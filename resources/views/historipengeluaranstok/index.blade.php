@@ -54,7 +54,7 @@
                         <div class="row">
 
                             <div class="col-sm-6 mt-4">
-                                <a id="btnPreview" class="btn btn-secondary mr-2 ">
+                                <a id="btnPreview" class="btn btn-primary mr-2 ">
                                     <i class="fas fa-sync"></i>
                                     Reload
                                 </a>
@@ -344,7 +344,26 @@
             })
 
             .customPager({
-                buttons: [{
+                buttons: [
+                    {
+                    id: 'report',
+                    innerHTML: '<i class="fa fa-print"></i> REPORT',
+                    class: 'btn btn-info btn-sm mr-1',
+                    onClick: function(event) {
+                        let stokdari_id = $('#crudForm').find('[name=stokdari_id]').val()
+                        let stoksampai_id = $('#crudForm').find('[name=stoksampai_id]').val()
+                        let dari = $('#crudForm').find('[name=dari]').val()
+                        let sampai = $('#crudForm').find('[name=sampai]').val()
+                        let filter = $('#crudForm').find('[name=filter]').val()
+
+                        if (stokdari_id != '' && stoksampai_id != '' && dari != '' && sampai != '' && filter != '') {
+
+                            window.open(`{{ route('historipengeluaranstok.report') }}?dari=${dari}&sampai=${sampai}&stokdari_id=${stokdari_id}&stoksampai_id=${stoksampai_id}&filter=${filter}`)
+                        } else {
+                            showDialog('ISI SELURUH KOLOM')
+                        }
+                    }
+                }, {
                     id: 'export',
                     innerHTML: '<i class="fas fa-file-export"></i> EXPORT',
                     class: 'btn btn-warning btn-sm mr-1',
@@ -359,24 +378,6 @@
                         if (stokdari_id != '' && stoksampai_id != '' && dari != '' && sampai != '' && filter != '') {
 
                             window.open(`{{ route('historipengeluaranstok.export') }}?dari=${dari}&sampai=${sampai}&stokdari_id=${stokdari_id}&stoksampai_id=${stoksampai_id}&filter=${filter}`)
-                        } else {
-                            showDialog('ISI SELURUH KOLOM')
-                        }
-                    }
-                }, {
-                    id: 'report',
-                    innerHTML: '<i class="fa fa-print"></i> REPORT',
-                    class: 'btn btn-info btn-sm mr-1',
-                    onClick: function(event) {
-                        let stokdari_id = $('#crudForm').find('[name=stokdari_id]').val()
-                        let stoksampai_id = $('#crudForm').find('[name=stoksampai_id]').val()
-                        let dari = $('#crudForm').find('[name=dari]').val()
-                        let sampai = $('#crudForm').find('[name=sampai]').val()
-                        let filter = $('#crudForm').find('[name=filter]').val()
-
-                        if (stokdari_id != '' && stoksampai_id != '' && dari != '' && sampai != '' && filter != '') {
-
-                            window.open(`{{ route('historipengeluaranstok.report') }}?dari=${dari}&sampai=${sampai}&stokdari_id=${stokdari_id}&stoksampai_id=${stoksampai_id}&filter=${filter}`)
                         } else {
                             showDialog('ISI SELURUH KOLOM')
                         }

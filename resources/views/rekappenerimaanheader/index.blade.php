@@ -379,15 +379,12 @@
             }
           },
           {
-            id: 'approval',
-            innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-            class: 'btn btn-purple btn-sm mr-1',
+            id: 'report',
+            innerHTML: '<i class="fa fa-print"></i> REPORT',
+            class: 'btn btn-info btn-sm mr-1',
             onClick: () => {
-              let id = $('#jqGrid').jqGrid('getGridParam', 'selrow')
-
-              $('#processingLoader').removeClass('d-none')
-
-              handleApproval(id)
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              window.open(`{{url('rekappenerimaanheader/report/${selectedId}')}}`)
             }
           },
           {
@@ -401,12 +398,15 @@
             }
           },
           {
-            id: 'report',
-            innerHTML: '<i class="fa fa-print"></i> REPORT',
-            class: 'btn btn-info btn-sm mr-1',
+            id: 'approval',
+            innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+            class: 'btn btn-purple btn-sm mr-1',
             onClick: () => {
-              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              window.open(`{{url('rekappenerimaanheader/report/${selectedId}')}}`)
+              let id = $('#jqGrid').jqGrid('getGridParam', 'selrow')
+
+              $('#loader').removeClass('d-none')
+
+              handleApproval(id)
             }
           },
         ]

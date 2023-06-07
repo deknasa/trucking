@@ -5,7 +5,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
-            <div class="card card-primary">
+            <div class="card card-easyui bordered mb-4">
                 <div class="card-header">
                 </div>
                 <form id="crudForm">
@@ -24,16 +24,15 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-
+                         <div class="row">
                             <div class="col-sm-6 mt-4">
-                                <a id="btnPreview" class="btn btn-secondary mr-2 ">
-                                    <i class="fas fa-sync"></i>
-                                    Cetak
+                                <a id="btnPreview" class="btn btn-info mr-1 ">
+                                    <i class="fas fa-print"></i>
+                                    Report
                                 </a>
-                                <a id="btnEkspor" class="btn btn-secondary mr-2 ">
-                                    <i class="fas fa-sync"></i>
-                                    Ekspor
+                                <a id="btnEkspor" class="btn btn-warning mr-1 ">
+                                    <i class="fas fa-file-export"></i>
+                                    Export
                                 </a>
                             </div>
                         </div>
