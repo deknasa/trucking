@@ -319,14 +319,19 @@
 
       $('#formRange [name=sidx]').val($('#jqGrid').jqGrid('getGridParam').postData.sidx)
       $('#formRange [name=sord]').val($('#jqGrid').jqGrid('getGridParam').postData.sord)
-      $('#formRange [name=dari]').val((indexRow + 1) + (limit * (page - 1)))
-      $('#formRange [name=sampai]').val(totalRecord)
+      if (page == 0) {
+        $('#formRange [name=dari]').val(page)
+        $('#formRange [name=sampai]').val(totalRecord)
+      }else{
+        $('#formRange [name=dari]').val((indexRow + 1) + (limit * (page - 1)))
+        $('#formRange [name=sampai]').val(totalRecord)
+      }
 
       autoNumericElements = new AutoNumeric.multiple('#formRange .autonumeric-report', {
         digitGroupSeparator: '.',
         decimalCharacter: ',',
         allowDecimalPadding: false,
-        minimumValue: 1,
+        minimumValue: 0,
         maximumValue: totalRecord,
       })
     })

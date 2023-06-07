@@ -207,9 +207,13 @@ class ParameterController extends MyController
             $memo = $params['memo'];
             $result = json_decode($memo, true);
             $memo = $result['MEMO'];
+          
             $parameters[$i]['memo'] = $memo;
             $i++;
+
         }
+
+        // dd($parameters);
         return view('reports.parameter', compact('parameters'));
     }
 
