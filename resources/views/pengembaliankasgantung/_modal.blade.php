@@ -30,7 +30,7 @@
                 <div class="row">
                   <div class="col-12 col-sm-3 col-md-4">
                     <label class="col-form-label">
-                      TANGGAL BUKTI <span class="text-danger">*</span>
+                      TGL BUKTI <span class="text-danger">*</span>
                     </label>
                   </div>
                   <div class="col-12 col-sm-9 col-md-8">

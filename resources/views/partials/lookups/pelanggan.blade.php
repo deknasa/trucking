@@ -31,7 +31,7 @@
           align: 'left'
         },
         {
-          label: 'TELP',
+          label: 'NO TELEPON',
           name: 'telp',
           align: 'left'
         },

@@ -26,7 +26,7 @@
 
                 <div class="col-12 col-md-2">
                   <label class="col-form-label">
-                    TANGGAL BUKTI <span class="text-danger">*</span>
+                    TGL BUKTI <span class="text-danger">*</span>
                   </label>
                 </div>
                 <div class="col-12 col-md-4">
@@ -579,7 +579,7 @@
             align: 'left',
           },
           {
-            label: 'TANGGAL BUKTI',
+            label: 'TGL BUKTI',
             name: 'tglbukti_posting',
             align: 'left',
             formatter: "date",
@@ -589,7 +589,7 @@
             }
           },
           {
-            label: 'NOBUKTI PENGELUARAN',
+           label: 'NO BUKTI PENGELUARAN',
             name: 'pengeluaran_posting',
             align: 'left'
           },
@@ -764,7 +764,7 @@
             align: 'left',
           },
           {
-            label: 'TANGGAL BUKTI',
+            label: 'TGL BUKTI',
             name: 'tglbukti_nonposting',
             align: 'left',
             formatter: "date",
@@ -774,7 +774,7 @@
             }
           },
           {
-            label: 'NOBUKTI PENGELUARAN',
+           label: 'NO BUKTI PENGELUARAN',
             name: 'pengeluaran_nonposting',
             align: 'left'
           },

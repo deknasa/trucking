@@ -110,7 +110,7 @@ class LaporanPenyesuaianBarangController extends MyController
                 'index' => 'nobukti',
             ],
             [
-                'label' => 'Tanggal Bukti',
+                'label' => 'TGL bukti',
                 'index' => 'tglbukti',
             ],
             [

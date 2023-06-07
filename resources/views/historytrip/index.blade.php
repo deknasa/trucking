@@ -92,7 +92,7 @@
             name: 'nobukti',
           },
           {
-            label: 'TANGGAL BUKTI',
+            label: 'TGL BUKTI',
             name: 'tglbukti',
             formatter: 'date',
             formatoptions: {
@@ -307,7 +307,7 @@
           //   name: 'nosp',
           // },
           // {
-          //   label: 'TANGGAL SP',
+          //   label: 'TGL SP',
           //   name: 'tglsp',
           // },
           {

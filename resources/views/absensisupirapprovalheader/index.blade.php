@@ -209,7 +209,7 @@
             align: 'left'
           },
           {
-            label: 'TANGGAL BUKTI',
+            label: 'TGL BUKTI',
             name: 'tglbukti',
             align: 'left',
             formatter: "date",
@@ -235,7 +235,7 @@
             align: 'left'
           },
           {
-            label: 'TANGGAL approval',
+            label: 'TGL approval',
             name: 'tglapproval',
             align: 'left',
             formatter: "date",
@@ -250,12 +250,12 @@
             align: 'left'
           },
           {
-            label: 'coa kaskeluar',
+            label: 'coa kas keluar',
             name: 'coakaskeluar',
             align: 'left'
           },
           {
-            label: 'TANGGAL kas keluar',
+            label: 'TGL kas keluar',
             name: 'tglkaskeluar',
             align: 'left',
             formatter: "date",
@@ -270,7 +270,7 @@
             align: 'left'
           },
           {
-            label: 'TANGGAL CETAK',
+            label: 'TGL CETAK',
             name: 'tglbukacetak',
             align: 'left',
             formatter: "date",

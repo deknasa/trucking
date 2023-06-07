@@ -93,7 +93,7 @@
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
-                  JOB EMKL </label>
+                  NO JOB EMKL (1)</label>
               </div>
               <div class="col-12 col-md-10">
                 <input type="text" name="nojobemkl" class="form-control orderanemkl-lookup">
@@ -102,7 +102,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
-                  NO CONT <span class="text-danger">*</span>
+                  NO CONT (1)<span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
@@ -112,7 +112,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
-                  NO SEAL <span class="text-danger">*</span>
+                  NO SEAL (1)<span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
@@ -122,7 +122,7 @@
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
-                  JOB EMKL 2 </label>
+                  NO JOB EMKL (2) </label>
               </div>
               <div class="col-12 col-md-10">
                 <input type="text" name="nojobemkl2" class="form-control orderanemkl-lookup">
@@ -131,7 +131,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
-                  NO CONT 2
+                  NO CONT (2)
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
@@ -141,7 +141,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
-                  NO SEAL 2
+                  NO SEAL (2)
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">

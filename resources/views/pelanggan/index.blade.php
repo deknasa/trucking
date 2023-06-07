@@ -95,15 +95,15 @@
             }
           },
           {
-            label: 'telp',
+            label: 'NO TELEPON',
             name: 'telp',
           },
           {
-            label: 'alamat',
+            label: 'alamat (1)',
             name: 'alamat',
           },
           {
-            label: 'alamat2',
+            label: 'alamat (2)',
             name: 'alamat2',
           },
           {

@@ -44,7 +44,7 @@
             hidden: true
           },
           {
-            label: 'KODE JNS ORDER',
+            label: 'KODE JENIS ORDER',
             name: 'kodejenisorder',
           },
           {

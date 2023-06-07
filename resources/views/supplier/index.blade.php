@@ -65,11 +65,11 @@
             name: 'kodepos',
           },
           {
-            label: 'notelp1',
+            label: 'NO TELEPON (1)',
             name: 'notelp1',
           },
           {
-            label: 'notelp2',
+            label: 'NO TELEPON (2)',
             name: 'notelp2',
           },
           {

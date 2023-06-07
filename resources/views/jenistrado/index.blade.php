@@ -44,7 +44,7 @@
             hidden: true
           },
           {
-            label: 'KODE JNS TRADO',
+            label: 'KODE JENIS TRADO',
             name: 'kodejenistrado',
           },
           {

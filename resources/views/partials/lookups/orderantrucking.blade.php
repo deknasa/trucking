@@ -32,7 +32,7 @@
           name: 'nobukti',
         },
         {
-          label: 'TANGGAL BUKTI',
+          label: 'TGL BUKTI',
           name: 'tglbukti',
         },
         {
@@ -66,27 +66,27 @@
           }
         },
         {
-          label: 'NO. JOBEMKL',
+          label: 'NO. JOB EMKL (1)',
           name: 'nojobemkl',
         },
         {
-          label: 'NO. CONT',
+          label: 'NO. CONT (1)',
           name: 'nocont',
         },
         {
-          label: 'NO. SEAL',
+          label: 'NO. SEAL (1)',
           name: 'noseal',
         },
         {
-          label: 'NO. JOBEMKL',
+          label: 'NO. JOB EMKL (2)',
           name: 'nojobemkl2',
         },
         {
-          label: 'NO. CONT',
+          label: 'NO. CONT (2)',
           name: 'nocont2',
         },
         {
-          label: 'NO. SEAL',
+          label: 'NO. SEAL (2)',
           name: 'noseal2',
         },
         {

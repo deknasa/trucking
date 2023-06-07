@@ -26,7 +26,7 @@
 
                 <div class="col-12 col-md-2">
                   <label class="col-form-label">
-                    TANGGAL BUKTI <span class="text-danger">*</span>
+                    TGL BUKTI <span class="text-danger">*</span>
                   </label>
                 </div>
                 <div class="col-12 col-md-4">

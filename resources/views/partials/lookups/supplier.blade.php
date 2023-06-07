@@ -45,12 +45,12 @@
           align: 'left'
         },
         {
-          label: 'NO TELP 1',
+          label: 'NO TELEPON (1)',
           name: 'notelp1',
           align: 'left'
         },
         {
-          label: 'NO TELP 2',
+          label: 'NO TELEPON (2)',
           name: 'notelp2',
           align: 'left'
         },
