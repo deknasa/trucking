@@ -306,7 +306,8 @@
         success: response => {
           $('#jqGrid').setGridParam({
             datatype: "local",
-            data:response.data
+            data:response.data,
+            rowNum: response.data.length
           }).trigger('reloadGrid')
         }
       })
