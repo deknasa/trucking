@@ -86,7 +86,7 @@
         }
       }
     }).always(() => {
-      $('#loader').addClass('d-none')
+      $('#processingLoader').addClass('d-none')
       $(this).removeAttr('disabled')
     })
   }

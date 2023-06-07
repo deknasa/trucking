@@ -402,7 +402,7 @@
             onClick: () => {
               let id = $('#jqGrid').jqGrid('getGridParam', 'selrow')
 
-              $('#loader').removeClass('d-none')
+              $('#processingLoader').removeClass('d-none')
 
               handleApproval(id)
             }
@@ -556,7 +556,7 @@
         $('#jqGrid').trigger('reloadGrid')
       }
     }).always(() => {
-      $('#loader').addClass('d-none')
+      $('#processingLoader').addClass('d-none')
     })
   }
 </script>
