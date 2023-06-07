@@ -52,7 +52,7 @@
               </div>
 
               <div class="form-group col-sm-6 row">
-                <label class="col-sm-4 col-form-label">Telp <span class="text-danger">*</span></label>
+                <label class="col-sm-4 col-form-label">Telp/HP <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
                   <input type="text" name="telp" class="form-control numbernoseparate" maxlength="13">
                 </div>
@@ -68,17 +68,11 @@
               </div>
 
               <div class="form-group col-sm-6 row">
-                <label class="col-sm-4 col-form-label">No Bukti Pemutihan</label>
+                <label class="col-sm-4 col-form-label">Tgl Masuk <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
-                  <input type="text" name="pemutihansupir_nobukti" class="form-control pemutihan-lookup">
-                </div>
-              </div>
-
-
-              <div class="form-group col-sm-6 row">
-                <label class="col-sm-4 col-form-label">Nominal Pinjaman</label>
-                <div class="col-sm-8">
-                  <input type="text" name="nominalpinjamansaldoawal" class="form-control text-right" readonly>
+                  <div class="input-group">
+                    <input type="text" class="form-control datepicker" name="tglmasuk">
+                  </div>
                 </div>
               </div>
 
@@ -90,14 +84,7 @@
                 </div>
               </div> -->
 
-              <div class="form-group col-sm-6 row">
-                <label class="col-sm-4 col-form-label">Tgl Masuk <span class="text-danger">*</span></label>
-                <div class="col-sm-8">
-                  <div class="input-group">
-                    <input type="text" class="form-control datepicker" name="tglmasuk">
-                  </div>
-                </div>
-              </div>
+              
 
               <div class="form-group col-sm-6 row">
                 <label class="col-sm-4 col-form-label">Tgl Terbit SIM<span class="text-danger">*</span></label>
@@ -125,13 +112,6 @@
               </div>
 
               <div class="form-group col-sm-6 row">
-                <label class="col-sm-4 col-form-label">Keterangan</label>
-                <div class="col-sm-8">
-                  <input type="text" name="keterangan" class="form-control">
-                </div>
-              </div>
-
-              <div class="form-group col-sm-6 row">
                 <label class="col-sm-4 col-form-label">No KTP <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
                   <input type="text" name="noktp" id="noktp" maxlength="16" class="form-control numbernoseparate">
@@ -145,6 +125,26 @@
                 </div>
               </div>
 
+              <div class="form-group col-sm-6 row">
+                <label class="col-sm-4 col-form-label">Keterangan</label>
+                <div class="col-sm-8">
+                  <input type="text" name="keterangan" class="form-control">
+                </div>
+              </div>
+
+              <div class="form-group col-sm-6 row">
+                <label class="col-sm-4 col-form-label">Nominal Pinjaman</label>
+                <div class="col-sm-8">
+                  <input type="text" name="nominalpinjamansaldoawal" class="form-control text-right" readonly>
+                </div>
+              </div>
+
+              <div class="form-group col-sm-6 row">
+                <label class="col-sm-4 col-form-label">No Bukti Pemutihan</label>
+                <div class="col-sm-8">
+                  <input type="text" name="pemutihansupir_nobukti" class="form-control pemutihan-lookup">
+                </div>
+              </div>
 
               <div class="form-group col-sm-6 row" style="display:none;">
                 <label for="staticEmail" class="col-sm-4 col-form-label ">Angsuran Pinjaman</label>
