@@ -15,7 +15,7 @@
               <input type="hidden" name="id" hidden class="form-control" readonly>
 
               <div class="col-12 col-sm-3 col-md-2">
-                <label class="col-form-label">nobukti <span class="text-danger">*</span> </label>
+                <label class="col-form-label">nobukti <span class="text-danger"></span> </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <input type="text" readonly name="nobukti" class="form-control">
@@ -239,9 +239,9 @@
                 <thead>
                   <tr>
                     <th style="width:10%; max-width: 25px;max-width: 15px">No</th>
-                    <th style="width: 20%; min-width: 200px;">stok <span class="text-danger">*</span> </th>
+                    <th style="width: 20%; min-width: 200px;">stok <span class="text-danger"></span> </th>
                     <th class="data_tbl tbl_vulkanisirke" style="width: 10px">vulkanisir ke</th>
-                    <th style="width: 20%; min-width: 200px;">keterangan <span class="text-danger">*</span> </th>
+                    <th style="width: 20%; min-width: 200px;">keterangan <span class="text-danger"></span> </th>
                     <th class="data_tbl tbl_qty" style="width:10%; min-width: 100px">qty</th>
                     <th class="data_tbl tbl_harga" style="width: 20%; min-width: 200px;">harga</th>
                     <th class="data_tbl tbl_penerimaanstok_nobukti"  style="width: 20%; min-width: 200px;">Penerimaanstoknobukti</th>
@@ -383,7 +383,7 @@
       }
 
       $(this).attr('disabled', '')
-      $('#loader').removeClass('d-none')
+      $('#processingLoader').removeClass('d-none')
 
       $.ajax({
         url: url,
@@ -420,7 +420,7 @@
           }
         },
       }).always(() => {
-        $('#loader').addClass('d-none')
+        $('#processingLoader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
     })

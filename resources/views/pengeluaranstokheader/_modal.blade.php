@@ -15,7 +15,7 @@
               <input type="hidden" name="id" hidden class="form-control" readonly>
 
               <div class="col-12 col-sm-3 col-md-2">
-                <label class="col-form-label">nobukti <span class="text-danger">*</span> </label>
+                <label class="col-form-label">nobukti <span class="text-danger"></span> </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4 mb-3">
                 <input type="text" readonly name="nobukti" class="form-control">
@@ -397,7 +397,7 @@
       }
 
       $(this).attr('disabled', '')
-      $('#loader').removeClass('d-none')
+      $('#processingLoader').removeClass('d-none')
 
       $.ajax({
         url: url,
@@ -434,7 +434,7 @@
           }
         },
       }).always(() => {
-        $('#loader').addClass('d-none')
+        $('#processingLoader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
     })
@@ -1307,6 +1307,13 @@ $('.tbl_qty').show()
       $('.supir-lookup').lookup({
         title: 'supir Lookup',
         fileName: 'supir',
+        beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+
+          Aktif: 'AKTIF',
+        }
+      },
         onSelectRow: (supir, element) => {
           element.val(supir.namasupir)
           $(`#${element[0]['name']}Id`).val(supir.id)
@@ -1324,6 +1331,7 @@ $('.tbl_qty').show()
       $('.kerusakan-lookup').lookup({
         title: 'kerusakan Lookup',
         fileName: 'kerusakan',
+        
         onSelectRow: (kerusakan, element) => {
           element.val(kerusakan.keterangan)
           $(`#${element[0]['name']}Id`).val(kerusakan.id)
@@ -1340,6 +1348,13 @@ $('.tbl_qty').show()
       $('.supplier-lookup').lookup({
         title: 'supplier Lookup',
         fileName: 'supplier',
+        beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+
+          Aktif: 'AKTIF',
+        }
+      },
         onSelectRow: (supplier, element) => {
           element.val(supplier.namasupplier)
           $(`#${element[0]['name']}Id`).val(supplier.id)
@@ -1377,12 +1392,15 @@ $('.tbl_qty').show()
         title: 'Trado Lookup',
         fileName: 'trado',
         beforeProcess: function(test) {
+
           // var levelcoa = $(`#levelcoa`).val();
             this.postData = {
   
               Aktif: 'AKTIF',
             }
           },
+
+      },
         onSelectRow: (trado, element) => {
           element.val(trado.kodetrado)
           $(`#${element[0]['name']}Id`).val(trado.id)
@@ -1409,6 +1427,7 @@ $('.tbl_qty').show()
             Aktif: 'AKTIF',
           }
         },
+
         onSelectRow: (gandengan, element) => {
           element.val(gandengan.keterangan)
           $(`#${element[0]['name']}Id`).val(gandengan.id)

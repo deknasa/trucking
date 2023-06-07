@@ -175,7 +175,7 @@
 
 
         $(this).attr('disabled', '')
-        $('#loader').removeClass('d-none')
+        $('#processingLoader').removeClass('d-none')
 
         $.ajax({
             url: `${apiUrl}approvalpendapatansupir`,
@@ -207,7 +207,7 @@
                 }
             },
         }).always(() => {
-            $('#loader').addClass('d-none')
+            $('#processingLoader').addClass('d-none')
             $(this).removeAttr('disabled')
         })
 
@@ -500,7 +500,7 @@
             .customPager({
                 buttons: [{
                     id: 'approveun',
-                    innerHTML: '<i class="fas fa-check""></i> APPROVE/UN',
+                    innerHTML: '<i class="fas fa-check""></i> UN/APPROVAL',
                     class: 'btn btn-purple btn-sm mr-1',
                     onClick: () => {
 

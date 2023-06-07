@@ -45,8 +45,8 @@
               <div class="col-md-12">
                   <div class="card" style="max-height:500px; overflow-y: scroll;">
                       <div class="card-body">
-            <div class="table-responsive">
-              <table class="table table-bordered table-bindkeys" id="detailList" style="width: 1800;">
+            <!-- <div class="table-responsive"> -->
+              <table class="table table-bordered table-bindkeys" id="detailList" style="width: 1800px;">
                 <thead>
                   <tr>
                     <th width="2%">No</th>
@@ -103,7 +103,7 @@
                   </tr>
                 </tfoot>
               </table>
-            </div>
+            <!-- </div> -->
           </div>
         </div>
     </div>
@@ -218,7 +218,7 @@
       }
 
       $(this).attr('disabled', '')
-      $('#loader').removeClass('d-none')
+      $('#processingLoader').removeClass('d-none')
 
       $.ajax({
         url: url,
@@ -255,7 +255,7 @@
           }
         },
       }).always(() => {
-        $('#loader').addClass('d-none')
+        $('#processingLoader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
     })

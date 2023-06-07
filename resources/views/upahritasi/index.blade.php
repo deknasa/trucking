@@ -295,7 +295,19 @@
               deleteUpahRitasi(selectedId)
             }
           },
-
+          {
+            id: 'report',
+            innerHTML: '<i class="fa fa-print"></i> REPORT',
+            class: 'btn btn-info btn-sm mr-1',
+            onClick: () => {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Please select a row')
+              } else {
+                window.open(`{{ route('upahritasi.report') }}?id=${selectedId}`)
+              }
+            }
+          },
           {
             id: 'export',
             title: 'Export',
@@ -314,22 +326,9 @@
             }
           },
           {
-            id: 'report',
-            innerHTML: '<i class="fa fa-print"></i> REPORT',
-            class: 'btn btn-info btn-sm mr-1',
-            onClick: () => {
-              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Please select a row')
-              } else {
-                window.open(`{{ route('upahritasi.report') }}?id=${selectedId}`)
-              }
-            }
-          },
-          {
             id: 'import',
             innerHTML: '<i class="fas fa-file-upload"></i> UPDATE HARGA',
-            class: 'btn btn-info btn-sm mr-1',
+            class: 'btn btn-purple btn-sm mr-1',
             onClick: () => {
               // $('#importModal').data('action', 'import')
               $('#importModal').find('button:submit').html(`Update Harga`)
@@ -379,16 +378,45 @@
     $('#formRangeTgl').submit(event => {
       event.preventDefault()
 
-      let actionUrl = `{{ route('upahritasi.export') }}`
+      getCekExport()
+      .then((response) => {
+        let actionUrl = `{{ route('upahritasi.export') }}`
 
-      /* Clear validation messages */
-      $('.is-invalid').removeClass('is-invalid')
-      $('.invalid-feedback').remove()
+          /* Clear validation messages */
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
 
 
-      window.open(`${actionUrl}?${$('#formRangeTgl').serialize()}`)
+          window.open(`${actionUrl}?${$('#formRangeTgl').serialize()}`)
+      })
+      .catch((error) => {
+        setErrorMessages($('#formRangeTgl'), error.responseJSON.errors);
+      })
+      
     })
     
+    function getCekExport() {
+      return new Promise((resolve, reject) => {
+        $.ajax({
+          url: `${apiUrl}upahritasi/listpivot`,
+          dataType: "JSON",
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          },
+          data: {
+            dari:$('#formRangeTgl').find('[name=dari]').val(),
+            sampai:$('#formRangeTgl').find('[name=sampai]').val()
+          },
+          success: (response) => {
+            resolve(response);
+          },
+          error: error => {
+            reject(error)
+
+          },
+        });
+      });
+    }
     $('#btnImport').click(function(event) {
       event.preventDefault()
 
@@ -397,7 +425,7 @@
       let form = $('#formImport')
 
       $(this).attr('disabled', '')
-      $('#loader').removeClass('d-none')
+      $('#processingLoader').removeClass('d-none')
 
       $.ajax({
         url: url,
@@ -428,7 +456,7 @@
           }
         },
       }).always(() => {
-        $('#loader').addClass('d-none')
+        $('#processingLoader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
     })

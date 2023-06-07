@@ -199,7 +199,7 @@
       }
 
       $(this).attr('disabled', '')
-      $('#loader').removeClass('d-none')
+      $('#processingLoader').removeClass('d-none')
 
       $.ajax({
         url: url,
@@ -234,7 +234,7 @@
           }
         },
       }).always(() => {
-        $('#loader').addClass('d-none')
+        $('#processingLoader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
     })
@@ -402,6 +402,9 @@
           $.each(response.data, (index, value) => {
             if (value !== null && value !== 0 && value !== undefined) {
               form.find(`[name=${index}]`).attr('maxlength', value)
+            }
+            if (value !== null && value !== 0 && value !== undefined) {
+              form.find(`[name=coa]`).attr('maxlength', 15)
             }
           })
 

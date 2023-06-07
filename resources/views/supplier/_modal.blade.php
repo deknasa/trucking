@@ -317,7 +317,7 @@
       }
 
       $(this).attr('disabled', '')
-      $('#loader').removeClass('d-none')
+      $('#processingLoader').removeClass('d-none')
 
       $.ajax({
         url: url,
@@ -352,7 +352,7 @@
           }
         },
       }).always(() => {
-        $('#loader').addClass('d-none')
+        $('#processingLoader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
     })
@@ -495,6 +495,9 @@
               }
               if(index == 'rekeningbank'){
                 form.find(`[name=rekeningbank]`).attr('maxlength', 13)
+              }
+              if(index == 'kota'){
+                form.find(`[name=kota]`).attr('maxlength', 150)
               }
             }
           })

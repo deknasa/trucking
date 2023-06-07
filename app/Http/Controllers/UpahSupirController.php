@@ -265,8 +265,6 @@ class UpahSupirController extends MyController
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'upahsupir/listpivot?dari=' . $request->dari . '&sampai=' . $request->sampai)['data'];
 
-       
-
         if ($upahsupir == null) {
             echo "<script>window.close();</script>";
         } else {
@@ -288,7 +286,7 @@ class UpahSupirController extends MyController
                 ];
             }
             // $detail_columns = [];
-            // foreach($upahsupir[0] as $key => $value)
+            // foreach($upahritasi[0] as $key => $value)
             // {
             //     $detail_columns[] =  [
             //         'label' => $key,

@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "23bbb5aa3a301b388f6ed760cc9847ca",
+  "ReportGuid": "f21809679596a24b92d73895ec1c9589",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://localhost/trucking/public/reports/ReportSupplier.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportAgen.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1685153190000+0700)/",
+  "ReportChanged": "/Date(1685957725000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -222,7 +222,7 @@
         "2": {
           "Ident": "StiGroupHeaderBand",
           "Name": "GroupHeaderBand1",
-          "ClientRectangle": "0,2.4,27.69,1.8",
+          "ClientRectangle": "0,2.4,27.69,1.2",
           "ComponentPlacement": "gh.Page1",
           "Interaction": {
             "Ident": "StiBandInteraction"
@@ -421,7 +421,7 @@
               "Ident": "StiText",
               "Name": "Text13",
               "Guid": "8199e916f071cd6f65a08e8e5cf337f1",
-              "ClientRectangle": "23.8,0,4,0.6",
+              "ClientRectangle": "23.8,0,3.8,0.6",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "ComponentStyle": "Table Header",
               "Interaction": {
@@ -583,7 +583,7 @@
               "Ident": "StiText",
               "Name": "Text23",
               "Guid": "2691c35beb7379362435437651396e9c",
-              "ClientRectangle": "0,1.2,3.8,0.6",
+              "ClientRectangle": "23.8,0.6,3.8,0.6",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "ComponentStyle": "Table Header",
               "Interaction": {
@@ -607,33 +607,6 @@
               "Type": "Expression"
             },
             "14": {
-              "Ident": "StiText",
-              "Name": "Text24",
-              "Guid": "81a282a7865086bd96ea0b94b87a3b20",
-              "ClientRectangle": "23.8,0.6,4,0.6",
-              "ComponentPlacement": "gh.GroupHeaderBand1",
-              "ComponentStyle": "Table Header",
-              "Interaction": {
-                "Ident": "StiInteraction"
-              },
-              "Text": {
-                "Value": "JENIS EMKL"
-              },
-              "HorAlignment": "Center",
-              "VertAlignment": "Center",
-              "Font": ";10;Bold;",
-              "Border": ";;;;;;;solid:0,0,0",
-              "Brush": "solid:156,195,229",
-              "TextBrush": "solid:255,255,255",
-              "Margins": {
-                "Left": 3,
-                "Right": 0,
-                "Top": 0,
-                "Bottom": 0
-              },
-              "Type": "Expression"
-            },
-            "15": {
               "Ident": "StiText",
               "Name": "Text25",
               "Guid": "9e02a761ead3347aa95c4043356040ae",
@@ -659,37 +632,13 @@
                 "Bottom": 0
               },
               "Type": "Expression"
-            },
-            "16": {
-              "Ident": "StiText",
-              "Name": "Text26",
-              "Guid": "3defa60d4ab88e8d0de2ed18599a58d1",
-              "ClientRectangle": "3.8,1.2,24,0.6",
-              "ComponentPlacement": "gh.GroupHeaderBand1",
-              "ComponentStyle": "Table Header",
-              "Interaction": {
-                "Ident": "StiInteraction"
-              },
-              "HorAlignment": "Center",
-              "VertAlignment": "Center",
-              "Font": ";10;Bold;",
-              "Border": ";;;;;;;solid:0,0,0",
-              "Brush": "solid:156,195,229",
-              "TextBrush": "solid:255,255,255",
-              "Margins": {
-                "Left": 3,
-                "Right": 0,
-                "Top": 0,
-                "Bottom": 0
-              },
-              "Type": "Expression"
             }
           }
         },
         "3": {
           "Ident": "StiDataBand",
           "Name": "DataBand2",
-          "ClientRectangle": "0,5,27.69,2.4",
+          "ClientRectangle": "0,4.4,27.69,2.4",
           "ComponentPlacement": "d.Page1",
           "Interaction": {
             "Ident": "StiBandInteraction"
@@ -1168,39 +1117,6 @@
               },
               "Text": {
                 "Value": "{agen.statustas}"
-              },
-              "CanBreak": true,
-              "VertAlignment": "Center",
-              "Border": ";242,242,242;;;;;;solid:0,0,0",
-              "Brush": "solid:",
-              "TextBrush": "solid:0,0,0",
-              "TextOptions": {
-                "WordWrap": true
-              },
-              "Margins": {
-                "Left": 3,
-                "Right": 0,
-                "Top": 0,
-                "Bottom": 0
-              },
-              "TextFormat": {
-                "Ident": "StiDateFormatService"
-              },
-              "Type": "DataColumn"
-            },
-            "15": {
-              "Ident": "StiText",
-              "Name": "Text38",
-              "Guid": "bbd1441c5da3aab898b57e8bb94eaa95",
-              "CanGrow": true,
-              "GrowToHeight": true,
-              "ClientRectangle": "0,1.6,4.8,0.6",
-              "ComponentPlacement": "d.DataBand2",
-              "Interaction": {
-                "Ident": "StiInteraction"
-              },
-              "Text": {
-                "Value": "{agen.jenisemkl}"
               },
               "CanBreak": true,
               "VertAlignment": "Center",

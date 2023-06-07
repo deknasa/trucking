@@ -102,7 +102,7 @@
           },
           success: response => {
             console.log(response);
-            location.reload()
+            window.close()
           }
     
         })

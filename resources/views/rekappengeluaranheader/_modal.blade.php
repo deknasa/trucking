@@ -14,7 +14,7 @@
                 <input type="hidden" name="id" hidden class="form-control" readonly>
 
               <div class="col-12 col-sm-3 col-md-2">
-                <label class="col-form-label">nobukti <span class="text-danger">*</span> </label>
+                <label class="col-form-label">nobukti <span class="text-danger"></span> </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <input type="text" readonly name="nobukti" class="form-control">
@@ -159,7 +159,7 @@
       }
 
       $(this).attr('disabled', '')
-      $('#loader').removeClass('d-none')
+      $('#processingLoader').removeClass('d-none')
 
       $.ajax({
         url: url,
@@ -197,7 +197,7 @@
           }
         },
       }).always(() => {
-        $('#loader').addClass('d-none')
+        $('#processingLoader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
     })

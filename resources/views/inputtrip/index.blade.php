@@ -5,14 +5,14 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-12">
-      <div class="card">
+      <div class="card card-easyui bordered mb-4">
+        <div class="card-header">
+          <h5 class="card-title" id="crudModalTitle" style="color: #0e2d5f;font-weight: 700;"> {{$title}} </h5>
 
+        </div>
         <form action="#" id="crudForm">
           <div class=" ">
-            <div class="card-header bg-primary">
-              <h5 class="card-title" id="crudModalTitle"> {{$title}} </h5>
 
-            </div>
             <form action="" method="post">
               <div class="card-body">
 
@@ -98,7 +98,7 @@
                 </div>
 
                 <div class="form-group ">
-                  <label class="col-sm-12 col-form-label">SHIPPER<span class="text-danger">*</span></label>
+                  <label class="col-sm-12 col-form-label">PELANGGAN<span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <input type="hidden" name="pelanggan_id">
                     <input type="text" name="pelanggan" class="form-control pelanggan-lookup">
@@ -149,7 +149,30 @@
                   </div>
                 </div>
 
+                <div class="table-scroll table-responsive">
+                  <table class="table table-bordered table-bindkeys" id="ritasiList" style="width: 1000px;">
+                    <thead>
+                      <tr>
+                        <th width="2%">No</th>
+                        <th width="25%">JENIS RITASI</th>
+                        <th width="35%">RITASI DARI</th>
+                        <th width="35%">RITASI KE</th>
+                        <th width="2%">Aksi</th>
+                      </tr>
+                    </thead>
+                    <tbody id="table_body" class="form-group">
 
+                    </tbody>
+                    <tfoot>
+                      <tr>
+                        <td colspan="4"></td>
+                        <td>
+                          <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">TAMBAH</button>
+                        </td>
+                      </tr>
+                    </tfoot>
+                  </table>
+                </div>
 
               </div>
               <div class="card-footer justify-content-start">
@@ -157,7 +180,7 @@
                   <i class="fa fa-save"></i>
                   Simpan
                 </button>
-                
+
               </div>
             </form>
           </div>
@@ -186,6 +209,14 @@
 
   $(document).ready(function() {
 
+    $(document).on('click', "#addRow", function() {
+      addRow()
+    });
+
+    $(document).on('click', '.delete-row', function(event) {
+      deleteRow($(this).parents('tr'))
+    })
+
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
 
@@ -196,8 +227,6 @@
       let action = form.data('action')
       let data = $('#crudForm').serializeArray()
 
-
-
       method = 'POST'
       url = `${apiUrl}inputtrip`
 
@@ -205,103 +234,79 @@
         name: 'indexRow',
         value: indexRow
       })
+      data.push({
+        name: 'upahritasi',
+        value: ''
+      })
 
       $(this).attr('disabled', '')
-      $('#loader').removeClass('d-none')
-      if (action == 'add') {
-        $.ajax({
-          url: `{{ config('app.api_url') }}suratpengantar/cekUpahSupir`,
-          method: 'POST',
-          dataType: 'JSON',
-          headers: {
-            Authorization: `Bearer ${accessToken}`
-          },
-          data: data,
-          success: response => {
+      $('#processingLoader').removeClass('d-none')
 
-            $.ajax({
-              url: url,
-              method: method,
-              dataType: 'JSON',
-              headers: {
-                Authorization: `Bearer ${accessToken}`
-              },
-              data: data,
-              success: response => {
-                console.log(response.message);
-                showSuccessDialog(response.message, response.data.nobukti)
-                createSuratPengantar()
-              },
-              error: error => {
-                console.log('postdata ', error)
-                if (error.status === 422) {
-                  $('.is-invalid').removeClass('is-invalid')
-                  $('.invalid-feedback').remove()
-                  setErrorMessages(form, error.responseJSON.errors);
-                } else {
-                  showDialog(error.statusText)
-                }
-              },
-            }).always(() => {
-              $('#loader').addClass('d-none')
-              $(this).removeAttr('disabled')
-            })
+      $.ajax({
+        url: url,
+        method: method,
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: data,
+        success: response => {
+          console.log(response.message);
+          showSuccessDialog(response.message, response.data.nobukti)
+          createSuratPengantar()
+        },
+        error: error => {
+          console.log('postdata ', error)
+          if (error.status === 422) {
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+            setErrorMessages(form, error.responseJSON.errors);
+          } else {
+            showDialog(error.statusText)
+          }
+        },
+      }).always(() => {
+        $('#processingLoader').addClass('d-none')
+        $(this).removeAttr('disabled')
+      })
 
-          },
-          error: error => {
-            console.log('cekupah ', error)
-            if (error.status === 422) {
-              $('.is-invalid').removeClass('is-invalid')
-              $('.invalid-feedback').remove()
-              showDialog(error.responseJSON.message)
-            } else {
-              showDialog(error.statusText)
-            }
-          },
-        }).always(() => {
-          $('#loader').addClass('d-none')
-          $(this).removeAttr('disabled')
-        })
-      } else {
-        console.log(action);
+      // $.ajax({
+      //   url: url,
+      //   method: method,
+      //   dataType: 'JSON',
+      //   headers: {
+      //     Authorization: `Bearer ${accessToken}`
+      //   },
+      //   data: data,
+      //   success: response => {
 
-        // $.ajax({
-        //   url: url,
-        //   method: method,
-        //   dataType: 'JSON',
-        //   headers: {
-        //     Authorization: `Bearer ${accessToken}`
-        //   },
-        //   data: data,
-        //   success: response => {
+      //     id = response.data.id
+      //     $('#crudModal').modal('hide')
+      //     $('#crudModal').find('#crudForm').trigger('reset')
 
-        //     id = response.data.id
-        //     $('#crudModal').modal('hide')
-        //     $('#crudModal').find('#crudForm').trigger('reset')
+      //     $('#jqGrid').jqGrid('setGridParam', {
+      //       page: response.data.page
+      //     }).trigger('reloadGrid');
 
-        //     $('#jqGrid').jqGrid('setGridParam', {
-        //       page: response.data.page
-        //     }).trigger('reloadGrid');
+      //     if (response.data.grp == 'FORMAT') {
+      //       updateFormat(response.data)
+      //     }
+      //   },
+      //   error: error => {
+      //     if (error.status === 422) {
+      //       $('.is-invalid').removeClass('is-invalid')
+      //       $('.invalid-feedback').remove()
 
-        //     if (response.data.grp == 'FORMAT') {
-        //       updateFormat(response.data)
-        //     }
-        //   },
-        //   error: error => {
-        //     if (error.status === 422) {
-        //       $('.is-invalid').removeClass('is-invalid')
-        //       $('.invalid-feedback').remove()
+      //       setErrorMessages(form, error.responseJSON.errors);
+      //     } else {
+      //       showDialog(error.statusText)
+      //     }
+      //   },
+      // }).always(() => {
+      //   $('#processingLoader').addClass('d-none')
+      //   $(this).removeAttr('disabled')
+      // })
 
-        //       setErrorMessages(form, error.responseJSON.errors);
-        //     } else {
-        //       showDialog(error.statusText)
-        //     }
-        //   },
-        // }).always(() => {
-        //   $('#loader').addClass('d-none')
-        //   $(this).removeAttr('disabled')
-        // })
-      }
 
     })
 
@@ -345,6 +350,9 @@
     $('.invalid-feedback').remove()
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
     // $('#crudForm').find('[name=tglsp]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+
+    $('#table_body').html('')
+    addRow()
     Promise
       .all([
         setStatusLongTripOptions(form),
@@ -352,7 +360,7 @@
       ])
       .then(() => {
         setIsDateAvailable(form),
-        showDefault(form)
+          showDefault(form)
       })
   }
 
@@ -430,7 +438,37 @@
       })
     })
   }
-  
+  const setStatusRitasi = function(relatedForm) {
+    return new Promise((resolve, reject) => {
+      relatedForm.find(`[name="jenisritasi[]"]`).empty()
+      relatedForm.find(`[name="jenisritasi[]"]`).append(
+        new Option('-- PILIH JENIS RITASI --', '', false, true)
+      ).trigger('change')
+
+      $.ajax({
+        url: `${apiUrl}parameter/combo`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          grp: 'STATUS RITASI',
+          subgrp: 'STATUS RITASI'
+        },
+        success: response => {
+          response.data.forEach(jenisRitasi => {
+            let option = new Option(jenisRitasi.text, jenisRitasi.id)
+
+            relatedForm.find(`[name="jenisritasi[]"]`).append(option).trigger('change')
+          });
+
+          resolve()
+        }
+      })
+    })
+  }
+
   function setIsDateAvailable(form) {
     $.ajax({
       url: `${apiUrl}suratpengantarapprovalinputtrip/cektanggal`,
@@ -444,10 +482,10 @@
         if (response.data.length) {
           // $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
           tglbukti.attr('readonly', false);
-          tglbukti.find('.ui-datepicker-trigger').attr('disabled',false)
-        }else{
+          tglbukti.find('.ui-datepicker-trigger').attr('disabled', false)
+        } else {
           tglbukti.attr('readonly', true);
-          tglbukti.find('.ui-datepicker-trigger').attr('disabled',true)
+          tglbukti.find('.ui-datepicker-trigger').attr('disabled', true)
         }
 
       }
@@ -470,9 +508,9 @@
         pelangganId = 0
         taridrincianId = 0
         statusLongtrip = 0
-        statuspelabuhan='1'
+        statuspelabuhan = '1'
         setJobReadOnly()
-   
+
 
 
         $.each(response.data, (index, value) => {
@@ -550,7 +588,7 @@
         // console.log(response.data.status)
         statuspelabuhan = response.data.status
         setJobReadOnly()
-      
+
         // console.log(statustas)
       },
       error: error => {
@@ -580,7 +618,7 @@
     }
   }
 
- 
+
 
 
   function initLookup() {
@@ -617,7 +655,7 @@
       title: 'Job Trucking Lookup',
       fileName: 'jobtrucking',
       beforeProcess: function(test) {
-    
+
         this.postData = {
           jenisorder_id: jenisorderId,
           container_id: containerId,
@@ -923,6 +961,96 @@
       }
     })
 
+  }
+
+  function addRow() {
+    let detailRow = $(`
+      <tr>
+        <td></td>
+        <td>
+            <select name="jenisritasi[]" class="form-control select2bs4">
+              <option value="">-- PILIH JENIS RITASI --</option>
+            </select>
+        </td>
+        <td>
+          <input type="hidden" name="ritasidari_id[]">
+          <input type="text" name="ritasidari[]" class="form-control ritasidari-lookup">
+        </td>
+        <td>
+          <input type="hidden" name="ritasike_id[]">
+          <input type="text" name="ritasike[]" class="form-control ritasike-lookup">
+        </td>
+        <td>
+          <button type="button" class="btn btn-danger btn-sm delete-row">HAPUS</button>
+        </td>
+      </tr>
+    `)
+
+    $('#ritasiList tbody').append(detailRow)
+    setStatusRitasi(detailRow)
+    initSelect2(detailRow.find(`[name="jenisritasi[]"]`), false)
+
+    $('.ritasidari-lookup').last().lookup({
+      title: 'RITASI DARI Lookup',
+      fileName: 'kota',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+        }
+      },
+      onSelectRow: (kota, element) => {
+        element.parents('td').find(`[name="ritasidari_id[]"]`).val(kota.id)
+        element.val(kota.kodekota)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.parents('td').find(`[name="ritasidari_id[]"]`).val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+
+    $('.ritasike-lookup').last().lookup({
+      title: 'RITASI KE Lookup',
+      fileName: 'kota',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+        }
+      },
+      onSelectRow: (kota, element) => {
+        element.parents('td').find(`[name="ritasike_id[]"]`).val(kota.id)
+        element.val(kota.kodekota)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.parents('td').find(`[name="ritasike_id[]"]`).val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+    setRowNumbers()
+  }
+
+  function deleteRow(row) {
+    row.remove()
+
+    setRowNumbers()
+    setTotal()
+  }
+
+  function setRowNumbers() {
+    let elements = $('#ritasiList tbody tr td:nth-child(1)')
+
+    elements.each((index, element) => {
+      $(element).text(index + 1)
+    })
   }
 </script>
 @endpush

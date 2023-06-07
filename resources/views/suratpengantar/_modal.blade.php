@@ -249,13 +249,13 @@
                   </div>
                 </div>
                 <div class="form-group ">
-                  <label class="col-sm-12 col-form-label">QTY TON<span class="text-danger">*</span></label>
+                  <label class="col-sm-12 col-form-label">QTY TON<span class="text-danger"></span></label>
                   <div class="col-sm-12">
                     <input type="text" name="qtyton" class="form-control">
                   </div>
                 </div>
                 <div class="form-group ">
-                  <label class="col-sm-12 col-form-label">GUDANG<span class="text-danger">*</span></label>
+                  <label class="col-sm-12 col-form-label">GUDANG<span class="text-danger"></span></label>
                   <div class="col-sm-12">
                     <input type="text" name="gudang" class="form-control">
                   </div>
@@ -500,7 +500,7 @@
       }
 
       $(this).attr('disabled', '')
-      $('#loader').removeClass('d-none')
+      $('#processingLoader').removeClass('d-none')
 
       if (action == 'add' || action == 'edit') {
         $.ajax({
@@ -546,7 +546,7 @@
                 }
               },
             }).always(() => {
-              $('#loader').addClass('d-none')
+              $('#processingLoader').addClass('d-none')
               $(this).removeAttr('disabled')
             })
 
@@ -562,7 +562,7 @@
             }
           },
         }).always(() => {
-          $('#loader').addClass('d-none')
+          $('#processingLoader').addClass('d-none')
           $(this).removeAttr('disabled')
         })
       } else {
@@ -599,7 +599,7 @@
             }
           },
         }).always(() => {
-          $('#loader').addClass('d-none')
+          $('#processingLoader').addClass('d-none')
           $(this).removeAttr('disabled')
         })
       }

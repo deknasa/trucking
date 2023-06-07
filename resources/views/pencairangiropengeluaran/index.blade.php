@@ -27,7 +27,7 @@
                         </div>
                         <div class="row">
                             <div class="col-sm-4 mt-2">
-                                <a id="btnReload" class="btn btn-secondary mr-2">
+                                <a id="btnReload" class="btn btn-primary mr-2">
                                     <i class="fas fa-sync"></i>
                                     Reload
                                 </a>
@@ -120,7 +120,7 @@
             }).siblings(".ui-datepicker-trigger")
             .wrap(
                 `<div class="input-group-append"></div>`)
-            .addClass("btn btn-primary").html(`
+            .addClass("btn btn-easyui text-easyui-dark").html(`
 			    <i class="fa fa-calendar-alt"></i>
 		    `);
 
@@ -177,7 +177,7 @@
 
 
             $(this).attr('disabled', '')
-            $('#loader').removeClass('d-none')
+            $('#processingLoader').removeClass('d-none')
 
             $.ajax({
                 url: `${apiUrl}pencairangiropengeluaranheader`,
@@ -209,7 +209,7 @@
                     $('#crudForm').find('[name=periode]').val($.datepicker.formatDate('mm-yy', new Date())).trigger('change');
                 },
             }).always(() => {
-                $('#loader').addClass('d-none')
+                $('#processingLoader').addClass('d-none')
                 $(this).removeAttr('disabled')
             })
 
