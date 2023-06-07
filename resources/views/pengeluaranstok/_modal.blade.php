@@ -43,7 +43,7 @@
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
-                  COA <span class="text-danger">*</span></label>
+                  KODE PERKIRAAN <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-md-10">
                 <input type="hidden" name="coa">
