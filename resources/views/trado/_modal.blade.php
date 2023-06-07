@@ -477,9 +477,9 @@
             getMaxLength(form)
             $('#crudForm').find(`.ui-datepicker-trigger`).attr('disabled', false)
 
-            let subkelompok = $('#crudForm').find(`[name]`).parents('.input-group').children()
-            subkelompok.attr('disabled', false)
-            subkelompok.find('.lookup-toggler').attr('disabled', false)
+            let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
+            name.attr('disabled', false)
+            name.find('.lookup-toggler').attr('disabled', false)
      
           })
           .finally(() => {
@@ -540,10 +540,10 @@
           .then(() => {
             $('#crudModal').modal('show')
             $('#crudForm').find(`.ui-datepicker-trigger`).attr('disabled', true)
-    
-            let subkelompok = $('#crudForm').find(`[name]`).parents('.input-group').children()
-            subkelompok.attr('disabled', true)
-            subkelompok.find('.lookup-toggler').attr('disabled', true)
+
+            let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
+            name.attr('disabled', true)
+            name.find('.lookup-toggler').attr('disabled', true)
 
           })
           .finally(() => {
