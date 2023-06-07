@@ -10,7 +10,7 @@
         </div>
         <form action="" method="post">
           <div class="modal-body">
-            <div class="row form-group">
+            <div class="row form-group" style="display: none;">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">ID</label>
               </div>
@@ -188,13 +188,14 @@
                   </tr>--}}
                 </tbody>
                 <tfoot>
-                  <tr>
+                  <tr style="display: none;">
                     <td colspan="2">
-                      <p class="text-right font-weight-bold">TOTAL :</p>
+                      <p class="text-right font-weight-bold"></p>
                     </td>
-                    <td>
-                      <p class="text-right font-weight-bold autonumeric" id="nominal"></p>
+                    <td >
+                      <p class="text-right font-weight-bold autonumeric" id="nominal" ></p>
                     </td>
+                    
                     {{-- <td>
                       <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">TAMBAH</button>
                     </td> --}}

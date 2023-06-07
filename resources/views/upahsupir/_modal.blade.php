@@ -231,7 +231,7 @@
                   </tr>
                 </tbody>
                 <tfoot>
-                  <tr>
+                  <tr style="display: none;">
                     <td colspan="3">
                       <p class="text-right font-weight-bold">TOTAL :</p>
                     </td>
