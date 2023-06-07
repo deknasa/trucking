@@ -313,7 +313,7 @@
     $('.invalid-feedback').remove()
     Promise
       .all([
-        setStatusAktifOptions(form),
+        setStatusAktifOptions(form)
       ])
       .then(() => {
         showDefault(form)
