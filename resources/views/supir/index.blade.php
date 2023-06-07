@@ -769,7 +769,7 @@
           class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
           dropmenuHTML: [{
               id: 'approvalBlackListSupir',
-              text: "Approval Black List Supir",
+              text: "un/Approval Black List Supir",
               onClick: () => {
                 selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                 approvalBlackListSupir(selectedId)
@@ -777,7 +777,7 @@
             },
             {
               id: 'approvalSupirLuarKota',
-              text: "Approval Supir Luar Kota",
+              text: "un/Approval Supir Luar Kota",
               onClick: () => {
                 selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                 approvalSupirLuarKota(selectedId)
@@ -785,7 +785,7 @@
             },
             {
               id: 'approvalSupirResign',
-              text: "Approval Supir Resign",
+              text: "un/Approval Supir Resign",
               onClick: () => {
                 selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                 if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -979,9 +979,9 @@
           Authorization: `Bearer ${accessToken}`
         },
         success: response => {
-          let msg = `YAKIN approved Black List Supir ${response.data.namasupir}`
-          if (response.data.statusblacklist === statusBukanBlackList) {
-            msg = `YAKIN Unapproved Black List Supir ${response.data.namasupir}`
+          let msg = `YAKIN approval BlackList Supir ${response.data.namasupir}`
+          if (response.data.statusblacklist != statusBukanBlackList) {
+            msg = `YAKIN Unapproval BlackList Supir ${response.data.namasupir}`
           }
           showConfirm(msg, "", `supir/${response.data.id}/approvalblacklist`)
         },
@@ -998,9 +998,9 @@
         },
         success: response => {
           console.log(statusTidakBolehLuarkota);
-          let msg = ` YAKIN approved STATUS Luar Kota Supir ${response.data.namasupir} ?`
-          if (response.data.statusluarkota === statusTidakBolehLuarkota) {
-            msg = `YAKIN UNapproved STATUS Luar Kota Supir ${response.data.namasupir} ?`
+          let msg = ` YAKIN approval STATUS Luar Kota Supir ${response.data.namasupir} ?`
+          if (response.data.statusluarkota != statusTidakBolehLuarkota) {
+            msg = `YAKIN UNapproval STATUS Luar Kota Supir ${response.data.namasupir} ?`
           }
           showConfirm(msg, "", `supir/${response.data.id}/approvalluarkota`)
         },
@@ -1016,6 +1016,7 @@
           Authorization: `Bearer ${accessToken}`
         },
         success: response => {
+          console.log('approvalsupirresign');
           if (response.data.tglberhentisupir == "1900-01-01") {
             $('#tglModal').find('button:submit').html(`Approve Resign`)
             $('#tglModal').find('label').html(`Tgl Supir Resign`)
