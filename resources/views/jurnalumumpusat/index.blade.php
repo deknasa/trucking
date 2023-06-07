@@ -178,7 +178,7 @@
 
 
             $(this).attr('disabled', '')
-            $('#loader').removeClass('d-none')
+            $('#processingLoader').removeClass('d-none')
 
             $.ajax({
                 url: `${apiUrl}jurnalumumpusatheader`,
@@ -210,7 +210,7 @@
                     }
                 },
             }).always(() => {
-                $('#loader').addClass('d-none')
+                $('#processingLoader').addClass('d-none')
                 $(this).removeAttr('disabled')
             })
 

@@ -70,7 +70,7 @@
 
             <div class="row">
               <div class="form-group col-sm-6 row">
-                <label class="col-sm-4 col-form-label">Nama <span class="text-danger">*</span></label>
+                <label class="col-sm-4 col-form-label">Nama Pemilik<span class="text-danger">*</span></label>
                 <div class="col-sm-8">
                   <input type="text" class="form-control" name="nama">
                 </div>
@@ -135,7 +135,7 @@
               <div class="form-group col-sm-6 row">
                 <label class="col-sm-4 col-form-label">Isi Silinder <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
-                  <input type="text" class="form-control numbernoseparate" name="isisilinder">
+                  <input type="text" class="form-control numbernoseparate" name="isisilinder" id="isisilinder">
                 </div>
               </div>
             </div>
@@ -163,7 +163,7 @@
                 </div>
               </div>
               <div class="form-group col-sm-6 row">
-                <label class="col-sm-4 col-form-label">Jumlah Roda <span class="text-danger">*</span></label>
+                <label class="col-sm-4 col-form-label">Jumlah BAN <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
                   <input type="text" class="form-control numbernoseparate" name="jumlahroda">
                 </div>
@@ -303,8 +303,9 @@
           formData.append(`${paramName}[${index}]`, file)
         })
       })
-      data.filter((row) => row.name === 'nominalplusborongan')[0].value = AutoNumeric.getNumber($(`#crudForm [name="nominalplusborongan"]`)[0])
-
+      if (form.data('action') != 'delete') {
+        data.filter((row) => row.name === 'nominalplusborongan')[0].value = AutoNumeric.getNumber($(`#crudForm [name="nominalplusborongan"]`)[0])
+      }
       $.each(data, function(key, input) {
         formData.append(input.name, input.value);
       });
@@ -326,7 +327,7 @@
       }
 
       $(this).attr('disabled', '')
-      $('#loader').removeClass('d-none')
+      $('#processingLoader').removeClass('d-none')
 
       $.ajax({
         url: url,
@@ -363,7 +364,7 @@
           }
         },
       }).always(() => {
-        $('#loader').addClass('d-none')
+        $('#processingLoader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
     })
@@ -474,6 +475,12 @@
           .then(() => {
             $('#crudModal').modal('show')
             getMaxLength(form)
+            $('#crudForm').find(`.ui-datepicker-trigger`).attr('disabled', false)
+
+            let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
+            name.attr('disabled', false)
+            name.find('.lookup-toggler').attr('disabled', false)
+     
           })
           .finally(() => {
             $('.modal-loader').addClass('d-none')
@@ -515,8 +522,8 @@
             initLookup()
             initDatepicker()
             initSelect2(form.find('.select2bs4'), true)
-            form.find('[name]').removeAttr('disabled')
-
+            form.find('[name]').removeAttr('disabled') 
+          
             form.find('select').each((index, select) => {
               let element = $(select)
 
@@ -532,11 +539,17 @@
           })
           .then(() => {
             $('#crudModal').modal('show')
+            $('#crudForm').find(`.ui-datepicker-trigger`).attr('disabled', true)
+
+            let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
+            name.attr('disabled', true)
+            name.find('.lookup-toggler').attr('disabled', true)
+
           })
           .finally(() => {
             $('.modal-loader').addClass('d-none')
-          })
-      })
+          })  
+      })      
   }
 
 
@@ -869,7 +882,7 @@
                 form.find(`[name=norangka]`).attr('maxlength', 20)
               }
               if (index == 'nostnk') {
-                form.find(`[name=nostnk]`).attr('maxlength', 8)
+                form.find(`[name=nostnk]`).attr('maxlength', 50)
               }
               if (index == 'kodetrado') {
                 form.find(`[name=kodetrado]`).attr('maxlength', 12)
@@ -881,6 +894,19 @@
                 form.find(`[name=nobpkb]`).attr('maxlength', 15)
               }
 
+            }
+            
+            if (index == 'jumlahsumbu') {
+                form.find(`[name=jumlahsumbu]`).attr('maxlength', 2)
+            }
+            if (index == 'isisilinder') {
+              form.find(`[name=isisilinder]`).attr('maxlength', 5)
+            }
+            if (index == 'jumlahroda') {
+              form.find(`[name=jumlahroda]`).attr('maxlength', 2)
+            }
+            if (index == 'jumlahbanserap') {
+              form.find(`[name=jumlahbanserap]`).attr('maxlength', 2)
             }
           })
           console.log(response)

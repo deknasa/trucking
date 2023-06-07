@@ -5,7 +5,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-12">
-                <div class="card card-primary">
+                <div class="card card-easyui bordered mb-4">
                     <div class="card-header">
                     </div>
                     <form id="crudForm">
@@ -88,7 +88,7 @@
                             <div class="row">
 
                                 <div class="col-sm-6 mt-4">
-                                    <a id="btnPreview" class="btn btn-secondary mr-2 ">
+                                    <a id="btnPreview" class="btn btn-primary mr-2 ">
                                         <i class="fas fa-sync"></i>
                                         Reload
                                     </a>

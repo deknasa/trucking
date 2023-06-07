@@ -142,13 +142,14 @@
         case 'store':
           method = 'POST'
           url = `${apiUrl}mandorabsensisupir`
+
           break;
         case 'edit':
-          method = 'POST'
+          method = 'PATCH'
           url = `${apiUrl}mandorabsensisupir/${mandorId}/update`
           break;
         case 'delete':
-          method = 'POST'
+          method = 'DELETE'
           url = `${apiUrl}mandorabsensisupir/${mandorId}/delete`
           break;
         default:
@@ -158,7 +159,7 @@
       }
 
       $(this).attr('disabled', '')
-      $('#loader').removeClass('d-none')
+      $('#processingLoader').removeClass('d-none')
 
       $.ajax({
         url: url,
@@ -225,11 +226,17 @@
               `).appendTo(form.find(`[name=jam]`).parent())
             }
           } else {
-            showDialog(error.statusText)
+            if (error.responseJSON.errors) {
+              showDialog(error.statusText, error.responseJSON.errors.join('<hr>'))
+            } else if (error.responseJSON.message) {
+              showDialog(error.statusText, error.responseJSON.message)
+            } else {
+              showDialog(error.statusText, error.statusText)
+            }
           }
         },
       }).always(() => {
-        $('#loader').addClass('d-none')
+        $('#processingLoader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
 
@@ -279,7 +286,7 @@
     Promise
       .all([
         showDefault(form),
-        showAbsensi(form,tradoId)
+        showAbsensi(form, tradoId)
       ])
       .then(() => {
         $('#crudModal').modal('show')
@@ -359,7 +366,7 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-    
+
     Promise
       .all([
         showAbsensi(form, tradoId)
@@ -429,23 +436,23 @@
     })
   }
 
-function cekValidasiAdd(tradoId) {
-  $.ajax({
-    url: `${apiUrl}mandorabsensisupir/${tradoId}/cekvalidasiadd`,
-    method: 'GET',
-    dataType: 'JSON',
-    headers: {
-      Authorization: `Bearer ${accessToken}`
-    },
-    success: response => {
-      if(response.errors){
-        showDialog(response.message)
-      }else{
-        createAbsensi(tradoId)
+  function cekValidasiAdd(tradoId) {
+    $.ajax({
+      url: `${apiUrl}mandorabsensisupir/${tradoId}/cekvalidasiadd`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      success: response => {
+        if (response.errors) {
+          showDialog(response.message)
+        } else {
+          createAbsensi(tradoId)
+        }
       }
-    }
-  })
-}
+    })
+  }
 
   function showDefault(form) {
     return new Promise((resolve, reject) => {
@@ -473,6 +480,46 @@ function cekValidasiAdd(tradoId) {
       })
     })
   }
+
+  function getabsentrado(id) {
+    $.ajax({
+      url: `${apiUrl}mandorabsensisupir/${id}/getabsentrado`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`
+      },
+      success: response => {
+
+        kodeabsen = response.data.kodeabsen
+        setSupirEnable()
+      },
+      error: error => {
+        showDialog(error.statusText)
+      }
+    })
+  }
+
+  
+  function setSupirEnable() {
+    let supir = $('#crudForm [name=supir]')
+    if (kodeabsen == '1') {
+      //2x20
+      supir.attr('readonly', true)
+      supir.parents('.input-group').find('.input-group-append').hide()
+      supir.parents('.input-group').find('.button-clear').hide()
+
+
+    } else {
+      supir.attr('readonly', false)
+        supir.parents('.input-group').find('.input-group-append').show()
+        supir.parents('.input-group').find('.button-clear').show()
+
+    }
+  }
+
+
+
 
 
   function initLookup() {
@@ -511,7 +558,9 @@ function cekValidasiAdd(tradoId) {
       onSelectRow: (absentrado, element) => {
         $(`#crudForm [name="absen_id"]`).first().val(absentrado.id)
         element.val(absentrado.keterangan)
+        absentradoId = absentrado.id
         element.data('currentValue', element.val())
+        getabsentrado(absentradoId)
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))

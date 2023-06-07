@@ -11,7 +11,7 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-12">
-      <div class="card card-primary">
+      <div class="card card-easyui bordered mb-4">
         <div class="card-header">
         </div>
         <form id="crudForm">

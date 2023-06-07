@@ -397,11 +397,20 @@
           //   onClick: () => {
           //     let id = $('#jqGrid').jqGrid('getGridParam', 'selrow')
 
-          //     $('#loader').removeClass('d-none')
+          //     $('#processingLoader').removeClass('d-none')
 
           //     handleApproval(id)
           //   }
-          // },
+          // },          
+          {
+            id: 'report',
+            innerHTML: '<i class="fa fa-print"></i> REPORT',
+            class: 'btn btn-info btn-sm mr-1',
+            onClick: () => {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              window.open(`{{url('invoicechargegandenganheader/report/${selectedId}')}}`)
+            }
+          },
           {
             id: 'export',
             innerHTML: '<i class="fa fa-file-export"></i> EXPORT',
@@ -410,15 +419,6 @@
               $('#rangeModal').data('action', 'export')
               $('#rangeModal').find('button:submit').html(`Export`)
               $('#rangeModal').modal('show')
-            }
-          },
-          {
-            id: 'report',
-            innerHTML: '<i class="fa fa-print"></i> REPORT',
-            class: 'btn btn-info btn-sm mr-1',
-            onClick: () => {
-              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              window.open(`{{url('invoicechargegandenganheader/report/${selectedId}')}}`)
             }
           },
         ]
@@ -534,7 +534,7 @@
           $('#jqGrid').trigger('reloadGrid')
         }
       }).always(() => {
-        $('#loader').addClass('d-none')
+        $('#processingLoader').addClass('d-none')
       })
     }
 

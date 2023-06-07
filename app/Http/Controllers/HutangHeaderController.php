@@ -22,7 +22,8 @@ class HutangHeaderController extends MyController
     {
         $title = $this->title;
         $data = [
-            'combocetak' => $this->comboList('list', 'STATUSCETAK','STATUSCETAK')
+            'combocetak' => $this->comboList('list', 'STATUSCETAK','STATUSCETAK'),
+            'comboapproval' => $this->comboList('list', 'STATUS APPROVAL', 'STATUS APPROVAL'),
         ];
         return view('hutang.index', compact('title','data'));
     }

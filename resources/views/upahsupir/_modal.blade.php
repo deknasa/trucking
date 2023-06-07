@@ -169,11 +169,18 @@
                     <label class="col-form-label">Upload Foto Peta</label>
                   </div>
                 </div>
-                <div class="dropzone" data-field="gambar">
+                <div class="dropzone" data-field="gambar" id="my-dropzone" style="padding: 0; min-width: 202px !important; min-height: 234px !important; display:flex;"></div>
+
+                <div class="dz-preview dz-file-preview">
+                  <div class="dz-details">
+                    <img data-dz-thumbnail style="width:100%" />
+                  </div>
+                </div>
+                <!-- <div class="dropzone" data-field="gambar" style="padding: 0; min-width: 202px !important; min-height: 234px !important; display:flex;">
                   <div class="fallback">
                     <input name="gambar" type="file" />
                   </div>
-                </div>
+                </div> -->
               </div>
             </div>
 
@@ -270,6 +277,7 @@
   let modalBody = $('#crudModal').find('.modal-body').html()
   Dropzone.autoDiscover = false;
   let dropzones = []
+  let maxLengthForDropzone = 5;
 
   $(document).ready(function() {
 
@@ -387,7 +395,7 @@
       }
 
       $(this).attr('disabled', '')
-      $('#loader').removeClass('d-none')
+      $('#processingLoader').removeClass('d-none')
       $.ajax({
         url: url,
         method: 'POST',
@@ -426,7 +434,7 @@
           }
         },
       }).always(() => {
-        $('#loader').addClass('d-none')
+        $('#processingLoader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
     })
@@ -450,6 +458,9 @@
     activeGrid = '#jqGrid'
 
     $('#crudModal').find('.modal-body').html(modalBody)
+    dropzones.forEach(dropzone => {
+      dropzone.removeAllFiles()
+    })
   })
 
   function setNominalSupir() {
@@ -519,8 +530,7 @@
 
     $('#crudForm').find('[name=tglmulaiberlaku]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
     $('#crudForm').find('[name=tglakhirberlaku]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-
-
+    maxLengthForDropzone = 5
 
     Promise
       .all([
@@ -652,31 +662,57 @@
       if (!element.dropzone) {
         let newDropzone = new Dropzone(element, {
           url: 'test',
+          previewTemplate: document.querySelector('.dz-preview').innerHTML,
+          thumbnailWidth: null,
+          thumbnailHeight: null,
           autoProcessQueue: false,
           addRemoveLinks: true,
           acceptedFiles: 'image/*',
-          // maxFiles: 5,
+          maxFiles: maxLengthForDropzone,
           paramName: $(element).data('field'),
           init: function() {
             dropzones.push(this)
-            // this.on("maxfilesexceeded", function(file) {
-            //   this.removeFile(file);
-            // });
+            this.on("maxfilesexceeded", function(file) {
+              this.removeFile(file);
+            });
           }
         })
       }
       element.dropzone.removeAllFiles()
-
+      // console.log(element.dropzone.removeAllFiles())
       if (action == 'edit' || action == 'delete') {
         assignAttachment(element.dropzone, data)
       }
     })
   }
 
+  // function assignAttachment(dropzone, data) {
+  //   console.log(dropzone)
+  //   if (data['gambar'] != '') {
+  //     let files = JSON.parse(data['gambar'])
+
+  //     files.forEach((file) => {
+  //       getImgURL(`${apiUrl}upahsupir/${file}/ori`, (fileBlob) => {
+  //         let imageFile = new File([fileBlob], file, {
+  //           type: 'image/jpeg',
+  //           lastModified: new Date().getTime()
+  //         }, 'utf-8')
+  //         if (fileBlob.type != 'text/html') {
+  //           dropzone.options.addedfile.call(dropzone, imageFile);
+  //           dropzone.options.thumbnail.call(dropzone, imageFile, `${apiUrl}upahsupir/${file}/ori`);
+  //           dropzone.files.push(imageFile)
+  //         }
+  //       })
+  //     })
+  //   }
+  // }
+
+
   function assignAttachment(dropzone, data) {
     const paramName = dropzone.options.paramName
+    console.log(dropzone)
     const type = paramName.substring(5)
-    maxLengthFile = 5 - JSON.parse(data[paramName]).length
+
     if (data[paramName] == '') {
       $('.dropzone').each((index, element) => {
         if (!element.dropzone) {
@@ -685,13 +721,13 @@
             autoProcessQueue: false,
             addRemoveLinks: true,
             acceptedFiles: 'image/*',
-            // maxFiles: 5,
+            maxFiles: 5,
             paramName: $(element).data('field'),
             init: function() {
               dropzones.push(this)
-              // this.on("maxfilesexceeded", function(file) {
-              // this.removeFile(file);
-            // });
+              this.on("maxfilesexceeded", function(file) {
+                this.removeFile(file);
+              });
             }
           })
         }
@@ -707,6 +743,7 @@
             type: 'image/jpeg',
             lastModified: new Date().getTime()
           }, 'utf-8')
+
           if (fileBlob.type != 'text/html') {
             dropzone.options.addedfile.call(dropzone, imageFile);
             dropzone.options.thumbnail.call(dropzone, imageFile, `${apiUrl}upahsupir/${file}/ori`);
@@ -854,7 +891,6 @@
               element.val(value)
             }
 
-
             if (index == 'kotadari') {
               element.data('current-value', value)
             }
@@ -872,6 +908,8 @@
             }
 
           })
+          
+          maxLengthForDropzone = 5 - response.count
           initAutoNumeric(form.find(`[name="jarak"]`), {
             minimumValue: 0
           })

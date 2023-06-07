@@ -60,6 +60,23 @@
   let sortorder = 'asc'
   let autoNumericElements = []
   let currentTab = 'detail'
+  let selectedRows = [];
+
+  function checkboxHandler(element) {
+    let value = $(element).val();
+    if (element.checked) {
+      selectedRows.push($(element).val())
+      $(element).parents('tr').addClass('bg-light-blue')
+    } else {
+      $(element).parents('tr').removeClass('bg-light-blue')
+      for (var i = 0; i < selectedRows.length; i++) {
+        if (selectedRows[i] == value) {
+          selectedRows.splice(i, 1);
+        }
+      }
+    }
+
+  }
 
   $(document).ready(function() {
     $("#tabs").tabs()
@@ -80,13 +97,94 @@
           tglsampai: $('#tglsampaiheader').val()
         },
         datatype: "json",
-        colModel: [{
+        colModel: [{ 
+            label: '',
+            name: '',
+            width: 30,
+            align: 'center',
+            sortable: false,
+            clear: false,
+            stype: 'input',
+            searchable: false,
+            searchoptions: {
+              type: 'checkbox',
+              clearSearch: false,
+              dataInit: function(element) {
+                $(element).removeClass('form-control')
+                $(element).parent().addClass('text-center')
+
+                $(element).on('click', function() {
+                  
+                  $(element).attr('disabled', true)
+                  if ($(this).is(':checked')) {
+                    selectAllRows()
+                  } else {
+                    clearSelectedRows()
+                  }
+                })
+
+              }
+            },
+            formatter: (value, rowOptions, rowData) => {
+              return `<input type="checkbox" name="hutangId[]" value="${rowData.id}" onchange="checkboxHandler(this)">`
+            },
+          },{
+          
             label: 'ID',
             name: 'id',
             align: 'right',
             width: '50px',
             search: false,
             hidden: true
+          },
+          {
+            label: 'STATUS APPROVAL',
+            name: 'statusapproval',
+            align: 'left',
+            stype: 'select',
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['comboapproval'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['comboapproval'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+              `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              let statusApproval = JSON.parse(value)
+
+              if (statusApproval == null) {
+                return '';
+              }
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusApproval.WARNA}; color: #fff;">
+                  <span>${statusApproval.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusApproval = JSON.parse(rowObject.statusapproval)
+              if (statusApproval == null) {
+                return '';
+              }
+              return ` title="${statusApproval.MEMO}"`
+            }
           },
           {
             label: 'STATUS CETAK',
@@ -271,6 +369,17 @@
           setCustomBindKeys($(this))
           initResize($(this))
 
+          $.each(selectedRows, function(key, value) {
+
+          $('#jqGrid tbody tr').each(function(row, tr) {
+            if ($(this).find(`td input:checkbox`).val() == value) {
+              $(this).find(`td input:checkbox`).prop('checked', true)
+              $(this).addClass('bg-light-blue')
+            }
+          })
+
+          });
+
           /* Set global variables */
           sortname = $(this).jqGrid("getGridParam", "sortname")
           sortorder = $(this).jqGrid("getGridParam", "sortorder")
@@ -309,6 +418,7 @@
           }, 100)
 
           setHighlight($(this))
+          $('#gs_').prop('disabled', false)
         }
       })
       .jqGrid("setLabel", "rn", "No.")
@@ -366,6 +476,19 @@
             }
           },
           {
+            id: 'report',
+            innerHTML: '<i class="fa fa-print"></i> REPORT',
+            class: 'btn btn-info btn-sm mr-1',
+            onClick: () => {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Please select a row')
+              } else {
+                window.open(`{{ route('hutangheader.report') }}?id=${selectedId}`)
+              }
+            }
+          },
+          {
             id: 'export',
             title: 'Export',
             caption: 'Export',
@@ -381,16 +504,13 @@
             }
           },
           {
-            id: 'report',
-            innerHTML: '<i class="fa fa-print"></i> REPORT',
-            class: 'btn btn-info btn-sm mr-1',
+            id: 'approveun',
+            innerHTML: '<i class="fas fa-check""></i> UN/APPROVAL',
+            class: 'btn btn-purple btn-sm mr-1',
             onClick: () => {
-              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Please select a row')
-              } else {
-                window.open(`{{ route('hutangheader.report') }}?id=${selectedId}`)
-              }
+
+              approve()
+
             }
           },
         ]
@@ -441,6 +561,9 @@
 
     if (!`{{ $myAuth->hasPermission('hutangheader', 'report') }}`) {
       $('#report').attr('disabled', 'disabled')
+    }
+    if (!`{{ $myAuth->hasPermission('hutangheader', 'approval') }}`) {
+      $('#approval').addClass('ui-disabled')
     }
 
     $('#rangeModal').on('shown.bs.modal', function() {
@@ -530,6 +653,48 @@
       })
     })
   })
+  function handleApproval(id) {
+    $.ajax({
+      url: `${apiUrl}hutangheader/${id}/approval`,
+      method: 'POST',
+      dataType: 'JSON',
+      beforeSend: request => {
+        request.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+      },
+      success: response => {
+        $('#jqGrid').trigger('reloadGrid')
+      }
+    }).always(() => {
+      $('#processingLoader').addClass('d-none')
+    })
+  }
+
+  function clearSelectedRows() {
+    selectedRows = []
+
+    $('#jqGrid').trigger('reloadGrid')
+  }
+
+  function selectAllRows() {
+    $.ajax({
+      url: `${apiUrl}hutangheader`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        limit: 0,
+        tgldari: $('#tgldariheader').val(),
+        tglsampai: $('#tglsampaiheader').val(),
+      },
+      success: (response) => {
+        selectedRows = response.data.map((hutang) => hutang.id)
+        console.log
+        $('#jqGrid').trigger('reloadGrid')
+      }
+    })
+  }
 </script>
 @endpush()
 @endsection

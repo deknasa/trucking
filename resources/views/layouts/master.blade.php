@@ -59,6 +59,11 @@
     <span>Loading</span>
   </div>
 
+  <div class="processing-loader d-none" id="processingLoader">
+    <img src="{{ asset('images/loading-color.gif') }}" rel="preload">
+    <span>Processing</span>
+  </div>
+
   <div id="dialog-message" title="Pesan" class="text-center text-danger" style="display: none;">
     <span class="fa fa-exclamation-triangle" aria-hidden="true" style="font-size:25px;"></span>
     <p></p>

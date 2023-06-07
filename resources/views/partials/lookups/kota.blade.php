@@ -12,6 +12,7 @@
       postData: {
         aktif: `{!! $Aktif ?? '' !!}`,
       },         
+      idPrefix: 'kotaLookup',
       colModel: [{
           label: 'ID',
           name: 'id',

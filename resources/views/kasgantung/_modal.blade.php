@@ -14,7 +14,7 @@
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
-                  NO BUKTI <span class="text-danger">*</span>
+                  NO BUKTI <span class="text-danger"></span>
                 </label>
               </div>
               <div class="col-12 col-md-4">
@@ -32,7 +32,7 @@
                 </div>
               </div>
             </div>
-            <div class="row">
+            <!-- <div class="row">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
                   PENERIMA
@@ -42,7 +42,17 @@
                 <input type="hidden" name="penerima_id">
                 <input type="text" name="penerima" class="form-control penerima-lookup">
               </div>
-            </div>
+            </div> -->
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
+                  PENERIMA <span class="text-danger"></span>
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="text" name="penerima" class="form-control">
+              </div>
+            </div>            
             <div class="border p-3 mt-3">
               <h6>Posting Pengeluaran</h6>
 
@@ -222,7 +232,7 @@
       }
 
       $(this).attr('disabled', '')
-      $('#loader').removeClass('d-none')
+      $('#processingLoader').removeClass('d-none')
 
       $.ajax({
         url: url,
@@ -260,7 +270,7 @@
           }
         },
       }).always(() => {
-        $('#loader').addClass('d-none')
+        $('#processingLoader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
     })

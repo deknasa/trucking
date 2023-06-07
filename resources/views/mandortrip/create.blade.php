@@ -187,7 +187,7 @@
       })
 
       $(this).attr('disabled', '')
-      $('#loader').removeClass('d-none')
+      $('#processingLoader').removeClass('d-none')
 
       if (action == 'add' ) {
         $.ajax({
@@ -224,7 +224,7 @@
                 }
               },
             }).always(() => {
-              $('#loader').addClass('d-none')
+              $('#processingLoader').addClass('d-none')
               $(this).removeAttr('disabled')
             })
 
@@ -240,7 +240,7 @@
             }
           },
         }).always(() => {
-          $('#loader').addClass('d-none')
+          $('#processingLoader').addClass('d-none')
           $(this).removeAttr('disabled')
         })
       } else {
@@ -277,7 +277,7 @@
             }
           },
         }).always(() => {
-          $('#loader').addClass('d-none')
+          $('#processingLoader').addClass('d-none')
           $(this).removeAttr('disabled')
         })
       }

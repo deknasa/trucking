@@ -294,6 +294,7 @@ class PengeluaranStokHeaderController extends MyController
 
         $pengeluaranstok_details = $response['data'];
         $user =  Auth::user();
+        dd($user);
         $combo = $this->combo('list');
         $parameterStatusFormat = $this->statusFormat();
 

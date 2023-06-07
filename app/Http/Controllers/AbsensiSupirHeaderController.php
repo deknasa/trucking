@@ -128,7 +128,6 @@ class AbsensiSupirHeaderController extends MyController
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'absensisupirdetail', $detailParams);
         
-        
         $absensi_details = $absensi_detail['data'];
         $user = $absensi_detail['user'];
         return view('reports.absensi', compact('absensi_details','user'));

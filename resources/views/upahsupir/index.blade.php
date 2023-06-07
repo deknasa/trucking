@@ -331,7 +331,19 @@
               deleteUpahSupir(selectedId)
             }
           },
-          
+          {
+            id: 'report',
+            innerHTML: '<i class="fa fa-print"></i> REPORT',
+            class: 'btn btn-info btn-sm mr-1',
+            onClick: () => {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Please select a row')
+              } else {
+                window.open(`{{ route('upahsupir.report') }}?id=${selectedId}`)
+              }
+            }
+          },          
           {
             id: 'export',
             title: 'Export',
@@ -350,22 +362,9 @@
             }
           },  
           {
-            id: 'report',
-            innerHTML: '<i class="fa fa-print"></i> REPORT',
-            class: 'btn btn-info btn-sm mr-1',
-            onClick: () => {
-              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Please select a row')
-              } else {
-                window.open(`{{ route('upahsupir.report') }}?id=${selectedId}`)
-              }
-            }
-          },
-          {
             id: 'import',
             innerHTML: '<i class="fas fa-file-upload"></i> UPDATE HARGA',
-            class: 'btn btn-info btn-sm mr-1',
+            class: 'btn btn-purple btn-sm mr-1',
             onClick: () => {
               // $('#importModal').data('action', 'import')
               $('#importModal').find('button:submit').html(`Update Harga`)
@@ -466,7 +465,7 @@
       let form = $('#formImport')
 
       $(this).attr('disabled', '')
-      $('#loader').removeClass('d-none')
+      $('#processingLoader').removeClass('d-none')
 
       $.ajax({
         url: url,
@@ -497,7 +496,7 @@
           }
         },
       }).always(() => {
-        $('#loader').addClass('d-none')
+        $('#processingLoader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
     })
@@ -513,14 +512,19 @@
 
       $('#formRange [name=sidx]').val($('#jqGrid').jqGrid('getGridParam').postData.sidx)
       $('#formRange [name=sord]').val($('#jqGrid').jqGrid('getGridParam').postData.sord)
-      $('#formRange [name=dari]').val((indexRow + 1) + (limit * (page - 1)))
-      $('#formRange [name=sampai]').val(totalRecord)
+      if (page == 0) {
+        $('#formRange [name=dari]').val(page)
+        $('#formRange [name=sampai]').val(totalRecord)
+      }else{
+        $('#formRange [name=dari]').val((indexRow + 1) + (limit * (page - 1)))
+        $('#formRange [name=sampai]').val(totalRecord)
+      }
 
       autoNumericElements = new AutoNumeric.multiple('#formRange .autonumeric-report', {
         digitGroupSeparator: '.',
         decimalCharacter: ',',
         allowDecimalPadding: false,
-        minimumValue: 1,
+        minimumValue: 0,
         maximumValue: totalRecord
       })
     })

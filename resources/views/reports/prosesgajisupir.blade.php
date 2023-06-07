@@ -17,7 +17,6 @@
     
     let prosesgajis = <?= json_encode($data); ?>
 
-    console.log(prosesgajis.statuscetak)
     $( document ).ready(function() {
       var statuscetak = prosesgajis.statuscetak
       if (statuscetak == 174) {
@@ -102,7 +101,7 @@
           },
           success: response => {
             console.log(response);
-            location.reload()
+            window.close()
           }
     
         })

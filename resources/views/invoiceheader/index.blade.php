@@ -520,6 +520,22 @@
               }
             }
           },
+          {
+            id: 'report',
+            innerHTML: '<i class="fa fa-print"></i> REPORT',
+            class: 'btn btn-info btn-sm mr-1',
+            onClick: () => {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Please select a row')
+              } else {
+                window.open(`{{ route('invoiceheader.report') }}?id=${selectedId}`)
+              }
+              
+              clearSelectedRows()
+              $('#gs_').prop('checked', false)
+            }
+          },
 
           {
             id: 'export',
@@ -538,22 +554,6 @@
               clearSelectedRows()
               $('#gs_').prop('checked', false)
 
-            }
-          },
-          {
-            id: 'report',
-            innerHTML: '<i class="fa fa-print"></i> REPORT',
-            class: 'btn btn-info btn-sm mr-1',
-            onClick: () => {
-              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Please select a row')
-              } else {
-                window.open(`{{ route('invoiceheader.report') }}?id=${selectedId}`)
-              }
-              
-              clearSelectedRows()
-              $('#gs_').prop('checked', false)
             }
           },
           {

@@ -1098,9 +1098,11 @@ function showSuccessDialog(statusText = "", message = "") {
 	});
 }
 function showDialog(statusText = "", message = "") {
-	$("#dialog-message").find("p").remove();
+	$("#dialog-message").html(`
+		<span class="fa fa-exclamation-triangle" aria-hidden="true" style="font-size:25px;"></span>
+	`)
 	$("#dialog-message").append(
-		`<p class="text-dark"> ${statusText} </p><p> ${message} </p>`
+		`<p class="text-dark"> ${statusText} </p> ${message}`
 	);
 	$("#dialog-message").dialog({
 		modal: true,

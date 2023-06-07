@@ -36,7 +36,7 @@
                 </label>
               </div>
               <div class="col-12 col-md-10">
-                <input type="text" name="menuseq" class="form-control">
+                <input type="text" name="menuseq" class="form-control numbernoseparate">
               </div>
             </div>
             <div class="row form-group sometimes">
@@ -160,7 +160,7 @@
       }
 
       $(this).attr('disabled', '')
-      $('#loader').removeClass('d-none')
+      $('#processingLoader').removeClass('d-none')
 
       $.ajax({
         url: url,
@@ -193,7 +193,7 @@
           }
         },
       }).always(() => {
-        $('#loader').addClass('d-none')
+        $('#processingLoader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
     })

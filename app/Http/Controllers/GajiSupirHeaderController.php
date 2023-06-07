@@ -117,7 +117,8 @@ class GajiSupirHeaderController extends MyController
 
         //FETCH DETAIL
         $detailParams = [
-            'gajisupir_id' => $request->id,
+            'forReport' => true,
+            'gajisupir_id' => $request->id
         ];
 
         $responses = Http::withHeaders($request->header())
@@ -130,10 +131,10 @@ class GajiSupirHeaderController extends MyController
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setCellValue('A1', 'TAS '.$user['cabang_id']);
+        $sheet->setCellValue('A1', 'TAS ');
         $sheet->getStyle("A1")->getFont()->setSize(20);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
-        $sheet->mergeCells('A1:G1');
+        $sheet->mergeCells('A1:I1');
 
         $header_start_row = 2;
         $detail_table_header_row = 7;
@@ -206,7 +207,7 @@ class GajiSupirHeaderController extends MyController
             $sheet->setCellValue('C' . $header_start_row++, ': '.$gajisupirs[$header_column['index']]);
         }
         ;
-        $sheet->setCellValue('C6', ': '.number_format((float) $gajisupirs['nominal'], '2', ',', '.'));
+        $sheet->setCellValue('C5', ': '.number_format((float) $gajisupirs['nominal'], '2', ',', '.'));
 
         foreach ($detail_columns as $detail_columns_index => $detail_column) {
             $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_table_header_row, $detail_column['label'] ?? $detail_columns_index + 1);
