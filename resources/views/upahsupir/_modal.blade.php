@@ -231,7 +231,7 @@
                   </tr>
                 </tbody>
                 <tfoot>
-                  <tr>
+                  <tr style="display: none;">
                     <td colspan="3">
                       <p class="text-right font-weight-bold">TOTAL :</p>
                     </td>
@@ -395,7 +395,7 @@
       }
 
       $(this).attr('disabled', '')
-      $('#loader').removeClass('d-none')
+      $('#processingLoader').removeClass('d-none')
       $.ajax({
         url: url,
         method: 'POST',
@@ -434,7 +434,7 @@
           }
         },
       }).always(() => {
-        $('#loader').addClass('d-none')
+        $('#processingLoader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
     })
@@ -1287,6 +1287,7 @@
 
         $('#crudForm [name=parent_id]').first().val(upahsupir.id)
         $('#crudForm [name=parent]').first().val(upahsupir.kotasampai_id)
+        $('#crudForm').find(`[name=kotasampai]`).prop('readonly', false)
         element.data('currentValue', element.val())
         upahSupirKota = upahsupir.kotasampai_id;
         // Menghapus nilai autonumeric pada input jarak
@@ -1363,6 +1364,7 @@
       },
       onClear: (element) => {
         $('#crudForm [name=kotasampai_id]').first().val('')
+        $('#crudForm').find(`[name=kotasampai]`).prop('readonly', false)
         element.val('')
         element.data('currentValue', element.val())
       }
@@ -1379,7 +1381,13 @@
         }
       },
       onSelectRow: (kota, element) => {
-        $('#crudForm [name=kotasampai_id]').first().val(kota.id)
+        $('#crudForm [name=kotasampai_id]').first().val(kota.kotaId)
+        $('#crudForm [name=kotasampai]').first().val(kota.tujuan)
+        $('#crudForm [name=tarif_id]').first().val(kota.id)
+        $('#crudForm').find(`[name=kotasampai]`).prop('readonly', true)
+        $('#crudForm').find(`[name="kotasampai"]`).parent('.input-group').find('.button-clear').remove()
+        $('#crudForm').find(`[name="kotasampai"]`).parent('.input-group').find('.input-group-append').remove()
+
         element.val(kota.tujuan)
         element.data('currentValue', element.val())
       },
@@ -1388,6 +1396,9 @@
       },
       onClear: (element) => {
         $('#crudForm [name=kotasampai_id]').first().val('')
+        $('#crudForm').find(`[name=kotasampai]`).val('').prop('readonly', false)
+        $('#crudForm').find(`[name="kotasampai"]`).parent('.input-group').addClass('.button-clear')
+        $('#crudForm').find(`[name="kotasampai"]`).parent('.input-group').addClass('.input-group-append')
         element.val('')
         element.data('currentValue', element.val())
       }

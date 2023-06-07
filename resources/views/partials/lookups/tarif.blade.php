@@ -168,6 +168,12 @@
           name: 'kota_id',
         },
         {
+          label: 'KOTAID',
+          name: 'kotaId',
+          hidden:true,
+          search: false,
+        },
+        {
           label: 'ZONA',
           name: 'zona_id',
         },

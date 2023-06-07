@@ -498,19 +498,6 @@
             }
           },
           {
-            id: 'export',
-            innerHTML: '<i class="fa fa-file-export"></i> EXPORT',
-            class: 'btn btn-warning btn-sm mr-1',
-            onClick: () => {
-
-              $('#rangeModal').data('action', 'export')
-              $('#rangeModal').find('button:submit').html(`Export`)
-              $('#rangeModal').modal('show')
-              clearSelectedRows()
-              $('#gs_').prop('checked', false)
-            }
-          },
-          {
             id: 'report',
             innerHTML: '<i class="fa fa-print"></i> REPORT',
             class: 'btn btn-info btn-sm mr-1',
@@ -519,6 +506,19 @@
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               window.open(`{{url('invoiceextraheader/report/${selectedId}')}}`)
               
+              clearSelectedRows()
+              $('#gs_').prop('checked', false)
+            }
+          },
+          {
+            id: 'export',
+            innerHTML: '<i class="fa fa-file-export"></i> EXPORT',
+            class: 'btn btn-warning btn-sm mr-1',
+            onClick: () => {
+
+              $('#rangeModal').data('action', 'export')
+              $('#rangeModal').find('button:submit').html(`Export`)
+              $('#rangeModal').modal('show')
               clearSelectedRows()
               $('#gs_').prop('checked', false)
             }
@@ -649,7 +649,7 @@
           $('#jqGrid').trigger('reloadGrid')
         }
       }).always(() => {
-        $('#loader').addClass('d-none')
+        $('#processingLoader').addClass('d-none')
       })
     }
 

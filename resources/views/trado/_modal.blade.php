@@ -327,7 +327,7 @@
       }
 
       $(this).attr('disabled', '')
-      $('#loader').removeClass('d-none')
+      $('#processingLoader').removeClass('d-none')
 
       $.ajax({
         url: url,
@@ -364,7 +364,7 @@
           }
         },
       }).always(() => {
-        $('#loader').addClass('d-none')
+        $('#processingLoader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
     })
@@ -475,6 +475,12 @@
           .then(() => {
             $('#crudModal').modal('show')
             getMaxLength(form)
+            $('#crudForm').find(`.ui-datepicker-trigger`).attr('disabled', false)
+
+            let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
+            name.attr('disabled', false)
+            name.find('.lookup-toggler').attr('disabled', false)
+     
           })
           .finally(() => {
             $('.modal-loader').addClass('d-none')
@@ -516,8 +522,8 @@
             initLookup()
             initDatepicker()
             initSelect2(form.find('.select2bs4'), true)
-            form.find('[name]').removeAttr('disabled')
-
+            form.find('[name]').removeAttr('disabled') 
+          
             form.find('select').each((index, select) => {
               let element = $(select)
 
@@ -533,11 +539,17 @@
           })
           .then(() => {
             $('#crudModal').modal('show')
+            $('#crudForm').find(`.ui-datepicker-trigger`).attr('disabled', true)
+
+            let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
+            name.attr('disabled', true)
+            name.find('.lookup-toggler').attr('disabled', true)
+
           })
           .finally(() => {
             $('.modal-loader').addClass('d-none')
-          })
-      })
+          })  
+      })      
   }
 
 

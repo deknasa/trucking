@@ -118,13 +118,13 @@
             totalNominaltol = nominaltols.reduce((previousValue, currentValue) => previousValue + currencyUnformat(currentValue), 0)
           }
 
-          $(this).jqGrid('footerData', 'set', {
-            container_id: 'Total:',
-            nominalsupir: totalNominalsupir,
-            nominalkenek: totalNominalkenek,
-            nominalkomisi: totalNominalkomisi,
-            nominaltol: totalNominaltol,
-          }, true)
+          // $(this).jqGrid('footerData', 'set', {
+          //   container_id: 'Total:',
+          //   nominalsupir: totalNominalsupir,
+          //   nominalkenek: totalNominalkenek,
+          //   nominalkomisi: totalNominalkomisi,
+          //   nominaltol: totalNominaltol,
+          // }, true)
 
         }
       })

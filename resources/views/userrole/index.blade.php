@@ -75,7 +75,7 @@
         method = 'DELETE'
       }
 
-      $('#loader').removeClass('d-none')
+      $('#processingLoader').removeClass('d-none')
       $(this).attr('disabled', 'disabled')
 
       $.ajax({
@@ -106,7 +106,7 @@
           }
         }
       }).always(() => {
-        $('#loader').addClass('d-none')
+        $('#processingLoader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
     })

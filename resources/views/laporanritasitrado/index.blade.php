@@ -5,7 +5,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
-            <div class="card card-primary">
+            <div class="card card-easyui bordered mb-4">
                 <div class="card-header">
                 </div>
                 <form id="crudForm">
@@ -21,9 +21,9 @@
                         <div class="row">
 
                             <div class="col-sm-6 mt-4">
-                                <a id="btnEkspor" class="btn btn-secondary mr-2 ">
-                                    <i class="fas fa-sync"></i>
-                                    Ekspor
+                                <a id="btnEkspor" class="btn btn-warning mr-1 ">
+                                    <i class="fas fa-file-export"></i>
+                                    Export
                                 </a>
                                 <a id="btnreload" class="btn btn-primary mr-2 ">
                                     <i class="fas fa-sync"></i>
@@ -60,7 +60,7 @@
 
 
     $(document).ready(function() {
-        
+
         $('#crudForm').find('[name=periode]').val($.datepicker.formatDate('mm-yy', new Date())).trigger('change');
 
         $('.datepicker').datepicker({
@@ -79,15 +79,14 @@
 			</div>
 		`
             )
-            .addClass("btn btn-primary").html(`
+            .addClass("btn btn-easyui text-easyui-dark").html(`
 			<i class="fa fa-calendar-alt"></i>
 		`);
-        
-        let css_property =
-        {
+
+        let css_property = {
             "color": "#fff",
             "background-color": "rgb(173 180 187)",
-            "cursor" : "not-allowed",
+            "cursor": "not-allowed",
             "border-color": "rgb(173 180 187)"
         }
         if (!`{{ $myAuth->hasPermission('laporanritasitrado', 'export') }}`) {
@@ -117,8 +116,6 @@
             showDialog('ISI SELURUH KOLOM')
         }
     })
-
-
 </script>
 @endpush()
 @endsection

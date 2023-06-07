@@ -156,7 +156,7 @@
                   </tr>
                 </tbody>
                 <tfoot>
-                  <tr>
+                  <tr style="display: none;">
                     <td colspan="2">
                       <p class="text-right font-weight-bold">TOTAL :</p>
                     </td>
@@ -289,7 +289,7 @@
       }
 
       $(this).attr('disabled', '')
-      $('#loader').removeClass('d-none')
+      $('#processingLoader').removeClass('d-none')
 
       $.ajax({
         url: url,
@@ -327,7 +327,7 @@
           }
         },
       }).always(() => {
-        $('#loader').addClass('d-none')
+        $('#processingLoader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
     })
