@@ -1347,6 +1347,9 @@
         $('#crudForm [name=kotasampai]').first().val(kota.tujuan)
         $('#crudForm [name=tarif_id]').first().val(kota.id)
         $('#crudForm').find(`[name=kotasampai]`).prop('readonly', true)
+        $('#crudForm').find(`[name="kotasampai"]`).parent('.input-group').find('.button-clear').remove()
+        $('#crudForm').find(`[name="kotasampai"]`).parent('.input-group').find('.input-group-append').remove()
+
         element.val(kota.tujuan)
         element.data('currentValue', element.val())
       },
@@ -1355,7 +1358,9 @@
       },
       onClear: (element) => {
         $('#crudForm [name=kotasampai_id]').first().val('')
-        $('#crudForm').find(`[name=kotasampai]`).prop('readonly', false)
+        $('#crudForm').find(`[name=kotasampai]`).val('').prop('readonly', false)
+        $('#crudForm').find(`[name="kotasampai"]`).parent('.input-group').addClass('.button-clear')
+        $('#crudForm').find(`[name="kotasampai"]`).parent('.input-group').addClass('.input-group-append')
         element.val('')
         element.data('currentValue', element.val())
       }
