@@ -112,7 +112,7 @@
                 <label class="col-sm-4 col-form-label">Tgl Pajak STNK <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
                   <div class="input-group">
-                    <input type="text" class="form-control datepicker" name="tglpajakstnk">
+                    <input type="text" class="form-control" name="tglpajakstnk">
                   </div>
                 </div>
               </div>
@@ -533,18 +533,11 @@
           })
           .then(() => {
             $('#crudModal').modal('show')
-            //  $('#crudForm [name=tglpajakstnk]').siblings('.input-group-append').remove()
-            //  $('#crudForm [name=mandor]').siblings('.input-group-append').remove()
-            //  $('#crudForm [name=mandor]').siblings('.button-clear').remove()
-
-            //  $('#crudForm [name=supir]').siblings('.input-group-append').remove()
-            //  $('#crudForm [name=supir]').siblings('.button-clear').remove()
-
           })
           .finally(() => {
             $('.modal-loader').addClass('d-none')
-          })
-      })
+          })  
+      })      
   }
 
 
