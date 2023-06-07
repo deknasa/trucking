@@ -363,14 +363,21 @@
 
       $('#formRange [name=sidx]').val($('#jqGrid').jqGrid('getGridParam').postData.sidx)
       $('#formRange [name=sord]').val($('#jqGrid').jqGrid('getGridParam').postData.sord)
-      $('#formRange [name=dari]').val((indexRow + 1) + (limit * (page - 1)))
-      $('#formRange [name=sampai]').val(totalRecord)
+
+      if (page == 0) {
+        $('#formRange [name=dari]').val(page)
+        $('#formRange [name=sampai]').val(totalRecord)
+      }else{
+        $('#formRange [name=dari]').val((indexRow + 1) + (limit * (page - 1)))
+        $('#formRange [name=sampai]').val(totalRecord)
+      }
+      
 
       autoNumericElements = new AutoNumeric.multiple('#formRange .autonumeric-report', {
         digitGroupSeparator: '.',
         decimalCharacter: ',',
         allowDecimalPadding: false,
-        minimumValue: 1,
+        minimumValue: 0,
         maximumValue: totalRecord
       })
     })
@@ -395,6 +402,8 @@
       let offset = parseInt(formRange.find('[name=dari]').val()) - 1
       let limit = parseInt(formRange.find('[name=sampai]').val().replace('.', '')) - offset
       params += `&offset=${offset}&limit=${limit}`
+      console.log(offset)
+      console.log(limit)
 
       if ($('#rangeModal').data('action') == 'export') {
         let xhr = new XMLHttpRequest()
