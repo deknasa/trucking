@@ -5,11 +5,14 @@
         <div class="modal-header">
           <p class="modal-title" id="crudModalTitle"></p>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            
+
           </button>
         </div>
         <form action="" method="post">
           <div class="modal-body">
+            <input type="hidden" name="id">
+
+            <!-- <div class="row form-group">
             <div class="row form-group" style="display: none;">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">ID</label>
@@ -17,7 +20,7 @@
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="text" name="id" class="form-control" readonly>
               </div>
-            </div>
+            </div> -->
 
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
@@ -173,7 +176,7 @@
                   </tr>
                 </thead>
                 <tbody id="table_body" class="form-group">
-                {{--<tr>
+                  {{--<tr>
                     <td>1</td>
                     <td>
                       <input type="hidden" name="container_id[]">
@@ -640,11 +643,10 @@
               element.val(value).trigger('change')
             } else if (element.hasClass('datepicker')) {
               element.val(dateFormat(value))
+            } else {
+              element.val(value)
             }
-            else {
-                element.val(value)
-            }
-            
+
             if (index == 'container') {
               element.data('current-value', value)
             }
@@ -658,8 +660,8 @@
 
 
           $.each(response.detail, (index, detail) => {
-              // $.each(response.data.upahsupir_rincian, (index, detail) => {
-              let detailRow = $(`
+            // $.each(response.data.upahsupir_rincian, (index, detail) => {
+            let detailRow = $(`
                 <tr>
                   <td></td>
                   
@@ -675,19 +677,19 @@
                   
                 </tr>
               `)
-      
-              detailRow.find(`[name="container_id[]"]`).val(detail.container_id)
-              detailRow.find(`[name="container[]"]`).val(detail.container)
-              detailRow.find(`[name="nominal[]"]`).val(detail.nominal)
-      
-              $('#detailList tbody').append(detailRow)
-      
-              initAutoNumeric(detailRow.find('.autonumeric'))
-              setNominal()
-            })
-            // setuprowshow(userId);
 
-            setRowNumbers()
+            detailRow.find(`[name="container_id[]"]`).val(detail.container_id)
+            detailRow.find(`[name="container[]"]`).val(detail.container)
+            detailRow.find(`[name="nominal[]"]`).val(detail.nominal)
+
+            $('#detailList tbody').append(detailRow)
+
+            initAutoNumeric(detailRow.find('.autonumeric'))
+            setNominal()
+          })
+          // setuprowshow(userId);
+
+          setRowNumbers()
 
           if (form.data('action') === 'delete') {
             form.find('[name]').addClass('disabled')
@@ -707,10 +709,10 @@
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
-      
+
           Aktif: 'AKTIF',
         }
-      },        
+      },
       onSelectRow: (container, element) => {
         $('#crudForm [name=container_id]').first().val(container.id)
         element.val(container.keterangan)
@@ -732,10 +734,10 @@
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
-      
+
           Aktif: 'AKTIF',
         }
-      },        
+      },
       onSelectRow: (kota, element) => {
         $('#crudForm [name=kota_id]').first().val(kota.id)
         element.val(kota.keterangan)
@@ -757,10 +759,10 @@
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
-      
+
           Aktif: 'AKTIF',
         }
-      },        
+      },
       onSelectRow: (zona, element) => {
         $('#crudForm [name=zona_id]').first().val(zona.id)
         element.val(zona.keterangan)
@@ -782,13 +784,13 @@
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
-      
+
           Aktif: 'AKTIF',
         }
-      },        
+      },
       onSelectRow: (tarif, element) => {
         let form = $('#crudForm')
-        showTarif(form, tarif.id,true)
+        showTarif(form, tarif.id, true)
         element.val(tarif.tujuan)
         element.data('currentValue', element.val())
         $('#crudForm [name=parent_id]').first().val(tarif.id)
@@ -808,10 +810,10 @@
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
-      
+
           Aktif: 'AKTIF',
         }
-      },        
+      },
       onSelectRow: (upahsupir, element) => {
         $('#crudForm [name=upahsupir_id]').first().val(upahsupir.id)
         $('#crudForm').find(`[name=tujuan]`).prop('readonly', true)
@@ -917,10 +919,10 @@
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
-      
+
           Aktif: 'AKTIF',
         }
-      },        
+      },
       onSelectRow: (container, element) => {
         $(`#crudForm [name="container_id[]"]`).last().val(container.id)
         element.val(container.keterangan)
@@ -976,7 +978,7 @@
       })
     })
   }
-  
+
   function cekValidasidelete(Id) {
     $.ajax({
       url: `{{ config('app.api_url') }}tarif/${Id}/cekValidasi`,
@@ -987,15 +989,14 @@
       },
       success: response => {
         var kondisi = response.kondisi
-          if (kondisi == true) {
-            showDialog(response.message['keterangan'])
-          } else {
-              deleteTarif(Id)
-          }
+        if (kondisi == true) {
+          showDialog(response.message['keterangan'])
+        } else {
+          deleteTarif(Id)
+        }
 
       }
     })
   }
-
 </script>
 @endpush()
