@@ -79,7 +79,7 @@
             hidden: true
           },
           {
-            label: 'NO. BUKTI',
+            label: 'NO BUKTI',
             name: 'nobukti',
             align: 'left'
           },
@@ -126,24 +126,24 @@
           },
           
           {
-            label: 'servicein nobukti',
+            label: 'SERVICE IN NO BUKTI',
             name: 'servicein_nobukti',
             align: 'left'
           },
          
           
           {
-            label: 'PENerimaan stok nobukti',
+            label: 'PENERIMAAN STOK NO BUKTI',
             name: 'penerimaanstok_nobukti',
             align: 'left'
           },
           {
-            label: 'Pengeluaran nobukti',
+            label: 'Pengeluaran no bukti',
             name: 'pengeluaranstok_nobukti',
             align: 'left'
           },
           {
-            label: 'penerimaan nobukti',
+            label: 'Penerimaan no bukti',
             name: 'penerimaan_nobukti',
             align: 'left'
           },

@@ -99,7 +99,7 @@
           }
         },
         {
-          label: 'NO. BUKTI',
+          label: 'NO BUKTI',
           name: 'nobukti',
           align: 'left'
         },
@@ -129,7 +129,7 @@
           align: 'left'
         },
         {
-          label: 'NO. BUKTI PENERIMAAN',
+          label: 'NO BUKTI PENERIMAAN',
           name: 'penerimaan_nobukti',
           align: 'left'
         },

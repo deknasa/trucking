@@ -36,7 +36,7 @@
             name: 'nobukti',
           },
           {
-            label: 'NO. BUKTI PENERIMAAN',
+            label: 'NO BUKTI PENERIMAAN',
             name: 'penerimaantrucking_nobukti',
           },
           {
@@ -53,7 +53,7 @@
             name: 'penerimaantrucking_bank_id',
           },
           {
-            label: 'NO. BUKTI PENGELUARAN',
+            label: 'NO BUKTI PENGELUARAN',
             name: 'pengeluarantrucking_nobukti',
           },
           {
@@ -70,7 +70,7 @@
             name: 'pengeluarantrucking_bank_id',
           },
           {
-            label: 'NO. BUKTI PENGEMBALIAN KAS GANTUNG',
+            label: 'NO BUKTI PENGEMBALIAN KAS GANTUNG',
             name: 'pengembaliankasgantung_nobukti',
           },
           {

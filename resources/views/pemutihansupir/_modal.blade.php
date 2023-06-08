@@ -574,7 +574,7 @@
             hidden: true
           },
           {
-            label: 'NO. BUKTI',
+            label: 'NO BUKTI',
             name: 'nobukti_posting',
             align: 'left',
           },
@@ -759,7 +759,7 @@
             hidden: true
           },
           {
-            label: 'NO. BUKTI',
+            label: 'NO BUKTI',
             name: 'nobukti_nonposting',
             align: 'left',
           },

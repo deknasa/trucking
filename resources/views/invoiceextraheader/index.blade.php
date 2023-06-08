@@ -233,7 +233,7 @@
             }
           },
           {
-            label: 'NO. BUKTI',
+            label: 'NO BUKTI',
             name: 'nobukti',
             align: 'left'
           },
@@ -260,7 +260,7 @@
           },
 
           {
-            label: 'NO. BUKTI PIUTANG',
+            label: 'NO BUKTI PIUTANG',
             name: 'piutang_nobukti',
             align: 'left'
           },

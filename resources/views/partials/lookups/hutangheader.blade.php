@@ -27,7 +27,7 @@
           hidden: true
         },
         {
-          label: 'NO. BUKTI',
+          label: 'NO BUKTI',
           name: 'nobukti',
           align: 'left'
         },

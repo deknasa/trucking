@@ -34,7 +34,7 @@
           },
 
           {
-            label: 'persentasediscount',
+            label: 'persentase discount',
             name: 'persentasediscount',
             align: 'right',
             formatter: currencyFormat,

@@ -50,7 +50,7 @@
                         <div class="row form-group">
                             <div class="col-12 col-sm-2 col-md-2">
                                 <label class="col-form-label">
-                                    TANGGAL KELUAR <span class="text-danger">*</span>
+                                    TGL KELUAR <span class="text-danger">*</span>
                                 </label>
                             </div>
                             <div class="col-12 col-sm-4 col-md-4">
@@ -71,7 +71,7 @@
                                                 <thead>
                                                     <tr>
                                                         <th style="width:5%; max-width: 25px;min-width: 15px">No</th>
-                                                        <th style="width:40%;">Nobukti Servicein</th>
+                                                        <th style="width:40%;">No bukti Service in</th>
                                                         <th style="width:40%;">Keterangan</th>
                                                         <th style="width:5%; max-width: 25px;min-width: 15px">Aksi</th>
                                                         

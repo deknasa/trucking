@@ -56,7 +56,7 @@
             hidden: true
           },
           {
-            label: 'NO. BUKTI',
+            label: 'NO BUKTI',
             name: 'nobukti',
           },
           {
@@ -96,7 +96,7 @@
             name: 'nowarkat',
           },
           {
-            label: 'TANGGAL JATUH TEMPO',
+            label: 'TGL JATUH TEMPO',
             name: 'tgljatuhtempo',
             align: 'left',
             formatter: "date",

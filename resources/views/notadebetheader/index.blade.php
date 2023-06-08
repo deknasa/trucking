@@ -228,7 +228,7 @@
             }
           },
           {
-            label: 'NO. BUKTI',
+            label: 'NO BUKTI',
             name: 'nobukti',
             align: 'left'
           },
@@ -278,7 +278,7 @@
             align: 'left'
           },
           {
-            label: 'TANGGAL buka cetak',
+            label: 'TGL BUKA CETAK',
             name: 'tglbukacetak',
             align: 'left',
             formatter: "date",

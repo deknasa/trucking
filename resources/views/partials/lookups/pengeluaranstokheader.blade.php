@@ -30,7 +30,7 @@
             hidden: true
           },
           {
-            label: 'NO. BUKTI',
+            label: 'NO BUKTI',
             name: 'nobukti',
             align: 'left'
           },
@@ -76,19 +76,19 @@
           },
           
           {
-            label: 'servicein nobukti',
+            label: 'SERVICE IN NO BUKTI',
             name: 'servicein_nobukti',
             align: 'left'
           },
          
           
           {
-            label: 'PENerimaan nobukti',
+            label: 'Penerimaan no bukti',
             name: 'penerimaanstok_nobukti',
             align: 'left'
           },
           {
-            label: 'Pengeluaran nobukti',
+            label: 'Pengeluaran no bukti',
             name: 'pengeluaranstok_nobukti',
             align: 'left'
           },

@@ -820,7 +820,7 @@
                         hidden: true
                     },
                     {
-                        label: 'NO. BUKTI',
+                        label: 'NO BUKTI',
                         name: 'nobuktiric',
                         align: 'left'
                     },

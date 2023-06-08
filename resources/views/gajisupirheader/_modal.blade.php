@@ -1858,7 +1858,7 @@
                         hidden: true
                     },
                     {
-                        label: 'NO. BUKTI',
+                        label: 'NO BUKTI',
                         name: 'absensi_nobukti',
                         align: 'left',
                     },
@@ -2237,7 +2237,7 @@
                         hidden: true
                     },
                     {
-                        label: 'NO. BUKTI',
+                        label: 'NO BUKTI',
                         name: 'nobuktitrip',
                         align: 'left',
                     },

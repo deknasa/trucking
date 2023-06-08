@@ -161,7 +161,7 @@
         //   }
         // },
         {
-          label: 'NO. BUKTI',
+          label: 'NO BUKTI',
           name: 'nobukti',
           align: 'left'
         },
@@ -201,7 +201,7 @@
           align: 'left'
         },
         {
-          label: 'TANGGAL LUNAS',
+          label: 'TGL Lunas',
           name: 'tgllunas',
           align: 'left',
           formatter: "date",

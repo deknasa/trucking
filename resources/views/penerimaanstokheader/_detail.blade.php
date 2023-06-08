@@ -41,19 +41,19 @@
           },
           
           {
-            label: 'persentasediscount',
+            label: 'persentase discount',
             name: 'persentasediscount',
             align: 'right',
             formatter: currencyFormat,
           },
           {
-            label: 'nominaldiscount',
+            label: 'nominal discount',
             name: 'nominaldiscount',
             align: 'right',
             formatter: currencyFormat,
           },
           {
-            label: 'vulkanisirke',
+            label: 'vulkanisir ke',
             name: 'vulkanisirke',
           },
           {

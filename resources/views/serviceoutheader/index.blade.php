@@ -61,7 +61,7 @@
             hidden: true
           },
           {
-            label: 'NO. BUKTI',
+            label: 'NO BUKTI',
             name: 'nobukti',
             align: 'left'
           },
@@ -81,7 +81,7 @@
             align: 'left'
           },
           {
-            label: 'TANGGAL KELUAR',
+            label: 'TGL KELUAR',
             name: 'tglkeluar',
             align: 'left',
             formatter: "date",

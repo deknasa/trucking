@@ -226,7 +226,7 @@
                         }
                     },
                     {
-                        label: 'NO. BUKTI',
+                        label: 'NO BUKTI',
                         name: 'nobukti',
                         align: 'left'
                     },
@@ -257,7 +257,7 @@
                         align: 'left'
                     },
                     {
-                        label: 'TANGGAL LUNAS',
+                        label: 'TGL Lunas',
                         name: 'tgllunas',
                         align: 'left',
                         formatter: "date",
@@ -287,7 +287,7 @@
                         align: 'left'
                     },
                     {
-                        label: 'TANGGAL BUKA CETAK',
+                        label: 'TGL BUKA CETAK',
                         name: 'tglbukacetak',
                         align: 'left',
                         formatter: "date",
