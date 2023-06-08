@@ -25,8 +25,9 @@
         iconSet: 'fontAwesome',
         datatype: "local",
         colModel: [{
-            label: 'NOBUKTI SERVICE IN',
+            label: 'NO BUKTI SERVICE IN',
             name: 'servicein_nobukti',
+            width: 200
           },
           {
             label: 'KETERANGAN',

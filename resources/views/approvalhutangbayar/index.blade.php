@@ -294,7 +294,7 @@
                         }
                     },
                     {
-                        label: 'NO. BUKTI',
+                        label: 'NO BUKTI',
                         name: 'nobukti',
                         align: 'left'
                     },
@@ -314,7 +314,7 @@
                         align: 'left'
                     },
                     {
-                        label: 'NO. BUKTI PENGELUARAN',
+                        label: 'NO BUKTI PENGELUARAN',
                         name: 'pengeluaran_nobukti',
                         align: 'left'
                     },

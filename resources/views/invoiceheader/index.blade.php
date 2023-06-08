@@ -232,7 +232,7 @@
             }
           },
           {
-            label: 'NO. BUKTI',
+            label: 'NO BUKTI',
             name: 'nobukti',
             align: 'left'
           },
@@ -254,7 +254,7 @@
           },
 
           {
-            label: 'TANGGAL TERIMA',
+            label: 'TGL TERIMA',
             name: 'tglterima',
             align: 'left',
             formatter: "date",
@@ -265,7 +265,7 @@
           },
 
           {
-            label: 'TANGGAL JATUH TEMPO',
+            label: 'TGL JATUH TEMPO',
             name: 'tgljatuhtempo',
             align: 'left',
             formatter: "date",
@@ -290,7 +290,7 @@
             align: 'left'
           },
           {
-            label: 'NO. BUKTI PIUTANG',
+            label: 'NO BUKTI PIUTANG',
             name: 'piutang_nobukti',
             align: 'left'
           },

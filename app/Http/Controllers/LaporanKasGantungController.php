@@ -54,7 +54,7 @@ class LaporanKasGantungController extends MyController
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'laporankasgantung/export', $detailParams);
-
+        
         $pengeluaran = $responses['data'];
         $user = Auth::user();
         

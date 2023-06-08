@@ -135,7 +135,7 @@
             }
           },
           {
-            label: 'NO. BUKTI',
+            label: 'NO BUKTI',
             name: 'nobukti',
             align: 'left'
           },
@@ -150,7 +150,7 @@
             }
           },
           {
-            label: 'NO. BUKTI ABSENSI ',
+            label: 'NO BUKTI ABSENSI ',
             name: 'absensisupir_nobukti',
             align: 'left'
           },

@@ -311,7 +311,7 @@
                         }
                     },
                     {
-                        label: 'NO. BUKTI',
+                        label: 'NO BUKTI',
                         name: 'nobukti',
                         align: 'left'
                     },
@@ -326,7 +326,7 @@
                         }
                     },
                     {
-                        label: 'No. Bukti Pelunasan Piutang',
+                        label: 'NO BUKTI Pelunasan Piutang',
                         name: 'pelunasanpiutang_nobukti',
                         align: 'left'
                     },
@@ -336,7 +336,7 @@
                         align: 'left'
                     },
                     {
-                        label: 'TANGGAL Lunas',
+                        label: 'TGL Lunas',
                         name: 'tgllunas',
                         align: 'left',
                         formatter: "date",

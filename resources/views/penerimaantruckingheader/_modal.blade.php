@@ -737,7 +737,7 @@
             search: false,
           },
           {
-            label: "Nobukti PENGELUARAN TRUCKING",
+            label: "no bukti pengeluaran TRUCKING",
             name: "nobukti",
             sortable: true,
           },

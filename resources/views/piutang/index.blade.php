@@ -136,7 +136,7 @@
             }
           },
           {
-            label: 'NO. BUKTI',
+            label: 'NO BUKTI',
             name: 'nobukti',
             align: 'left'
           },
@@ -179,7 +179,7 @@
             align: 'left'
           },
           {
-            label: 'NO. BUKTI INVOICE',
+            label: 'NO BUKTI INVOICE',
             name: 'invoice_nobukti',
             align: 'left'
           },

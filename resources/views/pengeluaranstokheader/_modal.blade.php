@@ -63,7 +63,7 @@
               <div class="form-group col-md-6">
                 <div class="row">
                   <div class="col-12 col-sm-3 col-md-4">
-                    <label class="col-form-label">servicein no bukti </label>
+                    <label class="col-form-label">SERVICE IN NO bukti </label>
                   </div>
                   <div class="col-12 col-sm-9 col-md-8">
                     <input type="text" name="servicein_nobukti" class="form-control servicein-lookup">
@@ -74,7 +74,7 @@
               <div class="form-group col-md-6">
                 <div class="row">
                   <div class="col-12 col-sm-3 col-md-4">
-                    <label class="col-form-label">penerimaan stok nobukti </label>
+                    <label class="col-form-label">PENERIMAAN STOK NO BUKTI </label>
                   </div>
                   <div class="col-12 col-sm-9 col-md-8">
                     <input type="text" name="penerimaanstok_nobukti" class="form-control penerimaanstokheader-lookup">
@@ -210,7 +210,7 @@
                 <div class="form-group col-md-6">
                   <div class="row">
                     <div class="col-12 col-sm-3 col-md-4">
-                      <label class="col-form-label">penerimaan nobukti  </label>
+                      <label class="col-form-label">penerimaan no bukti  </label>
                     </div>
                     <div class="col-12 col-sm-9 col-md-8">
                       <div class="input-group">
@@ -233,7 +233,7 @@
                 <tr>
                   <th style="width : 5%">No</th>
                     <th style="width : 20%">stok</th>
-                    <th class="data_tbl tbl_vulkanisirke" style="width : 20px">vulkanisirke</th>
+                    <th class="data_tbl tbl_vulkanisirke" style="width : 20px">vulkanisir ke</th>
                     <th style="width : 20%">keterangan</th>
                     <th class="tbl_qty" style="width : 5%">qty</th>
                     <th class="data_tbl tbl_harga" style="width : 10%">harga</th>

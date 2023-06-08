@@ -242,7 +242,7 @@
                             iconSet: 'fontAwesome',
                             datatype: "local",
                             colModel: [{
-                                    label: 'NO. BUKTI',
+                                    label: 'NO BUKTI',
                                     name: 'nobukti',
                                 },
                                 {

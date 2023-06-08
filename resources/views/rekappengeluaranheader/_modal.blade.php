@@ -57,7 +57,7 @@
                   <tr>                  
                     <th width="50">No</th>
                     <th>no bukti</th>
-                    <th>tgltransaksi</th>
+                    <th>TGL TRANSAKSI</th>
                     <th>keterangan</th>
                     <th>nominal</th>
                   </tr>

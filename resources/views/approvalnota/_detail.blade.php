@@ -38,7 +38,7 @@
                 label: 'KETERANGAN',
                 name: 'keterangan',
             }, {
-                label: 'TANGGAL TERIMA',
+                label: 'TGL TERIMA',
                 name: 'tglterima',
                 align: 'left',
                 formatter: "date",
@@ -50,7 +50,7 @@
                 label: 'coa adjust',
                 name: 'coaadjust',
             }, {
-                label: 'invoice nobukti',
+                label: 'INVOICE NO BUKTI',
                 name: 'invoice_nobukti',
             }, {
                 label: 'NOMINAL',
@@ -89,7 +89,7 @@
                 label: 'KETERANGAN',
                 name: 'keterangan',
             }, {
-                label: 'TANGGAL TERIMA',
+                label: 'TGL TERIMA',
                 name: 'tglterima',
                 align: 'left',
                 formatter: "date",
@@ -98,10 +98,10 @@
                     newformat: "d-m-Y"
                 }
             }, {
-                label: 'coa lebihbayar',
+                label: 'COA LEBIH BAYAR',
                 name: 'coalebihbayar',
             }, {
-                label: 'invoice nobukti',
+                label: 'INVOICE NO BUKTI',
                 name: 'invoice_nobukti',
             }, {
                 label: 'NOMINAL',
@@ -257,7 +257,7 @@
                 label: 'KETERANGAN',
                 name: 'keterangan',
             }, {
-                label: 'TANGGAL TERIMA',
+                label: 'TGL TERIMA',
                 name: 'tglterima',
                 align: 'left',
                 formatter: "date",
@@ -269,7 +269,7 @@
                 label: 'coa adjust',
                 name: 'coaadjust',
             }, {
-                label: 'invoice nobukti',
+                label: 'INVOICE NO BUKTI',
                 name: 'invoice_nobukti',
             }, {
                 label: 'NOMINAL',
@@ -316,7 +316,7 @@
                 label: 'KETERANGAN',
                 name: 'keterangan',
             }, {
-                label: 'TANGGAL TERIMA',
+                label: 'TGL TERIMA',
                 name: 'tglterima',
                 align: 'left',
                 formatter: "date",
@@ -325,7 +325,7 @@
                     newformat: "d-m-Y"
                 }
             }, {
-                label: 'coa lebihbayar',
+                label: 'COA LEBIH BAYAR',
                 name: 'coalebihbayar',
             }, {
                 label: 'invoice nobukti',
