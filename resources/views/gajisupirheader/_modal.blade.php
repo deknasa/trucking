@@ -17,7 +17,7 @@
                             <div class="row form-group">
                                 <div class="col-12 col-md-2">
                                     <label class="col-form-label">
-                                        NO BUKTI <span class="text-danger">*</span>
+                                        NO BUKTI <span class="text-danger"></span>
                                     </label>
                                 </div>
                                 <div class="col-12 col-md-4">
@@ -26,7 +26,7 @@
 
                                 <div class="col-12 col-md-2">
                                     <label class="col-form-label">
-                                        TANGGAL BUKTI <span class="text-danger">*</span>
+                                        TGL BUKTI <span class="text-danger">*</span>
                                     </label>
                                 </div>
                                 <div class="col-12 col-md-4">
@@ -50,7 +50,7 @@
                             <div class="row form-group">
                                 <div class="col-12 col-md-2">
                                     <label class="col-form-label">
-                                        TANGGAL DARI <span class="text-danger">*</span>
+                                        TGL DARI <span class="text-danger">*</span>
                                     </label>
                                 </div>
 
@@ -64,7 +64,7 @@
                             <div class="row form-group">
                                 <div class="col-12 col-md-2">
                                     <label class="col-form-label">
-                                        TANGGAL SAMPAI <span class="text-danger">*</span>
+                                        TGL SAMPAI <span class="text-danger">*</span>
                                     </label>
                                 </div>
                                 <div class="col-12 col-md-10">
@@ -117,7 +117,7 @@
                                         <div class="row form-group">
                                             <div class="col-12 col-sm-3 col-md-2">
                                                 <label class="col-form-label">
-                                                    Tanggal Bukti</label>
+                                                    TGL bukti</label>
                                             </div>
                                             <div class="col-12 col-sm-9 col-md-10">
                                                 <input type="text" name="tglbuktiDeposito" class="form-control" disabled>
@@ -155,7 +155,7 @@
                                         <div class="row form-group">
                                             <div class="col-12 col-sm-3 col-md-2">
                                                 <label class="col-form-label">
-                                                    Tanggal Bukti</label>
+                                                    TGL bukti</label>
                                             </div>
                                             <div class="col-12 col-sm-9 col-md-10">
                                                 <input type="text" name="tglbuktiBBM" class="form-control" disabled>
@@ -786,7 +786,7 @@
             }
 
             $(this).attr('disabled', '')
-            $('#loader').removeClass('d-none')
+            $('#processingLoader').removeClass('d-none')
 
             $.ajax({
                 url: url,
@@ -928,7 +928,7 @@
                     }
                 },
             }).always(() => {
-                $('#loader').addClass('d-none')
+                $('#processingLoader').addClass('d-none')
                 $(this).removeAttr('disabled')
             })
         })
@@ -1038,6 +1038,9 @@
                 $('#crudModal').modal('show')
                 form.find(`[name="tglbukti"]`).prop('readonly', true)
                 form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+
+                form.find(`[name="supir"]`).parent('.input-group').find('.button-clear').remove()
+                form.find(`[name="supir"]`).parent('.input-group').find('.input-group-append').remove()
             })
             .finally(() => {
                 $('.modal-loader').addClass('d-none')
@@ -1065,6 +1068,8 @@
                 $('#crudModal').modal('show')
                 form.find(`[name="tglbukti"]`).prop('readonly', true)
                 form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+                form.find(`[name="supir"]`).parent('.input-group').find('.button-clear').remove()
+                form.find(`[name="supir"]`).parent('.input-group').find('.input-group-append').remove()
             })
             .finally(() => {
                 $('.modal-loader').addClass('d-none')
@@ -1858,7 +1863,7 @@
                         align: 'left',
                     },
                     {
-                        label: 'TANGGAL BUKTI',
+                        label: 'TGL BUKTI',
                         name: 'absensi_tglbukti',
                         align: 'left',
                         formatter: "date",
@@ -2020,8 +2025,6 @@
 
                     if (index == 'supir') {
                         element.data('current-value', value).prop('readonly', true)
-                        element.parent('.input-group').find('.button-clear').remove()
-                        element.parent('.input-group').find('.input-group-append').remove()
                     }
 
 
@@ -2239,7 +2242,7 @@
                         align: 'left',
                     },
                     {
-                        label: 'TANGGAL BUKTI',
+                        label: 'TGL BUKTI',
                         name: 'tglbuktisp',
                         align: 'left',
                         formatter: "date",

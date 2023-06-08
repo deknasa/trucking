@@ -1,27 +1,27 @@
 <div class="modal fade modal-fullscreen" id="resignModal" tabindex="-1" aria-labelledby="resignModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <form action="#" id="resignForm">
-      
-    <div class="modal-content">
-      <div class="modal-header">
-        <p class="modal-title" id="resignModalTitle">Approval Supir Resign</p>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          
-        </button>
-      </div>
-      <div class="modal-body">
-        <input type="hidden" name="id">
-        <div id="unapproveResign" >
+
+      <div class="modal-content">
+        <div class="modal-header">
+          <p class="modal-title" id="resignModalTitle"></p>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+
+          </button>
         </div>
-        <div class="form-group row">
-          <label class="col-sm-4 col-form-label">Supir<span class="text-danger"></span></label>
-          <div class="col-sm-8">
-            <div class="input-group">
-              <input type="text" class="form-control " readonly name="namasupir">
+        <div class="modal-body">
+          <input type="hidden" name="id">
+          <div id="unapproveResign">
+          </div>
+          <div class="form-group row">
+            <label class="col-sm-4 col-form-label">Supir<span class="text-danger"></span></label>
+            <div class="col-sm-8">
+              <div class="input-group">
+                <input type="text" class="form-control " readonly name="namasupir">
+              </div>
             </div>
           </div>
-        </div>
-        
+
           <div class="form-group row">
             <label class="col-sm-4 col-form-label">Tgl Resign <span class="text-danger">*</span></label>
             <div class="col-sm-8">
@@ -35,28 +35,28 @@
             <label class="col-sm-4 col-form-label">Keterangan Resign<span class="text-danger">*</span></label>
             <div class="col-sm-8">
               <div class="input-group">
-                <input type="text" class="form-control "  name="keteranganberhentisupir">
+                <input type="text" class="form-control " name="keteranganberhentisupir">
               </div>
             </div>
           </div>
 
-        
 
-        
+
+
+
+        </div>
+        <div class="modal-footer justify-content-start">
+          <button id="resignSubmit" class="btn btn-primary">
+            <i class="fa fa-save"></i>
+            Simpan
+          </button>
+          <button class="btn btn-secondary" data-dismiss="modal">
+            <i class="fa fa-times"></i>
+            Batal
+          </button>
+        </div>
 
       </div>
-      <div class="modal-footer justify-content-start">
-        <button id="resignSubmit" class="btn btn-primary">
-          <i class="fa fa-save"></i>
-          Simpan
-        </button>
-        <button class="btn btn-secondary" data-dismiss="modal">
-          <i class="fa fa-times"></i>
-          Batal
-        </button>
-      </div>
-
-    </div>
     </form>
   </div>
 </div>
@@ -104,13 +104,13 @@
         name: 'limit',
         value: limit
       })
-      
+
       // switch (action) {
       //   case 'resign':
-          method = 'POST'
-          url = `${apiUrl}supir/${supirId}/approvalresign`
+      method = 'POST'
+      url = `${apiUrl}supir/${supirId}/approvalresign`
       //     break;
-        
+
       //   default:
       //     method = 'POST'
       //     url = `${apiUrl}supir/${id}/approvalresign`
@@ -118,7 +118,7 @@
       // }
 
       $(this).attr('disabled', '')
-      $('#loader').removeClass('d-none')
+      $('#processingLoader').removeClass('d-none')
 
       $.ajax({
         url: url,
@@ -152,7 +152,7 @@
           }
         },
       }).always(() => {
-        $('#loader').addClass('d-none')
+        $('#processingLoader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
     })
@@ -170,11 +170,18 @@
   })
 
   function supirResign(id) {
-    
-    $('#resignModal').modal('show')
+
     $("#approveResign").hide();
     $("#unapproveResign").hide();
     getSupir($('#resignForm'), id)
+      .then((statusApproval) => {
+        $('#resignModal').modal('show')
+        $('#resignModalTitle').text(`${statusApproval} SUPIR RESIGN`)
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
+
     // $('#resignModal').find('[name=tanggalberhenti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
     initDatepicker()
   }
@@ -182,17 +189,18 @@
 
   function getSupir(form, supirId) {
     // console.log(supirId);
-    $.ajax({
-      url: `${apiUrl}supir/${supirId}`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        let form = $('#resignForm')
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `${apiUrl}supir/${supirId}`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          let form = $('#resignForm')
 
-        
+          let statusApproval
           $.each(response.data, (index, value) => {
             let element = form.find(`[name="${index}"]`)
             if (element.hasClass('datepicker')) {
@@ -203,22 +211,27 @@
           })
           if (response.data.tglberhentisupir !== "1900-01-01") {
             form.data('action', 'unapprove')
+            form.find('[name=tglberhentisupir]').prop('readonly', true)
+            form.find('[name=keteranganberhentisupir]').prop('readonly', true)
+            form.find(`[name="tglberhentisupir"]`).parent('.input-group').find('.input-group-append').remove()
             $("#unapproveResign").show();
-          }else{
+            statusApproval = 'unapproval'
+          } else {
             form.data('action', 'approve')
             form.find('[name=tglberhentisupir]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+            statusApproval = 'approval'
           }
 
-            // $("#unapproveResign").show();
+          // $("#unapproveResign").show();
           // let element = form.find(`[name="namasupir"]`)
           // element.val(response.data.namasupir)
           // $("#unapproveResign").html("unapproval Supir Resign " )
-        
-        
-          
-      }
+
+          resolve(statusApproval)
+
+        }
+      })
     })
   }
-  
 </script>
 @endpush

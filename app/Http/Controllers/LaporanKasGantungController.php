@@ -127,10 +127,8 @@ class LaporanKasGantungController extends MyController
         $totalDebet = 0;
         $totalKredit = 0;
         $totalSaldo = 0;
-        // if (is_array($pengeluaran) || is_iterable($pengeluaran)) {
-
-        // }
-        foreach ($pengeluaran as $response_index => $response_detail) {
+        if (is_array($pengeluaran) || is_iterable($pengeluaran)) {
+ foreach ($pengeluaran as $response_index => $response_detail) {
 
             foreach ($header_columns as $detail_columns_index => $detail_column) {
                 $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
@@ -153,6 +151,8 @@ class LaporanKasGantungController extends MyController
             $totalSaldo += $response_detail['Saldo'];
             $detail_start_row++;
         }
+        }
+       
 
         //ukuran kolom
         $sheet->getColumnDimension('A')->setWidth(15);

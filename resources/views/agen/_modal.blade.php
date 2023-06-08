@@ -84,7 +84,7 @@
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
-                  NO TELP <span class="text-danger">*</span>
+                NO TELEPON <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-md-10">
@@ -225,7 +225,7 @@
       }
 
       $(this).attr('disabled', '')
-      $('#loader').removeClass('d-none')
+      $('#processingLoader').removeClass('d-none')
 
       $.ajax({
         url: url,
@@ -258,7 +258,7 @@
           }
         },
       }).always(() => {
-        $('#loader').addClass('d-none')
+        $('#processingLoader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
     })
@@ -394,6 +394,13 @@
           $.each(response.data, (index, value) => {
             if (value !== null && value !== 0 && value !== undefined) {
               form.find(`[name=${index}]`).attr('maxlength', value)
+
+              if(index == 'nohp'){
+                form.find(`[name=nohp]`).attr('maxlength', 13)
+              }
+              if(index == 'notelp'){
+                form.find(`[name=notelp]`).attr('maxlength', 13)
+              }
             }
           })
 

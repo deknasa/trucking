@@ -73,7 +73,7 @@
             name: 'kota',
           },
           {
-            label: 'TELP',
+            label: 'NO TELEPON',
             name: 'telp',
           },
           {
@@ -318,11 +318,11 @@
           //   name: 'zona_id',
           // },
           {
-            label: 'angsuranpinjaman',
+            label: 'angsuran pinjaman',
             name: 'angsuranpinjaman',
           },
           {
-            label: 'plafondeposito',
+             label: 'plafon deposito',
             name: 'plafondeposito',
           },
         {
@@ -718,8 +718,12 @@
             class: 'btn btn-success btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-              editSupir(selectedId)
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Harap pilih salah satu record')
+              } else {
+                editSupir(selectedId)
+              }
+             
             }
           },
           {
@@ -737,22 +741,22 @@
             }
           },
           {
-            id: 'export',
-            innerHTML: '<i class="fa fa-file-export"></i> EXPORT',
-            class: 'btn btn-warning btn-sm mr-1',
-            onClick: () => {
-              $('#rangeModal').data('action', 'export')
-              $('#rangeModal').find('button:submit').html(`Export`)
-              $('#rangeModal').modal('show')
-            }
-          },
-          {
             id: 'report',
             innerHTML: '<i class="fa fa-print"></i> REPORT',
             class: 'btn btn-info btn-sm mr-1',
             onClick: () => {
               $('#rangeModal').data('action', 'report')
               $('#rangeModal').find('button:submit').html(`Report`)
+              $('#rangeModal').modal('show')
+            }
+          },
+          {
+            id: 'export',
+            innerHTML: '<i class="fa fa-file-export"></i> EXPORT',
+            class: 'btn btn-warning btn-sm mr-1',
+            onClick: () => {
+              $('#rangeModal').data('action', 'export')
+              $('#rangeModal').find('button:submit').html(`Export`)
               $('#rangeModal').modal('show')
             }
           },
@@ -765,7 +769,7 @@
           class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
           dropmenuHTML: [{
               id: 'approvalBlackListSupir',
-              text: "Approval Black List Supir",
+              text: "un/Approval Black List Supir",
               onClick: () => {
                 selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                 approvalBlackListSupir(selectedId)
@@ -773,7 +777,7 @@
             },
             {
               id: 'approvalSupirLuarKota',
-              text: "Approval Supir Luar Kota",
+              text: "un/Approval Supir Luar Kota",
               onClick: () => {
                 selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                 approvalSupirLuarKota(selectedId)
@@ -781,7 +785,7 @@
             },
             {
               id: 'approvalSupirResign',
-              text: "Approval Supir Resign",
+              text: "un/Approval Supir Resign",
               onClick: () => {
                 selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                 if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -891,14 +895,19 @@
 
       $('#formRange [name=sidx]').val($('#jqGrid').jqGrid('getGridParam').postData.sidx)
       $('#formRange [name=sord]').val($('#jqGrid').jqGrid('getGridParam').postData.sord)
-      $('#formRange [name=dari]').val((indexRow + 1) + (limit * (page - 1)))
-      $('#formRange [name=sampai]').val(totalRecord)
+      if (page == 0) {
+        $('#formRange [name=dari]').val(page)
+        $('#formRange [name=sampai]').val(totalRecord)
+      }else{
+        $('#formRange [name=dari]').val((indexRow + 1) + (limit * (page - 1)))
+        $('#formRange [name=sampai]').val(totalRecord)
+      }
 
       autoNumericElements = new AutoNumeric.multiple('#formRange .autonumeric-report', {
         digitGroupSeparator: '.',
         decimalCharacter: ',',
         allowDecimalPadding: false,
-        minimumValue: 1,
+        minimumValue: 0,
         maximumValue: totalRecord
       })
     })
@@ -975,9 +984,9 @@
           Authorization: `Bearer ${accessToken}`
         },
         success: response => {
-          let msg = `YAKIN approved Black List Supir ${response.data.namasupir}`
-          if (response.data.statusblacklist === statusBukanBlackList) {
-            msg = `YAKIN Unapproved Black List Supir ${response.data.namasupir}`
+          let msg = `YAKIN approval BlackList Supir ${response.data.namasupir}`
+          if (response.data.statusblacklist != statusBukanBlackList) {
+            msg = `YAKIN Unapproval BlackList Supir ${response.data.namasupir}`
           }
           showConfirm(msg, "", `supir/${response.data.id}/approvalblacklist`)
         },
@@ -994,9 +1003,9 @@
         },
         success: response => {
           console.log(statusTidakBolehLuarkota);
-          let msg = ` YAKIN approved STATUS Luar Kota Supir ${response.data.namasupir} ?`
-          if (response.data.statusluarkota === statusTidakBolehLuarkota) {
-            msg = `YAKIN UNapproved STATUS Luar Kota Supir ${response.data.namasupir} ?`
+          let msg = ` YAKIN approval STATUS Luar Kota Supir ${response.data.namasupir} ?`
+          if (response.data.statusluarkota != statusTidakBolehLuarkota) {
+            msg = `YAKIN UNapproval STATUS Luar Kota Supir ${response.data.namasupir} ?`
           }
           showConfirm(msg, "", `supir/${response.data.id}/approvalluarkota`)
         },
@@ -1012,6 +1021,7 @@
           Authorization: `Bearer ${accessToken}`
         },
         success: response => {
+          console.log('approvalsupirresign');
           if (response.data.tglberhentisupir == "1900-01-01") {
             $('#tglModal').find('button:submit').html(`Approve Resign`)
             $('#tglModal').find('label').html(`Tgl Supir Resign`)

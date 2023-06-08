@@ -19,6 +19,9 @@
       postData: {
         tgldari: $('#tgldariheaderlookup').val(),
         tglsampai: $('#tglsampaiheaderlookup').val(),
+        
+        // penerimaanheader_id:  `{!! $penerimaanheader_id ?? '' !!}`,
+      
       },
       datatype: "json",
       colModel: [{
@@ -101,7 +104,7 @@
           align: 'left'
         },
         {
-          label: 'TANGGAL BUKTI',
+          label: 'TGL BUKTI',
           name: 'tglbukti',
           align: 'left',
           formatter: "date",
@@ -136,7 +139,7 @@
           align: 'left'
         },
         {
-          label: 'TANGGAL CETAK',
+          label: 'TGL CETAK',
           name: 'tglbukacetak',
           align: 'left',
           formatter: "date",

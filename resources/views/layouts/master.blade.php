@@ -59,6 +59,11 @@
     <span>Loading</span>
   </div>
 
+  <div class="processing-loader d-none" id="processingLoader">
+    <img src="{{ asset('images/loading-color.gif') }}" rel="preload">
+    <span>Processing</span>
+  </div>
+
   <div id="dialog-message" title="Pesan" class="text-center text-danger" style="display: none;">
     <span class="fa fa-exclamation-triangle" aria-hidden="true" style="font-size:25px;"></span>
     <p></p>
@@ -412,17 +417,24 @@
 
 
 
-    function setRange() {
+    function setRange(isToday = false) {
       // mendapatkan tanggal hari ini
       let today = new Date();
+      let formattedLastDay;
 
       // mendapatkan tanggal pertama di bulan ini
       let firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
       let formattedFirstDay = $.datepicker.formatDate('dd-mm-yy', firstDay);
 
-      // mendapatkan tanggal terakhir di bulan ini
-      let lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-      let formattedLastDay = $.datepicker.formatDate('dd-mm-yy', lastDay);
+      if (isToday) {
+        formattedLastDay=$.datepicker.formatDate('dd-mm-yy', new Date())
+      }else{
+        // mendapatkan tanggal terakhir di bulan ini
+        let lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+        formattedLastDay = $.datepicker.formatDate('dd-mm-yy', lastDay);
+      }
+
+      
 
       $('#rangeHeader').find('[name=tgldariheader]').val(formattedFirstDay).trigger('change');
       $('#rangeHeader').find('[name=tglsampaiheader]').val(formattedLastDay).trigger('change');
@@ -454,28 +466,36 @@
 
           page: 1
         }).trigger('reloadGrid')
-      }).catch((errors) => {
+      }).catch((error) => {
         clearGlobalSearch($('#jqGrid'))
+        
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+          errors = error.responseJSON.errors
 
-        $.each(errors, (index, error) => {
-          let indexes = index.split(".");
-          let element;
-          if(indexes[0] == 'tgldari' || indexes[0] == 'tglsampai'){
+          $.each(errors, (index, error) => {
+            let indexes = index.split(".");
+            let element;
+            if(indexes[0] == 'tgldari' || indexes[0] == 'tglsampai'){
             element = $('#rangeHeader').find(`[name="${indexes[0]}header"]`)[0];
           }else{            
             element = $('#rangeHeader').find(`[name="${indexes[0]}"]`)[0];
           }
 
-          $(element).addClass("is-invalid");
-          $(`
+            $(element).addClass("is-invalid");
+            $(`
               <div class="invalid-feedback">
               ${error[0].toLowerCase()}
               </div>
 			    `).appendTo($(element).parent());
 
-        });
+          });
 
-        $(".is-invalid").first().focus();
+          $(".is-invalid").first().focus();
+        } else {
+          showDialog(error.statusText)
+        }
       })
 
     }
@@ -493,17 +513,7 @@
             resolve(response);
           },
           error: error => {
-            if (error.status === 422) {
-              $('.is-invalid').removeClass('is-invalid')
-              $('.invalid-feedback').remove()
-
-
-              errors = error.responseJSON.errors
-              reject(errors)
-
-            } else {
-              showDialog(error.statusText)
-            }
+            reject(error)
           },
         });
       });
@@ -537,14 +547,66 @@
         ...data,
         ...addtional
       }
+      getIndexLookup(url, data).then((response) => {
+        $('.is-invalid').removeClass('is-invalid')
+        $('.invalid-feedback').remove()
+        clearGlobalSearch($('#jqGrid'))
+        $(`#${grid}`).setGridParam({
+          url: `${apiUrl}${url}`,
+          datatype: "json",
+          postData: data,
 
-      $(`#${grid}`).setGridParam({
-        url: `${apiUrl}${url}`,
-        datatype: "json",
-        postData: data,
+          page: 1
+        }).trigger('reloadGrid')
+      }).catch((error) => {
+        clearGlobalSearch($('#jqGrid'))
 
-        page: 1
-      }).trigger('reloadGrid')
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+          errors = error.responseJSON.errors
+
+          $.each(errors, (index, error) => {
+            let indexes = index.split(".");
+            let element;
+            element = $('#rangeHeaderLookup').find(`[name="${indexes[0]}headerlookup"]`)[0];
+
+            $(element).addClass("is-invalid");
+            $(`
+              <div class="invalid-feedback">
+              ${error[0].toLowerCase()}
+              </div>
+			    `).appendTo($(element).parent());
+
+          });
+
+          $(".is-invalid").first().focus();
+        } else {
+          showDialog(error.statusText)
+        }
+      })
+
+
+    }
+
+    function getIndexLookup(url, data) {
+      return new Promise((resolve, reject) => {
+        $.ajax({
+          url: `${apiUrl}${url}`,
+          dataType: "JSON",
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          },
+          data: data,
+          success: (response) => {
+            resolve(response);
+          },
+          error: error => {
+            reject(error)
+
+          },
+        });
+      });
     }
   </script>
 </body>

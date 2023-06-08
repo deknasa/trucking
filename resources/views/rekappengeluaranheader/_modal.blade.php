@@ -14,14 +14,14 @@
                 <input type="hidden" name="id" hidden class="form-control" readonly>
 
               <div class="col-12 col-sm-3 col-md-2">
-                <label class="col-form-label">nobukti <span class="text-danger">*</span> </label>
+                <label class="col-form-label">no bukti <span class="text-danger"></span> </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <input type="text" readonly name="nobukti" class="form-control">
               </div>
 
               <div class="col-12 col-sm-3 col-md-2">
-                <label class="col-form-label">tgl bukti <span class="text-danger">*</span> </label>
+                <label class="col-form-label">TGL BUKTI <span class="text-danger">*</span> </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <div class="input-group">
@@ -56,7 +56,7 @@
                 <thead>
                   <tr>                  
                     <th width="50">No</th>
-                    <th>nobukti</th>
+                    <th>no bukti</th>
                     <th>tgltransaksi</th>
                     <th>keterangan</th>
                     <th>nominal</th>
@@ -159,7 +159,7 @@
       }
 
       $(this).attr('disabled', '')
-      $('#loader').removeClass('d-none')
+      $('#processingLoader').removeClass('d-none')
 
       $.ajax({
         url: url,
@@ -197,7 +197,7 @@
           }
         },
       }).always(() => {
-        $('#loader').addClass('d-none')
+        $('#processingLoader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
     })
@@ -215,7 +215,7 @@
       initDatepicker()
       initLookup()
 
-      $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date()) ).trigger('change');
+      // $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date()) ).trigger('change');
     // getMaxLength(form)
   })
 
@@ -275,6 +275,7 @@
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
+    $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date()) ).trigger('change');
   }
 
   function editRekapPengeluaranHeader(rekapPengeluaranId) {
@@ -298,6 +299,14 @@
       ])
       .then(() => {
         $('#crudModal').modal('show')
+        form.find(`[name="tglbukti"]`).prop('readonly', true)
+        form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()        
+        form.find(`[name="tgltransaksi"]`).prop('readonly', true)
+        form.find(`[name="tgltransaksi"]`).parent('.input-group').find('.input-group-append').remove()        
+        form.find(`[name="bank"]`).prop('readonly', true)
+        form.find(`[name="bank"]`).parent('.input-group').find('.input-group-append').remove()
+        form.find(`[name="bank"]`).parent('.input-group').find('.button-clear').remove()
+
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')

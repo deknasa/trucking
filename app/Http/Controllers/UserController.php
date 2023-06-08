@@ -20,11 +20,27 @@ class UserController extends MyController
             'pagename' => 'Menu Utama User',
             'combo' => $this->combo('list'),
             'combocabang' => $this->combocabang('list'),
+            'statusaktif' => $this->comboStatusAktif('list','STATUS AKTIF','STATUS AKTIF'),
         ];
 
         return view('user.index', compact('title', 'data'));
     }
 
+    public function comboStatusAktif($aksi,$grp,$subgrp)
+    {
+
+        $status = [
+            'status' => $aksi,
+            'grp' => $grp,
+            'subgrp' => $subgrp,
+        ];
+
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'user/combostatus', $status);
+
+        return $response['data'];
+    }
     public function aclGrid()
     {
         return view('user.acl._grid');

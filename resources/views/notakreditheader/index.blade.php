@@ -232,7 +232,7 @@
             align: 'left'
           },
           {
-            label: 'TANGGAL BUKTI',
+            label: 'TGL BUKTI',
             name: 'tglbukti',
             align: 'left',
             formatter: "date",
@@ -242,7 +242,7 @@
             }
           },
           {
-            label: 'tgllunas',
+            label: 'tgl lunas',
             name: 'tgllunas',
             align: 'left',
             formatter: "date",
@@ -262,7 +262,7 @@
             align: 'left'
           },
           {
-            label: 'TANGGAL APPROVAL',
+            label: 'TGL APPROVAL',
             name: 'tglapproval',
             align: 'left',
             formatter: "date",
@@ -287,7 +287,7 @@
             }
           },
           {
-            label: 'postingdari',
+            label: 'posting dari',
             name: 'postingdari',
             align: 'left'
           },
@@ -503,15 +503,13 @@
           //     }
           //   }
           // },
+          
           {
-            id: 'export',
-            innerHTML: '<i class="fa fa-file-export"></i> EXPORT',
-            class: 'btn btn-warning btn-sm mr-1',
+            id: 'report',
+            innerHTML: '<i class="fa fa-print"></i> REPORT',
+            class: 'btn btn-info btn-sm mr-1',
             onClick: () => {
 
-              // $('#rangeModal').data('action', 'export')
-              // $('#rangeModal').find('button:submit').html(`Export`)
-              // $('#rangeModal').modal('show')
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Please select a row')
@@ -523,11 +521,14 @@
             }
           },
           {
-            id: 'report',
-            innerHTML: '<i class="fa fa-print"></i> REPORT',
-            class: 'btn btn-info btn-sm mr-1',
+            id: 'export',
+            innerHTML: '<i class="fa fa-file-export"></i> EXPORT',
+            class: 'btn btn-warning btn-sm mr-1',
             onClick: () => {
 
+              // $('#rangeModal').data('action', 'export')
+              // $('#rangeModal').find('button:submit').html(`Export`)
+              // $('#rangeModal').modal('show')
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Please select a row')
@@ -661,7 +662,7 @@
           $('#jqGrid').trigger('reloadGrid')
         }
       }).always(() => {
-        $('#loader').addClass('d-none')
+        $('#processingLoader').addClass('d-none')
       })
     }
 

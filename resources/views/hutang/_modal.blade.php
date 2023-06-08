@@ -16,7 +16,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-2 col-md-2">
                 <label class="col-form-label">
-                  NO BUKTI <span class="text-danger">*</span>
+                  NO BUKTI <span class="text-danger"></span>
                 </label>
               </div>
               <div class="col-12 col-sm-4 col-md-4">
@@ -25,7 +25,7 @@
 
               <div class="col-12 col-sm-2 col-md-2">
                 <label class="col-form-label">
-                  TANGGAL BUKTI <span class="text-danger">*</span>
+                  TGL BUKTI <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-sm-4 col-md-4">
@@ -197,7 +197,7 @@
           break;
       }
       $(this).attr('disabled', '')
-      $('#loader').removeClass('d-none')
+      $('#processingLoader').removeClass('d-none')
 
       $.ajax({
         url: url,
@@ -237,7 +237,7 @@
           }
         },
       }).always(() => {
-        $('#loader').addClass('d-none')
+        $('#processingLoader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
 
@@ -316,6 +316,8 @@
       ])
       .then(() => {
         $('#crudModal').modal('show')
+        form.find(`[name="tglbukti"]`).prop('readonly', true)
+        form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
@@ -373,6 +375,49 @@
       }
     })
   }
+
+  function approve() {
+
+    event.preventDefault()
+
+    let form = $('#crudForm')
+    $(this).attr('disabled', '')
+    $('#processingLoader').removeClass('d-none')
+
+    $.ajax({
+        url: `${apiUrl}hutangheader/approval`,
+        method: 'POST',
+        dataType: 'JSON',
+        headers: {
+            Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+            hutangId: selectedRows
+        },
+        success: response => {
+            $('#crudForm').trigger('reset')
+            $('#crudModal').modal('hide')
+
+            $('#jqGrid').jqGrid().trigger('reloadGrid');
+            selectedRows = []
+            $('#gs_').prop('checked', false)
+        },
+        error: error => {
+            if (error.status === 422) {
+                $('.is-invalid').removeClass('is-invalid')
+                $('.invalid-feedback').remove()
+
+                setErrorMessages(form, error.responseJSON.errors);
+            } else {
+                showDialog(error.statusText)
+            }
+        },
+    }).always(() => {
+        $('#processingLoader').addClass('d-none')
+        $(this).removeAttr('disabled')
+    })
+
+}
 
   function cekValidasiAksi(Id, Aksi) {
     $.ajax({

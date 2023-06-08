@@ -77,7 +77,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
-                  Notelp1 <span class="text-danger">*</span>
+                  NO TELEPON (1) <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
@@ -88,7 +88,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
-                  Notelp2 
+                  NO TELEPON (2) 
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
@@ -317,7 +317,7 @@
       }
 
       $(this).attr('disabled', '')
-      $('#loader').removeClass('d-none')
+      $('#processingLoader').removeClass('d-none')
 
       $.ajax({
         url: url,
@@ -352,7 +352,7 @@
           }
         },
       }).always(() => {
-        $('#loader').addClass('d-none')
+        $('#processingLoader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
     })
@@ -484,6 +484,21 @@
           $.each(response.data, (index, value) => {
             if (value !== null && value !== 0 && value !== undefined) {
               form.find(`[name=${index}]`).attr('maxlength', value)
+              if(index == 'kodepos'){
+                form.find(`[name=kodepos]`).attr('maxlength', 5)
+              }
+              if(index == 'notelp1'){
+                form.find(`[name=notelp1]`).attr('maxlength', 13)
+              }
+              if(index == 'notelp2'){
+                form.find(`[name=notelp2]`).attr('maxlength', 13)
+              }
+              if(index == 'rekeningbank'){
+                form.find(`[name=rekeningbank]`).attr('maxlength', 13)
+              }
+              if(index == 'kota'){
+                form.find(`[name=kota]`).attr('maxlength', 150)
+              }
             }
           })
 

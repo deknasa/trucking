@@ -1021,21 +1021,28 @@ $(document).on("input", ".numbernoseparate", function () {
 
 /* Select2: Autofocus search input on open */
 function initSelect2(elements = null, isInsideModal = true) {
-	let option = {
-		width: "100%",
-		theme: "bootstrap4",
-		dropdownParent: isInsideModal ? $("#crudModal") : "",
-	};
-
 	if (elements === null) {
-		$(document)
-			.find("select")
-			.select2(option)
-			.on("select2:open", function (e) {
-				document.querySelector(".select2-search__field").focus();
-			});
+		$(document).find("select").each((index, element) => {
+			let option = {
+				width: "100%",
+				theme: "bootstrap4",
+				dropdownParent: isInsideModal ? $(element).parents('.modal-content') : "",
+			};
+
+			$(element)
+				.select2(option)
+				.on("select2:open", function (e) {
+					document.querySelector(".select2-search__field").focus();
+				});
+		})
 	} else {
 		$.each(elements, (index, element) => {
+			let option = {
+				width: "100%",
+				theme: "bootstrap4",
+				dropdownParent: isInsideModal ? $(element).parents('.modal-content') : "",
+			};
+
 			$(element)
 				.select2(option)
 				.on("select2:open", function (e) {
@@ -1091,9 +1098,11 @@ function showSuccessDialog(statusText = "", message = "") {
 	});
 }
 function showDialog(statusText = "", message = "") {
-	$("#dialog-message").find("p").remove();
+	$("#dialog-message").html(`
+		<span class="fa fa-exclamation-triangle" aria-hidden="true" style="font-size:25px;"></span>
+	`)
 	$("#dialog-message").append(
-		`<p class="text-dark"> ${statusText} </p><p> ${message} </p>`
+		`<p class="text-dark"> ${statusText} </p> ${message}`
 	);
 	$("#dialog-message").dialog({
 		modal: true,
@@ -1333,13 +1342,16 @@ function setGridLastRequest(grid, lastRequest) {
 }
 
 function getGridLastRequest(grid) {
-	return grid.getGridParam().lastRequest
+	return grid.getGridParam()?.lastRequest
 }
 
 function abortGridLastRequest(grid) {
-	let lastRequest = getGridLastRequest(grid)
+	getGridLastRequest(grid)?.abort()
+}
 
-	if (lastRequest) {
-		lastRequest.abort()
-	}
+function clearGridData(grid) {
+	grid.jqGrid('setGridParam', {
+		datatype: 'local',
+		data: []
+	}).trigger('reloadGrid')
 }

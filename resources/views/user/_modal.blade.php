@@ -58,7 +58,7 @@
                 </select>
               </div>
             </div> 
-            <div class="row form-group">
+            {{-- <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
                   Status Karyawan <span class="text-danger">*</span>
@@ -69,7 +69,7 @@
                   <option value="">-- PILIH STATUS KARYAWAN --</option>
                 </select>
               </div>
-            </div>
+            </div> --}}
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
@@ -169,7 +169,7 @@
       }
 
       $(this).attr('disabled', '')
-      $('#loader').removeClass('d-none')
+      $('#processingLoader').removeClass('d-none')
 
       $.ajax({
         url: url,
@@ -204,7 +204,7 @@
           }
         },
       }).always(() => {
-        $('#loader').addClass('d-none')
+        $('#processingLoader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
     })
@@ -254,6 +254,9 @@
           .then(() => {
             $('#crudModal').modal('show')
           })
+          .catch((error) => {
+            showDialog(error.statusText)
+          })
           .finally(() => {
             $('.modal-loader').addClass('d-none')
           })
@@ -287,6 +290,9 @@
           .then(() => {
             $('#crudModal').modal('show')
           })
+          .catch((error) => {
+            showDialog(error.statusText)
+          })
           .finally(() => {
             $('.modal-loader').addClass('d-none')
           })
@@ -318,6 +324,9 @@
         showUser(form, userId)
           .then(() => {
             $('#crudModal').modal('show')
+          })
+          .catch((error) => {
+            showDialog(error.statusText)
           })
           .finally(() => {
             $('.modal-loader').addClass('d-none')
@@ -471,11 +480,14 @@
             }
           })
           console.log(form.data('action'))
-                    if (form.data('action') === 'delete') {
-                        form.find('[name]').addClass('disabled')
-                        initDisabled()
-                    }
+          if (form.data('action') === 'delete') {
+            form.find('[name]').addClass('disabled')
+            initDisabled()
+          }
           resolve()
+        },
+        error: error => {
+          reject(error)
         }
       })
     })

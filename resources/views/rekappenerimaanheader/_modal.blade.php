@@ -14,14 +14,14 @@
                 <input type="hidden" name="id" hidden class="form-control" readonly>
 
               <div class="col-12 col-sm-3 col-md-2">
-                <label class="col-form-label">nobukti <span class="text-danger">*</span> </label>
+                <label class="col-form-label">no bukti <span class="text-danger"></span> </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <input type="text" readonly name="nobukti" class="form-control">
               </div>
 
               <div class="col-12 col-sm-3 col-md-2">
-                <label class="col-form-label">tgl bukti <span class="text-danger">*</span> </label>
+                <label class="col-form-label">TGL BUKTI <span class="text-danger">*</span> </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <div class="input-group">
@@ -57,7 +57,7 @@
                 <thead>
                   <tr>                  
                     <th width="50">No</th>
-                    <th>nobukti</th>
+                    <th>no bukti</th>
                     <th>tgltransaksi</th>
                     <th>keterangan</th>
                     <th>nominal</th>
@@ -158,7 +158,7 @@
       }
 
       $(this).attr('disabled', '')
-      $('#loader').removeClass('d-none')
+      $('#processingLoader').removeClass('d-none')
 
       $.ajax({
         url: url,
@@ -193,7 +193,7 @@
           }
         },
       }).always(() => {
-        $('#loader').addClass('d-none')
+        $('#processingLoader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
     })
@@ -243,6 +243,11 @@
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
+        $(`#${element[0]['name']}Id`).val('')
       }
     })
   }
@@ -265,7 +270,7 @@
     `)
     form.data('action', 'add')
     form.find(`.sometimes`).show()
-    $('#crudModalTitle').text('Create Penerimaan Stok')
+    $('#crudModalTitle').text('Create Penerimaan')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
@@ -389,7 +394,8 @@
                     showDialog(response.message['keterangan'])
                 } else {
                     if (Aksi == 'EDIT') {
-                        editRekapPenerimaanHeader(Id)
+                        showDialog('REKAP PENERIMAAN TIDAK BISA DIEDIT')
+                        // editRekapPenerimaanHeader(Id)
                     }
                     if (Aksi == 'DELETE') {
                         deleteRekapPenerimaanHeader(Id)
@@ -450,8 +456,11 @@
         Authorization: `Bearer ${accessToken}`
       },
       success: response => {
+        console.log(response.attributes.totalRows);
         let totalNominal = 0
         let row = 0
+        // showDialog('REKAP PENERIMAAN TIDAK BISA DIEDIT')
+
         $.each(response.data, (index, detail) => {
           let id = detail.id
           row++
@@ -479,8 +488,9 @@
           $('#detailList tbody').append(detailRow)
           totalNominal +=parseInt(detail.nominal)
           initAutoNumeric(detailRow.find('.nominal'))
-          })      
-          new AutoNumeric($('#sumary')[0]).set(totalNominal);
+        })      
+        new AutoNumeric($('#sumary')[0]).set(totalNominal);
+      
       }
     })
   }

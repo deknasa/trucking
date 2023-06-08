@@ -45,7 +45,7 @@
           align: 'left'
         },
         {
-          label: 'TELP',
+          label: 'NO TELEPON',
           name: 'telp',
           align: 'left'
         },
@@ -361,7 +361,7 @@
           name: 'zona_id',
         },
         {
-          label: 'angsuranpinjaman',
+          label: 'angsuran pinjaman',
           name: 'angsuranpinjaman',
         },
         {

@@ -156,7 +156,7 @@
                   </tr>
                 </tbody>
                 <tfoot>
-                  <tr>
+                  <tr style="display: none;">
                     <td colspan="2">
                       <p class="text-right font-weight-bold">TOTAL :</p>
                     </td>
@@ -242,8 +242,7 @@
         data.filter((row) => row.name === 'liter[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="liter[]"]`)[index])
       })
 
-      data.filter((row) => row.name === 'jarak')[0].value = AutoNumeric.getNumber($(`#crudForm [name="jarak"]`)[0])
-
+        data.filter((row) => row.name === 'jarak')[0].value = AutoNumeric.getNumber($(`#crudForm [name="jarak"]`)[0])
 
       data.push({
         name: 'sortIndex',
@@ -290,7 +289,7 @@
       }
 
       $(this).attr('disabled', '')
-      $('#loader').removeClass('d-none')
+      $('#processingLoader').removeClass('d-none')
 
       $.ajax({
         url: url,
@@ -328,7 +327,7 @@
           }
         },
       }).always(() => {
-        $('#loader').addClass('d-none')
+        $('#processingLoader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
     })

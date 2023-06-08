@@ -84,7 +84,7 @@
             name: 'nobukti',
           },
           {
-            label: 'TANGGAL BUKTI',
+            label: 'TGL BUKTI',
             name: 'tglbukti',
           },
           {
@@ -294,7 +294,7 @@
           //   name: 'nosp',
           // },
           // {
-          //   label: 'TANGGAL SP',
+          //   label: 'TGL SP',
           //   name: 'tglsp',
           // },
           {

@@ -136,6 +136,18 @@
                 </select>
               </div>
             </div>
+            <div class="row form-group" id="simpanKandang">
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">
+                  STATUS SIMPAN KANDANG <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-12 col-md-10">
+                <select name="statussimpankandang" class="form-control select2bs4" z-index="6">
+                  <option value="">-- PILIH STATUS SIMPAN KANDANG --</option>
+                </select>
+              </div>
+            </div>
 
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
@@ -157,11 +169,18 @@
                     <label class="col-form-label">Upload Foto Peta</label>
                   </div>
                 </div>
-                <div class="dropzone" data-field="gambar">
+                <div class="dropzone" data-field="gambar" id="my-dropzone" style="padding: 0; min-width: 202px !important; min-height: 234px !important; display:flex;"></div>
+
+                <div class="dz-preview dz-file-preview">
+                  <div class="dz-details">
+                    <img data-dz-thumbnail style="width:100%" />
+                  </div>
+                </div>
+                <!-- <div class="dropzone" data-field="gambar" style="padding: 0; min-width: 202px !important; min-height: 234px !important; display:flex;">
                   <div class="fallback">
                     <input name="gambar" type="file" />
                   </div>
-                </div>
+                </div> -->
               </div>
             </div>
 
@@ -212,7 +231,7 @@
                   </tr>
                 </tbody>
                 <tfoot>
-                  <tr>
+                  <tr style="display: none;">
                     <td colspan="3">
                       <p class="text-right font-weight-bold">TOTAL :</p>
                     </td>
@@ -258,6 +277,7 @@
   let modalBody = $('#crudModal').find('.modal-body').html()
   Dropzone.autoDiscover = false;
   let dropzones = []
+  let maxLengthForDropzone = 5;
 
   $(document).ready(function() {
 
@@ -375,7 +395,7 @@
       }
 
       $(this).attr('disabled', '')
-      $('#loader').removeClass('d-none')
+      $('#processingLoader').removeClass('d-none')
       $.ajax({
         url: url,
         method: 'POST',
@@ -414,7 +434,7 @@
           }
         },
       }).always(() => {
-        $('#loader').addClass('d-none')
+        $('#processingLoader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
     })
@@ -438,6 +458,9 @@
     activeGrid = '#jqGrid'
 
     $('#crudModal').find('.modal-body').html(modalBody)
+    dropzones.forEach(dropzone => {
+      dropzone.removeAllFiles()
+    })
   })
 
   function setNominalSupir() {
@@ -507,13 +530,13 @@
 
     $('#crudForm').find('[name=tglmulaiberlaku]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
     $('#crudForm').find('[name=tglakhirberlaku]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-
-
+    maxLengthForDropzone = 5
 
     Promise
       .all([
         setStatusAktifOptions(form),
         setStatusLuarKotaOptions(form),
+        setStatusSimpanKandangOptions(form),
       ])
       .then(() => {
         showDefault(form)
@@ -563,6 +586,7 @@
           })
           .then(() => {
             $('#crudModal').modal('show')
+            $('#simpanKandang').hide()
           })
           .finally(() => {
             $('.modal-loader').addClass('d-none')
@@ -595,6 +619,14 @@
         showUpahSupir(form, id)
           .then((upahsupir) => {
             initDropzone(form.data('action'), upahsupir)
+          })
+
+          .then(() => {
+            $('#crudModal').modal('show')
+            $('#simpanKandang').hide()
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
           })
 
       })
@@ -630,26 +662,57 @@
       if (!element.dropzone) {
         let newDropzone = new Dropzone(element, {
           url: 'test',
+          previewTemplate: document.querySelector('.dz-preview').innerHTML,
+          thumbnailWidth: null,
+          thumbnailHeight: null,
           autoProcessQueue: false,
           addRemoveLinks: true,
           acceptedFiles: 'image/*',
+          maxFiles: maxLengthForDropzone,
           paramName: $(element).data('field'),
           init: function() {
             dropzones.push(this)
+            this.on("maxfilesexceeded", function(file) {
+              this.removeFile(file);
+            });
           }
         })
       }
       element.dropzone.removeAllFiles()
-
+      // console.log(element.dropzone.removeAllFiles())
       if (action == 'edit' || action == 'delete') {
         assignAttachment(element.dropzone, data)
       }
     })
   }
 
+  // function assignAttachment(dropzone, data) {
+  //   console.log(dropzone)
+  //   if (data['gambar'] != '') {
+  //     let files = JSON.parse(data['gambar'])
+
+  //     files.forEach((file) => {
+  //       getImgURL(`${apiUrl}upahsupir/${file}/ori`, (fileBlob) => {
+  //         let imageFile = new File([fileBlob], file, {
+  //           type: 'image/jpeg',
+  //           lastModified: new Date().getTime()
+  //         }, 'utf-8')
+  //         if (fileBlob.type != 'text/html') {
+  //           dropzone.options.addedfile.call(dropzone, imageFile);
+  //           dropzone.options.thumbnail.call(dropzone, imageFile, `${apiUrl}upahsupir/${file}/ori`);
+  //           dropzone.files.push(imageFile)
+  //         }
+  //       })
+  //     })
+  //   }
+  // }
+
+
   function assignAttachment(dropzone, data) {
     const paramName = dropzone.options.paramName
+    console.log(dropzone)
     const type = paramName.substring(5)
+
     if (data[paramName] == '') {
       $('.dropzone').each((index, element) => {
         if (!element.dropzone) {
@@ -658,9 +721,13 @@
             autoProcessQueue: false,
             addRemoveLinks: true,
             acceptedFiles: 'image/*',
+            maxFiles: 5,
             paramName: $(element).data('field'),
             init: function() {
               dropzones.push(this)
+              this.on("maxfilesexceeded", function(file) {
+                this.removeFile(file);
+              });
             }
           })
         }
@@ -676,6 +743,7 @@
             type: 'image/jpeg',
             lastModified: new Date().getTime()
           }, 'utf-8')
+
           if (fileBlob.type != 'text/html') {
             dropzone.options.addedfile.call(dropzone, imageFile);
             dropzone.options.thumbnail.call(dropzone, imageFile, `${apiUrl}upahsupir/${file}/ori`);
@@ -762,6 +830,44 @@
     })
   }
 
+  const setStatusSimpanKandangOptions = function(relatedForm) {
+    return new Promise((resolve, reject) => {
+      relatedForm.find('[name=statussimpankandang]').empty()
+      relatedForm.find('[name=statussimpankandang]').append(
+        new Option('-- PILIH STATUS SIMPAN KANDANG --', '', false, true)
+      ).trigger('change')
+
+      $.ajax({
+        url: `${apiUrl}parameter`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          limit: 0,
+          filters: JSON.stringify({
+            "groupOp": "AND",
+            "rules": [{
+              "field": "grp",
+              "op": "cn",
+              "data": "STATUS SIMPAN KANDANG"
+            }]
+          })
+        },
+        success: response => {
+          response.data.forEach(statusSimpanKandang => {
+            let option = new Option(statusSimpanKandang.text, statusSimpanKandang.id)
+
+            relatedForm.find('[name=statussimpankandang]').append(option).trigger('change')
+          });
+
+          resolve()
+        }
+      })
+    })
+  }
+
   function showUpahSupir(form, userId, parrent = null) {
     return new Promise((resolve, reject) => {
       $('#detailList tbody').html('')
@@ -785,7 +891,6 @@
               element.val(value)
             }
 
-
             if (index == 'kotadari') {
               element.data('current-value', value)
             }
@@ -803,6 +908,8 @@
             }
 
           })
+          
+          maxLengthForDropzone = 5 - response.count
           initAutoNumeric(form.find(`[name="jarak"]`), {
             minimumValue: 0
           })
@@ -1180,8 +1287,9 @@
 
         $('#crudForm [name=parent_id]').first().val(upahsupir.id)
         $('#crudForm [name=parent]').first().val(upahsupir.kotasampai_id)
+        $('#crudForm').find(`[name=kotasampai]`).prop('readonly', false)
         element.data('currentValue', element.val())
-
+        upahSupirKota = upahsupir.kotasampai_id;
         // Menghapus nilai autonumeric pada input jarak
         // $('#crudForm [name=jarak]').autoNumeric('remove')
         let jarakInput = $('#crudForm [name=jarak]').get(0); // Dapatkan elemen input jarak
@@ -1195,6 +1303,8 @@
         let form = $('#crudForm')
         showUpahSupir(form, upahsupir.id, true).then((upahsupir) => {
           initDropzone('edit', upahsupir)
+          element.val(upahSupirKota)
+          element.data('currentValue', element.val())
         })
 
       },
@@ -1221,7 +1331,7 @@
       },
       onSelectRow: (kota, element) => {
         $('#crudForm [name=kotadari_id]').first().val(kota.id)
-        element.val(kota.keterangan)
+        element.val(kota.kodekota)
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {
@@ -1246,7 +1356,7 @@
       },
       onSelectRow: (kota, element) => {
         $('#crudForm [name=kotasampai_id]').first().val(kota.id)
-        element.val(kota.keterangan)
+        element.val(kota.kodekota)
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {
@@ -1254,6 +1364,7 @@
       },
       onClear: (element) => {
         $('#crudForm [name=kotasampai_id]').first().val('')
+        $('#crudForm').find(`[name=kotasampai]`).prop('readonly', false)
         element.val('')
         element.data('currentValue', element.val())
       }
@@ -1270,7 +1381,13 @@
         }
       },
       onSelectRow: (kota, element) => {
-        $('#crudForm [name=kotasampai_id]').first().val(kota.id)
+        $('#crudForm [name=kotasampai_id]').first().val(kota.kotaId)
+        $('#crudForm [name=kotasampai]').first().val(kota.tujuan)
+        $('#crudForm [name=tarif_id]').first().val(kota.id)
+        $('#crudForm').find(`[name=kotasampai]`).prop('readonly', true)
+        $('#crudForm').find(`[name="kotasampai"]`).parent('.input-group').find('.button-clear').remove()
+        $('#crudForm').find(`[name="kotasampai"]`).parent('.input-group').find('.input-group-append').remove()
+
         element.val(kota.tujuan)
         element.data('currentValue', element.val())
       },
@@ -1279,6 +1396,9 @@
       },
       onClear: (element) => {
         $('#crudForm [name=kotasampai_id]').first().val('')
+        $('#crudForm').find(`[name=kotasampai]`).val('').prop('readonly', false)
+        $('#crudForm').find(`[name="kotasampai"]`).parent('.input-group').addClass('.button-clear')
+        $('#crudForm').find(`[name="kotasampai"]`).parent('.input-group').addClass('.input-group-append')
         element.val('')
         element.data('currentValue', element.val())
       }

@@ -53,12 +53,12 @@
       var dataSet = new Stimulsoft.System.Data.DataSet("Data")
 
       viewer.renderHtml('content')
-      report.loadFile(`{{ asset('public/reports/ReportKasgantung.mrt') }}`)
+      report.loadFile(`{{ asset('public/reports/ReportPengembalianKasGantung.mrt') }}`)
 
       report.dictionary.dataSources.clear()
 
       dataSet.readJson({
-        'kasgantung': <?= json_encode($kasgantung_details); ?>,
+        'pengembaliankasgantung_details': <?= json_encode($pengembaliankasgantung_details); ?>,
         'user': <?= json_encode($user); ?>,
       })
 
@@ -68,44 +68,59 @@
       // designer.renderHtml('content');
       viewer.report = report
       
-      viewer.onPrintReport = function (event) {
-        triggerEvent(window, 'afterprint');
-      }
+      // viewer.onPrintReport = function (event) {
+      //   triggerEvent(window, 'afterprint');
+      // }
       
-      function triggerEvent(el, type) {
-        // IE9+ and other modern browsers
-        if ('createEvent' in document) {
-            var e = document.createEvent('HTMLEvents');
-            e.initEvent(type, false, true);
-            el.dispatchEvent(e);
-        } else {
-          // IE8
-          var e = document.createEventObject();
-          e.eventType = type;
-          el.fireEvent('on' + e.eventType, e);
-        }
-      }
+      // function triggerEvent(el, type) {
+      //   // IE9+ and other modern browsers
+      //   if ('createEvent' in document) {
+      //       var e = document.createEvent('HTMLEvents');
+      //       e.initEvent(type, false, true);
+      //       el.dispatchEvent(e);
+      //   } else {
+      //     // IE8
+      //     var e = document.createEventObject();
+      //     e.eventType = type;
+      //     el.fireEvent('on' + e.eventType, e);
+      //   }
+      // }
 
-      window.addEventListener('afterprint', (event) => {
+      // window.addEventListener('afterprint', (event) => {
         
-        var id = kasgantungheaders.id
-        var apiUrl = `{{ config('app.api_url') }}`;
+      //   var id = kasgantungheaders.id
+      //   var apiUrl = `{{ config('app.api_url') }}`;
         
+<<<<<<< Updated upstream
         $.ajax({
-          url: `${apiUrl}kasgantungheader/${id}/printreport`,
+          url: `${apiUrl}pengembaliankasgantungheader/${id}/printreport`,
           method: 'GET',
           dataType: 'JSON',
           headers: {
             Authorization: `Bearer {{ session('access_token') }}`
           },
           success: response => {
-            console.log(response);
-            location.reload()
+            window.close()
           }
-    
         })
-          
       });
+=======
+      //   $.ajax({
+      //     url: `${apiUrl}kasgantungheader/${id}/printreport`,
+      //     method: 'GET',
+      //     dataType: 'JSON',
+      //     headers: {
+      //       Authorization: `Bearer {{ session('access_token') }}`
+      //     },
+      //     success: response => {
+      //       console.log(response);
+      //       location.reload()
+      //     }
+    
+      //   })
+          
+      // });
+>>>>>>> Stashed changes
     }
   </script>
   <style>

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use ReflectionClass;
 
 class MenuController extends MyController
@@ -391,12 +392,27 @@ class MenuController extends MyController
     public function storeResequence(Request $request)
     {
         try {
+            DB::beginTransaction();
+
+            $menus = Menu::all();
+
+            foreach ($menus as $menu) {
+                $menu->menukode .= 'temp';
+                $menu->menukode .= 'temp';
+                $menu->save();
+            }
+
             $this->_updateRecursiveMenu($request->menu);
+            session(['menus' => (new Menu())->getMenu()]);
+
+            DB::commit();
 
             return response([
                 'message' => 'Berhasil disimpan'
             ], 200);
         } catch (\Throwable $th) {
+            DB::rollBack();
+
             throw $th;
         }
     }
@@ -404,16 +420,39 @@ class MenuController extends MyController
     private function _updateRecursiveMenu($menus, $index = 0, $parent = 0, $level = 0)
     {
         foreach ($menus as $menuIndex => $menu) {
-            $menuSequence = $level > 0 ? $index . $menuIndex + 1 : $menuIndex;
+            $menuKode = 0;
 
+            if (strtolower($menu['name']) === 'logout') {
+                $menuKode = 'Z';
+            } else {
+                if ($level > 0) {
+                    $menuIndex = $menuIndex + 1;
+    
+                    if (substr($index, 0, -$level) > 9) {
+                        $index = range('A', 'Z')[$index - 10];
+                    }
+    
+                    if ($menuIndex > 9) {
+                        $menuIndex = range('A', 'Z')[$menuIndex - 10];
+                    }
+    
+                    $menuKode = $index . $menuIndex;
+                } else {
+                    if ($menuIndex > 9) {
+                        $menuIndex = range('A', 'Z')[$menuIndex - 10];
+                    }
+    
+                    $menuKode = $menuIndex;
+                }
+            }
+            
             $menuModel = Menu::findOrFail($menu['id']);
-            $menuModel->menuseq = $menuSequence;
             $menuModel->menuparent = $parent;
-            $menuModel->menukode = $menuSequence;
+            $menuModel->menukode = $menuKode;
             $menuModel->save();
-
+            
             if (isset($menu['children'])) {
-                $this->_updateRecursiveMenu($menu['children'], $menuSequence, $menu['id'], $level + 1);
+                $this->_updateRecursiveMenu($menu['children'], $menuKode, $menu['id'], $level + 1);
             }
         }
     }

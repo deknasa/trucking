@@ -15,14 +15,14 @@
               <input type="hidden" name="id" hidden class="form-control" readonly>
 
               <div class="col-12 col-sm-3 col-md-2">
-                <label class="col-form-label">nobukti <span class="text-danger">*</span> </label>
+                <label class="col-form-label">no bukti <span class="text-danger"></span> </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4 mb-3">
                 <input type="text" readonly name="nobukti" class="form-control">
               </div>
 
               <div class="col-12 col-sm-3 col-md-2">
-                <label class="col-form-label">tglbukti <span class="text-danger">*</span> </label>
+                <label class="col-form-label">TGL BUKTI <span class="text-danger">*</span> </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <div class="input-group">
@@ -360,11 +360,13 @@
         name: 'tglsampaiheader',
         value: $('#tglsampaiheader').val()
       })
-      data.push({
-        name: 'pengeluaranheader_id',
-        value: data.find(item => item.name === "pengeluaranstok_id").value
-      })
-      let pengeluaranheader_id = data.find(item => item.name === "pengeluaranstok_id").value
+      if (action == 'add') {
+        data.push({
+          name: 'pengeluaranheader_id',
+          value: data.find(item => item.name === "pengeluaranstok_id").value
+        })
+        let pengeluaranheader_id = data.find(item => item.name === "pengeluaranstok_id").value
+      }
       let tgldariheader = $('#tgldariheader').val();
       let tglsampaiheader = $('#tglsampaiheader').val()
       
@@ -388,7 +390,7 @@
       }
 
       $(this).attr('disabled', '')
-      $('#loader').removeClass('d-none')
+      $('#processingLoader').removeClass('d-none')
 
       $.ajax({
         url: url,
@@ -425,7 +427,7 @@
           }
         },
       }).always(() => {
-        $('#loader').addClass('d-none')
+        $('#processingLoader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
     })
@@ -639,7 +641,7 @@ $('.tbl_qty').show()
 
     activeGrid = null
     initDatepicker()
-    initLookup()
+    
     initSelect2($('#statuspotongretur'),true)
     if( form.data('action') !== 'add'){
       let pengeluaranstok = $('#crudForm').find(`[name="pengeluaranstok"]`).parents('.input-group').children()
@@ -684,7 +686,7 @@ $('.tbl_qty').show()
       .finally(() => {
         $('.modal-loader').addClass('d-none')
       })
-
+      initLookup()
     addRow()
     sumary()
   }
@@ -717,6 +719,7 @@ $('.tbl_qty').show()
             $('.modal-loader').addClass('d-none')
           })
       })
+      initLookup()
   }
 
   function deletePengeluaranstokHeader(pengeluaranStokHeaderId) {
@@ -747,6 +750,7 @@ $('.tbl_qty').show()
             $('.modal-loader').addClass('d-none')
           })
       })
+      initLookup()
   }
 
   function getMaxLength(form) {
@@ -856,6 +860,13 @@ $('.tbl_qty').show()
     $(`.detail_stok_${row}`).lookup({
       title: 'stok Lookup',
       fileName: 'stok',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+
+          Aktif: 'AKTIF',
+        }
+      },
       onSelectRow: (stok, element) => {
         element.val(stok.namastok)
         parent = element.closest('td');
@@ -967,11 +978,13 @@ $('.tbl_qty').show()
     }else if (kodePengeluaranStok =="SPK") {
       switch (el) {
       case 'trado':
+          $('#crudForm').find(`[name="gandengan"]`).attr('disabled',true)
           $('#crudForm').find(`[name="gandengan"]`).parents('.input-group').children().attr('disabled',true)
           $('#crudForm').find(`[name="gandengan"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled',true)
           $('#gandenganId').attr('disabled',true);
           break;
         case 'gandengan':
+          $('#crudForm').find(`[name="trado"]`).attr('disabled',true)
           $('#crudForm').find(`[name="trado"]`).parents('.input-group').children().attr('disabled',true)
           $('#crudForm').find(`[name="trado"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled',true)
           $('#tradoId').attr('disabled',true);
@@ -1055,13 +1068,17 @@ $('.tbl_qty').show()
             } else {
               element.val(value)
             }
-            if (element.attr("trado_id") !== 0) {
-              persediaan = 'trado'
-            } 
-            if (element.attr("gandengan_id") !== 0) {
-              persediaan = 'gandengan'
-            }
+            
           })
+          if (form.find(`[name="trado_id"]`).val() > 0) {
+            persediaan = 'trado'
+            form.find(`[name="trado"]`).data('currentValue', form.find(`[name="trado"]`).val())
+          } 
+          if (form.find(`[name="gandengan_id"]`).val() > 0) {
+            persediaan = 'gandengan'
+            form.find(`[name="gandengan"]`).data('currentValue', form.find(`[name="gandengan"]`).val())
+          }
+          
           $.each(response.detail, (id, detail) => {
             let detailRow = $(`
               <tr class="trow">
@@ -1113,6 +1130,13 @@ $('.tbl_qty').show()
             $(`#detail_stok_${id}`).lookup({
               title: 'stok Lookup',
               fileName: 'stok',
+              beforeProcess: function(test) {
+              // var levelcoa = $(`#levelcoa`).val();
+                this.postData = {
+
+                  Aktif: 'AKTIF',
+                }
+              },
               onSelectRow: (stok, element) => {
                 element.val(stok.namastok)
                 parent = element.closest('td');
@@ -1128,6 +1152,7 @@ $('.tbl_qty').show()
           sumary()
           
           setKodePengeluaran(response.data.pengeluaranstok);
+          enabledKorDisable()
           lookupSelected(persediaan)
           resolve()
         }
@@ -1269,6 +1294,13 @@ $('.tbl_qty').show()
       $('.pengeluaranstok-lookup').lookup({
         title: 'pengeluaran stok Lookup',
         fileName: 'pengeluaranstok',
+        beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+
+          Aktif: 'AKTIF',
+        }
+      },
         onSelectRow: (pengeluaranstok, element) => {
           // setKodePengeluaran(pengeluaranstok.statusformatid)
           setKodePengeluaran(pengeluaranstok.kodepengeluaran)
@@ -1287,6 +1319,13 @@ $('.tbl_qty').show()
       $('.supir-lookup').lookup({
         title: 'supir Lookup',
         fileName: 'supir',
+        beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+
+          Aktif: 'AKTIF',
+        }
+      },
         onSelectRow: (supir, element) => {
           element.val(supir.namasupir)
           $(`#${element[0]['name']}Id`).val(supir.id)
@@ -1304,6 +1343,7 @@ $('.tbl_qty').show()
       $('.kerusakan-lookup').lookup({
         title: 'kerusakan Lookup',
         fileName: 'kerusakan',
+        
         onSelectRow: (kerusakan, element) => {
           element.val(kerusakan.keterangan)
           $(`#${element[0]['name']}Id`).val(kerusakan.id)
@@ -1320,6 +1360,13 @@ $('.tbl_qty').show()
       $('.supplier-lookup').lookup({
         title: 'supplier Lookup',
         fileName: 'supplier',
+        beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+
+          Aktif: 'AKTIF',
+        }
+      },
         onSelectRow: (supplier, element) => {
           element.val(supplier.namasupplier)
           $(`#${element[0]['name']}Id`).val(supplier.id)
@@ -1356,6 +1403,16 @@ $('.tbl_qty').show()
       $('.trado-lookup').lookup({
         title: 'Trado Lookup',
         fileName: 'trado',
+        beforeProcess: function(test) {
+
+          // var levelcoa = $(`#levelcoa`).val();
+            this.postData = {
+  
+              Aktif: 'AKTIF',
+            }
+          },
+
+      },
         onSelectRow: (trado, element) => {
           element.val(trado.kodetrado)
           $(`#${element[0]['name']}Id`).val(trado.id)
@@ -1375,6 +1432,14 @@ $('.tbl_qty').show()
       $('.gandengan-lookup').lookup({
         title: 'gandengan Lookup',
         fileName: 'gandengan',
+        beforeProcess: function(test) {
+          this.postData = {
+            // var levelcoa = $(`#levelcoa`).val();
+  
+            Aktif: 'AKTIF',
+          }
+        },
+
         onSelectRow: (gandengan, element) => {
           element.val(gandengan.keterangan)
           $(`#${element[0]['name']}Id`).val(gandengan.id)

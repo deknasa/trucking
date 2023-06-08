@@ -300,7 +300,7 @@ $indexRow = $_GET['indexRow'] ?? '';
     /* Handle on click btnSimpan */
     $('#btnSimpan').click(function() {
       $(this).attr('disabled', '')
-      $('#loader').removeClass('d-none')
+      $('#processingLoader').removeClass('d-none')
 
       $.ajax({
         url: actionUrl,
@@ -327,7 +327,7 @@ $indexRow = $_GET['indexRow'] ?? '';
           }
         }
       }).always(() => {
-        $('#loader').addClass('d-none')
+        $('#processingLoader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
     })

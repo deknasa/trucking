@@ -5,7 +5,7 @@
         <div class="modal-header">
           <p class="modal-title" id="crudModalTitle"></p>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            
+
           </button>
         </div>
         <form action="" method="post">
@@ -21,7 +21,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
-                  NO BUKTI <span class="text-danger">*</span>
+                  NO BUKTI <span class="text-danger"></span>
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
@@ -93,7 +93,7 @@
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
-                  JOB EMKL </label>
+                  NO JOB EMKL (1)</label>
               </div>
               <div class="col-12 col-md-10">
                 <input type="text" name="nojobemkl" class="form-control orderanemkl-lookup">
@@ -102,7 +102,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
-                  NO CONT <span class="text-danger">*</span>
+                  NO CONT (1)<span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
@@ -112,7 +112,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
-                  NO SEAL <span class="text-danger">*</span>
+                  NO SEAL (1)<span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
@@ -122,7 +122,7 @@
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
-                  JOB EMKL 2 </label>
+                  NO JOB EMKL (2) </label>
               </div>
               <div class="col-12 col-md-10">
                 <input type="text" name="nojobemkl2" class="form-control orderanemkl-lookup">
@@ -131,7 +131,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
-                  NO CONT 2
+                  NO CONT (2)
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
@@ -141,7 +141,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
-                  NO SEAL 2
+                  NO SEAL (2)
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
@@ -233,7 +233,7 @@
         name: 'limit',
         value: limit
       })
-      
+
       data.push({
         name: 'tgldariheader',
         value: $('#tgldariheader').val()
@@ -242,7 +242,7 @@
         name: 'tglsampaiheader',
         value: $('#tglsampaiheader').val()
       })
-      
+
       let tgldariheader = $('#tgldariheader').val();
       let tglsampaiheader = $('#tglsampaiheader').val()
 
@@ -266,7 +266,7 @@
       }
 
       $(this).attr('disabled', '')
-      $('#loader').removeClass('d-none')
+      $('#processingLoader').removeClass('d-none')
 
       $.ajax({
         url: url,
@@ -301,7 +301,7 @@
           }
         },
       }).always(() => {
-        $('#loader').addClass('d-none')
+        $('#processingLoader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
     })
@@ -375,7 +375,7 @@
     $('#crudModalTitle').text('Edit Orderan Trucking')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-   
+
 
     Promise
       .all([
@@ -544,12 +544,14 @@
             containerId = response.data.container_id
             jenisorderId = response.data.jenisorder_id
 
-            if (index == 'tglbukti') {
-              element.val(dateFormat(value))
-            }
+            // if (index == 'tglbukti') {
+            //   element.val(dateFormat(value))
+            // }
 
             if (element.is('select')) {
               element.val(value).trigger('change')
+            } else if (element.hasClass('datepicker')) {
+              element.val(dateFormat(value))
             } else {
               element.val(value)
             }
@@ -557,7 +559,7 @@
             if (index == 'container') {
               element.data('current-value', value)
               console.log(containerId)
-                getcont(containerId)
+              getcont(containerId)
             }
             if (index == 'agen') {
               element.data('current-value', value)
@@ -644,8 +646,12 @@
   }
 
   function setContEnable() {
+    let nojobemkl2 = $('#crudForm [name=nojobemkl2]')
     if (statustas == '0') {
       //bukan tas
+      nojobemkl2.attr('readonly', true)
+      nojobemkl2.parents('.input-group').find('.input-group-append').hide()
+      nojobemkl2.parents('.input-group').find('.button-clear').hide()
       $('#crudForm [name=nocont]').attr('readonly', false)
       $('#crudForm [name=noseal]').attr('readonly', false)
       if (kodecontainer == '1') {
@@ -653,6 +659,9 @@
         $('#crudForm [name=noseal2]').attr('readonly', false)
       }
     } else {
+      nojobemkl2.attr('readonly', false)
+      nojobemkl2.parents('.input-group').find('.input-group-append').show()
+      nojobemkl2.parents('.input-group').find('.button-clear').show()
       $('#crudForm [name=nocont]').attr('readonly', true)
       $('#crudForm [name=noseal]').attr('readonly', true)
       $('#crudForm [name=nocont2]').attr('readonly', true)
@@ -662,11 +671,25 @@
 
 
   function setCont2Enable() {
+    let nojobemkl2 = $('#crudForm [name=nojobemkl2]')
     if (kodecontainer == '1') {
       //2x20
+      if (statustas != '0') {
+        nojobemkl2.attr('readonly', false)
+        nojobemkl2.parents('.input-group').find('.input-group-append').show()
+        nojobemkl2.parents('.input-group').find('.button-clear').show()
+
+      } else {
+        nojobemkl2.attr('readonly', true)
+        nojobemkl2.parents('.input-group').find('.input-group-append').hide()
+        nojobemkl2.parents('.input-group').find('.button-clear').hide()
+      }
       $('#crudForm [name=nocont2]').attr('readonly', false)
       $('#crudForm [name=noseal2]').attr('readonly', false)
     } else {
+      nojobemkl2.attr('readonly', true)
+      nojobemkl2.parents('.input-group').find('.input-group-append').hide()
+      nojobemkl2.parents('.input-group').find('.button-clear').hide()
       $('#crudForm [name=nocont2]').attr('readonly', true)
       $('#crudForm [name=noseal2]').attr('readonly', true)
     }

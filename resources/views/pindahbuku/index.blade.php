@@ -60,7 +60,7 @@
             name: 'nobukti',
           },
           {
-            label: 'TANGGAL BUKTI',
+            label: 'TGL BUKTI',
             name: 'tglbukti',
             align: 'left',
             formatter: "date",

@@ -229,7 +229,7 @@
             align: 'left'
           },
           {
-            label: 'TANGGAL BUKTI',
+            label: 'TGL BUKTI',
             name: 'tglbukti',
             align: 'left',
             formatter: "date",
@@ -294,7 +294,7 @@
             align: 'left'
           },
           {
-            label: 'TANGGAL CETAK',
+            label: 'TGL CETAK',
             name: 'tglbukacetak',
             align: 'left',
             formatter: "date",
@@ -500,7 +500,22 @@
               }
             }
           },
-          
+          {
+            id: 'report',
+            innerHTML: '<i class="fa fa-print"></i> REPORT',
+            class: 'btn btn-info btn-sm mr-1',
+            onClick: () => {
+
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Please select a row')
+              } else {
+                window.open(`{{ route('hutangbayarheader.report') }}?id=${selectedId}`)
+              }
+              clearSelectedRows()
+              $('#gs_').prop('checked', false)
+            }
+          },
           {
             id: 'export',
             title: 'Export',
@@ -514,22 +529,6 @@
                 showDialog('Please select a row')
               } else {
                 window.open(`{{ route('hutangbayarheader.export') }}?id=${selectedId}`)
-              }
-              clearSelectedRows()
-              $('#gs_').prop('checked', false)
-            }
-          },
-          {
-            id: 'report',
-            innerHTML: '<i class="fa fa-print"></i> REPORT',
-            class: 'btn btn-info btn-sm mr-1',
-            onClick: () => {
-
-              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Please select a row')
-              } else {
-                window.open(`{{ route('hutangbayarheader.report') }}?id=${selectedId}`)
               }
               clearSelectedRows()
               $('#gs_').prop('checked', false)

@@ -70,10 +70,6 @@
       loadDataHeader('pengembaliankasgantungheader')
     })
 
-    $('#crudModal').on('hidden.bs.modal', function() {
-      activeGrid = '#jqGrid'
-    })
-
     $("#jqGrid").jqGrid({
         url: `{{ config('app.api_url') . 'pengembaliankasgantungheader' }}`,
         mtype: "GET",
@@ -147,7 +143,7 @@
             align: 'left'
           },
           {
-            label: 'TANGGAL BUKTI',
+            label: 'TGL BUKTI',
             name: 'tglbukti',
             align: 'left',
             formatter: "date",
@@ -157,7 +153,7 @@
             }
           },
           {
-            label: 'TANGGAL dari',
+            label: 'TGL DARI',
             name: 'tgldari',
             align: 'left',
             formatter: "date",
@@ -167,7 +163,7 @@
             }
           },
           {
-            label: 'TANGGAL sampai',
+            label: 'TGL SAMPAI',
             name: 'tglsampai',
             align: 'left',
             formatter: "date",
@@ -213,7 +209,7 @@
             align: 'left'
           },
           {
-            label: 'TANGGAL CETAK',
+            label: 'TGL CETAK',
             name: 'tglbukacetak',
             align: 'left',
             formatter: "date",
@@ -400,7 +396,19 @@
                 cekValidasi(selectedId, 'DELETE')
               }            }
           },
-          
+          {
+            id: 'report',
+            innerHTML: '<i class="fa fa-print"></i> REPORT',
+            class: 'btn btn-info btn-sm mr-1',
+            onClick: () => {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Please select a row')
+              } else {
+                window.open(`{{ route('pengembaliankasgantungheader.report') }}?id=${selectedId}`)
+              }
+            }
+          },          
           {
             id: 'export',
             title: 'Export',
@@ -416,19 +424,6 @@
               }
             }
           },  
-          {
-            id: 'report',
-            innerHTML: '<i class="fa fa-print"></i> REPORT',
-            class: 'btn btn-info btn-sm mr-1',
-            onClick: () => {
-              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Please select a row')
-              } else {
-                window.open(`{{ route('pengembaliankasgantungheader.report') }}?id=${selectedId}`)
-              }
-            }
-          },
         ]
 
       })

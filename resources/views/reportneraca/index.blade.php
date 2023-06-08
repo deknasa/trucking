@@ -13,7 +13,7 @@
                         <div class="form-group row">
                             <div class="col-12 col-sm-2 col-md-2">
                                 <label class="col-form-label">
-                                    TANGGAL DARI <span class="text-danger">*</span>
+                                    TGL DARI <span class="text-danger">*</span>
                                 </label>
                             </div>
                             <div class="col-12 col-sm-4 col-md-4">
@@ -26,7 +26,7 @@
 
                             <div class="col-12 col-sm-2 col-md-2">
                                 <label class="col-form-label">
-                                    TANGGAL SAMPAI <span class="text-danger">*</span>
+                                    TGL SAMPAI <span class="text-danger">*</span>
                                 </label>
                             </div>
                             <div class="col-12 col-sm-4 col-md-4">

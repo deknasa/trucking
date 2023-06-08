@@ -64,8 +64,8 @@
               <table class="table table-bordered table-bindkeys" id="detailList" style="width: 1300px;">
                 <thead>
                   <tr>
-                    <th width="3%">KEY</th>
-                    <th width="8%">VALUE</th>
+                    <th width="3%">Judul</th>
+                    <th width="8%">Keterangan</th>
                     <th width="2%">Aksi</th>
                   </tr>
                 </thead>
@@ -182,7 +182,7 @@
       }
 
       $(this).attr('disabled', '')
-      $('#loader').removeClass('d-none')
+      $('#processingLoader').removeClass('d-none')
 
       $.ajax({
         url: url,
@@ -215,7 +215,7 @@
           }
         },
       }).always(() => {
-        $('#loader').addClass('d-none')
+        $('#processingLoader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
     })

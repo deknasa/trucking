@@ -1,71 +1,78 @@
-<table id="pelunasanPiutangHeaderLookup" class="lookup-grid" style="width: 100%;"></table>
-<div id="pelunasanPiutangHeaderLookupPager"></div>
+<table id="pengeluaranStokDetailLookup" class="lookup-grid" style="width: 100%;"></table>
+<div id="pengeluaranStokDetailLookupPager"></div>
 
 <script>
-  $('#pelunasanPiutangHeaderLookup').jqGrid({
-      url: `{{ config('app.api_url') . 'pelunasanpiutangheader' }}`,
+  $('#pengeluaranStokDetailLookup').jqGrid({
+      url: `{{ config('app.api_url') . 'pengeluaranstokdetail' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
       iconSet: 'fontAwesome',
       datatype: "json",
+      postData: {
+        pengeluaranstokheader_id:  `{!! $pengeluaranstokheader_id ?? '' !!}`,
+      },
       colModel: [{
-            label: 'ID',
-            name: 'id',
-            align: 'right',
-            width: '50px',
-            search: false,
-            hidden: true
-          },
-          {
-            label: 'NO. BUKTI',
+            label: 'NO BUKTI',
             name: 'nobukti',
-            align: 'left'
           },
           {
-            label: 'TGL BUKTI',
-            name: 'tglbukti',
-            align: 'left',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
-            }
+            label: 'stok',
+            name: 'stok',
+          },
+
+          {
+            label: 'qty',
+            name: 'qty',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
+            label: 'harga',
+            name: 'harga',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+
+          {
+            label: 'persentasediscount',
+            name: 'persentasediscount',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
+            label: 'nominaldiscount',
+            name: 'nominaldiscount',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
+            label: 'vulkanisirke',
+            name: 'vulkanisirke',
+          },
+          {
+            label: 'TOTAL',
+            name: 'total',
+            align: 'right',
+            formatter: currencyFormat,
           },
           {
             label: 'KETERANGAN',
             name: 'keterangan',
-            align: 'left'
           },
           {
-            label: 'BANK',
-            name: 'bank_id',
-            align: 'left'
-          },
-          {
-            label: 'AGEN',
-            name: 'agen_id',
-            align: 'left'
-          },
-          {
-            label: 'CABANG',
-            name: 'cabang_id',
-            align: 'left'
-          },
-          {
-            label: 'MODIFIEDBY',
+            label: 'modifiedby',
             name: 'modifiedby',
-            align: 'left'
           },
           {
-            label: 'UPDATEDAT',
-            name: 'updated_at',
-            align: 'left',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y H:i:s"
-            }
+            label: 'stok_id',
+            name: 'stok_id',
+            align: 'right',
+            width: '70px',
+              search: false,
+            hidden: true
           },
+
+
         ],
       autowidth: true,
       responsive: true,
@@ -80,7 +87,7 @@
       sortorder: 'asc',
       toolbar: [true, "top"],
       page: 1,
-      pager: $('#pelunasanPiutangHeaderLookupPager'),
+      pager: $('#pengeluaranStokDetailLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -112,26 +119,26 @@
           setCustomBindKeys($(this))
           initResize($(this))
 
-          if (indexRow - 1 > $('#pelunasanPiutangHeaderLookup').getGridParam().reccount) {
-            indexRow = $('#pelunasanPiutangHeaderLookup').getGridParam().reccount - 1
+          if (indexRow - 1 > $('#pengeluaranStokDetailLookup').getGridParam().reccount) {
+            indexRow = $('#pengeluaranStokDetailLookup').getGridParam().reccount - 1
           }
 
           if (triggerClick) {
             if (id != '') {
               indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-              $(`#pelunasanPiutangHeaderLookup [id="${$('#pelunasanPiutangHeaderLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#pengeluaranStokDetailLookup [id="${$('#pengeluaranStokDetailLookup').getDataIDs()[indexRow]}"]`).click()
               id = ''
             } else if (indexRow != undefined) {
-              $(`#pelunasanPiutangHeaderLookup [id="${$('#pelunasanPiutangHeaderLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#pengeluaranStokDetailLookup [id="${$('#pengeluaranStokDetailLookup').getDataIDs()[indexRow]}"]`).click()
             }
 
-            if ($('#pelunasanPiutangHeaderLookup').getDataIDs()[indexRow] == undefined) {
-              $(`#pelunasanPiutangHeaderLookup [id="` + $('#pelunasanPiutangHeaderLookup').getDataIDs()[0] + `"]`).click()
+            if ($('#pengeluaranStokDetailLookup').getDataIDs()[indexRow] == undefined) {
+              $(`#pengeluaranStokDetailLookup [id="` + $('#pengeluaranStokDetailLookup').getDataIDs()[0] + `"]`).click()
             }
 
             triggerClick = false
           } else {
-            $('#pelunasanPiutangHeaderLookup').setSelection($('#pelunasanPiutangHeaderLookup').getDataIDs()[indexRow])
+            $('#pengeluaranStokDetailLookup').setSelection($('#pengeluaranStokDetailLookup').getDataIDs()[indexRow])
           }
         }
 
@@ -146,7 +153,7 @@
           clearColumnSearch($(this))
         })
 
-        $(this).setGridWidth($('#lookup').prev().width())
+        $(this).setGridWidth($('#lookupCabang').prev().width())
         setHighlight($(this))
       }
     })
@@ -161,10 +168,9 @@
       beforeSearch: function() {
         abortGridLastRequest($(this))
 
-        clearGlobalSearch($('#pelunasanPiutangHeaderLookup'))
+        clearGlobalSearch($('#pengeluaranStokDetailLookup'))
       },
     })
-
-  loadGlobalSearch($('#pelunasanPiutangHeaderLookup'))
-  loadClearFilter($('#pelunasanPiutangHeaderLookup'))
+  loadGlobalSearch($('#pengeluaranStokDetailLookup'))
+  loadClearFilter($('#pengeluaranStokDetailLookup'))
 </script>

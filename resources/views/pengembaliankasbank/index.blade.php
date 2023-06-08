@@ -203,7 +203,7 @@
             align: 'left'
           },
           {
-            label: 'TANGGAL BUKTI',
+            label: 'TGL BUKTI',
             name: 'tglbukti',
             align: 'left',
             formatter: "date",
@@ -543,7 +543,7 @@
             $('#jqGrid').trigger('reloadGrid')
           }
         }).always(() => {
-          $('#loader').addClass('d-none')
+          $('#processingLoader').addClass('d-none')
         })
       }
       

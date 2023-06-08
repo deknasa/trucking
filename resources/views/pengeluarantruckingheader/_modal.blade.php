@@ -15,7 +15,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-2 col-md-2">
                 <label class="col-form-label">
-                  NO BUKTI <span class="text-danger">*</span>
+                  NO BUKTI <span class="text-danger"></span>
                 </label>
               </div>
               <div class="col-12 col-sm-4 col-md-4">
@@ -24,7 +24,7 @@
 
               <div class="col-12 col-sm-2 col-md-2">
                 <label class="col-form-label">
-                  TANGGAL BUKTI <span class="text-danger">*</span>
+                  TGL BUKTI <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-sm-4 col-md-4">
@@ -49,7 +49,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-2 col-md-2">
                 <label class="col-form-label">
-                  TANGGAL dari <span class="text-danger">*</span>
+                  TGL DARI <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-sm-4 col-md-4">
@@ -60,7 +60,7 @@
 
               <div class="col-12 col-sm-2 col-md-2">
                 <label class="col-form-label">
-                  TANGGAL sampai <span class="text-danger">*</span>
+                  TGL SAMPAI <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-sm-4 col-md-4">
@@ -76,8 +76,18 @@
                   supir <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="hidden" id="supirHaeaderId" name="supirheader_id">
-                <input type="text" name="supir" class="form-control supirheader-lookup">
+                <input type="hidden" id="supirheaderId" name="supirheader_id">
+                <input type="text" name="supirheader" class="form-control supirheader-lookup">
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
+                  trado <span class="text-danger">*</span></label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="hidden" id="tradoHaeaderId" name="tradoheader_id">
+                <input type="text" name="trado" class="form-control tradoheader-lookup">
               </div>
             </div>
 
@@ -106,6 +116,30 @@
               </div>
             </div>
 
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
+                  posting Pinjaman<span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <select name="postingpinjaman" class="form-select select2bs4" style="width: 100%;">
+                  <option value="">-- PILIH posting PInjaman --</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
+                  pengeluaran trucking nobukti<span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="text" name="pengeluarantrucking_nobukti" id="pengeluarantrucking_nobukti" class="form-control" readonly>
+              </div>
+            </div>
+      
             <div class="border p-3 mb-3 posting-border">
               <h6>Posting Pengeluaran</h6>
 
@@ -144,18 +178,26 @@
               <table id="tablePelunasanbbm"></table>
             </div>
 
+            <div class="row mt-5">
+              <div class="col-md-12">
+                  <div class="card" style="max-height:500px; overflow-y: scroll;">
+                      <div class="card-body">
             <div id="detail-default-section" class="table-scroll table-responsive">
-              <table class="table table-bordered table-bindkeys mt-3" id="detailList" style="width: 1000px;">
+              <table class="table table-bordered table-bindkeys mt-3" id="detailList" >
                 <thead>
                   <tr>
-                    <th width="1%" class="">No</th>
+                    <th style="width:5%; max-width: 25px;max-width: 15px">No</th>
                     <th class="data_tbl tbl_checkbox" style="display:none" width="1%">Pilih</th>
-                    <th width="20%" class="data_tbl tbl_supir_id">SUPIR</th>
-                    <th class="data_tbl tbl_penerimaantruckingheader" width="20%">NO BUKTI PENERIMAAN TRUCKING</th>
-                    <th width="14%" class="tbl_sisa">Sisa</th>
-                    <th width="20%" class="tbl_nominal">Nominal</th>
-                    <th class="data_tbl tbl_keterangan" width="25%">Keterangan</th>
-                    <th width="1%" class="tbl_aksi">Aksi</th>
+                    <th style="width: 20%; min-width: 200px;" class="data_tbl tbl_supir_id">SUPIR</th>
+                    <th style="width: 20%; min-width: 200px;" class="data_tbl tbl_pengeluaranstokheader_nobukti">no bukti pengeluaran stok</th>
+                    <th style="width: 20%; min-width: 200px;" class="data_tbl tbl_stok_id">stok</th>
+                    <th class="data_tbl tbl_penerimaantruckingheader" style="width: 20%; min-width: 200px;">NO BUKTI PENERIMAAN TRUCKING</th>
+                    <th  style="width:10%; min-width: 100px" class="data_tbl tbl_qty">qty</th>
+                    <th style="width: 20%; min-width: 200px;" class="tbl_sisa">Sisa</th>
+                    <th style="width: 20%; min-width: 200px;" class="data_tbl tbl_harga">harga</th>
+                    <th style="width: 20%; min-width: 200px;" class="data_tbl tbl_nominal">Nominal</th>
+                    <th class="data_tbl tbl_keterangan" style="width: 20%; min-width: 200px;">Keterangan</th>
+                    <th style="width:5%; max-width: 25px;max-width: 15px">Aksi</th>
                   </tr>
                 </thead>
                 <tbody id="table_body" class="form-group">
@@ -180,7 +222,10 @@
                 </tfoot>
               </table>
             </div>
-
+                </div>
+              </div>
+          </div>
+      </div>
 
           </div>
           <div class="modal-footer justify-content-start">
@@ -347,6 +392,10 @@
           value: form.find(`[name="statusposting"]`).val()
         })
         data.push({
+          name: 'postingpinjaman',
+          value: form.find(`[name="postingpinjaman"]`).val()
+        })
+        data.push({
           name: 'bank_id',
           value: form.find(`[name="bank_id"]`).val()
         })
@@ -422,6 +471,10 @@
         data.push({
           name: 'statusposting',
           value: form.find(`[name="statusposting"]`).val()
+        })
+        data.push({
+          name: 'postingpinjaman',
+          value: form.find(`[name="postingpinjaman"]`).val()
         })
         data.push({
           name: 'bank_id',
@@ -545,12 +598,33 @@
       } else {
         data = $('#crudForm').serializeArray()
 
-        $('#crudForm').find(`[name="nominal[]"`).each((index, element) => {
-          if (KodePengeluaranId != "BST") {
-            data.filter((row) => row.name === 'nominal[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal[]"]`)[index])
-          }
+        if (KodePengeluaranId != "BST") {
+          $('#crudForm').find(`[name="nominal[]"`).each((index, element) => {
+            if (element.value !="" &&  AutoNumeric.getAutoNumericElement(element) !== null) {
+              data.filter((row) => row.name === 'nominal[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal[]"]`)[index])
+            }
+          })
+          $('#crudForm').find(`[name="harga[]"`).each((index, element) => {
+            // console.log(AutoNumeric.getAutoNumericElement(element));
+            if (element.value !="" && AutoNumeric.getAutoNumericElement(element) !== null) {
+              data.filter((row) => row.name === 'harga[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="harga[]"]`)[index])
+            }
+          })
+          $('#crudForm').find(`[name="qty[]"`).each((index, element) => {
+            if (element.value !="" &&  AutoNumeric.getAutoNumericElement(element) !== null) {
+              data.filter((row) => row.name === 'qty[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="qty[]"]`)[index])              
+            }
+          })
+        }
 
-        })
+
+      //   $('#crudForm').find(`[name="detail_qty[]"]`).each((index, element) => {
+      //   data.filter((row) => row.name === 'detail_qty[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="detail_qty[]"]`)[index])
+      // })
+      // $('#crudForm').find(`[name="detail_harga[]"]`).each((index, element) => {
+      //   data.filter((row) => row.name === 'detail_harga[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="detail_harga[]"]`)[index])
+      // })
+
       }
 
       data.push({
@@ -617,7 +691,7 @@
       }
 
       $(this).attr('disabled', '')
-      $('#loader').removeClass('d-none')
+      $('#processingLoader').removeClass('d-none')
 
       $.ajax({
         url: url,
@@ -634,7 +708,7 @@
           $('#crudModal').modal('hide')
           $('#crudModal').find('#crudForm').trigger('reset')
 
-          $('#kodepengeluaranheader').val(response.data.pengeluarantrucking_id).trigger('change')
+          $('#pengeluaranheader_id').val(response.data.pengeluarantrucking_id).trigger('change')
 
           $('#jqGrid').jqGrid('setGridParam', {
             postData: {
@@ -715,7 +789,7 @@
           }
         },
       }).always(() => {
-        $('#loader').addClass('d-none')
+        $('#processingLoader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
     })
@@ -747,6 +821,9 @@
       case 'KBBM':
         tampilanKBBM()
         break;
+      case 'KLAIM':
+        tampilanKLAIM()
+        break;
       default:
         tampilanall()
         break;
@@ -756,11 +833,18 @@
   function tampilanPJT() {
 
     $('[name=keterangancoa]').parents('.form-group').hide()
+    $('[name=tradoheader_id]').parents('.form-group').hide()
+    $('[name=postingpinjaman]').parents('.form-group').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
     $('[name=tgldari]').parents('.form-group').hide()
     $('#detail-bst-section').hide()
     $('#detail-tde-section').hide()
     $('#detail-default-section').show()
+    $('.tbl_pengeluaranstokheader_nobukti').hide()
+    $('.tbl_stok_id').hide()
+    $('.tbl_qty').hide()
+    $('.nominal').prop('readonly', false)
+    $('.tbl_harga').hide()
     $('.tbl_checkbox').hide()
     $('.tbl_supir_id').show()
     $('.tbl_aksi').show()
@@ -771,10 +855,18 @@
 
   function tampilanTDE() {
     $('[name=keterangancoa]').parents('.form-group').hide()
+    $('[name=tradoheader_id]').parents('.form-group').hide()
+    $('[name=postingpinjaman]').parents('.form-group').hide()
     $('.tbl_supir_id').hide()
     $('[name=supirheader_id]').parents('.form-group').show()
     $('[name=tgldari]').parents('.form-group').hide()
-
+    $('[name=tgldari]').prop('disabled', true)
+    $('[name=tglsampai]').prop('disabled', true)
+    $('.tbl_pengeluaranstokheader_nobukti').hide()
+    $('.tbl_stok_id').hide()
+    $('.tbl_qty').hide()
+    $('.nominal').prop('readonly', false)
+    $('.tbl_harga').hide()
     $('#detail-tde-section').show()
     $('#detail-bst-section').hide()
     $('#detail-default-section').hide()
@@ -784,14 +876,23 @@
   function tampilanBST() {
     $('#detailList tbody').html('')
     enabledKas(true);
+    $('[name=tradoheader_id]').parents('.form-group').hide()
+    $('[name=postingpinjaman]').parents('.form-group').hide()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
     $('[name=tgldari]').parents('.form-group').show()
+    $('[name=tgldari]').prop('disabled', false)
+    $('[name=tglsampai]').prop('disabled', false)
     $('#detail-bst-section').show()
     $('#detail-default-section').hide()
     $('#detail-tde-section').hide()
     $('.tbl_checkbox').hide()
     $('.tbl_penerimaantruckingheader').hide()
+    $('.tbl_pengeluaranstokheader_nobukti').hide()
+    $('.tbl_stok_id').hide()
+    $('.tbl_qty').hide()
+    $('.nominal').prop('readonly', false)
+    $('.tbl_harga').hide()
     $('.tbl_supir_id').show()
     $('.tbl_aksi').show()
     $('.colspan').attr('colspan', 2);
@@ -804,14 +905,23 @@
     $('#detailList tbody').html('')
     enabledKas(true);
     $('[name=keterangancoa]').parents('.form-group').hide()
+    $('[name=postingpinjaman]').parents('.form-group').hide()
+    $('[name=tradoheader_id]').parents('.form-group').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
     $('[name=tgldari]').parents('.form-group').show()
+    $('[name=tgldari]').prop('disabled', false)
+    $('[name=tglsampai]').prop('disabled', false)
     $('#detail-bst-section').hide()
     $('#detail-default-section').hide()
     $('#detail-tde-section').hide()
     $('#detail-kbbm-section').show()
     $('.tbl_checkbox').hide()
     $('.tbl_penerimaantruckingheader').hide()
+    $('.tbl_pengeluaranstokheader_nobukti').hide()
+    $('.tbl_stok_id').hide()
+    $('.tbl_qty').hide()
+    $('.nominal').prop('readonly', false)
+    $('.tbl_harga').hide()
     $('.tbl_supir_id').show()
     $('.tbl_aksi').show()
     $('.colspan').attr('colspan', 2);
@@ -822,14 +932,24 @@
   function tampilanBSB() {
     enabledKas(true);
     $('[name=keterangancoa]').parents('.form-group').hide()
+    $('[name=tradoheader_id]').parents('.form-group').hide()
+    $('[name=postingpinjaman]').parents('.form-group').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
     $('[name=tgldari]').parents('.form-group').hide()
+    $('[name=tgldari]').prop('disabled', true)
+    $('[name=tglsampai]').prop('disabled', true)
     $('#detail-bst-section').hide()
     $('#detail-tde-section').hide()
     $('#detail-kbbm-section').hide()
     $('#detail-default-section').show()
     $('.tbl_checkbox').hide()
     $('.tbl_penerimaantruckingheader').hide()
+    $('.tbl_pengeluaranstokheader_nobukti').hide()
+    $('[name=tradoheader_id]').parents('.form-group').hide()
+    $('.tbl_stok_id').hide()
+    $('.nominal').prop('readonly', false)
+    $('.tbl_harga').hide()
+    $('.tbl_qty').hide()
     $('.tbl_supir_id').show()
     $('.tbl_aksi').show()
     $('.colspan').attr('colspan', 2);
@@ -837,14 +957,49 @@
     // $('.colmn-offset').hide()
   }
 
+  function tampilanKLAIM() {
+    enabledKas(false);
+    $('[name=keterangancoa]').parents('.form-group').hide()
+    $('[name=statusposting]').parents('.form-group').hide()
+    $('[name=postingpinjaman]').parents('.form-group').show()
+    $('[name=supirheader_id]').parents('.form-group').show()
+    $('[name=tradoheader_id]').parents('.form-group').show()
+    $('[name=tgldari]').prop('disabled', true)
+    $('[name=tglsampai]').prop('disabled', true)
+    $('[name=tgldari]').parents('.form-group').hide()
+    $('#detail-bst-section').hide()
+    $('#detail-tde-section').hide()
+    $('#detail-kbbm-section').hide()
+    $('#detail-default-section').show()
+    $('.tbl_checkbox').hide()
+    $('.tbl_penerimaantruckingheader').hide()
+    $('.tbl_supir_id').hide()
+    $('.tbl_nominal').show()
+    $('.nominal').prop('readonly', true)
+    $('.tbl_harga').show()
+    $('.tbl_stok_id').show()
+    $('.tbl_pengeluaranstokheader_nobukti').show()
+    $('.tbl_qty').show()
+    $('.tbl_aksi').show()
+    $('.colspan').attr('colspan', 5);
+    $('#tbl_addRow').show()
+    // $('.colmn-offset').hide()
+  }
+
   function tampilanall() {
     enabledKas(true);
     $('[name=keterangancoa]').parents('.form-group').show()
+    $('.tbl_stok_id').hide()
+    $('.tbl_qty').hide()
+    $('[name=tradoheader_id]').parents('.form-group').hide()
+    $('[name=postingpinjaman]').parents('.form-group').hide()
     $('.tbl_supir_id').show()
     $('.tbl_sisa').hide()
     $('.tbl_penerimaantruckingheader').show()
     $('[name=supirheader_id]').parents('.form-group').hide()
     $('[name=tgldari]').parents('.form-group').hide()
+    $('[name=tgldari]').prop('disabled', true)
+    $('[name=tglsampai]').prop('disabled', true)
     $('#detail-bst-section').hide()
     $('#detail-tde-section').hide()
     $('#detail-kbbm-section').hide()
@@ -853,6 +1008,10 @@
     $('#sisaColFoot').hide()
     $('#sisaFoot').hide()
     $('.colmn-offset').show()
+    $('.tbl_nominal').prop('readonly', false)
+    $('.tbl_harga').hide()
+    $('.tbl_pengeluaranstokheader_nobukti').hide()
+    
   }
 
   $(document).on('click', '.checkItem', function(event) {
@@ -911,6 +1070,7 @@
     initLookup()
     initDatepicker()
     initSelect2(form.find(`[name="statusposting"]`), true)
+    initSelect2(form.find(`[name="postingpinjaman"]`), true)
     // initSelect2()
   })
 
@@ -957,6 +1117,7 @@
     Promise
       .all([
         setStatusPostingOptions(form),
+        setPostingPinjamanOptions(form),
         setDefaultBank(),
         addRow(),
         setTotal()
@@ -991,13 +1152,19 @@
     Promise
       .all([
         setStatusPostingOptions(form),
-        showPengeluaranTruckingHeader(form, id)
+        setPostingPinjamanOptions(form),
       ])
       .then(() => {
-          $('#crudModal').modal('show')
-          $('#crudForm [name=tglbukti]').attr('readonly', true)
-          $('#crudForm [name=statusposting]').attr('disabled', true)
-          $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
+        showPengeluaranTruckingHeader(form, id)
+        .then(() => {  
+            $('#crudModal').modal('show')
+            $('#crudForm [name=tglbukti]').attr('readonly', true)
+            $('#crudForm [name=statusposting]').attr('disabled', true)
+            $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
+          })
+        .finally(() => {
+          $('.modal-loader').addClass('d-none')
+        })
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
@@ -1027,15 +1194,20 @@
     Promise
       .all([
         setStatusPostingOptions(form),
-        showPengeluaranTruckingHeader(form, id)
+        setPostingPinjamanOptions(form),
       ])
       .then(() => {
-        $('#crudModal').modal('show')
-        $('#crudForm [name=statusposting]').attr('disabled', true)
+        showPengeluaranTruckingHeader(form, id)
+        .then(() => {  
+          $('#crudModal').modal('show')
+          $('#crudForm [name=statusposting]').attr('disabled', true)
+        })
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
       })
+      form.find(`[name="postingpinjaman"]`).attr('disabled', true)
+
   }
 
   function loadPelunasanBBMGrid() {
@@ -1815,6 +1987,8 @@
           $.each(response.data, (index, value) => {
             let element = form.find(`[name="${index}"]`)
             if (element.is('select')) {
+              // console.log(index);
+              element.val(value)
               element.val(value).trigger('change')
             } else if (element.hasClass('datepicker')) {
               element.val(dateFormat(value))
@@ -1842,6 +2016,12 @@
               element.parent('.input-group').find('.button-clear').remove()
               element.parent('.input-group').find('.input-group-append').remove()
             }
+            if (index == 'statusposting') {
+              element.data('current-value', value).prop('disabled', true)
+            }
+            // if (index == 'postingpinjaman') {
+            //   element.data('current-value', value).prop('disabled', true)
+            // }
             if (index == 'bank') {
               element.data('current-value', value).prop('readonly', true)
               element.parent('.input-group').find('.button-clear').remove()
@@ -1851,8 +2031,6 @@
               element.data('current-value', value)
             }
           })
-
-          setTampilanForm()
 
           if (kodepengeluaran === "TDE") {
             getDataDeposito(response.data.supirheader_id, id).then((response) => {
@@ -1937,33 +2115,59 @@
 
           } else {
             $.each(response.detail, (index, detail) => {
+              let pengeluaranstokheader;
               let detailRow = $(`
                 <tr>
                     <td></td>
-                    <td class="data_tbl tbl_supir">
-                        <input type="hidden" name="supir_id[]">
-                        <input type="text" name="supir[]" data-current-value="${detail.supir}" class="form-control supir-lookup">
+                    <td class="data_tbl tbl_supir_id">
+                        <input type="hidden" id="supir_id_${index}" name="supir_id[]">
+                        <input type="text" id="supir_${index}" name="supir[]" data-current-value="${detail.supir}" class="form-control supir-lookup">
                     </td>
+                    <td class="data_tbl tbl_pengeluaranstokheader_nobukti">
+                      <input type="text" id="pengeluaranstok_nobukti_${index}" name="pengeluaranstok_nobukti[]" data-current-value="${detail.pengeluaranstok_nobukti}" class="form-control pengeluaranstokheader-lookup">
+                    </td>
+                    <td class="data_tbl tbl_stok_id">
+                      <input type="hidden" id="stok_id_${index}" name="stok_id[]">
+                      <input type="text" id="stok_${index}" name="stok[]" data-current-value="${detail.stok}" class="form-control stok-lookup">
+                    </td>
+                    <td class="data_tbl tbl_qty">
+                      <input type="text" id="qty_${index}" name="qty[]" onkeyup="cal(${index})" class="form-control autonumeric qty"> 
+                    </td>
+
                     <td class="data_tbl tbl_penerimaantruckingheader">
-                        <input type="text" name="penerimaantruckingheader_nobukti[]" data-current-value="${detail.penerimaantruckingheader_nobukti}" class="form-control penerimaantruckingheader-lookup">
+                        <input type="text" id="penerimaantruckingheader_nobukti_${index}" name="penerimaantruckingheader_nobukti[]" data-current-value="${detail.penerimaantruckingheader_nobukti}" class="form-control penerimaantruckingheader-lookup">
+                    </td>
+                    <td class="data_tbl tbl_harga">
+                      <input type="text" id="harga_${index}" name="harga[]" class="form-control autonumeric nominal"> 
                     </td>
                     <td class="data_tbl tbl_nominal">
-                        <input type="text" name="nominal[]" class="form-control autonumeric nominal"> 
+                        <input type="text" id="nominal_${index}" name="nominal[]" class="form-control autonumeric nominal"> 
                     </td>
                     <td class="data_tbl tbl_keterangan">
-                        <input type="text" name="keterangan[]" class="form-control"> 
+                        <input type="text" id="keterangan_${index}" name="keterangan[]" class="form-control"> 
                     </td>
                     <td>
                         <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
                     </td>
                 </tr>
               `)
-
+              // let qtyNumeric = new AutoNumeric(detailRow.find(`[name="qty[]"]`))
               detailRow.find(`[name="supir_id[]"]`).val(detail.supir_id)
               detailRow.find(`[name="supir[]"]`).val(detail.supir)
+              detailRow.find(`[name="pengeluaranstok_nobukti[]"]`).val(detail.pengeluaranstok_nobukti)
+              detailRow.find(`[name="stok_id[]"]`).val(detail.stok_id)
+              detailRow.find(`[name="stok[]"]`).val(detail.stok)
+              detailRow.find(`[name="qty[]"]`).val(detail.qty)
+              detailRow.find(`[name="harga[]"]`).val(detail.harga)
               detailRow.find(`[name="keterangan[]"]`).val(detail.keterangan)
               detailRow.find(`[name="penerimaantruckingheader_nobukti[]"]`).val(detail.penerimaantruckingheader_nobukti)
               detailRow.find(`[name="nominal[]"]`).val(detail.nominal)
+              pengeluaranstokheader = detail.pengeluaranstokheader_id
+              if (detail.pengeluaranstok_nobukti) {
+                initAutoNumeric(detailRow.find(`[name="qty[]"]`))
+                // initAutoNumeric(detailRow.find(`[name="qty[]"]`),{'maximumValue':detail.maxqty})
+                initAutoNumeric(detailRow.find(`[name="harga[]"]`))
+              }
 
               initAutoNumeric(detailRow.find(`[name="nominal[]"]`))
               $('#detailList tbody').append(detailRow)
@@ -1994,13 +2198,91 @@
                 }
               })
 
+              $('.pengeluaranstokheader-lookup').last().lookup({
+                title: 'pengeluaran stok Lookup',
+                fileName: 'pengeluaranstokheader',
+                beforeProcess: function(test) {
+                  // var levelcoa = $(`#levelcoa`).val();
+                  this.postData = {
+          
+                    Aktif: 'AKTIF',
+                  }
+                },
+                onSelectRow: (stok, element) => {
+                  pengeluaranstokheader = stok.id
+                  element.val(stok.nobukti)
+                  
+                  element.data('currentValue', element.val())
+                },
+                onCancel: (element) => {
+                  element.val(element.data('currentValue'))
+                },
+                onClear: (element) => {
+                  detailRow.find(`[name="stok_id[]"]`).val('');
+                  detailRow.find(`[name="stok[]"]`).val('');
+                  detailRow.find(`[name="stok[]"]`).data('currentValue', element.val(''))
+                  
+                  // detailRow.find(`[name="harga[]"]`).val('');
+                  detailRow.find(`[name="qty[]"]`).val('');
+                   
+                  detailRow.find(`[name="nominal[]"]`).val('');
+                  setTotal();
+                  // element.parents('td').find(`[name="stok_id[]"]`).val('')
+                  element.val('')
+                  element.data('currentValue', element.val())
+                }
+              })
+              
+              $('.stok-lookup').last().lookup({
+                title: 'stok Lookup',
+                fileName: 'pengeluaranstokdetail',
+                beforeProcess: function(test) {
+                  // var levelcoa = $(`#levelcoa`).val();
+                  this.postData = {
+          
+                    pengeluaranstokheader_id: pengeluaranstokheader,
+                  }
+                },
+                onSelectRow: (stok, element) => {
+                  element.parents('td').find(`[name="stok_id[]"]`).val(stok.stok_id)
+                  element.val(stok.stok)
+                  element.data('currentValue', element.val())
+                  console.log(stok.qty);
+                  detailRow.find(`[name="qty[]"]`).val(0);
+                  detailRow.find(`[name="harga[]"]`).val(stok.harga);
+                  // new AutoNumeric(detailRow.find(`[name="qty[]"]`),{'maximumValue':stok.qty})
+                  initAutoNumeric(detailRow.find(`[name="harga[]"]`))
+                  // initAutoNumeric(detailRow.find(`[name="qty[]"]`),{'maximumValue':detail.maxqty})
+                  
+
+
+                  
+                },
+                onCancel: (element) => {
+                  element.val(element.data('currentValue'))
+                },
+                onClear: (element) => {
+                  detailRow.find(`[name="harga[]"]`).val('');
+                  detailRow.find(`[name="qty[]"]`).val('');
+                  // console.log(detailRow.find(`[name="qty[]"]`));
+                  detailRow.find(`[name="nominal[]"]`).val('');
+                  // initAutoNumeric(detailRow.find(`[name="qty[]"]`))
+
+                  setTotal();
+                  element.parents('td').find(`[name="stok_id[]"]`).val('')
+                  element.val('')
+                  element.data('currentValue', element.val())
+                }
+              })
+
               $('.penerimaantruckingheader-lookup').last().lookup({
                 title: 'Penerimaan Trucking Lookup',
                 fileName: 'penerimaantruckingheader',
                 beforeProcess: function(test) {
                   // var levelcoa = $(`#levelcoa`).val();
                   this.postData = {
-
+                    // penerimaanheader_id : $('#pengeluaranheader_id').val(),
+                    // penerimaanheader_id : 1,
                     Aktif: 'AKTIF',
                   }
                 },
@@ -2021,7 +2303,7 @@
             })
 
           }
-
+          setTampilanForm()
           setRowNumbers()
           if (form.data('action') === 'delete') {
             form.find(`[name="tgldari"]`).prop('readonly', true)
@@ -2146,30 +2428,46 @@
 
     new AutoNumeric('#sisaFoot').set(bayar)
   }
-
+  index = 0;
   function addRow() {
+    let pengeluaranstokheader;
+
     let detailRow = $(`
       <tr>
         <td></td>
-        <td class="data_tbl tbl_supir">
-          <input type="hidden" name="supir_id[]">
-          <input type="text" name="supir[]"  class="form-control supir-lookup">
+        <td class="data_tbl tbl_supir_id">
+          <input id="supir_id_${index}" type="hidden" name="supir_id[]">
+          <input id="supir_${index}" type="text" name="supir[]"  class="form-control supir-lookup">
         </td>
+        <td class="data_tbl tbl_pengeluaranstokheader_nobukti">
+          <input id="pengeluaranstok_nobukti_${index}" type="text" name="pengeluaranstok_nobukti[]"  class="form-control pengeluaranstokheader-lookup">
+        </td>
+        <td class="data_tbl tbl_stok_id">
+          <input id="stok_id_${index}" type="hidden" name="stok_id[]">
+          <input id="stok_${index}" type="text" name="stok[]"  class="form-control stok-lookup">
+        </td>
+        <td class="data_tbl tbl_qty">
+          <input id="qty_${index}" type="text" name="qty[]" onkeyup="cal(${index})" class="form-control  qty"> 
+        </td>
+
         <td class="data_tbl tbl_penerimaantruckingheader">
-          <input type="text" name="penerimaantruckingheader_nobukti[]"  class="form-control penerimaantruckingheader-lookup">
+          <input id="penerimaantruckingheader_nobukti_${index}" type="text" name="penerimaantruckingheader_nobukti[]"  class="form-control penerimaantruckingheader-lookup">
+        </td>
+        <td class="data_tbl tbl_harga">
+          <input id="harga_${index}" readonly type="text" name="harga[]" class="form-control autonumeric"> 
         </td>
         <td class="data_tbl tbl_nominal">
-          <input type="text" name="nominal[]" class="form-control autonumeric nominal"> 
+          <input id="nominal_${index}" type="text" name="nominal[]" class="form-control autonumeric nominal"> 
         </td>
         <td class="data_tbl tbl_keterangan">
-          <input type="text" name="keterangan[]" class="form-control"> 
+          <input id="keterangan_${index}" type="text" name="keterangan[]" class="form-control"> 
         </td>
         <td>
             <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
         </td>
       </tr>
     `)
-
+    var row = index;
     $('#detailList tbody').append(detailRow)
 
     $('.supir-lookup').last().lookup({
@@ -2197,6 +2495,76 @@
         element.data('currentValue', element.val())
       }
     })
+    $('.pengeluaranstokheader-lookup').last().lookup({
+      title: 'pengeluaran stok Lookup',
+      fileName: 'pengeluaranstokheader',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+
+          Aktif: 'AKTIF',
+        }
+      },
+      onSelectRow: (stok, element) => {
+        pengeluaranstokheader = stok.id
+        element.val(stok.nobukti)
+        
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $(`#stok_id_${row}`).val('');
+        $(`#stok_${row}`).val('');
+        $(`#stok_${row}`).data('currentValue', element.val(''))
+        // AutoNumeric($(`#qty_${row}`)[0]).set(0);
+        // $(`#qty_${row}`).val('');
+        // AutoNumeric($(`#harga_${row}`)[0]).set(0);
+        $(`#harga_${row}`).val('');
+        // AutoNumeric($(`#nominal_${row}`)[0]).set(0);
+        $(`#nominal_${row}`).val('');
+        setTotal();
+        // element.parents('td').find(`[name="stok_id[]"]`).val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+    
+    $('.stok-lookup').last().lookup({
+      title: 'stok Lookup',
+      fileName: 'pengeluaranstokdetail',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+
+          pengeluaranstokheader_id: pengeluaranstokheader,
+        }
+      },
+      onSelectRow: (stok, element) => {
+        element.parents('td').find(`[name="stok_id[]"]`).val(stok.stok_id)
+        element.val(stok.stok)
+        element.data('currentValue', element.val())
+        initAutoNumeric($(`#qty_${row}`),{'maximumValue':stok.qty})
+        new AutoNumeric($(`#harga_${row}`)[0]).set(stok.harga)
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        //  new AutoNumeric($(`#qty_${row}`)[0]).set(0);
+        //  $(`#qty_${row}`).val('');
+        //  new AutoNumeric($(`#harga_${row}`)[0]).set(0);
+         $(`#harga_${row}`).val('');
+        //  new AutoNumeric($(`#nominal_${row}`)[0]).set(0);
+         $(`#nominal_${row}`).val('');
+        setTotal();
+        element.parents('td').find(`[name="stok_id[]"]`).val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+
     $('.penerimaantruckingheader-lookup').last().lookup({
       title: 'Penerimaan Trucking Lookup',
       fileName: 'penerimaantruckingheader',
@@ -2223,6 +2591,7 @@
     initAutoNumeric(detailRow.find('.autonumeric'))
     setTampilanForm()
     setRowNumbers()
+    index++
   }
 
   function checkboxHandler(element) {
@@ -2605,6 +2974,20 @@
       })
     }
   }
+  
+  function cal(id) {
+    qty = $(`#qty_${id}`)[0];
+    harga = $(`#harga_${id}`)[0];
+
+    qty = AutoNumeric.getNumber(qty);
+    harga = AutoNumeric.getNumber(harga);
+    console.log(harga);
+    total = qty * harga;
+    // nominaldiscount = total * (discount / 100);
+    // total -= nominaldiscount;
+    new AutoNumeric($(`#nominal_${id}`)[0]).set(total)
+    setTotal()
+  }
 
   function initLookup() {
 
@@ -2673,7 +3056,7 @@
         }
       },
       onSelectRow: (supir, element) => {
-        $(`#supirHaeaderId`).val(supir.id)
+        $(`#supirheaderId`).val(supir.id)
         element.val(supir.namasupir)
         element.data('currentValue', element.val())
 
@@ -2706,11 +3089,63 @@
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
-        $(`#supirHaeaderId`).val('')
+        $(`#supirheaderId`).val('')
         element.val('')
         element.data('currentValue', element.val())
       }
     })
+
+    $('.tradoheader-lookup').last().lookup({
+      title: 'TRADO Lookup',
+      fileName: 'trado',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+
+          Aktif: 'AKTIF',
+        }
+      },
+      onSelectRow: (trado, element) => {
+        $(`#tradoHaeaderId`).val(trado.id)
+        element.val(trado.keterangan)
+        element.data('currentValue', element.val())
+
+        // $('#tableDeposito').jqGrid("clearGridData");
+        // $("#tableDeposito")
+        //   .jqGrid("setGridParam", {
+        //     selectedRowIds: []
+        //   })
+        //   .trigger("reloadGrid");
+
+        // getDataDeposito(trado.id).then((response) => {
+
+        //   console.log('before', $("#tableDeposito").jqGrid('getGridParam', 'selectedRowIds'))
+        //   setTimeout(() => {
+
+        //     $("#tableDeposito")
+        //       .jqGrid("setGridParam", {
+        //         datatype: "local",
+        //         data: response.data,
+        //         originalData: response.data,
+        //         rowNum: response.data.length,
+        //         selectedRowIds: []
+        //       })
+        //       .trigger("reloadGrid");
+        //   }, 100);
+
+        // });
+
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $(`#tradoHaeaderId`).val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+
     $('.pengeluaran-lookup').lookup({
       title: 'Pengeluaran Lookup',
       fileName: 'pengeluaranheader',
@@ -2788,6 +3223,42 @@
             relatedForm.find('[name=statusposting]').append(option).trigger('change')
             if (statusPosting.text === "POSTING") {
               parameterPosting = statusPosting.id
+            }
+          });
+          resolve()
+        }
+      })
+    })
+  }
+  const setPostingPinjamanOptions = function(relatedForm) {
+    return new Promise((resolve, reject) => {
+      relatedForm.find('[name=postingpinjaman]').empty()
+      relatedForm.find('[name=postingpinjaman]').append(
+        new Option('-- PILIH Posting Pinjaman --', '', false, true)
+      ).trigger('change')
+      $.ajax({
+        url: `${apiUrl}parameter`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          filters: JSON.stringify({
+            "groupOp": "AND",
+            "rules": [{
+              "field": "grp",
+              "op": "cn",
+              "data": "STATUS POSTING"
+            }]
+          })
+        },
+        success: response => {
+          response.data.forEach(postingPinjaman => {
+            let option = new Option(postingPinjaman.text, postingPinjaman.id)
+            relatedForm.find('[name=postingpinjaman]').append(option).trigger('change')
+            if (postingPinjaman.text === "POSTING") {
+              parameterPosting = postingPinjaman.id
             }
           });
           resolve()

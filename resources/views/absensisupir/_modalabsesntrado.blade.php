@@ -12,13 +12,13 @@
         <div class="row form-group">
           
           <div class="col-12 col-sm-3 col-md-2">
-            <label class="col-form-label">nobukti </label>
+            <label class="col-form-label">no bukti </label>
           </div>
           <div class="col-12 col-sm-9 col-md-4">
             <input type="text" readonly name="nobukti" class="form-control">
           </div>
           <div class="col-12 col-sm-3 col-md-2">
-            <label class="col-form-label">tglbukti </label>
+            <label class="col-form-label">TGL BUKTI </label>
           </div>
           <div class="col-12 col-sm-9 col-md-4">  
             <div class="input-group">

@@ -283,7 +283,7 @@ class AgenController extends MyController
                 'index' => 'alamat',
             ],
             [
-                'label' => 'No Telp',
+                'label' => 'No Telepon',
                 'index' => 'notelp',
             ],
             [

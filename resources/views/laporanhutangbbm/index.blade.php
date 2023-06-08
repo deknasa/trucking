@@ -5,7 +5,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
-            <div class="card card-primary">
+            <div class="card card-easyui bordered mb-4">
                 <div class="card-header">
                 </div>
                 <form id="crudForm">
@@ -20,13 +20,13 @@
                         </div>
                         <div class="row">
                             <div class="col-sm-6 mt-4">
-                                <a id="btnPreview" class="btn btn-secondary mr-2 ">
-                                    <i class="fas fa-sync"></i>
-                                    Cetak
+                                <a id="btnPreview" class="btn btn-info mr-1 ">
+                                    <i class="fas fa-print"></i>
+                                    Report
                                 </a>
-                                <a id="btnEkspor" class="btn btn-secondary mr-2 ">
-                                    <i class="fas fa-sync"></i>
-                                    Ekspor
+                                <a id="btnEkspor" class="btn btn-warning mr-1 ">
+                                    <i class="fas fa-file-export"></i>
+                                    Export
                                 </a>
                             </div>
                         </div>
@@ -62,11 +62,10 @@
         initDatepicker()
         $('#crudForm').find('[name=sampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
-        let css_property =
-        {
+        let css_property = {
             "color": "#fff",
             "background-color": "rgb(173 180 187)",
-            "cursor" : "not-allowed",
+            "cursor": "not-allowed",
             "border-color": "rgb(173 180 187)"
         }
         if (!`{{ $myAuth->hasPermission('laporanhutangbbm', 'report') }}`) {
@@ -79,29 +78,26 @@
         }
     })
 
-    $(document).on('click', `#btnPreview`, function(event) {
-        let sampai = $('#crudForm').find('[name=sampai]').val()
+    // $(document).on('click', `#btnPreview`, function(event) {
+    //     let sampai = $('#crudForm').find('[name=sampai]').val()
 
-        if (sampai != '') {
+    //     if (sampai != '') {
 
-            window.open(`{{ route('laporanhutangbbm.report') }}?sampai=${sampai}`)
-        } else {
-            showDialog('ISI SELURUH KOLOM')
-        }
-    })
-    $(document).on('click', `#btnEkspor`, function(event) {
-        let sampai = $('#crudForm').find('[name=sampai]').val()
+    //         window.open(`{{ route('laporanhutangbbm.report') }}?sampai=${sampai}`)
+    //     } else {
+    //         showDialog('ISI SELURUH KOLOM')
+    //     }
+    // })
+    // $(document).on('click', `#btnEkspor`, function(event) {
+    //     let sampai = $('#crudForm').find('[name=sampai]').val()
 
-        if (sampai != '') {
+    //     if (sampai != '') {
 
-            window.open(`{{ route('laporanhutangbbm.export') }}?sampai=${sampai}`)
-        } else {
-            showDialog('ISI SELURUH KOLOM')
-        }
-    })
-
-
-
+    //         window.open(`{{ route('laporanhutangbbm.export') }}?sampai=${sampai}`)
+    //     } else {
+    //         showDialog('ISI SELURUH KOLOM')
+    //     }
+    // })
 </script>
 @endpush()
 @endsection

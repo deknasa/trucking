@@ -16,7 +16,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-2 col-md-2">
                 <label class="col-form-label">
-                  NO BUKTI <span class="text-danger">*</span>
+                  NO BUKTI <span class="text-danger"></span>
                 </label>
               </div>
               <div class="col-12 col-sm-4 col-md-4">
@@ -25,7 +25,7 @@
 
               <div class="col-12 col-sm-2 col-md-2">
                 <label class="col-form-label">
-                  TANGGAL BUKTI <span class="text-danger">*</span>
+                  TGL BUKTI <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-sm-4 col-md-4">
@@ -272,7 +272,7 @@
       }
 
       $(this).attr('disabled', '')
-      $('#loader').removeClass('d-none')
+      $('#processingLoader').removeClass('d-none')
 
       $.ajax({
         url: url,
@@ -319,7 +319,7 @@
           }
         },
       }).always(() => {
-        $('#loader').addClass('d-none')
+        $('#processingLoader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
     })
@@ -404,6 +404,9 @@
         dataType: 'JSON',
         headers: {
           Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          bank_id: $('#bankheader').val(),
         },
         success: response => {
           bankId = response.data.bank_id
@@ -799,7 +802,7 @@
 
     let form = $('#crudForm')
     $(this).attr('disabled', '')
-    $('#loader').removeClass('d-none')
+    $('#processingLoader').removeClass('d-none')
 
     $.ajax({
       url: `${apiUrl}pengeluaranheader/approval`,
@@ -830,7 +833,7 @@
         }
       },
     }).always(() => {
-      $('#loader').addClass('d-none')
+      $('#processingLoader').addClass('d-none')
       $(this).removeAttr('disabled')
     })
 

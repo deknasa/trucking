@@ -25,7 +25,7 @@ class Myauth
             'penerimaanstokdetail',
             'pengeluaranstokdetail',
             'gudang',
-            'user',
+            // 'user',
         ],
         'method' => [
             'gridtab',
@@ -63,6 +63,7 @@ class Myauth
             'pelunasangrid',
             'transfergrid',
             'absensigrid',
+            'rolegrid',
         ],
     ];
 

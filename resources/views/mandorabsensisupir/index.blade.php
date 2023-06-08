@@ -73,7 +73,7 @@
             name: 'keterangan',
           },
           {
-            label: 'tanggal bukti',
+            label: 'TGL BUKTI',
             name: 'tglbukti',
             align: 'right',
             formatter: "date",
@@ -172,7 +172,7 @@
       .customPager({
         buttons: [{
             id: 'absen',
-            innerHTML: '<i class="fa fa-pen"></i> ADD',
+            innerHTML: '<i class="fa fa-plus"></i> ADD',
             class: 'btn btn-primary btn-sm mr-1',
             onClick: () => {
               
@@ -306,7 +306,8 @@
         success: response => {
           $('#jqGrid').setGridParam({
             datatype: "local",
-            data:response.data
+            data:response.data,
+            rowNum: response.data.length
           }).trigger('reloadGrid')
         }
       })

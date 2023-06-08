@@ -16,7 +16,7 @@
                         <div class="row form-group">
                             <div class="col-12 col-sm-2 col-md-2">
                                 <label class="col-form-label">
-                                    NO BUKTI <span class="text-danger">*</span>
+                                    NO BUKTI <span class="text-danger"></span>
                                 </label>
                             </div>
                             <div class="col-12 col-sm-4 col-md-4">
@@ -25,7 +25,7 @@
 
                             <div class="col-12 col-sm-2 col-md-2">
                                 <label class="col-form-label">
-                                    TANGGAL BUKTI <span class="text-danger">*</span>
+                                    TGL BUKTI <span class="text-danger">*</span>
                                 </label>
                             </div>
                             <div class="col-12 col-sm-4 col-md-4">
@@ -49,7 +49,7 @@
                         <div class="row form-group">
                             <div class="col-12 col-sm-3 col-md-2">
                                 <label class="col-form-label">
-                                    TANGGAL DARI <span class="text-danger">*</span></label>
+                                    TGL DARI <span class="text-danger">*</span></label>
                             </div>
                             <div class="col-12 col-sm-9 col-md-10">
                                 <div class="input-group">
@@ -61,7 +61,7 @@
                         <div class="row form-group">
                             <div class="col-12 col-sm-3 col-md-2">
                                 <label class="col-form-label">
-                                    TANGGAL SAMPAI <span class="text-danger">*</span></label>
+                                    TGL SAMPAI <span class="text-danger">*</span></label>
                             </div>
                             <div class="col-12 col-sm-9 col-md-10">
                                 <div class="input-group">
@@ -223,7 +223,7 @@
             }
 
             $(this).attr('disabled', '')
-            $('#loader').removeClass('d-none')
+            $('#processingLoader').removeClass('d-none')
 
             $.ajax({
                 url: url,
@@ -261,7 +261,7 @@
                     }
                 },
             }).always(() => {
-                $('#loader').addClass('d-none')
+                $('#processingLoader').addClass('d-none')
                 $(this).removeAttr('disabled')
             })
         })
@@ -347,6 +347,15 @@
                 $('#crudModal').modal('show')
                 form.find('[name=tglbukti]').attr('readonly', true)
                 form.find('[name=tglbukti]').siblings('.input-group-append').remove()
+                form.find('[name=tgldari]').attr('readonly', true)
+                form.find('[name=tgldari]').siblings('.input-group-append').remove()
+                form.find('[name=tglsampai]').attr('readonly', true)
+                form.find('[name=tglsampai]').siblings('.input-group-append').remove()
+                form.find('[name=periode]').attr('readonly', true)
+                form.find('[name=periode]').siblings('.input-group-append').remove()
+                form.find('[name=bank]').attr('readonly', true)
+                form.find('[name=bank]').siblings('.input-group-append').remove()
+                form.find('[name=bank]').siblings('.button-clear').remove()
             })
             .finally(() => {
                 $('.modal-loader').addClass('d-none')
@@ -579,7 +588,7 @@
 
         let form = $('#crudForm')
         $(this).attr('disabled', '')
-        $('#loader').removeClass('d-none')
+        $('#processingLoader').removeClass('d-none')
 
         $.ajax({
             url: `${apiUrl}pendapatansupirheader/approval`,
@@ -610,7 +619,7 @@
                 }
             },
         }).always(() => {
-            $('#loader').addClass('d-none')
+            $('#processingLoader').addClass('d-none')
             $(this).removeAttr('disabled')
         })
 

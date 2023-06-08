@@ -32,6 +32,20 @@
             align: "right",
           },
           {
+            label: 'stok',
+            name: 'stok',
+          },
+          {
+            label: 'qty',
+            name: 'qty',
+          },
+          {
+            label: 'harga',
+            name: 'harga',
+            formatter: currencyFormat,
+            align: "right",
+          },
+          {
             label: 'NO BUKTI PENERIMAAN TRUCKING',
             name: 'penerimaantruckingheader_nobukti',
           },

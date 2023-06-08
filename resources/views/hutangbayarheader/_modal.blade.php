@@ -16,7 +16,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-2 col-md-2">
                 <label class="col-form-label">
-                  NO BUKTI <span class="text-danger">*</span>
+                  NO BUKTI <span class="text-danger"></span>
                 </label>
               </div>
               <div class="col-12 col-sm-4 col-md-4">
@@ -25,7 +25,7 @@
 
               <div class="col-12 col-sm-2 col-md-2">
                 <label class="col-form-label">
-                  TANGGAL BUKTI <span class="text-danger">*</span>
+                  TGL BUKTI <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-sm-4 col-md-4">
@@ -290,6 +290,11 @@
       })
 
       let selectedRowsHutang = $("#tableHutang").getGridParam("selectedRowIds");
+      console.log()
+      data.push({
+        name: 'jumlahdetail',
+        value: selectedRowsHutang
+      })
       $.each(selectedRowsHutang, function(index, value) {
         dataHutang = $("#tableHutang").jqGrid("getLocalRow", value);
 
@@ -378,7 +383,7 @@
       }
 
       $(this).attr('disabled', '')
-      $('#loader').removeClass('d-none')
+      $('#processingLoader').removeClass('d-none')
 
       $.ajax({
         url: url,
@@ -449,7 +454,7 @@
           }
         },
       }).always(() => {
-        $('#loader').addClass('d-none')
+        $('#processingLoader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
 
@@ -563,6 +568,18 @@
         clearSelectedRows()
         $('#gs_').prop('checked', false)
         $('#crudModal').modal('show')
+        form.find(`[name="tglbukti"]`).prop('readonly', true)
+        form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+        form.find(`[name="alatbayar"]`).prop('readonly', true)
+        form.find(`[name="alatbayar"]`).parent('.input-group').find('.input-group-append').remove()
+        form.find(`[name="alatbayar"]`).parent('.input-group').find('.button-clear').remove()
+        form.find(`[name="supplier"]`).prop('readonly', true)
+        form.find(`[name="supplier"]`).parent('.input-group').find('.input-group-append').remove()
+        form.find(`[name="supplier"]`).parent('.input-group').find('.button-clear').remove()
+        form.find(`[name="bank"]`).prop('readonly', true)
+        form.find(`[name="bank"]`).parent('.input-group').find('.input-group-append').remove()
+        form.find(`[name="bank"]`).parent('.input-group').find('.button-clear').remove()
+
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
@@ -1562,7 +1579,7 @@
 
     let form = $('#crudForm')
     $(this).attr('disabled', '')
-    $('#loader').removeClass('d-none')
+    $('#processingLoader').removeClass('d-none')
 
     $.ajax({
       url: `${apiUrl}hutangbayarheader/approval`,
@@ -1593,7 +1610,7 @@
         }
       },
     }).always(() => {
-      $('#loader').addClass('d-none')
+      $('#processingLoader').addClass('d-none')
       $(this).removeAttr('disabled')
     })
 

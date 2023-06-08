@@ -144,7 +144,7 @@
             align: 'left'
           },
           {
-            label: 'TANGGAL BUKTI',
+            label: 'TGL BUKTI',
             name: 'tglbukti',
             formatter: "date",
             formatoptions: {
@@ -154,7 +154,7 @@
           },
           {
             label: 'PENERIMA',
-            name: 'penerima_id',
+            name: 'penerima',
             align: 'left'
           },
           {
@@ -178,7 +178,7 @@
             align: 'left'
           },
           {
-            label: 'TANGGAL CETAK',
+            label: 'TGL CETAK',
             name: 'tglbukacetak',
             formatter: "date",
             formatoptions: {
@@ -369,6 +369,19 @@
           },
           
           {
+            id: 'report',
+            innerHTML: '<i class="fa fa-print"></i> REPORT',
+            class: 'btn btn-info btn-sm mr-1',
+            onClick: () => {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Please select a row')
+              } else {
+                window.open(`{{ route('kasgantungheader.report') }}?id=${selectedId}`)
+              }
+            }
+          },
+          {
             id: 'export',
             title: 'Export',
             caption: 'Export',
@@ -383,19 +396,6 @@
               }
             }
           },  
-          {
-            id: 'report',
-            innerHTML: '<i class="fa fa-print"></i> REPORT',
-            class: 'btn btn-info btn-sm mr-1',
-            onClick: () => {
-              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Please select a row')
-              } else {
-                window.open(`{{ route('kasgantungheader.report') }}?id=${selectedId}`)
-              }
-            }
-          },
         ]
       })
 

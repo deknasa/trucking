@@ -245,7 +245,6 @@ class JurnalUmumHeaderController extends MyController
                     ->get(config('app.api_url') .'jurnalumumheader/'.$request->id)['data'];
 
         //FETCH DETAIL
-        
         $detailParams = [
             'forExport' => true,
             'jurnalumum_id' => $request->id
@@ -257,11 +256,12 @@ class JurnalUmumHeaderController extends MyController
             ->get(config('app.api_url') .'jurnalumumdetail', $detailParams);
 
         $jurnal_details = $responses['data'];
+        // dd($jurnal_details);
         $user = $responses['user'];
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setCellValue('A1', 'TAS '.$user['cabang_id']);
+        $sheet->setCellValue('A1', 'TAS '.$user['nama_cabang']);
         $sheet->getStyle("A1")->getFont()->setSize(20);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:E1');
@@ -289,19 +289,24 @@ class JurnalUmumHeaderController extends MyController
             ],
             [
                 'label' => 'Coa Debet',
-                'index' => 'coadebet',
+                'index' => 'coa',
             ],
             [
                 'label' => 'Coa Kredit',
-                'index' => 'coakredit',
+                'index' => 'coa',
             ],
             [
                 'label' => 'Keterangan',
                 'index' => 'keterangan',
             ],
             [
-                'label' => 'Nominal',
-                'index' => 'nominal',
+                'label' => 'Nominal Debet',
+                'index' => 'nominaldebet',
+                'format' => 'currency'
+            ],
+            [
+                'label' => 'Nominal Kredit',
+                'index' => 'nominalkredit',
                 'format' => 'currency'
             ]
         ];
@@ -336,25 +341,28 @@ class JurnalUmumHeaderController extends MyController
         ];
 
         // $sheet->getStyle("A$detail_table_header_row:G$detail_table_header_row")->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FF1F456E');
-        $sheet ->getStyle("A$detail_table_header_row:E$detail_table_header_row")->applyFromArray($styleArray);
+        $sheet ->getStyle("A$detail_table_header_row:F$detail_table_header_row")->applyFromArray($styleArray);
 
-        $total = 0;
+        $totaldebet = 0;
+        $totalkredit = 0;
         foreach ($jurnal_details as $response_index => $response_detail) {
             
             foreach ($detail_columns as $detail_columns_index => $detail_column) {
                 $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
             }
-            $response_detail['nominals'] = number_format((float) $response_detail['nominal'], '2', ',', '.');
+            $response_detail['nominals'] = number_format((float) $response_detail['nominaldebet'], '2', ',', '.');
         
             $sheet->setCellValue("A$detail_start_row", $response_index + 1);
-            $sheet->setCellValue("B$detail_start_row", $response_detail['coadebet']);
-            $sheet->setCellValue("C$detail_start_row", $response_detail['coakredit']);
+            $sheet->setCellValue("B$detail_start_row", $response_detail['coa']);
+            $sheet->setCellValue("C$detail_start_row", $response_detail['coa']);
             $sheet->setCellValue("D$detail_start_row", $response_detail['keterangan']);
-            $sheet->setCellValue("E$detail_start_row", $response_detail['nominals']);
+            $sheet->setCellValue("E$detail_start_row", $response_detail['nominaldebet']);
+            $sheet->setCellValue("F$detail_start_row", $response_detail['nominalkredit']);
 
-            $sheet ->getStyle("A$detail_start_row:D$detail_start_row")->applyFromArray($styleArray);
+            $sheet ->getStyle("A$detail_start_row:F$detail_start_row")->applyFromArray($styleArray);
             $sheet ->getStyle("E$detail_start_row")->applyFromArray($style_number);
-            $total += $response_detail['nominal'];
+            $totaldebet += $response_detail['nominaldebet'];
+            $totalkredit += $response_detail['nominalkredit'];
             $detail_start_row++;
         }
 
@@ -362,7 +370,8 @@ class JurnalUmumHeaderController extends MyController
         
         $sheet->mergeCells('A'.$total_start_row.':D'.$total_start_row);
         $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A'.$total_start_row.':D'.$total_start_row)->applyFromArray($style_number)->getFont()->setBold(true);
-        $sheet->setCellValue("E$total_start_row", number_format((float) $total, '2', ',', '.'))->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->setCellValue("E$total_start_row", number_format((float) $totaldebet, '2', ',', '.'))->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->setCellValue("F$total_start_row", number_format((float) $totalkredit, '2', ',', '.'))->getStyle("F$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
        
         //set diketahui dibuat
         $ttd_start_row = $total_start_row+2;

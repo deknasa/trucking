@@ -17,7 +17,7 @@
               <div class="row form-group">
                 <div class="col-12 col-md-2">
                   <label class="col-form-label">
-                    NO BUKTI <span class="text-danger">*</span>
+                    NO BUKTI <span class="text-danger"></span>
                   </label>
                 </div>
                 <div class="col-12 col-md-4">
@@ -26,7 +26,7 @@
 
                 <div class="col-12 col-md-2">
                   <label class="col-form-label">
-                    TANGGAL BUKTI <span class="text-danger">*</span>
+                    TGL BUKTI <span class="text-danger">*</span>
                   </label>
                 </div>
                 <div class="col-12 col-md-4">
@@ -213,7 +213,10 @@
         value: form.find(`[name="tglsampai"]`).val()
       })
       let selectedRowsInvoice = $("#tableInvoice").getGridParam("selectedRowIds");
-
+      data.push({
+        name: 'jumlahdetail',
+        value: selectedRowsInvoice
+      })
       $.each(selectedRowsInvoice, function(index, value) {
         dataInvoice = $("#tableInvoice").jqGrid("getLocalRow", value);
         let selectedExtra = dataInvoice.nominalextra
@@ -289,7 +292,7 @@
       }
 
       $(this).attr('disabled', '')
-      $('#loader').removeClass('d-none')
+      $('#processingLoader').removeClass('d-none')
 
       $.ajax({
         url: url,
@@ -360,7 +363,7 @@
           }
         },
       }).always(() => {
-        $('#loader').addClass('d-none')
+        $('#processingLoader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
     })
@@ -430,6 +433,15 @@
         clearSelectedRows()
         $('#gs_').prop('checked', false)
         $('#crudModal').modal('show')
+        form.find(`[name="tglbukti"]`).prop('readonly', true)
+        form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+        form.find(`[name="agen"]`).prop('readonly', true)
+        form.find(`[name="agen"]`).parent('.input-group').find('.input-group-append').remove()
+        form.find(`[name="agen"]`).parent('.input-group').find('.button-clear').remove()
+        form.find(`[name="jenisorder"]`).prop('readonly', true)
+        form.find(`[name="jenisorder"]`).parent('.input-group').find('.input-group-append').remove()
+        form.find(`[name="jenisorder"]`).parent('.input-group').find('.button-clear').remove()
+
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
@@ -1112,7 +1124,7 @@
 
     let form = $('#crudForm')
     $(this).attr('disabled', '')
-    $('#loader').removeClass('d-none')
+    $('#processingLoader').removeClass('d-none')
 
     $.ajax({
       url: `${apiUrl}invoiceheader/approval`,
@@ -1143,7 +1155,7 @@
         }
       },
     }).always(() => {
-      $('#loader').addClass('d-none')
+      $('#processingLoader').addClass('d-none')
       $(this).removeAttr('disabled')
     })
 

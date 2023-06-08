@@ -87,10 +87,6 @@
           method = 'POST'
           url = `${apiUrl}bukaabsensi`
           break;
-        case 'edit':
-          method = 'PATCH'
-          url = `${apiUrl}bukaabsensi/${bukaAbsensiId}`
-          break;
         case 'delete':
           method = 'DELETE'
           url = `${apiUrl}bukaabsensi/${bukaAbsensiId}`
@@ -102,7 +98,7 @@
       }
 
       $(this).attr('disabled', '')
-      $('#loader').removeClass('d-none')
+      $('#processingLoader').removeClass('d-none')
 
       $.ajax({
         url: url,
@@ -137,7 +133,7 @@
           }
         },
       }).always(() => {
-        $('#loader').addClass('d-none')
+        $('#processingLoader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
     })
@@ -172,33 +168,6 @@
     $('.invalid-feedback').remove()
   }
 
-  function editBukaAbsensi(bukaAbsensiId) {
-    let form = $('#crudForm')
-
-    $('.modal-loader').removeClass('d-none')
-
-    form.data('action', 'edit')
-    form.trigger('reset')
-    form.find('#btnSubmit').html(`
-    <i class="fa fa-save"></i>
-    Simpan
-  `)
-    $('#crudModalTitle').text('Edit Buka Absensi')
-    $('.is-invalid').removeClass('is-invalid')
-    $('.invalid-feedback').remove()
-
-    Promise
-      .all([
-        showBukaAbsensi(form, bukaAbsensiId)
-      ])
-      .then(() => {
-        $('#crudModal').modal('show')
-      })
-      .finally(() => {
-        $('.modal-loader').addClass('d-none')
-      })
-  }
-
   function deleteBukaAbsensi(bukaAbsensiId) {
     let form = $('#crudForm')
 
@@ -220,6 +189,7 @@
       ])
       .then(() => {
         $('#crudModal').modal('show')
+        form.find(`[name="tglabsensi"]`).parent('.input-group').find('.input-group-append').remove()
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')

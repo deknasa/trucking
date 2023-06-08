@@ -16,7 +16,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-2 col-md-2">
                 <label class="col-form-label">
-                  NO BUKTI <span class="text-danger">*</span>
+                  NO BUKTI <span class="text-danger"></span>
                 </label>
               </div>
               <div class="col-12 col-sm-4 col-md-4">
@@ -25,7 +25,7 @@
 
               <div class="col-12 col-sm-2 col-md-2">
                 <label class="col-form-label">
-                  TANGGAL BUKTI <span class="text-danger">*</span>
+                  TGL BUKTI <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-sm-4 col-md-4">
@@ -98,14 +98,14 @@
               <table class="table table-bordered table-bindkeys mt-3" id="detailList" style="width: 1000px;">
                 <thead>
                   <tr>
-                    <th width="1%" class="">No</th>
+                    <th style="width:5%; max-width: 25px;max-width: 15px" class="">No</th>
                     <th class="data_tbl tbl_checkbox" style="display:none" width="1%">Pilih</th>
-                    <th width="20%" class="tbl_supir_id">SUPIR </th>
-                    <th width="15%" class="tbl_pengeluarantruckingheader_nobukti">NO BUKTI PENGELUARAN TRUCKING</th>
-                    <th width="14%" class="tbl_sisa">Sisa </th>
-                    <th width="25%" class="tbl_keterangan">Keterangan</th>
-                    <th width="20%" class="tbl_nominal">Nominal</th>
-                    <th width="1%" class="tbl_aksi">Aksi</th>
+                    <th style="width: 20%; min-width: 200px;" class="tbl_supir_id">SUPIR </th>
+                    <th style="width: 20%; min-width: 200px;" class="tbl_pengeluarantruckingheader_nobukti">NO BUKTI PENGELUARAN TRUCKING</th>
+                    <th style="width: 20%; min-width: 200px;" class="tbl_sisa">Sisa </th>
+                    <th style="width: 20%; min-width: 200px;" class="tbl_keterangan">Keterangan</th>
+                    <th style="width: 20%; min-width: 200px;" class="tbl_nominal">Nominal</th>
+                    <th style="width:5%; max-width: 25px;max-width: 15px" class="tbl_aksi">Aksi</th>
                   </tr>
                 </thead>
                 <tbody id="table_body" class="form-group">
@@ -340,7 +340,7 @@
       }
 
       $(this).attr('disabled', '')
-      $('#loader').removeClass('d-none')
+      $('#processingLoader').removeClass('d-none')
 
       $.ajax({
         url: url,
@@ -357,7 +357,7 @@
           $('#crudModal').modal('hide')
           $('#crudModal').find('#crudForm').trigger('reset')
 
-          $('#kodepenerimaanheader').val(response.data.penerimaantrucking_id).trigger('change')
+          $('#penerimaanheader_id').val(response.data.penerimaantrucking_id).trigger('change')
 
           $('#jqGrid').jqGrid('setGridParam', {
             postData: {
@@ -422,7 +422,7 @@
           }
         },
       }).always(() => {
-        $('#loader').addClass('d-none')
+        $('#processingLoader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
     })
@@ -595,6 +595,9 @@
         $('#crudModal').modal('show')
         $('#crudForm [name=tglbukti]').attr('readonly', true)
         $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
+        $('#crudForm [name=supirheader]').attr('readonly', true)
+        $('#crudForm [name=supir]').siblings('.input-group-append').remove()
+        $('#crudForm [name=supir]').siblings('.button-clear').remove()
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')

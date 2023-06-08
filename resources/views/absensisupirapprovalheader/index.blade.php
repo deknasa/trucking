@@ -209,7 +209,7 @@
             align: 'left'
           },
           {
-            label: 'TANGGAL BUKTI',
+            label: 'TGL BUKTI',
             name: 'tglbukti',
             align: 'left',
             formatter: "date",
@@ -235,7 +235,7 @@
             align: 'left'
           },
           {
-            label: 'TANGGAL approval',
+            label: 'TGL approval',
             name: 'tglapproval',
             align: 'left',
             formatter: "date",
@@ -250,12 +250,12 @@
             align: 'left'
           },
           {
-            label: 'coa kaskeluar',
+            label: 'coa kas keluar',
             name: 'coakaskeluar',
             align: 'left'
           },
           {
-            label: 'TANGGAL kas keluar',
+            label: 'TGL kas keluar',
             name: 'tglkaskeluar',
             align: 'left',
             formatter: "date",
@@ -270,7 +270,7 @@
             align: 'left'
           },
           {
-            label: 'TANGGAL CETAK',
+            label: 'TGL CETAK',
             name: 'tglbukacetak',
             align: 'left',
             formatter: "date",
@@ -449,6 +449,15 @@
             }
           },
           {
+            id: 'report',
+            innerHTML: '<i class="fa fa-print"></i> REPORT',
+            class: 'btn btn-info btn-sm mr-1',
+            onClick: () => {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              window.open(`{{url('absensisupirapprovalheader/report/${selectedId}')}}`)
+            }
+          },
+          {
             id: 'export',
             innerHTML: '<i class="fa fa-file-export"></i> EXPORT',
             class: 'btn btn-warning btn-sm mr-1',
@@ -456,15 +465,6 @@
               $('#rangeModal').data('action', 'export')
               $('#rangeModal').find('button:submit').html(`Export`)
               $('#rangeModal').modal('show')
-            }
-          },
-          {
-            id: 'report',
-            innerHTML: '<i class="fa fa-print"></i> REPORT',
-            class: 'btn btn-info btn-sm mr-1',
-            onClick: () => {
-              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              window.open(`{{url('absensisupirapprovalheader/report/${selectedId}')}}`)
             }
           },
         ]
@@ -578,7 +578,7 @@
           $('#jqGrid').trigger('reloadGrid')
         }
       }).always(() => {
-        $('#loader').addClass('d-none')
+        $('#processingLoader').addClass('d-none')
       })
     }
 

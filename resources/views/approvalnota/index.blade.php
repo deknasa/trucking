@@ -193,7 +193,7 @@
 
 
         $(this).attr('disabled', '')
-        $('#loader').removeClass('d-none')
+        $('#processingLoader').removeClass('d-none')
 
         $.ajax({
             url: `${apiUrl}approvalnotaheader`,
@@ -226,7 +226,7 @@
                 }
             },
         }).always(() => {
-            $('#loader').addClass('d-none')
+            $('#processingLoader').addClass('d-none')
             $(this).removeAttr('disabled')
         })
 
@@ -316,7 +316,7 @@
                         align: 'left'
                     },
                     {
-                        label: 'TANGGAL BUKTI',
+                        label: 'TGL BUKTI',
                         name: 'tglbukti',
                         align: 'left',
                         formatter: "date",
@@ -351,7 +351,7 @@
                         align: 'left'
                     },
                     {
-                        label: 'TANGGAL APPROVAL',
+                        label: 'TGL APPROVAL',
                         name: 'tglapproval',
                         align: 'left',
                         formatter: "date",
@@ -501,7 +501,7 @@
             .customPager({
                 buttons: [{
                     id: 'approveun',
-                    innerHTML: '<i class="fas fa-check""></i> APPROVE/UN',
+                    innerHTML: '<i class="fas fa-check""></i> UN/APPROVAL,
                     class: 'btn btn-purple btn-sm mr-1',
                     onClick: () => {
 
