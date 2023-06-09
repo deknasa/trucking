@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "db2ef4e1dc6a230b0976be3bd745604c",
+  "ReportGuid": "53d3f41d3d26f94466fcda8298b61857",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportGandengan.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1686292641000+0700)/",
+  "ReportChanged": "/Date(1686296632000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -154,6 +154,7 @@
           "Ident": "StiHeaderBand",
           "Name": "HeaderBand1",
           "ClientRectangle": "0,2.8,19.01,0.6",
+          "ComponentPlacement": "h.ap.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
           },
@@ -164,7 +165,7 @@
               "Ident": "StiText",
               "Name": "Text15",
               "ClientRectangle": "0,0,0.8,0.6",
-              "ComponentPlacement": "gh.GroupHeaderBand1",
+              "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -189,7 +190,7 @@
               "Name": "Text3",
               "Guid": "7b9b483fc2f3bf4d8452726d4e9a7d94",
               "ClientRectangle": "0.8,0,3,0.6",
-              "ComponentPlacement": "gh.GroupHeaderBand1",
+              "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -214,7 +215,7 @@
               "Name": "Text2",
               "Guid": "0ec1f34220ac10ba01d24ef1c15bd18b",
               "ClientRectangle": "3.8,0,10.4,0.6",
-              "ComponentPlacement": "gh.GroupHeaderBand1",
+              "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -239,7 +240,7 @@
               "Name": "Text5",
               "Guid": "0f99d62f36a880966c3e71171a4dbab0",
               "ClientRectangle": "14.2,0,4.8,0.6",
-              "ComponentPlacement": "gh.GroupHeaderBand1",
+              "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -299,11 +300,6 @@
                 "Right": 0,
                 "Top": 0,
                 "Bottom": 0
-              },
-              "TextFormat": {
-                "Ident": "StiNumberFormatService",
-                "NegativePattern": 1,
-                "GroupSeparator": ","
               },
               "Type": "DataColumn"
             },
