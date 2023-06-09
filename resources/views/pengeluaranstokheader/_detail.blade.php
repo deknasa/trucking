@@ -51,6 +51,7 @@
 
           {
             label: 'persentase discount',
+            width: 200,
             name: 'persentasediscount',
             align: 'right',
             formatter: currencyFormat,

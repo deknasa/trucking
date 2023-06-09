@@ -83,7 +83,7 @@
             align: 'left'
           },
           {
-            label: 'nobon',
+            label: 'no bon',
             name: 'nobon',
             align: 'left'
           },
