@@ -37,6 +37,7 @@
           },
           {
             label: 'Pengeluaran no bukti',
+            width: 250,
             name: 'pengeluaran_nobukti',
           },
           {

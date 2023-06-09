@@ -127,6 +127,7 @@
           
           {
             label: 'SERVICE IN NO BUKTI',
+            width: 230,
             name: 'servicein_nobukti',
             align: 'left'
           },
@@ -134,21 +135,25 @@
           
           {
             label: 'PENERIMAAN STOK NO BUKTI',
+            width: 230,
             name: 'penerimaanstok_nobukti',
             align: 'left'
           },
           {
             label: 'Pengeluaran no bukti',
+            width: 230,
             name: 'pengeluaranstok_nobukti',
             align: 'left'
           },
           {
             label: 'Penerimaan no bukti',
             name: 'penerimaan_nobukti',
+            width: 230,
             align: 'left'
           },
           {
             label: 'hutang bayar nobukti',
+            width: 230,
             name: 'hutangbayar_nobukti',
             align: 'left'
           },
@@ -159,6 +164,7 @@
           },
           {
             label: 'status potong retur',
+            width: 230,
             name: 'statuspotongretur',
             align: 'left'
           },

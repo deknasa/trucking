@@ -139,11 +139,13 @@
           },
           {
             label: 'Penerimaan no bukti',
+            width: 200,
             name: 'penerimaanstok_nobukti',
             align: 'left'
           },
           {
             label: 'Pengeluaran no bukti',
+            width: 200,
             name: 'pengeluaranstok_nobukti',
             align: 'left'
           },
@@ -163,7 +165,7 @@
             align: 'left'
           },
           {
-            label: 'nobon',
+            label: 'no bon',
             name: 'nobon',
             align: 'left'
           },

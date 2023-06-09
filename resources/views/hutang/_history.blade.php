@@ -27,6 +27,7 @@
           },
           {
             label: 'NO BUKTI PEMBAYARAN',
+            width: 230,
             name: 'nobukti_bayar',
           },
           {

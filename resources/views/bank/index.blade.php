@@ -108,7 +108,7 @@
           },
           {
             label: 'FORMAT PENERIMAAN',
-            width:170,
+            width:190,
             name: 'formatpenerimaan',
             formatter: (value, options, rowData) => {
               let FormatPenerimaan = JSON.parse(value)
@@ -129,7 +129,7 @@
           },
           {
             label: 'FORMAT PENGELUARAN',
-            width:170,
+            width:190,
             name: 'formatpengeluaran',
             formatter: (value, options, rowData) => {
               let FormatPengeluaran = JSON.parse(value)
