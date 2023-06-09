@@ -55,7 +55,7 @@
             hidden: true
           },
           {
-            label: 'NO. BUKTI',
+            label: 'NO BUKTI',
             name: 'nobukti',
           },
           {
@@ -73,7 +73,8 @@
             name: 'statusritasi',
           },
           {
-            label: 'SURATPENGANTAR NOBUKTI',
+            label: 'surat pengantar no bukti',
+            width: 230,
             name: 'suratpengantar_nobukti',
           },
           {

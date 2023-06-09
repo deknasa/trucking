@@ -47,6 +47,16 @@
             </div>
 
             <div class="row form-group">
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">
+                  KOTA <span class="text-danger">*</span></label>
+              </div>
+              <div class="col-12 col-md-10">
+                <input type="hidden" name="kota_id">
+                <input type="text" name="kota" class="form-control kota-lookup">
+              </div>
+            </div>
+            <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
                   TUJUAN <span class="text-danger">*</span>
@@ -54,6 +64,16 @@
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="text" name="tujuan" class="form-control">
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
+                  PENYESUAIAN
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="text" name="penyesuaian" class="form-control">
               </div>
             </div>
             {{-- <div class="row form-group">
@@ -100,26 +120,6 @@
                 </select>
               </div>
             </div>
-            <div class="row form-group">
-              <div class="col-12 col-md-2">
-                <label class="col-form-label">
-                  KOTA <span class="text-danger">*</span></label>
-              </div>
-              <div class="col-12 col-md-10">
-                <input type="hidden" name="kota_id">
-                <input type="text" name="kota" class="form-control kota-lookup">
-              </div>
-            </div>
-            <div class="row form-group">
-              <div class="col-12 col-md-2">
-                <label class="col-form-label">
-                  ZONA </label>
-              </div>
-              <div class="col-12 col-md-10">
-                <input type="hidden" name="zona_id">
-                <input type="text" name="zona" class="form-control zona-lookup">
-              </div>
-            </div>
             {{-- <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
@@ -154,6 +154,16 @@
               </div>
             </div>
 
+            <div class="row form-group">
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">
+                  ZONA </label>
+              </div>
+              <div class="col-12 col-md-10">
+                <input type="hidden" name="zona_id">
+                <input type="text" name="zona" class="form-control zona-lookup">
+              </div>
+            </div>
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
@@ -195,10 +205,10 @@
                     <td colspan="2">
                       <p class="text-right font-weight-bold"></p>
                     </td>
-                    <td >
-                      <p class="text-right font-weight-bold autonumeric" id="nominal" ></p>
+                    <td>
+                      <p class="text-right font-weight-bold autonumeric" id="nominal"></p>
                     </td>
-                    
+
                     {{-- <td>
                       <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">TAMBAH</button>
                     </td> --}}
@@ -442,6 +452,18 @@
         showTarif(form, tarifId)
           .then(() => {
             $('#crudModal').modal('show')
+            form.find(`[name="kota"]`).parent('.input-group').find('.button-clear').remove()
+            form.find(`[name="kota"]`).parent('.input-group').find('.input-group-append').remove()
+
+            form.find(`[name="zona"]`).parent('.input-group').find('.button-clear').remove()
+            form.find(`[name="zona"]`).parent('.input-group').find('.input-group-append').remove()
+
+            form.find(`[name="parent"]`).parent('.input-group').find('.button-clear').remove()
+            form.find(`[name="parent"]`).parent('.input-group').find('.input-group-append').remove()
+
+            form.find(`[name="upahsupir"]`).parent('.input-group').find('.button-clear').remove()
+            form.find(`[name="upahsupir"]`).parent('.input-group').find('.input-group-append').remove()
+
           })
           .finally(() => {
             $('.modal-loader').addClass('d-none')
@@ -634,6 +656,7 @@
             delete response.data['id'];
             delete response.data['parent_id'];
             delete response.data['parent'];
+            delete response.data['penyesuaian'];
           }
 
           $.each(response.data, (index, value) => {
@@ -646,15 +669,34 @@
             } else {
               element.val(value)
             }
-
-            if (index == 'container') {
-              element.data('current-value', value)
+            if (!parent) {
+              if (index == 'tujuan' || index == 'penyesuaian') {
+                element.prop('readonly', true)
+              }
             }
             if (index == 'kota') {
               element.data('current-value', value)
+              if (!parent) {
+                element.prop('readonly', true)
+              }
             }
             if (index == 'zona') {
               element.data('current-value', value)
+              if (!parent) {
+                element.prop('readonly', true)
+              }
+            }
+            if (index == 'parent') {
+              element.data('current-value', value)
+              if (!parent) {
+                element.prop('readonly', true)
+              }
+            }
+            if (index == 'upahsupir') {
+              element.data('current-value', value)
+              if (!parent) {
+                element.prop('readonly', true)
+              }
             }
           })
 
@@ -816,6 +858,7 @@
       },
       onSelectRow: (upahsupir, element) => {
         $('#crudForm [name=upahsupir_id]').first().val(upahsupir.id)
+        $('#crudForm').find(`[name=penyesuaian]`).val(upahsupir.penyesuaian).prop('readonly', true)
         $('#crudForm').find(`[name=tujuan]`).prop('readonly', true)
         $('#crudForm [name=tujuan]').val(upahsupir.kotasampai_id)
         element.val(upahsupir.kotasampai_id)
@@ -827,6 +870,7 @@
       onClear: (element) => {
         $('#crudForm [name=upahsupir_id]').first().val('')
         $('#crudForm').find(`[name=tujuan]`).prop('readonly', false)
+        $('#crudForm').find(`[name=penyesuaian]`).val('').prop('readonly', false)
         $('#crudForm [name=tujuan]').val('')
         element.val('')
         element.data('currentValue', element.val())

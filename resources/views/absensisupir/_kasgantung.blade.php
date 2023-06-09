@@ -27,7 +27,7 @@
             name: 'keterangan',
           },
           {
-            label: 'COA',
+            label: 'KODE PERKIRAAN',
             name: 'coa',
           },
           {

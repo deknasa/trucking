@@ -64,6 +64,11 @@
             align: 'left'
           },
           {
+            label: 'PENYESUAIAN',
+            name: 'penyesuaian',
+            align: 'left'
+          },
+          {
             label: 'JARAK',
             name: 'jarak',
             align: 'right',
@@ -125,49 +130,6 @@
             }
           },
           
-          {
-            label: 'STATUS LUAR KOTA',
-            name: 'statusluarkota',
-            align: 'left',
-            stype: 'select',
-            searchoptions: {
-              value: `<?php
-                      $i = 1;
-
-                      foreach ($data['comboluarkota'] as $status) :
-                        echo "$status[param]:$status[parameter]";
-                        if ($i !== count($data['comboluarkota'])) {
-                          echo ";";
-                        }
-                        $i++;
-                      endforeach
-
-                      ?>
-            `,
-              dataInit: function(element) {
-                $(element).select2({
-                  width: 'resolve',
-                  theme: "bootstrap4"
-                });
-              }
-            },
-            formatter: (value, options, rowData) => {
-              let statusLuarKota = JSON.parse(value)
-
-              let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusLuarKota.WARNA}; color: #fff;">
-                  <span>${statusLuarKota.SINGKATAN}</span>
-                </div>
-              `)
-
-              return formattedValue[0].outerHTML
-            },
-            cellattr: (rowId, value, rowObject) => {
-              let statusLuarKota = JSON.parse(rowObject.statusluarkota)
-
-              return ` title="${statusLuarKota.MEMO}"`
-            }
-          },
           {
             label: 'Keterangan',
             name: 'keterangan',

@@ -59,7 +59,7 @@
             hidden: true
           },
           {
-            label: 'NO. BUKTI',
+            label: 'NO BUKTI',
             name: 'nobukti',
           },
           {
@@ -81,7 +81,8 @@
             name: 'bank',
           },
           {
-            label: 'NO. BUKTI PENERIMAAN',
+            label: 'NO BUKTI PENERIMAAN',
+            width: 230,
             name: 'penerimaan_nobukti',
           },
           {
@@ -91,6 +92,7 @@
           },
           {
             label: 'PENGELUARAN SUPIR',
+            width: 250,
             name: 'pengeluaransupir',
             align: 'right',
             formatter: currencyFormat

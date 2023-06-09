@@ -45,7 +45,7 @@
             name: 'keteranganpotongan',
           },
           {
-            label: 'COA POTONGAN',
+            label: 'KODE PERKIRAAN POTONGAN',
             name: 'coapotongan',
             width: 220
           },

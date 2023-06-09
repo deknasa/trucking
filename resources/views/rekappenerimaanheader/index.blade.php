@@ -156,7 +156,7 @@
             }
           },
           {
-            label: 'NO. BUKTI',
+            label: 'NO BUKTI',
             name: 'nobukti',
             align: 'left'
           },
@@ -176,7 +176,7 @@
             }
           },
           {
-            label: 'TANGGAL Transaksi',
+            label: 'TGL Transaksi',
             name: 'tgltransaksi',
             align: 'left',
             formatter: "date",

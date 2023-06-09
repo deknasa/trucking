@@ -100,7 +100,7 @@
           {
             label: 'status karyawan',
             name: 'statuskaryawan',
-            width: 100,
+            width: 180,
             stype: 'select',
             searchoptions: {
               value: `<?php

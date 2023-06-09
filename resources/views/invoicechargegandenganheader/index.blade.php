@@ -156,7 +156,7 @@
             }
           },
           {
-            label: 'NO. BUKTI',
+            label: 'NO BUKTI',
             name: 'nobukti',
             align: 'left'
           },
@@ -171,7 +171,7 @@
             }
           },
           {
-            label: 'TANGGAL PROSES',
+            label: 'TGL PROSES',
             name: 'tglproses',
             align: 'left',
             formatter: "date",

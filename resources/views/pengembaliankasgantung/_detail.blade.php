@@ -31,7 +31,7 @@
             width: 300
           },
           {
-            label: 'COA',
+            label: 'KODE PERKIRAAN',
             name: 'coa',
           },
           {

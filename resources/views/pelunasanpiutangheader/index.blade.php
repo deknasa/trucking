@@ -92,9 +92,10 @@
             hidden: true
           },
           {
-            label: 'NO. BUKTI',
+            label: 'NO BUKTI',
             name: 'nobukti',
             align: 'left'
+            
           },
           {
             label: 'TGL BUKTI',
@@ -122,12 +123,13 @@
             align: 'left'
           },
           {
-            label: 'NO. BUKTI PENERIMAAN',
+            label: 'NO BUKTI PENERIMAAN',
+            width: 230,
             name: 'penerimaan_nobukti',
             align: 'left'
           },
           {
-            label: 'NO. BUKTI GIRO',
+            label: 'NO BUKTI GIRO',
             name: 'penerimaangiro_nobukti',
             align: 'left'
           },

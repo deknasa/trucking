@@ -33,7 +33,7 @@
             hidden: true
           },
           {
-            label: 'NO. BUKTI',
+            label: 'NO BUKTI',
             name: 'nobukti',
             align: 'left'
           },
@@ -58,12 +58,12 @@
             align: 'left'
           },
           {
-            label: 'Penerimaan nobukti',
+            label: 'Penerimaan no bukti',
             name: 'penerimaanstok_nobukti',
             align: 'left'
           },
           {
-            label: 'Pengeluaran nobukti',
+            label: 'Pengeluaran no bukti',
             name: 'pengeluaranstok_nobukti',
             align: 'left'
           },
@@ -83,7 +83,7 @@
             align: 'left'
           },
           {
-            label: 'nobon',
+            label: 'no bon',
             name: 'nobon',
             align: 'left'
           },
@@ -108,7 +108,7 @@
             align: 'left'
           },
           {
-            label: 'COA',
+            label: 'KODE PERKIRAAN',
             name: 'coa',
             align: 'left'
           },

@@ -254,7 +254,7 @@
                         editable: true,
                         edittype: 'checkbox',
                         search: false,
-                        width: 60,
+                        width: 70,
                         align: 'center',
                         formatoptions: {
                             disabled: false
@@ -311,7 +311,7 @@
                         }
                     },
                     {
-                        label: 'NO. BUKTI',
+                        label: 'NO BUKTI',
                         name: 'nobukti',
                         align: 'left'
                     },
@@ -326,7 +326,8 @@
                         }
                     },
                     {
-                        label: 'No. Bukti Pelunasan Piutang',
+                        label: 'NO BUKTI Pelunasan Piutang',
+                        width: 250,
                         name: 'pelunasanpiutang_nobukti',
                         align: 'left'
                     },
@@ -336,7 +337,7 @@
                         align: 'left'
                     },
                     {
-                        label: 'TANGGAL Lunas',
+                        label: 'TGL Lunas',
                         name: 'tgllunas',
                         align: 'left',
                         formatter: "date",

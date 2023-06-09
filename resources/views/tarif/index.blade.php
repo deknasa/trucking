@@ -59,6 +59,10 @@
             label: 'TUJUAN',
             name: 'tujuan',
           },
+          {
+            label: 'PENYESUAIAN',
+            name: 'penyesuaian',
+          },
 
           {
             label: 'STATUS',
@@ -165,6 +169,7 @@
           {
             label: 'STATUS PENYESUAIAN HARGA',
             name: 'statuspenyesuaianharga',
+            width: 230,
             stype: 'select',
             searchoptions: {
               value: `<?php

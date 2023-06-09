@@ -91,9 +91,10 @@
           label: 'keterangan',
           name: 'keterangan',
           align: 'left',
+  
       },
       {
-          label: 'namaterpusat',
+          label: 'nama terpusat',
           name: 'namaterpusat',
           align: 'left',
       },
@@ -103,12 +104,12 @@
         align: 'left'
       },
       {
-        label: 'jenistrado',
+        label: 'jenis trado',
         name: 'jenistrado',
         align: 'left'
       },
       {
-        label: 'subkelompok',
+        label: 'sub kelompok',
         name: 'subkelompok',
         align: 'left'
       },

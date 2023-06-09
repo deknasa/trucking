@@ -176,7 +176,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
-                  COA <span class="text-danger">*</span>
+                  KODE PERKIRAAN <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-8 col-md-10">
@@ -485,17 +485,45 @@
             if (value !== null && value !== 0 && value !== undefined) {
               form.find(`[name=${index}]`).attr('maxlength', value)
               if(index == 'kodepos'){
-                form.find(`[name=kodepos]`).attr('maxlength', 5)
+                form.find(`[name=kodepos]`).attr('maxlength', 50)
+              }
+              if(index == 'namakontak'){
+                form.find(`[name=namakontak]`).attr('maxlength', 150)
               }
               if(index == 'notelp1'){
-                form.find(`[name=notelp1]`).attr('maxlength', 13)
+                form.find(`[name=notelp1]`).attr('maxlength', 50)
               }
               if(index == 'notelp2'){
-                form.find(`[name=notelp2]`).attr('maxlength', 13)
+                form.find(`[name=notelp2]`).attr('maxlength', 50)
+              }
+              if(index == 'namarekening'){
+                form.find(`[name=namarekening]`).attr('maxlength', 150)
+              }
+              if(index == 'jabatan'){
+                form.find(`[name=jabatan]`).attr('maxlength', 150)
+              }
+              if(index == 'kategoriusaha'){
+                form.find(`[name=kategoriusaha]`).attr('maxlength', 150)
               }
               if(index == 'rekeningbank'){
-                form.find(`[name=rekeningbank]`).attr('maxlength', 13)
+                form.find(`[name=rekeningbank]`).attr('maxlength', 150)
               }
+              if(index == 'email'){
+                form.find(`[name=email]`).attr('maxlength', 50)
+              }
+              if(index == 'web'){
+                form.find(`[name=web]`).attr('maxlength', 50)
+              }
+              if(index == 'namapemilik'){
+                form.find(`[name=namapemilik]`).attr('maxlength', 150)
+              }
+              if(index == 'jenisusaha'){
+                form.find(`[name=jenisusaha]`).attr('maxlength', 150)
+              }
+              if(index == 'bank'){
+                form.find(`[name=bank]`).attr('maxlength', 150)
+              }
+             
               if(index == 'kota'){
                 form.find(`[name=kota]`).attr('maxlength', 150)
               }

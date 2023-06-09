@@ -141,7 +141,7 @@
             }
           },    
           {
-            label: 'NO. BUKTI',
+            label: 'NO BUKTI',
             name: 'nobukti',
             align: 'left'
           },
@@ -205,7 +205,8 @@
             formatter: currencyFormat,
           },
           {
-            label: 'POT. PINJAMAN (SEMUA)',
+            label: 'POT. PINJAMAN (SEMUA)', width: 210,
+            width: 210,
             name: 'potonganpinjamansemua',
             align: 'right',
             formatter: currencyFormat,

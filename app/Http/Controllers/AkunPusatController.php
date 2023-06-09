@@ -27,7 +27,7 @@ class AkunPusatController extends MyController
 
         $data = [
             'comboaktif' => $this->comboList('list', 'STATUS AKTIF', 'STATUS AKTIF'),
-            'combocoa' => $this->comboList('list', 'STATUS COA', 'STATUS COA'),
+            'combocoa' => $this->comboList('list', 'status kode perkiraan', 'status kode perkiraan'),
             'comboaccountpayable' => $this->comboList('list', 'STATUS ACCOUNT PAYABLE', 'STATUS ACCOUNT PAYABLE'),
             'comboneraca' => $this->comboList('list', 'STATUS NERACA', 'STATUS NERACA'),
             'combolabarugi' => $this->comboList('list', 'STATUS LABA RUGI', 'STATUS LABA RUGI'),
@@ -58,7 +58,7 @@ class AkunPusatController extends MyController
         $title = $this->title;
 
         $combo = [
-            'statuscoa' => $this->getParameter('STATUS COA', 'STATUS COA'),
+            'statuscoa' => $this->getParameter('status kode perkiraan', 'status kode perkiraan'),
             'statusaccountpayable' => $this->getParameter('STATUS ACCOUNT PAYABLE', 'STATUS ACCOUNT PAYABLE'),
             'statusneraca' => $this->getParameter('STATUS NERACA', 'STATUS NERACA'),
             'statuslabarugi' => $this->getParameter('STATUS LABA RUGI', 'STATUS LABA RUGI'),
@@ -73,7 +73,7 @@ class AkunPusatController extends MyController
         $title = $this->title;
 
         $combo = [
-            'statuscoa' => $this->getParameter('STATUS COA', 'STATUS COA'),
+            'statuscoa' => $this->getParameter('status kode perkiraan', 'status kode perkiraan'),
             'statusaccountpayable' => $this->getParameter('STATUS ACCOUNT PAYABLE', 'STATUS ACCOUNT PAYABLE'),
             'statusneraca' => $this->getParameter('STATUS NERACA', 'STATUS NERACA'),
             'statuslabarugi' => $this->getParameter('STATUS LABA RUGI', 'STATUS LABA RUGI'),

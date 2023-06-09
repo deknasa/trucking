@@ -23,11 +23,13 @@
             name: 'nobukti',
           },
           {
-            label: 'COA DEBET',
+            label: 'KODE PERKIRAAN DEBET', 
+    width: 220,
             name: 'coadebet',
           },
           {
-            label: 'COA KREDIT',
+            label: 'KODE PERKIRAAN kredit', 
+         width: 220,
             name: 'coakredit',
           },
 

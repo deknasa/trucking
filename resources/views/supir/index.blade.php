@@ -58,6 +58,7 @@
           {
             label: 'TGL LAHIR',
             name: 'tgllahir',
+            width: 130,
             formatter: "date",
             formatoptions: {
               srcformat: "ISO8601Long",
@@ -121,6 +122,7 @@
           {
             label: 'NOM. DEPOSIT SALDO AWAL',
             name: 'nominaldepositsa',
+            width: 200,
             align: 'right',
             formatter: currencyFormat,
           },
@@ -133,6 +135,7 @@
           {
             label: 'NOM. PINJ SALDO AWAL',
             name: 'nominalpinjamansaldoawal',
+            width: 200,
             align: 'right',
             formatter: currencyFormat,
           },
@@ -520,6 +523,7 @@
           {
             label: 'TGL BERHENTI SUPIR',
             name: 'tglberhentisupir',
+            width: 200,
             formatter: "date",
             formatoptions: {
               srcformat: "ISO8601Long",
@@ -529,6 +533,7 @@
           {
             label: 'keterangan BERHENTI SUPIR',
             name: 'keteranganberhentisupir',
+            width: 250,
             
           },
           // {
@@ -584,6 +589,7 @@
           {
             label: 'NO BUKTI PEMUTIHAN SUPIR',
             name: 'pemutihansupir_nobukti',
+            width: 230,
           },
           {
             label: 'MODIFIEDBY',

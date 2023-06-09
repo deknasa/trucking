@@ -25,7 +25,7 @@
                                     <i class="fas fa-print"></i>
                                     Report
                                 </a>
-                                <a id="btnEkspor" class="btn btn-warning mr-1 ">
+                                <a id="btnExport" class="btn btn-warning mr-1 ">
                                     <i class="fas fa-file-export"></i>
                                     Export
                                 </a>

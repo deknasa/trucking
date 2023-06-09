@@ -36,7 +36,7 @@
           align: 'left'
         },
         {
-          label: 'COA',
+          label: 'KODE PERKIRAAN',
           name: 'coa',
           align: 'left'
         },
@@ -113,6 +113,7 @@
         {
           label: 'FORMAT PENERIMAAN',
           name: 'formatpenerimaan',
+          width: 190,
           align: 'left',
           formatter: (value, options, rowData) => {
             let statusFormatPenerimaan = JSON.parse(value)
@@ -134,6 +135,8 @@
         {
           label: 'FORMAT PENGELUARAN',
           name: 'formatpengeluaran',
+          width: 190,
+
           align: 'left',
           formatter: (value, options, rowData) => {
               let statusFormatPengeluaran = JSON.parse(value)

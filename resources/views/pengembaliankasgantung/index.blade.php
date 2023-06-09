@@ -138,7 +138,7 @@
             }
           },
           {
-            label: 'NO. BUKTI',
+            label: 'NO BUKTI',
             name: 'nobukti',
             align: 'left'
           },
@@ -179,7 +179,7 @@
             align: 'left'
           },
           {
-            label: 'TANGGAL kas masuk',
+            label: 'tgl kas masuk',
             name: 'tglkasmasuk',
             align: 'left',
             formatter: "date",
@@ -194,12 +194,13 @@
             align: 'left'
           },
           {
-            label: 'No. Bukti Penerimaan',
+            label: 'NO BUKTI Penerimaan',
+            width: 230,
             name: 'penerimaan_nobukti',
             align: 'left'
           },
           {
-            label: 'coa',
+            label: 'KODE PERKIRAAN',
             name: 'coa',
             align: 'left'
           },

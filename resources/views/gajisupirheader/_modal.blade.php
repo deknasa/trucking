@@ -1161,7 +1161,7 @@
                         sortable: true,
                     },
                     {
-                        label: "Nobukti PINJAMAN",
+                        label: "no bukti pinjaman",
                         name: "pinjSemua_nobukti",
                         sortable: true,
                     },
@@ -1496,7 +1496,7 @@
                         search: false,
                     },
                     {
-                        label: "Nobukti PINJAMAN",
+                        label: "no bukti pinjaman",
                         name: "pinjPribadi_nobukti",
                         sortable: true,
                     },
@@ -1858,7 +1858,7 @@
                         hidden: true
                     },
                     {
-                        label: 'NO. BUKTI',
+                        label: 'NO BUKTI',
                         name: 'absensi_nobukti',
                         align: 'left',
                     },
@@ -2237,7 +2237,7 @@
                         hidden: true
                     },
                     {
-                        label: 'NO. BUKTI',
+                        label: 'NO BUKTI',
                         name: 'nobuktitrip',
                         align: 'left',
                     },

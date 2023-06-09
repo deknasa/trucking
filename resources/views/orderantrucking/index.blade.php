@@ -56,7 +56,7 @@
             hidden: true
           },
           {
-            label: 'NO. BUKTI',
+            label: 'NO BUKTI',
             name: 'nobukti',
           },
           {
@@ -95,27 +95,27 @@
             formatter: currencyFormat,
           },
           {
-            label: 'NO. JOB EMKL (1)',
+            label: 'no job EMKL (1)',
             name: 'nojobemkl',
           },
           {
-            label: 'NO. CONT (1)',
+            label: 'no conT (1)',
             name: 'nocont',
           },
           {
-            label: 'NO. SEAL (1)',
+            label: 'no seaL (1)',
             name: 'noseal',
           },
           {
-            label: 'NO. JOB EMKL (2)',
+            label: 'no job EMKL (2)',
             name: 'nojobemkl2',
           },
           {
-            label: 'NO. CONT (2)',
+            label: 'no conT (2)',
             name: 'nocont2',
           },
           {
-            label: 'NO. SEAL (2)',
+            label: 'no seaL (2)',
             name: 'noseal2',
           },
           {

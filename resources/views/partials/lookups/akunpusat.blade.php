@@ -89,7 +89,7 @@
           }
         },
         {
-          label: 'COA',
+          label: 'KODE PERKIRAAN',
           name: 'coa',
           align: 'left',
         },
@@ -114,7 +114,7 @@
           align: 'left'
         },
         {
-          label: 'STATUS COA',
+          label: 'status kode perkiraan', width: 210,
           name: 'statuscoa',
           align: 'left',
           
@@ -131,8 +131,8 @@
                     Authorization: `Bearer ${accessToken}`
                   },
                   data: {
-                    grp: 'STATUS COA',
-                    subgrp: 'STATUS COA'
+                    grp: 'status kode perkiraan',
+                    subgrp: 'status kode perkiraan'
                   },
                   beforeSend: () => {
                     // clear options
@@ -182,6 +182,7 @@
         },
         {
           label: 'STATUS ACCOUNT PAYABLE',
+width: 210,
           name: 'statusaccountpayable',
           align: 'left',
           
@@ -381,7 +382,8 @@
           }
         },
         {
-          label: 'COAMAIN',
+          label: 'kode perkiraan main',
+ width: 200,
           name: 'coamain',
           align: 'left'
         },

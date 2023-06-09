@@ -24,6 +24,10 @@
           label: 'TUJUAN',
           name: 'tujuan',
         },
+        {
+          label: 'PENYESUAIAN',
+          name: 'penyesuaian',
+        },
         // {
         //   label: 'CONTAINER',
         //   name: 'container_id',
@@ -294,7 +298,7 @@
       rowList: [10, 20, 50, 0],
       toolbar: [true, "top"],
       sortable: true,
-      sortname: 'id',
+      sortname: 'tujuan',
       sortorder: 'asc',
       page: 1,
       pager: $('#tarifLookupPager'),

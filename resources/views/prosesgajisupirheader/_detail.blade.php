@@ -59,7 +59,7 @@
             formatter: currencyFormat,
           },
           {
-            label: 'Pot. Pinjaman (semua)',
+            label: 'POT. PINJAMAN (SEMUA)', width: 210,
             name: 'potonganpinjamansemua',
             align: 'right',
             formatter: currencyFormat,

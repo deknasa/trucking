@@ -35,7 +35,8 @@
             width: 300
           },
           {
-            label: 'penerimaan nobukti',
+            label: 'Penerimaan no bukti',
+            width: 250,
             name: 'penerimaan_nobukti',
           },
           {

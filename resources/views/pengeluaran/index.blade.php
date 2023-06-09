@@ -248,7 +248,7 @@
             }
           },
           {
-            label: 'NO. BUKTI',
+            label: 'NO BUKTI',
             name: 'nobukti',
             align: 'left'
           },
@@ -290,16 +290,19 @@
           },
           {
             label: 'TRANSFER KE NO REK',
+            width: 250,
             name: 'transferkeac',
             align: 'left'
           },
           {
             label: 'TRANSFER NAMA REK',
+            width: 250,
             name: 'transferkean',
             align: 'left'
           },
           {
             label: 'TRANSFER NAMA BANK',
+            width: 250,
             name: 'transferkebank',
             align: 'left'
           },

@@ -33,7 +33,7 @@
             name: 'keterangan',
           },
           {
-            label: 'TANGGAL TERIMA',
+            label: 'TGL TERIMA',
             name: 'tglterima',
             align: 'left',
             formatter: "date",
@@ -43,12 +43,12 @@
             }
           },
           {
-            label: 'coa adjust',
+            label: 'KODE PERKIRAAN adjust',
             name: 'coaadjust',
             width: 200
           },
           {
-            label: 'invoice nobukti',
+            label: 'INVOICE NO BUKTI',
             name: 'invoice_nobukti',
           },
           {
@@ -64,7 +64,7 @@
             formatter: currencyFormat,
           },
           {
-            label: 'penyesuaian',
+            label: 'potongan',
             name: 'penyesuaian',
             align: 'right',
             formatter: currencyFormat,

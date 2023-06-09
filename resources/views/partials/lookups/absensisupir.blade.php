@@ -29,7 +29,7 @@
             hidden: true
           },
           {
-            label: 'NO. BUKTI',
+            label: 'NO BUKTI',
             name: 'nobukti',
             align: 'left'
           },
@@ -43,7 +43,7 @@
             }
           },
           {
-            label: 'NO. BUKTI KGT',
+            label: 'NO BUKTI KGT',
             name: 'kasgantung_nobukti',
             align: 'left'
           },

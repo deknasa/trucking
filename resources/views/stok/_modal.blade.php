@@ -81,7 +81,7 @@
             </div>
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
-                <label class="col-form-label">jenistrado </label>
+                <label class="col-form-label">jenis trado </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="text" name="jenistrado" class="form-control jenistrado-lookup">
@@ -100,7 +100,7 @@
             <div class="row form-group">
 
               <div class="col-12 col-sm-3 col-md-2">
-                <label class="col-form-label">qtymin </label>
+                <label class="col-form-label">qty min </label>
 
               </div>
               <div class="col-12 col-sm-9 col-md-4">
@@ -108,7 +108,7 @@
               </div>
 
               <div class="col-12 col-sm-3 col-md-2">
-                <label class="col-form-label">qtymax </label>
+                <label class="col-form-label">qty max </label>
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <input type="text" name="qtymax" style="text-align:right" class="form-control ">

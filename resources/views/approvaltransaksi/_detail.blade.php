@@ -49,10 +49,12 @@
         align: 'right',
         formatter: currencyFormat
       }, {
-        label: 'COA DEBET',
+        label: 'KODE PERKIRAAN DEBET', 
+       width: 220,
         name: 'coadebet',
       }, {
-        label: 'COA KREDIT',
+        label: 'KODE PERKIRAAN kredit', 
+         width: 220,
         name: 'coakredit',
       }, {
         label: 'BULAN BEBAN',
@@ -86,10 +88,12 @@
         align: 'right',
         formatter: currencyFormat
       }, {
-        label: 'COA DEBET',
+        label: 'KODE PERKIRAAN DEBET', 
+    width: 220,
         name: 'coadebet',
       }, {
-        label: 'COA KREDIT',
+        label: 'KODE PERKIRAAN kredit', 
+         width: 220,
         name: 'coakredit',
       }, {
         label: 'BANK',
@@ -101,7 +105,7 @@
         label: 'BANK PELANGGAN',
         name: 'bankpelanggan_id',
       }, {
-        label: 'PELUNASAN PIUTANG NO BUKTI',
+        label: 'PELUNASAN PIUTANG NO BUKTI', width: 240,
         name: 'pelunasanpiutang_nobukti',
       }, {
         label: 'BULAN BEBAN',
@@ -134,10 +138,12 @@
         align: 'right',
         formatter: currencyFormat
       }, {
-        label: 'COA DEBET',
+        label: 'KODE PERKIRAAN DEBET', 
+    width: 220,
         name: 'coadebet',
       }, {
-        label: 'COA KREDIT',
+        label: 'KODE PERKIRAAN kredit', 
+         width: 220,
         name: 'coakredit',
       }, {
         label: 'BANK',
@@ -149,7 +155,7 @@
         label: 'BANK PELANGGAN',
         name: 'bankpelanggan_id',
       }, {
-        label: 'PELUNASAN PIUTANG NO BUKTI',
+        label: 'PELUNASAN PIUTANG NO BUKTI', width: 240,
         name: 'pelunasanpiutang_nobukti',
       }, {
         label: 'BULAN BEBAN',
@@ -295,10 +301,12 @@
         align: 'right',
         formatter: currencyFormat
       }, {
-        label: 'COA DEBET',
+        label: 'KODE PERKIRAAN DEBET', 
+    width: 220,
         name: 'coadebet',
       }, {
-        label: 'COA KREDIT',
+        label: 'KODE PERKIRAAN kredit', 
+         width: 220,
         name: 'coakredit',
       }, {
         label: 'BULAN BEBAN',
@@ -335,10 +343,12 @@
         align: 'right',
         formatter: currencyFormat
       }, {
-        label: 'COA DEBET',
+        label: 'KODE PERKIRAAN DEBET', 
+    width: 220,
         name: 'coadebet',
       }, {
-        label: 'COA KREDIT',
+        label: 'KODE PERKIRAAN kredit', 
+         width: 220,
         name: 'coakredit',
       }, {
         label: 'BANK',
@@ -350,7 +360,7 @@
         label: 'BANK PELANGGAN',
         name: 'bankpelanggan_id',
       }, {
-        label: 'PELUNASAN PIUTANG NO BUKTI',
+        label: 'PELUNASAN PIUTANG NO BUKTI', width: 240,
         name: 'pelunasanpiutang_nobukti',
       }, {
         label: 'BULAN BEBAN',
@@ -387,10 +397,12 @@
         align: 'right',
         formatter: currencyFormat
       }, {
-        label: 'COA DEBET',
+        label: 'KODE PERKIRAAN DEBET', 
+    width: 220,
         name: 'coadebet',
       }, {
-        label: 'COA KREDIT',
+        label: 'KODE PERKIRAAN kredit', 
+         width: 220,
         name: 'coakredit',
       }, {
         label: 'BANK',
@@ -402,7 +414,7 @@
         label: 'BANK PELANGGAN',
         name: 'bankpelanggan_id',
       }, {
-        label: 'PELUNASAN PIUTANG NO BUKTI',
+        label: 'PELUNASAN PIUTANG NO BUKTI', width: 240,
         name: 'pelunasanpiutang_nobukti',
       }, {
         label: 'BANK',
@@ -414,7 +426,7 @@
         label: 'BANK PELANGGAN',
         name: 'bankpelanggan_id',
       }, {
-        label: 'PELUNASAN PIUTANG NO BUKTI',
+        label: 'PELUNASAN PIUTANG NO BUKTI', width: 240,
         name: 'pelunasanpiutang_nobukti',
       }, {
         label: 'BULAN BEBAN',

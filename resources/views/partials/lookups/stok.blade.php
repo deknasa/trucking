@@ -95,7 +95,7 @@ $('#stokLookup').jqGrid({
           align: 'left',
       },
       {
-          label: 'namaterpusat',
+          label: 'nama terpusat',
           name: 'namaterpusat',
           align: 'left',
       },

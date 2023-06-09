@@ -48,7 +48,7 @@
               <div class="form-group col-md-6">
                 <div class="row">
                   <div class="col-12 col-sm-3 col-md-4">
-                    <label class="col-form-label">penerimaan stok nobukti </label>
+                    <label class="col-form-label">PENERIMAAN STOK NO BUKTI </label>
                   </div>
                   <div class="col-12 col-sm-9 col-md-8">
                     <input type="text" name="penerimaanstok_nobukti" class="form-control penerimaanstokheader-lookup">
@@ -59,7 +59,7 @@
               <div class="form-group col-md-6">
                 <div class="row">
                   <div class="col-12 col-sm-3 col-md-4">
-                    <label class="col-form-label">pengeluaran stok nobukti </label>
+                    <label class="col-form-label">pengeluaran stok no bukti </label>
                   </div>
                   <div class="col-12 col-sm-9 col-md-8">
                     <input type="text" name="pengeluaranstok_nobukti" class="form-control pengeluaranstokheader-lookup">
@@ -70,7 +70,7 @@
               <div class="form-group col-md-6">
                 <div class="row">
                   <div class="col-12 col-sm-3 col-md-4">
-                    <label class="col-form-label">nobon </label>
+                    <label class="col-form-label">no bon </label>
                   </div>
                   <div class="col-12 col-sm-9 col-md-8">
                     <input type="text" name="nobon" class="form-control">
@@ -92,7 +92,7 @@
               <div class="form-group col-md-6">
                 <div class="row">
                   <div class="col-12 col-sm-3 col-md-4">
-                    <label class="col-form-label">coa </label>
+                    <label class="col-form-label">kode perkiraan</label>
                   </div>
                   <div class="col-12 col-sm-9 col-md-8">
                     <input type="text" name="coa" class="form-control akunpusat-lookup">
@@ -147,12 +147,12 @@
                   </div>
                 </div>
               </div>
-              <div class="row">
+             
 
                 <div class="form-group col-md-6">
                   <div class="row">
                     <div class="col-12 col-sm-3 col-md-4">
-                      <label class="col-form-label">gudangdari </label>
+                      <label class="col-form-label"> gudang dari </label>
                     </div>
                     <div class="col-12 col-sm-9 col-md-8">
                       <input type="text" name="gudangdari" class="form-control gudangdari-lookup">
@@ -163,7 +163,7 @@
                 <div class="form-group col-md-6">
                   <div class="row">
                     <div class="col-12 col-sm-3 col-md-4">
-                      <label class="col-form-label">gudangke </label>
+                      <label class="col-form-label">gudang ke </label>
                     </div>
                     <div class="col-12 col-sm-9 col-md-8">
                       <input type="text" name="gudangke" class="form-control gudangke-lookup">
@@ -219,7 +219,7 @@
                     </div>
                   </div>
                 </div>
-              </div>
+           
 
 
             </div>
@@ -244,7 +244,7 @@
                     <th style="width: 20%; min-width: 200px;">keterangan <span class="text-danger"></span> </th>
                     <th class="data_tbl tbl_qty" style="width:10%; min-width: 100px">qty</th>
                     <th class="data_tbl tbl_harga" style="width: 20%; min-width: 200px;">harga</th>
-                    <th class="data_tbl tbl_penerimaanstok_nobukti"  style="width: 20%; min-width: 200px;">Penerimaanstoknobukti</th>
+                    <th class="data_tbl tbl_penerimaanstok_nobukti"  style="width: 20%; min-width: 200px;">Penerimaan stok no bukti</th>
                     <th class="data_tbl tbl_persentase" style="width:10%; min-width: 100px">persentase discount</th>
                     <th class="data_tbl tbl_total"  style="width: 20%; min-width: 200px;">Total</th>
                     <th style="width:10%; max-width: 25px;max-width: 15px">Aksi</th>

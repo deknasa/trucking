@@ -60,7 +60,7 @@
             name: 'keterangan',
           },
           {
-            label: 'coa',
+            label: 'KODE PERKIRAAN',
             name: 'coa',
           },
           {
@@ -86,6 +86,7 @@
           {
             label: 'status hitung stok',
             name: 'statushitungstok',
+            width: 180,
             stype: 'select',
             searchoptions: {
 

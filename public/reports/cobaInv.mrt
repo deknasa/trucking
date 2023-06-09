@@ -335,7 +335,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "No. Cont"
+                "Value": "no cont"
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",

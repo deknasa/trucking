@@ -574,7 +574,7 @@
             hidden: true
           },
           {
-            label: 'NO. BUKTI',
+            label: 'NO BUKTI',
             name: 'nobukti_posting',
             align: 'left',
           },
@@ -589,7 +589,8 @@
             }
           },
           {
-           label: 'NO BUKTI PENGELUARAN',
+           label: 'NO BUKTI pengeluaran',
+            width: 210,
             name: 'pengeluaran_posting',
             align: 'left'
           },
@@ -759,7 +760,7 @@
             hidden: true
           },
           {
-            label: 'NO. BUKTI',
+            label: 'NO BUKTI',
             name: 'nobukti_nonposting',
             align: 'left',
           },
@@ -774,7 +775,8 @@
             }
           },
           {
-           label: 'NO BUKTI PENGELUARAN',
+           label: 'NO BUKTI pengeluaran',
+            width: 210,
             name: 'pengeluaran_nonposting',
             align: 'left'
           },

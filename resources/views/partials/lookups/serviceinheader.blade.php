@@ -29,7 +29,7 @@
           hidden: true
         },
         {
-          label: 'NO. BUKTI',
+          label: 'NO BUKTI',
           name: 'nobukti',
           align: 'left',
         },
@@ -44,7 +44,7 @@
           align: 'left',
         },
         {
-          label: 'TANGGAL MASUK',
+          label: 'TGL MASUK',
           name: 'tglmasuk',
           align: 'left',
         },

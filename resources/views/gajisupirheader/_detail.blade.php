@@ -73,7 +73,7 @@
             align: "right",
           },
           {
-            label: 'NO. BUKTI RITASI',
+            label: 'NO BUKTI RITASI',
             name: 'ritasi_nobukti',
             align: 'left'
           },

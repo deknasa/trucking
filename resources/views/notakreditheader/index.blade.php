@@ -227,7 +227,7 @@
             }
           },
           {
-            label: 'NO. BUKTI',
+            label: 'NO BUKTI',
             name: 'nobukti',
             align: 'left'
           },
@@ -253,6 +253,7 @@
           },
           {
             label: 'NO BUKTI PELUNASAN PIUTANG',
+            width: 250,
             name: 'pelunasanpiutang_nobukti',
             align: 'left'
           },
@@ -277,7 +278,7 @@
             align: 'left'
           },
           {
-            label: 'TANGGAL buka cetak',
+            label: 'TGL BUKA CETAK',
             name: 'tglbukacetak',
             align: 'left',
             formatter: "date",

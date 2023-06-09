@@ -234,7 +234,7 @@
                         editable: true,
                         edittype: 'checkbox',
                         search: false,
-                        width: 60,
+                        width: 70,
                         align: 'center',
                         formatoptions: {
                             disabled: false
@@ -291,7 +291,7 @@
                         }
                     },
                     {
-                        label: 'NO. BUKTI',
+                        label: 'NO BUKTI',
                         name: 'nobukti',
                         align: 'left'
                     },

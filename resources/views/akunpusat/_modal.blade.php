@@ -21,7 +21,7 @@
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
-                  coa <span class="text-danger">*</span>
+                  KODE PERKIRAAN <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-md-10">
@@ -31,7 +31,7 @@
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
-                  keterangan coa <span class="text-danger">*</span>
+                  keterangan kode perkiraan <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-md-10">
@@ -69,10 +69,10 @@
               </div>
             </div>
             <div class="row form-group">
-              <label class="col-12 col-md-2 col-form-label">STATUS COA<span class="text-danger">*</span></label>
+              <label class="col-12 col-md-2 col-form-label">status kode perkiraan<span class="text-danger">*</span></label>
               <div class="col-12 col-md-10">
                 <select name="statuscoa" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH STATUS COA --</option>
+                  <option value="">-- PILIH status kode perkiraan --</option>
                 </select>
               </div>
             </div>
@@ -103,7 +103,7 @@
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
-                  coamain <span class="text-danger">*</span>
+                  kode perkiraan main <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-md-10">
@@ -421,7 +421,7 @@
     return new Promise((resolve, reject) => {
       relatedForm.find('[name=statuscoa]').empty()
       relatedForm.find('[name=statuscoa]').append(
-        new Option('-- PILIH STATUS COA --', '', false, true)
+        new Option('-- PILIH status kode perkiraan --', '', false, true)
       ).trigger('change')
 
       $.ajax({
@@ -437,7 +437,7 @@
             "rules": [{
               "field": "grp",
               "op": "cn",
-              "data": "STATUS COA"
+              "data": "status kode perkiraan"
             }]
           })
         },

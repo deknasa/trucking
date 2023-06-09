@@ -99,7 +99,7 @@
           }
         },
         {
-          label: 'NO. BUKTI',
+          label: 'NO BUKTI',
           name: 'nobukti',
           align: 'left'
         },
@@ -124,12 +124,13 @@
           align: 'left'
         },
         {
-          label: 'COA',
+          label: 'KODE PERKIRAAN',
           name: 'coa',
           align: 'left'
         },
         {
-          label: 'NO. BUKTI PENERIMAAN',
+          label: 'NO BUKTI PENERIMAAN',
+          width: 230,
           name: 'penerimaan_nobukti',
           align: 'left'
         },

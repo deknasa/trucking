@@ -32,7 +32,7 @@
             name: 'keterangan',
           },
           {
-            label: 'TANGGAL TERIMA',
+            label: 'TGL TERIMA',
             name: 'tglterima',
             align: 'left',
             formatter: "date",
@@ -42,12 +42,12 @@
             }
           },
           {
-            label: 'coa lebihbayar',
+            label: 'KODE PERKIRAAN LEBIH BAYAR',
             name: 'coalebihbayar',
             width: 200
           },
           {
-            label: 'invoice nobukti',
+            label: 'INVOICE NO BUKTI',
             name: 'invoice_nobukti',
           },
           {

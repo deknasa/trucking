@@ -204,7 +204,7 @@
           },
 
           {
-            label: 'NO. BUKTI',
+            label: 'NO BUKTI',
             name: 'nobukti',
             align: 'left'
           },
@@ -225,7 +225,7 @@
           },
 
           {
-            label: 'No. bukti Absensi Supir',
+            label: 'NO BUKTI Absensi Supir',
             name: 'absensisupir_nobukti',
             align: 'left'
           },
@@ -245,12 +245,14 @@
             }
           },
           {
-            label: 'No. bukti pengeluaran',
+            label: 'NO BUKTI pengeluaran',
+            width: 210,
             name: 'pengeluaran_nobukti',
             align: 'left'
           },
           {
-            label: 'coa kas keluar',
+            label: 'KODE PERKIRAAN KAS KELUAR',
+            width: 230,
             name: 'coakaskeluar',
             align: 'left'
           },
