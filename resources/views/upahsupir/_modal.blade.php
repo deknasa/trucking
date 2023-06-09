@@ -55,19 +55,19 @@
               </div>
               <div class="col-12 col-md-10">
                 <input type="hidden" name="kotasampai_id">
-                <input type="text" name="kotasampai" class="form-control kotasampai-lookup">
+                <input type="text" id="kotaupahsupir" name="kotasampai" class="form-control kotasampai-lookup">
+                <input type="hidden" id="kotatarif" name="kotasampai" disabled class="form-control">
               </div>
             </div>
 
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
-                  ZONA
+                  PENYESUAIAN
                 </label>
               </div>
               <div class="col-12 col-md-10">
-                <input type="hidden" name="zona_id">
-                <input type="text" name="zona" class="form-control zona-lookup">
+                <input type="text" name="penyesuaian" class="form-control">
               </div>
             </div>
 
@@ -123,7 +123,7 @@
                   <input type="text" name="tglakhirberlaku" class="form-control datepicker">
                 </div>
               </div>
-            </div> --}}
+            </div> 
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
@@ -135,7 +135,7 @@
                   <option value="">-- PILIH STATUS LUAR KOTA --</option>
                 </select>
               </div>
-            </div>
+            </div> --}}
             <div class="row form-group" id="simpanKandang">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
@@ -149,6 +149,17 @@
               </div>
             </div>
 
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
+                  ZONA
+                </label>
+              </div>
+              <div class="col-12 col-md-10">
+                <input type="hidden" name="zona_id">
+                <input type="text" name="zona" class="form-control zona-lookup">
+              </div>
+            </div>
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
@@ -190,7 +201,7 @@
                   <tr>
                     <th width="5%">NO</th>
                     <th width="10%">CONTAINER</th>
-                    <th width="25%">STATUS CONTAINER</th>
+                    <th width="12%">STATUS CONTAINER</th>
                     <th width="12%">NOMINAL SUPIR</th>
                     <th width="12%">NOMINAL KENEK</th>
                     <th width="12%">NOMINAL KOMISI</th>
@@ -280,7 +291,7 @@
   let maxLengthForDropzone = 5;
 
   $(document).ready(function() {
-
+    $('#kotatarif').hide()
     $("#crudForm [name]").attr("autocomplete", "off");
 
     $(document).on('click', '#addRow', function(event) {
@@ -586,6 +597,20 @@
           })
           .then(() => {
             $('#crudModal').modal('show')
+            form.find(`[name="kotadari"]`).parent('.input-group').find('.button-clear').remove()
+            form.find(`[name="kotadari"]`).parent('.input-group').find('.input-group-append').remove()
+            form.find(`[name="kotasampai"]`).parent('.input-group').find('.button-clear').remove()
+            form.find(`[name="kotasampai"]`).parent('.input-group').find('.input-group-append').remove()
+            form.find(`[name="zona"]`).parent('.input-group').find('.button-clear').remove()
+            form.find(`[name="zona"]`).parent('.input-group').find('.input-group-append').remove()
+
+            form.find(`[name="parent"]`).parent('.input-group').find('.button-clear').remove()
+            form.find(`[name="parent"]`).parent('.input-group').find('.input-group-append').remove()
+
+            form.find(`[name="tarif"]`).parent('.input-group').find('.button-clear').remove()
+            form.find(`[name="tarif"]`).parent('.input-group').find('.input-group-append').remove()
+
+
             $('#simpanKandang').hide()
           })
           .finally(() => {
@@ -868,7 +893,7 @@
     })
   }
 
-  function showUpahSupir(form, userId, parrent = null) {
+  function showUpahSupir(form, userId, parent = null) {
     return new Promise((resolve, reject) => {
       $('#detailList tbody').html('')
       $.ajax({
@@ -879,36 +904,61 @@
           Authorization: `Bearer ${accessToken}`
         },
         success: response => {
+          if (parent) {
+            delete response.data['id'];
+            delete response.data['parent_id'];
+            delete response.data['parent'];
+            delete response.data['penyesuaian'];
+          }
           $.each(response.data, (index, value) => {
             let element = form.find(`[name="${index}"]`).not(':file')
             if (element.is('select')) {
               element.val(value).trigger('change')
-            } else if ((index == 'parent_id') && parrent || (index == 'id') && parrent) {
-              console.log('parrent');
+            } else if ((index == 'parent_id') && parent || (index == 'id') && parent) {
+              console.log('parent');
             } else if (element.hasClass('datepicker')) {
               element.val(dateFormat(value))
             } else {
               element.val(value)
             }
-
+            if (!parent) {
+              if (index == 'tujuan' || index == 'penyesuaian') {
+                element.prop('readonly', true)
+              }
+            }
             if (index == 'kotadari') {
               element.data('current-value', value)
+              if (!parent) {
+                element.prop('readonly', true)
+              }
             }
             if (index == 'kotasampai') {
               element.data('current-value', value)
+              if (!parent) {
+                element.prop('readonly', true)
+              }
             }
             if (index == 'zona') {
               element.data('current-value', value)
+              if (!parent) {
+                element.prop('readonly', true)
+              }
             }
             if (index == 'parent') {
               element.data('current-value', value)
+              if (!parent) {
+                element.prop('readonly', true)
+              }
             }
             if (index == 'tarif') {
               element.data('current-value', value)
+              if (!parent) {
+                element.prop('readonly', true)
+              }
             }
 
           })
-          
+
           maxLengthForDropzone = 5 - response.count
           initAutoNumeric(form.find(`[name="jarak"]`), {
             minimumValue: 0
@@ -1380,27 +1430,35 @@
           Aktif: 'AKTIF',
         }
       },
-      onSelectRow: (kota, element) => {
-        $('#crudForm [name=kotasampai_id]').first().val(kota.kotaId)
-        $('#crudForm [name=kotasampai]').first().val(kota.tujuan)
-        $('#crudForm [name=tarif_id]').first().val(kota.id)
+      onSelectRow: (tarif, element) => {
+        $('#crudForm').find(`[name=penyesuaian]`).val(tarif.penyesuaian).prop('readonly', true)
+        $('#crudForm [name=kotasampai_id]').first().val(tarif.kotaId)
+        $('#crudForm [name=kotasampai]').val(tarif.tujuan)
+        $('#crudForm [name=tarif_id]').first().val(tarif.id)
         $('#crudForm').find(`[name=kotasampai]`).prop('readonly', true)
-        $('#crudForm').find(`[name="kotasampai"]`).parent('.input-group').find('.button-clear').remove()
-        $('#crudForm').find(`[name="kotasampai"]`).parent('.input-group').find('.input-group-append').remove()
+        $('#kotaupahsupir').prop('readonly', true)
+        $('#kotaupahsupir').parent('.input-group').hide()
+        $('#kotatarif').prop('type', 'text')
+        $('#kotatarif').prop('readonly', true).show()
 
-        element.val(kota.tujuan)
+        element.val(tarif.tujuan)
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
-        $('#crudForm [name=kotasampai_id]').first().val('')
+        $('#crudForm').find(`[name=penyesuaian]`).val('').prop('readonly', false)
+        $('#crudForm [name=kotasampai_id]').val('')
         $('#crudForm').find(`[name=kotasampai]`).val('').prop('readonly', false)
-        $('#crudForm').find(`[name="kotasampai"]`).parent('.input-group').addClass('.button-clear')
-        $('#crudForm').find(`[name="kotasampai"]`).parent('.input-group').addClass('.input-group-append')
+        
+        $('#kotaupahsupir').prop('disabled', false)
+        $('#kotaupahsupir').parent('.input-group').show()
+        $('#kotatarif').prop('type', 'hidden')
+        $('#kotatarif').prop('disabled', true).hide()
         element.val('')
         element.data('currentValue', element.val())
+        $('#crudForm [name=tarif_id]').val('')
       }
     })
 

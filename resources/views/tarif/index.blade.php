@@ -59,6 +59,10 @@
             label: 'TUJUAN',
             name: 'tujuan',
           },
+          {
+            label: 'PENYESUAIAN',
+            name: 'penyesuaian',
+          },
 
           {
             label: 'STATUS',
