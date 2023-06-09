@@ -43,7 +43,7 @@
             }
           },
           {
-            label: 'coa adjust',
+            label: 'KODE PERKIRAAN adjust',
             name: 'coaadjust',
             width: 200
           },

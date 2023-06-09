@@ -246,11 +246,13 @@
           },
           {
             label: 'NO BUKTI pengeluaran',
+            width: 210,
             name: 'pengeluaran_nobukti',
             align: 'left'
           },
           {
-            label: 'coa kas keluar',
+            label: 'KODE PERKIRAAN KAS KELUAR',
+            width: 230,
             name: 'coakaskeluar',
             align: 'left'
           },

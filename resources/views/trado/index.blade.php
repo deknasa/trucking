@@ -107,6 +107,7 @@
           {
             label: 'KM GANTI OLI AKHIR',
             name: 'kmakhirgantioli',
+            width: 200,
             align: 'right',
             formatter: 'currency',
             formatoptions: {
@@ -128,11 +129,11 @@
             name: 'merek',
           },
           {
-            label: 'NO. RANGKA',
+            label: 'no rangka',
             name: 'norangka',
           },
           {
-            label: 'NO. MESIN',
+            label: 'no mesin',
             name: 'nomesin',
           },
           {
@@ -174,6 +175,7 @@
           {
             label: 'TGL SERVICE OPNAME',
             name: 'tglserviceopname',
+            width: 200,
             formatter: "date",
             formatoptions: {
               srcformat: "ISO8601Long",
@@ -183,6 +185,7 @@
           {
             label: 'STATUS STANDARISASI',
             name: 'statusstandarisasi',
+            width: 200,
             stype: 'select',
             searchoptions: {
               value: `<?php
@@ -224,6 +227,7 @@
           },
           {
             label: 'KET. PROGRESS STANDARISASI',
+            width: 230,
             name: 'keteranganprogressstandarisasi',
           },
           {
@@ -280,6 +284,7 @@
           {
             label: 'TGL GANTI AKI AKHIR',
             name: 'tglgantiakiterakhir',
+            width: 200,
             formatter: "date",
             formatoptions: {
               srcformat: "ISO8601Long",
@@ -331,6 +336,7 @@
           {
             label: 'STATUS VALIDASI KEND',
             name: 'statusvalidasikendaraan',
+            width: 200,
             stype: 'select',
             searchoptions: {
               value: `<?php
@@ -409,6 +415,7 @@
           {
             label: 'STATUS MOBIL STORING',
             name: 'statusmobilstoring',
+            width: 200,
             stype: 'select',
             searchoptions: {
               value: `<?php
@@ -511,6 +518,7 @@
           {
             label: 'STATUS LEWAT VALIDASI',
             name: 'statuslewatvalidasi',
+            width: 200,
             stype: 'select',
             searchoptions: {
               value: `<?php

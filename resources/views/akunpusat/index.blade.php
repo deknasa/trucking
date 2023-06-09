@@ -44,11 +44,11 @@
             hidden: true
           },
           {
-            label: 'COA',
+            label: 'KODE PERKIRAAN',
             name: 'coa',
           },
           {
-            label: 'KETERANGAN COA',
+            label: 'keterangan kode perkiraan', width: 220,
             name: 'keterangancoa',
           },
           {
@@ -106,7 +106,7 @@
             name: 'parent',
           },
           {
-            label: 'STATUS COA',
+            label: 'status kode perkiraan', width: 210,
             name: 'statuscoa',
             align: 'left',
             stype: 'select',
@@ -151,6 +151,7 @@
           },
           {
             label: 'STATUS ACCOUNT PAYABLE',
+            width: 210,
             name: 'statusaccountpayable',
             align: 'left',
             stype: 'select',
@@ -282,7 +283,8 @@
             }
           },
           {
-            label: 'COAMAIN',
+            label: 'kode perkiraan main',
+ width: 200,
             name: 'coamain',
           },
           {

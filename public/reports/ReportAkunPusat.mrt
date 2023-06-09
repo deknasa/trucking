@@ -269,7 +269,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "KETERANGAN COA"
+                "Value": "keterangan kode perkiraan"
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
@@ -380,7 +380,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "STATUS COA"
+                "Value": "status kode perkiraan"
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",

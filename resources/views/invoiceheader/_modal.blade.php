@@ -24,7 +24,7 @@
                   <input type="text" name="nobukti" class="form-control" readonly>
                 </div>
 
-                <div class="col-12 col-md-2">
+                <div class="col-12 col-md-2 text-right">
                   <label class="col-form-label">
                     TGL BUKTI <span class="text-danger">*</span>
                   </label>
@@ -47,7 +47,15 @@
                     <input type="text" name="tglterima" class="form-control datepicker">
                   </div>
                 </div>
-
+                <div class="col-12 col-md-2  text-right">
+                  <label class="col-form-label">
+                    Jenis Order <span class="text-danger">*</span>
+                  </label>
+                </div>
+                <div class="col-12 col-md-4">
+                  <input type="hidden" name="jenisorder_id">
+                  <input type="text" name="jenisorder" class="form-control jenisorder-lookup">
+                </div>
               </div>
 
               <div class="row form-group">
@@ -61,15 +69,17 @@
                   <input type="text" name="agen" class="form-control agen-lookup">
                 </div>
 
-                <div class="col-12 col-md-2 col-form-label text-right">
+                <div class="col-12 col-md-2  text-right">
                   <label class="col-form-label">
-                    Jenis Order <span class="text-danger">*</span>
+                    TGL SAMPAI <span class="text-danger">*</span>
                   </label>
                 </div>
                 <div class="col-12 col-md-4">
-                  <input type="hidden" name="jenisorder_id">
-                  <input type="text" name="jenisorder" class="form-control jenisorder-lookup">
+                  <div class="input-group">
+                    <input type="text" name="tglsampai" class="form-control datepicker">
+                  </div>
                 </div>
+                
               </div>
 
               <div class="row form-group">
@@ -84,16 +94,7 @@
                   </div>
                 </div>
 
-                <div class="col-12 col-md-2 col-form-label text-right">
-                  <label class="col-form-label">
-                    TGL SAMPAI <span class="text-danger">*</span>
-                  </label>
-                </div>
-                <div class="col-12 col-md-4">
-                  <div class="input-group">
-                    <input type="text" name="tglsampai" class="form-control datepicker">
-                  </div>
-                </div>
+              
               </div>
 
               <div class="row form-group mb-5">

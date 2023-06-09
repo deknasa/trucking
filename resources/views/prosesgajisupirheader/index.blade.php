@@ -209,6 +209,7 @@
           },
           {
             label: 'U. borongan (post kas keluar)',
+            width: 280,
             name: 'totalposting',
             align: 'right',
             formatter: currencyFormat,
@@ -238,7 +239,8 @@
             formatter: currencyFormat,
           },
           {
-            label: 'POT. PINJAMAN (SEMUA)',
+            label: 'POT. PINJAMAN (SEMUA)', 
+            width: 210,
             name: 'potonganpinjamansemua',
             align: 'right',
             formatter: currencyFormat,
@@ -312,7 +314,8 @@
             }
           },
           {
-           label: 'NO BUKTI PENGELUARAN',
+           label: 'NO BUKTI pengeluaran',
+            width: 210,
             name: 'pengeluaran_nobukti',
             align: 'left'
           },

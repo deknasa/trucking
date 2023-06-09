@@ -47,7 +47,7 @@
                     newformat: "d-m-Y"
                 }
             }, {
-                label: 'coa adjust',
+                label: 'KODE PERKIRAAN adjust',
                 name: 'coaadjust',
             }, {
                 label: 'INVOICE NO BUKTI',
@@ -98,7 +98,7 @@
                     newformat: "d-m-Y"
                 }
             }, {
-                label: 'COA LEBIH BAYAR',
+                label: 'KODE PERKIRAAN LEBIH BAYAR',
                 name: 'coalebihbayar',
             }, {
                 label: 'INVOICE NO BUKTI',
@@ -266,7 +266,7 @@
                     newformat: "d-m-Y"
                 }
             }, {
-                label: 'coa adjust',
+                label: 'KODE PERKIRAAN adjust',
                 name: 'coaadjust',
             }, {
                 label: 'INVOICE NO BUKTI',
@@ -325,7 +325,7 @@
                     newformat: "d-m-Y"
                 }
             }, {
-                label: 'COA LEBIH BAYAR',
+                label: 'KODE PERKIRAAN LEBIH BAYAR',
                 name: 'coalebihbayar',
             }, {
                 label: 'invoice nobukti',

@@ -109,7 +109,7 @@
           {
             label: 'status daftar harga',
             name: 'statusdaftarharga',
-            width: 100,
+            width: 180,
             stype: 'select',
             searchoptions: {
               value: `<?php
@@ -152,7 +152,7 @@
           {
             label: 'status aktif',
             name: 'statusaktif',
-            width: 100,
+            width: 130,
             stype: 'select',
             searchoptions: {
               value: `<?php

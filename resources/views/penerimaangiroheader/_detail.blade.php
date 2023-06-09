@@ -48,11 +48,13 @@
             formatter: currencyFormat
           },
           {
-            label: 'COA DEBET',
+            label: 'KODE PERKIRAAN DEBET', 
+    width: 220,
             name: 'coadebet',
           },
           {
-            label: 'COA KREDIT',
+            label: 'KODE PERKIRAAN kredit', 
+         width: 220,
             name: 'coakredit',
           },
 
@@ -73,7 +75,7 @@
             name: 'jenisbiaya',
           },
           // {
-          //   label: 'PELUNASAN PIUTANG NO BUKTI',
+          //   label: 'PELUNASAN PIUTANG NO BUKTI', width: 240,
           //   name: 'pelunasanpiutang_nobukti',
           // },
           {

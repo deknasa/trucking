@@ -65,7 +65,7 @@
             name: 'jobtrucking',
           },
           {
-            label: 'NO. TRIP',
+            label: 'NO TRIP',
             name: 'nobukti',
           },
           {
@@ -79,7 +79,7 @@
             }
           },
           {
-            label: 'NO. SP',
+            label: 'no sp',
             name: 'nosp',
           },
           {
@@ -93,7 +93,7 @@
             }
           },
           {
-            label: 'NO. JOB',
+            label: 'no job',
             name: 'nojob',
           },
           {
@@ -137,11 +137,11 @@
             name: 'container_id'
           },
           {
-            label: 'NO. CONT',
+            label: 'no conT',
             name: 'nocont'
           },
           {
-            label: 'NO. SEAL',
+            label: 'no seaL',
             name: 'noseal',
           },
           {
@@ -153,7 +153,7 @@
             name: 'gudang',
           },
           {
-            label: 'NO. POLISI',
+            label: 'no polisi',
             name: 'trado_id',
           },
           {
@@ -305,6 +305,7 @@
           },
           {
             label: 'LOKASI BONGKAR MUAT',
+            width: 210,
             name: 'tarif_id',
           },
           {

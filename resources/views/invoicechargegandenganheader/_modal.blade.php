@@ -415,7 +415,7 @@
           editable: true,
           edittype: 'checkbox',
           search: false,
-          width: 60,
+          width: 95,
           align: 'center',
           formatoptions: {
             disabled: false
