@@ -95,6 +95,7 @@
             label: 'NO BUKTI',
             name: 'nobukti',
             align: 'left'
+            
           },
           {
             label: 'TGL BUKTI',
@@ -123,6 +124,7 @@
           },
           {
             label: 'NO BUKTI PENERIMAAN',
+            width: 230,
             name: 'penerimaan_nobukti',
             align: 'left'
           },
