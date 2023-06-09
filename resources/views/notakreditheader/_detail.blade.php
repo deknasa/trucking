@@ -64,7 +64,7 @@
             formatter: currencyFormat,
           },
           {
-            label: 'penyesuaian',
+            label: 'potongan',
             name: 'penyesuaian',
             align: 'right',
             formatter: currencyFormat,
