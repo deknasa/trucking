@@ -88,6 +88,23 @@ class UserController extends MyController
 
         $users = $response['data'];
 
+
+        $i = 0;
+        foreach ($users as $index => $params) {
+
+            $statusaktif = $params['statusaktif'];
+
+            $result = json_decode($statusaktif, true);
+
+            $statusaktif = $result['MEMO'];
+
+            $users[$i]['statusaktif'] = $statusaktif;
+        
+            $i++;
+
+
+        }
+
         return view('reports.user', compact('users'));
     }
 
