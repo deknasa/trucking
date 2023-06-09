@@ -31,6 +31,7 @@
           },
           {
             label: 'NO BUKTI PELUNASAN',
+            width: 220,
             name: 'nobukti_pelunasan',
           },
           {
@@ -47,6 +48,7 @@
           },
           {
             label: 'NOMINAL LEBIH BAYAR',
+            width: 220,
             name: 'nominallebihbayar',
             align: 'right',
             formatter: currencyFormat,

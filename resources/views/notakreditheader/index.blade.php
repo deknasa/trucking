@@ -253,6 +253,7 @@
           },
           {
             label: 'NO BUKTI PELUNASAN PIUTANG',
+            width: 250,
             name: 'pelunasanpiutang_nobukti',
             align: 'left'
           },

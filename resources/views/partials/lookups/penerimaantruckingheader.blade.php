@@ -130,6 +130,7 @@
         },
         {
           label: 'NO BUKTI PENERIMAAN',
+          width: 230,
           name: 'penerimaan_nobukti',
           align: 'left'
         },

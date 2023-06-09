@@ -327,6 +327,7 @@
                     },
                     {
                         label: 'NO BUKTI Pelunasan Piutang',
+                        width: 250,
                         name: 'pelunasanpiutang_nobukti',
                         align: 'left'
                     },

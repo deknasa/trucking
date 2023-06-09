@@ -37,6 +37,7 @@
           },
           {
             label: 'NO BUKTI PENERIMAAN',
+            width: 230,
             name: 'penerimaantrucking_nobukti',
           },
           {
