@@ -277,7 +277,7 @@
   let hasFormBindKeys = false
   let kodePengeluaranStok
   let modalBody = $('#crudModal').find('.modal-body').html()
-
+  let pengeluaranheader_id
   $(document).ready(function() {
     $(document).on('click', '#addRow', function(event) {
       addRow()
@@ -365,8 +365,11 @@
           name: 'pengeluaranheader_id',
           value: data.find(item => item.name === "pengeluaranstok_id").value
         })
-        let pengeluaranheader_id = data.find(item => item.name === "pengeluaranstok_id").value
+        pengeluaranheader_id = data.find(item => item.name === "pengeluaranstok_id").value
+      }else{
+        pengeluaranheader_id =$('#kodepengeluaranheader').val(); 
       }
+      console.log(action,$('#kodepengeluaranheader').val());
       let tgldariheader = $('#tgldariheader').val();
       let tglsampaiheader = $('#tglsampaiheader').val()
       
@@ -556,6 +559,7 @@
     $('[name=kerusakan]').parents('.form-group').hide()
     $('[name=supir]').parents('.form-group').hide()
     $('[name=gandengan]').parents('.form-group').hide()
+    $('[name=gudang]').parents('.form-group').hide()
     $('[name=trado]').parents('.form-group').hide()
    $('.tbl_qty').show()
     $('.tbl_harga').show()
@@ -1412,7 +1416,6 @@ $('.tbl_qty').show()
             }
           },
 
-      },
         onSelectRow: (trado, element) => {
           element.val(trado.kodetrado)
           $(`#${element[0]['name']}Id`).val(trado.id)
