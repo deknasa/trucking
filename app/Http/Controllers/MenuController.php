@@ -174,6 +174,7 @@ class MenuController extends MyController
 
         $menus = $response['data'];
 
+
         return view('reports.menu', compact('menus'));
     }
 
