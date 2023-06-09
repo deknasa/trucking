@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "029c3a0db74f41709e0bcf658f24bcbc",
+  "ReportGuid": "9bfa0db45e10b3c205b711957f6107a0",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportKaryawan.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1686209509000+0700)/",
+  "ReportChanged": "/Date(1686294189000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -324,7 +324,7 @@
               },
               "CanBreak": true,
               "VertAlignment": "Center",
-              "Border": "All;;;;;;;solid:0,0,0",
+              "Border": ";0,255,255,255;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
               "TextOptions": {
@@ -356,7 +356,7 @@
               },
               "CanBreak": true,
               "VertAlignment": "Center",
-              "Border": "All;;;;;;;solid:0,0,0",
+              "Border": ";0,255,255,255;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
               "TextOptions": {
@@ -386,7 +386,7 @@
               },
               "CanBreak": true,
               "VertAlignment": "Center",
-              "Border": "All;;;;;;;solid:0,0,0",
+              "Border": ";0,255,255,255;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
               "TextOptions": {
@@ -416,7 +416,7 @@
               },
               "CanBreak": true,
               "VertAlignment": "Center",
-              "Border": "All;;;;;;;solid:0,0,0",
+              "Border": ";0,255,255,255;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
               "TextOptions": {
@@ -446,7 +446,7 @@
               },
               "CanBreak": true,
               "VertAlignment": "Center",
-              "Border": "All;;;;;;;solid:0,0,0",
+              "Border": ";0,255,255,255;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
               "TextOptions": {

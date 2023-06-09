@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "0f81b568a8c92b87ad43b33db2888296",
+  "ReportGuid": "376e442eb4c49f93d4160cb86723e2ac",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportRole.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1686197045000+0700)/",
+  "ReportChanged": "/Date(1686293732000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -89,7 +89,7 @@
         "0": {
           "Ident": "StiReportTitleBand",
           "Name": "ReportTitleBand1",
-          "ClientRectangle": "0,0.4,19.01,3.2",
+          "ClientRectangle": "0,0.4,19.01,1.4",
           "ComponentPlacement": "rt.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -100,7 +100,7 @@
             "0": {
               "Ident": "StiText",
               "Name": "Text1",
-              "ClientRectangle": "6.2,0,7.2,1",
+              "ClientRectangle": "6.2,0,7.2,0.8",
               "ComponentPlacement": "rt.ReportTitleBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -120,7 +120,7 @@
               "Ident": "StiText",
               "Name": "Text3",
               "Guid": "759f529dd3edd3e78f3f817d55ccbf77",
-              "ClientRectangle": "6.2,1,7.2,1",
+              "ClientRectangle": "6.2,0.8,7.2,0.6",
               "ComponentPlacement": "rt.ReportTitleBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -141,7 +141,7 @@
         "1": {
           "Ident": "StiHeaderBand",
           "Name": "HeaderBand1",
-          "ClientRectangle": "0,4.4,19.01,0.8",
+          "ClientRectangle": "0,2.6,19.01,0.6",
           "ComponentPlacement": "h.ap.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -203,7 +203,7 @@
         "2": {
           "Ident": "StiDataBand",
           "Name": "DataBand1",
-          "ClientRectangle": "0,6,19.01,0.8",
+          "ClientRectangle": "0,4,19.01,0.8",
           "ComponentPlacement": "d.Page1",
           "Interaction": {
             "Ident": "StiBandInteraction"
@@ -227,7 +227,7 @@
               },
               "CanBreak": true,
               "VertAlignment": "Center",
-              "Border": "All;242,242,242;;;;;;solid:0,0,0",
+              "Border": ";0,255,255,255;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
               "TextOptions": {
@@ -243,40 +243,11 @@
             },
             "1": {
               "Ident": "StiText",
-              "Name": "Text21",
-              "CanGrow": true,
-              "GrowToHeight": true,
-              "ClientRectangle": "0.8,0,2,0.6",
-              "ComponentPlacement": "d.DataBand1",
-              "Interaction": {
-                "Ident": "StiInteraction"
-              },
-              "Text": {
-                "Value": "{role.id}"
-              },
-              "CanBreak": true,
-              "VertAlignment": "Center",
-              "Border": "All;242,242,242;;;;;;solid:0,0,0",
-              "Brush": "solid:",
-              "TextBrush": "solid:0,0,0",
-              "TextOptions": {
-                "WordWrap": true
-              },
-              "Margins": {
-                "Left": 3,
-                "Right": 0,
-                "Top": 0,
-                "Bottom": 0
-              },
-              "Type": "DataColumn"
-            },
-            "2": {
-              "Ident": "StiText",
               "Name": "Text7",
               "Guid": "0e495134760184402730fe0cf2a838ce",
               "CanGrow": true,
               "GrowToHeight": true,
-              "ClientRectangle": "2.8,0,16.2,0.6",
+              "ClientRectangle": "0.8,0,18.2,0.6",
               "ComponentPlacement": "d.DataBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -286,7 +257,7 @@
               },
               "CanBreak": true,
               "VertAlignment": "Center",
-              "Border": "All;242,242,242;;;;;;solid:0,0,0",
+              "Border": ";0,255,255,255;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
               "TextOptions": {

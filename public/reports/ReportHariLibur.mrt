@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "860c5daba89affd651168697370625cb",
+  "ReportGuid": "e82ee17dd40c7773c22ce5c94d793ff9",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportHariLibur.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1686199657000+0700)/",
+  "ReportChanged": "/Date(1686294097000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -153,7 +153,8 @@
         "1": {
           "Ident": "StiHeaderBand",
           "Name": "HeaderBand1",
-          "ClientRectangle": "0,2.8,19.01,0.8",
+          "ClientRectangle": "0,2.8,19.01,0.6",
+          "ComponentPlacement": "h.ap.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
           },
@@ -164,7 +165,7 @@
               "Ident": "StiText",
               "Name": "Text15",
               "ClientRectangle": "0,0,0.8,0.6",
-              "ComponentPlacement": "gh.GroupHeaderBand1",
+              "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -189,7 +190,7 @@
               "Name": "Text3",
               "Guid": "7b9b483fc2f3bf4d8452726d4e9a7d94",
               "ClientRectangle": "0.8,0,3.6,0.6",
-              "ComponentPlacement": "gh.GroupHeaderBand1",
+              "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -214,7 +215,7 @@
               "Name": "Text2",
               "Guid": "0ec1f34220ac10ba01d24ef1c15bd18b",
               "ClientRectangle": "4.4,0,6.4,0.6",
-              "ComponentPlacement": "gh.GroupHeaderBand1",
+              "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -239,7 +240,7 @@
               "Name": "Text4",
               "Guid": "f130aa62b1f985be2ad79fdf761179be",
               "ClientRectangle": "10.8,0,8.2,0.6",
-              "ComponentPlacement": "gh.GroupHeaderBand1",
+              "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -264,7 +265,7 @@
         "2": {
           "Ident": "StiDataBand",
           "Name": "DataBand2",
-          "ClientRectangle": "0,4.4,19.01,0.8",
+          "ClientRectangle": "0,4.2,19.01,0.8",
           "ComponentPlacement": "d.Page1",
           "Interaction": {
             "Ident": "StiBandInteraction"
@@ -288,7 +289,7 @@
               },
               "CanBreak": true,
               "VertAlignment": "Center",
-              "Border": "All;242,242,242;;;;;;solid:0,0,0",
+              "Border": ";0,255,255,255;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
               "TextOptions": {
@@ -321,7 +322,7 @@
               },
               "CanBreak": true,
               "VertAlignment": "Center",
-              "Border": "All;242,242,242;;;;;;solid:0,0,0",
+              "Border": ";0,255,255,255;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
               "TextOptions": {
@@ -351,7 +352,7 @@
               },
               "CanBreak": true,
               "VertAlignment": "Center",
-              "Border": "All;242,242,242;;;;;;solid:0,0,0",
+              "Border": ";0,255,255,255;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
               "TextOptions": {
@@ -381,7 +382,7 @@
               },
               "CanBreak": true,
               "VertAlignment": "Center",
-              "Border": "All;242,242,242;;;;;;solid:0,0,0",
+              "Border": ";0,255,255,255;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
               "TextOptions": {
