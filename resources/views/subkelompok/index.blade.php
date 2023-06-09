@@ -44,7 +44,7 @@
             hidden: true
           },
           {
-            label: 'Kode Subkelompok',
+            label: 'kode sub kelompok',
             name: 'kodesubkelompok',
           },
           {

@@ -41,7 +41,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
-                  coa debet <span class="text-danger">*</span>
+                  KODE PERKIRAAN debet <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
@@ -53,7 +53,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
-                  coa kredit<span class="text-danger">*</span>
+                  KODE PERKIRAAN kredit<span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
@@ -66,7 +66,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
-                  coa posting debet <span class="text-danger">*</span>
+                  KODE PERKIRAAN posting debet <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
@@ -78,7 +78,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
-                  coa posting kredit<span class="text-danger">*</span>
+                  KODE PERKIRAAN posting kredit<span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">

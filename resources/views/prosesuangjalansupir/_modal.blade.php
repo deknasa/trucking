@@ -802,6 +802,7 @@
                     },
                     {
                         label: "no bukti pengeluaran TRUCKING",
+                        width: 250,
                         name: "nobuktipengeluaran",
                         sortable: true,
                     },

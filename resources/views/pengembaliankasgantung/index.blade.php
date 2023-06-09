@@ -195,11 +195,12 @@
           },
           {
             label: 'NO BUKTI Penerimaan',
+            width: 230,
             name: 'penerimaan_nobukti',
             align: 'left'
           },
           {
-            label: 'coa',
+            label: 'KODE PERKIRAAN',
             name: 'coa',
             align: 'left'
           },

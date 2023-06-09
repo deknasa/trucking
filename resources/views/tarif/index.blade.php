@@ -165,6 +165,7 @@
           {
             label: 'STATUS PENYESUAIAN HARGA',
             name: 'statuspenyesuaianharga',
+            width: 230,
             stype: 'select',
             searchoptions: {
               value: `<?php

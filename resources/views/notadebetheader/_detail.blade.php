@@ -42,7 +42,7 @@
             }
           },
           {
-            label: 'COA LEBIH BAYAR',
+            label: 'KODE PERKIRAAN LEBIH BAYAR',
             name: 'coalebihbayar',
             width: 200
           },

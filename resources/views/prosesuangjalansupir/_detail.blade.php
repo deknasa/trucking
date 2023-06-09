@@ -53,7 +53,8 @@
             name: 'penerimaantrucking_bank_id',
           },
           {
-            label: 'NO BUKTI PENGELUARAN',
+            label: 'NO BUKTI pengeluaran',
+            width: 210,
             name: 'pengeluarantrucking_nobukti',
           },
           {

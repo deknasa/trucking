@@ -28,7 +28,7 @@
           {
             label: 'NO BUKTI PENGELUARAN TRUCKING',
             name: 'pengeluarantruckingheader_nobukti',
-            width: 200
+            width: 250
           },
           {
             label: 'KETERANGAN',

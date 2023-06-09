@@ -285,7 +285,7 @@
             align: 'left'
           },
           {
-            label: 'NO. PAJAK INVOICE',
+            label: 'no pajak INVOICE',
             name: 'cabang_id',
             align: 'left'
           },

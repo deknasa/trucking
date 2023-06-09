@@ -67,7 +67,7 @@
             name: 'keterangan',
           },
           {
-            label: 'coa',
+            label: 'KODE PERKIRAAN',
             name: 'coa',
           },
           {

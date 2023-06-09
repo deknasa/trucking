@@ -738,6 +738,7 @@
           },
           {
             label: "no bukti pengeluaran TRUCKING",
+            width: 250,
             name: "nobukti",
             sortable: true,
           },

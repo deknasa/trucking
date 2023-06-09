@@ -174,6 +174,7 @@
           },
           {
             label: 'PENERIMAAN TRUCKING ',
+            width: 180,
             name: 'penerimaantrucking_id',
             align: 'left'
           },
@@ -183,12 +184,13 @@
             align: 'left'
           },
           {
-            label: 'COA',
+            label: 'KODE PERKIRAAN',
             name: 'coa',
             align: 'left'
           },
           {
             label: 'NO BUKTI PENERIMAAN',
+            width: 180,
             name: 'penerimaan_nobukti',
             align: 'left'
           },

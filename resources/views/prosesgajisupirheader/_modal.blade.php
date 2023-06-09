@@ -886,7 +886,7 @@
                         align: "right",
                     },
                     {
-                        label: 'POT. PINJAMAN (SEMUA)',
+                        label: 'POT. PINJAMAN (SEMUA)', width: 210,
                         name: 'potonganpinjamansemua',
                         formatter: currencyFormat,
                         align: "right",

@@ -16,7 +16,8 @@
         iconSet: 'fontAwesome',
         datatype: "json",
         colModel: [{
-            label: 'NO BUKTI PENGELUARAN',
+            label: 'NO BUKTI pengeluaran',
+            width: 210,
             name: 'nobukti',
           },
           {
@@ -44,11 +45,13 @@
             formatter: currencyFormat,
           },
           {
-            label: 'COA DEBET',
+            label: 'KODE PERKIRAAN DEBET', 
+    width: 220,
             name: 'coadebet',
           },
           {
-            label: 'COA KREDIT',
+            label: 'KODE PERKIRAAN kredit', 
+         width: 220,
             name: 'coakredit',
           },
           {

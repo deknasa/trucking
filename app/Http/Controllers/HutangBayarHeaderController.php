@@ -164,7 +164,7 @@ class HutangBayarHeaderController extends MyController
                 'index' => 'coa',
             ],
             [
-                'label' => 'No Bukti Pengeluaran',
+                'label' => 'No Bukti Pengeluaran', 
                 'index' => 'pengeluaran_nobukti',
             ],
         ];

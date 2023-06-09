@@ -249,7 +249,8 @@
             align: 'left'
           },
           {
-            label: 'NO BUKTI PENGELUARAN',
+            label: 'NO BUKTI pengeluaran',
+            width: 210,
             name: 'pengeluaran_nobukti',
             align: 'left'
           },

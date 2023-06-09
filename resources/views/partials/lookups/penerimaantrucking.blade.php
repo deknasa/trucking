@@ -28,19 +28,23 @@
           align: 'left'
         },
         {
-          label: 'coa debet',
+          label: 'KODE PERKIRAAN DEBET', 
+    width: 220,
           name: 'coadebet_keterangan',
         },
         {
-          label: 'coa kredit',
+          label: 'KODE PERKIRAAN kredit', 
+         width: 220,
           name: 'coakredit_keterangan',
         },
         {
-          label: 'coa posting debet',
+          label: 'KODE PERKIRAAN posting debet',
+       width: 230,
           name: 'coapostingdebet_keterangan',
         },
         {
-          label: 'coa posting kredit',
+          label: 'KODE PERKIRAAN posting kredit', 
+        width: 240,
           name: 'coapostingkredit_keterangan',
         },
         {

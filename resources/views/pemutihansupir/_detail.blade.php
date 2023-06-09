@@ -32,7 +32,7 @@
           {
             label: 'NO BUKTI PENGELUARAN TRUCKING',
             name: 'pengeluarantrucking_nobukti',
-            width: 200
+            width: 250
           },
           {
             label: 'NOMINAL',

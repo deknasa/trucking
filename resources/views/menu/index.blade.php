@@ -62,7 +62,6 @@
           {
             label: 'MENU PARENT',
             name: 'menuparent',
-            width: 100,
             stype: 'select',
             searchoptions: {
               value: `<?php

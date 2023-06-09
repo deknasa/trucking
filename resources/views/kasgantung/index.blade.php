@@ -164,6 +164,7 @@
           },
           {
             label: 'NO BUKTI KAS KELUAR',
+            width: 250,
             name: 'pengeluaran_nobukti',
             align: 'left'
           },

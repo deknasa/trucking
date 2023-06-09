@@ -46,6 +46,7 @@
           {
             label: 'kode status container',
             name: 'kodestatuscontainer',
+            width: 200,
           },
           {
             label: 'keterangan',

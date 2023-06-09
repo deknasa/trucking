@@ -82,6 +82,7 @@
           },
           {
             label: 'NO BUKTI PENERIMAAN',
+            width: 250,
             name: 'penerimaan_nobukti',
           },
           {
@@ -91,6 +92,7 @@
           },
           {
             label: 'PENGELUARAN SUPIR',
+            width: 250,
             name: 'pengeluaransupir',
             align: 'right',
             formatter: currencyFormat
