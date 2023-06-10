@@ -1,17 +1,16 @@
-<table id="userAclGrid"></table>
-
 @include('user.acl._modal')
 
+@push('scripts')
 <script>
-  function loadGrid(userId) {
+  function loadUserAclGrid() {
     $('#userAclGrid')
       .jqGrid({
-        url: `${apiUrl}user/${userId}/acl`,
-        datatype: 'json',
+        datatype: 'local',
+        data: [],
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
-        colModel: [
-          {
+        idPrefix: 'userAclGrid',
+        colModel: [{
             label: 'CLASS',
             name: 'class',
           },
@@ -100,7 +99,7 @@
         disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
           abortGridLastRequest($(this))
-          
+
           clearGlobalSearch($('#acoGrid'))
         },
       })
@@ -121,7 +120,7 @@
     loadGlobalSearch($('#userAclGrid'))
   }
 
-  function loadAclData(userId) {
+  function loadUserAclData(userId) {
     abortGridLastRequest($('#userAclGrid'))
 
     $('#userAclGrid').setGridParam({
@@ -130,3 +129,4 @@
     }).trigger('reloadGrid')
   }
 </script>
+@endpush

@@ -11,20 +11,17 @@
   <div class="row">
     <div class="col-12">
       <div class="card card-primary card-outline card-outline-tabs">
-        
         <div class="card-body" style="min-height: 529px">
-          
           <div id="tabs" style="font-size:12px">
             <ul class="dejavu">
               <li><a href="#role-tab">Role</a></li>
               <li><a href="#acl-tab">Acl</a></li>
             </ul>
             <div id="role-tab">
-
+              <table id="userRoleGrid"></table>
             </div>
-
             <div id="acl-tab">
-
+              <table id="userAclGrid"></table>
             </div>
           </div>
         </div>
@@ -34,8 +31,8 @@
 </div>
 
 @include('user._modal')
-@include('user.acl._grid')
 @include('user.role._grid')
+@include('user.acl._grid')
 
 @push('scripts')
 <script>
@@ -54,6 +51,10 @@
 
   $(document).ready(function() {
     $("#tabs").tabs()
+
+    loadUserRoleGrid()
+    loadUserAclGrid()
+
     jqGrid = $("#jqGrid")
       .jqGrid({
         url: `${apiUrl}user`,
@@ -225,18 +226,17 @@
           let userId = $('#jqGrid').jqGrid('getGridParam', 'selrow')
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
 
-          $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/user/${currentTab}/grid`, function() {
-               loadGrid(id)
-            })
+          loadUserRoleData(id)
+          loadUserAclData(id)
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
 
           if (data.data.length === 0) {
-            abortGridLastRequest($('#userRoleGrid'))
-            clearGridData($('#userRoleGrid'))
-            abortGridLastRequest($('#userAclGrid'))
-            clearGridData($('#userAclGrid'))
+            $('#userRoleGrid, #userAclGrid').each((index, element) => {
+              abortGridLastRequest($(element))
+              clearGridData($(element))
+            })
           }
 
           $(document).unbind('keydown')
@@ -341,7 +341,7 @@
         disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
           abortGridLastRequest($(this))
-          
+
           clearGlobalSearch($('#jqGrid'))
         },
       })
@@ -403,7 +403,7 @@
       if (page == 0) {
         $('#formRange [name=dari]').val(page)
         $('#formRange [name=sampai]').val(totalRecord)
-      }else{
+      } else {
         $('#formRange [name=dari]').val((indexRow + 1) + (limit * (page - 1)))
         $('#formRange [name=sampai]').val(totalRecord)
       }
@@ -417,9 +417,9 @@
       })
     })
 
-     // MODAL HIDDEN, REMOVE KOTAK MERAH
-     $('#rangeModal').on('hidden.bs.modal', function() {
-      
+    // MODAL HIDDEN, REMOVE KOTAK MERAH
+    $('#rangeModal').on('hidden.bs.modal', function() {
+
       $('.is-invalid').removeClass('is-invalid')
       $('.invalid-feedback').remove()
     })
@@ -445,77 +445,77 @@
       let limit = parseInt(formRange.find('[name=sampai]').val().replace('.', '')) - offset
       params += `&offset=${offset}&limit=${limit}`
 
-    getCekExport(params).then((response) => {
-      if ($('#rangeModal').data('action') == 'export') {
-        let xhr = new XMLHttpRequest()
-        xhr.open('GET', `{{ config('app.api_url') }}user/export?${params}`, true)
-        xhr.setRequestHeader("Authorization", `Bearer {{ session('access_token') }}`)
-        xhr.responseType = 'arraybuffer'
+      getCekExport(params).then((response) => {
+          if ($('#rangeModal').data('action') == 'export') {
+            let xhr = new XMLHttpRequest()
+            xhr.open('GET', `{{ config('app.api_url') }}user/export?${params}`, true)
+            xhr.setRequestHeader("Authorization", `Bearer {{ session('access_token') }}`)
+            xhr.responseType = 'arraybuffer'
 
-        xhr.onload = function(e) {
-          if (this.status === 200) {
-            if (this.response !== undefined) {
-              let blob = new Blob([this.response], {
-                type: "application/vnd.ms-excel"
-              })
-              let link = document.createElement('a')
+            xhr.onload = function(e) {
+              if (this.status === 200) {
+                if (this.response !== undefined) {
+                  let blob = new Blob([this.response], {
+                    type: "application/vnd.ms-excel"
+                  })
+                  let link = document.createElement('a')
 
-              link.href = window.URL.createObjectURL(blob)
-              link.download = `laporanUser${(new Date).getTime()}.xlsx`
-              link.click()
+                  link.href = window.URL.createObjectURL(blob)
+                  link.download = `laporanUser${(new Date).getTime()}.xlsx`
+                  link.click()
 
+                  submitButton.removeAttr('disabled')
+                }
+              }
+            }
+
+            xhr.onerror = (error) => {
               submitButton.removeAttr('disabled')
             }
+
+            xhr.send()
+          } else if ($('#rangeModal').data('action') == 'report') {
+            window.open(`{{ route('user.report') }}?${params}`)
+
+            submitButton.removeAttr('disabled')
           }
-        }
+        })
+        .catch((error) => {
+          if (error.status === 422) {
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+            errors = error.responseJSON.errors
 
-        xhr.onerror = (error) => {
-          submitButton.removeAttr('disabled')
-        }
+            $.each(errors, (index, error) => {
+              let indexes = index.split(".");
+              indexes[0] = 'sampai'
+              let element;
+              element = $('#rangeModal').find(`[name="${indexes[0]}"]`)[0];
 
-        xhr.send()
-      } else if ($('#rangeModal').data('action') == 'report') {
-        window.open(`{{ route('user.report') }}?${params}`)
-
-        submitButton.removeAttr('disabled')
-      }
-    })
-    .catch((error) => {
-        if (error.status === 422) {
-          $('.is-invalid').removeClass('is-invalid')
-          $('.invalid-feedback').remove()
-          errors = error.responseJSON.errors
-
-          $.each(errors, (index, error) => {
-            let indexes = index.split(".");
-            indexes[0] = 'sampai'
-            let element;
-            element = $('#rangeModal').find(`[name="${indexes[0]}"]`)[0];
-
-            $(element).addClass("is-invalid");
-            $(`
+              $(element).addClass("is-invalid");
+              $(`
               <div class="invalid-feedback">
               ${error[0].toLowerCase()}
               </div>
 			    `).appendTo($(element).parent());
 
-          });
+            });
 
-          $(".is-invalid").first().focus();
-        } else {
-          showDialog(error.statusText)
-        }
-      })
-      
-      .finally(() => {
-        $('.ui-button').click()
-        
-        submitButton.removeAttr('disabled')
-      })
+            $(".is-invalid").first().focus();
+          } else {
+            showDialog(error.statusText)
+          }
+        })
+
+        .finally(() => {
+          $('.ui-button').click()
+
+          submitButton.removeAttr('disabled')
+        })
     })
 
     function getCekExport(params) {
-      
+
       params += `&cekExport=true`
 
       return new Promise((resolve, reject) => {
@@ -535,16 +535,6 @@
         });
       });
     }
-
-    $("#tabs").on('click', 'li.ui-state-active', function() {
-      let href = $(this).find('a').attr('href');
-      currentTab = href.substring(1, href.length - 4);
-      userId = $('#jqGrid').jqGrid('getGridParam', 'selrow')
-      $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/user/${currentTab}/grid`, function() {
-
-        loadGrid(userId)
-      })
-    })
   })
 </script>
 @endpush()
