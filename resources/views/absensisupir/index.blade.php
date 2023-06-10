@@ -239,18 +239,14 @@
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
-          if (data.data.length == 0) {
-            $('#detailGrid').jqGrid('setGridParam', {
-              postData: {
-                absensi_id: 0,
-              },
-            }).trigger('reloadGrid');
-            $('#kasgantungGrid').jqGrid('setGridParam', {
-              postData: {
-                nobukti: 0,
-              },
-            }).trigger('reloadGrid');
+
+          if (data.data.length === 0) {
+            abortGridLastRequest($('#detail'))
+            clearGridData($('#detail'))
+            abortGridLastRequest($('#kasgantungGrid'))
+            clearGridData($('#kasgantungGrid'))
           }
+          
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))

@@ -141,6 +141,8 @@
   }
 
   function loadDetailData(id, nobukti) {
+    abortGridLastRequest($('#absensiGrid'))
+    
     $('#absensiGrid').setGridParam({
       url: `${apiUrl}gajisupirdetail/absensi`,
       datatype: "json",

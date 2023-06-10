@@ -179,6 +179,7 @@
   }
 
   function loadDetailData(id, nobukti) {
+    abortGridLastRequest($('#penerimaanGrid'))
     $('#penerimaanGrid').setGridParam({
       url: `${apiUrl}penerimaandetail/getPenerimaan`,
       datatype: "json",

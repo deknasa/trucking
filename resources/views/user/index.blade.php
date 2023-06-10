@@ -233,8 +233,10 @@
           changeJqGridRowListText()
 
           if (data.data.length === 0) {
-            abortGridLastRequest($('#detail'))
-            clearGridData($('#detail'))
+            abortGridLastRequest($('#userRoleGrid'))
+            clearGridData($('#userRoleGrid'))
+            abortGridLastRequest($('#userAclGrid'))
+            clearGridData($('#userAclGrid'))
           }
 
           $(document).unbind('keydown')

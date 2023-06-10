@@ -11,6 +11,7 @@
       postData: {
         pengeluaranstokheader_id:  `{!! $pengeluaranstokheader_id ?? '' !!}`,
       },
+      idPrefix: 'pengeluaranStokDetailLookup',
       colModel: [{
             label: 'NO BUKTI',
             name: 'nobukti',

@@ -161,6 +161,7 @@
   }
 
   function loadDetailData(id, nobukti) {
+    abortGridLastRequest($('#potpribadiGrid'))
     $('#potpribadiGrid').setGridParam({
       url: `${apiUrl}prosesgajisupirdetail/potpribadi`,
       datatype: "json",

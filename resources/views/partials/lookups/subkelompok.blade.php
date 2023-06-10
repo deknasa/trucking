@@ -15,6 +15,7 @@
       postData: {
         filters: `{!! $filters ?? '' !!}`
       },
+      idPrefix: 'subKelompokLookup',
       colModel: [{
           label: 'ID',
           name: 'id',

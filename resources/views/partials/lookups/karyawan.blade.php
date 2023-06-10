@@ -13,6 +13,7 @@
         aktif: `{!! $Aktif ?? '' !!}`,
         staff: `{!! $staff ?? '' !!}`,
       },         
+      idPrefix: 'karyawanLookup',
       colModel: [{
           label: 'ID',
           name: 'id',

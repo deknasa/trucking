@@ -313,38 +313,22 @@
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
-          if (data.data.length == 0) {
-            $('#detail').jqGrid('setGridParam', {
-              postData: {
-                gajisupir_id: 0,
-              },
-            }).trigger('reloadGrid'); 
-            $('#potsemuaGrid').jqGrid('setGridParam', {
-              postData: {
-                nobukti: 0,
-              },
-            }).trigger('reloadGrid');
-            $('#potpribadiGrid').jqGrid('setGridParam', {
-              postData: {
-                nobukti: 0,
-              },
-            }).trigger('reloadGrid');
-            $('#depositoGrid').jqGrid('setGridParam', {
-              postData: {
-                nobukti: 0,
-              },
-            }).trigger('reloadGrid');
-            $('#jurnalGrid').jqGrid('setGridParam', {
-              postData: {
-                nobukti: 0,
-              },
-            }).trigger('reloadGrid');
-            $('#absensiGrid').jqGrid('setGridParam', {
-              postData: {
-                nobukti: 0,
-              },
-            }).trigger('reloadGrid');
+
+          if (data.data.length === 0) {
+            abortGridLastRequest($('#detail'))
+            clearGridData($('#detail'))
+            abortGridLastRequest($('#potsemuaGrid'))
+            clearGridData($('#potsemuaGrid'))
+            abortGridLastRequest($('#potpribadiGrid'))
+            clearGridData($('#potpribadiGrid'))
+            abortGridLastRequest($('#depositoGrid'))
+            clearGridData($('#depositoGrid'))
+            abortGridLastRequest($('#jurnalGrid'))
+            clearGridData($('#jurnalGrid'))
+            abortGridLastRequest($('#absensiGrid'))
+            clearGridData($('#absensiGrid'))
           }
+
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))

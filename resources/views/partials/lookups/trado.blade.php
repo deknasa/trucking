@@ -12,6 +12,7 @@
       postData: {
         aktif: `{!! $Aktif ?? '' !!}`,
       },
+      idPrefix: 'tradoLookup',
       colModel: [{
           label: 'ID',
           name: 'id',

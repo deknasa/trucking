@@ -10,7 +10,8 @@ $('#kerusakanLookup').jqGrid({
         datatype: "json",
         postData: {
         aktif: `{!! $Aktif ?? '' !!}`,
-      },           
+        },   
+        idPrefix: 'kerusakanLookup',        
         colModel: [{
             label: 'ID',
             name: 'id',

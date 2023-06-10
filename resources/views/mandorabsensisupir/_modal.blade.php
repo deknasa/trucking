@@ -291,6 +291,9 @@
       .then(() => {
         $('#crudModal').modal('show')
       })
+      .catch((error) => {
+        showDialog(error.statusText)
+      })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
       })
@@ -345,6 +348,9 @@
       .then(() => {
         $('#crudModal').modal('show')
       })
+      .catch((error) => {
+        showDialog(error.statusText)
+      })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
       })
@@ -373,6 +379,9 @@
       ])
       .then(() => {
         $('#crudModal').modal('show')
+      })
+      .catch((error) => {
+        showDialog(error.statusText)
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
@@ -409,6 +418,9 @@
             initDisabled()
           }
           resolve()
+        },
+        error: error => {
+          reject(error)
         }
       })
     })
@@ -476,6 +488,9 @@
             }
           })
           resolve()
+        },
+        error: error => {
+          reject(error)
         }
       })
     })

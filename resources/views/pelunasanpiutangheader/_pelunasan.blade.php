@@ -164,6 +164,8 @@
   }
 
   function loadDetailData(id, nobukti) {
+    abortGridLastRequest($('#pelunasanGrid'))
+    
     $('#pelunasanGrid').setGridParam({
       url: `${apiUrl}pelunasanpiutangdetail/getPelunasan`,
       datatype: "json",

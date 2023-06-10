@@ -17,6 +17,7 @@
         tgldari: $('#tgldariheaderlookup').val(),
         tglsampai: $('#tglsampaiheaderlookup').val(),
       },
+      idPrefix: 'hutangHeaderLookup',
       datatype: "json",
       colModel: [{
           label: 'ID',

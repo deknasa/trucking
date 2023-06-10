@@ -12,6 +12,7 @@
       postData: {
         aktif: `{!! $Aktif ?? '' !!}`,
       },         
+      idPrefix: 'mandorLookup',
       colModel: [{
           label: 'ID',
           name: 'id',

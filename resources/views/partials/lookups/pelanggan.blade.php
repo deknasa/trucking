@@ -12,6 +12,7 @@
       postData: {
         aktif: `{!! $Aktif ?? '' !!}`,
       },   
+      idPrefix: 'pelangganLookup',
       colModel: [{
           label: 'ID',
           name: 'id',

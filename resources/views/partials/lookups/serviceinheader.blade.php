@@ -20,6 +20,7 @@
         tglsampai: $('#tglsampaiheaderlookup').val(),
 
       },
+      idPrefix: 'serviceinLookup',
       colModel: [{
           label: 'ID',
           name: 'id',

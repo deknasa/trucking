@@ -359,8 +359,15 @@
         setStatusGudangSamaOptions(form),
       ])
       .then(() => {
-        setIsDateAvailable(form),
+        
+          setIsDateAvailable(form),
           showDefault(form)
+      })
+      .catch((error) => {
+        showDialog(error.statusText)
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
       })
   }
 
@@ -397,6 +404,9 @@
           });
 
           resolve()
+        },
+        error: error => {
+          reject(error)
         }
       })
     })
@@ -434,6 +444,9 @@
           });
 
           resolve()
+        },
+        error: error => {
+          reject(error)
         }
       })
     })
@@ -464,6 +477,9 @@
           });
 
           resolve()
+        },
+        error: error => {
+          reject(error)
         }
       })
     })

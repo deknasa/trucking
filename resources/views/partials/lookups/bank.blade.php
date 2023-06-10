@@ -17,6 +17,7 @@
         bankExclude: `{!! $bankExclude ?? '' !!}`,
         alatbayar: `{!! $alatbayar ?? '' !!}`,
       },
+      idPrefix: 'bankLookup',
       colModel: [{
           label: 'ID',
           name: 'id',

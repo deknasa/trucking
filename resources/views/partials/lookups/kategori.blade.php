@@ -12,6 +12,7 @@
       postData: {
         filters: `{!! $filters ?? '' !!}`
       },
+      idPrefix: 'kategoriLookup',
       colModel: [{
           label: 'ID',
           name: 'id',

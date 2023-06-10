@@ -8,6 +8,7 @@ $('#parameterLookup').jqGrid({
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         datatype: "json",
+        idPrefix: 'parameterLookup',
         colModel: [{
             label: 'ID',
             name: 'id',

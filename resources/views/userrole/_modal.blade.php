@@ -167,6 +167,9 @@
           });
 
           resolve()
+        },
+        error: error => {
+          reject(error)
         }
       })
     })

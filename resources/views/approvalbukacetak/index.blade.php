@@ -531,6 +531,9 @@
                     } else {
                         showDialog(error.statusText)
                     }
+                },
+                error: error => {
+                    reject(error)
                 }
             })
         })

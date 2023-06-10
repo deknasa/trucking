@@ -12,6 +12,7 @@
       postData: {
         aktif: `{!! $Aktif ?? '' !!}`,
       },       
+      idPrefix: 'absenTradoLookup',
       colModel: [{
           label: 'ID',
           name: 'id',

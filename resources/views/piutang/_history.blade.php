@@ -154,7 +154,7 @@
   }
 
   function loadDetailData(id) {
-        abortGridLastRequest($('#detail'))
+        abortGridLastRequest($('#historyGrid'))
 
         $('#historyGrid').setGridParam({
       url: `${apiUrl}piutangdetail/history`,

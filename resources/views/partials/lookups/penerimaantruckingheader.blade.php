@@ -23,6 +23,7 @@
         // penerimaanheader_id:  `{!! $penerimaanheader_id ?? '' !!}`,
       
       },
+      idPrefix: 'penerimaanTruckingHeaderLookup',
       datatype: "json",
       colModel: [{
           label: 'ID',

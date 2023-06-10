@@ -475,7 +475,13 @@
 
             setErrorMessages(form, error.responseJSON.errors);
           } else {
-            showDialog(error.statusText)
+            if (error.responseJSON.errors) {
+              showDialog(error.statusText, error.responseJSON.errors.join('<hr>'))
+            } else if (error.responseJSON.message) {
+              showDialog(error.statusText, error.responseJSON.message)
+            } else {
+              showDialog(error.statusText, error.statusText)
+            }
           }
         },
       }).always(() => {
@@ -736,6 +742,9 @@ $('.tbl_qty').show()
       .then(() => {
         $('#crudModal').modal('show')
       })
+      .catch((error) => {
+        showDialog(error.statusText)
+      })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
       })
@@ -768,6 +777,9 @@ $('.tbl_qty').show()
           .then(() => {
             $('#crudModal').modal('show')
           })
+          .catch((error) => {
+            showDialog(error.statusText)
+          })
           .finally(() => {
             $('.modal-loader').addClass('d-none')
           })
@@ -798,6 +810,9 @@ $('.tbl_qty').show()
         showPengeluaranstokHeader(form, pengeluaranStokHeaderId)
           .then(() => {
             $('#crudModal').modal('show')
+          })
+          .catch((error) => {
+            showDialog(error.statusText)
           })
           .finally(() => {
             $('.modal-loader').addClass('d-none')
@@ -863,6 +878,9 @@ $('.tbl_qty').show()
           });
 
           resolve()
+        },
+        error: error => {
+          reject(error)
         }
       })
     })
@@ -1208,6 +1226,9 @@ $('.tbl_qty').show()
           enabledKorDisable()
           lookupSelected(persediaan)
           resolve()
+        },
+        error: error => {
+          reject(error)
         }
       })
     })
@@ -1456,15 +1477,12 @@ $('.tbl_qty').show()
       $('.trado-lookup').lookup({
         title: 'Trado Lookup',
         fileName: 'trado',
-        beforeProcess: function(test) {
-
-          // var levelcoa = $(`#levelcoa`).val();
-            this.postData = {
-  
+        beforeProcess: function(test)
+        {
+          this.postData = {
               Aktif: 'AKTIF',
             }
-          },
-
+        },
         onSelectRow: (trado, element) => {
           element.val(trado.kodetrado)
           $(`#${element[0]['name']}Id`).val(trado.id)

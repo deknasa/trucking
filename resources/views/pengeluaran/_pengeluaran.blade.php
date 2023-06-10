@@ -168,6 +168,7 @@
   }
 
   function loadDetailData(id, nobukti) {
+    abortGridLastRequest($('#pengeluaranGrid'))
     $('#pengeluaranGrid').setGridParam({
       url: `${apiUrl}pengeluarandetail/getPengeluaran`,
       datatype: "json",

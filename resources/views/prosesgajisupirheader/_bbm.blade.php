@@ -161,6 +161,8 @@
   }
 
   function loadDetailData(id, nobukti) {
+    abortGridLastRequest($('#bbmGrid'))
+
     $('#bbmGrid').setGridParam({
       url: `${apiUrl}prosesgajisupirdetail/bbm`,
       datatype: "json",

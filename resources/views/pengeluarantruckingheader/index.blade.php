@@ -338,28 +338,21 @@
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
-          if (data.data.length == 0) {
-            $('#detail').jqGrid('setGridParam', {
-              postData: {
-                pengeluarantruckingheader_id: 0,
-              },
-            }).trigger('reloadGrid');
-            $('#jurnalGrid').jqGrid('setGridParam', {
-              postData: {
-                nobukti: 0,
-              },
-            }).trigger('reloadGrid');
-            $('#pengeluaranGrid').jqGrid('setGridParam', {
-              postData: {
-                nobukti: 0,
-              },
-            }).trigger('reloadGrid');
+
+          if (data.data.length === 0) {
+            abortGridLastRequest($('#detail'))
+            clearGridData($('#detail'))
+            abortGridLastRequest($('#jurnalGrid'))
+            clearGridData($('#jurnalGrid'))
+            abortGridLastRequest($('#pengeluaranGrid'))
+            clearGridData($('#pengeluaranGrid'))
           }
+
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))
 
-          /* Set global variables */
+        /* Set global variables */
           sortname = $(this).jqGrid("getGridParam", "sortname")
           sortorder = $(this).jqGrid("getGridParam", "sortorder")
           totalRecord = $(this).getGridParam("records")

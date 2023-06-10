@@ -8,6 +8,7 @@
       styleUI: 'Bootstrap4',
       iconSet: 'fontAwesome',
       datatype: "json",
+      idPrefix: 'absensiSupirLookup',
       colModel: [{
             label: 'TRADO',
             name: 'trado'

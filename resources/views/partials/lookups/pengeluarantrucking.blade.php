@@ -9,6 +9,7 @@
       styleUI: 'Bootstrap4',
       iconSet: 'fontAwesome',
       datatype: "json",
+      idPrefix: 'pengeluaranTruckingLookup',
       colModel: [{
           label: 'ID',
           name: 'id',

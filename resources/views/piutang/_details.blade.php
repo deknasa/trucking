@@ -135,9 +135,9 @@
   }
 
   function loadDetailData(id) {
-        abortGridLastRequest($('#detail'))
+        abortGridLastRequest($('#detailGrid'))
 
-        $('#detail').setGridParam({
+        $('#detailGrid').setGridParam({
       url: `${apiUrl}piutangdetail`,
       datatype: "json",
       postData: {

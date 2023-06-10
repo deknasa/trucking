@@ -20,6 +20,7 @@
         tglsampai: $('#tglsampaiheaderlookup').val(),
 
       },
+      idPrefix: 'absensiSupirLookup',
       colModel: [{
             label: 'ID',
             name: 'id',

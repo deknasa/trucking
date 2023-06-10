@@ -355,7 +355,13 @@
               }
             });
           } else {
-            showDialog(error.statusText)
+            if (error.responseJSON.errors) {
+              showDialog(error.statusText, error.responseJSON.errors.join('<hr>'))
+            } else if (error.responseJSON.message) {
+              showDialog(error.statusText, error.responseJSON.message)
+            } else {
+              showDialog(error.statusText, error.statusText)
+            }
           }
         },
       }).always(() => {
@@ -473,6 +479,9 @@
         $('#crudModal').modal('show')
         setRange(true)
       })
+      .catch((error) => {
+        showDialog(error.statusText)
+      })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
       })
@@ -502,6 +511,9 @@
         $('#crudModal').modal('show')
         form.find(`[name="tglbukti"]`).prop('readonly', true)
         form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+      })
+      .catch((error) => {
+        showDialog(error.statusText)
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
@@ -538,6 +550,9 @@
         form.find(`[name="tgldari"]`).parent('.input-group').find('.input-group-append').remove()
         form.find(`[name="tglsampai"]`).prop('readonly', true)
         form.find(`[name="tglsampai"]`).parent('.input-group').find('.input-group-append').remove()
+      })
+      .catch((error) => {
+        showDialog(error.statusText)
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
@@ -890,6 +905,9 @@
             showDialog(error.statusText)
           }
         },
+        error: error => {
+          reject(error)
+        }
       });
     });
   }
@@ -978,6 +996,9 @@
             initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePengembalian_nominal"]`).text(totalBayar))
           });
           resolve()
+        },
+        error: error => {
+          reject(error)
         }
       })
     })
@@ -1227,6 +1248,9 @@
             }
           })
           resolve()
+        },
+        error: error => {
+          reject(error)
         }
       })
     })

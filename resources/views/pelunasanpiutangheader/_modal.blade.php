@@ -497,12 +497,6 @@
           if (error.status === 422) {
             $('.is-invalid').removeClass('is-invalid')
             $('.invalid-feedback').remove()
-            // piutangid = []
-            // $('#table_body tr').each(function(row, tr) {
-            //   if ($(this).find(`[name="piutang_id[]"]`).is(':checked')) {
-            //     piutangid.push($(this).find(`[name="piutang_id[]"]`).val())
-            //   }
-            // })
             errors = error.responseJSON.errors
 
             $(".ui-state-error").removeClass("ui-state-error");
@@ -537,7 +531,13 @@
               }
             });
           } else {
-            showDialog(error.statusText)
+            if (error.responseJSON.errors) {
+              showDialog(error.statusText, error.responseJSON.errors.join('<hr>'))
+            } else if (error.responseJSON.message) {
+              showDialog(error.statusText, error.responseJSON.message)
+            } else {
+              showDialog(error.statusText, error.statusText)
+            }
           }
         },
       }).always(() => {
@@ -631,6 +631,9 @@
       .then(() => {
         loadPelunasanGrid()
         $('#crudModal').modal('show')
+      })
+      .catch((error) => {
+        showDialog(error.statusText)
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
@@ -1110,6 +1113,9 @@
         success: (response) => {
           resolve(response);
         },
+        error: error => {
+          reject(error)
+        }
       });
     });
   }
@@ -1293,6 +1299,9 @@
         form.find(`[name="alatbayar"]`).parent('.input-group').find('.button-clear').remove()
         form.find(`[name="alatbayar"]`).parent('.input-group').find('.input-group-append').remove()
       })
+      .catch((error) => {
+        showDialog(error.statusText)
+      })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
       })
@@ -1325,6 +1334,9 @@
         form.find(`[name="bank"]`).parent('.input-group').find('.input-group-append').remove()
         form.find(`[name="alatbayar"]`).parent('.input-group').find('.button-clear').remove()
         form.find(`[name="alatbayar"]`).parent('.input-group').find('.input-group-append').remove()
+      })
+      .catch((error) => {
+        showDialog(error.statusText)
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
@@ -1409,6 +1421,9 @@
             initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePelunasan_nominallebihbayar"]`).text(totalNominalLebih))
           });
           resolve()
+        },
+        error: error => {
+          reject(error)
         }
       })
     })
@@ -1859,6 +1874,9 @@
             }
           })
           resolve()
+        },
+        error: error => {
+          reject(error)
         }
       })
     })

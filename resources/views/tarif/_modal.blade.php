@@ -358,7 +358,13 @@
 
             setErrorMessages(form, error.responseJSON.errors);
           } else {
-            showDialog(error.statusText)
+            if (error.responseJSON.errors) {
+              showDialog(error.statusText, error.responseJSON.errors.join('<hr>'))
+            } else if (error.responseJSON.message) {
+              showDialog(error.statusText, error.responseJSON.message)
+            } else {
+              showDialog(error.statusText, error.statusText)
+            }
           }
         },
       }).always(() => {
@@ -417,6 +423,9 @@
           .then(() => {
             $('#crudModal').modal('show')
           })
+          .catch((error) => {
+            showDialog(error.statusText)
+          })
           .finally(() => {
             $('.modal-loader').addClass('d-none')
           })
@@ -465,6 +474,9 @@
             form.find(`[name="upahsupir"]`).parent('.input-group').find('.input-group-append').remove()
 
           })
+          .catch((error) => {
+            showDialog(error.statusText)
+          })
           .finally(() => {
             $('.modal-loader').addClass('d-none')
           })
@@ -497,6 +509,9 @@
         showTarif(form, tarifId)
           .then(() => {
             $('#crudModal').modal('show')
+          })
+          .catch((error) => {
+            showDialog(error.statusText)
           })
           .finally(() => {
             $('.modal-loader').addClass('d-none')
@@ -561,7 +576,11 @@
           });
 
           resolve()
+        },
+        error: error => {
+          reject(error)
         }
+
       })
     })
   }
@@ -599,6 +618,9 @@
           });
 
           resolve()
+        },
+        error: error => {
+          reject(error)
         }
       })
     })
@@ -636,6 +658,9 @@
           });
 
           resolve()
+        },
+        error: error => {
+          reject(error)
         }
       })
     })
@@ -739,6 +764,9 @@
           }
 
           resolve()
+        },
+        error: error => {
+          reject(error)
         }
       })
     })
@@ -1017,7 +1045,9 @@
             }
           })
           resolve()
-
+        },
+        error: error => {
+          reject(error)
         }
       })
     })

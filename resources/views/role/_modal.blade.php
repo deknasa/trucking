@@ -134,7 +134,13 @@
 
             setErrorMessages(form, error.responseJSON.errors);
           } else {
-            showDialog(error.statusText)
+            if (error.responseJSON.errors) {
+              showDialog(error.statusText, error.responseJSON.errors.join('<hr>'))
+            } else if (error.responseJSON.message) {
+              showDialog(error.statusText, error.responseJSON.message)
+            } else {
+              showDialog(error.statusText, error.statusText)
+            }
           }
         },
       }).always(() => {
@@ -197,11 +203,14 @@
       .then(() => {
         showRole(form, id)
         .then(() => {
-                        $('#crudModal').modal('show')
-                    })
-      })
-      .finally(() => {
-        $('.modal-loader').addClass('d-none')
+          $('#crudModal').modal('show')
+        })
+        .catch((error) => {
+          showDialog(error.statusText)
+        })
+        .finally(() => {
+          $('.modal-loader').addClass('d-none')
+        })
       })
   }
 
@@ -225,6 +234,9 @@
       ])
       .then(() => {
         $('#crudModal').modal('show')
+      })
+      .catch((error) => {
+        showDialog(error.statusText)
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
@@ -282,6 +294,9 @@
           }
 
           resolve()
+        },
+        error: error => {
+          reject(error)
         }
       })
     })

@@ -161,6 +161,8 @@
   }
 
   function loadJurnalData(id) {
+    abortGridLastRequest($('#jurnalGrid'))
+
     $('#jurnalGrid').setGridParam({
       url: `${apiUrl}gajisupirdetail`,
       datatype: "json",

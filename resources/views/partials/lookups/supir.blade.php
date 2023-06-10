@@ -12,6 +12,7 @@
       postData: {
         aktif: `{!! $Aktif ?? '' !!}`,
       },
+      idPrefix: 'supirLookup',
       colModel: [{
           label: 'ID',
           name: 'id',

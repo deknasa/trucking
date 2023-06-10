@@ -161,6 +161,8 @@
   }
 
   function loadDetailData(id, nobukti) {
+    abortGridLastRequest($('#depositoGrid'))
+
     $('#depositoGrid').setGridParam({
       url: `${apiUrl}prosesgajisupirdetail/deposito`,
       datatype: "json",

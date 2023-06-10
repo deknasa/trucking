@@ -12,6 +12,7 @@
       postData: {
         aktif: `{!! $Aktif ?? '' !!}`,
       },         
+      idPrefix: 'jenistradoLookup',
       colModel: [{
           label: 'ID',
           name: 'id',

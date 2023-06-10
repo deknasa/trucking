@@ -785,7 +785,13 @@
               setErrorMessages(form, error.responseJSON.errors);
             }
           } else {
-            showDialog(error.statusText)
+            if (error.responseJSON.errors) {
+              showDialog(error.statusText, error.responseJSON.errors.join('<hr>'))
+            } else if (error.responseJSON.message) {
+              showDialog(error.statusText, error.responseJSON.message)
+            } else {
+              showDialog(error.statusText, error.statusText)
+            }
           }
         },
       }).always(() => {
@@ -1124,7 +1130,9 @@
       ])
       .then(() => {
         $('#crudModal').modal('show')
-       
+      })
+      .catch((error) => {
+        showDialog(error.statusText)
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
@@ -1166,6 +1174,9 @@
           $('.modal-loader').addClass('d-none')
         })
       })
+      .catch((error) => {
+        showDialog(error.statusText)
+      })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
       })
@@ -1202,6 +1213,9 @@
           $('#crudModal').modal('show')
           $('#crudForm [name=statusposting]').attr('disabled', true)
         })
+      })
+      .catch((error) => {
+        showDialog(error.statusText)
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
@@ -1461,6 +1475,9 @@
         success: (response) => {
           resolve(response);
         },
+        error: error => {
+          reject(error)
+        }
       });
     });
   }
@@ -1802,6 +1819,9 @@
         success: (response) => {
           resolve(response);
         },
+        error: error => {
+          reject(error)
+        }
       });
     });
   }
@@ -1959,6 +1979,9 @@
             }
           })
           resolve()
+        },
+        error: error => {
+          reject(error)
         }
       })
     })
@@ -2314,6 +2337,9 @@
             initDisabled()
           }
           resolve()
+        },
+        error: error => {
+          reject(error)
         }
       })
     })
@@ -2357,6 +2383,9 @@
           }).trigger('reloadGrid');
           resolve();
         },
+        error: error => {
+          reject(error)
+        }
       });
     });
   }
@@ -2831,37 +2860,41 @@
       urlSumbangan = 'getinvoice'
     }
     return new Promise((resolve, reject) => {
-        $.ajax({
-          url: `${apiUrl}pengeluarantruckingheader/${urlSumbangan}`,
-          method: 'GET',
-          dataType: 'JSON',
-          data: {
-            tgldari: $('#crudForm').find('[name=tgldari]').val(),
-            tglsampai: $('#crudForm').find('[name=tglsampai]').val(),
-            limit: 0
-          },
-          headers: {
-            Authorization: `Bearer ${accessToken}`
-          },
-          success: response => {
-              response.url = urlSumbangan
-              resolve(response)
-          },
-          error: error => {
-              if (error.status === 422) {
-                  $('.is-invalid').removeClass('is-invalid')
-                  $('.invalid-feedback').remove()
+    $.ajax({
+      url: `${apiUrl}pengeluarantruckingheader/${urlSumbangan}`,
+      method: 'GET',
+      dataType: 'JSON',
+      data: {
+        tgldari: $('#crudForm').find('[name=tgldari]').val(),
+        tglsampai: $('#crudForm').find('[name=tglsampai]').val(),
+        limit: 0
+      },
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      success: response => {
+          response.url = urlSumbangan
+          resolve(response)
+      },
+      error: error => {
+        if (error.status === 422) 
+        {
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
 
 
-                  errors = error.responseJSON.errors
-                  reject(errors)
+            errors = error.responseJSON.errors
+            reject(errors)
 
-              } else {
-                  showDialog(error.statusText)
-              }
-              }
+          } else {
+              showDialog(error.statusText)
+          }
+        },
+        error: error => {
+            reject(error)
+          }
+      })
     })
-  })
   }
 
   function selectAllRowsSumbangan() {
@@ -2914,18 +2947,21 @@
             }
           },
           error: error => {
-              if (error.status === 422) {
-                  $('.is-invalid').removeClass('is-invalid')
-                  $('.invalid-feedback').remove()
+            if (error.status === 422) {
+                $('.is-invalid').removeClass('is-invalid')
+                $('.invalid-feedback').remove()
 
 
-                  errors = error.responseJSON.errors
-                  reject(errors)
+                errors = error.responseJSON.errors
+                reject(errors)
 
-              } else {
-                  showDialog(error.statusText)
-              }
-              }
+            } else {
+                showDialog(error.statusText)
+            }
+          },
+          error: error => {
+            reject(error)
+          }
        })
     })
   }
@@ -3226,6 +3262,9 @@
             }
           });
           resolve()
+        },
+        error: error => {
+          reject(error)
         }
       })
     })
@@ -3262,6 +3301,9 @@
             }
           });
           resolve()
+        },
+        error: error => {
+          reject(error)
         }
       })
     })

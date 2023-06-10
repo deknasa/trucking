@@ -8,6 +8,7 @@
       styleUI: 'Bootstrap4',
       iconSet: 'fontAwesome',
       datatype: "json",
+      idPrefix: 'pengeluaranStokLookup',
       colModel: [{
           label: 'ID',
           name: 'id',

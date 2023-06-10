@@ -19,6 +19,7 @@
         tgldari: $('#tgldariheaderlookup').val(),
         tglsampai: $('#tglsampaiheaderlookup').val(),
       },
+      idPrefix: 'penerimaanHeaderLookup',
       datatype: "json",
       colModel: [{
           label: 'ID',

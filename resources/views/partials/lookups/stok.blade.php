@@ -11,6 +11,7 @@ $('#stokLookup').jqGrid({
       postData: {
         aktif: `{!! $Aktif ?? '' !!}`,
       },         
+      idPrefix: 'stokLookup',
       colModel: [{
         label: 'ID',
         name: 'id',

@@ -213,6 +213,9 @@
       .then(() => {
         $('#crudModal').modal('show')
       })
+      .catch((error) => {
+        showDialog(error.statusText)
+      })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
       })
@@ -241,6 +244,9 @@
         showProsesAbsensiSupir(form, prosesAbsensiSupirId)
           .then(() => {
             $('#crudModal').modal('show')
+          })
+          .catch((error) => {
+            showDialog(error.statusText)
           })
           .finally(() => {
             $('.modal-loader').addClass('d-none')
@@ -271,6 +277,9 @@
         showProsesAbsensiSupir(form, prosesAbsensiSupirId)
           .then(() => {
             $('#crudModal').modal('show')
+          })
+          .catch((error) => {
+            showDialog(error.statusText)
           })
           .finally(() => {
             $('.modal-loader').addClass('d-none')
@@ -328,6 +337,9 @@
           });
 
           resolve()
+        },
+        error: error => {
+          reject(error)
         }
       })
     })
@@ -353,6 +365,9 @@
             }
           })
           resolve()
+        },
+        error: error => {
+          reject(error)
         }
       })
     })

@@ -204,7 +204,13 @@
                         $('#crudForm').find('[name=periode]').val(data.periode)
                         setErrorMessages(form, error.responseJSON.errors);
                     } else {
-                        showDialog(error.responseJSON.message)
+                        if (error.responseJSON.errors) {
+                            showDialog(error.statusText, error.responseJSON.errors.join('<hr>'))
+                        } else if (error.responseJSON.message) {
+                            showDialog(error.statusText, error.responseJSON.message)
+                        } else {
+                            showDialog(error.statusText, error.statusText)
+                        }
                     }
                     $('#crudForm').find('[name=periode]').val($.datepicker.formatDate('mm-yy', new Date())).trigger('change');
                 },
@@ -438,18 +444,14 @@
                 },
                 loadComplete: function(data) {
                     changeJqGridRowListText()
-                    if (data.data.length == 0) {
-                        $('#detail').jqGrid('setGridParam', {
-                            postData: {
-                                pengeluaran_id: 0,
-                            },
-                        }).trigger('reloadGrid');
-                        $('#jurnalGrid').jqGrid('setGridParam', {
-                            postData: {
-                                nobukti: 0,
-                            },
-                        }).trigger('reloadGrid');
+
+                    if (data.data.length === 0) {
+                        abortGridLastRequest($('#detail'))
+                        clearGridData($('#detail'))
+                        abortGridLastRequest($('#jurnalGrid'))
+                        clearGridData($('#jurnalGrid'))
                     }
+
                     $(document).unbind('keydown')
                     setCustomBindKeys($(this))
                     initResize($(this))

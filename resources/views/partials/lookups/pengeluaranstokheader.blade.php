@@ -20,6 +20,7 @@
         tgldari: $('#tgldariheaderlookup').val(),
         tglsampai: $('#tglsampaiheaderlookup').val(),
       },
+      idPrefix: 'pengeluaranStokHeaderLookup',
       datatype: "json",
       colModel: [{
             label: 'ID',

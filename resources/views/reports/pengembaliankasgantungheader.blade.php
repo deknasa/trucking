@@ -16,7 +16,6 @@
   <script type="text/javascript">
     
     let kasgantungheaders = <?= json_encode($data); ?>;
-  
     $( document ).ready(function() {
       var statuscetak = kasgantungheaders.statuscetak
       if (statuscetak == 174) {
@@ -38,7 +37,7 @@
 
       var viewer = new Stimulsoft.Viewer.StiViewer(viewerOptions, "StiViewer", false)
       var report = new Stimulsoft.Report.StiReport()
-      console.log(kasgantungheaders)
+      
       var statuscetak = kasgantungheaders.statuscetak
       if (statuscetak == 174) {
         viewerOptions.toolbar.showPrintButton = false;
@@ -68,30 +67,29 @@
       // designer.renderHtml('content');
       viewer.report = report
       
-      // viewer.onPrintReport = function (event) {
-      //   triggerEvent(window, 'afterprint');
-      // }
+      viewer.onPrintReport = function (event) {
+        triggerEvent(window, 'afterprint');
+      }
       
-      // function triggerEvent(el, type) {
-      //   // IE9+ and other modern browsers
-      //   if ('createEvent' in document) {
-      //       var e = document.createEvent('HTMLEvents');
-      //       e.initEvent(type, false, true);
-      //       el.dispatchEvent(e);
-      //   } else {
-      //     // IE8
-      //     var e = document.createEventObject();
-      //     e.eventType = type;
-      //     el.fireEvent('on' + e.eventType, e);
-      //   }
-      // }
+      function triggerEvent(el, type) {
+        // IE9+ and other modern browsers
+        if ('createEvent' in document) {
+            var e = document.createEvent('HTMLEvents');
+            e.initEvent(type, false, true);
+            el.dispatchEvent(e);
+        } else {
+          // IE8
+          var e = document.createEventObject();
+          e.eventType = type;
+          el.fireEvent('on' + e.eventType, e);
+        }
+      }
 
-      // window.addEventListener('afterprint', (event) => {
+      window.addEventListener('afterprint', (event) => {
         
-      //   var id = kasgantungheaders.id
-      //   var apiUrl = `{{ config('app.api_url') }}`;
+        var id = kasgantungheaders.id
+        var apiUrl = `{{ config('app.api_url') }}`;
         
-<<<<<<< Updated upstream
         $.ajax({
           url: `${apiUrl}pengembaliankasgantungheader/${id}/printreport`,
           method: 'GET',
@@ -104,23 +102,6 @@
           }
         })
       });
-=======
-      //   $.ajax({
-      //     url: `${apiUrl}kasgantungheader/${id}/printreport`,
-      //     method: 'GET',
-      //     dataType: 'JSON',
-      //     headers: {
-      //       Authorization: `Bearer {{ session('access_token') }}`
-      //     },
-      //     success: response => {
-      //       console.log(response);
-      //       location.reload()
-      //     }
-    
-      //   })
-          
-      // });
->>>>>>> Stashed changes
     }
   </script>
   <style>

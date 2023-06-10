@@ -12,6 +12,7 @@
       postData: {
         aktif: `{!! $Aktif ?? '' !!}`,
       },       
+      idPrefix: 'agenLookup',
       colModel: [{
           label: 'ID',
           name: 'id',

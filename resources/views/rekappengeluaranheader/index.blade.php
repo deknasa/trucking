@@ -281,6 +281,11 @@
         loadComplete: function(data) {
           changeJqGridRowListText()
 
+          if (data.data.length === 0) {
+            abortGridLastRequest($('#detail'))
+            clearGridData($('#detail'))
+          }
+
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))
