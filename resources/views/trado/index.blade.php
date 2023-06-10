@@ -94,35 +94,10 @@
               return ` title="${statusAktif.MEMO}"`
             }
           },
+          
           {
-            label: 'KM AWAL',
-            name: 'kmawal',
-            align: 'right',
-            formatter: 'currency',
-            formatoptions: {
-              decimalSeparator: '.',
-              thousandsSeparator: ','
-            }
-          },
-          {
-            label: 'KM GANTI OLI AKHIR',
-            name: 'kmakhirgantioli',
-            width: 200,
-            align: 'right',
-            formatter: 'currency',
-            formatoptions: {
-              decimalSeparator: '.',
-              thousandsSeparator: ','
-            }
-          },
-          {
-            label: 'TGL ASURANSI MATI',
-            name: 'tglasuransimati',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
-            }
+            label: 'TAHUN',
+            name: 'tahun',
           },
           {
             label: 'MEREK',
@@ -137,7 +112,7 @@
             name: 'nomesin',
           },
           {
-            label: 'NAMA',
+            label: 'NAMA PEMILIK',
             name: 'nama',
           },
           {
@@ -148,6 +123,140 @@
             label: 'ALAMAT STNK',
             name: 'alamatstnk',
           },
+          {
+            label: 'JENIS PLAT',
+            name: 'statusjenisplat',
+            stype: 'select',
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['statusjenisplat'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['statusjenisplat'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+              `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              let statusJenisPlat = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusJenisPlat.WARNA}; color: #fff;">
+                  <span>${statusJenisPlat.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusJenisPlat = JSON.parse(rowObject.statusjenisplat)
+
+              return ` title="${statusJenisPlat.MEMO}"`
+            }
+          },
+          {
+            label: 'TGL PAJAK STNK',
+            name: 'tglpajakstnk',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
+          {
+            label: 'TIPE',
+            name: 'tipe',
+          },
+          {
+            label: 'JENIS',
+            name: 'jenis',
+          },
+          {
+            label: 'ISI SILINDER',
+            name: 'isisilinder',
+          },
+          {
+            label: 'WARNA',
+            name: 'warna',
+          },
+          {
+            label: 'BAHAN BAKAR',
+            name: 'jenisbahanbakar',
+          },
+          {
+            label: 'JLH SUMBU',
+            name: 'jumlahsumbu',
+          },
+          {
+            label: 'JLH BAN',
+            name: 'jumlahroda',
+          },
+          {
+            label: 'MODEL',
+            name: 'model',
+          },
+          {
+            label: 'BPKB',
+            name: 'nobpkb',
+          },
+          {
+            label: 'JLH BAN SERAP',
+            name: 'jumlahbanserap',
+          },
+          {
+            label: 'PLUS BORONGAN',
+            name: 'nominalplusborongan',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
+            label: 'MILIK MANDOR',
+            name: 'mandor_id',
+          },
+          {
+            label: 'MILIK SUPIR',
+            name: 'supir_id',
+          },
+          // {
+          //   label: 'KM AWAL',
+          //   name: 'kmawal',
+          //   align: 'right',
+          //   formatter: 'currency',
+          //   formatoptions: {
+          //     decimalSeparator: '.',
+          //     thousandsSeparator: ','
+          //   }
+          // },
+          // {
+          //   label: 'KM GANTI OLI AKHIR',
+          //   name: 'kmakhirgantioli',
+          //   align: 'right',
+          //   formatter: 'currency',
+          //   formatoptions: {
+          //     decimalSeparator: '.',
+          //     thousandsSeparator: ','
+          //   }
+          // },
+          // {
+          //   label: 'TGL ASURANSI MATI',
+          //   name: 'tglasuransimati',
+          //   formatter: "date",
+          //   formatoptions: {
+          //     srcformat: "ISO8601Long",
+          //     newformat: "d-m-Y"
+          //   }
+          // },
           {
             label: 'MODIFIEDBY',
             name: 'modifiedby',
@@ -200,7 +309,7 @@
                       endforeach
 
                       ?>
-  `,
+        `,
               dataInit: function(element) {
                 $(element).select2({
                   width: 'resolve',
@@ -230,57 +339,7 @@
             width: 230,
             name: 'keteranganprogressstandarisasi',
           },
-          {
-            label: 'JENIS PLAT',
-            name: 'statusjenisplat',
-            stype: 'select',
-            searchoptions: {
-              value: `<?php
-                      $i = 1;
-
-                      foreach ($data['statusjenisplat'] as $status) :
-                        echo "$status[param]:$status[parameter]";
-                        if ($i !== count($data['statusjenisplat'])) {
-                          echo ";";
-                        }
-                        $i++;
-                      endforeach
-
-                      ?>
-  `,
-              dataInit: function(element) {
-                $(element).select2({
-                  width: 'resolve',
-                  theme: "bootstrap4"
-                });
-              }
-            },
-            formatter: (value, options, rowData) => {
-              let statusJenisPlat = JSON.parse(value)
-
-              let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusJenisPlat.WARNA}; color: #fff;">
-                  <span>${statusJenisPlat.SINGKATAN}</span>
-                </div>
-              `)
-
-              return formattedValue[0].outerHTML
-            },
-            cellattr: (rowId, value, rowObject) => {
-              let statusJenisPlat = JSON.parse(rowObject.statusjenisplat)
-
-              return ` title="${statusJenisPlat.MEMO}"`
-            }
-          },
-          {
-            label: 'TGL PAJAK STNK',
-            name: 'tglpajakstnk',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
-            }
-          },
+          
           {
             label: 'TGL GANTI AKI AKHIR',
             name: 'tglgantiakiterakhir',
@@ -377,42 +436,6 @@
             }
           },
           {
-            label: 'TIPE',
-            name: 'tipe',
-          },
-          {
-            label: 'JENIS',
-            name: 'jenis',
-          },
-          {
-            label: 'ISI SILINDER',
-            name: 'isisilinder',
-          },
-          {
-            label: 'WARNA',
-            name: 'warna',
-          },
-          {
-            label: 'BAHAN BAKAR',
-            name: 'jenisbahanbakar',
-          },
-          {
-            label: 'JLH SUMBU',
-            name: 'jumlahsumbu',
-          },
-          {
-            label: 'JLH RODA',
-            name: 'jumlahroda',
-          },
-          {
-            label: 'MODEL',
-            name: 'model',
-          },
-          {
-            label: 'BPKB',
-            name: 'nobpkb',
-          },
-          {
             label: 'STATUS MOBIL STORING',
             name: 'statusmobilstoring',
             width: 200,
@@ -454,24 +477,6 @@
 
               return ` title="${statusMobilStoring.MEMO}"`
             }
-          },
-          {
-            label: 'MANDOR',
-            name: 'mandor_id',
-          },
-          {
-            label: 'SUPIR',
-            name: 'supir_id',
-          },
-          {
-            label: 'JLH BAN SERAP',
-            name: 'jumlahbanserap',
-          },
-          {
-            label: 'PLUS BORONGAN',
-            name: 'nominalplusborongan',
-            align: 'right',
-            formatter: currencyFormat,
           },
           {
             label: 'STATUS BAN EDIT',
