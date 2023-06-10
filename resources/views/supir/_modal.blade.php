@@ -397,7 +397,7 @@
         success: response => {
           $('#crudForm').trigger('reset')
           $('#crudModal').modal('hide')
-
+          indexRow =  response.data.position -1
           id = response.data.id
 
           $('#jqGrid').jqGrid('setGridParam', {

@@ -337,8 +337,8 @@
       })
 
     initDropzone(form.data('action'))
-    initAutoNumeric(form.find(`[name="qtymin"]`))
-    initAutoNumeric(form.find(`[name="qtymax"]`))
+    initAutoNumeric(form.find(`[name="qtymin"]`),{'maximumValue':10000})
+    initAutoNumeric(form.find(`[name="qtymax"]`),{'maximumValue':10000})
   }
 
   function editStok(stokId) {
@@ -490,7 +490,7 @@
         },
         success: response => {
           $.each(response.data, (index, value) => {
-            console.log(value)
+            // console.log(value)
             let element = form.find(`[name="${index}"]`)
             // let element = form.find(`[name="statusaktif"]`)
 
@@ -535,8 +535,8 @@
           })
           maxLengthForDropzone = 5 - response.count
           resolve(response.data)
-          initAutoNumeric(form.find(`[name="qtymin"]`))
-          initAutoNumeric(form.find(`[name="qtymax"]`))
+          initAutoNumeric(form.find(`[name="qtymin"]`),{'maximumValue':9999})
+          initAutoNumeric(form.find(`[name="qtymax"]`),{'maximumValue':10000})
           resolve()
         },
         error: error => {
@@ -576,12 +576,21 @@
           acceptedFiles: 'image/*',
           paramName: $(element).data('field'),
           init: function() {
+            checkIsPhotExist(this.files, data)
             dropzones.push(this)
             this.on("addedfile", function(file) {
               if(this.files.length > 5){
                 this.removeFile(file);
               }
+              checkIsPhotExist(this.files, data)
             });
+
+          },
+          removedfile: function(file) {
+            
+            file.previewElement.remove();
+            checkIsPhotExist(this.files, data)
+
           }
         })
       }
@@ -591,7 +600,16 @@
       if (action == 'edit' || action == 'delete') {
         assignAttachment(element.dropzone, data)
       }
-    })
+    })    
+  }
+
+  function checkIsPhotExist(files, data) {
+    
+    if (files.length > 0) {
+      $('#crudForm').find(`[name="namaterpusat"]`).prop('disabled',false)
+    }else{
+      $('#crudForm').find(`[name="namaterpusat"]`).prop('disabled',true)
+    }
   }
 
   function assignAttachment(dropzone, data) {
@@ -609,6 +627,8 @@
             paramName: $(element).data('field'),
             init: function() {
               dropzones.push(this)
+              console.log(this.files.length);
+              checkIsPhotExist(this, data)
             }
           })
         }
@@ -618,7 +638,7 @@
     } else {
 
       let files = JSON.parse(data[paramName])
-
+      checkIsPhotExist(files, data)
       files.forEach((file) => {
         getImgURL(`${apiUrl}stok/${file}/ori`, (fileBlob) => {
           let imageFile = new File([fileBlob], file, {
@@ -629,6 +649,7 @@
           dropzone.options.addedfile.call(dropzone, imageFile);
           dropzone.options.thumbnail.call(dropzone, imageFile, `${apiUrl}stok/${file}/ori`);
           dropzone.files.push(imageFile)
+  
         })
       })
     }
@@ -795,7 +816,7 @@
   function getImgURL(url, callback) {
     var xhr = new XMLHttpRequest();
     xhr.onload = function() {
-      console.log(xhr.response);
+      // console.log(xhr.response);
       callback(xhr.response);
     };
     xhr.open('GET', url);
