@@ -139,6 +139,8 @@
   }
 
   function loadDetailData(id, nobukti) {
+    abortGridLastRequest($('#kasgantungGrid'))
+
     $('#kasgantungGrid').setGridParam({
       url: `${apiUrl}jurnalumumdetail/jurnal`,
       datatype: "json",

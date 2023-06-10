@@ -138,6 +138,8 @@
   }
 
   function loadDetailData(id, nobukti) {
+    abortGridLastRequest($('#piutangGrid'))
+
     $('#piutangGrid').setGridParam({
       url: `${apiUrl}invoicedetail/piutang`,
       datatype: "json",

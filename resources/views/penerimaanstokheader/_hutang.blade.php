@@ -143,6 +143,8 @@
   }
 
   function loadDetailData(id, nobukti) {
+    abortGridLastRequest($('#hutangGrid'))
+
     $('#hutangGrid').setGridParam({
       url: `${apiUrl}penerimaanstokdetail/hutang`,
       datatype: "json",

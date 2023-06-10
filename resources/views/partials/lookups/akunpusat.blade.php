@@ -14,6 +14,7 @@
         aktif: `{!! $Aktif ?? '' !!}`,        
         // filters: `{!! $filters ?? '' !!}`
       },
+      idPrefix: 'akunPusatLookup',
       colModel: [{
           label: 'ID',
           name: 'id',

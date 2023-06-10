@@ -64,8 +64,9 @@
           let rows = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
         },
-        loadBeforeSend: (jqXHR) => {
+        loadBeforeSend: function(jqXHR) {
           jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+          setGridLastRequest($(this), jqXHR)
         }, 
         loadComplete: function(data) {
           changeJqGridRowListText()

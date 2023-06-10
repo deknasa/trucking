@@ -11,6 +11,7 @@
       postData: {
         aktif: `{!! $Aktif ?? '' !!}`,
       },   
+      idPrefix: 'supplierLookup',
       colModel: [{
           label: 'ID',
           name: 'id',

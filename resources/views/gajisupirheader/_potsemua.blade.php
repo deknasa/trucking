@@ -145,6 +145,8 @@
   }
 
   function loadDetailData(id, nobukti) {
+    abortGridLastRequest($('#potsemuaGrid'))
+
     $('#potsemuaGrid').setGridParam({
       url: `${apiUrl}gajisupirdetail/potsemua`,
       datatype: "json",

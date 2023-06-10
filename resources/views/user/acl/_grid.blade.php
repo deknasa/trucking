@@ -122,6 +122,8 @@
   }
 
   function loadAclData(userId) {
+    abortGridLastRequest($('#userAclGrid'))
+
     $('#userAclGrid').setGridParam({
       url: `${apiUrl}user/${userId}/acl`,
       datatype: 'json'

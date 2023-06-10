@@ -20,6 +20,7 @@
         tgldari: $('#tgldariheaderlookup').val(),
         tglsampai: $('#tglsampaiheaderlookup').val(),
       },
+      idPrefix: 'pengeluaranTruckingHeaderLookup',
       datatype: "json",
       colModel: [{
           label: 'ID',

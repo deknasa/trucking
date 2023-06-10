@@ -73,6 +73,7 @@
       styleUI: 'Bootstrap4',
       iconSet: 'fontAwesome',
       datatype: 'local',
+      idPrefix: 'orderanemklLookup',
       colModel: [{
           label: 'NO JOB',
           name: 'nojob',

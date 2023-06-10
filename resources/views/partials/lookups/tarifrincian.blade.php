@@ -13,7 +13,7 @@
         aktif: `{!! $Aktif ?? '' !!}`,
         container_id: `{!! $container_Id?? '' !!}`,
       },   
-
+      idPrefix: 'tarifrincianLookup',
       colModel: [{
           label: 'ID',
           name: 'id',

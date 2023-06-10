@@ -117,6 +117,8 @@
   }
 
   function loadRoleData(userId) {
+    abortGridLastRequest($('#userRoleGrid'))
+
     $('#userRoleGrid').setGridParam({
       url: `${apiUrl}user/${userId}/role`,
       datatype: 'json'

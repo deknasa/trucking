@@ -11,7 +11,8 @@
       datatype: "json",
       postData: {
         aktif: `{!! $Aktif ?? '' !!}`,
-      },          
+      },         
+      idPrefix: 'bankPelangganLookup', 
       colModel: [{
           label: 'ID',
           name: 'id',

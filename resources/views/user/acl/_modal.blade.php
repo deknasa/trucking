@@ -132,8 +132,10 @@
       .then(() => {
         showUserAcl(userId)
           .then(() => {
-
             $('#userAclModal').modal('show')
+          })
+          .catch((error) => {
+            showDialog(error.statusText)
           })
           .finally(() => {
             $('.modal-loader').addClass('d-none')
@@ -156,6 +158,9 @@
           $('#userAclForm').find(`[name="user"]`).val(response.data.user)
 
           resolve()
+        },
+        error: error => {
+          reject(error)
         }
       })
     })
@@ -341,6 +346,9 @@
           });
 
           resolve()
+        },
+        error: error => {
+          reject(error)
         }
       })
     })

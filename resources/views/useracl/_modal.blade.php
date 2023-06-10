@@ -206,6 +206,9 @@
       .then(() => {
         $('#crudModal').modal('show')
       })
+      .catch((error) => {
+            showDialog(error.statusText)
+          })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
       })
@@ -234,6 +237,9 @@
         showUserAcl(form, userId)
           .then(() => {
             $('#crudModal').modal('show')
+          })
+          .catch((error) => {
+            showDialog(error.statusText)
           })
           .finally(() => {
             $('.modal-loader').addClass('d-none')
@@ -264,6 +270,9 @@
         showUserAcl(form, userId)
           .then(() => {
             $('#crudModal').modal('show')
+          })
+          .catch((error) => {
+            showDialog(error.statusText)
           })
           .finally(() => {
             $('.modal-loader').addClass('d-none')
@@ -321,6 +330,9 @@
           });
 
           resolve()
+        },
+        error: error => {
+          reject(error)
         }
       })
     })
@@ -346,6 +358,9 @@
             }
           })
           resolve()
+        },
+        error: error => {
+          reject(error)
         }
       })
     })
@@ -372,6 +387,9 @@
         },
         success: response => {
           resolve(response.data)
+        },
+        error: error => {
+          reject(error)
         }
       })
     })

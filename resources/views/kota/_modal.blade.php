@@ -168,7 +168,13 @@
 
             setErrorMessages(form, error.responseJSON.errors);
           } else {
-            showDialog(error.statusText)
+            if (error.responseJSON.errors) {
+              showDialog(error.statusText, error.responseJSON.errors.join('<hr>'))
+            } else if (error.responseJSON.message) {
+              showDialog(error.statusText, error.responseJSON.message)
+            } else {
+              showDialog(error.statusText, error.statusText)
+            }
           }
         },
       }).always(() => {
@@ -218,11 +224,14 @@
     .then(() => {
       showDefault(form)
         .then(() => {
-            $('#crudModal').modal('show')
-          })
-          .finally(() => {
-            $('.modal-loader').addClass('d-none')
-          })
+          $('#crudModal').modal('show')
+        })
+        .catch((error) => {
+          showDialog(error.statusText)
+        })
+        .finally(() => {
+          $('.modal-loader').addClass('d-none')
+        })
     })
   }
 
@@ -250,6 +259,9 @@
         showKota(form, kotaId)
           .then(() => {
             $('#crudModal').modal('show')
+          })
+          .catch((error) => {
+            showDialog(error.statusText)
           })
           .finally(() => {
             $('.modal-loader').addClass('d-none')
@@ -281,6 +293,9 @@
         showKota(form, kotaId)
           .then(() => {
             $('#crudModal').modal('show')
+          })
+          .catch((error) => {
+            showDialog(error.statusText)
           })
           .finally(() => {
             $('.modal-loader').addClass('d-none')
@@ -346,6 +361,9 @@
           });
 
           resolve()
+        },
+        error: error => {
+          reject(error)
         }
       })
     })
@@ -380,6 +398,9 @@
             initDisabled()
           }
           resolve()
+        },
+        error: error => {
+          reject(error)
         }
       })
     })
@@ -428,6 +449,9 @@
             }
           })
           resolve()
+        },
+        error: error => {
+          reject(error)
         }
       })
     })

@@ -147,6 +147,8 @@
   }
 
   function loadDepositoData(id) {
+    abortGridLastRequest($('#depositoGrid'))
+    
     $('#depositoGrid').setGridParam({
       url: `${apiUrl}gajisupirdetail`,
       datatype: "json",

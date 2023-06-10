@@ -12,6 +12,7 @@
       postData: {
         aktif: `{!! $Aktif ?? '' !!}`,
       },         
+      idPrefix: 'jenisOrderLookup',
       colModel: [{
           label: 'ID',
           name: 'id',

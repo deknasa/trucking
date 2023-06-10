@@ -19,6 +19,7 @@
         tgldari: $('#tgldariheaderlookup').val(),
         tglsampai: $('#tglsampaiheaderlookup').val(),
       },
+      idPrefix: 'orderanTruckingLookup',
       colModel: [{
           label: 'ID',
           name: 'id',

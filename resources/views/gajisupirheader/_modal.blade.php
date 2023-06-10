@@ -870,61 +870,14 @@
                                 }
                             }
                         })
-                        // keys = Object.keys(errors)
-                        // keyError = keys[0]
-                        // textError = keyError.substr(0, 9);
-                        // console.log(errors)
-                        // if (textError == 'nominalPS') {
-                        //     pinjSemua = []
-                        //     $('#tbodyPotSemua tr').each(function(row, tr) {
-                        //         if ($(this).find(`[name="pinjSemua[]"]`).is(':checked')) {
-                        //             pinjSemua.push($(this).find(`[name="pinjSemua[]"]`).val())
-                        //         }
-                        //     })
-                        // } else if (textError == 'nominalPP') {
-                        //     pinjPribadi = []
-                        //     $('#tbodyPinjPribadi tr').each(function(row, tr) {
-                        //         if ($(this).find(`[name="pinjPribadi[]"]`).is(':checked')) {
-                        //             pinjPribadi.push($(this).find(`[name="pinjPribadi[]"]`).val())
-                        //         }
-                        //     })
-                        // }
-
-                        // $.each(errors, (index, error) => {
-                        //     let indexes = index.split(".");
-                        //     let angka = indexes[1]
-
-                        //     if (textError == 'nominalPS') {
-                        //         row = pinjSemua[angka] - 1;
-                        //     } else if (textError == 'nominalPP') {
-                        //         row = pinjPribadi[angka] - 1;
-                        //     }
-                        //     let element;
-
-                        //     if (indexes.length > 1) {
-                        //         element = form.find(`[name="${indexes[0]}[]"]`)[row];
-                        //     } else {
-                        //         element = form.find(`[name="${indexes[0]}"]`)[0];
-                        //     }
-
-                        //     $(element).addClass("is-invalid");
-                        //     $(`
-                        //         <div class="invalid-feedback">
-                        //         ${error[0].toLowerCase()}
-                        //         </div>
-                        //     `).appendTo($(element).parent());
-
-                        //     if ($(element).length > 0 && $(element).is(":hidden")) {
-                        //         return showDialog(error);
-                        //     }
-                        //     if (keyError == 'rincian') {
-                        //         return showDialog(error);
-                        //     }
-
-                        // });
-                        // setErrorMessagesCheckForm(form, error.responseJSON.errors);
                     } else {
-                        showDialog(error.statusText)
+                        if (error.responseJSON.errors) {
+                            showDialog(error.statusText, error.responseJSON.errors.join('<hr>'))
+                        } else if (error.responseJSON.message) {
+                            showDialog(error.statusText, error.responseJSON.message)
+                        } else {
+                            showDialog(error.statusText, error.statusText)
+                        }
                     }
                 },
             }).always(() => {
@@ -1042,6 +995,9 @@
                 form.find(`[name="supir"]`).parent('.input-group').find('.button-clear').remove()
                 form.find(`[name="supir"]`).parent('.input-group').find('.input-group-append').remove()
             })
+            .catch((error) => {
+                showDialog(error.statusText)
+            })
             .finally(() => {
                 $('.modal-loader').addClass('d-none')
             })
@@ -1070,6 +1026,9 @@
                 form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
                 form.find(`[name="supir"]`).parent('.input-group').find('.button-clear').remove()
                 form.find(`[name="supir"]`).parent('.input-group').find('.input-group-append').remove()
+            })
+            .catch((error) => {
+                showDialog(error.statusText)
             })
             .finally(() => {
                 $('.modal-loader').addClass('d-none')
@@ -1378,6 +1337,9 @@
                 success: (response) => {
                     resolve(response);
                 },
+                error: error => {
+                    reject(error)
+                }
             });
         });
     }
@@ -1710,6 +1672,9 @@
                 success: (response) => {
                     resolve(response);
                 },
+                error: error => {
+                    reject(error)
+                }
             });
         });
     }
@@ -2721,6 +2686,9 @@
                     } else {
                         showDialog(error.statusText)
                     }
+                },
+                error: error => {
+                    reject(error)
                 }
             })
         });

@@ -9,6 +9,7 @@
       styleUI: 'Bootstrap4',
       iconSet: 'fontAwesome',
       datatype: "json",
+      idPrefix: 'RoleLookup',
       colModel: [{
           label: 'ID',
           name: 'id',

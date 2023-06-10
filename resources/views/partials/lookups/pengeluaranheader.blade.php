@@ -19,6 +19,7 @@
         tgldari: $('#tgldariheaderlookup').val(),
         tglsampai: $('#tglsampaiheaderlookup').val(),
       },
+      idPrefix: 'pengeluaranHeaderLookup',
       datatype: "json",
       colModel: [{
           label: 'ID',

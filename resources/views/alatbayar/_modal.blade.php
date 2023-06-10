@@ -214,7 +214,13 @@
 
             setErrorMessages(form, error.responseJSON.errors);
           } else {
-            showDialog(error.statusText)
+            if (error.responseJSON.errors) {
+              showDialog(error.statusText, error.responseJSON.errors.join('<hr>'))
+            } else if (error.responseJSON.message) {
+              showDialog(error.statusText, error.responseJSON.message)
+            } else {
+              showDialog(error.statusText, error.statusText)
+            }
           }
         },
       }).always(() => {
@@ -268,6 +274,9 @@
           .then(() => {
             $('#crudModal').modal('show')
           })
+          .catch((error) => {
+            showDialog(error.statusText)
+          })
           .finally(() => {
             $('.modal-loader').addClass('d-none')
           })
@@ -302,6 +311,9 @@
           .then(() => {
             $('#crudModal').modal('show')
           })
+          .catch((error) => {
+            showDialog(error.statusText)
+          })
           .finally(() => {
             $('.modal-loader').addClass('d-none')
           })
@@ -334,6 +346,9 @@
         showAlatBayar(form, alatBayarId)
           .then(() => {
             $('#crudModal').modal('show')
+          })
+          .catch((error) => {
+            showDialog(error.statusText)
           })
           .finally(() => {
             $('.modal-loader').addClass('d-none')
@@ -400,6 +415,9 @@
           });
 
           resolve()
+        },
+        error: error => {
+          reject(error)
         }
       })
     })
@@ -437,6 +455,9 @@
           });
 
           resolve()
+        },
+        error: error => {
+          reject(error)
         }
       })
     })
@@ -473,6 +494,9 @@
             relatedForm.find('[name=statuslangsungcair]').append(option).trigger('change')
           });
           resolve()
+        },
+        error: error => {
+          reject(error)
         }
       })
     })
@@ -500,6 +524,9 @@
             }
           })
           resolve()
+        },
+        error: error => {
+          reject(error)
         }
       })
     })
@@ -536,6 +563,9 @@
             initDisabled()
           }
           resolve()
+        },
+        error: error => {
+          reject(error)
         }
       })
     })

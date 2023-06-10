@@ -19,6 +19,7 @@
         tgldari: $('#tgldariheaderlookup').val(),
         tglsampai: $('#tglsampaiheaderlookup').val(),
       },
+      idPrefix: 'pemutihanSupirLookup',
       colModel: [{
           label: 'ID',
           name: 'id',

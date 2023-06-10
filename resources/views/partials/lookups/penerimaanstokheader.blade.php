@@ -24,6 +24,7 @@
         tgldari: $('#tgldariheaderlookup').val(),
         tglsampai: $('#tglsampaiheaderlookup').val(),
       },
+      idPrefix: 'penerimaanStokHeaderLookup',
       colModel: [{
             label: 'ID',
             name: 'id',

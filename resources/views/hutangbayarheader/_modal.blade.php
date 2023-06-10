@@ -450,7 +450,13 @@
               }
             });
           } else {
-            showDialog(error.statusText)
+            if (error.responseJSON.errors) {
+              showDialog(error.statusText, error.responseJSON.errors.join('<hr>'))
+            } else if (error.responseJSON.message) {
+              showDialog(error.statusText, error.responseJSON.message)
+            } else {
+              showDialog(error.statusText, error.statusText)
+            }
           }
         },
       }).always(() => {
@@ -581,6 +587,9 @@
         form.find(`[name="bank"]`).parent('.input-group').find('.button-clear').remove()
 
       })
+      .catch((error) => {
+        showDialog(error.statusText)
+      })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
       })
@@ -609,6 +618,9 @@
         clearSelectedRows()
         $('#gs_').prop('checked', false)
         $('#crudModal').modal('show')
+      })
+      .catch((error) => {
+        showDialog(error.statusText)
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
@@ -694,6 +706,9 @@
           });
 
           resolve()
+        },
+        error: error => {
+          reject(error)
         }
       })
     })
@@ -1106,6 +1121,9 @@
         success: (response) => {
           resolve(response);
         },
+        error: error => {
+          reject(error)
+        }
       });
     });
   }

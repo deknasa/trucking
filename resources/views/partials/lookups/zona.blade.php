@@ -11,6 +11,7 @@
       postData: {
         aktif: `{!! $Aktif ?? '' !!}`,
       },         
+      idPrefix: 'ZonaLookup',
       colModel: [{
           label: 'ID',
           name: 'id',

@@ -14,6 +14,7 @@
         bank_id: `{!! $bank_Id?? '' !!}`,
         aktif: `{!! $Aktif ?? '' !!}`,        
       },      
+      idPrefix: 'alatBayarLookup',
       colModel: [{
           label: 'ID',
           name: 'id',

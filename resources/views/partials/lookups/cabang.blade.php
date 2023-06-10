@@ -12,6 +12,7 @@
       postData: {
         aktif: `{!! $Aktif ?? '' !!}`,
       },          
+      idPrefix: 'cabangLookup',
       colModel: [{
           label: 'ID',
           name: 'id',

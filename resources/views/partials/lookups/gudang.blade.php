@@ -13,6 +13,7 @@
         filters: `{!! $filters ?? '' !!}`,
         aktif: `{!! $Aktif ?? '' !!}`,
       },
+      idPrefix: 'gudangLookup',
       colModel: [{
           label: 'ID',
           name: 'id',

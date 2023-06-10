@@ -175,11 +175,4 @@
       page: 1
     }).trigger('reloadGrid')
   }
-
-  // var $footRow = $("#detail").closest(".ui-jqgrid-bdiv")
-  //   .next(".ui-jqgrid-sdiv")
-  //   .find(".footrow");
-
-  // $footRow.find('>td[aria-describedby="detail_nobukti"]')
-  //   .css("border-right-color", "transparent");
 </script>

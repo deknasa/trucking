@@ -275,13 +275,12 @@
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
-          if (data.data.length == 0) {
-            $('#detail').jqGrid('setGridParam', {
-              postData: {
-                jurnalumum_id: 0,
-              },
-            }).trigger('reloadGrid');
+
+          if (data.data.length === 0) {
+            abortGridLastRequest($('#detail'))
+            clearGridData($('#detail'))
           }
+          
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))

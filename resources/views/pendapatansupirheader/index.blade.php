@@ -348,13 +348,14 @@
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
-          if (data.data.length == 0) {
-            $('#historyGrid').jqGrid('setGridParam', {
-              postData: {
-                pendapatansupir_id: 0,
-              },
-            }).trigger('reloadGrid');
+
+          if (data.data.length === 0) {
+            abortGridLastRequest($('#detail'))
+            clearGridData($('#detail'))
+            abortGridLastRequest($('#historyGrid'))
+            clearGridData($('#historyGrid'))
           }
+          
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))

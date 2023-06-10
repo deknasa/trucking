@@ -83,6 +83,14 @@
           $('.invalid-feedback').remove()
 
           setErrorMessages(form, error.responseJSON.errors);
+        } else {
+          if (error.responseJSON.errors) {
+            showDialog(error.statusText, error.responseJSON.errors.join('<hr>'))
+          } else if (error.responseJSON.message) {
+            showDialog(error.statusText, error.responseJSON.message)
+          } else {
+            showDialog(error.statusText, error.statusText)
+          }
         }
       }
     }).always(() => {
@@ -352,6 +360,9 @@
           });
 
           resolve()
+        },
+        error: error => {
+          reject(error)
         }
       })
     })

@@ -20,6 +20,7 @@
         statuslongtrip: `{!! $statuslongtrip ?? '' !!}`,
         filters: `{!! $filters ?? '' !!}`
       },
+      idPrefix: 'jobTruckingLookup',
       colModel: [{
           label: 'JOB TRUCKING',
           name: 'jobtrucking',

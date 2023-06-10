@@ -20,6 +20,7 @@
         tglsampai: $('#tglsampaiheaderlookup').val(),
 
       },
+      idPrefix: 'suratpengantarLookup',
       colModel: [{
           label: 'ID',
           name: 'id',
