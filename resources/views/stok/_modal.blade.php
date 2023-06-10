@@ -122,11 +122,11 @@
                     <label class="col-form-label">Upload Foto Stok</label>
                   </div>
                 </div>
-                <div class="dropzone" data-field="gambar" id="my-dropzone" style="padding: 0; min-width: 202px !important; min-height: 234px !important; display:flex;"></div>
+                <div class="dropzone" data-field="gambar" id="my-dropzone"></div>
 
                 <div class="dz-preview dz-file-preview">
                   <div class="dz-details" >
-                    <img data-dz-thumbnail style="width:100%" />
+                    <img data-dz-thumbnail />
                   </div>
                 </div>
                 <!-- <div class="dropzone" data-field="gambar" style="padding: 0; min-width: 202px !important; min-height: 234px !important">
@@ -166,11 +166,9 @@
   let hasFormBindKeys = false
   let modalBody = $('#crudModal').find('.modal-body').html()
   let dropzones = []
-  let maxLengthForDropzone = 5;
+  
   $(document).ready(function() {
-
-
-
+    $(document).on('dblclick', '[data-dz-thumbnail]', handleImageClick)
     $(document).on('click', '.rmv', function(event) {
       deleteRow($(this).parents('tr'))
     })
@@ -549,7 +547,22 @@
 
   }
 
+  function handleImageClick(event) {
+    event.preventDefault();
+    let imageUrl = event.target.src;
+    if (imageUrl.substr(0, 4) == 'data') {
+      var image = new Image();
+      image.src = imageUrl;
+      var w = window.open("");
+      w.document.write(image.outerHTML);
+    } else {
+      window.open(imageUrl);
+    }
+
+  }
+  
   function initDropzone(action, data = null) {
+    let buttonRemoveDropzone = `<i class="fas fa-times-circle"></i>`
     $('.dropzone').each((index, element) => {
       if (!element.dropzone) {
         let newDropzone = new Dropzone(element, {
@@ -559,13 +572,15 @@
           thumbnailHeight: null,
           autoProcessQueue: false,
           addRemoveLinks: true,
+          dictRemoveFile: buttonRemoveDropzone,
           acceptedFiles: 'image/*',
-          maxFiles: maxLengthForDropzone,
           paramName: $(element).data('field'),
           init: function() {
             dropzones.push(this)
-            this.on("maxfilesexceeded", function(file) {
-              this.removeFile(file);
+            this.on("addedfile", function(file) {
+              if(this.files.length > 5){
+                this.removeFile(file);
+              }
             });
           }
         })

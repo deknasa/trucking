@@ -180,7 +180,7 @@
                     <label class="col-form-label">Upload Foto Peta</label>
                   </div>
                 </div>
-                <div class="dropzone" data-field="gambar" id="my-dropzone" style="padding: 0; min-width: 202px !important; min-height: 234px !important; display:flex;"></div>
+                <div class="dropzone" data-field="gambar" id="my-dropzone" ></div>
 
                 <div class="dz-preview dz-file-preview">
                   <div class="dz-details">
@@ -288,9 +288,9 @@
   let modalBody = $('#crudModal').find('.modal-body').html()
   Dropzone.autoDiscover = false;
   let dropzones = []
-  let maxLengthForDropzone = 5;
 
   $(document).ready(function() {
+    $(document).on('dblclick', '[data-dz-thumbnail]', handleImageClick)
     $('#kotatarif').hide()
     $("#crudForm [name]").attr("autocomplete", "off");
 
@@ -547,7 +547,6 @@
 
     $('#crudForm').find('[name=tglmulaiberlaku]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
     $('#crudForm').find('[name=tglakhirberlaku]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-    maxLengthForDropzone = 5
 
     Promise
       .all([
@@ -695,8 +694,25 @@
       })
     }
   }
+  
+  function handleImageClick(event) {
+    event.preventDefault();
+    let imageUrl = event.target.src;
+    if (imageUrl.substr(0, 4) == 'data') {
+      var image = new Image();
+      image.src = imageUrl;
+      var w = window.open("");
+      w.document.write(image.outerHTML);
+    }else{
+      window.open(imageUrl);
+    }
+
+  }
+
 
   function initDropzone(action, data = null) {
+    let buttonRemoveDropzone = `<i class="fas fa-times-circle"></i>`
+    
     $('.dropzone').each((index, element) => {
       if (!element.dropzone) {
         let newDropzone = new Dropzone(element, {
@@ -706,50 +722,28 @@
           thumbnailHeight: null,
           autoProcessQueue: false,
           addRemoveLinks: true,
+          dictRemoveFile: buttonRemoveDropzone,
           acceptedFiles: 'image/*',
-          maxFiles: maxLengthForDropzone,
           paramName: $(element).data('field'),
           init: function() {
             dropzones.push(this)
-            this.on("maxfilesexceeded", function(file) {
-              this.removeFile(file);
+            this.on("addedfile", function(file) {
+              if(this.files.length > 5){
+                this.removeFile(file);
+              }
             });
           }
         })
       }
       element.dropzone.removeAllFiles()
-      // console.log(element.dropzone.removeAllFiles())
       if (action == 'edit' || action == 'delete') {
         assignAttachment(element.dropzone, data)
       }
     })
   }
 
-  // function assignAttachment(dropzone, data) {
-  //   console.log(dropzone)
-  //   if (data['gambar'] != '') {
-  //     let files = JSON.parse(data['gambar'])
-
-  //     files.forEach((file) => {
-  //       getImgURL(`${apiUrl}upahsupir/${file}/ori`, (fileBlob) => {
-  //         let imageFile = new File([fileBlob], file, {
-  //           type: 'image/jpeg',
-  //           lastModified: new Date().getTime()
-  //         }, 'utf-8')
-  //         if (fileBlob.type != 'text/html') {
-  //           dropzone.options.addedfile.call(dropzone, imageFile);
-  //           dropzone.options.thumbnail.call(dropzone, imageFile, `${apiUrl}upahsupir/${file}/ori`);
-  //           dropzone.files.push(imageFile)
-  //         }
-  //       })
-  //     })
-  //   }
-  // }
-
-
   function assignAttachment(dropzone, data) {
     const paramName = dropzone.options.paramName
-    console.log(dropzone)
     const type = paramName.substring(5)
 
     if (data[paramName] == '') {
@@ -760,13 +754,9 @@
             autoProcessQueue: false,
             addRemoveLinks: true,
             acceptedFiles: 'image/*',
-            maxFiles: 5,
             paramName: $(element).data('field'),
             init: function() {
               dropzones.push(this)
-              this.on("maxfilesexceeded", function(file) {
-                this.removeFile(file);
-              });
             }
           })
         }
@@ -982,7 +972,6 @@
 
           })
 
-          maxLengthForDropzone = 5 - response.count
           initAutoNumeric(form.find(`[name="jarak"]`), {
             minimumValue: 0
           })
@@ -1366,7 +1355,15 @@
 
         $('#crudForm [name=parent_id]').first().val(upahsupir.id)
         $('#crudForm [name=parent]').first().val(upahsupir.kotasampai_id)
-        $('#crudForm').find(`[name=kotasampai]`).prop('readonly', false)
+
+        $('#crudForm').find(`[name=penyesuaian]`).val('').prop('readonly', false)
+        $('#crudForm [name=kotasampai_id]').val('')
+        $('#crudForm').find(`[name=kotasampai]`).val('').prop('readonly', false)
+        $('#kotaupahsupir').prop('disabled', false)
+        $('#kotaupahsupir').parent('.input-group').show()
+        $('#kotatarif').prop('type', 'hidden')
+        $('#kotatarif').prop('disabled', true).hide()
+        
         element.data('currentValue', element.val())
         upahSupirKota = upahsupir.kotasampai_id;
         // Menghapus nilai autonumeric pada input jarak
