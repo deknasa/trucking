@@ -143,7 +143,7 @@
                     </div>
                   </div>
     
-                  <div class="form-group col-md-6">
+                  {{-- <div class="form-group col-md-6">
                     <div class="row">
                       <div class="col-12 col-sm-3 col-md-4">
                         <label class="col-form-label">penerimaan stok nobukti </label>
@@ -152,7 +152,7 @@
                         <input type="text" name="penerimaanstok_nobukti" class="form-control penerimaanstokheader-lookup">
                       </div>
                     </div>
-                  </div>
+                  </div> --}}
                   
                   <div class="form-group col-md-6">
                     <div class="row">

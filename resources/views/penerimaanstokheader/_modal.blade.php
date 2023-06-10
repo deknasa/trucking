@@ -224,7 +224,7 @@
 
             </div>
 
-            <div class="row form-group">
+            <div class="row form-group" style="display:none">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">keterangan </label>
               </div>
@@ -290,7 +290,7 @@
   let hasFormBindKeys = false
   let modalBody = $('#crudModal').find('.modal-body').html()
   var KodePenerimaanId
-
+  var listKodePenerimaan =[];
   $(document).ready(function() {
     addRow()
     $(document).on('click', '#addRow', function(event) {
@@ -440,22 +440,22 @@
   function setTampilanForm() {
     tampilanall()
     switch (KodePenerimaanId) {
-      case 'DOT':
+      case listKodePenerimaan[0] : // 'DOT':
         tampilandot()
         break;
-      case 'PO':
+      case listKodePenerimaan[1] : // 'PO':
         tampilanpo()
         break;
-      case 'SPB':
+      case listKodePenerimaan[2] : // 'SPB':
         tampilanpbt()
         break;
-      case 'PG':
+      case listKodePenerimaan[4] : // 'PG':
         tampilanpgt()
         break;
-      case 'KOR':
+      case listKodePenerimaan[3] : // 'KOR':
         tampilankst()
         break;
-      case 'SPBS':
+      case listKodePenerimaan[5] : // 'SPBS':
         tampilanpst()
         break;
 
@@ -799,7 +799,7 @@
         })
         sumary()
         setTampilanForm()
-        if (KodePenerimaanId === 'SPB') {
+        if (KodePenerimaanId === listKodePenerimaan[2]) {
           $('#addRow').hide()
         }else{
           $('#addRow').show()
@@ -1036,7 +1036,7 @@
     let form = $('#crudForm')
 
     setFormBindKeys(form)
-
+    penerimaanStok(form);
     activeGrid = null
     initDatepicker()
     initLookup()
@@ -1047,6 +1047,7 @@
       $('#penerimaanstokId').attr('readonly', true);
       console.log($('#crudForm').find(`[name="penerimaanstok"]`).val());
     }
+      
       
     getMaxLength(form)
   })
@@ -1342,6 +1343,28 @@
     
   }
 
+  function penerimaanStok(form) {
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `${apiUrl}penerimaanstok`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          // console.log(response.data);
+          $.each(response.data, (index,data) => {
+            // console.log();
+
+            listKodePenerimaan[index] = data.kodepenerimaan;
+          })
+
+        }
+      })
+    })
+  }
+
   function showPenerimaanstokHeader(form, penerimaanStokHeaderId) {
     return new Promise((resolve, reject) => {
       resetRow()
@@ -1465,7 +1488,7 @@
           sumary()
           setKodePenerimaan(response.data.penerimaanstok);
          
-          if (KodePenerimaanId === 'SPB') {
+          if (KodePenerimaanId === listKodePenerimaan[2]) {
             $('#addRow').hide()
           }else{
             $('#addRow').show()
