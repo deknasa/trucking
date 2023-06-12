@@ -242,7 +242,7 @@
                     <th style="width: 20%; min-width: 200px;">stok <span class="text-danger">*</span> </th>
                     <th class="data_tbl tbl_vulkanisirke" style="width: 10px">vulkanisir ke</th>
                     <th style="width: 20%; min-width: 200px;">keterangan <span class="text-danger">*</span> </th>
-                    <th class="data_tbl tbl_qty" style="width:10%; min-width: 100px">qty</th>
+                    <th class="data_tbl tbl_qty" style="width:10%; min-width: 100px">qty <span class="text-danger">*</span></th>
                     <th class="data_tbl tbl_harga" style="width: 20%; min-width: 200px;">harga</th>
                     <th class="data_tbl tbl_penerimaanstok_nobukti"  style="width: 20%; min-width: 200px;">Penerimaan stok no bukti</th>
                     <th class="data_tbl tbl_persentase" style="width:10%; min-width: 100px">persentase discount</th>
@@ -1129,9 +1129,34 @@
       .all([
         showPenerimaanstokHeader(form, penerimaanStokHeaderId)
       ])
-      .then(() => {
-        $('#crudModal').modal('show')
-      })
+      .then(penerimaanStokHeaderId => {
+            setFormBindKeys(form)
+            initDatepicker()
+            initSelect2(form.find('.select2bs4'), true)
+            form.find('[name]').removeAttr('disabled')
+
+            form.find('select').each((index, select) => {
+              let element = $(select)
+
+              if (element.data('select2')) {
+                element.select2('destroy')
+              }
+            })
+
+            form.find('[name]').attr('readonly', 'readonly').css({
+              background: '#fff'
+            })
+
+          })
+          .then(() => {
+            $('#crudModal').modal('show')
+            $('#crudForm').find(`.ui-datepicker-trigger`).attr('readonly', true)
+
+            let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
+            name.attr('disabled', true)
+            name.find('.lookup-toggler').attr('disabled', true)
+
+          })
       .catch((error) => {
         showDialog(error.statusText)
       })
@@ -1494,7 +1519,7 @@
           if (KodePenerimaanId === listKodePenerimaan[2]) {
             $('#addRow').hide()
           }else{
-            $('#addRow').show()
+            $('#addRow').hide()
           }
           resolve()
         },
