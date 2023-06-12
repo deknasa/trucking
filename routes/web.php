@@ -211,6 +211,7 @@ use App\Http\Controllers\LaporanWarkatBelumCairController;
 use App\Http\Controllers\LaporanPenyesuaianBarangController;
 use App\Http\Controllers\LaporanPemakaianBanController;
 use App\Http\Controllers\LaporanTransaksiHarianController;
+use App\Http\Controllers\DataRitasiController;
 
 
 
@@ -270,6 +271,15 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('cabang/export', [CabangController::class, 'export'])->name('cabang.export');
     Route::get('cabang/report', [CabangController::class, 'report'])->name('cabang.report');
     Route::resource('cabang', CabangController::class);
+
+    Route::get('dataritasi/field_length', [DataRitasiController::class, 'fieldLength'])->name('dataritasi.field_length');
+    Route::get('dataritasi/{id}/delete', [DataRitasiController::class, 'delete'])->name('dataritasi.delete');
+    Route::get('dataritasi/index', [DataRitasiController::class, 'index']);
+    Route::get('dataritasi/get', [DataRitasiController::class, 'get'])->name('dataritasi.get');
+    Route::get('dataritasi/export', [DataRitasiController::class, 'export'])->name('dataritasi.export');
+    Route::get('dataritasi/report', [DataRitasiController::class, 'report'])->name('dataritasi.report');
+    Route::resource('dataritasi', DataRitasiController::class);
+
 
 
     Route::get('gandengan/field_length', [GandenganController::class, 'fieldLength'])->name('gandengan.field_length');
