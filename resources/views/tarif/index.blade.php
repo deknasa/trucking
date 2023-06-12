@@ -380,9 +380,15 @@
             innerHTML: '<i class="fa fa-print"></i> REPORT',
             class: 'btn btn-info btn-sm mr-1',
             onClick: () => {
-              $('#rangeModal').data('action', 'report')
-              $('#rangeModal').find('button:submit').html(`Report`)
-              $('#rangeModal').modal('show')
+              // $('#rangeModal').data('action', 'report')
+              // $('#rangeModal').find('button:submit').html(`Report`)
+              // $('#rangeModal').modal('show')
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Please select a row')
+              } else {
+                window.open(`{{ route('tarif.report') }}?id=${selectedId}`)
+              }
             }
           },
           {
@@ -434,6 +440,36 @@
     $('#export .ui-pg-div')
       .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
+
+      $('#rangeTglModal').on('shown.bs.modal', function() {
+
+
+        initDatepicker()
+
+        $('#formRangeTgl').find('[name=dari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+        $('#formRangeTgl').find('[name=sampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+
+        })
+
+        $('#formRangeTgl').submit(event => {
+        event.preventDefault()
+
+        getCekExport()
+        .then((response) => {
+          let actionUrl = `{{ route('upahritasi.export') }}`
+
+            /* Clear validation messages */
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+
+
+            window.open(`${actionUrl}?${$('#formRangeTgl').serialize()}`)
+        })
+        .catch((error) => {
+          setErrorMessages($('#formRangeTgl'), error.responseJSON.errors);
+        })
+
+        })
 
     if (!`{{ $myAuth->hasPermission('tarif', 'store') }}`) {
       $('#add').attr('disabled', 'disabled')
