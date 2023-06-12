@@ -742,6 +742,7 @@
           `)
           detailRow.find(`[name="detail_nobukti[]"]`).val(detail.nobukti)
           detailRow.find(`[name="detail_stok[]"]`).val(detail.stok)
+          detailRow.find(`[name="detail_stok[]"]`).data('currentValue',detail.stok)
           detailRow.find(`[name="detail_stok_id[]"]`).val(detail.stok_id)
           detailRow.find(`[name="detail_qty[]"]`).val(detail.qty)
           detailRow.find(`[name="detail_harga[]"]`).val(detail.harga)
@@ -756,9 +757,13 @@
             title: 'stok Lookup',
             fileName: 'stok',
             beforeProcess: function(test) {
+              var penerimaanstokId = $(`#penerimaanstokId`).val();
+              var penerimaanstok_nobukti = $('#crudModal').find(`[name=penerimaanstok_nobukti]`).val();
+              console.log(penerimaanstok_nobukti);
               this.postData = {
+                penerimaanstok_id: penerimaanstokId,
+                penerimaanstokheader_nobukti: penerimaanstok_nobukti,
                 Aktif: 'AKTIF',
-
               }
             },
             onSelectRow: (stok, element) => {
@@ -769,6 +774,12 @@
             },
             onCancel: (element) => {
               element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+              element.val('')
+              parent = element.closest('td');
+              parent.children('.detailpenerimaanstoknobuktiId').val('')
+              element.data('currentValue', element.val())
             }
           })
           $(`#detail_penerimaanstoknobukti_${id}`).lookup({
@@ -791,7 +802,7 @@
             onClear: (element) => {
               element.val('')
               parent = element.closest('td');
-              parent.children('.detailpenerimaanstoknobuktiId').val('')
+              parent.children('.detailstokId').val('')
               element.data('currentValue', element.val())
             }
           })
@@ -1045,7 +1056,6 @@
       penerimaanstok.attr('disabled', true)
       penerimaanstok.find('.lookup-toggler').attr('disabled', true)
       $('#penerimaanstokId').attr('readonly', true);
-      console.log($('#crudForm').find(`[name="penerimaanstok"]`).val());
     }
       
       
@@ -1474,9 +1484,13 @@
               title: 'stok Lookup',
               fileName: 'stok',
               beforeProcess: function(test) {
+                var penerimaanstokId = $("#crudForm").find(`[name="penerimaanstok_id"]`).val();
+                var penerimaanstok_nobukti = $('#crudModal').find(`[name=penerimaanstok_nobukti]`).val();
+                console.log(penerimaanstok_nobukti);
                 this.postData = {
+                  penerimaanstok_id: penerimaanstokId,
+                  penerimaanstokheader_nobukti: penerimaanstok_nobukti,
                   Aktif: 'AKTIF',
-
                 }
               },
               onSelectRow: (stok, element) => {
@@ -1517,8 +1531,7 @@
           })
           sumary()
           setKodePenerimaan(response.data.penerimaanstok);
-          console.log(response.data.penerimaanstok);
-          console.log(listKodePenerimaan[0]);
+          
           if (KodePenerimaanId === listKodePenerimaan[2]) {
             $('#addRow').hide()
           }else{
