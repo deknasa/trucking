@@ -122,11 +122,11 @@
                     <label class="col-form-label">Upload Foto Stok</label>
                   </div>
                 </div>
-                <div class="dropzone" data-field="gambar" id="my-dropzone" style="padding: 0; min-width: 202px !important; min-height: 234px !important; display:flex;"></div>
+                <div class="dropzone" data-field="gambar" id="my-dropzone"></div>
 
                 <div class="dz-preview dz-file-preview">
                   <div class="dz-details" >
-                    <img data-dz-thumbnail style="width:100%" />
+                    <img data-dz-thumbnail />
                   </div>
                 </div>
                 <!-- <div class="dropzone" data-field="gambar" style="padding: 0; min-width: 202px !important; min-height: 234px !important">
@@ -166,11 +166,9 @@
   let hasFormBindKeys = false
   let modalBody = $('#crudModal').find('.modal-body').html()
   let dropzones = []
-  let maxLengthForDropzone = 5;
+  
   $(document).ready(function() {
-
-
-
+    $(document).on('dblclick', '[data-dz-thumbnail]', handleImageClick)
     $(document).on('click', '.rmv', function(event) {
       deleteRow($(this).parents('tr'))
     })
@@ -339,8 +337,8 @@
       })
 
     initDropzone(form.data('action'))
-    initAutoNumeric(form.find(`[name="qtymin"]`))
-    initAutoNumeric(form.find(`[name="qtymax"]`))
+    initAutoNumeric(form.find(`[name="qtymin"]`),{'maximumValue':10000})
+    initAutoNumeric(form.find(`[name="qtymax"]`),{'maximumValue':10000})
   }
 
   function editStok(stokId) {
@@ -492,7 +490,7 @@
         },
         success: response => {
           $.each(response.data, (index, value) => {
-            console.log(value)
+            // console.log(value)
             let element = form.find(`[name="${index}"]`)
             // let element = form.find(`[name="statusaktif"]`)
 
@@ -537,8 +535,8 @@
           })
           maxLengthForDropzone = 5 - response.count
           resolve(response.data)
-          initAutoNumeric(form.find(`[name="qtymin"]`))
-          initAutoNumeric(form.find(`[name="qtymax"]`))
+          initAutoNumeric(form.find(`[name="qtymin"]`),{'maximumValue':9999})
+          initAutoNumeric(form.find(`[name="qtymax"]`),{'maximumValue':10000})
           resolve()
         },
         error: error => {
@@ -549,7 +547,22 @@
 
   }
 
+  function handleImageClick(event) {
+    event.preventDefault();
+    let imageUrl = event.target.src;
+    if (imageUrl.substr(0, 4) == 'data') {
+      var image = new Image();
+      image.src = imageUrl;
+      var w = window.open("");
+      w.document.write(image.outerHTML);
+    } else {
+      window.open(imageUrl);
+    }
+
+  }
+  
   function initDropzone(action, data = null) {
+    let buttonRemoveDropzone = `<i class="fas fa-times-circle"></i>`
     $('.dropzone').each((index, element) => {
       if (!element.dropzone) {
         let newDropzone = new Dropzone(element, {
@@ -559,14 +572,25 @@
           thumbnailHeight: null,
           autoProcessQueue: false,
           addRemoveLinks: true,
+          dictRemoveFile: buttonRemoveDropzone,
           acceptedFiles: 'image/*',
-          maxFiles: maxLengthForDropzone,
           paramName: $(element).data('field'),
           init: function() {
+            checkIsPhotExist(this.files, data)
             dropzones.push(this)
-            this.on("maxfilesexceeded", function(file) {
-              this.removeFile(file);
+            this.on("addedfile", function(file) {
+              if(this.files.length > 5){
+                this.removeFile(file);
+              }
+              checkIsPhotExist(this.files, data)
             });
+
+          },
+          removedfile: function(file) {
+            
+            file.previewElement.remove();
+            checkIsPhotExist(this.files, data)
+
           }
         })
       }
@@ -576,7 +600,16 @@
       if (action == 'edit' || action == 'delete') {
         assignAttachment(element.dropzone, data)
       }
-    })
+    })    
+  }
+
+  function checkIsPhotExist(files, data) {
+    
+    if (files.length > 0) {
+      $('#crudForm').find(`[name="namaterpusat"]`).prop('disabled',false)
+    }else{
+      $('#crudForm').find(`[name="namaterpusat"]`).prop('disabled',true)
+    }
   }
 
   function assignAttachment(dropzone, data) {
@@ -594,6 +627,8 @@
             paramName: $(element).data('field'),
             init: function() {
               dropzones.push(this)
+              console.log(this.files.length);
+              checkIsPhotExist(this, data)
             }
           })
         }
@@ -603,7 +638,7 @@
     } else {
 
       let files = JSON.parse(data[paramName])
-
+      checkIsPhotExist(files, data)
       files.forEach((file) => {
         getImgURL(`${apiUrl}stok/${file}/ori`, (fileBlob) => {
           let imageFile = new File([fileBlob], file, {
@@ -614,6 +649,7 @@
           dropzone.options.addedfile.call(dropzone, imageFile);
           dropzone.options.thumbnail.call(dropzone, imageFile, `${apiUrl}stok/${file}/ori`);
           dropzone.files.push(imageFile)
+  
         })
       })
     }
@@ -780,7 +816,7 @@
   function getImgURL(url, callback) {
     var xhr = new XMLHttpRequest();
     xhr.onload = function() {
-      console.log(xhr.response);
+      // console.log(xhr.response);
       callback(xhr.response);
     };
     xhr.open('GET', url);

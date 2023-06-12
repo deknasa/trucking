@@ -84,7 +84,7 @@
                 </div>
               </div> -->
 
-              
+
 
               <div class="form-group col-sm-6 row">
                 <label class="col-sm-4 col-form-label">Tgl Terbit SIM<span class="text-danger">*</span></label>
@@ -169,11 +169,18 @@
                     <label class="col-form-label">Upload Foto Supir <span class="text-danger">*</span></label>
                   </div>
                 </div>
-                <div class="dropzone dropzoneImg" data-field="photosupir">
+                <div class="dropzone dropzoneImg" data-field="photosupir" id="my-dropzone"></div>
+
+                <div class="dz-preview dz-file-preview">
+                  <div class="dz-details">
+                    <img data-dz-thumbnail />
+                  </div>
+                </div>
+                <!-- <div class="dropzone dropzoneImg" data-field="photosupir">
                   <div class="fallback">
                     <input name="photosupir" type="file" />
                   </div>
-                </div>
+                </div> -->
               </div>
 
               <div class="col-md-4">
@@ -182,11 +189,18 @@
                     <label class="col-form-label">Upload Foto KTP <span class="text-danger">*</span></label>
                   </div>
                 </div>
-                <div class="dropzone dropzoneImg" data-field="photoktp">
+                <div class="dropzone dropzoneImg" data-field="photoktp" id="my-dropzone"></div>
+
+                <div class="dz-preview dz-file-preview">
+                  <div class="dz-details">
+                    <img data-dz-thumbnail />
+                  </div>
+                </div>
+                <!-- <div class="dropzone dropzoneImg" data-field="photoktp">
                   <div class="fallback">
                     <input name="photoktp" type="file" />
                   </div>
-                </div>
+                </div> -->
               </div>
 
               <div class="col-md-4">
@@ -195,11 +209,18 @@
                     <label class="col-form-label">Upload Foto SIM <span class="text-danger">*</span></label>
                   </div>
                 </div>
-                <div class="dropzone dropzoneImg" data-field="photosim">
+                <div class="dropzone dropzoneImg" data-field="photosim" id="my-dropzone"></div>
+
+                <div class="dz-preview dz-file-preview">
+                  <div class="dz-details">
+                    <img data-dz-thumbnail />
+                  </div>
+                </div>
+                <!-- <div class="dropzone dropzoneImg" data-field="photosim">
                   <div class="fallback">
                     <input name="photosim" type="file" />
                   </div>
-                </div>
+                </div> -->
               </div>
             </div>
 
@@ -209,12 +230,19 @@
                   <div class="col">
                     <label class="col-form-label">Upload Foto KK <span class="text-danger">*</span></label>
                   </div>
+                </div>                
+                <div class="dropzone dropzoneImg" data-field="photokk" id="my-dropzone"></div>
+
+                <div class="dz-preview dz-file-preview">
+                  <div class="dz-details">
+                    <img data-dz-thumbnail />
+                  </div>
                 </div>
-                <div class="dropzone dropzoneImg" data-field="photokk">
+                <!-- <div class="dropzone dropzoneImg" data-field="photokk">
                   <div class="fallback">
                     <input name="photokk" type="file" />
                   </div>
-                </div>
+                </div> -->
               </div>
 
               <div class="col-md-4">
@@ -222,12 +250,19 @@
                   <div class="col">
                     <label class="col-form-label">Upload Foto SKCK <span class="text-danger">*</span></label>
                   </div>
+                </div>        
+                <div class="dropzone dropzoneImg" data-field="photoskck" id="my-dropzone"></div>
+
+                <div class="dz-preview dz-file-preview">
+                  <div class="dz-details">
+                    <img data-dz-thumbnail />
+                  </div>
                 </div>
-                <div class="dropzone dropzoneImg" data-field="photoskck">
+                <!-- <div class="dropzone dropzoneImg" data-field="photoskck">
                   <div class="fallback">
                     <input name="photoskck" type="file" />
                   </div>
-                </div>
+                </div> -->
               </div>
 
               <div class="col-md-4">
@@ -235,12 +270,19 @@
                   <div class="col">
                     <label class="col-form-label">Upload Foto Domisili <span class="text-danger">*</span></label>
                   </div>
+                </div>  
+                <div class="dropzone dropzoneImg" data-field="photodomisili" id="my-dropzone"></div>
+
+                <div class="dz-preview dz-file-preview">
+                  <div class="dz-details">
+                    <img data-dz-thumbnail />
+                  </div>
                 </div>
-                <div class="dropzone dropzoneImg" data-field="photodomisili">
+                <!-- <div class="dropzone dropzoneImg" data-field="photodomisili">
                   <div class="fallback">
                     <input name="photodomisili" type="file" />
                   </div>
-                </div>
+                </div> -->
               </div>
 
               <div class="col-md-4">
@@ -249,11 +291,18 @@
                     <label class="col-form-label">Upload Foto Vaksin <span class="text-danger">*</span></label>
                   </div>
                 </div>
-                <div class="dropzone dropzoneImg" data-field="photovaksin">
+                <div class="dropzone dropzoneImg" data-field="photovaksin" id="my-dropzone"></div>
+
+                <div class="dz-preview dz-file-preview">
+                  <div class="dz-details">
+                    <img data-dz-thumbnail />
+                  </div>
+                </div>
+                <!-- <div class="dropzone dropzoneImg" data-field="photovaksin">
                   <div class="fallback">
                     <input name="photovaksin" type="file" />
                   </div>
-                </div>
+                </div> -->
               </div>
 
               <div class="col-md-4">
@@ -295,6 +344,7 @@
   let modalBody = $('#crudModal').find('.modal-body').html()
 
   $(document).ready(function() {
+    $(document).on('dblclick', '[data-dz-thumbnail]', handleImageClick)
     $(document).on('click', '#btnSubmit', function(event) {
       event.preventDefault()
 
@@ -347,7 +397,7 @@
         success: response => {
           $('#crudForm').trigger('reset')
           $('#crudModal').modal('hide')
-
+          indexRow =  response.data.position -1
           id = response.data.id
 
           $('#jqGrid').jqGrid('setGridParam', {
@@ -396,6 +446,9 @@
     activeGrid = '#jqGrid'
 
     $('#crudForm [name=nominalpinjamansaldoawal]').attr('value', '')
+    dropzones.forEach(dropzone => {
+      dropzone.removeAllFiles()
+    })
   })
 
   function createSupir() {
@@ -436,7 +489,7 @@
     $('#crudForm').find('[name=tglterbitsim]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
     $('#crudForm').find('[name=tglexpsim]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
-    
+
     initDropzone(form.data('action'))
     initDropzonePdf(form.data('action'))
     initLookup()
@@ -635,17 +688,42 @@
     }
   }
 
+
+  function handleImageClick(event) {
+    event.preventDefault();
+    let imageUrl = event.target.src;
+    if (imageUrl.substr(0, 4) == 'data') {
+      var image = new Image();
+      image.src = imageUrl;
+      var w = window.open("");
+      w.document.write(image.outerHTML);
+    } else {
+      window.open(imageUrl);
+    }
+
+  }
+
   function initDropzone(action, data = null) {
+    let buttonRemoveDropzone = `<i class="fas fa-times-circle"></i>`
     $('.dropzoneImg').each((index, element) => {
       if (!element.dropzone) {
         let newDropzone = new Dropzone(element, {
           url: 'test',
+          previewTemplate: document.querySelector('.dz-preview').innerHTML,
+          thumbnailWidth: null,
+          thumbnailHeight: null,
           autoProcessQueue: false,
           addRemoveLinks: true,
+          dictRemoveFile: buttonRemoveDropzone,
           acceptedFiles: 'image/*',
           paramName: $(element).data('field'),
           init: function() {
             dropzones.push(this)
+            this.on("addedfile", function(file) {
+              if(this.files.length > 5){
+                this.removeFile(file);
+              }
+            });
           }
         })
       }
@@ -659,16 +737,26 @@
   }
 
   function initDropzonePdf(action, data = null) {
+    let buttonRemoveDropzone = `<i class="fas fa-times-circle"></i>`
     $('.dropzonePdf').each((index, element) => {
       if (!element.dropzone) {
         let newDropzone = new Dropzone(element, {
           url: 'test',
           autoProcessQueue: false,
           addRemoveLinks: true,
+          dictRemoveFile: buttonRemoveDropzone,
           acceptedFiles: 'application/pdf',
+          uploadprogress: false,
           paramName: $(element).data('field'),
           init: function() {
             dropzones.push(this)
+            this.on("addedfile", function(file) {
+              if(this.files.length > 1){
+                this.removeFile(file);
+              }
+              
+              // $(file.previewElement).find('img').prop('src',appUrl+'/images/pdf_icon.png')
+            });
           }
         })
       }

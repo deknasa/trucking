@@ -509,7 +509,6 @@
 
                 images.push(image.outerHTML)
               });
-
               return images.join(' ')
             } else {
               let image = new Image()
@@ -520,6 +519,8 @@
             }
           }
         },
+              
+
           {
             label: 'TGL BERHENTI SUPIR',
             name: 'tglberhentisupir',
@@ -557,7 +558,7 @@
                       endforeach
 
                       ?>
-          `,
+              `,
               dataInit: function(element) {
                 $(element).select2({
                   width: 'resolve',

@@ -226,11 +226,18 @@
                     <label class="col-form-label">Upload Foto Trado <span class="text-danger">*</span></label>
                   </div>
                 </div>
-                <div class="dropzone" data-field="phototrado">
+                <div class="dropzone" data-field="phototrado" id="my-dropzone"></div>
+
+                <div class="dz-preview dz-file-preview">
+                  <div class="dz-details">
+                    <img data-dz-thumbnail />
+                  </div>
+                </div>
+                <!-- <div class="dropzone" data-field="phototrado">
                   <div class="fallback">
                     <input name="phototrado" type="file" />
                   </div>
-                </div>
+                </div> -->
               </div>
 
               <div class="col">
@@ -239,11 +246,18 @@
                     <label class="col-form-label">Upload Foto BPKB <span class="text-danger">*</span></label>
                   </div>
                 </div>
-                <div class="dropzone" data-field="photobpkb">
+                <div class="dropzone" data-field="photobpkb" id="my-dropzone"></div>
+
+                <div class="dz-preview dz-file-preview">
+                  <div class="dz-details">
+                    <img data-dz-thumbnail />
+                  </div>
+                </div>
+                <!-- <div class="dropzone" data-field="photobpkb">
                   <div class="fallback">
                     <input name="photobpkb" type="file" />
                   </div>
-                </div>
+                </div> -->
               </div>
 
               <div class="col">
@@ -252,11 +266,18 @@
                     <label class="col-form-label">Upload Foto STNK <span class="text-danger">*</span></label>
                   </div>
                 </div>
-                <div class="dropzone" data-field="photostnk">
+                <div class="dropzone" data-field="photostnk" id="my-dropzone"></div>
+
+                <div class="dz-preview dz-file-preview">
+                  <div class="dz-details">
+                    <img data-dz-thumbnail />
+                  </div>
+                </div>
+                <!-- <div class="dropzone" data-field="photostnk">
                   <div class="fallback">
                     <input name="photostnk" type="file" />
                   </div>
-                </div>
+                </div> -->
               </div>
             </div>
           </div>
@@ -285,6 +306,7 @@
   let dropzones = []
 
   $(document).ready(function() {
+    $(document).on('dblclick', '[data-dz-thumbnail]', handleImageClick)
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
 
@@ -378,6 +400,14 @@
     })
   })
 
+  $('#crudModal').on('hidden.bs.modal', () => {
+    
+    // $('#crudModal').find('.modal-body').html(modalBody)
+    dropzones.forEach(dropzone => {
+      dropzone.removeAllFiles()
+    })
+  })
+
   function cekValidasidelete(Id) {
     $.ajax({
       url: `{{ config('app.api_url') }}trado/${Id}/cekValidasi`,
@@ -415,7 +445,6 @@
     $('#crudModalTitle').text('Create Trado')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-
     Promise
       .all([
         setStatusAktifOptions(form),
@@ -491,7 +520,7 @@
             let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
             name.attr('disabled', false)
             name.find('.lookup-toggler').attr('disabled', false)
-     
+
           })
           .catch((error) => {
             showDialog(error.statusText)
@@ -536,8 +565,8 @@
             initLookup()
             initDatepicker()
             initSelect2(form.find('.select2bs4'), true)
-            form.find('[name]').removeAttr('disabled') 
-          
+            form.find('[name]').removeAttr('disabled')
+
             form.find('select').each((index, select) => {
               let element = $(select)
 
@@ -565,8 +594,8 @@
           })
           .finally(() => {
             $('.modal-loader').addClass('d-none')
-          })  
-      })      
+          })
+      })
   }
 
 
@@ -594,7 +623,6 @@
               element.val(value)
             }
           })
-
           resolve(response.data)
         },
         error: error => {
@@ -660,21 +688,41 @@
     }
   }
 
+  function handleImageClick(event) {
+    event.preventDefault();
+    let imageUrl = event.target.src;
+    if (imageUrl.substr(0, 4) == 'data') {
+      var image = new Image();
+      image.src = imageUrl;
+      var w = window.open("");
+      w.document.write(image.outerHTML);
+    } else {
+      window.open(imageUrl);
+    }
+
+  }
+
   function initDropzone(action, data = null) {
+    let buttonRemoveDropzone = `<i class="fas fa-times-circle"></i>`
     $('.dropzone').each((index, element) => {
       if (!element.dropzone) {
         let newDropzone = new Dropzone(element, {
           url: 'test',
+          previewTemplate: document.querySelector('.dz-preview').innerHTML,
+          thumbnailWidth: null,
+          thumbnailHeight: null,
           autoProcessQueue: false,
           addRemoveLinks: true,
+          dictRemoveFile: buttonRemoveDropzone,
           acceptedFiles: 'image/*',
-          // maxFiles: 5,
           paramName: $(element).data('field'),
           init: function() {
             dropzones.push(this)
-            // this.on("maxfilesexceeded", function(file) {
-            //   this.removeFile(file);
-            // });
+            this.on("addedfile", function(file) {
+              if(this.files.length > 5){
+                this.removeFile(file);
+              }
+            });
           }
         })
       }
@@ -874,7 +922,6 @@
         },
         success: response => {
           $.each(response.data, (index, value) => {
-            console.log(value)
             let element = form.find(`[name="${index}"]`)
             // let element = form.find(`[name="statusaktif"]`)
 
@@ -927,9 +974,12 @@
               }
 
             }
-            
+
+            if (index == 'alamatstnk') {
+              form.find(`[name=alamatstnk]`).attr('maxlength', 255)
+            } 
             if (index == 'jumlahsumbu') {
-                form.find(`[name=jumlahsumbu]`).attr('maxlength', 2)
+              form.find(`[name=jumlahsumbu]`).attr('maxlength', 2)
             }
             if (index == 'isisilinder') {
               form.find(`[name=isisilinder]`).attr('maxlength', 5)
@@ -941,7 +991,6 @@
               form.find(`[name=jumlahbanserap]`).attr('maxlength', 2)
             }
           })
-          console.log(response)
           form.attr('has-maxlength', true)
         },
         error: error => {

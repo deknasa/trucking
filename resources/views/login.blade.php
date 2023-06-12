@@ -9,19 +9,19 @@
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="{{ asset('plugins/fontawesome-free/css/all.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('libraries/adminlte/plugins/fontawesome-free/css/all.min.css') }}">
   <!-- icheck bootstrap -->
-  <link rel="stylesheet" href="{{ asset('plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('libraries/adminlte/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
   <!-- Theme style -->
-  <link rel="stylesheet" href="{{ asset('css/adminlte.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('libraries/adminlte/dist/css/adminlte.min.css') }}">
   <!-- Custom Style -->
-  <link rel="stylesheet" href="{{ asset('css/styles.css?version=' . config('app.version')) }}">
+  <link rel="stylesheet" href="{{ asset('libraries/tas-lib/css/styles.css?version=' . config('app.version')) }}">
 </head>
 
 <body class="hold-transition login-page">
   <div class="login-box">
     <div class="login-logo">
-      <img class="mx-auto d-block" src="{{ asset('images/logo-min.png') }}" width="150" height="150">
+      <img class="mx-auto d-block" src="{{ asset('libraries/tas-lib/img/logo-min.png') }}" width="150" height="150">
       <h5 style="font-family: 'Open Sans Condensed';">PT. TRANSPORINDO AGUNG SEJAHTERA</h5>
       <p style="font-family: 'Open Sans Condensed'; font-size:1rem" class="text-success">TRUCKING DEV</p>
     </div>
@@ -76,11 +76,11 @@
   <p>Halaman ini dimuat selama <strong>{{ number_format(microtime(true) - LARAVEL_START, 2) }}</strong> detik</p>
 
   <!-- jQuery -->
-  <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
+  <script src="{{ asset('libraries/adminlte/plugins/jquery/jquery.min.js') }}"></script>
   <!-- Bootstrap 4 -->
-  <script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+  <script src="{{ asset('libraries/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
   <!-- AdminLTE App -->
-  <script src="{{ asset('js/adminlte.min.js') }}"></script>
+  <script src="{{ asset('libraries/adminlte/dist/js/adminlte.min.js') }}"></script>
 </body>
 
 </html>

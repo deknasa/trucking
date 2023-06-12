@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "88e1616005a4b846807241ae1e42c9c1",
+  "ReportGuid": "b4902a76c374b66a7eb6dabf301cdf54",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportError.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1686293900000+0700)/",
+  "ReportChanged": "/Date(1686535258000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -166,6 +166,7 @@
               "Text": {
                 "Value": "NO"
               },
+              "HorAlignment": "Center",
               "VertAlignment": "Center",
               "Font": ";;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
@@ -183,7 +184,7 @@
               "Ident": "StiText",
               "Name": "Text2",
               "Guid": "621c6cbd6645cf74658ae1711ee876c0",
-              "ClientRectangle": "0.8,0,8.4,0.6",
+              "ClientRectangle": "0.8,0,7.6,0.6",
               "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -191,6 +192,7 @@
               "Text": {
                 "Value": "Kode Error"
               },
+              "HorAlignment": "Center",
               "VertAlignment": "Center",
               "Font": ";;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
@@ -208,7 +210,7 @@
               "Ident": "StiText",
               "Name": "Text3",
               "Guid": "e281e6a9b1cb6c12260e96026a5e227e",
-              "ClientRectangle": "9.2,0,9.8,0.6",
+              "ClientRectangle": "8.4,0,10.6,0.6",
               "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -216,6 +218,7 @@
               "Text": {
                 "Value": "Keterangan"
               },
+              "HorAlignment": "Center",
               "VertAlignment": "Center",
               "Font": ";;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
@@ -278,7 +281,7 @@
               "Guid": "e248769b9b9da7d613128b1ccf8e80eb",
               "CanGrow": true,
               "GrowToHeight": true,
-              "ClientRectangle": "0.8,0,8.4,0.6",
+              "ClientRectangle": "0.8,0,7.6,0.6",
               "ComponentPlacement": "d.DataBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -308,7 +311,7 @@
               "Guid": "d727dd598c9df13ac2a87c0b18abae0b",
               "CanGrow": true,
               "GrowToHeight": true,
-              "ClientRectangle": "9.2,0,9.8,0.6",
+              "ClientRectangle": "8.4,0,10.6,0.6",
               "ComponentPlacement": "d.DataBand1",
               "Interaction": {
                 "Ident": "StiInteraction"

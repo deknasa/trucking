@@ -224,7 +224,7 @@
 
             </div>
 
-            <div class="row form-group">
+            <div class="row form-group" style="display:none">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">keterangan </label>
               </div>
@@ -239,9 +239,9 @@
                 <thead>
                   <tr>
                     <th style="width:10%; max-width: 25px;max-width: 15px">No</th>
-                    <th style="width: 20%; min-width: 200px;">stok <span class="text-danger"></span> </th>
+                    <th style="width: 20%; min-width: 200px;">stok <span class="text-danger">*</span> </th>
                     <th class="data_tbl tbl_vulkanisirke" style="width: 10px">vulkanisir ke</th>
-                    <th style="width: 20%; min-width: 200px;">keterangan <span class="text-danger"></span> </th>
+                    <th style="width: 20%; min-width: 200px;">keterangan <span class="text-danger">*</span> </th>
                     <th class="data_tbl tbl_qty" style="width:10%; min-width: 100px">qty</th>
                     <th class="data_tbl tbl_harga" style="width: 20%; min-width: 200px;">harga</th>
                     <th class="data_tbl tbl_penerimaanstok_nobukti"  style="width: 20%; min-width: 200px;">Penerimaan stok no bukti</th>
@@ -290,7 +290,7 @@
   let hasFormBindKeys = false
   let modalBody = $('#crudModal').find('.modal-body').html()
   var KodePenerimaanId
-
+  var listKodePenerimaan =[];
   $(document).ready(function() {
     addRow()
     $(document).on('click', '#addRow', function(event) {
@@ -440,22 +440,22 @@
   function setTampilanForm() {
     tampilanall()
     switch (KodePenerimaanId) {
-      case 'DOT':
+      case listKodePenerimaan[0] : // 'DOT':
         tampilandot()
         break;
-      case 'PO':
+      case listKodePenerimaan[1] : // 'PO':
         tampilanpo()
         break;
-      case 'SPB':
+      case listKodePenerimaan[2] : // 'SPB':
         tampilanpbt()
         break;
-      case 'PG':
+      case listKodePenerimaan[4] : // 'PG':
         tampilanpgt()
         break;
-      case 'KOR':
+      case listKodePenerimaan[3] : // 'KOR':
         tampilankst()
         break;
-      case 'SPBS':
+      case listKodePenerimaan[5] : // 'SPBS':
         tampilanpst()
         break;
 
@@ -799,7 +799,7 @@
         })
         sumary()
         setTampilanForm()
-        if (KodePenerimaanId === 'SPB') {
+        if (KodePenerimaanId === listKodePenerimaan[2]) {
           $('#addRow').hide()
         }else{
           $('#addRow').show()
@@ -1036,7 +1036,7 @@
     let form = $('#crudForm')
 
     setFormBindKeys(form)
-
+    
     activeGrid = null
     initDatepicker()
     initLookup()
@@ -1047,6 +1047,7 @@
       $('#penerimaanstokId').attr('readonly', true);
       console.log($('#crudForm').find(`[name="penerimaanstok"]`).val());
     }
+      
       
     getMaxLength(form)
   })
@@ -1342,6 +1343,28 @@
     
   }
 
+  function penerimaanStok(form) {
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `${apiUrl}penerimaanstok`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          // console.log(response.data);
+          $.each(response.data, (index,data) => {
+            // console.log();
+
+            listKodePenerimaan[index] = data.kodepenerimaan;
+          })
+
+        }
+      })
+    })
+  }
+
   function showPenerimaanstokHeader(form, penerimaanStokHeaderId) {
     return new Promise((resolve, reject) => {
       resetRow()
@@ -1361,6 +1384,7 @@
               element.val(result[2] + '-' + result[1] + '-' + result[0]);
             } else {
               element.val(value)
+              element.data('currentValue', value)
             }
           })
 
@@ -1407,6 +1431,7 @@
             `)
             detailRow.find(`[name="detail_nobukti[]"]`).val(detail.nobukti)
             detailRow.find(`[name="detail_stok[]"]`).val(detail.stok)
+            detailRow.find(`[name="detail_stok[]"]`).data('currentValue', detail.stok)
             detailRow.find(`[name="detail_stok_id[]"]`).val(detail.stok_id)
             detailRow.find(`[name="detail_qty[]"]`).val(detail.qty)
             detailRow.find(`[name="detail_harga[]"]`).val(detail.harga)
@@ -1464,8 +1489,9 @@
           })
           sumary()
           setKodePenerimaan(response.data.penerimaanstok);
-         
-          if (KodePenerimaanId === 'SPB') {
+          console.log(response.data.penerimaanstok);
+          console.log(listKodePenerimaan[0]);
+          if (KodePenerimaanId === listKodePenerimaan[2]) {
             $('#addRow').hide()
           }else{
             $('#addRow').show()
@@ -1764,6 +1790,12 @@
     $('.gudangdari-lookup').lookup({
       title: 'Gudang Lookup',
       fileName: 'gudang',
+      beforeProcess: function(test) {
+        var penerimaanstokId = $(`#penerimaanstokId`).val();
+        this.postData = {
+          penerimaanstok_id: penerimaanstokId,
+        }
+      },
       onSelectRow: (gudang, element) => {
         element.val(gudang.gudang)
         $(`#${element[0]['name']}Id`).val(gudang.id)

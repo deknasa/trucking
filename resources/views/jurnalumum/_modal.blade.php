@@ -198,7 +198,7 @@
           $('#jqGrid').jqGrid('setGridParam', {
             page: response.data.page
           }).trigger('reloadGrid');
-          
+
           if (id == 0) {
             $('#detail').jqGrid().trigger('reloadGrid')
           }
@@ -403,7 +403,7 @@
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-    showJurnalUmum(form, id)
+    showJurnalUmum(form, id, true)
 
   }
 
@@ -459,26 +459,26 @@
           showDialog(response.message['keterangan'])
         } else {
           if (Aksi == 'EDIT') {
-              editJurnalUmumHeader(Id)
-            }
-            if (Aksi == 'DELETE') {
-              deleteJurnalUmumHeader(Id)
-            }
-            if (Aksi == 'COPY') {
-              copyJurnal(Id)
-            }
+            editJurnalUmumHeader(Id)
+          }
+          if (Aksi == 'DELETE') {
+            deleteJurnalUmumHeader(Id)
+          }
+          if (Aksi == 'COPY') {
+            copyJurnal(Id)
+          }
         }
       }
     })
   }
 
-  function showJurnalUmum(form, id) {
+  function showJurnalUmum(form, id, isCopy = false) {
     return new Promise((resolve, reject) => {
       $('#detailList tbody').html('')
-
-      form.find(`[name="tglbukti"]`).prop('readonly', true)
-      form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
-
+      if (!isCopy) {
+        form.find(`[name="tglbukti"]`).prop('readonly', true)
+        form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+      }
       $.ajax({
         url: `${apiUrl}jurnalumumheader/${id}`,
         method: 'GET',
@@ -487,8 +487,14 @@
           Authorization: `Bearer ${accessToken}`
         },
         success: response => {
-          let tgl = response.data.tglbukti
+          if(isCopy){
 
+            delete response.data['id'];
+            delete response.data['nobukti'];
+            delete response.data['tglbukti'];
+            $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+
+          }
 
           $.each(response.data, (index, value) => {
             let element = form.find(`[name="${index}"]`)
