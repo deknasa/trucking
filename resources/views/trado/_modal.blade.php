@@ -975,6 +975,9 @@
 
             }
 
+            if (index == 'alamatstnk') {
+              form.find(`[name=alamatstnk]`).attr('maxlength', 255)
+            } 
             if (index == 'jumlahsumbu') {
               form.find(`[name=jumlahsumbu]`).attr('maxlength', 2)
             }

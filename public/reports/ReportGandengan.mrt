@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "53d3f41d3d26f94466fcda8298b61857",
+  "ReportGuid": "587353f513209ab128bbabf616ec864b",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportGandengan.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1686296632000+0700)/",
+  "ReportChanged": "/Date(1686535582000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -172,6 +172,7 @@
               "Text": {
                 "Value": "NO"
               },
+              "HorAlignment": "Center",
               "VertAlignment": "Center",
               "Font": ";;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
@@ -197,6 +198,7 @@
               "Text": {
                 "Value": "KODE GANDENGAN"
               },
+              "HorAlignment": "Center",
               "VertAlignment": "Center",
               "Font": ";;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
@@ -222,6 +224,7 @@
               "Text": {
                 "Value": "KETERANGAN"
               },
+              "HorAlignment": "Center",
               "VertAlignment": "Center",
               "Font": ";;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
@@ -247,6 +250,7 @@
               "Text": {
                 "Value": "STATUS AKTIF"
               },
+              "HorAlignment": "Center",
               "VertAlignment": "Center",
               "Font": ";;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",

@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "376e442eb4c49f93d4160cb86723e2ac",
+  "ReportGuid": "7d34a5bd189fb88a669a5186dca68f98",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportRole.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1686293732000+0700)/",
+  "ReportChanged": "/Date(1686535139000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -160,6 +160,7 @@
               "Text": {
                 "Value": "NO"
               },
+              "HorAlignment": "Center",
               "VertAlignment": "Center",
               "Font": ";;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
@@ -185,6 +186,7 @@
               "Text": {
                 "Value": "ROLENAME"
               },
+              "HorAlignment": "Center",
               "VertAlignment": "Center",
               "Font": ";;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
