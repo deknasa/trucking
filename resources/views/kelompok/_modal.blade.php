@@ -5,7 +5,7 @@
         <div class="modal-header">
           <p class="modal-title" id="crudModalTitle"></p>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            
+
           </button>
         </div>
         <form action="" method="post">
@@ -146,7 +146,9 @@
 
           id = response.data.id
 
-          $('#jqGrid').jqGrid('setGridParam', { page: response.data.page}).trigger('reloadGrid');
+          $('#jqGrid').jqGrid('setGridParam', {
+            page: response.data.page
+          }).trigger('reloadGrid');
 
           if (response.data.grp == 'FORMAT') {
             updateFormat(response.data)
@@ -209,21 +211,21 @@
     $('.invalid-feedback').remove()
 
     Promise
-    .all([
-      setStatusAktifOptions(form),
-    ])
-    .then(() => {
-      showDefault(form)
-        .then(() => {
-          $('#crudModal').modal('show')
-        })
-        .catch((error) => {
-          showDialog(error.statusText)
-        })
-        .finally(() => {
-          $('.modal-loader').addClass('d-none')
-        })
-    })
+      .all([
+        setStatusAktifOptions(form),
+      ])
+      .then(() => {
+        showDefault(form)
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .catch((error) => {
+            showDialog(error.statusText)
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
+      })
   }
 
   function editKelompok(kelompokId) {
@@ -238,7 +240,7 @@
     Simpan
   `)
     form.find(`.sometimes`).hide()
-    $('#crudModalTitle').text('Edit Kelompok') 
+    $('#crudModalTitle').text('Edit Kelompok')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -264,7 +266,7 @@
     let form = $('#crudForm')
 
     $('.modal-loader').removeClass('d-none')
-    
+
     form.data('action', 'delete')
     form.trigger('reset')
     form.find('#btnSubmit').html(`
@@ -282,8 +284,28 @@
       ])
       .then(() => {
         showKelompok(form, kelompokId)
-         .then(() => {
+          .then(kelompok => {
+            initSelect2(form.find('.select2bs4'), true)
+            form.find('[name]').removeAttr('disabled')
+
+            form.find('select').each((index, select) => {
+              let element = $(select)
+
+              if (element.data('select2')) {
+                element.select2('destroy')
+              }
+            })
+            form.find('[name]').attr('disabled', 'disabled').css({
+              background: '#fff'
+            })
+
+          })
+          .then(() => {
             $('#crudModal').modal('show')
+            let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
+            name.attr('disabled', true)
+            name.find('.lookup-toggler').attr('disabled', true)
+
           })
           .catch((error) => {
             showDialog(error.statusText)
@@ -409,8 +431,7 @@
 
             if (element.is('select')) {
               element.val(value).trigger('change')
-            } 
-            else {
+            } else {
               element.val(value)
             }
           })
@@ -422,7 +443,7 @@
       })
     })
   }
-  
+
   function cekValidasidelete(Id) {
     $.ajax({
       url: `{{ config('app.api_url') }}kelompok/${Id}/cekValidasi`,
@@ -433,11 +454,11 @@
       },
       success: response => {
         var kondisi = response.kondisi
-          if (kondisi == true) {
-            showDialog(response.message['keterangan'])
-          } else {
-              deleteKelompok(Id)
-          }
+        if (kondisi == true) {
+          showDialog(response.message['keterangan'])
+        } else {
+          deleteKelompok(Id)
+        }
 
       }
     })
