@@ -10,6 +10,7 @@ $('#stokLookup').jqGrid({
       datatype: "json",
       postData: {
         aktif: `{!! $Aktif ?? '' !!}`,
+        penerimaanstok_id: `{!! $penerimaanstok_id ?? '' !!}`,
       },         
       idPrefix: 'stokLookup',
       colModel: [{

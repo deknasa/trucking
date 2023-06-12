@@ -1242,9 +1242,12 @@
       title: 'stok Lookup',
       fileName: 'stok',
       beforeProcess: function(test) {
+        var penerimaanstokId = $(`#penerimaanstokId`).val();
+        var penerimaanstok_nobukti = $('#crudModal').find(`[name=penerimaanstok_nobukti]`).val();
         this.postData = {
+          penerimaanstok_id: penerimaanstokId,
+          penerimaanstokheader_nobukti: penerimaanstok_nobukti,
           Aktif: 'AKTIF',
-
         }
       },
       onSelectRow: (stok, element) => {
