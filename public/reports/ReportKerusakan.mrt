@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "3178024aa9231bfd8ccc088fd03c4d39",
+  "ReportGuid": "e23c05bce17dd51bd4ee5b11605fb267",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportKerusakan.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1686298921000+0700)/",
+  "ReportChanged": "/Date(1686535748000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -148,6 +148,7 @@
           "Ident": "StiHeaderBand",
           "Name": "HeaderBand1",
           "ClientRectangle": "0,2.8,19.01,0.6",
+          "ComponentPlacement": "h.ap.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
           },
@@ -158,15 +159,16 @@
               "Ident": "StiText",
               "Name": "Text15",
               "ClientRectangle": "0,0,0.8,0.6",
-              "ComponentPlacement": "gh.GroupHeaderBand1",
+              "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "Text": {
                 "Value": "NO"
               },
+              "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": ";10;Bold;",
+              "Font": ";;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
               "Brush": "empty",
               "TextBrush": "solid:0,0,0",
@@ -183,15 +185,16 @@
               "Name": "Text2",
               "Guid": "0ec1f34220ac10ba01d24ef1c15bd18b",
               "ClientRectangle": "0.8,0,12.4,0.6",
-              "ComponentPlacement": "gh.GroupHeaderBand1",
+              "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "Text": {
                 "Value": "KETERANGAN"
               },
+              "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": ";10;Bold;",
+              "Font": ";;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
               "Brush": "empty",
               "TextBrush": "solid:0,0,0",
@@ -208,15 +211,16 @@
               "Name": "Text5",
               "Guid": "0f99d62f36a880966c3e71171a4dbab0",
               "ClientRectangle": "13.2,0,5.8,0.6",
-              "ComponentPlacement": "gh.GroupHeaderBand1",
+              "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "Text": {
                 "Value": "STATUS AKTIF"
               },
+              "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": ";10;Bold;",
+              "Font": ";;Bold;",
               "Border": "All;;;;;;;solid:0,0,0",
               "Brush": "empty",
               "TextBrush": "solid:0,0,0",
