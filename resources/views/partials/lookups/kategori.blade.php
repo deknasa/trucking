@@ -22,7 +22,7 @@
           hidden: true
         },
         {
-          label: 'KODE KATEGORI',
+          label: 'KATEGORI',
           name: 'kodekategori',
           align: 'left',
         },

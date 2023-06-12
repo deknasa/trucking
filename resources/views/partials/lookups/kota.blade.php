@@ -22,7 +22,7 @@
           hidden: true
         },
         {
-          label: 'KODE KOTA',
+          label: 'KOTA',
           name: 'kodekota',
           align: 'left',
         },

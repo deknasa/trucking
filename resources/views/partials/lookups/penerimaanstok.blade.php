@@ -18,7 +18,7 @@
           hidden: true
         },
         {
-          label: 'KODE PENERIMAAN',
+          label: 'PENERIMAAN',
           name: 'kodepenerimaan',
           align: 'left',
         },

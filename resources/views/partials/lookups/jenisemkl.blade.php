@@ -22,7 +22,7 @@
           hidden: true
         },
         {
-          label: 'KODE JENIS EMKL',
+          label: 'JENIS EMKL',
           name: 'kodejenisemkl',
           align: 'left'
         },
