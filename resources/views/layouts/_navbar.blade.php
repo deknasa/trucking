@@ -5,7 +5,7 @@
     </li>
   </ul>
 
-  <img src="{{ asset('dist/img/taslogo.png') }}" alt="AdminLTE Logo" class="brand-image" style="width: 25px; margin-right: 5px;">
+  <img src="{{ asset('libraries/tas-lib/img/taslogo.png') }}" alt="AdminLTE Logo" class="brand-image" style="width: 25px; margin-right: 5px;">
   <strong>TAS Trucking System</strong>
 
   <ul class="navbar-nav ml-auto">
