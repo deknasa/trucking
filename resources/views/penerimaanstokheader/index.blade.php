@@ -77,6 +77,7 @@
   let activeGrid
 
   $(document).ready(function() {
+    penerimaanStok($('#crudForm'))
     $("#tabs").tabs()
     initSelect2($(`#kodepenerimaanheader`),false)
     // $('#kodepenerimaanheader').select2({

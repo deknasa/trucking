@@ -239,9 +239,9 @@
                 <thead>
                   <tr>
                     <th style="width:10%; max-width: 25px;max-width: 15px">No</th>
-                    <th style="width: 20%; min-width: 200px;">stok <span class="text-danger"></span> </th>
+                    <th style="width: 20%; min-width: 200px;">stok <span class="text-danger">*</span> </th>
                     <th class="data_tbl tbl_vulkanisirke" style="width: 10px">vulkanisir ke</th>
-                    <th style="width: 20%; min-width: 200px;">keterangan <span class="text-danger"></span> </th>
+                    <th style="width: 20%; min-width: 200px;">keterangan <span class="text-danger">*</span> </th>
                     <th class="data_tbl tbl_qty" style="width:10%; min-width: 100px">qty</th>
                     <th class="data_tbl tbl_harga" style="width: 20%; min-width: 200px;">harga</th>
                     <th class="data_tbl tbl_penerimaanstok_nobukti"  style="width: 20%; min-width: 200px;">Penerimaan stok no bukti</th>
@@ -1036,7 +1036,7 @@
     let form = $('#crudForm')
 
     setFormBindKeys(form)
-    penerimaanStok(form);
+    
     activeGrid = null
     initDatepicker()
     initLookup()
@@ -1384,6 +1384,7 @@
               element.val(result[2] + '-' + result[1] + '-' + result[0]);
             } else {
               element.val(value)
+              element.data('currentValue', value)
             }
           })
 
@@ -1430,6 +1431,7 @@
             `)
             detailRow.find(`[name="detail_nobukti[]"]`).val(detail.nobukti)
             detailRow.find(`[name="detail_stok[]"]`).val(detail.stok)
+            detailRow.find(`[name="detail_stok[]"]`).data('currentValue', detail.stok)
             detailRow.find(`[name="detail_stok_id[]"]`).val(detail.stok_id)
             detailRow.find(`[name="detail_qty[]"]`).val(detail.qty)
             detailRow.find(`[name="detail_harga[]"]`).val(detail.harga)
@@ -1487,7 +1489,8 @@
           })
           sumary()
           setKodePenerimaan(response.data.penerimaanstok);
-         
+          console.log(response.data.penerimaanstok);
+          console.log(listKodePenerimaan[0]);
           if (KodePenerimaanId === listKodePenerimaan[2]) {
             $('#addRow').hide()
           }else{
@@ -1787,6 +1790,12 @@
     $('.gudangdari-lookup').lookup({
       title: 'Gudang Lookup',
       fileName: 'gudang',
+      beforeProcess: function(test) {
+        var penerimaanstokId = $(`#penerimaanstokId`).val();
+        this.postData = {
+          penerimaanstok_id: penerimaanstokId,
+        }
+      },
       onSelectRow: (gudang, element) => {
         element.val(gudang.gudang)
         $(`#${element[0]['name']}Id`).val(gudang.id)
