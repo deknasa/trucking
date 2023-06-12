@@ -344,6 +344,12 @@
       })
     })
 
+    $('#rangeModal').on('hidden.bs.modal', function() {
+      
+      $('.is-invalid').removeClass('is-invalid')
+      $('.invalid-feedback').remove()
+    })
+
     $('#formRange').submit(function(event) {
       event.preventDefault()
 
@@ -365,6 +371,8 @@
       let limit = parseInt(formRange.find('[name=sampai]').val().replace('.', '')) - offset
       params += `&offset=${offset}&limit=${limit}`
 
+
+    getCekExport(params).then((response) => {
       if ($('#rangeModal').data('action') == 'export') {
         let xhr = new XMLHttpRequest()
         xhr.open('GET', `{{ config('app.api_url') }}subkelompok/export?${params}`, true)
@@ -387,6 +395,10 @@
             }
           }
         }
+        xhr.onerror = () => {
+            submitButton.removeAttr('disabled')
+          }
+          
 
         xhr.send()
       } else if ($('#rangeModal').data('action') == 'report') {
@@ -395,6 +407,64 @@
         submitButton.removeAttr('disabled')
       }
     })
+    .catch((error) => {
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+          errors = error.responseJSON.errors
+
+          $.each(errors, (index, error) => {
+            let indexes = index.split(".");
+            indexes[0] = 'sampai'
+            let element;
+            element = $('#rangeModal').find(`[name="${indexes[0]}"]`)[0];
+
+            $(element).addClass("is-invalid");
+            $(`
+              <div class="invalid-feedback">
+              ${error[0].toLowerCase()}
+              </div>
+			    `).appendTo($(element).parent());
+
+          });
+
+          $(".is-invalid").first().focus();
+        } else {
+          showDialog(error.statusText)
+        }
+      })
+      
+      .finally(() => {
+        $('.ui-button').click()
+        
+        submitButton.removeAttr('disabled')
+      })
+    })
+
+    function getCekExport(params) {
+      
+      params += `&cekExport=true`
+
+      return new Promise((resolve, reject) => {
+        $.ajax({
+          url: `${apiUrl}subkelompok/export?${params}`,
+          dataType: "JSON",
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          },
+          success: (response) => {
+            resolve(response);
+          },
+          error: error => {
+            reject(error)
+
+          },
+        });
+      });
+    }
+
+
+
   })
 </script>
 @endpush()
