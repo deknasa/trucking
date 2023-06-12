@@ -69,7 +69,7 @@
                       endforeach
 
                       ?>
-  `,
+                  `,
               dataInit: function(element) {
                 $(element).select2({
                   width: 'resolve',
@@ -367,7 +367,7 @@
                       endforeach
 
                       ?>
-  `,
+        `,
               dataInit: function(element) {
                 $(element).select2({
                   width: 'resolve',
@@ -877,7 +877,7 @@
         digitGroupSeparator: '.',
         decimalCharacter: ',',
         allowDecimalPadding: false,
-        minimumValue: 1,
+        minimumValue: 0,
         maximumValue: totalRecord
       })
     })
