@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "428661ddbee3ec499947f982ae44f7a1",
+  "ReportGuid": "26971effeb9080c9012e21cbc5ebde04",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportZona.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1686379382000+0700)/",
+  "ReportChanged": "/Date(1686544330000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -99,61 +99,10 @@
       "Brush": "solid:",
       "Components": {
         "0": {
-          "Ident": "StiReportTitleBand",
-          "Name": "ReportTitleBand1",
-          "ClientRectangle": "0,0.4,19.01,1.6",
-          "ComponentPlacement": "rt.Page1",
-          "Interaction": {
-            "Ident": "StiInteraction"
-          },
-          "Border": ";;;;;;;solid:Black",
-          "Brush": "solid:",
-          "Components": {
-            "0": {
-              "Ident": "StiText",
-              "Name": "Text1",
-              "ClientRectangle": "5.8,0,7.6,0.8",
-              "ComponentPlacement": "rt.ReportTitleBand1",
-              "Interaction": {
-                "Ident": "StiInteraction"
-              },
-              "Text": {
-                "Value": "{zona.judul}"
-              },
-              "HorAlignment": "Center",
-              "VertAlignment": "Center",
-              "Font": ";10;Bold;",
-              "Border": ";;;;;;;solid:Black",
-              "Brush": "solid:",
-              "TextBrush": "solid:0,0,0",
-              "Type": "DataColumn"
-            },
-            "1": {
-              "Ident": "StiText",
-              "Name": "Text4",
-              "Guid": "feb88786d11c9debe243ad8c96c2d735",
-              "ClientRectangle": "5.8,0.8,7.6,0.8",
-              "ComponentPlacement": "rt.ReportTitleBand1",
-              "Interaction": {
-                "Ident": "StiInteraction"
-              },
-              "Text": {
-                "Value": "{zona.judulLaporan}"
-              },
-              "HorAlignment": "Center",
-              "VertAlignment": "Center",
-              "Font": ";10;Bold;",
-              "Border": ";;;;;;;solid:Black",
-              "Brush": "solid:",
-              "TextBrush": "solid:0,0,0",
-              "Type": "DataColumn"
-            }
-          }
-        },
-        "1": {
           "Ident": "StiHeaderBand",
           "Name": "HeaderBand1",
-          "ClientRectangle": "0,2.8,19.01,0.8",
+          "ClientRectangle": "0,0.4,19.01,2.4",
+          "ComponentPlacement": "h.ap.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
           },
@@ -163,8 +112,8 @@
             "0": {
               "Ident": "StiText",
               "Name": "Text15",
-              "ClientRectangle": "0,0,0.8,0.6",
-              "ComponentPlacement": "gh.GroupHeaderBand1",
+              "ClientRectangle": "0,1.6,0.8,0.6",
+              "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -189,8 +138,8 @@
               "Ident": "StiText",
               "Name": "Text3",
               "Guid": "7b9b483fc2f3bf4d8452726d4e9a7d94",
-              "ClientRectangle": "0.8,0,4.8,0.6",
-              "ComponentPlacement": "gh.GroupHeaderBand1",
+              "ClientRectangle": "0.8,1.6,4.8,0.6",
+              "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -215,8 +164,8 @@
               "Ident": "StiText",
               "Name": "Text2",
               "Guid": "0ec1f34220ac10ba01d24ef1c15bd18b",
-              "ClientRectangle": "5.6,0,7,0.6",
-              "ComponentPlacement": "gh.GroupHeaderBand1",
+              "ClientRectangle": "5.6,1.6,7,0.6",
+              "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -241,8 +190,8 @@
               "Ident": "StiText",
               "Name": "Text5",
               "Guid": "0f99d62f36a880966c3e71171a4dbab0",
-              "ClientRectangle": "12.6,0,6.4,0.6",
-              "ComponentPlacement": "gh.GroupHeaderBand1",
+              "ClientRectangle": "12.6,1.6,6.4,0.6",
+              "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -262,13 +211,52 @@
                 "Bottom": 0
               },
               "Type": "Expression"
+            },
+            "4": {
+              "Ident": "StiText",
+              "Name": "Text1",
+              "ClientRectangle": "6.2,0,7.6,0.8",
+              "ComponentPlacement": "rt.ReportTitleBand1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "{zona.judul}"
+              },
+              "HorAlignment": "Center",
+              "VertAlignment": "Center",
+              "Font": ";10;Bold;",
+              "Border": ";;;;;;;solid:Black",
+              "Brush": "solid:",
+              "TextBrush": "solid:0,0,0",
+              "Type": "DataColumn"
+            },
+            "5": {
+              "Ident": "StiText",
+              "Name": "Text4",
+              "Guid": "feb88786d11c9debe243ad8c96c2d735",
+              "ClientRectangle": "6.2,0.8,7.6,0.8",
+              "ComponentPlacement": "rt.ReportTitleBand1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "{zona.judulLaporan}"
+              },
+              "HorAlignment": "Center",
+              "VertAlignment": "Center",
+              "Font": ";10;Bold;",
+              "Border": ";;;;;;;solid:Black",
+              "Brush": "solid:",
+              "TextBrush": "solid:0,0,0",
+              "Type": "DataColumn"
             }
           }
         },
-        "2": {
+        "1": {
           "Ident": "StiDataBand",
           "Name": "DataBand2",
-          "ClientRectangle": "0,4.4,19.01,0.8",
+          "ClientRectangle": "0,3.6,19.01,0.8",
           "ComponentPlacement": "d.Page1",
           "Interaction": {
             "Ident": "StiBandInteraction"
