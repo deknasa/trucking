@@ -69,7 +69,7 @@
                       endforeach
 
                       ?>
-  `,
+                  `,
               dataInit: function(element) {
                 $(element).select2({
                   width: 'resolve',
@@ -367,7 +367,7 @@
                       endforeach
 
                       ?>
-  `,
+        `,
               dataInit: function(element) {
                 $(element).select2({
                   width: 'resolve',
