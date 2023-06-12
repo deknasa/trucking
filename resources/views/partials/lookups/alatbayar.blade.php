@@ -24,7 +24,7 @@
           hidden: true
         },
         {
-          label: 'KODE ALAT BAYAR',
+          label: 'ALAT BAYAR',
           name: 'kodealatbayar',
           align: 'left',
         },

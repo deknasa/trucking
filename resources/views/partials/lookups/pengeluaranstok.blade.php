@@ -18,7 +18,7 @@
           hidden: true
         },
         {
-          label: 'KODE Pengeluaran',
+          label: 'Pengeluaran',
           name: 'kodepengeluaran',
           align: 'left',
         },

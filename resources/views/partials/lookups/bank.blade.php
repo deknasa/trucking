@@ -27,12 +27,12 @@
           hidden: true
         },
         {
-          label: 'KODE BANK',
+          label: 'KAS/BANK',
           name: 'kodebank',
           align: 'left',
         },
         {
-          label: 'NAMA BANK',
+          label: 'NAMA KAS/BANK',
           name: 'namabank',
           align: 'left'
         },
