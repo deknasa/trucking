@@ -56,7 +56,7 @@
   </div>
 
   <div class="processing-loader d-none" id="processingLoader">
-    <img src="{{ asset('images/loading-color.gif') }}" rel="preload">
+    <img src="{{ asset('libraries/tas-lib/img/loading-color.gif') }}" rel="preload">
     <span>Processing</span>
   </div>
 
