@@ -22,7 +22,7 @@
           hidden: true
         },
         {
-          label: 'KODE AGEN',
+          label: 'AGEN',
           name: 'kodeagen',
           align: 'left',
         },

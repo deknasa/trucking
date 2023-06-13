@@ -22,7 +22,7 @@
           hidden: true
         },
         {
-          label: 'KODE CONTAINER',
+          label: 'CONTAINER',
           name: 'kodecontainer',
           align: 'left'
         },

@@ -22,7 +22,7 @@
           hidden: true
         },
         {
-          label: 'KODE MERK',
+          label: 'MERK',
           name: 'kodemerk',
           align: 'left',
         },

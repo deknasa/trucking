@@ -45,7 +45,7 @@
             hidden: true
           },
           {
-            label: 'KODE KELOMPOK',
+            label: 'KELOMPOK',
             name: 'kodekelompok',
           },
           {

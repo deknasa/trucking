@@ -495,6 +495,9 @@
             }
           }
         }
+        xhr.onerror = () => {
+            submitButton.removeAttr('disabled')
+          }
 
         xhr.send()
       } else if ($('#rangeModal').data('action') == 'report') {
@@ -504,6 +507,7 @@
       }
     })
     .catch((error) => {
+
         if (error.status === 422) {
           $('.is-invalid').removeClass('is-invalid')
           $('.invalid-feedback').remove()
@@ -529,7 +533,6 @@
           showDialog(error.statusText)
         }
       })
-      
       .finally(() => {
         $('.ui-button').click()
         
@@ -539,6 +542,7 @@
 
     
     function getCekExport(params) {
+
       
       params += `&cekExport=true`
 
@@ -559,7 +563,6 @@
         });
       });
     }
-
 
   })
 </script>

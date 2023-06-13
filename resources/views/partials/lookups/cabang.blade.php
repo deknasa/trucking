@@ -22,7 +22,7 @@
           hidden: true
         },
         {
-          label: 'KODE CABANG',
+          label: 'CABANG',
           name: 'kodecabang',
           align: 'left',
         },

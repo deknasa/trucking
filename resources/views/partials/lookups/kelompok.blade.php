@@ -21,7 +21,7 @@
             hidden: true
           },
           {
-            label: 'Kode Kelompok',
+            label: 'Kelompok',
             name: 'kodekelompok',
           },
           {
