@@ -373,6 +373,8 @@ class TarifController extends MyController
             'tarif_id' => $request->id
         ];
 
+        dd(config('app.api_url') . 'tarifrincian', $detailParams);
+
         $upahtarif_detail = Http::withHeaders(request()->header())
         ->withOptions(['verify' => false])
         ->withToken(session('access_token'))
