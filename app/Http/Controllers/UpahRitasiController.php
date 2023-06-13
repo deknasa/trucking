@@ -241,14 +241,23 @@ class UpahRitasiController extends MyController
             foreach ($upahritasi as $response_index => $response_detail) {
 
                 $alphabets = range('A', 'Z');
-                $sheet->getStyle("C$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
-                $sheet->getStyle("D$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+                $sheet->getStyle("D$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
                 $sheet->getStyle("E$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
                 $sheet->getStyle("F$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
                 $sheet->getStyle("G$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
                 $sheet->getStyle("H$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+                $sheet->getStyle("I$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+                $sheet->getStyle("J$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
                 foreach ($header_columns as $data_columns_index => $data_column) {
-                    $sheet->setCellValue($alphabets[$data_columns_index] . $detail_start_row, $response_detail[$data_column['index']]);
+                    if ($data_columns_index == 3) {
+                        $tgl = date('Y/m/d', strtotime($response_detail[$data_column['index']]));
+                        $excelDateValue = \PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel(
+                            $tgl
+                        );
+                        $sheet->setCellValue($alphabets[$data_columns_index] . $detail_start_row, $excelDateValue);
+                    }else{
+                        $sheet->setCellValue($alphabets[$data_columns_index] . $detail_start_row, $response_detail[$data_column['index']]);
+                    }
                     $sheet->getColumnDimension($alphabets[$data_columns_index])->setAutoSize(true);
                 }
                 $sheet->getStyle("A$header_start_row:$lastColumn$detail_start_row")->applyFromArray($styleArray);
