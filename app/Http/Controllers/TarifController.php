@@ -302,12 +302,12 @@ class TarifController extends MyController
             $total = 0;
             foreach ($tarif as $response_index => $response_detail) {
                 $alphabets = range('A', 'Z');
-                $sheet->getStyle("B$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
-                $sheet->getStyle("D$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+                $sheet->getStyle("C$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
                 $sheet->getStyle("E$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
                 $sheet->getStyle("F$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
-                foreach ($header_columns as $data_columns_index => $data_column) {
-                    if ($data_columns_index == 1) {
+                $sheet->getStyle("G$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+                foreach ($header_columns as $data_columns_index => $data_column) {                    
+                    if ($data_columns_index == 2) {
                         $tgl = date('Y/m/d', strtotime($response_detail[$data_column['index']]));
                         $excelDateValue = \PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel(
                             $tgl
