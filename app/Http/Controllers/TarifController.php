@@ -305,6 +305,7 @@ class TarifController extends MyController
                 $sheet->getStyle("B$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
                 $sheet->getStyle("D$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
                 $sheet->getStyle("E$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+                $sheet->getStyle("F$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
                 foreach ($header_columns as $data_columns_index => $data_column) {
                     if ($data_columns_index == 1) {
                         $tgl = date('Y/m/d', strtotime($response_detail[$data_column['index']]));
