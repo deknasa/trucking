@@ -739,6 +739,7 @@
         element.val(kelompok.kodekelompok)
         $(`#${element[0]['name']}Id`).val(kelompok.id)
         element.data('currentValue', element.val())
+        disabledHirarkiKelompok()
         enabledSubKelompok()
       },
       onCancel: (element) => {

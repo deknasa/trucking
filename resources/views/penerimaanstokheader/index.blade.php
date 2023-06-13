@@ -1,12 +1,13 @@
 @extends('layouts.master')
 @push('addtional-field')
 <div class="form-group row">
-  <label class="col-12 col-sm-2 col-form-label mt-2">penerimaan stok<span class="text-danger">*</span></label>
+  <label class="col-12 col-sm-2 col-form-label mt-2">penerimaan stok </label>
   <div class="col-sm-4 mt-2">
     <select name="kodepenerimaanheader" id="kodepenerimaanheader" class="form-select select2" style="width: 100%;">
-      <option value="">-- PILIH Penerimaan stok --</option>
+      <option value="">-- semua --</option>
       @foreach ($comboKodepenerimaan as $kodepenerimaan)
-        <option @if ($kodepenerimaan['id'] === "1") selected @endif value="{{$kodepenerimaan['id']}}"> {{$kodepenerimaan['keterangan']}} </option>
+      {{-- @if ($kodepenerimaan['id'] === "1") selected @endif --}}
+        <option  value="{{$kodepenerimaan['id']}}"> {{$kodepenerimaan['keterangan']}} </option>
         {{-- <option @if ($kodepenerimaan['statusdefault_text'] ==="YA") selected @endif value="{{$kodepenerimaan['id']}}"> {{$kodepenerimaan['namakodepenerimaan']}} </option> --}}
       @endforeach
     </select>
