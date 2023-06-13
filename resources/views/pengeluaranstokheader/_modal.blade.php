@@ -64,17 +64,6 @@
               <div class="form-group col-md-6">
                 <div class="row">
                   <div class="col-12 col-sm-3 col-md-4">
-                    <label class="col-form-label">SERVICE IN NO bukti </label>
-                  </div>
-                  <div class="col-12 col-sm-9 col-md-8">
-                    <input type="text" name="servicein_nobukti" class="form-control servicein-lookup">
-                  </div>
-                </div>
-              </div>
-
-              <div class="form-group col-md-6">
-                <div class="row">
-                  <div class="col-12 col-sm-3 col-md-4">
                     <label class="col-form-label">PENERIMAAN STOK NO BUKTI </label>
                   </div>
                   <div class="col-12 col-sm-9 col-md-8">

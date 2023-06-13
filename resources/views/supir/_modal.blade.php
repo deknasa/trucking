@@ -397,7 +397,9 @@
         success: response => {
           $('#crudForm').trigger('reset')
           $('#crudModal').modal('hide')
-          indexRow =  response.data.position -1
+          irow = response.data.position % limit
+          console.log(Math.ceil(irow));
+          indexRow =  irow -1
           id = response.data.id
 
           $('#jqGrid').jqGrid('setGridParam', {
