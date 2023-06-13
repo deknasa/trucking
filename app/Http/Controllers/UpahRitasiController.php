@@ -192,7 +192,7 @@ class UpahRitasiController extends MyController
 
             $sheet->setCellValue('A2', 'Laporan Upah Ritasi');
             $sheet->getStyle("A2")->getFont()->setSize(12);
-            $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
+            $sheet->getStyle('A2')->getAlignment()->setHorizontal('left');
             $sheet->mergeCells('A2:H2');
 
             $header_start_row = 3;
@@ -200,10 +200,12 @@ class UpahRitasiController extends MyController
 
             $header_columns = [];
             foreach ($upahritasi[0] as $key => $value) {
-                $header_columns[] =  [
-                    'label' => $key,
-                    'index' => $key
-                ];
+                if ($key <> 'id') {
+                    $header_columns[] =  [
+                        'label' => $key,
+                        'index' => $key
+                    ];
+                }
             }
             // $detail_columns = [];
             // foreach($upahritasi[0] as $key => $value)
@@ -239,6 +241,12 @@ class UpahRitasiController extends MyController
             foreach ($upahritasi as $response_index => $response_detail) {
 
                 $alphabets = range('A', 'Z');
+                $sheet->getStyle("C$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+                $sheet->getStyle("D$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+                $sheet->getStyle("E$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+                $sheet->getStyle("F$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+                $sheet->getStyle("G$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+                $sheet->getStyle("H$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
                 foreach ($header_columns as $data_columns_index => $data_column) {
                     $sheet->setCellValue($alphabets[$data_columns_index] . $detail_start_row, $response_detail[$data_column['index']]);
                     $sheet->getColumnDimension($alphabets[$data_columns_index])->setAutoSize(true);
