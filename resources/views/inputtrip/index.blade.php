@@ -50,6 +50,14 @@
                 </div>
 
                 <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">FULL / EMPTY<span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <input type="hidden" name="statuscontainer_id">
+                    <input type="text" name="statuscontainer" class="form-control statuscontainer-lookup">
+                  </div>
+                </div>
+
+                <div class="form-group ">
                   <label class="col-sm-4 col-form-label">CONTAINER<span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <input type="hidden" name="container_id">
@@ -62,6 +70,13 @@
                   <div class="col-sm-12">
                     <input type="hidden" name="tarifrincian_id">
                     <input type="text" name="tarifrincian" class="form-control tarifrincian-lookup">
+                  </div>
+                </div>
+
+                <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">PENYESUAIAN</label>
+                  <div class="col-sm-12">
+                    <input type="text" name="penyesuaian" class="form-control" readonly>
                   </div>
                 </div>
 
@@ -81,6 +96,14 @@
                     <input type="text" name="trado" class="form-control absensisupirdetail-lookup">
                   </div>
                 </div>
+                <div class="form-group ">
+                  <label class="col-sm-4 col-form-label">UPAH SUPIR<span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <input type="hidden" name="upah_id">
+                    <input type="text" name="upah" class="form-control upahsupirrincian-lookup">
+                  </div>
+                </div>
+
                 <div class="form-group ">
                   <label class="col-sm-4 col-form-label">DARI<span class="text-danger">*</span></label>
                   <div class="col-sm-12">
@@ -120,17 +143,6 @@
                     <input type="text" name="jenisorder" class="form-control jenisorder-lookup">
                   </div>
                 </div>
-
-
-
-                <div class="form-group ">
-                  <label class="col-sm-12 col-form-label">FULL / EMPTY<span class="text-danger">*</span></label>
-                  <div class="col-sm-12">
-                    <input type="hidden" name="statuscontainer_id">
-                    <input type="text" name="statuscontainer" class="form-control statuscontainer-lookup">
-                  </div>
-                </div>
-
 
                 <div class="form-group ">
                   <label name="labeljobtrucking" class="col-sm-12 col-form-label">NO JOB TRUCKING
@@ -199,6 +211,11 @@
   let triggerClick = true;
   let id = "";
   let jenisorderId
+  let statuscontainerId
+  let kotadariId
+  let kotasampaiId
+  let pilihKotaDariId = 0;
+  let pilihKotaSampaiId = 0;
   let containerId
   let tradoId
   let pelangganId
@@ -320,6 +337,8 @@
     initDatepicker()
     initSelect2(null, false)
     enabledTarif()
+    enabledUpahSupir()
+    enabledKota()
   })
 
   function enabledTarif() {
@@ -337,6 +356,47 @@
       tarifrincian.parents('.input-group').find('.button-clear').show()
     }
   }
+
+  function enabledUpahSupir() {
+
+    let statuscontainer_id = $('#crudForm [name=statuscontainer_id]')
+    let container_id = $('#crudForm [name=container_id]')
+    let upahsupir = $('#crudForm [name=upah]')
+    // tarifrincian
+    if (container_id.val() == '' && statuscontainer_id.val() == '') {
+      upahsupir.attr('readonly', true)
+      upahsupir.parents('.input-group').find('.input-group-append').hide()
+      upahsupir.parents('.input-group').find('.button-clear').hide()
+    } else {
+      upahsupir.attr('readonly', false)
+      upahsupir.parents('.input-group').find('.input-group-append').show()
+      upahsupir.parents('.input-group').find('.button-clear').show()
+    }
+  }
+
+  function enabledKota() {
+
+    let kotadari_id = $('#crudForm [name=dari]')
+    let kotasampai_id = $('#crudForm [name=sampai]')
+    let upahsupir = $('#crudForm [name=upah_id]')
+    // tarifrincian
+    if (upahsupir.val() == '') {
+      kotadari_id.attr('readonly', true)
+      kotadari_id.parents('.input-group').find('.input-group-append').hide()
+      kotadari_id.parents('.input-group').find('.button-clear').hide()
+      kotasampai_id.attr('readonly', true)
+      kotasampai_id.parents('.input-group').find('.input-group-append').hide()
+      kotasampai_id.parents('.input-group').find('.button-clear').hide()
+    } else {
+      kotadari_id.attr('readonly', false)
+      kotadari_id.parents('.input-group').find('.input-group-append').show()
+      kotadari_id.parents('.input-group').find('.button-clear').show()
+      kotasampai_id.attr('readonly', false)
+      kotasampai_id.parents('.input-group').find('.input-group-append').show()
+      kotasampai_id.parents('.input-group').find('.button-clear').show()
+    }
+  }
+
 
 
   function createSuratPengantar() {
@@ -359,8 +419,8 @@
         setStatusGudangSamaOptions(form),
       ])
       .then(() => {
-        
-          setIsDateAvailable(form),
+
+        setIsDateAvailable(form),
           showDefault(form)
       })
       .catch((error) => {
@@ -644,13 +704,15 @@
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
-
           Aktif: 'AKTIF',
+          kotadari_id: kotadariId,
+          kotasampai_id: kotasampaiId,
+          pilihkota_id: pilihKotaSampaiId
         }
       },
       onSelectRow: (kota, element) => {
         $('#crudForm [name=dari_id]').first().val(kota.id)
-        kotadariId = kota.id
+        pilihKotaDariId = kota.id
         getpelabuhan(kota.id)
         element.val(kota.keterangan)
         element.data('currentValue', element.val())
@@ -661,6 +723,7 @@
       },
       onClear: (element) => {
         $('#crudForm [name=dari_id]').first().val('')
+        pilihKotaDariId = 0
         element.val('')
         element.data('currentValue', element.val())
         // getGaji()
@@ -706,12 +769,14 @@
         this.postData = {
 
           Aktif: 'AKTIF',
+          kotadari_id: kotadariId,
+          kotasampai_id: kotasampaiId,
+          pilihkota_id: pilihKotaDariId
         }
       },
       onSelectRow: (kota, element) => {
         $('#crudForm [name=sampai_id]').first().val(kota.id)
-        kotasampaiId = kota.id
-
+        pilihKotaSampaiId = kota.id
         element.val(kota.keterangan)
         element.data('currentValue', element.val())
         // getGaji()
@@ -721,6 +786,8 @@
       },
       onClear: (element) => {
         $('#crudForm [name=sampai_id]').first().val('')
+
+        pilihKotaSampaiId = 0
         element.val('')
         element.data('currentValue', element.val())
         // getGaji()
@@ -767,21 +834,23 @@
       onSelectRow: (container, element) => {
         $('#crudForm [name=container_id]').first().val(container.id)
         containerId = container.id
-        console.log(containerId)
         element.val(container.keterangan)
         element.data('currentValue', element.val())
         enabledTarif()
+        enabledUpahSupir()
         // getGaji()
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
         enabledTarif()
+        enabledUpahSupir()
       },
       onClear: (element) => {
         $('#crudForm [name=container_id]').first().val('')
         element.val('')
         element.data('currentValue', element.val())
         enabledTarif()
+        enabledUpahSupir()
         // getGaji()
       }
     })
@@ -799,18 +868,21 @@
       },
       onSelectRow: (statuscontainer, element) => {
         $('#crudForm [name=statuscontainer_id]').first().val(statuscontainer.id)
-
+        statuscontainerId = statuscontainer.id
         element.val(statuscontainer.keterangan)
         element.data('currentValue', element.val())
+        enabledUpahSupir()
         // getGaji()
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+        enabledUpahSupir()
       },
       onClear: (element) => {
         $('#crudForm [name=statuscontainer_id]').first().val('')
         element.val('')
         element.data('currentValue', element.val())
+        enabledUpahSupir()
         // getGaji()
       }
     })
@@ -955,12 +1027,13 @@
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
-          Aktif: 'AKTIF1',
+          Aktif: 'AKTIF',
           container_Id: containerId,
         }
       },
       onSelectRow: (tarifrincian, element) => {
         $('#crudForm [name=tarifrincian_id]').first().val(tarifrincian.id)
+        $('#crudForm [name=penyesuaian]').val(tarifrincian.penyesuaian)
         tarifrincianId = tarifrincian.id
         element.val(tarifrincian.tujuan)
         element.data('currentValue', element.val())
@@ -970,13 +1043,46 @@
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
-        $('#crudForm [name=tarifrincian_id]').first().val('')
+        $('#crudForm [name=tarifrincian_id]').val('')
         $('#crudForm [name=omset]').first().val('')
+        $('#crudForm [name=penyesuaian]').val('')
         element.val('')
         element.data('currentValue', element.val())
       }
     })
 
+    $('.upahsupirrincian-lookup').lookup({
+      title: 'Upah Supir Lookup',
+      fileName: 'upahsupirrincian',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+          Aktif: 'AKTIF',
+          container_Id: containerId,
+          statuscontainer_Id: statuscontainerId,
+        }
+      },
+      onSelectRow: (upahsupir, element) => {
+        $('#crudForm [name=upah_id]').val(upahsupir.id)
+        kotadariId = upahsupir.kotadari_id
+        kotasampaiId = upahsupir.kotasampai_id
+        element.val(upahsupir.kotasampai)
+        element.data('currentValue', element.val())
+        enabledKota()
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+        enabledKota()
+      },
+      onClear: (element) => {
+        $('#crudForm [name=upah_id]').val('')
+        enabledKota()
+        kotadariId = 0
+        kotasampaiId = 0
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
   }
 
   function addRow() {

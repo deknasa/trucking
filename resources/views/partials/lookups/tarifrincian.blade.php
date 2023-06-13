@@ -11,7 +11,7 @@
       datatype: "json",
       postData: {
         aktif: `{!! $Aktif ?? '' !!}`,
-        container_id: `{!! $container_Id?? '' !!}`,
+        containerId: `{!! $container_Id ?? '' !!}`,
       },   
       idPrefix: 'tarifrincianLookup',
       colModel: [{
@@ -25,6 +25,10 @@
         {
           label: 'TUJUAN',
           name: 'tujuan',
+        },
+        {
+          label: 'PENYESUAIAN',
+          name: 'penyesuaian',
         },
         {
           label: 'CONTAINER',
@@ -45,54 +49,11 @@
           name: 'statusaktif',
           stype: 'select',
           searchoptions: {
-            
             dataInit: function(element) {
-              // $(element).select2({
-              //   width: 'resolve',
-              //   theme: "bootstrap4",
-              //   ajax: {
-              //     url: `${apiUrl}parameter/combo`,
-              //     dataType: 'JSON',
-              //     headers: {
-              //       Authorization: `Bearer ${accessToken}`
-              //     },
-              //     data: {
-              //       grp: 'STATUS AKTIF',
-              //       subgrp: 'STATUS AKTIF'
-              //     },
-              //     beforeSend: () => {
-              //       // clear options
-              //       $(element).data('select2').$results.children().filter((index, element) => {
-              //         // clear options except index 0, which
-              //         // is the "searching..." label
-              //         if (index > 0) {
-              //           element.remove()
-              //         }
-              //       })
-              //     },
-              //     processResults: (response) => {
-              //       let formattedResponse = response.data.map(row => ({
-              //         id: row.text,
-              //         text: row.text
-              //       }));
-
-              //       formattedResponse.unshift({
-              //         id: '',
-              //         text: 'ALL'
-              //       });
-
-              //       return {
-              //         results: formattedResponse
-              //       };
-              //     },
-              //   }
-              // });
               $(element).select2({
-                  width: 'resolve',
-                  theme: "bootstrap4",
-                });
-  
-                $.ajax({
+                width: 'resolve',
+                theme: "bootstrap4",
+                ajax: {
                   url: `${apiUrl}parameter/combo`,
                   dataType: 'JSON',
                   headers: {
@@ -112,17 +73,24 @@
                       }
                     })
                   },
-                  success: response => {
-                    response.data.forEach(statusAktif => {
-                      let option = new Option(statusAktif.text, statusAktif.id)
-                      element.append(option)
-                  });
-                  }
-                })
+                  processResults: (response) => {
+                    let formattedResponse = response.data.map(row => ({
+                      id: row.text,
+                      text: row.text
+                    }));
+
+                    formattedResponse.unshift({
+                      id: '',
+                      text: 'ALL'
+                    });
+
+                    return {
+                      results: formattedResponse
+                    };
+                  },
+                }
+              });
             }
-
-            
-
           },
           formatter: (value, options, rowData) => {
             let statusAktif = JSON.parse(value)
@@ -392,7 +360,7 @@
           clearColumnSearch($(this))
         })
 
-        $(this).setGridWidth($('#lookuptarifrincian').prev().width())
+        $(this).setGridWidth($('#tarifrincianLookup').prev().width())
         setHighlight($(this))
       }
     })

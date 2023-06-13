@@ -1,43 +1,81 @@
-<table id="kotaLookup" class="lookup-grid"></table>
+<table id="upahSupirRincianLookup" class="lookup-grid"></table>
 
 @push('scripts')
 <script>
-  $('#kotaLookup').jqGrid({
-      url: `{{ config('app.api_url') . 'kota' }}`,
+ $('#upahSupirRincianLookup').jqGrid({
+      url: `{{ config('app.api_url') . 'upahsupirrincian/get' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
       iconSet: 'fontAwesome',
-      datatype: "json",
+      datatype: "json", 
       postData: {
         aktif: `{!! $Aktif ?? '' !!}`,
-        kotadari_id: `{!! $kotadari_id ?? '' !!}`,
-        kotasampai_id: `{!! $kotasampai_id ?? '' !!}`,
-        pilihkota_id: `{!! $pilihkota_id ?? '' !!}`,
-      },         
-      idPrefix: 'kotaLookup',
-      colModel: [{
-          label: 'ID',
-          name: 'id',
-          align: 'right',
-          width: '70px',
+        container_id: `{!! $container_Id ?? '' !!}`,
+        statuscontainer_id: `{!! $statuscontainer_Id ?? '' !!}`,
+      }, 
+      idPrefix: 'upahSupirRincianLookup',
+      colModel: [
+        {
+            label: 'ID',
+            name: 'id',
+            align: 'right',
+            width: '50px',
             search: false,
-          hidden: true
-        },
-        {
-          label: 'KOTA',
-          name: 'kodekota',
-          align: 'left',
-        },
-        {
-          label: 'KETERANGAN',
-          name: 'keterangan',
-          align: 'left'
-        },
-        {
-          label: 'ZONA',
-          name: 'zona_id',
-          align: 'left'
-        },
+            hidden: true
+          }, 
+          {
+            label: 'Kota dari Id',
+            name: 'kotadari_id',
+            search: false,
+            hidden: true
+          },
+          {
+            label: 'Kota Sampai Id',
+            name: 'kotasampai_id',
+            search: false,
+            hidden: true
+          },
+          {
+            label: 'DARI',
+            name: 'kotadari',
+            align: 'left'
+          },
+          {
+            label: 'TUJUAN',
+            name: 'kotasampai',
+            align: 'left'
+          },
+          {
+            label: 'PENYESUAIAN',
+            name: 'penyesuaian',
+            align: 'left'
+          },
+          {
+            label: 'JARAK',
+            name: 'jarak',
+            align: 'right',
+            // formatter: currencyFormat
+          },
+          {
+            label: 'Container',
+            name: 'container',
+            align: 'left'
+          },
+          {
+            label: 'Status Container',
+            name: 'statuscontainer',
+            align: 'left'
+          },
+          {
+            label: 'Nominal Supir',
+            name: 'nominalsupir',
+            align: 'right',
+            formatter: 'currency',
+            formatoptions: {
+                decimalSeparator: ',',
+                thousandsSeparator: '.'
+            }
+          },
         {
           label: 'STATUS AKTIF',
           name: 'statusaktif',
@@ -103,31 +141,40 @@
             return ` title="${statusAktif.MEMO}"`
           }
         },
-        {
-          label: 'MODIFIEDBY',
-          name: 'modifiedby',
-          align: 'left'
-        },
-        {
-          label: 'CREATEDAT',
-          name: 'created_at',
-          align: 'right',
-          formatter: "date",
-          formatoptions: {
-            srcformat: "ISO8601Long",
-            newformat: "d-m-Y H:i:s"
-          }
-        },
-        {
-          label: 'UPDATEDAT',
-          name: 'updated_at',
-          align: 'right',
-          formatter: "date",
-          formatoptions: {
-            srcformat: "ISO8601Long",
-            newformat: "d-m-Y H:i:s"
-          }
-        },
+          {
+            label: 'TGL MULAI BERLAKU',
+            name: 'tglmulaiberlaku',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
+          {
+            label: 'MODIFIEDBY',
+            name: 'modifiedby',
+            align: 'left'
+          },
+          {
+            label: 'CREATEDAT',
+            name: 'created_at',
+            align: 'right',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y H:i:s"
+            }
+          },
+          {
+            label: 'UPDATEDAT',
+            name: 'updated_at',
+            align: 'right',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y H:i:s"
+            }
+          },
       ],
       autowidth: true,
       responsive: true,
@@ -135,13 +182,14 @@
       height: 350,
       rowNum: 10,
       rownumbers: true,
-      toolbar: [true, "top"],
       rownumWidth: 45,
       rowList: [10, 20, 50, 0],
+      toolbar: [true, "top"],
       sortable: true,
       sortname: 'id',
       sortorder: 'asc',
       page: 1,
+    //   pager: $('#upahSupirRincianLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -173,26 +221,26 @@
           setCustomBindKeys($(this))
           initResize($(this))
 
-          if (indexRow - 1 > $('#kotaLookup').getGridParam().reccount) {
-            indexRow = $('#kotaLookup').getGridParam().reccount - 1
+          if (indexRow - 1 > $('#upahSupirRincianLookup').getGridParam().reccount) {
+            indexRow = $('#upahSupirRincianLookup').getGridParam().reccount - 1
           }
 
           if (triggerClick) {
             if (id != '') {
               indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-              $(`#kotaLookup [id="${$('#kotaLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#upahSupirRincianLookup [id="${$('#upahSupirRincianLookup').getDataIDs()[indexRow]}"]`).click()
               id = ''
             } else if (indexRow != undefined) {
-              $(`#kotaLookup [id="${$('#kotaLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#upahSupirRincianLookup [id="${$('#upahSupirRincianLookup').getDataIDs()[indexRow]}"]`).click()
             }
 
-            if ($('#kotaLookup').getDataIDs()[indexRow] == undefined) {
-              $(`#kotaLookup [id="` + $('#kotaLookup').getDataIDs()[0] + `"]`).click()
+            if ($('#upahSupirRincianLookup').getDataIDs()[indexRow] == undefined) {
+              $(`#upahSupirRincianLookup [id="` + $('#upahSupirRincianLookup').getDataIDs()[0] + `"]`).click()
             }
 
             triggerClick = false
           } else {
-            $('#kotaLookup').setSelection($('#kotaLookup').getDataIDs()[indexRow])
+            $('#upahSupirRincianLookup').setSelection($('#upahSupirRincianLookup').getDataIDs()[indexRow])
           }
         }
 
@@ -207,7 +255,7 @@
           clearColumnSearch($(this))
         })
 
-        $(this).setGridWidth($('#lookupkota').prev().width())
+        $(this).setGridWidth($('#lookuptarif').prev().width())
         setHighlight($(this))
       }
     })
@@ -220,13 +268,12 @@
       groupOp: 'AND',
       disabledKeys: [16, 17, 18, 33, 34, 35, 36, 37, 38, 39, 40],
       beforeSearch: function() {
-        abortGridLastRequest($(this))
-
-        clearGlobalSearch($('#kotaLookup'))
+          abortGridLastRequest($(this))
+          
+          clearGlobalSearch($('#upahSupirRincianLookup'))
       },
     })
-
     .customPager()
-  loadGlobalSearch($('#kotaLookup'))
-  loadClearFilter($('#kotaLookup'))
+    loadGlobalSearch($('#upahSupirRincianLookup'))
+    loadClearFilter($('#upahSupirRincianLookup'))
 </script>
