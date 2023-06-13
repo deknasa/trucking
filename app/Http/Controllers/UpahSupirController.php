@@ -270,13 +270,18 @@ class UpahSupirController extends MyController
         } else {
             $spreadsheet = new Spreadsheet();
             $sheet = $spreadsheet->getActiveSheet();
-            // $sheet->setCellValue('A1', 'TAS TARIF');
-            // $sheet->getStyle("A1")->getFont()->setSize(20);
-            // $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
-            // $sheet->mergeCells('A1:G1');
+            $sheet->setCellValue('A1', 'PT. TRANSPORINDO AGUNG SEJAHTERA');
+            $sheet->getStyle("A1")->getFont()->setSize(12);
+            $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
+            $sheet->mergeCells('A1:H1');
 
-            $header_start_row = 1;
-            $detail_start_row = 2;
+            $sheet->setCellValue('A2', 'Laporan Upah Supir');
+            $sheet->getStyle("A2")->getFont()->setSize(12);
+            $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
+            $sheet->mergeCells('A2:H2');
+
+            $header_start_row = 3;
+            $detail_start_row = 4;
 
             $header_columns = [];
             foreach ($upahsupir[0] as $key => $value) {

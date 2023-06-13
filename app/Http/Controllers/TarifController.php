@@ -325,47 +325,62 @@ class TarifController extends MyController
     }
     public function report(Request $request)
     {
-        $response = Http::withHeaders($this->httpHeaders)
-            ->withOptions(['verify' => false])
-            ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'tarif', $request->all());
+        // $response = Http::withHeaders($this->httpHeaders)
+        //     ->withOptions(['verify' => false])
+        //     ->withToken(session('access_token'))
+        //     ->get(config('app.api_url') . 'tarif', $request->all());
 
-        $tarifs = $response['data'];
+        // $tarifs = $response['data'];
 
-        $i = 0;
-        foreach ($tarifs as $index => $params) {
+        // $i = 0;
+        // foreach ($tarifs as $index => $params) {
 
-            $statusaktif = $params['statusaktif'];
-            $statusSistemTon = $params['statussistemton'];
-            $statusPenyesuaianHarga = $params['statuspenyesuaianharga'];
+        //     $statusaktif = $params['statusaktif'];
+        //     $statusSistemTon = $params['statussistemton'];
+        //     $statusPenyesuaianHarga = $params['statuspenyesuaianharga'];
 
-            $result = json_decode($statusaktif, true);
-            $resultSistemTon = json_decode($statusSistemTon, true);
-            $resultPenyesuaianHarga = json_decode($statusPenyesuaianHarga, true);
+        //     $result = json_decode($statusaktif, true);
+        //     $resultSistemTon = json_decode($statusSistemTon, true);
+        //     $resultPenyesuaianHarga = json_decode($statusPenyesuaianHarga, true);
 
-            $statusaktif = $result['MEMO'];
-            $statusSistemTon = $resultSistemTon['MEMO'];
-            $statusPenyesuaianHarga = $resultPenyesuaianHarga['MEMO'];
+        //     $statusaktif = $result['MEMO'];
+        //     $statusSistemTon = $resultSistemTon['MEMO'];
+        //     $statusPenyesuaianHarga = $resultPenyesuaianHarga['MEMO'];
 
 
-            $tarifs[$i]['statusaktif'] = $statusaktif;
-            $tarifs[$i]['statussistemton'] = $statusSistemTon;
-            $tarifs[$i]['statuspenyesuaianharga'] = $statusPenyesuaianHarga;
+        //     $tarifs[$i]['statusaktif'] = $statusaktif;
+        //     $tarifs[$i]['statussistemton'] = $statusSistemTon;
+        //     $tarifs[$i]['statuspenyesuaianharga'] = $statusPenyesuaianHarga;
 
             
 
-            //  $rincian = Http::withHeaders($this->httpHeaders)
-            //         ->withOptions(['verify' => false])
-            //         ->withToken(session('access_token'))
-            //         ->get(config('app.api_url') . 'tarifrincian', ['tarif_id' => $tarifs[$i]['id']]);
+        //     //  $rincian = Http::withHeaders($this->httpHeaders)
+        //     //         ->withOptions(['verify' => false])
+        //     //         ->withToken(session('access_token'))
+        //     //         ->get(config('app.api_url') . 'tarifrincian', ['tarif_id' => $tarifs[$i]['id']]);
 
-            //     $tarifs[$i]['rincian'] = $rincian['data'];
+        //     //     $tarifs[$i]['rincian'] = $rincian['data'];
 
         
-            $i++;
+        //     $i++;
 
-        }
+        // }
 
-        return view('reports.tarif', compact('tarifs'));
+        // return view('reports.tarif', compact('tarifs'));
+        
+        $detailParams = [
+            'forReport' => true,
+            'tarif_id' => $request->id
+        ];
+
+        dd(config('app.api_url') . 'tarifrincian', $detailParams);
+
+        $upahtarif_detail = Http::withHeaders(request()->header())
+        ->withOptions(['verify' => false])
+        ->withToken(session('access_token'))
+        ->get(config('app.api_url') . 'tarifrincian', $detailParams);
+
+
+
     }
 }

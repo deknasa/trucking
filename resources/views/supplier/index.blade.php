@@ -444,6 +444,12 @@
       })
     })
 
+    $('#rangeModal').on('hidden.bs.modal', function() {
+      
+      $('.is-invalid').removeClass('is-invalid')
+      $('.invalid-feedback').remove()
+    })
+
     $('#formRange').submit(function(event) {
       event.preventDefault()
 
@@ -464,6 +470,7 @@
       let offset = parseInt(formRange.find('[name=dari]').val()) - 1
       let limit = parseInt(formRange.find('[name=sampai]').val().replace('.', '')) - offset
       params += `&offset=${offset}&limit=${limit}`
+
 
       getCekExport(params).then((response) => {
       if ($('#rangeModal').data('action') == 'export') {
@@ -498,7 +505,9 @@
 
         submitButton.removeAttr('disabled')
       }
-    }).catch((error) => {
+    })
+    .catch((error) => {
+
         if (error.status === 422) {
           $('.is-invalid').removeClass('is-invalid')
           $('.invalid-feedback').remove()
@@ -529,8 +538,11 @@
         
         submitButton.removeAttr('disabled')
       })
-  })
-  function getCekExport(params) {
+    })
+
+    
+    function getCekExport(params) {
+
       
       params += `&cekExport=true`
 
@@ -551,6 +563,7 @@
         });
       });
     }
+
   })
 </script>
 @endpush()
