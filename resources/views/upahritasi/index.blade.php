@@ -460,26 +460,38 @@
         },
         data: form_data,
         success: response => {
-          $('#formImport').trigger('reset')
-          $('#importModal').modal('hide')
-          $('#jqGrid').jqGrid().trigger('reloadGrid');
+          var kondisi = response.kondisi
+          console.log(kondisi)
+          if (kondisi == false) {
+            showDialog(response.keterangan);
 
-          $('.is-invalid').removeClass('is-invalid')
-          $('.invalid-feedback').remove()
+            $('#formImport').trigger('reset')
+            $('#importModal').modal('hide')
+            $('#jqGrid').jqGrid().trigger('reloadGrid');
+
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+
+          } else {
+
+            showDialog(response.message['keterangan'])
+          }
         },
         error: error => {
           if (error.status === 422) {
             $('.is-invalid').removeClass('is-invalid')
             $('.invalid-feedback').remove()
 
-            setErrorMessages(form, error.responseJSON.errors);
+            setErrorMessages(response.message);
           } else {
-            showDialog(error.statusText)
+            showDialog(response.message['keterangan'])
           }
         },
       }).always(() => {
         $('#processingLoader').addClass('d-none')
         $(this).removeAttr('disabled')
+        console.log(response)
+          showDialog(response.keterangan);
       })
     })
   })
