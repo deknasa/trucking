@@ -264,10 +264,10 @@
                         <thead>
                           <tr>
                             <th style="width:10%; max-width: 25px; max-width: 15px">No</th>
-                            <th style="width: 20%; min-width: 200px;">stok</th>
+                            <th style="width: 20%; min-width: 200px;"><span class="text-danger">*</span> stok</th>
                             <th class="data_tbl tbl_vulkanisirke" style="width: 20px">vulkanisirke</th>
-                            <th style="width: 20%; min-width: 200px;">keterangan</th>
-                            <th class="tbl_qty" style="width:10%; min-width: 100px">qty</th>
+                            <th style="width: 20%; min-width: 200px;"><span class="text-danger">*</span> keterangan</th>
+                            <th class="tbl_qty" style="width:10%; min-width: 100px"><span class="text-danger">*</span> qty</th>
                             <th class="data_tbl tbl_harga" style="width: 20%; min-width: 200px;">harga</th>
                             <th class="data_tbl tbl_persentase" style="width:10%; min-width: 100px">persentase discount</th>
                             <th class="data_tbl tbl_total" style="width: 20%; min-width: 200px;">Total</th>
