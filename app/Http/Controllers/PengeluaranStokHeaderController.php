@@ -294,7 +294,7 @@ class PengeluaranStokHeaderController extends MyController
 
         $pengeluaranstok_details = $response['data'];
         $user =  Auth::user();
-        dd($user);
+        // dd($user);
         $combo = $this->combo('list');
         $parameterStatusFormat = $this->statusFormat();
 
@@ -379,10 +379,10 @@ class PengeluaranStokHeaderController extends MyController
                 'label' => 'Tanggal',
                 'index' => 'tglbukti',
             ],
-            [
-                'label' => 'Keterangan',
-                'index' => 'keterangan',
-            ],
+            // [
+            //     'label' => 'Keterangan',
+            //     'index' => 'keterangan',
+            // ],
         ];
 
         
