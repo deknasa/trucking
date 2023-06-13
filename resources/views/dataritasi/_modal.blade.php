@@ -22,7 +22,7 @@
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
-                  STATUS RITASI <span class="text-danger"></span></label>
+                  STATUS RITASI <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-md-10">
                 <select name="statusritasi" class="form-select select2bs4" style="width: 100%;">
@@ -357,6 +357,7 @@
             if (value !== null && value !== 0 && value !== undefined) {
               form.find(`[name=${index}]`).attr('maxlength', value)
             }
+          
           })
 
           form.attr('has-maxlength', true)
