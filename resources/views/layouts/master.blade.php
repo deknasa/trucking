@@ -321,7 +321,7 @@
     let appUrl = `{{ url()->to('/') }}`
     let apiUrl = `{{ config('app.api_url') }}`
     let apiEmklUrl = `{{ config('app.emkl_api_url') }}`
-
+    var pleaseSelectARow; 
     function separatorNumber(object) {
       var value = parseInt(object.value.replaceAll('.', '').replaceAll(',', ''));
 
@@ -369,6 +369,30 @@
 
           if (event.progress >= 100) {
             $(document).find('#progressbar').remove()
+          }
+        })
+
+        $.ajax({
+          url: `${apiUrl}error/geterrors`,
+          method: 'GET',
+          dataType: 'JSON',
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          },
+          data: {
+            kodeerror:"PSB"
+          },
+          success: response => {
+            // console.log(response.keterangan);
+            pleaseSelectARow = response.keterangan;
+          },
+          error: error => {
+            if (error.status === 422) {
+              $('.is-invalid').removeClass('is-invalid')
+              $('.invalid-feedback').remove()
+
+              setErrorMessages(form, error.responseJSON.errors);
+            }
           }
         })
     })
