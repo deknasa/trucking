@@ -596,8 +596,8 @@
     $('[name=gudang]').parents('.form-group').show()
     $('[name=trado]').parents('.form-group').show()
     $('[name=gandengan]').parents('.form-group').show()
-    $('[name=gudang]').val('').attr('readonly', false);
-    $('[name=gudang_id]').val('')
+    // $('[name=gudang]').val('').attr('readonly', false);
+    // $('[name=gudang_id]').val('')
     
     $('[name=gudangdari]').parents('.form-group').hide()
     $('[name=gudangke]').parents('.form-group').hide()
@@ -1109,8 +1109,47 @@
       .all([
         showPenerimaanstokHeader(form, penerimaanStokHeaderId)
       ])
+      .then(penerimaanStokHeaderId => {
+            setFormBindKeys(form)
+            initDatepicker()
+            initSelect2(form.find('.select2bs4'), true)
+            form.find('[name=tglbukti]').removeAttr('disabled')
+    
+            form.find('[name=tglbukti]').attr('disabled', 'disabled').css({
+              background: '#fff'
+            })
+
+          })
       .then(() => {
         $('#crudModal').modal('show')
+        $('#crudForm').find(`.ui-datepicker-trigger`).attr('disabled', true)
+        if ( $('#crudForm').find("[name=gudang]")) {
+            lookupSelected(`gudang`);
+        }else if ( $('#crudForm').find("[name=gandengan]")) {
+            lookupSelected('gandengan')
+        }else if ( $('#crudForm').find("[name=trado]")) {
+            lookupSelected('trado')
+        }
+        if ( $('#crudForm').find("[name=gudangke]")) {
+            lookupSelectedKe(`gudangke`);
+        }else if ( $('#crudForm').find("[name=gandenganke]")) {
+          lookupSelectedKe('gandenganke')
+        }else if ( $('#crudForm').find("[name=tradoke]")) {
+          lookupSelectedKe('tradoke')
+        }
+        if ( $('#crudForm').find("[name=gudangdari]")) {
+            lookupSelectedDari(`gudangdari`);
+        }else if ( $('#crudForm').find("[name=gandengandari]")) {
+          lookupSelectedDari('gandengandari')
+        }else if ( $('#crudForm').find("[name=tradodari]")) {
+          lookupSelectedDari('tradodari')
+        }
+          
+
+
+// let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
+// name.attr('disabled', true)
+// name.find('.lookup-toggler').attr('disabled', true)
       })
       .catch((error) => {
         showDialog(error.statusText)
@@ -1153,14 +1192,14 @@
               }
             })
 
-            form.find('[name]').attr('readonly', 'readonly').css({
+            form.find('[name]').attr('disabled', 'disabled').css({
               background: '#fff'
             })
 
           })
           .then(() => {
             $('#crudModal').modal('show')
-            $('#crudForm').find(`.ui-datepicker-trigger`).attr('readonly', true)
+            $('#crudForm').find(`.ui-datepicker-trigger`).attr('disabled', true)
 
             let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
             name.attr('disabled', true)
@@ -1424,6 +1463,9 @@
               element.val(value)
               element.data('currentValue', value)
             }
+            
+
+            
           })
 
           $.each(response.detail, (id, detail) => {
