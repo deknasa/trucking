@@ -545,6 +545,10 @@
           var kondisi = response.kondisi
           console.log(kondisi)
           if (kondisi == false) {
+            console.log(response);
+
+            showDialog(response.keterangan);
+
             $('#formImport').trigger('reset')
             $('#importModal').modal('hide')
             $('#jqGrid').jqGrid().trigger('reloadGrid');
@@ -553,6 +557,7 @@
             $('.invalid-feedback').remove()
 
           } else {
+
             showDialog(response.message['keterangan'])
           }
         },
