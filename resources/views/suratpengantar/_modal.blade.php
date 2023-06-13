@@ -62,24 +62,24 @@
                   </div>
                 </div>
                 <div class="form-group ">
-                  <label class="col-sm-12 col-form-label">DARI<span class="text-danger">*</span></label>
-                  <div class="col-sm-12">
-                    <input type="hidden" name="dari_id">
-                    <input type="text" name="dari" class="form-control kotadari-lookup">
-                  </div>
-                </div>
-                <div class="form-group ">
-                  <label class="col-sm-12 col-form-label">NO GANDENGAN / CHASIS</label>
-                  <div class="col-sm-12">
-                    <input type="hidden" name="gandengan_id">
-                    <input type="text" name="gandengan" class="form-control gandengan-lookup">
-                  </div>
-                </div>
-                <div class="form-group ">
                   <label class="col-sm-12 col-form-label">CONTAINER<span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <input type="hidden" name="container_id">
                     <input type="text" name="container" class="form-control container-lookup">
+                  </div>
+                </div>
+                <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">FULL / EMPTY<span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <input type="hidden" name="statuscontainer_id">
+                    <input type="text" name="statuscontainer" class="form-control statuscontainer-lookup">
+                  </div>
+                </div>
+                <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">UPAH SUPIR<span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <input type="hidden" name="upah_id">
+                    <input type="text" name="upah" class="form-control upahsupirrincian-lookup">
                   </div>
                 </div>
                 <div class="form-group ">
@@ -167,6 +167,13 @@
                   </div>
                 </div>
                 <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">DARI<span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <input type="hidden" name="dari_id">
+                    <input type="text" name="dari" class="form-control kotadari-lookup">
+                  </div>
+                </div>
+                <div class="form-group ">
                   <label class="col-sm-12 col-form-label">TUJUAN<span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <input type="hidden" name="sampai_id">
@@ -174,10 +181,10 @@
                   </div>
                 </div>
                 <div class="form-group ">
-                  <label class="col-sm-12 col-form-label">FULL / EMPTY<span class="text-danger">*</span></label>
+                  <label class="col-sm-12 col-form-label">NO GANDENGAN / CHASIS</label>
                   <div class="col-sm-12">
-                    <input type="hidden" name="statuscontainer_id">
-                    <input type="text" name="statuscontainer" class="form-control statuscontainer-lookup">
+                    <input type="hidden" name="gandengan_id">
+                    <input type="text" name="gandengan" class="form-control gandengan-lookup">
                   </div>
                 </div>
                 <div class="form-group ">
@@ -369,6 +376,12 @@
   let hasFormBindKeys = false
   let modalBody = $('#crudModal').find('.modal-body').html()
   var isAllowEdited;
+  let statuscontainerId
+  let kotadariId
+  let kotasampaiId
+  let pilihKotaDariId = 0;
+  let pilihKotaSampaiId = 0;
+  let containerId
   $(document).ready(function() {
 
     $(document).on('input', `#crudForm [name="nominalperalihan"]`, function(event) {
@@ -1175,10 +1188,14 @@
         this.postData = {
 
           Aktif: 'AKTIF',
+          kotadari_id: kotadariId,
+          kotasampai_id: kotasampaiId,
+          pilihkota_id: pilihKotaSampaiId
         }
       },
       onSelectRow: (kota, element) => {
         $('#crudForm [name=dari_id]').first().val(kota.id)
+        pilihKotaDariId = kota.id
         element.val(kota.keterangan)
         element.data('currentValue', element.val())
         getGaji()
@@ -1188,6 +1205,7 @@
       },
       onClear: (element) => {
         $('#crudForm [name=dari_id]').first().val('')
+        pilihKotaDariId = 0
         element.val('')
         element.data('currentValue', element.val())
         getGaji()
@@ -1202,10 +1220,14 @@
         this.postData = {
 
           Aktif: 'AKTIF',
+          kotadari_id: kotadariId,
+          kotasampai_id: kotasampaiId,
+          pilihkota_id: pilihKotaDariId
         }
       },
       onSelectRow: (kota, element) => {
         $('#crudForm [name=sampai_id]').first().val(kota.id)
+        pilihKotaSampaiId = kota.id
         element.val(kota.keterangan)
         element.data('currentValue', element.val())
         getGaji()
@@ -1215,6 +1237,7 @@
       },
       onClear: (element) => {
         $('#crudForm [name=sampai_id]').first().val('')
+        pilihKotaSampaiId = 0
         element.val('')
         element.data('currentValue', element.val())
         getGaji()
@@ -1288,6 +1311,7 @@
       },
       onSelectRow: (statuscontainer, element) => {
         $('#crudForm [name=statuscontainer_id]').first().val(statuscontainer.id)
+        statuscontainerId = statuscontainer.id
         element.val(statuscontainer.keterangan)
         element.data('currentValue', element.val())
         getGaji()
@@ -1300,6 +1324,39 @@
         element.val('')
         element.data('currentValue', element.val())
         getGaji()
+      }
+    })
+
+    $('.upahsupirrincian-lookup').lookup({
+      title: 'Upah Supir Lookup',
+      fileName: 'upahsupirrincian',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+          Aktif: 'AKTIF',
+          container_Id: containerId,
+          statuscontainer_Id: statuscontainerId,
+        }
+      },
+      onSelectRow: (upahsupir, element) => {
+        $('#crudForm [name=upah_id]').val(upahsupir.id)
+        kotadariId = upahsupir.kotadari_id
+        kotasampaiId = upahsupir.kotasampai_id
+        element.val(upahsupir.kotasampai)
+        element.data('currentValue', element.val())
+        // enabledKota()
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+        // enabledKota()
+      },
+      onClear: (element) => {
+        $('#crudForm [name=upah_id]').val('')
+        // enabledKota()
+        kotadariId = 0
+        kotasampaiId = 0
+        element.val('')
+        element.data('currentValue', element.val())
       }
     })
 

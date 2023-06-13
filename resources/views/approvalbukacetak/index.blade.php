@@ -25,17 +25,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <label class="col-12 col-sm-2 col-form-label mt-2">Proses data<span class="text-danger">*</span></label>
-
-                            <div class="col-12 col-sm-9 col-md-10">
-                                <select name="cetak" id="cetak" class="form-select select2bs4" style="width: 100%;">
-
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <label class="col-12 col-sm-2 col-form-label mt-2">table Cetak<span class="text-danger">*</span></label>
+                            <label class="col-12 col-sm-2 col-form-label mt-2">Transaksi<span class="text-danger">*</span></label>
 
                             <div class="col-12 col-sm-9 col-md-10">
                                 <select name="table" id="table" class="form-select select2bs4" style="width: 100%;">
@@ -585,7 +575,7 @@
         // return new Promise((resolve, reject) => {
         // relatedForm.find('[name=cetak]').empty()
         relatedForm.find('[name=table]').append(
-            new Option('-- PILIH TABLE CETAK ULANG --', '', false, true)
+            new Option('-- PILIH DATA TRANSAKSI --', '', false, true)
         ).trigger('change')
 
         let data = [];
@@ -608,7 +598,8 @@
             success: response => {
 
                 response.data.forEach(statusApproval => {
-                    let option = new Option(statusApproval.text, statusApproval.text)
+                    let memo = JSON.parse(statusApproval.memo)
+                    let option = new Option( memo.MEMO, statusApproval.text)
                     relatedForm.find('[name=table]').append(option).trigger('change')
                 });
 
