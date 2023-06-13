@@ -237,149 +237,118 @@ class TarifController extends MyController
         $tarif = Http::withHeaders($request->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'tarif/listpivot')['data'];
+            ->get(config('app.api_url') . 'tarif/listpivot?dari=' . $request->dari . '&sampai=' . $request->sampai)['data'];
 
-
+        if ($tarif == null) {
+            echo "<script>window.close();</script>";
+        } else {
             // dd($tarif);
-        $spreadsheet = new Spreadsheet();
-        $sheet = $spreadsheet->getActiveSheet();
-        // $sheet->setCellValue('A1', 'TAS TARIF');
-        // $sheet->getStyle("A1")->getFont()->setSize(20);
-        // $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
-        // $sheet->mergeCells('A1:G1');
+            $spreadsheet = new Spreadsheet();
+            $sheet = $spreadsheet->getActiveSheet();
+            $sheet->setCellValue('A1', 'PT. TRANSPORINDO AGUNG SEJAHTERA');
+            $sheet->getStyle("A1")->getFont()->setSize(12);
+            $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
+            $sheet->mergeCells('A1:I1');
 
-        $header_start_row = 1;
-        $detail_start_row = 2;
+            $sheet->setCellValue('A2', 'Laporan Tarif');
+            $sheet->getStyle("A2")->getFont()->setSize(12);
+            $sheet->getStyle('A2')->getAlignment()->setHorizontal('left');
+            $sheet->mergeCells('A2:I2');
 
-        $header_columns = [];
-       
-        foreach ($tarif[0] as $key => $value) {
-            if ($key <> 'id') {
-                $header_columns[] =  [
-                    'label' => $key,
-                    'index' => $key
-                ];
-            }
-        }
-        // $detail_columns = [];
-        // foreach($tarif[0] as $key => $value)
-        // {
-        //     $detail_columns[] =  [
-        //         'label' => $key,
-        //         'index' => $key
-        //     ];
-        // }
+            $header_start_row = 3;
+            $detail_start_row = 4;
 
+            $header_columns = [];
 
-        $alphabets = array();
-        for ($i = 'A'; $i <= 'Z'; $i++) {
-            $alphabets[] =  $i;
-        }
-        foreach ($header_columns as $data_columns_index => $data_column) {
-                $sheet->setCellValue($alphabets[$data_columns_index] . $header_start_row, $data_column['label'] ?? $data_columns_index + 1);
-        }
-        $lastColumn = $alphabets[$data_columns_index];
-
-        $styleArray = array(
-            'borders' => array(
-                'allBorders' => array(
-                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-                ),
-            ),
-        );
-        $sheet->getStyle("A$header_start_row:$lastColumn$header_start_row")->applyFromArray($styleArray);
-
-        $sheet->getStyle("A$detail_start_row:$lastColumn$detail_start_row")->applyFromArray($styleArray);
-
-        // LOOPING DETAIL
-        $total = 0;
-        foreach ($tarif as $response_index => $response_detail) {
-            $alphabets = range('A', 'Z');
-            $sheet->getStyle("B$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
-            $sheet->getStyle("D$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
-            $sheet->getStyle("E$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
-            foreach ($header_columns as $data_columns_index => $data_column) {
-                if ($data_columns_index==1) {
-                    $tgl=date('Y/m/d',strtotime($response_detail[$data_column['index']]));
-                    $excelDateValue = \PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel(
-                        $tgl ); 
-                    $sheet->setCellValue($alphabets[$data_columns_index] . $detail_start_row, $excelDateValue);
-                } else {
-                    $sheet->setCellValue($alphabets[$data_columns_index] . $detail_start_row, $response_detail[$data_column['index']]);
+            foreach ($tarif[0] as $key => $value) {
+                if ($key <> 'id') {
+                    $header_columns[] =  [
+                        'label' => $key,
+                        'index' => $key
+                    ];
                 }
-                $sheet->getColumnDimension($alphabets[$data_columns_index])->setAutoSize(true);
             }
-            $sheet->getStyle("A$header_start_row:$lastColumn$detail_start_row")->applyFromArray($styleArray);
-            $detail_start_row++;
+            // $detail_columns = [];
+            // foreach($tarif[0] as $key => $value)
+            // {
+            //     $detail_columns[] =  [
+            //         'label' => $key,
+            //         'index' => $key
+            //     ];
+            // }
+
+
+            $alphabets = array();
+            for ($i = 'A'; $i <= 'Z'; $i++) {
+                $alphabets[] =  $i;
+            }
+            foreach ($header_columns as $data_columns_index => $data_column) {
+                $sheet->setCellValue($alphabets[$data_columns_index] . $header_start_row, $data_column['label'] ?? $data_columns_index + 1);
+            }
+            $lastColumn = $alphabets[$data_columns_index];
+
+            $styleArray = array(
+                'borders' => array(
+                    'allBorders' => array(
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ),
+                ),
+            );
+            $sheet->getStyle("A$header_start_row:$lastColumn$header_start_row")->applyFromArray($styleArray);
+
+            $sheet->getStyle("A$detail_start_row:$lastColumn$detail_start_row")->applyFromArray($styleArray);
+
+            // LOOPING DETAIL
+            $total = 0;
+            foreach ($tarif as $response_index => $response_detail) {
+                $alphabets = range('A', 'Z');
+                $sheet->getStyle("B$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
+                $sheet->getStyle("D$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+                $sheet->getStyle("E$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+                $sheet->getStyle("F$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+                foreach ($header_columns as $data_columns_index => $data_column) {
+                    if ($data_columns_index == 1) {
+                        $tgl = date('Y/m/d', strtotime($response_detail[$data_column['index']]));
+                        $excelDateValue = \PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel(
+                            $tgl
+                        );
+                        $sheet->setCellValue($alphabets[$data_columns_index] . $detail_start_row, $excelDateValue);
+                    } else {
+                        $sheet->setCellValue($alphabets[$data_columns_index] . $detail_start_row, $response_detail[$data_column['index']]);
+                    }
+                    $sheet->getColumnDimension($alphabets[$data_columns_index])->setAutoSize(true);
+                }
+                $sheet->getStyle("A$header_start_row:$lastColumn$detail_start_row")->applyFromArray($styleArray);
+                $detail_start_row++;
+            }
+
+
+
+            $writer = new Xlsx($spreadsheet);
+            $filename = 'Data Tarif  ' . date('dmYHis');
+            header('Content-Type: application/vnd.ms-excel');
+            header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+            header('Cache-Control: max-age=0');
+
+            $writer->save('php://output');
         }
-
-      
-
-        $writer = new Xlsx($spreadsheet);
-        $filename = 'Data Tarif  ' . date('dmYHis');
-        header('Content-Type: application/vnd.ms-excel');
-        header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
-        header('Cache-Control: max-age=0');
-
-        $writer->save('php://output');
     }
     public function report(Request $request)
     {
-        // $response = Http::withHeaders($this->httpHeaders)
-        //     ->withOptions(['verify' => false])
-        //     ->withToken(session('access_token'))
-        //     ->get(config('app.api_url') . 'tarif', $request->all());
-
-        // $tarifs = $response['data'];
-
-        // $i = 0;
-        // foreach ($tarifs as $index => $params) {
-
-        //     $statusaktif = $params['statusaktif'];
-        //     $statusSistemTon = $params['statussistemton'];
-        //     $statusPenyesuaianHarga = $params['statuspenyesuaianharga'];
-
-        //     $result = json_decode($statusaktif, true);
-        //     $resultSistemTon = json_decode($statusSistemTon, true);
-        //     $resultPenyesuaianHarga = json_decode($statusPenyesuaianHarga, true);
-
-        //     $statusaktif = $result['MEMO'];
-        //     $statusSistemTon = $resultSistemTon['MEMO'];
-        //     $statusPenyesuaianHarga = $resultPenyesuaianHarga['MEMO'];
-
-
-        //     $tarifs[$i]['statusaktif'] = $statusaktif;
-        //     $tarifs[$i]['statussistemton'] = $statusSistemTon;
-        //     $tarifs[$i]['statuspenyesuaianharga'] = $statusPenyesuaianHarga;
-
-            
-
-        //     //  $rincian = Http::withHeaders($this->httpHeaders)
-        //     //         ->withOptions(['verify' => false])
-        //     //         ->withToken(session('access_token'))
-        //     //         ->get(config('app.api_url') . 'tarifrincian', ['tarif_id' => $tarifs[$i]['id']]);
-
-        //     //     $tarifs[$i]['rincian'] = $rincian['data'];
-
-        
-        //     $i++;
-
-        // }
-
-        // return view('reports.tarif', compact('tarifs'));
-        
         $detailParams = [
             'forReport' => true,
             'tarif_id' => $request->id
         ];
 
+        $tarif_detail = Http::withHeaders(request()->header())
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'tarifrincian', $detailParams);
 
-        $upahtarif_detail = Http::withHeaders(request()->header())
-        ->withOptions(['verify' => false])
-        ->withToken(session('access_token'))
-        ->get(config('app.api_url') . 'tarifrincian', $detailParams);
+        $tarif_details = $tarif_detail['data'];
 
+        $user = $tarif_detail['user'];
 
-
+        return view('reports.tarif', compact('tarif_details', 'user'));
     }
 }
