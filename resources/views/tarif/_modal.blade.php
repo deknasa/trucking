@@ -509,6 +509,9 @@
         showTarif(form, tarifId)
           .then(() => {
             $('#crudModal').modal('show')
+     
+            $('#crudForm').find(`.btn.btn-easyui.lookup-toggler`).attr('disabled', true)
+            $('#crudForm').find(`.ui-datepicker-trigger.btn.btn-easyui.text-easyui-dark`).attr('disabled', true)
           })
           .catch((error) => {
             showDialog(error.statusText)
