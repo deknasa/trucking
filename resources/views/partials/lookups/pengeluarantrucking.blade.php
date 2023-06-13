@@ -19,7 +19,7 @@
           hidden: true
         },
         {
-          label: 'KODE PENGELUARAN',
+          label: 'PENGELUARAN',
           name: 'kodepengeluaran',
           align: 'left',
         },

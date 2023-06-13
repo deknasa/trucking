@@ -658,6 +658,10 @@
           })
           .then(() => {
             $('#crudModal').modal('show')
+            $('#crudForm').find(`.btn.btn-easyui.lookup-toggler`).attr('disabled', true)
+            $('#crudForm').find(`.ui-datepicker-trigger.btn.btn-easyui.text-easyui-dark`).attr('disabled', true)
+            
+
             $('#simpanKandang').hide()
           })
           .catch((error) => {

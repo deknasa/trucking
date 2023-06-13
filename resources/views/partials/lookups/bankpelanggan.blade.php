@@ -22,7 +22,7 @@
           hidden: true
         },
         {
-          label: 'KODE BANK',
+          label: 'BANK',
           name: 'kodebank',
           align: 'left',
         },

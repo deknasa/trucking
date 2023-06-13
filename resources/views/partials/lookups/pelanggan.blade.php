@@ -22,7 +22,7 @@
           hidden: true
         },
         {
-          label: 'KODE PELANGGAN',
+          label: 'PELANGGAN',
           name: 'kodepelanggan',
           align: 'left',
         },

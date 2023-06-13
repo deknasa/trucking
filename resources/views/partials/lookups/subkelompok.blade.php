@@ -24,7 +24,7 @@
           hidden: true
         },
         {
-          label: 'Kode Subkelompok',
+          label: 'Sub kelompok',
           name: 'kodesubkelompok',
         },
         {
@@ -32,7 +32,7 @@
           name: 'keterangan',
         },
         {
-          label: 'Kelompok ID',
+          label: 'Kelompok',
           name: 'kelompok_id',
         },
         {
