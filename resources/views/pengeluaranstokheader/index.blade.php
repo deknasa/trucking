@@ -322,7 +322,7 @@
             onClick: function(event) {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Please select a row')
+                showDialog(pleaseSelectARow)
               } else {
                 cekValidasi(selectedId, 'EDIT')
               }
@@ -335,7 +335,7 @@
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Please select a row')
+                showDialog(pleaseSelectARow)
               } else {
                 cekValidasi(selectedId, 'DELETE')
               }
@@ -348,7 +348,7 @@
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Please select a row')
+                showDialog(pleaseSelectARow)
               } else {
                 window.open(`{{ route('pengeluaranstokheader.report') }}?id=${selectedId}`)
               }
@@ -363,7 +363,7 @@
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Please select a row')
+                showDialog(pleaseSelectARow)
               } else {
                 window.open(`{{ route('pengeluaranstokheader.export') }}?id=${selectedId}`)
               }
