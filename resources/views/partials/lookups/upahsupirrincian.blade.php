@@ -70,11 +70,19 @@
             label: 'Nominal Supir',
             name: 'nominalsupir',
             align: 'right',
-            formatter: 'currency',
-            formatoptions: {
-                decimalSeparator: ',',
-                thousandsSeparator: '.'
-            }
+            formatter: currencyFormat,
+          },
+          {
+            label: 'Nominal Kenek',
+            name: 'nominalkenek',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
+            label: 'Nominal Komisi',
+            name: 'nominalkomisi',
+            align: 'right',
+            formatter: currencyFormat,
           },
         {
           label: 'STATUS AKTIF',
