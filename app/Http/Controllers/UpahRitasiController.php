@@ -185,20 +185,27 @@ class UpahRitasiController extends MyController
 
             $spreadsheet = new Spreadsheet();
             $sheet = $spreadsheet->getActiveSheet();
-            // $sheet->setCellValue('A1', 'TAS TARIF');
-            // $sheet->getStyle("A1")->getFont()->setSize(20);
-            // $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
-            // $sheet->mergeCells('A1:G1');
+            $sheet->setCellValue('A1', 'PT. TRANSPORINDO AGUNG SEJAHTERA');
+            $sheet->getStyle("A1")->getFont()->setSize(12);
+            $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
+            $sheet->mergeCells('A1:H1');
 
-            $header_start_row = 1;
-            $detail_start_row = 2;
+            $sheet->setCellValue('A2', 'Laporan Upah Ritasi');
+            $sheet->getStyle("A2")->getFont()->setSize(12);
+            $sheet->getStyle('A2')->getAlignment()->setHorizontal('left');
+            $sheet->mergeCells('A2:H2');
+
+            $header_start_row = 3;
+            $detail_start_row = 4;
 
             $header_columns = [];
             foreach ($upahritasi[0] as $key => $value) {
-                $header_columns[] =  [
-                    'label' => $key,
-                    'index' => $key
-                ];
+                if ($key <> 'id') {
+                    $header_columns[] =  [
+                        'label' => $key,
+                        'index' => $key
+                    ];
+                }
             }
             // $detail_columns = [];
             // foreach($upahritasi[0] as $key => $value)
@@ -234,8 +241,23 @@ class UpahRitasiController extends MyController
             foreach ($upahritasi as $response_index => $response_detail) {
 
                 $alphabets = range('A', 'Z');
+                $sheet->getStyle("D$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
+                $sheet->getStyle("E$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+                $sheet->getStyle("F$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+                $sheet->getStyle("G$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+                $sheet->getStyle("H$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+                $sheet->getStyle("I$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+                $sheet->getStyle("J$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
                 foreach ($header_columns as $data_columns_index => $data_column) {
-                    $sheet->setCellValue($alphabets[$data_columns_index] . $detail_start_row, $response_detail[$data_column['index']]);
+                    if ($data_columns_index == 3) {
+                        $tgl = date('Y/m/d', strtotime($response_detail[$data_column['index']]));
+                        $excelDateValue = \PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel(
+                            $tgl
+                        );
+                        $sheet->setCellValue($alphabets[$data_columns_index] . $detail_start_row, $excelDateValue);
+                    }else{
+                        $sheet->setCellValue($alphabets[$data_columns_index] . $detail_start_row, $response_detail[$data_column['index']]);
+                    }
                     $sheet->getColumnDimension($alphabets[$data_columns_index])->setAutoSize(true);
                 }
                 $sheet->getStyle("A$header_start_row:$lastColumn$detail_start_row")->applyFromArray($styleArray);

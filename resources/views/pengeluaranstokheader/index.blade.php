@@ -1,12 +1,13 @@
 @extends('layouts.master')
 @push('addtional-field')
 <div class="form-group row">
-  <label class="col-12 col-sm-2 col-form-label mt-2">pengeluaran stok<span class="text-danger">*</span></label>
+  <label class="col-12 col-sm-2 col-form-label mt-2">pengeluaran stok</label>
   <div class="col-sm-4 mt-2">
     <select name="kodepengeluaranheader" id="kodepengeluaranheader" class="form-select select2" style="width: 100%;">
-      <option value="">-- PILIH Pengeluaran stok --</option>
+      <option value="">-- semua --</option>
       @foreach ($comboKodepengeluaran as $kodepengeluaran)
-        <option @if ($kodepengeluaran['id'] === "1") selected @endif value="{{$kodepengeluaran['id']}}"> {{$kodepengeluaran['keterangan']}} </option>
+      {{-- @if ($kodepengeluaran['id'] === "1") selected @endif --}}
+        <option  value="{{$kodepengeluaran['id']}}"> {{$kodepengeluaran['keterangan']}} </option>
         {{-- <option @if ($kodepengeluaran['statusdefault_text'] ==="YA") selected @endif value="{{$kodepengeluaran['id']}}"> {{$kodepengeluaran['namakodepengeluaran']}} </option> --}}
       @endforeach
     </select>
@@ -321,7 +322,7 @@
             onClick: function(event) {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Please select a row')
+                showDialog(pleaseSelectARow)
               } else {
                 cekValidasi(selectedId, 'EDIT')
               }
@@ -334,7 +335,7 @@
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Please select a row')
+                showDialog(pleaseSelectARow)
               } else {
                 cekValidasi(selectedId, 'DELETE')
               }
@@ -347,7 +348,7 @@
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Please select a row')
+                showDialog(pleaseSelectARow)
               } else {
                 window.open(`{{ route('pengeluaranstokheader.report') }}?id=${selectedId}`)
               }
@@ -362,7 +363,7 @@
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Please select a row')
+                showDialog(pleaseSelectARow)
               } else {
                 window.open(`{{ route('pengeluaranstokheader.export') }}?id=${selectedId}`)
               }

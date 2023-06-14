@@ -36,13 +36,14 @@
       report.dictionary.dataSources.clear()
 
       dataSet.readJson({
-        'tarif': <?= json_encode($tarifs); ?>,
+        'tarif': <?= json_encode($tarif_details); ?>,
+        'user': <?= json_encode($user); ?>
       })
 
       report.regData(dataSet.dataSetName, '', dataSet)
       report.dictionary.synchronize()
-    //   designer.report = report;
-    //   designer.renderHtml('content');
+      // designer.report = report;
+      // designer.renderHtml('content');
       viewer.report = report
       
      

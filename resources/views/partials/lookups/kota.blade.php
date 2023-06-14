@@ -1,5 +1,4 @@
 <table id="kotaLookup" class="lookup-grid"></table>
-<div id="kotaLookupPager"></div>
 
 @push('scripts')
 <script>
@@ -11,6 +10,9 @@
       datatype: "json",
       postData: {
         aktif: `{!! $Aktif ?? '' !!}`,
+        kotadari_id: `{!! $kotadari_id ?? '' !!}`,
+        kotasampai_id: `{!! $kotasampai_id ?? '' !!}`,
+        pilihkota_id: `{!! $pilihkota_id ?? '' !!}`,
       },         
       idPrefix: 'kotaLookup',
       colModel: [{
@@ -22,7 +24,7 @@
           hidden: true
         },
         {
-          label: 'KODE KOTA',
+          label: 'KOTA',
           name: 'kodekota',
           align: 'left',
         },
@@ -140,7 +142,6 @@
       sortname: 'id',
       sortorder: 'asc',
       page: 1,
-      pager: $('#kotaLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -225,6 +226,7 @@
       },
     })
 
+    .customPager()
   loadGlobalSearch($('#kotaLookup'))
   loadClearFilter($('#kotaLookup'))
 </script>

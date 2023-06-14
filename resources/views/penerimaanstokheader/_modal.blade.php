@@ -242,7 +242,7 @@
                     <th style="width: 20%; min-width: 200px;">stok <span class="text-danger">*</span> </th>
                     <th class="data_tbl tbl_vulkanisirke" style="width: 10px">vulkanisir ke</th>
                     <th style="width: 20%; min-width: 200px;">keterangan <span class="text-danger">*</span> </th>
-                    <th class="data_tbl tbl_qty" style="width:10%; min-width: 100px">qty</th>
+                    <th class="data_tbl tbl_qty" style="width:10%; min-width: 100px">qty <span class="text-danger">*</span></th>
                     <th class="data_tbl tbl_harga" style="width: 20%; min-width: 200px;">harga</th>
                     <th class="data_tbl tbl_penerimaanstok_nobukti"  style="width: 20%; min-width: 200px;">Penerimaan stok no bukti</th>
                     <th class="data_tbl tbl_persentase" style="width:10%; min-width: 100px">persentase discount</th>
@@ -596,8 +596,8 @@
     $('[name=gudang]').parents('.form-group').show()
     $('[name=trado]').parents('.form-group').show()
     $('[name=gandengan]').parents('.form-group').show()
-    $('[name=gudang]').val('').attr('readonly', false);
-    $('[name=gudang_id]').val('')
+    // $('[name=gudang]').val('').attr('readonly', false);
+    // $('[name=gudang_id]').val('')
     
     $('[name=gudangdari]').parents('.form-group').hide()
     $('[name=gudangke]').parents('.form-group').hide()
@@ -742,6 +742,7 @@
           `)
           detailRow.find(`[name="detail_nobukti[]"]`).val(detail.nobukti)
           detailRow.find(`[name="detail_stok[]"]`).val(detail.stok)
+          detailRow.find(`[name="detail_stok[]"]`).data('currentValue',detail.stok)
           detailRow.find(`[name="detail_stok_id[]"]`).val(detail.stok_id)
           detailRow.find(`[name="detail_qty[]"]`).val(detail.qty)
           detailRow.find(`[name="detail_harga[]"]`).val(detail.harga)
@@ -756,9 +757,13 @@
             title: 'stok Lookup',
             fileName: 'stok',
             beforeProcess: function(test) {
+              var penerimaanstokId = $(`#penerimaanstokId`).val();
+              var penerimaanstok_nobukti = $('#crudModal').find(`[name=penerimaanstok_nobukti]`).val();
+              console.log(penerimaanstok_nobukti);
               this.postData = {
+                penerimaanstok_id: penerimaanstokId,
+                penerimaanstokheader_nobukti: penerimaanstok_nobukti,
                 Aktif: 'AKTIF',
-
               }
             },
             onSelectRow: (stok, element) => {
@@ -769,6 +774,12 @@
             },
             onCancel: (element) => {
               element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+              element.val('')
+              parent = element.closest('td');
+              parent.children('.detailpenerimaanstoknobuktiId').val('')
+              element.data('currentValue', element.val())
             }
           })
           $(`#detail_penerimaanstoknobukti_${id}`).lookup({
@@ -791,7 +802,7 @@
             onClear: (element) => {
               element.val('')
               parent = element.closest('td');
-              parent.children('.detailpenerimaanstoknobuktiId').val('')
+              parent.children('.detailstokId').val('')
               element.data('currentValue', element.val())
             }
           })
@@ -1045,7 +1056,6 @@
       penerimaanstok.attr('disabled', true)
       penerimaanstok.find('.lookup-toggler').attr('disabled', true)
       $('#penerimaanstokId').attr('readonly', true);
-      console.log($('#crudForm').find(`[name="penerimaanstok"]`).val());
     }
       
       
@@ -1099,8 +1109,47 @@
       .all([
         showPenerimaanstokHeader(form, penerimaanStokHeaderId)
       ])
+      .then(penerimaanStokHeaderId => {
+            setFormBindKeys(form)
+            initDatepicker()
+            initSelect2(form.find('.select2bs4'), true)
+            form.find('[name=tglbukti]').removeAttr('disabled')
+    
+            form.find('[name=tglbukti]').attr('disabled', 'disabled').css({
+              background: '#fff'
+            })
+
+          })
       .then(() => {
         $('#crudModal').modal('show')
+        $('#crudForm').find(`.ui-datepicker-trigger`).attr('disabled', true)
+        if ( $('#crudForm').find("[name=gudang]")) {
+            lookupSelected(`gudang`);
+        }else if ( $('#crudForm').find("[name=gandengan]")) {
+            lookupSelected('gandengan')
+        }else if ( $('#crudForm').find("[name=trado]")) {
+            lookupSelected('trado')
+        }
+        if ( $('#crudForm').find("[name=gudangke]")) {
+            lookupSelectedKe(`gudangke`);
+        }else if ( $('#crudForm').find("[name=gandenganke]")) {
+          lookupSelectedKe('gandenganke')
+        }else if ( $('#crudForm').find("[name=tradoke]")) {
+          lookupSelectedKe('tradoke')
+        }
+        if ( $('#crudForm').find("[name=gudangdari]")) {
+            lookupSelectedDari(`gudangdari`);
+        }else if ( $('#crudForm').find("[name=gandengandari]")) {
+          lookupSelectedDari('gandengandari')
+        }else if ( $('#crudForm').find("[name=tradodari]")) {
+          lookupSelectedDari('tradodari')
+        }
+          
+
+
+// let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
+// name.attr('disabled', true)
+// name.find('.lookup-toggler').attr('disabled', true)
       })
       .catch((error) => {
         showDialog(error.statusText)
@@ -1129,9 +1178,34 @@
       .all([
         showPenerimaanstokHeader(form, penerimaanStokHeaderId)
       ])
-      .then(() => {
-        $('#crudModal').modal('show')
-      })
+      .then(penerimaanStokHeaderId => {
+            setFormBindKeys(form)
+            initDatepicker()
+            initSelect2(form.find('.select2bs4'), true)
+            form.find('[name]').removeAttr('disabled')
+
+            form.find('select').each((index, select) => {
+              let element = $(select)
+
+              if (element.data('select2')) {
+                element.select2('destroy')
+              }
+            })
+
+            form.find('[name]').attr('disabled', 'disabled').css({
+              background: '#fff'
+            })
+
+          })
+          .then(() => {
+            $('#crudModal').modal('show')
+            $('#crudForm').find(`.ui-datepicker-trigger`).attr('disabled', true)
+
+            let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
+            name.attr('disabled', true)
+            name.find('.lookup-toggler').attr('disabled', true)
+
+          })
       .catch((error) => {
         showDialog(error.statusText)
       })
@@ -1217,9 +1291,12 @@
       title: 'stok Lookup',
       fileName: 'stok',
       beforeProcess: function(test) {
+        var penerimaanstokId = $(`#penerimaanstokId`).val();
+        var penerimaanstok_nobukti = $('#crudModal').find(`[name=penerimaanstok_nobukti]`).val();
         this.postData = {
+          penerimaanstok_id: penerimaanstokId,
+          penerimaanstokheader_nobukti: penerimaanstok_nobukti,
           Aktif: 'AKTIF',
-
         }
       },
       onSelectRow: (stok, element) => {
@@ -1386,6 +1463,9 @@
               element.val(value)
               element.data('currentValue', value)
             }
+            
+
+            
           })
 
           $.each(response.detail, (id, detail) => {
@@ -1446,9 +1526,13 @@
               title: 'stok Lookup',
               fileName: 'stok',
               beforeProcess: function(test) {
+                var penerimaanstokId = $("#crudForm").find(`[name="penerimaanstok_id"]`).val();
+                var penerimaanstok_nobukti = $('#crudModal').find(`[name=penerimaanstok_nobukti]`).val();
+                console.log(penerimaanstok_nobukti);
                 this.postData = {
+                  penerimaanstok_id: penerimaanstokId,
+                  penerimaanstokheader_nobukti: penerimaanstok_nobukti,
                   Aktif: 'AKTIF',
-
                 }
               },
               onSelectRow: (stok, element) => {
@@ -1489,12 +1573,11 @@
           })
           sumary()
           setKodePenerimaan(response.data.penerimaanstok);
-          console.log(response.data.penerimaanstok);
-          console.log(listKodePenerimaan[0]);
+          
           if (KodePenerimaanId === listKodePenerimaan[2]) {
             $('#addRow').hide()
           }else{
-            $('#addRow').show()
+            $('#addRow').hide()
           }
           resolve()
         },

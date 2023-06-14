@@ -211,6 +211,8 @@ use App\Http\Controllers\LaporanWarkatBelumCairController;
 use App\Http\Controllers\LaporanPenyesuaianBarangController;
 use App\Http\Controllers\LaporanPemakaianBanController;
 use App\Http\Controllers\LaporanTransaksiHarianController;
+use App\Http\Controllers\DataRitasiController;
+use App\Http\Controllers\AkuntansiController;
 
 
 
@@ -270,6 +272,22 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('cabang/export', [CabangController::class, 'export'])->name('cabang.export');
     Route::get('cabang/report', [CabangController::class, 'report'])->name('cabang.report');
     Route::resource('cabang', CabangController::class);
+
+    Route::get('dataritasi/field_length', [DataRitasiController::class, 'fieldLength'])->name('dataritasi.field_length');
+    Route::get('dataritasi/{id}/delete', [DataRitasiController::class, 'delete'])->name('dataritasi.delete');
+    Route::get('dataritasi/index', [DataRitasiController::class, 'index']);
+    Route::get('dataritasi/get', [DataRitasiController::class, 'get'])->name('dataritasi.get');
+    Route::get('dataritasi/export', [DataRitasiController::class, 'export'])->name('dataritasi.export');
+    Route::get('dataritasi/report', [DataRitasiController::class, 'report'])->name('dataritasi.report');
+    Route::resource('dataritasi', DataRitasiController::class);
+
+    Route::get('akuntansi/field_length', [AkuntansiController::class, 'fieldLength'])->name('akuntansi.field_length');
+    Route::get('akuntansi/{id}/delete', [AkuntansiController::class, 'delete'])->name('akuntansi.delete');
+    Route::get('akuntansi/index', [AkuntansiController::class, 'index']);
+    Route::get('akuntansi/get', [AkuntansiController::class, 'get'])->name('akuntansi.get');
+    Route::get('akuntansi/export', [AkuntansiController::class, 'export'])->name('akuntansi.export');
+    Route::get('akuntansi/report', [AkuntansiController::class, 'report'])->name('akuntansi.report');
+    Route::resource('akuntansi', AkuntansiController::class);
 
 
     Route::get('gandengan/field_length', [GandenganController::class, 'fieldLength'])->name('gandengan.field_length');
