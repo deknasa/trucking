@@ -80,13 +80,16 @@
         let value = $(element).val();
         if (element.checked) {
             selectedRows.push($(element).val())
+            $(element).parents('tr').addClass('bg-light-blue')
         } else {
+            $(element).parents('tr').removeClass('bg-light-blue')
             for (var i = 0; i < selectedRows.length; i++) {
                 if (selectedRows[i] == value) {
                     selectedRows.splice(i, 1);
                 }
             }
         }
+
     }
 
     $(document).ready(function() {
@@ -132,38 +135,6 @@
             let form = $('#crudForm')
             let data = $('#crudForm').serializeArray()
 
-            $.each(selectedRows, function(index, item) {
-                data.push({
-                    name: 'tableId[]',
-                    value: item
-                })
-            });
-            data.push({
-                name: 'sortIndex',
-                value: $('#jqGrid').getGridParam().sortname
-            })
-            data.push({
-                name: 'sortOrder',
-                value: $('#jqGrid').getGridParam().sortorder
-            })
-            data.push({
-                name: 'filters',
-                value: $('#jqGrid').getGridParam('postData').filters
-            })
-            data.push({
-                name: 'indexRow',
-                value: indexRow
-            })
-            data.push({
-                name: 'page',
-                value: page
-            })
-            data.push({
-                name: 'limit',
-                value: limit
-            })
-
-
             $(this).attr('disabled', '')
             $('#processingLoader').removeClass('d-none')
 
@@ -174,7 +145,11 @@
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 },
-                data: data,
+                data: {
+                    tableId: selectedRows,
+                    periode: $('#crudForm').find('[name=periode]').val(),
+                    table: $('#crudForm').find('[name=table]').val()
+                },
                 success: response => {
                     $('.is-invalid').removeClass('is-invalid')
                     $('.invalid-feedback').remove()
@@ -234,26 +209,44 @@
                 iconSet: 'fontAwesome',
                 datatype: "local",
                 colModel: [{
-                        label: 'Pilih',
-                        name: 'id',
-                        index: 'Pilih',
-                        formatter: (value) => {
-                            return `<input type="checkbox" value="${value}" onchange="checkboxHandler(this)">`
-                        },
-                        editable: true,
-                        edittype: 'checkbox',
-                        search: false,
-                        width: 70,
+                        label: '',
+                        name: '',
+                        width: 30,
                         align: 'center',
-                        formatoptions: {
-                            disabled: false
+                        sortable: false,
+                        clear: false,
+                        stype: 'input',
+                        searchable: false,
+                        searchoptions: {
+                            type: 'checkbox',
+                            clearSearch: false,
+                            dataInit: function(element) {
+                                $(element).removeClass('form-control')
+                                $(element).parent().addClass('text-center')
+
+                                $(element).attr('disabled', true)
+                                $(element).on('click', function() {
+                                    $(element).attr('disabled', true)
+                                    if ($(this).is(':checked')) {
+                                        selectAllRows()
+                                    } else {
+                                        clearSelectedRows()
+                                    }
+                                })
+
+                            }
+                        },
+                        formatter: (value, rowOptions, rowData) => {
+                            return `<input type="checkbox" name="tableId[]" value="${rowData.id}" onchange="checkboxHandler(this)">`
                         },
                     },
                     {
                         label: 'ID',
                         name: 'id',
                         align: 'right',
-                        width: '50px'
+                        width: '50px',
+                        hidden: true,
+                        search: false
                     },
                     {
                         label: 'STATUS CETAK',
@@ -301,57 +294,26 @@
                         name: 'keterangan',
                         align: 'left'
                     },
-
-
                     {
-                        label: 'STATUS APPROVAL',
-                        name: 'statusapproval',
-                        align: 'left',
-                        stype: 'select',
-                        searchoptions: {
-                            value: `<?php
-                                    $i = 1;
-
-                                    foreach ($data['comboapproval'] as $status) :
-                                        echo "$status[param]:$status[parameter]";
-                                        if ($i !== count($data['comboapproval'])) {
-                                            echo ";";
-                                        }
-                                        $i++;
-                                    endforeach
-
-                                    ?>
-                            `,
-                            dataInit: function(element) {
-                                $(element).select2({
-                                    width: 'resolve',
-                                    theme: "bootstrap4"
-                                });
-                            }
-                        },
-                        formatter: (value, options, rowData) => {
-                            let statusApproval = JSON.parse(value)
-
-                            let formattedValue = $(`
-                                <div class="badge" style="background-color: ${statusApproval.WARNA}; color: #fff;">
-                                <span>${statusApproval.SINGKATAN}</span>
-                                </div>
-                            `)
-
-                            return formattedValue[0].outerHTML
-                        },
-                        cellattr: (rowId, value, rowObject) => {
-                            let statusApproval = JSON.parse(rowObject.statusapproval)
-
-                            return ` title="${statusApproval.MEMO}"`
-                        }
-                    },
-                    {
-                        label: 'USER APPROVAL',
-                        name: 'userapproval',
+                        label: 'USER CETAK',
+                        name: 'userbukacetak',
                         align: 'left'
                     },
-
+                    {
+                        label: 'MODIFIEDBY',
+                        name: 'modifiedby',
+                        align: 'left'
+                    },
+                    {
+                        label: 'CREATEDAT',
+                        name: 'created_at',
+                        align: 'right',
+                        formatter: "date",
+                        formatoptions: {
+                            srcformat: "ISO8601Long",
+                            newformat: "d-m-Y H:i:s"
+                        }
+                    },
                     {
                         label: 'UPDATEDAT',
                         name: 'updated_at',
@@ -420,6 +382,7 @@
                         $('#jqGrid tbody tr').each(function(row, tr) {
                             if ($(this).find(`td input:checkbox`).val() == value) {
                                 $(this).find(`td input:checkbox`).prop('checked', true)
+                                $(this).addClass('bg-light-blue')
                             }
                         })
 
@@ -461,8 +424,11 @@
                             $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
                         }
                     }, 100)
-
-
+                    if (data.data != undefined) {
+                        if (data.data.length != 0) {
+                            $('#gs_').attr('disabled', false)
+                        }
+                    }
                     setHighlight($(this))
                 }
             })
@@ -521,8 +487,6 @@
                     } else {
                         showDialog(error.statusText)
                     }
-                },
-                error: error => {
                     reject(error)
                 }
             })
@@ -599,7 +563,7 @@
 
                 response.data.forEach(statusApproval => {
                     let memo = JSON.parse(statusApproval.memo)
-                    let option = new Option( memo.MEMO, statusApproval.text)
+                    let option = new Option(memo.MEMO, statusApproval.text)
                     relatedForm.find('[name=table]').append(option).trigger('change')
                 });
 
@@ -613,6 +577,24 @@
             }
         })
         // })
+    }
+
+    function clearSelectedRows() {
+        selectedRows = []
+
+        $('#jqGrid').trigger('reloadGrid')
+    }
+
+    function selectAllRows() {
+        getData()
+            .then((response) => {
+                selectedRows = response.data.map((rows) => rows.id)
+                $('#jqGrid').trigger('reloadGrid')
+            })
+            .catch((errors) => {
+                setErrorMessages($('#crudForm'), errors)
+            })
+
     }
 </script>
 @endpush()
