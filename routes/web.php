@@ -289,16 +289,16 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('akuntansi/report', [AkuntansiController::class, 'report'])->name('akuntansi.report');
     Route::resource('akuntansi', AkuntansiController::class);
 
-    Route::get('typeakuntansi/field_length', [TypeAkuntansiController::class, 'fieldLength'])->name('akuntansi.field_length');
-    Route::get('typeakuntansi/{id}/delete', [TypeAkuntansiController::class, 'delete'])->name('akuntansi.delete');
+    Route::get('typeakuntansi/field_length', [TypeAkuntansiController::class, 'fieldLength'])->name('typeakuntansi.field_length');
+    Route::get('typeakuntansi/{id}/delete', [TypeAkuntansiController::class, 'delete'])->name('typeakuntansi.delete');
     Route::get('typeakuntansi/index', [TypeAkuntansiController::class, 'index']);
-    Route::get('typeakuntansi/get', [TypeAkuntansiController::class, 'get'])->name('maintypeakuntansi.get');
+    Route::get('typeakuntansi/get', [TypeAkuntansiController::class, 'get'])->name('typeakuntansi.get');
     Route::get('typeakuntansi/export', [TypeAkuntansiController::class, 'export'])->name('typeakuntansi.export');
     Route::get('typeakuntansi/report', [TypeAkuntansiController::class, 'report'])->name('typeakuntansi.report');
     Route::resource('typeakuntansi', TypeAkuntansiController::class);
 
-    Route::get('maintypeakuntansi/field_length', [MainTypeAkuntansiController::class, 'fieldLength'])->name('akuntansi.field_length');
-    Route::get('maintypeakuntansi/{id}/delete', [MainTypeAkuntansiController::class, 'delete'])->name('akuntansi.delete');
+    Route::get('maintypeakuntansi/field_length', [MainTypeAkuntansiController::class, 'fieldLength'])->name('maintypeakuntansi.field_length');
+    Route::get('maintypeakuntansi/{id}/delete', [MainTypeAkuntansiController::class, 'delete'])->name('maintypeakuntansi.delete');
     Route::get('maintypeakuntansi/index', [MainTypeAkuntansiController::class, 'index']);
     Route::get('maintypeakuntansi/get', [MainTypeAkuntansiController::class, 'get'])->name('maintypeakuntansi.get');
     Route::get('maintypeakuntansi/export', [MainTypeAkuntansiController::class, 'export'])->name('maintypeakuntansi.export');
