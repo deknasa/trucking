@@ -293,8 +293,8 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('typeakuntansi/{id}/delete', [TypeAkuntansiController::class, 'delete'])->name('akuntansi.delete');
     Route::get('typeakuntansi/index', [TypeAkuntansiController::class, 'index']);
     Route::get('typeakuntansi/get', [TypeAkuntansiController::class, 'get'])->name('akuntansi.get');
-    Route::get('typeakuntansi/export', [TypeAkuntansiController::class, 'export'])->name('akuntansi.export');
-    Route::get('typeakuntansi/report', [TypeAkuntansiController::class, 'report'])->name('akuntansi.report');
+    Route::get('typeakuntansi/export', [TypeAkuntansiController::class, 'export'])->name('typeakuntansi.export');
+    Route::get('typeakuntansi/report', [TypeAkuntansiController::class, 'report'])->name('typeakuntansi.report');
     Route::resource('typeakuntansi', TypeAkuntansiController::class);
 
     Route::get('gandengan/field_length', [GandenganController::class, 'fieldLength'])->name('gandengan.field_length');

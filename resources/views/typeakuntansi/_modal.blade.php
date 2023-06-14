@@ -318,7 +318,7 @@
         setStatusRitasiOptions(form)
       ])
       .then(() => {
-        showAkuntansi(form, id)
+        showTypeAkuntansi(form, id)
         .then(() => {
             $('#crudModal').modal('show')
             form.find(`[name="order"]`).parent('.input-group').find('.button-clear').remove()
@@ -356,9 +356,10 @@
         setStatusRitasiOptions(form)
       ])
       .then(() => {
-        showAkuntansi(form, id)
+        showTypeAkuntansi(form, id)
           .then(() => {
             $('#crudModal').modal('show')
+            $('#crudForm').find(`.btn.btn-easyui.lookup-toggler`).attr('disabled', true)
           })
           .catch((error) => {
             showDialog(error.statusText)
@@ -471,7 +472,7 @@
   }
 
 
-  function showAkuntansi(form, id) {
+  function showTypeAkuntansi(form, id) {
     return new Promise((resolve, reject) => {
       $.ajax({
         url: `${apiUrl}typeakuntansi/${id}`,
@@ -554,6 +555,7 @@
         $('#crudForm [name=akuntansi_id]').val(akuntansi.id)
         element.val(akuntansi.kodeakuntansi)
         element.data('currentValue', element.val())
+      
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
