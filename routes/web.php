@@ -713,6 +713,7 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('orderantrucking/{id}/delete', [OrderanTruckingController::class, 'delete'])->name('orderantrucking.delete');
     Route::get('orderantrucking/get', [OrderanTruckingController::class, 'get'])->name('orderantrucking.get');
     Route::get('orderantrucking/index', [OrderanTruckingController::class, 'index']);
+    Route::get('orderantrucking/export', [OrderanTruckingController::class, 'export'])->name('orderantrucking.export');
     Route::resource('orderantrucking', OrderanTruckingController::class);
 
     Route::get('prosesabsensisupir/field_length', [ProsesAbsensiSupirController::class, 'fieldLength'])->name('prosesabsensisupir.field_length');

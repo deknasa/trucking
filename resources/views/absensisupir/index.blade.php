@@ -19,10 +19,10 @@
               <li><a href="#kasgantung-tab">KAS GANTUNG</a></li>
             </ul>
             <div id="detail-tab">
-
+              <table id="detail"></table>
             </div>
             <div id="kasgantung-tab">
-
+             <table id="kasgantungGrid"></table>
             </div>
           </div>
         </div>
@@ -59,6 +59,10 @@
   $(document).ready(function() {
     
     $("#tabs").tabs()
+
+    loadDetailGrid()
+    loadKasGantungGrid()
+
     setRange()
     initDatepicker()
     $(document).on('click','#btnReload', function(event) {
@@ -226,25 +230,27 @@
         },
         onSelectRow: function(id) {
           let nobukti = $('#jqGrid').jqGrid('getCell', id, 'kasgantung_nobukti')
-          $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/absensisupir_detail/${currentTab}/grid`, function() {
-            loadGrid(id,nobukti)
-          })
-          loadDetailData(id)
+          // $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/absensisupir_detail/${currentTab}/grid`, function() {
+          //   loadGrid(id,nobukti)
+          // })
+          
           activeGrid = $(this)
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
           
+          loadDetailData(id)
+          loadKasGantungData()
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
 
           if (data.data.length === 0) {
-            abortGridLastRequest($('#detail'))
-            clearGridData($('#detail'))
-            abortGridLastRequest($('#kasgantungGrid'))
-            clearGridData($('#kasgantungGrid'))
+            $('#detail, #kasGantungGrid').each((index, element) => {
+              abortGridLastRequest($(element))
+              clearGridData($(element))
+            })
           }
           
           $(document).unbind('keydown')
@@ -538,17 +544,6 @@
 
         submitButton.removeAttr('disabled')
       }
-    })
-    
-    $("#tabs").on('click', 'li.ui-state-active', function() {
-      let href = $(this).find('a').attr('href');
-      currentTab = href.substring(1, href.length - 4);
-      let absenId = $('#jqGrid').jqGrid('getGridParam', 'selrow')
-      let nobukti = $('#jqGrid').jqGrid('getCell', absenId, 'kasgantung_nobukti')
-      $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/absensisupir_detail/${currentTab}/grid`, function() {
-
-        loadGrid(absenId, nobukti)
-      })
     })
 
     function approve(id) {
