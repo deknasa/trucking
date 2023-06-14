@@ -311,16 +311,30 @@
       let action = form.data('action')
       let data = $('#crudForm').serializeArray()
 
-      $('#crudForm').find(`[name="detail_qty[]"]`).each((index, element) => {
-        data.filter((row) => row.name === 'detail_qty[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="detail_qty[]"]`)[index])
-      })
-      $('#crudForm').find(`[name="detail_harga[]"]`).each((index, element) => {
-        data.filter((row) => row.name === 'detail_harga[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="detail_harga[]"]`)[index])
-      })
-
-      $('#crudForm').find(`[name="detail_persentasediscount[]"]`).each((index, element) => {
-        data.filter((row) => row.name === 'detail_persentasediscount[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="detail_persentasediscount[]"]`)[index])
-      })
+      if (action !== 'delete') {
+        $('#crudForm').find(`[name="detail_qty[]"]`).each((index, element) => {
+          if (element.value !="" &&  AutoNumeric.getAutoNumericElement(element) !== null) {
+            data.filter((row) => row.name === 'detail_qty[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="detail_qty[]"]`)[index])
+          }else{
+            data.filter((row) => row.name === 'detail_qty[]')[index].value = 0;
+          }
+        })
+        $('#crudForm').find(`[name="detail_harga[]"]`).each((index, element) => {
+          if (element.value !="" &&  AutoNumeric.getAutoNumericElement(element) !== null) {
+            data.filter((row) => row.name === 'detail_harga[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="detail_harga[]"]`)[index])
+          }else{
+            data.filter((row) => row.name === 'detail_harga[]')[index].value = 0;
+          }
+        })
+  
+        $('#crudForm').find(`[name="detail_persentasediscount[]"]`).each((index, element) => {
+          if (element.value !="" &&  AutoNumeric.getAutoNumericElement(element) !== null) {
+            data.filter((row) => row.name === 'detail_persentasediscount[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="detail_persentasediscount[]"]`)[index])
+          }else{
+            data.filter((row) => row.name === 'detail_persentasediscount[]')[index].value = 0;
+          }
+        })
+      }
 
 
       data.push({
@@ -358,9 +372,9 @@
       })
       data.push({
         name: 'penerimaanheader_id',
-        value: data.find(item => item.name === "penerimaanstok_id").value
+        value:  $('#penerimaanstokId').val()
       })
-      let penerimaanheader_id = data.find(item => item.name === "penerimaanstok_id").value
+      let penerimaanheader_id = $('#penerimaanstokId').val()
       let tgldariheader = $('#tgldariheader').val();
       let tglsampaiheader = $('#tglsampaiheader').val()
       switch (action) {
@@ -1115,7 +1129,7 @@
             initSelect2(form.find('.select2bs4'), true)
             form.find('[name=tglbukti]').removeAttr('disabled')
     
-            form.find('[name=tglbukti]').attr('disabled', 'disabled').css({
+            form.find('[name=tglbukti]').attr('readonly', 'readonly').css({
               background: '#fff'
             })
 
