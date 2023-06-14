@@ -57,7 +57,7 @@
           },
           {
             label: 'AKUNTANSI',
-            name: 'akuntansi_id',
+            name: 'akuntansi',
             align: 'left'
           },
           {
@@ -389,7 +389,7 @@
                 let link = document.createElement('a')
 
                 link.href = window.URL.createObjectURL(blob)
-                link.download = `laporantypeakuntansi${(new Date).getTime()}.xlsx`
+                link.download = `laporantipeakuntansi${(new Date).getTime()}.xlsx`
                 link.click()
 
                 submitButton.removeAttr('disabled')
@@ -404,7 +404,7 @@
           xhr.send()
         } else if ($('#rangeModal').data('action') == 'report') {
         
-          window.open(`{{ route('dataritasi.report') }}?${params}`)
+          window.open(`{{ route('typeakuntansi.report') }}?${params}`)
 
           submitButton.removeAttr('disabled')
         }

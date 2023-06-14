@@ -952,9 +952,6 @@
       minimumValue: 0
     })
         })
-        initAutoNumeric(detailRow.find('.autonumeric'), {
-      minimumValue: 0
-    })
         setRowNumbers()
       }
     })
