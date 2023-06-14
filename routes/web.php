@@ -214,7 +214,7 @@ use App\Http\Controllers\LaporanTransaksiHarianController;
 use App\Http\Controllers\DataRitasiController;
 use App\Http\Controllers\AkuntansiController;
 use App\Http\Controllers\TypeAkuntansiController;
-
+use App\Http\Controllers\MainTypeAkuntansiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -292,10 +292,18 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('typeakuntansi/field_length', [TypeAkuntansiController::class, 'fieldLength'])->name('akuntansi.field_length');
     Route::get('typeakuntansi/{id}/delete', [TypeAkuntansiController::class, 'delete'])->name('akuntansi.delete');
     Route::get('typeakuntansi/index', [TypeAkuntansiController::class, 'index']);
-    Route::get('typeakuntansi/get', [TypeAkuntansiController::class, 'get'])->name('akuntansi.get');
+    Route::get('typeakuntansi/get', [TypeAkuntansiController::class, 'get'])->name('maintypeakuntansi.get');
     Route::get('typeakuntansi/export', [TypeAkuntansiController::class, 'export'])->name('typeakuntansi.export');
     Route::get('typeakuntansi/report', [TypeAkuntansiController::class, 'report'])->name('typeakuntansi.report');
     Route::resource('typeakuntansi', TypeAkuntansiController::class);
+
+    Route::get('maintypeakuntansi/field_length', [MainTypeAkuntansiController::class, 'fieldLength'])->name('akuntansi.field_length');
+    Route::get('maintypeakuntansi/{id}/delete', [MainTypeAkuntansiController::class, 'delete'])->name('akuntansi.delete');
+    Route::get('maintypeakuntansi/index', [MainTypeAkuntansiController::class, 'index']);
+    Route::get('maintypeakuntansi/get', [MainTypeAkuntansiController::class, 'get'])->name('maintypeakuntansi.get');
+    Route::get('maintypeakuntansi/export', [MainTypeAkuntansiController::class, 'export'])->name('maintypeakuntansi.export');
+    Route::get('maintypeakuntansi/report', [MainTypeAkuntansiController::class, 'report'])->name('maintypeakuntansi.report');
+    Route::resource('maintypeakuntansi', MainTypeAkuntansiController::class);
 
     Route::get('gandengan/field_length', [GandenganController::class, 'fieldLength'])->name('gandengan.field_length');
     Route::get('gandengan/{id}/delete', [GandenganController::class, 'delete'])->name('gandengan.delete');
