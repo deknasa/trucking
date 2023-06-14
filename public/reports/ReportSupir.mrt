@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "b9c299a87f6ed9c2d3f6cf5f393cfcba",
+  "ReportGuid": "8c84bcc556e2fac32d5d5c5fd6c6ff8c",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportSupir.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1686543330000+0700)/",
+  "ReportChanged": "/Date(1686717042000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -897,7 +897,7 @@
               "Ident": "StiText",
               "Name": "Text1",
               "ClientRectangle": "10.4,0,7.8,0.8",
-              "ComponentPlacement": "rt.ReportTitleBand1",
+              "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -917,7 +917,7 @@
               "Name": "Text28",
               "Guid": "83d8bce70b8e5fec9592f57af66c8f3f",
               "ClientRectangle": "10.4,0.8,7.8,0.8",
-              "ComponentPlacement": "rt.ReportTitleBand1",
+              "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -1066,7 +1066,8 @@
                 "Bottom": 0
               },
               "TextFormat": {
-                "Ident": "StiDateFormatService"
+                "Ident": "StiCustomFormatService",
+                "StringFormat": "DD-MM-YYYY"
               },
               "Type": "DataColumn"
             },
