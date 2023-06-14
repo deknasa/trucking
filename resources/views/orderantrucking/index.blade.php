@@ -355,6 +355,21 @@
 
             }
           },
+          {
+            id: 'export',
+            title: 'Export',
+            caption: 'Export',
+            innerHTML: '<i class="fas fa-file-export"></i> EXPORT',
+            class: 'btn btn-warning btn-sm mr-1',
+            onClick: () => {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Please select a row')
+              } else {
+                window.open(`{{ route('orderantrucking.export') }}?id=${selectedId}`)
+              }
+            }
+          },  
         ]
       })
 
@@ -394,6 +409,10 @@
 
     if (!`{{ $myAuth->hasPermission('orderantrucking', 'destroy') }}`) {
       $('#delete').attr('disabled', 'disabled')
+    }
+
+    if (!`{{ $myAuth->hasPermission('absensisupirheader', 'export') }}`) {
+      $('#export').attr('disabled', 'disabled')
     }
 
     $('#rangeModal').on('shown.bs.modal', function() {

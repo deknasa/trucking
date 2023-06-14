@@ -1,7 +1,8 @@
-<table id="kasgantungGrid"></table>
 
+
+@push('scripts')
 <script>
-  function loadGrid(id, nobukti) {
+  function loadKasGantungGrid(nobukti) {
     let sortnameKasgantung = 'nobukti'
     let sortorderKasgantung = 'asc'
     let totalRecordKasgantung
@@ -13,11 +14,11 @@
 
     $("#kasgantungGrid")
       .jqGrid({
-        url: `${apiUrl}kasgantungdetail/getKasgantung`,
-        mtype: "GET",
+        datatype: 'local',
+        data: [],
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
-        datatype: "json",
+        idPrefix: 'kasGantungGrid',
         colModel: [{
             label: 'NO BUKTI',
             name: 'nobukti',
@@ -138,7 +139,7 @@
     loadGlobalSearch($('#kasgantungGrid'))
   }
 
-  function loadDetailData(id, nobukti) {
+  function loadKasGantungData(nobukti) {
     abortGridLastRequest($('#kasgantungGrid'))
 
     $('#kasgantungGrid').setGridParam({
@@ -151,3 +152,4 @@
     }).trigger('reloadGrid')
   }
 </script>
+@endpush

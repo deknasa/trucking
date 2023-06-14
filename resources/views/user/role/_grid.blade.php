@@ -1,17 +1,16 @@
-<table id="userRoleGrid"></table>
-
 @include('user.role._modal')
 
+@push('scripts')
 <script>
-  function loadGrid(userId) {
+  function loadUserRoleGrid() {
     $('#userRoleGrid')
       .jqGrid({
-        url: `${apiUrl}user/${userId}/role`,
-        datatype: 'json',
+        datatype: 'local',
+        data: [],
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
-        colModel: [
-          {
+        idPrefix: 'userRoleGrid',
+        colModel: [{
             label: 'ROLE',
             name: 'rolename',
           },
@@ -83,7 +82,7 @@
           } else {
             $('#userRoleGrid').setSelection($('#userRoleGrid').getDataIDs()[indexRow])
           }
-          
+
           setHighlight($(this))
         }
       })
@@ -95,7 +94,7 @@
         disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
           abortGridLastRequest($(this))
-          
+
           clearGlobalSearch($('#acoGrid'))
         },
       })
@@ -116,7 +115,7 @@
     loadGlobalSearch($('#userRoleGrid'))
   }
 
-  function loadRoleData(userId) {
+  function loadUserRoleData(userId) {
     abortGridLastRequest($('#userRoleGrid'))
 
     $('#userRoleGrid').setGridParam({
@@ -125,3 +124,4 @@
     }).trigger('reloadGrid')
   }
 </script>
+@endpush

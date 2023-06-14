@@ -9,6 +9,9 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use stdClass;
 
 class OrderanTruckingController extends MyController
 {
@@ -102,6 +105,37 @@ class OrderanTruckingController extends MyController
         return $response['data'];
         
                 
+    }
+
+    public function export(Request $request):void
+    {
+        //FETCH HEADER
+        $id = $request->id;
+        $data = Http::withHeaders($request->header())
+        ->withOptions(['verify' => false])
+        ->withToken(session('access_token'))
+        ->get(config('app.api_url') .'orderantrucking/'.$id.'/export');
+
+        $orderantrucking = $data['data'];
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setCellValue('A1', $orderantrucking['judul']);
+        $sheet->setCellValue('A2', $orderantrucking['judulLaporan']);
+        $sheet->getStyle("A1")->getFont()->setSize(14);
+        $sheet->getStyle("A2")->getFont()->setSize(12);
+        $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
+        $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
+        $sheet->mergeCells('A1:B1');
+        $sheet->mergeCells('A2:B2');
+
+        $writer = new Xlsx($spreadsheet);
+        $filename = 'Laporan Orderan Trucking  ' . date('dmYHis');
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+        header('Cache-Control: max-age=0');
+
+        $writer->save('php://output');
     }
 
 }

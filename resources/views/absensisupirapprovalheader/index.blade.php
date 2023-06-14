@@ -21,9 +21,8 @@
               <li><a href="#jurnal-tab">Jurnal</a></li>
             </ul>
             <div id="detail-tab">
-
+              <table id="detail"></table>
             </div>
-
             <div id="pengeluaran-tab">
 
             </div>
@@ -64,6 +63,8 @@
 
   $(document).ready(function() {
     $("#tabs").tabs()
+    
+    loadDetailGrid()
 
     $('#lookup').hide()
     setRange()
@@ -338,26 +339,35 @@
         },
         onSelectRow: function(id) {
           let nobukti = $('#jqGrid').jqGrid('getCell', id, 'pengeluaran_nobukti')
-          $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/absensisupirapprovaldetail/${currentTab}/grid`, function() {
-            loadGrid(id,nobukti)
-          })
+          // $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/absensisupirapprovaldetail/${currentTab}/grid`, function() {
+          //   loadGrid(id,nobukti)
+          // })
           activeGrid = $(this)
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
+
+          loadDetailData(id)
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
 
           if (data.data.length === 0) {
-            abortGridLastRequest($('#detail'))
-            clearGridData($('#detail'))
-            abortGridLastRequest($('#jurnalGrid'))
-            clearGridData($('#jurnalGrid'))
-            abortGridLastRequest($('#pengeluaranGrid'))
-            clearGridData($('#pengeluaranGrid'))
+            $('#detail').each((index, element) => {
+              abortGridLastRequest($(element))
+              clearGridData($(element))
+            })
           }
+
+          // if (data.data.length === 0) {
+          //   abortGridLastRequest($('#detail'))
+          //   clearGridData($('#detail'))
+          //   abortGridLastRequest($('#jurnalGrid'))
+          //   clearGridData($('#jurnalGrid'))
+          //   abortGridLastRequest($('#pengeluaranGrid'))
+          //   clearGridData($('#pengeluaranGrid'))
+          // }
 
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
@@ -456,9 +466,12 @@
             innerHTML: '<i class="fa fa-file-export"></i> EXPORT',
             class: 'btn btn-warning btn-sm mr-1',
             onClick: () => {
-              $('#rangeModal').data('action', 'export')
-              $('#rangeModal').find('button:submit').html(`Export`)
-              $('#rangeModal').modal('show')
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Please select a row')
+              } else {
+                window.open(`{{ route('absensisupirapprovalheader.export') }}?id=${selectedId}`)
+              }
             }
           },
         ]
@@ -576,16 +589,16 @@
       })
     }
 
-    $("#tabs").on('click', 'li.ui-state-active', function() {
-      let href = $(this).find('a').attr('href');
-      currentTab = href.substring(1, href.length - 4);
-      let approvalId = $('#jqGrid').jqGrid('getGridParam', 'selrow')
-      let nobukti = $('#jqGrid').jqGrid('getCell', approvalId, 'pengeluaran_nobukti')
-      $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/absensisupirapprovaldetail/${currentTab}/grid`, function() {
+    // $("#tabs").on('click', 'li.ui-state-active', function() {
+    //   let href = $(this).find('a').attr('href');
+    //   currentTab = href.substring(1, href.length - 4);
+    //   let approvalId = $('#jqGrid').jqGrid('getGridParam', 'selrow')
+    //   let nobukti = $('#jqGrid').jqGrid('getCell', approvalId, 'pengeluaran_nobukti')
+    //   $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/absensisupirapprovaldetail/${currentTab}/grid`, function() {
 
-        loadGrid(approvalId, nobukti)
-      })
-    })
+    //     loadGrid(approvalId, nobukti)
+    //   })
+    // })
   })
 </script>
 @endpush()

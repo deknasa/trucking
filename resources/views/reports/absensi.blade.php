@@ -34,7 +34,8 @@
       report.dictionary.dataSources.clear()
 
       dataSet.readJson({
-        'absensi': <?= json_encode($absensi_details); ?>,
+        'absensi': <?= json_encode($absensi); ?>,
+        'detail': <?= json_encode($absensi_details); ?>,
         'user': <?= json_encode($user); ?>
       })
 
