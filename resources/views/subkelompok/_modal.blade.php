@@ -463,7 +463,7 @@
       }
     })
   }
-  function cekValidasidelete(Id) {
+  function cekValidasidelete(Id,Aksi) {
     $.ajax({
       url: `{{ config('app.api_url') }}subkelompok/${Id}/cekValidasi`,
       method: 'POST',
@@ -476,7 +476,12 @@
           if (kondisi == true) {
             showDialog(response.message['keterangan'])
           } else {
+            if(Aksi == 'EDIT'){
+              editSubKelompok(Id)
+            }
+            if(Aksi == 'DELETE'){
               deleteSubKelompok(Id)
+            }
           }
 
       }
