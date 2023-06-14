@@ -430,9 +430,13 @@
             $('.modal-loader').addClass('d-none')
           })
       })
-
-    initAutoNumeric(form.find(`[name="nominal"]`))
-    initAutoNumeric(form.find(`[name="nominalton"]`))
+     
+    initAutoNumeric(form.find(`[name="nominal[]"]`), {
+      minimumValue: 0
+    })
+    initAutoNumeric(form.find(`[name="nominalton"]`), {
+      minimumValue: 0
+    })
   }
 
   function editTarif(tarifId) {
@@ -753,9 +757,11 @@
             detailRow.find(`[name="nominal[]"]`).val(detail.nominal)
 
             $('#detailList tbody').append(detailRow)
-
-            initAutoNumeric(detailRow.find('.autonumeric'))
-            setNominal()
+            
+            initAutoNumeric(detailRow.find('.autonumeric'), {
+              minimumValue: 0
+            })
+            
           })
           // setuprowshow(userId);
 
@@ -937,11 +943,18 @@
             `)
           detailRow.find(`[name="container_id[]"]`).val(detail.container_id)
           detailRow.find(`[name="container[]"]`).val(detail.container)
-          initAutoNumeric(detailRow.find('.autonumeric'))
-          setNominal()
+          
+          // initAutoNumeric(detailRow.find('.autonumeric'))
+          // setNominal()
+      
           $('#detailList tbody').append(detailRow)
-
+          initAutoNumeric(detailRow.find('.autonumeric'), {
+      minimumValue: 0
+    })
         })
+        initAutoNumeric(detailRow.find('.autonumeric'), {
+      minimumValue: 0
+    })
         setRowNumbers()
       }
     })
