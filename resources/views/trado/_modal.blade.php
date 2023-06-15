@@ -401,7 +401,7 @@
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
-    
+
     // $('#crudModal').find('.modal-body').html(modalBody)
     dropzones.forEach(dropzone => {
       dropzone.removeAllFiles()
@@ -455,6 +455,11 @@
         showDefault(form)
           .then(() => {
             $('#crudModal').modal('show')
+            $('#crudForm').find(`.ui-datepicker-trigger`).attr('disabled', false)
+
+            let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
+            name.attr('disabled', false)
+            name.find('.lookup-toggler').attr('disabled', false)
           })
           .catch((error) => {
             showDialog(error.statusText)
@@ -719,7 +724,7 @@
           init: function() {
             dropzones.push(this)
             this.on("addedfile", function(file) {
-              if(this.files.length > 5){
+              if (this.files.length > 5) {
                 this.removeFile(file);
               }
             });
