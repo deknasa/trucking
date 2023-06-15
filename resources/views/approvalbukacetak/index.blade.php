@@ -447,7 +447,7 @@
             .customPager({
                 buttons: [{
                     id: 'btnSubmit',
-                    innerHTML: '<i class="fas fa-check""></i> UN/APPROVAL',
+                    innerHTML: '<i class="fas fa-check""></i> APPROVAL',
                     class: 'btn btn-purple btn-sm mr-1',
                 }]
             })
