@@ -54,6 +54,12 @@
              hidden: true
           },
           {
+            label: 'nominalplusborongan',
+            name: 'nominalplusborongan',
+             hidden: true,
+             search: false
+          },
+          {
             label: 'UANG JALAN',
             name: 'uangjalan',
             formatter: 'number', 

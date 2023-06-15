@@ -11,6 +11,7 @@
       datatype: "json",
       postData: {
         aktif: `{!! $Aktif ?? '' !!}`,
+        absen: `{!! $AbsensiId ?? '' !!}`,
       },
       idPrefix: 'supirLookup',
       colModel: [{

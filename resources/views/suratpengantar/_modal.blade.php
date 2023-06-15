@@ -51,7 +51,8 @@
                   <label class="col-sm-12 col-form-label">NO POLISI<span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <input type="hidden" name="trado_id">
-                    <input type="text" name="trado" class="form-control trado-lookup">
+                    <input type="hidden" name="absensidetail_id">
+                    <input type="text" name="trado" class="form-control absensisupirdetail-lookup">
                   </div>
                 </div>
                 <div class="form-group ">
@@ -113,7 +114,7 @@
                         <div class="form-group">
                           <label class="col-sm-12 col-form-label">Nominal Peralihan</label>
                           <div class="col-md-12">
-                            <input type="text" name="nominalperalihan" class="form-control text-right" disabled>
+                            <input type="text" name="nominalperalihan" class="form-control text-right" readonly>
                             <input type="hidden" name="omset">
                           </div>
                         </div>
@@ -382,6 +383,10 @@
   let pilihKotaDariId = 0;
   let pilihKotaSampaiId = 0;
   let containerId
+  let nominalPlusBorongan = 0;
+  let nominalSupir = 0;
+  let totalNominalSupir = 0;
+
   $(document).ready(function() {
 
     $(document).on('input', `#crudForm [name="nominalperalihan"]`, function(event) {
@@ -515,116 +520,57 @@
       $(this).attr('disabled', '')
       $('#processingLoader').removeClass('d-none')
 
-      if (action == 'add' || action == 'edit') {
-        $.ajax({
-          url: `{{ config('app.api_url') }}suratpengantar/cekUpahSupir`,
-          method: 'POST',
-          dataType: 'JSON',
-          headers: {
-            Authorization: `Bearer ${accessToken}`
-          },
-          data: data,
-          success: response => {
+      $.ajax({
+        url: url,
+        method: method,
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: data,
+        success: response => {
 
-            $.ajax({
-              url: url,
-              method: method,
-              dataType: 'JSON',
-              headers: {
-                Authorization: `Bearer ${accessToken}`
-              },
-              data: data,
-              success: response => {
+          id = response.data.id
+          $('#crudModal').modal('hide')
+          $('#crudModal').find('#crudForm').trigger('reset')
 
-                id = response.data.id
-                $('#crudModal').modal('hide')
-                $('#crudModal').find('#crudForm').trigger('reset')
+          $('#jqGrid').jqGrid('setGridParam', {
+            page: response.data.page
+          }).trigger('reloadGrid');
 
-                $('#jqGrid').jqGrid('setGridParam', {
-                  page: response.data.page
-                }).trigger('reloadGrid');
-
-                if (response.data.grp == 'FORMAT') {
-                  updateFormat(response.data)
-                }
-              },
-              error: error => {
-                console.log('postdata ', error)
-                if (error.status === 422) {
-                  $('.is-invalid').removeClass('is-invalid')
-                  $('.invalid-feedback').remove()
-                  setErrorMessages(form, error.responseJSON.errors);
-                } else {
-                  if (error.responseJSON.errors) {
-                    showDialog(error.statusText, error.responseJSON.errors.join('<hr>'))
-                  } else if (error.responseJSON.message) {
-                    showDialog(error.statusText, error.responseJSON.message)
-                  } else {
-                    showDialog(error.statusText, error.statusText)
-                  }
-                }
-              },
-            }).always(() => {
-              $('#processingLoader').addClass('d-none')
-              $(this).removeAttr('disabled')
-            })
-
-          },
-          error: error => {
-            console.log('cekupah ', error)
-            if (error.status === 422) {
-              $('.is-invalid').removeClass('is-invalid')
-              $('.invalid-feedback').remove()
-              showDialog(error.responseJSON.message)
+          if (response.data.grp == 'FORMAT') {
+            updateFormat(response.data)
+          }
+        },
+        error: error => {
+          console.log('postdata ', error)
+          if (error.status === 422) {
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+            setErrorMessages(form, error.responseJSON.errors);
+          } else {
+            if (error.responseJSON.errors) {
+              showDialog(error.statusText, error.responseJSON.errors.join('<hr>'))
+            } else if (error.responseJSON.message) {
+              showDialog(error.statusText, error.responseJSON.message)
             } else {
-              showDialog(error.statusText)
+              showDialog(error.statusText, error.statusText)
             }
-          },
-        }).always(() => {
-          $('#processingLoader').addClass('d-none')
-          $(this).removeAttr('disabled')
-        })
-      } else {
-        $.ajax({
-          url: url,
-          method: method,
-          dataType: 'JSON',
-          headers: {
-            Authorization: `Bearer ${accessToken}`
-          },
-          data: data,
-          success: response => {
-
-            id = response.data.id
-            $('#crudModal').modal('hide')
-            $('#crudModal').find('#crudForm').trigger('reset')
-
-            $('#jqGrid').jqGrid('setGridParam', {
-              page: response.data.page
-            }).trigger('reloadGrid');
-
-            if (response.data.grp == 'FORMAT') {
-              updateFormat(response.data)
-            }
-          },
-          error: error => {
-            if (error.status === 422) {
-              $('.is-invalid').removeClass('is-invalid')
-              $('.invalid-feedback').remove()
-
-              setErrorMessages(form, error.responseJSON.errors);
-            } else {
-              showDialog(error.statusText)
-            }
-          },
-        }).always(() => {
-          $('#processingLoader').addClass('d-none')
-          $(this).removeAttr('disabled')
-        })
-      }
-
+          }
+        },
+      }).always(() => {
+        $('#processingLoader').addClass('d-none')
+        $(this).removeAttr('disabled')
+      })
     })
   })
+
+  function getNominalSupir() {
+    totalNominalSupir = nominalPlusBorongan + nominalSupir;
+
+    $('#crudForm [name=gajisupir]').val(totalNominalSupir)
+    initAutoNumeric($('#crudForm').find('[name="gajisupir"]'))
+  }
 
   $('#crudModal').on('shown.bs.modal', () => {
     let form = $('#crudForm')
@@ -992,49 +938,49 @@
     })
   }
 
-  function getGaji(plusBorongan) {
-    let form = $('#crudForm')
-    let data = []
+  // function getGaji(plusBorongan) {
+  //   let form = $('#crudForm')
+  //   let data = []
 
-    let dari = form.find(`[name="dari_id"]`).val()
-    let sampai = form.find(`[name="sampai_id"]`).val()
-    let container = form.find(`[name="container_id"]`).val()
-    let statuscontainer = form.find(`[name="statuscontainer_id"]`).val()
+  //   let dari = form.find(`[name="dari_id"]`).val()
+  //   let sampai = form.find(`[name="sampai_id"]`).val()
+  //   let container = form.find(`[name="container_id"]`).val()
+  //   let statuscontainer = form.find(`[name="statuscontainer_id"]`).val()
 
 
-    $.ajax({
-      url: `${apiUrl}suratpengantar/getGaji/${dari}/${sampai}/${container}/${statuscontainer}`,
-      method: 'GET',
-      dataType: 'JSON',
-      data: data,
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        totalBorongan = response.data.nominalsupir
-        if (plusBorongan != undefined) {
-          plusBorongan = parseInt(parseFloat(plusBorongan.replace(/,/g, '')))
-          totalBorongan = plusBorongan + parseFloat(response.data.nominalsupir)
-        }
-        form.find(`[name="gajisupir"]`).val(totalBorongan)
-        form.find(`[name="gajikenek"]`).val(response.data.nominalkenek)
-        form.find(`[name="komisisupir"]`).val(response.data.nominalkomisi)
+  //   $.ajax({
+  //     url: `${apiUrl}suratpengantar/getGaji/${dari}/${sampai}/${container}/${statuscontainer}`,
+  //     method: 'GET',
+  //     dataType: 'JSON',
+  //     data: data,
+  //     headers: {
+  //       Authorization: `Bearer ${accessToken}`
+  //     },
+  //     success: response => {
+  //       totalBorongan = response.data.nominalsupir
+  //       if (plusBorongan != undefined) {
+  //         plusBorongan = parseInt(parseFloat(plusBorongan.replace(/,/g, '')))
+  //         totalBorongan = plusBorongan + parseFloat(response.data.nominalsupir)
+  //       }
+  //       form.find(`[name="gajisupir"]`).val(totalBorongan)
+  //       form.find(`[name="gajikenek"]`).val(response.data.nominalkenek)
+  //       form.find(`[name="komisisupir"]`).val(response.data.nominalkomisi)
 
-        initAutoNumeric($(form).find('[name="gajisupir"]'))
-        initAutoNumeric($(form).find('[name="gajikenek"]'))
-        initAutoNumeric($(form).find('[name="komisisupir"]'))
-      },
-      error: error => {
-        if (error.status === 422) {
-          $('.is-invalid').removeClass('is-invalid')
-          $('.invalid-feedback').remove()
+  //       initAutoNumeric($(form).find('[name="gajisupir"]'))
+  //       initAutoNumeric($(form).find('[name="gajikenek"]'))
+  //       initAutoNumeric($(form).find('[name="komisisupir"]'))
+  //     },
+  //     error: error => {
+  //       if (error.status === 422) {
+  //         $('.is-invalid').removeClass('is-invalid')
+  //         $('.invalid-feedback').remove()
 
-          setErrorMessages(form, error.responseJSON.errors);
-          showDialog(error.responseJSON.message)
-        }
-      },
-    })
-  }
+  //         setErrorMessages(form, error.responseJSON.errors);
+  //         showDialog(error.responseJSON.message)
+  //       }
+  //     },
+  //   })
+  // }
 
   function showSuratPengantar(form, userId) {
     return new Promise((resolve, reject) => {
@@ -1076,7 +1022,7 @@
           })
 
           getTarifOmset(response.data.tarifrincian_id)
-          getGaji(response.data.nominalplusborongan)
+          // getGaji(response.data.nominalplusborongan)
           initAutoNumeric(form.find(`[name="nominal"]`))
           initAutoNumeric(form.find(`[name="nominalTagih"]`))
           initAutoNumeric(form.find(`[name="qtyton"]`))
@@ -1198,7 +1144,7 @@
         pilihKotaDariId = kota.id
         element.val(kota.keterangan)
         element.data('currentValue', element.val())
-        getGaji()
+        // getGaji()
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
@@ -1208,7 +1154,7 @@
         pilihKotaDariId = 0
         element.val('')
         element.data('currentValue', element.val())
-        getGaji()
+        // getGaji()
       }
     })
 
@@ -1230,7 +1176,7 @@
         pilihKotaSampaiId = kota.id
         element.val(kota.keterangan)
         element.data('currentValue', element.val())
-        getGaji()
+        // getGaji()
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
@@ -1240,7 +1186,7 @@
         pilihKotaSampaiId = 0
         element.val('')
         element.data('currentValue', element.val())
-        getGaji()
+        // getGaji()
       }
     })
 
@@ -1285,7 +1231,7 @@
         console.log(container.id)
         element.val(container.keterangan)
         element.data('currentValue', element.val())
-        getGaji()
+        // getGaji()
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
@@ -1294,7 +1240,7 @@
         $('#crudForm [name=container_id]').first().val('')
         element.val('')
         element.data('currentValue', element.val())
-        getGaji()
+        // getGaji()
       }
     })
 
@@ -1314,7 +1260,7 @@
         statuscontainerId = statuscontainer.id
         element.val(statuscontainer.keterangan)
         element.data('currentValue', element.val())
-        getGaji()
+        // getGaji()
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
@@ -1323,7 +1269,7 @@
         $('#crudForm [name=statuscontainer_id]').first().val('')
         element.val('')
         element.data('currentValue', element.val())
-        getGaji()
+        // getGaji()
       }
     })
 
@@ -1340,11 +1286,19 @@
       },
       onSelectRow: (upahsupir, element) => {
         $('#crudForm [name=upah_id]').val(upahsupir.id)
+        nominalSupir = parseFloat(upahsupir.nominalsupir.replace(/,/g, ""));
+        let nominalKenek = parseFloat(upahsupir.nominalkenek.replace(/,/g, ""));
+        let nominalKomisi = parseFloat(upahsupir.nominalkomisi.replace(/,/g, ""));
+
+        $('#crudForm [name=gajikenek]').val(nominalKenek)
+        $('#crudForm [name=komisisupir]').val(nominalKomisi)
+        initAutoNumeric($('#crudForm').find('[name="gajikenek"]'))
+        initAutoNumeric($('#crudForm').find('[name="komisisupir"]'))
         kotadariId = upahsupir.kotadari_id
         kotasampaiId = upahsupir.kotasampai_id
         element.val(upahsupir.kotasampai)
         element.data('currentValue', element.val())
-        // enabledKota()
+        getNominalSupir()
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
@@ -1352,7 +1306,10 @@
       },
       onClear: (element) => {
         $('#crudForm [name=upah_id]').val('')
-        // enabledKota()
+        nominalSupir = 0
+        getNominalSupir()
+        $('#crudForm [name=gajikenek]').val(0)
+        $('#crudForm [name=komisisupir]').val(0)
         kotadariId = 0
         kotasampaiId = 0
         element.val('')
@@ -1360,9 +1317,9 @@
       }
     })
 
-    $('.trado-lookup').lookup({
+    $('.absensisupirdetail-lookup').lookup({
       title: 'Trado Lookup',
-      fileName: 'trado',
+      fileName: 'absensisupirdetail',
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
@@ -1371,19 +1328,22 @@
         }
       },
       onSelectRow: (trado, element) => {
-        $('#crudForm [name=trado_id]').first().val(trado.id)
-        getGaji(trado.nominalplusborongan)
-        element.val(trado.kodetrado)
+        $('#crudForm [name=trado_id]').first().val(trado.trado_id)
+        nominalPlusBorongan = parseFloat(trado.nominalplusborongan.replace(/,/g, ""));
+        $('#crudForm [name=absensidetail_id]').first().val(trado.id)
+        element.val(trado.trado)
         element.data('currentValue', element.val())
+        getNominalSupir()
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
         $('#crudForm [name=trado_id]').first().val('')
+        nominalPlusBorongan = 0;
         element.val('')
         element.data('currentValue', element.val())
-        getGaji()
+        getNominalSupir()
       }
     })
     $('.supir-lookup').lookup({
@@ -1394,6 +1354,7 @@
         this.postData = {
 
           Aktif: 'AKTIF',
+          AbsensiId: true
         }
       },
       onSelectRow: (supir, element) => {
