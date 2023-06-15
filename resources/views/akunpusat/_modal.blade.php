@@ -455,7 +455,7 @@
             "rules": [{
               "field": "grp",
               "op": "cn",
-              "data": "status kode perkiraan"
+              "data": "STATUS COA"
             }]
           })
         },
