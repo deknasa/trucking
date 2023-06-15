@@ -1083,6 +1083,7 @@
         element.data('currentValue', element.val())
       }
     })
+
   }
 
   function addRow() {
@@ -1090,9 +1091,8 @@
       <tr>
         <td></td>
         <td>
-            <select name="jenisritasi[]" class="form-control select2bs4">
-              <option value="">-- PILIH JENIS RITASI --</option>
-            </select>
+          <input type="hidden" name="jenisritasi_id[]">
+          <input type="text" name="jenisritasi[]" class="form-control dataritasi-lookup">
         </td>
         <td>
           <input type="hidden" name="ritasidari_id[]">
@@ -1109,8 +1109,34 @@
     `)
 
     $('#ritasiList tbody').append(detailRow)
-    setStatusRitasi(detailRow)
-    initSelect2(detailRow.find(`[name="jenisritasi[]"]`), false)
+    // setStatusRitasi(detailRow)
+    // initSelect2(detailRow.find(`[name="jenisritasi[]"]`), false)
+
+    
+    $('.dataritasi-lookup').last().lookup({
+      title: 'Data Ritasi Lookup',
+      fileName: 'dataritasi',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+
+          Aktif: 'AKTIF',
+        }
+      },
+      onSelectRow: (dataRitasi, element) => {  
+        element.parents('td').find(`[name="jenisritasi_id[]"]`).val(dataRitasi.id)
+        element.val(dataRitasi.statusritasi)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.parents('td').find(`[name="jenisritasi_id[]"]`).val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
 
     $('.ritasidari-lookup').last().lookup({
       title: 'RITASI DARI Lookup',
