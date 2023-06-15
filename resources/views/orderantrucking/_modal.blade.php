@@ -913,9 +913,9 @@
     })
   }
 
-  function cekValidasidelete(Id) {
+  function cekValidasidelete(Id, Aksi) {
     $.ajax({
-      url: `{{ config('app.api_url') }}orderantrucking/${Id}/cekValidasi`,
+      url: `{{ config('app.api_url') }}orderantrucking/${Id}/${Aksi}/cekValidasi`,
       method: 'POST',
       dataType: 'JSON',
       beforeSend: request => {
@@ -926,7 +926,11 @@
         if (kondisi == true) {
           showDialog(response.message['keterangan'])
         } else {
-          deleteOrderanTrucking(Id)
+          if (Aksi == 'edit') {
+            editOrderanTrucking(selectedId)
+          } else if (Aksi == 'delete') {
+            deleteOrderanTrucking(Id)
+          }
         }
 
       }

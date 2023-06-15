@@ -5,7 +5,7 @@
         <div class="modal-header">
           <p class="modal-title" id="crudModalTitle"></p>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            
+
           </button>
         </div>
         <form action="" method="post">
@@ -44,12 +44,11 @@
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
-                  STATUS RITASI <span class="text-danger"></span></label>
+                  STATUS RITASI <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-md-10">
-                <select name="statusritasi" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH STATUS RITASI --</option>
-                </select>
+                <input type="hidden" name="statusritasi_id">
+                <input type="text" name="statusritasi" class="form-control dataritasi-lookup">
               </div>
             </div>
             <div class="row form-group">
@@ -135,6 +134,14 @@
       let data = $('#crudForm').serializeArray()
 
       data.push({
+        name: 'tgldariheader',
+        value: $('#tgldariheader').val()
+      })
+      data.push({
+        name: 'tglsampaiheader',
+        value: $('#tglsampaiheader').val()
+      })
+      data.push({
         name: 'sortIndex',
         value: $('#jqGrid').getGridParam().sortname
       })
@@ -159,6 +166,9 @@
         value: limit
       })
 
+      let tgldariheader = $('#tgldariheader').val();
+      let tglsampaiheader = $('#tglsampaiheader').val()
+      
       switch (action) {
         case 'add':
           method = 'POST'
@@ -170,7 +180,7 @@
           break;
         case 'delete':
           method = 'DELETE'
-          url = `${apiUrl}ritasi/${ritasiId}`
+          url = `${apiUrl}ritasi/${ritasiId}?tgldariheader=${tgldariheader}&tglsampaiheader=${tglsampaiheader}&indexRow=${indexRow}&limit=${limit}&page=${page}`
           break;
         default:
           method = 'POST'
@@ -255,28 +265,15 @@
     Simpan
   `)
     form.data('action', 'add')
+    $('#crudModal').modal('show')
     form.find(`.sometimes`).show()
     $('#crudModalTitle').text('Create Ritasi')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
-    Promise
-    .all([
-      setStatusRitasiOptions(form)
-    ])
-    .then(() => {
-      showDefault(form)
-        .then(() => {
-          $('#crudModal').modal('show')
-        })
-        .catch((error) => {
-          showDialog(error.statusText)
-        })
-        .finally(() => {
-          $('.modal-loader').addClass('d-none')
-        })
-    })
+    $('.modal-loader').addClass('d-none')
+    
   }
 
   function editRitasi(ritasiId) {
@@ -366,8 +363,7 @@
 
             if (element.is('select')) {
               element.val(value).trigger('change')
-            } 
-            else {
+            } else {
               element.val(value)
             }
           })
@@ -505,10 +501,10 @@
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
-      
+
           Aktif: 'AKTIF',
         }
-      },        
+      },
       onSelectRow: (suratpengantar, element) => {
         element.val(suratpengantar.nobukti)
         element.data('currentValue', element.val())
@@ -527,13 +523,13 @@
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
-      
+
           Aktif: 'AKTIF',
         }
-      },        
+      },
       onSelectRow: (kota, element) => {
         $('#crudForm [name=dari_id]').first().val(kota.id)
-        element.val(kota.keterangan)
+        element.val(kota.kodekota)
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {
@@ -551,13 +547,13 @@
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
-      
+
           Aktif: 'AKTIF',
         }
-      },        
+      },
       onSelectRow: (kota, element) => {
         $('#crudForm [name=sampai_id]').first().val(kota.id)
-        element.val(kota.keterangan)
+        element.val(kota.kodekota)
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {
@@ -575,13 +571,13 @@
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
-      
+
           Aktif: 'AKTIF',
         }
-      },        
+      },
       onSelectRow: (trado, element) => {
         $('#crudForm [name=trado_id]').first().val(trado.id)
-        element.val(trado.keterangan)
+        element.val(trado.kodetrado)
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {
@@ -599,10 +595,10 @@
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
-      
+
           Aktif: 'AKTIF',
         }
-      },        
+      },
       onSelectRow: (supir, element) => {
         $('#crudForm [name=supir_id]').first().val(supir.id)
         element.val(supir.namasupir)
@@ -613,6 +609,31 @@
       },
       onClear: (element) => {
         $('#crudForm [name=supir_id]').first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+
+    $('.dataritasi-lookup').lookup({
+      title: 'Data Ritasi Lookup',
+      fileName: 'dataritasi',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+
+          Aktif: 'AKTIF',
+        }
+      },
+      onSelectRow: (dataRitasi, element) => {
+        $('#crudForm [name=statusritasi_id]').first().val(dataRitasi.id)
+        element.val(dataRitasi.statusritasi)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $('#crudForm [name=statusritasi_id]').first().val('')
         element.val('')
         element.data('currentValue', element.val())
       }
