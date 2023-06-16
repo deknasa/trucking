@@ -147,7 +147,8 @@
                   </div>
                 </div>
               </div>
-             
+
+              <div class="row">
 
                 <div class="form-group col-md-6">
                   <div class="row">
@@ -195,6 +196,7 @@
                     </div>
                   </div>
                 </div>
+              </div>
   
                 <div class="form-group col-md-6">
                   <div class="row">
@@ -1101,6 +1103,12 @@
     addRow()
     sumary()
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+    $('#crudForm').find('[name=tglbukti]').attr('readonly', 'readonly').css({
+      background: '#fff'
+    })
+    let tglbukti = $('#crudForm').find(`[name="tglbukti"]`).parents('.input-group').children()
+    tglbukti.find('button').attr('disabled', true)
+    
 
   }
 
