@@ -79,7 +79,7 @@
               <div class="row form-group">
                 <div class="col-12 col-md-2">
                   <label class="col-form-label">
-                    POST <span class="text-danger">*</span></label>
+                    KAS / BANK <span class="text-danger">*</span></label>
                 </div>
                 <div class="col-12 col-md-4">
                   <input type="hidden" name="bank_id">
@@ -89,7 +89,7 @@
               <div class="row form-group">
                 <div class="col-12 col-md-2">
                   <label class="col-form-label">
-                    NO BUKTI KAS KELUAR </label>
+                    NO BUKTI KAS / BANK KELUAR </label>
                 </div>
                 <div class="col-12 col-md-4">
                   <input type="text" name="pengeluaran_nobukti" id="pengeluaran_nobukti" class="form-control" readonly>
@@ -1848,6 +1848,8 @@
         element.val(alatbayar.namaalatbayar)
         bankId = alatbayar.bank_id
         element.data('currentValue', element.val())
+        $('#crudForm [name=bank_id]').val('')
+        $('#crudForm [name=bank]').val('')
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
