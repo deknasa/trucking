@@ -241,15 +241,15 @@
                 <thead>
                   <tr>
                     <th style="width:10%; max-width: 25px;max-width: 15px">No</th>
-                    <th style="width: 20%; min-width: 200px;">stok <span class="text-danger">*</span> </th>
+                    <th style="width: 20%; min-width: 200px;">stok  </th>
                     <th class="data_tbl tbl_vulkanisirke" style="width: 10px">vulkanisir ke</th>
-                    <th style="width: 20%; min-width: 200px;">keterangan <span class="text-danger">*</span> </th>
-                    <th class="data_tbl tbl_qty" style="width:10%; min-width: 100px">qty <span class="text-danger">*</span></th>
+                    <th style="width: 20%; min-width: 200px;">keterangan  </th>
+                    <th class="data_tbl tbl_qty" style="width:10%; min-width: 100px">qty </th>
                     <th class="data_tbl tbl_harga" style="width: 20%; min-width: 200px;">harga</th>
                     <th class="data_tbl tbl_penerimaanstok_nobukti"  style="width: 20%; min-width: 200px;">Penerimaan stok no bukti</th>
                     <th class="data_tbl tbl_persentase" style="width:10%; min-width: 100px">persentase discount</th>
-                    <th class="data_tbl tbl_total"  style="width: 20%; min-width: 200px;">Total</th>
-                    <th style="width:10%; max-width: 25px;max-width: 15px">Aksi</th>
+                    <th class="data_tbl tbl_total" style="width: 20%; min-width: 200px;">Total</th>
+                    <th class="data_tbl tbl_aksi" style="width:10%; max-width: 25px;max-width: 15px">Aksi</th>
                   </tr>
                 </thead>
                 <tbody id="table_body" class="form-group">
@@ -261,7 +261,7 @@
 
                     <td class="font-weight-bold data_tbl sumrow"> Total : </td>
                     <td id="sumary" class="text-right font-weight-bold data_tbl sumrow"> </td>
-                    <td>
+                    <td  class="data_tbl tbl_aksi" >
                       <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
                     </td>
                   </tr>
@@ -476,7 +476,7 @@
         break;
 
       default:
-        tampilanall()
+        tampilanInit()
         break;
     }
   }
@@ -509,6 +509,7 @@
     // $('[name=supplier]').data('currentValue', '')
     // $('[name=supplier_id]').val('')
     $('#addRow').show()
+    $('.tbl_aksi').show()
   }
 
   function tampilanpo() {
@@ -539,6 +540,7 @@
     // $('[name=supplier]').data('currentValue', '')
     // $('[name=supplier_id]').val('')
     $('#addRow').show()
+    $('.tbl_aksi').show()
   }
 
   function tampilanpbt() {
@@ -575,6 +577,7 @@
       }
     })
     // $('#addRow').hide()
+    $('.tbl_aksi').show()
   }
 
   function tampilanpgt() {
@@ -595,7 +598,7 @@
     $('[name=gandengandari]').parents('.form-group').show()
     $('[name=gandenganke]').parents('.form-group').show()
     $('.tbl_penerimaanstok_nobukti').hide();
-
+    $('.tbl_aksi').show()
     $('#addRow').show()
   }
 
@@ -678,6 +681,30 @@
     // $('[name=supplier]').data('currentValue', '')
     // $('[name=supplier_id]').val('')
     $('#addRow').show()
+  }
+  function tampilanInit() {
+    $('[name=penerimaanstok_nobukti]').parents('.form-group').hide()
+    $('[name=pengeluaranstok_nobukti]').parents('.form-group').hide()
+    $('[name=nobon]').parents('.form-group').hide()
+    $('[name=hutang_nobukti]').parents('.form-group').hide()
+    $('[name=trado]').parents('.form-group').hide()
+    $('[name=supplier]').parents('.form-group').hide()
+    $('[name=gudang]').parents('.form-group').hide()
+    $('[name=gudangdari]').parents('.form-group').hide()
+    $('[name=gudangke]').parents('.form-group').hide()
+    $('[name=coa]').parents('.form-group').hide()
+    // $('[name=gudang]').val('').attr('readonly', false);
+    // $('[name=gudang_id]').val('')
+    $('.tbl_penerimaanstok_nobukti').hide();
+    $('.sumrow').hide();
+    $('.data_tbl').hide();
+    $('.colspan').attr('colspan',3);
+    // $('[name=nobon]').val('')
+    // $('[name=supplier]').attr('readonly', false);
+    // $('[name=supplier]').data('currentValue', '')
+    // $('[name=supplier_id]').val('')
+    $('#addRow').show()
+    $('.tbl_aksi').show()
   }
 
   function setSuplier(penerimaan_id) {
@@ -1061,7 +1088,6 @@
 
   $('#crudModal').on('shown.bs.modal', () => {
     let form = $('#crudForm')
-
     setFormBindKeys(form)
     
     activeGrid = null
@@ -1099,7 +1125,8 @@
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-    tampilanall()
+    // tampilanall()
+    tampilanInit()
     addRow()
     sumary()
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
@@ -1108,7 +1135,8 @@
     })
     let tglbukti = $('#crudForm').find(`[name="tglbukti"]`).parents('.input-group').children()
     tglbukti.find('button').attr('disabled', true)
-    
+    setKodePenerimaan(0)
+
 
   }
 
@@ -1227,6 +1255,7 @@
             name.attr('disabled', true)
             name.find('.lookup-toggler').attr('disabled', true)
 
+            $('.tbl_aksi').hide()
           })
       .catch((error) => {
         showDialog(error.statusText)
@@ -1526,7 +1555,7 @@
                     <td class="data_tbl tbl_total">
                       <input type="text"  name="totalItem[]" readonly id="totalItem${id}" style="text-align:right" class="form-control totalItem autonumeric number${id}">                    
                     </td>  
-                    <td>
+                    <td class="data_tbl tbl_aksi">
                       <div class='btn btn-danger btn-sm rmv'>Hapus</div>
                     </td>
                 </tr>
@@ -1597,9 +1626,13 @@
           setKodePenerimaan(response.data.penerimaanstok);
           
           if (KodePenerimaanId === listKodePenerimaan[2]) {
-            $('#addRow').hide()
+            if (response.data.penerimaanstok_nobukti) {
+              $('#addRow').hide()
+            }else{
+              $('#addRow').show()
+            }
           }else{
-            $('#addRow').hide()
+            $('#addRow').show()
           }
           resolve()
         },

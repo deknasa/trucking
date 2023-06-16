@@ -264,14 +264,14 @@
                         <thead>
                           <tr>
                             <th style="width:10%; max-width: 25px; max-width: 15px">No</th>
-                            <th style="width: 20%; min-width: 200px;"><span class="text-danger">*</span> stok</th>
+                            <th style="width: 20%; min-width: 200px;">stok</th>
                             <th class="data_tbl tbl_vulkanisirke" style="width: 20px">vulkanisirke</th>
-                            <th style="width: 20%; min-width: 200px;"><span class="text-danger">*</span> keterangan</th>
-                            <th class="tbl_qty" style="width:10%; min-width: 100px"><span class="text-danger">*</span> qty</th>
+                            <th style="width: 20%; min-width: 200px;">keterangan</th>
+                            <th class="tbl_qty" style="width:10%; min-width: 100px">qty</th>
                             <th class="data_tbl tbl_harga" style="width: 20%; min-width: 200px;">harga</th>
                             <th class="data_tbl tbl_persentase" style="width:10%; min-width: 100px">persentase discount</th>
                             <th class="data_tbl tbl_total" style="width: 20%; min-width: 200px;">Total</th>
-                            <th style="width:10%; max-width: 25px;max-width: 15px">Aksi</th>
+                            <th  class="data_tbl tbl_aksi" style="width:10%; max-width: 25px;max-width: 15px">Aksi</th>
                           </tr>
                         </thead>
                         <tbody id="table_body" class="form-group">
@@ -282,7 +282,7 @@
           
                             <td class="font-weight-bold  data_tbl tbl_total"> Total : </td>
                             <td id="sumary" class="text-right font-weight-bold data_tbl tbl_total"> </td>
-                            <td>
+                            <td class="data_tbl tbl_aksi" >
                               <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
                             </td>
                           </tr>
@@ -765,6 +765,20 @@ $('.tbl_qty').show()
         showPengeluaranstokHeader(form, pengeluaranStokHeaderId)
           .then(() => {
             $('#crudModal').modal('show')
+            if ( $('#crudForm').find("[name=gudang]")) {
+              lookupSelected(`gudang`);
+            }else if ( $('#crudForm').find("[name=gandengan]")) {
+                lookupSelected('gandengan')
+            }else if ( $('#crudForm').find("[name=trado]")) {
+                lookupSelected('trado')
+            }
+            // penerimaanOrServicein
+            if ($('#crudForm').find("[name=servicein_nobukti]").val() !=="") {
+              penerimaanOrServicein('penerimaan');
+            }else if ($('#crudForm').find("[name=penerimaanstok_nobukti]").val() !==""){
+              penerimaanOrServicein('servicein');
+            }
+            
           })
           .catch((error) => {
             showDialog(error.statusText)
@@ -797,8 +811,34 @@ $('.tbl_qty').show()
       ])
       .then(() => {
         showPengeluaranstokHeader(form, pengeluaranStokHeaderId)
+        .then(penerimaanStokHeaderId => {
+            setFormBindKeys(form)
+            initDatepicker()
+            initSelect2(form.find('.select2bs4'), true)
+            form.find('[name]').removeAttr('disabled')
+
+            form.find('select').each((index, select) => {
+              let element = $(select)
+
+              if (element.data('select2')) {
+                element.select2('destroy')
+              }
+            })
+
+            form.find('[name]').attr('disabled', 'disabled').css({
+              background: '#fff'
+            })
+
+          })
           .then(() => {
             $('#crudModal').modal('show')
+            $('#crudForm').find(`.ui-datepicker-trigger`).attr('disabled', true)
+
+            let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
+            name.attr('disabled', true)
+            name.find('.lookup-toggler').attr('disabled', true)
+
+            $('.tbl_aksi').hide()
           })
           .catch((error) => {
             showDialog(error.statusText)
@@ -909,7 +949,7 @@ $('.tbl_qty').show()
                     <input type="text"  name="totalItem[]" readonly id="totalItem${index}" style="text-align:right" class="form-control totalItem autonumeric number${index}">                    
                   </td>  
                   
-                  <td>
+                  <td class="data_tbl tbl_aksi" >
                     <div class='btn btn-danger btn-sm rmv'>Hapus</div>
                   </td>
               </tr>
@@ -1170,7 +1210,7 @@ $('.tbl_qty').show()
                     <td class="data_tbl tbl_total">
                       <input type="text"  name="totalItem[]" readonly id="totalItem${id}" style="text-align:right" class="form-control totalItem autonumeric number${id}">                    
                     </td>  
-                    <td>
+                    <td class="data_tbl tbl_aksi" >
                       <div class='btn btn-danger btn-sm rmv'>Hapus</div>
                     </td>
                 </tr>
