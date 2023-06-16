@@ -111,6 +111,7 @@
                 $(element).parent().addClass('text-center')
 
                 $(element).on('click', function() {
+                  $(element).attr('disabled', true)
                   if ($(this).is(':checked')) {
                     selectAllRows()
                   } else {
@@ -439,7 +440,7 @@
             }
           }, 100)
 
-
+          $('#gs_').attr('disabled', false)
           setHighlight($(this))
         }
       })
@@ -453,7 +454,7 @@
         disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
           abortGridLastRequest($(this))
-          
+
           clearGlobalSearch($('#jqGrid'))
         },
       })
@@ -494,7 +495,7 @@
           //     }
           //   }
           // },
-          
+
           {
             id: 'report',
             innerHTML: '<i class="fa fa-print"></i> REPORT',
