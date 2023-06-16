@@ -1,5 +1,5 @@
 <table id="penerimaanTruckingLookup" class="lookup-grid"></table>
-<div id="penerimaanTruckingLookupPager"></div>
+{{-- <div id="penerimaanTruckingLookupPager"></div> --}}
 
 @push('scripts')
 <script>
@@ -108,7 +108,7 @@
       sortname: 'id',
       sortorder: 'asc',
       page: 1,
-      pager: $('#penerimaanTruckingLookupPager'),
+      // pager: $('#penerimaanTruckingLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -192,6 +192,14 @@
         clearGlobalSearch($('#penerimaanTruckingLookup'))
       },
     })
+    .jqGrid("navGrid", pager, {
+        search: false,
+        refresh: false,
+        add: false,
+        edit: false,
+        del: false,
+      })
+    .customPager()
 
   loadGlobalSearch($('#penerimaanTruckingLookup'))
   loadClearFilter($('#penerimaanTruckingLookup'))
