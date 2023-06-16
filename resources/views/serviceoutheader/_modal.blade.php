@@ -472,7 +472,7 @@
     }
     function cekValidasi(Id, Aksi) {
     $.ajax({
-      url: `{{ config('app.api_url') }}serviceinheader/${Id}/cekvalidasi`,
+      url: `{{ config('app.api_url') }}serviceoutheader/${Id}/cekvalidasi`,
       method: 'POST',
       dataType: 'JSON',
       beforeSend: request => {
