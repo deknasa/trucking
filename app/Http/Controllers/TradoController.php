@@ -261,12 +261,15 @@ class TradoController extends MyController
 
     public function report(Request $request)
     {
+
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'trado', $request->all());
 
         $trados = $response['data'];
+
+       
 
         $i = 0;
         foreach ($trados as $index => $params) {
