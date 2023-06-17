@@ -1060,26 +1060,6 @@ function destroySelect2() {
 	});
 }
 
-// select2 lama untuk testing lokal
-// function initSelect2() {
-// 	$(document)
-// 		.find("select")
-// 		.select2({
-// 			theme: "bootstrap4",
-// 		})
-// 		.on("select2:open", function (e) {
-// 			document.querySelector(".select2-search__field").focus();
-// 		});
-// }
-
-// function destroySelect2() {
-// 	let select2Elements = $(document).find("select");
-
-// 	$.each(select2Elements, (index, select2Element) => {
-// 		$(select2Element).select2("destroy");
-// 	});
-// }
-
 function showSuccessDialog(statusText = "", message = "") {
 	$("#dialog-success-message").find("p").remove();
 	$("#dialog-success-message").append(
@@ -1096,13 +1076,18 @@ function showSuccessDialog(statusText = "", message = "") {
 			},
 		]
 	});
-}
-function showDialog(statusText = "", message = "") {
+} 
+
+function showDialog(response) {
 	$("#dialog-message").html(`
 		<span class="fa fa-exclamation-triangle" aria-hidden="true" style="font-size:25px;"></span>
 	`)
 	$("#dialog-message").append(
-		`<p class="text-dark"> ${statusText} </p> ${message}`
+		// `<p class="text-dark"> ${statusText} </p> ${message}`
+		`<p>file: ${response.file}</p>` +
+		`<p>line : ${response.line}</p>` +
+		`<p>${response.message}</p>`
+
 	);
 	$("#dialog-message").dialog({
 		modal: true,
@@ -1117,22 +1102,7 @@ function showDialog(statusText = "", message = "") {
 	});
 
 	$(".ui-dialog-titlebar-close").find("p").remove();
-
-
-	// let css_header = {
-	// 	background: "#db1f30",
-	// 	color: "#fff",
-	// };
-	// $(".ui-dialog .ui-widget-header").css(css_header);
-	// let css_property = {
-	// 	border: "none",
-	// 	background: "#db1f30",
-	// 	color: "#fff",
-	// };
-
-	// $(".ui-dialog .ui-dialog-titlebar-close").css(css_property);
-}
-
+}  
 function showConfirm(statusText = "", message = "", urlDestination = "") {
 	$("#dialog-confirm").find("p").remove();
 	$("#dialog-confirm").append(`<p> ${statusText} </p><p> ${message} </p>`);

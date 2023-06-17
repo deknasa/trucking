@@ -189,30 +189,37 @@ class GajiSupirHeaderController extends MyController
             [
                 'label' => 'Uang Jalan',
                 'index' => 'uangjalan',
+                'format' => 'currency'
             ],
             [
                 'label' => 'Uang BBM',
                 'index' => 'bbm',
+                'format' => 'currency'
             ],
             [
                 'label' => 'Deposito',
                 'index' => 'deposito',
+                'format' => 'currency'
             ],
             [
                 'label' => 'Potongan Pinjaman',
                 'index' => 'potonganpinjaman',
+                'format' => 'currency'
             ],
             [
                 'label' => 'Potongan Pinjaman Semua',
                 'index' => 'potonganpinjamansemua',
+                'format' => 'currency'
             ],
             [
                 'label' => 'Uang Makan Harian',
                 'index' => 'uangmakanharian',
+                'format' => 'currency'
             ],
             [
                 'label' => 'Nominal',
                 'index' => 'nominal',
+                'format' => 'currency'
             ],
         ];
 
@@ -389,10 +396,10 @@ class GajiSupirHeaderController extends MyController
         $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A'.$total_start_row.':G'.$total_start_row)->applyFromArray($style_number)->getFont()->setBold(true);
         $sheet->setCellValue("H$total_start_row", number_format((float) $gajisupir, '2', '.', ','))->getStyle("H$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
         $sheet->setCellValue("I$total_start_row", number_format((float) $gajikenek, '2', '.', ','))->getStyle("I$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
-        $sheet->setCellValue("J$total_start_row", number_format((float) $gajikenek, '2', '.', ','))->getStyle("J$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
-        $sheet->setCellValue("K$total_start_row", number_format((float) $gajikenek, '2', '.', ','))->getStyle("K$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
-        $sheet->setCellValue("M$total_start_row", number_format((float) $gajikenek, '2', '.', ','))->getStyle("M$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
-        $sheet->setCellValue("P$total_start_row", number_format((float) $gajikenek, '2', '.', ','))->getStyle("P$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->setCellValue("J$total_start_row", number_format((float) $komisisupir, '2', '.', ','))->getStyle("J$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->setCellValue("K$total_start_row", number_format((float) $tolsupir, '2', '.', ','))->getStyle("K$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->setCellValue("M$total_start_row", number_format((float) $upahritasi, '2', '.', ','))->getStyle("M$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->setCellValue("P$total_start_row", number_format((float) $biayaextra, '2', '.', ','))->getStyle("P$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
 
         //set diketahui dibuat
         $ttd_start_row = $total_start_row+2;

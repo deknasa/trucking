@@ -151,33 +151,45 @@ class ServiceInHeaderController extends MyController
     {
         
         //FETCH HEADER
+        $id = $request->id;
         $serviceIn = Http::withHeaders($request->header())
         ->withOptions(['verify' => false])
         ->withToken(session('access_token'))
-        ->get(config('app.api_url') .'serviceinheader/'.$request->id)['data'];
+        ->get(config('app.api_url') .'serviceinheader/'.$id.'/export')['data'];
 
         //FETCH DETAIL
         $detailParams = [
             'servicein_id' => $request->id,
         ];
-
         $responses = Http::withHeaders($request->header())
         ->withOptions(['verify' => false])
         ->withToken(session('access_token'))
         ->get(config('app.api_url') .'serviceindetail', $detailParams);
+        $serviceIn_details = $responses['data'];
 
-        $servicein_details = $responses['data'];
-        $user = $responses['user'];
+        $tglBukti = $serviceIn["tglbukti"];
+        $timeStamp = strtotime($tglBukti);
+        $dateTglBukti = date('d-m-Y', $timeStamp); 
+        $serviceIn['tglbukti'] = $dateTglBukti;
+
+        $tglMasuk = $serviceIn["tglmasuk"];
+        $timeStamp = strtotime($tglMasuk);
+        $datetglMasuk = date('d-m-Y', $timeStamp); 
+        $serviceIn['tglmasuk'] = $datetglMasuk;
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setCellValue('A1', 'TAS '.$user['cabang_id']);
-        $sheet->getStyle("A1")->getFont()->setSize(20);
+        $sheet->setCellValue('A1', $serviceIn['judul']);
+        $sheet->setCellValue('A2', $serviceIn['judulLaporan']);
+        $sheet->getStyle("A1")->getFont()->setSize(14);
+        $sheet->getStyle("A2")->getFont()->setSize(12);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
-        $sheet->mergeCells('A1:G1');
+        $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
+        $sheet->mergeCells('A1:D1');
+        $sheet->mergeCells('A2:D2');
 
-        $header_start_row = 2;
-        $detail_table_header_row = 8;
+        $header_start_row = 4;
+        $detail_table_header_row = 9;
         $detail_start_row = $detail_table_header_row + 1;
        
         $alphabets = range('A', 'Z');
@@ -193,10 +205,10 @@ class ServiceInHeaderController extends MyController
             ],
             [
                 'label' => 'Trado',
-                'index' => 'trado',
+                'index' => 'trado_id',
             ],
             [
-                'label' => 'Tgl Masuk',
+                'label' => 'Tanggal Masuk',
                 'index' => 'tglmasuk',
             ],
         ];
@@ -211,7 +223,7 @@ class ServiceInHeaderController extends MyController
             ],
             [
                 'label' => 'Mekanik',
-                'index' => 'mekanik_id',
+                'index' => 'karyawan_id',
             ],
             [
                 'label' => 'Keterangan',
@@ -241,14 +253,14 @@ class ServiceInHeaderController extends MyController
         $sheet ->getStyle("A$detail_table_header_row:D$detail_table_header_row")->applyFromArray($styleArray);
 
         // LOOPING DETAIL
-        foreach ($servicein_details as $response_index => $response_detail) {
+        foreach ($serviceIn_details as $response_index => $response_detail) {
             
             foreach ($detail_columns as $detail_columns_index => $detail_column) {
                 $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
             }
             $sheet->setCellValue("A$detail_start_row", $response_index + 1);
             $sheet->setCellValue("B$detail_start_row", $response_detail['nobukti']);
-            $sheet->setCellValue("C$detail_start_row", $response_detail['mekanik']);
+            $sheet->setCellValue("C$detail_start_row", $response_detail['karyawan_id']);
             $sheet->setCellValue("D$detail_start_row", $response_detail['keterangan']);
 
             $sheet ->getStyle("A$detail_start_row:D$detail_start_row")->applyFromArray($styleArray);
@@ -269,16 +281,6 @@ class ServiceInHeaderController extends MyController
         $sheet ->getStyle("C".($ttd_start_row+1).":C".($ttd_start_row+3))->applyFromArray($styleArray);
         $sheet ->getStyle("D".($ttd_start_row+1).":D".($ttd_start_row+3))->applyFromArray($styleArray);
 
-        //set tglcetak
-        date_default_timezone_set('Asia/Jakarta');
-        
-        $sheet->setCellValue("B".($ttd_start_row+5), 'Dicetak Pada :');
-        $sheet->getStyle("B".($ttd_start_row+5))->getFont()->setItalic(true);
-        $sheet->setCellValue("C".($ttd_start_row+5), date('d/m/Y H:i:s'));
-        $sheet->getStyle("C".($ttd_start_row+5))->getFont()->setItalic(true);
-        $sheet->setCellValue("D".($ttd_start_row+5), $user['name']);
-        $sheet->getStyle("D".($ttd_start_row+5))->getFont()->setItalic(true);
-
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);
         $sheet->getColumnDimension('C')->setAutoSize(true);
@@ -287,8 +289,6 @@ class ServiceInHeaderController extends MyController
         $sheet->getColumnDimension('F')->setAutoSize(true);
         $sheet->getColumnDimension('G')->setAutoSize(true);
         $sheet->getColumnDimension('H')->setAutoSize(true);
-
-        
 
         $writer = new Xlsx($spreadsheet);
         $filename = 'Laporan ServiceIn  ' . date('dmYHis');

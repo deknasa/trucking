@@ -1,15 +1,15 @@
-<table id="roleAclGrid"></table>
-
 @include('role.acl._modal')
 
+@push('scripts')
 <script>
-  function loadGrid(roleId) {
+  function loadRoleAclGrid() {
     $('#roleAclGrid')
       .jqGrid({
-        url: `${apiUrl}role/${roleId}/acl`,
-        datatype: 'json',
+        datatype: 'local',
+        data: [],
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
+        idPrefix: 'roleAclGrid',
         colModel: [
           {
             label: 'CLASS',
@@ -102,6 +102,8 @@
         groupOp: 'AND',
         disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
+          abortGridLastRequest($(this))
+
           clearGlobalSearch($('#acoGrid'))
         },
       })
@@ -123,10 +125,13 @@
     loadGlobalSearch($('#roleAclGrid'))
   }
 
-  function loadAclData(roleId) {
+  function loadRoleAclData(roleId) {
+    abortGridLastRequest($('#roleAclGrid'))
+
     $('#roleAclGrid').setGridParam({
       url: `${apiUrl}role/${roleId}/acl`,
       datatype: 'json'
     }).trigger('reloadGrid')
   }
 </script>
+@endpush

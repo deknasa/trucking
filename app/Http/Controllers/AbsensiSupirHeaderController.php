@@ -284,7 +284,7 @@ class AbsensiSupirHeaderController extends MyController
         
 
         //LOOPING HEADER        
-        $invoice['nominal'] = number_format((float) $invoice['nominal'], '2', '.', ',');
+        $invoice['nominal'] = number_format((float) $invoice['nominal'], '2', ',', '.');
         foreach ($header_columns as $header_column) {
             $sheet->setCellValue('B' . $header_start_row, $header_column['label']);
             $sheet->setCellValue('C' . $header_start_row++, ': '.$invoice[$header_column['index']]);

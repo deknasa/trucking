@@ -20,14 +20,13 @@
               <li><a href="#jurnal-tab">Jurnal</a></li>
             </ul>
             <div id="detail-tab">
-
+              <table id="detailGrid"></table>
             </div>
-
             <div id="history-tab">
-
+              <table id="historyGrid"></table>
             </div>
             <div id="jurnal-tab">
-
+              <table id="jurnalGrid"></table>
             </div>
           </div>
         </div>
@@ -63,6 +62,11 @@
 
   $(document).ready(function() {
     $("#tabs").tabs()
+
+    let nobukti = $('#jqGrid').jqGrid('getCell', id, 'nobukti')
+    loadDetailGrid()
+    loadHistoryGrid(nobukti)
+    loadJurnalUmumGrid(nobukti)
 
     setRange()
     initDatepicker()
@@ -257,10 +261,6 @@
         onSelectRow: function(id) {
           
           let nobukti = $('#jqGrid').jqGrid('getCell', id, 'nobukti')
-          $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/piutangdetail/${currentTab}/grid`, function() {
-            loadGrid(id,nobukti)
-          })
-          loadDetailData(id)
           activeGrid = $(this)
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
           page = $(this).jqGrid('getGridParam', 'page')
@@ -268,18 +268,20 @@
           if (indexRow >= limit) {
             indexRow = (indexRow - limit * (page - 1))
           }
+
+          loadDetailData(id)
+          loadHistoryData(id)
+          loadJurnalUmumData(id, nobukti)
         },
         loadComplete: function(data) {
           
           changeJqGridRowListText()
 
           if (data.data.length === 0) {
-            abortGridLastRequest($('#detail'))
-            clearGridData($('#detail'))
-            abortGridLastRequest($('#detailGrid'))
-            clearGridData($('#detailGrid'))
-            abortGridLastRequest($('#jurnalGrid'))
-            clearGridData($('#jurnalGrid'))
+            $('#detail, #historyGrid, #jurnalGrid').each((index, element) => {
+              abortGridLastRequest($(element))
+              clearGridData($(element))
+            })
           }
 
           $(document).unbind('keydown')
@@ -527,18 +529,6 @@
 
         submitButton.removeAttr('disabled')
       }
-    })
-
-
-    $("#tabs").on('click', 'li.ui-state-active', function() {
-      let href = $(this).find('a').attr('href');
-      currentTab = href.substring(1, href.length - 4);
-      let piutangId = $('#jqGrid').jqGrid('getGridParam', 'selrow')
-      let nobukti = $('#jqGrid').jqGrid('getCell', piutangId, 'nobukti')
-      $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/piutangdetail/${currentTab}/grid`, function() {
-
-        loadGrid(piutangId, nobukti)
-      })
     })
   })
 </script>

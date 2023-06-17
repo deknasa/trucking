@@ -138,36 +138,40 @@ class InvoiceHeaderController extends MyController
 
     public function export(Request $request): void
     {
-
         //FETCH HEADER
+        $id = $request->id;
         $invoices = Http::withHeaders($request->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'invoiceheader/' . $request->id)['data'];
+            ->get(config('app.api_url') . 'invoiceheader/'.$id.'/export')['data'];
 
         //FETCH DETAIL
         $detailParams = [
             'forExport' => true,
             'invoice_id' => $request->id
         ];
-
         $responses = Http::withHeaders($request->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'invoicedetail', $detailParams);
 
         $invoice_details = $responses['data'];
-        $user = Auth::user();
+        // dd($invoice_details);
+        // $user = Auth::user();
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setCellValue('A1', 'TAS ' . $user['cabang_id']);
-        $sheet->getStyle("A1")->getFont()->setSize(20);
+        $sheet->setCellValue('A1', $invoices['judul']);
+        $sheet->setCellValue('A2', $invoices['judulLaporan']);
+        $sheet->getStyle("A1")->getFont()->setSize(14);
+        $sheet->getStyle("A2")->getFont()->setSize(12);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
-        $sheet->mergeCells('A1:G1');
+        $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
+        $sheet->mergeCells('A1:I1');
+        $sheet->mergeCells('A2:I2');
 
-        $header_start_row = 2;
-        $detail_table_header_row = 5;
+        $header_start_row = 4;
+        $detail_table_header_row = 13;
         $detail_start_row = $detail_table_header_row + 1;
 
         $alphabets = range('A', 'Z');
@@ -182,8 +186,29 @@ class InvoiceHeaderController extends MyController
                 'index' => 'tglbukti',
             ],
             [
+                'label' => 'Nominal',
+                'index' => 'nominal',
+                'format' => 'currency'
+            ],
+            [
+                'label' => 'Tanggal Terima',
+                'index' => 'tglterima',
+            ],
+            [
+                'label' => 'Tanggal Jatuh Tempo',
+                'index' => 'tgljatuhtempo',
+            ],
+            [
                 'label' => 'EMKL',
                 'index' => 'agen',
+            ],
+            [
+                'label' => 'Jenis Order',
+                'index' => 'jenisorder_id',
+            ], 
+            [
+                'label' => 'No Bukti Piutang',
+                'index' => 'piutang_nobukti',
             ],
         ];
 
@@ -192,37 +217,48 @@ class InvoiceHeaderController extends MyController
                 'label' => 'No',
             ],
             [
-                'label' => 'Tanggal',
-                'index' => 'tglsp',
-            ],
-            [
-                'label' => 'Shipper',
-                'index' => 'agen_id',
-            ],
-            [
-                'label' => 'Tujuan',
-                'index' => 'tujuan',
-            ],
-            [
-                'label' => 'No Container',
-                'index' => 'nocont',
+                'label' => 'No Bukti',
+                'index' => 'nobukti_header',
             ],
             [
                 'label' => 'Keterangan',
                 'index' => 'keterangan_detail',
             ],
             [
-                'label' => 'Omzet',
+                'label' => 'No Bukti Orderan',
+                'index' => 'orderantrucking_nobukti',
+            ],
+            [
+                'label' => 'No Bukti Surat Pengantar',
+                'index' => 'suratpengantar_nobukti',
+            ],
+            [
+                'label' => 'Nominal',
                 'index' => 'omset',
                 'format' => 'currency'
-            ]
+            ],
+            [
+                'label' => 'Nominal Extra',
+                'index' => 'extra',
+                'format' => 'currency'
+            ],
+            [
+                'label' => 'Total',
+                'index' => 'total_detail',
+                'format' => 'currency'
+            ],
+            [
+                'label' => 'Nominal Retribusi',
+                'index' => 'nominalretribusi',
+                'format' => 'currency'
+            ],
         ];
 
-        //LOOPING HEADER        
+        //LOOPING HEADER       
+        $invoices['nominal'] = number_format((float) $invoices['nominal'], '2', '.', ',');  
         foreach ($header_columns as $header_column) {
-            $sheet->setCellValue('A' . $header_start_row, $header_column['label']);
-            $sheet->setCellValue('B' . $header_start_row, ':');
-            $sheet->setCellValue('C' . $header_start_row++, $invoices[$header_column['index']]);
+            $sheet->setCellValue('B' . $header_start_row, $header_column['label']);
+            $sheet->setCellValue('C' . $header_start_row++, ': '.$invoices[$header_column['index']]);
         }
 
         foreach ($detail_columns as $detail_columns_index => $detail_column) {
@@ -237,72 +273,75 @@ class InvoiceHeaderController extends MyController
         );
 
         $style_number = [
-            'alignment' => [
-                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT,
-            ],
-
-            'borders' => [
-                'top' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
-                'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
-                'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
-                'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN]
-            ]
+			'alignment' => [
+				'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT, 
+			],
+            
+			'borders' => [
+				'allBorders' => array(
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ),
+			]
         ];
 
         // $sheet->getStyle("A$detail_table_header_row:G$detail_table_header_row")->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FF1F456E');
-        $sheet->getStyle("A$detail_table_header_row:G$detail_table_header_row")->applyFromArray($styleArray);
+        $sheet->getStyle("A$detail_table_header_row:I$detail_table_header_row")->applyFromArray($styleArray);
 
         // LOOPING DETAIL
         $total = 0;
+        $nominal = 0;
+        $nominalExtra = 0;
+        $nominalRetribusi = 0;
         foreach ($invoice_details as $response_index => $response_detail) {
 
             foreach ($detail_columns as $detail_columns_index => $detail_column) {
                 $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
             }
-            $response_detail['omsets'] = number_format((float) $response_detail['omset'], '2', ',', '.');
+            $response_detail['omsets'] = number_format((float) $response_detail['omset'], '2', '.', ',');
+            $response_detail['extras'] = number_format((float) $response_detail['extra'], '2', '.', ',');
+            $response_detail['total_details'] = number_format((float) $response_detail['total_detail'], '2', '.', ',');
+            $response_detail['nominalretribusis'] = number_format((float) $response_detail['nominalretribusi'], '2', '.', ',');
 
             $sheet->setCellValue("A$detail_start_row", $response_index + 1);
-            $sheet->setCellValue("B$detail_start_row", $response_detail['tglsp']);
-            $sheet->setCellValue("C$detail_start_row", $response_detail['agen_id']);
-            $sheet->setCellValue("D$detail_start_row", $response_detail['tujuan']);
-            $sheet->setCellValue("E$detail_start_row", $response_detail['nocont']);
-            $sheet->setCellValue("F$detail_start_row", $response_detail['keterangan_detail']);
-            $sheet->setCellValue("G$detail_start_row", $response_detail['omsets']);
+            $sheet->setCellValue("B$detail_start_row", $response_detail['nobukti_header']);
+            $sheet->setCellValue("C$detail_start_row", $response_detail['keterangan_detail']);
+            $sheet->setCellValue("D$detail_start_row", $response_detail['orderantrucking_nobukti']);
+            $sheet->setCellValue("E$detail_start_row", $response_detail['suratpengantar_nobukti']);
+            $sheet->setCellValue("F$detail_start_row", $response_detail['omsets']);
+            $sheet->setCellValue("G$detail_start_row", $response_detail['extras']);
+            $sheet->setCellValue("H$detail_start_row", $response_detail['total_details']);
+            $sheet->setCellValue("I$detail_start_row", $response_detail['nominalretribusis']);
 
-            $sheet->getStyle("A$detail_start_row:F$detail_start_row")->applyFromArray($styleArray);
-            $sheet->getStyle("G$detail_start_row")->applyFromArray($style_number);
-            $total += $response_detail['omset'];
+            $sheet->getStyle("A$detail_start_row:E$detail_start_row")->applyFromArray($styleArray);
+            $sheet->getStyle("F$detail_start_row:I$detail_start_row")->applyFromArray($style_number);
+            $total += $response_detail['total_detail'];
+            $nominal += $response_detail['omset'];
+            $nominalExtra += $response_detail['extra'];
+            $nominalRetribusi += $response_detail['nominalretribusi'];
             $detail_start_row++;
         }
 
         $total_start_row = $detail_start_row;
-        $sheet->mergeCells('A' . $total_start_row . ':F' . $total_start_row);
-        $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A' . $total_start_row . ':F' . $total_start_row)->applyFromArray($style_number)->getFont()->setBold(true);
-        $sheet->setCellValue("G$total_start_row", number_format((float) $total, '2', ',', '.'))->getStyle("G$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->mergeCells('A' . $total_start_row . ':E' . $total_start_row);
+        $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A' . $total_start_row . ':E' . $total_start_row)->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->setCellValue("F$total_start_row", number_format((float) $total, '2', ',', '.'))->getStyle("F$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->setCellValue("G$total_start_row", number_format((float) $nominal, '2', ',', '.'))->getStyle("G$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->setCellValue("H$total_start_row", number_format((float) $nominalExtra, '2', ',', '.'))->getStyle("H$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->setCellValue("I$total_start_row", number_format((float) $nominalRetribusi, '2', ',', '.'))->getStyle("I$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
 
         //set diketahui dibuat
-        $ttd_start_row = $total_start_row + 2;
-        $sheet->setCellValue("A$ttd_start_row", 'Disetujui');
-        $sheet->setCellValue("B$ttd_start_row", 'Diketahui');
-        $sheet->setCellValue("C$ttd_start_row", 'Dibuat');
-        $sheet->getStyle("A$ttd_start_row:C$ttd_start_row")->applyFromArray($styleArray);
+        $ttd_start_row = $total_start_row+2;
+        $sheet->setCellValue("B$ttd_start_row", 'Disetujui');
+        $sheet->setCellValue("C$ttd_start_row", 'Diketahui');
+        $sheet->setCellValue("D$ttd_start_row", 'Dibuat');
+        $sheet ->getStyle("B$ttd_start_row:D$ttd_start_row")->applyFromArray($styleArray);
         // $sheet->mergeCells("A$ttd_end_row:C$ttd_end_row");
-        $sheet->mergeCells("A" . ($ttd_start_row + 1) . ":A" . ($ttd_start_row + 3));
-        $sheet->mergeCells("B" . ($ttd_start_row + 1) . ":B" . ($ttd_start_row + 3));
-        $sheet->mergeCells("C" . ($ttd_start_row + 1) . ":C" . ($ttd_start_row + 3));
-        $sheet->getStyle("A" . ($ttd_start_row + 1) . ":A" . ($ttd_start_row + 3))->applyFromArray($styleArray);
-        $sheet->getStyle("B" . ($ttd_start_row + 1) . ":B" . ($ttd_start_row + 3))->applyFromArray($styleArray);
-        $sheet->getStyle("C" . ($ttd_start_row + 1) . ":C" . ($ttd_start_row + 3))->applyFromArray($styleArray);
-
-        //set tglcetak
-        date_default_timezone_set('Asia/Jakarta');
-
-        $sheet->setCellValue("A" . ($ttd_start_row + 5), 'Dicetak Pada :');
-        $sheet->getStyle("A" . ($ttd_start_row + 5))->getFont()->setItalic(true);
-        $sheet->setCellValue("B" . ($ttd_start_row + 5), date('d/m/Y H:i:s'));
-        $sheet->getStyle("B" . ($ttd_start_row + 5))->getFont()->setItalic(true);
-        $sheet->setCellValue("C" . ($ttd_start_row + 5), $user['name']);
-        $sheet->getStyle("C" . ($ttd_start_row + 5))->getFont()->setItalic(true);
+        $sheet->mergeCells("B".($ttd_start_row+1).":B".($ttd_start_row+3));      
+        $sheet->mergeCells("C".($ttd_start_row+1).":C".($ttd_start_row+3));      
+        $sheet->mergeCells("D".($ttd_start_row+1).":D".($ttd_start_row+3));      
+        $sheet ->getStyle("B".($ttd_start_row+1).":B".($ttd_start_row+3))->applyFromArray($styleArray);
+        $sheet ->getStyle("C".($ttd_start_row+1).":C".($ttd_start_row+3))->applyFromArray($styleArray);
+        $sheet ->getStyle("D".($ttd_start_row+1).":D".($ttd_start_row+3))->applyFromArray($styleArray);
 
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);
@@ -312,11 +351,10 @@ class InvoiceHeaderController extends MyController
         $sheet->getColumnDimension('F')->setAutoSize(true);
         $sheet->getColumnDimension('G')->setAutoSize(true);
         $sheet->getColumnDimension('H')->setAutoSize(true);
-
-
+        $sheet->getColumnDimension('I')->setAutoSize(true);
 
         $writer = new Xlsx($spreadsheet);
-        $filename = 'Laporan Invoice ' . date('dmYHis');
+        $filename = 'Laporan Invoice' . date('dmYHis');
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
         header('Cache-Control: max-age=0');

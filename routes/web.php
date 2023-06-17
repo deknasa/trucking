@@ -748,6 +748,7 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('suratpengantar/get_gaji', [SuratPengantarController::class, 'getGaji'])->name('suratpengantar.get_gaji');
     Route::get('suratpengantar/{id}/delete', [SuratPengantarController::class, 'delete'])->name('suratpengantar.delete');
     Route::get('suratpengantar/get', [SuratPengantarController::class, 'get'])->name('suratpengantar.get');
+    Route::get('suratpengantar/export', [SuratPengantarController::class, 'export'])->name('suratpengantar.export');
     Route::get('suratpengantar/index', [SuratPengantarController::class, 'index']);
     Route::resource('suratpengantar', SuratPengantarController::class);
 
@@ -772,6 +773,8 @@ Route::middleware(['auth','authorized'])->group(function () {
 
     Route::get('ritasi/field_length', [RitasiController::class, 'fieldLength'])->name('ritasi.field_length');
     Route::get('ritasi/{id}/delete', [RitasiController::class, 'delete'])->name('ritasi.delete');
+    Route::get('ritasi/export', [RitasiController::class, 'export'])->name('ritasi.export');
+    Route::get('ritasi/report', [RitasiController::class, 'report'])->name('ritasi.report');
     Route::get('ritasi/get', [RitasiController::class, 'get'])->name('ritasi.get');
     Route::get('ritasi/index', [RitasiController::class, 'index']);
 
@@ -988,7 +991,7 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('invoiceextraheader/index', [InvoiceExtraHeaderController::class, 'index']);
     Route::get('invoiceextraheader/get', [InvoiceExtraHeaderController::class, 'get'])->name('invoiceextraheader.get');
     Route::get('invoiceextraheader/export', [InvoiceExtraHeaderController::class, 'export'])->name('invoiceextraheader.export');
-    Route::get('invoiceextraheader/report/{id}', [InvoiceExtraHeaderController::class, 'report'])->name('invoiceextraheader.report');
+    Route::get('invoiceextraheader/report', [InvoiceExtraHeaderController::class, 'report'])->name('invoiceextraheader.report');
     Route::resource('invoiceextraheader', InvoiceExtraHeaderController::class);
     Route::get('invoiceextradetail/jurnal/grid', [InvoiceExtraDetailController::class, 'jurnalGrid']);
     Route::get('invoiceextradetail/piutang/grid', [InvoiceExtraDetailController::class, 'piutangGrid']);
@@ -997,7 +1000,7 @@ Route::middleware(['auth','authorized'])->group(function () {
     
     Route::get('invoicechargegandenganheader/index', [InvoiceChargeGandenganHeaderController::class, 'index']);
     Route::get('invoicechargegandenganheader/export', [InvoiceChargeGandenganHeaderController::class, 'export'])->name('invoicechargegandenganheader.export');
-    Route::get('invoicechargegandenganheader/report/{id}', [InvoiceChargeGandenganHeaderController::class, 'report'])->name('invoicechargegandenganheader.report');
+    Route::get('invoicechargegandenganheader/report', [InvoiceChargeGandenganHeaderController::class, 'report'])->name('invoicechargegandenganheader.report');
     Route::resource('invoicechargegandenganheader', InvoiceChargeGandenganHeaderController::class);
 
 

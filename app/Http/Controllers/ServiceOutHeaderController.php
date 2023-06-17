@@ -209,12 +209,12 @@ class ServiceOutHeaderController extends MyController
 
     public function export(Request $request): void
     {
-        
         //FETCH HEADER
+        $id = $request->id;
         $serviceOut = Http::withHeaders($request->header())
         ->withOptions(['verify' => false])
         ->withToken(session('access_token'))
-        ->get(config('app.api_url') .'serviceoutheader/'.$request->id)['data'];
+        ->get(config('app.api_url') .'serviceoutheader/'.$id.'/export')['data'];;
 
         //FETCH DETAIL
         $detailParams = [
@@ -225,19 +225,31 @@ class ServiceOutHeaderController extends MyController
         ->withOptions(['verify' => false])
         ->withToken(session('access_token'))
         ->get(config('app.api_url') .'serviceoutdetail', $detailParams);
-
         $serviceout_details = $responses['data'];
-        $user = $responses['user'];
+
+        $tglBukti = $serviceOut["tglbukti"];
+        $timeStamp = strtotime($tglBukti);
+        $dateTglBukti = date('d-m-Y', $timeStamp); 
+        $serviceOut['tglbukti'] = $dateTglBukti;
+
+        $tglKeluar = $serviceOut["tglkeluar"];
+        $timeStamp = strtotime($tglKeluar);
+        $datetglKeluar = date('d-m-Y', $timeStamp); 
+        $serviceOut['tglkeluar'] = $datetglKeluar;
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setCellValue('A1', 'TAS '.$user['cabang_id']);
-        $sheet->getStyle("A1")->getFont()->setSize(20);
+        $sheet->setCellValue('A1', $serviceOut['judul']);
+        $sheet->setCellValue('A2', $serviceOut['judulLaporan']);
+        $sheet->getStyle("A1")->getFont()->setSize(14);
+        $sheet->getStyle("A2")->getFont()->setSize(12);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
-        $sheet->mergeCells('A1:G1');
+        $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
+        $sheet->mergeCells('A1:D1');
+        $sheet->mergeCells('A2:D2');
 
-        $header_start_row = 2;
-        $detail_table_header_row = 8;
+        $header_start_row = 4;
+        $detail_table_header_row = 10;
         $detail_start_row = $detail_table_header_row + 1;
        
         $alphabets = range('A', 'Z');
@@ -248,15 +260,15 @@ class ServiceOutHeaderController extends MyController
                 'index' => 'nobukti',
             ],
             [
-                'label' => 'Tanggal',
+                'label' => 'Tanggal Bukti',
                 'index' => 'tglbukti',
             ],
             [
                 'label' => 'Trado',
-                'index' => 'trado',
+                'index' => 'trado_id',
             ],
             [
-                'label' => 'Tgl Keluar',
+                'label' => 'Tanggal Keluar',
                 'index' => 'tglkeluar',
             ],
         ];
@@ -292,8 +304,6 @@ class ServiceOutHeaderController extends MyController
                 ),
             ),
         );
-
-        // $sheet->getStyle("A$detail_table_header_row:G$detail_table_header_row")->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FF1F456E');
         $sheet ->getStyle("A$detail_table_header_row:C$detail_table_header_row")->applyFromArray($styleArray);
 
         // LOOPING DETAIL
@@ -323,16 +333,6 @@ class ServiceOutHeaderController extends MyController
         $sheet ->getStyle("B".($ttd_start_row+1).":B".($ttd_start_row+3))->applyFromArray($styleArray);
         $sheet ->getStyle("C".($ttd_start_row+1).":C".($ttd_start_row+3))->applyFromArray($styleArray);
         $sheet ->getStyle("D".($ttd_start_row+1).":D".($ttd_start_row+3))->applyFromArray($styleArray);
-
-        //set tglcetak
-        date_default_timezone_set('Asia/Jakarta');
-        
-        $sheet->setCellValue("B".($ttd_start_row+5), 'Dicetak Pada :');
-        $sheet->getStyle("B".($ttd_start_row+5))->getFont()->setItalic(true);
-        $sheet->setCellValue("C".($ttd_start_row+5), date('d/m/Y H:i:s'));
-        $sheet->getStyle("C".($ttd_start_row+5))->getFont()->setItalic(true);
-        $sheet->setCellValue("D".($ttd_start_row+5), $user['name']);
-        $sheet->getStyle("D".($ttd_start_row+5))->getFont()->setItalic(true);
 
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);

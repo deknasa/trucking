@@ -34,14 +34,14 @@
               <li><a href="#jurnal-tab">Jurnal</a></li>
             </ul>
             <div id="detail-tab">
-
+              <table id="detail"></table>
             </div>
 
             <div id="hutang-tab">
-
+              <table id="hutangGrid"></table>
             </div>
             <div id="jurnal-tab">
-
+              <table id="jurnalGrid"></table>
             </div>
           </div>
         </div>
@@ -80,11 +80,13 @@
   $(document).ready(function() {
     penerimaanStok($('#crudForm'))
     $("#tabs").tabs()
+
+    let nobukti = $('#jqGrid').jqGrid('getCell', id, 'hutang_nobukti')
+    loadDetailGrid()
+    loadHutangGrid(nobukti)
+    loadJurnalUmumGrid(nobukti)
+
     initSelect2($(`#kodepenerimaanheader`),false)
-    // $('#kodepenerimaanheader').select2({
-    //   width: 'resolve',
-    //   theme: "bootstrap4"
-    // });
     setRange()
     initDatepicker()
     $(document).on('click','#btnReload', function(event) {
@@ -247,29 +249,28 @@
           setGridLastRequest($(this), jqXHR)
         },
         onSelectRow: function(id) {
-
           let nobukti = $('#jqGrid').jqGrid('getCell', id, 'hutang_nobukti')
-          $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/penerimaanstokdetail/${currentTab}/grid`, function() {
-            loadGrid(id,nobukti)
-          })
-          loadDetailData(id)
+
           activeGrid = $(this)
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
+
+          loadDetailData(id)
+          loadHutangData(id, nobukti)
+          loadJurnalUmumData(id, nobukti)
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
 
           if (data.data.length === 0) {
-            abortGridLastRequest($('#detail'))
-            clearGridData($('#detail'))
-            abortGridLastRequest($('#hutangGrid'))
-            clearGridData($('#hutangGrid'))
-            abortGridLastRequest($('#jurnalGrid'))
-            clearGridData($('#jurnalGrid'))
+            $('#detail, #hutangGrid, #jurnalGrid').each((index, element) => {
+              abortGridLastRequest($(element))
+              clearGridData($(element))
+            })
           }
+
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))
@@ -518,18 +519,6 @@
         submitButton.removeAttr('disabled')
       }
     })
-
-    $("#tabs").on('click', 'li.ui-state-active', function() {
-      let href = $(this).find('a').attr('href');
-      currentTab = href.substring(1, href.length - 4);
-      let penerimaanstokId = $('#jqGrid').jqGrid('getGridParam', 'selrow')
-      let nobukti = $('#jqGrid').jqGrid('getCell', penerimaanstokId, 'hutang_nobukti')
-      $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/penerimaanstokdetail/${currentTab}/grid`, function() {
-
-        loadGrid(penerimaanstokId, nobukti)
-      })
-    })
-
   })
 </script>
 @endpush()

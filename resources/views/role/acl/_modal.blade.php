@@ -48,6 +48,7 @@
   hasFormBindKeys = false
   selectedRows = [];
 
+  
   $(document).ready(function() {
     $('#btnSubmitUserAcl').click(function(event) {
       event.preventDefault()
@@ -126,7 +127,6 @@
     $('#userAclModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-
 
     let userAcls = await getUserAcls(roleId)
 

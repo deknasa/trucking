@@ -1,7 +1,7 @@
-<table id="pengeluaranGrid"></table>
 
+@push('scripts')
 <script>
-  function loadGrid(id, nobukti) {
+  function loadPengeluaranGrid(nobukti) {
     let sortnamePengeluaran = 'nobukti'
     let sortorderPengeluaran = 'asc'
     let totalRecordPengeluaran
@@ -13,18 +13,18 @@
 
     $("#pengeluaranGrid")
       .jqGrid({
-        url: `${apiUrl}pengeluarandetail/getPengeluaran`,
-        mtype: "GET",
+        datatype: 'local',
+        data: [],
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
-        datatype: "json",
+        idPrefix: 'pengeluaranGrid',
         colModel: [{
             label: 'NO BUKTI',
             name: 'nobukti',
           },
           {
             label: 'KODE PERKIRAAN DEBET', 
-    width: 220,
+            width: 220,
             name: 'coadebet',
           },
           {
@@ -167,8 +167,9 @@
     loadGlobalSearch($('#pengeluaranGrid'))
   }
 
-  function loadDetailData(id, nobukti) {
+  function loadPengeluaranData(id, nobukti) {
     abortGridLastRequest($('#pengeluaranGrid'))
+
     $('#pengeluaranGrid').setGridParam({
       url: `${apiUrl}pengeluarandetail/getPengeluaran`,
       datatype: "json",
@@ -179,3 +180,4 @@
     }).trigger('reloadGrid')
   }
 </script>
+@endpush

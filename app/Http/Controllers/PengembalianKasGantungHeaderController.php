@@ -116,7 +116,6 @@ class PengembalianKasGantungHeaderController extends MyController
 
         $pengembaliankasgantung = $data['data'];
         $pengembaliankasgantung_details = $responses['data'];
-        $user = $responses['user'];
 
         $tglBukti = $pengembaliankasgantung["tglbukti"];
         $timeStamp = strtotime($tglBukti);
@@ -141,12 +140,10 @@ class PengembalianKasGantungHeaderController extends MyController
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setCellValue('A1', 'TAS '.$user['nama_cabang']);
-        $sheet->setCellValue('A2', 'Pengembalian Kas Gantung');
-        $sheet->getStyle("A1")->getFont()->setSize(20);
-        $sheet->getStyle("A2")->getFont()->setSize(16);
-        $sheet->getStyle("A1")->getFont()->setBold(true);
-        $sheet->getStyle("A2")->getFont()->setBold(true);
+        $sheet->setCellValue('A1', $pengembaliankasgantung['judul']);
+        $sheet->setCellValue('A2', $pengembaliankasgantung['judulLaporan']);
+        $sheet->getStyle("A1")->getFont()->setSize(14);
+        $sheet->getStyle("A2")->getFont()->setSize(12);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:E1');
@@ -292,16 +289,6 @@ class PengembalianKasGantungHeaderController extends MyController
         $sheet ->getStyle("B".($ttd_start_row+1).":B".($ttd_start_row+3))->applyFromArray($styleArray);
         $sheet ->getStyle("C".($ttd_start_row+1).":C".($ttd_start_row+3))->applyFromArray($styleArray);
         $sheet ->getStyle("D".($ttd_start_row+1).":D".($ttd_start_row+3))->applyFromArray($styleArray);
-
-        //set tglcetak
-        date_default_timezone_set('Asia/Jakarta');
-        
-        $sheet->setCellValue("B".($ttd_start_row+5), 'Dicetak Pada :');
-        $sheet->getStyle("B".($ttd_start_row+5))->getFont()->setItalic(true);
-        $sheet->setCellValue("C".($ttd_start_row+5), date('d-m-Y H:i:s'));
-        $sheet->getStyle("C".($ttd_start_row+5))->getFont()->setItalic(true);
-        $sheet->setCellValue("D".($ttd_start_row+5), $user['name']);
-        $sheet->getStyle("D".($ttd_start_row+5))->getFont()->setItalic(true);
 
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);

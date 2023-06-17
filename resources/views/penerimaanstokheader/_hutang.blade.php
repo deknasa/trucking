@@ -1,7 +1,7 @@
-<table id="hutangGrid"></table>
 
+@push('scripts')
 <script>
-  function loadGrid(penerimaanstokId, nobukti) {
+  function loadHutangGrid(nobukti) {
     let sortnameHutang = 'nobukti'
     let sortorderHutang = 'asc'
     let totalRecordHutang
@@ -13,11 +13,11 @@
 
     $("#hutangGrid")
       .jqGrid({
-        url: `${apiUrl}penerimaanstokdetail/hutang`,
-        mtype: "GET",
+        datatype: 'local',
+        data: [],
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
-        datatype: "json",
+        idPrefix: 'hutangGrid',
         colModel: [{
             label: 'NO BUKTI',
             name: 'nobukti',
@@ -142,7 +142,7 @@
     loadGlobalSearch($('#hutangGrid'))
   }
 
-  function loadDetailData(id, nobukti) {
+  function loadHutangData(id, nobukti) {
     abortGridLastRequest($('#hutangGrid'))
 
     $('#hutangGrid').setGridParam({
@@ -155,3 +155,4 @@
     }).trigger('reloadGrid')
   }
 </script>
+@endpush

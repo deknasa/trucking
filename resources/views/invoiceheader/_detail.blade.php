@@ -1,7 +1,6 @@
-<table id="detailGrid"></table>
-
+@push('scripts')
 <script>
-  function loadGrid(id) {
+  function loadDetailGrid() {
     let sortnameDetail = 'orderantrucking_nobukti'
     let sortorderDetail = 'asc'
     let totalRecordDetail
@@ -13,11 +12,11 @@
 
     $("#detailGrid")
       .jqGrid({
-        url: `${apiUrl}invoicedetail`,
-        mtype: "GET",
+        datatype: 'local',
+        data: [],
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
-        datatype: "json",
+        idPrefix: 'detailGrid',
         colModel: [{
             label: 'NO BUKTI',
             name: 'nobukti',
@@ -175,3 +174,4 @@
     }).trigger('reloadGrid')
   }
 </script>
+@endpush

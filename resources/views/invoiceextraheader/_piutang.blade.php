@@ -1,7 +1,7 @@
-<table id="piutangGrid"></table>
 
+@push('scripts')
 <script>
-  function loadGrid(invoiceId, nobukti) {
+  function loadPiutangGrid(nobukti) {
     let sortnamePiutang = 'nobukti'
     let sortorderPiutang = 'asc'
     let totalRecordPiutang
@@ -13,11 +13,11 @@
 
     $("#piutangGrid")
       .jqGrid({
-        url: `${apiUrl}invoicedetail/piutang`,
-        mtype: "GET",
+        datatype: 'local',
+        data: [],
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
-        datatype: "json",
+        idPrefix: 'piutangGrid',
         colModel: [{
             label: 'NO BUKTI',
             name: 'nobukti',
@@ -137,7 +137,7 @@
     loadGlobalSearch($('#piutangGrid'))
   }
 
-  function loadDetailData(id, nobukti) {
+  function loadPiutangData(id, nobukti) {
     abortGridLastRequest($('#piutangGrid'))
 
     $('#piutangGrid').setGridParam({
@@ -150,3 +150,4 @@
     }).trigger('reloadGrid')
   }
 </script>
+@endpush

@@ -71,6 +71,7 @@
 @push('scripts')
 <script>
   let hasFormBindKeys = false
+  let modalBody = $('#crudModal').find('.modal-body').html()
 
   $(document).ready(function() {
     $('#btnSubmit').click(function(event) {
@@ -157,10 +158,11 @@
 
             setErrorMessages(form, error.responseJSON.errors);
           } else {
+            console.log(error.responseJSON.errors)
             if (error.responseJSON.errors) {
-              showDialog(error.statusText, error.responseJSON.errors.join('<hr>'))
+              showDialog(error.responseJSON.errors)
             } else if (error.responseJSON.message) {
-              showDialog(error.statusText, error.responseJSON.message)
+              showDialog(error.responseJSON);
             } else {
               showDialog(error.statusText, error.statusText)
             }
@@ -186,6 +188,7 @@
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
+    $('#crudModal').find('.modal-body').html(modalBody)
   })
 
   function createMandor() {

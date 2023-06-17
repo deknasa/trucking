@@ -376,7 +376,7 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Please select a row')
               } else {
-                window.open(`{{ route('penerimaanheader.report') }}?id=${selectedId}`)
+                window.open(`{{ route('prosesuangjalansupirheader.report') }}?id=${selectedId}`)
               }
             }
           },
@@ -391,7 +391,7 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Please select a row')
               } else {
-                window.open(`{{ route('penerimaanheader.export') }}?id=${selectedId}`)
+                window.open(`{{ route('prosesuangjalansupirheader.export') }}?id=${selectedId}`)
               }
             }
           },
