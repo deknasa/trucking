@@ -147,7 +147,9 @@
                   </div>
                 </div>
               </div>
-
+            
+            </div>
+              
               <div class="row">
 
                 <div class="form-group col-md-6">
@@ -224,16 +226,16 @@
               </div>
 
 
-            </div>
+            
 
-            <div class="row form-group" style="display:none">
+            {{-- <div class="row form-group" style="display:none">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">keterangan </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="text" name="keterangan" class="form-control">
               </div>
-            </div>
+            </div> --}}
 
 
             <div class="table-scroll table-responsive">
@@ -603,6 +605,11 @@
     $('[name=gandengandari]').parents('.form-group').show()
     $('[name=gandenganke]').parents('.form-group').show()
     $('.tbl_penerimaanstok_nobukti').hide();
+    $('.tbl_persentase').hide();
+    $('.tbl_total').hide();
+    $('.tbl_harga').hide();
+    $('.colspan').attr('colspan', 3);
+
     $('.tbl_aksi').show()
     $('#addRow').show()
     $('[name=gudang]').val('').attr('readonly', false);
