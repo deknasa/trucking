@@ -171,6 +171,10 @@
                                 stoksampai: $('#crudForm').find('[name=stoksampai]').val(),
                                 gudang: $('#crudForm').find('[name=gudang]').val(),
                                 gudang_id: $('#crudForm').find('[name=gudang_id]').val(),
+                                gandengan: $('#crudForm').find('[name=gandengan]').val(),
+                                gandengan_id: $('#crudForm').find('[name=gandengan_id]').val(),
+                                trado: $('#crudForm').find('[name=trado]').val(),
+                                trado_id: $('#crudForm').find('[name=trado_id]').val(),
 
                             },
                             datatype: "json"
