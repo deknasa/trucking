@@ -110,7 +110,8 @@
                                 $(element).removeClass('form-control')
                                 $(element).parent().addClass('text-center')
 
-                                $(element).on('click', function() {
+                                $(element).on('click', function() {                                    
+                                    $(element).attr('disabled', true)
                                     if ($(this).is(':checked')) {
                                         selectAllRows()
                                     } else {
@@ -423,7 +424,7 @@
                         }
                     }, 100)
 
-
+                    $('#gs_').attr('disabled', false)
                     setHighlight($(this))
                 }
             })
