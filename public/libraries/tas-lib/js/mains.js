@@ -1078,15 +1078,12 @@ function showSuccessDialog(statusText = "", message = "") {
 	});
 } 
 
-function showDialog(response) {
+function showDialog(statusText="", message="") {
 	$("#dialog-message").html(`
 		<span class="fa fa-exclamation-triangle" aria-hidden="true" style="font-size:25px;"></span>
 	`)
 	$("#dialog-message").append(
-		// `<p class="text-dark"> ${statusText} </p> ${message}`
-		`<p>file: ${response.file}</p>` +
-		`<p>line : ${response.line}</p>` +
-		`<p>${response.message}</p>`
+		`<p class="text-dark"> ${statusText} </p> ${message}`
 
 	);
 	$("#dialog-message").dialog({
@@ -1102,7 +1099,34 @@ function showDialog(response) {
 	});
 
 	$(".ui-dialog-titlebar-close").find("p").remove();
-}  
+}
+
+// function showDialog(response) {
+// 	$("#dialog-message").html(`
+// 		<span class="fa fa-exclamation-triangle" aria-hidden="true" style="font-size:25px;"></span>
+// 	`)
+// 	$("#dialog-message").append(
+// 		// `<p class="text-dark"> ${statusText} </p> ${message}`
+// 		`<p>file: ${response.file}</p>` +
+// 		`<p>line : ${response.line}</p>` +
+// 		`<p>${response.message}</p>`
+
+// 	);
+// 	$("#dialog-message").dialog({
+// 		modal: true,
+// 		buttons: [
+// 			{
+// 				text: "Ok",
+// 				click: function () {
+// 					$(this).dialog("close");
+// 				},
+// 			},
+// 		]
+// 	});
+
+// 	$(".ui-dialog-titlebar-close").find("p").remove();
+// }  
+
 function showConfirm(statusText = "", message = "", urlDestination = "") {
 	$("#dialog-confirm").find("p").remove();
 	$("#dialog-confirm").append(`<p> ${statusText} </p><p> ${message} </p>`);
