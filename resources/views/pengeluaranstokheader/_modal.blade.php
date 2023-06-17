@@ -499,7 +499,7 @@
         break;
     
       default:
-        tampilanall()
+        tampilanInit()
         break;
     }
   }
@@ -673,6 +673,24 @@ $('.tbl_qty').show()
    tampilanAllRow();
     // $('.data_tbl').show();
   }
+  function tampilanInit() {
+    $('[name=nobukti]').parents('.form-group').show()
+    $('[name=tglbukti]').parents('.form-group').show()
+    $('[name=pengeluaranstok]').parents('.form-group').show()
+    $('[name=supplier]').parents('.form-group').hide()
+    $('[name=servicein_nobukti]').parents('.form-group').hide()
+    $('[name=penerimaanstok_nobukti]').parents('.form-group').hide()
+    $('[name=pengeluaranstok_nobukti]').parents('.form-group').hide()
+    $('[name=kerusakan]').parents('.form-group').hide()
+    $('[name=supir]').parents('.form-group').hide()
+    $('[name=trado]').parents('.form-group').hide()
+    $('[name=gandengan]').parents('.form-group').hide()
+    $('[name=gudang]').parents('.form-group').hide()
+    $('[name=statuspotongretur]').parents('.form-group').hide()
+     
+   tampilanAllRow();
+    // $('.data_tbl').show();
+  }
   function tampilanAllRow() {
     $('.tbl_vulkanisirke').show()
     $('.tbl_qty').show()
@@ -730,6 +748,7 @@ $('.tbl_qty').show()
       ])
       .then(() => {
         $('#crudModal').modal('show')
+        setKodePengeluaran(0)
       })
       .catch((error) => {
         showDialog(error.statusText)
