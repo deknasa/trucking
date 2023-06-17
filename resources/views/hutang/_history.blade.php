@@ -1,7 +1,7 @@
-<table id="historyGrid"></table>
 
+@push('scripts')
 <script>
-  function loadGrid(id) {
+  function loadHistoryGrid() {
     let sortnameHistory = 'hutang_nobukti'
     let sortorderHistory = 'asc'
     let totalRecordHistory
@@ -12,11 +12,11 @@
     let pageHistory = 0;
     $('#historyGrid')
       .jqGrid({
-        url: `${apiUrl}hutangdetail/history`,
-        mtype: "GET",
+        datatype: 'local',
+        data: [],
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
-        datatype: "json",
+        idPrefix: 'historyGrid',
         colModel: [{
             label: 'NO BUKTI',
             name: 'hutang_nobukti',
@@ -143,7 +143,7 @@
     loadGlobalSearch($('#historyGrid'))
   }
 
-  function loadDetailData(id) {
+  function loadHistoryData(id) {
         abortGridLastRequest($('#historyGrid'))
 
         $('#historyGrid').setGridParam({
@@ -156,3 +156,4 @@
     }).trigger('reloadGrid')
   }
 </script>
+@endpush

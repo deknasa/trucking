@@ -1,7 +1,7 @@
-<table id="detail"></table>
 
+@push('scripts')
 <script>
-  function loadGrid(id) {
+  function loadDetailGrid() {
     let sortnameDetail = 'nobukti'
     let sortorderDetail = 'asc'
     let totalRecordDetail
@@ -12,11 +12,11 @@
     let pageDetail = 0;
 
     $("#detail").jqGrid({
-        url: `${apiUrl}penerimaanstokdetail`,
-        mtype: "GET",
+        datatype: 'local',
+        data: [],
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
-        datatype: "json",
+        idPrefix: 'detail',
         colModel: [
           {
             label: 'NO BUKTI',
@@ -181,3 +181,4 @@
     }).trigger('reloadGrid')
   }
 </script>
+@endpush

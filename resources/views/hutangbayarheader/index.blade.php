@@ -20,14 +20,13 @@
               <li><a href="#jurnal-tab">Jurnal</a></li>
             </ul>
             <div id="detail-tab">
-
+              <table id="detail"></table>
             </div>
-
             <div id="pengeluaran-tab">
-
+              <table id="pengeluaranGrid"></table>
             </div>
             <div id="jurnal-tab">
-
+              <table id="jurnalGrid"></table>
             </div>
           </div>
         </div>
@@ -81,6 +80,12 @@
 
   $(document).ready(function() {
     $("#tabs").tabs()
+
+    let nobukti = $('#jqGrid').jqGrid('getCell', id, 'pengeluaran_nobukti')
+    loadDetailGrid()
+    loadPengeluaranGrid(nobukti)
+    loadJurnalUmumGrid(nobukti)
+
     setRange()
     initDatepicker()
     $(document).on('click', '#btnReload', function(event) {
@@ -360,27 +365,24 @@
         },
         onSelectRow: function(id) {
           let nobukti = $('#jqGrid').jqGrid('getCell', id, 'pengeluaran_nobukti')
-          $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/hutangbayardetail/${currentTab}/grid`, function() {
-            loadGrid(id,nobukti)
-          })
-          loadDetailData(id)
           activeGrid = $(this)
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
 
+          loadDetailData(id)
+          loadPengeluaranData(id, nobukti)
+          loadJurnalUmumData(id, nobukti)
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
 
           if (data.data.length === 0) {
-            abortGridLastRequest($('#detail'))
-            clearGridData($('#detail'))
-            abortGridLastRequest($('#jurnalGrid'))
-            clearGridData($('#jurnalGrid'))
-            abortGridLastRequest($('#pengeluaranGrid'))
-            clearGridData($('#pengeluaranGrid'))
+            $('#detail, #pengeluaranGrid, #jurnalGrid').each((index, element) => {
+              abortGridLastRequest($(element))
+              clearGridData($(element))
+            })
           }
 
           $(document).unbind('keydown')
@@ -592,18 +594,6 @@
       $('#approveun').attr('disabled', 'disabled')
       $("#jqGrid").hideCol("");
     }
-
-    
-    $("#tabs").on('click', 'li.ui-state-active', function() {
-      let href = $(this).find('a').attr('href');
-      currentTab = href.substring(1, href.length - 4);
-      let hutangBayarId = $('#jqGrid').jqGrid('getGridParam', 'selrow')
-      let nobukti = $('#jqGrid').jqGrid('getCell', hutangBayarId, 'pengeluaran_nobukti')
-      $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/hutangbayardetail/${currentTab}/grid`, function() {
-
-        loadGrid(hutangBayarId, nobukti)
-      })
-    })
   })
   
   function clearSelectedRows() {

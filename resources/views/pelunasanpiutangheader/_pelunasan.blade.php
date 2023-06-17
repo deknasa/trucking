@@ -1,7 +1,7 @@
-<table id="pelunasanGrid"></table>
 
+@push('scripts')
 <script>
-  function loadGrid(id, nobukti) {
+  function loadPelunasanGrid(nobukti) {
     let sortnamePelunasan = 'nobukti'
     let sortorderPelunasan = 'asc'
     let totalRecordPelunasan
@@ -13,11 +13,11 @@
 
     $("#pelunasanGrid")
       .jqGrid({
-        url: `${apiUrl}pelunasanpiutangdetail/getPelunasan`,
-        mtype: "GET",
+        datatype: 'local',
+        data: [],
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
-        datatype: "json",
+        idPrefix: 'pelunasanGrid',
         colModel: [{
             label: 'NO BUKTI',
             name: 'nobukti',
@@ -176,3 +176,4 @@
     }).trigger('reloadGrid')
   }
 </script>
+@endpush

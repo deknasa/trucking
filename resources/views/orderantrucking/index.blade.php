@@ -357,22 +357,25 @@
               }
 
             }
+          }, 
+          {
+            id: 'report',
+            innerHTML: '<i class="fa fa-print"></i> REPORT',
+            class: 'btn btn-info btn-sm mr-1',
+            onClick: () => {
+              $('#rangeTglModal').find('button:submit').html(`Report`)
+              $('#rangeTglModal').modal('show')
+            }
           },
           {
             id: 'export',
-            title: 'Export',
-            caption: 'Export',
-            innerHTML: '<i class="fas fa-file-export"></i> EXPORT',
+            innerHTML: '<i class="fa fa-file-export"></i> EXPORT',
             class: 'btn btn-warning btn-sm mr-1',
             onClick: () => {
-              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Please select a row')
-              } else {
-                window.open(`{{ route('orderantrucking.export') }}?id=${selectedId}`)
-              }
+              $('#rangeTglModal').find('button:submit').html(`Export`)
+              $('#rangeTglModal').modal('show')
             }
-          },  
+          },
         ]
       })
 
@@ -402,6 +405,53 @@
       .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
 
+      $('#rangeTglModal').on('shown.bs.modal', function() {
+        initDatepicker()
+
+        $('#formRangeTgl').find('[name=dari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+        $('#formRangeTgl').find('[name=sampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+      })
+      $('#formRangeTgl').submit(event => {
+        event.preventDefault()
+        getCekExport()
+        .then((response) => {
+          let actionUrl = `{{ route('orderantrucking.export') }}`
+
+            /* Clear validation messages */
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+
+
+            window.open(`${actionUrl}?${$('#formRangeTgl').serialize()}`)
+        })
+        .catch((error) => {
+          setErrorMessages($('#formRangeTgl'), error.responseJSON.errors);
+        })
+
+        })
+        function getCekExport() {
+           return new Promise((resolve, reject) => {
+        $.ajax({
+          url: `${apiUrl}orderantrucking/export`,
+          dataType: "JSON",
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          },
+          data: {
+            dari:$('#formRangeTgl').find('[name=dari]').val(),
+            sampai:$('#formRangeTgl').find('[name=sampai]').val()
+          },
+          success: (response) => {
+            resolve(response);
+          },
+          error: error => {
+            reject(error)
+
+          },
+        });
+      });
+    }
+
     if (!`{{ $myAuth->hasPermission('orderantrucking', 'store') }}`) {
       $('#add').attr('disabled', 'disabled')
     }
@@ -414,7 +464,11 @@
       $('#delete').attr('disabled', 'disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('absensisupirheader', 'export') }}`) {
+    if (!`{{ $myAuth->hasPermission('orderantrucking', 'report') }}`) {
+      $('#report').attr('disabled', 'disabled')
+    }
+
+    if (!`{{ $myAuth->hasPermission('orderantrucking', 'export') }}`) {
       $('#export').attr('disabled', 'disabled')
     }
 
@@ -461,9 +515,6 @@
 
       window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
     })
-
-
-
   })
 </script>
 @endpush()

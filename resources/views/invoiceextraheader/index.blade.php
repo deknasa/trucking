@@ -20,14 +20,13 @@
               <li><a href="#jurnal-tab">Jurnal</a></li>
             </ul>
             <div id="detail-tab">
-
+              <table id="detail"></table>
             </div>
-
             <div id="piutang-tab">
-
+              <table id="piutangGrid"></table>
             </div>
             <div id="jurnal-tab">
-
+              <table id="jurnalGrid"></table>
             </div>
           </div>
         </div>
@@ -80,6 +79,12 @@
 
   $(document).ready(function() {
     $("#tabs").tabs()
+
+    let nobukti = $('#jqGrid').jqGrid('getCell', id, 'piutang_nobukti')
+
+    loadDetailGrid()
+    loadPiutangGrid(nobukti)
+    loadJurnalUmumGrid(nobukti)
 
     setRange()
     initDatepicker()
@@ -352,27 +357,37 @@
         onSelectRow: function(id) {
 
           let nobukti = $('#jqGrid').jqGrid('getCell', id, 'piutang_nobukti')
-          $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/invoiceextradetail/${currentTab}/grid`, function() {
-            loadGrid(id, nobukti)
-          })
+          // $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/invoiceextradetail/${currentTab}/grid`, function() {
+          //   loadGrid(id, nobukti)
+          // })
           loadDetailData(id, nobukti)
           activeGrid = $(this)
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
+          
+          loadDetailData(id)
+          loadPiutangData(id, nobukti)
+          loadJurnalUmumData(id, nobukti)
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
 
           if (data.data.length === 0) {
-            abortGridLastRequest($('#detail'))
-            clearGridData($('#detail'))
-            abortGridLastRequest($('#piutangGrid'))
-            clearGridData($('#piutangGrid'))
-            abortGridLastRequest($('#jurnalGrid'))
-            clearGridData($('#jurnalGrid'))
+            $('#detail, #piutangGrid, #jurnalGrid').each((index, element) => {
+              abortGridLastRequest($(element))
+              clearGridData($(element))
+            })
           }
+          // if (data.data.length === 0) {
+          //   abortGridLastRequest($('#detail'))
+          //   clearGridData($('#detail'))
+          //   abortGridLastRequest($('#piutangGrid'))
+          //   clearGridData($('#piutangGrid'))
+          //   abortGridLastRequest($('#jurnalGrid'))
+          //   clearGridData($('#jurnalGrid'))
+          // }
 
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
@@ -494,25 +509,27 @@
             innerHTML: '<i class="fa fa-print"></i> REPORT',
             class: 'btn btn-info btn-sm mr-1',
             onClick: () => {
-
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              window.open(`{{url('invoiceextraheader/report/${selectedId}')}}`)
-              
-              clearSelectedRows()
-              $('#gs_').prop('checked', false)
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Please select a row')
+              } else {
+                window.open(`{{ route('invoiceextraheader.report') }}?id=${selectedId}`)
+              }
             }
           },
           {
             id: 'export',
-            innerHTML: '<i class="fa fa-file-export"></i> EXPORT',
+            title: 'Export',
+            caption: 'Export',
+            innerHTML: '<i class="fas fa-file-export"></i> EXPORT',
             class: 'btn btn-warning btn-sm mr-1',
             onClick: () => {
-
-              $('#rangeModal').data('action', 'export')
-              $('#rangeModal').find('button:submit').html(`Export`)
-              $('#rangeModal').modal('show')
-              clearSelectedRows()
-              $('#gs_').prop('checked', false)
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Please select a row')
+              } else {
+                window.open(`{{ route('invoiceextraheader.export') }}?id=${selectedId}`)
+              }
             }
           },
           {
@@ -604,31 +621,6 @@
       })
     })
 
-    $('#formRange').submit(function(event) {
-      event.preventDefault()
-
-      let params
-      let submitButton = $(this).find('button:submit')
-
-      if ($('#rangeModal').data('action') == 'export') {
-        actionUrl = `{{ route('invoiceextraheader.export') }}`
-      }
-
-      /* Clear validation messages */
-      $('.is-invalid').removeClass('is-invalid')
-      $('.invalid-feedback').remove()
-
-      /* Set params value */
-      for (var key in postData) {
-        if (params != "") {
-          params += "&";
-        }
-        params += key + "=" + encodeURIComponent(postData[key]);
-      }
-
-      window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
-    })
-
     function handleApproval(id) {
       $.ajax({
         url: `${apiUrl}invoiceextraheader/${id}/approval`,
@@ -647,16 +639,16 @@
 
 
 
-    $("#tabs").on('click', 'li.ui-state-active', function() {
-      let href = $(this).find('a').attr('href');
-      currentTab = href.substring(1, href.length - 4);
-      let invoiceId = $('#jqGrid').jqGrid('getGridParam', 'selrow')
-      let nobukti = $('#jqGrid').jqGrid('getCell', invoiceId, 'piutang_nobukti')
-      $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/invoiceextradetail/${currentTab}/grid`, function() {
+    // $("#tabs").on('click', 'li.ui-state-active', function() {
+    //   let href = $(this).find('a').attr('href');
+    //   currentTab = href.substring(1, href.length - 4);
+    //   let invoiceId = $('#jqGrid').jqGrid('getGridParam', 'selrow')
+    //   let nobukti = $('#jqGrid').jqGrid('getCell', invoiceId, 'piutang_nobukti')
+    //   $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/invoiceextradetail/${currentTab}/grid`, function() {
 
-        loadGrid(invoiceId, nobukti)
-      })
-    })
+    //     loadGrid(invoiceId, nobukti)
+    //   })
+    // })
 
   })
 

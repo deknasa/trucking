@@ -17,9 +17,8 @@
             <ul class="dejavu">
               <li><a href="#acl-tab">Acl</a></li>
             </ul>
-
             <div id="acl-tab">
-
+              <table id="roleAclGrid"></table>
             </div>
           </div>
         </div>
@@ -50,6 +49,9 @@
 
   $(document).ready(function() {
     $("#tabs").tabs()
+
+    loadRoleAclGrid()
+
     $("#jqGrid").jqGrid({
         url: `${apiUrl}role`,
         mtype: "GET",
@@ -136,16 +138,20 @@
           let roleId = $('#jqGrid').jqGrid('getGridParam', 'selrow')
           if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
 
-          $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/role/${currentTab}/grid`, function() {
-            loadGrid(id)
-          })
+          // $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/role/${currentTab}/grid`, function() {
+          //   loadGrid(id)
+          // })
+
+          loadRoleAclData(roleId)
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
 
           if (data.data.length === 0) {
-            abortGridLastRequest($('#roleAclGrid'))
-            clearGridData($('#roleAclGrid'))
+            $('#roleAclGrid').each((index, element) => {
+              abortGridLastRequest($(element))
+              clearGridData($(element))
+            })
           }
           $(document).unbind('keydown')
           setCustomBindKeys($(this))

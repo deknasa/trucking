@@ -1,7 +1,7 @@
-<table id="penerimaanGrid"></table>
 
+@push('scripts')
 <script>
-  function loadGrid(id, nobukti) {
+  function loadPenerimaanGrid(nobukti) {
     let sortnamePenerimaan = 'nobukti'
     let sortorderPenerimaan = 'asc'
     let totalRecordPenerimaan
@@ -13,11 +13,11 @@
 
     $("#penerimaanGrid")
       .jqGrid({
-        url: `${apiUrl}penerimaandetail/getPenerimaan`,
-        mtype: "GET",
+        datatype: 'local',
+        data: [],
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
-        datatype: "json",
+        idPrefix: 'penerimaanGrid',
         colModel: [{
             label: 'NO BUKTI',
             name: 'nobukti',
@@ -178,7 +178,7 @@
     loadGlobalSearch($('#penerimaanGrid'))
   }
 
-  function loadDetailData(id, nobukti) {
+  function loadPenerimaanData(id, nobukti) {
     abortGridLastRequest($('#penerimaanGrid'))
     $('#penerimaanGrid').setGridParam({
       url: `${apiUrl}penerimaandetail/getPenerimaan`,
@@ -190,3 +190,4 @@
     }).trigger('reloadGrid')
   }
 </script>
+@endpush

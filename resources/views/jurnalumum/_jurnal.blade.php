@@ -1,7 +1,7 @@
-<table id="jurnalGrid"></table>
 
+@push('scripts')
 <script>
-  function loadGrid(id, nobukti) {
+  function loadJurnalUmumGrid(nobukti) {
     let sortnameJurnal = 'nobukti'
     let sortorderJurnal = 'asc'
     let totalRecordJurnal
@@ -13,11 +13,11 @@
 
     $("#jurnalGrid")
       .jqGrid({
-        url: `${apiUrl}jurnalumumdetail/jurnal`,
-        mtype: "GET",
+        datatype: 'local',
+        data: [],
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
-        datatype: "json",
+        idPrefix: 'jurnalGrid',
         colModel: [{
             label: 'NO BUKTI',
             name: 'nobukti',
@@ -158,7 +158,7 @@
     loadGlobalSearch($('#jurnalGrid'))
   }
 
-  function loadDetailData(id, nobukti) {
+  function loadJurnalUmumData(id, nobukti) {
     abortGridLastRequest($('#jurnalGrid'))
     $('#jurnalGrid').setGridParam({
       url: `${apiUrl}jurnalumumdetail/jurnal`,
@@ -170,3 +170,4 @@
     }).trigger('reloadGrid')
   }
 </script>
+@endpush
