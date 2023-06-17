@@ -196,7 +196,7 @@
                     </div>
                   </div>
                 </div>
-              </div>
+              
   
                 <div class="form-group col-md-6">
                   <div class="row">
@@ -221,7 +221,7 @@
                     </div>
                   </div>
                 </div>
-           
+              </div>
 
 
             </div>
@@ -450,6 +450,7 @@
 
   function setKodePenerimaan(kode) {
     KodePenerimaanId = kode;
+    resetLookup()
     setTampilanForm();
   }
 
@@ -510,6 +511,8 @@
     // $('[name=supplier_id]').val('')
     $('#addRow').show()
     $('.tbl_aksi').show()
+    $('[name=gudang]').val('').attr('readonly', false);
+    $('[name=gudang_id]').val('')
   }
 
   function tampilanpo() {
@@ -541,6 +544,8 @@
     // $('[name=supplier_id]').val('')
     $('#addRow').show()
     $('.tbl_aksi').show()
+    $('[name=gudang]').val('').attr('readonly', false);
+    $('[name=gudang_id]').val('')
   }
 
   function tampilanpbt() {
@@ -600,6 +605,8 @@
     $('.tbl_penerimaanstok_nobukti').hide();
     $('.tbl_aksi').show()
     $('#addRow').show()
+    $('[name=gudang]').val('').attr('readonly', false);
+    $('[name=gudang_id]').val('')
   }
 
   function tampilankst() {
@@ -615,8 +622,8 @@
     $('[name=gudang]').parents('.form-group').show()
     $('[name=trado]').parents('.form-group').show()
     $('[name=gandengan]').parents('.form-group').show()
-    // $('[name=gudang]').val('').attr('readonly', false);
-    // $('[name=gudang_id]').val('')
+    $('[name=gudang]').val('').attr('readonly', false);
+    $('[name=gudang_id]').val('')
     
     $('[name=gudangdari]').parents('.form-group').hide()
     $('[name=gudangke]').parents('.form-group').hide()
@@ -655,7 +662,8 @@
 
     $('.tbl_penerimaanstok_nobukti').show();
     $('.colspan').attr('colspan', 7);
-    
+    $('[name=gudang]').val('').attr('readonly', false);
+    $('[name=gudang_id]').val('')
     $('#addRow').show()
   }
 
@@ -681,8 +689,12 @@
     // $('[name=supplier]').data('currentValue', '')
     // $('[name=supplier_id]').val('')
     $('#addRow').show()
+    $('[name=gudang]').val('').attr('readonly', false);
+    $('[name=gudang_id]').val('')
   }
   function tampilanInit() {
+    $('[name=gudang]').val('').attr('readonly', false);
+    $('[name=gudang_id]').val('')
     $('[name=penerimaanstok_nobukti]').parents('.form-group').hide()
     $('[name=pengeluaranstok_nobukti]').parents('.form-group').hide()
     $('[name=nobon]').parents('.form-group').hide()
@@ -1643,6 +1655,33 @@
     })
   }
 
+  function resetLookup() {
+    
+    array = [
+      'supplier',
+      'trado',
+      'gandengan',
+      'gudangdari',
+      'gudang',
+      'penerimaanstokheader_nobukti',
+      'pengeluaranstokheader_nobukti',
+      'tradoke',
+      'gandenganke',
+      'gudangke',
+      'tradodari',
+      'gandengandari',
+    ];
+    array.forEach(index => {
+      $('#crudForm').find(`[name="${index}"]`).parents('.input-group').children().attr('disabled',false)
+      $('#crudForm').find(`[name="${index}"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled',false)
+      $(`#${index}Id`).val('')
+      $('#crudForm').find(`[name="${index}"]`).data('currentValue', '')
+    });
+    enabledLookupSelected()
+    enabledLookupSelectedDari()
+    enabledLookupSelectedKe()
+  }
+
   function initLookup(params) {
     $('.akunpusat-lookup').lookup({
       title: 'akun pusat Lookup',
@@ -1812,22 +1851,7 @@
         element.data('currentValue', element.val())
       }
     })
-    $('.hutang-lookup').lookup({
-      title: 'hutang header Lookup',
-      fileName: 'hutangheader',
-      onSelectRow: (hutang, element) => {
-        element.val(hutang.nobukti)
-        element.data('currentValue', element.val())
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
-      },
-      onClear: (element) => {
-        element.val('')
-        element.data('currentValue', element.val())
-      }
-    })
-
+    
 
     $('.tradoke-lookup').lookup({
       title: 'Trado Lookup',
