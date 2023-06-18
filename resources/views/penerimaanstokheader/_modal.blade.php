@@ -365,7 +365,10 @@
         name: 'limit',
         value: limit
       })
-
+      data.push({
+        name: 'keterangan',
+        value: ''
+      })
       data.push({
         name: 'tgldariheader',
         value: $('#tgldariheader').val()
@@ -392,7 +395,8 @@
           break;
         case 'delete':
           method = 'DELETE'
-          url = `${apiUrl}penerimaanstokheader/${penerimaanStokHeaderId}?tgldariheader=${tgldariheader}&tglsampaiheader=${tglsampaiheader}&penerimaanheader_id=${penerimaanheader_id}&indexRow=${indexRow}&limit=${limit}&page=${page}`
+          // url = `${apiUrl}penerimaanstokheader/${penerimaanStokHeaderId}?tgldariheader=${tgldariheader}&tglsampaiheader=${tglsampaiheader}&penerimaanheader_id=${penerimaanheader_id}&indexRow=${indexRow}&limit=${limit}&page=${page}`
+          url = `${apiUrl}penerimaanstokheader/${penerimaanStokHeaderId}`
           break;
         default:
           method = 'POST'
