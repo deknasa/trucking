@@ -508,7 +508,7 @@
 
   }
 
-  function deletePemutihanSupir(userId) {
+  function deletePemutihanSupir(pemutihanId) {
     let form = $('#crudForm')
 
     $('.modal-loader').removeClass('d-none')
