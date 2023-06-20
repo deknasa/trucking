@@ -510,15 +510,13 @@
     $('.tbl_penerimaanstok_nobukti').hide();
     $('.colspan').attr('colspan', 4);
     $('.sumrow').hide();
-    $('[name=gudang]').val('').attr('readonly', false);
-    $('[name=gudang_id]').val('')
+    
     // $('[name=supplier]').val('').attr('readonly', false);
     // $('[name=supplier]').data('currentValue', '')
     // $('[name=supplier_id]').val('')
     $('#addRow').show()
     $('.tbl_aksi').show()
-    $('[name=gudang]').val('').attr('readonly', false);
-    $('[name=gudang_id]').val('')
+    
   }
 
   function tampilanpo() {
@@ -543,15 +541,13 @@
 
     $('.colspan').attr('colspan', 4);
     $('.sumrow').hide();
-    $('[name=gudang]').val('').attr('readonly', false);
-    $('[name=gudang_id]').val('')
+    
     // $('[name=supplier]').val('').attr('readonly', false);
     // $('[name=supplier]').data('currentValue', '')
     // $('[name=supplier_id]').val('')
     $('#addRow').show()
     $('.tbl_aksi').show()
-    $('[name=gudang]').val('').attr('readonly', false);
-    $('[name=gudang_id]').val('')
+    
   }
 
   function tampilanpbt() {
@@ -571,23 +567,7 @@
     $('.tbl_penerimaanstok_nobukti').hide();
 
     $('.sumrow').show();
-    $.ajax({
-      url: `${apiUrl}gudang/1`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        'Authorization': `Bearer ${accessToken}`
-      },
-      success: response => {
-        var data = response.data;
-        $('[name=gudang]').val(data.gudang).attr('readonly', true);
-        $('[name=gudang_id]').val(data.id)
-      },
-      error: error => {
-        showDialog(error.statusText)
-      }
-    })
-    // $('#addRow').hide()
+    
     $('.tbl_aksi').show()
   }
 
@@ -616,8 +596,7 @@
 
     $('.tbl_aksi').show()
     $('#addRow').show()
-    $('[name=gudang]').val('').attr('readonly', false);
-    $('[name=gudang_id]').val('')
+    
   }
 
   function tampilankst() {
@@ -633,8 +612,7 @@
     $('[name=gudang]').parents('.form-group').show()
     $('[name=trado]').parents('.form-group').show()
     $('[name=gandengan]').parents('.form-group').show()
-    $('[name=gudang]').val('').attr('readonly', false);
-    $('[name=gudang_id]').val('')
+    
     
     $('[name=gudangdari]').parents('.form-group').hide()
     $('[name=gudangke]').parents('.form-group').hide()
@@ -673,8 +651,7 @@
 
     $('.tbl_penerimaanstok_nobukti').show();
     $('.colspan').attr('colspan', 7);
-    $('[name=gudang]').val('').attr('readonly', false);
-    $('[name=gudang_id]').val('')
+    
     $('#addRow').show()
   }
 
@@ -700,8 +677,7 @@
     // $('[name=supplier]').data('currentValue', '')
     // $('[name=supplier_id]').val('')
     $('#addRow').show()
-    $('[name=gudang]').val('').attr('readonly', false);
-    $('[name=gudang_id]').val('')
+    
   }
   function tampilanInit() {
     $('[name=gudang]').val('').attr('readonly', false);
