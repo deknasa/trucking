@@ -1165,6 +1165,7 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::resource('laporantripgandengandetail', LaporanTripGandenganDetailController::class);
 
     Route::get('laporanuangjalan/report', [LaporanUangJalanController::class, 'report'])->name('laporanuangjalan.report');
+    Route::get('laporanuangjalan/export', [LaporanUangJalanController::class, 'export'])->name('laporanuangjalan.export');
     Route::get('laporanuangjalan/index', [LaporanUangJalanController::class, 'index']);
     Route::resource('laporanuangjalan', LaporanUangJalanController::class);
 
@@ -1177,6 +1178,7 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::resource('laporanpemotonganpinjamanperebs', LaporanPemotonganPinjamanPerEBSController::class);
 
     Route::get('laporansupirlebihdaritrado/report', [LaporanSupirLebihDariTradoController::class, 'report'])->name('laporansupirlebihdaritrado.report');
+    Route::get('laporansupirlebihdaritrado/export', [LaporanSupirLebihDariTradoController::class, 'export'])->name('laporansupirlebihdaritrado.export');
     Route::get('laporansupirlebihdaritrado/index', [LaporanSupirLebihDariTradoController::class, 'index']);
     Route::resource('laporansupirlebihdaritrado', LaporanSupirLebihDariTradoController::class);
 

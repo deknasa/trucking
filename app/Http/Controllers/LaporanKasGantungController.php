@@ -41,6 +41,7 @@ class LaporanKasGantungController extends MyController
           
         $data = $header['data'];
         $user = Auth::user();
+      
         return view('reports.laporankasgantung', compact('data', 'user', 'detailParams'));
     }
 

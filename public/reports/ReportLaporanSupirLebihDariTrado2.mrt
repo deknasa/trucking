@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "e5ea6c21476943c849bc78df2ea93ba7",
+  "ReportGuid": "ea90d7f08439252e3301c25f47360b98",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanSupirLebihDariTrado.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanSupirLebihDariTrado2.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1686988365000+0700)/",
+  "ReportChanged": "/Date(1686991715000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -37,7 +37,7 @@
             "Name": "tglbukti",
             "NameInSource": "tglbukti",
             "Alias": "tglbukti",
-            "Type": "System.DateTime"
+            "Type": "System.String"
           },
           "2": {
             "Name": "jumlah",
@@ -214,6 +214,24 @@
             "NameInSource": "dari",
             "Alias": "dari",
             "Type": "System.String"
+          },
+          "2": {
+            "Name": "judul",
+            "NameInSource": "judul",
+            "Alias": "judul",
+            "Type": "System.String"
+          },
+          "3": {
+            "Name": "judullaporan",
+            "NameInSource": "judullaporan",
+            "Alias": "judullaporan",
+            "Type": "System.String"
+          },
+          "4": {
+            "Name": "tanggal_cetak",
+            "NameInSource": "tanggal_cetak",
+            "Alias": "tanggal_cetak",
+            "Type": "System.String"
           }
         },
         "NameInSource": "Data.parameter"
@@ -272,60 +290,6 @@
           "Components": {
             "0": {
               "Ident": "StiText",
-              "Name": "Text2",
-              "ClientRectangle": "86,0,14,6",
-              "ComponentPlacement": "gh.GroupHeaderBand1",
-              "Interaction": {
-                "Ident": "StiInteraction"
-              },
-              "Text": {
-                "Value": "TAS"
-              },
-              "HorAlignment": "Center",
-              "Font": ";14;Bold;",
-              "Border": ";;;;;;;solid:Black",
-              "Brush": "solid:",
-              "TextBrush": "solid:Black",
-              "Type": "Expression"
-            },
-            "1": {
-              "Ident": "StiText",
-              "Name": "Text1",
-              "Guid": "49e9f9bf3c0d19d3942c49b11d63ed4a",
-              "ClientRectangle": "100,0,48,6",
-              "ComponentPlacement": "gh.GroupHeaderBand1",
-              "Interaction": {
-                "Ident": "StiInteraction"
-              },
-              "Text": {
-                "Value": "PUSAT"
-              },
-              "Font": ";14;Bold;",
-              "Border": ";;;;;;;solid:Black",
-              "Brush": "solid:",
-              "TextBrush": "solid:Black",
-              "Type": "Expression"
-            },
-            "2": {
-              "Ident": "StiText",
-              "Name": "Text3",
-              "Guid": "829fd5107935fade3f2d14b62b8287de",
-              "ClientRectangle": "70,8,78,6",
-              "ComponentPlacement": "gh.GroupHeaderBand1",
-              "Interaction": {
-                "Ident": "StiInteraction"
-              },
-              "Text": {
-                "Value": "Laporan 1 Supir Lebih Dari 1 Trado"
-              },
-              "Font": ";13;Bold;",
-              "Border": ";;;;;;;solid:Black",
-              "Brush": "solid:",
-              "TextBrush": "solid:Black",
-              "Type": "Expression"
-            },
-            "3": {
-              "Ident": "StiText",
               "Name": "Text4",
               "Guid": "47ee01b8833b293c5b57c8072ab4b12a",
               "ClientRectangle": "4,22,28,6",
@@ -342,7 +306,7 @@
               "TextBrush": "solid:Black",
               "Type": "Expression"
             },
-            "4": {
+            "1": {
               "Ident": "StiText",
               "Name": "Text5",
               "Guid": "369e4952f3623c8d519f2879344d100f",
@@ -360,7 +324,7 @@
               "TextBrush": "solid:Black",
               "Type": "Expression"
             },
-            "5": {
+            "2": {
               "Ident": "StiText",
               "Name": "Text7",
               "Guid": "dad79547fd78795ac3a6c1887a746546",
@@ -378,7 +342,7 @@
               "TextBrush": "solid:Black",
               "Type": "DataColumn"
             },
-            "6": {
+            "3": {
               "Ident": "StiText",
               "Name": "Text9",
               "Guid": "a2541ba69182d160387a68ff9a255d51",
@@ -401,7 +365,7 @@
               },
               "Type": "Expression"
             },
-            "7": {
+            "4": {
               "Ident": "StiText",
               "Name": "Text10",
               "Guid": "facac79a1db858ca33450c607cc4998b",
@@ -421,7 +385,7 @@
               "TextBrush": "solid:Black",
               "Type": "Expression"
             },
-            "8": {
+            "5": {
               "Ident": "StiText",
               "Name": "Text11",
               "Guid": "c163f661b82e7df3fce00556394c0991",
@@ -441,7 +405,7 @@
               "TextBrush": "solid:Black",
               "Type": "Expression"
             },
-            "9": {
+            "6": {
               "Ident": "StiText",
               "Name": "Text12",
               "Guid": "fc0890bc8886c633ab72f55ab35cb740",
@@ -461,7 +425,7 @@
               "TextBrush": "solid:Black",
               "Type": "Expression"
             },
-            "10": {
+            "7": {
               "Ident": "StiText",
               "Name": "Text16",
               "Guid": "678bb34430b7e0d908f43dd3024bf2da",
@@ -479,7 +443,7 @@
               "TextBrush": "solid:Black",
               "Type": "Expression"
             },
-            "11": {
+            "8": {
               "Ident": "StiText",
               "Name": "Text18",
               "Guid": "feb5b5c4625f24be99d986d9103fdb82",
@@ -497,7 +461,78 @@
               "TextBrush": "solid:Black",
               "Type": "DataColumn"
             },
+            "9": {
+              "Ident": "StiText",
+              "Name": "Text6",
+              "ClientRectangle": "146,22,58,6",
+              "ComponentPlacement": "gh.GroupHeaderBand1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "Halaman :{PageNumber} dari {TotalPageCount}"
+              },
+              "HorAlignment": "Right",
+              "VertAlignment": "Center",
+              "Border": ";;;;;;;solid:Black",
+              "Brush": "solid:",
+              "TextBrush": "solid:Black",
+              "Type": "Expression"
+            },
+            "10": {
+              "Ident": "StiText",
+              "Name": "Text13",
+              "ClientRectangle": "132,16,72,6",
+              "ComponentPlacement": "gh.GroupHeaderBand1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "Tanggal Cetak : {parameter.tanggal_cetak} User : {user_roles.rolename}"
+              },
+              "HorAlignment": "Right",
+              "VertAlignment": "Center",
+              "Font": ";;Italic;",
+              "Border": ";;;;;;;solid:Black",
+              "Brush": "solid:",
+              "TextBrush": "solid:Black",
+              "Type": "Expression"
+            },
+            "11": {
+              "Ident": "StiText",
+              "Name": "Text1",
+              "ClientRectangle": "56,2,96,6",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "{parameter.judul}"
+              },
+              "HorAlignment": "Center",
+              "VertAlignment": "Center",
+              "Font": ";9;Bold;",
+              "Border": ";;;;;;;solid:Black",
+              "Brush": "solid:",
+              "TextBrush": "solid:Black"
+            },
             "12": {
+              "Ident": "StiText",
+              "Name": "Text2",
+              "ClientRectangle": "66,8,78,6",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "{parameter.judullaporan}"
+              },
+              "HorAlignment": "Center",
+              "VertAlignment": "Center",
+              "Font": ";9;Bold;",
+              "Border": ";;;;;;;solid:0,0,0",
+              "Brush": "solid:",
+              "TextBrush": "solid:0,0,0"
+            },
+            "13": {
               "Ident": "StiHorizontalLinePrimitive",
               "Name": "HorizontalLinePrimitive1",
               "Guid": "28e023b1d15c626816e66934e26c185d",
@@ -599,6 +634,7 @@
               "Text": {
                 "Value": "{data.jumlah}"
               },
+              "HorAlignment": "Right",
               "Font": ";9;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
