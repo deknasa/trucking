@@ -456,7 +456,7 @@
 
   function setKodePenerimaan(kode) {
     KodePenerimaanId = kode;
-    resetLookup()
+    // resetLookup()
     setTampilanForm();
   }
 
@@ -825,7 +825,6 @@
             beforeProcess: function(test) {
               var penerimaanstokId = $(`#penerimaanstokId`).val();
               var penerimaanstok_nobukti = $('#crudModal').find(`[name=penerimaanstok_nobukti]`).val();
-              console.log(penerimaanstok_nobukti);
               this.postData = {
                 penerimaanstok_id: penerimaanstokId,
                 penerimaanstokheader_nobukti: penerimaanstok_nobukti,
@@ -1196,25 +1195,27 @@
       .then(() => {
         $('#crudModal').modal('show')
         $('#crudForm').find(`.ui-datepicker-trigger`).attr('disabled', true)
-        if ( $('#crudForm').find("[name=gudang]")) {
+        if ( $('#crudForm').find("[name=gudang]").val()) {
             lookupSelected(`gudang`);
-        }else if ( $('#crudForm').find("[name=gandengan]")) {
+        }else if ( $('#crudForm').find("[name=gandengan]").val()) {
             lookupSelected('gandengan')
-        }else if ( $('#crudForm').find("[name=trado]")) {
+        }else if ( $('#crudForm').find("[name=trado]").val()) {
             lookupSelected('trado')
         }
-        if ( $('#crudForm').find("[name=gudangke]")) {
+
+        if ( $('#crudForm').find("[name=gudangke]").val()) {
             lookupSelectedKe(`gudangke`);
-        }else if ( $('#crudForm').find("[name=gandenganke]")) {
+        }else if ( $('#crudForm').find("[name=gandenganke]").val()) {
           lookupSelectedKe('gandenganke')
-        }else if ( $('#crudForm').find("[name=tradoke]")) {
+        }else if ( $('#crudForm').find("[name=tradoke]").val()) {
           lookupSelectedKe('tradoke')
         }
-        if ( $('#crudForm').find("[name=gudangdari]")) {
+
+        if ( $('#crudForm').find("[name=gudangdari]").val()) {
             lookupSelectedDari(`gudangdari`);
-        }else if ( $('#crudForm').find("[name=gandengandari]")) {
+        }else if ( $('#crudForm').find("[name=gandengandari]").val()) {
           lookupSelectedDari('gandengandari')
-        }else if ( $('#crudForm').find("[name=tradodari]")) {
+        }else if ( $('#crudForm').find("[name=tradodari]").val()) {
           lookupSelectedDari('tradodari')
         }
           
@@ -1504,10 +1505,7 @@
           Authorization: `Bearer ${accessToken}`
         },
         success: response => {
-          // console.log(response.data);
           $.each(response.data, (index,data) => {
-            // console.log();
-
             listKodePenerimaan[index] = data.kodepenerimaan;
           })
 
@@ -1538,9 +1536,22 @@
               element.data('currentValue', value)
             }
             
-
             
           })
+
+          // console.log('gudang_id '+ response.data.tradodari_id);
+          // console.log('gandengan_id '+ response.data.gandengan_id);
+          
+          $('#gudangId').val(response.data.gudang_id)
+          $('#gandenganId').val(response.data.gandengan_id)
+          $('#tradoId').val(response.data.trado_id)
+          $('#gudangkeId').val(response.data.gudangke_id)
+          $('#gandengankeId').val(response.data.gandenganke_id)
+          $('#tradokeId').val(response.data.tradoke_id)
+          $('#gudangdariId').val(response.data.gudangdari_id)
+          $('#gandengandariId').val(response.data.gandengandari_id)
+          $('#tradodariId').val(response.data.tradodari_id)
+          
 
           $.each(response.detail, (id, detail) => {
             let detailRow = $(`
@@ -1602,7 +1613,6 @@
               beforeProcess: function(test) {
                 var penerimaanstokId = $("#crudForm").find(`[name="penerimaanstok_id"]`).val();
                 var penerimaanstok_nobukti = $('#crudModal').find(`[name=penerimaanstok_nobukti]`).val();
-                console.log(penerimaanstok_nobukti);
                 this.postData = {
                   penerimaanstok_id: penerimaanstokId,
                   penerimaanstokheader_nobukti: penerimaanstok_nobukti,
