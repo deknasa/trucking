@@ -2,11 +2,6 @@
 
 @section('content')
 
-<style>
-  .ui-datepicker-calendar {
-    display: none;
-  }
-</style>
 <!-- Grid -->
 <div class="container-fluid">
   <div class="row">
