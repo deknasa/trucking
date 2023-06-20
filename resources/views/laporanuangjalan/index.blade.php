@@ -10,7 +10,7 @@
                 </div>
                 <form id="crudForm">
                     <div class="card-body">
-                        <div class="form-group row">
+                        {{-- <div class="form-group row">
                             <label class="col-12 col-sm-2 col-form-label mt-2">Periode<span class="text-danger">*</span></label>
                             <div class="col-sm-4 mt-2">
                                 <div class="input-group">
@@ -24,7 +24,7 @@
                                 </div>
                             </div>
                             
-                        </div>
+                        </div> --}}
                         
                         <div class="form-group row">
                             <label class="col-12 col-sm-2 col-form-label mt-2">TGL RIC (DARI)<span class="text-danger">*</span></label>
@@ -87,6 +87,10 @@
                                     <i class="fas fa-print"></i>
                                     Report
                                 </a>
+                                <a id="btnExport" class="btn btn-warning mr-1 ">
+                                    <i class="fas fa-file-export"></i>
+                                    Export
+                                </a>
                             </div>
                         </div>
 
@@ -122,7 +126,6 @@
         setStatusKembali($('#crudForm'))
 
         initDatepicker()
-        $('#crudForm').find('[name=sampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         $('#crudForm').find('[name=ricdari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         $('#crudForm').find('[name=ricsampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         $('#crudForm').find('[name=ambildari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
@@ -132,17 +135,35 @@
     })
 
     $(document).on('click', `#btnPreview`, function(event) {
-        let sampai = $('#crudForm').find('[name=sampai]').val()
-        let jenis = $('#crudForm').find('[name=jenis]').val()
+        let ricdari = $('#crudForm').find('[name=ricdari]').val()
+        let ricsampai = $('#crudForm').find('[name=ricsampai]').val()
+        let ambildari = $('#crudForm').find('[name=ambildari]').val()
+        let ambilsampai = $('#crudForm').find('[name=ambilsampai]').val()
+        let supirdari= $('#crudForm').find('[name=supirdari_id]').val()
+        let supirsampai= $('#crudForm').find('[name=supirsampai_id]').val()
 
-        if (jenis != '' && sampai != '') {
+        if (ricdari != '' && ricsampai != '' && ambildari != '' && ambilsampai) {
 
-            window.open(`{{ route('laporanuangjalan.report') }}?sampai=${sampai}&jenis=${jenis}`)
+            window.open(`{{ route('laporanuangjalan.report') }}?ricdari2=${ricdari}&ricsampai=${ricsampai}&ambildari=${ambildari}&ambilsampai=${ambilsampai}&supirdari=${supirdari}&supirsampai=${supirsampai}`)
         } else {
             showDialog('ISI SELURUH KOLOM')
         }
     })
 
+    $(document).on('click', `#btnExport`, function(event) {
+        let ricdari = $('#crudForm').find('[name=ricdari]').val()
+        let ricsampai = $('#crudForm').find('[name=ricsampai]').val()
+        let ambildari = $('#crudForm').find('[name=ambildari]').val()
+        let ambilsampai = $('#crudForm').find('[name=ambilsampai]').val()
+        let supirdari= $('#crudForm').find('[name=supirdari_id]').val()
+        let supirsampai= $('#crudForm').find('[name=supirsampai_id]').val()
+
+        if (ricdari != '' && ricsampai != '' && ambildari != '' && ambilsampai) {
+        window.open(`{{ route('laporanuangjalan.export') }}?ricdari=${ricdari}&ricsampai=${ricsampai}&ambildari=${ambildari}&ambilsampai=${ambilsampai}&supirdari=${supirdari}&supirsampai=${supirsampai}`)
+        } else {
+        showDialog('ISI SELURUH KOLOM')
+        }
+            })
 
     function initLookup() {
         $('.supirdari-lookup').lookup({
