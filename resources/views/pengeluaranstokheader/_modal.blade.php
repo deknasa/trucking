@@ -723,9 +723,9 @@
     initSelect2($('#statuspotongretur'), true)
     if (form.data('action') !== 'add') {
       let pengeluaranstok = $('#crudForm').find(`[name="pengeluaranstok"]`).parents('.input-group').children()
-      pengeluaranstok.attr('disabled', true)
+      pengeluaranstok.attr('readonly', true)
       pengeluaranstok.find('.lookup-toggler').attr('disabled', true)
-      $('#pengeluaranstokId').attr('disabled', true);
+      $('#pengeluaranstokId').attr('readonly', true);
       console.log(pengeluaranstok);
     }
     // getMaxLength(form)
@@ -796,19 +796,19 @@
         showPengeluaranstokHeader(form, pengeluaranStokHeaderId)
           .then(() => {
             $('#crudModal').modal('show')
-            if ($('#crudForm').find("[name=gudang]")) {
-              lookupSelected(`gudang`);
-            } else if ($('#crudForm').find("[name=gandengan]")) {
-              lookupSelected('gandengan')
-            } else if ($('#crudForm').find("[name=trado]")) {
-              lookupSelected('trado')
-            }
-            // penerimaanOrServicein
-            if ($('#crudForm').find("[name=servicein_nobukti]").val() !== "") {
-              penerimaanOrServicein('penerimaan');
-            } else if ($('#crudForm').find("[name=penerimaanstok_nobukti]").val() !== "") {
-              penerimaanOrServicein('servicein');
-            }
+            // if ($('#crudForm').find("[name=gudang]")) {
+            //   lookupSelected(`gudang`);
+            // } else if ($('#crudForm').find("[name=gandengan]")) {
+            //   lookupSelected('gandengan')
+            // } else if ($('#crudForm').find("[name=trado]")) {
+            //   lookupSelected('trado')
+            // }
+            // // penerimaanOrServicein
+            // if ($('#crudForm').find("[name=servicein_nobukti]").val() !== "") {
+            //   penerimaanOrServicein('penerimaan');
+            // } else if ($('#crudForm').find("[name=penerimaanstok_nobukti]").val() !== "") {
+            //   penerimaanOrServicein('servicein');
+            // }
 
           })
           .catch((error) => {
