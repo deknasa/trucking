@@ -156,7 +156,18 @@
                             let element = form.find(`[name="${index}"]`);
                             element.val(value);
                         });
-
+                        let filter = $('#crudForm').find('[name=filter]').val()
+                        let dataFilter = ''
+                        if (filter == '186') {
+                            dataFilter = $('#crudForm').find('[name=gudang_id]').val()
+                        }
+                        if (filter == '187') {
+                            dataFilter = $('#crudForm').find('[name=trado_id]').val()
+                        }
+                        if (filter == '188') {
+                            dataFilter = $('#crudForm').find('[name=gandengan_id]').val()
+                        }
+                        
                       
 
                         $('#jqGrid').jqGrid('setGridParam', {
@@ -175,6 +186,7 @@
                                 gandengan_id: $('#crudForm').find('[name=gandengan_id]').val(),
                                 trado: $('#crudForm').find('[name=trado]').val(),
                                 trado_id: $('#crudForm').find('[name=trado_id]').val(),
+                                datafilter:dataFilter,
 
                             },
                             datatype: "json"
