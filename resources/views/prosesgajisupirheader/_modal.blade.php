@@ -796,7 +796,6 @@
                                 let tglDari = $('#crudForm').find(`[name="tgldari"]`).val()
                                 let tglSampai = $('#crudForm').find(`[name="tglsampai"]`).val()
                                 let aksi = $('#crudForm').data('action')
-
                                 $(element).attr('id', 'gsRincian')
                                 $(element).removeClass('form-control')
                                 $(element).parent().addClass('text-center')
@@ -892,7 +891,8 @@
                         align: "right",
                     },
                     {
-                        label: 'POT. PINJAMAN (SEMUA)', width: 210,
+                        label: 'POT. PINJAMAN (SEMUA)',
+                        width: 210,
                         name: 'potonganpinjamansemua',
                         formatter: currencyFormat,
                         align: "right",
@@ -991,8 +991,11 @@
                     }
 
                     setHighlight($(this))
-
-                    $('#gsRincian').attr('disabled', false)
+                    if (disabled == '') {
+                        $('#gsRincian').attr('disabled', false)
+                    } else {
+                        $('#gsRincian').attr('disabled', true)
+                    }
                 }
             })
 

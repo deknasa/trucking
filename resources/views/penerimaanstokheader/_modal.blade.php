@@ -147,7 +147,9 @@
                   </div>
                 </div>
               </div>
-
+            
+            </div>
+              
               <div class="row">
 
                 <div class="form-group col-md-6">
@@ -224,16 +226,16 @@
               </div>
 
 
-            </div>
+            
 
-            <div class="row form-group" style="display:none">
+            {{-- <div class="row form-group" style="display:none">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">keterangan </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="text" name="keterangan" class="form-control">
               </div>
-            </div>
+            </div> --}}
 
 
             <div class="table-scroll table-responsive">
@@ -363,7 +365,10 @@
         name: 'limit',
         value: limit
       })
-
+      data.push({
+        name: 'keterangan',
+        value: ''
+      })
       data.push({
         name: 'tgldariheader',
         value: $('#tgldariheader').val()
@@ -390,7 +395,8 @@
           break;
         case 'delete':
           method = 'DELETE'
-          url = `${apiUrl}penerimaanstokheader/${penerimaanStokHeaderId}?tgldariheader=${tgldariheader}&tglsampaiheader=${tglsampaiheader}&penerimaanheader_id=${penerimaanheader_id}&indexRow=${indexRow}&limit=${limit}&page=${page}`
+          // url = `${apiUrl}penerimaanstokheader/${penerimaanStokHeaderId}?tgldariheader=${tgldariheader}&tglsampaiheader=${tglsampaiheader}&penerimaanheader_id=${penerimaanheader_id}&indexRow=${indexRow}&limit=${limit}&page=${page}`
+          url = `${apiUrl}penerimaanstokheader/${penerimaanStokHeaderId}`
           break;
         default:
           method = 'POST'
@@ -450,7 +456,7 @@
 
   function setKodePenerimaan(kode) {
     KodePenerimaanId = kode;
-    resetLookup()
+    // resetLookup()
     setTampilanForm();
   }
 
@@ -504,15 +510,13 @@
     $('.tbl_penerimaanstok_nobukti').hide();
     $('.colspan').attr('colspan', 4);
     $('.sumrow').hide();
-    $('[name=gudang]').val('').attr('readonly', false);
-    $('[name=gudang_id]').val('')
+    
     // $('[name=supplier]').val('').attr('readonly', false);
     // $('[name=supplier]').data('currentValue', '')
     // $('[name=supplier_id]').val('')
     $('#addRow').show()
     $('.tbl_aksi').show()
-    $('[name=gudang]').val('').attr('readonly', false);
-    $('[name=gudang_id]').val('')
+    
   }
 
   function tampilanpo() {
@@ -537,15 +541,13 @@
 
     $('.colspan').attr('colspan', 4);
     $('.sumrow').hide();
-    $('[name=gudang]').val('').attr('readonly', false);
-    $('[name=gudang_id]').val('')
+    
     // $('[name=supplier]').val('').attr('readonly', false);
     // $('[name=supplier]').data('currentValue', '')
     // $('[name=supplier_id]').val('')
     $('#addRow').show()
     $('.tbl_aksi').show()
-    $('[name=gudang]').val('').attr('readonly', false);
-    $('[name=gudang_id]').val('')
+    
   }
 
   function tampilanpbt() {
@@ -565,23 +567,7 @@
     $('.tbl_penerimaanstok_nobukti').hide();
 
     $('.sumrow').show();
-    $.ajax({
-      url: `${apiUrl}gudang/1`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        'Authorization': `Bearer ${accessToken}`
-      },
-      success: response => {
-        var data = response.data;
-        $('[name=gudang]').val(data.gudang).attr('readonly', true);
-        $('[name=gudang_id]').val(data.id)
-      },
-      error: error => {
-        showDialog(error.statusText)
-      }
-    })
-    // $('#addRow').hide()
+    
     $('.tbl_aksi').show()
   }
 
@@ -603,10 +589,14 @@
     $('[name=gandengandari]').parents('.form-group').show()
     $('[name=gandenganke]').parents('.form-group').show()
     $('.tbl_penerimaanstok_nobukti').hide();
+    $('.tbl_persentase').hide();
+    $('.tbl_total').hide();
+    $('.tbl_harga').hide();
+    $('.colspan').attr('colspan', 3);
+
     $('.tbl_aksi').show()
     $('#addRow').show()
-    $('[name=gudang]').val('').attr('readonly', false);
-    $('[name=gudang_id]').val('')
+    
   }
 
   function tampilankst() {
@@ -622,8 +612,7 @@
     $('[name=gudang]').parents('.form-group').show()
     $('[name=trado]').parents('.form-group').show()
     $('[name=gandengan]').parents('.form-group').show()
-    $('[name=gudang]').val('').attr('readonly', false);
-    $('[name=gudang_id]').val('')
+    
     
     $('[name=gudangdari]').parents('.form-group').hide()
     $('[name=gudangke]').parents('.form-group').hide()
@@ -662,8 +651,7 @@
 
     $('.tbl_penerimaanstok_nobukti').show();
     $('.colspan').attr('colspan', 7);
-    $('[name=gudang]').val('').attr('readonly', false);
-    $('[name=gudang_id]').val('')
+    
     $('#addRow').show()
   }
 
@@ -689,8 +677,7 @@
     // $('[name=supplier]').data('currentValue', '')
     // $('[name=supplier_id]').val('')
     $('#addRow').show()
-    $('[name=gudang]').val('').attr('readonly', false);
-    $('[name=gudang_id]').val('')
+    
   }
   function tampilanInit() {
     $('[name=gudang]').val('').attr('readonly', false);
@@ -814,7 +801,6 @@
             beforeProcess: function(test) {
               var penerimaanstokId = $(`#penerimaanstokId`).val();
               var penerimaanstok_nobukti = $('#crudModal').find(`[name=penerimaanstok_nobukti]`).val();
-              console.log(penerimaanstok_nobukti);
               this.postData = {
                 penerimaanstok_id: penerimaanstokId,
                 penerimaanstokheader_nobukti: penerimaanstok_nobukti,
@@ -1185,25 +1171,27 @@
       .then(() => {
         $('#crudModal').modal('show')
         $('#crudForm').find(`.ui-datepicker-trigger`).attr('disabled', true)
-        if ( $('#crudForm').find("[name=gudang]")) {
+        if ( $('#crudForm').find("[name=gudang]").val()) {
             lookupSelected(`gudang`);
-        }else if ( $('#crudForm').find("[name=gandengan]")) {
+        }else if ( $('#crudForm').find("[name=gandengan]").val()) {
             lookupSelected('gandengan')
-        }else if ( $('#crudForm').find("[name=trado]")) {
+        }else if ( $('#crudForm').find("[name=trado]").val()) {
             lookupSelected('trado')
         }
-        if ( $('#crudForm').find("[name=gudangke]")) {
+
+        if ( $('#crudForm').find("[name=gudangke]").val()) {
             lookupSelectedKe(`gudangke`);
-        }else if ( $('#crudForm').find("[name=gandenganke]")) {
+        }else if ( $('#crudForm').find("[name=gandenganke]").val()) {
           lookupSelectedKe('gandenganke')
-        }else if ( $('#crudForm').find("[name=tradoke]")) {
+        }else if ( $('#crudForm').find("[name=tradoke]").val()) {
           lookupSelectedKe('tradoke')
         }
-        if ( $('#crudForm').find("[name=gudangdari]")) {
+
+        if ( $('#crudForm').find("[name=gudangdari]").val()) {
             lookupSelectedDari(`gudangdari`);
-        }else if ( $('#crudForm').find("[name=gandengandari]")) {
+        }else if ( $('#crudForm').find("[name=gandengandari]").val()) {
           lookupSelectedDari('gandengandari')
-        }else if ( $('#crudForm').find("[name=tradodari]")) {
+        }else if ( $('#crudForm').find("[name=tradodari]").val()) {
           lookupSelectedDari('tradodari')
         }
           
@@ -1493,10 +1481,7 @@
           Authorization: `Bearer ${accessToken}`
         },
         success: response => {
-          // console.log(response.data);
           $.each(response.data, (index,data) => {
-            // console.log();
-
             listKodePenerimaan[index] = data.kodepenerimaan;
           })
 
@@ -1527,9 +1512,22 @@
               element.data('currentValue', value)
             }
             
-
             
           })
+
+          // console.log('gudang_id '+ response.data.tradodari_id);
+          // console.log('gandengan_id '+ response.data.gandengan_id);
+          
+          $('#gudangId').val(response.data.gudang_id)
+          $('#gandenganId').val(response.data.gandengan_id)
+          $('#tradoId').val(response.data.trado_id)
+          $('#gudangkeId').val(response.data.gudangke_id)
+          $('#gandengankeId').val(response.data.gandenganke_id)
+          $('#tradokeId').val(response.data.tradoke_id)
+          $('#gudangdariId').val(response.data.gudangdari_id)
+          $('#gandengandariId').val(response.data.gandengandari_id)
+          $('#tradodariId').val(response.data.tradodari_id)
+          
 
           $.each(response.detail, (id, detail) => {
             let detailRow = $(`
@@ -1591,7 +1589,6 @@
               beforeProcess: function(test) {
                 var penerimaanstokId = $("#crudForm").find(`[name="penerimaanstok_id"]`).val();
                 var penerimaanstok_nobukti = $('#crudModal').find(`[name=penerimaanstok_nobukti]`).val();
-                console.log(penerimaanstok_nobukti);
                 this.postData = {
                   penerimaanstok_id: penerimaanstokId,
                   penerimaanstokheader_nobukti: penerimaanstok_nobukti,
@@ -1894,6 +1891,12 @@
     $('.gudangke-lookup').lookup({
       title: 'Gudang Lookup',
       fileName: 'gudang',
+      beforeProcess: function(test) {
+        var penerimaanstokId = $(`#penerimaanstokId`).val();
+        this.postData = {
+          penerimaanstok_id: penerimaanstokId,
+        }
+      },
       onSelectRow: (gudang, element) => {
         element.val(gudang.gudang)
         $(`#${element[0]['name']}Id`).val(gudang.id)

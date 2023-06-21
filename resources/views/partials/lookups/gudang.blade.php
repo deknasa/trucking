@@ -12,6 +12,7 @@
       postData: {
         filters: `{!! $filters ?? '' !!}`,
         aktif: `{!! $Aktif ?? '' !!}`,
+        penerimaanstok_id: `{!! $penerimaanstok_id ?? '' !!}`,
       },
       idPrefix: 'gudangLookup',
       colModel: [{

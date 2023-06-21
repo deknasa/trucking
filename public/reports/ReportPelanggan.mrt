@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "d12e8d34e5b45835392cdb48adde3c6c",
+  "ReportGuid": "e6d71bd633a900225970d40e233c87d1",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportPelanggan.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1686587739000+0700)/",
+  "ReportChanged": "/Date(1687144949000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -117,6 +117,12 @@
             "NameInSource": "judul",
             "Alias": "judul",
             "Type": "System.String"
+          },
+          "15": {
+            "Name": "tglcetak",
+            "NameInSource": "tglcetak",
+            "Alias": "tglcetak",
+            "Type": "System.String"
           }
         },
         "NameInSource": "Data.pelanggan"
@@ -135,129 +141,10 @@
       "Brush": "solid:",
       "Components": {
         "0": {
-          "Ident": "StiText",
-          "Name": "Text12",
-          "Guid": "9934e023564dce028bd70a4038028de5",
-          "ClientRectangle": "21.2,2.4,3,0.6",
-          "ComponentPlacement": "p.Page1",
-          "ComponentStyle": "Table Header",
-          "Interaction": {
-            "Ident": "StiInteraction"
-          },
-          "Text": {
-            "Value": "BANK"
-          },
-          "HorAlignment": "Center",
-          "VertAlignment": "Center",
-          "Font": ";10;Bold;",
-          "Border": ";;;;;;;solid:0,0,0",
-          "Brush": "solid:156,195,229",
-          "TextBrush": "solid:255,255,255",
-          "Margins": {
-            "Left": 3,
-            "Right": 0,
-            "Top": 0,
-            "Bottom": 0
-          },
-          "Type": "Expression"
-        },
-        "1": {
-          "Ident": "StiText",
-          "Name": "Text13",
-          "Guid": "8199e916f071cd6f65a08e8e5cf337f1",
-          "ClientRectangle": "24.2,2.4,3.6,0.6",
-          "ComponentPlacement": "p.Page1",
-          "ComponentStyle": "Table Header",
-          "Interaction": {
-            "Ident": "StiInteraction"
-          },
-          "Text": {
-            "Value": "STATUS AKTIF"
-          },
-          "HorAlignment": "Center",
-          "VertAlignment": "Center",
-          "Font": ";10;Bold;",
-          "Border": ";;;;;;;solid:0,0,0",
-          "Brush": "solid:156,195,229",
-          "TextBrush": "solid:255,255,255",
-          "Margins": {
-            "Left": 3,
-            "Right": 0,
-            "Top": 0,
-            "Bottom": 0
-          },
-          "Type": "Expression"
-        },
-        "2": {
-          "Ident": "StiText",
-          "Name": "Text14",
-          "Guid": "dc8227ebb69d831560abcfabe3e8323c",
-          "CanGrow": true,
-          "GrowToHeight": true,
-          "ClientRectangle": "21.2,3.8,3.2,0.6",
-          "ComponentPlacement": "p.Page1",
-          "Interaction": {
-            "Ident": "StiInteraction"
-          },
-          "Text": {
-            "Value": "{alatbayar.bank}"
-          },
-          "CanBreak": true,
-          "VertAlignment": "Center",
-          "Border": "All;242,242,242;;;;;;solid:0,0,0",
-          "Brush": "solid:",
-          "TextBrush": "solid:0,0,0",
-          "TextOptions": {
-            "WordWrap": true
-          },
-          "Margins": {
-            "Left": 3,
-            "Right": 0,
-            "Top": 0,
-            "Bottom": 0
-          },
-          "TextFormat": {
-            "Ident": "StiDateFormatService"
-          },
-          "Type": "DataColumn"
-        },
-        "3": {
-          "Ident": "StiText",
-          "Name": "Text16",
-          "Guid": "c43eb86514346ae96740d3c87f9398ac",
-          "CanGrow": true,
-          "GrowToHeight": true,
-          "ClientRectangle": "24.4,3.8,3.4,0.6",
-          "ComponentPlacement": "p.Page1",
-          "Interaction": {
-            "Ident": "StiInteraction"
-          },
-          "Text": {
-            "Value": "{alatbayar.statusaktif}"
-          },
-          "CanBreak": true,
-          "VertAlignment": "Center",
-          "Border": "All;242,242,242;;;;;;solid:0,0,0",
-          "Brush": "solid:",
-          "TextBrush": "solid:0,0,0",
-          "TextOptions": {
-            "WordWrap": true
-          },
-          "Margins": {
-            "Left": 3,
-            "Right": 0,
-            "Top": 0,
-            "Bottom": 0
-          },
-          "TextFormat": {
-            "Ident": "StiDateFormatService"
-          },
-          "Type": "DataColumn"
-        },
-        "4": {
           "Ident": "StiHeaderBand",
           "Name": "HeaderBand1",
-          "ClientRectangle": "0,0.4,19.01,2.2",
+          "ClientRectangle": "0,0.4,21.3,4.99",
+          "ComponentPlacement": "h.ap.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
           },
@@ -265,107 +152,69 @@
           "Brush": "solid:",
           "Components": {
             "0": {
-              "Ident": "StiText",
-              "Name": "Text3",
-              "Guid": "7b9b483fc2f3bf4d8452726d4e9a7d94",
-              "ClientRectangle": "0.8,1.6,2.6,0.6",
-              "ComponentPlacement": "gh.GroupHeaderBand1",
+              "Ident": "StiShape",
+              "Name": "Shape3",
+              "ClientRectangle": "1.09,2.83,20.22,1.63",
+              "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
-              "Text": {
-                "Value": "KODE\r\nPELANGGAN"
-              },
-              "HorAlignment": "Center",
-              "VertAlignment": "Center",
-              "Font": ";;Bold;",
-              "Border": "All;;;;;;;solid:0,0,0",
               "Brush": "empty",
-              "TextBrush": "solid:0,0,0",
-              "TextOptions": {
-                "WordWrap": true
+              "ShapeType": {
+                "Ident": "StiHorizontalLineShapeType"
               },
-              "Margins": {
-                "Left": 3,
-                "Right": 0,
-                "Top": 0,
-                "Bottom": 0
-              },
-              "Type": "Expression"
+              "Font": ";9;Bold;",
+              "HorAlignment": "Left"
             },
             "1": {
-              "Ident": "StiText",
-              "Name": "Text2",
-              "Guid": "9fcd14ac70b52f0473ae649992ab5699",
-              "ClientRectangle": "3.4,1.6,2.6,0.6",
-              "ComponentPlacement": "gh.GroupHeaderBand1",
+              "Ident": "StiShape",
+              "Name": "Shape1",
+              "ClientRectangle": "0.38,2.57,20.98,2.16",
+              "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
-              "Text": {
-                "Value": "NAMA\r\nPELANGGAN"
-              },
-              "HorAlignment": "Center",
-              "VertAlignment": "Center",
-              "Font": ";;Bold;",
-              "Border": "All;;;;;;;solid:0,0,0",
-              "Brush": "empty",
-              "TextBrush": "solid:0,0,0",
-              "TextOptions": {
-                "WordWrap": true
-              },
-              "Margins": {
-                "Left": 3,
-                "Right": 0,
-                "Top": 0,
-                "Bottom": 0
-              },
-              "Type": "Expression"
+              "Brush": "solid:",
+              "ShapeType": {
+                "Ident": "StiRectangleShapeType"
+              }
             },
             "2": {
-              "Ident": "StiText",
-              "Name": "Text4",
-              "Guid": "2af1bba89eb85cddeab7a7aa0a7f8497",
-              "ClientRectangle": "6,1.6,2.4,0.6",
-              "ComponentPlacement": "gh.GroupHeaderBand1",
+              "Ident": "StiShape",
+              "Name": "Shape4",
+              "ClientRectangle": "6.21,2.58,5.56,2.1",
+              "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
-              "Text": {
-                "Value": "TELP"
-              },
-              "HorAlignment": "Center",
-              "VertAlignment": "Center",
-              "Font": ";;Bold;",
-              "Border": "All;;;;;;;solid:0,0,0",
               "Brush": "empty",
-              "TextBrush": "solid:0,0,0",
-              "Margins": {
-                "Left": 3,
-                "Right": 0,
-                "Top": 0,
-                "Bottom": 0
+              "ShapeType": {
+                "Ident": "StiLeftAndRightLineShapeType"
               },
-              "Type": "Expression"
+              "Font": ";9;Bold;",
+              "HorAlignment": "Left"
             },
             "3": {
               "Ident": "StiText",
-              "Name": "Text5",
-              "Guid": "4d392d051f8bfd19f3dc0e3eecba8f92",
-              "ClientRectangle": "8.4,1.6,2.2,0.6",
-              "ComponentPlacement": "gh.GroupHeaderBand1",
+              "Name": "Text3",
+              "Guid": "7b9b483fc2f3bf4d8452726d4e9a7d94",
+              "ClientRectangle": "1.73,2.71,3.9,0.85",
+              "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "ALAMAT"
+                "Value": "KODE PELANGGAN"
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": ";;Bold;",
-              "Border": "All;;;;;;;solid:0,0,0",
+              "Font": ";9;Bold;",
+              "Border": ";;;;;;;solid:0,0,0",
               "Brush": "empty",
               "TextBrush": "solid:0,0,0",
+              "TextOptions": {
+                "WordWrap": true
+              },
               "Margins": {
                 "Left": 3,
                 "Right": 0,
@@ -376,22 +225,25 @@
             },
             "4": {
               "Ident": "StiText",
-              "Name": "Text9",
-              "Guid": "b109859ca57083a9b7f410e1918ef698",
-              "ClientRectangle": "10.6,1.6,2.2,0.6",
-              "ComponentPlacement": "gh.GroupHeaderBand1",
+              "Name": "Text2",
+              "Guid": "9fcd14ac70b52f0473ae649992ab5699",
+              "ClientRectangle": "6.88,2.69,4.36,0.85",
+              "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "ALAMAT 2"
+                "Value": "NAMA PELANGGAN"
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": ";;Bold;",
-              "Border": "All;;;;;;;solid:0,0,0",
+              "Font": ";9;Bold;",
+              "Border": ";;;;;;;solid:0,0,0",
               "Brush": "empty",
               "TextBrush": "solid:0,0,0",
+              "TextOptions": {
+                "WordWrap": true
+              },
               "Margins": {
                 "Left": 3,
                 "Right": 0,
@@ -402,20 +254,20 @@
             },
             "5": {
               "Ident": "StiText",
-              "Name": "Text17",
-              "Guid": "b1957a32399480c24eca69599da66d60",
-              "ClientRectangle": "12.8,1.6,1.8,0.6",
-              "ComponentPlacement": "gh.GroupHeaderBand1",
+              "Name": "Text4",
+              "Guid": "2af1bba89eb85cddeab7a7aa0a7f8497",
+              "ClientRectangle": "12.12,2.69,3.99,0.85",
+              "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "KOTA"
+                "Value": "TELEPON"
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": ";;Bold;",
-              "Border": "All;;;;;;;solid:0,0,0",
+              "Font": ";9;Bold;",
+              "Border": ";;;;;;;solid:0,0,0",
               "Brush": "empty",
               "TextBrush": "solid:0,0,0",
               "Margins": {
@@ -428,20 +280,20 @@
             },
             "6": {
               "Ident": "StiText",
-              "Name": "Text18",
-              "Guid": "c4dc9e2a88ca3e3f15db8db2dc5be2a6",
-              "ClientRectangle": "14.6,1.6,2,0.6",
-              "ComponentPlacement": "gh.GroupHeaderBand1",
+              "Name": "Text5",
+              "Guid": "4d392d051f8bfd19f3dc0e3eecba8f92",
+              "ClientRectangle": "16.84,2.7,4.39,0.85",
+              "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "KODE POS"
+                "Value": "ALAMAT"
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": ";;Bold;",
-              "Border": "All;;;;;;;solid:0,0,0",
+              "Font": ";9;Bold;",
+              "Border": ";;;;;;;solid:0,0,0",
               "Brush": "empty",
               "TextBrush": "solid:0,0,0",
               "Margins": {
@@ -454,20 +306,20 @@
             },
             "7": {
               "Ident": "StiText",
-              "Name": "Text19",
-              "Guid": "d8bca86880bf64ec971a8f1d4cc278d9",
-              "ClientRectangle": "16.6,1.6,2.4,0.6",
-              "ComponentPlacement": "gh.GroupHeaderBand1",
+              "Name": "Text9",
+              "Guid": "b109859ca57083a9b7f410e1918ef698",
+              "ClientRectangle": "1.69,3.8,3.86,0.85",
+              "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "KETERANGAN"
+                "Value": "ALAMAT 2"
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": ";;Bold;",
-              "Border": "All;;;;;;;solid:0,0,0",
+              "Font": ";9;Bold;",
+              "Border": ";;;;;;;solid:0,0,0",
               "Brush": "empty",
               "TextBrush": "solid:0,0,0",
               "Margins": {
@@ -480,18 +332,20 @@
             },
             "8": {
               "Ident": "StiText",
-              "Name": "Text15",
-              "ClientRectangle": "0,1.6,0.8,0.6",
-              "ComponentPlacement": "gh.GroupHeaderBand1",
+              "Name": "Text17",
+              "Guid": "b1957a32399480c24eca69599da66d60",
+              "ClientRectangle": "7.3,3.75,3.33,0.85",
+              "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "NO"
+                "Value": "KOTA"
               },
+              "HorAlignment": "Center",
               "VertAlignment": "Center",
-              "Font": ";;Bold;",
-              "Border": "All;;;;;;;solid:0,0,0",
+              "Font": ";9;Bold;",
+              "Border": ";;;;;;;solid:0,0,0",
               "Brush": "empty",
               "TextBrush": "solid:0,0,0",
               "Margins": {
@@ -504,9 +358,85 @@
             },
             "9": {
               "Ident": "StiText",
+              "Name": "Text18",
+              "Guid": "c4dc9e2a88ca3e3f15db8db2dc5be2a6",
+              "ClientRectangle": "12.35,3.71,3.6,0.85",
+              "ComponentPlacement": "h.ap.HeaderBand1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "KODE POS"
+              },
+              "HorAlignment": "Center",
+              "VertAlignment": "Center",
+              "Font": ";9;Bold;",
+              "Border": ";;;;;;;solid:0,0,0",
+              "Brush": "empty",
+              "TextBrush": "solid:0,0,0",
+              "Margins": {
+                "Left": 3,
+                "Right": 0,
+                "Top": 0,
+                "Bottom": 0
+              },
+              "Type": "Expression"
+            },
+            "10": {
+              "Ident": "StiText",
+              "Name": "Text19",
+              "Guid": "d8bca86880bf64ec971a8f1d4cc278d9",
+              "ClientRectangle": "17.07,3.74,3.99,0.85",
+              "ComponentPlacement": "h.ap.HeaderBand1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "KETERANGAN"
+              },
+              "HorAlignment": "Center",
+              "VertAlignment": "Center",
+              "Font": ";9;Bold;",
+              "Border": ";;;;;;;solid:0,0,0",
+              "Brush": "empty",
+              "TextBrush": "solid:0,0,0",
+              "Margins": {
+                "Left": 3,
+                "Right": 0,
+                "Top": 0,
+                "Bottom": 0
+              },
+              "Type": "Expression"
+            },
+            "11": {
+              "Ident": "StiText",
+              "Name": "Text15",
+              "ClientRectangle": "0.42,3.27,0.67,0.85",
+              "ComponentPlacement": "h.ap.HeaderBand1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "NO"
+              },
+              "VertAlignment": "Center",
+              "Font": ";9;Bold;",
+              "Border": ";;;;;;;solid:0,0,0",
+              "Brush": "empty",
+              "TextBrush": "solid:0,0,0",
+              "Margins": {
+                "Left": 3,
+                "Right": 0,
+                "Top": 0,
+                "Bottom": 0
+              },
+              "Type": "Expression"
+            },
+            "12": {
+              "Ident": "StiText",
               "Name": "Text1",
-              "ClientRectangle": "4.8,0,9.8,0.8",
-              "ComponentPlacement": "rt.ReportTitleBand1",
+              "ClientRectangle": "6.12,0.06,9.8,0.86",
+              "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -521,12 +451,12 @@
               "TextBrush": "solid:0,0,0",
               "Type": "DataColumn"
             },
-            "10": {
+            "13": {
               "Ident": "StiText",
               "Name": "Text24",
               "Guid": "4d727b81576b419a511438daa5af812d",
-              "ClientRectangle": "4.8,0.8,9.8,0.8",
-              "ComponentPlacement": "rt.ReportTitleBand1",
+              "ClientRectangle": "6.05,0.82,9.8,0.8",
+              "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -540,13 +470,81 @@
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
               "Type": "DataColumn"
+            },
+            "14": {
+              "Ident": "StiShape",
+              "Name": "Shape2",
+              "ClientRectangle": "0.3,2.56,1.63,2.18",
+              "ComponentPlacement": "h.ap.HeaderBand1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Brush": "empty",
+              "ShapeType": {
+                "Ident": "StiVerticalLineShapeType"
+              },
+              "Font": ";9;Bold;",
+              "HorAlignment": "Left"
+            },
+            "15": {
+              "Ident": "StiShape",
+              "Name": "Shape5",
+              "ClientRectangle": "15.74,2.55,1.62,2.17",
+              "ComponentPlacement": "h.ap.HeaderBand1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Brush": "empty",
+              "ShapeType": {
+                "Ident": "StiVerticalLineShapeType"
+              },
+              "Font": ";9;Bold;",
+              "HorAlignment": "Left"
+            },
+            "16": {
+              "Ident": "StiText",
+              "Name": "Text12",
+              "Guid": "5ddb236d5efa01a54428370b0cbe28ca",
+              "ClientRectangle": "12.9,1.68,8.36,0.41",
+              "ComponentPlacement": "h.ap.HeaderBand1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "{pelanggan.tglcetak}"
+              },
+              "HorAlignment": "Right",
+              "VertAlignment": "Center",
+              "Font": ";;Italic;",
+              "Border": ";;;;;;;solid:Black",
+              "Brush": "solid:",
+              "TextBrush": "solid:0,0,0",
+              "Type": "DataColumn"
+            },
+            "17": {
+              "Ident": "StiText",
+              "Name": "Text51",
+              "Guid": "d840ee687b121771568c41d668e17f1c",
+              "ClientRectangle": "15.27,2.11,6.03,0.37",
+              "ComponentPlacement": "h.ap.HeaderBand1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "Halaman :{PageNumber} dari {TotalPageCount}"
+              },
+              "HorAlignment": "Right",
+              "Border": ";;;;;;;solid:Black",
+              "Brush": "solid:",
+              "TextBrush": "solid:Black",
+              "Type": "Expression"
             }
           }
         },
-        "5": {
+        "1": {
           "Ident": "StiDataBand",
           "Name": "DataBand2",
-          "ClientRectangle": "0,3.4,19.01,0.8",
+          "ClientRectangle": "0,6.19,21.3,2.72",
           "ComponentPlacement": "d.Page1",
           "Interaction": {
             "Ident": "StiBandInteraction"
@@ -560,7 +558,7 @@
               "Guid": "0e495134760184402730fe0cf2a838ce",
               "CanGrow": true,
               "GrowToHeight": true,
-              "ClientRectangle": "0.8,0,2.6,0.6",
+              "ClientRectangle": "1.22,-0.02,4.66,0.6",
               "ComponentPlacement": "d.DataBand2",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -569,7 +567,7 @@
                 "Value": "{pelanggan.kodepelanggan}"
               },
               "CanBreak": true,
-              "VertAlignment": "Center",
+              "Font": ";9;;",
               "Border": ";242,242,242;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
@@ -592,7 +590,7 @@
               "Name": "Text20",
               "CanGrow": true,
               "GrowToHeight": true,
-              "ClientRectangle": "0,0,0.8,0.6",
+              "ClientRectangle": "0.44,-0.02,0.6,0.6",
               "ComponentPlacement": "d.DataBand2",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -601,7 +599,7 @@
                 "Value": "{Line}"
               },
               "CanBreak": true,
-              "VertAlignment": "Center",
+              "Font": ";9;;",
               "Border": ";242,242,242;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
@@ -622,7 +620,7 @@
               "Guid": "5463313200377a6f7ad621f78047e62d",
               "CanGrow": true,
               "GrowToHeight": true,
-              "ClientRectangle": "3.4,0,2.6,0.6",
+              "ClientRectangle": "6.42,0.02,4.87,0.6",
               "ComponentPlacement": "d.DataBand2",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -631,7 +629,7 @@
                 "Value": "{pelanggan.namapelanggan}"
               },
               "CanBreak": true,
-              "VertAlignment": "Center",
+              "Font": ";9;;",
               "Border": ";242,242,242;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
@@ -655,7 +653,7 @@
               "Guid": "ed2f29f6f92435965de9e49f474ce923",
               "CanGrow": true,
               "GrowToHeight": true,
-              "ClientRectangle": "6,0,2.4,0.6",
+              "ClientRectangle": "11.94,0,4.53,0.6",
               "ComponentPlacement": "d.DataBand2",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -664,7 +662,7 @@
                 "Value": "{pelanggan.telp}"
               },
               "CanBreak": true,
-              "VertAlignment": "Center",
+              "Font": ";9;;",
               "Border": ";242,242,242;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
@@ -688,7 +686,7 @@
               "Guid": "b496ef634cc724a9ac5e3fd129e6789d",
               "CanGrow": true,
               "GrowToHeight": true,
-              "ClientRectangle": "8.4,0,2.2,0.6",
+              "ClientRectangle": "16.6,-0.02,4.34,0.6",
               "ComponentPlacement": "d.DataBand2",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -697,7 +695,7 @@
                 "Value": "{pelanggan.alamat}"
               },
               "CanBreak": true,
-              "VertAlignment": "Center",
+              "Font": ";9;;",
               "Border": ";242,242,242;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
@@ -721,7 +719,7 @@
               "Guid": "25c238bacc1c0b3d36c5af2f06e003bb",
               "CanGrow": true,
               "GrowToHeight": true,
-              "ClientRectangle": "10.6,0,2.2,0.6",
+              "ClientRectangle": "1.15,0.95,4.76,0.6",
               "ComponentPlacement": "d.DataBand2",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -730,7 +728,7 @@
                 "Value": "{pelanggan.alamat2}"
               },
               "CanBreak": true,
-              "VertAlignment": "Center",
+              "Font": ";9;;",
               "Border": ";242,242,242;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
@@ -754,7 +752,7 @@
               "Guid": "4bce54b37d5d6f04471c44e895ce1427",
               "CanGrow": true,
               "GrowToHeight": true,
-              "ClientRectangle": "12.8,0,1.8,0.6",
+              "ClientRectangle": "6.37,0.99,4.92,0.6",
               "ComponentPlacement": "d.DataBand2",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -763,7 +761,7 @@
                 "Value": "{pelanggan.kota}"
               },
               "CanBreak": true,
-              "VertAlignment": "Center",
+              "Font": ";9;;",
               "Border": ";242,242,242;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
@@ -787,7 +785,7 @@
               "Guid": "0bf84bd89a868ffb29865df18ab2509c",
               "CanGrow": true,
               "GrowToHeight": true,
-              "ClientRectangle": "14.6,0,2,0.6",
+              "ClientRectangle": "12.01,1.01,4.41,0.6",
               "ComponentPlacement": "d.DataBand2",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -796,7 +794,7 @@
                 "Value": "{pelanggan.kodepos}"
               },
               "CanBreak": true,
-              "VertAlignment": "Center",
+              "Font": ";9;;",
               "Border": ";242,242,242;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
@@ -820,7 +818,7 @@
               "Guid": "72f16b3b3bc5d6ba111941d23f566142",
               "CanGrow": true,
               "GrowToHeight": true,
-              "ClientRectangle": "16.6,0,2.4,0.6",
+              "ClientRectangle": "16.63,1.04,4.34,0.6",
               "ComponentPlacement": "d.DataBand2",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -829,7 +827,7 @@
                 "Value": "{pelanggan.keterangan}"
               },
               "CanBreak": true,
-              "VertAlignment": "Center",
+              "Font": ";9;;",
               "Border": ";242,242,242;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
@@ -846,21 +844,34 @@
                 "Ident": "StiDateFormatService"
               },
               "Type": "DataColumn"
+            },
+            "9": {
+              "Ident": "StiShape",
+              "Name": "Shape6",
+              "ClientRectangle": "0.58,2.12,20.62,0.03",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Brush": "solid:",
+              "ShapeType": {
+                "Ident": "StiHorizontalLineShapeType"
+              }
             }
           },
           "DataSourceName": "pelanggan"
         }
       },
-      "PageWidth": 21.01,
-      "PageHeight": 29.69,
+      "PaperSize": "Letter",
+      "PageWidth": 21.6,
+      "PageHeight": 27.9,
       "Watermark": {
         "TextBrush": "solid:50,0,0,0"
       },
       "Margins": {
-        "Left": 1,
-        "Right": 1,
-        "Top": 1,
-        "Bottom": 1
+        "Left": 0.2,
+        "Right": 0.1,
+        "Top": 0.1,
+        "Bottom": 0.1
       }
     }
   }
