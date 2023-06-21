@@ -683,7 +683,7 @@
                             return new Promise((resolve, reject) => {
                             relatedForm.find('[name=filter]').empty()
                             relatedForm.find('[name=filter]').append(
-                            new Option('-- PILIH FILTER --', '0', false, true)
+                            new Option('-- SEMUA --', '0', false, true)
                             ).trigger('change')
 
                             let data = [];
