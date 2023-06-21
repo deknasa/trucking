@@ -704,7 +704,7 @@
   }
 
   function tampilanAllRow() {
-    $('.tbl_vulkanisirke').show()
+    $('.tbl_vulkanisirke').hide()
     $('.tbl_qty').show()
     $('.tbl_harga').show()
     $('.tbl_persentase').show()
@@ -959,7 +959,7 @@
                     <input type="text"  name="detail_stok[]" id="" class="form-control detail_stok_${index}">
                     <input type="text" id="detailstokId_${index}" readonly hidden class="detailstokId" name="detail_stok_id[]">
                   </td>                 
-                  <td class="data_tbl tbl_vulkanisirke">
+                  <td class="data_tbl tbl_vulkanisirke" style="display: none;">
                     <input type="text"  name="detail_vulkanisirke[]" style="" class="form-control">                    
                   </td>  
                   <td>
@@ -1222,7 +1222,7 @@
                       <input type="text"  name="detail_stok[]" id="detail_stok_${id}" class="form-control stok-lookup ">
                       <input type="text" id="detailstokId_${id}" readonly hidden class="detailstokId" name="detail_stok_id[]">
                     </td>
-                    <td class="data_tbl tbl_vulkanisirke">
+                    <td class="data_tbl tbl_vulkanisirke" style="display: none;">
                       <input type="text"  name="detail_vulkanisirke[]" style="" class="form-control">                    
                     </td>  
                     <td>
