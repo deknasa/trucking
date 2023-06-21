@@ -447,8 +447,8 @@
                             } else if ($('#rangeModal').data('action') == 'report') {
 
                                 if (totalRecord === 0) {
-                                  // alert('data tidak ada')
-                                  showDialog('Please select a row')
+                                    // alert('data tidak ada')
+                                    showDialog('Please select a row')
                                 } else {
                                     window.open(`{{ route('karyawan.report') }}?${params}`);
                                 }
@@ -461,24 +461,29 @@
                             if (error.status === 422) {
                                 $('.is-invalid').removeClass('is-invalid')
                                 $('.invalid-feedback').remove()
-                                errors = error.responseJSON.errors
+                                if (error.responseJSON.status != false) {
 
-                                $.each(errors, (index, error) => {
-                                    let indexes = index.split(".");
-                                    indexes[0] = 'sampai'
-                                    let element;
-                                    element = $('#rangeModal').find(`[name="${indexes[0]}"]`)[0];
+                                    errors = error.responseJSON.errors
+                                    $.each(errors, (index, error) => {
+                                        let indexes = index.split(".");
+                                        indexes[0] = 'sampai'
+                                        let element;
+                                        element = $('#rangeModal').find(`[name="${indexes[0]}"]`)[
+                                            0];
 
-                                    $(element).addClass("is-invalid");
-                                    $(`
-              <div class="invalid-feedback">
-              ${error[0].toLowerCase()}
-              </div>
-			    `).appendTo($(element).parent());
+                                        $(element).addClass("is-invalid");
+                                        $(`
+                                            <div class="invalid-feedback">
+                                            ${error[0].toLowerCase()}
+                                            </div>
+                                        `).appendTo($(element).parent());
 
-                                });
+                                    });
+                                    $(".is-invalid").first().focus();
+                                } else {
+                                    // showDialog(error.statusText, error.responseJSON.message)
 
-                                $(".is-invalid").first().focus();
+                                }
                             } else {
                                 showDialog(error.statusText)
                             }
