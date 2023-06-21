@@ -144,10 +144,10 @@
                             let element = form.find(`[name="${index}"]`);
                             element.val(value);
                         });
-                        $.each(response.data.filter, (index, value) => {
-                            let element = form.find(`[name="${index}"]`);
-                            element.val(value).trigger('change');
-                        });
+                        // $.each(response.data.filter, (index, value) => {
+                        //     let element = form.find(`[name="${index}"]`);
+                        //     element.val(value).trigger('change');
+                        // });
                         $.each(response.data.trado, (index, value) => {
                             let element = form.find(`[name="${index}"]`);
                             element.val(value);
@@ -156,17 +156,17 @@
                             let element = form.find(`[name="${index}"]`);
                             element.val(value);
                         });
-                        let filter = $('#crudForm').find('[name=filter]').val()
-                        let dataFilter = ''
-                        if (filter == '186') {
-                            dataFilter = $('#crudForm').find('[name=gudang_id]').val()
-                        }
-                        if (filter == '187') {
-                            dataFilter = $('#crudForm').find('[name=trado_id]').val()
-                        }
-                        if (filter == '188') {
-                            dataFilter = $('#crudForm').find('[name=gandengan_id]').val()
-                        }
+                        // let filter = $('#crudForm').find('[name=filter]').val()
+                        // let dataFilter = ''
+                        // if (filter == '186') {
+                        //     dataFilter = $('#crudForm').find('[name=gudang_id]').val()
+                        // }
+                        // if (filter == '187') {
+                        //     dataFilter = $('#crudForm').find('[name=trado_id]').val()
+                        // }
+                        // if (filter == '188') {
+                        //     dataFilter = $('#crudForm').find('[name=gandengan_id]').val()
+                        // }
                         
                       
 
@@ -186,7 +186,7 @@
                                 gandengan_id: $('#crudForm').find('[name=gandengan_id]').val(),
                                 trado: $('#crudForm').find('[name=trado]').val(),
                                 trado_id: $('#crudForm').find('[name=trado_id]').val(),
-                                datafilter:dataFilter,
+                                // datafilter:dataFilter,
 
                             },
                             datatype: "json"
@@ -230,7 +230,7 @@
                         dataFilter = $('#crudForm').find('[name=gandengan_id]').val()
                     }
 
-                    if (stokdari_id != '' && stoksampai_id != '' && dari != '' && sampai != '' && filter != '' && dataFilter != '') {
+                    if (stokdari_id != '' && stoksampai_id != '' && dari != '' && sampai != '' && filter != '') {
 
                         $('#jqGrid').jqGrid('setGridParam', {
                             postData: {
@@ -269,6 +269,10 @@
                                         srcformat: "ISO8601Long",
                                         newformat: "d-m-Y"
                                     }
+                                },
+                                {
+                                    label: 'Lokasi',
+                                    name: 'lokasi',
                                 },
                                 {
                                     label: 'KODE BARANG',
@@ -582,6 +586,7 @@
                             } else {
                             $('#trado').hide()
                             $('#gandengan').hide()
+                            $('#gudang').hide()
                             }
                             })
 
@@ -678,7 +683,7 @@
                             return new Promise((resolve, reject) => {
                             relatedForm.find('[name=filter]').empty()
                             relatedForm.find('[name=filter]').append(
-                            new Option('-- PILIH FILTER --', '', false, true)
+                            new Option('-- PILIH FILTER --', '0', false, true)
                             ).trigger('change')
 
                             let data = [];
