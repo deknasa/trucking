@@ -31,6 +31,10 @@
                                     <i class="fas fa-print"></i>
                                     Report
                                 </a>
+                                <a id="btnExport" class="btn btn-warning mr-1 ">
+                                    <i class="fas fa-file-export"></i>
+                                    Export
+                                </a>
                             </div>
                         </div>
 
@@ -82,7 +86,17 @@
         }
     })
 
+    $(document).on('click', `#btnExport`, function(event) {
+        let sampai = $('#crudForm').find('[name=sampai]').val()
+        let dari = $('#crudForm').find('[name=dari]').val()
 
+        if (dari != '' && sampai != '') {
+
+            window.open(`{{ route('laporanpemotonganpinjamanperebs.export') }}?sampai=${sampai}&dari=${dari}`)
+        } else {
+            showDialog('ISI SELURUH KOLOM')
+        }
+            })
 
 </script>
 @endpush()

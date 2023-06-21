@@ -1174,6 +1174,7 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::resource('laporanpinjamansupirkaryawan', LaporanPinjamanSupirKaryawanController::class);
 
     Route::get('laporanpemotonganpinjamanperebs/report', [LaporanPemotonganPinjamanPerEBSController::class, 'report'])->name('laporanpemotonganpinjamanperebs.report');
+    Route::get('laporanpemotonganpinjamanperebs/export', [LaporanPemotonganPinjamanPerEBSController::class, 'export'])->name('laporanpemotonganpinjamanperebs.export');
     Route::get('laporanpemotonganpinjamanperebs/index', [LaporanPemotonganPinjamanPerEBSController::class, 'index']);
     Route::resource('laporanpemotonganpinjamanperebs', LaporanPemotonganPinjamanPerEBSController::class);
 

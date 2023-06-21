@@ -156,7 +156,7 @@ class LaporanSupirLebihDariTradoController extends MyController
        
 
         //ukuran kolom
-        $sheet->getColumnDimension('A')->setWidth(70);
+        $sheet->getColumnDimension('A')->setWidth(40);
         $sheet->getColumnDimension('B')->setWidth(20);
         $sheet->getColumnDimension('C')->setWidth(20);
         // $sheet->getColumnDimension('D')->setWidth(18);
@@ -176,37 +176,37 @@ $sheet->getStyle("A" . ($detail_start_row + 1) . ":$lastColumn" . ($detail_start
 
 
 //persetujuan
-$sheet->mergeCells('A' . ($detail_start_row + 3) . ':B' . ($detail_start_row + 3));
+$sheet->mergeCells('A' . ($detail_start_row + 3) . ':A' . ($detail_start_row + 3));
 $sheet->setCellValue('A' . ($detail_start_row + 3), 'Disetujui Oleh,');
-$sheet->mergeCells('C' . ($detail_start_row + 3). ($detail_start_row + 3));
-$sheet->setCellValue('C' . ($detail_start_row + 3), 'Diperiksa Oleh');
-$sheet->mergeCells('D' . ($detail_start_row + 3) . ':E' . ($detail_start_row + 3));
-$sheet->setCellValue('D' . ($detail_start_row + 3), 'Disusun Oleh,');
+$sheet->mergeCells('B' . ($detail_start_row + 3) . ':B' . ($detail_start_row + 3));
+$sheet->setCellValue('B' . ($detail_start_row + 3), 'Diperiksa Oleh');
+$sheet->mergeCells('C' . ($detail_start_row + 3) . ':C' . ($detail_start_row + 3));
+$sheet->setCellValue('C' . ($detail_start_row + 3), 'Disusun Oleh,');
 
 
-$sheet->mergeCells('A' . ($detail_start_row + 6) . ':B' . ($detail_start_row + 6));
+$sheet->mergeCells('A' . ($detail_start_row + 6) . ':A' . ($detail_start_row + 6));
 $sheet->setCellValue('A' . ($detail_start_row + 6), '( Bpk. Hasan )');
-$sheet->mergeCells('C' . ($detail_start_row + 6) . ($detail_start_row + 6));
-$sheet->setCellValue('C' . ($detail_start_row + 6), '( RINA )');
-$sheet->mergeCells('D' . ($detail_start_row + 6) . ':E' . ($detail_start_row + 6));
-$sheet->setCellValue('D' . ($detail_start_row + 6), '(                                          )');
+$sheet->mergeCells('B' . ($detail_start_row + 6) . ($detail_start_row + 6));
+$sheet->setCellValue('B' . ($detail_start_row + 6), '( RINA )');
+$sheet->mergeCells('C' . ($detail_start_row + 6) . ':C' . ($detail_start_row + 6));
+$sheet->setCellValue('C' . ($detail_start_row + 6), '(                      )');
 
 
 // style persetujuan
 $sheet->getStyle('A' . ($detail_start_row + 3))->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 $sheet->getStyle('A' . ($detail_start_row + 3))->getFont()->setSize(12);
+$sheet->getStyle('B' . ($detail_start_row + 3))->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+$sheet->getStyle('B' . ($detail_start_row + 3))->getFont()->setSize(12);
 $sheet->getStyle('C' . ($detail_start_row + 3))->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 $sheet->getStyle('C' . ($detail_start_row + 3))->getFont()->setSize(12);
-$sheet->getStyle('D' . ($detail_start_row + 3))->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-$sheet->getStyle('D' . ($detail_start_row + 3))->getFont()->setSize(12);
 
 
 $sheet->getStyle('A' . ($detail_start_row + 6))->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 $sheet->getStyle('A' . ($detail_start_row + 6))->getFont()->setSize(12);
+$sheet->getStyle('B' . ($detail_start_row + 6))->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+$sheet->getStyle('B' . ($detail_start_row + 6))->getFont()->setSize(12);
 $sheet->getStyle('C' . ($detail_start_row + 6))->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 $sheet->getStyle('C' . ($detail_start_row + 6))->getFont()->setSize(12);
-$sheet->getStyle('D' . ($detail_start_row + 6))->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-$sheet->getStyle('D' . ($detail_start_row + 6))->getFont()->setSize(12);
 
 // mengatur border top dan bottom pada cell Total
 // $border_style = [
