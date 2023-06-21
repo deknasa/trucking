@@ -141,10 +141,10 @@
         let ambilsampai = $('#crudForm').find('[name=ambilsampai]').val()
         let supirdari= $('#crudForm').find('[name=supirdari_id]').val()
         let supirsampai= $('#crudForm').find('[name=supirsampai_id]').val()
-
+        let status= $('#crudForm').find('[name=status]').val()
         if (ricdari != '' && ricsampai != '' && ambildari != '' && ambilsampai) {
 
-            window.open(`{{ route('laporanuangjalan.report') }}?ricdari2=${ricdari}&ricsampai=${ricsampai}&ambildari=${ambildari}&ambilsampai=${ambilsampai}&supirdari=${supirdari}&supirsampai=${supirsampai}`)
+            window.open(`{{ route('laporanuangjalan.report') }}?ricdari2=${ricdari}&ricsampai=${ricsampai}&ambildari=${ambildari}&ambilsampai=${ambilsampai}&supirdari=${supirdari}&supirsampai=${supirsampai}&status=${status}`)
         } else {
             showDialog('ISI SELURUH KOLOM')
         }
@@ -157,7 +157,7 @@
         let ambilsampai = $('#crudForm').find('[name=ambilsampai]').val()
         let supirdari= $('#crudForm').find('[name=supirdari_id]').val()
         let supirsampai= $('#crudForm').find('[name=supirsampai_id]').val()
-
+        let status= $('#crudForm').find('[name=status]').val()
         if (ricdari != '' && ricsampai != '' && ambildari != '' && ambilsampai) {
         window.open(`{{ route('laporanuangjalan.export') }}?ricdari=${ricdari}&ricsampai=${ricsampai}&ambildari=${ambildari}&ambilsampai=${ambilsampai}&supirdari=${supirdari}&supirsampai=${supirsampai}`)
         } else {

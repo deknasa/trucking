@@ -53,18 +53,21 @@ class LaporanUangJalanController extends MyController
 
     public function report(Request $request)
     {
+        date_default_timezone_set('Asia/Jakarta'); 
         $detailParams = [
             'judul' => 'PT. TRANSPORINDO AGUNG SEJAHTERA',
             'judullaporan' => 'Laporan Uang Jalan',
+            'tanggal_cetak' => date('d-m-Y H:i:s'),
             'ricdari' => $request->ricdari,
             'ricsampai' => $request->ricsampai,
             'ambildari' => $request->ambildari,
             'ambilsampai' => $request->ambilsampai,
             'supirdari' => $request->supirdari,
             'supirsampai' => $request->supirsampai,
+            'status' => $request->status,
 
         ];
-
+        // dd($detailParams);
         $header = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
@@ -72,7 +75,7 @@ class LaporanUangJalanController extends MyController
 
         $data = $header['data'];
         $user = Auth::user();
-        // dd($data);
+
         return view('reports.laporanuangjalan', compact('data', 'user', 'detailParams'));
     }
 
