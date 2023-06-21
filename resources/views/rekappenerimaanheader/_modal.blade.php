@@ -325,7 +325,7 @@
     Hapus
   `)
     form.find(`.sometimes`).hide()
-    $('#crudModalTitle').text('Delete Penerimaan Stok')
+    $('#crudModalTitle').text('Delete Rekap Penerimaan')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -479,6 +479,8 @@
         $.each(response.data, (index, detail) => {
           let id = detail.id
           row++
+          tglbukti = detail.tglbukti.split("-")
+
           let detailRow = $(`
             <tr class="trow">
               <td>${row}</td>
@@ -488,7 +490,7 @@
                 <input type="text" value="${detail.nobukti}" id="penerimaan_nobukti" readonly hidden name="penerimaan_nobukti[]"  >
               </td>                 
               <td>
-                ${detail.tglbukti}
+                ${tglbukti[2]+'-'+tglbukti[1]+'-'+tglbukti[0]}
                 <input type="text" value="${detail.tglbukti}" id="tgltransaksi" readonly hidden name="tgltransaksi_detail[]"  >
               </td>                 
               <td>
@@ -528,6 +530,9 @@
         $.each(response.data, (index, detail) => {
           let id = detail.id
           row++
+
+          tglbukti = detail.tglbukti.split("-")
+
           let detailRow = $(`
             <tr class="trow">
               <td>${row}</td>
@@ -537,7 +542,7 @@
                 <input type="text" value="${detail.penerimaan_nobukti}" id="penerimaan_nobukti" readonly hidden name="penerimaan_nobukti[]"  >
               </td>                 
               <td>
-                ${detail.tglbukti}
+                ${tglbukti[2]+'-'+tglbukti[1]+'-'+tglbukti[0]}
                 <input type="text" value="${detail.tglbukti}" id="tgltransaksi" readonly hidden name="tgltransaksi_detail[]"  >
               </td>                 
               <td>
@@ -549,6 +554,8 @@
                 <input type="text" value="${detail.nominal}" id="nominal" readonly hidden name="nominal[]"  >
               </td>  
             </tr>`)
+           
+           
           $('#detailList tbody').append(detailRow)
           totalNominal +=parseInt(detail.nominal)
           initAutoNumeric(detailRow.find('.nominal'))
