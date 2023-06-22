@@ -5,7 +5,7 @@
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportParameter.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1687323908000+0700)/",
+  "ReportChanged": "/Date(1687336873000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -428,6 +428,7 @@
               "Text": {
                 "Value": "{parameter.usercetak}"
               },
+              "Font": ";;Italic;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
