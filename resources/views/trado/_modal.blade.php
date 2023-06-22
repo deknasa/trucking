@@ -12,209 +12,182 @@
           <div class="modal-body">
 
             <input type="hidden" name="id">
-            <div class="row">
-              <div class="form-group col-sm-6 row">
-                <label class="col-sm-4 col-form-label">Keterangan</label>
-                <div class="col-sm-8">
-                  <input type="text" name="keterangan" class="form-control">
-                </div>
-              </div>
-              <div class="form-group col-sm-6 row">
-                <label class="col-sm-4 col-form-label">No Polisi <span class="text-danger">*</span></label>
-                <div class="col-sm-8">
-                  <input type="text" name="kodetrado" class="form-control">
-                </div>
-              </div>
-
-              <div class="form-group col-sm-6 row">
-                <label class="col-sm-4 col-form-label">STATUS AKTIF <span class="text-danger">*</span></label>
-                <div class="col-sm-8">
-                  <select name="statusaktif" class="form-control select2bs4">
-                    <option value="">-- PILIH STATUS AKTIF --</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-
 
             <div class="row">
-
-              <div class="form-group col-sm-6 row">
-                <label class="col-sm-4 col-form-label">Tahun <span class="text-danger">*</span></label>
-                <div class="col-sm-8">
-                  <input type="text" class="form-control numbernoseparate" name="tahun" maxlength="4">
+              <div class="col-md-6">
+                <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">No Polisi <span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <input type="text" name="kodetrado" class="form-control">
+                  </div>
                 </div>
-              </div>
-              <div class="form-group col-sm-6 row">
-                <label class="col-sm-4 col-form-label">Merek <span class="text-danger">*</span></label>
-                <div class="col-sm-8">
-                  <input type="text" class="form-control" name="merek">
+                <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">Merek <span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <input type="text" name="merek" class="form-control">
+                  </div>
                 </div>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="form-group col-sm-6 row">
-                <label class="col-sm-4 col-form-label">No Rangka <span class="text-danger">*</span></label>
-                <div class="col-sm-8">
-                  <input type="text" class="form-control" name="norangka">
+                <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">Tipe <span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <input type="text" name="tipe" class="form-control">
+                  </div>
                 </div>
-              </div>
-              <div class="form-group col-sm-6 row">
-                <label class="col-sm-4 col-form-label">No Mesin <span class="text-danger">*</span></label>
-                <div class="col-sm-8">
-                  <input type="text" class="form-control" name="nomesin">
+                <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">Jenis <span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <input type="text" name="jenis" class="form-control">
+                  </div>
                 </div>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="form-group col-sm-6 row">
-                <label class="col-sm-4 col-form-label">Nama Pemilik<span class="text-danger">*</span></label>
-                <div class="col-sm-8">
-                  <input type="text" class="form-control" name="nama">
+                <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">Model <span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <input type="text" name="model" class="form-control">
+                  </div>
                 </div>
-              </div>
-              {{-- //NOTE - nominal borongan --}}
-              <div class="form-group col-sm-6 row">
-                <label class="col-sm-4 col-form-label">PLUS BORONGAN </label>
-                <div class="col-sm-8">
-                  <input type="text" class="form-control autonumeric text-right" name="nominalplusborongan">
+                <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">Tahun <span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <input type="text" name="tahun" class="form-control" maxlength="4">
+                  </div>
                 </div>
-              </div>
-              <div class="form-group col-sm-6 row">
-                <label class="col-sm-4 col-form-label">No STNK <span class="text-danger">*</span></label>
-                <div class="col-sm-8">
-                  <input type="text" class="form-control" name="nostnk">
+                <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">Isi Silinder <span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <div class="input-group">
+                      <input type="text" name="isisilinder" class="form-control numbernoseparate">
+                      <div class="input-group-append">
+                        <span class="input-group-text" style="font-weight: bold;">CC</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="form-group col-sm-6 row">
-                <label class="col-sm-4 col-form-label">Alamat STNK <span class="text-danger">*</span></label>
-                <div class="col-sm-8">
-                  <input type="text" class="form-control" name="alamatstnk">
+                <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">Warna <span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <input type="text" name="warna" class="form-control">
+                  </div>
                 </div>
-              </div>
-              <div class="form-group col-sm-6 row">
-                <label class="col-sm-4 col-form-label">Jenis Plat <span class="text-danger">*</span></label>
-                <div class="col-sm-8">
-                  <select name="statusjenisplat" class="form-control select2bs4">
-                    <option value="">-- PILIH JENIS PLAT --</option>
-                  </select>
+                <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">No Rangka <span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <input type="text" name="norangka" class="form-control">
+                  </div>
                 </div>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="form-group col-sm-6 row">
-                <label class="col-sm-4 col-form-label">Tgl Pajak STNK <span class="text-danger">*</span></label>
-                <div class="col-sm-8">
-                  <div class="input-group">
-                    <input type="text" class="form-control datepicker" name="tglpajakstnk">
+                <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">No Mesin <span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <input type="text" name="nomesin" class="form-control">
+                  </div>
+                </div>
+                <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">PLUS BORONGAN</label>
+                  <div class="col-sm-12">
+                    <input type="text" class="form-control autonumeric text-right" name="nominalplusborongan">
+                  </div>
+                </div>
+                <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">Bahan Bakar <span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <input type="text" name="jenisbahanbakar" class="form-control">
+                  </div>
+                </div>
+                <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">Jumlah Sumbu <span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <input type="text" name="jumlahsumbu" class="form-control numbernoseparate">
                   </div>
                 </div>
               </div>
-              <div class="form-group col-sm-6 row">
-                <label class="col-sm-4 col-form-label">Tipe <span class="text-danger">*</span></label>
-                <div class="col-sm-8">
-                  <input type="text" class="form-control" name="tipe">
-                </div>
-              </div>
+              <div class="col-md-6">
 
-            </div>
-
-            <div class="row">
-              <div class="form-group col-sm-6 row">
-                <label class="col-sm-4 col-form-label">Jenis <span class="text-danger">*</span></label>
-                <div class="col-sm-8">
-                  <input type="text" class="form-control" name="jenis">
+                <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">Jumlah BAN <span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <input type="text" name="jumlahroda" class="form-control numbernoseparate">
+                  </div>
                 </div>
-              </div>
-              <div class="form-group col-sm-6 row">
-                <label class="col-sm-4 col-form-label">Isi Silinder <span class="text-danger">*</span></label>
-                <div class="col-sm-8">
-                  <input type="text" class="form-control numbernoseparate" name="isisilinder" id="isisilinder">
+                <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">Jumlah Ban Serap <span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <input type="text" name="jumlahbanserap" class="form-control numbernoseparate">
+                  </div>
                 </div>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="form-group col-sm-6 row">
-                <label class="col-sm-4 col-form-label">Warna <span class="text-danger">*</span></label>
-                <div class="col-sm-8">
-                  <input type="text" class="form-control" name="warna">
+                <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">Nama Pemilik<span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <input type="text" name="nama" class="form-control">
+                  </div>
                 </div>
-              </div>
-              <div class="form-group col-sm-6 row">
-                <label class="col-sm-4 col-form-label">Bahan Bakar <span class="text-danger">*</span></label>
-                <div class="col-sm-8">
-                  <input type="text" class="form-control" name="jenisbahanbakar">
+                <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">No BPKB <span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <input type="text" name="nobpkb" class="form-control">
+                  </div>
                 </div>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="form-group col-sm-6 row">
-                <label class="col-sm-4 col-form-label">Jumlah Sumbu <span class="text-danger">*</span></label>
-                <div class="col-sm-8">
-                  <input type="text" class="form-control numbernoseparate" name="jumlahsumbu">
+                <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">Alamat STNK <span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <input type="text" name="alamatstnk" class="form-control">
+                  </div>
                 </div>
-              </div>
-              <div class="form-group col-sm-6 row">
-                <label class="col-sm-4 col-form-label">Jumlah BAN <span class="text-danger">*</span></label>
-                <div class="col-sm-8">
-                  <input type="text" class="form-control numbernoseparate" name="jumlahroda">
+                <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">No STNK <span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <input type="text" name="nostnk" class="form-control">
+                  </div>
                 </div>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="form-group col-sm-6 row">
-                <label class="col-sm-4 col-form-label">Model <span class="text-danger">*</span></label>
-                <div class="col-sm-8">
-                  <input type="text" class="form-control" name="model">
+                <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">Tgl Pajak STNK <span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <div class="input-group">
+                      <input type="text" name="tglpajakstnk" class="form-control datepicker">
+                    </div>
+                  </div>
                 </div>
-              </div>
-              <div class="form-group col-sm-6 row">
-                <label class="col-sm-4 col-form-label">No BPKB <span class="text-danger">*</span></label>
-                <div class="col-sm-8">
-                  <input type="text" class="form-control" name="nobpkb">
+                <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">Jenis Plat <span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <select name="statusjenisplat" class="form-control select2bs4">
+                      <option value="">-- PILIH JENIS PLAT --</option>
+                    </select>
+                  </div>
                 </div>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="form-group col-sm-6 row">
-                <label class="col-sm-4 col-form-label">Milik Mandor </label>
-                <div class="col-sm-8">
-                  <input type="hidden" name="mandor_id">
-                  <input type="text" name="mandor" class="form-control mandor-lookup">
+                <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">STATUS AKTIF <span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <select name="statusaktif" class="form-control select2bs4">
+                      <option value="">-- PILIH STATUS AKTIF --</option>
+                    </select>
+                  </div>
                 </div>
-              </div>
-              <div class="form-group col-sm-6 row">
-                <label class="col-sm-4 col-form-label">Jumlah Ban Serap <span class="text-danger">*</span></label>
-                <div class="col-sm-8">
-                  <input type="text" class="form-control numbernoseparate" name="jumlahbanserap">
+                <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">STATUS GEROBAK <span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <select name="statusgerobak" class="form-control select2bs4">
+                      <option value="">-- PILIH STATUS GEROBAK --</option>
+                    </select>
+                  </div>
                 </div>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="form-group col-sm-6 row">
-                <label class="col-sm-4 col-form-label">Milik Supir</label>
-                <div class="col-sm-8">
-                  <input type="hidden" name="supir_id">
-                  <input type="text" name="supir" class="form-control supir-lookup">
+                <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">Keterangan</label>
+                  <div class="col-sm-12">
+                    <input type="text" name="keterangan" class="form-control">
+                  </div>
                 </div>
-              </div>
-              <div class="form-group col-sm-6 row">
-                <label class="col-sm-4 col-form-label">STATUS GEROBAK <span class="text-danger">*</span></label>
-                <div class="col-sm-8">
-                  <select name="statusgerobak" class="form-control select2bs4">
-                    <option value="">-- PILIH STATUS GEROBAK --</option>
-                  </select>
+                <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">Milik Mandor</label>
+                  <div class="col-sm-12">
+                    <input type="hidden" name="mandor_id">
+                    <input type="text" name="mandor" class="form-control mandor-lookup">
+                  </div>
+                </div>
+                <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">Milik Supir</label>
+                  <div class="col-sm-12">
+                    <input type="hidden" name="supir_id">
+                    <input type="text" name="supir" class="form-control supir-lookup">
+                  </div>
                 </div>
               </div>
             </div>

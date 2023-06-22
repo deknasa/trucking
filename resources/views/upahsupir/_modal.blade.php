@@ -180,7 +180,7 @@
                     <label class="col-form-label">Upload Foto Peta</label>
                   </div>
                 </div>
-                <div class="dropzone" data-field="gambar" id="my-dropzone" ></div>
+                <div class="dropzone" data-field="gambar" id="my-dropzone"></div>
 
                 <div class="dz-preview dz-file-preview">
                   <div class="dz-details">
@@ -288,6 +288,7 @@
   let modalBody = $('#crudModal').find('.modal-body').html()
   Dropzone.autoDiscover = false;
   let dropzones = []
+  let aksiEdit = true;
 
   $(document).ready(function() {
     $(document).on('dblclick', '[data-dz-thumbnail]', handleImageClick)
@@ -601,24 +602,35 @@
         showUpahSupir(form, id)
           .then((upahsupir) => {
             initDropzone(form.data('action'), upahsupir);
+            if (aksiEdit == false) {
+              form.find('select').each((index, select) => {
+                let element = $(select)
 
+                if (element.data('select2')) {
+                  element.select2('destroy')
+                }
+              })
+              form.find('[name]').attr('disabled', 'disabled')
+            }
           })
           .then(() => {
             $('#crudModal').modal('show')
-            form.find(`[name="kotadari"]`).parent('.input-group').find('.button-clear').remove()
-            form.find(`[name="kotadari"]`).parent('.input-group').find('.input-group-append').remove()
-            form.find(`[name="kotasampai"]`).parent('.input-group').find('.button-clear').remove()
-            form.find(`[name="kotasampai"]`).parent('.input-group').find('.input-group-append').remove()
-            form.find(`[name="zona"]`).parent('.input-group').find('.button-clear').remove()
-            form.find(`[name="zona"]`).parent('.input-group').find('.input-group-append').remove()
+            if (aksiEdit == false) {
+              console.log(aksiEdit)
+              $('#crudForm').find(`.ui-datepicker-trigger`).attr('disabled', true)
+              let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
+              name.attr('disabled', true)
+              name.find('.lookup-toggler').attr('disabled', true)
 
-            form.find(`[name="parent"]`).parent('.input-group').find('.button-clear').remove()
-            form.find(`[name="parent"]`).parent('.input-group').find('.input-group-append').remove()
+            } else {
+              console.log(aksiEdit)
+              $('#crudForm').find(`.ui-datepicker-trigger`).attr('disabled', false)
 
-            form.find(`[name="tarif"]`).parent('.input-group').find('.button-clear').remove()
-            form.find(`[name="tarif"]`).parent('.input-group').find('.input-group-append').remove()
+              let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
+              name.attr('disabled', false)
+              name.find('.lookup-toggler').attr('disabled', false)
 
-
+            }
             $('#simpanKandang').hide()
           })
           .catch((error) => {
@@ -660,7 +672,7 @@
             $('#crudModal').modal('show')
             $('#crudForm').find(`.btn.btn-easyui.lookup-toggler`).attr('disabled', true)
             $('#crudForm').find(`.ui-datepicker-trigger.btn.btn-easyui.text-easyui-dark`).attr('disabled', true)
-            
+
 
             $('#simpanKandang').hide()
           })
@@ -672,6 +684,37 @@
           })
 
       })
+  }
+
+  function cekValidasidelete(Id, aksi) {
+    $.ajax({
+      url: `{{ config('app.api_url') }}upahsupir/${Id}/cekValidasi`,
+      method: 'POST',
+      dataType: 'JSON',
+      beforeSend: request => {
+        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+      },
+      success: response => {
+        var kondisi = response.kondisi
+        if (kondisi == true) {
+          if (aksi == 'EDIT') {
+            aksiEdit = false
+            editUpahSupir(selectedId)
+          } else {
+            showDialog(response.message['keterangan'])
+          }
+        } else {
+          if (aksi == 'EDIT') {
+            aksiEdit = true
+            editUpahSupir(selectedId)
+          } else {
+            deleteUpahSupir(selectedId)
+          }
+        }
+
+        // 
+      }
+    })
   }
 
   function getMaxLength(form) {
@@ -698,7 +741,7 @@
       })
     }
   }
-  
+
   function handleImageClick(event) {
     event.preventDefault();
     let imageUrl = event.target.src;
@@ -707,7 +750,7 @@
       image.src = imageUrl;
       var w = window.open("");
       w.document.write(image.outerHTML);
-    }else{
+    } else {
       window.open(imageUrl);
     }
 
@@ -716,7 +759,7 @@
 
   function initDropzone(action, data = null) {
     let buttonRemoveDropzone = `<i class="fas fa-times-circle"></i>`
-    
+
     $('.dropzone').each((index, element) => {
       if (!element.dropzone) {
         let newDropzone = new Dropzone(element, {
@@ -732,7 +775,7 @@
           init: function() {
             dropzones.push(this)
             this.on("addedfile", function(file) {
-              if(this.files.length > 5){
+              if (this.files.length > 5) {
                 this.removeFile(file);
               }
             });
@@ -938,38 +981,15 @@
             } else {
               element.val(value)
             }
-            if (!parent) {
-              if (index == 'tujuan' || index == 'penyesuaian') {
-                element.prop('readonly', true)
-              }
-            }
-            if (index == 'kotadari') {
-              element.data('current-value', value)
-              if (!parent) {
-                element.prop('readonly', true)
-              }
-            }
-            if (index == 'kotasampai') {
-              element.data('current-value', value)
-              if (!parent) {
-                element.prop('readonly', true)
-              }
-            }
-            if (index == 'zona') {
-              element.data('current-value', value)
-              if (!parent) {
-                element.prop('readonly', true)
-              }
-            }
-            if (index == 'parent') {
-              element.data('current-value', value)
-              if (!parent) {
-                element.prop('readonly', true)
-              }
-            }
-            if (index == 'tarif') {
-              element.data('current-value', value)
-              if (!parent) {
+            // if(!parent && aksiEdit == true){
+            //   console.log('tru kaaa')
+            //   if (index == 'tujuan' || index == 'penyesuaian' || index == 'kotadari' || index == 'kotasampai' || index == 'zona' || index == 'parent' || index == 'tarif') {
+            //     element.prop('readonly', true)
+            //   }
+            // }
+
+            if (aksiEdit == false) {
+              if (index == 'tujuan' || index == 'penyesuaian' || index == 'kotadari' || index == 'kotasampai' || index == 'zona' || index == 'parent' || index == 'tarif') {
                 element.prop('readonly', true)
               }
             }
@@ -1367,7 +1387,7 @@
         $('#kotaupahsupir').parent('.input-group').show()
         $('#kotatarif').prop('type', 'hidden')
         $('#kotatarif').prop('disabled', true).hide()
-        
+
         element.data('currentValue', element.val())
         upahSupirKota = upahsupir.kotasampai_id;
         // Menghapus nilai autonumeric pada input jarak
@@ -1481,7 +1501,7 @@
         $('#crudForm').find(`[name=penyesuaian]`).val('').prop('readonly', false)
         $('#crudForm [name=kotasampai_id]').val('')
         $('#crudForm').find(`[name=kotasampai]`).val('').prop('readonly', false)
-        
+
         $('#kotaupahsupir').prop('disabled', false)
         $('#kotaupahsupir').parent('.input-group').show()
         $('#kotatarif').prop('type', 'hidden')
