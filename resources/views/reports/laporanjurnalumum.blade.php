@@ -31,18 +31,20 @@
       var dataSet = new Stimulsoft.System.Data.DataSet("Data")
 
       viewer.renderHtml('content')
-      report.loadFile(`{{ asset('public/reports/ReportParameter.mrt') }}`)
+      report.loadFile(`{{ asset('public/reports/Report_jurnalumum (1).mrt') }}`)
 
       report.dictionary.dataSources.clear()
 
       dataSet.readJson({
-        'parameter': <?= json_encode($parameters); ?>,
+        'data': <?= json_encode($data); ?>,
+        'user': <?= json_encode($user); ?>,
+        'parameter': <?= json_encode($detailParams); ?>
       })
 
       report.regData(dataSet.dataSetName, '', dataSet)
       report.dictionary.synchronize()
-      designer.report = report;
-      designer.renderHtml('content');
+      // designer.report = report;
+      // designer.renderHtml('content');
       viewer.report = report
       
      
