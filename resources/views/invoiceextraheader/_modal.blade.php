@@ -52,7 +52,7 @@
                   <tr>
                     <th width="2%">No</th>
                     <th width="70%">keterangan</th>
-                    <th width="26%">harga</th>
+                    <th width="26%">nominal</th>
                     <th width="2%">Aksi</th>
                   </tr>
                 </thead>

@@ -163,7 +163,7 @@
     loadGlobalSearch($('#pelunasanGrid'))
   }
 
-  function loadDetailData(id, nobukti) {
+  function loadPelunasanData(id, nobukti) {
     abortGridLastRequest($('#pelunasanGrid'))
     
     $('#pelunasanGrid').setGridParam({
