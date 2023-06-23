@@ -216,7 +216,7 @@ use App\Http\Controllers\AkuntansiController;
 use App\Http\Controllers\TypeAkuntansiController;
 use App\Http\Controllers\MainTypeAkuntansiController;
 use App\Http\Controllers\LaporanJurnalUmumController;
-
+use App\Http\Controllers\LaporanPembelianController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -1174,6 +1174,11 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('laporanjurnalumum/export', [LaporanJurnalUmumController::class, 'export'])->name('laporanjurnalumum.export');
     Route::get('laporanjurnalumum/index', [LaporanJurnalUmumController::class, 'index']);
     Route::resource('laporanjurnalumum', LaporanJurnalUmumController::class);
+
+    Route::get('laporanpembelian/report', [LaporanPembelianController::class, 'report'])->name('laporanpembelian.report');
+    Route::get('laporanpembelian/export', [LaporanPembelianController::class, 'export'])->name('laporanpembelian.export');
+    Route::get('laporanpembelian/index', [LaporanPembelianController::class, 'index']);
+    Route::resource('laporanpembelian', LaporanPembelianController::class);
 
     Route::get('laporanpinjamansupirkaryawan/report', [LaporanPinjamanSupirKaryawanController::class, 'report'])->name('laporanpinjamansupirkaryawan.report');
     Route::get('laporanpinjamansupirkaryawan/index', [LaporanPinjamanSupirKaryawanController::class, 'index']);
