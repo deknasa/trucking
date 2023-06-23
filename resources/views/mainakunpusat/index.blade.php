@@ -57,6 +57,10 @@
             name: 'type',
           },
           {
+            label: 'AKUNTANSI',
+            name: 'akuntansi',
+          },
+          {
             label: 'LEVEL',
             name: 'level',
           },
@@ -412,8 +416,11 @@
             class: 'btn btn-success btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-              editMainAkunPusat(selectedId)
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Harap pilih salah satu record')
+              } else {
+                cekValidasi(selectedId, 'edit')
+              }
             }
           },
           {
@@ -422,8 +429,11 @@
             class: 'btn btn-danger btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-              deleteMainAkunPusat(selectedId)
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Harap pilih salah satu record')
+              } else {
+                cekValidasi(selectedId, 'delete')
+              }
             }
           },
           {
@@ -564,7 +574,7 @@
       getCekExport(params).then((response) => {
       if ($('#rangeModal').data('action') == 'export') {
         let xhr = new XMLHttpRequest()
-        xhr.open('GET', `{{ config('app.api_url') }}akunpusat/export?${params}`, true)
+        xhr.open('GET', `{{ config('app.api_url') }}mainakunpusat/export?${params}`, true)
         xhr.setRequestHeader("Authorization", `Bearer {{ session('access_token') }}`)
         xhr.responseType = 'arraybuffer'
 
@@ -591,7 +601,7 @@
 
         xhr.send()
       } else if ($('#rangeModal').data('action') == 'report') {
-        window.open(`{{ route('akunpusat.report') }}?${params}`)
+        window.open(`{{ route('mainakunpusat.report') }}?${params}`)
 
         submitButton.removeAttr('disabled')
       }
@@ -637,7 +647,7 @@
 
       return new Promise((resolve, reject) => {
         $.ajax({
-          url: `${apiUrl}akunpusat/export?${params}`,
+          url: `${apiUrl}mainakunpusat/export?${params}`,
           dataType: "JSON",
           headers: {
             Authorization: `Bearer ${accessToken}`

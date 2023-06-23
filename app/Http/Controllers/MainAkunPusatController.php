@@ -33,7 +33,7 @@ class MainAkunPusatController extends MyController
             'combolabarugi' => $this->comboList('list', 'STATUS LABA RUGI', 'STATUS LABA RUGI'),
         ];
 
-        return view('akunpusat.index', compact('title', 'data'));
+        return view('mainakunpusat.index', compact('title', 'data'));
     }
 
     public function comboList($aksi, $grp, $subgrp)
@@ -53,27 +53,12 @@ class MainAkunPusatController extends MyController
         return $response['data'];
     }
 
-    public function create()
-    {
-        $title = $this->title;
-
-        $combo = [
-            'statuscoa' => $this->getParameter('status kode perkiraan', 'status kode perkiraan'),
-            'statusaccountpayable' => $this->getParameter('STATUS ACCOUNT PAYABLE', 'STATUS ACCOUNT PAYABLE'),
-            'statusneraca' => $this->getParameter('STATUS NERACA', 'STATUS NERACA'),
-            'statuslabarugi' => $this->getParameter('STATUS LABA RUGI', 'STATUS LABA RUGI'),
-            'statusaktif' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF')
-        ];
-
-        return view('akunpusat.add', compact('title', 'combo'));
-    }
-    
     public function report(Request $request)
     {
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'akunpusat', $request->all());
+            ->get(config('app.api_url') . 'mainakunpusat', $request->all());
 
         $akunpusats = $response['data'];
 
@@ -109,7 +94,7 @@ class MainAkunPusatController extends MyController
             $i++;
         }
 
-        return view('reports.akunpusat', compact('akunpusats'));
+        return view('reports.mainakunpusat', compact('akunpusats'));
     }
 
     /**
