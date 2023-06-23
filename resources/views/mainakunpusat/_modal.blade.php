@@ -64,7 +64,7 @@
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
-                  kode perkiraan parent <span class="text-danger">*</span>
+                  kode perkiraan parent
                 </label>
               </div>
               <div class="col-12 col-md-10">
@@ -175,19 +175,19 @@
       switch (action) {
         case 'add':
           method = 'POST'
-          url = `${apiUrl}akunpusat`
+          url = `${apiUrl}mainakunpusat`
           break;
         case 'edit':
           method = 'PATCH'
-          url = `${apiUrl}akunpusat/${akunPusatId}`
+          url = `${apiUrl}mainakunpusat/${akunPusatId}`
           break;
         case 'delete':
           method = 'DELETE'
-          url = `${apiUrl}akunpusat/${akunPusatId}`
+          url = `${apiUrl}mainakunpusat/${akunPusatId}`
           break;
         default:
           method = 'POST'
-          url = `${apiUrl}akunpusat`
+          url = `${apiUrl}mainakunpusat`
           break;
       }
 
@@ -256,7 +256,7 @@
     $('#crudModal').find('.modal-body').html(modalBody)
   })
 
-  function createAkunPusat() {
+  function createMainAkunPusat() {
     let form = $('#crudForm')
 
     $('.modal-loader').removeClass('d-none')
@@ -268,7 +268,7 @@
   `)
     form.data('action', 'add')
     form.find(`.sometimes`).show()
-    $('#crudModalTitle').text('Create Akun Pusat')
+    $('#crudModalTitle').text('Create Main Akun Pusat')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -297,7 +297,7 @@
   function showDefault(form) {
     return new Promise((resolve, reject) => {
       $.ajax({
-        url: `${apiUrl}akunpusat/default`,
+        url: `${apiUrl}mainakunpusat/default`,
         method: 'GET',
         dataType: 'JSON',
         headers: {
@@ -324,7 +324,7 @@
     })
   }
 
-  function editAkunPusat(akunPusatId) {
+  function editMainAkunPusat(akunPusatId) {
     let form = $('#crudForm')
 
     $('.modal-loader').removeClass('d-none')
@@ -349,7 +349,7 @@
         setStatusAktifOptions(form),
       ])
       .then(() => {
-        showAkunPusat(form, akunPusatId)
+        showMainAkunPusat(form, akunPusatId)
           .then(() => {
             $('#crudModal').modal('show')
           })
@@ -362,7 +362,7 @@
       })
   }
 
-  function deleteAkunPusat(akunPusatId) {
+  function deleteMainAkunPusat(akunPusatId) {
     let form = $('#crudForm')
 
     $('.modal-loader').removeClass('d-none')
@@ -387,7 +387,7 @@
         setStatusAktifOptions(form),
       ])
       .then(() => {
-        showAkunPusat(form, akunPusatId)
+        showMainAkunPusat(form, akunPusatId)
           .then(() => {
             $('#crudModal').modal('show')
           })
@@ -628,10 +628,10 @@
     })
   }
 
-  function showAkunPusat(form, akunPusatId) {
+  function showMainAkunPusat(form, akunPusatId) {
     return new Promise((resolve, reject) => {
       $.ajax({
-        url: `${apiUrl}akunpusat/${akunPusatId}`,
+        url: `${apiUrl}mainakunpusat/${akunPusatId}`,
         method: 'GET',
         dataType: 'JSON',
         headers: {
@@ -646,6 +646,16 @@
             } else {
               element.val(value)
             }
+
+            if (index == 'type') {
+              element.data('current-value', value)
+            }
+            if (index == 'akuntansi') {
+              element.data('current-value', value)
+            }
+            if (index == 'parent') {
+              element.data('current-value', value)
+            }
           })
 
           if (form.data('action') === 'delete') {
@@ -658,6 +668,30 @@
           reject(error)
         }
       })
+    })
+  }
+  
+  function cekValidasi(Id,aksi) {
+    $.ajax({
+      url: `{{ config('app.api_url') }}mainakunpusat/${Id}/cekValidasi`,
+      method: 'GET',
+      dataType: 'JSON',
+      beforeSend: request => {
+        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+      },
+      success: response => {
+        var kondisi = response.kondisi
+        if (kondisi == true) {
+          showDialog(response.message['keterangan'])
+        } else {
+          if(aksi == 'edit'){
+            editMainAkunPusat(Id)
+          }else{
+            deleteMainAkunPusat(Id)
+          }
+        }
+
+      }
     })
   }
 
@@ -713,8 +747,8 @@
     })
 
     $('.parent-lookup').lookup({
-      title: 'Akun Pusat Lookup',
-      fileName: 'akunpusat',
+      title: 'Main Akun Pusat Lookup',
+      fileName: 'mainakunpusat',
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
