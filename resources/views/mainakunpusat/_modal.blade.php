@@ -104,16 +104,6 @@
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-md-2">
-                <label class="col-form-label">
-                  kode perkiraan main <span class="text-danger">*</span>
-                </label>
-              </div>
-              <div class="col-12 col-md-10">
-                <input type="text" name="coamain" class="form-control coamain-lookup">
-              </div>
-            </div>
-            <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
                   STATUS AKTIF <span class="text-danger">*</span>
@@ -185,19 +175,19 @@
       switch (action) {
         case 'add':
           method = 'POST'
-          url = `${apiUrl}akunpusat`
+          url = `${apiUrl}mainakunpusat`
           break;
         case 'edit':
           method = 'PATCH'
-          url = `${apiUrl}akunpusat/${akunPusatId}`
+          url = `${apiUrl}mainakunpusat/${akunPusatId}`
           break;
         case 'delete':
           method = 'DELETE'
-          url = `${apiUrl}akunpusat/${akunPusatId}`
+          url = `${apiUrl}mainakunpusat/${akunPusatId}`
           break;
         default:
           method = 'POST'
-          url = `${apiUrl}akunpusat`
+          url = `${apiUrl}mainakunpusat`
           break;
       }
 
@@ -266,7 +256,7 @@
     $('#crudModal').find('.modal-body').html(modalBody)
   })
 
-  function createAkunPusat() {
+  function createMainAkunPusat() {
     let form = $('#crudForm')
 
     $('.modal-loader').removeClass('d-none')
@@ -278,7 +268,7 @@
   `)
     form.data('action', 'add')
     form.find(`.sometimes`).show()
-    $('#crudModalTitle').text('Create Akun Pusat')
+    $('#crudModalTitle').text('Create Main Akun Pusat')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -307,7 +297,7 @@
   function showDefault(form) {
     return new Promise((resolve, reject) => {
       $.ajax({
-        url: `${apiUrl}akunpusat/default`,
+        url: `${apiUrl}mainakunpusat/default`,
         method: 'GET',
         dataType: 'JSON',
         headers: {
@@ -334,7 +324,7 @@
     })
   }
 
-  function editAkunPusat(akunPusatId) {
+  function editMainAkunPusat(akunPusatId) {
     let form = $('#crudForm')
 
     $('.modal-loader').removeClass('d-none')
@@ -359,7 +349,7 @@
         setStatusAktifOptions(form),
       ])
       .then(() => {
-        showAkunPusat(form, akunPusatId)
+        showMainAkunPusat(form, akunPusatId)
           .then(() => {
             $('#crudModal').modal('show')
           })
@@ -372,7 +362,7 @@
       })
   }
 
-  function deleteAkunPusat(akunPusatId) {
+  function deleteMainAkunPusat(akunPusatId) {
     let form = $('#crudForm')
 
     $('.modal-loader').removeClass('d-none')
@@ -397,7 +387,7 @@
         setStatusAktifOptions(form),
       ])
       .then(() => {
-        showAkunPusat(form, akunPusatId)
+        showMainAkunPusat(form, akunPusatId)
           .then(() => {
             $('#crudModal').modal('show')
           })
@@ -638,10 +628,10 @@
     })
   }
 
-  function showAkunPusat(form, akunPusatId) {
+  function showMainAkunPusat(form, akunPusatId) {
     return new Promise((resolve, reject) => {
       $.ajax({
-        url: `${apiUrl}akunpusat/${akunPusatId}`,
+        url: `${apiUrl}mainakunpusat/${akunPusatId}`,
         method: 'GET',
         dataType: 'JSON',
         headers: {
@@ -656,6 +646,7 @@
             } else {
               element.val(value)
             }
+
             if (index == 'type') {
               element.data('current-value', value)
             }
@@ -663,9 +654,6 @@
               element.data('current-value', value)
             }
             if (index == 'parent') {
-              element.data('current-value', value)
-            }
-            if (index == 'coamain') {
               element.data('current-value', value)
             }
           })
@@ -682,10 +670,10 @@
       })
     })
   }
- 
+  
   function cekValidasi(Id,aksi) {
     $.ajax({
-      url: `{{ config('app.api_url') }}akunpusat/${Id}/cekValidasi`,
+      url: `{{ config('app.api_url') }}mainakunpusat/${Id}/cekValidasi`,
       method: 'GET',
       dataType: 'JSON',
       beforeSend: request => {
@@ -697,9 +685,9 @@
           showDialog(response.message['keterangan'])
         } else {
           if(aksi == 'edit'){
-            editAkunPusat(Id)
+            editMainAkunPusat(Id)
           }else{
-            deleteAkunPusat(Id)
+            deleteMainAkunPusat(Id)
           }
         }
 
@@ -759,29 +747,6 @@
     })
 
     $('.parent-lookup').lookup({
-      title: 'Akun Pusat Lookup',
-      fileName: 'akunpusat',
-      beforeProcess: function(test) {
-        // var levelcoa = $(`#levelcoa`).val();
-        this.postData = {
-
-          Aktif: 'AKTIF',
-        }
-      },
-      onSelectRow: (akunpusat, element) => {
-        element.val(akunpusat.coa)
-        element.data('currentValue', element.val())
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
-      },
-      onClear: (element) => {
-        element.val('')
-        element.data('currentValue', element.val())
-      }
-    })
-
-    $('.coamain-lookup').lookup({
       title: 'Main Akun Pusat Lookup',
       fileName: 'mainakunpusat',
       beforeProcess: function(test) {

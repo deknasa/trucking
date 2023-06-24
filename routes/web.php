@@ -218,6 +218,7 @@ use App\Http\Controllers\MainTypeAkuntansiController;
 use App\Http\Controllers\LaporanJurnalUmumController;
 use App\Http\Controllers\LaporanPembelianController;
 use App\Http\Controllers\LaporanPembelianStokController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -489,6 +490,11 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('akunpusat/export', [AkunPusatController::class, 'export'])->name('akunpusat.export');
     Route::get('akunpusat/get', [AkunPusatController::class, 'get'])->name('akunpusat.get');
     Route::resource('akunpusat', AkunPusatController::class);
+
+    Route::get('mainakunpusat/index', [MainAkunPusatController::class, 'index']);
+    Route::get('mainakunpusat/report', [MainAkunPusatController::class, 'report'])->name('mainakunpusat.report');
+    Route::get('mainakunpusat/export', [MainAkunPusatController::class, 'export'])->name('mainakunpusat.export');
+    Route::resource('mainakunpusat', MainAkunPusatController::class);
 
     Route::get('alatbayar/field_length', [AlatBayarController::class, 'fieldLength'])->name('alatbayar.field_length');
     Route::get('alatbayar/{id}/delete', [AlatBayarController::class, 'delete'])->name('alatbayar.delete');
@@ -1175,6 +1181,7 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('laporanjurnalumum/export', [LaporanJurnalUmumController::class, 'export'])->name('laporanjurnalumum.export');
     Route::get('laporanjurnalumum/index', [LaporanJurnalUmumController::class, 'index']);
     Route::resource('laporanjurnalumum', LaporanJurnalUmumController::class);
+
 
     Route::get('laporanpembelian/report', [LaporanPembelianController::class, 'report'])->name('laporanpembelian.report');
     Route::get('laporanpembelian/export', [LaporanPembelianController::class, 'export'])->name('laporanpembelian.export');

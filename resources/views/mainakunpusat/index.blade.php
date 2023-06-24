@@ -10,7 +10,7 @@
   </div>
 </div>
 
-@include('akunpusat._modal')
+@include('mainakunpusat._modal')
 
 @push('scripts')
 <script>
@@ -31,7 +31,7 @@
 
   $(document).ready(function() {
     $("#jqGrid").jqGrid({
-        url: `${apiUrl}akunpusat`,
+        url: `${apiUrl}mainakunpusat`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -48,7 +48,8 @@
             name: 'coa',
           },
           {
-            label: 'keterangan kode perkiraan', width: 220,
+            label: 'keterangan kode perkiraan',
+            width: 220,
             name: 'keterangancoa',
           },
           {
@@ -287,11 +288,6 @@
             }
           },
           {
-            label: 'kode perkiraan main',
- width: 200,
-            name: 'coamain',
-          },
-          {
             label: 'CREATEDAT',
             name: 'created_at',
             align: 'right',
@@ -411,7 +407,7 @@
             innerHTML: '<i class="fa fa-plus"></i> ADD',
             class: 'btn btn-primary btn-sm mr-1',
             onClick: () => {
-              createAkunPusat()
+              createMainAkunPusat()
             }
           },
           {
@@ -578,7 +574,7 @@
       getCekExport(params).then((response) => {
       if ($('#rangeModal').data('action') == 'export') {
         let xhr = new XMLHttpRequest()
-        xhr.open('GET', `{{ config('app.api_url') }}akunpusat/export?${params}`, true)
+        xhr.open('GET', `{{ config('app.api_url') }}mainakunpusat/export?${params}`, true)
         xhr.setRequestHeader("Authorization", `Bearer {{ session('access_token') }}`)
         xhr.responseType = 'arraybuffer'
 
@@ -605,7 +601,7 @@
 
         xhr.send()
       } else if ($('#rangeModal').data('action') == 'report') {
-        window.open(`{{ route('akunpusat.report') }}?${params}`)
+        window.open(`{{ route('mainakunpusat.report') }}?${params}`)
 
         submitButton.removeAttr('disabled')
       }
@@ -651,7 +647,7 @@
 
       return new Promise((resolve, reject) => {
         $.ajax({
-          url: `${apiUrl}akunpusat/export?${params}`,
+          url: `${apiUrl}mainakunpusat/export?${params}`,
           dataType: "JSON",
           headers: {
             Authorization: `Bearer ${accessToken}`
