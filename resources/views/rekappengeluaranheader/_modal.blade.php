@@ -5,13 +5,13 @@
         <div class="modal-header">
           <p class="modal-title" id="crudModalTitle"></p>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            
+
           </button>
         </div>
         <form action="" method="post">
           <div class="modal-body">
             <div class="row form-group">
-                <input type="hidden" name="id" hidden class="form-control" readonly>
+              <input type="hidden" name="id" hidden class="form-control" readonly>
 
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">no bukti <span class="text-danger"></span> </label>
@@ -44,17 +44,26 @@
 
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
-                <label class="col-form-label">KAS/bank  <span class="text-danger">*</span>  </label>
+                <label class="col-form-label">KAS/bank <span class="text-danger">*</span> </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="text" name="bank" class="form-control bank-lookup">
-                <input type="text" id="bankId" name="bank_id" readonly hidden >
-              </div>  
+                <input type="text" id="bankId" name="bank_id" readonly hidden>
+              </div>
             </div>
-            <div class="table-scroll table-responsive">
+
+            <div class="row form-group">
+              <div class="col-12 col-md-12">
+                <button class="btn btn-secondary" type="button" id="btnTampil"><i class="fas fa-sync"></i>
+                  RELOAD</button>
+              </div>
+            </div>
+            <table id="modalgrid"></table>
+
+            <!-- <div class="table-scroll table-responsive">
               <table class="table table-bordered table-bindkeys " id="detailList">
                 <thead>
-                  <tr>                  
+                  <tr>
                     <th width="50">No</th>
                     <th>no bukti</th>
                     <th>TGL TRANSAKSI</th>
@@ -67,14 +76,14 @@
                 <tfoot>
                   <tr>
                     <td colspan="3"></td>
-                    
+
                     <td class="font-weight-bold"> Total : </td>
-                    <td id="sumary" class="text-right font-weight-bold">  </td>
-                    
+                    <td id="sumary" class="text-right font-weight-bold"> </td>
+
                   </tr>
                 </tfoot>
               </table>
-            </div>
+            </div> -->
 
 
           </div>
@@ -99,9 +108,38 @@
   let hasFormBindKeys = false
   let parameterPengeluaran = {};
   let modalBody = $('#crudModal').find('.modal-body').html()
+  let selectedRows = []
+  let selectedNobukti = [];
+  let selectedTglBukti = [];
+  let selectedKeterangan = [];
+  let selectedNominal = [];
 
   $(document).ready(function() {
-    
+
+    $(document).on('click', '#btnTampil', function(event) {
+
+      getPengeluaran().then((response) => {
+
+        $('.is-invalid').removeClass('is-invalid')
+        $('.invalid-feedback').remove()
+        selectedRows = response.data.map((data) => data.id)
+        selectedNobukti = response.data.map((data) => data.nobukti_pengeluaran);
+        selectedTglBukti = response.data.map((data) => data.tglbukti_pengeluaran);
+        selectedKeterangan = response.data.map((data) => data.keterangan_detail);
+        selectedNominal = response.data.map((data) => data.nominal_detail);
+
+        $('#modalgrid').jqGrid('setGridParam', {
+          url: `${apiUrl}rekappengeluaranheader/getpengeluaran`,
+          postData: {
+            bank: parameterPengeluaran.bank,
+            tglbukti: parameterPengeluaran.tglbukti,
+          },
+          datatype: "json"
+        }).trigger('reloadGrid');
+      }).catch((errors) => {
+        setErrorMessages($('#crudForm'), errors)
+      })
+    })
 
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
@@ -113,6 +151,30 @@
       let action = form.data('action')
       let data = $('#crudForm').serializeArray()
 
+      $.each(selectedNobukti, function(index, item) {
+        data.push({
+          name: 'pengeluaran_nobukti[]',
+          value: item
+        })
+      });
+      $.each(selectedTglBukti, function(index, item) {
+        data.push({
+          name: 'tgltransaksi_detail[]',
+          value: item
+        })
+      });
+      $.each(selectedKeterangan, function(index, item) {
+        data.push({
+          name: 'keterangan_detail[]',
+          value: item
+        })
+      });
+      $.each(selectedNominal, function(index, item) {
+        data.push({
+          name: 'nominal[]',
+          value: parseFloat(item.replaceAll(',', ''))
+        })
+      });
 
       data.push({
         name: 'sortIndex',
@@ -208,28 +270,28 @@
       })
     })
   })
-  function kodepengeluaran(kodepengeluaran){
+
+  function kodepengeluaran(kodepengeluaran) {
     $('#crudForm').find('[name=statusformat]').val(kodepengeluaran).trigger('change');
   }
-    
-    $('#crudModal').on('shown.bs.modal', () => {
-      let form = $('#crudForm')
-      
-      setFormBindKeys(form)
-      
-      activeGrid = null
-      initDatepicker()
-      initLookup()
 
-      // $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date()) ).trigger('change');
+  $('#crudModal').on('shown.bs.modal', () => {
+    let form = $('#crudForm')
+
+    setFormBindKeys(form)
+
+    activeGrid = null
+    initDatepicker()
+    initLookup()
+    loadModalGrid()
+    // $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date()) ).trigger('change');
     // getMaxLength(form)
   })
 
   $('#crudForm').find('[name=statusformat]').change()
-  
+
   function setPengeluaranTgl() {
     parameterPengeluaran.tglbukti = $('#crudForm').find('[name=tgltransaksi]').val();
-    getPengeluaran();
   }
 
 
@@ -240,10 +302,10 @@
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
-      
+
           Aktif: 'AKTIF',
         }
-      },        
+      },
       onSelectRow: (bank, element) => {
         element.val(bank.kodebank)
         parameterPengeluaran.bank = bank.id;
@@ -281,7 +343,7 @@
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-    $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date()) ).trigger('change');
+    $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
   }
 
   function editRekapPengeluaranHeader(rekapPengeluaranId) {
@@ -306,9 +368,9 @@
       .then(() => {
         $('#crudModal').modal('show')
         form.find(`[name="tglbukti"]`).prop('readonly', true)
-        form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()        
+        form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
         form.find(`[name="tgltransaksi"]`).prop('readonly', true)
-        form.find(`[name="tgltransaksi"]`).parent('.input-group').find('.input-group-append').remove()        
+        form.find(`[name="tgltransaksi"]`).parent('.input-group').find('.input-group-append').remove()
         form.find(`[name="bank"]`).prop('readonly', true)
         form.find(`[name="bank"]`).parent('.input-group').find('.input-group-append').remove()
         form.find(`[name="bank"]`).parent('.input-group').find('.button-clear').remove()
@@ -318,7 +380,7 @@
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
-      })  
+      })
   }
 
   function deleteRekapPengeluaranHeader(rekapPengeluaranId) {
@@ -335,6 +397,7 @@
     $('#crudModalTitle').text('Delete Rekap Pengeluaran')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
+    form.find('#btnTampil').prop('disabled', true)
 
     Promise
       .all([
@@ -348,7 +411,7 @@
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
-      })  
+      })
 
   }
 
@@ -389,14 +452,14 @@
     })
   }
 
-  function sumary(){
-		let sumary =0;
-		$('.totalItem').each(function(){
-			var totalItem = AutoNumeric.getNumber($(this)[0]);
-			sumary +=totalItem;
-		})
+  function sumary() {
+    let sumary = 0;
+    $('.totalItem').each(function() {
+      var totalItem = AutoNumeric.getNumber($(this)[0]);
+      sumary += totalItem;
+    })
     new AutoNumeric($('#sumary')[0]).set(sumary);
-	}
+  }
 
   function showRekapPengeluaran(form, rekapPengeluaranId) {
     return new Promise((resolve, reject) => {
@@ -409,22 +472,34 @@
           Authorization: `Bearer ${accessToken}`
         },
         success: response => {
-          sum =0;
+          sum = 0;
           $.each(response.data, (index, value) => {
             let element = form.find(`[name="${index}"]`)
             if (element.is('select')) {
               element.val(value).trigger('change')
-            }else if(element.attr("name") == 'tglbukti'){
+            } else if (element.attr("name") == 'tglbukti') {
               var result = value.split('-');
-              element.val(result[2]+'-'+result[1]+'-'+result[0]);
-            }else if(element.attr("name") == 'tgltransaksi'){
+              element.val(result[2] + '-' + result[1] + '-' + result[0]);
+            } else if (element.attr("name") == 'tgltransaksi') {
               var result = value.split('-');
-              element.val(result[2]+'-'+result[1]+'-'+result[0]);
+              element.val(result[2] + '-' + result[1] + '-' + result[0]);
             } else {
               element.val(value)
             }
           })
-          getRekapPengeluaran(rekapPengeluaranId)
+          $.each(response.detail, (index, detail) => {
+            selectedRows.push(detail.id)
+            selectedNobukti.push(detail.nobukti_pengeluaran)
+            selectedTglBukti.push(detail.tglbukti_pengeluaran)
+            selectedKeterangan.push(detail.keterangan_detail)
+            selectedNominal.push(detail.nominal_detail)
+          })
+          setTimeout(() => {
+            $('#modalgrid').jqGrid('setGridParam', {
+              url: `${apiUrl}rekappengeluaranheader/${rekapPengeluaranId}/getrekappengeluaran`,
+              datatype: "json"
+            }).trigger('reloadGrid');
+          })
           resolve()
         },
         error: error => {
@@ -436,82 +511,219 @@
 
   function cekValidasi(Id, Aksi) {
     $.ajax({
-        url: `{{ config('app.api_url') }}rekappengeluaranheader/${Id}/cekvalidasi`,
-        method: 'POST',
-        dataType: 'JSON',
-        beforeSend: request => {
-            request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
-        },
-        success: response => {
-            var kodenobukti = response.kodenobukti
-            if (kodenobukti == '1') {
-                var kodestatus = response.kodestatus
-                if (kodestatus == '1') {
-                    showDialog(response.message['keterangan'])
-                } else {
-                    if (Aksi == 'EDIT') {
-                        editRekapPengeluaranHeader(Id)
-                    }
-                    if (Aksi == 'DELETE') {
-                        deleteRekapPengeluaranHeader(Id)
-                    }
-                }
-            } else {
-                showDialog(response.message['keterangan'])
-            }
-        }
-    })
-  }
-
-  function getPengeluaran() {
-    $('#detailList tbody').html('')
-    $.ajax({
-      url: `${apiUrl}rekappengeluaranheader/getpengeluaran`,
-      method: 'GET',
+      url: `{{ config('app.api_url') }}rekappengeluaranheader/${Id}/cekvalidasi`,
+      method: 'POST',
       dataType: 'JSON',
-      data: {
-        limit: 0,
-        bank : parameterPengeluaran.bank,
-        tglbukti : parameterPengeluaran.tglbukti,
-      },
-      headers: {
-        Authorization: `Bearer ${accessToken}`
+      beforeSend: request => {
+        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
       success: response => {
-        let totalNominal = 0
-        let row = 0
-        $.each(response.data, (index, detail) => {
-          let id = detail.id
-          row++
-          let detailRow = $(`
-            <tr class="trow">
-              <td>${row}</td>
-              
-              <td>
-                ${detail.nobukti}
-                <input type="text" value="${detail.nobukti}" id="pengeluaran_nobukti" readonly hidden name="pengeluaran_nobukti[]"  >
-              </td>                 
-              <td>
-                ${detail.tglbukti}
-                <input type="text" value="${detail.tglbukti}" id="tgltransaksi" readonly hidden name="tgltransaksi_detail[]"  >
-              </td>                 
-              <td>
-                ${detail.keterangan_detail}
-                <input type="text" value=" ${detail.keterangan_detail}" id="keterangan_detail" readonly hidden name="keterangan_detail[]"  >
-              </td>
-              <td>
-                <p class="text-right nominal">${detail.nominal}</p>
-                <input type="text" value="${detail.nominal}" id="nominal" readonly hidden name="nominal[]"  >
-              </td>  
-            </tr>`)
-          $('#detailList tbody').append(detailRow)
-          totalNominal +=parseInt(detail.nominal)
-          initAutoNumeric(detailRow.find('.nominal'))
-          })      
-          new AutoNumeric($('#sumary')[0]).set(totalNominal);
+        var kodenobukti = response.kodenobukti
+        if (kodenobukti == '1') {
+          var kodestatus = response.kodestatus
+          if (kodestatus == '1') {
+            showDialog(response.message['keterangan'])
+          } else {
+            if (Aksi == 'EDIT') {
+              showDialog('REKAP PENGELUARAN TIDAK BISA DIEDIT')
+            }
+            if (Aksi == 'DELETE') {
+              deleteRekapPengeluaranHeader(Id)
+            }
+          }
+        } else {
+          showDialog(response.message['keterangan'])
+        }
       }
     })
   }
+
+  function loadModalGrid() {
+    $("#modalgrid").jqGrid({
+        styleUI: 'Bootstrap4',
+        iconSet: 'fontAwesome',
+        datatype: "local",
+        colModel: [
+          {
+            label: 'NO BUKTI',
+            name: 'nobukti_pengeluaran',
+          },
+          {
+            label: 'TGL BUKTI',
+            name: 'tglbukti_pengeluaran',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
+          {
+            label: 'keterangan',
+            name: 'keterangan_detail',
+            align: 'left',
+          },
+          {
+            label: 'NOMINAL',
+            name: 'nominal_detail',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+        ],
+        autowidth: true,
+        shrinkToFit: false,
+        height: 350,
+        rowNum: 10,
+        rownumbers: true,
+        rownumWidth: 45,
+        rowList: [10, 20, 50, 0],
+        toolbar: [true, "top"],
+        sortable: true,
+        sortname: 'nobukti_pengeluaran',
+        viewrecords: true,
+        footerrow: true,
+        userDataOnFooter: true,
+        jsonReader: {
+          root: 'data',
+          total: 'attributes.totalPages',
+          records: 'attributes.totalRows',
+        },
+        loadBeforeSend: function(jqXHR) {
+          jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+
+          setGridLastRequest($(this), jqXHR)
+        },
+
+        loadComplete: function(data) {
+          let grid = $(this)
+          changeJqGridRowListText()
+          initResize($(this))
+          console.log(data);
+          let nominals = $(this).jqGrid("getCol", "nominal_detail")
+          let totalNominal = 0
+          if (nominals.length > 0) {
+            totalNominal = nominals.reduce((previousValue, currentValue) => previousValue + currencyUnformat(currentValue), 0)
+          }
+          $('.clearsearchclass').click(function() {
+            clearColumnSearch($(this))
+          })
+          if (indexRow > $(this).getDataIDs().length - 1) {
+            indexRow = $(this).getDataIDs().length - 1;
+          }
+          $('#modalgrid').setSelection($('#modalgrid').getDataIDs()[0])
+          setHighlight($(this))
+          $(this).jqGrid('footerData', 'set', {
+            nobukti: 'Total:',
+            nominal: totalNominal,
+          }, true)
+
+        }
+      })
+      .jqGrid('filterToolbar', {
+        stringResult: true,
+        searchOnEnter: false,
+        defaultSearch: 'cn',
+        groupOp: 'AND',
+        disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
+        beforeSearch: function() {
+          abortGridLastRequest($(this))
+
+          clearGlobalSearch($('#modalgrid'))
+        },
+      })
+      .customPager()
+    /* Append clear filter button */
+    loadClearFilter($('#modalgrid'))
+
+    /* Append global search */
+    loadGlobalSearch($('#modalgrid'))
+  }
+
+  function getPengeluaran() {
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `${apiUrl}rekappengeluaranheader/getpengeluaran`,
+        method: 'GET',
+        dataType: 'JSON',
+        data: {
+          limit: 0,
+          bank: parameterPengeluaran.bank,
+          tglbukti: parameterPengeluaran.tglbukti,
+        },
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: (response) => {
+          response.url = `${apiUrl}rekappengeluaranheader/getpengeluaran`
+          resolve(response)
+        },
+        error: error => {
+          if (error.status === 422) {
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+            errors = error.responseJSON.errors
+            reject(errors)
+
+          } else {
+            showDialog(error.statusText)
+          }
+        },
+        error: error => {
+          reject(error)
+        }
+      })
+    });
+
+  }
+
+  // function getPengeluaran() {
+  //   $('#detailList tbody').html('')
+  //   $.ajax({
+  //     url: `${apiUrl}rekappengeluaranheader/getpengeluaran`,
+  //     method: 'GET',
+  //     dataType: 'JSON',
+  //     data: {
+  //       limit: 0,
+  //       bank: parameterPengeluaran.bank,
+  //       tglbukti: parameterPengeluaran.tglbukti,
+  //     },
+  //     headers: {
+  //       Authorization: `Bearer ${accessToken}`
+  //     },
+  //     success: response => {
+  //       let totalNominal = 0
+  //       let row = 0
+  //       $.each(response.data, (index, detail) => {
+  //         let id = detail.id
+  //         row++
+  //         let detailRow = $(`
+  //           <tr class="trow">
+  //             <td>${row}</td>
+
+  //             <td>
+  //               ${detail.nobukti}
+  //               <input type="text" value="${detail.nobukti}" id="pengeluaran_nobukti" readonly hidden name="pengeluaran_nobukti[]"  >
+  //             </td>                 
+  //             <td>
+  //               ${detail.tglbukti}
+  //               <input type="text" value="${detail.tglbukti}" id="tgltransaksi" readonly hidden name="tgltransaksi_detail[]"  >
+  //             </td>                 
+  //             <td>
+  //               ${detail.keterangan_detail}
+  //               <input type="text" value=" ${detail.keterangan_detail}" id="keterangan_detail" readonly hidden name="keterangan_detail[]"  >
+  //             </td>
+  //             <td>
+  //               <p class="text-right nominal">${detail.nominal}</p>
+  //               <input type="text" value="${detail.nominal}" id="nominal" readonly hidden name="nominal[]"  >
+  //             </td>  
+  //           </tr>`)
+  //         $('#detailList tbody').append(detailRow)
+  //         totalNominal += parseInt(detail.nominal)
+  //         initAutoNumeric(detailRow.find('.nominal'))
+  //       })
+  //       new AutoNumeric($('#sumary')[0]).set(totalNominal);
+  //     }
+  //   })
+  // }
 
   function getRekapPengeluaran(rekapPengeluaranId) {
     $('#detailList tbody').html('')
@@ -553,10 +765,10 @@
               </td>  
             </tr>`)
           $('#detailList tbody').append(detailRow)
-          totalNominal +=parseInt(detail.nominal)
+          totalNominal += parseInt(detail.nominal)
           initAutoNumeric(detailRow.find('.nominal'))
-          })      
-          new AutoNumeric($('#sumary')[0]).set(totalNominal);
+        })
+        new AutoNumeric($('#sumary')[0]).set(totalNominal);
       }
     })
   }

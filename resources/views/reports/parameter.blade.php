@@ -41,9 +41,11 @@
 
       report.regData(dataSet.dataSetName, '', dataSet)
       report.dictionary.synchronize()
+
       
       // designer.report = report;
       // designer.renderHtml('content');
+
       viewer.report = report
       
      

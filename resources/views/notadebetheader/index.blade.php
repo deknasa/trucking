@@ -378,7 +378,7 @@
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
-
+          
           loadDetailData(id)
           loadPelunasanData(id, nobukti_pelunasan)
           loadJurnalUmumData(id, nobukti_jurnal)
@@ -466,41 +466,6 @@
 
       .customPager({
         buttons: [
-          // {
-          //   id: 'add',
-          //   innerHTML: '<i class="fa fa-plus"></i> ADD',
-          //   class: 'btn btn-primary btn-sm mr-1',
-          //   onClick: function(event) {
-          //     createNotaDebet()
-          //   }
-          // },
-          // {
-          //   id: 'edit',
-          //   innerHTML: '<i class="fa fa-pen"></i> EDIT',
-          //   class: 'btn btn-success btn-sm mr-1',
-          //   onClick: function(event) {
-          //     selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-          //     if (selectedId == null || selectedId == '' || selectedId == undefined) {
-          //       showDialog('Please select a row')
-          //     } else {
-          //       cekValidasi(selectedId, 'EDIT')
-          //     }
-          //   }
-          // },
-          // {
-          //   id: 'delete',
-          //   innerHTML: '<i class="fa fa-trash"></i> DELETE',
-          //   class: 'btn btn-danger btn-sm mr-1',
-          //   onClick: () => {
-          //     selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-          //     if (selectedId == null || selectedId == '' || selectedId == undefined) {
-          //       showDialog('Please select a row')
-          //     } else {
-          //       cekValidasi(selectedId, 'DELETE')
-          //     }
-          //   }
-          // },
-
           {
             id: 'report',
             innerHTML: '<i class="fa fa-print"></i> REPORT',

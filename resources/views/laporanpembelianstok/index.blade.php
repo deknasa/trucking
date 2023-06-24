@@ -27,51 +27,34 @@
                         </div> --}}
                         
                         <div class="form-group row">
-                            <label class="col-12 col-sm-2 col-form-label mt-2">TGL RIC (DARI)<span class="text-danger">*</span></label>
+                            <label class="col-12 col-sm-2 col-form-label mt-2">Periode<span class="text-danger">*</span></label>
                             <div class="col-sm-4 mt-2">
                                 <div class="input-group">
-                                    <input type="text" name="ricdari" class="form-control datepicker">
+                                    <input type="text" name="dari" class="form-control datepicker">
                                 </div>
                             </div>
                             <h5 class="mt-3">s/d</h5>
                             <div class="col-sm-4 mt-2">
                                 <div class="input-group">
-                                    <input type="text" name="ricsampai" class="form-control datepicker">
+                                    <input type="text" name="sampai" class="form-control datepicker">
                                 </div>
                             </div>
                             
                         </div>
                         
                         <div class="form-group row">
-                            <label class="col-12 col-sm-2 col-form-label mt-2">SUPIR (DARI)<span class="text-danger">*</span></label>
+                            <label class="col-12 col-sm-2 col-form-label mt-2">stok (DARI)<span class="text-danger">*</span></label>
                             <div class="col-sm-4 mt-2">
-                                <input type="hidden" name="supirdari_id">
-                                <input type="text" name="supirdari" class="form-control supirdari-lookup">
+                                <input type="hidden" name="stokdari_id">
+                                <input type="text" name="stokdari" class="form-control stokdari-lookup">
                             </div>
                             <h5 class="mt-3">s/d</h5>
                             <div class="col-sm-4 mt-2">
-                                <input type="hidden" name="supirsampai_id">
-                                <input type="text" name="supirsampai" class="form-control supirsampai-lookup">
+                                <input type="hidden" name="stoksampai_id">
+                                <input type="text" name="stoksampai" class="form-control stoksampai-lookup">
                             </div>
-                            
                         </div>
-                        
-                        
-                        <div class="form-group row">
-                            <label class="col-12 col-sm-2 col-form-label mt-2">TGL AMBIL UANG JALAN (DARI)<span class="text-danger">*</span></label>
-                            <div class="col-sm-4 mt-2">
-                                <div class="input-group">
-                                    <input type="text" name="ambildari" class="form-control datepicker">
-                                </div>
-                            </div>
-                            <h5 class="mt-3">s/d</h5>
-                            <div class="col-sm-4 mt-2">
-                                <div class="input-group">
-                                    <input type="text" name="ambilsampai" class="form-control datepicker">
-                                </div>
-                            </div>
-                            
-                        </div>
+{{--                     
                         <div class="row">
                             <label class="col-12 col-sm-2 col-form-label mt-2">STATUS<span class="text-danger">*</span></label>
                             <div class="col-sm-4 mt-2">
@@ -79,7 +62,7 @@
 
                                 </select>
                             </div>
-                        </div>
+                        </div> --}}
                         <div class="row">
 
                             <div class="col-sm-6 mt-4">
@@ -123,11 +106,11 @@
 
     $(document).ready(function() {
         initSelect2($('#crudForm').find('[name=status]'), false)
-        setStatusKembali($('#crudForm'))
+        setLaporanPembelian($('#crudForm'))
 
         initDatepicker()
-        $('#crudForm').find('[name=ricdari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-        $('#crudForm').find('[name=ricsampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+        $('#crudForm').find('[name=dari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+        $('#crudForm').find('[name=sampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         $('#crudForm').find('[name=ambildari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         $('#crudForm').find('[name=ambilsampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
@@ -135,48 +118,46 @@
     })
 
     $(document).on('click', `#btnPreview`, function(event) {
-        let ricdari = $('#crudForm').find('[name=ricdari]').val()
-        let ricsampai = $('#crudForm').find('[name=ricsampai]').val()
-        let ambildari = $('#crudForm').find('[name=ambildari]').val()
-        let ambilsampai = $('#crudForm').find('[name=ambilsampai]').val()
-        let supirdari= $('#crudForm').find('[name=supirdari_id]').val()
-        let supirsampai= $('#crudForm').find('[name=supirsampai_id]').val()
+        let dari = $('#crudForm').find('[name=dari]').val()
+        let sampai = $('#crudForm').find('[name=sampai]').val()
+        let stokdari= $('#crudForm').find('[name=stokdari_id]').val()
+        let stoksampai= $('#crudForm').find('[name=stoksampai_id]').val()
         let status= $('#crudForm').find('[name=status]').val()
-        if (ricdari != '' && ricsampai != '' && ambildari != '' && ambilsampai) {
 
-            window.open(`{{ route('laporanuangjalan.report') }}?ricdari2=${ricdari}&ricsampai=${ricsampai}&ambildari=${ambildari}&ambilsampai=${ambilsampai}&supirdari=${supirdari}&supirsampai=${supirsampai}&status=${status}`)
+        
+        if (dari != '' && sampai != '' && stokdari != '' && stoksampai != '') {
+            window.open(`{{ route('laporanpembelianstok.report') }}?dari=${dari}&sampai=${sampai}&stokdari=${stokdari}&stoksampai=${stoksampai}`)
         } else {
             showDialog('ISI SELURUH KOLOM')
         }
+
     })
 
     $(document).on('click', `#btnExport`, function(event) {
-        let ricdari = $('#crudForm').find('[name=ricdari]').val()
-        let ricsampai = $('#crudForm').find('[name=ricsampai]').val()
-        let ambildari = $('#crudForm').find('[name=ambildari]').val()
-        let ambilsampai = $('#crudForm').find('[name=ambilsampai]').val()
-        let supirdari= $('#crudForm').find('[name=supirdari_id]').val()
-        let supirsampai= $('#crudForm').find('[name=supirsampai_id]').val()
-        let status= $('#crudForm').find('[name=status]').val()
-        if (ricdari != '' && ricsampai != '' && ambildari != '' && ambilsampai) {
-        window.open(`{{ route('laporanuangjalan.export') }}?ricdari=${ricdari}&ricsampai=${ricsampai}&ambildari=${ambildari}&ambilsampai=${ambilsampai}&supirdari=${supirdari}&supirsampai=${supirsampai}`)
+        let dari = $('#crudForm').find('[name=dari]').val()
+        let sampai = $('#crudForm').find('[name=sampai]').val()
+        let stokdari= $('#crudForm').find('[name=stokdari_id]').val()
+        let stoksampai= $('#crudForm').find('[name=stoksampai_id]').val()
+
+        if (dari != '' && sampai != '' && stokdari != '' && stoksampai != '') {
+        window.open(`{{ route('laporanpembelianstok.export') }}?dari=${dari}&sampai=${sampai}&stokdari=${stokdari}&stoksampai=${stoksampai}`)
         } else {
         showDialog('ISI SELURUH KOLOM')
         }
             })
 
     function initLookup() {
-        $('.supirdari-lookup').lookup({
-            title: 'Supir Lookup',
-            fileName: 'supir',
+        $('.stokdari-lookup').lookup({
+            title: 'Stok Lookup',
+            fileName: 'stok',
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
                 }
             },
-            onSelectRow: (supir, element) => {
-                $('#crudForm [name=supirdari_id]').first().val(supir.id)
-                element.val(supir.namasupir)
+            onSelectRow: (stok, element) => {
+                $('#crudForm [name=stokdari_id]').first().val(stok.id)
+                element.val(stok.namastok)
                 element.data('currentValue', element.val())
             },
             onCancel: (element) => {
@@ -184,22 +165,22 @@
             },
             onClear: (element) => {
                 element.val('')
-                $(`#crudForm [name="supirdari_id"]`).first().val('')
+                $(`#crudForm [name="stokdari_id"]`).first().val('')
                 element.data('currentValue', element.val())
             }
         });
 
-        $('.supirsampai-lookup').lookup({
-            title: 'Supir Lookup',
-            fileName: 'supir',
+        $('.stoksampai-lookup').lookup({
+            title: 'stok Lookup',
+            fileName: 'stok',
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
                 }
             },
-            onSelectRow: (supir, element) => {
-                $('#crudForm [name=supirsampai_id]').first().val(supir.id)
-                element.val(supir.namasupir)
+            onSelectRow: (stok, element) => {
+                $('#crudForm [name=stoksampai_id]').first().val(stok.id)
+                element.val(stok.namastok)
                 element.data('currentValue', element.val())
             },
             onCancel: (element) => {
@@ -207,13 +188,13 @@
             },
             onClear: (element) => {
                 element.val('')
-                $(`#crudForm [name="supirsampai_id"]`).first().val('')
+                $(`#crudForm [name="stoksampai_id"]`).first().val('')
                 element.data('currentValue', element.val())
             }
         })
     }
 
-    const setStatusKembali = function(relatedForm) {
+    const setLaporanPembelian = function(relatedForm) {
         // return new Promise((resolve, reject) => {
         // relatedForm.find('[name=approve]').empty()
         relatedForm.find('[name=status]').append(
@@ -223,11 +204,11 @@
         let data = [];
         data.push({
             name: 'grp',
-            value: 'STATUS KEMBALI'
+            value: 'LAPORAN PEMBELIAN'
         })
         data.push({
             name: 'subgrp',
-            value: 'STATUS KEMBALI'
+            value: 'LAPORAN PEMBELIAN'
         })
         $.ajax({
             url: `${apiUrl}parameter/combo`,
@@ -239,8 +220,8 @@
             data: data,
             success: response => {
 
-                response.data.forEach(statusKembali => {
-                    let option = new Option(statusKembali.text, statusKembali.id)
+                response.data.forEach(laporanPembelian => {
+                    let option = new Option(laporanPembelian.text, laporanPembelian.text)
                     relatedForm.find('[name=status]').append(option).trigger('change')
                 });
 

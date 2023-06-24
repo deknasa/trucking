@@ -13,47 +13,76 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 
-class LaporanPemotonganPinjamanPerEBSController extends MyController
+class LaporanJurnalUmumController extends MyController
 {
-    public $title = 'Laporan Pemotongan Pinjaman Per EBS';
+    public $title = 'Laporan Jurnal Umum';
 
     public function index(Request $request)
     {
         $title = $this->title;
         $data = [
-            'pagename' => 'Menu Utama Laporan Pemotongan Pinjaman Per EBS',
+            'pagename' => 'Menu Utama Laporan Jurnal Umum',
         ];
 
-        return view('laporanpemotonganpinjamanperebs.index', compact('title'));
+        return view('laporanjurnalumum.index', compact('title'));
     }
+
+    public function get($params = []): array
+    {
+        $params = [
+            'offset' => $params['offset'] ?? request()->offset ?? ((request()->page - 1) * request()->rows),
+            'limit' => $params['rows'] ?? request()->rows ?? 0,
+            'sortIndex' => $params['sidx'] ?? request()->sidx,
+            'sortOrder' => $params['sord'] ?? request()->sord,
+            'search' => json_decode($params['filters'] ?? request()->filters, 1) ?? [],
+        ];
+
+        $response = Http::withHeaders(request()->header())
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'laporanjurnalumum', $params);
+
+        $data = [
+            'total' => $response['attributes']['totalPages'] ?? [],
+            'records' => $response['attributes']['totalRows'] ?? [],
+            'rows' => $response['data'] ?? []
+        ];
+
+        return $data;
+    }
+
 
     public function report(Request $request)
     {
         date_default_timezone_set('Asia/Jakarta'); 
         $detailParams = [
             'judul' => 'PT. TRANSPORINDO AGUNG SEJAHTERA',
-            'judullaporan' => 'Laporan Pemotongan Pinjaman Per EBS',
+            'judullaporan' => 'Laporan Jurnal Umum',
             'tanggal_cetak' => date('d-m-Y H:i:s'),
-            'sampai' => $request->sampai,
             'dari' => $request->dari,
-        ];
+            'sampai' => $request->sampai,
 
+        ];
+        // dd($detailParams);
         $header = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'laporanpemotonganpinjamanperebs/report', $detailParams);
-        
+            ->get(config('app.api_url') . 'laporanjurnalumum/report', $detailParams);
+
         $data = $header['data'];
-        $user = Auth::user();
         // dd($data);
-        return view('reports.laporanpemotonganpinjamanperebs', compact('data', 'user', 'detailParams'));
+        $user = Auth::user();
+
+        return view('reports.laporanjurnalumum', compact('data', 'user', 'detailParams'));
     }
+
+
+
 
     public function export(Request $request): void
     {
         $detailParams = [
             'judul' => 'PT. TRANSPORINDO AGUNG SEJAHTERA',
-            'judullaporan' => 'Laporan Pemotongan Pinjaman Per EBS',
+            'judullaporan' => 'Laporan Jurnal Umum',
             'tanggal_cetak' => date('d-m-Y H:i:s'),
             'sampai' => $request->sampai,
             'dari' => $request->dari,
@@ -62,7 +91,7 @@ class LaporanPemotonganPinjamanPerEBSController extends MyController
         $responses = Http::withHeaders($request->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'laporanpemotonganpinjamanperebs/export', $detailParams);
+            ->get(config('app.api_url') . 'laporanjurnalumum/export', $detailParams);
         
         $pengeluaran = $responses['data'];
         $user = Auth::user();
@@ -71,14 +100,14 @@ class LaporanPemotonganPinjamanPerEBSController extends MyController
         $sheet = $spreadsheet->getActiveSheet();
       
         $sheet->setCellValue('A1', 'PT. TRANSPORINDO AGUNG SEJAHTERA');
-        $sheet->setCellValue('A2', 'LAPORAN PEMOTONGAN PEMINJAMAN SUPIR PER EBS');
+        $sheet->setCellValue('A2', 'Laporan Jurnal Umum');
         
         // $sheet->getStyle("A1")->getFont()->setSize(20)->setBold(true);
     
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->getStyle('A2')->getAlignment()->setHorizontal('left');
-        $sheet->mergeCells('A1:T1');
-        $sheet->mergeCells('A2:T2');
+        $sheet->mergeCells('A1:I1');
+        $sheet->mergeCells('A2:I2');
        
         $header_start_row = 4;
         $detail_start_row = 5;
@@ -112,76 +141,32 @@ class LaporanPemotonganPinjamanPerEBSController extends MyController
                 'index' => 'tglbukti',
             ],
             [
-                'label' => 'GAJI SUPIR NO BUKTI',
-                'index' => 'gajisupir_nobukti',
+                'label' => 'KETERANGAN',
+                'index' => 'keterangan',
             ],
             [
-                'label' => 'NAMA SUPIR',
-                'index' => 'namasupir',
+                'label' => 'POSTING DARI',
+                'index' => 'postingdari',
             ],
             [
-                'label' => 'TOTAL',
-                'index' => 'total',
+                'label' => 'COA',
+                'index' => 'coa',
             ],
             [
-                'label' => 'UANG JALAN',
-                'index' => 'uangjalan',
+                'label' => 'KETERANGAN COA',
+                'index' => 'keterangcoa',
             ],
             [
-                'label' => 'BBM',
-                'index' => 'bbm',
+                'label' => 'DEBET',
+                'index' => 'FDebet',
             ],
             [
-                'label' => 'POTONGAN PINJAMAN',
-                'index' => 'potonganpinjaman',
+                'label' => 'CREDIT',
+                'index' => 'FCredit',
             ],
             [
-                'label' => 'DEPOSITO',
-                'index' => 'deposito',
-            ],
-            [
-                'label' => 'POTONGAN PINJAMAN SEMUA',
-                'index' => 'potonganpinjamansemua',
-            ],
-            [
-                'label' => 'NO POLISI',
-                'index' => 'nopolisi',
-            ],
-            [
-                'label' => 'TGL DARI',
-                'index' => 'tgldari',
-            ],
-            [
-                'label' => 'TGL SAMPAI',
-                'index' => 'tglsampai',
-            ],
-            [
-                'label' => 'KOMISI SUPIR',
-                'index' => 'komisisupir',
-            ],
-            [
-                'label' => 'TOL SUPIR',
-                'index' => 'tolsupir',
-            ],
-            [
-                'label' => 'VOUCHER',
-                'index' => 'voucher',
-            ],
-            [
-                'label' => 'TGL DARI',
-                'index' => 'tanggaldari',
-            ],
-            [
-                'label' => 'TGL SAMPAI',
-                'index' => 'tanggalsampai',
-            ],
-            [
-                'label' => 'KETERANGAN PINJAMAN SUPIR',
-                'index' => 'keteranganpinjamansupir',
-            ],
-            [
-                'label' => 'KETERANGAN PINJAMAN SUPIR SEMUA',
-                'index' => 'keteranganpinjamansupirsemua',
+                'label' => 'KETERANGAN DETAIL',
+                'index' => 'keterangandetail',
             ],
 
 
@@ -207,28 +192,16 @@ class LaporanPemotonganPinjamanPerEBSController extends MyController
 
             $sheet->setCellValue("A$detail_start_row", $response_detail['nobukti']);
             $sheet->setCellValue("B$detail_start_row", date('d-m-Y', strtotime($response_detail['tglbukti'])));
-            $sheet->setCellValue("D$detail_start_row", $response_detail['gajisupir_nobukti']);
-            $sheet->setCellValue("D$detail_start_row", $response_detail['namasupir']);
-            $sheet->setCellValue("E$detail_start_row", $response_detail['total']);
-            $sheet->setCellValue("F$detail_start_row", $response_detail['uangjalan']);
-            $sheet->setCellValue("G$detail_start_row", $response_detail['bbm']);
-            $sheet->setCellValue("H$detail_start_row", $response_detail['potonganpinjaman']);
-            $sheet->setCellValue("I$detail_start_row", $response_detail['deposito']);
-            $sheet->setCellValue("J$detail_start_row", $response_detail['potonganpinjamansemua']);
-            $sheet->setCellValue("K$detail_start_row", $response_detail['nopolisi']);
-            $sheet->setCellValue("L$detail_start_row", $response_detail['tgldari']);
-            $sheet->setCellValue("M$detail_start_row", $response_detail['tglsampai']);
-            $sheet->setCellValue("N$detail_start_row", $response_detail['komisisupir']);
-            $sheet->setCellValue("O$detail_start_row", $response_detail['tolsupir']);
-            $sheet->setCellValue("P$detail_start_row", $response_detail['voucher']);
-            $sheet->setCellValue("Q$detail_start_row", $response_detail['tanggaldari']);
-            $sheet->setCellValue("R$detail_start_row", $response_detail['tanggalsampai']);
-            $sheet->setCellValue("S$detail_start_row", $response_detail['keteranganpinjamansupir']);
-            $sheet->setCellValue("T$detail_start_row", $response_detail['keteranganpinjamansupirsemua']);
-
+            $sheet->setCellValue("D$detail_start_row", $response_detail['keterangan']);
+            $sheet->setCellValue("D$detail_start_row", $response_detail['postingdari']);
+            $sheet->setCellValue("E$detail_start_row", $response_detail['coa']);
+            $sheet->setCellValue("F$detail_start_row", $response_detail['keterangcoa']);
+            $sheet->setCellValue("G$detail_start_row", $response_detail['FDebet']);
+            $sheet->setCellValue("H$detail_start_row", $response_detail['FCredit']);
+            $sheet->setCellValue("I$detail_start_row", $response_detail['keterangandetail']);
             
-            $sheet->getStyle("A$detail_start_row:T$detail_start_row")->applyFromArray($styleArray);
-            $sheet->getStyle("C$detail_start_row:T$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+            $sheet->getStyle("A$detail_start_row:I$detail_start_row")->applyFromArray($styleArray);
+            $sheet->getStyle("C$detail_start_row:I$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
             // $sheet->getStyle("B$detail_start_row:B$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
             // $sheet->getStyle("D$detail_start_row:D$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
             
@@ -242,26 +215,17 @@ class LaporanPemotonganPinjamanPerEBSController extends MyController
        
 
         //ukuran kolom
-        $sheet->getColumnDimension('A')->setWidth(30);
-        $sheet->getColumnDimension('B')->setWidth(20);
-        $sheet->getColumnDimension('C')->setWidth(20);
-        $sheet->getColumnDimension('D')->setWidth(35);
-        $sheet->getColumnDimension('E')->setWidth(20);
-        $sheet->getColumnDimension('F')->setWidth(20);
-        $sheet->getColumnDimension('G')->setWidth(20);
-        $sheet->getColumnDimension('H')->setWidth(30);
-        $sheet->getColumnDimension('I')->setWidth(20);
-        $sheet->getColumnDimension('J')->setWidth(30);
-        $sheet->getColumnDimension('K')->setWidth(20);
-        $sheet->getColumnDimension('L')->setWidth(20);
-        $sheet->getColumnDimension('M')->setWidth(20);
-        $sheet->getColumnDimension('N')->setWidth(20);
-        $sheet->getColumnDimension('O')->setWidth(20);
-        $sheet->getColumnDimension('P')->setWidth(20);
-        $sheet->getColumnDimension('Q')->setWidth(20);
-        $sheet->getColumnDimension('R')->setWidth(20);
-        $sheet->getColumnDimension('S')->setWidth(40);
-        $sheet->getColumnDimension('T')->setWidth(45);
+        $sheet->getColumnDimension('A')->setAutoSize(true);
+        $sheet->getColumnDimension('B')->setAutoSize(true);
+        $sheet->getColumnDimension('C')->setAutoSize(true);
+        $sheet->getColumnDimension('D')->setAutoSize(true);
+        $sheet->getColumnDimension('E')->setAutoSize(true);
+        $sheet->getColumnDimension('F')->setAutoSize(true);
+        $sheet->getColumnDimension('G')->setAutoSize(true);
+        $sheet->getColumnDimension('H')->setAutoSize(true);
+        $sheet->getColumnDimension('I')->setAutoSize(true);
+
+
 
 // menambahkan sel Total pada baris terakhir + 1
 // $sheet->setCellValue("A" . ($detail_start_row + 1), 'Total');
@@ -322,7 +286,7 @@ $sheet->getStyle("A" . ($detail_start_row + 1) . ":$lastColumn" . ($detail_start
 
 
         $writer = new Xlsx($spreadsheet);
-        $filename = 'EXPORTPEMOTONGANPINJAMANPEREBS' . date('dmYHis');
+        $filename = 'EXPORTJURNALUMUM' . date('dmYHis');
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
         header('Cache-Control: max-age=0');
@@ -330,6 +294,5 @@ $sheet->getStyle("A" . ($detail_start_row + 1) . ":$lastColumn" . ($detail_start
         $writer->save('php://output');
 
     }
-
 
 }

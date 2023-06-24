@@ -452,11 +452,13 @@
     $('#crudModalTitle').text('Edit Pengeluaran')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
+    
     Promise
       .all([
         setStatusJenisTransaksiOptions(form)
       ])
       .then(() => {
+        $('#detailList tbody').html('')
         showPengeluaran(form, id)
           .then(() => {
             clearSelectedRows()
@@ -486,11 +488,14 @@
     $('#crudModalTitle').text('Delete Pengeluaran')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
+    
+
     Promise
       .all([
         setStatusJenisTransaksiOptions(form)
       ])
       .then(() => {
+        $('#detailList tbody').html('')
         showPengeluaran(form, id)
           .then(() => {
             clearSelectedRows()
@@ -642,7 +647,7 @@
               element.data('current-value', value)
             }
           })
-
+console.log(response.detail);
           $.each(response.detail, (index, detail) => {
             let detailRow = $(`
               <tr>

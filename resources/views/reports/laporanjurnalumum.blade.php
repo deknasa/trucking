@@ -6,7 +6,8 @@
 <head>
 
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <title>Laporan Potongan Pinjaman Per EBS</title>
+
+  <title>Laporan Jurnal Umum</title>
   <link rel="stylesheet" type="text/css" href="{{ asset($stireport_path . 'css/stimulsoft.viewer.office2013.whiteblue.css') }}">
   <link rel="stylesheet" type="text/css" href="{{ asset($stireport_path . 'css/stimulsoft.designer.office2013.whiteblue.css') }}">
   <script type="text/javascript" src="{{ asset($stireport_path . 'scripts/stimulsoft.reports.js') }}"></script>
@@ -31,7 +32,7 @@
       var dataSet = new Stimulsoft.System.Data.DataSet("Data")
 
       viewer.renderHtml('content')
-      report.loadFile(`{{ asset('public/reports/ReportParameter.mrt') }}`)
+      report.loadFile(`{{ asset('public/reports/Report_jurnalumum (1).mrt') }}`)
 
       report.dictionary.dataSources.clear()
 

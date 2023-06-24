@@ -80,7 +80,7 @@
 
         if (dari != '' && sampai != '') {
 
-            window.open(`{{ route('laporanpemotonganpinjamanperebs.report') }}?sampai=${sampai}&dari=${dari}`)
+            window.open(`{{ route('laporanjurnalumum.report') }}?sampai=${sampai}&dari=${dari}`)
         } else {
             showDialog('ISI SELURUH KOLOM')
         }
@@ -92,7 +92,7 @@
 
         if (dari != '' && sampai != '') {
 
-            window.open(`{{ route('laporanpemotonganpinjamanperebs.export') }}?sampai=${sampai}&dari=${dari}`)
+            window.open(`{{ route('laporanjurnalumum.export') }}?sampai=${sampai}&dari=${dari}`)
         } else {
             showDialog('ISI SELURUH KOLOM')
         }
