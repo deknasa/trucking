@@ -92,9 +92,9 @@
         rownumWidth: 45,
         rowList: [10, 20, 50],
         toolbar: [true, "top"],
-        // sortable: true,
-        // sortname: sortname,
-        // sortorder: sortorder,
+        sortable: false,
+        sortname: sortname,
+        sortorder: sortorder,
         page: page,
         viewrecords: true,
        
@@ -290,7 +290,6 @@
       window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
     })
     function loadGrid() {
-      console.log('asd');
       $.ajax({
           url: `${apiUrl}mandorabsensisupir`,
           method: 'GET',
