@@ -359,10 +359,11 @@
       }
 
       autoNumericElements = new AutoNumeric.multiple('#formRange .autonumeric-report', {
-        digitGroupSeparator: '.',
-        decimalCharacter: ',',
+        digitGroupSeparator: ',',
+        decimalCharacter: '.',
+        decimalPlaces: 0,
         allowDecimalPadding: false,
-        minimumValue: 0,
+        minimumValue: 1,
         maximumValue: totalRecord
       })
     })
