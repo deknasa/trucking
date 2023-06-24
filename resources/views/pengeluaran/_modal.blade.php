@@ -527,12 +527,7 @@
           if (kodestatus == '1') {
             showDialog(response.message['keterangan'])
           } else {
-            if (Aksi == 'EDIT') {
-              editPengeluaran(Id)
-            }
-            if (Aksi == 'DELETE') {
-              deletePengeluaran(Id)
-            }
+            cekValidasiAksi(Id, Aksi)
           }
 
         } else {

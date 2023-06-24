@@ -103,6 +103,16 @@
                             </div>
                         </div>
 
+                        <div class="row form-group">
+                            <div class="col-12 col-sm-3 col-md-2">
+                                <label class="col-form-label">
+                                    No Bukti Penerimaan Giro</label>
+                            </div>
+                            <div class="col-12 col-sm-9 col-md-10">
+                                <input type="text" name="penerimaangiro" class="form-control penerimaangiro-lookup">
+                            </div>
+                        </div>
+
                         {{-- <div class="row form-group">
                             <div class="col-12 col-sm-3 col-md-2">
                                 <label class="col-form-label">
@@ -124,7 +134,7 @@
                                         <th width="7%">Bank Pelanggan</th>
                                         <th width="10%">Keterangan</th>
                                         <th width="6%">Nominal</th>
-                                        <th width="1%">Aksi</th>
+                                        <th width="1%" class="aksiGiro">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody id="table_body" class="form-group">
@@ -138,7 +148,7 @@
                                         <td>
                                             <p class="text-right font-weight-bold autonumeric" id="total"></p>
                                         </td>
-                                        <td>
+                                        <td class="aksiGiro">
                                             <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
                                         </td>
                                     </tr>
@@ -746,7 +756,7 @@
         <td>
           <input type="text" name="nominal_detail[]" class="form-control autonumeric"> 
         </td>
-        <td>
+        <td class="aksiGiro">
             <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
         </td>
       </tr>
@@ -957,6 +967,24 @@
             onClear: (element) => {
                 element.val('')
                 $(`#crudForm [name="bank_id"]`).first().val('')
+                element.data('currentValue', element.val())
+            }
+        })
+        $('.penerimaangiro-lookup').lookup({
+            title: 'Penerimaan Giro Lookup',
+            fileName: 'penerimaangiro',
+           
+            onSelectRow: (penerimaanGiro, element) => {
+                element.val(penerimaanGiro.nobukti)
+                element.data('currentValue', element.val())
+                $('.aksiGiro').hide()
+            },
+            onCancel: (element) => {
+                element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+                $('.aksiGiro').show()
+                element.val('')
                 element.data('currentValue', element.val())
             }
         })
