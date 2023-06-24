@@ -121,7 +121,9 @@
             Authorization: `Bearer {{ session('access_token') }}`
           },
           success: response => {
-            location.reload();
+            // location.reload();
+            window.close();
+
           }
     
         })

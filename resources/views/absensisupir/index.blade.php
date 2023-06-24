@@ -386,7 +386,7 @@
           dropmenuHTML: [
             {
               id:'approvalEdit',
-              text:"Absensi Approval Edit",
+              text:"UN/APPROVAL Absensi Edit",
               onClick: () => {
                 selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                 approveEdit(selectedId)
