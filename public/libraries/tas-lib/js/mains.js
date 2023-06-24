@@ -1079,6 +1079,7 @@ function showSuccessDialog(statusText = "", message = "") {
 } 
 
 function showDialog(statusText="", message="") {
+	
 	$("#dialog-message").html(`
 		<span class="fa fa-exclamation-triangle" aria-hidden="true" style="font-size:25px;"></span>
 	`)
