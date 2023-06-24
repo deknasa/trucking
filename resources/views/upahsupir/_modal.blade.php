@@ -322,12 +322,12 @@
 
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
-
       let method
       let url
       let form = $('#crudForm')
       let Id = form.find('[name=id]').val()
       let action = form.data('action')
+      form.find(`[name="statusaktif"]`).prop('disabled', false)
       let data = $('#crudForm').serializeArray()
       let formData = new FormData()
 
@@ -610,7 +610,17 @@
                   element.select2('destroy')
                 }
               })
-              form.find('[name]').attr('disabled', 'disabled')
+              
+              form.find(`[name="jarak"]`).prop('readonly', true)
+              form.find(`[name="statusaktif"]`).prop('disabled', 'disabled')
+              form.find(`[name="tglmulaiberlaku"]`).prop('readonly', true)
+              form.find(`[name="tujuan"]`).prop('readonly', true)
+              form.find(`[name="penyesuaian"]`).prop('readonly', true)
+              form.find(`[name="kotadari"]`).prop('readonly', true)
+              form.find(`[name="kotasampai"]`).prop('readonly', true)
+              form.find(`[name="zona"]`).prop('readonly', true)
+              form.find(`[name="parent"]`).prop('readonly', true)
+              form.find(`[name="tarif"]`).prop('readonly', true)
             }
           })
           .then(() => {
@@ -619,7 +629,6 @@
               console.log(aksiEdit)
               $('#crudForm').find(`.ui-datepicker-trigger`).attr('disabled', true)
               let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
-              name.attr('disabled', true)
               name.find('.lookup-toggler').attr('disabled', true)
 
             } else {
@@ -987,13 +996,6 @@
             //     element.prop('readonly', true)
             //   }
             // }
-
-            if (aksiEdit == false) {
-              if (index == 'tujuan' || index == 'penyesuaian' || index == 'kotadari' || index == 'kotasampai' || index == 'zona' || index == 'parent' || index == 'tarif') {
-                element.prop('readonly', true)
-              }
-            }
-
           })
 
           initAutoNumeric(form.find(`[name="jarak"]`), {
