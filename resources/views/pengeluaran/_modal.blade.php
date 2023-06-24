@@ -391,6 +391,7 @@
             clearSelectedRows()
             $('#gs_').prop('checked', false)
             $('#crudModal').modal('show')
+            addRow()
           })
           .catch((error) => {
             showDialog(error.statusText)
@@ -444,7 +445,7 @@
     let form = $('#crudForm')
     $('.modal-loader').removeClass('d-none')
     form.data('action', 'edit')
-    form.trigger('reset')
+    // form.trigger('reset')
     form.find('#btnSubmit').html(`
       <i class="fa fa-save"></i>
       Simpan
@@ -455,15 +456,24 @@
     
     Promise
       .all([
-        setStatusJenisTransaksiOptions(form)
+        setStatusJenisTransaksiOptions(form),
+       
+        // $('#detailList tbody').remove()
       ])
       .then(() => {
-        $('#detailList tbody').html('')
         showPengeluaran(form, id)
           .then(() => {
             clearSelectedRows()
             $('#gs_').prop('checked', false)
             $('#crudModal').modal('show')
+            $('#crudForm').find(`[name="bank"]`).parents('.input-group').children().attr('disabled', true)
+            $('#crudForm').find(`[name="bank"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled', true)
+            $('#crudForm').find(`[name="bank"]`).attr('disabled', false).attr('readonly', true)
+            $('[name="bank_id"]').attr('readonly', true);
+            $('#crudForm').find(`[name="alatbayar"]`).parents('.input-group').children().attr('disabled', true)
+            $('#crudForm').find(`[name="alatbayar"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled', true)
+            $('#crudForm').find(`[name="alatbayar"]`).attr('disabled', false).attr('readonly', true)
+            $('[name="alatbayar_id"]').attr('readonly', true);
           })
           .catch((error) => {
             showDialog(error.statusText)
@@ -472,6 +482,8 @@
             $('.modal-loader').addClass('d-none')
           })
       })
+
+     
 
   }
 
@@ -492,12 +504,11 @@
 
     Promise
       .all([
-        setStatusJenisTransaksiOptions(form)
+        setStatusJenisTransaksiOptions(form),
       ])
       .then(() => {
-        $('#detailList tbody').html('')
         showPengeluaran(form, id)
-          .then(() => {
+        .then(() => {
             clearSelectedRows()
             $('#gs_').prop('checked', false)
             $('#crudModal').modal('show')
@@ -604,6 +615,7 @@
   }
 
   function showPengeluaran(form, id) {
+    console.log(id);
     return new Promise((resolve, reject) => {
       $('#detailList tbody').html('')
 
@@ -622,7 +634,6 @@
 
           $.each(response.data, (index, value) => {
             bankId = response.data.bank_id
-            console.log(response.data.bank_id)
             let element = form.find(`[name="${index}"]`)
             if (element.is('select')) {
               element.val(value).trigger('change')
@@ -642,7 +653,7 @@
               element.data('current-value', value)
             }
           })
-console.log(response.detail);
+          $('#detailList tbody').html('')
           $.each(response.detail, (index, detail) => {
             let detailRow = $(`
               <tr>
