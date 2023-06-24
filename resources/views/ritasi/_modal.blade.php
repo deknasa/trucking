@@ -478,6 +478,9 @@
             if (index == 'supir') {
               element.data('current-value', value)
             }
+            if (index == 'statusritasi') {
+              element.data('current-value', value)
+            }
           })
 
           if (form.data('action') === 'delete') {

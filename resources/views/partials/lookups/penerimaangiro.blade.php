@@ -17,6 +17,7 @@
       postData: {
         tgldari: $('#tgldariheaderlookup').val(),
         tglsampai: $('#tglsampaiheaderlookup').val(),
+        nobukti: `{!! $nobukti ?? '' !!}`,
       }, 
       idPrefix: 'penerimaanGiroLookup',
       colModel: [
