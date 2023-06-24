@@ -170,6 +170,7 @@
         },
         data: data,
         success: response => {
+          console.log(indexRow);
           $('#crudForm').trigger('reset')
           $('#crudModal').modal('hide')
           $.ajax({
@@ -185,6 +186,7 @@
               Authorization: `Bearer ${accessToken}`
             },
             success: response => {
+              // indexRow =4
               $('#jqGrid').setGridParam({
                 datatype: "local",
                 data: response.data
@@ -584,6 +586,7 @@
         element.val('')
         $(`#crudForm [name="absen_id"]`).first().val('')
         element.data('currentValue', element.val())
+        setSupirEnable()
       }
     })
   }
