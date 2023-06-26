@@ -219,6 +219,8 @@ use App\Http\Controllers\LaporanJurnalUmumController;
 use App\Http\Controllers\LaporanPembelianController;
 use App\Http\Controllers\LaporanPembelianStokController;
 
+use App\Http\Controllers\LaporanHutangGiroController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -1193,6 +1195,11 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('laporanpembelianstok/index', [LaporanPembelianStokController::class, 'index']);
     Route::resource('laporanpembelianstok', LaporanPembelianStokController::class);
 
+    Route::get('laporanhutanggiro/report', [LaporanHutangGiroController::class, 'report'])->name('laporanhutanggiro.report');
+    Route::get('laporanhutanggiro/export', [LaporanHutangGiroController::class, 'export'])->name('laporanhutanggiro.export');
+    Route::get('laporanhutanggiro/index', [LaporanHutangGiroController::class, 'index']);
+    Route::resource('laporanhutanggiro', LaporanHutangGiroController::class);
+
     Route::get('laporanpinjamansupirkaryawan/report', [LaporanPinjamanSupirKaryawanController::class, 'report'])->name('laporanpinjamansupirkaryawan.report');
     Route::get('laporanpinjamansupirkaryawan/index', [LaporanPinjamanSupirKaryawanController::class, 'index']);
     Route::resource('laporanpinjamansupirkaryawan', LaporanPinjamanSupirKaryawanController::class);
@@ -1289,6 +1296,7 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::resource('laporankasgantung', LaporanKasGantungController::class);
 
     Route::get('laporanpiutanggiro/report', [LaporanPiutangGiroController::class, 'report'])->name('laporanpiutanggiro.report');
+    Route::get('laporanpiutanggiro/export', [LaporanPiutangGiroController::class, 'export'])->name('laporanpiutanggiro.export');
     Route::get('laporanpiutanggiro/index', [LaporanPiutangGiroController::class, 'index']);
     Route::resource('laporanpiutanggiro', LaporanPiutangGiroController::class);
 

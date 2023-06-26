@@ -75,12 +75,12 @@
             "cursor" : "not-allowed",
             "border-color": "rgb(173 180 187)"
         }
-        if (!`{{ $myAuth->hasPermission('laporanpiutanggiro', 'report') }}`) {
+        if (!`{{ $myAuth->hasPermission('laporanhutanggiro', 'report') }}`) {
             $('#btnPreview').prop('disabled', true)
             $('#btnPreview').css(css_property);
         }
 
-        if (!`{{ $myAuth->hasPermission('laporanpiutanggiro', 'export') }}`) {
+        if (!`{{ $myAuth->hasPermission('laporanhutanggiro', 'export') }}`) {
             $('#btnExport').prop('disabled', true)
             $('#btnExport').css(css_property);
         }
@@ -92,7 +92,7 @@
 
         if (periode != '') {
 
-            window.open(`{{ route('laporanpiutanggiro.report') }}?periode=${periode}`)
+            window.open(`{{ route('laporanhutanggiro.report') }}?periode=${periode}`)
         } else {
             showDialog('ISI SELURUH KOLOM')
         }
@@ -103,7 +103,7 @@
 
         if (periode != '') {
 
-            window.open(`{{ route('laporanpiutanggiro.export') }}?periode=${periode}`)
+            window.open(`{{ route('laporanhutanggiro.export') }}?periode=${periode}`)
         } else {
             showDialog('ISI SELURUH KOLOM')
         }

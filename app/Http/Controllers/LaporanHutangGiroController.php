@@ -2,46 +2,81 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Menu;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
-class LaporanPiutangGiroController extends MyController
+
+class LaporanHutangGiroController extends MyController
 {
-    public $title = 'Laporan Piutang Giro';
+    public $title = 'Laporan Hutang Giro';
 
     public function index(Request $request)
     {
         $title = $this->title;
         $data = [
-            'pagename' => 'Menu Utama Laporan Piutang Giro',
+            'pagename' => 'Menu Utama Laporan Hutang Giro',
         ];
 
-        return view('laporanpiutanggiro.index', compact('title'));
+        return view('laporanhutanggiro.index', compact('title'));
     }
+
+    public function get($params = []): array
+    {
+        $params = [
+            'offset' => $params['offset'] ?? request()->offset ?? ((request()->page - 1) * request()->rows),
+            'limit' => $params['rows'] ?? request()->rows ?? 0,
+            'sortIndex' => $params['sidx'] ?? request()->sidx,
+            'sortOrder' => $params['sord'] ?? request()->sord,
+            'search' => json_decode($params['filters'] ?? request()->filters, 1) ?? [],
+        ];
+
+        $response = Http::withHeaders(request()->header())
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'laporanhutanggiro', $params);
+
+        $data = [
+            'total' => $response['attributes']['totalPages'] ?? [],
+            'records' => $response['attributes']['totalRows'] ?? [],
+            'rows' => $response['data'] ?? []
+        ];
+
+        return $data;
+    }
+
 
     public function report(Request $request)
     {
+        date_default_timezone_set('Asia/Jakarta'); 
         $detailParams = [
+            'judul' => 'PT. TRANSPORINDO AGUNG SEJAHTERA',
+            'judullaporan' => 'Laporan  Hutang Giro',
+            'tanggal_cetak' => date('d-m-Y H:i:s'),
             'periode' => $request->periode,
-            
         ];
-
+        // dd($detailParams);
         $header = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'laporanpiutanggiro/report', $detailParams);
-
+            ->get(config('app.api_url') . 'laporanhutanggiro/report', $detailParams);
         $data = $header['data'];
+ 
+        // $dataHeader = $header['dataheader'];
         $user = Auth::user();
-        return view('reports.laporanpiutanggiro', compact('data', 'user', 'detailParams'));
+        // dd($data);
+        return view('reports.laporanhutanggiro', compact('data', 'user', 'detailParams'));
+
     }
+
+
+
+
 
     public function export(Request $request): void
     {
@@ -49,13 +84,14 @@ class LaporanPiutangGiroController extends MyController
             'judul' => 'PT. TRANSPORINDO AGUNG SEJAHTERA',
             'judullaporan' => 'Laporan  Hutang Giro',
             'tanggal_cetak' => date('d-m-Y H:i:s'),
+            'dari' => $request->dari,
 
         ];
        
         $responses = Http::withHeaders($request->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'laporanpiutanggiro/export', $detailParams);
+            ->get(config('app.api_url') . 'laporanhutanggiro/export', $detailParams);
         
         $pengeluaran = $responses['data'];
         $user = Auth::user();
@@ -64,14 +100,14 @@ class LaporanPiutangGiroController extends MyController
         $sheet = $spreadsheet->getActiveSheet();
       
         $sheet->setCellValue('A1', 'PT. TRANSPORINDO AGUNG SEJAHTERA');
-        $sheet->setCellValue('A2', 'Laporan Piutang Giro');
+        $sheet->setCellValue('A2', 'Laporan Hutang Giro');
         
         // $sheet->getStyle("A1")->getFont()->setSize(20)->setBold(true);
     
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->getStyle('A2')->getAlignment()->setHorizontal('left');
-        $sheet->mergeCells('A1:E1');
-        $sheet->mergeCells('A2:E2');
+        $sheet->mergeCells('A1:F1');
+        $sheet->mergeCells('A2:F2');
        
         $header_start_row = 4;
         $detail_start_row = 5;
@@ -103,6 +139,10 @@ class LaporanPiutangGiroController extends MyController
             [
                 'label' => 'TANGGAL BUKTI',
                 'index' => 'tglbukti',
+            ],
+            [
+                'label' => 'KETERANGAN',
+                'index' => 'keterangan',
             ],
             [
                 'label' => 'NO WARKAT',
@@ -138,13 +178,14 @@ class LaporanPiutangGiroController extends MyController
 
             $sheet->setCellValue("A$detail_start_row", $response_detail['nobukti']);
             $sheet->setCellValue("B$detail_start_row", date('d-m-Y', strtotime($response_detail['tglbukti'])));
-            $sheet->setCellValue("C$detail_start_row", $response_detail['nowarkat']);
-            $sheet->setCellValue("D$detail_start_row", $response_detail['nominal']);
-            $sheet->setCellValue("E$detail_start_row", date('d-m-Y', strtotime($response_detail['tgljatuhtempo'])));
+            $sheet->setCellValue("C$detail_start_row", $response_detail['keterangan']);
+            $sheet->setCellValue("D$detail_start_row", $response_detail['nowarkat']);
+            $sheet->setCellValue("E$detail_start_row", $response_detail['nominal']);
+            $sheet->setCellValue("F$detail_start_row", date('d-m-Y', strtotime($response_detail['tgljatuhtempo'])));
       
             
-            $sheet->getStyle("A$detail_start_row:E$detail_start_row")->applyFromArray($styleArray);
-            $sheet->getStyle("C$detail_start_row:E$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+            $sheet->getStyle("A$detail_start_row:F$detail_start_row")->applyFromArray($styleArray);
+            $sheet->getStyle("C$detail_start_row:F$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
             // $sheet->getStyle("B$detail_start_row:B$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
             // $sheet->getStyle("D$detail_start_row:D$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
             
@@ -163,6 +204,7 @@ class LaporanPiutangGiroController extends MyController
         $sheet->getColumnDimension('C')->setAutoSize(true);
         $sheet->getColumnDimension('D')->setAutoSize(true);
         $sheet->getColumnDimension('E')->setAutoSize(true);
+        $sheet->getColumnDimension('F')->setAutoSize(true);
 
 
 
@@ -222,7 +264,7 @@ $sheet->getStyle("A" . ($detail_start_row + 1) . ":$lastColumn" . ($detail_start
 
 
         $writer = new Xlsx($spreadsheet);
-        $filename = 'EXPORTPiutangGiro' . date('dmYHis');
+        $filename = 'EXPORTHutangGiro' . date('dmYHis');
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
         header('Cache-Control: max-age=0');

@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "6762b47e13826df4828b1953868cafcc",
+  "ReportGuid": "44771b233dc9898cbf53c30740d6868f",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://localhost/trucking/public/reports/ReportPembelian3.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportPembelianStok (1).mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1687572074000+0700)/",
+  "ReportChanged": "/Date(1687576681000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -39,7 +39,7 @@
             "Name": "tglbukti",
             "NameInSource": "tglbukti",
             "Alias": "tglbukti",
-            "Type": "System.DateTime"
+            "Type": "System.String"
           },
           "2": {
             "Name": "namasupplier",
@@ -93,6 +93,30 @@
             "Name": "keterangan",
             "NameInSource": "keterangan",
             "Alias": "keterangan",
+            "Type": "System.String"
+          },
+          "11": {
+            "Name": "judulLaporan",
+            "NameInSource": "judulLaporan",
+            "Alias": "judulLaporan",
+            "Type": "System.String"
+          },
+          "12": {
+            "Name": "judul",
+            "NameInSource": "judul",
+            "Alias": "judul",
+            "Type": "System.String"
+          },
+          "13": {
+            "Name": "tglcetak",
+            "NameInSource": "tglcetak",
+            "Alias": "tglcetak",
+            "Type": "System.String"
+          },
+          "14": {
+            "Name": "usercetak",
+            "NameInSource": "usercetak",
+            "Alias": "usercetak",
             "Type": "System.String"
           }
         },
@@ -590,7 +614,7 @@
               "Ident": "StiShape",
               "Name": "Shape7",
               "Guid": "ff3dd90802e40bc2349b0fa86188b9bc",
-              "ClientRectangle": "9.98,3.2,6.25,0.74",
+              "ClientRectangle": "9.98,3.2,6.25,0.98",
               "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -630,7 +654,7 @@
               "Ident": "StiShape",
               "Name": "Shape6",
               "Guid": "936500f89b1ea1c38926ec94b783864b",
-              "ClientRectangle": "1.02,3.2,4.42,0.74",
+              "ClientRectangle": "1.02,3.05,4.42,0.98",
               "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -827,7 +851,7 @@
               "Ident": "StiText",
               "Name": "Text28",
               "Guid": "f0596e5368b233002105407d463a81b5",
-              "ClientRectangle": "4.2,0.8,0.78,0.61",
+              "ClientRectangle": "3.8,0.8,0.78,0.61",
               "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -1391,7 +1415,7 @@
               "Guid": "3480d34a393f4c9cde5acb1dea176e7a",
               "CanGrow": true,
               "GrowToHeight": true,
-              "ClientRectangle": "1,1.3,4.43,0.51",
+              "ClientRectangle": "1,1.3,4.23,0.51",
               "ComponentPlacement": "d.DataBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -1469,7 +1493,7 @@
               "Guid": "e775a524fdcd561ed93c9a6147ff7787",
               "CanGrow": true,
               "GrowToHeight": true,
-              "ClientRectangle": "10,1.3,6.03,0.51",
+              "ClientRectangle": "10.08,1.3,6.03,0.51",
               "ComponentPlacement": "d.DataBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
