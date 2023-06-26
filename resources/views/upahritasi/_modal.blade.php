@@ -74,7 +74,18 @@
                 </div>
               </div>
             </div>
-
+            <div class="row form-group">
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">
+                  NOMINAL SUPIR <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-12 col-md-10">
+                <div class="input-group">
+                  <input type="text" name="nominalsupir" class="form-control" style="text-align: right">
+                </div>
+              </div>
+            </div>
 
             <div class="row form-group">
               <div class="col-12 col-md-2">
@@ -131,7 +142,6 @@
                   <tr>
                     <th width="5%">NO</th>
                     <th width="50%">CONTAINER</th>
-                    <th width="25%">NOMINAL SUPIR</th>
                     <th width="20%">LITER</th>
                     {{-- <th width="1%">AKSI</th> --}}
                   </tr>
@@ -144,9 +154,6 @@
                       <input type="text" name="container[]" class="form-control container-lookup">
                     </td>
 
-                    <td>
-                      <input type="text" name="nominalsupir[]" class="form-control autonumeric">
-                    </td>
                     <td>
                       <input type="text" name="liter[]" class="form-control autonumeric">
                     </td>
@@ -222,26 +229,11 @@
       let action = form.data('action')
       let data = $('#crudForm').serializeArray()
 
-      $('#crudForm').find(`[name="nominalsupir[]"]`).each((index, element) => {
-        data.filter((row) => row.name === 'nominalsupir[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominalsupir[]"]`)[index])
-      })
-
-      $('#crudForm').find(`[name="nominalkenek[]"]`).each((index, element) => {
-        data.filter((row) => row.name === 'nominalkenek[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominalkenek[]"]`)[index])
-      })
-
-      $('#crudForm').find(`[name="nominalkomisi[]"]`).each((index, element) => {
-        data.filter((row) => row.name === 'nominalkomisi[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominalkomisi[]"]`)[index])
-      })
-
-      $('#crudForm').find(`[name="nominaltol[]"]`).each((index, element) => {
-        data.filter((row) => row.name === 'nominaltol[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominaltol[]"]`)[index])
-      })
-
       $('#crudForm').find(`[name="liter[]"]`).each((index, element) => {
         data.filter((row) => row.name === 'liter[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="liter[]"]`)[index])
       })
 
+        data.filter((row) => row.name === 'nominalsupir')[0].value = AutoNumeric.getNumber($(`#crudForm [name="nominalsupir"]`)[0])
         data.filter((row) => row.name === 'jarak')[0].value = AutoNumeric.getNumber($(`#crudForm [name="jarak"]`)[0])
 
       data.push({
@@ -407,8 +399,11 @@
             $('.modal-loader').addClass('d-none')
           })
       })
-    setNominalSupir()
+    // setNominalSupir()
     initAutoNumeric(form.find(`[name="jarak"]`), {
+      minimumValue: 0
+    })
+    initAutoNumeric(form.find(`[name="nominalsupir"]`), {
       minimumValue: 0
     })
   }
@@ -628,6 +623,9 @@
 
           initAutoNumeric(form.find(`[name="jarak"]`), {
             minimumValue: 0
+          }) 
+          initAutoNumeric(form.find(`[name="nominalsupir"]`), {
+            minimumValue: 0
           })
 
           $.each(response.detail, (index, detail) => {
@@ -641,10 +639,6 @@
               </td>
               
               <td>
-                <input type="text" name="nominalsupir[]" class="form-control autonumeric" data-current-value="${detail.nominalsupir}" >
-              </td>
-              
-              <td>
                 <input type="text" name="liter[]" class="form-control autonumeric" data-current-value="${detail.liter}">
               </td>
               
@@ -652,7 +646,6 @@
             `)
             detailRow.find(`[name="container_id[]"]`).val(detail.container_id)
             detailRow.find(`[name="container[]"]`).val(detail.container)
-            detailRow.find(`[name="nominalsupir[]"]`).val(detail.nominalsupir)
             detailRow.find(`[name="liter[]"]`).val(detail.liter)
 
             $('#detailList tbody').append(detailRow)
@@ -660,7 +653,6 @@
             initAutoNumeric(detailRow.find('.autonumeric'), {
               minimumValue: 0
             })
-            setNominalSupir()
           })
 
           // setupRowShow(userId);
@@ -698,10 +690,6 @@
                 <input type="hidden" name="container_id[]">
                 <input type="text" name="container[]" readonly data-current-value="${detail.container}" class="form-control" readonly>
               </td>
-             
-              <td>
-                <input type="text" name="nominalsupir[]" data-current-value="${detail.nominalsupir}" class="form-control autonumeric">
-              </td>
               
               <td>
                 <input type="text" name="liter[]" data-current-value="${detail.liter}" class="form-control autonumeric">
@@ -711,7 +699,6 @@
             `)
           detailRow.find(`[name="container_id[]"]`).val(detail.container_id)
           detailRow.find(`[name="container[]"]`).val(detail.container)
-          detailRow.find(`[name="nominalsupir[]"]`).val(detail.nominalsupir)
           detailRow.find(`[name="liter[]"]`).val(detail.liter)
           initAutoNumeric(detailRow.find('.autonumeric'), {
             minimumValue: 0
@@ -744,11 +731,7 @@
                 <input type="hidden" name="container_id[]">
                 <input type="text" name="container[]" readonly data-current-value="${detail.container}" class="form-control" readonly>
               </td>
-             
-              <td>
-                <input type="text" name="nominalsupir[]" class="form-control autonumeric" data-current-value="${detail.nominalsupir}" >
-              </td>
-              
+                           
               <td>
                 <input type="text" name="liter[]" class="form-control autonumeric" data-current-value="${detail.liter}" >
               </td>
@@ -758,7 +741,6 @@
           detailRow.find(`[name="container_id[]"]`).val(detail.container_id)
           detailRow.find(`[name="container[]"]`).val(detail.container)
           initAutoNumeric(detailRow.find('.autonumeric'))
-          setNominalSupir()
           $('#detailList tbody').append(detailRow)
 
         })

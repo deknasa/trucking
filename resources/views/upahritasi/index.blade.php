@@ -66,6 +66,12 @@
             // formatter: currencyFormat
           },
           {
+            label: 'NOMINAL SUPIR',
+            name: 'nominalsupir',
+            align: 'right',
+            formatter: currencyFormat
+          },
+          {
             label: 'STATUS',
             name: 'statusaktif',
             stype: 'select',
@@ -451,7 +457,7 @@
     function getCekExport() {
       return new Promise((resolve, reject) => {
         $.ajax({
-          url: `${apiUrl}upahritasi/listpivot`,
+          url: `${apiUrl}upahritasi/export`,
           dataType: "JSON",
           headers: {
             Authorization: `Bearer ${accessToken}`

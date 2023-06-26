@@ -22,12 +22,6 @@
           },
          
           {
-            label: 'NOMINAL SUPIR',
-            name: 'nominalsupir',
-            align: 'right',
-            formatter: currencyFormat
-          },
-          {
             label: 'LITER',
             name: 'liter',
             align: 'right',
