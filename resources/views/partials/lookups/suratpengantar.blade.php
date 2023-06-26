@@ -79,6 +79,18 @@
           name: 'supir_id',
         },
         {
+          label: 'TRADO ID',
+          name: 'tradolookup',
+          hidden: true,
+          search: false
+        },
+        {
+          label: 'SUPIR ID',
+          name: 'supirlookup',
+          hidden: true,
+          search: false
+        },
+        {
           label: 'NOJOB',
           name: 'nojob',
         },

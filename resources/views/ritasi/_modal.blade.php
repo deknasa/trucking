@@ -54,7 +54,7 @@
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
-                  SURAT PENGANTAR <span class="text-danger">*</span></label>
+                  SURAT PENGANTAR</label>
               </div>
               <div class="col-12 col-md-10">
                 <input type="text" name="suratpengantar_nobukti" class="form-control suratpengantar-lookup">
@@ -121,7 +121,8 @@
 <script>
   let hasFormBindKeys = false
   let modalBody = $('#crudModal').find('.modal-body').html()
-
+  let tradoLookup = ''
+  let supirLookup = ''
   $(document).ready(function() {
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
@@ -168,7 +169,7 @@
 
       let tgldariheader = $('#tgldariheader').val();
       let tglsampaiheader = $('#tglsampaiheader').val()
-      
+
       switch (action) {
         case 'add':
           method = 'POST'
@@ -252,6 +253,8 @@
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
     $('#crudModal').find('.modal-body').html(modalBody)
+    tradoLookup = ''
+    supirLookup = ''
   })
 
   function createRitasi() {
@@ -273,7 +276,7 @@
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
     $('.modal-loader').addClass('d-none')
-    
+
   }
 
   function editRitasi(ritasiId) {
@@ -510,6 +513,8 @@
       },
       onSelectRow: (suratpengantar, element) => {
         element.val(suratpengantar.nobukti)
+        tradoLookup = suratpengantar.tradolookup
+        supirLookup = suratpengantar.supirlookup
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {
@@ -518,6 +523,12 @@
       onClear: (element) => {
         element.val('')
         element.data('currentValue', element.val())
+        $('#crudForm [name=trado_id]').val('')
+        $('#crudForm [name=trado]').val('').data('currentValue', '')
+        $('#crudForm [name=supir_id]').val('')
+        $('#crudForm [name=supir]').val('').data('currentValue', '')
+        tradoLookup = ''
+        supirLookup = ''
       }
     })
     $('.dari-lookup').lookup({
@@ -576,6 +587,7 @@
         this.postData = {
 
           Aktif: 'AKTIF',
+          trado_id: tradoLookup
         }
       },
       onSelectRow: (trado, element) => {
@@ -600,6 +612,7 @@
         this.postData = {
 
           Aktif: 'AKTIF',
+          supir_id: supirLookup
         }
       },
       onSelectRow: (supir, element) => {

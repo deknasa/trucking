@@ -12,6 +12,7 @@
       postData: {
         aktif: `{!! $Aktif ?? '' !!}`,
         absen: `{!! $AbsensiId ?? '' !!}`,
+        supir_id: `{!! $supir_id ?? '' !!}`,
       },
       idPrefix: 'supirLookup',
       colModel: [{
