@@ -73,6 +73,10 @@
             name: 'pelunasanpiutang_nobukti',
           },
           {
+            label: 'PENERIMAAN GIRO NO BUKTI',
+            name: 'penerimaangiro_nobukti',
+          },
+          {
             label: 'BANK PELANGGAN',
             name: 'bankpelanggan_id',
           },

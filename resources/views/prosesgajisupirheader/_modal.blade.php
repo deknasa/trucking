@@ -534,7 +534,7 @@
             $.each(selectedBorongan, function(index, item) {
                 data.push({
                     name: 'totalborongan[]',
-                    value: item
+                    value: parseFloat(item.replaceAll(',', ''))
                 })
             });
 

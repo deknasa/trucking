@@ -92,9 +92,9 @@
         rownumWidth: 45,
         rowList: [10, 20, 50],
         toolbar: [true, "top"],
-        // sortable: true,
-        // sortname: sortname,
-        // sortorder: sortorder,
+        sortable: false,
+        sortname: sortname,
+        sortorder: sortorder,
         page: page,
         viewrecords: true,
        
@@ -261,8 +261,9 @@
       $('#formRange [name=sampai]').val(totalRecord)
 
       autoNumericElements = new AutoNumeric.multiple('#formRange .autonumeric-report', {
-        digitGroupSeparator: '.',
-        decimalCharacter: ',',
+        digitGroupSeparator: ',',
+        decimalCharacter: '.',
+        decimalPlaces: 0,
         allowDecimalPadding: false,
         minimumValue: 1,
         maximumValue: totalRecord
@@ -290,7 +291,6 @@
       window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
     })
     function loadGrid() {
-      console.log('asd');
       $.ajax({
           url: `${apiUrl}mandorabsensisupir`,
           method: 'GET',

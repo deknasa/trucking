@@ -442,8 +442,9 @@
                 } else {
                   return showDialog(error);
                 }
+              } else if(indexes[0] == 'id') {
+                return showDialog(error);
               } else {
-
                 element = $(`#tableHutang tr#${parseInt(selectedRowsHutang[angka])}`).find(`td[aria-describedby="tableHutang_${indexes[0]}"]`)
                 $(element).addClass("ui-state-error");
                 $(element).attr("title", error[0].toLowerCase())

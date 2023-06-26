@@ -409,6 +409,52 @@
             }
           },
           {
+            label: 'EDIT TUJUAN',
+            name: 'statusedittujuan',
+            stype: 'select',
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['comboedittujuan'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['comboedittujuan'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+            `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              let statusEditTujaun = JSON.parse(value)
+              if (!statusEditTujaun) {
+                return ''
+              }
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusEditTujaun.WARNA}; color: #fff;">
+                  <span>${statusEditTujaun.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusEditTujaun = JSON.parse(rowObject.statusedittujuan)
+              if (!statusEditTujaun) {
+                return ` title=""`
+              }
+              return ` title="${statusEditTujaun.MEMO}"`
+            }
+          },
+          {
             label: 'MODIFIEDBY',
             name: 'modifiedby',
           },
@@ -588,7 +634,7 @@
           dropmenuHTML: [
             {
               id:'approvalBatalMuat',
-              text:"Batal Muat",
+              text:"un/Approval Batal Muat",
               onClick: () => {
                 selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                 approvalBatalMuat(selectedId);
@@ -596,7 +642,7 @@
             },
             {
               id:'approvalEditTujuan',
-              text:"Edit Tujuan",
+              text:"un/Approval Edit Tujuan",
               onClick: () => {
                 selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                 approvalEditTujuan(selectedId);
@@ -718,8 +764,9 @@
       $('#formRange [name=sampai]').val(totalRecord)
 
       autoNumericElements = new AutoNumeric.multiple('#formRange .autonumeric-report', {
-        digitGroupSeparator: '.',
-        decimalCharacter: ',',
+        digitGroupSeparator: ',',
+        decimalCharacter: '.',
+        decimalPlaces: 0,
         allowDecimalPadding: false,
         minimumValue: 1,
         maximumValue: totalRecord
@@ -735,10 +782,10 @@
           Authorization: `Bearer ${accessToken}`
         },
         success: response => {
-          let msg = `YAKIN status Berubah jadi BUkan Batal Muat`
+          let msg = `YAKIN Unapproval Batal Muat`
           console.log(statusBukanBatalMuat);
           if (response.data.statusbatalmuat === statusBukanBatalMuat) {
-            msg = `YAKIN status Berubah jadi Batal Muat`
+            msg = `YAKIN approval Batal Muat`
           }
           showConfirm(msg,response.data.nobukti,`suratpengantar/${response.data.id}/batalmuat`)
         },
@@ -754,10 +801,10 @@
           Authorization: `Bearer ${accessToken}`
         },
         success: response => {
-          let msg = `YAKIN status Berubah jadi Tidak Boleh Edit Tujuan`
+          let msg = `YAKIN Unapproval Edit Tujuan`
           console.log(statusEditTujuan);
           if (response.data.statusedittujuan === statusEditTujuan) {
-            msg = `YAKIN status Berubah jadi Edit Tujuan`
+            msg = `YAKIN approval Edit Tujuan`
           }
           showConfirm(msg,response.data.nobukti,`suratpengantar/${response.data.id}/edittujuan`)
         },

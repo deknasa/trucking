@@ -268,8 +268,12 @@
                                 class: 'btn btn-success btn-sm mr-1',
                                 onClick: () => {
                                     selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                                    if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                                        showDialog('Harap pilih salah satu record')
+                                    } else {
+                                        editKaryawan(selectedId)
+                                    }
 
-                                    editKaryawan(selectedId)
                                 }
                             },
                             {
@@ -409,10 +413,9 @@
                     let offset = parseInt(formRange.find('[name=dari]').val()) - 1
                     let limit = parseInt(formRange.find('[name=sampai]').val().replace('.', '')) - offset
                     params += `&offset=${offset}&limit=${limit}`
-                    console.log(offset)
-                    console.log(limit)
-
-                    getCekExport(params).then((response) => {
+                   
+                    getCekExport(params)
+                        .then((response) => {
                             if ($('#rangeModal').data('action') == 'export') {
                                 let xhr = new XMLHttpRequest()
                                 xhr.open('GET', `{{ config('app.api_url') }}karyawan/export?${params}`,
@@ -447,7 +450,7 @@
                             } else if ($('#rangeModal').data('action') == 'report') {
 
                                 if (totalRecord === 0) {
-                                    // alert('data tidak ada')
+                                    alert('data tidak ada')
                                     showDialog('Please select a row')
                                 } else {
                                     window.open(`{{ route('karyawan.report') }}?${params}`);
@@ -461,8 +464,8 @@
                             if (error.status === 422) {
                                 $('.is-invalid').removeClass('is-invalid')
                                 $('.invalid-feedback').remove()
+                               
                                 if (error.responseJSON.status != false) {
-
                                     errors = error.responseJSON.errors
                                     $.each(errors, (index, error) => {
                                         let indexes = index.split(".");
@@ -477,12 +480,11 @@
                                             ${error[0].toLowerCase()}
                                             </div>
                                         `).appendTo($(element).parent());
-
                                     });
                                     $(".is-invalid").first().focus();
                                 } else {
-                                    // showDialog(error.statusText, error.responseJSON.message)
-
+                                    // showDialog(error.statusText,error.responseJSON.errors.export)
+                                    console.log(error.responseJSON.errors)
                                 }
                             } else {
                                 showDialog(error.statusText)
@@ -490,6 +492,7 @@
                         })
 
                         .finally(() => {
+                            
                             $('.ui-button').click()
 
                             submitButton.removeAttr('disabled')

@@ -387,10 +387,11 @@
       }
 
       autoNumericElements = new AutoNumeric.multiple('#formRange .autonumeric-report', {
-        digitGroupSeparator: '.',
-        decimalCharacter: ',',
+        digitGroupSeparator: ',',
+        decimalCharacter: '.',
+        decimalPlaces: 0,
         allowDecimalPadding: false,
-        minimumValue: 0,
+        minimumValue: 1,
         maximumValue: totalRecord
       })
     })
@@ -421,7 +422,7 @@
       let offset = parseInt(formRange.find('[name=dari]').val()) - 1
       let limit = parseInt(formRange.find('[name=sampai]').val().replace('.', '')) - offset
       params += `&offset=${offset}&limit=${limit}`
-
+console.log(formRange.find('[name=dari]').val());
 
     getCekExport(params).then((response) => {
       if ($('#rangeModal').data('action') == 'export') {

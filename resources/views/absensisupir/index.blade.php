@@ -386,7 +386,7 @@
           dropmenuHTML: [
             {
               id:'approvalEdit',
-              text:"Absensi Approval Edit",
+              text:"UN/APPROVAL Absensi Edit",
               onClick: () => {
                 selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                 approveEdit(selectedId)
@@ -486,8 +486,9 @@
       $('#formRange [name=sampai]').val(totalRecord)
 
       autoNumericElements = new AutoNumeric.multiple('#formRange .autonumeric-report', {
-        digitGroupSeparator: '.',
-        decimalCharacter: ',',
+        digitGroupSeparator: ',',
+        decimalCharacter: '.',
+        decimalPlaces: 0,
         allowDecimalPadding: false,
         minimumValue: 1,
         maximumValue: totalRecord

@@ -285,8 +285,11 @@
             class: 'btn btn-success btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-              editUpahSupir(selectedId)
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Harap pilih salah satu record')
+              } else {
+                cekValidasidelete(selectedId,'EDIT')
+              }
             }
           },
           {
@@ -295,8 +298,11 @@
             class: 'btn btn-danger btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-              deleteUpahSupir(selectedId)
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Harap pilih salah satu record')
+              } else {
+                cekValidasidelete(selectedId,'DELETE')
+              }
             }
           },
           {
@@ -489,10 +495,11 @@
       }
 
       autoNumericElements = new AutoNumeric.multiple('#formRange .autonumeric-report', {
-        digitGroupSeparator: '.',
-        decimalCharacter: ',',
+        digitGroupSeparator: ',',
+        decimalCharacter: '.',
+        decimalPlaces: 0,
         allowDecimalPadding: false,
-        minimumValue: 0,
+        minimumValue: 1,
         maximumValue: totalRecord
       })
     })

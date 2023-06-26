@@ -88,6 +88,7 @@
                 $(element).parent().addClass('text-center')
 
                 $(element).on('click', function() {
+                  $(element).attr('disabled', true)
                   if ($(this).is(':checked')) {
                     selectAllRows()
                   } else {
@@ -407,7 +408,7 @@
             }
           }, 100)
 
-
+          $('#gs_').attr('disabled', false)
           setHighlight($(this))
         }
       })
@@ -594,8 +595,9 @@
       $('#formRange [name=sampai]').val(totalRecord)
 
       autoNumericElements = new AutoNumeric.multiple('#formRange .autonumeric-report', {
-        digitGroupSeparator: '.',
-        decimalCharacter: ',',
+        digitGroupSeparator: ',',
+        decimalCharacter: '.',
+        decimalPlaces: 0,
         allowDecimalPadding: false,
         minimumValue: 1,
         maximumValue: totalRecord

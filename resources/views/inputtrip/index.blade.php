@@ -847,6 +847,8 @@
       },
       onClear: (element) => {
         $('#crudForm [name=container_id]').first().val('')
+        $('#crudForm [name=upah_id]').val('')
+        $('#crudForm [name=upah]').val('')
         element.val('')
         element.data('currentValue', element.val())
         enabledTarif()
@@ -879,7 +881,9 @@
         enabledUpahSupir()
       },
       onClear: (element) => {
-        $('#crudForm [name=statuscontainer_id]').first().val('')
+        $('#crudForm [name=statuscontainer_id]').first().val('') 
+        $('#crudForm [name=upah_id]').val('')
+        $('#crudForm [name=upah]').val('')
         element.val('')
         element.data('currentValue', element.val())
         enabledUpahSupir()
@@ -1076,6 +1080,10 @@
       },
       onClear: (element) => {
         $('#crudForm [name=upah_id]').val('')
+        $('#crudForm [name=dari_id]').val('')
+        $('#crudForm [name=sampai_id]').val('')
+        $('#crudForm [name=dari]').val('')
+        $('#crudForm [name=sampai]').val('')
         enabledKota()
         kotadariId = 0
         kotasampaiId = 0
