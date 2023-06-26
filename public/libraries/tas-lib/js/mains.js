@@ -39,7 +39,7 @@ $(document).ready(function () {
 	});
 
 	$("#loader").addClass("d-none");
-	
+
 	$.fn.modal.Constructor.Default.backdrop = 'static'
 });
 
@@ -757,7 +757,7 @@ function loadGlobalSearch(grid) {
 		function () {
 			delay(function () {
 				abortGridLastRequest(grid)
-				
+
 				clearColumnSearch(grid);
 
 				var postData = grid.jqGrid("getGridParam", "postData"),
@@ -1076,7 +1076,7 @@ function showSuccessDialog(statusText = "", message = "") {
 			},
 		]
 	});
-} 
+}
 
 function showDialog(statusText="", message="") {
 	
@@ -1085,7 +1085,6 @@ function showDialog(statusText="", message="") {
 	`)
 	$("#dialog-message").append(
 		`<p class="text-dark"> ${statusText} </p> ${message}`
-
 	);
 	$("#dialog-message").dialog({
 		modal: true,
@@ -1100,6 +1099,20 @@ function showDialog(statusText="", message="") {
 	});
 
 	$(".ui-dialog-titlebar-close").find("p").remove();
+
+
+	// let css_header = {
+	// 	background: "#db1f30",
+	// 	color: "#fff",
+	// };
+	// $(".ui-dialog .ui-widget-header").css(css_header);
+	// let css_property = {
+	// 	border: "none",
+	// 	background: "#db1f30",
+	// 	color: "#fff",
+	// };
+
+	// $(".ui-dialog .ui-dialog-titlebar-close").css(css_property);
 }
 
 // function showDialog(response) {
@@ -1133,7 +1146,7 @@ function showConfirm(statusText = "", message = "", urlDestination = "") {
 	$("#dialog-confirm").append(`<p> ${statusText} </p><p> ${message} </p>`);
 	$("#dialog-confirm").dialog({
 		modal: true,
-		open: function() {
+		open: function () {
 			console.log($(this));
 		},
 		buttons: [
@@ -1341,12 +1354,33 @@ function getGridLastRequest(grid) {
 }
 
 function abortGridLastRequest(grid) {
-	getGridLastRequest(grid)?.abort()
-}
+	// getGridLastRequest(grid)?.abort()
 
+	var lastRequest = getGridLastRequest(grid);
+	if (lastRequest) {
+		lastRequest.abort();
+		grid.abortComplete = false; // Set completion flag to false
+		lastRequest.onreadystatechange = function () {
+			if (lastRequest.readyState === 4) {
+				grid.abortComplete = true; // Set completion flag to true
+			}
+		};
+	}
+} 
+function isAbortComplete(grid) {
+	return grid.abortComplete !== false;
+}
+function isAbortComplete(grid) {
+	return grid.abortComplete !== false;
+}
 function clearGridData(grid) {
 	grid.jqGrid('setGridParam', {
 		datatype: 'local',
+		data: []
+	}).trigger('reloadGrid')
+}
+function clearGridHeader(grid) {
+	grid.jqGrid('setGridParam', {
 		data: []
 	}).trigger('reloadGrid')
 }

@@ -286,6 +286,10 @@
           if (data.data.length === 0) {
             abortGridLastRequest($('#detail'))
             clearGridData($('#detail'))
+            $('#jqGrid').each((index, element) => {
+              abortGridLastRequest($(element))
+              clearGridHeader($(element))
+            })
           }
           
           $(document).unbind('keydown')
@@ -326,6 +330,8 @@
             $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
           }
 
+          $('#left-nav').find('button').attr('disabled', false)
+          permission() 
           setHighlight($(this))
         },
       })
@@ -338,7 +344,7 @@
         groupOp: 'AND',
         beforeSearch: function() {
           abortGridLastRequest($(this))
-          
+          $('#left-nav').find(`button:not(#add)`).attr('disabled', 'disabled')
           clearGlobalSearch($('#jqGrid'))
         }
       })
@@ -496,22 +502,24 @@
       });
     }
 
-    if (!`{{ $myAuth->hasPermission('tarif', 'store') }}`) {
-      $('#add').attr('disabled', 'disabled')
-    }
+    function permission() {
+      if (!`{{ $myAuth->hasPermission('tarif', 'store') }}`) {
+        $('#add').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('tarif', 'update') }}`) {
-      $('#edit').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('tarif', 'update') }}`) {
+        $('#edit').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('tarif', 'destroy') }}`) {
-      $('#delete').attr('disabled', 'disabled')
-    }
-    if (!`{{ $myAuth->hasPermission('tarif', 'export') }}`) {
-      $('#export').attr('disabled', 'disabled')
-    }
-    if (!`{{ $myAuth->hasPermission('tarif', 'report') }}`) {
-      $('#report').attr('disabled', 'disabled')
+      if (!`{{ $myAuth->hasPermission('tarif', 'destroy') }}`) {
+        $('#delete').attr('disabled', 'disabled')
+      }
+      if (!`{{ $myAuth->hasPermission('tarif', 'export') }}`) {
+        $('#export').attr('disabled', 'disabled')
+      }
+      if (!`{{ $myAuth->hasPermission('tarif', 'report') }}`) {
+        $('#report').attr('disabled', 'disabled')
+      }
     }
 
     $('#importModal').on('shown.bs.modal', function() {

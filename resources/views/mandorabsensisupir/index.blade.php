@@ -24,35 +24,56 @@
   let totalRecord
   let limit
   let postData
-  let sortname = 'trado_id'
+  let sortname = 'kodetrado'
   let sortorder = 'asc'
   let autoNumericElements = []
-  let rowNum = 10
-
+  let rowNum = 0
   $(document).ready(function() {
 
-    loadGrid()
+    // loadGrid()
 
     $("#jqGrid").jqGrid({
-        // url: `${apiUrl}mandorabsensisupir`,
-        // mtype: "GET",
+        url: `${apiUrl}mandorabsensisupir`,
+        mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
-        datatype: "local",
-        colModel: [{
-            label: 'ID',
+        datatype: "json",
+        // datatype: "local",
+        data: {
+          limit: 0,
+          sortIndex:'kodetrado',
+          sortOrder:'asc',
+        },
+        datatype: "json",
+        colModel: [
+          {
+            label: 'id',
             name: 'id',
             width: '50px',
             search: false,
             hidden: true
           },
           {
-            label: 'Trado',
+            label: 'trado_id',
             name: 'trado_id',
+            width: '50px',
+            search: false,
+            hidden: true
+          },
+          {
+            label: 'supir_id',
+            name: 'supir_id',
+            width: '50px',
+            search: false,
+            hidden: true
+          },
+          {
+            label: 'Trado',
+            name: 'kodetrado',
           },
           {
             label: 'Supir',
-            name: 'supir_id',
+            name: 'namasupir',
           },
           {
             label: 'JAM',
@@ -66,7 +87,7 @@
           },
           {
             label: 'status',
-            name: 'absen_id',
+            name: 'absentrado',
           },
           {
             label: 'keterangan',
@@ -90,14 +111,23 @@
         rowNum: rowNum,
         rownumbers: true,
         rownumWidth: 45,
-        rowList: [10, 20, 50],
+        rowList: [10, 20, 50,0],
         toolbar: [true, "top"],
         sortable: false,
         sortname: sortname,
         sortorder: sortorder,
         page: page,
         viewrecords: true,
-       
+        prmNames: {
+          sort: 'sortIndex',
+          order: 'sortOrder',
+          rows: 'limit'
+        },
+        jsonReader: {
+          root: 'data',
+          total: 'attributes.total',
+          records: 'attributes.records',
+        },
         
         loadBeforeSend: function(jqXHR) {
           jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
@@ -177,10 +207,11 @@
             onClick: () => {
               
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              let rowData = $("#jqGrid").jqGrid("getRowData", selectedId);
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Please select a row')
               } else {
-                cekValidasiAdd(selectedId)
+                cekValidasiAdd(rowData.trado_id)
               }
             }
           },
@@ -190,10 +221,12 @@
             class: 'btn btn-success btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              let rowData = $("#jqGrid").jqGrid("getRowData", selectedId);
+              
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Please select a row')
               } else {
-                cekValidasi(selectedId,'edit')
+                cekValidasi(rowData.trado_id,'edit')
               }
             }
           },
@@ -203,10 +236,11 @@
             class: 'btn btn-danger btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              let rowData = $("#jqGrid").jqGrid("getRowData", selectedId);
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Please select a row')
               } else {
-                cekValidasi(selectedId,'delete')
+                cekValidasi(rowData.trado_id,'delete')
               }
             }
           },
@@ -290,28 +324,28 @@
 
       window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
     })
-    function loadGrid() {
-      $.ajax({
-          url: `${apiUrl}mandorabsensisupir`,
-          method: 'GET',
-        dataType: 'JSON',
-        data: {
-          limit: 0,
-          sortIndex:'trado_id',
-          sortOrder:'asc',
-        },
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        success: response => {
-          $('#jqGrid').setGridParam({
-            datatype: "local",
-            data:response.data,
-            rowNum: response.data.length
-          }).trigger('reloadGrid')
-        }
-      })
-    }
+    // function loadGrid() {
+    //   $.ajax({
+    //       url: `${apiUrl}mandorabsensisupir`,
+    //       method: 'GET',
+    //     dataType: 'JSON',
+    //     data: {
+    //       limit: 0,
+    //       sortIndex:'trado_id',
+    //       sortOrder:'asc',
+    //     },
+    //     headers: {
+    //       Authorization: `Bearer ${accessToken}`
+    //     },
+    //     success: response => {
+    //       $('#jqGrid').setGridParam({
+    //         datatype: "local",
+    //         data:response.data,
+    //         rowNum: response.data.length
+    //       }).trigger('reloadGrid')
+    //     }
+    //   })
+    // }
   })
 </script>
 @endpush()

@@ -151,33 +151,33 @@ class UpahRitasiController extends MyController
 
     public function report(Request $request)
     {
-     
+
         $detailParams = [
             'forReport' => true,
             'upahritasi_id' => $request->id
         ];
-    
+
         $upahritasi_detail = Http::withHeaders(request()->header())
-        ->withOptions(['verify' => false])
-        ->withToken(session('access_token'))
-        ->get(config('app.api_url') . 'upahritasirincian', $detailParams);
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'upahritasirincian', $detailParams);
 
-       
-    
-    $upahritasi_details = $upahritasi_detail['data'];
 
-    $user = $upahritasi_detail->json()['user'];
-    
-    return view('reports.upahritasi', compact('upahritasi_details', 'user'));
+
+        $upahritasi_details = $upahritasi_detail['data'];
+
+        $user = $upahritasi_detail->json()['user'];
+
+        return view('reports.upahritasi', compact('upahritasi_details', 'user'));
     }
-    
+
     public function export(Request $request): void
     {
-        
+
         $upahritasi = Http::withHeaders($request->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'upahritasi/listpivot?dari=' . $request->dari . '&sampai=' . $request->sampai)['data'];
+            ->get(config('app.api_url') . 'upahritasi/export?dari=' . $request->dari . '&sampai=' . $request->sampai)['data'];
 
         if ($upahritasi == null) {
             echo "<script>window.close();</script>";
@@ -255,7 +255,7 @@ class UpahRitasiController extends MyController
                             $tgl
                         );
                         $sheet->setCellValue($alphabets[$data_columns_index] . $detail_start_row, $excelDateValue);
-                    }else{
+                    } else {
                         $sheet->setCellValue($alphabets[$data_columns_index] . $detail_start_row, $response_detail[$data_column['index']]);
                     }
                     $sheet->getColumnDimension($alphabets[$data_columns_index])->setAutoSize(true);

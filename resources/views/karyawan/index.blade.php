@@ -236,7 +236,9 @@
                                 $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
                             }
 
-                            setHighlight($(this))
+                        $('#left-nav').find('button').attr('disabled', false)
+                        permission() 
+                        setHighlight($(this))
                         },
                     })
 
@@ -247,9 +249,9 @@
                         defaultSearch: 'cn',
                         groupOp: 'AND',
                         beforeSearch: function() {
-                            abortGridLastRequest($(this))
-
-                            clearGlobalSearch($('#jqGrid'))
+                        abortGridLastRequest($(this))
+                        $('#left-nav').find(`button:not(#add)`).attr('disabled', 'disabled')
+                        clearGlobalSearch($('#jqGrid'))
                         }
                     })
 
@@ -338,6 +340,7 @@
                     .addClass('btn-sm btn-warning')
                     .parent().addClass('px-1')
 
+                    function permission() {
                 if (!`{{ $myAuth->hasPermission('karyawan', 'store') }}`) {
                     $('#add').attr('disabled', 'disabled')
                 }
@@ -354,7 +357,7 @@
                 }
                 if (!`{{ $myAuth->hasPermission('karyawan', 'report') }}`) {
                     $('#report').attr('disabled', 'disabled')
-                }
+                } }
 
                 $('#rangeModal').on('shown.bs.modal', function() {
                     if (autoNumericElements.length > 0) {
@@ -413,7 +416,7 @@
                     let offset = parseInt(formRange.find('[name=dari]').val()) - 1
                     let limit = parseInt(formRange.find('[name=sampai]').val().replace('.', '')) - offset
                     params += `&offset=${offset}&limit=${limit}`
-                   
+
                     getCekExport(params)
                         .then((response) => {
                             if ($('#rangeModal').data('action') == 'export') {
@@ -464,35 +467,44 @@
                             if (error.status === 422) {
                                 $('.is-invalid').removeClass('is-invalid')
                                 $('.invalid-feedback').remove()
-                               
-                                if (error.responseJSON.status != false) {
-                                    errors = error.responseJSON.errors
-                                    $.each(errors, (index, error) => {
-                                        let indexes = index.split(".");
+                                let status
+                                if (error.responseJSON.hasOwnProperty('status') == false) {
+                                    status = false
+                                } else {
+                                    status = true
+                                }
+                                statusText = error.statusText
+                                errors = error.responseJSON.errors
+                                $.each(errors, (index, error) => {
+                                    let indexes = index.split(".");
+                                    if (status === false) {
                                         indexes[0] = 'sampai'
-                                        let element;
-                                        element = $('#rangeModal').find(`[name="${indexes[0]}"]`)[
-                                            0];
-
+                                    }
+                                    let element;
+                                    element = $('#rangeModal').find(`[name="${indexes[0]}"]`)[
+                                        0];
+                                    if ($(element).length > 0 && !$(element).is(":hidden")) {
                                         $(element).addClass("is-invalid");
                                         $(`
-                                            <div class="invalid-feedback">
-                                            ${error[0].toLowerCase()}
-                                            </div>
+                                                <div class="invalid-feedback">
+                                                ${error[0].toLowerCase()}
+                                                </div>
                                         `).appendTo($(element).parent());
-                                    });
-                                    $(".is-invalid").first().focus();
-                                } else {
-                                    // showDialog(error.statusText,error.responseJSON.errors.export)
-                                    console.log(error.responseJSON.errors)
-                                }
+                                    } else {
+                                        setTimeout(() => {
+                                            return showDialog(error);
+                                        }, 100)
+                                    }
+                                });
+                                $(".is-invalid").first().focus();
+
                             } else {
                                 showDialog(error.statusText)
                             }
                         })
 
                         .finally(() => {
-                            
+
                             $('.ui-button').click()
 
                             submitButton.removeAttr('disabled')

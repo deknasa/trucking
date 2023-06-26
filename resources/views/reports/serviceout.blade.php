@@ -34,14 +34,14 @@
       report.dictionary.dataSources.clear()
 
       dataSet.readJson({
-        'serviceout': <?= json_encode($serviceout_details); ?>,
-        'user': <?= json_encode($user); ?>
+        'serviceOut': <?= json_encode($serviceOut); ?>,
+        'serviceOut_details': <?= json_encode($serviceOut_details); ?>
       })
 
       report.regData(dataSet.dataSetName, '', dataSet)
       report.dictionary.synchronize()
-    //   designer.report = report;
-    //   designer.renderHtml('content');
+      designer.report = report;
+      designer.renderHtml('content');
       viewer.report = report
     }
   </script>

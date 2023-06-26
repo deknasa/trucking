@@ -1,12 +1,15 @@
 @extends('layouts.master')
 
 @section('content')
-<!-- Grid -->
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-12">
-      <table id="jqGrid"></table>
+    <!-- Grid -->
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <table id="jqGrid"></table>
+            </div>
+        </div>
     </div>
+
   </div>
 </div>
 
@@ -237,66 +240,181 @@
                         $i++;
                       endforeach
 
-                      ?>
-            `,
-              dataInit: function(element) {
-                $(element).select2({
-                  width: 'resolve',
-                  theme: "bootstrap4"
-                });
-              }
-            },
-            formatter: (value, options, rowData) => {
-              let statusDaftarHarga = JSON.parse(value)
 
-              let formattedValue = $(`
+    @include('supplier._modal')
+
+    @push('scripts')
+        <script>
+            let indexRow = 0;
+            let page = 1;
+            let pager = '#jqGridPager'
+            let popup = "";
+            let id = "";
+            let triggerClick = true;
+            let highlightSearch;
+            let totalRecord
+            let limit
+            let postData
+            let sortname = 'namasupplier'
+            let sortorder = 'asc'
+            let autoNumericElements = []
+            let rowNum = 10
+
+            $(document).ready(function() {
+                $("#jqGrid").jqGrid({
+                        url: `${apiUrl}supplier`,
+                        mtype: "GET",
+                        styleUI: 'Bootstrap4',
+                        iconSet: 'fontAwesome',
+                        datatype: "json",
+                        colModel: [{
+                                label: 'id',
+                                name: 'id',
+                                width: '50px',
+                                search: false,
+                                hidden: true
+                            },
+                            {
+                                label: 'nama supplier',
+                                name: 'namasupplier',
+                            },
+                            {
+                                label: 'nama kontak',
+                                name: 'namakontak',
+                            },
+                            {
+                                label: 'alamat',
+                                name: 'alamat',
+                            },
+
+                            {
+                                label: 'kota',
+                                name: 'kota',
+                            },
+                            {
+                                label: 'kode pos',
+                                name: 'kodepos',
+                            },
+                            {
+                                label: 'NO TELEPON (1)',
+                                name: 'notelp1',
+                            },
+                            {
+                                label: 'NO TELEPON (2)',
+                                name: 'notelp2',
+                            },
+                            {
+                                label: 'email',
+                                name: 'email',
+                            },
+
+                            {
+                                label: 'web',
+                                name: 'web',
+                            },
+                            {
+                                label: 'nama pemilik',
+                                name: 'namapemilik',
+                            },
+                            {
+                                label: 'jenis usaha',
+                                name: 'jenisusaha',
+                            },
+                            // {
+                            //   label: 'top',
+                            //   name: 'top',
+                            // },
+                            {
+                                label: 'bank',
+                                name: 'bank',
+                            },
+                            {
+                                label: 'rekening bank',
+                                name: 'rekeningbank',
+                            },
+
+                            {
+                                label: 'jabatan',
+                                name: 'jabatan',
+                            },
+                            {
+                                label: 'status daftar harga',
+                                name: 'statusdaftarharga',
+                                width: 180,
+                                stype: 'select',
+                                searchoptions: {
+                                    value: `<?php
+                                    $i = 1;
+                                    
+                                    foreach ($data['combodaftarharga'] as $status):
+                                        echo "$status[param]:$status[parameter]";
+                                        if ($i !== count($data['combodaftarharga'])) {
+                                            echo ';';
+                                        }
+                                        $i++;
+                                    endforeach;
+                                    
+                                    ?>
+            `,
+                                    dataInit: function(element) {
+                                        $(element).select2({
+                                            width: 'resolve',
+                                            theme: "bootstrap4"
+                                        });
+                                    }
+                                },
+                                formatter: (value, options, rowData) => {
+                                    let statusDaftarHarga = JSON.parse(value)
+
+                                    let formattedValue = $(`
                 <div class="badge" style="background-color: ${statusDaftarHarga.WARNA}; color: #fff;">
                   <span>${statusDaftarHarga.SINGKATAN}</span>
                 </div>
               `)
 
-              return formattedValue[0].outerHTML
-            },
-            cellattr: (rowId, value, rowObject) => {
-              let statusDaftarHarga = JSON.parse(rowObject.statusdaftarharga)
+                                    return formattedValue[0].outerHTML
+                                },
+                                cellattr: (rowId, value, rowObject) => {
+                                    let statusDaftarHarga = JSON.parse(rowObject.statusdaftarharga)
 
-              return ` title="${statusDaftarHarga.MEMO}"`
-            }
-          },
-          {
-            label: 'status aktif',
-            name: 'statusaktif',
-            width: 130,
-            stype: 'select',
-            searchoptions: {
-              value: `<?php
-                      $i = 1;
-
-                      foreach ($data['comboaktif'] as $status) :
-                        echo "$status[param]:$status[parameter]";
-                        if ($i !== count($data['comboaktif'])) {
-                          echo ";";
-                        }
-                        $i++;
-                      endforeach
-
-                      ?>
+                                    return ` title="${statusDaftarHarga.MEMO}"`
+                                }
+                            },
+                            {
+                                label: 'status aktif',
+                                name: 'statusaktif',
+                                width: 130,
+                                stype: 'select',
+                                searchoptions: {
+                                    value: `<?php
+                                    $i = 1;
+                                    
+                                    foreach ($data['comboaktif'] as $status):
+                                        echo "$status[param]:$status[parameter]";
+                                        if ($i !== count($data['comboaktif'])) {
+                                            echo ';';
+                                        }
+                                        $i++;
+                                    endforeach;
+                                    
+                                    ?>
             `,
-              dataInit: function(element) {
-                $(element).select2({
-                  width: 'resolve',
-                  theme: "bootstrap4"
-                });
-              }
-            },
-            formatter: (value, options, rowData) => {
-              let statusAktif = JSON.parse(value)
+                                    dataInit: function(element) {
+                                        $(element).select2({
+                                            width: 'resolve',
+                                            theme: "bootstrap4"
+                                        });
+                                    }
+                                },
+                                formatter: (value, options, rowData) => {
+                                    let statusAktif = JSON.parse(value)
 
-              let formattedValue = $(`
+                                    let formattedValue = $(`
                 <div class="badge" style="background-color: ${statusAktif.WARNA}; color: #fff;">
                   <span>${statusAktif.SINGKATAN}</span>
                 </div>
               `)
+
 
               return formattedValue[0].outerHTML
             },
@@ -750,3 +868,4 @@
 </script>
 @endpush()
 @endsection
+

@@ -1,12 +1,15 @@
 @extends('layouts.master')
 
 @section('content')
-<!-- Grid -->
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-12">
-      <table id="jqGrid"></table>
+    <!-- Grid -->
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <table id="jqGrid"></table>
+            </div>
+        </div>
     </div>
+
   </div>
 </div>
 
@@ -73,23 +76,83 @@
                         $i++;
                       endforeach
 
-                      ?>
-            `,
-              dataInit: function(element) {
-                $(element).select2({
-                  width: 'resolve',
-                  theme: "bootstrap4"
-                });
-              }
-            },
-            formatter: (value, options, rowData) => {
-              let statusAktif = JSON.parse(value)
 
-              let formattedValue = $(`
+    @include('pelanggan._modal')
+
+    @push('scripts')
+        <script>
+            let indexRow = 0;
+            let page = 1;
+            let pager = '#jqGridPager'
+            let popup = "";
+            let id = "";
+            let triggerClick = true;
+            let highlightSearch;
+            let totalRecord
+            let limit
+            let postData
+            let sortname = 'kodepelanggan'
+            let sortorder = 'asc'
+            let autoNumericElements = []
+            let rowNum = 10
+
+            $(document).ready(function() {
+                $("#jqGrid").jqGrid({
+                        url: `${apiUrl}pelanggan`,
+                        mtype: "GET",
+                        styleUI: 'Bootstrap4',
+                        iconSet: 'fontAwesome',
+                        datatype: "json",
+                        colModel: [{
+                                label: 'ID',
+                                name: 'id',
+                                width: '50px',
+                                search: false,
+                                hidden: true
+                            },
+                            {
+                                label: 'kode pelanggan',
+                                name: 'kodepelanggan',
+                            },
+                            {
+                                label: 'nama pelanggan',
+                                name: 'namapelanggan',
+                            },
+                            {
+                                label: 'Status',
+                                name: 'statusaktif',
+                                width: 100,
+                                stype: 'select',
+                                searchoptions: {
+                                    value: `<?php
+                                    $i = 1;
+                                    
+                                    foreach ($data['combo'] as $status):
+                                        echo "$status[param]:$status[parameter]";
+                                        if ($i !== count($data['combo'])) {
+                                            echo ';';
+                                        }
+                                        $i++;
+                                    endforeach;
+                                    
+                                    ?>
+            `,
+                                    dataInit: function(element) {
+                                        $(element).select2({
+                                            width: 'resolve',
+                                            theme: "bootstrap4"
+                                        });
+                                    }
+                                },
+                                formatter: (value, options, rowData) => {
+                                    let statusAktif = JSON.parse(value)
+
+                                    let formattedValue = $(`
                 <div class="badge" style="background-color: ${statusAktif.WARNA}; color: #fff;">
                   <span>${statusAktif.SINGKATAN}</span>
                 </div>
               `)
+
 
               return formattedValue[0].outerHTML
             },
@@ -496,3 +559,4 @@
 </script>
 @endpush()
 @endsection
+

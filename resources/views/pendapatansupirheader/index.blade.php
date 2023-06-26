@@ -355,6 +355,10 @@
             clearGridData($('#detail'))
             abortGridLastRequest($('#historyGrid'))
             clearGridData($('#historyGrid'))
+            $('#jqGrid').each((index, element) => {
+              abortGridLastRequest($(element))
+              clearGridHeader($(element))
+            })
           }
           
           $(document).unbind('keydown')
@@ -407,7 +411,8 @@
               $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
             }
           }, 100)
-
+          $('#left-nav').find('button').attr('disabled', false)
+          permission()
           $('#gs_').attr('disabled', false)
           setHighlight($(this))
         }
@@ -421,6 +426,7 @@
         groupOp: 'AND',
         disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
+          $('#left-nav').find(`button:not(#add)`).attr('disabled', 'disabled')
           $(this).setGridParam({
             postData: {
               tgldari: $('#tgldariheader').val(),
@@ -555,6 +561,7 @@
       })
       .parent().addClass('px-1')
 
+      function permission() {
     if (!`{{ $myAuth->hasPermission('pendapatansupirheader', 'store') }}`) {
       $('#add').attr('disabled', 'disabled')
     }
@@ -578,7 +585,7 @@
     if (!`{{ $myAuth->hasPermission('pendapatansupirheader', 'approval') }}`) {
       $('#approveun').attr('disabled', 'disabled')
       $("#jqGrid").hideCol("");
-    }
+    }}
 
     $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {
