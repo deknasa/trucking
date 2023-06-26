@@ -47,6 +47,18 @@
                   <input type="text" name="agen" class="form-control agen-lookup">
                 </div>
               </div>
+              <div class="row form-group">
+                <div class="col-12 col-md-2">
+                  <label class="col-form-label">
+                    TGL JATUH TEMPO <span class="text-danger">*</span>
+                  </label>
+                </div>
+                <div class="col-12 col-md-10">
+                  <div class="input-group">
+                    <input type="text" name="tgljatuhtempo" class="form-control datepicker">
+                  </div>
+                </div>
+              </div>
             </div>
 
             <div class="table-scroll table-responsive">
@@ -299,6 +311,7 @@
 
     $('#table_body').html('')
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+    $('#crudForm').find(`[name="tgljatuhtempo"]`).val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
     addRow()
     setTotal()
   }
@@ -442,6 +455,7 @@
           })
 
           form.find(`[name="tglbukti"]`).val(dateFormat(response.data.tglbukti))
+          form.find(`[name="tgljatuhtempo"]`).val(dateFormat(response.data.tgljatuhtempo))
           form.find(`[name="agen"]`).val(response.data.agen.namaagen)
           form.find(`[name="agen"]`).data('currentValue', response.data.agen.namaagen)
 
