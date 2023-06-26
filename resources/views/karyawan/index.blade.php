@@ -413,7 +413,7 @@
                     let offset = parseInt(formRange.find('[name=dari]').val()) - 1
                     let limit = parseInt(formRange.find('[name=sampai]').val().replace('.', '')) - offset
                     params += `&offset=${offset}&limit=${limit}`
-                   
+
                     getCekExport(params)
                         .then((response) => {
                             if ($('#rangeModal').data('action') == 'export') {
@@ -464,35 +464,44 @@
                             if (error.status === 422) {
                                 $('.is-invalid').removeClass('is-invalid')
                                 $('.invalid-feedback').remove()
-                               
-                                if (error.responseJSON.status != false) {
-                                    errors = error.responseJSON.errors
-                                    $.each(errors, (index, error) => {
-                                        let indexes = index.split(".");
+                                let status
+                                if (error.responseJSON.hasOwnProperty('status') == false) {
+                                    status = false
+                                } else {
+                                    status = true
+                                }
+                                statusText = error.statusText
+                                errors = error.responseJSON.errors
+                                $.each(errors, (index, error) => {
+                                    let indexes = index.split(".");
+                                    if (status === false) {
                                         indexes[0] = 'sampai'
-                                        let element;
-                                        element = $('#rangeModal').find(`[name="${indexes[0]}"]`)[
-                                            0];
-
+                                    }
+                                    let element;
+                                    element = $('#rangeModal').find(`[name="${indexes[0]}"]`)[
+                                        0];
+                                    if ($(element).length > 0 && !$(element).is(":hidden")) {
                                         $(element).addClass("is-invalid");
                                         $(`
-                                            <div class="invalid-feedback">
-                                            ${error[0].toLowerCase()}
-                                            </div>
+                                                <div class="invalid-feedback">
+                                                ${error[0].toLowerCase()}
+                                                </div>
                                         `).appendTo($(element).parent());
-                                    });
-                                    $(".is-invalid").first().focus();
-                                } else {
-                                    // showDialog(error.statusText,error.responseJSON.errors.export)
-                                    console.log(error.responseJSON.errors)
-                                }
+                                    } else {
+                                        setTimeout(() => {
+                                            return showDialog(error);
+                                        }, 100)
+                                    }
+                                });
+                                $(".is-invalid").first().focus();
+
                             } else {
                                 showDialog(error.statusText)
                             }
                         })
 
                         .finally(() => {
-                            
+
                             $('.ui-button').click()
 
                             submitButton.removeAttr('disabled')
