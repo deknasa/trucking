@@ -1,450 +1,466 @@
 @extends('layouts.master')
 
 @section('content')
-<!-- Grid -->
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-12">
-      <table id="jqGrid"></table>
+    <!-- Grid -->
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <table id="jqGrid"></table>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
 
-@include('parameter._modal')
-@include('parameter._detail')
+    @include('parameter._modal')
+    @include('parameter._detail')
 
-@push('scripts')
-<script>
-  let indexRow = 0;
-  let page = 1;
-  let pager = '#jqGridPager'
-  let popup = "";
-  let id = "";
-  let triggerClick = true;
-  let highlightSearch;
-  let totalRecord
-  let limit
-  let postData
-  let sortname = 'grp'
-  let sortorder = 'asc'
-  let autoNumericElements = []
-  let rowNum = 10
-  let hasDetail = false
+    @push('scripts')
+        <script>
+            let indexRow = 0;
+            let page = 1;
+            let pager = '#jqGridPager'
+            let popup = "";
+            let id = "";
+            let triggerClick = true;
+            let highlightSearch;
+            let totalRecord
+            let limit
+            let postData
+            let sortname = 'grp'
+            let sortorder = 'asc'
+            let autoNumericElements = []
+            let rowNum = 10
+            let hasDetail = false
 
-  $(document).ready(function() {
-    $("#jqGrid").jqGrid({
-        url: `${apiUrl}parameter`,
-        mtype: "GET",
-        styleUI: 'Bootstrap4',
-        iconSet: 'fontAwesome',
-        datatype: "json",
-        colModel: [{
-            label: 'ID',
-            name: 'id',
-            width: '50px',
-            search: false,
-            hidden: true
-          },
-          {
-            label: 'GROUP',
-            name: 'grp',
-          },
-          {
-            label: 'SUBGROUP',
-            name: 'subgrp',
-          },
-          {
-            label: 'NAMA PARAMETER',
-            name: 'text',
-          },
-          {
-            label: 'KELOMPOK',
-            name: 'kelompok',
-          },       
-          {
-            label: 'DEFAULT',
-            name: 'default',
-          },
-          {
-            label: 'TYPE',
-            name: 'type',
-          },
-          {
-            label: 'MODIFIEDBY',
-            name: 'modifiedby',
-          },
-          {
-            label: 'CREATEDAT',
-            name: 'created_at',
-            align: 'right',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y H:i:s"
-            }
-          },
-          {
-            label: 'UPDATEDAT',
-            name: 'updated_at',
-            align: 'right',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y H:i:s"
-            }
-          },
-        ],
-        autowidth: true,
-        shrinkToFit: false,
-        height: 350,
-        rowNum: rowNum,
-        rownumbers: true,
-        rownumWidth: 45,
-        rowList: [10, 20, 50, 0],
-        toolbar: [true, "top"],
-        sortable: true,
-        sortname: sortname,
-        sortorder: sortorder,
-        page: page,
-        viewrecords: true,
-        prmNames: {
-          sort: 'sortIndex',
-          order: 'sortOrder',
-          rows: 'limit'
-        },
-        jsonReader: {
-          root: 'data',
-          total: 'attributes.totalPages',
-          records: 'attributes.totalRows',
-        },
-        loadBeforeSend: function(jqXHR) {
-          jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+            $(document).ready(function() {
+                $("#jqGrid").jqGrid({
+                        url: `${apiUrl}parameter`,
+                        mtype: "GET",
+                        styleUI: 'Bootstrap4',
+                        iconSet: 'fontAwesome',
+                        datatype: "json",
+                        colModel: [{
+                                label: 'ID',
+                                name: 'id',
+                                width: '50px',
+                                search: false,
+                                hidden: true
+                            },
+                            {
+                                label: 'GROUP',
+                                name: 'grp',
+                            },
+                            {
+                                label: 'SUBGROUP',
+                                name: 'subgrp',
+                            },
+                            {
+                                label: 'NAMA PARAMETER',
+                                name: 'text',
+                            },
+                            {
+                                label: 'KELOMPOK',
+                                name: 'kelompok',
+                            },
+                            {
+                                label: 'DEFAULT',
+                                name: 'default',
+                            },
+                            {
+                                label: 'TYPE',
+                                name: 'type',
+                            },
+                            {
+                                label: 'MODIFIEDBY',
+                                name: 'modifiedby',
+                            },
+                            {
+                                label: 'CREATEDAT',
+                                name: 'created_at',
+                                align: 'right',
+                                formatter: "date",
+                                formatoptions: {
+                                    srcformat: "ISO8601Long",
+                                    newformat: "d-m-Y H:i:s"
+                                }
+                            },
+                            {
+                                label: 'UPDATEDAT',
+                                name: 'updated_at',
+                                align: 'right',
+                                formatter: "date",
+                                formatoptions: {
+                                    srcformat: "ISO8601Long",
+                                    newformat: "d-m-Y H:i:s"
+                                }
+                            },
+                        ],
+                        autowidth: true,
+                        shrinkToFit: false,
+                        height: 350,
+                        rowNum: rowNum,
+                        rownumbers: true,
+                        rownumWidth: 45,
+                        rowList: [10, 20, 50, 0],
+                        toolbar: [true, "top"],
+                        sortable: true,
+                        sortname: sortname,
+                        sortorder: sortorder,
+                        page: page,
+                        viewrecords: true,
+                        prmNames: {
+                            sort: 'sortIndex',
+                            order: 'sortOrder',
+                            rows: 'limit'
+                        },
+                        jsonReader: {
+                            root: 'data',
+                            total: 'attributes.totalPages',
+                            records: 'attributes.totalRows',
+                        },
+                        loadBeforeSend: function(jqXHR) {
+                            jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
 
-          setGridLastRequest($(this), jqXHR)
-        },
-        onSelectRow: function(id) {
-          loadDetailGrid(id)
+                            setGridLastRequest($(this), jqXHR)
+                        },
+                        onSelectRow: function(id) {
+                            loadDetailGrid(id)
 
-          loadDetailData(id)
-          
-          activeGrid = $(this)
-          indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
-          page = $(this).jqGrid('getGridParam', 'page')
-          let limit = $(this).jqGrid('getGridParam', 'postData').limit
-          if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
+                            loadDetailData(id)
 
-        },
-        loadComplete: function(data) {
-          changeJqGridRowListText()
+                            activeGrid = $(this)
+                            indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
+                            page = $(this).jqGrid('getGridParam', 'page')
+                            let limit = $(this).jqGrid('getGridParam', 'postData').limit
+                            if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
 
-          if (data.data.length === 0) {
-            abortGridLastRequest($('#detail'))
-            clearGridData($('#detail'))
-          }
+                        },
+                        loadComplete: function(data) {
+                            changeJqGridRowListText()
 
-          $(document).unbind('keydown')
-          setCustomBindKeys($(this))
-          initResize($(this))
+                            if (data.data.length === 0) {
+                                abortGridLastRequest($('#detail'))
+                                clearGridData($('#detail'))
+                            }
 
-          /* Set global variables */
-          sortname = $(this).jqGrid("getGridParam", "sortname")
-          sortorder = $(this).jqGrid("getGridParam", "sortorder")
-          totalRecord = $(this).getGridParam("records")
-          limit = $(this).jqGrid('getGridParam', 'postData').limit
-          postData = $(this).jqGrid('getGridParam', 'postData')
-          triggerClick = true
+                            $(document).unbind('keydown')
+                            setCustomBindKeys($(this))
+                            initResize($(this))
 
-          $('.clearsearchclass').click(function() {
-            clearColumnSearch($(this))
-          })
+                            /* Set global variables */
+                            sortname = $(this).jqGrid("getGridParam", "sortname")
+                            sortorder = $(this).jqGrid("getGridParam", "sortorder")
+                            totalRecord = $(this).getGridParam("records")
+                            limit = $(this).jqGrid('getGridParam', 'postData').limit
+                            postData = $(this).jqGrid('getGridParam', 'postData')
+                            triggerClick = true
 
-          if (indexRow > $(this).getDataIDs().length - 1) {
-            indexRow = $(this).getDataIDs().length - 1;
-          }
+                            $('.clearsearchclass').click(function() {
+                                clearColumnSearch($(this))
+                            })
 
-          if (triggerClick) {
-            if (id != '') {
-              indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-              $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
-              id = ''
-            } else if (indexRow != undefined) {
-              $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
-            }
+                            if (indexRow > $(this).getDataIDs().length - 1) {
+                                indexRow = $(this).getDataIDs().length - 1;
+                            }
 
-            if ($('#jqGrid').getDataIDs()[indexRow] == undefined) {
-              $(`#jqGrid [id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
-            }
+                            if (triggerClick) {
+                                if (id != '') {
+                                    indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
+                                    $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
+                                    id = ''
+                                } else if (indexRow != undefined) {
+                                    $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
+                                }
 
-            triggerClick = false
-          } else {
-            $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
-          }
+                                if ($('#jqGrid').getDataIDs()[indexRow] == undefined) {
+                                    $(`#jqGrid [id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
+                                }
 
-          setHighlight($(this))
-        },
-      })
+                                triggerClick = false
+                            } else {
+                                $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
+                            }
 
-      .jqGrid("setLabel", "rn", "No.")
-      .jqGrid('filterToolbar', {
-        stringResult: true,
-        searchOnEnter: false,
-        defaultSearch: 'cn',
-        groupOp: 'AND',
-        disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
-        beforeSearch: function() {
-          abortGridLastRequest($(this))
-          
-          clearGlobalSearch($('#jqGrid'))
-        },
-      })
+                            setHighlight($(this))
+                        },
+                    })
 
-      .customPager({
-        buttons: [{
-            id: 'add',
-            innerHTML: '<i class="fa fa-plus"></i> ADD',
-            class: 'btn btn-primary btn-sm mr-1',
-            onClick: () => {
-              createParameter()
-            }
-          },
-          {
-            id: 'edit',
-            innerHTML: '<i class="fa fa-pen"></i> EDIT',
-            class: 'btn btn-success btn-sm mr-1',
-            onClick: () => {
-              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                    .jqGrid("setLabel", "rn", "No.")
+                    .jqGrid('filterToolbar', {
+                        stringResult: true,
+                        searchOnEnter: false,
+                        defaultSearch: 'cn',
+                        groupOp: 'AND',
+                        disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
+                        beforeSearch: function() {
+                            abortGridLastRequest($(this))
 
-              editParameter(selectedId)
-            }
-          },
-          {
-            id: 'delete',
-            innerHTML: '<i class="fa fa-trash"></i> DELETE',
-            class: 'btn btn-danger btn-sm mr-1',
-            onClick: () => {
-              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                            clearGlobalSearch($('#jqGrid'))
+                        },
+                    })
 
-              deleteParameter(selectedId)
-            }
-          },
-          {
-            id: 'report',
-            innerHTML: '<i class="fa fa-print"></i> REPORT',
-            class: 'btn btn-info btn-sm mr-1',
-            onClick: () => {
-              $('#rangeModal').data('action', 'report')
-              $('#rangeModal').find('button:submit').html(`Report`)
-              $('#rangeModal').modal('show')
-            }
-          },
-          {
-            id: 'export',
-            innerHTML: '<i class="fa fa-file-export"></i> EXPORT',
-            class: 'btn btn-warning btn-sm mr-1',
-            onClick: () => {
-              $('#rangeModal').data('action', 'export')
-              $('#rangeModal').find('button:submit').html(`Export`)
-              $('#rangeModal').modal('show')
-            }
-          },
-        ]
-      })
+                    .customPager({
+                        buttons: [{
+                                id: 'add',
+                                innerHTML: '<i class="fa fa-plus"></i> ADD',
+                                class: 'btn btn-primary btn-sm mr-1',
+                                onClick: () => {
+                                    createParameter()
+                                }
+                            },
+                            {
+                                id: 'edit',
+                                innerHTML: '<i class="fa fa-pen"></i> EDIT',
+                                class: 'btn btn-success btn-sm mr-1',
+                                onClick: () => {
+                                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
 
-    /* Append clear filter button */
-    loadClearFilter($('#jqGrid'))
+                                    editParameter(selectedId)
+                                }
+                            },
+                            {
+                                id: 'delete',
+                                innerHTML: '<i class="fa fa-trash"></i> DELETE',
+                                class: 'btn btn-danger btn-sm mr-1',
+                                onClick: () => {
+                                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
 
-    /* Append global search */
-    loadGlobalSearch($('#jqGrid'))
+                                    deleteParameter(selectedId)
+                                }
+                            },
+                            {
+                                id: 'report',
+                                innerHTML: '<i class="fa fa-print"></i> REPORT',
+                                class: 'btn btn-info btn-sm mr-1',
+                                onClick: () => {
+                                    $('#rangeModal').data('action', 'report')
+                                    $('#rangeModal').find('button:submit').html(`Report`)
+                                    $('#rangeModal').modal('show')
+                                }
+                            },
+                            {
+                                id: 'export',
+                                innerHTML: '<i class="fa fa-file-export"></i> EXPORT',
+                                class: 'btn btn-warning btn-sm mr-1',
+                                onClick: () => {
+                                    $('#rangeModal').data('action', 'export')
+                                    $('#rangeModal').find('button:submit').html(`Export`)
+                                    $('#rangeModal').modal('show')
+                                }
+                            },
+                        ]
+                    })
 
-    $('#add .ui-pg-div')
-      .addClass(`btn-sm btn-primary`)
-      .parent().addClass('px-1')
+                /* Append clear filter button */
+                loadClearFilter($('#jqGrid'))
 
-    $('#edit .ui-pg-div')
-      .addClass('btn-sm btn-success')
-      .parent().addClass('px-1')
+                /* Append global search */
+                loadGlobalSearch($('#jqGrid'))
 
-    $('#delete .ui-pg-div')
-      .addClass('btn-sm btn-danger')
-      .parent().addClass('px-1')
+                $('#add .ui-pg-div')
+                    .addClass(`btn-sm btn-primary`)
+                    .parent().addClass('px-1')
 
-    $('#report .ui-pg-div')
-      .addClass('btn-sm btn-info')
-      .parent().addClass('px-1')
+                $('#edit .ui-pg-div')
+                    .addClass('btn-sm btn-success')
+                    .parent().addClass('px-1')
 
-    $('#export .ui-pg-div')
-      .addClass('btn-sm btn-warning')
-      .parent().addClass('px-1')
+                $('#delete .ui-pg-div')
+                    .addClass('btn-sm btn-danger')
+                    .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('parameter', 'store') }}`) {
-      $('#add').attr('disabled', 'disabled')
-    }
+                $('#report .ui-pg-div')
+                    .addClass('btn-sm btn-info')
+                    .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('parameter', 'update') }}`) {
-      $('#edit').attr('disabled', 'disabled')
-    }
+                $('#export .ui-pg-div')
+                    .addClass('btn-sm btn-warning')
+                    .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('parameter', 'destroy') }}`) {
-      $('#delete').attr('disabled', 'disabled')
-    }
+                if (!`{{ $myAuth->hasPermission('parameter', 'store') }}`) {
+                    $('#add').attr('disabled', 'disabled')
+                }
 
-    if (!`{{ $myAuth->hasPermission('parameter', 'export') }}`) {
-      $('#export').attr('disabled', 'disabled')
-    }
+                if (!`{{ $myAuth->hasPermission('parameter', 'update') }}`) {
+                    $('#edit').attr('disabled', 'disabled')
+                }
 
-    if (!`{{ $myAuth->hasPermission('parameter', 'report') }}`) {
-      $('#report').attr('disabled', 'disabled')
-    }
+                if (!`{{ $myAuth->hasPermission('parameter', 'destroy') }}`) {
+                    $('#delete').attr('disabled', 'disabled')
+                }
 
-    $('#rangeModal').on('shown.bs.modal', function() {
-      if (autoNumericElements.length > 0) {
-        $.each(autoNumericElements, (index, autoNumericElement) => {
-          autoNumericElement.remove()
-        })
-      }
+                if (!`{{ $myAuth->hasPermission('parameter', 'export') }}`) {
+                    $('#export').attr('disabled', 'disabled')
+                }
 
-      $('#formRange [name]:not(:hidden)').first().focus()
+                if (!`{{ $myAuth->hasPermission('parameter', 'report') }}`) {
+                    $('#report').attr('disabled', 'disabled')
+                }
 
-      $('#formRange [name=sidx]').val($('#jqGrid').jqGrid('getGridParam').postData.sidx)
-      $('#formRange [name=sord]').val($('#jqGrid').jqGrid('getGridParam').postData.sord)
-      if (page == 0) {
-        $('#formRange [name=dari]').val(page)
-        $('#formRange [name=sampai]').val(totalRecord)
-      }else{
-        $('#formRange [name=dari]').val((indexRow + 1) + (limit * (page - 1)))
-        $('#formRange [name=sampai]').val(totalRecord)
-      }
+                $('#rangeModal').on('shown.bs.modal', function() {
+                    if (autoNumericElements.length > 0) {
+                        $.each(autoNumericElements, (index, autoNumericElement) => {
+                            autoNumericElement.remove()
+                        })
+                    }
 
-      autoNumericElements = new AutoNumeric.multiple('#formRange .autonumeric-report', {
-        digitGroupSeparator: ',',
-        decimalCharacter: '.',
-        decimalPlaces: 0,
-        allowDecimalPadding: false,
-        minimumValue: 1,
-        maximumValue: totalRecord,
-      })
-    })
+                    $('#formRange [name]:not(:hidden)').first().focus()
 
-     // MODAL HIDDEN, REMOVE KOTAK MERAH
-     $('#rangeModal').on('hidden.bs.modal', function() {
-      
-      $('.is-invalid').removeClass('is-invalid')
-      $('.invalid-feedback').remove()
-    })
+                    $('#formRange [name=sidx]').val($('#jqGrid').jqGrid('getGridParam').postData.sidx)
+                    $('#formRange [name=sord]').val($('#jqGrid').jqGrid('getGridParam').postData.sord)
+                    if (page == 0) {
+                        $('#formRange [name=dari]').val(page)
+                        $('#formRange [name=sampai]').val(totalRecord)
+                    } else {
+                        $('#formRange [name=dari]').val((indexRow + 1) + (limit * (page - 1)))
+                        $('#formRange [name=sampai]').val(totalRecord)
+                    }
 
-    $('#formRange').submit(function(event) {
-      event.preventDefault()
+                    autoNumericElements = new AutoNumeric.multiple('#formRange .autonumeric-report', {
+                        digitGroupSeparator: ',',
+                        decimalCharacter: '.',
+                        decimalPlaces: 0,
+                        allowDecimalPadding: false,
+                        minimumValue: 1,
+                        maximumValue: totalRecord,
+                    })
+                })
 
-      let params
-      let submitButton = $(this).find('button:submit')
+                // MODAL HIDDEN, REMOVE KOTAK MERAH
+                $('#rangeModal').on('hidden.bs.modal', function() {
 
-      submitButton.attr('disabled', 'disabled')
+                    $('.is-invalid').removeClass('is-invalid')
+                    $('.invalid-feedback').remove()
+                })
 
-      /* Set params value */
-      for (var key in postData) {
-        if (params != "") {
-          params += "&";
-        }
-        params += key + "=" + encodeURIComponent(postData[key]);
-      }
+                $('#formRange').submit(function(event) {
+                    event.preventDefault()
 
-      let formRange = $('#formRange')
-      let offset = parseInt(formRange.find('[name=dari]').val()) - 1
-      let limit = parseInt(formRange.find('[name=sampai]').val().replace('.', '')) - offset
-      params += `&offset=${offset}&limit=${limit}`
+                    let params
+                    let submitButton = $(this).find('button:submit')
 
-    getCekExport(params).then((response) => {
-      if ($('#rangeModal').data('action') == 'export') {
-        let xhr = new XMLHttpRequest()
-        xhr.open('GET', `{{ config('app.api_url') }}parameter/export?${params}`, true)
-        xhr.setRequestHeader("Authorization", `Bearer ${accessToken}`)
-        xhr.responseType = 'arraybuffer'
+                    submitButton.attr('disabled', 'disabled')
 
-        xhr.onload = function(e) {
-          if (this.status === 200) {
-            if (this.response !== undefined) {
-              let blob = new Blob([this.response], {
-                type: "application/vnd.ms-excel"
-              })
-              let link = document.createElement('a')
+                    /* Set params value */
+                    for (var key in postData) {
+                        if (params != "") {
+                            params += "&";
+                        }
+                        params += key + "=" + encodeURIComponent(postData[key]);
+                    }
 
-              link.href = window.URL.createObjectURL(blob)
-              link.download = `laporanParameter${(new Date).getTime()}.xlsx`
-              link.click()
+                    let formRange = $('#formRange')
+                    let offset = parseInt(formRange.find('[name=dari]').val()) - 1
+                    let limit = parseInt(formRange.find('[name=sampai]').val().replace('.', '')) - offset
+                    params += `&offset=${offset}&limit=${limit}`
 
-              submitButton.removeAttr('disabled')
-            }
-          }
-        }
+                    getCekExport(params).then((response) => {
+                            if ($('#rangeModal').data('action') == 'export') {
+                                let xhr = new XMLHttpRequest()
+                                xhr.open('GET', `{{ config('app.api_url') }}parameter/export?${params}`,
+                                    true)
+                                xhr.setRequestHeader("Authorization", `Bearer ${accessToken}`)
+                                xhr.responseType = 'arraybuffer'
 
-        xhr.onerror = () => {
-          submitButton.removeAttr('disabled')
-        }
+                                xhr.onload = function(e) {
+                                    if (this.status === 200) {
+                                        if (this.response !== undefined) {
+                                            let blob = new Blob([this.response], {
+                                                type: "application/vnd.ms-excel"
+                                            })
+                                            let link = document.createElement('a')
 
-        xhr.send()
-      } else if ($('#rangeModal').data('action') == 'report') {
-        window.open(`{{ route('parameter.report') }}?${params}`)
+                                            link.href = window.URL.createObjectURL(blob)
+                                            link.download =
+                                                `laporanParameter${(new Date).getTime()}.xlsx`
+                                            link.click()
 
-        submitButton.removeAttr('disabled')
-      }
-    })
-    .catch((error) => {
-        if (error.status === 422) {
-          $('.is-invalid').removeClass('is-invalid')
-          $('.invalid-feedback').remove()
-          errors = error.responseJSON.errors
+                                            submitButton.removeAttr('disabled')
+                                        }
+                                    }
+                                }
 
-          $.each(errors, (index, error) => {
-            let indexes = index.split(".");
-            indexes[0] = 'sampai'
-            let element;
-            element = $('#rangeModal').find(`[name="${indexes[0]}"]`)[0];
+                                xhr.onerror = () => {
+                                    submitButton.removeAttr('disabled')
+                                }
 
-            $(element).addClass("is-invalid");
-            $(`
-              <div class="invalid-feedback">
-              ${error[0].toLowerCase()}
-              </div>
-			    `).appendTo($(element).parent());
+                                xhr.send()
+                            } else if ($('#rangeModal').data('action') == 'report') {
+                                window.open(`{{ route('parameter.report') }}?${params}`)
 
-          });
+                                submitButton.removeAttr('disabled')
+                            }
+                        })
+                        .catch((error) => {
+                            if (error.status === 422) {
+                                $('.is-invalid').removeClass('is-invalid')
+                                $('.invalid-feedback').remove()
+                                let status
+                                if (error.responseJSON.hasOwnProperty('status') == false) {
+                                    status = false
+                                } else {
+                                    status = true
+                                }
+                                statusText = error.statusText
+                                errors = error.responseJSON.errors
+                                $.each(errors, (index, error) => {
+                                    let indexes = index.split(".");
+                                    if (status === false) {
+                                        indexes[0] = 'sampai'
+                                    }
+                                    let element;
+                                    element = $('#rangeModal').find(`[name="${indexes[0]}"]`)[
+                                        0];
+                                    if ($(element).length > 0 && !$(element).is(":hidden")) {
+                                        $(element).addClass("is-invalid");
+                                        $(`
+                                                <div class="invalid-feedback">
+                                                ${error[0].toLowerCase()}
+                                                </div>
+                                        `).appendTo($(element).parent());
+                                    } else {
+                                        setTimeout(() => {
+                                            return showDialog(error);
+                                        }, 100)
+                                    }
+                                });
+                                $(".is-invalid").first().focus();
 
-          $(".is-invalid").first().focus();
-        } else {
-          showDialog(error.statusText)
-        }
-      })
-      
-      .finally(() => {
-        $('.ui-button').click()
-        
-        submitButton.removeAttr('disabled')
-      })
-    })
+                            } else {
+                                showDialog(error.statusText)
+                            }
+                        })
 
-    function getCekExport(params) {
-      
-      params += `&cekExport=true`
+                        .finally(() => {
 
-      return new Promise((resolve, reject) => {
-        $.ajax({
-          url: `${apiUrl}parameter/export?${params}`,
-          dataType: "JSON",
-          headers: {
-            Authorization: `Bearer ${accessToken}`
-          },
-          success: (response) => {
-            resolve(response);
-          },
-          error: error => {
-            reject(error)
+                            $('.ui-button').click()
 
-          },
-        });
-      });
-    }
+                            submitButton.removeAttr('disabled')
+                        })
+                })
 
-  })
-</script>
-@endpush()
+                function getCekExport(params) {
+
+                    params += `&cekExport=true`
+
+                    return new Promise((resolve, reject) => {
+                        $.ajax({
+                            url: `${apiUrl}parameter/export?${params}`,
+                            dataType: "JSON",
+                            headers: {
+                                Authorization: `Bearer ${accessToken}`
+                            },
+                            success: (response) => {
+                                resolve(response);
+                            },
+                            error: error => {
+                                reject(error)
+
+                            },
+                        });
+                    });
+                }
+
+            })
+        </script>
+    @endpush()
 @endsection
