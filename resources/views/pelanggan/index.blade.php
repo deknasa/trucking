@@ -43,13 +43,18 @@
             search: false,
             hidden: true
           },
-          {
-            label: 'kode pelanggan',
-            name: 'kodepelanggan',
-          },
+
           {
             label: 'nama pelanggan',
             name: 'namapelanggan',
+          },
+          {
+            label: 'alias pelanggan',
+            name: 'kodepelanggan',
+          },
+          {
+            label: 'nama kontak',
+            name: 'namakontak',
           },
           {
             label: 'Status',
@@ -95,7 +100,7 @@
             }
           },
           {
-            label: 'NO TELEPON',
+            label: 'NO TELEPON/HANDPHONE',
             name: 'telp',
           },
           {
@@ -231,7 +236,7 @@
         disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
           abortGridLastRequest($(this))
-          
+
           clearGlobalSearch($('#jqGrid'))
         },
       })
@@ -351,7 +356,7 @@
       if (page == 0) {
         $('#formRange [name=dari]').val(page)
         $('#formRange [name=sampai]').val(totalRecord)
-      }else{
+      } else {
         $('#formRange [name=dari]').val((indexRow + 1) + (limit * (page - 1)))
         $('#formRange [name=sampai]').val(totalRecord)
       }
@@ -367,7 +372,7 @@
     })
 
     $('#rangeModal').on('hidden.bs.modal', function() {
-      
+
       $('.is-invalid').removeClass('is-invalid')
       $('.invalid-feedback').remove()
     })
@@ -394,76 +399,76 @@
       params += `&offset=${offset}&limit=${limit}`
 
       getCekExport(params).then((response) => {
-      if ($('#rangeModal').data('action') == 'export') {
-        let xhr = new XMLHttpRequest()
-        xhr.open('GET', `{{ config('app.api_url') }}pelanggan/export?${params}`, true)
-        xhr.setRequestHeader("Authorization", `Bearer {{ session('access_token') }}`)
-        xhr.responseType = 'arraybuffer'
+          if ($('#rangeModal').data('action') == 'export') {
+            let xhr = new XMLHttpRequest()
+            xhr.open('GET', `{{ config('app.api_url') }}pelanggan/export?${params}`, true)
+            xhr.setRequestHeader("Authorization", `Bearer {{ session('access_token') }}`)
+            xhr.responseType = 'arraybuffer'
 
-        xhr.onload = function(e) {
-          if (this.status === 200) {
-            if (this.response !== undefined) {
-              let blob = new Blob([this.response], {
-                type: "application/vnd.ms-excel"
-              })
-              let link = document.createElement('a')
+            xhr.onload = function(e) {
+              if (this.status === 200) {
+                if (this.response !== undefined) {
+                  let blob = new Blob([this.response], {
+                    type: "application/vnd.ms-excel"
+                  })
+                  let link = document.createElement('a')
 
-              link.href = window.URL.createObjectURL(blob)
-              link.download = `laporanPelanggan${(new Date).getTime()}.xlsx`
-              link.click()
+                  link.href = window.URL.createObjectURL(blob)
+                  link.download = `laporanPelanggan${(new Date).getTime()}.xlsx`
+                  link.click()
 
+                  submitButton.removeAttr('disabled')
+                }
+              }
+            }
+
+            xhr.onerror = () => {
               submitButton.removeAttr('disabled')
             }
-          }
-        }
 
-        xhr.onerror = () => {
+            xhr.send()
+          } else if ($('#rangeModal').data('action') == 'report') {
+            window.open(`{{ route('pelanggan.report') }}?${params}`)
+
             submitButton.removeAttr('disabled')
           }
+        })
+        .catch((error) => {
+          if (error.status === 422) {
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+            errors = error.responseJSON.errors
 
-        xhr.send()
-      } else if ($('#rangeModal').data('action') == 'report') {
-        window.open(`{{ route('pelanggan.report') }}?${params}`)
+            $.each(errors, (index, error) => {
+              let indexes = index.split(".");
+              indexes[0] = 'sampai'
+              let element;
+              element = $('#rangeModal').find(`[name="${indexes[0]}"]`)[0];
 
-        submitButton.removeAttr('disabled')
-      }
-    })
-    .catch((error) => {
-        if (error.status === 422) {
-          $('.is-invalid').removeClass('is-invalid')
-          $('.invalid-feedback').remove()
-          errors = error.responseJSON.errors
-
-          $.each(errors, (index, error) => {
-            let indexes = index.split(".");
-            indexes[0] = 'sampai'
-            let element;
-            element = $('#rangeModal').find(`[name="${indexes[0]}"]`)[0];
-
-            $(element).addClass("is-invalid");
-            $(`
+              $(element).addClass("is-invalid");
+              $(`
               <div class="invalid-feedback">
               ${error[0].toLowerCase()}
               </div>
 			    `).appendTo($(element).parent());
 
-          });
+            });
 
-          $(".is-invalid").first().focus();
-        } else {
-          showDialog(error.statusText)
-        }
-      })
-      
-      .finally(() => {
-        $('.ui-button').click()
-        
-        submitButton.removeAttr('disabled')
-      })
+            $(".is-invalid").first().focus();
+          } else {
+            showDialog(error.statusText)
+          }
+        })
+
+        .finally(() => {
+          $('.ui-button').click()
+
+          submitButton.removeAttr('disabled')
+        })
     })
 
     function getCekExport(params) {
-      
+
       params += `&cekExport=true`
 
       return new Promise((resolve, reject) => {
