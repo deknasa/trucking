@@ -11,6 +11,7 @@
       datatype: "json",
       postData: {
         aktif: `{!! $Aktif ?? '' !!}`,
+        trado_id: `{!! $trado_id ?? '' !!}`,
       },
       idPrefix: 'tradoLookup',
       colModel: [{
