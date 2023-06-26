@@ -100,6 +100,18 @@
             formatter: currencyFormat,
           },
           {
+            label: 'upah',
+            name: 'upah',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
+            label: 'extra',
+            name: 'extra',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
             label: 'GAJI',
             name: 'gaji',
             align: 'right',
