@@ -233,6 +233,7 @@
 
           }, 100)
 
+          
           setHighlight($(this))
         }
       })

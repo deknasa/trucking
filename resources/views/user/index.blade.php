@@ -234,8 +234,12 @@
 
                             if (data.data.length === 0) {
                                 $('#userRoleGrid, #userAclGrid').each((index, element) => {
-                                    abortGridLastRequest($(element))
-                                    clearGridData($(element))
+                                abortGridLastRequest($(element))
+                                clearGridData($(element))
+                                })
+                                $('#jqGrid').each((index, element) => {
+                                abortGridLastRequest($(element))
+                                clearGridHeader($(element))
                                 })
                             }
 
@@ -276,6 +280,8 @@
                                 $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
                             }
 
+                            $('#left-nav').find('button').attr('disabled', false)
+                            permission() 
                             setHighlight($(this))
                         }
                     })
@@ -332,19 +338,19 @@
                         ]
                     })
 
-                    .jqGrid("setLabel", "rn", "No.")
-                    .jqGrid('filterToolbar', {
-                        stringResult: true,
-                        searchOnEnter: false,
-                        defaultSearch: 'cn',
-                        groupOp: 'AND',
-                        disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
-                        beforeSearch: function() {
-                            abortGridLastRequest($(this))
-
-                            clearGlobalSearch($('#jqGrid'))
-                        },
-                    })
+                .jqGrid("setLabel", "rn", "No.")
+                .jqGrid('filterToolbar', {
+                    stringResult: true,
+                    searchOnEnter: false,
+                    defaultSearch: 'cn',
+                    groupOp: 'AND',
+                    disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
+                    beforeSearch: function() {
+                    abortGridLastRequest($(this))
+                    $('#left-nav').find(`button:not(#add)`).attr('disabled', 'disabled')
+                    clearGlobalSearch($('#jqGrid'))
+                    },
+                })
 
                 /* Append clear filter button */
                 loadClearFilter($('#jqGrid'))
@@ -377,6 +383,7 @@
                     .addClass('btn-sm btn-warning')
                     .parent().addClass('px-1')
 
+                    function permission() {
                 if (!`{{ $myAuth->hasPermission('user', 'store') }}`) {
                     $('#add').attr('disabled', 'disabled')
                 }
@@ -387,7 +394,7 @@
 
                 if (!`{{ $myAuth->hasPermission('user', 'destroy') }}`) {
                     $('#delete').attr('disabled', 'disabled')
-                }
+                } }
 
                 $('#rangeModal').on('shown.bs.modal', function() {
                     if (autoNumericElements.length > 0) {

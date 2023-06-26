@@ -158,14 +158,6 @@
 
             setErrorMessages(form, error.responseJSON.errors);
           } else {
-            // console.log(error.responseJSON.errors)
-            // if (error.responseJSON.errors) {
-            //   showDialog(error.responseJSON.errors)
-            // } else if (error.responseJSON.message) {
-            //   showDialog(error.responseJSON);
-            // } else {
-            //   showDialog(error.statusText, error.statusText)
-            // }
             if (error.responseJSON.errors) {
               showDialog(error.statusText, error.responseJSON.errors.join('<hr>'))
             } else if (error.responseJSON.message) {
@@ -173,6 +165,18 @@
             } else {
               showDialog(error.statusText, error.statusText)
             }
+
+            // if (error.responseJSON.errors) {
+            //   showDialog('',error.responseJSON.errors)
+            // } else if (error.responseJSON.message) {
+            //   showDialog(error.statusText, error.responseJSON.message)
+            // } else {
+            //   showDialog(error.statusText, error.statusText)
+            // }
+
+            // if (error.responseJSON.message) {
+            //   showDialog(error.responseJSON)
+            // }
           }
         },
       }).always(() => {

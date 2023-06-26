@@ -6,18 +6,20 @@
 <head>
 
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <title>Report Pengembalian Kas Gantung Header</title>
+  <title>Laporan Pengembalian Kas Gantung</title>
   <link rel="stylesheet" type="text/css" href="{{ asset($stireport_path . 'css/stimulsoft.viewer.office2013.whiteblue.css') }}">
   <link rel="stylesheet" type="text/css" href="{{ asset($stireport_path . 'css/stimulsoft.designer.office2013.whiteblue.css') }}">
   <script type="text/javascript" src="{{ asset($stireport_path . 'scripts/stimulsoft.reports.js') }}"></script>
   <script type="text/javascript" src="{{ asset($stireport_path . 'scripts/stimulsoft.viewer.js') }}"></script>
   <script type="text/javascript" src="{{ asset($stireport_path . 'scripts/stimulsoft.designer.js') }}"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+  <script src="{{ asset('libraries/tas-lib/js/terbilang.js?version='. config('app.version')) }}"></script>
   <script type="text/javascript">
     
-    let kasgantungheaders = <?= json_encode($data); ?>;
+    let pengembaliankasgantung = <?= json_encode($pengembaliankasgantung); ?>
+
     $( document ).ready(function() {
-      var statuscetak = kasgantungheaders.statuscetak
+      var statuscetak = pengembaliankasgantung.statuscetak
       if (statuscetak == 174) {
         $(document).on('keydown', function(e) { 
           if((e.ctrlKey || e.metaKey) && (e.key == "p" || e.charCode == 16 || e.charCode == 112 || e.keyCode == 80) ){
@@ -31,14 +33,18 @@
 
 
     });
+
     function Start() {
       Stimulsoft.Base.StiLicense.loadFromFile("{{ asset($stireport_path . 'license.php') }}");
       var viewerOptions = new Stimulsoft.Viewer.StiViewerOptions()
 
+      Stimulsoft.Report.Dictionary.StiFunctions.addFunction("MyCategory", "Terbilang", "Terbilang", "Terbilang", "", String, "Return Description", [Object], ["value"], ["Descriptions"], terbilang);      
+      viewerOptions.toolbar.viewMode = Stimulsoft.Viewer.StiWebViewMode.Continuous;
+
       var viewer = new Stimulsoft.Viewer.StiViewer(viewerOptions, "StiViewer", false)
       var report = new Stimulsoft.Report.StiReport()
       
-      var statuscetak = kasgantungheaders.statuscetak
+      var statuscetak = pengembaliankasgantung.statuscetak
       if (statuscetak == 174) {
         viewerOptions.toolbar.showPrintButton = false;
         viewerOptions.toolbar.showSaveButton = false;
@@ -57,14 +63,14 @@
       report.dictionary.dataSources.clear()
 
       dataSet.readJson({
-        'pengembaliankasgantung_details': <?= json_encode($pengembaliankasgantung_details); ?>,
-        'user': <?= json_encode($user); ?>,
+        'pengembaliankasgantung': <?= json_encode($pengembaliankasgantung); ?>,
+        'pengembaliankasgantung_details': <?= json_encode($pengembaliankasgantung_details); ?>
       })
 
       report.regData(dataSet.dataSetName, '', dataSet)
       report.dictionary.synchronize()
-      // designer.report = report;
-      // designer.renderHtml('content');
+      designer.report = report;
+      designer.renderHtml('content');
       viewer.report = report
       
       viewer.onPrintReport = function (event) {
@@ -87,20 +93,23 @@
 
       window.addEventListener('afterprint', (event) => {
         
-        var id = kasgantungheaders.id
+        var id = pengembaliankasgantung.id
         var apiUrl = `{{ config('app.api_url') }}`;
         
         $.ajax({
-          url: `${apiUrl}pengembaliankasgantungheader/${id}/printreport`,
+          url: `${apiUrl}penerimaangiroheader/${id}/printreport`,
           method: 'GET',
           dataType: 'JSON',
           headers: {
             Authorization: `Bearer {{ session('access_token') }}`
           },
           success: response => {
-            window.close()
+            console.log(response);
+            location.reload()
           }
+    
         })
+          
       });
     }
   </script>

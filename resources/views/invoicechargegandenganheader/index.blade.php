@@ -292,6 +292,10 @@
           if (data.data.length === 0) {
             abortGridLastRequest($('#detail'))
             clearGridData($('#detail'))
+            $('#jqGrid').each((index, element) => {
+              abortGridLastRequest($(element))
+              clearGridHeader($(element))
+            })
           }
           
           $(document).unbind('keydown')
@@ -335,7 +339,8 @@
             }
           }, 100)
 
-
+          $('#left-nav').find('button').attr('disabled', false)
+          permission() 
           setHighlight($(this))
         }
       })
@@ -349,7 +354,7 @@
         disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
           abortGridLastRequest($(this))
-          
+          $('#left-nav').find(`button:not(#add)`).attr('disabled', 'disabled')
           clearGlobalSearch($('#jqGrid'))
         },
       })
@@ -389,6 +394,19 @@
               }
             }
           }, 
+          {
+            id: 'report',
+            innerHTML: '<i class="fa fa-print"></i> REPORT',
+            class: 'btn btn-info btn-sm mr-1',
+            onClick: () => {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Please select a row')
+              } else {
+                window.open(`{{ route('invoicechargegandenganheader.report') }}?id=${selectedId}`)
+              }
+            }
+          },
           {
             id: 'export',
             title: 'Export',
@@ -437,6 +455,7 @@
       .addClass('btn btn-sm btn-warning')
       .parent().addClass('px-1')
 
+      function permission() {
     if (!`{{ $myAuth->hasPermission('invoicechargegandenganheader', 'store') }}`) {
       $('#add').attr('disabled', 'disabled')
     }
@@ -455,7 +474,7 @@
 
     if (!`{{ $myAuth->hasPermission('invoicechargegandenganheader', 'report') }}`) {
       $('#report').attr('disabled', 'disabled')
-    }
+    }}
 
     $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {

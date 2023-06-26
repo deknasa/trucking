@@ -194,13 +194,28 @@
                                 if ($('#jqGrid').getDataIDs()[indexRow] == undefined) {
                                     $(`#jqGrid [id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
                                 }
-
-                                triggerClick = false
                             } else {
                                 $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
                             }
 
+                            $('#left-nav').find('button').attr('disabled', false)
+                            permission() 
                             setHighlight($(this))
+                        },
+
+                    })
+
+                    .jqGrid("setLabel", "rn", "No.")
+                    .jqGrid('filterToolbar', {
+                        stringResult: true,
+                        searchOnEnter: false,
+                        defaultSearch: 'cn',
+                        groupOp: 'AND',
+                        disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
+                        beforeSearch: function() {
+                        abortGridLastRequest($(this))
+                        $('#left-nav').find(`button:not(#add)`).attr('disabled', 'disabled')
+                        clearGlobalSearch($('#jqGrid'))
                         },
                     })
 
@@ -299,6 +314,7 @@
                     .addClass('btn-sm btn-warning')
                     .parent().addClass('px-1')
 
+                    function permission() {
                 if (!`{{ $myAuth->hasPermission('kategori', 'store') }}`) {
                     $('#add').attr('disabled', 'disabled')
                 }
@@ -315,7 +331,7 @@
                 }
                 if (!`{{ $myAuth->hasPermission('kategori', 'report') }}`) {
                     $('#report').attr('disabled', 'disabled')
-                }
+                } }
 
                 $('#rangeModal').on('shown.bs.modal', function() {
                     if (autoNumericElements.length > 0) {

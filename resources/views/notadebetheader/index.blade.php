@@ -391,6 +391,10 @@
               abortGridLastRequest($(element))
               clearGridData($(element))
             })
+            $('#jqGrid').each((index, element) => {
+              abortGridLastRequest($(element))
+              clearGridHeader($(element))
+            })
           }
 
           $(document).unbind('keydown')
@@ -445,6 +449,8 @@
             }
           }, 100)
 
+          $('#left-nav').find('button').attr('disabled', false)
+          permission()
           $('#gs_').attr('disabled', false)
           setHighlight($(this))
         }
@@ -459,7 +465,7 @@
         disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
           abortGridLastRequest($(this))
-
+          $('#left-nav').find(`button:not(#add)`).attr('disabled', 'disabled')
           clearGlobalSearch($('#jqGrid'))
         },
       })
@@ -481,17 +487,19 @@
           },
           {
             id: 'export',
-            innerHTML: '<i class="fa fa-file-export"></i> EXPORT',
+            title: 'Export',
+            caption: 'Export',
+            innerHTML: '<i class="fas fa-file-export"></i> EXPORT',
             class: 'btn btn-warning btn-sm mr-1',
             onClick: () => {
-
-              $('#rangeModal').data('action', 'export')
-              $('#rangeModal').find('button:submit').html(`Export`)
-              $('#rangeModal').modal('show')
-              clearSelectedRows()
-              $('#gs_').prop('checked', false)
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Please select a row')
+              } else {
+                window.open(`{{ route('notadebetheader.export') }}?id=${selectedId}`)
+              }
             }
-          },
+          }, 
           {
             id: 'approveun',
             innerHTML: '<i class="fas fa-check""></i> UN/APPROVAL',
@@ -533,6 +541,7 @@
       .addClass('btn btn-sm btn-warning')
       .parent().addClass('px-1')
 
+      function permission() {
     if (!`{{ $myAuth->hasPermission('notadebetheader', 'store') }}`) {
       $('#add').addClass('ui-disabled')
     }
@@ -555,7 +564,7 @@
     if (!`{{ $myAuth->hasPermission('notadebetheader', 'approval') }}`) {
       $('#approveun').attr('disabled', 'disabled')
       $("#jqGrid").hideCol("");
-    }
+    }}
 
     $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {
@@ -586,7 +595,6 @@
 
       let params
       let actionUrl = ``
-      console.log(params);
       if ($('#rangeModal').data('action') == 'export') {
         actionUrl = `{{ route('notadebetheader.export') }}`
       }

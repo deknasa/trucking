@@ -327,6 +327,10 @@
             clearGridData($('#jurnalGrid'))
             abortGridLastRequest($('#absensiGrid'))
             clearGridData($('#absensiGrid'))
+            $('#jqGrid').each((index, element) => {
+              abortGridLastRequest($(element))
+              clearGridHeader($(element))
+            })
           }
 
           $(document).unbind('keydown')
@@ -370,7 +374,8 @@
             }
           }, 100)
 
-
+          $('#left-nav').find('button').attr('disabled', false)
+          permission() 
           setHighlight($(this))
         }
       })
@@ -383,6 +388,7 @@
         groupOp: 'AND',
         disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
+          $('#left-nav').find(`button:not(#add)`).attr('disabled', 'disabled')
           $(this).setGridParam({
           postData: {
             tgldari:$('#tgldariheader').val() ,
@@ -485,25 +491,27 @@
       .addClass('btn btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('gajisupirheader', 'store') }}`) {
-      $('#add').attr('disabled', 'disabled')
-    }
+    function permission() {
+      if (!`{{ $myAuth->hasPermission('gajisupirheader', 'store') }}`) {
+        $('#add').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('gajisupirheader', 'update') }}`) {
-      $('#edit').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('gajisupirheader', 'update') }}`) {
+        $('#edit').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('gajisupirheader', 'destroy') }}`) {
-      $('#delete').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('gajisupirheader', 'destroy') }}`) {
+        $('#delete').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('gajisupirheader', 'export') }}`) {
-      $('#export').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('gajisupirheader', 'export') }}`) {
+        $('#export').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('gajisupirheader', 'report') }}`) {
-      $('#report').attr('disabled', 'disabled')
-    }    
+      if (!`{{ $myAuth->hasPermission('gajisupirheader', 'report') }}`) {
+        $('#report').attr('disabled', 'disabled')
+      }    
+    }
 
     $("#tabs-detail").on('click', 'li.ui-state-active', function() {
       let href = $(this).find('a').attr('href');
