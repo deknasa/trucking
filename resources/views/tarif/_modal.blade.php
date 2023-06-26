@@ -732,7 +732,7 @@
             }
           })
 
-
+          $('#detailList tbody').html('')
           $.each(response.detail, (index, detail) => {
             // $.each(response.data.upahsupir_rincian, (index, detail) => {
             let detailRow = $(`
@@ -925,6 +925,7 @@
         Authorization: `Bearer ${accessToken}`
       },
       success: response => {
+        $('#detailList tbody').html('')
         $.each(response.detail, (index, detail) => {
 
           let detailRow = $(`

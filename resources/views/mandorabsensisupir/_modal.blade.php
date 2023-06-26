@@ -170,7 +170,6 @@
         },
         data: data,
         success: response => {
-          console.log(indexRow);
           indexRow = response.data.position - 1;
           $('#crudForm').trigger('reset')
           $('#crudModal').modal('hide')
