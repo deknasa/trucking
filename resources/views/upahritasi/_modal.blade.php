@@ -627,7 +627,7 @@
           initAutoNumeric(form.find(`[name="nominalsupir"]`), {
             minimumValue: 0
           })
-
+          $('#detailList tbody').html('')
           $.each(response.detail, (index, detail) => {
             // $.each(response.data.upahritasi_rincian, (index, detail) => {
             let detailRow = $(`
@@ -681,6 +681,7 @@
         Authorization: `Bearer ${accessToken}`
       },
       success: response => {
+        $('#detailList tbody').html('')
         $.each(response.detail, (index, detail) => {
 
           let detailRow = $(`
@@ -722,6 +723,7 @@
         Authorization: `Bearer ${accessToken}`
       },
       success: response => {
+        $('#detailList tbody').html('')
         $.each(response.detail, (index, detail) => {
 
           let detailRow = $(`

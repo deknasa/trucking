@@ -33,6 +33,7 @@
   let autoNumericElements = []
   let rowNum = 10
   var statusBukanBatalMuat;
+  var activeGrid;
   var statusEditTujuan;
   $(document).ready(function() {
 
@@ -434,10 +435,10 @@
               }
             },
             formatter: (value, options, rowData) => {
-              let statusEditTujaun = JSON.parse(value)
-              if (!statusEditTujaun) {
+              if (!value) {
                 return ''
               }
+              let statusEditTujaun = JSON.parse(value)
               let formattedValue = $(`
                 <div class="badge" style="background-color: ${statusEditTujaun.WARNA}; color: #fff;">
                   <span>${statusEditTujaun.SINGKATAN}</span>
@@ -447,10 +448,10 @@
               return formattedValue[0].outerHTML
             },
             cellattr: (rowId, value, rowObject) => {
-              let statusEditTujaun = JSON.parse(rowObject.statusedittujuan)
-              if (!statusEditTujaun) {
+              if (!rowObject.statusedittujuan) {
                 return ` title=""`
               }
+              let statusEditTujaun = JSON.parse(rowObject.statusedittujuan)
               return ` title="${statusEditTujaun.MEMO}"`
             }
           },
