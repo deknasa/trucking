@@ -286,8 +286,11 @@
           if (data.data.length === 0) {
             abortGridLastRequest($('#detail'))
             clearGridData($('#detail'))
-            abortGridLastRequest($('#detail'))
-            clearGridData($('#detail'))
+            
+            $('#jqGrid').each((index, element) => {
+              abortGridLastRequest($(element))
+              clearGridHeader($(element))
+            })
           }
 
           $(document).unbind('keydown')
@@ -331,7 +334,8 @@
             }
           }, 100)
 
-
+          $('#left-nav').find('button').attr('disabled', false)
+          permission() 
           setHighlight($(this))
         }
       })
@@ -345,7 +349,7 @@
         disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
           abortGridLastRequest($(this))
-          
+          $('#left-nav').find(`button:not(#add)`).attr('disabled', 'disabled')
           clearGlobalSearch($('#jqGrid'))
         },
       })
@@ -391,17 +395,26 @@
             class: 'btn btn-info btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              window.open(`{{url('rekappenerimaanheader/report/${selectedId}')}}`)
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Please select a row')
+              } else {
+                window.open(`{{ route('rekappenerimaanheader.report') }}?id=${selectedId}`)
+              }
             }
           },
           {
             id: 'export',
-            innerHTML: '<i class="fa fa-file-export"></i> EXPORT',
+            title: 'Export',
+            caption: 'Export',
+            innerHTML: '<i class="fas fa-file-export"></i> EXPORT',
             class: 'btn btn-warning btn-sm mr-1',
             onClick: () => {
-              $('#rangeModal').data('action', 'export')
-              $('#rangeModal').find('button:submit').html(`Export`)
-              $('#rangeModal').modal('show')
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Please select a row')
+              } else {
+                window.open(`{{ route('rekappenerimaanheader.export') }}?id=${selectedId}`)
+              }
             }
           },
           {
@@ -453,6 +466,7 @@
       .addClass('btn btn-sm btn-warning')
       .parent().addClass('px-1')
 
+      function permission() {
     if (!`{{ $myAuth->hasPermission('rekappenerimaanheader', 'store') }}`) {
       $('#add').addClass('ui-disabled')
     }
@@ -474,7 +488,7 @@
     }
     if (!`{{ $myAuth->hasPermission('rekappenerimaanheader', 'approval') }}`) {
       $('#approval').addClass('ui-disabled')
-    }
+    }}
 
     $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {
@@ -500,30 +514,30 @@
       })
     })
 
-    $('#formRange').submit(event => {
-      event.preventDefault()
+    // $('#formRange').submit(event => {
+    //   event.preventDefault()
 
-      let params
-      let actionUrl = ``
-      if ($('#rangeModal').data('action') == 'export') {
-        actionUrl = `{{ route('rekappenerimaanheader.export') }}`
-      // } else if ($('#rangeModal').data('action') == 'report') {
-      }
+    //   let params
+    //   let actionUrl = ``
+    //   if ($('#rangeModal').data('action') == 'export') {
+    //     actionUrl = `{{ route('rekappenerimaanheader.export') }}`
+    //   // } else if ($('#rangeModal').data('action') == 'report') {
+    //   }
 
-      /* Clear validation messages */
-      $('.is-invalid').removeClass('is-invalid')
-      $('.invalid-feedback').remove()
+    //   /* Clear validation messages */
+    //   $('.is-invalid').removeClass('is-invalid')
+    //   $('.invalid-feedback').remove()
 
-      /* Set params value */
-      for (var key in postData) {
-        if (params != "") {
-          params += "&";
-        }
-        params += key + "=" + encodeURIComponent(postData[key]);
-      }
+    //   /* Set params value */
+    //   for (var key in postData) {
+    //     if (params != "") {
+    //       params += "&";
+    //     }
+    //     params += key + "=" + encodeURIComponent(postData[key]);
+    //   }
 
-      window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
-    })
+    //   window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
+    // })
 
   function handleApproval(id) {
     $.ajax({

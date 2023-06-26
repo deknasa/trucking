@@ -150,7 +150,8 @@ class AbsensiSupirApprovalHeaderController extends MyController
         $sheet->mergeCells('A2:E2');
 
         $header_start_row = 4;
-        $detail_table_header_row = 15;
+        $header_right_start_row = 4;
+        $detail_table_header_row = 10;
         $detail_start_row = $detail_table_header_row + 1;
 
         $alphabets = range('A', 'Z');
@@ -175,6 +176,8 @@ class AbsensiSupirApprovalHeaderController extends MyController
                 'label'=>'Status Approval',
                 'index'=>'statusapproval'
             ],
+        ];
+        $header_right_columns = [
             [
                 'label'=>'User Approval',
                 'index'=>'userapproval'
@@ -184,7 +187,7 @@ class AbsensiSupirApprovalHeaderController extends MyController
                 'index'=>'pengeluaran_nobukti'
             ],
             [
-                'label'=>'Coa Kas Keluar',
+                'label'=>'Kode Perkiraan Kas Keluar',
                 'index'=>'coakaskeluar'
             ],
             [
@@ -202,19 +205,19 @@ class AbsensiSupirApprovalHeaderController extends MyController
                 'label'=>'NO',
             ],
             [
-                'label'=>'No Bukti',
+                'label'=>'NO BUKTI',
                 'index'=>'nobukti'
             ],
             [
-                'label'=>'Trado',
+                'label'=>'TRADO',
                 'index'=>'trado'
             ],
             [
-                'label'=>'Supir',
+                'label'=>'SUPIR',
                 'index'=>'supir'
             ],
             [
-                'label'=>'Supir Serap',
+                'label'=>'SUPIR SERAP',
                 'index'=>'supirserap'
             ],
             
@@ -224,7 +227,10 @@ class AbsensiSupirApprovalHeaderController extends MyController
          foreach ($header_columns as $header_column) {
              $sheet->setCellValue('B' . $header_start_row, $header_column['label']);
              $sheet->setCellValue('C' . $header_start_row++, ': '.$absensiappheader[$header_column['index']]);
-             
+        }
+        foreach ($header_right_columns as $header_right_column) {
+            $sheet->setCellValue('D' . $header_right_start_row, $header_right_column['label']);
+            $sheet->setCellValue('E' . $header_right_start_row++, ': ' . $absensiappheader[$header_right_column['index']]);
         }
 
         foreach ($detail_columns as $detail_columns_index => $detail_column) {
@@ -261,6 +267,8 @@ class AbsensiSupirApprovalHeaderController extends MyController
             
             foreach ($detail_columns as $detail_columns_index => $detail_column) {
                 $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
+                $sheet->getStyle("A$detail_table_header_row:H$detail_table_header_row")->getFont()->setBold(true);
+                $sheet->getStyle("A$detail_table_header_row:H$detail_table_header_row")->getAlignment()->setHorizontal('center');
             }
         
             $sheet->setCellValue("A$detail_start_row", $response_index + 1);
@@ -272,30 +280,6 @@ class AbsensiSupirApprovalHeaderController extends MyController
             $sheet ->getStyle("A$detail_start_row:E$detail_start_row")->applyFromArray($styleArray);
             $detail_start_row++;
         }
-
-        $total_start_row = $detail_start_row;
-
-        //set diketahui dibuat
-        $ttd_start_row = $total_start_row+2;
-        $sheet->setCellValue("B$ttd_start_row", 'Disetujui');
-        $sheet->setCellValue("C$ttd_start_row", 'Diketahui');
-        $sheet->setCellValue("D$ttd_start_row", 'Dibuat');
-        $sheet ->getStyle("B$ttd_start_row:D$ttd_start_row")->applyFromArray($styleArray);
-
-        $sheet->mergeCells("B".($ttd_start_row+1).":B".($ttd_start_row+3));      
-        $sheet->mergeCells("C".($ttd_start_row+1).":C".($ttd_start_row+3));      
-        $sheet->mergeCells("D".($ttd_start_row+1).":D".($ttd_start_row+3));      
-        $sheet ->getStyle("B".($ttd_start_row+1).":B".($ttd_start_row+3))->applyFromArray($styleArray);
-        $sheet ->getStyle("C".($ttd_start_row+1).":C".($ttd_start_row+3))->applyFromArray($styleArray);
-        $sheet ->getStyle("D".($ttd_start_row+1).":D".($ttd_start_row+3))->applyFromArray($styleArray);
-
-        //set autosize
-        $sheet->getColumnDimension('A')->setAutoSize(true);
-        $sheet->getColumnDimension('B')->setAutoSize(true);
-        $sheet->getColumnDimension('C')->setAutoSize(true);
-        //$sheet->getColumnDimension('D')->setAutoSize(true);
-        $sheet->getColumnDimension('E')->setAutoSize(true);
-
 
         $writer = new Xlsx($spreadsheet);
         $filename = 'LaporanAbsensiSupirApproval' . date('dmYHis');

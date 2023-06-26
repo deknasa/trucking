@@ -337,6 +337,8 @@
                         $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
                     }
 
+                    $('#left-nav').find('button').attr('disabled', false)
+                    permission() 
                     setHighlight($(this))
                 },
             })
@@ -348,6 +350,7 @@
                 groupOp: 'AND',
                 disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
                 beforeSearch: function() {
+                    $('#left-nav').find(`button:not(#add)`).attr('disabled', 'disabled')
                     clearGlobalSearch($('#jqGrid'))
                 },
             })
@@ -399,13 +402,14 @@
         /* Append global search */
         loadGlobalSearch($('#jqGrid'))
 
+        function permission() {
         if (!`{{ $myAuth->hasPermission('historipenerimaanstok', 'report') }}`) {
             $('#export').attr('disabled', 'disabled')
         }
 
         if (!`{{ $myAuth->hasPermission('historipenerimaanstok', 'report') }}`) {
             $('#report').attr('disabled', 'disabled')
-        }
+        }}
     }
 
 

@@ -63,27 +63,15 @@ class PenerimaanTruckingController extends MyController
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'penerimaantrucking', $request->all());
-
         $penerimaanTruckings = $response['data'];
-
         $i = 0;
         foreach ($penerimaanTruckings as $index => $params) {
-
             $statusaktif = $params['format'];
-
             $result = json_decode($statusaktif, true);
-
             $statusaktif = $result['MEMO'];
-
-
             $penerimaanTruckings[$i]['format'] = $statusaktif;
-
-        
             $i++;
-
-
         }
-
         return view('reports.penerimaantrucking', compact('penerimaanTruckings'));
     }
 }

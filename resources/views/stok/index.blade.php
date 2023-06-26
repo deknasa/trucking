@@ -245,8 +245,9 @@
                                 }
                             }, 100)
 
-
-                            setHighlight($(this))
+                        $('#left-nav').find('button').attr('disabled', false)
+                        permission() 
+                        setHighlight($(this))
                         }
                     })
 
@@ -258,9 +259,9 @@
                         groupOp: 'AND',
                         disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
                         beforeSearch: function() {
-                            abortGridLastRequest($(this))
-
-                            clearGlobalSearch($('#jqGrid'))
+                        abortGridLastRequest($(this))
+                        $('#left-nav').find(`button:not(#add)`).attr('disabled', 'disabled')
+                        clearGlobalSearch($('#jqGrid'))
                         },
                     })
 
@@ -349,6 +350,7 @@
                     .addClass('btn btn-sm btn-warning')
                     .parent().addClass('px-1')
 
+                    function permission() {  
                 if (!`{{ $myAuth->hasPermission('stok', 'store') }}`) {
                     $('#add').attr('disabled', 'disabled')
                 }
@@ -367,7 +369,7 @@
 
                 if (!`{{ $myAuth->hasPermission('stok', 'report') }}`) {
                     $('#report').attr('disabled', 'disabled')
-                }
+                } }
 
                 $('#rangeModal').on('shown.bs.modal', function() {
                     if (autoNumericElements.length > 0) {

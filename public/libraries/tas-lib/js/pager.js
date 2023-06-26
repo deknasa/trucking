@@ -212,7 +212,7 @@ $.fn.customPager = function (option = {}) {
 		$(`#gbox_${$(this).getGridParam().id}`).after(`
 			<div class="col-12 bg-white grid-pager overflow-x-hidden">
 				<div class="row d-flex align-items-center text-center text-lg-left">
-					<div class="col-12 col-lg-6">
+					<div class="col-12 col-lg-6" id="left-nav">
 						${
 							typeof option.buttons !== "undefined"
 							? option.buttons
