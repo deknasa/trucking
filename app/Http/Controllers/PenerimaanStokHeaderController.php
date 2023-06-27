@@ -261,6 +261,7 @@ class PenerimaanStokHeaderController extends MyController
         $key = array_search('CETAK', array_column( $combo, 'parameter')); 
         $data["combo"] =  $combo[$key];
         $penerimaanstokheaders = $data;
+        
         return view('reports.penerimaanstokheader', compact('penerimaanstokheaders'));
     }
 
