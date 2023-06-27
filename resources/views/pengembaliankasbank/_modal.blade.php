@@ -544,7 +544,7 @@
               bank.parents('.input-group').find('.button-clear').hide()
             }
           })
-
+          $('#detailList tbody').html('')
           $.each(response.detail, (index, detail) => {
             let detailRow = $(`
               <tr>

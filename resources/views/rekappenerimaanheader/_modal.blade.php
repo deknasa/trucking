@@ -510,6 +510,7 @@
               element.val(value)
             }
           })
+          $('#detailList tbody').html('')
           $.each(response.detail, (index, detail) => {
             selectedNobukti.push(detail.nobukti_penerimaan)
             selectedTglBukti.push(detail.tglbukti_penerimaan)

@@ -196,6 +196,7 @@
                                 $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
                             }
 
+<<<<<<< Updated upstream
                             setHighlight($(this))
                         }
                     })
@@ -209,6 +210,27 @@
                         disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
                         beforeSearch: function() {
                             abortGridLastRequest($(this))
+=======
+          $('#left-nav').find('button').attr('disabled', false)
+          permission() 
+          setHighlight($(this))
+        }
+      })
+
+      .jqGrid("setLabel", "rn", "No.")
+      .jqGrid('filterToolbar', {
+        stringResult: true,
+        searchOnEnter: false,
+        defaultSearch: 'cn',
+        groupOp: 'AND',
+        disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
+        beforeSearch: function() {
+          abortGridLastRequest($(this))
+          $('#left-nav').find(`button:not(#add)`).attr('disabled', 'disabled')
+          clearGlobalSearch($('#jqGrid'))
+        },
+      })
+>>>>>>> Stashed changes
 
                             clearGlobalSearch($('#jqGrid'))
                         },
@@ -293,7 +315,12 @@
                     .addClass('btn-sm btn-warning')
                     .parent().addClass('px-1')
 
+    function permission() {
+      if (!`{{ $myAuth->hasPermission('cabang', 'store') }}`) {
+        $('#add').attr('disabled', 'disabled')
+      }
 
+<<<<<<< Updated upstream
                 if (!`{{ $myAuth->hasPermission('cabang', 'store') }}`) {
                     $('#add').attr('disabled', 'disabled')
                 }
@@ -313,6 +340,24 @@
                 if (!`{{ $myAuth->hasPermission('cabang', 'report') }}`) {
                     $('#report').attr('disabled', 'disabled')
                 }
+=======
+      if (!`{{ $myAuth->hasPermission('cabang', 'update') }}`) {
+        $('#edit').attr('disabled', 'disabled')
+      }
+
+      if (!`{{ $myAuth->hasPermission('cabang', 'destroy') }}`) {
+        $('#delete').attr('disabled', 'disabled')
+      }
+
+      if (!`{{ $myAuth->hasPermission('cabang', 'export') }}`) {
+        $('#export').attr('disabled', 'disabled')
+      }
+
+      if (!`{{ $myAuth->hasPermission('cabang', 'report') }}`) {
+        $('#report').attr('disabled', 'disabled')
+      }
+    }
+>>>>>>> Stashed changes
 
                 $('#rangeModal').on('shown.bs.modal', function() {
                     if (autoNumericElements.length > 0) {

@@ -984,7 +984,7 @@
 
   function showSuratPengantar(form, userId) {
     return new Promise((resolve, reject) => {
-      $('#detailList tbody').html('')
+      
       $.ajax({
         url: `${apiUrl}suratpengantar/${userId}`,
         method: 'GET',
@@ -993,6 +993,7 @@
           Authorization: `Bearer ${accessToken}`
         },
         success: response => {
+          $('#detailList tbody').html('')
           $.each(response.data, (index, value) => {
             let element = form.find(`[name="${index}"]`)
 
@@ -1034,7 +1035,7 @@
           if (response.detail.length === 0) {
             addRow()
           } else {
-
+            $('#detailList tbody').html('')
             $.each(response.detail, (index, detail) => {
               let detailRow = $(`
                         <tr>

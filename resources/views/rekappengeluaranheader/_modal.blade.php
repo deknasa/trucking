@@ -487,6 +487,7 @@
               element.val(value)
             }
           })
+          $('#detailList tbody').html('')
           $.each(response.detail, (index, detail) => {
             selectedRows.push(detail.id)
             selectedNobukti.push(detail.nobukti_pengeluaran)

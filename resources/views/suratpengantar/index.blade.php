@@ -33,6 +33,7 @@
   let autoNumericElements = []
   let rowNum = 10
   var statusBukanBatalMuat;
+  var activeGrid;
   var statusEditTujuan;
   $(document).ready(function() {
 
@@ -434,10 +435,10 @@
               }
             },
             formatter: (value, options, rowData) => {
-              let statusEditTujaun = JSON.parse(value)
-              if (!statusEditTujaun) {
+              if (!value) {
                 return ''
               }
+              let statusEditTujaun = JSON.parse(value)
               let formattedValue = $(`
                 <div class="badge" style="background-color: ${statusEditTujaun.WARNA}; color: #fff;">
                   <span>${statusEditTujaun.SINGKATAN}</span>
@@ -447,10 +448,10 @@
               return formattedValue[0].outerHTML
             },
             cellattr: (rowId, value, rowObject) => {
-              let statusEditTujaun = JSON.parse(rowObject.statusedittujuan)
-              if (!statusEditTujaun) {
+              if (!rowObject.statusedittujuan) {
                 return ` title=""`
               }
+              let statusEditTujaun = JSON.parse(rowObject.statusedittujuan)
               return ` title="${statusEditTujaun.MEMO}"`
             }
           },
@@ -553,7 +554,8 @@
           } else {
             $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
           }
-
+          $('#left-nav').find('button').attr('disabled', false)
+          permission() 
           setHighlight($(this))
         },
       })
@@ -566,7 +568,7 @@
         groupOp: 'AND',
         beforeSearch: function() {
           abortGridLastRequest($(this))
-          
+          $('#left-nav').find(`button:not(#add)`).attr('disabled', 'disabled')
           clearGlobalSearch($('#jqGrid'))
         }
       })
@@ -611,6 +613,7 @@
             innerHTML: '<i class="fa fa-print"></i> REPORT',
             class: 'btn btn-info btn-sm mr-1',
             onClick: () => {
+              $('#formRangeTgl').data('action', 'report')
               $('#rangeTglModal').find('button:submit').html(`Report`)
               $('#rangeTglModal').modal('show')
             }
@@ -620,6 +623,7 @@
             innerHTML: '<i class="fa fa-file-export"></i> EXPORT',
             class: 'btn btn-warning btn-sm mr-1',
             onClick: () => {
+              $('#formRangeTgl').data('action', 'export')
               $('#rangeTglModal').find('button:submit').html(`Export`)
               $('#rangeTglModal').modal('show')
             }
@@ -687,22 +691,43 @@
       })
       $('#formRangeTgl').submit(event => {
         event.preventDefault()
+
+        let params
+        let actionUrl = ``
+        let submitButton = $(this).find('button:submit')
+
+        /* Clear validation messages */
+        $('.is-invalid').removeClass('is-invalid')
+        $('.invalid-feedback').remove()
+
+        /* Set params value */
+        for (var key in postData) {
+          if (params != "") {
+            params += "&";
+          }
+          params += key + "=" + encodeURIComponent(postData[key]);
+        }
+
+        let formRange = $('#formRangeTgl')
+        let dari = formRange.find('[name=dari]').val()
+        let sampai = formRange.find('[name=sampai]').val()
+        params += `&dari=${dari}&sampai=${sampai}`
+
         getCekExport()
         .then((response) => {
-          let actionUrl = `{{ route('suratpengantar.export') }}`
+          if($('#formRangeTgl').data('action') == 'export')
+          {
+            let actionUrl = `{{ route('suratpengantar.export') }}`
 
             /* Clear validation messages */
             $('.is-invalid').removeClass('is-invalid')
             $('.invalid-feedback').remove()
-
-
             window.open(`${actionUrl}?${$('#formRangeTgl').serialize()}`)
+          } else if ($('#formRangeTgl').data('action') == 'report') {
+            window.open(`{{ route('suratpengantar.report') }}?${params}`)
+          }
         })
-        .catch((error) => {
-          setErrorMessages($('#formRangeTgl'), error.responseJSON.errors);
-        })
-
-        })
+      })
         function getCekExport() {
            return new Promise((resolve, reject) => {
         $.ajax({
@@ -725,6 +750,7 @@
       });
     }
 
+    function permission() {
     if (!`{{ $myAuth->hasPermission('suratpengantar', 'store') }}`) {
       $('#add').attr('disabled', 'disabled')
     }
@@ -747,7 +773,7 @@
     }
     if (!`{{ $myAuth->hasPermission('suratpengantar', 'export') }}`) {
       $('#export').attr('disabled', 'disabled')
-    }
+    }}
 
     $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {

@@ -5,7 +5,7 @@
         <div class="modal-header">
           <p class="modal-title" id="crudModalTitle"></p>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            
+
           </button>
         </div>
         <form action="" method="post">
@@ -21,126 +21,126 @@
             <input type="text" name="id" class="form-control" hidden>
 
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2">
+              <div class="col-12 col-sm-3 col-md-3">
                 <label class="col-form-label">
                   Nama Supplier <span class="text-danger">*</span>
                 </label>
               </div>
-              <div class="col-12 col-sm-9 col-md-10">
+              <div class="col-12 col-sm-9 col-md-9">
                 <input type="text" name="namasupplier" class="form-control">
               </div>
             </div>
 
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2">
+              <div class="col-12 col-sm-3 col-md-3">
                 <label class="col-form-label">
                   Nama Kontak <span class="text-danger">*</span>
                 </label>
               </div>
-              <div class="col-12 col-sm-9 col-md-10">
+              <div class="col-12 col-sm-9 col-md-9">
                 <input type="text" name="namakontak" class="form-control">
               </div>
             </div>
 
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2">
+              <div class="col-12 col-sm-3 col-md-3">
                 <label class="col-form-label">
                   Alamat <span class="text-danger">*</span>
                 </label>
               </div>
-              <div class="col-12 col-sm-9 col-md-10">
+              <div class="col-12 col-sm-9 col-md-9">
                 <input type="text" name="alamat" class="form-control">
               </div>
             </div>
 
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2">
+              <div class="col-12 col-sm-3 col-md-3"p>
                 <label class="col-form-label">
                   Kota <span class="text-danger">*</span>
                 </label>
               </div>
-              <div class="col-12 col-sm-9 col-md-10">
+              <div class="col-12 col-sm-9 col-md-9">
                 <input type="text" name="kota" class="form-control">
               </div>
             </div>
 
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2">
+              <div class="col-12 col-sm-3 col-md-3">
                 <label class="col-form-label">
-                  Kodepos <span class="text-danger">*</span>
+                  Kode pos <span class="text-danger"></span>
                 </label>
               </div>
-              <div class="col-12 col-sm-9 col-md-10"> 
+              <div class="col-12 col-sm-9 col-md-9">
                 <input type="text" name="kodepos" class="form-control numbernoseparate">
               </div>
             </div>
 
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2">
+              <div class="col-12 col-sm-3 col-md-3">
                 <label class="col-form-label">
-                  NO TELEPON (1) <span class="text-danger">*</span>
+                  NO TELEPON/HANDPHONE (1) <span class="text-danger">*</span>
                 </label>
               </div>
-              <div class="col-12 col-sm-9 col-md-10">
+              <div class="col-12 col-sm-9 col-md-9">
                 <input type="text" name="notelp1" class="form-control numbernoseparate">
               </div>
             </div>
 
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2">
+              <div class="col-12 col-sm-3 col-md-3">
                 <label class="col-form-label">
-                  NO TELEPON (2) 
+                  NO TELEPON/HANDPHONE (2)
                 </label>
               </div>
-              <div class="col-12 col-sm-9 col-md-10">
+              <div class="col-12 col-sm-9 col-md-9">
                 <input type="text" name="notelp2" class="form-control numbernoseparate">
               </div>
             </div>
 
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2">
+              <div class="col-12 col-sm-3 col-md-3">
                 <label class="col-form-label">
-                  Email <span class="text-danger">*</span>
+                  Email <span class="text-danger"></span>
                 </label>
               </div>
-              <div class="col-12 col-sm-9 col-md-10">
+              <div class="col-12 col-sm-9 col-md-9">
                 <input type="email" name="email" class="form-control">
               </div>
             </div>
 
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2">
+              <div class="col-12 col-sm-3 col-md-3">
                 <label class="col-form-label">
-                  Web 
+                  Web
                 </label>
               </div>
-              <div class="col-12 col-sm-9 col-md-10">
+              <div class="col-12 col-sm-9 col-md-9">
                 <input type="text" name="web" class="form-control">
               </div>
             </div>
 
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2">
+              <div class="col-12 col-sm-3 col-md-3">
                 <label class="col-form-label">
                   Nama Pemilik <span class="text-danger">*</span>
                 </label>
               </div>
-              <div class="col-12 col-sm-9 col-md-10">
+              <div class="col-12 col-sm-9 col-md-9">
                 <input type="text" name="namapemilik" class="form-control">
               </div>
             </div>
 
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2">
+              <div class="col-12 col-sm-3 col-md-3">
                 <label class="col-form-label">
                   Jenis Usaha <span class="text-danger">*</span>
                 </label>
               </div>
-              <div class="col-12 col-sm-9 col-md-10">
+              <div class="col-12 col-sm-9 col-md-9">
                 <input type="text" name="jenisusaha" class="form-control">
               </div>
             </div>
-<!-- 
+            <!-- 
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
@@ -153,34 +153,34 @@
             </div> -->
 
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2">
+              <div class="col-12 col-sm-3 col-md-3">
                 <label class="col-form-label">
-                  Bank <span class="text-danger">*</span>
+                  Bank <span class="text-danger"></span>
                 </label>
               </div>
-              <div class="col-12 col-sm-9 col-md-10">
+              <div class="col-12 col-sm-9 col-md-9">
                 <input type="text" name="bank" class="form-control">
               </div>
             </div>
 
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2">
+              <div class="col-12 col-sm-3 col-md-3">
                 <label class="col-form-label">
-                  Rekening Bank <span class="text-danger">*</span>
+                  Rekening Bank <span class="text-danger"></span>
                 </label>
               </div>
-              <div class="col-12 col-sm-9 col-md-10">
+              <div class="col-12 col-sm-9 col-md-9">
                 <input type="text" name="rekeningbank" class="form-control">
               </div>
             </div>
 
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2">
+              <div class="col-12 col-sm-3 col-md-3">
                 <label class="col-form-label">
                   KODE PERKIRAAN <span class="text-danger">*</span>
                 </label>
               </div>
-              <div class="col-8 col-md-10">
+              <div class="col-8 col-md-9">
                 <div class="input-group">
                   <input type="text" name="coa" class="form-control akunpusat-lookup">
                 </div>
@@ -188,19 +188,19 @@
             </div>
 
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2">
+              <div class="col-12 col-sm-3 col-md-3">
                 <label class="col-form-label">
-                  Jabatan <span class="text-danger">*</span>
+                  Jabatan <span class="text-danger"></span>
                 </label>
               </div>
-              <div class="col-12 col-sm-9 col-md-10">
+              <div class="col-12 col-sm-9 col-md-9">
                 <input type="text" name="jabatan" class="form-control">
               </div>
             </div>
 
             <div class="form-group row">
-              <label class="col-sm-3 col-md-2 col-form-label">STATUS DAFTAR HARGA<span class="text-danger">*</span></label>
-              <div class="col-sm-9 col-md-10">
+              <label class="col-sm-3 col-md-3 col-form-label">STATUS DAFTAR HARGA<span class="text-danger">*</span></label>
+              <div class="col-sm-9 col-md-9">
                 <select name="statusdaftarharga" class="form-select select2bs4" style="width: 100%;">
                   <option value="">-- PILIH STATUS DAFTAR HARGA --</option>
                 </select>
@@ -208,33 +208,54 @@
             </div>
 
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2">
+              <div class="col-12 col-sm-3 col-md-3">
                 <label class="col-form-label">
-                  Kategori Usaha <span class="text-danger">*</span>
+                  Kategori Usaha <span class="text-danger"></span>
                 </label>
               </div>
-              <div class="col-12 col-sm-9 col-md-10">
+              <div class="col-12 col-sm-9 col-md-9">
                 <input type="text" name="kategoriusaha" class="form-control">
               </div>
             </div>
 
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2">
+              <div class="col-12 col-sm-3 col-md-3">
                 <label class="col-form-label">
                   Nama Rekening <span class="text-danger">*</span>
                 </label>
               </div>
-              <div class="col-12 col-sm-9 col-md-10">
+              <div class="col-12 col-sm-9 col-md-9">
                 <input type="text" name="namarekening" class="form-control">
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2">
+              <div class="col-12 col-sm-3 col-md-3">
+                <label class="col-form-label">
+                  Keterangan <span class="text-danger"></span>
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-9">
+                <input type="text" name="keterangan" class="form-control">
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-3">
+                <label class="col-form-label">
+                  syarat pembayaran <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-9">
+                <input type="text" name="top" class="form-control">
+              </div>
+            </div>
+
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-3">
                 <label class="col-form-label">
                   STATUS AKTIF <span class="text-danger">*</span>
                 </label>
               </div>
-              <div class="col-12 col-sm-9 col-md-10">
+              <div class="col-12 col-sm-9 col-md-9">
                 <select name="statusaktif" class="form-select select2bs4" style="width: 100%;">
                   <option value="">-- PILIH STATUS AKTIF --</option>
                 </select>
@@ -399,22 +420,22 @@
     $('.invalid-feedback').remove()
 
     Promise
-    .all([
-      setStatusDaftarHargaOptions(form),
-      setStatusAktifOptions(form),
-    ])
-    .then(() => {
-      showDefault(form)
-        .then(() => {
-          $('#crudModal').modal('show')
-        })
-        .catch((error) => {
-          showDialog(error.statusText)
-        })
-        .finally(() => {
-          $('.modal-loader').addClass('d-none')
-        })
-    })
+      .all([
+        setStatusDaftarHargaOptions(form),
+        setStatusAktifOptions(form),
+      ])
+      .then(() => {
+        showDefault(form)
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .catch((error) => {
+            showDialog(error.statusText)
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
+      })
   }
 
   function editSupplier(supplierId) {
@@ -502,47 +523,47 @@
           $.each(response.data, (index, value) => {
             if (value !== null && value !== 0 && value !== undefined) {
               form.find(`[name=${index}]`).attr('maxlength', value)
-              if(index == 'kodepos'){
+              if (index == 'kodepos') {
                 form.find(`[name=kodepos]`).attr('maxlength', 50)
               }
-              if(index == 'namakontak'){
+              if (index == 'namakontak') {
                 form.find(`[name=namakontak]`).attr('maxlength', 150)
               }
-              if(index == 'notelp1'){
+              if (index == 'notelp1') {
                 form.find(`[name=notelp1]`).attr('maxlength', 50)
               }
-              if(index == 'notelp2'){
+              if (index == 'notelp2') {
                 form.find(`[name=notelp2]`).attr('maxlength', 50)
               }
-              if(index == 'namarekening'){
+              if (index == 'namarekening') {
                 form.find(`[name=namarekening]`).attr('maxlength', 150)
               }
-              if(index == 'jabatan'){
+              if (index == 'jabatan') {
                 form.find(`[name=jabatan]`).attr('maxlength', 150)
               }
-              if(index == 'kategoriusaha'){
+              if (index == 'kategoriusaha') {
                 form.find(`[name=kategoriusaha]`).attr('maxlength', 150)
               }
-              if(index == 'rekeningbank'){
+              if (index == 'rekeningbank') {
                 form.find(`[name=rekeningbank]`).attr('maxlength', 150)
               }
-              if(index == 'email'){
+              if (index == 'email') {
                 form.find(`[name=email]`).attr('maxlength', 50)
               }
-              if(index == 'web'){
+              if (index == 'web') {
                 form.find(`[name=web]`).attr('maxlength', 50)
               }
-              if(index == 'namapemilik'){
+              if (index == 'namapemilik') {
                 form.find(`[name=namapemilik]`).attr('maxlength', 150)
               }
-              if(index == 'jenisusaha'){
+              if (index == 'jenisusaha') {
                 form.find(`[name=jenisusaha]`).attr('maxlength', 150)
               }
-              if(index == 'bank'){
+              if (index == 'bank') {
                 form.find(`[name=bank]`).attr('maxlength', 150)
               }
-             
-              if(index == 'kota'){
+
+              if (index == 'kota') {
                 form.find(`[name=kota]`).attr('maxlength', 150)
               }
             }
@@ -556,6 +577,8 @@
       })
     }
   }
+
+
 
   const setStatusDaftarHargaOptions = function(relatedForm) {
     return new Promise((resolve, reject) => {
@@ -597,6 +620,49 @@
     })
   }
 
+  function approve() {
+
+    event.preventDefault()
+
+    let form = $('#crudForm')
+    $(this).attr('disabled', '')
+    $('#processingLoader').removeClass('d-none')
+
+    $.ajax({
+      url: `${apiUrl}supplier/approval`,
+      method: 'POST',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        Id: selectedRows
+      },
+      success: response => {
+        $('#crudForm').trigger('reset')
+        $('#crudModal').modal('hide')
+
+        $('#jqGrid').jqGrid().trigger('reloadGrid');
+        selectedRows = []
+        $('#gs_').prop('checked', false)
+      },
+      error: error => {
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+
+          setErrorMessages(form, error.responseJSON.errors);
+        } else {
+          showDialog(error.statusText)
+        }
+      },
+    }).always(() => {
+      $('#processingLoader').addClass('d-none')
+      $(this).removeAttr('disabled')
+    })
+
+  }
+
   function showDefault(form) {
     return new Promise((resolve, reject) => {
       $.ajax({
@@ -614,8 +680,7 @@
 
             if (element.is('select')) {
               element.val(value).trigger('change')
-            } 
-            else {
+            } else {
               element.val(value)
             }
           })
@@ -696,6 +761,7 @@
       })
     })
   }
+
   function cekValidasidelete(Id) {
     $.ajax({
       url: `{{ config('app.api_url') }}supplier/${Id}/cekValidasi`,
@@ -706,11 +772,11 @@
       },
       success: response => {
         var kondisi = response.kondisi
-          if (kondisi == true) {
-            showDialog(response.message['keterangan'])
-          } else {
-              deleteSupplier(Id)
-          }
+        if (kondisi == true) {
+          showDialog(response.message['keterangan'])
+        } else {
+          deleteSupplier(Id)
+        }
 
       }
     })
@@ -724,9 +790,10 @@
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
           levelCoa: '3',
-          Aktif: 'AKTIF',          
+          Aktif: 'AKTIF',
+          Supplier: 'Supplier',
         }
-      },      
+      },
       onSelectRow: (akunpusat, element) => {
         element.val(akunpusat.coa)
         element.data('currentValue', element.val())
@@ -740,6 +807,5 @@
       }
     })
   }
-
 </script>
 @endpush()

@@ -201,7 +201,9 @@
                                 $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
                             }
 
-                            setHighlight($(this))
+                        $('#left-nav').find('button').attr('disabled', false)
+                        permission() 
+                        setHighlight($(this))
                         }
                     })
 
@@ -212,12 +214,11 @@
                         defaultSearch: 'cn',
                         groupOp: 'AND',
                         beforeSearch: function() {
-                            abortGridLastRequest($(this))
-
-                            clearGlobalSearch($('#jqGrid'))
+                        abortGridLastRequest($(this))
+                        $('#left-nav').find(`button:not(#add)`).attr('disabled', 'disabled')
+                        clearGlobalSearch($('#jqGrid'))
                         }
                     })
-
                     .customPager({
                         buttons: [{
                                 id: 'add',
@@ -297,6 +298,7 @@
                     .parent().addClass('px-1')
 
 
+                    function permission() {
                 if (!`{{ $myAuth->hasPermission('container', 'store') }}`) {
                     $('#add').attr('disabled', 'disabled')
                 }
@@ -313,7 +315,8 @@
                 }
                 if (!`{{ $myAuth->hasPermission('container', 'report') }}`) {
                     $('#report').attr('disabled', 'disabled')
-                }
+                }}
+                
                 $('#rangeModal').on('shown.bs.modal', function() {
                     if (autoNumericElements.length > 0) {
                         $.each(autoNumericElements, (index, autoNumericElement) => {

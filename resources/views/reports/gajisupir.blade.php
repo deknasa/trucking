@@ -6,47 +6,36 @@
 <head>
 
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <title>Report Gaji Supir</title>
+  <title>Laporan Gaji Supir</title>
   <link rel="stylesheet" type="text/css" href="{{ asset($stireport_path . 'css/stimulsoft.viewer.office2013.whiteblue.css') }}">
   <link rel="stylesheet" type="text/css" href="{{ asset($stireport_path . 'css/stimulsoft.designer.office2013.whiteblue.css') }}">
   <script type="text/javascript" src="{{ asset($stireport_path . 'scripts/stimulsoft.reports.js') }}"></script>
   <script type="text/javascript" src="{{ asset($stireport_path . 'scripts/stimulsoft.viewer.js') }}"></script>
   <script type="text/javascript" src="{{ asset($stireport_path . 'scripts/stimulsoft.designer.js') }}"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+  <script src="{{ asset('libraries/tas-lib/js/terbilang.js?version='. config('app.version')) }}"></script>
   <script type="text/javascript">
 
-    let gajisupirs = <?= json_encode($data); ?>
-
-    console.log(gajisupirs.statuscetak)
-    $( document ).ready(function() {
-      var statuscetak = gajisupirs.statuscetak
-      if (statuscetak == 174) {
-        $(document).on('keydown', function(e) { 
-          if((e.ctrlKey || e.metaKey) && (e.key == "p" || e.charCode == 16 || e.charCode == 112 || e.keyCode == 80) ){
-            alert("Document Sudah Pernah Dicetak ");
-            e.cancelBubble = true;
-            e.preventDefault();
-            e.stopImmediatePropagation();
-          }  
-        });  
-      }
-
-
-    });
+    let gajisupirs = <?= json_encode($gajisupir); ?>
 
     function Start() {
       Stimulsoft.Base.StiLicense.loadFromFile("{{ asset($stireport_path . 'license.php') }}");
       var viewerOptions = new Stimulsoft.Viewer.StiViewerOptions()
 
+      Stimulsoft.Report.Dictionary.StiFunctions.addFunction("MyCategory", "Terbilang", "Terbilang", "Terbilang", "", String, "Return Description", [Object], ["value"], ["Descriptions"], terbilang);      
+      viewerOptions.toolbar.viewMode = Stimulsoft.Viewer.StiWebViewMode.Continuous;
+
       var viewer = new Stimulsoft.Viewer.StiViewer(viewerOptions, "StiViewer", false)
       var report = new Stimulsoft.Report.StiReport()
       
-      var statuscetak = gajisupirs.statuscetak
-      if (statuscetak == 174) {
+      var statuscetak = gajisupirs.statuscetak_id
+      var sudahcetak = gajisupirs['combo']['id']
+      if (statuscetak == sudahcetak) {
         viewerOptions.toolbar.showPrintButton = false;
         viewerOptions.toolbar.showSaveButton = false;
         viewerOptions.toolbar.showOpenButton = false;
       }
+
       var options = new Stimulsoft.Designer.StiDesignerOptions()
       options.appearance.fullScreenMode = true
 
@@ -60,8 +49,8 @@
       report.dictionary.dataSources.clear()
 
       dataSet.readJson({
-        'gajisupir': <?= json_encode($gajisupir_details); ?>,
-        'user': <?= json_encode($user); ?>
+        'gajisupir': <?= json_encode($gajisupir); ?>,
+        'detail': <?= json_encode($gajisupir_details); ?>
       })
 
       report.regData(dataSet.dataSetName, '', dataSet)
@@ -69,7 +58,6 @@
       // designer.report = report;
       // designer.renderHtml('content');
       viewer.report = report
-      
       viewer.onPrintReport = function (event) {
         triggerEvent(window, 'afterprint');
       }
@@ -89,10 +77,8 @@
       }
 
       window.addEventListener('afterprint', (event) => {
-        
         var id = gajisupirs.id
         var apiUrl = `{{ config('app.api_url') }}`;
-        
         $.ajax({
           url: `${apiUrl}gajisupirheader/${id}/printreport`,
           method: 'GET',
@@ -101,14 +87,27 @@
             Authorization: `Bearer {{ session('access_token') }}`
           },
           success: response => {
-            console.log(response);
-            window.close()
+            window.close();
           }
-    
         })
-          
       });
     }
+  </script>
+  <script type="text/javascript">
+    $( document ).ready(function() {
+      var statuscetak = gajisupirs.statuscetak_id
+      var sudahcetak = gajisupirs['combo']['id']
+      if (statuscetak == sudahcetak) {
+        $(document).on('keydown', function(e) { 
+          if((e.ctrlKey || e.metaKey) && (e.key == "p" || e.charCode == 16 || e.charCode == 112 || e.keyCode == 80) ){
+            alert("Document Sudah Pernah Dicetak ");
+            e.cancelBubble = true;
+            e.preventDefault();
+            e.stopImmediatePropagation();
+          }  
+        });  
+      }
+    }); 
   </script>
   <style>
     .stiJsViewerPage {
@@ -116,11 +115,7 @@
     }
   </style>
 </head>
-
 <body onLoad="Start()">
-
   <div id="content"></div>
-
 </body>
-
 </html>
