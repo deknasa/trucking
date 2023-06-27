@@ -18,23 +18,6 @@
 
     let gajisupirs = <?= json_encode($gajisupir); ?>
 
-    console.log(gajisupirs.statuscetak)
-    $( document ).ready(function() {
-      var statuscetak = gajisupirs.statuscetak
-      if (statuscetak == 174) {
-        $(document).on('keydown', function(e) { 
-          if((e.ctrlKey || e.metaKey) && (e.key == "p" || e.charCode == 16 || e.charCode == 112 || e.keyCode == 80) ){
-            alert("Document Sudah Pernah Dicetak ");
-            e.cancelBubble = true;
-            e.preventDefault();
-            e.stopImmediatePropagation();
-          }  
-        });  
-      }
-
-
-    });
-
     function Start() {
       Stimulsoft.Base.StiLicense.loadFromFile("{{ asset($stireport_path . 'license.php') }}");
       var viewerOptions = new Stimulsoft.Viewer.StiViewerOptions()
@@ -45,12 +28,14 @@
       var viewer = new Stimulsoft.Viewer.StiViewer(viewerOptions, "StiViewer", false)
       var report = new Stimulsoft.Report.StiReport()
       
-      var statuscetak = gajisupirs.statuscetak
-      if (statuscetak == 174) {
+      var statuscetak = gajisupirs.statuscetak_id
+      var sudahcetak = gajisupirs['combo']['id']
+      if (statuscetak == sudahcetak) {
         viewerOptions.toolbar.showPrintButton = false;
         viewerOptions.toolbar.showSaveButton = false;
         viewerOptions.toolbar.showOpenButton = false;
       }
+
       var options = new Stimulsoft.Designer.StiDesignerOptions()
       options.appearance.fullScreenMode = true
 
@@ -70,10 +55,9 @@
 
       report.regData(dataSet.dataSetName, '', dataSet)
       report.dictionary.synchronize()
-      designer.report = report;
-      designer.renderHtml('content');
+      // designer.report = report;
+      // designer.renderHtml('content');
       viewer.report = report
-      
       viewer.onPrintReport = function (event) {
         triggerEvent(window, 'afterprint');
       }
@@ -93,10 +77,8 @@
       }
 
       window.addEventListener('afterprint', (event) => {
-        
         var id = gajisupirs.id
         var apiUrl = `{{ config('app.api_url') }}`;
-        
         $.ajax({
           url: `${apiUrl}gajisupirheader/${id}/printreport`,
           method: 'GET',
@@ -105,14 +87,27 @@
             Authorization: `Bearer {{ session('access_token') }}`
           },
           success: response => {
-            console.log(response);
-            window.close()
+            window.close();
           }
-    
         })
-          
       });
     }
+  </script>
+  <script type="text/javascript">
+    $( document ).ready(function() {
+      var statuscetak = gajisupirs.statuscetak_id
+      var sudahcetak = gajisupirs['combo']['id']
+      if (statuscetak == sudahcetak) {
+        $(document).on('keydown', function(e) { 
+          if((e.ctrlKey || e.metaKey) && (e.key == "p" || e.charCode == 16 || e.charCode == 112 || e.keyCode == 80) ){
+            alert("Document Sudah Pernah Dicetak ");
+            e.cancelBubble = true;
+            e.preventDefault();
+            e.stopImmediatePropagation();
+          }  
+        });  
+      }
+    }); 
   </script>
   <style>
     .stiJsViewerPage {
@@ -120,11 +115,7 @@
     }
   </style>
 </head>
-
 <body onLoad="Start()">
-
   <div id="content"></div>
-
 </body>
-
 </html>

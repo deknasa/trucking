@@ -115,6 +115,19 @@ class AbsensiSupirHeaderController extends MyController
         return $response['data'];
     }
 
+    public function combo($aksi)
+    {
+        $status = [
+            'status' => $aksi,
+            'grp' => 'STATUSCETAK',
+            'subgrp' => 'STATUSCETAK',
+        ]; 
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'user/combostatus',$status);
+        return $response['data'];
+    }
+
     public function report(Request $request)
     {
         //FETCH HEADER
@@ -136,6 +149,9 @@ class AbsensiSupirHeaderController extends MyController
 
         $absensi = $invoices['data'];
         $absensi_details = $responses['data'];
+        $combo = $this->combo('list');
+        $key = array_search('CETAK', array_column( $combo, 'parameter')); 
+        $absensi["combo"] =  $combo[$key];
         return view('reports.absensi', compact('absensi', 'absensi_details'));
     }
 

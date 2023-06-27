@@ -447,7 +447,6 @@
                             submitButton.removeAttr('disabled')
                         }
                     })
-                    @extends('layouts.master')
 
                 })
 

@@ -83,6 +83,19 @@ class ProsesGajiSupirHeaderController extends MyController
         return $response['data'];
     }
 
+    public function combo($aksi)
+    {
+        $status = [
+            'status' => $aksi,
+            'grp' => 'STATUSCETAK',
+            'subgrp' => 'STATUSCETAK',
+        ]; 
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'user/combostatus',$status);
+        return $response['data'];
+    }
+
     public function report(Request $request)
     {
 
@@ -103,6 +116,9 @@ class ProsesGajiSupirHeaderController extends MyController
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'prosesgajisupirdetail', $detailParams)['data'];
 
+        $combo = $this->combo('list');
+        $key = array_search('CETAK', array_column( $combo, 'parameter')); 
+        $prosesgajisupir["combo"] =  $combo[$key];
         return view('reports.prosesgajisupir', compact('prosesgajisupir', 'prosesgajisupir_detail'));
     }
 

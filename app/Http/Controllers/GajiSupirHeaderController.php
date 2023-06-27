@@ -67,13 +67,11 @@ class GajiSupirHeaderController extends MyController
     
     public function comboList($aksi, $grp, $subgrp)
     {
-
         $status = [
             'status' => $aksi,
             'grp' => $grp,
             'subgrp' => $subgrp,
         ];
-
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
@@ -82,25 +80,43 @@ class GajiSupirHeaderController extends MyController
         return $response['data'];
     }
 
+    public function combo($aksi)
+    {
+        $status = [
+            'status' => $aksi,
+            'grp' => 'STATUSCETAK',
+            'subgrp' => 'STATUSCETAK',
+        ]; 
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'user/combostatus',$status);
+        return $response['data'];
+    }
+
     public function report(Request $request)
     {
+        //FETCH HEADER
         $id = $request->id;
         $gajisupir = Http::withHeaders($request->header())
         ->withOptions(['verify' => false])
         ->withToken(session('access_token'))
         ->get(config('app.api_url') .'gajisupirheader/'.$id.'/export')['data'];
 
+        //FETCH DETAIL
         $detailParams = [
             'forReport' => true,
             'gajisupir_id' => $request->id,
             'sortIndex' => 'suratpengantar_nobukti'
         ];
-  
+
         $gajisupir_details = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'gajisupirdetail', $detailParams)['data'];
         
+        $combo = $this->combo('list');
+        $key = array_search('CETAK', array_column( $combo, 'parameter')); 
+        $gajisupir["combo"] =  $combo[$key];
         return view('reports.gajisupir', compact('gajisupir','gajisupir_details'));
     }
 
