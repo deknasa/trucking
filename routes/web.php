@@ -219,6 +219,8 @@ use App\Http\Controllers\LaporanJurnalUmumController;
 use App\Http\Controllers\LaporanPembelianController;
 use App\Http\Controllers\LaporanPembelianStokController;
 use App\Http\Controllers\LaporanHutangGiroController;
+use App\Http\Controllers\LaporanKartuHutangPerSupplierController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -1291,6 +1293,11 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('laporanpiutanggiro/export', [LaporanPiutangGiroController::class, 'export'])->name('laporanpiutanggiro.export');
     Route::get('laporanpiutanggiro/index', [LaporanPiutangGiroController::class, 'index']);
     Route::resource('laporanpiutanggiro', LaporanPiutangGiroController::class);
+
+    Route::get('laporankartuhutangpersupplier/report', [LaporanKartuHutangPerSupplierController::class, 'report'])->name('laporankartuhutangpersupplier.report');
+    Route::get('laporankartuhutangpersupplier/export', [LaporanKartuHutangPerSupplierController::class, 'export'])->name('laporankartuhutangpersupplier.export');
+    Route::get('laporankartuhutangpersupplier/index', [LaporanKartuHutangPerSupplierController::class, 'index']);
+    Route::resource('laporankartuhutangpersupplier', LaporanKartuHutangPerSupplierController::class);
 
     Route::get('laporanbangudangsementara/report', [LaporanBanGudangSementaraController::class, 'report'])->name('laporanbangudangsementara.report');
     Route::get('laporanbangudangsementara/index', [LaporanBanGudangSementaraController::class, 'index']);
