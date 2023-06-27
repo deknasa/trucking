@@ -523,7 +523,7 @@
               element.data('current-value', value)
             }
           })
-
+          $('#detailList tbody').html('')
           $.each(response.detail, (index, detail) => {
             let detailRow = $(`
               <tr>

@@ -1,12 +1,15 @@
 @extends('layouts.master')
 
 @section('content')
-<!-- Grid -->
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-12">
-      <table id="jqGrid"></table>
+    <!-- Grid -->
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <table id="jqGrid"></table>
+            </div>
+        </div>
     </div>
+
   </div>
 </div>
 
@@ -28,8 +31,31 @@
   let sortorder = 'asc'
   let autoNumericElements = []
   let rowNum = 10
+  let selectedRows = [];
+
+  function checkboxHandler(element) {
+    let value = $(element).val();
+    if (element.checked) {
+      selectedRows.push($(element).val())
+      $(element).parents('tr').addClass('bg-light-blue')
+
+
+    } else {
+      $(element).parents('tr').removeClass('bg-light-blue')
+      for (var i = 0; i < selectedRows.length; i++) {
+        if (selectedRows[i] == value) {
+          selectedRows.splice(i, 1);
+        }
+      }
+    }
+
+  }
+
+
 
   $(document).ready(function() {
+
+
     $("#jqGrid").jqGrid({
         url: `${apiUrl}supplier`,
         mtype: "GET",
@@ -37,11 +63,94 @@
         iconSet: 'fontAwesome',
         datatype: "json",
         colModel: [{
-            label: 'id',
+            label: '',
+            name: '',
+            width: 30,
+            align: 'center',
+            sortable: false,
+            clear: false,
+            stype: 'input',
+            searchable: false,
+            searchoptions: {
+              type: 'checkbox',
+              clearSearch: false,
+              dataInit: function(element) {
+                $(element).removeClass('form-control')
+                $(element).parent().addClass('text-center')
+
+                $(element).on('click', function() {
+
+                  $(element).attr('disabled', true)
+                  if ($(this).is(':checked')) {
+                    selectAllRows()
+                  } else {
+                    clearSelectedRows()
+                  }
+                })
+
+              }
+            },
+            formatter: (value, rowOptions, rowData) => {
+              return `<input type="checkbox" name="Id[]" value="${rowData.id}" onchange="checkboxHandler(this)">`
+            },
+          },
+          {
+
+            label: 'ID',
             name: 'id',
+            align: 'right',
             width: '50px',
             search: false,
             hidden: true
+          },
+          {
+            label: 'STATUS APPROVAL',
+            name: 'statusapproval',
+            align: 'left',
+            stype: 'select',
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['comboapproval'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['comboapproval'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+              `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              let statusApproval = JSON.parse(value)
+
+              if (statusApproval == null) {
+                return '';
+              }
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusApproval.WARNA}; color: #fff;">
+                  <span>${statusApproval.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusApproval = JSON.parse(rowObject.statusapproval)
+              if (statusApproval == null) {
+                return '';
+              }
+              return ` title="${statusApproval.MEMO}"`
+            }
           },
           {
             label: 'nama supplier',
@@ -65,11 +174,11 @@
             name: 'kodepos',
           },
           {
-            label: 'NO TELEPON (1)',
+            label: 'NO TELEPON/HANDPHONE (1)',
             name: 'notelp1',
           },
           {
-            label: 'NO TELEPON (2)',
+            label: 'NO TELEPON/HANDPHONE (2)',
             name: 'notelp2',
           },
           {
@@ -107,6 +216,14 @@
             name: 'jabatan',
           },
           {
+            label: 'keterangan',
+            name: 'keterangan',
+          },
+          {
+            label: 'syarat pembayaran',
+            name: 'top',
+          },
+          {
             label: 'status daftar harga',
             name: 'statusdaftarharga',
             width: 180,
@@ -123,66 +240,181 @@
                         $i++;
                       endforeach
 
-                      ?>
-            `,
-              dataInit: function(element) {
-                $(element).select2({
-                  width: 'resolve',
-                  theme: "bootstrap4"
-                });
-              }
-            },
-            formatter: (value, options, rowData) => {
-              let statusDaftarHarga = JSON.parse(value)
 
-              let formattedValue = $(`
+    @include('supplier._modal')
+
+    @push('scripts')
+        <script>
+            let indexRow = 0;
+            let page = 1;
+            let pager = '#jqGridPager'
+            let popup = "";
+            let id = "";
+            let triggerClick = true;
+            let highlightSearch;
+            let totalRecord
+            let limit
+            let postData
+            let sortname = 'namasupplier'
+            let sortorder = 'asc'
+            let autoNumericElements = []
+            let rowNum = 10
+
+            $(document).ready(function() {
+                $("#jqGrid").jqGrid({
+                        url: `${apiUrl}supplier`,
+                        mtype: "GET",
+                        styleUI: 'Bootstrap4',
+                        iconSet: 'fontAwesome',
+                        datatype: "json",
+                        colModel: [{
+                                label: 'id',
+                                name: 'id',
+                                width: '50px',
+                                search: false,
+                                hidden: true
+                            },
+                            {
+                                label: 'nama supplier',
+                                name: 'namasupplier',
+                            },
+                            {
+                                label: 'nama kontak',
+                                name: 'namakontak',
+                            },
+                            {
+                                label: 'alamat',
+                                name: 'alamat',
+                            },
+
+                            {
+                                label: 'kota',
+                                name: 'kota',
+                            },
+                            {
+                                label: 'kode pos',
+                                name: 'kodepos',
+                            },
+                            {
+                                label: 'NO TELEPON (1)',
+                                name: 'notelp1',
+                            },
+                            {
+                                label: 'NO TELEPON (2)',
+                                name: 'notelp2',
+                            },
+                            {
+                                label: 'email',
+                                name: 'email',
+                            },
+
+                            {
+                                label: 'web',
+                                name: 'web',
+                            },
+                            {
+                                label: 'nama pemilik',
+                                name: 'namapemilik',
+                            },
+                            {
+                                label: 'jenis usaha',
+                                name: 'jenisusaha',
+                            },
+                            // {
+                            //   label: 'top',
+                            //   name: 'top',
+                            // },
+                            {
+                                label: 'bank',
+                                name: 'bank',
+                            },
+                            {
+                                label: 'rekening bank',
+                                name: 'rekeningbank',
+                            },
+
+                            {
+                                label: 'jabatan',
+                                name: 'jabatan',
+                            },
+                            {
+                                label: 'status daftar harga',
+                                name: 'statusdaftarharga',
+                                width: 180,
+                                stype: 'select',
+                                searchoptions: {
+                                    value: `<?php
+                                    $i = 1;
+                                    
+                                    foreach ($data['combodaftarharga'] as $status):
+                                        echo "$status[param]:$status[parameter]";
+                                        if ($i !== count($data['combodaftarharga'])) {
+                                            echo ';';
+                                        }
+                                        $i++;
+                                    endforeach;
+                                    
+                                    ?>
+            `,
+                                    dataInit: function(element) {
+                                        $(element).select2({
+                                            width: 'resolve',
+                                            theme: "bootstrap4"
+                                        });
+                                    }
+                                },
+                                formatter: (value, options, rowData) => {
+                                    let statusDaftarHarga = JSON.parse(value)
+
+                                    let formattedValue = $(`
                 <div class="badge" style="background-color: ${statusDaftarHarga.WARNA}; color: #fff;">
                   <span>${statusDaftarHarga.SINGKATAN}</span>
                 </div>
               `)
 
-              return formattedValue[0].outerHTML
-            },
-            cellattr: (rowId, value, rowObject) => {
-              let statusDaftarHarga = JSON.parse(rowObject.statusdaftarharga)
+                                    return formattedValue[0].outerHTML
+                                },
+                                cellattr: (rowId, value, rowObject) => {
+                                    let statusDaftarHarga = JSON.parse(rowObject.statusdaftarharga)
 
-              return ` title="${statusDaftarHarga.MEMO}"`
-            }
-          },
-          {
-            label: 'status aktif',
-            name: 'statusaktif',
-            width: 130,
-            stype: 'select',
-            searchoptions: {
-              value: `<?php
-                      $i = 1;
-
-                      foreach ($data['comboaktif'] as $status) :
-                        echo "$status[param]:$status[parameter]";
-                        if ($i !== count($data['comboaktif'])) {
-                          echo ";";
-                        }
-                        $i++;
-                      endforeach
-
-                      ?>
+                                    return ` title="${statusDaftarHarga.MEMO}"`
+                                }
+                            },
+                            {
+                                label: 'status aktif',
+                                name: 'statusaktif',
+                                width: 130,
+                                stype: 'select',
+                                searchoptions: {
+                                    value: `<?php
+                                    $i = 1;
+                                    
+                                    foreach ($data['comboaktif'] as $status):
+                                        echo "$status[param]:$status[parameter]";
+                                        if ($i !== count($data['comboaktif'])) {
+                                            echo ';';
+                                        }
+                                        $i++;
+                                    endforeach;
+                                    
+                                    ?>
             `,
-              dataInit: function(element) {
-                $(element).select2({
-                  width: 'resolve',
-                  theme: "bootstrap4"
-                });
-              }
-            },
-            formatter: (value, options, rowData) => {
-              let statusAktif = JSON.parse(value)
+                                    dataInit: function(element) {
+                                        $(element).select2({
+                                            width: 'resolve',
+                                            theme: "bootstrap4"
+                                        });
+                                    }
+                                },
+                                formatter: (value, options, rowData) => {
+                                    let statusAktif = JSON.parse(value)
 
-              let formattedValue = $(`
+                                    let formattedValue = $(`
                 <div class="badge" style="background-color: ${statusAktif.WARNA}; color: #fff;">
                   <span>${statusAktif.SINGKATAN}</span>
                 </div>
               `)
+
 
               return formattedValue[0].outerHTML
             },
@@ -259,9 +491,21 @@
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
+
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))
+
+          $.each(selectedRows, function(key, value) {
+
+            $('#jqGrid tbody tr').each(function(row, tr) {
+              if ($(this).find(`td input:checkbox`).val() == value) {
+                $(this).find(`td input:checkbox`).prop('checked', true)
+                $(this).addClass('bg-light-blue')
+              }
+            })
+
+          });
 
           /* Set global variables */
           sortname = $(this).jqGrid("getGridParam", "sortname")
@@ -310,7 +554,7 @@
         disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
           abortGridLastRequest($(this))
-          
+
           clearGlobalSearch($('#jqGrid'))
         },
       })
@@ -367,6 +611,16 @@
               $('#rangeModal').modal('show')
             }
           },
+          {
+            id: 'approveun',
+            innerHTML: '<i class="fas fa-check""></i> UN/APPROVAL',
+            class: 'btn btn-purple btn-sm mr-1',
+            onClick: () => {
+
+              approve()
+
+            }
+          },
         ]
       })
 
@@ -416,6 +670,10 @@
       $('#report').attr('disabled', 'disabled')
     }
 
+    if (!`{{ $myAuth->hasPermission('supplier', 'approval') }}`) {
+      $('#approval').addClass('ui-disabled')
+    }
+
     $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {
         $.each(autoNumericElements, (index, autoNumericElement) => {
@@ -430,22 +688,23 @@
       if (page == 0) {
         $('#formRange [name=dari]').val(page)
         $('#formRange [name=sampai]').val(totalRecord)
-      }else{
+      } else {
         $('#formRange [name=dari]').val((indexRow + 1) + (limit * (page - 1)))
         $('#formRange [name=sampai]').val(totalRecord)
       }
 
       autoNumericElements = new AutoNumeric.multiple('#formRange .autonumeric-report', {
-        digitGroupSeparator: '.',
-        decimalCharacter: ',',
+        digitGroupSeparator: ',',
+        decimalCharacter: '.',
+        decimalPlaces: 0,
         allowDecimalPadding: false,
-        minimumValue: 0,
+        minimumValue: 1,
         maximumValue: totalRecord,
       })
     })
 
     $('#rangeModal').on('hidden.bs.modal', function() {
-      
+
       $('.is-invalid').removeClass('is-invalid')
       $('.invalid-feedback').remove()
     })
@@ -473,77 +732,118 @@
 
 
       getCekExport(params).then((response) => {
-      if ($('#rangeModal').data('action') == 'export') {
-        let xhr = new XMLHttpRequest()
-        xhr.open('GET', `{{ config('app.api_url') }}supplier/export?${params}`, true)
-        xhr.setRequestHeader("Authorization", `Bearer {{ session('access_token') }}`)
-        xhr.responseType = 'arraybuffer'
+          if ($('#rangeModal').data('action') == 'export') {
+            let xhr = new XMLHttpRequest()
+            xhr.open('GET', `{{ config('app.api_url') }}supplier/export?${params}`, true)
+            xhr.setRequestHeader("Authorization", `Bearer {{ session('access_token') }}`)
+            xhr.responseType = 'arraybuffer'
 
-        xhr.onload = function(e) {
-          if (this.status === 200) {
-            if (this.response !== undefined) {
-              let blob = new Blob([this.response], {
-                type: "application/vnd.ms-excel"
-              })
-              let link = document.createElement('a')
+            xhr.onload = function(e) {
+              if (this.status === 200) {
+                if (this.response !== undefined) {
+                  let blob = new Blob([this.response], {
+                    type: "application/vnd.ms-excel"
+                  })
+                  let link = document.createElement('a')
 
-              link.href = window.URL.createObjectURL(blob)
-              link.download = `laporanSupplier${(new Date).getTime()}.xlsx`
-              link.click()
+                  link.href = window.URL.createObjectURL(blob)
+                  link.download = `laporanSupplier${(new Date).getTime()}.xlsx`
+                  link.click()
 
+                  submitButton.removeAttr('disabled')
+                }
+              }
+            }
+            xhr.onerror = () => {
               submitButton.removeAttr('disabled')
             }
-          }
-        }
-        xhr.onerror = () => {
+
+            xhr.send()
+          } else if ($('#rangeModal').data('action') == 'report') {
+            window.open(`{{ route('supplier.report') }}?${params}`)
+
             submitButton.removeAttr('disabled')
           }
+        })
+        .catch((error) => {
 
-        xhr.send()
-      } else if ($('#rangeModal').data('action') == 'report') {
-        window.open(`{{ route('supplier.report') }}?${params}`)
+          if (error.status === 422) {
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+            errors = error.responseJSON.errors
 
-        submitButton.removeAttr('disabled')
-      }
-    })
-    .catch((error) => {
+            $.each(errors, (index, error) => {
+              let indexes = index.split(".");
+              indexes[0] = 'sampai'
+              let element;
+              element = $('#rangeModal').find(`[name="${indexes[0]}"]`)[0];
 
-        if (error.status === 422) {
-          $('.is-invalid').removeClass('is-invalid')
-          $('.invalid-feedback').remove()
-          errors = error.responseJSON.errors
-
-          $.each(errors, (index, error) => {
-            let indexes = index.split(".");
-            indexes[0] = 'sampai'
-            let element;
-            element = $('#rangeModal').find(`[name="${indexes[0]}"]`)[0];
-
-            $(element).addClass("is-invalid");
-            $(`
+              $(element).addClass("is-invalid");
+              $(`
               <div class="invalid-feedback">
               ${error[0].toLowerCase()}
               </div>
 			    `).appendTo($(element).parent());
 
-          });
+            });
 
-          $(".is-invalid").first().focus();
-        } else {
-          showDialog(error.statusText)
-        }
-      })
-      .finally(() => {
-        $('.ui-button').click()
-        
-        submitButton.removeAttr('disabled')
-      })
+            $(".is-invalid").first().focus();
+          } else {
+            showDialog(error.statusText)
+          }
+        })
+        .finally(() => {
+          $('.ui-button').click()
+
+          submitButton.removeAttr('disabled')
+        })
     })
 
-    
+
+    function handleApproval(id) {
+      $.ajax({
+        url: `${apiUrl}supplier/${id}/approval`,
+        method: 'POST',
+        dataType: 'JSON',
+        beforeSend: request => {
+          request.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+        },
+        success: response => {
+          $('#jqGrid').trigger('reloadGrid')
+        }
+      }).always(() => {
+        $('#processingLoader').addClass('d-none')
+      })
+    }
+
+    function clearSelectedRows() {
+      selectedRows = []
+
+      $('#jqGrid').trigger('reloadGrid')
+    }
+
+    function selectAllRows() {
+      $.ajax({
+        url: `${apiUrl}supplier`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          limit: 0,
+        },
+        success: (response) => {
+          selectedRows = response.data.map((supplier) => supplier.id)
+          $('#jqGrid').trigger('reloadGrid')
+        }
+      })
+    }
+
+
     function getCekExport(params) {
 
-      
+
       params += `&cekExport=true`
 
       return new Promise((resolve, reject) => {
@@ -568,3 +868,4 @@
 </script>
 @endpush()
 @endsection
+

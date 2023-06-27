@@ -12,6 +12,7 @@
       postData: {
         aktif: `{!! $Aktif ?? '' !!}`,
         absen: `{!! $AbsensiId ?? '' !!}`,
+        supir_id: `{!! $supir_id ?? '' !!}`,
       },
       idPrefix: 'supirLookup',
       colModel: [{
@@ -370,198 +371,198 @@
           label: 'plafondeposito',
           name: 'plafondeposito',
         },
-        {
-          label: 'PHOTO SUPIR',
-          name: 'photosupir',
-          search: false,
-          align: 'center',
-          formatter: (value, row) => {
-            let images = []
-            if (value) {
-              let files = JSON.parse(value)
+        // {
+        //   label: 'PHOTO SUPIR',
+        //   name: 'photosupir',
+        //   search: false,
+        //   align: 'center',
+        //   formatter: (value, row) => {
+        //     let images = []
+        //     if (value) {
+        //       let files = JSON.parse(value)
 
-              files.forEach(file => {
-                if (file == '') {
-                  file = 'no-image'
-                }
-                let image = new Image()
-                image.width = 25
-                image.height = 25
-                image.src = `${apiUrl}supir/image/supir/${encodeURI(file)}/small/show`
+        //       files.forEach(file => {
+        //         if (file == '') {
+        //           file = 'no-image'
+        //         }
+        //         let image = new Image()
+        //         image.width = 25
+        //         image.height = 25
+        //         image.src = `${apiUrl}supir/image/supir/${encodeURI(file)}/small/show`
 
-                images.push(image.outerHTML)
-              });
+        //         images.push(image.outerHTML)
+        //       });
 
-              return images.join(' ')
-            } else {
-              let image = new Image()
-              image.width = 25
-              image.height = 25
-              image.src = `${apiUrl}supir/image/supir/no-image/small/show`
-              return image.outerHTML
-            }
-          }
-        },
-        {
-          label: 'PHOTO KTP',
-          name: 'photoktp',
-          align: 'center',
-          search: false,
-          formatter: (value, row) => {
-            let images = []
-            if (value) {
-              let files = JSON.parse(value)
+        //       return images.join(' ')
+        //     } else {
+        //       let image = new Image()
+        //       image.width = 25
+        //       image.height = 25
+        //       image.src = `${apiUrl}supir/image/supir/no-image/small/show`
+        //       return image.outerHTML
+        //     }
+        //   }
+        // },
+        // {
+        //   label: 'PHOTO KTP',
+        //   name: 'photoktp',
+        //   align: 'center',
+        //   search: false,
+        //   formatter: (value, row) => {
+        //     let images = []
+        //     if (value) {
+        //       let files = JSON.parse(value)
 
-              files.forEach(file => {
-                if (file == '') {
-                  file = 'no-image'
-                }
-                let image = new Image()
-                image.width = 25
-                image.height = 25
-                image.src = `${apiUrl}supir/image/ktp/${file}/small/show`
+        //       files.forEach(file => {
+        //         if (file == '') {
+        //           file = 'no-image'
+        //         }
+        //         let image = new Image()
+        //         image.width = 25
+        //         image.height = 25
+        //         image.src = `${apiUrl}supir/image/ktp/${file}/small/show`
 
-                images.push(image.outerHTML)
-              });
+        //         images.push(image.outerHTML)
+        //       });
 
-              return images.join(' ')
-            } else {
-              let image = new Image()
-              image.width = 25
-              image.height = 25
-              image.src = `${apiUrl}supir/image/ktp/no-image/small/show`
-              return image.outerHTML
-            }
-          }
-        },
-        {
-          label: 'PHOTO SIM',
-          name: 'photosim',
-          align: 'center',
-          search: false,
-          formatter: (value, row) => {
-            let images = []
-            if (value) {
-              let files = JSON.parse(value)
+        //       return images.join(' ')
+        //     } else {
+        //       let image = new Image()
+        //       image.width = 25
+        //       image.height = 25
+        //       image.src = `${apiUrl}supir/image/ktp/no-image/small/show`
+        //       return image.outerHTML
+        //     }
+        //   }
+        // },
+        // {
+        //   label: 'PHOTO SIM',
+        //   name: 'photosim',
+        //   align: 'center',
+        //   search: false,
+        //   formatter: (value, row) => {
+        //     let images = []
+        //     if (value) {
+        //       let files = JSON.parse(value)
 
-              files.forEach(file => {
-                if (file == '') {
-                  file = 'no-image'
-                }
-                let image = new Image()
-                image.width = 25
-                image.height = 25
-                image.src = `${apiUrl}supir/image/sim/${file}/small/show`
+        //       files.forEach(file => {
+        //         if (file == '') {
+        //           file = 'no-image'
+        //         }
+        //         let image = new Image()
+        //         image.width = 25
+        //         image.height = 25
+        //         image.src = `${apiUrl}supir/image/sim/${file}/small/show`
 
-                images.push(image.outerHTML)
-              });
+        //         images.push(image.outerHTML)
+        //       });
 
-              return images.join(' ')
-            } else {
-              let image = new Image()
-              image.width = 25
-              image.height = 25
-              image.src = `${apiUrl}supir/image/sim/no-image/small/show`
-              return image.outerHTML
-            }
-          }
-        },
-        {
-          label: 'PHOTO KK',
-          name: 'photokk',
-          align: 'center',
-          search: false,
-          formatter: (value, row) => {
-            let images = []
-            if (value) {
-              let files = JSON.parse(value)
+        //       return images.join(' ')
+        //     } else {
+        //       let image = new Image()
+        //       image.width = 25
+        //       image.height = 25
+        //       image.src = `${apiUrl}supir/image/sim/no-image/small/show`
+        //       return image.outerHTML
+        //     }
+        //   }
+        // },
+        // {
+        //   label: 'PHOTO KK',
+        //   name: 'photokk',
+        //   align: 'center',
+        //   search: false,
+        //   formatter: (value, row) => {
+        //     let images = []
+        //     if (value) {
+        //       let files = JSON.parse(value)
 
-              files.forEach(file => {
-                if (file == '') {
-                  file = 'no-image'
-                }
-                let image = new Image()
-                image.width = 25
-                image.height = 25
-                image.src = `${apiUrl}supir/image/kk/${file}/small/show`
+        //       files.forEach(file => {
+        //         if (file == '') {
+        //           file = 'no-image'
+        //         }
+        //         let image = new Image()
+        //         image.width = 25
+        //         image.height = 25
+        //         image.src = `${apiUrl}supir/image/kk/${file}/small/show`
 
-                images.push(image.outerHTML)
-              });
+        //         images.push(image.outerHTML)
+        //       });
 
-              return images.join(' ')
-            } else {
-              let image = new Image()
-              image.width = 25
-              image.height = 25
-              image.src = `${apiUrl}supir/image/kk/no-image/small/show`
-              return image.outerHTML
-            }
-          }
-        },
-        {
-          label: 'PHOTO SKCK',
-          name: 'photoskck',
-          search: false,
-          align: 'center',
-          formatter: (value, row) => {
-            let images = []
-            if (value) {
-              let files = JSON.parse(value)
+        //       return images.join(' ')
+        //     } else {
+        //       let image = new Image()
+        //       image.width = 25
+        //       image.height = 25
+        //       image.src = `${apiUrl}supir/image/kk/no-image/small/show`
+        //       return image.outerHTML
+        //     }
+        //   }
+        // },
+        // {
+        //   label: 'PHOTO SKCK',
+        //   name: 'photoskck',
+        //   search: false,
+        //   align: 'center',
+        //   formatter: (value, row) => {
+        //     let images = []
+        //     if (value) {
+        //       let files = JSON.parse(value)
 
-              files.forEach(file => {
-                if (file == '') {
-                  file = 'no-image'
-                }
-                let image = new Image()
-                image.width = 25
-                image.height = 25
-                image.src = `${apiUrl}supir/image/skck/${file}/small/show`
+        //       files.forEach(file => {
+        //         if (file == '') {
+        //           file = 'no-image'
+        //         }
+        //         let image = new Image()
+        //         image.width = 25
+        //         image.height = 25
+        //         image.src = `${apiUrl}supir/image/skck/${file}/small/show`
 
-                images.push(image.outerHTML)
-              });
+        //         images.push(image.outerHTML)
+        //       });
 
-              return images.join(' ')
-            } else {
-              let image = new Image()
-              image.width = 25
-              image.height = 25
-              image.src = `${apiUrl}supir/image/skck/no-image/small/show`
-              return image.outerHTML
-            }
-          }
-        },
-        {
-          label: 'PHOTO DOMISILI',
-          name: 'photodomisili',
-          search: false,
-          align: 'center',
-          formatter: (value, row) => {
-            let images = []
-            if (value) {
-              let files = JSON.parse(value)
+        //       return images.join(' ')
+        //     } else {
+        //       let image = new Image()
+        //       image.width = 25
+        //       image.height = 25
+        //       image.src = `${apiUrl}supir/image/skck/no-image/small/show`
+        //       return image.outerHTML
+        //     }
+        //   }
+        // },
+        // {
+        //   label: 'PHOTO DOMISILI',
+        //   name: 'photodomisili',
+        //   search: false,
+        //   align: 'center',
+        //   formatter: (value, row) => {
+        //     let images = []
+        //     if (value) {
+        //       let files = JSON.parse(value)
 
-              files.forEach(file => {
-                if (file == '') {
-                  file = 'no-image'
-                }
-                let image = new Image()
-                image.width = 25
-                image.height = 25
-                image.src = `${apiUrl}supir/image/domisili/${file}/small/show`
+        //       files.forEach(file => {
+        //         if (file == '') {
+        //           file = 'no-image'
+        //         }
+        //         let image = new Image()
+        //         image.width = 25
+        //         image.height = 25
+        //         image.src = `${apiUrl}supir/image/domisili/${file}/small/show`
 
-                images.push(image.outerHTML)
-              });
+        //         images.push(image.outerHTML)
+        //       });
 
-              return images.join(' ')
-            } else {
-              let image = new Image()
-              image.width = 25
-              image.height = 25
-              image.src = `${apiUrl}supir/image/domisili/no-image/small/show`
-              return image.outerHTML
-            }
-          }
-        },
+        //       return images.join(' ')
+        //     } else {
+        //       let image = new Image()
+        //       image.width = 25
+        //       image.height = 25
+        //       image.src = `${apiUrl}supir/image/domisili/no-image/small/show`
+        //       return image.outerHTML
+        //     }
+        //   }
+        // },
         {
           label: 'TGL BERHENTI SUPIR',
           name: 'tglberhentisupir',

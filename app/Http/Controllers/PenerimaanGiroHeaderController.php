@@ -127,36 +127,35 @@ class PenerimaanGiroHeaderController extends MyController
 
     public function report(Request $request)
     {
-
-        $header = Http::withHeaders(request()->header())
+        //FETCH HEADER
+        $id = $request->id;
+        $penerimaangiro = Http::withHeaders($request->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'penerimaangiroheader/' . $request->id);
+            ->get(config('app.api_url') . 'penerimaangiroheader/'.$id.'/export')['data'];
 
+        //FETCH DETAIL
         $detailParams = [
             'forReport' => true,
-            'penerimaangiro_id' => $request->id
+            'penerimaangiro_id' => $request->id,
         ];
 
-        $penerimaangiro_detail = Http::withHeaders(request()->header())
+        $penerimaangiro_details = Http::withHeaders($request->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'penerimaangirodetail', $detailParams);
+            ->get(config('app.api_url') . 'penerimaangirodetail', $detailParams)['data'];
 
-        $data = $header['data'];
-        $penerimaangiro_details = $penerimaangiro_detail['data'];
-        $user = Auth::user();
-        return view('reports.penerimaangiroheader', compact('data','penerimaangiro_details', 'user'));
+        return view('reports.penerimaangiroheader', compact('penerimaangiro','penerimaangiro_details'));
     }
 
     public function export(Request $request): void
     {
-
         //FETCH HEADER
-        $penerimaangiros = Http::withHeaders($request->header())
+        $id = $request->id;
+        $penerimaangiro = Http::withHeaders($request->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'penerimaangiroheader/' . $request->id)['data'];
+            ->get(config('app.api_url') . 'penerimaangiroheader/'.$id.'/export')['data'];
 
         //FETCH DETAIL
         $detailParams = [
@@ -167,19 +166,34 @@ class PenerimaanGiroHeaderController extends MyController
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'penerimaangirodetail', $detailParams);
-
         $penerimaangiro_details = $responses['data'];
-        $user = Auth::user();
+
+        $tglBukti = $penerimaangiro["tglbukti"];
+        $timeStamp = strtotime($tglBukti);
+        $dateTglBukti = date('d-m-Y', $timeStamp); 
+        $penerimaangiro['tglbukti'] = $dateTglBukti;
+
+        $tgllunas = $penerimaangiro["tgllunas"];
+        $timeStamp = strtotime($tgllunas);
+        $datetgllunas = date('d-m-Y', $timeStamp); 
+        $penerimaangiro['tgllunas'] = $datetgllunas;
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setCellValue('A1', 'PENERIMAAN GIRO');
-        $sheet->getStyle("A1")->getFont()->setSize(20);
+        $sheet->setCellValue('A1', $penerimaangiro['judul']);
+        $sheet->setCellValue('A2', $penerimaangiro['judulLaporan']);
+        $sheet->getStyle("A1")->getFont()->setSize(12);
+        $sheet->getStyle("A2")->getFont()->setSize(12);
+        $sheet->getStyle("A1")->getFont()->setBold(true);
+        $sheet->getStyle("A2")->getFont()->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
-        $sheet->mergeCells('A1:G1');
+        $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
+        $sheet->mergeCells('A1:K1');
+        $sheet->mergeCells('A2:K2');
 
-        $header_start_row = 2;
-        $detail_table_header_row = 9;
+        $header_start_row = 4;
+        $header_right_start_row = 4;
+        $detail_table_header_row = 8;
         $detail_start_row = $detail_table_header_row + 1;
 
         $alphabets = range('A', 'Z');
@@ -195,72 +209,66 @@ class PenerimaanGiroHeaderController extends MyController
             ],
             [
                 'label' => 'Pelanggan',
-                'index' => 'pelanggan',
+                'index' => 'pelanggan_id',
+            ],
+        ];
+        $header_right_columns = [
+            [
+                'label' => 'Tanggal Lunas',
+                'index' => 'tgllunas',
+            ],
+            [
+                'label' => 'Posting Dari',
+                'index' => 'postingdari',
             ],
             [
                 'label' => 'Diterima Dari',
                 'index' => 'diterimadari',
-            ],
-            [
-                'label' => 'Tgl Lunas',
-                'index' => 'tgllunas',
-            ],
-            [
-                'label' => 'Keterangan',
-                'index' => 'keterangan',
-            ],
+            ]
         ];
 
         $detail_columns = [
             [
-                'label' => 'No',
+                'label' => 'NO',
             ],
             [
-                'label' => 'No Warkat',
+                'label' => 'NO WARKAT',
                 'index' => 'nowarkat',
             ],
             [
-                'label' => 'Tgl Jatuh Tempo',
+                'label' => 'JATUH TEMPO',
                 'index' => 'tgljatuhtempo',
-            ],
-            [
-                'label' => 'COA Debet',
-                'index' => 'coadebet',
-            ],
-            [
-                'label' => 'COA Kredit',
-                'index' => 'coakredit'
             ],
             [
                 'label' => 'Bank',
                 'index' => 'bank_id'
             ],
             [
-                'label' => 'Pelanggan',
-                'index' => 'pelanggan_id'
+                'label' => 'KODE PERKIRAAN DEBET',
+                'index' => 'coadebet',
             ],
             [
-                'label' => 'Bank Pelanggan',
-                'index' => 'bankpelanggan_id'
+                'label' => 'KODE PERKIRAAN KREDIT',
+                'index' => 'coakredit'
             ],
             [
-                'label' => 'No Bukti Invoice',
-                'index' => 'invoice_nobukti'
-            ],
-            [
-                'label' => 'Jenis Biaya',
-                'index' => 'jenisbiaya'
-            ],
-            [
-                'label' => 'Bulan Beban',
-                'index' => 'bulanbeban'
-            ],
-            [
-                'label' => 'Keterangan',
+                'label' => 'KETERANGAN',
                 'index' => 'keterangan'
             ],
             [
-                'label' => 'Nominal',
+                'label' => 'JENIS BIAYA',
+                'index' => 'jenisbiaya'
+            ],
+            [
+                'label' => 'BULAN BEBAN',
+                'index' => 'bulanbeban'
+            ],
+            [
+                'label' => 'BANK PELANGGAN',
+                'index' => 'bankpelanggan_id'
+            ],
+            [
+                'label' => 'NOMINAL',
                 'index' => 'nominal',
                 'format' => 'currency'
             ]
@@ -269,8 +277,11 @@ class PenerimaanGiroHeaderController extends MyController
         //LOOPING HEADER        
         foreach ($header_columns as $header_column) {
             $sheet->setCellValue('B' . $header_start_row, $header_column['label']);
-
-            $sheet->setCellValue('C' . $header_start_row++, ': ' . $penerimaangiros[$header_column['index']]);
+            $sheet->setCellValue('C' . $header_start_row++, ': ' . $penerimaangiro[$header_column['index']]);
+        }
+        foreach ($header_right_columns as $header_right_column) {
+            $sheet->setCellValue('D' . $header_right_start_row, $header_right_column['label']);
+            $sheet->setCellValue('E' . $header_right_start_row++, ': '.$penerimaangiro[$header_right_column['index']]);
         }
         foreach ($detail_columns as $detail_columns_index => $detail_column) {
             $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_table_header_row, $detail_column['label'] ?? $detail_columns_index + 1);
@@ -297,7 +308,7 @@ class PenerimaanGiroHeaderController extends MyController
         ];
 
         // $sheet->getStyle("A$detail_table_header_row:G$detail_table_header_row")->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FF1F456E');
-        $sheet->getStyle("A$detail_table_header_row:M$detail_table_header_row")->applyFromArray($styleArray);
+        $sheet->getStyle("A$detail_table_header_row:K$detail_table_header_row")->applyFromArray($styleArray);
 
         // LOOPING DETAIL
         $nominal = 0;
@@ -305,57 +316,41 @@ class PenerimaanGiroHeaderController extends MyController
 
             foreach ($detail_columns as $detail_columns_index => $detail_column) {
                 $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
+                $sheet->getStyle("A$detail_table_header_row:K$detail_table_header_row")->getFont()->setBold(true);
+                $sheet->getStyle("A$detail_table_header_row:K$detail_table_header_row")->getAlignment()->setHorizontal('center');
             }
             $response_detail['nominals'] = number_format((float) $response_detail['nominal'], '2', ',', '.');
+
+            $tgljatuhtempo = $response_detail["tgljatuhtempo"];
+            $timeStamp = strtotime($tgljatuhtempo);
+            $datetgljatuhtempo = date('d-m-Y', $timeStamp); 
+            $response_detail['tgljatuhtempo'] = $datetgljatuhtempo;
 
             $sheet->setCellValue("A$detail_start_row", $response_index + 1);
             $sheet->setCellValue("B$detail_start_row", $response_detail['nowarkat']);
             $sheet->setCellValue("C$detail_start_row", $response_detail['tgljatuhtempo']);
-            $sheet->setCellValue("D$detail_start_row", $response_detail['coadebet']);
-            $sheet->setCellValue("E$detail_start_row", $response_detail['coakredit']);
-            $sheet->setCellValue("F$detail_start_row", $response_detail['bank_id']);
-            $sheet->setCellValue("G$detail_start_row", $response_detail['pelanggan_id']);
-            $sheet->setCellValue("H$detail_start_row", $response_detail['bankpelanggan_id']);
-            $sheet->setCellValue("I$detail_start_row", $response_detail['invoice_nobukti']);
-            $sheet->setCellValue("J$detail_start_row", $response_detail['jenisbiaya']);
-            $sheet->setCellValue("K$detail_start_row", $response_detail['bulanbeban']);
-            $sheet->setCellValue("L$detail_start_row", $response_detail['keterangan']);
-            $sheet->setCellValue("M$detail_start_row", $response_detail['nominals']);
+            $sheet->setCellValue("D$detail_start_row", $response_detail['bank_id']);
+            $sheet->setCellValue("E$detail_start_row", $response_detail['coadebet']);
+            $sheet->setCellValue("F$detail_start_row", $response_detail['coakredit']);
+            $sheet->setCellValue("G$detail_start_row", $response_detail['keterangan']);
+            $sheet->setCellValue("H$detail_start_row", $response_detail['jenisbiaya']);
+            $sheet->setCellValue("I$detail_start_row", $response_detail['bulanbeban']);
+            $sheet->setCellValue("J$detail_start_row", $response_detail['bankpelanggan_id']);
+            $sheet->setCellValue("K$detail_start_row", $response_detail['nominals']);
 
-            $sheet->getStyle("A$detail_start_row:M$detail_start_row")->applyFromArray($styleArray);
-            $sheet->getStyle("M$detail_start_row")->applyFromArray($style_number);
+            $sheet->getStyle("J$detail_start_row")->getAlignment()->setWrapText(true);
+            $sheet->getColumnDimension('J')->setWidth(50);
+
+            $sheet->getStyle("A$detail_start_row:J$detail_start_row")->applyFromArray($styleArray);
+            $sheet->getStyle("K$detail_start_row")->applyFromArray($style_number);
             $nominal += $response_detail['nominal'];
             $detail_start_row++;
         }
 
         $total_start_row = $detail_start_row;
-        $sheet->mergeCells('A' . $total_start_row . ':L' . $total_start_row);
-        $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A' . $total_start_row . ':L' . $total_start_row)->applyFromArray($style_number)->getFont()->setBold(true);
-        $sheet->setCellValue("M$total_start_row", number_format((float) $nominal, '2', ',', '.'))->getStyle("M$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
-
-        // set diketahui dibuat
-        $ttd_start_row = $total_start_row + 2;
-        $sheet->setCellValue("B$ttd_start_row", 'Disetujui');
-        $sheet->setCellValue("C$ttd_start_row", 'Diketahui');
-        $sheet->setCellValue("D$ttd_start_row", 'Dibuat');
-        $sheet->getStyle("B$ttd_start_row:D$ttd_start_row")->applyFromArray($styleArray);
-
-        $sheet->mergeCells("B" . ($ttd_start_row + 1) . ":B" . ($ttd_start_row + 3));
-        $sheet->mergeCells("C" . ($ttd_start_row + 1) . ":C" . ($ttd_start_row + 3));
-        $sheet->mergeCells("D" . ($ttd_start_row + 1) . ":D" . ($ttd_start_row + 3));
-        $sheet->getStyle("B" . ($ttd_start_row + 1) . ":B" . ($ttd_start_row + 3))->applyFromArray($styleArray);
-        $sheet->getStyle("C" . ($ttd_start_row + 1) . ":C" . ($ttd_start_row + 3))->applyFromArray($styleArray);
-        $sheet->getStyle("D" . ($ttd_start_row + 1) . ":D" . ($ttd_start_row + 3))->applyFromArray($styleArray);
-
-        //set tglcetak
-        date_default_timezone_set('Asia/Jakarta');
-
-        $sheet->setCellValue("B" . ($ttd_start_row + 5), 'Dicetak Pada :');
-        $sheet->getStyle("B" . ($ttd_start_row + 5))->getFont()->setItalic(true);
-        $sheet->setCellValue("C" . ($ttd_start_row + 5), date('d/m/Y H:i:s'));
-        $sheet->getStyle("C" . ($ttd_start_row + 5))->getFont()->setItalic(true);
-        $sheet->setCellValue("D" . ($ttd_start_row + 5), $user['name']);
-        $sheet->getStyle("D" . ($ttd_start_row + 5))->getFont()->setItalic(true);
+        $sheet->mergeCells('A' . $total_start_row . ':J' . $total_start_row);
+        $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A' . $total_start_row . ':J' . $total_start_row)->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->setCellValue("K$total_start_row", number_format((float) $nominal, '2', ',', '.'))->getStyle("K$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
 
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);
@@ -368,10 +363,6 @@ class PenerimaanGiroHeaderController extends MyController
         $sheet->getColumnDimension('I')->setAutoSize(true);
         $sheet->getColumnDimension('J')->setAutoSize(true);
         $sheet->getColumnDimension('K')->setAutoSize(true);
-        $sheet->getColumnDimension('L')->setAutoSize(true);
-        $sheet->getColumnDimension('M')->setAutoSize(true);
-
-
 
         $writer = new Xlsx($spreadsheet);
         $filename = 'Laporan Penerimaan Giro ' . date('dmYHis');

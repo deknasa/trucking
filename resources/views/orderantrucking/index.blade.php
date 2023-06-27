@@ -303,7 +303,8 @@
           } else {
             $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
           }
-
+          $('#left-nav').find('button').attr('disabled', false)
+          permission() 
           setHighlight($(this))
         },
       })
@@ -317,7 +318,7 @@
         disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
           abortGridLastRequest($(this))
-          
+          $('#left-nav').find(`button:not(#add)`).attr('disabled', 'disabled')
           clearGlobalSearch($('#jqGrid'))
         },
       })
@@ -340,7 +341,7 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                cekValidasidelete(selectedId,'edit')
+                cekValidasidelete(selectedId, 'edit')
               }
             }
           },
@@ -353,16 +354,17 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                cekValidasidelete(selectedId,'delete')
+                cekValidasidelete(selectedId, 'delete')
               }
 
             }
-          }, 
+          },
           {
             id: 'report',
             innerHTML: '<i class="fa fa-print"></i> REPORT',
             class: 'btn btn-info btn-sm mr-1',
             onClick: () => {
+              $('#formRangeTgl').data('action', 'report')
               $('#rangeTglModal').find('button:submit').html(`Report`)
               $('#rangeTglModal').modal('show')
             }
@@ -372,6 +374,7 @@
             innerHTML: '<i class="fa fa-file-export"></i> EXPORT',
             class: 'btn btn-warning btn-sm mr-1',
             onClick: () => {
+              $('#formRangeTgl').data('action', 'export')
               $('#rangeTglModal').find('button:submit').html(`Export`)
               $('#rangeTglModal').modal('show')
             }
@@ -405,32 +408,54 @@
       .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
 
-      $('#rangeTglModal').on('shown.bs.modal', function() {
-        initDatepicker()
+    $('#rangeTglModal').on('shown.bs.modal', function() {
+      initDatepicker()
 
-        $('#formRangeTgl').find('[name=dari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-        $('#formRangeTgl').find('[name=sampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-      })
-      $('#formRangeTgl').submit(event => {
-        event.preventDefault()
-        getCekExport()
+      $('#formRangeTgl').find('[name=dari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+      $('#formRangeTgl').find('[name=sampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+    })
+
+    $('#formRangeTgl').submit(event => {
+      event.preventDefault()
+      let params
+      let actionUrl = ``
+      let submitButton = $(this).find('button:submit')
+
+      /* Clear validation messages */
+      $('.is-invalid').removeClass('is-invalid')
+      $('.invalid-feedback').remove()
+
+      /* Set params value */
+      for (var key in postData) {
+        if (params != "") {
+          params += "&";
+        }
+        params += key + "=" + encodeURIComponent(postData[key]);
+      }
+
+       // window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
+
+      let formRange = $('#formRangeTgl')
+      let dari = formRange.find('[name=dari]').val()
+      let sampai = formRange.find('[name=sampai]').val()
+      params += `&dari=${dari}&sampai=${sampai}`
+
+      getCekExport()
         .then((response) => {
-          let actionUrl = `{{ route('orderantrucking.export') }}`
-
+          if ($('#formRangeTgl').data('action') == 'export') {
+            let actionUrl = `{{ route('orderantrucking.export') }}`
             /* Clear validation messages */
             $('.is-invalid').removeClass('is-invalid')
             $('.invalid-feedback').remove()
-
-
             window.open(`${actionUrl}?${$('#formRangeTgl').serialize()}`)
+          } else if ($('#formRangeTgl').data('action') == 'report') {
+            window.open(`{{ route('orderantrucking.report') }}?${params}`)
+          }
         })
-        .catch((error) => {
-          setErrorMessages($('#formRangeTgl'), error.responseJSON.errors);
-        })
+    })
 
-        })
-        function getCekExport() {
-           return new Promise((resolve, reject) => {
+    function getCekExport() {
+      return new Promise((resolve, reject) => {
         $.ajax({
           url: `${apiUrl}orderantrucking/export`,
           dataType: "JSON",
@@ -438,8 +463,8 @@
             Authorization: `Bearer ${accessToken}`
           },
           data: {
-            dari:$('#formRangeTgl').find('[name=dari]').val(),
-            sampai:$('#formRangeTgl').find('[name=sampai]').val()
+            dari: $('#formRangeTgl').find('[name=dari]').val(),
+            sampai: $('#formRangeTgl').find('[name=sampai]').val()
           },
           success: (response) => {
             resolve(response);
@@ -452,6 +477,7 @@
       });
     }
 
+    function permission() {
     if (!`{{ $myAuth->hasPermission('orderantrucking', 'store') }}`) {
       $('#add').attr('disabled', 'disabled')
     }
@@ -470,7 +496,7 @@
 
     if (!`{{ $myAuth->hasPermission('orderantrucking', 'export') }}`) {
       $('#export').attr('disabled', 'disabled')
-    }
+    }}
 
     $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {
@@ -487,8 +513,9 @@
       $('#formRange [name=sampai]').val(totalRecord)
 
       autoNumericElements = new AutoNumeric.multiple('#formRange .autonumeric-report', {
-        digitGroupSeparator: '.',
-        decimalCharacter: ',',
+        digitGroupSeparator: ',',
+        decimalCharacter: '.',
+        decimalPlaces: 0,
         allowDecimalPadding: false,
         minimumValue: 1,
         maximumValue: totalRecord

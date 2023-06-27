@@ -19,7 +19,7 @@
 
   <script type="text/javascript">
 
-    let invoiceheaders = <?= json_encode($data); ?>
+    let invoiceheaders = <?= json_encode($invoices); ?>
 
     $( document ).ready(function() {
       var statuscetak = invoiceheaders.statuscetak
@@ -68,14 +68,14 @@
       report.dictionary.dataSources.clear()
 
       dataSet.readJson({
-        'invoice': <?= json_encode($invoice_details); ?>,
-        'user': <?= json_encode($user); ?>
+        'invoices': <?= json_encode($invoices); ?>,
+        'invoice_detail': <?= json_encode($invoice_detail); ?>
       })
 
       report.regData(dataSet.dataSetName, '', dataSet)
       report.dictionary.synchronize()
-      // designer.report = report;
-      // designer.renderHtml('content');
+      designer.report = report;
+      designer.renderHtml('content');
       viewer.report = report
       
       viewer.onPrintReport = function (event) {

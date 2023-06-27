@@ -47,14 +47,15 @@
                     <input type="text" name="tglterima" class="form-control datepicker">
                   </div>
                 </div>
-                <div class="col-12 col-md-2  text-right">
+                <div class="col-12 col-md-2 text-right">
                   <label class="col-form-label">
-                    Jenis Order <span class="text-danger">*</span>
+                    TGL JATUH TEMPO <span class="text-danger">*</span>
                   </label>
                 </div>
                 <div class="col-12 col-md-4">
-                  <input type="hidden" name="jenisorder_id">
-                  <input type="text" name="jenisorder" class="form-control jenisorder-lookup">
+                  <div class="input-group">
+                    <input type="text" name="tgljatuhtempo" class="form-control datepicker">
+                  </div>
                 </div>
               </div>
 
@@ -71,15 +72,14 @@
 
                 <div class="col-12 col-md-2  text-right">
                   <label class="col-form-label">
-                    TGL SAMPAI <span class="text-danger">*</span>
+                    Jenis Order <span class="text-danger">*</span>
                   </label>
                 </div>
                 <div class="col-12 col-md-4">
-                  <div class="input-group">
-                    <input type="text" name="tglsampai" class="form-control datepicker">
-                  </div>
+                  <input type="hidden" name="jenisorder_id">
+                  <input type="text" name="jenisorder" class="form-control jenisorder-lookup">
                 </div>
-                
+
               </div>
 
               <div class="row form-group">
@@ -94,7 +94,17 @@
                   </div>
                 </div>
 
-              
+                <div class="col-12 col-md-2  text-right">
+                  <label class="col-form-label">
+                    TGL SAMPAI <span class="text-danger">*</span>
+                  </label>
+                </div>
+                <div class="col-12 col-md-4">
+                  <div class="input-group">
+                    <input type="text" name="tglsampai" class="form-control datepicker">
+                  </div>
+                </div>
+
               </div>
 
               <div class="row form-group mb-5">
@@ -187,6 +197,10 @@
       data.push({
         name: 'tglterima',
         value: form.find(`[name="tglterima"]`).val()
+      })
+      data.push({
+        name: 'tgljatuhtempo',
+        value: form.find(`[name="tgljatuhtempo"]`).val()
       })
       data.push({
         name: 'jenisorder',
@@ -408,6 +422,7 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+    $('#crudForm').find('[name=tgljatuhtempo]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
     $('#crudForm').find('[name=tglterima]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
     $('#crudForm').find('[name=tgldari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
     $('#crudForm').find('[name=tglsampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
@@ -431,7 +446,7 @@
     $('#crudModalTitle').text('Edit Invoice')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-    
+
     Promise
       .all([
         showInvoiceHeader(form, invId, 'edit')
@@ -459,7 +474,7 @@
   }
 
   function deleteInvoiceHeader(invId) {
-    let form = $('#crudForm') 
+    let form = $('#crudForm')
 
     $('.modal-loader').removeClass('d-none')
 

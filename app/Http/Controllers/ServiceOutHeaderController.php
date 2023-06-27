@@ -190,21 +190,25 @@ class ServiceOutHeaderController extends MyController
     
     public function report(Request $request)
     {
-        
+       //FETCH HEADER
+        $id = $request->id;
+        $serviceOut = Http::withHeaders($request->header())
+        ->withOptions(['verify' => false])
+        ->withToken(session('access_token'))
+        ->get(config('app.api_url') .'serviceoutheader/'.$id.'/export')['data'];;
+
+        //FETCH DETAIL
         $detailParams = [
-            'forReport' => true,
-            'serviceout_id' => $request->id
+            'serviceout_id' => $request->id,
         ];
-  
-        $serviceout_detail = Http::withHeaders(request()->header())
-            ->withOptions(['verify' => false])
-            ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'serviceoutdetail', $detailParams);
-        
-        
-        $serviceout_details = $serviceout_detail['data'];
-        $user = $serviceout_detail['user'];
-        return view('reports.serviceout', compact('serviceout_details','user'));
+
+        $responses = Http::withHeaders($request->header())
+        ->withOptions(['verify' => false])
+        ->withToken(session('access_token'))
+        ->get(config('app.api_url') .'serviceoutdetail', $detailParams);
+        $serviceOut_details = $responses['data'];
+
+        return view('reports.serviceout', compact('serviceOut_details','serviceOut'));
     }
 
     public function export(Request $request): void
@@ -241,15 +245,17 @@ class ServiceOutHeaderController extends MyController
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setCellValue('A1', $serviceOut['judul']);
         $sheet->setCellValue('A2', $serviceOut['judulLaporan']);
-        $sheet->getStyle("A1")->getFont()->setSize(14);
+        $sheet->getStyle("A1")->getFont()->setSize(12);
         $sheet->getStyle("A2")->getFont()->setSize(12);
+        $sheet->getStyle("A1")->getFont()->setBold(true);
+        $sheet->getStyle("A2")->getFont()->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:D1');
         $sheet->mergeCells('A2:D2');
 
         $header_start_row = 4;
-        $detail_table_header_row = 10;
+        $detail_table_header_row = 9;
         $detail_start_row = $detail_table_header_row + 1;
        
         $alphabets = range('A', 'Z');
@@ -260,7 +266,7 @@ class ServiceOutHeaderController extends MyController
                 'index' => 'nobukti',
             ],
             [
-                'label' => 'Tanggal Bukti',
+                'label' => 'Tanggal',
                 'index' => 'tglbukti',
             ],
             [
@@ -278,11 +284,11 @@ class ServiceOutHeaderController extends MyController
                 'label' => 'No',
             ],
             [
-                'label' => 'No Bukti Service In',
+                'label' => 'NO BUKTI SERVICE IN',
                 'index' => 'servicein_nobukti',
             ],
             [
-                'label' => 'Keterangan',
+                'label' => 'KETERANGAN',
                 'index' => 'keterangan',
             ]
         ];
@@ -316,34 +322,15 @@ class ServiceOutHeaderController extends MyController
             $sheet->setCellValue("B$detail_start_row", $response_detail['servicein_nobukti']);
             $sheet->setCellValue("C$detail_start_row", $response_detail['keterangan']);
 
+            $sheet->getStyle("C$detail_start_row")->getAlignment()->setWrapText(true);
+            $sheet->getColumnDimension('C')->setWidth(50);
+
             $sheet ->getStyle("A$detail_start_row:C$detail_start_row")->applyFromArray($styleArray);
             $detail_start_row++;
         }
 
-        // set diketahui dibuat
-        $ttd_start_row = $detail_start_row+2;
-        $sheet->setCellValue("B$ttd_start_row", 'Disetujui');
-        $sheet->setCellValue("C$ttd_start_row", 'Diketahui');
-        $sheet->setCellValue("D$ttd_start_row", 'Dibuat');
-        $sheet ->getStyle("B$ttd_start_row:D$ttd_start_row")->applyFromArray($styleArray);
-        
-        $sheet->mergeCells("B".($ttd_start_row+1).":B".($ttd_start_row+3));      
-        $sheet->mergeCells("C".($ttd_start_row+1).":C".($ttd_start_row+3));      
-        $sheet->mergeCells("D".($ttd_start_row+1).":D".($ttd_start_row+3));      
-        $sheet ->getStyle("B".($ttd_start_row+1).":B".($ttd_start_row+3))->applyFromArray($styleArray);
-        $sheet ->getStyle("C".($ttd_start_row+1).":C".($ttd_start_row+3))->applyFromArray($styleArray);
-        $sheet ->getStyle("D".($ttd_start_row+1).":D".($ttd_start_row+3))->applyFromArray($styleArray);
-
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);
-        $sheet->getColumnDimension('C')->setAutoSize(true);
-        $sheet->getColumnDimension('D')->setAutoSize(true);
-        $sheet->getColumnDimension('E')->setAutoSize(true);
-        $sheet->getColumnDimension('F')->setAutoSize(true);
-        $sheet->getColumnDimension('G')->setAutoSize(true);
-        $sheet->getColumnDimension('H')->setAutoSize(true);
-
-        
 
         $writer = new Xlsx($spreadsheet);
         $filename = 'Laporan ServiceOut  ' . date('dmYHis');

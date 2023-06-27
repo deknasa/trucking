@@ -5,12 +5,12 @@
         <div class="modal-header">
           <p class="modal-title" id="crudModalTitle"></p>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            
+
           </button>
         </div>
         <form action="" method="post">
           <div class="modal-body">
-                   {{-- <div class="row form-group">
+            {{-- <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">ID</label>
               </div>
@@ -46,27 +46,29 @@
                 </label>
               </div>
               <div class="col-12 col-md-10">
-                <input type="text" name="type" class="form-control">
+                <input type="hidden" name="type_id">
+                <input type="text" name="type" class="form-control type-lookup">
               </div>
             </div>
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
-                  level <span class="text-danger">*</span>
+                  akuntansi <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-md-10">
-                <input type="text" name="level" class="form-control numbernoseparate">
+                <input type="hidden" name="akuntansi_id">
+                <input type="text" name="akuntansi" class="form-control akuntansi-lookup">
               </div>
             </div>
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
-                  parent <span class="text-danger">*</span>
+                  kode perkiraan parent
                 </label>
               </div>
               <div class="col-12 col-md-10">
-                <input type="text" name="parent" class="form-control">
+                <input type="text" name="parent" class="form-control parent-lookup">
               </div>
             </div>
             <div class="row form-group">
@@ -108,7 +110,7 @@
                 </label>
               </div>
               <div class="col-12 col-md-10">
-                <input type="text" name="coamain" class="form-control">
+                <input type="text" name="coamain" class="form-control coamain-lookup">
               </div>
             </div>
             <div class="row form-group">
@@ -256,6 +258,7 @@
 
     getMaxLength(form)
     initSelect2(form.find('.select2bs4'), true)
+    initLookup()
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
@@ -318,8 +321,7 @@
 
             if (element.is('select')) {
               element.val(value).trigger('change')
-            } 
-            else {
+            } else {
               element.val(value)
             }
           })
@@ -654,6 +656,18 @@
             } else {
               element.val(value)
             }
+            if (index == 'type') {
+              element.data('current-value', value)
+            }
+            if (index == 'akuntansi') {
+              element.data('current-value', value)
+            }
+            if (index == 'parent') {
+              element.data('current-value', value)
+            }
+            if (index == 'coamain') {
+              element.data('current-value', value)
+            }
           })
 
           if (form.data('action') === 'delete') {
@@ -666,6 +680,128 @@
           reject(error)
         }
       })
+    })
+  }
+ 
+  function cekValidasi(Id,aksi) {
+    $.ajax({
+      url: `{{ config('app.api_url') }}akunpusat/${Id}/cekValidasi`,
+      method: 'GET',
+      dataType: 'JSON',
+      beforeSend: request => {
+        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+      },
+      success: response => {
+        var kondisi = response.kondisi
+        if (kondisi == true) {
+          showDialog(response.message['keterangan'])
+        } else {
+          if(aksi == 'edit'){
+            editAkunPusat(Id)
+          }else{
+            deleteAkunPusat(Id)
+          }
+        }
+
+      }
+    })
+  }
+
+  function initLookup() {
+    $('.type-lookup').lookup({
+      title: 'Type Akuntansi Lookup',
+      fileName: 'typeakuntansi',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+
+          Aktif: 'AKTIF',
+        }
+      },
+      onSelectRow: (type, element) => {
+        $('#crudForm [name=type_id]').val(type.id)
+        element.val(type.kodetype)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $('#crudForm [name=type_id]').val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+
+    $('.akuntansi-lookup').lookup({
+      title: 'Akuntansi Lookup',
+      fileName: 'akuntansi',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+
+          Aktif: 'AKTIF',
+        }
+      },
+      onSelectRow: (akuntansi, element) => {
+        $('#crudForm [name=akuntansi_id]').val(akuntansi.id)
+        element.val(akuntansi.kodeakuntansi)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $('#crudForm [name=akuntansi_id]').val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+
+    $('.parent-lookup').lookup({
+      title: 'Akun Pusat Lookup',
+      fileName: 'akunpusat',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+
+          Aktif: 'AKTIF',
+        }
+      },
+      onSelectRow: (akunpusat, element) => {
+        element.val(akunpusat.coa)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+
+    $('.coamain-lookup').lookup({
+      title: 'Main Akun Pusat Lookup',
+      fileName: 'mainakunpusat',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+
+          Aktif: 'AKTIF',
+        }
+      },
+      onSelectRow: (akunpusat, element) => {
+        element.val(akunpusat.coa)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
+      }
     })
   }
 </script>

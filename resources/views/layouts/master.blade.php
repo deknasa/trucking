@@ -94,7 +94,7 @@
                 <label class="col-form-label">Dari</label>
               </div>
               <div class="col-sm-10">
-                <input type="text" name="dari" class="form-control autonumeric-report" autofocus>
+                <input type="tel" name="dari" class="form-control autonumeric-report" autofocus>
               </div>
             </div>
 
@@ -103,7 +103,7 @@
                 <label class="col-form-label">Sampai</label>
               </div>
               <div class="col-sm-10">
-                <input type="text" name="sampai" class="form-control autonumeric-report">
+                <input type="tel" name="sampai" class="form-control autonumeric-report">
               </div>
             </div>
           </div>

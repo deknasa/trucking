@@ -2085,6 +2085,7 @@
 
             });
           } else if (kodepengeluaran === "BST") {
+            $('#detailList tbody').html('')
             $.each(response.detail, (index, detail) => {
               if (detail.pengeluarantrucking_id != null) {
                 selectedRowsSumbangan.push(detail.id_detail)
@@ -2137,6 +2138,7 @@
             });
 
           } else {
+            $('#detailList tbody').html('')
             $.each(response.detail, (index, detail) => {
               let pengeluaranstokheader;
               let detailRow = $(`

@@ -11,6 +11,7 @@
       datatype: "json",
       postData: {
         aktif: `{!! $Aktif ?? '' !!}`,
+        trado_id: `{!! $trado_id ?? '' !!}`,
       },
       idPrefix: 'tradoLookup',
       colModel: [{
@@ -689,104 +690,104 @@
             return ` title="${statusLewatValidasi.MEMO}"`
           }
         },
-          {
-            label: 'PHOTO STNK',
-            name: 'photostnk',
-            align: 'center',
-            search: false,
-            formatter: (value, row) => {
-              let images = []
-              if (value.length) {
-                let files = JSON.parse(value)
+          // {
+          //   label: 'PHOTO STNK',
+          //   name: 'photostnk',
+          //   align: 'center',
+          //   search: false,
+          //   formatter: (value, row) => {
+          //     let images = []
+          //     if (value.length) {
+          //       let files = JSON.parse(value)
 
-                files.forEach(file => {
-                  if (file == '') {
-                    file = 'no-image'
-                  }
-                  let image = new Image()
-                  image.width = 25
-                  image.height = 25
-                  image.src = `${apiUrl}trado/image/stnk/${encodeURI(file)}/small/show`
-                  images.push(image.outerHTML)
-                });
+          //       files.forEach(file => {
+          //         if (file == '') {
+          //           file = 'no-image'
+          //         }
+          //         let image = new Image()
+          //         image.width = 25
+          //         image.height = 25
+          //         image.src = `${apiUrl}trado/image/stnk/${encodeURI(file)}/small/show`
+          //         images.push(image.outerHTML)
+          //       });
 
-                return images.join(' ')
-              } else {
-                let image = new Image()
-                image.width = 25
-                image.height = 25
-                image.src = `${apiUrl}trado/image/stnk/no-image/small/show`
-                return image.outerHTML
-              }
-            }
-          },
-          {
-            label: 'PHOTO BPKB',
-            name: 'photobpkb',
-            align: 'center',
-            search: false,
-            formatter: (value, row) => {
-              let images = []
+          //       return images.join(' ')
+          //     } else {
+          //       let image = new Image()
+          //       image.width = 25
+          //       image.height = 25
+          //       image.src = `${apiUrl}trado/image/stnk/no-image/small/show`
+          //       return image.outerHTML
+          //     }
+          //   }
+          // },
+          // {
+          //   label: 'PHOTO BPKB',
+          //   name: 'photobpkb',
+          //   align: 'center',
+          //   search: false,
+          //   formatter: (value, row) => {
+          //     let images = []
 
-              if (value) {
-                let files = JSON.parse(value)
+          //     if (value) {
+          //       let files = JSON.parse(value)
 
-                files.forEach(file => {
-                  if (file == '') {
-                    file = 'no-image'
-                  }
+          //       files.forEach(file => {
+          //         if (file == '') {
+          //           file = 'no-image'
+          //         }
 
-                  let image = new Image()
-                  image.width = 25
-                  image.height = 25
-                  image.src = `${apiUrl}trado/image/bpkb/${encodeURI(file)}/small/show`
+          //         let image = new Image()
+          //         image.width = 25
+          //         image.height = 25
+          //         image.src = `${apiUrl}trado/image/bpkb/${encodeURI(file)}/small/show`
 
-                  images.push(image.outerHTML)
-                });
+          //         images.push(image.outerHTML)
+          //       });
 
-                return images.join(' ')
-              } else {
-                let image = new Image()
-                image.width = 25
-                image.height = 25
-                image.src = `${apiUrl}trado/image/bpkb/no-image/small/show`
-                return image.outerHTML
-              }
-            }
-          },
-          {
-            label: 'PHOTO TRADO',
-            name: 'phototrado',
-            align: 'center',
-            search: false,
-            formatter: (value, row) => {
-              let images = []
+          //       return images.join(' ')
+          //     } else {
+          //       let image = new Image()
+          //       image.width = 25
+          //       image.height = 25
+          //       image.src = `${apiUrl}trado/image/bpkb/no-image/small/show`
+          //       return image.outerHTML
+          //     }
+          //   }
+          // },
+          // {
+          //   label: 'PHOTO TRADO',
+          //   name: 'phototrado',
+          //   align: 'center',
+          //   search: false,
+          //   formatter: (value, row) => {
+          //     let images = []
 
-              if (value) {
-                let files = JSON.parse(value)
+          //     if (value) {
+          //       let files = JSON.parse(value)
 
-                files.forEach(file => {
-                  if (file == '') {
-                    file = 'no-image'
-                  }
-                  let image = new Image()
-                  image.width = 25
-                  image.height = 25
-                  image.src = `${apiUrl}trado/image/trado/${encodeURI(file)}/small/show`
+          //       files.forEach(file => {
+          //         if (file == '') {
+          //           file = 'no-image'
+          //         }
+          //         let image = new Image()
+          //         image.width = 25
+          //         image.height = 25
+          //         image.src = `${apiUrl}trado/image/trado/${encodeURI(file)}/small/show`
 
-                  images.push(image.outerHTML)
-                });
+          //         images.push(image.outerHTML)
+          //       });
 
-                return images.join(' ')
-              } else {
-                let image = new Image()
-                image.width = 25
-                image.height = 25
-                image.src = `${apiUrl}trado/image/trado/no-image/small/show`
-                return image.outerHTML
-              }
-            }
-          },
+          //       return images.join(' ')
+          //     } else {
+          //       let image = new Image()
+          //       image.width = 25
+          //       image.height = 25
+          //       image.src = `${apiUrl}trado/image/trado/no-image/small/show`
+          //       return image.outerHTML
+          //     }
+          //   }
+          // },
       ],
       autowidth: true,
       responsive: true,

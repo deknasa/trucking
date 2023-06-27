@@ -294,6 +294,10 @@
               abortGridLastRequest($(element))
               clearGridData($(element))
             })
+            $('#jqGrid').each((index, element) => {
+              abortGridLastRequest($(element))
+              clearGridHeader($(element))
+            })
           }
           
           $(document).unbind('keydown')
@@ -337,7 +341,8 @@
             }
           }, 100)
 
-
+          $('#left-nav').find('button').attr('disabled', false)
+          permission() 
           setHighlight($(this))
         }
       })
@@ -350,6 +355,7 @@
         groupOp: 'AND',
         disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
+          $('#left-nav').find(`button:not(#add)`).attr('disabled', 'disabled')
           $(this).setGridParam({
           postData: {
             tgldari:$('#tgldariheader').val() ,
@@ -452,6 +458,7 @@
       .addClass('btn btn-sm btn-warning')
       .parent().addClass('px-1')
 
+      function permission() {
     if (!`{{ $myAuth->hasPermission('pengembaliankasgantungheader', 'store') }}`) {
       $('#add').addClass('ui-disabled')
     }
@@ -462,7 +469,7 @@
 
     if (!`{{ $myAuth->hasPermission('pengembaliankasgantungheader', 'destroy') }}`) {
       $('#delete').addClass('ui-disabled')
-    }
+  }
 
     if (!`{{ $myAuth->hasPermission('pengembaliankasgantungheader', 'export') }}`) {
       $('#export').addClass('ui-disabled')
@@ -470,7 +477,7 @@
 
     if (!`{{ $myAuth->hasPermission('pengembaliankasgantungheader', 'report') }}`) {
       $('#report').addClass('ui-disabled')
-    }
+    }}
 
     $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {
@@ -487,8 +494,9 @@
       $('#formRange [name=sampai]').val(totalRecord)
 
       autoNumericElements = new AutoNumeric.multiple('#formRange .autonumeric-report', {
-        digitGroupSeparator: '.',
-        decimalCharacter: ',',
+        digitGroupSeparator: ',',
+        decimalCharacter: '.',
+        decimalPlaces: 0,
         allowDecimalPadding: false,
         minimumValue: 1,
         maximumValue: totalRecord

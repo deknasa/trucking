@@ -121,6 +121,7 @@
                 $(element).parent().addClass('text-center')
 
                 $(element).on('click', function() {
+                  $(element).attr('disabled', true)
                   if ($(this).is(':checked')) {
                     selectAllRows()
                   } else {
@@ -383,6 +384,10 @@
               abortGridLastRequest($(element))
               clearGridData($(element))
             })
+            $('#jqGrid').each((index, element) => {
+              abortGridLastRequest($(element))
+              clearGridHeader($(element))
+            })
           }
 
           $(document).unbind('keydown')
@@ -437,7 +442,9 @@
             }
           }, 100)
 
-
+          $('#left-nav').find('button').attr('disabled', false)
+          permission() 
+          $('#gs_').attr('disabled', false)
           setHighlight($(this))
         }
       })
@@ -451,7 +458,7 @@
         disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
           abortGridLastRequest($(this))
-          
+          $('#left-nav').find(`button:not(#add)`).attr('disabled', 'disabled')
           clearGlobalSearch($('#jqGrid'))
         },
       })
@@ -570,6 +577,7 @@
       .addClass('btn btn-sm btn-warning')
       .parent().addClass('px-1')
 
+      function permission() {
     if (!`{{ $myAuth->hasPermission('hutangbayarheader', 'store') }}`) {
       $('#add').attr('disabled', 'disabled')
     }
@@ -593,7 +601,7 @@
     if (!`{{ $myAuth->hasPermission('hutangbayarheader', 'approval') }}`) {
       $('#approveun').attr('disabled', 'disabled')
       $("#jqGrid").hideCol("");
-    }
+    }}
   })
   
   function clearSelectedRows() {

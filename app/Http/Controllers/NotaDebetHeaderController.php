@@ -103,33 +103,24 @@ class NotaDebetHeaderController extends MyController
      */
     public function report(Request $request,$id)
     {
-        $params = [
-            'offset' => $request->dari - 1,
-            'rows' => $request->sampai - $request->dari + 1,
-            'withRelations' => true,
+        //FETCH HEADER
+        $id = $request->id;
+        $notadebet = Http::withHeaders($request->header())
+           ->withOptions(['verify' => false])
+           ->withToken(session('access_token'))
+           ->get(config('app.api_url') .'notadebetheader/'.$id.'/export')['data'];
 
-        ];
-        $notadebet = $this->find($params,$id)['data'];
-        // return $notadebets['id'];
-        $data = $notadebet;
-        $i =0;
-        
-            $response = Http::withHeaders($this->httpHeaders)
-            ->withOptions(['verify' => false])
-            ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'notadebet_detail', ['notadebet_id' => $notadebet['id']]);
+       //FETCH DETAIL
+       $detailParams = [
+        'forReport' => true,
+        'notadebet_id' => $request->id
+       ];
+       $notadebet_detail = Http::withHeaders(request()->header())
+           ->withOptions(['verify' => false])
+           ->withToken(session('access_token'))
+           ->get(config('app.api_url') .'notadebet_detail', $detailParams)['data'];
 
-            $data["details"] =$response['data'];
-            $data["user"] = Auth::user();
-            
-
-        $combo = $this->combo('list');
-        
-        $key = array_search('CETAK', array_column( $combo, 'parameter')); 
-        $data["combo"] =  $combo[$key];
-        
-        $notadebetheaders = $data;
-        return view('reports.notadebetheader', compact('notadebetheaders'));
+        return view('reports.notadebetheader', compact('notadebet', 'notadebet_detail'));
     }
 
     /**
@@ -137,36 +128,47 @@ class NotaDebetHeaderController extends MyController
      */
     public function export(Request $request)
     {
-        $params = [
-            'offset' => $request->dari - 1,
-            'rows' => $request->sampai - $request->dari + 1,
-            'withRelations' => true,
-
-        ];
-
-        $notadebets = $this->get($params)['rows'];
-        $data = [];
-        $i =0;
-        foreach ($notadebets as $notadebet) {
-            $data[$i] =$notadebet;
-            $response = Http::withHeaders($this->httpHeaders)
+         //FETCH HEADER
+         $id = $request->id;
+         $notadebet = Http::withHeaders($request->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'notadebet_detail', [$request->all()]);
+            ->get(config('app.api_url') .'notadebetheader/'.$id.'/export')['data'];
 
+        //FETCH DETAIL
+        $detailParams = [
+            'notadebet_id' => $request->id
+        ];
+        $notadebet_detail = Http::withHeaders(request()->header())
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') .'notadebet_detail', $detailParams)['data'];
 
-            $data[$i]["details"] =$response['data'];
-            $i++;
-        }
+        $tglBukti = $notadebet["tglbukti"];
+        $timeStamp = strtotime($tglBukti);
+        $dateTglBukti = date('d-m-Y', $timeStamp); 
+        $notadebet['tglbukti'] = $dateTglBukti;
+
+        $tgllunas = $notadebet["tgllunas"];
+        $timeStamp = strtotime($tgllunas);
+        $datetgllunas = date('d-m-Y', $timeStamp); 
+        $notadebet['tgllunas'] = $datetgllunas;
+
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setCellValue('A1', 'Laporan Nota Kredit Header');
-        $sheet->getStyle("A1")->getFont()->setSize(20);
+        $sheet->setCellValue('A1', $notadebet['judul']);
+        $sheet->setCellValue('A2', $notadebet['judulLaporan']);
+        $sheet->getStyle("A1")->getFont()->setSize(12);
+        $sheet->getStyle("A2")->getFont()->setSize(12);
+        $sheet->getStyle("A1")->getFont()->setBold(true);
+        $sheet->getStyle("A2")->getFont()->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
-        $sheet->mergeCells('A1:K1');
+        $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
+        $sheet->mergeCells('A1:H1');
+        $sheet->mergeCells('A2:H2');
 
-        $header_start_row = 2;
-        $detail_table_header_row = 12;
+        $header_start_row = 4;
+        $detail_table_header_row = 9;
         $detail_start_row = $detail_table_header_row + 1;
 
         $alphabets = range('A', 'Z');
@@ -176,36 +178,16 @@ class NotaDebetHeaderController extends MyController
                 'index'=>'nobukti'
             ],
             [
+                'label'=>'Tanggal',
+                'index'=>'tglbukti'
+            ],
+            [
                 'label'=>'No Bukti Pelunasan Piutang',
                 'index'=>'pelunasanpiutang_nobukti'
             ],
             [
-                'label'=>'Tgl Bukti',
-                'index'=>'tglbukti'
-            ],
-            [
-                'label'=>'Approval Status ',
-                'index'=>'statusapproval_memo'
-            ],
-            [
-                'label'=>'tgl lunas',
+                'label'=>'Tanggal lunas',
                 'index'=>'tgllunas'
-            ],
-            [
-                'label'=>'Approval User',
-                'index'=>'userapproval'
-            ],
-            [
-                'label'=>'Tgl Approval',
-                'index'=>'tglapproval'
-            ],
-            [
-                'label'=>'Status Format',
-                'index'=>'statusformat'
-            ],
-            [
-                'label'=>'modifiedby',
-                'index'=>'modifiedby'
             ],
             
         ];
@@ -214,92 +196,46 @@ class NotaDebetHeaderController extends MyController
                 'label'=>'NO',
             ],
             [
-                'label'=>'No Bukti',
-                'index'=>'nobukti'
-            ],
-            [
-                'label'=>'Invoice No Bukti',
+                'label'=>'NO BUKTI INVOICE',
                 'index'=>'invoice_nobukti'
             ],
             [
-                'label'=>'Tgl Terima',
+                'label'=>'TANGGAL TERIMA',
                 'index'=>'tglterima'
             ],
             [
-                'label'=>'Keterangan',
-                'index'=>'keterangan'
-            ],
-            [
-                'label'=>'Nominal',
-                'index'=>'nominal'
-            ],
-            [
-                'label'=>'Nominal Bayar',
-                'index'=>'nominalbayar'
-            ],
-            [
-                'label'=>'Penyesuaian',
-                'index'=>'lebihbayar'
-            ],
-            [
-                'label'=>'COA Penyesuaian',
+                'label'=>'NAMA PERKIRAAN LEBIH BAYAR',
                 'index'=>'coalebihbayar'
             ],
             [
-                'label'=>'modifiedby',
-                'index'=>'modifiedby'
+                'label'=>'KETERANGAN',
+                'index'=>'keterangan'
             ],
-            
+            [
+                'label'=>'NOMINAL BAYAR',
+                'index'=>'nominalbayar',
+                'format'=>'currency',
+            ],
+            [
+                'label'=>'PENYESUAIAN',
+                'index'=>'lebihbayar',
+                'format'=>'currency',
+            ],
+            [
+                'label'=>'NOMINAL',
+                'index'=>'nominal',
+                'format'=>'currency',
+            ]
         ];
 
-        for ($i = 0; $i < count($data); $i++) {
-            foreach ($header_columns as $header_column) {
-                $sheet->setCellValue('A' . $header_start_row, $header_column['label']);
-                $sheet->setCellValue('B' . $header_start_row, ':');
-                $sheet->setCellValue('C' . $header_start_row++, $data[$i][$header_column['index']]);
-            }
-
-            $header_start_row += count($data[$i]['details']) + 2;
-
-            foreach ($detail_columns as $detail_columns_index => $detail_column) {
-                $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_table_header_row, $detail_column['label'] ?? $detail_columns_index + 1);
-            }
-
-            $sheet->getStyle("A$detail_table_header_row:J$detail_table_header_row")->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FF02c4f5');
-
-            foreach ($data[$i]['details'] as $detail_index => $detail_data) {
-                foreach ($detail_columns as $detail_columns_index => $detail_column) {
-                    $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $detail_data[$detail_column['index']] : $detail_index + 1);
-                }
-                $sheet->setCellValue("A$detail_start_row", $detail_index + 1);
-                $sheet->setCellValue("B$detail_start_row", $detail_data['nobukti']);
-                $sheet->setCellValue("C$detail_start_row", $detail_data['invoice_nobukti']);
-                $sheet->setCellValue("D$detail_start_row", $detail_data['tglterima']);
-                $sheet->setCellValue("E$detail_start_row", $detail_data['keterangan']);
-                $sheet->setCellValue("F$detail_start_row", $detail_data['nominal']);
-                $sheet->setCellValue("G$detail_start_row", $detail_data['nominalbayar']);
-                $sheet->setCellValue("H$detail_start_row", $detail_data['lebihbayar']);
-                $sheet->setCellValue("I$detail_start_row", $detail_data['coalebihbayar']);
-                $sheet->setCellValue("J$detail_start_row", $detail_data['modifiedby']);
-
-                $detail_start_row++;
-            }
-
-            $detail_table_header_row += (10 + count($data[$i]['details']) + 2);
-            $detail_start_row = $detail_table_header_row + 1;
+        //LOOPING HEADER        
+        foreach ($header_columns as $header_column) {
+            $sheet->setCellValue('B' . $header_start_row, $header_column['label']);
+            $sheet->setCellValue('C' . $header_start_row++, ': '.$notadebet[$header_column['index']]);
         }
-
-        $sheet->getColumnDimension('A')->setAutoSize(true);
-        $sheet->getColumnDimension('B')->setAutoSize(true);
-        $sheet->getColumnDimension('C')->setAutoSize(true);
-        $sheet->getColumnDimension('D')->setAutoSize(true);
-        $sheet->getColumnDimension('E')->setAutoSize(true);
-        $sheet->getColumnDimension('F')->setAutoSize(true);
-        $sheet->getColumnDimension('G')->setAutoSize(true);
-        $sheet->getColumnDimension('H')->setAutoSize(true);
-        $sheet->getColumnDimension('I')->setAutoSize(true);
-        $sheet->getColumnDimension('J')->setAutoSize(true);
-        $sheet->getColumnDimension('K')->setAutoSize(true);
+        foreach ($detail_columns as $detail_columns_index => $detail_column) {
+            $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_table_header_row, $detail_column['label'] ?? $detail_columns_index + 1);
+        }
 
         $styleArray = array(
             'borders' => array(
@@ -309,9 +245,73 @@ class NotaDebetHeaderController extends MyController
             ),
         );
 
-        $writer = new Xlsx($spreadsheet);
-        $filename = 'laporanNotaKreditHeader' . date('dmYHis');
+        $style_number = [
+			'alignment' => [
+				'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT, 
+			],
+            
+			'borders' => [
+				'top' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+				'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN], 
+				'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+				'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN] 
+			]
+        ];
 
+        $sheet ->getStyle("A$detail_table_header_row:H$detail_table_header_row")->applyFromArray($styleArray);
+
+        // LOOPING DETAIL
+        $nominal = 0;
+        foreach ($notadebet_detail as $response_index => $response_detail) {
+            
+            foreach ($detail_columns as $detail_columns_index => $detail_column) {
+                $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
+                $sheet->getStyle("A$detail_table_header_row:H$detail_table_header_row")->getFont()->setBold(true);
+                $sheet->getStyle("A$detail_table_header_row:H$detail_table_header_row")->getAlignment()->setHorizontal('center');
+            }
+            $response_detail['nominals'] = number_format((float) $response_detail['nominal'], '2', '.', ',');
+            $response_detail['nominalbayars'] = number_format((float) $response_detail['nominalbayar'], '2', '.', ',');
+            $response_detail['lebihbayars'] = number_format((float) $response_detail['lebihbayar'], '2', '.', ',');
+
+            $tglterima = $response_detail["tglterima"];
+            $timeStamp = strtotime($tglterima);
+            $datetglterima = date('d-m-Y', $timeStamp); 
+            $response_detail['tglterima'] = $datetglterima;
+        
+            $sheet->setCellValue("A$detail_start_row", $response_index + 1);
+            $sheet->setCellValue("B$detail_start_row", $response_detail['invoice_nobukti']);
+            $sheet->setCellValue("C$detail_start_row", $response_detail['tglterima']);
+            $sheet->setCellValue("D$detail_start_row", $response_detail['keterangan']);
+            $sheet->setCellValue("E$detail_start_row", $response_detail['coalebihbayar']);
+            $sheet->setCellValue("F$detail_start_row", $response_detail['nominalbayars']);
+            $sheet->setCellValue("G$detail_start_row", $response_detail['lebihbayars']);
+            $sheet->setCellValue("H$detail_start_row", $response_detail['nominals']);
+
+            $sheet->getStyle("E$detail_start_row")->getAlignment()->setWrapText(true);
+            $sheet->getColumnDimension('E')->setWidth(40);
+
+            $sheet ->getStyle("A$detail_start_row:E$detail_start_row")->applyFromArray($styleArray);
+            $sheet ->getStyle("F$detail_start_row:H$detail_start_row")->applyFromArray($style_number);
+
+            $nominal += $response_detail['nominal'];
+            $detail_start_row++;
+        }
+
+        $total_start_row = $detail_start_row;
+        $sheet->mergeCells('A'.$total_start_row.':G'.$total_start_row);
+        $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A'.$total_start_row.':G'.$total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
+        $sheet->setCellValue("H$total_start_row", number_format((float) $nominal, '2', '.', ','))->getStyle("H$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+
+        $sheet->getColumnDimension('A')->setAutoSize(true);
+        $sheet->getColumnDimension('B')->setAutoSize(true);
+        $sheet->getColumnDimension('C')->setAutoSize(true);
+        $sheet->getColumnDimension('D')->setAutoSize(true);
+        $sheet->getColumnDimension('F')->setAutoSize(true);
+        $sheet->getColumnDimension('G')->setAutoSize(true);
+        $sheet->getColumnDimension('H')->setAutoSize(true);
+
+        $writer = new Xlsx($spreadsheet);
+        $filename = 'Laporan Nota Debet' . date('dmYHis');
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
         header('Cache-Control: max-age=0');

@@ -103,6 +103,16 @@
                             </div>
                         </div>
 
+                        <div class="row form-group">
+                            <div class="col-12 col-sm-3 col-md-2">
+                                <label class="col-form-label">
+                                    No Bukti Penerimaan Giro</label>
+                            </div>
+                            <div class="col-12 col-sm-9 col-md-10">
+                                <input type="text" name="penerimaangiro_nobukti" class="form-control penerimaangiro-lookup">
+                            </div>
+                        </div>
+
                         {{-- <div class="row form-group">
                             <div class="col-12 col-sm-3 col-md-2">
                                 <label class="col-form-label">
@@ -124,7 +134,7 @@
                                         <th width="7%">Bank Pelanggan</th>
                                         <th width="10%">Keterangan</th>
                                         <th width="6%">Nominal</th>
-                                        <th width="1%">Aksi</th>
+                                        <th width="1%" class="aksiGiro">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody id="table_body" class="form-group">
@@ -138,7 +148,7 @@
                                         <td>
                                             <p class="text-right font-weight-bold autonumeric" id="total"></p>
                                         </td>
-                                        <td>
+                                        <td class="aksiGiro">
                                             <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
                                         </td>
                                     </tr>
@@ -168,6 +178,7 @@
     let hasFormBindKeys = false
     let modalBody = $('#crudModal').find('.modal-body').html()
     let type
+    let penerimaanGiro = ''
     $(document).ready(function() {
 
         $("#crudForm [name]").attr("autocomplete", "off");
@@ -239,11 +250,11 @@
 
             data.push({
                 name: 'bankheader',
-                value: $('#bankheader').val()
+                value: data.find(item => item.name === "bank_id").value
             })
             let tgldariheader = $('#tgldariheader').val();
             let tglsampaiheader = $('#tglsampaiheader').val()
-            let bankheader = $('#bankheader').val()
+            let bankheader = data.find(item => item.name === "bank_id").value
 
             switch (action) {
                 case 'add':
@@ -277,12 +288,16 @@
                     id = response.data.id
                     $('#crudModal').modal('hide')
                     $('#crudModal').find('#crudForm').trigger('reset')
+                    $('#bankheader').val(response.data.bank_id).trigger('change')
 
                     $('.select2').select2({
                         width: 'resolve',
                         theme: "bootstrap4"
                     });
                     $('#jqGrid').jqGrid('setGridParam', {
+                        postData: {
+                            bank: response.data.bank_id
+                        },
                         page: response.data.page
                     }).trigger('reloadGrid');
 
@@ -327,6 +342,7 @@
         activeGrid = '#jqGrid'
         $('#crudModal').find('.modal-body').html(modalBody)
     })
+
     function setTotal() {
         let nominalDetails = $(`#table_body [name="nominal_detail[]"]`)
         let total = 0
@@ -365,15 +381,15 @@
             ])
             .then(() => {
                 showDefault(form)
-                .then(() => {
-                    $('#crudModal').modal('show')
-                })
-                .catch((error) => {
-                    showDialog(error.statusText)
-                })
-                .finally(() => {
-                    $('.modal-loader').addClass('d-none')
-                })
+                    .then(() => {
+                        $('#crudModal').modal('show')
+                    })
+                    .catch((error) => {
+                        showDialog(error.statusText)
+                    })
+                    .finally(() => {
+                        $('.modal-loader').addClass('d-none')
+                    })
             })
         setTotal()
     }
@@ -431,24 +447,24 @@
             ])
             .then(() => {
                 showPenerimaan(form, id)
-                .then(() => {
-                    clearSelectedRows()
-                    $('#gs_').prop('checked', false)
-                    $('#crudModal').modal('show')
-                    
-                    $('#crudForm [name=tglbukti]').attr('readonly', true)
-                    $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
-                    $('#crudForm [name=tgllunas]').attr('readonly', true)
-                    $('#crudForm [name=tgllunas]').siblings('.input-group-append').remove()
-                    $('#crudForm [name=bank]').parent('.input-group').find('.button-clear').remove()
-                    $('#crudForm [name=bank]').parent('.input-group').find('.input-group-append').remove()
-                })
-                .catch((error) => {
-                    showDialog(error.statusText)
-                })
-                .finally(() => {
-                    $('.modal-loader').addClass('d-none')
-                })
+                    .then(() => {
+                        clearSelectedRows()
+                        $('#gs_').prop('checked', false)
+                        $('#crudModal').modal('show')
+
+                        $('#crudForm [name=tglbukti]').attr('readonly', true)
+                        $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
+                        $('#crudForm [name=tgllunas]').attr('readonly', true)
+                        $('#crudForm [name=tgllunas]').siblings('.input-group-append').remove()
+                        $('#crudForm [name=bank]').parent('.input-group').find('.button-clear').remove()
+                        $('#crudForm [name=bank]').parent('.input-group').find('.input-group-append').remove()
+                    })
+                    .catch((error) => {
+                        showDialog(error.statusText)
+                    })
+                    .finally(() => {
+                        $('.modal-loader').addClass('d-none')
+                    })
             })
     }
 
@@ -470,23 +486,23 @@
             ])
             .then(() => {
                 showPenerimaan(form, id)
-                .then(() => {
-                    clearSelectedRows()
-                    $('#gs_').prop('checked', false)
-                    $('#crudModal').modal('show')
-                    $('#crudForm [name=tglbukti]').attr('readonly', true)
-                    $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
-                    $('#crudForm [name=tgllunas]').attr('readonly', true)
-                    $('#crudForm [name=tgllunas]').siblings('.input-group-append').remove()
-                    $('#crudForm [name=bank]').parent('.input-group').find('.button-clear').remove()
-                    $('#crudForm [name=bank]').parent('.input-group').find('.input-group-append').remove()
-                })
-                .catch((error) => {
-                    showDialog(error.statusText)
-                })
-                .finally(() => {
-                    $('.modal-loader').addClass('d-none')
-                })
+                    .then(() => {
+                        clearSelectedRows()
+                        $('#gs_').prop('checked', false)
+                        $('#crudModal').modal('show')
+                        $('#crudForm [name=tglbukti]').attr('readonly', true)
+                        $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
+                        $('#crudForm [name=tgllunas]').attr('readonly', true)
+                        $('#crudForm [name=tgllunas]').siblings('.input-group-append').remove()
+                        $('#crudForm [name=bank]').parent('.input-group').find('.button-clear').remove()
+                        $('#crudForm [name=bank]').parent('.input-group').find('.input-group-append').remove()
+                    })
+                    .catch((error) => {
+                        showDialog(error.statusText)
+                    })
+                    .finally(() => {
+                        $('.modal-loader').addClass('d-none')
+                    })
             })
     }
 
@@ -539,7 +555,7 @@
             }
         })
     }
-    
+
     const setStatusKasOptions = function(relatedForm) {
         return new Promise((resolve, reject) => {
             relatedForm.find('[name=statuskas]').empty()
@@ -610,11 +626,15 @@
                         if (index == 'bank') {
                             element.data('current-value', value).prop('readonly', true)
                         }
+                        if (index == 'penerimaangiro_nobukti') {
+                            element.data('current-value', value)
+                        }
                     })
-
-                    $.each(response.detail, (index, detail) => {
-                        let readOnly = (detail.pelunasanpiutang_nobukti != '-') ? 'readonly' : '';
-                        let detailRow = $(`
+                    if (response.data.penerimaangiro_nobukti == '') {
+                        $('#detailList tbody').html('')
+                        $.each(response.detail, (index, detail) => {
+                            let readOnly = (detail.pelunasanpiutang_nobukti != '-') ? 'readonly' : '';
+                            let detailRow = $(`
                         <tr class="${detail.pelunasanpiutang_nobukti}">
                             <td></td>
                             <td>
@@ -645,66 +665,116 @@
                         </tr>
                         `)
 
-                        detailRow.find(`[name="coakredit[]"]`).val(detail.coakredit)
-                        detailRow.find(`[name="ketcoakredit[]"]`).val(detail.ketcoakredit)
-                        detailRow.find(`[name="nowarkat[]"]`).val(detail.nowarkat)
-                        detailRow.find(`[name="bankpelanggan_id[]"]`).val(detail.bankpelanggan_id)
-                        detailRow.find(`[name="bankpelanggan[]"]`).val(detail.bankpelanggan)
-                        detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
-                        detailRow.find(`[name="nominal_detail[]"]`).val(detail.nominal)
-                        initAutoNumeric(detailRow.find(`[name="nominal_detail[]"]`))
-                        detailRow.find(`[name="tgljatuhtempo[]"]`).val(dateFormat(detail.tgljatuhtempo))
-                        detailRow.find(`[name="bulanbeban[]"]`).val(dateFormat(detail.bulanbeban))
-                        $('#detailList tbody').append(detailRow)
-                        setTotal();
-                        $('.akunpusat-lookup').last().lookup({
-                            title: 'Kode Perk. Lookup',
-                            fileName: 'akunpusat',
-                            beforeProcess: function(test) {
-                                // var levelcoa = $(`#levelcoa`).val();
-                                this.postData = {
-                                    levelCoa: '3',
-                                    Aktif: 'AKTIF',
+                            detailRow.find(`[name="coakredit[]"]`).val(detail.coakredit)
+                            detailRow.find(`[name="ketcoakredit[]"]`).val(detail.ketcoakredit)
+                            detailRow.find(`[name="nowarkat[]"]`).val(detail.nowarkat)
+                            detailRow.find(`[name="bankpelanggan_id[]"]`).val(detail.bankpelanggan_id)
+                            detailRow.find(`[name="bankpelanggan[]"]`).val(detail.bankpelanggan)
+                            detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
+                            detailRow.find(`[name="nominal_detail[]"]`).val(detail.nominal)
+                            initAutoNumeric(detailRow.find(`[name="nominal_detail[]"]`))
+                            detailRow.find(`[name="tgljatuhtempo[]"]`).val(dateFormat(detail.tgljatuhtempo))
+                            detailRow.find(`[name="bulanbeban[]"]`).val(dateFormat(detail.bulanbeban))
+                            $('#detailList tbody').append(detailRow)
+                            setTotal();
+                            $('.akunpusat-lookup').last().lookup({
+                                title: 'Kode Perk. Lookup',
+                                fileName: 'akunpusat',
+                                beforeProcess: function(test) {
+                                    // var levelcoa = $(`#levelcoa`).val();
+                                    this.postData = {
+                                        levelCoa: '3',
+                                        Aktif: 'AKTIF',
+                                    }
+                                },
+                                onSelectRow: (akunpusat, element) => {
+                                    element.parents('td').find(`[name="coakredit[]"]`).val(akunpusat.coa)
+                                    element.val(akunpusat.keterangancoa)
+                                    element.data('currentValue', element.val())
+                                },
+                                onCancel: (element) => {
+                                    element.val(element.data('currentValue'))
+                                },
+                                onClear: (element) => {
+
+                                    element.parents('td').find(`[name="coakredit[]"]`).val('')
+                                    element.val('')
+                                    element.data('currentValue', element.val())
                                 }
-                            },
-                            onSelectRow: (akunpusat, element) => {
-                                element.parents('td').find(`[name="coakredit[]"]`).val(akunpusat.coa)
-                                element.val(akunpusat.keterangancoa)
-                                element.data('currentValue', element.val())
-                            },
-                            onCancel: (element) => {
-                                element.val(element.data('currentValue'))
-                            },
-                            onClear: (element) => {
-                          
-                                element.parents('td').find(`[name="coakredit[]"]`).val('')
-                                element.val('')
-                                element.data('currentValue', element.val())
-                            }
-                        })
-                        $('.bankpelanggan-lookup').last().lookup({
-                            title: 'Bank Pelanggan Lookup',
-                            fileName: 'bankpelanggan',
-                            beforeProcess: function(test) {
-                                this.postData = {
-                                    Aktif: 'AKTIF',
+                            })
+                            $('.bankpelanggan-lookup').last().lookup({
+                                title: 'Bank Pelanggan Lookup',
+                                fileName: 'bankpelanggan',
+                                beforeProcess: function(test) {
+                                    this.postData = {
+                                        Aktif: 'AKTIF',
+                                    }
+                                },
+                                onSelectRow: (bankpelanggan, element) => {
+                                    element.parents('td').find(`[name="bankpelanggan_id[]"]`).val(bankpelanggan.id)
+                                    element.val(bankpelanggan.namabank)
+                                    element.data('currentValue', element.val())
+                                },
+                                onCancel: (element) => {
+                                    element.val(element.data('currentValue'))
+                                },
+                                onClear: (element) => {
+                                    element.parents('td').find(`[name="bankpelanggan_id[]"]`).val('')
+                                    element.val('')
+                                    element.data('currentValue', element.val())
                                 }
-                            },
-                            onSelectRow: (bankpelanggan, element) => {
-                                element.parents('td').find(`[name="bankpelanggan_id[]"]`).val(bankpelanggan.id)
-                                element.val(bankpelanggan.namabank)
-                                element.data('currentValue', element.val())
-                            },
-                            onCancel: (element) => {
-                                element.val(element.data('currentValue'))
-                            },
-                            onClear: (element) => {
-                                element.parents('td').find(`[name="bankpelanggan_id[]"]`).val('')
-                                element.val('')
-                                element.data('currentValue', element.val())
-                            }
+                            })
                         })
-                    })
+                    } else {
+                        penerimaanGiro = response.data.penerimaangiro_nobukti;
+                        $('.aksiGiro').hide()
+                        $('#detailList tbody').html('')
+                        $.each(response.detail, (index, detail) => {
+
+                            let detailRow = $(`
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        <input type="hidden" name="coakredit[]">
+                                        <input type="text" name="ketcoakredit[]" data-current-value="${detail.ketcoakredit}" class="form-control akunpusat-lookup" readonly>
+                                    </td>
+                                    <td>
+                                        <div class="input-group">
+                                            <input type="text" name="tgljatuhtempo[]" class="form-control" readonly>   
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <input type="text" name="nowarkat[]"  class="form-control" readonly>
+                                    </td>
+                                    <td>
+                                        <input type="hidden" name="bankpelanggan_id[]">
+                                        <input type="text" name="bankpelanggan[]" data-current-value="${detail.bankpelanggan}" class="form-control bankpelanggan-lookup" readonly>
+                                    </td>
+                                    <td>
+                                        <input type="text" name="keterangan_detail[]"  class="form-control" readonly>
+                                    </td>
+                                    <td>
+                                        <input type="text" name="nominal_detail[]" class="form-control autonumeric"  readonly> 
+                                    </td>
+                                </tr>
+                                `)
+
+                            detailRow.find(`[name="coakredit[]"]`).val(detail.coakredit)
+                            detailRow.find(`[name="ketcoakredit[]"]`).val(detail.ketcoakredit)
+                            detailRow.find(`[name="nowarkat[]"]`).val(detail.nowarkat)
+                            detailRow.find(`[name="bankpelanggan_id[]"]`).val(detail.bankpelanggan_id)
+                            detailRow.find(`[name="bankpelanggan[]"]`).val(detail.bankpelanggan)
+                            detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
+                            detailRow.find(`[name="nominal_detail[]"]`).val(detail.nominal)
+                            initAutoNumeric(detailRow.find(`[name="nominal_detail[]"]`))
+                            detailRow.find(`[name="tgljatuhtempo[]"]`).val(dateFormat(detail.tgljatuhtempo))
+                            detailRow.find(`[name="bulanbeban[]"]`).val(dateFormat(detail.bulanbeban))
+                            $('#detailList tbody').append(detailRow)
+                            setTotal();
+
+                        })
+                    }
+
                     setRowNumbers()
                     initDatepicker()
                     if (form.data('action') === 'delete') {
@@ -746,7 +816,7 @@
         <td>
           <input type="text" name="nominal_detail[]" class="form-control autonumeric"> 
         </td>
-        <td>
+        <td class="aksiGiro">
             <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
         </td>
       </tr>
@@ -958,6 +1028,96 @@
                 element.val('')
                 $(`#crudForm [name="bank_id"]`).first().val('')
                 element.data('currentValue', element.val())
+            }
+        })
+        $('.penerimaangiro-lookup').lookup({
+            title: 'Penerimaan Giro Lookup',
+            fileName: 'penerimaangiro',
+            beforeProcess: function(test) {
+                this.postData = {
+                    nobukti: penerimaanGiro,
+                }
+            },
+            onSelectRow: (penerimaanGiro, element) => {
+                $('#table_body').html('')
+                $('.aksiGiro').hide()
+                element.val(penerimaanGiro.nobukti)
+                getPenerimaanGiro(penerimaanGiro.id)
+                element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+                element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+                $('.aksiGiro').show()
+                $('#table_body').html('')
+                addRow();
+                element.val('')
+                element.data('currentValue', element.val())
+            }
+        })
+    }
+
+    function getPenerimaanGiro(giroId) {
+        $.ajax({
+            url: `${apiUrl}penerimaangirodetail/getDetail`,
+            method: 'GET',
+            dataType: 'JSON',
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
+            },
+            data: {
+                penerimaangiro_id: giroId
+            },
+            success: response => {
+                $.each(response.data, (index, detail) => {
+
+                    let detailRow = $(`
+                        <tr>
+                            <td></td>
+                            <td>
+                                <input type="hidden" name="coakredit[]">
+                                <input type="text" name="ketcoakredit[]" data-current-value="${detail.ketcoakredit}" class="form-control akunpusat-lookup" readonly>
+                            </td>
+                            <td>
+                                <div class="input-group">
+                                    <input type="text" name="tgljatuhtempo[]" class="form-control" readonly>   
+                                </div>
+                            </td>
+                            <td>
+                                <input type="text" name="nowarkat[]"  class="form-control" readonly>
+                            </td>
+                            <td>
+                                <input type="hidden" name="bankpelanggan_id[]">
+                                <input type="text" name="bankpelanggan[]" data-current-value="${detail.bankpelanggan}" class="form-control bankpelanggan-lookup" readonly>
+                            </td>
+                            <td>
+                                <input type="text" name="keterangan_detail[]"  class="form-control" readonly>
+                            </td>
+                            <td>
+                                <input type="text" name="nominal_detail[]" class="form-control autonumeric"  readonly> 
+                            </td>
+                        </tr>
+                        `)
+
+                    detailRow.find(`[name="coakredit[]"]`).val(detail.coakredit)
+                    detailRow.find(`[name="ketcoakredit[]"]`).val(detail.ketcoakredit)
+                    detailRow.find(`[name="nowarkat[]"]`).val(detail.nowarkat)
+                    detailRow.find(`[name="bankpelanggan_id[]"]`).val(detail.bankpelanggan_id)
+                    detailRow.find(`[name="bankpelanggan[]"]`).val(detail.bankpelanggan)
+                    detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
+                    detailRow.find(`[name="nominal_detail[]"]`).val(detail.nominal)
+                    initAutoNumeric(detailRow.find(`[name="nominal_detail[]"]`))
+                    detailRow.find(`[name="tgljatuhtempo[]"]`).val(dateFormat(detail.tgljatuhtempo))
+                    detailRow.find(`[name="bulanbeban[]"]`).val(dateFormat(detail.bulanbeban))
+                    $('#detailList tbody').append(detailRow)
+                    setTotal();
+
+                })
+                setRowNumbers()
+            },
+            error: error => {
+                showDialog(error.statusText)
             }
         })
     }

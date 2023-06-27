@@ -126,7 +126,7 @@
         selectedNobukti = response.data.map((data) => data.nobukti_pengeluaran);
         selectedTglBukti = response.data.map((data) => data.tglbukti_pengeluaran);
         selectedKeterangan = response.data.map((data) => data.keterangan_detail);
-        selectedNominal = response.data.map((data) => data.nominal);
+        selectedNominal = response.data.map((data) => data.nominal_detail);
 
         $('#modalgrid').jqGrid('setGridParam', {
           url: `${apiUrl}rekappengeluaranheader/getpengeluaran`,
@@ -487,12 +487,13 @@
               element.val(value)
             }
           })
+          $('#detailList tbody').html('')
           $.each(response.detail, (index, detail) => {
             selectedRows.push(detail.id)
             selectedNobukti.push(detail.nobukti_pengeluaran)
             selectedTglBukti.push(detail.tglbukti_pengeluaran)
             selectedKeterangan.push(detail.keterangan_detail)
-            selectedNominal.push(detail.nominal)
+            selectedNominal.push(detail.nominal_detail)
           })
           setTimeout(() => {
             $('#modalgrid').jqGrid('setGridParam', {
@@ -500,7 +501,6 @@
               datatype: "json"
             }).trigger('reloadGrid');
           })
-          getRekapPengeluaran(rekapPengeluaranId)
           resolve()
         },
         error: error => {
@@ -565,7 +565,7 @@
           },
           {
             label: 'NOMINAL',
-            name: 'nominal',
+            name: 'nominal_detail',
             align: 'right',
             formatter: currencyFormat,
           },
@@ -579,6 +579,7 @@
         rowList: [10, 20, 50, 0],
         toolbar: [true, "top"],
         sortable: true,
+        sortname: 'nobukti_pengeluaran',
         viewrecords: true,
         footerrow: true,
         userDataOnFooter: true,
@@ -598,7 +599,7 @@
           changeJqGridRowListText()
           initResize($(this))
           console.log(data);
-          let nominals = $(this).jqGrid("getCol", "nominal")
+          let nominals = $(this).jqGrid("getCol", "nominal_detail")
           let totalNominal = 0
           if (nominals.length > 0) {
             totalNominal = nominals.reduce((previousValue, currentValue) => previousValue + currencyUnformat(currentValue), 0)
