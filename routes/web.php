@@ -219,7 +219,9 @@ use App\Http\Controllers\LaporanJurnalUmumController;
 use App\Http\Controllers\LaporanPembelianController;
 use App\Http\Controllers\LaporanPembelianStokController;
 use App\Http\Controllers\LaporanHutangGiroController;
+use App\Http\Controllers\LaporanKasHarianController;
 use App\Http\Controllers\LaporanKartuHutangPerSupplierController;
+
 
 
 /*
@@ -1140,6 +1142,11 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('laporanketeranganpinjamansupir/export', [LaporanKeteranganPinjamanSupirController::class, 'export'])->name('laporanketeranganpinjamansupir.export');
     Route::get('laporanketeranganpinjamansupir/index', [LaporanKeteranganPinjamanSupirController::class, 'index']);
     Route::resource('laporanketeranganpinjamansupir', LaporanKeteranganPinjamanSupirController::class);
+
+    Route::get('laporankasharian/report', [LaporanKasHarianController::class, 'report'])->name('laporankasharian.report');
+    Route::get('laporankasharian/export', [LaporanKasHarianController::class, 'export'])->name('laporankasharian.export');
+    Route::get('laporankasharian/index', [LaporanKasHarianController::class, 'index']);
+    Route::resource('laporankasharian', LaporanKasHarianController::class);
 
 
     Route::get('lapkartuhutangpervendordetail/report', [LapKartuHutangPerVendorDetailController::class, 'report'])->name('lapkartuhutangpervendordetail.report');

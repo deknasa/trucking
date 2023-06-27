@@ -57,7 +57,6 @@ class LaporanKeteranganPinjamanSupirController extends MyController
 
         $data = $header['data'];
 
-      
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
