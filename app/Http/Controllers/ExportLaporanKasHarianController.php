@@ -33,13 +33,26 @@ class ExportLaporanKasHarianController extends MyController
             'periode' => $request->periode,
             'bank_id' => $request->bank_id,
         ];
-        dd($detailParams);
+        $header = Http::withHeaders(request()->header())
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'exportlaporankasharian/export', $detailParams);
+
+         
+
+
+        // dd(config('app.api_url') . 'exportlaporankasharian/export', $detailParams);
+
+        $data = $header['data'];
+
+        dd($data);
+
         date_default_timezone_set("Asia/Jakarta");
 
         $monthNum  = intval(substr($request->periode, 0, 2));
-        $yearNum  = substr($request->periode,3);
+        $yearNum  = substr($request->periode, 3);
         $monthName = $this->getBulan($monthNum);
-        
+
         // $responses = Http::withHeaders($request->header())
         //     ->withOptions(['verify' => false])
         //     ->withToken(session('access_token'))
@@ -90,44 +103,45 @@ class ExportLaporanKasHarianController extends MyController
         $writer->save('php://output');
     }
 
-    public function getBulan($bln){
-        switch ($bln){
-         case 1:
-          return "JANUARI";
-          break;
-         case 2:
-          return "FEBRUARI";
-          break;
-         case 3:
-          return "MARET";
-          break;
-         case 4:
-          return "APRIL";
-          break;
-         case 5:
-          return "MEI";
-          break;
-         case 6:
-          return "JUNI";
-          break;
-         case 7:
-          return "JULI";
-          break;
-         case 8:
-          return "AGUSTUS";
-          break;
-         case 9:
-          return "SEPTEMBER";
-          break;
-         case 10:
-          return "OKTOBER";
-          break;
-         case 11:
-          return "NOVEMBER";
-          break;
-         case 12:
-          return "DESEMBER";
-          break;
+    public function getBulan($bln)
+    {
+        switch ($bln) {
+            case 1:
+                return "JANUARI";
+                break;
+            case 2:
+                return "FEBRUARI";
+                break;
+            case 3:
+                return "MARET";
+                break;
+            case 4:
+                return "APRIL";
+                break;
+            case 5:
+                return "MEI";
+                break;
+            case 6:
+                return "JUNI";
+                break;
+            case 7:
+                return "JULI";
+                break;
+            case 8:
+                return "AGUSTUS";
+                break;
+            case 9:
+                return "SEPTEMBER";
+                break;
+            case 10:
+                return "OKTOBER";
+                break;
+            case 11:
+                return "NOVEMBER";
+                break;
+            case 12:
+                return "DESEMBER";
+                break;
         }
-       }
+    }
 }

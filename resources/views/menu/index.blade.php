@@ -444,7 +444,52 @@
                             submitButton.removeAttr('disabled')
                         }
                     })
-                    @extends('layouts.master')
+                    .catch((error) => {
+                            if (error.status === 422) {
+                                $('.is-invalid').removeClass('is-invalid')
+                                $('.invalid-feedback').remove()
+                                let status
+                                if (error.responseJSON.hasOwnProperty('status') == false) {
+                                    status = false
+                                } else {
+                                    status = true
+                                }
+                                statusText = error.statusText
+                                errors = error.responseJSON.errors
+                                $.each(errors, (index, error) => {
+                                    let indexes = index.split(".");
+                                    if (status === false) {
+                                        indexes[0] = 'sampai'
+                                    }
+                                    let element;
+                                    element = $('#rangeModal').find(`[name="${indexes[0]}"]`)[
+                                        0];
+                                    if ($(element).length > 0 && !$(element).is(":hidden")) {
+                                        $(element).addClass("is-invalid");
+                                        $(`
+                                                <div class="invalid-feedback">
+                                                ${error[0].toLowerCase()}
+                                                </div>
+                                        `).appendTo($(element).parent());
+                                    } else {
+                                        setTimeout(() => {
+                                            return showDialog(error);
+                                        }, 100)
+                                    }
+                                });
+                                $(".is-invalid").first().focus();
+
+                            } else {    
+                                showDialog(error.statusText)
+                            }
+                        })
+
+                        .finally(() => {
+
+                            $('.ui-button').click()
+
+                            submitButton.removeAttr('disabled')
+                        })
 
                 })
 
