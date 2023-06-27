@@ -41,7 +41,14 @@ class AuthController extends Controller
             'client_secret' => config('app.emkl_client_secret')
         ];
 
+        // $cekIp = Http::withHeaders([
+        //     'Accept' => 'application/json'
+        // ])->withOptions(['verify' => true])
+        // ->get(config('app.api_url') . 'cekIp', $credentials);
 
+
+
+        // dd($cekIp['reasonPhrase']);
 
         if (Auth::attempt($credentials)) {
             $token = Http::withHeaders([
