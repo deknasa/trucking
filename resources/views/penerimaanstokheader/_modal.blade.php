@@ -1087,7 +1087,7 @@
   }
 
   $(window).on('popstate', function() { 
-    $('#crudModal').modal('hide')
+    $('#crudModal').modal('hide') 
   });
 
   $('#crudModal').on('shown.bs.modal', () => {
