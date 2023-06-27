@@ -72,7 +72,7 @@
     let autoNumericElements = []
     let rowNum = 10
     let hasDetail = false
-  
+
 
     $(document).ready(function() {
         initLookup()
@@ -82,11 +82,10 @@
         $('#crudForm').find('[name=sampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
 
-        let css_property =
-        {
+        let css_property = {
             "color": "#fff",
             "background-color": "rgb(173 180 187)",
-            "cursor" : "not-allowed",
+            "cursor": "not-allowed",
             "border-color": "rgb(173 180 187)"
         }
         if (!`{{ $myAuth->hasPermission('laporankasbank', 'report') }}`) {
@@ -103,28 +102,100 @@
         let dari = $('#crudForm').find('[name=dari]').val()
         let sampai = $('#crudForm').find('[name=sampai]').val()
         let bank_id = $('#crudForm').find('[name=bank_id]').val()
+        let bank = $('#crudForm').find('[name=bank]').val()
 
-        if (dari != '' && sampai != '') {
+        getCekReport().then((response) => {
+            window.open(`{{ route('laporankasbank.report') }}?dari=${dari}&sampai=${sampai}&bank=${bank}&bank_id=${bank_id}`)
+        }).catch((error) => {
+            if (error.status === 422) {
+                $('.is-invalid').removeClass('is-invalid')
+                $('.invalid-feedback').remove()
 
-            window.open(`{{ route('laporankasbank.report') }}?dari=${dari}&sampai=${sampai}&bankid=${bank_id}`)
-        } else {
-            showDialog('ISI SELURUH KOLOM')
-        }
+                setErrorMessages($('#crudForm'), error.responseJSON.errors);
+            } else {
+                showDialog(error.statusText, error.responseJSON.message)
+
+            }
+        })
+
     })
 
     $(document).on('click', `#btnEkspor`, function(event) {
         let dari = $('#crudForm').find('[name=dari]').val()
         let sampai = $('#crudForm').find('[name=sampai]').val()
         let bank_id = $('#crudForm').find('[name=bank_id]').val()
+        let bank = $('#crudForm').find('[name=bank]').val()
+        
+        getCekExport().then((response) => {
+            window.open(`{{ route('laporankasbank.export') }}?dari=${dari}&sampai=${sampai}&bank=${bank}&bank_id=${bank_id}`)
+        }).catch((error) => {
+            if (error.status === 422) {
+                $('.is-invalid').removeClass('is-invalid')
+                $('.invalid-feedback').remove()
 
-        if (dari != '' && sampai != '') {
+                setErrorMessages($('#crudForm'), error.responseJSON.errors);
+            } else {
+                showDialog(error.statusText, error.responseJSON.message)
 
-            window.open(`{{ route('laporankasbank.export') }}?dari=${dari}&sampai=${sampai}&bankid=${bank_id}`)
-        } else {
-            showDialog('ISI SELURUH KOLOM')
-        }
+            }
+        })
+
     })
-  
+
+    function getCekReport() {
+
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: `${apiUrl}laporankasbank/report`,
+                dataType: "JSON",
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                data: {
+                    dari: $('#crudForm').find('[name=dari]').val(),
+                    sampai: $('#crudForm').find('[name=sampai]').val(),
+                    bank: $('#crudForm').find('[name=bank]').val(),
+                    bank_id: $('#crudForm').find('[name=bank_id]').val(),
+                    isCheck: true,
+                },
+                success: (response) => {
+                    resolve(response);
+                },
+                error: error => {
+                    reject(error)
+
+                },
+            });
+        });
+    }
+
+    function getCekExport() {
+
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: `${apiUrl}laporankasbank/export`,
+                dataType: "JSON",
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                data: {
+                    dari: $('#crudForm').find('[name=dari]').val(),
+                    sampai: $('#crudForm').find('[name=sampai]').val(),
+                    bank: $('#crudForm').find('[name=bank]').val(),
+                    bank_id: $('#crudForm').find('[name=bank_id]').val(),
+                    isCheck: true,
+                },
+                success: (response) => {
+                    resolve(response);
+                },
+                error: error => {
+                    reject(error)
+
+                },
+            });
+        });
+    }
+
     function initLookup() {
 
         $('.bank-lookup').lookup({
@@ -145,7 +216,6 @@
             }
         })
     }
-
 </script>
 @endpush()
 @endsection
