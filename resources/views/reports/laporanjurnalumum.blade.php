@@ -6,6 +6,7 @@
 <head>
 
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
   <title>Laporan Jurnal Umum</title>
   <link rel="stylesheet" type="text/css" href="{{ asset($stireport_path . 'css/stimulsoft.viewer.office2013.whiteblue.css') }}">
   <link rel="stylesheet" type="text/css" href="{{ asset($stireport_path . 'css/stimulsoft.designer.office2013.whiteblue.css') }}">

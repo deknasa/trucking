@@ -40,25 +40,25 @@ class PendapatanSupirHeaderController extends MyController
     
     public function report(Request $request)
     {
-        $header = Http::withHeaders(request()->header())
+        //FETCH HEADER
+        $id = $request->id;
+        $pendapatan = Http::withHeaders($request->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'pendapatansupirheader/' . $request->id);
-
+            ->get(config('app.api_url') .'pendapatansupirheader/'.$id.'/export')['data'];
+      
+        //FETCH DETAIL
         $detailParams = [
             'forReport' => true,
             'pendapatansupir_id' => $request->id
         ];
-  
-        $pendapatan_detail = Http::withHeaders(request()->header())
+
+        $pendapatan_details = Http::withHeaders($request->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'pendapatansupirdetail', $detailParams);
-        
-        $data = $header['data'];
-        $pendapatan_details = $pendapatan_detail['data'];
-        $user = Auth::user();
-        return view('reports.pendapatansupir', compact('data','pendapatan_details','user'));
+            ->get(config('app.api_url') .'pendapatansupirdetail', $detailParams)['data'];
+
+        return view('reports.pendapatansupir', compact('pendapatan','pendapatan_details'));
     }
 
     public function export(Request $request): void
@@ -106,15 +106,18 @@ class PendapatanSupirHeaderController extends MyController
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setCellValue('A1', $pendapatans['judul']);
         $sheet->setCellValue('A2', $pendapatans['judulLaporan']);
-        $sheet->getStyle("A1")->getFont()->setSize(14);
+        $sheet->getStyle("A1")->getFont()->setSize(12);
         $sheet->getStyle("A2")->getFont()->setSize(12);
+        $sheet->getStyle("A1")->getFont()->setBold(true);
+        $sheet->getStyle("A2")->getFont()->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:D1');
         $sheet->mergeCells('A2:D2');
 
         $header_start_row = 4;
-        $detail_table_header_row = 11;
+        $header_right_start_row = 4;
+        $detail_table_header_row = 8;
         $detail_start_row = $detail_table_header_row + 1;
        
         $alphabets = range('A', 'Z');
@@ -125,13 +128,15 @@ class PendapatanSupirHeaderController extends MyController
                 'index' => 'nobukti',
             ],
             [
-                'label' => 'Tanggal Bukti',
+                'label' => 'Tanggal',
                 'index' => 'tglbukti',
             ],
             [
                 'label' => 'Bank',
                 'index' => 'bank_id',
-            ],
+            ]
+        ];
+        $header_right_columns = [
             [
                 'label' => 'Tanggal Dari',
                 'index' => 'tgldari',
@@ -148,18 +153,18 @@ class PendapatanSupirHeaderController extends MyController
 
         $detail_columns = [
             [
-                'label' => 'No',
+                'label' => 'NO',
             ],
             [
-                'label' => 'Supir',
+                'label' => 'SUPIR',
                 'index' => 'supir_id',
             ],
             [
-                'label' => 'Keterangan',
+                'label' => 'KETERANGAN',
                 'index' => 'keterangan',
             ],
             [
-                'label' => 'Nominal',
+                'label' => 'NOMINAL',
                 'index' => 'nominal',
                 'format' => 'currency'
             ]
@@ -169,7 +174,10 @@ class PendapatanSupirHeaderController extends MyController
             $sheet->setCellValue('B' . $header_start_row, $header_column['label']);
             $sheet->setCellValue('C' . $header_start_row++, ': '.$pendapatans[$header_column['index']]);
         }
-
+        foreach ($header_right_columns as $header_right_column) {
+            $sheet->setCellValue('D' . $header_right_start_row, $header_right_column['label']);
+            $sheet->setCellValue('E' . $header_right_start_row++, ': '.$pendapatans[$header_right_column['index']]);
+        }
         foreach ($detail_columns as $detail_columns_index => $detail_column) {
             $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_table_header_row, $detail_column['label'] ?? $detail_columns_index + 1);
         }
@@ -201,6 +209,8 @@ class PendapatanSupirHeaderController extends MyController
             
             foreach ($detail_columns as $detail_columns_index => $detail_column) {
                 $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
+                $sheet->getStyle("A$detail_table_header_row:D$detail_table_header_row")->getFont()->setBold(true);
+                $sheet->getStyle("A$detail_table_header_row:D$detail_table_header_row")->getAlignment()->setHorizontal('center');
             }
             $response_detail['nominals'] = number_format((float) $response_detail['nominal'], '2', '.', ',');
         
@@ -209,8 +219,12 @@ class PendapatanSupirHeaderController extends MyController
             $sheet->setCellValue("C$detail_start_row", $response_detail['keterangan']);
             $sheet->setCellValue("D$detail_start_row", $response_detail['nominals']);
 
+            $sheet->getStyle("C$detail_start_row")->getAlignment()->setWrapText(true);
+            $sheet->getColumnDimension('C')->setWidth(50);
+
             $sheet ->getStyle("A$detail_start_row:D$detail_start_row")->applyFromArray($styleArray);
             $sheet ->getStyle("D$detail_start_row")->applyFromArray($style_number);
+            
             $total += $response_detail['nominal'];
             $detail_start_row++;
         }
@@ -218,33 +232,13 @@ class PendapatanSupirHeaderController extends MyController
         $total_start_row = $detail_start_row;
         
         $sheet->mergeCells('A'.$total_start_row.':C'.$total_start_row);
-        $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A'.$total_start_row.':C'.$total_start_row)->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A'.$total_start_row.':C'.$total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
         $sheet->setCellValue("D$total_start_row", number_format((float) $total, '2', '.', ','))->getStyle("D$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
-       
-        //set diketahui dibuat
-        $ttd_start_row = $total_start_row+2;
-        $sheet->setCellValue("B$ttd_start_row", 'Disetujui');
-        $sheet->setCellValue("C$ttd_start_row", 'Diketahui');
-        $sheet->setCellValue("D$ttd_start_row", 'Dibuat');
-        $sheet ->getStyle("B$ttd_start_row:D$ttd_start_row")->applyFromArray($styleArray);
-        // $sheet->mergeCells("A$ttd_end_row:C$ttd_end_row");
-        $sheet->mergeCells("B".($ttd_start_row+1).":B".($ttd_start_row+3));      
-        $sheet->mergeCells("C".($ttd_start_row+1).":C".($ttd_start_row+3));      
-        $sheet->mergeCells("D".($ttd_start_row+1).":D".($ttd_start_row+3));      
-        $sheet ->getStyle("B".($ttd_start_row+1).":B".($ttd_start_row+3))->applyFromArray($styleArray);
-        $sheet ->getStyle("C".($ttd_start_row+1).":C".($ttd_start_row+3))->applyFromArray($styleArray);
-        $sheet ->getStyle("D".($ttd_start_row+1).":D".($ttd_start_row+3))->applyFromArray($styleArray);
 
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);
-        $sheet->getColumnDimension('C')->setAutoSize(true);
         $sheet->getColumnDimension('D')->setAutoSize(true);
-        $sheet->getColumnDimension('E')->setAutoSize(true);
-        $sheet->getColumnDimension('F')->setAutoSize(true);
-        $sheet->getColumnDimension('G')->setAutoSize(true);
-
         
-
         $writer = new Xlsx($spreadsheet);
         $filename = 'Laporan Pendapatan Supir' . date('dmYHis');
         header('Content-Type: application/vnd.ms-excel');

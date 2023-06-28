@@ -170,36 +170,17 @@
         },
         data: data,
         success: response => {
+          indexRow = response.data.position - 1;
           $('#crudForm').trigger('reset')
           $('#crudModal').modal('hide')
-          $.ajax({
-            url: `${apiUrl}mandorabsensisupir`,
-            method: 'GET',
-            dataType: 'JSON',
-            data: {
-              limit: 0,
-              sortIndex: 'trado_id',
-              sortOrder: 'asc',
-            },
-            headers: {
-              Authorization: `Bearer ${accessToken}`
-            },
-            success: response => {
-              $('#jqGrid').setGridParam({
-                datatype: "local",
-                data: response.data
-              }).trigger('reloadGrid')
-            }
-          })
-          // id = response.data.id
 
-          // $('#jqGrid').jqGrid('setGridParam', {
-          //   page: response.data.page
-          // }).trigger('reloadGrid');
+          $('#jqGrid').jqGrid('setGridParam', {
+            page: response.data.page
+          }).trigger('reloadGrid');
 
-          // if (response.data.grp == 'FORMAT') {
-          //   updateFormat(response.data)
-          // }
+          if (response.data.grp == 'FORMAT') {
+            updateFormat(response.data)
+          }
         },
         error: error => {
           if (error.status === 422) {
@@ -477,7 +458,6 @@
         },
         success: response => {
           $.each(response.data, (index, value) => {
-            console.log(value)
             let element = form.find(`[name="${index}"]`)
             // let element = form.find(`[name="statusaktif"]`)
 
@@ -584,6 +564,7 @@
         element.val('')
         $(`#crudForm [name="absen_id"]`).first().val('')
         element.data('currentValue', element.val())
+        setSupirEnable()
       }
     })
   }

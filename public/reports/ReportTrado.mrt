@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "3cdec3720c74d8525a376d198a59ab2a",
+  "ReportGuid": "6d663f5ed46a9e898bd1ecefcdb49a70",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportTrado.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1687340844000+0700)/",
+  "ReportChanged": "/Date(1687425887000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -1683,15 +1683,16 @@
               "Name": "Text20",
               "CanGrow": true,
               "GrowToHeight": true,
-              "ClientRectangle": "0.46,0.01,0.53,0.58",
+              "ClientRectangle": "0.36,0.02,0.53,0.58",
               "ComponentPlacement": "d.DataBand2",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{Line}"
+                "Value": "{Line}."
               },
               "CanBreak": true,
+              "HorAlignment": "Right",
               "Font": ";9;;",
               "Border": ";;;;;;;solid:0,0,0",
               "Brush": "solid:",

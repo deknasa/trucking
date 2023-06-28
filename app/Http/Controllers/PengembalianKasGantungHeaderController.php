@@ -73,27 +73,25 @@ class PengembalianKasGantungHeaderController extends MyController
     public function report(Request $request)
     {
         //FETCH HEADER
-        $pengembaliankasgantung = Http::withHeaders($request->header())
+        $id = $request->id;
+        $data = Http::withHeaders($request->header())
         ->withOptions(['verify' => false])
         ->withToken(session('access_token'))
-        ->get(config('app.api_url') .'pengembaliankasgantungheader/'.$request->id);
-        
+        ->get(config('app.api_url') .'pengembaliankasgantungheader/'.$id.'/export');
+
         //FETCH DETAIL
         $detailParams = [
-            'forReport' => true,
             'pengembaliankasgantung_id' => $request->id
         ];
-
         $responses = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') .'pengembaliankasgantung_detail', $detailParams);
 
-        $data = $pengembaliankasgantung['data'];
+        $pengembaliankasgantung = $data['data'];
         $pengembaliankasgantung_details = $responses['data'];
-        $user = $responses['user'];
 
-        return view('reports.pengembaliankasgantungheader', compact('data','pengembaliankasgantung_details','user'));
+        return view('reports.pengembaliankasgantungheader', compact('pengembaliankasgantung','pengembaliankasgantung_details'));
     }
 
     public function export(Request $request): void
@@ -142,15 +140,18 @@ class PengembalianKasGantungHeaderController extends MyController
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setCellValue('A1', $pengembaliankasgantung['judul']);
         $sheet->setCellValue('A2', $pengembaliankasgantung['judulLaporan']);
-        $sheet->getStyle("A1")->getFont()->setSize(14);
+        $sheet->getStyle("A1")->getFont()->setSize(12);
         $sheet->getStyle("A2")->getFont()->setSize(12);
+        $sheet->getStyle("A1")->getFont()->setBold(true);
+        $sheet->getStyle("A2")->getFont()->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:E1');
         $sheet->mergeCells('A2:E2');
 
         $header_start_row = 4;
-        $detail_table_header_row = 15;
+        $header_right_start_row = 4;
+        $detail_table_header_row = 10;
         $detail_start_row = $detail_table_header_row + 1;
 
         $alphabets = range('A', 'Z');
@@ -161,20 +162,8 @@ class PengembalianKasGantungHeaderController extends MyController
                 'index' => 'nobukti',
             ],
             [
-                'label' => 'Tanggal Bukti',
+                'label' => 'Tanggal',
                 'index' => 'tglbukti',
-            ],
-            [
-                'label' => 'No Bukti Penerimaan',
-                'index' => 'penerimaan_nobukti',
-            ],
-            [
-                'label' => 'Bank',
-                'index' => 'bank',
-            ],
-            [
-                'label' => 'COA Kas Masuk',
-                'index' => 'coakasmasuk',
             ],
             [
                 'label' => 'Tanggal Dari',
@@ -189,30 +178,44 @@ class PengembalianKasGantungHeaderController extends MyController
                 'label' => 'Tanggal Kas Masuk',
                 'index' => 'tglkasmasuk',
             ],
+        ];
+        $header_right_columns = [
             [
                 'label' => 'Posting Dari',
                 'index' => 'postingdari',
+            ],
+            [
+                'label' => 'Bank',
+                'index' => 'bank',
+            ],
+            [
+                'label' => 'No Bukti Penerimaan',
+                'index' => 'penerimaan_nobukti',
+            ],
+            [
+                'label' => 'Kode Perkiraan',
+                'index' => 'coakasmasuk',
             ],
         ];
 
         $detail_columns = [
             [
-                'label' => 'No',
+                'label' => 'NO',
             ],
             [
-                'label' => 'No Bukti Kas Gantung',
+                'label' => 'NO BUKTI KAS GANTUNG',
                 'index' => 'kasgantung_nobukti',
             ],
             [
-                'label' => 'Keterangan',
+                'label' => 'KETERANGAN',
                 'index' => 'keterangan',
             ],
             [
-                'label' => 'COA',
+                'label' => 'KODE PERKIRAAN',
                 'index' => 'coa',
             ],
             [
-                'label' => 'Nominal',
+                'label' => 'NOMINAL',
                 'index' => 'nominal',
                 'format' => 'currency'
             ],
@@ -221,9 +224,11 @@ class PengembalianKasGantungHeaderController extends MyController
         //LOOPING HEADER        
         foreach ($header_columns as $header_column) {
             $sheet->setCellValue('B' . $header_start_row, $header_column['label']);
-              
-                $sheet->setCellValue('C' . $header_start_row++, ': '.$pengembaliankasgantung[$header_column['index']]);
-           
+            $sheet->setCellValue('C' . $header_start_row++, ': '.$pengembaliankasgantung[$header_column['index']]);
+        }
+        foreach ($header_right_columns as $header_right_column) {
+            $sheet->setCellValue('D' . $header_right_start_row, $header_right_column['label']);
+            $sheet->setCellValue('E' . $header_right_start_row++, ': '.$pengembaliankasgantung[$header_right_column['index']]);
         }
         foreach ($detail_columns as $detail_columns_index => $detail_column) {
             $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_table_header_row, $detail_column['label'] ?? $detail_columns_index + 1);
@@ -256,14 +261,19 @@ class PengembalianKasGantungHeaderController extends MyController
             
             foreach ($detail_columns as $detail_columns_index => $detail_column) {
                 $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
+                $sheet->getStyle("A$detail_table_header_row:E$detail_table_header_row")->getFont()->setBold(true);
+                $sheet->getStyle("A$detail_table_header_row:E$detail_table_header_row")->getAlignment()->setHorizontal('center');
             }
-            $response_detail['nominals'] = number_format((float) $response_detail['nominal'], '2', ',', '.');
+            $response_detail['nominals'] = number_format((float) $response_detail['nominal'], '2', '.', ',');
         
             $sheet->setCellValue("A$detail_start_row", $response_index + 1);    
             $sheet->setCellValue("B$detail_start_row", $response_detail['kasgantung_nobukti']);
             $sheet->setCellValue("C$detail_start_row", $response_detail['keterangan']);
             $sheet->setCellValue("D$detail_start_row", $response_detail['coa']);
             $sheet->setCellValue("E$detail_start_row", $response_detail['nominals']);
+
+            $sheet->getStyle("C$detail_start_row")->getAlignment()->setWrapText(true);
+            $sheet->getColumnDimension('C')->setWidth(50);
 
             $sheet ->getStyle("A$detail_start_row:E$detail_start_row")->applyFromArray($styleArray);
             $sheet ->getStyle("E$detail_start_row")->applyFromArray($style_number);
@@ -273,22 +283,8 @@ class PengembalianKasGantungHeaderController extends MyController
 
         $total_start_row = $detail_start_row;
         $sheet->mergeCells('A'.$total_start_row.':D'.$total_start_row);
-        $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A'.$total_start_row.':E'.$total_start_row)->applyFromArray($style_number)->getFont()->setBold(true);
-        $sheet->setCellValue("E$total_start_row", number_format((float) $nominal, '2', ',', '.'))->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
-
-        // set diketahui dibuat
-        $ttd_start_row = $total_start_row+2;
-        $sheet->setCellValue("B$ttd_start_row", 'Disetujui');
-        $sheet->setCellValue("C$ttd_start_row", 'Diketahui');
-        $sheet->setCellValue("D$ttd_start_row", 'Dibuat');
-        $sheet ->getStyle("B$ttd_start_row:D$ttd_start_row")->applyFromArray($styleArray);
-        
-        $sheet->mergeCells("B".($ttd_start_row+1).":B".($ttd_start_row+3));      
-        $sheet->mergeCells("C".($ttd_start_row+1).":C".($ttd_start_row+3));      
-        $sheet->mergeCells("D".($ttd_start_row+1).":D".($ttd_start_row+3));      
-        $sheet ->getStyle("B".($ttd_start_row+1).":B".($ttd_start_row+3))->applyFromArray($styleArray);
-        $sheet ->getStyle("C".($ttd_start_row+1).":C".($ttd_start_row+3))->applyFromArray($styleArray);
-        $sheet ->getStyle("D".($ttd_start_row+1).":D".($ttd_start_row+3))->applyFromArray($styleArray);
+        $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A'.$total_start_row.':D'.$total_start_row)->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->setCellValue("E$total_start_row", number_format((float) $nominal, '2', '.', ','))->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
 
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);

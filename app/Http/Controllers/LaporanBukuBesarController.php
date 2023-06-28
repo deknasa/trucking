@@ -34,6 +34,8 @@ class LaporanBukuBesarController extends MyController
             'sampai' => $request->sampai,
             'coadari_id' => $request->coadari_id,
             'coasampai_id' => $request->coasampai_id,
+            'coadari' => $request->coadari,
+            'coasampai' => $request->coasampai,
         ];
 
         $header = Http::withHeaders(request()->header())

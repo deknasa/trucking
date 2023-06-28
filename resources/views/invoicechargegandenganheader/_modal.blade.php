@@ -852,7 +852,7 @@
               element.val(value)
             }
           })
-
+          $('#detailList tbody').html('')
           $.each(response.detail, (index, detail) => {
             if (detail.nobukti_header != null) {
 

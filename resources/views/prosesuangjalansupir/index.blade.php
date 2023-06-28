@@ -260,17 +260,17 @@
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
+
           if (data.data.length == 0) {
             $('#detail').jqGrid('setGridParam', {
               postData: {
                 prosesuangjalansupir_id: 0,
               },
             }).trigger('reloadGrid');
-            // $('#transferGrid').jqGrid('setGridParam', {
-            //   postData: {
-            //     nobukti: 0,
-            //   },
-            // }).trigger('reloadGrid');
+            $('#jqGrid').each((index, element) => {
+              abortGridLastRequest($(element))
+              clearGridHeader($(element))
+            })
           }
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
@@ -313,7 +313,8 @@
             }
           }, 100)
 
-
+          $('#left-nav').find('button').attr('disabled', false)
+          permission() 
           setHighlight($(this))
         }
       })
@@ -327,7 +328,7 @@
         disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
           abortGridLastRequest($(this))
-          
+          $('#left-nav').find(`button:not(#add)`).attr('disabled', 'disabled')
           clearGlobalSearch($('#jqGrid'))
         },
       })
@@ -426,7 +427,7 @@
       .addClass('btn btn-sm btn-warning')
       .parent().addClass('px-1')
 
-
+      function permission() {
     if (!`{{ $myAuth->hasPermission('prosesuangjalansupirheader', 'store') }}`) {
       $('#add').attr('disabled', 'disabled')
     }
@@ -445,7 +446,7 @@
 
     if (!`{{ $myAuth->hasPermission('prosesuangjalansupirheader', 'report') }}`) {
       $('#report').attr('disabled', 'disabled')
-    }
+    }}
 
     
     // $("#tabs").on('click', 'li.ui-state-active', function() {

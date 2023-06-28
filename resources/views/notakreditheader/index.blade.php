@@ -390,6 +390,10 @@
               abortGridLastRequest($(element))
               clearGridData($(element))
             })
+            $('#jqGrid').each((index, element) => {
+              abortGridLastRequest($(element))
+              clearGridHeader($(element))
+            })
           }
 
 
@@ -445,6 +449,8 @@
             }
           }, 100)
 
+          $('#left-nav').find('button').attr('disabled', false)
+          permission() 
           $('#gs_').attr('disabled', false)
           setHighlight($(this))
         }
@@ -459,7 +465,7 @@
         disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
           abortGridLastRequest($(this))
-          
+          $('#left-nav').find(`button:not(#add)`).attr('disabled', 'disabled')
           clearGlobalSearch($('#jqGrid'))
         },
       })
@@ -519,23 +525,19 @@
           },
           {
             id: 'export',
-            innerHTML: '<i class="fa fa-file-export"></i> EXPORT',
+            title: 'Export',
+            caption: 'Export',
+            innerHTML: '<i class="fas fa-file-export"></i> EXPORT',
             class: 'btn btn-warning btn-sm mr-1',
             onClick: () => {
-
-              // $('#rangeModal').data('action', 'export')
-              // $('#rangeModal').find('button:submit').html(`Export`)
-              // $('#rangeModal').modal('show')
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Please select a row')
               } else {
-                window.open(`{{ route('notakreditheader.report') }}?id=${selectedId}`)
+                window.open(`{{ route('notakreditheader.export') }}?id=${selectedId}`)
               }
-              clearSelectedRows()
-              $('#gs_').prop('checked', false)
             }
-          },
+          }, 
           {
             id: 'approveun',
             innerHTML: '<i class="fas fa-check""></i> UN/APPROVAL',
@@ -581,6 +583,7 @@
       .addClass('btn btn-sm btn-warning')
       .parent().addClass('px-1')
 
+      function permission() {
     if (!`{{ $myAuth->hasPermission('notakreditheader', 'store') }}`) {
       $('#add').addClass('ui-disabled')
     }
@@ -603,7 +606,7 @@
     if (!`{{ $myAuth->hasPermission('notakreditheader', 'approval') }}`) {
       $('#approveun').attr('disabled', 'disabled')
       $("#jqGrid").hideCol("");
-    }
+    }}
 
     $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {
@@ -620,8 +623,9 @@
       $('#formRange [name=sampai]').val(totalRecord)
 
       autoNumericElements = new AutoNumeric.multiple('#formRange .autonumeric-report', {
-        digitGroupSeparator: '.',
-        decimalCharacter: ',',
+        digitGroupSeparator: ',',
+        decimalCharacter: '.',
+        decimalPlaces: 0,
         allowDecimalPadding: false,
         minimumValue: 1,
         maximumValue: totalRecord
@@ -634,7 +638,13 @@
       let params
       let submitButton = $(this).find('button:submit')
 
-      submitButton.attr('disabled', 'disabled')
+      if ($('#rangeModal').data('action') == 'export') {
+        actionUrl = `{{ route('notakreditheader.export') }}`
+      }
+
+      /* Clear validation messages */
+      $('.is-invalid').removeClass('is-invalid')
+      $('.invalid-feedback').remove()
 
       /* Set params value */
       for (var key in postData) {

@@ -126,59 +126,72 @@ class PenerimaanHeaderController extends MyController
     }
     public function report(Request $request)
     {
-
-        $header = Http::withHeaders(request()->header())
+        //FETCH HEADER
+        $id = $request->id;
+        $penerimaan = Http::withHeaders($request->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'penerimaanheader/' . $request->id);
+            ->get(config('app.api_url') . 'penerimaanheader/'.$id.'/export')['data'];
 
+        //FETCH DETAIL
         $detailParams = [
             'forReport' => true,
             'penerimaan_id' => $request->id
         ];
-
-        $penerimaan_detail = Http::withHeaders(request()->header())
+        $penerimaan_details = Http::withHeaders($request->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'penerimaandetail', $detailParams);
+            ->get(config('app.api_url') . 'penerimaandetail', $detailParams)['data'];
 
-        $data = $header['data'];
-        $penerimaan_details = $penerimaan_detail['data'];
-        $user = Auth::user();
-        return view('reports.penerimaan', compact('data','penerimaan_details', 'user'));
+        if($penerimaan['tipe_bank'] === 'KAS')
+        { return view('reports.penerimaankas', compact('penerimaan', 'penerimaan_details',));
+        } else {
+            return view('reports.penerimaanbank', compact('penerimaan', 'penerimaan_details',));
+        }
+        
     }
 
     public function export(Request $request): void
     {
-
         //FETCH HEADER
-        $penerimaans = Http::withHeaders($request->header())
+        $id = $request->id;
+        $penerimaan = Http::withHeaders($request->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'penerimaanheader/' . $request->id)['data'];
+            ->get(config('app.api_url') . 'penerimaanheader/'.$id.'/export')['data'];
 
         //FETCH DETAIL
         $detailParams = [
             'penerimaan_id' => $request->id,
         ];
-
-        $responses = Http::withHeaders($request->header())
+        $penerimaan_details = Http::withHeaders($request->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'penerimaandetail', $detailParams);
+            ->get(config('app.api_url') . 'penerimaandetail', $detailParams)['data'];
 
-        $penerimaan_details = $responses['data'];
-        $user = Auth::user();
+        $tglBukti = $penerimaan["tglbukti"];
+        $timeStamp = strtotime($tglBukti);
+        $dateTglBukti = date('d-m-Y', $timeStamp); 
+        $penerimaan['tglbukti'] = $dateTglBukti;
+
+        $tglLunas = $penerimaan["tgllunas"];
+        $timeStamp = strtotime($tglLunas);
+        $datetglLunas = date('d-m-Y', $timeStamp); 
+        $penerimaan['tgllunas'] = $datetglLunas;
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setCellValue('A1', 'PENERIMAAN');
-        $sheet->getStyle("A1")->getFont()->setSize(20);
+        $sheet->setCellValue('A1', $penerimaan['judul']);
+        $sheet->setCellValue('A2', $penerimaan['judulLaporan']);
+        $sheet->getStyle("A1")->getFont()->setSize(14);
+        $sheet->getStyle("A2")->getFont()->setSize(12);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
-        $sheet->mergeCells('A1:G1');
+        $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
+        $sheet->mergeCells('A1:L1');
+        $sheet->mergeCells('A2:L2');
 
-        $header_start_row = 2;
-        $detail_table_header_row = 10;
+        $header_start_row = 4;
+        $detail_table_header_row = 13;
         $detail_start_row = $detail_table_header_row + 1;
 
         $alphabets = range('A', 'Z');
@@ -189,16 +202,24 @@ class PenerimaanHeaderController extends MyController
                 'index' => 'nobukti',
             ],
             [
-                'label' => 'Tanggal',
+                'label' => 'Tanggal Bukti',
                 'index' => 'tglbukti',
             ],
             [
                 'label' => 'Pelanggan',
-                'index' => 'pelanggan',
+                'index' => 'pelanggan_id',
+            ],
+            [
+                'label' => 'Agen',
+                'index' => 'agen_id',
             ],
             [
                 'label' => 'Bank',
-                'index' => 'bank',
+                'index' => 'bank_id',
+            ],
+            [
+                'label' => 'Posting Dari',
+                'index' => 'postingdari',
             ],
             [
                 'label' => 'Diterima Dari',
@@ -235,20 +256,20 @@ class PenerimaanHeaderController extends MyController
                 'index' => 'bank_id'
             ],
             [
-                'label' => 'Pelanggan',
-                // 'index' => 'pelanggan_id'
-            ],
-            [
-                'label' => 'Bank Pelanggan',
-                // 'index' => 'bankpelanggan_id'
-            ],
-            [
-                'label' => 'No Bukti Invoice',
+                'label' => 'Invoice No Bukti',
                 'index' => 'invoice_nobukti'
             ],
             [
-                'label' => 'Jenis Biaya',
-                // 'index' => 'jenisbiaya'
+                'label' => 'Pelunasan Piutang No Bukti ',
+                'index' => 'pelunasanpiutang_nobukti'
+            ],
+            [
+                'label' => 'Bank Pelanggan',
+                'index' => 'bankpelanggan_id'
+            ],
+            [
+                'label' => 'Bulan Beban',
+                'index' => 'bulanbeban'
             ],
             [
                 'label' => 'Keterangan',
@@ -265,7 +286,7 @@ class PenerimaanHeaderController extends MyController
         foreach ($header_columns as $header_column) {
             $sheet->setCellValue('B' . $header_start_row, $header_column['label']);
 
-            $sheet->setCellValue('C' . $header_start_row++, ': ' . $penerimaans[$header_column['index']]);
+            $sheet->setCellValue('C' . $header_start_row++, ': ' . $penerimaan[$header_column['index']]);
         }
         foreach ($detail_columns as $detail_columns_index => $detail_column) {
             $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_table_header_row, $detail_column['label'] ?? $detail_columns_index + 1);
@@ -303,21 +324,27 @@ class PenerimaanHeaderController extends MyController
             }
             $response_detail['nominals'] = number_format((float) $response_detail['nominal'], '2', ',', '.');
 
+            $tglJatuhTempo = $response_detail["tgljatuhtempo"];
+            $timeStamp = strtotime($tglJatuhTempo);
+            $datetglJatuhTempo = date('d-m-Y', $timeStamp); 
+            $response_detail['tgljatuhtempo'] = $datetglJatuhTempo;
+
             $sheet->setCellValue("A$detail_start_row", $response_index + 1);
             $sheet->setCellValue("B$detail_start_row", $response_detail['nowarkat']);
             $sheet->setCellValue("C$detail_start_row", $response_detail['tgljatuhtempo']);
             $sheet->setCellValue("D$detail_start_row", $response_detail['coadebet']);
             $sheet->setCellValue("E$detail_start_row", $response_detail['coakredit']);
             $sheet->setCellValue("F$detail_start_row", $response_detail['bank_id']);
-            // $sheet->setCellValue("G$detail_start_row", $response_detail['pelanggan_id']);
-            // $sheet->setCellValue("H$detail_start_row", $response_detail['bankpelanggan_id']);
-            $sheet->setCellValue("I$detail_start_row", $response_detail['invoice_nobukti']);
-            // $sheet->setCellValue("J$detail_start_row", $response_detail['jenisbiaya']);
+            $sheet->setCellValue("G$detail_start_row", $response_detail['invoice_nobukti']);
+            $sheet->setCellValue("H$detail_start_row", $response_detail['pelunasanpiutang_nobukti']);
+            $sheet->setCellValue("I$detail_start_row", $response_detail['bankpelanggan_id']);
+            $sheet->setCellValue("J$detail_start_row", $response_detail['bulanbeban']);
             $sheet->setCellValue("K$detail_start_row", $response_detail['keterangan']);
             $sheet->setCellValue("L$detail_start_row", $response_detail['nominals']);
 
-            $sheet->getStyle("A$detail_start_row:L$detail_start_row")->applyFromArray($styleArray);
+            $sheet->getStyle("A$detail_start_row:K$detail_start_row")->applyFromArray($styleArray);
             $sheet->getStyle("L$detail_start_row")->applyFromArray($style_number);
+
             $nominal += $response_detail['nominal'];
             $detail_start_row++;
         }
@@ -341,16 +368,6 @@ class PenerimaanHeaderController extends MyController
         $sheet->getStyle("C" . ($ttd_start_row + 1) . ":C" . ($ttd_start_row + 3))->applyFromArray($styleArray);
         $sheet->getStyle("D" . ($ttd_start_row + 1) . ":D" . ($ttd_start_row + 3))->applyFromArray($styleArray);
 
-        //set tglcetak
-        date_default_timezone_set('Asia/Jakarta');
-
-        $sheet->setCellValue("B" . ($ttd_start_row + 5), 'Dicetak Pada :');
-        $sheet->getStyle("B" . ($ttd_start_row + 5))->getFont()->setItalic(true);
-        $sheet->setCellValue("C" . ($ttd_start_row + 5), date('d/m/Y H:i:s'));
-        $sheet->getStyle("C" . ($ttd_start_row + 5))->getFont()->setItalic(true);
-        $sheet->setCellValue("D" . ($ttd_start_row + 5), $user['name']);
-        $sheet->getStyle("D" . ($ttd_start_row + 5))->getFont()->setItalic(true);
-
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);
         $sheet->getColumnDimension('C')->setAutoSize(true);
@@ -364,10 +381,8 @@ class PenerimaanHeaderController extends MyController
         $sheet->getColumnDimension('K')->setAutoSize(true);
         $sheet->getColumnDimension('L')->setAutoSize(true);
 
-
-
         $writer = new Xlsx($spreadsheet);
-        $filename = 'Laporan Penerimaan  ' . date('dmYHis');
+        $filename = 'Laporan Penerimaan Kas/Bank' . date('dmYHis');
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
         header('Cache-Control: max-age=0');

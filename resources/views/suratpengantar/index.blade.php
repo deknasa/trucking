@@ -33,6 +33,7 @@
   let autoNumericElements = []
   let rowNum = 10
   var statusBukanBatalMuat;
+  var activeGrid;
   var statusEditTujuan;
   $(document).ready(function() {
 
@@ -409,6 +410,52 @@
             }
           },
           {
+            label: 'EDIT TUJUAN',
+            name: 'statusedittujuan',
+            stype: 'select',
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['comboedittujuan'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['comboedittujuan'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+            `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              if (!value) {
+                return ''
+              }
+              let statusEditTujaun = JSON.parse(value)
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusEditTujaun.WARNA}; color: #fff;">
+                  <span>${statusEditTujaun.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              if (!rowObject.statusedittujuan) {
+                return ` title=""`
+              }
+              let statusEditTujaun = JSON.parse(rowObject.statusedittujuan)
+              return ` title="${statusEditTujaun.MEMO}"`
+            }
+          },
+          {
             label: 'MODIFIEDBY',
             name: 'modifiedby',
           },
@@ -507,7 +554,8 @@
           } else {
             $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
           }
-
+          $('#left-nav').find('button').attr('disabled', false)
+          permission() 
           setHighlight($(this))
         },
       })
@@ -520,7 +568,7 @@
         groupOp: 'AND',
         beforeSearch: function() {
           abortGridLastRequest($(this))
-          
+          $('#left-nav').find(`button:not(#add)`).attr('disabled', 'disabled')
           clearGlobalSearch($('#jqGrid'))
         }
       })
@@ -565,6 +613,7 @@
             innerHTML: '<i class="fa fa-print"></i> REPORT',
             class: 'btn btn-info btn-sm mr-1',
             onClick: () => {
+              $('#formRangeTgl').data('action', 'report')
               $('#rangeTglModal').find('button:submit').html(`Report`)
               $('#rangeTglModal').modal('show')
             }
@@ -574,6 +623,7 @@
             innerHTML: '<i class="fa fa-file-export"></i> EXPORT',
             class: 'btn btn-warning btn-sm mr-1',
             onClick: () => {
+              $('#formRangeTgl').data('action', 'export')
               $('#rangeTglModal').find('button:submit').html(`Export`)
               $('#rangeTglModal').modal('show')
             }
@@ -588,7 +638,7 @@
           dropmenuHTML: [
             {
               id:'approvalBatalMuat',
-              text:"Batal Muat",
+              text:"un/Approval Batal Muat",
               onClick: () => {
                 selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                 approvalBatalMuat(selectedId);
@@ -596,7 +646,7 @@
             },
             {
               id:'approvalEditTujuan',
-              text:"Edit Tujuan",
+              text:"un/Approval Edit Tujuan",
               onClick: () => {
                 selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                 approvalEditTujuan(selectedId);
@@ -641,22 +691,43 @@
       })
       $('#formRangeTgl').submit(event => {
         event.preventDefault()
+
+        let params
+        let actionUrl = ``
+        let submitButton = $(this).find('button:submit')
+
+        /* Clear validation messages */
+        $('.is-invalid').removeClass('is-invalid')
+        $('.invalid-feedback').remove()
+
+        /* Set params value */
+        for (var key in postData) {
+          if (params != "") {
+            params += "&";
+          }
+          params += key + "=" + encodeURIComponent(postData[key]);
+        }
+
+        let formRange = $('#formRangeTgl')
+        let dari = formRange.find('[name=dari]').val()
+        let sampai = formRange.find('[name=sampai]').val()
+        params += `&dari=${dari}&sampai=${sampai}`
+
         getCekExport()
         .then((response) => {
-          let actionUrl = `{{ route('suratpengantar.export') }}`
+          if($('#formRangeTgl').data('action') == 'export')
+          {
+            let actionUrl = `{{ route('suratpengantar.export') }}`
 
             /* Clear validation messages */
             $('.is-invalid').removeClass('is-invalid')
             $('.invalid-feedback').remove()
-
-
             window.open(`${actionUrl}?${$('#formRangeTgl').serialize()}`)
+          } else if ($('#formRangeTgl').data('action') == 'report') {
+            window.open(`{{ route('suratpengantar.report') }}?${params}`)
+          }
         })
-        .catch((error) => {
-          setErrorMessages($('#formRangeTgl'), error.responseJSON.errors);
-        })
-
-        })
+      })
         function getCekExport() {
            return new Promise((resolve, reject) => {
         $.ajax({
@@ -679,6 +750,7 @@
       });
     }
 
+    function permission() {
     if (!`{{ $myAuth->hasPermission('suratpengantar', 'store') }}`) {
       $('#add').attr('disabled', 'disabled')
     }
@@ -701,7 +773,7 @@
     }
     if (!`{{ $myAuth->hasPermission('suratpengantar', 'export') }}`) {
       $('#export').attr('disabled', 'disabled')
-    }
+    }}
 
     $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {
@@ -718,8 +790,9 @@
       $('#formRange [name=sampai]').val(totalRecord)
 
       autoNumericElements = new AutoNumeric.multiple('#formRange .autonumeric-report', {
-        digitGroupSeparator: '.',
-        decimalCharacter: ',',
+        digitGroupSeparator: ',',
+        decimalCharacter: '.',
+        decimalPlaces: 0,
         allowDecimalPadding: false,
         minimumValue: 1,
         maximumValue: totalRecord
@@ -735,10 +808,10 @@
           Authorization: `Bearer ${accessToken}`
         },
         success: response => {
-          let msg = `YAKIN status Berubah jadi BUkan Batal Muat`
+          let msg = `YAKIN Unapproval Batal Muat`
           console.log(statusBukanBatalMuat);
           if (response.data.statusbatalmuat === statusBukanBatalMuat) {
-            msg = `YAKIN status Berubah jadi Batal Muat`
+            msg = `YAKIN approval Batal Muat`
           }
           showConfirm(msg,response.data.nobukti,`suratpengantar/${response.data.id}/batalmuat`)
         },
@@ -754,10 +827,10 @@
           Authorization: `Bearer ${accessToken}`
         },
         success: response => {
-          let msg = `YAKIN status Berubah jadi Tidak Boleh Edit Tujuan`
+          let msg = `YAKIN Unapproval Edit Tujuan`
           console.log(statusEditTujuan);
           if (response.data.statusedittujuan === statusEditTujuan) {
-            msg = `YAKIN status Berubah jadi Edit Tujuan`
+            msg = `YAKIN approval Edit Tujuan`
           }
           showConfirm(msg,response.data.nobukti,`suratpengantar/${response.data.id}/edittujuan`)
         },

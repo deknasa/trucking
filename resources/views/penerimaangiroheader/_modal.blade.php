@@ -691,7 +691,7 @@
                         }
 
                     })
-
+                    $('#detailList tbody').html('')
                     $.each(response.detail, (index, detail) => {
                         let readOnly = (detail.pelunasanpiutang_nobukti != '-') ? 'readonly' : '';
                         let detailRow = $(`

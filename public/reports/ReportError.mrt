@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "83dfe61eda022024a11197301d4fd65d",
+  "ReportGuid": "d191272ec5dba9f2b362f09e05ca3758",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportError.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1687336499000+0700)/",
+  "ReportChanged": "/Date(1687506846000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -204,7 +204,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "Kode Error"
+                "Value": "KODE ERROR"
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
@@ -230,7 +230,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "Keterangan"
+                "Value": "KETERANGAN"
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",

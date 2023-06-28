@@ -18,6 +18,7 @@ class StokController  extends MyController
 
     public function report(Request $request)
     {
+        // dd($request->all());
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))

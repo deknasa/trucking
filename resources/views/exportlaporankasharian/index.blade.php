@@ -5,7 +5,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
-            <div class="card card-primary">
+            <div class="card card-easyui bordered mb-4">
                 <div class="card-header">
                 </div>
                 <form id="crudForm">
@@ -28,8 +28,8 @@
                         <div class="row">
 
                             <div class="col-sm-6 mt-4">
-                                <a id="btnEkspor" class="btn btn-secondary mr-2 ">
-                                    <i class="fas fa-sync"></i>
+                                <a id="btnEkspor" class="btn btn-warning ">
+                                    <i class="fas fa-file-export"></i>
                                     Export
                                 </a>
                             </div>
@@ -83,7 +83,7 @@
 			</div>
 		`
             )
-            .addClass("btn btn-primary").html(`
+            .addClass("btn btn-easyui text-easyui-dark").html(`
 			<i class="fa fa-calendar-alt"></i>
 		`);
 

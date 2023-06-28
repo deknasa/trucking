@@ -236,7 +236,9 @@
                                 $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
                             }
 
-                            setHighlight($(this))
+                        $('#left-nav').find('button').attr('disabled', false)
+                        permission() 
+                        setHighlight($(this))
                         },
                     })
 
@@ -247,9 +249,9 @@
                         defaultSearch: 'cn',
                         groupOp: 'AND',
                         beforeSearch: function() {
-                            abortGridLastRequest($(this))
-
-                            clearGlobalSearch($('#jqGrid'))
+                        abortGridLastRequest($(this))
+                        $('#left-nav').find(`button:not(#add)`).attr('disabled', 'disabled')
+                        clearGlobalSearch($('#jqGrid'))
                         }
                     })
 
@@ -268,8 +270,12 @@
                                 class: 'btn btn-success btn-sm mr-1',
                                 onClick: () => {
                                     selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                                    if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                                        showDialog('Harap pilih salah satu record')
+                                    } else {
+                                        editKaryawan(selectedId)
+                                    }
 
-                                    editKaryawan(selectedId)
                                 }
                             },
                             {
@@ -334,6 +340,7 @@
                     .addClass('btn-sm btn-warning')
                     .parent().addClass('px-1')
 
+                    function permission() {
                 if (!`{{ $myAuth->hasPermission('karyawan', 'store') }}`) {
                     $('#add').attr('disabled', 'disabled')
                 }
@@ -350,7 +357,7 @@
                 }
                 if (!`{{ $myAuth->hasPermission('karyawan', 'report') }}`) {
                     $('#report').attr('disabled', 'disabled')
-                }
+                } }
 
                 $('#rangeModal').on('shown.bs.modal', function() {
                     if (autoNumericElements.length > 0) {
@@ -409,10 +416,9 @@
                     let offset = parseInt(formRange.find('[name=dari]').val()) - 1
                     let limit = parseInt(formRange.find('[name=sampai]').val().replace('.', '')) - offset
                     params += `&offset=${offset}&limit=${limit}`
-                    console.log(offset)
-                    console.log(limit)
 
-                    getCekExport(params).then((response) => {
+                    getCekExport(params)
+                        .then((response) => {
                             if ($('#rangeModal').data('action') == 'export') {
                                 let xhr = new XMLHttpRequest()
                                 xhr.open('GET', `{{ config('app.api_url') }}karyawan/export?${params}`,
@@ -447,7 +453,7 @@
                             } else if ($('#rangeModal').data('action') == 'report') {
 
                                 if (totalRecord === 0) {
-                                    // alert('data tidak ada')
+                                    alert('data tidak ada')
                                     showDialog('Please select a row')
                                 } else {
                                     window.open(`{{ route('karyawan.report') }}?${params}`);
@@ -461,35 +467,44 @@
                             if (error.status === 422) {
                                 $('.is-invalid').removeClass('is-invalid')
                                 $('.invalid-feedback').remove()
-                                if (error.responseJSON.status != false) {
-
-                                    errors = error.responseJSON.errors
-                                    $.each(errors, (index, error) => {
-                                        let indexes = index.split(".");
+                                let status
+                                if (error.responseJSON.hasOwnProperty('status') == false) {
+                                    status = false
+                                } else {
+                                    status = true
+                                }
+                                statusText = error.statusText
+                                errors = error.responseJSON.errors
+                                $.each(errors, (index, error) => {
+                                    let indexes = index.split(".");
+                                    if (status === false) {
                                         indexes[0] = 'sampai'
-                                        let element;
-                                        element = $('#rangeModal').find(`[name="${indexes[0]}"]`)[
-                                            0];
-
+                                    }
+                                    let element;
+                                    element = $('#rangeModal').find(`[name="${indexes[0]}"]`)[
+                                        0];
+                                    if ($(element).length > 0 && !$(element).is(":hidden")) {
                                         $(element).addClass("is-invalid");
                                         $(`
-                                            <div class="invalid-feedback">
-                                            ${error[0].toLowerCase()}
-                                            </div>
+                                                <div class="invalid-feedback">
+                                                ${error[0].toLowerCase()}
+                                                </div>
                                         `).appendTo($(element).parent());
+                                    } else {
+                                        setTimeout(() => {
+                                            return showDialog(error);
+                                        }, 100)
+                                    }
+                                });
+                                $(".is-invalid").first().focus();
 
-                                    });
-                                    $(".is-invalid").first().focus();
-                                } else {
-                                    // showDialog(error.statusText, error.responseJSON.message)
-
-                                }
                             } else {
                                 showDialog(error.statusText)
                             }
                         })
 
                         .finally(() => {
+
                             $('.ui-button').click()
 
                             submitButton.removeAttr('disabled')

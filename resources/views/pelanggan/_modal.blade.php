@@ -22,95 +22,107 @@
             <input type="text" name="id" class="form-control" hidden>
             
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2">
-                <label class="col-form-label">
-                  kode pelanggan <span class="text-danger">*</span>
-                </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="kodepelanggan" class="form-control">
-              </div>
-            </div>
-            <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2">
+              <div class="col-12 col-sm-3 col-md-3">
                 <label class="col-form-label">
                   nama pelanggan <span class="text-danger">*</span>
                 </label>
               </div>
-              <div class="col-12 col-sm-9 col-md-10">
+              <div class="col-12 col-sm-9 col-md-9">
                 <input type="text" name="namapelanggan" class="form-control">
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2">
+              <div class="col-12 col-sm-3 col-md-3">
                 <label class="col-form-label">
-                  NO TELEPON <span class="text-danger">*</span>
+                  alias pelanggan <span class="text-danger">*</span>
                 </label>
               </div>
-              <div class="col-12 col-sm-9 col-md-10">
+              <div class="col-12 col-sm-9 col-md-9">
+                <input type="text" name="kodepelanggan" class="form-control">
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-3">
+                <label class="col-form-label">
+                  nama kontak <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-9">
+                <input type="text" name="namakontak" class="form-control">
+              </div>
+            </div>
+
+
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-3">
+                <label class="col-form-label">
+                  NO TELEPON/HANDPHONE <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-9">
                 <input type="text" name="telp" class="form-control numbernoseparate">
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2">
+              <div class="col-12 col-sm-3 col-md-3">
                 <label class="col-form-label">
                   alamat (1) <span class="text-danger">*</span>
                 </label>
               </div>
-              <div class="col-12 col-sm-9 col-md-10">
+              <div class="col-12 col-sm-9 col-md-9">
                 <input type="text" name="alamat" class="form-control">
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2">
+              <div class="col-12 col-sm-3 col-md-3">
                 <label class="col-form-label">
                   alamat (2) <span class="text-danger"></span>
                 </label>
               </div>
-              <div class="col-12 col-sm-9 col-md-10">
+              <div class="col-12 col-sm-9 col-md-9">
                 <input type="text" name="alamat2" class="form-control">
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2">
+              <div class="col-12 col-sm-3 col-md-3">
                 <label class="col-form-label">
                   kota <span class="text-danger">*</span>
                 </label>
               </div>
-              <div class="col-12 col-sm-9 col-md-10">
+              <div class="col-12 col-sm-9 col-md-9">
                 <input type="text" name="kota" class="form-control">
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2">
+              <div class="col-12 col-sm-3 col-md-3">
                 <label class="col-form-label">
-                  kode pos <span class="text-danger">*</span>
+                  kode pos <span class="text-danger"></span>
                 </label>
               </div>
-              <div class="col-12 col-sm-9 col-md-10">
+              <div class="col-12 col-sm-9 col-md-9">
                 <input type="text" name="kodepos" class="form-control numbernoseparate">
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2">
+              <div class="col-12 col-sm-3 col-md-3">
                 <label class="col-form-label">
                   keterangan
                 </label>
               </div>
-              <div class="col-12 col-sm-9 col-md-10">
+              <div class="col-12 col-sm-9 col-md-9">
                 <input type="text" name="keterangan" class="form-control">
               </div>
             </div>
 
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2">
+              <div class="col-12 col-sm-3 col-md-3">
                 <label class="col-form-label">
                   Status Aktif <span class="text-danger">*</span>
                 </label>
               </div>
 
 
-              <div class="col-12 col-sm-9 col-md-10">
+              <div class="col-12 col-sm-9 col-md-9">
                 <select name="statusaktif" class="form-select select2bs4" style="width: 100%;">
                   <option value="">-- PILIH STATUS AKTIF --</option>
                 </select>

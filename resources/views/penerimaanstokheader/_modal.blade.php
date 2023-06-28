@@ -239,16 +239,16 @@
 
 
             <div class="table-scroll table-responsive">
-              <table class="table table-bordered table-bindkeys" style="width: 100%; min-width: 500px;">
+              <table class="table table-bordered table-bindkeys" id="detailList" style="width: 100%; min-width: 500px;">
                 <thead>
                   <tr>
                     <th style="width:10%; max-width: 25px;max-width: 15px">No</th>
                     <th style="width: 20%; min-width: 200px;">stok  </th>
                     <th class="data_tbl tbl_vulkanisirke" style="width: 10px">vulkanisir ke</th>
                     <th style="width: 20%; min-width: 200px;">keterangan  </th>
-                    <th class="data_tbl tbl_qty" style="width:10%; min-width: 100px">qty </th>
-                    <th class="data_tbl tbl_harga" style="width: 20%; min-width: 200px;">harga</th>
                     <th class="data_tbl tbl_penerimaanstok_nobukti"  style="width: 20%; min-width: 200px;">Penerimaan stok no bukti</th>
+                    <th class="data_tbl tbl_harga" style="width: 20%; min-width: 200px;">harga</th>
+                    <th class="data_tbl tbl_qty" style="width:10%; min-width: 100px">qty </th>
                     <th class="data_tbl tbl_persentase" style="width:10%; min-width: 100px">persentase discount</th>
                     <th class="data_tbl tbl_total" style="width: 20%; min-width: 200px;">Total</th>
                     <th class="data_tbl tbl_aksi" style="width:10%; max-width: 25px;max-width: 15px">Aksi</th>
@@ -740,6 +740,7 @@
         'Authorization': `Bearer ${accessToken}`
       },
       success: response => {
+        $('#detailList tbody').html('')
         resetRow()
         $.each(response.detail, (id, detail) => {
           let detailRow = $(`
@@ -758,25 +759,28 @@
                   <td>
                     <input type="text"  name="detail_keterangan[]" style="" class="form-control">                    
                   </td>
-                  <td class="data_tbl tbl_qty">
-                    <input type="text"  name="detail_qty[]" id="detail_qty${id}" onkeyup="cal(${id})" style="text-align:right" class="form-control autonumeric number${id}">                    
-                  </td>  
-                  
-                  <td class="data_tbl tbl_harga">
-                    <input type="text"  name="detail_harga[]" id="detail_harga${id}" onkeyup="cal(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
-                  </td>  
                   
                   <td class="data_tbl tbl_penerimaanstok_nobukti">
                     <input type="text"  name="detail_penerimaanstoknobukti[]" id="detail_penerimaanstoknobukti_${id}" class="form-control ">
                     <input type="text" id="detailpenerimaanstoknobuktiId_${id}" readonly hidden class="detailpenerimaanstoknobuktiId" name="detail_penerimaanstoknobukti_id[]">
                   </td>  
+
+                  <td class="data_tbl tbl_harga">
+                    <input type="text"  name="detail_harga[]" readonly id="detail_harga${id}" style="text-align:right" class="autonumeric number${id} form-control">                    
+                  </td>
+
+                  <td class="data_tbl tbl_qty">
+                    <input type="text"  name="detail_qty[]" id="detail_qty${id}" onkeyup="calculate(${id})" style="text-align:right" class="form-control autonumeric number${id}">                    
+                  </td>  
                   
                   <td class="data_tbl tbl_persentase">
-                    <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${id}" onkeyup="cal(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
+                    <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${id}" onkeyup="calculate(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
                   </td>  
+
                   <td class="data_tbl tbl_total">
-                    <input type="text"  name="totalItem[]" readonly id="totalItem${id}" style="text-align:right" class="form-control totalItem autonumeric number${id}">                    
-                  </td>  
+                    <input type="text"  name="totalItem[]" readonly id="totalItem${id}" style="text-align:right" onkeyup="calculate(${id})" class="form-control totalItem autonumeric number${id}">                    
+                  </td>
+
                   <td>
                     <div class='btn btn-danger btn-sm rmv'>Hapus</div>
                   </td>
@@ -1082,9 +1086,13 @@
     $('#gudangId').val('');
   }
 
-
+  $(window).on('popstate', function() { 
+    $('#crudModal').modal('hide') 
+  });
 
   $('#crudModal').on('shown.bs.modal', () => {
+    var urlReplace = "#" + $(this).attr('id'); // make the hash the id of the modal shown
+    history.pushState(null, null, urlReplace); // push state that hash into the url
     let form = $('#crudForm')
     setFormBindKeys(form)
     
@@ -1310,26 +1318,28 @@
                   <td>
                     <input type="text"  name="detail_keterangan[]" style="" class="form-control">                    
                   </td>
-                  <td class="data_tbl tbl_qty">
-                    <input type="text"  name="detail_qty[]" id="detail_qty${index}" onkeyup="cal(${index})" style="text-align:right" class="form-control autonumeric number${index}" >
-                  </td>  
-                  
-                  <td class="data_tbl tbl_harga">
-                    <input type="text"  name="detail_harga[]" id="detail_harga${index}" onkeyup="cal(${index})" style="text-align:right" class="form-control autonumeric number${index}" >
-                  </td>  
                   
                   <td class="data_tbl tbl_penerimaanstok_nobukti">
                     <input type="text"  name="detail_penerimaanstoknobukti[]" id="detail_penerimaanstoknobukti_${index}" class="form-control ">
                     <input type="text" id="detailpenerimaanstoknobuktiId_${index}" readonly hidden class="detailpenerimaanstoknobuktiId" name="detail_penerimaanstoknobukti_id[]">
-                  </td>  
-                  
+                  </td>
+
+                  <td class="data_tbl tbl_harga">
+                    <input type="text"  name="detail_harga[]" readonly id="detail_harga${index}" style="text-align:right" class="form-control autonumeric number${index}" >
+                  </td>
+
+                  <td class="data_tbl tbl_qty">
+                    <input type="text"  name="detail_qty[]" id="detail_qty${index}" onkeyup="calculate(${index})" style="text-align:right" class="form-control autonumeric number${index}" >
+                  </td>
+
                   <td class="data_tbl tbl_persentase">
-                    <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${index}" onkeyup="cal(${index})" style="text-align:right" class="form-control autonumeric number${index}" >
+                    <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${index}" onkeyup="calculate(${index})" style="text-align:right" class="form-control autonumeric number${index}" >
                   </td>  
+
                   <td class="data_tbl tbl_total">
-                    <input type="text"  name="totalItem[]" readonly id="totalItem${index}" style="text-align:right" class="form-control totalItem autonumeric number${index}" >                    
-                  </td>  
-                  
+                    <input type="text"  name="totalItem[]" id="totalItem${index}" style="text-align:right"  onkeyup="calculate(${index})" class="form-control totalItem autonumeric number${index}" >                    
+                  </td>
+
                   <td>
                     <div class='btn btn-danger btn-sm rmv'>Hapus</div>
                   </td>
@@ -1427,6 +1437,25 @@
     nominaldiscount = total * (discount / 100);
     total -= nominaldiscount;
     new AutoNumeric($(`#totalItem${id}`)[0]).set(total)
+    sumary();
+  }
+
+  function calculate(id) {
+    qty = $(`#detail_qty${id}`)[0];
+    discount = $(`#detail_persentasediscount${id}`)[0];
+    totalItem = $(`#totalItem${id}`)[0];
+
+    qty = AutoNumeric.getNumber(qty);
+    discount = AutoNumeric.getNumber(discount);
+    totalItem = AutoNumeric.getNumber(totalItem);
+
+    satuanSebelumDiscount= totalItem / qty
+    discount = 1-(discount/100)
+
+    satuanSetelahDiscount = satuanSebelumDiscount / discount;
+  
+    harga = satuanSetelahDiscount;
+    new AutoNumeric($(`#detail_harga${id}`)[0]).set(harga)
     sumary();
   }
 
@@ -1528,7 +1557,7 @@
           $('#gandengandariId').val(response.data.gandengandari_id)
           $('#tradodariId').val(response.data.tradodari_id)
           
-
+          $('#detailList tbody').html('')
           $.each(response.detail, (id, detail) => {
             let detailRow = $(`
               <tr class="trow">
@@ -1546,25 +1575,28 @@
                     <td>
                       <input type="text"  name="detail_keterangan[]" style="" class="form-control">                    
                     </td>
-                    <td class="data_tbl tbl_qty">
-                      <input type="text"  name="detail_qty[]" id="detail_qty${id}" onkeyup="cal(${id})" style="text-align:right" class="form-control autonumeric number${id}">                    
-                    </td>  
-                    
-                    <td class="data_tbl tbl_harga">
-                      <input type="text"  name="detail_harga[]" id="detail_harga${id}" onkeyup="cal(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
-                    </td>  
                     
                     <td class="data_tbl tbl_penerimaanstok_nobukti">
                       <input type="text"  name="detail_penerimaanstoknobukti[]" id="detail_penerimaanstoknobukti_${id}" class="form-control ">
                       <input type="text" id="detailpenerimaanstoknobuktiId_${id}" readonly hidden class="detailpenerimaanstoknobuktiId" name="detail_penerimaanstoknobukti_id[]">
                     </td>
+
+                    <td class="data_tbl tbl_harga">
+                      <input type="text"  name="detail_harga[]" readonly id="detail_harga${id}" style="text-align:right" class="autonumeric number${id} form-control">                    
+                    </td>
+
+                    <td class="data_tbl tbl_qty">
+                      <input type="text"  name="detail_qty[]" id="detail_qty${id}" onkeyup="calculate(${id})" style="text-align:right" class="form-control autonumeric number${id}">
+                    </td>
                     
                     <td class="data_tbl tbl_persentase">
-                      <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${id}" onkeyup="cal(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
-                    </td>  
+                      <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${id}" onkeyup="calculate(${id})" style="text-align:right" class="autonumeric number${id} form-control">
+                    </td>
+
                     <td class="data_tbl tbl_total">
-                      <input type="text"  name="totalItem[]" readonly id="totalItem${id}" style="text-align:right" class="form-control totalItem autonumeric number${id}">                    
-                    </td>  
+                      <input type="text"  name="totalItem[]" readonly id="totalItem${id}" style="text-align:right" onkeyup="calculate(${id})" class="form-control totalItem autonumeric number${id}">
+                    </td>
+
                     <td class="data_tbl tbl_aksi">
                       <div class='btn btn-danger btn-sm rmv'>Hapus</div>
                     </td>

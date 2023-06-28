@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "b8c38532d9105f7107e2d36732631747",
+  "ReportGuid": "cda427bfc1cfa83dd2a01265b729fbaa",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportCabang.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1687336988000+0700)/",
+  "ReportChanged": "/Date(1687507057000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -210,7 +210,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "Kode Cabang"
+                "Value": "KODE CABANG"
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
@@ -236,7 +236,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "Nama Cabang"
+                "Value": "NAMA CABANG"
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
@@ -262,7 +262,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "Status Aktif"
+                "Value": "STATUS AKTIF"
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",

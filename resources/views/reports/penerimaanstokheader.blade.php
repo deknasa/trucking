@@ -89,8 +89,8 @@
       report.dictionary.synchronize()
 
       viewer.report = report
-      // designer.renderHtml("content")
-      // designer.report = report
+      designer.renderHtml("content")
+      designer.report = report
       
       viewer.onPrintReport = function (event) {
         triggerEvent(window, 'afterprint');
@@ -121,7 +121,9 @@
             Authorization: `Bearer {{ session('access_token') }}`
           },
           success: response => {
-            location.reload();
+            // location.reload();
+            window.close();
+
           }
     
         })
