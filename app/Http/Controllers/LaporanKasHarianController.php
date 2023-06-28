@@ -473,8 +473,9 @@ class LaporanKasHarianController extends Controller
             $rekapPerkiraanColumnIndex = 0;
             $rekapPerkiraanRowNumber++;
         }
-        
+
        
+        
 
         // Menghitung total kolom D (nominaldebet)
         $rekapPerkiraanSheet->setCellValue('D' . $rekapPerkiraanDataRow, "=SUM(D5:D" . ($rekapPerkiraanDataRow - 1) . ")");
