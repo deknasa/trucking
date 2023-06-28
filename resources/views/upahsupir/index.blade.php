@@ -212,6 +212,10 @@
           if (data.data.length === 0) {
             abortGridLastRequest($('#detail'))
             clearGridData($('#detail'))
+            $('#jqGrid').each((index, element) => {
+              abortGridLastRequest($(element))
+              clearGridHeader($(element))
+            })
           }
           
           $(document).unbind('keydown')
@@ -252,6 +256,8 @@
             $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
           }
 
+          $('#left-nav').find('button').attr('disabled', false)
+          permission() 
           setHighlight($(this))
         }
       })
@@ -265,7 +271,7 @@
         disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
           abortGridLastRequest($(this))
-          
+          $('#left-nav').find(`button:not(#add)`).attr('disabled', 'disabled')
           clearGlobalSearch($('#jqGrid'))
         },
       })
@@ -378,6 +384,31 @@
       $('#formImport [name]:not(:hidden)').first().focus()
     })
 
+    function permission() {
+      if (!`{{ $myAuth->hasPermission('upahsupir', 'store') }}`) {
+        $('#add').attr('disabled', 'disabled')
+      }
+
+      if (!`{{ $myAuth->hasPermission('upahsupir', 'update') }}`) {
+        $('#edit').attr('disabled', 'disabled')
+      }
+
+      if (!`{{ $myAuth->hasPermission('upahsupir', 'destroy') }}`) {
+        $('#delete').attr('disabled', 'disabled')
+      }
+
+      if (!`{{ $myAuth->hasPermission('upahsupir', 'export') }}`) {
+        $('#export').attr('disabled', 'disabled')
+      }
+
+      if (!`{{ $myAuth->hasPermission('upahsupir', 'report') }}`) {
+        $('#report').attr('disabled', 'disabled')
+      }
+      if (!`{{ $myAuth->hasPermission('upahsupir', 'updateharga') }}`) {
+        $('#approvalEdit').attr('disabled', 'disabled')
+      }
+    }
+
     $('#rangeTglModal').on('shown.bs.modal', function() {
 
 
@@ -409,7 +440,7 @@
   function getCekExport() {
       return new Promise((resolve, reject) => {
         $.ajax({
-          url: `${apiUrl}upahsupir/listpivot`,
+          url: `${apiUrl}upahsupir/export`,
           dataType: "JSON",
           headers: {
             Authorization: `Bearer ${accessToken}`

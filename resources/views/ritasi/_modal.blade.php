@@ -485,6 +485,10 @@
               element.data('current-value', value)
             }
           })
+          if (response.data.suratpengantar_nobukti != null) {
+            tradoLookup = response.data.trado_id
+            supirLookup = response.data.supir_id
+          }
 
           if (form.data('action') === 'delete') {
             form.find('[name]').addClass('disabled')
@@ -512,7 +516,11 @@
         }
       },
       onSelectRow: (suratpengantar, element) => {
-        element.val(suratpengantar.nobukti)
+        element.val(suratpengantar.nobukti)        
+        $('#crudForm [name=trado_id]').val('')
+        $('#crudForm [name=trado]').val('').data('currentValue', '')
+        $('#crudForm [name=supir_id]').val('')
+        $('#crudForm [name=supir]').val('').data('currentValue', '')
         tradoLookup = suratpengantar.tradolookup
         supirLookup = suratpengantar.supirlookup
         element.data('currentValue', element.val())

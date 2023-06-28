@@ -26,7 +26,7 @@
           name: 'id',
           align: 'right',
           width: '50px',
-            search: false,
+          search: false,
           hidden: true
         },
 
@@ -148,7 +148,9 @@
           },
           formatter: (value, options, rowData) => {
             let statusLongTrip = JSON.parse(value)
-
+            if (!statusLongTrip) {
+              return ''
+            }
             let formattedValue = $(`
                 <div class="badge" style="background-color: ${statusLongTrip.WARNA}; color: #fff;">
                   <span>${statusLongTrip.SINGKATAN}</span>
@@ -159,7 +161,9 @@
           },
           cellattr: (rowId, value, rowObject) => {
             let statusLongTrip = JSON.parse(rowObject.statuslongtrip)
-
+            if (!statusLongTrip) {
+              return ` title=""`
+            }
             return ` title="${statusLongTrip.MEMO}"`
           }
         },
@@ -239,7 +243,9 @@
           },
           formatter: (value, options, rowData) => {
             let statusPeralihan = JSON.parse(value)
-
+            if (!statusPeralihan) {
+              return ''
+            }
             let formattedValue = $(`
                 <div class="badge" style="background-color: ${statusPeralihan.WARNA}; color: #fff;">
                   <span>${statusPeralihan.SINGKATAN}</span>
@@ -250,7 +256,9 @@
           },
           cellattr: (rowId, value, rowObject) => {
             let statusPeralihan = JSON.parse(rowObject.statusperalihan)
-
+            if (!statusPeralihan) {
+              return ` title=""`
+            }
             return ` title="${statusPeralihan.MEMO}"`
           }
         },
@@ -279,26 +287,26 @@
           label: 'MODIFIEDBY',
           name: 'modifiedby',
         },
-          {
-            label: 'CREATEDAT',
-            name: 'created_at',
-            align: 'right',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y H:i:s"
-            }
-          },
-          {
-            label: 'UPDATEDAT',
-            name: 'updated_at',
-            align: 'right',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y H:i:s"
-            }
-          },
+        {
+          label: 'CREATEDAT',
+          name: 'created_at',
+          align: 'right',
+          formatter: "date",
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y H:i:s"
+          }
+        },
+        {
+          label: 'UPDATEDAT',
+          name: 'updated_at',
+          align: 'right',
+          formatter: "date",
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y H:i:s"
+          }
+        },
       ],
       autowidth: true,
       responsive: true,
@@ -339,7 +347,7 @@
         setGridLastRequest($(this), jqXHR)
       },
       loadComplete: function(data) {
-          changeJqGridRowListText()
+        changeJqGridRowListText()
         if (detectDeviceType() == 'desktop') {
           $(document).unbind('keydown')
           setCustomBindKeys($(this))

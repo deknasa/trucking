@@ -84,6 +84,7 @@
           tglsampai: $('#tglsampaiheader').val()
         },
         datatype: "json",
+        isLoading: true,
         colModel: [{
             label: 'ID',
             name: 'id',
@@ -269,7 +270,7 @@
           setGridLastRequest($(this), jqXHR)
         },
         onSelectRow: function(id) {
-          
+
           let nobukti = $('#jqGrid').jqGrid('getCell', id, 'nobukti')
           activeGrid = $(this)
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
@@ -278,19 +279,21 @@
           if (indexRow >= limit) {
             indexRow = (indexRow - limit * (page - 1))
           }
-
           loadDetailData(id)
           loadHistoryData(id)
           loadJurnalUmumData(id, nobukti)
         },
         loadComplete: function(data) {
-          
-          changeJqGridRowListText()
 
+          changeJqGridRowListText()
           if (data.data.length === 0) {
-            $('#detail, #historyGrid, #jurnalGrid').each((index, element) => {
+            $('#detailGrid, #historyGrid, #jurnalGrid').each((index, element) => {
               abortGridLastRequest($(element))
               clearGridData($(element))
+            })
+            $('#jqGrid').each((index, element) => {
+              abortGridLastRequest($(element))
+              clearGridHeader($(element))
             })
           }
 
@@ -333,7 +336,8 @@
             }
           }, 100)
 
-
+          $('#left-nav').find('button').attr('disabled', false)
+          permission() 
           setHighlight($(this))
         }
       })
@@ -347,9 +351,9 @@
         disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
           abortGridLastRequest($(this))
-          
+          $('#left-nav').find(`button:not(#add)`).attr('disabled', 'disabled')
           clearGlobalSearch($('#jqGrid'))
-        },
+        }
       })
 
       .customPager({
@@ -446,26 +450,27 @@
       .addClass('btn btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('piutangheader', 'store') }}`) {
-      $('#add').attr('disabled', 'disabled')
-    }
+    function permission() {
+      if (!`{{ $myAuth->hasPermission('piutangheader', 'store') }}`) {
+        $('#add').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('piutangheader', 'update') }}`) {
-      $('#edit').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('piutangheader', 'update') }}`) {
+        $('#edit').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('piutangheader', 'destroy') }}`) {
-      $('#delete').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('piutangheader', 'destroy') }}`) {
+        $('#delete').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('piutangheader', 'export') }}`) {
-      $('#export').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('piutangheader', 'export') }}`) {
+        $('#export').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('piutangheader', 'report') }}`) {
-      $('#report').attr('disabled', 'disabled')
+      if (!`{{ $myAuth->hasPermission('piutangheader', 'report') }}`) {
+        $('#report').attr('disabled', 'disabled')
+      }
     }
-
     $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {
         $.each(autoNumericElements, (index, autoNumericElement) => {

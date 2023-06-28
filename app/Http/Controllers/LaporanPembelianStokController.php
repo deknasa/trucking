@@ -62,8 +62,8 @@ class LaporanPembelianStokController extends MyController
             'sampai' => $request->sampai,
             'stokdari' => $request->stokdari,
             'stoksampai' => $request->stoksampai,
-            'status' => $request->status,
-            'dari' => $request->dari,
+            'stokdari_id' => $request->stokdari_id,
+            'stoksampai_id' => $request->stoksampai_id,
 
         ];
         // dd($detailParams);
@@ -94,6 +94,8 @@ class LaporanPembelianStokController extends MyController
             'sampai' => $request->sampai,
             'stokdari' => $request->stokdari,
             'stoksampai' => $request->stoksampai,
+            'stokdari_id' => $request->stokdari_id,
+            'stoksampai_id' => $request->stoksampai_id,
 
         ];
        
@@ -110,16 +112,20 @@ class LaporanPembelianStokController extends MyController
       
         $sheet->setCellValue('A1', 'PT. TRANSPORINDO AGUNG SEJAHTERA');
         $sheet->setCellValue('A2', 'Laporan Pembelian Stok');
+        $sheet->setCellValue('A3', 'Periode: ' . $request->dari . ' S/D ' . $request->sampai);
+        $sheet->setCellValue('A4', 'Stok: ' . $request->stokdari . ' S/D ' . $request->stoksampai);
         
         // $sheet->getStyle("A1")->getFont()->setSize(20)->setBold(true);
     
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->getStyle('A2')->getAlignment()->setHorizontal('left');
-        $sheet->mergeCells('A1:K1');
-        $sheet->mergeCells('A2:K2');
+        $sheet->mergeCells('A1:L1');
+        $sheet->mergeCells('A2:L2');
+        $sheet->mergeCells('A3:L3');
+        $sheet->mergeCells('A4:L4');
        
-        $header_start_row = 4;
-        $detail_start_row = 5;
+        $header_start_row = 6;
+        $detail_start_row = 7;
 
         $styleArray = array(
             'borders' => array(
@@ -141,6 +147,9 @@ class LaporanPembelianStokController extends MyController
         
         
         $header_columns = [
+            [
+                'label' => 'No',
+            ],
             [
                 'label' => 'No Bukti',
                 'index' => 'nobukti',
@@ -200,6 +209,7 @@ class LaporanPembelianStokController extends MyController
         $totalDebet = 0;
         $totalKredit = 0;
         $totalSaldo = 0;
+        $no = 1;
         if (is_array($pengeluaran) || is_iterable($pengeluaran)) {
  foreach ($pengeluaran as $response_index => $response_detail) {
 
@@ -207,20 +217,21 @@ class LaporanPembelianStokController extends MyController
                 $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
             }
 
-            $sheet->setCellValue("A$detail_start_row", $response_detail['nobukti']);
-            $sheet->setCellValue("B$detail_start_row", date('d-m-Y', strtotime($response_detail['tglbukti'])));
+            $sheet->setCellValue("A$detail_start_row", $no);
+            $sheet->setCellValue("B$detail_start_row", $response_detail['nobukti']);
+            $sheet->setCellValue("C$detail_start_row", date('d-m-Y', strtotime($response_detail['tglbukti'])));
             $sheet->setCellValue("D$detail_start_row", $response_detail['namasupplier']);
-            $sheet->setCellValue("D$detail_start_row", $response_detail['stok_id']);
-            $sheet->setCellValue("E$detail_start_row", $response_detail['namastok']);
-            $sheet->setCellValue("F$detail_start_row", $response_detail['qty']);
-            $sheet->setCellValue("G$detail_start_row", $response_detail['harga']);
-            $sheet->setCellValue("H$detail_start_row", $response_detail['nominaldiscount']);
-            $sheet->setCellValue("I$detail_start_row", $response_detail['total']);
-            $sheet->setCellValue("J$detail_start_row", $response_detail['satuan']);
-            $sheet->setCellValue("K$detail_start_row", $response_detail['keterangan']);
+            $sheet->setCellValue("E$detail_start_row", $response_detail['stok_id']);
+            $sheet->setCellValue("F$detail_start_row", $response_detail['namastok']);
+            $sheet->setCellValue("G$detail_start_row", $response_detail['qty']);
+            $sheet->setCellValue("H$detail_start_row", $response_detail['harga']);
+            $sheet->setCellValue("I$detail_start_row", $response_detail['nominaldiscount']);
+            $sheet->setCellValue("J$detail_start_row", $response_detail['total']);
+            $sheet->setCellValue("K$detail_start_row", $response_detail['satuan']);
+            $sheet->setCellValue("L$detail_start_row", $response_detail['keterangan']);
             
-            $sheet->getStyle("A$detail_start_row:K$detail_start_row")->applyFromArray($styleArray);
-            $sheet->getStyle("C$detail_start_row:K$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+            $sheet->getStyle("A$detail_start_row:L$detail_start_row")->applyFromArray($styleArray);
+            $sheet->getStyle("C$detail_start_row:L$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
             // $sheet->getStyle("B$detail_start_row:B$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
             // $sheet->getStyle("D$detail_start_row:D$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
             
@@ -229,6 +240,7 @@ class LaporanPembelianStokController extends MyController
         //     $totalDebet += $response_detail['debet'];
         //     $totalSaldo += $response_detail['Saldo'];
             $detail_start_row++;
+            $no++;
         }
         }
        
@@ -245,6 +257,7 @@ class LaporanPembelianStokController extends MyController
         $sheet->getColumnDimension('I')->setAutoSize(true);
         $sheet->getColumnDimension('J')->setAutoSize(true);
         $sheet->getColumnDimension('K')->setAutoSize(true);
+        $sheet->getColumnDimension('L')->setAutoSize(true);
 
 
 

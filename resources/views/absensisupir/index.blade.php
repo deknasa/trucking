@@ -230,9 +230,6 @@
         },
         onSelectRow: function(id) {
           let nobukti = $('#jqGrid').jqGrid('getCell', id, 'kasgantung_nobukti')
-          // $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/absensisupir_detail/${currentTab}/grid`, function() {
-          //   loadGrid(id,nobukti)
-          // })
           
           activeGrid = $(this)
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
@@ -250,6 +247,10 @@
             $('#detail, #kasGantungGrid').each((index, element) => {
               abortGridLastRequest($(element))
               clearGridData($(element))
+            })
+            $('#jqGrid').each((index, element) => {
+              abortGridLastRequest($(element))
+              clearGridHeader($(element))
             })
           }
           
@@ -294,7 +295,8 @@
             }
           }, 100)
 
-
+          $('#left-nav').find('button').attr('disabled', false)
+          permission() 
           setHighlight($(this))
         }
       })
@@ -308,7 +310,7 @@
         disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
           abortGridLastRequest($(this))
-          
+          $('#left-nav').find(`button:not(#add)`).attr('disabled', 'disabled')
           clearGlobalSearch($('#jqGrid'))
         },
       })
@@ -445,30 +447,32 @@
       .addClass('btn btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('absensisupirheader', 'store') }}`) {
-      $('#add').attr('disabled', 'disabled')
-    }
+    function permission() {
+      if (!`{{ $myAuth->hasPermission('absensisupirheader', 'store') }}`) {
+        $('#add').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('absensisupirheader', 'update') }}`) {
-      $('#edit').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('absensisupirheader', 'update') }}`) {
+        $('#edit').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('absensisupirheader', 'destroy') }}`) {
-      $('#delete').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('absensisupirheader', 'destroy') }}`) {
+        $('#delete').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('absensisupirheader', 'export') }}`) {
-      $('#export').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('absensisupirheader', 'export') }}`) {
+        $('#export').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('absensisupirheader', 'report') }}`) {
-      $('#report').attr('disabled', 'disabled')
-    }
-    if (!`{{ $myAuth->hasPermission('absensisupirheader', 'approvalEditAbsensi') }}`) {
-      $('#approvalEdit').attr('disabled', 'disabled')
-    }
-    if (!`{{ $myAuth->hasPermission('absensisupirheader', 'cekabsensi') }}`) {
-      $('#cekAbsenTrado').attr('disabled', 'disabled')
+      if (!`{{ $myAuth->hasPermission('absensisupirheader', 'report') }}`) {
+        $('#report').attr('disabled', 'disabled')
+      }
+      if (!`{{ $myAuth->hasPermission('absensisupirheader', 'approvalEditAbsensi') }}`) {
+        $('#approvalEdit').attr('disabled', 'disabled')
+      }
+      if (!`{{ $myAuth->hasPermission('absensisupirheader', 'cekabsensi') }}`) {
+        $('#cekAbsenTrado').attr('disabled', 'disabled')
+      }
     }
 
     $('#rangeModal').on('shown.bs.modal', function() {
@@ -538,7 +542,6 @@
             }
           }
         }
-
         xhr.send()
       } else if ($('#rangeModal').data('action') == 'report') {
         window.open(`{{ route('piutangheader.report') }}?${params}`)

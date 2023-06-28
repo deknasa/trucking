@@ -291,7 +291,9 @@
                                 $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
                             }
 
-                            setHighlight($(this))
+                        $('#left-nav').find('button').attr('disabled', false)
+                        permission()
+                        setHighlight($(this))
                         },
                     })
 
@@ -302,12 +304,11 @@
                         defaultSearch: 'cn',
                         groupOp: 'AND',
                         beforeSearch: function() {
-                            abortGridLastRequest($(this))
-
-                            clearGlobalSearch($('#jqGrid'))
+                        abortGridLastRequest($(this))
+                        $('#left-nav').find(`button:not(#add)`).attr('disabled', 'disabled')
+                        clearGlobalSearch($('#jqGrid'))
                         }
                     })
-
                     .customPager({
                         buttons: [{
                                 id: 'add',
@@ -389,6 +390,7 @@
                     .addClass('btn-sm btn-warning')
                     .parent().addClass('px-1')
 
+                    function permission() {
                 if (!`{{ $myAuth->hasPermission('alatbayar', 'store') }}`) {
                     $('#add').attr('disabled', 'disabled')
                 }
@@ -406,7 +408,7 @@
 
                 if (!`{{ $myAuth->hasPermission('alatbayar', 'report') }}`) {
                     $('#delete').attr('disabled', 'disabled')
-                }
+                }}
 
                 $('#rangeModal').on('shown.bs.modal', function() {
                     if (autoNumericElements.length > 0) {

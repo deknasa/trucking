@@ -329,6 +329,7 @@
         Authorization: `Bearer ${accessToken}`
       },
       success: response => {
+        $('#detailList tbody').html('')
         $.each(response.detail, (index, detail) => {
 
           let detailRow = $(`
@@ -533,7 +534,7 @@
               element.val(value)
             }
           })
-
+          $('#detailList tbody').html('')
           $.each(response.detail, (index, detail) => {
             let detailRow = $(`
             <tr>

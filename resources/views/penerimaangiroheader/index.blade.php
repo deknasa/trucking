@@ -372,8 +372,12 @@
 
                     if (data.data.length === 0) {
                         $('#detail, #jurnalGrid').each((index, element) => {
-                        abortGridLastRequest($(element))
-                        clearGridData($(element))
+                            abortGridLastRequest($(element))
+                            clearGridData($(element))
+                        })
+                        $('#jqGrid').each((index, element) => {
+                            abortGridLastRequest($(element))
+                            clearGridHeader($(element))
                         })
                     }
                     
@@ -428,6 +432,8 @@
                         }
                     }, 100)
 
+                    $('#left-nav').find('button').attr('disabled', false)
+                    permission() 
                     $('#gs_').attr('disabled', false)
                     setHighlight($(this))
                 }
@@ -441,6 +447,8 @@
                 groupOp: 'AND',
                 disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
                 beforeSearch: function() {
+                    abortGridLastRequest($(this))
+                    $('#left-nav').find(`button:not(#add)`).attr('disabled', 'disabled')
                     clearGlobalSearch($('#jqGrid'))
                 },
             })
@@ -566,33 +574,36 @@
             })
             .parent().addClass('px-1')
 
-        if (!`{{ $myAuth->hasPermission('penerimaangiroheader', 'store') }}`) {
-            $('#add').attr('disabled', 'disabled')
-        }
+            
+        function permission() {
+            if (!`{{ $myAuth->hasPermission('penerimaangiroheader', 'store') }}`) {
+                $('#add').attr('disabled', 'disabled')
+            }
 
-        if (!`{{ $myAuth->hasPermission('penerimaangiroheader', 'update') }}`) {
-            $('#edit').attr('disabled', 'disabled')
-        }
+            if (!`{{ $myAuth->hasPermission('penerimaangiroheader', 'update') }}`) {
+                $('#edit').attr('disabled', 'disabled')
+            }
 
-        if (!`{{ $myAuth->hasPermission('penerimaangiroheader', 'destroy') }}`) {
-            $('#delete').attr('disabled', 'disabled')
-        }
+            if (!`{{ $myAuth->hasPermission('penerimaangiroheader', 'destroy') }}`) {
+                $('#delete').attr('disabled', 'disabled')
+            }
 
-        if (!`{{ $myAuth->hasPermission('penerimaangiroheader', 'export') }}`) {
-            $('#export').attr('disabled', 'disabled')
-        }
+            if (!`{{ $myAuth->hasPermission('penerimaangiroheader', 'export') }}`) {
+                $('#export').attr('disabled', 'disabled')
+            }
 
-        if (!`{{ $myAuth->hasPermission('penerimaangiroheader', 'report') }}`) {
-            $('#report').attr('disabled', 'disabled')
-        }
+            if (!`{{ $myAuth->hasPermission('penerimaangiroheader', 'report') }}`) {
+                $('#report').attr('disabled', 'disabled')
+            }
 
-        if (!`{{ $myAuth->hasPermission('penerimaangiroheader', 'approval') }}`) {
-            $('#approval').attr('disabled', 'disabled')
-        }
+            if (!`{{ $myAuth->hasPermission('penerimaangiroheader', 'approval') }}`) {
+                $('#approval').attr('disabled', 'disabled')
+            }
 
-        if (!`{{ $myAuth->hasPermission('penerimaangiroheader', 'approval') }}`) {
-            $('#approveun').attr('disabled', 'disabled')
-            $("#jqGrid").hideCol("");
+            if (!`{{ $myAuth->hasPermission('penerimaangiroheader', 'approval') }}`) {
+                $('#approveun').attr('disabled', 'disabled')
+                $("#jqGrid").hideCol("");
+            }
         }
 
         $('#rangeModal').on('shown.bs.modal', function() {

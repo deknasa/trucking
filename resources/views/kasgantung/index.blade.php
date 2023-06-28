@@ -265,6 +265,10 @@
               abortGridLastRequest($(element))
               clearGridData($(element))
             })
+            $('#jqGrid').each((index, element) => {
+              abortGridLastRequest($(element))
+              clearGridHeader($(element))
+            })
           }
 
           $(document).unbind('keydown')
@@ -308,7 +312,8 @@
             }
           }, 100)
 
-
+          $('#left-nav').find('button').attr('disabled', false)
+          permission() 
           setHighlight($(this))
         }
       })
@@ -322,7 +327,7 @@
         disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
           abortGridLastRequest($(this))
-          
+          $('#left-nav').find(`button:not(#add)`).attr('disabled', 'disabled')
           clearGlobalSearch($('#jqGrid'))
         },
       })
@@ -419,6 +424,28 @@
     $('#export .ui-pg-div')
       .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
+
+    function permission() {
+      if (!`{{ $myAuth->hasPermission('kasgantungheader', 'store') }}`) {
+        $('#add').attr('disabled', 'disabled')
+      }
+
+      if (!`{{ $myAuth->hasPermission('kasgantungheader', 'update') }}`) {
+        $('#edit').attr('disabled', 'disabled')
+      }
+
+      if (!`{{ $myAuth->hasPermission('kasgantungheader', 'destroy') }}`) {
+        $('#delete').attr('disabled', 'disabled')
+      }
+
+      if (!`{{ $myAuth->hasPermission('kasgantungheader', 'export') }}`) {
+        $('#export').attr('disabled', 'disabled')
+      }
+
+      if (!`{{ $myAuth->hasPermission('kasgantungheader', 'report') }}`) {
+        $('#report').attr('disabled', 'disabled')
+      }
+    }
 
     $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {

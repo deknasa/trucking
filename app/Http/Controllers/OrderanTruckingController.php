@@ -88,23 +88,33 @@ class OrderanTruckingController extends MyController
     }
 
 
-    public function combo($aksi, $grp, $subgrp)
+    public function combo($aksi)
     {
-
         $status = [
             'status' => $aksi,
-            'grp' => $grp,
-            'subgrp' => $subgrp,
-        ];
+            'grp' => 'STATUSCETAK',
+            'subgrp' => 'STATUSCETAK',
+        ];    
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'user/combostatus',$status);
+        return $response['data'];
+    }
 
-        $response = Http::withHeaders($this->httpHeaders)
+
+    public function report(Request $request)
+    {
+        //FETCH HEADER
+        $data = Http::withHeaders($request->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'parameter/combolist', $status);
-
-        return $response['data'];
-        
-                
+            ->get(config('app.api_url') . 'orderantrucking/export?dari=' . $request->dari . '&sampai=' . $request->sampai)['data'];
+        $orderantrucking = $data['data'];
+        $params = $data['parameter'];
+        $combo = $this->combo('list');
+        $key = array_search('CETAK', array_column( $combo, 'parameter')); 
+        $orderantrucking["combo"] =  $combo[$key];
+        return view('reports.orderantrucking', compact('orderantrucking', 'params'));
     }
 
     public function export(Request $request):void
@@ -120,8 +130,10 @@ class OrderanTruckingController extends MyController
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setCellValue('A1', $orderanTrucking['parameter']['judul']);
         $sheet->setCellValue('A2', $orderanTrucking['parameter']['judulLaporan']);
-        $sheet->getStyle("A1")->getFont()->setSize(14);
-        $sheet->getStyle("A2")->getFont()->setSize(12);
+        $sheet->getStyle("A1")->getFont()->setSize(12);
+        $sheet->getStyle("A2")->getFont()->setSize(11);
+        $sheet->getStyle("A1")->getFont()->setBold(true);
+        $sheet->getStyle("A2")->getFont()->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:O1');
@@ -134,62 +146,62 @@ class OrderanTruckingController extends MyController
 
         $columns = [
             [
-                'label' => 'No',
+                'label' => 'NO',
             ],
             [
-                'label' => 'No Bukti',
+                'label' => 'NO BUKTI',
                 'index' => 'nobukti',
             ],
             [
-                'label' => 'Tanggal Bukti',
+                'label' => 'TANGGAL',
                 'index' => 'tglbukti',
             ],
             [
-                'label' => 'Container',
+                'label' => 'CONTAINER',
                 'index' => 'container_id',
             ],
             [
-                'label' => 'Agen',
+                'label' => 'AGEN',
                 'index' => 'agen_id',
             ],
             [
-                'label' => 'Jenis Order',
+                'label' => 'JENIS ORDER',
                 'index' => 'jenisorder_id',
             ],
             [
-                'label' => 'Pelanggan',
+                'label' => 'PELANGGAN',
                 'index' => 'pelanggan_id',
             ],
             [
-                'label' => 'Tujuan',
+                'label' => 'TUUAN',
                 'index' => 'tarif_id',
             ],
             [
-                'label' => 'No Job EMKL (1)',
+                'label' => 'NO JOB EMKL(1)',
                 'index' => 'nojobemkl',
             ],
             [
-                'label' => 'No Cont (1)',
+                'label' => 'NO CONT(1)',
                 'index' => 'nocont',
             ],
             [
-                'label' => 'No Seal (1)',
+                'label' => 'NO SEAL(1)',
                 'index' => 'noseal',
             ],
             [
-                'label' => 'No Job EMKL (2)',
+                'label' => 'NO JOB EMKL(2)',
                 'index' => 'nojobemkl2',
             ],
             [
-                'label' => 'No Cont (2)',
+                'label' => 'NO CONT(2)',
                 'index' => 'nocont2',
             ],
             [
-                'label' => 'No Seal (2)',
+                'label' => 'NO SEAL(2)',
                 'index' => 'noseal2',
             ],
             [
-                'label' => 'Nominal',
+                'label' => 'NOMINAL',
                 'index' => 'nominal',
             ],
         ];
@@ -225,6 +237,11 @@ class OrderanTruckingController extends MyController
                 $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
             }
             $response_detail['nominals'] = number_format((float) $response_detail['nominal'], '2', '.', ',');
+
+            $tglbukti = $response_detail["tglbukti"];
+            $timeStamp = strtotime($tglbukti);
+            $datetglbukti = date('d-m-Y', $timeStamp); 
+            $response_detail['tglbukti'] = $datetglbukti;
         
             $sheet->setCellValue("A$detail_start_row", $response_index + 1);
             $sheet->setCellValue("B$detail_start_row", $response_detail['nobukti']);
@@ -253,21 +270,6 @@ class OrderanTruckingController extends MyController
         $sheet->mergeCells('A'.$total_start_row.':N'.$total_start_row);
         $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A'.$total_start_row.':N'.$total_start_row)->applyFromArray($style_number)->getFont()->setBold(true);
         $sheet->setCellValue("O$total_start_row", number_format((float) $nominal, '2', '.', ','))->getStyle("O$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
-
-        //set diketahui dibuat
-        
-        $ttd_start_row = $total_start_row+2;
-        $sheet->setCellValue("B$ttd_start_row", 'Disetujui');
-        $sheet->setCellValue("C$ttd_start_row", 'Diketahui');
-        $sheet->setCellValue("D$ttd_start_row", 'Dibuat');
-        $sheet ->getStyle("B$ttd_start_row:D$ttd_start_row")->applyFromArray($styleArray);
-        // $sheet->mergeCells("A$ttd_end_row:C$ttd_end_row");
-        $sheet->mergeCells("B".($ttd_start_row+1).":B".($ttd_start_row+3));      
-        $sheet->mergeCells("C".($ttd_start_row+1).":C".($ttd_start_row+3));      
-        $sheet->mergeCells("D".($ttd_start_row+1).":D".($ttd_start_row+3));      
-        $sheet ->getStyle("B".($ttd_start_row+1).":B".($ttd_start_row+3))->applyFromArray($styleArray);
-        $sheet ->getStyle("C".($ttd_start_row+1).":C".($ttd_start_row+3))->applyFromArray($styleArray);
-        $sheet ->getStyle("D".($ttd_start_row+1).":D".($ttd_start_row+3))->applyFromArray($styleArray);
 
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);

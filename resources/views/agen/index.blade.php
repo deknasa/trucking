@@ -444,6 +444,8 @@
                     })
                     .parent().addClass('px-1')
 
+                
+                function permission() {
                 if (!`{{ $myAuth->hasPermission('agen', 'store') }}`) {
                     $('#add').attr('disabled', 'disabled')
                 }
@@ -466,6 +468,7 @@
 
                 if (!`{{ $myAuth->hasPermission('agen', 'approval') }}`) {
                     $('#approval').attr('disabled', 'disabled')
+                }
                 }
 
                 $('#rangeModal').on('shown.bs.modal', function() {

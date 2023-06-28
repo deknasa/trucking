@@ -263,7 +263,7 @@ class UpahSupirController extends MyController
         $upahsupir = Http::withHeaders($request->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'upahsupir/listpivot?dari=' . $request->dari . '&sampai=' . $request->sampai)['data'];
+            ->get(config('app.api_url') . 'upahsupir/export?dari=' . $request->dari . '&sampai=' . $request->sampai)['data'];
 
         if ($upahsupir == null) {
             echo "<script>window.close();</script>";

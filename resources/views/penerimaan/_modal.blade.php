@@ -631,6 +631,7 @@
                         }
                     })
                     if (response.data.penerimaangiro_nobukti == '') {
+                        $('#detailList tbody').html('')
                         $.each(response.detail, (index, detail) => {
                             let readOnly = (detail.pelunasanpiutang_nobukti != '-') ? 'readonly' : '';
                             let detailRow = $(`
@@ -727,6 +728,7 @@
                     } else {
                         penerimaanGiro = response.data.penerimaangiro_nobukti;
                         $('.aksiGiro').hide()
+                        $('#detailList tbody').html('')
                         $.each(response.detail, (index, detail) => {
 
                             let detailRow = $(`

@@ -183,6 +183,19 @@ class RitasiController extends MyController
         return $response['data'];
     }
 
+    public function report(Request $request)
+    {
+        //FETCH HEADER
+        $data = Http::withHeaders($request->header())
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'ritasi/export?dari=' . $request->dari . '&sampai=' . $request->sampai)['data'];
+        $ritasi = $data['data'];
+        $params = $data['parameter'];
+
+        return view('reports.ritasi', compact('ritasi', 'params'));
+    }
+
     public function export(Request $request):void
     {
         //FETCH HEADER
@@ -196,8 +209,10 @@ class RitasiController extends MyController
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setCellValue('A1', $data['parameter']['judul']);
         $sheet->setCellValue('A2', $data['parameter']['judulLaporan']);
-        $sheet->getStyle("A1")->getFont()->setSize(14);
+        $sheet->getStyle("A1")->getFont()->setSize(12);
         $sheet->getStyle("A2")->getFont()->setSize(12);
+        $sheet->getStyle("A1")->getFont()->setBold(true);
+        $sheet->getStyle("A2")->getFont()->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:K1');
@@ -210,46 +225,46 @@ class RitasiController extends MyController
 
         $columns = [
             [
-                'label' => 'No',
+                'label' => 'NO',
             ],
             [
-                'label' => 'No Bukti',
+                'label' => 'NO BUKTI',
                 'index' => 'nobukti',
             ],
             [
-                'label' => 'Tanggal Bukti',
-                'index' => 'tglbukti',
-            ],
-            [
-                'label' => 'Status Container',
-                'index' => 'statusritasi',
-            ],
-            [
-                'label' => 'No Bukti Surat Pengantar',
+                'label' => 'NO BUKTI SURAT PENGANTAR',
                 'index' => 'suratpengantar_nobukti',
             ],
             [
-                'label' => 'Supir',
+                'label' => 'SUPIR',
                 'index' => 'supir_id',
             ],
             [
-                'label' => 'Trado',
+                'label' => 'Tanggal',
+                'index' => 'tglbukti',
+            ],
+            [
+                'label' => 'STATUS CONTAINER',
+                'index' => 'statusritasi',
+            ],
+            [
+                'label' => 'TRADO',
                 'index' => 'trado_id',
             ],
             [
-                'label' => 'Dari',
+                'label' => 'DARI',
                 'index' => 'dari_id',
             ],
             [
-                'label' => 'Sampai',
+                'label' => 'SAMPAI',
                 'index' => 'sampai_id',
             ],
             [
-                'label' => 'Jarak (KM)',
+                'label' => 'JARAK (KM)',
                 'index' => 'jarak',
             ],
             [
-                'label' => 'Gaji',
+                'label' => 'GAJI',
                 'index' => 'gaji',
             ],
         ];
@@ -283,6 +298,8 @@ class RitasiController extends MyController
         foreach ($ritasi as $response_index => $response_detail) {
             foreach ($columns as $detail_columns_index => $detail_column) {
                 $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
+                $sheet->getStyle("A$detail_table_header_row:K$detail_table_header_row")->getFont()->setBold(true);
+                $sheet->getStyle("A$detail_table_header_row:K$detail_table_header_row")->getAlignment()->setHorizontal('center');
             }
             $response_detail['gajis'] = number_format((float) $response_detail['gaji'], '2', '.', ',');
 
@@ -293,10 +310,10 @@ class RitasiController extends MyController
         
             $sheet->setCellValue("A$detail_start_row", $response_index + 1);
             $sheet->setCellValue("B$detail_start_row", $response_detail['nobukti']);
-            $sheet->setCellValue("C$detail_start_row", $response_detail['tglbukti']);
-            $sheet->setCellValue("D$detail_start_row", $response_detail['statusritasi']);
             $sheet->setCellValue("E$detail_start_row", $response_detail['suratpengantar_nobukti']);
             $sheet->setCellValue("F$detail_start_row", $response_detail['supir_id']);
+            $sheet->setCellValue("C$detail_start_row", $response_detail['tglbukti']);
+            $sheet->setCellValue("D$detail_start_row", $response_detail['statusritasi']);
             $sheet->setCellValue("G$detail_start_row", $response_detail['trado_id']);
             $sheet->setCellValue("H$detail_start_row", $response_detail['dari_id']);
             $sheet->setCellValue("I$detail_start_row", $response_detail['sampai_id']);

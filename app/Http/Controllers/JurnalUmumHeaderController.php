@@ -220,29 +220,35 @@ class JurnalUmumHeaderController extends MyController
 
     public function report(Request $request)
     {
-        
+        //FETCH HEADER
+        $id = $request->id;
+        $jurnal = Http::withHeaders($request->header())
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') .'jurnalumumheader/'.$id.'/export')['data'];
+
+        //FETCH DETAIL
         $detailParams = [
             'forReport' => true,
             'jurnalumum_id' => $request->id
         ];
-  
-        $jurnal_detail = Http::withHeaders(request()->header())
+
+        $jurnal_details = Http::withHeaders($request->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'jurnalumumdetail', $detailParams);
-        // return $jurnal_detail;
-        $jurnal_details = $jurnal_detail['data'];
-        $user = Auth::user();
-        return view('reports.jurnalumum', compact('jurnal_details','user'));
+            ->get(config('app.api_url') .'jurnalumumdetail', $detailParams)['data'];
+
+        return view('reports.jurnalumum', compact('jurnal', 'jurnal_details'));
     }
 
     public function export(Request $request): void
     {
         //FETCH HEADER
-        $jurnals = Http::withHeaders($request->header())
-                    ->withOptions(['verify' => false])
-                    ->withToken(session('access_token'))
-                    ->get(config('app.api_url') .'jurnalumumheader/'.$request->id)['data'];
+        $id = $request->id;
+        $jurnal = Http::withHeaders($request->header())
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') .'jurnalumumheader/'.$id.'/export')['data'];
 
         //FETCH DETAIL
         $detailParams = [
@@ -254,67 +260,77 @@ class JurnalUmumHeaderController extends MyController
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') .'jurnalumumdetail', $detailParams);
-
         $jurnal_details = $responses['data'];
-        // dd($jurnal_details);
-        $user = $responses['user'];
+    
+        $tglBukti = $jurnal["tglbukti"];
+        $timeStamp = strtotime($tglBukti);
+        $dateTglBukti = date('d-m-Y', $timeStamp); 
+        $jurnal['tglbukti'] = $dateTglBukti;
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setCellValue('A1', 'TAS '.$user['nama_cabang']);
-        $sheet->getStyle("A1")->getFont()->setSize(20);
+        $sheet->setCellValue('A1', $jurnal['judul']);
+        $sheet->setCellValue('A2', $jurnal['judulLaporan']);
+        $sheet->getStyle("A1")->getFont()->setSize(12);
+        $sheet->getStyle("A2")->getFont()->setSize(12);
+        $sheet->getStyle("A1")->getFont()->setBold(true);
+        $sheet->getStyle("A2")->getFont()->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
-        $sheet->mergeCells('A1:E1');
+        $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
+        $sheet->mergeCells('A1:F1');
+        $sheet->mergeCells('A2:F2');
 
-        $header_start_row = 2;
-        $detail_table_header_row = 5;
+        $header_start_row = 4;
+        $detail_table_header_row = 8;
         $detail_start_row = $detail_table_header_row + 1;
        
         $alphabets = range('A', 'Z');
 
         $header_columns = [
             [
-                'label' => 'No Jurnal',
+                'label' => 'No Bukti',
                 'index' => 'nobukti',
             ],
             [
                 'label' => 'Tanggal',
                 'index' => 'tglbukti',
             ],
+            [
+                'label' => 'Posting Dari',
+                'index' => 'postingdari',
+            ],
         ];
 
         $detail_columns = [
             [
-                'label' => 'No',
+                'label' => 'NO',
             ],
             [
-                'label' => 'Coa Debet',
+                'label' => 'KODE PERKIRAAN',
                 'index' => 'coa',
             ],
             [
-                'label' => 'Coa Kredit',
-                'index' => 'coa',
+                'label' => 'NAMA PERKIRAAN',
+                'index' => 'keterangancoa',
             ],
             [
-                'label' => 'Keterangan',
+                'label' => 'KETERANGAN',
                 'index' => 'keterangan',
             ],
             [
-                'label' => 'Nominal Debet',
+                'label' => 'DEBET',
                 'index' => 'nominaldebet',
-                'format' => 'currency'
             ],
             [
-                'label' => 'Nominal Kredit',
+                'label' => 'KREDIT',
                 'index' => 'nominalkredit',
-                'format' => 'currency'
             ]
         ];
 
+        //LOOPING HEADER
         foreach ($header_columns as $header_column) {
-            $sheet->setCellValue('A' . $header_start_row, $header_column['label']);
-            $sheet->setCellValue('B' . $header_start_row, ':');
-            $sheet->setCellValue('C' . $header_start_row++, $jurnals[$header_column['index']]);
+            $sheet->setCellValue('B' . $header_start_row, $header_column['label']);
+            $sheet->setCellValue('C' . $header_start_row++, ': '.$jurnal[$header_column['index']]);
         }
 
         foreach ($detail_columns as $detail_columns_index => $detail_column) {
@@ -343,24 +359,36 @@ class JurnalUmumHeaderController extends MyController
         // $sheet->getStyle("A$detail_table_header_row:G$detail_table_header_row")->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FF1F456E');
         $sheet ->getStyle("A$detail_table_header_row:F$detail_table_header_row")->applyFromArray($styleArray);
 
+        //LOOPING DETAIL
         $totaldebet = 0;
         $totalkredit = 0;
         foreach ($jurnal_details as $response_index => $response_detail) {
             
             foreach ($detail_columns as $detail_columns_index => $detail_column) {
                 $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
+                $sheet->getStyle("A$detail_table_header_row:F$detail_table_header_row")->getFont()->setBold(true);
+                $sheet->getStyle("A$detail_table_header_row:F$detail_table_header_row")->getAlignment()->setHorizontal('center');
             }
-            $response_detail['nominals'] = number_format((float) $response_detail['nominaldebet'], '2', ',', '.');
+            $response_detail['nominaldebets'] = number_format((float) $response_detail['nominaldebet'], '2', '.', ',');
+            $response_detail['nominalkredits'] = number_format((float) $response_detail['nominalkredit'], '2', '.', ',');
+
+            $tglBukti = $response_detail["tglbukti"];
+            $timeStamp = strtotime($tglBukti);
+            $dateTglBukti = date('d-m-Y', $timeStamp); 
+            $response_detail['tglbukti'] = $dateTglBukti;
         
             $sheet->setCellValue("A$detail_start_row", $response_index + 1);
             $sheet->setCellValue("B$detail_start_row", $response_detail['coa']);
-            $sheet->setCellValue("C$detail_start_row", $response_detail['coa']);
+            $sheet->setCellValue("C$detail_start_row", $response_detail['keterangancoa']);
             $sheet->setCellValue("D$detail_start_row", $response_detail['keterangan']);
-            $sheet->setCellValue("E$detail_start_row", $response_detail['nominaldebet']);
-            $sheet->setCellValue("F$detail_start_row", $response_detail['nominalkredit']);
+            $sheet->setCellValue("E$detail_start_row", $response_detail['nominaldebets']);
+            $sheet->setCellValue("F$detail_start_row", $response_detail['nominalkredits']);
 
-            $sheet ->getStyle("A$detail_start_row:F$detail_start_row")->applyFromArray($styleArray);
-            $sheet ->getStyle("E$detail_start_row")->applyFromArray($style_number);
+            $sheet->getStyle("D$detail_start_row")->getAlignment()->setWrapText(true);
+            $sheet->getColumnDimension('D')->setWidth(50);
+
+            $sheet ->getStyle("A$detail_start_row:D$detail_start_row")->applyFromArray($styleArray);
+            $sheet ->getStyle("E$detail_start_row:F$detail_start_row")->applyFromArray($style_number);
             $totaldebet += $response_detail['nominaldebet'];
             $totalkredit += $response_detail['nominalkredit'];
             $detail_start_row++;
@@ -369,62 +397,22 @@ class JurnalUmumHeaderController extends MyController
         $total_start_row = $detail_start_row;
         
         $sheet->mergeCells('A'.$total_start_row.':D'.$total_start_row);
-        $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A'.$total_start_row.':D'.$total_start_row)->applyFromArray($style_number)->getFont()->setBold(true);
-        $sheet->setCellValue("E$total_start_row", number_format((float) $totaldebet, '2', ',', '.'))->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
-        $sheet->setCellValue("F$total_start_row", number_format((float) $totalkredit, '2', ',', '.'))->getStyle("F$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
-       
-        //set diketahui dibuat
-        $ttd_start_row = $total_start_row+2;
-        $sheet->setCellValue("A$ttd_start_row", 'Disetujui');
-        $sheet->setCellValue("B$ttd_start_row", 'Diketahui');
-        $sheet->setCellValue("C$ttd_start_row", 'Dibuat');
-        $sheet ->getStyle("A$ttd_start_row:C$ttd_start_row")->applyFromArray($styleArray);
-        // $sheet->mergeCells("A$ttd_end_row:C$ttd_end_row");
-        $sheet->mergeCells("A".($ttd_start_row+1).":A".($ttd_start_row+3));      
-        $sheet->mergeCells("B".($ttd_start_row+1).":B".($ttd_start_row+3));      
-        $sheet->mergeCells("C".($ttd_start_row+1).":C".($ttd_start_row+3));      
-        $sheet ->getStyle("A".($ttd_start_row+1).":A".($ttd_start_row+3))->applyFromArray($styleArray);
-        $sheet ->getStyle("B".($ttd_start_row+1).":B".($ttd_start_row+3))->applyFromArray($styleArray);
-        $sheet ->getStyle("C".($ttd_start_row+1).":C".($ttd_start_row+3))->applyFromArray($styleArray);
-
-        
-        //set tglcetak
-        date_default_timezone_set('Asia/Jakarta');
-        
-        $sheet->setCellValue("A".($ttd_start_row+5), 'Dicetak Pada :');
-        $sheet->getStyle("A".($ttd_start_row+5))->getFont()->setItalic(true);
-        $sheet->setCellValue("B".($ttd_start_row+5), date('d/m/Y H:i:s'));
-        $sheet->getStyle("B".($ttd_start_row+5))->getFont()->setItalic(true);
-        $sheet->setCellValue("C".($ttd_start_row+5), $user['name']);
-        $sheet->getStyle("C".($ttd_start_row+5))->getFont()->setItalic(true);
+        $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A'.$total_start_row.':D'.$total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
+        $sheet->setCellValue("E$total_start_row", number_format((float) $totaldebet, '2', '.', ','))->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->setCellValue("F$total_start_row", number_format((float) $totalkredit, '2', '.', ','))->getStyle("F$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
 
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);
         $sheet->getColumnDimension('C')->setAutoSize(true);
-        $sheet->getColumnDimension('D')->setAutoSize(true);
         $sheet->getColumnDimension('E')->setAutoSize(true);
         $sheet->getColumnDimension('F')->setAutoSize(true);
-        $sheet->getColumnDimension('G')->setAutoSize(true);
-        $sheet->getColumnDimension('H')->setAutoSize(true);
-        $sheet->getColumnDimension('A')->setAutoSize(true);
-        $sheet->getColumnDimension('B')->setAutoSize(true);
-        $sheet->getColumnDimension('C')->setAutoSize(true);
-        $sheet->getColumnDimension('D')->setAutoSize(true);
-        $sheet->getColumnDimension('E')->setAutoSize(true);
-        $sheet->getColumnDimension('F')->setAutoSize(true);
-        $sheet->getColumnDimension('G')->setAutoSize(true);
-        $sheet->getColumnDimension('H')->setAutoSize(true);
-
-        
 
         $writer = new Xlsx($spreadsheet);
-        $filename = 'Jurnal Umum ' . date('dmYHis');
+        $filename = 'Jurnal Umum' . date('dmYHis');
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
         header('Cache-Control: max-age=0');
 
         $writer->save('php://output');
     }
-
-
 }

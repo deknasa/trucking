@@ -120,13 +120,15 @@
     $(document).on('click', `#btnPreview`, function(event) {
         let dari = $('#crudForm').find('[name=dari]').val()
         let sampai = $('#crudForm').find('[name=sampai]').val()
-        let stokdari= $('#crudForm').find('[name=stokdari_id]').val()
-        let stoksampai= $('#crudForm').find('[name=stoksampai_id]').val()
+        let stokdari_id= $('#crudForm').find('[name=stokdari_id]').val()
+        let stoksampai_id= $('#crudForm').find('[name=stoksampai_id]').val()
+        let stokdari= $('#crudForm').find('[name=stokdari]').val()
+        let stoksampai= $('#crudForm').find('[name=stoksampai]').val()
         let status= $('#crudForm').find('[name=status]').val()
 
         
         if (dari != '' && sampai != '' && stokdari != '' && stoksampai != '') {
-            window.open(`{{ route('laporanpembelianstok.report') }}?dari=${dari}&sampai=${sampai}&stokdari=${stokdari}&stoksampai=${stoksampai}`)
+            window.open(`{{ route('laporanpembelianstok.report') }}?dari=${dari}&sampai=${sampai}&stokdari_id=${stokdari_id}&stoksampai_id=${stoksampai_id}&stokdari=${stokdari}&stoksampai=${stoksampai}`)
         } else {
             showDialog('ISI SELURUH KOLOM')
         }
@@ -136,14 +138,18 @@
     $(document).on('click', `#btnExport`, function(event) {
         let dari = $('#crudForm').find('[name=dari]').val()
         let sampai = $('#crudForm').find('[name=sampai]').val()
-        let stokdari= $('#crudForm').find('[name=stokdari_id]').val()
-        let stoksampai= $('#crudForm').find('[name=stoksampai_id]').val()
+        let stokdari_id= $('#crudForm').find('[name=stokdari_id]').val()
+        let stoksampai_id= $('#crudForm').find('[name=stoksampai_id]').val()
+        let stokdari= $('#crudForm').find('[name=stokdari]').val()
+        let stoksampai= $('#crudForm').find('[name=stoksampai]').val()
+        let status= $('#crudForm').find('[name=status]').val()
 
         if (dari != '' && sampai != '' && stokdari != '' && stoksampai != '') {
-        window.open(`{{ route('laporanpembelianstok.export') }}?dari=${dari}&sampai=${sampai}&stokdari=${stokdari}&stoksampai=${stoksampai}`)
+            window.open(`{{ route('laporanpembelianstok.export') }}?dari=${dari}&sampai=${sampai}&stokdari_id=${stokdari_id}&stoksampai_id=${stoksampai_id}&stokdari=${stokdari}&stoksampai=${stoksampai}`)
         } else {
-        showDialog('ISI SELURUH KOLOM')
+            showDialog('ISI SELURUH KOLOM')
         }
+
             })
 
     function initLookup() {

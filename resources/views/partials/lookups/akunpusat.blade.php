@@ -12,6 +12,7 @@
         level: `{!! $levelCoa ?? '' !!}`,
         potongan: `{!! $potongan ?? '' !!}`,
         aktif: `{!! $Aktif ?? '' !!}`,        
+        supplier: `{!! $Supplier ?? '' !!}`,        
         // filters: `{!! $filters ?? '' !!}`
       },
       idPrefix: 'akunPusatLookup',
