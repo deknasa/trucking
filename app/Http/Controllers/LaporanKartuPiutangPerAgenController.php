@@ -2,107 +2,69 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Models\Menu;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
-
-class LaporanPembelianStokController extends MyController
+class LaporanKartuPiutangPerAgenController extends MyController
 {
-    public $title = 'Laporan Pembelian Stok';
+    public $title = 'Laporan Kartu Piutang Per Agen';
 
     public function index(Request $request)
     {
         $title = $this->title;
         $data = [
-            'pagename' => 'Menu Utama Laporan Pembelian Stok',
+            'pagename' => 'Menu Utama Laporan Kartu Piutang Per Agen',
         ];
 
-        return view('laporanpembelianstok.index', compact('title'));
+        return view('laporankartupiutangperagen.index', compact('title'));
     }
-
-    public function get($params = []): array
-    {
-        $params = [
-            'offset' => $params['offset'] ?? request()->offset ?? ((request()->page - 1) * request()->rows),
-            'limit' => $params['rows'] ?? request()->rows ?? 0,
-            'sortIndex' => $params['sidx'] ?? request()->sidx,
-            'sortOrder' => $params['sord'] ?? request()->sord,
-            'search' => json_decode($params['filters'] ?? request()->filters, 1) ?? [],
-        ];
-
-        $response = Http::withHeaders(request()->header())
-            ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'laporanpembelianstok', $params);
-
-        $data = [
-            'total' => $response['attributes']['totalPages'] ?? [],
-            'records' => $response['attributes']['totalRows'] ?? [],
-            'rows' => $response['data'] ?? []
-        ];
-
-        return $data;
-    }
-
 
     public function report(Request $request)
     {
-        date_default_timezone_set('Asia/Jakarta'); 
         $detailParams = [
-            'judul' => 'PT. TRANSPORINDO AGUNG SEJAHTERA',
-            'judullaporan' => 'Laporan  Pembelian',
-            'tanggal_cetak' => date('d-m-Y H:i:s'),
             'dari' => $request->dari,
             'sampai' => $request->sampai,
-            'stokdari' => $request->stokdari,
-            'stoksampai' => $request->stoksampai,
-            'stokdari_id' => $request->stokdari_id,
-            'stoksampai_id' => $request->stoksampai_id,
-
+            'supplierdari' => $request->supplierdari,
+            'suppliersampai' => $request->suppliersampai,
+            'supplierdari_id' => $request->supplierdari_id,
+            'suppliersampai_id' => $request->suppliersampai_id,
+            
         ];
         // dd($detailParams);
         $header = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'laporanpembelianstok/report', $detailParams);
+            ->get(config('app.api_url') . 'laporankartupiutangperagen/report', $detailParams);
+
         $data = $header['data'];
- 
-        // $dataHeader = $header['dataheader'];
         $user = Auth::user();
-        // dd($data);
-        return view('reports.laporanpembelianstok', compact('data', 'user', 'detailParams'));
-
+        
+        return view('reports.laporankartupiutangperagen', compact('data', 'user', 'detailParams'));
     }
-
-
-
-
 
     public function export(Request $request): void
     {
         $detailParams = [
-            'judul' => 'PT. TRANSPORINDO AGUNG SEJAHTERA',
-            'judullaporan' => 'Laporan  Pembelian Stok',
-            'tanggal_cetak' => date('d-m-Y H:i:s'),
             'dari' => $request->dari,
             'sampai' => $request->sampai,
-            'stokdari' => $request->stokdari,
-            'stoksampai' => $request->stoksampai,
-            'stokdari_id' => $request->stokdari_id,
-            'stoksampai_id' => $request->stoksampai_id,
+            'supplierdari' => $request->supplierdari,
+            'suppliersampai' => $request->suppliersampai,
+            'supplierdari_id' => $request->supplierdari_id,
+            'suppliersampai_id' => $request->suppliersampai_id,
 
         ];
        
         $responses = Http::withHeaders($request->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'laporanpembelianstok/export', $detailParams);
+            ->get(config('app.api_url') . 'laporankartupiutangperagen/export', $detailParams);
         
         $pengeluaran = $responses['data'];
         $user = Auth::user();
@@ -111,19 +73,18 @@ class LaporanPembelianStokController extends MyController
         $sheet = $spreadsheet->getActiveSheet();
       
         $sheet->setCellValue('A1', 'PT. TRANSPORINDO AGUNG SEJAHTERA');
-        $sheet->setCellValue('A2', 'Laporan Pembelian Stok');
+        $sheet->setCellValue('A2', 'Laporan Kartu Piutang Per Agen');
         $sheet->setCellValue('A3', 'Periode: ' . $request->dari . ' S/D ' . $request->sampai);
-        $sheet->setCellValue('A4', 'Stok: ' . $request->stokdari . ' S/D ' . $request->stoksampai);
-        
+        $sheet->setCellValue('A4', 'Agen: ' . $request->supplierdari . ' S/D ' . $request->suppliersampai);
         // $sheet->getStyle("A1")->getFont()->setSize(20)->setBold(true);
     
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->getStyle('A2')->getAlignment()->setHorizontal('left');
-        $sheet->mergeCells('A1:L1');
-        $sheet->mergeCells('A2:L2');
-        $sheet->mergeCells('A3:L3');
-        $sheet->mergeCells('A4:L4');
-       
+        $sheet->mergeCells('A1:J1');
+        $sheet->mergeCells('A2:J2');
+        $sheet->mergeCells('A3:J3');
+        $sheet->mergeCells('A4:J4');
+
         $header_start_row = 6;
         $detail_start_row = 7;
 
@@ -151,51 +112,41 @@ class LaporanPembelianStokController extends MyController
                 'label' => 'No',
             ],
             [
-                'label' => 'No Bukti',
+                'label' => 'NO BUKTI',
                 'index' => 'nobukti',
             ],
             [
-                'label' => 'Tanggal Bukti',
+                'label' => 'NAMA AGEN',
+                'index' => 'namaagen',
+            ],
+            [
+                'label' => 'TANGGAL',
                 'index' => 'tglbukti',
             ],
             [
-                'label' => 'Nama Supplier',
-                'index' => 'namasupplier',
+                'label' => 'TGL JATUH TEMPO',
+                'index' => 'tgljatuhtempo',
             ],
             [
-                'label' => 'Stok',
-                'index' => 'stok_id',
+                'label' => 'CICILAN',
+                'index' => 'cicil',
             ],
             [
-                'label' => 'Nama Stok',
-                'index' => 'namastok',
+                'label' => 'NOMINAL',
+                'index' => 'nominal',
             ],
             [
-                'label' => 'Qty',
-                'index' => 'qty',
+                'label' => 'BAYAR',
+                'index' => 'bayar',
             ],
             [
-                'label' => 'HARGA',
-                'index' => 'harga',
+                'label' => 'SALDO',
+                'index' => 'Saldo',
             ],
             [
-                'label' => 'NOMINAL DISKON',
-                'index' => 'nominaldiscount',
-            ],
-            [
-                'label' => 'TOTAL',
-                'index' => 'total',
-            ],
-            [
-                'label' => 'Satuan',
-                'index' => 'satuan',
-            ],
-            [
-                'label' => 'Keterangan',
+                'label' => 'KETERANGAN',
                 'index' => 'keterangan',
             ],
-
-
             
         ];
 
@@ -216,22 +167,19 @@ class LaporanPembelianStokController extends MyController
             foreach ($header_columns as $detail_columns_index => $detail_column) {
                 $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
             }
-
             $sheet->setCellValue("A$detail_start_row", $no);
             $sheet->setCellValue("B$detail_start_row", $response_detail['nobukti']);
-            $sheet->setCellValue("C$detail_start_row", date('d-m-Y', strtotime($response_detail['tglbukti'])));
-            $sheet->setCellValue("D$detail_start_row", $response_detail['namasupplier']);
-            $sheet->setCellValue("E$detail_start_row", $response_detail['stok_id']);
-            $sheet->setCellValue("F$detail_start_row", $response_detail['namastok']);
-            $sheet->setCellValue("G$detail_start_row", $response_detail['qty']);
-            $sheet->setCellValue("H$detail_start_row", $response_detail['harga']);
-            $sheet->setCellValue("I$detail_start_row", $response_detail['nominaldiscount']);
-            $sheet->setCellValue("J$detail_start_row", $response_detail['total']);
-            $sheet->setCellValue("K$detail_start_row", $response_detail['satuan']);
-            $sheet->setCellValue("L$detail_start_row", $response_detail['keterangan']);
+            $sheet->setCellValue("C$detail_start_row", $response_detail['namaagen']);
+            $sheet->setCellValue("D$detail_start_row", date('d-m-Y', strtotime($response_detail['tglbukti'])));
+            $sheet->setCellValue("E$detail_start_row", date('d-m-Y', strtotime($response_detail['tgljatuhtempo'])));
+            $sheet->setCellValue("F$detail_start_row", $response_detail['cicil']);
+            $sheet->setCellValue("G$detail_start_row", $response_detail['nominal']);
+            $sheet->setCellValue("H$detail_start_row", $response_detail['bayar']);
+            $sheet->setCellValue("I$detail_start_row", $response_detail['Saldo']);
+            $sheet->setCellValue("J$detail_start_row", $response_detail['keterangan']);
             
-            $sheet->getStyle("A$detail_start_row:L$detail_start_row")->applyFromArray($styleArray);
-            $sheet->getStyle("C$detail_start_row:L$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+            $sheet->getStyle("A$detail_start_row:J$detail_start_row")->applyFromArray($styleArray);
+            $sheet->getStyle("C$detail_start_row:J$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
             // $sheet->getStyle("B$detail_start_row:B$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
             // $sheet->getStyle("D$detail_start_row:D$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
             
@@ -256,9 +204,6 @@ class LaporanPembelianStokController extends MyController
         $sheet->getColumnDimension('H')->setAutoSize(true);
         $sheet->getColumnDimension('I')->setAutoSize(true);
         $sheet->getColumnDimension('J')->setAutoSize(true);
-        $sheet->getColumnDimension('K')->setAutoSize(true);
-        $sheet->getColumnDimension('L')->setAutoSize(true);
-
 
 
 // menambahkan sel Total pada baris terakhir + 1
@@ -317,7 +262,7 @@ $sheet->getStyle("A" . ($detail_start_row + 1) . ":$lastColumn" . ($detail_start
 
 
         $writer = new Xlsx($spreadsheet);
-        $filename = 'EXPORTPEMBELIANSTOK' . date('dmYHis');
+        $filename = 'EXPORTlaporankartupiutangperagen' . date('dmYHis');
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
         header('Cache-Control: max-age=0');

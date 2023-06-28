@@ -130,13 +130,15 @@
     $(document).on('click', `#btnExport`, function(event) {
         let dari = $('#crudForm').find('[name=dari]').val()
         let sampai = $('#crudForm').find('[name=sampai]').val()
-        let supplierdari= $('#crudForm').find('[name=supplierdari_id]').val()
-        let suppliersampai= $('#crudForm').find('[name=suppliersampai_id]').val()
+        let supplierdari_id= $('#crudForm').find('[name=supplierdari_id]').val()
+        let suppliersampai_id= $('#crudForm').find('[name=suppliersampai_id]').val()
+        let supplierdari= $('#crudForm').find('[name=supplierdari]').val()
+        let suppliersampai= $('#crudForm').find('[name=suppliersampai]').val()
       
         if (dari != '' && sampai != '' && supplierdari != '' && suppliersampai != '') {
-        window.open(`{{ route('laporankartuhutangpersupplier.export') }}?dari=${dari}&sampai=${sampai}&supplierdari=${supplierdari}&suppliersampai=${suppliersampai}`)
+            window.open(`{{ route('laporankartuhutangpersupplier.export') }}?dari=${dari}&sampai=${sampai}&supplierdari_id=${supplierdari_id}&suppliersampai_id=${suppliersampai_id}&supplierdari=${supplierdari}&suppliersampai=${suppliersampai}`)
         } else {
-        showDialog('ISI SELURUH KOLOM')
+            showDialog('ISI SELURUH KOLOM')
         }
             })
 
