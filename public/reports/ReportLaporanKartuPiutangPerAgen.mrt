@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "d00d733a833630bab77af5d3b7936ab2",
+  "ReportGuid": "2fd417026215c7168ca359690093b245",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanKartuHutangPerSupplier.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanKartuPiutangPerAgen.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1687861177000+0700)/",
+  "ReportChanged": "/Date(1687859243000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -30,9 +30,9 @@
         "Alias": "data",
         "Columns": {
           "0": {
-            "Name": "namasupplier",
-            "NameInSource": "namasupplier",
-            "Alias": "namasupplier",
+            "Name": "namaagen",
+            "NameInSource": "namaagen",
+            "Alias": "namaagen",
             "Type": "System.String"
           },
           "1": {
@@ -486,7 +486,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "NAMA SUPPLIER"
+                "Value": "NAMA AGEN"
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
@@ -987,7 +987,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "SUPPLIER"
+                "Value": "AGEN"
               },
               "VertAlignment": "Center",
               "Font": ";9;Bold;",
@@ -1057,7 +1057,7 @@
         "2": {
           "Ident": "StiDataBand",
           "Name": "DataBand1",
-          "ClientRectangle": "0,5.9,21.3,2.31",
+          "ClientRectangle": "0,5.9,21.3,2.51",
           "ComponentPlacement": "d.Page1",
           "Interaction": {
             "Ident": "StiBandInteraction"
@@ -1141,7 +1141,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{data.namasupplier}"
+                "Value": "{data.namaagen}"
               },
               "CanBreak": true,
               "Font": ";9;;",
@@ -1263,12 +1263,10 @@
               "TextFormat": {
                 "Ident": "StiNumberFormatService",
                 "NegativePattern": 1,
-                "DecimalSeparator": ",",
                 "DecimalDigits": 0,
-                "GroupSeparator": ".",
+                "GroupSeparator": ",",
                 "UseGroupSeparator": false,
-                "UseLocalSetting": false,
-                "State": "DecimalSeparator, GroupSeparator"
+                "UseLocalSetting": false
               },
               "Type": "DataColumn"
             },
@@ -1429,7 +1427,7 @@
               "Name": "Shape12",
               "Guid": "9d3bc2e52c68e3bb3fbd3eb208ef0bce",
               "GrowToHeight": true,
-              "ClientRectangle": "1,2.1,20.22,0.4",
+              "ClientRectangle": "1,1.7,20.22,0.4",
               "ComponentPlacement": "d.DataBand1",
               "Interaction": {
                 "Ident": "StiInteraction"

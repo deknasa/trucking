@@ -220,6 +220,7 @@ use App\Http\Controllers\LaporanPembelianController;
 use App\Http\Controllers\LaporanPembelianStokController;
 use App\Http\Controllers\LaporanHutangGiroController;
 use App\Http\Controllers\LaporanKartuHutangPerSupplierController;
+use App\Http\Controllers\LaporanKartuPiutangPerAgenController;
 
 /*
 |--------------------------------------------------------------------------
@@ -1298,6 +1299,11 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('laporankartuhutangpersupplier/export', [LaporanKartuHutangPerSupplierController::class, 'export'])->name('laporankartuhutangpersupplier.export');
     Route::get('laporankartuhutangpersupplier/index', [LaporanKartuHutangPerSupplierController::class, 'index']);
     Route::resource('laporankartuhutangpersupplier', LaporanKartuHutangPerSupplierController::class);
+
+    Route::get('laporankartupiutangperagen/report', [LaporanKartuPiutangPerAgenController::class, 'report'])->name('laporankartupiutangperagen.report');
+    Route::get('laporankartupiutangperagen/export', [LaporanKartuPiutangPerAgenController::class, 'export'])->name('laporankartupiutangperagen.export');
+    Route::get('laporankartupiutangperagen/index', [LaporanKartuPiutangPerAgenController::class, 'index']);
+    Route::resource('laporankartupiutangperagen', LaporanKartuPiutangPerAgenController::class);
 
     Route::get('laporanbangudangsementara/report', [LaporanBanGudangSementaraController::class, 'report'])->name('laporanbangudangsementara.report');
     Route::get('laporanbangudangsementara/index', [LaporanBanGudangSementaraController::class, 'index']);

@@ -117,11 +117,15 @@ class laporanpembelianController extends MyController
     
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->getStyle('A2')->getAlignment()->setHorizontal('left');
+        $sheet->setCellValue('A3', 'Periode: ' . $request->dari . ' S/D ' . $request->sampai);
+        $sheet->setCellValue('A4', 'Status: ' . $request->status);
         $sheet->mergeCells('A1:H1');
         $sheet->mergeCells('A2:H2');
+        $sheet->mergeCells('A3:H3');
+        $sheet->mergeCells('A4:H4');
        
-        $header_start_row = 4;
-        $detail_start_row = 5;
+        $header_start_row = 6;
+        $detail_start_row = 7;
 
         $styleArray = array(
             'borders' => array(

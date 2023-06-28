@@ -43,26 +43,19 @@
                         </div>
                         
                         <div class="form-group row">
-                            <label class="col-12 col-sm-2 col-form-label mt-2">stok (DARI)<span class="text-danger">*</span></label>
+                            <label class="col-12 col-sm-2 col-form-label mt-2">SUPPLIER (DARI)<span class="text-danger">*</span></label>
                             <div class="col-sm-4 mt-2">
-                                <input type="hidden" name="stokdari_id">
-                                <input type="text" name="stokdari" class="form-control stokdari-lookup">
+                                <input type="hidden" name="supplierdari_id">
+                                <input type="text" name="supplierdari" class="form-control supplierdari-lookup">
                             </div>
                             <h5 class="mt-3">s/d</h5>
                             <div class="col-sm-4 mt-2">
-                                <input type="hidden" name="stoksampai_id">
-                                <input type="text" name="stoksampai" class="form-control stoksampai-lookup">
+                                <input type="hidden" name="suppliersampai_id">
+                                <input type="text" name="suppliersampai" class="form-control suppliersampai-lookup">
                             </div>
                         </div>
-{{--                     
-                        <div class="row">
-                            <label class="col-12 col-sm-2 col-form-label mt-2">STATUS<span class="text-danger">*</span></label>
-                            <div class="col-sm-4 mt-2">
-                                <select name="status" id="status" class="form-select select2bs4" style="width: 100%;">
-
-                                </select>
-                            </div>
-                        </div> --}}
+                    
+                     
                         <div class="row">
 
                             <div class="col-sm-6 mt-4">
@@ -106,7 +99,7 @@
 
     $(document).ready(function() {
         initSelect2($('#crudForm').find('[name=status]'), false)
-        setLaporanPembelian($('#crudForm'))
+        setLaporanPiutangPerAgen($('#crudForm'))
 
         initDatepicker()
         $('#crudForm').find('[name=dari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
@@ -120,15 +113,14 @@
     $(document).on('click', `#btnPreview`, function(event) {
         let dari = $('#crudForm').find('[name=dari]').val()
         let sampai = $('#crudForm').find('[name=sampai]').val()
-        let stokdari_id= $('#crudForm').find('[name=stokdari_id]').val()
-        let stoksampai_id= $('#crudForm').find('[name=stoksampai_id]').val()
-        let stokdari= $('#crudForm').find('[name=stokdari]').val()
-        let stoksampai= $('#crudForm').find('[name=stoksampai]').val()
-        let status= $('#crudForm').find('[name=status]').val()
+        let supplierdari_id= $('#crudForm').find('[name=supplierdari_id]').val()
+        let suppliersampai_id= $('#crudForm').find('[name=suppliersampai_id]').val()
+        let supplierdari= $('#crudForm').find('[name=supplierdari]').val()
+        let suppliersampai= $('#crudForm').find('[name=suppliersampai]').val()
 
         
-        if (dari != '' && sampai != '' && stokdari != '' && stoksampai != '') {
-            window.open(`{{ route('laporanpembelianstok.report') }}?dari=${dari}&sampai=${sampai}&stokdari_id=${stokdari_id}&stoksampai_id=${stoksampai_id}&stokdari=${stokdari}&stoksampai=${stoksampai}`)
+        if (dari != '' && sampai != '' && supplierdari != '' && suppliersampai != '') {
+            window.open(`{{ route('laporankartupiutangperagen.report') }}?dari=${dari}&sampai=${sampai}&supplierdari_id=${supplierdari_id}&suppliersampai_id=${suppliersampai_id}&supplierdari=${supplierdari}&suppliersampai=${suppliersampai}`)
         } else {
             showDialog('ISI SELURUH KOLOM')
         }
@@ -138,32 +130,30 @@
     $(document).on('click', `#btnExport`, function(event) {
         let dari = $('#crudForm').find('[name=dari]').val()
         let sampai = $('#crudForm').find('[name=sampai]').val()
-        let stokdari_id= $('#crudForm').find('[name=stokdari_id]').val()
-        let stoksampai_id= $('#crudForm').find('[name=stoksampai_id]').val()
-        let stokdari= $('#crudForm').find('[name=stokdari]').val()
-        let stoksampai= $('#crudForm').find('[name=stoksampai]').val()
-        let status= $('#crudForm').find('[name=status]').val()
-
-        if (dari != '' && sampai != '' && stokdari != '' && stoksampai != '') {
-            window.open(`{{ route('laporanpembelianstok.export') }}?dari=${dari}&sampai=${sampai}&stokdari_id=${stokdari_id}&stoksampai_id=${stoksampai_id}&stokdari=${stokdari}&stoksampai=${stoksampai}`)
+        let supplierdari_id= $('#crudForm').find('[name=supplierdari_id]').val()
+        let suppliersampai_id= $('#crudForm').find('[name=suppliersampai_id]').val()
+        let supplierdari= $('#crudForm').find('[name=supplierdari]').val()
+        let suppliersampai= $('#crudForm').find('[name=suppliersampai]').val()
+      
+        if (dari != '' && sampai != '' && supplierdari != '' && suppliersampai != '') {
+            window.open(`{{ route('laporankartupiutangperagen.export') }}?dari=${dari}&sampai=${sampai}&supplierdari_id=${supplierdari_id}&suppliersampai_id=${suppliersampai_id}&supplierdari=${supplierdari}&suppliersampai=${suppliersampai}`)
         } else {
             showDialog('ISI SELURUH KOLOM')
         }
-
             })
 
     function initLookup() {
-        $('.stokdari-lookup').lookup({
-            title: 'Stok Lookup',
-            fileName: 'stok',
+        $('.supplierdari-lookup').lookup({
+            title: 'Supplier Lookup',
+            fileName: 'supplier',
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
                 }
             },
-            onSelectRow: (stok, element) => {
-                $('#crudForm [name=stokdari_id]').first().val(stok.id)
-                element.val(stok.namastok)
+            onSelectRow: (supplier, element) => {
+                $('#crudForm [name=supplierdari_id]').first().val(supplier.id)
+                element.val(supplier.namasupplier)
                 element.data('currentValue', element.val())
             },
             onCancel: (element) => {
@@ -171,22 +161,22 @@
             },
             onClear: (element) => {
                 element.val('')
-                $(`#crudForm [name="stokdari_id"]`).first().val('')
+                $(`#crudForm [name="supplierdari_id"]`).first().val('')
                 element.data('currentValue', element.val())
             }
         });
 
-        $('.stoksampai-lookup').lookup({
-            title: 'stok Lookup',
-            fileName: 'stok',
+        $('.suppliersampai-lookup').lookup({
+            title: 'Supplier Lookup',
+            fileName: 'supplier',
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
                 }
             },
-            onSelectRow: (stok, element) => {
-                $('#crudForm [name=stoksampai_id]').first().val(stok.id)
-                element.val(stok.namastok)
+            onSelectRow: (supplier, element) => {
+                $('#crudForm [name=suppliersampai_id]').first().val(supplier.id)
+                element.val(supplier.namasupplier)
                 element.data('currentValue', element.val())
             },
             onCancel: (element) => {
@@ -194,13 +184,13 @@
             },
             onClear: (element) => {
                 element.val('')
-                $(`#crudForm [name="stoksampai_id"]`).first().val('')
+                $(`#crudForm [name="suppliersampai_id"]`).first().val('')
                 element.data('currentValue', element.val())
             }
         })
     }
 
-    const setLaporanPembelian = function(relatedForm) {
+    const setLaporanPiutangPerAgen = function(relatedForm) {
         // return new Promise((resolve, reject) => {
         // relatedForm.find('[name=approve]').empty()
         relatedForm.find('[name=status]').append(

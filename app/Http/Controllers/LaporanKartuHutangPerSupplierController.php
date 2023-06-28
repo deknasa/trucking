@@ -55,6 +55,8 @@ class LaporanKartuHutangPerSupplierController extends MyController
             'sampai' => $request->sampai,
             'supplierdari' => $request->supplierdari,
             'suppliersampai' => $request->suppliersampai,
+            'supplierdari_id' => $request->supplierdari_id,
+            'suppliersampai_id' => $request->suppliersampai_id,
 
         ];
        
@@ -76,11 +78,16 @@ class LaporanKartuHutangPerSupplierController extends MyController
     
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->getStyle('A2')->getAlignment()->setHorizontal('left');
+        $sheet->setCellValue('A3', 'Periode: ' . $request->dari . ' S/D ' . $request->sampai);
+        $sheet->setCellValue('A4', 'Agen: ' . $request->supplierdari . ' S/D ' . $request->suppliersampai);
         $sheet->mergeCells('A1:I1');
         $sheet->mergeCells('A2:I2');
+        $sheet->mergeCells('A3:I3');
+        $sheet->mergeCells('A4:I4');
        
-        $header_start_row = 4;
-        $detail_start_row = 5;
+        $header_start_row = 6;
+        $detail_start_row = 7;
+
 
         $styleArray = array(
             'borders' => array(
@@ -103,6 +110,9 @@ class LaporanKartuHutangPerSupplierController extends MyController
         
         $header_columns = [
             [
+                'label' => 'NO',
+            ],
+            [
                 'label' => 'NO BUKTI',
                 'index' => 'nobukti',
             ],
@@ -119,7 +129,7 @@ class LaporanKartuHutangPerSupplierController extends MyController
                 'index' => 'tgljatuhtempo',
             ],
             [
-                'label' => 'CICIL',
+                'label' => 'CICILAN',
                 'index' => 'cicil',
             ],
             [
@@ -151,25 +161,26 @@ class LaporanKartuHutangPerSupplierController extends MyController
         $totalDebet = 0;
         $totalKredit = 0;
         $totalSaldo = 0;
+        $no = 1;
         if (is_array($pengeluaran) || is_iterable($pengeluaran)) {
  foreach ($pengeluaran as $response_index => $response_detail) {
 
             foreach ($header_columns as $detail_columns_index => $detail_column) {
                 $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
             }
-
-            $sheet->setCellValue("A$detail_start_row", $response_detail['nobukti']);
-            $sheet->setCellValue("B$detail_start_row", $response_detail['namasupplier']);
-            $sheet->setCellValue("C$detail_start_row", date('d-m-Y', strtotime($response_detail['tglbukti'])));
-            $sheet->setCellValue("D$detail_start_row", date('d-m-Y', strtotime($response_detail['tgljatuhtempo'])));
-            $sheet->setCellValue("E$detail_start_row", $response_detail['cicil']);
-            $sheet->setCellValue("F$detail_start_row", $response_detail['nominal']);
-            $sheet->setCellValue("G$detail_start_row", $response_detail['bayar']);
-            $sheet->setCellValue("H$detail_start_row", $response_detail['Saldo']);
-            $sheet->setCellValue("I$detail_start_row", $response_detail['keterangan']);
+            $sheet->setCellValue("A$detail_start_row", $no);
+            $sheet->setCellValue("B$detail_start_row", $response_detail['nobukti']);
+            $sheet->setCellValue("C$detail_start_row", $response_detail['namasupplier']);
+            $sheet->setCellValue("D$detail_start_row", date('d-m-Y', strtotime($response_detail['tglbukti'])));
+            $sheet->setCellValue("E$detail_start_row", date('d-m-Y', strtotime($response_detail['tgljatuhtempo'])));
+            $sheet->setCellValue("F$detail_start_row", $response_detail['cicil']);
+            $sheet->setCellValue("G$detail_start_row", $response_detail['nominal']);
+            $sheet->setCellValue("H$detail_start_row", $response_detail['bayar']);
+            $sheet->setCellValue("I$detail_start_row", $response_detail['Saldo']);
+            $sheet->setCellValue("J$detail_start_row", $response_detail['keterangan']);
             
-            $sheet->getStyle("A$detail_start_row:I$detail_start_row")->applyFromArray($styleArray);
-            $sheet->getStyle("C$detail_start_row:I$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+            $sheet->getStyle("A$detail_start_row:J$detail_start_row")->applyFromArray($styleArray);
+            $sheet->getStyle("C$detail_start_row:J$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
             // $sheet->getStyle("B$detail_start_row:B$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
             // $sheet->getStyle("D$detail_start_row:D$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
             
@@ -178,6 +189,7 @@ class LaporanKartuHutangPerSupplierController extends MyController
         //     $totalDebet += $response_detail['debet'];
         //     $totalSaldo += $response_detail['Saldo'];
             $detail_start_row++;
+            $no++;
         }
         }
        
@@ -192,7 +204,7 @@ class LaporanKartuHutangPerSupplierController extends MyController
         $sheet->getColumnDimension('G')->setAutoSize(true);
         $sheet->getColumnDimension('H')->setAutoSize(true);
         $sheet->getColumnDimension('I')->setAutoSize(true);
-
+        $sheet->getColumnDimension('J')->setAutoSize(true);
 
 
 // menambahkan sel Total pada baris terakhir + 1
