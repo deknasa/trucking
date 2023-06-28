@@ -473,6 +473,7 @@ class LaporanKasHarianController extends Controller
             $rekapPerkiraanColumnIndex = 0;
             $rekapPerkiraanRowNumber++;
         }
+        
        
 
         // Menghitung total kolom D (nominaldebet)
