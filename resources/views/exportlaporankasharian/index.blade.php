@@ -1,6 +1,11 @@
 @extends('layouts.master')
 
 @section('content')
+<style>
+    .ui-datepicker-calendar {
+        display: none;
+    }
+</style>
 <!-- Grid -->
 <div class="container-fluid">
     <div class="row">
@@ -105,7 +110,7 @@
 
         if (periode != '' && bank_id != '') {
 
-            window.open(`{{ route('exportlaporankasharian.export') }}?periode=${periode}&&bank_id=${bank_id}`)
+            window.open(`{{ route('laporankasharian.export') }}?sampai=${periode}&&jenis=${bank_id}`)
         } else {
             showDialog('ISI SELURUH KOLOM')
         }
