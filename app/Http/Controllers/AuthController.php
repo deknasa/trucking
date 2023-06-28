@@ -48,7 +48,7 @@ class AuthController extends Controller
 
 
 
-        dd($cekIp['data']);
+        // dd($cekIp['data']);
 
         if (Auth::attempt($credentials)) {
             $token = Http::withHeaders([
