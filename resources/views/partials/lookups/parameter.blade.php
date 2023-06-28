@@ -1,5 +1,5 @@
 <table id="parameterLookup" class="lookup-grid" style="width: 100%;"></table>
-<div id="parameterLookupPager"></div>
+{{-- <div id="parameterLookupPager"></div> --}}
 
 <script>
 $('#parameterLookup').jqGrid({
@@ -74,7 +74,7 @@ $('#parameterLookup').jqGrid({
       sortorder: 'asc',
       page: 1,
       toolbar: [true, "top"],
-      pager: $('#parameterLookupPager'),
+      // pager: $('#parameterLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -158,7 +158,7 @@ $('#parameterLookup').jqGrid({
         clearGlobalSearch($('#parameterLookup'))
       },
     })
-
+    .customPager()
   loadGlobalSearch($('#parameterLookup'))
   loadClearFilter($('#parameterLookup'))
 </script>

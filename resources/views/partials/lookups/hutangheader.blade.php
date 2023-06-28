@@ -1,6 +1,6 @@
 @include('layouts._rangeheaderlookup')
 <table id="hutangHeaderLookup" class="lookup-grid" style="width: 100%;"></table>
-<div id="hutangHeaderLookupPager"></div>
+
 
 <script>
   setRangeLookup()
@@ -91,7 +91,7 @@
       sortorder: 'asc',
       toolbar: [true, "top"],
       page: 1,
-      pager: $('#hutangHeaderLookupPager'),
+      // pager: $('#hutangHeaderLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -177,7 +177,7 @@
         clearGlobalSearch($('#hutangHeaderLookup'))
       },
     })
-
+    .customPager()
   loadGlobalSearch($('#hutangHeaderLookup'))
   loadClearFilter($('#hutangHeaderLookup'))
 </script>

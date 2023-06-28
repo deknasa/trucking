@@ -1,6 +1,6 @@
 @include('layouts._rangeheaderlookup')
 <table id="piutangHeaderLookup" style="width: 100%;"></table>
-<div id="piutangHeaderLookupPager"></div>
+{{-- <div id="piutangHeaderLookupPager"></div> --}}
 
 @push('scripts')
 <script>
@@ -107,7 +107,7 @@
       sortname: 'id',
       sortorder: 'asc',
       page: 1,
-      pager: $('#piutangHeaderLookupPager'),
+      // pager: $('#piutangHeaderLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -191,7 +191,7 @@
         clearGlobalSearch($('#piutangHeaderLookup'))
       },
     })
-
+    .customPager()
   loadGlobalSearch($('#piutangHeaderLookup'))
   loadClearFilter($('#piutangHeaderLookup'))
 </script>

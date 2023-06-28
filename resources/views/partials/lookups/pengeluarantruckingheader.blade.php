@@ -1,6 +1,6 @@
 @include('layouts._rangeheaderlookup')
 <table id="pengeluaranTruckingHeaderLookup" class="lookup-grid" style="width: 100%;"></table>
-<div id="pengeluaranTruckingHeaderLookupPager"></div>
+{{-- <div id="pengeluaranTruckingHeaderLookupPager"></div> --}}
 
 @push('scripts')
 <script>
@@ -253,7 +253,7 @@
       sortname: 'id',
       sortorder: 'asc',
       page: 1,
-      pager: $('#pengeluaranTruckingHeaderLookupPager'),
+      // pager: $('#pengeluaranTruckingHeaderLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -337,7 +337,7 @@
         clearGlobalSearch($('#pengeluaranTruckingHeaderLookup'))
       },
     })
-
+    .customPager()
   loadGlobalSearch($('#pengeluaranTruckingHeaderLookup'))
   loadClearFilter($('#pengeluaranTruckingHeaderLookup'))
 </script>

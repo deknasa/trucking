@@ -1,5 +1,5 @@
 <table id="upahRitasiLookup" class="lookup-grid"></table>
-<div id="upahRitasiLookupPager"></div>
+{{-- <div id="upahRitasiLookupPager"></div> --}}
 
 @push('scripts')
 <script>
@@ -90,7 +90,7 @@
       sortname: 'id',
       sortorder: 'asc',
       page: 1,
-      pager: $('#upahRitasiLookupPager'),
+      // pager: $('#upahRitasiLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -174,7 +174,7 @@
           clearGlobalSearch($('#upahRitasiLookup'))
       },
     })
-
+    .customPager()
     loadGlobalSearch($('#upahRitasiLookup'))
     loadClearFilter($('#upahRitasiLookup'))
 </script>

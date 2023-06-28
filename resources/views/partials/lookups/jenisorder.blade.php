@@ -1,5 +1,4 @@
 <table id="jenisOrderLookup" class="lookup-grid"></table>
-<div id="jenisOrderLookupPager"></div>
 
 @push('scripts')
 <script>
@@ -133,7 +132,6 @@
       sortname: 'id',
       sortorder: 'asc',
       page: 1,
-      pager: $('#jenisOrderLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -216,7 +214,7 @@
           clearGlobalSearch($('#jenisOrderLookup'))
       },
     })
-
+    .customPager()
     loadGlobalSearch($('#jenisOrderLookup'))
     loadClearFilter($('#jenisOrderLookup'))
 </script>

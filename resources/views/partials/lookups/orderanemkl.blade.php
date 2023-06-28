@@ -35,7 +35,6 @@
 </div>
 
 <table id="orderanemklLookup" class="lookup-grid"></table>
-<div id="orderanemklLookupPager"></div>
 
 @push('scripts')
 <script>
@@ -123,7 +122,7 @@
       sortname: 'nojob',
       sortorder: 'asc',
       page: 1,
-      pager: $('#orderanemklLookupPager'),
+      // pager: $('#orderanemklLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -194,6 +193,7 @@
         clearGlobalSearch($('#orderanemklLookup'))
       },
     })
+    .customPager()
   loadGlobalSearch($('#orderanemklLookup'))
   loadClearFilter($('#orderanemklLookup'))
   setbulanJobOptions = function(relatedForm) {

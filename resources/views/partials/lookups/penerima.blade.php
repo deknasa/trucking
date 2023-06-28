@@ -1,5 +1,5 @@
 <table id="penerimaLookup" class="lookup-grid"></table>
-<div id="penerimaLookupPager"></div>
+{{-- <div id="penerimaLookupPager"></div> --}}
 
 @push('scripts')
 <script>
@@ -198,7 +198,7 @@
       sortname: 'id',
       sortorder: 'asc',
       page: 1,
-      pager: $('#penerimaLookupPager'),
+      // pager: $('#penerimaLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -281,7 +281,7 @@
         clearGlobalSearch($('#penerimaLookup'))
       },
     })
-
+    .customPager()
   loadGlobalSearch($('#penerimaLookup'))
   loadClearFilter($('#penerimaLookup'))
 </script>

@@ -277,7 +277,8 @@
 
         clearGlobalSearch($('#bankLookup'))
       },
-    }).customPager()
+    })
+    .customPager()
 
   loadGlobalSearch($('#bankLookup'))
   loadClearFilter($('#bankLookup'))

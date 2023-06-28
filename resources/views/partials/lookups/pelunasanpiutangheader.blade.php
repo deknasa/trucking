@@ -1,5 +1,5 @@
 <table id="pelunasanPiutangHeaderLookup" class="lookup-grid" style="width: 100%;"></table>
-<div id="pelunasanPiutangHeaderLookupPager"></div>
+{{-- <div id="pelunasanPiutangHeaderLookupPager"></div> --}}
 
 <script>
   $('#pelunasanPiutangHeaderLookup').jqGrid({
@@ -81,7 +81,7 @@
       sortorder: 'asc',
       toolbar: [true, "top"],
       page: 1,
-      pager: $('#pelunasanPiutangHeaderLookupPager'),
+      // pager: $('#pelunasanPiutangHeaderLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -165,7 +165,7 @@
         clearGlobalSearch($('#pelunasanPiutangHeaderLookup'))
       },
     })
-
+    .customPager()
   loadGlobalSearch($('#pelunasanPiutangHeaderLookup'))
   loadClearFilter($('#pelunasanPiutangHeaderLookup'))
 </script>

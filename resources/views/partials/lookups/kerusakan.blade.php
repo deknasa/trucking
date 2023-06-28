@@ -1,6 +1,4 @@
 <table id="kerusakanLookup" class="lookup-grid" style="width: 100%;"></table>
-<div id="kerusakanLookupPager"></div>
-
 <script>
 $('#kerusakanLookup').jqGrid({
   url: `{{ config('app.api_url') . 'kerusakan' }}`,
@@ -89,7 +87,7 @@ $('#kerusakanLookup').jqGrid({
       sortorder: 'asc',
       page: 1,
       toolbar: [true, "top"],
-      pager: $('#kerusakanLookupPager'),
+      // pager: $('#kerusakanLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -173,7 +171,7 @@ $('#kerusakanLookup').jqGrid({
         clearGlobalSearch($('#kerusakanLookup'))
       },
     })
-
+    .customPager()
   loadGlobalSearch($('#kerusakanLookup'))
   loadClearFilter($('#kerusakanLookup'))
 </script>
