@@ -1,6 +1,4 @@
 <table id="jobTruckingLookup" class="lookup-grid"></table>
-<div id="jobTruckingLookupPager"></div>
-
 @push('scripts')
 <script>
   // loadOrderanTrucking()
@@ -70,7 +68,7 @@
       sortname: 'jobtrucking',
       sortorder: 'asc',
       page: 1,
-      pager: $('#jobTruckingLookupPager'),
+      // pager: $('#jobTruckingLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -154,7 +152,7 @@
         clearGlobalSearch($('#jobTruckingLookup'))
       },
     })
-
+    .customPager()
   loadGlobalSearch($('#jobTruckingLookup'))
   loadClearFilter($('#jobTruckingLookup'))
 

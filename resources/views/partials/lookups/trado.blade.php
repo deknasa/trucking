@@ -1,5 +1,5 @@
 <table id="tradoLookup" class="lookup-grid"></table>
-<div id="tradoLookupPager"></div>
+{{-- <div id="tradoLookupPager"></div> --}}
 
 @push('scripts')
 <script>
@@ -803,7 +803,7 @@
       sortorder: 'asc',
       toolbar: [true, "top"],
       page: 1,
-      pager: $('#tradoLookupPager'),
+      // pager: $('#tradoLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -886,7 +886,7 @@
         clearGlobalSearch($('#tradoLookup'))
       },
     })
-
+    .customPager()
   loadGlobalSearch($('#tradoLookup'))
   loadClearFilter($('#tradoLookup'))
 </script>

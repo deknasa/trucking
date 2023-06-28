@@ -1,5 +1,4 @@
 <table id="absenTradoLookup" class="lookup-grid"></table>
-<div id="absenTradoLookupPager"></div>
 
 @push('scripts')
 <script>
@@ -135,7 +134,7 @@
       sortorder: 'asc',
       page: 1,
       toolbar: [true, "top"],
-      pager: $('#absenTradoLookupPager'),
+      // pager: $('#absenTradoLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -218,7 +217,7 @@
         clearGlobalSearch($('#absenTradoLookup'))
       },
     })
-
+    .customPager()
   loadGlobalSearch($('#absenTradoLookup'))
   loadClearFilter($('#absenTradoLookup'))
 </script>

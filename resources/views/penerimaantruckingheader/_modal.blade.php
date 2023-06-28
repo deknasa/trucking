@@ -235,6 +235,10 @@
         })
 
         let selectedRowsHutang = $("#tablePinjaman").getGridParam("selectedRowIds");
+        data.push({
+          name: 'jumlahdetail',
+          value: selectedRowsHutang
+        })
         $.each(selectedRowsHutang, function(index, value) {
           dataPinjaman = $("#tablePinjaman").jqGrid("getLocalRow", value);
           let selectedSisa = dataPinjaman.sisa

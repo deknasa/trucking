@@ -1,5 +1,4 @@
 <table id="containerLookup" class="lookup-grid"></table>
-<div id="containerLookupPager"></div>
 
 @push('scripts')
 <script>
@@ -141,7 +140,7 @@
       sortname: 'id',
       sortorder: 'asc',
       page: 1,
-      pager: $('#containerLookupPager'),
+      // pager: $('#containerLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -224,7 +223,7 @@
         clearGlobalSearch($('#containerLookup'))
       },
     })
-
+    .customPager()
   loadGlobalSearch($('#containerLookup'))
   loadClearFilter($('#containerLookup'))
 </script>

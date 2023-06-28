@@ -1,5 +1,5 @@
 <table id="supirLookup" class="lookup-grid"></table>
-<div id="supirLookupPager"></div>
+{{-- <div id="supirLookupPager"></div> --}}
 
 @push('scripts')
 <script>

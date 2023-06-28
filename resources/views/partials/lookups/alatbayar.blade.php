@@ -1,5 +1,4 @@
 <table id="alatBayarLookup" class="lookup-grid"></table>
-<div id="alatBayarLookupPager"></div>
 
 @push('scripts')
 <script>
@@ -216,7 +215,7 @@
       sortname: 'id',
       sortorder: 'asc',
       page: 1,
-      pager: $('#alatBayarLookupPager'),
+      // pager: $('#alatBayarLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -300,7 +299,7 @@
         clearGlobalSearch($('#alatBayarLookup'))
       },
     })
-
+    .customPager()
   loadGlobalSearch($('#alatBayarLookup'))
   loadClearFilter($('#alatBayarLookup'))
 </script>

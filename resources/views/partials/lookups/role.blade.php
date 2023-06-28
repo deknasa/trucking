@@ -1,5 +1,5 @@
 <table id="roleLookup" class="lookup-grid"></table>
-<div id="roleLookupPager"></div>
+{{-- <div id="roleLookupPager"></div> --}}
 
 @push('scripts')
 <script>
@@ -62,7 +62,7 @@
       sortorder: 'asc',
       page: 1,
       toolbar: [true, "top"],
-      pager: $('#roleLookupPager'),
+      // pager: $('#roleLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -145,7 +145,7 @@
         clearGlobalSearch($('#roleLookup'))
       },
     })
-
+    .customPager()
   loadGlobalSearch($('#roleLookup'))
   loadClearFilter($('#roleLookup'))
 </script>
