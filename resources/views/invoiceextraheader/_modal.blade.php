@@ -36,11 +36,23 @@
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">agen <span class="text-danger">*</span> </label>
               </div>
-              <div class="col-12 col-sm-9 col-md-4">
+              <div class="col-12 col-sm-9 col-md-10">
                 <input type="text" name="agen" class="form-control agen-lookup">
                 <input type="text" id="agenId" name="agen_id" readonly hidden>
               </div>
 
+            </div>
+            <div class="row form-group">
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">
+                  TGL JATUH TEMPO <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-12 col-md-10">
+                <div class="input-group">
+                  <input type="text" name="tgljatuhtempo" class="form-control datepicker">
+                </div>
+              </div>
             </div>
             <input type="text" name="nominal" readonly hidden id="nominal">
 
@@ -305,6 +317,7 @@
     addRow()
 
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+    $('#crudForm').find('[name=tgljatuhtempo]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
   }
 
   function editInvoiceExtraHeader(invoiceExtraHeader) {
@@ -444,9 +457,8 @@
         sum = 0;
         $.each(response.data, (index, value) => {
           let element = form.find(`[name="${index}"]`)
-          if (element.attr("name") == 'tglbukti') {
-            var result = value.split('-');
-            element.val(result[2] + '-' + result[1] + '-' + result[0]);
+          if (element.hasClass('datepicker')) {
+            element.val(dateFormat(value))
           } else {
             element.val(value)
           }
