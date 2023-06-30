@@ -326,7 +326,6 @@
     })
     $(document).on('change', '#statuspotongretur', function(event) {
       // deleteRow($(this).parents('tr'))
-      console.log($(this).val());
       if ($(this).val() == 219) {
         $('.potongkas').show() //potong kas
         $('#titlePotongkas').html('POSTING Penerimaan')
@@ -507,6 +506,9 @@
       case 'KOR':
         tampilankor()
         break;
+      case 'PJA':
+        tampilanPJA()
+        break;
 
       default:
         tampilanInit()
@@ -623,6 +625,35 @@
     $('.colspan').attr('colspan', 4);
   }
 
+  function tampilanPJA() {
+    // $('[name=nobukti]').parents('.form-group').show()
+    // $('[name=tglbukti]').parents('.form-group').show()
+    // $('[name=pengeluaranstok]').parents('.form-group').show()
+    // $('[name=supplier]').parents('.form-group').show()
+    $('[name=penerimaanstok_nobukti]').parents('.form-group').hide()
+    // $('[name=trado]').parents('.form-group').show()
+    // $('[name=gandengan]').parents('.form-group').show()
+    // $('[name=gudang]').parents('.form-group').show()
+    $('[name=statuspotongretur]').parents('.form-group').hide()
+
+    $('[name=pengeluaranstok_nobukti]').parents('.form-group').hide()
+    $('[name=servicein_nobukti]').parents('.form-group').hide()
+    $('[name=kerusakan]').parents('.form-group').hide()
+    $('[name=supir]').parents('.form-group').hide()
+    $('[name=gandengan]').parents('.form-group').hide()
+    $('[name=gudang]').parents('.form-group').hide()
+    $('[name=trado]').parents('.form-group').hide()
+    $('.tbl_qty').show()
+    $('.tbl_harga').show()
+    $('.tbl_total').show()
+    $('.tbl_vulkanisirke').hide();
+    $('.tbl_persentase').hide();
+    $('.colspan').attr('colspan', 4);
+    $('.potongkas').show() //potong kas
+        $('#titlePotongkas').html('POSTING Penerimaan')
+        $('[name=tglkasmasuk]').parents('.form-group').show()
+  }
+  
   // function tampilanRbtAddRow() {
   //   $('.tbl_qty').show()
   //   $('.tbl_harga').show()
@@ -966,18 +997,18 @@
                     <input type="text"  name="detail_keterangan[]" style="" class="form-control">                    
                   </td>
                   <td>
-                    <input type="text"  name="detail_qty[]" id="detail_qty${index}" onkeyup="cal(${index})" style="text-align:right" class="form-control autonumeric number${index}">
+                    <input type="text"  name="detail_qty[]" id="detail_qty${index}" onkeyup="calculate(${index})" style="text-align:right" class="form-control autonumeric number${index}">
                   </td>  
                   
                   <td class="data_tbl tbl_harga">
-                    <input type="text"  name="detail_harga[]" id="detail_harga${index}" onkeyup="cal(${index})" style="text-align:right" class="form-control autonumeric number${index}">
+                    <input type="text"  name="detail_harga[]" id="detail_harga${index}" readonly style="text-align:right" class="form-control autonumeric number${index}">
                   </td>  
                   
                   <td class="data_tbl tbl_persentase">
-                    <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${index}" onkeyup="cal(${index})" style="text-align:right" class="form-control autonumeric number${index}">
+                    <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${index}" onkeyup="calculate(${index})" style="text-align:right" class="form-control autonumeric number${index}">
                   </td>  
                   <td class="data_tbl tbl_total">
-                    <input type="text"  name="totalItem[]" readonly id="totalItem${index}" style="text-align:right" class="form-control totalItem autonumeric number${index}">                    
+                    <input type="text"  name="totalItem[]"  id="totalItem${index}" onkeyup="calculate(${index})" style="text-align:right" class="form-control totalItem autonumeric number${index}">                    
                   </td>  
                   
                   <td class="data_tbl tbl_aksi" >
@@ -1034,6 +1065,25 @@
     elements.each((index, element) => {
       $(element).text(index + 1)
     })
+  }
+
+  function calculate(id) {
+    qty = $(`#detail_qty${id}`)[0];
+    discount = $(`#detail_persentasediscount${id}`)[0];
+    totalItem = $(`#totalItem${id}`)[0];
+
+    qty = AutoNumeric.getNumber(qty);
+    discount = AutoNumeric.getNumber(discount);
+    totalItem = AutoNumeric.getNumber(totalItem);
+
+    satuanSebelumDiscount= totalItem / qty
+    discount = 1-(discount/100)
+
+    satuanSetelahDiscount = satuanSebelumDiscount / discount;
+  
+    harga = satuanSetelahDiscount;
+    new AutoNumeric($(`#detail_harga${id}`)[0]).set(harga)
+    sumary();
   }
 
   function cal(id) {
@@ -1210,7 +1260,7 @@
             persediaan = 'gandengan'
             form.find(`[name="gandengan"]`).data('currentValue', form.find(`[name="gandengan"]`).val())
           }
-
+          $('#detailList tbody').html('')
           $.each(response.detail, (id, detail) => {
             let detailRow = $(`
               <tr class="trow">
@@ -1229,18 +1279,18 @@
                       <input type="text"  name="detail_keterangan[]" style="" class="form-control">                    
                     </td>
                     <td>
-                      <input type="text"  name="detail_qty[]" id="detail_qty${id}" onkeyup="cal(${id})" style="text-align:right" class="form-control autonumeric number${id}">                    
+                      <input type="text"  name="detail_qty[]" id="detail_qty${id}" onkeyup="calculate(${id})" style="text-align:right" class="form-control autonumeric number${id}">                    
                     </td>  
                     
                     <td class="data_tbl tbl_harga">
-                      <input type="text"  name="detail_harga[]" id="detail_harga${id}" onkeyup="cal(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
+                      <input type="text"  name="detail_harga[]" id="detail_harga${id}" readonly style="text-align:right" class="autonumeric number${id} form-control">                    
                     </td>  
                     
                     <td class="data_tbl tbl_persentase">
-                      <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${id}" onkeyup="cal(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
+                      <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${id}" onkeyup="calculate(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
                     </td>  
                     <td class="data_tbl tbl_total">
-                      <input type="text"  name="totalItem[]" readonly id="totalItem${id}" style="text-align:right" class="form-control totalItem autonumeric number${id}">                    
+                      <input type="text"  name="totalItem[]" id="totalItem${id}" onkeyup="calculate(${id})" style="text-align:right" class="form-control totalItem autonumeric number${id}">                    
                     </td>  
                     <td class="data_tbl tbl_aksi" >
                       <div class='btn btn-danger btn-sm rmv'>Hapus</div>
@@ -1265,7 +1315,7 @@
               beforeProcess: function(test) {
                 // var levelcoa = $(`#levelcoa`).val();
                 this.postData = {
-
+                  pengeluaranstok_id: pengeluaranstokId,
                   Aktif: 'AKTIF',
                 }
               },
@@ -1329,18 +1379,18 @@
                     <input type="text"  name="detail_keterangan[]" style="" class="form-control">                    
                   </td>
                   <td>
-                    <input type="text"  name="detail_qty[]" id="detail_qty${id}" onkeyup="cal(${id})" style="text-align:right" class="form-control autonumeric number${id}">                    
+                    <input type="text"  name="detail_qty[]" id="detail_qty${id}" onkeyup="calculate(${id})" style="text-align:right" class="form-control autonumeric number${id}">                    
                   </td>  
                   
                   <td class="data_tbl tbl_harga">
-                    <input type="text"  name="detail_harga[]" id="detail_harga${id}" onkeyup="cal(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
+                    <input type="text"  name="detail_harga[]" id="detail_harga${id}" readonly style="text-align:right" class="autonumeric number${id} form-control">                    
                   </td>  
                   
                   <td class="data_tbl tbl_persentase" style="display: none;">
-                    <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${id}" onkeyup="cal(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
+                    <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${id}" onkeyup="calculate(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
                   </td>  
                   <td class="data_tbl tbl_total">
-                    <input type="text"  name="totalItem[]" readonly id="totalItem${id}" style="text-align:right" class="form-control totalItem autonumeric number${id}">                    
+                    <input type="text"  name="totalItem[]" id="totalItem${id}" onkeyup="calculate(${id})" style="text-align:right" class="form-control totalItem autonumeric number${id}">                    
                   </td>  
                   <td>
                     <div class='btn btn-danger btn-sm rmv'>Hapus</div>
