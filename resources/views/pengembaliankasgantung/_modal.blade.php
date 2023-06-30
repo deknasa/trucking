@@ -205,7 +205,10 @@
       })
 
       let selectedRows = $("#tablePengembalian").getGridParam("selectedRowIds");
-
+      data.push({
+        name: 'jumlahdetail',
+        value: selectedRows
+      })
       $.each(selectedRows, function(index, value) {
         dataPengembalianKasGantung = $("#tablePengembalian").jqGrid("getLocalRow", value);
         let selectedNominal = (dataPengembalianKasGantung.nominal == undefined) ? 0 : dataPengembalianKasGantung.nominal;
@@ -805,6 +808,8 @@
               });
           }, 100);
 
+          setTotalNominal()
+          setTotalSisa()
           setHighlight($(this))
         },
       })
@@ -837,14 +842,14 @@
   }
 
   function setTotalNominal() {
-    let nominalDetails = $(`#tablePinjaman`).find(`td[aria-describedby="tablePinjaman_nominal"]`)
+    let nominalDetails = $(`#tablePengembalian`).find(`td[aria-describedby="tablePengembalian_nominal"]`)
     let nominal = 0
     $.each(nominalDetails, (index, nominalDetail) => {
       nominaldetail = parseFloat($(nominalDetail).text().replaceAll(',', ''))
       nominals = (isNaN(nominaldetail)) ? 0 : nominaldetail;
       nominal += nominals
     });
-    initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePinjaman_nominal"]`).text(nominal))
+    initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePengembalian_nominal"]`).text(nominal))
   }
 
   function setTotalSisa() {
@@ -929,11 +934,27 @@
             selectedRowIds.splice(i, 1);
           }
         }
-
+        if ($('#crudForm').data('action') == 'edit') {
+          sisa = parseFloat(originalGridData.sisa) + parseFloat(originalGridData.nominal)
+        } else {
+          sisa = parseFloat(originalGridData.sisa)
+        }
+        $("#tablePengembalian").jqGrid(
+          "setCell",
+          rowId,
+          "sisa",
+          sisa
+        );
+        $("#tablePengembalian").jqGrid("setCell", rowId, "nominal", 0);
+        $(`#tablePengembalian tr#${rowId}`).find(`td[aria-describedby="tablePinjaman_nominal"]`).attr("value", 0)
         $("#tablePengembalian").jqGrid("setCell", rowId, "keterangandetail", null);
         $("#tablePengembalian").jqGrid("setCell", rowId, "coadetail", null);
+        setTotalNominal()
+        setTotalSisa()
       } else {
         selectedRowIds.push(rowId);
+        setTotalNominal()
+        setTotalSisa()
       }
     });
 

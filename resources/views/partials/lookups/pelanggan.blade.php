@@ -1,5 +1,5 @@
 <table id="pelangganLookup" class="lookup-grid"></table>
-<div id="pelangganLookupPager"></div>
+{{-- <div id="pelangganLookupPager"></div> --}}
 
 @push('scripts')
 <script>
@@ -101,7 +101,7 @@
       sortname: 'id',
       sortorder: 'asc',
       page: 1,
-      pager: $('#pelangganLookupPager'),
+      // pager: $('#pelangganLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -184,6 +184,7 @@
         clearGlobalSearch($('#pelangganLookup'))
       },
     })
+    .customPager()
     loadGlobalSearch($('#pelangganLookup'))
     loadClearFilter($('#pelangganLookup'))
 </script>

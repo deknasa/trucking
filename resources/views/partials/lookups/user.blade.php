@@ -1,5 +1,5 @@
 <table id="userLookup" class="lookup-grid"></table>
-<div id="userLookupPager"></div>
+{{-- <div id="userLookupPager"></div> --}}
 
 @push('scripts')
 <script>
@@ -87,7 +87,7 @@
       sortname: 'id',
       sortorder: 'asc',
       page: 1,
-      pager: $('#userLookupPager'),
+      // pager: $('#userLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -169,7 +169,7 @@
         clearGlobalSearch($('#userLookup'))
       },
     })
-
+    .customPager()
   loadGlobalSearch($('#userLookup'))
   loadClearFilter($('#userLookup'))
 </script>

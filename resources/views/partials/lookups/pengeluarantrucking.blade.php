@@ -1,5 +1,5 @@
 <table id="pengeluaranTruckingLookup" class="lookup-grid"></table>
-<div id="pengeluaranTruckingLookupPager"></div>
+{{-- <div id="pengeluaranTruckingLookupPager"></div> --}}
 
 @push('scripts')
 <script>
@@ -131,7 +131,7 @@ width: 240,
       sortname: 'id',
       sortorder: 'asc',
       page: 1,
-      pager: $('#pengeluaranTruckingLookupPager'),
+      // pager: $('#pengeluaranTruckingLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -215,7 +215,7 @@ width: 240,
         clearGlobalSearch($('#pengeluaranTruckingLookup'))
       },
     })
-
+    .customPager()
   loadGlobalSearch($('#pengeluaranTruckingLookup'))
   loadClearFilter($('#pengeluaranTruckingLookup'))
 </script>

@@ -1,5 +1,5 @@
 <table id="pengeluaranStokDetailLookup" class="lookup-grid" style="width: 100%;"></table>
-<div id="pengeluaranStokDetailLookupPager"></div>
+{{-- <div id="pengeluaranStokDetailLookupPager"></div> --}}
 
 <script>
   $('#pengeluaranStokDetailLookup').jqGrid({
@@ -88,7 +88,7 @@
       sortorder: 'asc',
       toolbar: [true, "top"],
       page: 1,
-      pager: $('#pengeluaranStokDetailLookupPager'),
+      // pager: $('#pengeluaranStokDetailLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -172,6 +172,7 @@
         clearGlobalSearch($('#pengeluaranStokDetailLookup'))
       },
     })
+    .customPager()
   loadGlobalSearch($('#pengeluaranStokDetailLookup'))
   loadClearFilter($('#pengeluaranStokDetailLookup'))
 </script>

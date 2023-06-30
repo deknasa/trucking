@@ -1,5 +1,4 @@
 <table id="gudangLookup" class="lookup-grid" style="width: 100%;"></table>
-<div id="gudangLookupPager"></div>
 
 <script>
   $('#gudangLookup').jqGrid({
@@ -130,7 +129,7 @@
       sortorder: 'asc',
       toolbar: [true, "top"],
       page: 1,
-      pager: $('#gudangLookupPager'),
+      // pager: $('#gudangLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -214,6 +213,7 @@
         clearGlobalSearch($('#gudangLookup'))
       },
     })
+    .customPager()
   loadGlobalSearch($('#gudangLookup'))
   loadClearFilter($('#gudangLookup'))
 </script>

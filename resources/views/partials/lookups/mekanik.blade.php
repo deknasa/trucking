@@ -1,5 +1,4 @@
 <table id="mekanikLookup" class="lookup-grid"></table>
-<div id="mekanikLookupPager"></div>
 
 @push('scripts')
 <script>
@@ -135,7 +134,7 @@
       sortname: 'id',
       sortorder: 'asc',
       page: 1,
-      pager: $('#mekanikLookupPager'),
+      // pager: $('#mekanikLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -219,7 +218,7 @@
         clearGlobalSearch($('#mekanikLookup'))
       },
     })
-
+    .customPager()
   loadGlobalSearch($('#mekanikLookup'))
   loadClearFilter($('#mekanikLookup'))
 </script>

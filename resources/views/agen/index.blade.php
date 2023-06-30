@@ -43,11 +43,11 @@
                                 hidden: true
                             },
                             {
-                                label: 'KODE AGEN',
+                                label: 'KODE AGEN (EMKL)',
                                 name: 'kodeagen',
                             },
                             {
-                                label: 'NAMA AGEN',
+                                label: 'NAMA AGEN (EMKL)',
                                 name: 'namaagen',
                             },
                             {
@@ -72,7 +72,7 @@
                                     endforeach;
                                     
                                     ?>
-            `,
+                                     `,
                                     dataInit: function(element) {
                                         $(element).select2({
                                             width: 'resolve',
@@ -84,10 +84,10 @@
                                     let statusAktif = JSON.parse(value)
 
                                     let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusAktif.WARNA}; color: #fff;">
-                  <span>${statusAktif.SINGKATAN}</span>
-                </div>
-              `)
+                                            <div class="badge" style="background-color: ${statusAktif.WARNA}; color: #fff;">
+                                            <span>${statusAktif.SINGKATAN}</span>
+                                            </div>
+                                        `)
 
                                     return formattedValue[0].outerHTML
                                 },
@@ -106,19 +106,15 @@
                                 name: 'alamat',
                             },
                             {
-                                label: 'NO TELEPON',
+                                label: 'NO TELEPON / HANDPHONE',
                                 name: 'notelp',
                             },
                             {
-                                label: 'NO HP',
-                                name: 'nohp',
-                            },
-                            {
-                                label: 'CONTACT PERSON',
+                                label: 'NAMA KONTAK',
                                 name: 'contactperson',
                             },
                             {
-                                label: 'TOP',
+                                label: 'STATUS PEMBAYARAN (TOP)',
                                 name: 'top',
                                 align: 'right',
                                 formatter: currencyFormat
@@ -141,7 +137,7 @@
                                     endforeach;
                                     
                                     ?>
-            `,
+                                    `,
                                     dataInit: function(element) {
                                         $(element).select2({
                                             width: 'resolve',
@@ -153,10 +149,10 @@
                                     let statusApproval = JSON.parse(value)
 
                                     let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusApproval.WARNA}; color: #fff;">
-                  <span>${statusApproval.SINGKATAN}</span>
-                </div>
-              `)
+                                        <div class="badge" style="background-color: ${statusApproval.WARNA}; color: #fff;">
+                                        <span>${statusApproval.SINGKATAN}</span>
+                                        </div>
+                                    `)
 
                                     return formattedValue[0].outerHTML
                                 },
@@ -198,7 +194,7 @@
                                     endforeach;
                                     
                                     ?>
-            `,
+                                 `,
                                     dataInit: function(element) {
                                         initSelect2($(element), false)
                                         // $(element).select2({
@@ -211,10 +207,10 @@
                                     let statusTas = JSON.parse(value)
 
                                     let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusTas.WARNA}; color: #fff;">
-                  <span>${statusTas.SINGKATAN}</span>
-                </div>
-              `)
+                                        <div class="badge" style="background-color: ${statusTas.WARNA}; color: #fff;">
+                                        <span>${statusTas.SINGKATAN}</span>
+                                        </div>
+                                    `)
 
                                     return formattedValue[0].outerHTML
                                 },

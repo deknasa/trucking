@@ -1,5 +1,5 @@
 <table id="cabangLookup" class="lookup-grid"></table>
-<div id="cabangLookupPager"></div>
+<!-- <div id="cabangLookupPager"></div> -->
 
 @push('scripts')
 <script>
@@ -136,7 +136,7 @@
       sortname: 'id',
       sortorder: 'asc',
       page: 1,
-      pager: $('#cabangLookupPager'),
+      // pager: $('#cabangLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -220,7 +220,7 @@
         clearGlobalSearch($('#cabangLookup'))
       },
     })
-
+    .customPager()
   loadGlobalSearch($('#cabangLookup'))
   loadClearFilter($('#cabangLookup'))
 </script>

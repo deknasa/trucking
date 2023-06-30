@@ -1,6 +1,5 @@
 @include('layouts._rangeheaderlookup')
 <table id="absensiSupirLookup" class="lookup-grid"></table>
-<div id="absensiSupirLookupPager"></div>
 
 @push('scripts')
 <script>
@@ -93,7 +92,7 @@
       sortorder: 'asc',
       page: 1,
       toolbar: [true, "top"],
-      pager: $('#absensiSupirLookupPager'),
+      // pager: $('#absensiSupirLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -176,7 +175,7 @@
         clearGlobalSearch($('#absensiSupirLookup'))
       },
     })
-
+    .customPager()
   loadGlobalSearch($('#absensiSupirLookup'))
   loadClearFilter($('#absensiSupirLookup'))
 </script>

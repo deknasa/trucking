@@ -1,6 +1,6 @@
 @include('layouts._rangeheaderlookup')
 <table id="penerimaanTruckingHeaderLookup" class="lookup-grid" style="width: 100%;"></table>
-<div id="penerimaanTruckingHeaderLookupPager"></div>
+{{-- <div id="penerimaanTruckingHeaderLookupPager"></div> --}}
 
 @push('scripts')
 <script>
@@ -190,7 +190,7 @@
       sortname: 'id',
       sortorder: 'asc',
       page: 1,
-      pager: $('#penerimaanTruckingHeaderLookupPager'),
+      // pager: $('#penerimaanTruckingHeaderLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -274,7 +274,7 @@
         clearGlobalSearch($('#penerimaanTruckingHeaderLookup'))
       },
     })
-
+    .customPager()
   loadGlobalSearch($('#penerimaanTruckingHeaderLookup'))
   loadClearFilter($('#penerimaanTruckingHeaderLookup'))
 </script>
