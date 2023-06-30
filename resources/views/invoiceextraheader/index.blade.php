@@ -271,6 +271,16 @@
             align: 'left'
           },
           {
+            label: 'TGL JATUH TEMPO',
+            name: 'tgljatuhtempo',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
+          {
             label: 'USER APPROVAL',
             name: 'userapproval',
             align: 'left'
