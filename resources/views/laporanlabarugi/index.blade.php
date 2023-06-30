@@ -32,6 +32,10 @@
                                     <i class="fas fa-print"></i>
                                     Report
                                 </a>
+                                <a id="btnExport" class="btn btn-warning mr-1 ">
+                                    <i class="fas fa-file-export"></i>
+                                    Export
+                                </a>
                             </div>
                         </div>
 
@@ -97,6 +101,10 @@
             $('#btnEkspor').prop('disabled', true)
             $('#btnEkspor').css(css_property);
         }
+        if (!`{{ $myAuth->hasPermission('laporanlabarugi', 'export') }}`) {
+            $('#btnEksport').prop('disabled', true)
+            $('#btnEkspor').css(css_property);
+        }
 
     })
 
@@ -106,6 +114,18 @@
         if (sampai != '') {
 
             window.open(`{{ route('laporanlabarugi.report') }}?sampai=${sampai}`)    
+        } else {
+            showDialog('ISI SELURUH KOLOM')
+        }
+    })
+
+
+    $(document).on('click', `#btnExport`, function(event) {
+        let sampai = $('#crudForm').find('[name=sampai]').val()
+
+        if (sampai != '') {
+
+            window.open(`{{ route('laporanlabarugi.export') }}?sampai=${sampai}`)    
         } else {
             showDialog('ISI SELURUH KOLOM')
         }

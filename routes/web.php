@@ -222,7 +222,7 @@ use App\Http\Controllers\LaporanHutangGiroController;
 use App\Http\Controllers\LaporanKasHarianController;
 use App\Http\Controllers\LaporanKartuHutangPerSupplierController;
 use App\Http\Controllers\LaporanKartuPiutangPerAgenController;
-
+use App\Http\Controllers\MainAkunPusatController;
 
 
 /*
@@ -1127,6 +1127,7 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::resource('laporandepositosupir', LaporanDepositoSupirController::class);
 
     Route::get('laporanlabarugi/report', [LaporanLabaRugiController::class, 'report'])->name('laporanlabarugi.report');
+    Route::get('laporanlabarugi/export', [LaporanLabaRugiController::class, 'export'])->name('laporanlabarugi.export');
     Route::get('laporanlabarugi/index', [LaporanLabaRugiController::class, 'index']);
     Route::resource('laporanlabarugi', LaporanLabaRugiController::class);
 
