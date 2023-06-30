@@ -45,6 +45,45 @@
 
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
+                  status reuse <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <select name="statusreuse" id="statusreuse" class="form-select select2bs4" style="width: 100%;">
+                  <option value="">-- PILIH STATUS REUSE --</option>
+                </select>
+              </div>
+            </div>
+            
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
+                  status ban <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <select name="statusban" class="form-select select2bs4" style="width: 100%;">
+                  <option value="">-- PILIH STATUS BAN --</option>
+                </select>
+              </div>
+            </div>
+            
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
+                  status service rutin <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <select name="statusservicerutin" class="form-select select2bs4" style="width: 100%;">
+                  <option value="">-- PILIH STATUS service rutin --</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">kelompok <span class="text-danger">*</span> </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
@@ -97,6 +136,27 @@
                 <input type="text" name="keterangan" class="form-control">
               </div>
             </div>
+
+            <div class="row form-group">
+
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">Total vulkanisir</label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="text" name="totalvulkanisir" style="text-align:right" disabled class="form-control">
+              </div>
+            </div>
+            
+            <div class="row form-group">
+
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">vulkanisir awal</label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="text" name="vulkanisirawal" style="text-align:right" class="form-control">
+              </div>
+            </div>
+
             <div class="row form-group">
 
               <div class="col-12 col-sm-3 col-md-2">
@@ -112,6 +172,23 @@
               </div>
               <div class="col-12 col-sm-9 col-md-4">
                 <input type="text" name="qtymax" style="text-align:right" class="form-control ">
+              </div>
+            </div>
+            <div class="row form-group">
+
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">harga beli min </label>
+
+              </div>
+              <div class="col-12 col-sm-9 col-md-4">
+                <input type="text" name="hargabelimin" style="text-align:right" class="form-control ">
+              </div>
+
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">harga beli max </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-4">
+                <input type="text" name="hargabelimax" style="text-align:right" class="form-control ">
               </div>
             </div>
 
@@ -166,11 +243,29 @@
   let hasFormBindKeys = false
   let modalBody = $('#crudModal').find('.modal-body').html()
   let dropzones = []
+  var dataReuse = []
   
   $(document).ready(function() {
     $(document).on('dblclick', '[data-dz-thumbnail]', handleImageClick)
     $(document).on('click', '.rmv', function(event) {
       deleteRow($(this).parents('tr'))
+    })
+
+    $(document).on('change', '#statusreuse', function(event) {
+      let reuse =0
+      if (dataReuse.length) {
+        $.each(dataReuse, (index,data) => {
+          if (data.text == "REUSE"){
+            reuse = data.id
+          }
+        })
+      }
+      if ($(this).val() == reuse) {
+        $('#crudForm').find('[name=vulkanisirawal]').attr('readonly', false);
+      }else{
+        $('#crudForm').find('[name=vulkanisirawal]').attr('readonly', true);
+        $('#crudForm').find('[name=vulkanisirawal]').val('');
+      }
     })
 
     $('#btnSubmit').click(function(event) {
@@ -199,6 +294,19 @@
       $('#crudForm').find(`[name="qtymax"]`).each((index, element) => {
         formData.append(`qtymax`, AutoNumeric.getNumber($(`#crudForm [name="qtymax"]`)[index]))
       })
+      formData.delete(`hargabelimin`);
+      $('#crudForm').find(`[name="hargabelimin"]`).each((index, element) => {
+        formData.append(`hargabelimin`, AutoNumeric.getNumber($(`#crudForm [name="hargabelimin"]`)[index]))
+      })
+      formData.delete(`hargabelimax`);
+      $('#crudForm').find(`[name="hargabelimax"]`).each((index, element) => {
+        formData.append(`hargabelimax`, AutoNumeric.getNumber($(`#crudForm [name="hargabelimax"]`)[index]))
+      })
+
+      formData.delete(`vulkanisirawal`);
+      $('#crudForm').find(`[name="vulkanisirawal"]`).each((index, element) => {
+        formData.append(`vulkanisirawal`, AutoNumeric.getNumber($(`#crudForm [name="vulkanisirawal"]`)[index]))
+      })
 
 
       formData.append('sortIndex', $('#jqGrid').getGridParam().sortname)
@@ -218,12 +326,6 @@
         formData.append('_method', 'DELETE')
       }
 
-      // $('#crudForm').find(`[name="qtymin"]`).each((index, element) => {
-      //   data.filter((row) => row.name === 'qtymin')[index].value = AutoNumeric.getNumber($(`#crudForm [name="qtymin"]`)[index])
-      // })
-      // $('#crudForm').find(`[name="qtymax"]`).each((index, element) => {
-      //   data.filter((row) => row.name === 'qtymax')[index].value = AutoNumeric.getNumber($(`#crudForm [name="qtymax"]`)[index])
-      // })
       $(this).attr('disabled', '')
       $('#processingLoader').removeClass('d-none')
 
@@ -288,6 +390,9 @@
     initDatepicker()
     initLookup()
     initSelect2(form.find(`[name="statusaktif"]`))
+    initSelect2(form.find(`[name="statusreuse"]`))
+    initSelect2(form.find(`[name="statusban"]`))
+    initSelect2(form.find(`[name="statusservicerutin"]`))
     getMaxLength(form)
   })
 
@@ -320,7 +425,11 @@
     $('.invalid-feedback').remove()
     Promise
       .all([
-        setStatusAktifOptions(form)
+        setStatusAktifOptions(form),
+        setStatusReuseOptions(form),
+        setStatusBanOptions(form),
+        setStatusServiceRutinOptions(form)
+
       ])
       .then(() => {
         showDefault(form)
@@ -339,6 +448,9 @@
     initDropzone(form.data('action'))
     initAutoNumeric(form.find(`[name="qtymin"]`),{'maximumValue':10000})
     initAutoNumeric(form.find(`[name="qtymax"]`),{'maximumValue':10000})
+    initAutoNumeric(form.find(`[name="hargabelimin"]`))
+    initAutoNumeric(form.find(`[name="hargabelimax"]`))
+    initAutoNumeric(form.find(`[name="vulkanisirawal"]`),{'maximumValue':100})
   }
 
   function editStok(stokId) {
@@ -360,6 +472,9 @@
     Promise
       .all([
         setStatusAktifOptions(form),
+        setStatusReuseOptions(form),
+        setStatusBanOptions(form),
+        setStatusServiceRutinOptions(form)
       ])
       .then(() => {
         showStok(form, stokId)
@@ -396,6 +511,9 @@
     Promise
       .all([
         setStatusAktifOptions(form),
+        setStatusReuseOptions(form),
+        setStatusBanOptions(form),
+        setStatusServiceRutinOptions(form)
       ])
       .then(() => {
         showStok(form, stokId)
@@ -478,6 +596,127 @@
       })
     })
   }
+  const setStatusReuseOptions = function(relatedForm) {
+    return new Promise((resolve, reject) => {
+      relatedForm.find('[name=statusreuse]').empty()
+      relatedForm.find('[name=statusreuse]').append(
+        new Option('-- PILIH STATUS REUSE --', '', false, true)
+      ).trigger('change')
+
+      $.ajax({
+        url: `${apiUrl}parameter`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          filters: JSON.stringify({
+            "groupOp": "AND",
+            "rules": [{
+              "field": "grp",
+              "op": "cn",
+              "data": "STATUS REUSE"
+            }]
+          })
+        },
+        success: response => {
+          response.data.forEach((statusReuse,index) => {
+            dataReuse[index] = statusReuse
+            // dataReuse[index]['text'] =  statusReuse.text
+
+            let option = new Option(statusReuse.text, statusReuse.id)
+
+            relatedForm.find('[name=statusreuse]').append(option).trigger('change')
+          });
+
+          resolve()
+        },
+        error: error => {
+          reject(error)
+        }
+      })
+    })
+  }
+
+  const setStatusBanOptions = function(relatedForm) {
+    return new Promise((resolve, reject) => {
+      relatedForm.find('[name=statusban]').empty()
+      relatedForm.find('[name=statusban]').append(
+        new Option('-- PILIH STATUS BAN --', '', false, true)
+      ).trigger('change')
+
+      $.ajax({
+        url: `${apiUrl}parameter`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          filters: JSON.stringify({
+            "groupOp": "AND",
+            "rules": [{
+              "field": "grp",
+              "op": "cn",
+              "data": "STATUS BAN"
+            }]
+          })
+        },
+        success: response => {
+          response.data.forEach(statusReuse => {
+            let option = new Option(statusReuse.text, statusReuse.id)
+
+            relatedForm.find('[name=statusban]').append(option).trigger('change')
+          });
+
+          resolve()
+        },
+        error: error => {
+          reject(error)
+        }
+      })
+    })
+  }
+  const setStatusServiceRutinOptions = function(relatedForm) {
+    return new Promise((resolve, reject) => {
+      relatedForm.find('[name=statusservicerutin]').empty()
+      relatedForm.find('[name=statusservicerutin]').append(
+        new Option('-- PILIH STATUS service rutin --', '', false, true)
+      ).trigger('change')
+
+      $.ajax({
+        url: `${apiUrl}parameter`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          filters: JSON.stringify({
+            "groupOp": "AND",
+            "rules": [{
+              "field": "grp",
+              "op": "cn",
+              "data": "STATUS service rutin"
+            }]
+          })
+        },
+        success: response => {
+          response.data.forEach(statusReuse => {
+            let option = new Option(statusReuse.text, statusReuse.id)
+
+            relatedForm.find('[name=statusservicerutin]').append(option).trigger('change')
+          });
+
+          resolve()
+        },
+        error: error => {
+          reject(error)
+        }
+      })
+    })
+  }
 
   function showDefault(form) {
     return new Promise((resolve, reject) => {
@@ -537,6 +776,15 @@
           resolve(response.data)
           initAutoNumeric(form.find(`[name="qtymin"]`),{'maximumValue':9999})
           initAutoNumeric(form.find(`[name="qtymax"]`),{'maximumValue':10000})
+          initAutoNumeric(form.find(`[name="hargabelimin"]`))
+          initAutoNumeric(form.find(`[name="hargabelimax"]`))
+          initAutoNumeric(form.find(`[name="vulkanisirawal"]`),{'maximumValue':100})
+
+          if (response.statuspakai) {
+            $(`#statusreuse`).attr('disabled', true)
+            form.find(`[name="vulkanisirawal"]`).attr('disabled', true)
+          }
+
           resolve()
         },
         error: error => {
