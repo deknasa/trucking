@@ -32,7 +32,8 @@ class LaporanKasBankController extends MyController
         $detailParams = [
             'dari' => $request->dari,
             'sampai' => $request->sampai,
-            'bankid' => $request->bankid,
+            'bank_id' => $request->bank_id,
+            'bank' => $request->bank,
         ];
 
         $header = Http::withHeaders(request()->header())
@@ -50,7 +51,8 @@ class LaporanKasBankController extends MyController
         $detailParams = [
             'dari' => $request->dari,
             'sampai' => $request->sampai,
-            'bankid' => $request->bankid,
+            'bank_id' => $request->bank_id,
+            'bank' => $request->bank,
         ];
 
         $header = Http::withHeaders(request()->header())
@@ -59,30 +61,26 @@ class LaporanKasBankController extends MyController
             ->get(config('app.api_url') . 'laporankasbank/export', $detailParams);
 
         $data = $header['data'];
-        
+
         // echo json_encode($data);
         // die;
-
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setCellValue('A1', 'Transporindo Agung Sejahtera');
+        $sheet->setCellValue('A1', $data[0]['judul']);
         $sheet->getStyle("A1")->getFont()->setSize(20);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:G1');
 
-        $sheet->setCellValue('A2', 'Laporan Kas Harian');
+        $sheet->setCellValue('A2', $data[0]['judulLaporan']);
         $sheet->getStyle("A2")->getFont()->setSize(16);
-        $sheet->getStyle('A2')->getAlignment()->setHorizontal('left');
+        $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A2:G2');
 
         $sheet->setCellValue('A4', 'Periode');
-        $sheet->setCellValue('B4', ': ' . $detailParams['dari']);
-
-        $sheet->setCellValue('C4', 's/d');
-        $sheet->setCellValue('D4', $detailParams['sampai']);
+        $sheet->setCellValue('B4', ': ' . $detailParams['dari'] . ' s/d ' . $detailParams['sampai']);
 
         $detail_table_header_row = 6;
-        $detail_start_row = $detail_table_header_row + 4;
+        $detail_start_row = $detail_table_header_row + 2;
 
         $styleArray = array(
             'borders' => array(
@@ -153,17 +151,23 @@ class LaporanKasBankController extends MyController
                 $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
             }
 
+            $response_detail['debets'] = number_format((float) $response_detail['debet'], '2', '.', ',');
+            $response_detail['kredits'] = number_format((float) $response_detail['kredit'], '2', '.', ',');
+            $response_detail['saldos'] = number_format((float) $response_detail['saldo'], '2', '.', ',');
             $sheet->setCellValue("A$detail_start_row", $response_detail['nobukti']);
             $sheet->setCellValue("B$detail_start_row", $response_detail['keterangancoa']);
             $sheet->setCellValue("C$detail_start_row", $response_detail['keterangan']);
-            $sheet->setCellValue("D$detail_start_row", $response_detail['debet']);
-            $sheet->setCellValue("E$detail_start_row", $response_detail['kredit']);
-            $sheet->setCellValue("F$detail_start_row", $response_detail['saldo']);
+            $sheet->setCellValue("D$detail_start_row", $response_detail['debets']);
+            $sheet->setCellValue("E$detail_start_row", $response_detail['kredits']);
+            $sheet->setCellValue("F$detail_start_row", $response_detail['saldos']);
 
             $sheet->getStyle("A$detail_start_row:F$detail_start_row")->applyFromArray($styleArray);
-             $sheet->getStyle("D$detail_start_row:F$detail_start_row")->applyFromArray($style_number);
+            $sheet->getStyle("D$detail_start_row:F$detail_start_row")->applyFromArray($style_number);
 
-           $totalKredit += $response_detail['kredit'];
+            $sheet->getStyle("C$detail_start_row")->getAlignment()->setWrapText(true);
+            $sheet->getColumnDimension('C')->setWidth(150);
+
+            $totalKredit += $response_detail['kredit'];
             $totalDebet += $response_detail['debet'];
             $totalSaldo += $response_detail['saldo'];
             $detail_start_row++;
@@ -171,23 +175,22 @@ class LaporanKasBankController extends MyController
 
         $sheet->mergeCells('A' . $detail_start_row . ':C' . $detail_start_row);
         $sheet->setCellValue("A$detail_start_row", 'Total :')->getStyle('A' . $detail_start_row . ':C' . $detail_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
-        $sheet->setCellValue("D$detail_start_row", number_format((float) $totalDebet, '2', ',', '.'))->getStyle("D$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
-        $sheet->setCellValue("E$detail_start_row", number_format((float) $totalKredit, '2', ',', '.'))->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
-        $sheet->setCellValue("F$detail_start_row", number_format((float) $totalSaldo, '2', ',', '.'))->getStyle("F$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->setCellValue("D$detail_start_row", number_format((float) $totalDebet, '2', '.', ','))->getStyle("D$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->setCellValue("E$detail_start_row", number_format((float) $totalKredit, '2', '.', ','))->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->setCellValue("F$detail_start_row", number_format((float) $totalSaldo, '2', '.', ','))->getStyle("F$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
 
 
-        $ttd_start_row = $detail_start_row + 2;
-        $sheet->setCellValue("A$ttd_start_row", 'Disetujui Oleh,');
-        $sheet->setCellValue("C$ttd_start_row", 'Diperiksa Oleh,');
-        $sheet->setCellValue("F$ttd_start_row", 'Disusun Oleh,');
+        // $ttd_start_row = $detail_start_row + 2;
+        // $sheet->setCellValue("A$ttd_start_row", 'Disetujui Oleh,');
+        // $sheet->setCellValue("C$ttd_start_row", 'Diperiksa Oleh,');
+        // $sheet->setCellValue("F$ttd_start_row", 'Disusun Oleh,');
 
-        $sheet->setCellValue("A" . ($ttd_start_row + 3), '( Bpk. Hasan )');
-        $sheet->setCellValue("C" . ($ttd_start_row + 3), '( Rina )');
-        $sheet->setCellValue("F" . ($ttd_start_row + 3), '(                )');
+        // $sheet->setCellValue("A" . ($ttd_start_row + 3), '( Bpk. Hasan )');
+        // $sheet->setCellValue("C" . ($ttd_start_row + 3), '( Rina )');
+        // $sheet->setCellValue("F" . ($ttd_start_row + 3), '(                )');
 
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);
-        $sheet->getColumnDimension('C')->setAutoSize(true);
         $sheet->getColumnDimension('D')->setAutoSize(true);
         $sheet->getColumnDimension('E')->setAutoSize(true);
         $sheet->getColumnDimension('F')->setAutoSize(true);

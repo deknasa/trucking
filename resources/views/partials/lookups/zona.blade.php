@@ -1,5 +1,5 @@
 <table id="zonaLookup" class="lookup-grid"></table>
-<div id="zonaLookupPager"></div>
+{{-- <div id="zonaLookupPager"></div> --}}
 
 <script>
   $('#zonaLookup').jqGrid({
@@ -215,7 +215,7 @@
           clearGlobalSearch($('#zonaLookup'))
       },
     })
-
+    .customPager()
     loadGlobalSearch($('#zonaLookup'))
     loadClearFilter($('#zonaLookup'))
 </script>

@@ -1,6 +1,6 @@
 @include('layouts._rangeheaderlookup')
 <table id="pengeluaranHeaderLookup" class="lookup-grid" style="width: 100%;"></table>
-<div id="pengeluaranHeaderLookupPager"></div>
+{{-- <div id="pengeluaranHeaderLookupPager"></div> --}}
 
 @push('scripts')
 <script>
@@ -353,7 +353,7 @@
       sortname: 'id',
       sortorder: 'asc',
       page: 1,
-      pager: $('#pengeluaranHeaderLookupPager'),
+      // pager: $('#pengeluaranHeaderLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -437,7 +437,7 @@
         clearGlobalSearch($('#pengeluaranHeaderLookup'))
       },
     })
-
+    .customPager()
   loadGlobalSearch($('#pengeluaranHeaderLookup'))
   loadClearFilter($('#pengeluaranHeaderLookup'))
 </script>

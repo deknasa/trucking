@@ -246,11 +246,11 @@
 
       data.push({
         name: 'bankheader',
-        value: $('#bankheader').val()
+        value: data.find(item => item.name === "bank_id").value
       })
       let tgldariheader = $('#tgldariheader').val();
       let tglsampaiheader = $('#tglsampaiheader').val()
-      let bankheader = $('#bankheader').val()
+      let bankheader = data.find(item => item.name === "bank_id").value
 
       switch (action) {
         case 'add':
@@ -289,6 +289,7 @@
           console.log(id)
           $('#crudModal').modal('hide')
           $('#crudModal').find('#crudForm').trigger('reset')
+          $('#bankheader').val(response.data.bank_id).trigger('change')
 
           $('.select2').select2({
             width: 'resolve',
@@ -296,6 +297,9 @@
           });
 
           $('#jqGrid').jqGrid('setGridParam', {
+            postData: {
+              bank_id: response.data.bank_id
+            },
             page: response.data.page
           }).trigger('reloadGrid');
 
@@ -401,7 +405,6 @@
           })
       })
 
-    addRow()
     setTotal()
   }
 
@@ -453,11 +456,11 @@
     $('#crudModalTitle').text('Edit Pengeluaran')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-    
+
     Promise
       .all([
         setStatusJenisTransaksiOptions(form),
-       
+
         // $('#detailList tbody').remove()
       ])
       .then(() => {
@@ -483,7 +486,7 @@
           })
       })
 
-     
+
 
   }
 
@@ -500,7 +503,7 @@
     $('#crudModalTitle').text('Delete Pengeluaran')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-    
+
 
     Promise
       .all([
@@ -508,7 +511,7 @@
       ])
       .then(() => {
         showPengeluaran(form, id)
-        .then(() => {
+          .then(() => {
             clearSelectedRows()
             $('#gs_').prop('checked', false)
             $('#crudModal').modal('show')

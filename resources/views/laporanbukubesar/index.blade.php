@@ -92,13 +92,21 @@
         let sampai = $('#crudForm').find('[name=sampai]').val()
         let coadari_id = $('#crudForm').find('[name=coadari_id]').val()
         let coasampai_id = $('#crudForm').find('[name=coasampai_id]').val()
+        let coadari = $('#crudForm').find('[name=coadari]').val()
+        let coasampai = $('#crudForm').find('[name=coasampai]').val()
+        getCekReport().then((response) => {
+            window.open(`{{ route('laporanbukubesar.report') }}?dari=${dari}&sampai=${sampai}&coadari=${coadari}&coasampai=${coasampai}&coadari_id=${coadari_id}&coasampai_id=${coasampai_id}`)
+        }).catch((error) => {
+            if (error.status === 422) {
+                $('.is-invalid').removeClass('is-invalid')
+                $('.invalid-feedback').remove()
 
-        if (dari != '' && sampai != '') {
+                setErrorMessages($('#crudForm'), error.responseJSON.errors);
+            } else {
+                showDialog(error.statusText, error.responseJSON.message)
 
-            window.open(`{{ route('laporanbukubesar.report') }}?dari=${dari}&sampai=${sampai}&coadari_id=${coadari_id}&coasampai_id=${coasampai_id}`)
-        } else {
-            showDialog('ISI SELURUH KOLOM')
-        }
+            }
+        })
     })
 
     $(document).on('click', `#btnExport`, function(event) {
@@ -115,7 +123,34 @@
         }
     })
 
+    function getCekReport() {
 
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: `${apiUrl}laporanbukubesar/report`,
+                dataType: "JSON",
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                data: {
+                    dari: $('#crudForm').find('[name=dari]').val(),
+                    sampai: $('#crudForm').find('[name=sampai]').val(),
+                    coadari: $('#crudForm').find('[name=coadari]').val(),
+                    coadari_id: $('#crudForm').find('[name=coadari_id]').val(),
+                    coasampai: $('#crudForm').find('[name=coasampai]').val(),
+                    coasampai_id: $('#crudForm').find('[name=coasampai_id]').val(),
+                    isCheck: true,
+                },
+                success: (response) => {
+                    resolve(response);
+                },
+                error: error => {
+                    reject(error)
+
+                },
+            });
+        });
+    }
 
     function initLookup() {
 

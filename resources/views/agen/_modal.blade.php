@@ -11,7 +11,7 @@
         <form action="" method="post">
           <div class="modal-body">
 
-            {{--        {{-- <div class="row form-group">
+            {{-- <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">ID</label>
               </div>
@@ -19,12 +19,12 @@
                 <input type="text" name="id" class="form-control" readonly>
               </div>
             </div> --}}
-            <input type="text" name="id" class="form-control" hidden>
+            <input type="hidden" name="id" class="form-control">
             
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
-                  KODE AGEN <span class="text-danger">*</span>
+                  KODE AGEN (EMKL) <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-md-10">
@@ -34,7 +34,7 @@
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
-                  NAMA AGEN <span class="text-danger">*</span>
+                  NAMA AGEN (EMKL) <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-md-10">
@@ -52,12 +52,12 @@
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2">
+              <div class="col-12 col-md-2">
                 <label class="col-form-label">
                   Status Aktif <span class="text-danger">*</span>
                 </label>
               </div>
-              <div class="col-12 col-sm-9 col-md-10">
+              <div class="col-12 col-md-10">
                 <select name="statusaktif" class="form-select select2bs4" style="width: 100%;">
                   <option value="">-- PILIH STATUS AKTIF --</option>
                 </select>
@@ -86,7 +86,7 @@
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
-                NO TELEPON <span class="text-danger">*</span>
+                NO TELEPON / HANDPHONE <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-md-10">
@@ -96,17 +96,7 @@
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
-                  NO HP <span class="text-danger">*</span>
-                </label>
-              </div>
-              <div class="col-12 col-md-10">
-                <input type="text" name="nohp" class="form-control numbernoseparate">
-              </div>
-            </div>
-            <div class="row form-group">
-              <div class="col-12 col-md-2">
-                <label class="col-form-label">
-                  CONTACTPERSON <span class="text-danger">*</span>
+                  NAMA KONTAK <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-md-10">
@@ -116,7 +106,7 @@
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
-                  TOP <span class="text-danger">*</span>
+                  STATUS PEMBAYARAN (TOP) <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-md-10">
@@ -124,12 +114,12 @@
               </div>
             </div>
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2">
+              <div class="col-12 col-md-2">
                 <label class="col-form-label">
                   STATUS TAS <span class="text-danger">*</span>
                 </label>
               </div>
-              <div class="col-12 col-sm-9 col-md-10">
+              <div class="col-12 col-md-10">
                 <select name="statustas" class="form-select select2bs4" style="width: 100%;">
                   <option value="">-- PILIH STATUS TAS --</option>
                 </select>

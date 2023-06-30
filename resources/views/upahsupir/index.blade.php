@@ -440,7 +440,7 @@
   function getCekExport() {
       return new Promise((resolve, reject) => {
         $.ajax({
-          url: `${apiUrl}upahsupir/listpivot`,
+          url: `${apiUrl}upahsupir/export`,
           dataType: "JSON",
           headers: {
             Authorization: `Bearer ${accessToken}`

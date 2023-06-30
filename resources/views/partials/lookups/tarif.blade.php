@@ -1,5 +1,5 @@
 <table id="tarifLookup" class="lookup-grid"></table>
-<div id="tarifLookupPager"></div>
+{{-- <div id="tarifLookupPager"></div> --}}
 
 @push('scripts')
 <script>
@@ -302,7 +302,7 @@
       sortname: 'tujuan',
       sortorder: 'asc',
       page: 1,
-      pager: $('#tarifLookupPager'),
+      // pager: $('#tarifLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -386,7 +386,7 @@
           clearGlobalSearch($('#tarifLookup'))
       },
     })
-
+    .customPager()
     loadGlobalSearch($('#tarifLookup'))
     loadClearFilter($('#tarifLookup'))
 </script>

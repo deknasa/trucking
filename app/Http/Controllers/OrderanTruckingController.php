@@ -88,22 +88,19 @@ class OrderanTruckingController extends MyController
     }
 
 
-    public function combo($aksi, $grp, $subgrp)
+    public function combo($aksi)
     {
-
         $status = [
             'status' => $aksi,
-            'grp' => $grp,
-            'subgrp' => $subgrp,
-        ];
-
-        $response = Http::withHeaders($this->httpHeaders)
-            ->withOptions(['verify' => false])
+            'grp' => 'STATUSCETAK',
+            'subgrp' => 'STATUSCETAK',
+        ];    
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'parameter/combolist', $status);
-
-        return $response['data'];       
+            ->get(config('app.api_url') . 'user/combostatus',$status);
+        return $response['data'];
     }
+
 
     public function report(Request $request)
     {
@@ -114,6 +111,9 @@ class OrderanTruckingController extends MyController
             ->get(config('app.api_url') . 'orderantrucking/export?dari=' . $request->dari . '&sampai=' . $request->sampai)['data'];
         $orderantrucking = $data['data'];
         $params = $data['parameter'];
+        $combo = $this->combo('list');
+        $key = array_search('CETAK', array_column( $combo, 'parameter')); 
+        $orderantrucking["combo"] =  $combo[$key];
         return view('reports.orderantrucking', compact('orderantrucking', 'params'));
     }
 

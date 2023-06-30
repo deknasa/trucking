@@ -1,6 +1,6 @@
 @include('layouts._rangeheaderlookup')
 <table id="pemutihanSupirLookup" class="lookup-grid" style="width: 100%;"></table>
-<div id="pemutihanSupirLookupPager"></div>
+{{-- <div id="pemutihanSupirLookupPager"></div> --}}
 
 @push('scripts')
 <script>
@@ -99,7 +99,7 @@
       sortname: 'id',
       sortorder: 'asc',
       page: 1,
-      pager: $('#pemutihanSupirLookupPager'),
+      // pager: $('#pemutihanSupirLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -183,7 +183,7 @@
         clearGlobalSearch($('#pemutihanSupirLookup'))
       },
     })
-
+    .customPager()
   loadGlobalSearch($('#pemutihanSupirLookup'))
   loadClearFilter($('#pemutihanSupirLookup'))
 </script>

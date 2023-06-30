@@ -1,5 +1,4 @@
 <table id="agenLookup" class="lookup-grid"></table>
-<div id="agenLookupPager"></div>
 
 @push('scripts')
 <script>
@@ -22,12 +21,12 @@
           hidden: true
         },
         {
-          label: 'AGEN',
+          label: 'KODE AGEN (EMKL)',
           name: 'kodeagen',
           align: 'left',
         },
         {
-          label: 'NAMA AGEN',
+          label: 'NAMA AGEN (EMKL)',
           name: 'namaagen',
           align: 'left'
         },
@@ -114,22 +113,17 @@
           align: 'left'
         },
         {
-          label: 'NO TELEPON',
+          label: 'NO TELEPON / HANDPHONE',
           name: 'notelp',
           align: 'left'
         },
         {
-          label: 'NO HP',
-          name: 'nohp',
-          align: 'left'
-        },
-        {
-          label: 'CONTACT PERSON',
+          label: 'NAMA KONTAK',
           name: 'contactperson',
           align: 'left'
         },
         {
-          label: 'TOP',
+          label: 'STATUS PEMBAYARAN (TOP)',
           name: 'top',
           align: 'right',
           formatter: currencyFormat
@@ -321,7 +315,7 @@
       sortname: 'id',
       sortorder: 'asc',
       page: 1,
-      pager: $('#agenLookupPager'),
+      // pager: $('#agenLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -404,7 +398,7 @@
         clearGlobalSearch($('#agenLookup'))
       },
     })
-
+    .customPager()
   loadGlobalSearch($('#agenLookup'))
   loadClearFilter($('#agenLookup'))
 </script>

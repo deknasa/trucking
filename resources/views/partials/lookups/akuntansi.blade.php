@@ -1,5 +1,4 @@
 <table id="akuntansiLookup" class="lookup-grid"></table>
-<div id="akuntansiLookupPager"></div>
 
 @push('scripts')
 <script>
@@ -132,7 +131,7 @@
       sortname: 'id',
       sortorder: 'asc',
       page: 1,
-      pager: $('#akuntansiLookupPager'),
+      // pager: $('#akuntansiLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -216,7 +215,7 @@
         clearGlobalSearch($('#akuntansiLookup'))
       },
     })
-
+    .customPager()
   loadGlobalSearch($('#akuntansiLookup'))
   loadClearFilter($('#akuntansiLookup'))
 </script>

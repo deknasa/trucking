@@ -1,5 +1,4 @@
 <table id="mandorLookup" class="lookup-grid"></table>
-<div id="mandorLookupPager"></div>
 
 @push('scripts')
 <script>
@@ -137,7 +136,7 @@
       sortname: 'id',
       sortorder: 'asc',
       page: 1,
-      pager: $('#mandorLookupPager'),
+      // pager: $('#mandorLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -221,7 +220,7 @@
         clearGlobalSearch($('#mandorLookup'))
       },
     })
-
+    .customPager()
   loadGlobalSearch($('#mandorLookup'))
   loadClearFilter($('#mandorLookup'))
 </script>

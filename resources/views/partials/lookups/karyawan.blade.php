@@ -1,5 +1,4 @@
 <table id="karyawanLookup" class="lookup-grid"></table>
-<div id="karyawanLookupPager"></div>
 
 @push('scripts')
 <script>
@@ -136,7 +135,7 @@
       sortname: 'id',
       sortorder: 'asc',
       page: 1,
-      pager: $('#karyawanLookupPager'),
+      // pager: $('#karyawanLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -220,7 +219,7 @@
         clearGlobalSearch($('#karyawanLookup'))
       },
     })
-
+    .customPager()
   loadGlobalSearch($('#karyawanLookup'))
   loadClearFilter($('#karyawanLookup'))
 </script>

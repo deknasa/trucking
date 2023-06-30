@@ -1,6 +1,5 @@
 @include('layouts._rangeheaderlookup')
 <table id="orderanTruckingLookup" class="lookup-grid"></table>
-<div id="orderanTruckingLookupPager"></div>
 
 @push('scripts')
 <script>
@@ -258,7 +257,7 @@
       sortname: 'id',
       sortorder: 'asc',
       page: 1,
-      pager: $('#orderanTruckingLookupPager'),
+      // pager: $('#orderanTruckingLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -342,7 +341,7 @@
         clearGlobalSearch($('#orderanTruckingLookup'))
       },
     })
-
+    .customPager()
   loadGlobalSearch($('#orderanTruckingLookup'))
   loadClearFilter($('#orderanTruckingLookup'))
 </script>

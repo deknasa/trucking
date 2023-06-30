@@ -1,5 +1,4 @@
 <table id="gandenganLookup" class="lookup-grid"></table>
-<div id="gandenganLookupPager"></div>
 
 @push('scripts')
 <script>
@@ -136,7 +135,7 @@
       sortname: 'id',
       sortorder: 'asc',
       page: 1,
-      pager: $('#gandenganLookupPager'),
+      // pager: $('#gandenganLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -220,7 +219,7 @@
         clearGlobalSearch($('#gandenganLookup'))
       },
     })
-
+    .customPager()
   loadGlobalSearch($('#gandenganLookup'))
   loadClearFilter($('#gandenganLookup'))
 </script>

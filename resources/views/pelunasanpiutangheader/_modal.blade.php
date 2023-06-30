@@ -359,7 +359,10 @@
       })
 
       let selectedRows = $("#tablePelunasan").getGridParam("selectedRowIds");
-
+      data.push({
+        name: 'jumlahdetail',
+        value: selectedRows
+      })
       $.each(selectedRows, function(index, value) {
         dataPelunasan = $("#tablePelunasan").jqGrid("getLocalRow", value);
         let selectedBayar = (dataPelunasan.bayar == undefined || dataPelunasan.bayar == '') ? 0 : dataPelunasan.bayar;
