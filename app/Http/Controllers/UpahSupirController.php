@@ -326,12 +326,27 @@ class UpahSupirController extends MyController
             foreach ($upahsupir as $response_index => $response_detail) {
 
                 $alphabets = range('A', 'Z');
-                $sheet->getStyle("C$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
                 $sheet->getStyle("D$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
-                $sheet->getStyle("E$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+                $sheet->getStyle("E$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
                 $sheet->getStyle("F$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
                 $sheet->getStyle("G$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
                 $sheet->getStyle("H$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+                $sheet->getStyle("I$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+                $sheet->getStyle("J$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+                $sheet->getStyle("K$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+                $sheet->getStyle("L$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+                $sheet->getStyle("M$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+                $sheet->getStyle("N$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+                $sheet->getStyle("O$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+                $sheet->getStyle("P$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+                $sheet->getStyle("Q$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+                $sheet->getStyle("R$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+                $sheet->getStyle("S$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+                $sheet->getStyle("T$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+                $sheet->getStyle("U$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+                $sheet->getStyle("V$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+                $sheet->getStyle("W$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
+
                 foreach ($header_columns as $data_columns_index => $data_column) {
                     $sheet->setCellValue($alphabets[$data_columns_index] . $detail_start_row, $response_detail[$data_column['index']]);
                     $sheet->getColumnDimension($alphabets[$data_columns_index])->setAutoSize(true);
