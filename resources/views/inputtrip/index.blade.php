@@ -129,10 +129,27 @@
                 </div>
 
                 <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">STATUS GANDENGAN <span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <select name="statusgandengan" class="form-control select2bs4" id="statusgandengan">
+                      <option value="">-- PILIH STATUS GANDENGAN --</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-group ">
                   <label class="col-sm-12 col-form-label">NO GANDENGAN / CHASIS<span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <input type="hidden" name="gandengan_id">
                     <input type="text" name="gandengan" class="form-control gandengan-lookup">
+                  </div>
+                </div>
+
+                <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">NO GANDENGAN / CHASIS (ASAL)</label>
+                  <div class="col-sm-12">
+                    <input type="hidden" name="gandenganasal_id">
+                    <input type="text" name="gandenganasal" class="form-control gandenganasal-lookup">
                   </div>
                 </div>
 
@@ -417,6 +434,7 @@
       .all([
         setStatusLongTripOptions(form),
         setStatusGudangSamaOptions(form),
+        setStatusGandenganOptions(form)
       ])
       .then(() => {
 
@@ -431,6 +449,45 @@
       })
   }
 
+  const setStatusGandenganOptions = function(relatedForm) {
+    return new Promise((resolve, reject) => {
+      relatedForm.find('[name=statusgandengan]').empty()
+      relatedForm.find('[name=statusgandengan]').append(
+        new Option('-- PILIH STATUS GANDENGAN --', '', false, true)
+      ).trigger('change')
+
+      $.ajax({
+        url: `${apiUrl}parameter`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          filters: JSON.stringify({
+            "groupOp": "AND",
+            "rules": [{
+              "field": "grp",
+              "op": "cn",
+              "data": "STATUS GANDENGAN"
+            }]
+          })
+        },
+        success: response => {
+          response.data.forEach(statusGandengan => {
+            let option = new Option(statusGandengan.text, statusGandengan.id)
+            statusLongtrip = statusGandengan.id
+            relatedForm.find('[name=statusgandengan]').append(option).trigger('change')
+          });
+
+          resolve()
+        },
+        error: error => {
+          reject(error)
+        }
+      })
+    })
+  }
 
   const setStatusLongTripOptions = function(relatedForm) {
     return new Promise((resolve, reject) => {
@@ -881,7 +938,7 @@
         enabledUpahSupir()
       },
       onClear: (element) => {
-        $('#crudForm [name=statuscontainer_id]').first().val('') 
+        $('#crudForm [name=statuscontainer_id]').first().val('')
         $('#crudForm [name=upah_id]').val('')
         $('#crudForm [name=upah]').val('')
         element.val('')
@@ -960,8 +1017,9 @@
       },
       onSelectRow: (gandengan, element) => {
         $('#crudForm [name=gandengan_id]').first().val(gandengan.id)
-        gandenganId = gandengan.id
-
+        if ($('#crudForm [name=gandenganasal_id]').val() == '') {
+          gandenganId = gandengan.id
+        }
         element.val(gandengan.keterangan)
         element.data('currentValue', element.val())
       },
@@ -971,6 +1029,9 @@
       onClear: (element) => {
         $('#crudForm [name=gandengan_id]').first().val('')
         element.val('')
+        if ($('#crudForm [name=gandenganasal_id]').val() == '') {
+          gandenganId = 0
+        }
         element.data('currentValue', element.val())
       }
     })
@@ -1092,6 +1153,39 @@
       }
     })
 
+    $('.gandenganasal-lookup').lookup({
+      title: 'Gandengan Asal Lookup',
+      fileName: 'gandengan',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+
+          Aktif: 'AKTIF',
+          Asal: 'YA'
+        }
+      },
+      onSelectRow: (gandengan, element) => {
+        $('#crudForm [name=gandenganasal_id]').first().val(gandengan.id)
+        gandenganId = gandengan.id
+
+        element.val(gandengan.keterangan)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $('#crudForm [name=gandenganasal_id]').first().val('')
+        if($('#crudForm [name=gandengan_id]') != ''){
+          gandenganId = $('#crudForm [name=gandengan_id]').val()
+        }else{
+          gandenganId = 0
+        }
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+
   }
 
   function addRow() {
@@ -1120,7 +1214,7 @@
     // setStatusRitasi(detailRow)
     // initSelect2(detailRow.find(`[name="jenisritasi[]"]`), false)
 
-    
+
     $('.dataritasi-lookup').last().lookup({
       title: 'Data Ritasi Lookup',
       fileName: 'dataritasi',
@@ -1131,7 +1225,7 @@
           Aktif: 'AKTIF',
         }
       },
-      onSelectRow: (dataRitasi, element) => {  
+      onSelectRow: (dataRitasi, element) => {
         element.parents('td').find(`[name="jenisritasi_id[]"]`).val(dataRitasi.id)
         element.val(dataRitasi.statusritasi)
         element.data('currentValue', element.val())
