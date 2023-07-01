@@ -240,11 +240,11 @@ class RitasiController extends MyController
                 'index' => 'supir_id',
             ],
             [
-                'label' => 'Tanggal',
+                'label' => 'TANGGAL',
                 'index' => 'tglbukti',
             ],
             [
-                'label' => 'STATUS CONTAINER',
+                'label' => 'STATUS RITASI',
                 'index' => 'statusritasi',
             ],
             [
@@ -307,13 +307,13 @@ class RitasiController extends MyController
             $timeStamp = strtotime($tglBukti);
             $dateTglBukti = date('d-m-Y', $timeStamp); 
             $response_detail['tglbukti'] = $dateTglBukti;
-        
+
             $sheet->setCellValue("A$detail_start_row", $response_index + 1);
             $sheet->setCellValue("B$detail_start_row", $response_detail['nobukti']);
-            $sheet->setCellValue("E$detail_start_row", $response_detail['suratpengantar_nobukti']);
-            $sheet->setCellValue("F$detail_start_row", $response_detail['supir_id']);
-            $sheet->setCellValue("C$detail_start_row", $response_detail['tglbukti']);
-            $sheet->setCellValue("D$detail_start_row", $response_detail['statusritasi']);
+            $sheet->setCellValue("C$detail_start_row", $response_detail['suratpengantar_nobukti']);
+            $sheet->setCellValue("D$detail_start_row", $response_detail['supir_id']);
+            $sheet->setCellValue("E$detail_start_row", $response_detail['tglbukti']);
+            $sheet->setCellValue("F$detail_start_row", $response_detail['statusritasi']);
             $sheet->setCellValue("G$detail_start_row", $response_detail['trado_id']);
             $sheet->setCellValue("H$detail_start_row", $response_detail['dari_id']);
             $sheet->setCellValue("I$detail_start_row", $response_detail['sampai_id']);
