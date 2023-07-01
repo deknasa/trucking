@@ -93,6 +93,19 @@
                 </select>
               </div>
             </div>
+
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
+                  Status Akses <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <select name="statusakses" class="form-select select2bs4" style="width: 100%;">
+                  <option value="">-- PILIH STATUS AKSES --</option>
+                </select>
+              </div>
+            </div>
           </div>
           <div class="modal-footer justify-content-start">
             <button id="btnSubmit" class="btn btn-primary">
@@ -254,7 +267,8 @@
       .all([
         setCabangOptions(form),
         setStatusKaryawanOptions(form),
-        setStatusAktifOptions(form)
+        setStatusAktifOptions(form),
+        setStatusAkses(form)
       ])
       .then(() => {
         showDefault(form)
@@ -475,6 +489,47 @@
       })
     })
   }
+
+  const setStatusAkses = function(relatedForm) {
+    return new Promise((resolve, reject) => {
+      relatedForm.find('[name=statusakses]').empty()
+      relatedForm.find('[name=statusakses]').append(
+        new Option('-- PILIH STATUS AKSES --', '', false, true)
+      ).trigger('change')
+
+      $.ajax({
+        url: `${apiUrl}parameter`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          filters: JSON.stringify({
+            "groupOp": "AND",
+            "rules": [{
+              "field": "grp",
+              "op": "cn",
+              "data": "STATUS AKSES"
+            }]
+          })
+        },
+        success: response => {
+          response.data.forEach(statusAkses => {
+            let option = new Option(statusAkses.text, statusAkses.id)
+
+            relatedForm.find('[name=statusakses]').append(option).trigger('change')
+          });
+
+          resolve()
+        },
+        error: error => {
+          reject(error)
+        }
+      })
+    })
+  }
+  
 
   function showUser(form, userId) {
     return new Promise((resolve, reject) => {

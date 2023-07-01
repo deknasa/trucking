@@ -10,7 +10,7 @@
         </div>
         <form action="" method="post">
           <div class="modal-body">
-            {{-- <div class="row form-group">
+            {{--{{-- <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">ID</label>
               </div>
@@ -22,7 +22,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
-                  Kode Gandengan <span class="text-danger">*</span>
+                  Gandengan <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">

@@ -11,7 +11,7 @@
         <form action="" method="post">
           <div class="modal-body">
 
-            {{-- <div class="row form-group">
+           {{-- <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">ID</label>
               </div>
