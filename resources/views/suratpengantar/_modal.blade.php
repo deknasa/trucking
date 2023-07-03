@@ -1067,11 +1067,13 @@
             (index == 'jenisorder') ? element.data('current-value', value): '';
             (index == 'tarifrincian') ? element.data('current-value', value): '';
             (index == 'cabang') ? element.data('current-value', value): '';
+            (index == 'upah') ? element.data('current-value', value): '';
 
 
 
           })
-
+          containerId = response.data.container_id
+          statuscontainerId = response.data.statuscontainer_id
           getTarifOmset(response.data.tarifrincian_id)
           // getGaji(response.data.nominalplusborongan)
           initAutoNumeric(form.find(`[name="nominal"]`))
