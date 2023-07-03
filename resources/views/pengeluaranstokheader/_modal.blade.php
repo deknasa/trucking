@@ -513,7 +513,6 @@
       case listKodePengeluaran[4]: //'GST':
         tampilanGST()
         break;
-
       default:
         tampilanInit()
         break;

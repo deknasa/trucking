@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "d6295ddba82dc31f17d12df92f9c0411",
+  "ReportGuid": "3afa9e04923484bc9cf774791a348c3e",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanLabaRugi2.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanLabaRugi (1) (1).mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1688112348000+0700)/",
+  "ReportChanged": "/Date(1688097744000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -621,7 +621,7 @@
             "0": {
               "Ident": "StiText",
               "Name": "Text9",
-              "ClientRectangle": "0.4,0.1,10.2,0.6",
+              "ClientRectangle": "0.4,0.1,6.6,0.6",
               "ComponentPlacement": "gh.GroupHeaderBand2",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -668,7 +668,7 @@
             "0": {
               "Ident": "StiText",
               "Name": "Text2",
-              "ClientRectangle": "0.6,0.1,10.2,0.6",
+              "ClientRectangle": "0.6,0.1,6.4,0.6",
               "ComponentPlacement": "gh.GroupHeaderBand4",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -727,7 +727,7 @@
               "Ident": "StiText",
               "Name": "Text3",
               "GrowToHeight": true,
-              "ClientRectangle": "1.4,0.1,9.4,0.6",
+              "ClientRectangle": "1.4,0.1,5.6,0.6",
               "ComponentPlacement": "d.DataBand1",
               "Interaction": {
                 "Ident": "StiInteraction"

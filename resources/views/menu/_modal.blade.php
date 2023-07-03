@@ -62,14 +62,14 @@
                 <input type="text" name="menuicon" class="form-control">
               </div>
             </div>
-            <div class="row form-group sometimes">
+            <div class="row form-group sometimes_link">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
                   LINK 
                 </label>
               </div>
               <div class="col-12 col-md-10">
-                <input type="text" name="menuexe" class="form-control">
+                <input type="text" name="menuexe" class="form-control sometimes_link">
               </div>
             </div>
             <div class="row form-group sometimes">
@@ -234,6 +234,7 @@
     <i class="fa fa-save"></i>
     Simpan
   `)
+
     form.data('action', 'add')
     form.find(`.sometimes`).show()
     $('#crudModalTitle').text('Create Menu')
@@ -267,7 +268,8 @@
     <i class="fa fa-save"></i>
     Simpan
   `)
-    form.find(`.sometimes`).hide()
+
+    form.find(`.sometimes`).show()
     $('#crudModalTitle').text('Edit Menu')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
@@ -280,6 +282,9 @@
       .then(() => {
         showMenu(form, menuId)
           .then(() => {
+          form.find('select').prop('disabled', true);
+          form.find('.select2-container').addClass('disabled');
+          form.find('input[name="menuexe"]').prop('disabled', true);
             $('#crudModal').modal('show')
           })
           .catch((error) => {
@@ -288,43 +293,47 @@
           .finally(() => {
             $('.modal-loader').addClass('d-none')
           })
-      })
+        })
+        
   }
 
   function deleteMenu(menuId) {
-    let form = $('#crudForm')
+  let form = $('#crudForm');
 
-    $('.modal-loader').removeClass('d-none')
+  $('.modal-loader').removeClass('d-none');
 
-    form.data('action', 'delete')
-    form.trigger('reset')
-    form.find('#btnSubmit').html(`
+  form.data('action', 'delete');
+  form.trigger('reset');
+  form.find('#btnSubmit').html(`
     <i class="fa fa-save"></i>
     Hapus
-  `)
-    form.find(`.sometimes`).hide()
-    $('#crudModalTitle').text('Delete Menu')
-    $('.is-invalid').removeClass('is-invalid')
-    $('.invalid-feedback').remove()
+  `);
+  form.find('.sometimes').show();
+  $('#crudModalTitle').text('Delete Menu');
+  $('.is-invalid').removeClass('is-invalid');
+  $('.invalid-feedback').remove();
 
-    Promise
-      .all([
-        setMenuParentOptions(form),
-        setControllerOptions(form)
-      ])
-      .then(() => {
-        showMenu(form, menuId)
-          .then(() => {
-            $('#crudModal').modal('show')
-          })
-          .catch((error) => {
-            showDialog(error.statusText)
-          })
-          .finally(() => {
-            $('.modal-loader').addClass('d-none')
-          })
-      })
-  }
+  Promise.all([
+    setMenuParentOptions(form),
+    setControllerOptions(form)
+  ])
+    .then(() => {
+      showMenu(form, menuId)
+        .then(() => {
+          form.find('select').prop('disabled', true);
+          form.find('.select2-container').addClass('disabled');
+          form.find('.form-control.sometimes_link').addClass('disabled');
+          form.find('input[name="menuexe"]').prop('disabled', true);
+          $('#crudModal').modal('show');
+        })
+        .catch((error) => {
+          showDialog(error.statusText);
+        })
+        .finally(() => {
+          $('.modal-loader').addClass('d-none');
+        });
+    });
+}
 
   function getMaxLength(form) {
     if (!form.attr('has-maxlength')) {
@@ -429,6 +438,7 @@
             } else {
               element.val(value)
             }
+            
           })
           if (form.data('action') === 'delete') {
             form.find('[name]').addClass('disabled')
