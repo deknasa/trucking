@@ -17,6 +17,8 @@
       styleUI: 'Bootstrap4',
       iconSet: 'fontAwesome',
       postData: {
+        penerimaanstok_id: `{!! $penerimaanstok_id ?? '' !!}`,
+
         tgldari: $('#tgldariheaderlookup').val(),
         tglsampai: $('#tglsampaiheaderlookup').val(),
       },

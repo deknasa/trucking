@@ -49,7 +49,7 @@
 
   $(document).ready(function() {
     initSelect2($(`#kodepengeluaranheader`),false);
-
+    pengeluaranStok($('#crudForm'));
     $('#crudModal').on('hidden.bs.modal', function() {
        activeGrid = '#jqGrid'
      })
