@@ -53,7 +53,14 @@
                                 name: 'keterangan',
                                 align: 'left'
                             },
-
+                            {
+                                label: 'JLH BAN',
+                                name: 'jumlahroda',
+                            },
+                            {
+                                label: 'JLH BAN SERAP',
+                                name: 'jumlahbanserap',
+                            },
                             {
                                 label: 'Status',
                                 name: 'statusaktif',
