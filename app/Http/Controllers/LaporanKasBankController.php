@@ -104,7 +104,7 @@ class LaporanKasBankController extends MyController
         ];
 
         $sheet->setCellValue('A7', 'Buku Kas/Bank');
-        $sheet->setCellValue('B7', 'BANK TRUCKING');
+        $sheet->setCellValue('B7', $data[0]['namabank']);
 
         $alphabets = range('A', 'Z');
 
@@ -145,41 +145,46 @@ class LaporanKasBankController extends MyController
         $totalDebet = 0;
         $totalKredit = 0;
         $totalSaldo = 0;
+        $dataRow = $detail_table_header_row + 2;
+        $previousRow = $dataRow - 1; // Initialize the previous row number
+
+
         foreach ($data as $response_index => $response_detail) {
 
             foreach ($detail_columns as $detail_columns_index => $detail_column) {
                 $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
             }
 
-            $response_detail['debets'] = number_format((float) $response_detail['debet'], '2', '.', ',');
-            $response_detail['kredits'] = number_format((float) $response_detail['kredit'], '2', '.', ',');
-            $response_detail['saldos'] = number_format((float) $response_detail['saldo'], '2', '.', ',');
             $sheet->setCellValue("A$detail_start_row", $response_detail['nobukti']);
             $sheet->setCellValue("B$detail_start_row", $response_detail['keterangancoa']);
             $sheet->setCellValue("C$detail_start_row", $response_detail['keterangan']);
-            $sheet->setCellValue("D$detail_start_row", $response_detail['debets']);
-            $sheet->setCellValue("E$detail_start_row", $response_detail['kredits']);
-            $sheet->setCellValue("F$detail_start_row", $response_detail['saldos']);
-
+            $sheet->setCellValue("D$detail_start_row", $response_detail['debet']);
+            $sheet->setCellValue("E$detail_start_row", $response_detail['kredit']);
+            if ($dataRow > $detail_table_header_row + 1) {
+                $sheet->setCellValue('F' . $dataRow, '=(F' . $previousRow . '+D' . $dataRow . ')-E' . $dataRow);
+            }
+            
             $sheet->getStyle("A$detail_start_row:F$detail_start_row")->applyFromArray($styleArray);
-            $sheet->getStyle("D$detail_start_row:F$detail_start_row")->applyFromArray($style_number);
+            $sheet->getStyle("D$detail_start_row:F$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
 
             $sheet->getStyle("C$detail_start_row")->getAlignment()->setWrapText(true);
             $sheet->getColumnDimension('C')->setWidth(150);
+            $previousRow = $dataRow; // Update the previous row number
 
-            $totalKredit += $response_detail['kredit'];
-            $totalDebet += $response_detail['debet'];
-            $totalSaldo += $response_detail['saldo'];
+            $dataRow++;
             $detail_start_row++;
         }
 
         $sheet->mergeCells('A' . $detail_start_row . ':C' . $detail_start_row);
         $sheet->setCellValue("A$detail_start_row", 'Total :')->getStyle('A' . $detail_start_row . ':C' . $detail_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
-        $sheet->setCellValue("D$detail_start_row", number_format((float) $totalDebet, '2', '.', ','))->getStyle("D$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
-        $sheet->setCellValue("E$detail_start_row", number_format((float) $totalKredit, '2', '.', ','))->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
-        $sheet->setCellValue("F$detail_start_row", number_format((float) $totalSaldo, '2', '.', ','))->getStyle("F$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
 
+        $sheet->setCellValue("D$detail_start_row", "=SUM(D8:D". ($dataRow) . ")")->getStyle("D$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
 
+        $sheet->setCellValue("E$detail_start_row",  "=SUM(E8:E". ($dataRow) . ")")->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->getStyle("F$detail_start_row")->applyFromArray($style_number);
+
+        $sheet->getStyle("D$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+        $sheet->getStyle("E$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
         // $ttd_start_row = $detail_start_row + 2;
         // $sheet->setCellValue("A$ttd_start_row", 'Disetujui Oleh,');
         // $sheet->setCellValue("C$ttd_start_row", 'Diperiksa Oleh,');

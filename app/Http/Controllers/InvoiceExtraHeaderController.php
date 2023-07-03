@@ -148,7 +148,7 @@ class InvoiceExtraHeaderController extends MyController
         $sheet->mergeCells('A2:D2');
 
         $header_start_row = 4;
-        $detail_table_header_row = 9;
+        $detail_table_header_row = 10;
         $detail_start_row = $detail_table_header_row + 1;
 
         $alphabets = range('A', 'Z');
@@ -168,6 +168,10 @@ class InvoiceExtraHeaderController extends MyController
             [
                 'label'=>'Agen',
                 'index'=>'agen'
+            ],
+            [
+                'label'=>'Tanggal Jatuh Tempo',
+                'index'=>'tgljatuhtempo'
             ],
         ];
 

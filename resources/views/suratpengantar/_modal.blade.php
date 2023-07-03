@@ -276,6 +276,14 @@
                     </select>
                   </div>
                 </div>
+                <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">STATUS GANDENGAN <span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <select name="statusgandengan" class="form-control select2bs4" id="statusgandengan">
+                      <option value="">-- PILIH STATUS GANDENGAN --</option>
+                    </select>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -650,7 +658,8 @@
         setStatusLongTripOptions(form),
         setStatusPeralihanOptions(form),
         setStatusGudangSamaOptions(form),
-        setStatusBatalMuatOptions(form)
+        setStatusBatalMuatOptions(form),
+        setStatusGandenganOptions(form)
       ])
       .then(() => {
         showDefault(form)
@@ -695,7 +704,8 @@
         setStatusLongTripOptions(form),
         setStatusPeralihanOptions(form),
         setStatusGudangSamaOptions(form),
-        setStatusBatalMuatOptions(form)
+        setStatusBatalMuatOptions(form),
+        setStatusGandenganOptions(form),
       ])
       .then(() => {
         showSuratPengantar(form, id)
@@ -898,6 +908,46 @@
     })
   }
 
+  const setStatusGandenganOptions = function(relatedForm) {
+    return new Promise((resolve, reject) => {
+      relatedForm.find('[name=statusgandengan]').empty()
+      relatedForm.find('[name=statusgandengan]').append(
+        new Option('-- PILIH STATUS GANDENGAN --', '', false, true)
+      ).trigger('change')
+
+      $.ajax({
+        url: `${apiUrl}parameter`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          filters: JSON.stringify({
+            "groupOp": "AND",
+            "rules": [{
+              "field": "grp",
+              "op": "cn",
+              "data": "STATUS GANDENGAN"
+            }]
+          })
+        },
+        success: response => {
+          response.data.forEach(statusGandengan => {
+            let option = new Option(statusGandengan.text, statusGandengan.id)
+            statusLongtrip = statusGandengan.id
+            relatedForm.find('[name=statusgandengan]').append(option).trigger('change')
+          });
+
+          resolve()
+        },
+        error: error => {
+          reject(error)
+        }
+      })
+    })
+  }
+
   const setStatusBatalMuatOptions = function(relatedForm) {
     return new Promise((resolve, reject) => {
       relatedForm.find('[name=statusbatalmuat]').empty()
@@ -984,7 +1034,7 @@
 
   function showSuratPengantar(form, userId) {
     return new Promise((resolve, reject) => {
-      
+
       $.ajax({
         url: `${apiUrl}suratpengantar/${userId}`,
         method: 'GET',

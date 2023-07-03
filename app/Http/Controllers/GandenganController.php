@@ -196,7 +196,7 @@ class GandenganController extends MyController
                 'index' => 'id',
             ],
             [
-                'label' => 'Kode Gandengan',
+                'label' => 'Gandengan',
                 'index' => 'kodegandengan',
             ],
             [
@@ -208,7 +208,7 @@ class GandenganController extends MyController
                 'index' => 'statusaktif',
             ],
         ];
-
+  
         $this->toExcel($this->title, $gandengans, $columns);
     }
 

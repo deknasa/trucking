@@ -44,7 +44,7 @@
                                 hidden: true
                             },
                             {
-                                label: 'KODE GANDENGAN',
+                                label: 'GANDENGAN',
                                 name: 'kodegandengan',
                                 align: 'left'
                             },

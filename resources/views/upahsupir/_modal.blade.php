@@ -1058,7 +1058,7 @@
             setNominalKomisi()
             setNominalTol()
           })
-          setuprowshow(userId);
+          // setuprowshow(userId);
 
           setRowNumbers()
 

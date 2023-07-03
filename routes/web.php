@@ -222,8 +222,9 @@ use App\Http\Controllers\LaporanHutangGiroController;
 use App\Http\Controllers\LaporanKasHarianController;
 use App\Http\Controllers\LaporanKartuHutangPerSupplierController;
 use App\Http\Controllers\LaporanKartuPiutangPerAgenController;
+use App\Http\Controllers\MainAkunPusatController;
 
-
+use App\Http\Controllers\UbahPasswordController;
 
 /*
 |--------------------------------------------------------------------------
@@ -1127,6 +1128,7 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::resource('laporandepositosupir', LaporanDepositoSupirController::class);
 
     Route::get('laporanlabarugi/report', [LaporanLabaRugiController::class, 'report'])->name('laporanlabarugi.report');
+    Route::get('laporanlabarugi/export', [LaporanLabaRugiController::class, 'export'])->name('laporanlabarugi.export');
     Route::get('laporanlabarugi/index', [LaporanLabaRugiController::class, 'index']);
     Route::resource('laporanlabarugi', LaporanLabaRugiController::class);
 
@@ -1370,6 +1372,8 @@ Route::middleware(['auth','authorized'])->group(function () {
 
     Route::get('approvaltradogambar/index', [ApprovalTradoGambarController::class, 'index']);
     Route::resource('approvaltradogambar', ApprovalTradoGambarController::class);
+    Route::get('ubahpassword/index', [UbahPasswordController::class, 'index']);
+    Route::resource('ubahpassword', UbahPasswordController::class);
     
 });
 
