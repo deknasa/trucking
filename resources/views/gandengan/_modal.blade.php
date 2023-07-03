@@ -32,11 +32,32 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
-                  Keterangan <span class="text-danger">*</span>
+                  Keterangan <span class="text-danger"></span>
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="text" name="keterangan" class="form-control">
+              </div>
+            </div>
+
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
+                  Jumlah BAN <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="text" name="jumlahroda" class="form-control numbernoseparate" maxlength="2">
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
+                  Jumlah Ban Serap <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="text" name="jumlahbanserap" class="form-control numbernoseparate" maxlength="2">
               </div>
             </div>
             <div class="row form-group">
@@ -305,6 +326,9 @@
           $.each(response.data, (index, value) => {
             if (value !== null && value !== 0 && value !== undefined) {
               form.find(`[name=${index}]`).attr('maxlength', value)
+              if (index == 'jumlahbanserap') {
+                form.find(`[name=jumlahbanserap]`).attr('maxlength', 1)
+              }
             }
           })
 
