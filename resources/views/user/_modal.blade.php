@@ -37,6 +37,16 @@
                 <input type="text" name="name" class="form-control">
               </div>
             </div>
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
+                  Email <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="text" name="email" class="form-control">
+              </div>
+            </div>
             <div class="row form-group sometimes">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
@@ -81,6 +91,7 @@
                 <input type="text" name="dashboard" class="form-control">
               </div>
             </div>
+          
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
@@ -94,18 +105,6 @@
               </div>
             </div>
 
-            <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2">
-                <label class="col-form-label">
-                  Status Akses <span class="text-danger">*</span>
-                </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-10">
-                <select name="statusakses" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH STATUS AKSES --</option>
-                </select>
-              </div>
-            </div>
           </div>
           <div class="modal-footer justify-content-start">
             <button id="btnSubmit" class="btn btn-primary">
@@ -304,7 +303,8 @@
       .all([
         setCabangOptions(form),
         setStatusKaryawanOptions(form),
-        setStatusAktifOptions(form)
+        setStatusAktifOptions(form),
+        setStatusAkses(form)
       ])
       .then(() => {
         showUser(form, userId)
@@ -339,7 +339,8 @@
       .all([
         setCabangOptions(form),
         setStatusKaryawanOptions(form),
-        setStatusAktifOptions(form)
+        setStatusAktifOptions(form),
+        setStatusAkses(form)
       ])
       .then(() => {
         showUser(form, userId)
