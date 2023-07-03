@@ -76,13 +76,13 @@
             "border-color": "rgb(173 180 187)"
         }
         if (!`{{ $myAuth->hasPermission('laporanhutanggiro', 'report') }}`) {
-            $('#btnPreview').prop('disabled', true)
-            $('#btnPreview').css(css_property);
+            $('#btnEkspor').prop('disabled', true)
+            $('#btnEkspor').css(css_property);
         }
 
         if (!`{{ $myAuth->hasPermission('laporanhutanggiro', 'export') }}`) {
-            $('#btnExport').prop('disabled', true)
-            $('#btnExport').css(css_property);
+            $('#btnEkspor').prop('disabled', true)
+            $('#btnEkspor').css(css_property);
         }
 
     })

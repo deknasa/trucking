@@ -163,7 +163,6 @@ class GandenganController extends MyController
             $statusaktif = $result['MEMO'];
 
             $gandengans[$i]['statusaktif'] = $statusaktif;
-
         
             $i++;
 
@@ -208,7 +207,7 @@ class GandenganController extends MyController
                 'index' => 'statusaktif',
             ],
         ];
-  
+
         $this->toExcel($this->title, $gandengans, $columns);
     }
 
@@ -218,14 +217,12 @@ class GandenganController extends MyController
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'gandengan/field_length');
-
         return response($response['data']);
     }
 
 
     public function combo($aksi)
     {
-
         $status = [
             'status' => $aksi,
             'grp' => 'STATUS AKTIF',
