@@ -316,6 +316,7 @@
   let kodePengeluaranStok
   let modalBody = $('#crudModal').find('.modal-body').html()
   let pengeluaranheader_id
+  var listKodePengeluaran = [];
   $(document).ready(function() {
     $(document).on('click', '#addRow', function(event) {
       addRow()
@@ -497,19 +498,21 @@
   function setTampilanForm() {
     tampilanall()
     switch (kodePengeluaranStok) {
-      case 'SPK':
+      case listKodePengeluaran[0]: //'SPK':
         tampilanspk()
         break;
-      case 'RTR':
+      case listKodePengeluaran[1]: //'RTR':
         tampilanrbt()
         break;
-      case 'KOR':
+      case listKodePengeluaran[2]: //'KOR':
         tampilankor()
         break;
-      case 'PJA':
+      case listKodePengeluaran[3]: //'PJA':
         tampilanPJA()
         break;
-
+      case listKodePengeluaran[4]: //'GST':
+        tampilanGST()
+        break;
       default:
         tampilanInit()
         break;
@@ -652,6 +655,32 @@
     $('.potongkas').show() //potong kas
         $('#titlePotongkas').html('POSTING Penerimaan')
         $('[name=tglkasmasuk]').parents('.form-group').show()
+  }
+
+  function tampilanGST() {
+    // $('[name=nobukti]').parents('.form-group').show()
+    // $('[name=tglbukti]').parents('.form-group').show()
+    // $('[name=pengeluaranstok]').parents('.form-group').show()
+    $('[name=kerusakan]').parents('.form-group').hide()
+    // $('[name=supir]').parents('.form-group').show()
+    // $('[name=trado]').parents('.form-group').show()
+    // $('[name=gandengan]').parents('.form-group').show()
+    // $('[name=gudang]').parents('.form-group').show()
+
+
+    $('[name=statuspotongretur]').parents('.form-group').hide()
+    $('[name=penerimaanstok_nobukti]').parents('.form-group').hide()
+    $('[name=pengeluaranstok_nobukti]').parents('.form-group').hide()
+    $('[name=servicein_nobukti]').parents('.form-group').hide()
+    $('[name=supplier]').parents('.form-group').hide()
+    $('[name=gudang]').parents('.form-group').hide()
+    $('.tbl_qty').show()
+    $('.tbl_vulkanisirke').hide();
+    $('.tbl_harga').hide();
+    $('.tbl_persentase').hide();
+    $('.tbl_total').hide();
+    $('.colspan').attr('colspan', 4);
+    $('.sumrow').hide();
   }
   
   // function tampilanRbtAddRow() {
@@ -1124,7 +1153,7 @@
   }
 
   function lookupSelected(el) {
-    if (kodePengeluaranStok == "KOR") {
+    if (kodePengeluaranStok == listKodePengeluaran[2]) {
       // console.log(kodepengeluaranstok);
       // console.log(el);
       switch (el) {
@@ -1157,7 +1186,7 @@
         default:
           break;
       }
-    } else if (kodePengeluaranStok == "SPK") {
+    } else if (kodePengeluaranStok == listKodePengeluaran[0]) {
       switch (el) {
         case 'trado':
           $('#crudForm').find(`[name="gandengan"]`).attr('disabled', true)
@@ -1220,6 +1249,25 @@
       sumary += totalItem;
     })
     new AutoNumeric($('#sumary')[0]).set(sumary);
+  }
+
+  function pengeluaranStok(form) {
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `${apiUrl}pengeluaranstok`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          $.each(response.data, (index,data) => {
+            listKodePengeluaran[index] = data.kodepengeluaran;
+          })
+
+        }
+      })
+    })
   }
 
   function showPengeluaranstokHeader(form, pengeluaranStokHeaderId) {
@@ -1678,7 +1726,7 @@
         element.val(penerimaan.nobukti)
         element.data('currentValue', element.val())
         penerimaanOrServicein('penerimaan')
-        if (kodePengeluaranStok == "RTR") {
+        if (kodePengeluaranStok == listKodePengeluaran[1]) {
           getSpb(penerimaan.id)
         }
       },
