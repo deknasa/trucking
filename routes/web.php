@@ -223,6 +223,7 @@ use App\Http\Controllers\LaporanKasHarianController;
 use App\Http\Controllers\LaporanKartuHutangPerSupplierController;
 use App\Http\Controllers\LaporanKartuPiutangPerAgenController;
 use App\Http\Controllers\MainAkunPusatController;
+use App\Http\Controllers\LaporanHistoryDepositoController;
 
 use App\Http\Controllers\UbahPasswordController;
 
@@ -1131,6 +1132,11 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('laporanlabarugi/export', [LaporanLabaRugiController::class, 'export'])->name('laporanlabarugi.export');
     Route::get('laporanlabarugi/index', [LaporanLabaRugiController::class, 'index']);
     Route::resource('laporanlabarugi', LaporanLabaRugiController::class);
+
+    Route::get('laporanhistorydeposito/report', [LaporanHistoryDepositoController::class, 'report'])->name('laporanhistorydeposito.report');
+    Route::get('laporanhistorydeposito/export', [LaporanHistoryDepositoController::class, 'export'])->name('laporanhistorydeposito.export');
+    Route::get('laporanhistorydeposito/index', [LaporanHistoryDepositoController::class, 'index']);
+    Route::resource('laporanhistorydeposito', LaporanHistoryDepositoController::class);
 
     Route::get('laporantransaksiharian/report', [LaporanTransaksiHarianController::class, 'report'])->name('laporantransaksiharian.report');
     Route::get('laporantransaksiharian/export', [LaporanTransaksiHarianController::class, 'export'])->name('laporantransaksiharian.export');

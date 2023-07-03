@@ -76,13 +76,13 @@
             "border-color": "rgb(173 180 187)"
         }
         if (!`{{ $myAuth->hasPermission('laporanpiutanggiro', 'report') }}`) {
-            $('#btnPreview').prop('disabled', true)
-            $('#btnPreview').css(css_property);
+            $('#btnEkspor').prop('disabled', true)
+            $('#btnEkspor').css(css_property);
         }
 
         if (!`{{ $myAuth->hasPermission('laporanpiutanggiro', 'export') }}`) {
-            $('#btnExport').prop('disabled', true)
-            $('#btnExport').css(css_property);
+            $('#btnEkspor').prop('disabled', true)
+            $('#btnEkspor').css(css_property);
         }
 
     })
