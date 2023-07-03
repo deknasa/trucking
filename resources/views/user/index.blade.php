@@ -80,11 +80,18 @@
                                 name: 'name',
                                 align: 'left'
                             },
+                             {
+                                label: 'EMAIL',
+                                name: 'email',
+                                align: 'left'
+                            },
                             {
                                 label: 'DASHBOARD',
                                 name: 'dashboard',
                                 align: 'left'
                             },
+                          
+                           
 
                             // {
                             //   label: 'ID KARYAWAN',
@@ -164,6 +171,7 @@
                                     return ` title="${statusAktif.MEMO}"`
                                 }
                             },
+                            
                             {
                                 label: 'MODIFIEDBY',
                                 name: 'modifiedby',
