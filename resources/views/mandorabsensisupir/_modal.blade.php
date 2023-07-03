@@ -503,7 +503,8 @@
       supir.attr('readonly', true)
       supir.parents('.input-group').find('.input-group-append').hide()
       supir.parents('.input-group').find('.button-clear').hide()
-
+      supir.val('');
+      $('#crudForm [name=supir_id]').val('');
 
     } else {
       supir.attr('readonly', false)
@@ -564,6 +565,7 @@
         element.val('')
         $(`#crudForm [name="absen_id"]`).first().val('')
         element.data('currentValue', element.val())
+        kodeabsen=0
         setSupirEnable()
       }
     })
