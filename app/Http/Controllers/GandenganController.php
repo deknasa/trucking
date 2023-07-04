@@ -195,11 +195,15 @@ class GandenganController extends MyController
                 'index' => 'id',
             ],
             [
-                'label' => 'Gandengan',
+                'label' => 'GANDENGAN',
                 'index' => 'kodegandengan',
             ],
             [
-                'label' => 'Keterangan',
+                'label' => 'NO POLISI',
+                'index' => 'trado',
+            ],
+            [
+                'label' => 'KETERANGAN',
                 'index' => 'keterangan',
             ],
             [

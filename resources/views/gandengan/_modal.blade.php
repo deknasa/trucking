@@ -43,6 +43,18 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
+                  No Polisi <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="hidden" name="trado_id">
+                <input type="text" name="trado" class="form-control trado-lookup">
+              </div>
+            </div>
+
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   Jumlah BAN <span class="text-danger">*</span>
                 </label>
               </div>
@@ -244,6 +256,7 @@
             $('.modal-loader').addClass('d-none')
           })
       })
+      initLookup()
   }
 
   function editGandengan(gandenganId) {
@@ -277,6 +290,7 @@
             $('.modal-loader').addClass('d-none')
           })
       })
+      initLookup()
   }
 
   function deleteGandengan(gandenganId) {
@@ -339,6 +353,63 @@
         }
       })
     }
+  }
+
+  function initLookup() {
+    if (!$('.trado-lookup').data('hasLookup')) {
+      $('.trado-lookup').lookup({
+        title: 'trado Lookup',
+        fileName: 'trado',
+        beforeProcess: function(test) {
+          // var levelcoa = $(`#levelcoa`).val();
+          this.postData = {
+
+            Aktif: 'AKTIF',
+          }
+        },
+        onSelectRow: (trado, element) => {
+          $('#crudForm [name=trado_id]').first().val(trado.id)
+          element.val(trado.kodetrado)
+          element.data('currentValue', element.val())
+          console.log(trado)
+        },
+      
+        onCancel: (element) => {
+          element.val(element.data('currentValue'))
+        },
+        onClear: (element) => {
+          $('#crudForm [name=trado_id]').first().val('')
+          element.val('')
+          element.data('currentValue', element.val())
+        }
+      })
+    }
+    // if (!$('.supir-lookup').data('hasLookup')) {
+    //   $('.supir-lookup').lookup({
+    //     title: 'Supir Lookup',
+    //     fileName: 'supir',
+    //     beforeProcess: function(test) {
+    //       // var levelcoa = $(`#levelcoa`).val();
+    //       this.postData = {
+
+    //         Aktif: 'AKTIF',
+    //       }
+    //     },
+    //     onSelectRow: (supir, element) => {
+    //       $('#crudForm [name=supir_id]').first().val(supir.id)
+    //       element.val(supir.namasupir)
+    //       element.data('currentValue', element.val())
+    //     },
+    //     onCancel: (element) => {
+    //       element.val(element.data('currentValue'))
+    //     },
+    //     onClear: (element) => {
+    //       $('#crudForm [name=supir_id]').first().val('')
+    //       element.val('')
+    //       element.data('currentValue', element.val())
+    //     }
+    //   })
+    // }
   }
 
   const setStatusAktifOptions = function(relatedForm) {

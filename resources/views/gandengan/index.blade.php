@@ -54,6 +54,11 @@
                                 align: 'left'
                             },
                             {
+                                label: 'NO POLISI',
+                                name: 'trado',
+                                align: 'left'
+                            },
+                            {
                                 label: 'JLH BAN',
                                 name: 'jumlahroda',
                             },
