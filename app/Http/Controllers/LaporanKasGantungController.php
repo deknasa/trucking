@@ -41,7 +41,7 @@ class LaporanKasGantungController extends MyController
           
         $data = $header['data'];
         $user = Auth::user();
-      
+    //   dd($data);
         return view('reports.laporankasgantung', compact('data', 'user', 'detailParams'));
     }
 
