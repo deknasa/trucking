@@ -10,6 +10,8 @@ use App\Http\Controllers\ApprovalInvoiceHeaderController;
 
 use App\Http\Controllers\ApprovalSupirGambarController;
 use App\Http\Controllers\ApprovalSupirKeteranganController;
+use App\Http\Controllers\BlackListSupirController;
+use App\Http\Controllers\TradoSupirMilikMandorController;
 use App\Http\Controllers\BukaAbsensiController;
 use App\Http\Controllers\SuratPengantarApprovalInputTripController;
 use App\Http\Controllers\TutupBukuController;
@@ -377,6 +379,12 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('approvalsupirketerangan/index', [ApprovalSupirKeteranganController::class,'index']);
     Route::resource('approvalsupirketerangan', ApprovalSupirKeteranganController::class);
 
+    Route::get('blacklistsupir/index', [BlackListSupirController::class,'index']);
+    Route::resource('blacklistsupir', BlackListSupirController::class);
+    
+    Route::get('tradosupirmilikmandor/index', [TradoSupirMilikMandorController::class,'index']);
+    Route::resource('tradosupirmilikmandor', TradoSupirMilikMandorController::class);
+    
     Route::get('bukaabsensi/index', [BukaAbsensiController::class,'index']);
     Route::resource('bukaabsensi', BukaAbsensiController::class);
     Route::resource('suratpengantarapprovalinputtrip', SuratPengantarApprovalInputTripController::class);
