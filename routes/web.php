@@ -9,6 +9,7 @@ use App\Http\Controllers\ApprovalTransaksiHeaderController;
 use App\Http\Controllers\ApprovalInvoiceHeaderController;
 
 use App\Http\Controllers\ApprovalSupirGambarController;
+use App\Http\Controllers\ApprovalSupirKeteranganController;
 use App\Http\Controllers\BukaAbsensiController;
 use App\Http\Controllers\SuratPengantarApprovalInputTripController;
 use App\Http\Controllers\TutupBukuController;
@@ -63,6 +64,7 @@ use App\Http\Controllers\NotaDebetHeaderController;
 
 use App\Http\Controllers\ApprovalBukaCetakController;
 use App\Http\Controllers\ApprovalTradoGambarController;
+use App\Http\Controllers\ApprovalTradoKeteranganController;
 use App\Http\Controllers\ExportLaporanDepositoController;
 use App\Http\Controllers\ExportLaporanKasGantungController;
 use App\Http\Controllers\ExportLaporanKasHarianController;
@@ -372,6 +374,9 @@ Route::middleware(['auth','authorized'])->group(function () {
     
     Route::get('approvalsupirgambar/index', [ApprovalSupirGambarController::class,'index']);
     Route::resource('approvalsupirgambar', ApprovalSupirGambarController::class);
+
+    Route::get('approvalsupirketerangan/index', [ApprovalSupirKeteranganController::class,'index']);
+    Route::resource('approvalsupirketerangan', ApprovalSupirKeteranganController::class);
 
     Route::get('bukaabsensi/index', [BukaAbsensiController::class,'index']);
     Route::resource('bukaabsensi', BukaAbsensiController::class);
@@ -1384,6 +1389,10 @@ Route::middleware(['auth','authorized'])->group(function () {
 
     Route::get('approvaltradogambar/index', [ApprovalTradoGambarController::class, 'index']);
     Route::resource('approvaltradogambar', ApprovalTradoGambarController::class);
+    
+    Route::get('approvaltradoketerangan/index', [ApprovalTradoKeteranganController::class, 'index']);
+    Route::resource('approvaltradoketerangan', ApprovalTradoKeteranganController::class);
+    
     Route::get('ubahpassword/index', [UbahPasswordController::class, 'index']);
     Route::resource('ubahpassword', UbahPasswordController::class);
     
