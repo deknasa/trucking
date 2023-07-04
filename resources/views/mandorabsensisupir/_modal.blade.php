@@ -393,7 +393,10 @@
               element.val(value)
             }
           })
-
+          let kodeabsen = form.find(`[name="absen_id"]`).val()
+          if (kodeabsen !== "") {
+            getabsentrado(kodeabsen)
+          }
           if (form.data('action') === 'delete') {
             form.find('[name]').addClass('disabled')
             initDisabled()

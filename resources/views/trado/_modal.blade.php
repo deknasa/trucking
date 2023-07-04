@@ -589,7 +589,11 @@
         success: response => {
           $.each(response.data, (index, value) => {
             let element = form.find(`[name="${index}"]`).not(':file')
-
+            if (index =="isisilinder") {
+              if (value == 0) {
+                value =""
+              }
+            }
             if (element.is('select')) {
               element.val(value).trigger('change')
             } else if (element.hasClass('datepicker')) {
@@ -600,6 +604,8 @@
             } else {
               element.val(value)
             }
+            
+
           })
           resolve(response.data)
         },

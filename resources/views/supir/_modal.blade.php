@@ -486,7 +486,7 @@
             $('.modal-loader').addClass('d-none')
           })
       })
-    $('#crudForm').find('[name=tgllahir]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+    // $('#crudForm').find('[name=tgllahir]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
     $('#crudForm').find('[name=tglmasuk]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
     $('#crudForm').find('[name=tglterbitsim]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
     $('#crudForm').find('[name=tglexpsim]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
