@@ -78,26 +78,26 @@
         }
     })
 
-    // $(document).on('click', `#btnPreview`, function(event) {
-    //     let sampai = $('#crudForm').find('[name=sampai]').val()
+    $(document).on('click', `#btnPreview`, function(event) {
+        let sampai = $('#crudForm').find('[name=sampai]').val()
 
-    //     if (sampai != '') {
+        if (sampai != '') {
 
-    //         window.open(`{{ route('laporanhutangbbm.report') }}?sampai=${sampai}`)
-    //     } else {
-    //         showDialog('ISI SELURUH KOLOM')
-    //     }
-    // })
-    // $(document).on('click', `#btnEkspor`, function(event) {
-    //     let sampai = $('#crudForm').find('[name=sampai]').val()
+            window.open(`{{ route('laporanhutangbbm.report') }}?sampai=${sampai}`)
+        } else {
+            showDialog('ISI SELURUH KOLOM')
+        }
+    })
+    $(document).on('click', `#btnEkspor`, function(event) {
+        let sampai = $('#crudForm').find('[name=sampai]').val()
 
-    //     if (sampai != '') {
+        if (sampai != '') {
 
-    //         window.open(`{{ route('laporanhutangbbm.export') }}?sampai=${sampai}`)
-    //     } else {
-    //         showDialog('ISI SELURUH KOLOM')
-    //     }
-    // })
+            window.open(`{{ route('laporanhutangbbm.export') }}?sampai=${sampai}`)
+        } else {
+            showDialog('ISI SELURUH KOLOM')
+        }
+    })
 </script>
 @endpush()
 @endsection
