@@ -213,6 +213,7 @@ use App\Http\Controllers\LaporanPemakaianBanController;
 use App\Http\Controllers\LaporanTransaksiHarianController;
 use App\Http\Controllers\DataRitasiController;
 use App\Http\Controllers\AkuntansiController;
+use App\Http\Controllers\ExportLaporanMingguanSupirController;
 use App\Http\Controllers\TypeAkuntansiController;
 use App\Http\Controllers\MainTypeAkuntansiController;
 use App\Http\Controllers\LaporanJurnalUmumController;
@@ -1253,6 +1254,7 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::resource('laporanorderpembelian', LaporanOrderPembelianController::class);
 
     Route::get('laporanneraca/report', [LaporanNeracaController::class, 'report'])->name('laporanneraca.report');
+    Route::get('laporanneraca/export', [LaporanNeracaController::class, 'export'])->name('laporanneraca.export');
     Route::get('laporanneraca/index', [LaporanNeracaController::class, 'index']);
     Route::resource('laporanneraca', LaporanNeracaController::class);
     
@@ -1340,6 +1342,10 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('exportlaporankasharian/export', [ExportLaporanKasHarianController::class, 'export'])->name('exportlaporankasharian.export');
     Route::get('exportlaporankasharian/index', [ExportLaporanKasHarianController::class, 'index']);
     Route::resource('exportlaporankasharian', ExportLaporanKasHarianController::class);
+
+    Route::get('exportlaporanmingguansupir/export', [ExportLaporanMingguanSupirController::class, 'export'])->name('exportlaporanmingguansupir.export');
+    Route::get('exportlaporanmingguansupir/index', [ExportLaporanMingguanSupirController::class, 'index']);
+    Route::resource('exportlaporanmingguansupir', ExportLaporanMingguanSupirController::class);
     
     Route::get('pindahbuku/index', [PindahBukuController::class, 'index']);
     Route::resource('pindahbuku', PindahBukuController::class);

@@ -26,9 +26,12 @@ class LaporanKasHarianController extends Controller
     public function export(Request $request): void
     {
         $detailParams = [
-            'sampai' => $request->sampai,
-            'jenis' => $request->jenis,
+            'periode' => $request->periode,
+            'bank_id' => $request->bank_id,
+            'bank' => $request->bank
         ];
+
+        // dd(config('app.api_url') . 'exportlaporankasharian/export', $detailParams);
 
         $header = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
@@ -36,6 +39,7 @@ class LaporanKasHarianController extends Controller
             ->get(config('app.api_url') . 'exportlaporankasharian/export', $detailParams);
 
         $data = $header['data'];
+       
         $dataDua = $header['dataDua'];
 
 
