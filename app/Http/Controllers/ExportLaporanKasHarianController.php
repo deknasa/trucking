@@ -32,7 +32,10 @@ class ExportLaporanKasHarianController extends MyController
         $detailParams = [
             'periode' => $request->periode,
             'bank_id' => $request->bank_id,
+            'bank' => $request->bank
         ];
+
+       
         $header = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
@@ -40,12 +43,8 @@ class ExportLaporanKasHarianController extends MyController
 
          
 
-
-        // dd(config('app.api_url') . 'exportlaporankasharian/export', $detailParams);
-
         $data = $header['data'];
 
-        dd($data);
 
         date_default_timezone_set("Asia/Jakarta");
 
