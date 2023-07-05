@@ -32,7 +32,7 @@
                 </div>
                 <div class="modal-footer">
                     <div class="mr-auto">
-                        <button type="button" id="btnSubmitTransfer" class="btn btn-primary">SIMPAN</button>
+                        <button type="button" id="btnSubmitTransfer" class="btn btn-primary"><i class="fa fa-upload"></i> TRANSFER</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">BATAL</button>
                     </div>
                 </div>
@@ -124,32 +124,21 @@
                 data: data,
                 success: response => {
 
-                    id = response.data.id
                     $('#transferModal').find('#crudForm').trigger('reset')
                     $('#transferModal').modal('hide')
-                    $('#jqGrid').jqGrid('setGridParam', {
-                        page: response.data.page
-                    }).trigger('reloadGrid');
+                    $('#jqGrid').jqGrid().trigger('reloadGrid');
                     selectedRows = []
 
-                    if (response.data.grp == 'FORMAT') {
-                        updateFormat(response.data)
-                    }
                 },
                 error: error => {
                     if (error.status === 422) {
                         $('.is-invalid').removeClass('is-invalid')
                         $('.invalid-feedback').remove()
-
+                        console.log(error)
                         setErrorMessages(form, error.responseJSON.errors);
                     } else {
-                        if (error.responseJSON.errors) {
-                            showDialog(error.statusText, error.responseJSON.errors.join('<hr>'))
-                        } else if (error.responseJSON.message) {
-                            showDialog(error.statusText, error.responseJSON.message)
-                        } else {
-                            showDialog(error.statusText, error.statusText)
-                        }
+                        let text = error.responseJSON.message.join('<br>');
+                        showDangerDialog(text)
                     }
                 },
             }).always(() => {
