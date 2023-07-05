@@ -16,23 +16,7 @@
   <script src="{{ asset('libraries/tas-lib/js/terbilang.js?version='. config('app.version')) }}"></script>
  <script type="text/javascript">
     
-    let piutangheaders = <?= json_encode($piutang); ?>
-
-    $( document ).ready(function() {
-      var statuscetak = piutangheaders.statuscetak
-      if (statuscetak == 174) {
-        $(document).on('keydown', function(e) { 
-          if((e.ctrlKey || e.metaKey) && (e.key == "p" || e.charCode == 16 || e.charCode == 112 || e.keyCode == 80) ){
-            alert("Document Sudah Pernah Dicetak ");
-            e.cancelBubble = true;
-            e.preventDefault();
-            e.stopImmediatePropagation();
-          }  
-        });  
-      }
-
-
-    });
+    let piutangheader = <?= json_encode($piutang); ?>
 
     function Start() {
       Stimulsoft.Base.StiLicense.loadFromFile("{{ asset($stireport_path . 'license.php') }}");
@@ -44,8 +28,9 @@
       var viewer = new Stimulsoft.Viewer.StiViewer(viewerOptions, "StiViewer", false)
       var report = new Stimulsoft.Report.StiReport()
 
-      var statuscetak = piutangheaders.statuscetak
-      if (statuscetak == 174) {
+      var statuscetak = piutangheader.statuscetak_id
+      var sudahcetak = piutangheader['combo']['id']
+      if (statuscetak == sudahcetak) {
         viewerOptions.toolbar.showPrintButton = false;
         viewerOptions.toolbar.showSaveButton = false;
         viewerOptions.toolbar.showOpenButton = false;
@@ -70,14 +55,13 @@
 
       report.regData(dataSet.dataSetName, '', dataSet)
       report.dictionary.synchronize()
-      designer.report = report;
-      designer.renderHtml('content');
+      // designer.report = report;
+      // designer.renderHtml('content');
       viewer.report = report
-      
       viewer.onPrintReport = function (event) {
         triggerEvent(window, 'afterprint');
       }
-      
+
       function triggerEvent(el, type) {
         // IE9+ and other modern browsers
         if ('createEvent' in document) {
@@ -93,10 +77,8 @@
       }
 
       window.addEventListener('afterprint', (event) => {
-        
-        var id = piutangheaders.id
+        var id = piutangheader.id
         var apiUrl = `{{ config('app.api_url') }}`;
-        
         $.ajax({
           url: `${apiUrl}piutangheader/${id}/printreport`,
           method: 'GET',
@@ -105,14 +87,27 @@
             Authorization: `Bearer {{ session('access_token') }}`
           },
           success: response => {
-            console.log(response);
-            location.reload()
+            window.close();
           }
-    
         })
-          
       });
     }
+  </script>
+  <script type="text/javascript">
+    $( document ).ready(function() {
+      var statuscetak = piutangheader.statuscetak_id
+      var sudahcetak = piutangheader['combo']['id']
+      if (statuscetak == sudahcetak) {
+        $(document).on('keydown', function(e) { 
+          if((e.ctrlKey || e.metaKey) && (e.key == "p" || e.charCode == 16 || e.charCode == 112 || e.keyCode == 80) ){
+            alert("Document Sudah Pernah Dicetak ");
+            e.cancelBubble = true;
+            e.preventDefault();
+            e.stopImmediatePropagation();
+          }  
+        });  
+      }
+    }); 
   </script>
   <style>
     .stiJsViewerPage {
@@ -120,11 +115,7 @@
     }
   </style>
 </head>
-
 <body onLoad="Start()">
-
   <div id="content"></div>
-
 </body>
-
 </html>

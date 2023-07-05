@@ -250,7 +250,7 @@ class AbsensiSupirHeaderController extends MyController
                 'index' => 'nobukti',
             ],
             [
-                'label' => 'Tanggal Bukti',
+                'label' => 'Tanggal',
                 'index' => 'tglbukti',
             ],
             [

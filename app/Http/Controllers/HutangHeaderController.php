@@ -93,15 +93,28 @@ class HutangHeaderController extends MyController
         return $noBukti;
     }
 
+    public function combo($aksi)
+    {
+        $status = [
+            'status' => $aksi,
+            'grp' => 'STATUSCETAK',
+            'subgrp' => 'STATUSCETAK',
+        ]; 
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'user/combostatus',$status);
+        return $response['data'];
+    }
+
     public function report(Request $request)
     {
         
         //FETCH HEADER
         $id = $request->id;
         $hutang = Http::withHeaders($request->header())
-        ->withOptions(['verify' => false])
-        ->withToken(session('access_token'))
-        ->get(config('app.api_url') .'hutangheader/'.$id.'/export')['data'];
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') .'hutangheader/'.$id.'/export')['data'];
 
         //FETCH DETAIL
         $detailParams = [
@@ -109,10 +122,13 @@ class HutangHeaderController extends MyController
             'hutang_id' => $request->id,
         ];
         $hutang_details = Http::withHeaders($request->header())
-        ->withOptions(['verify' => false])
-        ->withToken(session('access_token'))
-        ->get(config('app.api_url') .'hutangdetail', $detailParams)['data'];
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') .'hutangdetail', $detailParams)['data'];
 
+        $combo = $this->combo('list');
+        $key = array_search('CETAK', array_column( $combo, 'parameter')); 
+        $hutang["combo"] =  $combo[$key];
         return view('reports.hutang', compact('hutang','hutang_details'));
     }
 

@@ -79,35 +79,21 @@ class NotaKreditHeaderController extends MyController
             ->get(config('app.api_url') . 'notakreditheader/'.$id);
     }
 
-    // OLD REPORT
-    // public function report(Request $request,$id)
-    // {
-    //     $params = [
-    //         'offset' => $request->dari - 1,
-    //         'rows' => $request->sampai - $request->dari + 1,
-    //         'withRelations' => true,
-
-    //     ];
-
-    //     $notakredit = $this->find($params,$id)['data'];
-    //     $data = $notakredit;
-    //     $i =0;
-        
-    //         $response = Http::withHeaders($this->httpHeaders)
-    //         ->withOptions(['verify' => false])
-    //         ->withToken(session('access_token'))
-    //         ->get(config('app.api_url') . 'notakredit_detail', ['notakredit_id' => $notakredit['id']]);
-
-
-    //         $data["details"] =$response['data'];
-    //         $data["user"] = Auth::user();
-    //     $notakreditheaders = $data;
-    //     return view('reports.notakreditheader', compact('notakreditheaders'));
-    // }
+    public function combo($aksi)
+    {
+        $status = [
+            'status' => $aksi,
+            'grp' => 'STATUSCETAK',
+            'subgrp' => 'STATUSCETAK',
+        ]; 
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'user/combostatus',$status);
+        return $response['data'];
+    }
 
     public function report(Request $request)
     {
-
         //FETCH HEADER
         $id = $request->id;
         $notakredit = Http::withHeaders($request->header())
@@ -123,8 +109,11 @@ class NotaKreditHeaderController extends MyController
        $notakredit_detail = Http::withHeaders(request()->header())
            ->withOptions(['verify' => false])
            ->withToken(session('access_token'))
-           ->get(config('app.api_url') .'notakredit_detail', $detailParams)['data'];
+           ->get(config('app.api_url') .'notakreditdetail', $detailParams)['data'];
 
+        $combo = $this->combo('list');
+        $key = array_search('CETAK', array_column( $combo, 'parameter')); 
+        $notakredit["combo"] =  $combo[$key];
         return view('reports.notakreditheader', compact('notakredit','notakredit_detail'));
     }
     /**
@@ -146,7 +135,7 @@ class NotaKreditHeaderController extends MyController
         $notakredit_detail = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') .'notakredit_detail', $detailParams)['data'];
+            ->get(config('app.api_url') .'notakreditdetail', $detailParams)['data'];
 
         $tglBukti = $notakredit["tglbukti"];
         $timeStamp = strtotime($tglBukti);

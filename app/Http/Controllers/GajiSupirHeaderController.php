@@ -117,6 +117,7 @@ class GajiSupirHeaderController extends MyController
         $combo = $this->combo('list');
         $key = array_search('CETAK', array_column( $combo, 'parameter')); 
         $gajisupir["combo"] =  $combo[$key];
+
         return view('reports.gajisupir', compact('gajisupir','gajisupir_details'));
     }
 
@@ -317,6 +318,8 @@ class GajiSupirHeaderController extends MyController
             
             foreach ($detail_columns as $detail_columns_index => $detail_column) {
                 $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
+                $sheet->getStyle("A$detail_table_header_row:P$detail_table_header_row")->getFont()->setBold(true);
+                $sheet->getStyle("A$detail_table_header_row:P$detail_table_header_row")->getAlignment()->setHorizontal('center');
             }
             $response_detail['gajisupirs'] = number_format((float) $response_detail['gajisupir'], '2', '.', ',');
             $response_detail['gajikeneks'] = number_format((float) $response_detail['gajikenek'], '2', '.', ',');

@@ -90,22 +90,26 @@ class InvoiceExtraHeaderController extends MyController
     public function report(Request $request)
     {
         
-         //FETCH HEADER
-         $id = $request->id;
-         $invoiceextra = Http::withHeaders($request->header())
-         ->withOptions(['verify' => false])
-         ->withToken(session('access_token'))
-         ->get(config('app.api_url') .'invoiceextraheader/'.$id.'/export')['data'];
- 
-         //FETCH DETAIL
-         $detailParams = [
-             'forReport' => true,
-             'invoiceextra_id' => $id,
-         ];
-         $invoiceextra_details = Http::withHeaders($request->header())
-         ->withOptions(['verify' => false])
-         ->withToken(session('access_token'))
-         ->get(config('app.api_url') .'invoiceextradetail', $detailParams)['data'];
+        //FETCH HEADER
+        $id = $request->id;
+        $invoiceextra = Http::withHeaders($request->header())
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') .'invoiceextraheader/'.$id.'/export')['data'];
+
+        //FETCH DETAIL
+        $detailParams = [
+            'forReport' => true,
+            'invoiceextra_id' => $id,
+        ];
+        $invoiceextra_details = Http::withHeaders($request->header())
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') .'invoiceextradetail', $detailParams)['data'];
+            
+        $combo = $this->combo('list');
+        $key = array_search('CETAK', array_column( $combo, 'parameter')); 
+        $invoiceextra["combo"] =  $combo[$key];
         return view('reports.invoiceextraheader', compact('invoiceextra', 'invoiceextra_details'));
     }
 
@@ -127,7 +131,6 @@ class InvoiceExtraHeaderController extends MyController
         ->withOptions(['verify' => false])
         ->withToken(session('access_token'))
         ->get(config('app.api_url') .'invoiceextradetail', $detailParams)['data'];
-        //dd($invoiceextra_details);
 
         $tglBukti = $invoiceextra["tglbukti"];
         $timeStamp = strtotime($tglBukti);
@@ -228,6 +231,8 @@ class InvoiceExtraHeaderController extends MyController
             
             foreach ($detail_columns as $detail_columns_index => $detail_column) {
                 $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
+                $sheet->getStyle("A$detail_table_header_row:C$detail_table_header_row")->getFont()->setBold(true);
+                $sheet->getStyle("A$detail_table_header_row:C$detail_table_header_row")->getAlignment()->setHorizontal('center');
             }
             $response_detail['nominals'] = number_format((float) $response_detail['nominal'], '2', '.', ',');
          
@@ -264,18 +269,14 @@ class InvoiceExtraHeaderController extends MyController
 
     public function combo($aksi)
     {
-
         $status = [
             'status' => $aksi,
             'grp' => 'STATUSCETAK',
             'subgrp' => 'STATUSCETAK',
-        ];
-                
+        ]; 
         $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'user/combostatus',$status);
-
         return $response['data'];
     }
-
 }

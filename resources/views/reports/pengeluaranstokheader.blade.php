@@ -13,13 +13,12 @@
   <script type="text/javascript" src="{{ asset($stireport_path . 'scripts/stimulsoft.viewer.js') }}"></script>
   <script type="text/javascript" src="{{ asset($stireport_path . 'scripts/stimulsoft.designer.js') }}"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
-    <script src="{{ asset('libraries/tas-lib/js/terbilang.js?version='. config('app.version')) }}"></script>
-
+  <script src="{{ asset('libraries/tas-lib/js/terbilang.js?version='. config('app.version')) }}"></script>
 
   <script type="text/javascript">
     var pengeluaranstokheaders = {!! json_encode($pengeluaranstokheaders); !!}
     var parameterStatusFormat = {!! json_encode($parameterStatusFormat); !!}
-    console.log(pengeluaranstokheaders.statusformat);
+
     function Start() {
       Stimulsoft.Base.StiLicense.loadFromFile("{{ asset($stireport_path . 'license.php') }}");
       var viewerOptions = new Stimulsoft.Viewer.StiViewerOptions()
@@ -47,6 +46,7 @@
 
       viewer.renderHtml('content')
 
+      console.log(pengeluaranstokheaders.statusformat)
       switch (pengeluaranstokheaders.statusformat) {
         case '135':
         //spk
@@ -56,7 +56,7 @@
         //retur
         report.loadFile(`{{ asset('public/reports/ReportPengeluaranStokRTR.mrt') }}`)
           break;
-        case '102':
+        case '221':
         //KOr
         report.loadFile(`{{ asset('public/reports/ReportPengeluaranStokKOR.mrt') }}`)
         
@@ -76,8 +76,8 @@
       report.dictionary.synchronize()
 
       viewer.report = report
-      // designer.renderHtml("content")
-      // designer.report = report
+      designer.renderHtml("content")
+      designer.report = report
       
       viewer.onPrintReport = function (event) {
         triggerEvent(window, 'afterprint');

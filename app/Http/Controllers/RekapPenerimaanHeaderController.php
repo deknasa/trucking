@@ -80,6 +80,19 @@ class RekapPenerimaanHeaderController extends MyController
             ->get(config('app.api_url') . 'rekappenerimaanheader/'.$id);
     }
 
+    public function combo($aksi)
+    {
+        $status = [
+            'status' => $aksi,
+            'grp' => 'STATUSCETAK',
+            'subgrp' => 'STATUSCETAK',
+        ]; 
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'user/combostatus',$status);
+        return $response['data'];
+    }
+
     /**
      * @ClassName
      */
@@ -102,6 +115,9 @@ class RekapPenerimaanHeaderController extends MyController
            ->withToken(session('access_token'))
            ->get(config('app.api_url') .'rekappenerimaandetail', $detailParams)['data'];
 
+        $combo = $this->combo('list');
+        $key = array_search('CETAK', array_column( $combo, 'parameter')); 
+        $rekappenerimaan["combo"] =  $combo[$key];
         return view('reports.rekappenerimaanheader', compact('rekappenerimaan', 'rekappenerimaan_details'));
     }
 

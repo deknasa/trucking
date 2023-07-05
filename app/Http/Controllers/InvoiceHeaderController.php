@@ -112,6 +112,19 @@ class InvoiceHeaderController extends MyController
         return $response['data'];
     }
 
+    public function combo($aksi)
+    {
+        $status = [
+            'status' => $aksi,
+            'grp' => 'STATUSCETAK',
+            'subgrp' => 'STATUSCETAK',
+        ]; 
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'user/combostatus',$status);
+        return $response['data'];
+    }
+
 
     public function report(Request $request)
     {
@@ -131,6 +144,9 @@ class InvoiceHeaderController extends MyController
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'invoicedetail', $detailParams)['data'];
 
+        $combo = $this->combo('list');
+        $key = array_search('CETAK', array_column( $combo, 'parameter')); 
+        $invoices["combo"] =  $combo[$key];
         return view('reports.invoice', compact('invoice_detail', 'invoices'));
     }
 
@@ -302,6 +318,8 @@ class InvoiceHeaderController extends MyController
 
             foreach ($detail_columns as $detail_columns_index => $detail_column) {
                 $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
+                $sheet->getStyle("A$detail_table_header_row:I$detail_table_header_row")->getFont()->setBold(true);
+                $sheet->getStyle("A$detail_table_header_row:I$detail_table_header_row")->getAlignment()->setHorizontal('center');
             }
             $response_detail['omsets'] = number_format((float) $response_detail['omset'], '2', '.', ',');
             $response_detail['extras'] = number_format((float) $response_detail['extra'], '2', '.', ',');

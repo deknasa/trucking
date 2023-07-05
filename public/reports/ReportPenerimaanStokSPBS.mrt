@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "1db676e430a1b317f7406ca3285e0a50",
+  "ReportGuid": "3e382683a85267c0fcb71c7b2d922003",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "ReportPenerimaanStokSPBS.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1687847897000+0700)/",
+  "ReportChanged": "/Date(1688453288000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -1627,7 +1627,7 @@
               },
               "MaxNumberOfLines": 6,
               "Text": {
-                "Value": "{penerimaanstokheader_details.persentasediscount}"
+                "Value": "{penerimaanstokheader_details.nominaldiscount}"
               },
               "HorAlignment": "Right",
               "VertAlignment": "Center",
