@@ -1,710 +1,714 @@
 @extends('layouts.master')
 
 @section('content')
-    <!-- Grid -->
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-12">
-                <table id="jqGrid"></table>
-            </div>
+<!-- Grid -->
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <table id="jqGrid"></table>
         </div>
     </div>
+</div>
 
-    @include('akunpusat._modal')
+@include('akunpusat._modal')
 
-    @include('akunpusat.transfer._modal')
-    @push('scripts')
-        <script>
-            let indexRow = 0;
-            let page = 0;
-            let pager = '#jqGridPager'
-            let popup = "";
-            let id = "";
-            let triggerClick = true;
-            let highlightSearch;
-            let totalRecord
-            let limit
-            let postData
-            let sortname = 'coa'
-            let sortorder = 'asc'
-            let autoNumericElements = []
-            let rowNum = 10
+@include('akunpusat.transfer._modal')
+@push('scripts')
+<script>
+    let indexRow = 0;
+    let page = 0;
+    let pager = '#jqGridPager'
+    let popup = "";
+    let id = "";
+    let triggerClick = true;
+    let highlightSearch;
+    let totalRecord
+    let limit
+    let postData
+    let sortname = 'coa'
+    let sortorder = 'asc'
+    let autoNumericElements = []
+    let rowNum = 10
 
-            $(document).ready(function() {
-                $("#jqGrid").jqGrid({
-                        url: `${apiUrl}akunpusat`,
-                        mtype: "GET",
-                        styleUI: 'Bootstrap4',
-                        iconSet: 'fontAwesome',
-                        datatype: "json",
-                        colModel: [{
-                                label: 'ID',
-                                name: 'id',
-                                width: '50px',
-                                search: false,
-                                hidden: true
-                            },
-                            {
-                                label: 'KODE PERKIRAAN',
-                                name: 'coa',
-                            },
-                            {
-                                label: 'keterangan kode perkiraan',
-                                width: 220,
-                                name: 'keterangancoa',
-                            },
-                            {
-                                label: 'TYPE',
-                                name: 'type',
-                            },
-                            {
-                                label: 'AKUNTANSI',
-                                name: 'akuntansi',
-                            },
-                            {
-                                label: 'LEVEL',
-                                name: 'level',
-                            },
-                            {
-                                label: 'STATUS',
-                                name: 'statusaktif',
-                                stype: 'select',
-                                searchoptions: {
-                                    value: `<?php
+    $(document).ready(function() {
+        $("#jqGrid").jqGrid({
+                url: `${apiUrl}akunpusat`,
+                mtype: "GET",
+                styleUI: 'Bootstrap4',
+                iconSet: 'fontAwesome',
+                datatype: "json",
+                colModel: [{
+                        label: 'ID',
+                        name: 'id',
+                        width: '50px',
+                        search: false,
+                        hidden: true
+                    },
+                    {
+                        label: 'KODE PERKIRAAN',
+                        name: 'coa',
+                    },
+                    {
+                        label: 'keterangan kode perkiraan',
+                        width: 220,
+                        name: 'keterangancoa',
+                    },
+                    {
+                        label: 'TYPE',
+                        name: 'type',
+                    },
+                    {
+                        label: 'AKUNTANSI',
+                        name: 'akuntansi',
+                    },
+                    {
+                        label: 'LEVEL',
+                        name: 'level',
+                    },
+                    {
+                        label: 'STATUS',
+                        name: 'statusaktif',
+                        stype: 'select',
+                        searchoptions: {
+                            value: `<?php
                                     $i = 1;
-                                    
-                                    foreach ($data['comboaktif'] as $status):
+
+                                    foreach ($data['comboaktif'] as $status) :
                                         echo "$status[param]:$status[parameter]";
                                         if ($i !== count($data['comboaktif'])) {
                                             echo ';';
                                         }
                                         $i++;
                                     endforeach;
-                                    
+
                                     ?>
               `,
-                                    dataInit: function(element) {
-                                        $(element).select2({
-                                            width: 'resolve',
-                                            theme: "bootstrap4"
-                                        });
-                                    }
-                                },
-                                formatter: (value, options, rowData) => {
-                                    let statusAktif = JSON.parse(value)
+                            dataInit: function(element) {
+                                $(element).select2({
+                                    width: 'resolve',
+                                    theme: "bootstrap4"
+                                });
+                            }
+                        },
+                        formatter: (value, options, rowData) => {
+                            let statusAktif = JSON.parse(value)
 
-                                    let formattedValue = $(`
+                            let formattedValue = $(`
                 <div class="badge" style="background-color: ${statusAktif.WARNA}; color: #fff;">
                   <span>${statusAktif.SINGKATAN}</span>
                 </div>
               `)
 
-                                    return formattedValue[0].outerHTML
-                                },
-                                cellattr: (rowId, value, rowObject) => {
-                                    let statusAktif = JSON.parse(rowObject.statusaktif)
+                            return formattedValue[0].outerHTML
+                        },
+                        cellattr: (rowId, value, rowObject) => {
+                            let statusAktif = JSON.parse(rowObject.statusaktif)
 
-                                    return ` title="${statusAktif.MEMO}"`
-                                }
-                            },
-                            {
-                                label: 'PARENT',
-                                name: 'parent',
-                            },
-                            {
-                                label: 'status kode perkiraan',
-                                width: 210,
-                                name: 'statuscoa',
-                                align: 'left',
-                                stype: 'select',
-                                searchoptions: {
+                            return ` title="${statusAktif.MEMO}"`
+                        }
+                    },
+                    {
+                        label: 'PARENT',
+                        name: 'parent',
+                    },
+                    {
+                        label: 'status kode perkiraan',
+                        width: 210,
+                        name: 'statuscoa',
+                        align: 'left',
+                        stype: 'select',
+                        searchoptions: {
 
-                                    value: `<?php
+                            value: `<?php
                                     $i = 1;
-                                    
-                                    foreach ($data['combocoa'] as $status):
+
+                                    foreach ($data['combocoa'] as $status) :
                                         echo "$status[param]:$status[parameter]";
                                         if ($i !== count($data['combocoa'])) {
                                             echo ';';
                                         }
                                         $i++;
                                     endforeach;
-                                    
+
                                     ?>
               `,
-                                    dataInit: function(element) {
-                                        $(element).select2({
-                                            width: 'resolve',
-                                            theme: "bootstrap4"
-                                        });
-                                    }
-                                },
-                                formatter: (value, options, rowData) => {
-                                    let statusCoa = JSON.parse(value)
+                            dataInit: function(element) {
+                                $(element).select2({
+                                    width: 'resolve',
+                                    theme: "bootstrap4"
+                                });
+                            }
+                        },
+                        formatter: (value, options, rowData) => {
+                            let statusCoa = JSON.parse(value)
 
-                                    let formattedValue = $(`
+                            let formattedValue = $(`
                 <div class="badge" style="background-color: ${statusCoa.WARNA}; color: #fff;">
                   <span>${statusCoa.SINGKATAN}</span>
                 </div>
               `)
 
-                                    return formattedValue[0].outerHTML
-                                },
-                                cellattr: (rowId, value, rowObject) => {
-                                    let statusCoa = JSON.parse(rowObject.statuscoa)
+                            return formattedValue[0].outerHTML
+                        },
+                        cellattr: (rowId, value, rowObject) => {
+                            let statusCoa = JSON.parse(rowObject.statuscoa)
 
-                                    return ` title="${statusCoa.MEMO}"`
-                                }
-                            },
-                            {
-                                label: 'STATUS ACCOUNT PAYABLE',
-                                width: 210,
-                                name: 'statusaccountpayable',
-                                align: 'left',
-                                stype: 'select',
-                                searchoptions: {
+                            return ` title="${statusCoa.MEMO}"`
+                        }
+                    },
+                    {
+                        label: 'STATUS ACCOUNT PAYABLE',
+                        width: 210,
+                        name: 'statusaccountpayable',
+                        align: 'left',
+                        stype: 'select',
+                        searchoptions: {
 
-                                    value: `<?php
+                            value: `<?php
                                     $i = 1;
-                                    
-                                    foreach ($data['comboaccountpayable'] as $status):
+
+                                    foreach ($data['comboaccountpayable'] as $status) :
                                         echo "$status[param]:$status[parameter]";
                                         if ($i !== count($data['comboaccountpayable'])) {
                                             echo ';';
                                         }
                                         $i++;
                                     endforeach;
-                                    
+
                                     ?>
               `,
-                                    dataInit: function(element) {
-                                        $(element).select2({
-                                            width: 'resolve',
-                                            theme: "bootstrap4"
-                                        });
-                                    }
-                                },
-                                formatter: (value, options, rowData) => {
-                                    let statusAccPayable = JSON.parse(value)
+                            dataInit: function(element) {
+                                $(element).select2({
+                                    width: 'resolve',
+                                    theme: "bootstrap4"
+                                });
+                            }
+                        },
+                        formatter: (value, options, rowData) => {
+                            let statusAccPayable = JSON.parse(value)
 
-                                    let formattedValue = $(`
+                            let formattedValue = $(`
                 <div class="badge" style="background-color: ${statusAccPayable.WARNA}; color: #fff;">
                   <span>${statusAccPayable.SINGKATAN}</span>
                 </div>
               `)
 
-                                    return formattedValue[0].outerHTML
-                                },
-                                cellattr: (rowId, value, rowObject) => {
-                                    let statusAccPayable = JSON.parse(rowObject.statusaccountpayable)
+                            return formattedValue[0].outerHTML
+                        },
+                        cellattr: (rowId, value, rowObject) => {
+                            let statusAccPayable = JSON.parse(rowObject.statusaccountpayable)
 
-                                    return ` title="${statusAccPayable.MEMO}"`
-                                }
-                            },
-                            {
-                                label: 'STATUS NERACA',
-                                name: 'statusneraca',
-                                align: 'left',
-                                stype: 'select',
-                                searchoptions: {
+                            return ` title="${statusAccPayable.MEMO}"`
+                        }
+                    },
+                    {
+                        label: 'STATUS NERACA',
+                        name: 'statusneraca',
+                        align: 'left',
+                        stype: 'select',
+                        searchoptions: {
 
-                                    value: `<?php
+                            value: `<?php
                                     $i = 1;
-                                    
-                                    foreach ($data['comboneraca'] as $status):
+
+                                    foreach ($data['comboneraca'] as $status) :
                                         echo "$status[param]:$status[parameter]";
                                         if ($i !== count($data['comboneraca'])) {
                                             echo ';';
                                         }
                                         $i++;
                                     endforeach;
-                                    
+
                                     ?>
               `,
-                                    dataInit: function(element) {
-                                        $(element).select2({
-                                            width: 'resolve',
-                                            theme: "bootstrap4"
-                                        });
-                                    }
-                                },
-                                formatter: (value, options, rowData) => {
-                                    let statusNeraca = JSON.parse(value)
+                            dataInit: function(element) {
+                                $(element).select2({
+                                    width: 'resolve',
+                                    theme: "bootstrap4"
+                                });
+                            }
+                        },
+                        formatter: (value, options, rowData) => {
+                            let statusNeraca = JSON.parse(value)
 
-                                    let formattedValue = $(`
+                            let formattedValue = $(`
                 <div class="badge" style="background-color: ${statusNeraca.WARNA}; color: #fff;">
                   <span>${statusNeraca.SINGKATAN}</span>
                 </div>
               `)
 
-                                    return formattedValue[0].outerHTML
-                                },
-                                cellattr: (rowId, value, rowObject) => {
-                                    let statusNeraca = JSON.parse(rowObject.statusneraca)
+                            return formattedValue[0].outerHTML
+                        },
+                        cellattr: (rowId, value, rowObject) => {
+                            let statusNeraca = JSON.parse(rowObject.statusneraca)
 
-                                    return ` title="${statusNeraca.MEMO}"`
-                                }
-                            },
-                            {
-                                label: 'STATUS LABA RUGI',
-                                name: 'statuslabarugi',
-                                align: 'left',
-                                stype: 'select',
-                                searchoptions: {
+                            return ` title="${statusNeraca.MEMO}"`
+                        }
+                    },
+                    {
+                        label: 'STATUS LABA RUGI',
+                        name: 'statuslabarugi',
+                        align: 'left',
+                        stype: 'select',
+                        searchoptions: {
 
-                                    value: `<?php
+                            value: `<?php
                                     $i = 1;
-                                    
-                                    foreach ($data['combolabarugi'] as $status):
+
+                                    foreach ($data['combolabarugi'] as $status) :
                                         echo "$status[param]:$status[parameter]";
                                         if ($i !== count($data['combolabarugi'])) {
                                             echo ';';
                                         }
                                         $i++;
                                     endforeach;
-                                    
+
                                     ?>
               `,
-                                    dataInit: function(element) {
-                                        $(element).select2({
-                                            width: 'resolve',
-                                            theme: "bootstrap4"
-                                        });
-                                    }
-                                },
-                                formatter: (value, options, rowData) => {
-                                    let statusLabaRugi = JSON.parse(value)
+                            dataInit: function(element) {
+                                $(element).select2({
+                                    width: 'resolve',
+                                    theme: "bootstrap4"
+                                });
+                            }
+                        },
+                        formatter: (value, options, rowData) => {
+                            let statusLabaRugi = JSON.parse(value)
 
-                                    let formattedValue = $(`
+                            let formattedValue = $(`
                 <div class="badge" style="background-color: ${statusLabaRugi.WARNA}; color: #fff;">
                   <span>${statusLabaRugi.SINGKATAN}</span>
                 </div>
               `)
 
-                                    return formattedValue[0].outerHTML
-                                },
-                                cellattr: (rowId, value, rowObject) => {
-                                    let statusLabaRugi = JSON.parse(rowObject.statuslabarugi)
-
-                                    return ` title="${statusLabaRugi.MEMO}"`
-                                }
-                            },
-                            {
-                                label: 'kode perkiraan main',
-                                width: 200,
-                                name: 'coamain',
-                            },
-                            {
-                                label: 'CREATEDAT',
-                                name: 'created_at',
-                                align: 'right',
-                                formatter: "date",
-                                formatoptions: {
-                                    srcformat: "ISO8601Long",
-                                    newformat: "d-m-Y H:i:s"
-                                }
-                            },
-                            {
-                                label: 'UPDATEDAT',
-                                name: 'updated_at',
-                                align: 'right',
-                                formatter: "date",
-                                formatoptions: {
-                                    srcformat: "ISO8601Long",
-                                    newformat: "d-m-Y H:i:s"
-                                }
-                            },
-                        ],
-                        autowidth: true,
-                        shrinkToFit: false,
-                        height: 350,
-                        rowNum: rowNum,
-                        rownumbers: true,
-                        rownumWidth: 45,
-                        rowList: [10, 20, 50, 0],
-                        toolbar: [true, "top"],
-                        sortable: true,
-                        sortname: sortname,
-                        sortorder: sortorder,
-                        page: page,
-                        viewrecords: true,
-                        prmNames: {
-                            sort: 'sortIndex',
-                            order: 'sortOrder',
-                            rows: 'limit'
+                            return formattedValue[0].outerHTML
                         },
-                        jsonReader: {
-                            root: 'data',
-                            total: 'attributes.totalPages',
-                            records: 'attributes.totalRows',
-                        },
-                        loadBeforeSend: function(jqXHR) {
-                            jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+                        cellattr: (rowId, value, rowObject) => {
+                            let statusLabaRugi = JSON.parse(rowObject.statuslabarugi)
 
-                            setGridLastRequest($(this), jqXHR)
-                        },
-                        onSelectRow: function(id) {
-                            activeGrid = $(this)
-                            indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
-                            page = $(this).jqGrid('getGridParam', 'page')
-                            let limit = $(this).jqGrid('getGridParam', 'postData').limit
-                            if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
-                        },
-                        loadComplete: function(data) {
-                            changeJqGridRowListText()
-                            $(document).unbind('keydown')
-                            setCustomBindKeys($(this))
-                            initResize($(this))
+                            return ` title="${statusLabaRugi.MEMO}"`
+                        }
+                    },
+                    {
+                        label: 'kode perkiraan main',
+                        width: 200,
+                        name: 'coamain',
+                    },
+                    {
+                        label: 'CREATEDAT',
+                        name: 'created_at',
+                        align: 'right',
+                        formatter: "date",
+                        formatoptions: {
+                            srcformat: "ISO8601Long",
+                            newformat: "d-m-Y H:i:s"
+                        }
+                    },
+                    {
+                        label: 'UPDATEDAT',
+                        name: 'updated_at',
+                        align: 'right',
+                        formatter: "date",
+                        formatoptions: {
+                            srcformat: "ISO8601Long",
+                            newformat: "d-m-Y H:i:s"
+                        }
+                    },
+                ],
+                autowidth: true,
+                shrinkToFit: false,
+                height: 350,
+                rowNum: rowNum,
+                rownumbers: true,
+                rownumWidth: 45,
+                rowList: [10, 20, 50, 0],
+                toolbar: [true, "top"],
+                sortable: true,
+                sortname: sortname,
+                sortorder: sortorder,
+                page: page,
+                viewrecords: true,
+                prmNames: {
+                    sort: 'sortIndex',
+                    order: 'sortOrder',
+                    rows: 'limit'
+                },
+                jsonReader: {
+                    root: 'data',
+                    total: 'attributes.totalPages',
+                    records: 'attributes.totalRows',
+                },
+                loadBeforeSend: function(jqXHR) {
+                    jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
 
-                            /* Set global variables */
-                            sortname = $(this).jqGrid("getGridParam", "sortname")
-                            sortorder = $(this).jqGrid("getGridParam", "sortorder")
-                            totalRecord = $(this).getGridParam("records")
-                            limit = $(this).jqGrid('getGridParam', 'postData').limit
-                            postData = $(this).jqGrid('getGridParam', 'postData')
-                            triggerClick = true
+                    setGridLastRequest($(this), jqXHR)
+                },
+                onSelectRow: function(id) {
+                    activeGrid = $(this)
+                    indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
+                    page = $(this).jqGrid('getGridParam', 'page')
+                    let limit = $(this).jqGrid('getGridParam', 'postData').limit
+                    if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
+                },
+                loadComplete: function(data) {
+                    changeJqGridRowListText()
+                    $(document).unbind('keydown')
+                    setCustomBindKeys($(this))
+                    initResize($(this))
 
-                            $('.clearsearchclass').click(function() {
-                                clearColumnSearch($(this))
-                            })
+                    /* Set global variables */
+                    sortname = $(this).jqGrid("getGridParam", "sortname")
+                    sortorder = $(this).jqGrid("getGridParam", "sortorder")
+                    totalRecord = $(this).getGridParam("records")
+                    limit = $(this).jqGrid('getGridParam', 'postData').limit
+                    postData = $(this).jqGrid('getGridParam', 'postData')
+                    triggerClick = true
 
-                            if (indexRow > $(this).getDataIDs().length - 1) {
-                                indexRow = $(this).getDataIDs().length - 1;
-                            }
+                    $('.clearsearchclass').click(function() {
+                        clearColumnSearch($(this))
+                    })
 
-                            if (triggerClick) {
-                                if (id != '') {
-                                    indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-                                    $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
-                                    id = ''
-                                } else if (indexRow != undefined) {
-                                    $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
-                                }
+                    if (indexRow > $(this).getDataIDs().length - 1) {
+                        indexRow = $(this).getDataIDs().length - 1;
+                    }
 
-                                if ($('#jqGrid').getDataIDs()[indexRow] == undefined) {
-                                    $(`#jqGrid [id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
-                                }
+                    if (triggerClick) {
+                        if (id != '') {
+                            indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
+                            $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
+                            id = ''
+                        } else if (indexRow != undefined) {
+                            $(`#jqGrid [id="${$('#jqGrid').getDataIDs()[indexRow]}"]`).click()
+                        }
 
-                                triggerClick = false
+                        if ($('#jqGrid').getDataIDs()[indexRow] == undefined) {
+                            $(`#jqGrid [id="` + $('#jqGrid').getDataIDs()[0] + `"]`).click()
+                        }
+
+                        triggerClick = false
+                    } else {
+                        $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
+                    }
+
+                    $('#left-nav').find('button').attr('disabled', false)
+                    permission()
+                    setHighlight($(this))
+                },
+            })
+
+            .jqGrid("setLabel", "rn", "No.")
+            .jqGrid('filterToolbar', {
+                stringResult: true,
+                searchOnEnter: false,
+                defaultSearch: 'cn',
+                groupOp: 'AND',
+                disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
+                beforeSearch: function() {
+                    abortGridLastRequest($(this))
+                    $('#left-nav').find(`button:not(#add)`).attr('disabled', 'disabled')
+                    clearGlobalSearch($('#jqGrid'))
+                },
+            })
+
+            .customPager({
+                buttons: [{
+                        id: 'add',
+                        innerHTML: '<i class="fa fa-plus"></i> ADD',
+                        class: 'btn btn-primary btn-sm mr-1',
+                        onClick: () => {
+                            createAkunPusat()
+                        }
+                    },
+                    {
+                        id: 'edit',
+                        innerHTML: '<i class="fa fa-pen"></i> EDIT',
+                        class: 'btn btn-success btn-sm mr-1',
+                        onClick: () => {
+                            selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                            if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                                showDialog('Harap pilih salah satu record')
                             } else {
-                                $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
+                                cekValidasi(selectedId, 'edit')
                             }
+                        }
+                    },
+                    {
+                        id: 'delete',
+                        innerHTML: '<i class="fa fa-trash"></i> DELETE',
+                        class: 'btn btn-danger btn-sm mr-1',
+                        onClick: () => {
+                            selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                            if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                                showDialog('Harap pilih salah satu record')
+                            } else {
+                                cekValidasi(selectedId, 'delete')
+                            }
+                        }
+                    },
+                    {
+                        id: 'report',
+                        innerHTML: '<i class="fa fa-print"></i> REPORT',
+                        class: 'btn btn-info btn-sm mr-1',
+                        onClick: () => {
+                            $('#rangeModal').data('action', 'report')
+                            $('#rangeModal').find('button:submit').html(`Report`)
+                            $('#rangeModal').modal('show')
+                        }
+                    },
+                    {
+                        id: 'export',
+                        innerHTML: '<i class="fa fa-file-export"></i> EXPORT',
+                        class: 'btn btn-warning btn-sm mr-1',
+                        onClick: () => {
+                            $('#rangeModal').data('action', 'export')
+                            $('#rangeModal').find('button:submit').html(`Export`)
+                            $('#rangeModal').modal('show')
+                        }
+                    },
+                    {
+                        id: 'transfer',
+                        innerHTML: '<i class="fa fa-upload"></i> TRANSFER',
+                        class: 'btn btn-purple btn-sm mr-1',
+                        onClick: () => {
+                            transferCoa()
+                        }
+                    },
+                ]
+            })
 
-                        $('#left-nav').find('button').attr('disabled', false)
-                        permission() 
-                        setHighlight($(this))
-                        },
-                    })
+        /* Append clear filter button */
+        loadClearFilter($('#jqGrid'))
 
-                    .jqGrid("setLabel", "rn", "No.")
-                    .jqGrid('filterToolbar', {
-                        stringResult: true,
-                        searchOnEnter: false,
-                        defaultSearch: 'cn',
-                        groupOp: 'AND',
-                        disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
-                        beforeSearch: function() {
-                        abortGridLastRequest($(this))
-                        $('#left-nav').find(`button:not(#add)`).attr('disabled', 'disabled')
-                        clearGlobalSearch($('#jqGrid'))
-                        },
-                    })
+        /* Append global search */
+        loadGlobalSearch($('#jqGrid'))
 
-                    .customPager({
-                        buttons: [{
-                                id: 'add',
-                                innerHTML: '<i class="fa fa-plus"></i> ADD',
-                                class: 'btn btn-primary btn-sm mr-1',
-                                onClick: () => {
-                                    createAkunPusat()
-                                }
-                            },
-                            {
-                                id: 'edit',
-                                innerHTML: '<i class="fa fa-pen"></i> EDIT',
-                                class: 'btn btn-success btn-sm mr-1',
-                                onClick: () => {
-                                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                                    if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                                        showDialog('Harap pilih salah satu record')
-                                    } else {
-                                        cekValidasi(selectedId, 'edit')
-                                    }
-                                }
-                            },
-                            {
-                                id: 'delete',
-                                innerHTML: '<i class="fa fa-trash"></i> DELETE',
-                                class: 'btn btn-danger btn-sm mr-1',
-                                onClick: () => {
-                                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                                    if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                                        showDialog('Harap pilih salah satu record')
-                                    } else {
-                                        cekValidasi(selectedId, 'delete')
-                                    }
-                                }
-                            },
-                            {
-                                id: 'report',
-                                innerHTML: '<i class="fa fa-print"></i> REPORT',
-                                class: 'btn btn-info btn-sm mr-1',
-                                onClick: () => {
-                                    $('#rangeModal').data('action', 'report')
-                                    $('#rangeModal').find('button:submit').html(`Report`)
-                                    $('#rangeModal').modal('show')
-                                }
-                            },
-                            {
-                                id: 'export',
-                                innerHTML: '<i class="fa fa-file-export"></i> EXPORT',
-                                class: 'btn btn-warning btn-sm mr-1',
-                                onClick: () => {
-                                    $('#rangeModal').data('action', 'export')
-                                    $('#rangeModal').find('button:submit').html(`Export`)
-                                    $('#rangeModal').modal('show')
-                                }
-                            },
-                            {
-                                id: 'transfer',
-                                innerHTML: '<i class="fa fa-upload"></i> TRANSFER',
-                                class: 'btn btn-purple btn-sm mr-1',
-                                onClick: () => {
-                                    transferCoa()
-                                }
-                            },
-                        ]
-                    })
+        $('#add .ui-pg-div')
+            .addClass(`btn-sm btn-primary`)
+            .parent().addClass('px-1')
 
-                /* Append clear filter button */
-                loadClearFilter($('#jqGrid'))
+        $('#edit .ui-pg-div')
+            .addClass('btn-sm btn-success')
+            .parent().addClass('px-1')
 
-                /* Append global search */
-                loadGlobalSearch($('#jqGrid'))
+        $('#delete .ui-pg-div')
+            .addClass('btn-sm btn-danger')
+            .parent().addClass('px-1')
 
-                $('#add .ui-pg-div')
-                    .addClass(`btn-sm btn-primary`)
-                    .parent().addClass('px-1')
+        $('#report .ui-pg-div')
+            .addClass('btn-sm btn-info')
+            .parent().addClass('px-1')
 
-                $('#edit .ui-pg-div')
-                    .addClass('btn-sm btn-success')
-                    .parent().addClass('px-1')
+        $('#export .ui-pg-div')
+            .addClass('btn-sm btn-warning')
+            .parent().addClass('px-1')
 
-                $('#delete .ui-pg-div')
-                    .addClass('btn-sm btn-danger')
-                    .parent().addClass('px-1')
-
-                $('#report .ui-pg-div')
-                    .addClass('btn-sm btn-info')
-                    .parent().addClass('px-1')
-
-                $('#export .ui-pg-div')
-                    .addClass('btn-sm btn-warning')
-                    .parent().addClass('px-1')
-
-                function permission() {
-                if (!`{{ $myAuth->hasPermission('akunpusat', 'store') }}`) {
-                    $('#add').attr('disabled', 'disabled')
-                }
-
-                if (!`{{ $myAuth->hasPermission('akunpusat', 'update') }}`) {
-                    $('#edit').attr('disabled', 'disabled')
-                }
-
-                if (!`{{ $myAuth->hasPermission('akunpusat', 'destroy') }}`) {
-                    $('#delete').attr('disabled', 'disabled')
-                }
-
-                if (!`{{ $myAuth->hasPermission('akunpusat', 'export') }}`) {
-                    $('#delete').attr('disabled', 'disabled')
-                }
-
-                if (!`{{ $myAuth->hasPermission('akunpusat', 'report') }}`) {
-                    $('#delete').attr('disabled', 'disabled')
-                }
+        function permission() {
+            if (!`{{ $myAuth->hasPermission('akunpusat', 'store') }}`) {
+                $('#add').attr('disabled', 'disabled')
             }
 
-                $('#rangeModal').on('shown.bs.modal', function() {
-                    if (autoNumericElements.length > 0) {
-                        $.each(autoNumericElements, (index, autoNumericElement) => {
-                            autoNumericElement.remove()
-                        })
-                    }
+            if (!`{{ $myAuth->hasPermission('akunpusat', 'update') }}`) {
+                $('#edit').attr('disabled', 'disabled')
+            }
 
-                    $('#formRange [name]:not(:hidden)').first().focus()
+            if (!`{{ $myAuth->hasPermission('akunpusat', 'destroy') }}`) {
+                $('#delete').attr('disabled', 'disabled')
+            }
 
-                    $('#formRange [name=sidx]').val($('#jqGrid').jqGrid('getGridParam').postData.sidx)
-                    $('#formRange [name=sord]').val($('#jqGrid').jqGrid('getGridParam').postData.sord)
-                    if (page == 0) {
-                        $('#formRange [name=dari]').val(page)
-                        $('#formRange [name=sampai]').val(totalRecord)
-                    } else {
-                        $('#formRange [name=dari]').val((indexRow + 1) + (limit * (page - 1)))
-                        $('#formRange [name=sampai]').val(totalRecord)
-                    }
+            if (!`{{ $myAuth->hasPermission('akunpusat', 'export') }}`) {
+                $('#export').attr('disabled', 'disabled')
+            }
 
-                    autoNumericElements = new AutoNumeric.multiple('#formRange .autonumeric-report', {
-                        digitGroupSeparator: ',',
-                        decimalCharacter: '.',
-                        decimalPlaces: 0,
-                        allowDecimalPadding: false,
-                        minimumValue: 1,
-                        maximumValue: totalRecord
-                    })
+            if (!`{{ $myAuth->hasPermission('akunpusat', 'report') }}`) {
+                $('#report').attr('disabled', 'disabled')
+            }
+
+            if (!`{{ $myAuth->hasPermission('akunpusat', 'transfer') }}`) {
+                $('#transfer').attr('disabled', 'disabled')
+            }
+        }
+
+        $('#rangeModal').on('shown.bs.modal', function() {
+            if (autoNumericElements.length > 0) {
+                $.each(autoNumericElements, (index, autoNumericElement) => {
+                    autoNumericElement.remove()
                 })
+            }
 
-                $('#rangeModal').on('hidden.bs.modal', function() {
+            $('#formRange [name]:not(:hidden)').first().focus()
 
-                    $('.is-invalid').removeClass('is-invalid')
-                    $('.invalid-feedback').remove()
-                })
+            $('#formRange [name=sidx]').val($('#jqGrid').jqGrid('getGridParam').postData.sidx)
+            $('#formRange [name=sord]').val($('#jqGrid').jqGrid('getGridParam').postData.sord)
+            if (page == 0) {
+                $('#formRange [name=dari]').val(page)
+                $('#formRange [name=sampai]').val(totalRecord)
+            } else {
+                $('#formRange [name=dari]').val((indexRow + 1) + (limit * (page - 1)))
+                $('#formRange [name=sampai]').val(totalRecord)
+            }
 
-                $('#formRange').submit(event => {
-                    event.preventDefault()
+            autoNumericElements = new AutoNumeric.multiple('#formRange .autonumeric-report', {
+                digitGroupSeparator: ',',
+                decimalCharacter: '.',
+                decimalPlaces: 0,
+                allowDecimalPadding: false,
+                minimumValue: 1,
+                maximumValue: totalRecord
+            })
+        })
 
-                    let params
-                    let actionUrl = ``
+        $('#rangeModal').on('hidden.bs.modal', function() {
+
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+        })
+
+        $('#formRange').submit(event => {
+            event.preventDefault()
+
+            let params
+            let actionUrl = ``
 
 
-                    getCekExport(params).then((response) => {
+            getCekExport(params).then((response) => {
+                if ($('#rangeModal').data('action') == 'export') {
+                    actionUrl = `{{ route('akunpusat.export') }}`
+                } else if ($('#rangeModal').data('action') == 'report') {
+                    actionUrl = `{{ route('akunpusat.report') }}`
+                }
+
+                /* Clear validation messages */
+                $('.is-invalid').removeClass('is-invalid')
+                $('.invalid-feedback').remove()
+
+                /* Set params value */
+                for (var key in postData) {
+                    if (params != "") {
+                        params += "&";
+                    }
+                    params += key + "=" + encodeURIComponent(postData[key]);
+                }
+
+                // window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
+                let formRange = $('#formRange')
+                let offset = parseInt(formRange.find('[name=dari]').val()) - 1
+                let limit = parseInt(formRange.find('[name=sampai]').val().replace('.', '')) -
+                    offset
+                params += `&offset=${offset}&limit=${limit}`
+
+                getCekExport(params).then((response) => {
                         if ($('#rangeModal').data('action') == 'export') {
-                            actionUrl = `{{ route('akunpusat.export') }}`
-                        } else if ($('#rangeModal').data('action') == 'report') {
-                            actionUrl = `{{ route('akunpusat.report') }}`
-                        }
+                            let xhr = new XMLHttpRequest()
+                            xhr.open('GET',
+                                `{{ config('app.api_url') }}akunpusat/export?${params}`,
+                                true)
+                            xhr.setRequestHeader("Authorization",
+                                `Bearer {{ session('access_token') }}`)
+                            xhr.responseType = 'arraybuffer'
 
-                        /* Clear validation messages */
-                        $('.is-invalid').removeClass('is-invalid')
-                        $('.invalid-feedback').remove()
+                            xhr.onload = function(e) {
+                                if (this.status === 200) {
+                                    if (this.response !== undefined) {
+                                        let blob = new Blob([this.response], {
+                                            type: "application/vnd.ms-excel"
+                                        })
+                                        let link = document.createElement('a')
 
-                        /* Set params value */
-                        for (var key in postData) {
-                            if (params != "") {
-                                params += "&";
-                            }
-                            params += key + "=" + encodeURIComponent(postData[key]);
-                        }
+                                        link.href = window.URL.createObjectURL(blob)
+                                        link.download =
+                                            `laporanAkunPusat${(new Date).getTime()}.xlsx`
+                                        link.click()
 
-                        // window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
-                        let formRange = $('#formRange')
-                        let offset = parseInt(formRange.find('[name=dari]').val()) - 1
-                        let limit = parseInt(formRange.find('[name=sampai]').val().replace('.', '')) -
-                            offset
-                        params += `&offset=${offset}&limit=${limit}`
-
-                        getCekExport(params).then((response) => {
-                                if ($('#rangeModal').data('action') == 'export') {
-                                    let xhr = new XMLHttpRequest()
-                                    xhr.open('GET',
-                                        `{{ config('app.api_url') }}akunpusat/export?${params}`,
-                                        true)
-                                    xhr.setRequestHeader("Authorization",
-                                        `Bearer {{ session('access_token') }}`)
-                                    xhr.responseType = 'arraybuffer'
-
-                                    xhr.onload = function(e) {
-                                        if (this.status === 200) {
-                                            if (this.response !== undefined) {
-                                                let blob = new Blob([this.response], {
-                                                    type: "application/vnd.ms-excel"
-                                                })
-                                                let link = document.createElement('a')
-
-                                                link.href = window.URL.createObjectURL(blob)
-                                                link.download =
-                                                    `laporanAkunPusat${(new Date).getTime()}.xlsx`
-                                                link.click()
-
-                                                submitButton.removeAttr('disabled')
-                                            }
-                                        }
-                                    }
-
-                                    xhr.onerror = () => {
                                         submitButton.removeAttr('disabled')
                                     }
-
-                                    xhr.send()
-                                } else if ($('#rangeModal').data('action') == 'report') {
-                                    window.open(`{{ route('akunpusat.report') }}?${params}`)
-
-                                    submitButton.removeAttr('disabled')
                                 }
-                            })
-                            .catch((error) => {
-                                if (error.status === 422) {
-                                    $('.is-invalid').removeClass('is-invalid')
-                                    $('.invalid-feedback').remove()
-                                    let status
-                                    if (error.responseJSON.hasOwnProperty('status') == false) {
-                                        status = false
-                                    } else {
-                                        status = true
-                                    }
-                                    statusText = error.statusText
-                                    errors = error.responseJSON.errors
-                                    $.each(errors, (index, error) => {
-                                        let indexes = index.split(".");
-                                        if (status === false) {
-                                            indexes[0] = 'sampai'
-                                        }
-                                        let element;
-                                        element = $('#rangeModal').find(
-                                            `[name="${indexes[0]}"]`)[
-                                            0];
-                                        if ($(element).length > 0 && !$(element).is(
-                                                ":hidden")) {
-                                            $(element).addClass("is-invalid");
-                                            $(`
+                            }
+
+                            xhr.onerror = () => {
+                                submitButton.removeAttr('disabled')
+                            }
+
+                            xhr.send()
+                        } else if ($('#rangeModal').data('action') == 'report') {
+                            window.open(`{{ route('akunpusat.report') }}?${params}`)
+
+                            submitButton.removeAttr('disabled')
+                        }
+                    })
+                    .catch((error) => {
+                        if (error.status === 422) {
+                            $('.is-invalid').removeClass('is-invalid')
+                            $('.invalid-feedback').remove()
+                            let status
+                            if (error.responseJSON.hasOwnProperty('status') == false) {
+                                status = false
+                            } else {
+                                status = true
+                            }
+                            statusText = error.statusText
+                            errors = error.responseJSON.errors
+                            $.each(errors, (index, error) => {
+                                let indexes = index.split(".");
+                                if (status === false) {
+                                    indexes[0] = 'sampai'
+                                }
+                                let element;
+                                element = $('#rangeModal').find(
+                                    `[name="${indexes[0]}"]`)[
+                                    0];
+                                if ($(element).length > 0 && !$(element).is(
+                                        ":hidden")) {
+                                    $(element).addClass("is-invalid");
+                                    $(`
                                                 <div class="invalid-feedback">
                                                 ${error[0].toLowerCase()}
                                                 </div>
                                         `).appendTo($(element).parent());
-                                        } else {
-                                            setTimeout(() => {
-                                                return showDialog(error);
-                                            }, 100)
-                                        }
-                                    });
-                                    $(".is-invalid").first().focus();
-
                                 } else {
-                                    showDialog(error.statusText)
+                                    setTimeout(() => {
+                                        return showDialog(error);
+                                    }, 100)
                                 }
-                            })
+                            });
+                            $(".is-invalid").first().focus();
 
-                            .finally(() => {
-
-                                $('.ui-button').click()
-
-                                submitButton.removeAttr('disabled')
-                            })
+                        } else {
+                            showDialog(error.statusText)
+                        }
                     })
 
+                    .finally(() => {
 
-                    function getCekExport(params) {
+                        $('.ui-button').click()
 
-                        params += `&cekExport=true`
-
-                        return new Promise((resolve, reject) => {
-                            $.ajax({
-                                url: `${apiUrl}akunpusat/export?${params}`,
-                                dataType: "JSON",
-                                headers: {
-                                    Authorization: `Bearer ${accessToken}`
-                                },
-                                success: (response) => {
-                                    resolve(response);
-                                },
-                                error: error => {
-                                    reject(error)
-
-                                },
-                            });
-                        });
-                    }
-                })
+                        submitButton.removeAttr('disabled')
+                    })
             })
-        </script>
-    @endpush()
+
+
+            function getCekExport(params) {
+
+                params += `&cekExport=true`
+
+                return new Promise((resolve, reject) => {
+                    $.ajax({
+                        url: `${apiUrl}akunpusat/export?${params}`,
+                        dataType: "JSON",
+                        headers: {
+                            Authorization: `Bearer ${accessToken}`
+                        },
+                        success: (response) => {
+                            resolve(response);
+                        },
+                        error: error => {
+                            reject(error)
+
+                        },
+                    });
+                });
+            }
+        })
+    })
+</script>
+@endpush()
 @endsection

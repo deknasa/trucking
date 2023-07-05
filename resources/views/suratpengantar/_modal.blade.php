@@ -1747,26 +1747,3 @@
   // }
 </script>
 @endpush()
-
-public function statusFormat()
-{
-  $paramsFormat = [
-    "groupOp"=> "AND", 
-    "rules"=> [
-      [
-        "field"=> "grp", 
-        "op"=> "cn",
-        "data"=> "PENGELUARAN STOK"
-      ],
-      [
-        "field"=> "subgrp", 
-        "op"=> "cn",
-        "data"=> "SPK STOK BUKTI"
-      ]
-    ]
-  ];
-  return $parameterStatusFormat = Http::withHeaders($this->httpHeaders)
-  ->withOptions(['verify' => false])
-  ->withToken(session('access_token'))
-  ->get(config('app.api_url') . 'parameter', ['filters' = >json_encode($paramsFormat)])['data'][0];
-}

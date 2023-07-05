@@ -1078,6 +1078,24 @@ function showSuccessDialog(statusText = "", message = "") {
 	});
 }
 
+function showDangerDialog(statusText = "", message = "") {
+	$("#dialog-danger-message").find("p").remove();
+	$("#dialog-danger-message").append(
+		`<p> ${statusText} </p><p> ${message} </p>`
+	);
+	console.log(statusText)
+	$("#dialog-danger-message").dialog({
+		modal: true,
+		buttons: [
+			{
+				text: "Ok",
+				click: function () {
+					$(this).dialog("close");
+				},
+			},
+		]
+	});
+}
 // function showDialog(statusText="", message="") {
 // 	$("#dialog-message").html(`
 // 		<span class="fa fa-exclamation-triangle" aria-hidden="true" style="font-size:25px;"></span>
