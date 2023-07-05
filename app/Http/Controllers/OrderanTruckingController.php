@@ -111,9 +111,7 @@ class OrderanTruckingController extends MyController
             ->get(config('app.api_url') . 'orderantrucking/export?dari=' . $request->dari . '&sampai=' . $request->sampai)['data'];
         $orderantrucking = $data['data'];
         $params = $data['parameter'];
-        $combo = $this->combo('list');
-        $key = array_search('CETAK', array_column( $combo, 'parameter')); 
-        $orderantrucking["combo"] =  $combo[$key];
+
         return view('reports.orderantrucking', compact('orderantrucking', 'params'));
     }
 
@@ -235,6 +233,8 @@ class OrderanTruckingController extends MyController
         foreach ($orderanTruck as $response_index => $response_detail) {
             foreach ($columns as $detail_columns_index => $detail_column) {
                 $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
+                $sheet->getStyle("A$detail_table_header_row:O$detail_table_header_row")->getFont()->setBold(true);
+                $sheet->getStyle("A$detail_table_header_row:O$detail_table_header_row")->getAlignment()->setHorizontal('center');
             }
             $response_detail['nominals'] = number_format((float) $response_detail['nominal'], '2', '.', ',');
 

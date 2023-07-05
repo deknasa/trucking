@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "45d9dd2c6d7ed25ac181572632df8bea",
+  "ReportGuid": "929c55cc831711faa165771bfe1b90d8",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportPenerimaanKas.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1687580997000+0700)/",
+  "ReportChanged": "/Date(1687940249000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -23,6 +23,38 @@
   "Dictionary": {
     "DataSources": {
       "0": {
+        "Ident": "StiDataTableSource",
+        "Name": "penerimaan_combo",
+        "Alias": "penerimaan_combo",
+        "Columns": {
+          "0": {
+            "Name": "id",
+            "NameInSource": "id",
+            "Alias": "id",
+            "Type": "System.String"
+          },
+          "1": {
+            "Name": "parameter",
+            "NameInSource": "parameter",
+            "Alias": "parameter",
+            "Type": "System.String"
+          },
+          "2": {
+            "Name": "param",
+            "NameInSource": "param",
+            "Alias": "param",
+            "Type": "System.String"
+          },
+          "3": {
+            "Name": "relationId",
+            "NameInSource": "relationId",
+            "Alias": "relationId",
+            "Type": "System.String"
+          }
+        },
+        "NameInSource": "Data.penerimaan_combo"
+      },
+      "1": {
         "Ident": "StiDataTableSource",
         "Name": "penerimaan",
         "Alias": "penerimaan",
@@ -82,45 +114,63 @@
             "Type": "System.String"
           },
           "9": {
+            "Name": "statuscetak",
+            "NameInSource": "statuscetak",
+            "Alias": "statuscetak",
+            "Type": "System.String"
+          },
+          "10": {
+            "Name": "statuscetak_id",
+            "NameInSource": "statuscetak_id",
+            "Alias": "statuscetak_id",
+            "Type": "System.String"
+          },
+          "11": {
             "Name": "tgllunas",
             "NameInSource": "tgllunas",
             "Alias": "tgllunas",
             "Type": "System.DateTime"
           },
-          "10": {
+          "12": {
             "Name": "userapproval",
             "NameInSource": "userapproval",
             "Alias": "userapproval",
             "Type": "System.String"
           },
-          "11": {
+          "13": {
             "Name": "judulLaporan",
             "NameInSource": "judulLaporan",
             "Alias": "judulLaporan",
             "Type": "System.String"
           },
-          "12": {
+          "14": {
             "Name": "judul",
             "NameInSource": "judul",
             "Alias": "judul",
             "Type": "System.String"
           },
-          "13": {
+          "15": {
             "Name": "tglcetak",
             "NameInSource": "tglcetak",
             "Alias": "tglcetak",
             "Type": "System.String"
           },
-          "14": {
+          "16": {
             "Name": "usercetak",
             "NameInSource": "usercetak",
             "Alias": "usercetak",
+            "Type": "System.String"
+          },
+          "17": {
+            "Name": "combo",
+            "NameInSource": "combo",
+            "Alias": "combo",
             "Type": "System.String"
           }
         },
         "NameInSource": "Data.penerimaan"
       },
-      "1": {
+      "2": {
         "Ident": "StiDataTableSource",
         "Name": "penerimaan_details",
         "Alias": "penerimaan_details",
@@ -195,7 +245,7 @@
             "Name": "bulanbeban",
             "NameInSource": "bulanbeban",
             "Alias": "bulanbeban",
-            "Type": "System.String"
+            "Type": "System.DateTime"
           },
           "12": {
             "Name": "coadebet",
@@ -211,6 +261,21 @@
           }
         },
         "NameInSource": "Data.penerimaan_details"
+      }
+    },
+    "Relations": {
+      "0": {
+        "Name": "penerimaan",
+        "ChildColumns": {
+          "0": "relationId"
+        },
+        "ParentColumns": {
+          "0": "combo"
+        },
+        "NameInSource": "penerimaan_combo",
+        "Alias": "penerimaan",
+        "ParentSource": "penerimaan",
+        "ChildSource": "penerimaan_combo"
       }
     }
   },
@@ -886,7 +951,7 @@
               },
               "MaxNumberOfLines": 6,
               "Text": {
-                "Value": "{penerimaan_details.coakredit}"
+                "Value": "{penerimaan_details.coadebet}"
               },
               "VertAlignment": "Center",
               "Font": ";9;;",

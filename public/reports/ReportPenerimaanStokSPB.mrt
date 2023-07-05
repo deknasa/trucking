@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "457fcdcd0ee8e656093b6b2a2e0c70aa",
+  "ReportGuid": "a24b0db1b9aba3be048244620be577b7",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportPenerimaanStokSPB.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1687846369000+0700)/",
+  "ReportChanged": "/Date(1688451656000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -256,30 +256,42 @@
             "Type": "System.String"
           },
           "7": {
+            "Name": "statusakses",
+            "NameInSource": "statusakses",
+            "Alias": "statusakses",
+            "Type": "System.String"
+          },
+          "8": {
+            "Name": "email",
+            "NameInSource": "email",
+            "Alias": "email",
+            "Type": "System.String"
+          },
+          "9": {
             "Name": "modifiedby",
             "NameInSource": "modifiedby",
             "Alias": "modifiedby",
             "Type": "System.String"
           },
-          "8": {
+          "10": {
             "Name": "created_at",
             "NameInSource": "created_at",
             "Alias": "created_at",
             "Type": "System.DateTime"
           },
-          "9": {
+          "11": {
             "Name": "updated_at",
             "NameInSource": "updated_at",
             "Alias": "updated_at",
             "Type": "System.DateTime"
           },
-          "10": {
+          "12": {
             "Name": "roles",
             "NameInSource": "roles",
             "Alias": "roles",
             "Type": "System.String"
           },
-          "11": {
+          "13": {
             "Name": "relationId",
             "NameInSource": "relationId",
             "Alias": "relationId",
@@ -554,18 +566,24 @@
             "Type": "System.String"
           },
           "38": {
+            "Name": "judul",
+            "NameInSource": "judul",
+            "Alias": "judul",
+            "Type": "System.String"
+          },
+          "39": {
             "Name": "details",
             "NameInSource": "details",
             "Alias": "details",
             "Type": "System.String"
           },
-          "39": {
+          "40": {
             "Name": "user",
             "NameInSource": "user",
             "Alias": "user",
             "Type": "System.String"
           },
-          "40": {
+          "41": {
             "Name": "combo",
             "NameInSource": "combo",
             "Alias": "combo",
@@ -1416,6 +1434,7 @@
               "Ident": "StiStartPointPrimitive",
               "Name": "StartPointPrimitive25",
               "ClientRectangle": "124,56,0,0",
+              "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -1425,6 +1444,7 @@
               "Ident": "StiEndPointPrimitive",
               "Name": "EndPointPrimitive25",
               "ClientRectangle": "124,64,0,0",
+              "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -1627,7 +1647,7 @@
               },
               "MaxNumberOfLines": 6,
               "Text": {
-                "Value": "{penerimaanstokheader_details.persentasediscount}"
+                "Value": "{penerimaanstokheader_details.nominaldiscount}"
               },
               "HorAlignment": "Right",
               "VertAlignment": "Center",
@@ -1793,6 +1813,7 @@
               "Ident": "StiStartPointPrimitive",
               "Name": "StartPointPrimitive26",
               "ClientRectangle": "124,0,0,0",
+              "ComponentPlacement": "d.DataBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -1802,6 +1823,7 @@
               "Ident": "StiEndPointPrimitive",
               "Name": "EndPointPrimitive26",
               "ClientRectangle": "124,8,0,0",
+              "ComponentPlacement": "d.DataBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },

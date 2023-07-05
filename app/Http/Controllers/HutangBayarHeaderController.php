@@ -82,25 +82,41 @@ class HutangBayarHeaderController extends MyController
 
         return $response['data'];
     }
+
+    public function combo($aksi)
+    {
+        $status = [
+            'status' => $aksi,
+            'grp' => 'STATUSCETAK',
+            'subgrp' => 'STATUSCETAK',
+        ]; 
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'user/combostatus',$status);
+        return $response['data'];
+    }
     
     public function report(Request $request)
     {
-         //FETCH HEADER
-         $id = $request->id;
-         $hutangbayar = Http::withHeaders($request->header())
-         ->withOptions(['verify' => false])
-         ->withToken(session('access_token'))
-         ->get(config('app.api_url') .'hutangbayarheader/'.$id.'/export')['data'];
- 
-         //FETCH DETAIL
-         $detailParams = [
-             'hutangbayar_id' => $id,
-         ];
-         $hutangbayar_details = Http::withHeaders($request->header())
-         ->withOptions(['verify' => false])
-         ->withToken(session('access_token'))
-         ->get(config('app.api_url') .'hutangbayardetail', $detailParams)['data'];
+        //FETCH HEADER
+        $id = $request->id;
+        $hutangbayar = Http::withHeaders($request->header())
+        ->withOptions(['verify' => false])
+        ->withToken(session('access_token'))
+        ->get(config('app.api_url') .'hutangbayarheader/'.$id.'/export')['data'];
 
+        //FETCH DETAIL
+        $detailParams = [
+            'hutangbayar_id' => $id,
+        ];
+        $hutangbayar_details = Http::withHeaders($request->header())
+        ->withOptions(['verify' => false])
+        ->withToken(session('access_token'))
+        ->get(config('app.api_url') .'hutangbayardetail', $detailParams)['data'];
+
+        $combo = $this->combo('list');
+        $key = array_search('CETAK', array_column( $combo, 'parameter')); 
+        $hutangbayar["combo"] =  $combo[$key];
         return view('reports.hutangbayar', compact('hutangbayar','hutangbayar_details'));
     }
 
@@ -133,6 +149,8 @@ class HutangBayarHeaderController extends MyController
         $sheet->setCellValue('A2', $hutangbayar['judulLaporan']);
         $sheet->getStyle("A1")->getFont()->setSize(12);
         $sheet->getStyle("A2")->getFont()->setSize(12);
+        $sheet->getStyle("A1")->getFont()->setBold(true);
+        $sheet->getStyle("A2")->getFont()->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:E1');
@@ -140,7 +158,7 @@ class HutangBayarHeaderController extends MyController
 
         $header_start_row = 4;
         $header_right_start_row = 4;
-        $detail_table_header_row = 10;
+        $detail_table_header_row = 9;
         $detail_start_row = $detail_table_header_row + 1;
        
         $alphabets = range('A', 'Z');
@@ -155,16 +173,6 @@ class HutangBayarHeaderController extends MyController
                 'index' => 'tglbukti',
             ],
             [
-                'label' => 'Bank',
-                'index' => 'bank_id',
-            ],
-            [
-                'label' => 'Supplier',
-                'index' => 'supplier_id',
-            ],
-        ];
-        $header_right_columns = [
-            [
                 'label' => 'No Bukti Pengeluaran', 
                 'index' => 'pengeluaran_nobukti',
             ],
@@ -172,14 +180,26 @@ class HutangBayarHeaderController extends MyController
                 'label' => 'Nama Perkiraan',
                 'index' => 'coa',
             ],
+            
+        ];
+        $header_right_columns = [
+            [
+                'label' => 'Tanggal Cair',
+                'index' => 'tglcair',
+            ],
+            [
+                'label' => 'Bank',
+                'index' => 'bank_id',
+            ],
             [
                 'label' => 'Alat Bayar', 
                 'index' => 'alatbayar_id',
             ],
             [
-                'label' => 'Tanggal Cair',
-                'index' => 'tglcair',
-            ],
+                'label' => 'Supplier',
+                'index' => 'supplier_id',
+            ]
+            
             
         ];
 
@@ -245,7 +265,6 @@ class HutangBayarHeaderController extends MyController
 
        // LOOPING DETAIL
        $nominal = 0;
-       $potongan = 0;
        foreach ($hutangbayar_details as $response_index => $response_detail) {
            
            foreach ($detail_columns as $detail_columns_index => $detail_column) {
@@ -266,18 +285,16 @@ class HutangBayarHeaderController extends MyController
            $sheet->getColumnDimension('C')->setWidth(100);
 
            $sheet ->getStyle("A$detail_start_row:C$detail_start_row")->applyFromArray($styleArray);
-           $sheet ->getStyle("D$detail_start_row")->applyFromArray($style_number);
+           $sheet ->getStyle("D$detail_start_row:E$detail_start_row")->applyFromArray($style_number);
 
            $nominal += $response_detail['nominal'];
-           $potongan += $response_detail['potongan'];
            $detail_start_row++;
        }
 
        $total_start_row = $detail_start_row;
-       $sheet->mergeCells('A'.$total_start_row.':C'.$total_start_row);
-       $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A'.$total_start_row.':C'.$total_start_row)->applyFromArray($style_number)->getFont()->setBold(true);
-       $sheet->setCellValue("D$total_start_row", number_format((float) $nominal, '2', ',', '.'))->getStyle("D$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
-       $sheet->setCellValue("E$total_start_row", number_format((float) $potongan, '2', ',', '.'))->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+       $sheet->mergeCells('A'.$total_start_row.':D'.$total_start_row);
+       $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A'.$total_start_row.':D'.$total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
+       $sheet->setCellValue("E$total_start_row", number_format((float) $nominal, '2', ',', '.'))->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
 
        $sheet->getColumnDimension('A')->setAutoSize(true);
        $sheet->getColumnDimension('B')->setAutoSize(true);

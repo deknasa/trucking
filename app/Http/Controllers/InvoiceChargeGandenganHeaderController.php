@@ -41,6 +41,19 @@ class InvoiceChargeGandenganHeaderController extends MyController
         return $response['data'];
     }
 
+    public function combo($aksi)
+    {
+        $status = [
+            'status' => $aksi,
+            'grp' => 'STATUSCETAK',
+            'subgrp' => 'STATUSCETAK',
+        ]; 
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'user/combostatus',$status);
+        return $response['data'];
+    }
+
     public function report(Request $request)
     {
         //FETCH HEADER
@@ -60,6 +73,9 @@ class InvoiceChargeGandenganHeaderController extends MyController
             ->withToken(session('access_token'))
             ->get(config('app.api_url') .'invoicechargegandengandetail', $detailParams)['data'];
 
+        $combo = $this->combo('list');
+        $key = array_search('CETAK', array_column( $combo, 'parameter')); 
+        $chargegandengan["combo"] =  $combo[$key];
         return view('reports.invoicechargegandengan', compact('chargegandengan', 'chargegandengan_details'));
     }
 
@@ -98,7 +114,7 @@ class InvoiceChargeGandenganHeaderController extends MyController
         $sheet->setCellValue('A2', $invchargegandengan['judulLaporan']);
         $sheet->getStyle("A1")->getFont()->setSize(12);
         $sheet->getStyle("A2")->getFont()->setSize(12);
-        $sheet->getStyle("A2")->getFont()->setBold(true);
+        $sheet->getStyle("A1")->getFont()->setBold(true);
         $sheet->getStyle("A2")->getFont()->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
@@ -143,7 +159,7 @@ class InvoiceChargeGandenganHeaderController extends MyController
             ],
             [
                 'label' => 'NO POLISI',
-                'index' => 'trado_id',
+                'index' => 'nopolisi',
             ],
             [
                 'label' => 'KETERANGAN',
@@ -190,6 +206,8 @@ class InvoiceChargeGandenganHeaderController extends MyController
             
             foreach ($detail_columns as $detail_columns_index => $detail_column) {
                 $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
+                $sheet->getStyle("A$detail_table_header_row:F$detail_table_header_row")->getFont()->setBold(true);
+                $sheet->getStyle("A$detail_table_header_row:F$detail_table_header_row")->getAlignment()->setHorizontal('center');            
             }
             $response_detail['nominals'] = number_format((float) $response_detail['nominal'], '2', '.', ',');
         
@@ -201,7 +219,7 @@ class InvoiceChargeGandenganHeaderController extends MyController
             $sheet->setCellValue("A$detail_start_row", $response_index + 1);    
             $sheet->setCellValue("B$detail_start_row", $response_detail['tglbukti']);
             $sheet->setCellValue("C$detail_start_row", $response_detail['jumlahhari']);
-            $sheet->setCellValue("D$detail_start_row", $response_detail['trado_id']);
+            $sheet->setCellValue("D$detail_start_row", $response_detail['nopolisi']);
             $sheet->setCellValue("E$detail_start_row", $response_detail['keterangan']);
             $sheet->setCellValue("F$detail_start_row", $response_detail['nominals']);
 

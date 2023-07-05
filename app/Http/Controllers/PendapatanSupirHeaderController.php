@@ -37,6 +37,19 @@ class PendapatanSupirHeaderController extends MyController
 
         return $response['data'];
     }
+
+    public function combo($aksi)
+    {
+        $status = [
+            'status' => $aksi,
+            'grp' => 'STATUSCETAK',
+            'subgrp' => 'STATUSCETAK',
+        ]; 
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'user/combostatus',$status);
+        return $response['data'];
+    }
     
     public function report(Request $request)
     {
@@ -58,6 +71,9 @@ class PendapatanSupirHeaderController extends MyController
             ->withToken(session('access_token'))
             ->get(config('app.api_url') .'pendapatansupirdetail', $detailParams)['data'];
 
+        $combo = $this->combo('list');
+        $key = array_search('CETAK', array_column( $combo, 'parameter')); 
+        $pendapatan["combo"] =  $combo[$key];
         return view('reports.pendapatansupir', compact('pendapatan','pendapatan_details'));
     }
 

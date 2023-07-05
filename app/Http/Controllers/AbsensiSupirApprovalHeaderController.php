@@ -70,33 +70,46 @@ class AbsensiSupirApprovalHeaderController extends MyController
             ->get(config('app.api_url') . 'absensisupirapprovalheader/'.$id);
     }
 
+    public function combo($aksi)
+    {
+        $status = [
+            'status' => $aksi,
+            'grp' => 'STATUSCETAK',
+            'subgrp' => 'STATUSCETAK',
+        ]; 
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'user/combostatus',$status);
+        return $response['data'];
+    }
+
      /**
      * @ClassName
      */
     public function report(Request $request,$id)
     {
-        $params = [
-            'offset' => $request->dari - 1,
-            'rows' => $request->sampai - $request->dari + 1,
-            'withRelations' => true,
+        //FETCH HEADER
+        $id = $request->id;
+        $data = Http::withHeaders($request->header())
+        ->withOptions(['verify' => false])
+        ->withToken(session('access_token'))
+        ->get(config('app.api_url') .'absensisupirapprovalheader/'.$id.'/export');
 
+        //FETCH DETAIL
+        $detailParams = [
+            'absensisupirapproval_id' => $request->id
         ];
-        $absensisupirapproval = $this->find($params,$id)['data'];
-        // return $absensisupirapprovals['id'];
-        $data = $absensisupirapproval;
-        $i =0;
-        
-            $response = Http::withHeaders($this->httpHeaders)
+        $responses = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'absensisupirapprovaldetail', ['absensisupirapproval_id' => $absensisupirapproval['id']]);
-
-            $data["details"] =$response['data'];
-            $data["user"] = Auth::user();
-            
-
-        $absensisupirapprovalheaders = $data;
-        return view('reports.absensisupirapprovalheader', compact('absensisupirapprovalheaders'));
+            ->get(config('app.api_url') .'absensisupirapprovaldetail', $detailParams);
+        
+        $absensiappheader = $data['data'];
+        $absensiappheader_details = $responses['data'];
+        $combo = $this->combo('list');
+        $key = array_search('CETAK', array_column( $combo, 'parameter')); 
+        $absensiappheader["combo"] =  $combo[$key];
+        return view('reports.absensisupirapprovalheader', compact('absensiappheader', 'absensiappheader_details'));
     }
 
     /**
@@ -142,8 +155,10 @@ class AbsensiSupirApprovalHeaderController extends MyController
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setCellValue('A1', $absensiappheader['judul']);
         $sheet->setCellValue('A2', $absensiappheader['judulLaporan']);
-        $sheet->getStyle("A1")->getFont()->setSize(14);
+        $sheet->getStyle("A1")->getFont()->setSize(12);
         $sheet->getStyle("A2")->getFont()->setSize(12);
+        $sheet->getStyle("A1")->getFont()->setBold(true);
+        $sheet->getStyle("A2")->getFont()->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:E1');
@@ -151,7 +166,7 @@ class AbsensiSupirApprovalHeaderController extends MyController
 
         $header_start_row = 4;
         $header_right_start_row = 4;
-        $detail_table_header_row = 10;
+        $detail_table_header_row = 8;
         $detail_start_row = $detail_table_header_row + 1;
 
         $alphabets = range('A', 'Z');
@@ -161,27 +176,15 @@ class AbsensiSupirApprovalHeaderController extends MyController
                 'index'=>'nobukti'
             ],
             [
-                'label'=>'Tgl Bukti',
+                'label'=>'Tanggal',
                 'index'=>'tglbukti'
-            ],
-            [
-                'label'=>'Keterangan',
-                'index'=>'keterangan'
             ],
             [
                 'label'=>'No Bukti Absensi Supir ',
                 'index'=>'absensisupir_nobukti'
             ],
-            [
-                'label'=>'Status Approval',
-                'index'=>'statusapproval'
-            ],
         ];
         $header_right_columns = [
-            [
-                'label'=>'User Approval',
-                'index'=>'userapproval'
-            ],
             [
                 'label'=>'No Bukti Pengeluaran',
                 'index'=>'pengeluaran_nobukti'
@@ -193,12 +196,7 @@ class AbsensiSupirApprovalHeaderController extends MyController
             [
                 'label'=>'Tanggal Kas Keluar',
                 'index'=>'tglkaskeluar'
-            ],
-            [
-                'label'=>'Posting Dari',
-                'index'=>'postingdari'
-            ],
-            
+            ]
         ];
         $detail_columns = [
             [
@@ -267,8 +265,8 @@ class AbsensiSupirApprovalHeaderController extends MyController
             
             foreach ($detail_columns as $detail_columns_index => $detail_column) {
                 $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
-                $sheet->getStyle("A$detail_table_header_row:H$detail_table_header_row")->getFont()->setBold(true);
-                $sheet->getStyle("A$detail_table_header_row:H$detail_table_header_row")->getAlignment()->setHorizontal('center');
+                $sheet->getStyle("A$detail_table_header_row:E$detail_table_header_row")->getFont()->setBold(true);
+                $sheet->getStyle("A$detail_table_header_row:E$detail_table_header_row")->getAlignment()->setHorizontal('center');
             }
         
             $sheet->setCellValue("A$detail_start_row", $response_index + 1);
@@ -280,6 +278,13 @@ class AbsensiSupirApprovalHeaderController extends MyController
             $sheet ->getStyle("A$detail_start_row:E$detail_start_row")->applyFromArray($styleArray);
             $detail_start_row++;
         }
+
+        //set autosize
+        $sheet->getColumnDimension('A')->setAutoSize(true);
+        $sheet->getColumnDimension('B')->setAutoSize(true);
+        $sheet->getColumnDimension('C')->setAutoSize(true);
+        $sheet->getColumnDimension('D')->setAutoSize(true);
+        $sheet->getColumnDimension('E')->setAutoSize(true);
 
         $writer = new Xlsx($spreadsheet);
         $filename = 'LaporanAbsensiSupirApproval' . date('dmYHis');

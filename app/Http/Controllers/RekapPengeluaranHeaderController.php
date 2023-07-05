@@ -80,6 +80,19 @@ class RekapPengeluaranHeaderController extends MyController
             ->get(config('app.api_url') . 'rekappengeluaranheader/'.$id);
     }
 
+    public function combo($aksi)
+    {
+        $status = [
+            'status' => $aksi,
+            'grp' => 'STATUSCETAK',
+            'subgrp' => 'STATUSCETAK',
+        ]; 
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'user/combostatus',$status);
+        return $response['data'];
+    }
+
     /**
      * @ClassName
      */
@@ -88,9 +101,9 @@ class RekapPengeluaranHeaderController extends MyController
         //FETCH HEADER
         $id = $request->id;
         $rekappengeluaran = Http::withHeaders($request->header())
-        ->withOptions(['verify' => false])
-        ->withToken(session('access_token'))
-        ->get(config('app.api_url') .'rekappengeluaranheader/'.$id.'/export')['data'];
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') .'rekappengeluaranheader/'.$id.'/export')['data'];
         
         //FETCH DETAIL
         $detailParams = [
@@ -98,10 +111,13 @@ class RekapPengeluaranHeaderController extends MyController
             'rekappengeluaran_id' => $request->id,
         ];
         $rekappengeluaran_details = Http::withHeaders($request->header())
-        ->withOptions(['verify' => false])
-        ->withToken(session('access_token'))
-        ->get(config('app.api_url') .'rekappengeluarandetail', $detailParams)['data'];
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') .'rekappengeluarandetail', $detailParams)['data'];
 
+        $combo = $this->combo('list');
+        $key = array_search('CETAK', array_column( $combo, 'parameter')); 
+        $rekappengeluaran["combo"] =  $combo[$key];
         return view('reports.rekappengeluaranheader', compact('rekappengeluaran','rekappengeluaran_details'));
     }
 

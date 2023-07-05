@@ -96,7 +96,6 @@
         .then(response => {
          
         $.each(response.data, (index, value) => {
-            console.log(value);
             let element = $('#crudForm').find(`[name="${index}"]`);
 
             if (element.is('select')) {
@@ -110,7 +109,6 @@
     })
     .catch(error => {
         // Penanganan kesalahan
-        console.error(error);
     });
 
 
@@ -267,13 +265,76 @@
                 },
             })
 
-            .customPager({})
+            .customPager({
+                buttons: [{
+                    id: 'report',
+                    innerHTML: '<i class="fa fa-print"></i> REPORT',
+                    class: 'btn btn-info btn-sm mr-1',
+                    onClick: function(event) {
+                        let filter = $('#crudForm').find('[name=keterangan]').val()
+                        let dataFilter = ''
+                        if (filter == '186') {
+                            dataFilter = $('#crudForm').find('[name=gudang_id]').val()
+                        }
+                        if (filter == '187') {
+                            dataFilter = $('#crudForm').find('[name=trado_id]').val()
+                        }
+                        if (filter == '188') {
+                            dataFilter = $('#crudForm').find('[name=gandengan_id]').val()
+                        }
+
+                        if (filter != '' && dataFilter != '') {
+
+                            window.open(
+                                `{{ route('stokpersediaan.report') }}?filter=${filter}&datafilter=${dataFilter}`
+                            )
+                        } else {
+                            showDialog('ISI SELURUH KOLOM')
+                        }
+                    }
+                },{
+                    id: 'export',
+                    innerHTML: '<i class="fas fa-file-export"></i> EXPORT',
+                    class: 'btn btn-warning btn-sm mr-1',
+                    onClick: function(event) {
+                        let filter = $('#crudForm').find('[name=keterangan]').val()
+                        let dataFilter = ''
+                        if (filter == '186') {
+                            dataFilter = $('#crudForm').find('[name=gudang_id]').val()
+                        }
+                        if (filter == '187') {
+                            dataFilter = $('#crudForm').find('[name=trado_id]').val()
+                        }
+                        if (filter == '188') {
+                            dataFilter = $('#crudForm').find('[name=gandengan_id]').val()
+                        }
+
+                        if (filter != '' && dataFilter != '') {
+
+                            window.open(
+                                `{{ route('stokpersediaan.export') }}?filter=${filter}&datafilter=${dataFilter}`
+                            )
+                        } else {
+                            showDialog('ISI SELURUH KOLOM')
+                        }
+                    }
+                }
+            ]
+            })
 
         /* Append clear filter button */
         loadClearFilter($('#jqGrid'))
 
         /* Append global search */
         loadGlobalSearch($('#jqGrid'))
+
+        if (!`{{ $myAuth->hasPermission('stokpersediaan', 'export') }}`) {
+            $('#export').attr('disabled', 'disabled')
+        }
+
+        if (!`{{ $myAuth->hasPermission('stokpersediaan', 'report') }}`) {
+            $('#report').attr('disabled', 'disabled')
+        }
     }
 
     $(document).on('click', '#btnReload', function(event) {

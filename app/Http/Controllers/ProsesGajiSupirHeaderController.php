@@ -319,6 +319,8 @@ class ProsesGajiSupirHeaderController extends MyController
 
             foreach ($detail_columns as $detail_columns_index => $detail_column) {
                 $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
+                $sheet->getStyle("A$detail_table_header_row:M$detail_table_header_row")->getFont()->setBold(true);
+                $sheet->getStyle("A$detail_table_header_row:M$detail_table_header_row")->getAlignment()->setHorizontal('center');
             }
             $response_detail['totals'] = number_format((float) $response_detail['total'], '2', '.', ',');
             $response_detail['uangjalans'] = number_format((float) $response_detail['uangjalan'], '2', '.', ',');

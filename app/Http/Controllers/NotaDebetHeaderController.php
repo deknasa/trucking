@@ -83,20 +83,16 @@ class NotaDebetHeaderController extends MyController
 
     public function combo($aksi)
     {
-
         $status = [
             'status' => $aksi,
             'grp' => 'STATUSCETAK',
             'subgrp' => 'STATUSCETAK',
-        ];
-                
+        ]; 
         $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'user/combostatus',$status);
-
         return $response['data'];
     }
-
 
     /**
      * @ClassName
@@ -118,8 +114,11 @@ class NotaDebetHeaderController extends MyController
        $notadebet_detail = Http::withHeaders(request()->header())
            ->withOptions(['verify' => false])
            ->withToken(session('access_token'))
-           ->get(config('app.api_url') .'notadebet_detail', $detailParams)['data'];
+           ->get(config('app.api_url') .'notadebetdetail', $detailParams)['data'];
 
+        $combo = $this->combo('list');
+        $key = array_search('CETAK', array_column( $combo, 'parameter')); 
+        $notadebet["combo"] =  $combo[$key];
         return view('reports.notadebetheader', compact('notadebet', 'notadebet_detail'));
     }
 
@@ -142,7 +141,7 @@ class NotaDebetHeaderController extends MyController
         $notadebet_detail = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') .'notadebet_detail', $detailParams)['data'];
+            ->get(config('app.api_url') .'notadebetdetail', $detailParams)['data'];
 
         $tglBukti = $notadebet["tglbukti"];
         $timeStamp = strtotime($tglBukti);

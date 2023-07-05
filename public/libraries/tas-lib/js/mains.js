@@ -1078,14 +1078,39 @@ function showSuccessDialog(statusText = "", message = "") {
 	});
 }
 
-function showDialog(statusText="", message="") {
-	
+// function showDialog(statusText="", message="") {
+// 	$("#dialog-message").html(`
+// 		<span class="fa fa-exclamation-triangle" aria-hidden="true" style="font-size:25px;"></span>
+// 	`)
+// 	$("#dialog-message").append(
+// 		`<p class="text-dark"> ${statusText} </p> ${message}`
+// 	);
+// 	$("#dialog-message").dialog({
+// 		modal: true,
+// 		buttons: [
+// 			{
+// 				text: "Ok",
+// 				click: function () {
+// 					$(this).dialog("close");
+// 				},
+// 			},
+// 		]
+// 	});
+// 	$(".ui-dialog-titlebar-close").find("p").remove();
+// 	
+// }
+
+function showDialog(response) {
 	$("#dialog-message").html(`
 		<span class="fa fa-exclamation-triangle" aria-hidden="true" style="font-size:25px;"></span>
 	`)
 	$("#dialog-message").append(
-		`<p class="text-dark"> ${statusText} </p> ${message}`
+		// `<p class="text-dark"> ${statusText} </p> ${message}`
+		`<p>file: ${response.file}</p>` +
+		`<p>line : ${response.line}</p>` +
+		`<p>message : ${response.message}</p>` 
 	);
+
 	$("#dialog-message").dialog({
 		modal: true,
 		buttons: [
@@ -1099,47 +1124,7 @@ function showDialog(statusText="", message="") {
 	});
 
 	$(".ui-dialog-titlebar-close").find("p").remove();
-
-
-	// let css_header = {
-	// 	background: "#db1f30",
-	// 	color: "#fff",
-	// };
-	// $(".ui-dialog .ui-widget-header").css(css_header);
-	// let css_property = {
-	// 	border: "none",
-	// 	background: "#db1f30",
-	// 	color: "#fff",
-	// };
-
-	// $(".ui-dialog .ui-dialog-titlebar-close").css(css_property);
 }
-
-// function showDialog(response) {
-// 	$("#dialog-message").html(`
-// 		<span class="fa fa-exclamation-triangle" aria-hidden="true" style="font-size:25px;"></span>
-// 	`)
-// 	$("#dialog-message").append(
-// 		// `<p class="text-dark"> ${statusText} </p> ${message}`
-// 		`<p>file: ${response.file}</p>` +
-// 		`<p>line : ${response.line}</p>` +
-// 		`<p>${response.message}</p>`
-
-// 	);
-// 	$("#dialog-message").dialog({
-// 		modal: true,
-// 		buttons: [
-// 			{
-// 				text: "Ok",
-// 				click: function () {
-// 					$(this).dialog("close");
-// 				},
-// 			},
-// 		]
-// 	});
-
-// 	$(".ui-dialog-titlebar-close").find("p").remove();
-// }  
 
 function showConfirm(statusText = "", message = "", urlDestination = "") {
 	$("#dialog-confirm").find("p").remove();
@@ -1366,7 +1351,7 @@ function abortGridLastRequest(grid) {
 			}
 		};
 	}
-} 
+}
 function isAbortComplete(grid) {
 	return grid.abortComplete !== false;
 }

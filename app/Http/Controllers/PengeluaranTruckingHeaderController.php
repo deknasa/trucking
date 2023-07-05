@@ -109,6 +109,19 @@ class PengeluaranTruckingHeaderController extends MyController
         return $noBukti;
     }
 
+    public function combo($aksi)
+    {
+        $status = [
+            'status' => $aksi,
+            'grp' => 'STATUSCETAK',
+            'subgrp' => 'STATUSCETAK',
+        ]; 
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'user/combostatus',$status);
+        return $response['data'];
+    }
+
     public function report(Request $request)
     {
         //FETCH HEADER
@@ -128,6 +141,9 @@ class PengeluaranTruckingHeaderController extends MyController
         ->withToken(session('access_token'))
         ->get(config('app.api_url') .'pengeluarantruckingdetail', $detailParams)['data'];
 
+        $combo = $this->combo('list');
+        $key = array_search('CETAK', array_column( $combo, 'parameter')); 
+        $pengeluarantrucking["combo"] =  $combo[$key];
         return view('reports.pengeluarantruckingheader', compact('pengeluarantrucking_details','pengeluarantrucking'));
     }
 

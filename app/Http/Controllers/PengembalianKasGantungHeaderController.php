@@ -70,6 +70,19 @@ class PengembalianKasGantungHeaderController extends MyController
         return $response['data'];
     }
 
+    public function combo($aksi)
+    {
+        $status = [
+            'status' => $aksi,
+            'grp' => 'STATUSCETAK',
+            'subgrp' => 'STATUSCETAK',
+        ]; 
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'user/combostatus',$status);
+        return $response['data'];
+    }
+
     public function report(Request $request)
     {
         //FETCH HEADER
@@ -86,11 +99,14 @@ class PengembalianKasGantungHeaderController extends MyController
         $responses = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') .'pengembaliankasgantung_detail', $detailParams);
+            ->get(config('app.api_url') .'pengembaliankasgantungdetail', $detailParams);
 
         $pengembaliankasgantung = $data['data'];
         $pengembaliankasgantung_details = $responses['data'];
 
+        $combo = $this->combo('list');
+        $key = array_search('CETAK', array_column( $combo, 'parameter')); 
+        $pengembaliankasgantung["combo"] =  $combo[$key];
         return view('reports.pengembaliankasgantungheader', compact('pengembaliankasgantung','pengembaliankasgantung_details'));
     }
 
@@ -110,7 +126,7 @@ class PengembalianKasGantungHeaderController extends MyController
         $responses = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') .'pengembaliankasgantung_detail', $detailParams);
+            ->get(config('app.api_url') .'pengembaliankasgantungdetail', $detailParams);
 
         $pengembaliankasgantung = $data['data'];
         $pengembaliankasgantung_details = $responses['data'];

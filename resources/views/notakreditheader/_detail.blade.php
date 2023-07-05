@@ -179,7 +179,7 @@
         abortGridLastRequest($('#detail'))
 
         $('#detail').setGridParam({
-      url: `${apiUrl}notakredit_detail`,
+      url: `${apiUrl}notakreditdetail`,
       datatype: "json",
       postData: {
         notakredit_id: id

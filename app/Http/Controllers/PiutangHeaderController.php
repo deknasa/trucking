@@ -84,24 +84,40 @@ class PiutangHeaderController extends MyController
         return $response['data'];
     }
 
+    public function combo($aksi)
+    {
+        $status = [
+            'status' => $aksi,
+            'grp' => 'STATUSCETAK',
+            'subgrp' => 'STATUSCETAK',
+        ]; 
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'user/combostatus',$status);
+        return $response['data'];
+    }
+
     public function report(Request $request)
     {
-         //FETCH HEADER
-         $id = $request->id;
-         $piutang = Http::withHeaders($request->header())
-             ->withOptions(['verify' => false])
-             ->withToken(session('access_token'))
-             ->get(config('app.api_url') . 'piutangheader/'.$id.'/export')['data'];
- 
-         //FETCH DETAIL
-         $detailParams = [
-             'piutang_id' => $request->id,
-         ];
-         $piutang_details = Http::withHeaders($request->header())
-             ->withOptions(['verify' => false])
-             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'piutangdetail', $detailParams)['data'];
+        //FETCH HEADER
+        $id = $request->id;
+        $piutang = Http::withHeaders($request->header())
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'piutangheader/'.$id.'/export')['data'];
 
+        //FETCH DETAIL
+        $detailParams = [
+            'piutang_id' => $request->id,
+        ];
+        $piutang_details = Http::withHeaders($request->header())
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+        ->get(config('app.api_url') . 'piutangdetail', $detailParams)['data'];
+
+        $combo = $this->combo('list');
+        $key = array_search('CETAK', array_column( $combo, 'parameter')); 
+        $piutang["combo"] =  $combo[$key];
         return view('reports.piutang', compact('piutang','piutang_details'));
     }
 

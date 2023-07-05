@@ -141,7 +141,7 @@
         abortGridLastRequest($('#detail'))
 
         $('#detail').setGridParam({
-      url: `${apiUrl}pengembaliankasgantung_detail`,
+      url: `${apiUrl}pengembaliankasgantungdetail`,
       datatype: "json",
       postData: {
         pengembaliankasgantung_id: id

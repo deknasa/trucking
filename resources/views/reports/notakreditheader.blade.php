@@ -16,23 +16,7 @@
   <script src="{{ asset('libraries/tas-lib/js/terbilang.js?version='. config('app.version')) }}"></script>
   <script type="text/javascript">
     
-    let notakredits = <?= json_encode($notakredit); ?>
-
-    $( document ).ready(function() {
-      var statuscetak = notakredits.statuscetak
-      if (statuscetak == 174) {
-        $(document).on('keydown', function(e) { 
-          if((e.ctrlKey || e.metaKey) && (e.key == "p" || e.charCode == 16 || e.charCode == 112 || e.keyCode == 80) ){
-            alert("Document Sudah Pernah Dicetak ");
-            e.cancelBubble = true;
-            e.preventDefault();
-            e.stopImmediatePropagation();
-          }  
-        });  
-      }
-
-
-    });
+    let notakredit = <?= json_encode($notakredit); ?>
 
     function Start() {
       Stimulsoft.Base.StiLicense.loadFromFile("{{ asset($stireport_path . 'license.php') }}");
@@ -44,12 +28,14 @@
       var viewer = new Stimulsoft.Viewer.StiViewer(viewerOptions, "StiViewer", false)
       var report = new Stimulsoft.Report.StiReport()
 
-      var statuscetak = notakredits.statuscetak
-      if (statuscetak == 174) {
+      var statuscetak = notakredit.statuscetak_id
+      var sudahcetak = notakredit['combo']['id']
+      if (statuscetak == sudahcetak) {
         viewerOptions.toolbar.showPrintButton = false;
         viewerOptions.toolbar.showSaveButton = false;
         viewerOptions.toolbar.showOpenButton = false;
       }
+
       var options = new Stimulsoft.Designer.StiDesignerOptions()
       options.appearance.fullScreenMode = true
 
@@ -69,14 +55,14 @@
 
       report.regData(dataSet.dataSetName, '', dataSet)
       report.dictionary.synchronize()
-      designer.report = report;
-      designer.renderHtml('content');
+      // designer.report = report;
+      // designer.renderHtml('content');
       viewer.report = report
       
       viewer.onPrintReport = function (event) {
         triggerEvent(window, 'afterprint');
       }
-      
+
       function triggerEvent(el, type) {
         // IE9+ and other modern browsers
         if ('createEvent' in document) {
@@ -92,10 +78,8 @@
       }
 
       window.addEventListener('afterprint', (event) => {
-        
-        var id = notakredits.id
+        var id = notakredit.id
         var apiUrl = `{{ config('app.api_url') }}`;
-        
         $.ajax({
           url: `${apiUrl}notakreditheader/${id}/printreport`,
           method: 'GET',
@@ -104,14 +88,27 @@
             Authorization: `Bearer {{ session('access_token') }}`
           },
           success: response => {
-            console.log(response);
-            location.reload()
+            window.close();
           }
-    
         })
-          
       });
     }
+  </script>
+   <script type="text/javascript">
+    $( document ).ready(function() {
+      var statuscetak = notakredit.statuscetak_id
+      var sudahcetak = notakredit['combo']['id']
+      if (statuscetak == sudahcetak) {
+        $(document).on('keydown', function(e) { 
+          if((e.ctrlKey || e.metaKey) && (e.key == "p" || e.charCode == 16 || e.charCode == 112 || e.keyCode == 80) ){
+            alert("Document Sudah Pernah Dicetak ");
+            e.cancelBubble = true;
+            e.preventDefault();
+            e.stopImmediatePropagation();
+          }  
+        });  
+      }
+    }); 
   </script>
   <style>
     .stiJsViewerPage {
@@ -119,11 +116,7 @@
     }
   </style>
 </head>
-
 <body onLoad="Start()">
-
   <div id="content"></div>
-
 </body>
-
 </html>

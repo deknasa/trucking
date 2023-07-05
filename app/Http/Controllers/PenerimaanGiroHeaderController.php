@@ -125,6 +125,19 @@ class PenerimaanGiroHeaderController extends MyController
         return $response['data'];
     }
 
+    public function comboreport($aksi)
+    {
+        $status = [
+            'status' => $aksi,
+            'grp' => 'STATUSCETAK',
+            'subgrp' => 'STATUSCETAK',
+        ]; 
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'user/combostatus',$status);
+        return $response['data'];
+    }
+
     public function report(Request $request)
     {
         //FETCH HEADER
@@ -145,6 +158,9 @@ class PenerimaanGiroHeaderController extends MyController
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'penerimaangirodetail', $detailParams)['data'];
 
+        $combo = $this->comboreport('list');
+        $key = array_search('CETAK', array_column( $combo, 'parameter')); 
+        $penerimaangiro["combo"] =  $combo[$key];
         return view('reports.penerimaangiroheader', compact('penerimaangiro','penerimaangiro_details'));
     }
 

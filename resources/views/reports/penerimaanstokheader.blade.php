@@ -53,7 +53,6 @@
       case '133':
         //POT
         report.loadFile(`{{ asset('public/reports/ReportPenerimaanStokPO.mrt') }}`)//now
-        
         break;
       case '134':
         //SPB
@@ -89,8 +88,8 @@
       report.dictionary.synchronize()
 
       viewer.report = report
-      // designer.renderHtml("content")
-      // designer.report = report
+      designer.renderHtml("content")
+      designer.report = report
       
       viewer.onPrintReport = function (event) {
         triggerEvent(window, 'afterprint');

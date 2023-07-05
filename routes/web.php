@@ -1106,6 +1106,8 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('approvalpendapatansupir/index', [ApprovalPendapatanSupirController::class, 'index']);
     Route::resource('approvalpendapatansupir', ApprovalPendapatanSupirController::class);
     
+    Route::get('stokpersediaan/export', [StokPersediaanController::class, 'export'])->name('stokpersediaan.export');
+    Route::get('stokpersediaan/report', [StokPersediaanController::class, 'report'])->name('stokpersediaan.report');
     Route::get('stokpersediaan/index', [StokPersediaanController::class, 'index']);
     Route::resource('stokpersediaan', StokPersediaanController::class);
 

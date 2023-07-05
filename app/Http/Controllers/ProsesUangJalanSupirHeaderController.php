@@ -77,15 +77,28 @@ class ProsesUangJalanSupirHeaderController extends MyController
 
         return $response['data'];
     }
+
+    public function combo($aksi)
+    {
+        $status = [
+            'status' => $aksi,
+            'grp' => 'STATUSCETAK',
+            'subgrp' => 'STATUSCETAK',
+        ]; 
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'user/combostatus',$status);
+        return $response['data'];
+    }
+
     public function report(Request $request)
     {
-
         //FETCH HEADER
         $id = $request->id;
         $uangjalansupir = Http::withHeaders($request->header())
-        ->withOptions(['verify' => false])
-        ->withToken(session('access_token'))
-        ->get(config('app.api_url') .'prosesuangjalansupirheader/'.$id.'/export')['data'];
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') .'prosesuangjalansupirheader/'.$id.'/export')['data'];
         
         //FETCH DETAIL
         $detailParams = [
@@ -97,6 +110,9 @@ class ProsesUangJalanSupirHeaderController extends MyController
             ->withToken(session('access_token'))
             ->get(config('app.api_url') .'prosesuangjalansupirdetail', $detailParams)['data'];
 
+        $combo = $this->combo('list');
+        $key = array_search('CETAK', array_column( $combo, 'parameter')); 
+        $uangjalansupir["combo"] =  $combo[$key];
         return view('reports.prosesuangjalansupir', compact('uangjalansupir','uangjalansupir_detail'));
     }
 

@@ -329,23 +329,8 @@ class RitasiController extends MyController
         $total_start_row = $detail_start_row;
         //Total
         $sheet->mergeCells('A'.$total_start_row.':J'.$total_start_row);
-        $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A'.$total_start_row.':J'.$total_start_row)->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A'.$total_start_row.':J'.$total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
         $sheet->setCellValue("K$total_start_row", number_format((float) $nominal, '2', '.', ','))->getStyle("K$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
-
-        //set diketahui dibuat
-        
-        $ttd_start_row = $total_start_row+2;
-        $sheet->setCellValue("B$ttd_start_row", 'Disetujui');
-        $sheet->setCellValue("C$ttd_start_row", 'Diketahui');
-        $sheet->setCellValue("D$ttd_start_row", 'Dibuat');
-        $sheet ->getStyle("B$ttd_start_row:D$ttd_start_row")->applyFromArray($styleArray);
-        // $sheet->mergeCells("A$ttd_end_row:C$ttd_end_row");
-        $sheet->mergeCells("B".($ttd_start_row+1).":B".($ttd_start_row+3));      
-        $sheet->mergeCells("C".($ttd_start_row+1).":C".($ttd_start_row+3));      
-        $sheet->mergeCells("D".($ttd_start_row+1).":D".($ttd_start_row+3));      
-        $sheet ->getStyle("B".($ttd_start_row+1).":B".($ttd_start_row+3))->applyFromArray($styleArray);
-        $sheet ->getStyle("C".($ttd_start_row+1).":C".($ttd_start_row+3))->applyFromArray($styleArray);
-        $sheet ->getStyle("D".($ttd_start_row+1).":D".($ttd_start_row+3))->applyFromArray($styleArray);
 
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);

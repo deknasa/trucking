@@ -15,7 +15,28 @@ class ServiceInHeaderController extends MyController
     public function index(Request $request)
     {
         $title = $this->title;
-        return view('serviceinheader.index', compact('title'));
+        
+        $data = [
+            'combocetak' => $this->comboCetak('list', 'STATUSCETAK', 'STATUSCETAK'),
+        ];
+        return view('serviceinheader.index', compact('title', 'data'));
+    }
+
+    public function comboCetak($aksi, $grp, $subgrp)
+    {
+
+        $status = [
+            'status' => $aksi,
+            'grp' => $grp,
+            'subgrp' => $subgrp,
+        ];
+
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'parameter/combolist', $status);
+
+        return $response['data'];
     }
 
     public function store(Request $request)
@@ -119,15 +140,29 @@ class ServiceInHeaderController extends MyController
         return $noBukti;
     }
 
-    private function combo()
-    {
-        $response = Http::withHeaders($this->httpHeaders)
-            ->withToken(session('access_token'))
-            ->withOptions(['verify' => false])
-            ->get(config('app.api_url') . 'serviceinheader/combo');
+    // private function combo()
+    // {
+    //     $response = Http::withHeaders($this->httpHeaders)
+    //         ->withToken(session('access_token'))
+    //         ->withOptions(['verify' => false])
+    //         ->get(config('app.api_url') . 'serviceinheader/combo');
 
+    //     return $response['data'];
+    // }
+
+    public function combo($aksi)
+    {
+        $status = [
+            'status' => $aksi,
+            'grp' => 'STATUSCETAK',
+            'subgrp' => 'STATUSCETAK',
+        ]; 
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'user/combostatus',$status);
         return $response['data'];
     }
+
     public function report(Request $request)
     {
         
@@ -149,6 +184,9 @@ class ServiceInHeaderController extends MyController
         ->get(config('app.api_url') .'serviceindetail', $detailParams);
         $serviceIn_details = $responses['data'];
 
+        $combo = $this->combo('list');
+        $key = array_search('CETAK', array_column( $combo, 'parameter')); 
+        $serviceIn["combo"] =  $combo[$key];
         return view('reports.servicein', compact('serviceIn','serviceIn_details'));
     }
 
@@ -259,6 +297,8 @@ class ServiceInHeaderController extends MyController
             
             foreach ($detail_columns as $detail_columns_index => $detail_column) {
                 $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
+                $sheet->getStyle("A$detail_table_header_row:C$detail_table_header_row")->getFont()->setBold(true);
+                $sheet->getStyle("A$detail_table_header_row:C$detail_table_header_row")->getAlignment()->setHorizontal('center');
             }
             $sheet->setCellValue("A$detail_start_row", $response_index + 1);
             $sheet->setCellValue("B$detail_start_row", $response_detail['karyawan_id']);
@@ -270,8 +310,6 @@ class ServiceInHeaderController extends MyController
             $sheet ->getStyle("A$detail_start_row:C$detail_start_row")->applyFromArray($styleArray);
             $detail_start_row++;
         }
-
-        
 
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);

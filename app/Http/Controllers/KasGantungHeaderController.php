@@ -90,6 +90,19 @@ class KasGantungHeaderController extends MyController
         return $response['data'];
     }
 
+    public function combo($aksi)
+    {
+        $status = [
+            'status' => $aksi,
+            'grp' => 'STATUSCETAK',
+            'subgrp' => 'STATUSCETAK',
+        ]; 
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'user/combostatus',$status);
+        return $response['data'];
+    }
+
     public function report(Request $request)
     {
         //FETCH HEADER
@@ -108,6 +121,9 @@ class KasGantungHeaderController extends MyController
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'kasgantungdetail', $detailParams)['data'];
 
+        $combo = $this->combo('list');
+        $key = array_search('CETAK', array_column( $combo, 'parameter')); 
+        $kasgantung["combo"] =  $combo[$key];
         return view('reports.kasgantung', compact('kasgantung', 'kasgantung_details',));
     }
 
@@ -306,12 +322,12 @@ class KasGantungHeaderController extends MyController
          $writer->save('php://output');
     }
 
-    private function combo()
-    {
-        $response = Http::withHeaders($this->httpHeaders)
-            ->withOptions(['verify' => false])
-            ->get(config('app.api_url') . 'kasgantung/combo');
+    // private function combo()
+    // {
+    //     $response = Http::withHeaders($this->httpHeaders)
+    //         ->withOptions(['verify' => false])
+    //         ->get(config('app.api_url') . 'kasgantung/combo');
 
-        return $response['data'];
-    }
+    //     return $response['data'];
+    // }
 }

@@ -45,8 +45,16 @@ class KartuStokController extends MyController
 
         $data = $header['data'];
         $dataHeader = $header['dataheader'];
-        $user = Auth::user();
-        return view('reports.kartustok', compact('data', 'user', 'dataHeader'));
+        
+
+        foreach ($data as $response_index => $response_detail) {
+            $tglBukti = $response_detail["tglbukti"];
+            $timeStamp = strtotime($tglBukti);
+            $dateTglBukti = date('d-m-Y', $timeStamp); 
+        
+            $data[$response_index]["tglbukti"] = $dateTglBukti;
+        }
+        return view('reports.kartustok', compact('data','dataHeader'));
     }
 
     public function export(Request $request): void
