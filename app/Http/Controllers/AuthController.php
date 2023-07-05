@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Menu;
+use App\Models\User;
+use App\Models\Parameter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
@@ -40,15 +42,45 @@ class AuthController extends Controller
             'client_id' => config('app.emkl_client_id'),
             'client_secret' => config('app.emkl_client_secret')
         ];
+       
+        $dataIp = $credentials;
+        // $dataIp['ipclient'] = "192.168.12.3";
+        $dataIp['ipclient'] = $request->ip();
 
         $cekIp = Http::withHeaders([
             'Accept' => 'application/json'
         ])->withOptions(['verify' => true])
-        ->get(config('app.api_url') . 'cekIp', $credentials);
+        ->get(config('app.api_url') . 'cekIp', $dataIp);
 
+        $isLocal = $cekIp['data']['status'];
+        $user = User::where('user',$request->user)->first();
+        if (!$isLocal) {
+            
+            
+            User::where('user',$request->user)->first();
+            if (!$user) {
+                return redirect()->back()->withErrors([
+                    'user_not_found' => 'User not registered'
+                ]);
+            }
+            // if($user->statusakses )
+            $parameter = Http::withHeaders([
+                'Accept' => 'application/json'
+            ])->withOptions(['verify' => false])
+                ->withToken(session('access_token'))
+                ->get(config('app.api_url') . 'parameter/select/STATUS AKSES/STATUS AKSES/PUBLIC');
+           
+            // $statusPublic = array_filter($parameter['data'], function($item) use ($targetKeterangan) {
+            //     return $item["keterangan"] === $targetKeterangan;
+            // });
+            if($user->statusakses != $parameter['id']){
+                return redirect()->back()->withErrors([
+                    'user_not_found' => 'User out Of network'
+                ]);
+            }
 
-
-    
+        }
+        // Auth::user()
 
         if (Auth::attempt($credentials)) {
             
@@ -84,6 +116,22 @@ class AuthController extends Controller
         session()->forget('menus');
         
         return redirect()->route('login');
+    }
+
+    public function cekIp(Request $request){
+        $credentials = [
+            'user' => $request->user,
+            'password' => $request->password,
+        ];
+        $dataIp = $credentials;
+        $dataIp['ipclient'] = $request->ip();
+        dd($dataIp);
+        $cekIp = Http::withHeaders([
+            'Accept' => 'application/json'
+        ])->withOptions(['verify' => true])
+        // ->get("https://tasmdn.kozow.com:8074/trucking-api/public/api/" . 'cekIp', $credentials);
+        ->get(config('app.api_url') . 'cekIp', $dataIp);
+        dd($cekIp['data']);
     }
 
 }

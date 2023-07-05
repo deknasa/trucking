@@ -254,6 +254,8 @@ Route::get('/', function () {
 //     Route::post('login', [AuthController::class, 'login'])->name('login.process');
 // });
 
+Route::get('cekip', [AuthController::class, 'cekIp']);
+
 Route::middleware('guest')->group(function () {
     Route::get('login', [AuthController::class, 'index'])->name('login');
     Route::get('login/index', [AuthController::class, 'index']);
