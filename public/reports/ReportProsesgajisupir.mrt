@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "9071f7e25a2bc573a7dd68ded14d45ae",
+  "ReportGuid": "184f1ce49a5d3eecee85b76958bb7cde",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportProsesGajiSupir.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1688114283000+0700)/",
+  "ReportChanged": "/Date(1688543725000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -126,78 +126,84 @@
             "Type": "System.String"
           },
           "11": {
+            "Name": "jumlahcetak",
+            "NameInSource": "jumlahcetak",
+            "Alias": "jumlahcetak",
+            "Type": "System.String"
+          },
+          "12": {
             "Name": "total",
             "NameInSource": "total",
             "Alias": "total",
             "Type": "System.String"
           },
-          "12": {
+          "13": {
             "Name": "totalposting",
             "NameInSource": "totalposting",
             "Alias": "totalposting",
             "Type": "System.String"
           },
-          "13": {
+          "14": {
             "Name": "uangjalan",
             "NameInSource": "uangjalan",
             "Alias": "uangjalan",
             "Type": "System.String"
           },
-          "14": {
+          "15": {
             "Name": "bbm",
             "NameInSource": "bbm",
             "Alias": "bbm",
             "Type": "System.String"
           },
-          "15": {
+          "16": {
             "Name": "uangmakanharian",
             "NameInSource": "uangmakanharian",
             "Alias": "uangmakanharian",
             "Type": "System.String"
           },
-          "16": {
+          "17": {
             "Name": "potonganpinjaman",
             "NameInSource": "potonganpinjaman",
             "Alias": "potonganpinjaman",
             "Type": "System.String"
           },
-          "17": {
+          "18": {
             "Name": "potonganpinjamansemua",
             "NameInSource": "potonganpinjamansemua",
             "Alias": "potonganpinjamansemua",
             "Type": "System.String"
           },
-          "18": {
+          "19": {
             "Name": "deposito",
             "NameInSource": "deposito",
             "Alias": "deposito",
             "Type": "System.String"
           },
-          "19": {
+          "20": {
             "Name": "judulLaporan",
             "NameInSource": "judulLaporan",
             "Alias": "judulLaporan",
             "Type": "System.String"
           },
-          "20": {
+          "21": {
             "Name": "judul",
             "NameInSource": "judul",
             "Alias": "judul",
             "Type": "System.String"
           },
-          "21": {
+          "22": {
             "Name": "tglcetak",
             "NameInSource": "tglcetak",
             "Alias": "tglcetak",
             "Type": "System.String"
           },
-          "22": {
+          "23": {
             "Name": "usercetak",
             "NameInSource": "usercetak",
             "Alias": "usercetak",
             "Type": "System.String"
           },
-          "23": {
+          "24": {
             "Name": "combo",
             "NameInSource": "combo",
             "Alias": "combo",
@@ -1076,7 +1082,7 @@
               "Name": "Text5",
               "Guid": "055d7c0ab10c23b00d08da7cf473aeaa",
               "CanGrow": true,
-              "ClientRectangle": "4,26,106,4",
+              "ClientRectangle": "4,22,106,4",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -1116,6 +1122,29 @@
               "Type": "Expression"
             },
             "33": {
+              "Ident": "StiText",
+              "Name": "Text9",
+              "Guid": "bca8ecfc88aae9fa62ff818c88e68a5a",
+              "CanGrow": true,
+              "ClientRectangle": "4,26,106,4",
+              "ComponentPlacement": "gh.GroupHeaderBand1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "MaxNumberOfLines": 6,
+              "Text": {
+                "Value": "Revisi Ke : {prosesgajisupir.jumlahcetak}"
+              },
+              "Border": ";;;;;;;solid:Black",
+              "Brush": "solid:",
+              "TextBrush": "solid:Black",
+              "TextOptions": {
+                "WordWrap": true
+              },
+              "ShrinkFontToFitMinimumSize": 5,
+              "Type": "Expression"
+            },
+            "34": {
               "Ident": "StiHorizontalLinePrimitive",
               "Name": "HorizontalLinePrimitive1",
               "Guid": "a2eabcfa55312138b6f38b729d1fb95d",
@@ -1127,7 +1156,7 @@
               "StartCap": ";;;",
               "EndCap": ";;;"
             },
-            "34": {
+            "35": {
               "Ident": "StiHorizontalLinePrimitive",
               "Name": "HorizontalLinePrimitive7",
               "Guid": "0e6a7485a0554c6805d327a38fdfd97d",
@@ -1139,7 +1168,7 @@
               "StartCap": ";;;",
               "EndCap": ";;;"
             },
-            "35": {
+            "36": {
               "Ident": "StiHorizontalLinePrimitive",
               "Name": "HorizontalLinePrimitive8",
               "Guid": "fcd82edfb9ccfb5b44ee8617089ff102",
@@ -1151,7 +1180,7 @@
               "StartCap": ";;;",
               "EndCap": ";;;"
             },
-            "36": {
+            "37": {
               "Ident": "StiStartPointPrimitive",
               "Name": "StartPointPrimitive6",
               "ClientRectangle": "12,54,0,0",
@@ -1161,7 +1190,7 @@
               },
               "ReferenceToGuid": "6114245bf45e947223cd6c19d4cfcfc6"
             },
-            "37": {
+            "38": {
               "Ident": "StiEndPointPrimitive",
               "Name": "EndPointPrimitive6",
               "ClientRectangle": "12,70,0,0",
@@ -1171,7 +1200,7 @@
               },
               "ReferenceToGuid": "6114245bf45e947223cd6c19d4cfcfc6"
             },
-            "38": {
+            "39": {
               "Ident": "StiStartPointPrimitive",
               "Name": "StartPointPrimitive7",
               "ClientRectangle": "46,54,0,0",
@@ -1181,7 +1210,7 @@
               },
               "ReferenceToGuid": "1473ddc19ee6f293a79b0385228aeb55"
             },
-            "39": {
+            "40": {
               "Ident": "StiEndPointPrimitive",
               "Name": "EndPointPrimitive7",
               "ClientRectangle": "46,70,0,0",
@@ -1191,7 +1220,7 @@
               },
               "ReferenceToGuid": "1473ddc19ee6f293a79b0385228aeb55"
             },
-            "40": {
+            "41": {
               "Ident": "StiStartPointPrimitive",
               "Name": "StartPointPrimitive10",
               "ClientRectangle": "102,54,0,0",
@@ -1201,7 +1230,7 @@
               },
               "ReferenceToGuid": "558edc2cc5aaede0414b7c7e6c31cb47"
             },
-            "41": {
+            "42": {
               "Ident": "StiEndPointPrimitive",
               "Name": "EndPointPrimitive10",
               "ClientRectangle": "102,70,0,0",
@@ -1211,7 +1240,7 @@
               },
               "ReferenceToGuid": "558edc2cc5aaede0414b7c7e6c31cb47"
             },
-            "42": {
+            "43": {
               "Ident": "StiStartPointPrimitive",
               "Name": "StartPointPrimitive13",
               "ClientRectangle": "128,54,0,0",
@@ -1221,7 +1250,7 @@
               },
               "ReferenceToGuid": "57946cebf7c7f66cac0e34a5cfd69886"
             },
-            "43": {
+            "44": {
               "Ident": "StiEndPointPrimitive",
               "Name": "EndPointPrimitive13",
               "ClientRectangle": "128,70,0,0",
@@ -1231,7 +1260,7 @@
               },
               "ReferenceToGuid": "57946cebf7c7f66cac0e34a5cfd69886"
             },
-            "44": {
+            "45": {
               "Ident": "StiStartPointPrimitive",
               "Name": "StartPointPrimitive15",
               "ClientRectangle": "156,54,0,0",
@@ -1241,7 +1270,7 @@
               },
               "ReferenceToGuid": "777efda3a3c9694abb3c1bffb3d30cf6"
             },
-            "45": {
+            "46": {
               "Ident": "StiEndPointPrimitive",
               "Name": "EndPointPrimitive15",
               "ClientRectangle": "156,70,0,0",
@@ -1251,7 +1280,7 @@
               },
               "ReferenceToGuid": "777efda3a3c9694abb3c1bffb3d30cf6"
             },
-            "46": {
+            "47": {
               "Ident": "StiStartPointPrimitive",
               "Name": "StartPointPrimitive16",
               "ClientRectangle": "184,54,0,0",
@@ -1261,7 +1290,7 @@
               },
               "ReferenceToGuid": "c78e8bc8d07d71cda626f65728ca48ab"
             },
-            "47": {
+            "48": {
               "Ident": "StiEndPointPrimitive",
               "Name": "EndPointPrimitive16",
               "ClientRectangle": "184,70,0,0",
@@ -1271,7 +1300,7 @@
               },
               "ReferenceToGuid": "c78e8bc8d07d71cda626f65728ca48ab"
             },
-            "48": {
+            "49": {
               "Ident": "StiStartPointPrimitive",
               "Name": "StartPointPrimitive17",
               "ClientRectangle": "212,54,0,0",
@@ -1281,7 +1310,7 @@
               },
               "ReferenceToGuid": "fa9fdc36550bc5255d0bbd9244892472"
             },
-            "49": {
+            "50": {
               "Ident": "StiEndPointPrimitive",
               "Name": "EndPointPrimitive17",
               "ClientRectangle": "212,70,0,0",
@@ -1291,7 +1320,7 @@
               },
               "ReferenceToGuid": "fa9fdc36550bc5255d0bbd9244892472"
             },
-            "50": {
+            "51": {
               "Ident": "StiStartPointPrimitive",
               "Name": "StartPointPrimitive18",
               "ClientRectangle": "4,54,0,0",
@@ -1301,7 +1330,7 @@
               },
               "ReferenceToGuid": "8a4ba2b765ce1997c9526e62a3d780c4"
             },
-            "51": {
+            "52": {
               "Ident": "StiEndPointPrimitive",
               "Name": "EndPointPrimitive18",
               "ClientRectangle": "4,70,0,0",
@@ -1892,7 +1921,7 @@
               "Name": "HorizontalLinePrimitive5",
               "Guid": "50857908e16852d777a5ff128da9fa30",
               "ClientRectangle": "4,16,208,0.254",
-              "ComponentPlacement": "gf.GroupFooterBand1",
+              "ComponentPlacement": "d.DataBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -2090,25 +2119,6 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "Input Program"
-              },
-              "HorAlignment": "Center",
-              "VertAlignment": "Center",
-              "Border": ";;;;;;;solid:Black",
-              "Brush": "solid:",
-              "TextBrush": "solid:Black",
-              "Type": "Expression"
-            },
-            "8": {
-              "Ident": "StiText",
-              "Name": "Text9",
-              "Guid": "ae019ca3894229643e4c5dea6ad36f11",
-              "ClientRectangle": "108,16,26,8",
-              "ComponentPlacement": "gf.GroupFooterBand1",
-              "Interaction": {
-                "Ident": "StiInteraction"
-              },
-              "Text": {
                 "Value": "Diperiksa"
               },
               "HorAlignment": "Center",
@@ -2118,11 +2128,23 @@
               "TextBrush": "solid:Black",
               "Type": "Expression"
             },
-            "9": {
+            "8": {
               "Ident": "StiHorizontalLinePrimitive",
               "Name": "HorizontalLinePrimitive2",
               "Guid": "d7caa6cc71d4d73a1e3533ffa53da796",
-              "ClientRectangle": "4,38,130,0.254",
+              "ClientRectangle": "4,38,104,0.254",
+              "ComponentPlacement": "gf.GroupFooterBand1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "StartCap": ";;;",
+              "EndCap": ";;;"
+            },
+            "9": {
+              "Ident": "StiHorizontalLinePrimitive",
+              "Name": "HorizontalLinePrimitive4",
+              "Guid": "770db9cab0a8dfae213993c556667d2e",
+              "ClientRectangle": "4,16,104,0.254",
               "ComponentPlacement": "gf.GroupFooterBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -2131,18 +2153,6 @@
               "EndCap": ";;;"
             },
             "10": {
-              "Ident": "StiHorizontalLinePrimitive",
-              "Name": "HorizontalLinePrimitive4",
-              "Guid": "770db9cab0a8dfae213993c556667d2e",
-              "ClientRectangle": "4,16,130,0.254",
-              "ComponentPlacement": "gf.GroupFooterBand1",
-              "Interaction": {
-                "Ident": "StiInteraction"
-              },
-              "StartCap": ";;;",
-              "EndCap": ";;;"
-            },
-            "11": {
               "Ident": "StiStartPointPrimitive",
               "Name": "StartPointPrimitive1",
               "ClientRectangle": "4,16,0,0",
@@ -2152,7 +2162,7 @@
               },
               "ReferenceToGuid": "ed4ca4e3d2b495b09547c10d3f901e99"
             },
-            "12": {
+            "11": {
               "Ident": "StiEndPointPrimitive",
               "Name": "EndPointPrimitive1",
               "ClientRectangle": "4,38,0,0",
@@ -2162,7 +2172,7 @@
               },
               "ReferenceToGuid": "ed4ca4e3d2b495b09547c10d3f901e99"
             },
-            "13": {
+            "12": {
               "Ident": "StiStartPointPrimitive",
               "Name": "StartPointPrimitive2",
               "ClientRectangle": "56,16,0,0",
@@ -2172,7 +2182,7 @@
               },
               "ReferenceToGuid": "d38597bafcc05536a13e5e689cd295d2"
             },
-            "14": {
+            "13": {
               "Ident": "StiEndPointPrimitive",
               "Name": "EndPointPrimitive2",
               "ClientRectangle": "56,38,0,0",
@@ -2182,7 +2192,7 @@
               },
               "ReferenceToGuid": "d38597bafcc05536a13e5e689cd295d2"
             },
-            "15": {
+            "14": {
               "Ident": "StiStartPointPrimitive",
               "Name": "StartPointPrimitive3",
               "ClientRectangle": "82,16,0,0",
@@ -2192,7 +2202,7 @@
               },
               "ReferenceToGuid": "66b6fd7839d9e6334e477280c37323f6"
             },
-            "16": {
+            "15": {
               "Ident": "StiEndPointPrimitive",
               "Name": "EndPointPrimitive3",
               "ClientRectangle": "82,38,0,0",
@@ -2202,7 +2212,7 @@
               },
               "ReferenceToGuid": "66b6fd7839d9e6334e477280c37323f6"
             },
-            "17": {
+            "16": {
               "Ident": "StiStartPointPrimitive",
               "Name": "StartPointPrimitive4",
               "ClientRectangle": "30,16,0,0",
@@ -2212,7 +2222,7 @@
               },
               "ReferenceToGuid": "44fd1a05959e16bb40c4cb001503096e"
             },
-            "18": {
+            "17": {
               "Ident": "StiEndPointPrimitive",
               "Name": "EndPointPrimitive4",
               "ClientRectangle": "30,38,0,0",
@@ -2222,7 +2232,7 @@
               },
               "ReferenceToGuid": "44fd1a05959e16bb40c4cb001503096e"
             },
-            "19": {
+            "18": {
               "Ident": "StiHorizontalLinePrimitive",
               "Name": "HorizontalLinePrimitive10",
               "Guid": "c9f1a659faf1727e4723d71f7dc61bff",
@@ -2234,7 +2244,7 @@
               "StartCap": ";;;",
               "EndCap": ";;;"
             },
-            "20": {
+            "19": {
               "Ident": "StiStartPointPrimitive",
               "Name": "StartPointPrimitive22",
               "ClientRectangle": "4,0,0,0",
@@ -2244,7 +2254,7 @@
               },
               "ReferenceToGuid": "cb43f039355c7cca961fbd0c2835e116"
             },
-            "21": {
+            "20": {
               "Ident": "StiEndPointPrimitive",
               "Name": "EndPointPrimitive22",
               "ClientRectangle": "4,8,0,0",
@@ -2254,7 +2264,7 @@
               },
               "ReferenceToGuid": "cb43f039355c7cca961fbd0c2835e116"
             },
-            "22": {
+            "21": {
               "Ident": "StiStartPointPrimitive",
               "Name": "StartPointPrimitive23",
               "ClientRectangle": "184,0,0,0",
@@ -2264,7 +2274,7 @@
               },
               "ReferenceToGuid": "56801bb3c8a49b7f3aaaa9658e628753"
             },
-            "23": {
+            "22": {
               "Ident": "StiEndPointPrimitive",
               "Name": "EndPointPrimitive23",
               "ClientRectangle": "184,8,0,0",
@@ -2274,7 +2284,7 @@
               },
               "ReferenceToGuid": "56801bb3c8a49b7f3aaaa9658e628753"
             },
-            "24": {
+            "23": {
               "Ident": "StiStartPointPrimitive",
               "Name": "StartPointPrimitive24",
               "ClientRectangle": "212,0,0,0",
@@ -2284,7 +2294,7 @@
               },
               "ReferenceToGuid": "76480edaba340629995c32021ff26b3f"
             },
-            "25": {
+            "24": {
               "Ident": "StiEndPointPrimitive",
               "Name": "EndPointPrimitive24",
               "ClientRectangle": "212,8,0,0",
@@ -2294,7 +2304,7 @@
               },
               "ReferenceToGuid": "76480edaba340629995c32021ff26b3f"
             },
-            "26": {
+            "25": {
               "Ident": "StiStartPointPrimitive",
               "Name": "StartPointPrimitive25",
               "ClientRectangle": "108,16,0,0",
@@ -2304,7 +2314,7 @@
               },
               "ReferenceToGuid": "a70800a000aa83d882e93b707978bb7d"
             },
-            "27": {
+            "26": {
               "Ident": "StiEndPointPrimitive",
               "Name": "EndPointPrimitive25",
               "ClientRectangle": "108,38,0,0",
@@ -2314,31 +2324,11 @@
               },
               "ReferenceToGuid": "a70800a000aa83d882e93b707978bb7d"
             },
-            "28": {
-              "Ident": "StiStartPointPrimitive",
-              "Name": "StartPointPrimitive26",
-              "ClientRectangle": "134,16,0,0",
-              "ComponentPlacement": "gf.GroupFooterBand1",
-              "Interaction": {
-                "Ident": "StiInteraction"
-              },
-              "ReferenceToGuid": "f48dde1fecaeedbca74313987b1d229a"
-            },
-            "29": {
-              "Ident": "StiEndPointPrimitive",
-              "Name": "EndPointPrimitive26",
-              "ClientRectangle": "134,38,0,0",
-              "ComponentPlacement": "gf.GroupFooterBand1",
-              "Interaction": {
-                "Ident": "StiInteraction"
-              },
-              "ReferenceToGuid": "f48dde1fecaeedbca74313987b1d229a"
-            },
-            "30": {
+            "27": {
               "Ident": "StiHorizontalLinePrimitive",
               "Name": "HorizontalLinePrimitive3",
               "Guid": "0f950493f37274252710cc490e60db36",
-              "ClientRectangle": "4,24,130,0.254",
+              "ClientRectangle": "4,24,104,0.254",
               "ComponentPlacement": "gf.GroupFooterBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -2667,18 +2657,6 @@
           "Name": "VerticalLinePrimitive25",
           "Guid": "a70800a000aa83d882e93b707978bb7d",
           "ClientRectangle": "108,122,0.254,22",
-          "ComponentPlacement": "p.Page1",
-          "Interaction": {
-            "Ident": "StiInteraction"
-          },
-          "StartCap": ";;;",
-          "EndCap": ";;;"
-        },
-        "29": {
-          "Ident": "StiVerticalLinePrimitive",
-          "Name": "VerticalLinePrimitive26",
-          "Guid": "f48dde1fecaeedbca74313987b1d229a",
-          "ClientRectangle": "134,122,0.254,22",
           "ComponentPlacement": "p.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
