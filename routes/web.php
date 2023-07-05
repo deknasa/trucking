@@ -227,7 +227,7 @@ use App\Http\Controllers\LaporanKartuHutangPerSupplierController;
 use App\Http\Controllers\LaporanKartuPiutangPerAgenController;
 use App\Http\Controllers\MainAkunPusatController;
 use App\Http\Controllers\LaporanHistoryDepositoController;
-
+use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\UbahPasswordController;
 
 /*
@@ -257,6 +257,13 @@ Route::middleware('guest')->group(function () {
     Route::get('login/index', [AuthController::class, 'index']);
     Route::post('login', [AuthController::class, 'login'])->name('login.process');
 });
+
+Route::get('reset-password/expired', [ResetPasswordController::class, 'expired'])->name('reset-password.expired');
+Route::get('reset-password/success', [ResetPasswordController::class, 'success'])->name('reset-password.success');
+
+
+  Route::get('reset-password/{token}', [ResetPasswordController::class, 'index'])->name('reset-password.index')->middleware('jwt');
+
 
 Route::middleware(['auth','authorized'])->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('/');
