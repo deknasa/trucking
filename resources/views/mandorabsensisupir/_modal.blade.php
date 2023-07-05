@@ -133,11 +133,19 @@
         name: 'page',
         value: page
       })
-      data.push({
-        name: 'limit',
-        value: limit
-      })
 
+      if (rowNum == 0) {
+        data.push({
+          name: 'limit',
+          value: rowNum
+        })
+      } else {
+        data.push({
+          name: 'limit',
+          value: limit
+        })
+      }
+      
       switch (action) {
         case 'store':
           method = 'POST'
@@ -492,7 +500,7 @@
     })
   }
 
-  
+
   function setSupirEnable() {
     let supir = $('#crudForm [name=supir]')
     if (kodeabsen == '1') {
@@ -505,8 +513,8 @@
 
     } else {
       supir.attr('readonly', false)
-        supir.parents('.input-group').find('.input-group-append').show()
-        supir.parents('.input-group').find('.button-clear').show()
+      supir.parents('.input-group').find('.input-group-append').show()
+      supir.parents('.input-group').find('.button-clear').show()
 
     }
   }
@@ -562,7 +570,7 @@
         element.val('')
         $(`#crudForm [name="absen_id"]`).first().val('')
         element.data('currentValue', element.val())
-        kodeabsen=0
+        kodeabsen = 0
         setSupirEnable()
       }
     })
