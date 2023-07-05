@@ -12,6 +12,7 @@
 
     @include('akunpusat._modal')
 
+    @include('akunpusat.transfer._modal')
     @push('scripts')
         <script>
             let indexRow = 0;
@@ -462,6 +463,14 @@
                                     $('#rangeModal').data('action', 'export')
                                     $('#rangeModal').find('button:submit').html(`Export`)
                                     $('#rangeModal').modal('show')
+                                }
+                            },
+                            {
+                                id: 'transfer',
+                                innerHTML: '<i class="fa fa-upload"></i> TRANSFER',
+                                class: 'btn btn-purple btn-sm mr-1',
+                                onClick: () => {
+                                    transferCoa()
                                 }
                             },
                         ]

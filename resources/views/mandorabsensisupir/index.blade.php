@@ -41,12 +41,11 @@
         // datatype: "local",
         data: {
           limit: 0,
-          sortIndex:'kodetrado',
-          sortOrder:'asc',
+          sortIndex: 'kodetrado',
+          sortOrder: 'asc',
         },
         datatype: "json",
-        colModel: [
-          {
+        colModel: [{
             label: 'id',
             name: 'id',
             width: '50px',
@@ -78,8 +77,8 @@
           {
             label: 'JAM',
             name: 'jam',
-            formatter:'date',
-            formatoptions:{
+            formatter: 'date',
+            formatoptions: {
               srcformat: "H:i:s",
               newformat: "H:i",
               // userLocalTime : true
@@ -103,7 +102,7 @@
               newformat: "d-m-Y"
             }
           },
-          
+
         ],
         autowidth: true,
         shrinkToFit: false,
@@ -111,7 +110,7 @@
         rowNum: rowNum,
         rownumbers: true,
         rownumWidth: 45,
-        rowList: [10, 20, 50,0],
+        rowList: [10, 20, 50, 0],
         toolbar: [true, "top"],
         sortable: false,
         sortname: sortname,
@@ -128,7 +127,7 @@
           total: 'attributes.total',
           records: 'attributes.records',
         },
-        
+
         loadBeforeSend: function(jqXHR) {
           jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
 
@@ -181,6 +180,9 @@
             $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
           }
 
+          if (rowNum == 0) {
+            $('#jqGrid_rowList option[value=0]').attr('selected','selected');
+          }
           setHighlight($(this))
         },
       })
@@ -194,7 +196,7 @@
         disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
           abortGridLastRequest($(this))
-          
+
           clearGlobalSearch($('#jqGrid'))
         },
       })
@@ -205,7 +207,7 @@
             innerHTML: '<i class="fa fa-plus"></i> ADD',
             class: 'btn btn-primary btn-sm mr-1',
             onClick: () => {
-              
+
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               let rowData = $("#jqGrid").jqGrid("getRowData", selectedId);
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -222,11 +224,11 @@
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               let rowData = $("#jqGrid").jqGrid("getRowData", selectedId);
-              
+
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Please select a row')
               } else {
-                cekValidasi(rowData.trado_id,'edit')
+                cekValidasi(rowData.trado_id, 'edit')
               }
             }
           },
@@ -240,11 +242,11 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Please select a row')
               } else {
-                cekValidasi(rowData.trado_id,'delete')
+                cekValidasi(rowData.trado_id, 'delete')
               }
             }
           },
-         
+
         ]
       })
 
@@ -278,7 +280,7 @@
       $('#absen').attr('disabled', 'disabled')
     }
 
-    
+
 
     $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {
