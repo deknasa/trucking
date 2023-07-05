@@ -194,6 +194,8 @@
 
     activeGrid = null
     initDatepicker()
+    initSelect2(form.find('.select2bs4'), true)
+
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
@@ -223,7 +225,6 @@
       .then(() => {
         showDefault(form)
       })
-      initSelect2(form.find('.select2bs4'), true)
 
   }
 
