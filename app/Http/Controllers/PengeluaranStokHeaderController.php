@@ -243,7 +243,7 @@ class PengeluaranStokHeaderController extends MyController
         if(!empty($gudang)) {
             $kolom = "Gudang";
             $value = $gudang;
-          } elseif(!empty($trado)) {
+        } elseif(!empty($trado)) {
             $kolom = "Trado";
             $value = $trado;
           } elseif(!empty($gandengan)) {

@@ -212,6 +212,26 @@ class PenerimaanStokHeaderController extends MyController
             ->get(config('app.api_url') . 'penerimaanstokheader/'.$id);
     }
 
+    public function persediaan($gudang,$trado,$gandengan)
+    {
+        $kolom = null;
+        $value = 0;
+        if(!empty($gudang)) {
+            $kolom = "Gudang";
+            $value = $gudang;
+          } elseif(!empty($trado)) {
+            $kolom = "Trado";
+            $value = $trado;
+          } elseif(!empty($gandengan)) {
+            $kolom = "Gandengan";
+            $value = $gandengan;
+          }
+          return [
+            "column"=>$kolom,
+            "value"=>$value
+        ];
+    }
+
     public function report(Request $request)
     {
         $params = [
@@ -237,7 +257,16 @@ class PenerimaanStokHeaderController extends MyController
         $key = array_search('CETAK', array_column( $combo, 'parameter')); 
         $data["combo"] =  $combo[$key];
         $penerimaanstokheaders = $data;
+
+        $trado = $penerimaanstokheaders['trado'];
+        $gandengan = $penerimaanstokheaders['gandengan'];
+        $gudang = $penerimaanstokheaders['gudang'];
+       
+        $persediaan = $this->persediaan($gudang,$trado,$gandengan);
+        $data['column'] = $persediaan['column'];
+        $data['value'] = $persediaan['value'];
         
+        $penerimaanstokheaders = $data;
         return view('reports.penerimaanstokheader', compact('penerimaanstokheaders'));
     }
 

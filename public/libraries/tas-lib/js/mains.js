@@ -1096,39 +1096,14 @@ function showDangerDialog(statusText = "", message = "") {
 		]
 	});
 }
-// function showDialog(statusText="", message="") {
-// 	$("#dialog-message").html(`
-// 		<span class="fa fa-exclamation-triangle" aria-hidden="true" style="font-size:25px;"></span>
-// 	`)
-// 	$("#dialog-message").append(
-// 		`<p class="text-dark"> ${statusText} </p> ${message}`
-// 	);
-// 	$("#dialog-message").dialog({
-// 		modal: true,
-// 		buttons: [
-// 			{
-// 				text: "Ok",
-// 				click: function () {
-// 					$(this).dialog("close");
-// 				},
-// 			},
-// 		]
-// 	});
-// 	$(".ui-dialog-titlebar-close").find("p").remove();
-// 	
-// }
 
-function showDialog(response) {
+function showDialog(statusText="", message="") {
 	$("#dialog-message").html(`
 		<span class="fa fa-exclamation-triangle" aria-hidden="true" style="font-size:25px;"></span>
 	`)
 	$("#dialog-message").append(
-		// `<p class="text-dark"> ${statusText} </p> ${message}`
-		`<p>file: ${response.file}</p>` +
-		`<p>line : ${response.line}</p>` +
-		`<p>message : ${response.message}</p>` 
+		`<p class="text-dark"> ${statusText} </p> ${message}`
 	);
-
 	$("#dialog-message").dialog({
 		modal: true,
 		buttons: [
@@ -1140,9 +1115,44 @@ function showDialog(response) {
 			},
 		]
 	});
-
 	$(".ui-dialog-titlebar-close").find("p").remove();
+	
 }
+
+// function showDialog(response) {
+// 	$("#dialog-message").html(`
+// 		<span class="fa fa-exclamation-triangle" aria-hidden="true" style="font-size:25px;"></span>
+// 	`)
+// 	if("file" in response) {
+
+// 		$("#dialog-message").append(
+// 			// `<p class="text-dark"> ${statusText} </p> ${message}`
+// 			`<p>file: ${response.file}</p>` +
+// 			`<p>line : ${response.line}</p>` +
+// 			`<p>message : ${response.message}</p>` 
+// 		);
+// 	} else {
+		
+// 	$("#dialog-message").append(
+// 		// `<p class="text-dark"> ${statusText} </p> ${message}`
+// 		`<p>message : ${response}</p>` 
+// 	);
+// 	}
+
+// 	$("#dialog-message").dialog({
+// 		modal: true,
+// 		buttons: [
+// 			{
+// 				text: "Ok",
+// 				click: function () {
+// 					$(this).dialog("close");
+// 				},
+// 			},
+// 		]
+// 	});
+
+// 	$(".ui-dialog-titlebar-close").find("p").remove();
+// }
 
 function showConfirm(statusText = "", message = "", urlDestination = "") {
 	$("#dialog-confirm").find("p").remove();
