@@ -60,12 +60,16 @@ class LaporanHutangGiroController extends MyController
             'tanggal_cetak' => date('d-m-Y H:i:s'),
             'periode' => $request->periode,
         ];
+
+       
         // dd($detailParams);
         $header = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'laporanhutanggiro/report', $detailParams);
         $data = $header['data'];
+
+        
  
         // $dataHeader = $header['dataheader'];
         $user = Auth::user();
