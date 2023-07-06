@@ -146,7 +146,7 @@
                                     endforeach;
                                     
                                     ?>
-            `,
+                                `,
                                     dataInit: function(element) {
                                         $(element).select2({
                                             width: 'resolve',
@@ -158,10 +158,10 @@
                                     let statusAktif = JSON.parse(value)
 
                                     let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusAktif.WARNA}; color: #fff;">
-                  <span>${statusAktif.SINGKATAN}</span>
-                </div>
-              `)
+                                        <div class="badge" style="background-color: ${statusAktif.WARNA}; color: #fff;">
+                                        <span>${statusAktif.SINGKATAN}</span>
+                                        </div>
+                                    `)
 
                                     return formattedValue[0].outerHTML
                                 },
@@ -171,7 +171,49 @@
                                     return ` title="${statusAktif.MEMO}"`
                                 }
                             },
-                            
+                            {
+                                label: 'Status AKSES',
+                                name: 'statusakses',
+                                width: 150,
+                                stype: 'select',
+                                searchoptions: {
+                                    value: `<?php
+                                    $i = 1;
+                                    
+                                    foreach ($data['statusakses'] as $status):
+                                        echo "$status[param]:$status[parameter]";
+                                        if ($i !== count($data['statusakses'])) {
+                                            echo ';';
+                                        }
+                                        $i++;
+                                    endforeach;
+                                    
+                                    ?>
+                                `,
+                                    dataInit: function(element) {
+                                        $(element).select2({
+                                            width: 'resolve',
+                                            theme: "bootstrap4"
+                                        });
+                                    }
+                                },
+                                formatter: (value, options, rowData) => {
+                                    let statusAkses = JSON.parse(value)
+
+                                    let formattedValue = $(`
+                                        <div class="badge" style="background-color: ${statusAkses.WARNA}; color: #fff;">
+                                        <span>${statusAkses.SINGKATAN}</span>
+                                        </div>
+                                    `)
+
+                                    return formattedValue[0].outerHTML
+                                },
+                                cellattr: (rowId, value, rowObject) => {
+                                    let statusAkses = JSON.parse(rowObject.statusakses)
+
+                                    return ` title="${statusAkses.MEMO}"`
+                                }
+                            },
                             {
                                 label: 'MODIFIEDBY',
                                 name: 'modifiedby',
