@@ -109,14 +109,29 @@
     })
 
     $(document).on('click', `#btnPreview`, function(event) {
+        // let sampai = $('#crudForm').find('[name=sampai]').val()
+
+        // if (sampai != '') {
+
+        //     window.open(`{{ route('laporanlabarugi.report') }}?sampai=${sampai}`)    
+        // } else {
+        //     showDialog('ISI SELURUH KOLOM')
+        // }
+
         let sampai = $('#crudForm').find('[name=sampai]').val()
+        getCekReport().then((response) => {
+            window.open(`{{ route('laporanlabarugi.report') }}?sampai=${sampai}`) 
+        }).catch((error) => {
+            if (error.status === 422) {
+                $('.is-invalid').removeClass('is-invalid')
+                $('.invalid-feedback').remove()
 
-        if (sampai != '') {
+                setErrorMessages($('#crudForm'), error.responseJSON.errors);
+            } else {
+                showDialog(error.statusText, error.responseJSON.message)
 
-            window.open(`{{ route('laporanlabarugi.report') }}?sampai=${sampai}`)    
-        } else {
-            showDialog('ISI SELURUH KOLOM')
-        }
+            }
+        })
     })
 
 
@@ -130,6 +145,30 @@
             showDialog('ISI SELURUH KOLOM')
         }
     })
+
+    function getCekReport() {
+
+return new Promise((resolve, reject) => {
+    $.ajax({
+        url: `${apiUrl}laporanlabarugi/report`,
+        dataType: "JSON",
+        headers: {
+            Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+            sampai: $('#crudForm').find('[name=sampai]').val(),
+            isCheck: true,
+        },
+        success: (response) => {
+            resolve(response);
+        },
+        error: error => {
+            reject(error)
+
+        },
+    });
+});
+}
 </script>
 @endpush()
 @endsection

@@ -44,7 +44,7 @@ class LaporanLabaRugiController extends MyController
      
         $data = $header['data'];
         $user = Auth::user();
-        // dd($data);
+        //  dd($data);
         return view('reports.laporanlabarugi', compact('data', 'user', 'detailParams'));
     }
 
