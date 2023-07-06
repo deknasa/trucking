@@ -5,13 +5,13 @@
         <div class="modal-header">
           <p class="modal-title" id="crudModalTitle"></p>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            
+
           </button>
         </div>
         <form action="" method="post">
           <div class="modal-body">
-            <input type="text" name="id" class="form-control"  hidden readonly>
-            
+            <input type="text" name="id" class="form-control" hidden readonly>
+
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
@@ -28,7 +28,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
-                  No KTP  <span class="text-danger">*</span>
+                  No KTP <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
@@ -53,7 +53,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
-                  STATUS APPROVAL  <span class="text-danger">*</span>
+                  STATUS APPROVAL <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
@@ -66,7 +66,7 @@
             </div>
 
             <div class="col-12 col-sm-9 col-md-10">
-              
+
             </div>
           </div>
           <div class="modal-footer justify-content-start">
@@ -162,7 +162,7 @@
 
           id = response.data.id
 
-          $('#jqGrid').jqGrid('setGridParam', { 
+          $('#jqGrid').jqGrid('setGridParam', {
             page: response.data.page
           }).trigger('reloadGrid');
 
@@ -194,6 +194,7 @@
 
     activeGrid = null
     initDatepicker()
+    initSelect2(form.find('.select2bs4'), true)
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
@@ -223,8 +224,6 @@
       .then(() => {
         showDefault(form)
       })
-      initSelect2(form.find('.select2bs4'), true)
-
   }
 
   function editApprovalSupirKeterangan(approvalSupirKeteranganId) {
@@ -237,7 +236,6 @@
     Simpan
   `)
     $('#crudModalTitle').text('Edit Approval Supir Keterangan')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
     Promise.all([
@@ -245,6 +243,15 @@
       ])
       .then(() => {
         showApprovalSupirKeterangan(form, approvalSupirKeteranganId)
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .catch((error) => {
+            showDialog(error.statusText)
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
       })
   }
 
@@ -267,40 +274,56 @@
       ])
       .then(() => {
         showApprovalSupirKeterangan(form, approvalSupirKeteranganId)
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .catch((error) => {
+            showDialog(error.statusText)
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
       })
   }
 
-  
+
 
   function showApprovalSupirKeterangan(form, approvalSupirKeteranganId) {
-    $.ajax({
-      url: `${apiUrl}approvalsupirketerangan/${approvalSupirKeteranganId}`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        $.each(response.data, (index, value) => {
-          let element = form.find(`[name="${index}"]`)
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `${apiUrl}approvalsupirketerangan/${approvalSupirKeteranganId}`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          $.each(response.data, (index, value) => {
+            let element = form.find(`[name="${index}"]`)
 
-          if (element.is('select')) {
-            element.val(value).trigger('change')
-          }else if(element.attr("name") == 'tglbatas'){
-            var result = value.split('-');
-            element.val(result[2]+'-'+result[1]+'-'+result[0]);
-          } else {
-            element.val(value)
+            if (element.is('select')) {
+              element.val(value).trigger('change')
+            } else if (element.attr("name") == 'tglbatas') {
+              var result = value.split('-');
+              element.val(result[2] + '-' + result[1] + '-' + result[0]);
+            } else {
+              element.val(value)
+            }
+          })
+
+          if (form.data('action') === 'delete') {
+            form.find('[name]').addClass('disabled')
+            initDisabled()
           }
-        })
-        
-        if (form.data('action') === 'delete') {
-          form.find('[name]').addClass('disabled')
-          initDisabled()
+          resolve()
+        },
+        error: error => {
+          reject(error)
         }
-      }
+      })
     })
   }
+
   function showDefault(form) {
     $.ajax({
       url: `${apiUrl}approvalsupirketerangan/default`,
@@ -340,12 +363,12 @@
         headers: {
           Authorization: `Bearer ${accessToken}`
         },
-       
+
 
         data: {
-          status:'entry',
-          grp:'STATUS APPROVAL',
-          subgrp:'STATUS APPROVAL',
+          status: 'entry',
+          grp: 'STATUS APPROVAL',
+          subgrp: 'STATUS APPROVAL',
         },
         success: response => {
           response.data.forEach(statusAktif => {
