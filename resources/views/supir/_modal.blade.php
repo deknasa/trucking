@@ -13,153 +13,147 @@
             <input type="hidden" name="id">
 
             <div class="row">
-              <div class="form-group col-sm-6 row">
-                <label class="col-sm-4 col-form-label">Nama Supir <span class="text-danger">*</span></label>
-                <div class="col-sm-8">
-                  <input type="text" name="namasupir" class="form-control">
-                </div>
-              </div>
+              <div class="col-md-6">
 
-              <div class="form-group col-sm-6 row">
-                <label class="col-sm-4 col-form-label">Tgl Lahir <span class="text-danger">*</span></label>
-                <div class="col-sm-8">
-                  <div class="input-group">
-                    <input type="text" class="form-control datepicker" name="tgllahir">
+                <div class="form-group row">
+                  <label class="col-sm-2 col-form-label">No KTP<span class="text-danger">*</span></label>
+                  <div class="col-sm-10">
+                    <input type="text" name="noktp" id="noktp" maxlength="16" class="form-control numbernoseparate">
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label class="col-sm-2 col-form-label">Nama Supir<span class="text-danger">*</span></label>
+                  <div class="col-sm-10">
+                    <input type="text" name="namasupir" class="form-control">
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label class="col-sm-2 col-form-label">nama alias<span class="text-danger">*</span></label>
+                  <div class="col-sm-10">
+                    <input type="text" name="namaalias" class="form-control">
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label class="col-sm-2 col-form-label">Tgl Lahir <span class="text-danger">*</span></label>
+                  <div class="col-sm-10">
+                    <div class="input-group">
+                      <input type="text" class="form-control datepicker" name="tgllahir">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label class="col-sm-2 col-form-label">Alamat <span class="text-danger">*</span></label>
+                  <div class="col-sm-10">
+                    <input type="text" name="alamat" class="form-control">
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label class="col-sm-2 col-form-label">Kota <span class="text-danger">*</span></label>
+                  <div class="col-sm-10">
+                    <input type="text" name="kota" class="form-control">
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label class="col-sm-2 col-form-label">NO Telepon / Handphone <span class="text-danger">*</span></label>
+                  <div class="col-sm-10">
+                    <input type="text" name="telp" class="form-control numbernoseparate" maxlength="50">
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label class="col-sm-2 col-form-label">No SIM <span class="text-danger">*</span></label>
+                  <div class="col-sm-10">
+                    <input type="text" name="nosim" id="nosim" maxlength="12" class="form-control numbernoseparate">
                   </div>
                 </div>
               </div>
+              <div class="col-md-6">
 
-              <div class="form-group col-sm-6 row">
-                <label class="col-sm-4 col-form-label">nama alias <span class="text-danger">*</span></label>
-                <div class="col-sm-8">
-                  <input type="text" name="namaalias" class="form-control">
-                </div>
-              </div>
-
-
-              <div class="form-group col-sm-6 row">
-                <label class="col-sm-4 col-form-label">Alamat <span class="text-danger">*</span></label>
-                <div class="col-sm-8">
-                  <input type="text" name="alamat" class="form-control">
-                </div>
-              </div>
-
-              <div class="form-group col-sm-6 row">
-                <label class="col-sm-4 col-form-label">Kota <span class="text-danger">*</span></label>
-                <div class="col-sm-8">
-                  <input type="text" name="kota" class="form-control">
-                </div>
-              </div>
-
-              <div class="form-group col-sm-6 row">
-                <label class="col-sm-4 col-form-label">NO TELEPON <span class="text-danger">*</span></label>
-                <div class="col-sm-8">
-                  <input type="text" name="telp" class="form-control numbernoseparate" maxlength="50">
-                </div>
-              </div>
-
-              <div class="form-group col-sm-6 row">
-                <label class="col-sm-4 col-form-label">STATUS AKTIF <span class="text-danger">*</span></label>
-                <div class="col-sm-8">
-                  <select name="statusaktif" class="form-control select2bs4" style="width: 100%;">
-                    <option value="">-- PILIH STATUS AKTIF --</option>
-                  </select>
-                </div>
-              </div>
-
-              <div class="form-group col-sm-6 row">
-                <label class="col-sm-4 col-form-label">Tgl Masuk <span class="text-danger">*</span></label>
-                <div class="col-sm-8">
-                  <div class="input-group">
-                    <input type="text" class="form-control datepicker" name="tglmasuk">
+                <div class="form-group row">
+                  <label class="col-sm-2 col-form-label">Tgl Terbit SIM<span class="text-danger">*</span></label>
+                  <div class="col-sm-10">
+                    <div class="input-group">
+                      <input type="text" class="form-control datepicker" name="tglterbitsim">
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <!-- <div class="form-group col-sm-6 row">
-                <label class="col-sm-4 col-form-label">SUPIR LAMA</label>
-                <div class="col-sm-8">
-                  <input type="hidden" name="supirold_id">
-                  <input type="text" name="supir" class="form-control supir-lookup">
-                </div>
-              </div> -->
-
-
-
-              <div class="form-group col-sm-6 row">
-                <label class="col-sm-4 col-form-label">Tgl Terbit SIM<span class="text-danger">*</span></label>
-                <div class="col-sm-8">
-                  <div class="input-group">
-                    <input type="text" class="form-control datepicker" name="tglterbitsim">
+                <div class="form-group row">
+                  <label class="col-sm-2 col-form-label">Tgl Exp SIM <span class="text-danger">*</span></label>
+                  <div class="col-sm-10">
+                    <div class="input-group">
+                      <input type="text" class="form-control datepicker" name="tglexpsim">
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <div class="form-group col-sm-6 row">
-                <label class="col-sm-4 col-form-label">Tgl Exp SIM <span class="text-danger">*</span></label>
-                <div class="col-sm-8">
-                  <div class="input-group">
-                    <input type="text" class="form-control datepicker" name="tglexpsim">
+                <div class="form-group row">
+                  <label class="col-sm-2 col-form-label">No KK <span class="text-danger">*</span></label>
+                  <div class="col-sm-10">
+                    <input type="text" name="nokk" id="nokk" maxlength="16" class="form-control numbernoseparate">
                   </div>
                 </div>
-              </div>
 
-              <div class="form-group col-sm-6 row">
-                <label class="col-sm-4 col-form-label">No SIM <span class="text-danger">*</span></label>
-                <div class="col-sm-8">
-                  <input type="text" name="nosim" id="nosim" maxlength="12" class="form-control numbernoseparate">
+                <div class="form-group row">
+                  <label class="col-sm-2 col-form-label">Tgl Masuk <span class="text-danger">*</span></label>
+                  <div class="col-sm-10">
+                    <div class="input-group">
+                      <input type="text" class="form-control datepicker" name="tglmasuk">
+                    </div>
+                  </div>
                 </div>
-              </div>
 
-              <div class="form-group col-sm-6 row">
-                <label class="col-sm-4 col-form-label">No KTP <span class="text-danger">*</span></label>
-                <div class="col-sm-8">
-                  <input type="text" name="noktp" id="noktp" maxlength="16" class="form-control numbernoseparate">
+                <div class="form-group row">
+                  <label class="col-sm-2 col-form-label">STATUS AKTIF <span class="text-danger">*</span></label>
+                  <div class="col-sm-10">
+                    <select name="statusaktif" class="form-control select2bs4" style="width: 100%;">
+                      <option value="">-- PILIH STATUS AKTIF --</option>
+                    </select>
+                  </div>
                 </div>
-              </div>
 
-              <div class="form-group col-sm-6 row">
-                <label class="col-sm-4 col-form-label">No KK <span class="text-danger">*</span></label>
-                <div class="col-sm-8">
-                  <input type="text" name="nokk" id="nokk" maxlength="16" class="form-control numbernoseparate">
+                <div class="form-group row">
+                  <label class="col-sm-2 col-form-label">Keterangan</label>
+                  <div class="col-sm-10">
+                    <input type="text" name="keterangan" class="form-control">
+                  </div>
                 </div>
-              </div>
 
-              <div class="form-group col-sm-6 row">
-                <label class="col-sm-4 col-form-label">Keterangan</label>
-                <div class="col-sm-8">
-                  <input type="text" name="keterangan" class="form-control">
+                <div class="form-group row">
+                  <label class="col-sm-2 col-form-label">No Bukti Pemutihan</label>
+                  <div class="col-sm-10">
+                    <input type="text" name="pemutihansupir_nobukti" class="form-control pemutihan-lookup">
+                  </div>
                 </div>
-              </div>
 
-              <div class="form-group col-sm-6 row">
-                <label class="col-sm-4 col-form-label">Nominal Pinjaman</label>
-                <div class="col-sm-8">
-                  <input type="text" name="nominalpinjamansaldoawal" class="form-control text-right" readonly>
+                <div class="form-group row">
+                  <label class="col-sm-2 col-form-label">Nominal Pinjaman</label>
+                  <div class="col-sm-10">
+                    <input type="text" name="nominalpinjamansaldoawal" class="form-control text-right" readonly>
+                  </div>
                 </div>
-              </div>
 
-              <div class="form-group col-sm-6 row">
-                <label class="col-sm-4 col-form-label">No Bukti Pemutihan</label>
-                <div class="col-sm-8">
-                  <input type="text" name="pemutihansupir_nobukti" class="form-control pemutihan-lookup">
+                <div class="form-group row" style="display:none;">
+                  <label for="staticEmail" class="col-sm-2 col-form-label ">Angsuran Pinjaman</label>
+                  <div class="col-sm-10">
+                    <input type="text" name="angsuranpinjaman" class="form-control autonumeric">
+                  </div>
                 </div>
-              </div>
 
-              <div class="form-group col-sm-6 row" style="display:none;">
-                <label for="staticEmail" class="col-sm-4 col-form-label ">Angsuran Pinjaman</label>
-                <div class="col-sm-8">
-                  <input type="text" name="angsuranpinjaman" class="form-control autonumeric">
+                <div class="form-group row" style="display:none;">
+                  <label for="staticEmail" class="col-sm-2 col-form-label ">Plafon Deposito</label>
+                  <div class="col-sm-10">
+                    <input type="text" name="plafondeposito" class="form-control autonumeric">
+                  </div>
                 </div>
-              </div>
 
-              <div class="form-group col-sm-6 row" style="display:none;">
-                <label for="staticEmail" class="col-sm-4 col-form-label ">Plafon Deposito</label>
-                <div class="col-sm-8">
-                  <input type="text" name="plafondeposito" class="form-control autonumeric">
-                </div>
               </div>
-
             </div>
 
             <div class="row p-2">
@@ -230,7 +224,7 @@
                   <div class="col">
                     <label class="col-form-label">Upload Foto KK <span class="text-danger">*</span></label>
                   </div>
-                </div>                
+                </div>
                 <div class="dropzone dropzoneImg" data-field="photokk" id="my-dropzone"></div>
 
                 <div class="dz-preview dz-file-preview">
@@ -250,7 +244,7 @@
                   <div class="col">
                     <label class="col-form-label">Upload Foto SKCK <span class="text-danger">*</span></label>
                   </div>
-                </div>        
+                </div>
                 <div class="dropzone dropzoneImg" data-field="photoskck" id="my-dropzone"></div>
 
                 <div class="dz-preview dz-file-preview">
@@ -270,7 +264,7 @@
                   <div class="col">
                     <label class="col-form-label">Upload Foto Domisili <span class="text-danger">*</span></label>
                   </div>
-                </div>  
+                </div>
                 <div class="dropzone dropzoneImg" data-field="photodomisili" id="my-dropzone"></div>
 
                 <div class="dz-preview dz-file-preview">
@@ -399,7 +393,7 @@
           $('#crudModal').modal('hide')
           irow = response.data.position % limit
           console.log(Math.ceil(irow));
-          indexRow =  irow -1
+          indexRow = irow - 1
           id = response.data.id
 
           $('#jqGrid').jqGrid('setGridParam', {
@@ -417,9 +411,11 @@
 
             setErrorMessages(form, error.responseJSON.errors);
           } else {
-            if (error.responseJSON.errors) {
+            
+            //showDialog(error.responseJSON)
+            if(error.responseJSON.errors){
               showDialog(error.statusText, error.responseJSON.errors.join('<hr>'))
-            } else if (error.responseJSON.message) {
+            } else if(error.responseJSON.message) {
               showDialog(error.statusText, error.responseJSON.message)
             } else {
               showDialog(error.statusText, error.statusText)
@@ -452,6 +448,47 @@
       dropzone.removeAllFiles()
     })
   })
+
+  $('#crudForm [name=noktp]').bind("enterKey", function(e) {
+    let form = $('#crudForm');
+    $.ajax({
+      url: `${apiUrl}supir/getsupirresign`,
+      method: 'GET',
+      dataType: 'JSON',
+      data: {
+        noktp: $('#crudForm [name=noktp]').val()
+      },
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      success: response => {
+        console.log(response.data)
+        if (response.data != null) {
+          console.log(response.data)
+          $.each(response.data, (index, value) => {
+            let element = form.find(`[name="${index}"]`).not(':file')
+            if (element.is('select')) {
+              element.val(value).trigger('change')
+            } else if (element.hasClass('datepicker')) {
+              element.val(dateFormat(value))
+            } else {
+              element.val(value)
+            }
+          })
+        }
+      },
+      error: error => {
+
+      }
+    })
+  });
+
+  $('#crudForm [name=noktp]').keyup(function(e) {
+    if (e.keyCode == 13) {
+      $(this).trigger("enterKey");
+    }
+  });
+
 
   function createSupir() {
     let form = $('#crudForm')
@@ -722,7 +759,7 @@
           init: function() {
             dropzones.push(this)
             this.on("addedfile", function(file) {
-              if(this.files.length > 5){
+              if (this.files.length > 5) {
                 this.removeFile(file);
               }
             });
@@ -753,10 +790,10 @@
           init: function() {
             dropzones.push(this)
             this.on("addedfile", function(file) {
-              if(this.files.length > 1){
+              if (this.files.length > 1) {
                 this.removeFile(file);
               }
-              
+
               // $(file.previewElement).find('img').prop('src',appUrl+'/images/pdf_icon.png')
             });
           }
