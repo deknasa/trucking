@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "b70585f60d044badb739b84739dc19c7",
+  "ReportGuid": "03fc46df3c7ad7d98670eaf48e19dec6",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "ReportKasGantung.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportKasGantung.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1688542261000+0700)/",
+  "ReportChanged": "/Date(1688619775000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -898,6 +898,7 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
+              "HideZeros": true,
               "MaxNumberOfLines": 6,
               "Text": {
                 "Value": "{kasgantung.jumlahcetak}"
@@ -1288,7 +1289,7 @@
               },
               "MaxNumberOfLines": 6,
               "Text": {
-                "Value": "Total Nominal"
+                "Value": "Total"
               },
               "VertAlignment": "Center",
               "Font": ";9;Bold;",

@@ -16,9 +16,26 @@ class JurnalUmumHeaderController extends MyController
     {
         $title = $this->title;
         $data = [            
-            'comboapproval' => $this->comboApproval('list')
+            'comboapproval' => $this->comboApproval('list'),
+            'combocetak' => $this->comboCetak('list', 'STATUSCETAK', 'STATUSCETAK'),
         ];
         return view('jurnalumum.index', compact('title','data'));
+    }
+
+    public function comboCetak($aksi, $grp, $subgrp)
+    {
+        $status = [
+            'status' => $aksi,
+            'grp' => $grp,
+            'subgrp' => $subgrp,
+        ];
+
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'parameter/combolist', $status);
+
+        return $response['data'];
     }
 
     
@@ -217,6 +234,18 @@ class JurnalUmumHeaderController extends MyController
         return $response['data'];
     }
     
+    public function comboReport($aksi)
+    {
+        $status = [
+            'status' => $aksi,
+            'grp' => 'STATUSCETAK',
+            'subgrp' => 'STATUSCETAK',
+        ]; 
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'user/combostatus',$status);
+        return $response['data'];
+    }
 
     public function report(Request $request)
     {
@@ -238,6 +267,9 @@ class JurnalUmumHeaderController extends MyController
             ->withToken(session('access_token'))
             ->get(config('app.api_url') .'jurnalumumdetail', $detailParams)['data'];
 
+        $combo = $this->comboReport('list');
+        $key = array_search('CETAK', array_column( $combo, 'parameter')); 
+        $jurnal["combo"] =  $combo[$key];
         return view('reports.jurnalumum', compact('jurnal', 'jurnal_details'));
     }
 

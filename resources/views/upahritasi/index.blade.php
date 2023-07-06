@@ -336,7 +336,7 @@
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Please select a row')
+                showDialog('Harap pilih salah satu record')
               } else {
                 window.open(`{{ route('upahritasi.report') }}?id=${selectedId}`)
               }
@@ -351,7 +351,7 @@
             onClick: () => {
               // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               // if (selectedId == null || selectedId == '' || selectedId == undefined) {
-              //   showDialog('Please select a row')
+              //   showDialog('Harap pilih salah satu record')
               // } else {
               //   window.open(`{{ route('upahritasi.export') }}?id=${selectedId}`)
               // }

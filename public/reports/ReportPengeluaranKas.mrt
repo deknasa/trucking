@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "a6acb45fdfd48f7cfd0b223edd3c0311",
+  "ReportGuid": "5ab14f912ba6d73bf1b71bd8108e00b8",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "ReportPengeluaranKas.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportPengeluaranKas.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1688542451000+0700)/",
+  "ReportChanged": "/Date(1688620462000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -716,6 +716,7 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
+              "HideZeros": true,
               "MaxNumberOfLines": 6,
               "Text": {
                 "Value": "{pengeluaran.jumlahcetak}"

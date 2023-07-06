@@ -143,6 +143,7 @@ class GajiSupirHeaderController extends MyController
         $gajisupirs = $data['data'];
         $gajisupir_details = $data_details['data'];
         //$user = Auth::user();
+        // dd($gajisupirs);
 
         $tglBukti = $gajisupirs["tglbukti"];
         $timeStamp = strtotime($tglBukti);

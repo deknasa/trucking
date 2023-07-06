@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "a0a915df050fab697a5608b94b39e98b",
+  "ReportGuid": "6fa30c7b08b03b87c74b1089a8dd6231",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "ReportJurnalUmum.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportJurnalUmum.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1688542578000+0700)/",
+  "ReportChanged": "/Date(1688631511000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -23,6 +23,38 @@
   "Dictionary": {
     "DataSources": {
       "0": {
+        "Ident": "StiDataTableSource",
+        "Name": "jurnal_combo",
+        "Alias": "jurnal_combo",
+        "Columns": {
+          "0": {
+            "Name": "id",
+            "NameInSource": "id",
+            "Alias": "id",
+            "Type": "System.String"
+          },
+          "1": {
+            "Name": "parameter",
+            "NameInSource": "parameter",
+            "Alias": "parameter",
+            "Type": "System.String"
+          },
+          "2": {
+            "Name": "param",
+            "NameInSource": "param",
+            "Alias": "param",
+            "Type": "System.String"
+          },
+          "3": {
+            "Name": "relationId",
+            "NameInSource": "relationId",
+            "Alias": "relationId",
+            "Type": "System.String"
+          }
+        },
+        "NameInSource": "Data.jurnal_combo"
+      },
+      "1": {
         "Ident": "StiDataTableSource",
         "Name": "jurnal",
         "Alias": "jurnal",
@@ -64,33 +96,51 @@
             "Type": "System.String"
           },
           "6": {
+            "Name": "statuscetak",
+            "NameInSource": "statuscetak",
+            "Alias": "statuscetak",
+            "Type": "System.String"
+          },
+          "7": {
+            "Name": "jumlahcetak",
+            "NameInSource": "jumlahcetak",
+            "Alias": "jumlahcetak",
+            "Type": "System.String"
+          },
+          "8": {
             "Name": "judulLaporan",
             "NameInSource": "judulLaporan",
             "Alias": "judulLaporan",
             "Type": "System.String"
           },
-          "7": {
+          "9": {
             "Name": "judul",
             "NameInSource": "judul",
             "Alias": "judul",
             "Type": "System.String"
           },
-          "8": {
+          "10": {
             "Name": "tglcetak",
             "NameInSource": "tglcetak",
             "Alias": "tglcetak",
             "Type": "System.String"
           },
-          "9": {
+          "11": {
             "Name": "usercetak",
             "NameInSource": "usercetak",
             "Alias": "usercetak",
+            "Type": "System.String"
+          },
+          "12": {
+            "Name": "combo",
+            "NameInSource": "combo",
+            "Alias": "combo",
             "Type": "System.String"
           }
         },
         "NameInSource": "Data.jurnal"
       },
-      "1": {
+      "2": {
         "Ident": "StiDataTableSource",
         "Name": "jurnal_details",
         "Alias": "jurnal_details",
@@ -139,6 +189,21 @@
           }
         },
         "NameInSource": "Data.jurnal_details"
+      }
+    },
+    "Relations": {
+      "0": {
+        "Name": "jurnal",
+        "ChildColumns": {
+          "0": "relationId"
+        },
+        "ParentColumns": {
+          "0": "combo"
+        },
+        "NameInSource": "jurnal_combo",
+        "Alias": "jurnal",
+        "ParentSource": "jurnal",
+        "ChildSource": "jurnal_combo"
       }
     }
   },
@@ -622,19 +687,20 @@
               "Name": "Text9",
               "Guid": "e8e111ce435e323a343eb92f8d4783c1",
               "CanGrow": true,
-              "ClientRectangle": "18,26,14,4",
+              "ClientRectangle": "18,26,90,4",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
+              "HideZeros": true,
               "MaxNumberOfLines": 6,
               "Text": {
-                "Value": "Revisi Ke :"
+                "Value": "{jurnal.jumlahcetak}"
               },
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
-              "Type": "Expression"
+              "Type": "DataColumn"
             },
             "22": {
               "Ident": "StiStartPointPrimitive",
@@ -1544,7 +1610,7 @@
               "Name": "HorizontalLinePrimitive14",
               "Guid": "a5e4f3abcfa5524b30b92b482fa8fd92",
               "ClientRectangle": "4,0,208,0.254",
-              "ComponentPlacement": "d.DataBand1",
+              "ComponentPlacement": "gf.GroupFooterBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },

@@ -454,7 +454,7 @@
 
                                 if (totalRecord === 0) {
                                     alert('data tidak ada')
-                                    showDialog('Please select a row')
+                                    showDialog('Harap pilih salah satu record')
                                 } else {
                                     window.open(`{{ route('karyawan.report') }}?${params}`);
                                 }

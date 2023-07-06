@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "82a145752d239bcbedb389b4a8b1bd16",
+  "ReportGuid": "13568c3c2e2b03a2dd84f98ac7ea07c3",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportPenerimaanStokKOR.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1688607985000+0700)/",
+  "ReportChanged": "/Date(1688613211000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -826,7 +826,7 @@
               },
               "MaxNumberOfLines": 6,
               "Text": {
-                "Value": "Laporan Cetak Koreksi Stok (KOR)"
+                "Value": "Laporan Koreksi Penerimaan Stok (KOR)"
               },
               "HorAlignment": "Center",
               "Font": ";10;Bold;",

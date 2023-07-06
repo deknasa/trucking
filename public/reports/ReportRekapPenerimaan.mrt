@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "619358f72c35fd613db1fe0e128717cf",
+  "ReportGuid": "996b54d1de14136f3cb518f4331dee98",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "ReportRekapPenerimaan.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportRekapPenerimaan.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1688542423000+0700)/",
+  "ReportChanged": "/Date(1688620429000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -721,6 +721,7 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
+              "HideZeros": true,
               "MaxNumberOfLines": 6,
               "Text": {
                 "Value": "{rekappenerimaan.jumlahcetak}"

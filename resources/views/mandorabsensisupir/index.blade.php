@@ -211,7 +211,7 @@
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               let rowData = $("#jqGrid").jqGrid("getRowData", selectedId);
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Please select a row')
+                showDialog('Harap pilih salah satu record')
               } else {
                 cekValidasiAdd(rowData.trado_id)
               }
@@ -226,7 +226,7 @@
               let rowData = $("#jqGrid").jqGrid("getRowData", selectedId);
 
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Please select a row')
+                showDialog('Harap pilih salah satu record')
               } else {
                 cekValidasi(rowData.trado_id, 'edit')
               }
@@ -240,7 +240,7 @@
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               let rowData = $("#jqGrid").jqGrid("getRowData", selectedId);
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Please select a row')
+                showDialog('Harap pilih salah satu record')
               } else {
                 cekValidasi(rowData.trado_id, 'delete')
               }

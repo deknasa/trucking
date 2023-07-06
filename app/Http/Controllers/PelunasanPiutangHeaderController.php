@@ -15,7 +15,25 @@ class PelunasanPiutangHeaderController extends MyController
     public function index(Request $request)
     {
         $title = $this->title;
-        return view('pelunasanpiutangheader.index', compact('title'));
+        $data = [
+            'combocetak' => $this->comboCetak('list', 'STATUSCETAK', 'STATUSCETAK'),
+        ];
+        return view('pelunasanpiutangheader.index', compact('title', 'data'));
+    }
+
+    public function comboCetak($aksi, $grp, $subgrp)
+    {
+        $status = [
+            'status' => $aksi,
+            'grp' => $grp,
+            'subgrp' => $subgrp,
+        ];
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'parameter/combolist', $status);
+
+        return $response['data'];
     }
 
     public function create()
@@ -184,6 +202,19 @@ class PelunasanPiutangHeaderController extends MyController
         return $response['data'];
     }
 
+    public function comboReport($aksi)
+    {
+        $status = [
+            'status' => $aksi,
+            'grp' => 'STATUSCETAK',
+            'subgrp' => 'STATUSCETAK',
+        ]; 
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'user/combostatus',$status);
+        return $response['data'];
+    }
+
     public function report(Request $request)
     {
         //FETCH HEADER
@@ -203,6 +234,9 @@ class PelunasanPiutangHeaderController extends MyController
         ->withToken(session('access_token'))
         ->get(config('app.api_url') .'pelunasanpiutangdetail', $detailParams)['data'];
         
+        $combo = $this->comboReport('list');
+        $key = array_search('CETAK', array_column( $combo, 'parameter')); 
+        $pelunasanPiutangs["combo"] =  $combo[$key];
         return view('reports.pelunasanpiutang', compact('pelunasanPiutang_details','pelunasanPiutangs'));
     }
 
