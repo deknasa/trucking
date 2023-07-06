@@ -10,14 +10,7 @@
         </div>
         <form action="" method="post">
           <div class="modal-body">
-            {{-- <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2">
-                <label class="col-form-label">ID</label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="id" class="form-control" readonly>
-              </div>
-            </div> --}}
+            <input type="hidden" name="id" class="form-control" readonly>
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
@@ -221,13 +214,13 @@
             setErrorMessages(form, error.responseJSON.errors);
           } else {
             //showDialog(error.responseJSON)
-if(error.responseJSON.errors){
-	showDialog(error.statusText, error.responseJSON.errors.join('<hr>'))
-} else if(error.responseJSON.message) {
-	showDialog(error.statusText, error.responseJSON.message)
-} else {
-	showDialog(error.statusText, error.statusText)
-}
+            if (error.responseJSON.errors) {
+              showDialog(error.statusText, error.responseJSON.errors.join('<hr>'))
+            } else if (error.responseJSON.message) {
+              showDialog(error.statusText, error.responseJSON.message)
+            } else {
+              showDialog(error.statusText, error.statusText)
+            }
           }
         },
       }).always(() => {
@@ -516,7 +509,7 @@ if(error.responseJSON.errors){
         }
       },
       onSelectRow: (suratpengantar, element) => {
-        element.val(suratpengantar.nobukti)        
+        element.val(suratpengantar.nobukti)
         $('#crudForm [name=trado_id]').val('')
         $('#crudForm [name=trado]').val('').data('currentValue', '')
         $('#crudForm [name=supir_id]').val('')
