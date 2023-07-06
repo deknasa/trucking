@@ -68,7 +68,11 @@
     <span class="fa fa-check" aria-hidden="true" style="font-size:25px;"></span>
     <p></p>
   </div>
-  <div id="dialog-danger-message" title="Pesan" class="text-center text-danger" style="display: none;">
+  <div id="dialog-warning-message" title="Pesan" class="text-center text-warning" style="display: none;">
+    <span class="fa fa-exclamation-triangle" aria-hidden="true" style="font-size:25px;"></span>
+    <p></p>
+  </div>
+  <div id="dialog-info-message" title="Pesan" class="text-center text-info" style="display: none;">
     <span class="fa fa-exclamation-triangle" aria-hidden="true" style="font-size:25px;"></span>
     <p></p>
   </div>

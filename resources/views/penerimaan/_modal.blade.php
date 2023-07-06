@@ -314,14 +314,7 @@
                         $('.invalid-feedback').remove()
                         setErrorMessages(form, error.responseJSON.errors);
                     } else {
-                        //showDialog(error.responseJSON)
-if(error.responseJSON.errors){
-	showDialog(error.statusText, error.responseJSON.errors.join('<hr>'))
-} else if(error.responseJSON.message) {
-	showDialog(error.statusText, error.responseJSON.message)
-} else {
-	showDialog(error.statusText, error.statusText)
-}
+                        showDialog(error.responseJSON)
                     }
                 },
             }).always(() => {
@@ -516,16 +509,11 @@ if(error.responseJSON.errors){
                 request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
             },
             success: response => {
-                var kodenobukti = response.kodenobukti
-                if (kodenobukti == '1') {
-                    var kodestatus = response.kodestatus
-                    if (kodestatus == '1') {
-                        showDialog(response.message['keterangan'])
-                    } else {
-                        cekValidasiAksi(Id, Aksi)
-                    }
+                var error = response.error
+                if (error) {
+                    showDialog(response)
                 } else {
-                    showDialog(response.message['keterangan'])
+                    cekValidasiAksi(Id, Aksi)
                 }
             }
         })
@@ -541,9 +529,9 @@ if(error.responseJSON.errors){
                 request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
             },
             success: response => {
-                var kondisi = response.kondisi
-                if (kondisi == true) {
-                    showDialog(response.message['keterangan'])
+                var error = response.error
+                if (error) {
+                    showDialog(response)
                 } else {
                     if (Aksi == 'EDIT') {
                         editPenerimaan(Id)
