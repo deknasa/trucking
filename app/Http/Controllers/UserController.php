@@ -21,6 +21,7 @@ class UserController extends MyController
             'combo' => $this->combo('list'),
             'combocabang' => $this->combocabang('list'),
             'statusaktif' => $this->comboStatusAktif('list','STATUS AKTIF','STATUS AKTIF'),
+            'statusakses' => $this->comboStatusAktif('list','STATUS AKSES','STATUS AKSES'),
         ];
 
         return view('user.index', compact('title', 'data'));
@@ -109,12 +110,17 @@ class UserController extends MyController
         foreach ($users as $index => $params) {
 
             $statusaktif = $params['statusaktif'];
+            $statusakses = $params['statusakses'];
 
             $result = json_decode($statusaktif, true);
+            $resultAkses = json_decode($statusakses, true);
 
             $statusaktif = $result['MEMO'];
+            $statusakses = $resultAkses['MEMO'];
 
             $users[$i]['statusaktif'] = $statusaktif;
+            $users[$i]['statusakses'] = $statusakses;
+
         
             $i++;
 
