@@ -233,15 +233,15 @@
                             deleteParameter(selectedId)
                         }
                     },
-                    {
-                        id: 'reload',
-                        innerHTML: '<i class="fas fa-sync-alt"></i> RELOAD',
-                        class: 'btn btn-dark btn-sm mr-1',
-                        onClick: () => {
-                            jQuery('#jqGrid').jqGrid('clearGridData');
-                            jQuery('#jqGrid').trigger('reloadGrid');
-                        }
-                    },
+                    // {
+                    //     id: 'reload',
+                    //     innerHTML: '<i class="fas fa-sync-alt"></i> RELOAD',
+                    //     class: 'btn btn-dark btn-sm mr-1',
+                    //     onClick: () => {
+                    //         jQuery('#jqGrid').jqGrid('clearGridData');
+                    //         jQuery('#jqGrid').trigger('reloadGrid');
+                    //     }
+                    // },
                     {
                         id: 'report',
                         innerHTML: '<i class="fa fa-print"></i> REPORT',
