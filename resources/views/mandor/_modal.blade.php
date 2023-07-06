@@ -158,14 +158,7 @@
 
             setErrorMessages(form, error.responseJSON.errors);
           } else {
-            //showDialog(error.responseJSON)
-if(error.responseJSON.errors){
-	showDialog(error.statusText, error.responseJSON.errors.join('<hr>'))
-} else if(error.responseJSON.message) {
-	showDialog(error.statusText, error.responseJSON.message)
-} else {
-	showDialog(error.statusText, error.statusText)
-}
+            showDialog(error.responseJSON)
 
             // if (error.responseJSON.errors) {
             //   showDialog('',error.responseJSON.errors)
@@ -176,14 +169,7 @@ if(error.responseJSON.errors){
             // }
 
             // if (error.responseJSON.message) {
-            //   //showDialog(error.responseJSON)
-if(error.responseJSON.errors){
-	showDialog(error.statusText, error.responseJSON.errors.join('<hr>'))
-} else if(error.responseJSON.message) {
-	showDialog(error.statusText, error.responseJSON.message)
-} else {
-	showDialog(error.statusText, error.statusText)
-}
+            //   showDialog(error.responseJSON)
             // }
           }
         },

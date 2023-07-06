@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "e265bcea75bdb0111ee53b783ce4aadb",
+  "ReportGuid": "883a53cfc21666e5bccf1577625c2639",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportPengeluaranStokRTR.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1688528320000+0700)/",
+  "ReportChanged": "/Date(1688612186000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -540,6 +540,18 @@
             "NameInSource": "combo",
             "Alias": "combo",
             "Type": "System.String"
+          },
+          "35": {
+            "Name": "column",
+            "NameInSource": "column",
+            "Alias": "column",
+            "Type": "System.String"
+          },
+          "36": {
+            "Name": "value",
+            "NameInSource": "value",
+            "Alias": "value",
+            "Type": "System.Decimal"
           }
         },
         "NameInSource": "Data.pengeluaranstokheader"
@@ -1193,6 +1205,7 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
+              "HideZeros": true,
               "MaxNumberOfLines": 6,
               "Text": {
                 "Value": "{pengeluaranstokheader.jumlahcetak}"

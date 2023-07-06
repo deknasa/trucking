@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "d22337f84b85c43b2cf6efcd2f749c7f",
+  "ReportGuid": "7619a24b6920208b3c12cb54e07c9641",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "ReportHutangBayar.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportHutangBayar.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1688542620000+0700)/",
+  "ReportChanged": "/Date(1688623890000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -992,6 +992,7 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
+              "HideZeros": true,
               "MaxNumberOfLines": 6,
               "Text": {
                 "Value": "{hutangbayar.jumlahcetak}"

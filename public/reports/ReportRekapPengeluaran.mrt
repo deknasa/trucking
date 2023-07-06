@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "922bd3a5f5538d2c4db518d9687b54e3",
+  "ReportGuid": "a7ba508e3c638200220aab72c3db4321",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "ReportRekapPengeluaran.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportRekapPengeluaran.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1688542349000+0700)/",
+  "ReportChanged": "/Date(1688620547000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -727,6 +727,7 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
+              "HideZeros": true,
               "MaxNumberOfLines": 6,
               "Text": {
                 "Value": "{rekappengeluaran.jumlahcetak}"

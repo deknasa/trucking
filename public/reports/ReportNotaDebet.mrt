@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "b8503756f300db737b08958dfbf5baf4",
+  "ReportGuid": "9ef0a822dfd5c1a8345bc23d0926d9c0",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "ReportNotaDebet.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportNotaDebet.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1688542753000+0700)/",
+  "ReportChanged": "/Date(1688624130000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -837,6 +837,7 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
+              "HideZeros": true,
               "MaxNumberOfLines": 6,
               "Text": {
                 "Value": "{notadebet.jumlahcetak}"

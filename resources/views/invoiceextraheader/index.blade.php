@@ -489,7 +489,7 @@
 
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Please select a row')
+                showDialog('Harap pilih salah satu record')
               } else {
                 cekValidasi(selectedId, 'EDIT')
               }
@@ -505,7 +505,7 @@
 
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Please select a row')
+                showDialog('Harap pilih salah satu record')
               } else {
                 cekValidasi(selectedId, 'DELETE')
               }
@@ -520,7 +520,7 @@
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Please select a row')
+                showDialog('Harap pilih salah satu record')
               } else {
                 window.open(`{{ route('invoiceextraheader.report') }}?id=${selectedId}`)
               }
@@ -535,7 +535,7 @@
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Please select a row')
+                showDialog('Harap pilih salah satu record')
               } else {
                 window.open(`{{ route('invoiceextraheader.export') }}?id=${selectedId}`)
               }

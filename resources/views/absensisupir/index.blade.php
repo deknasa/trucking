@@ -331,7 +331,7 @@
             onClick: function(event) {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Please select a row')
+                showDialog('Harap pilih salah satu record')
               } else {
                 cekValidasi(selectedId, 'EDIT')
               }
@@ -344,7 +344,7 @@
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Please select a row')
+                showDialog('Harap pilih salah satu record')
               } else {
                 cekValidasi(selectedId, 'DELETE')
               }
@@ -357,7 +357,7 @@
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Please select a row')
+                showDialog('Harap pilih salah satu record')
               } else {
                 window.open(`{{ route('absensisupirheader.report') }}?id=${selectedId}`)
               }
@@ -372,7 +372,7 @@
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Please select a row')
+                showDialog('Harap pilih salah satu record')
               } else {
                 window.open(`{{ route('absensisupirheader.export') }}?id=${selectedId}`)
               }

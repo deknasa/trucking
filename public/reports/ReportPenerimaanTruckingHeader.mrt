@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "93fc7bc568de4006f4a90b8047b3e390",
+  "ReportGuid": "7b3b4009b76048b0c8151c10db587715",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportPenerimaanTruckingHeader.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1688547081000+0700)/",
+  "ReportChanged": "/Date(1688618349000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -829,6 +829,7 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
+              "HideZeros": true,
               "MaxNumberOfLines": 6,
               "Text": {
                 "Value": "Revisi Ke : {penerimaantrucking.jumlahcetak}"
@@ -1289,7 +1290,7 @@
               },
               "MaxNumberOfLines": 6,
               "Text": {
-                "Value": "Total Nominal"
+                "Value": "Total"
               },
               "VertAlignment": "Center",
               "Font": ";9;Bold;",

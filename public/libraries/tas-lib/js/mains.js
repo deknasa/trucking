@@ -1078,25 +1078,6 @@ function showSuccessDialog(statusText = "", message = "") {
 	});
 }
 
-function showDangerDialog(statusText = "", message = "") {
-	$("#dialog-danger-message").find("p").remove();
-	$("#dialog-danger-message").append(
-		`<p> ${statusText} </p><p> ${message} </p>`
-	);
-	console.log(statusText)
-	$("#dialog-danger-message").dialog({
-		modal: true,
-		buttons: [
-			{
-				text: "Ok",
-				click: function () {
-					$(this).dialog("close");
-				},
-			},
-		]
-	});
-}
-
 // function showDialog(statusText="", message="") {
 // 	$("#dialog-message").html(`
 // 		<span class="fa fa-exclamation-triangle" aria-hidden="true" style="font-size:25px;"></span>
@@ -1116,7 +1097,6 @@ function showDangerDialog(statusText = "", message = "") {
 // 		]
 // 	});
 // 	$(".ui-dialog-titlebar-close").find("p").remove();
-	
 // }
 
 function showDialog(response) {
@@ -1126,7 +1106,6 @@ function showDialog(response) {
 	$("#dialog-warning-message").html(`
 		<span class="fa fa-exclamation-triangle" aria-hidden="true" style="font-size:25px;"></span>
 	`)
-	console.log(response)
 	if ($.type(response) === "object") {
 		if ("file" in response) {
 			$("#dialog-message").append(

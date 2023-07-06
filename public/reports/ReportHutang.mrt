@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "4ef0de04302b94d112ee0bb74900e125",
+  "ReportGuid": "b9a4c2215b7d7ee8e382f950b85b9ac7",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "ReportHutang.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportHutang.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1688542605000+0700)/",
+  "ReportChanged": "/Date(1688623768000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -828,6 +828,7 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
+              "HideZeros": true,
               "MaxNumberOfLines": 6,
               "Text": {
                 "Value": "{hutang.jumlahcetak}"

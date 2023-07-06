@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "610a0d6b670feb7d8f69c2fcc616966c",
+  "ReportGuid": "5e9113ca134d66bcefae048f71d31d67",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "ReportPenerimaanBank.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportPenerimaanBank.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1688542403000+0700)/",
+  "ReportChanged": "/Date(1688620233000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -946,6 +946,7 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
+              "HideZeros": true,
               "MaxNumberOfLines": 6,
               "Text": {
                 "Value": "{penerimaan.jumlahcetak}"

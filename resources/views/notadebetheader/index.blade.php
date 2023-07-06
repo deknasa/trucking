@@ -494,7 +494,7 @@
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Please select a row')
+                showDialog('Harap pilih salah satu record')
               } else {
                 window.open(`{{ route('notadebetheader.export') }}?id=${selectedId}`)
               }

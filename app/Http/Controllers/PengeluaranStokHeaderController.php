@@ -290,6 +290,7 @@ class PengeluaranStokHeaderController extends MyController
         $data['value'] = $persediaan['value'];
         
         $pengeluaranstokheaders = $data;       
+        dd($pengeluaranstokheaders);
         return view('reports.pengeluaranstokheader', compact('pengeluaranstokheaders','parameterStatusFormat'));
     }
 

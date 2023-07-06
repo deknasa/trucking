@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "8ae5cdc265e93b46faf1890ace9086e0",
+  "ReportGuid": "830fad599a86300525a2a7ff51516843",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "ReportPelunasanPiutang.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportPelunasanPiutang.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1688542733000+0700)/",
+  "ReportChanged": "/Date(1688636214000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -23,6 +23,38 @@
   "Dictionary": {
     "DataSources": {
       "0": {
+        "Ident": "StiDataTableSource",
+        "Name": "pelunasanPiutangs_combo",
+        "Alias": "pelunasanPiutangs_combo",
+        "Columns": {
+          "0": {
+            "Name": "id",
+            "NameInSource": "id",
+            "Alias": "id",
+            "Type": "System.String"
+          },
+          "1": {
+            "Name": "parameter",
+            "NameInSource": "parameter",
+            "Alias": "parameter",
+            "Type": "System.String"
+          },
+          "2": {
+            "Name": "param",
+            "NameInSource": "param",
+            "Alias": "param",
+            "Type": "System.String"
+          },
+          "3": {
+            "Name": "relationId",
+            "NameInSource": "relationId",
+            "Alias": "relationId",
+            "Type": "System.String"
+          }
+        },
+        "NameInSource": "Data.pelunasanPiutangs_combo"
+      },
+      "1": {
         "Ident": "StiDataTableSource",
         "Name": "pelunasanPiutangs",
         "Alias": "pelunasanPiutangs",
@@ -70,51 +102,69 @@
             "Type": "System.String"
           },
           "7": {
+            "Name": "jumlahcetak",
+            "NameInSource": "jumlahcetak",
+            "Alias": "jumlahcetak",
+            "Type": "System.String"
+          },
+          "8": {
+            "Name": "statuscetak",
+            "NameInSource": "statuscetak",
+            "Alias": "statuscetak",
+            "Type": "System.String"
+          },
+          "9": {
             "Name": "bank_id",
             "NameInSource": "bank_id",
             "Alias": "bank_id",
             "Type": "System.String"
           },
-          "8": {
+          "10": {
             "Name": "agen_id",
             "NameInSource": "agen_id",
             "Alias": "agen_id",
             "Type": "System.String"
           },
-          "9": {
+          "11": {
             "Name": "alatbayar_id",
             "NameInSource": "alatbayar_id",
             "Alias": "alatbayar_id",
             "Type": "System.String"
           },
-          "10": {
+          "12": {
             "Name": "judulLaporan",
             "NameInSource": "judulLaporan",
             "Alias": "judulLaporan",
             "Type": "System.String"
           },
-          "11": {
+          "13": {
             "Name": "judul",
             "NameInSource": "judul",
             "Alias": "judul",
             "Type": "System.String"
           },
-          "12": {
+          "14": {
             "Name": "tglcetak",
             "NameInSource": "tglcetak",
             "Alias": "tglcetak",
             "Type": "System.String"
           },
-          "13": {
+          "15": {
             "Name": "usercetak",
             "NameInSource": "usercetak",
             "Alias": "usercetak",
+            "Type": "System.String"
+          },
+          "16": {
+            "Name": "combo",
+            "NameInSource": "combo",
+            "Alias": "combo",
             "Type": "System.String"
           }
         },
         "NameInSource": "Data.pelunasanPiutangs"
       },
-      "1": {
+      "2": {
         "Ident": "StiDataTableSource",
         "Name": "pelunasanPiutang_details",
         "Alias": "pelunasanPiutang_details",
@@ -169,6 +219,21 @@
           }
         },
         "NameInSource": "Data.pelunasanPiutang_details"
+      }
+    },
+    "Relations": {
+      "0": {
+        "Name": "pelunasanPiutangs",
+        "ChildColumns": {
+          "0": "relationId"
+        },
+        "ParentColumns": {
+          "0": "combo"
+        },
+        "NameInSource": "pelunasanPiutangs_combo",
+        "Alias": "pelunasanPiutangs",
+        "ParentSource": "pelunasanPiutangs",
+        "ChildSource": "pelunasanPiutangs_combo"
       }
     }
   },
@@ -1114,14 +1179,15 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
+              "HideZeros": true,
               "MaxNumberOfLines": 6,
               "Text": {
-                "Value": "Revisi Ke :"
+                "Value": "{pelunasanPiutangs.jumlahcetak}"
               },
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
-              "Type": "Expression"
+              "Type": "DataColumn"
             },
             "43": {
               "Ident": "StiStartPointPrimitive",

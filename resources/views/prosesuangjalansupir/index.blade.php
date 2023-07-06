@@ -87,6 +87,54 @@
             hidden: true
           },
           {
+            label: 'STATUS CETAK',
+            name: 'statuscetak',
+            align: 'left',
+            stype: 'select',
+            searchoptions: {
+              
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['combocetak'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['combocetak'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+              `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              let statusCetak = JSON.parse(value)
+              if (!statusCetak) {
+                return ''
+              }
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusCetak.WARNA}; color: #fff;">
+                  <span>${statusCetak.SINGKATAN}</span>
+                </div>
+              `)
+              
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusCetak = JSON.parse(rowObject.statuscetak)
+              if (!statusCetak) {
+                return ` title=" "`
+              }
+              return ` title="${statusCetak.MEMO}"`
+            }
+          },
+          {
             label: 'STATUS APPROVAL',
             name: 'statusapproval',
             align: 'left',
@@ -349,7 +397,7 @@
             onClick: function(event) {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Please select a row')
+                showDialog('Harap pilih salah satu record')
               } else {
                 cekValidasi(selectedId, 'EDIT')
               }
@@ -362,7 +410,7 @@
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Please select a row')
+                showDialog('Harap pilih salah satu record')
               } else {
                 cekValidasi(selectedId, 'DELETE')
               }
@@ -375,7 +423,7 @@
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Please select a row')
+                showDialog('Harap pilih salah satu record')
               } else {
                 window.open(`{{ route('prosesuangjalansupirheader.report') }}?id=${selectedId}`)
               }
@@ -390,7 +438,7 @@
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Please select a row')
+                showDialog('Harap pilih salah satu record')
               } else {
                 window.open(`{{ route('prosesuangjalansupirheader.export') }}?id=${selectedId}`)
               }
