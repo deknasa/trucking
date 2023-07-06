@@ -514,7 +514,7 @@
 
           $(".is-invalid").first().focus();
         } else {
-          showDialog(error.statusText)
+          showDialog(error.responseJSON)
         }
       })
 
@@ -602,7 +602,7 @@
 
           $(".is-invalid").first().focus();
         } else {
-          showDialog(error.statusText)
+          showDialog(error.responseJSON)
         }
       })
 
