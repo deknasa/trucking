@@ -1097,48 +1097,13 @@ function showDangerDialog(statusText = "", message = "") {
 	});
 }
 
-function showDialog(statusText="", message="") {
-	$("#dialog-message").html(`
-		<span class="fa fa-exclamation-triangle" aria-hidden="true" style="font-size:25px;"></span>
-	`)
-	$("#dialog-message").append(
-		`<p class="text-dark"> ${statusText} </p> ${message}`
-	);
-	$("#dialog-message").dialog({
-		modal: true,
-		buttons: [
-			{
-				text: "Ok",
-				click: function () {
-					$(this).dialog("close");
-				},
-			},
-		]
-	});
-	$(".ui-dialog-titlebar-close").find("p").remove();
-	
-}
-
-// function showDialog(response) {
+// function showDialog(statusText="", message="") {
 // 	$("#dialog-message").html(`
 // 		<span class="fa fa-exclamation-triangle" aria-hidden="true" style="font-size:25px;"></span>
 // 	`)
-// 	if("file" in response) {
-
-// 		$("#dialog-message").append(
-// 			// `<p class="text-dark"> ${statusText} </p> ${message}`
-// 			`<p>file: ${response.file}</p>` +
-// 			`<p>line : ${response.line}</p>` +
-// 			`<p>message : ${response.message}</p>` 
-// 		);
-// 	} else {
-		
 // 	$("#dialog-message").append(
-// 		// `<p class="text-dark"> ${statusText} </p> ${message}`
-// 		`<p>message : ${response}</p>` 
+// 		`<p class="text-dark"> ${statusText} </p> ${message}`
 // 	);
-// 	}
-
 // 	$("#dialog-message").dialog({
 // 		modal: true,
 // 		buttons: [
@@ -1150,9 +1115,80 @@ function showDialog(statusText="", message="") {
 // 			},
 // 		]
 // 	});
-
 // 	$(".ui-dialog-titlebar-close").find("p").remove();
+	
 // }
+
+function showDialog(response) {
+	$("#dialog-message").html(`
+		<span class="fa fa-exclamation-triangle" aria-hidden="true" style="font-size:25px;"></span>
+	`)
+	$("#dialog-warning-message").html(`
+		<span class="fa fa-exclamation-triangle" aria-hidden="true" style="font-size:25px;"></span>
+	`)
+	console.log(response)
+	if ($.type(response) === "object") {
+		if ("file" in response) {
+			$("#dialog-message").append(
+				// `<p class="text-dark"> ${statusText} </p> ${message}`
+				`<p>file: ${response.file}</p>` +
+				`<p>line : ${response.line}</p>` +
+				`<p>message : ${response.message}</p>`
+			);
+
+			$("#dialog-message").dialog({
+				modal: true,
+				buttons: [
+					{
+						text: "Ok",
+						click: function () {
+							$(this).dialog("close");
+						},
+					},
+				]
+			});
+			$(".ui-dialog-titlebar-close").find("p").remove();
+		} else {
+
+			$(`#dialog-${response.statuspesan}-message`).append(
+				`<p class="text-dark">${response.message}</p>`
+			);
+
+			$(`#dialog-${response.statuspesan}-message`).dialog({
+				modal: true,
+				buttons: [
+					{
+						text: "Ok",
+						click: function () {
+							$(this).dialog("close");
+							$(`#dialog-${response.statuspesan}-message`).find("p").remove();
+						},
+					},
+				]
+			});
+			
+			$(".ui-dialog-titlebar-close").find("p").remove();
+		}
+	} else {
+		$("#dialog-warning-message").append(
+			`<p class="text-dark">${response}</p>`
+		);
+
+		$("#dialog-warning-message").dialog({
+			modal: true,
+			buttons: [
+				{
+					text: "Ok",
+					click: function () {
+						$(this).dialog("close");
+						$(`#dialog-warning-message`).find("p").remove();
+					},
+				},
+			]
+		});
+		$(".ui-dialog-titlebar-close").find("p").remove();
+	}
+}
 
 function showConfirm(statusText = "", message = "", urlDestination = "") {
 	$("#dialog-confirm").find("p").remove();
