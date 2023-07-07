@@ -255,6 +255,7 @@ Route::get('/', function () {
 // });
 
 Route::get('cekip', [AuthController::class, 'cekIp']);
+Route::get('cekparam', [AuthController::class, 'cek_param']);
 
 Route::middleware('guest')->group(function () {
     Route::get('login', [AuthController::class, 'index'])->name('login');
