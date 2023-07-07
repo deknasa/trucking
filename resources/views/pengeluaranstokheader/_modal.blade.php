@@ -1147,7 +1147,7 @@
   }
 
   function lookupSelected(el) {
-    if (kodePengeluaranStok == listKodePengeluaran[2]) {
+    if ((kodePengeluaranStok == listKodePengeluaran[2]) || (kodePengeluaranStok == listKodePengeluaran[4])) {
       // console.log(kodepengeluaranstok);
       // console.log(el);
       switch (el) {

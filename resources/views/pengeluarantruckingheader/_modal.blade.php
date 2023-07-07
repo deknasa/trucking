@@ -2227,7 +2227,7 @@
                 beforeProcess: function(test) {
                   // var levelcoa = $(`#levelcoa`).val();
                   this.postData = {
-
+                    pengeluaranheader_id : 1,
                     Aktif: 'AKTIF',
                   }
                 },

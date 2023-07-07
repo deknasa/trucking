@@ -63,16 +63,18 @@ class AuthController extends Controller
                     'user_not_found' => 'User not registered'
                 ]);
             }
-            // if($user->statusakses )
+            $statusaktif = [
+                "grp"=>"STATUS AKSES",
+                "subgrp"=>"STATUS AKSES",
+                "text"=>"PUBLIC"
+            ];
+    
             $parameter = Http::withHeaders([
                 'Accept' => 'application/json'
             ])->withOptions(['verify' => false])
                 ->withToken(session('access_token'))
-                ->get(config('app.api_url') . 'parameter/select/STATUS AKSES/STATUS AKSES/PUBLIC');
-           
-            // $statusPublic = array_filter($parameter['data'], function($item) use ($targetKeterangan) {
-            //     return $item["keterangan"] === $targetKeterangan;
-            // });
+                ->get(config('app.api_url') . 'parameter/getparamrequest',$statusaktif);
+            
             if($user->statusakses != $parameter['id']){
                 return redirect()->back()->withErrors([
                     'user_not_found' => 'User out Of network'
@@ -132,6 +134,21 @@ class AuthController extends Controller
         // ->get("https://tasmdn.kozow.com:8074/trucking-api/public/api/" . 'cekIp', $credentials);
         ->get(config('app.api_url') . 'cekIp', $dataIp);
         dd($cekIp['data']);
+    }
+
+    public function cek_param(){
+        $statusaktif = [
+            "grp"=>"STATUS AKSES",
+            "subgrp"=>"STATUS AKSES",
+            "text"=>"PUBLIC"
+        ];
+        $parameter = Http::withHeaders([
+            'Accept' => 'application/json'
+        ])->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'parameter/getparamrequest',$statusaktif);
+       
+        dd($parameter);
     }
 
 }
