@@ -56,6 +56,7 @@
   let hasDetail = false
   let currentTab = 'detail'
   var statusTidakBisaEdit;
+  let ajaxdefault =null ;
   $(document).ready(function() {
     
     $("#tabs").tabs()
@@ -565,7 +566,10 @@
     }
     getStatusEdit()
     function approveEdit(id) {
-      $.ajax({
+      if (ajaxdefault) {
+        ajaxdefault.abort();
+      }     
+      ajaxdefault = $.ajax({
         url: `${apiUrl}absensisupirheader/${id}`,
         method: 'GET',
         dataType: 'JSON',
