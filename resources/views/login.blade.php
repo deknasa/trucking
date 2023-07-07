@@ -88,7 +88,7 @@
                     <div id="error">
                     </div>
                     {{-- <a href="{{ config('app.api_url') }}">reset password</a> --}}
-                    <a href="javascript: void(0)" id="resetPassword">reset password</a>
+                    <a href="javascript: void(0)" id="resetPassword" style="text-decoration: underline ">reset password</a>
                     <div class="row">
                         <div class="col-md-4 offset-md-8">
                             <button type="submit" class="btn btn-primary btn-block">Sign In</button>

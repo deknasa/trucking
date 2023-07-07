@@ -26,7 +26,7 @@
                     <h4 class="alert-heading">Berhasil!</h4>
                     <hr>
                     <p>Password anda berhasil diubah. Silahkan login dengan password baru.</p>
-                    <a href="{{ config('app.url') }}" class="btn btn-primary">Login</a>
+                    <a href="{{ config('app.url') }}/login" class="btn btn-primary">Login</a>
                 </div>
             </div>
         </div>

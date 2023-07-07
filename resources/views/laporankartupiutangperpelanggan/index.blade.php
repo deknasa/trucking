@@ -50,6 +50,10 @@
                                         <i class="fas fa-print"></i>
                                         Report
                                     </a>
+                                    <a id="btnExport" class="btn btn-warning mr-1 ">
+                                        <i class="fas fa-file-export"></i>
+                                        Export
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -113,11 +117,96 @@
 
                     window.open(
                         `{{ route('laporankartupiutangperpelanggan.report') }}?sampai=${sampai}&dari=${dari}&pelanggandari_id=${pelanggandari_id}&pelanggansampai_id=${pelanggansampai_id}&pelanggandari=${pelanggandari}&pelanggansampai=${pelanggansampai}`
-                        )
+                    )
                 } else {
                     showDialog('ISI SELURUH KOLOM')
                 }
             })
+
+            $(document).on('click', `#btnExport`, function(event) {
+                let sampai = $('#crudForm').find('[name=sampai]').val()
+                let dari = $('#crudForm').find('[name=dari]').val()
+                let pelanggandari_id = $('#crudForm').find('[name=pelanggandari_id]').val()
+                let pelanggansampai_id = $('#crudForm').find('[name=pelanggansampai_id]').val()
+                let pelanggandari = $('#crudForm').find('[name=pelanggandari]').val()
+                let pelanggansampai = $('#crudForm').find('[name=pelanggansampai]').val()
+
+                getCekReport().then((response) => {
+                    window.open(
+                        `{{ route('laporankartupiutangperpelanggan.export') }}?sampai=${sampai}&dari=${dari}&pelanggandari_id=${pelanggandari_id}&pelanggansampai_id=${pelanggansampai_id}&pelanggandari=${pelanggandari}&pelanggansampai=${pelanggansampai}`
+                    )
+                }).catch((error) => {
+                    if (error.status === 422) {
+                        $('.is-invalid').removeClass('is-invalid')
+                        $('.invalid-feedback').remove()
+
+                        // return showDialog(error.responseJSON.errors.export);
+
+                        setErrorMessages($('#crudForm'), error.responseJSON.errors);
+                    } else {
+                        showDialog(error.statusText, error.responseJSON.message)
+
+                    }
+                })
+
+            })
+
+            function getCekReport() {
+                return new Promise((resolve, reject) => {
+                    $.ajax({
+                        url: `${apiUrl}laporankartupiutangperpelanggan/report`,
+                        dataType: "JSON",
+                        headers: {
+                            Authorization: `Bearer ${accessToken}`
+                        },
+                        data: {
+                            dari: $('#crudForm').find('[name=dari]').val(),
+                            sampai: $('#crudForm').find('[name=sampai]').val(),
+                            pelanggandari: $('#crudForm').find('[name=pelanggandari]').val(),
+                            pelanggandari_id: $('#crudForm').find('[name=pelanggandari_id]').val(),
+                            pelanggansampai: $('#crudForm').find('[name=pelanggansampai]').val(),
+                            pelanggansampai_id: $('#crudForm').find('[name=pelanggansampai_id]').val(),
+                            isCheck: true,
+                        },
+                        success: (response) => {
+                            resolve(response);
+                        },
+                        error: error => {
+                            reject(error)
+
+                        },
+                    });
+                });
+            }
+
+            function getCekExport() {
+
+                return new Promise((resolve, reject) => {
+                    $.ajax({
+                        url: `${apiUrl}laporankartupiutangperpelanggan/export`,
+                        dataType: "JSON",
+                        headers: {
+                            Authorization: `Bearer ${accessToken}`
+                        },
+                        data: {
+                            dari: $('#crudForm').find('[name=dari]').val(),
+                            sampai: $('#crudForm').find('[name=sampai]').val(),
+                            pelanggandari: $('#crudForm').find('[name=pelanggandari]').val(),
+                            pelanggandari_id: $('#crudForm').find('[name=pelanggandari_id]').val(),
+                            pelanggansampai: $('#crudForm').find('[name=pelanggansampai]').val(),
+                            pelanggansampai_id: $('#crudForm').find('[name=pelanggansampai_id]').val(),
+                            isCheck: true,
+                        },
+                        success: (response) => {
+                            resolve(response);
+                        },
+                        error: error => {
+                            reject(error)
+
+                        },
+                    });
+                });
+            }
 
             function initLookup() {
                 $('.pelanggandari-lookup').lookup({

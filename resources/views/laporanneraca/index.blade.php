@@ -86,7 +86,7 @@
 			</div>
 		`
                     )
-                    .addClass("btn btn-primary").html(`
+                    .addClass("ui-datepicker-trigger btn btn-easyui text-easyui-dark").html(`
 			<i class="fa fa-calendar-alt"></i>
 		`);
 
