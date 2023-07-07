@@ -391,9 +391,9 @@
         success: response => {
           $('#crudForm').trigger('reset')
           $('#crudModal').modal('hide')
-          irow = response.data.position % limit
-          console.log(Math.ceil(irow));
-          indexRow = irow - 1
+          irow = (response.data.position -1 ) % limit
+          // console.log(irow);
+          indexRow = Math.ceil(irow)
           id = response.data.id
 
           $('#jqGrid').jqGrid('setGridParam', {
@@ -875,7 +875,7 @@
           file = 'no file'
         }
         getImgURL(`${apiUrl}supir/pdf/${type}/${file}`, (fileBlob) => {
-          console.log('file', file)
+          // console.log('file', file)
           if (file != 'no file') {
             let imageFile = new File([fileBlob], file, {
               type: 'application/pdf',
