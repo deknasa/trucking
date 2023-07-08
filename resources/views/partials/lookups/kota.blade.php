@@ -13,6 +13,8 @@
         kotadari_id: `{!! $kotadari_id ?? '' !!}`,
         kotasampai_id: `{!! $kotasampai_id ?? '' !!}`,
         pilihkota_id: `{!! $pilihkota_id ?? '' !!}`,
+        dataritasi_id: `{!! $DataRitasi ?? '' !!}`,
+        ritasidarike: `{!! $RitasiDariKe ?? '' !!}`,
       },         
       idPrefix: 'kotaLookup',
       colModel: [{

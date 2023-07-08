@@ -54,6 +54,11 @@
             align: 'left'
           },
           {
+            label: 'TARIF',
+            name: 'tarif',
+            align: 'left'
+          },
+          {
             label: 'DARI',
             name: 'kotadari_id',
             align: 'left'

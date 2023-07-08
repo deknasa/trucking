@@ -259,52 +259,6 @@
             }
           },
           {
-            label: 'OMSET',
-            name: 'statusritasiomset',
-            stype: 'select',
-            searchoptions: {
-              value: `<?php
-                      $i = 1;
-
-                      foreach ($data['comboritasiomset'] as $status) :
-                        echo "$status[param]:$status[parameter]";
-                        if ($i !== count($data['comboritasiomset'])) {
-                          echo ";";
-                        }
-                        $i++;
-                      endforeach
-
-                      ?>
-            `,
-              dataInit: function(element) {
-                $(element).select2({
-                  width: 'resolve',
-                  theme: "bootstrap4"
-                });
-              }
-            },
-            formatter: (value, options, rowData) => {
-              let statusRitasiOmset = JSON.parse(value)
-              if (!statusRitasiOmset) {
-                return ''
-              }
-              let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusRitasiOmset.WARNA}; color: #fff;">
-                  <span>${statusRitasiOmset.SINGKATAN}</span>
-                </div>
-              `)
-
-              return formattedValue[0].outerHTML
-            },
-            cellattr: (rowId, value, rowObject) => {
-              let statusRitasiOmset = JSON.parse(rowObject.statusritasiomset)
-              if (!statusRitasiOmset) {
-                return ` title=""`
-              }
-              return ` title="${statusRitasiOmset.MEMO}"`
-            }
-          },
-          {
             label: 'LOKASI BONGKAR MUAT',
             width: 210,
             name: 'tarif_id',
@@ -579,7 +533,7 @@
             innerHTML: '<i class="fa fa-plus"></i> ADD',
             class: 'btn btn-primary btn-sm mr-1',
             onClick: () => {
-              createSuratPengantar()
+              showDialog('Harap isi dari input trip (mandor)')
             }
           },
           {

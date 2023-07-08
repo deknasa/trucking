@@ -12,6 +12,7 @@
         aktif: `{!! $Aktif ?? '' !!}`,
         container_id: `{!! $container_Id ?? '' !!}`,
         statuscontainer_id: `{!! $statuscontainer_Id ?? '' !!}`,
+        jenisorder_id: `{!! $jenisorder_Id ?? '' !!}`,
       }, 
       idPrefix: 'upahSupirRincianLookup',
       colModel: [
@@ -34,6 +35,17 @@
             name: 'kotasampai_id',
             search: false,
             hidden: true
+          },
+          {
+            label: 'Tarif ID',
+            name: 'tarif_id',
+            search: false,
+            hidden: true
+          },
+          {
+            label: 'Tarif',
+            name: 'tarif',
+            align: 'left'
           },
           {
             label: 'DARI',

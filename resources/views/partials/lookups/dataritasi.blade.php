@@ -16,19 +16,25 @@
           label: 'ID',
           name: 'id',
           width: '50px',
-            search: false,
+          search: false,
           hidden: true
         },
         {
-            label: 'STATUS RITASI',
-            name: 'statusritasi',
-          },
-          {
-            label: 'NOMINAL',
-            name: 'nominal',
-            align: "right",
-            formatter: currencyFormat,
-          },
+          label: 'STATUS RITASI ID',
+          name: 'statusritasi_id',
+          search: false,
+          hidden: true
+        },
+        {
+          label: 'STATUS RITASI',
+          name: 'statusritasi',
+        },
+        {
+          label: 'NOMINAL',
+          name: 'nominal',
+          align: "right",
+          formatter: currencyFormat,
+        },
         {
           label: 'STATUS',
           name: 'statusaktif',
@@ -133,7 +139,7 @@
       sortorder: 'asc',
       toolbar: [true, "top"],
       page: 1,
-    //   pager: $('#dataRitasiLookupPager'),
+      //   pager: $('#dataRitasiLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -159,7 +165,7 @@
         setGridLastRequest($(this), jqXHR)
       },
       loadComplete: function(data) {
-          changeJqGridRowListText()
+        changeJqGridRowListText()
         if (detectDeviceType() == 'desktop') {
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
