@@ -27,7 +27,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
-                  Tarif
+                  Tarif <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-md-10">
@@ -620,18 +620,17 @@
           .then(() => {
             $('#crudModal').modal('show')
             if (aksiEdit == false) {
-              console.log(aksiEdit)
               $('#crudForm').find(`.ui-datepicker-trigger`).attr('disabled', true)
-              let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
-              name.find('.lookup-toggler').attr('disabled', true)
+              let name = $('#crudForm').find(`[name]`).parents('.input-group')
+              name.find('.button-clear').attr('disabled', true)
+              name.children().find('.lookup-toggler').attr('disabled', true)
 
             } else {
-              console.log(aksiEdit)
               $('#crudForm').find(`.ui-datepicker-trigger`).attr('disabled', false)
 
-              let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
-              name.attr('disabled', false)
-              name.find('.lookup-toggler').attr('disabled', false)
+              let name = $('#crudForm').find(`[name]`).parents('.input-group')
+              name.find('.button-clear').attr('disabled', false)
+              name.children().find('.lookup-toggler').attr('disabled', false)
 
             }
             $('#simpanKandang').hide()

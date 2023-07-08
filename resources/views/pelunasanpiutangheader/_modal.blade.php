@@ -644,6 +644,7 @@
       .jqGrid({
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
+        datatype: "local",
         colModel: [{
             label: "",
             name: "",
@@ -672,7 +673,7 @@
           },
           {
             label: "TGL BUKTI",
-            name: "tglbukti",
+            name: "tglbukti_piutang",
             align: 'left',
             formatter: "date",
             formatoptions: {
@@ -822,7 +823,7 @@
                   let bayar = (getBayar != '') ? parseFloat(getBayar.replaceAll(',', '')) : 0
 
                   if ($('#crudForm').data('action') == 'edit') {
-                    totalSisa = (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.bayar)+ parseFloat(originalGridData.potongan)) - bayar - potongan
+                    totalSisa = (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.bayar) + parseFloat(originalGridData.potongan)) - bayar - potongan
                   } else {
                     totalSisa = originalGridData.sisa - bayar - potongan
                   }
@@ -1136,7 +1137,7 @@
         }
         sisa = 0
         if ($('#crudForm').data('action') == 'edit') {
-          sisa = (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.bayar)+ parseFloat(originalGridData.potongan))
+          sisa = (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.bayar) + parseFloat(originalGridData.potongan))
         } else {
           sisa = originalGridData.sisa
         }
@@ -1399,7 +1400,7 @@
                 totalNominalLebih += parseFloat(value.nominallebihbayar)
               }
             })
-            $('#tablePelunasan').jqGrid("clearGridData");
+            
             setTimeout(() => {
 
               $("#tablePelunasan")
