@@ -653,7 +653,7 @@
             "rules": [{
               "field": "grp",
               "op": "cn",
-              "data": "STATUS BAN"
+              "data": "STATUS KONDISI BAN"
             }]
           })
         },

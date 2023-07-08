@@ -23,11 +23,50 @@
       <table id="jqGrid"></table>
     </div>
   </div>
+
+  <div class="row mt-3">
+    <div class="col-12">
+      <div class="card card-primary card-outline card-outline-tabs">
+        <div class="card-body border-bottom-0">
+          <div id="tabs">
+            <ul class="dejavu">
+              <li><a href="#detail-tab">Details</a></li>
+              <li><a href="#penerimaan-tab">penerimaan</a></li>
+              <li><a href="#hutangbayar-tab">hutang bayar</a></li>
+              <li><a href="#pengeluaran-tab">pengeluaran</a></li>
+              <li><a href="#jurnal-tab">Jurnal</a></li>
+            </ul>
+            <div id="detail-tab">
+              <table id="detail"></table>
+            </div>
+
+            <div id="penerimaan-tab">
+              <table id="penerimaanGrid"></table>
+            </div>
+            <div id="hutangbayar-tab">
+              <table id="hutangbayarGrid"></table>
+            </div>
+            <div id="pengeluaran-tab">
+              <table id="pengeluaranGrid"></table>
+            </div>
+            <div id="jurnal-tab">
+              <table id="jurnalGrid"></table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 @include('pengeluaranstokheader._modal')
 <!-- Detail -->
 @include('pengeluaranstokheader._detail')
+@include('pengeluaranstokheader._pengeluaran')
+@include('pengeluaranstokheader._hutangbayar')
+@include('penerimaan._penerimaan')
+@include('pengeluaranstokheader._jurnal')
 
 @push('scripts')
 <script>
@@ -48,6 +87,8 @@
   let autoNumericElements = []
 
   $(document).ready(function() {
+    $("#tabs").tabs()
+
     initSelect2($(`#kodepengeluaranheader`),false);
     pengeluaranStok($('#crudForm'));
     $('#crudModal').on('hidden.bs.modal', function() {
@@ -237,6 +278,34 @@
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
+          
+          let pengeluaranstok = $('#jqGrid').jqGrid('getCell', id, 'pengeluaranstok')
+          let nobukti = $('#jqGrid').jqGrid('getCell', id, 'nobukti')
+          let statuspotong = $('#jqGrid').jqGrid('getCell', id, 'statuspotongretur');
+          let penerimaan = $('#jqGrid').jqGrid('getCell', id, 'penerimaan_nobukti')
+          let hutangbayar = $('#jqGrid').jqGrid('getCell', id, 'hutangbayar_nobukti')
+          let pengeluaran = false;
+          if (pengeluaranstok =="PJA") {
+            nobukti = $('#jqGrid').jqGrid('getCell', id, 'jqGrid_hutangbayar_nobukti')
+            hutangbayar = false;
+          }else if (pengeluaranstok =="RTR") {
+            
+            if (statuspotong == 219) {//penerimaan
+              nobukti = penerimaan;
+              hutangbayar = false;
+            }else if (statuspotong == 220) {//hutangbayar_nobukti
+              nobukti = hutangbayar;
+              pengeluaran = hutangbayar;
+            }
+            loadJurnalUmumData(id, nobukti,"pengeluaranstokdetail",statuspotong)
+          }else{
+            loadJurnalUmumData(id, nobukti)
+          }
+          // loadPenerimaanData(id, nobukti)
+          
+          loadHutangBayarData(id, hutangbayar)
+          loadPengeluaranData(id, pengeluaran)
+          loadPenerimaanData(id, penerimaan)
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
@@ -386,6 +455,12 @@
 
     /* Load detail grid */
     loadDetailGrid()
+    loadJurnalUmumGrid("")
+    loadHutangBayarGrid("")
+    loadPengeluaranGrid("")
+    loadPenerimaanGrid("")
+
+
 
     $('#add .ui-pg-div')
       .addClass(`btn btn-sm btn-primary`)
