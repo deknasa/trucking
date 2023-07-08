@@ -137,8 +137,7 @@
                         console.log(error)
                         setErrorMessages(form, error.responseJSON.errors);
                     } else {
-                        let text = error.responseJSON.message.join('<br>');
-                        showDangerDialog(text)
+                        showDialog(error.responseJSON)
                     }
                 },
             }).always(() => {
