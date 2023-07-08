@@ -98,7 +98,7 @@
             name: 'nojob',
           },
           {
-            label: 'SHIPPER',
+            label: 'PELANGGAN',
             name: 'pelanggan_id',
           },
           {
@@ -192,7 +192,6 @@
             },
             formatter: (value, options, rowData) => {
               let statusLongTrip = JSON.parse(value)
-              console.log(statusLongTrip)
               if (!statusLongTrip) {
                 return ''
               }
@@ -364,16 +363,16 @@
             }
           },
           {
-            label: 'EDIT TUJUAN',
-            name: 'statusedittujuan',
+            label: 'EDIT SURAT PENGANTAR',
+            name: 'statusapprovaleditsuratpengantar',
             stype: 'select',
             searchoptions: {
               value: `<?php
                       $i = 1;
 
-                      foreach ($data['comboedittujuan'] as $status) :
+                      foreach ($data['comboeditsp'] as $status) :
                         echo "$status[param]:$status[parameter]";
-                        if ($i !== count($data['comboedittujuan'])) {
+                        if ($i !== count($data['comboeditsp'])) {
                           echo ";";
                         }
                         $i++;
@@ -392,21 +391,21 @@
               if (!value) {
                 return ''
               }
-              let statusEditTujaun = JSON.parse(value)
+              let statusEditSP = JSON.parse(value)
               let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusEditTujaun.WARNA}; color: #fff;">
-                  <span>${statusEditTujaun.SINGKATAN}</span>
+                <div class="badge" style="background-color: ${statusEditSP.WARNA}; color: #fff;">
+                  <span>${statusEditSP.SINGKATAN}</span>
                 </div>
               `)
 
               return formattedValue[0].outerHTML
             },
             cellattr: (rowId, value, rowObject) => {
-              if (!rowObject.statusedittujuan) {
+              if (!rowObject.statusapprovaleditsuratpengantar) {
                 return ` title=""`
               }
-              let statusEditTujaun = JSON.parse(rowObject.statusedittujuan)
-              return ` title="${statusEditTujaun.MEMO}"`
+              let statusEditSP = JSON.parse(rowObject.statusapprovaleditsuratpengantar)
+              return ` title="${statusEditSP.MEMO}"`
             }
           },
           {
@@ -600,7 +599,7 @@
             },
             {
               id:'approvalEditTujuan',
-              text:"un/Approval Edit Tujuan",
+              text:"un/Approval Edit Surat Pengantar",
               onClick: () => {
                 selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                 approvalEditTujuan(selectedId);
@@ -781,10 +780,10 @@
           Authorization: `Bearer ${accessToken}`
         },
         success: response => {
-          let msg = `YAKIN Unapproval Edit Tujuan`
-          console.log(statusEditTujuan);
-          if (response.data.statusedittujuan === statusEditTujuan) {
-            msg = `YAKIN approval Edit Tujuan`
+          let msg = `YAKIN Unapproval Edit Surat Pengantar`
+          console.log(statusEditTujuan, response.data.statusapprovaleditsuratpengantar);
+          if (response.data.statusapprovaleditsuratpengantar === statusEditTujuan) {
+            msg = `YAKIN approval Edit Surat Pengantar`
           }
           showConfirm(msg,response.data.nobukti,`suratpengantar/${response.data.id}/edittujuan`)
         },
@@ -833,11 +832,11 @@
             "rules": [{
               "field": "grp",
               "op": "cn",
-              "data": "STATUS BATAL MUAT"
+              "data": "STATUS APPROVAL"
             },{
               "field": "text",
               "op": "cn",
-              "data": "BUKAN BATAL MUAT"
+              "data": "NON APPROVAL"
             }]
           })
         },
