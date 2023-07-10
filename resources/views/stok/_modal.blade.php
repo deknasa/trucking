@@ -59,19 +59,6 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
-                  status ban <span class="text-danger">*</span>
-                </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-10">
-                <select name="statusban" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH STATUS BAN --</option>
-                </select>
-              </div>
-            </div>
-            
-            <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2">
-                <label class="col-form-label">
                   status service rutin <span class="text-danger">*</span>
                 </label>
               </div>
@@ -137,24 +124,38 @@
               </div>
             </div>
 
-            <div class="row form-group">
+            <div id="kelompok-ban">
+              <div class="row form-group">
+                <div class="col-12 col-sm-3 col-md-2">
+                  <label class="col-form-label">
+                    status ban <span class="text-danger">*</span>
+                  </label>
+                </div>
+                <div class="col-12 col-sm-9 col-md-10">
+                  <select name="statusban" class="form-select select2bs4" style="width: 100%;">
+                    <option value="">-- PILIH STATUS BAN --</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div class="row form-group">
+                <div class="col-12 col-sm-3 col-md-2">
+                  <label class="col-form-label">Total vulkanisir</label>
+                </div>
+                <div class="col-12 col-sm-9 col-md-10">
+                  <input type="text" name="totalvulkanisir" style="text-align:right" disabled class="form-control">
+                </div>
+              </div>
+              
+              <div class="row form-group">
+                <div class="col-12 col-sm-3 col-md-2">
+                  <label class="col-form-label">vulkanisir awal</label>
+                </div>
+                <div class="col-12 col-sm-9 col-md-10">
+                  <input type="text" name="vulkanisirawal" style="text-align:right" class="form-control">
+                </div>
+              </div>
 
-              <div class="col-12 col-sm-3 col-md-2">
-                <label class="col-form-label">Total vulkanisir</label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="totalvulkanisir" style="text-align:right" disabled class="form-control">
-              </div>
-            </div>
-            
-            <div class="row form-group">
-
-              <div class="col-12 col-sm-3 col-md-2">
-                <label class="col-form-label">vulkanisir awal</label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="vulkanisirawal" style="text-align:right" class="form-control">
-              </div>
             </div>
 
             <div class="row form-group">
@@ -250,6 +251,7 @@
     $(document).on('click', '.rmv', function(event) {
       deleteRow($(this).parents('tr'))
     })
+    $(`#kelompok-ban`).hide();
 
     $(document).on('change', '#statusreuse', function(event) {
       let reuse =0
@@ -773,7 +775,7 @@
           initAutoNumeric(form.find(`[name="hargabelimin"]`))
           initAutoNumeric(form.find(`[name="hargabelimax"]`))
           initAutoNumeric(form.find(`[name="vulkanisirawal"]`),{'maximumValue':100})
-
+          isKelompokBan(response.data.kelompok_id,response.data.kelompok)
           if (response.statuspakai) {
             $(`#statusreuse`).attr('disabled', true)
             form.find(`[name="vulkanisirawal"]`).attr('disabled', true)
@@ -938,6 +940,13 @@
     $('#kategoriId').val('');
   }
 
+  function isKelompokBan(id=0,Kelompok=""){
+    $(`#kelompok-ban`).hide();
+    if ((id == 1) || (Kelompok =="BAN")) {
+      $(`#kelompok-ban`).show();
+    }
+  }
+
   function initLookup() {
 
     $('.jenistrado-lookup').lookup({
@@ -983,6 +992,7 @@
         element.data('currentValue', element.val())
         disabledHirarkiKelompok()
         enabledSubKelompok()
+        isKelompokBan(kelompok.id,kelompok.kodekelompok)
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
@@ -992,21 +1002,16 @@
         $(`#${element[0]['name']}Id`).val('')
         element.val('')
         element.data('currentValue', element.val())
+        isKelompokBan(0,"")
       }
     })
     $('.subkelompok-lookup').lookup({
       title: 'subkelompok Lookup',
       fileName: 'subkelompok',
       beforeProcess: function(test) {
+        var kelompokId = $(`#kelompokId`).val();
         this.postData = {
-          filters: JSON.stringify({
-            "groupOp": "AND",
-            "rules": [{
-              "field": "kelompokid",
-              "op": "cn",
-              "data": $(`#kelompokId`).val()
-            }]
-          })
+          kelompok_id: kelompokId,
         }
       },
       onSelectRow: (subkelompok, element) => {
@@ -1029,16 +1034,20 @@
       title: 'kategori Lookup',
       fileName: 'kategori',
       beforeProcess: function(test) {
+        var subkelompokId = $(`#subkelompokId`).val();
         this.postData = {
-          filters: JSON.stringify({
-            "groupOp": "AND",
-            "rules": [{
-              "field": "subkelompok_id",
-              "op": "cn",
-              "data": $(`#subkelompokId`).val()
-            }]
-          })
+          subkelompok_id: subkelompokId,
         }
+        // this.postData = {
+        //   filters: JSON.stringify({
+        //     "groupOp": "AND",
+        //     "rules": [{
+        //       "field": "subkelompok_id",
+        //       "op": "cn",
+        //       "data": $(`#subkelompokId`).val()
+        //     }]
+        //   })
+        // }
       },
       onSelectRow: (kategori, element) => {
         element.val(kategori.kodekategori)

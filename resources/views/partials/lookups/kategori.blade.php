@@ -10,7 +10,9 @@
       iconSet: 'fontAwesome',
       datatype: "json",
       postData: {
-        filters: `{!! $filters ?? '' !!}`
+        filters: `{!! $filters ?? '' !!}`,
+        subkelompok:`{!! $subkelompok_id ?? '' !!}`
+
       },
       idPrefix: 'kategoriLookup',
       colModel: [{

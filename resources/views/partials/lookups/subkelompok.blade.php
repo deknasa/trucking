@@ -11,11 +11,11 @@
       datatype: "json",
       postData: {
         aktif: `{!! $Aktif ?? '' !!}`,
+        kelompok:`{!! $kelompok_id ?? '' !!}`
       },   
-      postData: {
-        filters: `{!! $filters ?? '' !!}`
-      },
-      idPrefix: 'subKelompokLookup',
+      // postData: {
+      // },
+      // idPrefix: 'subKelompokLookup',
       colModel: [{
           label: 'ID',
           name: 'id',
