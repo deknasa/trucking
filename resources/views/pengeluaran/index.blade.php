@@ -102,7 +102,8 @@
     initDatepicker()
     $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('pengeluaranheader', {
-        bank_id: $('#bankheader').val()
+        bank_id: $('#bankheader').val(),
+        proses: 'reload'
       })
       selectedRows = []
       $('#gs_').prop('checked', false)
