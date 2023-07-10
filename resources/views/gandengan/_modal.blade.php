@@ -210,7 +210,9 @@
     activeGrid = null
 
     getMaxLength(form)
-    initSelect2()
+    initSelect2(form.find(`
+      [name="statusaktif"]
+    `), true)
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {

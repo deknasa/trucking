@@ -249,7 +249,11 @@
           setGridLastRequest($(this), jqXHR)
         },
         onSelectRow: function(id) {
-          let nobukti = $('#jqGrid').jqGrid('getCell', id, 'hutang_nobukti')
+          let penerimaanstok = $('#jqGrid').jqGrid('getCell', id, 'penerimaanstok')
+          let nobukti = $('#jqGrid').jqGrid('getCell', id, 'nobukti')
+          if (penerimaanstok =="SPB") {
+            nobukti = $('#jqGrid').jqGrid('getCell', id, 'hutang_nobukti')
+          }
 
           activeGrid = $(this)
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
