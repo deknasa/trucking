@@ -44,30 +44,64 @@
             hidden: true
           },
           {
-            label: 'Tgl bukti',
+            label: 'TGL BUKTI',
             name: 'tglbukti',
-            align: 'right',
-            // editoptions: { autocomplete: "off" },
-            searchoptions: {
-              autocomplete: "off",
-                            // dataInit is the client-side event that fires upon initializing the toolbar search field for a column
-                            // use it to place a third party control to customize the toolbar
-                            dataInit: function (element) {
-                              $(element).datepicker({
-                                 autoclose: true,
-                                 dateFormat:'dd-mm-yy',
-                                 format: 'd-m-yyyy',
-                                 orientation : 'bottom',
-                                 onSelect: function(dateText, inst){ $("#jqGrid")[0].triggerToolbar(); }
-
-                                });
-                            }
-                        }
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
           },
-          
           {
             label: 'Jumlah trip',
             name: 'jumlahtrip',
+          }, {
+            label: 'STATUS APPROVAL',
+            name: 'statusapproval',
+            align: 'left',
+            stype: 'select',
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['comboapproval'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['comboapproval'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+                            `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              let statusApproval = JSON.parse(value)
+              if (!statusApproval) {
+                return ''
+              }
+              let formattedValue = $(`
+                                <div class="badge" style="background-color: ${statusApproval.WARNA}; color: #fff;">
+                                <span>${statusApproval.SINGKATAN}</span>
+                                </div>
+                            `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusApproval = JSON.parse(rowObject.statusapproval)
+              if (!statusApproval) {
+                return ` title=" "`
+              }
+              return ` title="${statusApproval.MEMO}"`
+            }
           },
           {
             label: 'MODIFIEDBY',
@@ -182,7 +216,7 @@
         disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
           abortGridLastRequest($(this))
-          
+
           clearGlobalSearch($('#jqGrid'))
         },
       })
@@ -219,7 +253,7 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                deleteSuratPengantarApprovalInputTrip(selectedId)
+                cekValidasi(selectedId)
               }
             }
           },

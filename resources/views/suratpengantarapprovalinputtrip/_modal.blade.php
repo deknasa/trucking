@@ -5,13 +5,13 @@
         <div class="modal-header">
           <p class="modal-title" id="crudModalTitle"></p>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            
+
           </button>
         </div>
         <form action="" method="post">
           <div class="modal-body">
-            <input type="text" name="id" class="form-control"  hidden readonly>
-            
+            <input type="text" name="id" class="form-control" hidden readonly>
+
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
@@ -32,9 +32,20 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <div class="input-group">
-                  <input type="text" name="jumlahtrip" id="jumlahtrip" class="form-control numeric">
-                </div>
+                <input type="text" name="jumlahtrip" id="jumlahtrip" class="form-control numbernoseparate text-right">
+              </div>
+            </div>
+
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
+                  Status Approval <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <select name="statusapproval" class="form-select select2bs4" style="width: 100%;">
+                  <option value="">-- PILIH STATUS APPROVAL --</option>
+                </select>
               </div>
             </div>
           </div>
@@ -66,11 +77,9 @@
       let method
       let url
       let form = $('#crudForm')
-      let SuratPengantarApprovalInputTripId = form.find('[name=id]').val()
+      let approvalId = form.find('[name=id]').val()
       let action = form.data('action')
       let data = $('#crudForm').serializeArray()
-      // console.log(AutoNumeric.getNumber($(`#crudForm [name="jumlahtrip"]`)[0]));
-      $(`#crudForm`).find(`[name="jumlahtrip"]`)[0].value = AutoNumeric.getNumber($(`#crudForm`).find(`[name="jumlahtrip"]`)[0])
 
       data.push({
         name: 'sortIndex',
@@ -104,11 +113,11 @@
           break;
         case 'edit':
           method = 'PATCH'
-          url = `${apiUrl}suratpengantarapprovalinputtrip/${SuratPengantarApprovalInputTripId}`
+          url = `${apiUrl}suratpengantarapprovalinputtrip/${approvalId}`
           break;
         case 'delete':
           method = 'DELETE'
-          url = `${apiUrl}suratpengantarapprovalinputtrip/${SuratPengantarApprovalInputTripId}`
+          url = `${apiUrl}suratpengantarapprovalinputtrip/${approvalId}`
           break;
         default:
           method = 'POST'
@@ -133,7 +142,7 @@
 
           id = response.data.id
 
-          $('#jqGrid').jqGrid('setGridParam', { 
+          $('#jqGrid').jqGrid('setGridParam', {
             page: response.data.page
           }).trigger('reloadGrid');
 
@@ -164,8 +173,8 @@
     setFormBindKeys(form)
 
     activeGrid = null
+    initSelect2($(`[name="statusapproval"]`), true)
     initDatepicker()
-    initAutoNumeric(form.find('.numeric'))
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
@@ -182,10 +191,27 @@
     Simpan
   `)
     form.data('action', 'add')
-    $('#crudModalTitle').text('Create Buka Absensi')
-    $('#crudModal').modal('show')
+    $('#crudModalTitle').text('Create Buka Trip')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
+
+
+    Promise
+      .all([
+        setStatusApprovalOptions(form)
+      ])
+      .then(() => {
+        showDefault(form)
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .catch((error) => {
+            showDialog(error.statusText)
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
+      })
   }
 
   function editSuratPengantarApprovalInputTrip(SuratPengantarApprovalInputTripId) {
@@ -199,23 +225,27 @@
     <i class="fa fa-save"></i>
     Simpan
   `)
-    $('#crudModalTitle').text('Edit Buka Absensi')
+    $('#crudModalTitle').text('Edit Buka Trip')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
     Promise
       .all([
-        showSuratPengantarApprovalInputTrip(form, SuratPengantarApprovalInputTripId)
+        setStatusApprovalOptions(form)
       ])
       .then(() => {
-        $('#crudModal').modal('show')
+        showSuratPengantarApprovalInputTrip(form, SuratPengantarApprovalInputTripId)
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .catch((error) => {
+            showDialog(error.statusText)
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
       })
-      .catch((error) => {
-        showDialog(error.statusText)
-      })
-      .finally(() => {
-        $('.modal-loader').addClass('d-none')
-      })
+
   }
 
   function deleteSuratPengantarApprovalInputTrip(SuratPengantarApprovalInputTripId) {
@@ -228,26 +258,30 @@
     <i class="fa fa-save"></i>
     Hapus
   `)
-    $('#crudModalTitle').text('Delete Buka Absensi')
+    $('#crudModalTitle').text('Delete Buka Trip')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
     Promise
       .all([
-        showSuratPengantarApprovalInputTrip(form, SuratPengantarApprovalInputTripId)
+        setStatusApprovalOptions(form)
       ])
       .then(() => {
-        $('#crudModal').modal('show')
+        showSuratPengantarApprovalInputTrip(form, SuratPengantarApprovalInputTripId)
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .catch((error) => {
+            showDialog(error.statusText)
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
       })
-      .catch((error) => {
-        showDialog(error.statusText)
-      })
-      .finally(() => {
-        $('.modal-loader').addClass('d-none')
-      })
+
   }
 
-  
+
 
   function showSuratPengantarApprovalInputTrip(form, SuratPengantarApprovalInputTripId) {
     return new Promise((resolve, reject) => {
@@ -261,13 +295,99 @@
         success: response => {
           $.each(response.data, (index, value) => {
             let element = form.find(`[name="${index}"]`)
-            element.val(value)
+            if (element.is('select')) {
+              element.val(value).trigger('change')
+            } else {
+              element.val(value)
+            }
           })
-          
+
           if (form.data('action') === 'delete') {
             form.find('[name]').addClass('disabled')
             initDisabled()
           }
+          resolve()
+        },
+        error: error => {
+          reject(error)
+        }
+      })
+    })
+  }
+
+  function cekValidasi(Id, Aksi) {
+        $.ajax({
+            url: `{{ config('app.api_url') }}suratpengantarapprovalinputtrip/${Id}/cekvalidasi`,
+            method: 'POST',
+            dataType: 'JSON',
+            beforeSend: request => {
+                request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+            },
+            success: response => {
+                var error = response.error
+                if (error) {
+                    showDialog(response)
+                } else {
+                   deleteSuratPengantarApprovalInputTrip(Id)
+                }
+            }
+        })
+    }
+
+  const setStatusApprovalOptions = function(relatedForm) {
+    return new Promise((resolve, reject) => {
+      relatedForm.find('[name=statusapproval]').empty()
+      relatedForm.find('[name=statusapproval]').append(
+        new Option('-- PILIH STATUS APPROVAL --', '', false, true)
+      ).trigger('change')
+
+      $.ajax({
+        url: `${apiUrl}parameter/combo`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          grp: "STATUS APPROVAL",
+          subgrp: "STATUS APPROVAL",
+        },
+        success: response => {
+          response.data.forEach(statusApproval => {
+            let option = new Option(statusApproval.text, statusApproval.id)
+
+            relatedForm.find('[name=statusapproval]').append(option).trigger('change')
+          });
+
+          resolve()
+        },
+        error: error => {
+          reject(error)
+        }
+      })
+    })
+  }
+
+  function showDefault(form) {
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `${apiUrl}suratpengantarapprovalinputtrip/default`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          $.each(response.data, (index, value) => {
+            console.log(value)
+            let element = form.find(`[name="${index}"]`)
+
+            if (element.is('select')) {
+              element.val(value).trigger('change')
+            } else {
+              element.val(value)
+            }
+          })
           resolve()
         },
         error: error => {

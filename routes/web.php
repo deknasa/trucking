@@ -217,6 +217,7 @@ use App\Http\Controllers\LaporanPemakaianBanController;
 use App\Http\Controllers\LaporanTransaksiHarianController;
 use App\Http\Controllers\DataRitasiController;
 use App\Http\Controllers\AkuntansiController;
+use App\Http\Controllers\ApprovalBukaTanggalSuratPengantarController;
 use App\Http\Controllers\ExportLaporanMingguanSupirController;
 use App\Http\Controllers\TypeAkuntansiController;
 use App\Http\Controllers\MainTypeAkuntansiController;
@@ -398,6 +399,8 @@ Route::middleware(['auth','authorized'])->group(function () {
     
     Route::get('bukaabsensi/index', [BukaAbsensiController::class,'index']);
     Route::resource('bukaabsensi', BukaAbsensiController::class);
+
+    Route::get('suratpengantarapprovalinputtrip/index', [SuratPengantarApprovalInputTripController::class,'index']);
     Route::resource('suratpengantarapprovalinputtrip', SuratPengantarApprovalInputTripController::class);
 
     Route::get('absensisupirapprovalheader/{id}/delete', [AbsensiSupirApprovalHeaderController::class, 'delete'])->name('absensisupirapprovalheader.delete');
@@ -1415,7 +1418,6 @@ Route::middleware(['auth','authorized'])->group(function () {
     
     Route::get('ubahpassword/index', [UbahPasswordController::class, 'index']);
     Route::resource('ubahpassword', UbahPasswordController::class);
-    
 });
 
 Route::patch('format', [FormatController::class, 'update']);

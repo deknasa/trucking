@@ -60,7 +60,7 @@ class AuthController extends Controller
             User::where('user',$request->user)->first();
             if (!$user) {
                 return redirect()->back()->withErrors([
-                    'user_not_found' => 'User not registered'
+                    'user_not_found' => 'Autentikasi Gagal'
                 ]);
             }
             $statusaktif = [
