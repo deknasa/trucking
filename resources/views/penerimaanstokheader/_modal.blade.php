@@ -1375,9 +1375,16 @@
     initLookup()
     if( form.data('action') !== 'add'){
       let penerimaanstok = $('#crudForm').find(`[name="penerimaanstok"]`).parents('.input-group').children()
+      let penerimaanstok_nobukti = $('#crudForm').find(`[name="penerimaanstok_nobukti"]`).parents('.input-group').children()
+      let pengeluaranstok_nobukti = $('#crudForm').find(`[name="pengeluaranstok_nobukti"]`).parents('.input-group').children()
       penerimaanstok.attr('disabled', true)
       penerimaanstok.find('.lookup-toggler').attr('disabled', true)
       $('#penerimaanstokId').attr('readonly', true);
+
+      penerimaanstok_nobukti.attr('disabled', true)
+      penerimaanstok_nobukti.find('.lookup-toggler').attr('disabled', true)
+      pengeluaranstok_nobukti.attr('disabled', true)
+      pengeluaranstok_nobukti.find('.lookup-toggler').attr('disabled', true)
     }
       
       
