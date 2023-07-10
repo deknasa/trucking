@@ -9,6 +9,11 @@
   <strong>TAS Trucking System</strong>
 
   <ul class="navbar-nav ml-auto">
+    <li class="nav-item mr-3">
+      <div class="text-right">
+        your ip <span class="d-none d-lg-inline">  address : </span> ({{request()->ip()}}) 
+      </div>
+    </li>
     <li class="nav-item">
       <div class="datetime-place text-right">
         <span class="date-place"></span>
