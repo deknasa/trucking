@@ -186,6 +186,7 @@
                                 gandengan_id: $('#crudForm').find('[name=gandengan_id]').val(),
                                 trado: $('#crudForm').find('[name=trado]').val(),
                                 trado_id: $('#crudForm').find('[name=trado_id]').val(),
+                                proses: 'reload',
                                 // datafilter:dataFilter,
 
                             },
@@ -239,7 +240,8 @@
                                 dari: dari,
                                 sampai: sampai,
                                 filter: filter,
-                                datafilter: dataFilter
+                                datafilter: dataFilter,
+                                proses: 'reload'
                             },
                         }).trigger('reloadGrid');
 
@@ -484,7 +486,7 @@
                                         '' && filter != '' && dataFilter != '') {
 
                                         window.open(
-                                            `{{ route('kartustok.export') }}?dari=${dari}&sampai=${sampai}&stokdari_id=${stokdari_id}&stoksampai_id=${stoksampai_id}&filter=${filter}&datafilter=${dataFilter}`
+                                            `{{ route('kartustok.export') }}?dari=${dari}&sampai=${sampai}&stokdari_id=${stokdari_id}&stoksampai_id=${stoksampai_id}&filter=${filter}&datafilter=${dataFilter}&proses=${proses}`
                                         )
                                     } else {
                                         showDialog('ISI SELURUH KOLOM')
@@ -501,6 +503,7 @@
                                     let sampai = $('#crudForm').find('[name=sampai]').val()
                                     let filter = $('#crudForm').find('[name=filter]').val()
                                     let dataFilter = ''
+                                    let proses='reload'
                                     if (filter == '186') {
                                         dataFilter = $('#crudForm').find('[name=gudang_id]').val()
                                     }
@@ -515,7 +518,7 @@
                                         '' && filter != '' && dataFilter != '') {
 
                                         window.open(
-                                            `{{ route('kartustok.report') }}?dari=${dari}&sampai=${sampai}&stokdari_id=${stokdari_id}&stoksampai_id=${stoksampai_id}&filter=${filter}&datafilter=${dataFilter}`
+                                            `{{ route('kartustok.report') }}?dari=${dari}&sampai=${sampai}&stokdari_id=${stokdari_id}&stoksampai_id=${stoksampai_id}&filter=${filter}&datafilter=${dataFilter}&proses=${proses}`
                                         )
                                     } else {
                                         showDialog('ISI SELURUH KOLOM')
@@ -683,7 +686,7 @@
                             return new Promise((resolve, reject) => {
                             relatedForm.find('[name=filter]').empty()
                             relatedForm.find('[name=filter]').append(
-                            new Option('-- PILIH FILTER --', '0', false, true)
+                            new Option('-- SEMUA --', '0', false, true)
                             ).trigger('change')
 
                             let data = [];
