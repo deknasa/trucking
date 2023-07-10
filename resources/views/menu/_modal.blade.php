@@ -271,7 +271,7 @@
     Promise
       .all([
         setMenuParentOptions(form),
-        setControllerOptions(form)
+        // setControllerOptions(form)
       ])
       .then(() => {
         showMenu(form, menuId)
@@ -309,7 +309,7 @@
 
   Promise.all([
     setMenuParentOptions(form),
-    setControllerOptions(form)
+    // setControllerOptions(form)
   ])
     .then(() => {
       showMenu(form, menuId)
