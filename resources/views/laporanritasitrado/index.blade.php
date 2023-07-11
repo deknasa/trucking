@@ -21,13 +21,13 @@
                         <div class="row">
 
                             <div class="col-sm-6 mt-4">
-                                <a id="btnEkspor" class="btn btn-warning mr-1 ">
-                                    <i class="fas fa-file-export"></i>
-                                    Export
-                                </a>
                                 <a id="btnreload" class="btn btn-primary mr-2 ">
                                     <i class="fas fa-sync"></i>
                                     Reload
+                                </a>
+                                <a id="btnEkspor" class="btn btn-warning mr-1 ">
+                                    <i class="fas fa-file-export"></i>
+                                    Export
                                 </a>
                             </div>
                         </div>

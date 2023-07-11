@@ -278,16 +278,16 @@
                     let limit = $(this).jqGrid('getGridParam', 'postData').limit
                     if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
                 },
-                loadError: function (xhr, status, error) {
-                    if (xhr.status === 422) {
-                        $('.is-invalid').removeClass('is-invalid');
-                        $('.invalid-feedback').remove();
+                // loadError: function (xhr, status, error) {
+                //     if (xhr.status === 422) {
+                //         $('.is-invalid').removeClass('is-invalid');
+                //         $('.invalid-feedback').remove();
 
-                        setErrorMessages(form, xhr.responseJSON.errors);
-                    } else {
-                        showDialog(xhr.statusText);
-                    }
-                },
+                //         setErrorMessages(form, xhr.responseJSON.errors);
+                //     } else {
+                //         showDialog(xhr.statusText);
+                //     }
+                // },
                 loadComplete: function(data) {
                     changeJqGridRowListText()
                     $(document).unbind('keydown')
@@ -341,7 +341,8 @@
                 groupOp: 'AND',
                 disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
                 beforeSearch: function() {
-                    $('#left-nav').find(`button:not(#add)`).attr('disabled', 'disabled')
+                    abortGridLastRequest($(this))
+                    $('#left-nav').attr('disabled', 'disabled')
                     clearGlobalSearch($('#jqGrid'))
                 },
             })
