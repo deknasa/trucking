@@ -31,10 +31,10 @@ class LaporanKartuPiutangPerAgenController extends MyController
         $detailParams = [
             'dari' => $request->dari,
             'sampai' => $request->sampai,
-            'supplierdari' => $request->supplierdari,
-            'suppliersampai' => $request->suppliersampai,
-            'supplierdari_id' => $request->supplierdari_id,
-            'suppliersampai_id' => $request->suppliersampai_id,
+            'agendari' => $request->agendari,
+            'agensampai' => $request->agensampai,
+            'agendari_id' => $request->agendari_id,
+            'agensampai_id' => $request->agensampai_id,
             
         ];
         // dd($detailParams);
@@ -54,10 +54,10 @@ class LaporanKartuPiutangPerAgenController extends MyController
         $detailParams = [
             'dari' => $request->dari,
             'sampai' => $request->sampai,
-            'supplierdari' => $request->supplierdari,
-            'suppliersampai' => $request->suppliersampai,
-            'supplierdari_id' => $request->supplierdari_id,
-            'suppliersampai_id' => $request->suppliersampai_id,
+            'agendari' => $request->agendari,
+            'agensampai' => $request->agensampai,
+            'agendari_id' => $request->agendari_id,
+            'agensampai_id' => $request->agensampai_id,
 
         ];
        
@@ -75,7 +75,7 @@ class LaporanKartuPiutangPerAgenController extends MyController
         $sheet->setCellValue('A1', 'PT. TRANSPORINDO AGUNG SEJAHTERA');
         $sheet->setCellValue('A2', 'Laporan Kartu Piutang Per Agen');
         $sheet->setCellValue('A3', 'Periode: ' . $request->dari . ' S/D ' . $request->sampai);
-        $sheet->setCellValue('A4', 'Agen: ' . $request->supplierdari . ' S/D ' . $request->suppliersampai);
+        $sheet->setCellValue('A4', 'Agen: ' . $request->agendari . ' S/D ' . $request->agensampai);
         // $sheet->getStyle("A1")->getFont()->setSize(20)->setBold(true);
     
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
@@ -179,7 +179,7 @@ class LaporanKartuPiutangPerAgenController extends MyController
             $sheet->setCellValue("J$detail_start_row", $response_detail['keterangan']);
             
             $sheet->getStyle("A$detail_start_row:J$detail_start_row")->applyFromArray($styleArray);
-            $sheet->getStyle("C$detail_start_row:J$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+            $sheet->getStyle("G$detail_start_row:J$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
             // $sheet->getStyle("B$detail_start_row:B$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
             // $sheet->getStyle("D$detail_start_row:D$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
             
@@ -262,7 +262,7 @@ $sheet->getStyle("A" . ($detail_start_row + 1) . ":$lastColumn" . ($detail_start
 
 
         $writer = new Xlsx($spreadsheet);
-        $filename = 'EXPORTlaporankartupiutangperagen' . date('dmYHis');
+        $filename = 'laporankartupiutangperagen' . date('dmYHis');
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
         header('Cache-Control: max-age=0');

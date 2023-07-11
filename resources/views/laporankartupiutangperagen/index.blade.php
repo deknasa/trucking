@@ -25,7 +25,7 @@
                             </div>
                             
                         </div> --}}
-                        
+
                         <div class="form-group row">
                             <label class="col-12 col-sm-2 col-form-label mt-2">Periode<span class="text-danger">*</span></label>
                             <div class="col-sm-4 mt-2">
@@ -39,23 +39,23 @@
                                     <input type="text" name="sampai" class="form-control datepicker">
                                 </div>
                             </div>
-                            
+
                         </div>
-                        
+
                         <div class="form-group row">
-                            <label class="col-12 col-sm-2 col-form-label mt-2">SUPPLIER (DARI)<span class="text-danger">*</span></label>
+                            <label class="col-12 col-sm-2 col-form-label mt-2">AGEN (DARI)<span class="text-danger">*</span></label>
                             <div class="col-sm-4 mt-2">
-                                <input type="hidden" name="supplierdari_id">
-                                <input type="text" name="supplierdari" class="form-control supplierdari-lookup">
+                                <input type="hidden" name="agendari_id">
+                                <input type="text" name="agendari" class="form-control agendari-lookup">
                             </div>
                             <h5 class="mt-3">s/d</h5>
                             <div class="col-sm-4 mt-2">
-                                <input type="hidden" name="suppliersampai_id">
-                                <input type="text" name="suppliersampai" class="form-control suppliersampai-lookup">
+                                <input type="hidden" name="agensampai_id">
+                                <input type="text" name="agensampai" class="form-control agensampai-lookup">
                             </div>
                         </div>
-                    
-                     
+
+
                         <div class="row">
 
                             <div class="col-sm-6 mt-4">
@@ -113,47 +113,119 @@
     $(document).on('click', `#btnPreview`, function(event) {
         let dari = $('#crudForm').find('[name=dari]').val()
         let sampai = $('#crudForm').find('[name=sampai]').val()
-        let supplierdari_id= $('#crudForm').find('[name=supplierdari_id]').val()
-        let suppliersampai_id= $('#crudForm').find('[name=suppliersampai_id]').val()
-        let supplierdari= $('#crudForm').find('[name=supplierdari]').val()
-        let suppliersampai= $('#crudForm').find('[name=suppliersampai]').val()
+        let agendari_id = $('#crudForm').find('[name=agendari_id]').val()
+        let agensampai_id = $('#crudForm').find('[name=agensampai_id]').val()
+        let agendari = $('#crudForm').find('[name=agendari]').val()
+        let agensampai = $('#crudForm').find('[name=agensampai]').val()
 
-        
-        if (dari != '' && sampai != '' && supplierdari != '' && suppliersampai != '') {
-            window.open(`{{ route('laporankartupiutangperagen.report') }}?dari=${dari}&sampai=${sampai}&supplierdari_id=${supplierdari_id}&suppliersampai_id=${suppliersampai_id}&supplierdari=${supplierdari}&suppliersampai=${suppliersampai}`)
-        } else {
-            showDialog('ISI SELURUH KOLOM')
-        }
+        getCekReport().then((response) => {
+            window.open(`{{ route('laporankartupiutangperagen.report') }}?dari=${dari}&sampai=${sampai}&agendari_id=${agendari_id}&agensampai_id=${agensampai_id}&agendari=${agendari}&agensampai=${agensampai}`)
+        }).catch((error) => {
+            if (error.status === 422) {
+                $('.is-invalid').removeClass('is-invalid')
+                $('.invalid-feedback').remove()
+
+                setErrorMessages($('#crudForm'), error.responseJSON.errors);
+            } else {
+                showDialog(error.responseJSON)
+            }
+        })
 
     })
 
     $(document).on('click', `#btnExport`, function(event) {
         let dari = $('#crudForm').find('[name=dari]').val()
         let sampai = $('#crudForm').find('[name=sampai]').val()
-        let supplierdari_id= $('#crudForm').find('[name=supplierdari_id]').val()
-        let suppliersampai_id= $('#crudForm').find('[name=suppliersampai_id]').val()
-        let supplierdari= $('#crudForm').find('[name=supplierdari]').val()
-        let suppliersampai= $('#crudForm').find('[name=suppliersampai]').val()
-      
-        if (dari != '' && sampai != '' && supplierdari != '' && suppliersampai != '') {
-            window.open(`{{ route('laporankartupiutangperagen.export') }}?dari=${dari}&sampai=${sampai}&supplierdari_id=${supplierdari_id}&suppliersampai_id=${suppliersampai_id}&supplierdari=${supplierdari}&suppliersampai=${suppliersampai}`)
-        } else {
-            showDialog('ISI SELURUH KOLOM')
-        }
-            })
+        let agendari_id = $('#crudForm').find('[name=agendari_id]').val()
+        let agensampai_id = $('#crudForm').find('[name=agensampai_id]').val()
+        let agendari = $('#crudForm').find('[name=agendari]').val()
+        let agensampai = $('#crudForm').find('[name=agensampai]').val()
+
+        getCekExport().then((response) => {
+            window.open(`{{ route('laporankartupiutangperagen.export') }}?dari=${dari}&sampai=${sampai}&agendari_id=${agendari_id}&agensampai_id=${agensampai_id}&agendari=${agendari}&agensampai=${agensampai}`)
+        }).catch((error) => {
+            if (error.status === 422) {
+                $('.is-invalid').removeClass('is-invalid')
+                $('.invalid-feedback').remove()
+
+                setErrorMessages($('#crudForm'), error.responseJSON.errors);
+            } else {
+                showDialog(error.responseJSON)
+
+            }
+        })
+    })
+
+    function getCekReport() {
+
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: `${apiUrl}laporankartupiutangperagen/report`,
+                dataType: "JSON",
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                data: {
+                    dari: $('#crudForm').find('[name=dari]').val(),
+                    sampai: $('#crudForm').find('[name=sampai]').val(),
+                    agendari_id: $('#crudForm').find('[name=agendari_id]').val(),
+                    agensampai_id: $('#crudForm').find('[name=agensampai_id]').val(),
+                    agendari: $('#crudForm').find('[name=agendari]').val(),
+                    agensampai: $('#crudForm').find('[name=agensampai]').val(),
+                    isCheck: true,
+                },
+                success: (response) => {
+                    resolve(response);
+                },
+                error: error => {
+                    reject(error)
+
+                },
+            });
+        });
+    }
+
+    function getCekExport() {
+
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: `${apiUrl}laporankartupiutangperagen/export`,
+                dataType: "JSON",
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                data: {
+                    dari: $('#crudForm').find('[name=dari]').val(),
+                    sampai: $('#crudForm').find('[name=sampai]').val(),
+                    agendari_id: $('#crudForm').find('[name=agendari_id]').val(),
+                    agensampai_id: $('#crudForm').find('[name=agensampai_id]').val(),
+                    agendari: $('#crudForm').find('[name=agendari]').val(),
+                    agensampai: $('#crudForm').find('[name=agensampai]').val(),
+                    isCheck: true,
+                },
+                success: (response) => {
+                    resolve(response);
+                },
+                error: error => {
+                    reject(error)
+
+                },
+            });
+        });
+    }
 
     function initLookup() {
-        $('.supplierdari-lookup').lookup({
-            title: 'Supplier Lookup',
-            fileName: 'supplier',
+        $('.agendari-lookup').lookup({
+            title: 'Agen Lookup',
+            fileName: 'agen',
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
                 }
             },
-            onSelectRow: (supplier, element) => {
-                $('#crudForm [name=supplierdari_id]').first().val(supplier.id)
-                element.val(supplier.namasupplier)
+            onSelectRow: (agen, element) => {
+                $('#crudForm [name=agendari_id]').first().val(agen.id)
+                element.val(agen.namaagen)
                 element.data('currentValue', element.val())
             },
             onCancel: (element) => {
@@ -161,22 +233,22 @@
             },
             onClear: (element) => {
                 element.val('')
-                $(`#crudForm [name="supplierdari_id"]`).first().val('')
+                $(`#crudForm [name="agendari_id"]`).first().val('')
                 element.data('currentValue', element.val())
             }
         });
 
-        $('.suppliersampai-lookup').lookup({
-            title: 'Supplier Lookup',
-            fileName: 'supplier',
+        $('.agensampai-lookup').lookup({
+            title: 'Agen Lookup',
+            fileName: 'agen',
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
                 }
             },
-            onSelectRow: (supplier, element) => {
-                $('#crudForm [name=suppliersampai_id]').first().val(supplier.id)
-                element.val(supplier.namasupplier)
+            onSelectRow: (agen, element) => {
+                $('#crudForm [name=agensampai_id]').first().val(agen.id)
+                element.val(agen.namaagen)
                 element.data('currentValue', element.val())
             },
             onCancel: (element) => {
@@ -184,7 +256,7 @@
             },
             onClear: (element) => {
                 element.val('')
-                $(`#crudForm [name="suppliersampai_id"]`).first().val('')
+                $(`#crudForm [name="agensampai_id"]`).first().val('')
                 element.data('currentValue', element.val())
             }
         })
