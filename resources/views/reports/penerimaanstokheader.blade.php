@@ -90,6 +90,8 @@
       viewer.report = report
       // designer.renderHtml("content")
       // designer.report = report
+
+      
       
       viewer.onPrintReport = function (event) {
         triggerEvent(window, 'afterprint');
