@@ -1323,6 +1323,7 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::resource('laporanritasigandengan', LaporanRitasiGandenganController::class);
 
     Route::get('laporanhistorypinjaman/export', [LaporanHistoryPinjamanController::class, 'export'])->name('laporanhistorypinjaman.export');
+    Route::get('laporanhistorypinjaman/report', [LaporanHistoryPinjamanController::class, 'report'])->name('laporanhistorypinjaman.report');
     Route::get('laporanhistorypinjaman/index', [LaporanHistoryPinjamanController::class, 'index']);
     Route::resource('laporanhistorypinjaman', LaporanHistoryPinjamanController::class);
 
