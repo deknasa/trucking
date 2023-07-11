@@ -134,7 +134,7 @@
               newformat: "d-m-Y"
             }
           },
-          
+
           {
             label: 'Keterangan',
             name: 'keterangan',
@@ -222,7 +222,7 @@
               clearGridHeader($(element))
             })
           }
-          
+
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))
@@ -262,7 +262,7 @@
           }
 
           $('#left-nav').find('button').attr('disabled', false)
-          permission() 
+          permission()
           setHighlight($(this))
         }
       })
@@ -275,7 +275,12 @@
         groupOp: 'AND',
         disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
-          abortGridLastRequest($(this))
+          abortGridLastRequest($(this))          
+          $('#jqGrid').setGridParam({
+              postData: {
+                proses: "page"
+              }
+            })
           $('#left-nav').find(`button:not(#add)`).attr('disabled', 'disabled')
           clearGlobalSearch($('#jqGrid'))
         },
@@ -299,7 +304,7 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                cekValidasidelete(selectedId,'EDIT')
+                cekValidasidelete(selectedId, 'EDIT')
               }
             }
           },
@@ -312,7 +317,7 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                cekValidasidelete(selectedId,'DELETE')
+                cekValidasidelete(selectedId, 'DELETE')
               }
             }
           },
@@ -328,7 +333,7 @@
                 window.open(`{{ route('upahsupir.report') }}?id=${selectedId}`)
               }
             }
-          },          
+          },
           {
             id: 'export',
             title: 'Export',
@@ -345,7 +350,7 @@
               $('#rangeTglModal').find('button:submit').html(`Export`)
               $('#rangeTglModal').modal('show')
             }
-          },  
+          },
           {
             id: 'import',
             innerHTML: '<i class="fas fa-file-upload"></i> UPDATE HARGA',
@@ -384,7 +389,7 @@
     $('#export .ui-pg-div')
       .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
-      
+
     $('#importModal').on('shown.bs.modal', function() {
       $('#formImport [name]:not(:hidden)').first().focus()
     })
@@ -417,19 +422,19 @@
     $('#rangeTglModal').on('shown.bs.modal', function() {
 
 
-    initDatepicker()
+      initDatepicker()
 
-    $('#formRangeTgl').find('[name=dari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-    $('#formRangeTgl').find('[name=sampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+      $('#formRangeTgl').find('[name=dari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+      $('#formRangeTgl').find('[name=sampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
     })
 
     $('#formRangeTgl').submit(event => {
-    event.preventDefault()
+      event.preventDefault()
 
-    getCekExport()
-      .then((response) => {
-        let actionUrl = `{{ route('upahsupir.export') }}`
+      getCekExport()
+        .then((response) => {
+          let actionUrl = `{{ route('upahsupir.export') }}`
 
           /* Clear validation messages */
           $('.is-invalid').removeClass('is-invalid')
@@ -437,12 +442,13 @@
 
 
           window.open(`${actionUrl}?${$('#formRangeTgl').serialize()}`)
-      })
-      .catch((error) => {
-        setErrorMessages($('#formRangeTgl'), error.responseJSON.errors);
-      })
-})
-  function getCekExport() {
+        })
+        .catch((error) => {
+          setErrorMessages($('#formRangeTgl'), error.responseJSON.errors);
+        })
+    })
+
+    function getCekExport() {
       return new Promise((resolve, reject) => {
         $.ajax({
           url: `${apiUrl}upahsupir/export`,
@@ -451,8 +457,8 @@
             Authorization: `Bearer ${accessToken}`
           },
           data: {
-            dari:$('#formRangeTgl').find('[name=dari]').val(),
-            sampai:$('#formRangeTgl').find('[name=sampai]').val()
+            dari: $('#formRangeTgl').find('[name=dari]').val(),
+            sampai: $('#formRangeTgl').find('[name=sampai]').val()
           },
           success: (response) => {
             resolve(response);
@@ -510,7 +516,7 @@
         $(this).removeAttr('disabled')
       })
     })
-    
+
     $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {
         $.each(autoNumericElements, (index, autoNumericElement) => {
@@ -525,7 +531,7 @@
       if (page == 0) {
         $('#formRange [name=dari]').val(page)
         $('#formRange [name=sampai]').val(totalRecord)
-      }else{
+      } else {
         $('#formRange [name=dari]').val((indexRow + 1) + (limit * (page - 1)))
         $('#formRange [name=sampai]').val(totalRecord)
       }

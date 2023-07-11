@@ -1,16 +1,16 @@
 @extends('layouts.master')
 
 @section('content')
-    <!-- Grid -->
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-12">
-                <table id="jqGrid"></table>
-            </div>
-        </div>
+<!-- Grid -->
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <table id="jqGrid"></table>
     </div>
-
   </div>
+</div>
+
+</div>
 </div>
 
 @include('pelanggan._modal')
@@ -46,18 +46,13 @@
             search: false,
             hidden: true
           },
-
           {
-            label: 'nama pelanggan',
-            name: 'namapelanggan',
-          },
-          {
-            label: 'alias pelanggan',
+            label: 'kode pelanggan',
             name: 'kodepelanggan',
           },
           {
-            label: 'nama kontak',
-            name: 'namakontak',
+            label: 'nama pelanggan',
+            name: 'namapelanggan',
           },
           {
             label: 'Status',
@@ -71,83 +66,24 @@
                       foreach ($data['combo'] as $status) :
                         echo "$status[param]:$status[parameter]";
                         if ($i !== count($data['combo'])) {
-                          echo ";";
+                          echo ';';
                         }
                         $i++;
-                      endforeach
+                      endforeach;
 
-
-    @include('pelanggan._modal')
-
-    @push('scripts')
-        <script>
-            let indexRow = 0;
-            let page = 1;
-            let pager = '#jqGridPager'
-            let popup = "";
-            let id = "";
-            let triggerClick = true;
-            let highlightSearch;
-            let totalRecord
-            let limit
-            let postData
-            let sortname = 'kodepelanggan'
-            let sortorder = 'asc'
-            let autoNumericElements = []
-            let rowNum = 10
-
-            $(document).ready(function() {
-                $("#jqGrid").jqGrid({
-                        url: `${apiUrl}pelanggan`,
-                        mtype: "GET",
-                        styleUI: 'Bootstrap4',
-                        iconSet: 'fontAwesome',
-                        datatype: "json",
-                        colModel: [{
-                                label: 'ID',
-                                name: 'id',
-                                width: '50px',
-                                search: false,
-                                hidden: true
-                            },
-                            {
-                                label: 'kode pelanggan',
-                                name: 'kodepelanggan',
-                            },
-                            {
-                                label: 'nama pelanggan',
-                                name: 'namapelanggan',
-                            },
-                            {
-                                label: 'Status',
-                                name: 'statusaktif',
-                                width: 100,
-                                stype: 'select',
-                                searchoptions: {
-                                    value: `<?php
-                                    $i = 1;
-                                    
-                                    foreach ($data['combo'] as $status):
-                                        echo "$status[param]:$status[parameter]";
-                                        if ($i !== count($data['combo'])) {
-                                            echo ';';
-                                        }
-                                        $i++;
-                                    endforeach;
-                                    
-                                    ?>
+                      ?>
             `,
-                                    dataInit: function(element) {
-                                        $(element).select2({
-                                            width: 'resolve',
-                                            theme: "bootstrap4"
-                                        });
-                                    }
-                                },
-                                formatter: (value, options, rowData) => {
-                                    let statusAktif = JSON.parse(value)
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              let statusAktif = JSON.parse(value)
 
-                                    let formattedValue = $(`
+              let formattedValue = $(`
                 <div class="badge" style="background-color: ${statusAktif.WARNA}; color: #fff;">
                   <span>${statusAktif.SINGKATAN}</span>
                 </div>
@@ -286,6 +222,8 @@
             $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
           }
 
+          $('#left-nav').find('button').attr('disabled', false)
+          permission()
           setHighlight($(this))
         },
       })
@@ -299,7 +237,7 @@
         disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
           abortGridLastRequest($(this))
-
+          $('#left-nav').find(`button:not(#add)`).attr('disabled', 'disabled')
           clearGlobalSearch($('#jqGrid'))
         },
       })
@@ -385,26 +323,27 @@
       .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('pelanggan', 'store') }}`) {
-      $('#add').attr('disabled', 'disabled')
-    }
+    function permission() {
+      if (!`{{ $myAuth->hasPermission('pelanggan', 'store') }}`) {
+        $('#add').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('pelanggan', 'update') }}`) {
-      $('#edit').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('pelanggan', 'update') }}`) {
+        $('#edit').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('pelanggan', 'destroy') }}`) {
-      $('#delete').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('pelanggan', 'destroy') }}`) {
+        $('#delete').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('pelanggan', 'export') }}`) {
-      $('#export').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('pelanggan', 'export') }}`) {
+        $('#export').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('pelanggan', 'report') }}`) {
-      $('#report').attr('disabled', 'disabled')
+      if (!`{{ $myAuth->hasPermission('pelanggan', 'report') }}`) {
+        $('#report').attr('disabled', 'disabled')
+      }
     }
-
     $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {
         $.each(autoNumericElements, (index, autoNumericElement) => {
@@ -559,4 +498,3 @@
 </script>
 @endpush()
 @endsection
-

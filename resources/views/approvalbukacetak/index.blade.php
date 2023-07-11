@@ -429,6 +429,8 @@
                             $('#gs_').attr('disabled', false)
                         }
                     }
+                    $('#left-nav').find('button').attr('disabled', false)
+                    permission()
                     setHighlight($(this))
                 }
             })
@@ -440,6 +442,8 @@
                 groupOp: 'AND',
                 disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
                 beforeSearch: function() {
+                    abortGridLastRequest($(this))
+                    $('#left-nav').attr('disabled', 'disabled')
                     clearGlobalSearch($('#jqGrid'))
                 },
             })
@@ -457,6 +461,12 @@
 
         /* Append global search */
         loadGlobalSearch($('#jqGrid'))
+
+        function permission() {
+            if (!`{{ $myAuth->hasPermission('approvalbukacetak', 'store') }}`) {
+                $('#btnSubmit').attr('disabled', 'disabled')
+            }
+        }
     }
 
     function getData() {
