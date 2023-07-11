@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "2fd417026215c7168ca359690093b245",
+  "ReportGuid": "7fb4f90b275ae16ce4cd4a966d5f0e11",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanKartuPiutangPerAgen.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1687859243000+0700)/",
+  "ReportChanged": "/Date(1689041909000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -252,24 +252,36 @@
             "Type": "System.String"
           },
           "7": {
+            "Name": "statusakses",
+            "NameInSource": "statusakses",
+            "Alias": "statusakses",
+            "Type": "System.String"
+          },
+          "8": {
+            "Name": "email",
+            "NameInSource": "email",
+            "Alias": "email",
+            "Type": "System.String"
+          },
+          "9": {
             "Name": "modifiedby",
             "NameInSource": "modifiedby",
             "Alias": "modifiedby",
             "Type": "System.String"
           },
-          "8": {
+          "10": {
             "Name": "created_at",
             "NameInSource": "created_at",
             "Alias": "created_at",
             "Type": "System.DateTime"
           },
-          "9": {
+          "11": {
             "Name": "updated_at",
             "NameInSource": "updated_at",
             "Alias": "updated_at",
             "Type": "System.DateTime"
           },
-          "10": {
+          "12": {
             "Name": "roles",
             "NameInSource": "roles",
             "Alias": "roles",
@@ -296,27 +308,27 @@
             "Type": "System.String"
           },
           "2": {
-            "Name": "supplierdari",
-            "NameInSource": "supplierdari",
-            "Alias": "supplierdari",
+            "Name": "agendari",
+            "NameInSource": "agendari",
+            "Alias": "agendari",
             "Type": "System.String"
           },
           "3": {
-            "Name": "suppliersampai",
-            "NameInSource": "suppliersampai",
-            "Alias": "suppliersampai",
+            "Name": "agensampai",
+            "NameInSource": "agensampai",
+            "Alias": "agensampai",
             "Type": "System.String"
           },
           "4": {
-            "Name": "supplierdari_id",
-            "NameInSource": "supplierdari_id",
-            "Alias": "supplierdari_id",
+            "Name": "agendari_id",
+            "NameInSource": "agendari_id",
+            "Alias": "agendari_id",
             "Type": "System.String"
           },
           "5": {
-            "Name": "suppliersampai_id",
-            "NameInSource": "suppliersampai_id",
-            "Alias": "suppliersampai_id",
+            "Name": "agensampai_id",
+            "NameInSource": "agensampai_id",
+            "Alias": "agensampai_id",
             "Type": "System.String"
           }
         },
@@ -968,7 +980,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{parameter.supplierdari} S/D {parameter.suppliersampai}"
+                "Value": "{parameter.agendari} S/D {parameter.agensampai}"
               },
               "VertAlignment": "Center",
               "Font": ";9;Bold;",
