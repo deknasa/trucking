@@ -364,7 +364,7 @@
                             rowList: [10, 20, 50, 0],
                             toolbar: [true, "top"],
                             cmTemplate: {
-                                sortable: false
+                                sortable: true
                             },
                             sortname: sortname,
                             sortorder: sortorder,

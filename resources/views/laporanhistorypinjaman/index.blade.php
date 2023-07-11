@@ -29,6 +29,10 @@
                         <div class="row">
 
                             <div class="col-sm-6 mt-4">
+                                <a id="btnPreview" class="btn btn-info mr-1 ">
+                                    <i class="fas fa-print"></i>
+                                    Report
+                                </a>
                                 <a id="btnEkspor" class="btn btn-warning mr-1 ">
                                     <i class="fas fa-file-export"></i>
                                     Export
@@ -79,12 +83,20 @@
 
     $(document).on('click', `#btnEkspor`, function(event) {
         let supirdari_id = $('#crudForm').find('[name=supirdari_id]').val()
-
-        if (supirdari_id != '') {
-
-            window.open(`{{ route('laporanhistorypinjaman.export') }}?supirdari_id=${supirdari_id}`)
-        } else {
+        let supirsampai_id = $('#crudForm').find('[name=supirsampai_id]').val()
+        if ((supirdari_id == '') || (supirsampai_id =='')) {
             showDialog('ISI SELURUH KOLOM')
+        } else {
+            window.open(`{{ route('laporanhistorypinjaman.export') }}?supirdari_id=${supirdari_id}&supirsampai_id=${supirsampai_id}`)
+        }
+    })
+    $(document).on('click', `#btnPreview`, function(event) {
+        let supirdari_id = $('#crudForm').find('[name=supirdari_id]').val()
+        let supirsampai_id = $('#crudForm').find('[name=supirsampai_id]').val()
+        if ((supirdari_id == '') || (supirsampai_id =='')) {
+            showDialog('ISI SELURUH KOLOM')
+        } else {
+            window.open(`{{ route('laporanhistorypinjaman.report') }}?supirdari_id=${supirdari_id}&supirsampai_id=${supirsampai_id}`)
         }
     })
 
@@ -122,7 +134,7 @@
             },
             onSelectRow: (supir, element) => {
                 $('#crudForm [name=supirsampai_id]').first().val(supir.id)
-                element.val(supir.namasupir)
+                element.val(supir.namasupir)                
                 element.data('currentValue', element.val())
             },
             onCancel: (element) => {
