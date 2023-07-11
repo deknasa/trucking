@@ -3,48 +3,50 @@
 
 @push('scripts')
 <script>
- $('#upahSupirLookup').jqGrid({
+  $('#upahSupirLookup').jqGrid({
       url: `{{ config('app.api_url') . 'upahsupir' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
       iconSet: 'fontAwesome',
       datatype: "json",
+      postData: {
+        aktif: `{!! $Aktif ?? '' !!}`,
+      },
       idPrefix: 'upahSupirLookup',
-      colModel: [
+      colModel: [{
+          label: 'ID',
+          name: 'id',
+          align: 'right',
+          width: '50px',
+          search: false,
+          hidden: true
+        },
+        // {
+        //   label: 'DARI',
+        //   name: 'kotadari',
+        //   align: 'left'
+        // },
         {
-            label: 'ID',
-            name: 'id',
-            align: 'right',
-            width: '50px',
-            search: false,
-            hidden: true
-          },
-          // {
-          //   label: 'DARI',
-          //   name: 'kotadari',
-          //   align: 'left'
-          // },
-          {
-            label: 'TUJUAN',
-            name: 'kotasampai_id',
-            align: 'left'
-          },
-          {
-            label: 'PENYESUAIAN',
-            name: 'penyesuaian',
-            align: 'left'
-          },
-          {
-            label: 'JARAK',
-            name: 'jarak',
-            align: 'right',
-            // formatter: currencyFormat
-          },
-          {
-            label: 'ZONA',
-            name: 'zona_id',
-            align: 'left'
-          },
+          label: 'TUJUAN',
+          name: 'kotasampai_id',
+          align: 'left'
+        },
+        {
+          label: 'PENYESUAIAN',
+          name: 'penyesuaian',
+          align: 'left'
+        },
+        {
+          label: 'JARAK',
+          name: 'jarak',
+          align: 'right',
+          // formatter: currencyFormat
+        },
+        {
+          label: 'ZONA',
+          name: 'zona_id',
+          align: 'left'
+        },
         {
           label: 'STATUS AKTIF',
           name: 'statusaktif',
@@ -110,40 +112,40 @@
             return ` title="${statusAktif.MEMO}"`
           }
         },
-          {
-            label: 'TGL MULAI BERLAKU',
-            name: 'tglmulaiberlaku',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
-            }
-          },
-          {
-            label: 'MODIFIEDBY',
-            name: 'modifiedby',
-            align: 'left'
-          },
-          {
-            label: 'CREATEDAT',
-            name: 'created_at',
-            align: 'right',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y H:i:s"
-            }
-          },
-          {
-            label: 'UPDATEDAT',
-            name: 'updated_at',
-            align: 'right',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y H:i:s"
-            }
-          },
+        {
+          label: 'TGL MULAI BERLAKU',
+          name: 'tglmulaiberlaku',
+          formatter: "date",
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y"
+          }
+        },
+        {
+          label: 'MODIFIEDBY',
+          name: 'modifiedby',
+          align: 'left'
+        },
+        {
+          label: 'CREATEDAT',
+          name: 'created_at',
+          align: 'right',
+          formatter: "date",
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y H:i:s"
+          }
+        },
+        {
+          label: 'UPDATEDAT',
+          name: 'updated_at',
+          align: 'right',
+          formatter: "date",
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y H:i:s"
+          }
+        },
       ],
       autowidth: true,
       responsive: true,
@@ -184,7 +186,7 @@
         setGridLastRequest($(this), jqXHR)
       },
       loadComplete: function(data) {
-          changeJqGridRowListText()
+        changeJqGridRowListText()
         if (detectDeviceType() == 'desktop') {
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
@@ -237,12 +239,16 @@
       groupOp: 'AND',
       disabledKeys: [16, 17, 18, 33, 34, 35, 36, 37, 38, 39, 40],
       beforeSearch: function() {
-          abortGridLastRequest($(this))
-          
-          clearGlobalSearch($('#upahSupirLookup'))
+        abortGridLastRequest($(this))
+        $('#upahSupirLookup').setGridParam({
+          postData: {
+            proses: "page"
+          }
+        })
+        clearGlobalSearch($('#upahSupirLookup'))
       },
     })
     .customPager()
-    loadGlobalSearch($('#upahSupirLookup'))
-    loadClearFilter($('#upahSupirLookup'))
+  loadGlobalSearch($('#upahSupirLookup'))
+  loadClearFilter($('#upahSupirLookup'))
 </script>
