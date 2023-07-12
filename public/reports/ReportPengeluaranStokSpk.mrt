@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "61bcd39e8e1cf75e8b7b8f3a4c75ab71",
+  "ReportGuid": "4bf8767e94507b4f3ac7bfe413d21fd4",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportPengeluaranStokSPK.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1688608571000+0700)/",
+  "ReportChanged": "/Date(1688988969000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -100,24 +100,6 @@
             "Type": "System.String"
           },
           "12": {
-            "Name": "judul",
-            "NameInSource": "judul",
-            "Alias": "judul",
-            "Type": "System.String"
-          },
-          "13": {
-            "Name": "tglcetak",
-            "NameInSource": "tglcetak",
-            "Alias": "tglcetak",
-            "Type": "System.String"
-          },
-          "14": {
-            "Name": "usercetak",
-            "NameInSource": "usercetak",
-            "Alias": "usercetak",
-            "Type": "System.String"
-          },
-          "15": {
             "Name": "relationId",
             "NameInSource": "relationId",
             "Alias": "relationId",
@@ -524,30 +506,48 @@
             "Type": "System.String"
           },
           "32": {
+            "Name": "judul",
+            "NameInSource": "judul",
+            "Alias": "judul",
+            "Type": "System.String"
+          },
+          "33": {
+            "Name": "tglcetak",
+            "NameInSource": "tglcetak",
+            "Alias": "tglcetak",
+            "Type": "System.String"
+          },
+          "34": {
+            "Name": "usercetak",
+            "NameInSource": "usercetak",
+            "Alias": "usercetak",
+            "Type": "System.String"
+          },
+          "35": {
             "Name": "details",
             "NameInSource": "details",
             "Alias": "details",
             "Type": "System.String"
           },
-          "33": {
+          "36": {
             "Name": "user",
             "NameInSource": "user",
             "Alias": "user",
             "Type": "System.String"
           },
-          "34": {
+          "37": {
             "Name": "combo",
             "NameInSource": "combo",
             "Alias": "combo",
             "Type": "System.String"
           },
-          "35": {
+          "38": {
             "Name": "column",
             "NameInSource": "column",
             "Alias": "column",
             "Type": "System.String"
           },
-          "36": {
+          "39": {
             "Name": "value",
             "NameInSource": "value",
             "Alias": "value",
@@ -713,7 +713,7 @@
               },
               "MaxNumberOfLines": 6,
               "Text": {
-                "Value": "{pengeluaranstokheader_details.judul}"
+                "Value": "{pengeluaranstokheader.judul}"
               },
               "HorAlignment": "Center",
               "Font": ";10;Bold;",
@@ -950,7 +950,7 @@
               },
               "MaxNumberOfLines": 6,
               "Text": {
-                "Value": "{pengeluaranstokheader_details.tglcetak}"
+                "Value": "{pengeluaranstokheader.tglcetak}"
               },
               "HorAlignment": "Right",
               "Font": ";;Italic;",
@@ -1078,7 +1078,7 @@
               },
               "MaxNumberOfLines": 6,
               "Text": {
-                "Value": "{pengeluaranstokheader_details.usercetak}"
+                "Value": "{pengeluaranstokheader.usercetak}"
               },
               "Font": ";;Italic;",
               "Border": ";;;;;;;solid:Black",

@@ -309,7 +309,7 @@ class PengeluaranHeaderController extends MyController
                 $response_detail['nominals'] = number_format((float) $response_detail['nominal'], '2', '.', ',');
 
                 $sheet->setCellValue("A$detail_start_row", $response_index + 1);
-                $sheet->setCellValue("B$detail_start_row", $response_detail['coakredit']);
+                $sheet->setCellValue("B$detail_start_row", $response_detail['coadebet']);
                 $sheet->setCellValue("C$detail_start_row", $response_detail['keterangan']);
                 $sheet->setCellValue("D$detail_start_row", $response_detail['nominals']);
 

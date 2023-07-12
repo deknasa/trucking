@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "290576fe8b76c726b87e32aebe533120",
+  "ReportGuid": "0c0ab9cf901ba55f31d2bd85fae55656",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://localhost/trucking/public/reports/ReportInvoiceExtra.mrt",
+  "ReportFile": "ReportInvoiceExtra.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1688545110000+0700)/",
+  "ReportChanged": "/Date(1689160655000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -1229,7 +1229,7 @@
               "Name": "Text6",
               "Guid": "b7504949811c04e128413545c1cdedb7",
               "CanGrow": true,
-              "ClientRectangle": "4,8,22,6",
+              "ClientRectangle": "4,8,16,6",
               "ComponentPlacement": "gf.GroupFooterBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -1250,7 +1250,7 @@
               "Name": "Text42",
               "Guid": "bf61878b9c00458508b4d699243868c2",
               "CanGrow": true,
-              "ClientRectangle": "26,8,186,6",
+              "ClientRectangle": "20,8,192,6",
               "ComponentPlacement": "gf.GroupFooterBand1",
               "Interaction": {
                 "Ident": "StiInteraction"

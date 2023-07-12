@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "41581ae546d9916f6a0d76bbcaf70441",
+  "ReportGuid": "338907c7f76d80eee919469e58842fba",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportServiceOut.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1688546696000+0700)/",
+  "ReportChanged": "/Date(1688656291000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -230,7 +230,7 @@
               "Name": "Text14",
               "Guid": "fdbf1bd39cec7fbdfa4b332d1bd7b9b1",
               "CanGrow": true,
-              "ClientRectangle": "126,22,86,4",
+              "ClientRectangle": "110,22,102,4",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -641,11 +641,12 @@
               "Name": "Text15",
               "Guid": "5bbcff19398f99396fd3078dc0b25cae",
               "CanGrow": true,
-              "ClientRectangle": "4,26,102,4",
+              "ClientRectangle": "4,26,106,4",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
+              "HideZeros": true,
               "MaxNumberOfLines": 6,
               "Text": {
                 "Value": "Revisi Ke : {serviceOut.jumlahcetak}"

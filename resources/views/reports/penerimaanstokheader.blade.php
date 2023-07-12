@@ -70,8 +70,14 @@
         //SPBS
         report.loadFile(`{{ asset('public/reports/ReportPenerimaanStokSPBS.mrt') }}`)
         break;
-        
-    
+      case '352':
+        //PST
+        report.loadFile(`{{ asset('public/reports/ReportPenerimaanStokPST.mrt') }}`)
+        break;
+      case '361':
+        //PST
+        report.loadFile(`{{ asset('public/reports/ReportPenerimaanStokPSPK.mrt') }}`)
+        break;
       default:
         report.loadFile(`{{ asset('public/reports/ReportPenerimaanSPB.mrt') }}`)
         
@@ -90,8 +96,6 @@
       viewer.report = report
       // designer.renderHtml("content")
       // designer.report = report
-
-      
       
       viewer.onPrintReport = function (event) {
         triggerEvent(window, 'afterprint');

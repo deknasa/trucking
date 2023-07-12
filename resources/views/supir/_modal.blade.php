@@ -406,8 +406,6 @@
         },
         error: error => {
           if (error.status === 422) {
-            console.error(error.responseJSON)
-            // console.log(error.responseJSON);
             $('.is-invalid').removeClass('is-invalid')
             $('.invalid-feedback').remove()
 
