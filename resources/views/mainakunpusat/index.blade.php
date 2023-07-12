@@ -557,7 +557,11 @@
       /* Clear validation messages */
       $('.is-invalid').removeClass('is-invalid')
       $('.invalid-feedback').remove()
-
+      let submitButton = $(this).find('button:submit')
+      
+      submitButton.attr('disabled', 'disabled')
+      $('#processingLoader').removeClass('d-none')
+                    
       /* Set params value */
       for (var key in postData) {
         if (params != "") {
@@ -573,39 +577,44 @@
       params += `&offset=${offset}&limit=${limit}`
 
       getCekExport(params).then((response) => {
-      if ($('#rangeModal').data('action') == 'export') {
-        let xhr = new XMLHttpRequest()
-        xhr.open('GET', `{{ config('app.api_url') }}mainakunpusat/export?${params}`, true)
-        xhr.setRequestHeader("Authorization", `Bearer {{ session('access_token') }}`)
-        xhr.responseType = 'arraybuffer'
-
-        xhr.onload = function(e) {
-          if (this.status === 200) {
-            if (this.response !== undefined) {
-              let blob = new Blob([this.response], {
-                type: "application/vnd.ms-excel"
-              })
-              let link = document.createElement('a')
-
-              link.href = window.URL.createObjectURL(blob)
-              link.download = `laporanAkunPusat${(new Date).getTime()}.xlsx`
-              link.click()
-
+        if ($('#rangeModal').data('action') == 'export') {
+          $.ajax({
+              url: '{{ config('app.api_url') }}mainakunpusat/export?' + params,
+              type: 'GET',
+              beforeSend: function(xhr) {
+                  xhr.setRequestHeader('Authorization', 'Bearer {{ session('access_token') }}');
+              },
+              xhrFields: {
+                  responseType: 'arraybuffer'
+              },
+              success: function(response, status, xhr) {
+                  if (xhr.status === 200) {
+                      if (response !== undefined) {
+                          var blob = new Blob([response], {
+                              type: 'mainakunpusat/vnd.ms-excel'
+                          });
+                          var link = document.createElement('a');
+                          link.href = window.URL.createObjectURL(blob);
+                          link.download = 'mainakunpusat' + new Date().getTime() + '.xlsx';
+                          link.click();
+                      }
+                      $('#rangeModal').modal('hide')
+                  }
+              },
+              
+              error: function(xhr, status, error) {
+                  submitButton.removeAttr('disabled')
+              }
+          }).always(() => {
+              $('#processingLoader').addClass('d-none')
               submitButton.removeAttr('disabled')
-            }
-          }
-        }
-
-        xhr.onerror = () => {
-            submitButton.removeAttr('disabled')
-          }
-
-        xhr.send()
-      } else if ($('#rangeModal').data('action') == 'report') {
-        window.open(`{{ route('mainakunpusat.report') }}?${params}`)
-
-        submitButton.removeAttr('disabled')
-      }
+          })
+        } else if ($('#rangeModal').data('action') == 'report') {
+          window.open(`{{ route('mainakunpusat.report') }}?${params}`)
+          submitButton.removeAttr('disabled')
+          $('#processingLoader').addClass('d-none')
+          $('#rangeModal').modal('hide')
+        }          
     })
     .catch((error) => {
         if (error.status === 422) {

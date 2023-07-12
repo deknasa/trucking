@@ -364,6 +364,7 @@
 
                     let params
                     let submitButton = $(this).find('button:submit')
+                    $('#processingLoader').removeClass('d-none')
 
                     submitButton.attr('disabled', 'disabled')
 
@@ -382,44 +383,44 @@
 
 
                     getCekExport(params).then((response) => {
-                            if ($('#rangeModal').data('action') == 'export') {
-                                let xhr = new XMLHttpRequest()
-                                xhr.open('GET',
-                                    `{{ config('app.api_url') }}pengeluarantrucking/export?${params}`,
-                                    true)
-                                xhr.setRequestHeader("Authorization",
-                                    `Bearer {{ session('access_token') }}`)
-                                xhr.responseType = 'arraybuffer'
-
-                                xhr.onload = function(e) {
-                                    if (this.status === 200) {
-                                        if (this.response !== undefined) {
-                                            let blob = new Blob([this.response], {
-                                                type: "application/vnd.ms-excel"
-                                            })
-                                            let link = document.createElement('a')
-
-                                            link.href = window.URL.createObjectURL(blob)
-                                            link.download =
-                                                `laporanpengeluaranTrucking${(new Date).getTime()}.xlsx`
-                                            link.click()
-
-                                            submitButton.removeAttr('disabled')
-                                        }
+                        if ($('#rangeModal').data('action') == 'export') {
+                            $.ajax({
+                                url: '{{ config('app.api_url') }}pengeluarantrucking/export?' + params,
+                                type: 'GET',
+                                beforeSend: function(xhr) {
+                                    xhr.setRequestHeader('Authorization', 'Bearer {{ session('access_token') }}');
+                                },
+                                xhrFields: {
+                                    responseType: 'arraybuffer'
+                                },
+                                success: function(response, status, xhr) {
+                                  if (xhr.status === 200) {
+                                    if (response !== undefined) {
+                                      var blob = new Blob([response], {
+                                        type: 'pengeluarantrucking/vnd.ms-excel'
+                                      });
+                                      var link = document.createElement('a');
+                                      link.href = window.URL.createObjectURL(blob);
+                                      link.download = 'pengeluarantrucking' + new Date().getTime() + '.xlsx';
+                                      link.click();
                                     }
+                                    $('#rangeModal').modal('hide')
+                                  }
+                                },
+                                error: function(xhr, status, error) {
+                                  submitButton.prop('disabled',false)
                                 }
-
-                                xhr.onerror = () => {
-                                    submitButton.removeAttr('disabled')
-                                }
-
-                                xhr.send()
-                            } else if ($('#rangeModal').data('action') == 'report') {
-                                window.open(`{{ route('pengeluarantrucking.report') }}?${params}`)
-
-                                submitButton.removeAttr('disabled')
-                            }
-                        })
+                            }).always(() => {
+                                $('#processingLoader').addClass('d-none')
+                                submitButton.prop('disabled',false)
+                            })
+                        } else if ($('#rangeModal').data('action') == 'report') {
+                            window.open(`{{ route('pengeluarantrucking.report') }}?${params}`)
+                            submitButton.prop('disabled',false)
+                            $('#processingLoader').addClass('d-none')
+                            $('#rangeModal').modal('hide')
+                        }    
+                    })
                         .catch((error) => {
                             if (error.status === 422) {
                                 $('.is-invalid').removeClass('is-invalid')
