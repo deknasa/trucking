@@ -287,7 +287,8 @@
                     let limit = $(this).jqGrid('getGridParam', 'postData').limit
                     if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
                 },
-                // loadError: function(xhr, status, error) {
+                // loaderror: function(xhr, status, error) {
+                                    $('#processingLoader').addClass('d-none')
                 //     if (xhr.status === 422) {
                 //         $('.is-invalid').removeClass('is-invalid');
                 //         $('.invalid-feedback').remove();

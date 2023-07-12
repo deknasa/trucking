@@ -343,6 +343,7 @@
             }
           },
           error: function(xhr, status, error) {
+                                    $('#processingLoader').addClass('d-none')
             submitButton.prop('disabled',false)
           }
         }).always(() => {

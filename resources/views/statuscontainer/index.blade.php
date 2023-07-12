@@ -402,6 +402,7 @@
                                   }
                                 },
                                 error: function(xhr, status, error) {
+                                    $('#processingLoader').addClass('d-none')
                                   submitButton.prop('disabled',false)
                                 }
                             }).always(() => {
@@ -449,6 +450,7 @@
                                     }
                                 });
                                 $(".is-invalid").first().focus();
+          $('#processingLoader').addClass('d-none')
 
                             } else {
                                 showDialog(error.statusText)

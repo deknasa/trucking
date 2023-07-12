@@ -363,6 +363,7 @@
                 }
             },
             error: function(xhr, status, error) {
+                                    $('#processingLoader').addClass('d-none')
                 submitButton.removeAttr('disabled')
             }
         }).always(() => {

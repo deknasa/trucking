@@ -517,6 +517,7 @@
           });
 
           $(".is-invalid").first().focus();
+          $('#processingLoader').addClass('d-none')
         } else {
           showDialog(error.responseJSON)
         }
@@ -605,6 +606,7 @@
           });
 
           $(".is-invalid").first().focus();
+          $('#processingLoader').addClass('d-none')
         } else {
           showDialog(error.responseJSON)
         }
