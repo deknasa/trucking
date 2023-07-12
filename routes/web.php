@@ -209,6 +209,7 @@ use App\Http\Controllers\StokPersediaanController;
 use App\Http\Controllers\LaporanKartuHutangPerVendorController;
 use App\Http\Controllers\LaporanMutasiKasBankController;
 use App\Http\Controllers\LaporanKartuStokController;
+use App\Http\Controllers\LaporanSaldoInventoryController;
 use App\Http\Controllers\LaporanArusKasController;
 use App\Http\Controllers\LapKartuHutangPerVendorDetailController;
 use App\Http\Controllers\LaporanWarkatBelumCairController;
@@ -1400,6 +1401,10 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('laporankartustok/report', [LaporanKartuStokController::class, 'report'])->name('laporankartustok.report');
     Route::get('laporankartustok/index', [LaporanKartuStokController::class, 'index']);
     Route::resource('laporankartustok', LaporanKartuStokController::class);
+    
+    Route::get('laporansaldoinventory/report', [LaporanSaldoInventoryController::class, 'report'])->name('laporansaldoinventory.report');
+    Route::get('laporansaldoinventory/index', [LaporanSaldoInventoryController::class, 'index']);
+    Route::resource('laporansaldoinventory', LaporanSaldoInventoryController::class);
     
     Route::get('laporanaruskas/report', [LaporanArusKasController::class, 'report'])->name('laporanaruskas.report');
     Route::get('laporanaruskas/index', [LaporanArusKasController::class, 'index']);
