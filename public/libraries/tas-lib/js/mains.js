@@ -757,7 +757,9 @@ function loadGlobalSearch(grid) {
 		function () {
 			delay(function () {
 				abortGridLastRequest(grid)
-				$('#left-nav').find(`button:not(#add)`).attr('disabled', 'disabled')
+				if(grid.getGridParam().id == 'jqGrid'){
+					$('#left-nav').find(`button:not(#add)`).attr('disabled', 'disabled')
+				}
 				clearColumnSearch(grid);
 
 				var postData = grid.jqGrid("getGridParam", "postData"),

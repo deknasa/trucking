@@ -405,6 +405,12 @@
     $('.zona-lookup').lookup({
       title: 'Zona Lookup',
       fileName: 'zona',
+      beforeProcess: function(test) {
+        this.postData = {
+
+          Aktif: 'AKTIF',
+        }
+      },
       onSelectRow: (zona, element) => {
         $('#crudForm [name=zona_id]').first().val(zona.id)
         element.val(zona.zona)
