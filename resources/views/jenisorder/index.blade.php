@@ -404,6 +404,7 @@
                                 },
                                 
                                 error: function(xhr, status, error) {
+                                    $('#processingLoader').addClass('d-none')
                                     submitButton.removeAttr('disabled')
                                 }
                             }).always(() => {
@@ -451,6 +452,7 @@
                                     }
                                 });
                                 $(".is-invalid").first().focus();
+          $('#processingLoader').addClass('d-none')
 
                             } else {
                                 showDialog(error.statusText)
