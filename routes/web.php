@@ -230,6 +230,7 @@ use App\Http\Controllers\LaporanKartuHutangPerSupplierController;
 use App\Http\Controllers\LaporanKartuPiutangPerAgenController;
 use App\Http\Controllers\MainAkunPusatController;
 use App\Http\Controllers\LaporanHistoryDepositoController;
+use App\Http\Controllers\LaporanPinjamanPerUnitTradoController;
 use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\UbahPasswordController;
 
@@ -1419,6 +1420,11 @@ Route::middleware(['auth','authorized'])->group(function () {
     
     Route::get('ubahpassword/index', [UbahPasswordController::class, 'index']);
     Route::resource('ubahpassword', UbahPasswordController::class);
+    
+    Route::get('laporanpinjamanperunittrado/report', [LaporanPinjamanPerUnitTradoController::class, 'report'])->name('laporanpinjamanperunittrado.report');
+    Route::get('laporanpinjamanperunittrado/export', [LaporanPinjamanPerUnitTradoController::class, 'export'])->name('laporanpinjamanperunittrado.export');
+    Route::get('laporanpinjamanperunittrado/index', [LaporanPinjamanPerUnitTradoController::class, 'index']);
+    Route::resource('laporanpinjamanperunittrado', LaporanPinjamanPerUnitTradoController::class);
 });
 
 Route::patch('format', [FormatController::class, 'update']);
