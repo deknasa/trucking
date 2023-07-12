@@ -5,12 +5,12 @@
         <div class="modal-header">
           <p class="modal-title" id="crudModalTitle"></p>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            
+
           </button>
         </div>
         <form action="" method="post">
           <div class="modal-body">
-           {{-- <div class="row form-group">
+            {{-- <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">ID</label>
               </div>
@@ -167,8 +167,10 @@
     activeGrid = null
 
     getMaxLength(form)
-        initSelect2()
-        initDatepicker()
+    initSelect2(form.find(`
+      [name="statusaktif"]
+    `), true)
+    initDatepicker()
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
@@ -406,7 +408,7 @@
       })
     })
   }
-  
+
   function cekValidasidelete(Id) {
     $.ajax({
       url: `{{ config('app.api_url') }}kerusakan/${Id}/cekValidasi`,
@@ -417,11 +419,11 @@
       },
       success: response => {
         var kondisi = response.kondisi
-          if (kondisi == true) {
-            showDialog(response.message['keterangan'])
-          } else {
-              deleteKerusakan(Id)
-          }
+        if (kondisi == true) {
+          showDialog(response.message['keterangan'])
+        } else {
+          deleteKerusakan(Id)
+        }
 
       }
     })

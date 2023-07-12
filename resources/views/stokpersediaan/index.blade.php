@@ -93,26 +93,27 @@
 
 
         showDefault($('#crudForm'))
-        .then(response => {
-         
-        $.each(response.data, (index, value) => {
-            let element = $('#crudForm').find(`[name="${index}"]`);
+            .then(response => {
 
-            if (element.is('select')) {
-                element.val(value).trigger('change');
-            } else {
-                element.val(value);
-            }
-        });
-        grid()
-       
-    })
-    .catch(error => {
-        // Penanganan kesalahan
+                $.each(response.data, (index, value) => {
+                    let element = $('#crudForm').find(`[name="${index}"]`);
+
+                    if (element.is('select')) {
+                        element.val(value).trigger('change');
+                    } else {
+                        element.val(value);
+                    }
+                });
+                grid()
+
+            })
+            .catch(error => {
+                // Penanganan kesalahan
+            });
+
+
     });
 
-
-    });
     function showDefault(form) {
         return new Promise((resolve, reject) => {
             $.ajax({
@@ -131,7 +132,7 @@
             });
         });
     }
-      
+
 
     function grid() {
         $("#jqGrid").jqGrid({
@@ -192,9 +193,9 @@
                     records: 'attributes.totalRows',
                 },
                 postData: {
-                        filter: $('#crudForm').find('[name=keterangan]').val(),
-                        gudang: $('#crudForm').find('[name=gudang]').val(),
-                        gudang_id: $('#crudForm').find('[name=gudang_id]').val(),
+                    filter: $('#crudForm').find('[name=keterangan]').val(),
+                    gudang: $('#crudForm').find('[name=gudang]').val(),
+                    gudang_id: $('#crudForm').find('[name=gudang_id]').val(),
 
                 },
                 loadBeforeSend: function(jqXHR) {
@@ -248,7 +249,8 @@
                     } else {
                         $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
                     }
-
+                    $('#left-nav').find('button').attr('disabled', false)
+                    permission()
                     setHighlight($(this))
                 },
             })
@@ -261,6 +263,8 @@
                 groupOp: 'AND',
                 disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
                 beforeSearch: function() {
+                    abortGridLastRequest($(this))
+                    $('#left-nav').attr('disabled', 'disabled')
                     clearGlobalSearch($('#jqGrid'))
                 },
             })
@@ -292,7 +296,7 @@
                             showDialog('ISI SELURUH KOLOM')
                         }
                     }
-                },{
+                }, {
                     id: 'export',
                     innerHTML: '<i class="fas fa-file-export"></i> EXPORT',
                     class: 'btn btn-warning btn-sm mr-1',
@@ -318,8 +322,7 @@
                             showDialog('ISI SELURUH KOLOM')
                         }
                     }
-                }
-            ]
+                }]
             })
 
         /* Append clear filter button */
@@ -328,12 +331,14 @@
         /* Append global search */
         loadGlobalSearch($('#jqGrid'))
 
-        if (!`{{ $myAuth->hasPermission('stokpersediaan', 'export') }}`) {
-            $('#export').attr('disabled', 'disabled')
-        }
+        function permission() {
+            if (!`{{ $myAuth->hasPermission('stokpersediaan', 'export') }}`) {
+                $('#export').attr('disabled', 'disabled')
+            }
 
-        if (!`{{ $myAuth->hasPermission('stokpersediaan', 'report') }}`) {
-            $('#report').attr('disabled', 'disabled')
+            if (!`{{ $myAuth->hasPermission('stokpersediaan', 'report') }}`) {
+                $('#report').attr('disabled', 'disabled')
+            }
         }
     }
 

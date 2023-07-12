@@ -16,7 +16,7 @@
   <script src="{{ asset('libraries/tas-lib/js/terbilang.js?version='. config('app.version')) }}"></script>
 
   <script type="text/javascript">
-    var penerimaanstokheaders = {!! json_encode($penerimaanstokheaders); !!}
+    var penerimaanstokheaders = <?= json_encode($penerimaanstokheaders); ?>
 
     function Start() {
       Stimulsoft.Base.StiLicense.loadFromFile("{{ asset($stireport_path . 'license.php') }}");
@@ -90,6 +90,8 @@
       viewer.report = report
       // designer.renderHtml("content")
       // designer.report = report
+
+      
       
       viewer.onPrintReport = function (event) {
         triggerEvent(window, 'afterprint');

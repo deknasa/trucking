@@ -1,16 +1,16 @@
 @extends('layouts.master')
 
 @section('content')
-    <!-- Grid -->
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-12">
-                <table id="jqGrid"></table>
-            </div>
-        </div>
+<!-- Grid -->
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <table id="jqGrid"></table>
     </div>
-
   </div>
+</div>
+
+</div>
 </div>
 
 @include('pelanggan._modal')
@@ -46,18 +46,13 @@
             search: false,
             hidden: true
           },
-
           {
-            label: 'nama pelanggan',
-            name: 'namapelanggan',
-          },
-          {
-            label: 'alias pelanggan',
+            label: 'kode pelanggan',
             name: 'kodepelanggan',
           },
           {
-            label: 'nama kontak',
-            name: 'namakontak',
+            label: 'nama pelanggan',
+            name: 'namapelanggan',
           },
           {
             label: 'Status',
@@ -71,7 +66,7 @@
                       foreach ($data['combo'] as $status) :
                         echo "$status[param]:$status[parameter]";
                         if ($i !== count($data['combo'])) {
-                          echo ";";
+                          echo ';';
                         }
                         $i++;
                       endforeach
@@ -224,6 +219,8 @@
             $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
           }
 
+          $('#left-nav').find('button').attr('disabled', false)
+          permission()
           setHighlight($(this))
         },
       })
@@ -237,7 +234,7 @@
         disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
           abortGridLastRequest($(this))
-
+          $('#left-nav').find(`button:not(#add)`).attr('disabled', 'disabled')
           clearGlobalSearch($('#jqGrid'))
         },
       })
@@ -323,26 +320,27 @@
       .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('pelanggan', 'store') }}`) {
-      $('#add').attr('disabled', 'disabled')
-    }
+    function permission() {
+      if (!`{{ $myAuth->hasPermission('pelanggan', 'store') }}`) {
+        $('#add').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('pelanggan', 'update') }}`) {
-      $('#edit').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('pelanggan', 'update') }}`) {
+        $('#edit').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('pelanggan', 'destroy') }}`) {
-      $('#delete').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('pelanggan', 'destroy') }}`) {
+        $('#delete').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('pelanggan', 'export') }}`) {
-      $('#export').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('pelanggan', 'export') }}`) {
+        $('#export').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('pelanggan', 'report') }}`) {
-      $('#report').attr('disabled', 'disabled')
+      if (!`{{ $myAuth->hasPermission('pelanggan', 'report') }}`) {
+        $('#report').attr('disabled', 'disabled')
+      }
     }
-
     $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {
         $.each(autoNumericElements, (index, autoNumericElement) => {
@@ -504,4 +502,3 @@
 </script>
 @endpush()
 @endsection
-
