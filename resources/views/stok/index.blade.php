@@ -412,6 +412,7 @@
                     let params
                     let submitButton = $(this).find('button:submit')
                     submitButton.attr('disabled', 'disabled')
+                    $('#processingLoader').removeClass('d-none')
 
                     /* Set params value */
                     for (var key in postData) {
@@ -428,38 +429,72 @@
 
                     getCekExport(params).then((response) => {
                         if ($('#rangeModal').data('action') == 'export') {
-                            let xhr = new XMLHttpRequest()
-                            xhr.open('GET', `{{ config('app.api_url') }}stok/export?${params}`, true)
-                            xhr.setRequestHeader("Authorization",
-                                `Bearer {{ session('access_token') }}`)
-                            xhr.responseType = 'arraybuffer'
-
-                            xhr.onload = function(e) {
-                                if (this.status === 200) {
-                                    if (this.response !== undefined) {
-                                        let blob = new Blob([this.response], {
-                                            type: "application/vnd.ms-excel"
-                                        })
-                                        let link = document.createElement('a')
-
-                                        link.href = window.URL.createObjectURL(blob)
-                                        link.download = `laporanStok${(new Date).getTime()}.xlsx`
-                                        link.click()
-
-                                        submitButton.removeAttr('disabled')
+                            $.ajax({
+                                url: '{{ config('app.api_url') }}stok/export?' + params,
+                                type: 'GET',
+                                beforeSend: function(xhr) {
+                                    xhr.setRequestHeader('Authorization', 'Bearer {{ session('access_token') }}');
+                                },
+                                xhrFields: {
+                                    responseType: 'arraybuffer'
+                                },
+                                success: function(response, status, xhr) {
+                                    if (xhr.status === 200) {
+                                        if (response !== undefined) {
+                                            var blob = new Blob([response], {
+                                                type: 'application/vnd.ms-excel'
+                                            });
+                                            var link = document.createElement('a');
+                                            link.href = window.URL.createObjectURL(blob);
+                                            link.download = 'laporanStok' + new Date().getTime() + '.xlsx';
+                                            link.click();
+                                        }
+                                        $('#rangeModal').modal('hide')
                                     }
-                                }
-                            }
-                        
-                            xhr.onerror = () => {
-                                submitButton.removeAttr('disabled')
-                            }
 
-                            xhr.send()
-                            submitButton.removeAttr('disabled')
+                                },
+                                error: function(xhr, status, error) {
+                                    submitButton.removeAttr('disabled')
+                                }
+                            }).always(() => {
+                                $('#processingLoader').addClass('d-none')
+
+                                submitButton.removeAttr('disabled')
+                            })
+                            // let xhr = new XMLHttpRequest()
+                            // xhr.open('GET', `{{ config('app.api_url') }}stok/export?${params}`, true)
+                            // xhr.setRequestHeader("Authorization",
+                            //     `Bearer {{ session('access_token') }}`)
+                            // xhr.responseType = 'arraybuffer'
+
+                            // xhr.onload = function(e) {
+                            //     if (this.status === 200) {
+                            //         if (this.response !== undefined) {
+                            //             let blob = new Blob([this.response], {
+                            //                 type: "application/vnd.ms-excel"
+                            //             })
+                            //             let link = document.createElement('a')
+
+                            //             link.href = window.URL.createObjectURL(blob)
+                            //             link.download = `laporanStok${(new Date).getTime()}.xlsx`
+                            //             link.click()
+
+                            //             // submitButton.removeAttr('disabled')
+                            //         }
+                            //     }
+                            // }
+                        
+                            // xhr.onerror = () => {
+                            //     // submitButton.removeAttr('disabled')
+                            // }
+
+                            // xhr.send()
+                            // // submitButton.removeAttr('disabled')
                         } else if ($('#rangeModal').data('action') == 'report') {
                             window.open(`{{ route('stok.report') }}?${params}`)
                             submitButton.removeAttr('disabled')
+                            $('#processingLoader').addClass('d-none')
+                            $('#rangeModal').modal('hide')
                         }
                     })
                     .catch((error) => {
@@ -503,7 +538,7 @@
                     })
                     .finally(() => {
                         $('.ui-button').click()
-                        submitButton.removeAttr('disabled')
+                        // submitButton.removeAttr('disabled')
                     })
                 })
 

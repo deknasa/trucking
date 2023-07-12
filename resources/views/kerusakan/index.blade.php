@@ -349,87 +349,81 @@
 
             let params
             let actionUrl = ``
+            let submitButton = $(this).find('button:submit')
+                    
+                    submitButton.attr('disabled', 'disabled')
+                    $('#processingLoader').removeClass('d-none')
+                    
+                    // window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
+                    let formRange = $('#formRange')
+                    let offset = parseInt(formRange.find('[name=dari]').val()) - 1
+                    let limit = parseInt(formRange.find('[name=sampai]').val().replace('.', '')) - offset
+                    params += `&offset=${offset}&limit=${limit}`
 
-            /* Clear validation messages */
-            $('.is-invalid').removeClass('is-invalid')
-            $('.invalid-feedback').remove()
-
-            /* Set params value */
-            for (var key in postData) {
-                if (params != "") {
-                    params += "&";
-                }
-                params += key + "=" + encodeURIComponent(postData[key]);
-            }
-
-            // window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
-            let formRange = $('#formRange')
-            let offset = parseInt(formRange.find('[name=dari]').val()) - 1
-            let limit = parseInt(formRange.find('[name=sampai]').val().replace('.', '')) - offset
-            params += `&offset=${offset}&limit=${limit}`
-
-            getCekExport(params).then((response) => {
-                    if ($('#rangeModal').data('action') == 'export') {
-                        let xhr = new XMLHttpRequest()
-                        xhr.open('GET', `{{ config('app.api_url') }}kerusakan/export?${params}`,
-                            true)
-                        xhr.setRequestHeader("Authorization", `Bearer ${accessToken}`)
-                        xhr.responseType = 'arraybuffer'
-
-
-                        xhr.onload = function(e) {
-                            if (this.status === 200) {
-                                if (this.response !== undefined) {
-                                    let blob = new Blob([this.response], {
-                                        type: "application/vnd.ms-excel"
-                                    })
-                                    let link = document.createElement('a')
-
-                                    link.href = window.URL.createObjectURL(blob)
-                                    link.download =
-                                        `laporanKerusakan${(new Date).getTime()}.xlsx`
-                                    link.click()
-
+                    getCekExport(params).then((response) => {
+                        if ($('#rangeModal').data('action') == 'export') {
+                            $.ajax({
+                                url: '{{ config('app.api_url') }}kerusakan/export?' + params,
+                                type: 'GET',
+                                beforeSend: function(xhr) {
+                                    xhr.setRequestHeader('Authorization', 'Bearer {{ session('access_token') }}');
+                                },
+                                xhrFields: {
+                                    responseType: 'arraybuffer'
+                                },
+                                success: function(response, status, xhr) {
+                                    if (xhr.status === 200) {
+                                        if (response !== undefined) {
+                                            var blob = new Blob([response], {
+                                                type: 'kerusakan/vnd.ms-excel'
+                                            });
+                                            var link = document.createElement('a');
+                                            link.href = window.URL.createObjectURL(blob);
+                                            link.download = 'kerusakan' + new Date().getTime() + '.xlsx';
+                                            link.click();
+                                        }
+                                        $('#rangeModal').modal('hide')
+                                    }
+                                },
+                                
+                                error: function(xhr, status, error) {
                                     submitButton.removeAttr('disabled')
                                 }
-                            }
-                        }
-
-                        xhr.onerror = () => {
+                            }).always(() => {
+                                $('#processingLoader').addClass('d-none')
+                                submitButton.removeAttr('disabled')
+                            })
+                        } else if ($('#rangeModal').data('action') == 'report') {
+                            window.open(`{{ route('kerusakan.report') }}?${params}`)
                             submitButton.removeAttr('disabled')
+                            $('#processingLoader').addClass('d-none')
+                            $('#rangeModal').modal('hide')
                         }
-
-                        xhr.send()
-                    } else if ($('#rangeModal').data('action') == 'report') {
-
-                        window.open(`{{ route('kerusakan.report') }}?${params}`)
-
-                        submitButton.removeAttr('disabled')
-                    }
-                })
-                .catch((error) => {
-                    if (error.status === 422) {
-                        $('.is-invalid').removeClass('is-invalid')
-                        $('.invalid-feedback').remove()
-                        let status
-                        if (error.responseJSON.hasOwnProperty('status') == false) {
-                            status = false
-                        } else {
-                            status = true
-                        }
-                        statusText = error.statusText
-                        errors = error.responseJSON.errors
-                        $.each(errors, (index, error) => {
-                            let indexes = index.split(".");
-                            if (status === false) {
-                                indexes[0] = 'sampai'
-                            }
-                            let element;
-                            element = $('#rangeModal').find(`[name="${indexes[0]}"]`)[
-                                0];
-                            if ($(element).length > 0 && !$(element).is(":hidden")) {
-                                $(element).addClass("is-invalid");
-                                $(`
+                    })
+                        
+                        .catch((error) => {
+                            if (error.status === 422) {
+                                $('.is-invalid').removeClass('is-invalid')
+                                $('.invalid-feedback').remove()
+                                let status
+                                if (error.responseJSON.hasOwnProperty('status') == false) {
+                                    status = false
+                                } else {
+                                    status = true
+                                }
+                                statusText = error.statusText
+                                errors = error.responseJSON.errors
+                                $.each(errors, (index, error) => {
+                                    let indexes = index.split(".");
+                                    if (status === false) {
+                                        indexes[0] = 'sampai'
+                                    }
+                                    let element;
+                                    element = $('#rangeModal').find(`[name="${indexes[0]}"]`)[
+                                        0];
+                                    if ($(element).length > 0 && !$(element).is(":hidden")) {
+                                        $(element).addClass("is-invalid");
+                                        $(`
                                                 <div class="invalid-feedback">
                                                 ${error[0].toLowerCase()}
                                                 </div>

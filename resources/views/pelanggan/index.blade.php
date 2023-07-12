@@ -69,27 +69,24 @@
                           echo ';';
                         }
                         $i++;
-                      endforeach;
+                      endforeach
+                      ?>`,
 
-                      ?>
-            `,
               dataInit: function(element) {
                 $(element).select2({
-                  width: 'resolve',
-                  theme: "bootstrap4"
+                    width: 'resolve',
+                    theme: "bootstrap4"
                 });
               }
             },
+                
             formatter: (value, options, rowData) => {
               let statusAktif = JSON.parse(value)
-
               let formattedValue = $(`
                 <div class="badge" style="background-color: ${statusAktif.WARNA}; color: #fff;">
                   <span>${statusAktif.SINGKATAN}</span>
                 </div>
               `)
-
-
               return formattedValue[0].outerHTML
             },
             cellattr: (rowId, value, rowObject) => {
@@ -384,6 +381,7 @@
 
       let params
       let submitButton = $(this).find('button:submit')
+      $('#processingLoader').removeClass('d-none')
 
       submitButton.attr('disabled', 'disabled')
 
@@ -396,45 +394,51 @@
       }
 
       let formRange = $('#formRange')
-      let offset = parseInt(formRange.find('[name=dari]').val()) - 1
-      let limit = parseInt(formRange.find('[name=sampai]').val().replace('.', '')) - offset
+      let offset = parseInt(formRange.find('[name=dari]').val().replace('.', '').replace(',', '')) - 1
+      let limit = parseInt(formRange.find('[name=sampai]').val().replace('.', '').replace(',', '')) - offset
       params += `&offset=${offset}&limit=${limit}`
 
       getCekExport(params).then((response) => {
-          if ($('#rangeModal').data('action') == 'export') {
-            let xhr = new XMLHttpRequest()
-            xhr.open('GET', `{{ config('app.api_url') }}pelanggan/export?${params}`, true)
-            xhr.setRequestHeader("Authorization", `Bearer {{ session('access_token') }}`)
-            xhr.responseType = 'arraybuffer'
-
-            xhr.onload = function(e) {
-              if (this.status === 200) {
-                if (this.response !== undefined) {
-                  let blob = new Blob([this.response], {
-                    type: "application/vnd.ms-excel"
-                  })
-                  let link = document.createElement('a')
-
-                  link.href = window.URL.createObjectURL(blob)
-                  link.download = `laporanPelanggan${(new Date).getTime()}.xlsx`
-                  link.click()
-
-                  submitButton.removeAttr('disabled')
+        if ($('#rangeModal').data('action') == 'export') {
+          $.ajax({
+            url: '{{ config('app.api_url') }}pelanggan/export?' + params,
+            type: 'GET',
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader('Authorization', 'Bearer {{ session('access_token') }}');
+            },
+            xhrFields: {
+                responseType: 'arraybuffer'
+            },
+            success: function(response, status, xhr) {
+              if (xhr.status === 200) {
+                if (response !== undefined) {
+                  var blob = new Blob([response], {
+                    type: 'pelanggan/vnd.ms-excel'
+                  });
+                  var link = document.createElement('a');
+                  link.href = window.URL.createObjectURL(blob);
+                  link.download = 'pelanggan' + new Date().getTime() + '.xlsx';
+                  link.click();
                 }
+                $('#rangeModal').modal('hide')
               }
-            }
-
-            xhr.onerror = () => {
+            },
+            error: function(xhr, status, error) {
               submitButton.removeAttr('disabled')
             }
-
-            xhr.send()
-          } else if ($('#rangeModal').data('action') == 'report') {
-            window.open(`{{ route('pelanggan.report') }}?${params}`)
-
+          }).always(() => {
+            $('#processingLoader').addClass('d-none')
             submitButton.removeAttr('disabled')
-          }
-        })
+          })
+        } else if ($('#rangeModal').data('action') == 'report') {
+            window.open(`{{ route('pelanggan.report') }}?${params}`)
+            submitButton.removeAttr('disabled')
+            $('#processingLoader').addClass('d-none')
+            $('#rangeModal').modal('hide')
+        }  
+        
+      })
+          
         .catch((error) => {
           if (error.status === 422) {
             $('.is-invalid').removeClass('is-invalid')

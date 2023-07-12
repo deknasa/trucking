@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "a46f5a8eccfed4e08ce0b82e73b4baf7",
+  "ReportGuid": "7abde7eb1a9751d23e03f9cb9face52a",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/truck/public/reports/ReportLaporanHistoryPinjaman.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1689049617000+0700)/",
+  "ReportChanged": "/Date(1689061750000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -285,7 +285,7 @@
               "Ident": "StiText",
               "Name": "Text3",
               "Guid": "829fd5107935fade3f2d14b62b8287de",
-              "ClientRectangle": "4,12,94,6",
+              "ClientRectangle": "4,10,94,6",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -303,7 +303,7 @@
               "Ident": "StiText",
               "Name": "Text4",
               "Guid": "47ee01b8833b293c5b57c8072ab4b12a",
-              "ClientRectangle": "4,22,28,6",
+              "ClientRectangle": "4,20,28,6",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -311,7 +311,7 @@
               "Text": {
                 "Value": "Supir Dari"
               },
-              "Font": ";11;Bold;",
+              "Font": ";9;Bold;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -321,7 +321,7 @@
               "Ident": "StiText",
               "Name": "Text5",
               "Guid": "369e4952f3623c8d519f2879344d100f",
-              "ClientRectangle": "34,22,4,6",
+              "ClientRectangle": "32,20,4,6",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -329,7 +329,7 @@
               "Text": {
                 "Value": ":"
               },
-              "Font": ";11;Bold;",
+              "Font": ";9;Bold;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -339,7 +339,7 @@
               "Ident": "StiText",
               "Name": "Text7",
               "Guid": "dad79547fd78795ac3a6c1887a746546",
-              "ClientRectangle": "40,22,32,6",
+              "ClientRectangle": "36,20,50,6",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -347,7 +347,7 @@
               "Text": {
                 "Value": "{data.supirdari}"
               },
-              "Font": ";11;Bold;",
+              "Font": ";9;Bold;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -460,7 +460,7 @@
               "Ident": "StiText",
               "Name": "Text12",
               "Guid": "bcfded94d14a10a50b52961eec934727",
-              "ClientRectangle": "82,22,28,6",
+              "ClientRectangle": "4,26,28,6",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -468,7 +468,7 @@
               "Text": {
                 "Value": "Supir Sampai"
               },
-              "Font": ";11;Bold;",
+              "Font": ";9;Bold;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -478,7 +478,7 @@
               "Ident": "StiText",
               "Name": "Text13",
               "Guid": "628e348e87d13d6d041304dd058c8a0d",
-              "ClientRectangle": "112,22,4,6",
+              "ClientRectangle": "32,26,4,6",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -486,7 +486,7 @@
               "Text": {
                 "Value": ":"
               },
-              "Font": ";11;Bold;",
+              "Font": ";9;Bold;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -496,7 +496,7 @@
               "Ident": "StiText",
               "Name": "Text15",
               "Guid": "fdfc7c852d9840e766af644836ab6af6",
-              "ClientRectangle": "118,22,32,6",
+              "ClientRectangle": "36,26,50,6",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -504,7 +504,7 @@
               "Text": {
                 "Value": "{data.supirsampai}"
               },
-              "Font": ";11;Bold;",
+              "Font": ";9;Bold;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -652,9 +652,12 @@
                 "WordWrap": true
               },
               "TextFormat": {
-                "Ident": "StiNumberFormatService",
-                "NegativePattern": 1,
-                "GroupSeparator": ","
+                "Ident": "StiCurrencyFormatService",
+                "NegativePattern": 4,
+                "GroupSeparator": ",",
+                "UseLocalSetting": false,
+                "PositivePattern": 3,
+                "Symbol": ""
               },
               "Type": "DataColumn"
             }
