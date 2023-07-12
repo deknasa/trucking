@@ -204,16 +204,8 @@ class NotaKreditHeaderController extends MyController
                 'index'=>'keterangan'
             ],
             [
-                'label'=>'NOMINAL BAYAR',
-                'index'=>'nominalbayar'
-            ],
-            [
                 'label'=>'POTONGAN',
                 'index'=>'penyesuaian'
-            ],
-            [
-                'label'=>'NOMINAL',
-                'index'=>'nominal'
             ] 
         ];
 
@@ -247,19 +239,17 @@ class NotaKreditHeaderController extends MyController
 			]
         ];
 
-        $sheet ->getStyle("A$detail_table_header_row:H$detail_table_header_row")->applyFromArray($styleArray);
+        $sheet ->getStyle("A$detail_table_header_row:F$detail_table_header_row")->applyFromArray($styleArray);
 
         // LOOPING DETAIL
-        $nominal = 0;
+        $penyesuaian = 0;
         foreach ($notakredit_detail as $response_index => $response_detail) {
             
             foreach ($detail_columns as $detail_columns_index => $detail_column) {
                 $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
-                $sheet->getStyle("A$detail_table_header_row:H$detail_table_header_row")->getFont()->setBold(true);
-                $sheet->getStyle("A$detail_table_header_row:H$detail_table_header_row")->getAlignment()->setHorizontal('center');
+                $sheet->getStyle("A$detail_table_header_row:F$detail_table_header_row")->getFont()->setBold(true);
+                $sheet->getStyle("A$detail_table_header_row:F$detail_table_header_row")->getAlignment()->setHorizontal('center');
             }
-            $response_detail['nominals'] = number_format((float) $response_detail['nominal'], '2', '.', ',');
-            $response_detail['nominalbayars'] = number_format((float) $response_detail['nominalbayar'], '2', '.', ',');
             $response_detail['penyesuaians'] = number_format((float) $response_detail['penyesuaian'], '2', '.', ',');
 
             $tglterima = $response_detail["tglterima"];
@@ -270,34 +260,30 @@ class NotaKreditHeaderController extends MyController
             $sheet->setCellValue("A$detail_start_row", $response_index + 1);
             $sheet->setCellValue("B$detail_start_row", $response_detail['invoice_nobukti']);
             $sheet->setCellValue("C$detail_start_row", $response_detail['tglterima']);
-            $sheet->setCellValue("D$detail_start_row", $response_detail['keterangan']);
-            $sheet->setCellValue("E$detail_start_row", $response_detail['coaadjust']);
-            $sheet->setCellValue("F$detail_start_row", $response_detail['nominalbayars']);
-            $sheet->setCellValue("G$detail_start_row", $response_detail['penyesuaians']);
-            $sheet->setCellValue("H$detail_start_row", $response_detail['nominals']);
+            $sheet->setCellValue("D$detail_start_row", $response_detail['coaadjust']);
+            $sheet->setCellValue("E$detail_start_row", $response_detail['keterangan']);
+            $sheet->setCellValue("F$detail_start_row", $response_detail['penyesuaians']);
 
             $sheet->getStyle("E$detail_start_row")->getAlignment()->setWrapText(true);
             $sheet->getColumnDimension('E')->setWidth(40);
 
             $sheet ->getStyle("A$detail_start_row:E$detail_start_row")->applyFromArray($styleArray);
-            $sheet ->getStyle("F$detail_start_row:H$detail_start_row")->applyFromArray($style_number);
+            $sheet ->getStyle("F$detail_start_row")->applyFromArray($style_number);
 
-            $nominal += $response_detail['nominal'];
+            $penyesuaian += $response_detail['penyesuaian'];
             $detail_start_row++;
         }
 
         $total_start_row = $detail_start_row;
-        $sheet->mergeCells('A'.$total_start_row.':G'.$total_start_row);
-        $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A'.$total_start_row.':G'.$total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
-        $sheet->setCellValue("H$total_start_row", number_format((float) $nominal, '2', '.', ','))->getStyle("H$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->mergeCells('A'.$total_start_row.':E'.$total_start_row);
+        $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A'.$total_start_row.':E'.$total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
+        $sheet->setCellValue("F$total_start_row", number_format((float) $penyesuaian, '2', '.', ','))->getStyle("F$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
 
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);
         $sheet->getColumnDimension('C')->setAutoSize(true);
         $sheet->getColumnDimension('D')->setAutoSize(true);
         $sheet->getColumnDimension('F')->setAutoSize(true);
-        $sheet->getColumnDimension('G')->setAutoSize(true);
-        $sheet->getColumnDimension('H')->setAutoSize(true);
 
         $writer = new Xlsx($spreadsheet);
         $filename = 'Laporan Nota Kredit' . date('dmYHis');

@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "5bcbd0c32b29f86f3bcd2d8268002c56",
+  "ReportGuid": "ed445e03d76e3eaf0ac67ea4a6505837",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportpenerimaanStokPG.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1688608185000+0700)/",
+  "ReportChanged": "/Date(1688983194000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -606,6 +606,30 @@
             "NameInSource": "value",
             "Alias": "value",
             "Type": "System.Decimal"
+          },
+          "45": {
+            "Name": "columnDari",
+            "NameInSource": "columnDari",
+            "Alias": "columnDari",
+            "Type": "System.String"
+          },
+          "46": {
+            "Name": "valueDari",
+            "NameInSource": "valueDari",
+            "Alias": "valueDari",
+            "Type": "System.String"
+          },
+          "47": {
+            "Name": "columnKe",
+            "NameInSource": "columnKe",
+            "Alias": "columnKe",
+            "Type": "System.String"
+          },
+          "48": {
+            "Name": "valueKe",
+            "NameInSource": "valueKe",
+            "Alias": "valueKe",
+            "Type": "System.String"
           }
         },
         "NameInSource": "Data.penerimaanstokheader"
@@ -1095,14 +1119,14 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "Dari Gudang"
+                "Value": "{penerimaanstokheader.columnDari}"
               },
               "VertAlignment": "Center",
               "Font": ";9;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
-              "Type": "Expression"
+              "Type": "DataColumn"
             },
             "19": {
               "Ident": "StiText",
@@ -1134,7 +1158,7 @@
               },
               "MaxNumberOfLines": 6,
               "Text": {
-                "Value": "{penerimaanstokheader.gudangdari}"
+                "Value": "{penerimaanstokheader.valueDari}"
               },
               "VertAlignment": "Center",
               "Font": ";9;;",
@@ -1158,14 +1182,14 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "Ke Gudang"
+                "Value": "{penerimaanstokheader.columnKe}"
               },
               "VertAlignment": "Center",
               "Font": ";9;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
-              "Type": "Expression"
+              "Type": "DataColumn"
             },
             "22": {
               "Ident": "StiText",
@@ -1179,7 +1203,7 @@
               },
               "MaxNumberOfLines": 6,
               "Text": {
-                "Value": "{penerimaanstokheader.gudangke}"
+                "Value": "{penerimaanstokheader.valueKe}"
               },
               "VertAlignment": "Center",
               "Font": ";9;;",

@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "c0970250f0e97dfab1db29139d1bb5c9",
+  "ReportGuid": "257542c548791abd32a1c08c67dddfac",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportPengeluaranBank.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1688620482000+0700)/",
+  "ReportChanged": "/Date(1688959817000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -945,7 +945,7 @@
               },
               "MaxNumberOfLines": 6,
               "Text": {
-                "Value": "{pengeluaran_details.coadebet}"
+                "Value": "{pengeluaran_details.coakredit}"
               },
               "VertAlignment": "Center",
               "Font": ";9;;",

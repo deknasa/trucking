@@ -154,8 +154,10 @@ class RekapPenerimaanHeaderController extends MyController
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setCellValue('A1', $rekappenerimaan['judul']);
         $sheet->setCellValue('A2', $rekappenerimaan['judulLaporan']);
-        $sheet->getStyle("A1")->getFont()->setSize(14);
+        $sheet->getStyle("A1")->getFont()->setSize(12);
         $sheet->getStyle("A2")->getFont()->setSize(12);
+        $sheet->getStyle("A1")->getFont()->setBold(true);
+        $sheet->getStyle("A2")->getFont()->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:D1');

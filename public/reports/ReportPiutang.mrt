@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "7ef5f2f1b7b5de8d42a4091b51d35197",
+  "ReportGuid": "a5b82e771c9b65ea62229b12ceb07272",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "ReportPiutang.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportPiutang.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1688542717000+0700)/",
+  "ReportChanged": "/Date(1688960607000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -23,6 +23,38 @@
   "Dictionary": {
     "DataSources": {
       "0": {
+        "Ident": "StiDataTableSource",
+        "Name": "piutang_combo",
+        "Alias": "piutang_combo",
+        "Columns": {
+          "0": {
+            "Name": "id",
+            "NameInSource": "id",
+            "Alias": "id",
+            "Type": "System.String"
+          },
+          "1": {
+            "Name": "parameter",
+            "NameInSource": "parameter",
+            "Alias": "parameter",
+            "Type": "System.String"
+          },
+          "2": {
+            "Name": "param",
+            "NameInSource": "param",
+            "Alias": "param",
+            "Type": "System.String"
+          },
+          "3": {
+            "Name": "relationId",
+            "NameInSource": "relationId",
+            "Alias": "relationId",
+            "Type": "System.String"
+          }
+        },
+        "NameInSource": "Data.piutang_combo"
+      },
+      "1": {
         "Ident": "StiDataTableSource",
         "Name": "piutang",
         "Alias": "piutang",
@@ -94,33 +126,57 @@
             "Type": "System.String"
           },
           "11": {
+            "Name": "jumlahcetak",
+            "NameInSource": "jumlahcetak",
+            "Alias": "jumlahcetak",
+            "Type": "System.String"
+          },
+          "12": {
+            "Name": "statuscetak",
+            "NameInSource": "statuscetak",
+            "Alias": "statuscetak",
+            "Type": "System.String"
+          },
+          "13": {
+            "Name": "statuscetak_id",
+            "NameInSource": "statuscetak_id",
+            "Alias": "statuscetak_id",
+            "Type": "System.String"
+          },
+          "14": {
             "Name": "judulLaporan",
             "NameInSource": "judulLaporan",
             "Alias": "judulLaporan",
             "Type": "System.String"
           },
-          "12": {
+          "15": {
             "Name": "judul",
             "NameInSource": "judul",
             "Alias": "judul",
             "Type": "System.String"
           },
-          "13": {
+          "16": {
             "Name": "tglcetak",
             "NameInSource": "tglcetak",
             "Alias": "tglcetak",
             "Type": "System.String"
           },
-          "14": {
+          "17": {
             "Name": "usercetak",
             "NameInSource": "usercetak",
             "Alias": "usercetak",
+            "Type": "System.String"
+          },
+          "18": {
+            "Name": "combo",
+            "NameInSource": "combo",
+            "Alias": "combo",
             "Type": "System.String"
           }
         },
         "NameInSource": "Data.piutang"
       },
-      "1": {
+      "2": {
         "Ident": "StiDataTableSource",
         "Name": "piutang_details",
         "Alias": "piutang_details",
@@ -151,6 +207,21 @@
           }
         },
         "NameInSource": "Data.piutang_details"
+      }
+    },
+    "Relations": {
+      "0": {
+        "Name": "piutang",
+        "ChildColumns": {
+          "0": "relationId"
+        },
+        "ParentColumns": {
+          "0": "combo"
+        },
+        "NameInSource": "piutang_combo",
+        "Alias": "piutang",
+        "ParentSource": "piutang",
+        "ChildSource": "piutang_combo"
       }
     }
   },
@@ -827,12 +898,12 @@
               },
               "MaxNumberOfLines": 6,
               "Text": {
-                "Value": "Revisi Ke :"
+                "Value": "{piutang.jumlahcetak}"
               },
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
-              "Type": "Expression"
+              "Type": "DataColumn"
             },
             "31": {
               "Ident": "StiStartPointPrimitive",
@@ -1149,7 +1220,7 @@
               },
               "MaxNumberOfLines": 6,
               "Text": {
-                "Value": "Total Nominal"
+                "Value": "Total"
               },
               "VertAlignment": "Center",
               "Font": ";9;Bold;",
@@ -1525,7 +1596,7 @@
               "Name": "HorizontalLinePrimitive14",
               "Guid": "a5e4f3abcfa5524b30b92b482fa8fd92",
               "ClientRectangle": "4,0,208,0.254",
-              "ComponentPlacement": "d.DataBand1",
+              "ComponentPlacement": "gf.GroupFooterBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },

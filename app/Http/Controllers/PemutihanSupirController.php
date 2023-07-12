@@ -23,7 +23,27 @@ class PemutihanSupirController extends MyController
     {
         $title = $this->title;
 
-        return view('pemutihansupir.index', compact('title'));
+        $data = [
+            'combocetak' => $this->comboCetak('list', 'STATUSCETAK', 'STATUSCETAK'),
+        ];
+
+        return view('pemutihansupir.index', compact('title', 'data'));
+    }
+
+    public function comboCetak($aksi, $grp, $subgrp)
+    {
+        $status = [
+            'status' => $aksi,
+            'grp' => $grp,
+            'subgrp' => $subgrp,
+        ];
+
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'parameter/combolist', $status);
+
+        return $response['data'];
     }
 
     /**
@@ -58,6 +78,19 @@ class PemutihanSupirController extends MyController
         return $data;
     }
 
+    public function combo($aksi)
+    {
+        $status = [
+            'status' => $aksi,
+            'grp' => 'STATUSCETAK',
+            'subgrp' => 'STATUSCETAK',
+        ]; 
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'user/combostatus',$status);
+        return $response['data'];
+    }
+
     public function report(Request $request)
     {
         //FETCH HEADER
@@ -76,6 +109,10 @@ class PemutihanSupirController extends MyController
            ->withToken(session('access_token'))
            ->get(config('app.api_url') .'pemutihansupirdetail', $detailParams)['data'];
            
+        
+        $combo = $this->combo('list');
+        $key = array_search('CETAK', array_column( $combo, 'parameter')); 
+        $pemutihanSupir["combo"] =  $combo[$key];
         return view('reports.pemutihansupir', compact('pemutihanSupir', 'pemutihanSupir_detail'));
     }
 

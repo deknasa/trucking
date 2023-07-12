@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "2e2de0889eddbc75269822bcc1bbe862",
+  "ReportGuid": "ca60eefb578a0ef852ca9e1fd586eb63",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportServiceIn.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1688546302000+0700)/",
+  "ReportChanged": "/Date(1688655275000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -90,36 +90,42 @@
             "Type": "System.DateTime"
           },
           "5": {
+            "Name": "statuscetak",
+            "NameInSource": "statuscetak",
+            "Alias": "statuscetak",
+            "Type": "System.String"
+          },
+          "6": {
             "Name": "jumlahcetak",
             "NameInSource": "jumlahcetak",
             "Alias": "jumlahcetak",
             "Type": "System.String"
           },
-          "6": {
+          "7": {
             "Name": "judulLaporan",
             "NameInSource": "judulLaporan",
             "Alias": "judulLaporan",
             "Type": "System.String"
           },
-          "7": {
+          "8": {
             "Name": "judul",
             "NameInSource": "judul",
             "Alias": "judul",
             "Type": "System.String"
           },
-          "8": {
+          "9": {
             "Name": "tglcetak",
             "NameInSource": "tglcetak",
             "Alias": "tglcetak",
             "Type": "System.String"
           },
-          "9": {
+          "10": {
             "Name": "usercetak",
             "NameInSource": "usercetak",
             "Alias": "usercetak",
             "Type": "System.String"
           },
-          "10": {
+          "11": {
             "Name": "combo",
             "NameInSource": "combo",
             "Alias": "combo",
@@ -652,6 +658,7 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
+              "HideZeros": true,
               "Text": {
                 "Value": "Revisi Ke : {serviceIn.jumlahcetak}"
               },

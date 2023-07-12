@@ -57,14 +57,20 @@
         report.loadFile(`{{ asset('public/reports/ReportPengeluaranStokRTR.mrt') }}`)
           break;
         case '221':
-        //KOr
+        //KOR
         report.loadFile(`{{ asset('public/reports/ReportPengeluaranStokKOR.mrt') }}`)
-        
-        break;
+          break;
+        case '340':
+        //PJA
+        report.loadFile(`{{ asset('public/reports/ReportPengeluaranStokPJA.mrt') }}`)
+          break;
+        case '353':
+        //GST
+        report.loadFile(`{{ asset('public/reports/ReportPengeluaranStokGST.mrt') }}`)
+          break;
         default:
         report.loadFile(`{{ asset('public/reports/ReportPengeluaranStokSPK.mrt') }}`)
-        
-        break;
+          break;
       }
       report.dictionary.dataSources.clear()
 
@@ -78,8 +84,6 @@
       viewer.report = report
       // designer.renderHtml("content")
       // designer.report = report
-      
-
       
       viewer.onPrintReport = function (event) {
         triggerEvent(window, 'afterprint');

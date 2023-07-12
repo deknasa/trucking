@@ -107,6 +107,7 @@ class HutangBayarHeaderController extends MyController
 
         //FETCH DETAIL
         $detailParams = [
+            'forReport' => true,
             'hutangbayar_id' => $id,
         ];
         $hutangbayar_details = Http::withHeaders($request->header())
@@ -282,9 +283,9 @@ class HutangBayarHeaderController extends MyController
            $sheet->setCellValue("E$detail_start_row", $response_detail['nominals']);
 
            $sheet->getStyle("C$detail_start_row")->getAlignment()->setWrapText(true);
-           $sheet->getColumnDimension('C')->setWidth(100);
+           $sheet->getColumnDimension('C')->setWidth(50);
 
-           $sheet ->getStyle("A$detail_start_row:C$detail_start_row")->applyFromArray($styleArray);
+           $sheet ->getStyle("A$detail_start_row:E$detail_start_row")->applyFromArray($styleArray);
            $sheet ->getStyle("D$detail_start_row:E$detail_start_row")->applyFromArray($style_number);
 
            $nominal += $response_detail['nominal'];
