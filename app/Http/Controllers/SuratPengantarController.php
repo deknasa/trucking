@@ -279,6 +279,16 @@ class SuratPengantarController extends MyController
             ->get(config('app.api_url') . 'suratpengantar/export?dari=' . $request->dari . '&sampai=' . $request->sampai)['data'];
         $suratPengantar = $data_header['data'];
         
+        $tglDari = $suratPengantar[0]['tgldari'];
+        $timeStamp = strtotime($tglDari);
+        $datetglDari = date('d-m-Y', $timeStamp); 
+        $periodeDari = $datetglDari;
+
+        $tglSampai = $suratPengantar[0]['tglsampai'];
+        $timeStamp = strtotime($tglSampai);
+        $datetglSampai = date('d-m-Y', $timeStamp); 
+        $periodeSampai = $datetglSampai;
+
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setCellValue('A1', $data_header['parameter']['judul']);
@@ -292,9 +302,22 @@ class SuratPengantarController extends MyController
         $sheet->mergeCells('A1:Z1');
         $sheet->mergeCells('A2:Z2');
 
-        $detail_table_header_row = 4;
+        $header_start_row = 4;
+        $detail_table_header_row = 7;
         $detail_start_row = $detail_table_header_row + 1;
         $alphabets = range('A', 'Z');
+
+        $header_columns = [
+            [
+                'label'=>'Periode Dari',
+                'index'=>$periodeDari
+            ],
+            [
+                'label'=>'Periode Sampai',
+                'index'=>$periodeSampai
+            ]
+        ];
+
         $columns = [
             [
                 'label' => 'NO',
@@ -402,6 +425,11 @@ class SuratPengantarController extends MyController
             ],
         ];
 
+        //LOOPING HEADER        
+        foreach ($header_columns as $header_column) {
+            $sheet->setCellValue('B' . $header_start_row, $header_column['label']);
+            $sheet->setCellValue('C' . $header_start_row++, ': '.$header_column['index']);
+        }
         foreach ($columns as $detail_columns_index => $detail_column) {
             $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_table_header_row, $detail_column['label'] ?? $detail_columns_index + 1);
         }

@@ -123,13 +123,23 @@ class OrderanTruckingController extends MyController
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'orderantrucking/export?dari=' . $request->dari . '&sampai=' . $request->sampai)['data'];
         $orderanTruck = $orderanTrucking['data'];
+    
+        $tglDari = $orderanTruck[0]['tgldari'];
+        $timeStamp = strtotime($tglDari);
+        $datetglDari = date('d-m-Y', $timeStamp); 
+        $periodeDari = $datetglDari;
+
+        $tglSampai = $orderanTruck[0]['tglsampai'];
+        $timeStamp = strtotime($tglSampai);
+        $datetglSampai = date('d-m-Y', $timeStamp); 
+        $periodeSampai = $datetglSampai;
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setCellValue('A1', $orderanTrucking['parameter']['judul']);
         $sheet->setCellValue('A2', $orderanTrucking['parameter']['judulLaporan']);
         $sheet->getStyle("A1")->getFont()->setSize(12);
-        $sheet->getStyle("A2")->getFont()->setSize(11);
+        $sheet->getStyle("A2")->getFont()->setSize(12);
         $sheet->getStyle("A1")->getFont()->setBold(true);
         $sheet->getStyle("A2")->getFont()->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
@@ -137,11 +147,22 @@ class OrderanTruckingController extends MyController
         $sheet->mergeCells('A1:O1');
         $sheet->mergeCells('A2:O2');
 
-        $detail_table_header_row = 4;
+        $header_start_row = 4;
+        $detail_table_header_row = 7;
         $detail_start_row = $detail_table_header_row + 1;
 
         $alphabets = range('A', 'Z');
 
+        $header_columns = [
+            [
+                'label'=>'Periode Dari',
+                'index'=>$periodeDari
+            ],
+            [
+                'label'=>'Periode Sampai',
+                'index'=>$periodeSampai
+            ]
+        ];
         $columns = [
             [
                 'label' => 'NO',
@@ -204,6 +225,11 @@ class OrderanTruckingController extends MyController
             ],
         ];
 
+        //LOOPING HEADER        
+        foreach ($header_columns as $header_column) {
+            $sheet->setCellValue('B' . $header_start_row, $header_column['label']);
+            $sheet->setCellValue('C' . $header_start_row++, ': '.$header_column['index']);
+        }
         foreach ($columns as $detail_columns_index => $detail_column) {
             $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_table_header_row, $detail_column['label'] ?? $detail_columns_index + 1);
         }

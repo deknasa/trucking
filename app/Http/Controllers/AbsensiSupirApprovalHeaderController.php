@@ -203,10 +203,6 @@ class AbsensiSupirApprovalHeaderController extends MyController
                 'label'=>'NO',
             ],
             [
-                'label'=>'NO BUKTI',
-                'index'=>'nobukti'
-            ],
-            [
                 'label'=>'TRADO',
                 'index'=>'trado'
             ],
@@ -256,7 +252,7 @@ class AbsensiSupirApprovalHeaderController extends MyController
         ];
 
         // $sheet->getStyle("A$detail_table_header_row:G$detail_table_header_row")->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FF1F456E');
-        $sheet ->getStyle("A$detail_table_header_row:E$detail_table_header_row")->applyFromArray($styleArray);
+        $sheet ->getStyle("A$detail_table_header_row:D$detail_table_header_row")->applyFromArray($styleArray);
         
 
         // LOOPING DETAIL
@@ -265,17 +261,16 @@ class AbsensiSupirApprovalHeaderController extends MyController
             
             foreach ($detail_columns as $detail_columns_index => $detail_column) {
                 $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
-                $sheet->getStyle("A$detail_table_header_row:E$detail_table_header_row")->getFont()->setBold(true);
-                $sheet->getStyle("A$detail_table_header_row:E$detail_table_header_row")->getAlignment()->setHorizontal('center');
+                $sheet->getStyle("A$detail_table_header_row:D$detail_table_header_row")->getFont()->setBold(true);
+                $sheet->getStyle("A$detail_table_header_row:D$detail_table_header_row")->getAlignment()->setHorizontal('center');
             }
         
             $sheet->setCellValue("A$detail_start_row", $response_index + 1);
-            $sheet->setCellValue("B$detail_start_row", $response_detail['nobukti']);
-            $sheet->setCellValue("C$detail_start_row", $response_detail['trado']);
-            $sheet->setCellValue("D$detail_start_row", $response_detail['supir']);
-            $sheet->setCellValue("E$detail_start_row", $response_detail['supirserap']);
+            $sheet->setCellValue("B$detail_start_row", $response_detail['trado']);
+            $sheet->setCellValue("C$detail_start_row", $response_detail['supir']);
+            $sheet->setCellValue("D$detail_start_row", $response_detail['supirserap']);
 
-            $sheet ->getStyle("A$detail_start_row:E$detail_start_row")->applyFromArray($styleArray);
+            $sheet ->getStyle("A$detail_start_row:D$detail_start_row")->applyFromArray($styleArray);
             $detail_start_row++;
         }
 
@@ -284,7 +279,6 @@ class AbsensiSupirApprovalHeaderController extends MyController
         $sheet->getColumnDimension('B')->setAutoSize(true);
         $sheet->getColumnDimension('C')->setAutoSize(true);
         $sheet->getColumnDimension('D')->setAutoSize(true);
-        $sheet->getColumnDimension('E')->setAutoSize(true);
 
         $writer = new Xlsx($spreadsheet);
         $filename = 'LaporanAbsensiSupirApproval' . date('dmYHis');

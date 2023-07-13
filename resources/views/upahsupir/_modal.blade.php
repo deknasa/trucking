@@ -419,9 +419,9 @@
         },
         data: formData,
         success: response => {
-          id = response.data.id
           $('#crudForm').trigger('reset')
           $('#crudModal').modal('hide')
+          id = response.data.id
 
           $('#jqGrid').trigger('reloadGrid', {
             page: response.data.page

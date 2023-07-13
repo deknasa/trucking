@@ -140,17 +140,17 @@ class ServiceInHeaderController extends MyController
         return $noBukti;
     }
 
-    // private function combo()
-    // {
-    //     $response = Http::withHeaders($this->httpHeaders)
-    //         ->withToken(session('access_token'))
-    //         ->withOptions(['verify' => false])
-    //         ->get(config('app.api_url') . 'serviceinheader/combo');
+    private function combo()
+    {
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withToken(session('access_token'))
+            ->withOptions(['verify' => false])
+            ->get(config('app.api_url') . 'serviceinheader/combo');
 
-    //     return $response['data'];
-    // }
+        return $response['data'];
+    }
 
-    public function combo($aksi)
+    public function comboReport($aksi)
     {
         $status = [
             'status' => $aksi,
@@ -184,7 +184,7 @@ class ServiceInHeaderController extends MyController
         ->get(config('app.api_url') .'serviceindetail', $detailParams);
         $serviceIn_details = $responses['data'];
 
-        $combo = $this->combo('list');
+        $combo = $this->comboReport('list');
         $key = array_search('CETAK', array_column( $combo, 'parameter')); 
         $serviceIn["combo"] =  $combo[$key];
         return view('reports.servicein', compact('serviceIn','serviceIn_details'));
