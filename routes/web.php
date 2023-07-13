@@ -1403,6 +1403,7 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('laporankartustok/index', [LaporanKartuStokController::class, 'index']);
     Route::resource('laporankartustok', LaporanKartuStokController::class);
     
+    Route::get('laporansaldoinventory/export', [LaporanSaldoInventoryController::class, 'export'])->name('laporansaldoinventory.export');
     Route::get('laporansaldoinventory/report', [LaporanSaldoInventoryController::class, 'report'])->name('laporansaldoinventory.report');
     Route::get('laporansaldoinventory/index', [LaporanSaldoInventoryController::class, 'index']);
     Route::resource('laporansaldoinventory', LaporanSaldoInventoryController::class);

@@ -10,124 +10,168 @@
                 </div>
                 <form id="crudForm">
                     <div class="card-body">
-                        <div class=" row">
-                            <label class="col-12 col-sm-2 col-form-label mt-2">Periode<span class="text-danger">*</span></label>
-                            <div class="col-sm-4 mt-2">
-                                <div class="input-group">
-                                    <input type="text" name="dari" class="form-control datepicker">
-                                </div>
-                            </div>
-                            <div class="col-sm-1 mt-2">
-                                <h5 class="text-center mt-2">s/d</h5>
-                            </div>
-                            <div class="col-sm-4 mt-2">
-                                <div class="input-group">
-                                    <input type="text" name="sampai" class="form-control datepicker">
-                                </div>
-                            </div>
-                        </div>
+                        
                         <div class="row">
-                            <label class="col-12 col-sm-2 col-form-label mt-2">Stok<span class="text-danger">*</span></label>
-
-                            <div class="col-sm-4 mt-2">
-                                <input type="hidden" name="stokdari_id">
-                                <input type="text" name="stokdari" class="form-control stokdari-lookup">
-                            </div>
-                            <div class="col-sm-1 mt-2">
-                                <h5 class="text-center mt-2">s/d</h5>
-                            </div>
-                            <div class="col-sm-4 mt-2">
-                                <input type="hidden" name="stoksampai_id">
-                                <input type="text" name="stoksampai" class="form-control stoksampai-lookup">
-                            </div>
-                        </div>
-
-                        <div class="row" id="kategori">
-                            <label class="col-12 col-sm-2 col-form-label mt-2">Kategori<span class="text-danger">*</span></label>
-                            <div class="col-sm-4 mt-2">
-                                <div class="input-group">
-                                    <input type="hidden" name="kategori_id">
-                                    <input type="text" name="kategori" class="form-control kategori-lookup">
+                            <div class="col-md-6">
+                                <div class="row" id="kelompok">
+                                    <label class="col-12 col-sm-3 col-form-label mt-2">kelompok<span class="text-danger">*</span></label>
+                                    <div class="col-sm-9 mt-2">
+                                        <div class="input-group">
+                                            <input type="hidden" name="kelompok_id">
+                                            <input type="text" name="kelompok" class="form-control kelompok-lookup">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="row">
-                           <div class="col-md-6">
-                               <div class="row">
-                                   
-                                   <label class="col-12 col-sm-4 col-form-label mt-2">FILTER<span class="text-danger">*</span></label>
-                                       
-                                    <div class="col-12 col-sm-8 mt-2">
-                                        <select name="filter" id="filter" class="form-select select2bs4" style="width: 100%;">
-                                        </select>
-                                   </div>
-                               </div>
-                               <div class="row" id="gudang">
-                                   <label class="col-12 col-sm-4 col-form-label mt-2">GUDANG<span class="text-danger">*</span></label>
-                                   <div class="col-12 col-sm-8 mt-2">
-                                       <div class="input-group">
-                                           <input type="hidden" name="gudang_id">
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <label class="col-12 col-sm-3  col-form-label mt-2">status reuse<span class="text-danger">*</span></label>
+                                    <div class="col-sm-9 mt-2"><!-- offset-sm-1 -->
+                                        <div class="input-group">
+                                            <select name="statusreuse" id="statusreuse" class="form-select select2bs4" style="width: 100%;">
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="row" id="kelompok">
+                                    <label class="col-12 col-sm-3  col-form-label mt-2">status ban<span class="text-danger">*</span></label>
+                                    <div class="col-sm-9 mt-2">
+                                        <div class="input-group">
+                                            <select name="statusban" id="statusban" class="form-select select2bs4" style="width: 100%;">
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <label class="col-12 col-sm-3  col-form-label mt-2">FILTER<span class="text-danger">*</span></label>
+                                    <div class="col-sm-9 mt-2">
+                                        <div class="input-group">
+                                            <select name="filter" id="filter" class="form-select select2bs4" style="width: 100%;">
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <label class="col-12 col-sm-3  col-form-label mt-2">jenis tgl Tampil<span class="text-danger">*</span></label>
+                                    <div class="col-sm-9 mt-2">
+                                        <div class="input-group">
+                                            <select name="jenistgltampil" id="jenistgltampil" class="form-select select2bs4" style="width: 100%;">
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="row" id="gudang">
+                                    <label class="col-12 col-sm-3 col-form-label mt-2">GUDANG<span class="text-danger">*</span></label>
+                                    <div class="col-sm-9 mt-2">
+                                        <div class="input-group">
+                                            <input type="hidden" name="gudang_id">
                                            <input type="text" name="gudang" class="form-control gudang-lookup">
-                                       </div>
-                                   </div>
-                               </div>
-                               <div class="row" id="trado">
-                                   <label class="col-12 col-sm-4 col-form-label mt-2">TRADO<span class="text-danger">*</span></label>
-                                   <div class="col-12 col-sm-8 mt-2">
-                                       <div class="input-group">
-                                           <input type="hidden" name="trado_id">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row" id="trado">
+                                    <label class="col-12 col-sm-3 col-form-label mt-2">TRADO<span class="text-danger">*</span></label>
+                                    <div class="col-sm-9 mt-2">
+                                        <div class="input-group">
+                                            <input type="hidden" name="trado_id">
                                            <input type="text" name="trado" class="form-control trado-lookup">
-                                       </div>
-                                   </div>
-                               </div>
-                               <div class="row" id="gandengan">
-                                   <label class="col-12 col-sm-4 col-form-label mt-2">GANDENGAN<span class="text-danger">*</span></label>
-                                   <div class="col-12 col-sm-8 mt-2">
-                                       <div class="input-group">
-                                           <input type="hidden" name="gandengan_id">
-                                           <input type="text" name="gandengan" class="form-control gandengan-lookup">
-                                       </div>
-                                   </div>
-                               </div>
-                           </div>
-
-                           <div class="col-md-6">
-                               <div class="row">
-                                   <label class="col-12 col-sm-2 col-form-label mt-2">status ban<span class="text-danger">*</span></label>
-                                    <div class="col-12 col-sm-8 mt-2">
-                                        <select name="statusban" id="statusban" class="form-select select2bs4" style="width: 100%;">
-                                        </select>
+                                        </div>
                                     </div>
                                 </div>
-                               <div class="row">
-                                   <label class="col-12 col-sm-2 col-form-label mt-2">status reuse<span class="text-danger">*</span></label>
-                                    <div class="col-12 col-sm-8 mt-2">
-                                        <select name="statusreuse" id="statusreuse" class="form-select select2bs4" style="width: 100%;">
-                                        </select>
+                                <div class="row" id="gandengan">
+                                    <label class="col-12 col-sm-3 col-form-label mt-2">GANDENGAN<span class="text-danger">*</span></label>
+                                    <div class="col-sm-9 mt-2">
+                                        <div class="input-group">
+                                            <input type="hidden" name="gandengan_id">
+                                            <input type="text" name="gandengan" class="form-control gandengan-lookup">
+                                        </div>
                                     </div>
                                 </div>
-                           </div>
-                       </div>
+    
+                            </div>
 
-                        <div class="row">
+                        </div>
 
-                            <div class="col-sm-6 mt-4">
-                                <a id="btnPreview" class="btn btn-info mr-1 ">
-                                    <i class="fas fa-print"></i>
-                                    Cetak
-                                </a>
-                                <a id="btnExport" class="btn btn-warning mr-2 ">
-                                    <i class="fas fa-file-export"></i>
-                                    Export
-                                </a>
+                        <div class=" row">
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <label class="col-12 col-sm-3 col-form-label mt-2">Priode<span class="text-danger">*</span></label>
+                                    <div class="col-sm-9 mt-2">
+                                        <div class="input-group">
+                                            <input type="text" name="dari" class="form-control datepicker">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <h5 class="col-12 col-sm-3 text-center mt-2">s/d</h5>
+                                    {{-- <label class="col-12 col-sm-3 col-form-label mt-2">Priode<span class="text-danger">*</span></label> --}}
+                                    <div class="col-sm-9 mt-2">
+                                        <div class="input-group">
+                                            <input type="text" name="sampai" class="form-control datepicker">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                           
+                        <div class=" row">
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <label class="col-12 col-sm-3 col-form-label mt-2">Stok<span class="text-danger">*</span></label>
+                                    <div class="col-sm-9 mt-2">
+                                        <div class="input-group">
+                                            <input type="hidden" name="stokdari_id">
+                                            <input type="text" name="stokdari" class="form-control stokdari-lookup">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {{-- <label class="col-12 col-sm-3 col-form-label mt-2">Priode<span class="text-danger">*</span></label> --}}
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <h5 class="col-12 col-sm-3 text-center mt-2">s/d</h5>
+                                    <div class="col-sm-9 mt-2">
+                                        <div class="input-group">
+                                            <input type="hidden" name="stoksampai_id">
+                                            <input type="text" name="stoksampai" class="form-control stoksampai-lookup">
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
+                        <div class=" row">
+                            <div class="col-md-6 mt-4">
+                                <a id="btnPreview" class="btn btn-info mr-1 ">
+                                   <i class="fas fa-print"></i>
+                                   Cetak
+                               </a>
+                               <a id="btnExport" class="btn btn-warning mr-2 ">
+                                   <i class="fas fa-file-export"></i>
+                                   Export
+                               </a>
+
+                            </div>
+                       </div>
                     </div>
+                    
                 </form>
             </div>
-            <table id="jqGrid"></table>
         </div>
     </div>
 </div>
@@ -141,6 +185,7 @@
         initSelect2($('#crudForm').find('[name=filter]'), false)
         initSelect2($('#crudForm').find('[name=statusban]'), false)
         initSelect2($('#crudForm').find('[name=statusreuse]'), false)
+        initSelect2($('#crudForm').find('[name=jenistgltampil]'), false)
 
         let form = $("#crudForm");
         $('#crudForm').find('[name=dari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
@@ -148,34 +193,91 @@
         setFilterOptions(form)
         setStatusBanOptions(form)
         setStatusReuseOptions(form)
+        setJenisTglTampilOptions(form)
     })
 
     $(document).on('click', `#btnPreview`, function(event) {
+        
+        let kelompok_id = $('#crudForm').find('[name=kelompok_id]').val()
+        let statusreuse = $('#crudForm').find('[name=statusreuse]').val()
+        let statusban = $('#crudForm').find('[name=statusban]').val()
+        let filter = $('#crudForm').find('[name=filter]').val()
+        let jenistgltampil = $('#crudForm').find('[name=jenistgltampil]').val()
+        let gudang_id = $('#crudForm').find('[name=gudang_id]').val()
+        let trado_id = $('#crudForm').find('[name=trado_id]').val()
+        let gandengan_id = $('#crudForm').find('[name=gandengan_id]').val()
         let dari = $('#crudForm').find('[name=dari]').val()
         let sampai = $('#crudForm').find('[name=sampai]').val()
         let stokdari_id = $('#crudForm').find('[name=stokdari_id]').val()
         let stoksampai_id = $('#crudForm').find('[name=stoksampai_id]').val()
-        let kategori_id = $('#crudForm').find('[name=kategori_id]').val()
-        let gudang_id = $('#crudForm').find('[name=gudang_id]').val()
-        if (dari != '' && sampai != '' && stokdari_id != '' && stoksampai_id != '' && kategori_id != '' & gudang_id != '') {
+        let dataFilter = ''
+        if (filter == '186') {
+            dataFilter = gudang_id
+        }
+        if (filter == '187') {
+            dataFilter = trado_id
+        }
+        if (filter == '188') {
+            dataFilter = gandengan_id
+        }
 
-            window.open(`{{ route('laporankartustok.report') }}?dari=${dari}&sampai=${sampai}&stokdari_id=${stokdari_id}&stoksampai_id=${stoksampai_id}&kategori_id=${kategori_id}&gudang_id=${gudang_id}`)
-        } else {
+        if(
+            (kelompok_id != '') &&
+            // (statusreuse != '') &&
+            // (statusban != '') &&
+            (filter != '') &&
+            (jenistgltampil != '') &&
+            (dari != '') &&
+            (sampai != '') &&
+            (stokdari_id != '') &&
+            (stoksampai_id != '') &&
+            (dataFilter != '') 
+        ){           
+            window.open(`{{ route('laporansaldoinventory.report') }}?kelompok_id=${kelompok_id}&statusreuse=${statusreuse}&statusban=${statusban}&filter=${filter}&jenistgltampil=${jenistgltampil}&dari=${dari}&sampai=${sampai}&stokdari_id=${stokdari_id}&stoksampai_id=${stoksampai_id}&dataFilter=${dataFilter}`)
+
+        }else {
             showDialog('ISI SELURUH KOLOM')
         }
     })
 
 
     $(document).on('click', `#btnExport`, function(event) {
+        let kelompok_id = $('#crudForm').find('[name=kelompok_id]').val()
+        let statusreuse = $('#crudForm').find('[name=statusreuse]').val()
+        let statusban = $('#crudForm').find('[name=statusban]').val()
+        let filter = $('#crudForm').find('[name=filter]').val()
+        let jenistgltampil = $('#crudForm').find('[name=jenistgltampil]').val()
+        let gudang_id = $('#crudForm').find('[name=gudang_id]').val()
+        let trado_id = $('#crudForm').find('[name=trado_id]').val()
+        let gandengan_id = $('#crudForm').find('[name=gandengan_id]').val()
         let dari = $('#crudForm').find('[name=dari]').val()
         let sampai = $('#crudForm').find('[name=sampai]').val()
         let stokdari_id = $('#crudForm').find('[name=stokdari_id]').val()
         let stoksampai_id = $('#crudForm').find('[name=stoksampai_id]').val()
-         let kategori_id = $('#crudForm').find('[name=kategori_id]').val()
-         let gudang_id = $('#crudForm').find('[name=gudang_id]').val()
-        if (dari != '' && sampai != '' && stokdari_id != '' && stoksampai_id != '' && kategori_id != '' && gudang_id != '') {
+        let dataFilter = ''
+        if (filter == '186') {
+            dataFilter = gudang_id
+        }
+        if (filter == '187') {
+            dataFilter = trado_id
+        }
+        if (filter == '188') {
+            dataFilter = gandengan_id
+        }
 
-            window.open(`{{ route('laporanbukubesar.export') }}?dari=${dari}&sampai=${sampai}&stokdari_id=${stokdari_id}&stoksampai_id=${stoksampai_id}&kategori_id=${kategori_id}&gudang_id=${gudang_id}`)
+        if(
+            (kelompok_id != '') &&
+            // (statusreuse != '') &&
+            // (statusban != '') &&
+            (filter != '') &&
+            (jenistgltampil != '') &&
+            (dari != '') &&
+            (sampai != '') &&
+            (stokdari_id != '') &&
+            (stoksampai_id != '') &&
+            (dataFilter != '') 
+        ){ 
+            window.open(`{{ route('laporansaldoinventory.export') }}?kelompok_id=${kelompok_id}&statusreuse=${statusreuse}&statusban=${statusban}&filter=${filter}&jenistgltampil=${jenistgltampil}&dari=${dari}&sampai=${sampai}&stokdari_id=${stokdari_id}&stoksampai_id=${stoksampai_id}&dataFilter=${dataFilter}`)
         } else {
             showDialog('ISI SELURUH KOLOM')
         }
@@ -229,24 +331,24 @@
             }
         })
 
-        $('.kategori-lookup').lookup({
-            title: 'kategori dari lookup',
-            fileName: 'kategori',
+        $('.kelompok-lookup').lookup({
+            title: 'kelompok dari lookup',
+            fileName: 'kelompok',
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
                 }
             },
-            onSelectRow: (kategori, element) => {
-                $('#crudForm [name=kategori_id]').first().val(kategori.id)
-                element.val(kategori.kodekategori)
+            onSelectRow: (kelompok, element) => {
+                $('#crudForm [name=kelompok_id]').first().val(kelompok.id)
+                element.val(kelompok.kodekelompok)
                 element.data('currentValue', element.val())
             },
             onCancel: (element) => {
                 element.val(element.data('currentValue'))
             },
             onClear: (element) => {
-                $('#crudForm [name=kategori_id]').first().val('')
+                $('#crudForm [name=kelompok_id]').first().val('')
                 element.val('')
                 element.data('currentValue', element.val())
             }
@@ -294,7 +396,7 @@
         } else {
             $('#trado').hide()
             $('#gandengan').hide()
-            $('#gudang').hide()
+            $('#gudang').show()
         }
     })
         
@@ -375,6 +477,47 @@
             })
         })
     }
+    
+    const setJenisTglTampilOptions = function(relatedForm) {
+        return new Promise((resolve, reject) => {
+            relatedForm.find('[name=jenistgltampil]').empty()
+            relatedForm.find('[name=jenistgltampil]').append(
+              new Option('-- PILIH jenis tgl tampil --', '', false, true)
+            ).trigger('change')
+            
+            $.ajax({
+              url: `${apiUrl}parameter`,
+              method: 'GET',
+              dataType: 'JSON',
+              headers: {
+                Authorization: `Bearer ${accessToken}`
+              },
+              data: {
+                filters: JSON.stringify({
+                  "groupOp": "AND",
+                  "rules": [{
+                    "field": "grp",
+                    "op": "cn",
+                    "data": "STATUS KONDISI BAN"
+                  }]
+                })
+              },
+              success: response => {
+                response.data.forEach(statusReuse => {
+                  let option = new Option(statusReuse.text, statusReuse.id)
+      
+                  relatedForm.find('[name=jenistgltampil]').append(option).trigger('change')
+                });
+      
+                resolve()
+              },
+              error: error => {
+                reject(error)
+              }
+            })
+        })
+    }
+
     const setStatusReuseOptions = function(relatedForm) {
     return new Promise((resolve, reject) => {
       relatedForm.find('[name=statusreuse]').empty()
@@ -401,7 +544,7 @@
         },
         success: response => {
           response.data.forEach((statusReuse,index) => {
-            dataReuse[index] = statusReuse
+            // dataReuse[index] = statusReuse
             // dataReuse[index]['text'] =  statusReuse.text
 
             let option = new Option(statusReuse.text, statusReuse.id)

@@ -27,8 +27,16 @@ class LaporanSaldoInventoryController extends Controller
     {
       
         $detailParams = [
-            'dari' => $request->dari,
-            'sampai' => $request->sampai,
+            'kelompok_id' => $request->kelompok_id,
+            'statusreuse' => $request->statusreuse,
+            'statusban' => $request->statusban,
+            'filter' => $request->filter,
+            'jenistgltampil' => $request->jenistgltampil,
+            'tgldari' => $request->dari,
+            'tglsampai' => $request->sampai,
+            'stokdari_id' => $request->stokdari_id,
+            'stoksampai_id' => $request->stoksampai_id,
+            'dataFilter' => $request->dataFilter,
         ];
 
         $header = Http::withHeaders(request()->header())
@@ -44,33 +52,61 @@ class LaporanSaldoInventoryController extends Controller
     public function export(Request $request): void
     {
         $detailParams = [
-            'dari' => $request->dari,
-            'sampai' => $request->sampai,
+            'kelompok_id' => $request->kelompok_id,
+            'statusreuse' => $request->statusreuse,
+            'statusban' => $request->statusban,
+            'filter' => $request->filter,
+            'jenistgltampil' => $request->jenistgltampil,
+            'tgldari' => $request->dari,
+            'tglsampai' => $request->sampai,
+            'stokdari_id' => $request->stokdari_id,
+            'stoksampai_id' => $request->stoksampai_id,
+            'dataFilter' => $request->dataFilter,
         ];
-       
 
         $header = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'laporansaldoinventory/export', $detailParams);
+            ->get(config('app.api_url') . 'laporansaldoinventory/report', $detailParams);
 
         $data = $header['data'];
+        $user = Auth::user();
 
+        $data = $header['data'];
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setCellValue('b1', 'LAPORAN PENYESUAIAN BARANG');
-        $sheet->getStyle("B1")->getFont()->setSize(20)->setBold(true);
-        $sheet->getStyle('B1')->getAlignment()->setHorizontal('center');
-        $sheet->mergeCells('B1:I3');
+        $sheet->setCellValue('A1', $data[0]['header']);
+        $sheet->getStyle("A1")->getFont()->setSize(20)->setBold(true);
+        $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
+        $sheet->mergeCells('A1:G1');
 
         $sheet->setCellValue('A4', 'PERIODE');
         $sheet->getStyle("A4")->getFont()->setSize(12)->setBold(true);
         $sheet->getStyle("B4")->getFont()->setSize(12)->setBold(true);
 
         $sheet->setCellValue('B4',': '. $request->dari." S/D"." ".$request->sampai);
+
+        $sheet->setCellValue('A5', 'STOK');
+        $sheet->getStyle("A5")->getFont()->setSize(12)->setBold(true);
+        $sheet->getStyle("B5")->getFont()->setSize(12)->setBold(true);
+
+        $sheet->setCellValue('B5',': '.  $data[0]['stokdari']." S/D"." ". $data[0]['stoksampai']);
+        
+        $sheet->setCellValue('A6', 'KATEGORI');
+        $sheet->getStyle("A6")->getFont()->setSize(12)->setBold(true);
+        $sheet->getStyle("B6")->getFont()->setSize(12)->setBold(true);
+
+        $sheet->setCellValue('B6',': '.  $data[0]['kategori']);
+        
+        $sheet->setCellValue('A7', $data[0]['lokasi']);
+        $sheet->getStyle("A7")->getFont()->setSize(12)->setBold(true);
+        $sheet->getStyle("B7")->getFont()->setSize(12)->setBold(true);
+
+        $sheet->setCellValue('B7',': '.  $data[0]['namalokasi']);
+
         $sheet->getStyle("C4")->getFont()->setSize(12)->setBold(true);
 
-        $detail_table_header_row = 6;
+        $detail_table_header_row = 9;
         $detail_start_row = $detail_table_header_row + 1;
 
         $alphabets = range('A', 'Z');
@@ -98,45 +134,33 @@ class LaporanSaldoInventoryController extends Controller
 
         $header_columns = [
             [
-                'label' => 'No Polisi',
-                'index' => 'nopolisi',
+                "index" =>"vulkanisirke",
+                "label" =>"vulkanisirke",
             ],
             [
-                'label' => 'No Bukti',
-                'index' => 'nobukti',
+                "index" =>"kodebarang",
+                "label" =>"kodebarang",
             ],
             [
-                'label' => 'TGL bukti',
-                'index' => 'tglbukti',
+                "index" =>"namabarang",
+                "label" =>"namabarang",
             ],
             [
-                'label' => 'Keterangan',
-                'index' => 'keterangan',
+                "index" =>"tanggal",
+                "label" =>"tanggal",
             ],
             [
-                'label' => 'Kode Stok',
-                'index' => 'stok_id',
+                "index" =>"qty",
+                "label" =>"qty",
             ],
             [
-                'label' => 'Nama Stok',
-                'index' => 'namastok',
+                "index" =>"satuan",
+                "label" =>"satuan",
             ],
             [
-                'label' => 'Gudang',
-                'index' => 'gudang',
-            ],
-            [
-                'label' => 'QTY',
-                'index' => 'qty',
-            ],
-            [
-                'label' => 'Harga',
-                'index' => 'harga',
-            ],
-            [
-                'label' => 'Nominal',
-                'index' => 'nominal',
-            ],
+                "index" =>"nominal",
+                "label" =>"nominal",
+            ]
         ];
 
         
@@ -144,11 +168,9 @@ class LaporanSaldoInventoryController extends Controller
         foreach ($header_columns as $detail_columns_index => $detail_column) {
             $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_table_header_row, $detail_column['label'] ?? $detail_columns_index + 1);
         }
-        $sheet->getStyle("A$detail_table_header_row:J$detail_table_header_row")->applyFromArray($styleArray)->getFont()->setBold(true);
+        $sheet->getStyle("A$detail_table_header_row:G$detail_table_header_row")->applyFromArray($styleArray)->getFont()->setBold(true);
 
         // LOOPING DETAIL
-        $totalDebet = 0;
-        $totalKredit = 0;
         $totalSaldo = 0;
         foreach ($data as $response_index => $response_detail) {
 
@@ -156,40 +178,29 @@ class LaporanSaldoInventoryController extends Controller
                 $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
             }
 
-            $sheet->setCellValue("A$detail_start_row", $response_detail['nopolisi']);
-            $sheet->setCellValue("B$detail_start_row", $response_detail['nobukti']);
-            $sheet->setCellValue("C$detail_start_row", $response_detail['tglbukti']);
-            $sheet->setCellValue("D$detail_start_row", $response_detail['keterangan']);
-            $sheet->setCellValue("E$detail_start_row", $response_detail['stok_id']);
-            $sheet->setCellValue("F$detail_start_row", $response_detail['namastok']);
-            $sheet->setCellValue("G$detail_start_row", $response_detail['gudang']);
-            $sheet->setCellValue("H$detail_start_row", $response_detail['qty']);
-            $sheet->setCellValue("I$detail_start_row", $response_detail['harga']);
-            $sheet->setCellValue("J$detail_start_row", $response_detail['nominal']);
 
-            $sheet->getStyle("A$detail_start_row:J$detail_start_row")->applyFromArray($styleArray);
-             $sheet->getStyle("I$detail_start_row:J$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
-             $sheet->getStyle("C$detail_start_row:C$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
+            $sheet->setCellValue("A$detail_start_row", $response_detail['vulkanisirke']);
+            $sheet->setCellValue("B$detail_start_row", $response_detail['kodebarang']);
+            $sheet->setCellValue("C$detail_start_row", $response_detail['namabarang']);
+            $sheet->setCellValue("D$detail_start_row", $response_detail['tanggal']);
+            $sheet->setCellValue("E$detail_start_row", $response_detail['qty']);
+            $sheet->setCellValue("F$detail_start_row", $response_detail['satuan']);
+            $sheet->setCellValue("G$detail_start_row", $response_detail['nominal']);
+
+            $sheet->getStyle("A$detail_start_row:G$detail_start_row")->applyFromArray($styleArray);
+             $sheet->getStyle("G$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+             $sheet->getStyle("D$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
 
 
-           $totalKredit += $response_detail['harga'];
-            $totalDebet += $response_detail['nominal'];
+            $totalSaldo += $response_detail['nominal'];
             $detail_start_row++;
         }
 
          //total
-       $total_start_row = $detail_start_row;
-       $sheet->mergeCells('A' . $total_start_row . ':H' . $total_start_row);
-       $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A' . $total_start_row . ':H' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
-
-
-       $totalKredit = "=SUM(I6:I" . ($detail_start_row-1) . ")";
-       $sheet->setCellValue("I$total_start_row", $totalKredit)->getStyle("I$total_start_row")->applyFromArray($style_number);
-       $sheet->setCellValue("I$total_start_row", $totalKredit)->getStyle("I$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
-
-       $totalSaldo = "=SUM(J6:J" . ($detail_start_row-1) . ")";
-       $sheet->setCellValue("J$total_start_row", $totalSaldo)->getStyle("J$total_start_row")->applyFromArray($style_number);
-       $sheet->setCellValue("J$total_start_row", $totalSaldo)->getStyle("J$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+       $totalSaldo = "=SUM(G7:G" . ($detail_start_row-1) . ")";
+       $sheet->setCellValue("A$detail_start_row", "TOTAL")->getStyle("A$detail_start_row:G$detail_start_row")->applyFromArray($style_number);
+       $sheet->setCellValue("G$detail_start_row", $totalSaldo)->getStyle("G$detail_start_row")->applyFromArray($style_number);
+       $sheet->setCellValue("G$detail_start_row", $totalSaldo)->getStyle("G$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
 
         // set diketahui dibuat
         $ttd_start_row = $detail_start_row + 2;
