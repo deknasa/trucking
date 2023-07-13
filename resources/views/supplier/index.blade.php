@@ -64,7 +64,7 @@
         datatype: "json",
         colModel: [{
             label: '',
-            name: '',
+            name: 'check',
             width: 30,
             align: 'center',
             sortable: false,
