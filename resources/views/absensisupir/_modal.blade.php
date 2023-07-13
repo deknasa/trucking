@@ -811,7 +811,7 @@
       url = `{{ config('app.api_url') }}absensisupirheader/${Id}/cekvalidasi`;
     }
     if (Aksi == 'DELETE') {
-      url = `{{ config('app.api_url') }}absensisupirheader/${Id}/cekvalidasidelete`;
+      url = `{{ config('app.api_url') }}absensisupirheader/${Id}/cekvalidasi`;
     }
     $.ajax({
       url:url,
