@@ -91,7 +91,11 @@ class AuthController extends Controller
             ])->withOptions(['verify' => false])
             ->post(config('app.api_url') . 'token', $credentials);
 
-           
+            $tokenMedan = Http::withHeaders([
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json'
+            ]) ->post('https://tasmdn.kozow.com:8074/trucking-api/public/api/token', $credentials);
+
             $tokenEmkl = Http::withHeaders([
                 'Accept' => 'application/json'
             ])->withOptions(['verify' => false])
@@ -100,6 +104,7 @@ class AuthController extends Controller
             // dd($tokenEmkl->getBody()->getContents());
             
             session(['access_token' => $token['access_token']]);
+            session(['access_token_mdn' => $tokenMedan['access_token']]);
             session(['access_token_emkl' => $tokenEmkl['access_token']]);
             session(['menus' => (new Menu())->getMenu()]);
 

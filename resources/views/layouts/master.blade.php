@@ -326,9 +326,11 @@
   <script type="text/javascript">
     let accessToken = `{{ session('access_token') }}`
     let accessTokenEmkl = `{{ session('access_token_emkl') }}`
+    let accessTokenMdn = `{{ session('access_token_mdn') }}`
     let appUrl = `{{ url()->to('/') }}`
     let apiUrl = `{{ config('app.api_url') }}`
     let apiEmklUrl = `{{ config('app.emkl_api_url') }}`
+    let apiTruckingMdnUrl = `{{ config('app.trucking_api_mdn_url') }}`
     var pleaseSelectARow; 
     function separatorNumber(object) {
       var value = parseInt(object.value.replaceAll('.', '').replaceAll(',', ''));

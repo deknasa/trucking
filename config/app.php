@@ -258,4 +258,6 @@ return [
     'apppath' => 'c:/xampp/htdocs/truck/app/http/',
 
     'version' => '0.1.0',
+    'trucking_api_mdn_url' => env('TRUCKING_API_MDN_URL', 'https://tasmdn.kozow.com:8074/trucking-api/public/api/'),
+
 ];
