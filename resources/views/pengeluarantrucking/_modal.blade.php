@@ -419,6 +419,9 @@
             } else {
               element.val(value)
             }
+            if (index == 'kodepengeluaran') {
+              element.attr('readonly', true)
+            }
 
             if (index == 'coadebetKeterangan') {
               element.data('current-value', value)

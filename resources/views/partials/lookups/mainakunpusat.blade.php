@@ -10,7 +10,7 @@
       postData: {
         level: `{!! $levelCoa ?? '' !!}`,
         potongan: `{!! $potongan ?? '' !!}`,
-        aktif: `{!! $Aktif ?? '' !!}`,        
+        aktif: `{!! $Aktif ?? '' !!}`,
         // filters: `{!! $filters ?? '' !!}`
       },
       idPrefix: 'mainAkunPusatLookup',
@@ -19,7 +19,7 @@
           name: 'id',
           align: 'right',
           width: '70px',
-            search: false,
+          search: false,
           hidden: true
         },
         {
@@ -94,7 +94,8 @@
           align: 'left',
         },
         {
-          label: 'NAMA',
+          label: 'keterangan kode perkiraan',
+          width: 220,
           name: 'keterangancoa',
           align: 'left'
         },
@@ -102,6 +103,10 @@
           label: 'TYPE',
           name: 'type',
           align: 'left'
+        },
+        {
+          label: 'AKUNTANSI',
+          name: 'akuntansi',
         },
         {
           label: 'LEVEL',
@@ -114,10 +119,11 @@
           align: 'left'
         },
         {
-          label: 'status kode perkiraan', width: 210,
+          label: 'status kode perkiraan',
+          width: 210,
           name: 'statuscoa',
           align: 'left',
-          
+
           stype: 'select',
           searchoptions: {
             dataInit: function(element) {
@@ -182,10 +188,10 @@
         },
         {
           label: 'STATUS ACCOUNT PAYABLE',
-width: 210,
+          width: 210,
           name: 'statusaccountpayable',
           align: 'left',
-          
+
           stype: 'select',
           searchoptions: {
             dataInit: function(element) {
@@ -318,7 +324,7 @@ width: 210,
           label: 'STATUS LABA RUGI',
           name: 'statuslabarugi',
           align: 'left',
-          
+
           stype: 'select',
           searchoptions: {
             dataInit: function(element) {
@@ -386,26 +392,26 @@ width: 210,
           name: 'modifiedby',
           align: 'left'
         },
-          {
-            label: 'CREATEDAT',
-            name: 'created_at',
-            align: 'right',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y H:i:s"
-            }
-          },
-          {
-            label: 'UPDATEDAT',
-            name: 'updated_at',
-            align: 'right',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y H:i:s"
-            }
-          },
+        {
+          label: 'CREATEDAT',
+          name: 'created_at',
+          align: 'right',
+          formatter: "date",
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y H:i:s"
+          }
+        },
+        {
+          label: 'UPDATEDAT',
+          name: 'updated_at',
+          align: 'right',
+          formatter: "date",
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y H:i:s"
+          }
+        },
       ],
       autowidth: true,
       responsive: true,
@@ -446,7 +452,7 @@ width: 210,
         setGridLastRequest($(this), jqXHR)
       },
       loadComplete: function(data) {
-          changeJqGridRowListText()
+        changeJqGridRowListText()
         if (detectDeviceType() == 'desktop') {
           $(document).unbind('keydown')
           setCustomBindKeys($(this))

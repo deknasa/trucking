@@ -416,7 +416,9 @@
             } else {
               element.val(value)
             }
-
+            if (index == 'kodepenerimaan') {
+              element.attr('readonly', true)
+            }
             if (index == 'coadebetKeterangan') {
               element.data('current-value', value)
             }

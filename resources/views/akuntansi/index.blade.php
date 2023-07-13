@@ -194,7 +194,8 @@
           } else {
             $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
           }
-
+          $('#left-nav').find('button').attr('disabled', false)
+          permission()
           setHighlight($(this))
         }
       })
@@ -207,7 +208,7 @@
         groupOp: 'AND',
         beforeSearch: function() {
           abortGridLastRequest($(this))
-          
+          $('#left-nav').find(`button:not(#add)`).attr('disabled', 'disabled')
           clearGlobalSearch($('#jqGrid'))
         }
       })
@@ -233,7 +234,7 @@
               } else {
                 editAkuntansi(selectedId)
               }
-              
+
             }
           },
           {
@@ -291,24 +292,26 @@
       .addClass('btn-sm btn-danger')
       .parent().addClass('px-1')
 
+    function permission() {
+      if (!`{{ $myAuth->hasPermission('akuntansi', 'store') }}`) {
+        $('#add').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('akuntansi', 'store') }}`) {
-      $('#add').attr('disabled', 'disabled')
+      if (!`{{ $myAuth->hasPermission('akuntansi', 'update') }}`) {
+        $('#edit').attr('disabled', 'disabled')
+      }
+
+      if (!`{{ $myAuth->hasPermission('akuntansi', 'destroy') }}`) {
+        $('#delete').attr('disabled', 'disabled')
+      }
+      if (!`{{ $myAuth->hasPermission('akuntansi', 'export') }}`) {
+        $('#export').attr('disabled', 'disabled')
+      }
+      if (!`{{ $myAuth->hasPermission('akuntansi', 'report') }}`) {
+        $('#report').attr('disabled', 'disabled')
+      }
     }
 
-    if (!`{{ $myAuth->hasPermission('akuntansi', 'update') }}`) {
-      $('#edit').attr('disabled', 'disabled')
-    }
-
-    if (!`{{ $myAuth->hasPermission('akuntansi', 'destroy') }}`) {
-      $('#delete').attr('disabled', 'disabled')
-    }
-    if (!`{{ $myAuth->hasPermission('akuntansi', 'export') }}`) {
-      $('#export').attr('disabled', 'disabled')
-    }
-    if (!`{{ $myAuth->hasPermission('akuntansi', 'report') }}`) {
-      $('#report').attr('disabled', 'disabled')
-    }
     $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {
         $.each(autoNumericElements, (index, autoNumericElement) => {
@@ -323,7 +326,7 @@
       if (page == 0) {
         $('#formRange [name=dari]').val(page)
         $('#formRange [name=sampai]').val(totalRecord)
-      }else{
+      } else {
         $('#formRange [name=dari]').val((indexRow + 1) + (limit * (page - 1)))
         $('#formRange [name=sampai]').val(totalRecord)
       }
@@ -350,7 +353,7 @@
       let submitButton = $(this).find('button:submit')
       submitButton.attr('disabled', 'disabled')
       $('#processingLoader').removeClass('d-none')
-      
+
       /* Set params value */
       for (var key in postData) {
         if (params != "") {
@@ -366,82 +369,83 @@
       params += `&offset=${offset}&limit=${limit}`
 
       getCekExport(params).then((response) => {
-        if ($('#rangeModal').data('action') == 'export') {
-          $.ajax({
-            url: '{{ config('app.api_url') }}akuntansi/export?' + params,
-            type: 'GET',
-            beforeSend: function(xhr) {
-                xhr.setRequestHeader('Authorization', 'Bearer {{ session('access_token') }}');
-            },
-            xhrFields: {
+          if ($('#rangeModal').data('action') == 'export') {
+            $.ajax({
+              url: `{{ config('app.api_url ') }}akuntansi/export?` + params,
+              type: 'GET',
+              beforeSend: function(xhr) {
+                xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token ') }}`);
+              },
+              xhrFields: {
                 responseType: 'arraybuffer'
-            },
-            success: function(response, status, xhr) {
+              },
+              success: function(response, status, xhr) {
                 if (xhr.status === 200) {
-                    if (response !== undefined) {
-                        var blob = new Blob([response], {
-                            type: 'akuntansi/vnd.ms-excel'
-                        });
-                        var link = document.createElement('a');
-                        link.href = window.URL.createObjectURL(blob);
-                        link.download = 'laporanakuntansi' + new Date().getTime() + '.xlsx';
-                        link.click();
-                    }
-                    $('#rangeModal').modal('hide')
+                  if (response !== undefined) {
+                    var blob = new Blob([response], {
+                      type: 'akuntansi/vnd.ms-excel'
+                    });
+                    var link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = 'laporanakuntansi' + new Date().getTime() + '.xlsx';
+                    link.click();
+                  }
+                  $('#rangeModal').modal('hide')
                 }
-            },
-            error: function(xhr, status, error) {
-                                    $('#processingLoader').addClass('d-none')
+              },
+              error: function(xhr, status, error) {
+                $('#processingLoader').addClass('d-none')
                 submitButton.removeAttr('disabled')
-            }
-          }).always(() => {
+              }
+            }).always(() => {
               $('#processingLoader').addClass('d-none')
               submitButton.removeAttr('disabled')
-          })
-        } else if ($('#rangeModal').data('action') == 'report') {
-          window.open(`{{ route('akuntansi.report') }}?${params}`)
-          submitButton.removeAttr('disabled')
-          $('#processingLoader').addClass('d-none')
-          $('#rangeModal').modal('hide')
-        }
-      }).catch((error) => {
-        if (error.status === 422) {
-          $('.is-invalid').removeClass('is-invalid')
-          $('.invalid-feedback').remove()
-          errors = error.responseJSON.errors
+            })
+          } else if ($('#rangeModal').data('action') == 'report') {
+            window.open(`{{ route('akuntansi.report') }}?${params}`)
+            submitButton.removeAttr('disabled')
+            $('#processingLoader').addClass('d-none')
+            $('#rangeModal').modal('hide')
+          }
+        }).catch((error) => {
+          if (error.status === 422) {
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+            errors = error.responseJSON.errors
 
-          $.each(errors, (index, error) => {
-            let indexes = index.split(".");
-            indexes[0] = 'sampai'
-            let element;
-            element = $('#rangeModal').find(`[name="${indexes[0]}"]`)[0];
+            $.each(errors, (index, error) => {
+              let indexes = index.split(".");
+              indexes[0] = 'sampai'
+              let element;
+              element = $('#rangeModal').find(`[name="${indexes[0]}"]`)[0];
 
-            $(element).addClass("is-invalid");
-            $(`
+              $(element).addClass("is-invalid");
+              $(`
               <div class="invalid-feedback">
               ${error[0].toLowerCase()}
               </div>
 			    `).appendTo($(element).parent());
 
-          });
+            });
 
-          $(".is-invalid").first().focus();
-          $('#processingLoader').addClass('d-none')
-          $('#processingLoader').addClass('d-none')
-          $('#processingLoader').addClass('d-none')
-        } else {
-          showDialog(error.statusText)
-        }
-      })
-      
-      .finally(() => {
-        $('.ui-button').click()
-        
-        submitButton.removeAttr('disabled')
-      })
+            $(".is-invalid").first().focus();
+            $('#processingLoader').addClass('d-none')
+            $('#processingLoader').addClass('d-none')
+            $('#processingLoader').addClass('d-none')
+          } else {
+            showDialog(error.statusText)
+          }
+        })
+
+        .finally(() => {
+          $('.ui-button').click()
+
+          submitButton.removeAttr('disabled')
+        })
     })
+
     function getCekExport(params) {
-      
+
       params += `&cekExport=true`
 
       return new Promise((resolve, reject) => {
@@ -462,8 +466,7 @@
       });
     }
 
-    })
-    
+  })
 </script>
 @endpush()
 @endsection
