@@ -275,12 +275,12 @@
         groupOp: 'AND',
         disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
-          abortGridLastRequest($(this))          
+          abortGridLastRequest($(this))
           $('#jqGrid').setGridParam({
-              postData: {
-                proses: "page"
-              }
-            })
+            postData: {
+              proses: "page"
+            }
+          })
           $('#left-nav').find(`button:not(#add)`).attr('disabled', 'disabled')
           clearGlobalSearch($('#jqGrid'))
         },
@@ -494,12 +494,19 @@
         },
         data: form_data,
         success: response => {
-          $('#formImport').trigger('reset')
-          $('#importModal').modal('hide')
-          $('#jqGrid').jqGrid().trigger('reloadGrid');
+          var kondisi = response.kondisi
+          console.log(kondisi)
+          if (kondisi == false) {
+            $('#formImport').trigger('reset')
+            $('#importModal').modal('hide')
+            $('#jqGrid').jqGrid().trigger('reloadGrid');
 
-          $('.is-invalid').removeClass('is-invalid')
-          $('.invalid-feedback').remove()
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+          } else {
+
+            showDialog(response.message['keterangan'])
+          }
         },
         error: error => {
           if (error.status === 422) {
