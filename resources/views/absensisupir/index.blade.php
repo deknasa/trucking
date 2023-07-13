@@ -239,7 +239,7 @@
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
           
           loadDetailData(id)
-          loadKasGantungData()
+          loadKasGantungData(nobukti)
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
