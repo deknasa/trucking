@@ -36,7 +36,7 @@
        
         {
           label: 'STATUS AKTIF',
-          name: 'statusaktif',
+          name: 'status',
           stype: 'select',
           searchoptions: {
             dataInit: function(element) {
@@ -94,7 +94,7 @@
             return formattedValue[0].outerHTML
           },
           cellattr: (rowId, value, rowObject) => {
-            let statusAktif = JSON.parse(rowObject.statusaktif)
+            let statusAktif = JSON.parse(rowObject.status)
 
             return ` title="${statusAktif.MEMO}"`
           }
