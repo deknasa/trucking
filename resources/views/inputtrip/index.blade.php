@@ -393,9 +393,15 @@
       } else if (jenisorder_id.val() == '') {
         upahSupirReadOnly()
       } else {
-        upahsupir.attr('readonly', false)
-        upahsupir.parents('.input-group').find('.input-group-append').show()
-        upahsupir.parents('.input-group').find('.button-clear').show()
+        if (upahsupir.val() != '') {
+          upahsupir.val('')
+          $('#crudForm [name=upah]').val('')
+          clearUpahSupir()
+        } else {
+          upahsupir.attr('readonly', false)
+          upahsupir.parents('.input-group').find('.input-group-append').show()
+          upahsupir.parents('.input-group').find('.button-clear').show()
+        }
       }
     }
   }
@@ -1256,6 +1262,7 @@
   }
 
   let index = 0;
+
   function addRow() {
     let detailRow = $(`
       <tr>

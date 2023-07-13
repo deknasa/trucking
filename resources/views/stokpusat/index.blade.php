@@ -10,9 +10,7 @@
     </div>
 </div>
 
-@include('akunpusat._modal')
-
-@include('akunpusat.transfer._modal')
+@include('stokpusat._modal')
 @push('scripts')
 <script>
     let indexRow = 0;
@@ -25,14 +23,14 @@
     let totalRecord
     let limit
     let postData
-    let sortname = 'coa'
+    let sortname = 'namastok'
     let sortorder = 'asc'
     let autoNumericElements = []
     let rowNum = 10
 
     $(document).ready(function() {
         $("#jqGrid").jqGrid({
-                url: `${apiUrl}akunpusat`,
+                url: `${apiUrl}stokpusat`,
                 mtype: "GET",
                 styleUI: 'Bootstrap4',
                 iconSet: 'fontAwesome',
