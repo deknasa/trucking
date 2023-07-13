@@ -66,8 +66,8 @@
         },
         jsonReader: {
           root: 'data',
-          total: 'total',
-          records: 'records',
+          total: 'attributes.totalPages',
+          records: 'attributes.totalRows',
         },
         loadBeforeSend: function(jqXHR) {
           jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
