@@ -232,6 +232,7 @@ use App\Http\Controllers\MainAkunPusatController;
 use App\Http\Controllers\LaporanHistoryDepositoController;
 use App\Http\Controllers\LaporanPinjamanPerUnitTradoController;
 use App\Http\Controllers\ResetPasswordController;
+use App\Http\Controllers\StokPusatController;
 use App\Http\Controllers\UbahPasswordController;
 
 /*
@@ -1425,6 +1426,9 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('laporanpinjamanperunittrado/export', [LaporanPinjamanPerUnitTradoController::class, 'export'])->name('laporanpinjamanperunittrado.export');
     Route::get('laporanpinjamanperunittrado/index', [LaporanPinjamanPerUnitTradoController::class, 'index']);
     Route::resource('laporanpinjamanperunittrado', LaporanPinjamanPerUnitTradoController::class);
+
+    Route::get('stokpusat/index', [StokPusatController::class, 'index']);
+    Route::resource('stokpusat', StokPusatController::class);
 });
 
 Route::patch('format', [FormatController::class, 'update']);

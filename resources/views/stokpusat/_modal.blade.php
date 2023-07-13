@@ -1,0 +1,206 @@
+<div class="modal modal-fullscreen" id="crudModal" tabindex="-1" aria-labelledby="crudModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form action="#" id="crudForm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <p class="modal-title" id="crudModalTitle"></p>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+
+                    </button>
+                </div>
+                <form action="" method="post">
+                    <div class="modal-body">
+
+                        <input type="hidden" name="id" class="form-control">
+                        <div class="row form-group">
+                            <div class="col-12 col-sm-3 col-md-2">
+                                <label class="col-form-label">
+                                    Kelompok <span class="text-danger">*</span>
+                                </label>
+                            </div>
+                            <div class="col-12 col-sm-9 col-md-10">
+                                <input type="hidden" name="kelompok_id">
+                                <input type="text" name="kelompok" class="form-control kelompok-lookup">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-start">
+                        <button id="btnSubmit" class="btn btn-primary">
+                            <i class="fa fa-save"></i>
+                            Simpan
+                        </button>
+                        <button class="btn btn-secondary" data-dismiss="modal">
+                            <i class="fa fa-times"></i>
+                            Batal
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </form>
+    </div>
+</div>
+
+@push('scripts')
+<script>
+    let hasFormBindKeys = false
+    let modalBody = $('#crudModal').find('.modal-body').html()
+
+
+    $(document).ready(function() {
+        $('#btnSubmit').click(function(event) {
+            event.preventDefault()
+
+            let method
+            let url
+            let form = $('#crudForm')
+            let stokPusatId = form.find('[name=id]').val()
+            let action = form.data('action')
+            let data = $('#crudForm').serializeArray()
+
+            data.push({
+                name: 'sortIndex',
+                value: $('#jqGrid').getGridParam().sortname
+            })
+            data.push({
+                name: 'sortOrder',
+                value: $('#jqGrid').getGridParam().sortorder
+            })
+            data.push({
+                name: 'filters',
+                value: $('#jqGrid').getGridParam('postData').filters
+            })
+            data.push({
+                name: 'indexRow',
+                value: indexRow
+            })
+            data.push({
+                name: 'page',
+                value: page
+            })
+            data.push({
+                name: 'limit',
+                value: limit
+            })
+
+            switch (action) {
+                case 'add':
+                    method = 'POST'
+                    url = `${apiUrl}stokpusat`
+                    break;
+                case 'edit':
+                    method = 'PATCH'
+                    url = `${apiUrl}stokpusat/${stokPusatId}`
+                    break;
+                case 'delete':
+                    method = 'DELETE'
+                    url = `${apiUrl}stokpusat/${stokPusatId}`
+                    break;
+                default:
+                    method = 'POST'
+                    url = `${apiUrl}stokpusat`
+                    break;
+            }
+
+            $(this).attr('disabled', '')
+            $('#processingLoader').removeClass('d-none')
+
+            $.ajax({
+                url: url,
+                method: method,
+                dataType: 'JSON',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                data: data,
+                success: response => {
+                    $('#crudForm').trigger('reset')
+                    $('#crudModal').modal('hide')
+
+                    id = response.data.id
+
+                    $('#jqGrid').jqGrid('setGridParam', {
+                        page: response.data.page
+                    }).trigger('reloadGrid');
+
+                    if (response.data.grp == 'FORMAT') {
+                        updateFormat(response.data)
+                    }
+                },
+                error: error => {
+                    if (error.status === 422) {
+                        $('.is-invalid').removeClass('is-invalid')
+                        $('.invalid-feedback').remove()
+
+                        setErrorMessages(form, error.responseJSON.errors);
+                    } else {
+                        showDialog(error.responseJSON)
+                    }
+                },
+            }).always(() => {
+                $('#processingLoader').addClass('d-none')
+                $(this).removeAttr('disabled')
+            })
+        })
+    })
+
+    $('#crudModal').on('shown.bs.modal', () => {
+        let form = $('#crudForm')
+
+        setFormBindKeys(form)
+
+        activeGrid = null
+
+        initLookup()
+    })
+
+    $('#crudModal').on('hidden.bs.modal', () => {
+        activeGrid = '#jqGrid'
+        $('#crudModal').find('.modal-body').html(modalBody)
+    })
+
+    function createStokPusat() {
+        let form = $('#crudForm')
+
+        $('.modal-loader').removeClass('d-none')
+
+        form.trigger('reset')
+        form.find('#btnSubmit').html(`
+            <i class="fa fa-save"></i>
+            Simpan
+        `)
+        form.data('action', 'add')
+        $('#crudModal').modal('show')
+        form.find(`.sometimes`).show()
+        $('#crudModalTitle').text('Create Stok Pusat')
+        $('.is-invalid').removeClass('is-invalid')
+        $('.invalid-feedback').remove()
+    }
+
+    function initLookup() {
+        $('.kelompok-lookup').lookup({
+            title: 'Kelompok Lookup',
+            fileName: 'kelompok',
+            beforeProcess: function(test) {
+                // var levelcoa = $(`#levelcoa`).val();
+                this.postData = {
+
+                    Aktif: 'AKTIF',
+                }
+            },
+            onSelectRow: (kelompok, element) => {
+                $('#crudForm [name=kelompok_id]').first().val(kelompok.id)
+                element.val(kelompok.kodekelompok)
+                element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+                element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+                $('#crudForm [name=kelompok_id]').first().val('')
+                element.val('')
+                element.data('currentValue', element.val())
+            }
+        })
+    }
+</script>
+@endpush()

@@ -237,6 +237,10 @@
 <script>
   let hasFormBindKeys = false
   let modalBody = $('#crudModal').find('.modal-body').html()
+  let aksiEdit = true;
+  let statusAktif
+  let statusSistemTon
+  let statusPenyesuaianHarga
 
   $(document).ready(function() {
 
@@ -273,7 +277,20 @@
         data.filter((row) => row.name === 'nominal[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal[]"]`)[index])
       })
 
-
+      if (aksiEdit == false) {
+        data.push({
+          name: 'statusaktif',
+          value: statusAktif
+        })
+        data.push({
+          name: 'statussistemton',
+          value: statusSistemTon
+        })
+        data.push({
+          name: 'statuspenyesuaianharga',
+          value: statusPenyesuaianHarga
+        })
+      }
 
 
       data.push({
@@ -424,7 +441,7 @@
             $('.modal-loader').addClass('d-none')
           })
       })
-     
+
     initAutoNumeric(form.find(`[name="nominal[]"]`), {
       minimumValue: 0
     })
@@ -459,17 +476,51 @@
         showTarif(form, tarifId)
           .then(() => {
             $('#crudModal').modal('show')
-            form.find(`[name="kota"]`).parent('.input-group').find('.button-clear').remove()
-            form.find(`[name="kota"]`).parent('.input-group').find('.input-group-append').remove()
+            if (aksiEdit == false) {
+              // form.find('select').each((index, select) => {
+              //   let element = $(select)
 
-            form.find(`[name="zona"]`).parent('.input-group').find('.button-clear').remove()
-            form.find(`[name="zona"]`).parent('.input-group').find('.input-group-append').remove()
+              //   if (element.data('select2')) {
+              //     element.select2('destroy')
+              //   }
+              // })
 
-            form.find(`[name="parent"]`).parent('.input-group').find('.button-clear').remove()
-            form.find(`[name="parent"]`).parent('.input-group').find('.input-group-append').remove()
+              statusAktif = form.find(`[name="statusaktif"]`).val()
+              statusSistemTon = form.find(`[name="statussistemton"]`).val()
+              statusPenyesuaianHarga = form.find(`[name="statuspenyesuaianharga"]`).val()
+              $('#crudForm').find(`.ui-datepicker-trigger`).attr('disabled', true)
+              let name = $('#crudForm').find(`[name]`).parents('.input-group')
+              name.find('.button-clear').attr('disabled', true)
+              name.children().find('.lookup-toggler').attr('disabled', true)
+              console.log(form.find(`[name="statusaktif"]`).val())
+              form.find(`[name="statusaktif"]`).prop('disabled', 'disabled')
+              form.find(`[name="statussistemton"]`).prop('disabled', 'disabled')
+              form.find(`[name="statuspenyesuaianharga"]`).prop('disabled', 'disabled')
+              form.find(`[name="tglmulaiberlaku"]`).prop('readonly', true)
+              form.find(`[name="zona"]`).prop('readonly', true)
+              form.find(`[name="penyesuaian"]`).prop('readonly', true)
+              form.find(`[name="tujuan"]`).prop('readonly', true)
+              form.find(`[name="kota"]`).prop('readonly', true)
+              form.find(`[name="parent"]`).prop('readonly', true)
+              form.find(`[name="upahsupir"]`).prop('readonly', true)
+            } else {
+              $('#crudForm').find(`.ui-datepicker-trigger`).attr('disabled', false)
 
-            form.find(`[name="upahsupir"]`).parent('.input-group').find('.button-clear').remove()
-            form.find(`[name="upahsupir"]`).parent('.input-group').find('.input-group-append').remove()
+              let name = $('#crudForm').find(`[name]`).parents('.input-group')
+              name.find('.button-clear').attr('disabled', false)
+              name.children().find('.lookup-toggler').attr('disabled', false)
+            }
+            // form.find(`[name="kota"]`).parent('.input-group').find('.button-clear').remove()
+            // form.find(`[name="kota"]`).parent('.input-group').find('.input-group-append').remove()
+
+            // form.find(`[name="zona"]`).parent('.input-group').find('.button-clear').remove()
+            // form.find(`[name="zona"]`).parent('.input-group').find('.input-group-append').remove()
+
+            // form.find(`[name="parent"]`).parent('.input-group').find('.button-clear').remove()
+            // form.find(`[name="parent"]`).parent('.input-group').find('.input-group-append').remove()
+
+            // form.find(`[name="upahsupir"]`).parent('.input-group').find('.button-clear').remove()
+            // form.find(`[name="upahsupir"]`).parent('.input-group').find('.input-group-append').remove()
 
           })
           .catch((error) => {
@@ -507,7 +558,7 @@
         showTarif(form, tarifId)
           .then(() => {
             $('#crudModal').modal('show')
-     
+
             $('#crudForm').find(`.btn.btn-easyui.lookup-toggler`).attr('disabled', true)
             $('#crudForm').find(`.ui-datepicker-trigger.btn.btn-easyui.text-easyui-dark`).attr('disabled', true)
           })
@@ -695,34 +746,18 @@
             } else {
               element.val(value)
             }
-            if (!parent) {
-              if (index == 'tujuan' || index == 'penyesuaian') {
-                element.prop('readonly', true)
-              }
-            }
+
             if (index == 'kota') {
               element.data('current-value', value)
-              if (!parent) {
-                element.prop('readonly', true)
-              }
             }
             if (index == 'zona') {
               element.data('current-value', value)
-              if (!parent) {
-                element.prop('readonly', true)
-              }
             }
             if (index == 'parent') {
               element.data('current-value', value)
-              if (!parent) {
-                element.prop('readonly', true)
-              }
             }
             if (index == 'upahsupir') {
               element.data('current-value', value)
-              if (!parent) {
-                element.prop('readonly', true)
-              }
             }
           })
 
@@ -751,11 +786,11 @@
             detailRow.find(`[name="nominal[]"]`).val(detail.nominal)
 
             $('#detailList tbody').append(detailRow)
-            
+
             initAutoNumeric(detailRow.find('.autonumeric'), {
               minimumValue: 0
             })
-            
+
           })
           // setuprowshow(userId);
 
@@ -938,14 +973,14 @@
             `)
           detailRow.find(`[name="container_id[]"]`).val(detail.container_id)
           detailRow.find(`[name="container[]"]`).val(detail.container)
-          
+
           // initAutoNumeric(detailRow.find('.autonumeric'))
           // setNominal()
-      
+
           $('#detailList tbody').append(detailRow)
           initAutoNumeric(detailRow.find('.autonumeric'), {
-      minimumValue: 0
-    })
+            minimumValue: 0
+          })
         })
         setRowNumbers()
       }
@@ -1061,7 +1096,7 @@
     })
   }
 
-  function cekValidasidelete(Id) {
+  function cekValidasidelete(Id, aksi) {
     $.ajax({
       url: `{{ config('app.api_url') }}tarif/${Id}/cekValidasi`,
       method: 'POST',
@@ -1072,9 +1107,19 @@
       success: response => {
         var kondisi = response.kondisi
         if (kondisi == true) {
-          showDialog(response.message['keterangan'])
+          if (aksi == 'EDIT') {
+            aksiEdit = false
+            editTarif(selectedId)
+          } else {
+            showDialog(response.message['keterangan'])
+          }
         } else {
-          deleteTarif(Id)
+          if (aksi == 'EDIT') {
+            aksiEdit = true
+            editTarif(selectedId)
+          } else {
+            deleteTarif(selectedId)
+          }
         }
 
       }
