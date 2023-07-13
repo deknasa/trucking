@@ -348,6 +348,8 @@
 
                     let params
                     let actionUrl = ``
+                    let submitButton = $(this).find('button:submit')
+
                     submitButton.attr('disabled', 'disabled')
                     $('#processingLoader').removeClass('d-none')
 

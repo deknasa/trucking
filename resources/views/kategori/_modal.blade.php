@@ -170,7 +170,13 @@
 
             setErrorMessages(form, error.responseJSON.errors);
           } else {
-            showDialog(error.responseJSON)
+            if(error.responseJSON.errors){
+              showDialog(error.statusText, error.responseJSON.errors.join('<hr>'))
+            } else if(error.responseJSON.message) {
+              showDialog(error.statusText, error.responseJSON.message)
+            } else {
+              showDialog(error.statusText, error.statusText)
+            }
           }
         },
       }).always(() => {
@@ -205,14 +211,15 @@
     let form = $('#crudForm')
 
     $('.modal-loader').removeClass('d-none')
-
+    
+    form.data('action', 'add')
     form.trigger('reset')
     form.find('#btnSubmit').html(`
-    <i class="fa fa-save"></i>
-    Simpan
-  `)
-    form.data('action', 'add')
-    form.find(`.sometimes`).show()
+      <i class="fa fa-save"></i>
+      Simpan
+    `)
+    
+    form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Create Kategori')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
@@ -243,9 +250,9 @@
     form.data('action', 'edit')
     form.trigger('reset')
     form.find('#btnSubmit').html(`
-    <i class="fa fa-save"></i>
-    Simpan
-  `)
+      <i class="fa fa-save"></i>
+      Simpan
+    `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Edit Kategori')
     $('.is-invalid').removeClass('is-invalid')

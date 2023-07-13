@@ -245,7 +245,7 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-9">
-                <input type="text" name="top" class="form-control">
+                <input type="text" name="top"  class="form-control numbernoseparate">
               </div>
             </div>
 

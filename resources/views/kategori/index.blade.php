@@ -59,7 +59,7 @@
                             },
                             {
                                 label: 'STATUS',
-                                name: 'statusaktif',
+                                name: 'status',
                                 stype: 'select',
                                 searchoptions: {
                                     value: `<?php
@@ -94,8 +94,8 @@
                                     return formattedValue[0].outerHTML
                                 },
                                 cellattr: (rowId, value, rowObject) => {
-                                    let statusAktif = JSON.parse(rowObject.statusaktif)
-
+                                    let statusAktif = JSON.parse(rowObject.status)
+                                    // console.log(statusAktif);
                                     return ` title="${statusAktif.MEMO}"`
                                 }
                             },
@@ -392,8 +392,10 @@
 
                     // window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
                     let formRange = $('#formRange')
-                    let offset = parseInt(formRange.find('[name=dari]').val()) - 1
-                    let limit = parseInt(formRange.find('[name=sampai]').val().replace('.', '')) - offset
+                    // let offset = parseInt(formRange.find('[name=dari]').val()) - 1
+                    let offset = parseInt(formRange.find('[name=dari]').val().replace('.', '').replace(',', '')) - 1
+                    // let limit = parseInt(formRange.find('[name=sampai]').val().replace('.', '')) - offset
+                    let limit = parseInt(formRange.find('[name=sampai]').val().replace('.', '').replace(',', '')) - offset
                     params += `&offset=${offset}&limit=${limit}`
 
 
