@@ -143,7 +143,7 @@
     abortGridLastRequest($('#kasgantungGrid'))
 
     $('#kasgantungGrid').setGridParam({
-      url: `${apiUrl}jurnalumumdetail/jurnal`,
+      url: `${apiUrl}kasgantungdetail/getKasgantung`,
       datatype: "json",
       postData: {
         nobukti: nobukti
