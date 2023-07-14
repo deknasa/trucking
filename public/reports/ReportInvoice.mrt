@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "661bea44d63393af1741b7b336430fc1",
+  "ReportGuid": "feacc0fa042f859c99007e329b052165",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "ReportInvoice.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportInvoice.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1689160634000+0700)/",
+  "ReportChanged": "/Date(1689234948000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -1272,7 +1272,7 @@
               "Ident": "StiHorizontalLinePrimitive",
               "Name": "HorizontalLinePrimitive4",
               "Guid": "a6287e2aed3c6ba66da3b76ddce07ff0",
-              "ClientRectangle": "12,70,200,0.254",
+              "ClientRectangle": "38,70,134,0.254",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"

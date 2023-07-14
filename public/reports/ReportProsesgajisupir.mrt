@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "184f1ce49a5d3eecee85b76958bb7cde",
+  "ReportGuid": "c321baca7cd67f7be5f37fe7eb6aafb1",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://localhost/trucking/public/reports/ReportProsesGajiSupir.mrt",
+  "ReportFile": "ReportProsesgajisupir.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1688543725000+0700)/",
+  "ReportChanged": "/Date(1689223512000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -2032,7 +2032,7 @@
               "Name": "Text2",
               "Guid": "defce5b9e194e9aa9ce901d86a92ecc7",
               "CanGrow": true,
-              "ClientRectangle": "28,8,184,6",
+              "ClientRectangle": "20,8,192,6",
               "ComponentPlacement": "gf.GroupFooterBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -2057,7 +2057,7 @@
               "Name": "Text76",
               "Guid": "0efbf1e3a8bbd9a55df94fd7143aeee6",
               "CanGrow": true,
-              "ClientRectangle": "4,8,24,6",
+              "ClientRectangle": "4,8,16,6",
               "ComponentPlacement": "gf.GroupFooterBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
