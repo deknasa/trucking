@@ -472,6 +472,9 @@
             } else {
               element.val(value)
             }
+            if (index == 'kodepenerimaan') {
+              element.attr('readonly', true)
+            }
           })
           resolve()
         },
