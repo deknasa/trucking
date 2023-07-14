@@ -42,6 +42,7 @@ class LaporanPemakaianBanController extends MyController
             'posisiakhir' => $parameter,
             'jenislaporan' =>$request->jenislaporan
         ];
+      
 
         $header = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
@@ -49,7 +50,9 @@ class LaporanPemakaianBanController extends MyController
             ->get(config('app.api_url') . 'laporanpemakaianban/report', $detailParams);
 
         $data = $header['data'];
+
         $user = Auth::user();
+
         return view('reports.laporanpemakaianban', compact('data', 'user', 'detailParams'));
     }
 
