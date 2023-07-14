@@ -3,55 +3,22 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
-use Illuminate\View\View;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
-class HutangHeaderController extends MyController
+class HutangExtraHeaderController extends MyController
 {
+    public $title = 'Hutang Extra';
 
-    public $title = 'Hutang';
-
-    /**
-     * @ClassName index
-     */
+    
     public function index(Request $request)
     {
         $title = $this->title;
         $data = [
-            'combocetak' => $this->comboList('list', 'STATUSCETAK','STATUSCETAK'),
-            'comboapproval' => $this->comboList('list', 'STATUS APPROVAL', 'STATUS APPROVAL'),
+            'combocetak' => $this->comboList('list', 'STATUSCETAK','STATUSCETAK')
         ];
-        return view('hutang.index', compact('title','data'));
-    }
-
-    public function get($params = [])
-    {
-        $params = [
-            'offset' => $params['offset'] ?? request()->offset ?? ((request()->page - 1) * request()->rows),
-            'limit' => $params['rows'] ?? request()->rows ?? 0,
-            'sortIndex' => $params['sidx'] ?? request()->sidx,
-            'sortOrder' => $params['sord'] ?? request()->sord,
-            'search' => json_decode($params['filters'] ?? request()->filters, 1) ?? [],
-            'withRelations' => $params['withRelations'] ?? request()->withRelations ?? false,
-        ];
-
-        $response = Http::withHeaders(request()->header())
-            ->withOptions(['verify' => false])
-            ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'hutangheader', $params);
-
-        $data = [
-            'total' => $response['attributes']['totalPages'] ?? [],
-            'records' => $response['attributes']['totalRows'] ?? [],
-            'rows' => $response['data'] ?? [],
-            'params' => $response['params'] ?? [],
-        ];
-
-        return $data;
+        return view('hutangextraheader.index', compact('title','data'));
     }
 
     public function comboList($aksi, $grp, $subgrp)
@@ -69,28 +36,6 @@ class HutangHeaderController extends MyController
             ->get(config('app.api_url') . 'parameter/combolist', $status);
 
         return $response['data'];
-    }
-
-    // /**
-    //  * Fungsi getNoBukti
-    //  * @ClassName getNoBukti
-    //  */
-    public function getNoBukti($group, $subgroup, $table)
-    {
-        $params = [
-            'group' => $group,
-            'subgroup' => $subgroup,
-            'table' => $table
-        ];
-
-        $response = Http::withHeaders($this->httpHeaders)
-            ->withOptions(['verify' => false])
-            ->withToken(session('access_token'))
-            ->get(config('app.api_url') . "running_number", $params);
-
-        $noBukti = $response['data'] ?? 'No bukti tidak ditemukan';
-
-        return $noBukti;
     }
 
     public function combo($aksi)
@@ -114,22 +59,22 @@ class HutangHeaderController extends MyController
         $hutang = Http::withHeaders($request->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') .'hutangheader/'.$id.'/export')['data'];
+            ->get(config('app.api_url') .'hutangextraheader/'.$id.'/export')['data'];
 
         //FETCH DETAIL
         $detailParams = [
             'forReport' => true,
-            'hutang_id' => $request->id,
+            'hutangextra_id' => $request->id,
         ];
         $hutang_details = Http::withHeaders($request->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') .'hutangdetail', $detailParams)['data'];
+            ->get(config('app.api_url') .'hutangextradetail', $detailParams)['data'];
 
         $combo = $this->combo('list');
         $key = array_search('CETAK', array_column( $combo, 'parameter')); 
         $hutang["combo"] =  $combo[$key];
-        return view('reports.hutang', compact('hutang','hutang_details'));
+        return view('reports.hutangextra', compact('hutang','hutang_details'));
     }
 
     public function export(Request $request): void
@@ -139,16 +84,16 @@ class HutangHeaderController extends MyController
         $hutang = Http::withHeaders($request->header())
         ->withOptions(['verify' => false])
         ->withToken(session('access_token'))
-        ->get(config('app.api_url') .'hutangheader/'.$id.'/export')['data'];
+        ->get(config('app.api_url') .'hutangextraheader/'.$id.'/export')['data'];
 
         //FETCH DETAIL
         $detailParams = [
-            'hutang_id' => $request->id,
+            'hutangextra_id' => $request->id,
         ];
         $hutang_details = Http::withHeaders($request->header())
         ->withOptions(['verify' => false])
         ->withToken(session('access_token'))
-        ->get(config('app.api_url') .'hutangdetail', $detailParams)['data'];
+        ->get(config('app.api_url') .'hutangextradetail', $detailParams)['data'];
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
@@ -193,6 +138,10 @@ class HutangHeaderController extends MyController
             [
                 'label' => 'Supplier',
                 'index' => 'supplier_id',
+            ],
+            [
+                'label' => 'No Bukti Hutang',
+                'index' => 'hutang_nobukti',
             ],
         ];
 
@@ -260,6 +209,7 @@ class HutangHeaderController extends MyController
                 $sheet->getStyle("A$detail_table_header_row:E$detail_table_header_row")->getFont()->setBold(true);
                 $sheet->getStyle("A$detail_table_header_row:E$detail_table_header_row")->getAlignment()->setHorizontal('center');
             }
+            // $response_detail['totals'] = number_format((float) $response_detail['total'], '2', '.', ',');
             
             $tgljatuhtempo = $response_detail["tgljatuhtempo"];
             $timeStamp = strtotime($tgljatuhtempo);
@@ -288,19 +238,17 @@ class HutangHeaderController extends MyController
         $sheet->setCellValue("D$total_start_row", $total)->getStyle("D$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
         $sheet->getStyle("D$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
 
-
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);
         $sheet->getColumnDimension('D')->setAutoSize(true);
         $sheet->getColumnDimension('E')->setAutoSize(true);
 
         $writer = new Xlsx($spreadsheet);
-        $filename = 'Laporan Hutang' . date('dmYHis');
+        $filename = 'Laporan Hutang EXTRA' . date('dmYHis');
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
         header('Cache-Control: max-age=0');
 
         $writer->save('php://output');
     }
-
 }
