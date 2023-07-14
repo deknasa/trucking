@@ -3,7 +3,7 @@
   "ReportGuid": "d2bf27639e2748d71795423adc5ef46c",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://localhost/trucking/public/reports/ReportNotaKredit.mrt",
+  "ReportFile": "ReportNotaKredit.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
   "ReportChanged": "/Date(1689157241000+0700)/",

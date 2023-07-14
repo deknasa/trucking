@@ -170,6 +170,7 @@ class PengeluaranHeaderController extends MyController
 
         //FETCH DETAIL
         $detailParams = [
+            'forReport' => true,
             'pengeluaran_id' => $request->id,
         ];
         $pengeluaran_details = Http::withHeaders($request->header())

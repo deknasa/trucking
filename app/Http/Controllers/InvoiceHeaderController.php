@@ -134,7 +134,7 @@ class InvoiceHeaderController extends MyController
              ->withOptions(['verify' => false])
              ->withToken(session('access_token'))
              ->get(config('app.api_url') . 'invoiceheader/'.$id.'/export')['data'];
-
+             
         $detailParams = [
             'forReport' => true,
             'invoice_id' => $request->id
@@ -143,7 +143,7 @@ class InvoiceHeaderController extends MyController
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'invoicedetail', $detailParams)['data'];
-
+            
         $combo = $this->combo('list');
         $key = array_search('CETAK', array_column( $combo, 'parameter')); 
         $invoices["combo"] =  $combo[$key];
