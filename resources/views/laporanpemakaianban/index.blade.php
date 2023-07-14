@@ -29,7 +29,7 @@
                             <div class="col-sm-4 mt-2">
                                 <div class="input-group">
                                     <input type="hidden" name="posisiakhirtrado_id" id="tradoId">
-                                    <input type="text"  name="posisiakhirtrado" class="form-control posisiakhirtrado-lookup">
+                                    <input type="text" name="posisiakhirtrado" class="form-control posisiakhirtrado-lookup">
                                 </div>
                             </div>
                         </div>
@@ -95,12 +95,11 @@
         $('#crudForm').find('[name=dari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         $('#crudForm').find('[name=sampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         initLookup()
-        
-        let css_property =
-        {
+
+        let css_property = {
             "color": "#fff",
             "background-color": "rgb(173 180 187)",
-            "cursor" : "not-allowed",
+            "cursor": "not-allowed",
             "border-color": "rgb(173 180 187)"
         }
         if (!`{{ $myAuth->hasPermission('laporanorderpembelian', 'report') }}`) {
@@ -113,51 +112,93 @@
     $(document).on('click', `#btnPreview`, function(event) {
         let sampai = $('#crudForm').find('[name=sampai]').val()
         let dari = $('#crudForm').find('[name=dari]').val()
-        let posisiakhirtrado= $('#crudForm').find('[name=posisiakhirtrado]').val()
-        let posisiakhirtradoId= $('#crudForm').find('[name=posisiakhirtrado_id]').val()
+        let posisiakhirtrado = $('#crudForm').find('[name=posisiakhirtrado]').val()
+        let posisiakhirtradoId = $('#crudForm').find('[name=posisiakhirtrado_id]').val()
         let posisiakhirgandengan = $('#crudForm').find('[name=posisiakhirgandengan]').val()
         let posisiakhirgandenganId = $('#crudForm').find('[name=posisiakhirgandengan_id]').val()
         let posisiakhirgandengantext = $('#crudForm').find('[name=posisiakhirgandengan]').val()
         let jenislaporan_id = $('#crudForm').find('[name=text]').val()
         let jenislaporan = $('#text').find('option:selected').text();
 
-        if (dari != '' && sampai != '' && jenislaporan_id != '' && jenislaporan != ''&&(posisiakhirtrado != '' ||posisiakhirgandengan != '')) {
+        getCekReport().then((response) => {
+            window.open(`{{ route('laporanpemakaianban.report') }}?sampai=${sampai}&dari=${dari}&posisiakhirtrado_id=${posisiakhirtradoId}&posisiakhirtrado=${posisiakhirtrado}&posisiakhirgandengan_id=${posisiakhirgandenganId}&posisiakhirgandengan=${posisiakhirgandengan}&jenislaporan_id=${jenislaporan_id}&jenislaporan=${jenislaporan}`)
+        }).catch((error) => {
+            if (error.status === 422) {
+                $('.is-invalid').removeClass('is-invalid')
+                $('.invalid-feedback').remove()
 
-            window.open(`{{ route('laporanpemakaianban.report') }}?sampai=${sampai}&dari=${dari}&posisiakhirtrado_id=${posisiakhirtradoId}&posisiakhirtrado=${posisiakhirtrado}&posisiakhirgandengan_id=${posisiakhirgandenganId}&posisiakhirgandengan=${posisiakhirgandengan}&jenislaporan_id=${jenislaporan_id}&jenislaporan=${jenislaporan}`)    
-        } else {
-            showDialog('ISI SELURUH KOLOM')
-        }
+                setErrorMessages($('#crudForm'), error.responseJSON.errors);
+            } else {
+                showDialog(error.statusText, error.responseJSON.message)
+
+            }
+        })
+
     })
 
-    
+
+    function getCekReport() {
+
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: `${apiUrl}laporanpemakaianban/report`,
+                dataType: "JSON",
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                data: {
+                    dari: $('#crudForm').find('[name=dari]').val(),
+                    sampai: $('#crudForm').find('[name=sampai]').val(),
+                    posisiakhirtrado: $('#crudForm').find('[name=posisiakhirtrado]').val(),
+                    posisiakhirtradoId: $('#crudForm').find('[name=posisiakhirtrado_id]').val(),
+                    posisiakhirgandengan: $('#crudForm').find('[name=posisiakhirgandengan]').val(),
+                    posisiakhirgandenganId: $('#crudForm').find('[name=posisiakhirgandengan_id]').val(),
+                    posisiakhirgandengantext: $('#crudForm').find('[name=posisiakhirgandengan]').val(),
+                    jenislaporan_id: $('#crudForm').find('[name=text]').val(),
+                    jenislaporan: $('#text').find('option:selected').text(),
+                    isCheck: true,
+                },
+                success: (response) => {
+                    resolve(response);
+                },
+                error: error => {
+                    reject(error)
+
+                },
+            });
+        });
+    }
+
+
+
 
     function lookupSelected(el) {
 
-    let trado = $('#crudForm').find(`[name="posisiakhirtrado"]`).parents('.input-group').children()
+        let trado = $('#crudForm').find(`[name="posisiakhirtrado"]`).parents('.input-group').children()
 
-    let gandengan = $('#crudForm').find(`[name="posisiakhirgandengan"]`).parents('.input-group').children()
+        let gandengan = $('#crudForm').find(`[name="posisiakhirgandengan"]`).parents('.input-group').children()
 
 
-    switch (el) {
-    case 'trado':
-        gandengan.attr('disabled', true)
-        gandengan.find('.lookup-toggler').attr('disabled', true)
-        $('#gandenganId').attr('disabled', true);
+        switch (el) {
+            case 'trado':
+                gandengan.attr('disabled', true)
+                gandengan.find('.lookup-toggler').attr('disabled', true)
+                $('#gandenganId').attr('disabled', true);
 
-        break;
-    case 'gandengan':
-        trado.attr('disabled', true)
-        trado.find('.lookup-toggler').attr('disabled', true)
-        $('#tradoId').attr('disabled', true);
+                break;
+            case 'gandengan':
+                trado.attr('disabled', true)
+                trado.find('.lookup-toggler').attr('disabled', true)
+                $('#tradoId').attr('disabled', true);
 
-        break;
-    default:
-        break;
+                break;
+            default:
+                break;
+        }
+
     }
 
-  }
-
-  function enabledLookupSelected() {
+    function enabledLookupSelected() {
         let trado = $('#crudForm').find(`[name="posisiakhirtrado"]`).parents('.input-group').children()
         let gandengan = $('#crudForm').find(`[name="posisiakhirgandengan"]`).parents('.input-group').children()
         trado.find(`.lookup-toggler`).attr("disabled", false);
@@ -221,11 +262,10 @@
                 element.data('currentValue', element.val())
                 enabledLookupSelected()
             }
-        }) 
+        })
     }
 
-    const setTextParameterOptions = function(relatedForm) 
-    {
+    const setTextParameterOptions = function(relatedForm) {
         relatedForm.find('[name=text]').append(
             new Option('-- PILIH JENIS LAPORAN --', '', false, true)
         ).trigger('change')
@@ -254,7 +294,7 @@
                     relatedForm.find('[name=text]').append(option).trigger('change')
                 });
 
-               
+
                 relatedForm
                     .find('[name=text]')
                     .val($(`#crudForm [name=text] option:eq(1)`).val())
