@@ -28,12 +28,15 @@
       var report = new Stimulsoft.Report.StiReport()
 
       var statuscetak = pelunasanPiutangs.statuscetak_id
+      
       var sudahcetak = pelunasanPiutangs['combo']['id']
+      
       if (statuscetak == sudahcetak) {
         viewerOptions.toolbar.showPrintButton = false;
         viewerOptions.toolbar.showSaveButton = false;
         viewerOptions.toolbar.showOpenButton = false;
       }
+      
       
       var options = new Stimulsoft.Designer.StiDesignerOptions()
       options.appearance.fullScreenMode = true
@@ -62,6 +65,7 @@
         triggerEvent(window, 'afterprint');
       }
 
+     
       function triggerEvent(el, type) {
         // IE9+ and other modern browsers
         if ('createEvent' in document) {
@@ -97,6 +101,7 @@
     $( document ).ready(function() {
       var statuscetak = pelunasanPiutangs.statuscetak_id
       var sudahcetak = pelunasanPiutangs['combo']['id']
+      
       if (statuscetak == sudahcetak) {
         $(document).on('keydown', function(e) { 
           if((e.ctrlKey || e.metaKey) && (e.key == "p" || e.charCode == 16 || e.charCode == 112 || e.keyCode == 80) ){
