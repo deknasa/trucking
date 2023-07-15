@@ -113,6 +113,15 @@
   let selectedKeterangan = [];
   let selectedNominal = [];
 
+  let sortnamePenerimaan = 'nobukti_penerimaan';
+  let sortorderPenerimaan = 'asc';
+  let pagePenerimaan = 0;
+  let totalRecordPenerimaan
+  let limitPenerimaan
+  let postDataPenerimaan
+  let triggerClickPenerimaan
+  let indexRowPenerimaan
+
   $(document).ready(function() {
 
     $(document).on('click', '#btnTampil', function(event) {
@@ -132,11 +141,19 @@
           postData: {
             bank: parameterPenerimaan.bank,
             tglbukti: parameterPenerimaan.tglbukti,
+            sortIndex: 'nobukti_penerimaan',
           },
           datatype: "json"
         }).trigger('reloadGrid');
-      }).catch((errors) => {
-        setErrorMessages($('#crudForm'), errors)
+      }).catch((error) => {
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+
+          setErrorMessages($('#crudForm'), error.responseJSON.errors);
+        } else {
+          showDialog(error.responseJSON)
+        }
       })
     })
 
@@ -545,11 +562,6 @@
             }
           },
           {
-            label: 'keterangan',
-            name: 'keterangan_detail',
-            align: 'left',
-          },
-          {
             label: 'NOMINAL',
             name: 'nominal_detail',
             align: 'right',
@@ -565,10 +577,17 @@
         rowList: [10, 20, 50, 0],
         toolbar: [true, "top"],
         sortable: true,
-        sortname: 'nobukti_penerimaan',
+        sortname: sortnamePenerimaan,
+        sortorder: sortorderPenerimaan,
+        page: pagePenerimaan,
         viewrecords: true,
         footerrow: true,
         userDataOnFooter: true,
+        prmNames: {
+          sort: 'sortIndex',
+          order: 'sortOrder',
+          rows: 'limit'
+        },
         jsonReader: {
           root: 'data',
           total: 'attributes.totalPages',
@@ -584,12 +603,17 @@
           let grid = $(this)
           changeJqGridRowListText()
           initResize($(this))
-          console.log(data);
-          let nominals = $(this).jqGrid("getCol", "nominal_detail")
-          let totalNominal = 0
-          if (nominals.length > 0) {
-            totalNominal = nominals.reduce((previousValue, currentValue) => previousValue + currencyUnformat(currentValue), 0)
-          }
+          $(document).unbind('keydown')
+          setCustomBindKeys($(this))
+
+          /* Set global variables */
+          sortnamePenerimaan = $(this).jqGrid("getGridParam", "sortname")
+          sortorderPenerimaan = $(this).jqGrid("getGridParam", "sortorder")
+          totalRecordPenerimaan = $(this).getGridParam("records")
+          limitPenerimaan = $(this).jqGrid('getGridParam', 'postData').limit
+          postDataPenerimaan = $(this).jqGrid('getGridParam', 'postData')
+          triggerClick = false
+
           $('.clearsearchclass').click(function() {
             clearColumnSearch($(this))
           })
@@ -598,11 +622,13 @@
           }
           $('#modalgrid').setSelection($('#modalgrid').getDataIDs()[0])
           setHighlight($(this))
-          $(this).jqGrid('footerData', 'set', {
-            nobukti: 'Total:',
-            nominal: totalNominal,
-          }, true)
+          if (data.attributes) {
 
+            $(this).jqGrid('footerData', 'set', {
+              nobukti_penerimaan: 'Total:',
+              nominal_detail: data.attributes.totalNominal,
+            }, true)
+          }
         }
       })
       .jqGrid('filterToolbar', {
@@ -635,6 +661,7 @@
           limit: 0,
           bank: parameterPenerimaan.bank,
           tglbukti: parameterPenerimaan.tglbukti,
+          sortIndex: 'nobukti_penerimaan',
         },
         headers: {
           Authorization: `Bearer ${accessToken}`
@@ -642,17 +669,6 @@
         success: (response) => {
           response.url = `${apiUrl}rekappenerimaanheader/getpenerimaan`
           resolve(response)
-        },
-        error: error => {
-          if (error.status === 422) {
-            $('.is-invalid').removeClass('is-invalid')
-            $('.invalid-feedback').remove()
-            errors = error.responseJSON.errors
-            reject(errors)
-
-          } else {
-            showDialog(error.statusText)
-          }
         },
         error: error => {
           reject(error)

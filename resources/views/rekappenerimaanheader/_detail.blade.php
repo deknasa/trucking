@@ -30,9 +30,14 @@
             name: 'nobukti',
           },
           {
-            label: 'KETERANGAN',
-            name: 'keterangan',
-            width: 300
+            label: 'TGL BUKTI',
+            name: 'tgltransaksi',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
           },
           {
             label: 'Penerimaan no bukti',
