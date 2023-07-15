@@ -288,6 +288,8 @@
                     id = response.data.id
                     $('#crudModal').modal('hide')
                     $('#crudModal').find('#crudForm').trigger('reset')
+                    penerimaanGiro = ''
+
                     $('#bankheader').val(response.data.bank_id).trigger('change')
 
                     $('.select2').select2({
@@ -353,7 +355,7 @@
     function createPenerimaan() {
         let form = $('#crudForm')
         $('.modal-loader').removeClass('d-none')
-
+        penerimaanGiro = ''
         $('#crudModal').find('#crudForm').trigger('reset')
         form.find('#btnSubmit').html(`
       <i class="fa fa-save"></i>
@@ -427,6 +429,7 @@
         let form = $('#crudForm')
         $('.modal-loader').removeClass('d-none')
         form.data('action', 'edit')
+        penerimaanGiro = ''
         form.trigger('reset')
         form.find('#btnSubmit').html(`
       <i class="fa fa-save"></i>
@@ -466,6 +469,7 @@
         let form = $('#crudForm')
         $('.modal-loader').removeClass('d-none')
         form.data('action', 'delete')
+        penerimaanGiro = ''
         form.trigger('reset')
         form.find('#btnSubmit').html(`
       <i class="fa fa-save"></i>
@@ -897,6 +901,8 @@
             },
             success: response => {
                 $('#crudForm').trigger('reset')
+                penerimaanGiro = ''
+
                 $('#crudModal').modal('hide')
 
                 $('#jqGrid').jqGrid().trigger('reloadGrid');
