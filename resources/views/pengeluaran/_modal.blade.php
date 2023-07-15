@@ -128,7 +128,8 @@
                     <th width="10%">Nominal</th>
                     <th width="10%">No warkat</th>
                     <th width="10%">Tgl jatuh tempo</th>
-                    <th width="10%">Bulan beban</th>
+                    <th width="10%">No Invoice</th>
+                    <th width="10%">Bank</th>
                     <th width="1%">Aksi</th>
                   </tr>
                 </thead>
@@ -144,7 +145,7 @@
                     <td>
                       <p class="text-right font-weight-bold autonumeric" id="total"></p>
                     </td>
-                    <td colspan="3"></td>
+                    <td colspan="4"></td>
                     <td>
                       <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
                     </td>
@@ -675,9 +676,10 @@
                       </div>
                   </td>
                   <td>
-                      <div class="input-group">
-                          <input type="text" name="bulanbeban[]" class="form-control datepicker">   
-                      </div>
+                      <input type="text" name="noinvoice[]" class="form-control">
+                  </td>
+                  <td>
+                      <input type="text" name="bank_detail[]" class="form-control">
                   </td>
                   <td>
                       <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
@@ -691,8 +693,9 @@
             detailRow.find(`[name="nominal_detail[]"]`).val(detail.nominal)
             detailRow.find(`[name="coadebet[]"]`).val(detail.coadebet)
             detailRow.find(`[name="ketcoadebet[]"]`).val(detail.ketcoadebet)
+            detailRow.find(`[name="noinvoice[]"]`).val(detail.noinvoice)
+            detailRow.find(`[name="bank_detail[]"]`).val(detail.bank)
 
-            detailRow.find(`[name="bulanbeban[]"]`).val(dateFormat(detail.bulanbeban))
             initAutoNumeric(detailRow.find(`[name="nominal_detail[]"]`))
 
             detailRow.find(`[name="tgljatuhtempo[]"]`).val(dateFormat(detail.tgljatuhtempo))
@@ -768,7 +771,12 @@
         </td>
         <td>
           <div class="input-group">
-            <input type="text" name="bulanbeban[]" class="form-control datepicker">   
+            <input type="text" name="noinvoice[]" class="form-control">   
+          </div>
+        </td>
+        <td>
+          <div class="input-group">
+            <input type="text" name="bank_detail[]" class="form-control">   
           </div>
         </td>
         <td>
