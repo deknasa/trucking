@@ -113,6 +113,14 @@
   let selectedTglBukti = [];
   let selectedKeterangan = [];
   let selectedNominal = [];
+  let sortnamePengeluaran = 'nobukti_pengeluaran';
+  let sortorderPengeluaran = 'asc';
+  let pagePengeluaran = 0;
+  let totalRecordPengeluaran
+  let limitPengeluaran
+  let postDataPengeluaran
+  let triggerClickPengeluaran
+  let indexRowPengeluaran
 
   $(document).ready(function() {
 
@@ -133,11 +141,19 @@
           postData: {
             bank: parameterPengeluaran.bank,
             tglbukti: parameterPengeluaran.tglbukti,
+            sortIndex: 'nobukti_pengeluaran',
           },
           datatype: "json"
         }).trigger('reloadGrid');
-      }).catch((errors) => {
-        setErrorMessages($('#crudForm'), errors)
+      }).catch((error) => {
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+
+          setErrorMessages($('#crudForm'), error.responseJSON.errors);
+        } else {
+          showDialog(error.responseJSON)
+        }
       })
     })
 
@@ -538,8 +554,7 @@
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         datatype: "local",
-        colModel: [
-          {
+        colModel: [{
             label: 'NO BUKTI',
             name: 'nobukti_pengeluaran',
           },
@@ -551,11 +566,6 @@
               srcformat: "ISO8601Long",
               newformat: "d-m-Y"
             }
-          },
-          {
-            label: 'keterangan',
-            name: 'keterangan_detail',
-            align: 'left',
           },
           {
             label: 'NOMINAL',
@@ -573,10 +583,17 @@
         rowList: [10, 20, 50, 0],
         toolbar: [true, "top"],
         sortable: true,
-        sortname: 'nobukti_pengeluaran',
+        sortname: sortnamePengeluaran,
+        sortorder: sortorderPengeluaran,
+        page: pagePengeluaran,
         viewrecords: true,
         footerrow: true,
         userDataOnFooter: true,
+        prmNames: {
+          sort: 'sortIndex',
+          order: 'sortOrder',
+          rows: 'limit'
+        },
         jsonReader: {
           root: 'data',
           total: 'attributes.totalPages',
@@ -591,13 +608,18 @@
         loadComplete: function(data) {
           let grid = $(this)
           changeJqGridRowListText()
+          $(document).unbind('keydown')
+          setCustomBindKeys($(this))
           initResize($(this))
-          console.log(data);
-          let nominals = $(this).jqGrid("getCol", "nominal_detail")
-          let totalNominal = 0
-          if (nominals.length > 0) {
-            totalNominal = nominals.reduce((previousValue, currentValue) => previousValue + currencyUnformat(currentValue), 0)
-          }
+
+          /* Set global variables */
+          sortnamePengeluaran = $(this).jqGrid("getGridParam", "sortname")
+          sortorderPengeluaran = $(this).jqGrid("getGridParam", "sortorder")
+          totalRecordPengeluaran = $(this).getGridParam("records")
+          limitPengeluaran = $(this).jqGrid('getGridParam', 'postData').limit
+          postDataPengeluaran = $(this).jqGrid('getGridParam', 'postData')
+          triggerClick = false
+
           $('.clearsearchclass').click(function() {
             clearColumnSearch($(this))
           })
@@ -606,11 +628,13 @@
           }
           $('#modalgrid').setSelection($('#modalgrid').getDataIDs()[0])
           setHighlight($(this))
-          $(this).jqGrid('footerData', 'set', {
-            nobukti: 'Total:',
-            nominal: totalNominal,
-          }, true)
+          if (data.attributes) {
 
+            $(this).jqGrid('footerData', 'set', {
+              nobukti_pengeluaran: 'Total:',
+              nominal_detail: data.attributes.totalNominal,
+            }, true)
+          }
         }
       })
       .jqGrid('filterToolbar', {
@@ -643,6 +667,7 @@
           limit: 0,
           bank: parameterPengeluaran.bank,
           tglbukti: parameterPengeluaran.tglbukti,
+          sortIndex: 'nobukti_pengeluaran',
         },
         headers: {
           Authorization: `Bearer ${accessToken}`
