@@ -324,14 +324,7 @@
       })
 
       .customPager({
-        buttons: [{
-            id: 'add',
-            innerHTML: '<i class="fa fa-plus"></i> ADD',
-            class: 'btn btn-primary btn-sm mr-1',
-            onClick: () => {
-              createOrderanTrucking()
-            }
-          },
+        buttons: [
           {
             id: 'edit',
             innerHTML: '<i class="fa fa-pen"></i> EDIT',

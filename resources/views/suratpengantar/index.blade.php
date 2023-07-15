@@ -527,14 +527,7 @@
       })
 
       .customPager({
-        buttons: [{
-            id: 'add',
-            innerHTML: '<i class="fa fa-plus"></i> ADD',
-            class: 'btn btn-primary btn-sm mr-1',
-            onClick: () => {
-              showDialog('Harap isi dari input trip (mandor)')
-            }
-          },
+        buttons: [
           {
             id: 'edit',
             innerHTML: '<i class="fa fa-pen"></i> EDIT',
