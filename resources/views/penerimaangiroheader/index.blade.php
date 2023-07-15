@@ -247,8 +247,8 @@
                         }
                     },
                     {
-                        label: 'PELANGGAN ',
-                        name: 'pelanggan_id',
+                        label: 'AGEN ',
+                        name: 'agen_id',
                         align: 'left'
                     },
                     
