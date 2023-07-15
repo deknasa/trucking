@@ -114,7 +114,6 @@ class RekapPengeluaranHeaderController extends MyController
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') .'rekappengeluarandetail', $detailParams)['data'];
-
         $combo = $this->combo('list');
         $key = array_search('CETAK', array_column( $combo, 'parameter')); 
         $rekappengeluaran["combo"] =  $combo[$key];
@@ -132,6 +131,7 @@ class RekapPengeluaranHeaderController extends MyController
         
         //FETCH DETAIL
         $detailParams = [
+            'forReport' => true,
             'rekappengeluaran_id' => $request->id,
         ];
         $rekappengeluaran_details = Http::withHeaders($request->header())
@@ -177,12 +177,12 @@ class RekapPengeluaranHeaderController extends MyController
                 'index'=>'tglbukti'
             ],
             [
-                'label'=>'Tanggal Transaksi',
-                'index'=>'tgltransaksi'
+                'label'=>'Bank/Kas',
+                'index'=>'bank'
             ],
             [
-                'label'=>'Bank',
-                'index'=>'bank'
+                'label'=>'Tanggal Transaksi',
+                'index'=>'tgltransaksi'
             ]
         ];
         $detail_columns = [
@@ -190,7 +190,7 @@ class RekapPengeluaranHeaderController extends MyController
                 'label'=>'NO',
             ],
             [
-                'label'=>'NO BUKTI PENGELUARAN',
+                'label'=>'NAMA PERKIRAAN',
                 'index'=>'pengeluaran_nobukti'
             ],
             [

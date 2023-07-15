@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "42b2d3988b4c8ba9cc19526aef6222ed",
+  "ReportGuid": "b9f298ef7f76ddd655a5ce5c3c6c0c22",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportPengeluaranBank.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1689242157000+0700)/",
+  "ReportChanged": "/Date(1689386537000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -188,9 +188,9 @@
         "Alias": "pengeluaran_details",
         "Columns": {
           "0": {
-            "Name": "dibayarke",
-            "NameInSource": "dibayarke",
-            "Alias": "dibayarke",
+            "Name": "coadebet",
+            "NameInSource": "coadebet",
+            "Alias": "coadebet",
             "Type": "System.String"
           },
           "1": {
@@ -218,12 +218,6 @@
             "Type": "System.String"
           },
           "5": {
-            "Name": "coadebet",
-            "NameInSource": "coadebet",
-            "Alias": "coadebet",
-            "Type": "System.String"
-          },
-          "6": {
             "Name": "invoice_nobukti",
             "NameInSource": "invoice_nobukti",
             "Alias": "invoice_nobukti",
@@ -433,7 +427,7 @@
               "Name": "Text29",
               "Guid": "c510137e016cbcfaeaa2c74052410c9b",
               "CanGrow": true,
-              "ClientRectangle": "12,14,110,8",
+              "ClientRectangle": "12,14,100,8",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -660,20 +654,20 @@
               "Name": "Text38",
               "Guid": "1e39ed211c1715ce9e5b997ac5319ce4",
               "CanGrow": true,
-              "ClientRectangle": "124,14,88,8",
+              "ClientRectangle": "114,14,98,8",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "MaxNumberOfLines": 6,
               "Text": {
-                "Value": "BANK"
+                "Value": "{pengeluaran.bank_id}"
               },
               "Font": ";10;Bold;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
-              "Type": "Expression"
+              "Type": "DataColumn"
             },
             "19": {
               "Ident": "StiText",
@@ -931,6 +925,7 @@
               "Ident": "StiStartPointPrimitive",
               "Name": "StartPointPrimitive3",
               "ClientRectangle": "82,54,0,0",
+              "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -940,6 +935,7 @@
               "Ident": "StiEndPointPrimitive",
               "Name": "EndPointPrimitive3",
               "ClientRectangle": "82,64,0,0",
+              "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -949,6 +945,7 @@
               "Ident": "StiStartPointPrimitive",
               "Name": "StartPointPrimitive7",
               "ClientRectangle": "138,54,0,0",
+              "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -958,6 +955,7 @@
               "Ident": "StiEndPointPrimitive",
               "Name": "EndPointPrimitive7",
               "ClientRectangle": "138,64,0,0",
+              "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -1294,6 +1292,7 @@
               "Ident": "StiStartPointPrimitive",
               "Name": "StartPointPrimitive19",
               "ClientRectangle": "82,0,0,0",
+              "ComponentPlacement": "d.DataBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -1303,6 +1302,7 @@
               "Ident": "StiEndPointPrimitive",
               "Name": "EndPointPrimitive19",
               "ClientRectangle": "82,8,0,0",
+              "ComponentPlacement": "d.DataBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -1312,6 +1312,7 @@
               "Ident": "StiStartPointPrimitive",
               "Name": "StartPointPrimitive24",
               "ClientRectangle": "138,0,0,0",
+              "ComponentPlacement": "d.DataBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -1321,6 +1322,7 @@
               "Ident": "StiEndPointPrimitive",
               "Name": "EndPointPrimitive24",
               "ClientRectangle": "138,8,0,0",
+              "ComponentPlacement": "d.DataBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
