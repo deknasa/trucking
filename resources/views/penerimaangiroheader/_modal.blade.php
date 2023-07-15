@@ -38,11 +38,11 @@
                         <div class="row form-group">
                             <div class="col-12 col-sm-3 col-md-2">
                                 <label class="col-form-label">
-                                    PELANGGAN </label>
+                                    AGEN <span class="text-danger">*</span></label>
                             </div>
                             <div class="col-12 col-sm-9 col-md-10">
-                                <input type="hidden" name="pelanggan_id">
-                                <input type="text" name="pelanggan" class="form-control pelanggan-lookup">
+                                <input type="hidden" name="agen_id">
+                                <input type="text" name="agen" class="form-control agen-lookup">
                             </div>
                         </div>
 
@@ -148,7 +148,7 @@
 <script>
     let hasFormBindKeys = false
     let modalBody = $('#crudModal').find('.modal-body').html()
-
+    let formattedDate
     $(document).ready(function() {
 
         $('#crudForm').autocomplete({
@@ -540,7 +540,7 @@
         $('#crudModalTitle').text('Edit Penerimaan Giro')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
-        
+
         Promise
             .all([
                 showPenerimaanGiro(form, id)
@@ -683,7 +683,9 @@
                         } else {
                             element.val(value)
                         }
-
+                        if(index == 'agen'){
+                            element.data('current-value', value)
+                        }
                     })
                     $('#detailList tbody').html('')
                     $.each(response.detail, (index, detail) => {
@@ -900,8 +902,12 @@
             }
         })
         initAutoNumeric(detailRow.find('.autonumeric'))
-        tgllunas = $('#crudForm').find(`[name="tgllunas"]`).val()
-        $('#crudForm').find(`[name="tgljatuhtempo[]"]`).val(tgllunas).trigger('change');
+        if ($('#crudForm [name=agen]').val() != '') {
+            $('#crudForm').find(`[name="tgljatuhtempo[]"]`).val(formattedDate).trigger('change');
+        } else {
+            tgllunas = $('#crudForm').find(`[name="tgllunas"]`).val()
+            $('#crudForm').find(`[name="tgljatuhtempo[]"]`).val(tgllunas).trigger('change');
+        }
 
         initDatepicker()
         setRowNumbers()
@@ -992,25 +998,31 @@
 
     function initLookup() {
 
-        $('.pelanggan-lookup').lookup({
-            title: 'Pelanggan Lookup',
-            fileName: 'pelanggan',
+        $('.agen-lookup').lookup({
+            title: 'Agen Lookup',
+            fileName: 'agen',
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
 
                 }
             },
-            onSelectRow: (pelanggan, element) => {
-                $('#crudForm [name=pelanggan_id]').first().val(pelanggan.id)
-                element.val(pelanggan.namapelanggan)
+            onSelectRow: (agen, element) => {
+                $('#crudForm [name=agen_id]').first().val(agen.id)
+                let dateNow = new Date();
+                dateNow.setDate(dateNow.getDate() + parseInt(agen.top));
+                let end_date = new Date(dateNow.getFullYear(), dateNow.getMonth(), dateNow.getDate());
+                formattedDate = end_date.getDate().toString().padStart(2, '0') + '-' + (end_date.getMonth() + 1).toString().padStart(2, '0') + '-' + end_date.getFullYear();
+
+                $('#crudForm').find(`[name="tgljatuhtempo[]"]`).val(formattedDate).trigger('change');
+                element.val(agen.namaagen)
                 element.data('currentValue', element.val())
             },
             onCancel: (element) => {
                 element.val(element.data('currentValue'))
             },
             onClear: (element) => {
-                $('#crudForm [name=pelanggan_id]').first().val('')
+                $('#crudForm [name=agen_id]').first().val('')
                 element.val('')
                 element.data('currentValue', element.val())
             }

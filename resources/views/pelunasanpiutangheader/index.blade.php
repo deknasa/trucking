@@ -251,12 +251,15 @@
         },
         onSelectRow: function(id) {
           let nobukti = $('#jqGrid').jqGrid('getCell', id, 'penerimaan_nobukti')
+          if(nobukti == '-'){
+            nobukti = $('#jqGrid').jqGrid('getCell', id, 'penerimaangiro_nobukti')
+          }
           activeGrid = $(this)
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
-          
+          console.log(nobukti)
           loadDetailData(id)
           loadPenerimaanData(id, nobukti)
           loadJurnalUmumData(id, nobukti)

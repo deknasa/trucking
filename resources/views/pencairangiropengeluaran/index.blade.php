@@ -252,59 +252,6 @@
                         hidden: true
                     },
                     {
-                        label: 'STATUS APPROVAL',
-                        name: 'statusapproval',
-                        align: 'left',
-                        stype: 'select',
-                        searchoptions: {
-                            value: `<?php
-                                    $i = 1;
-
-                                    foreach ($data['comboapproval'] as $status) :
-                                        echo "$status[param]:$status[parameter]";
-                                        if ($i !== count($data['comboapproval'])) {
-                                            echo ";";
-                                        }
-                                        $i++;
-                                    endforeach
-
-                                    ?>
-                            `,
-                            dataInit: function(element) {
-                                $(element).select2({
-                                    width: 'resolve',
-                                    theme: "bootstrap4"
-                                });
-                            }
-                        },
-                        formatter: (value, options, rowData) => {
-                            if (value != null) {
-
-                                let statusApproval = JSON.parse(value)
-
-                                let formattedValue = $(`
-                                    <div class="badge" style="background-color: ${statusApproval.WARNA}; color: #fff;">
-                                    <span>${statusApproval.SINGKATAN}</span>
-                                    </div>
-                                `)
-
-                                return formattedValue[0].outerHTML
-                            } else {
-                                let nullValue = $(`
-                                    <div> </div>
-                                `)
-
-                                return nullValue[0].outerHTML
-                            }
-                        },
-                        cellattr: (rowId, value, rowObject) => {
-                            let statusApproval = JSON.parse(rowObject.statusapproval)
-                            if (statusApproval != null) {
-                                return ` title="${statusApproval.MEMO}"`
-                            }
-                        }
-                    },
-                    {
                         label: 'NO BUKTI',
                         name: 'nobukti',
                         align: 'left'
