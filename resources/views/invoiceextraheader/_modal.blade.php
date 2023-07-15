@@ -232,7 +232,7 @@
 
             setErrorMessages(form, error.responseJSON.errors);
           } else {
-              showDialog(error.responseJSON)
+            showDialog(error.responseJSON)
           }
         },
       }).always(() => {
@@ -328,8 +328,21 @@
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-
-    showInvoiceExtraHeader(form, invoiceExtraHeader)
+    Promise
+      .all([
+        showInvoiceExtraHeader(form, invoiceExtraHeader)
+      ])
+      .then(() => {
+        $('#crudModal').modal('show')
+        $('#crudForm [name=tglbukti]').attr('readonly', true)
+        $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
+      })
+      .catch((error) => {
+        showDialog(error.statusText)
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
 
   }
 
@@ -348,7 +361,21 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    showInvoiceExtraHeader(form, invoiceExtraHeader)
+    Promise
+      .all([
+        showInvoiceExtraHeader(form, invoiceExtraHeader)
+      ])
+      .then(() => {
+        $('#crudModal').modal('show')
+        $('#crudForm [name=tglbukti]').attr('readonly', true)
+        $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
+      })
+      .catch((error) => {
+        showDialog(error.statusText)
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
 
   }
 
