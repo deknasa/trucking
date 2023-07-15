@@ -408,7 +408,10 @@
 
                     let params
                     let actionUrl = ``
-
+                    let submitButton = $(this).find('button:submit')
+                    
+                    submitButton.attr('disabled', 'disabled')
+                    $('#processingLoader').removeClass('d-none')
                     /* Clear validation messages */
                     $('.is-invalid').removeClass('is-invalid')
                     $('.invalid-feedback').remove()
