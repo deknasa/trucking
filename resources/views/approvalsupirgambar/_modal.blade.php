@@ -238,15 +238,26 @@
     Simpan
   `)
     $('#crudModalTitle').text('Edit Approval Supir Gambar')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
     Promise.all([
-        setStatusApprovalOptions(form)
-      ])
+      setStatusApprovalOptions(form)
+    ])
+    .then(() => {  
+      showApprovalSupirGambar(form, approvalSupirGambarId)
       .then(() => {
-        showApprovalSupirGambar(form, approvalSupirGambarId)
+        $('#crudModal').modal('show')
       })
+      .catch((error) => {
+        showDialog(error.statusText)
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
+    })
+      
+        
+            
   }
 
   function deleteApprovalSupirGambar(approvalSupirGambarId) {
@@ -259,7 +270,6 @@
     Hapus
   `)
     $('#crudModalTitle').text('Delete Approval Supir Gambar')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -268,38 +278,55 @@
       ])
       .then(() => {
         showApprovalSupirGambar(form, approvalSupirGambarId)
+        .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .catch((error) => {
+            showDialog(error.statusText)
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
       })
   }
 
   
 
   function showApprovalSupirGambar(form, approvalSupirGambarId) {
-    $.ajax({
-      url: `${apiUrl}approvalsupirgambar/${approvalSupirGambarId}`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        $.each(response.data, (index, value) => {
-          let element = form.find(`[name="${index}"]`)
-
-          if (element.is('select')) {
-            element.val(value).trigger('change')
-          }else if(element.attr("name") == 'tglbatas'){
-            var result = value.split('-');
-            element.val(result[2]+'-'+result[1]+'-'+result[0]);
-          } else {
-            element.val(value)
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `${apiUrl}approvalsupirgambar/${approvalSupirGambarId}`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          $.each(response.data, (index, value) => {
+            let element = form.find(`[name="${index}"]`)
+  
+            if (element.is('select')) {
+              element.val(value).trigger('change')
+            }else if(element.attr("name") == 'tglbatas'){
+              var result = value.split('-');
+              element.val(result[2]+'-'+result[1]+'-'+result[0]);
+            } else {
+              element.val(value)
+            }
+          })
+          
+          if (form.data('action') === 'delete') {
+            form.find('[name]').addClass('disabled')
+            initDisabled()
           }
-        })
-        
-        if (form.data('action') === 'delete') {
-          form.find('[name]').addClass('disabled')
-          initDisabled()
+
+          resolve()
+
+        },
+        error: error => {
+          reject(error)
         }
-      }
+      })
     })
   }
   function showDefault(form) {

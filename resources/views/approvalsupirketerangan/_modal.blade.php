@@ -265,7 +265,6 @@
     Hapus
   `)
     $('#crudModalTitle').text('Delete Approval Supir Keterangan')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
