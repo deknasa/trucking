@@ -27,7 +27,7 @@ class OrderanTruckingController extends MyController
         $data = [
             'combolangsir' => $this->combo('list','STATUS LANGSIR','STATUS LANGSIR'),
             'comboperalihan' => $this->combo('list','STATUS PERALIHAN','STATUS PERALIHAN'),
-
+            'comboapproval' => $this->comboApproval('list', 'STATUS APPROVAL', 'STATUS APPROVAL'),
         ];
 
         
@@ -98,6 +98,22 @@ class OrderanTruckingController extends MyController
         $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'user/combostatus',$status);
+        return $response['data'];
+    }
+    public function comboApproval($aksi, $grp, $subgrp)
+    {
+
+        $status = [
+            'status' => $aksi,
+            'grp' => $grp,
+            'subgrp' => $subgrp,
+        ];
+
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'hutangbayarheader/comboapproval', $status);
+
         return $response['data'];
     }
 

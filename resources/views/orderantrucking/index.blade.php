@@ -28,7 +28,26 @@
   let sortname = 'nobukti'
   let sortorder = 'asc'
   let autoNumericElements = []
+  let activeGrid
   let rowNum = 10
+  let selectedRows = [];
+
+
+  function checkboxHandler(element) {
+    let value = $(element).val();
+    if (element.checked) {
+        selectedRows.push($(element).val())
+        $(element).parents('tr').addClass('bg-light-blue')
+    } else {
+        $(element).parents('tr').removeClass('bg-light-blue')
+        for (var i = 0; i < selectedRows.length; i++) {
+            if (selectedRows[i] == value) {
+                selectedRows.splice(i, 1);
+            }
+        }
+    }
+  }
+    
 
   $(document).ready(function() {
 
@@ -36,6 +55,9 @@
     initDatepicker()
     $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('orderantrucking')
+      selectedRows = []
+      $('#gs_').prop('checked', false)
+
     })
 
     $("#jqGrid").jqGrid({
@@ -48,7 +70,86 @@
           tglsampai: $('#tglsampaiheader').val()
         },
         datatype: "json",
-        colModel: [{
+        colModel: [
+          {
+            label: '',
+            name: '',
+            width: 30,
+            align: 'center',
+            sortable: false,
+            clear: false,
+            stype: 'input',
+            searchable: false,
+            searchoptions: {
+                type: 'checkbox',
+                clearSearch: false,
+                dataInit: function(element) {
+                    $(element).removeClass('form-control')
+                    $(element).parent().addClass('text-center')
+
+                    $(element).on('click', function() {                                    
+                        $(element).attr('disabled', true)
+                        if ($(this).is(':checked')) {
+                            selectAllRows()
+                        } else {
+                            clearSelectedRows()
+                        }
+                    })
+
+                }
+            },
+            formatter: (value, rowOptions, rowData) => {
+                return `<input type="checkbox" name="orderanTruckingId[]" value="${rowData.id}" onchange="checkboxHandler(this)">`
+            },
+          },
+          {
+            label: 'STATUS APPROVAL',
+            name: 'statusapprovalbukatrip',
+            align: 'left',
+            stype: 'select',
+            searchoptions: {
+                value: `<?php
+                        $i = 1;
+
+                        foreach ($data['comboapproval'] as $status) :
+                            echo "$status[param]:$status[parameter]";
+                            if ($i !== count($data['comboapproval'])) {
+                                echo ";";
+                            }
+                            $i++;
+                        endforeach
+
+                        ?>
+                `,
+                dataInit: function(element) {
+                    $(element).select2({
+                        width: 'resolve',
+                        theme: "bootstrap4"
+                    });
+                }
+            },
+            formatter: (value, options, rowData) => {
+                let statusApproval = JSON.parse(value)
+                if (!statusApproval) {
+                    return ''
+                }
+                let formattedValue = $(`
+                    <div class="badge" style="background-color: ${statusApproval.WARNA}; color: #fff;">
+                    <span>${statusApproval.SINGKATAN}</span>
+                    </div>
+                `)
+
+                return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusApproval = JSON.parse(rowObject.statusapprovalbukatrip)
+              if (!statusApproval) {
+                return ` title=" "`
+              }
+              return ` title="${statusApproval.MEMO}"`
+            }
+          },    
+          {
             label: 'ID',
             name: 'id',
             width: '50px',
@@ -270,6 +371,18 @@
           setCustomBindKeys($(this))
           initResize($(this))
 
+          $.each(selectedRows, function(key, value) {
+            $('#jqGrid tbody tr').each(function(row, tr) {
+              if ($(this).find(`td input:checkbox`).val() == value) {
+                $(this).find(`td input:checkbox`).prop('checked', true)
+                $(this).addClass('bg-light-blue')
+              }
+            })
+          });
+            
+                
+          
+
           /* Set global variables */
           sortname = $(this).jqGrid("getGridParam", "sortname")
           sortorder = $(this).jqGrid("getGridParam", "sortorder")
@@ -305,6 +418,8 @@
           }
           $('#left-nav').find('button').attr('disabled', false)
           permission() 
+          $('#gs_').attr('disabled', false)
+
           setHighlight($(this))
         },
       })
@@ -329,6 +444,8 @@
             innerHTML: '<i class="fa fa-plus"></i> ADD',
             class: 'btn btn-primary btn-sm mr-1',
             onClick: () => {
+              clearSelectedRows()
+              $('#gs_').prop('checked', false)
               createOrderanTrucking()
             }
           },
@@ -367,6 +484,8 @@
               $('#formRangeTgl').data('action', 'report')
               $('#rangeTglModal').find('button:submit').html(`Report`)
               $('#rangeTglModal').modal('show')
+              clearSelectedRows()
+              $('#gs_').prop('checked', false)
             }
           },
           {
@@ -377,8 +496,20 @@
               $('#formRangeTgl').data('action', 'export')
               $('#rangeTglModal').find('button:submit').html(`Export`)
               $('#rangeTglModal').modal('show')
+              clearSelectedRows()
+              $('#gs_').prop('checked', false)
             }
           },
+          {
+            id: 'approveun',
+            innerHTML: '<i class="fas fa-check""></i> UN/APPROVAL',
+            class: 'btn btn-purple btn-sm mr-1',
+            onClick: () => {
+  
+                approve()
+  
+            }
+        },
         ]
       })
 
@@ -542,6 +673,32 @@
 
       window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
     })
+    function clearSelectedRows() {
+        selectedRows = []
+
+        $('#jqGrid').trigger('reloadGrid')
+    }
+
+    function selectAllRows() {
+        $.ajax({
+            url: `${apiUrl}orderantrucking`,
+            method: 'GET',
+            dataType: 'JSON',
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            },
+            data: {
+                limit: 0,
+                tgldari: $('#tgldariheader').val(),
+                tglsampai: $('#tglsampaiheader').val()
+            },
+            success: (response) => {
+              console.log(response);
+                selectedRows = response.data.map((giro) => giro.id)
+                $('#jqGrid').trigger('reloadGrid')
+            }
+        })
+    }
   })
 </script>
 @endpush()
