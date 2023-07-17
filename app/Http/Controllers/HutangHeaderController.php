@@ -125,7 +125,6 @@ class HutangHeaderController extends MyController
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') .'hutangdetail', $detailParams)['data'];
-
         $combo = $this->combo('list');
         $key = array_search('CETAK', array_column( $combo, 'parameter')); 
         $hutang["combo"] =  $combo[$key];
@@ -150,6 +149,11 @@ class HutangHeaderController extends MyController
         ->withToken(session('access_token'))
         ->get(config('app.api_url') .'hutangdetail', $detailParams)['data'];
 
+        $tglbukti = $hutang["tglbukti"];
+        $timeStamp = strtotime($tglbukti);
+        $datetglbukti = date('d-m-Y', $timeStamp); 
+        $hutang['tglbukti'] = $datetglbukti;
+
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setCellValue('A1', $hutang['judul']);
@@ -160,11 +164,10 @@ class HutangHeaderController extends MyController
         $sheet->getStyle("A2")->getFont()->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
-        $sheet->mergeCells('A1:E1');
-        $sheet->mergeCells('A2:E2');
+        $sheet->mergeCells('A1:D1');
+        $sheet->mergeCells('A2:D2');
 
         $header_start_row = 4;
-        $header_right_start_row = 4;
         $detail_table_header_row = 8;
         $detail_start_row = $detail_table_header_row + 1;
        
@@ -180,20 +183,9 @@ class HutangHeaderController extends MyController
                 'index' => 'tglbukti',
             ],
             [
-                'label' => 'Posting Dari',
-                'index' => 'postingdari',
-            ]
-        ];
-
-        $header_right_columns = [
-            [
-                'label' => 'Kode Perkiraan',
-                'index' => 'coa',
-            ],
-            [
-                'label' => 'Pelanggan',
+                'label' => 'Supplier',
                 'index' => 'supplier_id',
-            ],
+            ]
         ];
 
         $detail_columns = [
@@ -201,7 +193,7 @@ class HutangHeaderController extends MyController
                 'label' => 'NO',
             ],
             [
-                'label' => 'JATUH TEMPO',
+                'label' => 'TANGGAL JATUH TEMPO',
                 'index' => 'tgljatuhtempo',
             ],
             [
@@ -209,7 +201,7 @@ class HutangHeaderController extends MyController
                 'index' => 'keterangan',
             ],
             [
-                'label' => 'TOTAL',
+                'label' => 'NOMINAL',
                 'index' => 'total',
                 'format' => 'currency'
             ]
@@ -219,10 +211,6 @@ class HutangHeaderController extends MyController
         foreach ($header_columns as $header_column) {
             $sheet->setCellValue('B' . $header_start_row, $header_column['label']);
             $sheet->setCellValue('C' . $header_start_row++, ': '.$hutang[$header_column['index']]);
-        }
-        foreach ($header_right_columns as $header_right_column) {
-            $sheet->setCellValue('D' . $header_right_start_row, $header_right_column['label']);
-            $sheet->setCellValue('E' . $header_right_start_row++, ': '.$hutang[$header_right_column['index']]);
         }
         foreach ($detail_columns as $detail_columns_index => $detail_column) {
             $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_table_header_row, $detail_column['label'] ?? $detail_columns_index + 1);
@@ -260,7 +248,6 @@ class HutangHeaderController extends MyController
                 $sheet->getStyle("A$detail_table_header_row:E$detail_table_header_row")->getFont()->setBold(true);
                 $sheet->getStyle("A$detail_table_header_row:E$detail_table_header_row")->getAlignment()->setHorizontal('center');
             }
-            $response_detail['totals'] = number_format((float) $response_detail['total'], '2', '.', ',');
             
             $tgljatuhtempo = $response_detail["tgljatuhtempo"];
             $timeStamp = strtotime($tgljatuhtempo);
@@ -270,12 +257,13 @@ class HutangHeaderController extends MyController
             $sheet->setCellValue("A$detail_start_row", $response_index + 1);
             $sheet->setCellValue("B$detail_start_row", $response_detail['tgljatuhtempo']);
             $sheet->setCellValue("C$detail_start_row", $response_detail['keterangan']);
-            $sheet->setCellValue("D$detail_start_row", $response_detail['totals']);
+            $sheet->setCellValue("D$detail_start_row", $response_detail['total']);
 
             $sheet->getStyle("C$detail_start_row")->getAlignment()->setWrapText(true);
             $sheet->getColumnDimension('C')->setWidth(50);
+            $sheet->getStyle("D$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
 
-            $sheet ->getStyle("A$detail_start_row:C$detail_start_row")->applyFromArray($styleArray);
+            $sheet ->getStyle("A$detail_start_row:D$detail_start_row")->applyFromArray($styleArray);
             $sheet ->getStyle("D$detail_start_row")->applyFromArray($style_number);
 
             $total += $response_detail['total'];
@@ -284,13 +272,12 @@ class HutangHeaderController extends MyController
 
         $total_start_row = $detail_start_row;
         $sheet->mergeCells('A'.$total_start_row.':C'.$total_start_row);
-        $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A'.$total_start_row.':C'.$total_start_row)->applyFromArray($style_number)->getFont()->setBold(true);
-        $sheet->setCellValue("D$total_start_row", number_format((float) $total, '2', ',', '.'))->getStyle("D$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A'.$total_start_row.':C'.$total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
+        $sheet->setCellValue("D$total_start_row", number_format((float) $total, '2', '.', ','))->getStyle("D$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
 
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);
         $sheet->getColumnDimension('D')->setAutoSize(true);
-        $sheet->getColumnDimension('E')->setAutoSize(true);
 
         $writer = new Xlsx($spreadsheet);
         $filename = 'Laporan Hutang' . date('dmYHis');

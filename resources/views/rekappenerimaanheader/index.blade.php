@@ -37,17 +37,17 @@
   $(document).ready(function() {
 
     $('#lookup').hide()
-    
+
     setRange()
     initDatepicker()
-    $(document).on('click','#btnReload', function(event) {
+    $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('rekappenerimaanheader')
     })
 
 
     $('#crudModal').on('hidden.bs.modal', function() {
-       activeGrid = '#jqGrid'
-     })
+      activeGrid = '#jqGrid'
+    })
 
     $("#jqGrid").jqGrid({
         url: `{{ config('app.api_url') . 'rekappenerimaanheader' }}`,
@@ -56,9 +56,9 @@
         iconSet: 'fontAwesome',
         datatype: "json",
         postData: {
-          tgldari:$('#tgldariheader').val() ,
-          tglsampai:$('#tglsampaiheader').val(),
-          
+          tgldari: $('#tgldariheader').val(),
+          tglsampai: $('#tglsampaiheader').val(),
+
         },
         colModel: [{
             label: 'ID',
@@ -184,17 +184,17 @@
               srcformat: "ISO8601Long",
               newformat: "d-m-Y"
             }
-          },   
+          },
           {
             label: 'user approval',
             name: 'userapproval',
             align: 'left'
-          },     
+          },
           {
             label: 'tgl approval',
             name: 'tglapproval',
             align: 'left',
-             formatter: "date",
+            formatter: "date",
             formatoptions: {
               srcformat: "ISO8601Long",
               newformat: "d-m-Y"
@@ -204,12 +204,12 @@
             label: 'user buka cetak',
             name: 'userbukacetak',
             align: 'left'
-          },     
+          },
           {
             label: 'tgl buka cetak',
             name: 'tglbukacetak',
             align: 'left',
-             formatter: "date",
+            formatter: "date",
             formatoptions: {
               srcformat: "ISO8601Long",
               newformat: "d-m-Y"
@@ -219,7 +219,7 @@
             label: 'modifiedby',
             name: 'modifiedby',
             align: 'left'
-          },  
+          },
           {
             label: 'CREATEDAT',
             name: 'created_at',
@@ -240,7 +240,7 @@
               newformat: "d-m-Y H:i:s"
             }
           },
-          
+
         ],
 
         autowidth: true,
@@ -286,7 +286,7 @@
           if (data.data.length === 0) {
             abortGridLastRequest($('#detail'))
             clearGridData($('#detail'))
-            
+
             $('#jqGrid').each((index, element) => {
               abortGridLastRequest($(element))
               clearGridHeader($(element))
@@ -303,7 +303,7 @@
           totalRecord = $(this).getGridParam("records")
           limit = $(this).jqGrid('getGridParam', 'postData').limit
           postData = $(this).jqGrid('getGridParam', 'postData')
-          triggerClick = true  
+          triggerClick = true
 
           $('.clearsearchclass').click(function() {
             clearColumnSearch($(this))
@@ -335,7 +335,7 @@
           }, 100)
 
           $('#left-nav').find('button').attr('disabled', false)
-          permission() 
+          permission()
           setHighlight($(this))
         }
       })
@@ -361,19 +361,6 @@
             class: 'btn btn-primary btn-sm mr-1',
             onClick: function(event) {
               createRekapPenerimaanHeader()
-            }
-          },
-          {
-            id: 'edit',
-            innerHTML: '<i class="fa fa-pen"></i> EDIT',
-            class: 'btn btn-success btn-sm mr-1',
-            onClick: function(event) {
-              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Harap pilih salah satu record')
-              } else {
-                cekValidasi(selectedId, 'EDIT')
-              }
             }
           },
           {
@@ -422,11 +409,12 @@
             innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
             class: 'btn btn-purple btn-sm mr-1',
             onClick: () => {
-              let id = $('#jqGrid').jqGrid('getGridParam', 'selrow')
-
-              $('#loader').removeClass('d-none')
-
-              handleApproval(id)
+              let selectedId = $('#jqGrid').jqGrid('getGridParam', 'selrow')
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Harap pilih salah satu record')
+              } else {
+                handleApproval(selectedId)
+              }
             }
           },
         ]
@@ -466,29 +454,30 @@
       .addClass('btn btn-sm btn-warning')
       .parent().addClass('px-1')
 
-      function permission() {
-    if (!`{{ $myAuth->hasPermission('rekappenerimaanheader', 'store') }}`) {
-      $('#add').addClass('ui-disabled')
-    }
+    function permission() {
+      if (!`{{ $myAuth->hasPermission('rekappenerimaanheader', 'store') }}`) {
+        $('#add').addClass('ui-disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('rekappenerimaanheader', 'update') }}`) {
-      $('#edit').addClass('ui-disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('rekappenerimaanheader', 'update') }}`) {
+        $('#edit').addClass('ui-disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('rekappenerimaanheader', 'destroy') }}`) {
-      $('#delete').addClass('ui-disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('rekappenerimaanheader', 'destroy') }}`) {
+        $('#delete').addClass('ui-disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('rekappenerimaanheader', 'export') }}`) {
-      $('#export').addClass('ui-disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('rekappenerimaanheader', 'export') }}`) {
+        $('#export').addClass('ui-disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('rekappenerimaanheader', 'report') }}`) {
-      $('#report').addClass('ui-disabled')
+      if (!`{{ $myAuth->hasPermission('rekappenerimaanheader', 'report') }}`) {
+        $('#report').addClass('ui-disabled')
+      }
+      if (!`{{ $myAuth->hasPermission('rekappenerimaanheader', 'approval') }}`) {
+        $('#approval').addClass('ui-disabled')
+      }
     }
-    if (!`{{ $myAuth->hasPermission('rekappenerimaanheader', 'approval') }}`) {
-      $('#approval').addClass('ui-disabled')
-    }}
 
     $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {
@@ -539,21 +528,22 @@
     //   window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
     // })
 
-  function handleApproval(id) {
-    $.ajax({
-      url: `${apiUrl}rekappenerimaanheader/${id}/approval`,
-      method: 'POST',
-      dataType: 'JSON',
-      beforeSend: request => {
-        request.setRequestHeader('Authorization', `Bearer ${accessToken}`)
-      },
-      success: response => {
-        $('#jqGrid').trigger('reloadGrid')
-      }
-    }).always(() => {
-      $('#processingLoader').addClass('d-none')
-    })
-  }
+    function handleApproval(id) {
+      $.ajax({
+        url: `${apiUrl}rekappenerimaanheader/${id}/approval`,
+        method: 'POST',
+        dataType: 'JSON',
+        beforeSend: request => {
+          request.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+        },
+        success: response => {
+          $('#loader').addClass('d-none')
+          $('#jqGrid').trigger('reloadGrid')
+        }
+      }).always(() => {
+        $('#processingLoader').addClass('d-none')
+      })
+    }
 
   })
 </script>

@@ -445,6 +445,10 @@
             } else {
               element.val(value)
             }
+            if (index == 'kodepengeluaran') {
+              element.attr('readonly', true)
+            }
+            
           })
           resolve()
         },

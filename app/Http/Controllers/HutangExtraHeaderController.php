@@ -3,23 +3,22 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
-class RekapPengeluaranHeaderController extends MyController
+class HutangExtraHeaderController extends MyController
 {
-    public $title = 'Rekap Pengeluaran';
+    public $title = 'Hutang Extra';
+
     
     public function index(Request $request)
     {
         $title = $this->title;
         $data = [
-            'comboapproval' => $this->comboList('list','STATUS APPROVAL','STATUS APPROVAL'),
-            'combocetak' => $this->comboList('list','STATUSCETAK','STATUSCETAK'),
+            'combocetak' => $this->comboList('list', 'STATUSCETAK','STATUSCETAK')
         ];
-        return view('rekappengeluaranheader.index', compact('title','data'));
+        return view('hutangextraheader.index', compact('title','data'));
     }
 
     public function comboList($aksi, $grp, $subgrp)
@@ -38,47 +37,6 @@ class RekapPengeluaranHeaderController extends MyController
 
         return $response['data'];
     }
-    public function get($params = [])
-    {
-        $params = [
-            'offset' => $params['offset'] ?? request()->offset ?? ((request()->page - 1) * request()->rows),
-            'limit' => $params['rows'] ?? request()->rows ?? 0,
-            'sortIndex' => $params['sidx'] ?? request()->sidx,
-            'sortOrder' => $params['sord'] ?? request()->sord,
-            'search' => json_decode($params['filters'] ?? request()->filters, 1) ?? [],
-            'withRelations' => $params['withRelations'] ?? request()->withRelations ?? false,
-        ];
-
-        $response = Http::withHeaders(request()->header())
-            ->withOptions(['verify' => false])
-            ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'rekappengeluaranheader', $params);
-
-        $data = [
-            'total' => $response['attributes']['totalPages'] ?? [],
-            'records' => $response['attributes']['totalRows'] ?? [],
-            'rows' => $response['data'] ?? [],
-            'params' => $response['params'] ?? [],
-        ];
-
-        return $data;
-    }
-
-    public function find($params,$id)
-    {
-        $params = [
-            'offset' => $params['offset'] ?? request()->offset ?? ((request()->page - 1) * request()->rows),
-            'limit' => $params['rows'] ?? request()->rows ?? 0,
-            'sortIndex' => $params['sidx'] ?? request()->sidx,
-            'sortOrder' => $params['sord'] ?? request()->sord,
-            'search' => json_decode($params['filters'] ?? request()->filters, 1) ?? [],
-            'withRelations' => $params['withRelations'] ?? request()->withRelations ?? false,
-        ];
-        return $response = Http::withHeaders(request()->header())
-            ->withOptions(['verify' => false])
-            ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'rekappengeluaranheader/'.$id);
-    }
 
     public function combo($aksi)
     {
@@ -93,128 +51,131 @@ class RekapPengeluaranHeaderController extends MyController
         return $response['data'];
     }
 
-    /**
-     * @ClassName
-     */
     public function report(Request $request)
     {
+        
         //FETCH HEADER
         $id = $request->id;
-        $rekappengeluaran = Http::withHeaders($request->header())
+        $hutang = Http::withHeaders($request->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') .'rekappengeluaranheader/'.$id.'/export')['data'];
-        
+            ->get(config('app.api_url') .'hutangextraheader/'.$id.'/export')['data'];
+
         //FETCH DETAIL
         $detailParams = [
             'forReport' => true,
-            'rekappengeluaran_id' => $request->id,
+            'hutangextra_id' => $request->id,
         ];
-        $rekappengeluaran_details = Http::withHeaders($request->header())
+        $hutang_details = Http::withHeaders($request->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') .'rekappengeluarandetail', $detailParams)['data'];
+            ->get(config('app.api_url') .'hutangextradetail', $detailParams)['data'];
+
         $combo = $this->combo('list');
         $key = array_search('CETAK', array_column( $combo, 'parameter')); 
-        $rekappengeluaran["combo"] =  $combo[$key];
-        return view('reports.rekappengeluaranheader', compact('rekappengeluaran','rekappengeluaran_details'));
+        $hutang["combo"] =  $combo[$key];
+        return view('reports.hutangextra', compact('hutang','hutang_details'));
     }
 
-    public function export(Request $request)
+    public function export(Request $request): void
     {
         //FETCH HEADER
         $id = $request->id;
-        $rekappengeluaran = Http::withHeaders($request->header())
+        $hutang = Http::withHeaders($request->header())
         ->withOptions(['verify' => false])
         ->withToken(session('access_token'))
-        ->get(config('app.api_url') .'rekappengeluaranheader/'.$id.'/export')['data'];
-        
+        ->get(config('app.api_url') .'hutangextraheader/'.$id.'/export')['data'];
+
         //FETCH DETAIL
         $detailParams = [
-            'forReport' => true,
-            'rekappengeluaran_id' => $request->id,
+            'hutangextra_id' => $request->id,
         ];
-        $rekappengeluaran_details = Http::withHeaders($request->header())
+        $hutang_details = Http::withHeaders($request->header())
         ->withOptions(['verify' => false])
         ->withToken(session('access_token'))
-        ->get(config('app.api_url') .'rekappengeluarandetail', $detailParams)['data'];
+        ->get(config('app.api_url') .'hutangextradetail', $detailParams)['data'];
 
-        $tglBukti = $rekappengeluaran["tglbukti"];
-        $timeStamp = strtotime($tglBukti);
-        $dateTglBukti = date('d-m-Y', $timeStamp); 
-        $rekappengeluaran['tglbukti'] = $dateTglBukti;
-
-        $tgltransaksi = $rekappengeluaran["tgltransaksi"];
-        $timeStamp = strtotime($tgltransaksi);
-        $datetgltransaksi = date('d-m-Y', $timeStamp); 
-        $rekappengeluaran['tgltransaksi'] = $datetgltransaksi;
-        
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setCellValue('A1', $rekappengeluaran['judul']);
-        $sheet->setCellValue('A2', $rekappengeluaran['judulLaporan']);
+        $sheet->setCellValue('A1', $hutang['judul']);
+        $sheet->setCellValue('A2', $hutang['judulLaporan']);
         $sheet->getStyle("A1")->getFont()->setSize(12);
         $sheet->getStyle("A2")->getFont()->setSize(12);
         $sheet->getStyle("A1")->getFont()->setBold(true);
         $sheet->getStyle("A2")->getFont()->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
-        $sheet->mergeCells('A1:D1');
-        $sheet->mergeCells('A2:D2');
+        $sheet->mergeCells('A1:E1');
+        $sheet->mergeCells('A2:E2');
 
         $header_start_row = 4;
-        $detail_table_header_row = 9;
+        $header_right_start_row = 4;
+        $detail_table_header_row = 8;
         $detail_start_row = $detail_table_header_row + 1;
-
+       
         $alphabets = range('A', 'Z');
+
         $header_columns = [
             [
-                'label'=>'No Bukti',
-                'index'=>'nobukti'
+                'label' => 'No Bukti',
+                'index' => 'nobukti',
             ],
             [
-                'label'=>'Tanggal',
-                'index'=>'tglbukti'
+                'label' => 'Tanggal',
+                'index' => 'tglbukti',
             ],
             [
-                'label'=>'Bank/Kas',
-                'index'=>'bank'
-            ],
-            [
-                'label'=>'Tanggal Transaksi',
-                'index'=>'tgltransaksi'
+                'label' => 'Posting Dari',
+                'index' => 'postingdari',
             ]
         ];
+
+        $header_right_columns = [
+            [
+                'label' => 'Kode Perkiraan',
+                'index' => 'coa',
+            ],
+            [
+                'label' => 'Supplier',
+                'index' => 'supplier_id',
+            ],
+            [
+                'label' => 'No Bukti Hutang',
+                'index' => 'hutang_nobukti',
+            ],
+        ];
+
         $detail_columns = [
             [
-                'label'=>'NO',
+                'label' => 'NO',
             ],
             [
-                'label'=>'NAMA PERKIRAAN',
-                'index'=>'pengeluaran_nobukti'
+                'label' => 'JATUH TEMPO',
+                'index' => 'tgljatuhtempo',
             ],
             [
-                'label'=>'KETERANGAN',
-                'index'=>'keterangan'
+                'label' => 'KETERANGAN',
+                'index' => 'keterangan',
             ],
             [
-                'label'=>'NOMINAL',
-                'index'=>'nominal',
-                'format'=>'currency'
-            ], 
-            
+                'label' => 'TOTAL',
+                'index' => 'total',
+                'format' => 'currency'
+            ]
         ];
 
         //LOOPING HEADER        
         foreach ($header_columns as $header_column) {
             $sheet->setCellValue('B' . $header_start_row, $header_column['label']);
-            $sheet->setCellValue('C' . $header_start_row++, ': '.$rekappengeluaran[$header_column['index']]);
+            $sheet->setCellValue('C' . $header_start_row++, ': '.$hutang[$header_column['index']]);
         }
-
+        foreach ($header_right_columns as $header_right_column) {
+            $sheet->setCellValue('D' . $header_right_start_row, $header_right_column['label']);
+            $sheet->setCellValue('E' . $header_right_start_row++, ': '.$hutang[$header_right_column['index']]);
+        }
         foreach ($detail_columns as $detail_columns_index => $detail_column) {
             $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_table_header_row, $detail_column['label'] ?? $detail_columns_index + 1);
         }
-
         $styleArray = array(
             'borders' => array(
                 'allBorders' => array(
@@ -238,44 +199,52 @@ class RekapPengeluaranHeaderController extends MyController
 
         // $sheet->getStyle("A$detail_table_header_row:G$detail_table_header_row")->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FF1F456E');
         $sheet ->getStyle("A$detail_table_header_row:D$detail_table_header_row")->applyFromArray($styleArray);
-    
+
         // LOOPING DETAIL
-        $nominal = 0;
-        foreach ($rekappengeluaran_details as $response_index => $response_detail) {
+        $total = 0;
+        foreach ($hutang_details as $response_index => $response_detail) {
             
             foreach ($detail_columns as $detail_columns_index => $detail_column) {
                 $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
                 $sheet->getStyle("A$detail_table_header_row:E$detail_table_header_row")->getFont()->setBold(true);
                 $sheet->getStyle("A$detail_table_header_row:E$detail_table_header_row")->getAlignment()->setHorizontal('center');
             }
-            $response_detail['nominals'] = number_format((float) $response_detail['nominal'], '2', '.', ',');
+            // $response_detail['totals'] = number_format((float) $response_detail['total'], '2', '.', ',');
+            
+            $tgljatuhtempo = $response_detail["tgljatuhtempo"];
+            $timeStamp = strtotime($tgljatuhtempo);
+            $datetgljatuhtempo = date('d-m-Y', $timeStamp); 
+            $response_detail['tgljatuhtempo'] = $datetgljatuhtempo;
         
             $sheet->setCellValue("A$detail_start_row", $response_index + 1);
-            $sheet->setCellValue("B$detail_start_row", $response_detail['pengeluaran_nobukti']);
+            $sheet->setCellValue("B$detail_start_row", $response_detail['tgljatuhtempo']);
             $sheet->setCellValue("C$detail_start_row", $response_detail['keterangan']);
-            $sheet->setCellValue("D$detail_start_row", $response_detail['nominals']);
+            $sheet->setCellValue("D$detail_start_row", $response_detail['total']);
 
             $sheet->getStyle("C$detail_start_row")->getAlignment()->setWrapText(true);
             $sheet->getColumnDimension('C')->setWidth(50);
+            $sheet->getStyle("D$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
 
             $sheet ->getStyle("A$detail_start_row:C$detail_start_row")->applyFromArray($styleArray);
             $sheet ->getStyle("D$detail_start_row")->applyFromArray($style_number);
-            $nominal += $response_detail['nominal'];
+
+            $total += $response_detail['total'];
             $detail_start_row++;
         }
- 
+
         $total_start_row = $detail_start_row;
         $sheet->mergeCells('A'.$total_start_row.':C'.$total_start_row);
-        $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A'.$total_start_row.':C'.$total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
-        $sheet->setCellValue("D$total_start_row", number_format((float) $nominal, '2', '.', ','))->getStyle("D$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A'.$total_start_row.':C'.$total_start_row)->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->setCellValue("D$total_start_row", $total)->getStyle("D$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->getStyle("D$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
 
-        //set autosize
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);
         $sheet->getColumnDimension('D')->setAutoSize(true);
+        $sheet->getColumnDimension('E')->setAutoSize(true);
 
         $writer = new Xlsx($spreadsheet);
-        $filename = 'Laporan Rekap Pengeluaran' . date('dmYHis');
+        $filename = 'Laporan Hutang EXTRA' . date('dmYHis');
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
         header('Cache-Control: max-age=0');

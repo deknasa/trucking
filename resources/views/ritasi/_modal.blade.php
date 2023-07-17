@@ -650,5 +650,29 @@
     })
 
   }
+  function cekValidasi(Id, Aksi) {
+        $.ajax({
+            url: `{{ config('app.api_url') }}ritasi/${Id}/cekvalidasi`,
+            method: 'POST',
+            dataType: 'JSON',
+            beforeSend: request => {
+                request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+            },
+            success: response => {
+                var error = response.error
+                if (error) {
+                    showDialog(response)
+                } else {
+                    if (Aksi == 'EDIT') {
+                        editRitasi(Id)
+                    }
+                    if (Aksi == 'DELETE') {
+                        deleteRitasi(Id)
+                    }
+                }
+
+            }
+        })
+    }
 </script>
 @endpush()

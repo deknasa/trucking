@@ -6,22 +6,24 @@
     <div class="row">
         <div class="col-12">
             @include('layouts._rangeheader')
-
             <table id="jqGrid"></table>
         </div>
     </div>
-
     <div class="row mt-3">
         <div class="col-12">
             <div class="card card-primary card-outline card-outline-tabs">
                 <div class="card-body border-bottom-0">
-                    <div id="tabs">
-                        <ul class="dejavu">
+                    <div id="tabs" class="open-sans">
+                        <ul>
                             <li><a href="#detail-tab">Details</a></li>
+                            <li><a href="#hutang-tab">Hutang</a></li>
                             <li><a href="#jurnal-tab">Jurnal</a></li>
                         </ul>
                         <div id="detail-tab">
-                            <table id="detail"></table>
+                            <table id="detailGrid"></table>
+                        </div>
+                        <div id="hutang-tab">
+                            <table id="hutangGrid"></table>
                         </div>
                         <div id="jurnal-tab">
                             <table id="jurnalGrid"></table>
@@ -33,11 +35,13 @@
     </div>
 </div>
 
-@include('penerimaangiroheader._modal')
 <!-- Detail -->
-@include('penerimaangiroheader._detail')
+
+@include('hutangextraheader._detail')
+@include('hutangextraheader._hutang')
 @include('jurnalumum._jurnal')
 
+@include('hutangextraheader._modal')
 @push('scripts')
 <script>
     let indexRow = 0;
@@ -53,44 +57,24 @@
     let sortname = 'nobukti'
     let sortorder = 'asc'
     let autoNumericElements = []
-    let rowNum = 10
-    let hasDetail = false
     let currentTab = 'detail'
-    let selectedRows = [];
-
-    function checkboxHandler(element) {
-        let value = $(element).val();
-        if (element.checked) {
-            selectedRows.push($(element).val())
-            $(element).parents('tr').addClass('bg-light-blue')
-        } else {
-            $(element).parents('tr').removeClass('bg-light-blue')
-            for (var i = 0; i < selectedRows.length; i++) {
-                if (selectedRows[i] == value) {
-                    selectedRows.splice(i, 1);
-                }
-            }
-        }
-
-    }
 
     $(document).ready(function() {
         $("#tabs").tabs()
 
-        let nobukti = $('#jqGrid').jqGrid('getCell', id, 'nobukti')
+        let nobukti = $('#jqGrid').jqGrid('getCell', id, 'hutang_nobukti')
         loadDetailGrid()
+        loadHutangGrid()
         loadJurnalUmumGrid(nobukti)
 
         setRange()
         initDatepicker()
         $(document).on('click', '#btnReload', function(event) {
-            loadDataHeader('penerimaangiroheader')
-            selectedRows = []
-            $('#gs_').prop('checked', false)
+            loadDataHeader('hutangextraheader')
         })
 
         $("#jqGrid").jqGrid({
-                url: `${apiUrl}penerimaangiroheader`,
+                url: `${apiUrl}hutangextraheader`,
                 mtype: "GET",
                 styleUI: 'Bootstrap4',
                 iconSet: 'fontAwesome',
@@ -100,36 +84,7 @@
                 },
                 datatype: "json",
                 colModel: [{
-                        label: '',
-                        name: '',
-                        width: 30,
-                        align: 'center',
-                        sortable: false,
-                        clear: false,
-                        stype: 'input',
-                        searchable: false,
-                        searchoptions: {
-                            type: 'checkbox',
-                            clearSearch: false,
-                            dataInit: function(element) {
-                                $(element).removeClass('form-control')
-                                $(element).parent().addClass('text-center')
 
-                                $(element).on('click', function() {                                    
-                                    $(element).attr('disabled', true)
-                                    if ($(this).is(':checked')) {
-                                        selectAllRows()
-                                    } else {
-                                        clearSelectedRows()
-                                    }
-                                })
-
-                            }
-                        },
-                        formatter: (value, rowOptions, rowData) => {
-                            return `<input type="checkbox" name="giroId[]" value="${rowData.id}" onchange="checkboxHandler(this)">`
-                        },
-                    }, {
                         label: 'ID',
                         name: 'id',
                         align: 'right',
@@ -138,58 +93,12 @@
                         hidden: true
                     },
                     {
-                        label: 'STATUS APPROVAL',
-                        name: 'statusapproval',
-                        align: 'left',
-                        stype: 'select',
-                        searchoptions: {
-                            value: `<?php
-                                    $i = 1;
-
-                                    foreach ($data['comboapproval'] as $status) :
-                                        echo "$status[param]:$status[parameter]";
-                                        if ($i !== count($data['comboapproval'])) {
-                                            echo ";";
-                                        }
-                                        $i++;
-                                    endforeach
-
-                                    ?>
-                            `,
-                            dataInit: function(element) {
-                                $(element).select2({
-                                    width: 'resolve',
-                                    theme: "bootstrap4"
-                                });
-                            }
-                        },
-                        formatter: (value, options, rowData) => {
-                            let statusApproval = JSON.parse(value)
-                            if (!statusApproval) {
-                                return ''
-                            }
-                            let formattedValue = $(`
-                                <div class="badge" style="background-color: ${statusApproval.WARNA}; color: #fff;">
-                                <span>${statusApproval.SINGKATAN}</span>
-                                </div>
-                            `)
-
-                            return formattedValue[0].outerHTML
-                        },
-                        cellattr: (rowId, value, rowObject) => {
-                            let statusApproval = JSON.parse(rowObject.statusapproval)
-                            if (!statusApproval) {
-                                return ` title=" "`
-                            }
-                            return ` title="${statusApproval.MEMO}"`
-                        }
-                    },
-                    {
                         label: 'STATUS CETAK',
                         name: 'statuscetak',
                         align: 'left',
                         stype: 'select',
                         searchoptions: {
+
                             value: `<?php
                                     $i = 1;
 
@@ -202,7 +111,7 @@
                                     endforeach
 
                                     ?>
-                            `,
+              `,
                             dataInit: function(element) {
                                 $(element).select2({
                                     width: 'resolve',
@@ -212,22 +121,18 @@
                         },
                         formatter: (value, options, rowData) => {
                             let statusCetak = JSON.parse(value)
-                            if (!statusCetak) {
-                                return ''
-                            }
+
                             let formattedValue = $(`
-                                <div class="badge" style="background-color: ${statusCetak.WARNA}; color: #fff;">
-                                <span>${statusCetak.SINGKATAN}</span>
-                                </div>
-                            `)
+                <div class="badge" style="background-color: ${statusCetak.WARNA}; color: #fff;">
+                  <span>${statusCetak.SINGKATAN}</span>
+                </div>
+              `)
 
                             return formattedValue[0].outerHTML
                         },
                         cellattr: (rowId, value, rowObject) => {
                             let statusCetak = JSON.parse(rowObject.statuscetak)
-                            if (!statusCetak) {
-                                return ` title=" "`
-                            }
+
                             return ` title="${statusCetak.MEMO}"`
                         }
                     },
@@ -247,60 +152,30 @@
                         }
                     },
                     {
-                        label: 'AGEN ',
-                        name: 'agen_id',
-                        align: 'left'
-                    },
-                    
-                    {
                         label: 'POSTING DARI',
                         name: 'postingdari',
                         align: 'left'
                     },
                     {
-                        label: 'DITERIMA DARI',
-                        name: 'diterimadari',
+                        label: 'NO BUKTI HUTANG',
+                        name: 'hutang_nobukti',
                         align: 'left'
                     },
                     {
-                        label: 'TGL Lunas',
-                        name: 'tgllunas',
-                        align: 'left',
-                        formatter: "date",
-                        formatoptions: {
-                            srcformat: "ISO8601Long",
-                            newformat: "d-m-Y"
-                        }
-                    },
-                    {
-                        label: 'USER APPROVAL',
-                        name: 'userapproval',
+                        label: 'NAMA PERKIRAAN',
+                        name: 'coa',
                         align: 'left'
                     },
                     {
-                        label: 'TGL APPROVAL',
-                        name: 'tglapproval',
-                        align: 'left',
-                        formatter: "date",
-                        formatoptions: {
-                            srcformat: "ISO8601Long",
-                            newformat: "d-m-Y"
-                        }
-                    },
-                    {
-                        label: 'USER BUKA CETAK',
-                        name: 'userbukacetak',
+                        label: 'SUPPLIER',
+                        name: 'supplier_id',
                         align: 'left'
                     },
                     {
-                        label: 'TGL BUKA CETAK',
-                        name: 'tglbukacetak',
-                        align: 'left',
-                        formatter: "date",
-                        formatoptions: {
-                            srcformat: "ISO8601Long",
-                            newformat: "d-m-Y"
-                        }
+                        label: 'TOTAL',
+                        name: 'total',
+                        align: 'right',
+                        formatter: currencyFormat,
                     },
                     {
                         label: 'MODIFIEDBY',
@@ -310,7 +185,7 @@
                     {
                         label: 'CREATEDAT',
                         name: 'created_at',
-                        align: 'left',
+                        align: 'right',
                         formatter: "date",
                         formatoptions: {
                             srcformat: "ISO8601Long",
@@ -320,7 +195,7 @@
                     {
                         label: 'UPDATEDAT',
                         name: 'updated_at',
-                        align: 'left',
+                        align: 'right',
                         formatter: "date",
                         formatoptions: {
                             srcformat: "ISO8601Long",
@@ -357,21 +232,24 @@
                     setGridLastRequest($(this), jqXHR)
                 },
                 onSelectRow: function(id) {
-                    let nobukti = $('#jqGrid').jqGrid('getCell', id, 'nobukti')
+                    let nobukti = $('#jqGrid').jqGrid('getCell', id, 'hutang_nobukti')
+
                     activeGrid = $(this)
                     indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
                     page = $(this).jqGrid('getGridParam', 'page')
                     let limit = $(this).jqGrid('getGridParam', 'postData').limit
-                    if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
-
+                    if (indexRow >= limit) {
+                        indexRow = (indexRow - limit * (page - 1))
+                    }
                     loadDetailData(id)
+                    loadHutangData(nobukti)
                     loadJurnalUmumData(id, nobukti)
                 },
                 loadComplete: function(data) {
                     changeJqGridRowListText()
 
                     if (data.data.length === 0) {
-                        $('#detail, #jurnalGrid').each((index, element) => {
+                        $('#detailGrid, #hutangGrid, #jurnalGrid').each((index, element) => {
                             abortGridLastRequest($(element))
                             clearGridData($(element))
                         })
@@ -380,21 +258,11 @@
                             clearGridHeader($(element))
                         })
                     }
-                    
+
                     $(document).unbind('keydown')
                     setCustomBindKeys($(this))
                     initResize($(this))
 
-                    $.each(selectedRows, function(key, value) {
-
-                        $('#jqGrid tbody tr').each(function(row, tr) {
-                            if ($(this).find(`td input:checkbox`).val() == value) {
-                                $(this).find(`td input:checkbox`).prop('checked', true)
-                                $(this).addClass('bg-light-blue')
-                            }
-                        })
-
-                    });
                     /* Set global variables */
                     sortname = $(this).jqGrid("getGridParam", "sortname")
                     sortorder = $(this).jqGrid("getGridParam", "sortorder")
@@ -433,12 +301,10 @@
                     }, 100)
 
                     $('#left-nav').find('button').attr('disabled', false)
-                    permission() 
-                    $('#gs_').attr('disabled', false)
+                    permission()
                     setHighlight($(this))
                 }
             })
-
             .jqGrid("setLabel", "rn", "No.")
             .jqGrid('filterToolbar', {
                 stringResult: true,
@@ -452,16 +318,13 @@
                     clearGlobalSearch($('#jqGrid'))
                 },
             })
-
             .customPager({
                 buttons: [{
                         id: 'add',
                         innerHTML: '<i class="fa fa-plus"></i> ADD',
                         class: 'btn btn-primary btn-sm mr-1',
                         onClick: function(event) {
-                            clearSelectedRows()
-                            $('#gs_').prop('checked', false)
-                            createPenerimaanGiro()
+                            createHutangExtraHeader()
                         }
                     },
                     {
@@ -469,7 +332,6 @@
                         innerHTML: '<i class="fa fa-pen"></i> EDIT',
                         class: 'btn btn-success btn-sm mr-1',
                         onClick: function(event) {
-
                             selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                             if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                 showDialog('Harap pilih salah satu record')
@@ -483,7 +345,6 @@
                         innerHTML: '<i class="fa fa-trash"></i> DELETE',
                         class: 'btn btn-danger btn-sm mr-1',
                         onClick: () => {
-
                             selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                             if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                 showDialog('Harap pilih salah satu record')
@@ -497,15 +358,12 @@
                         innerHTML: '<i class="fa fa-print"></i> REPORT',
                         class: 'btn btn-info btn-sm mr-1',
                         onClick: () => {
-
                             selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                             if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                 showDialog('Harap pilih salah satu record')
                             } else {
-                                window.open(`{{ route('penerimaangiroheader.report') }}?id=${selectedId}`)
+                                window.open(`{{ route('hutangextraheader.report') }}?id=${selectedId}`)
                             }
-                            clearSelectedRows()
-                            $('#gs_').prop('checked', false)
                         }
                     },
                     {
@@ -515,36 +373,23 @@
                         innerHTML: '<i class="fas fa-file-export"></i> EXPORT',
                         class: 'btn btn-warning btn-sm mr-1',
                         onClick: () => {
-
                             selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                             if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                 showDialog('Harap pilih salah satu record')
                             } else {
-                                window.open(`{{ route('penerimaangiroheader.export') }}?id=${selectedId}`)
+                                window.open(`{{ route('hutangextraheader.export') }}?id=${selectedId}`)
                             }
-                            clearSelectedRows()
-                            $('#gs_').prop('checked', false)
                         }
-                    },
-                    {
-                        id: 'approveun',
-                        innerHTML: '<i class="fas fa-check""></i> UN/APPROVAL',
-                        class: 'btn btn-purple btn-sm mr-1',
-                        onClick: () => {
-
-                            approve()
-
-                        }
-                    },
+                    }
                 ]
 
             })
-
         /* Append clear filter button */
         loadClearFilter($('#jqGrid'))
 
         /* Append global search */
         loadGlobalSearch($('#jqGrid'))
+
 
         $('#add .ui-pg-div')
             .addClass(`btn btn-sm btn-primary`)
@@ -566,43 +411,25 @@
             .addClass('btn btn-sm btn-warning')
             .parent().addClass('px-1')
 
-        $('#approval .ui-pg-div')
-            .addClass('btn btn-purple btn-sm')
-            .css({
-                'background': '#6619ff',
-                'color': '#fff'
-            })
-            .parent().addClass('px-1')
-
-            
         function permission() {
-            if (!`{{ $myAuth->hasPermission('penerimaangiroheader', 'store') }}`) {
+            if (!`{{ $myAuth->hasPermission('hutangextraheader', 'store') }}`) {
                 $('#add').attr('disabled', 'disabled')
             }
 
-            if (!`{{ $myAuth->hasPermission('penerimaangiroheader', 'update') }}`) {
+            if (!`{{ $myAuth->hasPermission('hutangextraheader', 'update') }}`) {
                 $('#edit').attr('disabled', 'disabled')
             }
 
-            if (!`{{ $myAuth->hasPermission('penerimaangiroheader', 'destroy') }}`) {
+            if (!`{{ $myAuth->hasPermission('hutangextraheader', 'destroy') }}`) {
                 $('#delete').attr('disabled', 'disabled')
             }
 
-            if (!`{{ $myAuth->hasPermission('penerimaangiroheader', 'export') }}`) {
+            if (!`{{ $myAuth->hasPermission('hutangextraheader', 'export') }}`) {
                 $('#export').attr('disabled', 'disabled')
             }
 
-            if (!`{{ $myAuth->hasPermission('penerimaangiroheader', 'report') }}`) {
+            if (!`{{ $myAuth->hasPermission('hutangextraheader', 'report') }}`) {
                 $('#report').attr('disabled', 'disabled')
-            }
-
-            if (!`{{ $myAuth->hasPermission('penerimaangiroheader', 'approval') }}`) {
-                $('#approval').attr('disabled', 'disabled')
-            }
-
-            if (!`{{ $myAuth->hasPermission('penerimaangiroheader', 'approval') }}`) {
-                $('#approveun').attr('disabled', 'disabled')
-                $("#jqGrid").hideCol("");
             }
         }
 
@@ -621,8 +448,9 @@
             $('#formRange [name=sampai]').val(totalRecord)
 
             autoNumericElements = new AutoNumeric.multiple('#formRange .autonumeric-report', {
-                digitGroupSeparator: '.',
-                decimalCharacter: ',',
+                digitGroupSeparator: ',',
+                decimalCharacter: '.',
+                decimalPlaces: 0,
                 allowDecimalPadding: false,
                 minimumValue: 1,
                 maximumValue: totalRecord
@@ -652,7 +480,7 @@
 
             if ($('#rangeModal').data('action') == 'export') {
                 let xhr = new XMLHttpRequest()
-                xhr.open('GET', `{{ config('app.api_url') }}piutangheader/export?${params}`, true)
+                xhr.open('GET', `{{ config('app.api_url') }}hutangextraheader/export?${params}`, true)
                 xhr.setRequestHeader("Authorization", `Bearer {{ session('access_token') }}`)
                 xhr.responseType = 'arraybuffer'
 
@@ -665,7 +493,7 @@
                             let link = document.createElement('a')
 
                             link.href = window.URL.createObjectURL(blob)
-                            link.download = `laporanpengeluarantrucking${(new Date).getTime()}.xlsx`
+                            link.download = `laporanhutangextra${(new Date).getTime()}.xlsx`
                             link.click()
 
                             submitButton.removeAttr('disabled')
@@ -675,38 +503,13 @@
 
                 xhr.send()
             } else if ($('#rangeModal').data('action') == 'report') {
-                window.open(`{{ route('piutangheader.report') }}?${params}`)
+                window.open(`{{ route('hutangextraheader.report') }}?${params}`)
 
                 submitButton.removeAttr('disabled')
             }
         })
     })
 
-    function clearSelectedRows() {
-        selectedRows = []
-
-        $('#jqGrid').trigger('reloadGrid')
-    }
-
-    function selectAllRows() {
-        $.ajax({
-            url: `${apiUrl}penerimaangiroheader`,
-            method: 'GET',
-            dataType: 'JSON',
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            },
-            data: {
-                limit: 0,
-                tgldari: $('#tgldariheader').val(),
-                tglsampai: $('#tglsampaiheader').val()
-            },
-            success: (response) => {
-                selectedRows = response.data.map((giro) => giro.id)
-                $('#jqGrid').trigger('reloadGrid')
-            }
-        })
-    }
 </script>
 @endpush()
 @endsection

@@ -163,8 +163,8 @@ class NotaDebetHeaderController extends MyController
         $sheet->getStyle("A2")->getFont()->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
-        $sheet->mergeCells('A1:H1');
-        $sheet->mergeCells('A2:H2');
+        $sheet->mergeCells('A1:E1');
+        $sheet->mergeCells('A2:E2');
 
         $header_start_row = 4;
         $detail_table_header_row = 9;
@@ -197,10 +197,6 @@ class NotaDebetHeaderController extends MyController
             [
                 'label'=>'NO BUKTI INVOICE',
                 'index'=>'invoice_nobukti'
-            ],
-            [
-                'label'=>'TANGGAL TERIMA',
-                'index'=>'tglterima'
             ],
             [
                 'label'=>'NAMA PERKIRAAN LEBIH BAYAR',
@@ -247,7 +243,7 @@ class NotaDebetHeaderController extends MyController
 			]
         ];
 
-        $sheet ->getStyle("A$detail_table_header_row:F$detail_table_header_row")->applyFromArray($styleArray);
+        $sheet ->getStyle("A$detail_table_header_row:E$detail_table_header_row")->applyFromArray($styleArray);
 
         // LOOPING DETAIL
         $lebihbayar = 0;
@@ -255,43 +251,36 @@ class NotaDebetHeaderController extends MyController
             
             foreach ($detail_columns as $detail_columns_index => $detail_column) {
                 $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
-                $sheet->getStyle("A$detail_table_header_row:H$detail_table_header_row")->getFont()->setBold(true);
-                $sheet->getStyle("A$detail_table_header_row:H$detail_table_header_row")->getAlignment()->setHorizontal('center');
+                $sheet->getStyle("A$detail_table_header_row:E$detail_table_header_row")->getFont()->setBold(true);
+                $sheet->getStyle("A$detail_table_header_row:E$detail_table_header_row")->getAlignment()->setHorizontal('center');
             }
             $response_detail['lebihbayars'] = number_format((float) $response_detail['lebihbayar'], '2', '.', ',');
-
-            $tglterima = $response_detail["tglterima"];
-            $timeStamp = strtotime($tglterima);
-            $datetglterima = date('d-m-Y', $timeStamp); 
-            $response_detail['tglterima'] = $datetglterima;
         
             $sheet->setCellValue("A$detail_start_row", $response_index + 1);
             $sheet->setCellValue("B$detail_start_row", $response_detail['invoice_nobukti']);
-            $sheet->setCellValue("C$detail_start_row", $response_detail['tglterima']);
-            $sheet->setCellValue("D$detail_start_row", $response_detail['coalebihbayar']);
-            $sheet->setCellValue("E$detail_start_row", $response_detail['keterangan']);
-            $sheet->setCellValue("F$detail_start_row", $response_detail['lebihbayars']);
+            $sheet->setCellValue("C$detail_start_row", $response_detail['coalebihbayar']);
+            $sheet->setCellValue("D$detail_start_row", $response_detail['keterangan']);
+            $sheet->setCellValue("E$detail_start_row", $response_detail['lebihbayars']);
 
-            $sheet->getStyle("E$detail_start_row")->getAlignment()->setWrapText(true);
-            $sheet->getColumnDimension('E')->setWidth(40);
+            $sheet->getStyle("D$detail_start_row")->getAlignment()->setWrapText(true);
+            $sheet->getColumnDimension('D')->setWidth(40);
 
             $sheet ->getStyle("A$detail_start_row:E$detail_start_row")->applyFromArray($styleArray);
-            $sheet ->getStyle("F$detail_start_row")->applyFromArray($style_number);
+            $sheet ->getStyle("E$detail_start_row")->applyFromArray($style_number);
 
             $lebihbayar += $response_detail['lebihbayar'];
             $detail_start_row++;
         }
 
         $total_start_row = $detail_start_row;
-        $sheet->mergeCells('A'.$total_start_row.':E'.$total_start_row);
-        $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A'.$total_start_row.':E'.$total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
-        $sheet->setCellValue("F$total_start_row", number_format((float) $lebihbayar, '2', '.', ','))->getStyle("F$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->mergeCells('A'.$total_start_row.':D'.$total_start_row);
+        $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A'.$total_start_row.':D'.$total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
+        $sheet->setCellValue("E$total_start_row", number_format((float) $lebihbayar, '2', '.', ','))->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
 
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);
         $sheet->getColumnDimension('C')->setAutoSize(true);
-        $sheet->getColumnDimension('D')->setAutoSize(true);
-        $sheet->getColumnDimension('F')->setAutoSize(true);
+        $sheet->getColumnDimension('E')->setAutoSize(true);
 
         $writer = new Xlsx($spreadsheet);
         $filename = 'Laporan Nota Debet' . date('dmYHis');

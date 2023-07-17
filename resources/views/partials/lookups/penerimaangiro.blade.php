@@ -45,11 +45,6 @@
             }
         },
         {
-            label: 'Pelanggan ',
-            name: 'pelanggan_id',
-            align: 'left'
-        },
-        {
             label: 'AGEN ',
             name: 'agen_id',
             align: 'left'

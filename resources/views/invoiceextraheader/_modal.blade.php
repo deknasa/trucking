@@ -232,7 +232,7 @@
 
             setErrorMessages(form, error.responseJSON.errors);
           } else {
-              showDialog(error.responseJSON)
+            showDialog(error.responseJSON)
           }
         },
       }).always(() => {
@@ -269,27 +269,40 @@
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
       success: response => {
-        var kodenobukti = response.kodenobukti
-        if (kodenobukti == '1') {
-          var kodestatus = response.kodestatus
-          if (kodestatus == '1') {
-            showDialog(response.message['keterangan'])
-          } else {
-            if (Aksi == 'EDIT') {
-              editInvoiceExtraHeader(Id)
-            }
-            if (Aksi == 'DELETE') {
-              deleteInvoiceExtraHeader(Id)
-            }
-          }
-
+        var error = response.error
+        if (error) {
+          showDialog(response)
         } else {
-          showDialog(response.message['keterangan'])
+          cekValidasiAksi(Id, Aksi)
         }
       }
     })
   }
 
+  function cekValidasiAksi(Id, Aksi) {
+    $.ajax({
+      url: `{{ config('app.api_url') }}invoiceextraheader/${Id}/cekvalidasiAksi`,
+      method: 'POST',
+      dataType: 'JSON',
+      beforeSend: request => {
+        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+      },
+      success: response => {
+        var error = response.error
+        if (error) {
+          showDialog(response)
+        } else {
+          if (Aksi == 'EDIT') {
+            editInvoiceExtraHeader(Id)
+          }
+          if (Aksi == 'DELETE') {
+            deleteInvoiceExtraHeader(Id)
+          }
+        }
+
+      }
+    })
+  }
 
 
   function createInvoiceExtraHeader() {
@@ -328,8 +341,21 @@
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-
-    showInvoiceExtraHeader(form, invoiceExtraHeader)
+    Promise
+      .all([
+        showInvoiceExtraHeader(form, invoiceExtraHeader)
+      ])
+      .then(() => {
+        $('#crudModal').modal('show')
+        $('#crudForm [name=tglbukti]').attr('readonly', true)
+        $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
+      })
+      .catch((error) => {
+        showDialog(error.statusText)
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
 
   }
 
@@ -348,7 +374,21 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    showInvoiceExtraHeader(form, invoiceExtraHeader)
+    Promise
+      .all([
+        showInvoiceExtraHeader(form, invoiceExtraHeader)
+      ])
+      .then(() => {
+        $('#crudModal').modal('show')
+        $('#crudForm [name=tglbukti]').attr('readonly', true)
+        $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
+      })
+      .catch((error) => {
+        showDialog(error.statusText)
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
 
   }
 

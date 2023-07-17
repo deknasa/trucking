@@ -201,6 +201,10 @@
   let hasFormBindKeys = false
   let modalBody = $('#crudModal').find('.modal-body').html()
 
+  let aksiEdit = true;
+  let statusAktif
+
+
   $(document).ready(function() {
 
 
@@ -233,9 +237,14 @@
         data.filter((row) => row.name === 'liter[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="liter[]"]`)[index])
       })
 
-        data.filter((row) => row.name === 'nominalsupir')[0].value = AutoNumeric.getNumber($(`#crudForm [name="nominalsupir"]`)[0])
-        data.filter((row) => row.name === 'jarak')[0].value = AutoNumeric.getNumber($(`#crudForm [name="jarak"]`)[0])
-
+      data.filter((row) => row.name === 'nominalsupir')[0].value = AutoNumeric.getNumber($(`#crudForm [name="nominalsupir"]`)[0])
+      data.filter((row) => row.name === 'jarak')[0].value = AutoNumeric.getNumber($(`#crudForm [name="jarak"]`)[0])
+      if (aksiEdit == false) {
+        data.push({
+          name: 'statusaktif',
+          value: statusAktif
+        })
+      }
       data.push({
         name: 'sortIndex',
         value: $('#jqGrid').getGridParam().sortname
@@ -427,6 +436,24 @@
         showUpahRitasi(form, id)
           .then(() => {
             $('#crudModal').modal('show')
+            if (aksiEdit == false) {
+              statusAktif = form.find(`[name="statusaktif"]`).val()
+
+              $('#crudForm').find(`.ui-datepicker-trigger`).attr('disabled', true)
+              let name = $('#crudForm').find(`[name]`).parents('.input-group')
+              name.find('.button-clear').attr('disabled', true)
+              name.children().find('.lookup-toggler').attr('disabled', true)
+              form.find(`[name="statusaktif"]`).prop('disabled', 'disabled')
+              form.find(`[name="tglmulaiberlaku"]`).prop('readonly', true)
+              form.find(`[name="kotadari"]`).prop('readonly', true)
+              form.find(`[name="kotasampai"]`).prop('readonly', true)
+            } else {
+              $('#crudForm').find(`.ui-datepicker-trigger`).attr('disabled', false)
+
+              let name = $('#crudForm').find(`[name]`).parents('.input-group')
+              name.find('.button-clear').attr('disabled', false)
+              name.children().find('.lookup-toggler').attr('disabled', false)
+            }
           })
           .catch((error) => {
             showDialog(error.statusText)
@@ -617,7 +644,7 @@
 
           initAutoNumeric(form.find(`[name="jarak"]`), {
             minimumValue: 0
-          }) 
+          })
           initAutoNumeric(form.find(`[name="nominalsupir"]`), {
             minimumValue: 0
           })
@@ -914,6 +941,38 @@
         $('#crudForm [name=zona_id]').first().val('')
         element.val('')
         element.data('currentValue', element.val())
+      }
+    })
+  }
+
+
+  function cekValidasidelete(Id, aksi) {
+    $.ajax({
+      url: `{{ config('app.api_url') }}upahritasi/${Id}/cekValidasi`,
+      method: 'POST',
+      dataType: 'JSON',
+      beforeSend: request => {
+        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+      },
+      success: response => {
+        var kondisi = response.error
+        if (kondisi == true) {
+          if (aksi == 'EDIT') {
+            aksiEdit = false
+            editUpahRitasi(selectedId)
+          } else {
+            showDialog(response)
+          }
+        } else {
+          if (aksi == 'EDIT') {
+            aksiEdit = true
+            editUpahRitasi(selectedId)
+          } else {
+            deleteUpahRitasi(selectedId)
+          }
+        }
+
+        // 
       }
     })
   }

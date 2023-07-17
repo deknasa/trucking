@@ -37,16 +37,16 @@
   $(document).ready(function() {
 
     $('#lookup').hide()
-    
+
     setRange()
     initDatepicker()
-    $(document).on('click','#btnReload', function(event) {
+    $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('rekappengeluaranheader')
     })
 
     $('#crudModal').on('hidden.bs.modal', function() {
-       activeGrid = '#jqGrid'
-     })
+      activeGrid = '#jqGrid'
+    })
 
     $("#jqGrid").jqGrid({
         url: `{{ config('app.api_url') . 'rekappengeluaranheader' }}`,
@@ -54,9 +54,9 @@
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         postData: {
-          tgldari:$('#tgldariheader').val() ,
-          tglsampai:$('#tglsampaiheader').val(),
-          
+          tgldari: $('#tgldariheader').val(),
+          tglsampai: $('#tglsampaiheader').val(),
+
         },
         datatype: "json",
         colModel: [{
@@ -183,17 +183,17 @@
               srcformat: "ISO8601Long",
               newformat: "d-m-Y"
             }
-          },     
+          },
           {
             label: 'user approval',
             name: 'userapproval',
             align: 'left'
-          }, 
+          },
           {
             label: 'TGL APPROVAL',
             name: 'tglapproval',
             align: 'left',
-             formatter: "date",
+            formatter: "date",
             formatoptions: {
               srcformat: "ISO8601Long",
               newformat: "d-m-Y"
@@ -203,12 +203,12 @@
             label: 'user buka cetak',
             name: 'userbukacetak',
             align: 'left'
-          },     
+          },
           {
             label: 'tgl buka cetak',
             name: 'tglbukacetak',
             align: 'left',
-             formatter: "date",
+            formatter: "date",
             formatoptions: {
               srcformat: "ISO8601Long",
               newformat: "d-m-Y"
@@ -300,7 +300,7 @@
           totalRecord = $(this).getGridParam("records")
           limit = $(this).jqGrid('getGridParam', 'postData').limit
           postData = $(this).jqGrid('getGridParam', 'postData')
-          triggerClick = true  
+          triggerClick = true
 
           $('.clearsearchclass').click(function() {
             clearColumnSearch($(this))
@@ -332,7 +332,7 @@
           }, 100)
 
           $('#left-nav').find('button').attr('disabled', false)
-          permission() 
+          permission()
           setHighlight($(this))
         }
       })
@@ -358,19 +358,6 @@
             class: 'btn btn-primary btn-sm mr-1',
             onClick: function(event) {
               createRekapPengeluaranHeader()
-            }
-          },
-          {
-            id: 'edit',
-            innerHTML: '<i class="fa fa-pen"></i> EDIT',
-            class: 'btn btn-success btn-sm mr-1',
-            onClick: function(event) {
-              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Harap pilih salah satu record')
-              } else {
-                cekValidasi(selectedId, 'EDIT')
-              }
             }
           },
           {
@@ -415,11 +402,12 @@
             innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
             class: 'btn btn-purple btn-sm mr-1',
             onClick: () => {
-              let id = $('#jqGrid').jqGrid('getGridParam', 'selrow')
-
-              $('#loader').removeClass('d-none')
-
-              handleApproval(id)
+              let selectedId = $('#jqGrid').jqGrid('getGridParam', 'selrow')
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Harap pilih salah satu record')
+              } else {
+                handleApproval(selectedId)
+              }
             }
           },
         ]
@@ -459,29 +447,30 @@
       .addClass('btn btn-sm btn-warning')
       .parent().addClass('px-1')
 
-      function permission() {
-    if (!`{{ $myAuth->hasPermission('rekappengeluaranheader', 'store') }}`) {
-      $('#add').addClass('ui-disabled')
-    }
+    function permission() {
+      if (!`{{ $myAuth->hasPermission('rekappengeluaranheader', 'store') }}`) {
+        $('#add').addClass('ui-disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('rekappengeluaranheader', 'update') }}`) {
-      $('#edit').addClass('ui-disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('rekappengeluaranheader', 'update') }}`) {
+        $('#edit').addClass('ui-disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('rekappengeluaranheader', 'destroy') }}`) {
-      $('#delete').addClass('ui-disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('rekappengeluaranheader', 'destroy') }}`) {
+        $('#delete').addClass('ui-disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('rekappengeluaranheader', 'export') }}`) {
-      $('#export').addClass('ui-disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('rekappengeluaranheader', 'export') }}`) {
+        $('#export').addClass('ui-disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('rekappengeluaranheader', 'report') }}`) {
-      $('#report').addClass('ui-disabled')
+      if (!`{{ $myAuth->hasPermission('rekappengeluaranheader', 'report') }}`) {
+        $('#report').addClass('ui-disabled')
+      }
+      if (!`{{ $myAuth->hasPermission('rekappengeluaranheader', 'approval') }}`) {
+        $('#approval').addClass('ui-disabled')
+      }
     }
-    if (!`{{ $myAuth->hasPermission('rekappengeluaranheader', 'approval') }}`) {
-      $('#approval').addClass('ui-disabled')
-    }}
 
     $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {
@@ -514,7 +503,7 @@
       let actionUrl = ``
       if ($('#rangeModal').data('action') == 'export') {
         actionUrl = `{{ route('rekappengeluaranheader.export') }}`
-      // } else if ($('#rangeModal').data('action') == 'report') {
+        // } else if ($('#rangeModal').data('action') == 'report') {
       }
 
       /* Clear validation messages */
@@ -532,21 +521,22 @@
       window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
     })
 
-  function handleApproval(id) {
-    $.ajax({
-      url: `${apiUrl}rekappengeluaranheader/${id}/approval`,
-      method: 'POST',
-      dataType: 'JSON',
-      beforeSend: request => {
-        request.setRequestHeader('Authorization', `Bearer ${accessToken}`)
-      },
-      success: response => {
-        $('#jqGrid').trigger('reloadGrid')
-      }
-    }).always(() => {
-      $('#processingLoader').addClass('d-none')
-    })
-  }
+    function handleApproval(id) {
+      $.ajax({
+        url: `${apiUrl}rekappengeluaranheader/${id}/approval`,
+        method: 'POST',
+        dataType: 'JSON',
+        beforeSend: request => {
+          request.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+        },
+        success: response => {
+          $('#loader').addClass('d-none')
+          $('#jqGrid').trigger('reloadGrid')
+        }
+      }).always(() => {
+        $('#processingLoader').addClass('d-none')
+      })
+    }
 
   })
 </script>

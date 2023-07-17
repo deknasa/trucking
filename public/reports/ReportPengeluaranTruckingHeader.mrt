@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "ef3acb5cb4597079be363fbc1badd13f",
+  "ReportGuid": "4eb650117137e37fb9040295f598a633",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://localhost/trucking/public/reports/ReportPengeluaranTruckingHeader.mrt",
+  "ReportFile": "ReportPengeluaranTruckingHeader.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1688618671000+0700)/",
+  "ReportChanged": "/Date(1689223488000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -1607,7 +1607,7 @@
               "Name": "Text32",
               "Guid": "bebbfc0864747a0073f4f861d79e5b9e",
               "CanGrow": true,
-              "ClientRectangle": "4,8,26,6",
+              "ClientRectangle": "4,8,16,6",
               "ComponentPlacement": "gf.GroupFooterBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -1628,7 +1628,7 @@
               "Name": "Text42",
               "Guid": "ba570ace369a0e4881ccd6fc3a850f6c",
               "CanGrow": true,
-              "ClientRectangle": "30,8,182,6",
+              "ClientRectangle": "20,8,192,6",
               "ComponentPlacement": "gf.GroupFooterBand1",
               "Interaction": {
                 "Ident": "StiInteraction"

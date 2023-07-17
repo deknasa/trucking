@@ -21,13 +21,13 @@
             name: 'nobukti',
           },
           {
-            label: 'KODE PERKIRAAN DEBET', 
-    width: 220,
+            label: 'KODE PERKIRAAN DEBET',
+            width: 220,
             name: 'coadebet',
           },
           {
-            label: 'KODE PERKIRAAN kredit', 
-         width: 220,
+            label: 'KODE PERKIRAAN kredit',
+            width: 220,
             name: 'coakredit',
           },
 
@@ -55,14 +55,13 @@
             }
           },
           {
-            label: 'BULAN BEBAN',
-            name: 'bulanbeban',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
-            }
-          }
+            label: 'NO INVOICE',
+            name: 'noinvoice',
+          },
+          {
+            label: 'BANK',
+            name: 'bank',
+          },
         ],
         autowidth: true,
         shrinkToFit: false,
@@ -142,7 +141,7 @@
         disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
           abortGridLastRequest($(this))
-          
+
           clearGlobalSearch($('#detail'))
         },
       })
@@ -166,9 +165,9 @@
   }
 
   function loadDetailData(id) {
-        abortGridLastRequest($('#detail'))
+    abortGridLastRequest($('#detail'))
 
-        $('#detail').setGridParam({
+    $('#detail').setGridParam({
       url: `${apiUrl}pengeluarandetail`,
       datatype: "json",
       postData: {

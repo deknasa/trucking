@@ -220,6 +220,8 @@ use App\Http\Controllers\DataRitasiController;
 use App\Http\Controllers\AkuntansiController;
 use App\Http\Controllers\ApprovalBukaTanggalSuratPengantarController;
 use App\Http\Controllers\ExportLaporanMingguanSupirController;
+use App\Http\Controllers\HutangExtraDetailController;
+use App\Http\Controllers\HutangExtraHeaderController;
 use App\Http\Controllers\TypeAkuntansiController;
 use App\Http\Controllers\MainTypeAkuntansiController;
 use App\Http\Controllers\LaporanJurnalUmumController;
@@ -1435,6 +1437,15 @@ Route::middleware(['auth','authorized'])->group(function () {
 
     Route::get('stokpusat/index', [StokPusatController::class, 'index']);
     Route::resource('stokpusat', StokPusatController::class);
+
+    Route::get('hutangextraheader/index', [HutangExtraHeaderController::class, 'index']);
+    Route::get('hutangextraheader/export', [HutangExtraHeaderController::class, 'export'])->name('hutangextraheader.export');
+    Route::get('hutangextraheader/report', [HutangExtraHeaderController::class, 'report'])->name('hutangextraheader.report');
+    Route::resource('hutangextraheader', HutangExtraHeaderController::class);
+    Route::get('hutangextradetail/jurnal/grid', [HutangExtraDetailController::class, 'jurnalGrid']);
+    Route::get('hutangextradetail/hutang/grid', [HutangExtraDetailController::class, 'hutangGrid']);
+    Route::get('hutangextradetail/detail/grid', [HutangExtraDetailController::class, 'detailGrid']);
+    Route::resource('hutangextradetail', HutangExtraDetailController::class);
 });
 
 Route::patch('format', [FormatController::class, 'update']);

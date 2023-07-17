@@ -557,26 +557,7 @@
             sortable: false,
             clear: false,
             stype: 'input',
-            searchable: false,
-            searchoptions: {
-              type: 'checkbox',
-              clearSearch: false,
-              dataInit: function(element) {
-                supirId = $('#crudForm').find(`[name="supir_id"]`).val()
-                let aksi = $('#crudForm').data('action')
-
-                $(element).removeClass('form-control')
-                $(element).parent().addClass('text-center')
-
-                $(element).on('click', function() {
-                  if ($(this).is(':checked')) {
-                    selectAllRowsPosting(supirId)
-                  } else {
-                    clearSelectedRowsPosting()
-                  }
-                })
-              }
-            },
+            search: false,
             formatter: (value, rowOptions, rowData) => {
               return `<input type="checkbox" name="postId[]" value="${rowData.id_posting}" disabled onchange="checkboxHandlerPosting(this)">`
             },

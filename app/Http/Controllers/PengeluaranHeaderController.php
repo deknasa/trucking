@@ -170,6 +170,7 @@ class PengeluaranHeaderController extends MyController
 
         //FETCH DETAIL
         $detailParams = [
+            'forReport' => true,
             'pengeluaran_id' => $request->id,
         ];
         $pengeluaran_details = Http::withHeaders($request->header())
@@ -198,6 +199,7 @@ class PengeluaranHeaderController extends MyController
 
         //FETCH DETAIL
         $detailParams = [
+            'forReport' => true,
             'pengeluaran_id' => $request->id,
         ];
         $pengeluaran_details = Http::withHeaders($request->header())
@@ -215,7 +217,7 @@ class PengeluaranHeaderController extends MyController
             $spreadsheet = new Spreadsheet();
             $sheet = $spreadsheet->getActiveSheet();
             $sheet->setCellValue('A1', $pengeluaran['judul']);
-            $sheet->setCellValue('A2', 'Laporan Pengeluaran KAS');
+            $sheet->setCellValue('A2', 'Laporan Pengeluaran '. $pengeluaran['bank_id'] );
             $sheet->getStyle("A1")->getFont()->setSize(12);
             $sheet->getStyle("A2")->getFont()->setSize(12);
             $sheet->getStyle("A1")->getFont()->setBold(true);
@@ -241,7 +243,7 @@ class PengeluaranHeaderController extends MyController
                     'index' => 'tglbukti',
                 ],
                 [
-                    'label' => 'Bank',
+                    'label' => 'Kas',
                     'index' => 'bank_id',
                 ],
             ];
@@ -252,7 +254,7 @@ class PengeluaranHeaderController extends MyController
                 ],
                 [
                     'label' => 'NAMA PERKIRAAN',
-                    'index' => 'coakredit'
+                    'index' => 'coadebet'
                 ],
                 [
                     'label' => 'KETERANGAN',
@@ -333,7 +335,7 @@ class PengeluaranHeaderController extends MyController
             $sheet->getColumnDimension('D')->setAutoSize(true);
 
             $writer = new Xlsx($spreadsheet);
-            $filename = 'Laporan Pengeluaran Kas' . date('dmYHis');
+            $filename = 'Laporan Pengeluaran ' .$pengeluaran['bank_id'] . date('dmYHis');
             header('Content-Type: application/vnd.ms-excel');
             header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
             header('Cache-Control: max-age=0');
@@ -343,7 +345,7 @@ class PengeluaranHeaderController extends MyController
             $spreadsheet = new Spreadsheet();
             $sheet = $spreadsheet->getActiveSheet();
             $sheet->setCellValue('A1', $pengeluaran['judul']);
-            $sheet->setCellValue('A2', 'Laporan pengeluaran BANK');
+            $sheet->setCellValue('A2', 'Laporan pengeluaran '. $pengeluaran['bank_id']);
             $sheet->getStyle("A1")->getFont()->setSize(12);
             $sheet->getStyle("A2")->getFont()->setSize(12);
             $sheet->getStyle("A1")->getFont()->setBold(true);
@@ -381,11 +383,19 @@ class PengeluaranHeaderController extends MyController
                 ],
                 [
                     'label' => 'NAMA PERKIRAAN',
-                    'index' => 'coakredit'
+                    'index' => 'coadebet'
+                ],
+                [
+                    'label' => 'BANK',
+                    'index' => 'bank'
                 ],
                 [
                     'label' => 'JATUH TEMPO',
                     'index' => 'tgljatuhtempo'
+                ],
+                [
+                    'label' => 'NO INVOICE',
+                    'index' => 'invoice_nobukti'
                 ],
                 [
                     'label' => 'KETERANGAN',
@@ -428,7 +438,7 @@ class PengeluaranHeaderController extends MyController
             ];
 
             // $sheet->getStyle("A$detail_table_header_row:G$detail_table_header_row")->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FF1F456E');
-            $sheet->getStyle("A$detail_table_header_row:E$detail_table_header_row")->applyFromArray($styleArray);
+            $sheet->getStyle("A$detail_table_header_row:G$detail_table_header_row")->applyFromArray($styleArray);
 
             // LOOPING DETAIL
             $nominal = 0;
@@ -436,8 +446,8 @@ class PengeluaranHeaderController extends MyController
 
                 foreach ($detail_columns as $detail_columns_index => $detail_column) {
                     $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : 0);
-                    $sheet->getStyle("A$detail_table_header_row:E$detail_table_header_row")->getFont()->setBold(true);
-                    $sheet->getStyle("A$detail_table_header_row:E$detail_table_header_row")->getAlignment()->setHorizontal('center');
+                    $sheet->getStyle("A$detail_table_header_row:G$detail_table_header_row")->getFont()->setBold(true);
+                    $sheet->getStyle("A$detail_table_header_row:G$detail_table_header_row")->getAlignment()->setHorizontal('center');
                 }
                 $response_detail['nominals'] = number_format((float) $response_detail['nominal'], '2', '.', ',');
 
@@ -447,32 +457,36 @@ class PengeluaranHeaderController extends MyController
                 $response_detail['tgljatuhtempo'] = $datetgljatuhtempo;
 
                 $sheet->setCellValue("A$detail_start_row", $response_index + 1);
-                $sheet->setCellValue("B$detail_start_row", $response_detail['coakredit']);
-                $sheet->setCellValue("C$detail_start_row", $response_detail['tgljatuhtempo']);
-                $sheet->setCellValue("D$detail_start_row", $response_detail['keterangan']);
-                $sheet->setCellValue("E$detail_start_row", $response_detail['nominals']);
+                $sheet->setCellValue("B$detail_start_row", $response_detail['coadebet']);
+                $sheet->setCellValue("C$detail_start_row", $response_detail['bank']);
+                $sheet->setCellValue("D$detail_start_row", $response_detail['tgljatuhtempo']);
+                $sheet->setCellValue("E$detail_start_row", $response_detail['invoice_nobukti']);
+                $sheet->setCellValue("F$detail_start_row", $response_detail['keterangan']);
+                $sheet->setCellValue("G$detail_start_row", $response_detail['nominals']);
 
-                $sheet->getStyle("D$detail_start_row")->getAlignment()->setWrapText(true);
-                $sheet->getColumnDimension('D')->setWidth(50);
+                $sheet->getStyle("F$detail_start_row")->getAlignment()->setWrapText(true);
+                $sheet->getColumnDimension('F')->setWidth(50);
 
-                $sheet->getStyle("A$detail_start_row:D$detail_start_row")->applyFromArray($styleArray);
-                $sheet->getStyle("E$detail_start_row")->applyFromArray($style_number);
+                $sheet->getStyle("A$detail_start_row:G$detail_start_row")->applyFromArray($styleArray);
+                $sheet->getStyle("G$detail_start_row")->applyFromArray($style_number);
 
                 $nominal += $response_detail['nominal'];
                 $detail_start_row++;
             }
             $total_start_row = $detail_start_row;
-            $sheet->mergeCells('A' . $total_start_row . ':D' . $total_start_row);
-            $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A' . $total_start_row . ':D' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
-            $sheet->setCellValue("E$total_start_row", number_format((float) $nominal, '2', '.', ','))->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+            $sheet->mergeCells('A' . $total_start_row . ':F' . $total_start_row);
+            $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A' . $total_start_row . ':F' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
+            $sheet->setCellValue("G$total_start_row", number_format((float) $nominal, '2', '.', ','))->getStyle("G$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
 
             $sheet->getColumnDimension('A')->setAutoSize(true);
             $sheet->getColumnDimension('B')->setAutoSize(true);
             $sheet->getColumnDimension('C')->setAutoSize(true);
+            $sheet->getColumnDimension('D')->setAutoSize(true);
             $sheet->getColumnDimension('E')->setAutoSize(true);
+            $sheet->getColumnDimension('G')->setAutoSize(true);
 
             $writer = new Xlsx($spreadsheet);
-            $filename = 'Laporan Penerimaan Bank' . date('dmYHis');
+            $filename = 'Laporan Pengeluaran ' .$pengeluaran['bank_id'] . date('dmYHis');
             header('Content-Type: application/vnd.ms-excel');
             header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
             header('Cache-Control: max-age=0');
