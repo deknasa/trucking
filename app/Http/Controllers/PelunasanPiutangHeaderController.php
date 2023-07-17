@@ -251,6 +251,7 @@ class PelunasanPiutangHeaderController extends MyController
 
         //FETCH DETAIL
         $detailParams = [
+            'forReport' => true,
             'pelunasanpiutang_id' => $request->id,
         ];
         $pelunasanPiutang_details = Http::withHeaders($request->header())
@@ -268,12 +269,12 @@ class PelunasanPiutangHeaderController extends MyController
         $sheet->getStyle("A2")->getFont()->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
-        $sheet->mergeCells('A1:I1');
-        $sheet->mergeCells('A2:I2');
+        $sheet->mergeCells('A1:J1');
+        $sheet->mergeCells('A2:J2');
 
         $header_start_row = 4;
         $header_right_start_row = 4;
-        $detail_table_header_row = 10;
+        $detail_table_header_row = 9;
         $detail_start_row = $detail_table_header_row + 1;
        
         $alphabets = range('A', 'Z');
@@ -288,12 +289,8 @@ class PelunasanPiutangHeaderController extends MyController
                 'index' => 'tglbukti',
             ],
             [
-                'label' => 'Bank',
+                'label' => 'Bank/Kas',
                 'index' => 'bank_id',
-            ],
-            [
-                'label' => 'Alat Bayar',
-                'index' => 'alatbayar_id',
             ],
             [
                 'label' => 'Agen',
@@ -306,7 +303,7 @@ class PelunasanPiutangHeaderController extends MyController
                 'index' => 'penerimaan_nobukti',
             ],
             [
-                'label' => 'No Bukti Penerimaan Giro',
+                'label' => 'No Bukt Giro',
                 'index' => 'penerimaangiro_nobukti',
             ],
             [
@@ -331,16 +328,14 @@ class PelunasanPiutangHeaderController extends MyController
                 'index' => 'invoice_nobukti',
             ],
             [
-                'label' => 'KODE PERKIRAAN POTONGAN',
-                'index' => 'coapotongan',
+                'label' => 'NOMINAL PIUTANG',
+                'index' => 'nominalpiutang',
+                'format' => 'currency'
             ],
             [
-                'label' => 'KETERANGAN',
-                'index' => 'keterangan',
-            ],
-            [
-                'label' => 'KETERANGAN POTONGAN',
-                'index' => 'keteranganpotongan',
+                'label' => 'NOMINAL BAYAR',
+                'index' => 'nominal',
+                'format' => 'currency'
             ],
             [
                 'label' => 'POTONGAN',
@@ -348,13 +343,21 @@ class PelunasanPiutangHeaderController extends MyController
                 'format' => 'currency'
             ],
             [
-                'label' => 'NOMINAL LEBIH BAYAR',
+                'label' => 'LEBIH BAYAR',
                 'index' => 'nominallebihbayar',
                 'format' => 'currency'
             ],
             [
-                'label' => 'NOMINAL',
-                'index' => 'nominal',
+                'label' => 'KETERANGAN POTONGAN',
+                'index' => 'keteranganpotongan',
+            ],
+            [
+                'label' => 'KETERANGAN',
+                'index' => 'keterangan',
+            ],
+            [
+                'label' => 'SISA PIUTANG',
+                'index' => 'sisapiutang',
                 'format' => 'currency'
             ]
         ];
@@ -395,7 +398,7 @@ class PelunasanPiutangHeaderController extends MyController
         ];
 
         // $sheet->getStyle("A$detail_table_header_row:G$detail_table_header_row")->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FF1F456E');
-        $sheet ->getStyle("A$detail_table_header_row:I$detail_table_header_row")->applyFromArray($styleArray);
+        $sheet ->getStyle("A$detail_table_header_row:J$detail_table_header_row")->applyFromArray($styleArray);
 
         // LOOPING DETAIL
         $nominal = 0;
@@ -403,49 +406,54 @@ class PelunasanPiutangHeaderController extends MyController
             
             foreach ($detail_columns as $detail_columns_index => $detail_column) {
                 $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
-                $sheet->getStyle("A$detail_table_header_row:I$detail_table_header_row")->getFont()->setBold(true);
-                $sheet->getStyle("A$detail_table_header_row:I$detail_table_header_row")->getAlignment()->setHorizontal('center');
+                $sheet->getStyle("A$detail_table_header_row:J$detail_table_header_row")->getFont()->setBold(true);
+                $sheet->getStyle("A$detail_table_header_row:J$detail_table_header_row")->getAlignment()->setHorizontal('center');
             }
             $response_detail['nominals'] = number_format((float) $response_detail['nominal'], '2', '.', ',');
-            $response_detail['potongans'] = number_format((float) $response_detail['potongan'], '2', '.', ',');
+            $response_detail['nominalpiutangs'] = number_format((float) $response_detail['nominalpiutang'], '2', '.', ',');
             $response_detail['nominallebihbayars'] = number_format((float) $response_detail['nominallebihbayar'], '2', '.', ',');
+            $response_detail['sisapiutangs'] = number_format((float) $response_detail['sisapiutang'], '2', '.', ',');
+            $response_detail['potongans'] = number_format((float) $response_detail['potongan'], '2', '.', ',');
         
             $sheet->setCellValue("A$detail_start_row", $response_index + 1);
             $sheet->setCellValue("B$detail_start_row", $response_detail['piutang_nobukti']);
             $sheet->setCellValue("C$detail_start_row", $response_detail['invoice_nobukti']);
-            $sheet->setCellValue("D$detail_start_row", $response_detail['coapotongan']);
-            $sheet->setCellValue("E$detail_start_row", $response_detail['keterangan']);
-            $sheet->setCellValue("F$detail_start_row", $response_detail['keteranganpotongan']);
-            $sheet->setCellValue("G$detail_start_row", $response_detail['potongans']);
-            $sheet->setCellValue("H$detail_start_row", $response_detail['nominallebihbayars']);
-            $sheet->setCellValue("I$detail_start_row", $response_detail['nominals']);
+            $sheet->setCellValue("D$detail_start_row", $response_detail['nominalpiutangs']);
+            $sheet->setCellValue("E$detail_start_row", $response_detail['nominals']);
+            $sheet->setCellValue("F$detail_start_row", $response_detail['potongans']);
+            $sheet->setCellValue("G$detail_start_row", $response_detail['nominallebihbayars']);
+            $sheet->setCellValue("H$detail_start_row", $response_detail['keteranganpotongan']);
+            $sheet->setCellValue("I$detail_start_row", $response_detail['keterangan']);
+            $sheet->setCellValue("J$detail_start_row", $response_detail['sisapiutangs']);
 
-            $sheet->getStyle("E$detail_start_row:F$detail_start_row")->getAlignment()->setWrapText(true);
-            $sheet->getColumnDimension('E')->setWidth(30);
-            $sheet->getColumnDimension('F')->setWidth(30);
+            $sheet->getStyle("H$detail_start_row:I$detail_start_row")->getAlignment()->setWrapText(true);
+            $sheet->getColumnDimension('H')->setWidth(30);
+            $sheet->getColumnDimension('I')->setWidth(30);
 
-            $sheet ->getStyle("A$detail_start_row:I$detail_start_row")->applyFromArray($styleArray);
-            $sheet ->getStyle("G$detail_start_row:I$detail_start_row")->applyFromArray($style_number);
+            $sheet ->getStyle("A$detail_start_row:J$detail_start_row")->applyFromArray($styleArray);
+            $sheet ->getStyle("D$detail_start_row:G$detail_start_row")->applyFromArray($style_number);
+            $sheet ->getStyle("J$detail_start_row")->applyFromArray($style_number);
 
             $nominal += $response_detail['nominal'];
             $detail_start_row++;
         }
 
         $total_start_row = $detail_start_row;
-        $sheet->mergeCells('A'.$total_start_row.':H'.$total_start_row);
-        $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A'.$total_start_row.':H'.$total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
-        $sheet->setCellValue("I$total_start_row", number_format((float) $nominal, '2', '.', ','))->getStyle("I$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->mergeCells('A'.$total_start_row.':D'.$total_start_row);
+        $sheet->setCellValue("A$total_start_row", 'Total Nominal Bayar')->getStyle('A'.$total_start_row.':D'.$total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
+        $sheet->setCellValue("E$total_start_row", number_format((float) $nominal, '2', '.', ','))->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
 
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);
         $sheet->getColumnDimension('C')->setAutoSize(true);
         $sheet->getColumnDimension('D')->setAutoSize(true);
+        $sheet->getColumnDimension('E')->setAutoSize(true);
+        $sheet->getColumnDimension('F')->setAutoSize(true);
         $sheet->getColumnDimension('G')->setAutoSize(true);
-        $sheet->getColumnDimension('H')->setAutoSize(true);
-        $sheet->getColumnDimension('I')->setAutoSize(true);
+        $sheet->getColumnDimension('J')->setAutoSize(true);
 
         $writer = new Xlsx($spreadsheet);
-        $filename = 'Laporan Pelunasan Piutang  ' . date('dmYHis');
+        $filename = 'Laporan Penerimaan Piutang  ' . date('dmYHis');
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
         header('Cache-Control: max-age=0');
