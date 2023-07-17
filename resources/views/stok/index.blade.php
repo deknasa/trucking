@@ -540,7 +540,7 @@
                     })
                     .finally(() => {
                         $('.ui-button').click()
-                        // submitButton.removeAttr('disabled')
+                        submitButton.removeAttr('disabled')
                     })
                 })
 
