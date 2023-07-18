@@ -51,6 +51,16 @@
                         <div class="row form-group">
                             <div class="col-12 col-md-2">
                                 <label class="col-form-label">
+                                    KETERANGAN <span class="text-danger">*</span></label>
+                            </div>
+                            <div class="col-12 col-md-10">
+                                <input type="text" name="keterangan" autocomplete="off" class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <div class="col-12 col-md-2">
+                                <label class="col-form-label">
                                     TGL DARI <span class="text-danger">*</span>
                                 </label>
                             </div>
@@ -118,7 +128,7 @@
                                                     Nominal</label>
                                             </div>
                                             <div class="col-12 col-sm-9 col-md-10">
-                                                <input type="text" name="nomPR" class="form-control text-right" readonly>
+                                                <input type="text" name="nomPR" class="form-control text-right autonumeric" readonly>
                                             </div>
                                         </div>
 
@@ -158,7 +168,7 @@
                                                     Nominal</label>
                                             </div>
                                             <div class="col-12 col-sm-9 col-md-10">
-                                                <input type="text" name="nomPS" class="form-control text-right" readonly>
+                                                <input type="text" name="nomPS" class="form-control text-right autonumeric" readonly>
                                             </div>
                                         </div>
 
@@ -198,7 +208,7 @@
                                                     Nominal</label>
                                             </div>
                                             <div class="col-12 col-sm-9 col-md-10">
-                                                <input type="text" name="nomPP" class="form-control text-right" readonly>
+                                                <input type="text" name="nomPP" class="form-control text-right autonumeric" readonly>
                                             </div>
                                         </div>
 
@@ -238,7 +248,7 @@
                                                     Nominal</label>
                                             </div>
                                             <div class="col-12 col-sm-9 col-md-10">
-                                                <input type="text" name="nomDeposito" class="form-control text-right" readonly>
+                                                <input type="text" name="nomDeposito" class="form-control text-right autonumeric" readonly>
                                             </div>
                                         </div>
 
@@ -278,7 +288,7 @@
                                                     Nominal</label>
                                             </div>
                                             <div class="col-12 col-sm-9 col-md-10">
-                                                <input type="text" name="nomBBM" class="form-control text-right" readonly>
+                                                <input type="text" name="nomBBM" class="form-control text-right autonumeric" readonly>
                                             </div>
                                         </div>
 
@@ -318,7 +328,7 @@
                                                     Nominal</label>
                                             </div>
                                             <div class="col-12 col-sm-9 col-md-10">
-                                                <input type="text" name="nomUangjalan" class="form-control text-right" readonly>
+                                                <input type="text" name="nomUangjalan" class="form-control text-right autonumeric" readonly>
                                             </div>
                                         </div>
 
@@ -508,6 +518,10 @@
             data.push({
                 name: 'tglsampai',
                 value: form.find(`[name="tglsampai"]`).val()
+            })
+            data.push({
+                name: 'keterangan',
+                value: form.find(`[name="keterangan"]`).val()
             })
 
             $.each(selectedRows, function(index, item) {
@@ -1347,9 +1361,15 @@
                 }).trigger('reloadGrid');
                 countNominal()
             })
-            .catch((errors) => {
-                console.log(errors)
-                setErrorMessages($('#crudForm'), errors)
+            .catch((error) => {
+                if (error.status === 422) {
+                    $('.is-invalid').removeClass('is-invalid')
+                    $('.invalid-feedback').remove()
+
+                    setErrorMessages(form, error.responseJSON.errors);
+                } else {
+                    showDialog(error.responseJSON)
+                }
             })
     })
 
