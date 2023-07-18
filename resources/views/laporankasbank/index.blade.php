@@ -37,14 +37,14 @@
                         </div>
                         <div class="row">
                             <div class="col-sm-6 mt-4">
-                                <a id="btnPreview" class="btn btn-info mr-1 ">
+                                <button type="button" id="btnPreview" class="btn btn-info mr-1 ">
                                     <i class="fas fa-print"></i>
                                     Report
-                                </a>
-                                <a id="btnEkspor" class="btn btn-warning mr-1 ">
+                                </button>
+                                <button type="button" id="btnExport" class="btn btn-warning mr-1 ">
                                     <i class="fas fa-file-export"></i>
                                     Export
-                                </a>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -81,20 +81,11 @@
         $('#crudForm').find('[name=dari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         $('#crudForm').find('[name=sampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
-
-        let css_property = {
-            "color": "#fff",
-            "background-color": "rgb(173 180 187)",
-            "cursor": "not-allowed",
-            "border-color": "rgb(173 180 187)"
-        }
         if (!`{{ $myAuth->hasPermission('laporankasbank', 'report') }}`) {
-            $('#btnPreview').prop('disabled', true)
-            $('#btnPreview').css(css_property);
+            $('#btnPreview').attr('disabled', 'disabled')
         }
         if (!`{{ $myAuth->hasPermission('laporankasbank', 'export') }}`) {
-            $('#btnEkspor').prop('disabled', true)
-            $('#btnEkspor').css(css_property);
+            $('#btnExport').attr('disabled', 'disabled')
         }
     })
 
@@ -120,12 +111,12 @@
 
     })
 
-    $(document).on('click', `#btnEkspor`, function(event) {
+    $(document).on('click', `#btnExport`, function(event) {
         let dari = $('#crudForm').find('[name=dari]').val()
         let sampai = $('#crudForm').find('[name=sampai]').val()
         let bank_id = $('#crudForm').find('[name=bank_id]').val()
         let bank = $('#crudForm').find('[name=bank]').val()
-        
+
         getCekExport().then((response) => {
             window.open(`{{ route('laporankasbank.export') }}?dari=${dari}&sampai=${sampai}&bank=${bank}&bank_id=${bank_id}`)
         }).catch((error) => {

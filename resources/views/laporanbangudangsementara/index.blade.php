@@ -14,10 +14,10 @@
                         <div class="row">
 
                             <div class="col-sm-6 mt-4">
-                                <a id="btnPreview" class="btn btn-info mr-1 ">
+                                <button type="button" id="btnPreview" class="btn btn-info mr-1 ">
                                     <i class="fas fa-print"></i>
                                     Report
-                                </a>
+                                </button>
                             </div>
                         </div>
 
@@ -50,16 +50,9 @@
 
     $(document).ready(function() {
       
-        let css_property =
-        {
-            "color": "#fff",
-            "background-color": "rgb(173 180 187)",
-            "cursor" : "not-allowed",
-            "border-color": "rgb(173 180 187)"
-        }
+        
         if (!`{{ $myAuth->hasPermission('laporanbangudangsementara', 'report') }}`) {
-            $('#btnPreview').prop('disabled', true)
-            $('#btnPreview').css(css_property);
+            $('#btnPreview').attr('disabled', 'disabled')
         }
 
     })

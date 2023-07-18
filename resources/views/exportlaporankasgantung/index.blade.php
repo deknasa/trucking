@@ -40,7 +40,7 @@
                         <div class="row">
 
                             <div class="col-sm-6 mt-4">
-                                <a id="btnEkspor" class="btn btn-secondary mr-2 ">
+                                <a id="btnExport" class="btn btn-secondary mr-2 ">
                                     <i class="fas fa-sync"></i>
                                     Ekspor
                                 </a>
@@ -99,20 +99,13 @@
 		`);
 
         
-        let css_property =
-        {
-            "color": "#fff",
-            "background-color": "rgb(173 180 187)",
-            "cursor" : "not-allowed",
-            "border-color": "rgb(173 180 187)"
-        }
+        
         if (!`{{ $myAuth->hasPermission('exportlaporankasgantung', 'export') }}`) {
-            $('#btnEkspor').prop('disabled', true)
-            $('#btnEkspor').css(css_property);
+            $('#btnExport').attr('disabled', 'disabled')
         }
     })
 
-    $(document).on('click', `#btnEkspor`, function(event) {
+    $(document).on('click', `#btnExport`, function(event) {
         let periode = $('#crudForm').find('[name=periode]').val()
 
         if (periode != '') {

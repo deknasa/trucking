@@ -66,7 +66,7 @@
                             <div class="row">
 
                                 <div class="col-sm-6 mt-4">
-                                    <a id="btnEkspor" class="btn btn-secondary text-white mr-2 ">
+                                    <a id="btnExport" class="btn btn-secondary text-white mr-2 ">
                                         <i class="fas fa-sync"></i>
                                         Export
                                     </a>
@@ -237,8 +237,7 @@
             "border-color": "rgb(173 180 187)"
         }
         if (!`{{ $myAuth->hasPermission('exportrincianmingguan', 'export') }}`) {
-            $('#btnEkspor').prop('disabled', true)
-            $('#btnEkspor').css(css_property);
+            $('#btnExport').attr('disabled', 'disabled')
             $('#btnEkspor2').prop('disabled', true)
             $('#btnEkspor2').css(css_property);
             $('#btnEkspor3').prop('disabled', true)
@@ -247,7 +246,7 @@
 
     })
 
-    $(document).on('click', `#btnEkspor`, function(event) {
+    $(document).on('click', `#btnExport`, function(event) {
         let periode = $('#crudForm').find('[name=periode]').val()
         let minggu = $('#crudForm').find('[name=minggu]').val()
         let dari = $('#crudForm').find('[name=dari]').val()

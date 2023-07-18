@@ -29,14 +29,14 @@
                         <div class="row">
 
                             <div class="col-sm-6 mt-4">
-                                <a id="btnPreview" class="btn btn-info mr-1 ">
+                                <button type="button" id="btnPreview" class="btn btn-info mr-1 ">
                                     <i class="fas fa-print"></i>
                                     Report
-                                </a>
-                                <a id="btnEkspor" class="btn btn-warning mr-1 ">
+                                </button>
+                                <button type="button" id="btnExport" class="btn btn-warning mr-1 ">
                                     <i class="fas fa-file-export"></i>
                                     Export
-                                </a>
+                                </button>
                             </div>
                         </div>
 
@@ -69,19 +69,16 @@
 
     $(document).ready(function() {
         initLookup()
-        let css_property = {
-            "color": "#fff",
-            "background-color": "rgb(173 180 187)",
-            "cursor": "not-allowed",
-            "border-color": "rgb(173 180 187)"
+
+        if (!`{{ $myAuth->hasPermission('laporanhistorypinjaman', 'report') }}`) {
+            $('#btnPreview').attr('disabled', 'disabled')
         }
         if (!`{{ $myAuth->hasPermission('laporanhistorypinjaman', 'export') }}`) {
-            $('#btnEkspor').prop('disabled', true)
-            $('#btnEkspor').css(css_property);
+            $('#btnExport').attr('disabled', 'disabled')
         }
     })
 
-    $(document).on('click', `#btnEkspor`, function(event) {
+    $(document).on('click', `#btnExport`, function(event) {
         let supirdari_id = $('#crudForm').find('[name=supirdari_id]').val()
         let supirsampai_id = $('#crudForm').find('[name=supirsampai_id]').val()
         if ((supirdari_id == '') || (supirsampai_id =='')) {
