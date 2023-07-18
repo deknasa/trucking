@@ -1534,6 +1534,7 @@
             form.find('[name]').attr('disabled', 'disabled').css({
               background: '#fff'
             })
+            form.find('[name=id]').prop('disabled',false)
 
           })
           .then(() => {
