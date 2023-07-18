@@ -361,11 +361,11 @@
                     $('#delete').attr('disabled', 'disabled')
                 }
                 if (!`{{ $myAuth->hasPermission('bank', 'export') }}`) {
-                    $('#delete').attr('disabled', 'disabled')
+                    $('#export').attr('disabled', 'disabled')
                 }
 
                 if (!`{{ $myAuth->hasPermission('bank', 'report') }}`) {
-                    $('#delete').attr('disabled', 'disabled')
+                    $('#report').attr('disabled', 'disabled')
                 }}
 
                 $('#rangeModal').on('shown.bs.modal', function() {
@@ -434,10 +434,10 @@
                     getCekExport(params).then((response) => {
                         if ($('#rangeModal').data('action') == 'export') {
                             $.ajax({
-                                url: '{{ config('app.api_url') }}bank/export?' + params,
+                                url: `{{ config('app.api_url') }}bank/export?` + params,
                                 type: 'GET',
                                 beforeSend: function(xhr) {
-                                    xhr.setRequestHeader('Authorization', 'Bearer {{ session('access_token') }}');
+                                    xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
                                 },
                                 xhrFields: {
                                     responseType: 'arraybuffer'

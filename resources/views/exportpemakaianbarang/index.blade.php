@@ -30,10 +30,10 @@
                         <div class="row">
 
                             <div class="col-sm-6 mt-4">
-                                <a id="btnEkspor" class="btn btn-warning mr-2 ">
+                                <button type="button" id="btnExport" class="btn btn-warning mr-2 ">
                                     <i class="fas fa-file-export"></i>
                                     Export
-                                </a>
+                                </button>
                             </div>
                         </div>
 
@@ -90,20 +90,13 @@
 			<i class="fa fa-calendar-alt"></i>
 		`);
 
-        let css_property =
-        {
-            "color": "#fff",
-            "background-color": "rgb(173 180 187)",
-            "cursor" : "not-allowed",
-            "border-color": "rgb(173 180 187)"
-        }
+
         if (!`{{ $myAuth->hasPermission('exportpemakaianbarang', 'export') }}`) {
-            $('#btnEkspor').prop('disabled', true)
-            $('#btnEkspor').css(css_property);
+            $('#btnExport').attr('disabled', 'disabled')
         }
     })
 
-    $(document).on('click', `#btnEkspor`, function(event) {
+    $(document).on('click', `#btnExport`, function(event) {
         let periode = $('#crudForm').find('[name=periode]').val()
         let jenis = $('#crudForm').find('[name=jenis]').val()
 

@@ -83,14 +83,14 @@
                         <div class="row">
 
                             <div class="col-sm-6 mt-4">
-                                <a id="btnPreview" class="btn btn-info mr-1 ">
+                                <button type="button" id="btnPreview" class="btn btn-info mr-1 ">
                                     <i class="fas fa-print"></i>
                                     Report
-                                </a>
-                                <a id="btnExport" class="btn btn-warning mr-1 ">
+                                </button>
+                                <button type="button" id="btnExport" class="btn btn-warning mr-1 ">
                                     <i class="fas fa-file-export"></i>
                                     Export
-                                </a>
+                                </button>
                             </div>
                         </div>
 
@@ -132,6 +132,12 @@
         $('#crudForm').find('[name=ambilsampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
         initLookup()
+        if (!`{{ $myAuth->hasPermission('laporanuangjalan', 'report') }}`) {
+            $('#btnPreview').attr('disabled', 'disabled')
+        }
+        if (!`{{ $myAuth->hasPermission('laporanuangjalan', 'export') }}`) {
+            $('#btnExport').attr('disabled', 'disabled')
+        }
     })
 
     $(document).on('click', `#btnPreview`, function(event) {

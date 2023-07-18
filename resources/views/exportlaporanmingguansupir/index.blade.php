@@ -48,10 +48,10 @@
                             </div>
                             <div class="row">
                                 <div class="col-sm-6 mt-4">
-                                    <a id="btnEkspor" class="btn btn-warning mr-1 ">
+                                    <button type="button" id="btnExport" class="btn btn-warning mr-1 ">
                                         <i class="fas fa-file-export"></i>
                                         Export
-                                    </a>
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -90,20 +90,12 @@
                 $('#crudForm').find('[name=sampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger(
                     'change');
 
-
-                let css_property = {
-                    "color": "#fff",
-                    "background-color": "rgb(173 180 187)",
-                    "cursor": "not-allowed",
-                    "border-color": "rgb(173 180 187)"
-                }
-                if (!`{{ $myAuth->hasPermission('laporanmingguansupir', 'export') }}`) {
-                    $('#btnEkspor').prop('disabled', true)
-                    $('#btnEkspor').css(css_property);
+                if (!`{{ $myAuth->hasPermission('exportlaporanmingguansupir', 'export') }}`) {
+                    $('#btnExport').attr('disabled', 'disabled')
                 }
             })
 
-            $(document).on('click', `#btnEkspor`, function(event) {
+            $(document).on('click', `#btnExport`, function(event) {
                 let dari = $('#crudForm').find('[name=dari]').val()
                 let sampai = $('#crudForm').find('[name=sampai]').val()
                 let tradodari_id = $('#crudForm').find('[name=tradodari_id]').val()

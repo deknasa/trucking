@@ -25,10 +25,10 @@
                                     <i class="fas fa-sync"></i>
                                     Reload
                                 </a>
-                                <a id="btnEkspor" class="btn btn-warning mr-1 ">
+                                <button type="button" id="btnExport" class="btn btn-warning mr-1 ">
                                     <i class="fas fa-file-export"></i>
                                     Export
-                                </a>
+                                </button>
                             </div>
                         </div>
 
@@ -90,12 +90,11 @@
             "border-color": "rgb(173 180 187)"
         }
         if (!`{{ $myAuth->hasPermission('laporanritasitrado', 'export') }}`) {
-            $('#btnEkspor').prop('disabled', true)
-            $('#btnEkspor').css(css_property);
+            $('#btnExport').attr('disabled', 'disabled')
         }
     })
 
-    $(document).on('click', `#btnEkspor`, function(event) {
+    $(document).on('click', `#btnExport`, function(event) {
         let periode = $('#crudForm').find('[name=periode]').val()
 
         if (periode != '') {

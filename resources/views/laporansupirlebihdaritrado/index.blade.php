@@ -27,14 +27,14 @@
                         <div class="row">
 
                             <div class="col-sm-6 mt-4">
-                                <a id="btnPreview" class="btn btn-info mr-1 ">
+                                <button type="button" id="btnPreview" class="btn btn-info mr-1 ">
                                     <i class="fas fa-print"></i>
                                     Report
-                                </a>
-                                <a id="btnExport" class="btn btn-warning mr-1 ">
+                                </button>
+                                <button type="button" id="btnExport" class="btn btn-warning mr-1 ">
                                     <i class="fas fa-file-export"></i>
                                     Export
-                                </a>
+                                </button>
                             </div>
                         </div>
 
@@ -70,16 +70,12 @@
         $('#crudForm').find('[name=dari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         $('#crudForm').find('[name=sampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
-        let css_property =
-        {
-            "color": "#fff",
-            "background-color": "rgb(173 180 187)",
-            "cursor" : "not-allowed",
-            "border-color": "rgb(173 180 187)"
-        }
+        
         if (!`{{ $myAuth->hasPermission('laporansupirlebihdaritrado', 'report') }}`) {
-            $('#btnPreview').prop('disabled', true)
-            $('#btnPreview').css(css_property);
+            $('#btnPreview').attr('disabled', 'disabled')
+        }
+        if (!`{{ $myAuth->hasPermission('laporansupirlebihdaritrado', 'export') }}`) {
+            $('#btnExport').attr('disabled', 'disabled')
         }
 
 

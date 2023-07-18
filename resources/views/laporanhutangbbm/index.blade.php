@@ -20,14 +20,14 @@
                         </div>
                         <div class="row">
                             <div class="col-sm-6 mt-4">
-                                <a id="btnPreview" class="btn btn-info mr-1 ">
+                                <button type="button" id="btnPreview" class="btn btn-info mr-1 ">
                                     <i class="fas fa-print"></i>
                                     Report
-                                </a>
-                                <a id="btnEkspor" class="btn btn-warning mr-1 ">
+                                </button>
+                                <button type="button" id="btnExport" class="btn btn-warning mr-1 ">
                                     <i class="fas fa-file-export"></i>
                                     Export
-                                </a>
+                                </button>
                             </div>
                         </div>
 
@@ -69,12 +69,10 @@
             "border-color": "rgb(173 180 187)"
         }
         if (!`{{ $myAuth->hasPermission('laporanhutangbbm', 'report') }}`) {
-            $('#btnPreview').prop('disabled', true)
-            $('#btnPreview').css(css_property);
+            $('#btnPreview').attr('disabled', 'disabled')
         }
         if (!`{{ $myAuth->hasPermission('laporanhutangbbm', 'export') }}`) {
-            $('#btnEkspor').prop('disabled', true)
-            $('#btnEkspor').css(css_property);
+            $('#btnExport').attr('disabled', 'disabled')
         }
     })
 
@@ -88,7 +86,7 @@
             showDialog('ISI SELURUH KOLOM')
         }
     })
-    $(document).on('click', `#btnEkspor`, function(event) {
+    $(document).on('click', `#btnExport`, function(event) {
         let sampai = $('#crudForm').find('[name=sampai]').val()
 
         if (sampai != '') {

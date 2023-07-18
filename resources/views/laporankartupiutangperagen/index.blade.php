@@ -59,14 +59,14 @@
                         <div class="row">
 
                             <div class="col-sm-6 mt-4">
-                                <a id="btnPreview" class="btn btn-info mr-1 ">
+                                <button type="button" id="btnPreview" class="btn btn-info mr-1 ">
                                     <i class="fas fa-print"></i>
                                     Report
-                                </a>
-                                <a id="btnExport" class="btn btn-warning mr-1 ">
+                                </button>
+                                <button type="button" id="btnExport" class="btn btn-warning mr-1 ">
                                     <i class="fas fa-file-export"></i>
                                     Export
-                                </a>
+                                </button>
                             </div>
                         </div>
 
@@ -107,6 +107,13 @@
         $('#crudForm').find('[name=ambildari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         $('#crudForm').find('[name=ambilsampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
+        
+        if (!`{{ $myAuth->hasPermission('laporankartupiutangperagen', 'report') }}`) {
+            $('#btnPreview').attr('disabled', 'disabled')
+        }
+        if (!`{{ $myAuth->hasPermission('laporankartupiutangperagen', 'export') }}`) {
+            $('#btnExport').attr('disabled', 'disabled')
+        }
         initLookup()
     })
 

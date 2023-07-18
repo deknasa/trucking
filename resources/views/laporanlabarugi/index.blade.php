@@ -28,17 +28,16 @@
                         <div class="row">
 
                             <div class="col-sm-6 mt-4">
-                                <a id="btnPreview" class="btn btn-info mr-1 ">
+                                <button type="button" id="btnPreview" class="btn btn-info mr-1 ">
                                     <i class="fas fa-print"></i>
                                     Report
-                                </a>
-                                <a id="btnExport" class="btn btn-warning mr-1 ">
+                                </button>
+                                <button type="button" id="btnExport" class="btn btn-warning mr-1 ">
                                     <i class="fas fa-file-export"></i>
                                     Export
-                                </a>
+                                </button>
                             </div>
                         </div>
-
                     </div>
                 </form>
             </div>
@@ -89,58 +88,51 @@
             .addClass("ui-datepicker-trigger btn btn-easyui text-easyui-dark").html(`
 			<i class="fa fa-calendar-alt"></i>
 		`);
-        
-        let css_property =
-        {
-            "color": "#fff",
-            "background-color": "rgb(173 180 187)",
-            "cursor" : "not-allowed",
-            "border-color": "rgb(173 180 187)"
-        }
+
         if (!`{{ $myAuth->hasPermission('laporanlabarugi', 'report') }}`) {
-            $('#btnEkspor').prop('disabled', true)
-            $('#btnEkspor').css(css_property);
+            $('#btnPreview').attr('disabled', 'disabled')
         }
         if (!`{{ $myAuth->hasPermission('laporanlabarugi', 'export') }}`) {
-            $('#btnEksport').prop('disabled', true)
-            $('#btnEkspor').css(css_property);
+            $('#btnExport').attr('disabled', 'disabled')
         }
 
     })
 
     $(document).on('click', `#btnPreview`, function(event) {
-        // let sampai = $('#crudForm').find('[name=sampai]').val()
-
-        // if (sampai != '') {
-
-        //     window.open(`{{ route('laporanlabarugi.report') }}?sampai=${sampai}`)    
-        // } else {
-        //     showDialog('ISI SELURUH KOLOM')
-        // }
 
         let sampai = $('#crudForm').find('[name=sampai]').val()
-        getCekReport().then((response) => {
-            window.open(`{{ route('laporanlabarugi.report') }}?sampai=${sampai}`) 
-        }).catch((error) => {
-            if (error.status === 422) {
-                $('.is-invalid').removeClass('is-invalid')
-                $('.invalid-feedback').remove()
-
-                setErrorMessages($('#crudForm'), error.responseJSON.errors);
-            } else {
-                showDialog(error.statusText, error.responseJSON.message)
-
+        $.ajax({
+            url: `{{ route('laporanlabarugi.report') }}`,
+            method: 'GET',
+            data: {
+                sampai: sampai
+            },
+            success: function(response) {
+                // Handle the success response
+                var newWindow = window.open('','_blank');
+                newWindow.document.open();
+                newWindow.document.write(response);
+                newWindow.document.close();
+            },
+            error: function(error) {
+                console.log(error)
+                if (error.status === 422) {
+                    $('.is-invalid').removeClass('is-invalid');
+                    $('.invalid-feedback').remove();
+                    setErrorMessages($('#crudForm'), error.responseJSON.errors);
+                } else {
+                    showDialog(error.responseJSON.message);
+                }
             }
-        })
+        });
     })
-
 
     $(document).on('click', `#btnExport`, function(event) {
         let sampai = $('#crudForm').find('[name=sampai]').val()
 
         if (sampai != '') {
 
-            window.open(`{{ route('laporanlabarugi.export') }}?sampai=${sampai}`)    
+            window.open(`{{ route('laporanlabarugi.export') }}?sampai=${sampai}`)
         } else {
             showDialog('ISI SELURUH KOLOM')
         }
@@ -148,27 +140,27 @@
 
     function getCekReport() {
 
-return new Promise((resolve, reject) => {
-    $.ajax({
-        url: `${apiUrl}laporanlabarugi/report`,
-        dataType: "JSON",
-        headers: {
-            Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-            sampai: $('#crudForm').find('[name=sampai]').val(),
-            isCheck: true,
-        },
-        success: (response) => {
-            resolve(response);
-        },
-        error: error => {
-            reject(error)
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: `${apiUrl}laporanlabarugi/report`,
+                dataType: "JSON",
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                data: {
+                    sampai: $('#crudForm').find('[name=sampai]').val(),
+                    isCheck: true,
+                },
+                success: (response) => {
+                    resolve(response);
+                },
+                error: error => {
+                    reject(error)
 
-        },
-    });
-});
-}
+                },
+            });
+        });
+    }
 </script>
 @endpush()
 @endsection
