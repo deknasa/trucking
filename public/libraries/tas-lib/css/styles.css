@@ -540,3 +540,12 @@ html {
     color: #d74d1a;
     margin-top: 5px;
 }
+
+span.textCard {
+    position: absolute;
+    top: -15px;
+    left: 13px;
+    padding: 5px;
+    background-color: #fff;
+}
+

@@ -314,6 +314,12 @@
             }
           },
           {
+           label: 'KETERANGAN',
+            width: 210,
+            name: 'keterangan',
+            align: 'left'
+          },
+          {
            label: 'NO BUKTI pengeluaran',
             width: 210,
             name: 'pengeluaran_nobukti',
