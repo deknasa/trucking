@@ -189,7 +189,14 @@
         name: 'limit',
         value: limit
       })
-
+      data.push({
+        name: 'tgldari',
+        value: $('#tgldariheader').val()
+      })
+      data.push({
+        name: 'tglsampai',
+        value: $('#tglsampaiheader').val()
+      })
       // let inputs = data.filter((row) => row.name === 'uangjalan[]')
 
       // inputs.forEach((input, index) => {
