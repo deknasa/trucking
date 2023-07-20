@@ -132,6 +132,7 @@ class GajiSupirHeaderController extends MyController
 
         //FETCH DETAIL
         $detailParams = [
+            'forReport' => true,
             'gajisupir_id' => $request->id,
             'sortIndex' => 'suratpengantar_nobukti'
         ];
@@ -142,23 +143,11 @@ class GajiSupirHeaderController extends MyController
 
         $gajisupirs = $data['data'];
         $gajisupir_details = $data_details['data'];
-        //$user = Auth::user();
-        // dd($gajisupirs);
 
         $tglBukti = $gajisupirs["tglbukti"];
         $timeStamp = strtotime($tglBukti);
         $dateTglBukti = date('d-m-Y', $timeStamp); 
         $gajisupirs['tglbukti'] = $dateTglBukti;
-
-        $tglDari = $gajisupirs["tgldari"];
-        $timeStamp = strtotime($tglDari);
-        $dateTglDari = date('d-m-Y', $timeStamp); 
-        $gajisupirs['tgldari'] = $dateTglDari;
-
-        $tglSampai = $gajisupirs["tglsampai"];
-        $timeStamp = strtotime($tglSampai);
-        $dateTglSampai = date('d-m-Y', $timeStamp); 
-        $gajisupirs['tglsampai'] = $dateTglSampai;
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
@@ -170,11 +159,10 @@ class GajiSupirHeaderController extends MyController
         $sheet->getStyle("A2")->getFont()->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
-        $sheet->mergeCells('A1:P1');
-        $sheet->mergeCells('A2:P2');
+        $sheet->mergeCells('A1:N1');
+        $sheet->mergeCells('A2:N2');
 
-        $header_start_row = 4;
-        $header_right_start_row = 4;
+        $header_start_row = 4; 
         $detail_table_header_row = 8;
         $detail_start_row = $detail_table_header_row + 1;
        
@@ -194,14 +182,43 @@ class GajiSupirHeaderController extends MyController
                 'index' => 'supir_id',
             ]
         ];
-        $header_right_columns = [
+
+        $header_down_columns = [
             [
-                'label' => 'Tanggal Dari',
-                'index' => 'tgldari',
+                'label' => 'TOTAL UANG BORONGAN',
+                'index' => 'total',
             ],
             [
-                'label' => 'Tanggal Sampai',
-                'index' => 'tglsampai',
+                'label' => 'UANG MAKAN',
+                'index' => 'uangmakanharian',
+            ],
+            [
+                'label' => 'TOTAL POTONGAN UANG JALAN TIDAK TERHITUNG',
+                'index' => 'uangJalantidakterhitung',
+            ],
+            [
+                'label' => 'TOTAL POTONGAN UANG JALAN',
+                'index' => 'uangjalan',
+            ],
+            [
+                'label' => 'TOTAL POTONGAN PINJAMAN',
+                'index' => 'potonganpinjaman',
+            ],
+            [
+                'label' => 'TOTAL POTONGAN PINJAMAN SEMUA',
+                'index' => 'potonganpinjamansemua',
+            ],
+            [
+                'label' => 'TOTAL DEPOSITO',
+                'index' => 'deposito',
+            ],
+            [
+                'label' => 'TOTAL POTONGAN BBM',
+                'index' => 'bbm',
+            ],
+            [
+                'label' => 'SISA YANG DITERIMA SUPIR',
+                'index' => 'sisa',
             ]
         ];
 
@@ -210,12 +227,16 @@ class GajiSupirHeaderController extends MyController
                 'label' => 'NO',
             ],
             [
-                'label' => 'NO TRIP',
-                'index' => 'nobukti',
+                'label' => 'TANGGAL',
+                'index' => 'tglsp',
             ],
             [
-                'label' => 'TANGGAL BON',
-                'index' => 'tglsp',
+                'label' => 'NO SP',
+                'index' => 'nosp',
+            ],
+            [
+                'label' => 'STATUS',
+                'index' => 'kodestatuscontainer',
             ],
             [
                 'label' => 'DARI',
@@ -226,53 +247,38 @@ class GajiSupirHeaderController extends MyController
                 'index' => 'sampai',
             ],
             [
+                'label' => 'RITASI',
+                'index' => 'statusritasi',
+            ],
+            [
+                'label' => 'UK. CONT',
+                'index' => 'kodecontainer',
+            ],
+            [
+                'label' => 'LITER',
+                'index' => 'liter',
+            ],
+            [
                 'label' => 'NO CONT',
                 'index' => 'nocont',
             ],
             [
-                'label' => 'NO SP',
-                'index' => 'nosp',
+                'label' => 'AGEN',
+                'index' => 'agen',
             ],
             [
-                'label' => 'STATUS RITASI',
-                'index' => 'statusritasi',
+                'label' => 'BORONGAN',
+                'index' => 'borongan',
+                'format' => 'currency'
             ],
             [
-                'label' => 'NO BUKTI RITASI',
-                'index' => 'ritasi_nobukti',
-            ],
-            [
-                'label' => 'KET. BIAYA EXTRA',
-                'index' => 'keteranganbiayatambahan',
-            ],
-            [
-                'label' => 'BIAYA EXTRA',
+                'label' => 'EXTRA',
                 'index' => 'biayaextra',
                 'format' => 'currency'
             ],
             [
-                'label' => 'GAJI KENEK',
-                'index' => 'gajikenek',
-                'format' => 'currency'
-            ],
-            [
-                'label' => 'KOMISI SUPIR',
-                'index' => 'komisisupir',
-                'format' => 'currency'
-            ],
-            [
-                'label' => 'UPAH RITASI',
+                'label' => 'RITASI',
                 'index' => 'upahritasi',
-                'format' => 'currency'
-            ],
-            [
-                'label' => 'TOL SUPIR',
-                'index' => 'tolsupir',
-                'format' => 'currency'
-            ],
-            [
-                'label' => 'GAJI SUPIR',
-                'index' => 'gajisupir',
                 'format' => 'currency'
             ]
         ];
@@ -282,11 +288,6 @@ class GajiSupirHeaderController extends MyController
             $sheet->setCellValue('B' . $header_start_row, $header_column['label']);
             $sheet->setCellValue('C' . $header_start_row++, ': '.$gajisupirs[$header_column['index']]);
         }
-        foreach ($header_right_columns as $header_right_column) {
-            $sheet->setCellValue('D' . $header_right_start_row, $header_right_column['label']);
-            $sheet->setCellValue('E' . $header_right_start_row++, ': '.$gajisupirs[$header_right_column['index']]);
-        }
-
         foreach ($detail_columns as $detail_columns_index => $detail_column) {
             $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_table_header_row, $detail_column['label'] ?? $detail_columns_index + 1);
         }
@@ -310,58 +311,67 @@ class GajiSupirHeaderController extends MyController
 			]
         ];
 
+        $style_number_2 = [
+			'alignment' => [
+				'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT, 
+			]
+        ];
+
         // $sheet->getStyle("A$detail_table_header_row:G$detail_table_header_row")->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FF1F456E');
-        $sheet ->getStyle("A$detail_table_header_row:P$detail_table_header_row")->applyFromArray($styleArray);
+        $sheet ->getStyle("A$detail_table_header_row:N$detail_table_header_row")->applyFromArray($styleArray);
 
         // LOOPING DETAIL
-        $gajisupir = 0;
+        $liter = 0;
+        $borongan = 0;
+        $biayaextra = 0;
+        $upahritasi = 0;
         foreach ($gajisupir_details as $response_index => $response_detail) {
             
             foreach ($detail_columns as $detail_columns_index => $detail_column) {
                 $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
-                $sheet->getStyle("A$detail_table_header_row:P$detail_table_header_row")->getFont()->setBold(true);
-                $sheet->getStyle("A$detail_table_header_row:P$detail_table_header_row")->getAlignment()->setHorizontal('center');
+                $sheet->getStyle("A$detail_table_header_row:N$detail_table_header_row")->getFont()->setBold(true);
+                $sheet->getStyle("A$detail_table_header_row:N$detail_table_header_row")->getAlignment()->setHorizontal('center');
             }
-            $response_detail['gajisupirs'] = number_format((float) $response_detail['gajisupir'], '2', '.', ',');
-            $response_detail['gajikeneks'] = number_format((float) $response_detail['gajikenek'], '2', '.', ',');
-            $response_detail['komisisupirs'] = number_format((float) $response_detail['komisisupir'], '2', '.', ',');
-            $response_detail['tolsupirs'] = number_format((float) $response_detail['tolsupir'], '2', '.', ',');
-            $response_detail['upahritasis'] = number_format((float) $response_detail['upahritasi'], '2', '.', ',');
+            $response_detail['borongans'] = number_format((float) $response_detail['borongan'], '2', '.', ',');
             $response_detail['biayaextras'] = number_format((float) $response_detail['biayaextra'], '2', '.', ',');
+            $response_detail['upahritasis'] = number_format((float) $response_detail['upahritasi'], '2', '.', ',');
 
-            $tglBon = $response_detail["tglsp"];
-            $timeStamp = strtotime($tglBon);
-            $datetglBon = date('d-m-Y', $timeStamp); 
-            $response_detail['tglsp'] = $datetglBon;
+            $tglsp = $response_detail["tglsp"];
+            $timeStamp = strtotime($tglsp);
+            $datetglsp = date('d-m-Y', $timeStamp); 
+            $response_detail['tglsp'] = $datetglsp;
         
             $sheet->setCellValue("A$detail_start_row", $response_index + 1);
-            $sheet->setCellValue("B$detail_start_row", $response_detail['nobukti']);
-            $sheet->setCellValue("C$detail_start_row", $response_detail['tglsp']);
-            $sheet->setCellValue("D$detail_start_row", $response_detail['dari']);
-            $sheet->setCellValue("E$detail_start_row", $response_detail['sampai']);
-            $sheet->setCellValue("F$detail_start_row", $response_detail['nocont']);
-            $sheet->setCellValue("G$detail_start_row", $response_detail['nosp']);
-            $sheet->setCellValue("H$detail_start_row", $response_detail['statusritasi']);
-            $sheet->setCellValue("I$detail_start_row", $response_detail['ritasi_nobukti']);
-            $sheet->setCellValue("J$detail_start_row", $response_detail['keteranganbiayatambahan']);
-            $sheet->setCellValue("K$detail_start_row", $response_detail['biayaextras']);
-            $sheet->setCellValue("L$detail_start_row", $response_detail['gajikeneks']);
-            $sheet->setCellValue("M$detail_start_row", $response_detail['komisisupirs']);
+            $sheet->setCellValue("B$detail_start_row", $response_detail['tglsp']);
+            $sheet->setCellValue("C$detail_start_row", $response_detail['nosp']);
+            $sheet->setCellValue("D$detail_start_row", $response_detail['kodestatuscontainer']);
+            $sheet->setCellValue("E$detail_start_row", $response_detail['dari']);
+            $sheet->setCellValue("F$detail_start_row", $response_detail['sampai']);
+            $sheet->setCellValue("G$detail_start_row", $response_detail['statusritasi']);
+            $sheet->setCellValue("H$detail_start_row", $response_detail['kodecontainer']);
+            $sheet->setCellValue("I$detail_start_row", $response_detail['liter']);
+            $sheet->setCellValue("J$detail_start_row", $response_detail['nocont']);
+            $sheet->setCellValue("K$detail_start_row", $response_detail['agen']);
+            $sheet->setCellValue("L$detail_start_row", $response_detail['borongans']);
+            $sheet->setCellValue("M$detail_start_row", $response_detail['biayaextras']);
             $sheet->setCellValue("N$detail_start_row", $response_detail['upahritasis']);
-            $sheet->setCellValue("O$detail_start_row", $response_detail['tolsupirs']);
-            $sheet->setCellValue("P$detail_start_row", $response_detail['gajisupirs']);
             
-            $sheet ->getStyle("A$detail_start_row:J$detail_start_row")->applyFromArray($styleArray);
-            $sheet ->getStyle("K$detail_start_row:P$detail_start_row")->applyFromArray($style_number);
+            $sheet ->getStyle("A$detail_start_row:N$detail_start_row")->applyFromArray($styleArray);
+            $sheet ->getStyle("L$detail_start_row:N$detail_start_row")->applyFromArray($style_number);
             
-            $gajisupir += $response_detail['gajisupir'];
+            $liter += $response_detail['liter'];
+            $borongan += $response_detail['borongan'];
+            $biayaextra += $response_detail['biayaextra'];
+            $upahritasi += $response_detail['upahritasi'];
             $detail_start_row++;
         }
 
         $total_start_row = $detail_start_row;
-        $sheet->mergeCells('A'.$total_start_row.':O'.$total_start_row);
-        $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A'.$total_start_row.':O'.$total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
-        $sheet->setCellValue("P$total_start_row", number_format((float) $gajisupir, '2', '.', ','))->getStyle("P$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->setCellValue("G$total_start_row", 'Tot Liter')->getStyle('G'.$total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
+        $sheet->setCellValue("I$total_start_row", number_format((float) $liter, '2', '.', ','))->getStyle("I$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->setCellValue("L$total_start_row", number_format((float) $borongan, '2', '.', ','))->getStyle("L$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->setCellValue("M$total_start_row", number_format((float) $biayaextra, '2', '.', ','))->getStyle("M$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->setCellValue("N$total_start_row", number_format((float) $upahritasi, '2', '.', ','))->getStyle("N$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
 
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);
@@ -377,11 +387,31 @@ class GajiSupirHeaderController extends MyController
         $sheet->getColumnDimension('L')->setAutoSize(true);
         $sheet->getColumnDimension('M')->setAutoSize(true);
         $sheet->getColumnDimension('N')->setAutoSize(true);
-        $sheet->getColumnDimension('O')->setAutoSize(true);
-        $sheet->getColumnDimension('P')->setAutoSize(true);
+
+        $gajisupirs['sisa'] = number_format((float) $gajisupirs['sisa'], '2', '.', ','); 
+        $gajisupirs['uangjalan'] = number_format((float) $gajisupirs['uangjalan'], '2', '.', ',');  
+        $gajisupirs['bbm'] = number_format((float) $gajisupirs['bbm'], '2', '.', ',');
+        $gajisupirs['deposito'] = number_format((float) $gajisupirs['deposito'], '2', '.', ',');
+        $gajisupirs['potonganpinjaman'] = number_format((float) $gajisupirs['potonganpinjaman'], '2', '.', ',');
+        $gajisupirs['potonganpinjamansemua'] = number_format((float) $gajisupirs['potonganpinjamansemua'], '2', '.', ',');
+        $gajisupirs['uangmakanharian'] = number_format((float) $gajisupirs['uangmakanharian'], '2', '.', ',');
+        $gajisupirs['total'] = number_format((float) $gajisupirs['total'], '2', '.', ',');
+        $gajisupirs['uangJalantidakterhitung'] = number_format((float) $gajisupirs['uangJalantidakterhitung'], '2', '.', ',');
+
+        $header_down_row = $total_start_row+2;
+        $header_down_value_row = $total_start_row+2;
+
+        foreach ($header_down_columns as $header_down_column) {
+            $sheet->setCellValue('L' . $header_down_row, $header_down_column['label']);
+            $sheet->setCellValue('M' . $header_down_row++, ':');
+
+            $cellCoordinate = 'N' . $header_down_value_row++;
+            $sheet->setCellValue($cellCoordinate, $gajisupirs[$header_down_column['index']]);
+            $sheet->getStyle($cellCoordinate)->applyFromArray($style_number_2);
+        }
 
         $writer = new Xlsx($spreadsheet);
-        $filename = 'Laporan Gaji Supir' . date('dmYHis');
+        $filename = 'Laporan Rincian Gaji Supir' . date('dmYHis');
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
         header('Cache-Control: max-age=0');

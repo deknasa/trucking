@@ -139,7 +139,7 @@ class LaporanHistoryPinjamanController extends MyController
         $sheet->getColumnDimension('E')->setAutoSize(true);
         // $sheet->getColumnDimension('F')->setAutoSize(true);
         $total_start_row = $detail_start_row;
-        $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A'.$total_start_row.':C'.$total_start_row)->getFont()->setBold(true);
+        $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A'.$total_start_row.':C'.$total_start_row)->getFont()->setBold(true);
 
         $sheet->setCellValue("D$total_start_row", number_format((float) $totalnominal, '2', '.', ','))->getStyle("D$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
         $sheet->setCellValue("E$total_start_row", number_format((float) $totalSaldo, '2', '.', ','))->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);

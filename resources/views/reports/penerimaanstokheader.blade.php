@@ -48,7 +48,6 @@
         case '132':
         //DOT
         report.loadFile(`{{ asset('public/reports/ReportpenerimaanStokPGDO.mrt') }}`)
-        
         break;
       case '133':
         //POT
@@ -80,10 +79,8 @@
         break;
       default:
         report.loadFile(`{{ asset('public/reports/ReportPenerimaanSPB.mrt') }}`)
-        
         break;
       }
-
       report.dictionary.dataSources.clear()
 
       dataSet.readJson({
@@ -163,11 +160,7 @@
     }
   </style>
 </head>
-
 <body onLoad="Start()">
-
   <div id="content"></div>
-
 </body>
-
 </html>

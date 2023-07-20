@@ -175,7 +175,7 @@ class LaporanKasBankController extends MyController
         }
 
         $sheet->mergeCells('A' . $detail_start_row . ':C' . $detail_start_row);
-        $sheet->setCellValue("A$detail_start_row", 'Total :')->getStyle('A' . $detail_start_row . ':C' . $detail_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
+        $sheet->setCellValue("A$detail_start_row", 'Total')->getStyle('A' . $detail_start_row . ':C' . $detail_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
 
         $sheet->setCellValue("D$detail_start_row", "=SUM(D8:D" . ($dataRow - 1) . ")")->getStyle("D$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
 

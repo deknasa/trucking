@@ -351,7 +351,7 @@ class ProsesUangJalanSupirHeaderController extends MyController
 
         $total_start_row = $detail_start_row;
         $sheet->mergeCells('A'.$total_start_row.':M'.$total_start_row);
-        $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A'.$total_start_row.':M'.$total_start_row)->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A'.$total_start_row.':M'.$total_start_row)->applyFromArray($style_number)->getFont()->setBold(true);
         $sheet->setCellValue("N$total_start_row", number_format((float) $nominal, '2', ',', '.'))->getStyle("N$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
 
         $sheet->getColumnDimension('A')->setAutoSize(true);

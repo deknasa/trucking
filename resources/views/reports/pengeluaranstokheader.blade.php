@@ -17,7 +17,6 @@
 
   <script type="text/javascript">
     var pengeluaranstokheaders = <?= json_encode($pengeluaranstokheaders); ?>
-    var parameterStatusFormat = <?= json_encode($parameterStatusFormat); ?>
 
     function Start() {
       Stimulsoft.Base.StiLicense.loadFromFile("{{ asset($stireport_path . 'license.php') }}");
@@ -45,8 +44,6 @@
       var dataSet = new Stimulsoft.System.Data.DataSet("Data")
 
       viewer.renderHtml('content')
-
-      console.log(pengeluaranstokheaders.statusformat)
       switch (pengeluaranstokheaders.statusformat) {
         case '135':
         //spk
@@ -84,8 +81,6 @@
       viewer.report = report
       // designer.renderHtml("content")
       // designer.report = report
-      
-
       
       viewer.onPrintReport = function (event) {
         triggerEvent(window, 'afterprint');
@@ -151,11 +146,7 @@
     }
   </style>
 </head>
-
 <body onLoad="Start()">
-
   <div id="content"></div>
-
 </body>
-
 </html>
