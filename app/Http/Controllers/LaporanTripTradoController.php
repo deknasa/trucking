@@ -171,7 +171,7 @@ class LaporanTripTradoController extends MyController
        //total
        $total_start_row = $detail_start_row;
        $sheet->mergeCells('A' . $total_start_row . ':A' . $total_start_row);
-       $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A' . $total_start_row . ':A' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
+       $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':A' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
 
        $totalFull = "=SUM(B6:B" . ($detail_start_row-1) . ")";
        $sheet->setCellValue("B$total_start_row", $totalFull)->getStyle("B$total_start_row")->applyFromArray($style_number);

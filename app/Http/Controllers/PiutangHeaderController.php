@@ -269,7 +269,7 @@ class PiutangHeaderController extends MyController
 
         $total_start_row = $detail_start_row;
         $sheet->mergeCells('A' . $total_start_row . ':B' . $total_start_row);
-        $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A' . $total_start_row . ':B' . $total_start_row)->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':B' . $total_start_row)->applyFromArray($style_number)->getFont()->setBold(true);
         $sheet->setCellValue("C$total_start_row", number_format((float) $total, '2', '.', ','))->getStyle("C$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
 
         $sheet->getColumnDimension('A')->setAutoSize(true);

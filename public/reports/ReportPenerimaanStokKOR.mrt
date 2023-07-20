@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "66d38c1aba48b1ef078c0828d463b797",
+  "ReportGuid": "f6e46d8ada0c51225ae6d1adc5c0d0f3",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "ReportPenerimaanStokKOR.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportPenerimaanStokKOR.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1689323999000+0700)/",
+  "ReportChanged": "/Date(1689566620000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -605,7 +605,31 @@
             "Name": "value",
             "NameInSource": "value",
             "Alias": "value",
+            "Type": "System.Decimal"
+          },
+          "45": {
+            "Name": "columnDari",
+            "NameInSource": "columnDari",
+            "Alias": "columnDari",
             "Type": "System.String"
+          },
+          "46": {
+            "Name": "valueDari",
+            "NameInSource": "valueDari",
+            "Alias": "valueDari",
+            "Type": "System.Decimal"
+          },
+          "47": {
+            "Name": "columnKe",
+            "NameInSource": "columnKe",
+            "Alias": "columnKe",
+            "Type": "System.String"
+          },
+          "48": {
+            "Name": "valueKe",
+            "NameInSource": "valueKe",
+            "Alias": "valueKe",
+            "Type": "System.Decimal"
           }
         },
         "NameInSource": "Data.penerimaanstokheader"
@@ -1168,10 +1192,6 @@
               },
               "ShrinkFontToFit": true,
               "ShrinkFontToFitMinimumSize": 5,
-              "TextFormat": {
-                "Ident": "StiCustomFormatService",
-                "StringFormat": "dd-MM-yyyy"
-              },
               "Type": "DataColumn"
             },
             "22": {

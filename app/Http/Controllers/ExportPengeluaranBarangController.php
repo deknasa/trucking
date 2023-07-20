@@ -150,7 +150,7 @@ class ExportPengeluaranBarangController extends MyController
             $detail_start_row++;
         }
         $sheet->mergeCells('A' . $detail_start_row . ':H' . $detail_start_row);
-        $sheet->setCellValue("A$detail_start_row", 'Total :')->getStyle('A' . $detail_start_row . ':H' . $detail_start_row)->getFont()->setBold(true);
+        $sheet->setCellValue("A$detail_start_row", 'Total')->getStyle('A' . $detail_start_row . ':H' . $detail_start_row)->getFont()->setBold(true);
         $sheet->setCellValue("I$detail_start_row", number_format((float) $totalNominal, '2', ',', '.'))->getStyle("I$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
 
         $sheet->getColumnDimension('A')->setAutoSize(true);

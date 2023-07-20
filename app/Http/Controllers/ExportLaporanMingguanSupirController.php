@@ -213,7 +213,7 @@ class ExportLaporanMingguanSupirController extends Controller
        //total
        $total_start_row = $detail_start_row;
        $sheet->mergeCells('A' . $total_start_row . ':M' . $total_start_row);
-       $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A' . $total_start_row . ':M' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
+       $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':M' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
 
        $totalDebet = "=SUM(N7:N" . ($detail_start_row-1) . ")";
        $sheet->setCellValue("N$total_start_row", $totalDebet)->getStyle("N$total_start_row")->applyFromArray($style_number)->getFont()->setBold(true);

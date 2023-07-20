@@ -153,7 +153,7 @@ class RekapPenerimaanHeaderController extends MyController
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setCellValue('A1', $rekappenerimaan['judul']);
-        $sheet->setCellValue('A2', $rekappenerimaan['judulLaporan']);
+        $sheet->setCellValue('A2', $rekappenerimaan['judulLaporan'] . $rekappenerimaan['bank']);
         $sheet->getStyle("A1")->getFont()->setSize(12);
         $sheet->getStyle("A2")->getFont()->setSize(12);
         $sheet->getStyle("A1")->getFont()->setBold(true);
@@ -178,12 +178,12 @@ class RekapPenerimaanHeaderController extends MyController
                 'index'=>'tglbukti'
             ],
             [
-                'label'=>'Tanggal Transaksi',
-                'index'=>'tgltransaksi'
-            ],
-            [
                 'label'=>'Bank',
                 'index'=>'bank'
+            ],
+            [
+                'label'=>'Tanggal Transaksi',
+                'index'=>'tgltransaksi'
             ]
         ];
         $detail_columns = [
@@ -191,8 +191,8 @@ class RekapPenerimaanHeaderController extends MyController
                 'label'=>'NO',
             ],
             [
-                'label'=>'NO BUKTI PENERIMAAN',
-                'index'=>'penerimaan_nobukti'
+                'label'=>'NAMA PERKIRAAN',
+                'index'=>'keterangancoa'
             ],
             [
                 'label'=>'KETERANGAN',
@@ -249,7 +249,7 @@ class RekapPenerimaanHeaderController extends MyController
             $response_detail['nominals'] = number_format((float) $response_detail['nominal'], '2', '.', ',');
         
             $sheet->setCellValue("A$detail_start_row", $response_index + 1);
-            $sheet->setCellValue("B$detail_start_row", $response_detail['penerimaan_nobukti']);
+            $sheet->setCellValue("B$detail_start_row", $response_detail['keterangancoa']);
             $sheet->setCellValue("C$detail_start_row", $response_detail['keterangan']);
             $sheet->setCellValue("D$detail_start_row", $response_detail['nominals']);
 
@@ -264,7 +264,7 @@ class RekapPenerimaanHeaderController extends MyController
 
         $total_start_row = $detail_start_row;
         $sheet->mergeCells('A'.$total_start_row.':C'.$total_start_row);
-        $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A'.$total_start_row.':C'.$total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
+        $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A'.$total_start_row.':C'.$total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
         $sheet->setCellValue("D$total_start_row", number_format((float) $nominal, '2', '.', ','))->getStyle("D$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
 
         //set autosize
@@ -274,7 +274,7 @@ class RekapPenerimaanHeaderController extends MyController
         $sheet->getColumnDimension('D')->setAutoSize(true);
 
         $writer = new Xlsx($spreadsheet);
-        $filename = 'Laporan Rekap Penerimaan' . date('dmYHis');
+        $filename = 'Laporan Rekap Penerimaan ' . $rekappenerimaan['bank'] . date('dmYHis');
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
         header('Cache-Control: max-age=0');

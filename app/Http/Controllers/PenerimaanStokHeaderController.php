@@ -586,7 +586,7 @@ class PenerimaanStokHeaderController extends MyController
 
                 $total_start_row = $detail_start_row;
                 $sheet->mergeCells('A' . $total_start_row . ':D' . $total_start_row);
-                $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A' . $total_start_row . ':D' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
+                $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':D' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
                 $sheet->setCellValue("E$total_start_row", number_format((float) $nominal, '2', '.', ','))->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
                 $sheet->getColumnDimension('A')->setAutoSize(true);
                 $sheet->getColumnDimension('B')->setAutoSize(true);
@@ -736,7 +736,7 @@ class PenerimaanStokHeaderController extends MyController
 
                 $total_start_row = $detail_start_row;
                 $sheet->mergeCells('A' . $total_start_row . ':E' . $total_start_row);
-                $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A' . $total_start_row . ':E' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
+                $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':E' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
                 $sheet->setCellValue("F$total_start_row", number_format((float) $nominal, '2', '.', ','))->getStyle("F$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
                 $sheet->getColumnDimension('A')->setAutoSize(true);
                 $sheet->getColumnDimension('B')->setAutoSize(true);
@@ -759,6 +759,7 @@ class PenerimaanStokHeaderController extends MyController
                 $persediaan = $this->persediaan($gudang,$trado,$gandengan);
                 $data['column'] = $persediaan['column'];
                 $data['value'] = $persediaan['value'];
+
                 $penerimaanstokheaders = $data;
                 $tglBukti = $penerimaanstokheaders["tglbukti"];
                 $timeStamp = strtotime($tglBukti);
@@ -778,7 +779,7 @@ class PenerimaanStokHeaderController extends MyController
                 $sheet->mergeCells('A1:F1');
                 $sheet->mergeCells('A2:F2');
                 $header_start_row = 4;
-                $detail_table_header_row = 7;
+                $detail_table_header_row = 8;
                 $detail_start_row = $detail_table_header_row + 1;
                 $alphabets = range('A', 'Z');
                 $header_columns = [
@@ -789,6 +790,10 @@ class PenerimaanStokHeaderController extends MyController
                     [
                         'label' => 'Tanggal',
                         'index' => 'tglbukti',
+                    ],
+                    [
+                        'label' => $data['column'],
+                        'index' => $data['value'],
                     ],
                 ];
                 $detail_columns = [
@@ -872,7 +877,7 @@ class PenerimaanStokHeaderController extends MyController
                 }
                 $total_start_row = $detail_start_row;
                 $sheet->mergeCells('A' . $total_start_row . ':D' . $total_start_row);
-                $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A' . $total_start_row . ':D' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
+                $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':D' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
                 $sheet->setCellValue("E$total_start_row", number_format((float) $nominal, '2', '.', ','))->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
                 $sheet->getColumnDimension('A')->setAutoSize(true);
                 $sheet->getColumnDimension('B')->setAutoSize(true);
@@ -1156,7 +1161,7 @@ class PenerimaanStokHeaderController extends MyController
 
                 $total_start_row = $detail_start_row;
                 $sheet->mergeCells('A' . $total_start_row . ':E' . $total_start_row);
-                $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A' . $total_start_row . ':E' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
+                $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':E' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
                 $sheet->setCellValue("F$total_start_row", number_format((float) $nominal, '2', '.', ','))->getStyle("F$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
                 $sheet->getColumnDimension('A')->setAutoSize(true);
                 $sheet->getColumnDimension('B')->setAutoSize(true);
@@ -1288,7 +1293,7 @@ class PenerimaanStokHeaderController extends MyController
 
                 $total_start_row = $detail_start_row;
                 $sheet->mergeCells('A' . $total_start_row . ':D' . $total_start_row);
-                $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A' . $total_start_row . ':D' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
+                $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':D' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
                 $sheet->setCellValue("E$total_start_row", number_format((float) $nominal, '2', '.', ','))->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
                 $sheet->getColumnDimension('A')->setAutoSize(true);
                 $sheet->getColumnDimension('B')->setAutoSize(true);
@@ -1419,7 +1424,7 @@ class PenerimaanStokHeaderController extends MyController
 
                 $total_start_row = $detail_start_row;
                 $sheet->mergeCells('A' . $total_start_row . ':D' . $total_start_row);
-                $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A' . $total_start_row . ':D' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
+                $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':D' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
                 $sheet->setCellValue("E$total_start_row", number_format((float) $nominal, '2', '.', ','))->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
                 $sheet->getColumnDimension('A')->setAutoSize(true);
                 $sheet->getColumnDimension('B')->setAutoSize(true);

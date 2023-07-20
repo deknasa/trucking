@@ -98,7 +98,6 @@ class ProsesGajiSupirHeaderController extends MyController
 
     public function report(Request $request)
     {
-
         //FETCH HEADER
         $id = $request->id;
         $prosesgajisupir = Http::withHeaders($request->header())
@@ -354,7 +353,7 @@ class ProsesGajiSupirHeaderController extends MyController
 
         $total_start_row = $detail_start_row;
         $sheet->mergeCells('A' . $total_start_row . ':L' . $total_start_row);
-        $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A' . $total_start_row . ':L' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
+        $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':L' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
         $sheet->setCellValue("M$total_start_row", number_format((float) $borongan, '2', '.', ','))->getStyle("M$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
         
         $sheet->getColumnDimension('A')->setAutoSize(true);

@@ -447,7 +447,7 @@ class UpahRitasiController extends MyController
 
         $total_start_row = $detail_start_row;
         $sheet->mergeCells('A' . $total_start_row . ':D' . $total_start_row);
-        $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A' . $total_start_row . ':D' . $total_start_row)->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':D' . $total_start_row)->applyFromArray($style_number)->getFont()->setBold(true);
         $sheet->setCellValue("E$total_start_row", number_format((float) $nominalSupir, '2', ',', '.'))->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
         $sheet->setCellValue("F$total_start_row", number_format((float) $nominalKenek, '2', ',', '.'))->getStyle("F$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
         $sheet->setCellValue("G$total_start_row", number_format((float) $nominalKomisi, '2', ',', '.'))->getStyle("G$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);

@@ -210,6 +210,7 @@ class AbsensiSupirHeaderController extends MyController
 
         //FETCH DETAIL
         $detailParams = [
+            'forReport' => true,
             'absensi_id' => $request->id,
         ];
         $responses = Http::withHeaders($request->header())
@@ -235,8 +236,8 @@ class AbsensiSupirHeaderController extends MyController
         $sheet->getStyle("A2")->getFont()->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
-        $sheet->mergeCells('A1:H1');
-        $sheet->mergeCells('A2:H2');
+        $sheet->mergeCells('A1:F1');
+        $sheet->mergeCells('A2:F2');
 
         $header_start_row = 4;
         $detail_table_header_row = 8;
@@ -276,17 +277,8 @@ class AbsensiSupirHeaderController extends MyController
                 'index' => 'status',
             ],
             [
-                'label' => 'JAM',
-                'index' => 'jam',
-            ],
-            [
                 'label' => 'KETERANGAN',
                 'index' => 'keterangan_detail',
-            ],
-            [
-                'label' => 'JUMLAH TRIP',
-                'index' => 'jumlahtrip',
-                'format' => 'currency'
             ],
             [
                 'label' => 'UANG JALAN',
@@ -326,17 +318,16 @@ class AbsensiSupirHeaderController extends MyController
         ];
 
         // $sheet->getStyle("A$detail_table_header_row:G$detail_table_header_row")->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FF1F456E');
-        $sheet ->getStyle("A$detail_table_header_row:H$detail_table_header_row")->applyFromArray($styleArray);
+        $sheet ->getStyle("A$detail_table_header_row:F$detail_table_header_row")->applyFromArray($styleArray);
         
         // LOOPING DETAIL
         $totaluangjalan = 0;
-        $totaljumlahtrip = 0;
         foreach ($invoice_details as $response_index => $response_detail) {
             
             foreach ($detail_columns as $detail_columns_index => $detail_column) {
                 $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
-                $sheet->getStyle("A$detail_table_header_row:H$detail_table_header_row")->getFont()->setBold(true);
-                $sheet->getStyle("A$detail_table_header_row:H$detail_table_header_row")->getAlignment()->setHorizontal('center');
+                $sheet->getStyle("A$detail_table_header_row:F$detail_table_header_row")->getFont()->setBold(true);
+                $sheet->getStyle("A$detail_table_header_row:F$detail_table_header_row")->getAlignment()->setHorizontal('center');
             }
             $response_detail['jumlahtrips'] = number_format((float) $response_detail['jumlahtrip'], '2', '.', ',');
             $response_detail['uangjalans'] = number_format((float) $response_detail['uangjalan'], '2', '.', ',');
@@ -346,34 +337,29 @@ class AbsensiSupirHeaderController extends MyController
             $sheet->setCellValue("B$detail_start_row", $response_detail['trado']);
             $sheet->setCellValue("C$detail_start_row", $response_detail['supir']);
             $sheet->setCellValue("D$detail_start_row", $response_detail['status']);
-            $sheet->setCellValue("E$detail_start_row", $response_detail['jam']);
-            $sheet->setCellValue("F$detail_start_row", $response_detail['keterangan_detail']);
-            $sheet->setCellValue("G$detail_start_row", $response_detail['jumlahtrips']);
-            $sheet->setCellValue("H$detail_start_row", $response_detail['uangjalans']);
+            $sheet->setCellValue("E$detail_start_row", $response_detail['keterangan_detail']);
+            $sheet->setCellValue("F$detail_start_row", $response_detail['uangjalans']);
 
-            $sheet->getStyle("F$detail_start_row")->getAlignment()->setWrapText(true);
-            $sheet->getColumnDimension('F')->setWidth(50);
+            $sheet->getStyle("E$detail_start_row")->getAlignment()->setWrapText(true);
+            $sheet->getColumnDimension('E')->setWidth(50);
             
             $sheet ->getStyle("A$detail_start_row:F$detail_start_row")->applyFromArray($styleArray);
-            $sheet ->getStyle("G$detail_start_row")->applyFromArray($style_number);
-            $sheet ->getStyle("H$detail_start_row")->applyFromArray($style_number);
+            $sheet ->getStyle("F$detail_start_row")->applyFromArray($style_number);
             $totaluangjalan += $response_detail['uangjalan'];
             $detail_start_row++;
         }
 
         $total_start_row = $detail_start_row;
-        $sheet->mergeCells('A'.$total_start_row.':G'.$total_start_row);
-        $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A'.$total_start_row.':G'.$total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
-        $sheet->setCellValue("H$total_start_row", number_format((float) $totaluangjalan, '2', '.', ','))->getStyle("H$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->mergeCells('A'.$total_start_row.':E'.$total_start_row);
+        $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A'.$total_start_row.':E'.$total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
+        $sheet->setCellValue("F$total_start_row", number_format((float) $totaluangjalan, '2', '.', ','))->getStyle("F$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
 
         //set autosize
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);
         $sheet->getColumnDimension('C')->setAutoSize(true);
         $sheet->getColumnDimension('D')->setAutoSize(true);
-        $sheet->getColumnDimension('E')->setAutoSize(true);
-        $sheet->getColumnDimension('G')->setAutoSize(true);
-        $sheet->getColumnDimension('H')->setAutoSize(true);
+        $sheet->getColumnDimension('F')->setAutoSize(true);
 
         $writer = new Xlsx($spreadsheet);
         $filename = 'Laporan Absensi' . date('dmYHis');

@@ -234,7 +234,7 @@ class HutangExtraHeaderController extends MyController
 
         $total_start_row = $detail_start_row;
         $sheet->mergeCells('A'.$total_start_row.':C'.$total_start_row);
-        $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A'.$total_start_row.':C'.$total_start_row)->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A'.$total_start_row.':C'.$total_start_row)->applyFromArray($style_number)->getFont()->setBold(true);
         $sheet->setCellValue("D$total_start_row", $total)->getStyle("D$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
         $sheet->getStyle("D$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
 

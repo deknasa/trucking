@@ -289,8 +289,7 @@ class PengeluaranStokHeaderController extends MyController
         $data['value'] = $persediaan['value'];
 
         $pengeluaranstokheaders = $data;
-        // dd($pengeluaranstokheaders); 
-        return view('reports.pengeluaranstokheader', compact('pengeluaranstokheaders','parameterStatusFormat'));
+        return view('reports.pengeluaranstokheader', compact('pengeluaranstokheaders'));
     }
 
     public function export(Request $request)
@@ -346,7 +345,7 @@ class PengeluaranStokHeaderController extends MyController
                 $sheet->mergeCells('A1:F1');
                 $sheet->mergeCells('A2:F2');
                 $header_start_row = 4;
-                $detail_table_header_row = 8;
+                $detail_table_header_row = 9;
                 $detail_start_row = $detail_table_header_row + 1;
                 $alphabets = range('A', 'Z');
                 $header_columns = [
@@ -359,8 +358,12 @@ class PengeluaranStokHeaderController extends MyController
                         'index' => 'tglbukti',
                     ],
                     [
-                        'label' => 'Supplier',
-                        'index' => 'supplier',
+                        'label' => 'No Polisi',
+                        'index' => 'trado',
+                    ],
+                    [
+                        'label' => 'No PG',
+                        'index' => 'penerimaanstok_nobukti',
                     ],
                 ];
                 $detail_columns = [
@@ -381,7 +384,7 @@ class PengeluaranStokHeaderController extends MyController
                         'format' => 'currency'
                     ],
                     [
-                        'label' => 'NOMINAL',
+                        'label' => 'TOTAL',
                         'index' => 'total',
                         'format' => 'currency'
                     ],
@@ -445,7 +448,7 @@ class PengeluaranStokHeaderController extends MyController
 
                 $total_start_row = $detail_start_row;
                 $sheet->mergeCells('A' . $total_start_row . ':D' . $total_start_row);
-                $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A' . $total_start_row . ':D' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
+                $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':D' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
                 $sheet->setCellValue("E$total_start_row", number_format((float) $nominal, '2', '.', ','))->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
                 $sheet->getColumnDimension('A')->setAutoSize(true);
                 $sheet->getColumnDimension('B')->setAutoSize(true);
@@ -513,7 +516,7 @@ class PengeluaranStokHeaderController extends MyController
                         'format' => 'currency'
                     ],
                     [
-                        'label' => 'NOMINAL',
+                        'label' => 'TOTAL',
                         'index' => 'total',
                         'format' => 'currency'
                     ],
@@ -577,7 +580,7 @@ class PengeluaranStokHeaderController extends MyController
 
                 $total_start_row = $detail_start_row;
                 $sheet->mergeCells('A' . $total_start_row . ':D' . $total_start_row);
-                $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A' . $total_start_row . ':D' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
+                $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':D' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
                 $sheet->setCellValue("E$total_start_row", number_format((float) $nominal, '2', '.', ','))->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
                 $sheet->getColumnDimension('A')->setAutoSize(true);
                 $sheet->getColumnDimension('B')->setAutoSize(true);
@@ -641,7 +644,7 @@ class PengeluaranStokHeaderController extends MyController
                         'format' => 'currency'
                     ],
                     [
-                        'label' => 'NOMINAL',
+                        'label' => 'TOTAL',
                         'index' => 'total',
                         'format' => 'currency'
                     ],
@@ -705,7 +708,7 @@ class PengeluaranStokHeaderController extends MyController
 
                 $total_start_row = $detail_start_row;
                 $sheet->mergeCells('A' . $total_start_row . ':D' . $total_start_row);
-                $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A' . $total_start_row . ':D' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
+                $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':D' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
                 $sheet->setCellValue("E$total_start_row", number_format((float) $nominal, '2', '.', ','))->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
                 $sheet->getColumnDimension('A')->setAutoSize(true);
                 $sheet->getColumnDimension('B')->setAutoSize(true);
@@ -780,7 +783,7 @@ class PengeluaranStokHeaderController extends MyController
                         'format' => 'currency'
                     ],
                     [
-                        'label' => 'NOMINAL',
+                        'label' => 'TOTAL',
                         'index' => 'total',
                         'format' => 'currency'
                     ],
@@ -848,7 +851,7 @@ class PengeluaranStokHeaderController extends MyController
 
                 $total_start_row = $detail_start_row;
                 $sheet->mergeCells('A' . $total_start_row . ':D' . $total_start_row);
-                $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A' . $total_start_row . ':D' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
+                $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':D' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
                 $sheet->setCellValue("E$total_start_row", number_format((float) $nominal, '2', '.', ','))->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
                 $sheet->getColumnDimension('A')->setAutoSize(true);
                 $sheet->getColumnDimension('B')->setAutoSize(true);
@@ -912,7 +915,7 @@ class PengeluaranStokHeaderController extends MyController
                         'format' => 'currency'
                     ],
                     [
-                        'label' => 'NOMINAL',
+                        'label' => 'TOTAL',
                         'index' => 'total',
                         'format' => 'currency'
                     ],
@@ -976,7 +979,7 @@ class PengeluaranStokHeaderController extends MyController
 
                 $total_start_row = $detail_start_row;
                 $sheet->mergeCells('A' . $total_start_row . ':D' . $total_start_row);
-                $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A' . $total_start_row . ':D' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
+                $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':D' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
                 $sheet->setCellValue("E$total_start_row", number_format((float) $nominal, '2', '.', ','))->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
                 $sheet->getColumnDimension('A')->setAutoSize(true);
                 $sheet->getColumnDimension('B')->setAutoSize(true);

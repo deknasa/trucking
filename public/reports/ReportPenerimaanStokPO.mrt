@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "5ace0f40442e487db80d43063d27bacf",
+  "ReportGuid": "d3943efb9aa6c35bde1309d5841c6c67",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "ReportPenerimaanStokPO.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportPenerimaanStokPO.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1689324054000+0700)/",
+  "ReportChanged": "/Date(1689566408000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -605,6 +605,30 @@
             "Name": "value",
             "NameInSource": "value",
             "Alias": "value",
+            "Type": "System.Decimal"
+          },
+          "45": {
+            "Name": "columnDari",
+            "NameInSource": "columnDari",
+            "Alias": "columnDari",
+            "Type": "System.String"
+          },
+          "46": {
+            "Name": "valueDari",
+            "NameInSource": "valueDari",
+            "Alias": "valueDari",
+            "Type": "System.Decimal"
+          },
+          "47": {
+            "Name": "columnKe",
+            "NameInSource": "columnKe",
+            "Alias": "columnKe",
+            "Type": "System.String"
+          },
+          "48": {
+            "Name": "valueKe",
+            "NameInSource": "valueKe",
+            "Alias": "valueKe",
             "Type": "System.Decimal"
           }
         },
@@ -1767,7 +1791,6 @@
               "CanGrow": true,
               "ClientRectangle": "2,8,16,6",
               "ComponentPlacement": "gf.GroupFooterBand1",
-              "Enabled": false,
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -1789,7 +1812,6 @@
               "CanGrow": true,
               "ClientRectangle": "18,8,194,6",
               "ComponentPlacement": "gf.GroupFooterBand1",
-              "Enabled": false,
               "Interaction": {
                 "Ident": "StiInteraction"
               },
