@@ -18,14 +18,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <label class="col-12 col-sm-2 col-form-label mt-2">JENIS<span class="text-danger">*</span></label>
-                            <div class="col-sm-4 mt-2">
-                                <select name="jenis" id="jenis" class="form-select select2bs4" style="width: 100%;">
 
-                                </select>
-                            </div>
-                        </div>
                         <div class="row">
 
                             <div class="col-sm-6 mt-4">
@@ -70,7 +63,7 @@
         initDatepicker()
         $('#crudForm').find('[name=sampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
-        
+
         if (!`{{ $myAuth->hasPermission('laporanpinjamansupirkaryawan', 'report') }}`) {
             $('#btnPreview').attr('disabled', 'disabled')
         }
@@ -79,15 +72,48 @@
 
     $(document).on('click', `#btnPreview`, function(event) {
         let sampai = $('#crudForm').find('[name=sampai]').val()
-        let jenis = $('#crudForm').find('[name=jenis]').val()
 
-        if (jenis != '' && sampai != '') {
+        getCekReport().then((response) => {
+            window.open(`{{ route('laporanpinjamansupirkaryawan.report') }}?sampai=${sampai}`)
 
-            window.open(`{{ route('laporanpinjamansupirkaryawan.report') }}?sampai=${sampai}&jenis=${jenis}`)
-        } else {
-            showDialog('ISI SELURUH KOLOM')
-        }
+        }).catch((error) => {
+            if (error.status === 422) {
+                $('.is-invalid').removeClass('is-invalid')
+                $('.invalid-feedback').remove()
+
+                setErrorMessages($('#crudForm'), error.responseJSON.errors);
+            } else {
+                showDialog(error.statusText, error.responseJSON.message)
+
+            }
+        })
+
+
     })
+
+    function getCekReport() {
+
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: `${apiUrl}laporanpinjamansupirkaryawan/report`,
+                dataType: "JSON",
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                data: {
+                    sampai: $('#crudForm').find('[name=sampai]').val(),
+                    isCheck: true,
+                },
+                success: (response) => {
+                    resolve(response);
+                },
+                error: error => {
+                    reject(error)
+
+                },
+            });
+        });
+    }
 
 
 
