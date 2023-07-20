@@ -57,8 +57,6 @@
 
 
     $(document).ready(function() {
-        initSelect2($('#crudForm').find('[name=jenis]'), false)
-        setJenisKaryawanOptions($('#crudForm'))
 
         initDatepicker()
         $('#crudForm').find('[name=sampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
@@ -73,92 +71,32 @@
     $(document).on('click', `#btnPreview`, function(event) {
         let sampai = $('#crudForm').find('[name=sampai]').val()
 
-        getCekReport().then((response) => {
-            window.open(`{{ route('laporanpinjamansupirkaryawan.report') }}?sampai=${sampai}`)
-
-        }).catch((error) => {
-            if (error.status === 422) {
-                $('.is-invalid').removeClass('is-invalid')
-                $('.invalid-feedback').remove()
-
-                setErrorMessages($('#crudForm'), error.responseJSON.errors);
-            } else {
-                showDialog(error.statusText, error.responseJSON.message)
-
+        $.ajax({
+            url: `{{ route('laporanpinjamansupirkaryawan.report') }}`,
+            method: 'GET',
+            data: {
+                sampai: sampai
+            },
+            success: function(response) {
+                // Handle the success response
+                var newWindow = window.open('','_blank');
+                newWindow.document.open();
+                newWindow.document.write(response);
+                newWindow.document.close();
+            },
+            error: function(error) {
+                console.log(error)
+                if (error.status === 422) {
+                    $('.is-invalid').removeClass('is-invalid');
+                    $('.invalid-feedback').remove();
+                    setErrorMessages($('#crudForm'), error.responseJSON.errors);
+                } else {
+                    showDialog(error.responseJSON.message);
+                }
             }
-        })
-
-
+        });
     })
 
-    function getCekReport() {
-
-        return new Promise((resolve, reject) => {
-            $.ajax({
-                url: `${apiUrl}laporanpinjamansupirkaryawan/report`,
-                dataType: "JSON",
-                headers: {
-                    Authorization: `Bearer ${accessToken}`
-                },
-                data: {
-                    sampai: $('#crudForm').find('[name=sampai]').val(),
-                    isCheck: true,
-                },
-                success: (response) => {
-                    resolve(response);
-                },
-                error: error => {
-                    reject(error)
-
-                },
-            });
-        });
-    }
-
-
-
-    const setJenisKaryawanOptions = function(relatedForm) {
-        // return new Promise((resolve, reject) => {
-        // relatedForm.find('[name=approve]').empty()
-        relatedForm.find('[name=jenis]').append(
-            new Option('-- PILIH JENIS KARYAWAN --', '', false, true)
-        ).trigger('change')
-
-        let data = [];
-        data.push({
-            name: 'grp',
-            value: 'JENIS KARYAWAN'
-        })
-        data.push({
-            name: 'subgrp',
-            value: 'JENIS KARYAWAN'
-        })
-        $.ajax({
-            url: `${apiUrl}parameter/combo`,
-            method: 'GET',
-            dataType: 'JSON',
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            },
-            data: data,
-            success: response => {
-
-                response.data.forEach(statusApproval => {
-                    let option = new Option(statusApproval.text, statusApproval.id)
-                    relatedForm.find('[name=jenis]').append(option).trigger('change')
-                });
-
-                // relatedForm
-                //     .find('[name=approve]')
-                //     .val($(`#crudForm [name=approve] option:eq(1)`).val())
-                //     .trigger('change')
-                //     .trigger('select2:selected');
-
-                // resolve()
-            }
-        })
-        // })
-    }
 </script>
 @endpush()
 @endsection

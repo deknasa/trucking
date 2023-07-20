@@ -31,17 +31,19 @@ class LaporanPinjamanSupirController extends MyController
     {
         $detailParams = [
             'sampai' => $request->sampai,
-            'jenis' => $request->jenis,
         ];
 
         $header = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'laporanpinjamansupir/report', $detailParams);
-
-        $data = $header['data'];
-        $user = Auth::user();
-        return view('reports.laporanpinjamansupir', compact('data', 'user', 'detailParams'));
+            
+        if ($header->successful()) {
+            $data = $header['data'];
+            $user = Auth::user();
+            return view('reports.laporanpinjamansupir', compact('data', 'user', 'detailParams'));
+        } else {
+            return response()->json($header->json(), $header->status());
+        }
     }
-
 }

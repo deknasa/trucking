@@ -69,49 +69,33 @@
 
     $(document).on('click', `#btnPreview`, function(event) {
         let sampai = $('#crudForm').find('[name=sampai]').val()
-        
-        getCekReport().then((response) => {
-            window.open(`{{ route('laporanpinjamansupir.report') }}?sampai=${sampai}`)
 
-        }).catch((error) => {
-            if (error.status === 422) {
-                $('.is-invalid').removeClass('is-invalid')
-                $('.invalid-feedback').remove()
-
-                setErrorMessages($('#crudForm'), error.responseJSON.errors);
-            } else {
-                showDialog(error.statusText, error.responseJSON.message)
-
+        $.ajax({
+            url: `{{ route('laporanpinjamansupir.report') }}`,
+            method: 'GET',
+            data: {
+                sampai: sampai
+            },
+            success: function(response) {
+                // Handle the success response
+                var newWindow = window.open('','_blank');
+                newWindow.document.open();
+                newWindow.document.write(response);
+                newWindow.document.close();
+            },
+            error: function(error) {
+                console.log(error)
+                if (error.status === 422) {
+                    $('.is-invalid').removeClass('is-invalid');
+                    $('.invalid-feedback').remove();
+                    setErrorMessages($('#crudForm'), error.responseJSON.errors);
+                } else {
+                    showDialog(error.responseJSON.message);
+                }
             }
-        })
-
+        });
        
     })
-
-
-    function getCekReport() {
-
-        return new Promise((resolve, reject) => {
-            $.ajax({
-                url: `${apiUrl}laporanpinjamansupir/report`,
-                dataType: "JSON",
-                headers: {
-                    Authorization: `Bearer ${accessToken}`
-                },
-                data: {
-                    sampai: $('#crudForm').find('[name=sampai]').val(),
-                    isCheck: true,
-                },
-                success: (response) => {
-                    resolve(response);
-                },
-                error: error => {
-                    reject(error)
-
-                },
-            });
-        });
-    }
 </script>
 @endpush()
 @endsection
