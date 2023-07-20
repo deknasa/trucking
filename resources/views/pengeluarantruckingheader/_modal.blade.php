@@ -188,6 +188,7 @@
                           <tr>
                             <th style="width:5%; max-width: 25px;max-width: 15px">No</th>
                             <th class="data_tbl tbl_checkbox" style="display:none" width="1%">Pilih</th>
+                            <th style="width: 20%; min-width: 200px;" class="data_tbl tbl_karyawan_id">Karyawan</th>
                             <th style="width: 20%; min-width: 200px;" class="data_tbl tbl_supir_id">SUPIR</th>
                             <th style="width: 20%; min-width: 200px;" class="data_tbl tbl_pengeluaranstokheader_nobukti">no bukti pengeluaran stok</th>
                             <th style="width: 20%; min-width: 200px;" class="data_tbl tbl_stok_id">stok</th>
@@ -828,6 +829,9 @@
       case 'KLAIM':
         tampilanKLAIM()
         break;
+      case 'PJK':
+        tampilanPJK()
+        break;
       default:
         tampilanall()
         break;
@@ -851,6 +855,30 @@
     $('.tbl_harga').hide()
     $('.tbl_checkbox').hide()
     $('.tbl_supir_id').show()
+    $('.tbl_karyawan_id').hide()
+    $('.tbl_aksi').show()
+    $('.colspan').attr('colspan', 3);
+    $('#tbl_addRow').show()
+    // $('.colmn-offset').hide()
+  }
+
+  function tampilanPJK() {
+    $('[name=keterangancoa]').parents('.form-group').hide()
+    $('[name=tradoheader_id]').parents('.form-group').hide()
+    $('[name=postingpinjaman]').parents('.form-group').hide()
+    $('[name=supirheader_id]').parents('.form-group').hide()
+    $('[name=tgldari]').parents('.form-group').hide()
+    $('#detail-bst-section').hide()
+    $('#detail-tde-section').hide()
+    $('#detail-default-section').show()
+    $('.tbl_pengeluaranstokheader_nobukti').hide()
+    $('.tbl_stok_id').hide()
+    $('.tbl_qty').hide()
+    $('.nominal').prop('readonly', false)
+    $('.tbl_harga').hide()
+    $('.tbl_checkbox').hide()
+    $('.tbl_supir_id').hide()
+    $('.tbl_karyawan_id').show()
     $('.tbl_aksi').show()
     $('.colspan').attr('colspan', 3);
     $('#tbl_addRow').show()
@@ -871,6 +899,7 @@
     $('.tbl_qty').hide()
     $('.nominal').prop('readonly', false)
     $('.tbl_harga').hide()
+    $('.tbl_karyawan_id').hide()
     $('#detail-tde-section').show()
     $('#detail-bst-section').hide()
     $('#detail-default-section').hide()
@@ -891,6 +920,7 @@
     $('#detail-default-section').hide()
     $('#detail-tde-section').hide()
     $('.tbl_checkbox').hide()
+    $('.tbl_karyawan_id').hide()
     $('.tbl_penerimaantruckingheader').hide()
     $('.tbl_pengeluaranstokheader_nobukti').hide()
     $('.tbl_stok_id').hide()
@@ -926,6 +956,7 @@
     $('.tbl_qty').hide()
     $('.nominal').prop('readonly', false)
     $('.tbl_harga').hide()
+    $('.tbl_karyawan_id').hide()
     $('.tbl_supir_id').show()
     $('.tbl_aksi').show()
     $('.colspan').attr('colspan', 2);
@@ -947,6 +978,7 @@
     $('#detail-kbbm-section').hide()
     $('#detail-default-section').show()
     $('.tbl_checkbox').hide()
+    $('.tbl_karyawan_id').hide()
     $('.tbl_penerimaantruckingheader').hide()
     $('.tbl_pengeluaranstokheader_nobukti').hide()
     $('[name=tradoheader_id]').parents('.form-group').hide()
@@ -979,6 +1011,7 @@
     $('.tbl_penerimaantruckingheader').hide()
     $('.tbl_supir_id').hide()
     $('.tbl_nominal').show()
+    $('.tbl_karyawan_id').hide()
     $('.nominal').prop('readonly', true)
     $('.tbl_harga').show()
     $('.tbl_stok_id').show()
@@ -1011,6 +1044,7 @@
     $('.colspan').attr('colspan', 3);
     $('#sisaColFoot').hide()
     $('#sisaFoot').hide()
+    $('.tbl_karyawan_id').hide()
     $('.colmn-offset').show()
     $('.tbl_nominal').prop('readonly', false)
     $('.tbl_harga').hide()
@@ -2146,6 +2180,10 @@
                         <input type="hidden" id="supir_id_${index}" name="supir_id[]">
                         <input type="text" id="supir_${index}" name="supir[]" data-current-value="${detail.supir}" class="form-control supir-lookup">
                     </td>
+                    <td class="data_tbl tbl_karyawan_id">
+                        <input type="hidden" id="karyawan_id_${index}" name="karyawan_id[]">
+                        <input type="text" id="karyawan_${index}" name="karyawan[]" data-current-value="${detail.karyawan}" class="form-control karyawan-lookup">
+                    </td>
                     <td class="data_tbl tbl_pengeluaranstokheader_nobukti">
                       <input type="text" id="pengeluaranstok_nobukti_${index}" name="pengeluaranstok_nobukti[]" data-current-value="${detail.pengeluaranstok_nobukti}" class="form-control pengeluaranstokheader-lookup">
                     </td>
@@ -2177,6 +2215,8 @@
               // let qtyNumeric = new AutoNumeric(detailRow.find(`[name="qty[]"]`))
               detailRow.find(`[name="supir_id[]"]`).val(detail.supir_id)
               detailRow.find(`[name="supir[]"]`).val(detail.supir)
+              detailRow.find(`[name="karyawan_id[]"]`).val(detail.karyawan_id)
+              detailRow.find(`[name="karyawan[]"]`).val(detail.karyawan)
               detailRow.find(`[name="pengeluaranstok_nobukti[]"]`).val(detail.pengeluaranstok_nobukti)
               detailRow.find(`[name="stok_id[]"]`).val(detail.stok_id)
               detailRow.find(`[name="stok[]"]`).val(detail.stok)
@@ -2216,6 +2256,29 @@
                 },
                 onClear: (element) => {
                   element.parents('td').find(`[name="supir_id[]"]`).val('')
+                  element.val('')
+                  element.data('currentValue', element.val())
+                }
+              })
+              $('.karyawan-lookup').last().lookup({
+                title: 'karyawan Lookup',
+                fileName: 'karyawan',
+                beforeProcess: function(test) {
+                  // var levelcoa = $(`#levelcoa`).val();
+                  this.postData = {
+                    Aktif: 'AKTIF',
+                  }
+                },
+                onSelectRow: (karyawan, element) => {
+                  element.parents('td').find(`[name="karyawan_id[]"]`).val(karyawan.id)
+                  element.val(karyawan.namakaryawan)
+                  element.data('currentValue', element.val())
+                },
+                onCancel: (element) => {
+                  element.val(element.data('currentValue'))
+                },
+                onClear: (element) => {
+                  element.parents('td').find(`[name="karyawan_id[]"]`).val('')
                   element.val('')
                   element.data('currentValue', element.val())
                 }
@@ -2469,6 +2532,10 @@
           <input id="supir_id_${index}" type="hidden" name="supir_id[]">
           <input id="supir_${index}" type="text" name="supir[]"  class="form-control supir-lookup">
         </td>
+        <td class="data_tbl tbl_karyawan_id">
+          <input id="karyawan_id_${index}" type="hidden" name="karyawan_id[]">
+          <input id="karyawawan_${index}" type="text" name="karyawawan[]"  class="form-control karyawan-lookup">
+        </td>
         <td class="data_tbl tbl_pengeluaranstokheader_nobukti">
           <input id="pengeluaranstok_nobukti_${index}" type="text" name="pengeluaranstok_nobukti[]"  class="form-control pengeluaranstokheader-lookup">
         </td>
@@ -2521,6 +2588,31 @@
       onClear: (element) => {
 
         element.parents('td').find(`[name="supir_id[]"]`).val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+    $('.karyawan-lookup').last().lookup({
+      title: 'karyawan Lookup',
+      fileName: 'karyawan',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+
+          Aktif: 'AKTIF',
+        }
+      },
+      onSelectRow: (karyawan, element) => {
+        element.parents('td').find(`[name="karyawan_id[]"]`).val(karyawan.id)
+        element.val(karyawan.namakaryawan)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+
+        element.parents('td').find(`[name="karyawan_id[]"]`).val('')
         element.val('')
         element.data('currentValue', element.val())
       }
