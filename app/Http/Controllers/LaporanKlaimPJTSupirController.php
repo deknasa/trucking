@@ -32,7 +32,8 @@ class LaporanKlaimPJTSupirController extends MyController
         $detailParams = [
             'sampai' => $request->sampai,
             'dari' => $request->dari,
-            'kategori' => $request->kategori,
+            'kelompok' => $request->kelompok,
+            'kelompok_id' => $request->kelompok_id,
         ];
 
         $header = Http::withHeaders(request()->header())
@@ -40,9 +41,12 @@ class LaporanKlaimPJTSupirController extends MyController
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'laporanklaimpjtsupir/report', $detailParams);
 
-        $data = $header['data'];
-        $user = Auth::user();
-        return view('reports.laporanklaimpjtsupir', compact('data', 'user', 'detailParams'));
+        if ($header->successful()) {
+            $data = $header['data'];
+            $user = Auth::user();
+            return view('reports.laporanklaimpjtsupir', compact('data', 'user', 'detailParams'));
+        } else {
+            return response()->json($header->json(), $header->status());
+        }
     }
-
 }

@@ -81,7 +81,8 @@
             url: `{{ route('laporankartuhutangprediksi.report') }}`,
             method: 'GET',
             data: {
-                sampai: sampai
+                sampai: sampai,
+                dari: dari,
             },
             success: function(response) {
                 // Handle the success response
