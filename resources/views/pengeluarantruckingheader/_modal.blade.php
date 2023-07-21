@@ -839,7 +839,7 @@
   }
 
   function tampilanPJT() {
-
+    $('[name=statusposting]').parents('.form-group').show()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=tradoheader_id]').parents('.form-group').hide()
     $('[name=postingpinjaman]').parents('.form-group').hide()
@@ -863,6 +863,7 @@
   }
 
   function tampilanPJK() {
+    $('[name=statusposting]').parents('.form-group').show()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=tradoheader_id]').parents('.form-group').hide()
     $('[name=postingpinjaman]').parents('.form-group').hide()
@@ -886,6 +887,7 @@
   }
 
   function tampilanTDE() {
+    $('[name=statusposting]').parents('.form-group').show()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=tradoheader_id]').parents('.form-group').hide()
     $('[name=postingpinjaman]').parents('.form-group').hide()
@@ -909,6 +911,7 @@
   function tampilanBST() {
     $('#detailList tbody').html('')
     enabledKas(true);
+    $('[name=statusposting]').parents('.form-group').show()
     $('[name=tradoheader_id]').parents('.form-group').hide()
     $('[name=postingpinjaman]').parents('.form-group').hide()
     $('[name=keterangancoa]').parents('.form-group').hide()
@@ -938,6 +941,7 @@
   function tampilanKBBM() {
     $('#detailList tbody').html('')
     enabledKas(true);
+    $('[name=statusposting]').parents('.form-group').show()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=postingpinjaman]').parents('.form-group').hide()
     $('[name=tradoheader_id]').parents('.form-group').hide()
@@ -966,6 +970,7 @@
 
   function tampilanBSB() {
     enabledKas(true);
+    $('[name=statusposting]').parents('.form-group').show()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=tradoheader_id]').parents('.form-group').hide()
     $('[name=postingpinjaman]').parents('.form-group').hide()
