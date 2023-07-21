@@ -87,43 +87,46 @@ class AuthController extends Controller
         // Auth::user()
 
         if (Auth::attempt($credentials)) {
-
+            
             $token = Http::withHeaders([
                 'Accept' => 'application/json'
             ])->withOptions(['verify' => false])
                 ->post(config('app.api_url') . 'token', $credentials);
 
             if ($user->cabang_id == $cabang->id) {
-
+                $credentialsAdmin = [
+                    'user' => 'admin',
+                    'password' => '123456'
+                ];
                 $tokenMedan = Http::withHeaders([
                     'Content-Type' => 'application/json',
                     'Accept' => 'application/json'
-                ])->post('https://tasmdn.kozow.com:8074/trucking-api/public/api/token', $credentials);
+                ])->post('https://tasmdn.kozow.com:8074/trucking-api/public/api/token', $credentialsAdmin);
 
                 $tokenJakarta = Http::withHeaders([
                     'Content-Type' => 'application/json',
                     'Accept' => 'application/json'
-                ])->post('http://tasjkt.kozow.com:8074/trucking-api/public/api/token', $credentials);
+                ])->post('http://tasjkt.kozow.com:8074/trucking-api/public/api/token', $credentialsAdmin);
 
                 $tokenJakartaTnl = Http::withHeaders([
                     'Content-Type' => 'application/json',
                     'Accept' => 'application/json'
-                ])->post('http://tasjkt.kozow.com:8074/truckingtnl-api/public/api/token', $credentials);
+                ])->post('http://tasjkt.kozow.com:8074/truckingtnl-api/public/api/token', $credentialsAdmin);
 
                 $tokenMakassar = Http::withHeaders([
                     'Content-Type' => 'application/json',
                     'Accept' => 'application/json'
-                ])->post('http://tasmks.kozow.com:8074/trucking-api/public/api/token', $credentials);
+                ])->post('http://tasmks.kozow.com:8074/trucking-api/public/api/token', $credentialsAdmin);
 
                 $tokenSurabaya = Http::withHeaders([
                     'Content-Type' => 'application/json',
                     'Accept' => 'application/json'
-                ])->post('http://tassby.kozow.com:8074/trucking-api/public/api/token', $credentials);
+                ])->post('http://tassby.kozow.com:8074/trucking-api/public/api/token', $credentialsAdmin);
 
                 $tokenBitung = Http::withHeaders([
                     'Content-Type' => 'application/json',
                     'Accept' => 'application/json'
-                ])->post('http://tasbtg.kozow.com:8074/trucking-api/public/api/token', $credentials);
+                ])->post('http://tasbtg.kozow.com:8074/trucking-api/public/api/token', $credentialsAdmin);
             }
 
             $tokenEmkl = Http::withHeaders([
