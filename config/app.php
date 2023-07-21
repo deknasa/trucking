@@ -259,5 +259,10 @@ return [
 
     'version' => '0.1.0',
     'trucking_api_mdn_url' => env('TRUCKING_API_MDN_URL', 'https://tasmdn.kozow.com:8074/trucking-api/public/api/'),
+    'trucking_api_jkt_url' => env('TRUCKING_API_JKT_URL', 'http://tasjkt.kozow.com:8074/trucking-api/public/api/'),
+    'trucking_api_jkttnl_url' => env('TRUCKING_API_JKTTNL_URL', 'http://tasjkt.kozow.com:8074/truckingtnl-api/public/api/'),
+    'trucking_api_mks_url' => env('TRUCKING_API_MKS_URL', 'http://tasmks.kozow.com:8074/trucking-api/public/api/'),
+    'trucking_api_sby_url' => env('TRUCKING_API_SBY_URL', 'http://tassby.kozow.com:8074/trucking-api/public/api/'),
+    'trucking_api_btg_url' => env('TRUCKING_API_BTG_URL', 'http://tasbtg.kozow.com:8074/trucking-api/public/api/'),
 
 ];

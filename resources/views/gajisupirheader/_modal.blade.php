@@ -454,8 +454,14 @@
                     }).trigger('reloadGrid');
                     hitungNominal()
                 })
-                .catch((errors) => {
-                    setErrorMessages($('#crudForm'), errors)
+                .catch((error) => {
+                    if (error.status === 422) {
+                        $('.is-invalid').removeClass('is-invalid')
+                        $('.invalid-feedback').remove()
+                        setErrorMessages(form, error.responseJSON.errors);
+                    } else {
+                        showDialog(error.responseJSON)
+                    }
                 })
             selectAllRowsAbsensi(supirId, dari, sampai, aksi)
             // $.ajax({
@@ -990,7 +996,7 @@
                 form.find(`[name="supir"]`).parent('.input-group').find('.input-group-append').remove()
             })
             .catch((error) => {
-                showDialog(error.statusText)
+                showDialog(error.responseJSON)
             })
             .finally(() => {
                 $('.modal-loader').addClass('d-none')
@@ -1022,7 +1028,7 @@
                 form.find(`[name="supir"]`).parent('.input-group').find('.input-group-append').remove()
             })
             .catch((error) => {
-                showDialog(error.statusText)
+                showDialog(error.responseJSON)
             })
             .finally(() => {
                 $('.modal-loader').addClass('d-none')
@@ -2419,7 +2425,7 @@
                     form.attr('has-maxlength', true)
                 },
                 error: error => {
-                    showDialog(error.statusText)
+                    showDialog(error.responseJSON)
                 }
             })
         }
@@ -2667,19 +2673,6 @@
                 success: (response) => {
                     response.url = url
                     resolve(response)
-                },
-                error: error => {
-                    if (error.status === 422) {
-                        $('.is-invalid').removeClass('is-invalid')
-                        $('.invalid-feedback').remove()
-
-
-                        errors = error.responseJSON.errors
-                        reject(errors)
-
-                    } else {
-                        showDialog(error.statusText)
-                    }
                 },
                 error: error => {
                     reject(error)

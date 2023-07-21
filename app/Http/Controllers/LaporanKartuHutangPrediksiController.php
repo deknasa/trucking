@@ -39,9 +39,15 @@ class LaporanKartuHutangPrediksiController extends MyController
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'laporankartuhutangprediksi/report', $detailParams);
 
-        $data = $header['data'];
-        $user = Auth::user();
-        return view('reports.laporankartuhutangprediksi', compact('data', 'user', 'detailParams'));
+
+            if ($header->successful()) {
+                $data = $header['data'];
+                $user = Auth::user();
+                return view('reports.laporankartuhutangprediksi', compact('data', 'user', 'detailParams'));
+            } else {
+                return response()->json($header->json(), $header->status());
+            }
+
     }
 
 }

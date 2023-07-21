@@ -51,10 +51,6 @@
                         name: 'kelompok',
                     },
                     {
-                        label: 'GAMBAR',
-                        name: 'gambar',
-                    },
-                    {
                         label: 'MODIFIED BY',
                         name: 'modifiedby',
                     },
@@ -192,7 +188,7 @@
                             if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                 showDialog('Harap pilih salah satu record')
                             } else {
-                                cekValidasi(selectedId, 'edit')
+                                editStokPusat(selectedId)
                             }
                         }
                     },
@@ -205,7 +201,7 @@
                             if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                 showDialog('Harap pilih salah satu record')
                             } else {
-                                cekValidasi(selectedId, 'delete')
+                                deleteStokPusat(selectedId)
                             }
                         }
                     },

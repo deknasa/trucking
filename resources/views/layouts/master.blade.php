@@ -327,10 +327,20 @@
     let accessToken = `{{ session('access_token') }}`
     let accessTokenEmkl = `{{ session('access_token_emkl') }}`
     let accessTokenMdn = `{{ session('access_token_mdn') }}`
+    let accessTokenJkt = `{{ session('access_token_jkt') }}`
+    let accessTokenJktTnl = `{{ session('access_token_jkttnl') }}`
+    let accessTokenMks = `{{ session('access_token_mks') }}`
+    let accessTokenSby = `{{ session('access_token_sby') }}`
+    let accessTokenBtg = `{{ session('access_token_btg') }}`
     let appUrl = `{{ url()->to('/') }}`
     let apiUrl = `{{ config('app.api_url') }}`
     let apiEmklUrl = `{{ config('app.emkl_api_url') }}`
     let apiTruckingMdnUrl = `{{ config('app.trucking_api_mdn_url') }}`
+    let apiTruckingJktUrl = `{{ config('app.trucking_api_jkt_url') }}`
+    let apiTruckingJktTnlUrl = `{{ config('app.trucking_api_jkttnl_url') }}`
+    let apiTruckingMksUrl = `{{ config('app.trucking_api_mks_url') }}`
+    let apiTruckingSbyUrl = `{{ config('app.trucking_api_sby_url') }}`
+    let apiTruckingBtgUrl = `{{ config('app.trucking_api_btg_url') }}`
     var pleaseSelectARow; 
     function separatorNumber(object) {
       var value = parseInt(object.value.replaceAll('.', '').replaceAll(',', ''));

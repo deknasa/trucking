@@ -77,12 +77,32 @@
         let sampai = $('#crudForm').find('[name=sampai]').val()
         let dari = $('#crudForm').find('[name=dari]').val()
 
-        if (dari != '' && sampai != '') {
+        $.ajax({
+            url: `{{ route('laporankartuhutangprediksi.report') }}`,
+            method: 'GET',
+            data: {
+                sampai: sampai
+            },
+            success: function(response) {
+                // Handle the success response
+                var newWindow = window.open('','_blank');
+                newWindow.document.open();
+                newWindow.document.write(response);
+                newWindow.document.close();
+            },
+            error: function(error) {
+                console.log(error)
+                if (error.status === 422) {
+                    $('.is-invalid').removeClass('is-invalid');
+                    $('.invalid-feedback').remove();
+                    setErrorMessages($('#crudForm'), error.responseJSON.errors);
+                } else {
+                    showDialog(error.responseJSON.message);
+                }
+            }
+        });
 
-            window.open(`{{ route('laporankartuhutangprediksi.report') }}?sampai=${sampai}&dari=${dari}`)
-        } else {
-            showDialog('ISI SELURUH KOLOM')
-        }
+
     })
 
 
