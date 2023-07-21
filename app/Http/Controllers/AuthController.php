@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Parameter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 
 class AuthController extends Controller
@@ -54,6 +55,8 @@ class AuthController extends Controller
 
         $isLocal = $cekIp['data']['status'];
         $user = User::where('user', $request->user)->first();
+        $cabang = DB::table('cabang')->where('kodecabang', 'PST')->first();
+
         if (!$isLocal) {
 
 
@@ -90,36 +93,38 @@ class AuthController extends Controller
             ])->withOptions(['verify' => false])
                 ->post(config('app.api_url') . 'token', $credentials);
 
-            $tokenMedan = Http::withHeaders([
-                'Content-Type' => 'application/json',
-                'Accept' => 'application/json'
-            ])->post('https://tasmdn.kozow.com:8074/trucking-api/public/api/token', $credentials);
+            if ($user->cabang_id == $cabang->id) {
 
-            $tokenJakarta = Http::withHeaders([
-                'Content-Type' => 'application/json',
-                'Accept' => 'application/json'
-            ])->post('http://tasjkt.kozow.com:8074/trucking-api/public/api/token', $credentials);
+                $tokenMedan = Http::withHeaders([
+                    'Content-Type' => 'application/json',
+                    'Accept' => 'application/json'
+                ])->post('https://tasmdn.kozow.com:8074/trucking-api/public/api/token', $credentials);
 
-            $tokenJakartaTnl = Http::withHeaders([
-                'Content-Type' => 'application/json',
-                'Accept' => 'application/json'
-            ])->post('http://tasjkt.kozow.com:8074/truckingtnl-api/public/api/token', $credentials);
+                $tokenJakarta = Http::withHeaders([
+                    'Content-Type' => 'application/json',
+                    'Accept' => 'application/json'
+                ])->post('http://tasjkt.kozow.com:8074/trucking-api/public/api/token', $credentials);
 
-            $tokenMakassar = Http::withHeaders([
-                'Content-Type' => 'application/json',
-                'Accept' => 'application/json'
-            ])->post('http://tasmks.kozow.com:8074/trucking-api/public/api/token', $credentials);
+                $tokenJakartaTnl = Http::withHeaders([
+                    'Content-Type' => 'application/json',
+                    'Accept' => 'application/json'
+                ])->post('http://tasjkt.kozow.com:8074/truckingtnl-api/public/api/token', $credentials);
 
-            $tokenSurabaya = Http::withHeaders([
-                'Content-Type' => 'application/json',
-                'Accept' => 'application/json'
-            ])->post('http://tassby.kozow.com:8074/trucking-api/public/api/token', $credentials);
+                $tokenMakassar = Http::withHeaders([
+                    'Content-Type' => 'application/json',
+                    'Accept' => 'application/json'
+                ])->post('http://tasmks.kozow.com:8074/trucking-api/public/api/token', $credentials);
 
-            $tokenBitung = Http::withHeaders([
-                'Content-Type' => 'application/json',
-                'Accept' => 'application/json'
-            ])->post('http://tasbtg.kozow.com:8074/trucking-api/public/api/token', $credentials);
+                $tokenSurabaya = Http::withHeaders([
+                    'Content-Type' => 'application/json',
+                    'Accept' => 'application/json'
+                ])->post('http://tassby.kozow.com:8074/trucking-api/public/api/token', $credentials);
 
+                $tokenBitung = Http::withHeaders([
+                    'Content-Type' => 'application/json',
+                    'Accept' => 'application/json'
+                ])->post('http://tasbtg.kozow.com:8074/trucking-api/public/api/token', $credentials);
+            }
 
             $tokenEmkl = Http::withHeaders([
                 'Accept' => 'application/json'
@@ -129,14 +134,17 @@ class AuthController extends Controller
             // dd($tokenEmkl->getBody()->getContents());
 
             session(['access_token' => $token['access_token']]);
-            session(['access_token_mdn' => $tokenMedan['access_token']]);
-            session(['access_token_jkt' => $tokenJakarta['access_token']]);
-            session(['access_token_jkttnl' => $tokenJakartaTnl['access_token']]);
-            session(['access_token_mks' => $tokenMakassar['access_token']]);
-            session(['access_token_sby' => $tokenSurabaya['access_token']]);
-            session(['access_token_btg' => $tokenBitung['access_token']]);
             session(['access_token_emkl' => $tokenEmkl['access_token']]);
             session(['menus' => (new Menu())->getMenu()]);
+
+            if ($user->cabang_id == $cabang->id) {
+                session(['access_token_mdn' => $tokenMedan['access_token']]);
+                session(['access_token_jkt' => $tokenJakarta['access_token']]);
+                session(['access_token_jkttnl' => $tokenJakartaTnl['access_token']]);
+                session(['access_token_mks' => $tokenMakassar['access_token']]);
+                session(['access_token_sby' => $tokenSurabaya['access_token']]);
+                session(['access_token_btg' => $tokenBitung['access_token']]);
+            }
 
             return redirect()->route('dashboard');
         } else {
@@ -151,6 +159,12 @@ class AuthController extends Controller
         Auth::logout();
 
         session()->forget('menus');
+        session()->forget('access_token_mdn');
+        session()->forget('access_token_jkt');
+        session()->forget('access_token_jkttnl');
+        session()->forget('access_token_mks');
+        session()->forget('access_token_sby');
+        session()->forget('access_token_btg');
 
         return redirect()->route('login');
     }
