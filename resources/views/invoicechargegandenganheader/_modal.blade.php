@@ -100,11 +100,24 @@
   let rowIndex = 0;
   let selectedRows = []
   let selectedJobTrucking = [];
+  let selectedNoPolisi = [];
+  let selectedGandengan = [];
   let selectedTglTrip = [];
+  let selectedTglAkhir = [];
   let selectedJumlahHari = [];
   let selectedNominal = [];
-  let selectedNoPolisi = [];
+  let selectedJenisOrder = [];
+  let selectedNamaGudang = [];
   let selectedKeterangan = [];
+
+  let sortnameInvoice = 'jobtrucking';
+  let sortorderInvoice = 'asc';
+  let pageInvoice = 0;
+  let totalRecordInvoice
+  let limitInvoice
+  let postDataInvoice
+  let triggerClickInvoice
+  let indexRowInvoice
 
   $(document).ready(function() {
 
@@ -132,11 +145,21 @@
               postData: {
                 tglbukti: tglproses,
                 agen: agen_id,
+                sortIndex: 'jobtrucking',
+                aksi: $('#crudForm').data('action'),
+                idInvoice: $('#crudForm').find(`[name=id]`).val()
               },
               datatype: "json"
             }).trigger('reloadGrid');
-          }).catch((errors) => {
-            setErrorMessages($('#crudForm'), errors)
+          }).catch((error) => {
+            if (error.status === 422) {
+              $('.is-invalid').removeClass('is-invalid')
+              $('.invalid-feedback').remove()
+
+              setErrorMessages(form, error.responseJSON.errors);
+            } else {
+              showDialog(error.responseJSON)
+            }
           })
       }
 
@@ -173,9 +196,27 @@
           value: item
         })
       });
+      $.each(selectedNoPolisi, function(index, item) {
+        data.push({
+          name: 'nopolisi_detail[]',
+          value: item
+        })
+      });
+      $.each(selectedGandengan, function(index, item) {
+        data.push({
+          name: 'gandengan_detail[]',
+          value: item
+        })
+      });
       $.each(selectedTglTrip, function(index, item) {
         data.push({
           name: 'tgltrip_detail[]',
+          value: item
+        })
+      });
+      $.each(selectedTglAkhir, function(index, item) {
+        data.push({
+          name: 'tglkembali_detail[]',
           value: item
         })
       });
@@ -191,9 +232,15 @@
           value: parseFloat(item.replaceAll(',', ''))
         })
       });
-      $.each(selectedNoPolisi, function(index, item) {
+      $.each(selectedJenisOrder, function(index, item) {
         data.push({
-          name: 'nopolisi_detail[]',
+          name: 'jenisorder_detail[]',
+          value: item
+        })
+      });
+      $.each(selectedNamaGudang, function(index, item) {
+        data.push({
+          name: 'namagudang_detail[]',
           value: item
         })
       });
@@ -278,6 +325,7 @@
           $('#jqGrid').trigger('reloadGrid', {
             page: response.data.page
           })
+          clearSelectedRows()
           if (id == 0) {
             $('#detail').jqGrid().trigger('reloadGrid')
           }
@@ -371,6 +419,7 @@
     $('#table_body').html('')
 
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+    $('#crudForm').find('[name=tglproses]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
   }
 
   function editInvoiceChargeGandenganHeader(invoiceChargeGandenganHeader) {
@@ -398,7 +447,7 @@
         $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
       })
       .catch((error) => {
-        showDialog(error.statusText)
+        showDialog(error.responseJSON)
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
@@ -507,7 +556,7 @@
               }
             },
             formatter: (value, rowOptions, rowData) => {
-              return `<input type="checkbox" name="id_detail[]" value="${rowData.id}" ${disabled} onchange="checkboxHandler(this)">`
+              return `<input type="checkbox" name="idgrid[]" value="${rowData.id}" ${disabled} onchange="checkboxHandler(this)">`
             },
           },
           {
@@ -521,8 +570,17 @@
             name: 'jobtrucking',
           },
           {
-            label: 'TGL BUKTI',
+            label: 'TGL MASUK GUDANG',
             name: 'tgltrip',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
+          {
+            label: 'TGL KELUAR GUDANG',
+            name: 'tglkembali',
             formatter: "date",
             formatoptions: {
               srcformat: "ISO8601Long",
@@ -541,8 +599,32 @@
             formatter: currencyFormat,
           },
           {
+            label: 'Jenis Order',
+            name: 'jenisorder',
+          },
+          {
+            label: 'Nama Gudang',
+            name: 'namagudang',
+          },
+          {
             label: 'No Polisi',
             name: 'nopolisi',
+          },
+          {
+            label: 'Gandengan',
+            name: 'gandengan',
+          },
+          {
+            label: 'trado_id',
+            name: 'trado_id',
+            hidden: true,
+            search: false
+          },
+          {
+            label: 'gandengan_id',
+            name: 'gandengan_id',
+            hidden: true,
+            search: false
           },
           {
             label: 'keterangan',
@@ -558,9 +640,17 @@
         rowList: [10, 20, 50, 0],
         toolbar: [true, "top"],
         sortable: true,
+        sortname: sortnameInvoice,
+        sortorder: sortorderInvoice,
+        page: pageInvoice,
         viewrecords: true,
         footerrow: true,
         userDataOnFooter: true,
+        prmNames: {
+          sort: 'sortIndex',
+          order: 'sortOrder',
+          rows: 'limit'
+        },
         jsonReader: {
           root: 'data',
           total: 'attributes.totalPages',
@@ -576,12 +666,14 @@
           let grid = $(this)
           changeJqGridRowListText()
           initResize($(this))
-          console.log(data);
-          let nominals = $(this).jqGrid("getCol", "nominal")
-          let totalNominal = 0
-          if (nominals.length > 0) {
-            totalNominal = nominals.reduce((previousValue, currentValue) => previousValue + currencyUnformat(currentValue), 0)
-          }
+
+          sortnameInvoice = $(this).jqGrid("getGridParam", "sortname")
+          sortorderInvoice = $(this).jqGrid("getGridParam", "sortorder")
+          totalRecordInvoice = $(this).getGridParam("records")
+          limitInvoice = $(this).jqGrid('getGridParam', 'postData').limit
+          postDataInvoice = $(this).jqGrid('getGridParam', 'postData')
+          triggerClick = false
+
           $('.clearsearchclass').click(function() {
             clearColumnSearch($(this))
           })
@@ -590,10 +682,14 @@
           }
           $('#modalgrid').setSelection($('#modalgrid').getDataIDs()[0])
           setHighlight($(this))
-          $(this).jqGrid('footerData', 'set', {
-            nobukti: 'Total:',
-            nominal: totalNominal,
-          }, true)
+
+          if (data.attributes) {
+
+            $(this).jqGrid('footerData', 'set', {
+              jobtrucking: 'Total:',
+              nominal_detail: data.attributes.totalNominal,
+            }, true)
+          }
 
           $.each(selectedRows, function(key, value) {
             $(grid).find('tbody tr').each(function(row, tr) {
@@ -605,7 +701,7 @@
           });
           if (disabled == '') {
             $('#gs_').attr('disabled', false)
-          }else{
+          } else {
             $('#gs_').attr('disabled', true)
           }
         }
@@ -633,10 +729,14 @@
   function clearSelectedRows(element = null) {
     selectedRows = []
     selectedJobTrucking = [];
+    selectedNoPolisi = [];
+    selectedGandengan = [];
     selectedTglTrip = [];
+    selectedTglAkhir = [];
     selectedJumlahHari = [];
     selectedNominal = [];
-    selectedNoPolisi = [];
+    selectedJenisOrder = [];
+    selectedNamaGudang = [];
     selectedKeterangan = [];
     $('#modalgrid').trigger('reloadGrid')
   }
@@ -658,6 +758,7 @@
         limit: 0,
         tglbukti: tglproses,
         agen: agen_id,
+        sortIndex: 'jobtrucking',
       },
       headers: {
         Authorization: `Bearer ${accessToken}`
@@ -665,10 +766,14 @@
       success: (response) => {
         selectedRows = response.data.map((data) => data.id)
         selectedJobTrucking = response.data.map((data) => data.jobtrucking)
+        selectedNoPolisi = response.data.map((data) => data.trado_id)
+        selectedGandengan = response.data.map((data) => data.gandengan_id)
         selectedTglTrip = response.data.map((data) => data.tgltrip)
+        selectedTglAkhir = response.data.map((data) => data.tglkembali)
         selectedJumlahHari = response.data.map((data) => data.jumlahhari)
         selectedNominal = response.data.map((data) => data.nominal_detail)
-        selectedNoPolisi = response.data.map((data) => data.nopolisi)
+        selectedJenisOrder = response.data.map((data) => data.jenisorder)
+        selectedNamaGudang = response.data.map((data) => data.namagudang)
         selectedKeterangan = response.data.map((data) => data.keterangan)
 
         $('#modalgrid').jqGrid('setGridParam', {
@@ -676,6 +781,7 @@
           postData: {
             tglbukti: tglproses,
             agen: agen_id,
+            sortIndex: 'jobtrucking',
           },
           datatype: "json"
         }).trigger('reloadGrid');
@@ -700,6 +806,9 @@
           limit: 0,
           tglbukti: tglproses,
           agen: agen_id,
+          sortIndex: 'jobtrucking',
+          aksi: $('#crudForm').data('action'),
+          idInvoice: $('#crudForm').find(`[name=id]`).val()
         },
         headers: {
           Authorization: `Bearer ${accessToken}`
@@ -732,10 +841,14 @@
     if (element.checked) {
       selectedRows.push($(element).val())
       selectedJobTrucking.push($(element).parents('tr').find(`td[aria-describedby="modalgrid_jobtrucking"]`).text())
+      selectedNoPolisi.push($(element).parents('tr').find(`td[aria-describedby="modalgrid_trado_id"]`).text())
+      selectedGandengan.push($(element).parents('tr').find(`td[aria-describedby="modalgrid_gandengan_id"]`).text())
       selectedTglTrip.push($(element).parents('tr').find(`td[aria-describedby="modalgrid_tgltrip"]`).text())
+      selectedTglAkhir.push($(element).parents('tr').find(`td[aria-describedby="modalgrid_tglkembali"]`).text())
       selectedJumlahHari.push($(element).parents('tr').find(`td[aria-describedby="modalgrid_jumlahhari"]`).text())
       selectedNominal.push($(element).parents('tr').find(`td[aria-describedby="modalgrid_nominal_detail"]`).text())
-      selectedNoPolisi.push($(element).parents('tr').find(`td[aria-describedby="modalgrid_nopolisi"]`).text())
+      selectedJenisOrder.push($(element).parents('tr').find(`td[aria-describedby="modalgrid_jenisorder"]`).text())
+      selectedNamaGudang.push($(element).parents('tr').find(`td[aria-describedby="modalgrid_namagudang"]`).text())
       selectedKeterangan.push($(element).parents('tr').find(`td[aria-describedby="modalgrid_keterangan"]`).text())
       $(element).parents('tr').addClass('bg-light-blue')
     } else {
@@ -744,10 +857,14 @@
         if (selectedRows[i] == value) {
           selectedRows.splice(i, 1);
           selectedJobTrucking.splice(i, 1);
+          selectedNoPolisi.splice(i, 1);
+          selectedGandengan.splice(i, 1);
           selectedTglTrip.splice(i, 1);
+          selectedTglAkhir.splice(i, 1);
           selectedJumlahHari.splice(i, 1);
           selectedNominal.splice(i, 1);
-          selectedNoPolisi.splice(i, 1);
+          selectedJenisOrder.splice(i, 1);
+          selectedNamaGudang.splice(i, 1);
           selectedKeterangan.splice(i, 1);
         }
       }
@@ -763,6 +880,7 @@
       postData: {
         tglbukti: $('#crudForm').find(`[name=tglproses]`).val(),
         agen: $('#crudForm').find(`[name=agen_id]`).val(),
+        sortIndex: 'jobtrucking',
         aksi: 'show'
       },
       datatype: "json"
@@ -852,10 +970,14 @@
 
               selectedRows.push(detail.id)
               selectedJobTrucking.push(detail.jobtrucking)
+              selectedNoPolisi.push(detail.trado_id)
+              selectedGandengan.push(detail.gandengan_id)
               selectedTglTrip.push(detail.tgltrip)
+              selectedTglAkhir.push(detail.tglkembali)
               selectedJumlahHari.push(detail.jumlahhari)
               selectedNominal.push(detail.nominal_detail)
-              selectedNoPolisi.push(detail.nopolisi)
+              selectedJenisOrder.push(detail.jenisorder)
+              selectedNamaGudang.push(detail.namagudang)
               selectedKeterangan.push(detail.keterangan)
             }
           })
@@ -865,6 +987,7 @@
               postData: {
                 tglbukti: $('#crudForm').find(`[name=tglproses]`).val(),
                 agen: $('#crudForm').find(`[name=agen_id]`).val(),
+                sortIndex: 'jobtrucking',
               },
               datatype: "json"
             }).trigger('reloadGrid');

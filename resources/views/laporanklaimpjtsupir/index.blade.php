@@ -85,22 +85,36 @@
     $(document).on('click', `#btnPreview`, function(event) {
         let sampai = $('#crudForm').find('[name=sampai]').val()
         let dari = $('#crudForm').find('[name=dari]').val()
-        let kelompok = $('#crudForm').find('[name=kelompok_id]').val()
+        let kelompok_id = $('#crudForm').find('[name=kelompok_id]').val()
+        let kelompok = $('#crudForm').find('[name=kelompok]').val()
 
-        getCekReport().then((response) => {
-            window.open(`{{ route('laporanklaimpjtsupir.report') }}?sampai=${sampai}&dari=${dari}&kelompok=${kelompok}`)
-
-        }).catch((error) => {
-            if (error.status === 422) {
-                $('.is-invalid').removeClass('is-invalid')
-                $('.invalid-feedback').remove()
-
-                setErrorMessages($('#crudForm'), error.responseJSON.errors);
-            } else {
-                showDialog(error.statusText, error.responseJSON.message)
-
+        $.ajax({
+            url: `{{ route('laporanklaimpjtsupir.report') }}`,
+            method: 'GET',
+            data: {
+                sampai: sampai,
+                dari: dari,
+                kelompok: kelompok,
+                kelompok_id: kelompok_id,
+            },
+            success: function(response) {
+                // Handle the success response
+                var newWindow = window.open('','_blank');
+                newWindow.document.open();
+                newWindow.document.write(response);
+                newWindow.document.close();
+            },
+            error: function(error) {
+                console.log(error)
+                if (error.status === 422) {
+                    $('.is-invalid').removeClass('is-invalid');
+                    $('.invalid-feedback').remove();
+                    setErrorMessages($('#crudForm'), error.responseJSON.errors);
+                } else {
+                    showDialog(error.responseJSON.message);
+                }
             }
-        })
+        });
     })
 
 
