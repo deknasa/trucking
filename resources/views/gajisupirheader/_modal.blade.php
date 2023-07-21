@@ -990,7 +990,7 @@
                 form.find(`[name="supir"]`).parent('.input-group').find('.input-group-append').remove()
             })
             .catch((error) => {
-                showDialog(error.statusText)
+                showDialog(error.responseJSON)
             })
             .finally(() => {
                 $('.modal-loader').addClass('d-none')
