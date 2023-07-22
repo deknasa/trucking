@@ -10,7 +10,7 @@ class Myauth
         'class' => [
             '',
             'dashboard',
-            'laporansaldoinventory',
+            // 'laporansaldoinventory',
             // 'tutupbuku',
             // 'approvalbukacetak',
             // 'approvalsupirgambar',

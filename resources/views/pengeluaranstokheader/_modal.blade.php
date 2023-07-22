@@ -317,6 +317,7 @@
   let modalBody = $('#crudModal').find('.modal-body').html()
   let pengeluaranheader_id
   var listKodePengeluaran = [];
+  var listIdPengeluaran = [];
   $(document).ready(function() {
     $(document).on('click', '#addRow', function(event) {
       addRow()
@@ -773,7 +774,15 @@
 
     activeGrid = null
     initDatepicker()
-
+    if (form.data('action') == 'add') {
+      if($('#kodepengeluaranheader').val() != ''){
+        let index = listIdPengeluaran.indexOf($('#kodepengeluaranheader').val());
+        setKodePengeluaran(listKodePengeluaran[index]);
+        $('#crudForm').find(`[name="pengeluaranstok"]`).val(listKodePengeluaran[index])
+        $('#crudForm').find(`[name="pengeluaranstok"]`).data('currentValue', listKodePengeluaran[index])
+        $('#crudForm').find(`[name="pengeluaranstok_id"]`).val($('#kodepengeluaranheader').val())
+      }
+    }
     initSelect2($('#statuspotongretur'), true)
     if (form.data('action') !== 'add') {
       let pengeluaranstok = $('#crudForm').find(`[name="pengeluaranstok"]`).parents('.input-group').children()
@@ -814,7 +823,7 @@
       ])
       .then(() => {
         $('#crudModal').modal('show')
-        setKodePengeluaran(0)
+        
       })
       .catch((error) => {
         showDialog(error.statusText)
@@ -1257,6 +1266,7 @@
         },
         success: response => {
           $.each(response.data, (index,data) => {
+            listIdPengeluaran[index]=data.id;
             listKodePengeluaran[index] = data.kodepengeluaran;
           })
 
