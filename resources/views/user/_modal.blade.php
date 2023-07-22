@@ -557,7 +557,6 @@
               element.val(value)
             }
           })
-          console.log(form.data('action'))
           if (form.data('action') === 'delete') {
             form.find('[name]').addClass('disabled')
             initDisabled()
