@@ -383,18 +383,11 @@
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
       success: response => {
-        var kodenobukti = response.kodenobukti
-        if (kodenobukti == '1') {
-          var kodestatus = response.kodestatus
-          if (kodestatus == '1') {
-            showDialog(response.message['keterangan'])
-          } else {
-
-            cekValidasiAksi(Id, Aksi)
-          }
-
+        var error = response.error
+        if (error) {
+          showDialog(response)
         } else {
-          showDialog(response.message['keterangan'])
+          cekValidasiAksi(Id, Aksi)
         }
       }
     })
@@ -409,9 +402,9 @@
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
       success: response => {
-        var kondisi = response.kondisi
-        if (kondisi == true) {
-          showDialog(response.message['keterangan'])
+        var error = response.error
+        if (error) {
+          showDialog(response)
         } else {
           if (Aksi == 'EDIT') {
             editPiutangHeader(Id)
