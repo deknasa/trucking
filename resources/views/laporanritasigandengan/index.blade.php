@@ -28,10 +28,6 @@
             <div class="row">
 
               <div class="col-sm-6 mt-4">
-                <button type="button" id="btnPreview" class="btn btn-info mr-1 ">
-                  <i class="fas fa-print"></i>
-                  Report
-                </button>
                 <button type="button" id="btnExport" class="btn btn-warning mr-1 ">
                   <i class="fas fa-file-export"></i>
                   Export
@@ -87,10 +83,6 @@
       .addClass("ui-datepicker-trigger btn btn-easyui text-easyui-dark").html(`
       <i class="fa fa-calendar-alt"></i>
       `);
-
-    if (!`{{ $myAuth->hasPermission('laporanritasigandengan', 'report') }}`) {
-      $('#btnPreview').attr('disabled', 'disabled')
-    }
     if (!`{{ $myAuth->hasPermission('laporanritasigandengan', 'export') }}`) {
       $('#btnExport').attr('disabled', 'disabled')
     }
@@ -101,30 +93,7 @@
 
     let periode = $('#crudForm').find('[name=periode]').val()
     window.open(`{{ route('laporanritasigandengan.export') }}?periode=${periode}`)
-    // $.ajax({
-    //   url: `{{ route('laporanritasigandengan.export') }}`,
-    //   method: 'GET',
-    //   data: {
-    //     periode: periode
-    //   },
-    //   success: function(response) {
-    //     // Handle the success response
-    //     var newWindow = window.open('', '_blank');
-    //     newWindow.document.open();
-    //     newWindow.document.write(response);
-    //     newWindow.document.close();
-    //   },
-    //   error: function(error) {
-    //     console.log(error)
-    //     if (error.status === 422) {
-    //       $('.is-invalid').removeClass('is-invalid');
-    //       $('.invalid-feedback').remove();
-    //       setErrorMessages($('#crudForm'), error.responseJSON.errors);
-    //     } else {
-    //       showDialog(error.responseJSON.message);
-    //     }
-    //   }
-    // });
+    
   })
 </script>
 @endpush()
