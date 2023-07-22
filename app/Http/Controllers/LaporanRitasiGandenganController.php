@@ -38,46 +38,124 @@ class LaporanRitasiGandenganController extends MyController
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'laporanritasigandengan/export', $detailParams);
 
-        $data = $header['data'];
+        $ritasi = $header['data'];
         // echo json_encode($data);
         // die;
-
+        // dd($ritasi);
         date_default_timezone_set("Asia/Jakarta");
 
         $monthNum  = intval(substr($request->periode, 0, 2));
-        $yearNum  = substr($request->periode,3);
+        $yearNum  = substr($request->periode, 3);
         $monthName = $this->getBulan($monthNum);
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setCellValue('A1', 'Laporan Ritasi Gandengan : '. $monthName.' - '.$yearNum);
+        $sheet->setCellValue('A1', 'Laporan Ritasi Gandengan : ' . $monthName . ' - ' . $yearNum);
 
-        $header_start_row = 4;
-        $detail_start_row = 5;
+        $totalTanggal = count($ritasi[0]) - 1;
 
-        $styleArray = array(
-            'borders' => array(
-                'allBorders' => array(
-                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-                ),
-            ),
-        );
+        // SET DATA
+        $rowIndex = 4;
+        $columnIndex = 1;
+        foreach ($ritasi as $data) {
+            $noPol = $data['gandengan']; // Ganti 'no_pol' dengan indeks yang sesuai
+            $sheet->setCellValueByColumnAndRow($columnIndex, $rowIndex, $noPol);
+            // Initialize total variable for each row
+            $totalForRow = 0;
 
-        $style_number = [
-            'alignment' => [
-                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT,
+            // Iterate over the date fields
+            for ($i = 1; $i <= $totalTanggal; $i++) {
+                $tgl = $data[$i];
+                $sheet->setCellValueByColumnAndRow($columnIndex + $i, $rowIndex, $tgl);
+               
+                if(is_numeric($tgl)){
+                    $totalForRow += $tgl;
+                }else{
+                    $sheet->getStyleByColumnAndRow($columnIndex + $i, $rowIndex)->getFont()->setColor(new \PhpOffice\PhpSpreadsheet\Style\Color(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_RED));
+                }
+            }
+
+            $lastColumn = $columnIndex + ($totalTanggal+1);
+            $sheet->setCellValueByColumnAndRow($lastColumn, $rowIndex, $totalForRow);
+        
+            $rowIndex++;
+        }
+
+
+        // SET HEADER
+        $columnIndexHeader = 2;
+        $sheet->setCellValue('A3', 'Gandengan');
+        for ($i = 1; $i <= $totalTanggal; $i++) {
+            $cell = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($columnIndexHeader) . '3';
+            $sheet->setCellValue($cell, $i);
+            $columnIndexHeader++;
+        }
+
+        $cell = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($columnIndexHeader) . '3';
+        $sheet->setCellValue($cell, 'Total');
+        $cellRange = "A3:$cell";
+
+        $cell = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($columnIndexHeader) . $rowIndex;
+        $cellFooter = "A" . $rowIndex . ":$cell";
+
+        $styleArray = [
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'color' => [
+                    'rgb' => 'FFFF00', // Warna kuning (kode RGB)
+                ],
             ],
-
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    'color' => ['rgb' => '000000'], // Warna border (kode RGB)
+                ],
+            ],
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+            ],
         ];
 
-        $alphabets = range('A', 'Z');
 
-        $sheet->getColumnDimension('A')->setAutoSize(true);
-        $sheet->getColumnDimension('B')->setAutoSize(true);
-        $sheet->getColumnDimension('C')->setAutoSize(true);
-        $sheet->getColumnDimension('D')->setAutoSize(true);
-        $sheet->getColumnDimension('E')->setAutoSize(true);
-        $sheet->getColumnDimension('F')->setAutoSize(true);
+        $styleBody = [
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    'color' => ['rgb' => '000000'], // Warna border (kode RGB)
+                ],
+            ],
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+            ],
+        ];
+
+        $sheet->getStyle($cellRange)->applyFromArray($styleArray);
+        $sheet->getStyle($cellFooter)->applyFromArray($styleArray);
+
+
+        for ($columnIndex = 1; $columnIndex <= $columnIndexHeader; $columnIndex++) {
+            $columnLabel = $this->alphabetLoop($columnIndex);
+            $sheet->getColumnDimension($columnLabel)->setAutoSize(true);
+
+            if ($columnLabel != 'A') {
+
+                $cellBody = $columnLabel . "4:" . $columnLabel . $rowIndex;
+                $sheet->getStyle($cellBody)->applyFromArray($styleBody);
+            }
+        }
+
+        //NOTE GRAND TOTAL
+        $sheet->setCellValue("A" . ($rowIndex), 'Grand Total');
+        for ($columnIndex = 1; $columnIndex <= $columnIndexHeader; $columnIndex++) {
+            $columnLabel = $this->alphabetLoop($columnIndex);
+            if ($columnLabel != 'A') {
+
+                $cellBody = $columnLabel . "4:" . $columnLabel . $rowIndex;
+                $sheet->setCellValue($columnLabel . ($rowIndex), "=SUM(" . $columnLabel . "4:" . $columnLabel . $rowIndex . ")");
+            }
+        }
 
         $writer = new Xlsx($spreadsheet);
         $filename = 'LAPORANRITASIGANDENGAN' . date('dmYHis');
@@ -88,44 +166,59 @@ class LaporanRitasiGandenganController extends MyController
         $writer->save('php://output');
     }
 
-    public function getBulan($bln){
-        switch ($bln){ 
-         case 1:
-          return "JANUARI";
-          break;
-         case 2:
-          return "FEBRUARI";
-          break;
-         case 3:
-          return "MARET";
-          break;
-         case 4:
-          return "APRIL";
-          break;
-         case 5:
-          return "MEI";
-          break;
-         case 6:
-          return "JUNI";
-          break;
-         case 7:
-          return "JULI";
-          break;
-         case 8:
-          return "AGUSTUS";
-          break;
-         case 9:
-          return "SEPTEMBER";
-          break;
-         case 10:
-          return "OKTOBER";
-          break;
-         case 11:
-          return "NOVEMBER";
-          break;
-         case 12:
-          return "DESEMBER";
-          break;
+    public function alphabetLoop($num)
+    {
+        $alphabet = range('A', 'Z');
+        $loop = [];
+
+        while ($num > 0) {
+            $remainder = ($num - 1) % 26;
+            array_unshift($loop, $alphabet[$remainder]);
+            $num = (int)(($num - $remainder) / 26);
         }
-       }
+
+        return implode('', $loop);
+    }
+
+    public function getBulan($bln)
+    {
+        switch ($bln) {
+            case 1:
+                return "JANUARI";
+                break;
+            case 2:
+                return "FEBRUARI";
+                break;
+            case 3:
+                return "MARET";
+                break;
+            case 4:
+                return "APRIL";
+                break;
+            case 5:
+                return "MEI";
+                break;
+            case 6:
+                return "JUNI";
+                break;
+            case 7:
+                return "JULI";
+                break;
+            case 8:
+                return "AGUSTUS";
+                break;
+            case 9:
+                return "SEPTEMBER";
+                break;
+            case 10:
+                return "OKTOBER";
+                break;
+            case 11:
+                return "NOVEMBER";
+                break;
+            case 12:
+                return "DESEMBER";
+                break;
+        }
+    }
 }

@@ -495,7 +495,7 @@
     $('#crudModalTitle').text('Delete Invoice Charge Gandengan')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-
+    $('#btnTampil').prop('disabled', true)
     Promise
       .all([
         showInvoiceChargeGandenganHeader(form, invoiceChargeGandenganHeader)
@@ -504,7 +504,7 @@
         $('#crudModal').modal('show')
       })
       .catch((error) => {
-        showDialog(error.statusText)
+        showDialog(error.responseJSON)
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
