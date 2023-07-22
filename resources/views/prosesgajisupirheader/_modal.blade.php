@@ -1153,23 +1153,37 @@
                 request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
             },
             success: response => {
-                var kodenobukti = response.kodenobukti
-                if (kodenobukti == '1') {
-                    var kodestatus = response.kodestatus
-                    if (kodestatus == '1') {
-                        showDialog(response.message['keterangan'])
-                    } else {
-                        if (Aksi == 'EDIT') {
-                            editProsesGajiSupirHeader(Id)
-                        }
-                        if (Aksi == 'DELETE') {
-                            deleteProsesGajiSupirHeader(Id)
-                        }
-                    }
-
+                var error = response.error
+                if (error) {
+                    showDialog(response)
                 } else {
-                    showDialog(response.message['keterangan'])
+                    cekValidasiAksi(Id, Aksi)
                 }
+            }
+        })
+    }
+
+    function cekValidasiAksi(Id, Aksi) {
+        $.ajax({
+            url: `{{ config('app.api_url') }}prosesgajisupirheader/${Id}/cekValidasiAksi`,
+            method: 'POST',
+            dataType: 'JSON',
+            beforeSend: request => {
+                request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+            },
+            success: response => {
+                var error = response.error
+                if (error) {
+                    showDialog(response)
+                } else {
+                    if (Aksi == 'EDIT') {
+                        editProsesGajiSupirHeader(Id)
+                    }
+                    if (Aksi == 'DELETE') {
+                        deleteProsesGajiSupirHeader(Id)
+                    }
+                }
+
             }
         })
     }
