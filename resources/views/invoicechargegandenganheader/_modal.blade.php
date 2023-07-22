@@ -137,6 +137,7 @@
         getJobTrucking(agen_id, tglproses)
           .then((response) => {
 
+
             $('.is-invalid').removeClass('is-invalid')
             $('.invalid-feedback').remove()
 
@@ -174,7 +175,7 @@
       let form = $('#crudForm')
       let invoiceChargeGandenganHeader = form.find('[name=id]').val()
       let action = form.data('action')
-      let data = $('#crudForm').serializeArray()
+      let data = []
 
       // $('#crudForm').find(`[name="nominal_detail[]"]`).each((index, element) => {
       //   data.filter((row) => row.name === 'nominal_detail[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal_detail[]"]`)[index])
@@ -183,6 +184,30 @@
       // $('#crudForm').find(`[name="detail_persentasediscount[]"]`).each((index, element) => {
       //   data.filter((row) => row.name === 'detail_persentasediscount[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="detail_persentasediscount[]"]`)[index])
       // })
+      data.push({
+        name: 'id',
+        value: form.find(`[name="id"]`).val()
+      })
+      data.push({
+        name: 'nobukti',
+        value: form.find(`[name="nobukti"]`).val()
+      })
+      data.push({
+        name: 'tglbukti',
+        value: form.find(`[name="tglbukti"]`).val()
+      })
+      data.push({
+        name: 'tglproses',
+        value: form.find(`[name="tglproses"]`).val()
+      })
+      data.push({
+        name: 'agen',
+        value: form.find(`[name="agen"]`).val()
+      })
+      data.push({
+        name: 'agen_id',
+        value: form.find(`[name="agen_id"]`).val()
+      })
 
       $.each(selectedRows, function(index, item) {
         data.push({
@@ -445,6 +470,8 @@
         $('#crudModal').modal('show')
         $('#crudForm [name=tglbukti]').attr('readonly', true)
         $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
+        form.find(`[name="agen"]`).parent('.input-group').find('.button-clear').remove()
+        form.find(`[name="agen"]`).parent('.input-group').find('.input-group-append').remove()
       })
       .catch((error) => {
         showDialog(error.responseJSON)
@@ -742,16 +769,11 @@
   }
 
   function selectAllRows() {
-    if (aksi == 'edit') {
-      Id = $(`#crudForm`).find(`[name="id"]`).val()
-      url = `${apiUrl}invoicechargegandenganheader/${Id}/getinvoicegandengan`
-    } else {
-      url = `${apiUrl}orderantrucking/getorderantrip`
-    }
     agen_id = $('#crudForm').find(`[name=agen_id]`).val()
     tglproses = $('#crudForm').find(`[name=tglproses]`).val()
+
     $.ajax({
-      url: url,
+      url: `${apiUrl}orderantrucking/getorderantrip`,
       method: 'GET',
       dataType: 'JSON',
       data: {
@@ -759,11 +781,25 @@
         tglbukti: tglproses,
         agen: agen_id,
         sortIndex: 'jobtrucking',
+        aksi: $('#crudForm').data('action'),
+        idInvoice: $('#crudForm').find(`[name=id]`).val()
       },
       headers: {
         Authorization: `Bearer ${accessToken}`
       },
       success: (response) => {
+        selectedRows = []
+        selectedJobTrucking = [];
+        selectedNoPolisi = [];
+        selectedGandengan = [];
+        selectedTglTrip = [];
+        selectedTglAkhir = [];
+        selectedJumlahHari = [];
+        selectedNominal = [];
+        selectedJenisOrder = [];
+        selectedNamaGudang = [];
+        selectedKeterangan = [];
+
         selectedRows = response.data.map((data) => data.id)
         selectedJobTrucking = response.data.map((data) => data.jobtrucking)
         selectedNoPolisi = response.data.map((data) => data.trado_id)
@@ -777,11 +813,13 @@
         selectedKeterangan = response.data.map((data) => data.keterangan)
 
         $('#modalgrid').jqGrid('setGridParam', {
-          url: url,
+          url: `${apiUrl}orderantrucking/getorderantrip`,
           postData: {
             tglbukti: tglproses,
             agen: agen_id,
             sortIndex: 'jobtrucking',
+            aksi: $('#crudForm').data('action'),
+            idInvoice: $('#crudForm').find(`[name=id]`).val()
           },
           datatype: "json"
         }).trigger('reloadGrid');
@@ -815,6 +853,34 @@
         },
         success: (response) => {
           response.url = `${apiUrl}orderantrucking/getorderantrip`
+          selectedRows = []
+          selectedJobTrucking = [];
+          selectedNoPolisi = [];
+          selectedGandengan = [];
+          selectedTglTrip = [];
+          selectedTglAkhir = [];
+          selectedJumlahHari = [];
+          selectedNominal = [];
+          selectedJenisOrder = [];
+          selectedNamaGudang = [];
+          selectedKeterangan = [];
+
+          $.each(response.data, (index, detail) => {
+            if (detail.noinvoice != '') {
+
+              selectedRows.push(detail.id)
+              selectedJobTrucking.push(detail.jobtrucking)
+              selectedNoPolisi.push(detail.trado_id)
+              selectedGandengan.push(detail.gandengan_id)
+              selectedTglTrip.push(detail.tgltrip)
+              selectedTglAkhir.push(detail.tglkembali)
+              selectedJumlahHari.push(detail.jumlahhari)
+              selectedNominal.push(detail.nominal_detail)
+              selectedJenisOrder.push(detail.jenisorder)
+              selectedNamaGudang.push(detail.namagudang)
+              selectedKeterangan.push(detail.keterangan)
+            }
+          })
           resolve(response)
         },
         error: error => {
@@ -954,14 +1020,14 @@
           sum = 0;
           $.each(response.data, (index, value) => {
             let element = form.find(`[name="${index}"]`)
-            if (element.attr("name") == 'tglbukti') {
-              var result = value.split('-');
-              element.val(result[2] + '-' + result[1] + '-' + result[0]);
-            } else if (element.attr("name") == 'tglproses') {
-              var result = value.split('-');
-              element.val(result[2] + '-' + result[1] + '-' + result[0]);
+            if (element.hasClass('datepicker')) {
+              element.val(dateFormat(value))
             } else {
               element.val(value)
+            }
+
+            if (index == 'agen') {
+              element.data('current-value', value).prop('readonly', true)
             }
           })
           $('#detailList tbody').html('')
