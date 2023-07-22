@@ -564,6 +564,26 @@
                 if (error) {
                     showDialog(response)
                 } else {
+                    cekValidasiAksi(Id, Aksi)
+                }
+            }
+        })
+    }
+    
+
+    function cekValidasiAksi(Id, Aksi) {
+        $.ajax({
+            url: `${apiUrl}hutangextraheader/${Id}/cekValidasiAksi`,
+            method: 'POST',
+            dataType: 'JSON',
+            beforeSend: request => {
+                request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+            },
+            success: response => {
+                var error = response.error
+                if (error) {
+                    showDialog(response)
+                } else {
                     if (Aksi == 'EDIT') {
                         editHutangExtraHeader(Id)
                     }
@@ -571,8 +591,10 @@
                         deleteHutangExtraHeader(Id)
                     }
                 }
+
             }
         })
     }
+
 </script>
 @endpush()
