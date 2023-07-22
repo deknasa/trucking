@@ -32,8 +32,7 @@ class LaporanSaldoInventoryController extends Controller
             'statusban' => $request->statusban,
             'filter' => $request->filter,
             'jenistgltampil' => $request->jenistgltampil,
-            'tgldari' => $request->dari,
-            'tglsampai' => $request->sampai,
+            'priode' => $request->priode,
             'stokdari_id' => $request->stokdari_id,
             'stoksampai_id' => $request->stoksampai_id,
             'dataFilter' => $request->dataFilter,
@@ -57,8 +56,7 @@ class LaporanSaldoInventoryController extends Controller
             'statusban' => $request->statusban,
             'filter' => $request->filter,
             'jenistgltampil' => $request->jenistgltampil,
-            'tgldari' => $request->dari,
-            'tglsampai' => $request->sampai,
+            'priode' => $request->priode,
             'stokdari_id' => $request->stokdari_id,
             'stoksampai_id' => $request->stoksampai_id,
             'dataFilter' => $request->dataFilter,
@@ -84,7 +82,7 @@ class LaporanSaldoInventoryController extends Controller
         $sheet->getStyle("A4")->getFont()->setSize(12)->setBold(true);
         $sheet->getStyle("B4")->getFont()->setSize(12)->setBold(true);
 
-        $sheet->setCellValue('B4',': '. $request->dari." S/D"." ".$request->sampai);
+        $sheet->setCellValue('B4',': '. $request->priode);
 
         $sheet->setCellValue('A5', 'STOK');
         $sheet->getStyle("A5")->getFont()->setSize(12)->setBold(true);

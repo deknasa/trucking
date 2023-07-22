@@ -107,31 +107,6 @@
                         <div class=" row">
                             <div class="col-md-6">
                                 <div class="row">
-                                    <label class="col-12 col-sm-3 col-form-label mt-2">Priode<span class="text-danger">*</span></label>
-                                    <div class="col-sm-9 mt-2">
-                                        <div class="input-group">
-                                            <input type="text" name="dari" class="form-control datepicker">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        
-                            <div class="col-md-6">
-                                <div class="row">
-                                    <h5 class="col-12 col-sm-3 text-center mt-2">s/d</h5>
-                                    {{-- <label class="col-12 col-sm-3 col-form-label mt-2">Priode<span class="text-danger">*</span></label> --}}
-                                    <div class="col-sm-9 mt-2">
-                                        <div class="input-group">
-                                            <input type="text" name="sampai" class="form-control datepicker">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                           
-                        <div class=" row">
-                            <div class="col-md-6">
-                                <div class="row">
                                     <label class="col-12 col-sm-3 col-form-label mt-2">Stok<span class="text-danger">*</span></label>
                                     <div class="col-sm-9 mt-2">
                                         <div class="input-group">
@@ -153,6 +128,30 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+
+                        <div class=" row">
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <label class="col-12 col-sm-3 col-form-label mt-2">Priode<span class="text-danger">*</span></label>
+                                    <div class="col-sm-9 mt-2">
+                                        <div class="input-group">
+                                            <input type="text" name="priode" class="form-control datepicker">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        
+                            {{-- <div class="col-md-6">
+                                <div class="row">
+                                    <h5 class="col-12 col-sm-3 text-center mt-2">s/d</h5>
+                                    <div class="col-sm-9 mt-2">
+                                        <div class="input-group">
+                                            <input type="text" name="sampai" class="form-control datepicker">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> --}}
                         </div>
 
                         <div class=" row">
@@ -188,8 +187,8 @@
         initSelect2($('#crudForm').find('[name=jenistgltampil]'), false)
 
         let form = $("#crudForm");
-        $('#crudForm').find('[name=dari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-        $('#crudForm').find('[name=sampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+        $('#crudForm').find('[name=priode]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+        // $('#crudForm').find('[name=sampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         setFilterOptions(form)
         setStatusBanOptions(form)
         setStatusReuseOptions(form)
@@ -206,8 +205,8 @@
         let gudang_id = $('#crudForm').find('[name=gudang_id]').val()
         let trado_id = $('#crudForm').find('[name=trado_id]').val()
         let gandengan_id = $('#crudForm').find('[name=gandengan_id]').val()
-        let dari = $('#crudForm').find('[name=dari]').val()
-        let sampai = $('#crudForm').find('[name=sampai]').val()
+        let priode = $('#crudForm').find('[name=priode]').val()
+        // let sampai = $('#crudForm').find('[name=sampai]').val()
         let stokdari_id = $('#crudForm').find('[name=stokdari_id]').val()
         let stoksampai_id = $('#crudForm').find('[name=stoksampai_id]').val()
         let dataFilter = ''
@@ -227,13 +226,12 @@
             // (statusban != '') &&
             (filter != '') &&
             (jenistgltampil != '') &&
-            (dari != '') &&
-            (sampai != '') &&
+            (priode != '') &&
             (stokdari_id != '') &&
             (stoksampai_id != '') &&
             (dataFilter != '') 
         ){           
-            window.open(`{{ route('laporansaldoinventory.report') }}?kelompok_id=${kelompok_id}&statusreuse=${statusreuse}&statusban=${statusban}&filter=${filter}&jenistgltampil=${jenistgltampil}&dari=${dari}&sampai=${sampai}&stokdari_id=${stokdari_id}&stoksampai_id=${stoksampai_id}&dataFilter=${dataFilter}`)
+            window.open(`{{ route('laporansaldoinventory.report') }}?kelompok_id=${kelompok_id}&statusreuse=${statusreuse}&statusban=${statusban}&filter=${filter}&jenistgltampil=${jenistgltampil}&priode=${priode}&stokdari_id=${stokdari_id}&stoksampai_id=${stoksampai_id}&dataFilter=${dataFilter}`)
 
         }else {
             showDialog('ISI SELURUH KOLOM')
@@ -250,8 +248,7 @@
         let gudang_id = $('#crudForm').find('[name=gudang_id]').val()
         let trado_id = $('#crudForm').find('[name=trado_id]').val()
         let gandengan_id = $('#crudForm').find('[name=gandengan_id]').val()
-        let dari = $('#crudForm').find('[name=dari]').val()
-        let sampai = $('#crudForm').find('[name=sampai]').val()
+        let priode = $('#crudForm').find('[name=priode]').val()
         let stokdari_id = $('#crudForm').find('[name=stokdari_id]').val()
         let stoksampai_id = $('#crudForm').find('[name=stoksampai_id]').val()
         let dataFilter = ''
@@ -271,13 +268,12 @@
             // (statusban != '') &&
             (filter != '') &&
             (jenistgltampil != '') &&
-            (dari != '') &&
-            (sampai != '') &&
+            (priode != '') &&
             (stokdari_id != '') &&
             (stoksampai_id != '') &&
             (dataFilter != '') 
         ){ 
-            window.open(`{{ route('laporansaldoinventory.export') }}?kelompok_id=${kelompok_id}&statusreuse=${statusreuse}&statusban=${statusban}&filter=${filter}&jenistgltampil=${jenistgltampil}&dari=${dari}&sampai=${sampai}&stokdari_id=${stokdari_id}&stoksampai_id=${stoksampai_id}&dataFilter=${dataFilter}`)
+            window.open(`{{ route('laporansaldoinventory.export') }}?kelompok_id=${kelompok_id}&statusreuse=${statusreuse}&statusban=${statusban}&filter=${filter}&jenistgltampil=${jenistgltampil}&priode=${priode}&stokdari_id=${stokdari_id}&stoksampai_id=${stoksampai_id}&dataFilter=${dataFilter}`)
         } else {
             showDialog('ISI SELURUH KOLOM')
         }
@@ -498,7 +494,7 @@
                   "rules": [{
                     "field": "grp",
                     "op": "cn",
-                    "data": "STATUS KONDISI BAN"
+                    "data": "LAPORAN STOK INVENTORI"
                   }]
                 })
               },
