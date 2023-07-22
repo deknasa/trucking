@@ -295,6 +295,7 @@
   let modalBody = $('#crudModal').find('.modal-body').html()
   var KodePenerimaanId
   var listKodePenerimaan =[];
+  var listIdPenerimaan =[];
   $(document).ready(function() {
     addRow()
     $(document).on('click', '#addRow', function(event) {
@@ -456,6 +457,7 @@
 
   function setTampilanForm() {
     tampilanall()
+    console.log(KodePenerimaanId,listKodePenerimaan[0]);
     switch (KodePenerimaanId) {
       case listKodePenerimaan[0] : // 'DOT':
         tampilandot()
@@ -581,6 +583,7 @@
     $('[name=coa]').parents('.form-group').hide()
     $('[name=supplier_id]').parents('.form-group').hide()
     $('[name=nobon]').parents('.form-group').hide()
+    $('.tbl_vulkanisirke').hide();
 
     $('[name=gudangdari]').parents('.form-group').show()
     $('[name=gudangke]').parents('.form-group').show()
@@ -592,7 +595,7 @@
     $('.tbl_persentase').hide();
     $('.tbl_total').hide();
     $('.tbl_harga').hide();
-    $('.colspan').attr('colspan', 3);
+    $('.colspan').attr('colspan', 2);
 
     $('.tbl_aksi').show()
     $('#addRow').show()
@@ -648,6 +651,7 @@
     $('[name=tradoke]').parents('.form-group').hide()
     $('[name=gandengandari]').parents('.form-group').hide()
     $('[name=gandenganke]').parents('.form-group').hide()
+    $('.tbl_vulkanisirke').hide();
 
     $('.tbl_penerimaanstok_nobukti').show();
     $('.colspan').attr('colspan', 7);
@@ -672,6 +676,7 @@
     $('.sumrow').show();
     $('.data_tbl').show();
     $('.colspan').attr('colspan', 6);
+    $('.tbl_vulkanisirke').hide();
     // $('[name=nobon]').val('')
     // $('[name=supplier]').attr('readonly', false);
     // $('[name=supplier]').data('currentValue', '')
@@ -1373,6 +1378,15 @@
     activeGrid = null
     initDatepicker()
     initLookup()
+    if (form.data('action') == 'add') {
+      if($('#kodepenerimaanheader').val() != ''){
+        let index = listIdPenerimaan.indexOf($('#kodepenerimaanheader').val());
+        setKodePenerimaan(listKodePenerimaan[index]);
+        $('#crudForm').find(`[name="penerimaanstok"]`).val(listKodePenerimaan[index])
+        $('#crudForm').find(`[name="penerimaanstok"]`).data('currentValue', listKodePenerimaan[index])
+        $('#crudForm').find(`[name="penerimaanstok_id"]`).val($('#kodepenerimaanheader').val())
+      }
+    }
     if( form.data('action') !== 'add'){
       let penerimaanstok = $('#crudForm').find(`[name="penerimaanstok"]`).parents('.input-group').children()
       let penerimaanstok_nobukti = $('#crudForm').find(`[name="penerimaanstok_nobukti"]`).parents('.input-group').children()
@@ -1422,7 +1436,7 @@
     })
     let tglbukti = $('#crudForm').find(`[name="tglbukti"]`).parents('.input-group').children()
     tglbukti.find('button').attr('disabled', true)
-    setKodePenerimaan(0)
+    // setKodePenerimaan(0)
 
 
   }
@@ -1792,6 +1806,7 @@
         },
         success: response => {
           $.each(response.data, (index,data) => {
+            listIdPenerimaan[index] = data.id
             listKodePenerimaan[index] = data.kodepenerimaan;
           })
 
@@ -1885,7 +1900,7 @@
                     </td>
                 </tr>
             `)
-            console.log(KodePenerimaanId , listKodePenerimaan[7]);
+            // console.log(KodePenerimaanId , listKodePenerimaan[7]);
             
             if (KodePenerimaanId === listKodePenerimaan[7]) {
               detailRow.find(`[name="detail_harga[]"]`).prop('readonly',true);
