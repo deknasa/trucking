@@ -151,7 +151,7 @@ class AuthController extends Controller
             session(['access_token_emkl' => $tokenEmkl['access_token']]);
             session(['menus' => (new Menu())->getMenu()]);
 
-            if ($user->cabang_id == $cabang->id) {
+            if ($parametercabang['text'] == "PUSAT") {
                 session(['access_token_mdn' => $tokenMedan['access_token']]);
                 session(['access_token_jkt' => $tokenJakarta['access_token']]);
                 session(['access_token_jkttnl' => $tokenJakartaTnl['access_token']]);
