@@ -24,10 +24,28 @@ class UpahSupirController extends MyController
         $title = $this->title;
         $data = [
             'combo' => $this->comboStatusAktif('list'),
+            'comboupahzona' => $this->comboCetak('list', 'STATUS UPAH ZONA', 'STATUS UPAH ZONA'),
             'comboluarkota' => $this->comboLuarKota('list')
         ];
 
         return view('upahsupir.index', compact('title', 'data'));
+    }
+
+    public function comboCetak($aksi, $grp, $subgrp)
+    {
+
+        $status = [
+            'status' => $aksi,
+            'grp' => $grp,
+            'subgrp' => $subgrp,
+        ];
+
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'parameter/combolist', $status);
+
+        return $response['data'];
     }
 
     public function get($params = [])

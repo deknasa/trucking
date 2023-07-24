@@ -138,17 +138,18 @@
           //   stype: 'select',
           //   searchoptions: {
           //     value: `<?php
-          //             $i = 1;
+                          //             $i = 1;
 
-          //             foreach ($data['comboluarkota'] as $status) :
-          //               echo "$status[param]:$status[parameter]";
-          //               if ($i !== count($data['comboluarkota'])) {
-          //                 echo ";";
-          //               }
-          //               $i++;
-          //             endforeach
+                          //             foreach ($data['comboluarkota'] as $status) :
+                          //               echo "$status[param]:$status[parameter]";
+                          //               if ($i !== count($data['comboluarkota'])) {
+                          //                 echo ";";
+                          //               }
+                          //               $i++;
+                          //             endforeach
 
-          //             ?>
+                          //             
+                          ?>
           //   `,
           //     dataInit: function(element) {
           //       $(element).select2({
@@ -241,7 +242,7 @@
               clearGridHeader($(element))
             })
           }
-          
+
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))
@@ -281,7 +282,7 @@
           }
 
           $('#left-nav').find('button').attr('disabled', false)
-          permission() 
+          permission()
           setHighlight($(this))
         }
       })
@@ -444,8 +445,8 @@
       event.preventDefault()
 
       getCekExport()
-      .then((response) => {
-        let actionUrl = `{{ route('upahritasi.export') }}`
+        .then((response) => {
+          let actionUrl = `{{ route('upahritasi.export') }}`
 
           /* Clear validation messages */
           $('.is-invalid').removeClass('is-invalid')
@@ -453,13 +454,13 @@
 
 
           window.open(`${actionUrl}?${$('#formRangeTgl').serialize()}`)
-      })
-      .catch((error) => {
-        setErrorMessages($('#formRangeTgl'), error.responseJSON.errors);
-      })
-      
+        })
+        .catch((error) => {
+          setErrorMessages($('#formRangeTgl'), error.responseJSON.errors);
+        })
+
     })
-    
+
     function getCekExport() {
       return new Promise((resolve, reject) => {
         $.ajax({
@@ -469,8 +470,8 @@
             Authorization: `Bearer ${accessToken}`
           },
           data: {
-            dari:$('#formRangeTgl').find('[name=dari]').val(),
-            sampai:$('#formRangeTgl').find('[name=sampai]').val()
+            dari: $('#formRangeTgl').find('[name=dari]').val(),
+            sampai: $('#formRangeTgl').find('[name=sampai]').val()
           },
           success: (response) => {
             resolve(response);
@@ -525,16 +526,16 @@
             $('.is-invalid').removeClass('is-invalid')
             $('.invalid-feedback').remove()
 
-            setErrorMessages(response.message);
+            setErrorMessages(form, error.responseJSON.errors);
           } else {
-            showDialog(response.message['keterangan'])
+            showDialog(error.responseJSON)
           }
         },
       }).always(() => {
         $('#processingLoader').addClass('d-none')
         $(this).removeAttr('disabled')
         console.log(response)
-          showDialog(response.keterangan);
+        showDialog(response.keterangan);
       })
     })
   })

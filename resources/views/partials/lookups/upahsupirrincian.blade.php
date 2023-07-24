@@ -13,6 +13,7 @@
         container_id: `{!! $container_Id ?? '' !!}`,
         statuscontainer_id: `{!! $statuscontainer_Id ?? '' !!}`,
         jenisorder_id: `{!! $jenisorder_Id ?? '' !!}`,
+        statusupahzona: `{!! $statusUpahZona ?? '' !!}`,
       }, 
       idPrefix: 'upahSupirRincianLookup',
       colModel: [
@@ -33,6 +34,18 @@
           {
             label: 'Kota Sampai Id',
             name: 'kotasampai_id',
+            search: false,
+            hidden: true
+          },
+          {
+            label: 'Zona dari Id',
+            name: 'zonadari_id',
+            search: false,
+            hidden: true
+          },
+          {
+            label: 'Zona Sampai Id',
+            name: 'zonasampai_id',
             search: false,
             hidden: true
           },
@@ -60,6 +73,16 @@
           {
             label: 'PENYESUAIAN',
             name: 'penyesuaian',
+            align: 'left'
+          },
+          {
+            label: 'ZONA DARI',
+            name: 'zonadari',
+            align: 'left'
+          },
+          {
+            label: 'ZONA SAMPAI',
+            name: 'zonasampai',
             align: 'left'
           },
           {

@@ -31,6 +31,9 @@ class AuthController extends Controller
         $request->validate([
             'user' => 'required',
             'password' => 'required'
+        ], [
+            'user.required' => 'USERNAME WAJIB DIISI',
+            'password.required' => 'PASSWORD WAJIB DIISI',
         ]);
 
         $credentials = [
@@ -87,10 +90,10 @@ class AuthController extends Controller
         // Auth::user()
 
         $parametercabang = DB::table('parameter')->where('grp', 'CABANG')->where('subgrp', 'CABANG')->first();
-            // dd($parametercabang->text);
+        // dd($parametercabang->text);
 
         if (Auth::attempt($credentials)) {
-            
+
             $token = Http::withHeaders([
                 'Accept' => 'application/json'
             ])->withOptions(['verify' => false])
