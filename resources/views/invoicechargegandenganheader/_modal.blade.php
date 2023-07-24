@@ -403,23 +403,18 @@
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
       success: response => {
-        var kodenobukti = response.kodenobukti
-        if (kodenobukti == '1') {
-          var kodestatus = response.kodestatus
-          if (kodestatus == '1') {
-            showDialog(response.message['keterangan'])
-          } else {
-            if (Aksi == 'EDIT') {
-              editInvoiceChargeGandenganHeader(Id)
-            }
-            if (Aksi == 'DELETE') {
-              deleteInvoiceChargeGandenganHeader(Id)
-            }
-          }
-
+        var error = response.error
+        if (error) {
+          showDialog(response)
         } else {
-          showDialog(response.message['keterangan'])
+          if (Aksi == 'EDIT') {
+            editInvoiceChargeGandenganHeader(Id)
+          }
+          if (Aksi == 'DELETE') {
+            deleteInvoiceChargeGandenganHeader(Id)
+          }
         }
+
       }
     })
   }

@@ -359,7 +359,7 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               }else {
-                editPelunasanPiutangHeader(selectedId)
+                cekValidasi(selectedId, 'EDIT')
               }
             }
           },
@@ -372,7 +372,7 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                deletePelunasanPiutangHeader(selectedId)
+                cekValidasi(selectedId, 'DELETE')
               }
             }
           },

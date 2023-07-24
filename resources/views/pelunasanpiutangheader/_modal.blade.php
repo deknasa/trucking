@@ -509,7 +509,7 @@
               row = parseInt(selectedRows[angka]) - 1;
               let element;
 
-              if (indexes[0] == 'alatbayar' || indexes[0] == 'tglbukti' || indexes[0] == 'bank' || indexes[0] == 'nowarkat' || indexes[0] == 'agen' || indexes[0] == 'piutang_id') {
+              if (indexes[0] == 'alatbayar' || indexes[0] == 'id' || indexes[0] == 'tglbukti' || indexes[0] == 'bank' || indexes[0] == 'nowarkat' || indexes[0] == 'agen' || indexes[0] == 'piutang_id') {
                 if (indexes.length > 1) {
                   element = form.find(`[name="${indexes[0]}[]"]`)[row];
                 } else {
@@ -1400,7 +1400,7 @@
                 totalNominalLebih += parseFloat(value.nominallebihbayar)
               }
             })
-            
+
             setTimeout(() => {
 
               $("#tablePelunasan")
@@ -1991,6 +1991,50 @@
 
         element.val('')
         element.data('currentValue', element.val())
+      }
+    })
+  }
+
+  function cekValidasi(Id, Aksi) {
+    $.ajax({
+      url: `{{ config('app.api_url') }}pelunasanpiutangheader/${Id}/cekvalidasi`,
+      method: 'POST',
+      dataType: 'JSON',
+      beforeSend: request => {
+        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+      },
+      success: response => {
+        var error = response.error
+        if (error) {
+          showDialog(response)
+        } else {
+          cekValidasiAksi(Id, Aksi)
+        }
+      }
+    })
+  }
+
+  function cekValidasiAksi(Id, Aksi) {
+    $.ajax({
+      url: `{{ config('app.api_url') }}pelunasanpiutangheader/${Id}/cekValidasiAksi`,
+      method: 'POST',
+      dataType: 'JSON',
+      beforeSend: request => {
+        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+      },
+      success: response => {
+        var error = response.error
+        if (error) {
+          showDialog(response)
+        } else {
+          if (Aksi == 'EDIT') {
+            editPelunasanPiutangHeader(Id)
+          }
+          if (Aksi == 'DELETE') {
+            deletePelunasanPiutangHeader(Id)
+          }
+        }
+
       }
     })
   }
