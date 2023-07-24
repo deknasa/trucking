@@ -19,13 +19,6 @@
                             </div>
                         </div>
                         <div class="row">
-                            <label class="col-12 col-sm-2 col-form-label mt-2">JENIS<span class="text-danger">*</span></label>
-                            <div class="col-sm-4 mt-2">
-                                <select name="jenis" id="jenis" class="form-select select2bs4" style="width: 100%;">
-                                </select>
-                            </div>
-                        </div>
-                        <div class="row">
                             <div class="col-sm-6 mt-4">
                                 <button type="button" id="btnPreview" class="btn btn-info mr-1 ">
                                     <i class="fas fa-print"></i>
@@ -83,11 +76,10 @@
 
     $(document).on('click', `#btnPreview`, function(event) {
         let sampai = $('#crudForm').find('[name=sampai]').val()
-        let jenis = $('#crudForm').find('[name=jenis]').val()
 
-        if (jenis != '' && sampai != '') {
+        if (sampai != '') {
 
-            window.open(`{{ route('laporandepositosupir.report') }}?sampai=${sampai}&jenis=${jenis}`)
+            window.open(`{{ route('laporandepositosupir.report') }}?sampai=${sampai}`)
         } else {
             showDialog('ISI SELURUH KOLOM')
         }
