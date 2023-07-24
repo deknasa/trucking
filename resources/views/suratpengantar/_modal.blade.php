@@ -50,6 +50,14 @@
                   </div>
                 </div>
                 <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">UPAH ZONA <span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <select name="statusupahzona" class="form-control select2bs4" id="statusupahzona">
+                      <option value="">-- PILIH STATUS UPAH ZONA --</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group ">
                   <label class="col-sm-12 col-form-label">EMKL <span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <input type="hidden" name="agen_id">
@@ -96,7 +104,7 @@
                   <label class="col-sm-12 col-form-label">DARI <span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <input type="hidden" name="dari_id">
-                    <input type="text" name="dari" class="form-control" readonly>
+                    <input type="text" name="dari" class="form-control kotadari-lookup" readonly>
                   </div>
                 </div>
 
@@ -121,7 +129,7 @@
                   <label class="col-sm-12 col-form-label">SAMPAI <span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <input type="hidden" name="sampai_id">
-                    <input type="text" name="sampai" class="form-control" readonly>
+                    <input type="text" name="sampai" class="form-control kotasampai-lookup" readonly>
                   </div>
                 </div>
                 <div class="form-group ">
@@ -411,11 +419,33 @@
   let nominalPlusBorongan = 0;
   let nominalSupir = 0;
   let totalNominalSupir = 0;
+  let statusUpahZona
+  let selectedUpahZona
+  let zonadariId
+  let zonasampaiId
+  let isShow = false
+  let upahId = 0
 
   $(document).ready(function() {
 
     $(document).on('input', `#crudForm [name="nominalperalihan"]`, function(event) {
       setPersentase()
+    })
+
+    $(document).on('change',`#crudForm [name="statusupahzona"]`, function(event) {
+      console.log('here')
+      selectedUpahZona = $(`#crudForm [name="statusupahzona"] option:selected`).text()
+      if (selectedUpahZona == 'NON UPAH ZONA' || selectedUpahZona == 'UPAH ZONA') {
+        statusUpahZona = $(`#crudForm [name="statusupahzona"]`).val()
+        console.log(isShow)
+        if (!isShow) {
+          console.log('isshow galse')
+          $('#crudForm [name=upah_id]').val('')
+          $('#crudForm [name=upah]').val('').data('currentValue', '')
+          enabledUpahSupir()
+          clearUpahSupir()
+        }
+      }
     })
     $("#crudForm [name]").attr("autocomplete", "off");
 
@@ -717,6 +747,7 @@
         setStatusGudangSamaOptions(form),
         setStatusBatalMuatOptions(form),
         setStatusGandenganOptions(form),
+        setStatusUpahZonaOptions(form)
       ])
       .then(() => {
         showSuratPengantar(form, id)
@@ -958,6 +989,45 @@
     })
   }
 
+  const setStatusUpahZonaOptions = function(relatedForm) {
+    return new Promise((resolve, reject) => {
+      relatedForm.find('[name=statusupahzona]').empty()
+      relatedForm.find('[name=statusupahzona]').append(
+        new Option('-- PILIH STATUS UPAH ZONA --', '', false, true)
+      ).trigger('change')
+
+      $.ajax({
+        url: `${apiUrl}parameter`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          filters: JSON.stringify({
+            "groupOp": "AND",
+            "rules": [{
+              "field": "grp",
+              "op": "cn",
+              "data": "STATUS UPAH ZONA"
+            }]
+          })
+        },
+        success: response => {
+          response.data.forEach(statusUpahZona => {
+            let option = new Option(statusUpahZona.text, statusUpahZona.id)
+            relatedForm.find('[name=statusupahzona]').append(option).trigger('change')
+          });
+
+          resolve()
+        },
+        error: error => {
+          reject(error)
+        }
+      })
+    })
+  }
+
   const setStatusBatalMuatOptions = function(relatedForm) {
     return new Promise((resolve, reject) => {
       relatedForm.find('[name=statusbatalmuat]').empty()
@@ -1053,6 +1123,8 @@
           Authorization: `Bearer ${accessToken}`
         },
         success: response => {
+          isShow = true
+          upahId = response.data.upah_id
           $('#detailList tbody').html('')
           $.each(response.data, (index, value) => {
             let element = form.find(`[name="${index}"]`)
@@ -1082,6 +1154,8 @@
 
 
           })
+          kotaUpahZona()
+          statusUpahZona = response.data.statusupahzona
           containerId = response.data.container_id
           statuscontainerId = response.data.statuscontainer_id
           jenisorderId = response.data.jenisorder_id
@@ -1133,6 +1207,8 @@
 
             })
           }
+
+          isShow = false
           setRowNumbers()
 
           initDatepicker()
@@ -1191,15 +1267,13 @@
   function initLookup() {
     $('.kotadari-lookup').lookup({
       title: 'Kota Dari Lookup',
-      fileName: 'kota',
+      fileName: 'kotazona',
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
 
           Aktif: 'AKTIF',
-          kotadari_id: kotadariId,
-          kotasampai_id: kotasampaiId,
-          pilihkota_id: pilihKotaSampaiId
+          kotaZona: zonadariId
         }
       },
       onSelectRow: (kota, element) => {
@@ -1223,15 +1297,13 @@
 
     $('.kotasampai-lookup').lookup({
       title: 'Kota Tujuan Lookup',
-      fileName: 'kota',
+      fileName: 'kotazona',
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
 
           Aktif: 'AKTIF',
-          kotadari_id: kotadariId,
-          kotasampai_id: kotasampaiId,
-          pilihkota_id: pilihKotaDariId
+          kotaZona: zonasampaiId
         }
       },
       onSelectRow: (kota, element) => {
@@ -1358,18 +1430,31 @@
           container_Id: containerId,
           statuscontainer_Id: statuscontainerId,
           jenisorder_Id: jenisorderId,
+          statusUpahZona: statusUpahZona
         }
       },
       onSelectRow: (upahsupir, element) => {
         $('#crudForm [name=upah_id]').val(upahsupir.id)
-        $('#crudForm [name=tarifrincian_id]').val(upahsupir.tarif_id)
-        $('#crudForm [name=tarifrincian]').val(upahsupir.tarif)
-        $('#crudForm [name=penyesuaian]').val(upahsupir.penyesuaian)
-        $('#crudForm [name=dari_id]').val(upahsupir.kotadari_id)
-        $('#crudForm [name=dari]').val(upahsupir.kotadari)
-        $('#crudForm [name=sampai_id]').val(upahsupir.kotasampai_id)
-        $('#crudForm [name=sampai]').val(upahsupir.kotasampai)
+        if (selectedUpahZona == 'NON UPAH ZONA') {
 
+          $('#crudForm [name=tarifrincian_id]').val(upahsupir.tarif_id)
+          $('#crudForm [name=tarifrincian]').val(upahsupir.tarif)
+          $('#crudForm [name=penyesuaian]').val(upahsupir.penyesuaian)
+          $('#crudForm [name=dari_id]').val(upahsupir.kotadari_id)
+          $('#crudForm [name=dari]').val(upahsupir.kotadari)
+          $('#crudForm [name=sampai_id]').val(upahsupir.kotasampai_id)
+          $('#crudForm [name=sampai]').val(upahsupir.kotasampai)
+          kotadariId = upahsupir.kotadari_id
+          kotasampaiId = upahsupir.kotasampai_id
+
+          element.val(`${upahsupir.kotadari} - ${upahsupir.kotasampai}`)
+        } else {
+          zonadariId = upahsupir.zonadari_id
+          zonasampaiId = upahsupir.zonasampai_id
+
+          element.val(`${upahsupir.zonadari} - ${upahsupir.zonasampai}`)
+          kotaUpahZona()
+        }
         nominalSupir = parseFloat(upahsupir.nominalsupir.replace(/,/g, ""));
         let nominalKenek = parseFloat(upahsupir.nominalkenek.replace(/,/g, ""));
         let nominalKomisi = parseFloat(upahsupir.nominalkomisi.replace(/,/g, ""));
@@ -1378,10 +1463,6 @@
         $('#crudForm [name=komisisupir]').val(nominalKomisi)
         initAutoNumeric($('#crudForm').find('[name="gajikenek"]'))
         initAutoNumeric($('#crudForm').find('[name="komisisupir"]'))
-        kotadariId = upahsupir.kotadari_id
-        kotasampaiId = upahsupir.kotasampai_id
-
-        element.val(`${upahsupir.kotadari} - ${upahsupir.kotasampai}`)
         element.data('currentValue', element.val())
         getNominalSupir()
       },
@@ -1614,6 +1695,7 @@
 
     if (container_id.val() == '' && statuscontainer_id.val() == '' && jenisorder_id.val() == '') {
       upahSupirReadOnly()
+      kotaUpahZona()
     } else {
       if (container_id.val() == '') {
         upahSupirReadOnly()
@@ -1622,6 +1704,8 @@
       } else if (jenisorder_id.val() == '') {
         upahSupirReadOnly()
       } else {
+
+        kotaUpahZona()
         upahsupir.attr('readonly', false)
         upahsupir.parents('.input-group').find('.input-group-append').show()
         upahsupir.parents('.input-group').find('.button-clear').show()
@@ -1645,6 +1729,39 @@
     $('#crudForm [name=tarifrincian_id]').val('')
     $('#crudForm [name=tarifrincian]').val('')
     $('#crudForm [name=penyesuaian]').val('')
+  }
+
+  function kotaUpahZona() {
+    let kotadari_id = $('#crudForm [name=dari]')
+    let kotasampai_id = $('#crudForm [name=sampai]')
+
+    if (upahId != 0) {
+      if (selectedUpahZona == 'UPAH ZONA') {
+        kotadari_id.attr('readonly', false)
+        kotasampai_id.attr('readonly', false)
+        kotadari_id.parents('.input-group').find('.input-group-append').show()
+        kotadari_id.parents('.input-group').find('.button-clear').show()
+        kotasampai_id.parents('.input-group').find('.input-group-append').show()
+        kotasampai_id.parents('.input-group').find('.button-clear').show()
+      } else {
+        console.log('heress');
+        setTimeout(() => {
+          kotadari_id.attr('readonly', true)
+          kotasampai_id.attr('readonly', true)
+
+          $('#crudForm [name=dari]').parents('.input-group').find('.input-group-append').hide()
+          $('#crudForm [name=dari]').parents('.input-group').find('.button-clear').hide()
+          $('#crudForm [name=sampai]').parents('.input-group').find('.input-group-append').hide()
+          $('#crudForm [name=sampai]').parents('.input-group').find('.button-clear').hide()
+        }, 100);
+      }
+    } else {
+      console.log('waduh')
+      kotadari_id.parents('.input-group').find('.input-group-append').hide()
+      kotadari_id.parents('.input-group').find('.button-clear').hide()
+      kotasampai_id.parents('.input-group').find('.input-group-append').hide()
+      kotasampai_id.parents('.input-group').find('.button-clear').hide()
+    }
   }
 
   function showDefault(form) {
@@ -1685,6 +1802,8 @@
     let agen = $('#crudForm').find(`[name="agen"]`).parents('.input-group')
     let upah = $('#crudForm').find(`[name="upah"]`).parents('.input-group')
     let jenisorder = $('#crudForm').find(`[name="jenisorder"]`).parents('.input-group')
+    let dari = $('#crudForm').find(`[name="dari"]`).parents('.input-group')
+    let sampai = $('#crudForm').find(`[name="sampai"]`).parents('.input-group')
     let statuscontainer = $('#crudForm').find(`[name="statuscontainer"]`).parents('.input-group')
 
     if (!edit) {
@@ -1713,6 +1832,12 @@
       statuscontainer.find('.button-clear').attr('disabled', true)
       statuscontainer.find('input').attr('readonly', true)
       statuscontainer.children().find('.lookup-toggler').attr('disabled', true)
+      dari.find('.button-clear').attr('disabled', true)
+      dari.find('input').attr('readonly', true)
+      dari.children().find('.lookup-toggler').attr('disabled', true)
+      sampai.find('.button-clear').attr('disabled', true)
+      sampai.find('input').attr('readonly', true)
+      sampai.children().find('.lookup-toggler').attr('disabled', true)
 
     } else {
       console.log("true");
@@ -1756,9 +1881,12 @@
         'Authorization': `Bearer ${accessToken}`
       },
       success: response => {
-        $('#crudForm [name=lokasibongkarmuat]').first().val(response.dataTarif.tujuan)
-        $('#crudForm [name=hargaperton]').first().val(response.dataTarif.nominalton)
-        $('#crudForm ').find(`[name="omset"]`).val(response.dataTarif.nominal)
+        if (response.dataTarif != null) {
+
+          $('#crudForm [name=lokasibongkarmuat]').first().val(response.dataTarif.tujuan)
+          $('#crudForm [name=hargaperton]').first().val(response.dataTarif.nominalton)
+          $('#crudForm ').find(`[name="omset"]`).val(response.dataTarif.nominal)
+        }
       },
       error: error => {
         showDialog(error.statusText)
