@@ -86,6 +86,17 @@ class AuthController extends Controller
         }
         // Auth::user()
 
+        $cabang = [
+            "grp" => "CABANG",
+            "subgrp" => "CABANG",
+        ];
+
+        $parametercabang = Http::withHeaders([
+            'Accept' => 'application/json'
+        ])->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'parameter/getparamrequest', $cabang);
+
         if (Auth::attempt($credentials)) {
             
             $token = Http::withHeaders([
@@ -93,7 +104,7 @@ class AuthController extends Controller
             ])->withOptions(['verify' => false])
                 ->post(config('app.api_url') . 'token', $credentials);
 
-            if ($user->cabang_id == $cabang->id) {
+            if ($parametercabang['text'] == "PUSAT") {
                 $credentialsAdmin = [
                     'user' => 'admin',
                     'password' => '123456'
