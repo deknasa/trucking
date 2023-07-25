@@ -33,6 +33,10 @@
                                     <i class="fas fa-print"></i>
                                     Report
                                 </button>
+                                <button type="button" id="btnExport" class="btn btn-warning mr-1 ">
+                                    <i class="fas fa-file-export"></i>
+                                    Export
+                                </button>
                             </div>
                         </div>
 
@@ -74,6 +78,9 @@
         if (!`{{ $myAuth->hasPermission('laporanpinjamansupir', 'report') }}`) {
             $('#btnPreview').attr('disabled', 'disabled')
         }
+        if (!`{{ $myAuth->hasPermission('laporanpinjamansupir', 'export') }}`) {
+            $('#btnExport').attr('disabled', 'disabled')
+        }
 
     })
 
@@ -108,6 +115,18 @@
         });
 
     })
+    $(document).on('click', `#btnExport`, function(event) {
+        let sampai = $('#crudForm').find('[name=sampai]').val()
+        let jenis = $('#crudForm').find('[name=jenis]').val()
+
+        if (jenis != '' && sampai != '') {
+
+            window.open(`{{ route('laporanpinjamansupir.export') }}?sampai=${sampai}&jenis=${jenis}`)
+        } else {
+            showDialog('ISI SELURUH KOLOM')
+        }
+    })
+
 
 
     const setJenisKaryawanOptions = function(relatedForm) {

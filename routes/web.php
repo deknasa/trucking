@@ -1183,6 +1183,7 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('laporantransaksiharian/index', [LaporanTransaksiHarianController::class, 'index']);
     Route::resource('laporantransaksiharian', LaporanTransaksiHarianController::class);
 
+    Route::get('laporanpinjamansupir/export', [LaporanPinjamanSupirController::class, 'export'])->name('laporanpinjamansupir.export');
     Route::get('laporanpinjamansupir/report', [LaporanPinjamanSupirController::class, 'report'])->name('laporanpinjamansupir.report');
     Route::get('laporanpinjamansupir/index', [LaporanPinjamanSupirController::class, 'index']);
     Route::resource('laporanpinjamansupir', LaporanPinjamanSupirController::class);
@@ -1259,6 +1260,7 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('laporanhutanggiro/index', [LaporanHutangGiroController::class, 'index']);
     Route::resource('laporanhutanggiro', LaporanHutangGiroController::class);
 
+    Route::get('laporanpinjamansupirkaryawan/export', [LaporanPinjamanSupirKaryawanController::class, 'export'])->name('laporanpinjamansupirkaryawan.export');
     Route::get('laporanpinjamansupirkaryawan/report', [LaporanPinjamanSupirKaryawanController::class, 'report'])->name('laporanpinjamansupirkaryawan.report');
     Route::get('laporanpinjamansupirkaryawan/index', [LaporanPinjamanSupirKaryawanController::class, 'index']);
     Route::resource('laporanpinjamansupirkaryawan', LaporanPinjamanSupirKaryawanController::class);
