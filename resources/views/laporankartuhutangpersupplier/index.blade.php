@@ -27,29 +27,23 @@
                         </div> --}}
 
                         <div class="form-group row">
-                            <label class="col-12 col-sm-2 col-form-label mt-2">Periode<span class="text-danger">*</span></label>
-                            <div class="col-sm-4 mt-2">
+                            <label class="col-12 col-sm-1 col-form-label mt-2">Periode<span class="text-danger">*</span></label>
+                            <div class="col-sm-11 mt-2">
                                 <div class="input-group">
                                     <input type="text" name="dari" class="form-control datepicker">
-                                </div>
-                            </div>
-                            <h5 class="mt-3">s/d</h5>
-                            <div class="col-sm-4 mt-2">
-                                <div class="input-group">
-                                    <input type="text" name="sampai" class="form-control datepicker">
                                 </div>
                             </div>
 
                         </div>
 
                         <div class="form-group row">
-                            <label class="col-12 col-sm-2 col-form-label mt-2">SUPPLIER<span class="text-danger">*</span></label>
-                            <div class="col-sm-4 mt-2">
+                            <label class="col-12 col-sm-1 col-form-label mt-2">SUPPLIER<span class="text-danger">*</span></label>
+                            <div class="col-sm-5 mt-2">
                                 <input type="hidden" name="supplierdari_id">
                                 <input type="text" name="supplierdari" class="form-control supplierdari-lookup">
                             </div>
-                            <h5 class="mt-3">s/d</h5>
-                            <div class="col-sm-4 mt-2">
+                            <h5 class="col-sm-1 mt-3 text-center">s/d</h5>
+                            <div class="col-sm-5 mt-2">
                                 <input type="hidden" name="suppliersampai_id">
                                 <input type="text" name="suppliersampai" class="form-control suppliersampai-lookup">
                             </div>
@@ -122,7 +116,6 @@
 
     $(document).on('click', `#btnPreview`, function(event) {
         let dari = $('#crudForm').find('[name=dari]').val()
-        let sampai = $('#crudForm').find('[name=sampai]').val()
         let supplierdari_id = $('#crudForm').find('[name=supplierdari_id]').val()
         let suppliersampai_id = $('#crudForm').find('[name=suppliersampai_id]').val()
         let supplierdari = $('#crudForm').find('[name=supplierdari]').val()
@@ -130,7 +123,7 @@
 
         getCekReport().then((response) => {
             window.open(
-                `{{ route('laporankartuhutangpersupplier.report') }}?dari=${dari}&sampai=${sampai}&supplierdari_id=${supplierdari_id}&suppliersampai_id=${suppliersampai_id}&supplierdari=${supplierdari}&suppliersampai=${suppliersampai}`
+                `{{ route('laporankartuhutangpersupplier.report') }}?dari=${dari}&supplierdari_id=${supplierdari_id}&suppliersampai_id=${suppliersampai_id}&supplierdari=${supplierdari}&suppliersampai=${suppliersampai}`
             )
         }).catch((error) => {
             if (error.status === 422) {
@@ -150,7 +143,6 @@
 
     $(document).on('click', `#btnExport`, function(event) {
         let dari = $('#crudForm').find('[name=dari]').val()
-        let sampai = $('#crudForm').find('[name=sampai]').val()
         let supplierdari_id = $('#crudForm').find('[name=supplierdari_id]').val()
         let suppliersampai_id = $('#crudForm').find('[name=suppliersampai_id]').val()
         let supplierdari = $('#crudForm').find('[name=supplierdari]').val()
@@ -158,7 +150,7 @@
 
         getCekExport().then((response) => {
             window.open(
-                `{{ route('laporankartuhutangpersupplier.export') }}?dari=${dari}&sampai=${sampai}&supplierdari_id=${supplierdari_id}&suppliersampai_id=${suppliersampai_id}&supplierdari=${supplierdari}&suppliersampai=${suppliersampai}`
+                `{{ route('laporankartuhutangpersupplier.export') }}?dari=${dari}&supplierdari_id=${supplierdari_id}&suppliersampai_id=${suppliersampai_id}&supplierdari=${supplierdari}&suppliersampai=${suppliersampai}`
             )
         }).catch((error) => {
             if (error.status === 422) {
@@ -185,7 +177,6 @@
                 },
                 data: {
                     dari: $('#crudForm').find('[name=dari]').val(),
-                    sampai: $('#crudForm').find('[name=sampai]').val(),
                     supplierdari: $('#crudForm').find('[name=supplierdari]').val(),
                     supplierdari_id: $('#crudForm').find('[name=supplierdari_id]').val(),
                     suppliersampai: $('#crudForm').find('[name=suppliersampai]').val(),
@@ -214,7 +205,6 @@
                 },
                 data: {
                     dari: $('#crudForm').find('[name=dari]').val(),
-                    sampai: $('#crudForm').find('[name=sampai]').val(),
                     supplierdari: $('#crudForm').find('[name=supplierdari]').val(),
                     supplierdari_id: $('#crudForm').find('[name=supplierdari_id]').val(),
                     suppliersampai: $('#crudForm').find('[name=suppliersampai]').val(),
