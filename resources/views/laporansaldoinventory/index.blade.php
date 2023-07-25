@@ -14,7 +14,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="row" id="kelompok">
-                                    <label class="col-12 col-sm-3 col-form-label mt-2">kelompok<span class="text-danger">*</span></label>
+                                    <label class="col-12 col-sm-3 col-form-label mt-2">kelompok<span class="text-danger"></span></label>
                                     <div class="col-sm-9 mt-2">
                                         <div class="input-group">
                                             <input type="hidden" name="kelompok_id">
@@ -26,7 +26,7 @@
 
                             <div class="col-md-6">
                                 <div class="row">
-                                    <label class="col-12 col-sm-3  col-form-label mt-2">status reuse<span class="text-danger">*</span></label>
+                                    <label class="col-12 col-sm-3  col-form-label mt-2">status reuse<span class="text-danger"></span></label>
                                     <div class="col-sm-9 mt-2"><!-- offset-sm-1 -->
                                         <div class="input-group">
                                             <select name="statusreuse" id="statusreuse" class="form-select select2bs4" style="width: 100%;">
@@ -38,7 +38,7 @@
 
                             <div class="col-md-6">
                                 <div class="row" id="kelompok">
-                                    <label class="col-12 col-sm-3  col-form-label mt-2">status ban<span class="text-danger">*</span></label>
+                                    <label class="col-12 col-sm-3  col-form-label mt-2">status ban<span class="text-danger"></span></label>
                                     <div class="col-sm-9 mt-2">
                                         <div class="input-group">
                                             <select name="statusban" id="statusban" class="form-select select2bs4" style="width: 100%;">
@@ -107,7 +107,7 @@
                         <div class=" row">
                             <div class="col-md-6">
                                 <div class="row">
-                                    <label class="col-12 col-sm-3 col-form-label mt-2">Stok<span class="text-danger">*</span></label>
+                                    <label class="col-12 col-sm-3 col-form-label mt-2">Stok<span class="text-danger"></span></label>
                                     <div class="col-sm-9 mt-2">
                                         <div class="input-group">
                                             <input type="hidden" name="stokdari_id">
@@ -116,7 +116,7 @@
                                     </div>
                                 </div>
                             </div>
-                            {{-- <label class="col-12 col-sm-3 col-form-label mt-2">Priode<span class="text-danger">*</span></label> --}}
+                            {{-- <label class="col-12 col-sm-3 col-form-label mt-2">Priode<span class="text-danger"></span></label> --}}
                             <div class="col-md-6">
                                 <div class="row">
                                     <h5 class="col-12 col-sm-3 text-center mt-2">s/d</h5>
@@ -263,14 +263,15 @@
         }
 
         if(
-            (kelompok_id != '') &&
+            (
+                // kelompok_id != '') &&
             // (statusreuse != '') &&
             // (statusban != '') &&
             (filter != '') &&
             (jenistgltampil != '') &&
             (priode != '') &&
-            (stokdari_id != '') &&
-            (stoksampai_id != '') &&
+            // (stokdari_id != '') &&
+            // (stoksampai_id != '') &&
             (dataFilter != '') 
         ){ 
             window.open(`{{ route('laporansaldoinventory.export') }}?kelompok_id=${kelompok_id}&statusreuse=${statusreuse}&statusban=${statusban}&filter=${filter}&jenistgltampil=${jenistgltampil}&priode=${priode}&stokdari_id=${stokdari_id}&stoksampai_id=${stoksampai_id}&dataFilter=${dataFilter}`)

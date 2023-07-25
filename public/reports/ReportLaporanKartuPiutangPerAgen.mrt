@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "01c689fc7c964970e400350b6a65af37",
+  "ReportGuid": "643c93d49dbef97b520fb4adf2db9059",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanKartuPiutangPerAgen.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1690261935000+0700)/",
+  "ReportChanged": "/Date(1690282625000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -535,48 +535,6 @@
             },
             "7": {
               "Ident": "StiText",
-              "Name": "Text27",
-              "ClientRectangle": "5.8,1.6,3,0.6",
-              "ComponentPlacement": "h.ap.HeaderBand1",
-              "Interaction": {
-                "Ident": "StiInteraction"
-              },
-              "Text": {
-                "Value": "{parameter.sampai}"
-              },
-              "VertAlignment": "Center",
-              "Font": ";9;Bold;",
-              "Border": ";;;;;;;solid:0,0,0",
-              "Brush": "solid:",
-              "TextBrush": "solid:0,0,0"
-            },
-            "8": {
-              "Ident": "StiText",
-              "Name": "Text28",
-              "Guid": "f0596e5368b233002105407d463a81b5",
-              "ClientRectangle": "4.8,1.6,0.78,0.61",
-              "ComponentPlacement": "h.ap.HeaderBand1",
-              "Interaction": {
-                "Ident": "StiInteraction"
-              },
-              "Text": {
-                "Value": "S/D"
-              },
-              "VertAlignment": "Center",
-              "Font": ";9;Bold;",
-              "Border": ";;;;;;;solid:0,0,0",
-              "Brush": "empty",
-              "TextBrush": "solid:0,0,0",
-              "Margins": {
-                "Left": 3,
-                "Right": 0,
-                "Top": 0,
-                "Bottom": 0
-              },
-              "Type": "Expression"
-            },
-            "9": {
-              "Ident": "StiText",
               "Name": "Text29",
               "Guid": "b5a5a5f0249b519169d80139f3df266c",
               "ClientRectangle": "2.4,2,8.6,0.6",
@@ -594,7 +552,7 @@
               "TextBrush": "solid:Black",
               "Type": "Expression"
             },
-            "10": {
+            "8": {
               "Ident": "StiText",
               "Name": "Text30",
               "Guid": "f9e0dacc24784ff49e0cd8a323264a87",
@@ -619,7 +577,7 @@
               },
               "Type": "Expression"
             },
-            "11": {
+            "9": {
               "Ident": "StiText",
               "Name": "Text33",
               "Guid": "413af3a1a938283921604b7823bf1ff5",
@@ -644,7 +602,7 @@
               },
               "Type": "Expression"
             },
-            "12": {
+            "10": {
               "Ident": "StiText",
               "Name": "Text34",
               "Guid": "d974454d94b45d23ac70aa3d87789b22",
@@ -686,6 +644,7 @@
               "Ident": "StiShape",
               "Name": "Shape1",
               "ClientRectangle": "0.17,0.75,20.97,2.21",
+              "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -1032,7 +991,7 @@
               "Ident": "StiShape",
               "Name": "Shape2",
               "Guid": "54f447cc100a65e371a6dcc42e5f2ee1",
-              "ClientRectangle": "4.88,0.75,0.61,2.23",
+              "ClientRectangle": "4.88,0.75,0.61,1.47",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
