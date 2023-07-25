@@ -220,14 +220,14 @@
         }
 
         if (
-            (kelompok_id != '') &&
+            // (kelompok_id != '') &&
             // (statusreuse != '') &&
             // (statusban != '') &&
             (filter != '') &&
             (jenistgltampil != '') &&
             (priode != '') &&
-            (stokdari_id != '') &&
-            (stoksampai_id != '') &&
+            // (stokdari_id != '') &&
+            // (stoksampai_id != '') &&
             (dataFilter != '')
         ) {
             window.open(`{{ route('laporansaldoinventory.report') }}?kelompok_id=${kelompok_id}&statusreuse=${statusreuse}&statusban=${statusban}&filter=${filter}&jenistgltampil=${jenistgltampil}&priode=${priode}&stokdari_id=${stokdari_id}&stoksampai_id=${stoksampai_id}&dataFilter=${dataFilter}`)
