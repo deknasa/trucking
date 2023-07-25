@@ -70,7 +70,7 @@ class LaporanKeteranganPinjamanSupirController extends MyController
         $sheet->getStyle("A4")->getFont()->setSize(12)->setBold(true);
 
         $sheet->setCellValue('B4', $request->periode);
-        $sheet->setCellValue('B4', ':'." ".$request->periode);
+        $sheet->setCellValue('B4', ':' . " " . $request->periode);
         $sheet->getStyle("B4")->getFont()->setSize(12)->setBold(true);
 
         $sheet->mergeCells('B1:I3');
@@ -127,7 +127,7 @@ class LaporanKeteranganPinjamanSupirController extends MyController
                 'label' => 'Saldo',
                 'index' => 'Saldo',
             ],
-           
+
         ];
 
         foreach ($header_columns as $detail_columns_index => $detail_column) {
@@ -153,11 +153,11 @@ class LaporanKeteranganPinjamanSupirController extends MyController
             $sheet->setCellValue("F$detail_start_row", $response_detail['Saldo']);
 
             $sheet->getStyle("A$detail_start_row:F$detail_start_row")->applyFromArray($styleArray);
-             $sheet->getStyle("D$detail_start_row:F$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
-             $sheet->getStyle("A$detail_start_row:A$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
-           
+            $sheet->getStyle("D$detail_start_row:F$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+            $sheet->getStyle("A$detail_start_row:A$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
 
-           $totalKredit += $response_detail['kredit'];
+
+            $totalKredit += $response_detail['kredit'];
             $totalDebet += $response_detail['debet'];
             $totalSaldo += $response_detail['Saldo'];
             $detail_start_row++;
@@ -165,22 +165,23 @@ class LaporanKeteranganPinjamanSupirController extends MyController
 
 
 
-       //total
-       $total_start_row = $detail_start_row;
-       $sheet->mergeCells('A' . $total_start_row . ':C' . $total_start_row);
-       $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':C' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
+        //total
+        $total_start_row = $detail_start_row;
+        $sheet->mergeCells('A' . $total_start_row . ':C' . $total_start_row);
+        $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':C' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
 
-       $totalDebet = "=SUM(D6:D" . ($detail_start_row-1) . ")";
-       $sheet->setCellValue("D$total_start_row", $totalDebet)->getStyle("D$total_start_row")->applyFromArray($style_number);
-       $sheet->setCellValue("D$total_start_row", $totalDebet)->getStyle("D$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+        $totalDebet = "=SUM(D6:D" . ($detail_start_row - 1) . ")";
+        $sheet->setCellValue("D$total_start_row", $totalDebet)->getStyle("D$total_start_row")->applyFromArray($style_number);
+        $sheet->setCellValue("D$total_start_row", $totalDebet)->getStyle("D$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
 
-       $totalKredit = "=SUM(E6:E" . ($detail_start_row-1) . ")";
-       $sheet->setCellValue("E$total_start_row", $totalKredit)->getStyle("E$total_start_row")->applyFromArray($style_number);
-       $sheet->setCellValue("E$total_start_row", $totalKredit)->getStyle("E$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+        $totalKredit = "=SUM(E6:E" . ($detail_start_row - 1) . ")";
+        $sheet->setCellValue("E$total_start_row", $totalKredit)->getStyle("E$total_start_row")->applyFromArray($style_number);
+        $sheet->setCellValue("E$total_start_row", $totalKredit)->getStyle("E$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
 
-       $totalSaldo = "=SUM(F6:F" . ($detail_start_row-1) . ")";
-       $sheet->setCellValue("F$total_start_row", $totalSaldo)->getStyle("F$total_start_row")->applyFromArray($style_number);
-       $sheet->setCellValue("F$total_start_row", $totalSaldo)->getStyle("F$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+        //    $totalSaldo = "=SUM(F6:F" . ($detail_start_row-1) . ")";
+        $totalSaldo = "=(D" . ($detail_start_row) . "-E" . ($detail_start_row) . ")";
+        $sheet->setCellValue("F$total_start_row", $totalSaldo)->getStyle("F$total_start_row")->applyFromArray($style_number);
+        $sheet->setCellValue("F$total_start_row", $totalSaldo)->getStyle("F$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
 
         $ttd_start_row = $detail_start_row + 2;
         $sheet->setCellValue("A$ttd_start_row", 'Disetujui Oleh,');
@@ -208,5 +209,4 @@ class LaporanKeteranganPinjamanSupirController extends MyController
 
         $writer->save('php://output');
     }
-
 }
