@@ -70,18 +70,21 @@ class LaporanNeracaController extends MyController
         $sheet->setCellValue('A2', 'Laporan Neraca');
         $sheet->setCellValue('A3', 'Periode: ' . $request->sampai);
 
+        $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
+        $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
+
         // $sheet->getStyle("A1")->getFont()->setSize(20)->setBold(true);
 
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->getStyle('A2')->getAlignment()->setHorizontal('left');
-        $sheet->mergeCells('A1:B1');
-        $sheet->mergeCells('A2:B2');
-        $sheet->mergeCells('A3:B3');
-        $sheet->mergeCells('A4:B4');
+        $sheet->mergeCells('A1:C1');
+        // $sheet->mergeCells('A2:B2');
+        // $sheet->mergeCells('A3:B3');
+        // $sheet->mergeCells('A4:B4');
 
         $header_start_row = 6;
         $detail_start_row = 7;
-        $baris = $detail_start_row+3;
+        $baris = $detail_start_row + 3;
 
         $styleArray = array(
             'borders' => array(
@@ -120,7 +123,7 @@ class LaporanNeracaController extends MyController
         }
 
         $lastColumn = $alphabets[$data_columns_index];
-        $sheet->getStyle("A$header_start_row:$lastColumn$header_start_row")->getFont()->setBold(true);
+        $sheet->getStyle("A$header_start_row:C$header_start_row")->applyFromArray($styleArray)->getFont()->setBold(true);
 
         // Merge sel B dan C pada baris header
         $sheet->mergeCells("B$header_start_row:C$header_start_row");
@@ -131,6 +134,9 @@ class LaporanNeracaController extends MyController
             $previous_keterangan_type = '';
             $total_per_keterangan_type = 0;
             $total_start_row = 0;
+            $total_start_row_per_main = 0;
+            $start_last_main = 0;
+
             $a = 0;
             $b = 0;
             $c = 0;
@@ -139,57 +145,65 @@ class LaporanNeracaController extends MyController
                 $keterangan_main = $response_detail['TipeMaster'];
                 $keterangan_type = $response_detail['KeteranganType'];
                 $a = $a + 1;
+                
                 if ($keterangan_main != $previous_keterangan_main) {
-                    // if ($keterangan_main == 'PASSIVA') {
-                    //     $baris = $baris+$a; 
-                    //     $sheet->setCellValue("D$baris", "Total $previous_keterangan_main");
-                    //     $c = 1;
-                     
-                    // }
                     if ($previous_keterangan_main != '') {
-                        if ($total_per_keterangan_type > 0) {
-                            $sheet->mergeCells("A$total_start_row:A$total_start_row");
-                            $sheet->setCellValue('C' . ($total_start_row - 1), "=SUM(B$total_start_row:B" . ($detail_start_row - 1) . ")");
-                            $sheet->getStyle("C" . ($total_start_row - 1))->getFont()->setBold(true);
-                            $sheet->getStyle("C" . ($total_start_row - 1))->getNumberFormat()->setFormatCode("#,##0.00");
 
+                        if ($total_per_keterangan_type > 0) {
+                            // $sheet->mergeCells("A$total_start_row:A$total_start_row");
+                            $sheet->setCellValue('C' . ($total_start_row - 1), "=SUM(B$total_start_row:B" . ($detail_start_row - 1) . ")");
+                            $sheet->getStyle("C" . ($total_start_row - 1))->applyFromArray($styleArray)->getFont()->setBold(true);
+                            $sheet->getStyle("C" . ($total_start_row - 1))->getNumberFormat()->setFormatCode("#,##0.00");
+                            $sheet->getStyle("A$total_start_row:C$total_start_row")->applyFromArray($styleArray);
                         }
                         $total_per_keterangan_type = 0;
-                        
+                        if ($total_start_row_per_main > 0) {
+                            $sheet->setCellValue("A$detail_start_row", "TOTAL $previous_keterangan_main");
+                            $sheet->setCellValue("C$detail_start_row", "=SUM(B$total_start_row:B" . ($detail_start_row - 1) . ")");
+                            $sheet->getStyle("C$detail_start_row")->applyFromArray($styleArray)->getFont()->setBold(true);
+                            $sheet->getStyle("C$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+                            $sheet->getStyle("A$detail_start_row:C$detail_start_row")->applyFromArray($styleArray);
+                            $detail_start_row += 2;
+                        }
+                        $total_start_row_per_main = 0;
                     }
+
                     $sheet->setCellValue("A$detail_start_row", $keterangan_main);
-                 
-                    $sheet->mergeCells("A$detail_start_row:A$detail_start_row");
+                    $sheet->getStyle("A$detail_start_row:C$detail_start_row")->applyFromArray($styleArray);
+                    // $sheet->mergeCells("A$detail_start_row:A$detail_start_row");
                     $detail_start_row++;
 
 
                     $previous_keterangan_type = '';
                     $total_start_row = $detail_start_row;
+
+                    $total_start_row_per_main = $detail_start_row;
                 }
-                
-               
+
+
                 if ($keterangan_type != $previous_keterangan_type) {
-                 
+
                     if ($previous_keterangan_type != '') {
-                       
-                        $sheet->mergeCells("A$total_start_row:A$total_start_row");
+
+                        // $sheet->mergeCells("A$total_start_row:A$total_start_row");
                         $sheet->setCellValue('C' . ($total_start_row - 1), "=SUM(B$total_start_row:B" . ($detail_start_row - 1) . ")");
-                        $sheet->getStyle("C" . ($total_start_row - 1))->getFont()->setBold(true);
+                        $sheet->getStyle("C" . ($total_start_row - 1))->applyFromArray($styleArray)->getFont()->setBold(true);
                         $sheet->getStyle("C" . ($total_start_row - 1))->getNumberFormat()->setFormatCode("#,##0.00");
                         $sheet->setCellValue('C' . $total_start_row, '');
+                        $sheet->getStyle("A$total_start_row:C$total_start_row")->applyFromArray($styleArray);
+                        $start_last_main = $total_start_row;
                     }
 
                     // $d = $detail_start_row+$c;
-                    
-                    $sheet->setCellValue("A$detail_start_row", $keterangan_type);
-                    $sheet->mergeCells("A$detail_start_row:A$detail_start_row");
-                    $detail_start_row++;
-                    
-                    $total_start_row = $detail_start_row;
 
-                    
+                    $sheet->setCellValue("A$detail_start_row", $keterangan_type);
+                    $sheet->getStyle("A$detail_start_row:C$detail_start_row")->applyFromArray($styleArray);
+                    // $sheet->mergeCells("A$detail_start_row:A$detail_start_row");
+                    $detail_start_row++;
+
+                    $total_start_row = $detail_start_row;
                 }
-            
+                
                 $sheet->setCellValue("A$detail_start_row", "      " . $response_detail['KeteranganCoa']);
                 $sheet->setCellValue("B$detail_start_row", $response_detail['Nominal']);
                 $sheet->getStyle("B$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
@@ -197,20 +211,25 @@ class LaporanNeracaController extends MyController
                 $total_per_keterangan_type += $response_detail['Nominal'];
 
                 $detail_start_row++;
-
+                $sheet->getStyle("A$detail_start_row:C$detail_start_row")->applyFromArray($styleArray);
+                $total_start_row_per_main = $detail_start_row;
                 $previous_keterangan_main = $keterangan_main;
                 $previous_keterangan_type = $keterangan_type;
             }
-
             if ($previous_keterangan_main != '') {
                 if ($total_per_keterangan_type > 0) {
-                    $sheet->mergeCells("A$total_start_row:A$total_start_row");
+                    // $sheet->mergeCells("A$total_start_row:A$total_start_row");
                     $sheet->setCellValue('C' . ($total_start_row - 1), "=SUM(B$total_start_row:B" . ($detail_start_row - 1) . ")");
-                    $sheet->getStyle("C" . ($total_start_row - 1))->getFont()->setBold(true);
+                    $sheet->getStyle("C" . ($total_start_row - 1))->applyFromArray($styleArray)->getFont()->setBold(true);
                     $sheet->getStyle("C" . ($total_start_row - 1))->getNumberFormat()->setFormatCode("#,##0.00");
+                    $sheet->getStyle("A$total_start_row:C$total_start_row")->applyFromArray($styleArray);
                 }
 
-              
+                $sheet->setCellValue("A$detail_start_row", "TOTAL $previous_keterangan_main");
+                $sheet->setCellValue("C$detail_start_row", "=SUM(B$start_last_main:B" . ($detail_start_row - 1) . ")");
+                $sheet->getStyle("C$detail_start_row")->applyFromArray($styleArray)->getFont()->setBold(true);
+                $sheet->getStyle("C$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+                $sheet->getStyle("A$total_start_row:B$total_start_row")->applyFromArray($styleArray);
             }
         }
 

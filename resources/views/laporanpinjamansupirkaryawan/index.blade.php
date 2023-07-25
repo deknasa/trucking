@@ -26,6 +26,10 @@
                                     <i class="fas fa-print"></i>
                                     Report
                                 </button>
+                                <button type="button" id="btnExport" class="btn btn-warning mr-1 ">
+                                    <i class="fas fa-file-export"></i>
+                                    Export
+                                </button>
                             </div>
                         </div>
 
@@ -65,6 +69,9 @@
         if (!`{{ $myAuth->hasPermission('laporanpinjamansupirkaryawan', 'report') }}`) {
             $('#btnPreview').attr('disabled', 'disabled')
         }
+        if (!`{{ $myAuth->hasPermission('laporanpinjamansupirkaryawan', 'export') }}`) {
+            $('#btnExport').attr('disabled', 'disabled')
+        }
 
     })
 
@@ -96,6 +103,18 @@
             }
         });
     })
+
+    $(document).on('click', `#btnExport`, function(event) {
+        let sampai = $('#crudForm').find('[name=sampai]').val()
+
+        if (sampai != '') {
+
+            window.open(`{{ route('laporanpinjamansupirkaryawan.export') }}?sampai=${sampai}`)
+        } else {
+            showDialog('ISI SELURUH KOLOM')
+        }
+    })
+
 
 </script>
 @endpush()
