@@ -31,6 +31,10 @@
                                     <i class="fas fa-print"></i>
                                     Report
                                 </button>
+                                <button type="button" id="btnExport" class="btn btn-warning mr-1 ">
+                                    <i class="fas fa-file-export"></i>
+                                    Export
+                                </button>
                             </div>
                         </div>
 
@@ -71,6 +75,9 @@
         if (!`{{ $myAuth->hasPermission('laporankartuhutangprediksi', 'report') }}`) {
             $('#btnPreview').attr('disabled', 'disabled')
         }
+        if (!`{{ $myAuth->hasPermission('laporankartuhutangprediksi', 'export') }}`) {
+            $('#btnExport').attr('disabled', 'disabled')
+        }
     })
 
     $(document).on('click', `#btnPreview`, function(event) {
@@ -105,6 +112,19 @@
 
 
     })
+    $(document).on('click', `#btnExport`, function(event) {
+        let sampai = $('#crudForm').find('[name=sampai]').val()
+        let dari = $('#crudForm').find('[name=dari]').val()
+
+
+        if (dari != '' && sampai != '') {
+
+            window.open(`{{ route('laporankartuhutangprediksi.export') }}?sampai=${sampai}&dari=${dari}`)
+        } else {
+            showDialog('ISI SELURUH KOLOM')
+        }
+    })
+
 
 
 

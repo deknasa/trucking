@@ -1226,11 +1226,13 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('laporantriptrado/index', [LaporanTripTradoController::class, 'index']);
     Route::resource('laporantriptrado', LaporanTripTradoController::class);
 
+    Route::get('laporankartuhutangprediksi/export', [LaporanKartuHutangPrediksiController::class, 'export'])->name('laporankartuhutangprediksi.export');
     Route::get('laporankartuhutangprediksi/report', [LaporanKartuHutangPrediksiController::class, 'report'])->name('laporankartuhutangprediksi.report');
     Route::get('laporankartuhutangprediksi/index', [LaporanKartuHutangPrediksiController::class, 'index']);
     Route::resource('laporankartuhutangprediksi', LaporanKartuHutangPrediksiController::class);
 
     Route::get('laporantripgandengandetail/report', [LaporanTripGandenganDetailController::class, 'report'])->name('laporantripgandengandetail.report');
+    Route::get('laporantripgandengandetail/export', [LaporanTripGandenganDetailController::class, 'export'])->name('laporantripgandengandetail.export');
     Route::get('laporantripgandengandetail/index', [LaporanTripGandenganDetailController::class, 'index']);
     Route::resource('laporantripgandengandetail', LaporanTripGandenganDetailController::class);
 
