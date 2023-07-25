@@ -56,6 +56,7 @@ use App\Http\Controllers\KasGantungDetailController;
 use App\Http\Controllers\KasGantungHeaderController;
 use App\Http\Controllers\MandorAbsensiSupirController;
 use App\Http\Controllers\MandorTripController;
+use App\Http\Controllers\ChargeGandenganController;
 
 use App\Http\Controllers\PengembalianKasGantungDetailController;
 use App\Http\Controllers\PengembalianKasGantungHeaderController;
@@ -779,6 +780,11 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('orderantrucking/export', [OrderanTruckingController::class, 'export'])->name('orderantrucking.export');
     Route::get('orderantrucking/report', [OrderanTruckingController::class, 'report'])->name('orderantrucking.report');
     Route::resource('orderantrucking', OrderanTruckingController::class);
+    
+    Route::get('chargegandengan/export', [ChargeGandenganController::class, 'export'])->name('chargegandengan.export');
+    Route::get('chargegandengan/report', [ChargeGandenganController::class, 'report'])->name('chargegandengan.report');
+    Route::get('chargegandengan/index', [ChargeGandenganController::class,'index']);
+    Route::resource('chargegandengan', ChargeGandenganController::class);
 
     Route::get('prosesabsensisupir/field_length', [ProsesAbsensiSupirController::class, 'fieldLength'])->name('prosesabsensisupir.field_length');
     Route::get('prosesabsensisupir/{id}/delete', [ProsesAbsensiSupirController::class, 'delete'])->name('prosesabsensisupir.delete');
