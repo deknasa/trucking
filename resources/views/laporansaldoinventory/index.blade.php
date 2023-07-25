@@ -10,7 +10,7 @@
                 </div>
                 <form id="crudForm">
                     <div class="card-body">
-                        
+
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="row" id="kelompok">
@@ -77,7 +77,7 @@
                                     <div class="col-sm-9 mt-2">
                                         <div class="input-group">
                                             <input type="hidden" name="gudang_id">
-                                           <input type="text" name="gudang" class="form-control gudang-lookup">
+                                            <input type="text" name="gudang" class="form-control gudang-lookup">
                                         </div>
                                     </div>
                                 </div>
@@ -86,7 +86,7 @@
                                     <div class="col-sm-9 mt-2">
                                         <div class="input-group">
                                             <input type="hidden" name="trado_id">
-                                           <input type="text" name="trado" class="form-control trado-lookup">
+                                            <input type="text" name="trado" class="form-control trado-lookup">
                                         </div>
                                     </div>
                                 </div>
@@ -99,7 +99,7 @@
                                         </div>
                                     </div>
                                 </div>
-    
+
                             </div>
 
                         </div>
@@ -141,7 +141,7 @@
                                     </div>
                                 </div>
                             </div>
-                        
+
                             {{-- <div class="col-md-6">
                                 <div class="row">
                                     <h5 class="col-12 col-sm-3 text-center mt-2">s/d</h5>
@@ -157,18 +157,18 @@
                         <div class=" row">
                             <div class="col-md-6 mt-4">
                                 <a id="btnPreview" class="btn btn-info mr-1 ">
-                                   <i class="fas fa-print"></i>
-                                   Cetak
-                               </a>
-                               <a id="btnExport" class="btn btn-warning mr-2 ">
-                                   <i class="fas fa-file-export"></i>
-                                   Export
-                               </a>
+                                    <i class="fas fa-print"></i>
+                                    Cetak
+                                </a>
+                                <a id="btnExport" class="btn btn-warning mr-2 ">
+                                    <i class="fas fa-file-export"></i>
+                                    Export
+                                </a>
 
                             </div>
-                       </div>
+                        </div>
                     </div>
-                    
+
                 </form>
             </div>
         </div>
@@ -177,7 +177,6 @@
 
 @push('scripts')
 <script>
-    
     $(document).ready(function() {
         initLookup()
         initDatepicker()
@@ -196,7 +195,7 @@
     })
 
     $(document).on('click', `#btnPreview`, function(event) {
-        
+
         let kelompok_id = $('#crudForm').find('[name=kelompok_id]').val()
         let statusreuse = $('#crudForm').find('[name=statusreuse]').val()
         let statusban = $('#crudForm').find('[name=statusban]').val()
@@ -220,7 +219,7 @@
             dataFilter = gandengan_id
         }
 
-        if(
+        if (
             (kelompok_id != '') &&
             // (statusreuse != '') &&
             // (statusban != '') &&
@@ -229,11 +228,11 @@
             (priode != '') &&
             (stokdari_id != '') &&
             (stoksampai_id != '') &&
-            (dataFilter != '') 
-        ){           
+            (dataFilter != '')
+        ) {
             window.open(`{{ route('laporansaldoinventory.report') }}?kelompok_id=${kelompok_id}&statusreuse=${statusreuse}&statusban=${statusban}&filter=${filter}&jenistgltampil=${jenistgltampil}&priode=${priode}&stokdari_id=${stokdari_id}&stoksampai_id=${stoksampai_id}&dataFilter=${dataFilter}`)
 
-        }else {
+        } else {
             showDialog('ISI SELURUH KOLOM')
         }
     })
@@ -262,9 +261,9 @@
             dataFilter = gandengan_id
         }
 
-        if(
-            (
-                // kelompok_id != '') &&
+        if (
+
+            // kelompok_id != '') &&
             // (statusreuse != '') &&
             // (statusban != '') &&
             (filter != '') &&
@@ -272,8 +271,8 @@
             (priode != '') &&
             // (stokdari_id != '') &&
             // (stoksampai_id != '') &&
-            (dataFilter != '') 
-        ){ 
+            (dataFilter != '')
+        ) {
             window.open(`{{ route('laporansaldoinventory.export') }}?kelompok_id=${kelompok_id}&statusreuse=${statusreuse}&statusban=${statusban}&filter=${filter}&jenistgltampil=${jenistgltampil}&priode=${priode}&stokdari_id=${stokdari_id}&stoksampai_id=${stoksampai_id}&dataFilter=${dataFilter}`)
         } else {
             showDialog('ISI SELURUH KOLOM')
@@ -377,7 +376,7 @@
 
     $(document).on('change', `#crudForm [name="filter"]`, function(event) {
         let filter = $(this).val();
-        
+
         if (filter == '186') {
             $('#gudang').show()
             $('#trado').hide()
@@ -396,7 +395,7 @@
             $('#gudang').show()
         }
     })
-        
+
 
     const setFilterOptions = function(relatedForm) {
         return new Promise((resolve, reject) => {
@@ -439,125 +438,124 @@
         return new Promise((resolve, reject) => {
             relatedForm.find('[name=statusban]').empty()
             relatedForm.find('[name=statusban]').append(
-              new Option('-- PILIH STATUS BAN --', '', false, true)
+                new Option('-- PILIH STATUS BAN --', '', false, true)
             ).trigger('change')
-            
+
             $.ajax({
-              url: `${apiUrl}parameter`,
-              method: 'GET',
-              dataType: 'JSON',
-              headers: {
-                Authorization: `Bearer ${accessToken}`
-              },
-              data: {
-                filters: JSON.stringify({
-                  "groupOp": "AND",
-                  "rules": [{
-                    "field": "grp",
-                    "op": "cn",
-                    "data": "STATUS KONDISI BAN"
-                  }]
-                })
-              },
-              success: response => {
-                response.data.forEach(statusReuse => {
-                  let option = new Option(statusReuse.text, statusReuse.id)
-      
-                  relatedForm.find('[name=statusban]').append(option).trigger('change')
-                });
-      
-                resolve()
-              },
-              error: error => {
-                reject(error)
-              }
+                url: `${apiUrl}parameter`,
+                method: 'GET',
+                dataType: 'JSON',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                data: {
+                    filters: JSON.stringify({
+                        "groupOp": "AND",
+                        "rules": [{
+                            "field": "grp",
+                            "op": "cn",
+                            "data": "STATUS KONDISI BAN"
+                        }]
+                    })
+                },
+                success: response => {
+                    response.data.forEach(statusReuse => {
+                        let option = new Option(statusReuse.text, statusReuse.id)
+
+                        relatedForm.find('[name=statusban]').append(option).trigger('change')
+                    });
+
+                    resolve()
+                },
+                error: error => {
+                    reject(error)
+                }
             })
         })
     }
-    
+
     const setJenisTglTampilOptions = function(relatedForm) {
         return new Promise((resolve, reject) => {
             relatedForm.find('[name=jenistgltampil]').empty()
             relatedForm.find('[name=jenistgltampil]').append(
-              new Option('-- PILIH jenis tgl tampil --', '', false, true)
+                new Option('-- PILIH jenis tgl tampil --', '', false, true)
             ).trigger('change')
-            
+
             $.ajax({
-              url: `${apiUrl}parameter`,
-              method: 'GET',
-              dataType: 'JSON',
-              headers: {
-                Authorization: `Bearer ${accessToken}`
-              },
-              data: {
-                filters: JSON.stringify({
-                  "groupOp": "AND",
-                  "rules": [{
-                    "field": "grp",
-                    "op": "cn",
-                    "data": "LAPORAN STOK INVENTORI"
-                  }]
-                })
-              },
-              success: response => {
-                response.data.forEach(statusReuse => {
-                  let option = new Option(statusReuse.text, statusReuse.id)
-      
-                  relatedForm.find('[name=jenistgltampil]').append(option).trigger('change')
-                });
-      
-                resolve()
-              },
-              error: error => {
-                reject(error)
-              }
+                url: `${apiUrl}parameter`,
+                method: 'GET',
+                dataType: 'JSON',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                data: {
+                    filters: JSON.stringify({
+                        "groupOp": "AND",
+                        "rules": [{
+                            "field": "grp",
+                            "op": "cn",
+                            "data": "LAPORAN STOK INVENTORI"
+                        }]
+                    })
+                },
+                success: response => {
+                    response.data.forEach(statusReuse => {
+                        let option = new Option(statusReuse.text, statusReuse.id)
+
+                        relatedForm.find('[name=jenistgltampil]').append(option).trigger('change')
+                    });
+
+                    resolve()
+                },
+                error: error => {
+                    reject(error)
+                }
             })
         })
     }
 
     const setStatusReuseOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=statusreuse]').empty()
-      relatedForm.find('[name=statusreuse]').append(
-        new Option('-- PILIH STATUS REUSE --', '', false, true)
-      ).trigger('change')
+        return new Promise((resolve, reject) => {
+            relatedForm.find('[name=statusreuse]').empty()
+            relatedForm.find('[name=statusreuse]').append(
+                new Option('-- PILIH STATUS REUSE --', '', false, true)
+            ).trigger('change')
 
-      $.ajax({
-        url: `${apiUrl}parameter`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          filters: JSON.stringify({
-            "groupOp": "AND",
-            "rules": [{
-              "field": "grp",
-              "op": "cn",
-              "data": "STATUS REUSE"
-            }]
-          })
-        },
-        success: response => {
-          response.data.forEach((statusReuse,index) => {
-            // dataReuse[index] = statusReuse
-            // dataReuse[index]['text'] =  statusReuse.text
+            $.ajax({
+                url: `${apiUrl}parameter`,
+                method: 'GET',
+                dataType: 'JSON',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                data: {
+                    filters: JSON.stringify({
+                        "groupOp": "AND",
+                        "rules": [{
+                            "field": "grp",
+                            "op": "cn",
+                            "data": "STATUS REUSE"
+                        }]
+                    })
+                },
+                success: response => {
+                    response.data.forEach((statusReuse, index) => {
+                        // dataReuse[index] = statusReuse
+                        // dataReuse[index]['text'] =  statusReuse.text
 
-            let option = new Option(statusReuse.text, statusReuse.id)
+                        let option = new Option(statusReuse.text, statusReuse.id)
 
-            relatedForm.find('[name=statusreuse]').append(option).trigger('change')
-          });
+                        relatedForm.find('[name=statusreuse]').append(option).trigger('change')
+                    });
 
-          resolve()
-        },
-        error: error => {
-          reject(error)
-        }
-      })
-    })
-  }
-
+                    resolve()
+                },
+                error: error => {
+                    reject(error)
+                }
+            })
+        })
+    }
 </script>
 @endpush()
 @endsection
