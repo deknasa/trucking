@@ -268,7 +268,7 @@
                     },
                     {
                         label: 'NO BUKTI pengeluaran',
-            width: 210,
+                        width: 210,
                         name: 'pengeluaran_nobukti',
                         align: 'left'
                     },
@@ -350,7 +350,7 @@
 
                     setGridLastRequest($(this), jqXHR)
                 },
-                loadError: function (xhr, status, error) {
+                loadError: function(xhr, status, error) {
                     if (xhr.status === 422) {
                         $('.is-invalid').removeClass('is-invalid');
                         $('.invalid-feedback').remove();
@@ -376,8 +376,8 @@
 
                     if (data.data.length === 0) {
                         $('#detail, #jurnalGrid').each((index, element) => {
-                        abortGridLastRequest($(element))
-                        clearGridData($(element))
+                            abortGridLastRequest($(element))
+                            clearGridData($(element))
                         })
                     }
 
@@ -433,7 +433,8 @@
                         }
                     }, 100)
 
-
+                    $('#left-nav').find('button').attr('disabled', false)
+                    permission()
                     setHighlight($(this))
                 }
             })
@@ -446,6 +447,8 @@
                 groupOp: 'AND',
                 disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
                 beforeSearch: function() {
+                    abortGridLastRequest($(this))
+                    $('#left-nav').attr('disabled', 'disabled')
                     clearGlobalSearch($('#jqGrid'))
                 },
             })
@@ -453,7 +456,7 @@
             .customPager({
                 buttons: [{
                     id: 'approveun',
-                    innerHTML: '<i class="fa fa-plus"></i> ADD',
+                    innerHTML: '<i class="fa fa-plus"></i> PROSES',
                     class: 'btn btn-primary btn-sm mr-1',
                     onClick: () => {
 
@@ -467,8 +470,11 @@
 
         /* Append global search */
         loadGlobalSearch($('#jqGrid'))
-        if (!`{{ $myAuth->hasPermission('pencairangiropengeluaranheader', 'store') }}`) {
-            $('#add').attr('disabled', 'disabled')
+
+        function permission() {
+            if (!`{{ $myAuth->hasPermission('pencairangiropengeluaranheader', 'store') }}`) {
+                $('#add').attr('disabled', 'disabled')
+            }
         }
     })
 </script>
