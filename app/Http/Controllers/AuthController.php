@@ -129,10 +129,10 @@ class AuthController extends Controller
                     'Accept' => 'application/json'
                 ])->post('http://tassby.kozow.com:8074/trucking-api/public/api/token', $credentialsAdmin);
 
-                $tokenBitung = Http::withHeaders([
-                    'Content-Type' => 'application/json',
-                    'Accept' => 'application/json'
-                ])->post('http://tasbtg.kozow.com:8074/trucking-api/public/api/token', $credentialsAdmin);
+                // $tokenBitung = Http::withHeaders([
+                //     'Content-Type' => 'application/json',
+                //     'Accept' => 'application/json'
+                // ])->post('http://tasbtg.kozow.com:8074/trucking-api/public/api/token', $credentialsAdmin);
             }
 
             $tokenEmkl = Http::withHeaders([
@@ -152,7 +152,7 @@ class AuthController extends Controller
                 session(['access_token_jkttnl' => $tokenJakartaTnl['access_token']]);
                 session(['access_token_mks' => $tokenMakassar['access_token']]);
                 session(['access_token_sby' => $tokenSurabaya['access_token']]);
-                session(['access_token_btg' => $tokenBitung['access_token']]);
+                // session(['access_token_btg' => $tokenBitung['access_token']]);
             }
 
             return redirect()->route('dashboard');

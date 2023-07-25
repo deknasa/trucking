@@ -1114,6 +1114,15 @@
     initDatepicker()
     initSelect2(form.find(`[name="statusposting"]`), true)
     initSelect2(form.find(`[name="postingpinjaman"]`), true)
+    if (form.data('action') == 'add') {
+      if($('#kodepengeluaranheader').val() != ''){
+        let index = listIdPengeluaran.indexOf($('#kodepengeluaranheader').val());
+        setKodePengeluaran(listKodePengeluaran[index]);
+        $('#crudForm').find(`[name="pengeluaranstok"]`).val(listKodePengeluaran[index])
+        $('#crudForm').find(`[name="pengeluaranstok"]`).data('currentValue', listKodePengeluaran[index])
+        $('#crudForm').find(`[name="pengeluaranstok_id"]`).val($('#kodepengeluaranheader').val())
+      }
+    }
     // initSelect2()
   })
 
