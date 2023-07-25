@@ -47,6 +47,10 @@
                                     <i class="fas fa-print"></i>
                                     Report
                                 </button>
+                                <button type="button" id="btnExport" class="btn btn-warning mr-1 ">
+                                    <i class="fas fa-file-export"></i>
+                                    Export
+                                </button>
                             </div>
                         </div>
 
@@ -86,6 +90,9 @@
         if (!`{{ $myAuth->hasPermission('laporantripgandengandetail', 'report') }}`) {
             $('#btnPreview').attr('disabled', 'disabled')
         }
+        if (!`{{ $myAuth->hasPermission('laporantripgandengandetail', 'export') }}`) {
+            $('#btnExport').attr('disabled', 'disabled')
+        }
 
     })
 
@@ -104,6 +111,24 @@
             showDialog('ISI SELURUH KOLOM')
         }
     })
+    
+    $(document).on('click', `#btnExport`, function(event) {
+        let sampai = $('#crudForm').find('[name=sampai]').val()
+        let dari = $('#crudForm').find('[name=dari]').val()
+        let gandengandari_id = $('#crudForm').find('[name=gandengandari_id]').val()
+        let gandengansampai_id = $('#crudForm').find('[name=gandengansampai_id]').val()
+        let gandengandari = $('#crudForm').find('[name=gandengandari]').val()
+        let gandengansampai = $('#crudForm').find('[name=gandengansampai]').val()
+
+
+        if (dari != '' && sampai != '') {
+
+            window.open(`{{ route('laporantripgandengandetail.export') }}?sampai=${sampai}&dari=${dari}&gandengandari_id=${gandengandari_id}&gandengansampai_id=${gandengansampai_id}&gandengandari=${gandengandari}&gandengansampai=${gandengansampai}`)
+        } else {
+            showDialog('ISI SELURUH KOLOM')
+        }
+    })
+
 
     function initLookup() {
         $('.gandengandari-lookup').lookup({
