@@ -32,17 +32,17 @@ class LaporanPemakaianBanController extends MyController
         if ($request->posisiakhirtrado != null) {
 
             $parameter = $request->posisiakhirtrado;
-        }else{
+        } else {
             $parameter = $request->posisiakhirgandengan;
         }
-      
+
         $detailParams = [
             'dari' => $request->dari,
             'sampai' => $request->sampai,
             'posisiakhir' => $parameter,
-            'jenislaporan' =>$request->jenislaporan
+            'jenislaporan' => $request->jenislaporan
         ];
-      
+
 
         $header = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
@@ -56,4 +56,189 @@ class LaporanPemakaianBanController extends MyController
         return view('reports.laporanpemakaianban', compact('data', 'user', 'detailParams'));
     }
 
+    public function export(Request $request): void
+    {
+        if ($request->posisiakhirtrado != null) {
+
+            $parameter = $request->posisiakhirtrado;
+        } else {
+            $parameter = $request->posisiakhirgandengan;
+        }
+
+        $detailParams = [
+            'dari' => $request->dari,
+            'sampai' => $request->sampai,
+            'posisiakhir' => $parameter,
+            'jenislaporan' => $request->jenislaporan
+        ];
+
+        $header = Http::withHeaders(request()->header())
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'laporanpemakaianban/export', $detailParams);
+
+        $data = $header['data'];
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        $sheet->setCellValue('A1', $data[0]['judul']);
+        $sheet->setCellValue('A2', $data[0]['judulLaporan']);
+        $sheet->setCellValue('A3', 'Periode: ' . $request->dari . ' s/d ' . $request->sampai);
+        $sheet->setCellValue('A4', 'Posisi Akhir Ban: ' . $request->parameter);
+        $sheet->setCellValue('A5', 'Jenis Laporan: ' . $request->jenislaporan);
+        $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
+        $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
+
+        $sheet->mergeCells('A1:F1');
+
+        $detail_table_header_row = 8;
+        $detail_start_row = $detail_table_header_row + 1;
+
+        $styleArray = array(
+            'borders' => array(
+                'allBorders' => array(
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ),
+            ),
+        );
+
+        $style_number = [
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT,
+            ],
+
+            'borders' => [
+                'top' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+                'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+                'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+                'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN]
+            ]
+        ];
+
+
+        $alphabets = range('A', 'Z');
+
+        $header_columns = [
+            [
+                'label' => 'No Ban',
+                'index' => 'nobanA',
+            ],
+            [
+                'label' => 'No Bukti',
+                'index' => 'nobukti',
+            ],
+            [
+                'label' => 'Tanggal',
+                'index' => 'tanggal',
+            ],
+            [
+                'label' => 'Gudang',
+                'index' => 'gudang',
+            ],
+            [
+                'label' => 'Kondisi Akhir',
+                'index' => 'kondisiakhir',
+            ],
+            [
+                'label' => 'No Pg',
+                'index' => 'nopg',
+            ],
+            [
+                'label' => 'No Ban',
+                'index' => 'nobanB',
+            ],
+            [
+                'label' => 'Alasan Pengembalian',
+                'index' => 'alasanpenggantian',
+            ],
+            [
+                'label' => 'Vul Ke',
+                'index' => 'vulke',
+            ],
+            [
+                'label' => 'No Klaim',
+                'index' => 'noklaim',
+            ],
+            [
+                'label' => 'No Pjt',
+                'index' => 'nopjt',
+            ],
+            [
+                'label' => 'Ket. Afkir',
+                'index' => 'ketafkir',
+            ],
+
+        ];
+
+        foreach ($header_columns as $detail_columns_index => $detail_column) {
+            $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_table_header_row, $detail_column['label'] ?? $detail_columns_index + 1);
+        }
+        $sheet->getStyle("A$detail_table_header_row:L$detail_table_header_row")->applyFromArray($styleArray)->getFont()->setBold(true);
+
+        // LOOPING DETAIL
+        $totalDebet = 0;
+        $totalKredit = 0;
+        $totalSaldo = 0;
+        $dataRow = $detail_table_header_row + 1;
+        foreach ($data as $response_index => $response_detail) {
+
+            foreach ($header_columns as $detail_columns_index => $detail_column) {
+                $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
+            }
+
+            $sheet->setCellValue("A$detail_start_row", $response_detail['nobanA']);
+            $sheet->setCellValue("B$detail_start_row", $response_detail['nobukti']);
+            $sheet->setCellValue("C$detail_start_row", date('d-m-Y', strtotime($response_detail['tanggal'])));
+            $sheet->setCellValue("D$detail_start_row", $response_detail['gudang']);
+            $sheet->setCellValue("E$detail_start_row", $response_detail['kondisiakhir']);
+            $sheet->setCellValue("F$detail_start_row", $response_detail['nopg']);
+            $sheet->setCellValue("G$detail_start_row", $response_detail['nobanB']);
+            $sheet->setCellValue("H$detail_start_row", $response_detail['alasanpenggantian']);
+            $sheet->setCellValue("I$detail_start_row", $response_detail['vulke']);
+            $sheet->setCellValue("J$detail_start_row", $response_detail['noklaim']);
+            $sheet->setCellValue("K$detail_start_row", $response_detail['nopjt']);
+            $sheet->setCellValue("L$detail_start_row", $response_detail['ketafkir']);
+
+
+            $sheet->getStyle("A$detail_start_row:L$detail_start_row")->applyFromArray($styleArray);
+            $sheet->getStyle("C$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
+
+            $detail_start_row++;
+        }
+
+
+
+        $ttd_start_row = $detail_start_row + 2;
+        $sheet->setCellValue("A$ttd_start_row", 'Disetujui Oleh,');
+        $sheet->setCellValue("C$ttd_start_row", 'Diperiksa Oleh,');
+        $sheet->setCellValue("F$ttd_start_row", 'Disusun Oleh,');
+
+        $sheet->setCellValue("A" . ($ttd_start_row + 3), '( Bpk. Hasan )');
+        $sheet->setCellValue("C" . ($ttd_start_row + 3), '( Rina )');
+        $sheet->setCellValue("F" . ($ttd_start_row + 3), '(                )');
+
+        $sheet->getColumnDimension('A')->setAutoSize(true);
+        $sheet->getColumnDimension('B')->setAutoSize(true);
+        $sheet->getColumnDimension('C')->setAutoSize(true);
+        $sheet->getColumnDimension('D')->setAutoSize(true);
+        $sheet->getColumnDimension('E')->setAutoSize(true);
+        $sheet->getColumnDimension('F')->setAutoSize(true);
+        $sheet->getColumnDimension('G')->setAutoSize(true);
+        $sheet->getColumnDimension('H')->setAutoSize(true);
+        $sheet->getColumnDimension('I')->setAutoSize(true);
+        $sheet->getColumnDimension('J')->setAutoSize(true);
+        $sheet->getColumnDimension('K')->setAutoSize(true);
+        $sheet->getColumnDimension('L')->setAutoSize(true);
+
+
+
+        $writer = new Xlsx($spreadsheet);
+        $filename = 'LAPORAN PEMAKAIAN BAN' . date('dmYHis');
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+        header('Cache-Control: max-age=0');
+
+        $writer->save('php://output');
+    }
 }
