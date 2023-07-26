@@ -263,8 +263,7 @@
         }
 
         if(
-            (
-                // kelompok_id != '') &&
+            //(kelompok_id != '') &&
             // (statusreuse != '') &&
             // (statusban != '') &&
             (filter != '') &&
