@@ -261,9 +261,8 @@
             dataFilter = gandengan_id
         }
 
-        if (
-
-            // kelompok_id != '') &&
+        if(
+            //(kelompok_id != '') &&
             // (statusreuse != '') &&
             // (statusban != '') &&
             (filter != '') &&

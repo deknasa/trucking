@@ -266,6 +266,8 @@
   let selectedRowsSumbanganJobtrucking = [];
   let selectedRowsSumbanganKeterangan = [];
   let selectedRowsSumbanganNominal = [];
+  var listIdPengeluaran = []
+  var listKodePengeluaran = []
 
   $(document).ready(function() {
 
@@ -806,30 +808,31 @@
     $('#detail-list-grid').html('')
     setTampilanForm();
     addRow()
+    console.log(listKodePengeluaran[0] ,KodePengeluaranId);
   }
 
   function setTampilanForm() {
     tampilanall()
     switch (KodePengeluaranId) {
-      case 'PJT':
+      case  listKodePengeluaran[0]://'PJT':
         tampilanPJT()
         break;
-      case 'TDE':
+      case  listKodePengeluaran[1]://'TDE':
         tampilanTDE()
         break;
-      case 'BST':
+      case  listKodePengeluaran[2]://'BST':
         tampilanBST()
         break;
-      case 'BSB':
+      case  listKodePengeluaran[3]://'BSB':
         tampilanBSB()
         break;
-      case 'KBBM':
+      case  listKodePengeluaran[4]://'KBBM':
         tampilanKBBM()
         break;
-      case 'KLAIM':
+      case  listKodePengeluaran[6]://'KLAIM':
         tampilanKLAIM()
         break;
-      case 'PJK':
+      case  listKodePengeluaran[7]://'PJK':
         tampilanPJK()
         break;
       default:
@@ -3412,6 +3415,26 @@
         },
         error: error => {
           reject(error)
+        }
+      })
+    })
+  }
+
+  function pengeluaranTrucking(form) {
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `${apiUrl}pengeluarantrucking`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          $.each(response.data, (index,data) => {
+            listIdPengeluaran[index]=data.id;
+            listKodePengeluaran[index] = data.kodepengeluaran;
+          })
+
         }
       })
     })

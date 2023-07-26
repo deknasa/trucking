@@ -78,7 +78,7 @@
 
   $(document).ready(function() {
     $("#tabs").tabs()
-
+    pengeluaranTrucking($('#crudForm'))
     let nobukti = $('#jqGrid').jqGrid('getCell', id, 'pengeluaran_nobukti')
     loadDetailGrid()
     loadPengeluaranGrid(nobukti)
