@@ -74,16 +74,16 @@ class LaporanKartuHutangPerSupplierController extends MyController
         $sheet->setCellValue('A1', 'PT. TRANSPORINDO AGUNG SEJAHTERA');
         $sheet->setCellValue('A2', 'Laporan Kartu Hutang Per Supplier');
 
-        // $sheet->getStyle("A1")->getFont()->setSize(20)->setBold(true);
+        $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
 
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->getStyle('A2')->getAlignment()->setHorizontal('left');
-        $sheet->setCellValue('A3', 'Periode: ' . $request->dari . ' S/D ' . $request->sampai);
+        $sheet->setCellValue('A3', 'Periode: ' . $request->dari);
         $sheet->setCellValue('A4', 'Agen: ' . $request->supplierdari . ' S/D ' . $request->suppliersampai);
-        $sheet->mergeCells('A1:I1');
-        $sheet->mergeCells('A2:I2');
-        $sheet->mergeCells('A3:I3');
-        $sheet->mergeCells('A4:I4');
+        $sheet->mergeCells('A1:J1');
+        $sheet->mergeCells('A2:J2');
+        $sheet->mergeCells('A3:J3');
+        $sheet->mergeCells('A4:J4');
 
         $header_start_row = 6;
         $detail_start_row = 7;
@@ -187,6 +187,8 @@ class LaporanKartuHutangPerSupplierController extends MyController
                 // $sheet->getStyle("B$detail_start_row:B$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
                 // $sheet->getStyle("D$detail_start_row:D$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
 
+                $sheet->getStyle("J$detail_start_row")->getAlignment()->setWrapText(true);
+                $sheet->getColumnDimension('J')->setWidth(100);
 
                 //    $totalKredit += $response_detail['kredit'];
                 //     $totalDebet += $response_detail['debet'];
@@ -207,7 +209,6 @@ class LaporanKartuHutangPerSupplierController extends MyController
         $sheet->getColumnDimension('G')->setAutoSize(true);
         $sheet->getColumnDimension('H')->setAutoSize(true);
         $sheet->getColumnDimension('I')->setAutoSize(true);
-        $sheet->getColumnDimension('J')->setAutoSize(true);
 
 
         $rowKosong = "";
@@ -227,11 +228,12 @@ class LaporanKartuHutangPerSupplierController extends MyController
         $sheet->setCellValue("H$total_start_row", $totalBayar)->getStyle("H$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
         $sheet->setCellValue("H$total_start_row", $totalBayar)->getStyle("H$total_start_row")->applyFromArray($styleArray);
 
-        $totalSaldo = "=SUM(I7:I" . ($detail_start_row - 1) . ")";
-        $sheet->setCellValue("I$total_start_row", $totalSaldo)->getStyle("I$total_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
-        $sheet->setCellValue("I$total_start_row", $totalSaldo)->getStyle("I$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
-        $sheet->setCellValue("I$total_start_row", $totalSaldo)->getStyle("I$total_start_row")->applyFromArray($styleArray);
+        // $totalSaldo = "=SUM(I7:I" . ($detail_start_row - 1) . ")";
+        // $sheet->setCellValue("I$total_start_row", $totalSaldo)->getStyle("I$total_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        // $sheet->setCellValue("I$total_start_row", $totalSaldo)->getStyle("I$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+        // $sheet->setCellValue("I$total_start_row", $totalSaldo)->getStyle("I$total_start_row")->applyFromArray($styleArray);
 
+        $sheet->setCellValue("I$total_start_row", $rowKosong)->getStyle("I$total_start_row")->applyFromArray($styleArray);
         $sheet->setCellValue("J$total_start_row", $rowKosong)->getStyle("J$total_start_row")->applyFromArray($styleArray);
       
 
@@ -284,9 +286,17 @@ class LaporanKartuHutangPerSupplierController extends MyController
         // ];
         // $sheet->getStyle("A" . ($detail_start_row + 1) . ":$lastColumn" . ($detail_start_row + 1))->applyFromArray($border_style);
 
+        $ttd_start_row = $detail_start_row + 2;
+        $sheet->setCellValue("B$ttd_start_row", 'Disetujui Oleh,');
+        $sheet->setCellValue("D$ttd_start_row", 'Diperiksa Oleh,');
+        $sheet->setCellValue("F$ttd_start_row", 'Disusun Oleh,');
+
+        $sheet->setCellValue("B" . ($ttd_start_row + 3), '( Bpk. Hasan )');
+        $sheet->setCellValue("D" . ($ttd_start_row + 3), '( Rina )');
+        $sheet->setCellValue("F" . ($ttd_start_row + 3), '(                )');
 
         $writer = new Xlsx($spreadsheet);
-        $filename = 'EXPORTLAPORANKARTUHUTANGPERSUPPLIER' . date('dmYHis');
+        $filename = 'LAPORAN KARTU HUTANG PER SUPPLIER' . date('dmYHis');
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
         header('Cache-Control: max-age=0');

@@ -114,7 +114,7 @@ class LaporanPembelianStokController extends MyController
         $sheet->setCellValue('A3', 'Periode: ' . $request->dari . ' S/D ' . $request->sampai);
         $sheet->setCellValue('A4', 'Stok: ' . $request->stokdari . ' S/D ' . $request->stoksampai);
 
-        // $sheet->getStyle("A1")->getFont()->setSize(20)->setBold(true);
+        $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
 
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->getStyle('A2')->getAlignment()->setHorizontal('left');
@@ -298,6 +298,14 @@ class LaporanPembelianStokController extends MyController
         $sheet->setCellValue("K$total_start_row", $rowKosong)->getStyle("K$total_start_row")->applyFromArray($styleArray);
         $sheet->setCellValue("L$total_start_row", $rowKosong)->getStyle("L$total_start_row")->applyFromArray($styleArray);
 
+        $ttd_start_row = $detail_start_row + 3;
+        $sheet->setCellValue("A$ttd_start_row", 'Disetujui Oleh,');
+        $sheet->setCellValue("C$ttd_start_row", 'Diperiksa Oleh,');
+        $sheet->setCellValue("F$ttd_start_row", 'Disusun Oleh,');
+
+        $sheet->setCellValue("A" . ($ttd_start_row + 3), '( Bpk. Hasan )');
+        $sheet->setCellValue("C" . ($ttd_start_row + 3), '( Rina )');
+        $sheet->setCellValue("F" . ($ttd_start_row + 3), '(                )');
 
         $writer = new Xlsx($spreadsheet);
         $filename = 'EXPORTPEMBELIANSTOK' . date('dmYHis');
