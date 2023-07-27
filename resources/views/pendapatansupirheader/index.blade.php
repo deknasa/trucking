@@ -213,8 +213,8 @@
             }
           },
           {
-            label: 'BANK',
-            name: 'bank_id',
+            label: 'SUPIR',
+            name: 'supir_id',
             align: 'left'
           },
           {
@@ -238,14 +238,14 @@
             }
           },
           {
-            label: 'PERIODE',
-            name: 'periode',
-            align: 'left',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
-            }
+            label: 'BANK',
+            name: 'bank_id',
+            align: 'left'
+          },
+          {
+            label: 'NO BUKTI PENGELUARAN',
+            name: 'pengeluaran_nobukti',
+            align: 'left'
           },
           {
             label: 'USER APPROVAL',
