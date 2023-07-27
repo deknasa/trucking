@@ -5,7 +5,7 @@
     let sortnameDetail = 'nobukti'
     let sortorderDetail = 'asc'
     let totalRecordDetail
-    let limitDetail
+    let limitDetail = 0;
     let postDataDetail
     let triggerClickDetail
     let indexRowDetail
@@ -13,7 +13,9 @@
 
     $("#detail").jqGrid({
         datatype: 'local',
-        data: [],
+        data: {
+          limit: 0,
+        },
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         idPrefix: 'detail',
@@ -35,6 +37,12 @@
             label: 'SUPIR SERAP',
             name: 'supirserap',
           },
+          {
+            label: 'UANG JALAN',
+            name: 'uangjalan',
+            align: 'right',
+            formatter: currencyFormat,
+          },
           // {
           //   label: 'MODIFIEDBY',
           //   name: 'modifiedby',
@@ -44,10 +52,10 @@
         autowidth: true,
         shrinkToFit: false,
         height: 350,
-        rowNum: 10,
+        rowNum: 0,
         rownumbers: true,
         rownumWidth: 45,
-        rowList: [10, 20, 50, 0],
+        rowList: [0,10, 20, 50,],
         toolbar: [true, "top"],
         sortable: true,
         sortname: sortnameDetail,
@@ -134,17 +142,23 @@
       loadGlobalSearch($('#detail'))
     }
 
-  function loadDetailData(id) {
-        abortGridLastRequest($('#detail'))
-
-        $('#detail').setGridParam({
-      url: `${apiUrl}absensisupirapprovaldetail`,
-      datatype: "json",
-      postData: {
-        absensisupirapproval_id: id
-      },
-      page:1
-    }).trigger('reloadGrid')
-  }
+    function loadDetailData(id) {
+      abortGridLastRequest($('#detail'))
+      $('#detail').setGridParam({
+        url: `${apiUrl}absensisupirapprovaldetail`,
+        datatype: "json",
+        data: {
+          limit: 0,
+        },
+        postData: {
+          absensisupirapproval_id: id
+        },
+        prmNames: {
+          rows: 'limit'
+        },
+        page:1
+      }).trigger('reloadGrid')
+    }
+        
 </script>
 @endpush

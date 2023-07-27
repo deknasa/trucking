@@ -40,6 +40,19 @@
                     </select>
                   </div>
                 </div>
+
+                <div class="row form-group" style="display: none">
+                  <div class="col-12 col-md-2">
+                    <label class="col-form-label">
+                      STATUS LANGSIR <span class="text-danger">*</span></label>
+                  </div>
+                  <div class="col-12 col-md-10">
+                    <select name="statuslangsir" class="form-select select2bs4" style="width: 100%;">
+                      <option value="">-- PILIH STATUS LANGSIR --</option>
+                    </select>
+                  </div>
+                </div>
+                
                 <div class="form-group ">
                   <label class="col-sm-12 col-form-label">GUDANG SAMA <span class="text-danger">*</span></label>
                   <div class="col-sm-12">

@@ -97,7 +97,8 @@ class AbsensiSupirApprovalHeaderController extends MyController
 
         //FETCH DETAIL
         $detailParams = [
-            'absensisupirapproval_id' => $request->id
+            'absensisupirapproval_id' => $request->id,
+            'limit'=>0
         ];
         $responses = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
