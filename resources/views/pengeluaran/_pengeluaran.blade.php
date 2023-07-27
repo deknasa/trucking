@@ -167,7 +167,7 @@
     loadGlobalSearch($('#pengeluaranGrid'))
   }
 
-  function loadPengeluaranData(nobukti) {
+  function loadPengeluaranData(id,nobukti) {
     abortGridLastRequest($('#pengeluaranGrid'))
 
     $('#pengeluaranGrid').setGridParam({

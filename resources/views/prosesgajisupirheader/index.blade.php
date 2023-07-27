@@ -423,7 +423,7 @@
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
 
           loadDetailData(id)
-          loadPengeluaranData(pengeluaran_nobukti)
+          loadPengeluaranData(id,pengeluaran_nobukti)
           loadPotSemuaData(nobukti)
           loadPotPribadiData(nobukti)
           loadDepositoData(nobukti)
