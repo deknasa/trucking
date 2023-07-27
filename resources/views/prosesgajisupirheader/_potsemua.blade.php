@@ -1,7 +1,6 @@
-<table id="potsemuaGrid"></table>
-
+@push('scripts')
 <script>
-  function loadGrid(id, nobuktiPengeluaran, nobukti) {
+  function loadPotSemuaGrid(nobukti) {
     let sortnamePotSemua = 'nobukti'
     let sortorderPotSemua = 'asc'
     let totalRecordPotSemua
@@ -13,15 +12,15 @@
 
     $("#potsemuaGrid")
       .jqGrid({
-        url: `${apiUrl}prosesgajisupirdetail/getjurnal`,
-        mtype: "GET",
+        datatype: 'local',
+        data: [],
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
-        datatype: "json",
+        idPrefix: 'potsemuaGrid',
         colModel: [{
             label: 'NO BUKTI',
             name: 'nobukti',
-          },{
+          }, {
             label: 'TGL BUKTI',
             name: 'tglbukti',
             formatter: "date",
@@ -137,10 +136,11 @@
         disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
           $(this).setGridParam({
-          postData: {
-            nobukti: nobukti,
-            tab: 'potsemua'
-          },})
+            postData: {
+              nobukti: nobukti,
+              tab: 'potsemua'
+            },
+          })
           clearGlobalSearch($('#potsemuaGrid'))
         },
       })
@@ -160,15 +160,17 @@
     loadGlobalSearch($('#potsemuaGrid'))
   }
 
-  function loadDetailData(id, nobukti) {
+  function loadPotSemuaData(nobukti) {
     abortGridLastRequest($('#potsemuaGrid'))
     $('#potsemuaGrid').setGridParam({
-      url: `${apiUrl}prosesgajisupirdetail/potsemua`,
+      url: `${apiUrl}prosesgajisupirdetail/getjurnal`,
       datatype: "json",
       postData: {
-        nobukti: nobukti
+        nobukti: nobukti,
+        tab: 'potsemua'
       },
       page: 1
     }).trigger('reloadGrid')
   }
 </script>
+@endpush

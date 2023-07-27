@@ -1,6 +1,6 @@
-<table id="detail"></table>
+@push('scripts')
 <script>
-  function loadGrid(id) {
+  function loadDetailGrid() {
     let sortnameDetail = 'nobukti'
     let sortorderDetail = 'asc'
     let totalRecordDetail
@@ -11,11 +11,11 @@
     let pageDetail = 0;
 
     $("#detail").jqGrid({
-        url: `${apiUrl}prosesgajisupirdetail`,
-        mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
-        datatype: "json",
+        datatype: 'local',
+        data: [],
+        idPrefix: 'detail',
         colModel: [{
             label: 'NO RINCIAN',
             name: 'gajisupir_nobukti',
@@ -27,7 +27,7 @@
           {
             label: 'SUPIR',
             name: 'supir_id',
-          }, 
+          },
           {
             label: 'BORONGAN',
             name: 'total',
@@ -59,7 +59,8 @@
             formatter: currencyFormat,
           },
           {
-            label: 'POT. PINJAMAN (SEMUA)', width: 210,
+            label: 'POT. PINJAMAN (SEMUA)',
+            width: 210,
             name: 'potonganpinjamansemua',
             align: 'right',
             formatter: currencyFormat,
@@ -168,7 +169,7 @@
         disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
           abortGridLastRequest($(this))
-          
+
           clearGlobalSearch($('#detail'))
         },
       })
@@ -191,15 +192,16 @@
   }
 
   function loadDetailData(id) {
-        abortGridLastRequest($('#detail'))
+    abortGridLastRequest($('#detail'))
 
-        $('#detail').setGridParam({
+    $('#detail').setGridParam({
       url: `${apiUrl}prosesgajisupirdetail`,
       datatype: "json",
       postData: {
         prosesgajisupir_id: id
       },
-      page:1
+      page: 1
     }).trigger('reloadGrid')
   }
 </script>
+@endpush

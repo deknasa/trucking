@@ -1,7 +1,6 @@
-<table id="detail"></table>
-
+@push('scripts')
 <script>
-  function loadGrid(id) {
+  function loadDetailGrid(id) {
     let sortnameDetail = 'suratpengantar_nobukti'
     let sortorderDetail = 'asc'
     let totalRecordDetail
@@ -12,11 +11,11 @@
     let pageDetail = 0;
 
     $("#detail").jqGrid({
-        url: `${apiUrl}gajisupirdetail`,
-        mtype: "GET",
+        datatype: 'local',
+        data: [],
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
-        datatype: "json",
+        idPrefix: 'detail',
         colModel: [{
             label: 'NO TRIP',
             name: 'suratpengantar_nobukti',
@@ -219,3 +218,4 @@
     }).trigger('reloadGrid')
   }
 </script>
+@endpush

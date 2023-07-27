@@ -56,7 +56,7 @@
                 <input type="text" name="supir" class="form-control supirheader-lookup">
               </div>
             </div>
-            
+
             <div class="row form-group" style="display:none;">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
@@ -621,6 +621,7 @@
     $('#detailList').hide()
     loadPinjamanGrid()
   }
+
   function tampilanPJPK() {
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('.tbl_supir_id').hide()
@@ -839,18 +840,13 @@
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
       success: response => {
-        var kodenobukti = response.kodenobukti
-        if (kodenobukti == '1') {
-          var kodestatus = response.kodestatus
-          if (kodestatus == '1') {
-            showDialog(response.message['keterangan'])
-          } else {
-            cekValidasiAksi(Id, Aksi)
-          }
-
+        var error = response.error
+        if (error) {
+          showDialog(response)
         } else {
-          showDialog(response.message['keterangan'])
+          cekValidasiAksi(Id, Aksi)
         }
+
       }
     })
   }
@@ -864,9 +860,9 @@
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
       success: response => {
-        var kondisi = response.kondisi
-        if (kondisi == true) {
-          showDialog(response.message['keterangan'])
+        var error = response.error
+        if (error) {
+          showDialog(response)
         } else {
           if (Aksi == 'EDIT') {
             editPenerimaanTruckingHeader(Id)
@@ -965,10 +961,10 @@
                       "nominal",
                       0
                     );
-                    if(originalGridData.sisa == 0){
-                      $("#tablePinjaman").jqGrid("setCell",rowObject.rowId, "sisa", (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.nominal)));
-                    }else{
-                      $("#tablePinjaman").jqGrid("setCell",rowObject.rowId, "sisa",originalGridData.sisa);
+                    if (originalGridData.sisa == 0) {
+                      $("#tablePinjaman").jqGrid("setCell", rowObject.rowId, "sisa", (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.nominal)));
+                    } else {
+                      $("#tablePinjaman").jqGrid("setCell", rowObject.rowId, "sisa", originalGridData.sisa);
                     }
                   }
 
@@ -1103,7 +1099,7 @@
     /* Append global search */
     // loadGlobalSearch($('#tablePinjaman'))
   }
-  
+
   function loadPinjamanKaryawanGrid() {
     $("#tablePinjamanKaryawan")
       .jqGrid({
@@ -1189,10 +1185,10 @@
                       "nominal",
                       0
                     );
-                    if(originalGridData.sisa == 0){
-                      $("#tablePinjamanKaryawan").jqGrid("setCell",rowObject.rowId, "sisa", (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.nominal)));
-                    }else{
-                      $("#tablePinjamanKaryawan").jqGrid("setCell",rowObject.rowId, "sisa",originalGridData.sisa);
+                    if (originalGridData.sisa == 0) {
+                      $("#tablePinjamanKaryawan").jqGrid("setCell", rowObject.rowId, "sisa", (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.nominal)));
+                    } else {
+                      $("#tablePinjamanKaryawan").jqGrid("setCell", rowObject.rowId, "sisa", originalGridData.sisa);
                     }
                   }
 
@@ -1362,7 +1358,7 @@
       });
     });
   }
-  
+
   function getDataPinjamanKaryawan(karyawanId, id) {
     aksi = $('#crudForm').data('action')
     if (aksi == 'edit') {
@@ -1464,6 +1460,7 @@
     });
 
   }
+
   function checkboxHandlerKaryawan(element, rowId) {
 
     let isChecked = $(element).is(":checked");
@@ -1542,6 +1539,7 @@
     });
     initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePinjaman_sisa"]`).text(sisa))
   }
+
   function setTotalSisaKaryawan() {
     let sisaDetails = $(`#tablePinjamanKaryawan`).find(`td[aria-describedby="tablePinjamanKaryawan_sisa"]`)
     let sisa = 0
@@ -1630,7 +1628,7 @@
               initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePinjaman_nominal"]`).text(totalBayar))
 
             });
-          } else if(kodepenerimaan === "PJPK") {
+          } else if (kodepenerimaan === "PJPK") {
 
             getDataPinjamanKaryawan(response.data.karyawanheader_id, id).then((response) => {
 
@@ -1762,7 +1760,7 @@
     })
   }
 
-  function  setTotalNominal() {
+  function setTotalNominal() {
     let nominalDetails = $(`#tablePinjaman`).find(`td[aria-describedby="tablePinjaman_nominal"]`)
     let nominal = 0
     $.each(nominalDetails, (index, nominalDetail) => {
@@ -1772,7 +1770,8 @@
     });
     initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePinjaman_nominal"]`).text(nominal))
   }
-  function  setTotalNominalKaryawan() {
+
+  function setTotalNominalKaryawan() {
     let nominalDetails = $(`#tablePinjamanKaryawan`).find(`td[aria-describedby="tablePinjamanKaryawan_nominal"]`)
     let nominal = 0
     $.each(nominalDetails, (index, nominalDetail) => {

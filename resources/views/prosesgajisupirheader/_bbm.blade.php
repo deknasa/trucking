@@ -1,7 +1,7 @@
-<table id="bbmGrid"></table>
 
+@push('scripts')
 <script>
-  function loadGrid(id, nobuktiPengeluaran, nobukti) {
+  function loadBBMGrid(nobukti) {
     let sortnameBBM = 'nobukti'
     let sortorderBBM = 'asc'
     let totalRecordBBM
@@ -13,11 +13,11 @@
 
     $("#bbmGrid")
       .jqGrid({
-        url: `${apiUrl}prosesgajisupirdetail/getjurnal`,
-        mtype: "GET",
+        datatype: 'local',
+        data: [],
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
-        datatype: "json",
+        idPrefix: 'bbmGrid',
         colModel: [{
             label: 'NO BUKTI',
             name: 'nobukti',
@@ -160,16 +160,18 @@
     loadGlobalSearch($('#bbmGrid'))
   }
 
-  function loadDetailData(id, nobukti) {
+  function loadBBMData(nobukti) {
     abortGridLastRequest($('#bbmGrid'))
 
     $('#bbmGrid').setGridParam({
-      url: `${apiUrl}prosesgajisupirdetail/bbm`,
+      url: `${apiUrl}prosesgajisupirdetail/getjurnal`,
       datatype: "json",
       postData: {
-        nobukti: nobukti
+        nobukti: nobukti,
+        tab: 'bbm'
       },
       page: 1
     }).trigger('reloadGrid')
   }
 </script>
+@endpush
