@@ -1016,7 +1016,9 @@
             initDisabled()
           }
           // getEdit(invId, aksi)
-
+          $('#crudForm').find("[name=statuspilihaninvoice]").prop('disabled',true);
+          $('#crudForm').find("[name=tgljatuhtempo]").prop('readonly',true);
+          $('#crudForm').find("[name=tgljatuhtempo]").parent('.input-group').find('.input-group-append').children().prop('disabled',true);
           loadInvoiceGrid();
 
           getDataInvoice(`${invId}/getEdit`).then((response) => {

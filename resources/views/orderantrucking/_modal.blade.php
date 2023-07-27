@@ -149,7 +149,7 @@
                 <input type="text" name="noseal2" class="form-control" readonly>
               </div>
             </div>
-            <div class="row form-group">
+            <div class="row form-group" style="display: none">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
                   STATUS LANGSIR <span class="text-danger">*</span></label>
@@ -160,7 +160,7 @@
                 </select>
               </div>
             </div>
-            <div class="row form-group">
+            <div class="row form-group" style="display: none">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
                   STATUS PERALIHAN <span class="text-danger">*</span></label>

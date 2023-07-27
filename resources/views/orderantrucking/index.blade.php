@@ -446,7 +446,9 @@
             onClick: () => {
               clearSelectedRows()
               $('#gs_').prop('checked', false)
-              createOrderanTrucking()
+              showDialog('Penambahan Dilakukan di Input Trip Mandor')
+
+              // createOrderanTrucking()
             }
           },
           {
