@@ -10,9 +10,14 @@
       <table id="jqGrid"></table>
     </div>
   </div>
+  <div class="row mt-3">
+    <div class="col-12">
+      <table id="detailGrid"></table>
+    </div>
+  </div>
 </div>
 
-@include('upahsupir._detail')
+@include('suratpengantar._tambahan')
 
 @include('suratpengantar._modal')
 
@@ -36,10 +41,10 @@
   var activeGrid;
   var statusEditTujuan;
   $(document).ready(function() {
-
+    loadDetailGrid()
     setRange()
     initDatepicker()
-    $(document).on('click','#btnReload', function(event) {
+    $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('suratpengantar')
     })
 
@@ -49,9 +54,9 @@
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         postData: {
-          tgldari:$('#tgldariheader').val() ,
-          tglsampai:$('#tglsampaiheader').val(),
-          
+          tgldari: $('#tgldariheader').val(),
+          tglsampai: $('#tglsampaiheader').val(),
+
         },
         datatype: "json",
         colModel: [{
@@ -315,7 +320,7 @@
               }
               return ` title="${statusGudangSama.MEMO}"`
             }
-          },     
+          },
           {
             label: 'BATAL MUAT',
             name: 'statusbatalmuat',
@@ -467,9 +472,21 @@
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
+
+          loadDetailData(id)
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
+          if (data.data.length === 0) {
+            $('#detailGrid').each((index, element) => {
+              abortGridLastRequest($(element))
+              clearGridData($(element))
+            })
+            $('#jqGrid').each((index, element) => {
+              abortGridLastRequest($(element))
+              clearGridHeader($(element))
+            })
+          }
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))
@@ -508,7 +525,7 @@
             $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
           }
           $('#left-nav').find('button').attr('disabled', false)
-          permission() 
+          permission()
           setHighlight($(this))
         },
       })
@@ -527,8 +544,7 @@
       })
 
       .customPager({
-        buttons: [
-          {
+        buttons: [{
             id: 'edit',
             innerHTML: '<i class="fa fa-pen"></i> EDIT',
             class: 'btn btn-success btn-sm mr-1',
@@ -575,24 +591,23 @@
             }
           },
         ],
-        extndBtn:[{
+        extndBtn: [{
           id: 'approve',
           title: 'Approve',
           caption: 'Approve',
           innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
           class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-          dropmenuHTML: [
-            {
-              id:'approvalBatalMuat',
-              text:"un/Approval Batal Muat",
+          dropmenuHTML: [{
+              id: 'approvalBatalMuat',
+              text: "un/Approval Batal Muat",
               onClick: () => {
                 selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                 approvalBatalMuat(selectedId);
               }
             },
             {
-              id:'approvalEditTujuan',
-              text:"un/Approval Edit Surat Pengantar",
+              id: 'approvalEditTujuan',
+              text: "un/Approval Edit Surat Pengantar",
               onClick: () => {
                 selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                 approvalEditTujuan(selectedId);
@@ -600,8 +615,8 @@
             },
           ],
         }]
-            
-            
+
+
       })
 
     /* Append clear filter button */
@@ -630,39 +645,38 @@
       .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
 
-      $('#rangeTglModal').on('shown.bs.modal', function() {
-        initDatepicker()
-        $('#formRangeTgl').find('[name=dari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-        $('#formRangeTgl').find('[name=sampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-      })
-      $('#formRangeTgl').submit(event => {
-        event.preventDefault()
+    $('#rangeTglModal').on('shown.bs.modal', function() {
+      initDatepicker()
+      $('#formRangeTgl').find('[name=dari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+      $('#formRangeTgl').find('[name=sampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+    })
+    $('#formRangeTgl').submit(event => {
+      event.preventDefault()
 
-        let params
-        let actionUrl = ``
-        let submitButton = $(this).find('button:submit')
+      let params
+      let actionUrl = ``
+      let submitButton = $(this).find('button:submit')
 
-        /* Clear validation messages */
-        $('.is-invalid').removeClass('is-invalid')
-        $('.invalid-feedback').remove()
+      /* Clear validation messages */
+      $('.is-invalid').removeClass('is-invalid')
+      $('.invalid-feedback').remove()
 
-        /* Set params value */
-        for (var key in postData) {
-          if (params != "") {
-            params += "&";
-          }
-          params += key + "=" + encodeURIComponent(postData[key]);
+      /* Set params value */
+      for (var key in postData) {
+        if (params != "") {
+          params += "&";
         }
+        params += key + "=" + encodeURIComponent(postData[key]);
+      }
 
-        let formRange = $('#formRangeTgl')
-        let dari = formRange.find('[name=dari]').val()
-        let sampai = formRange.find('[name=sampai]').val()
-        params += `&dari=${dari}&sampai=${sampai}`
+      let formRange = $('#formRangeTgl')
+      let dari = formRange.find('[name=dari]').val()
+      let sampai = formRange.find('[name=sampai]').val()
+      params += `&dari=${dari}&sampai=${sampai}`
 
-        getCekExport()
+      getCekExport()
         .then((response) => {
-          if($('#formRangeTgl').data('action') == 'export')
-          {
+          if ($('#formRangeTgl').data('action') == 'export') {
             let actionUrl = `{{ route('suratpengantar.export') }}`
 
             /* Clear validation messages */
@@ -673,9 +687,10 @@
             window.open(`{{ route('suratpengantar.report') }}?${params}`)
           }
         })
-      })
-        function getCekExport() {
-           return new Promise((resolve, reject) => {
+    })
+
+    function getCekExport() {
+      return new Promise((resolve, reject) => {
         $.ajax({
           url: `${apiUrl}suratpengantar/export`,
           dataType: "JSON",
@@ -683,8 +698,8 @@
             Authorization: `Bearer ${accessToken}`
           },
           data: {
-            dari:$('#formRangeTgl').find('[name=dari]').val(),
-            sampai:$('#formRangeTgl').find('[name=sampai]').val()
+            dari: $('#formRangeTgl').find('[name=dari]').val(),
+            sampai: $('#formRangeTgl').find('[name=sampai]').val()
           },
           success: (response) => {
             resolve(response);
@@ -697,29 +712,30 @@
     }
 
     function permission() {
-    if (!`{{ $myAuth->hasPermission('suratpengantar', 'store') }}`) {
-      $('#add').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('suratpengantar', 'store') }}`) {
+        $('#add').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('suratpengantar', 'update') }}`) {
-      $('#edit').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('suratpengantar', 'update') }}`) {
+        $('#edit').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('suratpengantar', 'destroy') }}`) {
-      $('#delete').attr('disabled', 'disabled')
+      if (!`{{ $myAuth->hasPermission('suratpengantar', 'destroy') }}`) {
+        $('#delete').attr('disabled', 'disabled')
+      }
+      if (!`{{ $myAuth->hasPermission('suratpengantar', 'approvalBatalMuat') }}`) {
+        $('#approvalBatalMuat').attr('disabled', 'disabled')
+      }
+      if (!`{{ $myAuth->hasPermission('suratpengantar', 'approvalEditTujuan') }}`) {
+        $('#approvalEditTujuan').attr('disabled', 'disabled')
+      }
+      if (!`{{ $myAuth->hasPermission('suratpengantar', 'report') }}`) {
+        $('#report').attr('disabled', 'disabled')
+      }
+      if (!`{{ $myAuth->hasPermission('suratpengantar', 'export') }}`) {
+        $('#export').attr('disabled', 'disabled')
+      }
     }
-    if (!`{{ $myAuth->hasPermission('suratpengantar', 'approvalBatalMuat') }}`) {
-      $('#approvalBatalMuat').attr('disabled', 'disabled')
-    }
-    if (!`{{ $myAuth->hasPermission('suratpengantar', 'approvalEditTujuan') }}`) {
-      $('#approvalEditTujuan').attr('disabled', 'disabled')
-    }
-    if (!`{{ $myAuth->hasPermission('suratpengantar', 'report') }}`) {
-      $('#report').attr('disabled', 'disabled')
-    }
-    if (!`{{ $myAuth->hasPermission('suratpengantar', 'export') }}`) {
-      $('#export').attr('disabled', 'disabled')
-    }}
 
     $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {
@@ -744,6 +760,7 @@
         maximumValue: totalRecord
       })
     })
+
     function approvalBatalMuat(id) {
       getBatalMuat()
       $.ajax({
@@ -759,10 +776,11 @@
           if (response.data.statusbatalmuat === statusBukanBatalMuat) {
             msg = `YAKIN approval Batal Muat`
           }
-          showConfirm(msg,response.data.nobukti,`suratpengantar/${response.data.id}/batalmuat`)
+          showConfirm(msg, response.data.nobukti, `suratpengantar/${response.data.id}/batalmuat`)
         },
       })
     }
+
     function approvalEditTujuan(id) {
       getEditTujuan()
       $.ajax({
@@ -778,10 +796,11 @@
           if (response.data.statusapprovaleditsuratpengantar === statusEditTujuan) {
             msg = `YAKIN approval Edit Surat Pengantar`
           }
-          showConfirm(msg,response.data.nobukti,`suratpengantar/${response.data.id}/edittujuan`)
+          showConfirm(msg, response.data.nobukti, `suratpengantar/${response.data.id}/edittujuan`)
         },
       })
     }
+
     function getBatalMuat() {
       $.ajax({
         url: `${apiUrl}parameter`,
@@ -798,7 +817,7 @@
               "field": "grp",
               "op": "cn",
               "data": "STATUS BATAL MUAT"
-            },{
+            }, {
               "field": "text",
               "op": "cn",
               "data": "BUKAN BATAL MUAT"
@@ -806,10 +825,11 @@
           })
         },
         success: response => {
-          statusBukanBatalMuat =  response.data[0].id;
+          statusBukanBatalMuat = response.data[0].id;
         }
       })
     }
+
     function getEditTujuan() {
       $.ajax({
         url: `${apiUrl}parameter`,
@@ -826,7 +846,7 @@
               "field": "grp",
               "op": "cn",
               "data": "STATUS APPROVAL"
-            },{
+            }, {
               "field": "text",
               "op": "cn",
               "data": "NON APPROVAL"
@@ -834,7 +854,7 @@
           })
         },
         success: response => {
-          statusEditTujuan =  response.data[0].id;
+          statusEditTujuan = response.data[0].id;
         }
       })
     }
