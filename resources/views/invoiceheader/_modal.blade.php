@@ -195,8 +195,8 @@
         value: form.find(`[name="tglbukti"]`).val()
       })
       data.push({
-        name: 'tglterima',
-        value: form.find(`[name="tglterima"]`).val()
+        name: 'statuspilihaninvoice',
+        value: form.find(`[name="statuspilihaninvoice"]`).val()
       })
       data.push({
         name: 'tgljatuhtempo',
@@ -394,6 +394,8 @@
     getMaxLength(form)
     initLookup()
     initDatepicker()
+    initSelect2(form.find('.select2bs4'), true)
+
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
@@ -1250,12 +1252,16 @@
           })
         },
         success: response => {
+          let selectedId
           response.data.forEach(statusKaryawan => {
             let option = new Option(statusKaryawan.text, statusKaryawan.id)
-
+            // element.val(value).trigger('change')
+            if (statusKaryawan.default != "") {
+              selectedId = statusKaryawan.id
+            }
             relatedForm.find('[name=statuspilihaninvoice]').append(option).trigger('change')
           });
-
+          relatedForm.find('[name=statuspilihaninvoice]').val(selectedId).trigger('change')
           resolve()
         }
       })
@@ -1277,8 +1283,8 @@
 
     $('#crudForm').find("[name=tgljatuhtempo]").val(tanggal + "-" + bulan + "-" + tahun);
     $('#crudForm').find("[name=tgljatuhtempo]").prop('readonly',true);
-    // $('#crudForm').find("[name=tgljatuhtempo]").parent('.input-group').find('.input-group-append').child('.ui-datepicker-trigger').prop('disabled',true);
-    $('#crudForm').find("[name=tgljatuhtempo]").parent('.input-group').find('.input-group-append').remove()
+    $('#crudForm').find("[name=tgljatuhtempo]").parent('.input-group').find('.input-group-append').children().prop('disabled',true);
+    // $('#crudForm').find("[name=tgljatuhtempo]").parent('.input-group').find('.input-group-append').remove()
 
 
   }
