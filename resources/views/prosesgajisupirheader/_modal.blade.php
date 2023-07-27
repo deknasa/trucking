@@ -38,23 +38,11 @@
                         <div class="row form-group">
                             <div class="col-12 col-md-2">
                                 <label class="col-form-label">
-                                    PERIODE <span class="text-danger">*</span></label>
+                                    KAS/BANK <span class="text-danger">*</span></label>
                             </div>
                             <div class="col-12 col-md-10">
-
-                                <div class="input-group">
-                                    <input type="text" name="periode" autocomplete="off" class="form-control datepicker">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row form-group">
-                            <div class="col-12 col-md-2">
-                                <label class="col-form-label">
-                                    KETERANGAN <span class="text-danger">*</span></label>
-                            </div>
-                            <div class="col-12 col-md-10">
-                                <input type="text" name="keterangan" autocomplete="off" class="form-control">
+                                <input type="hidden" name="bank_id">
+                                <input type="text" name="bank" autocomplete="off" class="form-control bank-lookup">
                             </div>
                         </div>
 
@@ -131,17 +119,6 @@
                                                 <input type="text" name="nomPR" class="form-control text-right autonumeric" readonly>
                                             </div>
                                         </div>
-
-                                        <div class="row form-group">
-                                            <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                                                <label>
-                                                    KAS/BANK</label>
-                                            </div>
-                                            <div class="col-12 col-sm-9 col-md-10">
-                                                <input type="hidden" name="bank_idPR">
-                                                <input type="text" name="bankPR" class="form-control bankPR-lookup">
-                                            </div>
-                                        </div>
                                     </div>
                                     <div id="tabs-3">
                                         <div class="row form-group">
@@ -169,17 +146,6 @@
                                             </div>
                                             <div class="col-12 col-sm-9 col-md-10">
                                                 <input type="text" name="nomPS" class="form-control text-right autonumeric" readonly>
-                                            </div>
-                                        </div>
-
-                                        <div class="row form-group">
-                                            <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                                                <label>
-                                                    KAS/BANK</label>
-                                            </div>
-                                            <div class="col-12 col-sm-9 col-md-10">
-                                                <input type="hidden" name="bank_idPS">
-                                                <input type="text" name="bankPS" class="form-control bankPS-lookup">
                                             </div>
                                         </div>
                                     </div>
@@ -211,17 +177,6 @@
                                                 <input type="text" name="nomPP" class="form-control text-right autonumeric" readonly>
                                             </div>
                                         </div>
-
-                                        <div class="row form-group">
-                                            <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                                                <label>
-                                                    KAS/BANK</label>
-                                            </div>
-                                            <div class="col-12 col-sm-9 col-md-10">
-                                                <input type="hidden" name="bank_idPP">
-                                                <input type="text" name="bankPP" class="form-control bankPP-lookup">
-                                            </div>
-                                        </div>
                                     </div>
                                     <div id="tabs-5">
                                         <div class="row form-group">
@@ -249,17 +204,6 @@
                                             </div>
                                             <div class="col-12 col-sm-9 col-md-10">
                                                 <input type="text" name="nomDeposito" class="form-control text-right autonumeric" readonly>
-                                            </div>
-                                        </div>
-
-                                        <div class="row form-group">
-                                            <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                                                <label>
-                                                    KAS/BANK</label>
-                                            </div>
-                                            <div class="col-12 col-sm-9 col-md-10">
-                                                <input type="hidden" name="bank_idDeposito">
-                                                <input type="text" name="bankDeposito" class="form-control bankDeposito-lookup">
                                             </div>
                                         </div>
                                     </div>
@@ -291,17 +235,6 @@
                                                 <input type="text" name="nomBBM" class="form-control text-right autonumeric" readonly>
                                             </div>
                                         </div>
-
-                                        <div class="row form-group">
-                                            <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                                                <label>
-                                                    KAS/BANK</label>
-                                            </div>
-                                            <div class="col-12 col-sm-9 col-md-10">
-                                                <input type="hidden" name="bank_idBBM">
-                                                <input type="text" name="bankBBM" class="form-control bankBBM-lookup">
-                                            </div>
-                                        </div>
                                     </div>
                                     <div id="tabs-7">
                                         <div class="row form-group">
@@ -329,17 +262,6 @@
                                             </div>
                                             <div class="col-12 col-sm-9 col-md-10">
                                                 <input type="text" name="nomUangjalan" class="form-control text-right autonumeric" readonly>
-                                            </div>
-                                        </div>
-
-                                        <div class="row form-group">
-                                            <div class="col-12 col-sm-3 col-md-2 col-form-label">
-                                                <label>
-                                                    KAS/BANK</label>
-                                            </div>
-                                            <div class="col-12 col-sm-9 col-md-10">
-                                                <input type="hidden" name="bank_idUangjalan">
-                                                <input type="text" name="bankUangjalan" class="form-control bankUangjalan-lookup">
                                             </div>
                                         </div>
                                     </div>
@@ -462,7 +384,8 @@
             makan = makan + parseFloat(item.replace(/,/g, ''))
         });
 
-        postingRincian = borongan + makan
+        // postingRincian = borongan + makan
+        postingRincian = borongan
         initAutoNumeric($('#crudForm').find(`[name="nomPR"]`).val(postingRincian))
         initAutoNumeric($('#crudForm').find(`[name="nomPS"]`).val(potSemua))
         initAutoNumeric($('#crudForm').find(`[name="nomPP"]`).val(potPribadi))
@@ -508,10 +431,6 @@
                 value: form.find(`[name="tglbukti"]`).val()
             })
             data.push({
-                name: 'periode',
-                value: form.find(`[name="periode"]`).val()
-            })
-            data.push({
                 name: 'tgldari',
                 value: form.find(`[name="tgldari"]`).val()
             })
@@ -520,8 +439,12 @@
                 value: form.find(`[name="tglsampai"]`).val()
             })
             data.push({
-                name: 'keterangan',
-                value: form.find(`[name="keterangan"]`).val()
+                name: 'bank',
+                value: form.find(`[name="bank"]`).val()
+            })
+            data.push({
+                name: 'bank_id',
+                value: form.find(`[name="bank_id"]`).val()
             })
 
             $.each(selectedRows, function(index, item) {
@@ -552,14 +475,6 @@
                 })
             });
 
-            data.push({
-                name: 'bank_idPR',
-                value: form.find(`[name="bank_idPR"]`).val()
-            })
-            data.push({
-                name: 'bankPR',
-                value: form.find(`[name="bankPR"]`).val()
-            })
             $('#crudForm').find(`[name="nomPR"]`).each((index, element) => {
                 data.push({
                     name: 'nomPR',
@@ -567,14 +482,6 @@
                 })
             })
 
-            data.push({
-                name: 'bank_idPS',
-                value: form.find(`[name="bank_idPS"]`).val()
-            })
-            data.push({
-                name: 'bankPS',
-                value: form.find(`[name="bankPS"]`).val()
-            })
             $('#crudForm').find(`[name="nomPS"]`).each((index, element) => {
                 data.push({
                     name: 'nomPS',
@@ -582,25 +489,11 @@
                 })
             })
 
-            data.push({
-                name: 'bank_idPP',
-                value: form.find(`[name="bank_idPP"]`).val()
-            })
             $('#crudForm').find(`[name="nomPP"]`).each((index, element) => {
                 data.push({
                     name: 'nomPP',
                     value: AutoNumeric.getNumber($(`#crudForm [name="nomPP"]`)[index])
                 })
-            })
-            data.push({
-                name: 'bankPP',
-                value: form.find(`[name="bankPP"]`).val()
-            })
-
-
-            data.push({
-                name: 'bank_idDeposito',
-                value: form.find(`[name="bank_idDeposito"]`).val()
             })
             $('#crudForm').find(`[name="nomDeposito"]`).each((index, element) => {
                 data.push({
@@ -608,39 +501,17 @@
                     value: AutoNumeric.getNumber($(`#crudForm [name="nomDeposito"]`)[index])
                 })
             })
-            data.push({
-                name: 'bankDeposito',
-                value: form.find(`[name="bankDeposito"]`).val()
-            })
-
-            data.push({
-                name: 'bank_idBBM',
-                value: form.find(`[name="bank_idBBM"]`).val()
-            })
             $('#crudForm').find(`[name="nomBBM"]`).each((index, element) => {
                 data.push({
                     name: 'nomBBM',
                     value: AutoNumeric.getNumber($(`#crudForm [name="nomBBM"]`)[index])
                 })
             })
-            data.push({
-                name: 'bankBBM',
-                value: form.find(`[name="bankBBM"]`).val()
-            })
-
-            data.push({
-                name: 'bank_idUangjalan',
-                value: form.find(`[name="bank_idUangjalan"]`).val()
-            })
             $('#crudForm').find(`[name="nomUangjalan"]`).each((index, element) => {
                 data.push({
                     name: 'nomUangjalan',
                     value: AutoNumeric.getNumber($(`#crudForm [name="nomUangjalan"]`)[index])
                 })
-            })
-            data.push({
-                name: 'bankUangjalan',
-                value: form.find(`[name="bankUangjalan"]`).val()
             })
 
             data.push({
@@ -713,6 +584,7 @@
                     $('#jqGrid').jqGrid('setGridParam', {
                         page: response.data.page
                     }).trigger('reloadGrid');
+
                     selectedRows = []
                     selectedPP = [];
                     selectedPS = [];
@@ -1056,7 +928,6 @@
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
         $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-        $('#crudForm').find('[name=periode]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         $('#crudForm').find('[name=tgldari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         $('#crudForm').find('[name=tglsampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         $('#crudForm').find('[name=tglbuktiPR]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
@@ -1454,19 +1325,10 @@
                 },
                 success: response => {
                     bankId = response.data.bank_id
-                    form.find(`[name="bank_idPR"]`).val(response.data.bank_id)
-                    form.find(`[name="bankPR"]`).val(response.data.bank).data('current-value', response.data.bank)
-                    form.find(`[name="bank_idPS"]`).val(response.data.bank_id)
-                    form.find(`[name="bankPS"]`).val(response.data.bank).data('current-value', response.data.bank)
-                    form.find(`[name="bank_idPP"]`).val(response.data.bank_id)
-                    form.find(`[name="bankPP"]`).val(response.data.bank).data('current-value', response.data.bank)
-                    form.find(`[name="bank_idDeposito"]`).val(response.data.bank_id)
-                    form.find(`[name="bankDeposito"]`).val(response.data.bank).data('current-value', response.data.bank)
-                    form.find(`[name="bank_idBBM"]`).val(response.data.bank_id)
-                    form.find(`[name="bankBBM"]`).val(response.data.bank).data('current-value', response.data.bank)
-                    form.find(`[name="bank_idUangjalan"]`).val(response.data.bank_id)
-                    form.find(`[name="bankUangjalan"]`).val(response.data.bank).data('current-value', response.data.bank)
-
+                    $.each(response.data, (index, value) => {
+                        let element = form.find(`[name="${index}"]`)
+                        element.val(value)
+                    })
                     resolve()
                 },
                 error: error => {
@@ -1478,7 +1340,7 @@
 
     function initLookup() {
 
-        $('.bankPR-lookup').lookup({
+        $('.bank-lookup').lookup({
             title: 'Bank Lookup',
             fileName: 'bank',
             beforeProcess: function(test) {
@@ -1488,7 +1350,7 @@
                 }
             },
             onSelectRow: (bank, element) => {
-                $('#crudForm [name=bank_idPR]').first().val(bank.id)
+                $('#crudForm [name=bank_id]').first().val(bank.id)
                 element.val(bank.namabank)
                 element.data('currentValue', element.val())
             },
@@ -1496,123 +1358,7 @@
                 element.val(element.data('currentValue'))
             },
             onClear: (element) => {
-                $('#crudForm [name=bank_idPR]').first().val('')
-                element.val('')
-                element.data('currentValue', element.val())
-            }
-        })
-        $('.bankPS-lookup').lookup({
-            title: 'Bank Lookup',
-            fileName: 'bank',
-            beforeProcess: function(test) {
-                this.postData = {
-                    Aktif: 'AKTIF',
-
-                }
-            },
-            onSelectRow: (bank, element) => {
-                $('#crudForm [name=bank_idPS]').first().val(bank.id)
-                element.val(bank.namabank)
-                element.data('currentValue', element.val())
-            },
-            onCancel: (element) => {
-                element.val(element.data('currentValue'))
-            },
-            onClear: (element) => {
-                $('#crudForm [name=bank_idPS]').first().val('')
-                element.val('')
-                element.data('currentValue', element.val())
-            }
-        })
-        $('.bankPP-lookup').lookup({
-            title: 'Bank Lookup',
-            fileName: 'bank',
-            beforeProcess: function(test) {
-                this.postData = {
-                    Aktif: 'AKTIF',
-
-                }
-            },
-            onSelectRow: (bank, element) => {
-                $('#crudForm [name=bank_idPP]').first().val(bank.id)
-                element.val(bank.namabank)
-                element.data('currentValue', element.val())
-            },
-            onCancel: (element) => {
-                element.val(element.data('currentValue'))
-            },
-            onClear: (element) => {
-                $('#crudForm [name=bank_idPP]').first().val('')
-                element.val('')
-                element.data('currentValue', element.val())
-            }
-        })
-        $('.bankDeposito-lookup').lookup({
-            title: 'Bank Lookup',
-            fileName: 'bank',
-            beforeProcess: function(test) {
-                this.postData = {
-                    Aktif: 'AKTIF',
-
-                }
-            },
-            onSelectRow: (bank, element) => {
-                $('#crudForm [name=bank_idDeposito]').first().val(bank.id)
-                element.val(bank.namabank)
-                element.data('currentValue', element.val())
-            },
-            onCancel: (element) => {
-                element.val(element.data('currentValue'))
-            },
-            onClear: (element) => {
-                $('#crudForm [name=bank_idDeposito]').first().val('')
-                element.val('')
-                element.data('currentValue', element.val())
-            }
-        })
-        $('.bankBBM-lookup').lookup({
-            title: 'Bank Lookup',
-            fileName: 'bank',
-            beforeProcess: function(test) {
-                this.postData = {
-                    Aktif: 'AKTIF',
-
-                }
-            },
-            onSelectRow: (bank, element) => {
-                $('#crudForm [name=bank_idBBM]').first().val(bank.id)
-                element.val(bank.namabank)
-                element.data('currentValue', element.val())
-            },
-            onCancel: (element) => {
-                element.val(element.data('currentValue'))
-            },
-            onClear: (element) => {
-                $('#crudForm [name=bank_idBBM]').first().val('')
-                element.val('')
-                element.data('currentValue', element.val())
-            }
-        })
-
-        $('.bankUangjalan-lookup').lookup({
-            title: 'Bank Lookup',
-            fileName: 'bank',
-            beforeProcess: function(test) {
-                this.postData = {
-                    Aktif: 'AKTIF',
-
-                }
-            },
-            onSelectRow: (bank, element) => {
-                $('#crudForm [name=bank_idUangjalan]').first().val(bank.id)
-                element.val(bank.namabank)
-                element.data('currentValue', element.val())
-            },
-            onCancel: (element) => {
-                element.val(element.data('currentValue'))
-            },
-            onClear: (element) => {
-                $('#crudForm [name=bank_idUangjalan]').first().val('')
+                $('#crudForm [name=bank_id]').first().val('')
                 element.val('')
                 element.data('currentValue', element.val())
             }

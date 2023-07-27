@@ -19,15 +19,27 @@
               <li><a href="#potsemua-tab">Pot. Semua</a></li>
               <li><a href="#potpribadi-tab">Pot. Pribadi</a></li>
               <li><a href="#deposito-tab">Deposito</a></li>
-              <li><a href="#jurnal-tab">Jurnal BBM</a></li>
+              <li><a href="#bbm-tab">BBM</a></li>
               <li><a href="#absensi-tab">Absensi</a></li>
             </ul>
-            <div id="detail-tab"></div>
-            <div id="potsemua-tab"></div>
-            <div id="potpribadi-tab"></div>
-            <div id="deposito-tab"></div>
-            <div id="jurnal-tab"></div>
-            <div id="absensi-tab"></div>
+            <div id="detail-tab">
+              <table id="detail"></table>
+            </div>
+            <div id="potsemua-tab">
+              <table id="potsemuaGrid"></table>
+            </div>
+            <div id="potpribadi-tab">
+              <table id="potpribadiGrid"></table>
+            </div>
+            <div id="deposito-tab">
+              <table id="depositoGrid"></table>
+            </div>
+            <div id="bbm-tab">
+              <table id="bbmGrid"></table>
+            </div>
+            <div id="absensi-tab">
+              <table id="absensiGrid"></table>
+            </div>
           </div>
         </div>
       </div>
@@ -41,7 +53,7 @@
 @include('gajisupirheader._potsemua')
 @include('gajisupirheader._potpribadi')
 @include('gajisupirheader._deposito')
-@include('gajisupirheader._jurnal')
+@include('gajisupirheader._bbm')
 @include('gajisupirheader._absensi')
 
 @push('scripts')
@@ -67,9 +79,18 @@
   $(document).ready(function() {
     $("#tabs-detail").tabs()
 
+    let nobukti = $('#jqGrid').jqGrid('getCell', id, 'nobukti')
+    console.log('nobukti', nobukti)
+    loadDetailGrid()
+    loadPotSemuaIndexGrid()
+    loadPotPribadiIndexGrid()
+    loadDepositoGrid()
+    loadBBMGrid()
+    loadAbsensiGrid()
+
     setRange()
     initDatepicker()
-    $(document).on('click','#btnReload', function(event) {
+    $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('gajisupirheader')
     })
 
@@ -80,8 +101,8 @@
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         postData: {
-          tgldari:$('#tgldariheader').val() ,
-          tglsampai:$('#tglsampaiheader').val() 
+          tgldari: $('#tgldariheader').val(),
+          tglsampai: $('#tglsampaiheader').val()
         },
         datatype: "json",
         colModel: [{
@@ -98,7 +119,7 @@
             align: 'left',
             stype: 'select',
             searchoptions: {
-              
+
               value: `<?php
                       $i = 1;
 
@@ -129,7 +150,7 @@
                   <span>${statusCetak.SINGKATAN}</span>
                 </div>
               `)
-              
+
               return formattedValue[0].outerHTML
             },
             cellattr: (rowId, value, rowObject) => {
@@ -139,7 +160,7 @@
               }
               return ` title="${statusCetak.MEMO}"`
             }
-          },    
+          },
           {
             label: 'NO BUKTI',
             name: 'nobukti',
@@ -205,7 +226,8 @@
             formatter: currencyFormat,
           },
           {
-            label: 'POT. PINJAMAN (SEMUA)', width: 210,
+            label: 'POT. PINJAMAN (SEMUA)',
+            width: 210,
             width: 210,
             name: 'potonganpinjamansemua',
             align: 'right',
@@ -223,7 +245,7 @@
             align: 'right',
             formatter: currencyFormat,
           },
-          
+
           {
             label: 'NOMINAL',
             name: 'nominal',
@@ -301,9 +323,13 @@
         },
         onSelectRow: function(id) {
           let nobukti = $('#jqGrid').jqGrid('getCell', id, 'nobukti')
-          $(`#tabs-detail #${currentTab}-tab`).html('').load(`${appUrl}/gajisupirdetail/${currentTab}/grid`, function() {
-            loadGrid(id,nobukti)
-          })
+          loadDetailData(id)
+          loadPotSemuaIndexData(nobukti)
+          loadPotPribadiIndexData(nobukti)
+          loadDepositoData(nobukti)
+          loadBBMData(nobukti)
+          loadAbsensiData(nobukti)
+
           activeGrid = $(this)
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
           page = $(this).jqGrid('getGridParam', 'page')
@@ -315,18 +341,10 @@
           changeJqGridRowListText()
 
           if (data.data.length === 0) {
-            abortGridLastRequest($('#detail'))
-            clearGridData($('#detail'))
-            abortGridLastRequest($('#potsemuaGrid'))
-            clearGridData($('#potsemuaGrid'))
-            abortGridLastRequest($('#potpribadiGrid'))
-            clearGridData($('#potpribadiGrid'))
-            abortGridLastRequest($('#depositoGrid'))
-            clearGridData($('#depositoGrid'))
-            abortGridLastRequest($('#jurnalGrid'))
-            clearGridData($('#jurnalGrid'))
-            abortGridLastRequest($('#absensiGrid'))
-            clearGridData($('#absensiGrid'))
+            $('#detail, #potsemuaGrid, #potpribadiGrid, #depositoGrid,#bbmGrid, #absensiGrid').each((index, element) => {
+              abortGridLastRequest($(element))
+              clearGridData($(element))
+            })
             $('#jqGrid').each((index, element) => {
               abortGridLastRequest($(element))
               clearGridHeader($(element))
@@ -375,7 +393,7 @@
           }, 100)
 
           $('#left-nav').find('button').attr('disabled', false)
-          permission() 
+          permission()
           setHighlight($(this))
         }
       })
@@ -390,10 +408,11 @@
         beforeSearch: function() {
           $('#left-nav').find(`button:not(#add)`).attr('disabled', 'disabled')
           $(this).setGridParam({
-          postData: {
-            tgldari:$('#tgldariheader').val() ,
-            tglsampai:$('#tglsampaiheader').val() 
-          },})
+            postData: {
+              tgldari: $('#tgldariheader').val(),
+              tglsampai: $('#tglsampaiheader').val()
+            },
+          })
           clearGlobalSearch($('#jqGrid'))
         },
       })
@@ -510,20 +529,8 @@
 
       if (!`{{ $myAuth->hasPermission('gajisupirheader', 'report') }}`) {
         $('#report').attr('disabled', 'disabled')
-      }    
+      }
     }
-
-    $("#tabs-detail").on('click', 'li.ui-state-active', function() {
-      let href = $(this).find('a').attr('href');
-      currentTab = href.substring(1, href.length - 4);
-      let gajisupirId = $('#jqGrid').jqGrid('getGridParam', 'selrow')
-      let nobukti = $('#jqGrid').jqGrid('getCell', gajisupirId, 'nobukti')
-      $(`#tabs-detail #${currentTab}-tab`).html('').load(`${appUrl}/gajisupirdetail/${currentTab}/grid`, function() {
-
-        loadGrid(gajisupirId, nobukti)
-      })
-    })
-    
   })
 </script>
 @endpush()
