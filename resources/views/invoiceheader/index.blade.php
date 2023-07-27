@@ -259,17 +259,6 @@
           },
 
           {
-            label: 'TGL TERIMA',
-            name: 'tglterima',
-            align: 'left',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
-            }
-          },
-
-          {
             label: 'TGL JATUH TEMPO',
             name: 'tgljatuhtempo',
             align: 'left',
