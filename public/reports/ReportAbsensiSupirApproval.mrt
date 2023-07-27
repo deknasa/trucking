@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "a40d29b1381101728283d5a0a1472ce4",
+  "ReportGuid": "9219e19aa97fc0bafa9561fe0724a3b3",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://localhost/trucking/public/reports/ReportAbsensiSupirApproval.mrt",
+  "ReportFile": "http://localhost/truck/public/reports/ReportAbsensiSupirApproval.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1688542797000+0700)/",
+  "ReportChanged": "/Date(1690446893000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -285,6 +285,16 @@
       "Brush": "solid:",
       "Components": {
         "0": {
+          "Ident": "StiPageFooterBand",
+          "Name": "PageFooterBand1",
+          "ClientRectangle": "0,277.2,214.9,2",
+          "Interaction": {
+            "Ident": "StiInteraction"
+          },
+          "Border": ";;;;;;;solid:Black",
+          "Brush": "solid:"
+        },
+        "1": {
           "Ident": "StiGroupHeaderBand",
           "Name": "GroupHeaderBand1",
           "ClientRectangle": "0,4,214.9,64",
@@ -1036,7 +1046,7 @@
             "Value": "{absensiappheader.id}"
           }
         },
-        "1": {
+        "2": {
           "Ident": "StiDataBand",
           "Name": "DataBand1",
           "ClientRectangle": "0,76,214.9,8",
@@ -1253,7 +1263,7 @@
             "3": "FUrut"
           }
         },
-        "2": {
+        "3": {
           "Ident": "StiGroupFooterBand",
           "Name": "GroupFooterBand1",
           "ClientRectangle": "0,92,214.9,28",
@@ -1493,31 +1503,6 @@
             }
           }
         },
-        "3": {
-          "Ident": "StiFooterBand",
-          "Name": "FooterBand1",
-          "PrintOn": "ExceptLastPage",
-          "ClientRectangle": "0,128,214.9,4.2",
-          "ComponentPlacement": "f.ap.Page1",
-          "Conditions": {
-            "0": {
-              "Ident": "StiCondition",
-              "Item": "Expression",
-              "Expression": {
-                "Value": "{line == datasource.count}"
-              },
-              "CanAssignExpression": true,
-              "Style": "##Normal##",
-              "BorderSides": "None"
-            }
-          },
-          "Interaction": {
-            "Ident": "StiInteraction"
-          },
-          "Border": "All;;;None;;;;solid:0,0,0",
-          "Brush": "solid:",
-          "PrintOnAllPages": true
-        },
         "4": {
           "Ident": "StiVerticalLinePrimitive",
           "Name": "VerticalLinePrimitive1",
@@ -1692,6 +1677,30 @@
           "Guid": "c19a282b19ce05d961dad2fe675cf8db",
           "ClientRectangle": "130,60,0.254,8",
           "ComponentPlacement": "p.Page1",
+          "Interaction": {
+            "Ident": "StiInteraction"
+          },
+          "StartCap": ";;;",
+          "EndCap": ";;;"
+        },
+        "19": {
+          "Ident": "StiHorizontalLinePrimitive",
+          "Name": "HorizontalLinePrimitive6",
+          "Guid": "2ac9519dae4647de870530854ff87935",
+          "ClientRectangle": "4,280,208,0.254",
+          "ComponentPlacement": "gf.GroupFooterBand1",
+          "Interaction": {
+            "Ident": "StiInteraction"
+          },
+          "StartCap": ";;;",
+          "EndCap": ";;;"
+        },
+        "20": {
+          "Ident": "StiHorizontalLinePrimitive",
+          "Name": "HorizontalLinePrimitive7",
+          "Guid": "bcf8b2c7662893b991e2fb82f67a2922",
+          "ClientRectangle": "4,286,208,0.254",
+          "ComponentPlacement": "gf.GroupFooterBand1",
           "Interaction": {
             "Ident": "StiInteraction"
           },
