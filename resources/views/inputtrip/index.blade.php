@@ -41,7 +41,7 @@
                   </div>
                 </div>
 
-                <div class="row form-group" style="display: none">
+                <div class="form-group" >
                   <div class="col-12 col-md-2">
                     <label class="col-form-label">
                       STATUS LANGSIR <span class="text-danger">*</span></label>
@@ -52,7 +52,7 @@
                     </select>
                   </div>
                 </div>
-                
+
                 <div class="form-group ">
                   <label class="col-sm-12 col-form-label">GUDANG SAMA <span class="text-danger">*</span></label>
                   <div class="col-sm-12">
@@ -267,6 +267,9 @@
   let selectedUpahZona
   let zonadariId
   let zonasampaiId
+  let upahZona
+  let tinggalGandengan
+  let longTripId
 
   $(document).ready(function() {
 
@@ -403,6 +406,7 @@
   // }
   $(`#crudForm [name="statusupahzona"]`).on('change', function(event) {
     selectedUpahZona = $(`#crudForm [name="statusupahzona"] option:selected`).text()
+    enabledLogTrip($(this).val())
     if (selectedUpahZona == 'NON UPAH ZONA' || selectedUpahZona == 'UPAH ZONA') {
       statusUpahZona = $(`#crudForm [name="statusupahzona"]`).val()
 
@@ -421,6 +425,22 @@
       }
     }
   })
+  $(`#crudForm [name="statusgandengan"]`).on('change', function(event) {
+    if($(this).val() == tinggalGandengan){
+      $(`#crudForm [name="gandenganasal"]`).parents('.form-group').hide()
+    }else{
+      $(`#crudForm [name="gandenganasal"]`).parents('.form-group').show()
+    }
+  })
+  function enabledLogTrip(selected) {
+    if (selected == upahZona) {
+       
+      $(`#crudForm [name="statuslongtrip"]`).val(longTripId).trigger('change');
+      $(`#crudForm [name="statuslongtrip"]`).prop('disabled',true);
+    }else{
+      $(`#crudForm [name="statuslongtrip"]`).prop('disabled',false);
+    }
+  }
 
   function enabledUpahSupir() {
 
@@ -528,6 +548,7 @@
         setStatusLongTripOptions(form),
         setStatusGudangSamaOptions(form),
         setStatusUpahZonaOptions(form),
+        setStatusLangsirOptions(form),
         setStatusGandenganOptions(form)
       ])
       .then(() => {
@@ -571,6 +592,9 @@
           response.data.forEach(statusGandengan => {
             let option = new Option(statusGandengan.text, statusGandengan.id)
             statusLongtrip = statusGandengan.id
+            if (statusGandengan.text =="TINGGAL GANDENGAN") {
+              tinggalGandengan = statusGandengan.id
+            }
             relatedForm.find('[name=statusgandengan]').append(option).trigger('change')
           });
 
@@ -610,9 +634,11 @@
         success: response => {
           response.data.forEach(statusUpahZona => {
             let option = new Option(statusUpahZona.text, statusUpahZona.id)
+            if (statusUpahZona.text == "UPAH ZONA") {
+              upahZona = statusUpahZona.id
+            }
             relatedForm.find('[name=statusupahzona]').append(option).trigger('change')
           });
-
           resolve()
         },
         error: error => {
@@ -650,6 +676,9 @@
           response.data.forEach(statusLongTrip => {
             let option = new Option(statusLongTrip.text, statusLongTrip.id)
             statusLongtrip = statusLongTrip.id
+            if (statusLongTrip.text =='LONGTRIP') {
+              longTripId = statusLongTrip.id;
+            }
             relatedForm.find('[name=statuslongtrip]').append(option).trigger('change')
           });
 
@@ -701,6 +730,7 @@
       })
     })
   }
+
   const setStatusRitasi = function(relatedForm) {
     return new Promise((resolve, reject) => {
       relatedForm.find(`[name="jenisritasi[]"]`).empty()
@@ -734,6 +764,47 @@
       })
     })
   }
+
+  const setStatusLangsirOptions = function(relatedForm) {
+    return new Promise((resolve, reject) => {
+      relatedForm.find('[name=statuslangsir]').empty()
+      relatedForm.find('[name=statuslangsir]').append(
+        new Option('-- PILIH STATUS LANGSIR --', '', false, true)
+      ).trigger('change')
+
+      $.ajax({
+        url: `${apiUrl}parameter`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          filters: JSON.stringify({
+            "groupOp": "AND",
+            "rules": [{
+              "field": "grp",
+              "op": "cn",
+              "data": "STATUS LANGSIR"
+            }]
+          })
+        },
+        success: response => {
+          response.data.forEach(statusLangsir => {
+            let option = new Option(statusLangsir.text, statusLangsir.id)
+
+            relatedForm.find('[name=statuslangsir]').append(option).trigger('change')
+          });
+
+          resolve()
+        },
+        error: error => {
+          reject(error)
+        }
+      })
+    })
+  }
+
 
   function setIsDateAvailable(form) {
     $.ajax({
