@@ -1208,6 +1208,7 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::resource('laporanwarkatbelumcair', LaporanWarkatBelumCairController::class);
 
     Route::get('laporanpemakaianban/report', [LaporanPemakaianBanController::class, 'report'])->name('laporanpemakaianban.report');
+    Route::get('laporanpemakaianban/export', [LaporanPemakaianBanController::class, 'export'])->name('laporanpemakaianban.export');
     Route::get('laporanpemakaianban/index', [LaporanPemakaianBanController::class, 'index']);
     Route::resource('laporanpemakaianban', LaporanPemakaianBanController::class);
 
@@ -1287,6 +1288,7 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::resource('laporanrekapsumbangan', LaporanRekapSumbanganController::class);
 
     Route::get('laporanklaimpjtsupir/report', [LaporanKlaimPJTSupirController::class, 'report'])->name('laporanklaimpjtsupir.report');
+    Route::get('laporanklaimpjtsupir/export', [LaporanKlaimPJTSupirController::class, 'export'])->name('laporanklaimpjtsupir.export');
     Route::get('laporanklaimpjtsupir/index', [LaporanKlaimPJTSupirController::class, 'index']);
     Route::resource('laporanklaimpjtsupir', LaporanKlaimPJTSupirController::class);
 
