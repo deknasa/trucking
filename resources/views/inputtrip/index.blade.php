@@ -24,7 +24,14 @@
                     </div>
                   </div>
                 </div>
-
+                <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">UPAH ZONA <span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <select name="statusupahzona" class="form-control select2bs4" id="statusupahzona">
+                      <option value="">-- PILIH STATUS UPAH ZONA--</option>
+                    </select>
+                  </div>
+                </div>
                 <div class="form-group ">
                   <label class="col-sm-12 col-form-label">JENIS SURAT PENGANTAR <span class="text-danger">*</span></label>
                   <div class="col-sm-12">
@@ -41,14 +48,7 @@
                     </select>
                   </div>
                 </div>
-                <div class="form-group ">
-                  <label class="col-sm-12 col-form-label">UPAH ZONA <span class="text-danger">*</span></label>
-                  <div class="col-sm-12">
-                    <select name="statusupahzona" class="form-control select2bs4" id="statusupahzona">
-                      <option value="">-- PILIH STATUS UPAH ZONA--</option>
-                    </select>
-                  </div>
-                </div>
+                
                 <div class="form-group ">
                   <label class="col-sm-12 col-form-label">EMKL <span class="text-danger">*</span></label>
                   <div class="col-sm-12">
