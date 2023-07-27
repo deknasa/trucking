@@ -195,8 +195,8 @@
         value: form.find(`[name="tglbukti"]`).val()
       })
       data.push({
-        name: 'tglterima',
-        value: form.find(`[name="tglterima"]`).val()
+        name: 'statuspilihaninvoice',
+        value: form.find(`[name="statuspilihaninvoice"]`).val()
       })
       data.push({
         name: 'tgljatuhtempo',
