@@ -221,8 +221,7 @@
           {
             label: 'Kota Dari Sampai',
             name: 'kotadarisampai',
-            search: false,
-            hidden: true
+            align: 'left'
           },
 
       ],
