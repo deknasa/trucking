@@ -39,13 +39,12 @@
               <div class="row form-group">
                 <div class="col-12 col-md-2">
                   <label class="col-form-label">
-                    TGL TERIMA <span class="text-danger">*</span>
+                    AGEN <span class="text-danger">*</span>
                   </label>
                 </div>
                 <div class="col-12 col-md-4">
-                  <div class="input-group">
-                    <input type="text" name="tglterima" class="form-control datepicker">
-                  </div>
+                  <input type="hidden" name="agen_id">
+                  <input type="text" name="agen" class="form-control agen-lookup">
                 </div>
                 <div class="col-12 col-md-2 text-right">
                   <label class="col-form-label">
@@ -62,12 +61,13 @@
               <div class="row form-group">
                 <div class="col-12 col-md-2">
                   <label class="col-form-label">
-                    AGEN <span class="text-danger">*</span>
+                    STATUS pilihan invoice <span class="text-danger">*</span>
                   </label>
                 </div>
                 <div class="col-12 col-md-4">
-                  <input type="hidden" name="agen_id">
-                  <input type="text" name="agen" class="form-control agen-lookup">
+                  <select name="statuspilihaninvoice" class="form-select select2bs4" style="width: 100%;">
+                    <option value="">-- PILIH STATUS pilihan invoice --</option>
+                  </select>
                 </div>
 
                 <div class="col-12 col-md-2  text-right">
@@ -423,6 +423,7 @@
 
     initDatepicker()
     loadInvoiceGrid();
+    setStatusPilihanInvoiceOptions(form)
   }
 
   function editInvoiceHeader(invId) {
@@ -443,7 +444,8 @@
 
     Promise
       .all([
-        showInvoiceHeader(form, invId, 'edit')
+        showInvoiceHeader(form, invId, 'edit'),
+        setStatusPilihanInvoiceOptions(form)
       ])
       .then(() => {
         clearSelectedRows()
@@ -486,7 +488,8 @@
 
     Promise
       .all([
-        showInvoiceHeader(form, invId, 'edit')
+        showInvoiceHeader(form, invId, 'edit'),
+        setStatusPilihanInvoiceOptions(form)
       ])
       .then(() => {
         clearSelectedRows()
@@ -579,6 +582,21 @@
           {
             label: "NO CONT",
             name: "nocont",
+            sortable: true,
+          },
+          {
+            label: "no sp full",
+            name: "nospfull",
+            sortable: true,
+          },
+          {
+            label: "no sp empty",
+            name: "nospempty",
+            sortable: true,
+          },
+          {
+            label: "no sp full empty",
+            name: "nospfullempty",
             sortable: true,
           },
           {
@@ -840,6 +858,10 @@
     data.push({
       name: 'tglsampai',
       value: form.find(`[name="tglsampai"]`).val()
+    })
+    data.push({
+      name: 'pilihanperiode',
+      value: form.find(`[name="statuspilihaninvoice"]`).val()
     })
     data.push({
       name: 'limit',
@@ -1203,6 +1225,64 @@
 
   }
 
+  const setStatusPilihanInvoiceOptions = function setStatusPilihanInvoiceOptions(relatedForm) {
+    return new Promise((resolve, reject) => {
+      relatedForm.find('[name=statuspilihaninvoice]').empty()
+      relatedForm.find('[name=statuspilihaninvoice]').append(
+        new Option('-- PILIH STATUS pilihan invoice --', '', false, true)
+      ).trigger('change')
+
+      $.ajax({
+        url: `${apiUrl}parameter`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          filters: JSON.stringify({
+            "groupOp": "AND",
+            "rules": [{
+              "field": "grp",
+              "op": "cn",
+              "data": "STATUS PILIHAN INVOICE"
+            }]
+          })
+        },
+        success: response => {
+          response.data.forEach(statusKaryawan => {
+            let option = new Option(statusKaryawan.text, statusKaryawan.id)
+
+            relatedForm.find('[name=statuspilihaninvoice]').append(option).trigger('change')
+          });
+
+          resolve()
+        }
+      })
+    })
+  }
+
+  function setTglJatuhTempo(top = 0) {
+    // Tanggal awal dalam format "YYYY-MM-DD"
+    const tanggalAwal = new Date();
+    
+    // Menambahkan jumlah hari (34 hari)
+    const jumlahHari = Math.floor(top);
+    tanggalAwal.setDate(tanggalAwal.getDate() + jumlahHari);
+    
+    // Mendapatkan tanggal setelah ditambahkan 34 hari
+    const tahun = tanggalAwal.getFullYear();
+    const bulan = String(tanggalAwal.getMonth() + 1).padStart(2, "0"); // Ditambah 1 karena Januari dimulai dari 0
+    const tanggal = String(tanggalAwal.getDate()).padStart(2, "0");
+
+    $('#crudForm').find("[name=tgljatuhtempo]").val(tanggal + "-" + bulan + "-" + tahun);
+    $('#crudForm').find("[name=tgljatuhtempo]").prop('readonly',true);
+    // $('#crudForm').find("[name=tgljatuhtempo]").parent('.input-group').find('.input-group-append').child('.ui-datepicker-trigger').prop('disabled',true);
+    $('#crudForm').find("[name=tgljatuhtempo]").parent('.input-group').find('.input-group-append').remove()
+
+
+  }
+
   function initLookup() {
     $('.agen-lookup').lookup({
       title: 'Agen Lookup',
@@ -1214,6 +1294,8 @@
       },
       onSelectRow: (agen, element) => {
         $('#crudForm [name=agen_id]').first().val(agen.id)
+        setTglJatuhTempo(agen.top);
+
         element.val(agen.namaagen)
         element.data('currentValue', element.val())
       },

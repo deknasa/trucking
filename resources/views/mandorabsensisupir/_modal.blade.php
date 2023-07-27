@@ -74,7 +74,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
-                  Jam <span class="text-danger">*</span>
+                  Jam
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
@@ -279,6 +279,12 @@
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
+        let date = new Date();
+        let time = date.toLocaleString("id", {
+          timeStyle: "medium",
+        });
+        time = time.split('.')
+        $('#crudForm').find('[name=jam]').val(time[0]+":"+time[1]);
       })
   }
 
