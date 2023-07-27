@@ -36,27 +36,19 @@
                         </div>
 
                         <div class="row form-group">
-                            <div class="col-12 col-sm-3 col-md-2">
+                            <div class="col-12 col-md-2">
                                 <label class="col-form-label">
-                                    BANK <span class="text-danger">*</span></label>
+                                    SUPIR <span class="text-danger">*</span>
+                                </label>
                             </div>
-                            <div class="col-12 col-sm-9 col-md-10">
-                                <input type="hidden" name="bank_id">
-                                <input type="text" name="bank" class="form-control bank-lookup">
+                            <div class="col-12 col-md-10">
+                                <input type="hidden" name="supir_id">
+                                <input type="text" name="supir" class="form-control supir-lookup">
                             </div>
                         </div>
 
-                        <div class="row form-group">
-                            <div class="col-12 col-sm-3 col-md-2">
-                                <label class="col-form-label">
-                                    PERIODE <span class="text-danger">*</span></label>
-                            </div>
-                            <div class="col-12 col-sm-9 col-md-10">
-                                <div class="input-group">
-                                    <input type="text" name="periode" class="form-control datepicker">
-                                </div>
-                            </div>
-                        </div>
+
+
 
                         <div class="row form-group">
                             <div class="col-12 col-sm-3 col-md-2">
@@ -78,6 +70,29 @@
                             <div class="col-12 col-sm-9 col-md-10">
                                 <div class="input-group">
                                     <input type="text" name="tglsampai" class="form-control datepicker">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="border p-3 mt-3">
+                            <h6>Posting Pengeluaran</h6>
+
+                            <div class="row form-group">
+                                <div class="col-12 col-md-2">
+                                    <label class="col-form-label">
+                                        POSTING </label>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <input type="hidden" name="bank_id">
+                                    <input type="text" name="bank" class="form-control bank-lookup">
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-12 col-md-2">
+                                    <label class="col-form-label">
+                                        NO BUKTI KAS/BANK KELUAR </label>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <input type="text" name="penerimaan_nobukti" id="penerimaan_nobukti" class="form-control" readonly>
                                 </div>
                             </div>
                         </div>
@@ -118,7 +133,8 @@
     let selectedTrip = [];
     let selectedRic = [];
     let selectedNominal = [];
-    let selectedSupir = [];
+    let selectedDari = [];
+    let selectedSampai = [];
     let selectedKeterangan = [];
 
     let sortnameTrip = 'nobukti_trip';
@@ -137,11 +153,15 @@
         });
 
         $(document).on('click', '#btnTampil', function(event) {
-            console.log('reloaad');
+       
+
             let tgldari = $('#crudForm').find(`[name=tgldari]`).val()
             let tglsampai = $('#crudForm').find(`[name=tglsampai]`).val()
-            if ((tgldari != '') && (tglsampai != '')) {
-                getTrip(tgldari, tglsampai)
+            let supir_id = $('#crudForm').find(`[name=supir_id]`).val()
+            let id = $('#crudForm').find(`[name=id]`).val()
+            if ((tgldari != '') && (tglsampai != '') && (supir_id != '')) {
+
+                getTrip(tgldari, tglsampai, supir_id, id)
                     .then((response) => {
 
 
@@ -153,6 +173,7 @@
                             postData: {
                                 tglsampai: tglsampai,
                                 tgldari: tgldari,
+                                supir_id: supir_id,
                                 sortIndex: 'nobukti_trip',
                                 aksi: $('#crudForm').data('action'),
                                 idPendapatan: $('#crudForm').find(`[name=id]`).val()
@@ -170,7 +191,7 @@
                         }
                     })
             }
-
+  
         })
 
         $('#btnSubmit').click(function(event) {
@@ -195,8 +216,8 @@
                 value: form.find(`[name="tglbukti"]`).val()
             })
             data.push({
-                name: 'periode',
-                value: form.find(`[name="periode"]`).val()
+                name: 'pengeluaran_nobukti',
+                value: form.find(`[name="pengeluaran_nobukti"]`).val()
             })
             data.push({
                 name: 'bank',
@@ -207,6 +228,14 @@
                 value: form.find(`[name="bank_id"]`).val()
             })
             data.push({
+                name: 'supir',
+                value: form.find(`[name="supir"]`).val()
+            })
+            data.push({
+                name: 'supir_id',
+                value: form.find(`[name="supir_id"]`).val()
+            })
+            data.push({
                 name: 'tgldari',
                 value: form.find(`[name="tgldari"]`).val()
             })
@@ -215,7 +244,7 @@
                 value: form.find(`[name="tglsampai"]`).val()
             })
 
-            
+
             $.each(selectedRowsTrip, function(index, item) {
                 data.push({
                     name: 'id_detail[]',
@@ -234,9 +263,15 @@
                     value: item
                 })
             });
-            $.each(selectedSupir, function(index, item) {
+            $.each(selectedDari, function(index, item) {
                 data.push({
-                    name: 'supir_id[]',
+                    name: 'dari_id[]',
+                    value: item
+                })
+            });
+            $.each(selectedSampai, function(index, item) {
+                data.push({
+                    name: 'sampai_id[]',
                     value: item
                 })
             });
@@ -393,7 +428,6 @@
         $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         $('#crudForm').find('[name=tgldari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         $('#crudForm').find('[name=tglsampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-        $('#crudForm').find('[name=periode]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
     }
 
     function editPendapatanSupir(pendapatanId) {
@@ -425,11 +459,14 @@
                 form.find('[name=tgldari]').siblings('.input-group-append').remove()
                 form.find('[name=tglsampai]').attr('readonly', true)
                 form.find('[name=tglsampai]').siblings('.input-group-append').remove()
-                form.find('[name=periode]').attr('readonly', true)
-                form.find('[name=periode]').siblings('.input-group-append').remove()
+                form.find('[name=pengeluaran_nobukti]').attr('readonly', true)
+                form.find('[name=pengeluaran_nobukti]').siblings('.input-group-append').remove()
                 form.find('[name=bank]').attr('readonly', true)
                 form.find('[name=bank]').siblings('.input-group-append').remove()
                 form.find('[name=bank]').siblings('.button-clear').remove()
+                form.find('[name=supir]').attr('readonly', true)
+                form.find('[name=supir]').siblings('.input-group-append').remove()
+                form.find('[name=supir]').siblings('.button-clear').remove()
             })
             .catch((error) => {
                 showDialog(error.statusText)
@@ -534,14 +571,24 @@
                     <tr>
                     <td></td>
                     <td>
-                        <input type="hidden" name="supir_id[]">
-                        <input type="text" name="supir[]" data-current-value="${detail.supir}" class="form-control supir-lookup">
+                        <input type="hidden" name="dari_id[]">
+                        <input type="text" name="dari[]" data-current-value="${detail.dari}" >
+                    </td>
+                    <td>
+                        <input type="hidden" name="sampai_id[]">
+                        <input type="text" name="sampai[]" data-current-value="${detail.sampai}" >
+                    </td>
+                    <td>
+                        <input type="text" name="nobukti_ric[]" class="form-control">   
+                    </td>
+                    <td>
+                        <input type="text" name="nobukti_trip[]" class="form-control">   
+                    </td>
+                    <td>
+                        <input type="text" name="nominal_detail[]"  style="text-align:right" class="form-control autonumeric nominal" > 
                     </td>
                     <td>
                         <input type="text" name="keterangan_detail[]" class="form-control">   
-                    </td>
-                    <td>
-                        <input type="text" name="nominal[]"  style="text-align:right" class="form-control autonumeric nominal" > 
                     </td>
                     <td>
                         <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
@@ -549,33 +596,60 @@
                     </tr>
                 `)
 
-                        detailRow.find(`[name="supir_id[]"]`).val(detail.supir_id)
-                        detailRow.find(`[name="supir[]"]`).val(detail.supir)
+                        detailRow.find(`[name="nobukti_ric[]"]`).val(detail.keterangan)
+                        detailRow.find(`[name="nobukti_trip[]"]`).val(detail.keterangan)
+                        detailRow.find(`[name="dari_id[]"]`).val(detail.dari_id)
+                        detailRow.find(`[name="dari[]"]`).val(detail.dari)
+                        detailRow.find(`[name="sampai_id[]"]`).val(detail.sampai_id)
+                        detailRow.find(`[name="sampai[]"]`).val(detail.sampai)
                         detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
-                        detailRow.find(`[name="nominal[]"]`).val(detail.nominal)
+                        detailRow.find(`[name="nominal_detail[]"]`).val(detail.nominal)
 
-                        initAutoNumeric(detailRow.find(`[name="nominal[]"]`))
+                        initAutoNumeric(detailRow.find(`[name="nominal_detail[]"]`))
                         $('#detailList tbody').append(detailRow)
-                        setTotal();
+                       
 
-                        $('.supir-lookup').last().lookup({
-                            title: 'Supir Lookup',
-                            fileName: 'supir',
+                        $('.kota-lookup').last().lookup({
+                            title: 'Kota Lookup',
+                            fileName: 'kota',
                             beforeProcess: function(test) {
                                 this.postData = {
                                     Aktif: 'AKTIF',
                                 }
                             },
-                            onSelectRow: (supir, element) => {
-                                element.parents('td').find(`[name="supir_id[]"]`).val(supir.id)
-                                element.val(supir.namasupir)
+                            onSelectRow: (kota, element) => {
+                                element.parents('td').find(`[name="dari_id[]"]`).val(kota.id)
+                                element.val(kota.kodekota)
                                 element.data('currentValue', element.val())
                             },
                             onCancel: (element) => {
                                 element.val(element.data('currentValue'))
                             },
                             onClear: (element) => {
-                                element.parents('td').find(`[name="supir_id[]"]`).val('')
+                                element.parents('td').find(`[name="dari_id[]"]`).val('')
+                                element.val('')
+                                element.data('currentValue', element.val())
+                            }
+                        })
+
+                        $('.kota-lookup').last().lookup({
+                            title: 'Kota Lookup',
+                            fileName: 'sampai',
+                            beforeProcess: function(test) {
+                                this.postData = {
+                                    Aktif: 'AKTIF',
+                                }
+                            },
+                            onSelectRow: (kota, element) => {
+                                element.parents('td').find(`[name="sampai_id[]"]`).val(kota.id)
+                                element.val(kota.kodekota)
+                                element.data('currentValue', element.val())
+                            },
+                            onCancel: (element) => {
+                                element.val(element.data('currentValue'))
+                            },
+                            onClear: (element) => {
+                                element.parents('td').find(`[name="sampai_id[]"]`).val('')
                                 element.val('')
                                 element.data('currentValue', element.val())
                             }
@@ -657,16 +731,36 @@
                         name: 'nobukti_trip',
                     },
                     {
+                        label: 'TGL TRIP',
+                        name: 'tgl_trip',
+                        align: 'left',
+                        formatter: "date",
+                        formatoptions: {
+                            srcformat: "ISO8601Long",
+                            newformat: "d-m-Y"
+                        }
+                    },
+                    {
                         label: 'NO BUKTI RIC',
                         name: 'nobukti_ric',
                     },
                     {
-                        label: 'SUPIR',
-                        name: 'supir',
+                        label: 'DARI',
+                        name: 'dari',
                     },
                     {
-                        label: 'supir_id',
-                        name: 'supir_id',
+                        label: 'dari_id',
+                        name: 'dari_id',
+                        hidden: true,
+                        search: false
+                    },
+                    {
+                        label: 'SAMPAI',
+                        name: 'sampai',
+                    },
+                    {
+                        label: 'sampai_id',
+                        name: 'sampai_id',
                         hidden: true,
                         search: false
                     },
@@ -735,10 +829,10 @@
                     setHighlight($(this))
 
                     if (data.attributes) {
-
+                            
                         $(this).jqGrid('footerData', 'set', {
                             nobukti_trip: 'Total:',
-                            nominal_detail: data.attributes.totalNominal,
+                            nominal_detail: data.attributes.nominal_detail,
                         }, true)
                     }
 
@@ -778,8 +872,10 @@
     }
 
 
-    function getTrip(tgldari, tglsampai) {
+    function getTrip(tgldari, tglsampai, supir_id, id) {
         return new Promise((resolve, reject) => {
+
+
             $.ajax({
                 url: `${apiUrl}pendapatansupirheader/gettrip`,
                 method: 'GET',
@@ -788,6 +884,8 @@
                     limit: 0,
                     tglsampai: tglsampai,
                     tgldari: tgldari,
+                    supir_id: supir_id,
+                    id: id,
                     sortIndex: 'nobukti_trip',
                     aksi: $('#crudForm').data('action'),
                     idPendapatan: $('#crudForm').find(`[name=id]`).val()
@@ -801,7 +899,8 @@
                     selectedTrip = [];
                     selectedRic = [];
                     selectedNominal = [];
-                    selectedSupir = [];
+                    selectedDari = [];
+                    selectedSampai = [];
                     selectedKeterangan = [];
 
                     $.each(response.data, (index, detail) => {
@@ -811,7 +910,8 @@
                             selectedTrip.push(detail.nobukti_trip)
                             selectedRic.push(detail.nobukti_ric)
                             selectedNominal.push(detail.nominal_detail)
-                            selectedSupir.push(detail.supir_id)
+                            selectedDari.push(detail.dari_id)
+                            selectedSampai.push(detail.sampai_id)
                             selectedKeterangan.push(detail.keterangan)
                         }
                     })
@@ -841,7 +941,8 @@
         selectedTrip = [];
         selectedRic = [];
         selectedNominal = [];
-        selectedSupir = [];
+        selectedDari = [];
+        selectedSampai = [];
         selectedKeterangan = [];
 
         $('#modalgrid').trigger('reloadGrid')
@@ -868,14 +969,16 @@
                 selectedTrip = [];
                 selectedRic = [];
                 selectedNominal = [];
-                selectedSupir = [];
+                selectedDari = [];
+                selectedSampai = [];
                 selectedKeterangan = [];
 
                 selectedRowsTrip = response.data.map((data) => data.id)
                 selectedTrip = response.data.map((data) => data.nobukti_trip)
                 selectedRic = response.data.map((data) => data.nobukti_ric)
                 selectedNominal = response.data.map((data) => data.nominal_detail)
-                selectedSupir = response.data.map((data) => data.supir_id)
+                selectedDari = response.data.map((data) => data.dari_id)
+                selectedSampai = response.data.map((data) => data.sampai_id)
                 selectedKeterangan = response.data.map((data) => data.keterangan)
 
                 $('#modalgrid').jqGrid('setGridParam', {
@@ -883,6 +986,8 @@
                     postData: {
                         tglsampai: $('#crudForm').find(`[name=tglsampai]`).val(),
                         tgldari: $('#crudForm').find(`[name=tgldari]`).val(),
+                        supir_id: $('#crudForm').find(`[name=supir_id]`).val(),
+                        id: $('#crudForm').find(`[name=id]`).val(),
                         sortIndex: 'nobukti_trip',
                         aksi: $('#crudForm').data('action'),
                         idPendapatan: $('#crudForm').find(`[name=id]`).val()
@@ -901,7 +1006,8 @@
             selectedTrip.push($(element).parents('tr').find(`td[aria-describedby="modalgrid_nobukti_trip"]`).text())
             selectedRic.push($(element).parents('tr').find(`td[aria-describedby="modalgrid_nobukti_ric"]`).text())
             selectedNominal.push($(element).parents('tr').find(`td[aria-describedby="modalgrid_nominal_detail"]`).text())
-            selectedSupir.push($(element).parents('tr').find(`td[aria-describedby="modalgrid_supir_id"]`).text())
+            selectedDari.push($(element).parents('tr').find(`td[aria-describedby="modalgrid_dari_id"]`).text())
+            selectedSampai.push($(element).parents('tr').find(`td[aria-describedby="modalgrid_sampai_id"]`).text())
             selectedKeterangan.push($(element).parents('tr').find(`td[aria-describedby="modalgrid_keterangan"]`).text())
         } else {
             $(element).parents('tr').removeClass('bg-light-blue')
@@ -911,7 +1017,8 @@
                     selectedTrip.splice(i, 1);
                     selectedRic.splice(i, 1);
                     selectedNominal.splice(i, 1);
-                    selectedSupir.splice(i, 1);
+                    selectedDari.splice(i, 1);
+                    selectedSampai.splice(i, 1);
                     selectedKeterangan.splice(i, 1);
                 }
             }
@@ -924,14 +1031,28 @@
 
         <td></td>
         <td>
-            <input type="hidden" name="supir_id[]">
-            <input type="text" name="supir[]" class="form-control supir-lookup">
-        </td>
-        <td>
-          <input type="text" name="keterangan_detail[]" class="form-control">   
-        </td><td>
-          <input type="text" name="nominal[]" class="form-control autonumeric nominal"> 
-        </td>
+                        <input type="hidden" name="dari_id[]">
+                        <input type="text" name="dari[]" data-current-value="${detail.dari}" >
+                    </td>
+                    <td>
+                        <input type="hidden" name="sampai_id[]">
+                        <input type="text" name="sampai[]" data-current-value="${detail.sampai}" >
+                    </td>
+                    <td>
+                        <input type="text" name="nobukti_ric[]" class="form-control">   
+                    </td>
+                    <td>
+                        <input type="text" name="nobukti_trip[]" class="form-control">   
+                    </td>
+                    <td>
+                        <input type="text" name="nominal_detail[]"  style="text-align:right" class="form-control autonumeric nominal" > 
+                    </td>
+                    <td>
+                        <input type="text" name="keterangan_detail[]" class="form-control">   
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
+                    </td>
         <td>
             <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
         </td>
@@ -941,28 +1062,28 @@
         $('#detailList tbody').append(detailRow)
 
 
-        $('.supir-lookup').last().lookup({
-            title: 'Supir Lookup',
-            fileName: 'supir',
+        $('.kota-lookup').last().lookup({
+            title: 'Kota Lookup',
+            fileName: 'dari',
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
                 }
             },
 
-            onSelectRow: (supir, element) => {
-                element.parents('td').find(`[name="supir_id[]"]`).val(supir.id)
-                element.val(supir.namasupir)
-                element.data('currentValue', element.val())
+
+        })
+
+        $('.kota-lookup').last().lookup({
+            title: 'Kota Lookup',
+            fileName: 'sampai',
+            beforeProcess: function(test) {
+                this.postData = {
+                    Aktif: 'AKTIF',
+                }
             },
-            onCancel: (element) => {
-                element.val(element.data('currentValue'))
-            },
-            onClear: (element) => {
-                element.parents('td').find(`[name="supir_id[]"]`).val('')
-                element.val('')
-                element.data('currentValue', element.val())
-            }
+
+
         })
 
         initAutoNumeric(detailRow.find('.autonumeric'))
@@ -1055,15 +1176,40 @@
     }
 
     function initLookup() {
+        $('.supir-lookup').lookup({
+            title: 'Supir Lookup',
+            fileName: 'supir',
+            beforeProcess: function(test) {
+                // var levelcoa = $(`#levelcoa`).val();
+                this.postData = {
+
+                    Aktif: 'AKTIF',
+                }
+            },
+            onSelectRow: (supir, element) => {
+                $('#crudForm [name=supir_id]').first().val(supir.id)
+                element.val(supir.namasupir)
+                element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+                element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+                $('#crudForm [name=supir_id]').first().val('')
+                element.val('')
+                element.data('currentValue', element.val())
+            }
+        })
+
         $('.bank-lookup').lookup({
             title: 'Bank Lookup',
             fileName: 'bank',
             beforeProcess: function(test) {
                 this.postData = {
+
                     Aktif: 'AKTIF',
                 }
             },
-
             onSelectRow: (bank, element) => {
                 $('#crudForm [name=bank_id]').first().val(bank.id)
                 element.val(bank.namabank)
@@ -1073,11 +1219,71 @@
                 element.val(element.data('currentValue'))
             },
             onClear: (element) => {
+                $('#crudForm [name=bank_id]').first().val('')
                 element.val('')
-                $(`#crudForm [name="bank_id"]`).first().val('')
                 element.data('currentValue', element.val())
             }
         })
+
+        $('.kota-lookup').lookup({
+            title: 'Kota Lookup',
+            fileName: 'dari',
+            beforeProcess: function(test) {
+                this.postData = {
+
+                    Aktif: 'AKTIF',
+                }
+            },
+            onSelectRow: (kota, element) => {
+                $('#crudForm [name=dari_id]').first().val(kota.id)
+                element.val(kota.kodekota)
+                element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+                element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+                $('#crudForm [name=dari_id]').first().val('')
+                element.val('')
+                element.data('currentValue', element.val())
+            }
+        })
+
+
+        $('.kota-lookup').lookup({
+            title: 'Kota Lookup',
+            fileName: 'sampai',
+            beforeProcess: function(test) {
+                this.postData = {
+
+                    Aktif: 'AKTIF',
+                }
+            },
+            onSelectRow: (kota, element) => {
+                $('#crudForm [name=sampai_id]').first().val(kota.id)
+                element.val(kota.kodekota)
+                element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+                element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+                $('#crudForm [name=sampai_id]').first().val('')
+                element.val('')
+                element.data('currentValue', element.val())
+            }
+        })
+    }
+
+    function setTotal() {
+        let nominalDetails = $(`#table_body [name="nominal_detail[]"]`)
+        let total = 0
+        
+        $.each(nominalDetails, (index, nominalDetail) => {
+            total += AutoNumeric.getNumber(nominalDetail)
+        });
+
+        new AutoNumeric('#total').set(total)
     }
 </script>
 @endpush()
