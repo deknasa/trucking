@@ -38,6 +38,10 @@
                                     <i class="fas fa-print"></i>
                                     Report
                                 </button>
+                                <button type="button" id="btnExport" class="btn btn-warning mr-1 ">
+                                    <i class="fas fa-file-export"></i>
+                                    Export
+                                </button>
                             </div>
                         </div>
 
@@ -80,6 +84,9 @@
         if (!`{{ $myAuth->hasPermission('laporanklaimpjtsupir', 'report') }}`) {
             $('#btnPreview').attr('disabled', 'disabled')
         }
+        if (!`{{ $myAuth->hasPermission('laporanklaimpjtsupir', 'export') }}`) {
+            $('#btnExport').attr('disabled', 'disabled')
+        }
     })
 
     $(document).on('click', `#btnPreview`, function(event) {
@@ -99,7 +106,7 @@
             },
             success: function(response) {
                 // Handle the success response
-                var newWindow = window.open('','_blank');
+                var newWindow = window.open('', '_blank');
                 newWindow.document.open();
                 newWindow.document.write(response);
                 newWindow.document.close();
@@ -116,6 +123,21 @@
             }
         });
     })
+
+    $(document).on('click', `#btnExport`, function(event) {
+        let sampai = $('#crudForm').find('[name=sampai]').val()
+        let dari = $('#crudForm').find('[name=dari]').val()
+        let kelompok_id = $('#crudForm').find('[name=kelompok_id]').val()
+        let kelompok = $('#crudForm').find('[name=kelompok]').val()
+
+        if (dari != '' && sampai != '' && kelompok != '') {
+
+            window.open(`{{ route('laporanklaimpjtsupir.export') }}?sampai=${sampai}&dari=${dari}&kelompok_id=${kelompok_id}&kelompok=${kelompok}`)
+        } else {
+            showDialog('ISI SELURUH KOLOM')
+        }
+    })
+
 
 
     function getCekReport() {

@@ -119,16 +119,16 @@ class laporanpembelianController extends MyController
         $sheet->setCellValue('A1', 'PT. TRANSPORINDO AGUNG SEJAHTERA');
         $sheet->setCellValue('A2', 'Laporan Pembelian');
 
-        // $sheet->getStyle("A1")->getFont()->setSize(20)->setBold(true);
+        $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
 
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->getStyle('A2')->getAlignment()->setHorizontal('left');
         $sheet->setCellValue('A3', 'Periode: ' . $request->dari . ' S/D ' . $request->sampai);
         $sheet->setCellValue('A4', 'Status: ' . $request->status);
-        $sheet->mergeCells('A1:H1');
-        $sheet->mergeCells('A2:H2');
-        $sheet->mergeCells('A3:H3');
-        $sheet->mergeCells('A4:H4');
+        $sheet->mergeCells('A1:G1');
+        $sheet->mergeCells('A2:G2');
+        $sheet->mergeCells('A3:G3');
+        $sheet->mergeCells('A4:G4');
 
         $header_start_row = 6;
         $detail_start_row = 7;
@@ -166,10 +166,6 @@ class laporanpembelianController extends MyController
                 'index' => 'namasupplier',
             ],
             [
-                'label' => 'Stok',
-                'index' => 'stok_id',
-            ],
-            [
                 'label' => 'Nama Stok',
                 'index' => 'namastok',
             ],
@@ -198,9 +194,7 @@ class laporanpembelianController extends MyController
         $lastColumn = $alphabets[$data_columns_index];
         $sheet->getStyle("A$header_start_row:$lastColumn$header_start_row")->getFont()->setBold(true);
         $sheet->getStyle("A$header_start_row:$lastColumn$header_start_row")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-        $totalDebet = 0;
-        $totalKredit = 0;
-        $totalSaldo = 0;
+        
         if (is_array($pengeluaran) || is_iterable($pengeluaran)) {
             foreach ($pengeluaran as $response_index => $response_detail) {
 
@@ -210,15 +204,14 @@ class laporanpembelianController extends MyController
 
                 $sheet->setCellValue("A$detail_start_row", $response_detail['nobukti']);
                 $sheet->setCellValue("B$detail_start_row", date('d-m-Y', strtotime($response_detail['tglbukti'])));
-                $sheet->setCellValue("D$detail_start_row", $response_detail['namasupplier']);
-                $sheet->setCellValue("D$detail_start_row", $response_detail['stok_id']);
-                $sheet->setCellValue("E$detail_start_row", $response_detail['namastok']);
-                $sheet->setCellValue("F$detail_start_row", $response_detail['qty']);
-                $sheet->setCellValue("G$detail_start_row", $response_detail['satuan']);
-                $sheet->setCellValue("H$detail_start_row", $response_detail['keterangan']);
+                $sheet->setCellValue("C$detail_start_row", $response_detail['namasupplier']);
+                $sheet->setCellValue("D$detail_start_row", $response_detail['namastok']);
+                $sheet->setCellValue("E$detail_start_row", $response_detail['qty']);
+                $sheet->setCellValue("F$detail_start_row", $response_detail['satuan']);
+                $sheet->setCellValue("G$detail_start_row", $response_detail['keterangan']);
 
-                $sheet->getStyle("A$detail_start_row:I$detail_start_row")->applyFromArray($styleArray);
-                $sheet->getStyle("C$detail_start_row:I$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+                $sheet->getStyle("A$detail_start_row:G$detail_start_row")->applyFromArray($styleArray);
+                // $sheet->getStyle("C$detail_start_row:I$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
                 // $sheet->getStyle("B$detail_start_row:B$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
                 // $sheet->getStyle("D$detail_start_row:D$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
 
@@ -230,6 +223,14 @@ class laporanpembelianController extends MyController
             }
         }
 
+        $ttd_start_row = $detail_start_row + 2;
+        $sheet->setCellValue("A$ttd_start_row", 'Disetujui Oleh,');
+        $sheet->setCellValue("C$ttd_start_row", 'Diperiksa Oleh,');
+        $sheet->setCellValue("F$ttd_start_row", 'Disusun Oleh,');
+
+        $sheet->setCellValue("A" . ($ttd_start_row + 3), '( Bpk. Hasan )');
+        $sheet->setCellValue("C" . ($ttd_start_row + 3), '( Rina )');
+        $sheet->setCellValue("F" . ($ttd_start_row + 3), '(                )');
 
         //ukuran kolom
         $sheet->getColumnDimension('A')->setAutoSize(true);
@@ -239,19 +240,11 @@ class laporanpembelianController extends MyController
         $sheet->getColumnDimension('E')->setAutoSize(true);
         $sheet->getColumnDimension('F')->setAutoSize(true);
         $sheet->getColumnDimension('G')->setAutoSize(true);
-        $sheet->getColumnDimension('H')->setAutoSize(true);
-
-
-
-        //FORMAT
-        // set format ribuan untuk kolom D dan E
-        $sheet->getStyle("D" . ($detail_start_row + 1) . ":E" . ($detail_start_row + 1))->getNumberFormat()->setFormatCode("#,##0.00");
-        $sheet->getStyle("A" . ($detail_start_row + 1) . ":$lastColumn" . ($detail_start_row + 1))->getFont()->setBold(true);
 
 
 
         $writer = new Xlsx($spreadsheet);
-        $filename = 'EXPORTPEMBELIAN' . date('dmYHis');
+        $filename = 'LAPORAN PEMBELIAN PER SUPPLIER' . date('dmYHis');
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
         header('Cache-Control: max-age=0');
