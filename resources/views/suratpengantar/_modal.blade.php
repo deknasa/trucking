@@ -1916,6 +1916,9 @@
     $.ajax({
       url: `{{ config('app.api_url') }}suratpengantar/${Id}/cekValidasi`,
       method: 'POST',
+      data: {
+        aksi: Aksi
+      },
       dataType: 'JSON',
       beforeSend: request => {
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
