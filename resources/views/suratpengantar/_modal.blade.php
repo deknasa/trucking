@@ -139,7 +139,7 @@
                     <input type="text" name="tarifrincian" class="form-control" readonly>
                   </div>
                 </div>
-                <div class="form-group ">
+                <div class="form-group " style="display:none">
                   <label class="col-sm-12 col-form-label">Lokasi BONGKAR/MUAT <span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <input type="text" name="lokasibongkarmuat" class="form-control">
