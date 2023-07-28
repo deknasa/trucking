@@ -439,7 +439,7 @@
         autowidth: true,
         shrinkToFit: false,
         height: 350,
-        rowNum: 10,
+        rowNum: 10000,
         rownumbers: true,
         rownumWidth: 45,
         rowList: [10, 20, 50],

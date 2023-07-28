@@ -2085,6 +2085,11 @@
     $('.trado-lookup').lookup({
       title: 'Trado Lookup',
       fileName: 'trado',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+        }
+      },
       onSelectRow: (trado, element) => {
         element.val(trado.keterangan)
         $(`#${element[0]['name']}Id`).val(trado.id)
@@ -2104,6 +2109,11 @@
     $('.gandengan-lookup').lookup({
       title: 'gandengan Lookup',
       fileName: 'gandengan',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+        }
+      },
       onSelectRow: (trado, element) => {
         element.val(trado.keterangan)
         $(`#${element[0]['name']}Id`).val(trado.id)
@@ -2123,6 +2133,11 @@
     $('.gudang-lookup').lookup({
       title: 'Gudang Lookup',
       fileName: 'gudang',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+        }
+      },
       onSelectRow: (gudang, element) => {
         element.val(gudang.gudang)
         $(`#${element[0]['name']}Id`).val(gudang.id)
@@ -2204,6 +2219,11 @@
     $('.tradoke-lookup').lookup({
       title: 'Trado Lookup',
       fileName: 'trado',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+        }
+      },
       onSelectRow: (trado, element) => {
         element.val(trado.keterangan)
         $(`#${element[0]['name']}Id`).val(trado.id)
@@ -2223,6 +2243,11 @@
     $('.gandenganke-lookup').lookup({
       title: 'gandengan Lookup',
       fileName: 'gandengan',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+        }
+      },
       onSelectRow: (trado, element) => {
         element.val(trado.keterangan)
         $(`#${element[0]['name']}Id`).val(trado.id)
@@ -2246,6 +2271,7 @@
         var penerimaanstokId = $(`#penerimaanstokId`).val();
         this.postData = {
           penerimaanstok_id: penerimaanstokId,
+          Aktif: 'AKTIF',
         }
       },
       onSelectRow: (gudang, element) => {
@@ -2266,6 +2292,11 @@
     $('.tradodari-lookup').lookup({
       title: 'Trado Lookup',
       fileName: 'trado',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+        }
+      },
       onSelectRow: (trado, element) => {
         element.val(trado.keterangan)
         $(`#${element[0]['name']}Id`).val(trado.id)
@@ -2286,6 +2317,11 @@
     $('.gandengandari-lookup').lookup({
       title: 'gandengan Lookup',
       fileName: 'gandengan',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+        }
+      },
       onSelectRow: (trado, element) => {
         element.val(trado.keterangan)
         $(`#${element[0]['name']}Id`).val(trado.id)
@@ -2310,6 +2346,7 @@
         var penerimaanstokId = $(`#penerimaanstokId`).val();
         this.postData = {
           penerimaanstok_id: penerimaanstokId,
+          Aktif: 'AKTIF',
         }
       },
       onSelectRow: (gudang, element) => {
