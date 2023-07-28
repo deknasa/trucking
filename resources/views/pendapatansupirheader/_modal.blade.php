@@ -73,7 +73,17 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="border p-3 mt-3">
+
+                        <div class="row mt-3">
+                            <div class="col-sm-4">
+                                <a id="btnTampil" class="btn btn-secondary mr-2 mb-2">
+                                    <i class="fas fa-sync"></i>
+                                    Reload
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="border p-3 mt-3 mb-3">
                             <h6>Posting Pengeluaran</h6>
 
                             <div class="row form-group">
@@ -96,16 +106,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        <div class="row mt-3">
-                            <div class="col-sm-4">
-                                <a id="btnTampil" class="btn btn-secondary mr-2 mb-2">
-                                    <i class="fas fa-sync"></i>
-                                    Reload
-                                </a>
-                            </div>
-                        </div>
-
                         <table id="modalgrid"></table>
                     </div>
                     <div class="modal-footer justify-content-start">
@@ -135,7 +135,6 @@
     let selectedNominal = [];
     let selectedDari = [];
     let selectedSampai = [];
-    let selectedKeterangan = [];
 
     let sortnameTrip = 'nobukti_trip';
     let sortorderTrip = 'asc';
@@ -153,7 +152,7 @@
         });
 
         $(document).on('click', '#btnTampil', function(event) {
-       
+
 
             let tgldari = $('#crudForm').find(`[name=tgldari]`).val()
             let tglsampai = $('#crudForm').find(`[name=tglsampai]`).val()
@@ -191,7 +190,7 @@
                         }
                     })
             }
-  
+
         })
 
         $('#btnSubmit').click(function(event) {
@@ -245,11 +244,13 @@
             })
 
 
+            let rowLength = 0
             $.each(selectedRowsTrip, function(index, item) {
                 data.push({
                     name: 'id_detail[]',
                     value: item
                 })
+                rowLength++
             });
             $.each(selectedTrip, function(index, item) {
                 data.push({
@@ -275,12 +276,6 @@
                     value: item
                 })
             });
-            $.each(selectedKeterangan, function(index, item) {
-                data.push({
-                    name: 'keterangan[]',
-                    value: item
-                })
-            });
             $.each(selectedNominal, function(index, item) {
                 data.push({
                     name: 'nominal_detail[]',
@@ -288,6 +283,10 @@
                 })
             });
 
+            data.push({
+                name: 'jumlahdetail',
+                value: rowLength
+            })
             data.push({
                 name: 'sortIndex',
                 value: $('#jqGrid').getGridParam().sortname
@@ -360,7 +359,12 @@
                     id = response.data.id
                     $('#crudModal').modal('hide')
                     $('#crudModal').find('#crudForm').trigger('reset')
-
+                    selectedRowsTrip = []
+                    selectedTrip = [];
+                    selectedRic = [];
+                    selectedNominal = [];
+                    selectedDari = [];
+                    selectedSampai = [];
                     $('#jqGrid').jqGrid('setGridParam', {
                         page: response.data.page
                     }).trigger('reloadGrid');
@@ -406,6 +410,7 @@
         activeGrid = '#jqGrid'
 
         $('#crudModal').find('.modal-body').html(modalBody)
+        clearSelectedRowsTrip()
     })
 
     function createPendapatanSupir() {
@@ -419,15 +424,24 @@
         form.data('action', 'add')
 
         $('#crudModalTitle').text('Add Pendapatan Supir')
-        $('#crudModal').modal('show')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
-
-
-        $('#table_body').html('')
-        $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-        $('#crudForm').find('[name=tgldari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-        $('#crudForm').find('[name=tglsampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+        Promise
+            .all([
+                showDefault(form)
+            ])
+            .then(() => {
+                $('#crudModal').modal('show')
+                $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+                $('#crudForm').find('[name=tgldari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+                $('#crudForm').find('[name=tglsampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+            })
+            .catch((error) => {
+                showDialog(error.responseJSON)
+            })
+            .finally(() => {
+                $('.modal-loader').addClass('d-none')
+            })
     }
 
     function editPendapatanSupir(pendapatanId) {
@@ -452,24 +466,20 @@
             .then(() => {
                 clearSelectedRows()
                 $('#gs_').prop('checked', false)
+
                 $('#crudModal').modal('show')
                 form.find('[name=tglbukti]').attr('readonly', true)
                 form.find('[name=tglbukti]').siblings('.input-group-append').remove()
-                form.find('[name=tgldari]').attr('readonly', true)
-                form.find('[name=tgldari]').siblings('.input-group-append').remove()
-                form.find('[name=tglsampai]').attr('readonly', true)
-                form.find('[name=tglsampai]').siblings('.input-group-append').remove()
-                form.find('[name=pengeluaran_nobukti]').attr('readonly', true)
-                form.find('[name=pengeluaran_nobukti]').siblings('.input-group-append').remove()
-                form.find('[name=bank]').attr('readonly', true)
-                form.find('[name=bank]').siblings('.input-group-append').remove()
-                form.find('[name=bank]').siblings('.button-clear').remove()
-                form.find('[name=supir]').attr('readonly', true)
-                form.find('[name=supir]').siblings('.input-group-append').remove()
-                form.find('[name=supir]').siblings('.button-clear').remove()
+                supir = $('#crudForm').find(`[name="supir"]`).parents('.input-group')
+                supir.find('.button-clear').attr('disabled', true)
+                supir.children().find('.lookup-toggler').attr('disabled', true)
+
+                bank = $('#crudForm').find(`[name="bank"]`).parents('.input-group')
+                bank.find('.button-clear').attr('disabled', true)
+                bank.children().find('.lookup-toggler').attr('disabled', true)
             })
             .catch((error) => {
-                showDialog(error.statusText)
+                showDialog(error.responseJSON)
             })
             .finally(() => {
                 $('.modal-loader').addClass('d-none')
@@ -502,12 +512,42 @@
                 $('#crudModal').modal('show')
             })
             .catch((error) => {
-                showDialog(error.statusText)
+                showDialog(error.responseJSON)
             })
             .finally(() => {
                 $('.modal-loader').addClass('d-none')
             })
 
+    }
+
+
+    function showDefault(form) {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: `${apiUrl}pendapatansupirheader/default`,
+                method: 'GET',
+                dataType: 'JSON',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                success: response => {
+                    $.each(response.data, (index, value) => {
+                        let element = form.find(`[name="${index}"]`)
+                        // let element = form.find(`[name="statusaktif"]`)
+
+                        if (element.is('select')) {
+                            element.val(value).trigger('change')
+                        } else {
+                            element.val(value)
+                        }
+                    })
+                    resolve()
+                },
+                error: error => {
+                    reject(error)
+                }
+            })
+        })
     }
 
 
@@ -520,22 +560,16 @@
                 request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
             },
             success: response => {
-                var kodenobukti = response.kodenobukti
-                if (kodenobukti == '1') {
-                    var kodestatus = response.kodestatus
-                    if (kodestatus == '1') {
-                        showDialog(response.message['keterangan'])
-                    } else {
-                        if (Aksi == 'EDIT') {
-                            editPendapatanSupir(Id)
-                        }
-                        if (Aksi == 'DELETE') {
-                            deletePendapatanSupir(Id)
-                        }
-                    }
-
+                var error = response.error
+                if (error) {
+                    showDialog(response)
                 } else {
-                    showDialog(response.message['keterangan'])
+                    if (Aksi == 'EDIT') {
+                        editPendapatanSupir(Id)
+                    }
+                    if (Aksi == 'DELETE') {
+                        deletePendapatanSupir(Id)
+                    }
                 }
             }
         })
@@ -564,100 +598,46 @@
                         } else {
                             element.val(value)
                         }
+
+                        if (index == 'supir') {
+                            form.find('[name=supir]').attr('readonly', true)
+                            element.data('current-value', value)
+
+                        }
+                        if (index == 'bank') {
+                            form.find('[name=pengeluaran_nobukti]').attr('readonly', true)
+                            form.find('[name=bank]').attr('readonly', true)
+                            element.data('current-value', value)
+                        }
                     })
-                    $('#detailList tbody').html('')
                     $.each(response.detail, (index, detail) => {
-                        let detailRow = $(`
-                    <tr>
-                    <td></td>
-                    <td>
-                        <input type="hidden" name="dari_id[]">
-                        <input type="text" name="dari[]" data-current-value="${detail.dari}" >
-                    </td>
-                    <td>
-                        <input type="hidden" name="sampai_id[]">
-                        <input type="text" name="sampai[]" data-current-value="${detail.sampai}" >
-                    </td>
-                    <td>
-                        <input type="text" name="nobukti_ric[]" class="form-control">   
-                    </td>
-                    <td>
-                        <input type="text" name="nobukti_trip[]" class="form-control">   
-                    </td>
-                    <td>
-                        <input type="text" name="nominal_detail[]"  style="text-align:right" class="form-control autonumeric nominal" > 
-                    </td>
-                    <td>
-                        <input type="text" name="keterangan_detail[]" class="form-control">   
-                    </td>
-                    <td>
-                        <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
-                    </td>
-                    </tr>
-                `)
 
-                        detailRow.find(`[name="nobukti_ric[]"]`).val(detail.keterangan)
-                        detailRow.find(`[name="nobukti_trip[]"]`).val(detail.keterangan)
-                        detailRow.find(`[name="dari_id[]"]`).val(detail.dari_id)
-                        detailRow.find(`[name="dari[]"]`).val(detail.dari)
-                        detailRow.find(`[name="sampai_id[]"]`).val(detail.sampai_id)
-                        detailRow.find(`[name="sampai[]"]`).val(detail.sampai)
-                        detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
-                        detailRow.find(`[name="nominal_detail[]"]`).val(detail.nominal)
+                        if (detail.pendapatansupir_id != 0) {
 
-                        initAutoNumeric(detailRow.find(`[name="nominal_detail[]"]`))
-                        $('#detailList tbody').append(detailRow)
-                       
-
-                        $('.kota-lookup').last().lookup({
-                            title: 'Kota Lookup',
-                            fileName: 'kota',
-                            beforeProcess: function(test) {
-                                this.postData = {
-                                    Aktif: 'AKTIF',
-                                }
-                            },
-                            onSelectRow: (kota, element) => {
-                                element.parents('td').find(`[name="dari_id[]"]`).val(kota.id)
-                                element.val(kota.kodekota)
-                                element.data('currentValue', element.val())
-                            },
-                            onCancel: (element) => {
-                                element.val(element.data('currentValue'))
-                            },
-                            onClear: (element) => {
-                                element.parents('td').find(`[name="dari_id[]"]`).val('')
-                                element.val('')
-                                element.data('currentValue', element.val())
-                            }
-                        })
-
-                        $('.kota-lookup').last().lookup({
-                            title: 'Kota Lookup',
-                            fileName: 'sampai',
-                            beforeProcess: function(test) {
-                                this.postData = {
-                                    Aktif: 'AKTIF',
-                                }
-                            },
-                            onSelectRow: (kota, element) => {
-                                element.parents('td').find(`[name="sampai_id[]"]`).val(kota.id)
-                                element.val(kota.kodekota)
-                                element.data('currentValue', element.val())
-                            },
-                            onCancel: (element) => {
-                                element.val(element.data('currentValue'))
-                            },
-                            onClear: (element) => {
-                                element.parents('td').find(`[name="sampai_id[]"]`).val('')
-                                element.val('')
-                                element.data('currentValue', element.val())
-                            }
-                        })
-
+                            selectedRowsTrip.push(detail.id)
+                            selectedTrip.push(detail.nobukti_trip)
+                            selectedRic.push(detail.nobukti_ric)
+                            selectedNominal.push(detail.nominal_detail)
+                            selectedDari.push(detail.dari_id)
+                            selectedSampai.push(detail.sampai_id)
+                        }
                     })
 
-                    setRowNumbers()
+                    setTimeout(() => {
+                        $('#modalgrid').jqGrid('setGridParam', {
+                            url: `${apiUrl}pendapatansupirheader/gettrip`,
+                            postData: {
+                                tglsampai: $('#crudForm').find(`[name=tglsampai]`).val(),
+                                tgldari: $('#crudForm').find(`[name=tgldari]`).val(),
+                                supir_id: $('#crudForm').find(`[name=supir_id]`).val(),
+                                sortIndex: 'nobukti_trip',
+                                aksi: $('#crudForm').data('action'),
+                                idPendapatan: $('#crudForm').find(`[name=id]`).val()
+                            },
+                            datatype: "json"
+                        }).trigger('reloadGrid');
+
+                    }, 50);
                     if (form.data('action') === 'delete') {
                         form.find('[name]').addClass('disabled')
                         initDisabled()
@@ -770,11 +750,6 @@
                         align: 'right',
                         formatter: currencyFormat,
                     },
-
-                    {
-                        label: 'KETERANGAN',
-                        name: 'keterangan',
-                    },
                 ],
                 autowidth: true,
                 shrinkToFit: false,
@@ -829,10 +804,10 @@
                     setHighlight($(this))
 
                     if (data.attributes) {
-                            
+
                         $(this).jqGrid('footerData', 'set', {
                             nobukti_trip: 'Total:',
-                            nominal_detail: data.attributes.nominal_detail,
+                            nominal_detail: data.attributes.totalNominal,
                         }, true)
                     }
 
@@ -901,10 +876,9 @@
                     selectedNominal = [];
                     selectedDari = [];
                     selectedSampai = [];
-                    selectedKeterangan = [];
 
                     $.each(response.data, (index, detail) => {
-                        if (detail.noinvoice != '') {
+                        if (detail.pendapatansupir_id != 0) {
 
                             selectedRowsTrip.push(detail.id)
                             selectedTrip.push(detail.nobukti_trip)
@@ -912,7 +886,6 @@
                             selectedNominal.push(detail.nominal_detail)
                             selectedDari.push(detail.dari_id)
                             selectedSampai.push(detail.sampai_id)
-                            selectedKeterangan.push(detail.keterangan)
                         }
                     })
                     resolve(response)
@@ -943,8 +916,6 @@
         selectedNominal = [];
         selectedDari = [];
         selectedSampai = [];
-        selectedKeterangan = [];
-
         $('#modalgrid').trigger('reloadGrid')
     }
 
@@ -957,6 +928,7 @@
                 limit: 0,
                 tglsampai: $('#crudForm').find(`[name=tglsampai]`).val(),
                 tgldari: $('#crudForm').find(`[name=tgldari]`).val(),
+                supir_id: $('#crudForm').find(`[name=supir_id]`).val(),
                 sortIndex: 'nobukti_trip',
                 aksi: $('#crudForm').data('action'),
                 idPendapatan: $('#crudForm').find(`[name=id]`).val()
@@ -971,7 +943,6 @@
                 selectedNominal = [];
                 selectedDari = [];
                 selectedSampai = [];
-                selectedKeterangan = [];
 
                 selectedRowsTrip = response.data.map((data) => data.id)
                 selectedTrip = response.data.map((data) => data.nobukti_trip)
@@ -979,7 +950,6 @@
                 selectedNominal = response.data.map((data) => data.nominal_detail)
                 selectedDari = response.data.map((data) => data.dari_id)
                 selectedSampai = response.data.map((data) => data.sampai_id)
-                selectedKeterangan = response.data.map((data) => data.keterangan)
 
                 $('#modalgrid').jqGrid('setGridParam', {
                     url: `${apiUrl}pendapatansupirheader/gettrip`,
@@ -1008,7 +978,6 @@
             selectedNominal.push($(element).parents('tr').find(`td[aria-describedby="modalgrid_nominal_detail"]`).text())
             selectedDari.push($(element).parents('tr').find(`td[aria-describedby="modalgrid_dari_id"]`).text())
             selectedSampai.push($(element).parents('tr').find(`td[aria-describedby="modalgrid_sampai_id"]`).text())
-            selectedKeterangan.push($(element).parents('tr').find(`td[aria-describedby="modalgrid_keterangan"]`).text())
         } else {
             $(element).parents('tr').removeClass('bg-light-blue')
             for (var i = 0; i < selectedRowsTrip.length; i++) {
@@ -1019,7 +988,6 @@
                     selectedNominal.splice(i, 1);
                     selectedDari.splice(i, 1);
                     selectedSampai.splice(i, 1);
-                    selectedKeterangan.splice(i, 1);
                 }
             }
         }
@@ -1278,7 +1246,7 @@
     function setTotal() {
         let nominalDetails = $(`#table_body [name="nominal_detail[]"]`)
         let total = 0
-        
+
         $.each(nominalDetails, (index, nominalDetail) => {
             total += AutoNumeric.getNumber(nominalDetail)
         });

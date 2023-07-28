@@ -381,7 +381,7 @@
                         $('#crudModal').modal('show')
                     })
                     .catch((error) => {
-                        showDialog(error.statusText)
+                        showDialog(error.responseJSON)
                     })
                     .finally(() => {
                         $('.modal-loader').addClass('d-none')
