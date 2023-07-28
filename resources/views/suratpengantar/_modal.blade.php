@@ -238,9 +238,9 @@
                       </div>
                       <div class="form-group">
 
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                           <div class="input-group">
-                            <input type="text" name="persentaseperalihan" class="form-control numbernoseparate" readonly>
+                            <input type="text" name="persentaseperalihan" onkeyup="setNominal()" class="form-control" readonly>
                             <div class="input-group-append">
                               <span class="input-group-text">%</span>
                             </div>
@@ -428,18 +428,18 @@
 
   $(document).ready(function() {
 
-    $(document).on('input', `#crudForm [name="nominalperalihan"]`, function(event) {
-      setPersentase()
-    })
+    // $(document).on('input', `#crudForm [name="nominalperalihan"]`, function(event) {
+    //   setPersentase()
+    // })
+    // $(document).on('input', `#crudForm [name="persentaseperalihan"]`, function(event) {
+    //   setNominal()
+    // })
 
-    $(document).on('change',`#crudForm [name="statusupahzona"]`, function(event) {
-      console.log('here')
+    $(document).on('change', `#crudForm [name="statusupahzona"]`, function(event) {
       selectedUpahZona = $(`#crudForm [name="statusupahzona"] option:selected`).text()
       if (selectedUpahZona == 'NON UPAH ZONA' || selectedUpahZona == 'UPAH ZONA') {
         statusUpahZona = $(`#crudForm [name="statusupahzona"]`).val()
-        console.log(isShow)
         if (!isShow) {
-          console.log('isshow galse')
           $('#crudForm [name=upah_id]').val('')
           $('#crudForm [name=upah]').val('').data('currentValue', '')
           enabledUpahSupir()
@@ -466,10 +466,13 @@
 
     $(document).on('change', '#statusperalihan', function(event) {
       let status = $("#statusperalihan option:selected").text()
+      console.log(status)
       if (status == 'PERALIHAN') {
-        $(`#crudForm [name="nominalperalihan"]`).prop('disabled', false)
-      } else {
-        $(`#crudForm [name="nominalperalihan"]`).prop('disabled', true)
+        // $(`#crudForm [name="nominalperalihan"]`).prop('readonly', false)
+        $(`#crudForm [name="persentaseperalihan"]`).prop('readonly', false)
+      } else if (status == 'BUKAN PERALIHAN') {
+        // $(`#crudForm [name="nominalperalihan"]`).prop('readonly', true)
+        $(`#crudForm [name="persentaseperalihan"]`).prop('readonly', true)
         $(`#crudForm [name="nominalperalihan"]`).val('')
         $(`#crudForm [name="persentaseperalihan"]`).val('')
       }
@@ -507,14 +510,16 @@
       //   data.filter((row) => row.name === 'nominalperalihan')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominalperalihan"]:not([disabled])`)[index])
       // })
 
-      if ($(`#crudForm [name="nominalperalihan"]`).val() == 'PERALIHAN') {
-        $('#crudForm').find(`[name="nominalperalihan"]`).each((index, element) => {
-          data.filter((row) => row.name === 'nominalperalihan')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominalperalihan"]`)[index])
-        })
+      if ($("#statusperalihan option:selected").text() == 'PERALIHAN') {
+        // $('#crudForm').find(`[name="nominalperalihan"]`).each((index, element) => {
+          data.filter((row) => row.name === 'nominalperalihan')[0].value = AutoNumeric.getNumber($(`#crudForm [name="nominalperalihan"]`)[0])
+        // })
+
+        data.filter((row) => row.name === 'persentaseperalihan')[0].value = AutoNumeric.getNumber($(`#crudForm [name="persentaseperalihan"]`)[0])
       }
-      $('#crudForm').find(`[name="qtyton"]`).each((index, element) => {
-        data.filter((row) => row.name === 'qtyton')[index].value = AutoNumeric.getNumber($(`#crudForm [name="qtyton"]`)[index])
-      })
+      // $('#crudForm').find(`[name="qtyton"]`).each((index, element) => {
+      data.filter((row) => row.name === 'qtyton')[0].value = AutoNumeric.getNumber($(`#crudForm [name="qtyton"]`)[0])
+      // })
 
       data.push({
         name: 'sortIndex',
@@ -644,16 +649,28 @@
     let nominalDetails = $(`#crudForm [name="nominalperalihan"]`)
     let omset = $(`#crudForm [name="omset"]`).val()
     let total = 0
-    $.each(nominalDetails, (index, nominalDetail) => {
 
-      console.log(AutoNumeric.getNumber(nominalDetail))
-      console.log(omset)
-      total = AutoNumeric.getNumber(nominalDetail) / omset
-    });
-
-    $(`#crudForm [name="persentaseperalihan"]`).val(total)
+    // const autoNumericInstance = AutoNumeric.getAutoNumericElement($(`#crudForm [name="persentaseperalihan"]`));
+    // AutoNumeric.isManagedByAutoNumeric(domElementOrSelector);
+    // if (autoNumericInstance) {
+    //   autoNumericInstance.destroy();
+    // }
+    total = (AutoNumeric.getNumber(nominalDetails[0]) / omset) * 100;
+    console.log(total)
+    new AutoNumeric($(`#crudForm [name="persentaseperalihan"]`)[0]).set(total)
+    // initAutoNumeric($(`#crudForm [name="persentaseperalihan"]`).val(total))
   }
 
+  function setNominal() {
+    let persentase = $(`#crudForm [name="persentaseperalihan"]`)
+    let omset = $(`#crudForm [name="omset"]`).val()
+
+    totalPersentase = (AutoNumeric.getNumber(persentase[0]) / 100) * omset;
+    // $(`#crudForm [name="nominalperalihan"]`).val(totalPersentase)
+
+    new AutoNumeric($(`#crudForm [name="nominalperalihan"]`)[0]).set(totalPersentase)
+    // initAutoNumeric($(`#crudForm [name="nominalperalihan"]`).val(totalPersentase))
+  }
 
   function setTotal() {
     let nominalDetails = $(`#detailList [name="nominal[]"]`)
@@ -1165,6 +1182,7 @@
           initAutoNumeric(form.find(`[name="nominalTagih"]`))
           initAutoNumeric(form.find(`[name="qtyton"]`))
           initAutoNumeric(form.find(`[name="nominalperalihan"]`))
+          initAutoNumeric(form.find(`[name="persentaseperalihan"]`))
           initAutoNumeric(form.find(`[name="gajisupir"]`))
           initAutoNumeric(form.find(`[name="gajikenek"]`))
           initAutoNumeric(form.find(`[name="komisisupir"]`))

@@ -218,6 +218,12 @@
               newformat: "d-m-Y H:i:s"
             }
           },
+          {
+            label: 'Kota Dari Sampai',
+            name: 'kotadarisampai',
+            align: 'left'
+          },
+
       ],
       autowidth: true,
       responsive: true,

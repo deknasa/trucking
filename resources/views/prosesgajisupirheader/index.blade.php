@@ -18,18 +18,38 @@
           <div id="tabs-detail">
             <ul class="dejavu">
               <li><a href="#detail-tab">Details</a></li>
-              <li><a href="#pengeluaran-tab">Pengeluaran Kas/bank</a></li>
-              <li><a href="#potsemua-tab">Jurnal Pot. Semua</a></li>
-              <li><a href="#potpribadi-tab">Jurnal Pot. Pribadi</a></li>
-              <li><a href="#deposito-tab">Jurnal Deposito</a></li>
-              <li><a href="#jurnal-tab">Jurnal BBM</a></li>
+              <li><a href="#ebs-tab">Jurnal EBS</a></li>
+              <li><a href="#pengeluaran-tab">Jurnal Kas/bank</a></li>
+              <li><a href="#jurnalpotsemua-tab">Jurnal Pot. Semua</a></li>
+              <li><a href="#jurnalpotpribadi-tab">Jurnal Pot. Pribadi</a></li>
+              <li><a href="#jurnaldeposito-tab">Jurnal Deposito</a></li>
+              <li><a href="#jurnalbbm-tab">Jurnal BBM</a></li>
+              <li><a href="#pengembalian-tab">Jurnal Pengembalian Kas Gantung</a></li>
             </ul>
-            <div id="detail-tab"></div>
-            <div id="pengeluaran-tab"></div>
-            <div id="potsemua-tab"></div>
-            <div id="potpribadi-tab"></div>
-            <div id="deposito-tab"></div>
-            <div id="jurnal-tab"></div>
+            <div id="detail-tab">
+              <table id="detail"></table>
+            </div>
+            <div id="ebs-tab">
+              <table id="jurnalGrid"></table>
+            </div>
+            <div id="pengeluaran-tab">
+              <table id="pengeluaranGrid"></table>
+            </div>
+            <div id="jurnalpotsemua-tab">
+              <table id="potsemuaGrid"></table>
+            </div>
+            <div id="jurnalpotpribadi-tab">
+              <table id="potpribadiGrid"></table>
+            </div>
+            <div id="jurnaldeposito-tab">
+              <table id="depositoGrid"></table>
+            </div>
+            <div id="jurnalbbm-tab">
+              <table id="bbmGrid"></table>
+            </div>
+            <div id="pengembalian-tab">
+              <table id="pengembalianGrid"></table>
+            </div>
           </div>
         </div>
       </div>
@@ -42,9 +62,11 @@
 @include('prosesgajisupirheader._detail')
 @include('pengeluaran._pengeluaran')
 @include('prosesgajisupirheader._potsemua')
+@include('jurnalumum._jurnal')
 @include('prosesgajisupirheader._potpribadi')
 @include('prosesgajisupirheader._deposito')
 @include('prosesgajisupirheader._bbm')
+@include('prosesgajisupirheader._uangjalan')
 
 @push('scripts')
 <script>
@@ -67,6 +89,18 @@
 
   $(document).ready(function() {
     $("#tabs-detail").tabs()
+
+    let pengeluaran_nobukti = $('#jqGrid').jqGrid('getCell', id, 'pengeluaran_nobukti')
+    let nobukti = $('#jqGrid').jqGrid('getCell', id, 'nobukti')
+    loadDetailGrid()
+    loadPengeluaranGrid(pengeluaran_nobukti)
+    loadPotSemuaGrid(nobukti)
+    loadPotPribadiGrid(nobukti)
+    loadDepositoGrid(nobukti)
+    loadBBMGrid(nobukti)
+    loadJurnalUmumGrid(nobukti)
+    loadPengembalianGrid(nobukti)
+
     setRange()
     initDatepicker()
     $(document).on('click', '#btnReload', function(event) {
@@ -239,7 +273,7 @@
             formatter: currencyFormat,
           },
           {
-            label: 'POT. PINJAMAN (SEMUA)', 
+            label: 'POT. PINJAMAN (SEMUA)',
             width: 210,
             name: 'potonganpinjamansemua',
             align: 'right',
@@ -314,13 +348,13 @@
             }
           },
           {
-           label: 'KETERANGAN',
+            label: 'KETERANGAN',
             width: 210,
             name: 'keterangan',
             align: 'left'
           },
           {
-           label: 'NO BUKTI pengeluaran',
+            label: 'NO BUKTI pengeluaran',
             width: 210,
             name: 'pengeluaran_nobukti',
             align: 'left'
@@ -381,33 +415,31 @@
         },
         onSelectRow: function(id) {
           let nobukti = $('#jqGrid').jqGrid('getCell', id, 'nobukti')
-          let pengeluaran = $('#jqGrid').jqGrid('getCell', id, 'pengeluaran_nobukti')
-          $(`#tabs-detail #${currentTab}-tab`).html('').load(`${appUrl}/prosesgajisupirdetail/${currentTab}/grid`, function() {
-            loadGrid(id, pengeluaran, nobukti)
-          })
+          let pengeluaran_nobukti = $('#jqGrid').jqGrid('getCell', id, 'pengeluaran_nobukti')
           activeGrid = $(this)
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
 
+          loadDetailData(id)
+          loadPengeluaranData(id,pengeluaran_nobukti)
+          loadPotSemuaData(nobukti)
+          loadPotPribadiData(nobukti)
+          loadDepositoData(nobukti)
+          loadBBMData(nobukti)
+          loadJurnalUmumData(id, nobukti)
+          loadPengembalianData(nobukti)
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
-
+          console.log(data.data)
           if (data.data.length === 0) {
-            abortGridLastRequest($('#detail'))
-            clearGridData($('#detail'))
-            abortGridLastRequest($('#potsemuaGrid'))
-            clearGridData($('#potsemuaGrid'))
-            abortGridLastRequest($('#potpribadiGrid'))
-            clearGridData($('#potpribadiGrid'))
-            abortGridLastRequest($('#depositoGrid'))
-            clearGridData($('#depositoGrid'))
-            abortGridLastRequest($('#bbmGrid'))
-            clearGridData($('#bbmGrid'))
-            abortGridLastRequest($('#pengeluaranGrid'))
-            clearGridData($('#pengeluaranGrid'))
+            console.log('0 data')
+            $('#detail, #potsemuaGrid, #potpribadiGrid, #depositoGrid, #bbmGrid, #pengeluaranGrid, #jurnalGrid, #pengembalianGrid').each((index, element) => {
+              abortGridLastRequest($(element))
+              clearGridData($(element))
+            })
             $('#jqGrid').each((index, element) => {
               abortGridLastRequest($(element))
               clearGridHeader($(element))
@@ -457,7 +489,7 @@
 
 
           $('#left-nav').find('button').attr('disabled', false)
-          permission() 
+          permission()
           setHighlight($(this))
         }
       })
@@ -472,10 +504,11 @@
         beforeSearch: function() {
           $('#left-nav').find(`button:not(#add)`).attr('disabled', 'disabled')
           $(this).setGridParam({
-          postData: {
-            tgldari:$('#tgldariheader').val() ,
-            tglsampai:$('#tglsampaiheader').val() 
-          },})
+            postData: {
+              tgldari: $('#tgldariheader').val(),
+              tglsampai: $('#tglsampaiheader').val()
+            },
+          })
           clearGlobalSearch($('#jqGrid'))
         },
       })
@@ -573,27 +606,27 @@
       .addClass('btn btn-sm btn-warning')
       .parent().addClass('px-1')
 
-  function permission() {
-    if (!`{{ $myAuth->hasPermission('prosesgajisupirheader', 'store') }}`) {
-      $('#add').attr('disabled', 'disabled')
-    }
+    function permission() {
+      if (!`{{ $myAuth->hasPermission('prosesgajisupirheader', 'store') }}`) {
+        $('#add').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('prosesgajisupirheader', 'update') }}`) {
-      $('#edit').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('prosesgajisupirheader', 'update') }}`) {
+        $('#edit').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('prosesgajisupirheader', 'destroy') }}`) {
-      $('#delete').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('prosesgajisupirheader', 'destroy') }}`) {
+        $('#delete').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('prosesgajisupirheader', 'export') }}`) {
-      $('#export').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('prosesgajisupirheader', 'export') }}`) {
+        $('#export').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('prosesgajisupirheader', 'report') }}`) {
-      $('#report').attr('disabled', 'disabled')
+      if (!`{{ $myAuth->hasPermission('prosesgajisupirheader', 'report') }}`) {
+        $('#report').attr('disabled', 'disabled')
+      }
     }
-  }
 
     $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {
@@ -669,18 +702,6 @@
 
         submitButton.removeAttr('disabled')
       }
-    })
-
-    $("#tabs-detail").on('click', 'li.ui-state-active', function() {
-      let href = $(this).find('a').attr('href');
-      currentTab = href.substring(1, href.length - 4);
-      let prosesgajisupirId = $('#jqGrid').jqGrid('getGridParam', 'selrow')
-      let nobukti = $('#jqGrid').jqGrid('getCell', prosesgajisupirId, 'nobukti')
-      let pengeluaran = $('#jqGrid').jqGrid('getCell', prosesgajisupirId, 'pengeluaran_nobukti')
-      $(`#tabs-detail #${currentTab}-tab`).html('').load(`${appUrl}/prosesgajisupirdetail/${currentTab}/grid`, function() {
-
-        loadGrid(prosesgajisupirId,pengeluaran, nobukti)
-      })
     })
 
   })

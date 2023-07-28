@@ -32,8 +32,12 @@
             name: 'nobukti',
           },
           {
-            label: 'SUPIR',
-            name: 'supir_id',
+            label: 'DARI',
+            name: 'dari_id',
+          },
+          {
+            label: 'SAMPAI',
+            name: 'sampai_id',
           },
           {
             label: 'KETERANGAN',

@@ -1,7 +1,6 @@
-<table id="potpribadiGrid"></table>
-
+@push('scripts')
 <script>
-  function loadGrid(id,nobukti) {
+  function loadPotPribadiIndexGrid(nobukti) {
     let sortnamePotPribadi = 'nobukti'
     let sortorderPotPribadi = 'asc'
     let totalRecordPotPribadi
@@ -10,13 +9,13 @@
     let triggerClickPotPribadi
     let indexRowPotPribadi
     let pagePotPribadi = 0;
-
+    console.log('potpri ', nobukti)
     $("#potpribadiGrid").jqGrid({
-        url: `${apiUrl}gajisupirdetail/potpribadi`,
-        mtype: "GET",
+        datatype: 'local',
+        data: [],
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
-        datatype: "json",
+        idPrefix: 'potpribadiGrid',
         colModel: [{
             label: 'NO BUKTI',
             name: 'nobukti',
@@ -146,11 +145,11 @@
     loadGlobalSearch($('#potpribadiGrid'))
   }
 
-  function loadPotPribadiData(id) {
+  function loadPotPribadiIndexData(nobukti) {
     abortGridLastRequest($('#potpribadiGrid'))
 
     $('#potpribadiGrid').setGridParam({
-      url: `${apiUrl}gajisupirdetail`,
+      url: `${apiUrl}gajisupirdetail/potpribadi`,
       datatype: "json",
       postData: {
         nobukti: nobukti
@@ -159,3 +158,4 @@
     }).trigger('reloadGrid')
   }
 </script>
+@endpush

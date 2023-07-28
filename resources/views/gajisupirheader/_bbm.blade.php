@@ -1,58 +1,44 @@
 @push('scripts')
 <script>
-  function loadDepositoGrid(nobukti) {
-    let sortnameDeposito = 'nobukti'
-    let sortorderDeposito = 'asc'
-    let totalRecordDeposito
-    let limitDeposito
-    let postDataDeposito
-    let triggerClickDeposito
-    let indexRowDeposito
-    let pageDeposito = 0
+  function loadBBMGrid(nobukti) {
+    let sortnameJurnal = 'nobukti'
+    let sortorderJurnal = 'asc'
+    let totalRecordJurnal
+    let limitJurnal
+    let postDataJurnal
+    let triggerClickJurnal
+    let indexRowJurnal
+    let pageJurnal = 0;
 
-    $("#depositoGrid")
-      .jqGrid({
+    $("#bbmGrid").jqGrid({
         datatype: 'local',
         data: [],
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
-        idPrefix: 'depositoGrid',
+        idPrefix: 'bbmGrid',
         colModel: [{
             label: 'NO BUKTI',
             name: 'nobukti',
-          }, {
-            label: 'TGL BUKTI',
-            name: 'tglbukti',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
-            }
           },
           {
-            label: 'KODE PERKIRAAN',
-            name: 'coa',
+            label: 'SUPIR',
+            name: 'supir_id',
           },
           {
-            label: 'NAMA PERKIRAAN',
-            name: 'keterangancoa',
-          },
-          {
-            label: 'DEBET',
-            name: 'nominaldebet',
-            align: 'right',
-            formatter: currencyFormat,
-          },
-          {
-            label: 'KREDIT',
-            name: 'nominalkredit',
-            align: 'right',
-            formatter: currencyFormat,
+            label: 'NO BUKTI PENGELUARAN TRUCKING',
+            name: 'pengeluarantruckingheader_nobukti',
+            width: 250
           },
           {
             label: 'KETERANGAN',
             name: 'keterangan',
-            width: '500px'
+            width: 250
+          },
+          {
+            label: 'NOMINAL',
+            name: 'nominal',
+            align: 'right',
+            formatter: currencyFormat,
           }
         ],
         autowidth: true,
@@ -66,13 +52,12 @@
         userDataOnFooter: true,
         toolbar: [true, "top"],
         sortable: true,
-        sortname: sortnameDeposito,
-        sortorder: sortorderDeposito,
-        page: pageDeposito,
+        sortname: sortnameJurnal,
+        sortorder: sortorderJurnal,
+        page: pageJurnal,
         viewrecords: true,
         postData: {
-          nobukti: nobukti,
-          tab: 'deposito'
+          nobukti: nobukti
         },
         prmNames: {
           sort: 'sortIndex',
@@ -100,20 +85,21 @@
           initResize($(this))
 
           /* Set global variables */
-          sortnameDeposito = $(this).jqGrid("getGridParam", "sortname")
-          sortorderDeposito = $(this).jqGrid("getGridParam", "sortorder")
-          totalRecordDeposito = $(this).getGridParam("records")
-          limitDeposito = $(this).jqGrid('getGridParam', 'postData').limit
-          postDataDeposito = $(this).jqGrid('getGridParam', 'postData')
+          sortnameJurnal = $(this).jqGrid("getGridParam", "sortname")
+          sortorderJurnal = $(this).jqGrid("getGridParam", "sortorder")
+          totalRecordJurnal = $(this).getGridParam("records")
+          limitJurnal = $(this).jqGrid('getGridParam', 'postData').limit
+          postDataJurnal = $(this).jqGrid('getGridParam', 'postData')
           triggerClick = false
 
           $('.clearsearchclass').click(function() {
             clearColumnSearch($(this))
           })
 
-          if (indexRowDeposito > $(this).getDataIDs().length - 1) {
-            indexRowDeposito = $(this).getDataIDs().length - 1;
+          if (indexRowJurnal > $(this).getDataIDs().length - 1) {
+            indexRowJurnal = $(this).getDataIDs().length - 1;
           }
+
 
           setHighlight($(this))
 
@@ -137,13 +123,13 @@
         beforeSearch: function() {
           $(this).setGridParam({
             postData: {
-              nobukti: nobukti,
-              tab: 'deposito'
+                nobukti: nobukti
             },
           })
-          clearGlobalSearch($('#depositoGrid'))
+          clearGlobalSearch($('#bbmGrid'))
         },
       })
+
       .jqGrid("navGrid", pager, {
         search: false,
         refresh: false,
@@ -151,24 +137,23 @@
         edit: false,
         del: false,
       })
-
       .customPager()
+
     /* Append clear filter button */
-    loadClearFilter($('#depositoGrid'))
+    loadClearFilter($('#bbmGrid'))
 
     /* Append global search */
-    loadGlobalSearch($('#depositoGrid'))
+    loadGlobalSearch($('#bbmGrid'))
   }
 
-  function loadDepositoData(nobukti) {
-    abortGridLastRequest($('#depositoGrid'))
+  function loadBBMData(nobukti) {
+    abortGridLastRequest($('#bbmGrid'))
 
-    $('#depositoGrid').setGridParam({
-      url: `${apiUrl}prosesgajisupirdetail/getjurnal`,
+    $('#bbmGrid').setGridParam({
+      url: `${apiUrl}gajisupirdetail/bbm`,
       datatype: "json",
       postData: {
-        nobukti: nobukti,
-        tab: 'deposito'
+        nobukti: nobukti
       },
       page: 1
     }).trigger('reloadGrid')

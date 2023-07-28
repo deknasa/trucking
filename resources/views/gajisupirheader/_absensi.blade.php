@@ -1,7 +1,6 @@
-<table id="absensiGrid"></table>
-
+@push('scripts')
 <script>
-  function loadGrid(id, nobukti) {
+  function loadAbsensiGrid(nobukti) {
     let sortnameAbsensi = 'nobukti'
     let sortorderAbsensi = 'asc'
     let totalRecordAbsensi
@@ -13,11 +12,11 @@
 
     $("#absensiGrid")
       .jqGrid({
-        url: `${apiUrl}gajisupirdetail/absensi`,
-        mtype: "GET",
+        datatype: 'local',
+        data: [],
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
-        datatype: "json",
+        idPrefix: 'absensiGrid',
         colModel: [{
             label: 'NO BUKTI',
             name: 'nobukti',
@@ -140,7 +139,7 @@
     loadGlobalSearch($('#absensiGrid'))
   }
 
-  function loadDetailData(id, nobukti) {
+  function loadAbsensiData(nobukti) {
     abortGridLastRequest($('#absensiGrid'))
     
     $('#absensiGrid').setGridParam({
@@ -153,3 +152,4 @@
     }).trigger('reloadGrid')
   }
 </script>
+@endpush

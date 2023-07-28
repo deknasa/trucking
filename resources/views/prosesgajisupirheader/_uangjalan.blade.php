@@ -1,22 +1,23 @@
-<table id="jurnalGrid"></table>
 
+@push('scripts')
 <script>
-  function loadGrid(id,nobukti) {
-    let sortnameJurnal = 'nobukti'
-    let sortorderJurnal = 'asc'
-    let totalRecordJurnal
-    let limitJurnal
-    let postDataJurnal
-    let triggerClickJurnal
-    let indexRowJurnal
-    let pageJurnal = 0;
+  function loadPengembalianGrid(nobukti) {
+    let sortnamePengembalian = 'nobukti'
+    let sortorderPengembalian = 'asc'
+    let totalRecordPengembalian
+    let limitPengembalian
+    let postDataPengembalian
+    let triggerClickPengembalian
+    let indexRowPengembalian
+    let pagePengembalian = 0
 
-    $("#jurnalGrid").jqGrid({
-        url: `${apiUrl}gajisupirdetail/jurnalbbm`,
-        mtype: "GET",
+    $("#pengembalianGrid")
+      .jqGrid({
+        datatype: 'local',
+        data: [],
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
-        datatype: "json",
+        idPrefix: 'pengembalianGrid',
         colModel: [{
             label: 'NO BUKTI',
             name: 'nobukti',
@@ -66,12 +67,13 @@
         userDataOnFooter: true,
         toolbar: [true, "top"],
         sortable: true,
-        sortname: sortnameJurnal,
-        sortorder: sortorderJurnal,
-        page: pageJurnal,
+        sortname: sortnamePengembalian,
+        sortorder: sortorderPengembalian,
+        page: pagePengembalian,
         viewrecords: true,
         postData: {
-          nobukti: nobukti
+          nobukti: nobukti,
+          tab: 'Pengembalian'
         },
         prmNames: {
           sort: 'sortIndex',
@@ -99,21 +101,20 @@
           initResize($(this))
 
           /* Set global variables */
-          sortnameJurnal = $(this).jqGrid("getGridParam", "sortname")
-          sortorderJurnal = $(this).jqGrid("getGridParam", "sortorder")
-          totalRecordJurnal = $(this).getGridParam("records")
-          limitJurnal = $(this).jqGrid('getGridParam', 'postData').limit
-          postDataJurnal = $(this).jqGrid('getGridParam', 'postData')
+          sortnamePengembalian = $(this).jqGrid("getGridParam", "sortname")
+          sortorderPengembalian = $(this).jqGrid("getGridParam", "sortorder")
+          totalRecordPengembalian = $(this).getGridParam("records")
+          limitPengembalian = $(this).jqGrid('getGridParam', 'postData').limit
+          postDataPengembalian = $(this).jqGrid('getGridParam', 'postData')
           triggerClick = false
 
           $('.clearsearchclass').click(function() {
             clearColumnSearch($(this))
           })
 
-          if (indexRowJurnal > $(this).getDataIDs().length - 1) {
-            indexRowJurnal = $(this).getDataIDs().length - 1;
+          if (indexRowPengembalian > $(this).getDataIDs().length - 1) {
+            indexRowPengembalian = $(this).getDataIDs().length - 1;
           }
-
 
           setHighlight($(this))
 
@@ -135,15 +136,15 @@
         groupOp: 'AND',
         disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
+          abortGridLastRequest($(this))
           $(this).setGridParam({
-            postData: {
-                nobukti: nobukti
-            },
-          })
-          clearGlobalSearch($('#jurnalGrid'))
+          postData: {
+            nobukti: nobukti,
+            tab: 'pengembalian'
+          },})
+          clearGlobalSearch($('#pengembalianGrid'))
         },
       })
-
       .jqGrid("navGrid", pager, {
         search: false,
         refresh: false,
@@ -151,25 +152,27 @@
         edit: false,
         del: false,
       })
-      .customPager()
 
+      .customPager()
     /* Append clear filter button */
-    loadClearFilter($('#jurnalGrid'))
+    loadClearFilter($('#pengembalianGrid'))
 
     /* Append global search */
-    loadGlobalSearch($('#jurnalGrid'))
+    loadGlobalSearch($('#pengembalianGrid'))
   }
 
-  function loadJurnalData(id) {
-    abortGridLastRequest($('#jurnalGrid'))
+  function loadPengembalianData(nobukti) {
+    abortGridLastRequest($('#pengembalianGrid'))
 
-    $('#jurnalGrid').setGridParam({
-      url: `${apiUrl}gajisupirdetail`,
+    $('#pengembalianGrid').setGridParam({
+      url: `${apiUrl}prosesgajisupirdetail/getjurnal`,
       datatype: "json",
       postData: {
-        nobukti: nobukti
+        nobukti: nobukti,
+        tab: 'pengembalian'
       },
       page: 1
     }).trigger('reloadGrid')
   }
 </script>
+@endpush

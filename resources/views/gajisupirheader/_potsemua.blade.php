@@ -1,7 +1,6 @@
-<table id="potsemuaGrid"></table>
-
+@push('scripts')
 <script>
-  function loadGrid(id, nobukti) {
+  function loadPotSemuaIndexGrid(nobukti) {
     let sortnamePotSemua = 'nobukti'
     let sortorderPotSemua = 'asc'
     let totalRecordPotSemua
@@ -13,11 +12,11 @@
 
     $("#potsemuaGrid")
       .jqGrid({
-        url: `${apiUrl}gajisupirdetail/potsemua`,
-        mtype: "GET",
+        datatype: 'local',
+        data: [],
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
-        datatype: "json",
+        idPrefix: 'potsemuaGrid',
         colModel: [{
             label: 'NO BUKTI',
             name: 'nobukti',
@@ -122,9 +121,10 @@
         disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
           $(this).setGridParam({
-          postData: {
-            nobukti: nobukti
-          },})
+            postData: {
+              nobukti: nobukti
+            },
+          })
           clearGlobalSearch($('#potsemuaGrid'))
         },
       })
@@ -144,7 +144,7 @@
     loadGlobalSearch($('#potsemuaGrid'))
   }
 
-  function loadDetailData(id, nobukti) {
+  function loadPotSemuaIndexData(nobukti) {
     abortGridLastRequest($('#potsemuaGrid'))
 
     $('#potsemuaGrid').setGridParam({
@@ -157,3 +157,4 @@
     }).trigger('reloadGrid')
   }
 </script>
+@endpush

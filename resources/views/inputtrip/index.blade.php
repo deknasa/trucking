@@ -1171,7 +1171,7 @@
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
-
+          tgltrip: $('#crudForm [name=tglbukti]').val(),
           Aktif: 'AKTIF',
         }
       },

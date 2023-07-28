@@ -463,7 +463,33 @@
                         showDialog(error.responseJSON)
                     }
                 })
-            selectAllRowsAbsensi(supirId, dari, sampai, aksi)
+
+            getAllAbsensi(supirId, dari, sampai, aksi)
+                .then((response) => {
+                    $('.is-invalid').removeClass('is-invalid')
+                    $('.invalid-feedback').remove()
+
+                    $('#tableAbsensi').jqGrid('setGridParam', {
+                        url: `${apiUrl}gajisupirheader/${urlAbsensi}`,
+                        postData: {
+                            supir_id: $('#crudForm').find('[name=supir_id]').val(),
+                            tgldari: $('#crudForm').find('[name=tgldari]').val(),
+                            tglsampai: $('#crudForm').find('[name=tglsampai]').val(),
+                            aksi: aksi
+                        },
+                        datatype: "json"
+                    }).trigger('reloadGrid');
+                })
+                .catch((error) => {
+                    if (error.status === 422) {
+                        $('.is-invalid').removeClass('is-invalid')
+                        $('.invalid-feedback').remove()
+                        setErrorMessages(form, error.responseJSON.errors);
+                    } else {
+                        showDialog(error.responseJSON)
+                    }
+                })
+            // selectAllRowsAbsensi(supirId, dari, sampai, aksi)
             // $.ajax({
             //     url: `${apiUrl}gajisupirheader/getuangjalan`,
             //     method: 'POST',
@@ -1118,6 +1144,16 @@
                         sortable: true,
                     },
                     {
+                        label: "tgl bukti pinjaman",
+                        name: "pinjSemua_tglbukti",
+                        sortable: true,
+                        formatter: "date",
+                        formatoptions: {
+                            srcformat: "ISO8601Long",
+                            newformat: "d-m-Y"
+                        }
+                    },
+                    {
                         label: "SISA",
                         name: "pinjSemua_sisa",
                         sortable: true,
@@ -1454,6 +1490,16 @@
                         label: "no bukti pinjaman",
                         name: "pinjPribadi_nobukti",
                         sortable: true,
+                    },
+                    {
+                        label: "tgl bukti pinjaman",
+                        name: "pinjPribadi_tglbukti",
+                        sortable: true,
+                        formatter: "date",
+                        formatoptions: {
+                            srcformat: "ISO8601Long",
+                            newformat: "d-m-Y"
+                        }
                     },
                     {
                         label: "SISA",
@@ -2665,6 +2711,41 @@
                 },
                 success: (response) => {
                     response.url = url
+                    resolve(response)
+                },
+                error: error => {
+                    reject(error)
+                }
+            })
+        });
+
+    }
+
+    function getAllAbsensi(supirId, dari, sampai, aksi, element = null) {
+        if (aksi == 'edit') {
+            ricId = $(`#crudForm`).find(`[name="id"]`).val()
+            urlAbsensi = `${ricId}/getEditAbsensi`
+        } else {
+            urlAbsensi = 'getAbsensi'
+        }
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: `${apiUrl}gajisupirheader/${urlAbsensi}`,
+                method: 'GET',
+                dataType: 'JSON',
+                data: {
+                    limit: 0,
+                    supir_id: supirId,
+                    tgldari: dari,
+                    tglsampai: sampai,
+                    sortIndex: sortnameAbsensi,
+                    aksi: aksi
+                },
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                success: (response) => {
+                    response.url = urlAbsensi
                     resolve(response)
                 },
                 error: error => {

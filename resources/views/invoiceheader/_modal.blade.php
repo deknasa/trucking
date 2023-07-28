@@ -1020,9 +1020,9 @@
           $('#crudForm').find("[name=tgljatuhtempo]").parent('.input-group').find('.input-group-append').children().prop('disabled',true);
           }
           // getEdit(invId, aksi)
-          $('#crudForm').find("[name=statuspilihaninvoice]").prop('disabled',true);
-          $('#crudForm').find("[name=tgljatuhtempo]").prop('readonly',true);
-          $('#crudForm').find("[name=tgljatuhtempo]").parent('.input-group').find('.input-group-append').children().prop('disabled',true);
+          $('#crudForm').find("[name=statuspilihaninvoice]").prop('disabled', true);
+          $('#crudForm').find("[name=tgljatuhtempo]").prop('readonly', true);
+          $('#crudForm').find("[name=tgljatuhtempo]").parent('.input-group').find('.input-group-append').children().prop('disabled', true);
           loadInvoiceGrid();
 
           getDataInvoice(`${invId}/getEdit`).then((response) => {
@@ -1030,10 +1030,11 @@
             let selectedIdInv = []
             let totalRetribusi = 0
             $.each(response.data, (index, value) => {
-              selectedIdInv.push(value.id)
-              totalRetribusi += parseFloat(value.nominalretribusi)
+              if (value.idinvoice != null) {
+                selectedIdInv.push(value.id)
+                totalRetribusi += parseFloat(value.nominalretribusi)
+              }
             })
-
             $("#tableInvoice")
               .jqGrid("setGridParam", {
                 datatype: "local",
@@ -1165,29 +1166,29 @@
   }
 
   function cekValidasiAksi(Id, Aksi) {
-        $.ajax({
-            url: `{{ config('app.api_url') }}invoiceheader/${Id}/cekvalidasiAksi`,
-            method: 'POST',
-            dataType: 'JSON',
-            beforeSend: request => {
-                request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
-            },
-            success: response => {
-                var error = response.error
-                if (error) {
-                    showDialog(response)
-                } else {
-                    if (Aksi == 'EDIT') {
-                        editInvoiceHeader(Id)
-                    }
-                    if (Aksi == 'DELETE') {
-                        deleteInvoiceHeader(Id)
-                    }
-                }
+    $.ajax({
+      url: `{{ config('app.api_url') }}invoiceheader/${Id}/cekvalidasiAksi`,
+      method: 'POST',
+      dataType: 'JSON',
+      beforeSend: request => {
+        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+      },
+      success: response => {
+        var error = response.error
+        if (error) {
+          showDialog(response)
+        } else {
+          if (Aksi == 'EDIT') {
+            editInvoiceHeader(Id)
+          }
+          if (Aksi == 'DELETE') {
+            deleteInvoiceHeader(Id)
+          }
+        }
 
-            }
-        })
-    }
+      }
+    })
+  }
 
 
   function approve() {
@@ -1277,19 +1278,19 @@
   function setTglJatuhTempo(top = 0) {
     // Tanggal awal dalam format "YYYY-MM-DD"
     const tanggalAwal = new Date();
-    
+
     // Menambahkan jumlah hari (34 hari)
     const jumlahHari = Math.floor(top);
     tanggalAwal.setDate(tanggalAwal.getDate() + jumlahHari);
-    
+
     // Mendapatkan tanggal setelah ditambahkan 34 hari
     const tahun = tanggalAwal.getFullYear();
     const bulan = String(tanggalAwal.getMonth() + 1).padStart(2, "0"); // Ditambah 1 karena Januari dimulai dari 0
     const tanggal = String(tanggalAwal.getDate()).padStart(2, "0");
 
     $('#crudForm').find("[name=tgljatuhtempo]").val(tanggal + "-" + bulan + "-" + tahun);
-    $('#crudForm').find("[name=tgljatuhtempo]").prop('readonly',true);
-    $('#crudForm').find("[name=tgljatuhtempo]").parent('.input-group').find('.input-group-append').children().prop('disabled',true);
+    $('#crudForm').find("[name=tgljatuhtempo]").prop('readonly', true);
+    $('#crudForm').find("[name=tgljatuhtempo]").parent('.input-group').find('.input-group-append').children().prop('disabled', true);
     // $('#crudForm').find("[name=tgljatuhtempo]").parent('.input-group').find('.input-group-append').remove()
 
 

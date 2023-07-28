@@ -1,59 +1,42 @@
+
 @push('scripts')
 <script>
-  function loadDepositoGrid(nobukti) {
-    let sortnameDeposito = 'nobukti'
-    let sortorderDeposito = 'asc'
-    let totalRecordDeposito
-    let limitDeposito
-    let postDataDeposito
-    let triggerClickDeposito
-    let indexRowDeposito
-    let pageDeposito = 0
-
-    $("#depositoGrid")
+  function loadDetailGrid() {
+    let sortnameDetail = 'nobukti'
+    let sortorderDetail = 'asc'
+    let totalRecordDetail
+    let limitDetail
+    let postDataDetail
+    let triggerClickDetail
+    let indexRowDetail
+    let pageDetail = 0;
+    $('#detailGrid')
       .jqGrid({
         datatype: 'local',
         data: [],
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
-        idPrefix: 'depositoGrid',
+        idPrefix: 'detailGrid',
         colModel: [{
             label: 'NO BUKTI',
             name: 'nobukti',
-          }, {
-            label: 'TGL BUKTI',
-            name: 'tglbukti',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
-            }
           },
           {
-            label: 'KODE PERKIRAAN',
-            name: 'coa',
+            label: 'KETERANGAN BIAYA TAMBAHAN',
+            name: 'keteranganbiaya',
           },
           {
-            label: 'NAMA PERKIRAAN',
-            name: 'keterangancoa',
-          },
-          {
-            label: 'DEBET',
-            name: 'nominaldebet',
+            label: 'NOMINAL SUPIR',
+            name: 'nominal',
             align: 'right',
             formatter: currencyFormat,
           },
           {
-            label: 'KREDIT',
-            name: 'nominalkredit',
+            label: 'NOMINAL TAGIH',
+            name: 'nominaltagih',
             align: 'right',
             formatter: currencyFormat,
           },
-          {
-            label: 'KETERANGAN',
-            name: 'keterangan',
-            width: '500px'
-          }
         ],
         autowidth: true,
         shrinkToFit: false,
@@ -66,13 +49,12 @@
         userDataOnFooter: true,
         toolbar: [true, "top"],
         sortable: true,
-        sortname: sortnameDeposito,
-        sortorder: sortorderDeposito,
-        page: pageDeposito,
+        sortname: sortnameDetail,
+        sortorder: sortorderDetail,
+        page: pageDetail,
         viewrecords: true,
         postData: {
-          nobukti: nobukti,
-          tab: 'deposito'
+          suratpengantar_id: id
         },
         prmNames: {
           sort: 'sortIndex',
@@ -94,25 +76,24 @@
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
-
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))
 
           /* Set global variables */
-          sortnameDeposito = $(this).jqGrid("getGridParam", "sortname")
-          sortorderDeposito = $(this).jqGrid("getGridParam", "sortorder")
-          totalRecordDeposito = $(this).getGridParam("records")
-          limitDeposito = $(this).jqGrid('getGridParam', 'postData').limit
-          postDataDeposito = $(this).jqGrid('getGridParam', 'postData')
+          sortnameDetail = $(this).jqGrid("getGridParam", "sortname")
+          sortorderDetail = $(this).jqGrid("getGridParam", "sortorder")
+          totalRecordDetail = $(this).getGridParam("records")
+          limitDetail = $(this).jqGrid('getGridParam', 'postData').limit
+          postDataDetail = $(this).jqGrid('getGridParam', 'postData')
           triggerClick = false
 
           $('.clearsearchclass').click(function() {
             clearColumnSearch($(this))
           })
 
-          if (indexRowDeposito > $(this).getDataIDs().length - 1) {
-            indexRowDeposito = $(this).getDataIDs().length - 1;
+          if (indexRowDetail > $(this).getDataIDs().length - 1) {
+            indexRowDetail = $(this).getDataIDs().length - 1;
           }
 
           setHighlight($(this))
@@ -120,13 +101,12 @@
           if (data.attributes) {
             $(this).jqGrid('footerData', 'set', {
               nobukti: 'Total:',
-              nominaldebet: data.attributes.totalNominalDebet,
-              nominalkredit: data.attributes.totalNominalKredit,
+              nominal: data.attributes.totalNominal,
+              nominaltagih: data.attributes.totalNominalTagih,
             }, true)
           }
         }
       })
-
       .jqGrid("setLabel", "rn", "No.")
       .jqGrid('filterToolbar', {
         stringResult: true,
@@ -135,15 +115,12 @@
         groupOp: 'AND',
         disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
-          $(this).setGridParam({
-            postData: {
-              nobukti: nobukti,
-              tab: 'deposito'
-            },
-          })
-          clearGlobalSearch($('#depositoGrid'))
+          abortGridLastRequest($(this))
+          
+          clearGlobalSearch($('#detailGrid'))
         },
       })
+
       .jqGrid("navGrid", pager, {
         search: false,
         refresh: false,
@@ -154,21 +131,20 @@
 
       .customPager()
     /* Append clear filter button */
-    loadClearFilter($('#depositoGrid'))
+    loadClearFilter($('#detailGrid'))
 
     /* Append global search */
-    loadGlobalSearch($('#depositoGrid'))
+    loadGlobalSearch($('#detailGrid'))
   }
 
-  function loadDepositoData(nobukti) {
-    abortGridLastRequest($('#depositoGrid'))
+  function loadDetailData(id) {
+        abortGridLastRequest($('#detailGrid'))
 
-    $('#depositoGrid').setGridParam({
-      url: `${apiUrl}prosesgajisupirdetail/getjurnal`,
+        $('#detailGrid').setGridParam({
+      url: `${apiUrl}suratpengantarbiayatambahan`,
       datatype: "json",
       postData: {
-        nobukti: nobukti,
-        tab: 'deposito'
+        suratpengantar_id: id
       },
       page: 1
     }).trigger('reloadGrid')
