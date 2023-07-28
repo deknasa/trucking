@@ -81,7 +81,7 @@
                 <input type="text" name="pelanggan" class="form-control pelanggan-lookup">
               </div>
             </div>
-            <div class="row form-group">
+            <div class="row form-group" style="display:none;">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
                   TUJUAN <span class="text-danger">*</span></label>
