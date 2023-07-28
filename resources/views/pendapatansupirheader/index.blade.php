@@ -9,11 +9,32 @@
       <table id="jqGrid"></table>
     </div>
   </div>
+  <div class="row mt-3">
+    <div class="col-12">
+      <div class="card card-primary card-outline card-outline-tabs">
+        <div class="card-body border-bottom-0">
+          <div id="tabs">
+            <ul class="dejavu">
+              <li><a href="#detail-tab">Details</a></li>
+              <li><a href="#jurnal-tab">Jurnal</a></li>
+            </ul>
+            <div id="detail-tab">
+              <table id="detail"></table>
+            </div>
+            <div id="jurnal-tab">
+              <table id="jurnalGrid"></table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 @include('pendapatansupirheader._modal')
 <!-- Detail -->
 @include('pendapatansupirheader._detail')
+@include('jurnalumum._jurnal')
 
 @push('scripts')
 <script>
@@ -51,6 +72,11 @@
   }
 
   $(document).ready(function() {
+    $("#tabs").tabs()
+
+    let nobukti = $('#jqGrid').jqGrid('getCell', id, 'pengeluaran_nobukti')
+    loadDetailGrid()
+    loadJurnalUmumGrid(nobukti)
 
     setRange()
     initDatepicker()
@@ -248,6 +274,11 @@
             align: 'left'
           },
           {
+            label: 'NAMA PERKIRAAN',
+            name: 'coa',
+            align: 'left'
+          },
+          {
             label: 'USER APPROVAL',
             name: 'userapproval',
             align: 'left'
@@ -332,6 +363,7 @@
           setGridLastRequest($(this), jqXHR)
         },
         onSelectRow: function(id) {
+          let pengeluaran_nobukti = $('#jqGrid').jqGrid('getCell', id, 'pengeluaran_nobukti')
 
           activeGrid = $(this)
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
@@ -339,22 +371,18 @@
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
 
-          if (!hasDetail) {
-            loadDetailGrid(id)
-            hasDetail = true
-          }
-
           loadDetailData(id)
+          loadJurnalUmumData(id, pengeluaran_nobukti)
 
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
 
           if (data.data.length === 0) {
-            abortGridLastRequest($('#detail'))
-            clearGridData($('#detail'))
-            abortGridLastRequest($('#historyGrid'))
-            clearGridData($('#historyGrid'))
+            $('#detail, #jurnalGrid').each((index, element) => {
+              abortGridLastRequest($(element))
+              clearGridData($(element))
+            })
             $('#jqGrid').each((index, element) => {
               abortGridLastRequest($(element))
               clearGridHeader($(element))
