@@ -9,6 +9,10 @@
       iconSet: 'fontAwesome',
       datatype: "json",
       idPrefix: 'absensiSupirLookup',
+      postData: {
+        aktif: `{!! $Aktif ?? '' !!}`,
+        tgltrip: `{!! $tgltrip ?? '' !!}`,
+      },       
       colModel: [{
             label: 'TRADO',
             name: 'trado'
