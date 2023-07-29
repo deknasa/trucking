@@ -1,74 +1,41 @@
 
 @push('scripts')
 <script>
-  let sortnameDetail = 'jobtrucking'
-  let sortorderDetail = 'asc'
-  let totalRecordDetail
-  let limitDetail
-  let postDataDetail
-  let triggerClickDetail
-  let indexRowDetail
-  let pageDetail = 0;
+  function loadPiutangGrid(nobukti) {
+    let sortnamePiutang = 'nobukti'
+    let sortorderPiutang = 'asc'
+    let totalRecordPiutang
+    let limitPiutang
+    let postDataPiutang
+    let triggerClickPiutang
+    let indexRowPiutang
+    let pagePiutang = 0
 
-  function loadDetailGrid(id) {
-    $("#detail").jqGrid({
+    $("#piutangGrid")
+      .jqGrid({
         datatype: 'local',
         data: [],
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
-        idPrefix: 'detail',
+        idPrefix: 'piutangGrid',
         colModel: [{
             label: 'NO BUKTI',
-            name: 'jobtrucking',
+            name: 'nobukti',
           },
           {
-            label: 'TGL MASUK GUDANG',
-            name: 'tgltrip',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
-            }
+            label: 'KETERANGAN',
+            name: 'keterangan',
+            width: '500px'
           },
           {
-            label: 'TGL KELUAR GUDANG',
-            name: 'tglakhir',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
-            }
-          },
-          {
-            label: 'jumlah Hari',
-            name: 'jumlahhari',
-            align: 'right',
+            label: 'NO BUKTI INVOICE',
+            name: 'invoice_nobukti',
           },
           {
             label: 'NOMINAL',
             name: 'nominal',
             align: 'right',
             formatter: currencyFormat,
-          },
-          {
-            label: 'JENIS ORDER',
-            name: 'jenisorder',
-          },
-          {
-            label: 'NAMA GUDANG',
-            name: 'namagudang',
-          },
-          {
-            label: 'No Polisi',
-            name: 'nopolisi',
-          },
-          {
-            label: 'GANDENGAN',
-            name: 'gandengan',
-          },
-          {
-            label: 'keterangan',
-            name: 'keterangan',
           },
         ],
         autowidth: true,
@@ -82,12 +49,12 @@
         userDataOnFooter: true,
         toolbar: [true, "top"],
         sortable: true,
-        sortname: sortnameDetail,
-        sortorder: sortorderDetail,
-        page: pageDetail,
+        sortname: sortnamePiutang,
+        sortorder: sortorderPiutang,
+        page: pagePiutang,
         viewrecords: true,
         postData: {
-          invoicechargegandengan_id: id
+          nobukti_piutang: nobukti
         },
         prmNames: {
           sort: 'sortIndex',
@@ -113,23 +80,22 @@
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))
-          
+
           /* Set global variables */
-          sortnameDetail = $(this).jqGrid("getGridParam", "sortname")
-          sortorderDetail = $(this).jqGrid("getGridParam", "sortorder")
-          totalRecordDetail = $(this).getGridParam("records")
-          limitDetail = $(this).jqGrid('getGridParam', 'postData').limit
-          postDataDetail = $(this).jqGrid('getGridParam', 'postData')
+          sortnamePiutang = $(this).jqGrid("getGridParam", "sortname")
+          sortorderPiutang = $(this).jqGrid("getGridParam", "sortorder")
+          totalRecordPiutang = $(this).getGridParam("records")
+          limitPiutang = $(this).jqGrid('getGridParam', 'postData').limit
+          postDataPiutang = $(this).jqGrid('getGridParam', 'postData')
           triggerClick = false
 
           $('.clearsearchclass').click(function() {
             clearColumnSearch($(this))
           })
 
-          if (indexRowDetail > $(this).getDataIDs().length - 1) {
-            indexRowDetail = $(this).getDataIDs().length - 1;
+          if (indexRowPiutang > $(this).getDataIDs().length - 1) {
+            indexRowPiutang = $(this).getDataIDs().length - 1;
           }
-
 
           setHighlight($(this))
 
@@ -152,10 +118,9 @@
         beforeSearch: function() {
           abortGridLastRequest($(this))
           
-          clearGlobalSearch($('#detail'))
+          clearGlobalSearch($('#piutangGrid'))
         },
       })
-
       .jqGrid("navGrid", pager, {
         search: false,
         refresh: false,
@@ -166,23 +131,23 @@
 
       .customPager()
     /* Append clear filter button */
-    loadClearFilter($('#detail'))
+    loadClearFilter($('#piutangGrid'))
 
     /* Append global search */
-    loadGlobalSearch($('#detail'))
+    loadGlobalSearch($('#piutangGrid'))
   }
 
-  function loadDetailData(id) {
-        abortGridLastRequest($('#detail'))
+  function loadPiutangData(id, nobukti) {
+    abortGridLastRequest($('#piutangGrid'))
 
-        $('#detail').setGridParam({
-      url: `${apiUrl}invoicechargegandengandetail`,
+    $('#piutangGrid').setGridParam({
+      url: `${apiUrl}invoicedetail/piutang`,
       datatype: "json",
       postData: {
-        invoicechargegandengan_id: id
+        nobukti_piutang: nobukti
       },
       page: 1
     }).trigger('reloadGrid')
   }
 </script>
-@endpush()
+@endpush

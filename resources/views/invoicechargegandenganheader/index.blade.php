@@ -9,11 +9,38 @@
       <table id="jqGrid"></table>
     </div>
   </div>
+  <div class="row mt-3">
+    <div class="col-12">
+      <div class="card card-primary card-outline card-outline-tabs">
+        <div class="card-body border-bottom-0">
+          <div id="tabs">
+            <ul class="dejavu">
+              <li><a href="#detail-tab">Details</a></li>
+              <li><a href="#piutang-tab">Piutang</a></li>
+              <li><a href="#jurnal-tab">Jurnal</a></li>
+            </ul>
+            <div id="detail-tab">
+              <table id="detail"></table>
+            </div>
+            <div id="piutang-tab">
+              <table id="piutangGrid"></table>
+            </div>
+            <div id="jurnal-tab">
+              <table id="jurnalGrid"></table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 @include('invoicechargegandenganheader._modal')
 <!-- Detail -->
 @include('invoicechargegandenganheader._detail')
+@include('invoicechargegandenganheader._piutang')
+@include('jurnalumum._jurnal')
+
 
 @push('scripts')
 <script>
@@ -32,7 +59,13 @@
   let autoNumericElements = []
 
   $(document).ready(function() {
+    $("#tabs").tabs()
 
+    let nobukti = $('#jqGrid').jqGrid('getCell', id, 'piutang_nobukti')
+
+    loadDetailGrid()
+    loadPiutangGrid(nobukti)
+    loadJurnalUmumGrid(nobukti)
     setRange()
     initDatepicker()
     $(document).on('click', '#btnReload', function(event) {
@@ -49,8 +82,8 @@
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         postData: {
-          tgldari:$('#tgldariheader').val() ,
-          tglsampai:$('#tglsampaiheader').val() 
+          tgldari: $('#tgldariheader').val(),
+          tglsampai: $('#tglsampaiheader').val()
         },
         datatype: "json",
         colModel: [{
@@ -191,6 +224,21 @@
             name: 'agen',
             align: 'left'
           },
+          {
+            label: 'NO BUKTI PIUTANG',
+            name: 'piutang_nobukti',
+            align: 'left'
+          },
+          {
+            label: 'TGL JATUH TEMPO',
+            name: 'tgljatuhtempo',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
 
           {
             label: 'USER APPROVAL',
@@ -279,25 +327,31 @@
         },
         onSelectRow: function(id) {
 
-          loadDetailData(id)
+          let nobukti = $('#jqGrid').jqGrid('getCell', id, 'piutang_nobukti')
           activeGrid = $(this)
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
+
+          loadDetailData(id)
+          loadPiutangData(id, nobukti)
+          loadJurnalUmumData(id, nobukti)
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
 
           if (data.data.length === 0) {
-            abortGridLastRequest($('#detail'))
-            clearGridData($('#detail'))
+            $('#detail, #piutangGrid, #jurnalGrid').each((index, element) => {
+              abortGridLastRequest($(element))
+              clearGridData($(element))
+            })
             $('#jqGrid').each((index, element) => {
               abortGridLastRequest($(element))
               clearGridHeader($(element))
             })
           }
-          
+
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))
@@ -340,7 +394,7 @@
           }, 100)
 
           $('#left-nav').find('button').attr('disabled', false)
-          permission() 
+          permission()
           setHighlight($(this))
         }
       })
@@ -393,7 +447,7 @@
                 cekValidasi(selectedId, 'DELETE')
               }
             }
-          }, 
+          },
           {
             id: 'report',
             innerHTML: '<i class="fa fa-print"></i> REPORT',
@@ -455,26 +509,27 @@
       .addClass('btn btn-sm btn-warning')
       .parent().addClass('px-1')
 
-      function permission() {
-    if (!`{{ $myAuth->hasPermission('invoicechargegandenganheader', 'store') }}`) {
-      $('#add').attr('disabled', 'disabled')
-    }
+    function permission() {
+      if (!`{{ $myAuth->hasPermission('invoicechargegandenganheader', 'store') }}`) {
+        $('#add').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('invoicechargegandenganheader', 'update') }}`) {
-      $('#edit').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('invoicechargegandenganheader', 'update') }}`) {
+        $('#edit').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('invoicechargegandenganheader', 'destroy') }}`) {
-      $('#delete').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('invoicechargegandenganheader', 'destroy') }}`) {
+        $('#delete').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('invoicechargegandenganheader', 'export') }}`) {
-      $('#export').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('invoicechargegandenganheader', 'export') }}`) {
+        $('#export').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('invoicechargegandenganheader', 'report') }}`) {
-      $('#report').attr('disabled', 'disabled')
-    }}
+      if (!`{{ $myAuth->hasPermission('invoicechargegandenganheader', 'report') }}`) {
+        $('#report').attr('disabled', 'disabled')
+      }
+    }
 
     $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {
