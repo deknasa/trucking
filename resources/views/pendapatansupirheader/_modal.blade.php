@@ -564,6 +564,25 @@
                 if (error) {
                     showDialog(response)
                 } else {
+                    cekValidasiAksi(Id, Aksi)
+                }
+            }
+        })
+    }
+
+    function cekValidasiAksi(Id, Aksi) {
+        $.ajax({
+            url: `{{ config('app.api_url') }}pendapatansupirheader/${Id}/cekValidasiAksi`,
+            method: 'POST',
+            dataType: 'JSON',
+            beforeSend: request => {
+                request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+            },
+            success: response => {
+                var error = response.error
+                if (error) {
+                    showDialog(response)
+                } else {
                     if (Aksi == 'EDIT') {
                         editPendapatanSupir(Id)
                     }
@@ -571,9 +590,11 @@
                         deletePendapatanSupir(Id)
                     }
                 }
+
             }
         })
     }
+
 
     function showPendapatanSupir(form, pendapatanId) {
         return new Promise((resolve, reject) => {
