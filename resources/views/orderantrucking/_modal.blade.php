@@ -10,7 +10,7 @@
         </div>
         <form action="" method="post">
           <div class="modal-body">
-           {{-- <div class="row form-group">
+            {{-- <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">ID</label>
               </div>
@@ -126,7 +126,7 @@
                   NO JOB EMKL (2) </label>
               </div>
               <div class="col-12 col-md-10">
-                <input type="text" name="nojobemkl2" class="form-control orderanemkl-lookup">
+                <input type="text" name="nojobemkl2" class="form-control orderanemkl2-lookup">
               </div>
             </div>
             <div class="row form-group">
@@ -307,7 +307,7 @@
       })
     })
 
-    
+
   })
 
   $('#crudModal').on('shown.bs.modal', () => {
@@ -444,46 +444,46 @@
 
   function approve() {
     event.preventDefault()
-    
+
     let form = $('#crudForm')
     $(this).attr('disabled', '')
     $('#processingLoader').removeClass('d-none')
-    
+
     $.ajax({
-        url: `${apiUrl}orderantrucking/approval`,
-        method: 'POST',
-        dataType: 'JSON',
-        headers: {
-            Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          orderanTruckingId: selectedRows
-        },
-        success: response => {
-            $('#crudForm').trigger('reset')
-            $('#crudModal').modal('hide')
-    
-            $('#jqGrid').jqGrid().trigger('reloadGrid');
-            selectedRows = []
-            $('#gs_').prop('checked', false)
-        },
-        error: error => {
-            if (error.status === 422) {
-                $('.is-invalid').removeClass('is-invalid')
-                $('.invalid-feedback').remove()
-    
-                setErrorMessages(form, error.responseJSON.errors);
-            } else {
-                showDialog(error.statusText)
-            }
-        },
+      url: `${apiUrl}orderantrucking/approval`,
+      method: 'POST',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        orderanTruckingId: selectedRows
+      },
+      success: response => {
+        $('#crudForm').trigger('reset')
+        $('#crudModal').modal('hide')
+
+        $('#jqGrid').jqGrid().trigger('reloadGrid');
+        selectedRows = []
+        $('#gs_').prop('checked', false)
+      },
+      error: error => {
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+
+          setErrorMessages(form, error.responseJSON.errors);
+        } else {
+          showDialog(error.statusText)
+        }
+      },
     }).always(() => {
-        $('#processingLoader').addClass('d-none')
-        $(this).removeAttr('disabled')
+      $('#processingLoader').addClass('d-none')
+      $(this).removeAttr('disabled')
     })
-      
+
   }
-    
+
 
   function getMaxLength(form) {
     if (!form.attr('has-maxlength')) {
@@ -847,6 +847,32 @@
 
         $('#crudForm [name=nocont]').first().val(orderanemkl.nocont)
         $('#crudForm [name=noseal]').first().val(orderanemkl.noseal)
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+
+    $('.orderanemkl2-lookup').lookup({
+      title: 'orderanemkl Lookup',
+      fileName: 'orderanemkl',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+          jenisorder_Id: jenisorderId,
+          container_Id: containerId,
+        }
+      },
+      onSelectRow: (orderanemkl, element) => {
+        element.val(orderanemkl.nojob)
+        element.data('currentValue', element.val())
+
+        $('#crudForm [name=nocont2]').first().val(orderanemkl.nocont)
+        $('#crudForm [name=noseal2]').first().val(orderanemkl.noseal)
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
