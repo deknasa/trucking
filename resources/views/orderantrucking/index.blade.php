@@ -186,16 +186,6 @@
             name: 'pelanggan_id',
           },
           {
-            label: 'TUJUAN',
-            name: 'tarif_id',
-          },
-          {
-            label: 'NOMINAL',
-            name: 'nominal',
-            align: 'right',
-            formatter: currencyFormat,
-          },
-          {
             label: 'no job EMKL (1)',
             name: 'nojobemkl',
           },
