@@ -1912,12 +1912,13 @@
     })
   }
 
-  function cekValidasidelete(Id, Aksi) {
+  function cekValidasidelete(Id, Aksi,nobukti) {
     $.ajax({
       url: `{{ config('app.api_url') }}suratpengantar/${Id}/cekValidasi`,
       method: 'POST',
       data: {
-        aksi: Aksi
+        aksi: Aksi,
+        nobukti: nobukti
       },
       dataType: 'JSON',
       beforeSend: request => {
