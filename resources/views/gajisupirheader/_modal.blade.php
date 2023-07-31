@@ -942,6 +942,9 @@
         selectedKetBiaya = [];
         selectedTolSupir = [];
         selectedRitasi = [];
+        selectedRowsAbsensi = []
+        selectedRowsAbsensiNobukti = [];
+        selectedRowsAbsensiUangjalan = [];
         $('#crudModal').find('.modal-body').html(modalBody)
     })
 
