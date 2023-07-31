@@ -978,11 +978,15 @@
     })
   }
 
-  function cekValidasidelete(Id, Aksi) {
+  function cekValidasidelete(Id, Aksi,nobukti) {
     $.ajax({
       url: `{{ config('app.api_url') }}orderantrucking/${Id}/${Aksi}/cekValidasi`,
       method: 'POST',
       dataType: 'JSON',
+      data: {
+        aksi: Aksi,
+        nobukti: nobukti
+      },      
       beforeSend: request => {
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
