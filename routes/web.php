@@ -7,6 +7,7 @@ use App\Http\Controllers\AbsensiSupirApprovalDetailController;
 use App\Http\Controllers\AbsensiSupirApprovalHeaderController;
 use App\Http\Controllers\ApprovalTransaksiHeaderController;
 use App\Http\Controllers\ApprovalInvoiceHeaderController;
+use App\Http\Controllers\ReminderServiceController;
 
 use App\Http\Controllers\ApprovalSupirGambarController;
 use App\Http\Controllers\ApprovalSupirKeteranganController;
@@ -785,6 +786,11 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('chargegandengan/report', [ChargeGandenganController::class, 'report'])->name('chargegandengan.report');
     Route::get('chargegandengan/index', [ChargeGandenganController::class,'index']);
     Route::resource('chargegandengan', ChargeGandenganController::class);
+
+    Route::get('reminderservice/index', [ReminderServiceController::class, 'index'])->name('reminderservice.export');
+    Route::get('reminderservice/index', [ReminderServiceController::class, 'index'])->name('reminderservice.report');
+    Route::get('reminderservice/index', [ReminderServiceController::class, 'index'])->name('reminderservice.index');
+    Route::get('reminderservice', [ReminderServiceController::class, 'index'])->name('reminderservice.get');
 
     Route::get('prosesabsensisupir/field_length', [ProsesAbsensiSupirController::class, 'fieldLength'])->name('prosesabsensisupir.field_length');
     Route::get('prosesabsensisupir/{id}/delete', [ProsesAbsensiSupirController::class, 'delete'])->name('prosesabsensisupir.delete');

@@ -416,17 +416,31 @@
               $('#gs_').prop('checked', false)
             }
           },
-          {
-            id: 'approveun',
-            innerHTML: '<i class="fas fa-check""></i> UN/APPROVAL',
-            class: 'btn btn-purple btn-sm mr-1',
-            onClick: () => {
-  
+          
+        ],
+        extndBtn: [{
+          id: 'approve',
+          title: 'Approve',
+          caption: 'Approve',
+          innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+          class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
+          dropmenuHTML: [{
+              id: 'approveun',
+              text: "UN/APPROVAL status orderan trucking",
+              onClick: () => {
                 approve()
-  
-            }
-        },
-        ]
+              }
+            },
+            {
+              id: 'approvalEditOrderanTrucking',
+              text: "un/Approval Edit orderan trucking",
+              onClick: () => {
+                // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                approvalEditOrderanTrucking();
+              }
+            },
+          ],
+        }]
       })
 
     /* Append clear filter button */
