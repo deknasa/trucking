@@ -236,6 +236,7 @@ use App\Http\Controllers\LaporanKartuPiutangPerAgenController;
 use App\Http\Controllers\MainAkunPusatController;
 use App\Http\Controllers\LaporanHistoryDepositoController;
 use App\Http\Controllers\LaporanPinjamanPerUnitTradoController;
+use App\Http\Controllers\LogAbsensiController;
 use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\StokPusatController;
 use App\Http\Controllers\UbahPasswordController;
@@ -1464,6 +1465,11 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('hutangextradetail/hutang/grid', [HutangExtraDetailController::class, 'hutangGrid']);
     Route::get('hutangextradetail/detail/grid', [HutangExtraDetailController::class, 'detailGrid']);
     Route::resource('hutangextradetail', HutangExtraDetailController::class);
+    
+    Route::get('logabsensi/export', [LogAbsensiController::class, 'export'])->name('logabsensi.export');
+    Route::get('logabsensi/report', [LogAbsensiController::class, 'report'])->name('logabsensi.report');
+    Route::get('logabsensi/index', [LogAbsensiController::class, 'index']);
+    Route::resource('logabsensi', LogAbsensiController::class);
 });
 
 Route::patch('format', [FormatController::class, 'update']);
