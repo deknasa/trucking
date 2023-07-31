@@ -425,7 +425,7 @@
   let zonasampaiId
   let isShow = false
   let upahId = 0
-
+  let editUpahZona
   $(document).ready(function() {
 
     // $(document).on('input', `#crudForm [name="nominalperalihan"]`, function(event) {
@@ -500,6 +500,12 @@
       let action = form.data('action')
       let data = $('#crudForm').serializeArray()
 
+      if (!isAllowEdited) {
+        data.push({
+          name: 'statusupahzona',
+          value: editUpahZona
+        })
+      }
       $('#crudForm').find(`[name="nominal[]"]`).each((index, element) => {
         data.filter((row) => row.name === 'nominal[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal[]"]`)[index])
       })
@@ -1830,6 +1836,8 @@
 
     if (!edit) {
 
+      editUpahZona = $('#crudForm').find(`[name="statusupahzona"]`).val()
+      $('#crudForm').find(`[name="statusupahzona"]`).prop('disabled', 'disabled')
       jobtrucking.find('.button-clear').attr('disabled', true)
       jobtrucking.find('input').attr('readonly', true)
       jobtrucking.children().find('.lookup-toggler').attr('disabled', true)
@@ -1849,6 +1857,7 @@
 
     } else {
       console.log("true");
+      $('#crudForm').find(`[name="statusupahzona"]`).prop('disabled', false)
       jobtrucking.find('.button-clear').attr('disabled', false)
       jobtrucking.find('input').attr('readonly', false)
       jobtrucking.children().find('.lookup-toggler').attr('disabled', false)
