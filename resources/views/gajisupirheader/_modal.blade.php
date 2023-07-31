@@ -464,31 +464,34 @@
                     }
                 })
 
-            getAllAbsensi(supirId, dari, sampai, aksi)
-                .then((response) => {
-                    $('.is-invalid').removeClass('is-invalid')
-                    $('.invalid-feedback').remove()
+            if (dari != '' && sampai != '' && supirId != '') {
 
-                    $('#tableAbsensi').jqGrid('setGridParam', {
-                        url: `${apiUrl}gajisupirheader/${urlAbsensi}`,
-                        postData: {
-                            supir_id: $('#crudForm').find('[name=supir_id]').val(),
-                            tgldari: $('#crudForm').find('[name=tgldari]').val(),
-                            tglsampai: $('#crudForm').find('[name=tglsampai]').val(),
-                            aksi: aksi
-                        },
-                        datatype: "json"
-                    }).trigger('reloadGrid');
-                })
-                .catch((error) => {
-                    if (error.status === 422) {
+                getAllAbsensi(supirId, dari, sampai, aksi)
+                    .then((response) => {
                         $('.is-invalid').removeClass('is-invalid')
                         $('.invalid-feedback').remove()
-                        setErrorMessages(form, error.responseJSON.errors);
-                    } else {
-                        showDialog(error.responseJSON)
-                    }
-                })
+
+                        $('#tableAbsensi').jqGrid('setGridParam', {
+                            url: `${apiUrl}gajisupirheader/${urlAbsensi}`,
+                            postData: {
+                                supir_id: $('#crudForm').find('[name=supir_id]').val(),
+                                tgldari: $('#crudForm').find('[name=tgldari]').val(),
+                                tglsampai: $('#crudForm').find('[name=tglsampai]').val(),
+                                aksi: aksi
+                            },
+                            datatype: "json"
+                        }).trigger('reloadGrid');
+                    })
+                    .catch((error) => {
+                        if (error.status === 422) {
+                            $('.is-invalid').removeClass('is-invalid')
+                            $('.invalid-feedback').remove()
+                            setErrorMessages(form, error.responseJSON.errors);
+                        } else {
+                            showDialog(error.responseJSON)
+                        }
+                    })
+            }
             // selectAllRowsAbsensi(supirId, dari, sampai, aksi)
             // $.ajax({
             //     url: `${apiUrl}gajisupirheader/getuangjalan`,

@@ -56,7 +56,6 @@
         postData: {
           tgldari: $('#tgldariheader').val(),
           tglsampai: $('#tglsampaiheader').val(),
-
         },
         datatype: "json",
         colModel: [{
@@ -550,10 +549,12 @@
             class: 'btn btn-success btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              celValue = $("#jqGrid").jqGrid('getCell', selectedId, 'nobukti');
+              selectednobukti = celValue
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                cekValidasidelete(selectedId, 'EDIT')
+                cekValidasidelete(selectedId, 'EDIT',selectednobukti)
               }
             }
           },
@@ -563,10 +564,12 @@
             class: 'btn btn-danger btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              celValue = $("#jqGrid").jqGrid('getCell', selectedId, 'nobukti');
+              selectednobukti = celValue              
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                cekValidasidelete(selectedId, 'DELETE')
+                cekValidasidelete(selectedId, 'DELETE',selectednobukti)
               }
             }
           },

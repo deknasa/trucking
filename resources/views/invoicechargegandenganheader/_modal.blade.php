@@ -57,6 +57,20 @@
                 </div>
               </div>
             </div>
+            <div class="row">
+              <div class="form-group col-md-6">
+                <div class="row">
+                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
+                    <label>tgl jatuh tempo <span class="text-danger">*</span> </label>
+                  </div>
+                  <div class="col-12 col-sm-9 col-md-8">
+                    <div class="input-group">
+                      <input type="text" name="tgljatuhtempo" class="form-control datepicker">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
 
             <div class="row mt-3">
               <div class="col-sm-4">
@@ -199,6 +213,10 @@
       data.push({
         name: 'tglproses',
         value: form.find(`[name="tglproses"]`).val()
+      })
+      data.push({
+        name: 'tgljatuhtempo',
+        value: form.find(`[name="tgljatuhtempo"]`).val()
       })
       data.push({
         name: 'agen',
@@ -407,6 +425,26 @@
         if (error) {
           showDialog(response)
         } else {
+          cekValidasiAksi(Id, Aksi)
+        }
+
+      }
+    })
+  }
+
+  function cekValidasiAksi(Id, Aksi) {
+    $.ajax({
+      url: `{{ config('app.api_url') }}invoicechargegandenganheader/${Id}/cekvalidasiAksi`,
+      method: 'POST',
+      dataType: 'JSON',
+      beforeSend: request => {
+        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+      },
+      success: response => {
+        var error = response.error
+        if (error) {
+          showDialog(response)
+        } else {
           if (Aksi == 'EDIT') {
             editInvoiceChargeGandenganHeader(Id)
           }
@@ -418,7 +456,6 @@
       }
     })
   }
-
 
 
   function createInvoiceChargeGandenganHeader() {
@@ -440,6 +477,7 @@
 
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
     $('#crudForm').find('[name=tglproses]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+    $('#crudForm').find('[name=tgljatuhtempo]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
   }
 
   function editInvoiceChargeGandenganHeader(invoiceChargeGandenganHeader) {
@@ -1062,6 +1100,27 @@
     })
   }
 
+  function setTglJatuhTempo(top = 0) {
+    // Tanggal awal dalam format "YYYY-MM-DD"
+    const tanggalAwal = new Date();
+
+    // Menambahkan jumlah hari (34 hari)
+    const jumlahHari = Math.floor(top);
+    tanggalAwal.setDate(tanggalAwal.getDate() + jumlahHari);
+
+    // Mendapatkan tanggal setelah ditambahkan 34 hari
+    const tahun = tanggalAwal.getFullYear();
+    const bulan = String(tanggalAwal.getMonth() + 1).padStart(2, "0"); // Ditambah 1 karena Januari dimulai dari 0
+    const tanggal = String(tanggalAwal.getDate()).padStart(2, "0");
+
+    $('#crudForm').find("[name=tgljatuhtempo]").val(tanggal + "-" + bulan + "-" + tahun);
+    $('#crudForm').find("[name=tgljatuhtempo]").prop('readonly', true);
+    $('#crudForm').find("[name=tgljatuhtempo]").parent('.input-group').find('.input-group-append').children().prop('disabled', true);
+    // $('#crudForm').find("[name=tgljatuhtempo]").parent('.input-group').find('.input-group-append').remove()
+
+
+  }
+
   function initLookup() {
     // 
     $('.agen-lookup').lookup({
@@ -1074,6 +1133,7 @@
       },
       onSelectRow: (agen, element) => {
         element.val(agen.namaagen)
+        setTglJatuhTempo(agen.top);
         $(`#${element[0]['name']}Id`).val(agen.id)
         element.data('currentValue', element.val())
       },
