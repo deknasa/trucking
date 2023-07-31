@@ -512,7 +512,7 @@
 
       if ($("#statusperalihan option:selected").text() == 'PERALIHAN') {
         // $('#crudForm').find(`[name="nominalperalihan"]`).each((index, element) => {
-          data.filter((row) => row.name === 'nominalperalihan')[0].value = AutoNumeric.getNumber($(`#crudForm [name="nominalperalihan"]`)[0])
+        data.filter((row) => row.name === 'nominalperalihan')[0].value = AutoNumeric.getNumber($(`#crudForm [name="nominalperalihan"]`)[0])
         // })
 
         data.filter((row) => row.name === 'persentaseperalihan')[0].value = AutoNumeric.getNumber($(`#crudForm [name="persentaseperalihan"]`)[0])
@@ -772,7 +772,7 @@
             $('#crudModal').modal('show')
             $('#crudForm [name=tglbukti]').attr('readonly', true)
             $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
-
+            inputReadOnly()
             editValidasi(isAllowEdited);
           })
           .catch((error) => {
@@ -1155,20 +1155,18 @@
             }
 
             (index == 'jobtrucking') ? element.data('current-value', value): '';
+            (index == 'statuscontainer') ? element.data('current-value', value): '';
+            (index == 'trado') ? element.data('current-value', value): '';
+            (index == 'supir') ? element.data('current-value', value): '';
+            (index == 'tarifrincian') ? element.data('current-value', value): '';
+            (index == 'cabang') ? element.data('current-value', value): '';
+            (index == 'upah') ? element.data('current-value', value): '';
             (index == 'dari') ? element.data('current-value', value): '';
             (index == 'sampai') ? element.data('current-value', value): '';
             (index == 'pelanggan') ? element.data('current-value', value): '';
             (index == 'container') ? element.data('current-value', value): '';
-            (index == 'statuscontainer') ? element.data('current-value', value): '';
-            (index == 'trado') ? element.data('current-value', value): '';
-            (index == 'supir') ? element.data('current-value', value): '';
             (index == 'agen') ? element.data('current-value', value): '';
             (index == 'jenisorder') ? element.data('current-value', value): '';
-            (index == 'tarifrincian') ? element.data('current-value', value): '';
-            (index == 'cabang') ? element.data('current-value', value): '';
-            (index == 'upah') ? element.data('current-value', value): '';
-
-
 
           })
           kotaUpahZona()
@@ -1676,12 +1674,23 @@
         element.val(orderantrucking.nobukti)
         element.data('currentValue', element.val())
         getOrderanTrucking(orderantrucking.id)
+        enabledUpahSupir()
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
+        upahSupirReadOnly()
+        clearUpahSupir()
+        nominalSupir = 0
+        getNominalSupir()
+        $('#crudForm [name=gajikenek]').val(0)
+        $('#crudForm [name=komisisupir]').val(0)
+        kotadariId = 0
+        kotasampaiId = 0
         element.val('')
+        $('#crudForm [name=upah_id]').val('')
+        $('#crudForm [name=upah]').val('').data('currentValue', '')
         $('#crudForm [name=agen]').val('')
         $('#crudForm [name=agen_id]').val('')
         $('#crudForm [name=container_id]').val('')
@@ -1690,14 +1699,12 @@
         $('#crudForm [name=jenisorder]').val('')
         $('#crudForm [name=pelanggan_id]').val('')
         $('#crudForm [name=pelanggan]').val('')
-        $('#crudForm [name=tarifrincian_id]').val('')
-        $('#crudForm [name=tarifrincian]').val('')
         $('#crudForm [name=nocont]').val('')
         $('#crudForm [name=nocont2]').val('')
         $('#crudForm [name=nojob]').val('')
         $('#crudForm [name=nojob2]').val('')
-        $('#crudForm [name=omset]').val('')
-        $('#crudForm [name=totalton]').val('')
+        // $('#crudForm [name=omset]').val('')
+        // $('#crudForm [name=totalton]').val('')
         element.data('currentValue', element.val())
       }
     })
@@ -1725,8 +1732,8 @@
 
         kotaUpahZona()
         upahsupir.attr('readonly', false)
-        upahsupir.parents('.input-group').find('.input-group-append').show()
-        upahsupir.parents('.input-group').find('.button-clear').show()
+        upahsupir.parents('.input-group').find('.button-clear').attr('disabled', false)
+        upahsupir.parents('.input-group').children().find('.lookup-toggler').attr('disabled', false)
       }
     }
   }
@@ -1734,8 +1741,10 @@
   function upahSupirReadOnly() {
     let upahsupir = $('#crudForm [name=upah]')
     upahsupir.attr('readonly', true)
-    upahsupir.parents('.input-group').find('.input-group-append').hide()
-    upahsupir.parents('.input-group').find('.button-clear').hide()
+    // upahsupir.parents('.input-group').find('.input-group-append').hide()
+    // upahsupir.parents('.input-group').find('.button-clear').hide()
+    upahsupir.parents('.input-group').find('.button-clear').attr('disabled', true)
+    upahsupir.parents('.input-group').children().find('.lookup-toggler').attr('disabled', true)
   }
 
   function clearUpahSupir() {
@@ -1816,12 +1825,7 @@
     let jobtrucking = $('#crudForm').find(`[name="jobtrucking"]`).parents('.input-group')
     let trado = $('#crudForm').find(`[name="trado"]`).parents('.input-group')
     let supir = $('#crudForm').find(`[name="supir"]`).parents('.input-group')
-    let pelanggan = $('#crudForm').find(`[name="pelanggan"]`).parents('.input-group')
-    let agen = $('#crudForm').find(`[name="agen"]`).parents('.input-group')
     let upah = $('#crudForm').find(`[name="upah"]`).parents('.input-group')
-    let jenisorder = $('#crudForm').find(`[name="jenisorder"]`).parents('.input-group')
-    let dari = $('#crudForm').find(`[name="dari"]`).parents('.input-group')
-    let sampai = $('#crudForm').find(`[name="sampai"]`).parents('.input-group')
     let statuscontainer = $('#crudForm').find(`[name="statuscontainer"]`).parents('.input-group')
 
     if (!edit) {
@@ -1835,27 +1839,13 @@
       supir.find('.button-clear').attr('disabled', true)
       supir.find('input').attr('readonly', true)
       supir.children().find('.lookup-toggler').attr('disabled', true)
-      pelanggan.find('.button-clear').attr('disabled', true)
-      pelanggan.find('input').attr('readonly', true)
-      pelanggan.children().find('.lookup-toggler').attr('disabled', true)
-      agen.find('.button-clear').attr('disabled', true)
-      agen.find('input').attr('readonly', true)
-      agen.children().find('.lookup-toggler').attr('disabled', true)
+
       upah.find('.button-clear').attr('disabled', true)
       upah.find('input').attr('readonly', true)
       upah.children().find('.lookup-toggler').attr('disabled', true)
-      jenisorder.find('.button-clear').attr('disabled', true)
-      jenisorder.find('input').attr('readonly', true)
-      jenisorder.children().find('.lookup-toggler').attr('disabled', true)
       statuscontainer.find('.button-clear').attr('disabled', true)
       statuscontainer.find('input').attr('readonly', true)
       statuscontainer.children().find('.lookup-toggler').attr('disabled', true)
-      dari.find('.button-clear').attr('disabled', true)
-      dari.find('input').attr('readonly', true)
-      dari.children().find('.lookup-toggler').attr('disabled', true)
-      sampai.find('.button-clear').attr('disabled', true)
-      sampai.find('input').attr('readonly', true)
-      sampai.children().find('.lookup-toggler').attr('disabled', true)
 
     } else {
       console.log("true");
@@ -1868,18 +1858,10 @@
       supir.find('.button-clear').attr('disabled', false)
       supir.find('input').attr('readonly', false)
       supir.children().find('.lookup-toggler').attr('disabled', false)
-      pelanggan.find('.button-clear').attr('disabled', false)
-      pelanggan.find('input').attr('readonly', false)
-      pelanggan.children().find('.lookup-toggler').attr('disabled', false)
-      agen.find('.button-clear').attr('disabled', false)
-      agen.find('input').attr('readonly', false)
-      agen.children().find('.lookup-toggler').attr('disabled', false)
+
       upah.find('.button-clear').attr('disabled', false)
       upah.find('input').attr('readonly', false)
       upah.children().find('.lookup-toggler').attr('disabled', false)
-      jenisorder.find('.button-clear').attr('disabled', false)
-      jenisorder.find('input').attr('readonly', false)
-      jenisorder.children().find('.lookup-toggler').attr('disabled', false)
       statuscontainer.find('.button-clear').attr('disabled', false)
       statuscontainer.find('input').attr('readonly', false)
       statuscontainer.children().find('.lookup-toggler').attr('disabled', false)
@@ -1887,6 +1869,25 @@
     }
 
 
+  }
+
+  function inputReadOnly() {
+    let pelanggan = $('#crudForm').find(`[name="pelanggan"]`).parents('.input-group')
+    let container = $('#crudForm').find(`[name="container"]`).parents('.input-group')
+    let agen = $('#crudForm').find(`[name="agen"]`).parents('.input-group')
+    let jenisorder = $('#crudForm').find(`[name="jenisorder"]`).parents('.input-group')
+    pelanggan.find('.button-clear').attr('disabled', true)
+    pelanggan.find('input').attr('readonly', true)
+    pelanggan.children().find('.lookup-toggler').attr('disabled', true)
+    container.find('.button-clear').attr('disabled', true)
+    container.find('input').attr('readonly', true)
+    container.children().find('.lookup-toggler').attr('disabled', true)
+    agen.find('.button-clear').attr('disabled', true)
+    agen.find('input').attr('readonly', true)
+    agen.children().find('.lookup-toggler').attr('disabled', true)
+    jenisorder.find('.button-clear').attr('disabled', true)
+    jenisorder.find('input').attr('readonly', true)
+    jenisorder.children().find('.lookup-toggler').attr('disabled', true)
   }
 
 
@@ -1912,7 +1913,7 @@
     })
   }
 
-  function cekValidasidelete(Id, Aksi,nobukti) {
+  function cekValidasidelete(Id, Aksi, nobukti) {
     $.ajax({
       url: `{{ config('app.api_url') }}suratpengantar/${Id}/cekValidasi`,
       method: 'POST',
@@ -1956,10 +1957,10 @@
         'Authorization': `Bearer ${accessToken}`
       },
       success: response => {
-        getTarifOmset(response.data.tarif_id)
+        // getTarifOmset(response.data.tarif_id)
         console.log(response.data)
         containerId = response.data.container_id
-        $('#crudForm [name=statusperalihan]').val(response.data.statusperalihan)
+        // $('#crudForm [name=statusperalihan]').val(response.data.statusperalihan)
         $('#crudForm [name=agen]').val(response.data.agen)
         $('#crudForm [name=agen_id]').val(response.data.agen_id)
         $('#crudForm [name=container_id]').val(response.data.container_id)
@@ -1968,18 +1969,16 @@
         $('#crudForm [name=jenisorder]').val(response.data.jenisorder)
         $('#crudForm [name=pelanggan_id]').val(response.data.pelanggan_id)
         $('#crudForm [name=pelanggan]').val(response.data.pelanggan)
-        $('#crudForm [name=tarifrincian_id]').val(response.data.tarif_id)
-        $('#crudForm [name=tarifrincian]').val(response.data.tarif)
         $('#crudForm [name=nocont]').val(response.data.nocont)
         $('#crudForm [name=nocont2]').val(response.data.nocont2)
         $('#crudForm [name=nojob]').val(response.data.nojobemkl)
         $('#crudForm [name=nojob2]').val(response.data.nojobemkl2)
         $('#crudForm [name=noseal]').val(response.data.noseal)
         $('#crudForm [name=noseal2]').val(response.data.noseal2)
-        $('#crudForm [name=statusperalihan]')
-          .val(response.data.statusperalihan)
-          .trigger('change')
-          .trigger('select2:selected');
+        // $('#crudForm [name=statusperalihan]')
+        //   .val(response.data.statusperalihan)
+        //   .trigger('change')
+        //   .trigger('select2:selected');
       },
       error: error => {
         showDialog(error.statusText)
