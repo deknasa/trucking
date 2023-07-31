@@ -647,7 +647,7 @@
           })
 
           setRowNumbers()
-
+          setTotal()
           if (form.data('action') === 'delete') {
             form.find('[name]').addClass('disabled')
             initDisabled()
