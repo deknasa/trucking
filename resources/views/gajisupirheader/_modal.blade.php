@@ -464,7 +464,7 @@
                     }
                 })
 
-            if (dari != '' && sampai != '' && supir != '') {
+            if (dari != '' && sampai != '' && supirId != '') {
 
                 getAllAbsensi(supirId, dari, sampai, aksi)
                     .then((response) => {
