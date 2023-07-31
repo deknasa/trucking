@@ -19,6 +19,7 @@
               </div>
             </div> --}}
             <input type="text" name="id" class="form-control" hidden>
+            <input type="text" name="jenisorderemkl" class="form-control" hidden>
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
@@ -847,6 +848,8 @@
 
         $('#crudForm [name=nocont]').first().val(orderanemkl.nocont)
         $('#crudForm [name=noseal]').first().val(orderanemkl.noseal)
+        $('#crudForm [name=jenisorderemkl]').first().val(orderanemkl.jenisorderan)
+
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
@@ -978,7 +981,7 @@
     })
   }
 
-  function cekValidasidelete(Id, Aksi,nobukti) {
+  function cekValidasidelete(Id, Aksi, nobukti) {
     $.ajax({
       url: `{{ config('app.api_url') }}orderantrucking/${Id}/${Aksi}/cekValidasi`,
       method: 'POST',
@@ -986,7 +989,7 @@
       data: {
         aksi: Aksi,
         nobukti: nobukti
-      },      
+      },
       beforeSend: request => {
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
