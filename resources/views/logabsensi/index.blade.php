@@ -73,7 +73,7 @@
                     },
                     {
                         label: 'STATUS',
-                        name: 'status',
+                        name: 'statusabsen',
                         align: 'left'
                     },
                     {
