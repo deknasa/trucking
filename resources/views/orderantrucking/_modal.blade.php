@@ -197,6 +197,7 @@
   let containerId
   var statustas
   var kodecontainer
+  var isAllowEdited;
 
   $(document).ready(function() {
     $("#crudForm [name]").attr("autocomplete", "off");
@@ -396,6 +397,7 @@
             $('#crudForm [name=tglbukti]').attr('readonly', true)
             $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
 
+            editValidasi(isAllowEdited);
           })
           .catch((error) => {
             showDialog(error.statusText)
@@ -484,45 +486,90 @@
     })
 
   }
-  function approvalEditOrderanTrucking(){
+
+  function approvalEditOrderanTrucking() {
     event.preventDefault()
-    
+
     let form = $('#crudForm')
     $(this).attr('disabled', '')
     $('#processingLoader').removeClass('d-none')
-    
+
     $.ajax({
-        url: `${apiUrl}orderantrucking/approvaledit`,
-        method: 'POST',
-        dataType: 'JSON',
-        headers: {
-            Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          orderanTruckingId: selectedRows
-        },
-        success: response => {
-            $('#crudForm').trigger('reset')
-            $('#crudModal').modal('hide')
-    
-            $('#jqGrid').jqGrid().trigger('reloadGrid');
-            selectedRows = []
-            $('#gs_').prop('checked', false)
-        },
-        error: error => {
-            if (error.status === 422) {
-                $('.is-invalid').removeClass('is-invalid')
-                $('.invalid-feedback').remove()
-    
-                setErrorMessages(form, error.responseJSON.errors);
-            } else {
-                showDialog(error.statusText)
-            }
-        },
+      url: `${apiUrl}orderantrucking/approvaledit`,
+      method: 'POST',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        orderanTruckingId: selectedRows
+      },
+      success: response => {
+        $('#crudForm').trigger('reset')
+        $('#crudModal').modal('hide')
+
+        $('#jqGrid').jqGrid().trigger('reloadGrid');
+        selectedRows = []
+        $('#gs_').prop('checked', false)
+      },
+      error: error => {
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+
+          setErrorMessages(form, error.responseJSON.errors);
+        } else {
+          showDialog(error.statusText)
+        }
+      },
     }).always(() => {
-        $('#processingLoader').addClass('d-none')
-        $(this).removeAttr('disabled')
+      $('#processingLoader').addClass('d-none')
+      $(this).removeAttr('disabled')
     })
+  }
+
+  function editValidasi(edit) {
+    let container = $('#crudForm').find(`[name="container"]`).parents('.input-group')
+    let agen = $('#crudForm').find(`[name="agen"]`).parents('.input-group')
+    let jenisorder = $('#crudForm').find(`[name="jenisorder"]`).parents('.input-group')
+    let pelanggan = $('#crudForm').find(`[name="pelanggan"]`).parents('.input-group')
+  
+    if (!edit) {
+
+      container.find('.button-clear').attr('disabled', true)
+      container.find('input').attr('readonly', true)
+      container.children().find('.lookup-toggler').attr('disabled', true)
+      agen.find('.button-clear').attr('disabled', true)
+      agen.find('input').attr('readonly', true)
+      agen.children().find('.lookup-toggler').attr('disabled', true)
+      jenisorder.find('.button-clear').attr('disabled', true)
+      jenisorder.find('input').attr('readonly', true)
+      jenisorder.children().find('.lookup-toggler').attr('disabled', true)
+
+      pelanggan.find('.button-clear').attr('disabled', true)
+      pelanggan.find('input').attr('readonly', true)
+      pelanggan.children().find('.lookup-toggler').attr('disabled', true)
+    
+
+    } else {
+      console.log("true");
+      container.find('.button-clear').attr('disabled', false)
+      container.find('input').attr('readonly', false)
+      container.children().find('.lookup-toggler').attr('disabled', false)
+      agen.find('.button-clear').attr('disabled', false)
+      agen.find('input').attr('readonly', false)
+      agen.children().find('.lookup-toggler').attr('disabled', false)
+      jenisorder.find('.button-clear').attr('disabled', false)
+      jenisorder.find('input').attr('readonly', false)
+      jenisorder.children().find('.lookup-toggler').attr('disabled', false)
+
+      pelanggan.find('.button-clear').attr('disabled', false)
+      pelanggan.find('input').attr('readonly', false)
+      pelanggan.children().find('.lookup-toggler').attr('disabled', false)
+
+    }
+
+
   }
 
 
@@ -1035,6 +1082,7 @@
       },
       success: response => {
         var kondisi = response.kondisi
+        isAllowEdited = response.edit;
         if (kondisi == true) {
           showDialog(response.message['keterangan'])
         } else {
