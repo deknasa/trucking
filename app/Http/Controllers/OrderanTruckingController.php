@@ -28,6 +28,7 @@ class OrderanTruckingController extends MyController
             'combolangsir' => $this->combo('list','STATUS LANGSIR','STATUS LANGSIR'),
             'comboperalihan' => $this->combo('list','STATUS PERALIHAN','STATUS PERALIHAN'),
             'comboapproval' => $this->comboApproval('list', 'STATUS APPROVAL', 'STATUS APPROVAL'),
+            'comboapprovaledit' => $this->comboApproval('list', 'STATUS APPROVAL', 'STATUS APPROVAL'),
         ];
 
         

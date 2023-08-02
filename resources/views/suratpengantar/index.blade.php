@@ -413,6 +413,30 @@
             }
           },
           {
+            label: 'TGL APPROVAL EDIT',
+            name: 'tglapprovaleditsuratpengantar',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
+          {
+            label: 'USER APPROVAL EDIT',
+            name: 'userapprovaleditsuratpengantar',
+          },
+          {
+            label: 'TGL BATAS EDIT',
+            name: 'tglbataseditsuratpengantar',
+            align: 'right',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y H:i:s"
+            }
+          },
+          {
             label: 'MODIFIEDBY',
             name: 'modifiedby',
           },

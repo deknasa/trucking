@@ -36,18 +36,18 @@
   function checkboxHandler(element) {
     let value = $(element).val();
     if (element.checked) {
-        selectedRows.push($(element).val())
-        $(element).parents('tr').addClass('bg-light-blue')
+      selectedRows.push($(element).val())
+      $(element).parents('tr').addClass('bg-light-blue')
     } else {
-        $(element).parents('tr').removeClass('bg-light-blue')
-        for (var i = 0; i < selectedRows.length; i++) {
-            if (selectedRows[i] == value) {
-                selectedRows.splice(i, 1);
-            }
+      $(element).parents('tr').removeClass('bg-light-blue')
+      for (var i = 0; i < selectedRows.length; i++) {
+        if (selectedRows[i] == value) {
+          selectedRows.splice(i, 1);
         }
+      }
     }
   }
-    
+
 
   $(document).ready(function() {
 
@@ -70,8 +70,7 @@
           tglsampai: $('#tglsampaiheader').val()
         },
         datatype: "json",
-        colModel: [
-          {
+        colModel: [{
             label: '',
             name: '',
             width: 30,
@@ -81,25 +80,25 @@
             stype: 'input',
             searchable: false,
             searchoptions: {
-                type: 'checkbox',
-                clearSearch: false,
-                dataInit: function(element) {
-                    $(element).removeClass('form-control')
-                    $(element).parent().addClass('text-center')
+              type: 'checkbox',
+              clearSearch: false,
+              dataInit: function(element) {
+                $(element).removeClass('form-control')
+                $(element).parent().addClass('text-center')
 
-                    $(element).on('click', function() {                                    
-                        $(element).attr('disabled', true)
-                        if ($(this).is(':checked')) {
-                            selectAllRows()
-                        } else {
-                            clearSelectedRows()
-                        }
-                    })
+                $(element).on('click', function() {
+                  $(element).attr('disabled', true)
+                  if ($(this).is(':checked')) {
+                    selectAllRows()
+                  } else {
+                    clearSelectedRows()
+                  }
+                })
 
-                }
+              }
             },
             formatter: (value, rowOptions, rowData) => {
-                return `<input type="checkbox" name="orderanTruckingId[]" value="${rowData.id}" onchange="checkboxHandler(this)">`
+              return `<input type="checkbox" name="orderanTruckingId[]" value="${rowData.id}" onchange="checkboxHandler(this)">`
             },
           },
           {
@@ -108,38 +107,38 @@
             align: 'left',
             stype: 'select',
             searchoptions: {
-                value: `<?php
-                        $i = 1;
+              value: `<?php
+                      $i = 1;
 
-                        foreach ($data['comboapproval'] as $status) :
-                            echo "$status[param]:$status[parameter]";
-                            if ($i !== count($data['comboapproval'])) {
-                                echo ";";
-                            }
-                            $i++;
-                        endforeach
+                      foreach ($data['comboapproval'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['comboapproval'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
 
-                        ?>
+                      ?>
                 `,
-                dataInit: function(element) {
-                    $(element).select2({
-                        width: 'resolve',
-                        theme: "bootstrap4"
-                    });
-                }
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
             },
             formatter: (value, options, rowData) => {
-                let statusApproval = JSON.parse(value)
-                if (!statusApproval) {
-                    return ''
-                }
-                let formattedValue = $(`
+              let statusApproval = JSON.parse(value)
+              if (!statusApproval) {
+                return ''
+              }
+              let formattedValue = $(`
                     <div class="badge" style="background-color: ${statusApproval.WARNA}; color: #fff;">
                     <span>${statusApproval.SINGKATAN}</span>
                     </div>
                 `)
 
-                return formattedValue[0].outerHTML
+              return formattedValue[0].outerHTML
             },
             cellattr: (rowId, value, rowObject) => {
               let statusApproval = JSON.parse(rowObject.statusapprovalbukatrip)
@@ -148,7 +147,7 @@
               }
               return ` title="${statusApproval.MEMO}"`
             }
-          },    
+          },
           {
             label: 'ID',
             name: 'id',
@@ -208,6 +207,77 @@
           {
             label: 'no seaL (2)',
             name: 'noseal2',
+          },
+          {
+            label: 'EDIT ORDERAN TRUCKING',
+            name: 'statusapprovaledit',
+            align: 'left',
+            stype: 'select',
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['comboapprovaledit'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['comboapprovaledit'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+                `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              let statusApprovalEdit = JSON.parse(value)
+              if (!statusApprovalEdit) {
+                return ''
+              }
+              let formattedValue = $(`
+                    <div class="badge" style="background-color: ${statusApprovalEdit.WARNA}; color: #fff;">
+                    <span>${statusApprovalEdit.SINGKATAN}</span>
+                    </div>
+                `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusApprovalEdit = JSON.parse(rowObject.statusapprovaledit)
+              if (!statusApprovalEdit) {
+                return ` title=" "`
+              }
+              return ` title="${statusApprovalEdit.MEMO}"`
+            }
+          },
+          {
+            label: 'TGL APPROVAL EDIT',
+            name: 'tglapprovaledit',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
+          {
+            label: 'USER APPROVAL EDIT',
+            name: 'userapprovaledit',
+          },
+          {
+            label: 'TGL BATAS EDIT',
+            name: 'tglbataseditorderantrucking',
+            align: 'right',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y H:i:s"
+            }
           },
           {
             label: 'MODIFIEDBY',
@@ -283,9 +353,9 @@
               }
             })
           });
-            
-                
-          
+
+
+
 
           /* Set global variables */
           sortname = $(this).jqGrid("getGridParam", "sortname")
@@ -321,7 +391,7 @@
             $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
           }
           $('#left-nav').find('button').attr('disabled', false)
-          permission() 
+          permission()
           $('#gs_').attr('disabled', false)
 
           setHighlight($(this))
@@ -367,7 +437,7 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                cekValidasidelete(selectedId, 'edit',selectednobukti)
+                cekValidasidelete(selectedId, 'edit', selectednobukti)
               }
             }
           },
@@ -382,7 +452,7 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                cekValidasidelete(selectedId, 'delete',selectednobukti)
+                cekValidasidelete(selectedId, 'delete', selectednobukti)
               }
 
             }
@@ -411,7 +481,7 @@
               $('#gs_').prop('checked', false)
             }
           },
-          
+
         ],
         extndBtn: [{
           id: 'approve',
@@ -489,7 +559,7 @@
         params += key + "=" + encodeURIComponent(postData[key]);
       }
 
-       // window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
+      // window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
 
       let formRange = $('#formRangeTgl')
       let dari = formRange.find('[name=dari]').val()
@@ -534,25 +604,26 @@
     }
 
     function permission() {
-    if (!`{{ $myAuth->hasPermission('orderantrucking', 'store') }}`) {
-      $('#add').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('orderantrucking', 'store') }}`) {
+        $('#add').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('orderantrucking', 'update') }}`) {
-      $('#edit').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('orderantrucking', 'update') }}`) {
+        $('#edit').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('orderantrucking', 'destroy') }}`) {
-      $('#delete').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('orderantrucking', 'destroy') }}`) {
+        $('#delete').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('orderantrucking', 'report') }}`) {
-      $('#report').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('orderantrucking', 'report') }}`) {
+        $('#report').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('orderantrucking', 'export') }}`) {
-      $('#export').attr('disabled', 'disabled')
-    }}
+      if (!`{{ $myAuth->hasPermission('orderantrucking', 'export') }}`) {
+        $('#export').attr('disabled', 'disabled')
+      }
+    }
 
     $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {
@@ -598,31 +669,32 @@
 
       window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
     })
-    function clearSelectedRows() {
-        selectedRows = []
 
-        $('#jqGrid').trigger('reloadGrid')
+    function clearSelectedRows() {
+      selectedRows = []
+
+      $('#jqGrid').trigger('reloadGrid')
     }
 
     function selectAllRows() {
-        $.ajax({
-            url: `${apiUrl}orderantrucking`,
-            method: 'GET',
-            dataType: 'JSON',
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            },
-            data: {
-                limit: 0,
-                tgldari: $('#tgldariheader').val(),
-                tglsampai: $('#tglsampaiheader').val()
-            },
-            success: (response) => {
-              console.log(response);
-                selectedRows = response.data.map((giro) => giro.id)
-                $('#jqGrid').trigger('reloadGrid')
-            }
-        })
+      $.ajax({
+        url: `${apiUrl}orderantrucking`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          limit: 0,
+          tgldari: $('#tgldariheader').val(),
+          tglsampai: $('#tglsampaiheader').val()
+        },
+        success: (response) => {
+          console.log(response);
+          selectedRows = response.data.map((giro) => giro.id)
+          $('#jqGrid').trigger('reloadGrid')
+        }
+      })
     }
   })
 </script>
