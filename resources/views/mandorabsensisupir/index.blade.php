@@ -94,6 +94,11 @@
             $('.invalid-feedback').remove()
 
             setErrorMessages($('#tglBuka'), error.responseJSON.errors);
+            $('#jqGrid').setGridParam({
+              datatype: "local",
+              data:[],
+            }).trigger('reloadGrid')
+            
           } else {
             showDialog(error.statusText)
           }
