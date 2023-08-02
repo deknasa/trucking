@@ -52,9 +52,10 @@
                         hidden: true
                     },
                     {
-                        label: 'KARYAWAN',
+                        label: 'KARYAWAN/SUPIR/KENEK',
                         name: 'karyawan',
-                        align: 'left'
+                        align: 'left',
+                        width: '250px',
                     },
                     {
                         label: 'TANGGAL',
@@ -74,31 +75,6 @@
                     {
                         label: 'STATUS',
                         name: 'statusabsen',
-                        align: 'left'
-                    },
-                    {
-                        label: 'JAM KERJA',
-                        name: 'jamkerja',
-                        align: 'left'
-                    },
-                    {
-                        label: 'CEPAT MASUK',
-                        name: 'cepatmasuk',
-                        align: 'left'
-                    },
-                    {
-                        label: 'CEPAT PULANG',
-                        name: 'cepatpulang',
-                        align: 'left'
-                    },
-                    {
-                        label: 'TERLAMBAT MASUK',
-                        name: 'terlambatmasuk',
-                        align: 'left'
-                    },
-                    {
-                        label: 'TERLAMBAT PULANG',
-                        name: 'terlambatpulang',
                         align: 'left'
                     },
                     {
@@ -217,9 +193,7 @@
                         innerHTML: '<i class="fa fa-print"></i> REPORT',
                         class: 'btn btn-info btn-sm mr-1',
                         onClick: () => {
-                            $('#rangeModal').data('action', 'report')
-                            $('#rangeModal').find('button:submit').html(`Report`)
-                            $('#rangeModal').modal('show')
+                            window.open(`{{ route('logabsensi.report') }}?tgldari=${$('#tgldariheader').val()}&tglsampai=${$('#tglsampaiheader').val()}&limit=0`)
                         }
                     },
                     {
@@ -227,9 +201,7 @@
                         innerHTML: '<i class="fa fa-file-export"></i> EXPORT',
                         class: 'btn btn-warning btn-sm mr-1',
                         onClick: () => {
-                            $('#rangeModal').data('action', 'export')
-                            $('#rangeModal').find('button:submit').html(`Export`)
-                            $('#rangeModal').modal('show')
+                            window.open(`{{ route('logabsensi.export') }}?tgldari=${$('#tgldariheader').val()}&tglsampai=${$('#tglsampaiheader').val()}&limit=0`)
                         }
                     },
                 ]
@@ -262,175 +234,6 @@
                 $('#report').attr('disabled', 'disabled')
             }
         }
-
-        $('#rangeModal').on('shown.bs.modal', function() {
-            if (autoNumericElements.length > 0) {
-                $.each(autoNumericElements, (index, autoNumericElement) => {
-                    autoNumericElement.remove()
-                })
-            }
-
-            $('#formRange [name]:not(:hidden)').first().focus()
-
-            $('#formRange [name=sidx]').val($('#jqGrid').jqGrid('getGridParam').postData.sidx)
-            $('#formRange [name=sord]').val($('#jqGrid').jqGrid('getGridParam').postData.sord)
-            if (page == 0) {
-                $('#formRange [name=dari]').val(page)
-                $('#formRange [name=sampai]').val(totalRecord)
-            } else {
-                $('#formRange [name=dari]').val((indexRow + 1) + (limit * (page - 1)))
-                $('#formRange [name=sampai]').val(totalRecord)
-            }
-
-            autoNumericElements = new AutoNumeric.multiple('#formRange .autonumeric-report', {
-                digitGroupSeparator: ',',
-                decimalCharacter: '.',
-                decimalPlaces: 0,
-                allowDecimalPadding: false,
-                minimumValue: 1,
-                maximumValue: totalRecord
-            })
-        })
-
-        // MODAL HIDDEN, REMOVE KOTAK MERAH
-        $('#rangeModal').on('hidden.bs.modal', function() {
-
-            $('.is-invalid').removeClass('is-invalid')
-            $('.invalid-feedback').remove()
-        })
-
-        $('#formRange').submit(function(event) {
-            event.preventDefault()
-
-            let params
-            let submitButton = $(this).find('button:submit')
-
-            submitButton.attr('disabled', 'disabled')
-            $('#processingLoader').removeClass('d-none')
-
-            /* Set params value */
-            for (var key in postData) {
-                if (params != "") {
-                    params += "&";
-                }
-                params += key + "=" + encodeURIComponent(postData[key]);
-            }
-
-            let formRange = $('#formRange')
-            let offset = parseInt(formRange.find('[name=dari]').val()) - 1
-            let limit = parseInt(formRange.find('[name=sampai]').val().replace('.', '')) - offset
-            params += `&offset=${offset}&limit=${limit}`
-
-            getCekExport(params).then((response) => {
-                if ($('#rangeModal').data('action') == 'export') {
-                    $.ajax({
-                        url: `{{ config('app.api_url') }}logabsensi/export?` + params,
-                        type: 'GET',
-                        beforeSend: function(xhr) {
-                            xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
-                        },
-                        xhrFields: {
-                            responseType: 'arraybuffer'
-                        },
-                        success: function(response, status, xhr) {
-                            if (xhr.status === 200) {
-                                if (response !== undefined) {
-                                    var blob = new Blob([response], {
-                                        type: 'cabang/vnd.ms-excel'
-                                    });
-                                    var link = document.createElement('a');
-                                    link.href = window.URL.createObjectURL(blob);
-                                    link.download = 'logabsensi' + new Date().getTime() + '.xlsx';
-                                    link.click();
-                                }
-                                $('#rangeModal').modal('hide')
-                            }
-                        },
-                        error: function(xhr, status, error) {
-                            $('#processingLoader').addClass('d-none')
-                            submitButton.removeAttr('disabled')
-                        }
-                    }).always(() => {
-                        $('#processingLoader').addClass('d-none')
-                        submitButton.removeAttr('disabled')
-                    })
-                } else if ($('#rangeModal').data('action') == 'report') {
-                    window.open(`{{ route('logabsensi.report') }}?${params}`)
-                    submitButton.removeAttr('disabled')
-                    $('#processingLoader').addClass('d-none')
-                    $('#rangeModal').modal('hide')
-                }
-            }).catch((error) => {
-                if (error.status === 422) {
-                    $('.is-invalid').removeClass('is-invalid')
-                    $('.invalid-feedback').remove()
-                    let status
-                    if (error.responseJSON.hasOwnProperty('status') == false) {
-                        status = false
-                    } else {
-                        status = true
-                    }
-                    statusText = error.statusText
-                    errors = error.responseJSON.errors
-                    $.each(errors, (index, error) => {
-                        let indexes = index.split(".");
-                        if (status === false) {
-                            indexes[0] = 'sampai'
-                        }
-                        let element;
-                        element = $('#rangeModal').find(`[name="${indexes[0]}"]`)[
-                            0];
-                        if ($(element).length > 0 && !$(element).is(":hidden")) {
-                            $(element).addClass("is-invalid");
-                            $(`
-                                            <div class="invalid-feedback">
-                                            ${error[0].toLowerCase()}
-                                            </div>
-                                    `).appendTo($(element).parent());
-                        } else {
-                            setTimeout(() => {
-                                return showDialog(error);
-                            }, 100)
-                        }
-                    });
-                    $(".is-invalid").first().focus();
-                    $('#processingLoader').addClass('d-none')
-
-                } else {
-                    showDialog(error.statusText)
-                }
-            }).finally(() => {
-                $('.ui-button').click()
-                submitButton.removeAttr('disabled')
-            })
-        })
-
-
-
-        function getCekExport(params) {
-
-            params += `&cekExport=true`
-
-            return new Promise((resolve, reject) => {
-                $.ajax({
-                    url: `${apiUrl}logabsensi/export?${params}`,
-                    dataType: "JSON",
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`
-                    },
-                    success: (response) => {
-                        resolve(response);
-                    },
-                    error: error => {
-                        reject(error)
-
-                    },
-                });
-            });
-        }
-
-
-
     })
 </script>
 @endpush()
