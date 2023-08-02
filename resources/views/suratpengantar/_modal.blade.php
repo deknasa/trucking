@@ -230,7 +230,7 @@
                       <div id="peralihan">
                         <div class="form-group">
                           <label class="col-sm-12 col-form-label">Nominal Peralihan</label>
-                          <div class="col-md-12">
+                          <div class="col-md-12" id="nominalPeralihanDiv">
                             <input type="text" name="nominalperalihan" class="form-control text-right" readonly>
                             <input type="hidden" name="omset">
                           </div>
@@ -238,8 +238,8 @@
                       </div>
                       <div class="form-group">
 
-                        <div class="col-md-6">
-                          <div class="input-group">
+                        <div class="col-md-6" id="persentasePeralihanDiv">
+                          <div class="input-group" id="persentaseInputGroup">
                             <input type="text" name="persentaseperalihan" onkeyup="setNominal()" class="form-control" readonly>
                             <div class="input-group-append">
                               <span class="input-group-text">%</span>
@@ -473,8 +473,21 @@
       } else if (status == 'BUKAN PERALIHAN') {
         // $(`#crudForm [name="nominalperalihan"]`).prop('readonly', true)
         $(`#crudForm [name="persentaseperalihan"]`).prop('readonly', true)
-        $(`#crudForm [name="nominalperalihan"]`).val('')
-        $(`#crudForm [name="persentaseperalihan"]`).val('')
+
+        $(`#crudForm [name="nominalperalihan"]`).remove()
+        $(`#persentaseInputGroup`).remove()
+
+        $('#nominalPeralihanDiv').append(`
+        <input type="text" name="nominalperalihan" class="form-control text-right" readonly>
+        `)
+        $('#persentasePeralihanDiv').append(`
+          <div class="input-group" id="persentaseInputGroup">
+            <input type="text" name="persentaseperalihan" onkeyup="setNominal()" class="form-control" readonly>
+            <div class="input-group-append">
+              <span class="input-group-text">%</span>
+            </div>
+          </div>
+        `)
       }
     })
     $(document).on('click', '.delete-row', function(event) {
