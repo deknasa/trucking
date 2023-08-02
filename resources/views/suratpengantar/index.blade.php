@@ -130,6 +130,24 @@
             formatter: currencyFormat,
           },
           {
+            label: 'OMSET',
+            name: 'omset',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
+            label: 'NOMINAL PERALIHAN',
+            name: 'nominalperalihan',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
+            label: 'TOTAL OMSET',
+            name: 'totalomset',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
             label: 'AGEN',
             name: 'agen_id',
           },

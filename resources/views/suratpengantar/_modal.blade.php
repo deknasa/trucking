@@ -683,6 +683,7 @@
   function setNominal() {
     let persentase = $(`#crudForm [name="persentaseperalihan"]`)
     let omset = $(`#crudForm [name="omset"]`).val()
+    console.log(omset,(AutoNumeric.getNumber(persentase[0]) / 100) * omset)
 
     totalPersentase = (AutoNumeric.getNumber(persentase[0]) / 100) * omset;
     // $(`#crudForm [name="nominalperalihan"]`).val(totalPersentase)
@@ -1194,6 +1195,7 @@
           statuscontainerId = response.data.statuscontainer_id
           jenisorderId = response.data.jenisorder_id
           getTarifOmset(response.data.tarifrincian_id)
+          $('#crudForm ').find(`[name="omset"]`).val(response.data.omset)
           // getGaji(response.data.nominalplusborongan)
           initAutoNumeric(form.find(`[name="nominal"]`))
           initAutoNumeric(form.find(`[name="nominalTagih"]`))
@@ -1926,7 +1928,7 @@
 
           $('#crudForm [name=lokasibongkarmuat]').first().val(response.dataTarif.tujuan)
           $('#crudForm [name=hargaperton]').first().val(response.dataTarif.nominalton)
-          $('#crudForm ').find(`[name="omset"]`).val(response.dataTarif.nominal)
+          // $('#crudForm ').find(`[name="omset"]`).val(response.dataTarif.nominal)
         }
       },
       error: error => {
