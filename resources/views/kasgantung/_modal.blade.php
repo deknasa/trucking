@@ -52,7 +52,7 @@
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="text" name="penerima" class="form-control">
               </div>
-            </div>            
+            </div>
             <div class="border p-3 mt-3">
               <h6>Posting Pengeluaran</h6>
 
@@ -248,8 +248,14 @@
 
           id = response.data.id
 
+          $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
+          $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
           $('#jqGrid').jqGrid('setGridParam', {
-            page: response.data.page
+            page: response.data.page,
+            postData: {
+              tgldari: dateFormat(response.data.tgldariheader),
+              tglsampai: dateFormat(response.data.tglsampaiheader)
+            }
           }).trigger('reloadGrid');
 
           if (id == 0) {
@@ -365,8 +371,6 @@
       ])
       .then(() => {
         $('#crudModal').modal('show')
-        form.find(`[name="tglbukti"]`).prop('readonly', true)
-        form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
       })
       .catch((error) => {
         showDialog(error.statusText)

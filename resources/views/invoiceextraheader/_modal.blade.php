@@ -214,9 +214,15 @@
 
           id = response.data.id
 
-          $('#jqGrid').trigger('reloadGrid', {
-            page: response.data.page
-          })
+          $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
+          $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
+          $('#jqGrid').jqGrid('setGridParam', {
+            page: response.data.page,
+            postData: {
+              tgldari: dateFormat(response.data.tgldariheader),
+              tglsampai: dateFormat(response.data.tglsampaiheader)
+            }
+          }).trigger('reloadGrid');
           if (id == 0) {
             $('#detail').jqGrid().trigger('reloadGrid')
           }
@@ -347,8 +353,8 @@
       ])
       .then(() => {
         $('#crudModal').modal('show')
-        $('#crudForm [name=tglbukti]').attr('readonly', true)
-        $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
+        // $('#crudForm [name=tglbukti]').attr('readonly', true)
+        // $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
       })
       .catch((error) => {
         showDialog(error.statusText)
@@ -476,10 +482,6 @@
   }
 
   function showInvoiceExtraHeader(form, invoiceExtraHeader) {
-
-    form.find(`[name="tglbukti"]`).prop('readonly', true)
-    form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
-
     $.ajax({
       url: `${apiUrl}invoiceextraheader/${invoiceExtraHeader}`,
       method: 'GET',

@@ -716,12 +716,16 @@
           $('#crudModal').find('#crudForm').trigger('reset')
 
           $('#pengeluaranheader_id').val(response.data.pengeluarantrucking_id).trigger('change')
-
+          $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
+          $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
           $('#jqGrid').jqGrid('setGridParam', {
+            page: response.data.page,
             postData: {
+              tgldari: dateFormat(response.data.tgldariheader),
+              tglsampai: dateFormat(response.data.tglsampaiheader),
+              penerimaanheader_id: response.data.penerimaantrucking_id,
               pengeluaranheader_id: response.data.pengeluarantrucking_id
-            },
-            page: response.data.page
+            }
           }).trigger('reloadGrid');
 
           selectedRows = []
@@ -808,31 +812,31 @@
     $('#detail-list-grid').html('')
     setTampilanForm();
     addRow()
-    console.log(listKodePengeluaran[0] ,KodePengeluaranId);
+    console.log(listKodePengeluaran[0], KodePengeluaranId);
   }
 
   function setTampilanForm() {
     tampilanall()
     switch (KodePengeluaranId) {
-      case  listKodePengeluaran[0]://'PJT':
+      case listKodePengeluaran[0]: //'PJT':
         tampilanPJT()
         break;
-      case  listKodePengeluaran[1]://'TDE':
+      case listKodePengeluaran[1]: //'TDE':
         tampilanTDE()
         break;
-      case  listKodePengeluaran[2]://'BST':
+      case listKodePengeluaran[2]: //'BST':
         tampilanBST()
         break;
-      case  listKodePengeluaran[3]://'BSB':
+      case listKodePengeluaran[3]: //'BSB':
         tampilanBSB()
         break;
-      case  listKodePengeluaran[4]://'KBBM':
+      case listKodePengeluaran[4]: //'KBBM':
         tampilanKBBM()
         break;
-      case  listKodePengeluaran[6]://'KLAIM':
+      case listKodePengeluaran[6]: //'KLAIM':
         tampilanKLAIM()
         break;
-      case  listKodePengeluaran[7]://'PJK':
+      case listKodePengeluaran[7]: //'PJK':
         tampilanPJK()
         break;
       default:
@@ -1118,7 +1122,7 @@
     initSelect2(form.find(`[name="statusposting"]`), true)
     initSelect2(form.find(`[name="postingpinjaman"]`), true)
     if (form.data('action') == 'add') {
-      if($('#kodepengeluaranheader').val() != ''){
+      if ($('#kodepengeluaranheader').val() != '') {
         let index = listIdPengeluaran.indexOf($('#kodepengeluaranheader').val());
         setKodePengeluaran(listKodePengeluaran[index]);
         $('#crudForm').find(`[name="pengeluaranstok"]`).val(listKodePengeluaran[index])
@@ -1215,9 +1219,9 @@
         showPengeluaranTruckingHeader(form, id)
           .then(() => {
             $('#crudModal').modal('show')
-            $('#crudForm [name=tglbukti]').attr('readonly', true)
+            // $('#crudForm [name=tglbukti]').attr('readonly', true)
             $('#crudForm [name=statusposting]').attr('disabled', true)
-            $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
+            // $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
           })
           .finally(() => {
             $('.modal-loader').addClass('d-none')
@@ -1261,6 +1265,8 @@
           .then(() => {
             $('#crudModal').modal('show')
             $('#crudForm [name=statusposting]').attr('disabled', true)
+            form.find(`[name="tglbukti"]`).prop('readonly', true)
+            form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
           })
       })
       .catch((error) => {
@@ -2040,8 +2046,8 @@
     return new Promise((resolve, reject) => {
       $('#detailList tbody').html('')
 
-      form.find(`[name="tglbukti"]`).prop('readonly', true)
-      form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+      // form.find(`[name="tglbukti"]`).prop('readonly', true)
+      // form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
 
       $.ajax({
         url: `${apiUrl}pengeluarantruckingheader/${id}`,
@@ -2307,7 +2313,7 @@
                 beforeProcess: function(test) {
                   // var levelcoa = $(`#levelcoa`).val();
                   this.postData = {
-                    pengeluaranheader_id : 1,
+                    pengeluaranheader_id: 1,
                     Aktif: 'AKTIF',
                   }
                 },
@@ -3430,8 +3436,8 @@
           Authorization: `Bearer ${accessToken}`
         },
         success: response => {
-          $.each(response.data, (index,data) => {
-            listIdPengeluaran[index]=data.id;
+          $.each(response.data, (index, data) => {
+            listIdPengeluaran[index] = data.id;
             listKodePengeluaran[index] = data.kodepengeluaran;
           })
 

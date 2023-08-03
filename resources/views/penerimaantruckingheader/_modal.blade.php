@@ -461,12 +461,15 @@
           $('#crudModal').find('#crudForm').trigger('reset')
 
           $('#penerimaanheader_id').val(response.data.penerimaantrucking_id).trigger('change')
-
+          $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
+          $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
           $('#jqGrid').jqGrid('setGridParam', {
+            page: response.data.page,
             postData: {
+              tgldari: dateFormat(response.data.tgldariheader),
+              tglsampai: dateFormat(response.data.tglsampaiheader),
               penerimaanheader_id: response.data.penerimaantrucking_id
-            },
-            page: response.data.page
+            }
           }).trigger('reloadGrid');
 
           if (id == 0) {
@@ -756,8 +759,8 @@
       ])
       .then(() => {
         $('#crudModal').modal('show')
-        $('#crudForm [name=tglbukti]').attr('readonly', true)
-        $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
+        // $('#crudForm [name=tglbukti]').attr('readonly', true)
+        // $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
         $('#crudForm [name=supirheader]').attr('readonly', true)
         $('#crudForm [name=supir]').siblings('.input-group-append').remove()
         $('#crudForm [name=supir]').siblings('.button-clear').remove()
@@ -794,6 +797,8 @@
       ])
       .then(() => {
         $('#crudModal').modal('show')
+        form.find(`[name="tglbukti"]`).prop('readonly', true)
+        form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
       })
       .catch((error) => {
         showDialog(error.statusText)
@@ -1555,8 +1560,6 @@
     return new Promise((resolve, reject) => {
       $('#detailList tbody').html('')
 
-      form.find(`[name="tglbukti"]`).prop('readonly', true)
-      form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
       $.ajax({
         url: `${apiUrl}penerimaantruckingheader/${id}`,
         method: 'GET',

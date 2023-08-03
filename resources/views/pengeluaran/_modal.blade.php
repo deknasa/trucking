@@ -296,14 +296,16 @@
             width: 'resolve',
             theme: "bootstrap4"
           });
-
+          $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
+          $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
           $('#jqGrid').jqGrid('setGridParam', {
+            page: response.data.page,
             postData: {
-              bank_id: response.data.bank_id
-            },
-            page: response.data.page
+              bank_id: response.data.bank_id,
+              tgldari: dateFormat(response.data.tgldariheader),
+              tglsampai: dateFormat(response.data.tglsampaiheader)
+            }
           }).trigger('reloadGrid');
-
 
           if (id == 0) {
             $('#detail').jqGrid().trigger('reloadGrid')
@@ -616,9 +618,6 @@
     console.log(id);
     return new Promise((resolve, reject) => {
       $('#detailList tbody').html('')
-
-      $('#crudForm [name=tglbukti]').attr('readonly', true)
-      $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
 
       $.ajax({
         url: `${apiUrl}pengeluaranheader/${id}`,
