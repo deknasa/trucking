@@ -199,6 +199,40 @@
       })
   }
 
+  function updatetanggalbatas(bukaAbsensiId) {
+    event.preventDefault()
+    let form = $('#crudForm')
+    $(this).attr('disabled', '')
+    $('#processingLoader').removeClass('d-none')
+    $.ajax({
+      url: `${apiUrl}bukaabsensi/${bukaAbsensiId}/updatetanggalbatas`,
+      method: 'POST',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      success: response => {
+        $('#crudForm').trigger('reset')
+        $('#crudModal').modal('hide')
+        $('#jqGrid').jqGrid().trigger('reloadGrid');
+
+      },
+      error: error => {
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+
+          setErrorMessages(form, error.responseJSON.errors);
+        } else {
+          showDialog(error.statusText)
+        }
+      },
+    }).always(() => {
+      $('#processingLoader').addClass('d-none')
+      $(this).removeAttr('disabled')
+    })
+  }
+
   
 
   function showBukaAbsensi(form, bukaAbsensiId) {
