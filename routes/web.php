@@ -226,6 +226,7 @@ use App\Http\Controllers\ApprovalBukaTanggalSuratPengantarController;
 use App\Http\Controllers\ExportLaporanMingguanSupirController;
 use App\Http\Controllers\HutangExtraDetailController;
 use App\Http\Controllers\HutangExtraHeaderController;
+use App\Http\Controllers\KaryawanLogAbsensiController;
 use App\Http\Controllers\TypeAkuntansiController;
 use App\Http\Controllers\MainTypeAkuntansiController;
 use App\Http\Controllers\LaporanJurnalUmumController;
@@ -1477,6 +1478,9 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('logabsensi/report', [LogAbsensiController::class, 'report'])->name('logabsensi.report');
     Route::get('logabsensi/index', [LogAbsensiController::class, 'index']);
     Route::resource('logabsensi', LogAbsensiController::class);
+
+    Route::get('karyawanlogabsensi/index', [KaryawanLogAbsensiController::class, 'index']);
+    Route::resource('karyawanlogabsensi', KaryawanLogAbsensiController::class);
 });
 
 Route::patch('format', [FormatController::class, 'update']);

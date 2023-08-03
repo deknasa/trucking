@@ -53,6 +53,18 @@
                         <div class="row form-group">
                             <div class="col-12 col-sm-3 col-md-2">
                                 <label class="col-form-label">
+                                    PERIODE <span class="text-danger">*</span></label>
+                            </div>
+                            <div class="col-12 col-sm-9 col-md-10">
+                                <div class="input-group">
+                                    <input type="text" name="periode" class="form-control datepicker">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <div class="col-12 col-sm-3 col-md-2">
+                                <label class="col-form-label">
                                     TGL DARI <span class="text-danger">*</span></label>
                             </div>
                             <div class="col-12 col-sm-9 col-md-10">
@@ -135,6 +147,8 @@
     let selectedNominal = [];
     let selectedDari = [];
     let selectedSampai = [];
+    let selectedSupir = [];
+    let selectedKeterangan = [];
 
     let sortnameTrip = 'nobukti_trip';
     let sortorderTrip = 'asc';

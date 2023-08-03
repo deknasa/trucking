@@ -323,8 +323,14 @@
           $('#crudModal').find('#crudForm').trigger('reset')
           $('#crudModal').modal('hide')
 
+          $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
+          $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
           $('#jqGrid').jqGrid('setGridParam', {
-            page: response.data.page
+            page: response.data.page,
+            postData: {
+              tgldari: dateFormat(response.data.tgldariheader),
+              tglsampai: dateFormat(response.data.tglsampaiheader)
+            }
           }).trigger('reloadGrid');
 
           if (id == 0) {
@@ -446,29 +452,31 @@
 
     Promise
       .all([
-        showInvoiceHeader(form, invId, 'edit'),
         setStatusPilihanInvoiceOptions(form)
       ])
       .then(() => {
-        clearSelectedRows()
-        $('#gs_').prop('checked', false)
-        $('#crudModal').modal('show')
-        form.find(`[name="tglbukti"]`).prop('readonly', true)
-        form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
-        form.find(`[name="agen"]`).prop('readonly', true)
-        form.find(`[name="agen"]`).parent('.input-group').find('.input-group-append').remove()
-        form.find(`[name="agen"]`).parent('.input-group').find('.button-clear').remove()
-        form.find(`[name="jenisorder"]`).prop('readonly', true)
-        form.find(`[name="jenisorder"]`).parent('.input-group').find('.input-group-append').remove()
-        form.find(`[name="jenisorder"]`).parent('.input-group').find('.button-clear').remove()
+
+        showInvoiceHeader(form, invId, 'edit')
+          .then(() => {
+
+            clearSelectedRows()
+            $('#gs_').prop('checked', false)
+            $('#crudModal').modal('show')
+            form.find(`[name="agen"]`).prop('readonly', true)
+            form.find(`[name="agen"]`).parent('.input-group').find('.input-group-append').remove()
+            form.find(`[name="agen"]`).parent('.input-group').find('.button-clear').remove()
+            form.find(`[name="jenisorder"]`).prop('readonly', true)
+            form.find(`[name="jenisorder"]`).parent('.input-group').find('.input-group-append').remove()
+            form.find(`[name="jenisorder"]`).parent('.input-group').find('.button-clear').remove()
+          }).catch((error) => {
+            showDialog(error.statusText)
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
 
       })
-      .catch((error) => {
-        showDialog(error.statusText)
-      })
-      .finally(() => {
-        $('.modal-loader').addClass('d-none')
-      })
+
   }
 
   function deleteInvoiceHeader(invId) {
@@ -495,6 +503,8 @@
       ])
       .then(() => {
         clearSelectedRows()
+        form.find(`[name="tglbukti"]`).prop('readonly', true)
+        form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
         $('#gs_').prop('checked', false)
         $('#crudModal').modal('show')
       })
@@ -988,8 +998,6 @@
   function showInvoiceHeader(form, invId, aksi) {
     return new Promise((resolve, reject) => {
 
-      form.find(`[name="tglbukti"]`).prop('readonly', true)
-      form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
 
       $.ajax({
         url: `${apiUrl}invoiceheader/${invId}`,
@@ -1015,9 +1023,9 @@
             form.find('[name]').addClass('disabled')
             initDisabled()
             // getEdit(invId, aksi)
-          $('#crudForm').find("[name=statuspilihaninvoice]").prop('disabled',true);
-          $('#crudForm').find("[name=tgljatuhtempo]").prop('readonly',true);
-          $('#crudForm').find("[name=tgljatuhtempo]").parent('.input-group').find('.input-group-append').children().prop('disabled',true);
+            $('#crudForm').find("[name=statuspilihaninvoice]").prop('disabled', true);
+            $('#crudForm').find("[name=tgljatuhtempo]").prop('readonly', true);
+            $('#crudForm').find("[name=tgljatuhtempo]").parent('.input-group').find('.input-group-append').children().prop('disabled', true);
           }
           // getEdit(invId, aksi)
           $('#crudForm').find("[name=statuspilihaninvoice]").prop('disabled', true);
