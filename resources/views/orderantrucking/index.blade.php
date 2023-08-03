@@ -431,7 +431,8 @@
             class: 'btn btn-success btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              celValue = $("#jqGrid").jqGrid('getCell', selectedId, 'nobukti');
+              rawCellValue = $("#jqGrid").jqGrid('getCell', selectedId, 'nobukti');
+              celValue = $("<div>").html(rawCellValue).text();
               selectednobukti = celValue
 
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -447,7 +448,8 @@
             class: 'btn btn-danger btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              celValue = $("#jqGrid").jqGrid('getCell', selectedId, 'nobukti');
+              rawCellValue = $("#jqGrid").jqGrid('getCell', selectedId, 'nobukti');
+              celValue = $("<div>").html(rawCellValue).text();
               selectednobukti = celValue
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
