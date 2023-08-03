@@ -466,21 +466,39 @@
 
     $(document).on('change', '#statusperalihan', function(event) {
       let status = $("#statusperalihan option:selected").text()
-      console.log(status)
-      if (status == 'PERALIHAN') {
-        // $(`#crudForm [name="nominalperalihan"]`).prop('readonly', false)
-        $(`#crudForm [name="persentaseperalihan"]`).prop('readonly', false)
-      } else if (status == 'BUKAN PERALIHAN') {
-        // $(`#crudForm [name="nominalperalihan"]`).prop('readonly', true)
-        $(`#crudForm [name="persentaseperalihan"]`).prop('readonly', true)
+      console.log('before', isShow)
 
-        $(`#crudForm [name="nominalperalihan"]`).remove()
-        $(`#persentaseInputGroup`).remove()
+      if (!isShow) {
+        console.log('isshow', isShow)
+        if (status == 'PERALIHAN') {
+          // $(`#crudForm [name="nominalperalihan"]`).prop('readonly', false)
+          $(`#crudForm [name="persentaseperalihan"]`).prop('readonly', false)
+          $(`#crudForm [name="nominalperalihan"]`).remove()
+          $(`#persentaseInputGroup`).remove()
 
-        $('#nominalPeralihanDiv').append(`
+          $('#nominalPeralihanDiv').append(`
         <input type="text" name="nominalperalihan" class="form-control text-right" readonly>
         `)
-        $('#persentasePeralihanDiv').append(`
+          $('#persentasePeralihanDiv').append(`
+          <div class="input-group" id="persentaseInputGroup">
+            <input type="text" name="persentaseperalihan" onkeyup="setNominal()" class="form-control">
+            <div class="input-group-append">
+              <span class="input-group-text">%</span>
+            </div>
+          </div>
+        `)
+          initAutoNumeric($('#crudForm').find('[name="persentaseperalihan"]'))
+        } else if (status == 'BUKAN PERALIHAN') {
+          // $(`#crudForm [name="nominalperalihan"]`).prop('readonly', true)
+          $(`#crudForm [name="persentaseperalihan"]`).prop('readonly', true)
+
+          $(`#crudForm [name="nominalperalihan"]`).remove()
+          $(`#persentaseInputGroup`).remove()
+
+          $('#nominalPeralihanDiv').append(`
+        <input type="text" name="nominalperalihan" class="form-control text-right" readonly>
+        `)
+          $('#persentasePeralihanDiv').append(`
           <div class="input-group" id="persentaseInputGroup">
             <input type="text" name="persentaseperalihan" onkeyup="setNominal()" class="form-control" readonly>
             <div class="input-group-append">
@@ -488,7 +506,8 @@
             </div>
           </div>
         `)
-        initAutoNumeric($('#crudForm').find('[name="persentaseperalihan"]'))
+          initAutoNumeric($('#crudForm').find('[name="persentaseperalihan"]'))
+        }
       }
     })
     $(document).on('click', '.delete-row', function(event) {
@@ -1191,6 +1210,9 @@
             (index == 'jenisorder') ? element.data('current-value', value): '';
 
           })
+          if (parseInt(response.data.persentaseperalihan) > 0) {
+            $('#crudForm ').find(`[name="persentaseperalihan"]`).prop('readonly', false)
+          }
           kotaUpahZona()
           statusUpahZona = response.data.statusupahzona
           containerId = response.data.container_id
@@ -1207,7 +1229,6 @@
           initAutoNumeric(form.find(`[name="gajisupir"]`))
           initAutoNumeric(form.find(`[name="gajikenek"]`))
           initAutoNumeric(form.find(`[name="komisisupir"]`))
-
           if (response.detail.length === 0) {
             addRow()
           } else {
