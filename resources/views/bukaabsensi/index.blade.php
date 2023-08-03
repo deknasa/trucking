@@ -65,6 +65,16 @@
           },          
           
           {
+            label: 'tgl batas',
+            name: 'tglbatas',
+            align: 'right',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y H:i:s"
+            }
+          },
+          {
             label: 'MODIFIEDBY',
             name: 'modifiedby',
           },
@@ -201,6 +211,19 @@
                 showDialog('Harap pilih salah satu record')
               } else {
                 deleteBukaAbsensi(selectedId)
+              }
+            }
+          },
+          {
+            id: 'updatetanggalbatas',
+            innerHTML: '<i class="fas fa-check""></i> UPDATE TANGGAL BATAS',
+            class: 'btn btn-purple btn-sm mr-1',
+            onClick: () => {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Harap pilih salah satu record')
+              } else {
+                updatetanggalbatas(selectedId)
               }
             }
           },
