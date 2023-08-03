@@ -457,7 +457,7 @@
 
   function setTampilanForm() {
     tampilanall()
-    console.log(KodePenerimaanId,listKodePenerimaan[0]);
+    // console.log(KodePenerimaanId,listKodePenerimaan[0]);
     switch (KodePenerimaanId) {
       case listKodePenerimaan[0] : // 'DOT':
         tampilandot()
@@ -1382,6 +1382,8 @@
       if($('#kodepenerimaanheader').val() != ''){
         let index = listIdPenerimaan.indexOf($('#kodepenerimaanheader').val());
         setKodePenerimaan(listKodePenerimaan[index]);
+        setIsDateAvailable($('#kodepenerimaanheader').val())
+
         $('#crudForm').find(`[name="penerimaanstok"]`).val(listKodePenerimaan[index])
         $('#crudForm').find(`[name="penerimaanstok"]`).data('currentValue', listKodePenerimaan[index])
         $('#crudForm').find(`[name="penerimaanstok_id"]`).val($('#kodepenerimaanheader').val())
@@ -1431,13 +1433,10 @@
     addRow()
     sumary()
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-    $('#crudForm').find('[name=tglbukti]').attr('readonly', 'readonly').css({
-      background: '#fff'
-    })
+    
+    $('#crudForm').find('[name=tglbukti]').attr('readonly', 'readonly').css({ background: '#fff'})
     let tglbukti = $('#crudForm').find(`[name="tglbukti"]`).parents('.input-group').children()
     tglbukti.find('button').attr('disabled', true)
-    // setKodePenerimaan(0)
-
 
   }
 
@@ -1815,6 +1814,30 @@
     })
   }
 
+  function setIsDateAvailable(penerimaan_id) {
+    $.ajax({
+      url: `${apiUrl}bukapenerimaanstok/${penerimaan_id}/cektanggal`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      success: response => {
+        
+        if (response.data.length) {
+          $('#crudForm').find('[name=tglbukti]').attr('readonly', false)
+          let tglbukti = $('#crudForm').find(`[name="tglbukti"]`).parents('.input-group').children()
+          tglbukti.find('button').attr('disabled', false)
+        } else {
+          $('#crudForm').find('[name=tglbukti]').attr('readonly', 'readonly').css({ background: '#fff'})
+          let tglbukti = $('#crudForm').find(`[name="tglbukti"]`).parents('.input-group').children()
+          tglbukti.find('button').attr('disabled', true)
+        }
+
+      }
+    })
+  }
+
   function showPenerimaanstokHeader(form, penerimaanStokHeaderId) {
     return new Promise((resolve, reject) => {
       resetRow()
@@ -2045,6 +2068,8 @@
       fileName: 'penerimaanstok',
       onSelectRow: (penerimaanstok, element) => {
         setKodePenerimaan(penerimaanstok.kodepenerimaan)
+        setIsDateAvailable(penerimaanstok.id)
+        
         element.val(penerimaanstok.kodepenerimaan)
         $(`#${element[0]['name']}Id`).val(penerimaanstok.id)
         element.data('currentValue', element.val())

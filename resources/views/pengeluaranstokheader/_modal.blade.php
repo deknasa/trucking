@@ -778,6 +778,8 @@
       if($('#kodepengeluaranheader').val() != ''){
         let index = listIdPengeluaran.indexOf($('#kodepengeluaranheader').val());
         setKodePengeluaran(listKodePengeluaran[index]);
+        setIsDateAvailable($('#kodepengeluaranheader').val())
+
         $('#crudForm').find(`[name="pengeluaranstok"]`).val(listKodePengeluaran[index])
         $('#crudForm').find(`[name="pengeluaranstok"]`).data('currentValue', listKodePengeluaran[index])
         $('#crudForm').find(`[name="pengeluaranstok_id"]`).val($('#kodepengeluaranheader').val())
@@ -812,6 +814,9 @@
     form.data('action', 'add')
     form.find(`.sometimes`).show()
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+    $('#crudForm').find('[name=tglbukti]').attr('readonly', 'readonly').css({ background: '#fff'})
+    let tglbukti = $('#crudForm').find(`[name="tglbukti"]`).parents('.input-group').children()
+    tglbukti.find('button').attr('disabled', true)
 
     $('#crudModalTitle').text('Create Pengeluaran Stok')
     $('.is-invalid').removeClass('is-invalid')
@@ -1275,6 +1280,31 @@
     })
   }
 
+
+  function setIsDateAvailable(pengeluaran_id) {
+    $.ajax({
+      url: `${apiUrl}bukapengeluaranstok/${pengeluaran_id}/cektanggal`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      success: response => {
+        
+        if (response.data.length) {
+          $('#crudForm').find('[name=tglbukti]').attr('readonly', false)
+          let tglbukti = $('#crudForm').find(`[name="tglbukti"]`).parents('.input-group').children()
+          tglbukti.find('button').attr('disabled', false)
+        } else {
+          $('#crudForm').find('[name=tglbukti]').attr('readonly', 'readonly').css({ background: '#fff'})
+          let tglbukti = $('#crudForm').find(`[name="tglbukti"]`).parents('.input-group').children()
+          tglbukti.find('button').attr('disabled', true)
+        }
+
+      }
+    })
+  }
+
   function showPengeluaranstokHeader(form, pengeluaranStokHeaderId) {
     return new Promise((resolve, reject) => {
       resetRow()
@@ -1540,7 +1570,8 @@
         }
       },
       onSelectRow: (pengeluaranstok, element) => {
-        // setKodePengeluaran(pengeluaranstok.statusformatid)
+        // setKodePengeluaran(pengeluaranstok.statusformatid)        
+        setIsDateAvailable(pengeluaranstok.id)
         setKodePengeluaran(pengeluaranstok.kodepengeluaran)
         element.val(pengeluaranstok.kodepengeluaran)
         $(`#${element[0]['name']}Id`).val(pengeluaranstok.id)
