@@ -14,6 +14,8 @@ use App\Http\Controllers\ApprovalSupirKeteranganController;
 use App\Http\Controllers\BlackListSupirController;
 use App\Http\Controllers\TradoSupirMilikMandorController;
 use App\Http\Controllers\BukaAbsensiController;
+use App\Http\Controllers\BukaPenerimaanStokController;
+use App\Http\Controllers\BukaPengeluaranStokController;
 use App\Http\Controllers\SuratPengantarApprovalInputTripController;
 use App\Http\Controllers\TutupBukuController;
 use App\Http\Controllers\AbsenTradoController;
@@ -407,6 +409,11 @@ Route::middleware(['auth','authorized'])->group(function () {
     
     Route::get('bukaabsensi/index', [BukaAbsensiController::class,'index']);
     Route::resource('bukaabsensi', BukaAbsensiController::class);
+    
+    Route::get('bukapenerimaanstok/index', [BukaPenerimaanStokController::class,'index']);
+    Route::resource('bukapenerimaanstok', BukaPenerimaanStokController::class);
+    Route::get('bukapengeluaranstok/index', [BukaPengeluaranStokController::class,'index']);
+    Route::resource('bukapengeluaranstok', BukaPengeluaranStokController::class);
 
     Route::get('suratpengantarapprovalinputtrip/index', [SuratPengantarApprovalInputTripController::class,'index']);
     Route::resource('suratpengantarapprovalinputtrip', SuratPengantarApprovalInputTripController::class);
