@@ -488,6 +488,7 @@
             </div>
           </div>
         `)
+        initAutoNumeric($('#crudForm').find('[name="persentaseperalihan"]'))
       }
     })
     $(document).on('click', '.delete-row', function(event) {
@@ -683,7 +684,8 @@
   function setNominal() {
     let persentase = $(`#crudForm [name="persentaseperalihan"]`)
     let omset = $(`#crudForm [name="omset"]`).val()
-    console.log(omset,(AutoNumeric.getNumber(persentase[0]) / 100) * omset)
+    console.log(persentase)
+    // console.log(omset,(AutoNumeric.getNumber(persentase[0]) / 100) * omset)
 
     totalPersentase = (AutoNumeric.getNumber(persentase[0]) / 100) * omset;
     // $(`#crudForm [name="nominalperalihan"]`).val(totalPersentase)
