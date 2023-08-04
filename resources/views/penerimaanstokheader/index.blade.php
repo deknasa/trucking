@@ -76,6 +76,7 @@
   let currentTab = 'detail'
   let parampostok
   let activeGrid
+  let approveEditRequest =null ;
 
   $(document).ready(function() {
     penerimaanStok($('#crudForm'))
@@ -403,8 +404,18 @@
               }
             }
           },
+          {
+            id: 'approvalEdit',
+            title: 'approval Edit',
+            caption: 'approval Edit',
+            innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+            class: 'btn btn-purple btn-sm mr-1',
+            onClick: () => {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              approveEdit(selectedId)
+            }
+          }
         ]
-
       })
 
     /* Append clear filter button */
@@ -530,6 +541,59 @@
         submitButton.removeAttr('disabled')
       }
     })
+
+    getStatusEdit()
+    function approveEdit(id) {
+      if (approveEditRequest) {
+        approveEditRequest.abort();
+      }     
+      approveEditRequest = $.ajax({
+        url: `${apiUrl}penerimaanstokheader/${id}`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          let msg = `YAKIN Approve Status Edit `
+
+          console.log(response.data);
+          if (response.data.statusedit_id === statusBisaEdit) {
+            msg = `YAKIN UnApprove Status Edit `
+          }
+          showConfirm(msg,response.data.nobukti,`penerimaanstokheader/${response.data.id}/approvaledit`)
+        },
+      })
+    }
+    function getStatusEdit() {
+      $.ajax({
+        url: `${apiUrl}parameter`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          limit: 0,
+          filters: JSON.stringify({
+            "groupOp": "AND",
+            "rules": [{
+              "field": "grp",
+              "op": "cn",
+              "data": "STATUS APPROVAL"
+            },{
+              "field": "text",
+              "op": "cn",
+              "data": "APPROVAL"
+            }]
+          })
+        },
+        success: response => {
+          statusBisaEdit =  response.data[0].id;
+        }
+      })
+    }
+    
   })
 </script>
 @endpush()
