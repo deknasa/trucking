@@ -528,6 +528,10 @@ select[readonly].select2-hidden-accessible + .select2-container {
 	cursor: zoom-in;
 }
 
+.dropzonePdf .dz-preview .dz-details {
+	width:100%;
+	cursor: zoom-in;
+}
 /* .dropzone .dz-details .dz-remove {
 	display: flex;
     align-items: center;
