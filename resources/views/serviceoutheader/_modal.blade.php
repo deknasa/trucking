@@ -5,7 +5,7 @@
                 <div class="modal-header">
                     <p class="modal-title" id="crudModalTitle"></p>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        
+
                     </button>
                 </div>
                 <form action="" method="post">
@@ -65,16 +65,16 @@
                             <div class="col-md-12">
                                 <div class="card" style="max-height:500px; overflow-y: scroll;">
                                     <div class="card-body">
-                                    
+
                                         <div class="table-responsive table-scroll ">
-                                            <table class="table table-bordered table-bindkeys" id="detailList" >
+                                            <table class="table table-bordered table-bindkeys" id="detailList">
                                                 <thead>
                                                     <tr>
                                                         <th style="width:5%; max-width: 25px;min-width: 15px">No</th>
                                                         <th style="width:40%;">No bukti Service in</th>
                                                         <th style="width:40%;">Keterangan</th>
                                                         <th style="width:5%; max-width: 25px;min-width: 15px">Aksi</th>
-                                                        
+
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -121,6 +121,9 @@
 
         $(document).on('click', "#addRow", function() {
             addRow()
+        });
+        $(document).on('change', `#crudForm [name="tglbukti"]`, function() {
+            $('#crudForm').find(`[name="tglkeluar"]`).val($(this).val()).trigger('change');
         });
 
         $(document).on('click', '.delete-row', function(event) {
@@ -201,8 +204,14 @@
                     $('#crudModal').modal('hide')
                     $('#crudModal').find('#crudForm').trigger('reset')
 
+                    $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
+                    $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
                     $('#jqGrid').jqGrid('setGridParam', {
-                        page: response.data.page
+                        page: response.data.page,
+                        postData: {
+                            tgldari: dateFormat(response.data.tgldariheader),
+                            tglsampai: dateFormat(response.data.tglsampaiheader)
+                        }
                     }).trigger('reloadGrid');
 
                     if (id == 0) {
@@ -289,8 +298,8 @@
             ])
             .then(() => {
                 $('#crudModal').modal('show')
-                $('#crudForm [name=tglbukti]').attr('readonly', true)
-                $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
+                // $('#crudForm [name=tglbukti]').attr('readonly', true)
+                // $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
             })
             .catch((error) => {
                 showDialog(error.statusText)
@@ -298,7 +307,7 @@
             .finally(() => {
                 $('.modal-loader').addClass('d-none')
             })
-        
+
     }
 
     function deleteServiceOut(id) {
@@ -323,6 +332,8 @@
             ])
             .then(() => {
                 $('#crudModal').modal('show')
+                $('#crudForm [name=tglbukti]').attr('readonly', true)
+                $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
             })
             .catch((error) => {
                 showDialog(error.statusText)
@@ -330,7 +341,7 @@
             .finally(() => {
                 $('.modal-loader').addClass('d-none')
             })
-        
+
     }
 
     function showServiceOut(form, id) {
@@ -464,35 +475,37 @@
             $(element).text(index + 1)
         })
     }
-    function cekValidasi(Id, Aksi) {
-    $.ajax({
-      url: `{{ config('app.api_url') }}serviceoutheader/${Id}/cekvalidasi`,
-      method: 'POST',
-      dataType: 'JSON',
-      beforeSend: request => {
-        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
-      },
-      success: response => {
-        var kodenobukti = response.kodenobukti
-        if (kodenobukti == '1') {
-          var kodestatus = response.kodestatus
-          if (kodestatus == '1') {
-            showDialog(response.message['keterangan'])
-          } else {
-            if (Aksi == 'EDIT') {
-                editServiceOut(Id)
-            }
-            if (Aksi == 'DELETE') {
-                deleteServiceOut(Id)
-            }
-          }
 
-        } else {
-          showDialog(response.message['keterangan'])
-        }
-      }
-    })
-  }
+    function cekValidasi(Id, Aksi) {
+        $.ajax({
+            url: `{{ config('app.api_url') }}serviceoutheader/${Id}/cekvalidasi`,
+            method: 'POST',
+            dataType: 'JSON',
+            beforeSend: request => {
+                request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+            },
+            success: response => {
+                var kodenobukti = response.kodenobukti
+                if (kodenobukti == '1') {
+                    var kodestatus = response.kodestatus
+                    if (kodestatus == '1') {
+                        showDialog(response.message['keterangan'])
+                    } else {
+                        if (Aksi == 'EDIT') {
+                            editServiceOut(Id)
+                        }
+                        if (Aksi == 'DELETE') {
+                            deleteServiceOut(Id)
+                        }
+                    }
+
+                } else {
+                    showDialog(response.message['keterangan'])
+                }
+            }
+        })
+    }
+
     function getMaxLength(form) {
         if (!form.attr('has-maxlength')) {
             $.ajax({
@@ -532,7 +545,7 @@
             },
             onSelectRow: (trado, element) => {
                 $('#crudForm [name=trado_id]').first().val(trado.id)
-                element.val(trado.keterangan)
+                element.val(trado.kodetrado)
                 element.data('currentValue', element.val())
             },
             onCancel: (element) => {

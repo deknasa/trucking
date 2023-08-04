@@ -205,8 +205,14 @@
                     $('#crudModal').find('#crudForm').trigger('reset')
                     $('#crudModal').modal('hide')
 
+                    $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
+                    $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
                     $('#jqGrid').jqGrid('setGridParam', {
-                        page: response.data.page
+                        page: response.data.page,
+                        postData: {
+                            tgldari: dateFormat(response.data.tgldariheader),
+                            tglsampai: dateFormat(response.data.tglsampaiheader)
+                        }
                     }).trigger('reloadGrid');
 
                     if (id == 0) {
@@ -307,8 +313,8 @@
             ])
             .then(() => {
                 $('#crudModal').modal('show')
-                form.find(`[name="tglbukti"]`).prop('readonly', true)
-                form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+                // form.find(`[name="tglbukti"]`).prop('readonly', true)
+                // form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
             })
             .catch((error) => {
                 showDialog(error.statusText)
@@ -339,6 +345,9 @@
             ])
             .then(() => {
                 $('#crudModal').modal('show')
+                form.find(`[name="tglbukti"]`).prop('readonly', true)
+                form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+
             })
             .catch((error) => {
                 showDialog(error.statusText)
@@ -377,8 +386,6 @@
         return new Promise((resolve, reject) => {
             $('#detailList tbody').html('')
 
-            form.find(`[name="tglbukti"]`).prop('readonly', true)
-            form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
 
             $.ajax({
                 url: `${apiUrl}hutangextraheader/${hutangId}`,
@@ -569,7 +576,7 @@
             }
         })
     }
-    
+
 
     function cekValidasiAksi(Id, Aksi) {
         $.ajax({
@@ -595,6 +602,5 @@
             }
         })
     }
-
 </script>
 @endpush()

@@ -50,7 +50,7 @@
 
 
 
-                        <div class="row form-group">
+                        <!-- <div class="row form-group">
                             <div class="col-12 col-sm-3 col-md-2">
                                 <label class="col-form-label">
                                     PERIODE <span class="text-danger">*</span></label>
@@ -60,7 +60,7 @@
                                     <input type="text" name="periode" class="form-control datepicker">
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
 
                         <div class="row form-group">
                             <div class="col-12 col-sm-3 col-md-2">
@@ -114,7 +114,7 @@
                                         NO BUKTI KAS/BANK KELUAR </label>
                                 </div>
                                 <div class="col-12 col-md-4">
-                                    <input type="text" name="penerimaan_nobukti" id="penerimaan_nobukti" class="form-control" readonly>
+                                    <input type="text" name="pengeluaran_nobukti" id="pengeluaran_nobukti" class="form-control" readonly>
                                 </div>
                             </div>
                         </div>
@@ -379,8 +379,14 @@
                     selectedNominal = [];
                     selectedDari = [];
                     selectedSampai = [];
+                    $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
+                    $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
                     $('#jqGrid').jqGrid('setGridParam', {
-                        page: response.data.page
+                        page: response.data.page,
+                        postData: {
+                            tgldari: dateFormat(response.data.tgldariheader),
+                            tglsampai: dateFormat(response.data.tglsampaiheader)
+                        }
                     }).trigger('reloadGrid');
 
                     if (id == 0) {
@@ -482,8 +488,8 @@
                 $('#gs_').prop('checked', false)
 
                 $('#crudModal').modal('show')
-                form.find('[name=tglbukti]').attr('readonly', true)
-                form.find('[name=tglbukti]').siblings('.input-group-append').remove()
+                // form.find('[name=tglbukti]').attr('readonly', true)
+                // form.find('[name=tglbukti]').siblings('.input-group-append').remove()
                 supir = $('#crudForm').find(`[name="supir"]`).parents('.input-group')
                 supir.find('.button-clear').attr('disabled', true)
                 supir.children().find('.lookup-toggler').attr('disabled', true)
@@ -524,6 +530,9 @@
                 clearSelectedRows()
                 $('#gs_').prop('checked', false)
                 $('#crudModal').modal('show')
+
+                $('#crudForm [name=tglbukti]').attr('readonly', true)
+                $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
             })
             .catch((error) => {
                 showDialog(error.responseJSON)
@@ -614,8 +623,6 @@
         return new Promise((resolve, reject) => {
             $('#detailList tbody').html('')
 
-            $('#crudForm [name=tglbukti]').attr('readonly', true)
-            $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
 
             $.ajax({
                 url: `${apiUrl}pendapatansupirheader/${pendapatanId}`,
