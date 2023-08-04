@@ -336,9 +336,14 @@
   let dropzones = []
   let hasFormBindKeys = false
   let modalBody = $('#crudModal').find('.modal-body').html()
-
+  let linkPdf
   $(document).ready(function() {
+
+    linkPdf = document.createElement('a');
     $(document).on('dblclick', '[data-dz-thumbnail]', handleImageClick)
+
+    $(document).on('dblclick', '.dropzonePdf .dz-preview', handlePDFClick)
+
     $(document).on('click', '#btnSubmit', function(event) {
       event.preventDefault()
 
@@ -391,7 +396,7 @@
         success: response => {
           $('#crudForm').trigger('reset')
           $('#crudModal').modal('hide')
-          irow = (response.data.position -1 ) % limit
+          irow = (response.data.position - 1) % limit
           // console.log(irow);
           indexRow = Math.ceil(irow)
           id = response.data.id
@@ -467,6 +472,8 @@
               element.val(value)
             }
           })
+          initDropzone('edit', response.data)
+          initDropzonePdf('edit', response.data)
         }
       },
       error: error => {
@@ -476,7 +483,12 @@
   });
 
   $('#crudForm [name=noktp]').keyup(function(e) {
-    if (e.keyCode == 13) {
+    if (e.keyCode == 13 ) {
+      $(this).trigger("enterKey");
+    }
+  });
+  $('#crudForm [name=noktp]').keydown(function(e) {
+    if (e.keyCode == 9) {
       $(this).trigger("enterKey");
     }
   });
@@ -719,6 +731,11 @@
     }
   }
 
+  function handlePDFClick(event) {
+    // pdfName = $('.dropzonePdf .dz-preview').find('.dz-details .dz-filename').text()
+    // window.open(`${apiUrl}supir/pdf/suratperjanjian/${pdfName}`);
+    window.open($(linkPdf).attr('href'))
+  }
 
   function handleImageClick(event) {
     event.preventDefault();
@@ -735,6 +752,7 @@
   }
 
   function initDropzone(action, data = null) {
+    console.log('data', data)
     let buttonRemoveDropzone = `<i class="fas fa-times-circle"></i>`
     $('.dropzoneImg').each((index, element) => {
       if (!element.dropzone) {
@@ -784,8 +802,28 @@
             this.on("addedfile", function(file) {
               if (this.files.length > 1) {
                 this.removeFile(file);
-              }
+              } else {
+                linkPdf.href = window.URL.createObjectURL(file);
 
+                const currentDropzone = this;
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                  const arrayBuffer = event.target.result;
+                  const uint8Array = new Uint8Array(arrayBuffer);
+
+                  // Check for PDF magic numbers in the first few bytes (PDF files start with '%PDF')
+                  const isPdf = uint8Array[0] === 0x25 && uint8Array[1] === 0x50 && uint8Array[2] === 0x44 && uint8Array[3] === 0x46;
+
+                  console.log(isPdf)
+                  if (!isPdf) {
+                    // If the file is not a PDF, remove it from the dropzone
+                    currentDropzone.removeFile(file);
+                    showDialog('TYPE FILE BUKAN PDF')
+                  }
+                };
+
+                reader.readAsArrayBuffer(file);
+              }
               // $(file.previewElement).find('img').prop('src',appUrl+'/images/pdf_icon.png')
             });
           }
@@ -867,22 +905,28 @@
     } else {
 
       let files = JSON.parse(data[paramName])
-
+      console.log(files)
       files.forEach((file) => {
         if (file == '') {
           file = 'no file'
         }
+
         getImgURL(`${apiUrl}supir/pdf/${type}/${file}`, (fileBlob) => {
-          // console.log('file', file)
+
           if (file != 'no file') {
             let imageFile = new File([fileBlob], file, {
               type: 'application/pdf',
               lastModified: new Date().getTime()
             }, 'utf-8')
 
-            dropzone.options.addedfile.call(dropzone, imageFile);
-            // dropzone.options.thumbnail.call(dropzone, imageFile, `${apiUrl}supir/pdf/${type}/${file}`);
-            dropzone.files.push(imageFile)
+            if (fileBlob.type != 'application/json') {
+              $(linkPdf).attr('href', `${apiUrl}supir/pdf/suratperjanjian/${file}`);
+              dropzone.options.addedfile.call(dropzone, imageFile);
+              // dropzone.options.thumbnail.call(dropzone, imageFile, `${apiUrl}supir/pdf/${type}/${file}`);
+              dropzone.files.push(imageFile)
+            }
+
+
           }
         })
       })
@@ -931,21 +975,28 @@
     })
   }
 
-  function cekValidasidelete(Id) {
+  function cekValidasidelete(Id, Aksi) {
     $.ajax({
       url: `{{ config('app.api_url') }}supir/${Id}/cekValidasi`,
       method: 'POST',
       dataType: 'JSON',
+      data: {
+        aksi: Aksi
+      },
       beforeSend: request => {
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
       success: response => {
-        var kondisi = response.kondisi
-        console.log(kondisi)
-        if (kondisi == true) {
-          showDialog(response.message['keterangan'])
+        var error = response.error
+        if (error) {
+          showDialog(response)
         } else {
-          deleteSupir(Id)
+          if (Aksi == 'EDIT') {
+            editSupir(Id)
+          }
+          if (Aksi == 'DELETE') {
+            deleteSupir(Id)
+          }
         }
 
       }

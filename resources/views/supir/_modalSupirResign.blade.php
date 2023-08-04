@@ -148,7 +148,8 @@
 
             setErrorMessages(form, error.responseJSON.errors);
           } else {
-            showDialog(error.statusText)
+            console.log(error.responseJSON)
+            showDialog(error.responseJSON)
           }
         },
       }).always(() => {

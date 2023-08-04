@@ -48,7 +48,7 @@
                 <div class="form-group ">
                   <label class="col-sm-12 col-form-label">Tahun <span class="text-danger">*</span></label>
                   <div class="col-sm-12">
-                    <input type="text" name="tahun" class="form-control" maxlength="4">
+                    <input type="text" name="tahun" class="form-control numbernoseparate" maxlength="4">
                   </div>
                 </div>
                 <div class="form-group ">
