@@ -520,9 +520,14 @@
 
                     $('#crudModal').find('#crudForm').trigger('reset')
                     $('#crudModal').modal('hide')
-
+                    $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
+                    $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
                     $('#jqGrid').jqGrid('setGridParam', {
-                        page: response.data.page
+                        page: response.data.page,
+                        postData: {
+                            tgldari: dateFormat(response.data.tgldariheader),
+                            tglsampai: dateFormat(response.data.tglsampaiheader)
+                        }
                     }).trigger('reloadGrid');
 
                     if (id == 0) {
@@ -707,8 +712,8 @@
             .then(() => {
                 $('#crudModal').modal('show')
 
-                form.find(`[name="tglbukti"]`).prop('readonly', true)
-                form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+                // form.find(`[name="tglbukti"]`).prop('readonly', true)
+                // form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
                 form.find(`[name="tgladjust"]`).parent('.input-group').find('.input-group-append').remove()
                 form.find(`[name="tgldeposit"]`).parent('.input-group').find('.input-group-append').remove()
                 form.find(`[name="supir"]`).parent('.input-group').find('.button-clear').remove()

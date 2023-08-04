@@ -299,7 +299,7 @@
         dataHutang = $("#tableHutang").jqGrid("getLocalRow", value);
 
         let selectedBayar = (dataHutang.bayar == undefined) ? 0 : dataHutang.bayar;
-        let selectedPotongan =(dataHutang.potongan == undefined) ? 0 : dataHutang.potongan;
+        let selectedPotongan = (dataHutang.potongan == undefined) ? 0 : dataHutang.potongan;
         let selectedSisa = dataHutang.sisa
         data.push({
           name: 'bayar[]',
@@ -309,10 +309,10 @@
           name: 'potongan[]',
           value: (isNaN(selectedPotongan)) ? parseFloat(selectedPotongan.replaceAll(',', '')) : selectedPotongan
         })
-          data.push({
-            name: 'sisa[]',
-            value: selectedSisa
-          })
+        data.push({
+          name: 'sisa[]',
+          value: selectedSisa
+        })
         data.push({
           name: 'keterangan[]',
           value: dataHutang.keterangan
@@ -398,9 +398,17 @@
           id = response.data.id
           $('#crudModal').find('#crudForm').trigger('reset')
           $('#crudModal').modal('hide')
+
+          $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
+          $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
           $('#jqGrid').jqGrid('setGridParam', {
-            page: response.data.page
+            page: response.data.page,
+            postData: {
+              tgldari: dateFormat(response.data.tgldariheader),
+              tglsampai: dateFormat(response.data.tglsampaiheader)
+            }
           }).trigger('reloadGrid');
+
 
           $('#detailList tbody').html('')
           $('#nominalHutang').html('')
@@ -442,7 +450,7 @@
                 } else {
                   return showDialog(error);
                 }
-              } else if(indexes[0] == 'id') {
+              } else if (indexes[0] == 'id') {
                 return showDialog(error);
               } else {
                 element = $(`#tableHutang tr#${parseInt(selectedRowsHutang[angka])}`).find(`td[aria-describedby="tableHutang_${indexes[0]}"]`)
@@ -569,8 +577,8 @@
         clearSelectedRows()
         $('#gs_').prop('checked', false)
         $('#crudModal').modal('show')
-        form.find(`[name="tglbukti"]`).prop('readonly', true)
-        form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+        form.find(`[name="tglbukti"]`).prop('readonly', false)
+        // form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
         form.find(`[name="alatbayar"]`).prop('readonly', true)
         form.find(`[name="alatbayar"]`).parent('.input-group').find('.input-group-append').remove()
         form.find(`[name="alatbayar"]`).parent('.input-group').find('.button-clear').remove()
@@ -613,6 +621,9 @@
         clearSelectedRows()
         $('#gs_').prop('checked', false)
         $('#crudModal').modal('show')
+        form.find(`[name="tglbukti"]`).prop('readonly', true)
+        form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+
       })
       .catch((error) => {
         showDialog(error.statusText)
@@ -624,8 +635,6 @@
 
   function showHutangBayar(form, Id) {
     return new Promise((resolve, reject) => {
-      form.find(`[name="tglbukti"]`).prop('readonly', true)
-      form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
 
       $.ajax({
         url: `${apiUrl}hutangbayarheader/${Id}`,
@@ -774,7 +783,7 @@
               dataEvents: [{
                 type: "keyup",
                 fn: function(event, rowObject) {
-                  
+
                   let localRow = $("#tableHutang").jqGrid(
                     "getLocalRow",
                     rowObject.rowId
@@ -843,11 +852,11 @@
                       "bayar",
                       0
                     );
-                    $("#tableHutang").jqGrid("setCell",rowObject.rowId, "total",0 + potongan);
-                    if(originalGridData.sisa == 0){
-                      $("#tableHutang").jqGrid("setCell",rowObject.rowId, "sisa", (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.bayar)));
-                    }else{
-                      $("#tableHutang").jqGrid("setCell",rowObject.rowId, "sisa",originalGridData.sisa - potongan);
+                    $("#tableHutang").jqGrid("setCell", rowObject.rowId, "total", 0 + potongan);
+                    if (originalGridData.sisa == 0) {
+                      $("#tableHutang").jqGrid("setCell", rowObject.rowId, "sisa", (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.bayar)));
+                    } else {
+                      $("#tableHutang").jqGrid("setCell", rowObject.rowId, "sisa", originalGridData.sisa - potongan);
                     }
                   }
                   bayarDetails = $(`#tableHutang tr:not(#${rowObject.rowId})`).find(`td[aria-describedby="tableHutang_bayar"]`)
@@ -927,11 +936,11 @@
                       "potongan",
                       0
                     );
-                    $("#tableHutang").jqGrid("setCell",rowObject.rowId, "total",0 + bayar);
-                    if(originalGridData.sisa == 0){
-                      $("#tableHutang").jqGrid("setCell",rowObject.rowId, "sisa", (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.bayar)));
-                    }else{
-                      $("#tableHutang").jqGrid("setCell",rowObject.rowId, "sisa",originalGridData.sisa - bayar);
+                    $("#tableHutang").jqGrid("setCell", rowObject.rowId, "total", 0 + bayar);
+                    if (originalGridData.sisa == 0) {
+                      $("#tableHutang").jqGrid("setCell", rowObject.rowId, "sisa", (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.bayar)));
+                    } else {
+                      $("#tableHutang").jqGrid("setCell", rowObject.rowId, "sisa", originalGridData.sisa - bayar);
                     }
                   }
 
