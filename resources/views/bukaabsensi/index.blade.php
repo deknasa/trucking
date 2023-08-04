@@ -63,17 +63,6 @@
               newformat: "d-m-Y H:i:s"
             }
           },          
-          
-          {
-            label: 'tgl batas',
-            name: 'tglbatas',
-            align: 'right',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y H:i:s"
-            }
-          },
           {
             label: 'MODIFIEDBY',
             name: 'modifiedby',
