@@ -113,6 +113,9 @@
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         datatype: "json",
+        postData: {
+          tglbukaabsensi:$('#tglbukaabsensi').val()
+        },
         // datatype: "local",
         data: {
           limit: 0,
@@ -260,6 +263,25 @@
           }
           setHighlight($(this))
         },
+        loadError: function (jqXHR, textStatus, errorThrown) {
+          // alert('HTTP status code: ' + jqXHR.status + '\n' +
+          // 'textStatus: ' + textStatus + '\n' +
+          // 'errorThrown: ' + errorThrown);
+          // alert('HTTP message body (jqXHR.responseText): ' + '\n' + jqXHR.responseText);
+          if (jqXHR.status === 422) {
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+
+            setErrorMessages($('#tglBuka'), jqXHR.responseJSON.errors);
+            $('#jqGrid').setGridParam({
+              datatype: "local",
+              data:[],
+            }).trigger('reloadGrid')
+            
+          } else {
+            showDialog(error.statusText)
+          }
+        }
       })
 
       .jqGrid("setLabel", "rn", "No.")
