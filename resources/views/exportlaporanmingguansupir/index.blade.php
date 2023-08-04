@@ -154,9 +154,14 @@
                 $('.tradodari-lookup').lookup({
                     title: 'Trado Lookup',
                     fileName: 'trado',
+                    beforeProcess: function(test) {
+                        this.postData = {
+                            Aktif: 'AKTIF',
+                        }
+                    },  
                     onSelectRow: (trado, element) => {
                         $('#crudForm [name=tradodari_id]').first().val(trado.id)
-                        element.val(trado.keterangan)
+                        element.val(trado.kodetrado)
                         element.data('currentValue', element.val())
                     },
                     onCancel: (element) => {
@@ -172,9 +177,14 @@
                 $('.tradosampai-lookup').lookup({
                     title: 'Trado Lookup',
                     fileName: 'trado',
+                    beforeProcess: function(test) {
+                        this.postData = {
+                            Aktif: 'AKTIF',
+                        }
+                    },  
                     onSelectRow: (trado, element) => {
                         $('#crudForm [name=tradosampai_id]').first().val(trado.id)
-                        element.val(trado.keterangan)
+                        element.val(trado.kodetrado)
                         element.data('currentValue', element.val())
                     },
                     onCancel: (element) => {
