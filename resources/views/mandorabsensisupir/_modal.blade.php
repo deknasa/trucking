@@ -74,7 +74,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
-                  Jam <span class="text-danger">*</span>
+                  Jam
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
@@ -214,6 +214,15 @@
                 </div>
               `).appendTo(form.find(`[name=jam]`).parent())
             }
+            if (errorMessages['tglbukti'] && errorMessages['tglbukti'].length > 0) {
+              form.find(`[name=tglbukti]`).addClass("is-invalid")
+              $(`
+                <div class="invalid-feedback">
+                ${errorMessages['tglbukti'][0].toLowerCase()}
+                </div>
+              `).appendTo(form.find(`[name=tglbukti]`).parent())
+            }
+            
           } else {
             showDialog(error.responseJSON)
           }
@@ -264,7 +273,8 @@
     $('#crudModalTitle').text('Input Absen')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-    $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+    $('#crudForm').find('[name=tglbukti]').val($('#tglshow').val()).trigger('change');
+    // $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
     Promise
       .all([
@@ -279,6 +289,12 @@
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
+        let date = new Date();
+        let time = date.toLocaleString("id", {
+          timeStyle: "medium",
+        });
+        time = time.split('.')
+        $('#crudForm').find('[name=jam]').val(time[0]+":"+time[1]);
       })
   }
 
@@ -382,6 +398,9 @@
         headers: {
           Authorization: `Bearer ${accessToken}`
         },
+        data :{
+          tanggal : $('#tglshow').val()
+        },
         success: response => {
           $.each(response.data, (index, value) => {
             let element = form.find(`[name="${index}"]`)
@@ -420,6 +439,9 @@
       headers: {
         Authorization: `Bearer ${accessToken}`
       },
+      data :{
+          tanggal : $('#tglshow').val()
+        },
       success: response => {
         if (response.errors) {
           showDialog(response.message)
@@ -441,6 +463,9 @@
       dataType: 'JSON',
       headers: {
         Authorization: `Bearer ${accessToken}`
+      },
+      data :{
+          tanggal : $('#tglshow').val()
       },
       success: response => {
         if (response.errors) {

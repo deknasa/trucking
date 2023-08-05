@@ -156,7 +156,7 @@ class LaporanRekapSumbanganController extends MyController
        //total
        $total_start_row = $detail_start_row;
        $sheet->mergeCells('A' . $total_start_row . ':B' . $total_start_row);
-       $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A' . $total_start_row . ':B' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
+       $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':B' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
 
        $total = "=SUM(C6:C" . ($detail_start_row-1) . ")";
        $sheet->setCellValue("C$total_start_row", $total)->getStyle("C$total_start_row")->applyFromArray($style_number);

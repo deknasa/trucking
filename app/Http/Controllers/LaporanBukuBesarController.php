@@ -56,12 +56,14 @@ class LaporanBukuBesarController extends MyController
             'sampai' => $request->sampai,
             'coadari_id' => $request->coadari_id,
             'coasampai_id' => $request->coasampai_id,
+            'coadari' => $request->coadari,
+            'coasampai' => $request->coasampai,
         ];
 
         $responses = Http::withHeaders($request->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'laporanbukubesar/report', $detailParams);
+            ->get(config('app.api_url') . 'laporanbukubesar/export', $detailParams);
 
         $bukubesar = $responses['data'];
         $dataheader = $responses['dataheader'];
@@ -143,7 +145,7 @@ class LaporanBukuBesarController extends MyController
             ],
             [
                 'label' => 'Saldo',
-                'index' => 'saldo'
+                'index' => 'Saldo'
             ]
         ];
 
@@ -157,8 +159,19 @@ class LaporanBukuBesarController extends MyController
         $totalKredit = 0;
         $totalDebet = 0;
         $totalSaldo = 0;
+        $prevKeteranganCoa = null;
+
         foreach ($bukubesar as $response_index => $response_detail) {
 
+            if ($response_detail['keterangancoa'] !== $prevKeteranganCoa) {
+                $detail_start_row++;
+
+                $sheet->setCellValue("A$detail_start_row", $response_detail['coa'].' '.$response_detail['keterangancoa']);
+                $sheet->getStyle("A$detail_start_row")->getFont()->setSize(12)->setBold(true);
+                $sheet->getStyle("A$detail_start_row")->getAlignment()->setHorizontal('center');
+                $sheet->mergeCells("A$detail_start_row:F$detail_start_row");
+                $detail_start_row++;
+            }
             foreach ($detail_columns as $detail_columns_index => $detail_column) {
                 $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
             }
@@ -168,19 +181,20 @@ class LaporanBukuBesarController extends MyController
             $sheet->setCellValue("C$detail_start_row", $response_detail['keterangan']);
             $sheet->setCellValue("D$detail_start_row", number_format((float) $response_detail['debet'], '2', ',', '.'));
             $sheet->setCellValue("E$detail_start_row", number_format((float) $response_detail['kredit'], '2', ',', '.'));
-            $sheet->setCellValue("F$detail_start_row", number_format((float) $response_detail['saldo'], '2', ',', '.'));
+            $sheet->setCellValue("F$detail_start_row", number_format((float) $response_detail['Saldo'], '2', ',', '.'));
 
             $sheet->getStyle("A$detail_start_row:F$detail_start_row")->applyFromArray($styleArray);
             $sheet->getStyle("D$detail_start_row:F$detail_start_row")->applyFromArray($style_number);
 
             $totalKredit += $response_detail['kredit'];
             $totalDebet += $response_detail['debet'];
-            $totalSaldo += $response_detail['saldo'];
+            $totalSaldo += $response_detail['Saldo'];
             $detail_start_row++;
+            $prevKeteranganCoa = $response_detail['keterangancoa'];
         }
-
+        $detail_start_row++;
         $sheet->mergeCells('A' . $detail_start_row . ':C' . $detail_start_row);
-        $sheet->setCellValue("A$detail_start_row", 'Total :')->getStyle('A' . $detail_start_row . ':C' . $detail_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
+        $sheet->setCellValue("A$detail_start_row", 'Total')->getStyle('A' . $detail_start_row . ':C' . $detail_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
         $sheet->setCellValue("D$detail_start_row", number_format((float) $totalDebet, '2', ',', '.'))->getStyle("D$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
         $sheet->setCellValue("E$detail_start_row", number_format((float) $totalKredit, '2', ',', '.'))->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
         $sheet->setCellValue("F$detail_start_row", number_format((float) $totalSaldo, '2', ',', '.'))->getStyle("F$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);

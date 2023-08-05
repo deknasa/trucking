@@ -144,6 +144,17 @@
         name: 'limit',
         value: limit
       })
+      data.push({
+        name: 'tgldariheader',
+        value: $('#tgldariheader').val()
+      })
+      data.push({
+        name: 'tglsampaiheader',
+        value: $('#tglsampaiheader').val()
+      })
+
+      let tgldariheader = $('#tgldariheader').val();
+      let tglsampaiheader = $('#tglsampaiheader').val()
 
       switch (action) {
         case 'add':
@@ -156,7 +167,7 @@
           break;
         case 'delete':
           method = 'DELETE'
-          url = `${apiUrl}absensisupirapprovalheader/${absensiSupirApproval}`
+          url = `${apiUrl}absensisupirapprovalheader/${absensiSupirApproval}?tgldariheader=${tgldariheader}&tglsampaiheader=${tglsampaiheader}&indexRow=${indexRow}&limit=${limit}&page=${page}`
           break;
         default:
           method = 'POST'
@@ -181,9 +192,15 @@
 
           id = response.data.id
 
-          $('#jqGrid').trigger('reloadGrid', {
-            page: response.data.page
-          })
+          $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
+          $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
+          $('#jqGrid').jqGrid('setGridParam', {
+            page: response.data.page,
+            postData: {
+              tgldari: dateFormat(response.data.tgldariheader),
+              tglsampai: dateFormat(response.data.tglsampaiheader)
+            }
+          }).trigger('reloadGrid');
 
           if (response.data.grp == 'FORMAT') {
             updateFormat(response.data)
@@ -439,7 +456,7 @@
         autowidth: true,
         shrinkToFit: false,
         height: 350,
-        rowNum: 10,
+        rowNum: 10000,
         rownumbers: true,
         rownumWidth: 45,
         rowList: [10, 20, 50],
@@ -473,9 +490,9 @@
           $('#modalgrid').setSelection($('#modalgrid').getDataIDs()[0])
 
           setHighlight($(this))
-            $(this).jqGrid('footerData', 'set', {
-              trado: 'Total:',
-            }, true)
+          $(this).jqGrid('footerData', 'set', {
+            trado: 'Total:',
+          }, true)
         }
       })
       .jqGrid('filterToolbar', {
@@ -486,7 +503,7 @@
         disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
           abortGridLastRequest($(this))
-          
+
           clearGlobalSearch($('#modalgrid'))
         },
       })
@@ -508,23 +525,37 @@
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
       success: response => {
-        var kodenobukti = response.kodenobukti
-        if (kodenobukti == '1') {
-          var kodestatus = response.kodestatus
-          if (kodestatus == '1') {
-            showDialog(response.message['keterangan'])
-          } else {
-            if (Aksi == 'EDIT') {
-              editAbsensiSupirApprovalHeader(Id)
-            }
-            if (Aksi == 'DELETE') {
-              deleteAbsensiSupirApprovalHeader(Id)
-            }
-          }
-
+        var error = response.error
+        if (error) {
+          showDialog(response)
         } else {
-          showDialog(response.message['keterangan'])
+          cekValidasiAksi(Id, Aksi)
         }
+      }
+    })
+  }
+
+  function cekValidasiAksi(Id, Aksi) {
+    $.ajax({
+      url: `{{ config('app.api_url') }}absensisupirapprovalheader/${Id}/cekvalidasiaksi`,
+      method: 'POST',
+      dataType: 'JSON',
+      beforeSend: request => {
+        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+      },
+      success: response => {
+        var error = response.error
+        if (error) {
+          showDialog(response)
+        } else {
+          if (Aksi == 'EDIT') {
+            editAbsensiSupirApprovalHeader(Id)
+          }
+          if (Aksi == 'DELETE') {
+            deleteAbsensiSupirApprovalHeader(Id)
+          }
+        }
+
       }
     })
   }

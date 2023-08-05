@@ -97,7 +97,7 @@ class InvoiceChargeGandenganHeaderController extends MyController
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') .'invoicechargegandengandetail', $detailParams)['data'];
-        
+
         $tglBukti = $invchargegandengan["tglbukti"];
         $timeStamp = strtotime($tglBukti);
         $dateTglBukti = date('d-m-Y', $timeStamp); 
@@ -150,20 +150,32 @@ class InvoiceChargeGandenganHeaderController extends MyController
                 'label' => 'NO',
             ],
             [
-                'label' => 'TANGGAL',
-                'index' => 'tglbukti',
+                'label' => 'GANDENGAN',
+                'index' => 'gandengan',
+            ],
+            [
+                'label' => 'JOB TRUCKING',
+                'index' => 'jobtrucking',
+            ],
+            [
+                'label' => 'DARI',
+                'index' => 'tgltrip',
+            ],
+            [
+                'label' => 'SAMPAI',
+                'index' => 'tglakhir',
+            ],
+            [
+                'label' => 'ORDERAN',
+                'index' => 'orderan',
             ],
             [
                 'label' => 'JUMLAH HARI',
                 'index' => 'jumlahhari',
             ],
             [
-                'label' => 'NO POLISI',
-                'index' => 'nopolisi',
-            ],
-            [
-                'label' => 'KETERANGAN',
-                'index' => 'keterangan',
+                'label' => 'NAMA GUDANG',
+                'index' => 'namagudang',
             ],
             [
                 'label' => 'NOMINAL',
@@ -198,7 +210,7 @@ class InvoiceChargeGandenganHeaderController extends MyController
 				'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN] 
 			]
         ];
-        $sheet ->getStyle("A$detail_table_header_row:F$detail_table_header_row")->applyFromArray($styleArray);
+        $sheet ->getStyle("A$detail_table_header_row:I$detail_table_header_row")->applyFromArray($styleArray);
 
         // LOOPING DETAIL
         $nominal = 0;
@@ -206,42 +218,47 @@ class InvoiceChargeGandenganHeaderController extends MyController
             
             foreach ($detail_columns as $detail_columns_index => $detail_column) {
                 $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
-                $sheet->getStyle("A$detail_table_header_row:F$detail_table_header_row")->getFont()->setBold(true);
-                $sheet->getStyle("A$detail_table_header_row:F$detail_table_header_row")->getAlignment()->setHorizontal('center');            
+                $sheet->getStyle("A$detail_table_header_row:I$detail_table_header_row")->getFont()->setBold(true);
+                $sheet->getStyle("A$detail_table_header_row:I$detail_table_header_row")->getAlignment()->setHorizontal('center');            
             }
-            $response_detail['nominals'] = number_format((float) $response_detail['nominal'], '2', '.', ',');
         
-            $tglbukti = $response_detail["tglbukti"];
-            $timeStampProses = strtotime($tglbukti);
-            $datetglbukti = date('d-m-Y', $timeStampProses);
-            $response_detail['tglbukti'] = $datetglbukti;
+            // dd('here');
 
             $sheet->setCellValue("A$detail_start_row", $response_index + 1);    
-            $sheet->setCellValue("B$detail_start_row", $response_detail['tglbukti']);
-            $sheet->setCellValue("C$detail_start_row", $response_detail['jumlahhari']);
-            $sheet->setCellValue("D$detail_start_row", $response_detail['nopolisi']);
-            $sheet->setCellValue("E$detail_start_row", $response_detail['keterangan']);
-            $sheet->setCellValue("F$detail_start_row", $response_detail['nominals']);
+            $sheet->setCellValue("B$detail_start_row", $response_detail['gandengan']);
+            $sheet->setCellValue("C$detail_start_row", $response_detail['jobtrucking']);
+            $sheet->setCellValue("D$detail_start_row", date('d-m-Y', strtotime($response_detail['tgltrip'])));
+            $sheet->setCellValue("E$detail_start_row", date('d-m-Y', strtotime($response_detail['tglakhir'])));
+            $sheet->setCellValue("F$detail_start_row", $response_detail['orderan']);
+            $sheet->setCellValue("G$detail_start_row", $response_detail['jumlahhari']);
+            $sheet->setCellValue("H$detail_start_row", $response_detail['namagudang']);
+            $sheet->setCellValue("I$detail_start_row", $response_detail['nominal']);
 
-            $sheet->getStyle("E$detail_start_row")->getAlignment()->setWrapText(true);
-            $sheet->getColumnDimension('E')->setWidth(50);
-
-            $sheet ->getStyle("A$detail_start_row:E$detail_start_row")->applyFromArray($styleArray);
-            $sheet ->getStyle("F$detail_start_row")->applyFromArray($style_number);
+            $sheet ->getStyle("A$detail_start_row:I$detail_start_row")->applyFromArray($styleArray);
+            $sheet->getStyle("I$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+            
+            $sheet ->getStyle("I$detail_start_row")->applyFromArray($style_number);
             $nominal += $response_detail['nominal'];
             $detail_start_row++;
         }
 
         $total_start_row = $detail_start_row;
-        $sheet->mergeCells('A'.$total_start_row.':E'.$total_start_row);
-        $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A'.$total_start_row.':E'.$total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
-        $sheet->setCellValue("F$total_start_row", number_format((float) $nominal, '2', '.', ','))->getStyle("F$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->mergeCells('A'.$total_start_row.':H'.$total_start_row);
+        $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A'.$total_start_row.':H'.$total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
+
+        $sheet->setCellValue("I$detail_start_row", "=SUM(I10:I" . ($detail_start_row - 1) . ")")->getStyle("I$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+
+        $sheet->getStyle("I$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
 
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);
         $sheet->getColumnDimension('C')->setAutoSize(true);
         $sheet->getColumnDimension('D')->setAutoSize(true);
+        $sheet->getColumnDimension('E')->setAutoSize(true);
         $sheet->getColumnDimension('F')->setAutoSize(true);
+        $sheet->getColumnDimension('G')->setAutoSize(true);
+        $sheet->getColumnDimension('H')->setAutoSize(true);
+        $sheet->getColumnDimension('I')->setAutoSize(true);
 
         $writer = new Xlsx($spreadsheet);
         $filename = 'Laporan Invoice Extra Gandengan' . date('dmYHis');

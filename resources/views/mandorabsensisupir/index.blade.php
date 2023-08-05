@@ -1,6 +1,33 @@
 @extends('layouts.master')
 
 @section('content')
+<div class="card card-easyui bordered mb-4">
+  <div class="card-header"></div>
+  <form id="tglBuka">
+      <div class="card-body">
+          <div class="form-group row">
+              <label class="col-12 col-sm-2 col-form-label mt-2">Tgl absensi<span class="text-danger">*</span></label>
+              <div class="col-sm-4 mt-2">
+                  <div class="input-group">
+                      <input type="text" name="tglbukaabsensi" id="tglbukaabsensi" class="form-control datepicker">
+                      <input type="text" name="tglshow" id="tglshow" class="form-control " style="display:none">
+                  </div>
+              </div>
+              
+          </div>
+          <div class="row">
+
+              <div class="col-sm-6 mt-4">
+                  <a id="btnReload" class="btn btn-primary mr-2 ">
+                      <i class="fas fa-sync-alt"></i>
+                      Reload
+                  </a>
+              </div>
+          </div>
+
+      </div>
+  </form>
+</div>
 <!-- Grid -->
 <div class="container-fluid">
   <div class="row">
@@ -31,6 +58,54 @@
   $(document).ready(function() {
 
     // loadGrid()
+    initDatepicker()
+    // mendapatkan tanggal hari ini
+    let today = new Date();
+    // let tglBuka = new Date(today.getFullYear(), today.getMonth(), 1);
+    let formattedTglBuka = $.datepicker.formatDate('dd-mm-yy', today);
+    $('#tglBuka').find('[name=tglbukaabsensi]').val(formattedTglBuka).trigger('change');
+    $('#tglshow').val(formattedTglBuka);
+
+    
+
+    $(document).on('click','#btnReload', function(event) {
+      loadDataAbsensiMandor('mandorabsensisupir',{tglbukaabsensi:$('#tglbukaabsensi').val()})
+    })
+    
+    function loadDataAbsensiMandor(url, addtional = null) {
+      data = {
+        // ...data,
+        ...addtional
+      }
+      getIndex(url, data).then((response) => {
+        $('#tglshow').val($('#tglBuka').find('[name=tglbukaabsensi]').val());
+        $('.is-invalid').removeClass('is-invalid')
+        $('.invalid-feedback').remove()
+        clearGlobalSearch($('#jqGrid'))
+        $('#jqGrid').setGridParam({
+          url: `${apiUrl}${url}`,
+          datatype: "json",
+          postData: data,
+          page: 1
+        }).trigger('reloadGrid')
+      }).catch((error) => {
+        if (error.status === 422) {
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+
+            setErrorMessages($('#tglBuka'), error.responseJSON.errors);
+            $('#jqGrid').setGridParam({
+              datatype: "local",
+              data:[],
+            }).trigger('reloadGrid')
+            
+          } else {
+            showDialog(error.statusText)
+          }
+      })
+    }
+              
+      
 
     $("#jqGrid").jqGrid({
         url: `${apiUrl}mandorabsensisupir`,
@@ -38,6 +113,9 @@
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         datatype: "json",
+        postData: {
+          tglbukaabsensi:$('#tglbukaabsensi').val()
+        },
         // datatype: "local",
         data: {
           limit: 0,
@@ -185,6 +263,25 @@
           }
           setHighlight($(this))
         },
+        loadError: function (jqXHR, textStatus, errorThrown) {
+          // alert('HTTP status code: ' + jqXHR.status + '\n' +
+          // 'textStatus: ' + textStatus + '\n' +
+          // 'errorThrown: ' + errorThrown);
+          // alert('HTTP message body (jqXHR.responseText): ' + '\n' + jqXHR.responseText);
+          if (jqXHR.status === 422) {
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+
+            setErrorMessages($('#tglBuka'), jqXHR.responseJSON.errors);
+            $('#jqGrid').setGridParam({
+              datatype: "local",
+              data:[],
+            }).trigger('reloadGrid')
+            
+          } else {
+            showDialog(error.statusText)
+          }
+        }
       })
 
       .jqGrid("setLabel", "rn", "No.")

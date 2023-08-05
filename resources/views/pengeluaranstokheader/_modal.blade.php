@@ -317,6 +317,7 @@
   let modalBody = $('#crudModal').find('.modal-body').html()
   let pengeluaranheader_id
   var listKodePengeluaran = [];
+  var listIdPengeluaran = [];
   $(document).ready(function() {
     $(document).on('click', '#addRow', function(event) {
       addRow()
@@ -773,7 +774,17 @@
 
     activeGrid = null
     initDatepicker()
+    if (form.data('action') == 'add') {
+      if($('#kodepengeluaranheader').val() != ''){
+        let index = listIdPengeluaran.indexOf($('#kodepengeluaranheader').val());
+        setKodePengeluaran(listKodePengeluaran[index]);
+        setIsDateAvailable($('#kodepengeluaranheader').val())
 
+        $('#crudForm').find(`[name="pengeluaranstok"]`).val(listKodePengeluaran[index])
+        $('#crudForm').find(`[name="pengeluaranstok"]`).data('currentValue', listKodePengeluaran[index])
+        $('#crudForm').find(`[name="pengeluaranstok_id"]`).val($('#kodepengeluaranheader').val())
+      }
+    }
     initSelect2($('#statuspotongretur'), true)
     if (form.data('action') !== 'add') {
       let pengeluaranstok = $('#crudForm').find(`[name="pengeluaranstok"]`).parents('.input-group').children()
@@ -803,6 +814,9 @@
     form.data('action', 'add')
     form.find(`.sometimes`).show()
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+    $('#crudForm').find('[name=tglbukti]').attr('readonly', 'readonly').css({ background: '#fff'})
+    let tglbukti = $('#crudForm').find(`[name="tglbukti"]`).parents('.input-group').children()
+    tglbukti.find('button').attr('disabled', true)
 
     $('#crudModalTitle').text('Create Pengeluaran Stok')
     $('.is-invalid').removeClass('is-invalid')
@@ -814,7 +828,7 @@
       ])
       .then(() => {
         $('#crudModal').modal('show')
-        setKodePengeluaran(0)
+        
       })
       .catch((error) => {
         showDialog(error.statusText)
@@ -913,6 +927,7 @@
             form.find('[name]').attr('disabled', 'disabled').css({
               background: '#fff'
             })
+            form.find('[name=id]').prop('disabled',false);
 
           })
           .then(() => {
@@ -1256,11 +1271,37 @@
         },
         success: response => {
           $.each(response.data, (index,data) => {
+            listIdPengeluaran[index]=data.id;
             listKodePengeluaran[index] = data.kodepengeluaran;
           })
 
         }
       })
+    })
+  }
+
+
+  function setIsDateAvailable(pengeluaran_id) {
+    $.ajax({
+      url: `${apiUrl}bukapengeluaranstok/${pengeluaran_id}/cektanggal`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      success: response => {
+        
+        if (response.data.length) {
+          $('#crudForm').find('[name=tglbukti]').attr('readonly', false)
+          let tglbukti = $('#crudForm').find(`[name="tglbukti"]`).parents('.input-group').children()
+          tglbukti.find('button').attr('disabled', false)
+        } else {
+          $('#crudForm').find('[name=tglbukti]').attr('readonly', 'readonly').css({ background: '#fff'})
+          let tglbukti = $('#crudForm').find(`[name="tglbukti"]`).parents('.input-group').children()
+          tglbukti.find('button').attr('disabled', true)
+        }
+
+      }
     })
   }
 
@@ -1529,7 +1570,8 @@
         }
       },
       onSelectRow: (pengeluaranstok, element) => {
-        // setKodePengeluaran(pengeluaranstok.statusformatid)
+        // setKodePengeluaran(pengeluaranstok.statusformatid)        
+        setIsDateAvailable(pengeluaranstok.id)
         setKodePengeluaran(pengeluaranstok.kodepengeluaran)
         element.val(pengeluaranstok.kodepengeluaran)
         $(`#${element[0]['name']}Id`).val(pengeluaranstok.id)

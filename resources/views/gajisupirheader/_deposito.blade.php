@@ -1,7 +1,6 @@
-<table id="depositoGrid"></table>
-
+@push('scripts')
 <script>
-  function loadGrid(id,nobukti) {
+  function loadDepositoGrid(nobukti) {
     let sortnameDeposito = 'nobukti'
     let sortorderDeposito = 'asc'
     let totalRecordDeposito
@@ -12,11 +11,11 @@
     let pageDeposito = 0;
 
     $("#depositoGrid").jqGrid({
-        url: `${apiUrl}gajisupirdetail/deposito`,
-        mtype: "GET",
+        datatype: 'local',
+        data: [],
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
-        datatype: "json",
+        idPrefix: 'depositoGrid',
         colModel: [{
             label: 'NO BUKTI',
             name: 'nobukti',
@@ -146,11 +145,11 @@
     loadGlobalSearch($('#depositoGrid'))
   }
 
-  function loadDepositoData(id) {
+  function loadDepositoData(nobukti) {
     abortGridLastRequest($('#depositoGrid'))
     
     $('#depositoGrid').setGridParam({
-      url: `${apiUrl}gajisupirdetail`,
+      url: `${apiUrl}gajisupirdetail/deposito`,
       datatype: "json",
       postData: {
         nobukti: nobukti
@@ -159,3 +158,4 @@
     }).trigger('reloadGrid')
   }
 </script>
+@endpush

@@ -10,7 +10,7 @@
         </div>
         <form action="" method="post">
           <div class="modal-body">
-           {{-- <div class="row form-group">
+            {{-- <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">ID</label>
               </div>
@@ -19,6 +19,7 @@
               </div>
             </div> --}}
             <input type="text" name="id" class="form-control" hidden>
+            <input type="text" name="jenisorderemkl" class="form-control" hidden>
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
@@ -81,7 +82,7 @@
                 <input type="text" name="pelanggan" class="form-control pelanggan-lookup">
               </div>
             </div>
-            <div class="row form-group">
+            <div class="row form-group" style="display:none;">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
                   TUJUAN <span class="text-danger">*</span></label>
@@ -126,7 +127,7 @@
                   NO JOB EMKL (2) </label>
               </div>
               <div class="col-12 col-md-10">
-                <input type="text" name="nojobemkl2" class="form-control orderanemkl-lookup">
+                <input type="text" name="nojobemkl2" class="form-control orderanemkl2-lookup">
               </div>
             </div>
             <div class="row form-group">
@@ -149,7 +150,7 @@
                 <input type="text" name="noseal2" class="form-control" readonly>
               </div>
             </div>
-            <div class="row form-group">
+            <div class="row form-group" style="display: none">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
                   STATUS LANGSIR <span class="text-danger">*</span></label>
@@ -160,7 +161,7 @@
                 </select>
               </div>
             </div>
-            <div class="row form-group">
+            <div class="row form-group" style="display: none">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
                   STATUS PERALIHAN <span class="text-danger">*</span></label>
@@ -196,6 +197,7 @@
   let containerId
   var statustas
   var kodecontainer
+  var isAllowEdited;
 
   $(document).ready(function() {
     $("#crudForm [name]").attr("autocomplete", "off");
@@ -307,7 +309,7 @@
       })
     })
 
-    
+
   })
 
   $('#crudModal').on('shown.bs.modal', () => {
@@ -395,6 +397,7 @@
             $('#crudForm [name=tglbukti]').attr('readonly', true)
             $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
 
+            editValidasi(isAllowEdited);
           })
           .catch((error) => {
             showDialog(error.statusText)
@@ -444,46 +447,131 @@
 
   function approve() {
     event.preventDefault()
-    
+
     let form = $('#crudForm')
     $(this).attr('disabled', '')
     $('#processingLoader').removeClass('d-none')
-    
+
     $.ajax({
-        url: `${apiUrl}orderantrucking/approval`,
-        method: 'POST',
-        dataType: 'JSON',
-        headers: {
-            Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          orderanTruckingId: selectedRows
-        },
-        success: response => {
-            $('#crudForm').trigger('reset')
-            $('#crudModal').modal('hide')
-    
-            $('#jqGrid').jqGrid().trigger('reloadGrid');
-            selectedRows = []
-            $('#gs_').prop('checked', false)
-        },
-        error: error => {
-            if (error.status === 422) {
-                $('.is-invalid').removeClass('is-invalid')
-                $('.invalid-feedback').remove()
-    
-                setErrorMessages(form, error.responseJSON.errors);
-            } else {
-                showDialog(error.statusText)
-            }
-        },
+      url: `${apiUrl}orderantrucking/approval`,
+      method: 'POST',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        orderanTruckingId: selectedRows
+      },
+      success: response => {
+        $('#crudForm').trigger('reset')
+        $('#crudModal').modal('hide')
+
+        $('#jqGrid').jqGrid().trigger('reloadGrid');
+        selectedRows = []
+        $('#gs_').prop('checked', false)
+      },
+      error: error => {
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+
+          setErrorMessages(form, error.responseJSON.errors);
+        } else {
+          showDialog(error.statusText)
+        }
+      },
     }).always(() => {
-        $('#processingLoader').addClass('d-none')
-        $(this).removeAttr('disabled')
+      $('#processingLoader').addClass('d-none')
+      $(this).removeAttr('disabled')
     })
-      
+
   }
+
+  function approvalEditOrderanTrucking() {
+    event.preventDefault()
+
+    let form = $('#crudForm')
+    $(this).attr('disabled', '')
+    $('#processingLoader').removeClass('d-none')
+
+    $.ajax({
+      url: `${apiUrl}orderantrucking/approvaledit`,
+      method: 'POST',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        orderanTruckingId: selectedRows
+      },
+      success: response => {
+        $('#crudForm').trigger('reset')
+        $('#crudModal').modal('hide')
+
+        $('#jqGrid').jqGrid().trigger('reloadGrid');
+        selectedRows = []
+        $('#gs_').prop('checked', false)
+      },
+      error: error => {
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+
+          setErrorMessages(form, error.responseJSON.errors);
+        } else {
+          showDialog(error.statusText)
+        }
+      },
+    }).always(() => {
+      $('#processingLoader').addClass('d-none')
+      $(this).removeAttr('disabled')
+    })
+  }
+
+  function editValidasi(edit) {
+    let container = $('#crudForm').find(`[name="container"]`).parents('.input-group')
+    let agen = $('#crudForm').find(`[name="agen"]`).parents('.input-group')
+    let jenisorder = $('#crudForm').find(`[name="jenisorder"]`).parents('.input-group')
+    let pelanggan = $('#crudForm').find(`[name="pelanggan"]`).parents('.input-group')
+  
+    if (!edit) {
+
+      container.find('.button-clear').attr('disabled', true)
+      container.find('input').attr('readonly', true)
+      container.children().find('.lookup-toggler').attr('disabled', true)
+      agen.find('.button-clear').attr('disabled', true)
+      agen.find('input').attr('readonly', true)
+      agen.children().find('.lookup-toggler').attr('disabled', true)
+      jenisorder.find('.button-clear').attr('disabled', true)
+      jenisorder.find('input').attr('readonly', true)
+      jenisorder.children().find('.lookup-toggler').attr('disabled', true)
+
+      pelanggan.find('.button-clear').attr('disabled', true)
+      pelanggan.find('input').attr('readonly', true)
+      pelanggan.children().find('.lookup-toggler').attr('disabled', true)
     
+
+    } else {
+      console.log("true");
+      container.find('.button-clear').attr('disabled', false)
+      container.find('input').attr('readonly', false)
+      container.children().find('.lookup-toggler').attr('disabled', false)
+      agen.find('.button-clear').attr('disabled', false)
+      agen.find('input').attr('readonly', false)
+      agen.children().find('.lookup-toggler').attr('disabled', false)
+      jenisorder.find('.button-clear').attr('disabled', false)
+      jenisorder.find('input').attr('readonly', false)
+      jenisorder.children().find('.lookup-toggler').attr('disabled', false)
+
+      pelanggan.find('.button-clear').attr('disabled', false)
+      pelanggan.find('input').attr('readonly', false)
+      pelanggan.children().find('.lookup-toggler').attr('disabled', false)
+
+    }
+
+
+  }
+
 
   function getMaxLength(form) {
     if (!form.attr('has-maxlength')) {
@@ -847,6 +935,34 @@
 
         $('#crudForm [name=nocont]').first().val(orderanemkl.nocont)
         $('#crudForm [name=noseal]').first().val(orderanemkl.noseal)
+        $('#crudForm [name=jenisorderemkl]').first().val(orderanemkl.jenisorderan)
+
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+
+    $('.orderanemkl2-lookup').lookup({
+      title: 'orderanemkl Lookup',
+      fileName: 'orderanemkl',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+          jenisorder_Id: jenisorderId,
+          container_Id: containerId,
+        }
+      },
+      onSelectRow: (orderanemkl, element) => {
+        element.val(orderanemkl.nojob)
+        element.data('currentValue', element.val())
+
+        $('#crudForm [name=nocont2]').first().val(orderanemkl.nocont)
+        $('#crudForm [name=noseal2]').first().val(orderanemkl.noseal)
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
@@ -952,16 +1068,21 @@
     })
   }
 
-  function cekValidasidelete(Id, Aksi) {
+  function cekValidasidelete(Id, Aksi, nobukti) {
     $.ajax({
       url: `{{ config('app.api_url') }}orderantrucking/${Id}/${Aksi}/cekValidasi`,
       method: 'POST',
       dataType: 'JSON',
+      data: {
+        aksi: Aksi,
+        nobukti: nobukti
+      },
       beforeSend: request => {
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
       success: response => {
         var kondisi = response.kondisi
+        isAllowEdited = response.edit;
         if (kondisi == true) {
           showDialog(response.message['keterangan'])
         } else {

@@ -454,10 +454,45 @@
                     }).trigger('reloadGrid');
                     hitungNominal()
                 })
-                .catch((errors) => {
-                    setErrorMessages($('#crudForm'), errors)
+                .catch((error) => {
+                    if (error.status === 422) {
+                        $('.is-invalid').removeClass('is-invalid')
+                        $('.invalid-feedback').remove()
+                        setErrorMessages(form, error.responseJSON.errors);
+                    } else {
+                        showDialog(error.responseJSON)
+                    }
                 })
-            selectAllRowsAbsensi(supirId, dari, sampai, aksi)
+
+            if (dari != '' && sampai != '' && supirId != '') {
+
+                getAllAbsensi(supirId, dari, sampai, aksi)
+                    .then((response) => {
+                        $('.is-invalid').removeClass('is-invalid')
+                        $('.invalid-feedback').remove()
+
+                        $('#tableAbsensi').jqGrid('setGridParam', {
+                            url: `${apiUrl}gajisupirheader/${urlAbsensi}`,
+                            postData: {
+                                supir_id: $('#crudForm').find('[name=supir_id]').val(),
+                                tgldari: $('#crudForm').find('[name=tgldari]').val(),
+                                tglsampai: $('#crudForm').find('[name=tglsampai]').val(),
+                                aksi: aksi
+                            },
+                            datatype: "json"
+                        }).trigger('reloadGrid');
+                    })
+                    .catch((error) => {
+                        if (error.status === 422) {
+                            $('.is-invalid').removeClass('is-invalid')
+                            $('.invalid-feedback').remove()
+                            setErrorMessages(form, error.responseJSON.errors);
+                        } else {
+                            showDialog(error.responseJSON)
+                        }
+                    })
+            }
+            // selectAllRowsAbsensi(supirId, dari, sampai, aksi)
             // $.ajax({
             //     url: `${apiUrl}gajisupirheader/getuangjalan`,
             //     method: 'POST',
@@ -801,9 +836,17 @@
                     id = response.data.id
                     $('#crudModal').find('#crudForm').trigger('reset')
                     $('#crudModal').modal('hide')
+
+                    $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
+                    $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
                     $('#jqGrid').jqGrid('setGridParam', {
-                        page: response.data.page
+                        page: response.data.page,
+                        postData: {
+                            tgldari: dateFormat(response.data.tgldariheader),
+                            tglsampai: dateFormat(response.data.tglsampaiheader)
+                        }
                     }).trigger('reloadGrid');
+
                     selectedRows = []
                     selectedNobukti = [];
                     selectedGajiSupir = [];
@@ -907,6 +950,9 @@
         selectedKetBiaya = [];
         selectedTolSupir = [];
         selectedRitasi = [];
+        selectedRowsAbsensi = []
+        selectedRowsAbsensiNobukti = [];
+        selectedRowsAbsensiUangjalan = [];
         $('#crudModal').find('.modal-body').html(modalBody)
     })
 
@@ -983,14 +1029,14 @@
             ])
             .then(() => {
                 $('#crudModal').modal('show')
-                form.find(`[name="tglbukti"]`).prop('readonly', true)
-                form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+                // form.find(`[name="tglbukti"]`).prop('readonly', true)
+                // form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
 
                 form.find(`[name="supir"]`).parent('.input-group').find('.button-clear').remove()
                 form.find(`[name="supir"]`).parent('.input-group').find('.input-group-append').remove()
             })
             .catch((error) => {
-                showDialog(error.statusText)
+                showDialog(error.responseJSON)
             })
             .finally(() => {
                 $('.modal-loader').addClass('d-none')
@@ -1022,7 +1068,7 @@
                 form.find(`[name="supir"]`).parent('.input-group').find('.input-group-append').remove()
             })
             .catch((error) => {
-                showDialog(error.statusText)
+                showDialog(error.responseJSON)
             })
             .finally(() => {
                 $('.modal-loader').addClass('d-none')
@@ -1039,18 +1085,11 @@
                 request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
             },
             success: response => {
-                var kodenobukti = response.kodenobukti
-                if (kodenobukti == '1') {
-                    var kodestatus = response.kodestatus
-                    if (kodestatus == '1') {
-                        showDialog(response.message['keterangan'])
-                    } else {
-                        cekValidasiAksi(Id, Aksi)
-
-                    }
-
+                var error = response.error
+                if (error) {
+                    showDialog(response)
                 } else {
-                    showDialog(response.message['keterangan'])
+                    cekValidasiAksi(Id, Aksi)
                 }
             }
         })
@@ -1065,9 +1104,9 @@
                 request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
             },
             success: response => {
-                var kondisi = response.kondisi
-                if (kondisi == true) {
-                    showDialog(response.message['keterangan'])
+                var error = response.error
+                if (error) {
+                    showDialog(response)
                 } else {
                     if (Aksi == 'EDIT') {
                         editGajiSupirHeader(Id)
@@ -1117,6 +1156,16 @@
                         label: "no bukti pinjaman",
                         name: "pinjSemua_nobukti",
                         sortable: true,
+                    },
+                    {
+                        label: "tgl bukti pinjaman",
+                        name: "pinjSemua_tglbukti",
+                        sortable: true,
+                        formatter: "date",
+                        formatoptions: {
+                            srcformat: "ISO8601Long",
+                            newformat: "d-m-Y"
+                        }
                     },
                     {
                         label: "SISA",
@@ -1455,6 +1504,16 @@
                         label: "no bukti pinjaman",
                         name: "pinjPribadi_nobukti",
                         sortable: true,
+                    },
+                    {
+                        label: "tgl bukti pinjaman",
+                        name: "pinjPribadi_tglbukti",
+                        sortable: true,
+                        formatter: "date",
+                        formatoptions: {
+                            srcformat: "ISO8601Long",
+                            newformat: "d-m-Y"
+                        }
                     },
                     {
                         label: "SISA",
@@ -2419,7 +2478,7 @@
                     form.attr('has-maxlength', true)
                 },
                 error: error => {
-                    showDialog(error.statusText)
+                    showDialog(error.responseJSON)
                 }
             })
         }
@@ -2669,17 +2728,39 @@
                     resolve(response)
                 },
                 error: error => {
-                    if (error.status === 422) {
-                        $('.is-invalid').removeClass('is-invalid')
-                        $('.invalid-feedback').remove()
+                    reject(error)
+                }
+            })
+        });
 
+    }
 
-                        errors = error.responseJSON.errors
-                        reject(errors)
-
-                    } else {
-                        showDialog(error.statusText)
-                    }
+    function getAllAbsensi(supirId, dari, sampai, aksi, element = null) {
+        if (aksi == 'edit') {
+            ricId = $(`#crudForm`).find(`[name="id"]`).val()
+            urlAbsensi = `${ricId}/getEditAbsensi`
+        } else {
+            urlAbsensi = 'getAbsensi'
+        }
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: `${apiUrl}gajisupirheader/${urlAbsensi}`,
+                method: 'GET',
+                dataType: 'JSON',
+                data: {
+                    limit: 0,
+                    supir_id: supirId,
+                    tgldari: dari,
+                    tglsampai: sampai,
+                    sortIndex: sortnameAbsensi,
+                    aksi: aksi
+                },
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                success: (response) => {
+                    response.url = urlAbsensi
+                    resolve(response)
                 },
                 error: error => {
                     reject(error)

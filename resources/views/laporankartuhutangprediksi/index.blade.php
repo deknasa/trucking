@@ -31,6 +31,10 @@
                                     <i class="fas fa-print"></i>
                                     Report
                                 </button>
+                                <button type="button" id="btnExport" class="btn btn-warning mr-1 ">
+                                    <i class="fas fa-file-export"></i>
+                                    Export
+                                </button>
                             </div>
                         </div>
 
@@ -71,19 +75,56 @@
         if (!`{{ $myAuth->hasPermission('laporankartuhutangprediksi', 'report') }}`) {
             $('#btnPreview').attr('disabled', 'disabled')
         }
+        if (!`{{ $myAuth->hasPermission('laporankartuhutangprediksi', 'export') }}`) {
+            $('#btnExport').attr('disabled', 'disabled')
+        }
     })
 
     $(document).on('click', `#btnPreview`, function(event) {
         let sampai = $('#crudForm').find('[name=sampai]').val()
         let dari = $('#crudForm').find('[name=dari]').val()
 
+        $.ajax({
+            url: `{{ route('laporankartuhutangprediksi.report') }}`,
+            method: 'GET',
+            data: {
+                sampai: sampai,
+                dari: dari,
+            },
+            success: function(response) {
+                // Handle the success response
+                var newWindow = window.open('','_blank');
+                newWindow.document.open();
+                newWindow.document.write(response);
+                newWindow.document.close();
+            },
+            error: function(error) {
+                console.log(error)
+                if (error.status === 422) {
+                    $('.is-invalid').removeClass('is-invalid');
+                    $('.invalid-feedback').remove();
+                    setErrorMessages($('#crudForm'), error.responseJSON.errors);
+                } else {
+                    showDialog(error.responseJSON.message);
+                }
+            }
+        });
+
+
+    })
+    $(document).on('click', `#btnExport`, function(event) {
+        let sampai = $('#crudForm').find('[name=sampai]').val()
+        let dari = $('#crudForm').find('[name=dari]').val()
+
+
         if (dari != '' && sampai != '') {
 
-            window.open(`{{ route('laporankartuhutangprediksi.report') }}?sampai=${sampai}&dari=${dari}`)
+            window.open(`{{ route('laporankartuhutangprediksi.export') }}?sampai=${sampai}&dari=${dari}`)
         } else {
             showDialog('ISI SELURUH KOLOM')
         }
     })
+
 
 
 

@@ -57,6 +57,17 @@
               </div>
             </div>
 
+            <div class="row form-group" style="display:none;">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
+                  karyawan <span class="text-danger">*</span></label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="hidden" id="karyawanHeaderId" name="karyawanheader_id">
+                <input type="text" name="karyawan" class="form-control karyawanheader-lookup">
+              </div>
+            </div>
+
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
@@ -93,6 +104,7 @@
             </div>
 
             <table id="tablePinjaman"></table>
+            <table id="tablePinjamanKaryawan"></table>
 
             <div class="table-scroll table-responsive">
               <table class="table table-bordered table-bindkeys mt-3" id="detailList" style="width: 1000px;">
@@ -269,6 +281,93 @@
           })
         });
 
+      } else if (KodePenerimaanId === "PJPK") {
+        data = []
+
+        data.push({
+          name: 'id',
+          value: form.find(`[name="id"]`).val()
+        })
+        data.push({
+          name: 'nobukti',
+          value: form.find(`[name="nobukti"]`).val()
+        })
+        data.push({
+          name: 'tglbukti',
+          value: form.find(`[name="tglbukti"]`).val()
+        })
+        data.push({
+          name: 'penerimaantrucking_id',
+          value: form.find(`[name="penerimaantrucking_id"]`).val()
+        })
+        data.push({
+          name: 'penerimaantrucking',
+          value: form.find(`[name="penerimaantrucking"]`).val()
+        })
+        data.push({
+          name: 'karyawanheader_id',
+          value: form.find(`[name="karyawanheader_id"]`).val()
+        })
+        data.push({
+          name: 'karyawan',
+          value: form.find(`[name="karyawan"]`).val()
+        })
+        data.push({
+          name: 'coa',
+          value: form.find(`[name="coa"]`).val()
+        })
+        data.push({
+          name: 'keterangancoa',
+          value: form.find(`[name="keterangancoa"]`).val()
+        })
+        data.push({
+          name: 'bank_id',
+          value: form.find(`[name="bank_id"]`).val()
+        })
+        data.push({
+          name: 'bank',
+          value: form.find(`[name="bank"]`).val()
+        })
+        data.push({
+          name: 'penerimaan_nobukti',
+          value: form.find(`[name="pengeluaran_nobukti"]`).val()
+        })
+
+        let selectedRowsHutang = $("#tablePinjamanKaryawan").getGridParam("selectedRowIds");
+        data.push({
+          name: 'jumlahdetail',
+          value: selectedRowsHutang
+        })
+        $.each(selectedRowsHutang, function(index, value) {
+          dataPinjaman = $("#tablePinjamanKaryawan").jqGrid("getLocalRow", value);
+          let selectedSisa = dataPinjaman.sisa
+          let selectedNominal = (dataPinjaman.nominal == undefined) ? 0 : dataPinjaman.nominal;
+          data.push({
+            name: 'nominal[]',
+            value: (isNaN(selectedNominal)) ? parseFloat(selectedNominal.replaceAll(',', '')) : selectedNominal
+          })
+          data.push({
+            name: 'sisa[]',
+            value: selectedSisa
+          })
+          data.push({
+            name: 'keterangan[]',
+            value: dataPinjaman.keterangan
+          })
+          data.push({
+            name: 'pengeluarantruckingheader_nobukti[]',
+            value: dataPinjaman.nobukti
+          })
+          data.push({
+            name: 'karyawan_id[]',
+            value: form.find(`[name="karyawanheader_id"]`).val()
+          })
+          data.push({
+            name: 'pjpk_id[]',
+            value: dataPinjaman.id
+          })
+        });
+
       } else {
         data = $('#crudForm').serializeArray()
 
@@ -362,12 +461,15 @@
           $('#crudModal').find('#crudForm').trigger('reset')
 
           $('#penerimaanheader_id').val(response.data.penerimaantrucking_id).trigger('change')
-
+          $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
+          $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
           $('#jqGrid').jqGrid('setGridParam', {
+            page: response.data.page,
             postData: {
+              tgldari: dateFormat(response.data.tgldariheader),
+              tglsampai: dateFormat(response.data.tglsampaiheader),
               penerimaanheader_id: response.data.penerimaantrucking_id
-            },
-            page: response.data.page
+            }
           }).trigger('reloadGrid');
 
           if (id == 0) {
@@ -418,6 +520,41 @@
                   $(element).attr("title", error[0].toLowerCase())
                 }
               });
+            } else if (KodePenerimaanId == "PJPK") {
+              console.log(error)
+              errors = error.responseJSON.errors
+              $(".ui-state-error").removeClass("ui-state-error");
+              $.each(errors, (index, error) => {
+                let indexes = index.split(".");
+                let angka = indexes[1]
+                selectedRowsHutang = $("#tablePinjamanKaryawan").getGridParam("selectedRowIds");
+                row = parseInt(selectedRowsHutang[angka]) - 1;
+                let element;
+                if (indexes[0] == 'bank' || indexes[0] == 'pengeluarantrucking' || indexes[0] == 'supir' || indexes[0] == 'pjpk_id') {
+                  if (indexes.length > 1) {
+                    element = form.find(`[name="${indexes[0]}[]"]`)[row];
+                  } else {
+                    element = form.find(`[name="${indexes[0]}"]`)[0];
+                  }
+
+                  if ($(element).length > 0 && !$(element).is(":hidden")) {
+                    $(element).addClass("is-invalid");
+                    $(`
+                      <div class="invalid-feedback">
+                      ${error[0].toLowerCase()}
+                      </div>
+                      `).appendTo($(element).parent());
+                  } else {
+                    return showDialog(error);
+                  }
+                } else {
+
+                  element = $(`#tablePinjamanKaryawan tr#${parseInt(selectedRowsHutang[angka])}`).find(`td[aria-describedby="tablePinjamanKaryawan_${indexes[0]}"]`)
+                  $(element).addClass("ui-state-error");
+                  console.log(error)
+                  $(element).attr("title", error[0].toLowerCase())
+                }
+              });
             } else {
               setErrorMessages(form, error.responseJSON.errors);
             }
@@ -450,6 +587,9 @@
       case 'DPO':
         tampilanDPO()
         break;
+      case 'PJPK':
+        tampilanPJPK()
+        break;
       default:
         tampilanall()
         break;
@@ -460,12 +600,14 @@
 
     $('#detailList').show()
     $('#gbox_tablePinjaman').hide()
+    $('#gbox_tablePinjamanKaryawan').hide()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('.tbl_supir_id').hide()
     $('.tbl_sisa').hide()
     $('.colmn-offset').hide()
     $('.tbl_pengeluarantruckingheader_nobukti').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
+    $('[name=karyawanheader_id]').parents('.form-group').hide()
     $('.colspan').attr('colspan', 2);
     $('#sisaColFoot').hide()
     $('#sisaFoot').hide()
@@ -476,15 +618,30 @@
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('.tbl_supir_id').hide()
     $('[name=supirheader_id]').parents('.form-group').show()
+    $('[name=karyawanheader_id]').parents('.form-group').hide()
     $('#gbox_tablePinjaman').show()
+    $('#gbox_tablePinjamanKaryawan').hide()
     $('#detailList').hide()
     loadPinjamanGrid()
+  }
+
+  function tampilanPJPK() {
+    $('[name=keterangancoa]').parents('.form-group').hide()
+    $('.tbl_supir_id').hide()
+    $('[name=supirheader_id]').parents('.form-group').hide()
+    $('[name=karyawanheader_id]').parents('.form-group').show()
+    $('#gbox_tablePinjaman').hide()
+    $('#gbox_tablePinjamanKaryawan').show()
+    $('#detailList').hide()
+    loadPinjamanKaryawanGrid()
   }
 
   function tampilanDPO() {
     $('#detailList').show()
     $('#gbox_tablePinjaman').hide()
+    $('#gbox_tablePinjamanKaryawan').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
+    $('[name=karyawanheader_id]').parents('.form-group').hide()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('.tbl_supir_id').show()
     $('.tbl_pengeluarantruckingheader_nobukti').hide()
@@ -499,11 +656,13 @@
   function tampilanall() {
     $('#detailList').show()
     $('#gbox_tablePinjaman').hide()
+    $('#gbox_tablePinjamanKaryawan').hide()
     $('[name=keterangancoa]').parents('.form-group').show()
     $('.tbl_supir_id').show()
     $('.tbl_sisa').hide()
     $('.tbl_pengeluarantruckingheader_nobukti').show()
     $('[name=supirheader_id]').parents('.form-group').hide()
+    $('[name=karyawanheader_id]').parents('.form-group').hide()
     $('.colspan').attr('colspan', 4);
     $('#sisaColFoot').hide()
     $('#sisaFoot').hide()
@@ -600,8 +759,8 @@
       ])
       .then(() => {
         $('#crudModal').modal('show')
-        $('#crudForm [name=tglbukti]').attr('readonly', true)
-        $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
+        // $('#crudForm [name=tglbukti]').attr('readonly', true)
+        // $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
         $('#crudForm [name=supirheader]').attr('readonly', true)
         $('#crudForm [name=supir]').siblings('.input-group-append').remove()
         $('#crudForm [name=supir]').siblings('.button-clear').remove()
@@ -638,6 +797,8 @@
       ])
       .then(() => {
         $('#crudModal').modal('show')
+        form.find(`[name="tglbukti"]`).prop('readonly', true)
+        form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
       })
       .catch((error) => {
         showDialog(error.statusText)
@@ -684,18 +845,13 @@
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
       success: response => {
-        var kodenobukti = response.kodenobukti
-        if (kodenobukti == '1') {
-          var kodestatus = response.kodestatus
-          if (kodestatus == '1') {
-            showDialog(response.message['keterangan'])
-          } else {
-            cekValidasiAksi(Id, Aksi)
-          }
-
+        var error = response.error
+        if (error) {
+          showDialog(response)
         } else {
-          showDialog(response.message['keterangan'])
+          cekValidasiAksi(Id, Aksi)
         }
+
       }
     })
   }
@@ -709,9 +865,9 @@
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
       success: response => {
-        var kondisi = response.kondisi
-        if (kondisi == true) {
-          showDialog(response.message['keterangan'])
+        var error = response.error
+        if (error) {
+          showDialog(response)
         } else {
           if (Aksi == 'EDIT') {
             editPenerimaanTruckingHeader(Id)
@@ -810,10 +966,10 @@
                       "nominal",
                       0
                     );
-                    if(originalGridData.sisa == 0){
-                      $("#tablePinjaman").jqGrid("setCell",rowObject.rowId, "sisa", (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.nominal)));
-                    }else{
-                      $("#tablePinjaman").jqGrid("setCell",rowObject.rowId, "sisa",originalGridData.sisa);
+                    if (originalGridData.sisa == 0) {
+                      $("#tablePinjaman").jqGrid("setCell", rowObject.rowId, "sisa", (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.nominal)));
+                    } else {
+                      $("#tablePinjaman").jqGrid("setCell", rowObject.rowId, "sisa", originalGridData.sisa);
                     }
                   }
 
@@ -949,6 +1105,230 @@
     // loadGlobalSearch($('#tablePinjaman'))
   }
 
+  function loadPinjamanKaryawanGrid() {
+    $("#tablePinjamanKaryawan")
+      .jqGrid({
+        datatype: 'local',
+        styleUI: 'Bootstrap4',
+        iconSet: 'fontAwesome',
+        colModel: [{
+            label: "",
+            name: "",
+            width: 30,
+            formatter: 'checkbox',
+            search: false,
+            editable: false,
+            formatter: function(value, rowOptions, rowData) {
+              let disabled = '';
+              if ($('#crudForm').data('action') == 'delete') {
+                disabled = 'disabled'
+              }
+              return `<input type="checkbox" value="${rowData.id}" ${disabled} onChange="checkboxHandlerKaryawan(this, ${rowData.id})">`;
+            },
+          },
+          {
+            label: "id",
+            name: "id",
+            hidden: true,
+            search: false,
+          },
+          {
+            label: "no bukti pengeluaran TRUCKING",
+            width: 250,
+            name: "nobukti",
+            sortable: true,
+          },
+          {
+            label: "SISA",
+            name: "sisa",
+            sortable: true,
+            align: "right",
+            formatter: currencyFormat,
+          },
+          {
+            label: "NOMINAL",
+            index: 'nominal',
+            name: "nominal",
+            align: "right",
+            editable: true,
+            editoptions: {
+              dataInit: function(element, id) {
+                initAutoNumeric($('#crudForm').find(`[id="${id.id}"]`))
+              },
+              dataEvents: [{
+                type: "keyup",
+                fn: function(event, rowObject) {
+                  let originalGridData = $("#tablePinjamanKaryawan")
+                    .jqGrid("getGridParam", "originalData")
+                    .find((row) => row.id == rowObject.rowId);
+
+                  let localRow = $("#tablePinjamanKaryawan").jqGrid(
+                    "getLocalRow",
+                    rowObject.rowId
+                  );
+                  let totalSisa
+                  localRow.nominal = event.target.value;
+                  let nominal = AutoNumeric.getNumber($('#crudForm').find(`[id="${rowObject.id}"]`)[0])
+                  if ($('#crudForm').data('action') == 'edit') {
+                    totalSisa = (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.nominal)) - nominal
+                  } else {
+                    totalSisa = originalGridData.sisa - nominal
+                  }
+
+                  $("#tablePinjamanKaryawan").jqGrid(
+                    "setCell",
+                    rowObject.rowId,
+                    "sisa",
+                    totalSisa
+                  );
+
+                  if (totalSisa < 0) {
+                    showDialog('sisa tidak boleh minus')
+                    $("#tablePinjamanKaryawan").jqGrid(
+                      "setCell",
+                      rowObject.rowId,
+                      "nominal",
+                      0
+                    );
+                    if (originalGridData.sisa == 0) {
+                      $("#tablePinjamanKaryawan").jqGrid("setCell", rowObject.rowId, "sisa", (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.nominal)));
+                    } else {
+                      $("#tablePinjamanKaryawan").jqGrid("setCell", rowObject.rowId, "sisa", originalGridData.sisa);
+                    }
+                  }
+
+                  nominalDetails = $(`#tablePinjamanKaryawan tr:not(#${rowObject.rowId})`).find(`td[aria-describedby="tablePinjamanKaryawan_nominal"]`)
+                  ttlBayar = 0
+                  $.each(nominalDetails, (index, nominalDetail) => {
+                    ttlBayarDetail = parseFloat($(nominalDetail).attr('title').replaceAll(',', ''))
+                    ttlBayars = (isNaN(ttlBayarDetail)) ? 0 : ttlBayarDetail;
+                    ttlBayar += ttlBayars
+                  });
+                  ttlBayar += nominal
+                  initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePinjamanKaryawan_nominal"]`).text(ttlBayar))
+
+                  // setAllTotal()
+                  setTotalSisaKaryawan()
+                },
+              }, ],
+            },
+            sortable: false,
+            sorttype: "int",
+          },
+          {
+            label: "KETERANGAN",
+            name: "keterangan",
+            sortable: false,
+            editable: false,
+            width: 500
+          },
+        ],
+        autowidth: true,
+        shrinkToFit: false,
+        height: 400,
+        rownumbers: true,
+        rownumWidth: 45,
+        footerrow: true,
+        userDataOnFooter: true,
+        toolbar: [true, "top"],
+        pgbuttons: false,
+        pginput: false,
+        cellEdit: true,
+        cellsubmit: "clientArray",
+        editableColumns: ["nominal"],
+        selectedRowIds: [],
+        afterRestoreCell: function(rowId, value, indexRow, indexColumn) {
+          let originalGridData = $("#tablePinjamanKaryawan")
+            .jqGrid("getGridParam", "originalData")
+            .find((row) => row.id == rowId);
+
+          let localRow = $("#tablePinjamanKaryawan").jqGrid("getLocalRow", rowId);
+
+          let getBayar = $("#tablePinjamanKaryawan").jqGrid("getCell", rowId, "nominal")
+          let nominal = (getBayar != '') ? parseFloat(getBayar.replaceAll(',', '')) : 0
+
+          sisa = 0
+          if ($('#crudForm').data('action') == 'edit') {
+            sisa = (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.nominal)) - nominal
+          } else {
+            sisa = originalGridData.sisa
+          }
+          console.log(indexColumn)
+          if (indexColumn == 5) {
+
+            $("#tablePinjamanKaryawan").jqGrid(
+              "setCell",
+              rowId,
+              "sisa",
+              sisa
+              // sisa - nominal - potongan
+            );
+          }
+          setTotalNominalKaryawan()
+          setTotalSisaKaryawan()
+        },
+        isCellEditable: function(cellname, iRow, iCol) {
+          let rowData = $(this).jqGrid("getRowData")[iRow - 1];
+          if ($('#crudForm').data('action') != 'delete') {
+            return $(this)
+              .find(`tr input[value=${rowData.id}]`)
+              .is(":checked");
+          }
+        },
+        validationCell: function(cellobject, errormsg, iRow, iCol) {
+          console.log(cellobject);
+          console.log(errormsg);
+          console.log(iRow);
+          console.log(iCol);
+        },
+        loadComplete: function() {
+          setTimeout(() => {
+            $(this)
+              .getGridParam("selectedRowIds")
+              .forEach((selectedRowId) => {
+                $(this)
+                  .find(`tr input[value=${selectedRowId}]`)
+                  .prop("checked", true);
+                initAutoNumeric($(this).find(`td[aria-describedby="tablePinjamanKaryawan_nominal"]`))
+              });
+          }, 100);
+          setTotalNominalKaryawan()
+          setTotalSisaKaryawan()
+          setHighlight($(this))
+        },
+      })
+      .jqGrid("setLabel", "rn", "No.")
+      .jqGrid("navGrid", "#tablePager", {
+        add: false,
+        edit: false,
+        del: false,
+        refresh: false,
+        search: false,
+      })
+      .jqGrid("filterToolbar", {
+        searchOnEnter: false,
+      })
+      .jqGrid("excelLikeGrid", {
+        beforeDeleteCell: function(rowId, iRow, iCol, event) {
+          let localRow = $("#tablePinjamanKaryawan").jqGrid("getLocalRow", rowId);
+
+          $("#tablePinjamanKaryawan").jqGrid(
+            "setCell",
+            rowId,
+            "sisa",
+            parseInt(localRow.sisa) + parseInt(localRow.nominal)
+          );
+
+          return true;
+        },
+      });
+    /* Append clear filter button */
+    loadClearFilter($('#tablePinjamanKaryawan'))
+
+    /* Append global search */
+    // loadGlobalSearch($('#tablePinjamanKaryawan'))
+  }
+
 
   function getDataPinjaman(supirId, id) {
     aksi = $('#crudForm').data('action')
@@ -965,6 +1345,40 @@
       forCheckbox = 'disabled'
     } else if (aksi == 'add') {
       url = `${apiUrl}penerimaantruckingheader/${supirId}/getpinjaman`
+    }
+
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: url,
+        dataType: "JSON",
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: (response) => {
+          resolve(response);
+        },
+        error: error => {
+          reject(error)
+        }
+      });
+    });
+  }
+
+  function getDataPinjamanKaryawan(karyawanId, id) {
+    aksi = $('#crudForm').data('action')
+    if (aksi == 'edit') {
+      console.log(id)
+      if (id != undefined) {
+        url = `${apiUrl}penerimaantruckingheader/${id}/edit/getpengembalianpinjamankaryawan`
+      } else {
+        url = `${apiUrl}penerimaantruckingheader/${karyawanId}/getpinjamankaryawan`
+      }
+    } else if (aksi == 'delete') {
+      url = `${apiUrl}penerimaantruckingheader/${id}/delete/getpengembalianpinjamankaryawan`
+      attribut = 'disabled'
+      forCheckbox = 'disabled'
+    } else if (aksi == 'add') {
+      url = `${apiUrl}penerimaantruckingheader/${karyawanId}/getpinjamankaryawan`
     }
 
     return new Promise((resolve, reject) => {
@@ -1052,6 +1466,74 @@
 
   }
 
+  function checkboxHandlerKaryawan(element, rowId) {
+
+    let isChecked = $(element).is(":checked");
+    let editableColumns = $("#tablePinjamanKaryawan").getGridParam("editableColumns");
+    let selectedRowIds = $("#tablePinjamanKaryawan").getGridParam("selectedRowIds");
+    let originalGridData = $("#tablePinjamanKaryawan")
+      .jqGrid("getGridParam", "originalData")
+      .find((row) => row.id == rowId);
+
+    editableColumns.forEach((editableColumn) => {
+
+      if (!isChecked) {
+        for (var i = 0; i < selectedRowIds.length; i++) {
+          if (selectedRowIds[i] == rowId) {
+            selectedRowIds.splice(i, 1);
+          }
+        }
+        sisa = 0
+        if ($('#crudForm').data('action') == 'edit') {
+          sisa = (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.nominal))
+        } else {
+          sisa = originalGridData.sisa
+        }
+
+        $("#tablePinjamanKaryawan").jqGrid(
+          "setCell",
+          rowId,
+          "sisa",
+          sisa
+        );
+
+        $("#tablePinjamanKaryawan").jqGrid("setCell", rowId, "nominal", 0);
+        setTotalNominalKaryawan()
+        setTotalSisaKaryawan()
+      } else {
+        selectedRowIds.push(rowId);
+
+        let localRow = $("#tablePinjamanKaryawan").jqGrid("getLocalRow", rowId);
+
+        if ($('#crudForm').data('action') == 'edit') {
+          // if (originalGridData.sisa == 0) {
+
+          //   let getNominal = $("#tablePinjamanKaryawan").jqGrid("getCell", rowId, "nominal")
+          //   localRow.nominal = (getNominal != '') ? parseFloat(getNominal.replaceAll(',', '')) : 0
+          // } else {
+          //   localRow.nominal = originalGridData.sisa
+          // }
+          localRow.nominal = (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.nominal) + parseFloat(originalGridData.potongan))
+        }
+
+        $("#tablePinjamanKaryawan").jqGrid(
+          "setCell",
+          rowId,
+          "nominal",
+          0
+        );
+        initAutoNumeric($(`#tablePinjamanKaryawan tr#${rowId}`).find(`td[aria-describedby="tablePinjamanKaryawan_nominal"]`))
+        setTotalNominalkaryawan()
+        setTotalSisaKaryawan()
+      }
+    });
+
+    $("#tablePinjamanKaryawan").jqGrid("setGridParam", {
+      selectedRowIds: selectedRowIds,
+    });
+
+  }
+
   function setTotalSisa() {
     let sisaDetails = $(`#tablePinjaman`).find(`td[aria-describedby="tablePinjaman_sisa"]`)
     let sisa = 0
@@ -1063,12 +1545,21 @@
     initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePinjaman_sisa"]`).text(sisa))
   }
 
+  function setTotalSisaKaryawan() {
+    let sisaDetails = $(`#tablePinjamanKaryawan`).find(`td[aria-describedby="tablePinjamanKaryawan_sisa"]`)
+    let sisa = 0
+    $.each(sisaDetails, (index, sisaDetail) => {
+      sisadetail = parseFloat($(sisaDetail).text().replaceAll(',', ''))
+      sisas = (isNaN(sisadetail)) ? 0 : sisadetail;
+      sisa += sisas
+    });
+    initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePinjamanKaryawan_sisa"]`).text(sisa))
+  }
+
   function showPenerimaanTruckingHeader(form, id) {
     return new Promise((resolve, reject) => {
       $('#detailList tbody').html('')
 
-      form.find(`[name="tglbukti"]`).prop('readonly', true)
-      form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
       $.ajax({
         url: `${apiUrl}penerimaantruckingheader/${id}`,
         method: 'GET',
@@ -1138,6 +1629,36 @@
               }, 100);
               console.log(response.data)
               initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePinjaman_nominal"]`).text(totalBayar))
+
+            });
+          } else if (kodepenerimaan === "PJPK") {
+
+            getDataPinjamanKaryawan(response.data.karyawanheader_id, id).then((response) => {
+
+              let selectedId = []
+              let totalBayar = 0
+
+              $.each(response.data, (index, value) => {
+                if (value.penerimaantrucking_id != null) {
+                  selectedId.push(value.id)
+                  totalBayar += parseFloat(value.nominal)
+                }
+              })
+              $('#tablePinjamanKaryawan').jqGrid("clearGridData");
+              setTimeout(() => {
+
+                $("#tablePinjamanKaryawan")
+                  .jqGrid("setGridParam", {
+                    datatype: "local",
+                    data: response.data,
+                    originalData: response.data,
+                    rowNum: response.data.length,
+                    selectedRowIds: selectedId
+                  })
+                  .trigger("reloadGrid");
+              }, 100);
+              console.log(response.data)
+              initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePinjamanKaryawan_nominal"]`).text(totalBayar))
 
             });
           } else {
@@ -1242,7 +1763,7 @@
     })
   }
 
-  function  setTotalNominal() {
+  function setTotalNominal() {
     let nominalDetails = $(`#tablePinjaman`).find(`td[aria-describedby="tablePinjaman_nominal"]`)
     let nominal = 0
     $.each(nominalDetails, (index, nominalDetail) => {
@@ -1251,6 +1772,17 @@
       nominal += nominals
     });
     initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePinjaman_nominal"]`).text(nominal))
+  }
+
+  function setTotalNominalKaryawan() {
+    let nominalDetails = $(`#tablePinjamanKaryawan`).find(`td[aria-describedby="tablePinjamanKaryawan_nominal"]`)
+    let nominal = 0
+    $.each(nominalDetails, (index, nominalDetail) => {
+      nominaldetail = parseFloat($(nominalDetail).text().replaceAll(',', ''))
+      nominals = (isNaN(nominaldetail)) ? 0 : nominaldetail;
+      nominal += nominals
+    });
+    initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePinjamanKaryawan_nominal"]`).text(nominal))
   }
 
   function getPinjaman() {
@@ -1635,6 +2167,53 @@
         element.data('currentValue', element.val())
       }
     })
+    $('.karyawanheader-lookup').last().lookup({
+      title: 'karyawan Lookup',
+      fileName: 'karyawan',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+
+        }
+      },
+      onSelectRow: (karyawan, element) => {
+        $(`#crudForm [name="karyawanheader_id"]`).last().val(karyawan.id)
+        element.val(karyawan.namakaryawan)
+        element.data('currentValue', element.val())
+        $('#tablePinjamanKaryawan').jqGrid("clearGridData");
+        $("#tablePinjamanKaryawan")
+          .jqGrid("setGridParam", {
+            selectedRowIds: []
+          })
+          .trigger("reloadGrid");
+
+        getDataPinjamanKaryawan(karyawan.id).then((response) => {
+
+          console.log('before', $("#tablePinjamanKaryawan").jqGrid('getGridParam', 'selectedRowIds'))
+          setTimeout(() => {
+
+            $("#tablePinjamanKaryawan")
+              .jqGrid("setGridParam", {
+                datatype: "local",
+                data: response.data,
+                originalData: response.data,
+                rowNum: response.data.length,
+                selectedRowIds: []
+              })
+              .trigger("reloadGrid");
+          }, 100);
+
+        });
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        $(`#crudForm [name="karyawan_id[]"]`).last().val('')
+        element.data('currentValue', element.val())
+      }
+    })
     $('.penerimaantrucking-lookup').lookup({
       title: 'Penerimaan Trucking Lookup',
       fileName: 'penerimaantrucking',
@@ -1649,7 +2228,6 @@
         $('#crudForm [name=penerimaantrucking_id]').first().val(penerimaantrucking.id)
         element.val(penerimaantrucking.keterangan)
         element.data('currentValue', element.val())
-        getPinjaman()
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))

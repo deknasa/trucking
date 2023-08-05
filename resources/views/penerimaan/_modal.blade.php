@@ -296,11 +296,15 @@
                         width: 'resolve',
                         theme: "bootstrap4"
                     });
+                    $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
+                    $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
                     $('#jqGrid').jqGrid('setGridParam', {
+                        page: response.data.page,
                         postData: {
-                            bank: response.data.bank_id
-                        },
-                        page: response.data.page
+                            bank: response.data.bank_id,
+                            tgldari: dateFormat(response.data.tgldariheader),
+                            tglsampai: dateFormat(response.data.tglsampaiheader)
+                        }
                     }).trigger('reloadGrid');
 
                     if (id == 0) {
@@ -381,7 +385,7 @@
                         $('#crudModal').modal('show')
                     })
                     .catch((error) => {
-                        showDialog(error.statusText)
+                        showDialog(error.responseJSON)
                     })
                     .finally(() => {
                         $('.modal-loader').addClass('d-none')
@@ -449,8 +453,6 @@
                         $('#gs_').prop('checked', false)
                         $('#crudModal').modal('show')
 
-                        $('#crudForm [name=tglbukti]').attr('readonly', true)
-                        $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
                         $('#crudForm [name=tgllunas]').attr('readonly', true)
                         $('#crudForm [name=tgllunas]').siblings('.input-group-append').remove()
                         $('#crudForm [name=bank]').parent('.input-group').find('.button-clear').remove()

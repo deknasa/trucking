@@ -216,6 +216,17 @@
         name: 'limit',
         value: limit
       })
+      data.push({
+        name: 'tgldariheader',
+        value: $('#tgldariheader').val()
+      })
+      data.push({
+        name: 'tglsampaiheader',
+        value: $('#tglsampaiheader').val()
+      })
+      
+      let tgldariheader = $('#tgldariheader').val();
+      let tglsampaiheader = $('#tglsampaiheader').val()
 
       switch (action) {
         case 'add':
@@ -228,7 +239,7 @@
           break;
         case 'delete':
           method = 'DELETE'
-          url = `${apiUrl}rekappenerimaanheader/${rekapPenerimaanId}`
+          url = `${apiUrl}rekappenerimaanheader/${rekapPenerimaanId}?tgldariheader=${tgldariheader}&tglsampaiheader=${tglsampaiheader}&indexRow=${indexRow}&limit=${limit}&page=${page}`
           break;
         default:
           method = 'POST'
@@ -253,9 +264,16 @@
 
           id = response.data.id
 
-          $('#jqGrid').trigger('reloadGrid', {
-            page: response.data.page
-          })
+          $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
+          $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
+          $('#jqGrid').jqGrid('setGridParam', {
+            page: response.data.page,
+            postData: {
+              tgldari: dateFormat(response.data.tgldariheader),
+              tglsampai: dateFormat(response.data.tglsampaiheader)
+            }
+          }).trigger('reloadGrid');
+
 
           if (response.data.grp == 'FORMAT') {
             updateFormat(response.data)
@@ -352,6 +370,7 @@
     $('#crudModalTitle').text('Create Rekap Penerimaan')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
+    $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
     $('.invalid-feedback').remove()
   }
 

@@ -65,30 +65,30 @@
                             <div class="col-md-12">
                                 <div class="card" style="max-height:500px; overflow-y: scroll;">
                                     <div class="card-body">
-                                    
-                        <div class="table-responsive table-scroll ">
-                            <table class="table table-bordered table-bindkeys" id="detailList" >
-                                <thead>
-                                    <tr>
-                                        <th style="width:5%; max-width: 25px;min-width: 15px">No</th>
-                                        <th style="width:40%;">Mekanik</th>
-                                        <th style="width:40%;">Keterangan</th>
-                                        <th style="width:5%; max-width: 25px;min-width: 15px">Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
 
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <td colspan="3"></td>
-                                        <td>
-                                            <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
-                                        </td>
-                                    </tr>
-                                </tfoot>
-                            </table>
-                        </div>
+                                        <div class="table-responsive table-scroll ">
+                                            <table class="table table-bordered table-bindkeys" id="detailList">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="width:5%; max-width: 25px;min-width: 15px">No</th>
+                                                        <th style="width:40%;">Mekanik</th>
+                                                        <th style="width:40%;">Keterangan</th>
+                                                        <th style="width:5%; max-width: 25px;min-width: 15px">Aksi</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+
+                                                </tbody>
+                                                <tfoot>
+                                                    <tr>
+                                                        <td colspan="3"></td>
+                                                        <td>
+                                                            <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
+                                                        </td>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -121,7 +121,9 @@
         $(document).on('click', "#addRow", function() {
             addRow()
         });
-
+        $(document).on('change', `#crudForm [name="tglbukti"]`, function() {
+            $('#crudForm').find(`[name="tglmasuk"]`).val($(this).val()).trigger('change');
+        });
         $(document).on('click', '.delete-row', function(event) {
             deleteRow($(this).parents('tr'))
         })
@@ -200,8 +202,14 @@
                     $('#crudModal').find('#crudForm').trigger('reset')
                     $('#crudModal').modal('hide')
 
+                    $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
+                    $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
                     $('#jqGrid').jqGrid('setGridParam', {
-                        page: response.data.page
+                        page: response.data.page,
+                        postData: {
+                            tgldari: dateFormat(response.data.tgldariheader),
+                            tglsampai: dateFormat(response.data.tglsampaiheader)
+                        }
                     }).trigger('reloadGrid');
 
                     if (id == 0) {
@@ -287,8 +295,8 @@
             ])
             .then(() => {
                 $('#crudModal').modal('show')
-                $('#crudForm [name=tglbukti]').attr('readonly', true)
-                $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
+                // $('#crudForm [name=tglbukti]').attr('readonly', true)
+                // $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
             })
             .catch((error) => {
                 showDialog(error.statusText)
@@ -320,6 +328,9 @@
             ])
             .then(() => {
                 $('#crudModal').modal('show')
+                form.find(`[name="tglbukti"]`).prop('readonly', true)
+                form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+
             })
             .catch((error) => {
                 showDialog(error.statusText)
@@ -327,15 +338,13 @@
             .finally(() => {
                 $('.modal-loader').addClass('d-none')
             })
-        
+
     }
 
     function showServicein(form, id) {
         return new Promise((resolve, reject) => {
             $('#detailList tbody').html('')
-            form.find(`[name="tglbukti"]`).prop('readonly', true)
-            form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
-            
+
             $.ajax({
                 url: `${apiUrl}serviceinheader/${id}`,
                 method: 'GET',
@@ -559,7 +568,7 @@
             },
             onSelectRow: (trado, element) => {
                 $('#crudForm [name=trado_id]').first().val(trado.id)
-                element.val(trado.keterangan)
+                element.val(trado.kodetrado)
                 element.data('currentValue', element.val())
             },
             onCancel: (element) => {

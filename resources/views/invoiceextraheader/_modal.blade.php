@@ -214,9 +214,15 @@
 
           id = response.data.id
 
-          $('#jqGrid').trigger('reloadGrid', {
-            page: response.data.page
-          })
+          $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
+          $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
+          $('#jqGrid').jqGrid('setGridParam', {
+            page: response.data.page,
+            postData: {
+              tgldari: dateFormat(response.data.tgldariheader),
+              tglsampai: dateFormat(response.data.tglsampaiheader)
+            }
+          }).trigger('reloadGrid');
           if (id == 0) {
             $('#detail').jqGrid().trigger('reloadGrid')
           }
@@ -347,8 +353,8 @@
       ])
       .then(() => {
         $('#crudModal').modal('show')
-        $('#crudForm [name=tglbukti]').attr('readonly', true)
-        $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
+        // $('#crudForm [name=tglbukti]').attr('readonly', true)
+        // $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
       })
       .catch((error) => {
         showDialog(error.statusText)
@@ -476,10 +482,6 @@
   }
 
   function showInvoiceExtraHeader(form, invoiceExtraHeader) {
-
-    form.find(`[name="tglbukti"]`).prop('readonly', true)
-    form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
-
     $.ajax({
       url: `${apiUrl}invoiceextraheader/${invoiceExtraHeader}`,
       method: 'GET',
@@ -574,6 +576,27 @@
     })
 
   }
+  
+  function setTglJatuhTempo(top = 0) {
+    // Tanggal awal dalam format "YYYY-MM-DD"
+    const tanggalAwal = new Date();
+
+    // Menambahkan jumlah hari (34 hari)
+    const jumlahHari = Math.floor(top);
+    tanggalAwal.setDate(tanggalAwal.getDate() + jumlahHari);
+
+    // Mendapatkan tanggal setelah ditambahkan 34 hari
+    const tahun = tanggalAwal.getFullYear();
+    const bulan = String(tanggalAwal.getMonth() + 1).padStart(2, "0"); // Ditambah 1 karena Januari dimulai dari 0
+    const tanggal = String(tanggalAwal.getDate()).padStart(2, "0");
+
+    $('#crudForm').find("[name=tgljatuhtempo]").val(tanggal + "-" + bulan + "-" + tahun);
+    $('#crudForm').find("[name=tgljatuhtempo]").prop('readonly', true);
+    $('#crudForm').find("[name=tgljatuhtempo]").parent('.input-group').find('.input-group-append').children().prop('disabled', true);
+    // $('#crudForm').find("[name=tgljatuhtempo]").parent('.input-group').find('.input-group-append').remove()
+
+
+  }
 
   function initLookup() {
     // 
@@ -587,6 +610,7 @@
       },
       onSelectRow: (agen, element) => {
         element.val(agen.namaagen)
+        setTglJatuhTempo(agen.top);
         $(`#${element[0]['name']}Id`).val(agen.id)
         element.data('currentValue', element.val())
       },
@@ -600,5 +624,6 @@
       }
     })
   }
+  
 </script>
 @endpush()

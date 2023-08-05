@@ -480,8 +480,14 @@
           $('#crudModal').find('#crudForm').trigger('reset')
           $('#crudModal').modal('hide')
           $('#piutangrow').html('')
+          $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
+          $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
           $('#jqGrid').jqGrid('setGridParam', {
-            page: response.data.page
+            page: response.data.page,
+            postData: {
+              tgldari: dateFormat(response.data.tgldariheader),
+              tglsampai: dateFormat(response.data.tglsampaiheader)
+            }
           }).trigger('reloadGrid');
 
           if (id == 0) {
@@ -509,7 +515,7 @@
               row = parseInt(selectedRows[angka]) - 1;
               let element;
 
-              if (indexes[0] == 'alatbayar' || indexes[0] == 'tglbukti' || indexes[0] == 'bank' || indexes[0] == 'nowarkat' || indexes[0] == 'agen' || indexes[0] == 'piutang_id') {
+              if (indexes[0] == 'alatbayar' || indexes[0] == 'id' || indexes[0] == 'tglbukti' || indexes[0] == 'bank' || indexes[0] == 'nowarkat' || indexes[0] == 'agen' || indexes[0] == 'piutang_id') {
                 if (indexes.length > 1) {
                   element = form.find(`[name="${indexes[0]}[]"]`)[row];
                 } else {
@@ -1288,8 +1294,6 @@
       ])
       .then(() => {
         $('#crudModal').modal('show')
-        form.find(`[name="tglbukti"]`).prop('readonly', true)
-        form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
         form.find(`[name="agen"]`).parent('.input-group').find('.button-clear').remove()
         form.find(`[name="agen"]`).parent('.input-group').find('.input-group-append').remove()
         form.find(`[name="bank"]`).parent('.input-group').find('.button-clear').remove()
@@ -1357,7 +1361,7 @@
             bankId = response.data.bank_id
             let element = form.find(`[name="${index}"]`)
 
-            form.find(`[name="${index}"]`).val(value).attr('readonly', true)
+            form.find(`[name="${index}"]:not([name="tglbukti"])`).val(value).attr('readonly', true)
 
             if (element.hasClass('datepicker')) {
               element.val(dateFormat(value))
@@ -1377,8 +1381,11 @@
             if (index == 'agen') {
               element.data('current-value', value).prop('readonly', true)
             }
-            form.find(`[name="${index}"]`).addClass('disabled')
-            initDisabled()
+            // form.find(`[name="${index}"]:not([name="tglbukti"])`).addClass('disabled')
+            if (form.data('action') === 'delete') {
+              form.find('[name]').addClass('disabled')
+              initDisabled()
+            }
 
           })
           let agenId = response.data.agen_id
@@ -1400,7 +1407,7 @@
                 totalNominalLebih += parseFloat(value.nominallebihbayar)
               }
             })
-            
+
             setTimeout(() => {
 
               $("#tablePelunasan")
@@ -1991,6 +1998,50 @@
 
         element.val('')
         element.data('currentValue', element.val())
+      }
+    })
+  }
+
+  function cekValidasi(Id, Aksi) {
+    $.ajax({
+      url: `{{ config('app.api_url') }}pelunasanpiutangheader/${Id}/cekvalidasi`,
+      method: 'POST',
+      dataType: 'JSON',
+      beforeSend: request => {
+        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+      },
+      success: response => {
+        var error = response.error
+        if (error) {
+          showDialog(response)
+        } else {
+          cekValidasiAksi(Id, Aksi)
+        }
+      }
+    })
+  }
+
+  function cekValidasiAksi(Id, Aksi) {
+    $.ajax({
+      url: `{{ config('app.api_url') }}pelunasanpiutangheader/${Id}/cekValidasiAksi`,
+      method: 'POST',
+      dataType: 'JSON',
+      beforeSend: request => {
+        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+      },
+      success: response => {
+        var error = response.error
+        if (error) {
+          showDialog(response)
+        } else {
+          if (Aksi == 'EDIT') {
+            editPelunasanPiutangHeader(Id)
+          }
+          if (Aksi == 'DELETE') {
+            deletePelunasanPiutangHeader(Id)
+          }
+        }
+
       }
     })
   }

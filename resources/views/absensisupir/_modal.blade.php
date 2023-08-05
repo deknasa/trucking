@@ -406,7 +406,7 @@
             },
             onSelectRow: (trado, element) => {
               element.parents('td').find(`[name="trado_id[]"]`).val(trado.id)
-              element.val(trado.keterangan)
+              element.val(trado.kodetrado)
               element.data('currentValue', element.val())
             },
             onCancel: (element) => {
@@ -609,7 +609,7 @@
               },
               onSelectRow: (trado, element) => {
                 element.parents('td').find(`[name="trado_id[]"]`).val(trado.id)
-                element.val(trado.keterangan)
+                element.val(trado.kodetrado)
                 element.data('currentValue', element.val())
               },
               onCancel: (element) => {
@@ -647,7 +647,7 @@
           })
 
           setRowNumbers()
-
+          setTotal()
           if (form.data('action') === 'delete') {
             form.find('[name]').addClass('disabled')
             initDisabled()
@@ -731,7 +731,7 @@
       },
       onSelectRow: (trado, element) => {
         $(`#crudForm [name="trado_id[]"]`).last().val(trado.id)
-        element.val(trado.keterangan)
+        element.val(trado.kodetrado)
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {
@@ -884,7 +884,7 @@
       },
       onSelectRow: (trado, element) => {
         $(`#crudForm [name="trado_id[]"]`).first().val(trado.id)
-        element.val(trado.keterangan)
+        element.val(trado.kodetrado)
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {
@@ -907,7 +907,7 @@
       },
       onSelectRow: (absentrado, element) => {
         $(`#crudForm [name="absen_id[]"]`).first().val(absentrado.id)
-        element.val(absentrado.keterangan)
+        element.val(absentrado.kodetrado)
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {

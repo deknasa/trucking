@@ -56,6 +56,10 @@
                                     <i class="fas fa-print"></i>
                                     Report
                                 </button>
+                                <button type="button" id="btnExport" class="btn btn-warning mr-1 ">
+                                    <i class="fas fa-file-export"></i>
+                                    Export
+                                </button>
                             </div>
                         </div>
 
@@ -99,6 +103,9 @@
         if (!`{{ $myAuth->hasPermission('laporanpemakaianban', 'report') }}`) {
             $('#btnPreview').attr('disabled', 'disabled')
         }
+        if (!`{{ $myAuth->hasPermission('laporanpemakaianban', 'export') }}`) {
+            $('#btnExport').attr('disabled', 'disabled')
+        }
 
     })
 
@@ -129,6 +136,25 @@
 
     })
 
+
+    $(document).on('click', `#btnExport`, function(event) {
+        let sampai = $('#crudForm').find('[name=sampai]').val()
+        let dari = $('#crudForm').find('[name=dari]').val()
+        let posisiakhirtrado = $('#crudForm').find('[name=posisiakhirtrado]').val()
+        let posisiakhirtradoId = $('#crudForm').find('[name=posisiakhirtrado_id]').val()
+        let posisiakhirgandengan = $('#crudForm').find('[name=posisiakhirgandengan]').val()
+        let posisiakhirgandenganId = $('#crudForm').find('[name=posisiakhirgandengan_id]').val()
+        let posisiakhirgandengantext = $('#crudForm').find('[name=posisiakhirgandengan]').val()
+        let jenislaporan_id = $('#crudForm').find('[name=text]').val()
+        let jenislaporan = $('#text').find('option:selected').text();
+
+        if (sampai != '' && dari != '') {
+
+            window.open(`{{ route('laporanpemakaianban.export') }}?sampai=${sampai}&dari=${dari}&posisiakhirtrado_id=${posisiakhirtradoId}&posisiakhirtrado=${posisiakhirtrado}&posisiakhirgandengan_id=${posisiakhirgandenganId}&posisiakhirgandengan=${posisiakhirgandengan}&jenislaporan_id=${jenislaporan_id}&jenislaporan=${jenislaporan}`)
+        } else {
+            showDialog('ISI SELURUH KOLOM')
+        }
+    })
 
     function getCekReport() {
 

@@ -27,29 +27,22 @@
                         </div> --}}
 
                         <div class="form-group row">
-                            <label class="col-12 col-sm-2 col-form-label mt-2">Periode<span class="text-danger">*</span></label>
-                            <div class="col-sm-4 mt-2">
+                            <label class="col-12 col-sm-1 col-form-label mt-2">Periode<span class="text-danger">*</span></label>
+                            <div class="col-sm-11 mt-2">
                                 <div class="input-group">
                                     <input type="text" name="dari" class="form-control datepicker">
                                 </div>
                             </div>
-                            <h5 class="mt-3">s/d</h5>
-                            <div class="col-sm-4 mt-2">
-                                <div class="input-group">
-                                    <input type="text" name="sampai" class="form-control datepicker">
-                                </div>
-                            </div>
-
                         </div>
 
                         <div class="form-group row">
-                            <label class="col-12 col-sm-2 col-form-label mt-2">AGEN (DARI)<span class="text-danger">*</span></label>
-                            <div class="col-sm-4 mt-2">
+                            <label class="col-12 col-sm-1 col-form-label mt-2">AGEN (DARI)<span class="text-danger">*</span></label>
+                            <div class="col-sm-5 mt-2">
                                 <input type="hidden" name="agendari_id">
                                 <input type="text" name="agendari" class="form-control agendari-lookup">
                             </div>
-                            <h5 class="mt-3">s/d</h5>
-                            <div class="col-sm-4 mt-2">
+                            <h5 class="col-sm-1 mt-3 text-center">s/d</h5>
+                            <div class="col-sm-5 mt-2">
                                 <input type="hidden" name="agensampai_id">
                                 <input type="text" name="agensampai" class="form-control agensampai-lookup">
                             </div>

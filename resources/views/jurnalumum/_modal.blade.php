@@ -195,8 +195,14 @@
           $('#crudModal').modal('hide')
           $('#crudModal').find('#crudForm').trigger('reset')
 
+          $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
+          $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
           $('#jqGrid').jqGrid('setGridParam', {
-            page: response.data.page
+            page: response.data.page,
+            postData: {
+              tgldari: dateFormat(response.data.tgldariheader),
+              tglsampai: dateFormat(response.data.tglsampaiheader)
+            }
           }).trigger('reloadGrid');
 
           if (id == 0) {
@@ -296,8 +302,6 @@
         clearSelectedRows()
         $('#gs_').prop('checked', false)
         $('#crudModal').modal('show')
-        form.find('[name=tglbukti]').attr('readonly', true)
-        form.find('[name=tglbukti]').siblings('.input-group-append').remove()
       })
       .catch((error) => {
         showDialog(error.statusText)
@@ -469,10 +473,7 @@
   function showJurnalUmum(form, id, isCopy = false) {
     return new Promise((resolve, reject) => {
       $('#detailList tbody').html('')
-      if (!isCopy) {
-        form.find(`[name="tglbukti"]`).prop('readonly', true)
-        form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
-      }
+      
       $.ajax({
         url: `${apiUrl}jurnalumumheader/${id}`,
         method: 'GET',
@@ -481,7 +482,7 @@
           Authorization: `Bearer ${accessToken}`
         },
         success: response => {
-          if(isCopy){
+          if (isCopy) {
 
             delete response.data['id'];
             delete response.data['nobukti'];

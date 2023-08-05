@@ -74,12 +74,12 @@
 
               dataInit: function(element) {
                 $(element).select2({
-                    width: 'resolve',
-                    theme: "bootstrap4"
+                  width: 'resolve',
+                  theme: "bootstrap4"
                 });
               }
             },
-                
+
             formatter: (value, options, rowData) => {
               let statusAktif = JSON.parse(value)
               let formattedValue = $(`
@@ -181,6 +181,13 @@
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
+
+          if (data.data.length === 0) {
+            $('#jqGrid').each((index, element) => {
+              abortGridLastRequest($(element))
+              clearGridHeader($(element))
+            })
+          }
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))
@@ -254,8 +261,11 @@
             class: 'btn btn-success btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-              editPelanggan(selectedId)
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Harap pilih salah satu record')
+              } else {
+                editPelanggan(selectedId)
+              }
             }
           },
           {
@@ -399,47 +409,48 @@
       params += `&offset=${offset}&limit=${limit}`
 
       getCekExport(params).then((response) => {
-        if ($('#rangeModal').data('action') == 'export') {
-          $.ajax({
-            url: '{{ config('app.api_url') }}pelanggan/export?' + params,
-            type: 'GET',
-            beforeSend: function(xhr) {
-                xhr.setRequestHeader('Authorization', 'Bearer {{ session('access_token') }}');
-            },
-            xhrFields: {
+          if ($('#rangeModal').data('action') == 'export') {
+            $.ajax({
+              url: `{{ config('app.api_url ') }}pelanggan/export?` + params,
+              type: 'GET',
+              beforeSend: function(xhr) {
+                xhr.setRequestHeader('Authorization', `Bearer {{ session('
+                  access_token ') }}`);
+              },
+              xhrFields: {
                 responseType: 'arraybuffer'
-            },
-            success: function(response, status, xhr) {
-              if (xhr.status === 200) {
-                if (response !== undefined) {
-                  var blob = new Blob([response], {
-                    type: 'pelanggan/vnd.ms-excel'
-                  });
-                  var link = document.createElement('a');
-                  link.href = window.URL.createObjectURL(blob);
-                  link.download = 'pelanggan' + new Date().getTime() + '.xlsx';
-                  link.click();
+              },
+              success: function(response, status, xhr) {
+                if (xhr.status === 200) {
+                  if (response !== undefined) {
+                    var blob = new Blob([response], {
+                      type: 'pelanggan/vnd.ms-excel'
+                    });
+                    var link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = 'pelanggan' + new Date().getTime() + '.xlsx';
+                    link.click();
+                  }
+                  $('#rangeModal').modal('hide')
                 }
-                $('#rangeModal').modal('hide')
+              },
+              error: function(xhr, status, error) {
+                $('#processingLoader').addClass('d-none')
+                submitButton.removeAttr('disabled')
               }
-            },
-            error: function(xhr, status, error) {
-                                    $('#processingLoader').addClass('d-none')
+            }).always(() => {
+              $('#processingLoader').addClass('d-none')
               submitButton.removeAttr('disabled')
-            }
-          }).always(() => {
-            $('#processingLoader').addClass('d-none')
-            submitButton.removeAttr('disabled')
-          })
-        } else if ($('#rangeModal').data('action') == 'report') {
+            })
+          } else if ($('#rangeModal').data('action') == 'report') {
             window.open(`{{ route('pelanggan.report') }}?${params}`)
             submitButton.removeAttr('disabled')
             $('#processingLoader').addClass('d-none')
             $('#rangeModal').modal('hide')
-        }  
-        
-      })
-          
+          }
+
+        })
+
         .catch((error) => {
           if (error.status === 422) {
             $('.is-invalid').removeClass('is-invalid')
@@ -462,7 +473,7 @@
             });
 
             $(".is-invalid").first().focus();
-          $('#processingLoader').addClass('d-none')
+            $('#processingLoader').addClass('d-none')
           } else {
             showDialog(error.statusText)
           }

@@ -213,8 +213,14 @@
           $('#crudModal').find('#crudForm').trigger('reset')
           $('#crudModal').modal('hide')
 
+          $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
+          $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
           $('#jqGrid').jqGrid('setGridParam', {
-            page: response.data.page
+            page: response.data.page,
+            postData: {
+              tgldari: dateFormat(response.data.tgldariheader),
+              tglsampai: dateFormat(response.data.tglsampaiheader)
+            }
           }).trigger('reloadGrid');
 
           if (id == 0) {
@@ -315,8 +321,8 @@
       ])
       .then(() => {
         $('#crudModal').modal('show')
-        form.find(`[name="tglbukti"]`).prop('readonly', true)
-        form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+        // form.find(`[name="tglbukti"]`).prop('readonly', true)
+        // form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
       })
       .catch((error) => {
         showDialog(error.statusText)
@@ -347,6 +353,9 @@
       ])
       .then(() => {
         $('#crudModal').modal('show')
+        form.find(`[name="tglbukti"]`).prop('readonly', true)
+        form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+
       })
       .catch((error) => {
         showDialog(error.statusText)
@@ -390,39 +399,39 @@
     $('#processingLoader').removeClass('d-none')
 
     $.ajax({
-        url: `${apiUrl}hutangheader/approval`,
-        method: 'POST',
-        dataType: 'JSON',
-        headers: {
-            Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-            hutangId: selectedRows
-        },
-        success: response => {
-            $('#crudForm').trigger('reset')
-            $('#crudModal').modal('hide')
+      url: `${apiUrl}hutangheader/approval`,
+      method: 'POST',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        hutangId: selectedRows
+      },
+      success: response => {
+        $('#crudForm').trigger('reset')
+        $('#crudModal').modal('hide')
 
-            $('#jqGrid').jqGrid().trigger('reloadGrid');
-            selectedRows = []
-            $('#gs_').prop('checked', false)
-        },
-        error: error => {
-            if (error.status === 422) {
-                $('.is-invalid').removeClass('is-invalid')
-                $('.invalid-feedback').remove()
+        $('#jqGrid').jqGrid().trigger('reloadGrid');
+        selectedRows = []
+        $('#gs_').prop('checked', false)
+      },
+      error: error => {
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
 
-                setErrorMessages(form, error.responseJSON.errors);
-            } else {
-                showDialog(error.statusText)
-            }
-        },
+          setErrorMessages(form, error.responseJSON.errors);
+        } else {
+          showDialog(error.statusText)
+        }
+      },
     }).always(() => {
-        $('#processingLoader').addClass('d-none')
-        $(this).removeAttr('disabled')
+      $('#processingLoader').addClass('d-none')
+      $(this).removeAttr('disabled')
     })
 
-}
+  }
 
   function cekValidasiAksi(Id, Aksi) {
     $.ajax({
@@ -478,9 +487,7 @@
     return new Promise((resolve, reject) => {
       $('#detailList tbody').html('')
 
-      form.find(`[name="tglbukti"]`).prop('readonly', true)
-      form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
-      
+
       $.ajax({
         url: `${apiUrl}hutangheader/${userId}`,
         method: 'GET',

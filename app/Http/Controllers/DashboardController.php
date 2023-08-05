@@ -6,6 +6,7 @@ use App\Models\Menu;
 use App\Providers\AuthServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 
 class DashboardController extends MyController
 {
@@ -16,10 +17,19 @@ class DashboardController extends MyController
         //     ->first();
         // dd($test);
         $title = 'Dashboard';
-        
-        return view('welcome', compact('title'));
+        $data = $this->getData();
+        return view('welcome', compact('title','data'));
     }
 
+    public function getData()
+    {
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'dashboard');
+
+        return $response['data'];
+    }
     /**
      * Show the form for creating a new resource.
      *

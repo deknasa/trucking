@@ -7,12 +7,15 @@ use App\Http\Controllers\AbsensiSupirApprovalDetailController;
 use App\Http\Controllers\AbsensiSupirApprovalHeaderController;
 use App\Http\Controllers\ApprovalTransaksiHeaderController;
 use App\Http\Controllers\ApprovalInvoiceHeaderController;
+use App\Http\Controllers\ReminderServiceController;
 
 use App\Http\Controllers\ApprovalSupirGambarController;
 use App\Http\Controllers\ApprovalSupirKeteranganController;
 use App\Http\Controllers\BlackListSupirController;
 use App\Http\Controllers\TradoSupirMilikMandorController;
 use App\Http\Controllers\BukaAbsensiController;
+use App\Http\Controllers\BukaPenerimaanStokController;
+use App\Http\Controllers\BukaPengeluaranStokController;
 use App\Http\Controllers\SuratPengantarApprovalInputTripController;
 use App\Http\Controllers\TutupBukuController;
 use App\Http\Controllers\AbsenTradoController;
@@ -56,6 +59,7 @@ use App\Http\Controllers\KasGantungDetailController;
 use App\Http\Controllers\KasGantungHeaderController;
 use App\Http\Controllers\MandorAbsensiSupirController;
 use App\Http\Controllers\MandorTripController;
+use App\Http\Controllers\ChargeGandenganController;
 
 use App\Http\Controllers\PengembalianKasGantungDetailController;
 use App\Http\Controllers\PengembalianKasGantungHeaderController;
@@ -222,6 +226,7 @@ use App\Http\Controllers\ApprovalBukaTanggalSuratPengantarController;
 use App\Http\Controllers\ExportLaporanMingguanSupirController;
 use App\Http\Controllers\HutangExtraDetailController;
 use App\Http\Controllers\HutangExtraHeaderController;
+use App\Http\Controllers\KaryawanLogAbsensiController;
 use App\Http\Controllers\TypeAkuntansiController;
 use App\Http\Controllers\MainTypeAkuntansiController;
 use App\Http\Controllers\LaporanJurnalUmumController;
@@ -234,6 +239,7 @@ use App\Http\Controllers\LaporanKartuPiutangPerAgenController;
 use App\Http\Controllers\MainAkunPusatController;
 use App\Http\Controllers\LaporanHistoryDepositoController;
 use App\Http\Controllers\LaporanPinjamanPerUnitTradoController;
+use App\Http\Controllers\LogAbsensiController;
 use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\StokPusatController;
 use App\Http\Controllers\UbahPasswordController;
@@ -404,6 +410,11 @@ Route::middleware(['auth','authorized'])->group(function () {
     
     Route::get('bukaabsensi/index', [BukaAbsensiController::class,'index']);
     Route::resource('bukaabsensi', BukaAbsensiController::class);
+    
+    Route::get('bukapenerimaanstok/index', [BukaPenerimaanStokController::class,'index']);
+    Route::resource('bukapenerimaanstok', BukaPenerimaanStokController::class);
+    Route::get('bukapengeluaranstok/index', [BukaPengeluaranStokController::class,'index']);
+    Route::resource('bukapengeluaranstok', BukaPengeluaranStokController::class);
 
     Route::get('suratpengantarapprovalinputtrip/index', [SuratPengantarApprovalInputTripController::class,'index']);
     Route::resource('suratpengantarapprovalinputtrip', SuratPengantarApprovalInputTripController::class);
@@ -779,6 +790,16 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('orderantrucking/export', [OrderanTruckingController::class, 'export'])->name('orderantrucking.export');
     Route::get('orderantrucking/report', [OrderanTruckingController::class, 'report'])->name('orderantrucking.report');
     Route::resource('orderantrucking', OrderanTruckingController::class);
+    
+    Route::get('chargegandengan/export', [ChargeGandenganController::class, 'export'])->name('chargegandengan.export');
+    Route::get('chargegandengan/report', [ChargeGandenganController::class, 'report'])->name('chargegandengan.report');
+    Route::get('chargegandengan/index', [ChargeGandenganController::class,'index']);
+    Route::resource('chargegandengan', ChargeGandenganController::class);
+
+    Route::get('reminderservice/index', [ReminderServiceController::class, 'index'])->name('reminderservice.export');
+    Route::get('reminderservice/index', [ReminderServiceController::class, 'index'])->name('reminderservice.report');
+    Route::get('reminderservice/index', [ReminderServiceController::class, 'index'])->name('reminderservice.index');
+    Route::get('reminderservice', [ReminderServiceController::class, 'index'])->name('reminderservice.get');
 
     Route::get('prosesabsensisupir/field_length', [ProsesAbsensiSupirController::class, 'fieldLength'])->name('prosesabsensisupir.field_length');
     Route::get('prosesabsensisupir/{id}/delete', [ProsesAbsensiSupirController::class, 'delete'])->name('prosesabsensisupir.delete');
@@ -1177,6 +1198,7 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('laporantransaksiharian/index', [LaporanTransaksiHarianController::class, 'index']);
     Route::resource('laporantransaksiharian', LaporanTransaksiHarianController::class);
 
+    Route::get('laporanpinjamansupir/export', [LaporanPinjamanSupirController::class, 'export'])->name('laporanpinjamansupir.export');
     Route::get('laporanpinjamansupir/report', [LaporanPinjamanSupirController::class, 'report'])->name('laporanpinjamansupir.report');
     Route::get('laporanpinjamansupir/index', [LaporanPinjamanSupirController::class, 'index']);
     Route::resource('laporanpinjamansupir', LaporanPinjamanSupirController::class);
@@ -1201,6 +1223,7 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::resource('laporanwarkatbelumcair', LaporanWarkatBelumCairController::class);
 
     Route::get('laporanpemakaianban/report', [LaporanPemakaianBanController::class, 'report'])->name('laporanpemakaianban.report');
+    Route::get('laporanpemakaianban/export', [LaporanPemakaianBanController::class, 'export'])->name('laporanpemakaianban.export');
     Route::get('laporanpemakaianban/index', [LaporanPemakaianBanController::class, 'index']);
     Route::resource('laporanpemakaianban', LaporanPemakaianBanController::class);
 
@@ -1219,11 +1242,13 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('laporantriptrado/index', [LaporanTripTradoController::class, 'index']);
     Route::resource('laporantriptrado', LaporanTripTradoController::class);
 
+    Route::get('laporankartuhutangprediksi/export', [LaporanKartuHutangPrediksiController::class, 'export'])->name('laporankartuhutangprediksi.export');
     Route::get('laporankartuhutangprediksi/report', [LaporanKartuHutangPrediksiController::class, 'report'])->name('laporankartuhutangprediksi.report');
     Route::get('laporankartuhutangprediksi/index', [LaporanKartuHutangPrediksiController::class, 'index']);
     Route::resource('laporankartuhutangprediksi', LaporanKartuHutangPrediksiController::class);
 
     Route::get('laporantripgandengandetail/report', [LaporanTripGandenganDetailController::class, 'report'])->name('laporantripgandengandetail.report');
+    Route::get('laporantripgandengandetail/export', [LaporanTripGandenganDetailController::class, 'export'])->name('laporantripgandengandetail.export');
     Route::get('laporantripgandengandetail/index', [LaporanTripGandenganDetailController::class, 'index']);
     Route::resource('laporantripgandengandetail', LaporanTripGandenganDetailController::class);
 
@@ -1253,6 +1278,7 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('laporanhutanggiro/index', [LaporanHutangGiroController::class, 'index']);
     Route::resource('laporanhutanggiro', LaporanHutangGiroController::class);
 
+    Route::get('laporanpinjamansupirkaryawan/export', [LaporanPinjamanSupirKaryawanController::class, 'export'])->name('laporanpinjamansupirkaryawan.export');
     Route::get('laporanpinjamansupirkaryawan/report', [LaporanPinjamanSupirKaryawanController::class, 'report'])->name('laporanpinjamansupirkaryawan.report');
     Route::get('laporanpinjamansupirkaryawan/index', [LaporanPinjamanSupirKaryawanController::class, 'index']);
     Route::resource('laporanpinjamansupirkaryawan', LaporanPinjamanSupirKaryawanController::class);
@@ -1277,6 +1303,7 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::resource('laporanrekapsumbangan', LaporanRekapSumbanganController::class);
 
     Route::get('laporanklaimpjtsupir/report', [LaporanKlaimPJTSupirController::class, 'report'])->name('laporanklaimpjtsupir.report');
+    Route::get('laporanklaimpjtsupir/export', [LaporanKlaimPJTSupirController::class, 'export'])->name('laporanklaimpjtsupir.export');
     Route::get('laporanklaimpjtsupir/index', [LaporanKlaimPJTSupirController::class, 'index']);
     Route::resource('laporanklaimpjtsupir', LaporanKlaimPJTSupirController::class);
 
@@ -1446,6 +1473,14 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('hutangextradetail/hutang/grid', [HutangExtraDetailController::class, 'hutangGrid']);
     Route::get('hutangextradetail/detail/grid', [HutangExtraDetailController::class, 'detailGrid']);
     Route::resource('hutangextradetail', HutangExtraDetailController::class);
+    
+    Route::get('logabsensi/export', [LogAbsensiController::class, 'export'])->name('logabsensi.export');
+    Route::get('logabsensi/report', [LogAbsensiController::class, 'report'])->name('logabsensi.report');
+    Route::get('logabsensi/index', [LogAbsensiController::class, 'index']);
+    Route::resource('logabsensi', LogAbsensiController::class);
+
+    Route::get('karyawanlogabsensi/index', [KaryawanLogAbsensiController::class, 'index']);
+    Route::resource('karyawanlogabsensi', KaryawanLogAbsensiController::class);
 });
 
 Route::patch('format', [FormatController::class, 'update']);

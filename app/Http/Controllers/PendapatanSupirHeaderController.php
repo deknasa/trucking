@@ -12,13 +12,14 @@ class PendapatanSupirHeaderController extends MyController
 {
     public $title = 'Pendapatan Supir';
 
-    public function index(Request $request){
+    public function index(Request $request)
+    {
         $title = $this->title;
-        $data = [            
-            'comboapproval' => $this->comboList('list','STATUS APPROVAL','STATUS APPROVAL'),
-            'combocetak' => $this->comboList('list','STATUSCETAK','STATUSCETAK')
+        $data = [
+            'comboapproval' => $this->comboList('list', 'STATUS APPROVAL', 'STATUS APPROVAL'),
+            'combocetak' => $this->comboList('list', 'STATUSCETAK', 'STATUSCETAK')
         ];
-        return view('pendapatansupirheader.index', compact('title','data'));
+        return view('pendapatansupirheader.index', compact('title', 'data'));
     }
 
     public function comboList($aksi, $grp, $subgrp)
@@ -44,13 +45,13 @@ class PendapatanSupirHeaderController extends MyController
             'status' => $aksi,
             'grp' => 'STATUSCETAK',
             'subgrp' => 'STATUSCETAK',
-        ]; 
+        ];
         $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'user/combostatus',$status);
+            ->get(config('app.api_url') . 'user/combostatus', $status);
         return $response['data'];
     }
-    
+
     public function report(Request $request)
     {
         //FETCH HEADER
@@ -58,8 +59,8 @@ class PendapatanSupirHeaderController extends MyController
         $pendapatan = Http::withHeaders($request->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') .'pendapatansupirheader/'.$id.'/export')['data'];
-      
+            ->get(config('app.api_url') . 'pendapatansupirheader/' . $id . '/export')['data'];
+
         //FETCH DETAIL
         $detailParams = [
             'forReport' => true,
@@ -69,12 +70,12 @@ class PendapatanSupirHeaderController extends MyController
         $pendapatan_details = Http::withHeaders($request->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') .'pendapatansupirdetail', $detailParams)['data'];
+            ->get(config('app.api_url') . 'pendapatansupirdetail', $detailParams)['data'];
 
         $combo = $this->combo('list');
-        $key = array_search('CETAK', array_column( $combo, 'parameter')); 
+        $key = array_search('CETAK', array_column($combo, 'parameter'));
         $pendapatan["combo"] =  $combo[$key];
-        return view('reports.pendapatansupir', compact('pendapatan','pendapatan_details'));
+        return view('reports.pendapatansupir', compact('pendapatan', 'pendapatan_details'));
     }
 
     public function export(Request $request): void
@@ -84,39 +85,34 @@ class PendapatanSupirHeaderController extends MyController
         $pendapatans = Http::withHeaders($request->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') .'pendapatansupirheader/'.$id.'/export')['data'];
-      
+            ->get(config('app.api_url') . 'pendapatansupirheader/' . $id . '/export')['data'];
+
         //FETCH DETAIL
         $detailParams = [
-            'forExport' => true,
+            'forReport' => true,
             'pendapatansupir_id' => $request->id
         ];
 
         $responses = Http::withHeaders($request->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') .'pendapatansupirdetail', $detailParams);
+            ->get(config('app.api_url') . 'pendapatansupirdetail', $detailParams);
         $pendapatan_details = $responses['data'];
 
         $tglBukti = $pendapatans["tglbukti"];
         $timeStamp = strtotime($tglBukti);
-        $dateTglBukti = date('d-m-Y', $timeStamp); 
+        $dateTglBukti = date('d-m-Y', $timeStamp);
         $pendapatans['tglbukti'] = $dateTglBukti;
 
         $tglDari = $pendapatans["tgldari"];
         $timeStampDari = strtotime($tglDari);
-        $datetglDari = date('d-m-Y', $timeStampDari); 
+        $datetglDari = date('d-m-Y', $timeStampDari);
         $pendapatans['tgldari'] = $datetglDari;
 
         $tglSampai = $pendapatans["tglsampai"];
         $timeStampSampai = strtotime($tglSampai);
-        $datetglSampai = date('d-m-Y', $timeStampSampai); 
+        $datetglSampai = date('d-m-Y', $timeStampSampai);
         $pendapatans['tglsampai'] = $datetglSampai;
-
-        $periode = $pendapatans["periode"];
-        $timeStampPeriode = strtotime($periode);
-        $dateperiode = date('d-m-Y', $timeStampPeriode); 
-        $pendapatans['periode'] = $dateperiode;
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
@@ -135,7 +131,7 @@ class PendapatanSupirHeaderController extends MyController
         $header_right_start_row = 4;
         $detail_table_header_row = 8;
         $detail_start_row = $detail_table_header_row + 1;
-       
+        $dataRow = $detail_table_header_row + 2;
         $alphabets = range('A', 'Z');
 
         $header_columns = [
@@ -162,8 +158,8 @@ class PendapatanSupirHeaderController extends MyController
                 'index' => 'tglsampai',
             ],
             [
-                'label' => 'Periode',
-                'index' => 'periode',
+                'label' => 'Supir',
+                'index' => 'supir_id',
             ],
         ];
 
@@ -172,12 +168,24 @@ class PendapatanSupirHeaderController extends MyController
                 'label' => 'NO',
             ],
             [
-                'label' => 'SUPIR',
-                'index' => 'supir_id',
+                'label' => 'NO BUKTI TRIP',
+                'index' => 'nobuktitrip',
             ],
             [
-                'label' => 'KETERANGAN',
-                'index' => 'keterangan',
+                'label' => 'TGL TRIP',
+                'index' => 'tgltrip',
+            ],
+            [
+                'label' => 'NO BUKTI RINCIAN',
+                'index' => 'nobuktirincian',
+            ],
+            [
+                'label' => 'DARI',
+                'index' => 'dari',
+            ],
+            [
+                'label' => 'SAMPAI',
+                'index' => 'sampai',
             ],
             [
                 'label' => 'NOMINAL',
@@ -188,11 +196,11 @@ class PendapatanSupirHeaderController extends MyController
 
         foreach ($header_columns as $header_column) {
             $sheet->setCellValue('B' . $header_start_row, $header_column['label']);
-            $sheet->setCellValue('C' . $header_start_row++, ': '.$pendapatans[$header_column['index']]);
+            $sheet->setCellValue('C' . $header_start_row++, ': ' . $pendapatans[$header_column['index']]);
         }
         foreach ($header_right_columns as $header_right_column) {
             $sheet->setCellValue('D' . $header_right_start_row, $header_right_column['label']);
-            $sheet->setCellValue('E' . $header_right_start_row++, ': '.$pendapatans[$header_right_column['index']]);
+            $sheet->setCellValue('E' . $header_right_start_row++, ': ' . $pendapatans[$header_right_column['index']]);
         }
         foreach ($detail_columns as $detail_columns_index => $detail_column) {
             $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_table_header_row, $detail_column['label'] ?? $detail_columns_index + 1);
@@ -205,56 +213,66 @@ class PendapatanSupirHeaderController extends MyController
             ),
         );
         $style_number = [
-			'alignment' => [
-				'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT, 
-			],
-            
-			'borders' => [
-				'top' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
-				'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN], 
-				'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
-				'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN] 
-			]
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT,
+            ],
+
+            'borders' => [
+                'top' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+                'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+                'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+                'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN]
+            ]
         ];
 
         // $sheet->getStyle("A$detail_table_header_row:G$detail_table_header_row")->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FF1F456E');
-        $sheet ->getStyle("A$detail_table_header_row:D$detail_table_header_row")->applyFromArray($styleArray);
+        $sheet->getStyle("A$detail_table_header_row:G$detail_table_header_row")->applyFromArray($styleArray);
 
         $total = 0;
         foreach ($pendapatan_details as $response_index => $response_detail) {
-            
+
             foreach ($detail_columns as $detail_columns_index => $detail_column) {
                 $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
-                $sheet->getStyle("A$detail_table_header_row:D$detail_table_header_row")->getFont()->setBold(true);
-                $sheet->getStyle("A$detail_table_header_row:D$detail_table_header_row")->getAlignment()->setHorizontal('center');
+                $sheet->getStyle("A$detail_table_header_row:G$detail_table_header_row")->getFont()->setBold(true);
+                $sheet->getStyle("A$detail_table_header_row:G$detail_table_header_row")->getAlignment()->setHorizontal('center');
             }
             $response_detail['nominals'] = number_format((float) $response_detail['nominal'], '2', '.', ',');
-        
+
             $sheet->setCellValue("A$detail_start_row", $response_index + 1);
-            $sheet->setCellValue("B$detail_start_row", $response_detail['supir_id']);
-            $sheet->setCellValue("C$detail_start_row", $response_detail['keterangan']);
-            $sheet->setCellValue("D$detail_start_row", $response_detail['nominals']);
+            $sheet->setCellValue("B$detail_start_row", $response_detail['nobuktitrip']);
+            $sheet->setCellValue("C$detail_start_row", date('d-m-Y', strtotime($response_detail['tgltrip'])));
+            $sheet->setCellValue("D$detail_start_row", $response_detail['nobuktirincian']);
+            $sheet->setCellValue("E$detail_start_row", $response_detail['dari']);
+            $sheet->setCellValue("F$detail_start_row", $response_detail['sampai']);
+            $sheet->setCellValue("G$detail_start_row", $response_detail['nominal']);
 
-            $sheet->getStyle("C$detail_start_row")->getAlignment()->setWrapText(true);
-            $sheet->getColumnDimension('C')->setWidth(50);
+            // $sheet->getStyle("C$detail_start_row")->getAlignment()->setWrapText(true);
+            // $sheet->getColumnDimension('C')->setWidth(50);
 
-            $sheet ->getStyle("A$detail_start_row:D$detail_start_row")->applyFromArray($styleArray);
-            $sheet ->getStyle("D$detail_start_row")->applyFromArray($style_number);
-            
-            $total += $response_detail['nominal'];
+            $sheet->getStyle("A$detail_start_row:G$detail_start_row")->applyFromArray($styleArray);
+            $sheet->getStyle("G$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
+
+            // $total += $response_detail['nominal'];
+            $dataRow++;
             $detail_start_row++;
         }
 
         $total_start_row = $detail_start_row;
-        
-        $sheet->mergeCells('A'.$total_start_row.':C'.$total_start_row);
-        $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A'.$total_start_row.':C'.$total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
-        $sheet->setCellValue("D$total_start_row", number_format((float) $total, '2', '.', ','))->getStyle("D$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+
+        $sheet->mergeCells('A' . $total_start_row . ':F' . $total_start_row);
+        $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':F' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
+        $sheet->setCellValue("G$detail_start_row",  "=SUM(G8:G" . ($dataRow - 1) . ")")->getStyle("G$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+
+        $sheet->getStyle("G$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
 
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);
+        $sheet->getColumnDimension('C')->setAutoSize(true);
         $sheet->getColumnDimension('D')->setAutoSize(true);
-        
+        $sheet->getColumnDimension('E')->setAutoSize(true);
+        $sheet->getColumnDimension('F')->setAutoSize(true);
+        $sheet->getColumnDimension('G')->setAutoSize(true);
+
         $writer = new Xlsx($spreadsheet);
         $filename = 'Laporan Pendapatan Supir' . date('dmYHis');
         header('Content-Type: application/vnd.ms-excel');
@@ -263,5 +281,4 @@ class PendapatanSupirHeaderController extends MyController
 
         $writer->save('php://output');
     }
-
 }

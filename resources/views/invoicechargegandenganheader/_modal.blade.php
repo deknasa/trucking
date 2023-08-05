@@ -57,6 +57,20 @@
                 </div>
               </div>
             </div>
+            <div class="row">
+              <div class="form-group col-md-6">
+                <div class="row">
+                  <div class="col-12 col-sm-3 col-md-4 col-form-label">
+                    <label>tgl jatuh tempo <span class="text-danger">*</span> </label>
+                  </div>
+                  <div class="col-12 col-sm-9 col-md-8">
+                    <div class="input-group">
+                      <input type="text" name="tgljatuhtempo" class="form-control datepicker">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
 
             <div class="row mt-3">
               <div class="col-sm-4">
@@ -100,11 +114,24 @@
   let rowIndex = 0;
   let selectedRows = []
   let selectedJobTrucking = [];
+  let selectedNoPolisi = [];
+  let selectedGandengan = [];
   let selectedTglTrip = [];
+  let selectedTglAkhir = [];
   let selectedJumlahHari = [];
   let selectedNominal = [];
-  let selectedNoPolisi = [];
+  let selectedJenisOrder = [];
+  let selectedNamaGudang = [];
   let selectedKeterangan = [];
+
+  let sortnameInvoice = 'jobtrucking';
+  let sortorderInvoice = 'asc';
+  let pageInvoice = 0;
+  let totalRecordInvoice
+  let limitInvoice
+  let postDataInvoice
+  let triggerClickInvoice
+  let indexRowInvoice
 
   $(document).ready(function() {
 
@@ -124,6 +151,7 @@
         getJobTrucking(agen_id, tglproses)
           .then((response) => {
 
+
             $('.is-invalid').removeClass('is-invalid')
             $('.invalid-feedback').remove()
 
@@ -132,11 +160,21 @@
               postData: {
                 tglbukti: tglproses,
                 agen: agen_id,
+                sortIndex: 'jobtrucking',
+                aksi: $('#crudForm').data('action'),
+                idInvoice: $('#crudForm').find(`[name=id]`).val()
               },
               datatype: "json"
             }).trigger('reloadGrid');
-          }).catch((errors) => {
-            setErrorMessages($('#crudForm'), errors)
+          }).catch((error) => {
+            if (error.status === 422) {
+              $('.is-invalid').removeClass('is-invalid')
+              $('.invalid-feedback').remove()
+
+              setErrorMessages(form, error.responseJSON.errors);
+            } else {
+              showDialog(error.responseJSON)
+            }
           })
       }
 
@@ -151,7 +189,7 @@
       let form = $('#crudForm')
       let invoiceChargeGandenganHeader = form.find('[name=id]').val()
       let action = form.data('action')
-      let data = $('#crudForm').serializeArray()
+      let data = []
 
       // $('#crudForm').find(`[name="nominal_detail[]"]`).each((index, element) => {
       //   data.filter((row) => row.name === 'nominal_detail[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal_detail[]"]`)[index])
@@ -160,6 +198,34 @@
       // $('#crudForm').find(`[name="detail_persentasediscount[]"]`).each((index, element) => {
       //   data.filter((row) => row.name === 'detail_persentasediscount[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="detail_persentasediscount[]"]`)[index])
       // })
+      data.push({
+        name: 'id',
+        value: form.find(`[name="id"]`).val()
+      })
+      data.push({
+        name: 'nobukti',
+        value: form.find(`[name="nobukti"]`).val()
+      })
+      data.push({
+        name: 'tglbukti',
+        value: form.find(`[name="tglbukti"]`).val()
+      })
+      data.push({
+        name: 'tglproses',
+        value: form.find(`[name="tglproses"]`).val()
+      })
+      data.push({
+        name: 'tgljatuhtempo',
+        value: form.find(`[name="tgljatuhtempo"]`).val()
+      })
+      data.push({
+        name: 'agen',
+        value: form.find(`[name="agen"]`).val()
+      })
+      data.push({
+        name: 'agen_id',
+        value: form.find(`[name="agen_id"]`).val()
+      })
 
       $.each(selectedRows, function(index, item) {
         data.push({
@@ -173,9 +239,27 @@
           value: item
         })
       });
+      $.each(selectedNoPolisi, function(index, item) {
+        data.push({
+          name: 'nopolisi_detail[]',
+          value: item
+        })
+      });
+      $.each(selectedGandengan, function(index, item) {
+        data.push({
+          name: 'gandengan_detail[]',
+          value: item
+        })
+      });
       $.each(selectedTglTrip, function(index, item) {
         data.push({
           name: 'tgltrip_detail[]',
+          value: item
+        })
+      });
+      $.each(selectedTglAkhir, function(index, item) {
+        data.push({
+          name: 'tglkembali_detail[]',
           value: item
         })
       });
@@ -191,9 +275,15 @@
           value: parseFloat(item.replaceAll(',', ''))
         })
       });
-      $.each(selectedNoPolisi, function(index, item) {
+      $.each(selectedJenisOrder, function(index, item) {
         data.push({
-          name: 'nopolisi_detail[]',
+          name: 'jenisorder_detail[]',
+          value: item
+        })
+      });
+      $.each(selectedNamaGudang, function(index, item) {
+        data.push({
+          name: 'namagudang_detail[]',
           value: item
         })
       });
@@ -275,9 +365,16 @@
 
           id = response.data.id
 
-          $('#jqGrid').trigger('reloadGrid', {
-            page: response.data.page
-          })
+          $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
+          $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
+          $('#jqGrid').jqGrid('setGridParam', {
+            page: response.data.page,
+            postData: {
+              tgldari: dateFormat(response.data.tgldariheader),
+              tglsampai: dateFormat(response.data.tglsampaiheader)
+            }
+          }).trigger('reloadGrid');
+          clearSelectedRows()
           if (id == 0) {
             $('#detail').jqGrid().trigger('reloadGrid')
           }
@@ -330,27 +427,41 @@
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
       success: response => {
-        var kodenobukti = response.kodenobukti
-        if (kodenobukti == '1') {
-          var kodestatus = response.kodestatus
-          if (kodestatus == '1') {
-            showDialog(response.message['keterangan'])
-          } else {
-            if (Aksi == 'EDIT') {
-              editInvoiceChargeGandenganHeader(Id)
-            }
-            if (Aksi == 'DELETE') {
-              deleteInvoiceChargeGandenganHeader(Id)
-            }
-          }
-
+        var error = response.error
+        if (error) {
+          showDialog(response)
         } else {
-          showDialog(response.message['keterangan'])
+          cekValidasiAksi(Id, Aksi)
         }
+
       }
     })
   }
 
+  function cekValidasiAksi(Id, Aksi) {
+    $.ajax({
+      url: `{{ config('app.api_url') }}invoicechargegandenganheader/${Id}/cekvalidasiAksi`,
+      method: 'POST',
+      dataType: 'JSON',
+      beforeSend: request => {
+        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+      },
+      success: response => {
+        var error = response.error
+        if (error) {
+          showDialog(response)
+        } else {
+          if (Aksi == 'EDIT') {
+            editInvoiceChargeGandenganHeader(Id)
+          }
+          if (Aksi == 'DELETE') {
+            deleteInvoiceChargeGandenganHeader(Id)
+          }
+        }
+
+      }
+    })
+  }
 
 
   function createInvoiceChargeGandenganHeader() {
@@ -371,6 +482,8 @@
     $('#table_body').html('')
 
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+    $('#crudForm').find('[name=tglproses]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+    $('#crudForm').find('[name=tgljatuhtempo]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
   }
 
   function editInvoiceChargeGandenganHeader(invoiceChargeGandenganHeader) {
@@ -394,11 +507,13 @@
       ])
       .then(() => {
         $('#crudModal').modal('show')
-        $('#crudForm [name=tglbukti]').attr('readonly', true)
-        $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
+        // $('#crudForm [name=tglbukti]').attr('readonly', true)
+        // $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
+        form.find(`[name="agen"]`).parent('.input-group').find('.button-clear').remove()
+        form.find(`[name="agen"]`).parent('.input-group').find('.input-group-append').remove()
       })
       .catch((error) => {
-        showDialog(error.statusText)
+        showDialog(error.responseJSON)
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
@@ -419,16 +534,18 @@
     $('#crudModalTitle').text('Delete Invoice Charge Gandengan')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-
+    $('#btnTampil').prop('disabled', true)
     Promise
       .all([
         showInvoiceChargeGandenganHeader(form, invoiceChargeGandenganHeader)
       ])
       .then(() => {
         $('#crudModal').modal('show')
+        $('#crudForm [name=tglbukti]').attr('readonly', true)
+        $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
       })
       .catch((error) => {
-        showDialog(error.statusText)
+        showDialog(error.responseJSON)
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
@@ -507,7 +624,7 @@
               }
             },
             formatter: (value, rowOptions, rowData) => {
-              return `<input type="checkbox" name="id_detail[]" value="${rowData.id}" ${disabled} onchange="checkboxHandler(this)">`
+              return `<input type="checkbox" name="idgrid[]" value="${rowData.id}" ${disabled} onchange="checkboxHandler(this)">`
             },
           },
           {
@@ -521,8 +638,17 @@
             name: 'jobtrucking',
           },
           {
-            label: 'TGL BUKTI',
+            label: 'TGL MASUK GUDANG',
             name: 'tgltrip',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
+          {
+            label: 'TGL KELUAR GUDANG',
+            name: 'tglkembali',
             formatter: "date",
             formatoptions: {
               srcformat: "ISO8601Long",
@@ -541,8 +667,32 @@
             formatter: currencyFormat,
           },
           {
+            label: 'Jenis Order',
+            name: 'jenisorder',
+          },
+          {
+            label: 'Nama Gudang',
+            name: 'namagudang',
+          },
+          {
             label: 'No Polisi',
             name: 'nopolisi',
+          },
+          {
+            label: 'Gandengan',
+            name: 'gandengan',
+          },
+          {
+            label: 'trado_id',
+            name: 'trado_id',
+            hidden: true,
+            search: false
+          },
+          {
+            label: 'gandengan_id',
+            name: 'gandengan_id',
+            hidden: true,
+            search: false
           },
           {
             label: 'keterangan',
@@ -558,9 +708,17 @@
         rowList: [10, 20, 50, 0],
         toolbar: [true, "top"],
         sortable: true,
+        sortname: sortnameInvoice,
+        sortorder: sortorderInvoice,
+        page: pageInvoice,
         viewrecords: true,
         footerrow: true,
         userDataOnFooter: true,
+        prmNames: {
+          sort: 'sortIndex',
+          order: 'sortOrder',
+          rows: 'limit'
+        },
         jsonReader: {
           root: 'data',
           total: 'attributes.totalPages',
@@ -576,12 +734,14 @@
           let grid = $(this)
           changeJqGridRowListText()
           initResize($(this))
-          console.log(data);
-          let nominals = $(this).jqGrid("getCol", "nominal")
-          let totalNominal = 0
-          if (nominals.length > 0) {
-            totalNominal = nominals.reduce((previousValue, currentValue) => previousValue + currencyUnformat(currentValue), 0)
-          }
+
+          sortnameInvoice = $(this).jqGrid("getGridParam", "sortname")
+          sortorderInvoice = $(this).jqGrid("getGridParam", "sortorder")
+          totalRecordInvoice = $(this).getGridParam("records")
+          limitInvoice = $(this).jqGrid('getGridParam', 'postData').limit
+          postDataInvoice = $(this).jqGrid('getGridParam', 'postData')
+          triggerClick = false
+
           $('.clearsearchclass').click(function() {
             clearColumnSearch($(this))
           })
@@ -590,10 +750,14 @@
           }
           $('#modalgrid').setSelection($('#modalgrid').getDataIDs()[0])
           setHighlight($(this))
-          $(this).jqGrid('footerData', 'set', {
-            nobukti: 'Total:',
-            nominal: totalNominal,
-          }, true)
+
+          if (data.attributes) {
+
+            $(this).jqGrid('footerData', 'set', {
+              jobtrucking: 'Total:',
+              nominal_detail: data.attributes.totalNominal,
+            }, true)
+          }
 
           $.each(selectedRows, function(key, value) {
             $(grid).find('tbody tr').each(function(row, tr) {
@@ -605,7 +769,7 @@
           });
           if (disabled == '') {
             $('#gs_').attr('disabled', false)
-          }else{
+          } else {
             $('#gs_').attr('disabled', true)
           }
         }
@@ -633,49 +797,70 @@
   function clearSelectedRows(element = null) {
     selectedRows = []
     selectedJobTrucking = [];
+    selectedNoPolisi = [];
+    selectedGandengan = [];
     selectedTglTrip = [];
+    selectedTglAkhir = [];
     selectedJumlahHari = [];
     selectedNominal = [];
-    selectedNoPolisi = [];
+    selectedJenisOrder = [];
+    selectedNamaGudang = [];
     selectedKeterangan = [];
     $('#modalgrid').trigger('reloadGrid')
   }
 
   function selectAllRows() {
-    if (aksi == 'edit') {
-      Id = $(`#crudForm`).find(`[name="id"]`).val()
-      url = `${apiUrl}invoicechargegandenganheader/${Id}/getinvoicegandengan`
-    } else {
-      url = `${apiUrl}orderantrucking/getorderantrip`
-    }
     agen_id = $('#crudForm').find(`[name=agen_id]`).val()
     tglproses = $('#crudForm').find(`[name=tglproses]`).val()
+
     $.ajax({
-      url: url,
+      url: `${apiUrl}orderantrucking/getorderantrip`,
       method: 'GET',
       dataType: 'JSON',
       data: {
         limit: 0,
         tglbukti: tglproses,
         agen: agen_id,
+        sortIndex: 'jobtrucking',
+        aksi: $('#crudForm').data('action'),
+        idInvoice: $('#crudForm').find(`[name=id]`).val()
       },
       headers: {
         Authorization: `Bearer ${accessToken}`
       },
       success: (response) => {
+        selectedRows = []
+        selectedJobTrucking = [];
+        selectedNoPolisi = [];
+        selectedGandengan = [];
+        selectedTglTrip = [];
+        selectedTglAkhir = [];
+        selectedJumlahHari = [];
+        selectedNominal = [];
+        selectedJenisOrder = [];
+        selectedNamaGudang = [];
+        selectedKeterangan = [];
+
         selectedRows = response.data.map((data) => data.id)
         selectedJobTrucking = response.data.map((data) => data.jobtrucking)
+        selectedNoPolisi = response.data.map((data) => data.trado_id)
+        selectedGandengan = response.data.map((data) => data.gandengan_id)
         selectedTglTrip = response.data.map((data) => data.tgltrip)
+        selectedTglAkhir = response.data.map((data) => data.tglkembali)
         selectedJumlahHari = response.data.map((data) => data.jumlahhari)
         selectedNominal = response.data.map((data) => data.nominal_detail)
-        selectedNoPolisi = response.data.map((data) => data.nopolisi)
+        selectedJenisOrder = response.data.map((data) => data.jenisorder)
+        selectedNamaGudang = response.data.map((data) => data.namagudang)
         selectedKeterangan = response.data.map((data) => data.keterangan)
 
         $('#modalgrid').jqGrid('setGridParam', {
-          url: url,
+          url: `${apiUrl}orderantrucking/getorderantrip`,
           postData: {
             tglbukti: tglproses,
             agen: agen_id,
+            sortIndex: 'jobtrucking',
+            aksi: $('#crudForm').data('action'),
+            idInvoice: $('#crudForm').find(`[name=id]`).val()
           },
           datatype: "json"
         }).trigger('reloadGrid');
@@ -700,12 +885,43 @@
           limit: 0,
           tglbukti: tglproses,
           agen: agen_id,
+          sortIndex: 'jobtrucking',
+          aksi: $('#crudForm').data('action'),
+          idInvoice: $('#crudForm').find(`[name=id]`).val()
         },
         headers: {
           Authorization: `Bearer ${accessToken}`
         },
         success: (response) => {
           response.url = `${apiUrl}orderantrucking/getorderantrip`
+          selectedRows = []
+          selectedJobTrucking = [];
+          selectedNoPolisi = [];
+          selectedGandengan = [];
+          selectedTglTrip = [];
+          selectedTglAkhir = [];
+          selectedJumlahHari = [];
+          selectedNominal = [];
+          selectedJenisOrder = [];
+          selectedNamaGudang = [];
+          selectedKeterangan = [];
+
+          $.each(response.data, (index, detail) => {
+            if (detail.noinvoice != '') {
+
+              selectedRows.push(detail.id)
+              selectedJobTrucking.push(detail.jobtrucking)
+              selectedNoPolisi.push(detail.trado_id)
+              selectedGandengan.push(detail.gandengan_id)
+              selectedTglTrip.push(detail.tgltrip)
+              selectedTglAkhir.push(detail.tglkembali)
+              selectedJumlahHari.push(detail.jumlahhari)
+              selectedNominal.push(detail.nominal_detail)
+              selectedJenisOrder.push(detail.jenisorder)
+              selectedNamaGudang.push(detail.namagudang)
+              selectedKeterangan.push(detail.keterangan)
+            }
+          })
           resolve(response)
         },
         error: error => {
@@ -732,10 +948,14 @@
     if (element.checked) {
       selectedRows.push($(element).val())
       selectedJobTrucking.push($(element).parents('tr').find(`td[aria-describedby="modalgrid_jobtrucking"]`).text())
+      selectedNoPolisi.push($(element).parents('tr').find(`td[aria-describedby="modalgrid_trado_id"]`).text())
+      selectedGandengan.push($(element).parents('tr').find(`td[aria-describedby="modalgrid_gandengan_id"]`).text())
       selectedTglTrip.push($(element).parents('tr').find(`td[aria-describedby="modalgrid_tgltrip"]`).text())
+      selectedTglAkhir.push($(element).parents('tr').find(`td[aria-describedby="modalgrid_tglkembali"]`).text())
       selectedJumlahHari.push($(element).parents('tr').find(`td[aria-describedby="modalgrid_jumlahhari"]`).text())
       selectedNominal.push($(element).parents('tr').find(`td[aria-describedby="modalgrid_nominal_detail"]`).text())
-      selectedNoPolisi.push($(element).parents('tr').find(`td[aria-describedby="modalgrid_nopolisi"]`).text())
+      selectedJenisOrder.push($(element).parents('tr').find(`td[aria-describedby="modalgrid_jenisorder"]`).text())
+      selectedNamaGudang.push($(element).parents('tr').find(`td[aria-describedby="modalgrid_namagudang"]`).text())
       selectedKeterangan.push($(element).parents('tr').find(`td[aria-describedby="modalgrid_keterangan"]`).text())
       $(element).parents('tr').addClass('bg-light-blue')
     } else {
@@ -744,10 +964,14 @@
         if (selectedRows[i] == value) {
           selectedRows.splice(i, 1);
           selectedJobTrucking.splice(i, 1);
+          selectedNoPolisi.splice(i, 1);
+          selectedGandengan.splice(i, 1);
           selectedTglTrip.splice(i, 1);
+          selectedTglAkhir.splice(i, 1);
           selectedJumlahHari.splice(i, 1);
           selectedNominal.splice(i, 1);
-          selectedNoPolisi.splice(i, 1);
+          selectedJenisOrder.splice(i, 1);
+          selectedNamaGudang.splice(i, 1);
           selectedKeterangan.splice(i, 1);
         }
       }
@@ -763,6 +987,7 @@
       postData: {
         tglbukti: $('#crudForm').find(`[name=tglproses]`).val(),
         agen: $('#crudForm').find(`[name=agen_id]`).val(),
+        sortIndex: 'jobtrucking',
         aksi: 'show'
       },
       datatype: "json"
@@ -822,8 +1047,6 @@
 
   function showInvoiceChargeGandenganHeader(form, invoiceChargeGandenganHeader) {
     return new Promise((resolve, reject) => {
-      form.find(`[name="tglbukti"]`).prop('readonly', true)
-      form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
 
       $.ajax({
         url: `${apiUrl}invoicechargegandenganheader/${invoiceChargeGandenganHeader}`,
@@ -836,14 +1059,14 @@
           sum = 0;
           $.each(response.data, (index, value) => {
             let element = form.find(`[name="${index}"]`)
-            if (element.attr("name") == 'tglbukti') {
-              var result = value.split('-');
-              element.val(result[2] + '-' + result[1] + '-' + result[0]);
-            } else if (element.attr("name") == 'tglproses') {
-              var result = value.split('-');
-              element.val(result[2] + '-' + result[1] + '-' + result[0]);
+            if (element.hasClass('datepicker')) {
+              element.val(dateFormat(value))
             } else {
               element.val(value)
+            }
+
+            if (index == 'agen') {
+              element.data('current-value', value).prop('readonly', true)
             }
           })
           $('#detailList tbody').html('')
@@ -852,10 +1075,14 @@
 
               selectedRows.push(detail.id)
               selectedJobTrucking.push(detail.jobtrucking)
+              selectedNoPolisi.push(detail.trado_id)
+              selectedGandengan.push(detail.gandengan_id)
               selectedTglTrip.push(detail.tgltrip)
+              selectedTglAkhir.push(detail.tglkembali)
               selectedJumlahHari.push(detail.jumlahhari)
               selectedNominal.push(detail.nominal_detail)
-              selectedNoPolisi.push(detail.nopolisi)
+              selectedJenisOrder.push(detail.jenisorder)
+              selectedNamaGudang.push(detail.namagudang)
               selectedKeterangan.push(detail.keterangan)
             }
           })
@@ -865,6 +1092,7 @@
               postData: {
                 tglbukti: $('#crudForm').find(`[name=tglproses]`).val(),
                 agen: $('#crudForm').find(`[name=agen_id]`).val(),
+                sortIndex: 'jobtrucking',
               },
               datatype: "json"
             }).trigger('reloadGrid');
@@ -876,6 +1104,27 @@
         }
       })
     })
+  }
+
+  function setTglJatuhTempo(top = 0) {
+    // Tanggal awal dalam format "YYYY-MM-DD"
+    const tanggalAwal = new Date();
+
+    // Menambahkan jumlah hari (34 hari)
+    const jumlahHari = Math.floor(top);
+    tanggalAwal.setDate(tanggalAwal.getDate() + jumlahHari);
+
+    // Mendapatkan tanggal setelah ditambahkan 34 hari
+    const tahun = tanggalAwal.getFullYear();
+    const bulan = String(tanggalAwal.getMonth() + 1).padStart(2, "0"); // Ditambah 1 karena Januari dimulai dari 0
+    const tanggal = String(tanggalAwal.getDate()).padStart(2, "0");
+
+    $('#crudForm').find("[name=tgljatuhtempo]").val(tanggal + "-" + bulan + "-" + tahun);
+    $('#crudForm').find("[name=tgljatuhtempo]").prop('readonly', true);
+    $('#crudForm').find("[name=tgljatuhtempo]").parent('.input-group').find('.input-group-append').children().prop('disabled', true);
+    // $('#crudForm').find("[name=tgljatuhtempo]").parent('.input-group').find('.input-group-append').remove()
+
+
   }
 
   function initLookup() {
@@ -890,6 +1139,7 @@
       },
       onSelectRow: (agen, element) => {
         element.val(agen.namaagen)
+        setTglJatuhTempo(agen.top);
         $(`#${element[0]['name']}Id`).val(agen.id)
         element.data('currentValue', element.val())
       },

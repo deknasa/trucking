@@ -1,16 +1,16 @@
 @extends('layouts.master')
 
 @section('content')
-    <!-- Grid -->
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-12">
-                <table id="jqGrid"></table>
-            </div>
-        </div>
+<!-- Grid -->
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <table id="jqGrid"></table>
     </div>
-
   </div>
+</div>
+
+</div>
 </div>
 
 @include('supplier._modal')
@@ -239,16 +239,16 @@
                         }
                         $i++;
                       endforeach
-                ?>`,        
+                      ?>`,
               dataInit: function(element) {
                 $(element).select2({
-                    width: 'resolve',
-                    theme: "bootstrap4"
+                  width: 'resolve',
+                  theme: "bootstrap4"
                 });
               }
             },
             formatter: (value, options, rowData) => {
-              let statusDaftarHarga = JSON.parse(value)  
+              let statusDaftarHarga = JSON.parse(value)
               let formattedValue = $(`
                 <div class="badge" style="background-color: ${statusDaftarHarga.WARNA}; color: #fff;">
                   <span>${statusDaftarHarga.SINGKATAN}</span>
@@ -268,15 +268,15 @@
             stype: 'select',
             searchoptions: {
               value: `<?php
-                $i = 1;
-                foreach ($data['comboaktif'] as $status):
-                  echo "$status[param]:$status[parameter]";
-                  if ($i !== count($data['comboaktif'])) {
-                    echo ';';
-                  }
-                  $i++;
-                endforeach;
-                ?>`,
+                      $i = 1;
+                      foreach ($data['comboaktif'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['comboaktif'])) {
+                          echo ';';
+                        }
+                        $i++;
+                      endforeach;
+                      ?>`,
               dataInit: function(element) {
                 $(element).select2({
                   width: 'resolve',
@@ -366,6 +366,13 @@
         loadComplete: function(data) {
           changeJqGridRowListText()
 
+          if (data.data.length === 0) {
+            $('#jqGrid').each((index, element) => {
+              abortGridLastRequest($(element))
+              clearGridHeader($(element))
+            })
+          }
+
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))
@@ -414,7 +421,8 @@
           } else {
             $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
           }
-
+          $('#left-nav').find('button').attr('disabled', false)
+          permission()
           setHighlight($(this))
         },
       })
@@ -429,6 +437,7 @@
         beforeSearch: function() {
           abortGridLastRequest($(this))
 
+          $('#left-nav').find(`button:not(#add)`).attr('disabled', 'disabled')
           clearGlobalSearch($('#jqGrid'))
         },
       })
@@ -448,8 +457,11 @@
             class: 'btn btn-success btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-              editSupplier(selectedId)
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Harap pilih salah satu record')
+              } else {
+                editSupplier(selectedId)
+              }
             }
           },
           {
@@ -524,30 +536,33 @@
       .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('supplier', 'store') }}`) {
-      $('#add').attr('disabled', 'disabled')
-    }
+    function permission() {
 
-    if (!`{{ $myAuth->hasPermission('supplier', 'update') }}`) {
-      $('#edit').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('supplier', 'store') }}`) {
+        $('#add').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('supplier', 'destroy') }}`) {
-      $('#delete').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('supplier', 'update') }}`) {
+        $('#edit').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('supplier', 'export') }}`) {
-      $('#export').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('supplier', 'destroy') }}`) {
+        $('#delete').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('supplier', 'report') }}`) {
-      $('#report').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('supplier', 'export') }}`) {
+        $('#export').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('supplier', 'approval') }}`) {
-      $('#approval').addClass('ui-disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('supplier', 'report') }}`) {
+        $('#report').attr('disabled', 'disabled')
+      }
 
+      if (!`{{ $myAuth->hasPermission('supplier', 'approval') }}`) {
+        $('#approval').addClass('ui-disabled')
+      }
+
+    }
     $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {
         $.each(autoNumericElements, (index, autoNumericElement) => {
@@ -607,15 +622,16 @@
 
 
       getCekExport(params).then((response) => {
-        if ($('#rangeModal').data('action') == 'export') {
-          $.ajax({
-              url: '{{ config('app.api_url') }}supplier/export?' + params,
+          if ($('#rangeModal').data('action') == 'export') {
+            $.ajax({
+              url: `{{ config('app.api_url ') }}supplier/export?` + params,
               type: 'GET',
               beforeSend: function(xhr) {
-                  xhr.setRequestHeader('Authorization', 'Bearer {{ session('access_token') }}');
+                xhr.setRequestHeader('Authorization', `Bearer {{ session('
+                  access_token ') }}`);
               },
               xhrFields: {
-                  responseType: 'arraybuffer'
+                responseType: 'arraybuffer'
               },
               success: function(response, status, xhr) {
                 if (xhr.status === 200) {
@@ -632,21 +648,21 @@
                 }
               },
               error: function(xhr, status, error) {
-                                    $('#processingLoader').addClass('d-none')
-                submitButton.prop('disabled',false)
+                $('#processingLoader').addClass('d-none')
+                submitButton.prop('disabled', false)
               }
-          }).always(() => {
+            }).always(() => {
               $('#processingLoader').addClass('d-none')
-              submitButton.prop('disabled',false)
-          })
-        } else if ($('#rangeModal').data('action') == 'report') {
+              submitButton.prop('disabled', false)
+            })
+          } else if ($('#rangeModal').data('action') == 'report') {
             window.open(`{{ route('supplier.report') }}?${params}`)
-            submitButton.prop('disabled',false)
+            submitButton.prop('disabled', false)
             $('#processingLoader').addClass('d-none')
             $('#rangeModal').modal('hide')
-        }
-          
-      })
+          }
+
+        })
         .catch((error) => {
 
           if (error.status === 422) {
@@ -670,7 +686,7 @@
             });
 
             $(".is-invalid").first().focus();
-          $('#processingLoader').addClass('d-none')
+            $('#processingLoader').addClass('d-none')
           } else {
             showDialog(error.statusText)
           }
@@ -751,4 +767,3 @@
 </script>
 @endpush()
 @endsection
-

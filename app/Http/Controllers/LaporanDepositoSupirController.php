@@ -31,7 +31,6 @@ class LaporanDepositoSupirController extends MyController
     {
         $detailParams = [
             'sampai' => $request->sampai,
-            'jenis' => $request->jenis,
         ];
 
         $header = Http::withHeaders(request()->header())
@@ -174,7 +173,7 @@ class LaporanDepositoSupirController extends MyController
         //total
         $total_start_row = $detail_start_row;
         $sheet->mergeCells('A' . $total_start_row . ':D' . $total_start_row);
-        $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A' . $total_start_row . ':F' . $total_start_row)->applyFromArray($styleArray2)->getFont()->setBold(true);
+        $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':F' . $total_start_row)->applyFromArray($styleArray2)->getFont()->setBold(true);
         
         $totalnomdeposito = "=SUM(E6:E" . ($detail_start_row-2) . ")";
         $sheet->setCellValue("E$total_start_row", $totalnomdeposito)->getStyle("E$total_start_row")->applyFromArray($style_number);

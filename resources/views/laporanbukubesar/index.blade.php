@@ -48,6 +48,10 @@
                                     <i class="fas fa-print"></i>
                                     Report
                                 </button>
+                                <button type="button" id="btnExport" class="btn btn-warning mr-1 ">
+                                    <i class="fas fa-file-export"></i>
+                                    Export
+                                </button>
                             </div>
                         </div>
 
@@ -117,10 +121,12 @@
         let sampai = $('#crudForm').find('[name=sampai]').val()
         let coadari_id = $('#crudForm').find('[name=coadari_id]').val()
         let coasampai_id = $('#crudForm').find('[name=coasampai_id]').val()
+        let coadari = $('#crudForm').find('[name=coadari]').val()
+        let coasampai = $('#crudForm').find('[name=coasampai]').val()
 
         if (dari != '' && sampai != '') {
 
-            window.open(`{{ route('laporanbukubesar.export') }}?dari=${dari}&sampai=${sampai}&coadari_id=${coadari_id}&coasampai_id=${coasampai_id}`)
+            window.open(`{{ route('laporanbukubesar.export') }}?dari=${dari}&sampai=${sampai}&coadari=${coadari}&coasampai=${coasampai}&coadari_id=${coadari_id}&coasampai_id=${coasampai_id}`)
         } else {
             showDialog('ISI SELURUH KOLOM')
         }

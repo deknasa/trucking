@@ -231,8 +231,14 @@
           $('#crudModal').find('#crudForm').trigger('reset')
           $('#crudModal').modal('hide')
 
+          $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
+          $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
           $('#jqGrid').jqGrid('setGridParam', {
-            page: response.data.page
+            page: response.data.page,
+            postData: {
+              tgldari: dateFormat(response.data.tgldariheader),
+              tglsampai: dateFormat(response.data.tglsampaiheader)
+            }
           }).trigger('reloadGrid');
 
           if (id == 0) {
@@ -331,8 +337,6 @@
       ])
       .then(() => {
         $('#crudModal').modal('show')
-        form.find(`[name="tglbukti"]`).prop('readonly', true)
-        form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
       })
       .catch((error) => {
         showDialog(error.statusText)
@@ -383,18 +387,11 @@
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
       success: response => {
-        var kodenobukti = response.kodenobukti
-        if (kodenobukti == '1') {
-          var kodestatus = response.kodestatus
-          if (kodestatus == '1') {
-            showDialog(response.message['keterangan'])
-          } else {
-
-            cekValidasiAksi(Id, Aksi)
-          }
-
+        var error = response.error
+        if (error) {
+          showDialog(response)
         } else {
-          showDialog(response.message['keterangan'])
+          cekValidasiAksi(Id, Aksi)
         }
       }
     })
@@ -409,9 +406,9 @@
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
       success: response => {
-        var kondisi = response.kondisi
-        if (kondisi == true) {
-          showDialog(response.message['keterangan'])
+        var error = response.error
+        if (error) {
+          showDialog(response)
         } else {
           if (Aksi == 'EDIT') {
             editPiutangHeader(Id)
@@ -554,6 +551,26 @@
       })
     }
   }
+  function setTglJatuhTempo(top = 0) {
+    // Tanggal awal dalam format "YYYY-MM-DD"
+    const tanggalAwal = new Date();
+
+    // Menambahkan jumlah hari (34 hari)
+    const jumlahHari = Math.floor(top);
+    tanggalAwal.setDate(tanggalAwal.getDate() + jumlahHari);
+
+    // Mendapatkan tanggal setelah ditambahkan 34 hari
+    const tahun = tanggalAwal.getFullYear();
+    const bulan = String(tanggalAwal.getMonth() + 1).padStart(2, "0"); // Ditambah 1 karena Januari dimulai dari 0
+    const tanggal = String(tanggalAwal.getDate()).padStart(2, "0");
+
+    $('#crudForm').find("[name=tgljatuhtempo]").val(tanggal + "-" + bulan + "-" + tahun);
+    $('#crudForm').find("[name=tgljatuhtempo]").prop('readonly', true);
+    $('#crudForm').find("[name=tgljatuhtempo]").parent('.input-group').find('.input-group-append').children().prop('disabled', true);
+    // $('#crudForm').find("[name=tgljatuhtempo]").parent('.input-group').find('.input-group-append').remove()
+
+
+  }
 
   function initLookup() {
     $('.agen-lookup').lookup({
@@ -568,6 +585,7 @@
       },
       onSelectRow: (agen, element) => {
         $('#crudForm [name=agen_id]').first().val(agen.id)
+        setTglJatuhTempo(agen.top);
         element.val(agen.namaagen)
         element.data('currentValue', element.val())
       },

@@ -1,13 +1,3 @@
-<!-- Grid -->
-<div class="container-fluid my-4">
-  <div class="row">
-    <div class="col-12">
-      <table id="detail"></table>
-      <div id="detailPager"></div>
-    </div>
-  </div>
-</div>
-
 @push('scripts')
 <script>
   let sortnameDetail = 'nobukti'
@@ -22,22 +12,39 @@
   function loadDetailGrid(id) {
 
     $("#detail").jqGrid({
-        url: `${apiUrl}pendapatansupirdetail`,
-        mtype: "GET",
+        datatype: 'local',
+        data: [],
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
-        datatype: "local",
+        idPrefix: 'detail',
         colModel: [{
             label: 'NO BUKTI',
             name: 'nobukti',
           },
           {
-            label: 'SUPIR',
-            name: 'supir_id',
+            label: 'NO BUKTI TRIP',
+            name: 'nobuktitrip',
           },
           {
-            label: 'KETERANGAN',
-            name: 'keterangan',
+            label: 'TGL TRIP',
+            name: 'tgltrip',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
+          {
+            label: 'NO BUKTI RIC',
+            name: 'nobuktirincian',
+          },
+          {
+            label: 'DARI',
+            name: 'dari',
+          },
+          {
+            label: 'SAMPAI',
+            name: 'sampai',
           },
           {
             label: 'NOMINAL',
@@ -124,7 +131,7 @@
         disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
           abortGridLastRequest($(this))
-          
+
           clearGlobalSearch($('#detail'))
         },
       })
@@ -146,9 +153,9 @@
   }
 
   function loadDetailData(id) {
-        abortGridLastRequest($('#detail'))
+    abortGridLastRequest($('#detail'))
 
-        $('#detail').setGridParam({
+    $('#detail').setGridParam({
       url: `${apiUrl}pendapatansupirdetail`,
       datatype: "json",
       postData: {

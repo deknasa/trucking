@@ -36,6 +36,7 @@ class KartuStokController extends MyController
             'sampai' => $request->sampai,
             'filter' => $request->filter,
             'datafilter' => $request->datafilter,
+            'limit'=>0
         ];
 
         $header = Http::withHeaders(request()->header())
@@ -66,6 +67,7 @@ class KartuStokController extends MyController
             'sampai' => $request->sampai,
             'filter' => $request->filter,
             'datafilter' => $request->datafilter,
+            'limit'=>0
         ];
 
         $responses = Http::withHeaders($request->header())
@@ -73,6 +75,7 @@ class KartuStokController extends MyController
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'kartustok/export', $detailParams);
 
+        
         $dataHeader = $responses['dataheader'];
         $kartustok = $responses['data'];
         $user = Auth::user();

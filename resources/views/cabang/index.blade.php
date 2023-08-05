@@ -158,6 +158,13 @@
                 },
                 loadComplete: function(data) {
                     changeJqGridRowListText()
+
+                    if (data.data.length === 0) {
+                        $('#jqGrid').each((index, element) => {
+                            abortGridLastRequest($(element))
+                            clearGridHeader($(element))
+                        })
+                    }
                     $(document).unbind('keydown')
                     setCustomBindKeys($(this))
                     initResize($(this))
@@ -323,7 +330,7 @@
             if (!`{{ $myAuth->hasPermission('cabang', 'report') }}`) {
                 $('#report').attr('disabled', 'disabled')
             }
-        } 
+        }
 
         $('#rangeModal').on('shown.bs.modal', function() {
             if (autoNumericElements.length > 0) {
@@ -386,10 +393,10 @@
             getCekExport(params).then((response) => {
                 if ($('#rangeModal').data('action') == 'export') {
                     $.ajax({
-                        url: '{{ config('app.api_url') }}cabang/export?' + params,
+                        url: `{{ config('app.api_url') }}cabang/export?` + params,
                         type: 'GET',
                         beforeSend: function(xhr) {
-                            xhr.setRequestHeader('Authorization', 'Bearer {{ session('access_token') }}');
+                            xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
                         },
                         xhrFields: {
                             responseType: 'arraybuffer'
@@ -409,7 +416,7 @@
                             }
                         },
                         error: function(xhr, status, error) {
-                                    $('#processingLoader').addClass('d-none')
+                            $('#processingLoader').addClass('d-none')
                             submitButton.removeAttr('disabled')
                         }
                     }).always(() => {
@@ -456,7 +463,7 @@
                         }
                     });
                     $(".is-invalid").first().focus();
-          $('#processingLoader').addClass('d-none')
+                    $('#processingLoader').addClass('d-none')
 
                 } else {
                     showDialog(error.statusText)

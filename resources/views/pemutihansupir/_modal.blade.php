@@ -273,11 +273,14 @@
         value: form.find(`[name="penerimaan_nobukti"]`).val()
       })
 
+
+      let rowLength = 0
       $.each(selectedRowsPosting, function(index, item) {
         data.push({
           name: 'postingId[]',
           value: item
         })
+        rowLength++
       });
       $.each(selectedBuktiPosting, function(index, item) {
         data.push({
@@ -303,6 +306,7 @@
           name: 'nonpostingId[]',
           value: item
         })
+        rowLength++
       });
       $.each(selectedBuktiNonPosting, function(index, item) {
         data.push({
@@ -323,6 +327,10 @@
         })
       });
 
+      data.push({
+        name: 'jumlahdetail',
+        value: rowLength
+      })
       data.push({
         name: 'sortIndex',
         value: $('#jqGrid').getGridParam().sortname
@@ -395,8 +403,14 @@
           $('#crudModal').find('#crudForm').trigger('reset')
           $('#crudModal').modal('hide')
 
+          $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
+          $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
           $('#jqGrid').jqGrid('setGridParam', {
-            page: response.data.page
+            page: response.data.page,
+            postData: {
+              tgldari: dateFormat(response.data.tgldariheader),
+              tglsampai: dateFormat(response.data.tglsampaiheader)
+            }
           }).trigger('reloadGrid');
 
           if (id == 0) {
@@ -419,7 +433,7 @@
             // } else if (error.responseJSON.message) {
             //   showDialog(error.responseJSON)
             // } else {
-              showDialog(error.responseJSON)
+            showDialog(error.responseJSON)
             // }
             // if (error.responseJSON.message) {
             //   showDialog(error.responseJSON)
@@ -493,21 +507,21 @@
       .all([
         showPemutihanSupir(form, pemutihanId)
       ])
-        .then(() => {
-          $('#crudModal').modal('show')
-          $('#crudForm [name=tglbukti]').attr('readonly', true)
-          $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
-          $('#crudForm [name=supir]').siblings('.input-group-append').remove()
-          $('#crudForm [name=supir]').siblings('.button-clear').remove()
-          $('#crudForm [name=bank]').siblings('.button-clear').remove()
-          $('#crudForm [name=bank]').siblings('.input-group-append').remove()
-        })
-        .catch((error) => {
-          showDialog(error.statusText)
-        })
-        .finally(() => {
-          $('.modal-loader').addClass('d-none')
-        })
+      .then(() => {
+        $('#crudModal').modal('show')
+        // $('#crudForm [name=tglbukti]').attr('readonly', true)
+        // $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
+        $('#crudForm [name=supir]').siblings('.input-group-append').remove()
+        $('#crudForm [name=supir]').siblings('.button-clear').remove()
+        $('#crudForm [name=bank]').siblings('.button-clear').remove()
+        $('#crudForm [name=bank]').siblings('.input-group-append').remove()
+      })
+      .catch((error) => {
+        showDialog(error.statusText)
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
 
   }
 
@@ -531,15 +545,18 @@
       .all([
         showPemutihanSupir(form, pemutihanId)
       ])
-        .then(() => {
-          $('#crudModal').modal('show')
-        })
-        .catch((error) => {
-          showDialog(error.statusText)
-        })
-        .finally(() => {
-          $('.modal-loader').addClass('d-none')
-        })
+      .then(() => {
+        $('#crudModal').modal('show')
+        form.find(`[name="tglbukti"]`).prop('readonly', true)
+        form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+
+      })
+      .catch((error) => {
+        showDialog(error.statusText)
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
   }
 
   function tablePost(url) {
@@ -585,7 +602,7 @@
             }
           },
           {
-           label: 'NO BUKTI pengeluaran',
+            label: 'NO BUKTI pengeluaran',
             width: 210,
             name: 'pengeluaran_posting',
             align: 'left'
@@ -692,7 +709,7 @@
         disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
           abortGridLastRequest($(this))
-          
+
           clearGlobalSearch($('#posting'))
         },
       })
@@ -771,7 +788,7 @@
             }
           },
           {
-           label: 'NO BUKTI pengeluaran',
+            label: 'NO BUKTI pengeluaran',
             width: 210,
             name: 'pengeluaran_nonposting',
             align: 'left'
@@ -878,7 +895,7 @@
         disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
           abortGridLastRequest($(this))
-          
+
           clearGlobalSearch($('#nonposting'))
         },
       })
@@ -897,8 +914,6 @@
   function showPemutihanSupir(form, pemutihanId) {
     return new Promise((resolve, reject) => {
       $('#detailList tbody').html('')
-      form.find(`[name="tglbukti"]`).prop('readonly', true)
-      form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
       $.ajax({
         url: `${apiUrl}pemutihansupir/${pemutihanId}`,
         method: 'GET',
@@ -1061,10 +1076,10 @@
     if (aksi == 'edit') {
       pemutihanId = $(`#crudForm`).find(`[name="id"]`).val()
       url = `${pemutihanId}/getEditPost`
-    } else if(aksi == 'delete') {
+    } else if (aksi == 'delete') {
       pemutihanId = $(`#crudForm`).find(`[name="id"]`).val()
       url = `${pemutihanId}/getDeletePost`
-    }else {
+    } else {
       url = 'getPost'
     }
     $.ajax({
@@ -1138,10 +1153,10 @@
     if (aksi == 'edit') {
       pemutihanId = $(`#crudForm`).find(`[name="id"]`).val()
       urlNon = `${pemutihanId}/getEditNonPost`
-    } else if(aksi == 'delete') {
+    } else if (aksi == 'delete') {
       pemutihanId = $(`#crudForm`).find(`[name="id"]`).val()
       urlNon = `${pemutihanId}/getDeleteNonPost`
-    }else {
+    } else {
       urlNon = 'getNonPost'
     }
     $.ajax({

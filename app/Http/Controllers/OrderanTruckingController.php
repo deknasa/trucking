@@ -28,6 +28,7 @@ class OrderanTruckingController extends MyController
             'combolangsir' => $this->combo('list','STATUS LANGSIR','STATUS LANGSIR'),
             'comboperalihan' => $this->combo('list','STATUS PERALIHAN','STATUS PERALIHAN'),
             'comboapproval' => $this->comboApproval('list', 'STATUS APPROVAL', 'STATUS APPROVAL'),
+            'comboapprovaledit' => $this->comboApproval('list', 'STATUS APPROVAL', 'STATUS APPROVAL'),
         ];
 
         
@@ -310,7 +311,7 @@ class OrderanTruckingController extends MyController
         $total_start_row = $detail_start_row;
         //Total
         $sheet->mergeCells('A'.$total_start_row.':N'.$total_start_row);
-        $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A'.$total_start_row.':N'.$total_start_row)->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A'.$total_start_row.':N'.$total_start_row)->applyFromArray($style_number)->getFont()->setBold(true);
         $sheet->setCellValue("O$total_start_row", number_format((float) $nominal, '2', '.', ','))->getStyle("O$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
 
         $sheet->getColumnDimension('A')->setAutoSize(true);

@@ -27,8 +27,8 @@
                         <div class="row">
                             <label class="col-12 col-sm-2 col-form-label mt-2">JENIS STOK<span class="text-danger">*</span></label>
                             <div class="col-sm-4 mt-2">
-                                <input type="hidden" name="kategori_id">
-                                <input type="text" name="kategori" class="form-control kategori-lookup">
+                                <input type="hidden" name="kelompok_id">
+                                <input type="text" name="kelompok" class="form-control kelompok-lookup">
                             </div>
                         </div>
                         <div class="row">
@@ -37,6 +37,10 @@
                                 <button type="button" id="btnPreview" class="btn btn-info mr-1 ">
                                     <i class="fas fa-print"></i>
                                     Report
+                                </button>
+                                <button type="button" id="btnExport" class="btn btn-warning mr-1 ">
+                                    <i class="fas fa-file-export"></i>
+                                    Export
                                 </button>
                             </div>
                         </div>
@@ -76,38 +80,104 @@
         $('#crudForm').find('[name=sampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
 
-        
+
         if (!`{{ $myAuth->hasPermission('laporanklaimpjtsupir', 'report') }}`) {
             $('#btnPreview').attr('disabled', 'disabled')
+        }
+        if (!`{{ $myAuth->hasPermission('laporanklaimpjtsupir', 'export') }}`) {
+            $('#btnExport').attr('disabled', 'disabled')
         }
     })
 
     $(document).on('click', `#btnPreview`, function(event) {
         let sampai = $('#crudForm').find('[name=sampai]').val()
         let dari = $('#crudForm').find('[name=dari]').val()
-        let kategori = $('#crudForm').find('[name=kategori_id]').val()
+        let kelompok_id = $('#crudForm').find('[name=kelompok_id]').val()
+        let kelompok = $('#crudForm').find('[name=kelompok]').val()
 
-        if (dari != '' && sampai != '' && kategori != '') {
+        $.ajax({
+            url: `{{ route('laporanklaimpjtsupir.report') }}`,
+            method: 'GET',
+            data: {
+                sampai: sampai,
+                dari: dari,
+                kelompok: kelompok,
+                kelompok_id: kelompok_id,
+            },
+            success: function(response) {
+                // Handle the success response
+                var newWindow = window.open('', '_blank');
+                newWindow.document.open();
+                newWindow.document.write(response);
+                newWindow.document.close();
+            },
+            error: function(error) {
+                console.log(error)
+                if (error.status === 422) {
+                    $('.is-invalid').removeClass('is-invalid');
+                    $('.invalid-feedback').remove();
+                    setErrorMessages($('#crudForm'), error.responseJSON.errors);
+                } else {
+                    showDialog(error.responseJSON.message);
+                }
+            }
+        });
+    })
 
-            window.open(`{{ route('laporanklaimpjtsupir.report') }}?sampai=${sampai}&dari=${dari}&kategori=${kategori}`)
+    $(document).on('click', `#btnExport`, function(event) {
+        let sampai = $('#crudForm').find('[name=sampai]').val()
+        let dari = $('#crudForm').find('[name=dari]').val()
+        let kelompok_id = $('#crudForm').find('[name=kelompok_id]').val()
+        let kelompok = $('#crudForm').find('[name=kelompok]').val()
+
+        if (dari != '' && sampai != '' && kelompok != '') {
+
+            window.open(`{{ route('laporanklaimpjtsupir.export') }}?sampai=${sampai}&dari=${dari}&kelompok_id=${kelompok_id}&kelompok=${kelompok}`)
         } else {
             showDialog('ISI SELURUH KOLOM')
         }
     })
 
 
-    function initLookup()
-    {
-        $('.kategori-lookup').lookup({
-            title: 'Kategori Lookup',
-            fileName: 'kategori',
+
+    function getCekReport() {
+
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: `${apiUrl}laporanklaimpjtsupir/report`,
+                dataType: "JSON",
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                data: {
+                    sampai: $('#crudForm').find('[name=sampai]').val(),
+                    dari: $('#crudForm').find('[name=dari]').val(),
+                    kelompok: $('#crudForm').find('[name=kelompok_id]').val(),
+                    isCheck: true,
+                },
+                success: (response) => {
+                    resolve(response);
+                },
+                error: error => {
+                    reject(error)
+
+                },
+            });
+        });
+    }
+
+
+    function initLookup() {
+        $('.kelompok-lookup').lookup({
+            title: 'kelompok Lookup',
+            fileName: 'kelompok',
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
                 }
             },
             onSelectRow: (kategori, element) => {
-                $('#crudForm [name=kategori_id]').first().val(kategori.id)
+                $('#crudForm [name=kelompok_id]').first().val(kategori.id)
                 element.val(kategori.keterangan)
                 element.data('currentValue', element.val())
             },
@@ -116,7 +186,7 @@
             },
             onClear: (element) => {
                 element.val('')
-                $(`#crudForm [name="kategori_id"]`).first().val('')
+                $(`#crudForm [name="kelompok_id"]`).first().val('')
                 element.data('currentValue', element.val())
             }
         })

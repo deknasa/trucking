@@ -74,6 +74,16 @@
             align: 'left'
           },
           {
+            label: 'ZONA DARI',
+            name: 'zonadari_id',
+            align: 'left'
+          },
+          {
+            label: 'ZONA SAMPAI',
+            name: 'zonasampai_id',
+            align: 'left'
+          },
+          {
             label: 'JARAK',
             name: 'jarak',
             align: 'right',
@@ -123,6 +133,48 @@
               let statusAktif = JSON.parse(rowObject.statusaktif)
 
               return ` title="${statusAktif.MEMO}"`
+            }
+          },
+          {
+            label: 'STATUS UPAH ZONA',
+            name: 'statusupahzona',
+            stype: 'select',
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['combo'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['combo'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+            `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              let statusUpahZona = JSON.parse(value)
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusUpahZona.WARNA}; color: #fff;">
+                  <span>${statusUpahZona.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusUpahZona = JSON.parse(rowObject.statusupahzona)
+
+              return ` title="${statusUpahZona.MEMO}"`
             }
           },
           {

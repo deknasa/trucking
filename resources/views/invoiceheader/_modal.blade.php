@@ -39,13 +39,12 @@
               <div class="row form-group">
                 <div class="col-12 col-md-2">
                   <label class="col-form-label">
-                    TGL TERIMA <span class="text-danger">*</span>
+                    AGEN <span class="text-danger">*</span>
                   </label>
                 </div>
                 <div class="col-12 col-md-4">
-                  <div class="input-group">
-                    <input type="text" name="tglterima" class="form-control datepicker">
-                  </div>
+                  <input type="hidden" name="agen_id">
+                  <input type="text" name="agen" class="form-control agen-lookup">
                 </div>
                 <div class="col-12 col-md-2 text-right">
                   <label class="col-form-label">
@@ -62,12 +61,13 @@
               <div class="row form-group">
                 <div class="col-12 col-md-2">
                   <label class="col-form-label">
-                    AGEN <span class="text-danger">*</span>
+                    STATUS pilihan invoice <span class="text-danger">*</span>
                   </label>
                 </div>
                 <div class="col-12 col-md-4">
-                  <input type="hidden" name="agen_id">
-                  <input type="text" name="agen" class="form-control agen-lookup">
+                  <select name="statuspilihaninvoice" class="form-select select2bs4" style="width: 100%;">
+                    <option value="">-- PILIH STATUS pilihan invoice --</option>
+                  </select>
                 </div>
 
                 <div class="col-12 col-md-2  text-right">
@@ -195,8 +195,8 @@
         value: form.find(`[name="tglbukti"]`).val()
       })
       data.push({
-        name: 'tglterima',
-        value: form.find(`[name="tglterima"]`).val()
+        name: 'statuspilihaninvoice',
+        value: form.find(`[name="statuspilihaninvoice"]`).val()
       })
       data.push({
         name: 'tgljatuhtempo',
@@ -323,8 +323,14 @@
           $('#crudModal').find('#crudForm').trigger('reset')
           $('#crudModal').modal('hide')
 
+          $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
+          $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
           $('#jqGrid').jqGrid('setGridParam', {
-            page: response.data.page
+            page: response.data.page,
+            postData: {
+              tgldari: dateFormat(response.data.tgldariheader),
+              tglsampai: dateFormat(response.data.tglsampaiheader)
+            }
           }).trigger('reloadGrid');
 
           if (id == 0) {
@@ -394,6 +400,8 @@
     getMaxLength(form)
     initLookup()
     initDatepicker()
+    initSelect2(form.find('.select2bs4'), true)
+
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
@@ -423,6 +431,7 @@
 
     initDatepicker()
     loadInvoiceGrid();
+    setStatusPilihanInvoiceOptions(form)
   }
 
   function editInvoiceHeader(invId) {
@@ -443,28 +452,31 @@
 
     Promise
       .all([
-        showInvoiceHeader(form, invId, 'edit')
+        setStatusPilihanInvoiceOptions(form)
       ])
       .then(() => {
-        clearSelectedRows()
-        $('#gs_').prop('checked', false)
-        $('#crudModal').modal('show')
-        form.find(`[name="tglbukti"]`).prop('readonly', true)
-        form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
-        form.find(`[name="agen"]`).prop('readonly', true)
-        form.find(`[name="agen"]`).parent('.input-group').find('.input-group-append').remove()
-        form.find(`[name="agen"]`).parent('.input-group').find('.button-clear').remove()
-        form.find(`[name="jenisorder"]`).prop('readonly', true)
-        form.find(`[name="jenisorder"]`).parent('.input-group').find('.input-group-append').remove()
-        form.find(`[name="jenisorder"]`).parent('.input-group').find('.button-clear').remove()
+
+        showInvoiceHeader(form, invId, 'edit')
+          .then(() => {
+
+            clearSelectedRows()
+            $('#gs_').prop('checked', false)
+            $('#crudModal').modal('show')
+            form.find(`[name="agen"]`).prop('readonly', true)
+            form.find(`[name="agen"]`).parent('.input-group').find('.input-group-append').remove()
+            form.find(`[name="agen"]`).parent('.input-group').find('.button-clear').remove()
+            form.find(`[name="jenisorder"]`).prop('readonly', true)
+            form.find(`[name="jenisorder"]`).parent('.input-group').find('.input-group-append').remove()
+            form.find(`[name="jenisorder"]`).parent('.input-group').find('.button-clear').remove()
+          }).catch((error) => {
+            showDialog(error.statusText)
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
 
       })
-      .catch((error) => {
-        showDialog(error.statusText)
-      })
-      .finally(() => {
-        $('.modal-loader').addClass('d-none')
-      })
+
   }
 
   function deleteInvoiceHeader(invId) {
@@ -486,10 +498,13 @@
 
     Promise
       .all([
-        showInvoiceHeader(form, invId, 'edit')
+        showInvoiceHeader(form, invId, 'edit'),
+        setStatusPilihanInvoiceOptions(form)
       ])
       .then(() => {
         clearSelectedRows()
+        form.find(`[name="tglbukti"]`).prop('readonly', true)
+        form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
         $('#gs_').prop('checked', false)
         $('#crudModal').modal('show')
       })
@@ -579,6 +594,21 @@
           {
             label: "NO CONT",
             name: "nocont",
+            sortable: true,
+          },
+          {
+            label: "no sp full",
+            name: "nospfull",
+            sortable: true,
+          },
+          {
+            label: "no sp empty",
+            name: "nospempty",
+            sortable: true,
+          },
+          {
+            label: "no sp full empty",
+            name: "nospfullempty",
             sortable: true,
           },
           {
@@ -842,6 +872,10 @@
       value: form.find(`[name="tglsampai"]`).val()
     })
     data.push({
+      name: 'pilihanperiode',
+      value: form.find(`[name="statuspilihaninvoice"]`).val()
+    })
+    data.push({
       name: 'limit',
       value: 0
     })
@@ -964,8 +998,6 @@
   function showInvoiceHeader(form, invId, aksi) {
     return new Promise((resolve, reject) => {
 
-      form.find(`[name="tglbukti"]`).prop('readonly', true)
-      form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
 
       $.ajax({
         url: `${apiUrl}invoiceheader/${invId}`,
@@ -990,9 +1022,15 @@
           if (aksi == 'delete') {
             form.find('[name]').addClass('disabled')
             initDisabled()
+            // getEdit(invId, aksi)
+            $('#crudForm').find("[name=statuspilihaninvoice]").prop('disabled', true);
+            $('#crudForm').find("[name=tgljatuhtempo]").prop('readonly', true);
+            $('#crudForm').find("[name=tgljatuhtempo]").parent('.input-group').find('.input-group-append').children().prop('disabled', true);
           }
           // getEdit(invId, aksi)
-
+          $('#crudForm').find("[name=statuspilihaninvoice]").prop('disabled', true);
+          $('#crudForm').find("[name=tgljatuhtempo]").prop('readonly', true);
+          $('#crudForm').find("[name=tgljatuhtempo]").parent('.input-group').find('.input-group-append').children().prop('disabled', true);
           loadInvoiceGrid();
 
           getDataInvoice(`${invId}/getEdit`).then((response) => {
@@ -1000,10 +1038,11 @@
             let selectedIdInv = []
             let totalRetribusi = 0
             $.each(response.data, (index, value) => {
-              selectedIdInv.push(value.id)
-              totalRetribusi += parseFloat(value.nominalretribusi)
+              if (value.idinvoice != null) {
+                selectedIdInv.push(value.id)
+                totalRetribusi += parseFloat(value.nominalretribusi)
+              }
             })
-
             $("#tableInvoice")
               .jqGrid("setGridParam", {
                 datatype: "local",
@@ -1135,29 +1174,29 @@
   }
 
   function cekValidasiAksi(Id, Aksi) {
-        $.ajax({
-            url: `{{ config('app.api_url') }}invoiceheader/${Id}/cekvalidasiAksi`,
-            method: 'POST',
-            dataType: 'JSON',
-            beforeSend: request => {
-                request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
-            },
-            success: response => {
-                var error = response.error
-                if (error) {
-                    showDialog(response)
-                } else {
-                    if (Aksi == 'EDIT') {
-                        editInvoiceHeader(Id)
-                    }
-                    if (Aksi == 'DELETE') {
-                        deleteInvoiceHeader(Id)
-                    }
-                }
+    $.ajax({
+      url: `{{ config('app.api_url') }}invoiceheader/${Id}/cekvalidasiAksi`,
+      method: 'POST',
+      dataType: 'JSON',
+      beforeSend: request => {
+        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+      },
+      success: response => {
+        var error = response.error
+        if (error) {
+          showDialog(response)
+        } else {
+          if (Aksi == 'EDIT') {
+            editInvoiceHeader(Id)
+          }
+          if (Aksi == 'DELETE') {
+            deleteInvoiceHeader(Id)
+          }
+        }
 
-            }
-        })
-    }
+      }
+    })
+  }
 
 
   function approve() {
@@ -1203,6 +1242,68 @@
 
   }
 
+  const setStatusPilihanInvoiceOptions = function setStatusPilihanInvoiceOptions(relatedForm) {
+    return new Promise((resolve, reject) => {
+      relatedForm.find('[name=statuspilihaninvoice]').empty()
+      relatedForm.find('[name=statuspilihaninvoice]').append(
+        new Option('-- PILIH STATUS pilihan invoice --', '', false, true)
+      ).trigger('change')
+
+      $.ajax({
+        url: `${apiUrl}parameter`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          filters: JSON.stringify({
+            "groupOp": "AND",
+            "rules": [{
+              "field": "grp",
+              "op": "cn",
+              "data": "STATUS PILIHAN INVOICE"
+            }]
+          })
+        },
+        success: response => {
+          let selectedId
+          response.data.forEach(statusKaryawan => {
+            let option = new Option(statusKaryawan.text, statusKaryawan.id)
+            // element.val(value).trigger('change')
+            if (statusKaryawan.default != "") {
+              selectedId = statusKaryawan.id
+            }
+            relatedForm.find('[name=statuspilihaninvoice]').append(option).trigger('change')
+          });
+          relatedForm.find('[name=statuspilihaninvoice]').val(selectedId).trigger('change')
+          resolve()
+        }
+      })
+    })
+  }
+
+  function setTglJatuhTempo(top = 0) {
+    // Tanggal awal dalam format "YYYY-MM-DD"
+    const tanggalAwal = new Date();
+
+    // Menambahkan jumlah hari (34 hari)
+    const jumlahHari = Math.floor(top);
+    tanggalAwal.setDate(tanggalAwal.getDate() + jumlahHari);
+
+    // Mendapatkan tanggal setelah ditambahkan 34 hari
+    const tahun = tanggalAwal.getFullYear();
+    const bulan = String(tanggalAwal.getMonth() + 1).padStart(2, "0"); // Ditambah 1 karena Januari dimulai dari 0
+    const tanggal = String(tanggalAwal.getDate()).padStart(2, "0");
+
+    $('#crudForm').find("[name=tgljatuhtempo]").val(tanggal + "-" + bulan + "-" + tahun);
+    $('#crudForm').find("[name=tgljatuhtempo]").prop('readonly', true);
+    $('#crudForm').find("[name=tgljatuhtempo]").parent('.input-group').find('.input-group-append').children().prop('disabled', true);
+    // $('#crudForm').find("[name=tgljatuhtempo]").parent('.input-group').find('.input-group-append').remove()
+
+
+  }
+
   function initLookup() {
     $('.agen-lookup').lookup({
       title: 'Agen Lookup',
@@ -1214,6 +1315,8 @@
       },
       onSelectRow: (agen, element) => {
         $('#crudForm [name=agen_id]').first().val(agen.id)
+        setTglJatuhTempo(agen.top);
+
         element.val(agen.namaagen)
         element.data('currentValue', element.val())
       },

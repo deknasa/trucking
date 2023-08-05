@@ -157,6 +157,12 @@
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
+          if (data.data.length === 0) {
+            $('#jqGrid').each((index, element) => {
+              abortGridLastRequest($(element))
+              clearGridHeader($(element))
+            })
+          }
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))

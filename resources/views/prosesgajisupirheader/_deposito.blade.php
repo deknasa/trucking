@@ -1,7 +1,6 @@
-<table id="depositoGrid"></table>
-
+@push('scripts')
 <script>
-  function loadGrid(id, nobuktiPengeluaran, nobukti) {
+  function loadDepositoGrid(nobukti) {
     let sortnameDeposito = 'nobukti'
     let sortorderDeposito = 'asc'
     let totalRecordDeposito
@@ -13,15 +12,15 @@
 
     $("#depositoGrid")
       .jqGrid({
-        url: `${apiUrl}prosesgajisupirdetail/getjurnal`,
-        mtype: "GET",
+        datatype: 'local',
+        data: [],
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
-        datatype: "json",
+        idPrefix: 'depositoGrid',
         colModel: [{
             label: 'NO BUKTI',
             name: 'nobukti',
-          },{
+          }, {
             label: 'TGL BUKTI',
             name: 'tglbukti',
             formatter: "date",
@@ -137,10 +136,11 @@
         disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
           $(this).setGridParam({
-          postData: {
-            nobukti: nobukti,
-            tab: 'deposito'
-          },})
+            postData: {
+              nobukti: nobukti,
+              tab: 'deposito'
+            },
+          })
           clearGlobalSearch($('#depositoGrid'))
         },
       })
@@ -160,16 +160,18 @@
     loadGlobalSearch($('#depositoGrid'))
   }
 
-  function loadDetailData(id, nobukti) {
+  function loadDepositoData(nobukti) {
     abortGridLastRequest($('#depositoGrid'))
 
     $('#depositoGrid').setGridParam({
-      url: `${apiUrl}prosesgajisupirdetail/deposito`,
+      url: `${apiUrl}prosesgajisupirdetail/getjurnal`,
       datatype: "json",
       postData: {
-        nobukti: nobukti
+        nobukti: nobukti,
+        tab: 'deposito'
       },
       page: 1
     }).trigger('reloadGrid')
   }
 </script>
+@endpush

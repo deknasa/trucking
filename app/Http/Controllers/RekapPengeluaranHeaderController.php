@@ -152,7 +152,7 @@ class RekapPengeluaranHeaderController extends MyController
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setCellValue('A1', $rekappengeluaran['judul']);
-        $sheet->setCellValue('A2', $rekappengeluaran['judulLaporan']);
+        $sheet->setCellValue('A2', $rekappengeluaran['judulLaporan'] . $rekappengeluaran['bank']);
         $sheet->getStyle("A1")->getFont()->setSize(12);
         $sheet->getStyle("A2")->getFont()->setSize(12);
         $sheet->getStyle("A1")->getFont()->setBold(true);
@@ -191,7 +191,7 @@ class RekapPengeluaranHeaderController extends MyController
             ],
             [
                 'label'=>'NAMA PERKIRAAN',
-                'index'=>'pengeluaran_nobukti'
+                'index'=>'keterangancoa'
             ],
             [
                 'label'=>'KETERANGAN',
@@ -251,7 +251,7 @@ class RekapPengeluaranHeaderController extends MyController
             $response_detail['nominals'] = number_format((float) $response_detail['nominal'], '2', '.', ',');
         
             $sheet->setCellValue("A$detail_start_row", $response_index + 1);
-            $sheet->setCellValue("B$detail_start_row", $response_detail['pengeluaran_nobukti']);
+            $sheet->setCellValue("B$detail_start_row", $response_detail['keterangancoa']);
             $sheet->setCellValue("C$detail_start_row", $response_detail['keterangan']);
             $sheet->setCellValue("D$detail_start_row", $response_detail['nominals']);
 
@@ -266,7 +266,7 @@ class RekapPengeluaranHeaderController extends MyController
  
         $total_start_row = $detail_start_row;
         $sheet->mergeCells('A'.$total_start_row.':C'.$total_start_row);
-        $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A'.$total_start_row.':C'.$total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
+        $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A'.$total_start_row.':C'.$total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
         $sheet->setCellValue("D$total_start_row", number_format((float) $nominal, '2', '.', ','))->getStyle("D$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
 
         //set autosize
@@ -275,7 +275,7 @@ class RekapPengeluaranHeaderController extends MyController
         $sheet->getColumnDimension('D')->setAutoSize(true);
 
         $writer = new Xlsx($spreadsheet);
-        $filename = 'Laporan Rekap Pengeluaran' . date('dmYHis');
+        $filename = 'Laporan Rekap Pengeluaran ' . $rekappengeluaran['bank'] . date('dmYHis');
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
         header('Cache-Control: max-age=0');

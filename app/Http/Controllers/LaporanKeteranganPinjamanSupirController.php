@@ -60,20 +60,22 @@ class LaporanKeteranganPinjamanSupirController extends MyController
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setCellValue('A1', 'PT. TRANSPORINDO AGUNG SEJAHTERA');
+        $sheet->setCellValue('A2', 'Laporan Keterangan Pinjaman Supir');
+        $sheet->setCellValue('A3', 'Periode: ' . $request->periode);
 
-        $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setCellValue('b1', 'LAPORAN KETERANGAN PINJAMAN SUPIR');
-        $sheet->getStyle("B1")->getFont()->setSize(20)->setBold(true);
-        $sheet->getStyle('B1')->getAlignment()->setHorizontal('center');
+        // $sheet->setCellValue('b1', 'LAPORAN KETERANGAN PINJAMAN SUPIR');
+        $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
+        $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
 
-        $sheet->setCellValue('A4', 'PERIODE');
-        $sheet->getStyle("A4")->getFont()->setSize(12)->setBold(true);
+        // $sheet->setCellValue('A4', 'PERIODE');
+        // $sheet->getStyle("A4")->getFont()->setSize(12)->setBold(true);
 
-        $sheet->setCellValue('B4', $request->periode);
-        $sheet->setCellValue('B4', ':'." ".$request->periode);
-        $sheet->getStyle("B4")->getFont()->setSize(12)->setBold(true);
+        // $sheet->setCellValue('B4', $request->periode);
+        // $sheet->setCellValue('B4', ':'." ".$request->periode);
+        // $sheet->getStyle("B4")->getFont()->setSize(12)->setBold(true);
 
-        $sheet->mergeCells('B1:I3');
+        $sheet->mergeCells('A1:F1');
 
         $detail_table_header_row = 6;
         $detail_start_row = $detail_table_header_row + 1;
@@ -127,7 +129,7 @@ class LaporanKeteranganPinjamanSupirController extends MyController
                 'label' => 'Saldo',
                 'index' => 'Saldo',
             ],
-           
+
         ];
 
         foreach ($header_columns as $detail_columns_index => $detail_column) {
@@ -139,6 +141,8 @@ class LaporanKeteranganPinjamanSupirController extends MyController
         $totalDebet = 0;
         $totalKredit = 0;
         $totalSaldo = 0;
+        $dataRow = $detail_table_header_row + 1;
+        $previousRow = $dataRow - 1; // Initialize the previous row number
         foreach ($data as $response_index => $response_detail) {
 
             foreach ($header_columns as $detail_columns_index => $detail_column) {
@@ -150,14 +154,24 @@ class LaporanKeteranganPinjamanSupirController extends MyController
             $sheet->setCellValue("C$detail_start_row", $response_detail['keterangan']);
             $sheet->setCellValue("D$detail_start_row", $response_detail['debet']);
             $sheet->setCellValue("E$detail_start_row", $response_detail['kredit']);
-            $sheet->setCellValue("F$detail_start_row", $response_detail['Saldo']);
 
+            if ($detail_start_row == 7) {
+                $sheet->setCellValue('F' . $detail_start_row, $response_detail['Saldo']);
+            } else {
+                if ($dataRow > $detail_table_header_row + 1) {
+                    $sheet->setCellValue('F' . $dataRow, '=(F' . $previousRow . '+D' . $dataRow . ')-E' . $dataRow);
+                }
+            }
             $sheet->getStyle("A$detail_start_row:F$detail_start_row")->applyFromArray($styleArray);
-             $sheet->getStyle("D$detail_start_row:F$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
-             $sheet->getStyle("A$detail_start_row:A$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
-           
+            $sheet->getStyle("D$detail_start_row:F$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+            $sheet->getStyle("A$detail_start_row:A$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
 
-           $totalKredit += $response_detail['kredit'];
+            $sheet->getStyle("C$detail_start_row")->getAlignment()->setWrapText(true);
+            $sheet->getColumnDimension('C')->setWidth(100);
+            $previousRow = $dataRow; // Update the previous row number
+
+            $dataRow++;
+            $totalKredit += $response_detail['kredit'];
             $totalDebet += $response_detail['debet'];
             $totalSaldo += $response_detail['Saldo'];
             $detail_start_row++;
@@ -165,22 +179,22 @@ class LaporanKeteranganPinjamanSupirController extends MyController
 
 
 
-       //total
-       $total_start_row = $detail_start_row;
-       $sheet->mergeCells('A' . $total_start_row . ':C' . $total_start_row);
-       $sheet->setCellValue("A$total_start_row", 'Total :')->getStyle('A' . $total_start_row . ':C' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
+        //total
+        $total_start_row = $detail_start_row;
+        $sheet->mergeCells('A' . $total_start_row . ':C' . $total_start_row);
+        $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':C' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
 
-       $totalDebet = "=SUM(D6:D" . ($detail_start_row-1) . ")";
-       $sheet->setCellValue("D$total_start_row", $totalDebet)->getStyle("D$total_start_row")->applyFromArray($style_number);
-       $sheet->setCellValue("D$total_start_row", $totalDebet)->getStyle("D$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+        $totalDebet = "=SUM(D6:D" . ($detail_start_row - 1) . ")";
+        $sheet->setCellValue("D$total_start_row", $totalDebet)->getStyle("D$total_start_row")->applyFromArray($style_number);
+        $sheet->setCellValue("D$total_start_row", $totalDebet)->getStyle("D$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
 
-       $totalKredit = "=SUM(E6:E" . ($detail_start_row-1) . ")";
-       $sheet->setCellValue("E$total_start_row", $totalKredit)->getStyle("E$total_start_row")->applyFromArray($style_number);
-       $sheet->setCellValue("E$total_start_row", $totalKredit)->getStyle("E$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+        $totalKredit = "=SUM(E6:E" . ($detail_start_row - 1) . ")";
+        $sheet->setCellValue("E$total_start_row", $totalKredit)->getStyle("E$total_start_row")->applyFromArray($style_number);
+        $sheet->setCellValue("E$total_start_row", $totalKredit)->getStyle("E$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
 
-       $totalSaldo = "=SUM(F6:F" . ($detail_start_row-1) . ")";
-       $sheet->setCellValue("F$total_start_row", $totalSaldo)->getStyle("F$total_start_row")->applyFromArray($style_number);
-       $sheet->setCellValue("F$total_start_row", $totalSaldo)->getStyle("F$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+        $totalSaldo = "=D".$total_start_row."-E" .$total_start_row;
+        $sheet->setCellValue("F$total_start_row", $totalSaldo)->getStyle("F$total_start_row")->applyFromArray($style_number);
+        $sheet->setCellValue("F$total_start_row", $totalSaldo)->getStyle("F$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
 
         $ttd_start_row = $detail_start_row + 2;
         $sheet->setCellValue("A$ttd_start_row", 'Disetujui Oleh,');
@@ -193,7 +207,6 @@ class LaporanKeteranganPinjamanSupirController extends MyController
 
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);
-        $sheet->getColumnDimension('C')->setAutoSize(true);
         $sheet->getColumnDimension('D')->setAutoSize(true);
         $sheet->getColumnDimension('E')->setAutoSize(true);
         $sheet->getColumnDimension('F')->setAutoSize(true);
@@ -208,5 +221,4 @@ class LaporanKeteranganPinjamanSupirController extends MyController
 
         $writer->save('php://output');
     }
-
 }

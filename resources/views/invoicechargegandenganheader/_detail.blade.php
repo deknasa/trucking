@@ -1,11 +1,3 @@
-<!-- Grid -->
-<div class="container-fluid my-4">
-  <div class="row">
-    <div class="col-12">
-      <table id="detail"></table>
-    </div>
-  </div>
-</div>
 
 @push('scripts')
 <script>
@@ -20,18 +12,27 @@
 
   function loadDetailGrid(id) {
     $("#detail").jqGrid({
-        url: `${apiUrl}invoicechargegandengandetail`,
-        mtype: "GET",
+        datatype: 'local',
+        data: [],
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
-        datatype: "local",
+        idPrefix: 'detail',
         colModel: [{
             label: 'NO BUKTI',
             name: 'jobtrucking',
           },
           {
-            label: 'TGL BUKTI',
+            label: 'TGL MASUK GUDANG',
             name: 'tgltrip',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
+          {
+            label: 'TGL KELUAR GUDANG',
+            name: 'tglakhir',
             formatter: "date",
             formatoptions: {
               srcformat: "ISO8601Long",
@@ -50,8 +51,20 @@
             formatter: currencyFormat,
           },
           {
+            label: 'JENIS ORDER',
+            name: 'jenisorder',
+          },
+          {
+            label: 'NAMA GUDANG',
+            name: 'namagudang',
+          },
+          {
             label: 'No Polisi',
             name: 'nopolisi',
+          },
+          {
+            label: 'GANDENGAN',
+            name: 'gandengan',
           },
           {
             label: 'keterangan',
