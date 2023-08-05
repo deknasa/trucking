@@ -3260,7 +3260,7 @@
       },
       onSelectRow: (trado, element) => {
         $(`#tradoHaeaderId`).val(trado.id)
-        element.val(trado.keterangan)
+        element.val(trado.kodetrado)
         element.data('currentValue', element.val())
 
         // $('#tableDeposito').jqGrid("clearGridData");
