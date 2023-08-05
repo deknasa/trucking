@@ -2116,7 +2116,7 @@
         }
       },
       onSelectRow: (trado, element) => {
-        element.val(trado.keterangan)
+        element.val(trado.kodetrado)
         $(`#${element[0]['name']}Id`).val(trado.id)
         element.data('currentValue', element.val())
         lookupSelected(`trado`);
@@ -2250,7 +2250,7 @@
         }
       },
       onSelectRow: (trado, element) => {
-        element.val(trado.keterangan)
+        element.val(trado.kodetrado)
         $(`#${element[0]['name']}Id`).val(trado.id)
         element.data('currentValue', element.val())
         lookupSelectedKe(`tradoke`);
@@ -2323,7 +2323,7 @@
         }
       },
       onSelectRow: (trado, element) => {
-        element.val(trado.keterangan)
+        element.val(trado.kodetrado)
         $(`#${element[0]['name']}Id`).val(trado.id)
         element.data('currentValue', element.val())
         lookupSelectedDari(`tradodari`);

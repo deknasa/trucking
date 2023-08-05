@@ -495,7 +495,7 @@
         }
       },      
       onSelectRow: (trado, element) => {
-        element.val(trado.keterangan)
+        element.val(trado.kodetrado)
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {
