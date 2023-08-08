@@ -67,9 +67,86 @@
             </div>
 
             <div class="row">
-                <!-- LEFT -->
+                <div class="col-lg-3 col-6">
+                    <!-- small box -->
+                    <div class="small-box bg-success">
+                        <div class="inner">
+                            <h5>Reminder Penggantian Oli</h5>
+                        </div>
+                        <a href="reminderoli" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-6">
+                    <!-- small box -->
+                    <div class="small-box bg-warning">
+                        <div class="inner">
+                            <h5>Reminder Stok</h5>
+                        </div>
+                        <a href="reminderstok" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-6">
+                    <!-- small box -->
+                    <div class="small-box bg-info">
+                        <div class="inner">
+                            <h5>Reminder SPK</h5>
+                        </div>
+                        <a href="reminderspk" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-6">
+                    <!-- small box -->
+                    <div class="small-box bg-primary">
+                        <div class="inner">
+                            <h5>SPK harian</h5>
+                        </div>
+                        <a href="spkharian" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3 col-6">
+                    <!-- small box -->
+                    <div class="small-box bg-lightblue">
+                        <div class="inner">
+                            <h5>EXP SIM</h5>
+                        </div>
+                        <a href="expsim" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-6">
+                    <!-- small box -->
+                    <div class="small-box bg-olive">
+                        <div class="inner">
+                            <h5>EXP STNK</h5>
+                        </div>
+                        <a href="expstnk" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-6">
+                    <!-- small box -->
+                    <div class="small-box bg-maroon">
+                        <div class="inner">
+                            <h5>EXP ASURANSI</h5>
+                        </div>
+                        <a href="expasuransi" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-6">
+                    <!-- small box -->
+                    <div class="small-box bg-teal">
+                        <div class="inner">
+                            <h5>STATUS OLI TRADO</h5>
+                        </div>
+                        <a href="statusolitrado" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+            </div>
+            <!--
+            <div class="row">
                 <div class="col-md-4">
-                    <!-- SERVICE -->
                     <div class="card">
                         <div class="card-body">
                             <div class="row form-group">
@@ -89,7 +166,6 @@
                             <table id="tableService"></table>
                         </div>
                     </div>
-                    <!-- STOK MINIMUM -->
                     <div class="card">
                         <div class="card-body">
                             <div class="row form-group">
@@ -106,9 +182,7 @@
                     </div>
                 </div>
 
-                <!-- CENTER -->
                 <div class="col-md-3">
-                    <!-- EXP SIM -->
                     <div class="card">
                         <div class="card-body">
                             <div class="row form-group">
@@ -120,7 +194,6 @@
                             <table id="tableExpSIM"></table>
                         </div>
                     </div>
-                    <!-- EXP STNK -->
                     <div class="card">
                         <div class="card-body">
                             <div class="row form-group">
@@ -131,7 +204,6 @@
                             <table id="tableExpSTNK"></table>
                         </div>
                     </div>
-                    <!-- EXP ASURANSI -->
                     <div class="card">
                         <div class="card-body">
                             <div class="row form-group">
@@ -144,10 +216,8 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- RIGHT -->
+                
                 <div class="col-md-5">
-                    <!-- STATUS OLI -->
                     <div class="card">
                         <div class="card-body">
                             <div class="form-group row">
@@ -192,7 +262,6 @@
                         </div>
                     </div>
 
-                    <!-- REMINDER -->
                     <div class="card">
                         <div class="card-body">
                             <div id="tabs">
@@ -222,13 +291,14 @@
                 </div>
 
             </div>
+            -->
         </div>
         <!-- /.row -->
 </div>
 </section>
 </div>
 
-@include('dashboard._service')
+<!-- @include('dashboard._service')
 @include('dashboard._oli')
 @include('dashboard._expsim')
 @include('dashboard._expstnk')
@@ -236,128 +306,46 @@
 @include('dashboard._stokminimum')
 @include('dashboard._reminderspk')
 @include('dashboard._spkharian')
-@include('dashboard._reminderspkdetail')
+@include('dashboard._reminderspkdetail') -->
 @push('scripts')
 <script>
-    let indexRow = 0;
-    $(document).ready(function() {
+    // let indexRow = 0;
+    // $(document).ready(function() {
 
-        initDatepicker()
-        initLookup()
-        let today = new Date();
-        let formattedLastDay;
+    //     initDatepicker()
+    //     initLookup()
+    //     let today = new Date();
+    //     let formattedLastDay;
 
-        // mendapatkan tanggal pertama di bulan ini
-        let firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
-        let formattedFirstDay = $.datepicker.formatDate('dd-mm-yy', firstDay);
-        let lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-        formattedLastDay = $.datepicker.formatDate('dd-mm-yy', lastDay);
-        $(`[name="tgldarioli"]`).val(formattedFirstDay).trigger('change');
-        $(`[name="tglsampaioli"]`).val(formattedLastDay).trigger('change');
-        $('[name=periode]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+    //     // mendapatkan tanggal pertama di bulan ini
+    //     let firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+    //     let formattedFirstDay = $.datepicker.formatDate('dd-mm-yy', firstDay);
+    //     let lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+    //     formattedLastDay = $.datepicker.formatDate('dd-mm-yy', lastDay);
+    //     $(`[name="tgldarioli"]`).val(formattedFirstDay).trigger('change');
+    //     $(`[name="tglsampaioli"]`).val(formattedLastDay).trigger('change');
+    //     $('[name=periode]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
-        initSelect2($('.select2bs4'), false)
-        $("#tabs").tabs()
-        Promise
-            .all([
-                setStatusServiceOptions(),
-            ]).then(() => {
-                loadServiceGrid()
-                loadStokMinimumGrid()
-                loadExpSimGrid()
-                loadExpStnkGrid()
-                loadExpAsuransiGrid()
-                loadOliGrid()
-                loadReminderSpkGrid()
-                loadReminderSpkDetailGrid()
-                loadSPKHarianGrid()
-            }).catch((error) => {
-                showDialog(error.responseJSON)
-            })
-    })
+    //     initSelect2($('.select2bs4'), false)
+    //     $("#tabs").tabs()
+    //     Promise
+    //         .all([
+    //             setStatusServiceOptions(),
+    //         ]).then(() => {
+    //             loadServiceGrid()
+    //             loadStokMinimumGrid()
+    //             loadExpSimGrid()
+    //             loadExpStnkGrid()
+    //             loadExpAsuransiGrid()
+    //             loadOliGrid()
+    //             loadReminderSpkGrid()
+    //             loadReminderSpkDetailGrid()
+    //             loadSPKHarianGrid()
+    //         }).catch((error) => {
+    //             showDialog(error.responseJSON)
+    //         })
+    // })
 
-    function showDashboard() {
-        return new Promise((resolve, reject) => {
-            $.ajax({
-                url: `${apiUrl}dashboard`,
-                method: 'GET',
-                dataType: 'JSON',
-                headers: {
-                    Authorization: `Bearer ${accessToken}`
-                },
-                success: response => {
-
-                    resolve()
-                },
-                error: error => {
-                    reject(error)
-                }
-            })
-        })
-    }
-
-    function initLookup() {
-        $('.trado-lookup').lookup({
-            title: 'Trado Lookup',
-            fileName: 'trado',
-            beforeProcess: function(test) {
-                this.postData = {
-                    Aktif: 'AKTIF',
-                }
-            },
-            onSelectRow: (trado, element) => {
-                $('[name=tradooli_id]').first().val(trado.id)
-                element.val(trado.kodetrado)
-                element.data('currentValue', element.val())
-            },
-            onCancel: (element) => {
-                element.val(element.data('currentValue'))
-            },
-            onClear: (element) => {
-                element.val('')
-                $(`[name="tradooli_id"]`).first().val('')
-                element.data('currentValue', element.val())
-            }
-        })
-    }
-    const setStatusServiceOptions = function() {
-        return new Promise((resolve, reject) => {
-            $('[name=statusservice]').empty()
-            $('[name=statusservice]').append(
-                new Option('-- SEMUA --', 'all', false, true)
-            ).trigger('change')
-
-            $.ajax({
-                url: `${apiUrl}parameter`,
-                method: 'GET',
-                dataType: 'JSON',
-                headers: {
-                    Authorization: `Bearer ${accessToken}`
-                },
-                data: {
-                    filters: JSON.stringify({
-                        "groupOp": "AND",
-                        "rules": [{
-                            "field": "grp",
-                            "op": "cn",
-                            "data": "STATUS SERVICE RUTIN"
-                        }]
-                    })
-                },
-                success: response => {
-                    response.data.forEach(statusService => {
-                        let option = new Option(statusService.text, statusService.id)
-
-                        $('[name=statusservice]').append(option).trigger('change')
-                    });
-                    resolve()
-                },
-                error: error => {
-                    reject(error)
-                }
-            })
-        })
-    }
 
     // var donutData = {
     //     labels: [

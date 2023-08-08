@@ -223,7 +223,10 @@ use App\Http\Controllers\LaporanTransaksiHarianController;
 use App\Http\Controllers\DataRitasiController;
 use App\Http\Controllers\AkuntansiController;
 use App\Http\Controllers\ApprovalBukaTanggalSuratPengantarController;
+use App\Http\Controllers\ExpAsuransiController;
 use App\Http\Controllers\ExportLaporanMingguanSupirController;
+use App\Http\Controllers\ExpSimController;
+use App\Http\Controllers\ExpStnkController;
 use App\Http\Controllers\HutangExtraDetailController;
 use App\Http\Controllers\HutangExtraHeaderController;
 use App\Http\Controllers\KaryawanLogAbsensiController;
@@ -240,7 +243,12 @@ use App\Http\Controllers\MainAkunPusatController;
 use App\Http\Controllers\LaporanHistoryDepositoController;
 use App\Http\Controllers\LaporanPinjamanPerUnitTradoController;
 use App\Http\Controllers\LogAbsensiController;
+use App\Http\Controllers\ReminderOliController;
+use App\Http\Controllers\ReminderSpkController;
+use App\Http\Controllers\ReminderStokController;
 use App\Http\Controllers\ResetPasswordController;
+use App\Http\Controllers\SpkHarianController;
+use App\Http\Controllers\StatusOliTradoController;
 use App\Http\Controllers\StokPusatController;
 use App\Http\Controllers\UbahPasswordController;
 
@@ -1481,6 +1489,29 @@ Route::middleware(['auth','authorized'])->group(function () {
 
     Route::get('karyawanlogabsensi/index', [KaryawanLogAbsensiController::class, 'index']);
     Route::resource('karyawanlogabsensi', KaryawanLogAbsensiController::class);
+
+    Route::get('reminderoli/export', [ReminderOliController::class, 'export'])->name('reminderoli.export');
+    Route::get('reminderoli/index', [ReminderOliController::class, 'index']);
+    Route::resource('reminderoli', ReminderOliController::class);
+    
+    Route::get('expsim/index', [ExpSimController::class, 'index']);
+    Route::resource('expsim', ExpSimController::class);
+    Route::get('expstnk/index', [ExpStnkController::class, 'index']);
+    Route::resource('expstnk', ExpStnkController::class);
+    Route::get('expasuransi/index', [ExpAsuransiController::class, 'index']);
+    Route::resource('expasuransi', ExpAsuransiController::class);
+    
+    Route::get('reminderstok/export', [ReminderStokController::class, 'export'])->name('reminderstok.export');
+    Route::get('reminderstok/index', [ReminderStokController::class, 'index']);
+    Route::resource('reminderstok', ReminderStokController::class);
+    Route::get('statusolitrado/export', [StatusOliTradoController::class, 'export'])->name('statusolitrado.export');
+    Route::get('statusolitrado/index', [StatusOliTradoController::class, 'index']);
+    Route::resource('statusolitrado', StatusOliTradoController::class);
+    
+    Route::get('reminderspk/index', [ReminderSpkController::class, 'index']);
+    Route::resource('reminderspk', ReminderSpkController::class);
+    Route::get('spkharian/index', [SpkHarianController::class, 'index']);
+    Route::resource('spkharian', SpkHarianController::class);
 });
 
 Route::patch('format', [FormatController::class, 'update']);
