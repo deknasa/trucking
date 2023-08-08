@@ -41,8 +41,16 @@
             <table id="jqGrid"></table>
         </div>
     </div>
+    <div class="row mt-3">
+        <div class="col-12">
+
+            <table id="detailGrid"></table>
+        </div>
+    </div>
 </div>
 
+<!-- Detail -->
+@include('spkharian._detail')
 @push('scripts')
 <script>
     let indexRow = 0;
@@ -73,6 +81,7 @@
             }).trigger('reloadGrid');
         })
 
+        loadDetailGrid()
         $("#jqGrid").jqGrid({
                 url: `${apiUrl}spkharian`,
                 mtype: "GET",
@@ -189,11 +198,16 @@
                     if (indexRow >= limit) {
                         indexRow = (indexRow - limit * (page - 1))
                     }
+                    loadDetailData(id)
                 },
                 loadComplete: function(data) {
 
                     changeJqGridRowListText()
                     if (data.data.length === 0) {
+                        $('#detailGrid').each((index, element) => {
+                            abortGridLastRequest($(element))
+                            clearGridData($(element))
+                        })
                         $('#jqGrid').each((index, element) => {
                             abortGridLastRequest($(element))
                             clearGridHeader($(element))

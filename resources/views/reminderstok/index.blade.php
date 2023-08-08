@@ -22,16 +22,16 @@
     let totalRecord
     let limit
     let postData
-    let sortname = 'kode'
+    let sortname = 'namastok'
     let sortorder = 'asc'
     let autoNumericElements = []
-    let rowNum = 10
+    let rowNum = 0
     let hasDetail = false
 
     $(document).ready(function() {
     
         $("#jqGrid").jqGrid({
-                url: `${apiUrl}reminderoli`,
+                url: `${apiUrl}reminderstok`,
                 mtype: "GET",
                 styleUI: 'Bootstrap4',
                 iconSet: 'fontAwesome',
@@ -46,13 +46,56 @@
                         hidden: true
                     },
                     {
+                        label: 'Status',
+                        name: 'status',
+                        width: 100,
+                        stype: 'select',
+                        searchoptions: {
+                            value: `<?php
+                                    $i = 1;
+
+                                    foreach ($data['combo'] as $status) :
+                                        echo "$status[param]:$status[parameter]";
+                                        if ($i !== count($data['combo'])) {
+                                            echo ';';
+                                        }
+                                        $i++;
+                                    endforeach;
+
+                                    ?>
+                            `,
+                            dataInit: function(element) {
+                                $(element).select2({
+                                    width: 'resolve',
+                                    theme: "bootstrap4"
+                                });
+                            }
+                        },
+                        formatter: (value, options, rowData) => {
+                            let statusAktif = JSON.parse(value)
+
+                            let formattedValue = $(`
+                            <div class="badge" style="background-color: ${statusAktif.WARNA}; color: #fff;">
+                            <span>${statusAktif.SINGKATAN}</span>
+                            </div>
+                        `)
+
+                            return formattedValue[0].outerHTML
+                        },
+                        cellattr: (rowId, value, rowObject) => {
+                            let statusAktif = JSON.parse(rowObject.status)
+
+                            return ` title="${statusAktif.MEMO}"`
+                        }
+                    },
+                    {
                         label: 'KODE',
-                        name: 'kode',
+                        name: 'namastok',
                         align: 'left'
                     },
                     {
                         label: 'NAMA',
-                        name: 'nama',
+                        name: 'keterangan',
                         align: 'left',
                         width: "300px"
                     },
@@ -64,7 +107,7 @@
                     },
                     {
                         label: 'SALDO STOK',
-                        name: 'saldostok',
+                        name: 'qty',
                         align: 'right',
                         formatter: currencyFormat,
                     },
@@ -72,7 +115,7 @@
                 autowidth: true,
                 shrinkToFit: false,
                 height: 350,
-                rowNum: 10,
+                rowNum: rowNum,
                 rownumbers: true,
                 rownumWidth: 45,
                 rowList: [10, 20, 50, 0],
@@ -155,6 +198,9 @@
                         }
                     }, 100)
 
+                    if (rowNum == 0) {
+                        $('#jqGrid_rowList option[value=0]').attr('selected', 'selected');
+                    }
                     $('#left-nav').find('button').attr('disabled', false)
                     permission()
                     setHighlight($(this))
