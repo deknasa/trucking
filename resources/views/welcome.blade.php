@@ -18,7 +18,7 @@
                         <div class="icon">
                             <i class="fas fa-truck"></i>
                         </div>
-                        <a href="trado" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        <a href="trado" class="small-box-footer trado">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -32,7 +32,7 @@
                         <div class="icon">
                             <i class="fas fa-truck"></i>
                         </div>
-                        <a href="trado" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        <a href="trado" class="small-box-footer trado">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -46,7 +46,7 @@
                         <div class="icon">
                             <i class="fas fa-user"></i>
                         </div>
-                        <a href="supir" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        <a href="supir" class="small-box-footer supir">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -60,7 +60,7 @@
                         <div class="icon">
                             <i class="fas fa-user"></i>
                         </div>
-                        <a href="supir" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        <a href="supir" class="small-box-footer supir">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -73,7 +73,7 @@
                         <div class="inner">
                             <h5>Reminder Penggantian Oli</h5>
                         </div>
-                        <a href="reminderoli" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        <a href="reminderoli" id="reminderoli" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <div class="col-lg-3 col-6">
@@ -82,17 +82,17 @@
                         <div class="inner">
                             <h5>Reminder Stok</h5>
                         </div>
-                        <a href="reminderstok" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        <a href="reminderstok" id="reminderstok" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
-                
+
                 <div class="col-lg-3 col-6">
                     <!-- small box -->
                     <div class="small-box bg-info">
                         <div class="inner">
                             <h5>Reminder SPK</h5>
                         </div>
-                        <a href="reminderspk" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        <a href="reminderspk" id="reminderspk" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <div class="col-lg-3 col-6">
@@ -101,7 +101,7 @@
                         <div class="inner">
                             <h5>SPK harian</h5>
                         </div>
-                        <a href="spkharian" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        <a href="spkharian" id="spkharian" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
             </div>
@@ -112,7 +112,7 @@
                         <div class="inner">
                             <h5>EXP SIM</h5>
                         </div>
-                        <a href="expsim" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        <a href="expsim" id="expsim" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <div class="col-lg-3 col-6">
@@ -121,17 +121,17 @@
                         <div class="inner">
                             <h5>EXP STNK</h5>
                         </div>
-                        <a href="expstnk" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        <a href="expstnk" id="expstnk" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
-                
+
                 <div class="col-lg-3 col-6">
                     <!-- small box -->
                     <div class="small-box bg-maroon">
                         <div class="inner">
                             <h5>EXP ASURANSI</h5>
                         </div>
-                        <a href="expasuransi" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        <a href="expasuransi" id="expasuransi" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <div class="col-lg-3 col-6">
@@ -140,7 +140,7 @@
                         <div class="inner">
                             <h5>STATUS OLI TRADO</h5>
                         </div>
-                        <a href="statusolitrado" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        <a href="statusolitrado" id="statusolitrado" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
             </div>
@@ -309,6 +309,40 @@
 @include('dashboard._reminderspkdetail') -->
 @push('scripts')
 <script>
+    $(document).ready(function() {
+        if (!`{{ $myAuth->hasPermission('reminderoli', 'index') }}`) {
+            $('#reminderoli').attr('href', '#')
+        }
+        if (!`{{ $myAuth->hasPermission('supir', 'index') }}`) {
+            $('.supir').attr('href', '#')
+        }
+        if (!`{{ $myAuth->hasPermission('trado', 'index') }}`) {
+            $('.trado').attr('href', '#')
+        }
+        if (!`{{ $myAuth->hasPermission('reminderstok', 'index') }}`) {
+            $('#reminderstok').attr('href', '#')
+        }
+        if (!`{{ $myAuth->hasPermission('reminderspk', 'index') }}`) {
+            $('#reminderspk').attr('href', '#')
+        }
+        if (!`{{ $myAuth->hasPermission('spkharian', 'index') }}`) {
+            $('#spkharian').attr('href', '#')
+        }
+        if (!`{{ $myAuth->hasPermission('expsim', 'index') }}`) {
+            $('#expsim').attr('href', '#')
+        }
+        if (!`{{ $myAuth->hasPermission('expstnk', 'index') }}`) {
+            $('#expstnk').attr('href', '#')
+        }
+        if (!`{{ $myAuth->hasPermission('expasuransi', 'index') }}`) {
+            $('#expasuransi').attr('href', '#')
+        }
+        if (!`{{ $myAuth->hasPermission('statusolitrado', 'index') }}`) {
+            $('#statusolitrado').attr('href', '#')
+        }
+    })
+
+
     // let indexRow = 0;
     // $(document).ready(function() {
 

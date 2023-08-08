@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class SpkHarianController extends Controller
+class SpkHarianController extends MyController
 {
     public $title = 'SPK Harian';
 
