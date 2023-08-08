@@ -244,11 +244,11 @@
                   <tr>
                     <th style="width:10%; max-width: 25px;max-width: 15px">No</th>
                     <th style="width: 20%; min-width: 200px;">stok  </th>
-                    <th class="data_tbl tbl_vulkanisirke" style="width: 10px">vulkanisir ke</th>
                     <th style="width: 20%; min-width: 200px;">keterangan  </th>
                     <th class="data_tbl tbl_penerimaanstok_nobukti"  style="width: 20%; min-width: 200px;">Penerimaan stok no bukti</th>
                     <th class="data_tbl tbl_harga" style="width: 20%; min-width: 200px;">harga</th>
                     <th class="data_tbl tbl_qty" style="width:10%; min-width: 100px">qty </th>
+                    <th class="data_tbl tbl_vulkanisirke" style="width:10%; min-width: 100px">vulkanisir ke</th>
                     <th class="data_tbl tbl_persentase" style="width:10%; min-width: 100px">persentase discount</th>
                     <th class="data_tbl tbl_total" style="width: 20%; min-width: 200px;">Total</th>
                     <th class="data_tbl tbl_aksi" style="width:10%; max-width: 25px;max-width: 15px">Aksi</th>
@@ -470,7 +470,7 @@
         break;
       case listKodePenerimaan[4] : // 'PG':
         tampilanpgt()
-        break;tampilanPSPK
+        break;
       case listKodePenerimaan[3] : // 'KOR':
         tampilankst()
         break;
@@ -482,6 +482,9 @@
         break;
       case listKodePenerimaan[8] : // 'PSPK':
         tampilanPSPK()
+        break;
+      case listKodePenerimaan[9] : // 'KORV':
+        tampilanKORV()
         break;
 
       default:
@@ -761,6 +764,39 @@
     $('.tbl_aksi').show()
   }
 
+  function tampilanKORV() {
+    $('[name=supplier]').parents('.form-group').hide()
+    $('[name=servicein_nobukti]').parents('.form-group').hide()
+    $('[name=penerimaanstok_nobukti]').parents('.form-group').hide()
+    $('[name=pengeluaranstok_nobukti]').parents('.form-group').hide()
+    $('[name=keterangan]').parents('.form-group').hide()
+    $('[name=nobon]').parents('.form-group').hide()
+    $('[name=hutang_nobukti]').parents('.form-group').hide()
+    $('[name=coa]').parents('.form-group').hide()
+
+    $('[name=gudang]').parents('.form-group').hide()
+    $('[name=trado]').parents('.form-group').hide()
+    $('[name=gandengan]').parents('.form-group').hide()
+    
+    
+    $('[name=gudangdari]').parents('.form-group').hide()
+    $('[name=gudangke]').parents('.form-group').hide()
+    $('[name=tradodari]').parents('.form-group').hide()
+    $('[name=tradoke]').parents('.form-group').hide()
+    $('[name=gandengandari]').parents('.form-group').hide()
+    $('[name=gandenganke]').parents('.form-group').hide()
+    $('.tbl_penerimaanstok_nobukti').hide();
+    $('.tbl_qty').hide()
+    $('.tbl_vulkanisirke').show();
+    $('.tbl_harga').hide();
+    $('.tbl_persentase').hide();
+    $('.tbl_total').hide();
+    $('.colspan').attr('colspan', 4);
+    $('.sumrow').hide();
+    
+    $('#addRow').show()
+  }
+
   function setSuplier(penerimaan_id) {
     $.ajax({
       url: `${apiUrl}penerimaanstokheader/${penerimaan_id}`,
@@ -808,9 +844,6 @@
                     <input type="text"  name="detail_stok[]" id="detail_stok_${id}" class="form-control stok-lookup ">
                     <input type="text" id="detailstokId_${id}" readonly hidden class="detailstokId" name="detail_stok_id[]">
                   </td>
-                  <td class="data_tbl tbl_vulkanisirke">
-                    <input type="number"  name="detail_vulkanisirke[]" style="" class="form-control">                    
-                  </td>  
                   <td>
                     <input type="text"  name="detail_keterangan[]" style="" class="form-control">                    
                   </td>
@@ -826,8 +859,12 @@
 
                   <td class="data_tbl tbl_qty">
                     <input type="text"  name="detail_qty[]" id="detail_qty${id}" onkeyup="calculate(${id})" style="text-align:right" class="form-control autonumeric number${id}">                    
-                  </td>  
-                  
+                  </td>
+
+                  <td class="data_tbl tbl_vulkanisirke">
+                    <input type="number"  name="detail_vulkanisirke[]" style="" class="form-control">                    
+                  </td>
+
                   <td class="data_tbl tbl_persentase">
                     <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${id}" onkeyup="calculate(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
                   </td>  
@@ -944,9 +981,7 @@
                     <input type="text"  name="detail_stok[]" id="detail_stok_${id}" class="form-control stok-lookup ">
                     <input type="text" id="detailstokId_${id}" readonly hidden class="detailstokId" name="detail_stok_id[]">
                   </td>
-                  <td class="data_tbl tbl_vulkanisirke">
-                    <input type="number"  name="detail_vulkanisirke[]" style="" class="form-control">                    
-                  </td>  
+                   
                   <td>
                     <input type="text"  name="detail_keterangan[]" style="" class="form-control">                    
                   </td>
@@ -962,7 +997,11 @@
 
                   <td class="data_tbl tbl_qty">
                     <input type="text"  name="detail_qty[]" id="detail_qty${id}" onkeyup="cal(${id})" style="text-align:right" class="form-control autonumeric number${id}">                    
-                  </td>  
+                  </td>
+                  
+                  <td class="data_tbl tbl_vulkanisirke">
+                    <input type="number"  name="detail_vulkanisirke[]" style="" max="100" class="form-control">                    
+                  </td> 
                   
                   <td class="data_tbl tbl_persentase">
                     <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${id}" onkeyup="cal(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
@@ -1073,9 +1112,7 @@
                     <input type="text"  name="detail_stok[]" id="detail_stok_${id}" class="form-control stok-lookup ">
                     <input type="text" id="detailstokId_${id}" readonly hidden class="detailstokId" name="detail_stok_id[]">
                   </td>
-                  <td class="data_tbl tbl_vulkanisirke">
-                    <input type="number"  name="detail_vulkanisirke[]" style="" class="form-control">                    
-                  </td>  
+                 
                   <td>
                     <input type="text"  name="detail_keterangan[]" style="" class="form-control">                    
                   </td>
@@ -1091,6 +1128,10 @@
     
                   <td class="data_tbl tbl_qty">
                     <input type="text"  name="detail_qty[]" id="detail_qty${id}" onkeyup="cal(${id})" style="text-align:right" class="form-control autonumeric number${id}">                    
+                  </td>  
+
+                  <td class="data_tbl tbl_vulkanisirke">
+                    <input type="number"  name="detail_vulkanisirke[]" style="" max="100" class="form-control">                    
                   </td>  
                   
                   <td class="data_tbl tbl_persentase">
@@ -1547,6 +1588,7 @@
             form.find('[name]').attr('disabled', 'disabled').css({
               background: '#fff'
             })
+            form.find('[name=id]').prop('disabled',false)
 
           })
           .then(() => {
@@ -1606,9 +1648,7 @@
                     <input type="text"  name="detail_stok[]" id="" class="form-control detail_stok_${index}">
                     <input type="text" id="detailstokId_${index}" readonly hidden class="detailstokId" name="detail_stok_id[]">
                   </td>                 
-                  <td class="data_tbl tbl_vulkanisirke">
-                    <input type="number"  name="detail_vulkanisirke[]" style="" class="form-control" >                    
-                  </td>  
+                  
                   <td>
                     <input type="text"  name="detail_keterangan[]" style="" class="form-control">                    
                   </td>
@@ -1625,6 +1665,10 @@
                   <td class="data_tbl tbl_qty">
                     <input type="text"  name="detail_qty[]" id="detail_qty${index}" onkeyup="calculate(${index})" style="text-align:right" class="form-control autonumeric number${index}" >
                   </td>
+
+                  <td class="data_tbl tbl_vulkanisirke">
+                    <input type="number"  name="detail_vulkanisirke[]" style="" max="100" class="form-control" >                    
+                  </td> 
 
                   <td class="data_tbl tbl_persentase">
                     <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${index}" onkeyup="calculate(${index})" style="text-align:right" class="form-control autonumeric number${index}" >
@@ -1890,9 +1934,7 @@
                       <input type="text"  name="detail_stok[]" id="detail_stok_${id}" class="form-control stok-lookup ">
                       <input type="text" id="detailstokId_${id}" readonly hidden class="detailstokId" name="detail_stok_id[]">
                     </td>
-                    <td class="data_tbl tbl_vulkanisirke">
-                      <input type="number"  name="detail_vulkanisirke[]" style="" class="form-control">                    
-                    </td>  
+                   
                     <td>
                       <input type="text"  name="detail_keterangan[]" style="" class="form-control">                    
                     </td>
@@ -1909,7 +1951,10 @@
                     <td class="data_tbl tbl_qty">
                       <input type="text"  name="detail_qty[]" id="detail_qty${id}" onkeyup="calculate(${id})" style="text-align:right" class="form-control autonumeric number${id}">
                     </td>
-                    
+                    <td class="data_tbl tbl_vulkanisirke">
+                      <input type="number"  name="detail_vulkanisirke[]" style="" max="100" class="form-control">                    
+                    </td>  
+
                     <td class="data_tbl tbl_persentase">
                       <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${id}" onkeyup="calculate(${id})" style="text-align:right" class="autonumeric number${id} form-control">
                     </td>
