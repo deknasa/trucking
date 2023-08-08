@@ -265,9 +265,9 @@
                         <tr>
                           <th style="width:10%; max-width: 25px; max-width: 15px">No</th>
                           <th style="width: 20%; min-width: 200px;">stok</th>
-                          <th class="data_tbl tbl_vulkanisirke" style="width: 20px">vulkanisirke</th>
                           <th style="width: 20%; min-width: 200px;">keterangan</th>
                           <th class="tbl_qty" style="width:10%; min-width: 100px">qty</th>
+                          <th class="data_tbl tbl_vulkanisirke" style="width:10%; min-width: 100px">vulkanisirke</th>
                           <th class="data_tbl tbl_harga" style="width: 20%; min-width: 200px;">harga</th>
                           <th class="data_tbl tbl_persentase" style="width:10%; min-width: 100px">persentase discount</th>
                           <th class="data_tbl tbl_total" style="width: 20%; min-width: 200px;">Total</th>
@@ -508,6 +508,9 @@
       case listKodePengeluaran[4]: //'GST':
         tampilanGST()
         break;
+      case listKodePengeluaran[5]: //'KORV':
+        tampilanKORV()
+        break;
       default:
         tampilanInit()
         break;
@@ -587,15 +590,6 @@
     $('.sumrow').hide();
   }
 
-  // function tampilanSpkAddRow() {
-  //   $('.tbl_qty').show()
-  //   $('.tbl_vulkanisirke').hide();
-  //   $('.tbl_harga').hide();
-  //   $('.tbl_persentase').hide();
-  //   $('.tbl_total').hide();
-  //   $('.colspan').attr('colspan', 4);
-  //   $('.sumrow').hide();
-  // }
 
   function tampilanrbt() {
     // $('[name=nobukti]').parents('.form-group').show()
@@ -677,15 +671,7 @@
     $('.colspan').attr('colspan', 4);
     $('.sumrow').hide();
   }
-  
-  // function tampilanRbtAddRow() {
-  //   $('.tbl_qty').show()
-  //   $('.tbl_harga').show()
-  //   $('.tbl_total').show()
-  //   $('.tbl_vulkanisirke').hide();
-  //   $('.tbl_persentase').hide();
-  //   $('.colspan').attr('colspan', 4);
-  // }
+ 
 
   function tampilankor() {
     // $('[name=nobukti]').parents('.form-group').show()
@@ -709,16 +695,29 @@
     $('.colspan').attr('colspan', 4);
     $('.sumrow').hide();
   }
-  // function tampilanKorAddRow() {
-  //   $('.tbl_qty').show()
-  //   $('.tbl_vulkanisirke').hide();
-  //   $('.tbl_harga').hide();
-  //   $('.tbl_persentase').hide();
-  //   $('.tbl_total').hide();
-  //   $('.colspan').attr('colspan', 4);
-  //   $('.sumrow').hide();
-  // }
 
+  function tampilanKORV() {
+    // $('[name=nobukti]').parents('.form-group').show()
+    // $('[name=tglbukti]').parents('.form-group').show()
+    // $('[name=pengeluaranstok]').parents('.form-group').show()
+    $('[name=trado]').parents('.form-group').hide()
+    $('[name=gandengan]').parents('.form-group').hide()
+    $('[name=gudang]').parents('.form-group').hide()
+    $('[name=supplier]').parents('.form-group').hide()
+    $('[name=servicein_nobukti]').parents('.form-group').hide()
+    $('[name=penerimaanstok_nobukti]').parents('.form-group').hide()
+    $('[name=pengeluaranstok_nobukti]').parents('.form-group').hide()
+    $('[name=kerusakan]').parents('.form-group').hide()
+    $('[name=supir]').parents('.form-group').hide()
+    $('[name=statuspotongretur]').parents('.form-group').hide()
+    $('.tbl_qty').hide()
+    $('.tbl_vulkanisirke').show();
+    $('.tbl_harga').hide();
+    $('.tbl_persentase').hide();
+    $('.tbl_total').hide();
+    $('.colspan').attr('colspan', 4);
+    $('.sumrow').hide();
+  }
 
   function tampilanall() {
     $('[name=nobukti]').parents('.form-group').show()
@@ -864,13 +863,13 @@
         showPengeluaranstokHeader(form, pengeluaranStokHeaderId)
           .then(() => {
             $('#crudModal').modal('show')
-            // if ($('#crudForm').find("[name=gudang]")) {
-            //   lookupSelected(`gudang`);
-            // } else if ($('#crudForm').find("[name=gandengan]")) {
-            //   lookupSelected('gandengan')
-            // } else if ($('#crudForm').find("[name=trado]")) {
-            //   lookupSelected('trado')
-            // }
+            if ($('#crudForm').find("[name=gudang]")) {
+              lookupSelected(`gudang`);
+            } else if ($('#crudForm').find("[name=gandengan]")) {
+              lookupSelected('gandengan')
+            } else if ($('#crudForm').find("[name=trado]")) {
+              lookupSelected('trado')
+            }
             // // penerimaanOrServicein
             // if ($('#crudForm').find("[name=servicein_nobukti]").val() !== "") {
             //   penerimaanOrServicein('penerimaan');
@@ -1028,16 +1027,15 @@
                     <input type="text"  name="detail_stok[]" id="" class="form-control detail_stok_${index}">
                     <input type="text" id="detailstokId_${index}" readonly hidden class="detailstokId" name="detail_stok_id[]">
                   </td>                 
-                  <td class="data_tbl tbl_vulkanisirke" style="display: none;">
-                    <input type="text"  name="detail_vulkanisirke[]" style="" class="form-control">                    
-                  </td>  
                   <td>
                     <input type="text"  name="detail_keterangan[]" style="" class="form-control">                    
                   </td>
-                  <td>
+                  <td class="data_tbl tbl_qty">
                     <input type="text"  name="detail_qty[]" id="detail_qty${index}" onkeyup="calculate(${index})" style="text-align:right" class="form-control autonumeric number${index}">
                   </td>  
-                  
+                  <td class="data_tbl tbl_vulkanisirke">
+                      <input type="number"  name="detail_vulkanisirke[]" style="" class="form-control">                    
+                    </td> 
                   <td class="data_tbl tbl_harga">
                     <input type="text"  name="detail_harga[]" id="detail_harga${index}" readonly style="text-align:right" class="form-control autonumeric number${index}">
                   </td>  
@@ -1162,7 +1160,7 @@
   }
 
   function lookupSelected(el) {
-    if ((kodePengeluaranStok == listKodePengeluaran[2]) || (kodePengeluaranStok == listKodePengeluaran[4])) {
+    if ((kodePengeluaranStok == listKodePengeluaran[2]) || (kodePengeluaranStok == listKodePengeluaran[4])|| (kodePengeluaranStok == listKodePengeluaran[5])) {
       // console.log(kodepengeluaranstok);
       // console.log(el);
       switch (el) {
@@ -1215,6 +1213,7 @@
   }
 
   function enabledKorDisable() {
+    console.log('adasd');
     $('#crudForm').find(`[name="gudang"]`).parents('.input-group').children().attr("disabled", false);
     $('#crudForm').find(`[name="gudang"]`).parents('.input-group').children().find(`.lookup-toggler`).attr("disabled", false);
     $('#gudangId').attr('disabled', false);
@@ -1355,16 +1354,15 @@
                       <input type="text"  name="detail_stok[]" id="detail_stok_${id}" class="form-control stok-lookup ">
                       <input type="text" id="detailstokId_${id}" readonly hidden class="detailstokId" name="detail_stok_id[]">
                     </td>
-                    <td class="data_tbl tbl_vulkanisirke" style="display: none;">
-                      <input type="text"  name="detail_vulkanisirke[]" style="" class="form-control">                    
-                    </td>  
                     <td>
                       <input type="text"  name="detail_keterangan[]" style="" class="form-control">                    
                     </td>
-                    <td>
+                    <td class="data_tbl tbl_qty">
                       <input type="text"  name="detail_qty[]" id="detail_qty${id}" onkeyup="calculate(${id})" style="text-align:right" class="form-control autonumeric number${id}">                    
                     </td>  
-                    
+                    <td class="data_tbl tbl_vulkanisirke">
+                      <input type="number"  name="detail_vulkanisirke[]" style="" class="form-control">                    
+                    </td>  
                     <td class="data_tbl tbl_harga">
                       <input type="text"  name="detail_harga[]" id="detail_harga${id}" readonly style="text-align:right" class="autonumeric number${id} form-control">                    
                     </td>  
@@ -1455,15 +1453,15 @@
                     <input type="text"  name="detail_stok[]" id="detail_stok_${id}" class="form-control stok-lookup ">
                     <input type="text" id="detailstokId_${id}" readonly hidden class="detailstokId" name="detail_stok_id[]">
                   </td>
-                   <td class="data_tbl tbl_vulkanisirke " style="display: none;">
-                    <input type="text"  name="detail_vulkanisirke[]" style="" class="form-control">                    
-                  </td>  
                   <td>
                     <input type="text"  name="detail_keterangan[]" style="" class="form-control">                    
                   </td>
-                  <td>
+                  <td class="data_tbl tbl_qty" >
                     <input type="text"  name="detail_qty[]" id="detail_qty${id}" onkeyup="calculate(${id})" style="text-align:right" class="form-control autonumeric number${id}">                    
-                  </td>  
+                  </td>
+                  <td class="data_tbl tbl_vulkanisirke" >
+                    <input type="text"  name="detail_vulkanisirke[]" style="" class="form-control">                    
+                  </td> 
                   
                   <td class="data_tbl tbl_harga">
                     <input type="text"  name="detail_harga[]" id="detail_harga${id}" readonly style="text-align:right" class="autonumeric number${id} form-control">                    
