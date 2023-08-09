@@ -245,6 +245,12 @@
             align: 'right',
             formatter: currencyFormat,
           },
+          {
+            label: 'U. MAKAN BERJENJANG',
+            name: 'uangmakanberjenjang',
+            align: 'right',
+            formatter: currencyFormat,
+          },
 
           {
             label: 'NOMINAL',

@@ -296,6 +296,7 @@
     let selectedJalan = [];
     let selectedKomisi = [];
     let selectedMakan = [];
+    let selectedMakanBerjenjang = [];
     let selectedPP = [];
     let selectedPS = [];
     let selectedDeposito = [];
@@ -325,7 +326,7 @@
             selectedJalan.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_uangjalan"]`).text());
             selectedKomisi.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_komisisupir"]`).text());
             selectedMakan.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_uangmakanharian"]`).text());
-
+            selectedMakanBerjenjang.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_uangmakanberjenjang"]`).text());
             countNominal()
             $(element).parents('tr').addClass('bg-light-blue')
         } else {
@@ -343,6 +344,7 @@
                     selectedJalan.splice(i, 1);
                     selectedKomisi.splice(i, 1);
                     selectedMakan.splice(i, 1);
+                    selectedMakanBerjenjang.splice(i, 1);
                 }
             }
 
@@ -359,6 +361,7 @@
         jalan = 0;
         komisi = 0;
         makan = 0;
+        berjenjang = 0;
         $.each(selectedPP, function(index, item) {
             potPribadi = potPribadi + parseFloat(item.replace(/,/g, ''))
         });
@@ -383,6 +386,9 @@
         $.each(selectedMakan, function(index, item) {
             makan = makan + parseFloat(item.replace(/,/g, ''))
         });
+        $.each(selectedMakanBerjenjang, function(index, item) {
+            berjenjang = berjenjang + parseFloat(item.replace(/,/g, ''))
+        });
 
         // postingRincian = borongan + makan
         postingRincian = borongan
@@ -401,6 +407,7 @@
         initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_uangjalan"]`).text(jalan))
         initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_komisisupir"]`).text(komisi))
         initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_uangmakanharian"]`).text(makan))
+        initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_uangmakanberjenjang"]`).text(berjenjang))
     }
 
     $(document).ready(function() {
@@ -652,6 +659,7 @@
         selectedKomisi = [];
         selectedJalan = [];
         selectedMakan = [];
+        selectedMakanBerjenjang = [];
         $('#crudModal').find('.modal-body').html(modalBody)
     })
 
@@ -768,6 +776,12 @@
                     {
                         label: 'UANG MAKAN',
                         name: 'uangmakanharian',
+                        formatter: currencyFormat,
+                        align: "right",
+                    },
+                    {
+                        label: 'U. MAKAN BERJENJANG',
+                        name: 'uangmakanberjenjang',
                         formatter: currencyFormat,
                         align: "right",
                     },
@@ -1103,6 +1117,7 @@
                     selectedJalan.push(detail.uangjalan)
                     selectedKomisi.push(detail.komisisupir)
                     selectedMakan.push(detail.uangmakanharian)
+                    selectedMakanBerjenjang.push(detail.uangmakanberjenjang)
                     selectedPP.push(detail.potonganpinjaman)
                     selectedPS.push(detail.potonganpinjamansemua)
                     selectedDeposito.push(detail.deposito)
@@ -1236,6 +1251,7 @@
                 selectedJalan = response.data.map((data) => data.uangjalan)
                 selectedKomisi = response.data.map((data) => data.komisisupir)
                 selectedMakan = response.data.map((data) => data.uangmakanharian)
+                selectedMakanBerjenjang = response.data.map((data) => data.uangmakanberjenjang)
                 selectedPP = response.data.map((data) => data.potonganpinjaman)
                 selectedPS = response.data.map((data) => data.potonganpinjamansemua)
                 selectedDeposito = response.data.map((data) => data.deposito)
@@ -1379,6 +1395,7 @@
         selectedJalan = [];
         selectedKomisi = [];
         selectedMakan = [];
+        selectedMakanBerjenjang = [];
         selectedPP = [];
         selectedPS = [];
         selectedDeposito = [];
@@ -1462,6 +1479,7 @@
                 selectedJalan = response.data.map((data) => data.uangjalan)
                 selectedKomisi = response.data.map((data) => data.komisisupir)
                 selectedMakan = response.data.map((data) => data.uangmakanharian)
+                selectedMakanBerjenjang = response.data.map((data) => data.uangmakanberjenjang)
                 selectedPP = response.data.map((data) => data.potonganpinjaman)
                 selectedPS = response.data.map((data) => data.potonganpinjamansemua)
                 selectedDeposito = response.data.map((data) => data.deposito)
