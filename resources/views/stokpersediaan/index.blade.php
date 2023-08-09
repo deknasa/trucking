@@ -149,6 +149,10 @@
                         hidden: true
                     },
                     {
+                        label: 'Lokasi',
+                        name: 'lokasi'
+                    },
+                    {
                         label: 'STOK',
                         name: 'stok_id',
                         width: '500px'
@@ -358,6 +362,9 @@
             if (keterangan == '188') {
                 dataFilter = $('#crudForm').find('[name=gandengan_id]').val()
             }
+            if (keterangan == '0') {
+                dataFilter = ""
+            }
             $('#jqGrid').jqGrid('setGridParam', {
                 postData: {
                     keterangan: $('#crudForm').find('[name=keterangan]').val(),
@@ -382,6 +389,10 @@
             $('#gandengan').hide()
         } else if (keterangan == '188') {
             $('#gandengan').show()
+            $('#gudang').hide()
+            $('#trado').hide()
+        } else if (keterangan == '0') {
+            $('#gandengan').hide()
             $('#gudang').hide()
             $('#trado').hide()
         } else {
@@ -452,7 +463,9 @@
             relatedForm.find('[name=keterangan]').append(
                 new Option('-- PILIH FILTER --', '', false, true)
             ).trigger('change')
-
+            relatedForm.find('[name=keterangan]').append(
+                new Option('Semua', 0, false, true)
+            )
             let data = [];
             data.push({
                 name: 'grp',
