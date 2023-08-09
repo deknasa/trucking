@@ -12,6 +12,7 @@
         filters: `{!! $filters ?? '' !!}`,
         aktif: `{!! $Aktif ?? '' !!}`,
         penerimaanstok_id: `{!! $penerimaanstok_id ?? '' !!}`,
+        gudangdarike: `{!! $gudangdarike ?? '' !!}`,
       },
       idPrefix: 'gudangLookup',
       colModel: [{
