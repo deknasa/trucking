@@ -457,7 +457,6 @@
 
   function setTampilanForm() {
     tampilanall()
-    // console.log(KodePenerimaanId,listKodePenerimaan[0]);
     switch (KodePenerimaanId) {
       case listKodePenerimaan[0] : // 'DOT':
         tampilandot()
@@ -1194,6 +1193,10 @@
     let gandengandari = $('#crudForm').find(`[name="gandengandari"]`).parents('.input-group').children()
     let gudang = $('#crudForm').find(`[name="gudang"]`).parents('.input-group').children()
     let gudangdari = $('#crudForm').find(`[name="gudangdari"]`).parents('.input-group').children()
+    let tradoke = $('#crudForm').find(`[name="tradoke"]`).parents('.input-group').children()
+    let gandenganke = $('#crudForm').find(`[name="gandenganke"]`).parents('.input-group').children()
+    let gudangke = $('#crudForm').find(`[name="gudangke"]`).parents('.input-group').children()
+    
 
 
     switch (el) {
@@ -1247,6 +1250,34 @@
         $('#gandengandariId').attr('disabled', true);
         $('#gudangdariId').attr('disabled', false);
 
+        if (KodePenerimaanId == listKodePenerimaan[4]) {
+          // GUDANG KANTOR
+          if ($('#gudangdariId').val() == 1) {
+            gudangke.attr('disabled', false)
+            gudangke.find('.lookup-toggler').attr('disabled', false)
+            $('#gudangkeId').attr('disabled', false);
+            $('#gudangkeId').val('');
+            $('#crudForm').find(`[name="gudangke"]`).val('');
+            
+            tradoke.attr('disabled', true)
+            tradoke.find('.lookup-toggler').attr('disabled', true)
+            $('#tradokeId').attr('disabled', true);
+    
+            gandenganke.attr('disabled', true)
+            gandenganke.find('.lookup-toggler').attr('disabled', true)
+            $('#gandengankeId').attr('disabled', true);
+          }else{
+            tradoke.attr('disabled', false)
+            tradoke.find('.lookup-toggler').attr('disabled', false)
+            $('#tradokeId').attr('disabled', false);
+    
+            gandenganke.attr('disabled', false)
+            gandenganke.find('.lookup-toggler').attr('disabled', false)
+            $('#gandengankeId').attr('disabled', false);
+          }
+          
+        }
+
         break;
       default:
         break;
@@ -1299,7 +1330,7 @@
     }
   }
 
-  function enabledLookupSelectedDari() {
+  function enabledLookupSelectedDari(lokasi = null, nilai = null) {
 
     let tradodari = $('#crudForm').find(`[name="tradodari"]`).parents('.input-group').children()
     let gandengandari = $('#crudForm').find(`[name="gandengandari"]`).parents('.input-group').children()
@@ -1317,6 +1348,17 @@
     gandengandari.find('.lookup-toggler').attr('disabled', false)
     $('#gandengandariId').attr('disabled', false);
     $('#gandengandariId').val('');
+
+    if (KodePenerimaanId == listKodePenerimaan[4]) {
+      if (lokasi == 'gudang' && nilai == 1) {
+            enabledLookupSelectedKe()
+            $('#crudForm').find(`[name="gudangke"]`).val('');
+      }
+      // let tradoke = $('#crudForm').find(`[name="tradoke"]`).parents('.input-group').children()
+      // let gandenganke = $('#crudForm').find(`[name="gandenganke"]`).parents('.input-group').children()
+      // let gudangke = $('#crudForm').find(`[name="gudangke"]`).parents('.input-group').children()
+    }
+          
   }
 
   function enabledLookupSelectedKe() {
@@ -2341,6 +2383,7 @@
         var penerimaanstokId = $(`#penerimaanstokId`).val();
         this.postData = {
           penerimaanstok_id: penerimaanstokId,
+          gudangdarike: 'ke',
           Aktif: 'AKTIF',
         }
       },
@@ -2416,6 +2459,7 @@
         var penerimaanstokId = $(`#penerimaanstokId`).val();
         this.postData = {
           penerimaanstok_id: penerimaanstokId,
+          gudangdarike: 'dari',
           Aktif: 'AKTIF',
         }
       },
@@ -2429,7 +2473,7 @@
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
-        enabledLookupSelectedDari()
+        enabledLookupSelectedDari('gudang',$(`#${element[0]['name']}Id`).val())
         element.val('')
         $(`#${element[0]['name']}Id`).val('')
         element.data('currentValue', element.val())
