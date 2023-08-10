@@ -192,7 +192,7 @@ class PenerimaanStokHeaderController extends MyController
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'penerimaanstok');
+            ->get(config('app.api_url') . 'penerimaanstok',["limit"=>20]);
 
         return $response['data'];
     }

@@ -27,7 +27,7 @@
             let sortname = 'kodepenerimaan'
             let sortorder = 'asc'
             let autoNumericElements = []
-            let rowNum = 10
+            let rowNum = 20
 
             $(document).ready(function() {
 
