@@ -256,43 +256,79 @@
     let selectedRowsAbsensiNobukti = [];
     let selectedRowsAbsensiUangjalan = [];
 
-    function checkboxHandler(element) {
-        let value = $(element).val();
-        if (element.checked) {
-            selectedRows.push($(element).val())
-            selectedNobukti.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_nobuktitrip"]`).text())
-            selectedGajiSupir.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_gajisupir"]`).text())
-            selectedGajiKenek.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_gajikenek"]`).text())
-            selectedKomisiSupir.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_komisisupir"]`).text())
-            selectedUpahRitasi.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_upahritasi"]`).text())
-            selectedStatusRitasi.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_statusritasi"]`).text())
-            selectedBiayaExtra.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_biayaextra"]`).text())
-            selectedKetBiaya.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_keteranganbiaya"]`).text())
-            selectedTolSupir.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_tolsupir"]`).text())
-            selectedRitasi.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_ritasi_nobukti"]`).text())
-            hitungNominal()
+    function checkboxHandler(element, rowId) {
 
-            $(element).parents('tr').addClass('bg-light-blue')
-        } else {
-            $(element).parents('tr').removeClass('bg-light-blue')
-            for (var i = 0; i < selectedRows.length; i++) {
-                if (selectedRows[i] == value) {
-                    selectedRows.splice(i, 1);
-                    selectedNobukti.splice(i, 1);
-                    selectedGajiSupir.splice(i, 1);
-                    selectedGajiKenek.splice(i, 1);
-                    selectedKomisiSupir.splice(i, 1);
-                    selectedUpahRitasi.splice(i, 1);
-                    selectedStatusRitasi.splice(i, 1);
-                    selectedBiayaExtra.splice(i, 1);
-                    selectedKetBiaya.splice(i, 1);
-                    selectedTolSupir.splice(i, 1);
-                    selectedRitasi.splice(i, 1);
+        let isChecked = $(element).is(":checked");
+        let editableColumns = $("#rekapRincian").getGridParam("editableColumns");
+        let selectedRowIds = $("#rekapRincian").getGridParam("selectedRowIds");
+        let originalGridData = $("#rekapRincian")
+            .jqGrid("getGridParam", "originalData")
+            .find((row) => row.id == rowId);
+
+        editableColumns.forEach((editableColumn) => {
+
+            if (!isChecked) {
+                for (var i = 0; i < selectedRowIds.length; i++) {
+                    if (selectedRowIds[i] == rowId) {
+                        selectedRowIds.splice(i, 1);
+                    }
                 }
-            }
-            hitungNominal()
-        }
 
+                $("#rekapRincian").jqGrid("setCell", rowId, "uangmakanberjenjang", 0);
+                $(`#rekapRincian tr#${rowId}`).find(`td[aria-describedby="rekapRincian_uangmakanberjenjang"]`).attr("value", 0)
+                // hitungNominal()
+                hitung(selectedRowIds)
+                $(element).parents('tr').removeClass('bg-light-blue')
+            } else {
+                selectedRowIds.push(rowId);
+
+                // hitungNominal()
+                hitung(selectedRowIds)
+                $(element).parents('tr').addClass('bg-light-blue')
+            }
+        });
+
+        $("#rekapRincian").jqGrid("setGridParam", {
+            selectedRowIds: selectedRowIds,
+        });
+
+
+
+    }
+
+    function hitung(selectedRowIds) {
+        gajiSupir = 0;
+        gajiKenek = 0;
+        komisi = 0;
+        tol = 0;
+        upahRitasi = 0;
+        biayaExtra = 0;
+        $.each(selectedRowIds, (index, value) => {
+            dataTrip = $("#rekapRincian").jqGrid("getLocalRow", value);
+            let selectedGaji = dataTrip.gajisupir
+            let selectedKenek = dataTrip.gajikenek
+            let selectedKomisi = dataTrip.komisisupir
+            let selectedTol = dataTrip.tolsupir
+            let selectedUpahRitasi = dataTrip.upahritasi
+            let selectedBiayaExtra = dataTrip.biayaextra
+
+            gajiSupir = gajiSupir + parseFloat(selectedGaji)
+            gajiKenek = gajiKenek + parseFloat(selectedKenek)
+            komisi = komisi + parseFloat(selectedKomisi)
+            tol = tol + parseFloat(selectedTol)
+            upahRitasi = upahRitasi + parseFloat(selectedUpahRitasi)
+            biayaExtra = biayaExtra + parseFloat(selectedBiayaExtra)
+        })
+
+        subtotal = gajiSupir + gajiKenek + tol + upahRitasi + biayaExtra
+        initAutoNumeric($('#crudForm').find(`[name="subtotal"]`).val(subtotal))
+        initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_gajisupir"]`).text(gajiSupir))
+        initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_gajikenek"]`).text(gajiKenek))
+        initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_komisisupir"]`).text(komisi))
+        initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_upahritasi"]`).text(upahRitasi))
+        initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_biayaextra"]`).text(biayaExtra))
+        initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_tolsupir"]`).text(tol))
+        hitungSisa()
     }
 
     function checkboxAbsensiHandler(element) {
@@ -378,8 +414,9 @@
             uangMakan = Number.isNaN(uangMakan) ? 0 : uangMakan
 
             let subTotal = ($(`#crudForm [name="subtotal"]`).val() == '') ? 0 : AutoNumeric.getNumber($(`#crudForm [name="subtotal"]`)[0])
+            let uangmakanBerjenjang = ($(`#crudForm [name="berjenjanguangmakan"]`).val() == '') ? 0 : AutoNumeric.getNumber($(`#crudForm [name="berjenjanguangmakan"]`)[0])
 
-            let total = subTotal + uangMakan
+            let total = subTotal + uangMakan + uangmakanBerjenjang
 
             let uangjalan = AutoNumeric.getNumber($(`#crudForm [name="uangjalan"]`)[0]);
             let deposito = ($(`#crudForm [name="deposito"]`).val() == '') ? 0 : AutoNumeric.getNumber($(`#crudForm [name="deposito"]`)[0]);
@@ -425,34 +462,32 @@
             $('#gajiSupir').html('')
             $('#gajiKenek').html('')
 
-            getAllTrip(supirId, dari, sampai, aksi)
+            getAllTrip(aksi)
                 .then((response) => {
-                    $('.is-invalid').removeClass('is-invalid')
-                    $('.invalid-feedback').remove()
-                    selectedRows = response.data.map((data) => data.id)
-                    selectedNobukti = response.data.map((data) => data.nobuktitrip)
-                    selectedGajiSupir = response.data.map((data) => data.gajisupir)
-                    selectedGajiKenek = response.data.map((data) => data.gajikenek)
-                    selectedKomisiSupir = response.data.map((data) => data.komisisupir)
-                    selectedUpahRitasi = response.data.map((data) => data.upahritasi)
-                    selectedStatusRitasi = response.data.map((data) => data.statusritasi)
-                    selectedBiayaExtra = response.data.map((data) => data.biayaextra)
-                    selectedKetBiaya = response.data.map((data) => data.keteranganbiaya)
-                    selectedTolSupir = response.data.map((data) => data.tolsupir)
-                    selectedRitasi = response.data.map((data) => data.ritasi_nobukti)
+                    let selectedTrip = []
+                    $.each(response.data, (index, value) => {
+                        selectedTrip.push(value.id)
+                    })
+                    // selectedRows = response.data.map((data) => data.id)
+                    // selectedNobukti = response.data.map((data) => data.nobuktitrip)
+                    // selectedGajiSupir = response.data.map((data) => data.gajisupir)
+                    // selectedGajiKenek = response.data.map((data) => data.gajikenek)
+                    // selectedKomisiSupir = response.data.map((data) => data.komisisupir)
+                    // selectedUpahRitasi = response.data.map((data) => data.upahritasi)
+                    // selectedStatusRitasi = response.data.map((data) => data.statusritasi)
+                    // selectedBiayaExtra = response.data.map((data) => data.biayaextra)
+                    // selectedKetBiaya = response.data.map((data) => data.keteranganbiaya)
+                    // selectedTolSupir = response.data.map((data) => data.tolsupir)
+                    // selectedRitasi = response.data.map((data) => data.ritasi_nobukti)
 
                     $('#rekapRincian').jqGrid('setGridParam', {
-                        url: `${apiUrl}gajisupirheader/${response.url}`,
-                        postData: {
-                            supir_id: $('#crudForm').find('[name=supir_id]').val(),
-                            supir: $('#crudForm').find(`[name="supir"]`).val(),
-                            tgldari: $('#crudForm').find('[name=tgldari]').val(),
-                            tglsampai: $('#crudForm').find('[name=tglsampai]').val(),
-                            aksi: aksi
-                        },
-                        datatype: "json"
+                        datatype: "local",
+                        data: response.data,
+                        originalData: response.data,
+                        rowNum: response.data.length,
+                        selectedRowIds: selectedTrip
                     }).trigger('reloadGrid');
-                    hitungNominal()
+                    hitung(selectedTrip)
                 })
                 .catch((error) => {
                     if (error.status === 422) {
@@ -559,71 +594,58 @@
                 value: form.find(`[name="tglsampai"]`).val()
             })
 
-            $.each(selectedRows, function(index, item) {
+
+            let selectedRowsTrip = $("#rekapRincian").getGridParam("selectedRowIds");
+            $.each(selectedRowsTrip, function(index, value) {
+                dataTrip = $("#rekapRincian").jqGrid("getLocalRow", value);
+                let selectedUangMakanBerjenjang = (dataTrip.uangmakanberjenjang == undefined) ? 0 : dataTrip.uangmakanberjenjang;
+                data.push({
+                    name: 'uangmakanjenjang[]',
+                    value: (isNaN(selectedUangMakanBerjenjang)) ? parseFloat(selectedUangMakanBerjenjang.replaceAll(',', '')) : selectedUangMakanBerjenjang
+                })
                 data.push({
                     name: 'rincianId[]',
-                    value: item
+                    value: dataTrip.id
                 })
-            });
-            $.each(selectedNobukti, function(index, item) {
                 data.push({
                     name: 'rincian_nobukti[]',
-                    value: item
+                    value: dataTrip.nobuktitrip
                 })
-            });
-
-            $.each(selectedGajiSupir, function(index, item) {
                 data.push({
                     name: 'rincian_gajisupir[]',
-                    value: parseFloat(item.replaceAll(',', ''))
+                    value: parseFloat(dataTrip.gajisupir)
                 })
-            });
-            $.each(selectedGajiKenek, function(index, item) {
                 data.push({
                     name: 'rincian_gajikenek[]',
-                    value: parseFloat(item.replaceAll(',', ''))
+                    value: parseFloat(dataTrip.gajikenek)
                 })
-            });
-            $.each(selectedKomisiSupir, function(index, item) {
                 data.push({
                     name: 'rincian_komisisupir[]',
-                    value: parseFloat(item.replaceAll(',', ''))
+                    value: parseFloat(dataTrip.komisisupir)
                 })
-            });
-            $.each(selectedTolSupir, function(index, item) {
                 data.push({
                     name: 'rincian_tolsupir[]',
-                    value: parseFloat(item.replaceAll(',', ''))
+                    value: parseFloat(dataTrip.tolsupir)
                 })
-            });
-            $.each(selectedUpahRitasi, function(index, item) {
                 data.push({
                     name: 'rincian_upahritasi[]',
-                    value: parseFloat(item.replaceAll(',', ''))
+                    value: parseFloat(dataTrip.upahritasi)
                 })
-            });
-            $.each(selectedStatusRitasi, function(index, item) {
                 data.push({
                     name: 'rincian_statusritasi[]',
-                    value: item
+                    value: dataTrip.statusritasi
                 })
-            });
-            $.each(selectedRitasi, function(index, item) {
                 data.push({
                     name: 'rincian_ritasi[]',
-                    value: item
+                    value: dataTrip.ritasi_nobukti
                 })
-            });
-            $.each(selectedBiayaExtra, function(index, item) {
                 data.push({
                     name: 'rincian_biayaextra[]',
-                    value: parseFloat(item.replaceAll(',', ''))
+                    value: parseFloat(dataTrip.biayaextra)
                 })
-            });
-            $.each(selectedKetBiaya, function(index, item) {
                 data.push({
                     name: 'rincian_keteranganbiaya[]',
-                    value: item
+                    value: dataTrip.keteranganbiaya
                 })
             });
 
@@ -644,6 +666,12 @@
                 data.push({
                     name: 'uangmakanharian',
                     value: AutoNumeric.getNumber($(`#crudForm [name="uangmakanharian"]`)[index])
+                })
+            })
+            $('#crudForm').find(`[name="berjenjanguangmakan"]`).each((index, element) => {
+                data.push({
+                    name: 'uangmakanberjenjang',
+                    value: AutoNumeric.getNumber($(`#crudForm [name="berjenjanguangmakan"]`)[index])
                 })
             })
             $('#crudForm').find(`[name="subtotal"]`).each((index, element) => {
@@ -2007,7 +2035,9 @@
         // hitung sisa
         let subtotal = ($(`#crudForm [name="subtotal"]`).val() == '') ? 0 : AutoNumeric.getNumber($(`#crudForm [name="subtotal"]`)[0]);
         let uangmakanharian = ($(`#crudForm [name="uangmakanharian"]`).val() == '') ? 0 : AutoNumeric.getNumber($(`#crudForm [name="uangmakanharian"]`)[0]);
-        let total = subtotal + uangmakanharian;
+        let uangmakanjenjang = ($(`#crudForm [name="berjenjanguangmakan"]`).val() == '') ? 0 : AutoNumeric.getNumber($(`#crudForm [name="berjenjanguangmakan"]`)[0]);
+        let total = subtotal + uangmakanharian + uangmakanjenjang;
+
 
         let uangjalan = AutoNumeric.getNumber($(`#crudForm [name="uangjalan"]`)[0]);
         let uangjalantidakterhitung = ($(`#crudForm [name="uangjalantidakterhitung"]`).val() == '') ? 0 : AutoNumeric.getNumber($(`#crudForm [name="uangjalantidakterhitung"]`)[0]);
@@ -2051,6 +2081,7 @@
                 initAutoNumeric(form.find(`[name="subtotal"]`))
                 initAutoNumeric(form.find(`[name="uangjalan"]`))
                 initAutoNumeric(form.find(`[name="uangjalantidakterhitung"]`))
+                initAutoNumeric(form.find(`[name="berjenjanguangmakan"]`))
                 initAutoNumeric(form.find(`[name="uangmakanharian"]`))
                 initAutoNumeric(form.find(`[name="deposito"]`))
                 initAutoNumeric(form.find(`[name="potonganpinjaman"]`))
@@ -2058,36 +2089,61 @@
                 initAutoNumeric(form.find(`[name="bbm"]`))
 
                 rekapRincian()
-                $.each(response.getTrip, (index, detail) => {
+                // $.each(response.getTrip, (index, detail) => {
 
-                    selectedRows.push(detail.id)
-                    selectedNobukti.push(detail.nobuktitrip)
-                    selectedGajiSupir.push(detail.gajisupir)
-                    selectedGajiKenek.push(detail.gajikenek)
-                    selectedKomisiSupir.push(detail.komisisupir)
-                    selectedUpahRitasi.push(detail.upahritasi)
-                    selectedStatusRitasi.push(detail.statusritasi)
-                    selectedBiayaExtra.push(detail.biayaextra)
-                    selectedKetBiaya.push(detail.keteranganbiaya)
-                    selectedTolSupir.push(detail.tolsupir)
-                    selectedRitasi.push(detail.ritasi_nobukti)
+                //     selectedRows.push(detail.id)
+                //     selectedNobukti.push(detail.nobuktitrip)
+                //     selectedGajiSupir.push(detail.gajisupir)
+                //     selectedGajiKenek.push(detail.gajikenek)
+                //     selectedKomisiSupir.push(detail.komisisupir)
+                //     selectedUpahRitasi.push(detail.upahritasi)
+                //     selectedStatusRitasi.push(detail.statusritasi)
+                //     selectedBiayaExtra.push(detail.biayaextra)
+                //     selectedKetBiaya.push(detail.keteranganbiaya)
+                //     selectedTolSupir.push(detail.tolsupir)
+                //     selectedRitasi.push(detail.ritasi_nobukti)
 
-                })
+                // })
 
-                $('#rekapRincian').jqGrid("clearGridData");
-                $('#rekapRincian').jqGrid('setGridParam', {
-                    url: `${apiUrl}gajisupirheader/${gajiId}/getEditTrip`,
-                    postData: {
-                        limit: 0,
-                        supir_id: $('#crudForm [name=supir_id]').val(),
-                        supir: $('#crudForm [name=supir]').val(),
-                        tgldari: $('#crudForm [name=tgldari]').val(),
-                        tglsampai: $('#crudForm [name=tglsampai]').val(),
-                        sortIndex: sortnameRincian,
-                    },
-                    datatype: "json"
-                }).trigger('reloadGrid');
+                // $('#rekapRincian').jqGrid("clearGridData");
+                // $('#rekapRincian').jqGrid('setGridParam', {
+                //     url: `${apiUrl}gajisupirheader/${gajiId}/getEditTrip`,
+                //     postData: {
+                //         limit: 0,
+                //         supir_id: $('#crudForm [name=supir_id]').val(),
+                //         supir: $('#crudForm [name=supir]').val(),
+                //         tgldari: $('#crudForm [name=tgldari]').val(),
+                //         tglsampai: $('#crudForm [name=tglsampai]').val(),
+                //         sortIndex: sortnameRincian,
+                //     },
+                //     datatype: "json"
+                // }).trigger('reloadGrid');
+                getAllTrip('show').then((response) => {
 
+                    let selectedTrip = []
+                    let totalBerjenjang = 0
+
+                    $.each(response.data, (index, value) => {
+                            selectedTrip.push(value.id)
+                            totalBerjenjang += parseFloat(value.uangmakanberjenjang)
+                    })
+                    setTimeout(() => {
+
+                        $("#rekapRincian")
+                            .jqGrid("setGridParam", {
+                                datatype: "local",
+                                data: response.data,
+                                originalData: response.data,
+                                rowNum: response.data.length,
+                                selectedRowIds: selectedTrip
+                            })
+                            .trigger("reloadGrid");
+                            hitung(selectedTrip)
+                    }, 100);
+
+                    initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_uangmakanberjenjang"]`).text(totalBerjenjang))
+                   
+                });
                 loadPotSemuaGrid()
                 getDataPotSemua(gajiId).then((response) => {
 
@@ -2203,7 +2259,6 @@
             disabled = 'disabled'
         }
         $("#rekapRincian").jqGrid({
-                mtype: "GET",
                 styleUI: 'Bootstrap4',
                 iconSet: 'fontAwesome',
                 datatype: "local",
@@ -2213,37 +2268,11 @@
                         width: 30,
                         align: 'center',
                         sortable: false,
-                        clear: false,
-                        stype: 'input',
-                        searchable: false,
-                        searchoptions: {
-                            type: 'checkbox',
-                            clearSearch: false,
-                            dataInit: function(element) {
-                                supirId = $('#crudForm').find(`[name="supir_id"]`).val()
-                                dari = $('#crudForm').find(`[name="tgldari"]`).val()
-                                sampai = $('#crudForm').find(`[name="tglsampai"]`).val()
-                                let aksi = $('#crudForm').data('action')
-                                $(element).attr('id', 'gsRincian')
-                                $(element).removeClass('form-control')
-                                $(element).parent().addClass('text-center')
-                                if (disabled == '') {
-                                    $(element).on('click', function() {
-                                        $(element).attr('disabled', true)
-
-                                        if ($(this).is(':checked')) {
-                                            selectAllRows(supirId, dari, sampai, aksi, element)
-                                        } else {
-                                            clearSelectedRows(element)
-                                        }
-                                    })
-                                } else {
-                                    $(element).attr('disabled', true)
-                                }
-                            }
-                        },
+                        formatter: 'checkbox',
+                        search: false,
+                        editable: false,
                         formatter: (value, rowOptions, rowData) => {
-                            return `<input type="checkbox" name="rincianId[]" value="${rowData.id}" ${disabled} onchange="checkboxHandler(this)">`
+                            return `<input type="checkbox" name="rincianId[]" value="${rowData.id}" ${disabled} onchange="checkboxHandler(this, ${rowData.id})">`
                         },
                     },
                     {
@@ -2293,6 +2322,47 @@
                         label: 'NO SP',
                         name: 'nosp',
                         align: 'left'
+                    },
+                    {
+                        label: "UANG MAKAN BERJENJANG",
+                        name: "uangmakanberjenjang",
+                        align: "right",
+                        editable: true,
+                        editoptions: {
+                            dataInit: function(element, id) {
+                                initAutoNumeric($('#crudForm').find(`[id="${id.id}"]`))
+                            },
+                            dataEvents: [{
+                                type: "keyup",
+                                fn: function(event, rowObject) {
+                                    let originalGridData = $("#rekapRincian")
+                                        .jqGrid("getGridParam", "originalData")
+                                        .find((row) => row.id == rowObject.rowId);
+                                    let uangMakanBerjenjang = AutoNumeric.getNumber($('#crudForm').find(`[id="${rowObject.id}"]`)[0])
+                                    let localRow = $("#rekapRincian").jqGrid(
+                                        "getLocalRow",
+                                        rowObject.rowId
+                                    );
+                                    let total
+                                    localRow.uangmakanberjenjang = event.target.value;
+                                    uangMakanBerjenjangDetails = $(`#rekapRincian tr:not(#${rowObject.rowId})`).find(`td[aria-describedby="rekapRincian_uangmakanberjenjang"]`)
+                                    ttlUangMakanJenjang = 0
+                                    $.each(uangMakanBerjenjangDetails, (index, uangMakanBerjenjangDetail) => {
+                                        ttlUangMakanJenjangDetail = parseFloat($(uangMakanBerjenjangDetail).attr('title').replaceAll(',', ''))
+                                        ttlUangMakanJenjangs = (isNaN(ttlUangMakanJenjangDetail)) ? 0 : ttlUangMakanJenjangDetail;
+                                        ttlUangMakanJenjang += ttlUangMakanJenjangs
+                                    });
+                                    ttlUangMakanJenjang += uangMakanBerjenjang
+                                    initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_uangmakanberjenjang"]`).text(ttlUangMakanJenjang))
+
+                                    $(`#crudForm [name="berjenjanguangmakan"]`).val(ttlUangMakanJenjang)
+                                    new AutoNumeric(`#crudForm [name="berjenjanguangmakan"]`)
+                                    hitungSisa()
+                                },
+                            }, ],
+                        },
+                        sortable: false,
+                        sorttype: "int",
                     },
                     {
                         label: 'GAJI SUPIR',
@@ -2356,89 +2426,77 @@
                 footerrow: true,
                 userDataOnFooter: true,
                 toolbar: [true, "top"],
-                sortable: true,
-                sortname: sortnameRincian,
-                sortorder: sortorderRincian,
-                page: pageRincian,
-                viewrecords: true,
-                prmNames: {
-                    sort: 'sortIndex',
-                    order: 'sortOrder',
-                    rows: 'limit'
-                },
-                jsonReader: {
-                    root: 'data',
-                    total: 'attributes.totalPages',
-                    records: 'attributes.totalRows',
-                },
-                loadBeforeSend: function(jqXHR) {
-                    jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+                pgbuttons: false,
+                pginput: false,
+                cellEdit: true,
+                cellsubmit: "clientArray",
+                editableColumns: ["uangmakanberjenjang"],
+                selectedRowIds: [],
+                afterRestoreCell: function(rowId, value, indexRow, indexColumn) {
+                    let originalGridData = $("#rekapRincian")
+                        .jqGrid("getGridParam", "originalData")
+                        .find((row) => row.id == rowId);
 
-                    setGridLastRequest($(this), jqXHR)
-                },
+                    let localRow = $("#rekapRincian").jqGrid("getLocalRow", rowId);
 
-                onSelectRow: function(id) {
-                    activeGrid = $(this)
+                    let uangMakanberjenjang = $("#rekapRincian").jqGrid("getCell", rowId, "uangmakanberjenjang")
+
+                },
+                isCellEditable: function(cellname, iRow, iCol) {
+                    let rowData = $(this).jqGrid("getRowData")[iRow - 1];
+                    if ($('#crudForm').data('action') != 'delete') {
+                        return $(this)
+                            .find(`tr input[value=${rowData.id}]`)
+                            .is(":checked");
+                    }
+                },
+                validationCell: function(cellobject, errormsg, iRow, iCol) {
+                    console.log(cellobject);
+                    console.log(errormsg);
+                    console.log(iRow);
+                    console.log(iCol);
                 },
                 loadComplete: function(data) {
-                    let grid = $(this)
-                    changeJqGridRowListText()
-
-                    $(document).unbind('keydown')
-                    setCustomBindKeys($(this))
-                    initResize($(this))
-
-                    /* Set global variables */
-                    sortnameRincian = $(this).jqGrid("getGridParam", "sortname")
-                    sortorderRincian = $(this).jqGrid("getGridParam", "sortorder")
-                    totalRecordRincian = $(this).getGridParam("records")
-                    limitRincian = $(this).jqGrid('getGridParam', 'postData').limit
-                    postDataRincian = $(this).jqGrid('getGridParam', 'postData')
-                    triggerClickRincian = true
-
-                    $('.clearsearchclass').click(function() {
-                        clearColumnSearch($(this))
-                    })
-
-                    if (indexRowRincian > $(this).getDataIDs().length - 1) {
-                        indexRowRincian = $(this).getDataIDs().length - 1;
-                    }
-
+                    setTimeout(() => {
+                        $(this)
+                            .getGridParam("selectedRowIds")
+                            .forEach((selectedRowId) => {
+                                $(this)
+                                    .find(`tr input[value=${selectedRowId}]`)
+                                    .prop("checked", true);
+                                initAutoNumeric($(this).find(`td[aria-describedby="rekapRincian_uangmakanberjenjang"]`))
+                            });
+                    }, 100);
                     setHighlight($(this))
-
-                    $.each(selectedRows, function(key, value) {
-                        $(grid).find('tbody tr').each(function(row, tr) {
-                            if ($(this).find(`td input:checkbox`).val() == value) {
-                                $(this).addClass('bg-light-blue')
-                                $(this).find(`td input:checkbox`).prop('checked', true)
-                            }
-                        })
-                    });
-
-                    $('#gsRincian').attr('disabled', false)
                 }
             })
 
             .jqGrid("setLabel", "rn", "No.")
-            .jqGrid('filterToolbar', {
-                stringResult: true,
-                searchOnEnter: false,
-                defaultSearch: 'cn',
-                groupOp: 'AND',
-                disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
-                beforeSearch: function() {
-                    $(this).setGridParam({
-                        postData: {
-                            supirId: $('#crudForm [name=supir_id]').val(),
-                            dari: $('#crudForm [name=tgldari]').val(),
-                            sampai: $('#crudForm [name=tglsampai]').val(),
-                        },
-                    })
-                    clearGlobalSearch($('#rekapRincian'))
-                },
+            .jqGrid("navGrid", "#tablePager", {
+                add: false,
+                edit: false,
+                del: false,
+                refresh: false,
+                search: false,
             })
+            .jqGrid('filterToolbar', {
+                searchOnEnter: false,
+            })
+            .jqGrid("excelLikeGrid", {
+                beforeDeleteCell: function(rowId, iRow, iCol, event) {
+                    let localRow = $("#rekapRincian").jqGrid("getLocalRow", rowId);
 
-            .customPager({})
+                    $("#rekapRincian").jqGrid(
+                        "setCell",
+                        rowId,
+                        "sisa",
+                        parseInt(localRow.sisa) + parseInt(localRow.bayar)
+                    );
+
+                    return true;
+                },
+            });
+
 
 
 
@@ -2446,7 +2504,7 @@
         loadClearFilter($('#rekapRincian'))
 
         /* Append global search */
-        loadGlobalSearch($('#rekapRincian'))
+        // loadGlobalSearch($('#rekapRincian'))
     }
 
 
@@ -2504,6 +2562,16 @@
                 </div>
                 <div class="col-12 col-md-9">
                     <input type="text" name="uangmakanharian" class="form-control text-right">
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-12 col-md-3">
+                  <label class="col-form-label">
+                   uang makan berjenjang
+                  </label>
+                </div>
+                <div class="col-12 col-md-9">
+                    <input type="text" name="berjenjanguangmakan" class="form-control text-right autonumeric" readonly>
                 </div>
             </div>
             
@@ -2699,8 +2767,8 @@
         $('#rekapRincian').trigger('reloadGrid')
     }
 
-    function getAllTrip(supirId, dari, sampai, aksi, element = null) {
-        if (aksi == 'edit') {
+    function getAllTrip(aksi, element = null) {
+        if (aksi == 'edit' || aksi == 'show') {
             ricId = $(`#crudForm`).find(`[name="id"]`).val()
             url = `${ricId}/getEditTrip`
         } else {
@@ -2713,10 +2781,10 @@
                 dataType: 'JSON',
                 data: {
                     limit: 0,
-                    supir_id: supirId,
+                    supir_id: $('#crudForm').find(`[name="supir_id"]`).val(),
                     supir: $('#crudForm').find(`[name="supir"]`).val(),
-                    tgldari: dari,
-                    tglsampai: sampai,
+                    tgldari: $('#crudForm').find(`[name="tgldari"]`).val(),
+                    tglsampai: $('#crudForm').find(`[name="tglsampai"]`).val(),
                     sortIndex: sortnameRincian,
                     aksi: aksi
                 },

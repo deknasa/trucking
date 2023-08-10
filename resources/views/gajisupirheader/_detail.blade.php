@@ -48,6 +48,12 @@
             name: 'nosp',
           },
           {
+            label: 'U. MAKAN BERJENJANG',
+            name: 'uangmakanberjenjang',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
             label: 'GAJI SUPIR',
             name: 'gajisupir',
             align: 'right',
@@ -170,6 +176,7 @@
               upahritasi: data.attributes.totalUpahRitasi,
               tolsupir: data.attributes.totalTolSupir,
               biayaextra: data.attributes.totalBiayaExtra,
+              uangmakanberjenjang: data.attributes.totalUangMakanBerjenjang,
             }, true)
           }
         }

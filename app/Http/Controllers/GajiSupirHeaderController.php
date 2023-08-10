@@ -193,6 +193,10 @@ class GajiSupirHeaderController extends MyController
                 'index' => 'uangmakanharian',
             ],
             [
+                'label' => 'UANG MAKAN BERJENJANG',
+                'index' => 'uangmakanberjenjang',
+            ],
+            [
                 'label' => 'TOTAL POTONGAN UANG JALAN TIDAK TERHITUNG',
                 'index' => 'uangJalantidakterhitung',
             ],
@@ -395,6 +399,7 @@ class GajiSupirHeaderController extends MyController
         $gajisupirs['potonganpinjaman'] = number_format((float) $gajisupirs['potonganpinjaman'], '2', '.', ',');
         $gajisupirs['potonganpinjamansemua'] = number_format((float) $gajisupirs['potonganpinjamansemua'], '2', '.', ',');
         $gajisupirs['uangmakanharian'] = number_format((float) $gajisupirs['uangmakanharian'], '2', '.', ',');
+        $gajisupirs['uangmakanberjenjang'] = number_format((float) $gajisupirs['uangmakanberjenjang'], '2', '.', ',');
         $gajisupirs['total'] = number_format((float) $gajisupirs['total'], '2', '.', ',');
         $gajisupirs['uangJalantidakterhitung'] = number_format((float) $gajisupirs['uangJalantidakterhitung'], '2', '.', ',');
 
