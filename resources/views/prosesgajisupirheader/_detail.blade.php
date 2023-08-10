@@ -53,6 +53,12 @@
             formatter: currencyFormat,
           },
           {
+            label: 'U. Makan Berjenjang',
+            name: 'uangmakanberjenjang',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
             label: 'Pot. Pinjaman',
             name: 'potonganpinjaman',
             align: 'right',
@@ -151,6 +157,7 @@
               uangjalan: data.attributes.totalUangJalan,
               bbm: data.attributes.totalBBM,
               uangmakanharian: data.attributes.totalUangMakan,
+              uangmakanberjenjang: data.attributes.totalUangMakanBerjenjang,
               potonganpinjaman: data.attributes.totalPinjaman,
               potonganpinjamansemua: data.attributes.totalPinjamanSemua,
               deposito: data.attributes.totalDeposito,
