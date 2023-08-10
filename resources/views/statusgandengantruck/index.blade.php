@@ -93,7 +93,6 @@
                         label: 'No Gandengan',
                         name: 'nogandengan',
                         align: 'left',
-                        width: "400px"
                     },
                     {
                         label: 'CONTAINER',
@@ -124,6 +123,7 @@
                         label: 'JENIS',
                         name: 'jenis',
                         align: 'left',
+                        width: "400px"
                     },
                 ],
                 autowidth: true,
