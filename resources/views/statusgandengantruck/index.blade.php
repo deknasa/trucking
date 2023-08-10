@@ -5,6 +5,38 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
+            <div class="card card-easyui bordered mb-4">
+                <div class="card-header">
+                </div>
+                <form id="crudForm">
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <div class="col-12 col-sm-2 col-md-2">
+                                <label class="col-form-label">Periode <span class="text-danger">*</span></label>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="input-group">
+                                    <input type="text" name="periode" class="form-control datepicker">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+
+                            <div class="col-sm-6 mt-4">
+                                <button type="button" id="btnTampil" class="btn btn-secondary mr-1 ">
+                                    <i class="fas fa-sync"></i>
+                                    Reload
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
             <table id="jqGrid"></table>
         </div>
     </div>
@@ -29,7 +61,16 @@
     let hasDetail = false
 
     $(document).ready(function() {
+        initDatepicker()
+        $('#crudForm').find('[name=periode]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
+        $('#btnTampil').click(function(event) {
+            $('#jqGrid').jqGrid('setGridParam', {
+                postData: {
+                    periode: $('#crudForm').find('[name=periode]').val()
+                },
+            }).trigger('reloadGrid');
+        })
         $("#jqGrid").jqGrid({
                 url: `${apiUrl}statusgandengantruck`,
                 mtype: "GET",
@@ -37,6 +78,9 @@
                 iconSet: 'fontAwesome',
                 datatype: "json",
                 isLoading: true,
+                postData: {
+                    periode: $('#crudForm').find('[name=periode]').val()
+                },
                 colModel: [{
                         label: 'ID',
                         name: 'id',
