@@ -285,6 +285,14 @@
             name: 'tarif_id',
           },
           {
+            label: 'GAJI SUPIR NOBUKTI',
+            name: 'gajisupir_nobukti',
+          },
+          {
+            label: 'INVOICE NOBUKTI',
+            name: 'invoice_nobukti',
+          },
+          {
             label: 'MANDOR TRADO',
             name: 'mandortrado_id',
           },
