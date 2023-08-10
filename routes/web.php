@@ -248,6 +248,7 @@ use App\Http\Controllers\ReminderSpkController;
 use App\Http\Controllers\ReminderStokController;
 use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\SpkHarianController;
+use App\Http\Controllers\StatusGandenganTruckController;
 use App\Http\Controllers\StatusOliTradoController;
 use App\Http\Controllers\StokPusatController;
 use App\Http\Controllers\UbahPasswordController;
@@ -1512,6 +1513,8 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::resource('reminderspk', ReminderSpkController::class);
     Route::get('spkharian/index', [SpkHarianController::class, 'index']);
     Route::resource('spkharian', SpkHarianController::class);
+    Route::get('statusgandengantruck/index', [StatusGandenganTruckController::class, 'index']);
+    Route::resource('statusgandengantruck', StatusGandenganTruckController::class);
 });
 
 Route::patch('format', [FormatController::class, 'update']);
