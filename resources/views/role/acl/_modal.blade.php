@@ -62,6 +62,7 @@
   function updateUserAcl(roleId) {
     let form = $('#userAclForm')
 
+    $('#processingLoader').removeClass('d-none')
     $.ajax({
       url: `${apiUrl}role/${roleId}/acl`,
       method: 'POST',
