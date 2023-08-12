@@ -10,10 +10,10 @@
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         idPrefix: 'roleAclGrid',
-        colModel: [
-          {
+        colModel: [{
             label: 'CLASS',
             name: 'class',
+            width: '300px',
             align: 'left'
           },
           {
@@ -67,7 +67,7 @@
         loadBeforeSend: function(jqXHR) {
           jqXHR.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
           setGridLastRequest($(this), jqXHR)
-        }, 
+        },
         loadComplete: function(data) {
           changeJqGridRowListText()
 
@@ -120,7 +120,7 @@
           }
         }]
       })
-      
+
     loadClearFilter($('#roleAclGrid'))
     loadGlobalSearch($('#roleAclGrid'))
   }
