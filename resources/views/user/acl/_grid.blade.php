@@ -12,6 +12,7 @@
         idPrefix: 'userAclGrid',
         colModel: [{
             label: 'CLASS',
+            width: '300px',
             name: 'class',
           },
           {
