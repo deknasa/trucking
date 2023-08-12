@@ -12,6 +12,7 @@
         penerimaanstokheader_id:  `{!! $penerimaanstokheader_id ?? '' !!}`,
         penerimaanstok_id:  `{!! $penerimaanstok_id ?? '' !!}`,
         stok_id:  `{!! $stok_id ?? '' !!}`,
+        nobukti:  `{!! $nobukti ?? '' !!}`,
       },
       idPrefix: 'penerimaanStokDetailLookup',
       colModel: [

@@ -820,7 +820,7 @@
     $('.tbl_penerimaanstok_nobukti').show();
     $('.colspan').attr('colspan', 6);
 
-    $('.tbl_aksi').hide()
+    $('.tbl_aksi').show()
   }
   function setSuplier(penerimaan_id) {
     $.ajax({
@@ -1142,7 +1142,153 @@
     })
   }
 
+  function setShowDetailSPBP(data){
+    resetRow()
+    $.each(data, (id, detail) => {
+      
+      let detailRow = $(`
+        <tr class="trow">
+              <td>
+                <div class="baris">1</div>
+              </td>
+              
+              <td>
+                <input type="text"  name="detail_stok[]" id="detail_stok_${id}" class="form-control stok-lookup ">
+                <input type="text" id="detailstokId_${id}" readonly hidden class="detailstokId" name="detail_stok_id[]">
+              </td>
+              <td>
+                <input type="text"  name="detail_keterangan[]" style="" class="form-control">                    
+              </td>
+              
+              <td class="data_tbl tbl_penerimaanstok_nobukti">
+                <input type="text"  name="detail_penerimaanstoknobukti[]" id="detail_penerimaanstoknobukti_${id}" class="form-control ">
+                <input type="text" id="detailpenerimaanstoknobuktiId_${id}" readonly hidden class="detailpenerimaanstoknobuktiId" name="detail_penerimaanstoknobukti_id[]">
+              </td>  
 
+              <td class="data_tbl tbl_harga">
+                <input type="text"  name="detail_harga[]" readonly id="detail_harga${id}" style="text-align:right" class="autonumeric number${id} form-control">                    
+              </td>
+
+              <td class="data_tbl tbl_qty">
+                <input type="text"  name="detail_qty[]" id="detail_qty${id}" onkeyup="calculate(${id})" style="text-align:right" class="form-control autonumeric number${id}">                    
+              </td>
+
+              <td class="data_tbl tbl_vulkanisirke">
+                <input type="number"  name="detail_vulkanisirke[]" style="" class="form-control">                    
+              </td>
+
+              <td class="data_tbl tbl_persentase">
+                <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${id}" onkeyup="calculate(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
+              </td>  
+
+              <td class="data_tbl tbl_total">
+                <input type="text"  name="totalItem[]" id="totalItem${id}" style="text-align:right" onkeyup="calculate(${id})" class="form-control totalItem autonumeric number${id}">                    
+              </td>
+
+              <td class="tbl_aksi">
+                <div class='btn btn-danger btn-sm rmv'>Hapus</div>
+              </td>
+          </tr>
+      `)
+      // detailRow.find(`[name="detail_nobukti[]"]`).val(detail.nobukti)
+      detailRow.find(`[name="detail_stok[]"]`).val(detail.stok)
+      detailRow.find(`[name="detail_stok[]"]`).data('currentValue',detail.stok)
+      detailRow.find(`[name="detail_stok_id[]"]`).val(detail.stok_id)
+
+      detailRow.find(`[name="detail_penerimaanstoknobukti[]"]`).val(detail.penerimaanstok_nobukti)
+      detailRow.find(`[name="detail_penerimaanstoknobukti[]"]`).data('currentValue',detail.penerimaanstok_nobukti)
+      // element.data('currentValue', value)
+      detailRow.find(`[name="detail_qty[]"]`).val(detail.qty)
+      detailRow.find(`[name="detail_harga[]"]`).val(detail.harga)
+      detailRow.find(`[name="detail_persentasediscount[]"]`).val(detail.persentasediscount)
+      detailRow.find(`[name="detail_vulkanisirke[]"]`).val(detail.vulkanisirke)
+      detailRow.find(`[name="totalItem[]"]`).val(detail.total)
+      
+      detailRow.find(`[name="detail_qty[]"]`).prop('readonly',true)
+      detailRow.find(`[name="detail_harga[]"]`).prop('readonly',true)
+      detailRow.find(`[name="detail_persentasediscount[]"]`).prop('readonly',true)
+      detailRow.find(`[name="detail_vulkanisirke[]"]`).prop('readonly',true)
+      detailRow.find(`[name="totalItem[]"]`).prop('readonly',true)
+
+
+      detailRow.find(`[name="detail_keterangan[]"]`).val(detail.keterangan)
+      $('table #table_body').append(detailRow)
+      initAutoNumeric($(`.number${id}`))
+      setRowNumbers()
+      $(`#detail_stok_${id}`).lookup({
+        title: 'stok Lookup',
+        fileName: 'stok',
+        beforeProcess: function(test) {
+          var penerimaanstokId = $(`#penerimaanstokId`).val();
+          var penerimaanstok_nobukti = $('#crudModal').find(`[name=penerimaanstok_nobukti]`).val();
+          this.postData = {
+            penerimaanstok_id: penerimaanstokId,
+            penerimaanstokheader_nobukti: penerimaanstok_nobukti,
+            Aktif: 'AKTIF',
+          }
+        },
+        onSelectRow: (stok, element) => {
+          element.val(stok.namastok)
+          parent = element.closest('td');
+          parent.children('.detailstokId').val(stok.id)
+          element.data('currentValue', element.val())
+        },
+        onCancel: (element) => {
+          element.val(element.data('currentValue'))
+        },
+        onClear: (element) => {
+          element.val('')
+          parent = element.closest('td');
+          parent.children('.detailpenerimaanstoknobuktiId').val('')
+          element.data('currentValue', element.val())
+        }
+      })
+      $(`#detail_penerimaanstoknobukti_${id}`).lookup({
+        title: 'penerimaan stok header Lookup',
+        fileName: 'penerimaanstokdetail',
+        beforeProcess: function(test) {
+          console.log($(`#detail_penerimaanstoknobukti_${id}`).val());
+          var penerimaanstoknobukti = $(`#detail_penerimaanstoknobukti_${id}`).val();
+          var penerimaanstokId = $(`#penerimaanstokId`).val();
+          var detailstok = $(`#detailstokId_${id}`).val()
+          this.postData = {
+            penerimaanstok_id: penerimaanstokId,
+            nobukti: penerimaanstoknobukti,
+            stok_id: detailstok,
+          }
+        },
+        onSelectRow: (penerimaan, element) => {
+          parent = element.closest('td');
+          parent.children('.detailpenerimaanstoknobuktiId').val(penerimaan.id)
+          element.val(penerimaan.nobukti)
+          
+          detailRow.find(`[name="detail_qty[]"]`).val(penerimaan.qty)
+          detailRow.find(`[name="detail_harga[]"]`).val(penerimaan.harga)
+          detailRow.find(`[name="detail_persentasediscount[]"]`).val(penerimaan.persentasediscount)
+          detailRow.find(`[name="detail_vulkanisirke[]"]`).val(penerimaan.vulkanisirke)
+          detailRow.find(`[name="totalItem[]"]`).val(penerimaan.total)
+
+          initAutoNumeric(detailRow.find(`[name="detail_qty[]"]`))
+          initAutoNumeric(detailRow.find(`[name="detail_harga[]"]`))
+          initAutoNumeric(detailRow.find(`[name="detail_persentasediscount[]"]`))
+          initAutoNumeric(detailRow.find(`[name="totalItem[]"]`))
+          sumary()
+        },
+        onCancel: (element) => {
+          element.val(element.data('currentValue'))
+        },
+        onClear: (element) => {
+          element.val('')
+          parent = element.closest('td');
+          parent.children('.detailstokId').val('')
+          element.data('currentValue', element.val())
+        }
+      })
+    })
+    setTampilanForm()
+    $('#addRow').hide()
+
+  }
   
   function setDetailPengeluaran(pengeluaran_id) {
     $.ajax({
@@ -1666,9 +1812,11 @@
       penerimaanstok.find('.lookup-toggler').attr('disabled', true)
       $('#penerimaanstokId').attr('readonly', true);
 
-      penerimaanstok_nobukti.attr('disabled', true)
+      penerimaanstok_nobukti.attr('readonly', true)
+      penerimaanstok_nobukti.parents('.input-group').find('.button-clear').attr('disabled', true)
       penerimaanstok_nobukti.find('.lookup-toggler').attr('disabled', true)
-      pengeluaranstok_nobukti.attr('disabled', true)
+      pengeluaranstok_nobukti.attr('readonly', true)
+      pengeluaranstok_nobukti.parents('.input-group').find('.button-clear').attr('disabled', true)
       pengeluaranstok_nobukti.find('.lookup-toggler').attr('disabled', true)
     }
       
@@ -2278,6 +2426,8 @@
             }else{
               $('#addRow').show()
             }
+          }else if (KodePenerimaanId === listKodePenerimaan[10]) {
+            setShowDetailSPBP(response.detail)
           }else if (KodePenerimaanId === listKodePenerimaan[8]) {
             setShowDetailPengeluaran(penerimaanStokHeaderId,KodePenerimaanId)
           }else if (KodePenerimaanId === listKodePenerimaan[7]) {
