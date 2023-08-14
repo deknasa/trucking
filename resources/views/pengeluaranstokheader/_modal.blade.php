@@ -267,6 +267,7 @@
                           <th style="width: 20%; min-width: 200px;">stok</th>
                           <th style="width: 20%; min-width: 200px;">keterangan</th>
                           <th class="tbl_qty" style="width:10%; min-width: 100px">qty</th>
+                          <th class="data_tbl tbl_statusoli" style="width:10%; min-width: 100px">Status Oli</th>
                           <th class="data_tbl tbl_vulkanisirke" style="width:10%; min-width: 100px">vulkanisirke</th>
                           <th class="data_tbl tbl_harga" style="width: 20%; min-width: 200px;">harga</th>
                           <th class="data_tbl tbl_persentase" style="width:10%; min-width: 100px">persentase discount</th>
@@ -582,11 +583,12 @@
     $('[name=supplier]').parents('.form-group').hide()
     $('[name=gudang]').parents('.form-group').hide()
     $('.tbl_qty').show()
+    $('.tbl_statusoli').show();
     $('.tbl_vulkanisirke').hide();
     $('.tbl_harga').hide();
     $('.tbl_persentase').hide();
     $('.tbl_total').hide();
-    $('.colspan').attr('colspan', 4);
+    $('.colspan').attr('colspan', 5);
     $('.sumrow').hide();
   }
 
@@ -613,6 +615,7 @@
     $('.tbl_harga').show()
     $('.tbl_total').show()
     $('.tbl_vulkanisirke').hide();
+    $('.tbl_statusoli').hide();
     $('.tbl_persentase').hide();
     $('.colspan').attr('colspan', 4);
   }
@@ -639,11 +642,12 @@
     $('.tbl_harga').show()
     $('.tbl_total').show()
     $('.tbl_vulkanisirke').hide();
+    $('.tbl_statusoli').hide();
     $('.tbl_persentase').hide();
     $('.colspan').attr('colspan', 4);
     $('.potongkas').show() //potong kas
-        $('#titlePotongkas').html('POSTING Penerimaan')
-        $('[name=tglkasmasuk]').parents('.form-group').show()
+    $('#titlePotongkas').html('POSTING Penerimaan')
+    $('[name=tglkasmasuk]').parents('.form-group').show()
   }
 
   function tampilanGST() {
@@ -668,10 +672,11 @@
     $('.tbl_harga').hide();
     $('.tbl_persentase').hide();
     $('.tbl_total').hide();
+    $('.tbl_statusoli').hide();
     $('.colspan').attr('colspan', 4);
     $('.sumrow').hide();
   }
- 
+
 
   function tampilankor() {
     // $('[name=nobukti]').parents('.form-group').show()
@@ -692,6 +697,7 @@
     $('.tbl_harga').hide();
     $('.tbl_persentase').hide();
     $('.tbl_total').hide();
+    $('.tbl_statusoli').hide();
     $('.colspan').attr('colspan', 4);
     $('.sumrow').hide();
   }
@@ -714,6 +720,7 @@
     $('.tbl_vulkanisirke').show();
     $('.tbl_harga').hide();
     $('.tbl_persentase').hide();
+    $('.tbl_statusoli').hide();
     $('.tbl_total').hide();
     $('.colspan').attr('colspan', 4);
     $('.sumrow').hide();
@@ -774,7 +781,7 @@
     activeGrid = null
     initDatepicker()
     if (form.data('action') == 'add') {
-      if($('#kodepengeluaranheader').val() != ''){
+      if ($('#kodepengeluaranheader').val() != '') {
         let index = listIdPengeluaran.indexOf($('#kodepengeluaranheader').val());
         setKodePengeluaran(listKodePengeluaran[index]);
         setIsDateAvailable($('#kodepengeluaranheader').val())
@@ -813,7 +820,9 @@
     form.data('action', 'add')
     form.find(`.sometimes`).show()
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-    $('#crudForm').find('[name=tglbukti]').attr('readonly', 'readonly').css({ background: '#fff'})
+    $('#crudForm').find('[name=tglbukti]').attr('readonly', 'readonly').css({
+      background: '#fff'
+    })
     let tglbukti = $('#crudForm').find(`[name="tglbukti"]`).parents('.input-group').children()
     tglbukti.find('button').attr('disabled', true)
 
@@ -823,11 +832,14 @@
 
     Promise
       .all([
-        setStatusPotongReturOptions(form)
+        setStatusPotongReturOptions(form),
+        setStatusOliOptions()
       ])
       .then(() => {
         $('#crudModal').modal('show')
-        
+        initLookup()
+        addRow()
+        sumary()
       })
       .catch((error) => {
         showDialog(error.statusText)
@@ -835,9 +847,9 @@
       .finally(() => {
         $('.modal-loader').addClass('d-none')
       })
-    initLookup()
-    addRow()
-    sumary()
+    // initLookup()
+    // addRow()
+    // sumary()
   }
 
   function editPengeluaranstokHeader(pengeluaranStokHeaderId) {
@@ -857,7 +869,8 @@
 
     Promise
       .all([
-        setStatusPotongReturOptions(form)
+        setStatusPotongReturOptions(form),
+        setStatusOliOptions()
       ])
       .then(() => {
         showPengeluaranstokHeader(form, pengeluaranStokHeaderId)
@@ -926,7 +939,7 @@
             form.find('[name]').attr('disabled', 'disabled').css({
               background: '#fff'
             })
-            form.find('[name=id]').prop('disabled',false);
+            form.find('[name=id]').prop('disabled', false);
 
           })
           .then(() => {
@@ -1013,6 +1026,39 @@
       })
     })
   }
+
+  let dataStatusOli
+  const setStatusOliOptions = function() {
+    return new Promise((resolve, reject) => {
+
+      $.ajax({
+        url: `${apiUrl}parameter`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          filters: JSON.stringify({
+            "groupOp": "AND",
+            "rules": [{
+              "field": "grp",
+              "op": "cn",
+              "data": "STATUS OLI"
+            }]
+          })
+        },
+        success: response => {
+          dataStatusOli = response.data
+          resolve()
+        },
+        error: error => {
+          reject(error)
+        }
+      })
+    })
+  }
+
   index = 0;
 
   function addRow() {
@@ -1033,6 +1079,11 @@
                   <td class="data_tbl tbl_qty">
                     <input type="text"  name="detail_qty[]" id="detail_qty${index}" onkeyup="calculate(${index})" style="text-align:right" class="form-control autonumeric number${index}">
                   </td>  
+                  <td class="data_tbl tbl_statusoli">
+                    <select name="detail_statusoli[]" class="form-select select2bs4" id="statusoli${index}" style="width: 100%;">
+                      <option value="">-- PILIH STATUS OLI --</option>
+                    </select>                 
+                  </td> 
                   <td class="data_tbl tbl_vulkanisirke">
                       <input type="number"  name="detail_vulkanisirke[]" style="" class="form-control">                    
                     </td> 
@@ -1052,8 +1103,18 @@
                   </td>
               </tr>
     `)
+    // // if (kodePengeluaranStok == 'SPK') {
 
+
+    // // }
     $('table #table_body').append(detailRow)
+    initSelect2($(`#statusoli${index}`), true)
+    dataStatusOli.forEach(statusOli => {
+      let option = new Option(statusOli.text, statusOli.id)
+
+      detailRow.find(`#statusoli${index}`).append(option).trigger('change')
+    });
+
     var row = index;
     $(`.detail_stok_${row}`).lookup({
       title: 'stok Lookup',
@@ -1070,6 +1131,38 @@
         parent = element.closest('td');
         parent.children('.detailstokId').val(stok.id)
         element.data('currentValue', element.val())
+        let service = stok.servicerutin_text;
+
+        let elStatusOli = element.parents('tr').find(`td [name="detail_statusoli[]"]`);
+        elStatusOli.find(`option:contains('TAMBAH')`).remove()
+        elStatusOli.find(`option:contains('GANTI')`).remove()
+
+        if (service == 'PERGANTIAN BATERE' || service == 'PERGANTIAN SARINGAN HAWA') {
+          dataStatusOli.forEach(statusOli => {
+            let option = new Option(statusOli.text, statusOli.id)
+
+            elStatusOli.append(option).trigger('change')
+          });
+
+          elStatusOli.find(`option:contains('TAMBAH')`).remove()
+          elStatusOli.trigger('change')
+        } else if (service == '') {
+          dataStatusOli.forEach(statusOli => {
+            let option = new Option(statusOli.text, statusOli.id)
+
+            elStatusOli.append(option).trigger('change')
+          });
+
+          elStatusOli.find(`option:contains('TAMBAH')`).remove()
+          elStatusOli.find(`option:contains('GANTI')`).remove()
+          elStatusOli.trigger('change')
+        } else {
+          dataStatusOli.forEach(statusOli => {
+            let option = new Option(statusOli.text, statusOli.id)
+
+            elStatusOli.append(option).trigger('change')
+          });
+        }
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
@@ -1077,6 +1170,11 @@
       onClear: (element) => {
         element.val('')
         element.data('currentValue', element.val())
+        dataStatusOli.forEach(statusOli => {
+          let option = new Option(statusOli.text, statusOli.id)
+
+          elStatusOli.append(option).trigger('change')
+        });
       }
     })
     initAutoNumeric($(`.number${index}`))
@@ -1112,11 +1210,11 @@
     discount = AutoNumeric.getNumber(discount);
     totalItem = AutoNumeric.getNumber(totalItem);
 
-    satuanSebelumDiscount= totalItem / qty
-    discount = 1-(discount/100)
+    satuanSebelumDiscount = totalItem / qty
+    discount = 1 - (discount / 100)
 
     satuanSetelahDiscount = satuanSebelumDiscount / discount;
-  
+
     harga = satuanSetelahDiscount;
     new AutoNumeric($(`#detail_harga${id}`)[0]).set(harga)
     sumary();
@@ -1160,7 +1258,7 @@
   }
 
   function lookupSelected(el) {
-    if ((kodePengeluaranStok == listKodePengeluaran[2]) || (kodePengeluaranStok == listKodePengeluaran[4])|| (kodePengeluaranStok == listKodePengeluaran[5])) {
+    if ((kodePengeluaranStok == listKodePengeluaran[2]) || (kodePengeluaranStok == listKodePengeluaran[4]) || (kodePengeluaranStok == listKodePengeluaran[5])) {
       // console.log(kodepengeluaranstok);
       // console.log(el);
       switch (el) {
@@ -1269,8 +1367,8 @@
           Authorization: `Bearer ${accessToken}`
         },
         success: response => {
-          $.each(response.data, (index,data) => {
-            listIdPengeluaran[index]=data.id;
+          $.each(response.data, (index, data) => {
+            listIdPengeluaran[index] = data.id;
             listKodePengeluaran[index] = data.kodepengeluaran;
           })
 
@@ -1289,13 +1387,15 @@
         Authorization: `Bearer ${accessToken}`
       },
       success: response => {
-        
+
         if (response.data.length) {
           $('#crudForm').find('[name=tglbukti]').attr('readonly', false)
           let tglbukti = $('#crudForm').find(`[name="tglbukti"]`).parents('.input-group').children()
           tglbukti.find('button').attr('disabled', false)
         } else {
-          $('#crudForm').find('[name=tglbukti]').attr('readonly', 'readonly').css({ background: '#fff'})
+          $('#crudForm').find('[name=tglbukti]').attr('readonly', 'readonly').css({
+            background: '#fff'
+          })
           let tglbukti = $('#crudForm').find(`[name="tglbukti"]`).parents('.input-group').children()
           tglbukti.find('button').attr('disabled', true)
         }
@@ -1352,7 +1452,7 @@
                     
                     <td>
                       <input type="text"  name="detail_stok[]" id="detail_stok_${id}" class="form-control stok-lookup ">
-                      <input type="text" id="detailstokId_${id}" readonly hidden class="detailstokId" name="detail_stok_id[]">
+                      <input type="text" id="detailstokId_${id}" data-current-value="${detail.stok}" readonly hidden class="detailstokId" name="detail_stok_id[]">
                     </td>
                     <td>
                       <input type="text"  name="detail_keterangan[]" style="" class="form-control">                    
@@ -1360,6 +1460,11 @@
                     <td class="data_tbl tbl_qty">
                       <input type="text"  name="detail_qty[]" id="detail_qty${id}" onkeyup="calculate(${id})" style="text-align:right" class="form-control autonumeric number${id}">                    
                     </td>  
+                  <td class="data_tbl tbl_statusoli">
+                    <select name="detail_statusoli[]" class="form-select select2bs4" id="statusoli${id}" style="width: 100%;">
+                      <option value="">-- PILIH STATUS OLI --</option>
+                    </select>                 
+                  </td> 
                     <td class="data_tbl tbl_vulkanisirke">
                       <input type="number"  name="detail_vulkanisirke[]" style="" class="form-control">                    
                     </td>  
@@ -1378,6 +1483,7 @@
                     </td>
                 </tr>
             `)
+
             detailRow.find(`[name="detail_nobukti[]"]`).val(detail.nobukti)
             detailRow.find(`[name="detail_stok[]"]`).val(detail.stok)
             detailRow.find(`[name="detail_stok_id[]"]`).val(detail.stok_id)
@@ -1388,6 +1494,30 @@
             detailRow.find(`[name="totalItem[]"]`).val(detail.total)
             detailRow.find(`[name="detail_keterangan[]"]`).val(detail.keterangan)
             $('table #table_body').append(detailRow)
+
+            if (response.data.pengeluaranstok == 'SPK') {
+              service = detail.statusservicerutin;
+              initSelect2($(`#statusoli${id}`), true)
+              dataStatusOli.forEach(statusOli => {
+                let option = new Option(statusOli.text, statusOli.id)
+
+                detailRow.find(`#statusoli${id}`).append(option).trigger('change')
+              });
+
+              if (service == 'PERGANTIAN BATERE' || service == 'PERGANTIAN SARINGAN HAWA') {
+                detailRow.find(`#statusoli${id} option:contains('TAMBAH')`).remove()
+                detailRow.trigger('change')
+              } else if (service == null) {
+
+                detailRow.find(`#statusoli${id} option:contains('TAMBAH')`).remove()
+                detailRow.find(`#statusoli${id} option:contains('GANTI')`).remove()
+                detailRow.find(`#statusoli${id}`).trigger('change')
+              }
+
+              detailRow.find(`[name="detail_statusoli[]"]`).val(detail.statusoli).trigger('change')
+
+            }
+
             initAutoNumeric($(`.number${id}`))
             setRowNumbers()
             $(`#detail_stok_${id}`).lookup({
@@ -1405,12 +1535,45 @@
                 parent = element.closest('td');
                 parent.children('.detailstokId').val(stok.id)
                 element.data('currentValue', element.val())
+                let service = stok.servicerutin_text;
+
+                let elStatusOli = element.parents('tr').find(`td [name="detail_statusoli[]"]`);
+                elStatusOli.find(`option:contains('TAMBAH')`).remove()
+                elStatusOli.find(`option:contains('GANTI')`).remove()
+
+                if (service == 'PERGANTIAN BATERE' || service == 'PERGANTIAN SARINGAN HAWA') {
+                  dataStatusOli.forEach(statusOli => {
+                    let option = new Option(statusOli.text, statusOli.id)
+
+                    elStatusOli.append(option).trigger('change')
+                  });
+
+                  elStatusOli.find(`option:contains('TAMBAH')`).remove()
+                  elStatusOli.trigger('change')
+                } else if (service == '') {
+                  dataStatusOli.forEach(statusOli => {
+                    let option = new Option(statusOli.text, statusOli.id)
+
+                    elStatusOli.append(option).trigger('change')
+                  });
+
+                  elStatusOli.find(`option:contains('TAMBAH')`).remove()
+                  elStatusOli.find(`option:contains('GANTI')`).remove()
+                  elStatusOli.trigger('change')
+                } else {
+                  dataStatusOli.forEach(statusOli => {
+                    let option = new Option(statusOli.text, statusOli.id)
+
+                    elStatusOli.append(option).trigger('change')
+                  });
+                }
               },
               onCancel: (element) => {
                 element.val(element.data('currentValue'))
               }
             })
             id++;
+            index++;
           })
           sumary()
 

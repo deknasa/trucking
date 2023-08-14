@@ -67,6 +67,10 @@
             name: 'vulkanisirke',
           },
           {
+            label: 'Status Oli',
+            name: 'statusoli',
+          },
+          {
             label: 'TOTAL',
             name: 'total',
             align: 'right',
@@ -144,7 +148,7 @@
 
           if (data.attributes) {
             $(this).jqGrid('footerData', 'set', {
-              vulkanisirke: 'Total:',
+              statusoli: 'Total:',
               total: data.attributes.totalNominal,
             }, true)
           }

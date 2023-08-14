@@ -789,6 +789,8 @@
       nojobemkl2.attr('readonly', true)
       nojobemkl2.parents('.input-group').find('.input-group-append').hide()
       nojobemkl2.parents('.input-group').find('.button-clear').hide()
+      nojobemkl.val('')
+      nojobemkl.val('')
     } else {
       //tas
       nojobemkl.attr('readonly', false)
