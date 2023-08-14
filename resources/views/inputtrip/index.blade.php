@@ -489,6 +489,8 @@
         kotasampai_id.parents('.input-group').find('.input-group-append').show()
         kotasampai_id.parents('.input-group').find('.button-clear').show()
       } else {
+        kotadari_id.attr('readonly', true)
+        kotasampai_id.attr('readonly', true)
         kotadari_id.parents('.input-group').find('.input-group-append').hide()
         kotadari_id.parents('.input-group').find('.button-clear').hide()
         kotasampai_id.parents('.input-group').find('.input-group-append').hide()
@@ -1346,8 +1348,8 @@
           zonasampaiId = upahsupir.zonasampai_id
 
           element.val(`${upahsupir.zonadari} - ${upahsupir.zonasampai}`)
-          kotaUpahZona()
         }
+        kotaUpahZona()
 
         element.data('currentValue', element.val())
       },

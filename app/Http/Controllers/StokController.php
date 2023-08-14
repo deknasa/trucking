@@ -12,8 +12,28 @@ class StokController  extends MyController
     public function index(Request $request)
     {
         $title = $this->title;
+        $data = [
+            'combo' => $this->comboList('list', 'STATUS AKTIF','STATUS AKTIF'),
+            'comboservice' => $this->comboList('list', 'STATUS SERVICE RUTIN', 'STATUS SERVICE RUTIN'),
+        ];
+        return view('stok.index', compact('title','data'));
+    }
 
-        return view('stok.index', compact('title'));
+    public function comboList($aksi, $grp, $subgrp)
+    {
+
+        $status = [
+            'status' => $aksi,
+            'grp' => $grp,
+            'subgrp' => $subgrp,
+        ];
+
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'parameter/combolist', $status);
+
+        return $response['data'];
     }
 
     public function report(Request $request)
