@@ -16,7 +16,7 @@
                             </div>
                             <div class="col-sm-4">
                                 <select name="status" id="status" class="form-select select2bs4" style="width: 100%;">
-                                    <option value="all">{SEMUA}</option>
+                                    <option value="0">{SEMUA}</option>
                                 </select>
                             </div>
                         </div>
@@ -80,6 +80,9 @@
                 iconSet: 'fontAwesome',
                 datatype: "json",
                 isLoading: true,
+                postData: {
+                    status: $('#crudForm').find('[name=status]').val()
+                },
                 colModel: [{
                         label: 'ID',
                         name: 'id',
@@ -87,6 +90,53 @@
                         width: '50px',
                         search: false,
                         hidden: true
+                    },
+                    {
+                        label: 'Status',
+                        name: 'statusbatas',
+                        width: 100,
+                        stype: 'select',
+                        searchoptions: {
+                            value: `<?php
+                                    $i = 1;
+
+                                    foreach ($data['combo'] as $status) :
+                                        echo "$status[param]:$status[parameter]";
+                                        if ($i !== count($data['combo'])) {
+                                            echo ';';
+                                        }
+                                        $i++;
+                                    endforeach;
+
+                                    ?>
+                            `,
+                            dataInit: function(element) {
+                                $(element).select2({
+                                    width: 'resolve',
+                                    theme: "bootstrap4"
+                                });
+                            }
+                        },
+                        formatter: (value, options, rowData) => {
+                            let statusBatas = JSON.parse(value)
+                            if (!statusBatas) {
+                                return ''
+                            }
+                            let formattedValue = $(`
+                            <div class="badge" style="background-color: ${statusBatas.WARNA}; color: #fff;">
+                            <span>${statusBatas.SINGKATAN}</span>
+                            </div>
+                        `)
+
+                            return formattedValue[0].outerHTML
+                        },
+                        cellattr: (rowId, value, rowObject) => {
+                            let statusBatas = JSON.parse(rowObject.statusbatas)
+                            if (!statusBatas) {
+                                return ` title=""`
+                            }
+                            return ` title="${statusBatas.MEMO}"`
+                        }
                     },
                     {
                         label: 'NO POL',
@@ -223,6 +273,11 @@
                 beforeSearch: function() {
                     abortGridLastRequest($(this))
                     $('#left-nav').find(`button:not(#add)`).attr('disabled', 'disabled')
+                    $('#jqGrid').jqGrid('setGridParam', {
+                        postData: {
+                            status: $('#crudForm').find('[name=status]').val()
+                        },
+                    })
                     clearGlobalSearch($('#jqGrid'))
                 }
             })
@@ -235,8 +290,8 @@
                     innerHTML: '<i class="fas fa-file-export"></i> EXPORT',
                     class: 'btn btn-warning btn-sm mr-1',
                     onClick: () => {
-
-                        window.open(`{{ route('reminderoli.export') }}`)
+                        statusReminder = $('#crudForm').find('[name=status]').val();
+                        window.open(`{{ route('reminderoli.export') }}?status=${statusReminder}`)
                     }
                 }, ]
 
@@ -264,7 +319,7 @@
         return new Promise((resolve, reject) => {
             relatedForm.find('[name=status]').empty()
             relatedForm.find('[name=status]').append(
-                new Option('{SEMUA}', 'all', false, true)
+                new Option('{SEMUA}', '0', false, true)
             ).trigger('change')
 
             let data = [];
