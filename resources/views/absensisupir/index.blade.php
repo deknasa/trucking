@@ -65,7 +65,7 @@
     setTampilanIndex()
     loadDetailGrid()
     loadKasGantungGrid()
-    
+
     setRange()
     initDatepicker()
     $(document).on('click', '#btnReload', function(event) {
@@ -241,7 +241,7 @@
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
 
           loadDetailData(id)
-          if(showKasgantung){
+          if (showKasgantung) {
             loadKasGantungData(nobukti)
           }
         },
@@ -611,16 +611,16 @@
         },
         data: data,
         success: response => {
-          if (response.memo != undefined) {
-            memo = JSON.parse(response.memo)
-            memo = memo.INPUT
+          memo = JSON.parse(response.memo)
+          memo = memo.INPUT
+          if (memo != '') {
             input = memo.split(',');
             input.forEach(field => {
               field = field.toLowerCase();
               $(`.${field}`).hide()
-              if(field == 'uangjalan'){
+              if (field == 'uangjalan') {
                 $("#detail").jqGrid("hideCol", field);
-              }else{
+              } else {
                 $("#jqGrid").jqGrid("hideCol", field);
               }
             });

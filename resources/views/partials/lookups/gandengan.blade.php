@@ -25,11 +25,13 @@
           label: 'GANDENGAN',
           name: 'kodegandengan',
           align: 'left',
+          width: '100px'
         },
         {
           label: 'KETERANGAN',
           name: 'keterangan',
-          align: 'left'
+          align: 'left',
+          width: '250px'
         },
         {
           label: 'Status',

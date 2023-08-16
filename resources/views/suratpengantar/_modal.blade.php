@@ -426,6 +426,7 @@
   let isShow = false
   let upahId = 0
   let editUpahZona
+  let indexDetail = 0
   $(document).ready(function() {
 
     // $(document).on('input', `#crudForm [name="nominalperalihan"]`, function(event) {
@@ -449,7 +450,7 @@
     })
     $("#crudForm [name]").attr("autocomplete", "off");
 
-    $("#addRow").click(function() {
+    $(document).on('click', "#addRow", function() {
       addRow()
     });
 
@@ -1286,6 +1287,7 @@
   }
 
   function addRow() {
+    console.log('addrow')
     let detailRow = $(`
       <tr>
         <td></td>
@@ -1311,9 +1313,16 @@
   }
 
   function deleteRow(row) {
-    row.remove()
+    if($('#detailList tbody').find('tr').length > 1){
+      row.remove()
+    }else{
+      row.remove()
+      addRow()
+    }
 
     setRowNumbers()
+    setTotal()
+    setTotalTagih()
   }
 
   function setRowNumbers() {
