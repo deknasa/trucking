@@ -18,17 +18,19 @@
           name: 'id',
           align: 'right',
           width: '70px',
-            search: false,
+          search: false,
           hidden: true
         },
         {
           label: 'GANDENGAN',
+          width: '70px',
           name: 'kodegandengan',
           align: 'left',
         },
         {
           label: 'KETERANGAN',
           name: 'keterangan',
+          width: '270px',
           align: 'left'
         },
         {

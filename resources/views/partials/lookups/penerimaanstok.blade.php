@@ -37,14 +37,15 @@
           name: 'format',
           formatter: (value, options, rowData) => {
             let statusFormat = JSON.parse(value)
+            let Format = JSON.parse(value)
+            // let formattedValue = $(`
+            //     <div class="badge" style="background-color: ${statusFormat.WARNA}; color: #fff;">
+            //       <span>${statusFormat.SINGKATAN}</span>
+            //     </div>
+            //   `)
 
-            let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusFormat.WARNA}; color: #fff;">
-                  <span>${statusFormat.SINGKATAN}</span>
-                </div>
-              `)
-
-            return formattedValue[0].outerHTML
+            return Format.SINGKATAN
+            // return formattedValue[0].outerHTML
           },
           cellattr: (rowId, value, rowObject) => {
             let statusFormat = JSON.parse(rowObject.format)
