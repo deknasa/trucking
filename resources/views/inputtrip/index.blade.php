@@ -24,7 +24,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="form-group ">
+                <div class="form-group statusupahzona">
                   <label class="col-sm-12 col-form-label">UPAH ZONA <span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <select name="statusupahzona" class="form-control select2bs4" id="statusupahzona">
@@ -40,7 +40,7 @@
                     </select>
                   </div>
                 </div>
-                <div class="form-group ">
+                <div class="form-group joblangsir">
                   <label class="col-sm-12 col-form-label">STATUS LANGSIR <span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <select name="statuslangsir" class="form-control select2bs4" id="statuslangsir">
@@ -57,7 +57,7 @@
                     </select>
                   </div>
                 </div>
-                
+
                 <div class="form-group ">
                   <label class="col-sm-12 col-form-label">EMKL <span class="text-danger">*</span></label>
                   <div class="col-sm-12">
@@ -154,7 +154,7 @@
                   </div>
                 </div>
 
-                <div class="form-group ">
+                <div class="form-group statusgandengan">
                   <label class="col-sm-12 col-form-label">STATUS GANDENGAN <span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <select name="statusgandengan" class="form-control select2bs4" id="statusgandengan">
@@ -163,7 +163,7 @@
                   </div>
                 </div>
 
-                <div class="form-group ">
+                <div class="form-group gandengan">
                   <label class="col-sm-12 col-form-label">NO GANDENGAN / CHASIS <span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <input type="hidden" name="gandengan_id">
@@ -196,7 +196,7 @@
                   </div>
                 </div>
 
-                <div class="table-scroll table-responsive">
+                <div class="table-scroll table-responsive ritasi">
                   <table class="table table-bordered table-bindkeys" id="ritasiList" style="width: 1000px;">
                     <thead>
                       <tr>
@@ -266,6 +266,7 @@
   let upahZona
   let tinggalGandengan
   let longTripId
+  let kodeStatusContainer
 
   $(document).ready(function() {
 
@@ -422,19 +423,20 @@
     }
   })
   $(`#crudForm [name="statusgandengan"]`).on('change', function(event) {
-    if($(this).val() == tinggalGandengan){
+    if ($(this).val() == tinggalGandengan) {
       $(`#crudForm [name="gandenganasal"]`).parents('.form-group').hide()
-    }else{
+    } else {
       $(`#crudForm [name="gandenganasal"]`).parents('.form-group').show()
     }
   })
+
   function enabledLogTrip(selected) {
     if (selected == upahZona) {
-       
+
       $(`#crudForm [name="statuslongtrip"]`).val(longTripId).trigger('change');
-      $(`#crudForm [name="statuslongtrip"]`).attr('readonly',true);
-    }else{
-      $(`#crudForm [name="statuslongtrip"]`).attr('readonly',false);
+      $(`#crudForm [name="statuslongtrip"]`).attr('readonly', true);
+    } else {
+      $(`#crudForm [name="statuslongtrip"]`).attr('readonly', false);
     }
   }
 
@@ -547,7 +549,8 @@
         setStatusGudangSamaOptions(form),
         setStatusUpahZonaOptions(form),
         setStatusLangsirOptions(form),
-        setStatusGandenganOptions(form)
+        setStatusGandenganOptions(form),
+        setTampilan(form)
       ])
       .then(() => {
 
@@ -562,6 +565,43 @@
       })
   }
 
+  const setTampilan = function(relatedForm) {
+    return new Promise((resolve, reject) => {
+      let data = [];
+      data.push({
+        name: 'grp',
+        value: 'UBAH TAMPILAN'
+      })
+      data.push({
+        name: 'text',
+        value: 'INPUTTRIP'
+      })
+      $.ajax({
+        url: `${apiUrl}parameter/getparambytext`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: data,
+        success: response => {
+          if (response.memo != undefined) {
+            memo = JSON.parse(response.memo)
+            memo = memo.INPUT
+            input = memo.split(',');
+            input.forEach(field => {
+              field = field.toLowerCase();
+              $(`.${field}`).hide()
+            });
+          }
+          resolve()
+        },
+        error: error => {
+          reject(error)
+        }
+      })
+    })
+  }
   const setStatusGandenganOptions = function(relatedForm) {
     return new Promise((resolve, reject) => {
       relatedForm.find('[name=statusgandengan]').empty()
@@ -590,7 +630,7 @@
           response.data.forEach(statusGandengan => {
             let option = new Option(statusGandengan.text, statusGandengan.id)
             statusLongtrip = statusGandengan.id
-            if (statusGandengan.text =="TINGGAL GANDENGAN") {
+            if (statusGandengan.text == "TINGGAL GANDENGAN") {
               tinggalGandengan = statusGandengan.id
             }
             relatedForm.find('[name=statusgandengan]').append(option).trigger('change')
@@ -674,7 +714,7 @@
           response.data.forEach(statusLongTrip => {
             let option = new Option(statusLongTrip.text, statusLongTrip.id)
             statusLongtrip = statusLongTrip.id
-            if (statusLongTrip.text =='LONGTRIP') {
+            if (statusLongTrip.text == 'LONGTRIP') {
               longTripId = statusLongTrip.id;
             }
             relatedForm.find('[name=statuslongtrip]').append(option).trigger('change')
@@ -1122,9 +1162,18 @@
       onSelectRow: (statuscontainer, element) => {
         $('#crudForm [name=statuscontainer_id]').first().val(statuscontainer.id)
         statuscontainerId = statuscontainer.id
+        kodeStatusContainer = statuscontainer.kodestatuscontainer
         element.val(statuscontainer.keterangan)
         element.data('currentValue', element.val())
         enabledUpahSupir()
+        if (statuscontainer.kodestatuscontainer == 'FULL EMPTY') {
+          let jobtrucking = $('#crudForm [name=jobtrucking]')
+          let labeljobtrucking = $('#crudForm [name=labeljobtrucking]')
+          jobtrucking.attr('hidden', true)
+          labeljobtrucking.attr('hidden', true)
+          jobtrucking.parents('.input-group').find('.input-group-append').hide()
+          jobtrucking.parents('.input-group').find('.button-clear').hide()
+        }
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
@@ -1342,7 +1391,9 @@
           element.val(`${upahsupir.kotadari} - ${upahsupir.kotasampai}`)
 
           tarifrincianId = upahsupir.tarif_id
-          getpelabuhan(upahsupir.kotadari_id)
+          if (kodeStatusContainer != 'FULL EMPTY') {
+            getpelabuhan(upahsupir.kotadari_id)
+          }
         } else {
           zonadariId = upahsupir.zonadari_id
           zonasampaiId = upahsupir.zonasampai_id

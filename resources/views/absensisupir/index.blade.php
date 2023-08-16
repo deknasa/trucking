@@ -16,13 +16,13 @@
           <div id="tabs">
             <ul class="dejavu">
               <li><a href="#detail-tab">Details</a></li>
-              <li><a href="#kasgantung-tab">KAS GANTUNG</a></li>
+              <li class="kasgantung_nobukti"><a href="#kasgantung-tab">KAS GANTUNG</a></li>
             </ul>
             <div id="detail-tab">
               <table id="detail"></table>
             </div>
-            <div id="kasgantung-tab">
-             <table id="kasgantungGrid"></table>
+            <div class="kasgantung_nobukti" id="kasgantung-tab">
+              <table id="kasgantungGrid"></table>
             </div>
           </div>
         </div>
@@ -56,17 +56,19 @@
   let hasDetail = false
   let currentTab = 'detail'
   var statusTidakBisaEdit;
-  let approveEditRequest =null ;
-  $(document).ready(function() {
-    
-    $("#tabs").tabs()
+  let approveEditRequest = null;
+  let showKasgantung = true;
 
+  $(document).ready(function() {
+
+    $("#tabs").tabs()
+    setTampilanIndex()
     loadDetailGrid()
     loadKasGantungGrid()
-
+    
     setRange()
     initDatepicker()
-    $(document).on('click','#btnReload', function(event) {
+    $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('absensisupirheader')
     })
     $("#jqGrid").jqGrid({
@@ -76,8 +78,8 @@
         iconSet: 'fontAwesome',
         datatype: "json",
         postData: {
-          tgldari:$('#tgldariheader').val() ,
-          tglsampai:$('#tglsampaiheader').val() 
+          tgldari: $('#tgldariheader').val(),
+          tglsampai: $('#tglsampaiheader').val()
         },
         colModel: [{
             label: 'ID',
@@ -93,7 +95,7 @@
             align: 'left',
             stype: 'select',
             searchoptions: {
-              
+
               value: `<?php
                       $i = 1;
 
@@ -124,7 +126,7 @@
                   <span>${statusCetak.SINGKATAN}</span>
                 </div>
               `)
-              
+
               return formattedValue[0].outerHTML
             },
             cellattr: (rowId, value, rowObject) => {
@@ -134,7 +136,7 @@
               }
               return ` title="${statusCetak.MEMO}"`
             }
-          }, 
+          },
           {
             label: 'NO BUKTI',
             name: 'nobukti',
@@ -231,15 +233,17 @@
         },
         onSelectRow: function(id) {
           let nobukti = $('#jqGrid').jqGrid('getCell', id, 'kasgantung_nobukti')
-          
+
           activeGrid = $(this)
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
-          
+
           loadDetailData(id)
-          loadKasGantungData(nobukti)
+          if(showKasgantung){
+            loadKasGantungData(nobukti)
+          }
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
@@ -254,7 +258,7 @@
               clearGridHeader($(element))
             })
           }
-          
+
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))
@@ -265,7 +269,7 @@
           totalRecord = $(this).getGridParam("records")
           limit = $(this).jqGrid('getGridParam', 'postData').limit
           postData = $(this).jqGrid('getGridParam', 'postData')
-          triggerClick = true  
+          triggerClick = true
 
           $('.clearsearchclass').click(function() {
             clearColumnSearch($(this))
@@ -297,7 +301,7 @@
           }, 100)
 
           $('#left-nav').find('button').attr('disabled', false)
-          permission() 
+          permission()
           setHighlight($(this))
         }
       })
@@ -378,47 +382,45 @@
                 window.open(`{{ route('absensisupirheader.export') }}?id=${selectedId}`)
               }
             }
-          },  
+          },
         ],
-        extndBtn:[{
-          id: 'approve',
-          title: 'Approve',
-          caption: 'Approve',
-          innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-          class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-          dropmenuHTML: [
-            {
-              id:'approvalEdit',
-              text:"UN/APPROVAL Absensi Edit",
-              onClick: () => {
-                selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                approveEdit(selectedId)
-              }
-            },
-            
-            
-          ],
-        },
-        {
-          id: 'lainnya',
-          title: 'Lainnya',
-          caption: 'Lainnya',
-          innerHTML: '<i class="fa fa-check"></i> LAINNYA',
-          class: 'btn btn-secondary btn-sm mr-1 dropdown-toggle ',
-          dropmenuHTML: [
-            {
-              id:'cekAbsenTrado',
-              text:"Cek Absen Trado",
-              onClick: () => {
-                selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                cekAbsenTrado(selectedId)
-              }
-            },
-            
-            
-          ],
-        }
-      ]
+        extndBtn: [{
+            id: 'approve',
+            title: 'Approve',
+            caption: 'Approve',
+            innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+            class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
+            dropmenuHTML: [{
+                id: 'approvalEdit',
+                text: "UN/APPROVAL Absensi Edit",
+                onClick: () => {
+                  selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                  approveEdit(selectedId)
+                }
+              },
+
+
+            ],
+          },
+          {
+            id: 'lainnya',
+            title: 'Lainnya',
+            caption: 'Lainnya',
+            innerHTML: '<i class="fa fa-check"></i> LAINNYA',
+            class: 'btn btn-secondary btn-sm mr-1 dropdown-toggle ',
+            dropmenuHTML: [{
+                id: 'cekAbsenTrado',
+                text: "Cek Absen Trado",
+                onClick: () => {
+                  selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                  cekAbsenTrado(selectedId)
+                }
+              },
+
+
+            ],
+          }
+        ]
 
       })
 
@@ -560,15 +562,16 @@
           Authorization: `Bearer ${accessToken}`
         },
         success: response => {
-          showConfirm("Approve",response.data.nobukti,`absensisupirheader/${response.data.id}/approval`)
+          showConfirm("Approve", response.data.nobukti, `absensisupirheader/${response.data.id}/approval`)
         },
       })
     }
     getStatusEdit()
+
     function approveEdit(id) {
       if (approveEditRequest) {
         approveEditRequest.abort();
-      }     
+      }
       approveEditRequest = $.ajax({
         url: `${apiUrl}absensisupirheader/${id}`,
         method: 'GET',
@@ -582,13 +585,55 @@
           if (response.data.statusapprovaleditabsensi === statusTidakBisaEdit) {
             msg = `YAKIN Approve Status Edit `
           }
-          showConfirm(msg,response.data.nobukti,`absensisupirheader/${response.data.id}/approvalEditAbsensi`)
+          showConfirm(msg, response.data.nobukti, `absensisupirheader/${response.data.id}/approvalEditAbsensi`)
         },
       })
     }
   })
+
+  const setTampilanIndex = function() {
+    return new Promise((resolve, reject) => {
+      let data = [];
+      data.push({
+        name: 'grp',
+        value: 'UBAH TAMPILAN'
+      })
+      data.push({
+        name: 'text',
+        value: 'ABSENSISUPIR'
+      })
+      $.ajax({
+        url: `${apiUrl}parameter/getparambytext`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: data,
+        success: response => {
+          if (response.memo != undefined) {
+            memo = JSON.parse(response.memo)
+            memo = memo.INPUT
+            input = memo.split(',');
+            input.forEach(field => {
+              field = field.toLowerCase();
+              $(`.${field}`).hide()
+              if(field == 'uangjalan'){
+                $("#detail").jqGrid("hideCol", field);
+              }else{
+                $("#jqGrid").jqGrid("hideCol", field);
+              }
+            });
+            showKasgantung = false;
+          }
+
+        }
+      })
+    })
+  }
+
   function getStatusEdit() {
-    
+
     $.ajax({
       url: `${apiUrl}parameter`,
       method: 'GET',
@@ -604,7 +649,7 @@
             "field": "grp",
             "op": "cn",
             "data": "STATUS EDIT ABSENSI"
-          },{
+          }, {
             "field": "text",
             "op": "cn",
             "data": "TIDAK BOLEH EDIT ABSENSI"
@@ -612,12 +657,10 @@
         })
       },
       success: response => {
-        statusTidakBisaEdit =  response.data[0].id;
+        statusTidakBisaEdit = response.data[0].id;
       }
     })
   }
-
-    
 </script>
 @endpush()
 @endsection
