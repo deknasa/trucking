@@ -2413,7 +2413,8 @@
                     {
                         label: 'KET. BIAYA EXTRA',
                         name: 'keteranganbiaya',
-                        align: 'left'
+                        align: 'left',
+                        width: '200px'
                     },
                 ],
                 autowidth: true,
