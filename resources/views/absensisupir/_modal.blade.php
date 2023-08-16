@@ -5,7 +5,7 @@
         <div class="modal-header">
           <p class="modal-title" id="crudModalTitle">Create Absensi Supir</p>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            
+
           </button>
         </div>
         <form action="" method="post">
@@ -20,7 +20,7 @@
                 <input type="text" name="nobukti" class="form-control" readonly>
               </div>
             </div>
-            <div class="row form-group">
+            <div class="row form-group kasgantung_nobukti">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">NO BUKTI KGT</label>
               </div>
@@ -35,33 +35,33 @@
               <div class="col-12 col-md-10">
                 <div class="input-group">
 
-                <input type="text" name="tglbukti" class="form-control datepicker">
-              </div>
+                  <input type="text" name="tglbukti" class="form-control datepicker">
+                </div>
               </div>
             </div>
 
             <hr>
             <div class="row mt-5">
               <div class="col-md-12">
-                  <div class="card" style="max-height:500px; overflow-y: scroll;">
-                      <div class="card-body">
-            <!-- <div class="table-responsive"> -->
-              <table class="table table-bordered table-bindkeys" id="detailList" style="width: 1800px;">
-                <thead>
-                  <tr>
-                    <th width="2%">No</th>
-                    <th width="13%">Trado</th>
-                    <th width="15%">Supir</th>
-                    <th width="30%">Keterangan</th>
-                    <th width="15%">Status</th>
-                    <th width="10%">Jam</th>
-                    <th width="15%">Uang Jalan</th>
-                    {{-- <th width="2%">Aksi</th> --}}
-                  </tr>
-                </thead>
-                <tbody id="table_body" class="form-group">
-                  <tr>
-                    {{-- <td>1</td>
+                <div class="card" style="max-height:500px; overflow-y: scroll;">
+                  <div class="card-body">
+                    <!-- <div class="table-responsive"> -->
+                    <table class="table table-bordered table-bindkeys" id="detailList" style="width: 1800px;">
+                      <thead>
+                        <tr>
+                          <th width="2%">No</th>
+                          <th width="13%">Trado</th>
+                          <th width="15%">Supir</th>
+                          <th width="30%">Keterangan</th>
+                          <th width="15%">Status</th>
+                          <th width="10%">Jam</th>
+                          <th width="15%" class="uangjalan">Uang Jalan</th>
+                          {{-- <th width="2%">Aksi</th> --}}
+                        </tr>
+                      </thead>
+                      <tbody id="table_body" class="form-group">
+                        <tr>
+                          {{-- <td>1</td>
                     <td>
                       <input type="hidden" name="trado_id[]">
                       <input type="text" name="trado[]" class="form-control trado-lookup">
@@ -87,27 +87,27 @@
                       <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
                     </td> --}}
 
-                  </tr>
-                </tbody>
-                <tfoot>
-                  <tr>
-                    <td colspan="6">
-                      <h5 class="text-right font-weight-bold">TOTAL:</h5>
-                    </td>
-                    <td>
-                      <h5 id="total" class="text-right font-weight-bold"></h5>
-                    </td>
-                    {{-- <td>
+                        </tr>
+                      </tbody>
+                      <tfoot>
+                        <tr>
+                          <td colspan="6">
+                            <h5 class="text-right font-weight-bold">TOTAL:</h5>
+                          </td>
+                          <td>
+                            <h5 id="total" class="text-right font-weight-bold"></h5>
+                          </td>
+                          {{-- <td>
                       <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
                     </td>--}}
-                  </tr>
-                </tfoot>
-              </table>
-            <!-- </div> -->
-          </div>
-        </div>
-    </div>
-</div>
+                        </tr>
+                      </tfoot>
+                    </table>
+                    <!-- </div> -->
+                  </div>
+                </div>
+              </div>
+            </div>
 
           </div>
           <div class="modal-footer justify-content-start">
@@ -308,32 +308,84 @@
     `)
     form.data('action', 'add')
 
+    $('#table_body').html('')
     $('#crudModalTitle').text('Add Absensi Supir')
-    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    $('#table_body').html('')
-    $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-
-    setUpRow()
-    setTotal()
+    Promise
+      .all([
+        setUpRow()
+      ])
+      .then(() => {
+        setTampilan(form).then(() => {
+            setTotal()
+            $('#crudModal').modal('show')
+            $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+          })
+          .catch((error) => {
+            showDialog(error.responseJSON)
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
+      })
   }
 
+  const setTampilan = function(relatedForm) {
+    return new Promise((resolve, reject) => {
+      let data = [];
+      data.push({
+        name: 'grp',
+        value: 'UBAH TAMPILAN'
+      })
+      data.push({
+        name: 'text',
+        value: 'ABSENSISUPIR'
+      })
+      $.ajax({
+        url: `${apiUrl}parameter/getparambytext`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: data,
+        success: response => {
+          if (response.memo != undefined) {
+            memo = JSON.parse(response.memo)
+            memo = memo.INPUT
+            input = memo.split(',');
+            input.forEach(field => {
+              field = field.toLowerCase();
+              $(`.${field}`).hide()
+            });
+            $('#detailList tfoot').hide()
+          }
+
+          resolve()
+        },
+        error: error => {
+          reject(error)
+        }
+      })
+    })
+  }
 
   function setUpRow() {
-    $.ajax({
-      url: `${apiUrl}absensisupirheader/default`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        $('#detailList tbody').html('')
-        $.each(response.detail, (index, detail) => {
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `${apiUrl}absensisupirheader/default`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          $('#detailList tbody').html('')
+          $.each(response.detail, (index, detail) => {
 
-          let detailRow = $(`
+            let detailRow = $(`
             <tr>
               <td></td>
                     <td>
@@ -354,97 +406,102 @@
                     <td>
                       <input type="text" class="form-control inputmask-time" name="jam[]"></input>
                     </td>
-                    <td>
+                    <td class="uangjalan">
                       <input type="text" class="form-control uangjalan autonumeric" name="uangjalan[]">
                     </td>              
             </tr>
             `)
-          detailRow.find(`[name="trado_id[]"]`).val(detail.trado_id)
-          detailRow.find(`[name="trado[]"]`).val(detail.trado)
-          initAutoNumeric(detailRow.find('.autonumeric'))
-          $('#detailList tbody').append(detailRow)
+            detailRow.find(`[name="trado_id[]"]`).val(detail.trado_id)
+            detailRow.find(`[name="trado[]"]`).val(detail.trado)
+            initAutoNumeric(detailRow.find('.autonumeric'))
+            $('#detailList tbody').append(detailRow)
 
-          detailRow.find(`[name="supir_id[]"]`).val(detail.supir_id)
-          $('#detailList tbody').append(detailRow)
-          Inputmask("datetime", {
-            inputFormat: "HH:MM",
-            max: 24
-          }).mask(".inputmask-time");
+            detailRow.find(`[name="supir_id[]"]`).val(detail.supir_id)
+            $('#detailList tbody').append(detailRow)
+            Inputmask("datetime", {
+              inputFormat: "HH:MM",
+              max: 24
+            }).mask(".inputmask-time");
 
 
-          $(document).find('.supir-lookup').last().lookup({
-            title: 'Supir Lookup',
-            fileName: 'supir',
-            beforeProcess: function(test) {
-              this.postData = {
-                Aktif: 'AKTIF',
+            $(document).find('.supir-lookup').last().lookup({
+              title: 'Supir Lookup',
+              fileName: 'supir',
+              beforeProcess: function(test) {
+                this.postData = {
+                  Aktif: 'AKTIF',
+                }
+              },
+              onSelectRow: (supir, element) => {
+                element.parents('td').find(`[name="supir_id[]"]`).val(supir.id)
+
+                element.val(supir.namasupir)
+                element.data('currentValue', element.val())
+              },
+              onCancel: (element) => {
+                element.val(element.data('currentValue'))
+              },
+              onClear: (element) => {
+                element.parents('td').find(`[name="supir_id[]"]`).val('')
+                element.val('')
+                element.data('currentValue', element.val())
               }
-            },
-            onSelectRow: (supir, element) => {
-              element.parents('td').find(`[name="supir_id[]"]`).val(supir.id)
+            })
 
-              element.val(supir.namasupir)
-              element.data('currentValue', element.val())
-            },
-            onCancel: (element) => {
-              element.val(element.data('currentValue'))
-            },
-            onClear: (element) => {
-              element.parents('td').find(`[name="supir_id[]"]`).val('')
-              element.val('')
-              element.data('currentValue', element.val())
-            }
-          })
-
-          $('.trado-lookup').last().lookup({
-            title: 'Trado Lookup',
-            fileName: 'trado',
-            beforeProcess: function(test) {
-              this.postData = {
-                Aktif: 'AKTIF',
+            $('.trado-lookup').last().lookup({
+              title: 'Trado Lookup',
+              fileName: 'trado',
+              beforeProcess: function(test) {
+                this.postData = {
+                  Aktif: 'AKTIF',
+                }
+              },
+              onSelectRow: (trado, element) => {
+                element.parents('td').find(`[name="trado_id[]"]`).val(trado.id)
+                element.val(trado.kodetrado)
+                element.data('currentValue', element.val())
+              },
+              onCancel: (element) => {
+                element.val(element.data('currentValue'))
+              },
+              onClear: (element) => {
+                element.parents('td').find(`[name="trado_id[]"]`).val('')
+                element.val('')
+                element.data('currentValue', element.val())
               }
-            },
-            onSelectRow: (trado, element) => {
-              element.parents('td').find(`[name="trado_id[]"]`).val(trado.id)
-              element.val(trado.kodetrado)
-              element.data('currentValue', element.val())
-            },
-            onCancel: (element) => {
-              element.val(element.data('currentValue'))
-            },
-            onClear: (element) => {
-              element.parents('td').find(`[name="trado_id[]"]`).val('')
-              element.val('')
-              element.data('currentValue', element.val())
-            }
-          })
+            })
 
-          $('.absentrado-lookup').last().lookup({
-            title: 'Absen Trado Lookup',
-            fileName: 'absentrado',
-            beforeProcess: function(test) {
-              this.postData = {
-                Aktif: 'AKTIF',
+            $('.absentrado-lookup').last().lookup({
+              title: 'Absen Trado Lookup',
+              fileName: 'absentrado',
+              beforeProcess: function(test) {
+                this.postData = {
+                  Aktif: 'AKTIF',
+                }
+              },
+              onSelectRow: (absentrado, element) => {
+                element.parents('td').find(`[name="absen_id[]"]`).val(absentrado.id)
+                element.val(absentrado.keterangan)
+                element.data('currentValue', element.val())
+              },
+              onCancel: (element) => {
+                element.val(element.data('currentValue'))
+              },
+              onClear: (element) => {
+                element.parents('td').find(`[name="absen_id[]"]`).val('')
+                element.val('')
+                element.data('currentValue', element.val())
               }
-            },
-            onSelectRow: (absentrado, element) => {
-              element.parents('td').find(`[name="absen_id[]"]`).val(absentrado.id)
-              element.val(absentrado.keterangan)
-              element.data('currentValue', element.val())
-            },
-            onCancel: (element) => {
-              element.val(element.data('currentValue'))
-            },
-            onClear: (element) => {
-              element.parents('td').find(`[name="absen_id[]"]`).val('')
-              element.val('')
-              element.data('currentValue', element.val())
-            }
-          })
+            })
 
-        })
-        setRowNumbers()
-      }
+          })
+          setRowNumbers()
+          resolve()
+        },
+        error: error => {
+          reject(error)
+        }
+      })
     })
 
   }
@@ -465,22 +522,25 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-  
+
 
     Promise
       .all([
         showAbsensiSupir(form, absensiId)
       ])
       .then(() => {
-        $('#crudModal').modal('show')
-        form.find('[name=tglbukti]').attr('readonly', true)
-        form.find('[name=tglbukti]').siblings('.input-group-append').remove()
-      })
-      .catch((error) => {
-        showDialog(error.statusText)
-      })
-      .finally(() => {
-        $('.modal-loader').addClass('d-none')
+        setTampilan(form).then(() => {
+            $('#crudModal').modal('show')
+            form.find('[name=tglbukti]').attr('readonly', true)
+            form.find('[name=tglbukti]').siblings('.input-group-append').remove()
+          })
+          .catch((error) => {
+            showDialog(error.responseJSON)
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
+
       })
   }
 
@@ -505,13 +565,17 @@
         showAbsensiSupir(form, absensiId)
       ])
       .then(() => {
-        $('#crudModal').modal('show')
-      })
-      .catch((error) => {
-        showDialog(error.statusText)
-      })
-      .finally(() => {
-        $('.modal-loader').addClass('d-none')
+        setTampilan(form).then(() => {
+            $('#crudModal').modal('show')
+            form.find('[name=tglbukti]').attr('readonly', true)
+            form.find('[name=tglbukti]').siblings('.input-group-append').remove()
+          })
+          .catch((error) => {
+            showDialog(error.responseJSON)
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
       })
   }
 
@@ -558,7 +622,7 @@
               <td>
                 <input type="text" class="form-control inputmask-time" name="jam[]" value="${detail.jam}"></input>
               </td>
-              <td>
+              <td class="uangjalan">
                 <input type="text" class="form-control uangjalan autonumeric" name="uangjalan[]" value="${detail.uangjalan}">
               </td>
             
@@ -813,7 +877,7 @@
   }
 
   function cekValidasi(Id, Aksi) {
-    let url 
+    let url
     if (Aksi == 'EDIT') {
       url = `{{ config('app.api_url') }}absensisupirheader/${Id}/cekvalidasi`;
     }
@@ -821,7 +885,7 @@
       url = `{{ config('app.api_url') }}absensisupirheader/${Id}/cekvalidasi`;
     }
     $.ajax({
-      url:url,
+      url: url,
       method: 'POST',
       dataType: 'JSON',
       beforeSend: request => {
@@ -848,7 +912,7 @@
       }
     })
   }
-  
+
 
   function initLookup() {
     $('.supir-lookup').lookup({
