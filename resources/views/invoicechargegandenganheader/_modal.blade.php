@@ -74,7 +74,7 @@
 
             <div class="row mt-3">
               <div class="col-sm-4">
-                <a id="btnTampil" class="btn btn-secondary mr-2 mb-2">
+                <a id="btnTampil" class="btn btn-primary mr-2 mb-2">
                   <i class="fas fa-sync"></i>
                   Reload
                 </a>
