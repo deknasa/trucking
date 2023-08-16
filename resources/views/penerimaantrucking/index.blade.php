@@ -73,14 +73,16 @@
                                 align: 'left',
                                 formatter: (value, options, rowData) => {
                                     let Format = JSON.parse(value)
+                                    let formattedValue = Format.SINGKATAN
 
-                                    let formattedValue = $(`
-                <div class="badge" style="background-color: ${Format.WARNA}; color: #fff;">
-                  <span>${Format.SINGKATAN}</span>
-                </div>
-              `)
+            //                         let formattedValue = $(`
+            //     <div class="badge" style="background-color: ${Format.WARNA}; color: #fff;">
+            //       <span>${Format.SINGKATAN}</span>
+            //     </div>
+            //   `)
 
-                                    return formattedValue[0].outerHTML
+                                    // return formattedValue[0].outerHTML
+                                    return Format.SINGKATAN
                                 },
                                 cellattr: (rowId, value, rowObject) => {
                                     let Format = JSON.parse(rowObject.format)

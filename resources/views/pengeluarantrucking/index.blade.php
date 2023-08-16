@@ -74,17 +74,21 @@
                             {
                                 label: 'FORMAT',
                                 name: 'format',
+                            },
+                            {
+                                label: 'FORMAT',
+                                name: 'format',
                                 align: 'left',
                                 formatter: (value, options, rowData) => {
                                     let Format = JSON.parse(value)
 
-                                    let formattedValue = $(`
-                <div class="badge" style="background-color: ${Format.WARNA}; color: #fff;">
-                  <span>${Format.SINGKATAN}</span>
-                </div>
-              `)
-
-                                    return formattedValue[0].outerHTML
+                //                     let formattedValue = $(`
+                // <div class="badge" style="background-color: ${Format.WARNA}; color: #fff;">
+                //   <span>${Format.SINGKATAN}</span>
+                // </div>
+                // `)
+                                    return Format.SINGKATAN
+                                    // return formattedValue[0].outerHTML
                                 },
                                 cellattr: (rowId, value, rowObject) => {
                                     let Format = JSON.parse(rowObject.format)
