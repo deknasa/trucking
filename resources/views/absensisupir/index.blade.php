@@ -616,7 +616,7 @@
           if (memo != '') {
             input = memo.split(',');
             input.forEach(field => {
-              field = field.toLowerCase();
+              field = $.trim(field.toLowerCase());
               $(`.${field}`).hide()
               if (field == 'uangjalan') {
                 $("#detail").jqGrid("hideCol", field);

@@ -662,6 +662,8 @@
       .all([
         setStatusAktifOptions(form),
         setStatusUpahZonaOptions(form),
+        setStatusPostingTnlOptions(form),
+        setTampilan(form)
       ])
       .then(() => {
         showUpahSupir(form, id)
@@ -740,6 +742,8 @@
     Promise
       .all([
         setStatusAktifOptions(form),
+        setStatusPostingTnlOptions(form),
+        setTampilan(form)
       ])
       .then(() => {
         showUpahSupir(form, id)
@@ -1177,6 +1181,10 @@
               element.val(dateFormat(value))
             } else {
               element.val(value)
+            }
+            
+            if (index == 'statuspostingtnl') {
+              element.prop('disabled', true)
             }
             // if(!parent && aksiEdit == true){
             //   console.log('tru kaaa')

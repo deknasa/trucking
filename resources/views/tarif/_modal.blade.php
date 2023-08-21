@@ -483,7 +483,9 @@
       .all([
         setStatusPenyesuaianHargaOptions(form),
         setStatusSistemTonOptions(form),
-        setStatusAktifOptions(form)
+        setStatusAktifOptions(form),
+        setStatusPostingTnlOptions(form),
+        setTampilan(form)
       ])
       .then(() => {
         showTarif(form, tarifId)
@@ -565,7 +567,9 @@
       .all([
         setStatusPenyesuaianHargaOptions(form),
         setStatusSistemTonOptions(form),
-        setStatusAktifOptions(form)
+        setStatusAktifOptions(form),
+        setStatusPostingTnlOptions(form),
+        setTampilan(form)
       ])
       .then(() => {
         showTarif(form, tarifId)
@@ -609,7 +613,7 @@
           if (memo != '') {
             input = memo.split(',');
             input.forEach(field => {
-              field = field.toLowerCase();
+              field = $.trim(field.toLowerCase());
               $(`.${field}`).hide()
             });
           }
@@ -826,8 +830,6 @@
             delete response.data['parent'];
             delete response.data['penyesuaian'];
           }
-          
-          $('.statuspostingtnl').hide()
 
           $.each(response.data, (index, value) => {
             let element = form.find(`[name="${index}"]`)
@@ -851,6 +853,9 @@
             }
             if (index == 'upahsupir') {
               element.data('current-value', value)
+            } 
+            if (index == 'statuspostingtnl') {
+              element.prop('disabled', true)
             }
           })
 
