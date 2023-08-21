@@ -12,7 +12,7 @@
           <div class="modal-body">
             <input type="hidden" name="id">
 
-            <div class="row form-group">
+            <div class="row form-group statusupahzona">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
                   STATUS UPAH ZONA <span class="text-danger">*</span>
@@ -84,7 +84,7 @@
               </div>
             </div>
 
-            <div class="row form-group">
+            <div class="row form-group zonadari">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
                   ZONA DARI
@@ -96,7 +96,7 @@
               </div>
             </div>
 
-            <div class="row form-group">
+            <div class="row form-group zonasampai">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
                   ZONA SAMPAI
@@ -173,7 +173,7 @@
                 </select>
               </div>
             </div> --}}
-            <div class="row form-group" id="simpanKandang">
+            <div class="row form-group statussimpankandang" id="simpanKandang">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
                   STATUS SIMPAN KANDANG <span class="text-danger">*</span>
@@ -186,6 +186,18 @@
               </div>
             </div>
 
+            <div class="row form-group statuspostingtnl">
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">
+                  STATUS POSTING TNL <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-12 col-md-10">
+                <select name="statuspostingtnl" class="form-control select2bs4" z-index="6">
+                  <option value="">-- PILIH STATUS POSTING TNL --</option>
+                </select>
+              </div>
+            </div>
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
@@ -343,7 +355,7 @@
       setNominalSupir()
     })
 
-    $(document).on('change',`#crudForm [name="statusupahzona"]`, function(event) {
+    $(document).on('change', `#crudForm [name="statusupahzona"]`, function(event) {
       let selectedUpahZona = $(`#crudForm [name="statusupahzona"] option:selected`).text()
       if (selectedUpahZona == 'NON UPAH ZONA' || selectedUpahZona == 'UPAH ZONA') {
         if (aksiEdit == true) {
@@ -603,7 +615,9 @@
       .all([
         setStatusAktifOptions(form),
         setStatusSimpanKandangOptions(form),
-        setStatusUpahZonaOptions(form)
+        setStatusUpahZonaOptions(form),
+        setStatusPostingTnlOptions(form),
+        setTampilan(form)
       ])
       .then(() => {
         showDefault(form)
@@ -748,6 +762,84 @@
           })
 
       })
+  }
+
+  const setTampilan = function(relatedForm) {
+    return new Promise((resolve, reject) => {
+      let data = [];
+      data.push({
+        name: 'grp',
+        value: 'UBAH TAMPILAN'
+      })
+      data.push({
+        name: 'text',
+        value: 'UPAHSUPIR'
+      })
+      $.ajax({
+        url: `${apiUrl}parameter/getparambytext`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: data,
+        success: response => {
+          memo = JSON.parse(response.memo)
+          memo = memo.INPUT
+          if (memo != '') {
+            input = memo.split(',');
+            input.forEach(field => {
+              field = $.trim(field.toLowerCase());
+              $(`.${field}`).hide()
+            });
+          }
+          resolve()
+        },
+        error: error => {
+          reject(error)
+        }
+      })
+    })
+  }
+
+  const setStatusPostingTnlOptions = function(relatedForm) {
+    return new Promise((resolve, reject) => {
+      relatedForm.find('[name=statuspostingtnl]').empty()
+      relatedForm.find('[name=statuspostingtnl]').append(
+        new Option('-- PILIH POSTING TNL --', '', false, true)
+      ).trigger('change')
+
+      $.ajax({
+        url: `${apiUrl}parameter`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          filters: JSON.stringify({
+            "groupOp": "AND",
+            "rules": [{
+              "field": "grp",
+              "op": "cn",
+              "data": "STATUS POSTING TNL"
+            }]
+          })
+        },
+        success: response => {
+          response.data.forEach(statuspostingTnl => {
+            let option = new Option(statuspostingTnl.text, statuspostingTnl.id)
+
+            relatedForm.find('[name=statuspostingtnl]').append(option).trigger('change')
+          });
+
+          resolve()
+        },
+        error: error => {
+          reject(error)
+        }
+      })
+    })
   }
 
   function cekValidasidelete(Id, aksi) {
@@ -1537,8 +1629,8 @@
         $('#crudForm').find(`[name=penyesuaian]`).val('').prop('readonly', false)
         $('#crudForm [name=kotasampai_id]').val('')
         $('#crudForm').find(`[name=kotasampai]`).val('').prop('readonly', false)
-        $('#kotaupahsupir').prop('disabled', false)
-        $('#kotaupahsupir').parent('.input-group').show()
+        // $('#kotaupahsupir').prop('disabled', false)
+        // $('#kotaupahsupir').parent('.input-group').show()
         $('#kotatarif').prop('type', 'hidden')
         $('#kotatarif').prop('disabled', true).hide()
 
@@ -1640,11 +1732,13 @@
         $('#crudForm [name=kotasampai]').val(tarif.tujuan)
         $('#crudForm [name=tarif_id]').first().val(tarif.id)
         $('#crudForm').find(`[name=kotasampai]`).prop('readonly', true)
-        $('#kotaupahsupir').prop('readonly', true)
-        $('#kotaupahsupir').parent('.input-group').hide()
+        // $('#kotaupahsupir').prop('readonly', true)
+        // $('#kotaupahsupir').parent('.input-group').hide()
         $('#kotatarif').prop('type', 'text')
         $('#kotatarif').prop('readonly', true).show()
 
+        $('#crudForm').find(`[name=kotasampai]`).parents('.input-group').find('.input-group-append').hide()
+        $('#crudForm').find(`[name=kotasampai]`).parents('.input-group').find('.button-clear').hide()
         element.val(tarif.tujuan)
         element.data('currentValue', element.val())
       },
@@ -1655,9 +1749,10 @@
         $('#crudForm').find(`[name=penyesuaian]`).val('').prop('readonly', false)
         $('#crudForm [name=kotasampai_id]').val('')
         $('#crudForm').find(`[name=kotasampai]`).val('').prop('readonly', false)
-
-        $('#kotaupahsupir').prop('disabled', false)
-        $('#kotaupahsupir').parent('.input-group').show()
+        $('#crudForm').find(`[name=kotasampai]`).parents('.input-group').find('.input-group-append').show()
+        $('#crudForm').find(`[name=kotasampai]`).parents('.input-group').find('.button-clear').show()
+        // $('#kotaupahsupir').prop('disabled', false)
+        // $('#kotaupahsupir').parent('.input-group').show()
         $('#kotatarif').prop('type', 'hidden')
         $('#kotatarif').prop('disabled', true).hide()
         element.val('')

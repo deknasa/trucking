@@ -34,6 +34,7 @@
 
   $(document).ready(function() {
 
+    setTampilanIndex()
     $("#jqGrid").jqGrid({
         url: `${apiUrl}tarif`,
         mtype: "GET",
@@ -210,6 +211,54 @@
             }
           },
           {
+            label: 'STATUS POSTING TNL',
+            name: 'statuspostingtnl',
+            width: 230,
+            stype: 'select',
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['combopostingtnl'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['combopostingtnl'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+            `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              let statusPostingTnl = JSON.parse(value)
+              if (!statusPostingTnl) {
+                return ''
+              }
+
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusPostingTnl.WARNA}; color: #fff;">
+                  <span>${statusPostingTnl.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusPostingTnl = JSON.parse(rowObject.statuspostingtnl)
+              if (!statusPostingTnl) {
+                return ` title=""`
+              }
+              return ` title="${statusPostingTnl.MEMO}"`
+            }
+          },
+          {
             label: 'Keterangan',
             name: 'keterangan',
           },
@@ -291,7 +340,7 @@
               clearGridHeader($(element))
             })
           }
-          
+
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))
@@ -331,7 +380,7 @@
           }
 
           $('#left-nav').find('button').attr('disabled', false)
-          permission() 
+          permission()
           setHighlight($(this))
         },
       })
@@ -367,7 +416,7 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                cekValidasidelete(selectedId,'EDIT')
+                cekValidasidelete(selectedId, 'EDIT')
               }
             }
           },
@@ -380,7 +429,7 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                cekValidasidelete(selectedId,'DELETE')
+                cekValidasidelete(selectedId, 'DELETE')
               }
             }
           },
@@ -452,38 +501,38 @@
       .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
 
-      $('#rangeTglModal').on('shown.bs.modal', function() {
+    $('#rangeTglModal').on('shown.bs.modal', function() {
 
 
-        initDatepicker()
+      initDatepicker()
 
-        $('#formRangeTgl').find('[name=dari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-        $('#formRangeTgl').find('[name=sampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+      $('#formRangeTgl').find('[name=dari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+      $('#formRangeTgl').find('[name=sampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
-        })
+    })
 
-        $('#formRangeTgl').submit(event => {
-        event.preventDefault()
+    $('#formRangeTgl').submit(event => {
+      event.preventDefault()
 
-        getCekExport()
+      getCekExport()
         .then((response) => {
           let actionUrl = `{{ route('tarif.export') }}`
 
-            /* Clear validation messages */
-            $('.is-invalid').removeClass('is-invalid')
-            $('.invalid-feedback').remove()
+          /* Clear validation messages */
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
 
 
-            window.open(`${actionUrl}?${$('#formRangeTgl').serialize()}`)
+          window.open(`${actionUrl}?${$('#formRangeTgl').serialize()}`)
         })
         .catch((error) => {
           setErrorMessages($('#formRangeTgl'), error.responseJSON.errors);
         })
 
-        })
+    })
 
-        function getCekExport() {
-           return new Promise((resolve, reject) => {
+    function getCekExport() {
+      return new Promise((resolve, reject) => {
         $.ajax({
           url: `${apiUrl}tarif/listpivot`,
           dataType: "JSON",
@@ -491,8 +540,8 @@
             Authorization: `Bearer ${accessToken}`
           },
           data: {
-            dari:$('#formRangeTgl').find('[name=dari]').val(),
-            sampai:$('#formRangeTgl').find('[name=sampai]').val()
+            dari: $('#formRangeTgl').find('[name=dari]').val(),
+            sampai: $('#formRangeTgl').find('[name=sampai]').val()
           },
           success: (response) => {
             resolve(response);
@@ -667,13 +716,50 @@
 
     //     xhr.send()
     //   } else if ($('#rangeModal').data('action') == 'report') {
-       
+
     //     window.open(`{{ route('tarif.report') }}?${params}`)
 
     //     submitButton.removeAttr('disabled')
     //   }
     // })
   })
+
+  const setTampilanIndex = function() {
+      return new Promise((resolve, reject) => {
+        let data = [];
+        data.push({
+          name: 'grp',
+          value: 'UBAH TAMPILAN'
+        })
+        data.push({
+          name: 'text',
+          value: 'TARIF'
+        })
+        $.ajax({
+          url: `${apiUrl}parameter/getparambytext`,
+          method: 'GET',
+          dataType: 'JSON',
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          },
+          data: data,
+          success: response => {
+            memo = JSON.parse(response.memo)
+            memo = memo.INPUT
+            if (memo != '') {
+              input = memo.split(',');
+              input.forEach(field => {
+                field = field.toLowerCase();
+                $(`.${field}`).hide()
+                $("#jqGrid").jqGrid("hideCol", field);
+              });
+            }
+
+          }
+        })
+      })
+    }
+
 </script>
 @endpush()
 @endsection
