@@ -501,6 +501,22 @@
 
             if (dari != '' && sampai != '' && supirId != '') {
 
+                getDataPotPribadi(supirId).then((response) => {
+                    setTimeout(() => {
+
+                        $("#tablePotPribadi")
+                            .jqGrid("setGridParam", {
+                                datatype: "local",
+                                data: response.data,
+                                originalData: response.data,
+                                rowNum: response.data.length,
+                                selectedRowIds: []
+                            })
+                            .trigger("reloadGrid");
+                    }, 100);
+
+                });
+
                 getAllAbsensi(supirId, dari, sampai, aksi)
                     .then((response) => {
                         $('.is-invalid').removeClass('is-invalid')
@@ -527,6 +543,22 @@
                         }
                     })
             }
+
+            getDataPotSemua().then((response) => {
+                setTimeout(() => {
+
+                    $("#tablePotSemua")
+                        .jqGrid("setGridParam", {
+                            datatype: "local",
+                            data: response.data,
+                            originalData: response.data,
+                            rowNum: response.data.length,
+                            selectedRowIds: []
+                        })
+                        .trigger("reloadGrid");
+                }, 100);
+
+            });
             // selectAllRowsAbsensi(supirId, dari, sampai, aksi)
             // $.ajax({
             //     url: `${apiUrl}gajisupirheader/getuangjalan`,
@@ -1019,21 +1051,6 @@
         initAutoNumeric($('#crudForm').find('[name=uangjalantidakterhitung]'))
 
         loadPotSemuaGrid()
-        getDataPotSemua().then((response) => {
-            setTimeout(() => {
-
-                $("#tablePotSemua")
-                    .jqGrid("setGridParam", {
-                        datatype: "local",
-                        data: response.data,
-                        originalData: response.data,
-                        rowNum: response.data.length,
-                        selectedRowIds: []
-                    })
-                    .trigger("reloadGrid");
-            }, 100);
-
-        });
         loadPotPribadiGrid()
         loadUangJalan()
     }
@@ -1389,6 +1406,8 @@
     function getDataPotSemua(id) {
         aksi = $('#crudForm').data('action')
         if (aksi == 'edit') {
+            id = $(`#crudForm`).find(`[name="id"]`).val()
+           
             urlPotSemua = `${apiUrl}gajisupirheader/${id}/edit/editpinjsemua`
 
         } else if (aksi == 'delete') {
@@ -1402,6 +1421,9 @@
             $.ajax({
                 url: urlPotSemua,
                 dataType: "JSON",
+                data : {
+                    tglbukti: $('#crudForm').find('[name=tglbukti]').val()
+                },
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 },
@@ -1734,6 +1756,7 @@
     function getDataPotPribadi(supirId, id) {
         aksi = $('#crudForm').data('action')
         if (aksi == 'edit') {
+            id = $(`#crudForm`).find(`[name="id"]`).val()
             urlPotPribadi = `${apiUrl}gajisupirheader/${id}/${supirId}/edit/editpinjpribadi`
 
         } else if (aksi == 'delete') {
@@ -1747,6 +1770,9 @@
             $.ajax({
                 url: urlPotPribadi,
                 dataType: "JSON",
+                data : {
+                    tglbukti: $('#crudForm').find('[name=tglbukti]').val()
+                },
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 },
@@ -2124,8 +2150,8 @@
                     let totalBerjenjang = 0
 
                     $.each(response.data, (index, value) => {
-                            selectedTrip.push(value.id)
-                            totalBerjenjang += parseFloat(value.uangmakanberjenjang)
+                        selectedTrip.push(value.id)
+                        totalBerjenjang += parseFloat(value.uangmakanberjenjang)
                     })
                     setTimeout(() => {
 
@@ -2138,11 +2164,11 @@
                                 selectedRowIds: selectedTrip
                             })
                             .trigger("reloadGrid");
-                            hitung(selectedTrip)
+                        hitung(selectedTrip)
                     }, 100);
 
                     initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_uangmakanberjenjang"]`).text(totalBerjenjang))
-                   
+
                 });
                 loadPotSemuaGrid()
                 getDataPotSemua(gajiId).then((response) => {
@@ -2678,21 +2704,7 @@
                 $('#crudForm [name=supir_id]').first().val(supir.id)
                 element.val(supir.namasupir)
                 element.data('currentValue', element.val())
-                getDataPotPribadi(supir.id).then((response) => {
-                    setTimeout(() => {
-
-                        $("#tablePotPribadi")
-                            .jqGrid("setGridParam", {
-                                datatype: "local",
-                                data: response.data,
-                                originalData: response.data,
-                                rowNum: response.data.length,
-                                selectedRowIds: []
-                            })
-                            .trigger("reloadGrid");
-                    }, 100);
-
-                });
+               
             },
             onCancel: (element) => {
                 element.val(element.data('currentValue'))
