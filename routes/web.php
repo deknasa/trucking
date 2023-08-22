@@ -18,6 +18,7 @@ use App\Http\Controllers\BukaPenerimaanStokController;
 use App\Http\Controllers\BukaPengeluaranStokController;
 use App\Http\Controllers\SuratPengantarApprovalInputTripController;
 use App\Http\Controllers\TutupBukuController;
+use App\Http\Controllers\ApprovalOpnameController;
 use App\Http\Controllers\AbsenTradoController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CabangController;
@@ -987,6 +988,9 @@ Route::middleware(['auth','authorized'])->group(function () {
     
     Route::get('tutupbuku/index', [TutupBukuController::class,'index']);
     Route::resource('tutupbuku', TutupBukuController::class);
+
+    Route::get('approvalopname/index', [ApprovalOpnameController::class,'index']);
+    Route::resource('approvalopname', ApprovalOpnameController::class);
 
     Route::get('piutangheader/index', [PiutangHeaderController::class, 'index']);
     Route::get('piutangheader/{id}/delete', [PiutangHeaderController::class, 'delete'])->name('piutangheader.delete');
