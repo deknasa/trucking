@@ -102,7 +102,8 @@
           {
             label: 'KET. BIAYA EXTRA',
             name: 'keteranganbiayatambahan',
-            align: 'left'
+            align: 'left',
+            width: '300px'
           },
         ],
         autowidth: true,

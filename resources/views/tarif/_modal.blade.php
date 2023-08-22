@@ -108,7 +108,7 @@
                 </select>
               </div>
             </div>
-            <div class="row form-group">
+            <div class="row form-group statussistemton">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
                   SISTEM TON <span class="text-danger">*</span>
@@ -142,7 +142,7 @@
                 </div>
               </div>
             </div>
-            <div class="row form-group">
+            <div class="row form-group statuspenyesuaianharga">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
                   STATUS PENYESUAIAN HARGA <span class="text-danger">*</span></label>
@@ -150,6 +150,17 @@
               <div class="col-12 col-md-10">
                 <select name="statuspenyesuaianharga" class="form-select select2bs4" style="width: 100%;" z-index='3'>
                   <option value="">-- PILIH STATUS PENYESUAIAN HARGA --</option>
+                </select>
+              </div>
+            </div>
+            <div class="row form-group statuspostingtnl">
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">
+                  STATUS POSTING TNL <span class="text-danger">*</span></label>
+              </div>
+              <div class="col-12 col-md-10">
+                <select name="statuspostingtnl" class="form-select select2bs4" style="width: 100%;" z-index='3'>
+                  <option value="">-- PILIH STATUS POSTING TNL --</option>
                 </select>
               </div>
             </div>
@@ -427,7 +438,9 @@
       .all([
         setStatusAktifOptions(form),
         setStatusPenyesuaianHargaOptions(form),
-        setStatusSistemTonOptions(form)
+        setStatusSistemTonOptions(form),
+        setStatusPostingTnlOptions(form),
+        setTampilan(form)
       ])
       .then(() => {
         showDefault(form)
@@ -470,7 +483,9 @@
       .all([
         setStatusPenyesuaianHargaOptions(form),
         setStatusSistemTonOptions(form),
-        setStatusAktifOptions(form)
+        setStatusAktifOptions(form),
+        setStatusPostingTnlOptions(form),
+        setTampilan(form)
       ])
       .then(() => {
         showTarif(form, tarifId)
@@ -552,7 +567,9 @@
       .all([
         setStatusPenyesuaianHargaOptions(form),
         setStatusSistemTonOptions(form),
-        setStatusAktifOptions(form)
+        setStatusAktifOptions(form),
+        setStatusPostingTnlOptions(form),
+        setTampilan(form)
       ])
       .then(() => {
         showTarif(form, tarifId)
@@ -569,6 +586,44 @@
             $('.modal-loader').addClass('d-none')
           })
       })
+  }
+
+  const setTampilan = function(relatedForm) {
+    return new Promise((resolve, reject) => {
+      let data = [];
+      data.push({
+        name: 'grp',
+        value: 'UBAH TAMPILAN'
+      })
+      data.push({
+        name: 'text',
+        value: 'TARIF'
+      })
+      $.ajax({
+        url: `${apiUrl}parameter/getparambytext`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: data,
+        success: response => {
+          memo = JSON.parse(response.memo)
+          memo = memo.INPUT
+          if (memo != '') {
+            input = memo.split(',');
+            input.forEach(field => {
+              field = $.trim(field.toLowerCase());
+              $(`.${field}`).hide()
+            });
+          }
+          resolve()
+        },
+        error: error => {
+          reject(error)
+        }
+      })
+    })
   }
 
   function getMaxLength(form) {
@@ -678,6 +733,46 @@
     })
   }
 
+  const setStatusPostingTnlOptions = function(relatedForm) {
+    return new Promise((resolve, reject) => {
+      relatedForm.find('[name=statuspostingtnl]').empty()
+      relatedForm.find('[name=statuspostingtnl]').append(
+        new Option('-- PILIH POSTING TNL --', '', false, true)
+      ).trigger('change')
+
+      $.ajax({
+        url: `${apiUrl}parameter`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          filters: JSON.stringify({
+            "groupOp": "AND",
+            "rules": [{
+              "field": "grp",
+              "op": "cn",
+              "data": "STATUS POSTING TNL"
+            }]
+          })
+        },
+        success: response => {
+          response.data.forEach(statuspostingTnl => {
+            let option = new Option(statuspostingTnl.text, statuspostingTnl.id)
+
+            relatedForm.find('[name=statuspostingtnl]').append(option).trigger('change')
+          });
+
+          resolve()
+        },
+        error: error => {
+          reject(error)
+        }
+      })
+    })
+  }
+
   const setStatusAktifOptions = function(relatedForm) {
     return new Promise((resolve, reject) => {
       relatedForm.find('[name=statusaktif]').empty()
@@ -758,6 +853,9 @@
             }
             if (index == 'upahsupir') {
               element.data('current-value', value)
+            } 
+            if (index == 'statuspostingtnl') {
+              element.prop('disabled', true)
             }
           })
 

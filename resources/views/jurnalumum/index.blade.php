@@ -503,7 +503,7 @@
                 if (selectedId == null || selectedId == '' || selectedId == undefined) {
                   showDialog('Harap pilih salah satu record')
                 } else {
-                  cekApproval(selectedId, 'COPY')
+                  cekValidasiAksi(selectedId,'COPY')
                 }
                 clearSelectedRows()
                 $('#gs_').prop('checked', false)
