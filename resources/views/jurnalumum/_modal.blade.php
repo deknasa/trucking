@@ -38,7 +38,7 @@
             <div class="row form-group jurnalasal">
               <div class="col-12 col-sm-2 col-md-2">
                 <label class="col-form-label">
-                  JURNAL <span class="text-danger"></span>
+                  NO JURNAL COPY <span class="text-danger"></span>
                 </label>
               </div>
               <div class="col-12 col-sm-4 col-md-4">
