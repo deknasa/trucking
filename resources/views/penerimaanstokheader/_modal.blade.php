@@ -675,9 +675,9 @@
     $('[name=gandengandari]').parents('.form-group').hide()
     $('[name=gandenganke]').parents('.form-group').hide()
     $('.tbl_vulkanisirke').hide();
-    $('.tbl_total_sebelum').hide();
+    $('.tbl_total_sebelum').show();
     $('.tbl_penerimaanstok_nobukti').show();
-    $('.colspan').attr('colspan', 6);
+    $('.colspan').attr('colspan', 7);
     
     $('#addRow').show()
   }
