@@ -51,6 +51,12 @@
             name: 'nominal',
             align: 'right',
             formatter: currencyFormat
+          },
+          {
+            label: 'GAJI KENEK',
+            name: 'gajikenek',
+            align: 'right',
+            formatter: currencyFormat
           }
         ],
         autowidth: true,
@@ -117,6 +123,7 @@
             $(this).jqGrid('footerData', 'set', {
               nobukti: 'Total:',
               nominal: data.attributes.totalNominal,
+              gajikenek: data.attributes.totalGajiKenek,
             }, true)
           }
         }

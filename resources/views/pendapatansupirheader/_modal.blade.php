@@ -145,6 +145,7 @@
     let selectedTrip = [];
     let selectedRic = [];
     let selectedNominal = [];
+    let selectedGajiKenek = [];
     let selectedDari = [];
     let selectedSampai = [];
     let selectedSupir = [];
@@ -173,7 +174,7 @@
             let supir_id = $('#crudForm').find(`[name=supir_id]`).val()
             let id = $('#crudForm').find(`[name=id]`).val()
             if ((tgldari != '') && (tglsampai != '') && (supir_id != '')) {
-
+                $('#gsTrip').prop("checked", false)
                 getTrip(tgldari, tglsampai, supir_id, id)
                     .then((response) => {
 
@@ -296,6 +297,12 @@
                     value: parseFloat(item.replaceAll(',', ''))
                 })
             });
+            $.each(selectedGajiKenek, function(index, item) {
+                data.push({
+                    name: 'gajikenek[]',
+                    value: parseFloat(item.replaceAll(',', ''))
+                })
+            });
 
             data.push({
                 name: 'jumlahdetail',
@@ -379,6 +386,7 @@
                     selectedNominal = [];
                     selectedDari = [];
                     selectedSampai = [];
+                    selectedGajiKenek = [];
                     $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
                     $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
                     $('#jqGrid').jqGrid('setGridParam', {
@@ -423,7 +431,6 @@
         getMaxLength(form)
         initDatepicker()
         initLookup()
-        loadModalGrid()
     })
 
     $('#crudModal').on('hidden.bs.modal', () => {
@@ -446,9 +453,12 @@
         $('#crudModalTitle').text('Add Pendapatan Supir')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
+
+        loadModalGrid()
         Promise
             .all([
-                showDefault(form)
+                showDefault(form),
+                setTampilan()
             ])
             .then(() => {
                 $('#crudModal').modal('show')
@@ -479,8 +489,10 @@
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
 
+        loadModalGrid()
         Promise
             .all([
+                setTampilan(),
                 showPendapatanSupir(form, pendapatanId)
             ])
             .then(() => {
@@ -521,9 +533,10 @@
         $('#crudModalTitle').text('Delete Pendapatan Supir')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
-
+        loadModalGrid()
         Promise
             .all([
+                setTampilan(),
                 showPendapatanSupir(form, pendapatanId)
             ])
             .then(() => {
@@ -660,6 +673,7 @@
                             selectedTrip.push(detail.nobukti_trip)
                             selectedRic.push(detail.nobukti_ric)
                             selectedNominal.push(detail.nominal_detail)
+                            selectedGajiKenek.push(detail.gajikenek)
                             selectedDari.push(detail.dari_id)
                             selectedSampai.push(detail.sampai_id)
                         }
@@ -792,6 +806,12 @@
                         align: 'right',
                         formatter: currencyFormat,
                     },
+                    {
+                        label: 'GAJI KENEK',
+                        name: 'gajikenek',
+                        align: 'right',
+                        formatter: currencyFormat,
+                    },
                 ],
                 autowidth: true,
                 shrinkToFit: false,
@@ -850,6 +870,7 @@
                         $(this).jqGrid('footerData', 'set', {
                             nobukti_trip: 'Total:',
                             nominal_detail: data.attributes.totalNominal,
+                            gajikenek: data.attributes.totalGajiKenek,
                         }, true)
                     }
 
@@ -916,6 +937,7 @@
                     selectedTrip = [];
                     selectedRic = [];
                     selectedNominal = [];
+                    selectedGajiKenek = [];
                     selectedDari = [];
                     selectedSampai = [];
 
@@ -926,6 +948,7 @@
                             selectedTrip.push(detail.nobukti_trip)
                             selectedRic.push(detail.nobukti_ric)
                             selectedNominal.push(detail.nominal_detail)
+                            selectedGajiKenek.push(detail.gajikenek)
                             selectedDari.push(detail.dari_id)
                             selectedSampai.push(detail.sampai_id)
                         }
@@ -958,6 +981,7 @@
         selectedNominal = [];
         selectedDari = [];
         selectedSampai = [];
+        selectedGajiKenek = [];
         $('#modalgrid').trigger('reloadGrid')
     }
 
@@ -985,11 +1009,13 @@
                 selectedNominal = [];
                 selectedDari = [];
                 selectedSampai = [];
+                selectedGajiKenek = [];
 
                 selectedRowsTrip = response.data.map((data) => data.id)
                 selectedTrip = response.data.map((data) => data.nobukti_trip)
                 selectedRic = response.data.map((data) => data.nobukti_ric)
                 selectedNominal = response.data.map((data) => data.nominal_detail)
+                selectedGajiKenek = response.data.map((data) => data.gajikenek)
                 selectedDari = response.data.map((data) => data.dari_id)
                 selectedSampai = response.data.map((data) => data.sampai_id)
 
@@ -1018,6 +1044,7 @@
             selectedTrip.push($(element).parents('tr').find(`td[aria-describedby="modalgrid_nobukti_trip"]`).text())
             selectedRic.push($(element).parents('tr').find(`td[aria-describedby="modalgrid_nobukti_ric"]`).text())
             selectedNominal.push($(element).parents('tr').find(`td[aria-describedby="modalgrid_nominal_detail"]`).text())
+            selectedGajiKenek.push($(element).parents('tr').find(`td[aria-describedby="modalgrid_gajikenek"]`).text())
             selectedDari.push($(element).parents('tr').find(`td[aria-describedby="modalgrid_dari_id"]`).text())
             selectedSampai.push($(element).parents('tr').find(`td[aria-describedby="modalgrid_sampai_id"]`).text())
         } else {
@@ -1028,6 +1055,7 @@
                     selectedTrip.splice(i, 1);
                     selectedRic.splice(i, 1);
                     selectedNominal.splice(i, 1);
+                    selectedGajiKenek.splice(i, 1);
                     selectedDari.splice(i, 1);
                     selectedSampai.splice(i, 1);
                 }
@@ -1294,6 +1322,46 @@
         });
 
         new AutoNumeric('#total').set(total)
+    }
+
+    const setTampilan = function() {
+        return new Promise((resolve, reject) => {
+            let data = [];
+            data.push({
+                name: 'grp',
+                value: 'UBAH TAMPILAN'
+            })
+            data.push({
+                name: 'text',
+                value: 'PENDAPATANSUPIR'
+            })
+            $.ajax({
+                url: `${apiUrl}parameter/getparambytext`,
+                method: 'GET',
+                dataType: 'JSON',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                data: data,
+                success: response => {
+                    memo = JSON.parse(response.memo)
+                    memo = memo.INPUT
+                    if (memo != '') {
+                        input = memo.split(',');
+                        input.forEach(field => {
+                            field = $.trim(field.toLowerCase());
+                            $(`.${field}`).hide()
+                            console.log($("#modalgrid").jqGrid("hideCol", `${field}`))
+                            $("#modalgrid").jqGrid("hideCol", `${field}`);
+                        });
+                    }
+                    resolve()
+                },
+                error: error => {
+                    reject(error)
+                }
+            })
+        })
     }
 </script>
 @endpush()

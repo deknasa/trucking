@@ -16,10 +16,14 @@
           <div id="tabs">
             <ul class="dejavu">
               <li><a href="#detail-tab">Details</a></li>
+              <li><a href="#pengeluaran-tab">Pengeluaran Kas/bank</a></li>
               <li><a href="#jurnal-tab">Jurnal</a></li>
             </ul>
             <div id="detail-tab">
               <table id="detail"></table>
+            </div>
+            <div id="pengeluaran-tab">
+              <table id="pengeluaranGrid"></table>
             </div>
             <div id="jurnal-tab">
               <table id="jurnalGrid"></table>
@@ -34,6 +38,7 @@
 @include('pendapatansupirheader._modal')
 <!-- Detail -->
 @include('pendapatansupirheader._detail')
+@include('pengeluaran._pengeluaran')
 @include('jurnalumum._jurnal')
 
 @push('scripts')
@@ -76,8 +81,9 @@
 
     let nobukti = $('#jqGrid').jqGrid('getCell', id, 'pengeluaran_nobukti')
     loadDetailGrid()
+    loadPengeluaranGrid(nobukti)
     loadJurnalUmumGrid(nobukti)
-
+    setTampilanIndex()
     setRange()
     initDatepicker()
     $(document).on('click', '#btnReload', function(event) {
@@ -372,6 +378,7 @@
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
 
           loadDetailData(id)
+          loadPengeluaranData(id, pengeluaran_nobukti)
           loadJurnalUmumData(id, pengeluaran_nobukti)
 
         },
@@ -379,7 +386,7 @@
           changeJqGridRowListText()
 
           if (data.data.length === 0) {
-            $('#detail, #jurnalGrid').each((index, element) => {
+            $('#detail, #pengeluaranGrid, #jurnalGrid').each((index, element) => {
               abortGridLastRequest($(element))
               clearGridData($(element))
             })
@@ -388,7 +395,7 @@
               clearGridHeader($(element))
             })
           }
-          
+
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))
@@ -503,7 +510,7 @@
               } else {
                 cekValidasi(selectedId, 'DELETE')
               }
-              
+
             }
           },
           {
@@ -589,31 +596,32 @@
       })
       .parent().addClass('px-1')
 
-      function permission() {
-    if (!`{{ $myAuth->hasPermission('pendapatansupirheader', 'store') }}`) {
-      $('#add').attr('disabled', 'disabled')
-    }
+    function permission() {
+      if (!`{{ $myAuth->hasPermission('pendapatansupirheader', 'store') }}`) {
+        $('#add').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('pendapatansupirheader', 'update') }}`) {
-      $('#edit').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('pendapatansupirheader', 'update') }}`) {
+        $('#edit').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('pendapatansupirheader', 'destroy') }}`) {
-      $('#delete').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('pendapatansupirheader', 'destroy') }}`) {
+        $('#delete').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('pendapatansupirheader', 'export') }}`) {
-      $('#export').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('pendapatansupirheader', 'export') }}`) {
+        $('#export').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('pendapatansupirheader', 'report') }}`) {
-      $('#report').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('pendapatansupirheader', 'report') }}`) {
+        $('#report').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('pendapatansupirheader', 'approval') }}`) {
-      $('#approveun').attr('disabled', 'disabled')
-      $("#jqGrid").hideCol("");
-    }}
+      if (!`{{ $myAuth->hasPermission('pendapatansupirheader', 'approval') }}`) {
+        $('#approveun').attr('disabled', 'disabled')
+        $("#jqGrid").hideCol("");
+      }
+    }
 
     $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {
@@ -716,6 +724,45 @@
         selectedRows = response.data.map((row) => row.id)
         $('#jqGrid').trigger('reloadGrid')
       }
+    })
+  }
+
+  const setTampilanIndex = function() {
+    return new Promise((resolve, reject) => {
+      let data = [];
+      data.push({
+        name: 'grp',
+        value: 'UBAH TAMPILAN'
+      })
+      data.push({
+        name: 'text',
+        value: 'PENDAPATANSUPIR'
+      })
+      $.ajax({
+        url: `${apiUrl}parameter/getparambytext`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: data,
+        success: response => {
+          memo = JSON.parse(response.memo)
+          memo = memo.INPUT
+          if (memo != '') {
+            input = memo.split(',');
+            input.forEach(field => {
+              field = $.trim(field.toLowerCase());
+              $(`.${field}`).hide()
+              $("#detail").jqGrid("hideCol", field);
+              $("#jqGrid").jqGrid("hideCol", field);
+
+            });
+            showKasgantung = false;
+          }
+
+        }
+      })
     })
   }
 </script>
