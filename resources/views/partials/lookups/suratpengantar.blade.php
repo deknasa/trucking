@@ -18,7 +18,7 @@
       postData: {
         tgldari: $('#tgldariheaderlookup').val(),
         tglsampai: $('#tglsampaiheaderlookup').val(),
-
+        pengeluarantruckingheader: `{!! $pengeluarantruckingheader ?? '' !!}`,
       },
       idPrefix: 'suratpengantarLookup',
       colModel: [{
