@@ -235,6 +235,7 @@
       $.each(selectedRowsInvoice, function(index, value) {
         dataInvoice = $("#tableInvoice").jqGrid("getLocalRow", value);
         let selectedExtra = dataInvoice.nominalextra
+        let selectedOmset = dataInvoice.omset
         let selectedRetribusi = (dataInvoice.nominalretribusi == undefined) ? 0 : dataInvoice.nominalretribusi;
         console.log(selectedExtra)
         console.log(isNaN(selectedExtra))
@@ -245,6 +246,10 @@
         data.push({
           name: 'nominalretribusi[]',
           value: (isNaN(selectedRetribusi)) ? parseFloat(selectedRetribusi.replaceAll(',', '')) : selectedRetribusi
+        })
+        data.push({
+          name: 'omset[]',
+          value: (isNaN(selectedOmset)) ? parseFloat(selectedOmset.replaceAll(',', '')) : selectedOmset
         })
         data.push({
           name: 'sp_id[]',

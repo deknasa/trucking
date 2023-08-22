@@ -352,12 +352,12 @@
         },
         data: data,
         success: response => {
-          if (response.memo != undefined) {
-            memo = JSON.parse(response.memo)
-            memo = memo.INPUT
+          memo = JSON.parse(response.memo)
+          memo = memo.INPUT
+          if (memo != '') {
             input = memo.split(',');
             input.forEach(field => {
-              field = field.toLowerCase();
+              field = $.trim(field.toLowerCase());
               $(`.${field}`).hide()
             });
             $('#detailList tfoot').hide()

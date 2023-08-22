@@ -186,7 +186,8 @@
                             method: 'POST',
                             dataType: "JSON",
                             data: {
-                                user: user
+                                user: user,
+                                check: true
                             },
                             success: (response) => {
                                 resolve(response);

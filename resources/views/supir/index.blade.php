@@ -34,6 +34,7 @@
             var statusBukanBlackList;
 
             $(document).ready(function() {
+                setTampilanIndex()
                 $("#jqGrid").jqGrid({
                         url: `${apiUrl}supir`,
                         mtype: "GET",
@@ -326,6 +327,54 @@
                             {
                                 label: 'plafon deposito',
                                 name: 'plafondeposito',
+                            },
+                            {
+                                label: 'STATUS POSTING TNL',
+                                name: 'statuspostingtnl',
+                                width: 230,
+                                stype: 'select',
+                                searchoptions: {
+                                value: `<?php
+                                        $i = 1;
+
+                                        foreach ($data['combopostingtnl'] as $status) :
+                                            echo "$status[param]:$status[parameter]";
+                                            if ($i !== count($data['combopostingtnl'])) {
+                                            echo ";";
+                                            }
+                                            $i++;
+                                        endforeach
+
+                                        ?>
+                                `,
+                                dataInit: function(element) {
+                                    $(element).select2({
+                                    width: 'resolve',
+                                    theme: "bootstrap4"
+                                    });
+                                }
+                                },
+                                formatter: (value, options, rowData) => {
+                                let statusPostingTnl = JSON.parse(value)
+                                if (!statusPostingTnl) {
+                                    return ''
+                                }
+
+                                let formattedValue = $(`
+                                    <div class="badge" style="background-color: ${statusPostingTnl.WARNA}; color: #fff;">
+                                    <span>${statusPostingTnl.SINGKATAN}</span>
+                                    </div>
+                                `)
+
+                                return formattedValue[0].outerHTML
+                                },
+                                cellattr: (rowId, value, rowObject) => {
+                                let statusPostingTnl = JSON.parse(rowObject.statuspostingtnl)
+                                if (!statusPostingTnl) {
+                                    return ` title=""`
+                                }
+                                return ` title="${statusPostingTnl.MEMO}"`
+                                }
                             },
                             {
                                 label: 'PHOTO SUPIR',
@@ -1200,6 +1249,41 @@
                     success: response => {
                         statusBukanBlackList = response.data[0].id;
                     }
+                })
+            }
+            const setTampilanIndex = function() {
+                return new Promise((resolve, reject) => {
+                    let data = [];
+                    data.push({
+                    name: 'grp',
+                    value: 'UBAH TAMPILAN'
+                    })
+                    data.push({
+                    name: 'text',
+                    value: 'SUPIR'
+                    })
+                    $.ajax({
+                    url: `${apiUrl}parameter/getparambytext`,
+                    method: 'GET',
+                    dataType: 'JSON',
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`
+                    },
+                    data: data,
+                    success: response => {
+                        memo = JSON.parse(response.memo)
+                        memo = memo.INPUT
+                        if (memo != '') {
+                        input = memo.split(',');
+                        input.forEach(field => {
+                            field = field.toLowerCase();
+                            $(`.${field}`).hide()
+                            $("#jqGrid").jqGrid("hideCol", field);
+                        });
+                        }
+
+                    }
+                    })
                 })
             }
         </script>

@@ -72,6 +72,18 @@
                     <input type="text" name="nosim" id="nosim" maxlength="12" class="form-control numbernoseparate">
                   </div>
                 </div>
+                
+                <div class="row form-group statuspostingtnl">
+                  <div class="col-12 col-md-2">
+                    <label class="col-form-label">
+                      STATUS POSTING TNL <span class="text-danger">*</span></label>
+                  </div>
+                  <div class="col-12 col-md-10">
+                    <select name="statuspostingtnl" class="form-select select2bs4" style="width: 100%;" z-index='3'>
+                      <option value="">-- PILIH STATUS POSTING TNL --</option>
+                    </select>
+                  </div>
+                </div>
               </div>
               <div class="col-md-6">
 
@@ -483,7 +495,7 @@
   });
 
   $('#crudForm [name=noktp]').keyup(function(e) {
-    if (e.keyCode == 13 ) {
+    if (e.keyCode == 13) {
       $(this).trigger("enterKey");
     }
   });
@@ -514,6 +526,8 @@
     Promise
       .all([
         setStatusAktifOptions(form),
+        setStatusPostingTnlOptions(form),
+        setTampilan(form)
       ])
       .then(() => {
         showDefault(form)
@@ -560,6 +574,8 @@
     Promise
       .all([
         setStatusAktifOptions(form),
+        setStatusPostingTnlOptions(form),
+        setTampilan(form)
       ])
       .then(() => {
         showSupir(form, id)
@@ -571,6 +587,7 @@
             initDatepicker()
             initSelect2(form.find('.select2bs4'), true)
             form.find('[name]').removeAttr('disabled')
+            form.find('[name=statuspostingtnl]').prop('disabled', true)
           })
           .then(() => {
             $('#crudModal').modal('show')
@@ -602,6 +619,8 @@
     Promise
       .all([
         setStatusAktifOptions(form),
+        setStatusPostingTnlOptions(form),
+        setTampilan(form)
       ])
       .then(() => {
         showSupir(form, id)
@@ -934,6 +953,46 @@
   }
 
 
+  const setStatusPostingTnlOptions = function(relatedForm) {
+    return new Promise((resolve, reject) => {
+      relatedForm.find('[name=statuspostingtnl]').empty()
+      relatedForm.find('[name=statuspostingtnl]').append(
+        new Option('-- PILIH POSTING TNL --', '', false, true)
+      ).trigger('change')
+
+      $.ajax({
+        url: `${apiUrl}parameter`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          filters: JSON.stringify({
+            "groupOp": "AND",
+            "rules": [{
+              "field": "grp",
+              "op": "cn",
+              "data": "STATUS POSTING TNL"
+            }]
+          })
+        },
+        success: response => {
+          response.data.forEach(statuspostingTnl => {
+            let option = new Option(statuspostingTnl.text, statuspostingTnl.id)
+
+            relatedForm.find('[name=statuspostingtnl]').append(option).trigger('change')
+          });
+
+          resolve()
+        },
+        error: error => {
+          reject(error)
+        }
+      })
+    })
+  }
+
   const setStatusAktifOptions = function(relatedForm) {
     return new Promise((resolve, reject) => {
       relatedForm.find('[name=statusaktif]').empty()
@@ -966,6 +1025,43 @@
             relatedForm.find('[name=statusaktif]').append(option).trigger('change')
           });
 
+          resolve()
+        },
+        error: error => {
+          reject(error)
+        }
+      })
+    })
+  }
+  const setTampilan = function(relatedForm) {
+    return new Promise((resolve, reject) => {
+      let data = [];
+      data.push({
+        name: 'grp',
+        value: 'UBAH TAMPILAN'
+      })
+      data.push({
+        name: 'text',
+        value: 'SUPIR'
+      })
+      $.ajax({
+        url: `${apiUrl}parameter/getparambytext`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: data,
+        success: response => {
+          memo = JSON.parse(response.memo)
+          memo = memo.INPUT
+          if (memo != '') {
+            input = memo.split(',');
+            input.forEach(field => {
+              field = field.toLowerCase();
+              $(`.${field}`).hide()
+            });
+          }
           resolve()
         },
         error: error => {

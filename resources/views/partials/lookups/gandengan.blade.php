@@ -26,12 +26,15 @@
           width: '70px',
           name: 'kodegandengan',
           align: 'left',
+          width: '100px'
         },
         {
           label: 'KETERANGAN',
           name: 'keterangan',
+
           width: '270px',
           align: 'left'
+
         },
         {
           label: 'Status',

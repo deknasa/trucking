@@ -166,6 +166,7 @@ class SupirController extends MyController
             'statusluarkota' => $this->comboStatusAktif('list','STATUS LUAR KOTA','STATUS LUAR KOTA'),
             'statuszonatertentu' => $this->comboStatusAktif('list','ZONA TERTENTU','ZONA TERTENTU'),
             'statusblacklist' => $this->comboStatusAktif('list','BLACKLIST SUPIR','BLACKLIST SUPIR'),
+            'combopostingtnl' => $this->comboStatusAktif('list', 'STATUS POSTING TNL', 'STATUS POSTING TNL'),
         ];
 
         return view('supir.index', compact('title','data'));

@@ -35,6 +35,17 @@
               </div>
             </div>
 
+            <div class="row form-group jurnalasal">
+              <div class="col-12 col-sm-2 col-md-2">
+                <label class="col-form-label">
+                  JURNAL <span class="text-danger"></span>
+                </label>
+              </div>
+              <div class="col-12 col-sm-4 col-md-4">
+                <input type="text" name="jurnalasal" class="form-control jurnal-lookup">
+              </div>
+            </div>
+
             <div class="table-responsive table-scroll">
               <table class="table table-bordered table-bindkeys" id="detailList" style="width: 1500px;">
                 <thead>
@@ -238,6 +249,7 @@
 
     getMaxLength(form)
     initDatepicker()
+    initLookup()
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
@@ -473,7 +485,7 @@
   function showJurnalUmum(form, id, isCopy = false) {
     return new Promise((resolve, reject) => {
       $('#detailList tbody').html('')
-      
+
       $.ajax({
         url: `${apiUrl}jurnalumumheader/${id}`,
         method: 'GET',
@@ -490,7 +502,7 @@
             $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
           }
-
+          $('.jurnalasal').hide()
           $.each(response.data, (index, value) => {
             let element = form.find(`[name="${index}"]`)
 
@@ -697,6 +709,128 @@
         }
       })
     }
+  }
+
+  function initLookup() {
+    $('.jurnal-lookup').lookup({
+      title: 'Jurnal Umum Lookup',
+      fileName: 'jurnalumum',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+        }
+      },
+      onSelectRow: (jurnalumum, element) => {
+        element.val(jurnalumum.nobukti)
+        element.data('currentValue', element.val())
+
+        $('#table_body').html('')
+        getJurnalUmum(jurnalumum.id)
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+  }
+
+  function getJurnalUmum(jurnalId) {
+    $.ajax({
+      url: `${apiUrl}jurnalumumdetail/getDetail`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`
+      },
+      data: {
+        jurnalumum_id: jurnalId
+      },
+      success: response => {
+        $.each(response.data, (index, detail) => {
+          let detailRow = $(`
+              <tr>
+              <td></td>
+              <td>
+                <input type="hidden" name="coadebet_detail[]">
+                <input type="text" name="ketcoadebet_detail[]" data-current-value="${detail.coadebet}" class="form-control coadebet-lookup">
+              </td>
+              <td>
+                <input type="hidden" name="coakredit_detail[]">
+                <input type="text" name="ketcoakredit_detail[]" data-current-value="${detail.coakredit}" class="form-control coakredit-lookup">
+              </td>
+              <td>
+                <input type="text" name="keterangan_detail[]" class="form-control">   
+              </td><td>
+                <input type="text" name="nominal_detail[]"  style="text-align:right" class="form-control autonumeric nominal" > 
+              </td>
+              <td>
+                  <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
+              </td>
+              </tr>
+            `)
+
+          detailRow.find(`[name="coadebet_detail[]"]`).val(detail.coadebet)
+          detailRow.find(`[name="coakredit_detail[]"]`).val(detail.coakredit)
+          detailRow.find(`[name="ketcoadebet_detail[]"]`).val(detail.ketcoadebet)
+          detailRow.find(`[name="ketcoakredit_detail[]"]`).val(detail.ketcoakredit)
+          detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
+          detailRow.find(`[name="nominal_detail[]"]`).val(detail.nominal)
+
+          initAutoNumeric(detailRow.find(`[name="nominal_detail[]"]`))
+          $('#detailList tbody').append(detailRow)
+          setTotal();
+
+          $('.coadebet-lookup').last().lookup({
+            title: 'Coa Debet Lookup',
+            fileName: 'akunpusat',
+            beforeProcess: function(test) {
+              this.postData = {
+                Aktif: 'AKTIF',
+                levelCoa: '3',
+              }
+            },
+            onSelectRow: (akunpusat, element) => {
+              element.parents('td').find(`[name="coadebet_detail[]"]`).val(akunpusat.coa)
+              element.val(akunpusat.keterangancoa)
+              element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+              element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+              element.parents('td').find(`[name="coadebet_detail[]"]`).val('')
+              element.val('')
+              element.data('currentValue', element.val())
+            }
+          })
+
+          $('.coakredit-lookup').last().lookup({
+            title: 'Coa Kredit Lookup',
+            fileName: 'akunpusat',
+            onSelectRow: (akunpusat, element) => {
+              element.parents('td').find(`[name="coakredit_detail[]"]`).val(akunpusat.coa)
+              element.val(akunpusat.keterangancoa)
+              element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+              element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+              element.parents('td').find(`[name="coakredit_detail[]"]`).val('')
+              element.val('')
+              element.data('currentValue', element.val())
+            }
+          })
+        })
+        setRowNumbers()
+      },
+      error: error => {
+        showDialog(error.statusText)
+      }
+    })
   }
 </script>
 @endpush()
