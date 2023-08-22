@@ -18,11 +18,12 @@
           name: 'id',
           align: 'right',
           width: '70px',
-            search: false,
+          search: false,
           hidden: true
         },
         {
           label: 'GANDENGAN',
+          width: '70px',
           name: 'kodegandengan',
           align: 'left',
           width: '100px'
@@ -30,8 +31,10 @@
         {
           label: 'KETERANGAN',
           name: 'keterangan',
-          align: 'left',
-          width: '250px'
+
+          width: '270px',
+          align: 'left'
+
         },
         {
           label: 'Status',
