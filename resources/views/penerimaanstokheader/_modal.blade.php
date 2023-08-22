@@ -2120,8 +2120,12 @@
       fileName: 'penerimaanstokheader',
       beforeProcess: function(test) {
         var penerimaanstokId = $(`#penerimaanstokId`).val();
+        var detailstok = $(`#detailstokId_${row}`).val()
+        // console.log(row);
+        // console.log($(`#detailstokId_${row}`).val(),$(`#detailstokId_${row}`));
         this.postData = {
           penerimaanstok_id: penerimaanstokId,
+          stok_id : detailstok
         }
       },
       onSelectRow: (penerimaan, element) => {

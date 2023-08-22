@@ -18,6 +18,7 @@
       datatype: "json",
       postData: {
         penerimaanstok_id: `{!! $penerimaanstok_id ?? '' !!}`,
+        stok_id: `{!! $stok_id ?? '' !!}`,
         // filters: `{!! $filters ?? '' !!}`
         supplier_id: `{!! $supplier_id ?? '' !!}`,
         pengeluaranstok_id: `{!! $pengeluaranstok_id ?? '' !!}`,
