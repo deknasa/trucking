@@ -357,7 +357,7 @@
           if (memo != '') {
             input = memo.split(',');
             input.forEach(field => {
-              field = field.toLowerCase();
+              field = $.trim(field.toLowerCase());
               $(`.${field}`).hide()
             });
             $('#detailList tfoot').hide()
