@@ -72,10 +72,20 @@ class PendapatanSupirHeaderController extends MyController
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'pendapatansupirdetail', $detailParams)['data'];
 
+        $tampilanParams = [
+            'grp' => 'PENDAPATAN SUPIR',
+            'subgrp' => 'GAJI KENEK',
+        ];
+        $tampilan = Http::withHeaders($request->header())
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'parameter/getparamfirst', $tampilanParams);
+        $tampilan = $tampilan->json();
+        $showgajikenek = $tampilan['text'];
         $combo = $this->combo('list');
         $key = array_search('CETAK', array_column($combo, 'parameter'));
         $pendapatan["combo"] =  $combo[$key];
-        return view('reports.pendapatansupir', compact('pendapatan', 'pendapatan_details'));
+        return view('reports.pendapatansupir', compact('pendapatan', 'pendapatan_details', 'showgajikenek'));
     }
 
     public function export(Request $request): void
@@ -97,6 +107,28 @@ class PendapatanSupirHeaderController extends MyController
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'pendapatansupirdetail', $detailParams);
+
+        $tampilanParams = [
+            'grp' => 'UBAH TAMPILAN',
+            'text' => 'PENDAPATANSUPIR',
+        ];
+        $tampilan = Http::withHeaders($request->header())
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'parameter/getparambytext', $tampilanParams);
+        $tampilan = $tampilan->json();
+
+        $notGajiKenek = true;
+        $getListTampilan = json_decode($tampilan['memo']);
+        if ($getListTampilan->INPUT != '') {
+            $getListTampilan = (explode(",", $getListTampilan->INPUT));
+            foreach ($getListTampilan as $value) {
+                if (trim(strtolower($value)) == 'gajikenek') {
+                    $notGajiKenek = false;
+                }
+            }
+        }
+
         $pendapatan_details = $responses['data'];
 
         $tglBukti = $pendapatans["tglbukti"];
@@ -191,9 +223,16 @@ class PendapatanSupirHeaderController extends MyController
                 'label' => 'NOMINAL',
                 'index' => 'nominal',
                 'format' => 'currency'
-            ]
+            ],
         ];
-
+        if ($notGajiKenek) {
+            $detail_columns[] =
+                [
+                    'label' => 'GAJI KENEK',
+                    'index' => 'gajikenek',
+                    'format' => 'currency'
+                ];
+        }
         foreach ($header_columns as $header_column) {
             $sheet->setCellValue('B' . $header_start_row, $header_column['label']);
             $sheet->setCellValue('C' . $header_start_row++, ': ' . $pendapatans[$header_column['index']]);
@@ -226,15 +265,23 @@ class PendapatanSupirHeaderController extends MyController
         ];
 
         // $sheet->getStyle("A$detail_table_header_row:G$detail_table_header_row")->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FF1F456E');
-        $sheet->getStyle("A$detail_table_header_row:G$detail_table_header_row")->applyFromArray($styleArray);
+        $lastCol = 'G';
+        if ($notGajiKenek) {
+            $lastCol = 'H';
+        }
+        $sheet->getStyle("A$detail_table_header_row:$lastCol" . "$detail_table_header_row")->applyFromArray($styleArray);
 
         $total = 0;
         foreach ($pendapatan_details as $response_index => $response_detail) {
 
             foreach ($detail_columns as $detail_columns_index => $detail_column) {
                 $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
-                $sheet->getStyle("A$detail_table_header_row:G$detail_table_header_row")->getFont()->setBold(true);
-                $sheet->getStyle("A$detail_table_header_row:G$detail_table_header_row")->getAlignment()->setHorizontal('center');
+                $lastCol = 'G';
+                if ($notGajiKenek) {
+                    $lastCol = 'H';
+                }
+                $sheet->getStyle("A$detail_table_header_row:$lastCol" . "$detail_table_header_row")->getFont()->setBold(true);
+                $sheet->getStyle("A$detail_table_header_row:$lastCol" . "$detail_table_header_row")->getAlignment()->setHorizontal('center');
             }
             $response_detail['nominals'] = number_format((float) $response_detail['nominal'], '2', '.', ',');
 
@@ -246,10 +293,18 @@ class PendapatanSupirHeaderController extends MyController
             $sheet->setCellValue("F$detail_start_row", $response_detail['sampai']);
             $sheet->setCellValue("G$detail_start_row", $response_detail['nominal']);
 
+            if ($notGajiKenek) {
+                $sheet->setCellValue("H$detail_start_row", $response_detail['gajikenek']);
+                $sheet->getStyle("H$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
+            }
+
             // $sheet->getStyle("C$detail_start_row")->getAlignment()->setWrapText(true);
             // $sheet->getColumnDimension('C')->setWidth(50);
-
-            $sheet->getStyle("A$detail_start_row:G$detail_start_row")->applyFromArray($styleArray);
+            $lastCol = 'G';
+            if ($notGajiKenek) {
+                $lastCol = 'H';
+            }
+            $sheet->getStyle("A$detail_start_row:$lastCol" . "$detail_start_row")->applyFromArray($styleArray);
             $sheet->getStyle("G$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
 
             // $total += $response_detail['nominal'];
@@ -265,6 +320,11 @@ class PendapatanSupirHeaderController extends MyController
 
         $sheet->getStyle("G$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
 
+        if ($notGajiKenek) {
+            $sheet->setCellValue("H$detail_start_row",  "=SUM(H8:H" . ($dataRow - 1) . ")")->getStyle("H$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+            $sheet->getStyle("H$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+        }
+
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);
         $sheet->getColumnDimension('C')->setAutoSize(true);
@@ -272,6 +332,7 @@ class PendapatanSupirHeaderController extends MyController
         $sheet->getColumnDimension('E')->setAutoSize(true);
         $sheet->getColumnDimension('F')->setAutoSize(true);
         $sheet->getColumnDimension('G')->setAutoSize(true);
+        $sheet->getColumnDimension('H')->setAutoSize(true);
 
         $writer = new Xlsx($spreadsheet);
         $filename = 'Laporan Pendapatan Supir' . date('dmYHis');

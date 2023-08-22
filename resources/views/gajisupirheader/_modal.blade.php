@@ -217,6 +217,7 @@
 <script>
     var today = new Date();
 
+    let komisiGajiKenek
     let idRic
     let hasFormBindKeys = false
     let modalBody = $('#crudModal').find('.modal-body').html()
@@ -319,8 +320,11 @@
             upahRitasi = upahRitasi + parseFloat(selectedUpahRitasi)
             biayaExtra = biayaExtra + parseFloat(selectedBiayaExtra)
         })
-
-        subtotal = gajiSupir + gajiKenek + tol + upahRitasi + biayaExtra
+        if (komisiGajiKenek == 'YA') {
+            subtotal = gajiSupir + tol + upahRitasi + biayaExtra
+        } else {
+            subtotal = gajiSupir + gajiKenek + tol + upahRitasi + biayaExtra
+        }
         initAutoNumeric($('#crudForm').find(`[name="subtotal"]`).val(subtotal))
         initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_gajisupir"]`).text(gajiSupir))
         initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_gajikenek"]`).text(gajiKenek))
@@ -364,42 +368,42 @@
         hitungSisa()
     }
 
-    function hitungNominal() {
-        gajiSupir = 0;
-        gajiKenek = 0;
-        komisi = 0;
-        tol = 0;
-        upahRitasi = 0;
-        biayaExtra = 0;
-        $.each(selectedGajiSupir, function(index, item) {
-            gajiSupir = gajiSupir + parseFloat(item.replace(/,/g, ''))
-        });
-        $.each(selectedGajiKenek, function(index, item) {
-            gajiKenek = gajiKenek + parseFloat(item.replace(/,/g, ''))
-        });
-        $.each(selectedKomisiSupir, function(index, item) {
-            komisi = komisi + parseFloat(item.replace(/,/g, ''))
-        });
-        $.each(selectedUpahRitasi, function(index, item) {
-            upahRitasi = upahRitasi + parseFloat(item.replace(/,/g, ''))
-        });
-        $.each(selectedBiayaExtra, function(index, item) {
-            biayaExtra = biayaExtra + parseFloat(item.replace(/,/g, ''))
-        });
-        $.each(selectedTolSupir, function(index, item) {
-            tol = tol + parseFloat(item.replace(/,/g, ''))
-        });
-        subtotal = gajiSupir + gajiKenek + tol + upahRitasi + biayaExtra
-        console.log(subtotal)
-        initAutoNumeric($('#crudForm').find(`[name="subtotal"]`).val(subtotal))
-        initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_gajisupir"]`).text(gajiSupir))
-        initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_gajikenek"]`).text(gajiKenek))
-        initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_komisisupir"]`).text(komisi))
-        initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_upahritasi"]`).text(upahRitasi))
-        initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_biayaextra"]`).text(biayaExtra))
-        initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_tolsupir"]`).text(tol))
-        hitungSisa()
-    }
+    // function hitungNominal() {
+    //     gajiSupir = 0;
+    //     gajiKenek = 0;
+    //     komisi = 0;
+    //     tol = 0;
+    //     upahRitasi = 0;
+    //     biayaExtra = 0;
+    //     $.each(selectedGajiSupir, function(index, item) {
+    //         gajiSupir = gajiSupir + parseFloat(item.replace(/,/g, ''))
+    //     });
+    //     $.each(selectedGajiKenek, function(index, item) {
+    //         gajiKenek = gajiKenek + parseFloat(item.replace(/,/g, ''))
+    //     });
+    //     $.each(selectedKomisiSupir, function(index, item) {
+    //         komisi = komisi + parseFloat(item.replace(/,/g, ''))
+    //     });
+    //     $.each(selectedUpahRitasi, function(index, item) {
+    //         upahRitasi = upahRitasi + parseFloat(item.replace(/,/g, ''))
+    //     });
+    //     $.each(selectedBiayaExtra, function(index, item) {
+    //         biayaExtra = biayaExtra + parseFloat(item.replace(/,/g, ''))
+    //     });
+    //     $.each(selectedTolSupir, function(index, item) {
+    //         tol = tol + parseFloat(item.replace(/,/g, ''))
+    //     });
+    //     subtotal = gajiSupir + gajiKenek + tol + upahRitasi + biayaExtra
+    //     console.log(subtotal)
+    //     initAutoNumeric($('#crudForm').find(`[name="subtotal"]`).val(subtotal))
+    //     initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_gajisupir"]`).text(gajiSupir))
+    //     initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_gajikenek"]`).text(gajiKenek))
+    //     initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_komisisupir"]`).text(komisi))
+    //     initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_upahritasi"]`).text(upahRitasi))
+    //     initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_biayaextra"]`).text(biayaExtra))
+    //     initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_tolsupir"]`).text(tol))
+    //     hitungSisa()
+    // }
 
     $(document).ready(function() {
 
@@ -1042,7 +1046,7 @@
         rekapRincian()
         detailLainnya()
         initDatepicker()
-
+        setGajiSupir()
         form.find(`[name="subtotal"]`).addClass('disabled')
         initAutoNumeric($('#crudForm').find('[name=nomDeposito]'))
         initAutoNumeric($('#crudForm').find('[name=nomBBM]'))
@@ -1137,6 +1141,79 @@
                     cekValidasiAksi(Id, Aksi)
                 }
             }
+        })
+    }
+
+    function setGajiSupir() {
+        let data = [];
+        data.push({
+            name: 'grp',
+            value: 'PENDAPATAN SUPIR'
+        })
+        data.push({
+            name: 'subgrp',
+            value: 'GAJI KENEK'
+        })
+        $.ajax({
+            url: `${apiUrl}parameter/getparamfirst`,
+            method: 'GET',
+            dataType: 'JSON',
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            },
+            data: data,
+            success: response => {
+                komisiGajiKenek = response.text
+                console.log('reposn ', response)
+            },
+            error: error => {
+                console.log('error ', error);
+                if (error.status === 422) {
+                    $('.is-invalid').removeClass('is-invalid')
+                    $('.invalid-feedback').remove()
+
+                    setErrorMessages(form, error.responseJSON.errors);
+                } else {
+                    showDialog(error.responseJSON)
+                }
+            }
+        })
+    }
+    const setTampilan = function(relatedForm) {
+        return new Promise((resolve, reject) => {
+            let data = [];
+            data.push({
+                name: 'grp',
+                value: 'PENDAPATAN SUPIR'
+            })
+            data.push({
+                name: 'text',
+                value: 'GAJI KENEK'
+            })
+            $.ajax({
+                url: `${apiUrl}parameter/getparamfirst`,
+                method: 'GET',
+                dataType: 'JSON',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                data: data,
+                success: response => {
+                    memo = JSON.parse(response.memo)
+                    memo = memo.INPUT
+                    if (memo != '') {
+                        input = memo.split(',');
+                        input.forEach(field => {
+                            field = $.trim(field.toLowerCase());
+                            $(`.${field}`).hide()
+                        });
+                    }
+                    resolve()
+                },
+                error: error => {
+                    reject(error)
+                }
+            })
         })
     }
 
@@ -1407,7 +1484,7 @@
         aksi = $('#crudForm').data('action')
         if (aksi == 'edit') {
             id = $(`#crudForm`).find(`[name="id"]`).val()
-           
+
             urlPotSemua = `${apiUrl}gajisupirheader/${id}/edit/editpinjsemua`
 
         } else if (aksi == 'delete') {
@@ -1421,7 +1498,7 @@
             $.ajax({
                 url: urlPotSemua,
                 dataType: "JSON",
-                data : {
+                data: {
                     tglbukti: $('#crudForm').find('[name=tglbukti]').val()
                 },
                 headers: {
@@ -1770,7 +1847,7 @@
             $.ajax({
                 url: urlPotPribadi,
                 dataType: "JSON",
-                data : {
+                data: {
                     tglbukti: $('#crudForm').find('[name=tglbukti]').val()
                 },
                 headers: {
@@ -2272,7 +2349,7 @@
                     initDisabled()
                 }
 
-                hitungNominal();
+                hitung()
                 hitungUangJalan();
 
             }
@@ -2704,7 +2781,7 @@
                 $('#crudForm [name=supir_id]').first().val(supir.id)
                 element.val(supir.namasupir)
                 element.data('currentValue', element.val())
-               
+
             },
             onCancel: (element) => {
                 element.val(element.data('currentValue'))
@@ -2900,7 +2977,8 @@
                     },
                     datatype: "json"
                 }).trigger('reloadGrid');
-                hitungNominal()
+                // hitungNominal()
+                hitung()
             }
         })
 
