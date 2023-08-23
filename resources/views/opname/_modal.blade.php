@@ -379,7 +379,6 @@
               selectedRowIds: selectedIdOpname
             })
             .trigger("reloadGrid");
-          $('#loaderGrid').addClass('d-none')
         }, 100);
 
       });
@@ -510,16 +509,7 @@
           console.log(iCol);
         },
         loadComplete: function() {
-          setTimeout(() => {
-            $(this)
-              .getGridParam("selectedRowIds")
-              .forEach((selectedRowId) => {
-                $(this)
-                  .find(`tr input[value=${selectedRowId}]`)
-                  .prop("checked", true);
-                initAutoNumeric($(this).find(`td[aria-describedby="tableOpname_nominalretribusi"]`))
-              });
-          }, 100);
+          $('#loaderGrid').addClass('d-none')
 
           setHighlight($(this))
         },
