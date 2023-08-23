@@ -252,7 +252,7 @@
         onSelectRow: function(id) {
           let penerimaanstok = $('#jqGrid').jqGrid('getCell', id, 'penerimaanstok')
           let nobukti = $('#jqGrid').jqGrid('getCell', id, 'nobukti')
-          if (penerimaanstok =="SPB") {
+          if (penerimaanstok =="SPB" || penerimaanstok =="SPBS") {
             nobukti = $('#jqGrid').jqGrid('getCell', id, 'hutang_nobukti')
           }
 
