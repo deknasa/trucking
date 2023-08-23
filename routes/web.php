@@ -244,6 +244,7 @@ use App\Http\Controllers\MainAkunPusatController;
 use App\Http\Controllers\LaporanHistoryDepositoController;
 use App\Http\Controllers\LaporanPinjamanPerUnitTradoController;
 use App\Http\Controllers\LogAbsensiController;
+use App\Http\Controllers\OpnameHeaderController;
 use App\Http\Controllers\ReminderOliController;
 use App\Http\Controllers\ReminderSpkController;
 use App\Http\Controllers\ReminderStokController;
@@ -1519,6 +1520,11 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::resource('spkharian', SpkHarianController::class);
     Route::get('statusgandengantruck/index', [StatusGandenganTruckController::class, 'index']);
     Route::resource('statusgandengantruck', StatusGandenganTruckController::class);
+    
+    Route::get('opnameheader/index', [OpnameHeaderController::class, 'index']);
+    Route::get('opnameheader/export', [OpnameHeaderController::class, 'export'])->name('opnameheader.export');
+    Route::get('opnameheader/report', [OpnameHeaderController::class, 'report'])->name('opnameheader.report');
+    Route::resource('opnameheader', OpnameHeaderController::class);
 });
 
 Route::patch('format', [FormatController::class, 'update']);
