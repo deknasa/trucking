@@ -82,7 +82,7 @@
               </div>
               <div class="col-md-6 mb-3">
                 <div class="row">
-                  <button id="btnTampil" type="button" class="btn btn-secondary"><i class="fas fa-sync"></i>
+                  <button id="btnTampil" type="button" class="btn btn-primary"><i class="fas fa-sync"></i>
                     RELOAD
                   </button>
                 </div>

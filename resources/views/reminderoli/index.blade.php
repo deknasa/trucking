@@ -23,7 +23,7 @@
                         <div class="row">
 
                             <div class="col-sm-6 mt-4">
-                                <button type="button" id="btnTampil" class="btn btn-secondary mr-1 ">
+                                <button type="button" id="btnTampil" class="btn btn-primary mr-1 ">
                                     <i class="fas fa-sync"></i>
                                     Reload
                                 </button>

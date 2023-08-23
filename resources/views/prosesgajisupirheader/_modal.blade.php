@@ -71,7 +71,7 @@
                         </div>
                         <div class="form-group row">
                             <div class="col-12 col-md-2 ">
-                                <button class="btn btn-secondary" id="btnTampil"><i class="fas fa-sync"></i>
+                                <button class="btn btn-primary" id="btnTampil"><i class="fas fa-sync"></i>
                                     RELOAD</button>
                             </div>
                         </div>
