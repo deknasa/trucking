@@ -585,7 +585,7 @@
           Authorization: `Bearer ${accessToken}`
         },
         success: (response) => {
-
+          selectedIdOpname = []
           $.each(response.data, (index, value) => {
             selectedIdOpname.push(value.id)
           })
