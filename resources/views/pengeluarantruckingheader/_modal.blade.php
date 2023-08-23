@@ -857,6 +857,7 @@
         tampilanPJK()
         break;
       case listKodePengeluaran[8]: //'BBT':
+        console.log('asdasd');
         tampilanBBT()
         break;
       default:
@@ -2324,14 +2325,28 @@
               detailRow.find(`[name="qty[]"]`).val(detail.qty)
               detailRow.find(`[name="harga[]"]`).val(detail.harga)
               detailRow.find(`[name="keterangan[]"]`).val(detail.keterangan)
-              detailRow.find(`[name="suratpengantar[]"]`).val(detail.suratpengantar)
+              detailRow.find(`[name="suratpengantar_nobukti[]"]`).val(detail.suratpengantar_nobukti)
+              detailRow.find(`[name="trado_id[]"]`).val(detail.trado_id)
+              detailRow.find(`[name="container_id[]"]`).val(detail.container_id)
+              detailRow.find(`[name="pelanggan_id[]"]`).val(detail.pelanggan_id)
+              detailRow.find(`[name="jenisorder_id[]"]`).val(detail.jenisorder_id)
               detailRow.find(`[name="penerimaantruckingheader_nobukti[]"]`).val(detail.penerimaantruckingheader_nobukti)
               detailRow.find(`[name="nominal[]"]`).val(detail.nominal)
+              detailRow.find(`[name="nominaltagih[]"]`).val(detail.nominaltagih)
               pengeluaranstokheader = detail.pengeluaranstokheader_id
               if (detail.pengeluaranstok_nobukti) {
                 initAutoNumeric(detailRow.find(`[name="qty[]"]`))
                 // initAutoNumeric(detailRow.find(`[name="qty[]"]`),{'maximumValue':detail.maxqty})
                 initAutoNumeric(detailRow.find(`[name="harga[]"]`))
+              }
+              if (detail.suratpengantar_nobukti) {
+                initAutoNumeric(detailRow.find(`[name="nominaltagih[]"]`))
+                detailRow.find(`[name="suratpengantar_nobukti[]"]`).data('current-value', detail.suratpengantar_nobukti)
+                detailRow.find(`[name="trado_id[]"]`).prop('readonly', true)
+                detailRow.find(`[name="container_id[]"]`).prop('readonly', true)
+                detailRow.find(`[name="pelanggan_id[]"]`).prop('readonly', true)
+                detailRow.find(`[name="jenisorder_id[]"]`).prop('readonly', true)
+
               }
 
               initAutoNumeric(detailRow.find(`[name="nominal[]"]`))
@@ -2491,7 +2506,7 @@
                 title: 'surat pengantar Lookup',
                 fileName: 'suratpengantar',
                 beforeProcess: function(test) {
-                  console.log(row);
+                  // console.log(index);
                   // var levelcoa = $(`#levelcoa`).val();
                   this.postData = {
                     pengeluarantruckingheader:KodePengeluaranId,
