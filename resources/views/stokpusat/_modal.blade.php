@@ -35,7 +35,7 @@
                         </div>
                         <div class="row form-group">
                             <div class="col-12 col-md-12">
-                                <button class="btn btn-secondary" type="button" id="btnTampil"><i class="fas fa-sync"></i>
+                                <button class="btn btn-primary" type="button" id="btnTampil"><i class="fas fa-sync"></i>
                                     FILTER</button>
                             </div>
                         </div>
