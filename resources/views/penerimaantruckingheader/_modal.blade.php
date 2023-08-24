@@ -71,11 +71,11 @@
             <div class="row form-group" style="display:none;">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
-                  jenisorderan <span class="text-danger">*</span></label>
+                  jenisorder <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="hidden" id="jenisorderan" name="jenisorderan_id">
-                <input type="text" name="jenisorderan" class="form-control jenisorderan-lookup">
+                <input type="hidden" id="jenisorder" name="jenisorder_id">
+                <input type="text" name="jenisorder" class="form-control jenisorder-lookup">
               </div>
             </div>
 
@@ -311,6 +311,18 @@
           value: form.find(`[name="bank"]`).val()
         })
         data.push({
+          name: 'periodedari',
+          value: null
+        })
+        data.push({
+          name: 'periodesampai',
+          value: null
+        })
+        data.push({
+          name: 'jenisorder_id',
+          value: null
+        })
+        data.push({
           name: 'penerimaan_nobukti',
           value: form.find(`[name="pengeluaran_nobukti"]`).val()
         })
@@ -372,6 +384,18 @@
         data.push({
           name: 'penerimaantrucking',
           value: form.find(`[name="penerimaantrucking"]`).val()
+        })
+        data.push({
+          name: 'periodedari',
+          value: null
+        })
+        data.push({
+          name: 'periodesampai',
+          value: null
+        })
+        data.push({
+          name: 'jenisorder_id',
+          value: null
         })
         data.push({
           name: 'karyawanheader_id',
@@ -439,6 +463,8 @@
       } else if (KodePenerimaanId === "PBT") {
         data = []
 
+        console.log($('[name=jenisorder_id]').val());
+        // console.log(form.find(`[name="jenisorder_id"]`).val());
         data.push({
           name: 'id',
           value: form.find(`[name="id"]`).val()
@@ -470,6 +496,18 @@
         data.push({
           name: 'coa',
           value: form.find(`[name="coa"]`).val()
+        })
+        data.push({
+          name: 'periodedari',
+          value: form.find(`[name="periodedari"]`).val()
+        })
+        data.push({
+          name: 'periodesampai',
+          value: form.find(`[name="periodesampai"]`).val()
+        })
+        data.push({
+          name: 'jenisorder_id',
+          value: form.find(`[name="jenisorder_id"]`).val()
         })
         data.push({
           name: 'keterangancoa',
@@ -757,7 +795,7 @@
     $('.tbl_pengeluarantruckingheader_nobukti').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
     $('[name=karyawanheader_id]').parents('.form-group').hide()
-    $('[name=jenisorderan_id]').parents('.form-group').hide()
+    $('[name=jenisorder_id]').parents('.form-group').hide()
     $('.colspan').attr('colspan', 2);
     $('#sisaColFoot').hide()
     $('#sisaFoot').hide()
@@ -770,7 +808,7 @@
     $('.tbl_supir_id').hide()
     $('[name=periodedari]').parents('.form-group').hide()
     $('[name=periodesampai]').parents('.form-group').hide()
-    $('[name=jenisorderan_id]').parents('.form-group').hide()
+    $('[name=jenisorder_id]').parents('.form-group').hide()
     $('[name=supirheader_id]').parents('.form-group').show()
     $('[name=karyawanheader_id]').parents('.form-group').hide()
     $('#gbox_tablePinjaman').show()
@@ -803,7 +841,7 @@
     $('[name=supirheader_id]').parents('.form-group').hide()
     $('[name=periodedari]').parents('.form-group').show()
     $('[name=periodesampai]').parents('.form-group').show()
-    $('[name=jenisorderan_id]').parents('.form-group').show()
+    $('[name=jenisorder_id]').parents('.form-group').show()
     $('[name=karyawanheader_id]').parents('.form-group').hide()
     $('#gbox_tablePinjaman').hide()
     $('#gbox_tablePinjamanKaryawan').hide()
@@ -822,7 +860,7 @@
     $('#gbox_tablePengembalianTitipan').hide()
     $('[name=periodedari]').parents('.form-group').hide()
     $('[name=periodesampai]').parents('.form-group').hide()
-    $('[name=jenisorderan_id]').parents('.form-group').hide()
+    $('[name=jenisorder_id]').parents('.form-group').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
     $('[name=karyawanheader_id]').parents('.form-group').hide()
     $('[name=keterangancoa]').parents('.form-group').hide()
@@ -840,7 +878,7 @@
     $('#detailList').show()
     $('#gbox_tablePinjaman').hide()
     $('#gbox_tablePinjamanKaryawan').hide()
-    $('[name=jenisorderan_id]').parents('.form-group').hide()
+    $('[name=jenisorder_id]').parents('.form-group').hide()
     $('#btnReloadBbtGrid').parents('.row').hide()
     $('[name=keterangancoa]').parents('.form-group').show()
     $('.tbl_supir_id').show()
@@ -1743,27 +1781,25 @@
     });
   }
 
-  function getDataPengembalianTitipan() {
+  function getDataPengembalianTitipan(id = null) {
     aksi = $('#crudForm').data('action')
+    periodedari = ''
+    periodesampai = ''
+    jenisorder_id = ''
     if (aksi == 'edit') {
-      // console.log(id)
-      if (id != undefined) {
-        url = `${apiUrl}penerimaantruckingheader/${id}/edit/getpengembalianpinjamankaryawan`
-      } else {
-        url = `${apiUrl}penerimaantruckingheader/${karyawanId}/getpinjamankaryawan`
-      }
+      url = `${apiUrl}penerimaantruckingheader/getpengembaliantitipan/${id}`
     } else if (aksi == 'delete') {
       url = `${apiUrl}penerimaantruckingheader/${id}/delete/getpengembalianpinjamankaryawan`
       attribut = 'disabled'
       forCheckbox = 'disabled'
     } else if (aksi == 'add') {
       url = `${apiUrl}penerimaantruckingheader/getpengembaliantitipan`
+      periodedari = $('[name=periodedari]').val()
+      periodesampai = $('[name=periodesampai]').val()
+      jenisorder_id = $('[name=jenisorder_id]').val()
     }
 
-    periodedari = $('[name=periodedari]').val()
-    periodesampai = $('[name=periodesampai]').val()
-    jenisorderan_id = $('[name=jenisorderan_id]').val()
-    if ((periodedari != '') || (periodesampai != '') || (jenisorderan_id != '')) {
+    if ((periodedari != '') || (periodesampai != '') || (jenisorder_id != '')) {
       return new Promise((resolve, reject) => {
         $.ajax({
           url: url,
@@ -1771,8 +1807,26 @@
           data: {
             periodedari :periodedari,
             periodesampai :periodesampai,
-            jenisorderan_id :jenisorderan_id,
+            jenisorder_id :jenisorder_id,
           },
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          },
+          success: (response) => {
+            resolve(response);
+          },
+          error: error => {
+            reject(error)
+          }
+        });
+      });
+    }
+
+    if (aksi !== 'add') {
+      return new Promise((resolve, reject) => {
+        $.ajax({
+          url: url,
+          dataType: "JSON",
           headers: {
             Authorization: `Bearer ${accessToken}`
           },
@@ -1952,7 +2006,7 @@
           sisa
         );
 
-        $("#tablePengembalianTitipan").jqGrid("setCell", rowId, "nominal", 0);
+        // $("#tablePengembalianTitipan").jqGrid("setCell", rowId, "nominal", 0);
         // setTotalNominalKaryawan()
         // setTotalSisaKaryawan()
       } else {
@@ -1965,12 +2019,12 @@
           localRow.nominal = (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.nominal) + parseFloat(originalGridData.potongan))
         }
 
-        $("#tablePengembalianTitipan").jqGrid(
-          "setCell",
-          rowId,
-          "nominal",
-          0
-        );
+        // $("#tablePengembalianTitipan").jqGrid(
+        //   "setCell",
+        //   rowId,
+        //   "nominal",
+        //   0
+        // );
         initAutoNumeric($(`#tablePengembalianTitipan tr#${rowId}`).find(`td[aria-describedby="tablePengembalianTitipan_nominal"]`))
         // setTotalNominalkaryawan()
         // setTotalSisaKaryawan()
@@ -2108,6 +2162,23 @@
               console.log(response.data)
               initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePinjamanKaryawan_nominal"]`).text(totalBayar))
 
+            });
+          } else if (kodepenerimaan === "PBT") {
+
+            getDataPengembalianTitipan(response.data.id).then((response) => {
+              setTimeout(() => {
+                
+                $("#tablePengembalianTitipan")
+                  .jqGrid("setGridParam", {
+                    datatype: "local",
+                    data: response.data,
+                    originalData: response.data,
+                    rowNum: response.data.length,
+                    selectedRowIds: []
+                  })
+                  .trigger("reloadGrid");
+              }, 100);
+              
             });
           } else {
             $('#detailList tbody').html('')
@@ -2662,7 +2733,7 @@
         element.data('currentValue', element.val())
       }
     })
-    $('.jenisorderan-lookup').last().lookup({
+    $('.jenisorder-lookup').last().lookup({
       title: 'jenis orderan Lookup',
       fileName: 'jenisorder',
       beforeProcess: function(test) {
@@ -2672,7 +2743,7 @@
         }
       },
       onSelectRow: (jenisorder, element) => {
-        $(`#crudForm [name="jenisorderan_id"]`).last().val(jenisorder.id)
+        $(`#crudForm`).find(`[name="jenisorder_id"]`).val(jenisorder.id)
         element.val(jenisorder.keterangan)
         element.data('currentValue', element.val())
         // $('#tablePinjamanKaryawan').jqGrid("clearGridData");
@@ -2705,7 +2776,7 @@
       },
       onClear: (element) => {
         element.val('')
-        $(`#crudForm [name="jenisorderan_id[]"]`).last().val('')
+        $(`#crudForm [name="jenisorder_id[]"]`).last().val('')
         element.data('currentValue', element.val())
       }
     })
