@@ -67,7 +67,7 @@
                 <input type="text" name="karyawan" class="form-control karyawanheader-lookup">
               </div>
             </div>
-            
+
             <div class="row form-group" style="display:none;">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
@@ -81,17 +81,17 @@
 
             <div class="row form-group">
               <div class="col-12 col-md-2">
-                  <label class="col-form-label">
-                      TGL DARI <span class="text-danger">*</span>
-                  </label>
+                <label class="col-form-label">
+                  TGL DARI <span class="text-danger">*</span>
+                </label>
               </div>
               <div class="col-12 col-md-10">
-                  <div class="input-group">
-                      <input type="text" name="periodedari" class="form-control datepicker" autocomplete="off">
-                  </div>
+                <div class="input-group">
+                  <input type="text" name="periodedari" class="form-control datepicker" autocomplete="off">
+                </div>
               </div>
             </div>
-            
+
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
@@ -113,6 +113,15 @@
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="hidden" name="coa">
                 <input type="text" name="keterangancoa" class="form-control akunpusat-lookup">
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-sm-6 m-1">
+                <a id="btnReloadBbtGrid" class="btn btn-primary mr-2 ">
+                  <i class="fas fa-sync-alt"></i>
+                  Reload
+                </a>
               </div>
             </div>
 
@@ -140,14 +149,6 @@
               </div>
             </div>
 
-            <div class="row">
-              <div class="col-sm-6 m-1">
-                <a id="btnReloadBbtGrid" class="btn btn-primary mr-2 ">
-                  <i class="fas fa-sync-alt"></i>
-                  Reload
-                </a>
-              </div>
-            </div>
 
 
             <table id="tablePinjaman"></table>
@@ -226,10 +227,19 @@
       addRow()
     });
     $(document).on('click', "#btnReloadBbtGrid", function() {
-      getDataPengembalianTitipan().then((response) => {
+      reloadGrid = null;
+      if ($('#crudForm').data('action') == 'edit') {
+        reloadGrid = 'reload'
+      }
+      getDataPengembalianTitipan(reloadGrid).then((response) => {
         // console.log('before', $("#tablePinjamanKaryawan").jqGrid('getGridParam', 'selectedRowIds'))
+        let totalBayar = 0
+
+        $.each(response.data, (index, value) => {
+          totalBayar += parseFloat(value.nominal_titipan)
+        })
         setTimeout(() => {
-        
+
           $("#tablePengembalianTitipan")
             .jqGrid("setGridParam", {
               datatype: "local",
@@ -239,9 +249,10 @@
               selectedRowIds: []
             })
             .trigger("reloadGrid");
+          initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePengembalianTitipan_nominal_titipan"]`).text(totalBayar))
         }, 100);
-        
-        });
+
+      });
 
     });
 
@@ -330,7 +341,7 @@
         let selectedRowsHutang = $("#tablePinjaman").getGridParam("selectedRowIds");
         data.push({
           name: 'jumlahdetail',
-          value: selectedRowsHutang
+          value: selectedRowsHutang.length
         })
         $.each(selectedRowsHutang, function(index, value) {
           dataPinjaman = $("#tablePinjaman").jqGrid("getLocalRow", value);
@@ -429,7 +440,7 @@
         let selectedRowsHutang = $("#tablePinjamanKaryawan").getGridParam("selectedRowIds");
         data.push({
           name: 'jumlahdetail',
-          value: selectedRowsHutang
+          value: selectedRowsHutang.length
         })
         $.each(selectedRowsHutang, function(index, value) {
           dataPinjaman = $("#tablePinjamanKaryawan").jqGrid("getLocalRow", value);
@@ -525,28 +536,48 @@
           name: 'penerimaan_nobukti',
           value: form.find(`[name="pengeluaran_nobukti"]`).val()
         })
+        data.push({
+          name: 'jenisorderan_id',
+          value: form.find(`[name="jenisorder_id"]`).val()
+        })
+        data.push({
+          name: 'jenisorderan',
+          value: form.find(`[name="jenisorder"]`).val()
+        })
+        data.push({
+          name: 'periodedari',
+          value: form.find(`[name="periodedari"]`).val()
+        })
+        data.push({
+          name: 'periodesampai',
+          value: form.find(`[name="periodesampai"]`).val()
+        })
 
         let selectedRowsTitipan = $("#tablePengembalianTitipan").getGridParam("selectedRowIds");
         data.push({
           name: 'jumlahdetail',
-          value: selectedRowsTitipan
+          value: selectedRowsTitipan.length
         })
         $.each(selectedRowsTitipan, function(index, value) {
           dataPinjaman = $("#tablePengembalianTitipan").jqGrid("getLocalRow", value);
-          let selectedNominal = (dataPinjaman.nominal == undefined) ? 0 : dataPinjaman.nominal;
+          let selectedNominal = (dataPinjaman.nominal_titipan == undefined) ? 0 : dataPinjaman.nominal_titipan;
           data.push({
             name: 'nominal[]',
             value: (isNaN(selectedNominal)) ? parseFloat(selectedNominal.replaceAll(',', '')) : selectedNominal
           })
           data.push({
             name: 'keterangan[]',
-            value: dataPinjaman.keterangan
+            value: dataPinjaman.keterangan_titipan
+          })
+          data.push({
+            name: 'jenisorder_id[]',
+            value: dataPinjaman.jenisorder_id
           })
           data.push({
             name: 'pengeluarantruckingheader_nobukti[]',
-            value: dataPinjaman.nobukti
+            value: dataPinjaman.nobukti_titipan
           })
-          
+
         });
 
       } else {
@@ -847,7 +878,10 @@
     $('#gbox_tablePinjamanKaryawan').hide()
     $('#gbox_tablePengembalianTitipan').show()
     $('#detailList').hide()
-    
+    if ($('#crudForm').data('action') == 'delete') {
+
+      $('#btnReloadBbtGrid').parents('.row').hide()
+    }
 
     loadPengembalianTitipanGrid()
   }
@@ -998,6 +1032,8 @@
         $('#crudForm [name=supirheader]').attr('readonly', true)
         $('#crudForm [name=supir]').siblings('.input-group-append').remove()
         $('#crudForm [name=supir]').siblings('.button-clear').remove()
+        $('#crudForm [name=karyawan]').siblings('.input-group-append').remove()
+        $('#crudForm [name=karyawan]').siblings('.button-clear').remove()
       })
       .catch((error) => {
         showDialog(error.statusText)
@@ -1562,6 +1598,7 @@
     /* Append global search */
     // loadGlobalSearch($('#tablePinjamanKaryawan'))
   }
+
   function loadPengembalianTitipanGrid() {
     $("#tablePengembalianTitipan")
       .jqGrid({
@@ -1592,12 +1629,12 @@
           {
             label: "no bukti pengeluaran TRUCKING",
             width: 250,
-            name: "nobukti",
+            name: "nobukti_titipan",
             sortable: true,
           },
           {
             label: 'TGL BUKTI',
-            name: 'tglbukti',
+            name: 'tglbukti_titipan',
             align: 'left',
             formatter: "date",
             formatoptions: {
@@ -1607,15 +1644,15 @@
           },
           {
             label: "nominal",
-            name: "nominal",
+            name: "nominal_titipan",
             sortable: true,
             align: "right",
             formatter: currencyFormat,
           },
-          
+
           {
             label: "KETERANGAN",
-            name: "keterangan",
+            name: "keterangan_titipan",
             sortable: false,
             editable: false,
             width: 200
@@ -1781,33 +1818,33 @@
     });
   }
 
-  function getDataPengembalianTitipan(id = null) {
+  function getDataPengembalianTitipan(reloadGrid = null) {
     aksi = $('#crudForm').data('action')
-    periodedari = ''
-    periodesampai = ''
-    jenisorder_id = ''
+    let idTitipan = $('#crudForm').find("[name=id]").val()
     if (aksi == 'edit') {
-      url = `${apiUrl}penerimaantruckingheader/getpengembaliantitipan/${id}`
+      url = `${apiUrl}penerimaantruckingheader/getpengembaliantitipan`
     } else if (aksi == 'delete') {
-      url = `${apiUrl}penerimaantruckingheader/${id}/delete/getpengembalianpinjamankaryawan`
+      url = `${apiUrl}penerimaantruckingheader/getpengembaliantitipan`
       attribut = 'disabled'
       forCheckbox = 'disabled'
     } else if (aksi == 'add') {
       url = `${apiUrl}penerimaantruckingheader/getpengembaliantitipan`
-      periodedari = $('[name=periodedari]').val()
-      periodesampai = $('[name=periodesampai]').val()
-      jenisorder_id = $('[name=jenisorder_id]').val()
     }
 
+    periodedari = $('[name=periodedari]').val()
+    periodesampai = $('[name=periodesampai]').val()
+    jenisorder_id = $('[name=jenisorder_id]').val()
     if ((periodedari != '') || (periodesampai != '') || (jenisorder_id != '')) {
       return new Promise((resolve, reject) => {
         $.ajax({
           url: url,
           dataType: "JSON",
           data: {
-            periodedari :periodedari,
-            periodesampai :periodesampai,
-            jenisorder_id :jenisorder_id,
+            periodedari: periodedari,
+            periodesampai: periodesampai,
+            jenisorderan_id: jenisorder_id,
+            id: idTitipan,
+            reloadGrid: reloadGrid
           },
           headers: {
             Authorization: `Bearer ${accessToken}`
@@ -1976,6 +2013,7 @@
     });
 
   }
+
   function checkboxTitipan(element, rowId) {
 
     let isChecked = $(element).is(":checked");
@@ -1986,54 +2024,32 @@
       .find((row) => row.id == rowId);
 
 
-      if (!isChecked) {
-        for (var i = 0; i < selectedRowIds.length; i++) {
-          if (selectedRowIds[i] == rowId) {
-            selectedRowIds.splice(i, 1);
-          }
+    if (!isChecked) {
+      for (var i = 0; i < selectedRowIds.length; i++) {
+        if (selectedRowIds[i] == rowId) {
+          selectedRowIds.splice(i, 1);
         }
-        sisa = 0
-        if ($('#crudForm').data('action') == 'edit') {
-          sisa = (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.nominal))
-        } else {
-          sisa = originalGridData.sisa
-        }
-
-        $("#tablePengembalianTitipan").jqGrid(
-          "setCell",
-          rowId,
-          "sisa",
-          sisa
-        );
-
-        // $("#tablePengembalianTitipan").jqGrid("setCell", rowId, "nominal", 0);
-        // setTotalNominalKaryawan()
-        // setTotalSisaKaryawan()
-      } else {
-        selectedRowIds.push(rowId);
-
-        let localRow = $("#tablePengembalianTitipan").jqGrid("getLocalRow", rowId);
-
-        if ($('#crudForm').data('action') == 'edit') {
-          
-          localRow.nominal = (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.nominal) + parseFloat(originalGridData.potongan))
-        }
-
-        // $("#tablePengembalianTitipan").jqGrid(
-        //   "setCell",
-        //   rowId,
-        //   "nominal",
-        //   0
-        // );
-        initAutoNumeric($(`#tablePengembalianTitipan tr#${rowId}`).find(`td[aria-describedby="tablePengembalianTitipan_nominal"]`))
-        // setTotalNominalkaryawan()
-        // setTotalSisaKaryawan()
       }
+
+    } else {
+      selectedRowIds.push(rowId);
+    }
 
     $("#tablePengembalianTitipan").jqGrid("setGridParam", {
       selectedRowIds: selectedRowIds,
     });
+    setTotalNominalTitipan()
+  }
 
+  function setTotalNominalTitipan() {
+    let nominalDetails = $(`#tablePengembalianTitipan`).find(`td[aria-describedby="tablePengembalianTitipan_nominal_titipan"]`)
+    let nominal = 0
+    $.each(nominalDetails, (index, nominalDetail) => {
+      nominaldetail = parseFloat($(nominalDetail).text().replaceAll(',', ''))
+      nominals = (isNaN(nominaldetail)) ? 0 : nominaldetail;
+      nominal += nominals
+    });
+    initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePengembalianTitipan_nominal_titipan"]`).text(nominal))
   }
 
   function setTotalSisa() {
@@ -2096,6 +2112,12 @@
                 element.data('current-value', value).prop('readonly', true)
                 element.parent('.input-group').find('.button-clear').remove()
                 element.parent('.input-group').find('.input-group-append').remove()
+              }
+            }
+
+            if (kodepenerimaan === "PJPK") {
+              if (index == 'karyawan') {
+                element.data('current-value', value).prop('readonly', true)
               }
             }
             if (index == 'keterangancoa') {
@@ -2164,22 +2186,58 @@
 
             });
           } else if (kodepenerimaan === "PBT") {
+            getDataPengembalianTitipan().then((response) => {
+              // console.log('before', $("#tablePinjamanKaryawan").jqGrid('getGridParam', 'selectedRowIds'))
+              let selectedId = []
+              let totalBayar = 0
 
-            getDataPengembalianTitipan(response.data.id).then((response) => {
+              $.each(response.data, (index, value) => {
+                selectedId.push(value.id)
+                totalBayar += parseFloat(value.nominal_titipan)
+              })
               setTimeout(() => {
-                
+
                 $("#tablePengembalianTitipan")
                   .jqGrid("setGridParam", {
                     datatype: "local",
                     data: response.data,
                     originalData: response.data,
                     rowNum: response.data.length,
-                    selectedRowIds: []
+                    selectedRowIds: selectedId
                   })
                   .trigger("reloadGrid");
+                initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePengembalianTitipan_nominal_titipan"]`).text(totalBayar))
+
               }, 100);
-              
-            });
+            }).catch((error) => {
+              showDialog(error.responseJSON)
+            })
+            // getDataPengembalianTitipan().then((response) => {
+
+            //   let selectedId = []
+            //   let totalBayar = 0
+
+            //   $.each(response.data, (index, value) => {
+            //     selectedId.push(value.id)
+            //     totalBayar += parseFloat(value.nominal)
+            //   })
+            //   $('#tablePengembalianTitipan').jqGrid("clearGridData");
+            //   setTimeout(() => {
+
+            //     $("#tablePengembalianTitipan")
+            //       .jqGrid("setGridParam", {
+            //         datatype: "local",
+            //         data: response.data,
+            //         originalData: response.data,
+            //         rowNum: response.data.length,
+            //         selectedRowIds: selectedId
+            //       })
+            //       .trigger("reloadGrid");
+            //   }, 100);
+            //   console.log(response.data)
+            //   // initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePinjamanKaryawan_nominal"]`).text(totalBayar))
+
+            // });
           } else {
             $('#detailList tbody').html('')
             $.each(response.detail, (index, detail) => {
