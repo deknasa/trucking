@@ -5,7 +5,7 @@
         <div class="modal-header">
           <h5 class="modal-title" id="userAclLabel"></h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            
+
           </button>
         </div>
         <div class="modal-body">
@@ -48,7 +48,7 @@
   hasFormBindKeys = false
   selectedRows = [];
 
-  
+
   $(document).ready(function() {
     $('#btnSubmitUserAcl').click(function(event) {
       event.preventDefault()
@@ -86,13 +86,7 @@
 
           setErrorMessages(form, error.responseJSON.errors);
         } else {
-          if (error.responseJSON.errors) {
-            showDialog(error.statusText, error.responseJSON.errors.join('<hr>'))
-          } else if (error.responseJSON.message) {
-            showDialog(error.statusText, error.responseJSON.message)
-          } else {
-            showDialog(error.statusText, error.statusText)
-          }
+          showDialog(error.responseJSON)
         }
       }
     }).always(() => {
@@ -158,6 +152,7 @@
       }
     })
   }
+
   function loadAcoGrid() {
     $('#acoGrid')
       .jqGrid({
@@ -195,18 +190,22 @@
           },
           {
             label: 'Class',
-            name: 'class'
+            name: 'class',
+            width: '300px',
           },
           {
             label: 'Method',
-            name: 'method'
+            name: 'method',
+            width: '200px',
           },
           {
             label: 'Nama',
-            name: 'nama'
+            name: 'nama',
+            width: '300px',
           },
         ],
         autowidth: true,
+        shrinkToFit: false,
         height: 350,
         rownumbers: true,
         rownumWidth: 45,
@@ -274,7 +273,7 @@
           } else {
             $('#acoGrid').setSelection($('#acoGrid').getDataIDs()[indexRow])
           }
-            $('#gs_').attr('disabled', false)
+          $('#gs_').attr('disabled', false)
           setHighlight($(this))
         }
       })
@@ -286,7 +285,7 @@
         disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
           abortGridLastRequest($(this))
-          
+
           clearGlobalSearch($('#acoGrid'))
         },
       })
@@ -296,7 +295,7 @@
     loadGlobalSearch($('#acoGrid'))
   }
 
-  
+
   async function getUserAcls(roleId) {
     return await $.ajax({
       url: `${apiUrl}role/${roleId}/acl`,
@@ -369,7 +368,7 @@
     })
   }
 
-  
+
   function checkboxHandler(element) {
     let value = $(element).val();
 
@@ -385,7 +384,7 @@
       }
     }
   }
-  
+
   function clearSelectedRows() {
     selectedRows = []
 
@@ -410,6 +409,7 @@
       }
     })
   }
+
   function getUserAclOptions() {
     $('#acoList tbody').html('')
 

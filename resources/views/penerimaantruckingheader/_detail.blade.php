@@ -103,11 +103,15 @@
 
 
           setHighlight($(this))
-
-          if (data.attributes) {
+          if (data.attributes != undefined) {
             $(this).jqGrid('footerData', 'set', {
               nobukti: 'Total:',
               nominal: data.attributes.totalNominal,
+            }, true)
+          }else {
+            $(this).jqGrid('footerData', 'set', {
+              nobukti: 'Total:',
+              nominal: 0,
             }, true)
           }
         }

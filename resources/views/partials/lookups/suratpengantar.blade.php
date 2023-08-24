@@ -19,6 +19,7 @@
         tgldari: $('#tgldariheaderlookup').val(),
         tglsampai: $('#tglsampaiheaderlookup').val(),
         pengeluarantruckingheader: `{!! $pengeluarantruckingheader ?? '' !!}`,
+        jenisorder_id: `{!! $jenisorder_id ?? '' !!}`,
       },
       idPrefix: 'suratpengantarLookup',
       colModel: [{

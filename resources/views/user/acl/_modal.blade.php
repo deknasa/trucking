@@ -79,6 +79,16 @@
 
         $('#userAclGrid').jqGrid('setGridParam').trigger('reloadGrid');
       },
+      error: error => {
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+
+          setErrorMessages(form, error.responseJSON.errors);
+        } else {
+          showDialog(error.responseJSON)
+        }
+      }
     }).always(() => {
       $('#processingLoader').addClass('d-none')
       $(this).removeAttr('disabled')
@@ -203,18 +213,22 @@
           },
           {
             label: 'Class',
-            name: 'class'
+            name: 'class',
+            width: '300px',
           },
           {
             label: 'Method',
-            name: 'method'
+            name: 'method',
+            width: '200px',
           },
           {
             label: 'Nama',
-            name: 'nama'
+            name: 'nama',
+            width: '300px',
           },
         ],
         autowidth: true,
+        shrinkToFit: false,
         height: 350,
         rownumbers: true,
         rownumWidth: 45,
