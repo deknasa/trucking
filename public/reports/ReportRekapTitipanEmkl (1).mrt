@@ -5,7 +5,7 @@
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportRekapTitipanEmkl.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1692972386000+0700)/",
+  "ReportChanged": "/Date(1692972362000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -994,7 +994,7 @@
               "Ident": "StiText",
               "Name": "Text11",
               "Guid": "68dcad00cc716d2559eda15d0b9b2fb0",
-              "ClientRectangle": "8.57,-0.04,4.6,0.6",
+              "ClientRectangle": "7.77,-0.04,4.6,0.6",
               "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
