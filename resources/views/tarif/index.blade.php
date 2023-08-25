@@ -157,6 +157,10 @@
             label: 'ZONA',
             name: 'zona_id',
           },
+          {
+            label: 'JENIS ORDER',
+            name: 'jenisorder',
+          },
 
           {
             label: 'TGL MULAI BERLAKU',
