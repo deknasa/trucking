@@ -54,7 +54,7 @@
             </div>
 
             <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-3"p>
+              <div class="col-12 col-sm-3 col-md-3" p>
                 <label class="col-form-label">
                   Kota <span class="text-danger">*</span>
                 </label>
@@ -245,7 +245,7 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-9">
-                <input type="text" name="top"  class="form-control numbernoseparate">
+                <input type="text" name="top" class="form-control numbernoseparate">
               </div>
             </div>
 
@@ -258,6 +258,18 @@
               <div class="col-12 col-sm-9 col-md-9">
                 <select name="statusaktif" class="form-select select2bs4" style="width: 100%;">
                   <option value="">-- PILIH STATUS AKTIF --</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="row form-group statuspostingtnl">
+              <div class="col-12 col-sm-3 col-md-3">
+                <label class="col-form-label">
+                  STATUS POSTING TNL <span class="text-danger">*</span></label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-9">
+                <select name="statuspostingtnl" class="form-select select2bs4" style="width: 100%;">
+                  <option value="">-- PILIH STATUS POSTING TNL --</option>
                 </select>
               </div>
             </div>
@@ -417,6 +429,8 @@
       .all([
         setStatusDaftarHargaOptions(form),
         setStatusAktifOptions(form),
+        setStatusPostingTnlOptions(form),
+        setTampilan(form)
       ])
       .then(() => {
         showDefault(form)
@@ -452,6 +466,8 @@
       .all([
         setStatusDaftarHargaOptions(form),
         setStatusAktifOptions(form),
+        setStatusPostingTnlOptions(form),
+        setTampilan(form)
       ])
       .then(() => {
         showSupplier(form, supplierId)
@@ -487,6 +503,8 @@
       .all([
         setStatusDaftarHargaOptions(form),
         setStatusAktifOptions(form),
+        setStatusPostingTnlOptions(form),
+        setTampilan(form)
       ])
       .then(() => {
         showSupplier(form, supplierId)
@@ -724,6 +742,84 @@
     })
   }
 
+  const setStatusPostingTnlOptions = function(relatedForm) {
+    return new Promise((resolve, reject) => {
+      relatedForm.find('[name=statuspostingtnl]').empty()
+      relatedForm.find('[name=statuspostingtnl]').append(
+        new Option('-- PILIH POSTING TNL --', '', false, true)
+      ).trigger('change')
+
+      $.ajax({
+        url: `${apiUrl}parameter`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          filters: JSON.stringify({
+            "groupOp": "AND",
+            "rules": [{
+              "field": "grp",
+              "op": "cn",
+              "data": "STATUS POSTING TNL"
+            }]
+          })
+        },
+        success: response => {
+          response.data.forEach(statuspostingTnl => {
+            let option = new Option(statuspostingTnl.text, statuspostingTnl.id)
+
+            relatedForm.find('[name=statuspostingtnl]').append(option).trigger('change')
+          });
+
+          resolve()
+        },
+        error: error => {
+          reject(error)
+        }
+      })
+    })
+  }
+
+  const setTampilan = function(relatedForm) {
+    return new Promise((resolve, reject) => {
+      let data = [];
+      data.push({
+        name: 'grp',
+        value: 'UBAH TAMPILAN'
+      })
+      data.push({
+        name: 'text',
+        value: 'SUPPLIER'
+      })
+      $.ajax({
+        url: `${apiUrl}parameter/getparambytext`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: data,
+        success: response => {
+          memo = JSON.parse(response.memo)
+          memo = memo.INPUT
+          if (memo != '') {
+            input = memo.split(',');
+            input.forEach(field => {
+              field = $.trim(field.toLowerCase());
+              $(`.${field}`).hide()
+            });
+          }
+          resolve()
+        },
+        error: error => {
+          reject(error)
+        }
+      })
+    })
+  }
+
   function showSupplier(form, supplierId) {
     return new Promise((resolve, reject) => {
       $.ajax({
@@ -741,6 +837,10 @@
               element.val(value).trigger('change')
             } else {
               element.val(value)
+            }
+            
+            if (index == 'statuspostingtnl') {
+              element.prop('disabled', true)
             }
           })
           if (form.data('action') === 'delete') {

@@ -55,7 +55,7 @@
 
   $(document).ready(function() {
 
-
+    setTampilanIndex()
     $("#jqGrid").jqGrid({
         url: `${apiUrl}supplier`,
         mtype: "GET",
@@ -296,6 +296,49 @@
             cellattr: (rowId, value, rowObject) => {
               let statusAktif = JSON.parse(rowObject.statusaktif)
               return ` title="${statusAktif.MEMO}"`
+            }
+          },
+          {
+            label: 'status posting tnl',
+            name: 'statuspostingtnl',
+            width: 130,
+            stype: 'select',
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
+                      foreach ($data['combopostingtnl'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['combopostingtnl'])) {
+                          echo ';';
+                        }
+                        $i++;
+                      endforeach;
+                      ?>`,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              let statusPostingTnl = JSON.parse(value)
+              if (!statusPostingTnl) {
+                return ''
+              }
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusPostingTnl.WARNA}; color: #fff;">
+                  <span>${statusPostingTnl.SINGKATAN}</span>
+                </div>
+              `)
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusPostingTnl = JSON.parse(rowObject.statuspostingtnl)
+              if (!statusPostingTnl) {
+                return ` title=""`
+              }
+              return ` title="${statusPostingTnl.MEMO}"`
             }
           },
           {
@@ -764,6 +807,42 @@
     }
 
   })
+
+  const setTampilanIndex = function() {
+      return new Promise((resolve, reject) => {
+        let data = [];
+        data.push({
+          name: 'grp',
+          value: 'UBAH TAMPILAN'
+        })
+        data.push({
+          name: 'text',
+          value: 'SUPPLIER'
+        })
+        $.ajax({
+          url: `${apiUrl}parameter/getparambytext`,
+          method: 'GET',
+          dataType: 'JSON',
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          },
+          data: data,
+          success: response => {
+            memo = JSON.parse(response.memo)
+            memo = memo.INPUT
+            if (memo != '') {
+              input = memo.split(',');
+              input.forEach(field => {
+                field = $.trim(field.toLowerCase());
+                $(`.${field}`).hide()
+                $("#jqGrid").jqGrid("hideCol", field);
+              });
+            }
+
+          }
+        })
+      })
+    }
 </script>
 @endpush()
 @endsection
