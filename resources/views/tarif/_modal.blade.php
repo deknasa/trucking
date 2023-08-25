@@ -175,6 +175,17 @@
                 <input type="text" name="zona" class="form-control zona-lookup">
               </div>
             </div>
+            
+            <div class="row form-group jenisorder">
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">
+                  JENIS ORDER </label>
+              </div>
+              <div class="col-12 col-md-10">
+                <input type="hidden" name="jenisorder_id">
+                <input type="text" name="jenisorder" class="form-control jenisorder-lookup">
+              </div>
+            </div>
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
@@ -979,6 +990,31 @@
       },
       onClear: (element) => {
         $('#crudForm [name=zona_id]').first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+    
+    $('.jenisorder-lookup').lookup({
+      title: 'Jenis Order Lookup',
+      fileName: 'jenisorder',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+
+          Aktif: 'AKTIF',
+        }
+      },
+      onSelectRow: (jenisorder, element) => {
+        $('#crudForm [name=jenisorder_id]').first().val(jenisorder.id)
+        element.val(jenisorder.keterangan)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $('#crudForm [name=jenisorder_id]').first().val('')
         element.val('')
         element.data('currentValue', element.val())
       }

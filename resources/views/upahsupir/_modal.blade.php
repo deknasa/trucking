@@ -48,6 +48,50 @@
                 <input type="text" name="tarif" class="form-control tarif-lookup">
               </div>
             </div>
+            <div class="row form-group tarifmuatan">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
+                  Tarif Muatan
+                </label>
+              </div>
+              <div class="col-12 col-md-10">
+                <input type="hidden" name="tarifmuatan_id">
+                <input type="text" name="tarifmuatan" class="form-control tarifmuatan-lookup">
+              </div>
+            </div>
+            <div class="row form-group tarifbongkaran">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
+                  Tarif Bongkaran
+                </label>
+              </div>
+              <div class="col-12 col-md-10">
+                <input type="hidden" name="tarifbongkaran_id">
+                <input type="text" name="tarifbongkaran" class="form-control tarifbongkaran-lookup">
+              </div>
+            </div>
+            <div class="row form-group tarifexport">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
+                  Tarif Export
+                </label>
+              </div>
+              <div class="col-12 col-md-10">
+                <input type="hidden" name="tarifexport_id">
+                <input type="text" name="tarifexport" class="form-control tarifexport-lookup">
+              </div>
+            </div>
+            <div class="row form-group tarifimport">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
+                  Tarif Import
+                </label>
+              </div>
+              <div class="col-12 col-md-10">
+                <input type="hidden" name="tarifimport_id">
+                <input type="text" name="tarifimport" class="form-control tarifimport-lookup">
+              </div>
+            </div>
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
@@ -1840,6 +1884,110 @@
         $('#crudForm [name=zonasampai_id]').first().val('')
         element.val('')
         element.data('currentValue', element.val())
+      }
+    })
+
+    
+    $('.tarifmuatan-lookup').lookup({
+      title: 'Tarif Muatan Lookup',
+      fileName: 'tarif',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+
+          Aktif: 'AKTIF',
+          jenisOrder: 'MUATAN'
+        }
+      },
+      onSelectRow: (tarif, element) => {
+        $('#crudForm [name=tarifmuatan_id]').first().val(tarif.id)
+        element.val(tarif.tujuan)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
+        $('#crudForm [name=tarifmuatan_id]').val('')
+      }
+    })
+    
+    $('.tarifbongkaran-lookup').lookup({
+      title: 'Tarif Bongkaran Lookup',
+      fileName: 'tarif',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+
+          Aktif: 'AKTIF',
+          jenisOrder: 'BONGKARAN'
+        }
+      },
+      onSelectRow: (tarif, element) => {
+        $('#crudForm [name=tarifbongkaran_id]').first().val(tarif.id)
+        element.val(tarif.tujuan)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
+        $('#crudForm [name=tarifbongkaran_id]').val('')
+      }
+    })
+    
+    $('.tarifexport-lookup').lookup({
+      title: 'Tarif Export Lookup',
+      fileName: 'tarif',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+
+          Aktif: 'AKTIF',
+          jenisOrder: 'EKSPORT'
+        }
+      },
+      onSelectRow: (tarif, element) => {
+        $('#crudForm [name=tarifexport_id]').first().val(tarif.id)
+        element.val(tarif.tujuan)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
+        $('#crudForm [name=tarifexport_id]').val('')
+      }
+    })
+    $('.tarifimport-lookup').lookup({
+      title: 'Tarif Import Lookup',
+      fileName: 'tarif',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+
+          Aktif: 'AKTIF',
+          jenisOrder: 'IMPORT'
+        }
+      },
+      onSelectRow: (tarif, element) => {
+        $('#crudForm [name=tarifimport_id]').first().val(tarif.id)
+        element.val(tarif.tujuan)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
+        $('#crudForm [name=tarifimport_id]').val('')
       }
     })
   }

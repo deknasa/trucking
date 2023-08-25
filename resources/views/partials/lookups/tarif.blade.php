@@ -11,6 +11,7 @@
       datatype: "json",
       postData: {
         aktif: `{!! $Aktif ?? '' !!}`,
+        jenisOrder: `{!! $jenisOrder ?? '' !!}`,
       },   
       idPrefix: 'tarifLookup',
       colModel: [{
