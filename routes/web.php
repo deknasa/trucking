@@ -192,6 +192,9 @@ use App\Http\Controllers\LaporanTripGandenganDetailController;
 use App\Http\Controllers\LaporanTripTradoController;
 use App\Http\Controllers\LaporanUangJalanController;
 use App\Http\Controllers\LaporanPiutangGiroController;
+use App\Http\Controllers\LaporanTitipanEmklController;
+
+
 use App\Http\Controllers\LookupController;
 use App\Http\Controllers\NotaDebetDetailController;
 use App\Http\Controllers\NotaKreditDetailController;
@@ -1397,6 +1400,11 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('laporanpiutanggiro/export', [LaporanPiutangGiroController::class, 'export'])->name('laporanpiutanggiro.export');
     Route::get('laporanpiutanggiro/index', [LaporanPiutangGiroController::class, 'index']);
     Route::resource('laporanpiutanggiro', LaporanPiutangGiroController::class);
+    
+    Route::get('laporantitipanemkl/report', [LaporanTitipanEmklController::class, 'report'])->name('laporantitipanemkl.report');
+    Route::get('laporantitipanemkl/export', [LaporanTitipanEmklController::class, 'export'])->name('laporantitipanemkl.export');
+    Route::get('laporantitipanemkl/index', [LaporanTitipanEmklController::class, 'index']);
+    Route::resource('laporantitipanemkl', LaporanTitipanEmklController::class);
 
     Route::get('laporankartuhutangpersupplier/report', [LaporanKartuHutangPerSupplierController::class, 'report'])->name('laporankartuhutangpersupplier.report');
     Route::get('laporankartuhutangpersupplier/export', [LaporanKartuHutangPerSupplierController::class, 'export'])->name('laporankartuhutangpersupplier.export');
