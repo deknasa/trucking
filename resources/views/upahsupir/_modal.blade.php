@@ -738,6 +738,10 @@
               form.find(`[name="zona"]`).prop('readonly', true)
               form.find(`[name="parent"]`).prop('readonly', true)
               form.find(`[name="tarif"]`).prop('readonly', true)
+              form.find(`[name="tarifmuatan"]`).prop('readonly', true)
+              form.find(`[name="tarifbongkaran"]`).prop('readonly', true)
+              form.find(`[name="tarifexport"]`).prop('readonly', true)
+              form.find(`[name="tarifimport"]`).prop('readonly', true)
             }
           })
           .then(() => {
