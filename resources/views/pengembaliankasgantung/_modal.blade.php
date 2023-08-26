@@ -226,10 +226,6 @@
           value: dataPengembalianKasGantung.keterangandetail
         })
         data.push({
-          name: 'coadetail[]',
-          value: dataPengembalianKasGantung.coadetail
-        })
-        data.push({
           name: 'kasgantungdetail_id[]',
           value: dataPengembalianKasGantung.id
         })
@@ -683,6 +679,7 @@
           {
             label: "KETERANGAN",
             name: "keterangandetail",
+            width: '300px',
             sortable: false,
             editable: true,
             editoptions: {
@@ -697,45 +694,6 @@
                 }
               }, ]
             }
-          },
-          {
-            label: "KODE PERKIRAAN",
-            name: "coadetail",
-            sortable: false,
-            editable: true,
-            editoptions: {
-              class: 'coadetail-lookup',
-              dataInit: function(element) {
-                $('.coadetail-lookup').last().lookup({
-                  title: 'Coa Potongan Lookup',
-                  fileName: 'akunpusat',
-                  beforeProcess: function(test) {
-                    // var levelcoa = $(`#levelcoa`).val();
-                    this.postData = {
-                      levelCoa: '3',
-                      Aktif: 'AKTIF',
-                    }
-                  },
-                  onSelectRow: (akunpusat, el) => {
-                    let localRow = $("#tablePengembalian").jqGrid(
-                      "getLocalRow",
-                      $(element).attr('rowid')
-                    );
-                    el.val(akunpusat.coa)
-                    el.data('currentValue', akunpusat.coa)
-
-                    localRow.coadetail = akunpusat.coa
-                  },
-                  onCancel: (el) => {
-                    el.val(el.data('currentValue'))
-                  },
-                  onClear: (el) => {
-                    el.val('')
-                    el.data('currentValue', el.val())
-                  }
-                })
-              }
-            },
           },
         ],
         autowidth: true,
