@@ -912,6 +912,12 @@
                     <input type="number"  name="detail_vulkanisirke[]" style="" class="form-control">                    
                   </td>
 
+
+                  <td class="data_tbl tbl_total_sebelum">
+                      <input type="text"  name="total_sebelum[]" id="total_sebelum${id}" style="text-align:right"  onkeyup="calculate(${id})" class="form-control total_sebelum autonumeric number${id}" >
+                    </td>
+
+
                   <td class="data_tbl tbl_persentase">
                     <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${id}" onkeyup="calculate(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
                   </td>  
