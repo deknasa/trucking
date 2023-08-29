@@ -116,6 +116,7 @@ class TradoController extends MyController
             'statusabsensisupir' => $this->comboStatusAktif('list','STATUS ABSENSI SUPIR','STATUS ABSENSI SUPIR'),
         ];
 
+   
         return view('trado.index', compact('title','data'));
     }
 
