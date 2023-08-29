@@ -667,7 +667,7 @@
 
           setErrorMessages(form, error.responseJSON.errors);
         } else {
-          showDialog(error.statusText)
+          showDialog(error.responseJSON)
         }
       },
     }).always(() => {
