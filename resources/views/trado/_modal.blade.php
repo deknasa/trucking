@@ -98,6 +98,14 @@
                     <input type="text" name="jumlahsumbu" class="form-control numbernoseparate">
                   </div>
                 </div>
+                <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">STATUS ABSENSI SUPIR <span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <select name="statusabsensisupir" class="form-control select2bs4">
+                      <option value="">-- PILIH STATUS ABSENSI SUPIR --</option>
+                    </select>
+                  </div>
+                </div>
               </div>
               <div class="col-md-6">
 
@@ -169,6 +177,7 @@
                     </select>
                   </div>
                 </div>
+
                 <div class="form-group ">
                   <label class="col-sm-12 col-form-label">Keterangan</label>
                   <div class="col-sm-12">
@@ -182,6 +191,7 @@
                     <input type="text" name="mandor" class="form-control mandor-lookup">
                   </div>
                 </div>
+
                 <div class="form-group ">
                   <label class="col-sm-12 col-form-label">Milik Supir</label>
                   <div class="col-sm-12">
@@ -189,6 +199,7 @@
                     <input type="text" name="supir" class="form-control supir-lookup">
                   </div>
                 </div>
+
               </div>
             </div>
 
@@ -416,7 +427,8 @@
       .all([
         setStatusAktifOptions(form),
         setStatusJenisPlatOptions(form),
-        setStatusGerobak(form)
+        setStatusGerobak(form),
+        setStatusAbsensiSupir(form)
       ])
       .then(() => {
         showDefault(form)
@@ -443,7 +455,8 @@
     initSelect2(form.find(`
       [name="statusaktif"],
       [name="statusjenisplat"],
-      [name="statusgerobak"]
+      [name="statusgerobak"],
+      [name="statusabsensisupir"]
     `), true)
     getMaxLength(form)
     form.find('[name]').removeAttr('disabled')
@@ -472,7 +485,8 @@
       .all([
         setStatusAktifOptions(form),
         setStatusJenisPlatOptions(form),
-        setStatusGerobak(form)
+        setStatusGerobak(form),
+        setStatusAbsensiSupir(form)
       ])
       .then(() => {
         showTrado(form, id)
@@ -526,7 +540,8 @@
       .all([
         setStatusAktifOptions(form),
         setStatusJenisPlatOptions(form),
-        setStatusGerobak(form)
+        setStatusGerobak(form),
+        setStatusAbsensiSupir(form)
 
       ])
       .then(() => {
@@ -583,9 +598,9 @@
         success: response => {
           $.each(response.data, (index, value) => {
             let element = form.find(`[name="${index}"]`).not(':file')
-            if (index =="isisilinder") {
+            if (index == "isisilinder") {
               if (value == 0) {
-                value =""
+                value = ""
               }
             }
             if (element.is('select')) {
@@ -598,7 +613,7 @@
             } else {
               element.val(value)
             }
-            
+
 
           })
           resolve(response.data)
@@ -785,6 +800,47 @@
             let option = new Option(jenisPlat.text, jenisPlat.id)
 
             relatedForm.find('[name=statusgerobak]').append(option).trigger('change')
+          });
+
+          resolve()
+        },
+        error: error => {
+          reject(error)
+        }
+      })
+    })
+  }
+
+  const setStatusAbsensiSupir = function(relatedForm) {
+    return new Promise((resolve, reject) => {
+      relatedForm.find('[name=statusabsensisupir]').empty()
+      relatedForm.find('[name=statusabsensisupir]').append(
+        new Option('-- PILIH STATUS ABSENSI SUPIR --', '', false, true)
+      ).trigger('change')
+
+      $.ajax({
+        url: `${apiUrl}parameter`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          limit: 0,
+          filters: JSON.stringify({
+            "groupOp": "AND",
+            "rules": [{
+              "field": "grp",
+              "op": "cn",
+              "data": "STATUS ABSENSI SUPIR"
+            }]
+          })
+        },
+        success: response => {
+          response.data.forEach(jenisPlat => {
+            let option = new Option(jenisPlat.text, jenisPlat.id)
+
+            relatedForm.find('[name=statusabsensisupir]').append(option).trigger('change')
           });
 
           resolve()
