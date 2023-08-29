@@ -32,11 +32,13 @@
   let autoNumericElements = []
   let rowNum = 10
   let selectedRows = [];
+  let selectedRowsSupplier = [];
 
   function checkboxHandler(element) {
     let value = $(element).val();
     if (element.checked) {
       selectedRows.push($(element).val())
+      selectedRowsSupplier.push($(element).parents('tr').find(`td[aria-describedby="jqGrid_namasupplier"]`).text())
       $(element).parents('tr').addClass('bg-light-blue')
 
 
@@ -45,6 +47,7 @@
       for (var i = 0; i < selectedRows.length; i++) {
         if (selectedRows[i] == value) {
           selectedRows.splice(i, 1);
+          selectedRowsSupplier.splice(i, 1);
         }
       }
     }
@@ -809,40 +812,40 @@
   })
 
   const setTampilanIndex = function() {
-      return new Promise((resolve, reject) => {
-        let data = [];
-        data.push({
-          name: 'grp',
-          value: 'UBAH TAMPILAN'
-        })
-        data.push({
-          name: 'text',
-          value: 'SUPPLIER'
-        })
-        $.ajax({
-          url: `${apiUrl}parameter/getparambytext`,
-          method: 'GET',
-          dataType: 'JSON',
-          headers: {
-            Authorization: `Bearer ${accessToken}`
-          },
-          data: data,
-          success: response => {
-            memo = JSON.parse(response.memo)
-            memo = memo.INPUT
-            if (memo != '') {
-              input = memo.split(',');
-              input.forEach(field => {
-                field = $.trim(field.toLowerCase());
-                $(`.${field}`).hide()
-                $("#jqGrid").jqGrid("hideCol", field);
-              });
-            }
-
-          }
-        })
+    return new Promise((resolve, reject) => {
+      let data = [];
+      data.push({
+        name: 'grp',
+        value: 'UBAH TAMPILAN'
       })
-    }
+      data.push({
+        name: 'text',
+        value: 'SUPPLIER'
+      })
+      $.ajax({
+        url: `${apiUrl}parameter/getparambytext`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: data,
+        success: response => {
+          memo = JSON.parse(response.memo)
+          memo = memo.INPUT
+          if (memo != '') {
+            input = memo.split(',');
+            input.forEach(field => {
+              field = $.trim(field.toLowerCase());
+              $(`.${field}`).hide()
+              $("#jqGrid").jqGrid("hideCol", field);
+            });
+          }
+
+        }
+      })
+    })
+  }
 </script>
 @endpush()
 @endsection

@@ -648,7 +648,8 @@
         Authorization: `Bearer ${accessToken}`
       },
       data: {
-        Id: selectedRows
+        Id: selectedRows,
+        nama: selectedRowsSupplier
       },
       success: response => {
         $('#crudForm').trigger('reset')
@@ -656,6 +657,7 @@
 
         $('#jqGrid').jqGrid().trigger('reloadGrid');
         selectedRows = []
+        selectedRowsSupplier = []
         $('#gs_').prop('checked', false)
       },
       error: error => {
