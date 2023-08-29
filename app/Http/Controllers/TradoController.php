@@ -113,6 +113,7 @@ class TradoController extends MyController
             'statusmobilstoring' => $this->comboStatusAktif('list','STATUS MOBIL STORING','STATUS MOBIL STORING'),
             'statusappeditban' => $this->comboStatusAktif('list','STATUS APPROVAL EDIT BAN','STATUS APPROVAL EDIT BAN'),
             'statuslewatvalidasi' => $this->comboStatusAktif('list','STATUS LEWAT VALIDASI','STATUS LEWAT VALIDASI'),
+            'statusabsensisupir' => $this->comboStatusAktif('list','STATUS ABSENSI SUPIR','STATUS ABSENSI SUPIR'),
         ];
 
         return view('trado.index', compact('title','data'));
@@ -283,6 +284,7 @@ class TradoController extends MyController
             $statusMobilStoring= $params['statusmobilstoring'];
             $statusAppEditBan= $params['statusappeditban'];
             $statusLewatValidasi= $params['statuslewatvalidasi'];
+            $statusAbsensiSupir= $params['statusabsensisupir'];
 
 
             $result = json_decode($statusaktif, true);
@@ -293,6 +295,7 @@ class TradoController extends MyController
             $resultMobilStoring = json_decode($statusMobilStoring, true);
             $resultAppEditBan = json_decode($statusAppEditBan, true);
             $resultLewatValidasi = json_decode($statusLewatValidasi, true);
+            $resultAbsensiSupir = json_decode($statusAbsensiSupir, true);
 
             $statusaktif = $result['MEMO'];
             $statusStandarisasi = $resultStandarisasi['MEMO'];
@@ -302,6 +305,7 @@ class TradoController extends MyController
             $statusMobilStoring = $resultMobilStoring['MEMO'];
             $statusAppEditBan = $resultAppEditBan['MEMO'];
             $statusLewatValidasi = $resultLewatValidasi['MEMO'];
+            $statusAbsensiSupir = $resultAbsensiSupir['MEMO'];
 
 
             $trados[$i]['statusaktif'] = $statusaktif;
@@ -312,6 +316,7 @@ class TradoController extends MyController
             $trados[$i]['statusmobilstoring'] = $statusMobilStoring;
             $trados[$i]['statusappeditban'] = $statusAppEditBan;
             $trados[$i]['statuslewatvalidasi'] = $statusLewatValidasi;
+            $trados[$i]['statusabsensisupir'] = $statusAbsensiSupir;
 
             $i++;
         }
