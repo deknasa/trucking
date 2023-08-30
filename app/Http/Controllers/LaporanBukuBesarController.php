@@ -161,43 +161,96 @@ class LaporanBukuBesarController extends MyController
         $totalSaldo = 0;
         $prevKeteranganCoa = null;
 
-        foreach ($bukubesar as $response_index => $response_detail) {
-
-            if ($response_detail['keterangancoa'] !== $prevKeteranganCoa) {
-                $detail_start_row++;
-
-                $sheet->setCellValue("A$detail_start_row", $response_detail['coa'].' '.$response_detail['keterangancoa']);
-                $sheet->getStyle("A$detail_start_row")->getFont()->setSize(12)->setBold(true);
-                $sheet->getStyle("A$detail_start_row")->getAlignment()->setHorizontal('center');
-                $sheet->mergeCells("A$detail_start_row:F$detail_start_row");
-                $detail_start_row++;
+        $groupedData = [];
+        foreach ($bukubesar as $row) {
+            $coa = $row['coa'];
+            if (!isset($groupedData[$coa])) {
+                $groupedData[$coa] = [];
             }
-            foreach ($detail_columns as $detail_columns_index => $detail_column) {
-                $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
-            }
-
-            $sheet->setCellValue("A$detail_start_row", $response_detail['tglbukti']);
-            $sheet->setCellValue("B$detail_start_row", $response_detail['nobukti']);
-            $sheet->setCellValue("C$detail_start_row", $response_detail['keterangan']);
-            $sheet->setCellValue("D$detail_start_row", number_format((float) $response_detail['debet'], '2', ',', '.'));
-            $sheet->setCellValue("E$detail_start_row", number_format((float) $response_detail['kredit'], '2', ',', '.'));
-            $sheet->setCellValue("F$detail_start_row", number_format((float) $response_detail['Saldo'], '2', ',', '.'));
-
-            $sheet->getStyle("A$detail_start_row:F$detail_start_row")->applyFromArray($styleArray);
-            $sheet->getStyle("D$detail_start_row:F$detail_start_row")->applyFromArray($style_number);
-
-            $totalKredit += $response_detail['kredit'];
-            $totalDebet += $response_detail['debet'];
-            $totalSaldo += $response_detail['Saldo'];
-            $detail_start_row++;
-            $prevKeteranganCoa = $response_detail['keterangancoa'];
+            $groupedData[$coa][] = $row;
         }
-        $detail_start_row++;
-        $sheet->mergeCells('A' . $detail_start_row . ':C' . $detail_start_row);
-        $sheet->setCellValue("A$detail_start_row", 'Total')->getStyle('A' . $detail_start_row . ':C' . $detail_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
-        $sheet->setCellValue("D$detail_start_row", number_format((float) $totalDebet, '2', ',', '.'))->getStyle("D$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
-        $sheet->setCellValue("E$detail_start_row", number_format((float) $totalKredit, '2', ',', '.'))->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
-        $sheet->setCellValue("F$detail_start_row", number_format((float) $totalSaldo, '2', ',', '.'))->getStyle("F$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+
+        // foreach ($bukubesar as $response_index => $response_detail) {
+
+        //     if ($response_detail['keterangancoa'] !== $prevKeteranganCoa) {
+        //         $detail_start_row++;
+
+        //         $sheet->setCellValue("A$detail_start_row", $response_detail['coa'].' '.$response_detail['keterangancoa']);
+        //         $sheet->getStyle("A$detail_start_row")->getFont()->setSize(12)->setBold(true);
+        //         $sheet->getStyle("A$detail_start_row")->getAlignment()->setHorizontal('center');
+        //         $sheet->mergeCells("A$detail_start_row:F$detail_start_row");
+        //         $detail_start_row++;
+        //     }
+        //     foreach ($detail_columns as $detail_columns_index => $detail_column) {
+        //         $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
+        //     }
+
+        //     $sheet->setCellValue("A$detail_start_row", $response_detail['tglbukti']);
+        //     $sheet->setCellValue("B$detail_start_row", $response_detail['nobukti']);
+        //     $sheet->setCellValue("C$detail_start_row", $response_detail['keterangan']);
+        //     $sheet->setCellValue("D$detail_start_row", number_format((float) $response_detail['debet'], '2', ',', '.'));
+        //     $sheet->setCellValue("E$detail_start_row", number_format((float) $response_detail['kredit'], '2', ',', '.'));
+        //     $sheet->setCellValue("F$detail_start_row", number_format((float) $response_detail['Saldo'], '2', ',', '.'));
+
+        //     $sheet->getStyle("A$detail_start_row:F$detail_start_row")->applyFromArray($styleArray);
+        //     $sheet->getStyle("D$detail_start_row:F$detail_start_row")->applyFromArray($style_number);
+
+        //     $totalKredit += $response_detail['kredit'];
+        //     $totalDebet += $response_detail['debet'];
+        //     $totalSaldo += $response_detail['Saldo'];
+        //     $detail_start_row++;
+        //     $prevKeteranganCoa = $response_detail['keterangancoa'];
+        // }
+        // $detail_start_row++;
+        // $sheet->mergeCells('A' . $detail_start_row . ':C' . $detail_start_row);
+        // $sheet->setCellValue("A$detail_start_row", 'Total')->getStyle('A' . $detail_start_row . ':C' . $detail_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
+        // $sheet->setCellValue("D$detail_start_row", number_format((float) $totalDebet, '2', ',', '.'))->getStyle("D$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        // $sheet->setCellValue("E$detail_start_row", number_format((float) $totalKredit, '2', ',', '.'))->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        // $sheet->setCellValue("F$detail_start_row", number_format((float) $totalSaldo, '2', ',', '.'))->getStyle("F$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        foreach ($groupedData as $coa => $group) {
+            $sheet->mergeCells("A$detail_start_row:F$detail_start_row");
+            $sheet->setCellValue("A$detail_start_row", $coa . ' ' . $group[0]['keterangancoa'])->getStyle('A' . $detail_start_row . ':F' . $detail_start_row)->applyFromArray($styleArray);
+            $sheet->getStyle("A$detail_start_row")->getFont()->setSize(12)->setBold(true);
+            $sheet->getStyle("A$detail_start_row")->getAlignment()->setHorizontal('center');
+            $detail_start_row++;
+
+            $dataRow = $detail_table_header_row + 2;
+            $previousRow = $dataRow - 1;
+            foreach ($group as $response_index => $response_detail) {
+                // ... (your existing code for filling in details)
+                $sheet->setCellValue("A$detail_start_row", $response_detail['tglbukti']);
+                $sheet->setCellValue("B$detail_start_row", $response_detail['nobukti']);
+                $sheet->setCellValue("C$detail_start_row", $response_detail['keterangan']);
+                $sheet->setCellValue("D$detail_start_row", $response_detail['debet']);
+                $sheet->setCellValue("E$detail_start_row", $response_detail['kredit']);
+                if ($response_detail['nobukti'] == '') {
+                    $sheet->setCellValue('F' . $detail_start_row, $response_detail['Saldo']);
+                    $previousRow = $detail_start_row;
+                } else {
+                    if ($detail_start_row > $detail_table_header_row + 1) {
+                        $sheet->setCellValue('F' . $detail_start_row, '=(F' . $previousRow . '+D' . $detail_start_row . ')-E' . $detail_start_row);
+                    }
+                }
+                // $sheet->setCellValue("F$detail_start_row", $response_detail['Saldo']);
+
+                $sheet->getStyle("D$detail_start_row:F$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+                $totalKredit += $response_detail['kredit'];
+                $totalDebet += $response_detail['debet'];
+                $totalSaldo += $response_detail['Saldo'];
+                $previousRow = $detail_start_row;
+                $detail_start_row++;
+                $prevKeteranganCoa = $response_detail['keterangancoa'];
+            }
+            // Display the group totals at the end of the group
+            $sheet->mergeCells('A' . $detail_start_row . ':C' . $detail_start_row);
+            $sheet->setCellValue("A$detail_start_row", 'Total')->getStyle('A' . $detail_start_row . ':C' . $detail_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
+            $sheet->setCellValue("D$detail_start_row", "=SUM(D" . ($detail_start_row - count($group)) . ":D" . ($detail_start_row - 1) . ")")->getStyle("D$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+            $sheet->setCellValue("E$detail_start_row", "=SUM(E" . ($detail_start_row - count($group)) . ":E" . ($detail_start_row - 1) . ")")->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+            $sheet->setCellValue("F$detail_start_row", "=F" . ($detail_start_row - 1))->getStyle("F$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+
+            $sheet->getStyle("D$detail_start_row:F$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+            $detail_start_row += 2; // Add an empty row between groups
+        }
 
 
         $ttd_start_row = $detail_start_row + 2;
@@ -219,7 +272,7 @@ class LaporanBukuBesarController extends MyController
 
 
         $writer = new Xlsx($spreadsheet);
-        $filename = 'Laporan Kas/Bank' . date('dmYHis');
+        $filename = 'Laporan Buku Besar' . date('dmYHis');
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
         header('Cache-Control: max-age=0');
