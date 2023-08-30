@@ -24,6 +24,7 @@
           {
             label: 'SUPIR',
             name: 'supir_id',
+            width: '200px'
           },
           {
             label: 'NOMINAL',
@@ -46,20 +47,24 @@
             align: "right",
           },
           {
+            label: 'KETERANGAN',
+            name: 'keterangan',
+            width: '300px'
+          },
+          {
             label: 'NO BUKTI PENERIMAAN TRUCKING',
             name: 'penerimaantruckingheader_nobukti',
+            width: '200px'
           },
           {
             label: 'NO orderan TRUCKING',
             name: 'orderantrucking_nobukti',
+            width: '200px'
           },
           {
             label: 'NO invoice',
             name: 'invoice_nobukti',
-          },
-          {
-            label: 'KETERANGAN',
-            name: 'keterangan',
+            width: '200px'
           },
         ],
         autowidth: true,
