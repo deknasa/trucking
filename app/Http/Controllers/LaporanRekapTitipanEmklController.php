@@ -143,7 +143,7 @@ class LaporanRekapTitipanEmklController extends MyController
                 // $sheet->setCellValue("E$detail_start_row", $response_detail['saldo']);
                 
 
-                $sheet->getStyle("A$detail_start_row:E$detail_start_row")->applyFromArray($styleArray);
+                $sheet->getStyle("A$detail_start_row:D$detail_start_row")->applyFromArray($styleArray);
                 $sheet->getStyle("D$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
                 // $sheet->getStyle("E$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
                 $detail_start_row++;
@@ -155,9 +155,9 @@ class LaporanRekapTitipanEmklController extends MyController
         $sheet->mergeCells('A' . $total_start_row . ':C' . $total_start_row);
         $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':C' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
 
-        $totalDebet = "=SUM(E6:E" . ($detail_start_row - 1) . ")";
-        $sheet->setCellValue("E$total_start_row", $totalDebet)->getStyle("E$total_start_row")->applyFromArray($style_number);
-        $sheet->setCellValue("E$total_start_row", $totalDebet)->getStyle("E$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+        // $totalDebet = "=SUM(E6:E" . ($detail_start_row - 1) . ")";
+        // $sheet->setCellValue("E$total_start_row", $totalDebet)->getStyle("E$total_start_row")->applyFromArray($style_number);
+        // $sheet->setCellValue("E$total_start_row", $totalDebet)->getStyle("E$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
         $totalDebet = "=SUM(D6:D" . ($detail_start_row - 1) . ")";
         $sheet->setCellValue("D$total_start_row", $totalDebet)->getStyle("D$total_start_row")->applyFromArray($style_number);
         $sheet->setCellValue("D$total_start_row", $totalDebet)->getStyle("D$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
@@ -176,7 +176,7 @@ class LaporanRekapTitipanEmklController extends MyController
         $sheet->getColumnDimension('B')->setAutoSize(true);
         $sheet->getColumnDimension('C')->setAutoSize(true);
         $sheet->getColumnDimension('D')->setAutoSize(true);
-        $sheet->getColumnDimension('E')->setAutoSize(true);
+        // $sheet->getColumnDimension('E')->setAutoSize(true);
 
 
 
