@@ -16,8 +16,7 @@
   <script src="{{ asset('libraries/tas-lib/js/terbilang.js?version='. config('app.version')) }}"></script>
   <script type="text/javascript">
     
-    let pengeluarantruckings = <?= json_encode($pengeluarantrucking); ?>
-
+    let pengeluarantruckings = <?= json_encode($pengeluarantrucking); ?>;
     function Start() {
       Stimulsoft.Base.StiLicense.loadFromFile("{{ asset($stireport_path . 'license.php') }}");
       var viewerOptions = new Stimulsoft.Viewer.StiViewerOptions()
@@ -44,7 +43,47 @@
       var dataSet = new Stimulsoft.System.Data.DataSet("Data")
 
       viewer.renderHtml('content')
-      report.loadFile(`{{ asset('public/reports/ReportPengeluaranTruckingHeader.mrt') }}`)
+      switch (pengeluarantruckings.statusformat) {
+        case '122':
+        //pjt
+        report.loadFile(`{{ asset('public/reports/ReportPengeluaranTruckingHeader.mrt') }}`)
+          break;
+        case '251':
+        //tde
+        report.loadFile(`{{ asset('public/reports/ReportPengeluaranTruckingHeader.mrt') }}`)
+          break;
+        case '289':
+        //BST
+        report.loadFile(`{{ asset('public/reports/ReportPengeluaranTruckingHeader.mrt') }}`)
+          break;
+        case '297':
+        //BSB
+        report.loadFile(`{{ asset('public/reports/ReportPengeluaranTruckingHeader.mrt') }}`)
+          break;
+        case '298':
+        //KBBM
+        report.loadFile(`{{ asset('public/reports/ReportPengeluaranTruckingHeader.mrt') }}`)
+          break;
+        case '279':
+        //BLS
+        report.loadFile(`{{ asset('public/reports/ReportPengeluaranTruckingHeader.mrt') }}`)
+          break;
+        case '318':
+        //KLAIM
+        report.loadFile(`{{ asset('public/reports/ReportPengeluaranTruckingHeader.mrt') }}`)
+          break;
+        case '369':
+        //PJK
+        report.loadFile(`{{ asset('public/reports/ReportPengeluaranTruckingHeader.mrt') }}`)
+          break;
+        case '411':
+        //BBT
+        report.loadFile(`{{ asset('public/reports/ReportPengeluaranTruckingHeader.mrt') }}`)
+          break;
+        default:
+      report.loadFile(`{{ asset('public/reports/ReportPengeluaranTruckingHeaderBLL.mrt') }}`)
+          break;
+      }
 
       report.dictionary.dataSources.clear()
 
