@@ -125,9 +125,7 @@
         let periode = $('#crudForm').find('[name=periode]').val()
         
         getCekExport().then((response) => {
-            window.open(
-                window.open(`{{ route('laporanrekaptitipanemkl.export') }}?periode=${periode}`)
-            )
+            window.open(`{{ route('laporanrekaptitipanemkl.export') }}?periode=${periode}`)
         }).catch((error) => {
             if (error.status === 422) {
                 $('.is-invalid').removeClass('is-invalid')

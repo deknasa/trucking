@@ -73,11 +73,11 @@ class LaporanTitipanEmklController extends MyController
         $user = Auth::user();
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-
-        $sheet->setCellValue('A1', $pengeluaran[0]['judul']);
-        $sheet->setCellValue('A2', $pengeluaran[0]['judulLaporan']);
+        $jenisorder = $pengeluaran[0]['jenisorder'] ?? '';
+        $sheet->setCellValue('A1', $pengeluaran[0]['judul']??'');
+        $sheet->setCellValue('A2', $pengeluaran[0]['judulLaporan']??'');
         $sheet->setCellValue('A3', 'Periode: ' . $request->tgldari .'s/d'.$request->tgldari );
-        $sheet->setCellValue('A4', 'Jenis Order: ' . $pengeluaran[0]['jenisorder']);
+        $sheet->setCellValue('A4', 'Jenis Order: ' . $jenisorder);
 
         $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
 

@@ -85,6 +85,8 @@
                             </div>
                         @enderror
                     </div>
+                    <input type="text" readonly hidden name="latitude" id="latitude">
+                    <input type="text" readonly hidden name="longitude" id="longitude">
                     <div id="error">
                     </div>
                     {{-- <a href="{{ config('app.api_url') }}">reset password</a> --}}
@@ -100,7 +102,7 @@
     </div>
     <p>Copyright &copy; <?= Date('Y') ?></p>
     <p>Halaman ini dimuat selama <strong>{{ number_format(microtime(true) - LARAVEL_START, 2) }}</strong> detik</p>
-
+    <p id="demo"></p>
     <!-- jQuery -->
     <script src="{{ asset('libraries/adminlte/plugins/jquery/jquery.min.js') }}"></script>
     <!-- jQuery UI -->
@@ -112,8 +114,22 @@
 
     <script>
         $(document).ready(function() {
+            var x = document.getElementById("demo");
 
-
+            getLocation()
+            function getLocation() {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(showPosition);
+                } else { 
+                    x.innerHTML = "Geolocation is not supported by this browser.";
+                }
+            }
+            
+            function showPosition(position) {
+                $('#latitude').val(position.coords.latitude)
+                $('#longitude').val(position.coords.longitude)
+            }
+                
             $(document).on('click', '#resetPassword', function() {
                 let form = $('#user')
                 let user = $('#user').val();

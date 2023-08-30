@@ -94,6 +94,12 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
 
+            $lat = $request->latitude;
+            $long = $request->longitude;
+            $credentials['ipclient'] = $request->ip();
+            $credentials['latitude'] = $lat;
+            $credentials['longitude'] = $long;
+
             $token = Http::withHeaders([
                 'Accept' => 'application/json'
             ])->withOptions(['verify' => false])
@@ -186,7 +192,6 @@ class AuthController extends Controller
         ];
         $dataIp = $credentials;
         $dataIp['ipclient'] = $request->ip();
-        dd($dataIp);
         $cekIp = Http::withHeaders([
             'Accept' => 'application/json'
         ])->withOptions(['verify' => true])
