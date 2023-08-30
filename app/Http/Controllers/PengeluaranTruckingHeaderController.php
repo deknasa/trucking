@@ -68,10 +68,13 @@ class PengeluaranTruckingHeaderController extends MyController
     }
     public function comboKodepengeluaran()
     {
+        $params = [
+            'limit' => 0
+        ];
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'pengeluarantrucking');
+            ->get(config('app.api_url') . 'pengeluarantrucking', $params);
 
         return $response['data'];
     }
