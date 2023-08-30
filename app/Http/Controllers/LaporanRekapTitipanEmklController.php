@@ -57,12 +57,14 @@ class LaporanRekapTitipanEmklController extends MyController
             ->get(config('app.api_url') . 'laporanrekaptitipanemkl/export', $detailParams);
 
         $pengeluaran = $responses['data'];
+
+        // dd($pengeluaran);
         $user = Auth::user();
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
         $sheet->setCellValue('A1', $pengeluaran[0]['judul']);
-        $sheet->setCellValue('A2', $pengeluaran[0]['judulLaporan']);
+        $sheet->setCellValue('A2', $pengeluaran[0]['judullaporan']);
         $sheet->setCellValue('A3', 'Periode: ' . $request->periode);
 
         $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
@@ -115,10 +117,7 @@ class LaporanRekapTitipanEmklController extends MyController
                 "index"=>"nominal",
                 "label"=>"NOMINAL"
             ],
-            [
-                "index"=>"saldo",
-                "label"=>"SALDO"
-            ],
+            
         ];
 
         $tradoPrev = null;
@@ -141,12 +140,12 @@ class LaporanRekapTitipanEmklController extends MyController
                 $sheet->setCellValue("B$detail_start_row", date('d-m-Y', strtotime($response_detail['tglbukti'])));
                 $sheet->setCellValue("C$detail_start_row", $response_detail['keterangan']);
                 $sheet->setCellValue("D$detail_start_row", $response_detail['nominal']);
-                $sheet->setCellValue("E$detail_start_row", $response_detail['saldo']);
+                // $sheet->setCellValue("E$detail_start_row", $response_detail['saldo']);
                 
 
                 $sheet->getStyle("A$detail_start_row:E$detail_start_row")->applyFromArray($styleArray);
                 $sheet->getStyle("D$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
-                $sheet->getStyle("E$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+                // $sheet->getStyle("E$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
                 $detail_start_row++;
             }
         }
