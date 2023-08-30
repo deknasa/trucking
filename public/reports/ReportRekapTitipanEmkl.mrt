@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "a6de34ee1eb34646834c444d6581d1bb",
+  "ReportGuid": "0b8e1271aa98b5ee8251740ac5dc5cf4",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://localhost/trucking/public/reports/ReportRekapTitipanEmkl.mrt",
+  "ReportFile": "http://localhost/truck/public/reports/ReportRekapTitipanEmkl.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1692972386000+0700)/",
+  "ReportChanged": "/Date(1693386565000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -788,7 +788,7 @@
               "ShrinkFontToFitMinimumSize": 5,
               "TextFormat": {
                 "Ident": "StiCustomFormatService",
-                "StringFormat": "dd-mm-yyyy"
+                "StringFormat": "dd-MM-yyyy"
               },
               "Type": "DataColumn"
             },
@@ -929,6 +929,7 @@
           "Ident": "StiFooterBand",
           "Name": "FooterBand1",
           "ClientRectangle": "0,6.21,21.3,0.8",
+          "ComponentPlacement": "f.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
           },
@@ -942,7 +943,7 @@
               "CanGrow": true,
               "GrowToHeight": true,
               "ClientRectangle": "13.4,-0.01,3.83,0.51",
-              "ComponentPlacement": "d.DataBand1",
+              "ComponentPlacement": "f.FooterBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -981,7 +982,7 @@
               "Guid": "2ee67fe6e6fb22ef9a13868e52bb191f",
               "GrowToHeight": true,
               "ClientRectangle": "0.2,0.6,21.02,0.2",
-              "ComponentPlacement": "d.DataBand1",
+              "ComponentPlacement": "f.FooterBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -995,7 +996,7 @@
               "Name": "Text11",
               "Guid": "68dcad00cc716d2559eda15d0b9b2fb0",
               "ClientRectangle": "8.57,-0.04,4.6,0.6",
-              "ComponentPlacement": "h.ap.HeaderBand1",
+              "ComponentPlacement": "f.FooterBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },

@@ -27,6 +27,7 @@ class BankController extends MyController
 
     public function index(Request $request)
     {
+        dd(session('info_loc'));
         $title = $this->title;
         $data = [
             'pagename' => 'Menu Utama Bank',
