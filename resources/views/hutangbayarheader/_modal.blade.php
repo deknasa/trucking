@@ -1400,12 +1400,7 @@
           if (kodestatus == '1') {
             showDialog(response.message['keterangan'])
           } else {
-            if (Aksi == 'EDIT') {
-              editHutangBayarHeader(Id)
-            }
-            if (Aksi == 'DELETE') {
-              deleteHutangBayarHeader(Id)
-            }
+            cekValidasiAksi(Id, Aksi)
           }
 
         } else {
@@ -1415,6 +1410,30 @@
     })
   }
 
+  function cekValidasiAksi(Id, Aksi) {
+    $.ajax({
+      url: `{{ config('app.api_url') }}hutangbayarheader/${Id}/cekValidasiAksi`,
+      method: 'POST',
+      dataType: 'JSON',
+      beforeSend: request => {
+        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+      },
+      success: response => {
+        var error = response.error
+        if (error) {
+          showDialog(response)
+        } else {
+          if (Aksi == 'EDIT') {
+              editHutangBayarHeader(Id)
+            }
+            if (Aksi == 'DELETE') {
+              deleteHutangBayarHeader(Id)
+            }
+        }
+
+      }
+    })
+  }
 
   function getPembayaran(id, supplierId, aksi) {
     $('#detailList tbody').html('')
