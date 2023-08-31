@@ -18,6 +18,8 @@
               <li><a href="#detail-tab">Details</a></li>
               <li><a href="#pengeluaran-tab">Pengeluaran Kas/bank</a></li>
               <li><a href="#jurnal-tab">Jurnal</a></li>
+              <li class="deposito"><a href="#deposito-tab">Jurnal Deposito</a></li>
+              <li class="pinjaman"><a href="#pinjaman-tab">Jurnal Pinjaman</a></li>
             </ul>
             <div id="detail-tab">
               <table id="detail"></table>
@@ -27,6 +29,12 @@
             </div>
             <div id="jurnal-tab">
               <table id="jurnalGrid"></table>
+            </div>
+            <div id="deposito-tab">
+              <table id="depositoGrid"></table>
+            </div>
+            <div id="pinjaman-tab">
+              <table id="pinjamanGrid"></table>
             </div>
           </div>
         </div>
@@ -38,6 +46,8 @@
 @include('pendapatansupirheader._modal')
 <!-- Detail -->
 @include('pendapatansupirheader._detail')
+@include('pendapatansupirheader._deposito')
+@include('pendapatansupirheader._pinjaman')
 @include('pengeluaran._pengeluaran')
 @include('jurnalumum._jurnal')
 
@@ -59,7 +69,7 @@
   let rowNum = 10
   let hasDetail = false
   let selectedRows = [];
-
+  let isDeposito;
   function checkboxHandler(element) {
     let value = $(element).val();
     if (element.checked) {
@@ -83,7 +93,10 @@
     loadDetailGrid()
     loadPengeluaranGrid(nobukti)
     loadJurnalUmumGrid(nobukti)
+    loadDepositoJurnalGrid(nobukti)
+    loadPinjamanJurnalGrid(nobukti)
     setTampilanIndex()
+    setIsDeposito()
     setRange()
     initDatepicker()
     $(document).on('click', '#btnReload', function(event) {
@@ -370,6 +383,7 @@
         },
         onSelectRow: function(id) {
           let pengeluaran_nobukti = $('#jqGrid').jqGrid('getCell', id, 'pengeluaran_nobukti')
+          nobukti = $('#jqGrid').jqGrid('getCell', id, 'nobukti')
 
           activeGrid = $(this)
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
@@ -380,6 +394,8 @@
           loadDetailData(id)
           loadPengeluaranData(id, pengeluaran_nobukti)
           loadJurnalUmumData(id, pengeluaran_nobukti)
+          loadDepositoData(id, nobukti)
+          loadPinjamanData(id, nobukti)
 
         },
         loadComplete: function(data) {
@@ -756,7 +772,6 @@
               $(`.${field}`).hide()
               $("#detail").jqGrid("hideCol", field);
               $("#jqGrid").jqGrid("hideCol", field);
-
             });
             showKasgantung = false;
           }
@@ -764,6 +779,25 @@
         }
       })
     })
+  }
+
+  function setIsDeposito()
+  {
+    $.ajax({
+        url: `${apiUrl}parameter/getparamfirst`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          grp: 'PENDAPATAN SUPIR',
+          subgrp: 'DEPOSITO'
+        },
+        success: response => {
+          isDeposito = response.text
+        }
+      })
   }
 </script>
 @endpush()
