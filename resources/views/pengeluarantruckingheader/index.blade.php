@@ -183,6 +183,12 @@
             align: 'left'
           },
           {
+            label: 'NO BUKTI PENERIMAAN TRUCKING',
+            width: 200,
+            name: 'penerimaantrucking_nobukti',
+            align: 'left'
+          },
+          {
             label: 'BANK',
             name: 'bank_id',
             align: 'left'
