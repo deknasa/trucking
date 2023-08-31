@@ -9,9 +9,15 @@
       <table id="jqGrid"></table>
     </div>
   </div>
+  <div class="row mt-3">
+    <div class="col-12">
+      <table id="jurnalGrid"></table>
+    </div>
+  </div>
 </div>
 
 @include('pindahbuku._modal')
+@include('jurnalumum._jurnal')
 
 @push('scripts')
 <script>
@@ -37,6 +43,8 @@
     $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('pindahbuku')
     })
+    let nobukti = $('#jqGrid').jqGrid('getCell', id, 'nobukti')
+    loadJurnalUmumGrid(nobukti)
 
     $("#jqGrid").jqGrid({
         url: `${apiUrl}pindahbuku`,
@@ -171,14 +179,27 @@
           setGridLastRequest($(this), jqXHR)
         },
         onSelectRow: function(id) {
+
+          let nobukti = $('#jqGrid').jqGrid('getCell', id, 'nobukti')
           activeGrid = $(this)
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
+          loadJurnalUmumData(id, nobukti)
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
+          if (data.data.length === 0) {
+            $('#jurnalGrid').each((index, element) => {
+              abortGridLastRequest($(element))
+              clearGridData($(element))
+            })
+            $('#jqGrid').each((index, element) => {
+              abortGridLastRequest($(element))
+              clearGridHeader($(element))
+            })
+          }
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))
@@ -217,6 +238,8 @@
             $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
           }
 
+          $('#left-nav').find('button').attr('disabled', false)
+          permission()
           setHighlight($(this))
         },
       })
@@ -230,7 +253,7 @@
         formatter: currencyFormat,
         beforeSearch: function() {
           abortGridLastRequest($(this))
-          
+          $('#left-nav').find(`button:not(#add)`).attr('disabled', 'disabled')
           clearGlobalSearch($('#jqGrid'))
         }
       })
@@ -299,20 +322,21 @@
       .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('pindahbuku', 'store') }}`) {
-      $('#add').attr('disabled', 'disabled')
-    }
+    function permission() {
+      if (!`{{ $myAuth->hasPermission('pindahbuku', 'store') }}`) {
+        $('#add').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('pindahbuku', 'update') }}`) {
-      $('#edit').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('pindahbuku', 'update') }}`) {
+        $('#edit').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('pindahbuku', 'destroy') }}`) {
-      $('#delete').attr('disabled', 'disabled')
+      if (!`{{ $myAuth->hasPermission('pindahbuku', 'destroy') }}`) {
+        $('#delete').attr('disabled', 'disabled')
+      }
     }
 
   })
-
 </script>
 @endpush()
 @endsection
