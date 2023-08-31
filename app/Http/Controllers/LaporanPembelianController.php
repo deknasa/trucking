@@ -239,7 +239,7 @@ class laporanpembelianController extends MyController
         $sheet->getColumnDimension('D')->setAutoSize(true);
         $sheet->getColumnDimension('E')->setAutoSize(true);
         $sheet->getColumnDimension('F')->setAutoSize(true);
-        $sheet->getColumnDimension('G')->setAutoSize(true);
+        $sheet->getColumnDimension('G')->setWidth(150);
 
 
 

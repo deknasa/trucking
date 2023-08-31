@@ -144,7 +144,7 @@ class LaporanPinjamanPerUnitTradoController extends Controller
         $sheet->getStyle('A' . $currentRow . ':D' . $currentRow)->getNumberFormat()->setFormatCode("#,##0.00");
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);
-        $sheet->getColumnDimension('C')->setAutoSize(true);
+        $sheet->getColumnDimension('C')->setWidth(150);
         $sheet->getColumnDimension('D')->setAutoSize(true);
 
         $writer = new Xlsx($spreadsheet);

@@ -48,7 +48,7 @@ class LaporanHutangBBMController extends MyController
         $detailParams = [
             'sampai' => $request->sampai,
         ];
-        
+
         $header = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
@@ -65,7 +65,7 @@ class LaporanHutangBBMController extends MyController
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:D3');
 
-        $sheet->setCellValue('A4', 'PERIODE : '.$request->sampai);
+        $sheet->setCellValue('A4', 'PERIODE : ' . $request->sampai);
         $sheet->getStyle("A4")->getFont()->setSize(12)->setBold(true);
         $sheet->mergeCells('A4:B4');
 
@@ -115,7 +115,7 @@ class LaporanHutangBBMController extends MyController
                 'label' => 'Saldo',
                 'index' => 'Saldo',
             ],
-           
+
         ];
 
         foreach ($header_columns as $detail_columns_index => $detail_column) {
@@ -125,7 +125,7 @@ class LaporanHutangBBMController extends MyController
 
         // LOOPING DETAIL
         $totalNominal = 0;
-       
+
         foreach ($data as $response_index => $response_detail) {
 
             foreach ($header_columns as $detail_columns_index => $detail_column) {
@@ -136,29 +136,29 @@ class LaporanHutangBBMController extends MyController
             $sheet->setCellValue("B$detail_start_row", $response_detail['keterangan']);
             $sheet->setCellValue("C$detail_start_row", $response_detail['nominal']);
             $sheet->setCellValue("D$detail_start_row", $response_detail['Saldo']);
-           
+
 
             $sheet->getStyle("A$detail_start_row:D$detail_start_row")->applyFromArray($styleArray);
-             $sheet->getStyle("C$detail_start_row:D$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
-             $sheet->getStyle("A$detail_start_row:A$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
-           
+            $sheet->getStyle("C$detail_start_row:D$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+            $sheet->getStyle("A$detail_start_row:A$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
 
-           $totalNominal += $response_detail['nominal'];
+
+            $totalNominal += $response_detail['nominal'];
             $detail_start_row++;
         }
 
 
 
-       //total
-       $total_start_row = $detail_start_row;
-       $sheet->mergeCells('A' . $total_start_row . ':B' . $total_start_row);
-       $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':B' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
+        //total
+        $total_start_row = $detail_start_row;
+        $sheet->mergeCells('A' . $total_start_row . ':B' . $total_start_row);
+        $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':B' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
 
-       $totalFull = "=SUM(C6:C" . ($detail_start_row-1) . ")";
-       $sheet->setCellValue("C$total_start_row", $totalFull)->getStyle("C$total_start_row")->applyFromArray($style_number)->getFont()->setBold(true);;
-       $sheet->setCellValue("C$total_start_row", $totalFull)->getStyle("C$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+        $totalFull = "=SUM(C6:C" . ($detail_start_row - 1) . ")";
+        $sheet->setCellValue("C$total_start_row", $totalFull)->getStyle("C$total_start_row")->applyFromArray($style_number)->getFont()->setBold(true);;
+        $sheet->setCellValue("C$total_start_row", $totalFull)->getStyle("C$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
 
-       $sheet->getStyle("D$detail_start_row:D$detail_start_row")->applyFromArray($styleArray);
+        $sheet->getStyle("D$detail_start_row:D$detail_start_row")->applyFromArray($styleArray);
 
         $ttd_start_row = $detail_start_row + 2;
         $sheet->setCellValue("A$ttd_start_row", 'Disetujui Oleh,');
@@ -170,10 +170,10 @@ class LaporanHutangBBMController extends MyController
         $sheet->setCellValue("C" . ($ttd_start_row + 3), '(                )');
 
         $sheet->getColumnDimension('A')->setAutoSize(true);
-        $sheet->getColumnDimension('B')->setAutoSize(true);
+        $sheet->getColumnDimension('B')->setWidth(150);
         $sheet->getColumnDimension('C')->setAutoSize(true);
         $sheet->getColumnDimension('D')->setAutoSize(true);
-      
+
 
 
         $writer = new Xlsx($spreadsheet);
@@ -184,5 +184,4 @@ class LaporanHutangBBMController extends MyController
 
         $writer->save('php://output');
     }
-
 }

@@ -260,8 +260,8 @@ class LaporanPemotonganPinjamanPerEBSController extends MyController
         $sheet->getColumnDimension('P')->setWidth(20);
         $sheet->getColumnDimension('Q')->setWidth(20);
         $sheet->getColumnDimension('R')->setWidth(20);
-        $sheet->getColumnDimension('S')->setWidth(40);
-        $sheet->getColumnDimension('T')->setWidth(45);
+        $sheet->getColumnDimension('S')->setWidth(150);
+        $sheet->getColumnDimension('T')->setWidth(150);
 
 // menambahkan sel Total pada baris terakhir + 1
 // $sheet->setCellValue("A" . ($detail_start_row + 1), 'Total');

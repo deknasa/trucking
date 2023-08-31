@@ -222,6 +222,7 @@ class LaporanHutangGiroController extends MyController
         $sheet->getColumnDimension('D')->setAutoSize(true);
         $sheet->getColumnDimension('E')->setAutoSize(true);
         $sheet->getColumnDimension('F')->setAutoSize(true);
+        $sheet->getColumnDimension('C')->setWidth(150);        
 
 
 
