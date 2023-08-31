@@ -141,7 +141,8 @@ class LaporanRekapTitipanEmklController extends MyController
                 $sheet->setCellValue("C$detail_start_row", $response_detail['keterangan']);
                 $sheet->setCellValue("D$detail_start_row", $response_detail['nominal']);
                 // $sheet->setCellValue("E$detail_start_row", $response_detail['saldo']);
-                
+                $sheet->getColumnDimension('C')->setWidth(150);
+
 
                 $sheet->getStyle("A$detail_start_row:D$detail_start_row")->applyFromArray($styleArray);
                 $sheet->getStyle("D$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
@@ -174,7 +175,6 @@ class LaporanRekapTitipanEmklController extends MyController
         //ukuran kolom
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);
-        $sheet->getColumnDimension('C')->setAutoSize(true);
         $sheet->getColumnDimension('D')->setAutoSize(true);
         // $sheet->getColumnDimension('E')->setAutoSize(true);
 
