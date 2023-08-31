@@ -141,8 +141,9 @@ class LaporanRekapTitipanEmklController extends MyController
                 $sheet->setCellValue("C$detail_start_row", $response_detail['keterangan']);
                 $sheet->setCellValue("D$detail_start_row", $response_detail['nominal']);
                 // $sheet->setCellValue("E$detail_start_row", $response_detail['saldo']);
-                $sheet->getColumnDimension('C')->setWidth(150);
-                $sheet->getColumnDimension('A')->setWidth(20);
+                // $sheet->getStyle("C$detail_start_row")->getAlignment()->setWrapText(true);
+                // $sheet->getColumnDimension('C')->setWidth(150);
+                // $sheet->getColumnDimension('A')->setWidth(20);
 
 
                 $sheet->getStyle("A$detail_start_row:D$detail_start_row")->applyFromArray($styleArray);
@@ -169,8 +170,8 @@ class LaporanRekapTitipanEmklController extends MyController
         $sheet->setCellValue("C$ttd_start_row", 'Diperiksa Oleh,');
         $sheet->setCellValue("E$ttd_start_row", 'Disusun Oleh,');
 
-        $sheet->setCellValue("A" . ($ttd_start_row + 3), '( Bpk. Hasan )');
-        $sheet->setCellValue("C" . ($ttd_start_row + 3), '( Rina )');
+        $sheet->setCellValue("A" . ($ttd_start_row + 3), '(                )');
+        $sheet->setCellValue("C" . ($ttd_start_row + 3), '(                )');
         $sheet->setCellValue("E" . ($ttd_start_row + 3), '(                )');
 
         //ukuran kolom
@@ -178,6 +179,9 @@ class LaporanRekapTitipanEmklController extends MyController
         $sheet->getColumnDimension('B')->setAutoSize(true);
         $sheet->getColumnDimension('D')->setAutoSize(true);
         // $sheet->getColumnDimension('E')->setAutoSize(true);
+        $sheet->getColumnDimension('C')->setWidth(150);
+        $sheet->getColumnDimension('A')->setWidth(20);
+
 
 
 
