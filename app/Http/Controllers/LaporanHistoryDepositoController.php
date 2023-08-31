@@ -168,10 +168,9 @@ class LaporanHistoryDepositoController extends MyController
         //ukuran kolom
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);
-        $sheet->getColumnDimension('C')->setAutoSize(true);
         $sheet->getColumnDimension('D')->setAutoSize(true);
         $sheet->getColumnDimension('E')->setAutoSize(true);
-
+        $sheet->getColumnDimension('C')->setWidth(150);
 
 
 // menambahkan sel Total pada baris terakhir + 1

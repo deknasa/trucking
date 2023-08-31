@@ -257,7 +257,7 @@ class LaporanPembelianStokController extends MyController
         $sheet->getColumnDimension('I')->setAutoSize(true);
         $sheet->getColumnDimension('J')->setAutoSize(true);
         $sheet->getColumnDimension('K')->setAutoSize(true);
-        $sheet->getColumnDimension('L')->setAutoSize(true);
+        $sheet->getColumnDimension('L')->setWidth(150);
 
 
 

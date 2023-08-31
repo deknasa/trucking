@@ -203,7 +203,7 @@ class LaporanTripGandenganDetailController extends MyController
         $sheet->getColumnDimension('F')->setAutoSize(true);
         $sheet->getColumnDimension('G')->setAutoSize(true);
         $sheet->getColumnDimension('H')->setAutoSize(true);
-        $sheet->getColumnDimension('I')->setAutoSize(true);
+        $sheet->getColumnDimension('I')->setWidth(150);
 
 
 

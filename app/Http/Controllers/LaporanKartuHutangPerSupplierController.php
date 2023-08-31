@@ -209,7 +209,7 @@ class LaporanKartuHutangPerSupplierController extends MyController
         $sheet->getColumnDimension('G')->setAutoSize(true);
         $sheet->getColumnDimension('H')->setAutoSize(true);
         $sheet->getColumnDimension('I')->setAutoSize(true);
-
+        $sheet->getColumnDimension('J')->setWidth(150);
 
         $rowKosong = "";
         // menambahkan sel Total pada baris terakhir + 1

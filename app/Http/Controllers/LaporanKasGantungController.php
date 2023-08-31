@@ -158,7 +158,7 @@ class LaporanKasGantungController extends MyController
         //ukuran kolom
         $sheet->getColumnDimension('A')->setWidth(15);
         $sheet->getColumnDimension('B')->setWidth(20);
-        $sheet->getColumnDimension('C')->setWidth(120);
+        $sheet->getColumnDimension('C')->setWidth(150);
         $sheet->getColumnDimension('D')->setWidth(18);
         $sheet->getColumnDimension('E')->setWidth(18);
         $sheet->getColumnDimension('F')->setWidth(18);
