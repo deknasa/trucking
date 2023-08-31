@@ -38,7 +38,7 @@
                         <div class="row form-group">
                             <div class="col-12 col-md-2">
                                 <label class="col-form-label">
-                                    SUPIR <span class="text-danger">*</span>
+                                    SUPIR
                                 </label>
                             </div>
                             <div class="col-12 col-md-10">
@@ -85,6 +85,18 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row form-group">
+                            <div class="col-12 col-md-2">
+                                <label class="col-form-label">
+                                    BANK <span class="text-danger">*</span>
+                                </label>
+                            </div>
+                            <div class="col-12 col-md-10">
+                                <input type="hidden" name="bank_id">
+                                <input type="text" name="bank" class="form-control bank-lookup">
+                            </div>
+                        </div>
+
 
                         <div class="row mt-3">
                             <div class="col-sm-4">
@@ -94,31 +106,56 @@
                                 </a>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div id="tabsModal" class="dejavu" style="font-size:12px">
+                                    <ul>
+                                        <li><a href="#tabsModal-1">Komisi Supir</a></li>
+                                        <li class="deposito"><a href="#tabsModal-2">Deposito</a></li>
+                                        <li class="pinjaman"><a href="#tabsModal-3">Pot. pinjaman</a></li>
+                                    </ul>
+                                    <div id="tabsModal-1">
+                                        <div class="row form-group mb-3">
+                                            <div class="col-12 col-md-2">
+                                                <label class="col-form-label">
+                                                    NO BUKTI KAS/BANK KELUAR </label>
+                                            </div>
+                                            <div class="col-12 col-md-4">
+                                                <input type="text" name="pengeluaran_nobukti" id="pengeluaran_nobukti" class="form-control" readonly>
+                                            </div>
+                                        </div>
+                                        <table id="modalgrid"></table>
+                                    </div>
 
-                        <div class="border p-3 mt-3 mb-3">
-                            <h6>Posting Pengeluaran</h6>
+                                    <div id="tabsModal-2">
+                                        <div class="row form-group mb-3">
+                                            <div class="col-12 col-md-2">
+                                                <label class="col-form-label">
+                                                    NO BUKTI KAS/BANK MASUK </label>
+                                            </div>
+                                            <div class="col-12 col-md-4">
+                                                <input type="text" name="penerimaan_deposito" class="form-control" readonly>
+                                            </div>
+                                        </div>
+                                        <table id="tableDeposito"></table>
+                                    </div>
 
-                            <div class="row form-group">
-                                <div class="col-12 col-md-2">
-                                    <label class="col-form-label">
-                                        POSTING </label>
-                                </div>
-                                <div class="col-12 col-md-4">
-                                    <input type="hidden" name="bank_id">
-                                    <input type="text" name="bank" class="form-control bank-lookup">
+                                    <div id="tabsModal-3">
+                                        <div class="row form-group mb-3">
+                                            <div class="col-12 col-md-2">
+                                                <label class="col-form-label">
+                                                    NO BUKTI KAS/BANK MASUK </label>
+                                            </div>
+                                            <div class="col-12 col-md-4">
+                                                <input type="text" name="penerimaan_pinjaman" class="form-control" readonly>
+                                            </div>
+                                        </div>
+                                        <table id="tablePinjaman"></table>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="row form-group">
-                                <div class="col-12 col-md-2">
-                                    <label class="col-form-label">
-                                        NO BUKTI KAS/BANK KELUAR </label>
-                                </div>
-                                <div class="col-12 col-md-4">
-                                    <input type="text" name="pengeluaran_nobukti" id="pengeluaran_nobukti" class="form-control" readonly>
-                                </div>
-                            </div>
+
                         </div>
-                        <table id="modalgrid"></table>
                     </div>
                     <div class="modal-footer justify-content-start">
                         <button id="btnSubmit" class="btn btn-primary">
@@ -148,7 +185,7 @@
     let selectedGajiKenek = [];
     let selectedDari = [];
     let selectedSampai = [];
-    let selectedSupir = [];
+    let selectedSupirId = [];
     let selectedKeterangan = [];
 
     let sortnameTrip = 'nobukti_trip';
@@ -173,7 +210,10 @@
             let tglsampai = $('#crudForm').find(`[name=tglsampai]`).val()
             let supir_id = $('#crudForm').find(`[name=supir_id]`).val()
             let id = $('#crudForm').find(`[name=id]`).val()
-            if ((tgldari != '') && (tglsampai != '') && (supir_id != '')) {
+            if (supir_id == '') {
+                supir_id = 0;
+            }
+            if ((tgldari != '') && (tglsampai != '')) {
                 $('#gsTrip').prop("checked", false)
                 getTrip(tgldari, tglsampai, supir_id, id)
                     .then((response) => {
@@ -204,6 +244,23 @@
                             showDialog(error.responseJSON)
                         }
                     })
+                if (isDeposito == 'YA') {
+
+                    getDataPinjaman().then((response) => {
+                        setTimeout(() => {
+
+                            $("#tablePinjaman")
+                                .jqGrid("setGridParam", {
+                                    datatype: "local",
+                                    data: response.data,
+                                    originalData: response.data,
+                                    rowNum: response.data.length,
+                                    selectedRowIds: []
+                                })
+                                .trigger("reloadGrid");
+                        }, 100);
+                    });
+                }
             }
 
         })
@@ -302,6 +359,70 @@
                     name: 'gajikenek[]',
                     value: parseFloat(item.replaceAll(',', ''))
                 })
+            });
+            $.each(selectedSupirId, function(index, item) {
+                data.push({
+                    name: 'supirtrip[]',
+                    value: parseFloat(item.replaceAll(',', ''))
+                })
+            });
+
+
+            // DEPOSITO
+
+            let selectedRowsDepo = $(`#tableDeposito`).getGridParam("selectedRowIds");
+            $.each(selectedRowsDepo, function(index, value) {
+                dataDepo = $(`#tableDeposito`).jqGrid("getLocalRow", value);
+                let selectedNominal = (dataDepo.nominal == undefined) ? 0 : dataDepo.nominal;
+                if (selectedNominal != 0) {
+
+                    data.push({
+                        name: 'nominal_depo[]',
+                        value: (isNaN(selectedNominal)) ? parseFloat(selectedNominal.replaceAll(',', '')) : selectedNominal
+                    })
+                    data.push({
+                        name: 'supir_depo[]',
+                        value: dataDepo.id
+                    })
+                    data.push({
+                        name: 'keterangan_depo[]',
+                        value: 'DEPOSITO ' + dataDepo.supirdeposito
+                    })
+                }
+            })
+
+            // potongan pinjaman
+            let selectedRowsPinjaman = $("#tablePinjaman").getGridParam("selectedRowIds");
+            $.each(selectedRowsPinjaman, function(index, value) {
+                dataPinjaman = $("#tablePinjaman").jqGrid("getLocalRow", value);
+                let selectedSisaPP = dataPinjaman.pinj_sisa
+                let selectedNominalPP = (dataPinjaman.pinj_nominal == undefined) ? 0 : dataPinjaman.pinj_nominal;
+                if (selectedNominalPP != 0) {
+                    data.push({
+                        name: 'pinj_nominal[]',
+                        value: (isNaN(selectedNominalPP)) ? parseFloat(selectedNominalPP.replaceAll(',', '')) : selectedNominalPP
+                    })
+                    data.push({
+                        name: 'pinj_sisa[]',
+                        value: selectedSisaPP
+                    })
+                    data.push({
+                        name: 'pinj_keterangan[]',
+                        value: dataPinjaman.pinj_keterangan
+                    })
+                    data.push({
+                        name: 'pinj_supir[]',
+                        value: dataPinjaman.pinj_supirid
+                    })
+                    data.push({
+                        name: 'pinj_nobukti[]',
+                        value: dataPinjaman.pinj_nobukti
+                    })
+                    data.push({
+                        name: 'pinj_id[]',
+                        value: dataPinjaman.pinj_id
+                    })
+                }
             });
 
             data.push({
@@ -423,7 +544,7 @@
 
     $('#crudModal').on('shown.bs.modal', () => {
         let form = $('#crudForm')
-
+        $("#tabsModal").tabs()
         setFormBindKeys(form)
 
         activeGrid = null
@@ -455,6 +576,34 @@
         $('.invalid-feedback').remove()
 
         loadModalGrid()
+        if (isDeposito == 'YA') {
+
+            loadDepositoGrid()
+            loadPinjamanGrid()
+
+            getDataDeposito().then((response) => {
+                let selectedIdDepo = []
+
+                $.each(response.data, (index, value) => {
+                    selectedIdDepo.push(value.id)
+                })
+                $('#tableDeposito').jqGrid("clearGridData");
+                setTimeout(() => {
+
+                    $("#tableDeposito")
+                        .jqGrid("setGridParam", {
+                            datatype: "local",
+                            data: response.data,
+                            originalData: response.data,
+                            rowNum: response.data.length,
+                            selectedRowIds: selectedIdDepo
+                        })
+                        .trigger("reloadGrid");
+                }, 100);
+                initAutoNumeric($('.footrow').find(`td[aria-describedby="tableDeposito_nominal"]`).text(0))
+
+            });
+        }
         Promise
             .all([
                 showDefault(form),
@@ -676,16 +825,21 @@
                             selectedGajiKenek.push(detail.gajikenek)
                             selectedDari.push(detail.dari_id)
                             selectedSampai.push(detail.sampai_id)
+                            selectedSupirId.push(detail.supir_id)
                         }
                     })
 
+                    supir_id = $('#crudForm').find(`[name=supir_id]`).val()
+                    if (supir_id == '') {
+                        supir_id = 0;
+                    }
                     setTimeout(() => {
                         $('#modalgrid').jqGrid('setGridParam', {
                             url: `${apiUrl}pendapatansupirheader/gettrip`,
                             postData: {
                                 tglsampai: $('#crudForm').find(`[name=tglsampai]`).val(),
                                 tgldari: $('#crudForm').find(`[name=tgldari]`).val(),
-                                supir_id: $('#crudForm').find(`[name=supir_id]`).val(),
+                                supir_id: supir_id,
                                 sortIndex: 'nobukti_trip',
                                 aksi: $('#crudForm').data('action'),
                                 idPendapatan: $('#crudForm').find(`[name=id]`).val()
@@ -694,6 +848,76 @@
                         }).trigger('reloadGrid');
 
                     }, 50);
+
+                    if (isDeposito == 'YA') {
+
+                        if (response.pjp != null) {
+                            form.find('[name=penerimaan_pinjaman]').val(response.pjp.penerimaan_nobukti)
+                        }
+                        if (response.dpo != null) {
+                            form.find('[name=penerimaan_deposito]').val(response.dpo.penerimaan_nobukti)
+                        }
+
+
+                        // DEPOSITO
+                        loadDepositoGrid()
+                        getDataDeposito().then((response) => {
+
+                            let selectedIdDepo = []
+                            let totalBiaya = 0
+
+                            $.each(response.data, (index, value) => {
+                                selectedIdDepo.push(value.id)
+                                totalBiaya += parseFloat(value.nominal)
+                            })
+                            $('#tableDeposito').jqGrid("clearGridData");
+                            setTimeout(() => {
+
+                                $("#tableDeposito")
+                                    .jqGrid("setGridParam", {
+                                        datatype: "local",
+                                        data: response.data,
+                                        originalData: response.data,
+                                        rowNum: response.data.length,
+                                        selectedRowIds: selectedIdDepo
+                                    })
+                                    .trigger("reloadGrid");
+                                initAutoNumeric($('#tableDeposito tbody tr').find(`td[aria-describedby="tableDeposito_nominal"]`))
+                            }, 100);
+                            initAutoNumeric($('.footrow').find(`td[aria-describedby="tableDeposito_nominal"]`).text(totalBiaya))
+
+                        });
+
+                        //PJP
+                        loadPinjamanGrid()
+                        getDataPinjaman().then((response) => {
+                            let selectedIdPinj = []
+                            let totalPinj = 0
+
+                            $.each(response.data, (index, value) => {
+                                if (value.penerimaantruckingheader_id != null) {
+                                    selectedIdPinj.push(value.pinj_id)
+                                    totalPinj += parseFloat(value.pinj_nominal)
+
+                                }
+                            })
+                            setTimeout(() => {
+
+                                $("#tablePinjaman")
+                                    .jqGrid("setGridParam", {
+                                        datatype: "local",
+                                        data: response.data,
+                                        originalData: response.data,
+                                        rowNum: response.data.length,
+                                        selectedRowIds: selectedIdPinj
+                                    })
+                                    .trigger("reloadGrid");
+                                initAutoNumeric($('#tablePinjaman tbody tr').find(`td[aria-describedby="tablePinjaman_pinj_nominal"]`))
+                            }, 100);
+                            initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePinjaman_pinj_nominal"]`).text(totalPinj))
+                        });
+
+                    }
                     if (form.data('action') === 'delete') {
                         form.find('[name]').addClass('disabled')
                         initDisabled()
@@ -761,6 +985,16 @@
                         name: 'id',
                         width: '50px',
                         hidden: true
+                    },
+                    {
+                        label: 'SUPIR',
+                        name: 'namasupir',
+                    },
+                    {
+                        label: 'SUPIRID',
+                        name: 'supir_id',
+                        hidden: true,
+                        search: false
                     },
                     {
                         label: 'NO BUKTI TRIP',
@@ -940,6 +1174,7 @@
                     selectedGajiKenek = [];
                     selectedDari = [];
                     selectedSampai = [];
+                    selectedSupirId = [];
 
                     $.each(response.data, (index, detail) => {
                         if (detail.pendapatansupir_id != 0) {
@@ -951,6 +1186,7 @@
                             selectedGajiKenek.push(detail.gajikenek)
                             selectedDari.push(detail.dari_id)
                             selectedSampai.push(detail.sampai_id)
+                            selectedSupirId.push(detail.supir_id)
                         }
                     })
                     resolve(response)
@@ -982,10 +1218,15 @@
         selectedDari = [];
         selectedSampai = [];
         selectedGajiKenek = [];
+        selectedSupirId = [];
         $('#modalgrid').trigger('reloadGrid')
     }
 
     function selectAllRowsTrip() {
+        supirId = $('#crudForm').find(`[name=supir_id]`).val()
+        if (supirId == '') {
+            supirId = 0;
+        }
         $.ajax({
             url: `${apiUrl}pendapatansupirheader/gettrip`,
             method: 'GET',
@@ -994,7 +1235,7 @@
                 limit: 0,
                 tglsampai: $('#crudForm').find(`[name=tglsampai]`).val(),
                 tgldari: $('#crudForm').find(`[name=tgldari]`).val(),
-                supir_id: $('#crudForm').find(`[name=supir_id]`).val(),
+                supir_id: supirId,
                 sortIndex: 'nobukti_trip',
                 aksi: $('#crudForm').data('action'),
                 idPendapatan: $('#crudForm').find(`[name=id]`).val()
@@ -1010,6 +1251,7 @@
                 selectedDari = [];
                 selectedSampai = [];
                 selectedGajiKenek = [];
+                selectedSupirId = [];
 
                 selectedRowsTrip = response.data.map((data) => data.id)
                 selectedTrip = response.data.map((data) => data.nobukti_trip)
@@ -1018,13 +1260,14 @@
                 selectedGajiKenek = response.data.map((data) => data.gajikenek)
                 selectedDari = response.data.map((data) => data.dari_id)
                 selectedSampai = response.data.map((data) => data.sampai_id)
+                selectedSupirId = response.data.map((data) => data.supir_id)
 
                 $('#modalgrid').jqGrid('setGridParam', {
                     url: `${apiUrl}pendapatansupirheader/gettrip`,
                     postData: {
                         tglsampai: $('#crudForm').find(`[name=tglsampai]`).val(),
                         tgldari: $('#crudForm').find(`[name=tgldari]`).val(),
-                        supir_id: $('#crudForm').find(`[name=supir_id]`).val(),
+                        supir_id: supirId,
                         id: $('#crudForm').find(`[name=id]`).val(),
                         sortIndex: 'nobukti_trip',
                         aksi: $('#crudForm').data('action'),
@@ -1047,6 +1290,9 @@
             selectedGajiKenek.push($(element).parents('tr').find(`td[aria-describedby="modalgrid_gajikenek"]`).text())
             selectedDari.push($(element).parents('tr').find(`td[aria-describedby="modalgrid_dari_id"]`).text())
             selectedSampai.push($(element).parents('tr').find(`td[aria-describedby="modalgrid_sampai_id"]`).text())
+            selectedSupirId.push($(element).parents('tr').find(`td[aria-describedby="modalgrid_supir_id"]`).text())
+            
+            $(element).parents('tr').addClass('bg-light-blue')
         } else {
             $(element).parents('tr').removeClass('bg-light-blue')
             for (var i = 0; i < selectedRowsTrip.length; i++) {
@@ -1058,91 +1304,516 @@
                     selectedGajiKenek.splice(i, 1);
                     selectedDari.splice(i, 1);
                     selectedSampai.splice(i, 1);
+                    selectedSupirId.splice(i, 1);
                 }
             }
         }
     }
 
-    function addRow() {
-        let detailRow = $(`
-      <tr>
+    function loadDepositoGrid() {
+        $("#tableDeposito")
+            .jqGrid({
+                datatype: 'local',
+                styleUI: 'Bootstrap4',
+                iconSet: 'fontAwesome',
+                colModel: [{
+                        label: "id",
+                        name: "id",
+                        hidden: true,
+                        search: false,
+                    },
+                    {
+                        label: "SUPIR",
+                        name: "supirdeposito",
+                        sortable: true,
+                        width: '250px'
+                    },
+                    {
+                        label: "NOMINAL",
+                        name: "nominal",
+                        align: "right",
+                        editable: true,
+                        editoptions: {
+                            dataInit: function(element, id) {
+                                initAutoNumeric($('#crudForm').find(`[id="${id.id}"]`))
+                            },
+                            dataEvents: [{
+                                type: "keyup",
+                                fn: function(event, rowObject) {
+                                    let originalGridData = $("#tableDeposito")
+                                        .jqGrid("getGridParam", "originalData")
+                                        .find((row) => row.id == rowObject.rowId);
 
-        <td></td>
-        <td>
-                        <input type="hidden" name="dari_id[]">
-                        <input type="text" name="dari[]" data-current-value="${detail.dari}" >
-                    </td>
-                    <td>
-                        <input type="hidden" name="sampai_id[]">
-                        <input type="text" name="sampai[]" data-current-value="${detail.sampai}" >
-                    </td>
-                    <td>
-                        <input type="text" name="nobukti_ric[]" class="form-control">   
-                    </td>
-                    <td>
-                        <input type="text" name="nobukti_trip[]" class="form-control">   
-                    </td>
-                    <td>
-                        <input type="text" name="nominal_detail[]"  style="text-align:right" class="form-control autonumeric nominal" > 
-                    </td>
-                    <td>
-                        <input type="text" name="keterangan_detail[]" class="form-control">   
-                    </td>
-                    <td>
-                        <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
-                    </td>
-        <td>
-            <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
-        </td>
-      </tr>
-    `)
+                                    let localRow = $("#tableDeposito").jqGrid(
+                                        "getLocalRow",
+                                        rowObject.rowId
+                                    );
+                                    let totalSisa
+                                    localRow.nominal = event.target.value;
 
-        $('#detailList tbody').append(detailRow)
+                                    let nominal = AutoNumeric.getNumber($('#crudForm').find(`[id="${rowObject.id}"]`)[0])
 
+                                    if (nominal < 0) {
+                                        showDialog('NOMINAL tidak boleh minus')
+                                        $("#tableDeposito").jqGrid(
+                                            "setCell",
+                                            rowObject.rowId,
+                                            "nominal",
+                                            0
+                                        );
+                                        nominal = AutoNumeric.getNumber($('#crudForm').find(`[id="${rowObject.id}"]`)[0])
+                                    }
+                                    nominalDetails = $(`#tableDeposito tr:not(#${rowObject.rowId})`).find(`td[aria-describedby="tableDeposito_nominal"]`)
+                                    ttlBayar = 0
+                                    $.each(nominalDetails, (index, nominalDetail) => {
+                                        ttlBayarDetail = parseFloat($(nominalDetail).attr('title').replaceAll(',', ''))
+                                        ttlBayars = (isNaN(ttlBayarDetail)) ? 0 : ttlBayarDetail;
+                                        ttlBayar += ttlBayars
+                                    });
+                                    ttlBayar += nominal
+                                    initAutoNumeric($('.footrow').find(`td[aria-describedby="tableDeposito_nominal"]`).text(ttlBayar))
+                                },
+                            }, ],
+                        },
+                        sortable: false,
+                        sorttype: "int",
+                    },
+                ],
+                autowidth: true,
+                shrinkToFit: false,
+                height: 400,
+                rownumbers: true,
+                rownumWidth: 45,
+                footerrow: true,
+                userDataOnFooter: true,
+                toolbar: [true, "top"],
+                pgbuttons: false,
+                pginput: false,
+                cellEdit: true,
+                cellsubmit: "clientArray",
+                editableColumns: ["nominal"],
+                selectedRowIds: [],
+                afterRestoreCell: function(rowId, value, indexRow, indexColumn) {
+                    let originalGridData = $("#tableDeposito")
+                        .jqGrid("getGridParam", "originalData")
+                        .find((row) => row.id == rowId);
 
-        $('.kota-lookup').last().lookup({
-            title: 'Kota Lookup',
-            fileName: 'dari',
-            beforeProcess: function(test) {
-                this.postData = {
-                    Aktif: 'AKTIF',
-                }
-            },
+                    let localRow = $("#tableDeposito").jqGrid("getLocalRow", rowId);
+                },
+                validationCell: function(cellobject, errormsg, iRow, iCol) {
+                    console.log(cellobject);
+                    console.log(errormsg);
+                    console.log(iRow);
+                    console.log(iCol);
+                },
+                loadComplete: function() {
+                    setHighlight($(this))
+                },
+            })
+            .jqGrid("setLabel", "rn", "No.")
+            .jqGrid("navGrid", "#tablePager", {
+                add: false,
+                edit: false,
+                del: false,
+                refresh: false,
+                search: false,
+            })
+            .jqGrid("filterToolbar", {
+                searchOnEnter: false,
+            })
+            .jqGrid("excelLikeGrid", {
+                beforeDeleteCell: function(rowId, iRow, iCol, event) {
+                    let localRow = $("#tableDeposito").jqGrid("getLocalRow", rowId);
 
+                    $("#tableDeposito").jqGrid(
+                        "setCell",
+                        rowId,
+                        "sisa",
+                        parseInt(localRow.sisa) + parseInt(localRow.nominal)
+                    );
 
-        })
+                    return true;
+                },
+            });
+        /* Append clear filter button */
+        loadClearFilter($('#tableDeposito'))
 
-        $('.kota-lookup').last().lookup({
-            title: 'Kota Lookup',
-            fileName: 'sampai',
-            beforeProcess: function(test) {
-                this.postData = {
-                    Aktif: 'AKTIF',
-                }
-            },
-
-
-        })
-
-        initAutoNumeric(detailRow.find('.autonumeric'))
-
-        initDatepicker()
-        setRowNumbers()
     }
 
-    function deleteRow(row) {
-        row.remove()
-
-        setRowNumbers()
-        setTotal()
+    function getDataDeposito() {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: `${apiUrl}pendapatansupirheader/getDataDeposito`,
+                dataType: "JSON",
+                data: {
+                    nobukti: $('#crudForm').find("[name=nobukti]").val(),
+                },
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                success: (response) => {
+                    resolve(response);
+                },
+                error: error => {
+                    reject(error)
+                }
+            });
+        });
     }
 
-    function setRowNumbers() {
-        let elements = $('#detailList tbody tr td:nth-child(1)')
+    function loadPinjamanGrid() {
+        $("#tablePinjaman")
+            .jqGrid({
+                datatype: 'local',
+                styleUI: 'Bootstrap4',
+                iconSet: 'fontAwesome',
+                colModel: [{
+                        label: "",
+                        name: "",
+                        width: 30,
+                        formatter: 'checkbox',
+                        search: false,
+                        editable: false,
+                        formatter: function(value, rowOptions, rowData) {
+                            let disabled = '';
+                            if ($('#crudForm').data('action') == 'delete') {
+                                disabled = 'disabled'
+                            }
+                            return `<input type="checkbox" value="${rowData.pinj_id}" ${disabled} onChange="checkboxPotPribadiHandler(this, ${rowData.pinj_id})">`;
+                        },
+                    },
+                    {
+                        label: "id",
+                        name: "pinj_id",
+                        hidden: true,
+                        search: false,
+                    },
+                    {
+                        label: "SUPIR",
+                        name: "pinj_supir",
+                        sortable: true,
+                    },
+                    {
+                        label: "SUPIR_ID",
+                        name: "pinj_supirid",
+                        hidden: true,
+                        search: false
+                    },
+                    {
+                        label: "no bukti pinjaman",
+                        name: "pinj_nobukti",
+                        sortable: true,
+                    },
+                    {
+                        label: "tgl bukti pinjaman",
+                        name: "pinj_tglbukti",
+                        sortable: true,
+                        formatter: "date",
+                        formatoptions: {
+                            srcformat: "ISO8601Long",
+                            newformat: "d-m-Y"
+                        }
+                    },
+                    {
+                        label: "SISA",
+                        name: "pinj_sisa",
+                        sortable: true,
+                        align: "right",
+                        formatter: currencyFormat,
+                    },
+                    {
+                        label: "NOMINAL",
+                        name: "pinj_nominal",
+                        align: "right",
+                        editable: true,
+                        editoptions: {
+                            dataInit: function(element, id) {
+                                initAutoNumeric($('#crudForm').find(`[id="${id.id}"]`))
+                            },
+                            dataEvents: [{
+                                type: "keyup",
+                                fn: function(event, rowObject) {
+                                    let originalGridDataPotPribadi = $("#tablePinjaman")
+                                        .jqGrid("getGridParam", "originalData")
+                                        .find((row) => row.pinj_id == rowObject.rowId);
 
-        elements.each((index, element) => {
-            $(element).text(index + 1)
-        })
+                                    let localRow = $("#tablePinjaman").jqGrid(
+                                        "getLocalRow",
+                                        rowObject.rowId
+                                    );
+                                    let totalSisaPinjPribadi
+                                    localRow.pinj_nominal = event.target.value;
+                                    let pinj_nominal = AutoNumeric.getNumber($('#crudForm').find(`[id="${rowObject.id}"]`)[0])
+                                    if ($('#crudForm').data('action') == 'edit') {
+                                        totalSisaPinjPribadi = (parseFloat(originalGridDataPotPribadi.pinj_sisa) + parseFloat(originalGridDataPotPribadi.pinj_nominal)) - pinj_nominal
+                                    } else {
+                                        totalSisaPinjPribadi = originalGridDataPotPribadi.pinj_sisa - pinj_nominal
+                                    }
+
+                                    $("#tablePinjaman").jqGrid(
+                                        "setCell",
+                                        rowObject.rowId,
+                                        "pinj_sisa",
+                                        totalSisaPinjPribadi
+                                    );
+
+                                    if (totalSisaPinjPribadi < 0) {
+                                        showDialog('sisa tidak boleh minus')
+                                        $("#tablePinjaman").jqGrid(
+                                            "setCell",
+                                            rowObject.rowId,
+                                            "pinj_nominal",
+                                            0
+                                        );
+                                        if (originalGridDataPotPribadi.pinj_sisa == 0) {
+                                            $("#tablePinjaman").jqGrid("setCell", rowObject.rowId, "pinj_sisa", (parseFloat(originalGridDataPotPribadi.pinj_sisa) + parseFloat(originalGridDataPotPribadi.pinj_nominal)));
+                                        } else {
+                                            $("#tablePinjaman").jqGrid("setCell", rowObject.rowId, "pinj_sisa", originalGridDataPotPribadi.pinj_sisa);
+                                        }
+                                    }
+
+                                    pinj_nominalDetails = $(`#tablePinjaman tr:not(#${rowObject.rowId})`).find(`td[aria-describedby="tablePinjaman_pinj_nominal"]`)
+                                    ttlpinj_nominal = 0
+                                    $.each(pinj_nominalDetails, (index, pinj_nominalDetail) => {
+                                        ttlpinj_nominalDetail = parseFloat($(pinj_nominalDetail).attr('title').replaceAll(',', ''))
+                                        ttlpinj_nominals = (isNaN(ttlpinj_nominalDetail)) ? 0 : ttlpinj_nominalDetail;
+                                        ttlpinj_nominal += ttlpinj_nominals
+                                    });
+                                    ttlpinj_nominal += pinj_nominal
+                                    initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePinjaman_pinj_nominal"]`).text(ttlpinj_nominal))
+
+                                    initAutoNumeric($('#detailLainnya').find(`[name="potonganpinjaman"]`).val(ttlpinj_nominal))
+
+                                    setTotalSisaPotPribadi()
+                                },
+                            }, ],
+                        },
+                        sortable: false,
+                        sorttype: "int",
+                    },
+                    {
+                        label: "KETERANGAN",
+                        name: "pinj_keterangan",
+                        sortable: false,
+                        editable: false,
+                        width: 500
+                    },
+                ],
+                autowidth: true,
+                shrinkToFit: false,
+                height: 400,
+                rownumbers: true,
+                rownumWidth: 45,
+                footerrow: true,
+                userDataOnFooter: true,
+                toolbar: [true, "top"],
+                pgbuttons: false,
+                pginput: false,
+                cellEdit: true,
+                cellsubmit: "clientArray",
+                editableColumns: ["pinj_nominal"],
+                selectedRowIds: [],
+                afterRestoreCell: function(rowId, value, indexRow, indexColumn) {
+                    let originalGridDataPotPribadi = $("#tablePinjaman")
+                        .jqGrid("getGridParam", "originalData")
+                        .find((row) => row.pinj_id == rowId);
+
+                    let getBayarPP = $("#tablePinjaman").jqGrid("getCell", rowId, "pinj_nominal")
+                    let pinj_nominal = (getBayarPP != '') ? parseFloat(getBayarPP.replaceAll(',', '')) : 0
+
+                    potPribadiSisa = 0
+                    if ($('#crudForm').data('action') == 'edit') {
+                        potPribadiSisa = (parseFloat(originalGridDataPotPribadi.pinj_sisa) + parseFloat(originalGridDataPotPribadi.pinj_nominal)) - pinj_nominal
+                    } else {
+                        potPribadiSisa = originalGridDataPotPribadi.pinj_sisa
+                    }
+                    console.log(indexColumn)
+                    if (indexColumn == 5) {
+
+                        $("#tablePinjaman").jqGrid(
+                            "setCell",
+                            rowId,
+                            "pinj_sisa",
+                            potPribadiSisa
+                            // sisa - nominal - potongan
+                        );
+                    }
+                    // setTotalNominal()
+                    setTotalSisaPotPribadi()
+                },
+                isCellEditable: function(cellname, iRow, iCol) {
+                    let rowData = $(this).jqGrid("getRowData")[iRow - 1];
+
+                    return $(this)
+                        .find(`tr input[value=${rowData.pinj_id}]`)
+                        .is(":checked");
+                },
+                validationCell: function(cellobject, errormsg, iRow, iCol) {
+                    console.log(cellobject);
+                    console.log(errormsg);
+                    console.log(iRow);
+                    console.log(iCol);
+                },
+                loadComplete: function() {
+                    setTimeout(() => {
+                        $(this)
+                            .getGridParam("selectedRowIds")
+                            .forEach((selectedRowId) => {
+                                $(this)
+                                    .find(`tr input[value=${selectedRowId}]`)
+                                    .prop("checked", true);
+                                initAutoNumeric($(this).find(`td[aria-describedby="tablePinjaman_pinj_nominal"]`))
+                            });
+                    }, 100);
+                    // setTotalNominal()
+                    setTotalSisaPotPribadi()
+                    setHighlight($(this))
+                },
+            })
+            .jqGrid("setLabel", "rn", "No.")
+            .jqGrid("navGrid", "#tablePager", {
+                add: false,
+                edit: false,
+                del: false,
+                refresh: false,
+                search: false,
+            })
+            .jqGrid("filterToolbar", {
+                searchOnEnter: false,
+            })
+            .jqGrid("excelLikeGrid", {
+                beforeDeleteCell: function(rowId, iRow, iCol, event) {
+                    let localRow = $("#tablePinjaman").jqGrid("getLocalRow", rowId);
+
+                    $("#tablePinjaman").jqGrid(
+                        "setCell",
+                        rowId,
+                        "sisa",
+                        parseInt(localRow.sisa) + parseInt(localRow.nominal)
+                    );
+
+                    return true;
+                },
+            });
+        /* Append clear filter button */
+        loadClearFilter($('#tablePinjaman'))
+
+        /* Append global search */
+        // loadGlobalSearch($('#tablePinjaman'))
+    }
+
+    function getDataPinjaman() {
+        aksi = $('#crudForm').data('action')
+        urlPotPribadi = `${apiUrl}pendapatansupirheader/getPinjaman`
+        let supirId = $('#crudForm').find('[name=supir_id]').val();
+        if (supirId == '') {
+            supirId = 0;
+        }
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: urlPotPribadi,
+                dataType: "JSON",
+                data: {
+                    nobukti: $('#crudForm').find('[name=nobukti]').val(),
+                    tglbukti: $('#crudForm').find('[name=tglbukti]').val(),
+                    supir_id: supirId,
+                },
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                success: (response) => {
+                    resolve(response);
+                },
+                error: error => {
+                    reject(error)
+                }
+            });
+        });
+    }
+
+    function checkboxPotPribadiHandler(element, rowId) {
+
+        let isChecked = $(element).is(":checked");
+        let editableColumnsPotPribadi = $("#tablePinjaman").getGridParam("editableColumns");
+        let selectedRowIdsPotPribadi = $("#tablePinjaman").getGridParam("selectedRowIds");
+        let originalGridDataPotPribadi = $("#tablePinjaman")
+            .jqGrid("getGridParam", "originalData")
+            .find((row) => row.pinj_id == rowId);
+
+        editableColumnsPotPribadi.forEach((editableColumn) => {
+
+            if (!isChecked) {
+                for (var i = 0; i < selectedRowIdsPotPribadi.length; i++) {
+                    if (selectedRowIdsPotPribadi[i] == rowId) {
+                        selectedRowIdsPotPribadi.splice(i, 1);
+                    }
+                }
+                sisaPribadi = 0
+                if ($('#crudForm').data('action') == 'edit') {
+                    sisaPribadi = (parseFloat(originalGridDataPotPribadi.pinj_sisa) + parseFloat(originalGridDataPotPribadi.pinj_nominal))
+                } else {
+                    sisaPribadi = originalGridDataPotPribadi.pinj_sisa
+                }
+
+                $("#tablePinjaman").jqGrid(
+                    "setCell",
+                    rowId,
+                    "pinj_sisa",
+                    sisaPribadi
+                );
+
+                $("#tablePinjaman").jqGrid("setCell", rowId, "pinj_nominal", 0);
+                setTotalNominalPP()
+                setTotalSisaPotPribadi()
+            } else {
+                selectedRowIdsPotPribadi.push(rowId);
+
+                let localRow = $("#tablePinjaman").jqGrid("getLocalRow", rowId);
+
+                if ($('#crudForm').data('action') == 'edit') {
+                    // if (originalGridDataPotPribadi.sisa == 0) {
+
+                    //   let getpinj_nominal = $("#tablePinjaman").jqGrid("getCell", rowId, "pinj_nominal")
+                    //   localRow.pinj_nominal = (getpinj_nominal != '') ? parseFloat(getpinj_nominal.replaceAll(',', '')) : 0
+                    // } else {
+                    //   localRow.pinj_nominal = originalGridDataPotPribadi.sisa
+                    // }
+                    localRow.pinj_nominal = (parseFloat(originalGridDataPotPribadi.pinj_sisa) + parseFloat(originalGridDataPotPribadi.pinj_nominal))
+                }
+
+                initAutoNumeric($(`#tablePinjaman tr#${rowId}`).find(`td[aria-describedby="tablePinjaman_pinj_nominal"]`))
+                setTotalNominalPP()
+                setTotalSisaPotPribadi()
+            }
+        });
+
+        $("#tablePinjaman").jqGrid("setGridParam", {
+            selectedRowIds: selectedRowIdsPotPribadi,
+        });
+
+    }
+
+    function setTotalSisaPotPribadi() {
+        let pinj_sisaDetails = $(`#tablePinjaman`).find(`td[aria-describedby="tablePinjaman_pinj_sisa"]`)
+        let pinj_sisa = 0
+        $.each(pinj_sisaDetails, (index, pinj_sisaDetail) => {
+            pinj_sisadetail = parseFloat($(pinj_sisaDetail).text().replaceAll(',', ''))
+            pinj_sisas = (isNaN(pinj_sisadetail)) ? 0 : pinj_sisadetail;
+            pinj_sisa += pinj_sisas
+        });
+        initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePinjaman_pinj_sisa"]`).text(pinj_sisa))
+    }
+
+    function setTotalNominalPP() {
+        let pinj_nominalDetails = $(`#tablePinjaman`).find(`td[aria-describedby="tablePinjaman_pinj_nominal"]`)
+        let pinj_nominal = 0
+        $.each(pinj_nominalDetails, (index, pinj_nominalDetail) => {
+            pinj_nominaldetail = parseFloat($(pinj_nominalDetail).text().replaceAll(',', ''))
+            pinj_nominals = (isNaN(pinj_nominaldetail)) ? 0 : pinj_nominaldetail;
+            pinj_nominal += pinj_nominals
+        });
+        initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePinjaman_pinj_nominal"]`).text(pinj_nominal))
+        initAutoNumeric($('#detailLainnya').find(`[name="potonganpinjaman"]`).val(pinj_nominal))
     }
 
     function approve() {
