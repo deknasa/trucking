@@ -76,6 +76,7 @@
   let modalBody = $('#crudModal').find('.modal-body').html()
 
   $(document).ready(function() {
+    console.log(info);
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
 
@@ -93,6 +94,10 @@
       data.push({
         name: 'sortOrder',
         value: $('#jqGrid').getGridParam().sortorder
+      })
+      data.push({
+        name: 'info',
+        value: info
       })
       data.push({
         name: 'filters',

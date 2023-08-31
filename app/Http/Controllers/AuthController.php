@@ -149,7 +149,7 @@ class AuthController extends Controller
             // dd($tokenEmkl->getBody()->getContents());
 
             session(['access_token' => $token['access_token']]);
-            session(['info_loc' => $token['info']]);
+            session(['info' => $token['info']]);
             session(['access_token_emkl' => $tokenEmkl['access_token']]);
             session(['menus' => (new Menu())->getMenu()]);
 

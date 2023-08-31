@@ -337,6 +337,7 @@
     let accessTokenMks = `{{ session('access_token_mks') }}`
     let accessTokenSby = `{{ session('access_token_sby') }}`
     let accessTokenBtg = `{{ session('access_token_btg') }}`
+    let info = `{{ session('info') }}`
     let appUrl = `{{ url()->to('/') }}`
     let apiUrl = `{{ config('app.api_url') }}`
     let apiEmklUrl = `{{ config('app.emkl_api_url') }}`
