@@ -39,7 +39,7 @@
                             <div class="row form-group">
                                 <div class="col-12 col-md-2">
                                     <label class="col-form-label">
-                                        BANK DARI <span class="text-danger">*</span>
+                                        KAS/BANK DARI <span class="text-danger">*</span>
                                     </label>
                                 </div>
                                 <div class="col-12 col-md-10">
@@ -50,7 +50,7 @@
                             <div class="row form-group">
                                 <div class="col-12 col-md-2">
                                     <label class="col-form-label">
-                                        BANK KE <span class="text-danger">*</span>
+                                        KAS/BANK KE <span class="text-danger">*</span>
                                     </label>
                                 </div>
                                 <div class="col-12 col-md-10">
