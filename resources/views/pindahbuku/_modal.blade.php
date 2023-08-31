@@ -231,9 +231,15 @@
 
                     $('#crudModal').find('#crudForm').trigger('reset')
                     $('#crudModal').modal('hide')
-
+                    $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
+                    $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
+                    
                     $('#jqGrid').jqGrid('setGridParam', {
-                        page: response.data.page
+                        page: response.data.page,
+                        postData: {
+                            tgldari: dateFormat(response.data.tgldariheader),
+                            tglsampai: dateFormat(response.data.tglsampaiheader)
+                        }
                     }).trigger('reloadGrid');
 
                     if (response.data.grp == 'FORMAT') {
@@ -247,7 +253,7 @@
 
                         setErrorMessages(form, error.responseJSON.errors);
                     } else {
-                        showDialog(error.statusText)
+                        showDialog(error.responseJSON)
                     }
                 },
             }).always(() => {
@@ -285,14 +291,25 @@
         form.data('action', 'add')
         // form.find(`.sometimes`).show()
         $('#crudModalTitle').text('Create Pindah Buku')
-        $('#crudModal').modal('show')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
 
         $('#table_body').html('')
         $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         initAutoNumeric($('#crudForm').find('[name=nominal]'))
-        showDefault(form)
+        Promise
+            .all([
+                showDefault(form)
+            ])
+            .then(() => {
+                $('#crudModal').modal('show')
+            })
+            .catch((error) => {
+                showDialog(error.responseJSON)
+            })
+            .finally(() => {
+                $('.modal-loader').addClass('d-none')
+            })
     }
 
     function editPindahBuku(pindahId) {
@@ -306,12 +323,21 @@
         `)
         form.find(`.sometimes`).hide()
         $('#crudModalTitle').text('Edit Pindah Buku')
-        $('#crudModal').modal('show')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
-
-
-        showPindahBuku(form, pindahId)
+        Promise
+            .all([
+                showPindahBuku(form, pindahId)
+            ])
+            .then(() => {
+                $('#crudModal').modal('show')
+            })
+            .catch((error) => {
+                showDialog(error.responseJSON)
+            })
+            .finally(() => {
+                $('.modal-loader').addClass('d-none')
+            })
     }
 
 
@@ -326,50 +352,64 @@
         `)
         form.find(`.sometimes`).hide()
         $('#crudModalTitle').text('Delete Pindah Buku')
-        $('#crudModal').modal('show')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
 
-        showPindahBuku(form, pindahId)
+        Promise
+            .all([
+                showPindahBuku(form, pindahId)
+            ])
+            .then(() => {
+                $('#crudModal').modal('show')
+            })
+            .catch((error) => {
+                showDialog(error.responseJSON)
+            })
+            .finally(() => {
+                $('.modal-loader').addClass('d-none')
+            })
     }
 
     function showPindahBuku(form, pindahId) {
+        return new Promise((resolve, reject) => {
 
-        form.find(`[name="tglbukti"]`).prop('readonly', true)
-        form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+            $.ajax({
+                url: `${apiUrl}pindahbuku/${pindahId}`,
+                method: 'GET',
+                dataType: 'JSON',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                success: response => {
+                    $.each(response.data, (index, value) => {
+                        let element = form.find(`[name="${index}"]`)
+                        if (element.is('select')) {
+                            element.val(value).trigger('change')
+                        } else {
+                            element.val(value)
+                        }
 
-        $.ajax({
-            url: `${apiUrl}pindahbuku/${pindahId}`,
-            method: 'GET',
-            dataType: 'JSON',
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            },
-            success: response => {
-                $.each(response.data, (index, value) => {
-                    let element = form.find(`[name="${index}"]`)
-                    if (element.is('select')) {
-                        element.val(value).trigger('change')
-                    } else {
-                        element.val(value)
+                    })
+
+                    bankDariId = response.data.bankdari_id
+                    bankKeId = response.data.bankke_id
+                    form.find(`[name="tglbukti"]`).val(dateFormat(response.data.tglbukti))
+                    form.find(`[name="tgljatuhtempo"]`).val(dateFormat(response.data.tgljatuhtempo))
+
+                    form.find(`[name="alatbayar"]`).data('currentValue', response.data.alatbayar)
+                    form.find(`[name="bankdari"]`).data('currentValue', response.data.bankdari)
+                    form.find(`[name="bankke"]`).data('currentValue', response.data.bankke)
+                    initAutoNumeric(form.find(`[name="nominal"]`))
+                    if (form.data('action') === 'delete') {
+                        form.find('[name]').addClass('disabled')
+                        initDisabled()
                     }
-
-                })
-
-                bankDariId = response.data.bankdari_id
-                bankKeId = response.data.bankke_id
-                form.find(`[name="tglbukti"]`).val(dateFormat(response.data.tglbukti))
-                form.find(`[name="tgljatuhtempo"]`).val(dateFormat(response.data.tgljatuhtempo))
-
-                form.find(`[name="alatbayar"]`).data('currentValue', response.data.alatbayar)
-                form.find(`[name="bankdari"]`).data('currentValue', response.data.bankdari)
-                form.find(`[name="bankke"]`).data('currentValue', response.data.bankke)
-                initAutoNumeric(form.find(`[name="nominal"]`))
-                if (form.data('action') === 'delete') {
-                    form.find('[name]').addClass('disabled')
-                    initDisabled()
+                    resolve()
+                },
+                error: error => {
+                    reject(error)
                 }
-            }
+            })
         })
     }
 
@@ -436,7 +476,7 @@
                 }
             },
             onSelectRow: (bank, element) => {
-                
+
                 bankKeId = bank.id
                 $('#crudForm [name=bankke_id]').first().val(bank.id)
                 element.val(bank.namabank)
