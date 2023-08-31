@@ -58,6 +58,9 @@ html {
 .ui-jqgrid .ui-icon-desc {
 	margin-top: 4px;
 }
+.badge {
+	font-size:12.25px !important;
+}
 
 .tambah {
 	padding-right: 8px;
