@@ -977,6 +977,85 @@ function initDatepicker() {
 	});
 }
 
+function initMonthpicker() {
+	let element = $(document).find(".monthpicker");
+
+	if (!element.parent().hasClass("input-group")) {
+		element.wrap(`
+				<div class="input-group">
+				</div>
+			`);
+	}
+
+	element
+		.datepicker({
+			dateFormat: "mm-yy",
+			changeYear: true,
+			changeMonth: true,
+			assumeNearbyYear: true,
+			showButtonPanel: true,
+			showOn: "button",
+			beforeShow: function (element, instance) {
+				let calendar = instance.dpDiv;
+
+				$(element).css({
+					position: "relative",
+				});
+				calendar.addClass("no-date");
+				// Dirty hack, but we can't do anything without it (for now, in jQuery UI 1.8.20)
+				setTimeout(function () {
+					calendar.position({
+						my: "left top",
+						at: "left bottom",
+						collision: "none",
+						of: element,
+					});
+				}, 1);
+			},
+			onClose: function(dateText, inst) {
+				$(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
+			}
+		})
+		.inputmask({
+			inputFormat: "mm-yyyy",
+			alias: "datetime",
+		})
+		.focusout(function (e) {
+			let val = $(this).val();
+			if (val.match("[a-zA-Z]") == null) {
+				if (val.length == 8) {
+					$(this)
+						.inputmask({
+							inputFormat: "mm-yyyy",
+						})
+						.val([val.slice(0, 6), "20", val.slice(6)].join(""));
+				}
+			} else {
+				$(this).focus();
+			}
+		});
+
+	element
+		.siblings(".ui-datepicker-trigger")
+		.wrap(
+			`
+			<div class="input-group-append">
+			</div>
+		`
+		)
+		.addClass("btn btn-easyui text-easyui-dark").html(`
+			<i class="fa fa-calendar-alt"></i>
+		`);
+		
+	element.on("keydown", function (event) {
+		if (event.keyCode === 115) {
+			if (element.datepicker("widget").not(":visible")) {
+				element.datepicker("show");
+			}
+		}
+	});
+}
+
 function getOffDays() {
 	let offDays = [];
 

@@ -122,7 +122,7 @@
               </div>
               <div class="col-12 col-sm-4 col-md-4">
                 <div class="input-group">
-                  <input type="text" name="periode" class="form-control datepicker">
+                  <input type="text" name="periode" class="form-control monthpicker">
                 </div>
               </div>
             </div>
@@ -267,7 +267,7 @@
                               <p class="text-right font-weight-bold autonumeric" id="total"></p>
                             </td>
                             <td class="colmn-offset"></td>
-                            <td class="colmn-offset2" style="display: none" ></td>
+                            <td class="colmn-offset2" style="display: none"></td>
                             <td id="tbl_addRow">
                               <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
                             </td>
@@ -1323,7 +1323,8 @@
     $('#tbl_addRow').hide()
     $('.kolom_bbt').hide()
     // $('.colmn-offset').hide()
-    $('#crudForm').find('[name=periode]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+   
+    $('#crudForm').find('[name=periode]').val($.datepicker.formatDate('mm-yy', new Date())).trigger('change');
     loadBLLGrid()
     if ($('#crudForm').data('action') == 'add') {
 
@@ -1391,7 +1392,7 @@
     $('#tbl_addRow').hide()
     $('.kolom_bbt').hide()
     // $('.colmn-offset').hide()
-    $('#crudForm').find('[name=periode]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+    $('#crudForm').find('[name=periode]').val($.datepicker.formatDate('mm-yy', new Date())).trigger('change');
     loadBLNGrid()
     if ($('#crudForm').data('action') == 'add') {
 
@@ -1458,7 +1459,7 @@
     $('#tbl_addRow').hide()
     $('.kolom_bbt').hide()
     // $('.colmn-offset').hide()
-    $('#crudForm').find('[name=periode]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+    $('#crudForm').find('[name=periode]').val($.datepicker.formatDate('mm-yy', new Date())).trigger('change');
     loadBTUGrid()
     if ($('#crudForm').data('action') == 'add') {
 
@@ -1525,7 +1526,7 @@
     $('#tbl_addRow').hide()
     $('.kolom_bbt').hide()
     // $('.colmn-offset').hide()
-    $('#crudForm').find('[name=periode]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+    $('#crudForm').find('[name=periode]').val($.datepicker.formatDate('mm-yy', new Date())).trigger('change');
     loadBPTGrid()
     if ($('#crudForm').data('action') == 'add') {
 
@@ -1593,7 +1594,7 @@
     $('#tbl_addRow').hide()
     $('.kolom_bbt').hide()
     // $('.colmn-offset').hide()
-    $('#crudForm').find('[name=periode]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+    $('#crudForm').find('[name=periode]').val($.datepicker.formatDate('mm-yy', new Date())).trigger('change');
     loadBGSGrid()
     if ($('#crudForm').data('action') == 'add') {
 
@@ -1659,7 +1660,7 @@
     $('#tbl_addRow').hide()
     $('.kolom_bbt').hide()
     // $('.colmn-offset').hide()
-    $('#crudForm').find('[name=periode]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+    $('#crudForm').find('[name=periode]').val($.datepicker.formatDate('mm-yy', new Date())).trigger('change');
     loadBITGrid()
     if ($('#crudForm').data('action') == 'add') {
 
@@ -1787,6 +1788,7 @@
     getMaxLength(form)
     initLookup()
     initDatepicker()
+    initMonthpicker()
     initSelect2(form.find(`[name="statusposting"]`), true)
     initSelect2(form.find(`[name="postingpinjaman"]`), true)
     if (form.data('action') == 'add') {
