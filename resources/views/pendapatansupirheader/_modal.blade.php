@@ -50,7 +50,7 @@
 
 
 
-<!-- 
+                        <!-- 
                         <div class="row form-group">
 
                             <div class="col-12 col-sm-3 col-md-2">
@@ -906,16 +906,7 @@
                         //PJP
                         loadPinjamanGrid()
                         getDataPinjaman().then((response) => {
-                            let selectedIdPinj = []
-                            let totalPinj = 0
-
-                            $.each(response.data, (index, value) => {
-                                if (value.penerimaantruckingheader_id != null) {
-                                    selectedIdPinj.push(value.pinj_id)
-                                    totalPinj += parseFloat(value.pinj_nominal)
-
-                                }
-                            })
+                            console.log(response)
                             setTimeout(() => {
 
                                 $("#tablePinjaman")
@@ -924,12 +915,12 @@
                                         data: response.data,
                                         originalData: response.data,
                                         rowNum: response.data.length,
-                                        selectedRowIds: selectedIdPinj
+                                        selectedRowIds: response.selectedId
                                     })
                                     .trigger("reloadGrid");
                                 initAutoNumeric($('#tablePinjaman tbody tr').find(`td[aria-describedby="tablePinjaman_pinj_nominal"]`))
                             }, 100);
-                            initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePinjaman_pinj_nominal"]`).text(totalPinj))
+                            initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePinjaman_pinj_nominal"]`).text(response.totalPinj))
                         });
 
                     }
@@ -1494,12 +1485,12 @@
                             if ($('#crudForm').data('action') == 'delete') {
                                 disabled = 'disabled'
                             }
-                            return `<input type="checkbox" value="${rowData.pinj_id}" ${disabled} onChange="checkboxPotPribadiHandler(this, ${rowData.pinj_id})">`;
+                            return `<input type="checkbox" value="${rowData.id}" ${disabled} onChange="checkboxPotPribadiHandler(this, ${rowData.id})">`;
                         },
                     },
                     {
                         label: "id",
-                        name: "pinj_id",
+                        name: "id",
                         hidden: true,
                         search: false,
                     },
@@ -1543,14 +1534,14 @@
                         editable: true,
                         editoptions: {
                             dataInit: function(element, id) {
-                                initAutoNumeric($('#crudForm').find(`[id="${id.pinj_id}"]`))
+                                initAutoNumeric($('#crudForm').find(`[id="${id.id}"]`))
                             },
                             dataEvents: [{
                                 type: "keyup",
                                 fn: function(event, rowObject) {
                                     let originalGridDataPotPribadi = $("#tablePinjaman")
                                         .jqGrid("getGridParam", "originalData")
-                                        .find((row) => row.pinj_id == rowObject.rowId);
+                                        .find((row) => row.id == rowObject.rowId);
 
                                     let localRow = $("#tablePinjaman").jqGrid(
                                         "getLocalRow",
@@ -1587,14 +1578,16 @@
                                         }
                                     }
 
-                                    pinj_nominalDetails = $(`#tablePinjaman tr:not(#${rowObject.rowId})`).find(`td[aria-describedby="tablePinjaman_pinj_nominal"]`)
-                                    ttlpinj_nominal = 0
-                                    $.each(pinj_nominalDetails, (index, pinj_nominalDetail) => {
-                                        ttlpinj_nominalDetail = parseFloat($(pinj_nominalDetail).attr('title').replaceAll(',', ''))
-                                        ttlpinj_nominals = (isNaN(ttlpinj_nominalDetail)) ? 0 : ttlpinj_nominalDetail;
-                                        ttlpinj_nominal += ttlpinj_nominals
-                                    });
-                                    ttlpinj_nominal += pinj_nominal
+                                    ttlpinj_nominals = 0
+                                    let selectedRowsPinjaman = $("#tablePinjaman").getGridParam("selectedRowIds");
+                                    $.each(selectedRowsPinjaman, function(index, value) {
+                                        if (value != rowObject.rowId) {
+                                            dataPinjaman = $("#tablePinjaman").jqGrid("getLocalRow", value);
+                                            getNominal = (dataPinjaman.pinj_nominal == undefined) ? 0 : dataPinjaman.pinj_nominal;
+                                            ttlpinj_nominals = ttlpinj_nominals + parseFloat(getNominal.replaceAll(',', ''))
+                                        }
+                                    })
+                                    ttlpinj_nominal = pinj_nominal + parseFloat(ttlpinj_nominals)
                                     initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePinjaman_pinj_nominal"]`).text(ttlpinj_nominal))
 
                                     initAutoNumeric($('#detailLainnya').find(`[name="potonganpinjaman"]`).val(ttlpinj_nominal))
@@ -1631,7 +1624,7 @@
                 afterRestoreCell: function(rowId, value, indexRow, indexColumn) {
                     let originalGridDataPotPribadi = $("#tablePinjaman")
                         .jqGrid("getGridParam", "originalData")
-                        .find((row) => row.pinj_id == rowId);
+                        .find((row) => row.id == rowId);
 
                     let getBayarPP = $("#tablePinjaman").jqGrid("getCell", rowId, "pinj_nominal")
                     let pinj_nominal = (getBayarPP != '') ? parseFloat(getBayarPP.replaceAll(',', '')) : 0
@@ -1660,7 +1653,7 @@
                     let rowData = $(this).jqGrid("getRowData")[iRow - 1];
 
                     return $(this)
-                        .find(`tr input[value=${rowData.pinj_id}]`)
+                        .find(`tr input[value=${rowData.id}]`)
                         .is(":checked");
                 },
                 validationCell: function(cellobject, errormsg, iRow, iCol) {
@@ -1703,8 +1696,8 @@
                     $("#tablePinjaman").jqGrid(
                         "setCell",
                         rowId,
-                        "sisa",
-                        parseInt(localRow.sisa) + parseInt(localRow.nominal)
+                        "pinj_sisa",
+                        parseInt(localRow.pinj_sisa) + parseInt(localRow.pinj_nominal)
                     );
 
                     return true;
@@ -1737,6 +1730,20 @@
                     Authorization: `Bearer ${accessToken}`
                 },
                 success: (response) => {
+                    if (aksi != 'add') {
+                        let selectedIdPinj = []
+                        let totalPinj = 0
+
+                        $.each(response.data, (index, value) => {
+                            if (value.penerimaantruckingheader_id != null) {
+                                selectedIdPinj.push(parseInt(value.id))
+                                totalPinj += parseFloat(value.pinj_nominal)
+
+                            }
+                        })
+                        response.selectedId = selectedIdPinj;
+                        response.totalPinj = totalPinj;
+                    }
                     resolve(response);
                 },
                 error: error => {
@@ -1753,7 +1760,7 @@
         let selectedRowIdsPotPribadi = $("#tablePinjaman").getGridParam("selectedRowIds");
         let originalGridDataPotPribadi = $("#tablePinjaman")
             .jqGrid("getGridParam", "originalData")
-            .find((row) => row.pinj_id == rowId);
+            .find((row) => row.id == rowId);
 
         editableColumnsPotPribadi.forEach((editableColumn) => {
 
@@ -1785,16 +1792,10 @@
 
                 let localRow = $("#tablePinjaman").jqGrid("getLocalRow", rowId);
 
-                if ($('#crudForm').data('action') == 'edit') {
-                    // if (originalGridDataPotPribadi.sisa == 0) {
-
-                    //   let getpinj_nominal = $("#tablePinjaman").jqGrid("getCell", rowId, "pinj_nominal")
-                    //   localRow.pinj_nominal = (getpinj_nominal != '') ? parseFloat(getpinj_nominal.replaceAll(',', '')) : 0
-                    // } else {
-                    //   localRow.pinj_nominal = originalGridDataPotPribadi.sisa
-                    // }
-                    localRow.pinj_nominal = (parseFloat(originalGridDataPotPribadi.pinj_sisa) + parseFloat(originalGridDataPotPribadi.pinj_nominal))
-                }
+                // if ($('#crudForm').data('action') == 'edit') {
+                //     localRow.pinj_nominal = (parseFloat(originalGridDataPotPribadi.pinj_sisa) + parseFloat(originalGridDataPotPribadi.pinj_nominal))
+                // }
+                $("#tablePinjaman").jqGrid("setCell", rowId, "pinj_nominal", 0);
 
                 initAutoNumeric($(`#tablePinjaman tr#${rowId}`).find(`td[aria-describedby="tablePinjaman_pinj_nominal"]`))
                 setTotalNominalPP()
@@ -1811,24 +1812,27 @@
     function setTotalSisaPotPribadi() {
         let pinj_sisaDetails = $(`#tablePinjaman`).find(`td[aria-describedby="tablePinjaman_pinj_sisa"]`)
         let pinj_sisa = 0
-        $.each(pinj_sisaDetails, (index, pinj_sisaDetail) => {
-            pinj_sisadetail = parseFloat($(pinj_sisaDetail).text().replaceAll(',', ''))
-            pinj_sisas = (isNaN(pinj_sisadetail)) ? 0 : pinj_sisadetail;
-            pinj_sisa += pinj_sisas
-        });
+        let originalData = $("#tablePinjaman").getGridParam("data");
+        $.each(originalData, function(index, value) {
+            sisa = value.pinj_sisa;
+            sisa = (isNaN(sisa)) ? parseFloat(sisa.replaceAll(',', '')) : parseFloat(sisa)
+            pinj_sisa += sisa
+           
+        })
         initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePinjaman_pinj_sisa"]`).text(pinj_sisa))
     }
 
     function setTotalNominalPP() {
-        let pinj_nominalDetails = $(`#tablePinjaman`).find(`td[aria-describedby="tablePinjaman_pinj_nominal"]`)
         let pinj_nominal = 0
-        $.each(pinj_nominalDetails, (index, pinj_nominalDetail) => {
-            pinj_nominaldetail = parseFloat($(pinj_nominalDetail).text().replaceAll(',', ''))
-            pinj_nominals = (isNaN(pinj_nominaldetail)) ? 0 : pinj_nominaldetail;
-            pinj_nominal += pinj_nominals
-        });
+        selectedRowsPinjaman = $("#tablePinjaman").getGridParam("selectedRowIds");
+        $.each(selectedRowsPinjaman, function(index, value) {
+            console.log('selectedRowsPinjaman ', value)
+            dataPinjaman = $("#tablePinjaman").jqGrid("getLocalRow", value);
+            pinj_nominals = (dataPinjaman.pinj_nominal == undefined) ? 0 : dataPinjaman.pinj_nominal;
+            getNominal = (isNaN(pinj_nominals)) ? parseFloat(pinj_nominals.replaceAll(',', '')) : parseFloat(pinj_nominals)
+            pinj_nominal = pinj_nominal + getNominal
+        })
         initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePinjaman_pinj_nominal"]`).text(pinj_nominal))
-        initAutoNumeric($('#detailLainnya').find(`[name="potonganpinjaman"]`).val(pinj_nominal))
     }
 
     function approve() {
