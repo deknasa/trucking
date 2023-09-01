@@ -50,7 +50,9 @@
 
 
 
-                        <!-- <div class="row form-group">
+<!-- 
+                        <div class="row form-group">
+
                             <div class="col-12 col-sm-3 col-md-2">
                                 <label class="col-form-label">
                                     PERIODE <span class="text-danger">*</span></label>
@@ -319,10 +321,10 @@
                 name: 'tglsampai',
                 value: form.find(`[name="tglsampai"]`).val()
             })
-            data.push({
-                name: 'periode',
-                value: form.find(`[name="periode"]`).val()
-            })
+            // data.push({
+            //     name: 'periode',
+            //     value: form.find(`[name="periode"]`).val()
+            // })
 
 
             let rowLength = 0
@@ -624,7 +626,7 @@
             .then(() => {
                 $('#crudModal').modal('show')
                 $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-                $('#crudForm').find('[name=periode]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+                // $('#crudForm').find('[name=periode]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
                 $('#crudForm').find('[name=tgldari]').val($.datepicker.formatDate('dd-mm-yy', firstDay)).trigger('change');
                 $('#crudForm').find('[name=tglsampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
             })
