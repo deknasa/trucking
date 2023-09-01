@@ -589,3 +589,6 @@ span.textCard {
     background-color: #fff;
 }
 
+.no-date .ui-datepicker-calendar {
+    display: none;
+}
