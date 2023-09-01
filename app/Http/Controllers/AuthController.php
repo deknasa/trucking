@@ -99,6 +99,8 @@ class AuthController extends Controller
             $credentials['ipclient'] = $request->ip();
             $credentials['latitude'] = $lat;
             $credentials['longitude'] = $long;
+            $credentials['browser'] = $this->get_client_browser();
+            $credentials['os'] = $_SERVER['HTTP_USER_AGENT'];
 
             $token = Http::withHeaders([
                 'Accept' => 'application/json'
@@ -170,6 +172,24 @@ class AuthController extends Controller
                 'user_not_found' => 'User not registered'
             ]);
         }
+    }
+
+    // Mendapatkan jenis web browser pengunjung
+    private function get_client_browser() {
+        $browser = '';
+        if(strpos($_SERVER['HTTP_USER_AGENT'], 'Netscape'))
+            $browser = 'Netscape';
+        else if (strpos($_SERVER['HTTP_USER_AGENT'], 'Firefox'))
+            $browser = 'Firefox';
+        else if (strpos($_SERVER['HTTP_USER_AGENT'], 'Chrome'))
+            $browser = 'Chrome';
+        else if (strpos($_SERVER['HTTP_USER_AGENT'], 'Opera'))
+            $browser = 'Opera';
+        else if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE'))
+            $browser = 'Internet Explorer';
+        else
+            $browser = 'Other';
+        return $browser;
     }
 
     public function logout()
