@@ -1543,7 +1543,7 @@
                         editable: true,
                         editoptions: {
                             dataInit: function(element, id) {
-                                initAutoNumeric($('#crudForm').find(`[id="${id.id}"]`))
+                                initAutoNumeric($('#crudForm').find(`[id="${id.pinj_id}"]`))
                             },
                             dataEvents: [{
                                 type: "keyup",
