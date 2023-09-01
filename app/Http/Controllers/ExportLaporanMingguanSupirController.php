@@ -354,22 +354,16 @@ class ExportLaporanMingguanSupirController extends Controller
             // dd(config('app.api_url') . 'exportlaporanmingguansupir/export', $detailParams);
 
         $data = $header['data'];
-        // $data1=json_decode($data,true);
 
-dd($data[0]['formatric']);
-
-
-        // dd($header['data']);
-        // if ($data['formatric'][0] == '1') {
+        if ($data[0]['formatric'] == '1') {
             $this->export1($data, $request->dari,$request->sampai,$request->tradodari_id,$request->tradosampai_id,$request->tradodari,$request->tradosampai);
-        // } else {
-        //     $this->export2($data);
-        // }
+        } else {
+            $this->export2($data, $request->dari,$request->sampai,$request->tradodari_id,$request->tradosampai_id,$request->tradodari,$request->tradosampai);
+        }
     }
 
-    public function export2(Request $request,$data)
+    public function export2($data, $dari,$sampai,$tradodari_id,$tradosampai_id,$tradodari,$tradosampai)
     {
-
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
@@ -435,9 +429,9 @@ dd($data[0]['formatric']);
         $sheet->mergeCells("N$detail_table_header_row:N" . ($detail_table_header_row + 2));
         $sheet->setCellValue("O$detail_table_header_row", 'Inv')->getStyle("O1")->applyFromArray($styleHeader)->getFont()->setSize(14)->setBold(true);
         $sheet->mergeCells("O$detail_table_header_row:O" . ($detail_table_header_row + 2));
-        $sheet->setCellValue("P$detail_table_header_row", 'Gaji')->getStyle("P1")->applyFromArray($styleHeader)->getFont()->setSize(14)->setBold(true);
+        $sheet->setCellValue("P$detail_table_header_row", 'Biaya Operasional')->getStyle("P1")->applyFromArray($styleHeader)->getFont()->setSize(14)->setBold(true);
         $sheet->mergeCells("P$detail_table_header_row:AF$detail_table_header_row");
-        $sheet->setCellValue("P" . ($detail_table_header_row + 1), 'Borongan')->getStyle("P2")->applyFromArray($styleHeader)->getFont()->setSize(14)->setBold(true);
+        $sheet->setCellValue("P" . ($detail_table_header_row + 1), 'Uang Jalan')->getStyle("P2")->applyFromArray($styleHeader)->getFont()->setSize(14)->setBold(true);
         $sheet->mergeCells("P" . ($detail_table_header_row + 1) . ":P" . ($detail_table_header_row + 2));
         $sheet->setCellValue("Q" . ($detail_table_header_row + 1), 'EBS')->getStyle("Q2")->applyFromArray($styleHeader)->getFont()->setSize(14)->setBold(true);
         $sheet->mergeCells("Q" . ($detail_table_header_row + 1) . ":Q" . ($detail_table_header_row + 2));
@@ -447,13 +441,13 @@ dd($data[0]['formatric']);
         $sheet->mergeCells("S" . ($detail_table_header_row + 1) . ":S" . ($detail_table_header_row + 2));
         $sheet->setCellValue("T" . ($detail_table_header_row + 1), 'No Voucher')->getStyle("T2")->applyFromArray($styleHeader)->getFont()->setSize(14)->setBold(true);
         $sheet->mergeCells("T" . ($detail_table_header_row + 1) . ":T" . ($detail_table_header_row + 2));
-        $sheet->setCellValue("U" . ($detail_table_header_row + 1), 'G. Supir')->getStyle("U2")->applyFromArray($styleHeader)->getFont()->setSize(14)->setBold(true);
+        $sheet->setCellValue("U" . ($detail_table_header_row + 1), 'Komisi Supir')->getStyle("U2")->applyFromArray($styleHeader)->getFont()->setSize(14)->setBold(true);
         $sheet->mergeCells("U" . ($detail_table_header_row + 1) . ":U" . ($detail_table_header_row + 2));
-        $sheet->setCellValue("V" . ($detail_table_header_row + 1), 'Komisi')->getStyle("V2")->applyFromArray($styleHeader)->getFont()->setSize(14)->setBold(true);
+        $sheet->setCellValue("V" . ($detail_table_header_row + 1), 'Kenek ')->getStyle("V2")->applyFromArray($styleHeader)->getFont()->setSize(14)->setBold(true);
         $sheet->mergeCells("V" . ($detail_table_header_row + 1) . ":V" . ($detail_table_header_row + 2));
-        $sheet->setCellValue("W" . ($detail_table_header_row + 1), 'G. Kernek')->getStyle("W2")->applyFromArray($styleHeader)->getFont()->setSize(14)->setBold(true);
+        $sheet->setCellValue("W" . ($detail_table_header_row + 1), '')->getStyle("W2")->applyFromArray($styleHeader)->getFont()->setSize(14)->setBold(true);
         $sheet->mergeCells("W" . ($detail_table_header_row + 1) . ":W" . ($detail_table_header_row + 2));
-        $sheet->setCellValue("X" . ($detail_table_header_row + 1), 'G. Mingguan')->getStyle("X2")->applyFromArray($styleHeader)->getFont()->setSize(14)->setBold(true);
+        $sheet->setCellValue("X" . ($detail_table_header_row + 1), 'G. Lain')->getStyle("X2")->applyFromArray($styleHeader)->getFont()->setSize(14)->setBold(true);
         $sheet->mergeCells("X" . ($detail_table_header_row + 1) . ":X" . ($detail_table_header_row + 2));
         $sheet->setCellValue("Y" . ($detail_table_header_row + 1), 'G. LAIN')->getStyle("Y2")->applyFromArray($styleHeader)->getFont()->setSize(14)->setBold(true);
         $sheet->mergeCells("Y" . ($detail_table_header_row + 1) . ":Y" . ($detail_table_header_row + 2));
@@ -461,13 +455,11 @@ dd($data[0]['formatric']);
         $sheet->mergeCells("Z" . ($detail_table_header_row + 1) . ":Z" . ($detail_table_header_row + 2));
         $sheet->setCellValue("AA" . ($detail_table_header_row + 1), 'No Bukti Komisi')->getStyle("AA2")->applyFromArray($styleHeader)->getFont()->setSize(14)->setBold(true);
         $sheet->mergeCells("AA" . ($detail_table_header_row + 1) . ":AA" . ($detail_table_header_row + 2));
-        $sheet->setCellValue("AB" . ($detail_table_header_row + 1), 'Lain')->getStyle("AB2")->applyFromArray($styleHeader)->getFont()->setSize(14)->setBold(true);
+        $sheet->setCellValue("AB" . ($detail_table_header_row + 1), 'Rp')->getStyle("AB2")->applyFromArray($styleHeader)->getFont()->setSize(14)->setBold(true);
         $sheet->mergeCells("AB" . ($detail_table_header_row + 1) . ":AG" . ($detail_table_header_row + 1));
-        $sheet->setCellValue("AB" . ($detail_table_header_row + 2), 'U. Lain')->getStyle("AB3")->applyFromArray($styleHeader)->getFont()->setSize(14)->setBold(true);
+        $sheet->setCellValue("AB" . ($detail_table_header_row + 2), 'Tol')->getStyle("AB3")->applyFromArray($styleHeader)->getFont()->setSize(14)->setBold(true);
         $sheet->mergeCells("AB" . ($detail_table_header_row + 2) . ":AB" . ($detail_table_header_row + 2));
-        $sheet->setCellValue("AC" . ($detail_table_header_row + 2), 'U. Bon')->getStyle("AC3")->applyFromArray($styleHeader)->getFont()->setSize(14)->setBold(true);
-        $sheet->mergeCells("AC" . ($detail_table_header_row + 2) . ":AC" . ($detail_table_header_row + 2));
-        $sheet->setCellValue("AD" . ($detail_table_header_row + 2), 'No Bukti KBT EBS2')->getStyle("AD3")->applyFromArray($styleHeader)->getFont()->setSize(14)->setBold(true);
+        $sheet->setCellValue("AD" . ($detail_table_header_row + 2), '')->getStyle("AD3")->applyFromArray($styleHeader)->getFont()->setSize(14)->setBold(true);
         $sheet->mergeCells("AD" . ($detail_table_header_row + 2) . ":AD" . ($detail_table_header_row + 2));
         $sheet->setCellValue("AE" . ($detail_table_header_row + 2), 'Ritasi')->getStyle("AE3")->applyFromArray($styleHeader)->getFont()->setSize(14)->setBold(true);
         $sheet->mergeCells("AE" . ($detail_table_header_row + 2) . ":AE" . ($detail_table_header_row + 2));
@@ -477,15 +469,15 @@ dd($data[0]['formatric']);
         $sheet->mergeCells("AG" . ($detail_table_header_row + 2) . ":AG" . ($detail_table_header_row + 2));
         $sheet->setCellValue("AH$detail_table_header_row", 'Biaya')->getStyle("AH1")->applyFromArray($styleHeader)->getFont()->setSize(14)->setBold(true);
         $sheet->mergeCells("AH" . ($detail_table_header_row) . ":AI" . ($detail_table_header_row));
-        $sheet->setCellValue("AH" . ($detail_table_header_row + 1), 'Uang Jalan')->getStyle("AH2")->applyFromArray($styleHeader)->getFont()->setSize(14)->setBold(true);
+        $sheet->setCellValue("AH" . ($detail_table_header_row + 1), 'Kas Gantung Supir')->getStyle("AH2")->applyFromArray($styleHeader)->getFont()->setSize(14)->setBold(true);
         $sheet->mergeCells("AH" . ($detail_table_header_row + 1) . ":AH" . ($detail_table_header_row + 2));
-        $sheet->setCellValue("AI" . ($detail_table_header_row + 1), 'BBM')->getStyle("AI2")->applyFromArray($styleHeader)->getFont()->setSize(14)->setBold(true);
+        $sheet->setCellValue("AI" . ($detail_table_header_row + 1), '')->getStyle("AI2")->applyFromArray($styleHeader)->getFont()->setSize(14)->setBold(true);
         $sheet->mergeCells("AI" . ($detail_table_header_row + 1) . ":AI" . ($detail_table_header_row + 2));
-        $sheet->setCellValue("AJ" . ($detail_table_header_row + 1), 'Uang Makan')->getStyle("AJ2")->applyFromArray($styleHeader)->getFont()->setSize(14)->setBold(true);
+        $sheet->setCellValue("AJ" . ($detail_table_header_row + 1), '')->getStyle("AJ2")->applyFromArray($styleHeader)->getFont()->setSize(14)->setBold(true);
         $sheet->mergeCells("AJ" . ($detail_table_header_row + 1) . ":AJ" . ($detail_table_header_row + 2));
         $sheet->setCellValue("AK$detail_table_header_row", 'Total Biaya')->getStyle("AK1")->applyFromArray($styleHeader)->getFont()->setSize(14)->setBold(true);
         $sheet->mergeCells("AK$detail_table_header_row:AK" . ($detail_table_header_row + 2));
-        $sheet->setCellValue("AL$detail_table_header_row", 'Sisa')->getStyle("AL1")->applyFromArray($styleHeader)->getFont()->setSize(14)->setBold(true);
+        $sheet->setCellValue("AL$detail_table_header_row", 'Laba')->getStyle("AL1")->applyFromArray($styleHeader)->getFont()->setSize(14)->setBold(true);
         $sheet->mergeCells("AL$detail_table_header_row:AL" . ($detail_table_header_row + 2));
         $sheet->setCellValue("AM$detail_table_header_row", 'No Trip')->getStyle("AM1")->applyFromArray($styleHeader)->getFont()->setSize(14)->setBold(true);
         $sheet->mergeCells("AM$detail_table_header_row:AM" . ($detail_table_header_row + 2));
@@ -493,19 +485,15 @@ dd($data[0]['formatric']);
         $sheet->mergeCells("AN$detail_table_header_row:AN" . ($detail_table_header_row + 2));
         $sheet->setCellValue("AO$detail_table_header_row", 'Panjar')->getStyle("AO1")->applyFromArray($styleHeader)->getFont()->setSize(14)->setBold(true);
         $sheet->mergeCells("AO$detail_table_header_row:AO" . ($detail_table_header_row + 2));
-        $sheet->setCellValue("AP$detail_table_header_row", 'Mandor')->getStyle("AP1")->applyFromArray($styleHeader)->getFont()->setSize(14)->setBold(true);
+        $sheet->setCellValue("AP$detail_table_header_row", 'Liter')->getStyle("AR1")->applyFromArray($styleHeader)->getFont()->setSize(14)->setBold(true);
         $sheet->mergeCells("AP$detail_table_header_row:AP" . ($detail_table_header_row + 2));
-        $sheet->setCellValue("AQ$detail_table_header_row", 'Supir Ex')->getStyle("AQ1")->applyFromArray($styleHeader)->getFont()->setSize(14)->setBold(true);
-        $sheet->mergeCells("AQ$detail_table_header_row:AQ" . ($detail_table_header_row + 2));
-        $sheet->setCellValue("AR$detail_table_header_row", 'Liter')->getStyle("AR1")->applyFromArray($styleHeader)->getFont()->setSize(14)->setBold(true);
-        $sheet->mergeCells("AR$detail_table_header_row:AR" . ($detail_table_header_row + 2));
 
 
         $rowIndex = 4;
         $previous_nopol = null;
         // $group = [];
         $groupRowCount = 0;
-        $sheet->setCellValue("A4", "periode : " . $request->dari . " s/d " . $request->sampai);
+        $sheet->setCellValue("A4", "periode : " . $dari . " s/d " . $sampai);
         foreach ($data as $response_index => $response_detail) {
             $nopol = $response_detail['nopol'];
 
@@ -546,8 +534,8 @@ dd($data[0]['formatric']);
                 $groupStartIndex = $rowIndex;
             }
 
-            // $sheet->setCellValue("A$rowIndex", $response_detail['tglbukti']);
-            // $sheet->setCellValue("C$rowIndex", $response_detail['namasupir']);
+            $sheet->setCellValue("A$rowIndex", $response_detail['tglbukti']);
+            $sheet->setCellValue("C$rowIndex", $response_detail['namasupir']);
             $sheet->setCellValue("D$rowIndex", $response_detail['rute']);
             $sheet->setCellValue("E$rowIndex", $response_detail['qty']);
             $sheet->setCellValue("F$rowIndex", $response_detail['lokasimuat']);
@@ -565,19 +553,19 @@ dd($data[0]['formatric']);
             $sheet->setCellValue("R$rowIndex", $response_detail['pengeluarannobuktiebs']);
             $sheet->setCellValue("S$rowIndex", $response_detail['voucher'])->getStyle("S$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
             $sheet->setCellValue("T$rowIndex", $response_detail['novoucher']);
-            $sheet->setCellValue("U$rowIndex", $response_detail['gajisupir'])->getStyle("U$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("V$rowIndex", $response_detail['komisi'])->getStyle("V$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("W$rowIndex", $response_detail['gajikenek'])->getStyle("W$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("X$rowIndex", $response_detail['gajimingguan'])->getStyle("X$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("Y$rowIndex", $response_detail['gajilain'])->getStyle("Y$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("Z$rowIndex", $response_detail['ket']);
-            $sheet->setCellValue("AA$rowIndex", $response_detail['nobuktikbtkomisi']);
-            $sheet->setCellValue("AB$rowIndex", $response_detail['uanglain'])->getStyle("AB$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
+            $sheet->setCellValue("U$rowIndex", $response_detail['komisi'])->getStyle("U$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
+            $sheet->setCellValue("V$rowIndex", $response_detail['gajikenek'])->getStyle("V$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
+            $sheet->setCellValue("W$rowIndex", $response_detail['gajimingguan'])->getStyle("W$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
+            $sheet->setCellValue("X$rowIndex", $response_detail['gajilain'])->getStyle("X$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
+            $sheet->setCellValue("Y$rowIndex", $response_detail['ket']);
+            $sheet->setCellValue("Z$rowIndex", $response_detail['nobuktikbtkomisi']);
+            $sheet->setCellValue("AA$rowIndex", $response_detail['uanglain'])->getStyle("AA$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
+            $sheet->setCellValue("AB$rowIndex", $response_detail['tolsupir'])->getStyle("AB$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
             $sheet->setCellValue("AC$rowIndex", $response_detail['uangbon'])->getStyle("AC$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
             $sheet->setCellValue("AD$rowIndex", $response_detail['nobuktikbtebs2']);
             $sheet->setCellValue("AE$rowIndex", $response_detail['ritasi'])->getStyle("AE$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
             $sheet->setCellValue("AF$rowIndex", $response_detail['extrabbm'])->getStyle("AF$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("AG$rowIndex", $response_detail['ketritasi']);
+            $sheet->setCellValue("AG$rowIndex", $response_detail['ketuanglain']);
             $sheet->setCellValue("AH$rowIndex", $response_detail['uangjalan'])->getStyle("AH$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
             $sheet->setCellValue("AI$rowIndex", $response_detail['uangbbm'])->getStyle("AI$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
             $sheet->setCellValue("AJ$rowIndex", $response_detail['uangmakan'])->getStyle("AJ$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
@@ -586,9 +574,7 @@ dd($data[0]['formatric']);
             $sheet->setCellValue("AM$rowIndex", $response_detail['nobukti']);
             $sheet->setCellValue("AN$rowIndex", $response_detail['bongkarmuat'])->getStyle("AN$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
             $sheet->setCellValue("AO$rowIndex", $response_detail['panjar']);
-            $sheet->setCellValue("AP$rowIndex", $response_detail['mandor']);
-            $sheet->setCellValue("AQ$rowIndex", $response_detail['supirex']);
-            $sheet->setCellValue("AR$rowIndex", $response_detail['liter'])->getStyle("AR$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
+            $sheet->setCellValue("AP$rowIndex", $response_detail['liter'])->getStyle("AP$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
             $rowIndex++;
 
             // Store the current group details in an array
@@ -665,8 +651,6 @@ dd($data[0]['formatric']);
         $sheet->getColumnDimension('AN')->setAutoSize(true);
         $sheet->getColumnDimension('AO')->setAutoSize(true);
         $sheet->getColumnDimension('AP')->setAutoSize(true);
-        $sheet->getColumnDimension('AQ')->setAutoSize(true);
-        $sheet->getColumnDimension('AR')->setAutoSize(true);
 
 
 
