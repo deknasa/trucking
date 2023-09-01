@@ -97,6 +97,7 @@ class AuthController extends Controller
             $lat = $request->latitude;
             $long = $request->longitude;
             $credentials['ipclient'] = $request->ip();
+            $credentials['ipserver'] = $cekIp['data']['ipserver'];
             $credentials['latitude'] = $lat;
             $credentials['longitude'] = $long;
             $credentials['browser'] = $this->get_client_browser();
