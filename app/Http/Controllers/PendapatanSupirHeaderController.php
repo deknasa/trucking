@@ -109,25 +109,16 @@ class PendapatanSupirHeaderController extends MyController
             ->get(config('app.api_url') . 'pendapatansupirdetail', $detailParams);
 
         $tampilanParams = [
-            'grp' => 'UBAH TAMPILAN',
-            'text' => 'PENDAPATANSUPIR',
+            'grp' => 'PENDAPATAN SUPIR',
+            'subgrp' => 'GAJI KENEK',
         ];
+
         $tampilan = Http::withHeaders($request->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'parameter/getparambytext', $tampilanParams);
+            ->get(config('app.api_url') . 'parameter/getparamfirst', $tampilanParams);
         $tampilan = $tampilan->json();
-
-        $notGajiKenek = true;
-        $getListTampilan = json_decode($tampilan['memo']);
-        if ($getListTampilan->INPUT != '') {
-            $getListTampilan = (explode(",", $getListTampilan->INPUT));
-            foreach ($getListTampilan as $value) {
-                if (trim(strtolower($value)) == 'gajikenek') {
-                    $notGajiKenek = false;
-                }
-            }
-        }
+        $showgajikenek = $tampilan['text'];
 
         $pendapatan_details = $responses['data'];
 
@@ -195,43 +186,55 @@ class PendapatanSupirHeaderController extends MyController
             ],
         ];
 
-        $detail_columns = [
-            [
-                'label' => 'NO',
-            ],
-            [
-                'label' => 'NO BUKTI TRIP',
-                'index' => 'nobuktitrip',
-            ],
-            [
-                'label' => 'TGL TRIP',
-                'index' => 'tgltrip',
-            ],
-            [
-                'label' => 'NO BUKTI RINCIAN',
-                'index' => 'nobuktirincian',
-            ],
-            [
-                'label' => 'DARI',
-                'index' => 'dari',
-            ],
-            [
-                'label' => 'SAMPAI',
-                'index' => 'sampai',
-            ],
-            [
-                'label' => 'NOMINAL',
-                'index' => 'nominal',
-                'format' => 'currency'
-            ],
-        ];
-        if ($notGajiKenek) {
-            $detail_columns[] =
+
+        if ($showgajikenek == 'YA') {
+            $detail_columns = [
                 [
-                    'label' => 'GAJI KENEK',
-                    'index' => 'gajikenek',
+                    'label' => 'NO',
+                ],
+                [
+                    'label' => 'TRADO',
+                    'index' => 'kodetrado',
+                ],
+                [
+                    'label' => 'NOMINAL',
+                    'index' => 'total',
                     'format' => 'currency'
-                ];
+                ], [
+                    'label' => 'TANDA TANGAN',
+                ],
+            ];
+        } else {
+            $detail_columns = [
+                [
+                    'label' => 'NO',
+                ],
+                [
+                    'label' => 'NO BUKTI TRIP',
+                    'index' => 'nobuktitrip',
+                ],
+                [
+                    'label' => 'TGL TRIP',
+                    'index' => 'tgltrip',
+                ],
+                [
+                    'label' => 'NO BUKTI RINCIAN',
+                    'index' => 'nobuktirincian',
+                ],
+                [
+                    'label' => 'DARI',
+                    'index' => 'dari',
+                ],
+                [
+                    'label' => 'SAMPAI',
+                    'index' => 'sampai',
+                ],
+                [
+                    'label' => 'NOMINAL',
+                    'index' => 'nominal',
+                    'format' => 'currency'
+                ],
+            ];
         }
         foreach ($header_columns as $header_column) {
             $sheet->setCellValue('B' . $header_start_row, $header_column['label']);
@@ -265,74 +268,96 @@ class PendapatanSupirHeaderController extends MyController
         ];
 
         // $sheet->getStyle("A$detail_table_header_row:G$detail_table_header_row")->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FF1F456E');
-        $lastCol = 'G';
-        if ($notGajiKenek) {
-            $lastCol = 'H';
-        }
-        $sheet->getStyle("A$detail_table_header_row:$lastCol" . "$detail_table_header_row")->applyFromArray($styleArray);
+        if ($showgajikenek == 'YA') {
 
-        $total = 0;
-        foreach ($pendapatan_details as $response_index => $response_detail) {
+            $sheet->getStyle("A$detail_table_header_row:D" . "$detail_table_header_row")->applyFromArray($styleArray);
 
-            foreach ($detail_columns as $detail_columns_index => $detail_column) {
-                $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
-                $lastCol = 'G';
-                if ($notGajiKenek) {
-                    $lastCol = 'H';
+            foreach ($pendapatan_details as $response_index => $response_detail) {
+
+                foreach ($detail_columns as $detail_columns_index => $detail_column) {
+                    $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
+                    $sheet->getStyle("A$detail_table_header_row:D$detail_table_header_row")->getFont()->setBold(true);
+                    $sheet->getStyle("A$detail_table_header_row:D$detail_table_header_row")->getAlignment()->setHorizontal('center');
                 }
-                $sheet->getStyle("A$detail_table_header_row:$lastCol" . "$detail_table_header_row")->getFont()->setBold(true);
-                $sheet->getStyle("A$detail_table_header_row:$lastCol" . "$detail_table_header_row")->getAlignment()->setHorizontal('center');
+
+                $sheet->setCellValue("A$detail_start_row", $response_index + 1);
+                $sheet->setCellValue("B$detail_start_row", $response_detail['kodetrado']);
+                $sheet->setCellValue("C$detail_start_row", $response_detail['total']);
+                $sheet->setCellValue("D$detail_start_row", $response_index + 1);
+
+                if (($response_index + 1) % 2 == 0) {
+                    $sheet->getStyle("D$detail_start_row")->getAlignment()->setHorizontal('center');
+                    $sheet->getStyle("D$detail_start_row")->getAlignment()->setVertical('center');
+                } else {
+                    $sheet->getStyle("D$detail_start_row")->getAlignment()->setHorizontal('left');
+                    $sheet->getStyle("D$detail_start_row")->getAlignment()->setVertical('center');
+                }
+
+                $sheet->getStyle("A$detail_start_row:D$detail_start_row")->applyFromArray($styleArray);
+                $sheet->getStyle("C$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
+                $spreadsheet->getActiveSheet()->getRowDimension($detail_start_row)->setRowHeight(28);
+                $dataRow++;
+                $detail_start_row++;
             }
-            $response_detail['nominals'] = number_format((float) $response_detail['nominal'], '2', '.', ',');
 
-            $sheet->setCellValue("A$detail_start_row", $response_index + 1);
-            $sheet->setCellValue("B$detail_start_row", $response_detail['nobuktitrip']);
-            $sheet->setCellValue("C$detail_start_row", date('d-m-Y', strtotime($response_detail['tgltrip'])));
-            $sheet->setCellValue("D$detail_start_row", $response_detail['nobuktirincian']);
-            $sheet->setCellValue("E$detail_start_row", $response_detail['dari']);
-            $sheet->setCellValue("F$detail_start_row", $response_detail['sampai']);
-            $sheet->setCellValue("G$detail_start_row", $response_detail['nominal']);
+            $total_start_row = $detail_start_row;
 
-            if ($notGajiKenek) {
-                $sheet->setCellValue("H$detail_start_row", $response_detail['gajikenek']);
-                $sheet->getStyle("H$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
+            $sheet->mergeCells('A' . $total_start_row . ':B' . $total_start_row);
+            $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':B' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
+            $sheet->setCellValue("C$detail_start_row",  "=SUM(C8:C" . ($dataRow - 1) . ")")->getStyle("C$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+
+            $sheet->getStyle("C$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+            
+            $sheet->getColumnDimension('A')->setAutoSize(true);
+            $sheet->getColumnDimension('B')->setAutoSize(true);
+            $sheet->getColumnDimension('C')->setAutoSize(true);
+            $sheet->getColumnDimension('D')->setWidth(30);
+        } else {
+
+            $sheet->getStyle("A$detail_table_header_row:G" . "$detail_table_header_row")->applyFromArray($styleArray);
+
+            foreach ($pendapatan_details as $response_index => $response_detail) {
+
+                foreach ($detail_columns as $detail_columns_index => $detail_column) {
+                    $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
+                    $sheet->getStyle("A$detail_table_header_row:G$detail_table_header_row")->getFont()->setBold(true);
+                    $sheet->getStyle("A$detail_table_header_row:G$detail_table_header_row")->getAlignment()->setHorizontal('center');
+                }
+                $response_detail['nominals'] = number_format((float) $response_detail['nominal'], '2', '.', ',');
+
+                $sheet->setCellValue("A$detail_start_row", $response_index + 1);
+                $sheet->setCellValue("B$detail_start_row", $response_detail['nobuktitrip']);
+                $sheet->setCellValue("C$detail_start_row", date('d-m-Y', strtotime($response_detail['tgltrip'])));
+                $sheet->setCellValue("D$detail_start_row", $response_detail['nobuktirincian']);
+                $sheet->setCellValue("E$detail_start_row", $response_detail['dari']);
+                $sheet->setCellValue("F$detail_start_row", $response_detail['sampai']);
+                $sheet->setCellValue("G$detail_start_row", $response_detail['nominal']);
+
+                $sheet->getStyle("A$detail_start_row:G$detail_start_row")->applyFromArray($styleArray);
+                $sheet->getStyle("G$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
+
+                // $total += $response_detail['nominal'];
+                $dataRow++;
+                $detail_start_row++;
             }
 
-            // $sheet->getStyle("C$detail_start_row")->getAlignment()->setWrapText(true);
-            // $sheet->getColumnDimension('C')->setWidth(50);
-            $lastCol = 'G';
-            if ($notGajiKenek) {
-                $lastCol = 'H';
-            }
-            $sheet->getStyle("A$detail_start_row:$lastCol" . "$detail_start_row")->applyFromArray($styleArray);
-            $sheet->getStyle("G$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
+            $total_start_row = $detail_start_row;
 
-            // $total += $response_detail['nominal'];
-            $dataRow++;
-            $detail_start_row++;
+            $sheet->mergeCells('A' . $total_start_row . ':F' . $total_start_row);
+            $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':F' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
+            $sheet->setCellValue("G$detail_start_row",  "=SUM(G8:G" . ($dataRow - 1) . ")")->getStyle("G$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+
+            $sheet->getStyle("G$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+
+            $sheet->getColumnDimension('A')->setAutoSize(true);
+            $sheet->getColumnDimension('B')->setAutoSize(true);
+            $sheet->getColumnDimension('C')->setAutoSize(true);
+            $sheet->getColumnDimension('D')->setAutoSize(true);
+            $sheet->getColumnDimension('E')->setAutoSize(true);
+            $sheet->getColumnDimension('F')->setAutoSize(true);
+            $sheet->getColumnDimension('G')->setAutoSize(true);
+            $sheet->getColumnDimension('H')->setAutoSize(true);
         }
-
-        $total_start_row = $detail_start_row;
-
-        $sheet->mergeCells('A' . $total_start_row . ':F' . $total_start_row);
-        $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':F' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
-        $sheet->setCellValue("G$detail_start_row",  "=SUM(G8:G" . ($dataRow - 1) . ")")->getStyle("G$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
-
-        $sheet->getStyle("G$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
-
-        if ($notGajiKenek) {
-            $sheet->setCellValue("H$detail_start_row",  "=SUM(H8:H" . ($dataRow - 1) . ")")->getStyle("H$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
-            $sheet->getStyle("H$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
-        }
-
-        $sheet->getColumnDimension('A')->setAutoSize(true);
-        $sheet->getColumnDimension('B')->setAutoSize(true);
-        $sheet->getColumnDimension('C')->setAutoSize(true);
-        $sheet->getColumnDimension('D')->setAutoSize(true);
-        $sheet->getColumnDimension('E')->setAutoSize(true);
-        $sheet->getColumnDimension('F')->setAutoSize(true);
-        $sheet->getColumnDimension('G')->setAutoSize(true);
-        $sheet->getColumnDimension('H')->setAutoSize(true);
 
         $writer = new Xlsx($spreadsheet);
         $filename = 'Laporan Pendapatan Supir' . date('dmYHis');
