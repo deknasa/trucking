@@ -33,7 +33,7 @@ $('#kerusakanLookup').jqGrid({
                 return ''
               }
               let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusaktif.WARNA}; color: #fff;">
+                <div class="badge" style="background-color: ${statusAktif.WARNA}; color: ${statusAktif.WARNATULISAN};">
                   <span>${statusaktif.SINGKATAN}</span>
                 </div>
               `)
