@@ -87,7 +87,7 @@
             let statusAktif = JSON.parse(value)
 
             let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusAktif.WARNA}; color: #fff;">
+                <div class="badge" style="background-color: ${statusAktif.WARNA}; color: ${statusAktif.WARNATULISAN};">
                   <span>${statusAktif.SINGKATAN}</span>
                 </div>
               `)
@@ -156,7 +156,7 @@
             let statusSistemTon = JSON.parse(value)
 
             let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusSistemTon.WARNA}; color: #fff;">
+                <div class="badge" style="background-color: ${statusSistemton.WARNA}; color: ${statusSistemton.WARNATULISAN};">
                   <span>${statusSistemTon.SINGKATAN}</span>
                 </div>
               `)
