@@ -255,7 +255,7 @@
                     {
                         id: 'view',
                         innerHTML: '<i class="fa fa-eye"></i> VIEW',
-                        class: 'btn btn-info btn-sm mr-1',
+                        class: 'btn btn-orange btn-sm mr-1',
                         onClick: () => {
                             selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
 
