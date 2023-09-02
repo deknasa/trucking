@@ -252,6 +252,16 @@
                             deleteCabang(selectedId)
                         }
                     },
+                    {
+                        id: 'view',
+                        innerHTML: '<i class="fa fa-eye"></i> VIEW',
+                        class: 'btn btn-orange btn-sm mr-1',
+                        onClick: () => {
+                            selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+
+                            viewCabang(selectedId)
+                        }
+                    },
                     // {
                     //     id: 'reload',
                     //     innerHTML: '<i class="fas fa-sync-alt"></i> RELOAD',
@@ -314,6 +324,9 @@
         function permission() {
             if (!`{{ $myAuth->hasPermission('cabang', 'store') }}`) {
                 $('#add').attr('disabled', 'disabled')
+            }
+            if (!`{{ $myAuth->hasPermission('cabang', 'show') }}`) {
+                $('#view').attr('disabled', 'disabled')
             }
             if (!`{{ $myAuth->hasPermission('cabang', 'update') }}`) {
                 $('#edit').attr('disabled', 'disabled')

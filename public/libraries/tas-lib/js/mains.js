@@ -879,6 +879,7 @@ function initDatepicker() {
 	if (!offDays) {
 		offDays = getOffDays();
 	}
+	console.log(offDays);
 
 	if (!element.parent().hasClass("input-group")) {
 		element.wrap(`
@@ -925,12 +926,25 @@ function initDatepicker() {
 				let currDate = y + "-" + m + "-" + d;
 
 				let offDay = offDays.find((offDay) => offDay.date == currDate);
+				let isSunday = date.getDay() === 0;
+				let isSat = date.getDay() === 6;
 
-				if (offDay) {
+				if (offDay || isSunday || isSat) {
+					
+					if (isSunday) {
+						desc ="sunday";
+						styleClass = "datepicker-offday"
+					}else if(isSat){
+						desc ="Saturday";
+						styleClass = "datepicker-saturday"
+					}else{
+						desc = offDay.description
+						styleClass = "datepicker-offday"
+					}
 					return [
 						true,
-						"datepicker-offday",
-						offDay.description,
+						styleClass,
+						desc,
 					];
 				} else {
 					return [true];

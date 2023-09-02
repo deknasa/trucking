@@ -295,6 +295,60 @@
           })
       })
   }
+  function viewCabang(cabangId) {
+    let form = $('#crudForm')
+
+    $('.modal-loader').removeClass('d-none')
+
+    form.data('action', 'view')
+    form.trigger('reset')
+    form.find('#btnSubmit').html(`
+      <i class="fa fa-save"></i>
+      Save
+    `)
+    form.find('#btnSubmit').prop('disabled',true)
+    form.find(`.sometimes`).hide()
+    $('#crudModalTitle').text('View Cabang')
+    $('.is-invalid').removeClass('is-invalid')
+    $('.invalid-feedback').remove()
+
+    Promise
+      .all([
+        setStatusAktifOptions(form)
+      ])
+      .then(() => {
+        showCabang(form, cabangId)
+          .then(cabangId => {
+              setFormBindKeys(form)
+              initSelect2(form.find('.select2bs4'), true)
+              form.find('[name]').removeAttr('disabled')
+  
+              form.find('select').each((index, select) => {
+                let element = $(select)
+  
+                if (element.data('select2')) {
+                  element.select2('destroy')
+                }
+              })
+  
+              form.find('[name]').attr('disabled', 'disabled').css({
+                background: '#fff'
+              })
+              form.find('[name=id]').prop('disabled',false)
+  
+            })
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .catch((error) => {
+            showDialog(error.statusText)
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
+          
+      })
+  }
 
   function getMaxLength(form) {
     if (!form.attr('has-maxlength')) {
