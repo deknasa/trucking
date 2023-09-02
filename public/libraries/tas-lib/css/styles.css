@@ -278,6 +278,9 @@ html {
 .datepicker-offday a {
 	color: red !important;
 }
+.datepicker-saturday a {
+	color: green !important;
+}
 
 .ui-jqgrid-btable tbody tr.table-success > td {
 	background-color: var(--jqgrid-selected-row-background) !important;
