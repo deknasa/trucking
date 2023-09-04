@@ -300,12 +300,97 @@
   $(document).ready(function() {
     addRow()
     $(document).on('click', '#addRow', function(event) {
-      addRow()
+      event.preventDefault()
+      let form = $('#crudForm')
+      let penerimaanStokHeaderId = form.find('[name=id]').val()
+      let action = form.data('action')
+      let data = $('#crudForm').serializeArray()
+      data = numericInput(data);
+      
+      
+      $.ajax({
+        url: `${apiUrl}penerimaanstokheader/addrow`,
+        method: 'POST',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: data,
+        success: response => {
+          addRow()
+        },
+        error: error => {
+          if (error.status === 422) {
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+
+            // Membuang elemen dengan kunci yang mengandung "detail_stok_id"
+            const filteredErrors = Object.keys(error.responseJSON.errors).reduce((result, key) => {
+              if (!key.includes("penerimaanstok_id")) {
+                if (!key.includes("detail_stok_id")) {
+                  result[key] = error.responseJSON.errors[key];
+                }
+              }
+              return result;
+            }, {});
+            
+            console.log(filteredErrors);
+            setErrorMessages(form, filteredErrors);
+          
+          } else {
+            showDialog(error.responseJSON)
+          }
+        },
+      }).always(() => {
+        $('#processingLoader').addClass('d-none')
+        $(this).removeAttr('disabled')
+      })
     });
 
     $(document).on('click', '.rmv', function(event) {
       deleteRow($(this).parents('tr'))
     })
+
+    function numericInput(data) {
+      $('#crudForm').find(`[name="detail_qty[]"]`).each((index, element) => {
+        if (element.value !="" &&  AutoNumeric.getAutoNumericElement(element) !== null) {
+          data.filter((row) => row.name === 'detail_qty[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="detail_qty[]"]`)[index])
+        }else{
+          data.filter((row) => row.name === 'detail_qty[]')[index].value = 0;
+        }
+      })
+      $('#crudForm').find(`[name="detail_harga[]"]`).each((index, element) => {
+        if (element.value !="" &&  AutoNumeric.getAutoNumericElement(element) !== null) {
+          data.filter((row) => row.name === 'detail_harga[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="detail_harga[]"]`)[index])
+        }else{
+          data.filter((row) => row.name === 'detail_harga[]')[index].value = 0;
+        }
+      })
+
+      $('#crudForm').find(`[name="detail_persentasediscount[]"]`).each((index, element) => {
+        if (element.value !="" &&  AutoNumeric.getAutoNumericElement(element) !== null) {
+          data.filter((row) => row.name === 'detail_persentasediscount[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="detail_persentasediscount[]"]`)[index])
+        }else{
+          data.filter((row) => row.name === 'detail_persentasediscount[]')[index].value = 0;
+        }
+      })
+
+      $('#crudForm').find(`[name="total_sebelum[]"]`).each((index, element) => {
+        if (element.value !="" &&  AutoNumeric.getAutoNumericElement(element) !== null) {
+          data.filter((row) => row.name === 'total_sebelum[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="total_sebelum[]"]`)[index])
+        }else{
+          data.filter((row) => row.name === 'total_sebelum[]')[index].value = 0;
+        }
+      })
+      $('#crudForm').find(`[name="totalItem[]"]`).each((index, element) => {
+        if (element.value !="" &&  AutoNumeric.getAutoNumericElement(element) !== null) {
+          data.filter((row) => row.name === 'totalItem[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="totalItem[]"]`)[index])
+        }else{
+          data.filter((row) => row.name === 'totalItem[]')[index].value = 0;
+        }
+      })
+      return data;
+    }
 
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
@@ -318,43 +403,7 @@
       let data = $('#crudForm').serializeArray()
 
       if (action !== 'delete') {
-        $('#crudForm').find(`[name="detail_qty[]"]`).each((index, element) => {
-          if (element.value !="" &&  AutoNumeric.getAutoNumericElement(element) !== null) {
-            data.filter((row) => row.name === 'detail_qty[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="detail_qty[]"]`)[index])
-          }else{
-            data.filter((row) => row.name === 'detail_qty[]')[index].value = 0;
-          }
-        })
-        $('#crudForm').find(`[name="detail_harga[]"]`).each((index, element) => {
-          if (element.value !="" &&  AutoNumeric.getAutoNumericElement(element) !== null) {
-            data.filter((row) => row.name === 'detail_harga[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="detail_harga[]"]`)[index])
-          }else{
-            data.filter((row) => row.name === 'detail_harga[]')[index].value = 0;
-          }
-        })
-  
-        $('#crudForm').find(`[name="detail_persentasediscount[]"]`).each((index, element) => {
-          if (element.value !="" &&  AutoNumeric.getAutoNumericElement(element) !== null) {
-            data.filter((row) => row.name === 'detail_persentasediscount[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="detail_persentasediscount[]"]`)[index])
-          }else{
-            data.filter((row) => row.name === 'detail_persentasediscount[]')[index].value = 0;
-          }
-        })
-
-        $('#crudForm').find(`[name="total_sebelum[]"]`).each((index, element) => {
-          if (element.value !="" &&  AutoNumeric.getAutoNumericElement(element) !== null) {
-            data.filter((row) => row.name === 'total_sebelum[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="total_sebelum[]"]`)[index])
-          }else{
-            data.filter((row) => row.name === 'total_sebelum[]')[index].value = 0;
-          }
-        })
-        $('#crudForm').find(`[name="totalItem[]"]`).each((index, element) => {
-          if (element.value !="" &&  AutoNumeric.getAutoNumericElement(element) !== null) {
-            data.filter((row) => row.name === 'totalItem[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="totalItem[]"]`)[index])
-          }else{
-            data.filter((row) => row.name === 'totalItem[]')[index].value = 0;
-          }
-        })
+        data = numericInput(data);
       }
 
 
@@ -716,6 +765,12 @@
     $('[name=nobon]').parents('.form-group').hide()
     $('[name=hutang_nobukti]').parents('.form-group').hide()
     $('[name=trado]').parents('.form-group').hide()
+    $('[name=tradodari]').parents('.form-group').hide()
+    $('[name=tradoke]').parents('.form-group').hide()
+    $('[name=gandengan]').parents('.form-group').hide()
+    $('[name=gandengandari]').parents('.form-group').hide()
+    $('[name=gandenganke]').parents('.form-group').hide()
+
     $('[name=supplier]').parents('.form-group').hide()
     $('[name=gudang]').parents('.form-group').hide()
     $('[name=gudangdari]').parents('.form-group').hide()
