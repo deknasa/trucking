@@ -348,6 +348,7 @@
     });
 
     $(document).on('click', '.rmv', function(event) {
+      // console.log($(.rmv).parents('tr'));
       deleteRow($(this).parents('tr'))
     })
 
@@ -937,7 +938,7 @@
         resetRow()
         $.each(response.detail, (id, detail) => {
           let detailRow = $(`
-            <tr class="trow">
+            <tr class="trow" data-id="${id}">
                   <td>
                     <div class="baris">1</div>
                   </td>
@@ -1081,7 +1082,7 @@
         $.each(response.detail, (id, detail) => {
           
           let detailRow = $(`
-            <tr class="trow">
+            <tr class="trow" data-id="${id}">
                   <td>
                     <div class="baris">1</div>
                   </td>
@@ -1230,7 +1231,7 @@
     $.each(data, (id, detail) => {
       
       let detailRow = $(`
-        <tr class="trow">
+        <tr class="trow" data-id="${id}">
               <td>
                 <div class="baris">1</div>
               </td>
@@ -1386,7 +1387,7 @@
         resetRow()
         $.each(response.detail, (id, detail) => {
           let detailRow = $(`
-            <tr class="trow">
+            <tr class="trow" data-id="${index}">
                   <td>
                     <div class="baris">1</div>
                   </td>
@@ -1517,7 +1518,7 @@
         $.each(response.detail, (id, detail) => {
           console.log(detail.maximum);
           let detailRow = $(`
-            <tr class="trow">
+            <tr class="trow" data-id="${id}">
                   <td>
                     <div class="baris">1</div>
                   </td>
@@ -2098,7 +2099,7 @@
 
   function addRow() {
     let detailRow = $(`
-    <tr class="trow">
+    <tr class="trow" data-id="${index}">
                   <td>
                     <div class="baris">1</div>
                   </td>
@@ -2212,7 +2213,11 @@
   }
 
   function deleteRow(row) {
+    let countRow = $('.rmv').parents('tr').length
     row.remove()
+    if (countRow <= 1) {
+      addRow()
+    }
     sumary()
     setRowNumbers()
   }
@@ -2416,7 +2421,7 @@
 
           $.each(response.detail, (id, detail) => {
             let detailRow = $(`
-              <tr class="trow">
+              <tr class="trow" data-id="${id}">
                     <td>
                       <div class="baris">1</div>
                     </td>
