@@ -879,7 +879,6 @@ function initDatepicker() {
 	if (!offDays) {
 		offDays = getOffDays();
 	}
-	console.log(offDays);
 
 	if (!element.parent().hasClass("input-group")) {
 		element.wrap(`

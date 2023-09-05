@@ -227,14 +227,26 @@ html {
 	background-color: #5012cb;
 }
 
+.btn-pink {
+	background-color: #d63384;
+	color: #fff;
+}
+
+.btn-pink:hover {
+	color: #fff !important;
+	background-color: #de5cd3d5;
+}
+
 .btn-orange {
 	background-color: #f50;
+	/* background-color: #3f6791; */
 	color: #fff;
 }
 
 .btn-orange:hover {
 	color: #fff !important;
 	background-color: #dd4a00;
+	/* background-color:  #25588f; */
 }
 
 .modal.modal-fullscreen .modal-dialog {
