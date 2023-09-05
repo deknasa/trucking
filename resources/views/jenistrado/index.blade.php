@@ -246,6 +246,16 @@
                                 }
                             },
                             {
+                                id: 'view',
+                                innerHTML: '<i class="fa fa-eye"></i> VIEW',
+                                class: 'btn btn-orange btn-sm mr-1',
+                                onClick: () => {
+                                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+            
+                                    viewJenisTrado(selectedId)
+                                }
+                            },
+                            {
                                 id: 'report',
                                 innerHTML: '<i class="fa fa-print"></i> REPORT',
                                 class: 'btn btn-info btn-sm mr-1',
@@ -297,6 +307,10 @@
                     function permission() {
                 if (!`{{ $myAuth->hasPermission('jenistrado', 'store') }}`) {
                     $('#add').attr('disabled', 'disabled')
+                }
+
+                if (!`{{ $myAuth->hasPermission('jenistrado', 'show') }}`) {
+                    $('#view').attr('disabled', 'disabled')
                 }
 
                 if (!`{{ $myAuth->hasPermission('jenistrado', 'update') }}`) {

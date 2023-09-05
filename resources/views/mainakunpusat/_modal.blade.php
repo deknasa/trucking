@@ -240,6 +240,11 @@
 
     activeGrid = null
 
+    form.find('#btnSubmit').prop('disabled',false)
+    if (form.data('action') == "view") {
+      form.find('#btnSubmit').prop('disabled',true)
+    }
+
     getMaxLength(form)
     initSelect2(form.find('.select2bs4'), true)
     initLookup()
@@ -384,6 +389,56 @@
         showMainAkunPusat(form, akunPusatId)
           .then(() => {
             $('#crudModal').modal('show')
+          })
+          .catch((error) => {
+            showDialog(error.statusText)
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
+      })
+  }
+
+  function viewMainAkunPusat(akunPusatId) {
+    let form = $('#crudForm')
+
+    $('.modal-loader').removeClass('d-none')
+
+    form.data('action', 'view')
+    form.trigger('reset')
+    form.find('#btnSubmit').html(`
+      <i class="fa fa-save"></i>
+      Save
+    `)
+    form.find(`.sometimes`).hide()
+    $('#crudModalTitle').text('View Akun Pusat')
+    $('.is-invalid').removeClass('is-invalid')
+    $('.invalid-feedback').remove()
+
+    Promise
+      .all([
+        setStatusCoaOptions(form),
+        setStatusAccountPayableOptions(form),
+        setStatusLabaRugiOptions(form),
+        setStatusNeracaOptions(form),
+        setStatusAktifOptions(form),
+      ])
+      .then(() => {
+        showMainAkunPusat(form, akunPusatId)
+        .then(akunPusatId => {
+              // form.find('.aksi').hide()
+              setFormBindKeys(form)
+              form.find('[name]').attr('disabled', 'disabled').css({
+                background: '#fff'
+              })
+              form.find('[name=id]').prop('disabled',false)
+              
+            })
+          .then(() => {
+            $('#crudModal').modal('show')
+            let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
+            name.attr('disabled', true)
+            name.find('.lookup-toggler').attr('disabled', true)
           })
           .catch((error) => {
             showDialog(error.statusText)

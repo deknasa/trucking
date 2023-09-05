@@ -67,7 +67,7 @@
                   <tr>
                     <th width="3%">Judul</th>
                     <th width="8%">Keterangan</th>
-                    <th width="2%">Aksi</th>
+                    <th width="2%" class="aksi">Aksi</th>
                   </tr>
                 </thead>
                 <tbody id="table_body" class="form-group">
@@ -76,7 +76,7 @@
                 <tfoot>
                   <tr>
                     <td colspan="2"></td>
-                    <td>
+                    <td class="aksi">
                       <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
                     </td>
                   </tr>
@@ -236,6 +236,11 @@ if(error.responseJSON.errors){
 
     activeGrid = null
 
+    form.find('#btnSubmit').prop('disabled',false)
+    if (form.data('action') == "view") {
+      form.find('#btnSubmit').prop('disabled',true)
+    }
+    
     getMaxLength(form)
     initSelect2(form.find('.select2bs4'), true)
   })
@@ -372,6 +377,60 @@ if(error.responseJSON.errors){
       })
   }
 
+  function viewAbsenTrado(absenTradoId) {
+    let form = $('#crudForm')
+
+    $('.modal-loader').removeClass('d-none')
+    
+    form.data('action', 'view')
+    form.trigger('reset')
+    form.find('#btnSubmit').html(`
+      <i class="fa fa-save"></i>
+      Save
+    `)
+    form.find('#btnSubmit').prop('disabled',true)
+    form.find(`.sometimes`).hide()
+    $('#crudModalTitle').text('View Absen Trado')
+    $('.is-invalid').removeClass('is-invalid')
+    $('.invalid-feedback').remove()
+
+    Promise
+      .all([
+        setStatusAktifOptions(form),
+      ])
+      .then(() => {
+        showAbsenTrado(form, absenTradoId)
+            .then(absenTradoId => {
+              form.find('.aksi').hide()
+              setFormBindKeys(form)
+              initSelect2(form.find('.select2bs4'), true)
+              form.find('[name]').removeAttr('disabled')
+  
+              form.find('select').each((index, select) => {
+                let element = $(select)
+  
+                if (element.data('select2')) {
+                  element.select2('destroy')
+                }
+              })
+  
+              form.find('[name]').attr('disabled', 'disabled').css({
+                background: '#fff'
+              })
+              form.find('[name=id]').prop('disabled',false)
+            })
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .catch((error) => {
+            showDialog(error.statusText)
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
+      })
+  }
+
   function getMaxLength(form) {
     if (!form.attr('has-maxlength')) {
       $.ajax({
@@ -490,7 +549,7 @@ if(error.responseJSON.errors){
                       <input type="text" name="value[]" class="form-control">
                     </div>
                   </td>
-                  <td>
+                  <td class="aksi">
                       <div class='btn btn-danger btn-sm delete-row'>Hapus</div>
                   </td>
               </tr>`)
@@ -572,7 +631,7 @@ if(error.responseJSON.errors){
                 <input type="text" name="value[]" class="form-control">
             </td>
 
-            <td>
+            <td class="aksi">
                 <div class='btn btn-danger btn-sm delete-row'>Hapus</div>
             </td>
         </tr>`)
