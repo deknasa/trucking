@@ -320,6 +320,10 @@
     activeGrid = null
 
     getMaxLength(form)
+    form.find('#btnSubmit').prop('disabled',false)
+    if (form.data('action') == "view") {
+      form.find('#btnSubmit').prop('disabled',true)
+    }
     initLookup()
     initSelect2(form.find('.select2bs4'), true)
     initDatepicker()
@@ -435,6 +439,57 @@
         showOrderanTrucking(form, orderanTruckingId)
           .then(() => {
             $('#crudModal').modal('show')
+          })
+          .catch((error) => {
+            showDialog(error.statusText)
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
+      })
+  }
+  function viewOrderanTrucking(orderanTruckingId) {
+    let form = $('#crudForm')
+
+    $('.modal-loader').removeClass('d-none')
+
+    form.data('action', 'view')
+    form.trigger('reset')
+    form.find('#btnSubmit').html(`
+      <i class="fa fa-save"></i>
+      Save
+    `)
+    form.find(`.sometimes`).hide()
+    $('#crudModalTitle').text('View Orderan Trucking')
+    $('.is-invalid').removeClass('is-invalid')
+    $('.invalid-feedback').remove()
+    $('#crudForm [name=tglbukti]').attr('readonly', true)
+    $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
+
+    Promise
+      .all([
+        setStatusLangsirOptions(form),
+        setStatusPeralihanOptions(form)
+      ])
+      .then(() => {
+        showOrderanTrucking(form, orderanTruckingId)
+        .then(orderanTruckingId => {
+              // form.find('.aksi').hide()
+              setFormBindKeys(form)
+              form.find('[name]').attr('disabled', 'disabled').css({
+                background: '#fff'
+              })
+              form.find('[name=id]').prop('disabled',false)
+              
+            })
+          .then(() => {
+            $('#crudModal').modal('show')
+            $('#crudForm').find(`.ui-datepicker-trigger`).attr('disabled', true)
+
+            let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
+            name.attr('disabled', true)
+            name.find('.lookup-toggler').attr('disabled', true)
+            name.find('.lookup-toggler').attr('disabled', true)
           })
           .catch((error) => {
             showDialog(error.statusText)

@@ -185,6 +185,11 @@
 
     activeGrid = null
 
+    form.find('#btnSubmit').prop('disabled',false)
+    if (form.data('action') == "view") {
+      form.find('#btnSubmit').prop('disabled',true)
+    }
+    
     getMaxLength(form)
     initSelect2(form.find('.select2bs4'), true)
   })
@@ -270,9 +275,9 @@
     form.data('action', 'delete')
     form.trigger('reset')
     form.find('#btnSubmit').html(`
-    <i class="fa fa-save"></i>
-    Hapus
-  `)
+      <i class="fa fa-save"></i>
+      Hapus
+    `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Delete Bank Pelanggan')
     $('.is-invalid').removeClass('is-invalid')
@@ -284,6 +289,60 @@
       ])
       .then(() => {
         showBankPelanggan(form, bankPelangganId)
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .catch((error) => {
+            showDialog(error.statusText)
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
+      })
+  }
+
+  function viewBankPelanggan(bankPelangganId) {
+    let form = $('#crudForm')
+
+    $('.modal-loader').removeClass('d-none')
+    form.data('action', 'view')
+    form.trigger('reset')
+    form.find('#btnSubmit').html(`
+      <i class="fa fa-save"></i>
+      Save
+    `)
+    form.find('#btnSubmit').prop('disabled',true)
+    form.find(`.sometimes`).hide()
+    $('#crudModalTitle').text('View Bank Pelanggan')
+    $('.is-invalid').removeClass('is-invalid')
+    $('.invalid-feedback').remove()
+
+    Promise
+      .all([
+        setStatusAktifOptions(form),
+      ])
+      .then(() => {
+        showBankPelanggan(form, bankPelangganId)
+        .then(bankPelangganId => {
+              // form.find('.aksi').hide()
+              setFormBindKeys(form)
+              initSelect2(form.find('.select2bs4'), true)
+              form.find('[name]').removeAttr('disabled')
+  
+              form.find('select').each((index, select) => {
+                let element = $(select)
+  
+                if (element.data('select2')) {
+                  element.select2('destroy')
+                }
+              })
+  
+              form.find('[name]').attr('disabled', 'disabled').css({
+                background: '#fff'
+              })
+              form.find('[name=id]').prop('disabled',false)
+              
+            })
           .then(() => {
             $('#crudModal').modal('show')
           })

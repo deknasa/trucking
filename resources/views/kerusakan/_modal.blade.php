@@ -166,6 +166,11 @@
 
     activeGrid = null
 
+    form.find('#btnSubmit').prop('disabled',false)
+    if (form.data('action') == "view") {
+      form.find('#btnSubmit').prop('disabled',true)
+    }
+
     getMaxLength(form)
     initSelect2(form.find(`
       [name="statusaktif"]
@@ -268,6 +273,48 @@
       ])
       .then(() => {
         showKerusakan(form, kerusakanId)
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .catch((error) => {
+            showDialog(error.statusText)
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
+      })
+  }
+  function viewKerusakan(kerusakanId) {
+    let form = $('#crudForm')
+
+    $('.modal-loader').removeClass('d-none')
+
+    form.data('action', 'view')
+    form.trigger('reset')
+    form.find('#btnSubmit').html(`
+      <i class="fa fa-save"></i>
+      Save
+    `)
+    form.find(`.sometimes`).hide()
+    $('#crudModalTitle').text('View Kerusakan')
+    $('.is-invalid').removeClass('is-invalid')
+    $('.invalid-feedback').remove()
+
+    Promise
+      .all([
+        setStatusAktifOptions(form)
+      ])
+      .then(() => {
+        showKerusakan(form, kerusakanId)
+        .then(kerusakanId => {
+              // form.find('.aksi').hide()
+              setFormBindKeys(form)
+              form.find('[name]').attr('disabled', 'disabled').css({
+                background: '#fff'
+              })
+              form.find('[name=id]').prop('disabled',false)
+              
+            })
           .then(() => {
             $('#crudModal').modal('show')
           })
