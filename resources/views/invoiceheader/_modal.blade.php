@@ -253,7 +253,7 @@
         })
         data.push({
           name: 'sp_id[]',
-          value: dataInvoice.id
+          value: dataInvoice.sp_id
         })
       });
 
@@ -532,7 +532,7 @@
     }
 
     if ($('#crudForm').find(`[name="agen_id"]`).val() != '' && $('#crudForm').find(`[name="jenisorder_id"]`).val() != '') {
-
+      $('#loaderGrid').removeClass('d-none')
       getDataInvoice(url).then((response) => {
         setTimeout(() => {
 
@@ -578,6 +578,12 @@
           {
             label: "id",
             name: "id",
+            hidden: true,
+            search: false,
+          },
+          {
+            label: "sp_id",
+            name: "sp_id",
             hidden: true,
             search: false,
           },
@@ -673,15 +679,17 @@
                     total
                   );
 
-                  retribusiDetails = $(`#tableInvoice tr:not(#${rowObject.rowId})`).find(`td[aria-describedby="tableInvoice_nominalretribusi"]`)
-                  ttlRetribusi = 0
-                  $.each(retribusiDetails, (index, retribusiDetail) => {
-                    ttlRetribusiDetail = parseFloat($(retribusiDetail).attr('title').replaceAll(',', ''))
-                    ttlRetribusis = (isNaN(ttlRetribusiDetail)) ? 0 : ttlRetribusiDetail;
-                    ttlRetribusi += ttlRetribusis
-                  });
-                  ttlRetribusi += retribusi
-                  initAutoNumeric($('.footrow').find(`td[aria-describedby="tableInvoice_nominalretribusi"]`).text(ttlRetribusi))
+                  // retribusiDetails = $(`#tableInvoice tr:not(#${rowObject.rowId})`).find(`td[aria-describedby="tableInvoice_nominalretribusi"]`)
+                  // ttlRetribusi = 0
+                  // $.each(retribusiDetails, (index, retribusiDetail) => {
+                  //   ttlRetribusiDetail = parseFloat($(retribusiDetail).attr('title').replaceAll(',', ''))
+                  //   ttlRetribusis = (isNaN(ttlRetribusiDetail)) ? 0 : ttlRetribusiDetail;
+                  //   ttlRetribusi += ttlRetribusis
+                  // });
+                  // ttlRetribusi += retribusi
+                  // initAutoNumeric($('.footrow').find(`td[aria-describedby="tableInvoice_nominalretribusi"]`).text(ttlRetribusi))
+
+                  setTotalRetribusi()
                   setTotalAll()
                 },
               }, ],
@@ -739,6 +747,12 @@
             name: "keterangan",
             sortable: true,
           },
+          {
+            label: "empty",
+            name: "empty",
+            hidden: true,
+            search: false,
+          },
         ],
         autowidth: true,
         shrinkToFit: false,
@@ -771,8 +785,8 @@
           let extra = (getExtra != '') ? parseFloat(getExtra.replaceAll(',', '')) : 0
 
           total = omset + extra + retribusi
-
-          if (indexColumn == 9) {
+          console.log(retribusi)
+          if (indexColumn == 13) {
             $("#tableInvoice").jqGrid(
               "setCell",
               rowId,
@@ -808,6 +822,8 @@
                 initAutoNumeric($(this).find(`td[aria-describedby="tableInvoice_nominalretribusi"]`))
               });
           }, 100);
+          
+          $('#loaderGrid').addClass('d-none')
           setTotalOmset()
           setTotalExtra()
           setTotalAll()
@@ -854,6 +870,22 @@
     /* Append global search */
     // loadGlobalSearch($('#tableInvoice'))
   }
+
+  $(document).on('click', '#resetdatafilter_tableInvoice', function(event) {
+    selectedRowsPengembalian = $("#tableInvoice").getGridParam("selectedRowIds");
+    $.each(selectedRowsPengembalian, function(index, value) {
+      $('#tableInvoice').jqGrid('saveCell', value, 20); //emptycell
+      $('#tableInvoice').jqGrid('saveCell', value, 13); //nominal
+    })
+
+  });
+  $(document).on('click', '#gbox_tableInvoice .ui-jqgrid-hbox .ui-jqgrid-htable thead .ui-search-toolbar th td a.clearsearchclass', function(event) {
+    selectedRowsPengembalian = $("#tableInvoice").getGridParam("selectedRowIds");
+    $.each(selectedRowsPengembalian, function(index, value) {
+      $('#tableInvoice').jqGrid('saveCell', value, 20); //emptycell
+      $('#tableInvoice').jqGrid('saveCell', value, 13); //nominal
+    })
+  })
 
   function getDataInvoice(url, id) {
 
@@ -959,44 +991,73 @@
   function setTotalOmset() {
     let omsetDetails = $(`#tableInvoice`).find(`td[aria-describedby="tableInvoice_omset"]`)
     let omset = 0
-    $.each(omsetDetails, (index, omsetDetail) => {
-      omsetdetail = parseFloat($(omsetDetail).text().replaceAll(',', ''))
-      omsets = (isNaN(omsetdetail)) ? 0 : omsetdetail;
+    let originalData = $("#tableInvoice").getGridParam("data");
+    $.each(originalData, function(index, value) {
+      lunas_omset = value.omset;
+      omsets = (isNaN(lunas_omset)) ? parseFloat(lunas_omset.replaceAll(',', '')) : parseFloat(lunas_omset)
       omset += omsets
-    });
+
+    })
+    // $.each(omsetDetails, (index, omsetDetail) => {
+    //   omsetdetail = parseFloat($(omsetDetail).text().replaceAll(',', ''))
+    //   omsets = (isNaN(omsetdetail)) ? 0 : omsetdetail;
+    //   omset += omsets
+    // });
     initAutoNumeric($('.footrow').find(`td[aria-describedby="tableInvoice_omset"]`).text(omset))
   }
 
   function setTotalExtra() {
     let extraDetails = $(`#tableInvoice`).find(`td[aria-describedby="tableInvoice_nominalextra"]`)
     let extra = 0
-    $.each(extraDetails, (index, extraDetail) => {
-      extradetail = parseFloat($(extraDetail).text().replaceAll(',', ''))
-      extras = (isNaN(extradetail)) ? 0 : extradetail;
+    let originalData = $("#tableInvoice").getGridParam("data");
+    $.each(originalData, function(index, value) {
+      lunas_extras = value.nominalextra;
+      extras = (isNaN(lunas_extras)) ? parseFloat(lunas_extras.replaceAll(',', '')) : parseFloat(lunas_extras)
       extra += extras
-    });
+
+    })
+    // $.each(extraDetails, (index, extraDetail) => {
+    //   extradetail = parseFloat($(extraDetail).text().replaceAll(',', ''))
+    //   extras = (isNaN(extradetail)) ? 0 : extradetail;
+    //   extra += extras
+    // });
     initAutoNumeric($('.footrow').find(`td[aria-describedby="tableInvoice_nominalextra"]`).text(extra))
   }
 
   function setTotalRetribusi() {
     let retribusiDetails = $(`#tableInvoice`).find(`td[aria-describedby="tableInvoice_nominalretribusi"]`)
     let retribusi = 0
-    $.each(retribusiDetails, (index, retribusiDetail) => {
-      retribusidetail = parseFloat($(retribusiDetail).text().replaceAll(',', ''))
-      retribusis = (isNaN(retribusidetail)) ? 0 : retribusidetail;
-      retribusi += retribusis
-    });
+    selectedRowsPinjaman = $("#tableInvoice").getGridParam("selectedRowIds");
+    $.each(selectedRowsPinjaman, function(index, value) {
+      dataPinjaman = $("#tableInvoice").jqGrid("getLocalRow", value);
+      nominals = (dataPinjaman.nominalretribusi == undefined || dataPinjaman.nominalretribusi == '') ? 0 : dataPinjaman.nominalretribusi;
+      retribusis = (isNaN(nominals)) ? parseFloat(nominals.replaceAll(',', '')) : parseFloat(nominals)
+      retribusi = retribusi + retribusis
+    })
+    // $.each(retribusiDetails, (index, retribusiDetail) => {
+    //   retribusidetail = parseFloat($(retribusiDetail).text().replaceAll(',', ''))
+    //   retribusis = (isNaN(retribusidetail)) ? 0 : retribusidetail;
+    //   retribusi += retribusis
+    // });
     initAutoNumeric($('.footrow').find(`td[aria-describedby="tableInvoice_nominalretribusi"]`).text(retribusi))
   }
 
   function setTotalAll() {
     let totalDetails = $(`#tableInvoice`).find(`td[aria-describedby="tableInvoice_total"]`)
     let total = 0
-    $.each(totalDetails, (index, totalDetail) => {
-      totaldetail = parseFloat($(totalDetail).text().replaceAll(',', ''))
-      totals = (isNaN(totaldetail)) ? 0 : totaldetail;
+    
+    let originalData = $("#tableInvoice").getGridParam("data");
+    $.each(originalData, function(index, value) {
+      lunas_total = value.total;
+      totals = (isNaN(lunas_total)) ? parseFloat(lunas_total.replaceAll(',', '')) : parseFloat(lunas_total)
       total += totals
-    });
+
+    })
+    // $.each(totalDetails, (index, totalDetail) => {
+    //   totaldetail = parseFloat($(totalDetail).text().replaceAll(',', ''))
+    //   totals = (isNaN(totaldetail)) ? 0 : totaldetail;
+    //   total += totals
+    // });
     initAutoNumeric($('.footrow').find(`td[aria-describedby="tableInvoice_total"]`).text(total))
   }
 
