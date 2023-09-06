@@ -572,6 +572,11 @@
 
     activeGrid = null
 
+    form.find('#btnSubmit').prop('disabled',false)
+    if (form.data('action') == "view") {
+      form.find('#btnSubmit').prop('disabled',true)
+    }
+
     getMaxLength(form)
     initSelect2(form.find('.select2bs4'), true)
     initDatepicker()
@@ -803,6 +808,68 @@
             $('#crudForm').find(`.btn.btn-easyui.lookup-toggler`).attr('disabled', true)
             $('#crudForm').find(`.ui-datepicker-trigger.btn.btn-easyui.text-easyui-dark`).attr('disabled', true)
 
+
+            $('#simpanKandang').hide()
+          })
+          .catch((error) => {
+            showDialog(error.responseJSON)
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
+
+      })
+  }
+  function viewUpahSupir(id) {
+    let form = $('#crudForm')
+
+    $('.modal-loader').removeClass('d-none')
+
+    form.data('action', 'view')
+    form.trigger('reset')
+    form.find('#btnSubmit').html(`
+      <i class="fa fa-save"></i>
+      Save
+    `)
+    form.find(`.sometimes`).hide()
+    $('#crudModalTitle').text('View Upah Supir')
+    $('.is-invalid').removeClass('is-invalid')
+    $('.invalid-feedback').remove()
+
+    Promise
+      .all([
+        setStatusAktifOptions(form),
+        setStatusPostingTnlOptions(form),
+        setTampilan(form)
+      ])
+      .then(() => {
+        showUpahSupir(form, id)
+          .then((upahsupir) => {
+            initDropzone(form.data('action'), upahsupir)
+          })
+          .then(stokId => {
+          form.find('[name]').removeAttr('disabled')
+          form.find('select').each((index, select) => {
+            let element = $(select)
+            if (element.data('select2')) {
+                element.select2('destroy')
+            }
+          })
+          form.find('[name]').attr('disabled', 'disabled').css({
+            background: '#fff'
+          })
+          form.find('[name=id]').prop('disabled',false)
+        })
+          .then(() => {
+            $('#crudModal').modal('show')
+            $('#crudForm').find(`.btn.btn-easyui.lookup-toggler`).attr('disabled', true)
+            $('#crudForm').find(`.ui-datepicker-trigger.btn.btn-easyui.text-easyui-dark`).attr('disabled', true)
+form.find(`.hasDatepicker`).prop('readonly', true)
+          form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
+          let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
+          name.attr('disabled', true)
+          name.find('.lookup-toggler').attr('disabled', true)
+          $(".dz-hidden-input").prop("disabled",true);
 
             $('#simpanKandang').hide()
           })

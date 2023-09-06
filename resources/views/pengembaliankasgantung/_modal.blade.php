@@ -377,6 +377,10 @@
     setFormBindKeys(form)
     activeGrid = null
     initLookup()
+    form.find('#btnSubmit').prop('disabled',false)
+    if (form.data('action') == "view") {
+      form.find('#btnSubmit').prop('disabled',true)
+    }
     initDatepicker()
   })
 
@@ -555,6 +559,43 @@
         $('.modal-loader').addClass('d-none')
       })
   }
+  function viewPengembalianKasGantung(userId) {
+    let form = $('#crudForm')
+
+    $('.modal-loader').removeClass('d-none')
+
+    form.data('action', 'view')
+    form.trigger('reset')
+    form.find('#btnSubmit').html(`
+      <i class="fa fa-save"></i>
+      Save
+    `)
+    form.find(`.sometimes`).hide()
+    $('#crudModalTitle').text('View Pengembalian Kas Gantung')
+    $('.is-invalid').removeClass('is-invalid')
+    $('.invalid-feedback').remove()
+    form.find('#btnTampil').prop('disabled', true)
+
+    Promise
+      .all([
+        showpengembalianKasGantung(form, userId)
+      ])
+      .then(() => {
+        $('#crudModal').modal('show')
+        form.find(`[name="tglbukti"]`).prop('readonly', true)
+        form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+        form.find(`[name="tgldari"]`).prop('readonly', true)
+        form.find(`[name="tgldari"]`).parent('.input-group').find('.input-group-append').remove()
+        form.find(`[name="tglsampai"]`).prop('readonly', true)
+        form.find(`[name="tglsampai"]`).parent('.input-group').find('.input-group-append').remove()
+      })
+      .catch((error) => {
+        showDialog(error.statusText)
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
+  }
 
   function loadPengembalianGrid() {
     //console.log('test')
@@ -572,7 +613,7 @@
             editable: false,
             formatter: function(value, rowOptions, rowData) {
               let disabled = '';
-              if ($('#crudForm').data('action') == 'delete') {
+              if (($('#crudForm').data('action') == 'delete') || ($('#crudForm').data('action') == 'view')) {
                 disabled = 'disabled'
               }
               return `<input type="checkbox" value="${rowData.id}" ${disabled} onChange="checkboxHandler(this, ${rowData.id})">`;
@@ -827,7 +868,7 @@
     if (aksi == 'edit') {
       id = $(`#crudForm`).find(`[name="id"]`).val()
       urlPengembalian = `${apiUrl}pengembaliankasgantungheader/${id}/edit/getpengembalian`
-    } else if (aksi == 'delete') {
+    } else if ((aksi == 'delete')||(aksi == 'view')) {
       urlPengembalian = `${apiUrl}pengembaliankasgantungheader/${id}/delete/getpengembalian`
       attribut = 'disabled'
       forCheckbox = 'disabled'

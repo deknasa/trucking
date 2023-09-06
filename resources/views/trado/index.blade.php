@@ -838,6 +838,15 @@
                         }
                     },
                     {
+                        id: 'view',
+                        innerHTML: '<i class="fa fa-eye"></i> VIEW',
+                        class: 'btn btn-orange btn-sm mr-1',
+                        onClick: () => {
+                          selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                          viewTrado(selectedId)
+                        }
+                      },
+                    {
                         id: 'report',
                         innerHTML: '<i class="fa fa-print"></i> REPORT',
                         class: 'btn btn-info btn-sm mr-1',
@@ -895,6 +904,10 @@
                 $('#edit').attr('disabled', 'disabled')
             }
 
+            if (!`{{ $myAuth->hasPermission('trado', 'show') }}`) {
+                $('#view').attr('disabled', 'disabled')
+            }
+       
             if (!`{{ $myAuth->hasPermission('trado', 'destroy') }}`) {
                 $('#delete').attr('disabled', 'disabled')
             }

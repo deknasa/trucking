@@ -257,6 +257,15 @@
               }
             }
           },
+          {
+            id: 'view',
+            innerHTML: '<i class="fa fa-eye"></i> VIEW',
+            class: 'btn btn-orange btn-sm mr-1',
+            onClick: () => {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              viewSuratPengantarApprovalInputTrip(selectedId)
+            }
+          },
         ]
       })
 
@@ -290,6 +299,10 @@
       $('#add').attr('disabled', 'disabled')
     }
 
+    if (!`{{ $myAuth->hasPermission('suratpengantarapprovalinputtrip', 'show') }}`) {
+      $('#view').attr('disabled', 'disabled')
+    }
+      
     if (!`{{ $myAuth->hasPermission('suratpengantarapprovalinputtrip', 'update') }}`) {
       $('#edit').attr('disabled', 'disabled')
     }
