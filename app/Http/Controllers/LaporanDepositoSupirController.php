@@ -58,12 +58,15 @@ class LaporanDepositoSupirController extends MyController
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setCellValue('A1', 'LAPORAN DEPOSITO SUPIR');
-        $sheet->getStyle("A1")->getFont()->setSize(20)->setBold(true);
+        
+        $sheet->setCellValue('A1', 'PT. TRANSPORINDO AGUNG SEJAHTERA');
+        $sheet->setCellValue('A2', 'Laporan Deposito Supir');
+        $sheet->setCellValue('A3', 'Periode: ' . $request->sampai);
+        $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
-        $sheet->mergeCells('A1:G3');
+        $sheet->mergeCells('A1:G1');
 
-        $header_start_row = 4;
+        $header_start_row = 5;
         $detail_start_row = $header_start_row + 1;
 
         $alphabets = range('A', 'Z');
