@@ -94,6 +94,11 @@ class LaporanJurnalUmumController extends MyController
             ->get(config('app.api_url') . 'laporanjurnalumum/export', $detailParams);
         
         $pengeluaran = $responses['data'];
+
+        $pengeluaran = $responses['data'];
+
+        $disetujui = $pengeluaran[0]['disetujui'] ?? '';
+        $diperiksa = $pengeluaran[0]['diperiksa'] ?? '';
         $user = Auth::user();
         // dd($pengeluaran);
         $spreadsheet = new Spreadsheet();
@@ -242,37 +247,37 @@ $sheet->getStyle("A" . ($detail_start_row + 1) . ":$lastColumn" . ($detail_start
 
 
 //persetujuan
-// $sheet->mergeCells('A' . ($detail_start_row + 3) . ':B' . ($detail_start_row + 3));
-// $sheet->setCellValue('A' . ($detail_start_row + 3), 'Disetujui Oleh,');
-// $sheet->mergeCells('C' . ($detail_start_row + 3). ($detail_start_row + 3));
-// $sheet->setCellValue('C' . ($detail_start_row + 3), 'Diperiksa Oleh');
-// $sheet->mergeCells('D' . ($detail_start_row + 3) . ':E' . ($detail_start_row + 3));
-// $sheet->setCellValue('D' . ($detail_start_row + 3), 'Disusun Oleh,');
+$sheet->mergeCells('A' . ($detail_start_row + 3) . ':B' . ($detail_start_row + 3));
+$sheet->setCellValue('A' . ($detail_start_row + 3), 'Disetujui Oleh,');
+$sheet->mergeCells('C' . ($detail_start_row + 3). ($detail_start_row + 3));
+$sheet->setCellValue('C' . ($detail_start_row + 3), 'Diperiksa Oleh');
+$sheet->mergeCells('D' . ($detail_start_row + 3) . ':E' . ($detail_start_row + 3));
+$sheet->setCellValue('D' . ($detail_start_row + 3), 'Disusun Oleh,');
 
 
-// $sheet->mergeCells('A' . ($detail_start_row + 6) . ':B' . ($detail_start_row + 6));
-// $sheet->setCellValue('A' . ($detail_start_row + 6), '( Bpk. Hasan )');
-// $sheet->mergeCells('C' . ($detail_start_row + 6) . ($detail_start_row + 6));
-// $sheet->setCellValue('C' . ($detail_start_row + 6), '( RINA )');
-// $sheet->mergeCells('D' . ($detail_start_row + 6) . ':E' . ($detail_start_row + 6));
-// $sheet->setCellValue('D' . ($detail_start_row + 6), '(                                          )');
+$sheet->mergeCells('A' . ($detail_start_row + 6) . ':B' . ($detail_start_row + 6));
+$sheet->setCellValue('A' . ($detail_start_row + 6), '( ' . $disetujui . ' )');
+$sheet->mergeCells('C' . ($detail_start_row + 6) . ($detail_start_row + 6));
+$sheet->setCellValue('C' . ($detail_start_row + 6), '( ' . $diperiksa . ' )');
+$sheet->mergeCells('D' . ($detail_start_row + 6) . ':E' . ($detail_start_row + 6));
+$sheet->setCellValue('D' . ($detail_start_row + 6), '(                                          )');
 
 
 // style persetujuan
-// $sheet->getStyle('A' . ($detail_start_row + 3))->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-// $sheet->getStyle('A' . ($detail_start_row + 3))->getFont()->setSize(12);
-// $sheet->getStyle('C' . ($detail_start_row + 3))->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-// $sheet->getStyle('C' . ($detail_start_row + 3))->getFont()->setSize(12);
-// $sheet->getStyle('D' . ($detail_start_row + 3))->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-// $sheet->getStyle('D' . ($detail_start_row + 3))->getFont()->setSize(12);
+$sheet->getStyle('A' . ($detail_start_row + 3))->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+$sheet->getStyle('A' . ($detail_start_row + 3))->getFont()->setSize(12);
+$sheet->getStyle('C' . ($detail_start_row + 3))->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+$sheet->getStyle('C' . ($detail_start_row + 3))->getFont()->setSize(12);
+$sheet->getStyle('D' . ($detail_start_row + 3))->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+$sheet->getStyle('D' . ($detail_start_row + 3))->getFont()->setSize(12);
 
 
-// $sheet->getStyle('A' . ($detail_start_row + 6))->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-// $sheet->getStyle('A' . ($detail_start_row + 6))->getFont()->setSize(12);
-// $sheet->getStyle('C' . ($detail_start_row + 6))->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-// $sheet->getStyle('C' . ($detail_start_row + 6))->getFont()->setSize(12);
-// $sheet->getStyle('D' . ($detail_start_row + 6))->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-// $sheet->getStyle('D' . ($detail_start_row + 6))->getFont()->setSize(12);
+$sheet->getStyle('A' . ($detail_start_row + 6))->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+$sheet->getStyle('A' . ($detail_start_row + 6))->getFont()->setSize(12);
+$sheet->getStyle('C' . ($detail_start_row + 6))->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+$sheet->getStyle('C' . ($detail_start_row + 6))->getFont()->setSize(12);
+$sheet->getStyle('D' . ($detail_start_row + 6))->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+$sheet->getStyle('D' . ($detail_start_row + 6))->getFont()->setSize(12);
 
 // mengatur border top dan bottom pada cell Total
 // $border_style = [

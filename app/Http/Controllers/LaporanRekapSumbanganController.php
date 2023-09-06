@@ -58,7 +58,8 @@ class LaporanRekapSumbanganController extends MyController
 
         $data = $header['data'];
 
-
+        $disetujui = $data[0]['disetujui'] ?? '';
+        $diperiksa = $data[0]['diperiksa'] ?? '';
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
@@ -169,8 +170,8 @@ class LaporanRekapSumbanganController extends MyController
         $sheet->setCellValue("B$ttd_start_row", 'Diperiksa Oleh,');
         $sheet->setCellValue("C$ttd_start_row", 'Disusun Oleh,');
 
-        $sheet->setCellValue("A" . ($ttd_start_row + 3), '( Bpk. Hasan )');
-        $sheet->setCellValue("B" . ($ttd_start_row + 3), '( Rina )');
+        $sheet->setCellValue("A" . ($ttd_start_row + 3), '( ' . $disetujui . ' )');
+        $sheet->setCellValue("B" . ($ttd_start_row + 3), '( ' . $diperiksa . ' )');
         $sheet->setCellValue("C" . ($ttd_start_row + 3), '(                )');
 
         $sheet->getColumnDimension('A')->setAutoSize(true);

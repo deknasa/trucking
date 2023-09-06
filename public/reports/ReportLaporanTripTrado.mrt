@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "739cf770f1284fda81b353f7696320a3",
+  "ReportGuid": "c8fbf6d1805f2322fa408e55b7dc152d",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanTripTrado.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1684228987000+0700)/",
+  "ReportChanged": "/Date(1693982414000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -24,52 +24,8 @@
     "DataSources": {
       "0": {
         "Ident": "StiDataTableSource",
-        "Name": "data",
-        "Alias": "data",
-        "Columns": {
-          "0": {
-            "Name": "NoPol",
-            "NameInSource": "NoPol",
-            "Alias": "NoPol",
-            "Type": "System.String"
-          },
-          "1": {
-            "Name": "full",
-            "NameInSource": "full",
-            "Alias": "full",
-            "Type": "System.String"
-          },
-          "2": {
-            "Name": "empty",
-            "NameInSource": "empty",
-            "Alias": "empty",
-            "Type": "System.String"
-          },
-          "3": {
-            "Name": "NamaSupir",
-            "NameInSource": "NamaSupir",
-            "Alias": "NamaSupir",
-            "Type": "System.String"
-          },
-          "4": {
-            "Name": "fullport",
-            "NameInSource": "fullport",
-            "Alias": "fullport",
-            "Type": "System.String"
-          },
-          "5": {
-            "Name": "emptyport",
-            "NameInSource": "emptyport",
-            "Alias": "emptyport",
-            "Type": "System.String"
-          }
-        },
-        "NameInSource": "Data.data"
-      },
-      "1": {
-        "Ident": "StiDataTableSource",
-        "Name": "user_roles_pivot",
-        "Alias": "user_roles_pivot",
+        "Name": "root_user_roles_pivot",
+        "Alias": "root_user_roles_pivot",
         "Columns": {
           "0": {
             "Name": "user_id",
@@ -90,12 +46,12 @@
             "Type": "System.String"
           }
         },
-        "NameInSource": "Data.user_roles_pivot"
+        "NameInSource": "Data.root_user_roles_pivot"
       },
-      "2": {
+      "1": {
         "Ident": "StiDataTableSource",
-        "Name": "user_roles",
-        "Alias": "user_roles",
+        "Name": "root_user_roles",
+        "Alias": "root_user_roles",
         "Columns": {
           "0": {
             "Name": "id",
@@ -128,24 +84,30 @@
             "Type": "System.DateTime"
           },
           "5": {
+            "Name": "info",
+            "NameInSource": "info",
+            "Alias": "info",
+            "Type": "System.String"
+          },
+          "6": {
             "Name": "pivot",
             "NameInSource": "pivot",
             "Alias": "pivot",
             "Type": "System.String"
           },
-          "6": {
+          "7": {
             "Name": "relationId",
             "NameInSource": "relationId",
             "Alias": "relationId",
             "Type": "System.String"
           }
         },
-        "NameInSource": "Data.user_roles"
+        "NameInSource": "Data.root_user_roles"
       },
-      "3": {
+      "2": {
         "Ident": "StiDataTableSource",
-        "Name": "user",
-        "Alias": "user",
+        "Name": "root_user",
+        "Alias": "root_user",
         "Columns": {
           "0": {
             "Name": "id",
@@ -190,36 +152,60 @@
             "Type": "System.String"
           },
           "7": {
+            "Name": "statusakses",
+            "NameInSource": "statusakses",
+            "Alias": "statusakses",
+            "Type": "System.String"
+          },
+          "8": {
+            "Name": "email",
+            "NameInSource": "email",
+            "Alias": "email",
+            "Type": "System.String"
+          },
+          "9": {
             "Name": "modifiedby",
             "NameInSource": "modifiedby",
             "Alias": "modifiedby",
             "Type": "System.String"
           },
-          "8": {
+          "10": {
             "Name": "created_at",
             "NameInSource": "created_at",
             "Alias": "created_at",
             "Type": "System.DateTime"
           },
-          "9": {
+          "11": {
             "Name": "updated_at",
             "NameInSource": "updated_at",
             "Alias": "updated_at",
             "Type": "System.DateTime"
           },
-          "10": {
+          "12": {
+            "Name": "info",
+            "NameInSource": "info",
+            "Alias": "info",
+            "Type": "System.String"
+          },
+          "13": {
             "Name": "roles",
             "NameInSource": "roles",
             "Alias": "roles",
             "Type": "System.String"
+          },
+          "14": {
+            "Name": "relationId",
+            "NameInSource": "relationId",
+            "Alias": "relationId",
+            "Type": "System.String"
           }
         },
-        "NameInSource": "Data.user"
+        "NameInSource": "Data.root_user"
       },
-      "4": {
+      "3": {
         "Ident": "StiDataTableSource",
-        "Name": "parameter",
-        "Alias": "parameter",
+        "Name": "root_parameter",
+        "Alias": "root_parameter",
         "Columns": {
           "0": {
             "Name": "sampai",
@@ -232,9 +218,41 @@
             "NameInSource": "dari",
             "Alias": "dari",
             "Type": "System.String"
+          },
+          "2": {
+            "Name": "relationId",
+            "NameInSource": "relationId",
+            "Alias": "relationId",
+            "Type": "System.String"
           }
         },
-        "NameInSource": "Data.parameter"
+        "NameInSource": "Data.root_parameter"
+      },
+      "4": {
+        "Ident": "StiDataTableSource",
+        "Name": "root",
+        "Alias": "root",
+        "Columns": {
+          "0": {
+            "Name": "data",
+            "NameInSource": "data",
+            "Alias": "data",
+            "Type": "System.String"
+          },
+          "1": {
+            "Name": "user",
+            "NameInSource": "user",
+            "Alias": "user",
+            "Type": "System.String"
+          },
+          "2": {
+            "Name": "parameter",
+            "NameInSource": "parameter",
+            "Alias": "parameter",
+            "Type": "System.String"
+          }
+        },
+        "NameInSource": "Data.root"
       }
     },
     "Relations": {
@@ -263,6 +281,58 @@
         "Alias": "user",
         "ParentSource": "user",
         "ChildSource": "user_roles"
+      },
+      "2": {
+        "Name": "root_user_roles",
+        "ChildColumns": {
+          "0": "relationId"
+        },
+        "ParentColumns": {
+          "0": "pivot"
+        },
+        "NameInSource": "root_user_roles_pivot",
+        "Alias": "root_user_roles",
+        "ParentSource": "root_user_roles",
+        "ChildSource": "root_user_roles_pivot"
+      },
+      "3": {
+        "Name": "root_user",
+        "ChildColumns": {
+          "0": "relationId"
+        },
+        "ParentColumns": {
+          "0": "roles"
+        },
+        "NameInSource": "root_user_roles",
+        "Alias": "root_user",
+        "ParentSource": "root_user",
+        "ChildSource": "root_user_roles"
+      },
+      "4": {
+        "Name": "root",
+        "ChildColumns": {
+          "0": "relationId"
+        },
+        "ParentColumns": {
+          "0": "user"
+        },
+        "NameInSource": "root_user",
+        "Alias": "root",
+        "ParentSource": "root",
+        "ChildSource": "root_user"
+      },
+      "5": {
+        "Name": "root",
+        "ChildColumns": {
+          "0": "relationId"
+        },
+        "ParentColumns": {
+          "0": "parameter"
+        },
+        "NameInSource": "root_parameter",
+        "Alias": "root",
+        "ParentSource": "root",
+        "ChildSource": "root_parameter"
       }
     }
   },
@@ -651,6 +721,7 @@
               "Ident": "StiText",
               "Name": "Text8",
               "ClientRectangle": "46,0,30,6",
+              "ComponentPlacement": "d.DataBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -672,6 +743,7 @@
               "Name": "Text14",
               "Guid": "1a7771f5fc99de5534f367bb00948924",
               "ClientRectangle": "82,0,30,6",
+              "ComponentPlacement": "d.DataBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -694,6 +766,7 @@
               "Ident": "StiText",
               "Name": "Text15",
               "ClientRectangle": "154,0,24,6",
+              "ComponentPlacement": "d.DataBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -715,6 +788,7 @@
               "Name": "Text17",
               "Guid": "2a2e4544953a672165ed7b7d15c9808c",
               "ClientRectangle": "180,0,22,6",
+              "ComponentPlacement": "d.DataBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -780,7 +854,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "( Bpk. Hasan )"
+                "Value": "( {data.disetujui} )"
               },
               "VertAlignment": "Center",
               "Font": ";10;Bold;",
@@ -824,7 +898,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "( RINA )"
+                "Value": "( {data.diperiksa} )"
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",

@@ -68,6 +68,10 @@ class LaporanSaldoInventoryController extends Controller
             ->get(config('app.api_url') . 'laporansaldoinventory/report', $detailParams);
 
         $data = $header['data'];
+
+        $disetujui = $data[0]['disetujui'] ?? '';
+        $diperiksa = $data[0]['diperiksa'] ?? '';
+
         $user = Auth::user();
 
         $data = $header['data'];
@@ -206,8 +210,8 @@ class LaporanSaldoInventoryController extends Controller
         $sheet->setCellValue("E$ttd_start_row", 'Diperiksa Oleh,');
         $sheet->setCellValue("G$ttd_start_row", 'Disusun Oleh,');
 
-        $sheet->setCellValue("C" . ($ttd_start_row + 3), '( Bpk. Hasan )');
-        $sheet->setCellValue("E" . ($ttd_start_row + 3), '( Rina )');
+        $sheet->setCellValue("C" . ($ttd_start_row + 3), '( ' . $disetujui . ' )');
+        $sheet->setCellValue("E" . ($ttd_start_row + 3), '( ' . $diperiksa . ' )');
         $sheet->setCellValue("G" . ($ttd_start_row + 3), '(                )');
 
 

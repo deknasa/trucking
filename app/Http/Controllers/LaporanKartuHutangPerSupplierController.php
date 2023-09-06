@@ -66,6 +66,9 @@ class LaporanKartuHutangPerSupplierController extends MyController
             ->get(config('app.api_url') . 'laporankartuhutangpersupplier/export', $detailParams);
 
         $pengeluaran = $responses['data'];
+
+        $disetujui = $pengeluaran[0]['disetujui'] ?? '';
+        $diperiksa = $pengeluaran[0]['diperiksa'] ?? '';
         $user = Auth::user();
         // dd($pengeluaran);
         $spreadsheet = new Spreadsheet();
@@ -254,9 +257,9 @@ class LaporanKartuHutangPerSupplierController extends MyController
 
 
         // $sheet->mergeCells('A' . ($detail_start_row + 6) . ':B' . ($detail_start_row + 6));
-        // $sheet->setCellValue('A' . ($detail_start_row + 6), '( Bpk. Hasan )');
+        // $sheet->setCellValue('A' . ($detail_start_row + 6), '( ' . $disetujui . ' )');
         // $sheet->mergeCells('C' . ($detail_start_row + 6) . ($detail_start_row + 6));
-        // $sheet->setCellValue('C' . ($detail_start_row + 6), '( RINA )');
+        // $sheet->setCellValue('C' . ($detail_start_row + 6), '( ' . $diperiksa . ' )');
         // $sheet->mergeCells('D' . ($detail_start_row + 6) . ':E' . ($detail_start_row + 6));
         // $sheet->setCellValue('D' . ($detail_start_row + 6), '(                                          )');
 
@@ -291,8 +294,8 @@ class LaporanKartuHutangPerSupplierController extends MyController
         $sheet->setCellValue("D$ttd_start_row", 'Diperiksa Oleh,');
         $sheet->setCellValue("F$ttd_start_row", 'Disusun Oleh,');
 
-        $sheet->setCellValue("B" . ($ttd_start_row + 3), '( Bpk. Hasan )');
-        $sheet->setCellValue("D" . ($ttd_start_row + 3), '( Rina )');
+        $sheet->setCellValue("B" . ($ttd_start_row + 3), '( ' . $disetujui . ' )');
+        $sheet->setCellValue("D" . ($ttd_start_row + 3), '( ' . $diperiksa . ' )');
         $sheet->setCellValue("F" . ($ttd_start_row + 3), '(                )');
 
         $writer = new Xlsx($spreadsheet);
