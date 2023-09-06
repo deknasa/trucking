@@ -68,7 +68,7 @@
                     <th width="2%">No</th>
                     <th width="70%">Keterangan</th>
                     <th width="26%">Nominal</th>
-                    <th width="2%">Aksi</th>
+                    <th width="2%" class="tbl_aksi">Aksi</th>
                   </tr>
                 </thead>
                 <tbody id="table_body" class="form-group">
@@ -101,7 +101,7 @@
                     <td>
                       <p class="text-right font-weight-bold autonumeric" id="total"></p>
                     </td>
-                    <td>
+                    <td class="tbl_aksi">
                       <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">TAMBAH</button>
                     </td>
                   </tr>
@@ -274,6 +274,10 @@
     activeGrid = null
 
     getMaxLength(form)
+    form.find('#btnSubmit').prop('disabled',false)
+    if (form.data('action') == "view") {
+      form.find('#btnSubmit').prop('disabled',true)
+    }
     initLookup()
     initDatepicker()
   })
@@ -378,6 +382,39 @@
       })
   }
 
+  function viewPiutangHeader(userId) {
+    let form = $('#crudForm')
+    $('.modal-loader').removeClass('d-none')
+
+    form.data('action', 'view')
+    form.trigger('reset')
+    form.find('#btnSubmit').html(`
+      <i class="fa fa-save"></i>
+      Save
+    `)
+    form.find(`.sometimes`).hide()
+    $('#crudModalTitle').text('View Piutang Header')
+    $('.is-invalid').removeClass('is-invalid')
+    $('.invalid-feedback').remove()
+
+    Promise
+      .all([
+        showPiutangHeader(form, userId)
+      ])
+      .then(() => {
+        $('#crudModal').modal('show')        
+        form.find(`.hasDatepicker`).prop('readonly', true)
+        form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
+        form.find(`.tbl_aksi`).hide()
+      })
+      .catch((error) => {
+        showDialog(error.statusText)
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
+  }
+
   function cekValidasi(Id, Aksi) {
     $.ajax({
       url: `{{ config('app.api_url') }}piutangheader/${Id}/cekvalidasi`,
@@ -460,7 +497,7 @@
                 <td>
                   <input type="text" name="nominal_detail[]" class="form-control nominal autonumeric">
                 </td>
-                <td>
+                <td class="tbl_aksi">
                   <button type="button" class="btn btn-danger btn-sm delete-row">HAPUS</button>
                 </td>
               </tr>
@@ -499,7 +536,7 @@
         <td>
           <input type="text" name="nominal_detail[]" class="form-control nominal autonumeric">
         </td>
-        <td>
+        <td class="tbl_aksi">
           <button type="button" class="btn btn-danger btn-sm delete-row">HAPUS</button>
         </td>
       </tr>

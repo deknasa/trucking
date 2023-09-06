@@ -524,6 +524,15 @@
             }
           },
           {
+            id: 'view',
+            innerHTML: '<i class="fa fa-eye"></i> VIEW',
+            class: 'btn btn-orange btn-sm mr-1',
+            onClick: () => {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              viewSupplier(selectedId)
+            }
+          },
+          {
             id: 'report',
             innerHTML: '<i class="fa fa-print"></i> REPORT',
             class: 'btn btn-info btn-sm mr-1',
@@ -588,6 +597,10 @@
         $('#add').attr('disabled', 'disabled')
       }
 
+      if (!`{{ $myAuth->hasPermission('supplier', 'show') }}`) {
+        $('#view').attr('disabled', 'disabled')
+      }
+        
       if (!`{{ $myAuth->hasPermission('supplier', 'update') }}`) {
         $('#edit').attr('disabled', 'disabled')
       }

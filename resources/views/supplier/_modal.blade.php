@@ -398,6 +398,10 @@
     setFormBindKeys(form)
 
     activeGrid = null
+    form.find('#btnSubmit').prop('disabled',false)
+    if (form.data('action') == "view") {
+      form.find('#btnSubmit').prop('disabled',true)
+    }
 
     getMaxLength(form)
     initSelect2(form.find('.select2bs4'), true)
@@ -496,6 +500,45 @@
   `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Delete Supplier')
+    $('.is-invalid').removeClass('is-invalid')
+    $('.invalid-feedback').remove()
+
+    Promise
+      .all([
+        setStatusDaftarHargaOptions(form),
+        setStatusAktifOptions(form),
+        setStatusPostingTnlOptions(form),
+        setTampilan(form)
+      ])
+      .then(() => {
+        showSupplier(form, supplierId)
+          .then(() => {
+            $('#crudModal').modal('show')
+            $('#crudForm').find(`.btn.btn-easyui.lookup-toggler`).attr('disabled', true)
+
+          })
+          .catch((error) => {
+            showDialog(error.statusText)
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
+      })
+  }
+  
+  function viewSupplier(supplierId) {
+    let form = $('#crudForm')
+
+    $('.modal-loader').removeClass('d-none')
+
+    form.data('action', 'view')
+    form.trigger('reset')
+    form.find('#btnSubmit').html(`
+      <i class="fa fa-save"></i>
+      Save
+    `)
+    form.find(`.sometimes`).hide()
+    $('#crudModalTitle').text('View Supplier')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 

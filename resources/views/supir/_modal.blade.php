@@ -510,6 +510,7 @@
     let form = $('#crudForm')
 
     $('.modal-loader').removeClass('d-none')
+    form.find('#btnSubmit').prop('disabled',false)
 
     form.find('[name]').removeAttr('disabled')
     form.trigger('reset')
@@ -559,6 +560,7 @@
     let form = $('#crudForm')
 
     $('.modal-loader').removeClass('d-none')
+    form.find('#btnSubmit').prop('disabled',false)
 
     form.find('[name]').removeAttr('disabled')
     form.data('action', 'edit')
@@ -605,6 +607,7 @@
     let form = $('#crudForm')
 
     $('.modal-loader').removeClass('d-none')
+    form.find('#btnSubmit').prop('disabled',false)
 
     form.data('action', 'delete')
     form.trigger('reset')
@@ -651,7 +654,66 @@
           })
       })
   }
+  function viewSupir(id) {
+    let form = $('#crudForm')
 
+    $('.modal-loader').removeClass('d-none')
+
+    form.data('action', 'view')
+    form.trigger('reset')
+    form.find('#btnSubmit').html(`
+      <i class="fa fa-save"></i>
+      Save
+    `)
+    form.find('#btnSubmit').prop('disabled',true)
+    
+
+    form.find(`.sometimes`).hide()
+    $('#crudModalTitle').text('View Supir')
+    $('.is-invalid').removeClass('is-invalid')
+    $('.invalid-feedback').remove()
+
+    Promise
+      .all([
+        setStatusAktifOptions(form),
+        setStatusPostingTnlOptions(form),
+        setTampilan(form)
+      ])
+      .then(() => {
+        showSupir(form, id)
+          .then(supir => {
+            setFormBindKeys(form)
+            initDropzone(form.data('action'), supir)
+            initDropzonePdf(form.data('action'), supir)
+            form.find('select').each((index, select) => {
+              let element = $(select)
+
+              if (element.data('select2')) {
+                element.select2('destroy')
+              }
+            })
+
+            form.find('[name]').attr('disabled', 'disabled').css({
+              background: '#fff'
+            })
+          })
+          .then(() => {
+            $('#crudModal').modal('show')
+            let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
+            name.attr('disabled', true)
+            name.find('.lookup-toggler').attr('disabled', true)
+            $(".dz-hidden-input").prop("disabled",true);
+
+          })
+          .catch((error) => {
+            showDialog(error.statusText)
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
+      })
+  }
+  
   const showSupir = function(form, id) {
     return new Promise((resolve, reject) => {
       $.ajax({
@@ -771,7 +833,6 @@
   }
 
   function initDropzone(action, data = null) {
-    console.log('data', data)
     let buttonRemoveDropzone = `<i class="fas fa-times-circle"></i>`
     $('.dropzoneImg').each((index, element) => {
       if (!element.dropzone) {

@@ -62,7 +62,7 @@
                     },
                     {
                         label: 'STATUS',
-                        name: 'statusaktif',
+                        name: 'statusAktif',
                         align: 'left',
                         stype: 'select',
                         searchoptions: {
@@ -87,25 +87,25 @@
                             }
                         },
                         formatter: (value, options, rowData) => {
-                            let statusaktif = JSON.parse(value)
-                            if (!statusaktif) {
+                            if (!value) {
                                 return ''
                             }
+                            let statusAktif = JSON.parse(value)
 
                             let formattedValue = $(`
             <div class="badge" style="background-color: ${statusAktif.WARNA}; color: ${statusAktif.WARNATULISAN};">
-              <span>${statusaktif.SINGKATAN}</span>
+              <span>${statusAktif.SINGKATAN}</span>
             </div>
           `)
 
                             return formattedValue[0].outerHTML
                         },
                         cellattr: (rowId, value, rowObject) => {
-                            let statusaktif = JSON.parse(rowObject.statusaktif)
-                            if (!statusaktif) {
+                            if (!rowObject.statusAktif) {
                                 return ` title=" "`
                             }
-                            return ` title="${statusaktif.MEMO}"`
+                            let statusAktif = JSON.parse(rowObject.statusAktif)
+                            return ` title="${statusAktif.MEMO}"`
                         }
                     },
 
@@ -371,6 +371,15 @@
                         }
                     },
                     {
+                        id: 'view',
+                        innerHTML: '<i class="fa fa-eye"></i> VIEW',
+                        class: 'btn btn-orange btn-sm mr-1',
+                        onClick: () => {
+                            selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                            viewStok(selectedId)
+                        }
+                    },
+                    {
                         id: 'report',
                         innerHTML: '<i class="fa fa-print"></i> REPORT',
                         class: 'btn btn-info btn-sm mr-1',
@@ -425,6 +434,10 @@
                 $('#add').attr('disabled', 'disabled')
             }
 
+            if (!`{{ $myAuth->hasPermission('stok', 'show') }}`) {
+                $('#view').attr('disabled', 'disabled')
+            }
+                
             if (!`{{ $myAuth->hasPermission('stok', 'update') }}`) {
                 $('#edit').attr('disabled', 'disabled')
             }
