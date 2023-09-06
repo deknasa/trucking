@@ -824,7 +824,7 @@
                 })
                 data.push({
                     name: 'pinjPribadi[]',
-                    value: dataPotPribadi.pinjPribadi_id
+                    value: dataPotPribadi.id
                 })
             });
 
@@ -1346,19 +1346,19 @@
                                             $("#tablePotSemua").jqGrid("setCell", rowObject.rowId, "pinjSemua_sisa", originalGridDataPotSemua.pinjSemua_sisa);
                                         }
                                     }
-                                    nominalPSDetails = $(`#tablePotSemua tr:not(#${rowObject.rowId})`).find(`td[aria-describedby="tablePotSemua_nominalPS"]`)
-                                    ttlNominalPS = 0
-                                    $.each(nominalPSDetails, (index, nominalPSDetail) => {
-                                        ttlNominalPSDetail = parseFloat($(nominalPSDetail).attr('title').replaceAll(',', ''))
-                                        ttlNominalPSs = (isNaN(ttlNominalPSDetail)) ? 0 : ttlNominalPSDetail;
-                                        ttlNominalPS += ttlNominalPSs
-                                    });
-                                    ttlNominalPS += nominalPS
-                                    initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePotSemua_nominalPS"]`).text(ttlNominalPS))
+                                    // nominalPSDetails = $(`#tablePotSemua tr:not(#${rowObject.rowId})`).find(`td[aria-describedby="tablePotSemua_nominalPS"]`)
+                                    // ttlNominalPS = 0
+                                    // $.each(nominalPSDetails, (index, nominalPSDetail) => {
+                                    //     ttlNominalPSDetail = parseFloat($(nominalPSDetail).attr('title').replaceAll(',', ''))
+                                    //     ttlNominalPSs = (isNaN(ttlNominalPSDetail)) ? 0 : ttlNominalPSDetail;
+                                    //     ttlNominalPS += ttlNominalPSs
+                                    // });
+                                    // ttlNominalPS += nominalPS
+                                    // initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePotSemua_nominalPS"]`).text(ttlNominalPS))
 
-                                    initAutoNumeric($('#detailLainnya').find(`[name="potonganpinjamansemua"]`).val(ttlNominalPS))
+                                    // initAutoNumeric($('#detailLainnya').find(`[name="potonganpinjamansemua"]`).val(ttlNominalPS))
+                                    setTotalNominalPS()
                                     hitungSisa()
-                                    // setAllTotal()
                                     setTotalSisaPotSemua()
                                 },
                             }, ],
@@ -1372,6 +1372,12 @@
                         sortable: false,
                         editable: false,
                         width: 500
+                    },
+                    {
+                        label: "empty",
+                        name: "empty",
+                        hidden: true,
+                        search: false,
                     },
                 ],
                 autowidth: true,
@@ -1400,12 +1406,11 @@
 
                     potSemuaSisa = 0
                     if ($('#crudForm').data('action') == 'edit') {
-                        potSemuaSisa = (parseFloat(originalGridDataPotSemua.pinjSemua_sisa) + parseFloat(originalGridDataPotSemua.nominalPS)) - nominalPS
+                        potSemuaSisa = (parseFloat(originalGridDataPotSemua.pinjSemua_sisa) + parseFloat(originalGridDataPotSemua.nominalPS)) - parseFloat(nominalPS)
                     } else {
-                        potSemuaSisa = originalGridDataPotSemua.pinjSemua_sisa
+                        potSemuaSisa = parseFloat(originalGridDataPotSemua.pinjSemua_sisa) - parseFloat(nominalPS)
                     }
-                    console.log(indexColumn)
-                    if (indexColumn == 6) {
+                    if (indexColumn == 7) {
 
                         $("#tablePotSemua").jqGrid(
                             "setCell",
@@ -1416,6 +1421,7 @@
                         );
                     }
                     // setTotalNominal()
+                    setTotalNominalPS()
                     setTotalSisaPotSemua()
                 },
                 isCellEditable: function(cellname, iRow, iCol) {
@@ -1444,6 +1450,7 @@
                             });
                     }, 100);
                     // setTotalNominal()
+                    setTotalNominalPS()
                     setTotalSisaPotSemua()
                     setHighlight($(this))
                 },
@@ -1576,25 +1583,47 @@
 
     }
 
+    $(document).on('click', '#resetdatafilter_tablePotSemua', function(event) {
+        selectedRowsPengembalian = $("#tablePotSemua").getGridParam("selectedRowIds");
+        $.each(selectedRowsPengembalian, function(index, value) {
+            $('#tablePotSemua').jqGrid('saveCell', value, 9); //emptycell
+            $('#tablePotSemua').jqGrid('saveCell', value, 7); //nominal
+        })
+
+    });
+    $(document).on('click', '#gbox_tablePotSemua .ui-jqgrid-hbox .ui-jqgrid-htable thead .ui-search-toolbar th td a.clearsearchclass', function(event) {
+        selectedRowsPengembalian = $("#tablePotSemua").getGridParam("selectedRowIds");
+        $.each(selectedRowsPengembalian, function(index, value) {
+            $('#tablePotSemua').jqGrid('saveCell', value, 9); //emptycell
+            $('#tablePotSemua').jqGrid('saveCell', value, 7); //nominal
+        })
+    })
+
     function setTotalSisaPotSemua() {
         let pinjSemua_sisaDetails = $(`#tablePotSemua`).find(`td[aria-describedby="tablePotSemua_pinjSemua_sisa"]`)
         let pinjSemua_sisa = 0
-        $.each(pinjSemua_sisaDetails, (index, pinjSemua_sisaDetail) => {
-            pinjSemua_sisadetail = parseFloat($(pinjSemua_sisaDetail).text().replaceAll(',', ''))
-            pinjSemua_sisas = (isNaN(pinjSemua_sisadetail)) ? 0 : pinjSemua_sisadetail;
+
+        let originalData = $("#tablePotSemua").getGridParam("data");
+        $.each(originalData, function(index, value) {
+            sisas = value.pinjSemua_sisa;
+            pinjSemua_sisas = (isNaN(sisas)) ? parseFloat(sisas.replaceAll(',', '')) : parseFloat(sisas)
             pinjSemua_sisa += pinjSemua_sisas
-        });
+
+        })
         initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePotSemua_pinjSemua_sisa"]`).text(pinjSemua_sisa))
     }
 
     function setTotalNominalPS() {
         let nominalPSDetails = $(`#tablePotSemua`).find(`td[aria-describedby="tablePotSemua_nominalPS"]`)
         let nominalPS = 0
-        $.each(nominalPSDetails, (index, nominalPSDetail) => {
-            nominalPSdetail = parseFloat($(nominalPSDetail).text().replaceAll(',', ''))
-            nominalPSs = (isNaN(nominalPSdetail)) ? 0 : nominalPSdetail;
-            nominalPS += nominalPSs
-        });
+
+        selectedRowsPinjaman = $("#tablePotSemua").getGridParam("selectedRowIds");
+        $.each(selectedRowsPinjaman, function(index, value) {
+            dataPinjaman = $("#tablePotSemua").jqGrid("getLocalRow", value);
+            nominals = (dataPinjaman.nominalPS == undefined || dataPinjaman.nominalPS == '') ? 0 : dataPinjaman.nominalPS;
+            getNominal = (isNaN(nominals)) ? parseFloat(nominals.replaceAll(',', '')) : parseFloat(nominals)
+            nominalPS = nominalPS + getNominal
+        })
         initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePotSemua_nominalPS"]`).text(nominalPS))
         initAutoNumeric($('#detailLainnya').find(`[name="potonganpinjamansemua"]`).val(nominalPS))
         hitungSisa()
@@ -1618,12 +1647,12 @@
                             if ($('#crudForm').data('action') == 'delete') {
                                 disabled = 'disabled'
                             }
-                            return `<input type="checkbox" value="${rowData.pinjPribadi_id}" ${disabled} onChange="checkboxPotPribadiHandler(this, ${rowData.pinjPribadi_id})">`;
+                            return `<input type="checkbox" value="${rowData.id}" ${disabled} onChange="checkboxPotPribadiHandler(this, ${rowData.id})">`;
                         },
                     },
                     {
                         label: "id",
-                        name: "pinjPribadi_id",
+                        name: "id",
                         hidden: true,
                         search: false,
                     },
@@ -1663,7 +1692,7 @@
                                 fn: function(event, rowObject) {
                                     let originalGridDataPotPribadi = $("#tablePotPribadi")
                                         .jqGrid("getGridParam", "originalData")
-                                        .find((row) => row.pinjPribadi_id == rowObject.rowId);
+                                        .find((row) => row.id == rowObject.rowId);
 
                                     let localRow = $("#tablePotPribadi").jqGrid(
                                         "getLocalRow",
@@ -1700,17 +1729,7 @@
                                         }
                                     }
 
-                                    nominalPPDetails = $(`#tablePotPribadi tr:not(#${rowObject.rowId})`).find(`td[aria-describedby="tablePotPribadi_nominalPP"]`)
-                                    ttlnominalPP = 0
-                                    $.each(nominalPPDetails, (index, nominalPPDetail) => {
-                                        ttlnominalPPDetail = parseFloat($(nominalPPDetail).attr('title').replaceAll(',', ''))
-                                        ttlnominalPPs = (isNaN(ttlnominalPPDetail)) ? 0 : ttlnominalPPDetail;
-                                        ttlnominalPP += ttlnominalPPs
-                                    });
-                                    ttlnominalPP += nominalPP
-                                    initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePotPribadi_nominalPP"]`).text(ttlnominalPP))
-
-                                    initAutoNumeric($('#detailLainnya').find(`[name="potonganpinjaman"]`).val(ttlnominalPP))
+                                    setTotalNominalPP()
                                     hitungSisa()
                                     setTotalSisaPotPribadi()
                                 },
@@ -1725,6 +1744,12 @@
                         sortable: false,
                         editable: false,
                         width: 500
+                    },
+                    {
+                        label: "empty",
+                        name: "empty",
+                        hidden: true,
+                        search: false,
                     },
                 ],
                 autowidth: true,
@@ -1744,7 +1769,7 @@
                 afterRestoreCell: function(rowId, value, indexRow, indexColumn) {
                     let originalGridDataPotPribadi = $("#tablePotPribadi")
                         .jqGrid("getGridParam", "originalData")
-                        .find((row) => row.pinjPribadi_id == rowId);
+                        .find((row) => row.id == rowId);
 
                     let getBayarPP = $("#tablePotPribadi").jqGrid("getCell", rowId, "nominalPP")
                     let nominalPP = (getBayarPP != '') ? parseFloat(getBayarPP.replaceAll(',', '')) : 0
@@ -1753,10 +1778,10 @@
                     if ($('#crudForm').data('action') == 'edit') {
                         potPribadiSisa = (parseFloat(originalGridDataPotPribadi.pinjPribadi_sisa) + parseFloat(originalGridDataPotPribadi.nominalPP)) - nominalPP
                     } else {
-                        potPribadiSisa = originalGridDataPotPribadi.pinjPribadi_sisa
+                        potPribadiSisa = parseFloat(originalGridDataPotPribadi.pinjPribadi_sisa) - nominalPP
                     }
                     console.log(indexColumn)
-                    if (indexColumn == 5) {
+                    if (indexColumn == 6) {
 
                         $("#tablePotPribadi").jqGrid(
                             "setCell",
@@ -1773,7 +1798,7 @@
                     let rowData = $(this).jqGrid("getRowData")[iRow - 1];
 
                     return $(this)
-                        .find(`tr input[value=${rowData.pinjPribadi_id}]`)
+                        .find(`tr input[value=${rowData.id}]`)
                         .is(":checked");
                 },
                 validationCell: function(cellobject, errormsg, iRow, iCol) {
@@ -1870,7 +1895,7 @@
         let selectedRowIdsPotPribadi = $("#tablePotPribadi").getGridParam("selectedRowIds");
         let originalGridDataPotPribadi = $("#tablePotPribadi")
             .jqGrid("getGridParam", "originalData")
-            .find((row) => row.pinjPribadi_id == rowId);
+            .find((row) => row.id == rowId);
 
         editableColumnsPotPribadi.forEach((editableColumn) => {
 
@@ -1925,25 +1950,45 @@
 
     }
 
+    $(document).on('click', '#resetdatafilter_tablePotPribadi', function(event) {
+        selectedRowsPengembalian = $("#tablePotPribadi").getGridParam("selectedRowIds");
+        $.each(selectedRowsPengembalian, function(index, value) {
+            $('#tablePotPribadi').jqGrid('saveCell', value, 7); //emptycell
+            $('#tablePotPribadi').jqGrid('saveCell', value, 5); //nominal
+        })
+
+    });
+    $(document).on('click', '#gbox_tablePotPribadi .ui-jqgrid-hbox .ui-jqgrid-htable thead .ui-search-toolbar th td a.clearsearchclass', function(event) {
+        selectedRowsPengembalian = $("#tablePotPribadi").getGridParam("selectedRowIds");
+        $.each(selectedRowsPengembalian, function(index, value) {
+            $('#tablePotPribadi').jqGrid('saveCell', value, 7); //emptycell
+            $('#tablePotPribadi').jqGrid('saveCell', value, 5); //nominal
+        })
+    })
+
     function setTotalSisaPotPribadi() {
         let pinjPribadi_sisaDetails = $(`#tablePotPribadi`).find(`td[aria-describedby="tablePotPribadi_pinjPribadi_sisa"]`)
         let pinjPribadi_sisa = 0
-        $.each(pinjPribadi_sisaDetails, (index, pinjPribadi_sisaDetail) => {
-            pinjPribadi_sisadetail = parseFloat($(pinjPribadi_sisaDetail).text().replaceAll(',', ''))
-            pinjPribadi_sisas = (isNaN(pinjPribadi_sisadetail)) ? 0 : pinjPribadi_sisadetail;
+        let originalData = $("#tablePotPribadi").getGridParam("data");
+        $.each(originalData, function(index, value) {
+            pinjPribadi_sisas = value.pinjPribadi_sisa;
+            pinjPribadi_sisas = (isNaN(pinjPribadi_sisas)) ? parseFloat(pinjPribadi_sisas.replaceAll(',', '')) : parseFloat(pinjPribadi_sisas)
             pinjPribadi_sisa += pinjPribadi_sisas
-        });
+
+        })
         initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePotPribadi_pinjPribadi_sisa"]`).text(pinjPribadi_sisa))
     }
 
     function setTotalNominalPP() {
         let nominalPPDetails = $(`#tablePotPribadi`).find(`td[aria-describedby="tablePotPribadi_nominalPP"]`)
         let nominalPP = 0
-        $.each(nominalPPDetails, (index, nominalPPDetail) => {
-            nominalPPdetail = parseFloat($(nominalPPDetail).text().replaceAll(',', ''))
-            nominalPPs = (isNaN(nominalPPdetail)) ? 0 : nominalPPdetail;
-            nominalPP += nominalPPs
-        });
+        selectedRowsPribadi = $("#tablePotPribadi").getGridParam("selectedRowIds");
+        $.each(selectedRowsPribadi, function(index, value) {
+            dataPinjaman = $("#tablePotPribadi").jqGrid("getLocalRow", value);
+            nominals = (dataPinjaman.nominalPP == undefined || dataPinjaman.nominalPP == '') ? 0 : dataPinjaman.nominalPP;
+            getNominal = (isNaN(nominals)) ? parseFloat(nominals.replaceAll(',', '')) : parseFloat(nominals)
+            nominalPP = nominalPP + getNominal
+        })
         initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePotPribadi_nominalPP"]`).text(nominalPP))
         initAutoNumeric($('#detailLainnya').find(`[name="potonganpinjaman"]`).val(nominalPP))
         hitungSisa()
@@ -2285,7 +2330,7 @@
 
                     $.each(response.data, (index, value) => {
                         if (value.gajisupir_id != null) {
-                            selectedIdPP.push(value.pinjPribadi_id)
+                            selectedIdPP.push(value.id)
                             totalBayarPP += parseFloat(value.nominalPP)
                         }
                     })
