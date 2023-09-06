@@ -46,39 +46,39 @@
       switch (pengeluarantruckings.statusformat) {
         case '122':
         //pjt
-        report.loadFile(`{{ asset('public/reports/ReportPengeluaranTruckingHeader.mrt') }}`)
+        report.loadFile(`{{ asset('public/reports/ReportPengeluaranTruckingHeaderPJT.mrt') }}`)
           break;
         case '251':
         //tde
-        report.loadFile(`{{ asset('public/reports/ReportPengeluaranTruckingHeader.mrt') }}`)
+        report.loadFile(`{{ asset('public/reports/ReportPengeluaranTruckingHeaderTDE.mrt') }}`)
           break;
         case '289':
         //BST
-        report.loadFile(`{{ asset('public/reports/ReportPengeluaranTruckingHeader.mrt') }}`)
+        report.loadFile(`{{ asset('public/reports/ReportPengeluaranTruckingHeaderBST.mrt') }}`)
           break;
         case '297':
         //BSB
-        report.loadFile(`{{ asset('public/reports/ReportPengeluaranTruckingHeader.mrt') }}`)
+        report.loadFile(`{{ asset('public/reports/ReportPengeluaranTruckingHeaderBSB.mrt') }}`)
           break;
         case '298':
         //KBBM
-        report.loadFile(`{{ asset('public/reports/ReportPengeluaranTruckingHeader.mrt') }}`)
+        report.loadFile(`{{ asset('public/reports/ReportPengeluaranTruckingHeaderKBBM.mrt') }}`)
           break;
         case '279':
         //BLS
-        report.loadFile(`{{ asset('public/reports/ReportPengeluaranTruckingHeader.mrt') }}`)
+        report.loadFile(`{{ asset('public/reports/ReportPengeluaranTruckingHeaderBLS.mrt') }}`)
           break;
         case '318':
         //KLAIM
-        report.loadFile(`{{ asset('public/reports/ReportPengeluaranTruckingHeader.mrt') }}`)
+        report.loadFile(`{{ asset('public/reports/ReportPengeluaranTruckingHeaderKLAIM.mrt') }}`)
           break;
         case '369':
         //PJK
-        report.loadFile(`{{ asset('public/reports/ReportPengeluaranTruckingHeader.mrt') }}`)
+        report.loadFile(`{{ asset('public/reports/ReportPengeluaranTruckingHeaderPJK.mrt') }}`)
           break;
         case '411':
         //BBT
-        report.loadFile(`{{ asset('public/reports/ReportPengeluaranTruckingHeader.mrt') }}`)
+        report.loadFile(`{{ asset('public/reports/ReportPengeluaranTruckingHeaderBBT.mrt') }}`)
           break;
         default:
       report.loadFile(`{{ asset('public/reports/ReportPengeluaranTruckingHeaderBLL.mrt') }}`)
