@@ -770,7 +770,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "( Bpk. Hasan )"
+                "Value": "(             )"
               },
               "VertAlignment": "Center",
               "Font": ";10;Bold;",
@@ -814,7 +814,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "( RINA )"
+                "Value": "(            )"
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",

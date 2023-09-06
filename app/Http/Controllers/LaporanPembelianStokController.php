@@ -104,6 +104,9 @@ class LaporanPembelianStokController extends MyController
             ->get(config('app.api_url') . 'laporanpembelianstok/export', $detailParams);
 
         $pengeluaran = $responses['data'];
+        
+        $disetujui = $pengeluaran[0]['disetujui'] ?? '';
+        $diperiksa = $pengeluaran[0]['diperiksa'] ?? '';
         $user = Auth::user();
         // dd($pengeluaran);
         $spreadsheet = new Spreadsheet();
@@ -303,8 +306,8 @@ class LaporanPembelianStokController extends MyController
         $sheet->setCellValue("C$ttd_start_row", 'Diperiksa Oleh,');
         $sheet->setCellValue("F$ttd_start_row", 'Disusun Oleh,');
 
-        $sheet->setCellValue("A" . ($ttd_start_row + 3), '( Bpk. Hasan )');
-        $sheet->setCellValue("C" . ($ttd_start_row + 3), '( Rina )');
+        $sheet->setCellValue("A" . ($ttd_start_row + 3), '( ' . $disetujui . ' )');
+        $sheet->setCellValue("C" . ($ttd_start_row + 3), '( ' . $diperiksa . ' )');
         $sheet->setCellValue("F" . ($ttd_start_row + 3), '(                )');
 
         $writer = new Xlsx($spreadsheet);

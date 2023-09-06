@@ -97,6 +97,10 @@ class LaporanHutangGiroController extends MyController
             ->get(config('app.api_url') . 'laporanhutanggiro/export', $detailParams);
 
         $pengeluaran = $responses['data'];
+
+        $disetujui = $pengeluaran[0]['disetujui'] ?? '';
+        $diperiksa = $pengeluaran[0]['diperiksa'] ?? '';
+
         $user = Auth::user();
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
@@ -213,8 +217,8 @@ class LaporanHutangGiroController extends MyController
         $sheet->setCellValue("C$ttd_start_row", 'Diperiksa Oleh,');
         $sheet->setCellValue("E$ttd_start_row", 'Disusun Oleh,');
 
-        $sheet->setCellValue("A" . ($ttd_start_row + 3), '( Bpk. Hasan )');
-        $sheet->setCellValue("C" . ($ttd_start_row + 3), '( Rina )');
+        $sheet->setCellValue("A" . ($ttd_start_row + 3), '( ' . $disetujui . ' )');
+        $sheet->setCellValue("C" . ($ttd_start_row + 3), '( ' . $diperiksa . ' )');
         $sheet->setCellValue("E" . ($ttd_start_row + 3), '(                )');
         //ukuran kolom
         $sheet->getColumnDimension('A')->setAutoSize(true);
