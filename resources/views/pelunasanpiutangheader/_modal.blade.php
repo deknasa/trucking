@@ -364,6 +364,16 @@
         value: selectedRows
       })
       $.each(selectedRows, function(index, value) {
+        $('#tablePelunasan').jqGrid('saveCell', value, 5); //nominal
+        $('#tablePelunasan').jqGrid('saveCell', value, 6); //sisa
+        $('#tablePelunasan').jqGrid('saveCell', value, 7); //keterangan
+        $('#tablePelunasan').jqGrid('saveCell', value, 8); //bayar
+        $('#tablePelunasan').jqGrid('saveCell', value, 9); //potongan
+        $('#tablePelunasan').jqGrid('saveCell', value, 10); //coapotongan
+        $('#tablePelunasan').jqGrid('saveCell', value, 11); //keteranganpotongan
+        $('#tablePelunasan').jqGrid('saveCell', value, 12); //nominallebihbayar
+      })
+      $.each(selectedRows, function(index, value) {
         dataPelunasan = $("#tablePelunasan").jqGrid("getLocalRow", value);
         let selectedBayar = (dataPelunasan.bayar == undefined || dataPelunasan.bayar == '') ? 0 : dataPelunasan.bayar;
         let selectedPotongan = (dataPelunasan.potongan == undefined || dataPelunasan.potongan == '') ? 0 : dataPelunasan.potongan;
@@ -749,11 +759,12 @@
                   let totalSisa
                   localRow.bayar = event.target.value;
                   let bayar = AutoNumeric.getNumber($('#crudForm').find(`[id="${rowObject.id}"]`)[0])
-                  let getPotongan = $("#tablePelunasan").jqGrid(
-                    "getCell",
-                    rowObject.rowId,
-                    "potongan")
-                  let potongan = (getPotongan != '') ? parseFloat(getPotongan.replaceAll(',', '')) : 0
+
+                  // ambil data potongan per row
+                  dataPelunasan = $("#tablePelunasan").jqGrid("getLocalRow", rowObject.rowId);
+                  getPotongan = (dataPelunasan.potongan == undefined) ? 0 : dataPelunasan.potongan;
+                  potongan = (isNaN(getPotongan)) ? parseFloat(getPotongan.replaceAll(',', '')) : getPotongan
+
                   if ($('#crudForm').data('action') == 'edit') {
                     totalSisa = (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.bayar) + parseFloat(originalGridData.potongan)) - bayar - potongan
                   } else {
@@ -782,15 +793,7 @@
                     }
                   }
 
-                  bayarDetails = $(`#tablePelunasan tr:not(#${rowObject.rowId})`).find(`td[aria-describedby="tablePelunasan_bayar"]`)
-                  ttlBayar = 0
-                  $.each(bayarDetails, (index, bayarDetail) => {
-                    ttlBayarDetail = parseFloat($(bayarDetail).attr('title').replaceAll(',', ''))
-                    ttlBayars = (isNaN(ttlBayarDetail)) ? 0 : ttlBayarDetail;
-                    ttlBayar += ttlBayars
-                  });
-                  ttlBayar += bayar
-                  initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePelunasan_bayar"]`).text(ttlBayar))
+                  setTotalBayar()
                   setTotalSisa()
                 },
               }, ],
@@ -822,11 +825,10 @@
 
                   let totalSisa
                   let potongan = AutoNumeric.getNumber($('#crudForm').find(`[id="${rowObject.id}"]`)[0])
-                  let getBayar = $("#tablePelunasan").jqGrid(
-                    "getCell",
-                    rowObject.rowId,
-                    "bayar")
-                  let bayar = (getBayar != '') ? parseFloat(getBayar.replaceAll(',', '')) : 0
+                  // ambil data potongan per row
+                  dataPelunasan = $("#tablePelunasan").jqGrid("getLocalRow", rowObject.rowId);
+                  getBayar = (dataPelunasan.bayar == undefined) ? 0 : dataPelunasan.bayar;
+                  bayar = (isNaN(getBayar)) ? parseFloat(getBayar.replaceAll(',', '')) : getBayar
 
                   if ($('#crudForm').data('action') == 'edit') {
                     totalSisa = (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.bayar) + parseFloat(originalGridData.potongan)) - bayar - potongan
@@ -854,15 +856,8 @@
                       $("#tablePelunasan").jqGrid("setCell", rowObject.rowId, "sisa", originalGridData.sisa - bayar);
                     }
                   }
-                  let potonganDetails = $(`#tablePelunasan tr:not(#${rowObject.rowId})`).find(`td[aria-describedby="tablePelunasan_potongan"]`)
-                  let ttlPotongan = 0
-                  $.each(potonganDetails, (index, potonganDetail) => {
-                    ttlPotDetail = parseFloat($(potonganDetail).attr('title').replaceAll(',', ''))
-                    ttlPotongans = (isNaN(ttlPotDetail)) ? 0 : ttlPotDetail;
-                    ttlPotongan += ttlPotongans
-                  });
-                  ttlPotongan += potongan
-                  initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePelunasan_potongan"]`).text(ttlPotongan))
+
+                  setTotalPotongan()
                   setTotalSisa()
                 },
               }, ],
@@ -955,22 +950,19 @@
                   localRow.nominallebihbayar = event.target.value;
                   let lebihBayar = AutoNumeric.getNumber($('#crudForm').find(`[id="${rowObject.id}"]`)[0])
 
-                  let lebihBayarDetails = $(`#tablePelunasan tr:not(#${rowObject.rowId})`).find(`td[aria-describedby="tablePelunasan_nominallebihbayar"]`)
-                  let ttlLebihBayar = 0
-                  $.each(lebihBayarDetails, (index, lebihBayarDetail) => {
-                    ttlLBayar = parseFloat($(lebihBayarDetail).attr('title').replaceAll(',', ''))
-                    ttlLBayars = (isNaN(ttlLBayar)) ? 0 : ttlLBayar;
-                    ttlLebihBayar += ttlLBayars
-                  });
-                  ttlLebihBayar += lebihBayar
-                  initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePelunasan_nominallebihbayar"]`).text(ttlLebihBayar))
-
+                  setTotalLebihBayar()
                 },
               }, ],
             },
 
             sortable: false,
             sorttype: "int",
+          },
+          {
+            label: "empty",
+            name: "empty",
+            hidden: true,
+            search: false,
           },
         ],
         autowidth: true,
@@ -1089,6 +1081,36 @@
     loadClearFilter($('#tablePelunasan'))
 
   }
+
+  $(document).on('click', '#resetdatafilter_tablePelunasan', function(event) {
+    selectedRowsPinjaman = $("#tablePelunasan").getGridParam("selectedRowIds");
+    $.each(selectedRowsPinjaman, function(index, value) {
+      $('#tablePelunasan').jqGrid('saveCell', value, 14); //emptycell
+      $('#tablePelunasan').jqGrid('saveCell', value, 6); //nominal
+      $('#tablePelunasan').jqGrid('saveCell', value, 7); //sisa
+      $('#tablePelunasan').jqGrid('saveCell', value, 8); //keterangan
+      $('#tablePelunasan').jqGrid('saveCell', value, 9); //bayar
+      $('#tablePelunasan').jqGrid('saveCell', value, 10); //potongan
+      $('#tablePelunasan').jqGrid('saveCell', value, 11); //coapotongan
+      $('#tablePelunasan').jqGrid('saveCell', value, 12); //keteranganpotongan
+      $('#tablePelunasan').jqGrid('saveCell', value, 13); //nominallebihbayar
+    })
+  })
+
+  $(document).on('click', '#gbox_tablePelunasan .ui-jqgrid-hbox .ui-jqgrid-htable thead .ui-search-toolbar th td a.clearsearchclass', function(event) {
+    selectedRowsPelunasan = $("#tablePelunasan").getGridParam("selectedRowIds");
+    $.each(selectedRowsPelunasan, function(index, value) {      
+      $('#tablePelunasan').jqGrid('saveCell', value, 14); //emptycell
+      $('#tablePelunasan').jqGrid('saveCell', value, 6); //nominal
+      $('#tablePelunasan').jqGrid('saveCell', value, 7); //sisa
+      $('#tablePelunasan').jqGrid('saveCell', value, 8); //keterangan
+      $('#tablePelunasan').jqGrid('saveCell', value, 9); //bayar
+      $('#tablePelunasan').jqGrid('saveCell', value, 10); //potongan
+      $('#tablePelunasan').jqGrid('saveCell', value, 11); //coapotongan
+      $('#tablePelunasan').jqGrid('saveCell', value, 12); //keteranganpotongan
+      $('#tablePelunasan').jqGrid('saveCell', value, 13); //nominallebihbayar
+    })
+  })
 
   function getDataPelunasan(agenId, id) {
     aksi = $('#crudForm').data('action')
@@ -1222,55 +1244,90 @@
   function setTotalBayar() {
     let bayarDetails = $(`#tablePelunasan`).find(`td[aria-describedby="tablePelunasan_bayar"]`)
     let bayar = 0
-    $.each(bayarDetails, (index, bayarDetail) => {
-      bayardetail = parseFloat($(bayarDetail).text().replaceAll(',', ''))
-      bayars = (isNaN(bayardetail)) ? 0 : bayardetail;
-      bayar += bayars
-    });
+    selectedRows = $("#tablePelunasan").getGridParam("selectedRowIds");
+    $.each(selectedRows, function(index, value) {
+      dataPelunasan = $("#tablePelunasan").jqGrid("getLocalRow", value);
+      lunas_nominal = (dataPelunasan.bayar == undefined || dataPelunasan.bayar == '') ? 0 : dataPelunasan.bayar;
+      bayars = (isNaN(lunas_nominal)) ? parseFloat(lunas_nominal.replaceAll(',', '')) : parseFloat(lunas_nominal)
+      bayar = bayar + bayars
+    })
+    // $.each(bayarDetails, (index, bayarDetail) => {
+    //   bayardetail = parseFloat($(bayarDetail).text().replaceAll(',', ''))
+    //   bayars = (isNaN(bayardetail)) ? 0 : bayardetail;
+    //   bayar += bayars
+    // });
     initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePelunasan_bayar"]`).text(bayar))
   }
 
   function setTotalPotongan() {
     let potonganDetails = $(`#tablePelunasan`).find(`td[aria-describedby="tablePelunasan_potongan"]`)
     let potongan = 0
-    $.each(potonganDetails, (index, potonganDetail) => {
-      potongandetail = parseFloat($(potonganDetail).text().replaceAll(',', ''))
-      potongans = (isNaN(potongandetail)) ? 0 : potongandetail;
-      potongan += potongans
-    });
+    selectedRows = $("#tablePelunasan").getGridParam("selectedRowIds");
+    $.each(selectedRows, function(index, value) {
+      dataPelunasan = $("#tablePelunasan").jqGrid("getLocalRow", value);
+      lunas_potongan = (dataPelunasan.potongan == undefined || dataPelunasan.potongan == '') ? 0 : dataPelunasan.potongan;
+      potongans = (isNaN(lunas_potongan)) ? parseFloat(lunas_potongan.replaceAll(',', '')) : parseFloat(lunas_potongan)
+      potongan = potongan + potongans
+    })
+    // $.each(potonganDetails, (index, potonganDetail) => {
+    //   potongandetail = parseFloat($(potonganDetail).text().replaceAll(',', ''))
+    //   potongans = (isNaN(potongandetail)) ? 0 : potongandetail;
+    //   potongan += potongans
+    // });
     initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePelunasan_potongan"]`).text(potongan))
   }
 
   function setTotalLebihBayar() {
     let lebihBayarDetails = $(`#tablePelunasan`).find(`td[aria-describedby="tablePelunasan_nominallebihbayar"]`)
     let lebihBayar = 0
-    $.each(lebihBayarDetails, (index, lebihBayarDetail) => {
-      lebihbayardetail = parseFloat($(lebihBayarDetail).text().replaceAll(',', ''))
-      lebihBayars = (isNaN(lebihbayardetail)) ? 0 : lebihbayardetail;
-      lebihBayar += lebihBayars
-    });
+    selectedRows = $("#tablePelunasan").getGridParam("selectedRowIds");
+    $.each(selectedRows, function(index, value) {
+      dataPelunasan = $("#tablePelunasan").jqGrid("getLocalRow", value);
+      lunas_lebih = (dataPelunasan.nominallebihbayar == undefined || dataPelunasan.nominallebihbayar == '') ? 0 : dataPelunasan.nominallebihbayar;
+      lebihBayars = (isNaN(lunas_lebih)) ? parseFloat(lunas_lebih.replaceAll(',', '')) : parseFloat(lunas_potongan)
+      lebihBayar = lebihBayar + lebihBayars
+    })
+    // $.each(lebihBayarDetails, (index, lebihBayarDetail) => {
+    //   lebihbayardetail = parseFloat($(lebihBayarDetail).text().replaceAll(',', ''))
+    //   lebihBayars = (isNaN(lebihbayardetail)) ? 0 : lebihbayardetail;
+    //   lebihBayar += lebihBayars
+    // });
     initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePelunasan_nominallebihbayar"]`).text(lebihBayar))
   }
 
   function setTotalNominal() {
     let nominalDetails = $(`#tablePelunasan`).find(`td[aria-describedby="tablePelunasan_nominal"]`)
     let nominal = 0
-    $.each(nominalDetails, (index, nominalDetail) => {
-      nominaldetail = parseFloat($(nominalDetail).text().replaceAll(',', ''))
-      nominals = (isNaN(nominaldetail)) ? 0 : nominaldetail;
+    let originalData = $("#tablePelunasan").getGridParam("data");
+    $.each(originalData, function(index, value) {
+      lunas_nominal = value.nominal;
+      nominals = (isNaN(lunas_nominal)) ? parseFloat(lunas_nominal.replaceAll(',', '')) : parseFloat(lunas_nominal)
       nominal += nominals
-    });
+
+    })
+    // $.each(nominalDetails, (index, nominalDetail) => {
+    //   nominaldetail = parseFloat($(nominalDetail).text().replaceAll(',', ''))
+    //   nominals = (isNaN(nominaldetail)) ? 0 : nominaldetail;
+    //   nominal += nominals
+    // });
     initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePelunasan_nominal"]`).text(nominal))
   }
 
   function setTotalSisa() {
     let sisaDetails = $(`#tablePelunasan`).find(`td[aria-describedby="tablePelunasan_sisa"]`)
     let sisa = 0
-    $.each(sisaDetails, (index, sisaDetail) => {
-      sisadetail = parseFloat($(sisaDetail).text().replaceAll(',', ''))
-      sisas = (isNaN(sisadetail)) ? 0 : sisadetail;
+    let originalData = $("#tablePelunasan").getGridParam("data");
+    $.each(originalData, function(index, value) {
+      lunas_sisa = value.sisa;
+      sisas = (isNaN(lunas_sisa)) ? parseFloat(lunas_sisa.replaceAll(',', '')) : parseFloat(lunas_sisa)
       sisa += sisas
-    });
+
+    })
+    // $.each(sisaDetails, (index, sisaDetail) => {
+    //   sisadetail = parseFloat($(sisaDetail).text().replaceAll(',', ''))
+    //   sisas = (isNaN(sisadetail)) ? 0 : sisadetail;
+    //   sisa += sisas
+    // });
     initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePelunasan_sisa"]`).text(sisa))
   }
 

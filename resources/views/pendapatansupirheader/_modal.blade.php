@@ -35,7 +35,7 @@
                             </div>
                         </div>
 
-                        <div class="row form-group">
+                        <div class="row form-group supir">
                             <div class="col-12 col-md-2">
                                 <label class="col-form-label">
                                     SUPIR
@@ -393,7 +393,7 @@
                     })
                     data.push({
                         name: 'supir_depo[]',
-                        value: dataDepo.id
+                        value: dataDepo.supir_id
                     })
                     data.push({
                         name: 'keterangan_depo[]',
@@ -1327,6 +1327,11 @@
                         name: "id",
                         hidden: true,
                         search: false,
+                    },{
+                        label: "supir_id",
+                        name: "supir_id",
+                        hidden: true,
+                        search: false,
                     },
                     {
                         label: "SUPIR",
@@ -1367,22 +1372,28 @@
                                             "nominal",
                                             0
                                         );
-                                        nominal = AutoNumeric.getNumber($('#crudForm').find(`[id="${rowObject.id}"]`)[0])
                                     }
-                                    nominalDetails = $(`#tableDeposito tr:not(#${rowObject.rowId})`).find(`td[aria-describedby="tableDeposito_nominal"]`)
-                                    ttlBayar = 0
-                                    $.each(nominalDetails, (index, nominalDetail) => {
-                                        ttlBayarDetail = parseFloat($(nominalDetail).attr('title').replaceAll(',', ''))
-                                        ttlBayars = (isNaN(ttlBayarDetail)) ? 0 : ttlBayarDetail;
-                                        ttlBayar += ttlBayars
-                                    });
-                                    ttlBayar += nominal
-                                    initAutoNumeric($('.footrow').find(`td[aria-describedby="tableDeposito_nominal"]`).text(ttlBayar))
+                                    setTotalNominalDeposito()
+                                    // nominalDetails = $(`#tableDeposito tr:not(#${rowObject.rowId})`).find(`td[aria-describedby="tableDeposito_nominal"]`)
+                                    // ttlBayar = 0
+                                    // $.each(nominalDetails, (index, nominalDetail) => {
+                                    //     ttlBayarDetail = parseFloat($(nominalDetail).attr('title').replaceAll(',', ''))
+                                    //     ttlBayars = (isNaN(ttlBayarDetail)) ? 0 : ttlBayarDetail;
+                                    //     ttlBayar += ttlBayars
+                                    // });
+                                    // ttlBayar += nominal
+                                    // initAutoNumeric($('.footrow').find(`td[aria-describedby="tableDeposito_nominal"]`).text(ttlBayar))
                                 },
                             }, ],
                         },
                         sortable: false,
                         sorttype: "int",
+                    },
+                    {
+                        label: "empty",
+                        name: "empty",
+                        hidden: true,
+                        search: false,
                     },
                 ],
                 autowidth: true,
@@ -1413,6 +1424,7 @@
                     console.log(iCol);
                 },
                 loadComplete: function() {
+                    setTotalNominalDeposito()
                     setHighlight($(this))
                 },
             })
@@ -1444,6 +1456,35 @@
         /* Append clear filter button */
         loadClearFilter($('#tableDeposito'))
 
+    }
+
+    $(document).on('click', '#resetdatafilter_tableDeposito', function(event) {
+        selectedRowsPengembalian = $("#tableDeposito").getGridParam("selectedRowIds");
+        $.each(selectedRowsPengembalian, function(index, value) {
+            $('#tableDeposito').jqGrid('saveCell', value, 5); //emptycell
+            $('#tableDeposito').jqGrid('saveCell', value, 4); //nominal
+        })
+
+    });
+    $(document).on('click', '#gbox_tableDeposito .ui-jqgrid-hbox .ui-jqgrid-htable thead .ui-search-toolbar th td a.clearsearchclass', function(event) {
+        selectedRowsPengembalian = $("#tableDeposito").getGridParam("selectedRowIds");
+        $.each(selectedRowsPengembalian, function(index, value) {
+            $('#tableDeposito').jqGrid('saveCell', value, 5); //emptycell
+            $('#tableDeposito').jqGrid('saveCell', value, 4); //nominal
+        })
+    })
+
+    function setTotalNominalDeposito() {
+        let nominalDetails = $(`#tableDeposito`).find(`td[aria-describedby="tableDeposito_nominal"]`)
+        let nominal = 0
+        selectedRowsPinjaman = $("#tableDeposito").getGridParam("selectedRowIds");
+        $.each(selectedRowsPinjaman, function(index, value) {
+            dataPinjaman = $("#tableDeposito").jqGrid("getLocalRow", value);
+            nominals = (dataPinjaman.nominal == undefined || dataPinjaman.nominal == '') ? 0 : dataPinjaman.nominal;
+            getNominal = (isNaN(nominals)) ? parseFloat(nominals.replaceAll(',', '')) : parseFloat(nominals)
+            nominal = nominal + getNominal
+        })
+        initAutoNumeric($('.footrow').find(`td[aria-describedby="tableDeposito_nominal"]`).text(nominal))
     }
 
     function getDataDeposito() {
@@ -1578,20 +1619,20 @@
                                         }
                                     }
 
-                                    ttlpinj_nominals = 0
-                                    let selectedRowsPinjaman = $("#tablePinjaman").getGridParam("selectedRowIds");
-                                    $.each(selectedRowsPinjaman, function(index, value) {
-                                        if (value != rowObject.rowId) {
-                                            dataPinjaman = $("#tablePinjaman").jqGrid("getLocalRow", value);
-                                            getNominal = (dataPinjaman.pinj_nominal == undefined) ? 0 : dataPinjaman.pinj_nominal;
-                                            ttlpinj_nominals = ttlpinj_nominals + parseFloat(getNominal.replaceAll(',', ''))
-                                        }
-                                    })
-                                    ttlpinj_nominal = pinj_nominal + parseFloat(ttlpinj_nominals)
-                                    initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePinjaman_pinj_nominal"]`).text(ttlpinj_nominal))
+                                    // ttlpinj_nominals = 0
+                                    // let selectedRowsPinjaman = $("#tablePinjaman").getGridParam("selectedRowIds");
+                                    // $.each(selectedRowsPinjaman, function(index, value) {
+                                    //     if (value != rowObject.rowId) {
+                                    //         dataPinjaman = $("#tablePinjaman").jqGrid("getLocalRow", value);
+                                    //         getNominal = (dataPinjaman.pinj_nominal == undefined) ? 0 : dataPinjaman.pinj_nominal;
+                                    //         ttlpinj_nominals = ttlpinj_nominals + parseFloat(getNominal.replaceAll(',', ''))
+                                    //     }
+                                    // })
+                                    // ttlpinj_nominal = pinj_nominal + parseFloat(ttlpinj_nominals)
+                                    // initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePinjaman_pinj_nominal"]`).text(ttlpinj_nominal))
 
-                                    initAutoNumeric($('#detailLainnya').find(`[name="potonganpinjaman"]`).val(ttlpinj_nominal))
-
+                                    // initAutoNumeric($('#detailLainnya').find(`[name="potonganpinjaman"]`).val(ttlpinj_nominal))
+                                    setTotalNominalPP()
                                     setTotalSisaPotPribadi()
                                 },
                             }, ],
@@ -1605,6 +1646,12 @@
                         sortable: false,
                         editable: false,
                         width: 500
+                    },
+                    {
+                        label: "empty",
+                        name: "empty",
+                        hidden: true,
+                        search: false,
                     },
                 ],
                 autowidth: true,
@@ -1633,10 +1680,10 @@
                     if ($('#crudForm').data('action') == 'edit') {
                         potPribadiSisa = (parseFloat(originalGridDataPotPribadi.pinj_sisa) + parseFloat(originalGridDataPotPribadi.pinj_nominal)) - pinj_nominal
                     } else {
-                        potPribadiSisa = originalGridDataPotPribadi.pinj_sisa
+                        potPribadiSisa = parseFloat(originalGridDataPotPribadi.pinj_sisa) - pinj_nominal
                     }
                     console.log(indexColumn)
-                    if (indexColumn == 5) {
+                    if (indexColumn == 8) {
 
                         $("#tablePinjaman").jqGrid(
                             "setCell",
@@ -1709,6 +1756,23 @@
         /* Append global search */
         // loadGlobalSearch($('#tablePinjaman'))
     }
+
+
+    $(document).on('click', '#resetdatafilter_tablePinjaman', function(event) {
+        selectedRowsPengembalian = $("#tablePinjaman").getGridParam("selectedRowIds");
+        $.each(selectedRowsPengembalian, function(index, value) {
+            $('#tablePinjaman').jqGrid('saveCell', value, 10); //emptycell
+            $('#tablePinjaman').jqGrid('saveCell', value, 8); //nominal
+        })
+
+    });
+    $(document).on('click', '#gbox_tablePinjaman .ui-jqgrid-hbox .ui-jqgrid-htable thead .ui-search-toolbar th td a.clearsearchclass', function(event) {
+        selectedRowsPengembalian = $("#tablePinjaman").getGridParam("selectedRowIds");
+        $.each(selectedRowsPengembalian, function(index, value) {
+            $('#tablePinjaman').jqGrid('saveCell', value, 10); //emptycell
+            $('#tablePinjaman').jqGrid('saveCell', value, 8); //nominal
+        })
+    })
 
     function getDataPinjaman() {
         aksi = $('#crudForm').data('action')
@@ -1817,7 +1881,7 @@
             sisa = value.pinj_sisa;
             sisa = (isNaN(sisa)) ? parseFloat(sisa.replaceAll(',', '')) : parseFloat(sisa)
             pinj_sisa += sisa
-           
+
         })
         initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePinjaman_pinj_sisa"]`).text(pinj_sisa))
     }
