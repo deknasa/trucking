@@ -99,17 +99,20 @@ class Myauth
         $data_union = DB::table('acos')
             ->select(['acos.id', 'acos.class', 'acos.method'])
             ->join('acl', 'acos.id', '=', 'acl.aco_id')
-            ->where('acos.class', 'like', "%$class%")
+            // ->where('acos.class', 'like', "%$class%")
+            ->where('acos.class', '=', $class)
             ->whereIn('acl.role_id', auth()->user()->roles->pluck('id')->toArray() ?? null);
 
         $data = DB::table('acos')
             ->select(['acos.id', 'acos.class', 'acos.method'])
             ->join('useracl', 'acos.id', '=', 'useracl.aco_id')
-            ->where('acos.class', 'like', "%$class%")
+            ->where('acos.class', '=', $class)
+            // ->where('acos.class', 'like', "%$class%")
             ->where('useracl.user_id', auth()->user()->id)
             ->unionAll($data_union)
             ->get();
         
+            // dd($data->tosql());
         if ($this->in_array_custom($method, $data->toArray()) == false && in_array($method, $this->exceptAuth['method']) == false) {
             return false;
         }
