@@ -1184,7 +1184,11 @@
   }
 
   function deleteRow(row) {
+    let countRow = $('.rmv').parents('tr').length
     row.remove()
+    if (countRow <= 1) {
+      addRow()
+    }
     sumary()
     setRowNumbers()
   }

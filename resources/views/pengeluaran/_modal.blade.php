@@ -882,8 +882,11 @@
   }
 
   function deleteRow(row) {
+    let countRow = $('.delete-row').parents('tr').length
     row.remove()
-
+    if (countRow <= 1) {
+      addRow()
+    }
     setRowNumbers()
     setTotal()
   }
