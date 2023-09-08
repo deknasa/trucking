@@ -56,6 +56,8 @@ class LaporanDepositoSupirController extends MyController
 
         $data = $header['data'];
 
+        $disetujui = $data[0]['disetujui'] ?? '';
+        $diperiksa = $data[0]['diperiksa'] ?? '';
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         
@@ -203,17 +205,13 @@ class LaporanDepositoSupirController extends MyController
 
         // set diketahui dibuat
         $ttd_start_row = $total_start_row + 2;
-        $sheet->setCellValue("B$ttd_start_row", 'Disetujui');
-        $sheet->setCellValue("C$ttd_start_row", 'Diketahui');
-        $sheet->setCellValue("D$ttd_start_row", 'Dibuat');
-        $sheet->getStyle("B$ttd_start_row:D$ttd_start_row")->applyFromArray($styleArray);
+        $sheet->setCellValue("A$ttd_start_row", 'Disetujui Oleh,');
+        $sheet->setCellValue("B$ttd_start_row", 'Diperiksa Oleh,');
+        $sheet->setCellValue("C$ttd_start_row", 'Disusun Oleh,');
 
-        $sheet->mergeCells("B" . ($ttd_start_row + 1) . ":B" . ($ttd_start_row + 3));
-        $sheet->mergeCells("C" . ($ttd_start_row + 1) . ":C" . ($ttd_start_row + 3));
-        $sheet->mergeCells("D" . ($ttd_start_row + 1) . ":D" . ($ttd_start_row + 3));
-        $sheet->getStyle("B" . ($ttd_start_row + 1) . ":B" . ($ttd_start_row + 3))->applyFromArray($styleArray);
-        $sheet->getStyle("C" . ($ttd_start_row + 1) . ":C" . ($ttd_start_row + 3))->applyFromArray($styleArray);
-        $sheet->getStyle("D" . ($ttd_start_row + 1) . ":D" . ($ttd_start_row + 3))->applyFromArray($styleArray);
+        $sheet->setCellValue("A" . ($ttd_start_row + 3), '( ' . $disetujui . ' )');
+        $sheet->setCellValue("B" . ($ttd_start_row + 3), '( ' . $diperiksa . ' )');
+        $sheet->setCellValue("C" . ($ttd_start_row + 3), '(                )');
 
 
         //style header
