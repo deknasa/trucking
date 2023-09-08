@@ -176,6 +176,7 @@
   let hasFormBindKeys = false
   let modalBody = $('#crudModal').find('.modal-body').html()
   let bankId
+  let isEditTgl
 
   $(document).ready(function() {
 
@@ -341,9 +342,9 @@
     activeGrid = null
 
     getMaxLength(form)
-    form.find('#btnSubmit').prop('disabled',false)
+    form.find('#btnSubmit').prop('disabled', false)
     if (form.data('action') == "view") {
-      form.find('#btnSubmit').prop('disabled',true)
+      form.find('#btnSubmit').prop('disabled', true)
     }
     initLookup()
     initSelect2(form.find('.select2bs4'), true)
@@ -399,7 +400,7 @@
             addRow()
           })
           .catch((error) => {
-            showDialog(error.statusText)
+            showDialog(error.responseJSON)
           })
           .finally(() => {
             $('.modal-loader').addClass('d-none')
@@ -460,6 +461,7 @@
 
     Promise
       .all([
+        setTglBukti(form),
         setStatusJenisTransaksiOptions(form),
 
         // $('#detailList tbody').remove()
@@ -470,6 +472,10 @@
             clearSelectedRows()
             $('#gs_').prop('checked', false)
             $('#crudModal').modal('show')
+            if (isEditTgl == 'TIDAK') {
+              form.find(`[name="tglbukti"]`).prop('readonly', true)
+              form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+            }
             $('#crudForm').find(`[name="bank"]`).parents('.input-group').children().attr('disabled', true)
             $('#crudForm').find(`[name="bank"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled', true)
             $('#crudForm').find(`[name="bank"]`).attr('disabled', false).attr('readonly', true)
@@ -480,7 +486,7 @@
             $('[name="alatbayar_id"]').attr('readonly', true);
           })
           .catch((error) => {
-            showDialog(error.statusText)
+            showDialog(error.responseJSON)
           })
           .finally(() => {
             $('.modal-loader').addClass('d-none')
@@ -518,7 +524,7 @@
             $('#crudModal').modal('show')
           })
           .catch((error) => {
-            showDialog(error.statusText)
+            showDialog(error.responseJSON)
           })
           .finally(() => {
             $('.modal-loader').addClass('d-none')
@@ -526,6 +532,7 @@
       })
 
   }
+
   function viewPengeluaran(id) {
 
     let form = $('#crudForm')
@@ -548,23 +555,23 @@
       ])
       .then(() => {
         showPengeluaran(form, id)
-        .then(id => {
-        // form.find('.aksi').hide()
-        setFormBindKeys(form)
-        initSelect2(form.find('.select2bs4'), true)
-        form.find('[name]').removeAttr('disabled')
-    
-        form.find('select').each((index, select) => {
-          let element = $(select)
-          if (element.data('select2')) {
-              element.select2('destroy')
-          }
-        })
-        form.find('[name]').attr('disabled', 'disabled').css({
-          background: '#fff'
-        })
-        form.find('[name=id]').prop('disabled',false)
-      })
+          .then(id => {
+            // form.find('.aksi').hide()
+            setFormBindKeys(form)
+            initSelect2(form.find('.select2bs4'), true)
+            form.find('[name]').removeAttr('disabled')
+
+            form.find('select').each((index, select) => {
+              let element = $(select)
+              if (element.data('select2')) {
+                element.select2('destroy')
+              }
+            })
+            form.find('[name]').attr('disabled', 'disabled').css({
+              background: '#fff'
+            })
+            form.find('[name=id]').prop('disabled', false)
+          })
           .then(() => {
             clearSelectedRows()
             $('#gs_').prop('checked', false)
@@ -576,7 +583,7 @@
             name.find('.lookup-toggler').attr('disabled', true)
           })
           .catch((error) => {
-            showDialog(error.statusText)
+            showDialog(error.responseJSON)
           })
           .finally(() => {
             $('.modal-loader').addClass('d-none')
@@ -932,7 +939,7 @@
 
           setErrorMessages(form, error.responseJSON.errors);
         } else {
-          showDialog(error.statusText)
+          showDialog(error.responseJSON)
         }
       },
     }).always(() => {
@@ -961,7 +968,7 @@
           form.attr('has-maxlength', true)
         },
         error: error => {
-          showDialog(error.statusText)
+          showDialog(error.responseJSON)
         }
       })
     }
@@ -1041,6 +1048,35 @@
         element.val('')
         element.data('currentValue', element.val())
       }
+    })
+  }
+  const setTglBukti = function(form) {
+    return new Promise((resolve, reject) => {
+      let data = [];
+      data.push({
+        name: 'grp',
+        value: 'EDIT TANGGAL BUKTI'
+      })
+      data.push({
+        name: 'subgrp',
+        value: 'PENGELUARAN KAS/BANK'
+      })
+      $.ajax({
+        url: `${apiUrl}parameter/getparamfirst`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: data,
+        success: response => {
+          isEditTgl = $.trim(response.text);
+          resolve()
+        },
+        error: error => {
+          reject(error)
+        }
+      })
     })
   }
 </script>

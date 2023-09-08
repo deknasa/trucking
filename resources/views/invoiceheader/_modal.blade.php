@@ -138,6 +138,7 @@
 <script>
   let hasFormBindKeys = false
   let modalBody = $('#crudModal').find('.modal-body').html()
+  let isEditTgl
 
   $(document).ready(function() {
 
@@ -457,6 +458,7 @@
 
     Promise
       .all([
+        setTglBukti(form),
         setStatusPilihanInvoiceOptions(form)
       ])
       .then(() => {
@@ -467,6 +469,10 @@
             clearSelectedRows()
             $('#gs_').prop('checked', false)
             $('#crudModal').modal('show')
+            if (isEditTgl == 'TIDAK') {
+              form.find(`[name="tglbukti"]`).prop('readonly', true)
+              form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+            }
             form.find(`[name="agen"]`).prop('readonly', true)
             form.find(`[name="agen"]`).parent('.input-group').find('.input-group-append').remove()
             form.find(`[name="agen"]`).parent('.input-group').find('.button-clear').remove()
@@ -474,7 +480,7 @@
             form.find(`[name="jenisorder"]`).parent('.input-group').find('.input-group-append').remove()
             form.find(`[name="jenisorder"]`).parent('.input-group').find('.button-clear').remove()
           }).catch((error) => {
-            showDialog(error.statusText)
+            showDialog(error.responseJSON)
           })
           .finally(() => {
             $('.modal-loader').addClass('d-none')
@@ -514,7 +520,7 @@
         $('#crudModal').modal('show')
       })
       .catch((error) => {
-        showDialog(error.statusText)
+        showDialog(error.responseJSON)
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
@@ -822,7 +828,7 @@
                 initAutoNumeric($(this).find(`td[aria-describedby="tableInvoice_nominalretribusi"]`))
               });
           }, 100);
-          
+
           $('#loaderGrid').addClass('d-none')
           setTotalOmset()
           setTotalExtra()
@@ -1045,7 +1051,7 @@
   function setTotalAll() {
     let totalDetails = $(`#tableInvoice`).find(`td[aria-describedby="tableInvoice_total"]`)
     let total = 0
-    
+
     let originalData = $("#tableInvoice").getGridParam("data");
     $.each(originalData, function(index, value) {
       lunas_total = value.total;
@@ -1214,7 +1220,7 @@
           form.attr('has-maxlength', true)
         },
         error: error => {
-          showDialog(error.statusText)
+          showDialog(error.responseJSON)
         }
       })
     }
@@ -1298,7 +1304,7 @@
 
           setErrorMessages(form, error.responseJSON.errors);
         } else {
-          showDialog(error.statusText)
+          showDialog(error.responseJSON)
         }
       },
     }).always(() => {
@@ -1420,6 +1426,36 @@
       }
     })
 
+  }
+
+  const setTglBukti = function(form) {
+    return new Promise((resolve, reject) => {
+      let data = [];
+      data.push({
+        name: 'grp',
+        value: 'EDIT TANGGAL BUKTI'
+      })
+      data.push({
+        name: 'subgrp',
+        value: 'INVOICE'
+      })
+      $.ajax({
+        url: `${apiUrl}parameter/getparamfirst`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: data,
+        success: response => {
+          isEditTgl = $.trim(response.text);
+          resolve()
+        },
+        error: error => {
+          reject(error)
+        }
+      })
+    })
   }
 </script>
 @endpush()

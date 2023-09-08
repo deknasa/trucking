@@ -336,7 +336,7 @@
 <script>
     let hasFormBindKeys = false
     let modalBody = $('#crudModal').find('.modal-body').html()
-
+    let isEditTgl
     $(document).ready(function() {
 
         $('#addRowTransfer').hide()
@@ -707,13 +707,15 @@
 
         Promise
             .all([
+                setTglBukti(form),
                 showProsesUangJalanSupir(form, userId)
             ])
             .then(() => {
                 $('#crudModal').modal('show')
-
-                // form.find(`[name="tglbukti"]`).prop('readonly', true)
-                // form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+                if (isEditTgl == 'TIDAK') {
+                    form.find(`[name="tglbukti"]`).prop('readonly', true)
+                    form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+                }
                 form.find(`[name="tgladjust"]`).parent('.input-group').find('.input-group-append').remove()
                 form.find(`[name="tgldeposit"]`).parent('.input-group').find('.input-group-append').remove()
                 form.find(`[name="supir"]`).parent('.input-group').find('.button-clear').remove()
@@ -1660,6 +1662,36 @@
                 $(`#crudForm [name="bank_idpengembalian"]`).first().val('')
                 element.data('currentValue', element.val())
             }
+        })
+    }
+
+    const setTglBukti = function(form) {
+        return new Promise((resolve, reject) => {
+            let data = [];
+            data.push({
+                name: 'grp',
+                value: 'EDIT TANGGAL BUKTI'
+            })
+            data.push({
+                name: 'subgrp',
+                value: 'PROSES UANG JALAN'
+            })
+            $.ajax({
+                url: `${apiUrl}parameter/getparamfirst`,
+                method: 'GET',
+                dataType: 'JSON',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                data: data,
+                success: response => {
+                    isEditTgl = $.trim(response.text);
+                    resolve()
+                },
+                error: error => {
+                    reject(error)
+                }
+            })
         })
     }
 </script>

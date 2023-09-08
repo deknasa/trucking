@@ -199,6 +199,7 @@
     let postDataTrip
     let triggerClickTrip
     let indexRowTrip
+    let isEditTgl
 
     $(document).ready(function() {
 
@@ -657,6 +658,7 @@
         Promise
             .all([
                 setTampilan(),
+                setTglBukti(form),
                 showPendapatanSupir(form, pendapatanId)
             ])
             .then(() => {
@@ -664,8 +666,10 @@
                 $('#gs_').prop('checked', false)
 
                 $('#crudModal').modal('show')
-                // form.find('[name=tglbukti]').attr('readonly', true)
-                // form.find('[name=tglbukti]').siblings('.input-group-append').remove()
+                if (isEditTgl == 'TIDAK') {
+                    form.find(`[name="tglbukti"]`).prop('readonly', true)
+                    form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+                }
                 supir = $('#crudForm').find(`[name="supir"]`).parents('.input-group')
                 supir.find('.button-clear').attr('disabled', true)
                 supir.children().find('.lookup-toggler').attr('disabled', true)
@@ -707,9 +711,6 @@
                 clearSelectedRows()
                 $('#gs_').prop('checked', false)
                 $('#crudModal').modal('show')
-
-                $('#crudForm [name=tglbukti]').attr('readonly', true)
-                $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
             })
             .catch((error) => {
                 showDialog(error.responseJSON)
@@ -1327,7 +1328,7 @@
                         name: "id",
                         hidden: true,
                         search: false,
-                    },{
+                    }, {
                         label: "supir_id",
                         name: "supir_id",
                         hidden: true,
@@ -2109,6 +2110,36 @@
                             $("#modalgrid").jqGrid("hideCol", `${field}`);
                         });
                     }
+                    resolve()
+                },
+                error: error => {
+                    reject(error)
+                }
+            })
+        })
+    }
+
+    const setTglBukti = function(form) {
+        return new Promise((resolve, reject) => {
+            let data = [];
+            data.push({
+                name: 'grp',
+                value: 'EDIT TANGGAL BUKTI'
+            })
+            data.push({
+                name: 'subgrp',
+                value: 'PENDAPATAN SUPIR'
+            })
+            $.ajax({
+                url: `${apiUrl}parameter/getparamfirst`,
+                method: 'GET',
+                dataType: 'JSON',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                data: data,
+                success: response => {
+                    isEditTgl = $.trim(response.text);
                     resolve()
                 },
                 error: error => {

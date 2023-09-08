@@ -129,6 +129,7 @@
 <script>
   let hasFormBindKeys = false
   let modalBody = $('#crudModal').find('.modal-body').html()
+  let isEditTgl
 
   $(document).ready(function() {
 
@@ -274,9 +275,9 @@
     activeGrid = null
 
     getMaxLength(form)
-    form.find('#btnSubmit').prop('disabled',false)
+    form.find('#btnSubmit').prop('disabled', false)
     if (form.data('action') == "view") {
-      form.find('#btnSubmit').prop('disabled',true)
+      form.find('#btnSubmit').prop('disabled', true)
     }
     initLookup()
     initDatepicker()
@@ -337,13 +338,18 @@
 
     Promise
       .all([
+        setTglBukti(form),
         showPiutangHeader(form, userId)
       ])
       .then(() => {
         $('#crudModal').modal('show')
+        if (isEditTgl == 'TIDAK') {
+          form.find(`[name="tglbukti"]`).prop('readonly', true)
+          form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+        }
       })
       .catch((error) => {
-        showDialog(error.statusText)
+        showDialog(error.responseJSON)
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
@@ -371,11 +377,9 @@
       ])
       .then(() => {
         $('#crudModal').modal('show')
-        form.find(`[name="tglbukti"]`).prop('readonly', true)
-        form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
       })
       .catch((error) => {
-        showDialog(error.statusText)
+        showDialog(error.responseJSON)
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
@@ -402,13 +406,13 @@
         showPiutangHeader(form, userId)
       ])
       .then(() => {
-        $('#crudModal').modal('show')        
+        $('#crudModal').modal('show')
         form.find(`.hasDatepicker`).prop('readonly', true)
         form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
         form.find(`.tbl_aksi`).hide()
       })
       .catch((error) => {
-        showDialog(error.statusText)
+        showDialog(error.responseJSON)
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
@@ -587,11 +591,12 @@
           form.attr('has-maxlength', true)
         },
         error: error => {
-          showDialog(error.statusText)
+          showDialog(error.responseJSON)
         }
       })
     }
   }
+
   function setTglJatuhTempo(top = 0) {
     // Tanggal awal dalam format "YYYY-MM-DD"
     const tanggalAwal = new Date();
@@ -638,6 +643,36 @@
         element.val('')
         element.data('currentValue', element.val())
       }
+    })
+  }
+
+  const setTglBukti = function(form) {
+    return new Promise((resolve, reject) => {
+      let data = [];
+      data.push({
+        name: 'grp',
+        value: 'EDIT TANGGAL BUKTI'
+      })
+      data.push({
+        name: 'subgrp',
+        value: 'PIUTANG'
+      })
+      $.ajax({
+        url: `${apiUrl}parameter/getparamfirst`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: data,
+        success: response => {
+          isEditTgl = $.trim(response.text);
+          resolve()
+        },
+        error: error => {
+          reject(error)
+        }
+      })
     })
   }
 </script>
