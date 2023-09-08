@@ -192,8 +192,41 @@
             }
         })
         $(document).on('click', "#addRow", function() {
-            addRow()
-        });
+            event.preventDefault()
+            let method = `POST`
+            let url = `${apiUrl}penerimaanheader/addrow`
+            let form = $('#crudForm')
+            let Id = form.find('[name=id]').val()
+            let action = form.data('action')
+            let data = $('#crudForm').serializeArray()
+            $('#crudForm').find(`[name="nominal_detail[]"`).each((index, element) => {
+                data.filter((row) => row.name === 'nominal_detail[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal_detail[]"]`)[index])
+            })
+            $.ajax({
+              url: url,
+              method: method,
+              dataType: 'JSON',
+              headers: {
+                Authorization: `Bearer ${accessToken}`
+              },
+              data: data,
+              success: response => {
+                addRow()
+              },
+              error: error => {
+                if (error.status === 422) {
+                  $('.is-invalid').removeClass('is-invalid')
+                  $('.invalid-feedback').remove()
+                  setErrorMessages(form, error.responseJSON.errors);
+                } else {
+                  showDialog(error.responseJSON)
+                }
+              },
+            }).always(() => {
+                $('#processingLoader').addClass('d-none')
+                $(this).removeAttr('disabled')
+            })  
+        });     
         $(document).on('change', `#crudForm [name="tgllunas"]`, function() {
             $('#crudForm').find(`[name="tgljatuhtempo[]"]`).val($(this).val()).trigger('change');
         });

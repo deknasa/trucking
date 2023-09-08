@@ -119,7 +119,38 @@
     $(document).ready(function() {
 
         $(document).on('click', "#addRow", function() {
-            addRow()
+            event.preventDefault()
+            let method = `POST`
+            let url = `${apiUrl}serviceinheader/addrow`
+            let form = $('#crudForm')
+            let Id = form.find('[name=id]').val()
+            let action = form.data('action')
+            let data = $('#crudForm').serializeArray()
+            $.ajax({
+                url: url,
+                method: method,
+                dataType: 'JSON',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                data: data,
+                success: response => {
+                    addRow()
+                },
+                error: error => {
+                    if (error.status === 422) {
+                    $('.is-invalid').removeClass('is-invalid')
+                    $('.invalid-feedback').remove()
+        
+                    setErrorMessages(form, error.responseJSON.errors);
+                  } else {
+                    showDialog(error.responseJSON)
+                  }
+                },
+            }).always(() => {
+                $('#processingLoader').addClass('d-none')
+                $(this).removeAttr('disabled')
+            })
         });
         $(document).on('change', `#crudForm [name="tglbukti"]`, function() {
             $('#crudForm').find(`[name="tglmasuk"]`).val($(this).val()).trigger('change');
