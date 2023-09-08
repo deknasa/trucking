@@ -192,6 +192,7 @@
   let modalBody = $('#crudModal').find('.modal-body').html()
   let bankId
   let selectAll = false
+  let isEditTgl
   $(document).ready(function() {
 
     $("#crudForm [name]").attr("autocomplete", "off");
@@ -646,7 +647,7 @@
         $('#crudModal').modal('show')
       })
       .catch((error) => {
-        showDialog(error.statusText)
+        showDialog(error.responseJSON)
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
@@ -1099,7 +1100,7 @@
 
   $(document).on('click', '#gbox_tablePelunasan .ui-jqgrid-hbox .ui-jqgrid-htable thead .ui-search-toolbar th td a.clearsearchclass', function(event) {
     selectedRowsPelunasan = $("#tablePelunasan").getGridParam("selectedRowIds");
-    $.each(selectedRowsPelunasan, function(index, value) {      
+    $.each(selectedRowsPelunasan, function(index, value) {
       $('#tablePelunasan').jqGrid('saveCell', value, 14); //emptycell
       $('#tablePelunasan').jqGrid('saveCell', value, 6); //nominal
       $('#tablePelunasan').jqGrid('saveCell', value, 7); //sisa
@@ -1347,10 +1348,15 @@
 
     Promise
       .all([
+        setTglBukti(form),
         showPelunasanPiutang(form, Id)
       ])
       .then(() => {
         $('#crudModal').modal('show')
+        if (isEditTgl == 'TIDAK') {
+          form.find(`[name="tglbukti"]`).prop('readonly', true)
+          form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+        }
         form.find(`[name="agen"]`).parent('.input-group').find('.button-clear').remove()
         form.find(`[name="agen"]`).parent('.input-group').find('.input-group-append').remove()
         form.find(`[name="bank"]`).parent('.input-group').find('.button-clear').remove()
@@ -1359,7 +1365,7 @@
         form.find(`[name="alatbayar"]`).parent('.input-group').find('.input-group-append').remove()
       })
       .catch((error) => {
-        showDialog(error.statusText)
+        showDialog(error.responseJSON)
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
@@ -1385,8 +1391,6 @@
       ])
       .then(() => {
         $('#crudModal').modal('show')
-        form.find(`[name="tglbukti"]`).prop('readonly', true)
-        form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
         form.find(`[name="agen"]`).parent('.input-group').find('.button-clear').remove()
         form.find(`[name="agen"]`).parent('.input-group').find('.input-group-append').remove()
         form.find(`[name="bank"]`).parent('.input-group').find('.button-clear').remove()
@@ -1395,7 +1399,7 @@
         form.find(`[name="alatbayar"]`).parent('.input-group').find('.input-group-append').remove()
       })
       .catch((error) => {
-        showDialog(error.statusText)
+        showDialog(error.responseJSON)
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
@@ -1888,7 +1892,7 @@
           form.attr('has-maxlength', true)
         },
         error: error => {
-          showDialog(error.statusText)
+          showDialog(error.responseJSON)
         }
       })
     }
@@ -2100,6 +2104,36 @@
         }
 
       }
+    })
+  }
+  
+  const setTglBukti = function(form) {
+    return new Promise((resolve, reject) => {
+      let data = [];
+      data.push({
+        name: 'grp',
+        value: 'EDIT TANGGAL BUKTI'
+      })
+      data.push({
+        name: 'subgrp',
+        value: 'PELUNASAN PIUTANG'
+      })
+      $.ajax({
+        url: `${apiUrl}parameter/getparamfirst`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: data,
+        success: response => {
+          isEditTgl = $.trim(response.text);
+          resolve()
+        },
+        error: error => {
+          reject(error)
+        }
+      })
     })
   }
 </script>

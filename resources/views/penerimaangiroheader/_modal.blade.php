@@ -149,6 +149,7 @@
     let hasFormBindKeys = false
     let modalBody = $('#crudModal').find('.modal-body').html()
     let formattedDate
+    let isEditTgl
     $(document).ready(function() {
 
         $('#crudForm').autocomplete({
@@ -549,15 +550,20 @@
 
         Promise
             .all([
+                setTglBukti(form),
                 showPenerimaanGiro(form, id)
             ])
             .then(() => {
                 clearSelectedRows()
                 $('#gs_').prop('checked', false)
                 $('#crudModal').modal('show')
+                if (isEditTgl == 'TIDAK') {
+                    form.find(`[name="tglbukti"]`).prop('readonly', true)
+                    form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+                }
             })
             .catch((error) => {
-                showDialog(error.statusText)
+                showDialog(error.responseJSON)
             })
             .finally(() => {
                 $('.modal-loader').addClass('d-none')
@@ -589,7 +595,7 @@
                 $('#crudModal').modal('show')
             })
             .catch((error) => {
-                showDialog(error.statusText)
+                showDialog(error.responseJSON)
             })
             .finally(() => {
                 $('.modal-loader').addClass('d-none')
@@ -971,7 +977,7 @@
 
                     setErrorMessages(form, error.responseJSON.errors);
                 } else {
-                    showDialog(error.statusText)
+                    showDialog(error.responseJSON)
                 }
             },
         }).always(() => {
@@ -1000,7 +1006,7 @@
                     form.attr('has-maxlength', true)
                 },
                 error: error => {
-                    showDialog(error.statusText)
+                    showDialog(error.responseJSON)
                 }
             })
         }
@@ -1036,6 +1042,35 @@
                 element.val('')
                 element.data('currentValue', element.val())
             }
+        })
+    }
+    const setTglBukti = function(form) {
+        return new Promise((resolve, reject) => {
+            let data = [];
+            data.push({
+                name: 'grp',
+                value: 'EDIT TANGGAL BUKTI'
+            })
+            data.push({
+                name: 'subgrp',
+                value: 'PENERIMAAN GIRO'
+            })
+            $.ajax({
+                url: `${apiUrl}parameter/getparamfirst`,
+                method: 'GET',
+                dataType: 'JSON',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                data: data,
+                success: response => {
+                    isEditTgl = $.trim(response.text);
+                    resolve()
+                },
+                error: error => {
+                    reject(error)
+                }
+            })
         })
     }
 </script>

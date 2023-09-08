@@ -117,7 +117,8 @@
 <script>
   let hasFormBindKeys = false
   let modalBody = $('#crudModal').find('.modal-body').html()
-
+  let isEditTgl
+  
   $(document).ready(function() {
 
     $(document).on('click', "#addRow", function() {
@@ -325,7 +326,7 @@
     $('#crudModalTitle').text('Create Nota Debet')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-    
+
     Promise
       .all([
         setStatusApprovalListOptions(form)
@@ -334,7 +335,7 @@
         $('#crudModal').modal('show')
       })
       .catch((error) => {
-        showDialog(error.statusText)
+        showDialog(error.responseJSON)
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
@@ -358,15 +359,20 @@
 
     Promise
       .all([
+        setTglBukti(form),
         setStatusApprovalListOptions(form)
       ])
       .then(() => {
         showNotaDebet(form, userId)
           .then(() => {
             $('#crudModal').modal('show')
+            if (isEditTgl == 'TIDAK') {
+              form.find(`[name="tglbukti"]`).prop('readonly', true)
+              form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+            }
           })
           .catch((error) => {
-            showDialog(error.statusText)
+            showDialog(error.responseJSON)
           })
           .finally(() => {
             $('.modal-loader').addClass('d-none')
@@ -400,7 +406,7 @@
             $('#crudModal').modal('show')
           })
           .catch((error) => {
-            showDialog(error.statusText)
+            showDialog(error.responseJSON)
           })
           .finally(() => {
             $('.modal-loader').addClass('d-none')
@@ -678,7 +684,7 @@
 
           setErrorMessages(form, error.responseJSON.errors);
         } else {
-          showDialog(error.statusText)
+          showDialog(error.responseJSON)
         }
       },
     }).always(() => {
@@ -709,7 +715,7 @@
         error: error => {
           console.log(error);
 
-          showDialog(error.statusText)
+          showDialog(error.responseJSON)
         }
       })
     }
@@ -814,5 +820,35 @@
   //     })
   //   })
   // }
+
+  const setTglBukti = function(form) {
+    return new Promise((resolve, reject) => {
+      let data = [];
+      data.push({
+        name: 'grp',
+        value: 'EDIT TANGGAL BUKTI'
+      })
+      data.push({
+        name: 'subgrp',
+        value: 'NOTA DEBET'
+      })
+      $.ajax({
+        url: `${apiUrl}parameter/getparamfirst`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: data,
+        success: response => {
+          isEditTgl = $.trim(response.text);
+          resolve()
+        },
+        error: error => {
+          reject(error)
+        }
+      })
+    })
+  }
 </script>
 @endpush()

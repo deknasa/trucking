@@ -132,6 +132,7 @@
   let postDataInvoice
   let triggerClickInvoice
   let indexRowInvoice
+  let isEditTgl
 
   $(document).ready(function() {
 
@@ -227,6 +228,10 @@
         value: form.find(`[name="agen_id"]`).val()
       })
 
+      data.push({
+        name: 'jumlahdetail',
+        value: selectedRows.length
+      })
       $.each(selectedRows, function(index, item) {
         data.push({
           name: 'id_detail[]',
@@ -503,12 +508,15 @@
 
     Promise
       .all([
+        setTglBukti(form),
         showInvoiceChargeGandenganHeader(form, invoiceChargeGandenganHeader)
       ])
       .then(() => {
         $('#crudModal').modal('show')
-        // $('#crudForm [name=tglbukti]').attr('readonly', true)
-        // $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
+        if (isEditTgl == 'TIDAK') {
+          form.find(`[name="tglbukti"]`).prop('readonly', true)
+          form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+        }
         form.find(`[name="agen"]`).parent('.input-group').find('.button-clear').remove()
         form.find(`[name="agen"]`).parent('.input-group').find('.input-group-append').remove()
       })
@@ -541,8 +549,6 @@
       ])
       .then(() => {
         $('#crudModal').modal('show')
-        $('#crudForm [name=tglbukti]').attr('readonly', true)
-        $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
       })
       .catch((error) => {
         showDialog(error.responseJSON)
@@ -1151,6 +1157,36 @@
         element.val('')
         element.data('currentValue', element.val())
       }
+    })
+  }
+
+  const setTglBukti = function(form) {
+    return new Promise((resolve, reject) => {
+      let data = [];
+      data.push({
+        name: 'grp',
+        value: 'EDIT TANGGAL BUKTI'
+      })
+      data.push({
+        name: 'subgrp',
+        value: 'INVOICE CHARGE'
+      })
+      $.ajax({
+        url: `${apiUrl}parameter/getparamfirst`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: data,
+        success: response => {
+          isEditTgl = $.trim(response.text);
+          resolve()
+        },
+        error: error => {
+          reject(error)
+        }
+      })
     })
   }
 </script>

@@ -121,6 +121,7 @@
   let postDataPosting
   let triggerClickPosting
   let indexRowPosting
+  let isEditTgl
 
   let sortnameNonPosting = 'nobukti_nonposting';
   let sortorderNonPosting = 'asc';
@@ -505,19 +506,22 @@
 
     Promise
       .all([
+        setTglBukti(form),
         showPemutihanSupir(form, pemutihanId)
       ])
       .then(() => {
         $('#crudModal').modal('show')
-        // $('#crudForm [name=tglbukti]').attr('readonly', true)
-        // $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
+        if (isEditTgl == 'TIDAK') {
+          form.find(`[name="tglbukti"]`).prop('readonly', true)
+          form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+        }
         $('#crudForm [name=supir]').siblings('.input-group-append').remove()
         $('#crudForm [name=supir]').siblings('.button-clear').remove()
         $('#crudForm [name=bank]').siblings('.button-clear').remove()
         $('#crudForm [name=bank]').siblings('.input-group-append').remove()
       })
       .catch((error) => {
-        showDialog(error.statusText)
+        showDialog(error.responseJSON)
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
@@ -552,12 +556,13 @@
 
       })
       .catch((error) => {
-        showDialog(error.statusText)
+        showDialog(error.responseJSON)
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
       })
   }
+
   function viewPemutihanSupir(pemutihanId) {
     let form = $('#crudForm')
 
@@ -582,8 +587,8 @@
         form.find('[name]').attr('disabled', 'disabled').css({
           background: '#fff'
         })
-        form.find('[name=id]').prop('disabled',false)
-        
+        form.find('[name=id]').prop('disabled', false)
+
         $('#crudModal').modal('show')
         form.find(`[name="tglbukti"]`).prop('readonly', true)
         form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
@@ -595,7 +600,7 @@
 
       })
       .catch((error) => {
-        showDialog(error.statusText)
+        showDialog(error.responseJSON)
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
@@ -1055,7 +1060,7 @@
           form.attr('has-maxlength', true)
         },
         error: error => {
-          showDialog(error.statusText)
+          showDialog(error.responseJSON)
         }
       })
     }
@@ -1285,6 +1290,36 @@
         initAutoNumeric($('#crudForm [name=penerimaansupir]').val(response.data.penerimaan))
         console.log(response.data)
       }
+    })
+  }
+  
+  const setTglBukti = function(form) {
+    return new Promise((resolve, reject) => {
+      let data = [];
+      data.push({
+        name: 'grp',
+        value: 'EDIT TANGGAL BUKTI'
+      })
+      data.push({
+        name: 'subgrp',
+        value: 'PEMUTIHAN SUPIR'
+      })
+      $.ajax({
+        url: `${apiUrl}parameter/getparamfirst`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: data,
+        success: response => {
+          isEditTgl = $.trim(response.text);
+          resolve()
+        },
+        error: error => {
+          reject(error)
+        }
+      })
     })
   }
 </script>

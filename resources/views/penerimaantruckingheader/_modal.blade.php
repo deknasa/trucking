@@ -219,6 +219,8 @@
   var listIdPenerimaan = []
   var listKodePenerimaan = []
   var listKeteranganPenerimaan = []
+  let isEditTgl
+
   $(document).ready(function() {
 
     $("#crudForm [name]").attr("autocomplete", "off");
@@ -1023,12 +1025,15 @@
 
     Promise
       .all([
+        setTglBukti(form),
         showPenerimaanTruckingHeader(form, id)
       ])
       .then(() => {
         $('#crudModal').modal('show')
-        // $('#crudForm [name=tglbukti]').attr('readonly', true)
-        // $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
+        if (isEditTgl == 'TIDAK') {
+          form.find(`[name="tglbukti"]`).prop('readonly', true)
+          form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+        }
         $('#crudForm [name=supirheader]').attr('readonly', true)
         $('#crudForm [name=supir]').siblings('.input-group-append').remove()
         $('#crudForm [name=supir]').siblings('.button-clear').remove()
@@ -1067,8 +1072,6 @@
       ])
       .then(() => {
         $('#crudModal').modal('show')
-        form.find(`[name="tglbukti"]`).prop('readonly', true)
-        form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
       })
       .catch((error) => {
         showDialog(error.statusText)
@@ -2992,6 +2995,36 @@
             listKeteranganPenerimaan[index] = data.keterangan;
           })
 
+        }
+      })
+    })
+  }
+  
+  const setTglBukti = function(form) {
+    return new Promise((resolve, reject) => {
+      let data = [];
+      data.push({
+        name: 'grp',
+        value: 'EDIT TANGGAL BUKTI'
+      })
+      data.push({
+        name: 'subgrp',
+        value: 'PENERIMAAN TRUCKING'
+      })
+      $.ajax({
+        url: `${apiUrl}parameter/getparamfirst`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: data,
+        success: response => {
+          isEditTgl = $.trim(response.text);
+          resolve()
+        },
+        error: error => {
+          reject(error)
         }
       })
     })
