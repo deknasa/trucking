@@ -310,6 +310,15 @@
             }
           },
           {
+            id: 'view',
+            innerHTML: '<i class="fa fa-eye"></i> VIEW',
+            class: 'btn btn-orange btn-sm mr-1',
+            onClick: () => {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              viewServiceOut(selectedId)
+            }
+          },    
+          {
             id: 'report',
             innerHTML: '<i class="fa fa-print"></i> REPORT',
             class: 'btn btn-info btn-sm mr-1',
@@ -377,6 +386,10 @@
 
     if (!`{{ $myAuth->hasPermission('serviceoutheader', 'update') }}`) {
       $('#edit').attr('disabled', 'disabled')
+    }
+
+    if (!`{{ $myAuth->hasPermission('serviceoutheader', 'show') }}`) {
+      $('#view').attr('disabled', 'disabled')
     }
 
     if (!`{{ $myAuth->hasPermission('serviceoutheader', 'destroy') }}`) {

@@ -487,6 +487,15 @@
             }
           },
           {
+            id: 'view',
+            innerHTML: '<i class="fa fa-eye"></i> VIEW',
+            class: 'btn btn-orange btn-sm mr-1',
+            onClick: () => {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              viewPengembalianKasBank(selectedId)
+            }
+          },
+          {
             id: 'export',
             title: 'Export',
             caption: 'Export',
@@ -586,6 +595,9 @@
 
     if (!`{{ $myAuth->hasPermission('pengembaliankasbankheader', 'store') }}`) {
       $('#add').attr('disabled', 'disabled')
+    }
+    if (!`{{ $myAuth->hasPermission('pengembaliankasbankheader', 'show') }}`) {
+      $('#view').attr('disabled', 'disabled')
     }
 
     if (!`{{ $myAuth->hasPermission('pengembaliankasbankheader', 'update') }}`) {

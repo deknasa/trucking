@@ -367,7 +367,15 @@
               }
             }
           },
-          
+          {
+            id: 'view',
+            innerHTML: '<i class="fa fa-eye"></i> VIEW',
+            class: 'btn btn-orange btn-sm mr-1',
+            onClick: () => {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              viewKasGantung(selectedId)
+            }
+          },
           {
             id: 'report',
             innerHTML: '<i class="fa fa-print"></i> REPORT',
@@ -428,6 +436,10 @@
     function permission() {
       if (!`{{ $myAuth->hasPermission('kasgantungheader', 'store') }}`) {
         $('#add').attr('disabled', 'disabled')
+      }
+
+      if (!`{{ $myAuth->hasPermission('kasgantungheader', 'show') }}`) {
+        $('#view').attr('disabled', 'disabled')
       }
 
       if (!`{{ $myAuth->hasPermission('kasgantungheader', 'update') }}`) {

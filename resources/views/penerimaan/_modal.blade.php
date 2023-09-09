@@ -134,7 +134,7 @@
                                         <th width="7%">Bank Pelanggan</th>
                                         <th width="10%">Keterangan</th>
                                         <th width="6%">Nominal</th>
-                                        <th width="1%" class="aksiGiro">Aksi</th>
+                                        <th width="1%" class="aksiGiro tbl_aksi">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody id="table_body" class="form-group">
@@ -148,7 +148,7 @@
                                         <td>
                                             <p class="text-right font-weight-bold autonumeric" id="total"></p>
                                         </td>
-                                        <td class="aksiGiro">
+                                        <td class="aksiGiro tbl_aksi">
                                             <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
                                         </td>
                                     </tr>
@@ -595,6 +595,7 @@
                 name.attr('disabled', true)
                 name.find('.lookup-toggler').attr('disabled', true)
                 name.find('.lookup-toggler').attr('disabled', true)
+                $('#crudForm').find(`.tbl_aksi`).hide()
 
             })
             .catch((error) => {
@@ -755,7 +756,7 @@
                             <td>
                                 <input type="text" name="nominal_detail[]" class="form-control autonumeric"  ${readOnly}> 
                             </td>
-                            <td>
+                            <td class="tbl_aksi">
                                 <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
                             </td>
                         </tr>
@@ -912,7 +913,7 @@
         <td>
           <input type="text" name="nominal_detail[]" class="form-control autonumeric"> 
         </td>
-        <td class="aksiGiro">
+        <td class="aksiGiro tbl_aksi">
             <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
         </td>
       </tr>

@@ -102,7 +102,7 @@
                   <tr>
                     <th width="3%">KEY <span class="text-danger">*</span></th>
                     <th width="8%">VALUE <span class="text-danger">*</span></th>
-                    <th width="2%">Aksi</th>
+                    <th width="2%" class="tbl_aksi">Aksi</th>
                   </tr>
                 </thead>
                 <tbody id="table_body" class="form-group">
@@ -111,7 +111,7 @@
                 <tfoot>
                   <tr>
                     <td colspan="2"></td>
-                    <td>
+                    <td class="tbl_aksi">
                       <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
                     </td>
                   </tr>
@@ -299,6 +299,10 @@
     setFormBindKeys(form)
 
     activeGrid = null
+    form.find('#btnSubmit').prop('disabled',false)
+    if (form.data('action') == "view") {
+      form.find('#btnSubmit').prop('disabled',true)
+    }
 
     getMaxLength(form)
     initLookup()
@@ -405,6 +409,69 @@
         showParameter(form, parameterId)
           .then(() => {
             $('#crudModal').modal('show')
+          })
+          .catch((error) => {
+            showDialog(error.statusText)
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
+      })
+  }
+
+  function viewParameter(parameterId) {
+    let form = $('#crudForm')
+
+    $('.modal-loader').removeClass('d-none')
+
+    form.data('action', 'view')
+    form.trigger('reset')
+    form.find('#btnSubmit').html(`
+      <i class="fa fa-save"></i>
+      Save
+    `)
+    form.find('#btnSubmit').prop('disabled',true)
+    form.find(`.sometimes`).hide()
+    $('#crudModalTitle').text('View Parameter')
+    $('.is-invalid').removeClass('is-invalid')
+    $('.invalid-feedback').remove()
+
+    Promise
+      .all([
+        setDefaultOptions(form)
+      ])
+      .then(() => {
+        showParameter(form, parameterId)
+        .then(userId => {
+        setFormBindKeys(form)
+        initSelect2(form.find('.select2bs4'), true)
+        form.find('[name]').removeAttr('disabled')
+  
+        form.find('select').each((index, select) => {
+          let element = $(select)
+  
+          if (element.data('select2')) {
+            element.select2('destroy')
+          }
+        })
+  
+        form.find('[name]').attr('disabled', 'disabled').css({
+          background: '#fff'
+        })
+        form.find('[name=id]').prop('disabled',false)
+      })
+        .then(() => {
+            $('#crudModal').modal('show')
+
+            form.find(`.hasDatepicker`).prop('readonly', true)
+            form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
+            
+            let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
+            let nameFind = $('#crudForm').find(`[name]`).parents('.input-group')
+            name.attr('disabled', true)
+            name.find('.lookup-toggler').remove()
+            nameFind.find('button.button-clear').remove()
+            $('#crudForm').find(`.tbl_aksi`).hide()
           })
           .catch((error) => {
             showDialog(error.statusText)
@@ -535,7 +602,7 @@
                       <input type="text" name="value[]" class="form-control">
                     </div>
                   </td>
-                  <td>
+                  <td class="tbl_aksi">
                       <div class='btn btn-danger btn-sm delete-row'>Hapus</div>
                   </td>
               </tr>`)
@@ -668,7 +735,7 @@
                 <input type="text" name="value[]" class="form-control">
             </td>
 
-            <td>
+            <td class="tbl_aksi">
                 <div class='btn btn-danger btn-sm delete-row'>Hapus</div>
             </td>
         </tr>`)

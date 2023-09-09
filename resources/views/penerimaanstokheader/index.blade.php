@@ -377,6 +377,15 @@
             }
           },
           {
+            id: 'view',
+            innerHTML: '<i class="fa fa-eye"></i> VIEW',
+            class: 'btn btn-orange btn-sm mr-1',
+            onClick: () => {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              viewPenerimaanstokHeader(selectedId)
+            }
+          },
+          {
             id: 'report',
             innerHTML: '<i class="fa fa-print"></i> REPORT',
             class: 'btn btn-info btn-sm mr-1',
@@ -452,6 +461,10 @@
 
     if (!`{{ $myAuth->hasPermission('penerimaanstokheader', 'update') }}`) {
       $('#edit').attr('disabled', 'disabled')
+    }
+
+    if (!`{{ $myAuth->hasPermission('penerimaanstokheader', 'show') }}`) {
+      $('#view').attr('disabled', 'disabled')
     }
 
     if (!`{{ $myAuth->hasPermission('penerimaanstokheader', 'destroy') }}`) {

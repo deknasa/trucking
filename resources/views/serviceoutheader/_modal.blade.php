@@ -73,7 +73,7 @@
                                                         <th style="width:5%; max-width: 25px;min-width: 15px">No</th>
                                                         <th style="width:40%;">No bukti Service in</th>
                                                         <th style="width:40%;">Keterangan</th>
-                                                        <th style="width:5%; max-width: 25px;min-width: 15px">Aksi</th>
+                                                        <th class="tbl_aksi" style="width:5%; max-width: 25px;min-width: 15px">Aksi</th>
 
                                                     </tr>
                                                 </thead>
@@ -83,7 +83,7 @@
                                                 <tfoot>
                                                     <tr>
                                                         <td colspan="3"></td>
-                                                        <td>
+                                                        <td class="tbl_aksi">
                                                             <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
                                                         </td>
                                                     </tr>
@@ -279,6 +279,11 @@
         getMaxLength(form)
         initLookup()
         initDatepicker()
+
+        form.find('#btnSubmit').prop('disabled',false)
+        if (form.data('action') == "view") {
+          form.find('#btnSubmit').prop('disabled',true)
+        }
     })
 
     $('#crudModal').on('hidden.bs.modal', () => {
@@ -374,6 +379,62 @@
             })
 
     }
+    function viewServiceOut(id) {
+        let form = $('#crudForm')
+
+        $('.modal-loader').removeClass('d-none')
+
+        form.data('action', 'view')
+        form.trigger('reset')
+        form.find('#btnSubmit').html(`
+          <i class="fa fa-save"></i>
+          Save
+        `)
+        form.find('#btnSubmit').prop('disabled',true)
+        form.find(`.sometimes`).hide()
+        $('#crudModalTitle').text('View Service Out')
+        $('.is-invalid').removeClass('is-invalid')
+        $('.invalid-feedback').remove()
+
+        Promise
+            .all([
+                showServiceOut(form, id)
+            ])
+            .then(id => {
+                setFormBindKeys(form)
+                form.find('[name]').removeAttr('disabled')
+    
+                form.find('select').each((index, select) => {
+                    let element = $(select)
+      
+                    if (element.data('select2')) {
+                      element.select2('destroy')
+                    }
+                })
+                form.find('[name]').attr('disabled', 'disabled').css({
+                    background: '#fff'
+                })
+                form.find('[name=id]').prop('disabled', false);
+            })
+            .then(() => {
+                $('#crudModal').modal('show')
+                form.find(`.hasDatepicker`).prop('readonly', true)
+                form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
+                let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
+                let nameFind = $('#crudForm').find(`[name]`).parents('.input-group')
+                name.attr('disabled', true)
+                name.find('.lookup-toggler').remove()
+                nameFind.find('button.button-clear').remove()
+                $('.tbl_aksi').hide()
+            })
+            .catch((error) => {
+                showDialog(error.statusText)
+            })
+            .finally(() => {
+                $('.modal-loader').addClass('d-none')
+            })
+
+    }
 
     function showServiceOut(form, id) {
         return new Promise((resolve, reject) => {
@@ -413,7 +474,7 @@
                             <td>
                                 <input type="text" name="keterangan_detail[]" class="form-control">
                             </td>
-                            <td>
+                            <td class="tbl_aksi">
                             <div class='btn btn-danger btn-sm delete-row '>Hapus</div>
                         </td>
                         </tr>`)

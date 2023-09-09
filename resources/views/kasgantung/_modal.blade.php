@@ -85,7 +85,7 @@
                     <th width="1%">NO</th>
                     <th width="70%">KETERANGAN</th>
                     <th width="28%">NOMINAL</th>
-                    <th width="1%">AKSI</th>
+                    <th width="1%" class="tbl_aksi">AKSI</th>
                   </tr>
                 </thead>
                 <tbody id="table_body" class="form-group">
@@ -105,7 +105,7 @@
                         </div>
                       </div>
                     </td>
-                    <td>
+                    <td class="tbl_aksi">
                       <div class="btn btn-danger btn-sm delete-row">HAPUS</div>
                     </td>
                   </tr>
@@ -118,7 +118,7 @@
                     <td>
                       <p class="text-right font-weight-bold autonumeric" id="total"></p>
                     </td>
-                    <td>
+                    <td class="tbl_aksi">
                       <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
                     </td>
                   </tr>
@@ -322,6 +322,11 @@
 
     activeGrid = null
 
+    form.find('#btnSubmit').prop('disabled',false)
+    if (form.data('action') == "view") {
+      form.find('#btnSubmit').prop('disabled',true)
+    }
+
     getMaxLength(form)
     initLookup()
     initDatepicker()
@@ -437,6 +442,65 @@
         $('#crudModal').modal('show')
         form.find(`[name="tglbukti"]`).prop('readonly', true)
         form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+      })
+      .catch((error) => {
+        showDialog(error.statusText)
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
+
+  }
+  function viewKasGantung(userId) {
+    let form = $('#crudForm')
+
+    $('.modal-loader').removeClass('d-none')
+
+   form.data('action', 'view')
+    form.trigger('reset')
+    form.find('#btnSubmit').html(`
+      <i class="fa fa-save"></i>
+      Save
+    `)
+    form.find('#btnSubmit').prop('disabled',true)
+    form.find(`.sometimes`).hide()
+    $('#crudModalTitle').text('View Kas Gantung')
+    $('.is-invalid').removeClass('is-invalid')
+    $('.invalid-feedback').remove()
+
+    Promise
+      .all([
+        showKasGantung(form, userId)
+      ])
+      .then(userId => {
+        setFormBindKeys(form)
+        initSelect2(form.find('.select2bs4'), true)
+        form.find('[name]').removeAttr('disabled')
+  
+        form.find('select').each((index, select) => {
+          let element = $(select)
+  
+          if (element.data('select2')) {
+            element.select2('destroy')
+          }
+        })
+  
+        form.find('[name]').attr('disabled', 'disabled').css({
+          background: '#fff'
+        })
+        form.find('[name=id]').prop('disabled',false)
+      })
+      .then(() => {
+        $('#crudModal').modal('show')
+        form.find(`.hasDatepicker`).prop('readonly', true)
+        form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
+        
+        let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
+        let nameFind = $('#crudForm').find(`[name]`).parents('.input-group')
+        name.attr('disabled', true)
+        name.find('.lookup-toggler').remove()
+        nameFind.find('button.button-clear').remove()
+        $('#crudForm').find(`.tbl_aksi`).hide()
       })
       .catch((error) => {
         showDialog(error.statusText)
@@ -565,7 +629,7 @@
                 <td>
                   <input type="text" name="nominal[]" class="form-control autonumeric nominal">
                 </td>
-                <td>
+                <td class="tbl_aksi">
                   <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
                 </td>
               </tr>
@@ -604,7 +668,7 @@
         <td>
           <input type="text" name="nominal[]" class="form-control autonumeric nominal">
         </td>
-        <td>
+        <td class="tbl_aksi">
           <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
         </td>
       </tr>
