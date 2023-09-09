@@ -328,7 +328,65 @@
     $("#crudForm [name]").attr("autocomplete", "off");
 
     $(document).on('click', "#addRow", function() {
-      addRow()
+      let method = `POST`
+      let url = `${apiUrl}pengeluarantruckingheader/addrow`
+      let form = $('#crudForm')
+      let Id = form.find('[name=id]').val()
+      let action = form.data('action')
+      let data = $('#crudForm').serializeArray()
+      
+      if (KodePengeluaranId != "BST") {
+        if (KodePengeluaranId == "BBT") {
+          $('#crudForm').find(`[name="nominaltagih[]"`).each((index, element) => {
+            if (element.value != "" && AutoNumeric.getAutoNumericElement(element) !== null) {
+              data.filter((row) => row.name === 'nominaltagih[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominaltagih[]"]`)[index])
+            }
+          })
+        }
+        $('#crudForm').find(`[name="nominal[]"`).each((index, element) => {
+          if (element.value != "" && AutoNumeric.getAutoNumericElement(element) !== null) {
+            data.filter((row) => row.name === 'nominal[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal[]"]`)[index])
+          }
+        })
+        $('#crudForm').find(`[name="harga[]"`).each((index, element) => {
+          // console.log(AutoNumeric.getAutoNumericElement(element));
+          if (element.value != "" && AutoNumeric.getAutoNumericElement(element) !== null) {
+            data.filter((row) => row.name === 'harga[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="harga[]"]`)[index])
+          }
+        })
+        $('#crudForm').find(`[name="qty[]"`).each((index, element) => {
+          if (element.value != "" && AutoNumeric.getAutoNumericElement(element) !== null) {
+            data.filter((row) => row.name === 'qty[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="qty[]"]`)[index])
+          }
+        })
+      }
+
+      $.ajax({
+        url: url,
+        method: method,
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: data,
+        success: response => {
+          addRow()
+        },
+        error: error => {
+          if (error.status === 422) {
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+            setErrorMessages(form, error.responseJSON.errors);
+          } else {
+            showDialog(error.responseJSON)
+          }
+        }
+      })
+      .always(() => {
+        $('#processingLoader').addClass('d-none')
+        $(this).removeAttr('disabled')
+      })
+
     });
 
     $(document).on('click', '.delete-row', function(event) {
@@ -1015,6 +1073,7 @@
     $('.tbl_aksi').show()
     $('.colspan').attr('colspan', 3);
     $('#tbl_addRow').show()
+    $('.colmn-offset2').hide()
     // $('.colmn-offset').hide()
   }
 
@@ -1049,6 +1108,7 @@
     $('.tbl_aksi').show()
     $('.colspan').attr('colspan', 3);
     $('#tbl_addRow').show()
+    $('.colmn-offset2').hide()
     // $('.colmn-offset').hide()
   }
 
@@ -1160,6 +1220,7 @@
     $('.tbl_aksi').show()
     $('.colspan').attr('colspan', 2);
     $('#tbl_addRow').show()
+    $('.colmn-offset2').hide()
     $('.kolom_bbt').hide()
     // $('.colmn-offset').hide()
     loadModalGrid()
@@ -1242,6 +1303,7 @@
     $('.colspan').attr('colspan', 2);
     $('.kolom_bbt').hide()
     $('#tbl_addRow').show()
+    $('.colmn-offset2').hide()
     // $('.colmn-offset').hide()
   }
 
@@ -1282,6 +1344,7 @@
     $('.colspan').attr('colspan', 5);
     $('.kolom_bbt').hide()
     $('#tbl_addRow').show()
+    $('.colmn-offset2').hide()
     // $('.colmn-offset').hide()
   }
 

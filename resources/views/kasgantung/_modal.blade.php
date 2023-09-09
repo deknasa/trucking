@@ -152,9 +152,42 @@
 
     $("#crudForm [name]").attr("autocomplete", "off");
     $(document).on('click', "#addRow", function() {
-      addRow()
+      event.preventDefault()
+      let method = `POST`
+      let url = `${apiUrl}kasgantungheader/addrow`
+      let form = $('#crudForm')
+      let Id = form.find('[name=id]').val()
+      let action = form.data('action')
+      let data = $('#crudForm').serializeArray()
+      $('#crudForm').find(`[name="nominal[]"]`).each((index, element) => {
+        data.filter((row) => row.name === 'nominal[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal[]"]`)[index])
+      })
+      $.ajax({
+        url: url,
+        method: method,
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: data,
+        success: response => {
+          addRow()
+        },
+        error: error => {
+          if (error.status === 422) {
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+            setErrorMessages(form, error.responseJSON.errors);
+          } else {
+            showDialog(error.responseJSON)
+          }
+        },
+      }).always(() => {
+        $('#processingLoader').addClass('d-none')
+        $(this).removeAttr('disabled')
+      })  
     });
-
+         
     $(document).on('click', '.delete-row', function(event) {
       deleteRow($(this).parents('tr'))
     })

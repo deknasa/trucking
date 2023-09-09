@@ -345,7 +345,43 @@
         });
 
         $(document).on('click', "#addRowTransfer", function() {
-            addRowTransfer()
+            event.preventDefault()
+            let method = `POST`
+            let url = `${apiUrl}prosesuangjalansupirheader/addrowtransfer`
+            let form = $('#crudForm')
+            let Id = form.find('[name=id]').val()
+            let action = form.data('action')
+            let data = $('#crudForm').serializeArray()
+            nilaiTransfer = 0
+            $('#crudForm').find(`[name="nilaitransfer[]"]`).each((index, element) => {
+                data.filter((row) => row.name === 'nilaitransfer[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nilaitransfer[]"]`)[index])
+                nilaiTransfer = nilaiTransfer + AutoNumeric.getNumber($(`#crudForm [name="nilaitransfer[]"]`)[index])
+            })
+      
+            $.ajax({
+              url: url,
+              method: method,
+              dataType: 'JSON',
+              headers: {
+                Authorization: `Bearer ${accessToken}`
+              },
+              data: data,
+              success: response => {
+                addRowTransfer()
+              },
+              error: error => {
+                if (error.status === 422) {
+                  $('.is-invalid').removeClass('is-invalid')
+                  $('.invalid-feedback').remove()
+                  setErrorMessages(form, error.responseJSON.errors);
+                } else {
+                  showDialog(error.responseJSON)
+                }
+              },
+            }).always(() => {
+              $('#processingLoader').addClass('d-none')
+              $(this).removeAttr('disabled')
+            })  
         });
 
         $(document).on('click', '.delete-row', function(event) {

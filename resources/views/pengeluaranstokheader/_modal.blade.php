@@ -321,7 +321,51 @@
   var listIdPengeluaran = [];
   $(document).ready(function() {
     $(document).on('click', '#addRow', function(event) {
-      addRow()
+      event.preventDefault()
+      
+      let method = `POST`
+      let url = `${apiUrl}pengeluaranstokheader/addrow`
+      let form = $('#crudForm')
+      let Id = form.find('[name=id]').val()
+      let action = form.data('action')
+      let data = $('#crudForm').serializeArray()
+
+      $('#crudForm').find(`[name="detail_qty[]"]`).each((index, element) => {
+        data.filter((row) => row.name === 'detail_qty[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="detail_qty[]"]`)[index])
+      })
+      $('#crudForm').find(`[name="detail_harga[]"]`).each((index, element) => {
+        data.filter((row) => row.name === 'detail_harga[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="detail_harga[]"]`)[index])
+      })
+  
+      $('#crudForm').find(`[name="detail_persentasediscount[]"]`).each((index, element) => {
+        data.filter((row) => row.name === 'detail_persentasediscount[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="detail_persentasediscount[]"]`)[index])
+      })
+      
+      $.ajax({
+        url: url,
+        method: method,
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: data,
+        success: response => {
+          addRow()
+        },
+        error: error => {
+          if (error.status === 422) {
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+
+            setErrorMessages(form, error.responseJSON.errors);
+          } else {
+            showDialog(error.responseJSON)
+          }
+        },
+      }).always(() => {
+        $('#processingLoader').addClass('d-none')
+        $(this).removeAttr('disabled')
+      })
     });
 
     $(document).on('click', '.rmv', function(event) {
