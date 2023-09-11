@@ -78,19 +78,21 @@ class LaporanStokController extends Controller
 
         $sheet->setCellValue('A1', 'PT. TRANSPORINDO AGUNG SEJAHTERA');
         $sheet->setCellValue('A2', 'Laporan Stok');
-        $sheet->setCellValue('A3', 'Periode: ' . $request->sampai);
-
-        // $sheet->getStyle("A1")->getFont()->setSize(20)->setBold(true);
+        $sheet->setCellValue('A3', 'Bulan ' . date('M-Y',strtotime($pengeluaran[0]['tgldari'])));
+        $sheet->getStyle("A1")->getFont()->setSize(20)->setBold(true);
+        $sheet->getStyle("A2")->getFont()->setSize(18)->setBold(true);
+        $sheet->getStyle("A3")->getFont()->setSize(18)->setBold(true);
 
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
-        $sheet->getStyle('A2')->getAlignment()->setHorizontal('left');
-        $sheet->mergeCells('A1:B1');
-        $sheet->mergeCells('A2:B2');
-        $sheet->mergeCells('A3:B3');
-        $sheet->mergeCells('A4:B4');
+        $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
+        $sheet->getStyle('A3')->getAlignment()->setHorizontal('center');
+        // $sheet->getStyle('A2')->getAlignment()->setHorizontal('left');
+        $sheet->mergeCells('A1:K1');
+        $sheet->mergeCells('A2:K2');
+        $sheet->mergeCells('A3:K3');
 
-        $header_start_row = 6;
-        $detail_start_row = 7;
+        $header_start_row = 5;
+        $detail_start_row = 6;
 
         $styleArray = array(
             'borders' => array(
@@ -114,14 +116,50 @@ class LaporanStokController extends Controller
         $header_columns = [
 
             [
-                'label' => 'KETERANGAN',
-                'index' => 'keteranganmain',
+                "label"=>"No",
+                "index"=> 'no' ,
             ],
-
             [
-                'label' => 'NILAI',
-                'index' => 'Nominal',
+                "label"=>"No Bukti",
+                "index"=> 'nobukti',
             ],
+            [
+                "label"=>"Tanggal",
+                "index"=> 'tglbukti',
+            ],
+            [
+                "label"=>"Nama Stock",
+                "index"=> 'namabarang',
+            ],
+            [
+                "label"=>"Qty Masuk",
+                "index"=> 'qtymasuk',
+            ],
+            [
+                "label"=>"Nominal Masuk",
+                "index"=> 'nominalmasuk',
+            ],
+            [
+                "label"=>"Qty Keluar",
+                "index"=> 'qtykeluar',
+            ],
+            [
+                "label"=>"Nominal Keluar",
+                "index"=> 'nominalkeluar',
+            ],
+            [
+                "label"=>"Keterangan",
+                "index"=> 'keterangan',
+            ],
+            [
+                "label"=>"Qty Saldo",
+                "index"=> 'qtysaldo',
+            ],
+            [
+                "label"=>"Nominal Saldo",
+                "index"=> 'nominalsaldo',
+            ],
+            
         ];
 
         foreach ($header_columns as $data_columns_index => $data_column) {
@@ -130,70 +168,65 @@ class LaporanStokController extends Controller
 
         $lastColumn = $alphabets[$data_columns_index];
         $sheet->getStyle("A$header_start_row:$lastColumn$header_start_row")->getFont()->setBold(true);
-        $totalDebet = 0;
-        $totalKredit = 0;
-        $totalSaldo = 0;
-        // $no = 1;
+ 
+        $no = 1;
         if (is_array($pengeluaran) || is_iterable($pengeluaran)) {
-            // $no = 1;
-
-            // Menambahkan baris untuk Pendapatan
-            // $sheet->setCellValue("A$detail_start_row", $no);
-            // Tulis label "Pendapatan :" pada kolom "A"
-
-            // Gabungkan sel pada kolom "A" untuk label "Pendapatan :"
-            $sheet->mergeCells("A$detail_start_row:A$detail_start_row");
-
-            $detail_start_row++;
-
-            // Menulis data dan melakukan grup berdasarkan kolom "KeteranganMain"
-            $previous_keterangan_main = '';
             foreach ($pengeluaran as $response_detail) {
-                $keterangan_main = $response_detail['keteranganmain'];
+                if ($no != 1) {
+                    if ($response_detail['nobukti'] == 'Saldo Awal') {
+                        $detail_start_row++;
+                    }
+                }
+                foreach ($header_columns as $data_columns_index => $data_column) {
+                    if ($data_column['index'] == 'no') {
+                        $value = $no;
+                    }else {
+                        $value = $response_detail[$data_column['index']];
+                    }
+                    
+                    if ($data_column['index'] == 'tglbukti') {
+                        $value = date('d-m-Y',strtotime($value));
+                    }
 
-                if ($keterangan_main != $previous_keterangan_main) {
-                    // Jika nilai "KeteranganMain" berbeda dengan sebelumnya, buat grup baru
-                    $sheet->setCellValue("A$detail_start_row", $keterangan_main);
-                    $sheet->mergeCells("A$detail_start_row:A$detail_start_row");
-
-                    // Tingkatkan nomor baris
-                    $detail_start_row++;
+                    $sheet->setCellValue($alphabets[$data_columns_index] . $detail_start_row, $value);
                 }
 
-
-                // Tulis data pada kolom-kolom lain
-                $sheet->setCellValue("A$detail_start_row", $response_detail['KeteranganParent']);
-
-                $sheet->setCellValue("A$detail_start_row", "      " . $response_detail['keterangancoa']);
-                $sheet->setCellValue("B$detail_start_row", $response_detail['Nominal']);
-
+                
                 // Tingkatkan nomor baris
                 $detail_start_row++;
-
-                // Simpan nilai "KeteranganMain" untuk perbandingan selanjutnya
-                $previous_keterangan_main = $keterangan_main;
+                $no++;
+                
             }
+            
+        }
+        //ukuran kolom
+        foreach ($header_columns as $data_columns_index => $data_column) {
+            $sheet->getColumnDimension($alphabets[$data_columns_index])->setAutoSize(true);
         }
 
-
-
-        //ukuran kolom
-        $sheet->getColumnDimension('A')->setAutoSize(true);
-        $sheet->getColumnDimension('B')->setAutoSize(true);
-
-
-
+        $detail_start_row++;
         // menambahkan sel Total pada baris terakhir + 1
-        // $sheet->setCellValue("A" . ($detail_start_row + 1), 'Total');
-        // $sheet->setCellValue("D" . ($detail_start_row + 1), "=SUM(D5:D" . $detail_start_row . ")");
-        // $sheet->setCellValue("E" . ($detail_start_row + 1), "=SUM(E5:E" . $detail_start_row . ")");
+        $sheet->setCellValue("B" . ($detail_start_row), 'TOTAL');
+        $sheet->setCellValue("F" . ($detail_start_row), "=SUM(F".($header_start_row + 1).":F" . $detail_start_row . ")");
+        $sheet->setCellValue("H" . ($detail_start_row), "=SUM(H".($header_start_row + 1).":H" . $detail_start_row . ")");
+        $sheet->setCellValue("K" . ($detail_start_row), "=SUM(K".($header_start_row + 1).":K" . $detail_start_row . ")");
 
 
         //FORMAT
-        // set format ribuan untuk kolom D dan E
-        $sheet->getStyle("B" . ($detail_start_row + 1) . ":B" . ($detail_start_row + 1))->getNumberFormat()->setFormatCode("#,##0.00");
-        $sheet->getStyle("A" . ($detail_start_row + 1) . ":$lastColumn" . ($detail_start_row + 1))->getFont()->setBold(true);
-
+        $numberColumn =[
+            "qtymasuk",
+            "nominalmasuk",
+            "qtykeluar",
+            "nominalkeluar",
+            "qtysaldo",
+            "nominalsaldo"
+        ];
+        foreach ($header_columns as $data_columns_index => $data_column) {
+            if (in_array($data_column['index'],$numberColumn)) {
+                $sheet->getStyle($alphabets[$data_columns_index]. ($header_start_row + 1) . ":".$alphabets[$data_columns_index]. ($detail_start_row + 1))->getNumberFormat()->setFormatCode("#,##0.00");
+            }
+        }
+        // $sheet->getStyle("A$header_start_row:$lastColumn$header_start_row")->getFont()->setBold(true);
 
         //persetujuan
         // $sheet->mergeCells('A' . ($detail_start_row + 3) . ':B' . ($detail_start_row + 3));
