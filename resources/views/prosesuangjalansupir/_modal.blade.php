@@ -336,7 +336,7 @@
 <script>
     let hasFormBindKeys = false
     let modalBody = $('#crudModal').find('.modal-body').html()
-
+    let isEditTgl
     $(document).ready(function() {
 
         $('#addRowTransfer').hide()
@@ -743,13 +743,15 @@
 
         Promise
             .all([
+                setTglBukti(form),
                 showProsesUangJalanSupir(form, userId)
             ])
             .then(() => {
                 $('#crudModal').modal('show')
-
-                // form.find(`[name="tglbukti"]`).prop('readonly', true)
-                // form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+                if (isEditTgl == 'TIDAK') {
+                    form.find(`[name="tglbukti"]`).prop('readonly', true)
+                    form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+                }
                 form.find(`[name="tgladjust"]`).parent('.input-group').find('.input-group-append').remove()
                 form.find(`[name="tgldeposit"]`).parent('.input-group').find('.input-group-append').remove()
                 form.find(`[name="supir"]`).parent('.input-group').find('.button-clear').remove()
@@ -910,17 +912,18 @@
                                         }
                                     }
 
-                                    nombayarDetails = $(`#tablePengembalian tr:not(#${rowObject.rowId})`).find(`td[aria-describedby="tablePengembalian_nombayar"]`)
-                                    ttlBayar = 0
-                                    $.each(nombayarDetails, (index, nombayarDetail) => {
-                                        ttlBayarDetail = parseFloat($(nombayarDetail).attr('title').replaceAll(',', ''))
-                                        ttlBayars = (isNaN(ttlBayarDetail)) ? 0 : ttlBayarDetail;
-                                        ttlBayar += ttlBayars
-                                    });
-                                    ttlBayar += nombayar
-                                    initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePengembalian_nombayar"]`).text(ttlBayar))
+                                    // nombayarDetails = $(`#tablePengembalian tr:not(#${rowObject.rowId})`).find(`td[aria-describedby="tablePengembalian_nombayar"]`)
+                                    // ttlBayar = 0
+                                    // $.each(nombayarDetails, (index, nombayarDetail) => {
+                                    //     ttlBayarDetail = parseFloat($(nombayarDetail).attr('title').replaceAll(',', ''))
+                                    //     ttlBayars = (isNaN(ttlBayarDetail)) ? 0 : ttlBayarDetail;
+                                    //     ttlBayar += ttlBayars
+                                    // });
+                                    // ttlBayar += nombayar
+                                    // initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePengembalian_nombayar"]`).text(ttlBayar))
 
                                     // setAllTotal()
+                                    setTotalNominal()
                                     setTotalSisa()
                                 },
                             }, ],
@@ -934,6 +937,12 @@
                         sortable: false,
                         editable: false,
                         width: 500
+                    },
+                    {
+                        label: "empty",
+                        name: "empty",
+                        hidden: true,
+                        search: false,
                     },
                 ],
                 autowidth: true,
@@ -1043,6 +1052,22 @@
         // loadGlobalSearch($('#tablePengembalian'))
     }
 
+    $(document).on('click', '#resetdatafilter_tablePengembalian', function(event) {
+        selectedRowsPengembalian = $("#tablePengembalian").getGridParam("selectedRowIds");
+        $.each(selectedRowsPengembalian, function(index, value) {
+            $('#tablePengembalian').jqGrid('saveCell', value, 7); //emptycell
+            $('#tablePengembalian').jqGrid('saveCell', value, 5); //nominal
+        })
+
+    });
+    $(document).on('click', '#gbox_tablePengembalian .ui-jqgrid-hbox .ui-jqgrid-htable thead .ui-search-toolbar th td a.clearsearchclass', function(event) {
+        selectedRowsPengembalian = $("#tablePengembalian").getGridParam("selectedRowIds");
+        $.each(selectedRowsPengembalian, function(index, value) {
+            $('#tablePengembalian').jqGrid('saveCell', value, 7); //emptycell
+            $('#tablePengembalian').jqGrid('saveCell', value, 5); //nominal
+        })
+    })
+
 
     function getDataPengembalian(supirId, id) {
         aksi = $('#crudForm').data('action')
@@ -1132,22 +1157,36 @@
     function setTotalNominal() {
         let nominalDetails = $(`#tablePengembalian`).find(`td[aria-describedby="tablePengembalian_nombayar"]`)
         let nominal = 0
-        $.each(nominalDetails, (index, nominalDetail) => {
-            nominaldetail = parseFloat($(nominalDetail).text().replaceAll(',', ''))
-            nominals = (isNaN(nominaldetail)) ? 0 : nominaldetail;
-            nominal += nominals
-        });
+        selectedRowsPinjaman = $("#tablePengembalian").getGridParam("selectedRowIds");
+        $.each(selectedRowsPinjaman, function(index, value) {
+            dataPinjaman = $("#tablePengembalian").jqGrid("getLocalRow", value);
+            nominals = (dataPinjaman.nombayar == undefined || dataPinjaman.nombayar == '') ? 0 : dataPinjaman.nombayar;
+            getNominal = (isNaN(nominals)) ? parseFloat(nominals.replaceAll(',', '')) : parseFloat(nominals)
+            nominal = nominal + getNominal
+        })
+        // $.each(nominalDetails, (index, nominalDetail) => {
+        //     nominaldetail = parseFloat($(nominalDetail).text().replaceAll(',', ''))
+        //     nominals = (isNaN(nominaldetail)) ? 0 : nominaldetail;
+        //     nominal += nominals
+        // });
         initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePengembalian_nombayar"]`).text(nominal))
     }
 
     function setTotalSisa() {
         let sisaDetails = $(`#tablePengembalian`).find(`td[aria-describedby="tablePengembalian_sisa"]`)
         let sisa = 0
-        $.each(sisaDetails, (index, sisaDetail) => {
-            sisadetail = parseFloat($(sisaDetail).text().replaceAll(',', ''))
-            sisas = (isNaN(sisadetail)) ? 0 : sisadetail;
+        let originalData = $("#tablePengembalian").getGridParam("data");
+        $.each(originalData, function(index, value) {
+            sisas = value.sisa;
+            sisas = (isNaN(sisas)) ? parseFloat(sisas.replaceAll(',', '')) : parseFloat(sisas)
             sisa += sisas
-        });
+
+        })
+        // $.each(sisaDetails, (index, sisaDetail) => {
+        //     sisadetail = parseFloat($(sisaDetail).text().replaceAll(',', ''))
+        //     sisas = (isNaN(sisadetail)) ? 0 : sisadetail;
+        //     sisa += sisas
+        // });
         initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePengembalian_sisa"]`).text(sisa))
     }
 
@@ -1659,6 +1698,36 @@
                 $(`#crudForm [name="bank_idpengembalian"]`).first().val('')
                 element.data('currentValue', element.val())
             }
+        })
+    }
+
+    const setTglBukti = function(form) {
+        return new Promise((resolve, reject) => {
+            let data = [];
+            data.push({
+                name: 'grp',
+                value: 'EDIT TANGGAL BUKTI'
+            })
+            data.push({
+                name: 'subgrp',
+                value: 'PROSES UANG JALAN'
+            })
+            $.ajax({
+                url: `${apiUrl}parameter/getparamfirst`,
+                method: 'GET',
+                dataType: 'JSON',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                data: data,
+                success: response => {
+                    isEditTgl = $.trim(response.text);
+                    resolve()
+                },
+                error: error => {
+                    reject(error)
+                }
+            })
         })
     }
 </script>

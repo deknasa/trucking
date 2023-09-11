@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "7abde7eb1a9751d23e03f9cb9face52a",
+  "ReportGuid": "a050490313b37ddf065451fc680a5292",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://localhost/truck/public/reports/ReportLaporanHistoryPinjaman.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanHistoryPinjaman.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1689061750000+0700)/",
+  "ReportChanged": "/Date(1693981168000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -82,12 +82,24 @@
             "Type": "System.String"
           },
           "9": {
+            "Name": "disetujui",
+            "NameInSource": "disetujui",
+            "Alias": "disetujui",
+            "Type": "System.String"
+          },
+          "10": {
+            "Name": "diperiksa",
+            "NameInSource": "diperiksa",
+            "Alias": "diperiksa",
+            "Type": "System.String"
+          },
+          "11": {
             "Name": "supirdari",
             "NameInSource": "supirdari",
             "Alias": "supirdari",
             "Type": "System.String"
           },
-          "10": {
+          "12": {
             "Name": "supirsampai",
             "NameInSource": "supirsampai",
             "Alias": "supirsampai",
@@ -97,6 +109,88 @@
         "NameInSource": "Data.data"
       },
       "1": {
+        "Ident": "StiDataTableSource",
+        "Name": "user_roles_pivot",
+        "Alias": "user_roles_pivot",
+        "Columns": {
+          "0": {
+            "Name": "user_id",
+            "NameInSource": "user_id",
+            "Alias": "user_id",
+            "Type": "System.String"
+          },
+          "1": {
+            "Name": "role_id",
+            "NameInSource": "role_id",
+            "Alias": "role_id",
+            "Type": "System.String"
+          },
+          "2": {
+            "Name": "relationId",
+            "NameInSource": "relationId",
+            "Alias": "relationId",
+            "Type": "System.String"
+          }
+        },
+        "NameInSource": "Data.user_roles_pivot"
+      },
+      "2": {
+        "Ident": "StiDataTableSource",
+        "Name": "user_roles",
+        "Alias": "user_roles",
+        "Columns": {
+          "0": {
+            "Name": "id",
+            "NameInSource": "id",
+            "Alias": "id",
+            "Type": "System.Decimal"
+          },
+          "1": {
+            "Name": "rolename",
+            "NameInSource": "rolename",
+            "Alias": "rolename",
+            "Type": "System.String"
+          },
+          "2": {
+            "Name": "modifiedby",
+            "NameInSource": "modifiedby",
+            "Alias": "modifiedby",
+            "Type": "System.String"
+          },
+          "3": {
+            "Name": "created_at",
+            "NameInSource": "created_at",
+            "Alias": "created_at",
+            "Type": "System.DateTime"
+          },
+          "4": {
+            "Name": "updated_at",
+            "NameInSource": "updated_at",
+            "Alias": "updated_at",
+            "Type": "System.DateTime"
+          },
+          "5": {
+            "Name": "info",
+            "NameInSource": "info",
+            "Alias": "info",
+            "Type": "System.String"
+          },
+          "6": {
+            "Name": "pivot",
+            "NameInSource": "pivot",
+            "Alias": "pivot",
+            "Type": "System.String"
+          },
+          "7": {
+            "Name": "relationId",
+            "NameInSource": "relationId",
+            "Alias": "relationId",
+            "Type": "System.String"
+          }
+        },
+        "NameInSource": "Data.user_roles"
+      },
+      "3": {
         "Ident": "StiDataTableSource",
         "Name": "user",
         "Alias": "user",
@@ -172,11 +266,23 @@
             "NameInSource": "updated_at",
             "Alias": "updated_at",
             "Type": "System.DateTime"
+          },
+          "12": {
+            "Name": "info",
+            "NameInSource": "info",
+            "Alias": "info",
+            "Type": "System.String"
+          },
+          "13": {
+            "Name": "roles",
+            "NameInSource": "roles",
+            "Alias": "roles",
+            "Type": "System.String"
           }
         },
         "NameInSource": "Data.user"
       },
-      "2": {
+      "4": {
         "Ident": "StiDataTableSource",
         "Name": "parameter",
         "Alias": "parameter",
@@ -780,13 +886,13 @@
               "Ident": "StiText",
               "Name": "Text31",
               "Guid": "b280fa23afccf1ff7f1fa97f7a1d537e",
-              "ClientRectangle": "20,34,30,6",
+              "ClientRectangle": "20.07,33.85,30,6",
               "ComponentPlacement": "gf.GroupFooterBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "( Bpk. Hasan )"
+                "Value": "( {data.disetujui} )"
               },
               "VertAlignment": "Center",
               "Font": ";10;Bold;",
@@ -830,7 +936,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "( RINA )"
+                "Value": "( {data.diperiksa} )"
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",

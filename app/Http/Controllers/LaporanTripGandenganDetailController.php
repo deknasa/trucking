@@ -67,6 +67,8 @@ class LaporanTripGandenganDetailController extends MyController
             ->get(config('app.api_url') . 'laporantripgandengandetail/export', $detailParams);
 
         $data = $header['data'];
+        $disetujui = $data[0]['disetujui'] ?? '';
+        $diperiksa = $data[0]['diperiksa'] ?? '';
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
@@ -191,8 +193,8 @@ class LaporanTripGandenganDetailController extends MyController
         $sheet->setCellValue("C$ttd_start_row", 'Diperiksa Oleh,');
         $sheet->setCellValue("F$ttd_start_row", 'Disusun Oleh,');
 
-        $sheet->setCellValue("A" . ($ttd_start_row + 3), '( Bpk. Hasan )');
-        $sheet->setCellValue("C" . ($ttd_start_row + 3), '( Rina )');
+        $sheet->setCellValue("A" . ($ttd_start_row + 3), '( ' . $disetujui . ' )');
+        $sheet->setCellValue("C" . ($ttd_start_row + 3), '( ' . $diperiksa . ' )');
         $sheet->setCellValue("F" . ($ttd_start_row + 3), '(                )');
 
         $sheet->getColumnDimension('A')->setAutoSize(true);

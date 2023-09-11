@@ -167,6 +167,9 @@ use App\Http\Controllers\LaporanBanGudangSementaraController;
 use App\Http\Controllers\LaporanBukuBesarController;
 use App\Http\Controllers\LaporanDepositoSupirController;
 use App\Http\Controllers\LaporanLabaRugiController;
+use App\Http\Controllers\LaporanPemakaianStokController;
+use App\Http\Controllers\LaporanPembelianBarangController;
+use App\Http\Controllers\LaporanStokController;
 use App\Http\Controllers\LaporanEstimasiKasGantungController;
 use App\Http\Controllers\LaporanHistoryPinjamanController;
 use App\Http\Controllers\LaporanHutangBBMController;
@@ -1205,6 +1208,22 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('laporanlabarugi/export', [LaporanLabaRugiController::class, 'export'])->name('laporanlabarugi.export');
     Route::get('laporanlabarugi/index', [LaporanLabaRugiController::class, 'index']);
     Route::resource('laporanlabarugi', LaporanLabaRugiController::class);
+
+    Route::get('laporanpemakaianstok/report', [LaporanPemakaianStokController::class, 'report'])->name('laporanpemakaianstok.report');
+    Route::get('laporanpemakaianstok/export', [LaporanPemakaianStokController::class, 'export'])->name('laporanpemakaianstok.export');
+    Route::get('laporanpemakaianstok/index', [LaporanPemakaianStokController::class, 'index']);
+    Route::resource('laporanpemakaianstok', LaporanPemakaianStokController::class);    
+
+    Route::get('laporanpembelianbarang/report', [LaporanPembelianBarangController::class, 'report'])->name('laporanpembelianbarang.report');
+    Route::get('laporanpembelianbarang/export', [LaporanPembelianBarangController::class, 'export'])->name('laporanpembelianbarang.export');
+    Route::get('laporanpembelianbarang/index', [LaporanPembelianBarangController::class, 'index']);
+    Route::resource('laporanlapembelianbarang', LaporanPembelianBarangController::class);
+
+    Route::get('laporanstok/report', [LaporanStokController::class, 'report'])->name('laporanstok.report');
+    Route::get('laporanstok/export', [LaporanStokController::class, 'export'])->name('laporanstok.export');
+    Route::get('laporanstok/index', [LaporanStokController::class, 'index']);
+    Route::resource('laporanstok', LaporanStokController::class);
+
 
     Route::get('laporanhistorydeposito/report', [LaporanHistoryDepositoController::class, 'report'])->name('laporanhistorydeposito.report');
     Route::get('laporanhistorydeposito/export', [LaporanHistoryDepositoController::class, 'export'])->name('laporanhistorydeposito.export');

@@ -136,6 +136,7 @@
 <script>
   let hasFormBindKeys = false
   let modalBody = $('#crudModal').find('.modal-body').html()
+  let isEditTgl
 
   $(document).ready(function() {
 
@@ -387,6 +388,7 @@
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
     $('#crudModal').find('.modal-body').html(modalBody)
+    editedData = {}
   })
 
   function rangeKasgantung() {
@@ -483,7 +485,7 @@
         setRange(true)
       })
       .catch((error) => {
-        showDialog(error.statusText)
+        showDialog(error.responseJSON)
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
@@ -508,13 +510,18 @@
 
     Promise
       .all([
+        setTglBukti(form),
         showpengembalianKasGantung(form, userId),
       ])
       .then(() => {
         $('#crudModal').modal('show')
+        if (isEditTgl == 'TIDAK') {
+          form.find(`[name="tglbukti"]`).prop('readonly', true)
+          form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+        }
       })
       .catch((error) => {
-        showDialog(error.statusText)
+        showDialog(error.responseJSON)
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
@@ -553,7 +560,7 @@
         form.find(`[name="tglsampai"]`).parent('.input-group').find('.input-group-append').remove()
       })
       .catch((error) => {
-        showDialog(error.statusText)
+        showDialog(error.responseJSON)
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
@@ -590,7 +597,7 @@
         form.find(`[name="tglsampai"]`).parent('.input-group').find('.input-group-append').remove()
       })
       .catch((error) => {
-        showDialog(error.statusText)
+        showDialog(error.responseJSON)
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
@@ -668,8 +675,7 @@
                     rowObject.rowId
                   );
                   localRow.nominal = event.target.value;
-                  let totalSisa
-
+                  let totalSisa = 0;
                   let nominal = AutoNumeric.getNumber($('#crudForm').find(`[id="${rowObject.id}"]`)[0])
                   if ($('#crudForm').data('action') == 'edit') {
                     totalSisa = (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.nominal)) - nominal
@@ -699,20 +705,10 @@
                     }
                   }
 
-                  nominalDetails = $(`#tablePengembalian tr:not(#${rowObject.rowId})`).find(`td[aria-describedby="tablePengembalian_nominal"]`)
-                  ttlBayar = 0
-                  $.each(nominalDetails, (index, nominalDetail) => {
-                    ttlBayarDetail = parseFloat($(nominalDetail).attr('title').replaceAll(',', ''))
-                    ttlBayars = (isNaN(ttlBayarDetail)) ? 0 : ttlBayarDetail;
-                    ttlBayar += ttlBayars
-                  });
-                  ttlBayar += nominal
-                  initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePengembalian_nominal"]`).text(ttlBayar))
-
-                  // setAllTotal()
+                  setTotalNominal()
                   setTotalSisa()
                 },
-              }, ],
+              }],
             },
             sortable: false,
             sorttype: "int",
@@ -733,8 +729,14 @@
                   );
                   localRow.keterangandetail = event.target.value;
                 }
-              }, ]
+              }]
             }
+          },
+          {
+            label: "empty",
+            name: "empty",
+            hidden: true,
+            search: false,
           },
         ],
         autowidth: true,
@@ -749,8 +751,11 @@
         pginput: false,
         cellEdit: true,
         cellsubmit: "clientArray",
-        editableColumns: ["keterangandetail"],
+        editableColumns: ["nominal"],
         selectedRowIds: [],
+        // onCellSelect: function(rowid, iCol, cellcontent, e) {
+        //   console.log("Selected Cell - Row ID: " + rowid + ", Column Index: " + iCol);
+        // },
         afterRestoreCell: function(rowId, value, indexRow, indexColumn) {
           let originalGridData = $("#tablePengembalian")
             .jqGrid("getGridParam", "originalData")
@@ -765,10 +770,10 @@
           if ($('#crudForm').data('action') == 'edit') {
             sisa = (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.nominal)) - nominal
           } else {
-            sisa = originalGridData.sisa
+            sisa = originalGridData.sisa - nominal
           }
           console.log(indexColumn)
-          if (indexColumn == 5) {
+          if (indexColumn == 6) {
 
             $("#tablePengembalian").jqGrid(
               "setCell",
@@ -824,12 +829,14 @@
       .jqGrid("excelLikeGrid", {
         beforeDeleteCell: function(rowId, iRow, iCol, event) {
           let localRow = $("#tablePengembalian").jqGrid("getLocalRow", rowId);
+          getNominal = (localRow.nominal == undefined || localRow.nominal == '') ? 0 : localRow.nominal;
+          nominal = (isNaN(getNominal)) ? parseFloat(getNominal.replaceAll(',', '')) : getNominal
 
           $("#tablePengembalian").jqGrid(
             "setCell",
             rowId,
             "nominal",
-            parseInt(localRow.nominal) + parseInt(localRow.bayar)
+            parseFloat(nominal)
           );
 
           return true;
@@ -838,25 +845,48 @@
     loadClearFilter($('#tablePengembalian'))
   }
 
+  $(document).on('click', '#resetdatafilter_tablePengembalian', function(event) {
+    selectedRowsPengembalian = $("#tablePengembalian").getGridParam("selectedRowIds");
+    $.each(selectedRowsPengembalian, function(index, value) {
+      $('#tablePengembalian').jqGrid('saveCell', value, 8); //emptycell
+      $('#tablePengembalian').jqGrid('saveCell', value, 6); //nominal
+      $('#tablePengembalian').jqGrid('saveCell', value, 7); //keterangan
+    })
+
+  });
+  $(document).on('click', '#gbox_tablePengembalian .ui-jqgrid-hbox .ui-jqgrid-htable thead .ui-search-toolbar th td a.clearsearchclass', function(event) {
+    selectedRowsPengembalian = $("#tablePengembalian").getGridParam("selectedRowIds");
+    $.each(selectedRowsPengembalian, function(index, value) {
+      $('#tablePengembalian').jqGrid('saveCell', value, 8); //emptycell
+      $('#tablePengembalian').jqGrid('saveCell', value, 6); //nominal
+      $('#tablePengembalian').jqGrid('saveCell', value, 7); //keterangan
+    })
+  })
+
   function setTotalNominal() {
     let nominalDetails = $(`#tablePengembalian`).find(`td[aria-describedby="tablePengembalian_nominal"]`)
     let nominal = 0
-    $.each(nominalDetails, (index, nominalDetail) => {
-      nominaldetail = parseFloat($(nominalDetail).text().replaceAll(',', ''))
-      nominals = (isNaN(nominaldetail)) ? 0 : nominaldetail;
-      nominal += nominals
-    });
+    selectedRowsPinjaman = $("#tablePengembalian").getGridParam("selectedRowIds");
+    $.each(selectedRowsPinjaman, function(index, value) {
+      dataPinjaman = $("#tablePengembalian").jqGrid("getLocalRow", value);
+      nominals = (dataPinjaman.nominal == undefined || dataPinjaman.nominal == '') ? 0 : dataPinjaman.nominal;
+      console.log('dataPinjaman ', dataPinjaman.nominal)
+      getNominal = (isNaN(nominals)) ? parseFloat(nominals.replaceAll(',', '')) : parseFloat(nominals)
+      nominal = nominal + getNominal
+    })
     initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePengembalian_nominal"]`).text(nominal))
   }
 
   function setTotalSisa() {
     let sisaDetails = $(`#tablePengembalian`).find(`td[aria-describedby="tablePengembalian_sisa"]`)
     let sisa = 0
-    $.each(sisaDetails, (index, sisaDetail) => {
-      sisadetail = parseFloat($(sisaDetail).text().replaceAll(',', ''))
-      sisas = (isNaN(sisadetail)) ? 0 : sisadetail;
+    let originalData = $("#tablePengembalian").getGridParam("data");
+    $.each(originalData, function(index, value) {
+      sisas = value.sisa;
+      sisas = (isNaN(sisas)) ? parseFloat(sisas.replaceAll(',', '')) : parseFloat(sisas)
       sisa += sisas
-    });
+
+    })
     initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePengembalian_sisa"]`).text(sisa))
   }
 
@@ -904,7 +934,7 @@
             reject(errors)
 
           } else {
-            showDialog(error.statusText)
+            showDialog(error.responseJSON)
           }
         },
         error: error => {
@@ -1188,7 +1218,7 @@
         error: error => {
           console.log(error);
 
-          showDialog(error.statusText)
+          showDialog(error.responseJSON)
         }
       })
     }
@@ -1374,6 +1404,36 @@
       }
     })
 
+  }
+  
+  const setTglBukti = function(form) {
+    return new Promise((resolve, reject) => {
+      let data = [];
+      data.push({
+        name: 'grp',
+        value: 'EDIT TANGGAL BUKTI'
+      })
+      data.push({
+        name: 'subgrp',
+        value: 'PENGEMBALIAN KAS GANTUNG'
+      })
+      $.ajax({
+        url: `${apiUrl}parameter/getparamfirst`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: data,
+        success: response => {
+          isEditTgl = $.trim(response.text);
+          resolve()
+        },
+        error: error => {
+          reject(error)
+        }
+      })
+    })
   }
 </script>
 @endpush()

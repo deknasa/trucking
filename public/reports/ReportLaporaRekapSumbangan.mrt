@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "8e26c0c8b0779d31f48ad8ebd1c13df8",
+  "ReportGuid": "b491b5b7740009a20f33755dfaccff9c",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportLaporaRekapSumbangan.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1684125299000+0700)/",
+  "ReportChanged": "/Date(1693981951000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -43,12 +43,24 @@
             "Name": "nominal",
             "NameInSource": "nominal",
             "Alias": "nominal",
-            "Type": "System.String"
+            "Type": "System.Double"
           },
           "3": {
             "Name": "nobst",
             "NameInSource": "nobst",
             "Alias": "nobst",
+            "Type": "System.String"
+          },
+          "4": {
+            "Name": "disetujui",
+            "NameInSource": "disetujui",
+            "Alias": "disetujui",
+            "Type": "System.String"
+          },
+          "5": {
+            "Name": "diperiksa",
+            "NameInSource": "diperiksa",
+            "Alias": "diperiksa",
             "Type": "System.String"
           }
         },
@@ -116,12 +128,18 @@
             "Type": "System.DateTime"
           },
           "5": {
+            "Name": "info",
+            "NameInSource": "info",
+            "Alias": "info",
+            "Type": "System.String"
+          },
+          "6": {
             "Name": "pivot",
             "NameInSource": "pivot",
             "Alias": "pivot",
             "Type": "System.String"
           },
-          "6": {
+          "7": {
             "Name": "relationId",
             "NameInSource": "relationId",
             "Alias": "relationId",
@@ -178,24 +196,42 @@
             "Type": "System.String"
           },
           "7": {
+            "Name": "statusakses",
+            "NameInSource": "statusakses",
+            "Alias": "statusakses",
+            "Type": "System.String"
+          },
+          "8": {
+            "Name": "email",
+            "NameInSource": "email",
+            "Alias": "email",
+            "Type": "System.String"
+          },
+          "9": {
             "Name": "modifiedby",
             "NameInSource": "modifiedby",
             "Alias": "modifiedby",
             "Type": "System.String"
           },
-          "8": {
+          "10": {
             "Name": "created_at",
             "NameInSource": "created_at",
             "Alias": "created_at",
             "Type": "System.DateTime"
           },
-          "9": {
+          "11": {
             "Name": "updated_at",
             "NameInSource": "updated_at",
             "Alias": "updated_at",
             "Type": "System.DateTime"
           },
-          "10": {
+          "12": {
+            "Name": "info",
+            "NameInSource": "info",
+            "Alias": "info",
+            "Type": "System.String"
+          },
+          "13": {
             "Name": "roles",
             "NameInSource": "roles",
             "Alias": "roles",
@@ -717,7 +753,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "( Bpk. Hasan )"
+                "Value": "( {data.disetujui} )"
               },
               "VertAlignment": "Center",
               "Font": ";10;Bold;",
@@ -755,13 +791,13 @@
               "Ident": "StiText",
               "Name": "Text33",
               "Guid": "a885adc94c3b30a857bb37f8427ce3fa",
-              "ClientRectangle": "80,34,30,6",
+              "ClientRectangle": "80.26,34.11,30,6",
               "ComponentPlacement": "gf.GroupFooterBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "( RINA )"
+                "Value": "( {data.diperiksa} )"
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",

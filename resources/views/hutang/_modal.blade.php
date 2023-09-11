@@ -100,6 +100,7 @@
 <script>
   let hasFormBindKeys = false
   let modalBody = $('#crudModal').find('.modal-body').html()
+  let isEditTgl
 
   $(document).ready(function() {
 
@@ -365,15 +366,18 @@
 
     Promise
       .all([
+        setTglBukti(form),
         showHutangHeader(form, id)
       ])
       .then(() => {
         $('#crudModal').modal('show')
-        // form.find(`[name="tglbukti"]`).prop('readonly', true)
-        // form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+        if (isEditTgl == 'TIDAK') {
+          form.find(`[name="tglbukti"]`).prop('readonly', true)
+          form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+        }
       })
       .catch((error) => {
-        showDialog(error.statusText)
+        showDialog(error.responseJSON)
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
@@ -401,12 +405,9 @@
       ])
       .then(() => {
         $('#crudModal').modal('show')
-        form.find(`[name="tglbukti"]`).prop('readonly', true)
-        form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
-
       })
       .catch((error) => {
-        showDialog(error.statusText)
+        showDialog(error.responseJSON)
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
@@ -528,7 +529,7 @@
 
           setErrorMessages(form, error.responseJSON.errors);
         } else {
-          showDialog(error.statusText)
+          showDialog(error.responseJSON)
         }
       },
     }).always(() => {
@@ -582,7 +583,7 @@
           form.attr('has-maxlength', true)
         },
         error: error => {
-          showDialog(error.statusText)
+          showDialog(error.responseJSON)
         }
       })
     }
@@ -768,6 +769,35 @@
       }
     })
 
+  }
+  const setTglBukti = function(form) {
+    return new Promise((resolve, reject) => {
+      let data = [];
+      data.push({
+        name: 'grp',
+        value: 'EDIT TANGGAL BUKTI'
+      })
+      data.push({
+        name: 'subgrp',
+        value: 'HUTANG'
+      })
+      $.ajax({
+        url: `${apiUrl}parameter/getparamfirst`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: data,
+        success: response => {
+          isEditTgl = $.trim(response.text);
+          resolve()
+        },
+        error: error => {
+          reject(error)
+        }
+      })
+    })
   }
 </script>
 @endpush()

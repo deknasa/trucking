@@ -146,6 +146,7 @@
 <script>
   let hasFormBindKeys = false
   let modalBody = $('#crudModal').find('.modal-body').html()
+  let isEditTgl
 
   $(document).ready(function() {
 
@@ -380,7 +381,7 @@
         $('#crudModal').modal('show')
       })
       .catch((error) => {
-        showDialog(error.statusText)
+        showDialog(error.responseJSON)
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
@@ -405,13 +406,18 @@
 
     Promise
       .all([
+        setTglBukti(form),
         showKasGantung(form, userId)
       ])
       .then(() => {
         $('#crudModal').modal('show')
+        if (isEditTgl == 'TIDAK') {
+          form.find(`[name="tglbukti"]`).prop('readonly', true)
+          form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+        }
       })
       .catch((error) => {
-        showDialog(error.statusText)
+        showDialog(error.responseJSON)
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
@@ -444,7 +450,7 @@
         form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
       })
       .catch((error) => {
-        showDialog(error.statusText)
+        showDialog(error.responseJSON)
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
@@ -581,7 +587,7 @@
           form.attr('has-maxlength', true)
         },
         error: error => {
-          showDialog(error.statusText)
+          showDialog(error.responseJSON)
         }
       })
     }
@@ -808,6 +814,35 @@
         element.val('')
         element.data('currentValue', element.val())
       }
+    })
+  }
+  const setTglBukti = function(form) {
+    return new Promise((resolve, reject) => {
+      let data = [];
+      data.push({
+        name: 'grp',
+        value: 'EDIT TANGGAL BUKTI'
+      })
+      data.push({
+        name: 'subgrp',
+        value: 'KAS GANTUNG'
+      })
+      $.ajax({
+        url: `${apiUrl}parameter/getparamfirst`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: data,
+        success: response => {
+          isEditTgl = $.trim(response.text);
+          resolve()
+        },
+        error: error => {
+          reject(error)
+        }
+      })
     })
   }
 </script>

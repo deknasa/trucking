@@ -321,6 +321,8 @@
   var listIdPengeluaran = []
   var listKodePengeluaran = []
   var listKeteranganPengeluaran = []
+  let isEditTgl
+
   $(document).ready(function() {
 
     $("#crudForm [name]").attr("autocomplete", "off");
@@ -1386,7 +1388,7 @@
     $('#tbl_addRow').hide()
     $('.kolom_bbt').hide()
     // $('.colmn-offset').hide()
-   
+
     $('#crudForm').find('[name=periode]').val($.datepicker.formatDate('mm-yy', new Date())).trigger('change');
     loadBLLGrid()
     if ($('#crudForm').data('action') == 'add') {
@@ -1922,7 +1924,7 @@
         $('#crudModal').modal('show')
       })
       .catch((error) => {
-        showDialog(error.statusText)
+        showDialog(error.responseJSON)
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
@@ -1949,6 +1951,7 @@
 
     Promise
       .all([
+        setTglBukti(form),
         setStatusPostingOptions(form),
         setPostingPinjamanOptions(form),
       ])
@@ -1958,14 +1961,17 @@
             $('#crudModal').modal('show')
             // $('#crudForm [name=tglbukti]').attr('readonly', true)
             $('#crudForm [name=statusposting]').attr('disabled', true)
-            // $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
+            if (isEditTgl == 'TIDAK') {
+              form.find(`[name="tglbukti"]`).prop('readonly', true)
+              form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+            }
           })
           .finally(() => {
             $('.modal-loader').addClass('d-none')
           })
       })
       .catch((error) => {
-        showDialog(error.statusText)
+        showDialog(error.responseJSON)
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
@@ -2007,7 +2013,7 @@
           })
       })
       .catch((error) => {
-        showDialog(error.statusText)
+        showDialog(error.responseJSON)
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
@@ -2177,17 +2183,18 @@
                       $("#tablePelunasanbbm").jqGrid("setCell", rowObject.rowId, "sisa", originalGridData.sisa);
                     }
                   }
-                  nominalDetails = $(`#tablePelunasanbbm tr:not(#${rowObject.rowId})`).find(`td[aria-describedby="tablePelunasanbbm_nominal"]`)
-                  ttlBayar = 0
-                  $.each(nominalDetails, (index, nominalDetail) => {
-                    ttlBayarDetail = parseFloat($(nominalDetail).attr('title').replaceAll(',', ''))
-                    ttlBayars = (isNaN(ttlBayarDetail)) ? 0 : ttlBayarDetail;
-                    ttlBayar += ttlBayars
-                  });
-                  ttlBayar += nominal
-                  initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePelunasanbbm_nominal"]`).text(ttlBayar))
+                  // nominalDetails = $(`#tablePelunasanbbm tr:not(#${rowObject.rowId})`).find(`td[aria-describedby="tablePelunasanbbm_nominal"]`)
+                  // ttlBayar = 0
+                  // $.each(nominalDetails, (index, nominalDetail) => {
+                  //   ttlBayarDetail = parseFloat($(nominalDetail).attr('title').replaceAll(',', ''))
+                  //   ttlBayars = (isNaN(ttlBayarDetail)) ? 0 : ttlBayarDetail;
+                  //   ttlBayar += ttlBayars
+                  // });
+                  // ttlBayar += nominal
+                  // initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePelunasanbbm_nominal"]`).text(ttlBayar))
 
                   // setAllTotal()
+                  setTotalNominalPelunasan()
                   setTotalSisaPelunasan()
                 },
               }, ],
@@ -2201,6 +2208,12 @@
             sortable: false,
             editable: false,
             width: 500
+          },
+          {
+            label: "empty",
+            name: "empty",
+            hidden: true,
+            search: false,
           },
         ],
         autowidth: true,
@@ -2231,7 +2244,7 @@
           if ($('#crudForm').data('action') == 'edit') {
             sisa = (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.nominal)) - nominal
           } else {
-            sisa = originalGridData.sisa
+            sisa = originalGridData.sisa - nominal
           }
           if (indexColumn == 5) {
 
@@ -2272,8 +2285,8 @@
                 initAutoNumeric($(this).find(`td[aria-describedby="tablePelunasanbbm_nominal"]`))
               });
           }, 100);
-          setTotalNominalDeposito()
-          setTotalSisaDeposito()
+          setTotalSisaPelunasan()
+          setTotalNominalPelunasan()
           setHighlight($(this))
         },
       })
@@ -2305,6 +2318,22 @@
     /* Append clear filter button */
     loadClearFilter($('#tablePelunasanbbm'))
   }
+
+  $(document).on('click', '#resetdatafilter_tablePelunasanbbm', function(event) {
+    selectedRowsPengembalian = $("#tablePelunasanbbm").getGridParam("selectedRowIds");
+    $.each(selectedRowsPengembalian, function(index, value) {
+      $('#tablePelunasanbbm').jqGrid('saveCell', value, 7); //emptycell
+      $('#tablePelunasanbbm').jqGrid('saveCell', value, 5); //nominal
+    })
+
+  });
+  $(document).on('click', '#gbox_tablePelunasanbbm .ui-jqgrid-hbox .ui-jqgrid-htable thead .ui-search-toolbar th td a.clearsearchclass', function(event) {
+    selectedRowsPengembalian = $("#tablePelunasanbbm").getGridParam("selectedRowIds");
+    $.each(selectedRowsPengembalian, function(index, value) {
+      $('#tablePelunasanbbm').jqGrid('saveCell', value, 7); //emptycell
+      $('#tablePelunasanbbm').jqGrid('saveCell', value, 5); //nominal
+    })
+  })
 
   function getDataPelunasanBBM(dari, sampai, id) {
     aksi = $('#crudForm').data('action')
@@ -2396,12 +2425,12 @@
         }
 
         initAutoNumeric($(`#tablePelunasanbbm tr#${rowId}`).find(`td[aria-describedby="tablePelunasanbbm_nominal"]`))
-        setTotalNominalPelunasan()
-        setTotalSisaPelunasan()
+        setTotalNominalDeposito()
+        setTotalSisaDeposito()
       }
     });
 
-    $("#tableDeposito").jqGrid("setGridParam", {
+    $("#tablePelunasanbbm").jqGrid("setGridParam", {
       selectedRowIds: selectedRowIds,
     });
 
@@ -2410,22 +2439,36 @@
   function setTotalNominalPelunasan() {
     let nominalDetails = $(`#tablePelunasanbbm`).find(`td[aria-describedby="tablePelunasanbbm_nominal"]`)
     let nominal = 0
-    $.each(nominalDetails, (index, nominalDetail) => {
-      nominaldetail = parseFloat($(nominalDetail).text().replaceAll(',', ''))
-      nominals = (isNaN(nominaldetail)) ? 0 : nominaldetail;
-      nominal += nominals
-    });
-    initAutoNumeric($('.footrow').find(`td[aria-describedby="tableDeposito_nominal"]`).text(nominal))
+    selectedRowsPinjaman = $("#tablePelunasanbbm").getGridParam("selectedRowIds");
+    $.each(selectedRowsPinjaman, function(index, value) {
+      dataPinjaman = $("#tablePelunasanbbm").jqGrid("getLocalRow", value);
+      nominals = (dataPinjaman.nominal == undefined || dataPinjaman.nominal == '') ? 0 : dataPinjaman.nominal;
+      getNominal = (isNaN(nominals)) ? parseFloat(nominals.replaceAll(',', '')) : parseFloat(nominals)
+      nominal = nominal + getNominal
+    })
+    // $.each(nominalDetails, (index, nominalDetail) => {
+    //   nominaldetail = parseFloat($(nominalDetail).text().replaceAll(',', ''))
+    //   nominals = (isNaN(nominaldetail)) ? 0 : nominaldetail;
+    //   nominal += nominals
+    // });
+    initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePelunasanbbm_nominal"]`).text(nominal))
   }
 
   function setTotalSisaPelunasan() {
     let sisaDetails = $(`#tablePelunasanbbm`).find(`td[aria-describedby="tablePelunasanbbm_sisa"]`)
     let sisa = 0
-    $.each(sisaDetails, (index, sisaDetail) => {
-      sisadetail = parseFloat($(sisaDetail).text().replaceAll(',', ''))
-      sisas = (isNaN(sisadetail)) ? 0 : sisadetail;
+    let originalData = $("#tablePelunasanbbm").getGridParam("data");
+    $.each(originalData, function(index, value) {
+      sisas = value.sisa;
+      sisas = (isNaN(sisas)) ? parseFloat(sisas.replaceAll(',', '')) : parseFloat(sisas)
       sisa += sisas
-    });
+
+    })
+    // $.each(sisaDetails, (index, sisaDetail) => {
+    //   sisadetail = parseFloat($(sisaDetail).text().replaceAll(',', ''))
+    //   sisas = (isNaN(sisadetail)) ? 0 : sisadetail;
+    //   sisa += sisas
+    // });
     initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePelunasanbbm_sisa"]`).text(sisa))
   }
 
@@ -2518,16 +2561,16 @@
                       $("#tableDeposito").jqGrid("setCell", rowObject.rowId, "sisa", originalGridData.sisa);
                     }
                   }
-                  nominalDetails = $(`#tableDeposito tr:not(#${rowObject.rowId})`).find(`td[aria-describedby="tableDeposito_nominal"]`)
-                  ttlBayar = 0
-                  $.each(nominalDetails, (index, nominalDetail) => {
-                    ttlBayarDetail = parseFloat($(nominalDetail).attr('title').replaceAll(',', ''))
-                    ttlBayars = (isNaN(ttlBayarDetail)) ? 0 : ttlBayarDetail;
-                    ttlBayar += ttlBayars
-                  });
-                  ttlBayar += nominal
-                  initAutoNumeric($('.footrow').find(`td[aria-describedby="tableDeposito_nominal"]`).text(ttlBayar))
-
+                  // nominalDetails = $(`#tableDeposito tr:not(#${rowObject.rowId})`).find(`td[aria-describedby="tableDeposito_nominal"]`)
+                  // ttlBayar = 0
+                  // $.each(nominalDetails, (index, nominalDetail) => {
+                  //   ttlBayarDetail = parseFloat($(nominalDetail).attr('title').replaceAll(',', ''))
+                  //   ttlBayars = (isNaN(ttlBayarDetail)) ? 0 : ttlBayarDetail;
+                  //   ttlBayar += ttlBayars
+                  // });
+                  // ttlBayar += nominal
+                  // initAutoNumeric($('.footrow').find(`td[aria-describedby="tableDeposito_nominal"]`).text(ttlBayar))
+                  setTotalNominalDeposito()
                   // setAllTotal()
                   setTotalSisaDeposito()
                 },
@@ -2542,6 +2585,12 @@
             sortable: false,
             editable: false,
             width: 500
+          },
+          {
+            label: "empty",
+            name: "empty",
+            hidden: true,
+            search: false,
           },
         ],
         autowidth: true,
@@ -2572,7 +2621,7 @@
           if ($('#crudForm').data('action') == 'edit') {
             sisa = (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.nominal)) - nominal
           } else {
-            sisa = originalGridData.sisa
+            sisa = originalGridData.sisa - nominal
           }
           if (indexColumn == 5) {
 
@@ -2649,6 +2698,22 @@
     /* Append global search */
     // loadGlobalSearch($('#tableDeposito'))
   }
+
+  $(document).on('click', '#resetdatafilter_tableDeposito', function(event) {
+    selectedRowsPengembalian = $("#tableDeposito").getGridParam("selectedRowIds");
+    $.each(selectedRowsPengembalian, function(index, value) {
+      $('#tableDeposito').jqGrid('saveCell', value, 7); //emptycell
+      $('#tableDeposito').jqGrid('saveCell', value, 5); //nominal
+    })
+
+  });
+  $(document).on('click', '#gbox_tableDeposito .ui-jqgrid-hbox .ui-jqgrid-htable thead .ui-search-toolbar th td a.clearsearchclass', function(event) {
+    selectedRowsPengembalian = $("#tableDeposito").getGridParam("selectedRowIds");
+    $.each(selectedRowsPengembalian, function(index, value) {
+      $('#tableDeposito').jqGrid('saveCell', value, 7); //emptycell
+      $('#tableDeposito').jqGrid('saveCell', value, 5); //nominal
+    })
+  })
 
   function getDataDeposito(supirId, id) {
     aksi = $('#crudForm').data('action')
@@ -2754,22 +2819,27 @@
   function setTotalNominalDeposito() {
     let nominalDetails = $(`#tableDeposito`).find(`td[aria-describedby="tableDeposito_nominal"]`)
     let nominal = 0
-    $.each(nominalDetails, (index, nominalDetail) => {
-      nominaldetail = parseFloat($(nominalDetail).text().replaceAll(',', ''))
-      nominals = (isNaN(nominaldetail)) ? 0 : nominaldetail;
-      nominal += nominals
-    });
+    selectedRowsPinjaman = $("#tableDeposito").getGridParam("selectedRowIds");
+    $.each(selectedRowsPinjaman, function(index, value) {
+      dataPinjaman = $("#tableDeposito").jqGrid("getLocalRow", value);
+      nominals = (dataPinjaman.nominal == undefined || dataPinjaman.nominal == '') ? 0 : dataPinjaman.nominal;
+      console.log('dataPinjaman ', dataPinjaman.nominal)
+      getNominal = (isNaN(nominals)) ? parseFloat(nominals.replaceAll(',', '')) : parseFloat(nominals)
+      nominal = nominal + getNominal
+    })
     initAutoNumeric($('.footrow').find(`td[aria-describedby="tableDeposito_nominal"]`).text(nominal))
   }
 
   function setTotalSisaDeposito() {
     let sisaDetails = $(`#tableDeposito`).find(`td[aria-describedby="tableDeposito_sisa"]`)
     let sisa = 0
-    $.each(sisaDetails, (index, sisaDetail) => {
-      sisadetail = parseFloat($(sisaDetail).text().replaceAll(',', ''))
-      sisas = (isNaN(sisadetail)) ? 0 : sisadetail;
+    let originalData = $("#tableDeposito").getGridParam("data");
+    $.each(originalData, function(index, value) {
+      sisas = value.sisa;
+      sisas = (isNaN(sisas)) ? parseFloat(sisas.replaceAll(',', '')) : parseFloat(sisas)
       sisa += sisas
-    });
+
+    })
     initAutoNumeric($('.footrow').find(`td[aria-describedby="tableDeposito_sisa"]`).text(sisa))
   }
 
@@ -4111,7 +4181,7 @@
             reject(errors)
 
           } else {
-            showDialog(error.statusText)
+            showDialog(error.responseJSON)
           }
         },
         error: error => {
@@ -4180,7 +4250,7 @@
             reject(errors)
 
           } else {
-            showDialog(error.statusText)
+            showDialog(error.responseJSON)
           }
         },
         error: error => {
@@ -5165,7 +5235,7 @@
           form.attr('has-maxlength', true)
         },
         error: error => {
-          showDialog(error.statusText)
+          showDialog(error.responseJSON)
         }
       })
     }
@@ -5501,6 +5571,35 @@
             listKeteranganPengeluaran[index] = data.keterangan;
           })
 
+        }
+      })
+    })
+  }
+  const setTglBukti = function(form) {
+    return new Promise((resolve, reject) => {
+      let data = [];
+      data.push({
+        name: 'grp',
+        value: 'EDIT TANGGAL BUKTI'
+      })
+      data.push({
+        name: 'subgrp',
+        value: 'PENGELUARAN TRUCKING'
+      })
+      $.ajax({
+        url: `${apiUrl}parameter/getparamfirst`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: data,
+        success: response => {
+          isEditTgl = $.trim(response.text);
+          resolve()
+        },
+        error: error => {
+          reject(error)
         }
       })
     })

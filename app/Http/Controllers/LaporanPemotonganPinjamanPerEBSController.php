@@ -65,6 +65,8 @@ class LaporanPemotonganPinjamanPerEBSController extends MyController
             ->get(config('app.api_url') . 'laporanpemotonganpinjamanperebs/export', $detailParams);
         
         $pengeluaran = $responses['data'];
+        $disetujui = $pengeluaran[0]['disetujui'] ?? '';
+        $diperiksa = $pengeluaran[0]['diperiksa'] ?? '';
         $user = Auth::user();
         // dd($pengeluaran);
         $spreadsheet = new Spreadsheet();
@@ -285,9 +287,9 @@ $sheet->getStyle("A" . ($detail_start_row + 1) . ":$lastColumn" . ($detail_start
 
 
 // $sheet->mergeCells('A' . ($detail_start_row + 6) . ':B' . ($detail_start_row + 6));
-// $sheet->setCellValue('A' . ($detail_start_row + 6), '( Bpk. Hasan )');
+// $sheet->setCellValue('A' . ($detail_start_row + 6), '( ' . $disetujui . ' )');
 // $sheet->mergeCells('C' . ($detail_start_row + 6) . ($detail_start_row + 6));
-// $sheet->setCellValue('C' . ($detail_start_row + 6), '( RINA )');
+// $sheet->setCellValue('C' . ($detail_start_row + 6), '( ' . $diperiksa . ' )');
 // $sheet->mergeCells('D' . ($detail_start_row + 6) . ':E' . ($detail_start_row + 6));
 // $sheet->setCellValue('D' . ($detail_start_row + 6), '(                                          )');
 

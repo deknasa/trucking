@@ -33,15 +33,15 @@ class LaporanHistoryPinjamanController extends MyController
             'supirdari_id' => $request->supirdari_id,
             'supirsampai_id' => $request->supirsampai_id,
         ];
-        
+
         $responses = Http::withHeaders($request->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'laporanhistorypinjaman/report', $detailParams);
-            // dd($responses['data']);
+        // dd($responses['data']);
         $data = $responses['data'];
         $user = Auth::user();
-        
+
         return view('reports.laporanhistorypinjaman', compact('data', 'user', 'detailParams'));
     }
 
@@ -51,7 +51,7 @@ class LaporanHistoryPinjamanController extends MyController
             'supirdari_id' => $request->supirdari_id,
             'supirsampai_id' => $request->supirsampai_id,
         ];
-        
+
         $responses = Http::withHeaders($request->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
@@ -121,17 +121,17 @@ class LaporanHistoryPinjamanController extends MyController
             foreach ($header_columns as $data_columns_index => $data_column) {
                 if (($data_column['index'] == 'nominal') || ($data_column['index'] == 'Saldo')) {
                     // $response_detail[$data_column['index']] = (number_format((float) $response_detail[$data_column['index']], '2', '.', ','))->applyFromArray($style_number);
-                    $sheet->setCellValue($alphabets[$data_columns_index] . $detail_start_row, number_format((float) $response_detail[$data_column['index']], '2', '.', ','))->getStyle($alphabets[$data_columns_index].$detail_start_row)->applyFromArray($style_number);
-                }else {
+                    $sheet->setCellValue($alphabets[$data_columns_index] . $detail_start_row, $response_detail[$data_column['index']])->getStyle($alphabets[$data_columns_index] . $detail_start_row)->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
+                } else {
                     $sheet->setCellValue($alphabets[$data_columns_index] . $detail_start_row, $response_detail[$data_column['index']]);
                 }
             }
             $detail_start_row++;
         }
-       
+
         $lastColumn = $alphabets[$data_columns_index];
         $sheet->getStyle("A$header_start_row:$lastColumn$header_start_row")->getFont()->setBold(true);
-        
+
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);
         $sheet->getColumnDimension('C')->setAutoSize(true);
@@ -139,10 +139,10 @@ class LaporanHistoryPinjamanController extends MyController
         $sheet->getColumnDimension('E')->setAutoSize(true);
         // $sheet->getColumnDimension('F')->setAutoSize(true);
         $total_start_row = $detail_start_row;
-        $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A'.$total_start_row.':C'.$total_start_row)->getFont()->setBold(true);
+        // $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A'.$total_start_row.':C'.$total_start_row)->getFont()->setBold(true);
 
-        $sheet->setCellValue("D$total_start_row", number_format((float) $totalnominal, '2', '.', ','))->getStyle("D$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
-        $sheet->setCellValue("E$total_start_row", number_format((float) $totalSaldo, '2', '.', ','))->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        // $sheet->setCellValue("D$total_start_row", number_format((float) $totalnominal, '2', '.', ','))->getStyle("D$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        // $sheet->setCellValue("E$total_start_row", number_format((float) $totalSaldo, '2', '.', ','))->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
 
 
 

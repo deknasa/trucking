@@ -140,6 +140,7 @@
 <script>
   let hasFormBindKeys = false
   let modalBody = $('#crudModal').find('.modal-body').html()
+  let isEditTgl
 
   $(document).ready(function() {
 
@@ -381,12 +382,17 @@
 
     Promise
       .all([
+        setTglBukti(form),
         setStatusApprovalListOptions(form)
       ])
       .then(() => {
         showNotaKredit(form, userId)
           .then(() => {
             $('#crudModal').modal('show')
+            if (isEditTgl == 'TIDAK') {
+              form.find(`[name="tglbukti"]`).prop('readonly', true)
+              form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+            }
           })
           .catch((error) => {
             showDialog(error.statusText)
@@ -838,5 +844,36 @@
   //     })
   //   })
   // }
+
+
+  const setTglBukti = function(form) {
+    return new Promise((resolve, reject) => {
+      let data = [];
+      data.push({
+        name: 'grp',
+        value: 'EDIT TANGGAL BUKTI'
+      })
+      data.push({
+        name: 'subgrp',
+        value: 'NOTA KREDIT'
+      })
+      $.ajax({
+        url: `${apiUrl}parameter/getparamfirst`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: data,
+        success: response => {
+          isEditTgl = $.trim(response.text);
+          resolve()
+        },
+        error: error => {
+          reject(error)
+        }
+      })
+    })
+  }
 </script>
 @endpush()
