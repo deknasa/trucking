@@ -988,6 +988,10 @@
         $('#crudForm').find(`[name="penerimaantrucking_id"]`).val($('#penerimaanheader_id').val())
       }
     }
+    form.find('#btnSubmit').prop('disabled',false)
+    if (form.data('action') == "view") {
+      form.find('#btnSubmit').prop('disabled',true)
+    }
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
@@ -1110,6 +1114,68 @@
       ])
       .then(() => {
         $('#crudModal').modal('show')
+      })
+      .catch((error) => {
+        showDialog(error.statusText)
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
+
+  }
+  function viewPenerimaanTruckingHeader(id) {
+    let form = $('#crudForm')
+    $('.modal-loader').removeClass('d-none')
+
+    form.data('action', 'view')
+    form.trigger('reset')
+    form.find('#btnSubmit').html(`
+      <i class="fa fa-save"></i>
+      Save
+    `)
+    form.find('#btnSubmit').prop('disabled',true)
+    form.find(`.sometimes`).hide()
+    $('#crudModalTitle').text('View Penerimaan Truck')
+    
+    $('.is-invalid').removeClass('is-invalid')
+    $('.invalid-feedback').remove()
+
+    form.find(`[name="bank"]`).removeClass('bank-lookup')
+    form.find(`[name="penerimaantrucking"]`).removeClass('penerimaantrucking-lookup')
+
+    Promise
+      .all([
+        showPenerimaanTruckingHeader(form, id)
+      ])
+      .then(userId => {
+                setFormBindKeys(form)
+                initSelect2(form.find('.select2bs4'), true)
+                form.find('[name]').removeAttr('disabled')
+        
+                form.find('select').each((index, select) => {
+                let element = $(select)
+        
+                if (element.data('select2')) {
+                    element.select2('destroy')
+                }
+                })
+        
+                form.find('[name]').attr('disabled', 'disabled').css({
+                background: '#fff'
+                })
+                form.find('[name=id]').prop('disabled',false)
+            })
+      .then(() => {
+        $('#crudModal').modal('show')
+        form.find(`.hasDatepicker`).prop('readonly', true)
+        form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
+        $('#crudForm').find(`.tbl_aksi`).hide()
+        let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
+        let nameFind = $('#crudForm').find(`[name]`).parents('.input-group')
+        name.attr('disabled', true)
+        name.find('.lookup-toggler').remove()
+        nameFind.find('button.button-clear').remove()
+
       })
       .catch((error) => {
         showDialog(error.statusText)

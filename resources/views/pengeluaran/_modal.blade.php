@@ -130,7 +130,7 @@
                     <th width="10%">Tgl jatuh tempo</th>
                     <th width="10%">No Invoice</th>
                     <th width="10%">Bank</th>
-                    <th width="1%">Aksi</th>
+                    <th width="1%" class="tbl_aksi">Aksi</th>
                   </tr>
                 </thead>
                 <tbody id="table_body" class="form-group">
@@ -146,7 +146,7 @@
                       <p class="text-right font-weight-bold autonumeric" id="total"></p>
                     </td>
                     <td colspan="4"></td>
-                    <td>
+                    <td class="tbl_aksi">
                       <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
                     </td>
                   </tr>
@@ -610,11 +610,15 @@
             clearSelectedRows()
             $('#gs_').prop('checked', false)
             $('#crudModal').modal('show')
+            form.find(`.hasDatepicker`).prop('readonly', true)
             form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
             let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
+            let nameFind = $('#crudForm').find(`[name]`).parents('.input-group')
             name.attr('disabled', true)
-            name.find('.lookup-toggler').attr('disabled', true)
-            name.find('.lookup-toggler').attr('disabled', true)
+            name.find('.lookup-toggler').remove()
+            nameFind.find('button.button-clear').remove()
+
+            $('.tbl_aksi').hide()
           })
           .catch((error) => {
             showDialog(error.responseJSON)
@@ -783,7 +787,7 @@
                   <td>
                       <input type="text" name="bank_detail[]" class="form-control">
                   </td>
-                  <td>
+                  <td class="tbl_aksi">
                       <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
                   </td>
               </tr>

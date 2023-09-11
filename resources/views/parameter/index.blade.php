@@ -233,7 +233,16 @@
                             deleteParameter(selectedId)
                         }
                     },
-                    // {
+                    {
+                        id: 'view',
+                        innerHTML: '<i class="fa fa-eye"></i> VIEW',
+                        class: 'btn btn-orange btn-sm mr-1',
+                        onClick: () => {
+                          selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                          viewParameter(selectedId)
+                        }
+                    },
+                        // {
                     //     id: 'reload',
                     //     innerHTML: '<i class="fas fa-sync-alt"></i> RELOAD',
                     //     class: 'btn btn-dark btn-sm mr-1',
@@ -295,7 +304,11 @@
             if (!`{{ $myAuth->hasPermission('parameter', 'store') }}`) {
                 $('#add').attr('disabled', 'disabled')
             }
-
+       
+            if (!`{{ $myAuth->hasPermission('parameter', 'show') }}`) {
+                $('#view').attr('disabled', 'disabled')
+            }
+                
             if (!`{{ $myAuth->hasPermission('parameter', 'update') }}`) {
                 $('#edit').attr('disabled', 'disabled')
             }

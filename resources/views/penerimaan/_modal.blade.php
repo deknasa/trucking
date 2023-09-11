@@ -134,7 +134,7 @@
                                         <th width="7%">Bank Pelanggan</th>
                                         <th width="10%">Keterangan</th>
                                         <th width="6%">Nominal</th>
-                                        <th width="1%" class="aksiGiro">Aksi</th>
+                                        <th width="1%" class="aksiGiro tbl_aksi">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody id="table_body" class="form-group">
@@ -148,7 +148,7 @@
                                         <td>
                                             <p class="text-right font-weight-bold autonumeric" id="total"></p>
                                         </td>
-                                        <td class="aksiGiro">
+                                        <td class="aksiGiro tbl_aksi">
                                             <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
                                         </td>
                                     </tr>
@@ -567,8 +567,24 @@
                 setStatusKasOptions(form)
             ])
             .then(() => {
+
                 showPenerimaan(form, id)
                     .then(id => {
+                     clearSelectedRows()
+                      $('#gs_').prop('checked', false)
+                      $('#crudModal').modal('show')
+                      $('#crudForm [name=tglbukti]').attr('readonly', true)
+                      $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
+                      $('#crudForm [name=tgllunas]').attr('readonly', true)
+                      $('#crudForm [name=tgllunas]').siblings('.input-group-append').remove()
+                      $('#crudForm [name=bank]').parent('.input-group').find('.button-clear').remove()
+                      $('#crudForm [name=bank]').parent('.input-group').find('.input-group-append').remove()
+                      form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
+                      let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
+                      name.attr('disabled', true)
+                      name.find('.lookup-toggler').attr('disabled', true)
+                      name.find('.lookup-toggler').attr('disabled', true)
+                      $('#crudForm').find(`.tbl_aksi`).hide()
                         // form.find('.aksi').hide()
                         setFormBindKeys(form)
                         initSelect2(form.find('.select2bs4'), true)
@@ -760,7 +776,7 @@
                             <td>
                                 <input type="text" name="nominal_detail[]" class="form-control autonumeric"  ${readOnly}> 
                             </td>
-                            <td>
+                            <td class="tbl_aksi">
                                 <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
                             </td>
                         </tr>
@@ -917,7 +933,7 @@
         <td>
           <input type="text" name="nominal_detail[]" class="form-control autonumeric"> 
         </td>
-        <td class="aksiGiro">
+        <td class="aksiGiro tbl_aksi">
             <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
         </td>
       </tr>

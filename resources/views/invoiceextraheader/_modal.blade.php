@@ -65,7 +65,7 @@
                     <th width="2%">No</th>
                     <th width="70%">keterangan</th>
                     <th width="26%">nominal</th>
-                    <th width="2%">Aksi</th>
+                    <th width="2%" class="tbl_aksi">Aksi</th>
                   </tr>
                 </thead>
                 <tbody id="table_body" class="form-group">
@@ -76,7 +76,7 @@
 
                     <td class="font-weight-bold"> Total : </td>
                     <td id="sumary" class="text-right font-weight-bold"> </td>
-                    <td>
+                    <td class="tbl_aksi">
                       <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
                     </td>
                   </tr>
@@ -300,7 +300,11 @@
     activeGrid = null
     initLookup()
     initDatepicker()
-
+    form.find('#btnSubmit').prop('disabled',false)
+    if (form.data('action') == "view") {
+      form.find('#btnSubmit').prop('disabled',true)
+    }
+    
     // getMaxLength(form)
   })
 
@@ -442,6 +446,65 @@
       })
 
   }
+  function viewInvoiceExtraHeader(invoiceExtraHeader) {
+    let form = $('#crudForm')
+
+    form.data('action', 'view')
+    form.trigger('reset')
+    form.find('#btnSubmit').html(`
+      <i class="fa fa-save"></i>
+      Save
+    `)
+    form.find('#btnSubmit').prop('disabled',true)
+    form.find(`.sometimes`).hide()
+    $('#crudModalTitle').text('View Invoice Extra')
+    $('#crudModal').modal('show')
+    $('.is-invalid').removeClass('is-invalid')
+    $('.invalid-feedback').remove()
+
+    Promise
+      .all([
+        showInvoiceExtraHeader(form, invoiceExtraHeader)
+      ])
+      .then(id => {
+        setFormBindKeys(form)
+        initSelect2(form.find('.select2bs4'), true)
+        form.find('[name]').removeAttr('disabled')
+  
+        form.find('select').each((index, select) => {
+          let element = $(select)
+  
+          if (element.data('select2')) {
+            element.select2('destroy')
+          }
+        })
+  
+        form.find('[name]').attr('disabled', 'disabled').css({
+          background: '#fff'
+        })
+        form.find('[name=id]').prop('disabled',false)
+      })
+      .then(() => {
+        $('#crudModal').modal('show')
+          form.find(`.hasDatepicker`).prop('readonly', true)
+          form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
+          
+          let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
+          let nameFind = $('#crudForm').find(`[name]`).parents('.input-group')
+          name.attr('disabled', true)
+          name.find('.lookup-toggler').remove()
+          nameFind.find('button.button-clear').remove()
+          $('#crudForm').find(`.tbl_aksi`).hide()
+
+      })
+      .catch((error) => {
+        showDialog(error.statusText)
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
+
+  }
 
   function getMaxLength(form) {
     if (!form.attr('has-maxlength')) {
@@ -483,7 +546,7 @@
                   <td>
                     <input type="text"  name="nominal_detail[]" id="nominal_detail" text-align:right" class="form-control autonumeric nominal number${rowIndex}">
                   </td>                  
-                  <td>
+                  <td class="tbl_aksi">
                     <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
                   </td>
               </tr>
@@ -531,54 +594,64 @@
   }
 
   function showInvoiceExtraHeader(form, invoiceExtraHeader) {
-    $.ajax({
-      url: `${apiUrl}invoiceextraheader/${invoiceExtraHeader}`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      success: response => {
-        sum = 0;
-        $.each(response.data, (index, value) => {
-          let element = form.find(`[name="${index}"]`)
-          if (element.hasClass('datepicker')) {
-            element.val(dateFormat(value))
-          } else {
-            element.val(value)
-          }
-        })
-        $.each(response.detail, (id, detail) => {
-          let detailRow = $(`
-            <tr>
-                  <td>
-                    <div class="baris"></div>
-                  </td>
-                  
-                  <td>
-                    <input type="text"  name="keterangan_detail[]" style="" class="form-control">                    
-                  </td>
-                  <td>
-                    <input type="text"  name="nominal_detail[]" id="nominal_detail${id}"  style="text-align:right" class="autonumeric nominal form-control">                    
-                  </td>  
-                  <td>
-                    <div class='btn btn-danger btn-sm rmv'>Hapus</div>
-                  </td>
-              </tr>
-          `)
-          detailRow.find(`[name="nominal_detail[]"]`).val(detail.nominal)
-          detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
-          $('table #table_body').append(detailRow)
-          initAutoNumeric(detailRow.find('.autonumeric'))
-
-          setRowNumbers()
-
-          setTotal()
-          id++;
-        })
-
-
-      }
+    return new Promise((resolve, reject) => {
+      $('#detailList tbody').html('')
+      $.ajax({
+        url: `${apiUrl}invoiceextraheader/${invoiceExtraHeader}`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          sum = 0;
+          $.each(response.data, (index, value) => {
+            let element = form.find(`[name="${index}"]`)
+            if (element.hasClass('datepicker')) {
+              element.val(dateFormat(value))
+            } else {
+              element.val(value)
+            }
+          })
+          $.each(response.detail, (id, detail) => {
+            let detailRow = $(`
+              <tr>
+                    <td>
+                      <div class="baris"></div>
+                    </td>
+                    
+                    <td>
+                      <input type="text"  name="keterangan_detail[]" style="" class="form-control">                    
+                    </td>
+                    <td>
+                      <input type="text"  name="nominal_detail[]" id="nominal_detail${id}"  style="text-align:right" class="autonumeric nominal form-control">                    
+                    </td>  
+                    <td class="tbl_aksi">
+                      <div class='btn btn-danger btn-sm rmv delete-row'>Hapus</div>
+                    </td>
+                </tr>
+            `)
+            detailRow.find(`[name="nominal_detail[]"]`).val(detail.nominal)
+            detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
+            $('table #table_body').append(detailRow)
+            initAutoNumeric(detailRow.find('.autonumeric'))
+  
+            setRowNumbers()
+  
+            setTotal()
+            id++;
+  
+            if (form.data('action') === 'delete') {
+              form.find('[name]').addClass('disabled')
+              initDisabled()
+            }
+            resolve()
+          })
+        },
+        error: error => {
+          reject(error)
+        }
+      })
     })
   }
 

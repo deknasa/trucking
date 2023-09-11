@@ -246,7 +246,7 @@
                             <th style="width: 20%; min-width: 200px;" class="data_tbl tbl_nominaltagih kolom_bbt">tagihan</th>
                             <th class="data_tbl tbl_keterangan" style="width: 20%; min-width: 200px;">Keterangan</th>
                             <th style="width: 20%; min-width: 200px;" class="data_tbl tbl_jenisorder kolom_bbt">jenis orderan</th>
-                            <th style="width:5%; max-width: 25px;max-width: 15px">Aksi</th>
+                            <th style="width:5%; max-width: 25px;max-width: 15px" class="tbl_aksi">Aksi</th>
                           </tr>
                         </thead>
                         <tbody id="table_body" class="form-group">
@@ -268,7 +268,7 @@
                             </td>
                             <td class="colmn-offset"></td>
                             <td class="colmn-offset2" style="display: none"></td>
-                            <td id="tbl_addRow">
+                            <td id="tbl_addRow" class="tbl_aksi">
                               <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
                             </td>
                           </tr>
@@ -1865,6 +1865,10 @@
         $('#crudForm').find(`[name="pengeluarantrucking_id"]`).val($('#pengeluaranheader_id').val())
       }
     }
+    form.find('#btnSubmit').prop('disabled',false)
+    if (form.data('action') == "view") {
+      form.find('#btnSubmit').prop('disabled',true)
+    }
     // initSelect2()
   })
 
@@ -2010,6 +2014,77 @@
       })
       .catch((error) => {
         showDialog(error.responseJSON)
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
+    form.find(`[name="postingpinjaman"]`).attr('disabled', true)
+
+  }
+  function viewPengeluaranTruckingHeader(id) {
+
+    let form = $('#crudForm')
+    $('.modal-loader').removeClass('d-none')
+
+    form.data('action', 'view')
+    form.trigger('reset')
+    form.find('#btnSubmit').html(`
+      <i class="fa fa-save"></i>
+      Save
+    `)
+    form.find('#btnSubmit').prop('disabled',true)
+    form.find(`.sometimes`).hide()
+    $('#crudModalTitle').text('View Pengeluaran Truck')
+    $('.is-invalid').removeClass('is-invalid')
+    $('.invalid-feedback').remove()
+
+    form.find(`[name="bank"]`).removeClass('bank-lookup')
+    form.find(`[name="pengeluarantrucking"]`).removeClass('pengeluarantrucking-lookup')
+
+
+    Promise
+      .all([
+        setStatusPostingOptions(form),
+        setPostingPinjamanOptions(form),
+      ])
+      .then(() => {
+        showPengeluaranTruckingHeader(form, id)
+        .then(penerimaanStokHeaderId => {
+            setFormBindKeys(form)
+            form.find('[name]').removeAttr('disabled')
+
+            form.find('select').each((index, select) => {
+              let element = $(select)
+
+              if (element.data('select2')) {
+                element.select2('destroy')
+              }
+            })
+
+            form.find('[name]').attr('disabled', 'disabled').css({
+              background: '#fff'
+            })
+            form.find('[name=id]').prop('disabled', false);
+
+          })
+          .then(() => {
+            $('#crudModal').modal('show')
+            $('#crudForm [name=statusposting]').attr('disabled', true)
+            $('#crudForm').find(`.ui-datepicker-trigger`).attr('disabled', true)
+            
+            form.find(`.hasDatepicker`).prop('readonly', true)
+            form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
+            let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
+            let nameFind = $('#crudForm').find(`[name]`).parents('.input-group')
+            name.attr('disabled', true)
+            name.find('.lookup-toggler').remove()
+            nameFind.find('button.button-clear').remove()
+            $('.tbl_aksi').hide()
+
+          })
+      })
+      .catch((error) => {
+        showDialog(error.statusText)
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
@@ -3232,7 +3307,7 @@
                     <td class="data_tbl tbl_jenisorder kolom_bbt">
                       <input id="jenisorder_${index}" type="text" name="jenisorder_id[]" class="form-control"> 
                     </td>
-                    <td>
+                    <td class="tbl_aksi">
                         <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
                     </td>
                 </tr>

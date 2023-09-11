@@ -476,6 +476,16 @@
             }
           },
           {
+            id: 'view',
+            innerHTML: '<i class="fa fa-eye"></i> VIEW',
+            class: 'btn btn-orange btn-sm mr-1',
+            onClick: () => {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              
+              viewHutangHeader(selectedId)
+            }
+          },
+          {
             id: 'report',
             innerHTML: '<i class="fa fa-print"></i> REPORT',
             class: 'btn btn-info btn-sm mr-1',
@@ -548,6 +558,10 @@
       $('#add').attr('disabled', 'disabled')
     }
 
+    if (!`{{ $myAuth->hasPermission('hutangheader', 'show') }}`) {
+      $('#view').attr('disabled', 'disabled')
+    }
+      
     if (!`{{ $myAuth->hasPermission('hutangheader', 'update') }}`) {
       $('#edit').attr('disabled', 'disabled')
     }
