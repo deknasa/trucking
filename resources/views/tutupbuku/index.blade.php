@@ -105,7 +105,7 @@
                     $('.invalid-feedback').remove()
                     showDialog(response.message)
 
-                    $('#crudForm').find('[name=tglterakhir]').val(response.data['text']).trigger('change');
+                    $('#crudForm').find('[name=tglterakhir]').val(dateFormat(response.data['text'])).trigger('change');
                     $('#crudForm').find('[name=tgltutupbuku]').val('').trigger('change');
 
                 },
