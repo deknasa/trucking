@@ -380,7 +380,7 @@
         // $('[name=bank]').parents('.form-group').show()
         // $('[name=tglkasmasuk]').parents('.form-group').show()
       } else if ($(this).val() == 220) {
-        $('.potongkas').show() //potong hutang
+        $('.potongkas').hide() //potong hutang
         $('#titlePotongkas').html('POSTING Pengeluaran')
         $('[name=tglkasmasuk]').parents('.form-group').hide()
         $('[name=penerimaan_nobukti]').parents('.form-group').hide()
@@ -837,11 +837,25 @@
     }
     initSelect2($('#statuspotongretur'), true)
     if (form.data('action') !== 'add') {
-      let pengeluaranstok = $('#crudForm').find(`[name="pengeluaranstok"]`).parents('.input-group').children()
-      pengeluaranstok.attr('readonly', true)
-      pengeluaranstok.find('.lookup-toggler').attr('disabled', true)
+      let pengeluaranstok = $('#crudForm').find(`[name="pengeluaranstok"]`).parents('.input-group')
+      pengeluaranstok.children().attr('readonly', true)
+      pengeluaranstok.children().find('.lookup-toggler').attr('disabled', true)
+      pengeluaranstok.find('button.button-clear').remove()
+      
+      let penerimaanstok_nobukti = $('#crudForm').find(`[name="penerimaanstok_nobukti"]`).parents('.input-group')
+      penerimaanstok_nobukti.children().attr('readonly', true)
+      penerimaanstok_nobukti.children().find('.lookup-toggler').attr('disabled', true)
+      penerimaanstok_nobukti.find('button.button-clear').remove()
       $('#pengeluaranstokId').attr('readonly', true);
-      console.log(pengeluaranstok);
+
+      let supplier = $('#crudForm').find(`[name="supplier"]`).parents('.input-group')
+      supplier.children().attr('readonly', true)
+      supplier.children().find('.lookup-toggler').attr('disabled', true)
+      supplier.find('button.button-clear').remove()
+      $('#supplierId').attr('readonly', true);
+      $('#supplierId').attr('readonly', true);
+      $('#statuspotongretur').attr('readonly', true);
+
     }
     form.find('#btnSubmit').prop('disabled',false)
     if (form.data('action') == "view") {
@@ -1742,7 +1756,7 @@
                   <td class="data_tbl tbl_qty" >
                     <input type="text"  name="detail_qty[]" id="detail_qty${id}" onkeyup="calculate(${id})" style="text-align:right" class="form-control autonumeric number${id}">                    
                   </td>
-                  <td class="data_tbl tbl_vulkanisirke" >
+                  <td class="data_tbl tbl_vulkanisirke"  style="display: none;" >
                     <input type="text"  name="detail_vulkanisirke[]" style="" class="form-control">                    
                   </td> 
                   
