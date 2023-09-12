@@ -11,7 +11,7 @@
         <form action="" method="post">
           <input type="hidden" name="id">
           <div class="modal-body">
-            <div class="row">
+            <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
                   NO BUKTI
@@ -33,65 +33,83 @@
             </div>
 
 
-            <div class="row">
-
+            <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
                   TGL LUNAS <span class="text-danger">*</span>
                 </label>
               </div>
-              <div class="col-12 col-sm-9 col-md-4">
+              <div class="col-12 col-sm-9 col-md-10">
                 <div class="input-group">
                   <input type="text" name="tgllunas" class="form-control datepicker">
                 </div>
               </div>
-
+            </div>
+            <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
-                <label class="col-form-label">pelunasan piutang <span class="text-danger">*</span> </label>
+                <label class="col-form-label">AGEN <span class="text-danger">*</span> </label>
               </div>
-              <div class="col-12 col-sm-9 col-md-4">
-                <input type="text" name="pelunasanpiutang_nobukti" class="form-control pelunasanpiutang-lookup">
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="hidden" name="agen_id">
+                <input type="text" name="agen" class="form-control agen-lookup">
               </div>
             </div>
 
-            <div class="row">
-
-
+            <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
-                <label class="col-form-label">keterangan <span class="text-danger">*</span> </label>
+                <label class="col-form-label">
+                  BANK <span class="text-danger">*</span></label>
               </div>
-              <div class="col-12 col-sm-9 col-md-4">
-                <input type="text" name="keterangan" class="form-control">
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="hidden" name="bank_id">
+                <input type="text" name="bank" class="form-control bank-lookup">
               </div>
             </div>
-            <div class="col-md-12" style="overflow-x:scroll">
-              <table class="table table-borderd mt-3" id="detailList" style="table-layout:auto">
-                <thead id="" class="table-secondary">
+
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
+                  ALAT BAYAR <span class="text-danger">*</span></label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="hidden" name="alatbayar_id">
+                <input type="text" name="alatbayar" class="form-control alatbayar-lookup">
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
+                  NO WARKAT </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="text" name="nowarkat" class="form-control">
+              </div>
+            </div>
+
+            <div class="table-scroll table-responsive">
+              <table class="table table-bordered table-bindkeys" id="detailList" style="width: 1000px;">
+                <thead>
                   <tr>
-                    <th><input type="checkbox" id="checkAll"> </th>
-                    <th>no</th>
-                    <th>nobukti</th>
-                    <th>tgl cair</th>
-                    <th>coalebihbayar</th>
-                    <th>nominal</th>
-                    <th>nominal bayar</th>
-                    <th>lebihbayar</th>
-                    <th>keterangan</th>
+                    <th width="2%">No</th>
+                    <th width="70%">Keterangan</th>
+                    <th width="26%">Nominal</th>
+                    <th width="2%" class="tbl_aksi">Aksi</th>
                   </tr>
                 </thead>
-                <tbody id="table_body">
+                <tbody id="table_body" class="form-group">
 
                 </tbody>
                 <tfoot>
                   <tr>
-                    <td colspan="5"></td>
-                    <td>
-                      <p id="nominalPiutang" class="text-right font-weight-bold"></p>
+                    <td colspan="2">
+                      <p class="text-right font-weight-bold">TOTAL :</p>
                     </td>
-                    <th></th>
-                    <th></th>
-
-
+                    <td>
+                      <p class="text-right font-weight-bold autonumeric" id="total"></p>
+                    </td>
+                    <td class="tbl_aksi">
+                      <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">TAMBAH</button>
+                    </td>
                   </tr>
                 </tfoot>
               </table>
@@ -118,11 +136,46 @@
   let hasFormBindKeys = false
   let modalBody = $('#crudModal').find('.modal-body').html()
   let isEditTgl
-  
+  let bankId
+
   $(document).ready(function() {
 
     $(document).on('click', "#addRow", function() {
-      addRow()
+      event.preventDefault()
+      let method = `POST`
+      let url = `${apiUrl}notadebetheader/addrow`
+      let form = $('#crudForm')
+      let Id = form.find('[name=id]').val()
+      let action = form.data('action')
+      let data = $('#crudForm').serializeArray()
+      $('#crudForm').find(`[name="nominal_detail[]"]`).each((index, element) => {
+        data.filter((row) => row.name === 'nominal_detail[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal_detail[]"]`)[index])
+      })
+      $.ajax({
+        url: url,
+        method: method,
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: data,
+        success: response => {
+          addRow()
+          $('.is-invalid').removeClass('is-invalid')
+        },
+        error: error => {
+          if (error.status === 422) {
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+            setErrorMessages(form, error.responseJSON.errors);
+          } else {
+            showDialog(error.responseJSON)
+          }
+        },
+      }).always(() => {
+        $('#processingLoader').addClass('d-none')
+        $(this).removeAttr('disabled')
+      })
     });
 
     $(document).on('click', '.delete-row', function(event) {
@@ -142,6 +195,10 @@
       let Id = form.find('[name=id]').val()
       let action = form.data('action')
       let data = $('#crudForm').serializeArray()
+
+      $('#crudForm').find(`[name="nominal_detail[]"`).each((index, element) => {
+        data.filter((row) => row.name === 'nominal_detail[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal_detail[]"]`)[index])
+      })
 
       data.push({
         name: 'sortIndex',
@@ -167,57 +224,17 @@
         name: 'limit',
         value: limit
       })
-      $('#table_body tr').each(function(row, tr) {
 
-        // if($(this).find(`[name="pelunasanpiutangdetail_id[]"]`).is(':checked')) {
-        //   data.push({
-        //     name: 'pelunasanpiutangdetail_id[]',
-        //     value: $(this).find(`[name="pelunasanpiutangdetail_id[]"]`).val()
-        //   })
-        //   data.push({
-        //     name: 'deatail_nobukti_pelunasan[]',
-        //     value: $(this).find(`[name="deatail_nobukti_pelunasan[]"]`).val()
-        //   })
-
-        //   data.push({
-        //     name: 'deatail_tglcair_pelunasan[]',
-        //     value: $(this).find(`[name="deatail_tglcair_pelunasan[]"]`).val()
-        //   })
-
-        //   data.push({
-        //     name: 'deatail_coalebihbayar_pelunasan[]',
-        //     value: $(this).find(`[name="deatail_coalebihbayar_pelunasan[]"]`).val()
-        //   })
-
-        //   data.push({
-        //     name: 'deatail_nominal_pelunasan[]',
-        //     value: $(this).find(`[name="deatail_nominal_pelunasan[]"]`).val()
-        //   })
-
-        //   data.push({
-        //     name: 'deatail_nominalbayar_pelunasan[]',
-        //     value: $(this).find(`[name="deatail_nominalbayar_pelunasan[]"]`).val()
-        //   })
-
-        //   data.push({
-        //     name: 'deatail_lebihbayar_pelunasan[]',
-        //     value: $(this).find(`[name="deatail_lebihbayar_pelunasan[]"]`).val()
-        //   })
-
-        //   data.push({
-        //     name: 'deatail_invoice_nobukti_pelunasan[]',
-        //     value: $(this).find(`[name="deatail_invoice_nobukti_pelunasan[]"]`).val()
-        //   })
-
-        //   data.push({
-        //     name: 'keterangandetail[]',
-        //     value: $(this).find(`[name="keterangandetail[]"]`).val()
-        //   })
-
-
-
-        // }
+      data.push({
+        name: 'tgldariheader',
+        value: $('#tgldariheader').val()
       })
+      data.push({
+        name: 'tglsampaiheader',
+        value: $('#tglsampaiheader').val()
+      })
+      let tgldariheader = $('#tgldariheader').val();
+      let tglsampaiheader = $('#tglsampaiheader').val()
 
       switch (action) {
         case 'add':
@@ -230,7 +247,7 @@
           break;
         case 'delete':
           method = 'DELETE'
-          url = `${apiUrl}notadebetheader/${Id}`
+          url = `${apiUrl}notadebetheader/${Id}?tgldariheader=${tgldariheader}&tglsampaiheader=${tglsampaiheader}&indexRow=${indexRow}&limit=${limit}&page=${page}`
           break;
         default:
           method = 'POST'
@@ -254,9 +271,15 @@
           $('#crudModal').modal('hide')
 
           id = response.data.id
+          $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
+          $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
 
           $('#jqGrid').jqGrid('setGridParam', {
-            page: response.data.page
+            page: response.data.page,
+            postData: {
+              tgldari: dateFormat(response.data.tgldariheader),
+              tglsampai: dateFormat(response.data.tglsampaiheader)
+            }
           }).trigger('reloadGrid');
 
           if (response.data.grp == 'FORMAT') {
@@ -288,6 +311,10 @@
     activeGrid = null
 
     getMaxLength(form)
+    form.find('#btnSubmit').prop('disabled', false)
+    if (form.data('action') == "view") {
+      form.find('#btnSubmit').prop('disabled', true)
+    }
     initLookup()
     initSelect2(form.find('.select2bs4'), true)
     initDatepicker()
@@ -300,7 +327,7 @@
   })
 
   function setTotal() {
-    let nominalDetails = $(`#table_body [name="nominal[]"]`)
+    let nominalDetails = $(`#table_body [name="nominal_detail[]"]`)
     let total = 0
 
     $.each(nominalDetails, (index, nominalDetail) => {
@@ -312,10 +339,11 @@
 
   function createNotaDebet() {
     let form = $('#crudForm')
-    $('.modal-loader').removeClass('d-none')
+    // $('.modal-loader').removeClass('d-none')
 
     form.trigger('reset')
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+    $('#crudForm').find('[name=tgllunas]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
     form.find('#btnSubmit').html(`
     <i class="fa fa-save"></i>
@@ -324,15 +352,18 @@
     form.data('action', 'add')
     form.find(`.sometimes`).show()
     $('#crudModalTitle').text('Create Nota Debet')
+    $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
     Promise
       .all([
-        setStatusApprovalListOptions(form)
+        showDefault(form)
       ])
       .then(() => {
         $('#crudModal').modal('show')
+        addRow()
+        setTotal()
       })
       .catch((error) => {
         showDialog(error.responseJSON)
@@ -359,8 +390,7 @@
 
     Promise
       .all([
-        setTglBukti(form),
-        setStatusApprovalListOptions(form)
+        setTglBukti(form)
       ])
       .then(() => {
         showNotaDebet(form, userId)
@@ -370,6 +400,14 @@
               form.find(`[name="tglbukti"]`).prop('readonly', true)
               form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
             }
+            $('#crudForm').find(`[name="bank"]`).parents('.input-group').children().attr('disabled', true)
+            $('#crudForm').find(`[name="bank"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled', true)
+            $('#crudForm').find(`[name="bank"]`).attr('disabled', false).attr('readonly', true)
+            $('[name="bank_id"]').attr('readonly', true);
+            $('#crudForm').find(`[name="alatbayar"]`).parents('.input-group').children().attr('disabled', true)
+            $('#crudForm').find(`[name="alatbayar"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled', true)
+            $('#crudForm').find(`[name="alatbayar"]`).attr('disabled', false).attr('readonly', true)
+            $('[name="alatbayar_id"]').attr('readonly', true);
           })
           .catch((error) => {
             showDialog(error.responseJSON)
@@ -398,19 +436,58 @@
 
     Promise
       .all([
-        setStatusApprovalListOptions(form)
+        showNotaDebet(form, userId)
       ])
       .then(() => {
+        $('#crudModal').modal('show')
+      })
+      .catch((error) => {
+        showDialog(error.responseJSON)
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
+  }
+
+  function viewNotaDebetHeader(userId) {
+    let form = $('#crudForm')
+    $('.modal-loader').removeClass('d-none')
+
+    form.data('action', 'view')
+    form.trigger('reset')
+    form.find('#btnSubmit').html(`
+      <i class="fa fa-save"></i>
+      Save
+    `)
+    form.find(`.sometimes`).hide()
+    $('#crudModalTitle').text('View Nota Debet')
+    $('.is-invalid').removeClass('is-invalid')
+    $('.invalid-feedback').remove()
+
+    Promise
+      .all([
         showNotaDebet(form, userId)
-          .then(() => {
-            $('#crudModal').modal('show')
-          })
-          .catch((error) => {
-            showDialog(error.responseJSON)
-          })
-          .finally(() => {
-            $('.modal-loader').addClass('d-none')
-          })
+      ])
+      .then(() => {
+        $('#crudModal').modal('show')
+        form.find(`.hasDatepicker`).prop('readonly', true)
+        form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
+        form.find(`.tbl_aksi`).hide()
+
+        form.find('[name]').attr('disabled', 'disabled').css({
+          background: '#fff'
+        })
+        let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
+        name.attr('disabled', true)
+        name.find('.lookup-toggler').attr('disabled', true)
+        name.find('.lookup-toggler').attr('disabled', true)
+
+      })
+      .catch((error) => {
+        showDialog(error.responseJSON)
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
       })
   }
 
@@ -423,23 +500,37 @@
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
       success: response => {
-        var kodenobukti = response.kodenobukti
-        if (kodenobukti == '1') {
-          var kodestatus = response.kodestatus
-          if (kodestatus == '1') {
-            showDialog(response.message['keterangan'])
-          } else {
-            if (Aksi == 'EDIT') {
-              editNotaDebet(Id)
-            }
-            if (Aksi == 'DELETE') {
-              deleteNotaDebet(Id)
-            }
-          }
-
+        var error = response.error
+        if (error) {
+          showDialog(response)
         } else {
-          showDialog(response.message['keterangan'])
+          cekValidasiAksi(Id, Aksi)
         }
+      }
+    })
+  }
+
+  function cekValidasiAksi(Id, Aksi) {
+    $.ajax({
+      url: `{{ config('app.api_url') }}notadebetheader/${Id}/cekValidasiAksi`,
+      method: 'POST',
+      dataType: 'JSON',
+      beforeSend: request => {
+        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+      },
+      success: response => {
+        var error = response.error
+        if (error) {
+          showDialog(response)
+        } else {
+          if (Aksi == 'EDIT') {
+            editNotaDebet(Id)
+          }
+          if (Aksi == 'DELETE') {
+            deleteNotaDebet(Id)
+          }
+        }
+
       }
     })
   }
@@ -458,23 +549,57 @@
         success: response => {
           sum = 0;
           $.each(response.data, (index, value) => {
+            bankId = response.data.bank_id
             let element = form.find(`[name="${index}"]`)
-            if (element.attr("name") == 'tglbukti') {
-              var result = value.split('-');
-              element.val(result[2] + '-' + result[1] + '-' + result[0]);
-            } else if (element.attr("name") == 'tglapproval') {
-              var result = value.split('-');
-              element.val(result[2] + '-' + result[1] + '-' + result[0]);
-            } else if (element.attr("name") == 'tgllunas') {
-              var result = value.split('-');
-              element.val(result[2] + '-' + result[1] + '-' + result[0]);
-            } else if (element.is('select')) {
+            if (element.is('select')) {
               element.val(value).trigger('change')
+            } else if (element.hasClass('datepicker')) {
+              element.val(dateFormat(value))
             } else {
               element.val(value)
             }
+
+            if (index == 'alatbayar') {
+              element.data('current-value', value)
+            }
+            if (index == 'bank') {
+              element.data('current-value', value)
+            }
+
           })
-          getNotaDebet(userId)
+          
+          $('#detailList tbody').html('')
+          $.each(response.detail, (index, detail) => {
+            let detailRow = $(`
+              <tr>
+              <td></td>
+              <td>
+                <input type="text" name="keterangan_detail[]" class="form-control">
+              </td>
+              <td>
+                <input type="text" name="nominal_detail[]" class="form-control nominal autonumeric">
+              </td>
+              <td class="tbl_aksi">
+                <button type="button" class="btn btn-danger btn-sm delete-row">HAPUS</button>
+              </td>
+            </tr>
+            `)
+
+            detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
+            detailRow.find(`[name="nominal_detail[]"]`).val(detail.lebihbayar)
+
+            initAutoNumeric(detailRow.find(`[name="nominal_detail[]"]`))
+
+            $('#detailList tbody').append(detailRow)
+
+            setTotal();
+          })
+
+          setRowNumbers()
+          if (form.data('action') === 'delete') {
+            form.find('[name]').addClass('disabled')
+            initDisabled()
+          }
           resolve()
         },
         error: error => {
@@ -651,6 +776,37 @@
   }
 
 
+  function showDefault(form) {
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `${apiUrl}notadebetheader/default`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          bankId = response.data.bank_id
+
+          $.each(response.data, (index, value) => {
+            let element = form.find(`[name="${index}"]`)
+
+            if (element.is('select')) {
+              element.val(value).trigger('change')
+            } else {
+              element.val(value)
+            }
+          })
+
+          resolve()
+        },
+        error: error => {
+          reject(error)
+        }
+      })
+    })
+  }
+
   function approve() {
 
     event.preventDefault()
@@ -722,19 +878,70 @@
   }
 
   function initLookup() {
-    $('.pelunasanpiutang-lookup').lookup({
-      title: 'pelunasan piutang Lookup',
-      fileName: 'pelunasanpiutangheader',
-      onSelectRow: (pelunasanpiutang, element) => {
-        element.val(pelunasanpiutang.nobukti)
-        getPelunasan(pelunasanpiutang.id)
+    $('.agen-lookup').lookup({
+      title: 'Agen Lookup',
+      fileName: 'agen',
+      onSelectRow: (agen, element) => {
+        $('#crudForm').find('[name=agen_id]').val(agen.id)
+        element.val(agen.namaagen)
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
+        $('#crudForm').find('[name=agen_id]').val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
 
+    $('.alatbayar-lookup').lookup({
+      title: 'Alat Bayar Lookup',
+      fileName: 'alatbayar',
+      beforeProcess: function(test) {
+        // const bank_ID=0        
+        this.postData = {
+          bank_Id: bankId,
+          Aktif: 'AKTIF',
+        }
+      },
+      onSelectRow: (alatbayar, element) => {
+        $(`#crudForm [name="alatbayar_id"]`).first().val(alatbayar.id)
+        element.val(alatbayar.namaalatbayar)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $(`#crudForm [name="alatbayar_id"]`).first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+
+    $('.bank-lookup').lookup({
+      title: 'Bank Lookup',
+      fileName: 'bank',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+
+        }
+      },
+      onSelectRow: (bank, element) => {
+        $('#crudForm [name=bank_id]').first().val(bank.id)
+
+        bankId = bank.id
+        element.val(bank.namabank)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $('#crudForm [name=bank_id]').first().val('')
         element.val('')
         element.data('currentValue', element.val())
       }
@@ -782,44 +989,47 @@
     })
   }
 
-  // const setStatusFormatListOptions = function(relatedForm) {
-  //   return new Promise((resolve, reject) => {
-  //     relatedForm.find('[name=statusformat]').empty()
-  //     relatedForm.find('[name=statusformat]').append(
-  //       new Option('-- PILIH STATUS FORMAT --', '', false, true)
-  //     ).trigger('change')
+  function addRow() {
+    let detailRow = $(`
+      <tr>
+        <td></td>
+        <td>
+          <input type="text" name="keterangan_detail[]" class="form-control">
+        </td>
+        <td>
+          <input type="text" name="nominal_detail[]" class="form-control nominal autonumeric">
+        </td>
+        <td class="tbl_aksi">
+          <button type="button" class="btn btn-danger btn-sm delete-row">HAPUS</button>
+        </td>
+      </tr>
+    `)
 
-  //     $.ajax({
-  //       url: `${apiUrl}parameter`,
-  //       method: 'GET',
-  //       dataType: 'JSON',
-  //       headers: {
-  //         Authorization: `Bearer ${accessToken}`
-  //       },
-  //       data: {
-  //         limit: 0,
-  //         filters: JSON.stringify({
-  //           "groupOp": "AND",
-  //           "rules": [{
-  //             "field": "grp",
-  //             "op": "cn",
-  //             "data": "NOTA KREDIT"
-  //           }]
-  //         })
-  //       },
-  //       success: response => {
-  //         response.data.forEach(statusFormatList => {
+    $('#detailList tbody').append(detailRow)
 
-  //           let option = new Option(statusFormatList.text, statusFormatList.id)
+    initAutoNumeric(detailRow.find('.autonumeric'))
 
-  //           relatedForm.find('[name=statusformat]').append(option).trigger('change')
-  //         });
+    setRowNumbers()
+  }
 
-  //         resolve()
-  //       }
-  //     })
-  //   })
-  // }
+  function deleteRow(row) {
+    let countRow = $('.delete-row').parents('tr').length
+    row.remove()
+    if (countRow <= 1) {
+      addRow()
+    }
+
+    setRowNumbers()
+    setTotal()
+  }
+
+  function setRowNumbers() {
+    let elements = $('#detailList tbody tr td:nth-child(1)')
+
+    elements.each((index, element) => {
+      $(element).text(index + 1)
+    })
+  }
 
   const setTglBukti = function(form) {
     return new Promise((resolve, reject) => {

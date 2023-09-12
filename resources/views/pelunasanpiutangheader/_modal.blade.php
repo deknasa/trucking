@@ -37,6 +37,18 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
+                  PELUNASAN <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-8 col-md-10">
+                <select name="statuspelunasan" class="form-select select2bs4" style="width: 100%;">
+                  <option value="">-- PILIH STATUS PELUNASAN --</option>
+                </select>
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   BANK/KAS <span class="text-danger">*</span>
                 </label>
               </div>
@@ -193,6 +205,8 @@
   let bankId
   let selectAll = false
   let isEditTgl
+  let statusDebet = {}
+  let statusKredit = {}
   $(document).ready(function() {
 
     $("#crudForm [name]").attr("autocomplete", "off");
@@ -401,12 +415,16 @@
           value: dataPelunasan.keterangan
         })
         data.push({
+          name: 'statusnotadebet[]',
+          value: dataPelunasan.statusnotadebet
+        })
+        data.push({
           name: 'keteranganpotongan[]',
           value: dataPelunasan.keteranganpotongan
         })
         data.push({
-          name: 'coapotongan[]',
-          value: dataPelunasan.coapotongan
+          name: 'statusnotakredit[]',
+          value: dataPelunasan.statusnotakredit
         })
         data.push({
           name: 'piutang_nobukti[]',
@@ -572,12 +590,26 @@
     getMaxLength(form)
     initLookup()
     initDatepicker()
+    initSelect2($(`.select2bs4`), true)
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
 
     $('#crudModal').find('.modal-body').html(modalBody)
+  })
+
+
+  $(document).on('change', `#crudForm [name="statuspelunasan"]`, function() {
+    pelunasanText = $("[name=statuspelunasan] option:selected").text()
+    if ($.trim(pelunasanText) == 'NOTA DEBET') {
+      $('[name=bank]').parents('.row').hide()
+      $('[name=alatbayar]').parents('.row').hide()
+    }
+    if ($.trim(pelunasanText) == 'BANK/KAS') {
+      $('[name=bank]').parents('.row').show()
+      $('[name=alatbayar]').parents('.row').show()
+    }
   })
 
   function setTotal() {
@@ -638,8 +670,11 @@
     $('.invalid-feedback').remove()
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
+    setStatusNotaDebetOptions()
+    setStatusNotaKreditOptions()
     Promise
       .all([
+        setStatusPelunasanOptions(form),
         showDefault(form)
       ])
       .then(() => {
@@ -869,47 +904,91 @@
           },
 
           {
-            label: "COA POTONGAN",
-            name: "coapotongan",
+            label: "TIPE NOTA KREDIT",
+            name: "statusnotakredit",
             width: 250,
             editable: true,
+            edittype: "select",
+            formatoptions: {
+              disabled: false
+            },
             editoptions: {
-              class: 'coapotongan-lookup',
+              class: 'statuskredit',
+              value: statusKredit,
               dataInit: function(element) {
-                $('.coapotongan-lookup').last().lookup({
-                  title: 'Coa Potongan Lookup',
-                  fileName: 'akunpusat',
-                  beforeProcess: function(test) {
-                    // var levelcoa = $(`#levelcoa`).val();
-                    this.postData = {
-                      potongan: '1',
-                      levelCoa: '2',
-                      Aktif: 'AKTIF',
-                    }
-                  },
-                  onSelectRow: (akunpusat, el) => {
-
-                    let localRow = $("#tablePelunasan").jqGrid(
-                      "getLocalRow",
-                      $(element).attr('rowid')
-                    );
-                    el.val(akunpusat.coa)
-                    el.data('currentValue', akunpusat.coa)
-
-                    localRow.coapotongan = akunpusat.coa
-                  },
-                  onCancel: (el) => {
-                    el.val(el.data('currentValue'))
-                  },
-                  onClear: (el) => {
-                    el.val('')
-                    el.data('currentValue', el.val())
-                  }
-                })
+                initSelect2($(`.statuskredit`), true);
               },
+              
+              dataEvents: [{
+                type: "change",
+                fn: function(event, rowObject) {
+                  let originalGridData = $("#tablePelunasan")
+                    .jqGrid("getGridParam", "originalData")
+                    .find((row) => row.id == rowObject.rowId);
+                  let localRow = $("#tablePelunasan").jqGrid(
+                    "getLocalRow",
+                    rowObject.rowId
+                  );
+                  localRow.statusnotakredit = event.target.value;
+                },
+              }, ],
+            },
+            formatter: function(cellValue, options, rowData) {
+              if (typeof cellValue === 'undefined' || cellValue === '' || cellValue == 0) {
+                return '';
+              }
+              return statusKredit[cellValue];
+            },
+            unformat: function(cellValue, options, cell) {
+              if (typeof cellValue === 'undefined' || cellValue === '' || cellValue == 0) {
+                return '';
+              }
+              return cellValue;
             },
             sortable: false,
           },
+          // {
+          //   label: "COA POTONGAN",
+          //   name: "coapotongan",
+          //   width: 250,
+          //   editable: true,
+          //   editoptions: {
+          //     class: 'coapotongan-lookup',
+          //     dataInit: function(element) {
+          //       $('.coapotongan-lookup').last().lookup({
+          //         title: 'Coa Potongan Lookup',
+          //         fileName: 'akunpusat',
+          //         beforeProcess: function(test) {
+          //           // var levelcoa = $(`#levelcoa`).val();
+          //           this.postData = {
+          //             potongan: '1',
+          //             levelCoa: '2',
+          //             Aktif: 'AKTIF',
+          //           }
+          //         },
+          //         onSelectRow: (akunpusat, el) => {
+
+          //           let localRow = $("#tablePelunasan").jqGrid(
+          //             "getLocalRow",
+          //             $(element).attr('rowid')
+          //           );
+          //           el.val(akunpusat.keterangancoa)
+          //           el.data('currentValue', akunpusat.keterangancoa)
+          //           localRow.ketcoapotongan = akunpusat.coa
+          //           localRow.coapotongan = akunpusat.keterangancoa
+          //         },
+          //         onCancel: (el) => {
+          //           el.val(el.data('currentValue'))
+          //         },
+          //         onClear: (el) => {
+          //           el.val('')
+          //           el.data('currentValue', el.val())
+          //         }
+          //       })
+          //     },
+          //   },
+          //   sortable: false,
+          // },
           {
             label: "KETERANGAN POTONGAN",
             name: "keteranganpotongan",
@@ -960,6 +1039,50 @@
             sorttype: "int",
           },
           {
+            label: "TIPE NOTA DEBET",
+            name: "statusnotadebet",
+            width: 250,
+            editable: true,
+            edittype: "select",
+            formatoptions: {
+              disabled: false
+            },
+            editoptions: {
+              class: 'statusdebet',
+              value: statusDebet,
+              dataInit: function(element) {
+                initSelect2($(`.statusdebet`), true);
+              },
+              
+              dataEvents: [{
+                type: "change",
+                fn: function(event, rowObject) {
+                  let originalGridData = $("#tablePelunasan")
+                    .jqGrid("getGridParam", "originalData")
+                    .find((row) => row.id == rowObject.rowId);
+                  let localRow = $("#tablePelunasan").jqGrid(
+                    "getLocalRow",
+                    rowObject.rowId
+                  );
+                  localRow.statusnotadebet = event.target.value;
+                },
+              }, ],
+            },
+            formatter: function(cellValue, options, rowData) {
+              if (typeof cellValue === 'undefined' || cellValue === '' || cellValue == 0) {
+                return '';
+              }
+              return statusDebet[cellValue];
+            },
+            unformat: function(cellValue, options, cell) {
+              if (typeof cellValue === 'undefined' || cellValue === '' || cellValue == 0) {
+                return '';
+              }
+              return cellValue;
+            },
+            sortable: false,
+          },
+          {
             label: "empty",
             name: "empty",
             hidden: true,
@@ -980,6 +1103,9 @@
         cellsubmit: "clientArray",
         editableColumns: ["bayar"],
         selectedRowIds: [],
+        // onCellSelect: function(rowid, iCol, cellcontent, e) {
+        //   console.log("Selected Cell - Row ID: " + rowid + ", Column Index: " + iCol);
+        // },
         afterRestoreCell: function(rowId, value, indexRow, indexColumn) {
           let originalGridData = $("#tablePelunasan")
             .jqGrid("getGridParam", "originalData")
@@ -1086,30 +1212,32 @@
   $(document).on('click', '#resetdatafilter_tablePelunasan', function(event) {
     selectedRowsPinjaman = $("#tablePelunasan").getGridParam("selectedRowIds");
     $.each(selectedRowsPinjaman, function(index, value) {
-      $('#tablePelunasan').jqGrid('saveCell', value, 14); //emptycell
+      $('#tablePelunasan').jqGrid('saveCell', value, 15); //emptycell
       $('#tablePelunasan').jqGrid('saveCell', value, 6); //nominal
       $('#tablePelunasan').jqGrid('saveCell', value, 7); //sisa
       $('#tablePelunasan').jqGrid('saveCell', value, 8); //keterangan
       $('#tablePelunasan').jqGrid('saveCell', value, 9); //bayar
       $('#tablePelunasan').jqGrid('saveCell', value, 10); //potongan
-      $('#tablePelunasan').jqGrid('saveCell', value, 11); //coapotongan
+      $('#tablePelunasan').jqGrid('saveCell', value, 11); //statusnotakredit
       $('#tablePelunasan').jqGrid('saveCell', value, 12); //keteranganpotongan
       $('#tablePelunasan').jqGrid('saveCell', value, 13); //nominallebihbayar
+      $('#tablePelunasan').jqGrid('saveCell', value, 14); //statusnotadebet
     })
   })
 
   $(document).on('click', '#gbox_tablePelunasan .ui-jqgrid-hbox .ui-jqgrid-htable thead .ui-search-toolbar th td a.clearsearchclass', function(event) {
     selectedRowsPelunasan = $("#tablePelunasan").getGridParam("selectedRowIds");
     $.each(selectedRowsPelunasan, function(index, value) {
-      $('#tablePelunasan').jqGrid('saveCell', value, 14); //emptycell
+      $('#tablePelunasan').jqGrid('saveCell', value, 15); //emptycell
       $('#tablePelunasan').jqGrid('saveCell', value, 6); //nominal
       $('#tablePelunasan').jqGrid('saveCell', value, 7); //sisa
       $('#tablePelunasan').jqGrid('saveCell', value, 8); //keterangan
       $('#tablePelunasan').jqGrid('saveCell', value, 9); //bayar
       $('#tablePelunasan').jqGrid('saveCell', value, 10); //potongan
-      $('#tablePelunasan').jqGrid('saveCell', value, 11); //coapotongan
+      $('#tablePelunasan').jqGrid('saveCell', value, 11); //statusnotakredit
       $('#tablePelunasan').jqGrid('saveCell', value, 12); //keteranganpotongan
       $('#tablePelunasan').jqGrid('saveCell', value, 13); //nominallebihbayar
+      $('#tablePelunasan').jqGrid('saveCell', value, 14); //statusnotadebet
     })
   })
 
@@ -1346,9 +1474,11 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
+    setStatusNotaDebetOptions()
     Promise
       .all([
         setTglBukti(form),
+        setStatusPelunasanOptions(form),
         showPelunasanPiutang(form, Id)
       ])
       .then(() => {
@@ -2106,7 +2236,7 @@
       }
     })
   }
-  
+
   const setTglBukti = function(form) {
     return new Promise((resolve, reject) => {
       let data = [];
@@ -2134,6 +2264,82 @@
           reject(error)
         }
       })
+    })
+  }
+
+  const setStatusPelunasanOptions = function(relatedForm) {
+    return new Promise((resolve, reject) => {
+      relatedForm.find('[name=statuspelunasan]').empty()
+      relatedForm.find('[name=statuspelunasan]').append(
+        new Option('-- PILIH STATUS PELUNASAN --', '', false, true)
+      ).trigger('change')
+
+      $.ajax({
+        url: `${apiUrl}parameter/combo`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          grp: 'PELUNASAN',
+          subgrp: 'PELUNASAN'
+        },
+        success: response => {
+          response.data.forEach(statusPelunasan => {
+            let option = new Option(statusPelunasan.text, statusPelunasan.id)
+
+            relatedForm.find('[name=statuspelunasan]').append(option).trigger('change')
+          });
+
+          resolve()
+        },
+        error: error => {
+          reject(error)
+        }
+      })
+    })
+  }
+
+  function setStatusNotaDebetOptions() {
+    $.ajax({
+      url: `${apiUrl}parameter/combo`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        grp: 'TIPENOTADEBET',
+        subgrp: 'TIPENOTADEBET'
+      },
+      success: response => {
+        statusDebet[0] = "--PILIH STATUS NOTA DEBET--"
+        $.each(response.data, function(index, item) {
+          statusDebet[item.id] = item.text;
+        });
+      },
+    })
+  }
+
+  function setStatusNotaKreditOptions() {
+    $.ajax({
+      url: `${apiUrl}parameter/combo`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        grp: 'TIPENOTAKREDIT',
+        subgrp: 'TIPENOTAKREDIT'
+      },
+      success: response => {
+        statusKredit[0] = "--PILIH STATUS NOTA KREDIT--"
+        $.each(response.data, function(index, item) {
+          statusKredit[item.id] = item.text;
+        });
+      },
     })
   }
 </script>

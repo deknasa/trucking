@@ -267,10 +267,30 @@
             }
           },
           {
+            label: 'AGEN',
+            name: 'agen',
+            align: 'left',
+          },
+          {
             label: 'NO BUKTI PELUNASAN PIUTANG',
             width: 250,
             name: 'pelunasanpiutang_nobukti',
             align: 'left'
+          },
+          {
+            label: 'BANK',
+            name: 'bank',
+            align: 'left',
+          },
+          {
+            label: 'ALAT BAYAR',
+            name: 'alatbayar',
+            align: 'left',
+          },
+          {
+            label: 'NO BUKTI PENERIMAAN',
+            name: 'penerimaan_nobukti',
+            align: 'left',
           },
           {
             label: 'user approval',
@@ -306,13 +326,6 @@
             label: 'posting dari',
             name: 'postingdari',
             align: 'left'
-          },
-          {
-            label: 'penerimaan_nobukti',
-            name: 'penerimaan_nobukti',
-            align: 'left',
-            hidden: true,
-            search: false
           },
           {
             label: 'modifiedby',
@@ -372,16 +385,21 @@
         onSelectRow: function(id) {
           let nobukti_pelunasan = $('#jqGrid').jqGrid('getCell', id, 'pelunasanpiutang_nobukti')
           let nobukti_jurnal = $('#jqGrid').jqGrid('getCell', id, 'nobukti')
+          let nobukti_penerimaan = $('#jqGrid').jqGrid('getCell', id, 'penerimaan_nobukti')
 
           activeGrid = $(this)
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
-          
+
           loadDetailData(id)
           loadPelunasanData(id, nobukti_pelunasan)
-          loadJurnalUmumData(id, nobukti_jurnal)
+          if (nobukti_penerimaan == '') {
+            loadJurnalUmumData(id, nobukti_jurnal)
+          } else {
+            loadJurnalUmumData(id, nobukti_penerimaan)
+          }
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
@@ -471,7 +489,50 @@
       })
 
       .customPager({
-        buttons: [
+        buttons: [{
+            id: 'add',
+            innerHTML: '<i class="fa fa-plus"></i> ADD',
+            class: 'btn btn-primary btn-sm mr-1',
+            onClick: function(event) {
+              createNotaDebet()
+            }
+          },
+          {
+            id: 'edit',
+            innerHTML: '<i class="fa fa-pen"></i> EDIT',
+            class: 'btn btn-success btn-sm mr-1',
+            onClick: function(event) {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Harap pilih salah satu record')
+              } else {
+                cekValidasi(selectedId, 'EDIT')
+              }
+            }
+          },
+          {
+            id: 'delete',
+            innerHTML: '<i class="fa fa-trash"></i> DELETE',
+            class: 'btn btn-danger btn-sm mr-1',
+            onClick: () => {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Harap pilih salah satu record')
+              } else {
+
+                cekValidasi(selectedId, 'DELETE')
+              }
+            }
+          },
+          {
+            id: 'view',
+            innerHTML: '<i class="fa fa-eye"></i> VIEW',
+            class: 'btn btn-orange btn-sm mr-1',
+            onClick: () => {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              viewNotaDebetHeader(selectedId)
+            }
+          },
           {
             id: 'report',
             innerHTML: '<i class="fa fa-print"></i> REPORT',
@@ -499,7 +560,7 @@
                 window.open(`{{ route('notadebetheader.export') }}?id=${selectedId}`)
               }
             }
-          }, 
+          },
           {
             id: 'approveun',
             innerHTML: '<i class="fas fa-check""></i> UN/APPROVAL',
@@ -541,30 +602,31 @@
       .addClass('btn btn-sm btn-warning')
       .parent().addClass('px-1')
 
-      function permission() {
-    if (!`{{ $myAuth->hasPermission('notadebetheader', 'store') }}`) {
-      $('#add').addClass('ui-disabled')
-    }
+    function permission() {
+      if (!`{{ $myAuth->hasPermission('notadebetheader', 'store') }}`) {
+        $('#add').addClass('ui-disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('notadebetheader', 'update') }}`) {
-      $('#edit').addClass('ui-disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('notadebetheader', 'update') }}`) {
+        $('#edit').addClass('ui-disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('notadebetheader', 'destroy') }}`) {
-      $('#delete').addClass('ui-disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('notadebetheader', 'destroy') }}`) {
+        $('#delete').addClass('ui-disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('notadebetheader', 'export') }}`) {
-      $('#export').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('notadebetheader', 'export') }}`) {
+        $('#export').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('notadebetheader', 'report') }}`) {
-      $('#report').attr('disabled', 'disabled')
+      if (!`{{ $myAuth->hasPermission('notadebetheader', 'report') }}`) {
+        $('#report').attr('disabled', 'disabled')
+      }
+      if (!`{{ $myAuth->hasPermission('notadebetheader', 'approval') }}`) {
+        $('#approveun').attr('disabled', 'disabled')
+        $("#jqGrid").hideCol("");
+      }
     }
-    if (!`{{ $myAuth->hasPermission('notadebetheader', 'approval') }}`) {
-      $('#approveun').attr('disabled', 'disabled')
-      $("#jqGrid").hideCol("");
-    }}
 
     $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {
