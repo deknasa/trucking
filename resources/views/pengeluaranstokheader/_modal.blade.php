@@ -1610,7 +1610,7 @@
                       <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${id}" onkeyup="calculate(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
                     </td>  
                     <td class="data_tbl tbl_total">
-                      <input type="text"  name="totalItem[]" id="totalItem${id}" onkeyup="calculate(${id})" style="text-align:right" class="form-control totalItem autonumeric number${id}">                    
+                      <input type="text" readonly name="totalItem[]" id="totalItem${id}" onkeyup="calculate(${id})" style="text-align:right" class="form-control totalItem autonumeric number${id}">                    
                     </td>  
                     <td class="data_tbl tbl_aksi" >
                       <div class='btn btn-danger btn-sm rmv'>Hapus</div>
@@ -1652,7 +1652,11 @@
 
             }
 
-            initAutoNumeric($(`.number${id}`))
+            // initAutoNumeric($(`.number${id}`))
+            initAutoNumeric($(`#detail_qty${id}`),{'maximumValue':detail.qty})
+            initAutoNumeric($(`#detail_harga${id}`))
+            initAutoNumeric($(`#detail_persentasediscount${id}`))
+            initAutoNumeric($(`#totalItem${id}`))
             setRowNumbers()
             $(`#detail_stok_${id}`).lookup({
               title: 'stok Lookup',
@@ -1768,7 +1772,7 @@
                     <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${id}" onkeyup="calculate(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
                   </td>  
                   <td class="data_tbl tbl_total">
-                    <input type="text"  name="totalItem[]" id="totalItem${id}" onkeyup="calculate(${id})" style="text-align:right" class="form-control totalItem autonumeric number${id}">                    
+                    <input type="text"  name="totalItem[]" id="totalItem${id}" readonly onkeyup="calculate(${id})" style="text-align:right" class="form-control totalItem autonumeric number${id}">                    
                   </td>  
                   <td>
                     <div class='btn btn-danger btn-sm rmv'>Hapus</div>
@@ -1785,7 +1789,11 @@
           detailRow.find(`[name="totalItem[]"]`).val(detail.total)
           detailRow.find(`[name="detail_keterangan[]"]`).val(detail.keterangan)
           $('table #table_body').append(detailRow)
-          initAutoNumeric($(`.number${id}`))
+          // initAutoNumeric($(`.number${id}`))
+          initAutoNumeric($(`#detail_qty${id}`),{'maximumValue':detail.qty})
+          initAutoNumeric($(`#detail_harga${id}`))
+          initAutoNumeric($(`#detail_persentasediscount${id}`))
+          initAutoNumeric($(`#totalItem${id}`))
           setRowNumbers()
           // $(`#detail_stok_${id}`).lookup({
           //   title: 'stok Lookup',
