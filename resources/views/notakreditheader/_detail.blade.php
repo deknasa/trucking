@@ -52,7 +52,7 @@
             name: 'invoice_nobukti',
           },
           {
-            label: 'NOMINAL',
+            label: 'NOMINAL PIUTANG',
             name: 'nominal',
             align: 'right',
             formatter: currencyFormat,

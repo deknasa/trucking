@@ -265,10 +265,30 @@
             }
           },
           {
+            label: 'AGEN',
+            name: 'agen',
+            align: 'left',
+          },
+          {
             label: 'NO BUKTI PELUNASAN PIUTANG',
             width: 250,
             name: 'pelunasanpiutang_nobukti',
             align: 'left'
+          },
+          {
+            label: 'BANK',
+            name: 'bank',
+            align: 'left',
+          },
+          {
+            label: 'ALAT BAYAR',
+            name: 'alatbayar',
+            align: 'left',
+          },
+          {
+            label: 'NO BUKTI PENGELUARAN',
+            name: 'pengeluaran_nobukti',
+            align: 'left',
           },
           {
             label: 'user approval',
@@ -371,6 +391,7 @@
         onSelectRow: function(id) {
           let nobukti_pelunasan = $('#jqGrid').jqGrid('getCell', id, 'pelunasanpiutang_nobukti')
           let nobukti_jurnal = $('#jqGrid').jqGrid('getCell', id, 'nobukti')
+          let nobukti_pengeluaran = $('#jqGrid').jqGrid('getCell', id, 'pengeluaran_nobukti')
 
           activeGrid = $(this)
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
@@ -380,7 +401,11 @@
 
           loadDetailData(id)
           loadPelunasanData(id, nobukti_pelunasan)
-          loadJurnalUmumData(id, nobukti_jurnal)
+          if (nobukti_pengeluaran == '') {
+            loadJurnalUmumData(id, nobukti_jurnal)
+          } else {
+            loadJurnalUmumData(id, nobukti_pengeluaran)
+          }
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
@@ -472,40 +497,49 @@
 
       .customPager({
         buttons: [
-          // {
-          //   id: 'add',
-          //   innerHTML: '<i class="fa fa-plus"></i> ADD',
-          //   class: 'btn btn-primary btn-sm mr-1',
-          //   onClick: function(event) {
-          //     createNotaKredit()
-          //   }
-          // },
-          // {
-          //   id: 'edit',
-          //   innerHTML: '<i class="fa fa-pen"></i> EDIT',
-          //   class: 'btn btn-success btn-sm mr-1',
-          //   onClick: function(event) {
-          //     selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-          //     if (selectedId == null || selectedId == '' || selectedId == undefined) {
-          //       showDialog('Harap pilih salah satu record')
-          //     } else {
-          //       cekValidasi(selectedId, 'EDIT')
-          //     }
-          //   }
-          // },
-          // {
-          //   id: 'delete',
-          //   innerHTML: '<i class="fa fa-trash"></i> DELETE',
-          //   class: 'btn btn-danger btn-sm mr-1',
-          //   onClick: () => {
-          //     selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-          //     if (selectedId == null || selectedId == '' || selectedId == undefined) {
-          //       showDialog('Harap pilih salah satu record')
-          //     } else {
-          //       cekValidasi(selectedId, 'DELETE')
-          //     }
-          //   }
-          // },
+          {
+            id: 'add',
+            innerHTML: '<i class="fa fa-plus"></i> ADD',
+            class: 'btn btn-primary btn-sm mr-1',
+            onClick: function(event) {
+              createNotaKredit()
+            }
+          },
+          {
+            id: 'edit',
+            innerHTML: '<i class="fa fa-pen"></i> EDIT',
+            class: 'btn btn-success btn-sm mr-1',
+            onClick: function(event) {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Harap pilih salah satu record')
+              } else {
+                cekValidasi(selectedId, 'EDIT')
+              }
+            }
+          },
+          {
+            id: 'delete',
+            innerHTML: '<i class="fa fa-trash"></i> DELETE',
+            class: 'btn btn-danger btn-sm mr-1',
+            onClick: () => {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Harap pilih salah satu record')
+              } else {
+                cekValidasi(selectedId, 'DELETE')
+              }
+            }
+          },
+          {
+            id: 'view',
+            innerHTML: '<i class="fa fa-eye"></i> VIEW',
+            class: 'btn btn-orange btn-sm mr-1',
+            onClick: () => {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              viewNotaKreditHeader(selectedId)
+            }
+          },
           
           {
             id: 'report',

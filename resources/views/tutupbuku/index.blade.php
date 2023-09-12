@@ -129,6 +129,10 @@
             showDialog('ISI SELURUH KOLOM')
         }
     })
+    $(document).on('click', `.ui-dialog .ui-button`, function(event) {
+        event.preventDefault()
+        window.location.href = `${appUrl}/dashboard`
+    })
 </script>
 @endpush()
 @endsection
