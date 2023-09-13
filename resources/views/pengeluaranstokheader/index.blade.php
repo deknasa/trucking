@@ -101,7 +101,10 @@
     $(document).on('click','#btnReload', function(event) {
       loadDataHeader('pengeluaranstokheader',{pengeluaranheader_id:$('#kodepengeluaranheader').val()})
     })
+    // console.log(,);
+    
 
+    
     $("#jqGrid").jqGrid({
         url: `{{ config('app.api_url') . 'pengeluaranstokheader' }}`,
         mtype: "GET",
@@ -181,7 +184,16 @@
             label: 'PENERIMAAN STOK NO BUKTI',
             width: 230,
             name: 'penerimaanstok_nobukti',
-            align: 'left'
+            align: 'left',
+            formatter: (value, options, rowData) => {
+              let tgldariheaderpenerimaanstok = rowData.tgldariheaderpenerimaanstok
+              let tglsampaiheaderpenerimaanstok = rowData.tglsampaiheaderpenerimaanstok
+              let url = "{{route('penerimaanstokheader.index')}}"
+              let formattedValue = $(`
+             <a href="${url}?tgldari=${tgldariheaderpenerimaanstok}&tglsampai=${tglsampaiheaderpenerimaanstok}" target="_blank">${value}</a>
+             `)
+             return formattedValue[0].outerHTML
+           },
           },
           {
             label: 'Pengeluaran no bukti',

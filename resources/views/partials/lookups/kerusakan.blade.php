@@ -28,24 +28,24 @@ $('#kerusakanLookup').jqGrid({
             align: 'left',
               
               formatter: (value, options, rowData) => {
-              let statusaktif = JSON.parse(value)
-              if (!statusaktif) {
+              let statusAktif = JSON.parse(value)
+              if (!statusAktif) {
                 return ''
               }
               let formattedValue = $(`
                 <div class="badge" style="background-color: ${statusAktif.WARNA}; color: ${statusAktif.WARNATULISAN};">
-                  <span>${statusaktif.SINGKATAN}</span>
+                  <span>${statusAktif.SINGKATAN}</span>
                 </div>
               `)
               
               return formattedValue[0].outerHTML
             },
             cellattr: (rowId, value, rowObject) => {
-              let statusaktif = JSON.parse(rowObject.statusaktif)
-              if (!statusaktif) {
+              let statusAktif = JSON.parse(rowObject.statusaktif)
+              if (!statusAktif) {
                 return ` title=" "`
               }
-              return ` title="${statusaktif.MEMO}"`
+              return ` title="${statusAktif.MEMO}"`
             }
           },
             

@@ -14,6 +14,8 @@
   </div>
 </div>
 @endpush
+
+
 @section('content')
 <!-- Grid -->
 <div class="container-fluid">
@@ -48,8 +50,10 @@
       </div>
     </div>
   </div>
+  {{-- @isset($request['tgldari']) ? $request['tgldari'] : 'null' }} --}}
+  
+ 
 </div>
-
 @include('penerimaanstokheader._modal')
 <!-- Detail -->
 @include('penerimaanstokheader._detail')
@@ -77,6 +81,8 @@
   let parampostok
   let activeGrid
   let approveEditRequest =null ;
+  let tgldariheader
+  let tglsampaiheader
 
   $(document).ready(function() {
     penerimaanStok($('#crudForm'))
@@ -88,7 +94,14 @@
     loadJurnalUmumGrid(nobukti)
 
     initSelect2($(`#kodepenerimaanheader`),false)
-    setRange()
+
+    @isset($request['tgldari'])
+      tgldariheader = `{{ $request['tgldari'] }}`;
+    @endisset
+    @isset($request['tglsampai'])
+      tglsampaiheader = `{{ $request['tglsampai'] }}`;
+    @endisset
+    setRange(false,tgldariheader,tglsampaiheader)
     initDatepicker()
     $(document).on('click','#btnReload', function(event) {
       loadDataHeader('penerimaanstokheader',{penerimaanheader_id:$('#kodepenerimaanheader').val()})

@@ -17,8 +17,11 @@ class PenerimaanStokHeaderController extends MyController
     {
         $title = $this->title;
         $comboKodepenerimaan = $this->comboKodepenerimaan();
-        
-        return view('penerimaanstokheader.index', compact('title','comboKodepenerimaan'));
+        $data = array_merge(compact('title','comboKodepenerimaan'),
+            ["request"=>$request->all()]
+        );
+
+        return view('penerimaanstokheader.index', $data);
     }
 
     public function create()

@@ -1731,11 +1731,15 @@
   function getSpb(detail_id) {
     resetRow()
     $.ajax({
-      url: `${apiUrl}penerimaanstokdetail?penerimaanstokheader_id=${detail_id}`,
+      url: `${apiUrl}penerimaanstokdetail`,
       method: 'GET',
       dataType: 'JSON',
       headers: {
         Authorization: `Bearer ${accessToken}`
+      },
+      data:{
+        penerimaanstokheader_id:detail_id,
+        pengeluaranstok_id:$('#pengeluaranstokId').val(),
       },
       success: response => {
         console.log(response);
@@ -1758,7 +1762,7 @@
                     <input type="text"  name="detail_keterangan[]" style="" class="form-control">                    
                   </td>
                   <td class="data_tbl tbl_qty" >
-                    <input type="text"  name="detail_qty[]" id="detail_qty${id}" onkeyup="calculate(${id})" style="text-align:right" class="form-control autonumeric number${id}">                    
+                    <input type="text"  name="detail_qty[]" id="detail_qty${id}" onkeyup="cal(${id})" style="text-align:right" class="form-control autonumeric number${id}">                    
                   </td>
                   <td class="data_tbl tbl_vulkanisirke"  style="display: none;" >
                     <input type="text"  name="detail_vulkanisirke[]" style="" class="form-control">                    
@@ -1785,8 +1789,7 @@
           detailRow.find(`[name="detail_qty[]"]`).val(detail.qty)
           detailRow.find(`[name="detail_harga[]"]`).val(detail.harga)
           detailRow.find(`[name="detail_persentasediscount[]"]`).val(detail.persentasediscount)
-          detailRow.find(`[name="detail_vulkanisirke[]"]`).val(detail.vulkanisirke)
-          detailRow.find(`[name="totalItem[]"]`).val(detail.total)
+          // detailRow.find(`[name="totalItem[]"]`).val(detail.total)
           detailRow.find(`[name="detail_keterangan[]"]`).val(detail.keterangan)
           $('table #table_body').append(detailRow)
           // initAutoNumeric($(`.number${id}`))
@@ -1794,6 +1797,7 @@
           initAutoNumeric($(`#detail_harga${id}`))
           initAutoNumeric($(`#detail_persentasediscount${id}`))
           initAutoNumeric($(`#totalItem${id}`))
+          cal(id)
           setRowNumbers()
           // $(`#detail_stok_${id}`).lookup({
           //   title: 'stok Lookup',
