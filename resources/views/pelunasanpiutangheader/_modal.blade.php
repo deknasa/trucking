@@ -73,6 +73,16 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
+                  NO BUKTI PENGELUARAN
+                </label>
+              </div>
+              <div class="col-8 col-md-10">
+                <input type="text" name="pengeluaran_nobukti" class="form-control" readonly>
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   NO BUKTI PENERIMAAN
                 </label>
               </div>
@@ -329,6 +339,10 @@
         value: form.find(`[name="tglbukti"]`).val()
       })
       data.push({
+        name: 'statuspelunasan',
+        value: form.find(`[name="statuspelunasan"]`).val()
+      })
+      data.push({
         name: 'bank',
         value: form.find(`[name="bank"]`).val()
       })
@@ -359,6 +373,10 @@
       data.push({
         name: 'penerimaan_nobukti',
         value: form.find(`[name="penerimaan_nobukti"]`).val()
+      })
+      data.push({
+        name: 'pengeluaran_nobukti',
+        value: form.find(`[name="pengeluaran_nobukti"]`).val()
       })
       data.push({
         name: 'penerimaangiro_nobukti',
@@ -600,17 +618,17 @@
   })
 
 
-  $(document).on('change', `#crudForm [name="statuspelunasan"]`, function() {
-    pelunasanText = $("[name=statuspelunasan] option:selected").text()
-    if ($.trim(pelunasanText) == 'NOTA DEBET') {
-      $('[name=bank]').parents('.row').hide()
-      $('[name=alatbayar]').parents('.row').hide()
-    }
-    if ($.trim(pelunasanText) == 'BANK/KAS') {
-      $('[name=bank]').parents('.row').show()
-      $('[name=alatbayar]').parents('.row').show()
-    }
-  })
+  // $(document).on('change', `#crudForm [name="statuspelunasan"]`, function() {
+  //   pelunasanText = $("[name=statuspelunasan] option:selected").text()
+  //   if ($.trim(pelunasanText) == 'NOTA DEBET') {
+  //     $('[name=bank]').parents('.row').hide()
+  //     $('[name=alatbayar]').parents('.row').hide()
+  //   }
+  //   if ($.trim(pelunasanText) == 'BANK/KAS') {
+  //     $('[name=bank]').parents('.row').show()
+  //     $('[name=alatbayar]').parents('.row').show()
+  //   }
+  // })
 
   function setTotal() {
     let nominalDetails = $(`#table_body [name="bayarppd[]"]:not([disabled])`)
@@ -918,7 +936,7 @@
               dataInit: function(element) {
                 initSelect2($(`.statuskredit`), true);
               },
-              
+
               dataEvents: [{
                 type: "change",
                 fn: function(event, rowObject) {
@@ -1053,7 +1071,7 @@
               dataInit: function(element) {
                 initSelect2($(`.statusdebet`), true);
               },
-              
+
               dataEvents: [{
                 type: "change",
                 fn: function(event, rowObject) {
@@ -1475,31 +1493,34 @@
     $('.invalid-feedback').remove()
 
     setStatusNotaDebetOptions()
+    setStatusNotaKreditOptions()
     Promise
       .all([
         setTglBukti(form),
         setStatusPelunasanOptions(form),
-        showPelunasanPiutang(form, Id)
-      ])
-      .then(() => {
-        $('#crudModal').modal('show')
-        if (isEditTgl == 'TIDAK') {
-          form.find(`[name="tglbukti"]`).prop('readonly', true)
-          form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
-        }
-        form.find(`[name="agen"]`).parent('.input-group').find('.button-clear').remove()
-        form.find(`[name="agen"]`).parent('.input-group').find('.input-group-append').remove()
-        form.find(`[name="bank"]`).parent('.input-group').find('.button-clear').remove()
-        form.find(`[name="bank"]`).parent('.input-group').find('.input-group-append').remove()
-        form.find(`[name="alatbayar"]`).parent('.input-group').find('.button-clear').remove()
-        form.find(`[name="alatbayar"]`).parent('.input-group').find('.input-group-append').remove()
+      ]).then(() => {
+
+        showPelunasanPiutang(form, Id).then(() => {
+            $('#crudModal').modal('show')
+            if (isEditTgl == 'TIDAK') {
+              form.find(`[name="tglbukti"]`).prop('readonly', true)
+              form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+            }
+            form.find(`[name="agen"]`).parent('.input-group').find('.button-clear').remove()
+            form.find(`[name="agen"]`).parent('.input-group').find('.input-group-append').remove()
+            form.find(`[name="bank"]`).parent('.input-group').find('.button-clear').remove()
+            form.find(`[name="bank"]`).parent('.input-group').find('.input-group-append').remove()
+            form.find(`[name="alatbayar"]`).parent('.input-group').find('.button-clear').remove()
+            form.find(`[name="alatbayar"]`).parent('.input-group').find('.input-group-append').remove()
+          })
+          .catch((error) => {
+            showDialog(error.responseJSON)
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
       })
-      .catch((error) => {
-        showDialog(error.responseJSON)
-      })
-      .finally(() => {
-        $('.modal-loader').addClass('d-none')
-      })
+
   }
 
   function deletePelunasanPiutangHeader(Id) {
@@ -1515,6 +1536,8 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
+    setStatusNotaDebetOptions()
+    setStatusNotaKreditOptions()
     Promise
       .all([
         showPelunasanPiutang(form, Id)
