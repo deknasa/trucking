@@ -73,7 +73,7 @@
 
     setRange()
     initDatepicker()
-    $(document).on('click','#btnReload', function(event) {
+    $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('pelunasanpiutangheader')
     })
 
@@ -83,8 +83,8 @@
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         postData: {
-          tgldari:$('#tgldariheader').val() ,
-          tglsampai:$('#tglsampaiheader').val() 
+          tgldari: $('#tgldariheader').val(),
+          tglsampai: $('#tglsampaiheader').val()
         },
         datatype: "json",
         colModel: [{
@@ -101,7 +101,7 @@
             align: 'left',
             stype: 'select',
             searchoptions: {
-              
+
               value: `<?php
                       $i = 1;
 
@@ -132,7 +132,7 @@
                   <span>${statusCetak.SINGKATAN}</span>
                 </div>
               `)
-              
+
               return formattedValue[0].outerHTML
             },
             cellattr: (rowId, value, rowObject) => {
@@ -142,12 +142,12 @@
               }
               return ` title="${statusCetak.MEMO}"`
             }
-          }, 
+          },
           {
             label: 'NO BUKTI',
             name: 'nobukti',
             align: 'left'
-            
+
           },
           {
             label: 'TGL BUKTI',
@@ -178,11 +178,26 @@
             label: 'NO BUKTI PENERIMAAN',
             width: 230,
             name: 'penerimaan_nobukti',
-            align: 'left'
+            align: 'left',
+            // formatter:'showlink',
+            // formatoptions: {
+            //   baseLinkUrl: `${appUrl}/penerimaanheader`,
+            //   // addParam: '&action=edit'
+            // }
+            formatter: function(cellValue, options, rowObject) {
+              var link = `${appUrl}/penerimaanheader`;
+              return `<a href="#" onclick="openNewPage('${link}')">${cellValue}</a>`;
+            }
           },
           {
             label: 'NO BUKTI GIRO',
             name: 'penerimaangiro_nobukti',
+            align: 'left'
+          },
+          {
+            label: 'NO BUKTI PENGELUARAN',
+            width: 230,
+            name: 'pengeluaran_nobukti',
             align: 'left'
           },
           {
@@ -251,7 +266,7 @@
         },
         onSelectRow: function(id) {
           let nobukti = $('#jqGrid').jqGrid('getCell', id, 'penerimaan_nobukti')
-          if(nobukti == '-'){
+          if (nobukti == '-') {
             nobukti = $('#jqGrid').jqGrid('getCell', id, 'penerimaangiro_nobukti')
           }
           activeGrid = $(this)
@@ -279,7 +294,7 @@
               clearGridHeader($(element))
             })
           }
- 
+
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))
@@ -290,7 +305,7 @@
           totalRecord = $(this).getGridParam("records")
           limit = $(this).jqGrid('getGridParam', 'postData').limit
           postData = $(this).jqGrid('getGridParam', 'postData')
-          triggerClick = true  
+          triggerClick = true
 
           $('.clearsearchclass').click(function() {
             clearColumnSearch($(this))
@@ -358,7 +373,7 @@
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
-              }else {
+              } else {
                 cekValidasi(selectedId, 'EDIT')
               }
             }
@@ -403,7 +418,7 @@
                 window.open(`{{ route('pelunasanpiutangheader.export') }}?id=${selectedId}`)
               }
             }
-          },  
+          },
         ]
 
       })
@@ -435,30 +450,33 @@
       .addClass('btn btn-sm btn-warning')
       .parent().addClass('px-1')
 
-      function permission() {
-    if (!`{{ $myAuth->hasPermission('pelunasanpiutangheader', 'store') }}`) {
-      $('#add').attr('disabled', 'disabled')
+    function permission() {
+      if (!`{{ $myAuth->hasPermission('pelunasanpiutangheader', 'store') }}`) {
+        $('#add').attr('disabled', 'disabled')
+      }
+
+      if (!`{{ $myAuth->hasPermission('pelunasanpiutangheader', 'update') }}`) {
+        $('#edit').attr('disabled', 'disabled')
+      }
+
+      if (!`{{ $myAuth->hasPermission('pelunasanpiutangheader', 'destroy') }}`) {
+        $('#delete').attr('disabled', 'disabled')
+      }
+
+      if (!`{{ $myAuth->hasPermission('pelunasanpiutangheader', 'export') }}`) {
+        $('#export').attr('disabled', 'disabled')
+      }
+
+      if (!`{{ $myAuth->hasPermission('pelunasanpiutangheader', 'report') }}`) {
+        $('#report').attr('disabled', 'disabled')
+      }
     }
 
-    if (!`{{ $myAuth->hasPermission('pelunasanpiutangheader', 'update') }}`) {
-      $('#edit').attr('disabled', 'disabled')
-    }
-
-    if (!`{{ $myAuth->hasPermission('pelunasanpiutangheader', 'destroy') }}`) {
-      $('#delete').attr('disabled', 'disabled')
-    }
-
-    if (!`{{ $myAuth->hasPermission('pelunasanpiutangheader', 'export') }}`) {
-      $('#export').attr('disabled', 'disabled')
-    }
-
-    if (!`{{ $myAuth->hasPermission('pelunasanpiutangheader', 'report') }}`) {
-      $('#report').attr('disabled', 'disabled')
-    }}
-    
   })
 
-  
+  function openNewPage(url) {
+    window.open(url, '_blank');
+  }
 </script>
 @endpush()
 @endsection
