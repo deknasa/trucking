@@ -459,23 +459,32 @@
 
 
 
-    function setRange(isToday = false) {
+    function setRange(isToday = false,firstDayParam = null,lastDayParam = null) {
       // mendapatkan tanggal hari ini
       let today = new Date();
       let formattedLastDay;
+      let firstDay  
+      let lastDay
 
-      // mendapatkan tanggal pertama di bulan ini
-      let firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
-      let formattedFirstDay = $.datepicker.formatDate('dd-mm-yy', firstDay);
-
-      if (isToday) {
-        formattedLastDay=$.datepicker.formatDate('dd-mm-yy', new Date())
+      if (firstDayParam) {
+        firstDay = new Date(firstDayParam);
       }else{
-        // mendapatkan tanggal terakhir di bulan ini
-        let lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-        formattedLastDay = $.datepicker.formatDate('dd-mm-yy', lastDay);
+        // mendapatkan tanggal pertama di bulan ini
+        firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
       }
 
+      let formattedFirstDay = $.datepicker.formatDate('dd-mm-yy', firstDay);
+
+      if (lastDayParam) {
+        lastDay = new Date(lastDayParam);
+      }else if (isToday) {
+        lastDay = new Date()
+        // formattedLastDay=$.datepicker.formatDate('dd-mm-yy', )
+      }else{
+        // mendapatkan tanggal terakhir di bulan ini
+        lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+      }
+      formattedLastDay = $.datepicker.formatDate('dd-mm-yy', lastDay);
       
 
       $('#rangeHeader').find('[name=tgldariheader]').val(formattedFirstDay).trigger('change');
