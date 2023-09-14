@@ -224,7 +224,7 @@
                 dataFilter = $('#crudForm').find('[name=gandengan_id]').val()
             }
 
-            if (stokdari_id != '' && stoksampai_id != '' && dari != '' && sampai != '' && filter != '') {
+            if ( dari != '' && sampai != '' && filter != '') {
 
                 $('#jqGrid').jqGrid('setGridParam', {
                     postData: {
