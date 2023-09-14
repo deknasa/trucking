@@ -1061,7 +1061,7 @@
     $('#detail-bgs-section').hide()
     $('#detail-bit-section').hide()
     $('#detail-tde-section').hide()
-    $('#detail-default-section').show()
+    $('#detail-default-section').parents('.card').show()
     $('.tbl_pengeluaranstokheader_nobukti').hide()
     $('.tbl_stok_id').hide()
     $('.tbl_qty').hide()
@@ -1096,7 +1096,7 @@
     $('#detail-bpt-section').hide()
     $('#detail-bgs-section').hide()
     $('#detail-bit-section').hide()
-    $('#detail-default-section').show()
+    $('#detail-default-section').parents('.card').show()
     $('.tbl_pengeluaranstokheader_nobukti').hide()
     $('.tbl_stok_id').hide()
     $('.tbl_qty').hide()
@@ -1133,7 +1133,7 @@
     $('#detail-bgs-section').hide()
     $('#detail-bit-section').hide()
     $('#detail-tde-section').hide()
-    $('#detail-default-section').show()
+    $('#detail-default-section').parents('.card').show()
     $('.tbl_pengeluaranstokheader_nobukti').hide()
 
     $('.tbl_karyawan_id').hide()
@@ -1181,7 +1181,7 @@
     $('#detail-bpt-section').hide()
     $('#detail-bgs-section').hide()
     $('#detail-bit-section').hide()
-    $('#detail-default-section').hide()
+    $('#detail-default-section').parents('.card').hide()
     loadDepositoGrid()
   }
 
@@ -1206,7 +1206,7 @@
     $('#detail-bpt-section').hide()
     $('#detail-bgs-section').hide()
     $('#detail-bit-section').hide()
-    $('#detail-default-section').hide()
+    $('#detail-default-section').parents('.card').hide()
     $('#detail-tde-section').hide()
     $('.tbl_checkbox').hide()
     $('.tbl_karyawan_id').hide()
@@ -1247,7 +1247,7 @@
     $('#detail-bpt-section').hide()
     $('#detail-bgs-section').hide()
     $('#detail-bit-section').hide()
-    $('#detail-default-section').hide()
+    $('#detail-default-section').parents('.card').hide()
     $('#detail-tde-section').hide()
     $('#detail-kbbm-section').show()
     $('.tbl_checkbox').hide()
@@ -1288,7 +1288,7 @@
     $('#detail-bit-section').hide()
     $('#detail-tde-section').hide()
     $('#detail-kbbm-section').hide()
-    $('#detail-default-section').show()
+    $('#detail-default-section').parents('.card').show()
     $('.tbl_checkbox').hide()
     $('.tbl_karyawan_id').hide()
     $('.tbl_penerimaantruckingheader').hide()
@@ -1329,7 +1329,7 @@
     $('#detail-bpt-section').hide()
     $('#detail-bgs-section').hide()
     $('#detail-bit-section').hide()
-    $('#detail-default-section').show()
+    $('#detail-default-section').parents('.card').show()
     $('.tbl_checkbox').hide()
     $('.tbl_penerimaantruckingheader').hide()
     $('.tbl_supir_id').hide()
@@ -1372,7 +1372,7 @@
     $('#detail-bgs-section').hide()
     $('#detail-bit-section').hide()
     $('#detail-bst-section').hide()
-    $('#detail-default-section').hide()
+    $('#detail-default-section').parents('.card').hide()
     $('#detail-tde-section').hide()
     $('.tbl_checkbox').hide()
     $('.tbl_karyawan_id').hide()
@@ -1394,7 +1394,7 @@
     if ($('#crudForm').data('action') == 'add') {
 
       getDataBiayaLapangan().then((response) => {
-        // console.log('before', $("#tablePinjamanKaryawan").jqGrid('getGridParam', 'selectedRowIds'))
+        console.log('before')
         let selectedIdBll = []
 
         $.each(response.data, (index, value) => {
@@ -1441,7 +1441,7 @@
     $('#detail-bgs-section').hide()
     $('#detail-bit-section').hide()
     $('#detail-bst-section').hide()
-    $('#detail-default-section').hide()
+    $('#detail-default-section').parents('.card').hide()
     $('#detail-tde-section').hide()
     $('.tbl_checkbox').hide()
     $('.tbl_karyawan_id').hide()
@@ -1508,7 +1508,7 @@
     $('#detail-bgs-section').hide()
     $('#detail-bit-section').hide()
     $('#detail-bst-section').hide()
-    $('#detail-default-section').hide()
+    $('#detail-default-section').parents('.card').hide()
     $('#detail-tde-section').hide()
     $('.tbl_checkbox').hide()
     $('.tbl_karyawan_id').hide()
@@ -1575,7 +1575,7 @@
     $('#detail-bgs-section').hide()
     $('#detail-bit-section').hide()
     $('#detail-bst-section').hide()
-    $('#detail-default-section').hide()
+    $('#detail-default-section').parents('.card').hide()
     $('#detail-tde-section').hide()
     $('.tbl_checkbox').hide()
     $('.tbl_karyawan_id').hide()
@@ -1643,7 +1643,7 @@
     $('#detail-bgs-section').show()
     $('#detail-bit-section').hide()
     $('#detail-bst-section').hide()
-    $('#detail-default-section').hide()
+    $('#detail-default-section').parents('.card').hide()
     $('#detail-tde-section').hide()
     $('.tbl_checkbox').hide()
     $('.tbl_karyawan_id').hide()
@@ -1709,7 +1709,7 @@
     $('#detail-bgs-section').hide()
     $('#detail-bit-section').show()
     $('#detail-bst-section').hide()
-    $('#detail-default-section').hide()
+    $('#detail-default-section').parents('.card').hide()
     $('#detail-tde-section').hide()
     $('.tbl_checkbox').hide()
     $('.tbl_karyawan_id').hide()
@@ -1780,7 +1780,7 @@
     $('#detail-bpt-section').hide()
     $('#detail-bgs-section').hide()
     $('#detail-bit-section').hide()
-    $('#detail-default-section').show()
+    $('#detail-default-section').parents('.card').show()
     $('.colspan').attr('colspan', 3);
     $('#sisaColFoot').hide()
     $('#sisaFoot').hide()
@@ -4228,7 +4228,7 @@
                 selectedRowsSumbanganNominal.push(data.nominal_detail)
               }
             })
-            $('#tableSumbangan').jqGrid("clearGridData");
+            // $('#tableSumbangan').jqGrid("clearGridData");
             $('#tableSumbangan').jqGrid('setGridParam', {
               url: `${apiUrl}pengeluarantruckingheader/${urlSumbangan}`,
               postData: {
