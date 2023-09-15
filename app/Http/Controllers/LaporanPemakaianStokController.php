@@ -124,7 +124,7 @@ class LaporanPemakaianStokController extends Controller
                 "index"=> 'tglbukti',
             ],
             [
-                "label"=>"No Pol",
+                "label"=>"No Pol/Gandengan",
                 "index"=> 'kodetrado',
             ],
             [
