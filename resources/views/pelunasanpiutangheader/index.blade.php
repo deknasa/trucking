@@ -190,6 +190,20 @@
             }
           },
           {
+            label: 'NO BUKTI PENERIMAAN',
+            width: 230,
+            name: 'penerimaan_nobuktihidden',
+            align: 'left',
+            hidden: true
+          },          
+          {
+            label: 'NO BUKTI PENERIMAAN GIRO',
+            width: 230,
+            name: 'penerimaangiro_nobuktihidden',
+            align: 'left',
+            hidden: true
+          },          
+          {
             label: 'NO BUKTI GIRO',
             name: 'penerimaangiro_nobukti',
             align: 'left'
@@ -265,9 +279,9 @@
           setGridLastRequest($(this), jqXHR)
         },
         onSelectRow: function(id) {
-          let nobukti = $('#jqGrid').jqGrid('getCell', id, 'penerimaan_nobukti')
+          let nobukti = $('#jqGrid').jqGrid('getCell', id, 'penerimaan_nobuktihidden')
           if (nobukti == '-') {
-            nobukti = $('#jqGrid').jqGrid('getCell', id, 'penerimaangiro_nobukti')
+            nobukti = $('#jqGrid').jqGrid('getCell', id, 'penerimaangiro_nobuktihidden')
           }
           activeGrid = $(this)
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
