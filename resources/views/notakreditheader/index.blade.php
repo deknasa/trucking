@@ -243,6 +243,11 @@
             label: 'NO BUKTI',
             name: 'nobukti',
             align: 'left'
+          },          {
+            label: 'NO BUKTI',
+            name: 'nobuktihidden',
+            align: 'left',
+            hidden:true
           },
           {
             label: 'TGL BUKTI',
@@ -390,7 +395,7 @@
         },
         onSelectRow: function(id) {
           let nobukti_pelunasan = $('#jqGrid').jqGrid('getCell', id, 'pelunasanpiutang_nobukti')
-          let nobukti_jurnal = $('#jqGrid').jqGrid('getCell', id, 'nobukti')
+          let nobukti_jurnal = $('#jqGrid').jqGrid('getCell', id, 'nobuktihidden')
           let nobukti_pengeluaran = $('#jqGrid').jqGrid('getCell', id, 'pengeluaran_nobukti')
 
           activeGrid = $(this)
