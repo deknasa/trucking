@@ -17,7 +17,10 @@ class NotaKreditHeaderController extends MyController
             'comboapproval' => $this->comboList('list', 'STATUS APPROVAL', 'STATUS APPROVAL'),
             'combocetak' => $this->comboList('list', 'STATUSCETAK', 'STATUSCETAK'),
         ];
-        return view('notakreditheader.index', compact('title','data'));
+        $data = array_merge(compact('title', 'data'),
+            ["request"=>$request->all()]
+        );
+        return view('notakreditheader.index', $data);
     }
 
     public function comboList($aksi, $grp, $subgrp)

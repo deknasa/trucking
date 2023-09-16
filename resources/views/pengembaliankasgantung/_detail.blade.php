@@ -23,6 +23,16 @@
           {
             label: 'NO BUKTI KAS GANTUNG',
             name: 'kasgantung_nobukti',
+            formatter: (value, options, rowData) => {
+              if ((value == null) ||( value == '')) {
+                return '';
+              }
+              let tgldari = rowData.tgldariheaderkasgantungheader
+              let tglsampai = rowData.tglsampaiheaderkasgantungheader
+              let url = "{{route('kasgantungheader.index')}}"
+              let formattedValue = $(`<a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>`)
+              return formattedValue[0].outerHTML
+            },
           },
           {
             label: 'KETERANGAN',

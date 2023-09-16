@@ -23,8 +23,10 @@ class RitasiController extends MyController
     public function index(Request $request)
     {
         $title = $this->title;
-
-        return view('ritasi.index', compact('title'));
+        $data = array_merge(compact('title'),
+            ["request"=>$request->all()]
+        );
+        return view('ritasi.index', $data);
     }
 
     /**

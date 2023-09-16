@@ -644,6 +644,16 @@
                                 label: 'NO BUKTI PEMUTIHAN SUPIR',
                                 name: 'pemutihansupir_nobukti',
                                 width: 230,
+                                formatter: (value, options, rowData) => {
+                                    if ((value == null) ||( value == '')) {
+                                      return '';
+                                    }
+                                    let tgldari = rowData.tgldariheaderpemutihansupir
+                                    let tglsampai = rowData.tglsampaiheaderpemutihansupir
+                                    let url = "{{route('pemutihansupir.index')}}"
+                                    let formattedValue = $(`<a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>`)
+                                    return formattedValue[0].outerHTML
+                                },
                             },
                             {
                                 label: 'MODIFIEDBY',

@@ -52,11 +52,31 @@
           {
             label: 'NO BUKTI ORDERAN',
             name: 'orderantrucking_nobukti',
+            formatter: (value, options, rowData) => {
+              if ((value == null) ||( value == '')) {
+                return '';
+              }
+              let tgldari = rowData.tgldariorderantrucking
+              let tglsampai = rowData.tglsampaiorderantrucking
+              let url = "{{route('orderantrucking.index')}}"
+              let formattedValue = $(`<a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>`)
+              return formattedValue[0].outerHTML
+            },
           },
           {
             label: 'NO BUKTI SP',
             name: 'suratpengantar_nobukti',
-            width: 300
+            width: 300,
+            formatter: (value, options, rowData) => {
+              if ((value == null) ||( value == '')) {
+                return '';
+              }
+              let tgldari = rowData.tgldarisuratpengantar
+              let tglsampai = rowData.tglsampaisuratpengantar
+              let url = "{{route('suratpengantar.index')}}"
+              let formattedValue = $(`<a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>`)
+              return formattedValue[0].outerHTML
+            },
           },
         ],
         autowidth: true,

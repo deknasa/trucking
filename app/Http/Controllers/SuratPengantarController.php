@@ -38,7 +38,11 @@ class SuratPengantarController extends MyController
             'combogudangsama' => $this->comboList('list','STATUS GUDANG SAMA','STATUS GUDANG SAMA'),
             'combobatalmuat' => $this->comboList('list','STATUS BATAL MUAT','STATUS BATAL MUAT')
         ];
-        return view('suratpengantar.index', compact('title','data'));
+
+        $data = array_merge(compact('title', 'data'),
+            ["request"=>$request->all()]
+        );
+        return view('suratpengantar.index', $data);
     }
 
     public function comboList($aksi, $grp, $subgrp)

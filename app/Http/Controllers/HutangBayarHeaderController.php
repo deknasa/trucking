@@ -19,7 +19,10 @@ class HutangBayarHeaderController extends MyController
             'comboapproval' => $this->comboList('list','STATUS APPROVAL','STATUS APPROVAL'),
             'combocetak' => $this->comboList('list','STATUSCETAK','STATUSCETAK'),
         ];
-        return view('hutangbayarheader.index', compact('title','data'));
+        $data = array_merge(compact('title','data'),
+            ["request"=>$request->all()]
+        );
+        return view('hutangbayarheader.index',$data  );
     }
 
     public function get($params = [])

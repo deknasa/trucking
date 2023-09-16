@@ -12,7 +12,7 @@ class InvoiceExtraHeaderController extends MyController
 {
     public $title = 'Invoice Extra';
     
-    public function index()
+    public function index(Request $request)
     {
 
         $title = $this->title;
@@ -21,7 +21,10 @@ class InvoiceExtraHeaderController extends MyController
             'comboapproval' => $this->comboList('list','STATUS APPROVAL','STATUS APPROVAL'),
             'combocetak' => $this->comboList('list','STATUSCETAK','STATUSCETAK'),
         ];
-        return view('invoiceextraheader.index', compact('title', 'data'));
+        $data = array_merge(compact('title', 'data'),
+            ["request"=>$request->all()]
+        );
+        return view('invoiceextraheader.index',$data);
     }
     
     public function comboList($aksi, $grp, $subgrp)

@@ -202,7 +202,19 @@
             label: 'NO BUKTI Penerimaan',
             width: 230,
             name: 'penerimaan_nobukti',
-            align: 'left'
+            align: 'left',
+            formatter: (value, options, rowData) => {
+              if ((value == null) ||( value == '')) {
+                return '';
+              }
+              let tgldari = rowData.tgldariheaderpenerimaanheader
+              let tglsampai = rowData.tglsampaiheaderpenerimaanheader
+              let url = "{{route('penerimaanheader.index')}}"
+              let formattedValue = $(`
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
+             `)
+             return formattedValue[0].outerHTML
+           }
           },
           {
             label: 'KODE PERKIRAAN',

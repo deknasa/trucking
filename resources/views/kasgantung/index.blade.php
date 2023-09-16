@@ -62,17 +62,24 @@
   let rowNum = 10
   let hasDetail = false
   let currentTab = 'detail'
-
+  let tgldariheader
+  let tglsampaiheader
 
   $(document).ready(function() {
     $("#tabs").tabs()
 
-    let nobukti = $('#jqGrid').jqGrid('getCell', id, 'pengeluaran_nobukti')
+    let nobukti = $('#jqGrid').jqGrid('getCell', id, 'pengeluaran_nobukti_hidden')
     loadDetailGrid()
     loadPengeluaranGrid(nobukti)
     loadJurnalUmumGrid(nobukti)
 
-    setRange()
+    @isset($request['tgldari'])
+      tgldariheader = `{{ $request['tgldari'] }}`;
+    @endisset
+    @isset($request['tglsampai'])
+      tglsampaiheader = `{{ $request['tglsampai'] }}`;
+    @endisset
+    setRange(false,tgldariheader,tglsampaiheader)
     initDatepicker()
     $(document).on('click','#btnReload', function(event) {
       loadDataHeader('kasgantungheader')
@@ -170,7 +177,26 @@
             label: 'NO BUKTI KAS KELUAR',
             width: 250,
             name: 'pengeluaran_nobukti',
-            align: 'left'
+            align: 'left',
+            formatter: (value, options, rowData) => {
+              if ((value == null) ||( value == '')) {
+                return '';
+              }
+              let tgldari = rowData.tgldariheaderpengeluaranheader
+              let tglsampai = rowData.tglsampaiheaderpengeluaranheader
+              let url = "{{route('pengeluaranheader.index')}}"
+              let formattedValue = $(`
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
+             `)
+             return formattedValue[0].outerHTML
+           }
+          },
+          {
+            name: 'pengeluaran_nobukti_hidden',
+            hidden: true,
+            formatter: (value, options, rowData) => {
+             return  rowData.pengeluaran_nobukti
+           },
           },
           {
             label: 'POSTING DARI',
@@ -246,7 +272,8 @@
           setGridLastRequest($(this), jqXHR)
         },
         onSelectRow: function(id) {
-          let nobukti = $('#jqGrid').jqGrid('getCell', id, 'pengeluaran_nobukti')
+          // let nobukti = $('#jqGrid').jqGrid('getCell', id, 'pengeluaran_nobukti')
+          let nobukti = $('#jqGrid').jqGrid('getCell', id, 'pengeluaran_nobukti_hidden')
           activeGrid = $(this)
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
           page = $(this).jqGrid('getGridParam', 'page')

@@ -67,14 +67,63 @@
           {
             label: 'INVOICE NO BUKTI',
             name: 'invoice_nobukti',
+            align: 'left',
+            formatter: (value, options, rowData) => {
+              let tgldari
+              let tglsampai
+              let url
+              if ((value == null) ||( value == '')) {
+                return '';
+              }
+              if (rowData.tgldariheaderinvoiceheader) {
+                tgldari = rowData.tgldariheaderinvoiceheader
+                tglsampai = rowData.tglsampaiheaderinvoiceheader
+                url = "{{route('invoiceheader.index')}}"
+              }else if (rowData.tgldariheaderinvoiceextraheader) {
+                tgldari = rowData.tgldariheaderinvoiceextraheader
+                tglsampai = rowData.tglsampaiheaderinvoiceextraheader
+                url = "{{route('invoiceextraheader.index')}}"
+              }
+              let formattedValue
+              if (url) {
+                formattedValue = $(`<a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>`)
+              }else{
+                formattedValue = $(`<span>${value}</span>`)
+              }
+              return formattedValue[0].outerHTML
+            },
           },
           {
             label: 'PELUNASAN PIUTANG NO BUKTI', width: 240,
             name: 'pelunasanpiutang_nobukti',
+            formatter: (value, options, rowData) => {
+              if ((value == null) ||( value == '')) {
+                return '';
+              }
+              let tgldari = rowData.tgldariheaderpelunasanpiutangheader
+              let tglsampai = rowData.tglsampaiheaderpelunasanpiutangheader
+              let url = "{{route('pelunasanpiutangheader.index')}}"
+              let formattedValue = $(`
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
+             `)
+             return formattedValue[0].outerHTML
+           }
           },
           {
             label: 'PENERIMAAN GIRO NO BUKTI',
             name: 'penerimaangiro_nobukti',
+            formatter: (value, options, rowData) => {
+              if ((value == null) ||( value == '')) {
+                return '';
+              }
+              let tgldari = rowData.tgldariheaderpenerimaangiroheader
+              let tglsampai = rowData.tglsampaiheaderpenerimaangiroheader
+              let url = "{{route('penerimaangiroheader.index')}}"
+              let formattedValue = $(`
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
+             `)
+             return formattedValue[0].outerHTML
+           }
           },
           {
             label: 'BANK PELANGGAN',

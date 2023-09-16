@@ -62,6 +62,8 @@
   let rowNum = 10
   let hasDetail = false
   let currentTab = 'detail'
+  let tgldariheader
+  let tglsampaiheader
 
   $(document).ready(function() {
     $("#tabs").tabs()
@@ -71,7 +73,13 @@
     loadPenerimaanGrid(nobukti)
     loadJurnalUmumGrid(nobukti)
 
-    setRange()
+     @isset($request['tgldari'])
+      tgldariheader = `{{ $request['tgldari'] }}`;
+    @endisset
+    @isset($request['tglsampai'])
+      tglsampaiheader = `{{ $request['tglsampai'] }}`;
+    @endisset
+    setRange(false,tgldariheader,tglsampaiheader)
     initDatepicker()
     $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('pelunasanpiutangheader')
@@ -184,31 +192,87 @@
             //   baseLinkUrl: `${appUrl}/penerimaanheader`,
             //   // addParam: '&action=edit'
             // }
-            formatter: function(cellValue, options, rowObject) {
-              var link = `${appUrl}/penerimaanheader`;
-              return `<a href="#" onclick="openNewPage('${link}')">${cellValue}</a>`;
-            }
+            formatter: (value, options, rowData) => {
+              if ((value == null) ||( value == '')) {
+                return '';
+              }
+              let tgldari = rowData.tgldariheaderpenerimaanheader
+              let tglsampai = rowData.tglsampaiheaderpenerimaanheader
+              let url = "{{route('penerimaanheader.index')}}"
+              let formattedValue = $(`
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
+             `)
+             return formattedValue[0].outerHTML
+           }
           },
           {
             label: 'NO BUKTI GIRO',
             name: 'penerimaangiro_nobukti',
-            align: 'left'
+            align: 'left',
+            formatter: (value, options, rowData) => {
+              if ((value == null) ||( value == '')) {
+                return '';
+              }
+              let tgldari = rowData.tgldariheaderpenerimaangiroheader
+              let tglsampai = rowData.tglsampaiheaderpenerimaangiroheader
+              let url = "{{route('penerimaangiroheader.index')}}"
+              let formattedValue = $(`
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
+             `)
+             return formattedValue[0].outerHTML
+           }
           },
           {
             label: 'NO BUKTI PENGELUARAN',
             width: 230,
             name: 'pengeluaran_nobukti',
-            align: 'left'
+            align: 'left',
+            formatter: (value, options, rowData) => {
+              if ((value == null) ||( value == '')) {
+                return '';
+              }
+              let tgldari = rowData.tgldariheaderpengeluaranheader
+              let tglsampai = rowData.tglsampaiheaderpengeluaranheader
+              let url = "{{route('pengeluaranheader.index')}}"
+              let formattedValue = $(`
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
+             `)
+             return formattedValue[0].outerHTML
+           }
           },
           {
             label: 'NOTA DEBET',
             name: 'notadebet_nobukti',
-            align: 'left'
+            align: 'left',
+            formatter: (value, options, rowData) => {
+              if ((value == null) ||( value == '')) {
+                return '';
+              }
+              let tgldari = rowData.tgldariheadernotadebetheader
+              let tglsampai = rowData.tglsampaiheadernotadebetheader
+              let url = "{{route('notadebetheader.index')}}"
+              let formattedValue = $(`
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
+             `)
+             return formattedValue[0].outerHTML
+           }
           },
           {
             label: 'NOTA KREDIT',
             name: 'notakredit_nobukti',
-            align: 'left'
+            align: 'left',
+            formatter: (value, options, rowData) => {
+              if ((value == null) ||( value == '')) {
+                return '';
+              }
+              let tgldari = rowData.tgldariheadernotakreditheader
+              let tglsampai = rowData.tglsampaiheadernotakreditheader
+              let url = "{{route('notakreditheader.index')}}"
+              let formattedValue = $(`
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
+             `)
+             return formattedValue[0].outerHTML
+           }
           },
           {
             label: 'MODIFIEDBY',

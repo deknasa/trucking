@@ -19,6 +19,17 @@
         colModel: [{
             label: 'NO RINCIAN',
             name: 'gajisupir_nobukti',
+            formatter: (value, options, rowData) => {
+              if ((value == null) ||( value == '')) {
+                return '';
+              }
+              let tgldari = rowData.tgldariheadergajisupirheaderheader
+              let tglsampai = rowData.tglsampaiheadergajisupirheaderheader
+              let url = "{{route('gajisupirheader.index')}}"
+              let formattedValue = $(`<a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>`)
+              return formattedValue[0].outerHTML
+          },
+          
           },
           {
             label: 'NO BK',

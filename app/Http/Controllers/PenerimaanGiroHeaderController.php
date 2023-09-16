@@ -26,8 +26,11 @@ class PenerimaanGiroHeaderController extends MyController
             'comboapproval' => $this->comboApproval('list', 'STATUS APPROVAL', 'STATUS APPROVAL'),
             'combocetak' => $this->comboApproval('list', 'STATUSCETAK', 'STATUSCETAK')
         ];
+        $data = array_merge(compact('title', 'data'),
+            ["request"=>$request->all()]
+        );
 
-        return view('penerimaangiroheader.index', compact('title', 'data'));
+        return view('penerimaangiroheader.index', $data);
     }
 
     // /**

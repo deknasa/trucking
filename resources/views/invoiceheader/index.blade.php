@@ -60,6 +60,8 @@
   let hasDetail = false
   let currentTab = 'detail'
   let selectedRows = [];
+  let tgldariheader
+  let tglsampaiheader
 
   function checkboxHandler(element) {
     let value = $(element).val();
@@ -80,12 +82,18 @@
   $(document).ready(function() {
     $("#tabs").tabs()
 
-    let nobukti = $('#jqGrid').jqGrid('getCell', id, 'piutang_nobukti')
+    let nobukti = $('#jqGrid').jqGrid('getCell', id, 'piutang_nobukti_hidden')
     loadDetailGrid()
     loadPiutangGrid(nobukti)
     loadJurnalUmumGrid(nobukti)
 
-    setRange()
+    @isset($request['tgldari'])
+      tgldariheader = `{{ $request['tgldari'] }}`;
+    @endisset
+    @isset($request['tglsampai'])
+      tglsampaiheader = `{{ $request['tglsampai'] }}`;
+    @endisset
+    setRange(false,tgldariheader,tglsampaiheader)
     initDatepicker()
     $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('invoiceheader')
@@ -286,7 +294,24 @@
           {
             label: 'NO BUKTI PIUTANG',
             name: 'piutang_nobukti',
-            align: 'left'
+            align: 'left',
+            formatter: (value, options, rowData) => {
+              if ((value == null) ||( value == '')) {
+                return '';
+              }
+              let tgldari = rowData.tgldariheaderpiutangheader
+              let tglsampai = rowData.tglsampaiheaderpiutangheader
+              let url = "{{route('piutangheader.index')}}"
+              let formattedValue = $(`<a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>`)
+              return formattedValue[0].outerHTML
+            },
+          },
+          {
+            name: 'piutang_nobukti_hidden',
+            hidden: true,
+            formatter: (value, options, rowData) => {
+             return  rowData.piutang_nobukti
+           },
           },
           {
             label: 'USER APPROVAL',
@@ -374,7 +399,7 @@
         },
         onSelectRow: function(id) {
 
-          let nobukti = $('#jqGrid').jqGrid('getCell', id, 'piutang_nobukti')
+          let nobukti = $('#jqGrid').jqGrid('getCell', id, 'piutang_nobukti_hidden')
           // $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/invoicedetail/${currentTab}/grid`, function() {
           //   loadGrid(id, nobukti)
           // })

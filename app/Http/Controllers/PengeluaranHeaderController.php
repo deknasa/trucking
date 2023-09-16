@@ -26,7 +26,10 @@ class PengeluaranHeaderController extends MyController
             'combocetak' => $this->comboCetak('list','STATUSCETAK','STATUSCETAK'),
             'combobank' => $this->comboBank(),
         ];
-        return view('pengeluaran.index', compact('title', 'data'));
+        $data = array_merge(compact('title', 'data'),
+            ["request"=>$request->all()]
+        );
+        return view('pengeluaran.index', $data);
     }
 
     public function get($params = [])
