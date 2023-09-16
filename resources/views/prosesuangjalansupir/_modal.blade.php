@@ -1599,11 +1599,7 @@
                 element.val(supir.namasupir)
                 element.data('currentValue', element.val())
                 $('#tablePengembalian').jqGrid("clearGridData");
-                $("#tablePengembalian")
-                    .jqGrid("setGridParam", {
-                        selectedRowIds: []
-                    })
-                    .trigger("reloadGrid");
+                $("#tablePengembalian")[0].p.selectedRowIds = [];
                 getDataPengembalian(supir.id).then((response) => {
 
                     console.log('before', $("#tablePengembalian").jqGrid('getGridParam', 'selectedRowIds'))

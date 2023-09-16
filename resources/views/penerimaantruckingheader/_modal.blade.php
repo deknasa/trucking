@@ -238,30 +238,30 @@
         data.filter((row) => row.name === 'nominal[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal[]"]`)[index])
       })
       $.ajax({
-        url: url,
-        method: method,
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: data,
-        success: response => {
-          addRow()
-        },
-        error: error => {
-          if (error.status === 422) {
-            $('.is-invalid').removeClass('is-invalid')
-            $('.invalid-feedback').remove()
-            setErrorMessages(form, error.responseJSON.errors);
-          } else {
-            showDialog(error.responseJSON)
+          url: url,
+          method: method,
+          dataType: 'JSON',
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          },
+          data: data,
+          success: response => {
+            addRow()
+          },
+          error: error => {
+            if (error.status === 422) {
+              $('.is-invalid').removeClass('is-invalid')
+              $('.invalid-feedback').remove()
+              setErrorMessages(form, error.responseJSON.errors);
+            } else {
+              showDialog(error.responseJSON)
+            }
           }
-        }
-      })
-      .always(() => {
-        $('#processingLoader').addClass('d-none')
-        $(this).removeAttr('disabled')
-      })
+        })
+        .always(() => {
+          $('#processingLoader').addClass('d-none')
+          $(this).removeAttr('disabled')
+        })
     });
 
     $(document).on('click', "#btnReloadBbtGrid", function() {
@@ -988,9 +988,9 @@
         $('#crudForm').find(`[name="penerimaantrucking_id"]`).val($('#penerimaanheader_id').val())
       }
     }
-    form.find('#btnSubmit').prop('disabled',false)
+    form.find('#btnSubmit').prop('disabled', false)
     if (form.data('action') == "view") {
-      form.find('#btnSubmit').prop('disabled',true)
+      form.find('#btnSubmit').prop('disabled', true)
     }
   })
 
@@ -1123,6 +1123,7 @@
       })
 
   }
+
   function viewPenerimaanTruckingHeader(id) {
     let form = $('#crudForm')
     $('.modal-loader').removeClass('d-none')
@@ -1133,10 +1134,10 @@
       <i class="fa fa-save"></i>
       Save
     `)
-    form.find('#btnSubmit').prop('disabled',true)
+    form.find('#btnSubmit').prop('disabled', true)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('View Penerimaan Truck')
-    
+
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -1148,23 +1149,23 @@
         showPenerimaanTruckingHeader(form, id)
       ])
       .then(userId => {
-                setFormBindKeys(form)
-                initSelect2(form.find('.select2bs4'), true)
-                form.find('[name]').removeAttr('disabled')
-        
-                form.find('select').each((index, select) => {
-                let element = $(select)
-        
-                if (element.data('select2')) {
-                    element.select2('destroy')
-                }
-                })
-        
-                form.find('[name]').attr('disabled', 'disabled').css({
-                background: '#fff'
-                })
-                form.find('[name=id]').prop('disabled',false)
-            })
+        setFormBindKeys(form)
+        initSelect2(form.find('.select2bs4'), true)
+        form.find('[name]').removeAttr('disabled')
+
+        form.find('select').each((index, select) => {
+          let element = $(select)
+
+          if (element.data('select2')) {
+            element.select2('destroy')
+          }
+        })
+
+        form.find('[name]').attr('disabled', 'disabled').css({
+          background: '#fff'
+        })
+        form.find('[name=id]').prop('disabled', false)
+      })
       .then(() => {
         $('#crudModal').modal('show')
         form.find(`.hasDatepicker`).prop('readonly', true)
@@ -1755,7 +1756,7 @@
       $('#tablePinjamanKaryawan').jqGrid('saveCell', value, 5); //nominal
     })
   })
-  
+
   function loadPengembalianTitipanGrid() {
     $("#tablePengembalianTitipan")
       .jqGrid({
@@ -2829,7 +2830,7 @@
     if (countRow <= 1) {
       addRow()
     }
-    
+
     setRowNumbers()
     setTotal()
   }
@@ -2890,7 +2891,7 @@
 
         getDataPinjaman(supir.id).then((response) => {
 
-          console.log('before', $("#tablePinjaman").jqGrid('getGridParam', 'selectedRowIds'))
+          $("#tablePinjaman")[0].p.selectedRowIds = [];
           setTimeout(() => {
 
             $("#tablePinjaman")
@@ -2936,8 +2937,7 @@
           .trigger("reloadGrid");
 
         getDataPinjamanKaryawan(karyawan.id).then((response) => {
-
-          console.log('before', $("#tablePinjamanKaryawan").jqGrid('getGridParam', 'selectedRowIds'))
+          $("#tablePinjamanKaryawan")[0].p.selectedRowIds = [];
           setTimeout(() => {
 
             $("#tablePinjamanKaryawan")
@@ -3103,7 +3103,7 @@
       })
     })
   }
-  
+
   const setTglBukti = function(form) {
     return new Promise((resolve, reject) => {
       let data = [];

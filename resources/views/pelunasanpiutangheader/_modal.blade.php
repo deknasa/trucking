@@ -2175,6 +2175,8 @@
         getDataPelunasan(agen.id).then((response) => {
 
           console.log('before', $("#tablePelunasan").jqGrid('getGridParam', 'selectedRowIds'))
+          
+        $("#tablePelunasan")[0].p.selectedRowIds = [];
           setTimeout(() => {
 
             $("#tablePelunasan")
@@ -2204,8 +2206,11 @@
 
         console.log('onclear', $("#tablePelunasan").jqGrid('getGridParam', 'selectedRowIds'))
         // setTimeout(() => {
+        $("#tablePelunasan")[0].p.selectedRowIds = [];
         $('#tablePelunasan').jqGrid("clearGridData");
         // }, 100);
+        $('.footrow').find(`td[aria-describedby="tablePelunasan_sisa"]`).text('')
+        $('.footrow').find(`td[aria-describedby="tablePelunasan_nominal"]`).text('')
         $('.footrow').find(`td[aria-describedby="tablePelunasan_bayar"]`).text('')
         $('.footrow').find(`td[aria-describedby="tablePelunasan_potongan"]`).text('')
         $('.footrow').find(`td[aria-describedby="tablePelunasan_nominallebihbayar"]`).text('')

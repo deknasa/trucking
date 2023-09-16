@@ -334,7 +334,7 @@
       let Id = form.find('[name=id]').val()
       let action = form.data('action')
       let data = $('#crudForm').serializeArray()
-      
+
       if (KodePengeluaranId != "BST") {
         if (KodePengeluaranId == "BBT") {
           $('#crudForm').find(`[name="nominaltagih[]"`).each((index, element) => {
@@ -362,30 +362,30 @@
       }
 
       $.ajax({
-        url: url,
-        method: method,
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: data,
-        success: response => {
-          addRow()
-        },
-        error: error => {
-          if (error.status === 422) {
-            $('.is-invalid').removeClass('is-invalid')
-            $('.invalid-feedback').remove()
-            setErrorMessages(form, error.responseJSON.errors);
-          } else {
-            showDialog(error.responseJSON)
+          url: url,
+          method: method,
+          dataType: 'JSON',
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          },
+          data: data,
+          success: response => {
+            addRow()
+          },
+          error: error => {
+            if (error.status === 422) {
+              $('.is-invalid').removeClass('is-invalid')
+              $('.invalid-feedback').remove()
+              setErrorMessages(form, error.responseJSON.errors);
+            } else {
+              showDialog(error.responseJSON)
+            }
           }
-        }
-      })
-      .always(() => {
-        $('#processingLoader').addClass('d-none')
-        $(this).removeAttr('disabled')
-      })
+        })
+        .always(() => {
+          $('#processingLoader').addClass('d-none')
+          $(this).removeAttr('disabled')
+        })
 
     });
 
@@ -427,12 +427,15 @@
 
         } else if (KodePengeluaranId == 'KBBM') {
           $('#tablePelunasanbbm').jqGrid("clearGridData");
-          $("#tablePelunasanbbm")
-            .jqGrid("setGridParam", {
-              selectedRowIds: []
-            })
-            .trigger("reloadGrid");
+          // $("#tablePelunasanbbm")
+          //   .jqGrid("setGridParam", {
+          //     selectedRowIds: []
+          //   })
+          //   .trigger("reloadGrid");
+
           getDataPelunasanBBM(tgldari, tglsampai).then((response) => {
+
+            $("#tablePelunasanbbm")[0].p.selectedRowIds = [];
             setTimeout(() => {
 
               $("#tablePelunasanbbm")
@@ -1865,9 +1868,9 @@
         $('#crudForm').find(`[name="pengeluarantrucking_id"]`).val($('#pengeluaranheader_id').val())
       }
     }
-    form.find('#btnSubmit').prop('disabled',false)
+    form.find('#btnSubmit').prop('disabled', false)
     if (form.data('action') == "view") {
-      form.find('#btnSubmit').prop('disabled',true)
+      form.find('#btnSubmit').prop('disabled', true)
     }
     // initSelect2()
   })
@@ -2021,6 +2024,7 @@
     form.find(`[name="postingpinjaman"]`).attr('disabled', true)
 
   }
+
   function viewPengeluaranTruckingHeader(id) {
 
     let form = $('#crudForm')
@@ -2032,7 +2036,7 @@
       <i class="fa fa-save"></i>
       Save
     `)
-    form.find('#btnSubmit').prop('disabled',true)
+    form.find('#btnSubmit').prop('disabled', true)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('View Pengeluaran Truck')
     $('.is-invalid').removeClass('is-invalid')
@@ -2049,7 +2053,7 @@
       ])
       .then(() => {
         showPengeluaranTruckingHeader(form, id)
-        .then(penerimaanStokHeaderId => {
+          .then(penerimaanStokHeaderId => {
             setFormBindKeys(form)
             form.find('[name]').removeAttr('disabled')
 
@@ -2071,7 +2075,7 @@
             $('#crudModal').modal('show')
             $('#crudForm [name=statusposting]').attr('disabled', true)
             $('#crudForm').find(`.ui-datepicker-trigger`).attr('disabled', true)
-            
+
             form.find(`.hasDatepicker`).prop('readonly', true)
             form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
             let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
@@ -2350,10 +2354,6 @@
       forCheckbox = 'disabled'
     } else if (aksi == 'add') {
       urlBBM = `${apiUrl}pengeluarantruckingheader/getpelunasan`
-      data = {
-        'tgldari': dari,
-        'tglsampai': sampai,
-      }
     }
 
     return new Promise((resolve, reject) => {
@@ -2363,7 +2363,10 @@
         headers: {
           Authorization: `Bearer ${accessToken}`
         },
-        data: data,
+        data: {
+          'tgldari': dari,
+          'tglsampai': sampai,
+        },
         success: (response) => {
           resolve(response);
         },
@@ -2731,9 +2734,7 @@
       forCheckbox = 'disabled'
     } else if (aksi == 'add') {
       url = `${apiUrl}pengeluarantruckingheader/getdeposito`
-      data = {
-        "supir": supirId,
-      }
+
     }
 
     return new Promise((resolve, reject) => {
@@ -2743,7 +2744,9 @@
         headers: {
           Authorization: `Bearer ${accessToken}`
         },
-        data: data,
+        data: {
+          "supir": supirId,
+        },
         success: (response) => {
           resolve(response);
         },
@@ -5326,6 +5329,7 @@
         element.val(supir.namasupir)
         element.data('currentValue', element.val())
 
+        $("#tableDeposito")[0].p.selectedRowIds = [];
         $('#tableDeposito').jqGrid("clearGridData");
         $("#tableDeposito")
           .jqGrid("setGridParam", {
