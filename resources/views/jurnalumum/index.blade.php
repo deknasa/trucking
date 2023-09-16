@@ -52,6 +52,7 @@
 
   }
 
+
   $(document).ready(function() {
 
     setRange()
@@ -119,7 +120,7 @@
             align: 'left',
             stype: 'select',
             searchoptions: {
-              
+
               value: `<?php
                       $i = 1;
 
@@ -150,7 +151,7 @@
                   <span>${statusCetak.SINGKATAN}</span>
                 </div>
               `)
-              
+
               return formattedValue[0].outerHTML
             },
             cellattr: (rowId, value, rowObject) => {
@@ -160,7 +161,7 @@
               }
               return ` title="${statusCetak.MEMO}"`
             }
-          }, 
+          },
           {
             label: 'STATUS APPROVAL',
             name: 'statusapproval',
@@ -386,7 +387,7 @@
           }, 100)
 
           $('#left-nav').find('button').attr('disabled', false)
-          permission() 
+          permission()
           $('#gs_').attr('disabled', false)
           setHighlight($(this))
         }
@@ -512,7 +513,7 @@
                 if (selectedId == null || selectedId == '' || selectedId == undefined) {
                   showDialog('Harap pilih salah satu record')
                 } else {
-                  cekValidasiAksi(selectedId,'COPY')
+                  cekValidasiAksi(selectedId, 'COPY')
                 }
                 clearSelectedRows()
                 $('#gs_').prop('checked', false)
@@ -552,39 +553,40 @@
       .addClass('btn btn-sm btn-warning')
       .parent().addClass('px-1')
 
-      function permission() {
-    if (!`{{ $myAuth->hasPermission('jurnalumumheader', 'store') }}`) {
-      $('#add').attr('disabled', 'disabled')
-    }
+    function permission() {
+      if (!`{{ $myAuth->hasPermission('jurnalumumheader', 'store') }}`) {
+        $('#add').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('jurnalumumheader', 'update') }}`) {
-      $('#edit').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('jurnalumumheader', 'update') }}`) {
+        $('#edit').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('jurnalumumheader', 'show') }}`) {
-      $('#view').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('jurnalumumheader', 'show') }}`) {
+        $('#view').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('jurnalumumheader', 'destroy') }}`) {
-      $('#delete').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('jurnalumumheader', 'destroy') }}`) {
+        $('#delete').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('jurnalumumheader', 'export') }}`) {
-      $('#export').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('jurnalumumheader', 'export') }}`) {
+        $('#export').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('jurnalumumheader', 'report') }}`) {
-      $('#report').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('jurnalumumheader', 'report') }}`) {
+        $('#report').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('jurnalumumheader', 'copy') }}`) {
-      $('#lainnya').attr('disabled', 'disabled')
-      $('#copy').attr('hidden', 'true')
+      if (!`{{ $myAuth->hasPermission('jurnalumumheader', 'copy') }}`) {
+        $('#lainnya').attr('disabled', 'disabled')
+        $('#copy').attr('hidden', 'true')
+      }
+      if (!`{{ $myAuth->hasPermission('jurnalumumheader', 'approval') }}`) {
+        $('#approveun').attr('disabled', 'disabled')
+        $("#jqGrid").hideCol("");
+      }
     }
-    if (!`{{ $myAuth->hasPermission('jurnalumumheader', 'approval') }}`) {
-      $('#approveun').attr('disabled', 'disabled')
-      $("#jqGrid").hideCol("");
-    }}
 
     $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {
@@ -688,6 +690,38 @@
       }
     })
   }
+
+  // PREVENT WINDOW BEING SCROLLED WHEN SPACEBAR PRESSED
+  window.addEventListener('keydown', function() {
+    if (event.keyCode == 32) {
+      var selectedRowId = $("#jqGrid").jqGrid("getGridParam", "selrow");
+      if (selectedRowId) {
+        var $checkbox = $("#jqGrid").find(`tr#${selectedRowId} td input[type='checkbox']`);
+        // Toggle the checkbox state
+        let value = $checkbox.val();
+        if ($checkbox.is(':checked')) {
+          $checkbox.prop("checked", false);
+          $checkbox.parents('tr').removeClass('bg-light-blue')
+          for (var i = 0; i < selectedRows.length; i++) {
+            if (selectedRows[i] == value) {
+              selectedRows.splice(i, 1);
+            }
+          }
+        } else {
+          $checkbox.prop("checked", true);
+          selectedRows.push($checkbox.val())
+          $checkbox.parents('tr').addClass('bg-light-blue')
+        }
+        event.preventDefault();
+      }
+      document.body.style.overflow = "hidden";
+    }
+  });
+  window.addEventListener('keyup', function() {
+    if (event.keyCode == 32) {
+      document.body.style.overflow = "auto";
+    }
+  });
 </script>
 @endpush()
 @endsection
