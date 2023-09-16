@@ -465,9 +465,11 @@
             $('#tripList tbody').html('')
             $('#gajiSupir').html('')
             $('#gajiKenek').html('')
-
+            $('#loaderGrid').removeClass('d-none')
             getAllTrip(aksi)
                 .then((response) => {
+
+                    $("#rekapRincian")[0].p.selectedRowIds = [];
                     let selectedTrip = []
                     $.each(response.data, (index, value) => {
                         selectedTrip.push(value.id)
@@ -494,6 +496,8 @@
                     hitung(selectedTrip)
                 })
                 .catch((error) => {
+
+                    $('#loaderGrid').addClass('d-none')
                     if (error.status === 422) {
                         $('.is-invalid').removeClass('is-invalid')
                         $('.invalid-feedback').remove()
@@ -506,7 +510,13 @@
             if (dari != '' && sampai != '' && supirId != '') {
 
                 getDataPotPribadi(supirId).then((response) => {
-                    setTimeout(() => {
+                    $("#tablePotPribadi")[0].p.selectedRowIds = [];
+                    if ($('#crudForm').data('action') == 'add') {
+                        selectedRowIdPP = [];
+                    } else {
+                        selectedRowIdPP = response.selectedId;
+                    }
+                    // setTimeout(() => {
 
                         $("#tablePotPribadi")
                             .jqGrid("setGridParam", {
@@ -514,10 +524,10 @@
                                 data: response.data,
                                 originalData: response.data,
                                 rowNum: response.data.length,
-                                selectedRowIds: []
+                                selectedRowIds: selectedRowIdPP
                             })
                             .trigger("reloadGrid");
-                    }, 100);
+                    // }, 100);
 
                 });
 
@@ -549,18 +559,24 @@
             }
 
             getDataPotSemua().then((response) => {
-                setTimeout(() => {
+                $("#tablePotSemua")[0].p.selectedRowIds = [];
+                if ($('#crudForm').data('action') == 'add') {
+                    selectedRowId = [];
+                } else {
+                    selectedRowId = response.selectedId;
+                }
+                // setTimeout(() => {
 
-                    $("#tablePotSemua")
-                        .jqGrid("setGridParam", {
-                            datatype: "local",
-                            data: response.data,
-                            originalData: response.data,
-                            rowNum: response.data.length,
-                            selectedRowIds: []
-                        })
-                        .trigger("reloadGrid");
-                }, 100);
+                $("#tablePotSemua")
+                    .jqGrid("setGridParam", {
+                        datatype: "local",
+                        data: response.data,
+                        originalData: response.data,
+                        rowNum: response.data.length,
+                        selectedRowIds: selectedRowId
+                    })
+                    .trigger("reloadGrid");
+                // }, 100);
 
             });
             // selectAllRowsAbsensi(supirId, dari, sampai, aksi)
@@ -1512,6 +1528,22 @@
                     Authorization: `Bearer ${accessToken}`
                 },
                 success: (response) => {
+                    if (aksi != 'add') {
+                        let selectedIdPS = []
+                        let totalPS = 0
+
+                        $.each(response.data, (index, value) => {
+                            if (value.gajisupir_id != null) {
+                                selectedIdPS.push(parseInt(value.id))
+                                totalPS += parseFloat(value.nominalPS)
+
+                            }
+                        })
+                        response.selectedId = selectedIdPS;
+                        response.totalPS = totalPS;
+
+                        console.log(selectedIdPS)
+                    }
                     resolve(response);
                 },
                 error: error => {
@@ -1526,6 +1558,7 @@
         let isChecked = $(element).is(":checked");
         let editableColumnsPotSemua = $("#tablePotSemua").getGridParam("editableColumns");
         let selectedRowIdsPotSemua = $("#tablePotSemua").getGridParam("selectedRowIds");
+        console.log(selectedRowIdsPotSemua)
         let originalGridDataPotSemua = $("#tablePotSemua")
             .jqGrid("getGridParam", "originalData")
             .find((row) => row.id == rowId);
@@ -1560,16 +1593,16 @@
 
                 let localRow = $("#tablePotSemua").jqGrid("getLocalRow", rowId);
 
-                if ($('#crudForm').data('action') == 'edit') {
-                    // if (originalGridDataPotSemua.sisa == 0) {
+                // if ($('#crudForm').data('action') == 'edit') {
+                //     // if (originalGridDataPotSemua.sisa == 0) {
 
-                    //   let getnominalPS = $("#tablePotSemua").jqGrid("getCell", rowId, "nominalPS")
-                    //   localRow.nominalPS = (getnominalPS != '') ? parseFloat(getnominalPS.replaceAll(',', '')) : 0
-                    // } else {
-                    //   localRow.nominalPS = originalGridDataPotSemua.sisa
-                    // }
-                    localRow.nominalPS = (parseFloat(originalGridDataPotSemua.pinjSemua_sisa) + parseFloat(originalGridDataPotSemua.nominalPS))
-                }
+                //     //   let getnominalPS = $("#tablePotSemua").jqGrid("getCell", rowId, "nominalPS")
+                //     //   localRow.nominalPS = (getnominalPS != '') ? parseFloat(getnominalPS.replaceAll(',', '')) : 0
+                //     // } else {
+                //     //   localRow.nominalPS = originalGridDataPotSemua.sisa
+                //     // }
+                //     localRow.nominalPS = (parseFloat(originalGridDataPotSemua.pinjSemua_sisa) + parseFloat(originalGridDataPotSemua.nominalPS))
+                // }
 
                 initAutoNumeric($(`#tablePotSemua tr#${rowId}`).find(`td[aria-describedby="tablePotSemua_nominalPS"]`))
                 setTotalNominalPS()
@@ -1879,6 +1912,20 @@
                     Authorization: `Bearer ${accessToken}`
                 },
                 success: (response) => {
+                    if (aksi != 'add') {
+                        let selectedIdPP = []
+                        let totalPP = 0
+
+                        $.each(response.data, (index, value) => {
+                            if (value.gajisupir_id != null) {
+                                selectedIdPP.push(parseInt(value.id))
+                                totalPP += parseFloat(value.nominalPP)
+
+                            }
+                        })
+                        response.selectedId = selectedIdPP;
+                        response.totalPP = totalPP;
+                    }
                     resolve(response);
                 },
                 error: error => {
@@ -1927,16 +1974,16 @@
 
                 let localRow = $("#tablePotPribadi").jqGrid("getLocalRow", rowId);
 
-                if ($('#crudForm').data('action') == 'edit') {
-                    // if (originalGridDataPotPribadi.sisa == 0) {
+                // if ($('#crudForm').data('action') == 'edit') {
+                //     // if (originalGridDataPotPribadi.sisa == 0) {
 
-                    //   let getnominalPP = $("#tablePotPribadi").jqGrid("getCell", rowId, "nominalPP")
-                    //   localRow.nominalPP = (getnominalPP != '') ? parseFloat(getnominalPP.replaceAll(',', '')) : 0
-                    // } else {
-                    //   localRow.nominalPP = originalGridDataPotPribadi.sisa
-                    // }
-                    localRow.nominalPP = (parseFloat(originalGridDataPotPribadi.pinjPribadi_sisa) + parseFloat(originalGridDataPotPribadi.nominalPP))
-                }
+                //     //   let getnominalPP = $("#tablePotPribadi").jqGrid("getCell", rowId, "nominalPP")
+                //     //   localRow.nominalPP = (getnominalPP != '') ? parseFloat(getnominalPP.replaceAll(',', '')) : 0
+                //     // } else {
+                //     //   localRow.nominalPP = originalGridDataPotPribadi.sisa
+                //     // }
+                //     localRow.nominalPP = (parseFloat(originalGridDataPotPribadi.pinjPribadi_sisa) + parseFloat(originalGridDataPotPribadi.nominalPP))
+                // }
 
                 initAutoNumeric($(`#tablePotPribadi tr#${rowId}`).find(`td[aria-describedby="tablePotPribadi_nominalPP"]`))
                 setTotalNominalPP()
@@ -2616,6 +2663,7 @@
                                 initAutoNumeric($(this).find(`td[aria-describedby="rekapRincian_uangmakanberjenjang"]`))
                             });
                     }, 100);
+                    $('#loaderGrid').addClass('d-none')
                     setHighlight($(this))
                 }
             })

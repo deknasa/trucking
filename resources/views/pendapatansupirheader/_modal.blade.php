@@ -223,6 +223,8 @@
             }
             if ((tgldari != '') && (tglsampai != '')) {
                 $('#gsTrip').prop("checked", false)
+
+                $('#loaderGrid').removeClass('d-none')
                 getTrip(tgldari, tglsampai, supir_id, id)
                     .then((response) => {
 
@@ -243,6 +245,7 @@
                             datatype: "json"
                         }).trigger('reloadGrid');
                     }).catch((error) => {
+                        $('#loaderGrid').addClass('d-none')
                         if (error.status === 422) {
                             $('.is-invalid').removeClass('is-invalid')
                             $('.invalid-feedback').remove()
@@ -255,6 +258,12 @@
                 if (isDeposito == 'YA') {
 
                     getDataPinjaman().then((response) => {
+                        $("#tablePinjaman")[0].p.selectedRowIds = [];
+                        if ($('#crudForm').data('action') == 'add') {
+                            selectedRowId = [];
+                        } else {
+                            selectedRowId = response.selectedId;
+                        }
                         setTimeout(() => {
 
                             $("#tablePinjaman")
@@ -263,7 +272,7 @@
                                     data: response.data,
                                     originalData: response.data,
                                     rowNum: response.data.length,
-                                    selectedRowIds: []
+                                    selectedRowIds: selectedRowId
                                 })
                                 .trigger("reloadGrid");
                         }, 100);
@@ -1103,6 +1112,7 @@
                     if (indexRow > $(this).getDataIDs().length - 1) {
                         indexRow = $(this).getDataIDs().length - 1;
                     }
+                    $('#loaderGrid').addClass('d-none')
                     $('#modalgrid').setSelection($('#modalgrid').getDataIDs()[0])
                     setHighlight($(this))
 
@@ -1138,7 +1148,15 @@
                 disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
                 beforeSearch: function() {
                     abortGridLastRequest($(this))
-
+                    let supir_id = $('#crudForm').find(`[name=supir_id]`).val()
+                    if (supir_id == '') {
+                        supir_id = 0;
+                    }
+                    $('#modalgrid').jqGrid('setGridParam', {
+                        postData: {
+                            supir_id: supir_id
+                        }
+                    })
                     clearGlobalSearch($('#modalgrid'))
                 },
             })

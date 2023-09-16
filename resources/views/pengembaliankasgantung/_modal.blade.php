@@ -378,9 +378,9 @@
     setFormBindKeys(form)
     activeGrid = null
     initLookup()
-    form.find('#btnSubmit').prop('disabled',false)
+    form.find('#btnSubmit').prop('disabled', false)
     if (form.data('action') == "view") {
-      form.find('#btnSubmit').prop('disabled',true)
+      form.find('#btnSubmit').prop('disabled', true)
     }
     initDatepicker()
   })
@@ -399,8 +399,13 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
+    $('#loaderGrid').removeClass('d-none')
     getDataPengembalian(tgldari, tglsampai)
       .then((response) => {
+
+        if ($('#crudForm').data('action') == 'add') {
+          $("#tablePengembalian")[0].p.selectedRowIds = [];
+        }
         selectedId = []
         totalBayar = 0
         $.each(response.data, (index, value) => {
@@ -423,7 +428,14 @@
         }, 100);
       })
       .catch((errors) => {
-        setErrorMessages($('#crudForm'), errors)
+        $('#loaderGrid').addClass('d-none')
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+          setErrorMessages(form, error.responseJSON.errors);
+        } else {
+          showDialog(error.responseJSON)
+        }
       })
   }
 
@@ -566,6 +578,7 @@
         $('.modal-loader').addClass('d-none')
       })
   }
+
   function viewPengembalianKasGantung(userId) {
     let form = $('#crudForm')
 
@@ -810,6 +823,7 @@
               });
           }, 100);
 
+          $('#loaderGrid').addClass('d-none')
           setTotalNominal()
           setTotalSisa()
           setHighlight($(this))
@@ -898,7 +912,7 @@
     if (aksi == 'edit') {
       id = $(`#crudForm`).find(`[name="id"]`).val()
       urlPengembalian = `${apiUrl}pengembaliankasgantungheader/${id}/edit/getpengembalian`
-    } else if ((aksi == 'delete')||(aksi == 'view')) {
+    } else if ((aksi == 'delete') || (aksi == 'view')) {
       urlPengembalian = `${apiUrl}pengembaliankasgantungheader/${id}/delete/getpengembalian`
       attribut = 'disabled'
       forCheckbox = 'disabled'
@@ -1405,7 +1419,7 @@
     })
 
   }
-  
+
   const setTglBukti = function(form) {
     return new Promise((resolve, reject) => {
       let data = [];

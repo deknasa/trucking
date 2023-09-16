@@ -1853,6 +1853,7 @@
           .trigger("reloadGrid");
         getDataHutang(supplier.id).then((response) => {
 
+          $("#tableHutang")[0].p.selectedRowIds = [];
           console.log('before', $("#tableHutang").jqGrid('getGridParam', 'selectedRowIds'))
           setTimeout(() => {
 
@@ -1876,12 +1877,20 @@
         $('#crudForm [name=supplier_id]').first().val('')
         element.val('')
         element.data('currentValue', element.val())
+        $("#tableHutang")[0].p.selectedRowIds = [];
+        $('#tableHutang').jqGrid("clearGridData");
         $('#detailList tbody').html('')
         $('#nominalHutang').html('')
         $('#sisaHutang').html('')
         $('#bayarHutang').html('')
         $('#potonganHutang').html('')
         $('#totalHutang').html('')
+        $('.footrow').find(`td[aria-describedby="tableHutang_sisa"]`).text('')
+        $('.footrow').find(`td[aria-describedby="tableHutang_nominal"]`).text('')
+        $('.footrow').find(`td[aria-describedby="tableHutang_bayar"]`).text('')
+        $('.footrow').find(`td[aria-describedby="tableHutang_potongan"]`).text('')
+        $('.footrow').find(`td[aria-describedby="tableHutang_total"]`).text('')
+
       }
     })
 

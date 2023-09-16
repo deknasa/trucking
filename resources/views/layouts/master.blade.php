@@ -56,8 +56,7 @@
   </div>
 
   <div class="loaderGrid d-none" id="loaderGrid">
-    <img src="{{ asset('libraries/tas-lib/img/loading-red.gif') }}" rel="preload">
-    <span>Loading</span>
+  <span><img src="{{ asset('libraries/tas-lib/img/loading-red.gif') }}" rel="preload">Loading ...</span>
   </div>
 
   <div class="processing-loader d-none" id="processingLoader">

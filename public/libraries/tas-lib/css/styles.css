@@ -122,13 +122,17 @@ html {
 	justify-content: center;
 }
 .loaderGrid img {
-	width: 1.5rem;
+    width: 1.8rem;
     font-size: 14px;
     background-color: #d9edf7;
 }
+
 .loaderGrid span {
     font-size: 14px;
     background-color: #d9edf7;
+    font-family: dejavu;
+    padding: 5px;
+    border: 1px solid #ddd;
 }
 
 .dropzone {
