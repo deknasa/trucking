@@ -454,6 +454,10 @@
     setFormBindKeys(form)
 
     activeGrid = null
+    form.find('#btnSubmit').prop('disabled', false)
+    if (form.data('action') == "view") {
+      form.find('#btnSubmit').prop('disabled', true)
+    }
 
     getMaxLength(form)
     initLookup()
@@ -789,26 +793,7 @@
             sortable: false,
             clear: false,
             stype: 'input',
-            searchable: false,
-            searchoptions: {
-              type: 'checkbox',
-              clearSearch: false,
-              dataInit: function(element) {
-                supirId = $('#crudForm').find(`[name="supir_id"]`).val()
-                let aksi = $('#crudForm').data('action')
-
-                $(element).removeClass('form-control')
-                $(element).parent().addClass('text-center')
-
-                $(element).on('click', function() {
-                  if ($(this).is(':checked')) {
-                    selectAllRowsNonPosting(supirId)
-                  } else {
-                    clearSelectedRowsNonPosting()
-                  }
-                })
-              }
-            },
+            search: false,
             formatter: (value, rowOptions, rowData) => {
               return `<input type="checkbox" name="nonpostId[]" value="${rowData.id_nonposting}" disabled onchange="checkboxHandlerNonPosting(this)">`
             },
@@ -993,7 +978,7 @@
           })
 
 
-          if (form.data('action') === 'delete') {
+          if (form.data('action') == 'delete' || form.data('action') == 'view') {
             form.find('[name]').addClass('disabled')
             initDisabled()
             tablePost(`${pemutihanId}/getDeletePost`)
@@ -1124,7 +1109,7 @@
     if (aksi == 'edit') {
       pemutihanId = $(`#crudForm`).find(`[name="id"]`).val()
       url = `${pemutihanId}/getEditPost`
-    } else if (aksi == 'delete') {
+    } else if (aksi == 'delete' || aksi == 'view') {
       pemutihanId = $(`#crudForm`).find(`[name="id"]`).val()
       url = `${pemutihanId}/getDeletePost`
     } else {
@@ -1201,7 +1186,7 @@
     if (aksi == 'edit') {
       pemutihanId = $(`#crudForm`).find(`[name="id"]`).val()
       urlNon = `${pemutihanId}/getEditNonPost`
-    } else if (aksi == 'delete') {
+    } else if (aksi == 'delete' || aksi == 'view') {
       pemutihanId = $(`#crudForm`).find(`[name="id"]`).val()
       urlNon = `${pemutihanId}/getDeleteNonPost`
     } else {
