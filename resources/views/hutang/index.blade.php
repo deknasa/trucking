@@ -78,6 +78,8 @@
 
   }
 
+  setSpaceBarCheckedHandler()
+
   $(document).ready(function() {
     $("#tabs").tabs()
 
@@ -108,7 +110,7 @@
           tglsampai: $('#tglsampaiheader').val()
         },
         datatype: "json",
-        colModel: [{ 
+        colModel: [{
             label: '',
             name: '',
             width: 30,
@@ -125,7 +127,7 @@
                 $(element).parent().addClass('text-center')
 
                 $(element).on('click', function() {
-                  
+
                   $(element).attr('disabled', true)
                   if ($(this).is(':checked')) {
                     selectAllRows()
@@ -139,8 +141,8 @@
             formatter: (value, rowOptions, rowData) => {
               return `<input type="checkbox" name="hutangId[]" value="${rowData.id}" onchange="checkboxHandler(this)">`
             },
-          },{
-          
+          }, {
+
             label: 'ID',
             name: 'id',
             align: 'right',
@@ -290,6 +292,36 @@
             formatter: currencyFormat,
           },
           {
+            label: 'USER APPROVAL',
+            name: 'userapproval',
+            align: 'left'
+          },
+          {
+            label: 'TGL APPROVAL',
+            name: 'tglapproval',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
+          {
+            label: 'USER BUKA CETAK',
+            name: 'userbukacetak',
+            align: 'left'
+          },
+          {
+            label: 'TGL BUKA CETAK',
+            name: 'tglbukacetak',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
+          {
             label: 'MODIFIEDBY',
             name: 'modifiedby',
             align: 'left'
@@ -377,12 +409,12 @@
 
           $.each(selectedRows, function(key, value) {
 
-          $('#jqGrid tbody tr').each(function(row, tr) {
-            if ($(this).find(`td input:checkbox`).val() == value) {
-              $(this).find(`td input:checkbox`).prop('checked', true)
-              $(this).addClass('bg-light-blue')
-            }
-          })
+            $('#jqGrid tbody tr').each(function(row, tr) {
+              if ($(this).find(`td input:checkbox`).val() == value) {
+                $(this).find(`td input:checkbox`).prop('checked', true)
+                $(this).addClass('bg-light-blue')
+              }
+            })
 
           });
 
@@ -489,7 +521,7 @@
             class: 'btn btn-orange btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              
+
               viewHutangHeader(selectedId)
             }
           },
@@ -561,33 +593,34 @@
       .addClass('btn btn-sm btn-warning')
       .parent().addClass('px-1')
 
-      function permission() {
-    if (!`{{ $myAuth->hasPermission('hutangheader', 'store') }}`) {
-      $('#add').attr('disabled', 'disabled')
-    }
+    function permission() {
+      if (!`{{ $myAuth->hasPermission('hutangheader', 'store') }}`) {
+        $('#add').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('hutangheader', 'show') }}`) {
-      $('#view').attr('disabled', 'disabled')
-    }
-      
-    if (!`{{ $myAuth->hasPermission('hutangheader', 'update') }}`) {
-      $('#edit').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('hutangheader', 'show') }}`) {
+        $('#view').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('hutangheader', 'destroy') }}`) {
-      $('#delete').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('hutangheader', 'update') }}`) {
+        $('#edit').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('hutangheader', 'export') }}`) {
-      $('#export').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('hutangheader', 'destroy') }}`) {
+        $('#delete').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('hutangheader', 'report') }}`) {
-      $('#report').attr('disabled', 'disabled')
+      if (!`{{ $myAuth->hasPermission('hutangheader', 'export') }}`) {
+        $('#export').attr('disabled', 'disabled')
+      }
+
+      if (!`{{ $myAuth->hasPermission('hutangheader', 'report') }}`) {
+        $('#report').attr('disabled', 'disabled')
+      }
+      if (!`{{ $myAuth->hasPermission('hutangheader', 'approval') }}`) {
+        $('#approval').addClass('ui-disabled')
+      }
     }
-    if (!`{{ $myAuth->hasPermission('hutangheader', 'approval') }}`) {
-      $('#approval').addClass('ui-disabled')
-    }}
 
     $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {
@@ -665,6 +698,7 @@
       }
     })
   })
+
   function handleApproval(id) {
     $.ajax({
       url: `${apiUrl}hutangheader/${id}/approval`,

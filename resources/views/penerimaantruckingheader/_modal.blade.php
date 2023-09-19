@@ -2509,7 +2509,6 @@
     $.each(selectedRowsPinjaman, function(index, value) {
       dataPinjaman = $("#tablePinjaman").jqGrid("getLocalRow", value);
       nominals = (dataPinjaman.nominal == undefined || dataPinjaman.nominal == '') ? 0 : dataPinjaman.nominal;
-      console.log('dataPinjaman ', dataPinjaman.nominal)
       getNominal = (isNaN(nominals)) ? parseFloat(nominals.replaceAll(',', '')) : parseFloat(nominals)
       nominal = nominal + getNominal
     })
@@ -2523,7 +2522,6 @@
     $.each(selectedRowsPinjaman, function(index, value) {
       dataPinjaman = $("#tablePinjamanKaryawan").jqGrid("getLocalRow", value);
       nominals = (dataPinjaman.nominal == undefined || dataPinjaman.nominal == '') ? 0 : dataPinjaman.nominal;
-      console.log('dataPinjaman ', dataPinjaman.nominal)
       getNominal = (isNaN(nominals)) ? parseFloat(nominals.replaceAll(',', '')) : parseFloat(nominals)
       nominal = nominal + getNominal
     })

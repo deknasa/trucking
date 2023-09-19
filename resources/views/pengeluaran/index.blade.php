@@ -88,6 +88,7 @@
     }
 
   }
+  setSpaceBarCheckedHandler()
   $(document).ready(function() {
     $("#tabs").tabs()
 

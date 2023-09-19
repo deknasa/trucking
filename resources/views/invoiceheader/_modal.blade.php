@@ -540,6 +540,12 @@
     if ($('#crudForm').find(`[name="agen_id"]`).val() != '' && $('#crudForm').find(`[name="jenisorder_id"]`).val() != '') {
       $('#loaderGrid').removeClass('d-none')
       getDataInvoice(url).then((response) => {
+        $("#tableInvoice")[0].p.selectedRowIds = [];
+        if ($('#crudForm').data('action') == 'add') {
+          selectedRowId = [];
+        } else {
+          selectedRowId = response.selectedId;
+        }
         setTimeout(() => {
 
           $("#tableInvoice")
@@ -548,7 +554,7 @@
               data: response.data,
               originalData: response.data,
               rowNum: response.data.length,
-              selectedRowIds: []
+              selectedRowIds: selectedRowId
             })
             .trigger("reloadGrid");
         }, 100);
@@ -936,6 +942,16 @@
           Authorization: `Bearer ${accessToken}`
         },
         success: (response) => {
+          if (form.data('action') != 'add') {
+            let selectedIdPinj = []
+
+            $.each(response.data, (index, value) => {
+              if (value.idinvoice != null) {
+                selectedIdPinj.push(parseInt(value.id))
+              }
+            })
+            response.selectedId = selectedIdPinj;
+          }
           resolve(response);
         },
         error: error => {
