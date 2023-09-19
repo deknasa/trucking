@@ -59,6 +59,8 @@
   let rowNum = 10
   let hasDetail = false
   let currentTab = 'detail'
+  let tgldariheader
+  let tglsampaiheader
 
   $(document).ready(function() {
     $("#tabs").tabs()
@@ -68,7 +70,13 @@
     loadHistoryGrid(nobukti)
     loadJurnalUmumGrid(nobukti)
 
-    setRange()
+    @isset($request['tgldari'])
+      tgldariheader = `{{ $request['tgldari'] }}`;
+    @endisset
+    @isset($request['tglsampai'])
+      tglsampaiheader = `{{ $request['tglsampai'] }}`;
+    @endisset
+    setRange(false,tgldariheader,tglsampaiheader)
     initDatepicker()
     $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('piutangheader')
@@ -186,7 +194,31 @@
           {
             label: 'NO BUKTI INVOICE',
             name: 'invoice_nobukti',
-            align: 'left'
+            align: 'left',
+            formatter: (value, options, rowData) => {
+              let tgldari
+              let tglsampai
+              let url
+              if ((value == null) ||( value == '')) {
+                return '';
+              }
+              if (rowData.tgldariheaderinvoiceheader) {
+                tgldari = rowData.tgldariheaderinvoiceheader
+                tglsampai = rowData.tglsampaiheaderinvoiceheader
+                url = "{{route('invoiceheader.index')}}"
+              }else if (rowData.tgldariheaderinvoiceextraheader) {
+                tgldari = rowData.tgldariheaderinvoiceextraheader
+                tglsampai = rowData.tglsampaiheaderinvoiceextraheader
+                url = "{{route('invoiceextraheader.index')}}"
+              }
+              let formattedValue
+              if (url) {
+                formattedValue = $(`<a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>`)
+              }else{
+                formattedValue = $(`<span>${value}</span>`)
+              }
+              return formattedValue[0].outerHTML
+            },
           },
           {
             label: 'TGL JATUH TEMPO',

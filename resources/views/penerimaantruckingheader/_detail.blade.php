@@ -28,7 +28,19 @@
           {
             label: 'NO BUKTI PENGELUARAN TRUCKING',
             name: 'pengeluarantruckingheader_nobukti',
-            width: 250
+            width: 250,
+            formatter: (value, options, rowData) => {
+              if ((value == null) ||( value == '')) {
+                return '';
+              }
+              let tgldari = rowData.tgldariheaderpengeluarantruckingheader
+              let tglsampai = rowData.tglsampaiheaderpengeluarantruckingheader
+              let url = "{{route('pengeluarantruckingheader.index')}}"
+              let formattedValue = $(`
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
+             `)
+             return formattedValue[0].outerHTML
+           }
           },
           {
             label: 'KETERANGAN',

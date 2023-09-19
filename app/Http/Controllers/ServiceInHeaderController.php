@@ -19,7 +19,10 @@ class ServiceInHeaderController extends MyController
         $data = [
             'combocetak' => $this->comboCetak('list', 'STATUSCETAK', 'STATUSCETAK'),
         ];
-        return view('serviceinheader.index', compact('title', 'data'));
+        $data = array_merge(compact('title', 'data'),
+            ["request"=>$request->all()]
+        );
+        return view('serviceinheader.index', $data);
     }
 
     public function comboCetak($aksi, $grp, $subgrp)

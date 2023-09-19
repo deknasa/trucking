@@ -18,8 +18,11 @@ class PiutangHeaderController extends MyController
         $data = [
             'statuscetak' => $this->comboapproval('list', 'STATUS CETAK', 'STATUS CETAK'),
         ];
+        $data = array_merge(compact('title', 'data'),
+            ["request"=>$request->all()]
+        );
 
-        return view('piutang.index', compact('title', 'data'));
+        return view('piutang.index', $data);
     }
 
 

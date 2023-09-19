@@ -200,7 +200,17 @@
           {
             label: 'NO BUKTI ABSENSI ',
             name: 'absensisupir_nobukti',
-            align: 'left'
+            align: 'left',
+            formatter: (value, options, rowData) => {
+              if ((value == null) ||( value == '')) {
+                return '';
+              }
+              let tgldari = rowData.tgldariheaderabsensisupirheader
+              let tglsampai = rowData.tglsampaiheaderabsensisupirheader
+              let url = "{{route('absensisupirheader.index')}}"
+              let formattedValue = $(`<a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>`)
+              return formattedValue[0].outerHTML
+            },
           },
           {
             label: 'TRADO',

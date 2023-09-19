@@ -26,8 +26,11 @@ class PemutihanSupirController extends MyController
         $data = [
             'combocetak' => $this->comboCetak('list', 'STATUSCETAK', 'STATUSCETAK'),
         ];
+        $data = array_merge(compact('title', 'data'),
+            ["request"=>$request->all()]
+        );
 
-        return view('pemutihansupir.index', compact('title', 'data'));
+        return view('pemutihansupir.index', $data);
     }
 
     public function comboCetak($aksi, $grp, $subgrp)

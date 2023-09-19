@@ -25,7 +25,10 @@ class KasGantungHeaderController extends MyController
         $data = [
             'combocetak' => $this->comboList('list', 'STATUSCETAK', 'STATUSCETAK'),
         ];
-        return view('kasgantung.index', compact('title', 'data'));
+        $data = array_merge(compact('title', 'data'),
+            ["request"=>$request->all()]
+        );
+        return view('kasgantung.index', $data);
     }
 
     public function get($params = [])

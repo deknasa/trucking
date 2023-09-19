@@ -29,7 +29,10 @@ class PenerimaanHeaderController extends MyController
             'combobank' => $this->comboBank(),
         ];
 
-        return view('penerimaan.index', compact('title', 'data'));
+        $data = array_merge(compact('title', 'data'),
+            ["request"=>$request->all()]
+        );
+        return view('penerimaan.index', $data);
     }
 
     // /**

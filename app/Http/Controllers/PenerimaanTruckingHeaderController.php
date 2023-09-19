@@ -19,8 +19,10 @@ class PenerimaanTruckingHeaderController extends MyController
             'combocetak' => $this->comboList('list', 'STATUSCETAK', 'STATUSCETAK')
         ];
         $comboKodepenerimaan = $this->comboKodepenerimaan();
-
-        return view('penerimaantruckingheader.index', compact('title', 'data', 'comboKodepenerimaan'));
+        $data = array_merge(compact('title', 'data', 'comboKodepenerimaan'),
+        ["request"=>$request->all()]
+    );
+        return view('penerimaantruckingheader.index', $data);
     }
 
     public function get($params = [])

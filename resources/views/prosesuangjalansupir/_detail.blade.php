@@ -39,6 +39,18 @@
             label: 'NO BUKTI PENERIMAAN',
             width: 230,
             name: 'penerimaantrucking_nobukti',
+            formatter: (value, options, rowData) => {
+              if ((value == null) ||( value == '')) {
+                return '';
+              }
+              let tgldari = rowData.tgldariheaderpenerimaantruckingheader
+              let tglsampai = rowData.tglsampaiheaderpenerimaantruckingheader
+              let url = "{{route('penerimaanheader.index')}}"
+              let formattedValue = $(`
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
+             `)
+             return formattedValue[0].outerHTML
+           }
           },
           {
             label: 'TGL PENERIMAAN',
@@ -57,6 +69,18 @@
             label: 'NO BUKTI pengeluaran',
             width: 210,
             name: 'pengeluarantrucking_nobukti',
+            formatter: (value, options, rowData) => {
+              if ((value == null) ||( value == '')) {
+                return '';
+              }
+              let tgldari = rowData.tgldariheaderpengeluarantruckingheader
+              let tglsampai = rowData.tglsampaiheaderpengeluarantruckingheader
+              let url = "{{route('pengeluaranheader.index')}}"
+              let formattedValue = $(`
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
+             `)
+             return formattedValue[0].outerHTML
+           }
           },
           {
             label: 'TGL PENGELUARAN',
@@ -74,6 +98,18 @@
           {
             label: 'NO BUKTI PENGEMBALIAN KAS GANTUNG',
             name: 'pengembaliankasgantung_nobukti',
+            formatter: (value, options, rowData) => {
+              if ((value == null) ||( value == '')) {
+                return '';
+              }
+              let tgldari = rowData.tgldariheaderpengembaliankasgantungheader
+              let tglsampai = rowData.tglsampaiheaderpengembaliankasgantungheader
+              let url = "{{route('pengembaliankasgantungheader.index')}}"
+              let formattedValue = $(`
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
+             `)
+             return formattedValue[0].outerHTML
+           }
           },
           {
             label: 'TGL PENGEMBALIAN KAS GANTUNG',

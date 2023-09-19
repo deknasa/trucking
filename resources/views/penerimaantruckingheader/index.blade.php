@@ -6,8 +6,9 @@
     <select name="penerimaanheader_id" id="penerimaanheader_id" class="form-select select2" style="width: 100%;">
       <option value="">-- PILIH penerimaan trucking --</option>
       @foreach ($comboKodepenerimaan as $kodepenerimaan)
-        <option @if ($kodepenerimaan['id'] == "1") selected @endif value="{{$kodepenerimaan['id']}}"> {{$kodepenerimaan['keterangan']}}  </option>
+        <option value="{{$kodepenerimaan['id']}}"> {{$kodepenerimaan['keterangan']}}  </option>
         {{-- <option @if ($kodepenerimaan['statusdefault_text'] ==="YA") selected @endif value="{{$kodepenerimaan['id']}}"> {{$kodepenerimaan['namakodepenerimaan']}} </option> --}}
+        {{-- @if ($kodepenerimaan['id'] == "1") selected @endif  --}}
       @endforeach
     </select>
   </div>
@@ -76,6 +77,8 @@
   let hasDetail = false
   let activeGrid 
   let currentTab = 'detail'
+  let tgldariheader
+  let tglsampaiheader
 
   $(document).ready(function() {
     $("#tabs").tabs()
@@ -90,7 +93,14 @@
       width: 'resolve',
       theme: "bootstrap4"
     });
-    setRange()
+
+    @isset($request['tgldari'])
+      tgldariheader = `{{ $request['tgldari'] }}`;
+    @endisset
+    @isset($request['tglsampai'])
+      tglsampaiheader = `{{ $request['tglsampai'] }}`;
+    @endisset
+    setRange(false,tgldariheader,tglsampaiheader)
     initDatepicker()
     $(document).on('click','#btnReload', function(event) {
       loadDataHeader('penerimaantruckingheader',{penerimaanheader_id:$('#penerimaanheader_id').val()})
@@ -198,7 +208,19 @@
             label: 'NO BUKTI PENERIMAAN',
             width: 230,
             name: 'penerimaan_nobukti',
-            align: 'left'
+            align: 'left',
+            formatter: (value, options, rowData) => {
+              if ((value == null) ||( value == '')) {
+                return '';
+              }
+              let tgldari = rowData.tgldariheaderpenerimaanheader
+              let tglsampai = rowData.tglsampaiheaderpenerimaanheader
+              let url = "{{route('penerimaanheader.index')}}"
+              let formattedValue = $(`
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
+             `)
+             return formattedValue[0].outerHTML
+           }
           },
           {
             label: 'USER BUKA CETAK',

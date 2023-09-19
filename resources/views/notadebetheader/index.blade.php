@@ -62,6 +62,8 @@
   let autoNumericElements = []
   let selectedRows = [];
   let currentTab = 'detail'
+  let tgldariheader
+  let tglsampaiheader
 
   function checkboxHandler(element) {
     let value = $(element).val();
@@ -88,7 +90,13 @@
     loadPelunasanGrid(nobukti_pelunasan)
     loadJurnalUmumGrid(nobukti_jurnal)
 
-    setRange()
+    @isset($request['tgldari'])
+      tgldariheader = `{{ $request['tgldari'] }}`;
+    @endisset
+    @isset($request['tglsampai'])
+      tglsampaiheader = `{{ $request['tglsampai'] }}`;
+    @endisset
+    setRange(false,tgldariheader,tglsampaiheader)
     initDatepicker()
     $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('notadebetheader')
@@ -275,7 +283,19 @@
             label: 'NO BUKTI PELUNASAN PIUTANG',
             width: 250,
             name: 'pelunasanpiutang_nobukti',
-            align: 'left'
+            align: 'left',
+            formatter: (value, options, rowData) => {
+              if ((value == null) ||( value == '')) {
+                return '';
+              }
+              let tgldari = rowData.tgldariheaderpelunasanpiutangheader
+              let tglsampai = rowData.tglsampaiheaderpelunasanpiutangheader
+              let url = "{{route('pelunasanpiutangheader.index')}}"
+              let formattedValue = $(`
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
+             `)
+             return formattedValue[0].outerHTML
+           }
           },
           {
             label: 'BANK',
@@ -291,6 +311,18 @@
             label: 'NO BUKTI PENERIMAAN',
             name: 'penerimaan_nobukti',
             align: 'left',
+            formatter: (value, options, rowData) => {
+              if ((value == null) ||( value == '')) {
+                return '';
+              }
+              let tgldari = rowData.tgldariheaderpenerimaanheader
+              let tglsampai = rowData.tglsampaiheaderpenerimaanheader
+              let url = "{{route('penerimaanheader.index')}}"
+              let formattedValue = $(`
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
+             `)
+             return formattedValue[0].outerHTML
+           }
           },
           {
             label: 'user approval',

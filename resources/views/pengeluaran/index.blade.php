@@ -70,6 +70,8 @@
   let hasDetail = false
   let currentTab = 'detail'
   let selectedRows = [];
+  let tgldariheader
+  let tglsampaiheader
 
   function checkboxHandler(element) {
     let value = $(element).val();
@@ -98,7 +100,14 @@
       theme: "bootstrap4"
     });
 
-    setRange()
+    @isset($request['tgldari'])
+      tgldariheader = `{{ $request['tgldari'] }}`;
+    @endisset
+    @isset($request['tglsampai'])
+      tglsampaiheader = `{{ $request['tglsampai'] }}`;
+    @endisset
+    
+    setRange(false,tgldariheader,tglsampaiheader)
     initDatepicker()
     $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('pengeluaranheader', {

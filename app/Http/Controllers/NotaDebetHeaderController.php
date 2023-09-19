@@ -11,7 +11,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 class NotaDebetHeaderController extends MyController
 {
     public $title = 'Nota Debet';
-    public function index()
+    public function index(Request $request)
     {
 
         $title = $this->title; 
@@ -19,7 +19,10 @@ class NotaDebetHeaderController extends MyController
             'comboapproval' => $this->comboList('list', 'STATUS APPROVAL', 'STATUS APPROVAL'),
             'combocetak' => $this->comboList('list', 'STATUSCETAK', 'STATUSCETAK'),
         ];
-        return view('notadebetheader.index', compact('title','data'));
+        $data = array_merge(compact('title', 'data'),
+            ["request"=>$request->all()]
+        );
+        return view('notadebetheader.index', $data);
     }
 
     public function comboList($aksi, $grp, $subgrp)

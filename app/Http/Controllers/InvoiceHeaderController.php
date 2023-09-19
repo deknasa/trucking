@@ -20,8 +20,10 @@ class InvoiceHeaderController extends MyController
             'comboapproval' => $this->comboList('list','STATUS APPROVAL','STATUS APPROVAL'),
             'combocetak' => $this->comboList('list','STATUSCETAK','STATUSCETAK'),
         ];
-
-        return view('invoiceheader.index', compact('title', 'data'));
+        $data = array_merge(compact('title', 'data'),
+            ["request"=>$request->all()]
+        );
+        return view('invoiceheader.index', $data);
     }
 
     public function store(Request $request)

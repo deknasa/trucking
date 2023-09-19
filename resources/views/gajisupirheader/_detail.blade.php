@@ -16,9 +16,20 @@
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         idPrefix: 'detail',
-        colModel: [{
+        colModel: [
+          {
             label: 'NO TRIP',
             name: 'suratpengantar_nobukti',
+            formatter: (value, options, rowData) => {
+              if ((value == null) ||( value == '')) {
+                return '';
+              }
+              let tgldari = rowData.tgldariheadersuratpengantar
+              let tglsampai = rowData.tglsampaiheadersuratpengantar
+              let url = "{{route('suratpengantar.index')}}"
+              let formattedValue = $(`<a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>`)
+              return formattedValue[0].outerHTML
+            },
           },
           {
             label: 'TANGGAL BON',
@@ -80,7 +91,17 @@
           {
             label: 'NO BUKTI RITASI',
             name: 'ritasi_nobukti',
-            align: 'left'
+            align: 'left',
+            formatter: (value, options, rowData) => {
+              if ((value == null) ||( value == '')) {
+                return '';
+              }
+              let tgldari = rowData.tgldariheaderritasi
+              let tglsampai = rowData.tglsampaiheaderritasi
+              let url = "{{route('ritasi.index')}}"
+              let formattedValue = $(`<a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>`)
+              return formattedValue[0].outerHTML
+            },
           },
           {
             label: 'UPAH RITASI',

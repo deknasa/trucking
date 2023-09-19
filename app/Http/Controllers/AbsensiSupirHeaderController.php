@@ -22,8 +22,10 @@ class AbsensiSupirHeaderController extends MyController
         $data = [
             'combocetak' => $this->comboCetak('list', 'STATUSCETAK', 'STATUSCETAK'),
         ];
-
-        return view('absensisupir.index', compact('title', 'data'));        
+        $data = array_merge(compact('title', 'data'),
+            ["request"=>$request->all()]
+        );
+        return view('absensisupir.index', $data);        
 
     }
 

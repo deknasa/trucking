@@ -31,7 +31,8 @@
   let activeGrid
   let rowNum = 10
   let selectedRows = [];
-
+  let tgldariheader
+  let tglsampaiheader
 
   function checkboxHandler(element) {
     let value = $(element).val();
@@ -51,7 +52,13 @@
 
   $(document).ready(function() {
 
-    setRange()
+    @isset($request['tgldari'])
+      tgldariheader = `{{ $request['tgldari'] }}`;
+    @endisset
+    @isset($request['tglsampai'])
+      tglsampaiheader = `{{ $request['tglsampai'] }}`;
+    @endisset
+    setRange(false,tgldariheader,tglsampaiheader)
     initDatepicker()
     $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('orderantrucking')

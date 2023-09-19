@@ -16,8 +16,10 @@ class PengeluaranStokHeaderController extends MyController
     {
         $title = $this->title;
         $comboKodepengeluaran = $this->comboKodepengeluaran();
-
-        return view('pengeluaranstokheader.index', compact('title','comboKodepengeluaran'));
+        $data = array_merge(compact('title','comboKodepengeluaran'),
+            ["request"=>$request->all()]
+        );
+        return view('pengeluaranstokheader.index', $data);
     }
 
     public function create()

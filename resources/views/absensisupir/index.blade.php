@@ -58,6 +58,8 @@
   var statusTidakBisaEdit;
   let approveEditRequest = null;
   let showKasgantung = true;
+  let tgldariheader
+  let tglsampaiheader
 
   $(document).ready(function() {
 
@@ -66,7 +68,13 @@
     loadDetailGrid()
     loadKasGantungGrid()
 
-    setRange()
+    @isset($request['tgldari'])
+      tgldariheader = `{{ $request['tgldari'] }}`;
+    @endisset
+    @isset($request['tglsampai'])
+      tglsampaiheader = `{{ $request['tglsampai'] }}`;
+    @endisset
+    setRange(false,tgldariheader,tglsampaiheader)
     initDatepicker()
     $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('absensisupirheader')
@@ -154,7 +162,17 @@
           {
             label: 'NO BUKTI KGT',
             name: 'kasgantung_nobukti',
-            align: 'left'
+            align: 'left',
+            formatter: (value, options, rowData) => {
+              if ((value == null) ||( value == '')) {
+                return '';
+              }
+              let tgldari = rowData.tgldariheaderkasgantungheader
+              let tglsampai = rowData.tglsampaiheaderkasgantungheader
+              let url = "{{route('kasgantungheader.index')}}"
+              let formattedValue = $(`<a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>`)
+              return formattedValue[0].outerHTML
+            },
           },
           {
             label: 'NOMINAL',

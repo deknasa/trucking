@@ -31,8 +31,10 @@ class OrderanTruckingController extends MyController
             'comboapprovaledit' => $this->comboApproval('list', 'STATUS APPROVAL', 'STATUS APPROVAL'),
         ];
 
-        
-        return view('orderantrucking.index', compact('title', 'data'));   
+        $data = array_merge(compact('title', 'data'),
+            ["request"=>$request->all()]
+        );
+        return view('orderantrucking.index', $data);   
     }
 
     /**
