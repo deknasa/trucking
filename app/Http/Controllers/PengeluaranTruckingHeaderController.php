@@ -20,7 +20,10 @@ class PengeluaranTruckingHeaderController extends MyController
             'combocetak' => $this->comboList('list', 'STATUSCETAK', 'STATUSCETAK'),
         ];
         $comboKodepengeluaran  = $this->comboKodepengeluaran();
-        return view('pengeluarantruckingheader.index', compact('title', 'data', 'comboKodepengeluaran'));
+        $data = array_merge(compact('title', 'data', 'comboKodepengeluaran'),
+            ["request"=>$request->all()]
+        );
+        return view('pengeluarantruckingheader.index', $data);
     }
 
     public function get($params = [])

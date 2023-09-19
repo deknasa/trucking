@@ -159,13 +159,37 @@
             label: 'Penerimaan no bukti',
             width: 200,
             name: 'penerimaanstok_nobukti',
-            align: 'left'
+            align: 'left',
+            formatter: (value, options, rowData) => {
+              if ((value == null) ||( value == '')) {
+                return '';
+              }
+              let tgldari = rowData.tgldariheadernobuktipenerimaanstok
+              let tglsampai = rowData.tglsampaiheadernobuktipenerimaanstok
+              let url = "{{route('penerimaanstokheader.index')}}"
+              let formattedValue = $(`
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
+             `)
+             return formattedValue[0].outerHTML
+           }
           },
           {
             label: 'Pengeluaran no bukti',
             width: 200,
             name: 'pengeluaranstok_nobukti',
-            align: 'left'
+            align: 'left',
+            formatter: (value, options, rowData) => {
+              if ((value == null) ||( value == '')) {
+                return '';
+              }
+              let tgldari = rowData.tgldariheaderpengeluaranstok
+              let tglsampai = rowData.tglsampaiheaderpengeluaranstok
+              let url = "{{route('pengeluaranstokheader.index')}}"
+              let formattedValue = $(`
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
+             `)
+             return formattedValue[0].outerHTML
+           }
           },
           {
             label: 'Gudang',
@@ -190,7 +214,19 @@
           {
             label: 'NO BUKTI Hutang',
             name: 'hutang_nobukti',
-            align: 'left'
+            align: 'left',
+            formatter: (value, options, rowData) => {
+              if ((value == null) ||( value == '')) {
+                return '';
+              }
+              let tgldari = rowData.tgldariheaderhutangheader
+              let tglsampai = rowData.tglsampaiheaderhutangheader
+              let url = "{{route('hutangheader.index')}}"
+              let formattedValue = $(`
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
+             `)
+             return formattedValue[0].outerHTML
+           }
           },
           {
             label: 'gudang dari',

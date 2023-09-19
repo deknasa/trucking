@@ -25,7 +25,10 @@ class HutangHeaderController extends MyController
             'combocetak' => $this->comboList('list', 'STATUSCETAK','STATUSCETAK'),
             'comboapproval' => $this->comboList('list', 'STATUS APPROVAL', 'STATUS APPROVAL'),
         ];
-        return view('hutang.index', compact('title','data'));
+        $data = array_merge(compact('title', 'data'),
+            ["request"=>$request->all()]
+        );
+        return view('hutang.index', $data);
     }
 
     public function get($params = [])
