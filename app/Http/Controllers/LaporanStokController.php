@@ -173,7 +173,7 @@ class LaporanStokController extends Controller
         if (is_array($pengeluaran) || is_iterable($pengeluaran)) {
             foreach ($pengeluaran as $response_detail) {
                 if ($no != 1) {
-                    if ($response_detail['nobukti'] == 'Saldo Awal') {
+                    if ($response_detail['baris'] == 1) {
                         $detail_start_row++;
                     }
                 }
