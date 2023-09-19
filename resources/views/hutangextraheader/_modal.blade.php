@@ -56,7 +56,7 @@
                                         <th scope="col" width="55%">Keterangan</th>
                                         <th scope="col" width="18%">Tgl Jatuh Tempo</th>
                                         <th scope="col" width="25%">Total</th>
-                                        <th scope="col" class="tbl_aksi"  width="1%">Aksi</th>
+                                        <th scope="col" class="tbl_aksi" width="1%">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody id="table_body">
@@ -71,7 +71,7 @@
                                         <td>
                                             <h5 id="total" class="text-right font-weight-bold"></h5>
                                         </td>
-                                        <td class="tbl_aksi" >
+                                        <td class="tbl_aksi">
                                             <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
                                         </td>
                                     </tr>
@@ -141,7 +141,7 @@
             }).always(() => {
                 $('#processingLoader').addClass('d-none')
                 $(this).removeAttr('disabled')
-            })  
+            })
         });
 
         $(document).on('change', `#crudForm [name="tglbukti"]`, function() {
@@ -283,9 +283,9 @@
 
         activeGrid = null
 
-        form.find('#btnSubmit').prop('disabled',false)
+        form.find('#btnSubmit').prop('disabled', false)
         if (form.data('action') == "view") {
-          form.find('#btnSubmit').prop('disabled',true)
+            form.find('#btnSubmit').prop('disabled', true)
         }
 
         initLookup()
@@ -397,6 +397,7 @@
                 $('.modal-loader').addClass('d-none')
             })
     }
+
     function viewHutangExtraHeader(id) {
         let form = $('#crudForm')
         $('.modal-loader').removeClass('d-none')
@@ -407,7 +408,7 @@
           <i class="fa fa-save"></i>
           Save
         `)
-        form.find('#btnSubmit').prop('disabled',true)
+        form.find('#btnSubmit').prop('disabled', true)
         form.find(`.sometimes`).hide()
         $('#crudModalTitle').text('View Hutang Extra')
         $('.is-invalid').removeClass('is-invalid')
@@ -421,32 +422,32 @@
                 setFormBindKeys(form)
                 initSelect2(form.find('.select2bs4'), true)
                 form.find('[name]').removeAttr('disabled')
-          
+
                 form.find('select').each((index, select) => {
-                  let element = $(select)
-          
-                  if (element.data('select2')) {
-                    element.select2('destroy')
-                  }
+                    let element = $(select)
+
+                    if (element.data('select2')) {
+                        element.select2('destroy')
+                    }
                 })
-          
+
                 form.find('[name]').attr('disabled', 'disabled').css({
-                  background: '#fff'
+                    background: '#fff'
                 })
-                form.find('[name=id]').prop('disabled',false)
-              })
+                form.find('[name=id]').prop('disabled', false)
+            })
             .then(() => {
                 $('#crudModal').modal('show')
                 form.find(`.hasDatepicker`).prop('readonly', true)
                 form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
-                
+
                 let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
                 let nameFind = $('#crudForm').find(`[name]`).parents('.input-group')
                 name.attr('disabled', true)
                 name.find('.lookup-toggler').remove()
                 nameFind.find('button.button-clear').remove()
                 $('#crudForm').find(`.tbl_aksi`).hide()
-                
+
             })
             .catch((error) => {
                 showDialog(error.statusText)
@@ -596,7 +597,7 @@
         let countRow = $('.delete-row').parents('tr').length
         row.remove()
         if (countRow <= 1) {
-          addRow()
+            addRow()
         }
 
         setRowNumbers()
@@ -734,6 +735,50 @@
                 }
             })
         })
+    }
+
+
+    function approve() {
+
+        event.preventDefault()
+
+        let form = $('#crudForm')
+        $(this).attr('disabled', '')
+        $('#processingLoader').removeClass('d-none')
+
+        $.ajax({
+            url: `${apiUrl}hutangextraheader/approval`,
+            method: 'POST',
+            dataType: 'JSON',
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            },
+            data: {
+                hutangId: selectedRows
+            },
+            success: response => {
+                $('#crudForm').trigger('reset')
+                $('#crudModal').modal('hide')
+
+                $('#jqGrid').jqGrid().trigger('reloadGrid');
+                selectedRows = []
+                $('#gs_').prop('checked', false)
+            },
+            error: error => {
+                if (error.status === 422) {
+                    $('.is-invalid').removeClass('is-invalid')
+                    $('.invalid-feedback').remove()
+
+                    setErrorMessages(form, error.responseJSON.errors);
+                } else {
+                    showDialog(error.responseJSON)
+                }
+            },
+        }).always(() => {
+            $('#processingLoader').addClass('d-none')
+            $(this).removeAttr('disabled')
+        })
+
     }
 </script>
 @endpush()

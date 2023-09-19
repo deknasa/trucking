@@ -80,7 +80,7 @@
     }
 
   }
-
+  setSpaceBarCheckedHandler()
   $(document).ready(function() {
     $("#tabs").tabs()
 
@@ -415,16 +415,21 @@
           setGridLastRequest($(this), jqXHR)
         },
         onSelectRow: function(id) {
-          let nobukti_pelunasan = $('#jqGrid').jqGrid('getCell', id, 'pelunasanpiutang_nobukti')
-          let nobukti_jurnal = $('#jqGrid').jqGrid('getCell', id, 'nobukti')
-          let nobukti_penerimaan = $('#jqGrid').jqGrid('getCell', id, 'penerimaan_nobukti')
+          // let nobukti_pelunasan = $('#jqGrid').jqGrid('getCell', id, 'pelunasanpiutang_nobukti')
+          // let nobukti_jurnal = $('#jqGrid').jqGrid('getCell', id, 'nobukti')
+          // let nobukti_penerimaan = $('#jqGrid').jqGrid('getCell', id, 'penerimaan_nobukti')
+
+          let nobukti_pelunasan = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_pelunasanpiutang_nobukti"]`).attr('title') ?? '';
+          let nobukti_jurnal = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title')
+          let nobukti_penerimaan = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_penerimaan_nobukti"]`).attr('title') ?? '';
 
           activeGrid = $(this)
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
-
+          console.log(nobukti_pelunasan)
+          console.log(nobukti_penerimaan)
           loadDetailData(id)
           loadPelunasanData(id, nobukti_pelunasan)
           if (nobukti_penerimaan == '') {

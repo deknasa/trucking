@@ -108,7 +108,7 @@
   let hasFormBindKeys = false
   let parameterPengeluaran = {};
   let modalBody = $('#crudModal').find('.modal-body').html()
-  let selectedRows = []
+  let selectedRowsId = []
   let selectedNobukti = [];
   let selectedTglBukti = [];
   let selectedKeterangan = [];
@@ -130,7 +130,7 @@
 
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
-        selectedRows = response.data.map((data) => data.id)
+        selectedRowsId = response.data.map((data) => data.id)
         selectedNobukti = response.data.map((data) => data.nobukti_pengeluaran);
         selectedTglBukti = response.data.map((data) => data.tglbukti_pengeluaran);
         selectedKeterangan = response.data.map((data) => data.keterangan_detail);
@@ -516,7 +516,7 @@
           })
           $('#detailList tbody').html('')
           $.each(response.detail, (index, detail) => {
-            selectedRows.push(detail.id)
+            selectedRowsId.push(detail.id)
             selectedNobukti.push(detail.nobukti_pengeluaran)
             selectedTglBukti.push(detail.tglbukti_pengeluaran)
             selectedKeterangan.push(detail.keterangan_detail)
