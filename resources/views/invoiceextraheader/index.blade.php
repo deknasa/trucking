@@ -394,11 +394,10 @@
         },
         onSelectRow: function(id) {
 
-          let nobukti = $('#jqGrid').jqGrid('getCell', id, 'piutang_nobukti_hidden')
+          let nobukti = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_piutang_nobukti"]`).attr('title') ?? ''; 
           // $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/invoiceextradetail/${currentTab}/grid`, function() {
           //   loadGrid(id, nobukti)
           // })
-          loadDetailData(id, nobukti)
           activeGrid = $(this)
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
           page = $(this).jqGrid('getGridParam', 'page')
