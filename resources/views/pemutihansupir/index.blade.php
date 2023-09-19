@@ -165,6 +165,40 @@
             formatter: currencyFormat
           },
           {
+            label: 'NO BUKTI PENERIMAAN TRUCKING POSTING',
+            width: 230,
+            name: 'penerimaantruckingposting_nobukti',
+            formatter: (value, options, rowData) => {
+              if ((value == null) ||( value == '')) {
+                return '';
+              }
+              let tgldari = rowData.tgldariheaderposting
+              let tglsampai = rowData.tglsampaiheaderposting
+              let url = "{{route('penerimaantruckingheader.index')}}"
+              let formattedValue = $(`
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
+             `)
+             return formattedValue[0].outerHTML
+           }
+          },
+          {
+            label: 'NO BUKTI PENERIMAAN TRUCKING NON POSTING',
+            width: 230,
+            name: 'penerimaantruckingnonposting_nobukti',
+            formatter: (value, options, rowData) => {
+              if ((value == null) ||( value == '')) {
+                return '';
+              }
+              let tgldari = rowData.tgldariheadernonposting
+              let tglsampai = rowData.tglsampaiheadernonposting
+              let url = "{{route('penerimaantruckingheader.index')}}"
+              let formattedValue = $(`
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
+             `)
+             return formattedValue[0].outerHTML
+           }
+          },
+          {
             label: 'MODIFIEDBY',
             name: 'modifiedby',
           },
