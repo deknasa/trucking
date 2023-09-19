@@ -230,6 +230,38 @@
                             newformat: "d-m-Y H:i:s"
                         }
                     },
+                    {
+                        label: 'gambar',
+                        name: 'gambar',
+                        align: 'center',
+                        search: false,
+                        formatter: (value, row) => {
+                            let images = []
+                            if (value.length) {
+                                let files = JSON.parse(value)
+
+                                files.forEach(file => {
+                                    if (file == '') {
+                                        file = 'no-image'
+                                    }
+                                    let image = new Image()
+                                    image.width = 25
+                                    image.height = 25
+                                    image.src =
+                                        `${apiUrl}stok/${encodeURI(file)}/small`
+                                    images.push(image.outerHTML)
+                                });
+
+                                return images.join(' ')
+                            } else {
+                                let image = new Image()
+                                image.width = 25
+                                image.height = 25
+                                image.src = `${apiUrl}stok/no-image/small`
+                                return image.outerHTML
+                            }
+                        }
+                    },
 
                 ],
 
