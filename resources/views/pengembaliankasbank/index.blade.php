@@ -371,7 +371,7 @@
           setGridLastRequest($(this), jqXHR)
         },
         onSelectRow: function(id) {
-          let nobukti = $('#jqGrid').jqGrid('getCell', id, 'pengeluaran_nobukti')
+          let nobukti = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_pengeluaran_nobukti"]`).attr('title') ?? '';
           $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/pengembaliankasbankdetail/${currentTab}/grid`, function() {
             loadGrid(id,nobukti)
           })

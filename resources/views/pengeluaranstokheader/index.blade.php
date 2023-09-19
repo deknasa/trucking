@@ -352,11 +352,11 @@
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
           
-          let pengeluaranstok = $('#jqGrid').jqGrid('getCell', id, 'pengeluaranstok')
-          let nobukti = $('#jqGrid').jqGrid('getCell', id, 'nobukti')
-          let statuspotong = $('#jqGrid').jqGrid('getCell', id, 'statuspotongretur');
-          let penerimaan = $('#jqGrid').jqGrid('getCell', id, 'penerimaan_nobukti')
-          let hutangbayar = $('#jqGrid').jqGrid('getCell', id, 'hutangbayar_nobukti')
+          let pengeluaranstok = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_pengeluaranstok"]`).attr('title') ?? '';
+          let nobukti = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title') ?? '';
+          let statuspotong = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_statuspotongretur"]`).attr('title') ?? '';
+          let penerimaan = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_penerimaan_nobukti"]`).attr('title') ?? '';
+          let hutangbayar = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_hutangbayar_nobukti"]`).attr('title') ?? '';
           let pengeluaran = false;
           if (pengeluaranstok =="PJA") {
             nobukti = $('#jqGrid').jqGrid('getCell', id, 'jqGrid_hutangbayar_nobukti')

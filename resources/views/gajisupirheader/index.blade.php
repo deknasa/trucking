@@ -336,7 +336,7 @@
           setGridLastRequest($(this), jqXHR)
         },
         onSelectRow: function(id) {
-          let nobukti = $('#jqGrid').jqGrid('getCell', id, 'nobukti')
+          let nobukti = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title') ?? '';
           loadDetailData(id)
           loadPotSemuaIndexData(nobukti)
           loadPotPribadiIndexData(nobukti)

@@ -394,8 +394,8 @@
           setGridLastRequest($(this), jqXHR)
         },
         onSelectRow: function(id) {
-          let pengeluaran_nobukti = $('#jqGrid').jqGrid('getCell', id, 'pengeluaran_nobukti')
-          nobukti = $('#jqGrid').jqGrid('getCell', id, 'nobukti')
+          let pengeluaran_nobukti = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_pengeluaran_nobukti"]`).attr('title') ?? '';
+          nobukti = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title') ?? '';
 
           activeGrid = $(this)
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1

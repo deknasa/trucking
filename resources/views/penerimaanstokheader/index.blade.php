@@ -299,10 +299,10 @@
           setGridLastRequest($(this), jqXHR)
         },
         onSelectRow: function(id) {
-          let penerimaanstok = $('#jqGrid').jqGrid('getCell', id, 'penerimaanstok')
-          let nobukti = $('#jqGrid').jqGrid('getCell', id, 'nobukti')
+          let penerimaanstok = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_penerimaanstok"]`).attr('title') ?? '';
+          let nobukti = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title') ?? '';
           if (penerimaanstok =="SPB" || penerimaanstok =="SPBS") {
-            nobukti = $('#jqGrid').jqGrid('getCell', id, 'hutang_nobukti')
+            nobukti = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_hutang_nobukti"]`).attr('title') ?? '';
           }
 
           activeGrid = $(this)
