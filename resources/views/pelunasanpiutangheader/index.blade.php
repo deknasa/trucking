@@ -343,9 +343,9 @@
           setGridLastRequest($(this), jqXHR)
         },
         onSelectRow: function(id) {
-          let nobukti = $('#jqGrid').jqGrid('getCell', id, 'penerimaan_nobuktihidden')
+          let nobukti = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_penerimaan_nobuktihidden"]`).attr('title') ?? '';
           if (nobukti == '-') {
-            nobukti = $('#jqGrid').jqGrid('getCell', id, 'penerimaangiro_nobuktihidden')
+            nobukti = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_penerimaangiro_nobuktihidden"]`).attr('title') ?? '';
           }
           activeGrid = $(this)
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
