@@ -168,8 +168,14 @@ class LaporanKartuHutangPerSupplierController extends MyController
         $totalKredit = 0;
         $totalSaldo = 0;
         $no = 1;
+        $supplier='';
         if (is_array($pengeluaran) || is_iterable($pengeluaran)) {
             foreach ($pengeluaran as $response_index => $response_detail) {
+                if ($no != 1) {
+                    if ($response_detail['namasupplier'] != $supplier) {
+                        $detail_start_row++;
+                    }
+                }
 
                 foreach ($header_columns as $detail_columns_index => $detail_column) {
                     $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
@@ -198,6 +204,7 @@ class LaporanKartuHutangPerSupplierController extends MyController
                 //     $totalSaldo += $response_detail['Saldo'];
                 $detail_start_row++;
                 $no++;
+                $supplier=$response_detail['namasupplier'];
             }
         }
 
