@@ -365,9 +365,9 @@ select[readonly].select2-hidden-accessible + .select2-container {
 }	
 
 .link-color{
-	color: #e22b0b !important;
-	/* color: #007bff; */
-	text-decoration: none;
+	/* color: #e22b0b !important; */
+	color: #007bff;
+	text-decoration: underline;
 	background-color: rgba(0,0,0,0);
 }	
 /* .scrollable-meddnu {
