@@ -395,10 +395,10 @@
         onSelectRow: function(id) {
 
           let nobukti = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_piutang_nobukti"]`).attr('title') ?? '';
+
           // $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/invoicedetail/${currentTab}/grid`, function() {
           //   loadGrid(id, nobukti)
           // })
-          loadDetailData(id, nobukti)
           activeGrid = $(this)
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
           page = $(this).jqGrid('getGridParam', 'page')
