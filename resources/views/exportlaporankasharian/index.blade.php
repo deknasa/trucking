@@ -105,7 +105,7 @@
         let bank_id = $('#crudForm').find('[name=bank_id]').val()
         let bank = $('#crudForm').find('[name=bank]').val()
         getCekExport().then((response) => {
-            window.open(` {{ route('laporankasharian.export') }}?periode=${periode}&&bank_id=${bank_id}&&bank=${bank}`)
+            window.open(` {{ route('exportlaporankasharian.export') }}?periode=${periode}&bank_id=${bank_id}&bank=${bank}`)
         }).catch((error) => {
             if (error.status === 422) {
                 $('.is-invalid').removeClass('is-invalid')
