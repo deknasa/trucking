@@ -104,6 +104,9 @@
 
 
         getCekReport().then((response) => {
+            // $.ajax({
+            //     url: `{{ route('laporanneraca.report') }}?sampai=${sampai}`,
+            // });
             window.open(`{{ route('laporanneraca.report') }}?sampai=${sampai}`)
         }).catch((error) => {
             if (error.status === 422) {

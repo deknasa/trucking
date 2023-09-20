@@ -56,7 +56,7 @@
   </div>
 
   <div class="loaderGrid d-none" id="loaderGrid">
-  <span><img src="{{ asset('libraries/tas-lib/img/loading-red.gif') }}" rel="preload">Loading ...</span>
+    <span><img src="{{ asset('libraries/tas-lib/img/loading-red.gif') }}" rel="preload">Loading ...</span>
   </div>
 
   <div class="processing-loader d-none" id="processingLoader">
@@ -323,6 +323,9 @@
   <script src="{{ asset('libraries/tas-lib/js/mains.js?version='. config('app.version')) }}"></script>
   <script src="{{ asset('libraries/tas-lib/js/app.js?version='. config('app.version')) }}"></script>
 
+  <!-- Pusher -->
+
+  <script src="https://js.pusher.com/3.1/pusher.min.js"></script>
 
   <!-- Custom page script -->
   @stack('scripts')
@@ -346,7 +349,8 @@
     let apiTruckingMksUrl = `{{ config('app.trucking_api_mks_url') }}`
     let apiTruckingSbyUrl = `{{ config('app.trucking_api_sby_url') }}`
     let apiTruckingBtgUrl = `{{ config('app.trucking_api_btg_url') }}`
-    var pleaseSelectARow; 
+    var pleaseSelectARow;
+
     function separatorNumber(object) {
       var value = parseInt(object.value.replaceAll('.', '').replaceAll(',', ''));
 
@@ -358,6 +362,21 @@
 
       return true;
     }
+
+    // var pusher = new Pusher('05155f3ff434cbf8e5f9', {
+    //   cluster: 'ap1',
+    //   encrypted: false
+    // });
+
+    // var channel = pusher.subscribe('data-channel');
+    // channel.bind('App\\Events\\LaporanNeracaEventPusher', function(response) {
+    //   console.log("asdf");
+    //   var message = JSON.parse(response.message);
+    //   console.log("Baca Berhasil diproses");
+    //   if (message.id == <?= auth()->user()->id ?>) {
+    //     alert("Laporan Neraca Sudah Berhasil Proses");
+    //   }
+    // });
 
     $(".formatdate").datepicker({
         dateFormat: 'dd-mm-yy',
@@ -397,29 +416,29 @@
           }
         })
 
-        $.ajax({
-          url: `${apiUrl}error/geterrors`,
-          method: 'GET',
-          dataType: 'JSON',
-          headers: {
-            Authorization: `Bearer ${accessToken}`
-          },
-          data: {
-            kodeerror:"PSB"
-          },
-          success: response => {
-            // console.log(response.keterangan);
-            pleaseSelectARow = response.keterangan;
-          },
-          error: error => {
-            if (error.status === 422) {
-              $('.is-invalid').removeClass('is-invalid')
-              $('.invalid-feedback').remove()
+      $.ajax({
+        url: `${apiUrl}error/geterrors`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          kodeerror: "PSB"
+        },
+        success: response => {
+          // console.log(response.keterangan);
+          pleaseSelectARow = response.keterangan;
+        },
+        error: error => {
+          if (error.status === 422) {
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
 
-              setErrorMessages(form, error.responseJSON.errors);
-            }
+            setErrorMessages(form, error.responseJSON.errors);
           }
-        })
+        }
+      })
     })
 
     $(document).on('collapsed.lte.pushmenu', () => {
@@ -458,16 +477,16 @@
 
 
 
-    function setRange(isToday = false,firstDayParam = null,lastDayParam = null) {
+    function setRange(isToday = false, firstDayParam = null, lastDayParam = null) {
       // mendapatkan tanggal hari ini
       let today = new Date();
       let formattedLastDay;
-      let firstDay  
+      let firstDay
       let lastDay
 
       if (firstDayParam) {
         firstDay = new Date(firstDayParam);
-      }else{
+      } else {
         // mendapatkan tanggal pertama di bulan ini
         firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
       }
@@ -476,15 +495,15 @@
 
       if (lastDayParam) {
         lastDay = new Date(lastDayParam);
-      }else if (isToday) {
+      } else if (isToday) {
         lastDay = new Date()
         // formattedLastDay=$.datepicker.formatDate('dd-mm-yy', )
-      }else{
+      } else {
         // mendapatkan tanggal terakhir di bulan ini
         lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
       }
       formattedLastDay = $.datepicker.formatDate('dd-mm-yy', lastDay);
-      
+
 
       $('#rangeHeader').find('[name=tgldariheader]').val(formattedFirstDay).trigger('change');
       $('#rangeHeader').find('[name=tglsampaiheader]').val(formattedLastDay).trigger('change');
@@ -518,7 +537,7 @@
         }).trigger('reloadGrid')
       }).catch((error) => {
         clearGlobalSearch($('#jqGrid'))
-        
+
         if (error.status === 422) {
           $('.is-invalid').removeClass('is-invalid')
           $('.invalid-feedback').remove()
@@ -527,11 +546,11 @@
           $.each(errors, (index, error) => {
             let indexes = index.split(".");
             let element;
-            if(indexes[0] == 'tgldari' || indexes[0] == 'tglsampai'){
-            element = $('#rangeHeader').find(`[name="${indexes[0]}header"]`)[0];
-          }else{            
-            element = $('#rangeHeader').find(`[name="${indexes[0]}"]`)[0];
-          }
+            if (indexes[0] == 'tgldari' || indexes[0] == 'tglsampai') {
+              element = $('#rangeHeader').find(`[name="${indexes[0]}header"]`)[0];
+            } else {
+              element = $('#rangeHeader').find(`[name="${indexes[0]}"]`)[0];
+            }
 
             $(element).addClass("is-invalid");
             $(`
