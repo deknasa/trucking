@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "c7d58b80971a178cffabfe28a915122d",
+  "ReportGuid": "a619b7258ba0697aac1b90f3430c9971",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanNeraca.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1688369895000+0700)/",
+  "ReportChanged": "/Date(1695199622000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -117,7 +117,25 @@
             "Name": "pTglSd",
             "NameInSource": "pTglSd",
             "Alias": "pTglSd",
-            "Type": "System.DateTime"
+            "Type": "System.String"
+          },
+          "15": {
+            "Name": "coabanding",
+            "NameInSource": "coabanding",
+            "Alias": "coabanding",
+            "Type": "System.String"
+          },
+          "16": {
+            "Name": "nominalbanding",
+            "NameInSource": "nominalbanding",
+            "Alias": "nominalbanding",
+            "Type": "System.String"
+          },
+          "17": {
+            "Name": "selisih",
+            "NameInSource": "selisih",
+            "Alias": "selisih",
+            "Type": "System.String"
           }
         },
         "NameInSource": "Data.data"
@@ -184,12 +202,18 @@
             "Type": "System.DateTime"
           },
           "5": {
+            "Name": "info",
+            "NameInSource": "info",
+            "Alias": "info",
+            "Type": "System.String"
+          },
+          "6": {
             "Name": "pivot",
             "NameInSource": "pivot",
             "Alias": "pivot",
             "Type": "System.String"
           },
-          "6": {
+          "7": {
             "Name": "relationId",
             "NameInSource": "relationId",
             "Alias": "relationId",
@@ -252,24 +276,36 @@
             "Type": "System.String"
           },
           "8": {
+            "Name": "email",
+            "NameInSource": "email",
+            "Alias": "email",
+            "Type": "System.String"
+          },
+          "9": {
             "Name": "modifiedby",
             "NameInSource": "modifiedby",
             "Alias": "modifiedby",
             "Type": "System.String"
           },
-          "9": {
+          "10": {
             "Name": "created_at",
             "NameInSource": "created_at",
             "Alias": "created_at",
             "Type": "System.DateTime"
           },
-          "10": {
+          "11": {
             "Name": "updated_at",
             "NameInSource": "updated_at",
             "Alias": "updated_at",
             "Type": "System.DateTime"
           },
-          "11": {
+          "12": {
+            "Name": "info",
+            "NameInSource": "info",
+            "Alias": "info",
+            "Type": "System.String"
+          },
+          "13": {
             "Name": "roles",
             "NameInSource": "roles",
             "Alias": "roles",
@@ -781,7 +817,7 @@
               "Ident": "StiText",
               "Name": "Text4",
               "GrowToHeight": true,
-              "ClientRectangle": "10.44,0.04,5.11,0.58",
+              "ClientRectangle": "10.44,0.04,4.71,0.58",
               "ComponentPlacement": "d.DataBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -801,6 +837,81 @@
                 "GroupSeparator": ".",
                 "State": "DecimalSeparator, GroupSeparator"
               }
+            },
+            "2": {
+              "Ident": "StiText",
+              "Name": "Text10",
+              "Guid": "bbd63146de68b0c388581bb2dfa4c9a1",
+              "GrowToHeight": true,
+              "ClientRectangle": "15.24,0.04,0.51,0.58",
+              "ComponentPlacement": "d.DataBand1",
+              "Conditions": {
+                "0": {
+                  "Ident": "StiCondition",
+                  "Column": "data.selisih",
+                  "Value1": "0",
+                  "Enabled": false,
+                  "TextColor": "255,255,255",
+                  "BorderSides": "None"
+                }
+              },
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "X"
+              },
+              "HorAlignment": "Right",
+              "Font": ";10;Bold;",
+              "Border": ";;;;;;;solid:0,0,0",
+              "Brush": "solid:",
+              "TextBrush": "solid:0,0,0",
+              "TextFormat": {
+                "Ident": "StiNumberFormatService",
+                "NegativePattern": 1,
+                "DecimalSeparator": ",",
+                "GroupSeparator": ".",
+                "State": "DecimalSeparator, GroupSeparator"
+              },
+              "Type": "Expression"
+            },
+            "3": {
+              "Ident": "StiText",
+              "Name": "Text12",
+              "Guid": "41a4539c2826792ab7677d737f5b4709",
+              "GrowToHeight": true,
+              "ClientRectangle": "15.82,0.04,3.51,0.58",
+              "ComponentPlacement": "d.DataBand1",
+              "Conditions": {
+                "0": {
+                  "Ident": "StiCondition",
+                  "DataType": "Numeric",
+                  "Column": "data.selisih",
+                  "Value1": "0",
+                  "Enabled": false,
+                  "TextColor": "255,255,255",
+                  "BorderSides": "None"
+                }
+              },
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "{data.nominalbanding}"
+              },
+              "HorAlignment": "Right",
+              "Font": ";9;Bold;",
+              "Border": ";;;;;;;solid:0,0,0",
+              "Brush": "solid:",
+              "TextBrush": "solid:0,0,0",
+              "TextFormat": {
+                "Ident": "StiNumberFormatService",
+                "NegativePattern": 1,
+                "DecimalSeparator": ",",
+                "GroupSeparator": ".",
+                "State": "DecimalSeparator, GroupSeparator"
+              },
+              "Type": "DataColumn"
             }
           },
           "DataSourceName": "data"
