@@ -108,6 +108,10 @@ class LaporanKasBankController extends MyController
 
         $detail_columns = [
             [
+                'label' => 'Tgl Bukti',
+                'index' => 'tglbukti',
+            ],
+            [
                 'label' => 'No Bukti',
                 'index' => 'nobukti',
             ],
@@ -137,7 +141,7 @@ class LaporanKasBankController extends MyController
         foreach ($detail_columns as $detail_columns_index => $detail_column) {
             $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_table_header_row, $detail_column['label'] ?? $detail_columns_index + 1);
         }
-        $sheet->getStyle("A$detail_table_header_row:F$detail_table_header_row")->applyFromArray($styleArray)->getFont()->setBold(true);
+        $sheet->getStyle("A$detail_table_header_row:G$detail_table_header_row")->applyFromArray($styleArray)->getFont()->setBold(true);
 
         // LOOPING DETAIL
         $dataRow = $detail_table_header_row + 2;
@@ -149,48 +153,50 @@ class LaporanKasBankController extends MyController
                 $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
             }
 
-            $sheet->setCellValue("A$detail_start_row", $response_detail['nobukti']);
-            $sheet->setCellValue("B$detail_start_row", $response_detail['keterangancoa']);
-            $sheet->setCellValue("C$detail_start_row", $response_detail['keterangan']);
-            $sheet->setCellValue("D$detail_start_row", $response_detail['debet']);
-            $sheet->setCellValue("E$detail_start_row", $response_detail['kredit']);
+            $sheet->setCellValue("A$detail_start_row", ($response_detail['tglbukti'] != null) ? date('d-m-Y', strtotime($response_detail['tglbukti'])) : '');
+            $sheet->setCellValue("B$detail_start_row", $response_detail['nobukti']);
+            $sheet->setCellValue("C$detail_start_row", $response_detail['keterangancoa']);
+            $sheet->setCellValue("D$detail_start_row", $response_detail['keterangan']);
+            $sheet->setCellValue("E$detail_start_row", $response_detail['debet']);
+            $sheet->setCellValue("F$detail_start_row", $response_detail['kredit']);
 
             if ($response_detail['nobukti'] == '') {
-                $sheet->setCellValue('F' . $dataRow, $response_detail['saldo']);
+                $sheet->setCellValue('G' . $dataRow, $response_detail['saldo']);
             } else {
                 if ($dataRow > $detail_table_header_row + 1) {
-                    $sheet->setCellValue('F' . $dataRow, '=(F' . $previousRow . '+D' . $dataRow . ')-E' . $dataRow);
+                    $sheet->setCellValue('G' . $dataRow, '=(G' . $previousRow . '+E' . $dataRow . ')-F' . $dataRow);
                 }
             }
 
-            $sheet->getStyle("A$detail_start_row:F$detail_start_row")->applyFromArray($styleArray);
-            $sheet->getStyle("D$detail_start_row:F$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
+            $sheet->getStyle("A$detail_start_row:G$detail_start_row")->applyFromArray($styleArray);
+            $sheet->getStyle("E$detail_start_row:G$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
 
-            $sheet->getStyle("C$detail_start_row")->getAlignment()->setWrapText(true);
-            $sheet->getColumnDimension('C')->setWidth(150);
+            $sheet->getStyle("D$detail_start_row")->getAlignment()->setWrapText(true);
+            $sheet->getColumnDimension('D')->setWidth(150);
             $previousRow = $dataRow; // Update the previous row number
 
             $dataRow++;
             $detail_start_row++;
         }
 
-        $sheet->mergeCells('A' . $detail_start_row . ':C' . $detail_start_row);
-        $sheet->setCellValue("A$detail_start_row", 'Total')->getStyle('A' . $detail_start_row . ':C' . $detail_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
+        $sheet->mergeCells('A' . $detail_start_row . ':D' . $detail_start_row);
+        $sheet->setCellValue("A$detail_start_row", 'Total')->getStyle('A' . $detail_start_row . ':D' . $detail_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
 
-        $sheet->setCellValue("D$detail_start_row", "=SUM(D8:D" . ($dataRow - 1) . ")")->getStyle("D$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->setCellValue("E$detail_start_row", "=SUM(E8:E" . ($dataRow - 1) . ")")->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
 
-        $sheet->setCellValue("E$detail_start_row",  "=SUM(E8:E" . ($dataRow - 1) . ")")->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
-        $sheet->setCellValue("F$detail_start_row",  "=F".($dataRow-1))->getStyle("F$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->setCellValue("F$detail_start_row",  "=SUM(F8:F" . ($dataRow - 1) . ")")->getStyle("F$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->setCellValue("G$detail_start_row",  "=G".($dataRow-1))->getStyle("G$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
 
-        $sheet->getStyle("D$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
         $sheet->getStyle("E$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
         $sheet->getStyle("F$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+        $sheet->getStyle("G$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
 
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);
-        $sheet->getColumnDimension('D')->setAutoSize(true);
+        $sheet->getColumnDimension('C')->setAutoSize(true);
         $sheet->getColumnDimension('E')->setAutoSize(true);
         $sheet->getColumnDimension('F')->setAutoSize(true);
+        $sheet->getColumnDimension('G')->setAutoSize(true);
 
         $writer = new Xlsx($spreadsheet);
         $filename = 'Laporan Kas/Bank' . date('dmYHis');

@@ -373,7 +373,7 @@
       .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    if (!`{{ $myAuth->hasPermission('mandor', 'store') }}`) {
+    if (!`{{ $myAuth->hasPermission('mandorabsensisupir', 'store') }}`) {
       $('#absen').attr('disabled', 'disabled')
     }
 
