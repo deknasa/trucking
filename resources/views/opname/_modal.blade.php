@@ -169,6 +169,7 @@
           sortIndex: $('#jqGrid').getGridParam().sortname,
           sortOrder: $('#jqGrid').getGridParam().sortorder,
           filters: $('#jqGrid').getGridParam('postData').filters,
+          info: info,
           indexRow: indexRow,
           page: page,
           limit: limit,

@@ -91,6 +91,10 @@
         value: indexRow
       })
       data.push({
+        name: 'info',
+        value: info
+      })
+      data.push({
         name: 'page',
         value: page
       })
