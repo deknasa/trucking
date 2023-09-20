@@ -148,7 +148,8 @@
                 data: {
                     tableId: selectedRows,
                     periode: $('#crudForm').find('[name=periode]').val(),
-                    table: $('#crudForm').find('[name=table]').val()
+                    table: $('#crudForm').find('[name=table]').val(),
+                    info : info
                 },
                 success: response => {
                     $('.is-invalid').removeClass('is-invalid')

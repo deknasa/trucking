@@ -130,6 +130,10 @@
         value: $('#jqGrid').getGridParam('postData').filters
       })
       data.push({
+        name: 'info',
+        value: info
+      })
+      data.push({
         name: 'indexRow',
         value: indexRow
       })

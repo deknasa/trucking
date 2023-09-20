@@ -183,6 +183,10 @@
                 value: $('#jqGrid').getGridParam().sortname
             })
             data.push({
+                name: 'info',
+                value: info
+            })
+            data.push({
                 name: 'sortOrder',
                 value: $('#jqGrid').getGridParam().sortorder
             })

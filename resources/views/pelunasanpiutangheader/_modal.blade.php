@@ -453,7 +453,10 @@
           value: dataPelunasan.id
         })
       });
-
+      data.push({
+        name: 'info',
+        value: info
+      })
       data.push({
         name: 'sortIndex',
         value: $('#jqGrid').getGridParam().sortname

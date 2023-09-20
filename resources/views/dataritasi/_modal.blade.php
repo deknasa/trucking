@@ -107,6 +107,10 @@
         value: $('#jqGrid').getGridParam().sortorder
       })
       data.push({
+        name: 'info',
+        value: info
+      })
+      data.push({
         name: 'filters',
         value: $('#jqGrid').getGridParam('postData').filters
       })

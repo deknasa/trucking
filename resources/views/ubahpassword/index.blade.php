@@ -52,7 +52,10 @@
             let Id = form.find('[name=id]').val()
             let action = form.data('action')
             let data = $('#crudForm').serializeArray()
-
+            data.push({
+                name: 'info',
+                value: info
+            })
             method = 'POST'
             url = `${apiUrl}ubahpassword`
 
