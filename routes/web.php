@@ -252,6 +252,7 @@ use App\Http\Controllers\LaporanHistoryDepositoController;
 use App\Http\Controllers\LaporanPinjamanPerUnitTradoController;
 use App\Http\Controllers\LogAbsensiController;
 use App\Http\Controllers\OpnameHeaderController;
+use App\Http\Controllers\PelunasanHutangHeaderController;
 use App\Http\Controllers\ReminderOliController;
 use App\Http\Controllers\ReminderSpkController;
 use App\Http\Controllers\ReminderStokController;
@@ -297,10 +298,10 @@ Route::get('reset-password/expired', [ResetPasswordController::class, 'expired']
 Route::get('reset-password/success', [ResetPasswordController::class, 'success'])->name('reset-password.success');
 
 
-  Route::get('reset-password/{token}', [ResetPasswordController::class, 'index'])->name('reset-password.index')->middleware('jwt');
+Route::get('reset-password/{token}', [ResetPasswordController::class, 'index'])->name('reset-password.index')->middleware('jwt');
 
 
-Route::middleware(['auth','authorized'])->group(function () {
+Route::middleware(['auth', 'authorized'])->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('/');
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
@@ -413,28 +414,28 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('absensisupir_detail/kasgantung/grid', [AbsensiSupirDetailController::class, 'kasgantungGrid']);
     Route::get('absensisupir_detail/detail/grid', [AbsensiSupirDetailController::class, 'detailGrid']);
     Route::resource('absensisupir_detail', AbsensiSupirDetailController::class);
-    
-    Route::get('approvalsupirgambar/index', [ApprovalSupirGambarController::class,'index']);
+
+    Route::get('approvalsupirgambar/index', [ApprovalSupirGambarController::class, 'index']);
     Route::resource('approvalsupirgambar', ApprovalSupirGambarController::class);
 
-    Route::get('approvalsupirketerangan/index', [ApprovalSupirKeteranganController::class,'index']);
+    Route::get('approvalsupirketerangan/index', [ApprovalSupirKeteranganController::class, 'index']);
     Route::resource('approvalsupirketerangan', ApprovalSupirKeteranganController::class);
 
-    Route::get('blacklistsupir/index', [BlackListSupirController::class,'index']);
+    Route::get('blacklistsupir/index', [BlackListSupirController::class, 'index']);
     Route::resource('blacklistsupir', BlackListSupirController::class);
-    
-    Route::get('tradosupirmilikmandor/index', [TradoSupirMilikMandorController::class,'index']);
+
+    Route::get('tradosupirmilikmandor/index', [TradoSupirMilikMandorController::class, 'index']);
     Route::resource('tradosupirmilikmandor', TradoSupirMilikMandorController::class);
-    
-    Route::get('bukaabsensi/index', [BukaAbsensiController::class,'index']);
+
+    Route::get('bukaabsensi/index', [BukaAbsensiController::class, 'index']);
     Route::resource('bukaabsensi', BukaAbsensiController::class);
-    
-    Route::get('bukapenerimaanstok/index', [BukaPenerimaanStokController::class,'index']);
+
+    Route::get('bukapenerimaanstok/index', [BukaPenerimaanStokController::class, 'index']);
     Route::resource('bukapenerimaanstok', BukaPenerimaanStokController::class);
-    Route::get('bukapengeluaranstok/index', [BukaPengeluaranStokController::class,'index']);
+    Route::get('bukapengeluaranstok/index', [BukaPengeluaranStokController::class, 'index']);
     Route::resource('bukapengeluaranstok', BukaPengeluaranStokController::class);
 
-    Route::get('suratpengantarapprovalinputtrip/index', [SuratPengantarApprovalInputTripController::class,'index']);
+    Route::get('suratpengantarapprovalinputtrip/index', [SuratPengantarApprovalInputTripController::class, 'index']);
     Route::resource('suratpengantarapprovalinputtrip', SuratPengantarApprovalInputTripController::class);
 
     Route::get('absensisupirapprovalheader/{id}/delete', [AbsensiSupirApprovalHeaderController::class, 'delete'])->name('absensisupirapprovalheader.delete');
@@ -443,7 +444,7 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('absensisupirapprovalheader/export', [AbsensiSupirApprovalHeaderController::class, 'export'])->name('absensisupirapprovalheader.export');
     Route::get('absensisupirapprovalheader/report/{id}', [AbsensiSupirApprovalHeaderController::class, 'report'])->name('absensisupirapprovalheader.report');
     Route::resource('absensisupirapprovalheader', AbsensiSupirApprovalHeaderController::class);
-    
+
     Route::get('absensisupirapprovaldetail/jurnal/grid', [AbsensiSupirApprovalDetailController::class, 'jurnalGrid']);
     Route::get('absensisupirapprovaldetail/pengeluaran/grid', [AbsensiSupirApprovalDetailController::class, 'pengeluaranGrid']);
     Route::get('absensisupirapprovaldetail/detail/grid', [AbsensiSupirApprovalDetailController::class, 'detailGrid']);
@@ -452,12 +453,12 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('mandorabsensisupir/index', [MandorAbsensiSupirController::class, 'index']);
     Route::resource('mandorabsensisupir', MandorAbsensiSupirController::class);
 
-    Route::get('historytrip/index', [HistoryTripController::class,'index']);
-    Route::get('listtrip/index', [ListTripController::class,'index']);
-    Route::get('inputtrip/index', [InputTripController::class,'index']);
-    Route::get('historytrip', [HistoryTripController::class,'index']);
-    Route::get('listtrip', [ListTripController::class,'index']);
-    Route::get('inputtrip', [InputTripController::class,'index']);
+    Route::get('historytrip/index', [HistoryTripController::class, 'index']);
+    Route::get('listtrip/index', [ListTripController::class, 'index']);
+    Route::get('inputtrip/index', [InputTripController::class, 'index']);
+    Route::get('historytrip', [HistoryTripController::class, 'index']);
+    Route::get('listtrip', [ListTripController::class, 'index']);
+    Route::get('inputtrip', [InputTripController::class, 'index']);
 
     Route::get('userrole/{id}/delete', [UserRoleController::class, 'delete'])->name('userrole.delete');
     Route::get('userrole/field_length', [UserRoleController::class, 'fieldLength'])->name('userrole.field_length');
@@ -494,7 +495,7 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('trado/get', [TradoController::class, 'get'])->name('trado.get');
     Route::get('trado/index', [TradoController::class, 'index']);
     Route::resource('trado', TradoController::class);
-    
+
     Route::get('stok/field_length', [StokController::class, 'fieldLength'])->name('stok.field_length');
     Route::get('stok/{id}/delete', [StokController::class, 'delete'])->name('stok.delete');
     Route::get('stok/get', [StokController::class, 'get'])->name('stok.get');
@@ -620,7 +621,7 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('pengembaliankasgantungheader/report', [PengembalianKasGantungHeaderController::class, 'report'])->name('pengembaliankasgantungheader.report');
     Route::get('pengembaliankasgantungheader/index', [PengembalianKasGantungHeaderController::class, 'index']);
     Route::resource('pengembaliankasgantungheader', PengembalianKasGantungHeaderController::class);
-    
+
     Route::get('pengembaliankasgantungdetail/jurnal/grid', [PengembalianKasGantungDetailController::class, 'jurnalGrid']);
     Route::get('pengembaliankasgantungdetail/penerimaan/grid', [PengembalianKasGantungDetailController::class, 'penerimaanGrid']);
     Route::get('pengembaliankasgantungdetail/detail/grid', [PengembalianKasGantungDetailController::class, 'detailGrid']);
@@ -631,7 +632,7 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('pengembaliankasbankheader/report', [PengembalianKasbankHeaderController::class, 'report'])->name('pengembaliankasbankheader.report');
     Route::get('pengembaliankasbankheader/index', [PengembalianKasbankHeaderController::class, 'index']);
     Route::resource('pengembaliankasbankheader', PengembalianKasbankHeaderController::class);
-    
+
     Route::get('pengembaliankasbankdetail/jurnal/grid', [PengembalianKasBankDetailController::class, 'jurnalGrid']);
     Route::get('pengembaliankasbankdetail/pengeluaran/grid', [PengembalianKasBankDetailController::class, 'pengeluaranGrid']);
     Route::get('pengembaliankasbankdetail/detail/grid', [PengembalianKasBankDetailController::class, 'detailGrid']);
@@ -642,19 +643,19 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('notakreditheader/report', [NotaKreditHeaderController::class, 'report'])->name('notakreditheader.report');
     Route::get('notakreditheader/index', [NotaKreditHeaderController::class, 'index']);
     Route::resource('notakreditheader', NotaKreditHeaderController::class);
-    
+
     Route::get('notakreditdetail/jurnal/grid', [NotaKreditDetailController::class, 'jurnalGrid']);
     Route::get('notakreditdetail/penerimaan/grid', [NotaKreditDetailController::class, 'penerimaanGrid']);
     Route::get('notakreditdetail/pelunasan/grid', [NotaKreditDetailController::class, 'pelunasanGrid']);
     Route::get('notakreditdetail/detail/grid', [NotaKreditDetailController::class, 'detailGrid']);
     Route::resource('notakreditdetail', NotaKreditDetailController::class);
-    
+
     Route::get('notadebetheader/get', [NotaDebetHeaderController::class, 'get'])->name('notadebetheader.get');
     Route::get('notadebetheader/export', [NotaDebetHeaderController::class, 'export'])->name('notadebetheader.export');
     Route::get('notadebetheader/report/{id}', [NotaDebetHeaderController::class, 'report'])->name('notadebetheader.report');
     Route::get('notadebetheader/index', [NotaDebetHeaderController::class, 'index']);
     Route::resource('notadebetheader', NotaDebetHeaderController::class);
-    
+
     Route::get('notadebetdetail/jurnal/grid', [NotaDebetDetailController::class, 'jurnalGrid']);
     Route::get('notadebetdetail/penerimaan/grid', [NotaDebetDetailController::class, 'penerimaanGrid']);
     Route::get('notadebetdetail/pelunasan/grid', [NotaDebetDetailController::class, 'pelunasanGrid']);
@@ -762,7 +763,7 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('penerimaanstok/get', [PenerimaanStokController::class, 'get'])->name('penerimaanstok.get');
     Route::get('penerimaanstok/index', [PenerimaanStokController::class, 'index']);
     Route::resource('penerimaanstok', PenerimaanStokController::class);
-    
+
     Route::get('pengeluaranstok/report', [PengeluaranStokController::class, 'report'])->name('pengeluaranstok.report');
     Route::get('pengeluaranstok/{id}/delete', [PengeluaranStokController::class, 'delete'])->name('pengeluaranstok.delete');
     Route::get('pengeluaranstok/get', [PengeluaranStokController::class, 'get'])->name('pengeluaranstok.get');
@@ -808,10 +809,10 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('orderantrucking/export', [OrderanTruckingController::class, 'export'])->name('orderantrucking.export');
     Route::get('orderantrucking/report', [OrderanTruckingController::class, 'report'])->name('orderantrucking.report');
     Route::resource('orderantrucking', OrderanTruckingController::class);
-    
+
     Route::get('chargegandengan/export', [ChargeGandenganController::class, 'export'])->name('chargegandengan.export');
     Route::get('chargegandengan/report', [ChargeGandenganController::class, 'report'])->name('chargegandengan.report');
-    Route::get('chargegandengan/index', [ChargeGandenganController::class,'index']);
+    Route::get('chargegandengan/index', [ChargeGandenganController::class, 'index']);
     Route::resource('chargegandengan', ChargeGandenganController::class);
 
     Route::get('reminderservice/index', [ReminderServiceController::class, 'index'])->name('reminderservice.export');
@@ -909,7 +910,7 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('pengeluarandetail/jurnal/grid', [PengeluaranDetailController::class, 'jurnalGrid']);
     Route::get('pengeluarandetail/detail/grid', [PengeluaranDetailController::class, 'detailGrid']);
     Route::resource('pengeluarandetail', PengeluaranDetailController::class);
-    
+
     Route::get('rekappengeluaranheader/{id}/delete', [RekapPengeluaranHeaderController::class, 'delete'])->name('rekappengeluaranheader.delete');
     Route::get('rekappengeluaranheader/index', [RekapPengeluaranHeaderController::class, 'index']);
     Route::get('rekappengeluaranheader/get', [RekapPengeluaranHeaderController::class, 'get'])->name('rekappengeluaranheader.get');
@@ -918,7 +919,7 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::resource('rekappengeluaranheader', RekapPengeluaranHeaderController::class);
 
     Route::resource('rekappengeluarandetail', RekapPengeluaranDetailController::class);
-    
+
     Route::get('rekappenerimaanheader/{id}/delete', [RekapPenerimaanHeaderController::class, 'delete'])->name('rekappenerimaanheader.delete');
     Route::get('rekappenerimaanheader/index', [RekapPenerimaanHeaderController::class, 'index']);
     Route::get('rekappenerimaanheader/get', [RekapPenerimaanHeaderController::class, 'get'])->name('rekappenerimaanheader.get');
@@ -946,19 +947,19 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('penerimaanstokheader/report', [PenerimaanStokHeaderController::class, 'report'])->name('penerimaanstokheader.report');
     Route::get('penerimaanstokheader/index', [PenerimaanStokHeaderController::class, 'index']);
     Route::resource('penerimaanstokheader', PenerimaanStokHeaderController::class);
-    
+
     Route::get('penerimaanstokdetail/jurnal/grid', [PenerimaanStokDetailController::class, 'jurnalGrid']);
     Route::get('penerimaanstokdetail/hutang/grid', [PenerimaanStokDetailController::class, 'hutangGrid']);
     Route::get('penerimaanstokdetail/detail/grid', [PenerimaanStokDetailController::class, 'detailGrid']);
     Route::resource('penerimaanstokdetail', PenerimaanStokDetailController::class);
-    
+
     Route::get('pengeluaranstokheader/get', [PengeluaranStokHeaderController::class, 'get'])->name('pengeluaranstokheader.get');
     Route::get('pengeluaranstokheader/export', [PengeluaranStokHeaderController::class, 'export'])->name('pengeluaranstokheader.export');
     Route::get('pengeluaranstokheader/report', [PengeluaranStokHeaderController::class, 'report'])->name('pengeluaranstokheader.report');
     Route::get('pengeluaranstokheader/index', [PengeluaranStokHeaderController::class, 'index']);
 
     Route::resource('pengeluaranstokheader', PengeluaranStokHeaderController::class);
-    
+
     Route::resource('pengeluaranstokdetail', PengeluaranStokDetailController::class);
 
     Route::get('jurnalumumheader/index', [JurnalUmumHeaderController::class, 'index']);
@@ -988,16 +989,16 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('hutangheader/export', [HutangHeaderController::class, 'export'])->name('hutangheader.export');
     Route::get('hutangheader/report', [HutangHeaderController::class, 'report'])->name('hutangheader.report');
     Route::resource('hutangheader', HutangHeaderController::class);
-    
+
     Route::get('hutangdetail/jurnal/grid', [HutangDetailController::class, 'jurnalGrid']);
     Route::get('hutangdetail/history/grid', [HutangDetailController::class, 'historyGrid']);
     Route::get('hutangdetail/detail/grid', [HutangDetailController::class, 'detailGrid']);
     Route::resource('hutangdetail', HutangDetailController::class);
-    
-    Route::get('tutupbuku/index', [TutupBukuController::class,'index']);
+
+    Route::get('tutupbuku/index', [TutupBukuController::class, 'index']);
     Route::resource('tutupbuku', TutupBukuController::class);
 
-    Route::get('approvalopname/index', [ApprovalOpnameController::class,'index']);
+    Route::get('approvalopname/index', [ApprovalOpnameController::class, 'index']);
     Route::resource('approvalopname', ApprovalOpnameController::class);
 
     Route::get('piutangheader/index', [PiutangHeaderController::class, 'index']);
@@ -1037,7 +1038,7 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('hutangbayardetail/detail/grid', [HutangBayarDetailController::class, 'detailGrid']);
     Route::resource('hutangbayardetail', HutangBayarDetailController::class);
 
-    
+
     Route::get('gajisupirheader/index', [GajiSupirHeaderController::class, 'index']);
     Route::get('gajisupirheader/{id}/delete', [GajiSupirHeaderController::class, 'delete'])->name('gajisupirheader.delete');
     Route::get('gajisupirheader/get', [GajiSupirHeaderController::class, 'get'])->name('gajisupirheader.get');
@@ -1052,14 +1053,14 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('gajisupirdetail/deposito/grid', [GajiSupirDetailController::class, 'depositoGrid']);
     Route::get('gajisupirdetail/detail/grid', [GajiSupirDetailController::class, 'detailGrid']);
     Route::resource('gajisupirdetail', GajiSupirDetailController::class);
-    
+
     Route::get('prosesgajisupirheader/index', [ProsesGajiSupirHeaderController::class, 'index']);
     Route::get('prosesgajisupirheader/{id}/delete', [ProsesGajiSupirHeaderController::class, 'delete'])->name('prosesgajisupirheader.delete');
     Route::get('prosesgajisupirheader/get', [ProsesGajiSupirHeaderController::class, 'get'])->name('prosesgajisupirheader.get');
     Route::get('prosesgajisupirheader/export', [ProsesGajiSupirHeaderController::class, 'export'])->name('prosesgajisupirheader.export');
     Route::get('prosesgajisupirheader/report', [ProsesGajiSupirHeaderController::class, 'report'])->name('prosesgajisupirheader.report');
     Route::resource('prosesgajisupirheader', ProsesGajiSupirHeaderController::class);
-    
+
     Route::get('prosesgajisupirdetail/jurnal/grid', [ProsesGajiSupirDetailController::class, 'jurnalGrid']);
     Route::get('prosesgajisupirdetail/potsemua/grid', [ProsesGajiSupirDetailController::class, 'potsemuaGrid']);
     Route::get('prosesgajisupirdetail/potpribadi/grid', [ProsesGajiSupirDetailController::class, 'potpribadiGrid']);
@@ -1068,7 +1069,7 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('prosesgajisupirdetail/detail/grid', [ProsesGajiSupirDetailController::class, 'detailGrid']);
     Route::resource('prosesgajisupirdetail', ProsesGajiSupirDetailController::class);
 
-    
+
     Route::get('invoiceheader/index', [InvoiceHeaderController::class, 'index']);
     Route::get('invoiceheader/{id}/delete', [InvoiceHeaderController::class, 'delete'])->name('invoiceheader.delete');
     Route::get('invoiceheader/get', [InvoiceHeaderController::class, 'get'])->name('invoiceheader.get');
@@ -1079,7 +1080,7 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('invoicedetail/piutang/grid', [InvoiceDetailController::class, 'piutangGrid']);
     Route::get('invoicedetail/detail/grid', [InvoiceDetailController::class, 'detailGrid']);
     Route::resource('invoicedetail', InvoiceDetailController::class);
-    
+
     Route::get('invoiceextraheader/index', [InvoiceExtraHeaderController::class, 'index']);
     Route::get('invoiceextraheader/get', [InvoiceExtraHeaderController::class, 'get'])->name('invoiceextraheader.get');
     Route::get('invoiceextraheader/export', [InvoiceExtraHeaderController::class, 'export'])->name('invoiceextraheader.export');
@@ -1089,7 +1090,7 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('invoiceextradetail/piutang/grid', [InvoiceExtraDetailController::class, 'piutangGrid']);
     Route::get('invoiceextradetail/detail/grid', [InvoiceExtraDetailController::class, 'detailGrid']);
     Route::resource('invoiceextradetail', InvoiceExtraDetailController::class);
-    
+
     Route::get('invoicechargegandenganheader/index', [InvoiceChargeGandenganHeaderController::class, 'index']);
     Route::get('invoicechargegandenganheader/export', [InvoiceChargeGandenganHeaderController::class, 'export'])->name('invoicechargegandenganheader.export');
     Route::get('invoicechargegandenganheader/report', [InvoiceChargeGandenganHeaderController::class, 'report'])->name('invoicechargegandenganheader.report');
@@ -1101,7 +1102,7 @@ Route::middleware(['auth','authorized'])->group(function () {
 
     Route::get('approvalinvoiceheader/index', [ApprovalInvoiceHeaderController::class, 'index']);
     Route::resource('approvalinvoiceheader', ApprovalInvoiceHeaderController::class);
-    
+
     Route::get('approvalbukacetak/index', [ApprovalBukaCetakController::class, 'index']);
     Route::resource('approvalbukacetak', ApprovalBukaCetakController::class);
 
@@ -1151,14 +1152,14 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::resource('approvalhutangbayar', ApprovalHutangBayarController::class);
 
     Route::get('pendapatansupirheader/export', [PendapatanSupirHeaderController::class, 'export'])->name('pendapatansupirheader.export');
-    Route::get('pendapatansupirheader/report', [PendapatanSupirHeaderController::class, 'report'])->name('pendapatansupirheader.report');   
+    Route::get('pendapatansupirheader/report', [PendapatanSupirHeaderController::class, 'report'])->name('pendapatansupirheader.report');
     Route::get('pendapatansupirheader/index', [PendapatanSupirHeaderController::class, 'index']);
     Route::resource('pendapatansupirheader', PendapatanSupirHeaderController::class);
     Route::resource('pendapatansupirdetail', PendapatanSupirDetailController::class);
 
     Route::get('approvalpendapatansupir/index', [ApprovalPendapatanSupirController::class, 'index']);
     Route::resource('approvalpendapatansupir', ApprovalPendapatanSupirController::class);
-    
+
     Route::get('stokpersediaan/export', [StokPersediaanController::class, 'export'])->name('stokpersediaan.export');
     Route::get('stokpersediaan/report', [StokPersediaanController::class, 'report'])->name('stokpersediaan.report');
     Route::get('stokpersediaan/index', [StokPersediaanController::class, 'index']);
@@ -1168,12 +1169,12 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('kartustok/report', [KartuStokController::class, 'report'])->name('kartustok.report');
     Route::get('kartustok/index', [KartuStokController::class, 'index']);
     Route::resource('kartustok', KartuStokController::class);
-    
+
     Route::get('historipenerimaanstok/export', [HistoriPenerimaanStokController::class, 'export'])->name('historipenerimaanstok.export');
     Route::get('historipenerimaanstok/report', [HistoriPenerimaanStokController::class, 'report'])->name('historipenerimaanstok.report');
     Route::get('historipenerimaanstok/index', [HistoriPenerimaanStokController::class, 'index']);
     Route::resource('historipenerimaanstok', HistoriPenerimaanStokController::class);
-    
+
     Route::get('historipengeluaranstok/export', [HistoriPengeluaranStokController::class, 'export'])->name('historipengeluaranstok.export');
     Route::get('historipengeluaranstok/report', [HistoriPengeluaranStokController::class, 'report'])->name('historipengeluaranstok.report');
     Route::get('historipengeluaranstok/index', [HistoriPengeluaranStokController::class, 'index']);
@@ -1188,17 +1189,17 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('laporanbukubesar/report', [LaporanBukuBesarController::class, 'report'])->name('laporanbukubesar.report');
     Route::get('laporanbukubesar/index', [LaporanBukuBesarController::class, 'index']);
     Route::resource('laporanbukubesar', LaporanBukuBesarController::class);
-    
+
     Route::get('prosesuangjalansupirheader/index', [ProsesUangJalanSupirHeaderController::class, 'index']);
     Route::get('prosesuangjalansupirheader/get', [ProsesUangJalanSupirHeaderController::class, 'get'])->name('prosesuangjalansupirheader.get');
     Route::get('prosesuangjalansupirheader/export', [ProsesUangJalanSupirHeaderController::class, 'export'])->name('prosesuangjalansupirheader.export');
     Route::get('prosesuangjalansupirheader/report', [ProsesUangJalanSupirHeaderController::class, 'report'])->name('prosesuangjalansupirheader.report');
     Route::resource('prosesuangjalansupirheader', ProsesUangJalanSupirHeaderController::class);
-    
+
     Route::get('prosesuangjalansupirdetail/transfer/grid', [ProsesUangJalanSupirDetailController::class, 'transferGrid']);
     Route::get('prosesuangjalansupirdetail/detail/grid', [ProsesUangJalanSupirDetailController::class, 'detailGrid']);
     Route::resource('prosesuangjalansupirdetail', ProsesUangJalanSupirDetailController::class);
-    
+
     Route::get('laporandepositosupir/report', [LaporanDepositoSupirController::class, 'report'])->name('laporandepositosupir.report');
     Route::get('laporandepositosupir/export', [LaporanDepositoSupirController::class, 'export'])->name('laporandepositosupir.export');
     Route::get('laporandepositosupir/index', [LaporanDepositoSupirController::class, 'index']);
@@ -1212,7 +1213,7 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('laporanpemakaianstok/report', [LaporanPemakaianStokController::class, 'report'])->name('laporanpemakaianstok.report');
     Route::get('laporanpemakaianstok/export', [LaporanPemakaianStokController::class, 'export'])->name('laporanpemakaianstok.export');
     Route::get('laporanpemakaianstok/index', [LaporanPemakaianStokController::class, 'index']);
-    Route::resource('laporanpemakaianstok', LaporanPemakaianStokController::class);    
+    Route::resource('laporanpemakaianstok', LaporanPemakaianStokController::class);
 
     Route::get('laporanpembelianbarang/report', [LaporanPembelianBarangController::class, 'report'])->name('laporanpembelianbarang.report');
     Route::get('laporanpembelianbarang/export', [LaporanPembelianBarangController::class, 'export'])->name('laporanpembelianbarang.export');
@@ -1239,7 +1240,7 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('laporanpinjamansupir/report', [LaporanPinjamanSupirController::class, 'report'])->name('laporanpinjamansupir.report');
     Route::get('laporanpinjamansupir/index', [LaporanPinjamanSupirController::class, 'index']);
     Route::resource('laporanpinjamansupir', LaporanPinjamanSupirController::class);
-    
+
     Route::get('laporanketeranganpinjamansupir/report', [LaporanKeteranganPinjamanSupirController::class, 'report'])->name('laporanketeranganpinjamansupir.report');
     Route::get('laporanketeranganpinjamansupir/export', [LaporanKeteranganPinjamanSupirController::class, 'export'])->name('laporanketeranganpinjamansupir.export');
     Route::get('laporanketeranganpinjamansupir/index', [LaporanKeteranganPinjamanSupirController::class, 'index']);
@@ -1268,7 +1269,7 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('laporanpenyesuaianbarang/export', [LaporanPenyesuaianBarangController::class, 'export'])->name('laporanpenyesuaianbarang.export');
     Route::get('laporanpenyesuaianbarang/index', [LaporanPenyesuaianBarangController::class, 'index']);
     Route::resource('laporanpenyesuaianbarang', LaporanPenyesuaianBarangController::class);
-    
+
     Route::get('laporanhutangbbm/export', [LaporanHutangBBMController::class, 'export'])->name('laporanhutangbbm.export');
     Route::get('laporanhutangbbm/report', [LaporanHutangBBMController::class, 'report'])->name('laporanhutangbbm.report');
     Route::get('laporanhutangbbm/index', [LaporanHutangBBMController::class, 'index']);
@@ -1360,7 +1361,7 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('laporanneraca/export', [LaporanNeracaController::class, 'export'])->name('laporanneraca.export');
     Route::get('laporanneraca/index', [LaporanNeracaController::class, 'index']);
     Route::resource('laporanneraca', LaporanNeracaController::class);
-    
+
     Route::get('exportpengeluaranbarang/export', [ExportPengeluaranBarangController::class, 'export'])->name('exportpengeluaranbarang.export');
     Route::get('exportpengeluaranbarang/index', [ExportPengeluaranBarangController::class, 'index']);
     Route::resource('exportpengeluaranbarang', ExportPengeluaranBarangController::class);
@@ -1377,7 +1378,7 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('exportlaporankasgantung/index', [ExportLaporanKasGantungController::class, 'index']);
     Route::resource('exportlaporankasgantung', ExportLaporanKasGantungController::class);
 
-    
+
 
     Route::get('exportlaporanstok/export', [ExportLaporanStokController::class, 'export'])->name('exportlaporanstok.export');
     Route::get('exportlaporanstok/index', [ExportLaporanStokController::class, 'index']);
@@ -1410,7 +1411,7 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('exportrincianmingguanpendapatan/index', [ExportRincianMingguanPendapatanSupirController::class, 'index']);
     Route::resource('exportrincianmingguanpendapatan', ExportRincianMingguanPendapatanSupirController::class);
 
-    
+
     Route::get('laporankasgantung/report', [LaporanKasGantungController::class, 'report'])->name('laporankasgantung.report');
     Route::get('laporankasgantung/export', [LaporanKasGantungController::class, 'export'])->name('laporankasgantung.export');
     Route::get('laporankasgantung/index', [LaporanKasGantungController::class, 'index']);
@@ -1420,12 +1421,12 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('laporanpiutanggiro/export', [LaporanPiutangGiroController::class, 'export'])->name('laporanpiutanggiro.export');
     Route::get('laporanpiutanggiro/index', [LaporanPiutangGiroController::class, 'index']);
     Route::resource('laporanpiutanggiro', LaporanPiutangGiroController::class);
-    
+
     Route::get('laporantitipanemkl/report', [LaporanTitipanEmklController::class, 'report'])->name('laporantitipanemkl.report');
     Route::get('laporantitipanemkl/export', [LaporanTitipanEmklController::class, 'export'])->name('laporantitipanemkl.export');
     Route::get('laporantitipanemkl/index', [LaporanTitipanEmklController::class, 'index']);
     Route::resource('laporantitipanemkl', LaporanTitipanEmklController::class);
-    
+
     Route::get('laporanrekaptitipanemkl/report', [LaporanRekapTitipanEmklController::class, 'report'])->name('laporanrekaptitipanemkl.report');
     Route::get('laporanrekaptitipanemkl/export', [LaporanRekapTitipanEmklController::class, 'export'])->name('laporanrekaptitipanemkl.export');
     Route::get('laporanrekaptitipanemkl/index', [LaporanRekapTitipanEmklController::class, 'index']);
@@ -1444,15 +1445,15 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('laporanbangudangsementara/report', [LaporanBanGudangSementaraController::class, 'report'])->name('laporanbangudangsementara.report');
     Route::get('laporanbangudangsementara/index', [LaporanBanGudangSementaraController::class, 'index']);
     Route::resource('laporanbangudangsementara', LaporanBanGudangSementaraController::class);
-    
+
     Route::get('laporanestimasikasgantung/report', [LaporanEstimasiKasGantungController::class, 'report'])->name('laporanestimasikasgantung.report');
     Route::get('laporanestimasikasgantung/index', [LaporanEstimasiKasGantungController::class, 'index']);
     Route::resource('laporanestimasikasgantung', LaporanEstimasiKasGantungController::class);
-    
+
     Route::get('exportrincianmingguan/export', [ExportRincianMingguanController::class, 'export'])->name('exportrincianmingguan.export');
     Route::get('exportrincianmingguan/index', [ExportRincianMingguanController::class, 'index']);
     Route::resource('exportrincianmingguan', ExportRincianMingguanController::class);
-    
+
     Route::get('exportlaporankasharian/export', [ExportLaporanKasHarianController::class, 'export'])->name('exportlaporankasharian.export');
     Route::get('exportlaporankasharian/index', [ExportLaporanKasHarianController::class, 'index']);
     Route::resource('exportlaporankasharian', ExportLaporanKasHarianController::class);
@@ -1460,7 +1461,7 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('exportlaporanmingguansupir/export', [ExportLaporanMingguanSupirController::class, 'export'])->name('exportlaporanmingguansupir.export');
     Route::get('exportlaporanmingguansupir/index', [ExportLaporanMingguanSupirController::class, 'index']);
     Route::resource('exportlaporanmingguansupir', ExportLaporanMingguanSupirController::class);
-    
+
     Route::get('pindahbuku/index', [PindahBukuController::class, 'index']);
     Route::resource('pindahbuku', PindahBukuController::class);
 
@@ -1479,12 +1480,12 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('laporankartustok/report', [LaporanKartuStokController::class, 'report'])->name('laporankartustok.report');
     Route::get('laporankartustok/index', [LaporanKartuStokController::class, 'index']);
     Route::resource('laporankartustok', LaporanKartuStokController::class);
-    
+
     Route::get('laporansaldoinventory/export', [LaporanSaldoInventoryController::class, 'export'])->name('laporansaldoinventory.export');
     Route::get('laporansaldoinventory/report', [LaporanSaldoInventoryController::class, 'report'])->name('laporansaldoinventory.report');
     Route::get('laporansaldoinventory/index', [LaporanSaldoInventoryController::class, 'index']);
     Route::resource('laporansaldoinventory', LaporanSaldoInventoryController::class);
-    
+
     Route::get('laporanaruskas/report', [LaporanArusKasController::class, 'report'])->name('laporanaruskas.report');
     Route::get('laporanaruskas/index', [LaporanArusKasController::class, 'index']);
     Route::resource('laporanaruskas', LaporanArusKasController::class);
@@ -1497,13 +1498,13 @@ Route::middleware(['auth','authorized'])->group(function () {
 
     Route::get('approvaltradogambar/index', [ApprovalTradoGambarController::class, 'index']);
     Route::resource('approvaltradogambar', ApprovalTradoGambarController::class);
-    
+
     Route::get('approvaltradoketerangan/index', [ApprovalTradoKeteranganController::class, 'index']);
     Route::resource('approvaltradoketerangan', ApprovalTradoKeteranganController::class);
-    
+
     Route::get('ubahpassword/index', [UbahPasswordController::class, 'index']);
     Route::resource('ubahpassword', UbahPasswordController::class);
-    
+
     Route::get('laporanpinjamanperunittrado/report', [LaporanPinjamanPerUnitTradoController::class, 'report'])->name('laporanpinjamanperunittrado.report');
     Route::get('laporanpinjamanperunittrado/export', [LaporanPinjamanPerUnitTradoController::class, 'export'])->name('laporanpinjamanperunittrado.export');
     Route::get('laporanpinjamanperunittrado/index', [LaporanPinjamanPerUnitTradoController::class, 'index']);
@@ -1520,7 +1521,7 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('hutangextradetail/hutang/grid', [HutangExtraDetailController::class, 'hutangGrid']);
     Route::get('hutangextradetail/detail/grid', [HutangExtraDetailController::class, 'detailGrid']);
     Route::resource('hutangextradetail', HutangExtraDetailController::class);
-    
+
     Route::get('logabsensi/export', [LogAbsensiController::class, 'export'])->name('logabsensi.export');
     Route::get('logabsensi/report', [LogAbsensiController::class, 'report'])->name('logabsensi.report');
     Route::get('logabsensi/index', [LogAbsensiController::class, 'index']);
@@ -1532,32 +1533,37 @@ Route::middleware(['auth','authorized'])->group(function () {
     Route::get('reminderoli/export', [ReminderOliController::class, 'export'])->name('reminderoli.export');
     Route::get('reminderoli/index', [ReminderOliController::class, 'index']);
     Route::resource('reminderoli', ReminderOliController::class);
-    
+
     Route::get('expsim/index', [ExpSimController::class, 'index']);
     Route::resource('expsim', ExpSimController::class);
     Route::get('expstnk/index', [ExpStnkController::class, 'index']);
     Route::resource('expstnk', ExpStnkController::class);
     Route::get('expasuransi/index', [ExpAsuransiController::class, 'index']);
     Route::resource('expasuransi', ExpAsuransiController::class);
-    
+
     Route::get('reminderstok/export', [ReminderStokController::class, 'export'])->name('reminderstok.export');
     Route::get('reminderstok/index', [ReminderStokController::class, 'index']);
     Route::resource('reminderstok', ReminderStokController::class);
     Route::get('statusolitrado/export', [StatusOliTradoController::class, 'export'])->name('statusolitrado.export');
     Route::get('statusolitrado/index', [StatusOliTradoController::class, 'index']);
     Route::resource('statusolitrado', StatusOliTradoController::class);
-    
+
     Route::get('reminderspk/index', [ReminderSpkController::class, 'index']);
     Route::resource('reminderspk', ReminderSpkController::class);
     Route::get('spkharian/index', [SpkHarianController::class, 'index']);
     Route::resource('spkharian', SpkHarianController::class);
     Route::get('statusgandengantruck/index', [StatusGandenganTruckController::class, 'index']);
     Route::resource('statusgandengantruck', StatusGandenganTruckController::class);
-    
+
     Route::get('opnameheader/index', [OpnameHeaderController::class, 'index']);
     Route::get('opnameheader/export', [OpnameHeaderController::class, 'export'])->name('opnameheader.export');
     Route::get('opnameheader/report', [OpnameHeaderController::class, 'report'])->name('opnameheader.report');
     Route::resource('opnameheader', OpnameHeaderController::class);
+
+    Route::get('pelunasanhutangheader/index', [PelunasanHutangHeaderController::class, 'index']);
+    Route::get('pelunasanhutangheader/export', [PelunasanHutangHeaderController::class, 'export'])->name('pelunasanhutangheader.export');
+    Route::get('pelunasanhutangheader/report', [PelunasanHutangHeaderController::class, 'report'])->name('pelunasanhutangheader.report');
+    Route::resource('pelunasanhutangheader', PelunasanHutangHeaderController::class);
 });
 
 Route::patch('format', [FormatController::class, 'update']);
