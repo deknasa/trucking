@@ -265,7 +265,7 @@
               }
               let tgldari = rowData.tgldariheaderhutangbayarheader
               let tglsampai = rowData.tglsampaiheaderhutangbayarheader
-              let url = "{{route('hutangbayarheader.index')}}"
+              let url = "{{route('pelunasanhutangheader.index')}}"
               let formattedValue = $(`
              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
              `)
@@ -384,8 +384,11 @@
           changeJqGridRowListText()
 
           if (data.data.length === 0) {
-            abortGridLastRequest($('#detail'))
-            clearGridData($('#detail'))
+            $('#detail,#penerimaanGrid,#hutangbayarGrid, #pengeluaranGrid, #jurnalGrid').each((index, element) => {
+              abortGridLastRequest($(element))
+              clearGridData($(element))
+            })
+
             $('#jqGrid').each((index, element) => {
               abortGridLastRequest($(element))
               clearGridHeader($(element))
