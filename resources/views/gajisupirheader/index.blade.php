@@ -467,6 +467,16 @@
             }
           },
           {
+            id: 'view',
+            innerHTML: '<i class="fa fa-eye"></i> VIEW',
+            class: 'btn btn-orange btn-sm mr-1',
+            onClick: () => {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              
+              viewGajiSupirHeader(selectedId)
+            }
+          },
+          {
             id: 'report',
             innerHTML: '<i class="fa fa-print"></i> REPORT',
             class: 'btn btn-info btn-sm mr-1',
@@ -527,6 +537,10 @@
     function permission() {
       if (!`{{ $myAuth->hasPermission('gajisupirheader', 'store') }}`) {
         $('#add').attr('disabled', 'disabled')
+      }
+
+      if (!`{{ $myAuth->hasPermission('gajisupirheader', 'show') }}`) {
+        $('#view').attr('disabled', 'disabled')
       }
 
       if (!`{{ $myAuth->hasPermission('gajisupirheader', 'update') }}`) {

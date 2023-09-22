@@ -542,6 +542,16 @@
             }
           },
           {
+            id: 'view',
+            innerHTML: '<i class="fa fa-eye"></i> VIEW',
+            class: 'btn btn-orange btn-sm mr-1',
+            onClick: () => {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              
+              viewPendapatanSupir(selectedId)
+            }
+          },
+          {
             id: 'report',
             innerHTML: '<i class="fa fa-print"></i> REPORT',
             class: 'btn btn-info btn-sm mr-1',
@@ -628,6 +638,11 @@
       if (!`{{ $myAuth->hasPermission('pendapatansupirheader', 'store') }}`) {
         $('#add').attr('disabled', 'disabled')
       }
+
+      if (!`{{ $myAuth->hasPermission('gajisupirheader', 'show') }}`) {
+        $('#view').attr('disabled', 'disabled')
+      }
+
 
       if (!`{{ $myAuth->hasPermission('pendapatansupirheader', 'update') }}`) {
         $('#edit').attr('disabled', 'disabled')

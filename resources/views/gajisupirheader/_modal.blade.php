@@ -1015,6 +1015,10 @@
         setFormBindKeys(form)
 
         activeGrid = null
+        form.find('#btnSubmit').prop('disabled',false)
+        if (form.data('action') == "view") {
+          form.find('#btnSubmit').prop('disabled',true)
+        }
 
         getMaxLength(form)
         initLookup()
@@ -1122,6 +1126,42 @@
             Hapus
         `)
         $('#crudModalTitle').text('Delete Rincian Gaji Supir')
+        $('.is-invalid').removeClass('is-invalid')
+        $('.invalid-feedback').remove()
+        form.find('#btnTampil').prop('disabled', true)
+        Promise
+            .all([
+                showGajiSupir(form, Id, 'delete')
+            ])
+            .then(() => {
+                $('#crudModal').modal('show')
+                form.find(`[name="tglbukti"]`).prop('readonly', true)
+                form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+                form.find(`[name="supir"]`).parent('.input-group').find('.button-clear').remove()
+                form.find(`[name="supir"]`).parent('.input-group').find('.input-group-append').remove()
+            })
+            .catch((error) => {
+                showDialog(error.responseJSON)
+            })
+            .finally(() => {
+                $('.modal-loader').addClass('d-none')
+            })
+
+    }
+    
+    function viewGajiSupirHeader(Id) {
+        let form = $('#crudForm')
+
+        $('.modal-loader').removeClass('d-none')
+        
+        form.data('action', 'view')
+        form.trigger('reset')
+        form.find('#btnSubmit').html(`
+          <i class="fa fa-save"></i>
+          Save
+        `)
+        form.find(`.sometimes`).hide()
+        $('#crudModalTitle').text('View Rincian Gaji Supir')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
         form.find('#btnTampil').prop('disabled', true)

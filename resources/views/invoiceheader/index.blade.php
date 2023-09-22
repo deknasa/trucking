@@ -62,6 +62,7 @@
   let selectedRows = [];
   let tgldariheader
   let tglsampaiheader
+  let activeGrid 
 
   function checkboxHandler(element) {
     let value = $(element).val();
@@ -535,6 +536,16 @@
             }
           },
           {
+            id: 'view',
+            innerHTML: '<i class="fa fa-eye"></i> VIEW',
+            class: 'btn btn-orange btn-sm mr-1',
+            onClick: () => {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              
+              viewInvoiceHeader(selectedId)
+            }
+          },
+          {
             id: 'report',
             innerHTML: '<i class="fa fa-print"></i> REPORT',
             class: 'btn btn-info btn-sm mr-1',
@@ -621,6 +632,9 @@
     if (!`{{ $myAuth->hasPermission('invoiceheader', 'store') }}`) {
       $('#add').attr('disabled', 'disabled')
     }
+    if (!`{{ $myAuth->hasPermission('invoiceheader', 'show') }}`) {
+        $('#view').attr('disabled', 'disabled')
+      }
 
     if (!`{{ $myAuth->hasPermission('invoiceheader', 'update') }}`) {
       $('#edit').attr('disabled', 'disabled')

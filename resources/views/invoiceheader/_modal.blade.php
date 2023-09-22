@@ -406,6 +406,10 @@
     setFormBindKeys(form)
 
     activeGrid = null
+    form.find('#btnSubmit').prop('disabled',false)
+    if (form.data('action') == "view") {
+      form.find('#btnSubmit').prop('disabled',true)
+    }
 
     getMaxLength(form)
     initLookup()
@@ -514,6 +518,43 @@
     Promise
       .all([
         showInvoiceHeader(form, invId, 'edit'),
+        setStatusPilihanInvoiceOptions(form)
+      ])
+      .then(() => {
+        clearSelectedRows()
+        form.find(`[name="tglbukti"]`).prop('readonly', true)
+        form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+        $('#gs_').prop('checked', false)
+        $('#crudModal').modal('show')
+      })
+      .catch((error) => {
+        showDialog(error.responseJSON)
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
+  }
+
+  function viewInvoiceHeader(invId) {
+    let form = $('#crudForm')
+
+    $('.modal-loader').removeClass('d-none')
+
+    form.data('action', 'view')
+    form.trigger('reset')
+    form.find('#btnSubmit').html(`
+      <i class="fa fa-save"></i>
+      Save
+    `)
+    form.find(`.sometimes`).hide()
+    $('#crudModalTitle').text('View Invoice')
+    $('.is-invalid').removeClass('is-invalid')
+    $('.invalid-feedback').remove()
+    form.find('#btnTampil').prop('disabled', true)
+
+    Promise
+      .all([
+        showInvoiceHeader(form, invId, 'delete'),
         setStatusPilihanInvoiceOptions(form)
       ])
       .then(() => {
