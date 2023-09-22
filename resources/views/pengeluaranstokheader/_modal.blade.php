@@ -1581,142 +1581,215 @@
             form.find(`[name="gandengan"]`).data('currentValue', form.find(`[name="gandengan"]`).val())
           }
           $('#detailList tbody').html('')
-          $.each(response.detail, (id, detail) => {
-            let detailRow = $(`
-              <tr class="trow">
-                    <td>
-                      <div class="baris">1</div>
-                    </td>
-                    
-                    <td>
-                      <input type="text"  name="detail_stok[]" id="detail_stok_${id}" class="form-control stok-lookup ">
-                      <input type="text" id="detailstokId_${id}" data-current-value="${detail.stok}" readonly hidden class="detailstokId" name="detail_stok_id[]">
-                    </td>
-                    <td>
-                      <input type="text"  name="detail_keterangan[]" style="" class="form-control">                    
-                    </td>
-                    <td class="data_tbl tbl_qty">
-                      <input type="text"  name="detail_qty[]" id="detail_qty${id}" onkeyup="calculate(${id})" style="text-align:right" class="form-control autonumeric number${id}">                    
-                    </td>  
-                  <td class="data_tbl tbl_statusoli">
-                    <select name="detail_statusoli[]" class="form-select select2bs4" id="statusoli${id}" style="width: 100%;">
-                      <option value="">-- PILIH STATUS OLI --</option>
-                    </select>                 
+         
+          if (listKodePengeluaran[1] == response.data.pengeluaranstok) {
+            $.each(response.detail, (id, detail) => {
+
+          let detailRow = $(`
+            <tr class="trow">
+                  <td>
+                    <div class="baris">1</div>
+                  </td>
+                  
+                  <td>
+                    <input type="text"  name="detail_stok[]" id="detail_stok_${id}" class="form-control stok-lookup ">
+                    <input type="text" id="detailstokId_${id}" readonly hidden class="detailstokId" name="detail_stok_id[]">
+                  </td>
+                  <td>
+                    <input type="text"  name="detail_keterangan[]" style="" class="form-control">                    
+                  </td>
+                  <td class="data_tbl tbl_qty" >
+                    <input type="text"  name="detail_qty[]" id="detail_qty${id}" onkeyup="cal(${id})" style="text-align:right" class="form-control autonumeric number${id}">                    
+                  </td>
+                  <td class="data_tbl tbl_vulkanisirke"  style="display: none;" >
+                    <input type="text"  name="detail_vulkanisirke[]" style="" class="form-control">                    
                   </td> 
-                    <td class="data_tbl tbl_vulkanisirke">
-                      <input type="number"  name="detail_vulkanisirke[]" style="" class="form-control">                    
-                    </td>  
-                    <td class="data_tbl tbl_harga">
-                      <input type="text"  name="detail_harga[]" id="detail_harga${id}" readonly style="text-align:right" class="autonumeric number${id} form-control">                    
-                    </td>  
-                    
-                    <td class="data_tbl tbl_persentase">
-                      <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${id}" onkeyup="calculate(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
-                    </td>  
-                    <td class="data_tbl tbl_total">
-                      <input type="text" readonly name="totalItem[]" id="totalItem${id}" onkeyup="calculate(${id})" style="text-align:right" class="form-control totalItem autonumeric number${id}">                    
-                    </td>  
-                    <td class="data_tbl tbl_aksi" >
-                      <div class='btn btn-danger btn-sm rmv'>Hapus</div>
-                    </td>
-                </tr>
-            `)
-
-            detailRow.find(`[name="detail_nobukti[]"]`).val(detail.nobukti)
-            detailRow.find(`[name="detail_stok[]"]`).val(detail.stok)
-            detailRow.find(`[name="detail_stok_id[]"]`).val(detail.stok_id)
-            detailRow.find(`[name="detail_qty[]"]`).val(detail.qty)
-            detailRow.find(`[name="detail_harga[]"]`).val(detail.harga)
-            detailRow.find(`[name="detail_persentasediscount[]"]`).val(detail.persentasediscount)
-            detailRow.find(`[name="detail_vulkanisirke[]"]`).val(detail.vulkanisirke)
-            detailRow.find(`[name="totalItem[]"]`).val(detail.total)
-            detailRow.find(`[name="detail_keterangan[]"]`).val(detail.keterangan)
-            $('table #table_body').append(detailRow)
-
-            if (response.data.pengeluaranstok == 'SPK') {
-              service = detail.statusservicerutin;
-              initSelect2($(`#statusoli${id}`), true)
-              dataStatusOli.forEach(statusOli => {
-                let option = new Option(statusOli.text, statusOli.id)
-
-                detailRow.find(`#statusoli${id}`).append(option).trigger('change')
-              });
-
-              if (service == 'PERGANTIAN BATERE' || service == 'PERGANTIAN SARINGAN HAWA') {
-                detailRow.find(`#statusoli${id} option:contains('TAMBAH')`).remove()
-                detailRow.trigger('change')
-              } else if (service == null) {
-
-                detailRow.find(`#statusoli${id} option:contains('TAMBAH')`).remove()
-                detailRow.find(`#statusoli${id} option:contains('GANTI')`).remove()
-                detailRow.find(`#statusoli${id}`).trigger('change')
-              }
-
-              detailRow.find(`[name="detail_statusoli[]"]`).val(detail.statusoli).trigger('change')
-
-            }
-
-            // initAutoNumeric($(`.number${id}`))
-            initAutoNumeric($(`#detail_qty${id}`),{'maximumValue':detail.qty})
-            initAutoNumeric($(`#detail_harga${id}`))
-            initAutoNumeric($(`#detail_persentasediscount${id}`))
-            initAutoNumeric($(`#totalItem${id}`))
-            setRowNumbers()
-            $(`#detail_stok_${id}`).lookup({
-              title: 'stok Lookup',
-              fileName: 'stok',
-              beforeProcess: function(test) {
-                // var levelcoa = $(`#levelcoa`).val();
-                this.postData = {
-                  pengeluaranstok_id: pengeluaranstokId,
-                  Aktif: 'AKTIF',
-                }
-              },
-              onSelectRow: (stok, element) => {
-                element.val(stok.namastok)
-                parent = element.closest('td');
-                parent.children('.detailstokId').val(stok.id)
-                element.data('currentValue', element.val())
-                let service = stok.servicerutin_text;
-
-                let elStatusOli = element.parents('tr').find(`td [name="detail_statusoli[]"]`);
-                elStatusOli.find(`option:contains('TAMBAH')`).remove()
-                elStatusOli.find(`option:contains('GANTI')`).remove()
-
+                  
+                  <td class="data_tbl tbl_harga">
+                    <input type="text"  name="detail_harga[]" id="detail_harga${id}" readonly style="text-align:right" class="autonumeric number${id} form-control">                    
+                  </td>  
+                  
+                  <td class="data_tbl tbl_persentase" style="display: none;">
+                    <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${id}" onkeyup="calculate(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
+                  </td>  
+                  <td class="data_tbl tbl_total">
+                    <input type="text"  name="totalItem[]" id="totalItem${id}" readonly onkeyup="calculate(${id})" style="text-align:right" class="form-control totalItem autonumeric number${id}">                    
+                  </td>  
+                  <td>
+                    <div class='btn btn-danger btn-sm rmv'>Hapus</div>
+                  </td>
+              </tr>
+          `)
+          detailRow.find(`[name="detail_nobukti[]"]`).val(detail.nobukti)
+          detailRow.find(`[name="detail_stok[]"]`).val(detail.stok)
+          detailRow.find(`[name="detail_stok_id[]"]`).val(detail.stok_id)
+          detailRow.find(`[name="detail_qty[]"]`).val(detail.qty)
+          detailRow.find(`[name="detail_harga[]"]`).val(detail.harga)
+          detailRow.find(`[name="detail_persentasediscount[]"]`).val(detail.persentasediscount)
+          // detailRow.find(`[name="totalItem[]"]`).val(detail.total)
+          detailRow.find(`[name="detail_keterangan[]"]`).val(detail.keterangan)
+          $('table #table_body').append(detailRow)
+          // initAutoNumeric($(`.number${id}`))
+          initAutoNumeric($(`#detail_qty${id}`),{'maximumValue':detail.qty})
+          initAutoNumeric($(`#detail_harga${id}`))
+          initAutoNumeric($(`#detail_persentasediscount${id}`))
+          initAutoNumeric($(`#totalItem${id}`))
+          cal(id)
+          setRowNumbers()
+          // $(`#detail_stok_${id}`).lookup({
+          //   title: 'stok Lookup',
+          //   fileName: 'stok',
+          //   onSelectRow: (stok, element) => {
+          //     element.val(stok.namastok)
+          //     parent = element.closest('td');
+          //     parent.children('.detailstokId').val(stok.id)
+          //     element.data('currentValue', element.val())
+          //   },
+          //   onCancel: (element) => {
+          //     element.val(element.data('currentValue'))
+          //   }
+          // })
+          id++;
+        })
+            
+          }else{
+            $.each(response.detail, (id, detail) => {
+              let detailRow = $(`
+                <tr class="trow">
+                      <td>
+                        <div class="baris">1</div>
+                      </td>
+                      
+                      <td>
+                        <input type="text"  name="detail_stok[]" id="detail_stok_${id}" class="form-control stok-lookup ">
+                        <input type="text" id="detailstokId_${id}" data-current-value="${detail.stok}" readonly hidden class="detailstokId" name="detail_stok_id[]">
+                      </td>
+                      <td>
+                        <input type="text"  name="detail_keterangan[]" style="" class="form-control">                    
+                      </td>
+                      <td class="data_tbl tbl_qty">
+                        <input type="text"  name="detail_qty[]" id="detail_qty${id}" onkeyup="calculate(${id})" style="text-align:right" class="form-control autonumeric number${id}">                    
+                      </td>  
+                    <td class="data_tbl tbl_statusoli">
+                      <select name="detail_statusoli[]" class="form-select select2bs4" id="statusoli${id}" style="width: 100%;">
+                        <option value="">-- PILIH STATUS OLI --</option>
+                      </select>                 
+                    </td> 
+                      <td class="data_tbl tbl_vulkanisirke">
+                        <input type="number"  name="detail_vulkanisirke[]" style="" class="form-control">                    
+                      </td>  
+                      <td class="data_tbl tbl_harga">
+                        <input type="text"  name="detail_harga[]" id="detail_harga${id}" readonly style="text-align:right" class="autonumeric number${id} form-control">                    
+                      </td>  
+                      
+                      <td class="data_tbl tbl_persentase">
+                        <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${id}" onkeyup="calculate(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
+                      </td>  
+                      <td class="data_tbl tbl_total">
+                        <input type="text" readonly name="totalItem[]" id="totalItem${id}" onkeyup="calculate(${id})" style="text-align:right" class="form-control totalItem autonumeric number${id}">                    
+                      </td>  
+                      <td class="data_tbl tbl_aksi" >
+                        <div class='btn btn-danger btn-sm rmv'>Hapus</div>
+                      </td>
+                  </tr>
+              `)
+  
+              detailRow.find(`[name="detail_nobukti[]"]`).val(detail.nobukti)
+              detailRow.find(`[name="detail_stok[]"]`).val(detail.stok)
+              detailRow.find(`[name="detail_stok_id[]"]`).val(detail.stok_id)
+              detailRow.find(`[name="detail_qty[]"]`).val(detail.qty)
+              detailRow.find(`[name="detail_harga[]"]`).val(detail.harga)
+              detailRow.find(`[name="detail_persentasediscount[]"]`).val(detail.persentasediscount)
+              detailRow.find(`[name="detail_vulkanisirke[]"]`).val(detail.vulkanisirke)
+              detailRow.find(`[name="totalItem[]"]`).val(detail.total)
+              detailRow.find(`[name="detail_keterangan[]"]`).val(detail.keterangan)
+              $('table #table_body').append(detailRow)
+  
+              if (response.data.pengeluaranstok == 'SPK') {
+                service = detail.statusservicerutin;
+                initSelect2($(`#statusoli${id}`), true)
+                dataStatusOli.forEach(statusOli => {
+                  let option = new Option(statusOli.text, statusOli.id)
+  
+                  detailRow.find(`#statusoli${id}`).append(option).trigger('change')
+                });
+  
                 if (service == 'PERGANTIAN BATERE' || service == 'PERGANTIAN SARINGAN HAWA') {
-                  dataStatusOli.forEach(statusOli => {
-                    let option = new Option(statusOli.text, statusOli.id)
-
-                    elStatusOli.append(option).trigger('change')
-                  });
-
-                  elStatusOli.find(`option:contains('TAMBAH')`).remove()
-                  elStatusOli.trigger('change')
-                } else if (service == '') {
-                  dataStatusOli.forEach(statusOli => {
-                    let option = new Option(statusOli.text, statusOli.id)
-
-                    elStatusOli.append(option).trigger('change')
-                  });
-
+                  detailRow.find(`#statusoli${id} option:contains('TAMBAH')`).remove()
+                  detailRow.trigger('change')
+                } else if (service == null) {
+  
+                  detailRow.find(`#statusoli${id} option:contains('TAMBAH')`).remove()
+                  detailRow.find(`#statusoli${id} option:contains('GANTI')`).remove()
+                  detailRow.find(`#statusoli${id}`).trigger('change')
+                }
+  
+                detailRow.find(`[name="detail_statusoli[]"]`).val(detail.statusoli).trigger('change')
+  
+              }
+  
+              // initAutoNumeric($(`.number${id}`))
+              initAutoNumeric($(`#detail_qty${id}`),{'maximumValue':detail.qty})
+              initAutoNumeric($(`#detail_harga${id}`))
+              initAutoNumeric($(`#detail_persentasediscount${id}`))
+              initAutoNumeric($(`#totalItem${id}`))
+              setRowNumbers()
+              $(`#detail_stok_${id}`).lookup({
+                title: 'stok Lookup',
+                fileName: 'stok',
+                beforeProcess: function(test) {
+                  // var levelcoa = $(`#levelcoa`).val();
+                  this.postData = {
+                    pengeluaranstok_id: pengeluaranstokId,
+                    Aktif: 'AKTIF',
+                  }
+                },
+                onSelectRow: (stok, element) => {
+                  element.val(stok.namastok)
+                  parent = element.closest('td');
+                  parent.children('.detailstokId').val(stok.id)
+                  element.data('currentValue', element.val())
+                  let service = stok.servicerutin_text;
+  
+                  let elStatusOli = element.parents('tr').find(`td [name="detail_statusoli[]"]`);
                   elStatusOli.find(`option:contains('TAMBAH')`).remove()
                   elStatusOli.find(`option:contains('GANTI')`).remove()
-                  elStatusOli.trigger('change')
-                } else {
-                  dataStatusOli.forEach(statusOli => {
-                    let option = new Option(statusOli.text, statusOli.id)
-
-                    elStatusOli.append(option).trigger('change')
-                  });
+  
+                  if (service == 'PERGANTIAN BATERE' || service == 'PERGANTIAN SARINGAN HAWA') {
+                    dataStatusOli.forEach(statusOli => {
+                      let option = new Option(statusOli.text, statusOli.id)
+  
+                      elStatusOli.append(option).trigger('change')
+                    });
+  
+                    elStatusOli.find(`option:contains('TAMBAH')`).remove()
+                    elStatusOli.trigger('change')
+                  } else if (service == '') {
+                    dataStatusOli.forEach(statusOli => {
+                      let option = new Option(statusOli.text, statusOli.id)
+  
+                      elStatusOli.append(option).trigger('change')
+                    });
+  
+                    elStatusOli.find(`option:contains('TAMBAH')`).remove()
+                    elStatusOli.find(`option:contains('GANTI')`).remove()
+                    elStatusOli.trigger('change')
+                  } else {
+                    dataStatusOli.forEach(statusOli => {
+                      let option = new Option(statusOli.text, statusOli.id)
+  
+                      elStatusOli.append(option).trigger('change')
+                    });
+                  }
+                },
+                onCancel: (element) => {
+                  element.val(element.data('currentValue'))
                 }
-              },
-              onCancel: (element) => {
-                element.val(element.data('currentValue'))
-              }
+              })
+              id++;
+              index++;
             })
-            id++;
-            index++;
-          })
+          }
           sumary()
 
           setKodePengeluaran(response.data.pengeluaranstok);
@@ -1751,7 +1824,6 @@
         var statusformat;
 
         $.each(response.data, (id, detail) => {
-          console.log(detail);
           let detailRow = $(`
             <tr class="trow">
                   <td>

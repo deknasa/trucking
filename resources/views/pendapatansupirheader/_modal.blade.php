@@ -733,6 +733,41 @@
             })
 
     }
+    function viewPendapatanSupir(pendapatanId) {
+
+        let form = $('#crudForm')
+
+        $('.modal-loader').removeClass('d-none')
+        
+        form.data('action', 'view')
+        form.trigger('reset')
+        form.find('#btnSubmit').html(`
+          <i class="fa fa-save"></i>
+          Save
+        `)
+        form.find(`.sometimes`).hide()
+        $('#crudModalTitle').text('View Pendapatan Supir')
+        $('.is-invalid').removeClass('is-invalid')
+        $('.invalid-feedback').remove()
+        loadModalGrid()
+        Promise
+            .all([
+                setTampilan(),
+                showPendapatanSupir(form, pendapatanId)
+            ])
+            .then(() => {
+                clearSelectedRows()
+                $('#gs_').prop('checked', false)
+                $('#crudModal').modal('show')
+            })
+            .catch((error) => {
+                showDialog(error.responseJSON)
+            })
+            .finally(() => {
+                $('.modal-loader').addClass('d-none')
+            })
+
+    }
 
 
     function showDefault(form) {
