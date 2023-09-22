@@ -218,7 +218,7 @@ class LaporanBukuBesarController extends MyController
             $previousRow = $dataRow - 1;
             foreach ($group as $response_index => $response_detail) {
                 // ... (your existing code for filling in details)
-                $sheet->setCellValue("A$detail_start_row", $response_detail['tglbukti']);
+                $sheet->setCellValue("A$detail_start_row", date('d-m-Y', strtotime($response_detail['tglbukti'])));
                 $sheet->setCellValue("B$detail_start_row", $response_detail['nobukti']);
                 $sheet->setCellValue("C$detail_start_row", $response_detail['keterangan']);
                 $sheet->setCellValue("D$detail_start_row", $response_detail['debet']);
