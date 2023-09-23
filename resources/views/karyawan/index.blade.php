@@ -136,6 +136,10 @@
                                 }
                             },
                             {
+                                label: 'JABATAN',
+                                name: 'jabatan',
+                            },
+                            {
                                 label: 'MODIFIEDBY',
                                 name: 'modifiedby',
                             },
