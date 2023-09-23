@@ -24,7 +24,7 @@
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
-                  KODE AGEN (EMKL) <span class="text-danger">*</span>
+                  KODE CUSTOMER <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-md-10">
@@ -34,7 +34,7 @@
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
-                  NAMA AGEN (EMKL) <span class="text-danger">*</span>
+                  NAMA CUSTOMER <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-md-10">
@@ -297,7 +297,7 @@
   `)
     form.data('action', 'add')
     form.find(`.sometimes`).show()
-    $('#crudModalTitle').text('Create Agen')
+    $('#crudModalTitle').text('Create Customer')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -333,7 +333,7 @@
     Simpan
   `)
     form.find(`.sometimes`).hide()
-    $('#crudModalTitle').text('Edit Agen')
+    $('#crudModalTitle').text('Edit Customer')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -368,7 +368,7 @@
     Hapus
   `)
     form.find(`.sometimes`).hide()
-    $('#crudModalTitle').text('Delete Agen')
+    $('#crudModalTitle').text('Delete Customer')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -403,7 +403,7 @@
     `)
     form.find('#btnSubmit').prop('disabled',true)
     form.find(`.sometimes`).hide()
-    $('#crudModalTitle').text('View Agen')
+    $('#crudModalTitle').text('View Customer')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 

@@ -12,13 +12,16 @@ class NotaKreditHeaderController extends MyController
 {
     public $title = 'Nota Kredit';
 
-    public function index(Request $request){
-        $title = $this->title;$data = [
+    public function index(Request $request)
+    {
+        $title = $this->title;
+        $data = [
             'comboapproval' => $this->comboList('list', 'STATUS APPROVAL', 'STATUS APPROVAL'),
             'combocetak' => $this->comboList('list', 'STATUSCETAK', 'STATUSCETAK'),
         ];
-        $data = array_merge(compact('title', 'data'),
-            ["request"=>$request->all()]
+        $data = array_merge(
+            compact('title', 'data'),
+            ["request" => $request->all()]
         );
         return view('notakreditheader.index', $data);
     }
@@ -65,7 +68,7 @@ class NotaKreditHeaderController extends MyController
         return $data;
     }
 
-    public function find($params,$id)
+    public function find($params, $id)
     {
         $params = [
             'offset' => $params['offset'] ?? request()->offset ?? ((request()->page - 1) * request()->rows),
@@ -79,7 +82,7 @@ class NotaKreditHeaderController extends MyController
         return $response = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'notakreditheader/'.$id);
+            ->get(config('app.api_url') . 'notakreditheader/' . $id);
     }
 
     public function combo($aksi)
@@ -88,10 +91,10 @@ class NotaKreditHeaderController extends MyController
             'status' => $aksi,
             'grp' => 'STATUSCETAK',
             'subgrp' => 'STATUSCETAK',
-        ]; 
+        ];
         $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'user/combostatus',$status);
+            ->get(config('app.api_url') . 'user/combostatus', $status);
         return $response['data'];
     }
 
@@ -100,24 +103,24 @@ class NotaKreditHeaderController extends MyController
         //FETCH HEADER
         $id = $request->id;
         $notakredit = Http::withHeaders($request->header())
-           ->withOptions(['verify' => false])
-           ->withToken(session('access_token'))
-           ->get(config('app.api_url') .'notakreditheader/'.$id.'/export')['data'];
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'notakreditheader/' . $id . '/export')['data'];
 
-       //FETCH DETAIL
-       $detailParams = [
-        'forReport'=> true,
-        'notakredit_id' => $request->id
-       ];
-       $notakredit_detail = Http::withHeaders(request()->header())
-           ->withOptions(['verify' => false])
-           ->withToken(session('access_token'))
-           ->get(config('app.api_url') .'notakreditdetail', $detailParams)['data'];
+        //FETCH DETAIL
+        $detailParams = [
+            'forReport' => true,
+            'notakredit_id' => $request->id
+        ];
+        $notakredit_detail = Http::withHeaders(request()->header())
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'notakreditdetail', $detailParams)['data'];
 
         $combo = $this->combo('list');
-        $key = array_search('CETAK', array_column( $combo, 'parameter')); 
+        $key = array_search('CETAK', array_column($combo, 'parameter'));
         $notakredit["combo"] =  $combo[$key];
-        return view('reports.notakreditheader', compact('notakredit','notakredit_detail'));
+        return view('reports.notakreditheader', compact('notakredit', 'notakredit_detail'));
     }
     /**
      * @ClassName
@@ -127,9 +130,9 @@ class NotaKreditHeaderController extends MyController
         //FETCH HEADER
         $id = $request->id;
         $notakredit = Http::withHeaders($request->header())
-        ->withOptions(['verify' => false])
-        ->withToken(session('access_token'))
-        ->get(config('app.api_url') .'notakreditheader/'.$id.'/export')['data'];
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'notakreditheader/' . $id . '/export')['data'];
 
         //FETCH DETAIL
         $detailParams = [
@@ -138,16 +141,16 @@ class NotaKreditHeaderController extends MyController
         $notakredit_detail = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') .'notakreditdetail', $detailParams)['data'];
+            ->get(config('app.api_url') . 'notakreditdetail', $detailParams)['data'];
 
         $tglBukti = $notakredit["tglbukti"];
         $timeStamp = strtotime($tglBukti);
-        $dateTglBukti = date('d-m-Y', $timeStamp); 
+        $dateTglBukti = date('d-m-Y', $timeStamp);
         $notakredit['tglbukti'] = $dateTglBukti;
 
         $tgllunas = $notakredit["tgllunas"];
         $timeStamp = strtotime($tgllunas);
-        $datetgllunas = date('d-m-Y', $timeStamp); 
+        $datetgllunas = date('d-m-Y', $timeStamp);
         $notakredit['tgllunas'] = $datetgllunas;
 
         $spreadsheet = new Spreadsheet();
@@ -170,52 +173,52 @@ class NotaKreditHeaderController extends MyController
         $alphabets = range('A', 'Z');
         $header_columns = [
             [
-                'label'=>'No Bukti',
-                'index'=>'nobukti'
+                'label' => 'No Bukti',
+                'index' => 'nobukti'
             ],
             [
-                'label'=>'Tanggal',
-                'index'=>'tglbukti'
+                'label' => 'Tanggal',
+                'index' => 'tglbukti'
             ],
             [
-                'label'=>'No Bukti Pelunasan Piutang',
-                'index'=>'pelunasanpiutang_nobukti'
+                'label' => 'No Bukti Pelunasan Piutang',
+                'index' => 'pelunasanpiutang_nobukti'
             ],
             [
-                'label'=>'Tanggal lunas',
-                'index'=>'tgllunas'
+                'label' => 'Tanggal lunas',
+                'index' => 'tgllunas'
             ]
         ];
         $detail_columns = [
             [
-                'label'=>'NO',
+                'label' => 'NO',
             ],
             [
-                'label'=>'NO BUKTI INVOICE',
-                'index'=>'invoice_nobukti'
+                'label' => 'NO BUKTI INVOICE',
+                'index' => 'invoice_nobukti'
             ],
             [
-                'label'=>'TANGGAL TERIMA',
-                'index'=>'tglterima'
+                'label' => 'TANGGAL TERIMA',
+                'index' => 'tglterima'
             ],
             [
-                'label'=>'KODE PERKIRAAN ADJUST',
-                'index'=>'coaadjust'
+                'label' => 'KODE PERKIRAAN ADJUST',
+                'index' => 'coaadjust'
             ],
             [
-                'label'=>'KETERANGAN',
-                'index'=>'keterangan'
+                'label' => 'KETERANGAN',
+                'index' => 'keterangan'
             ],
             [
-                'label'=>'POTONGAN',
-                'index'=>'penyesuaian'
-            ] 
+                'label' => 'POTONGAN',
+                'index' => 'penyesuaian'
+            ]
         ];
 
         //LOOPING HEADER        
         foreach ($header_columns as $header_column) {
             $sheet->setCellValue('B' . $header_start_row, $header_column['label']);
-            $sheet->setCellValue('C' . $header_start_row++, ': '.$notakredit[$header_column['index']]);
+            $sheet->setCellValue('C' . $header_start_row++, ': ' . $notakredit[$header_column['index']]);
         }
         foreach ($detail_columns as $detail_columns_index => $detail_column) {
             $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_table_header_row, $detail_column['label'] ?? $detail_columns_index + 1);
@@ -230,58 +233,59 @@ class NotaKreditHeaderController extends MyController
         );
 
         $style_number = [
-			'alignment' => [
-				'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT, 
-			],
-            
-			'borders' => [
-				'top' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
-				'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN], 
-				'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
-				'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN] 
-			]
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT,
+            ],
+
+            'borders' => [
+                'top' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+                'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+                'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+                'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN]
+            ]
         ];
 
-        $sheet ->getStyle("A$detail_table_header_row:F$detail_table_header_row")->applyFromArray($styleArray);
+        $sheet->getStyle("A$detail_table_header_row:F$detail_table_header_row")->applyFromArray($styleArray);
 
         // LOOPING DETAIL
         $penyesuaian = 0;
         foreach ($notakredit_detail as $response_index => $response_detail) {
-            
+
             foreach ($detail_columns as $detail_columns_index => $detail_column) {
                 $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
                 $sheet->getStyle("A$detail_table_header_row:F$detail_table_header_row")->getFont()->setBold(true);
                 $sheet->getStyle("A$detail_table_header_row:F$detail_table_header_row")->getAlignment()->setHorizontal('center');
             }
-            $response_detail['penyesuaians'] = number_format((float) $response_detail['penyesuaian'], '2', '.', ',');
+           
 
             $tglterima = $response_detail["tglterima"];
             $timeStamp = strtotime($tglterima);
-            $datetglterima = date('d-m-Y', $timeStamp); 
+            $datetglterima = date('d-m-Y', $timeStamp);
             $response_detail['tglterima'] = $datetglterima;
-        
+
             $sheet->setCellValue("A$detail_start_row", $response_index + 1);
             $sheet->setCellValue("B$detail_start_row", $response_detail['invoice_nobukti']);
             $sheet->setCellValue("C$detail_start_row", $response_detail['tglterima']);
             $sheet->setCellValue("D$detail_start_row", $response_detail['coaadjust']);
             $sheet->setCellValue("E$detail_start_row", $response_detail['keterangan']);
-            $sheet->setCellValue("F$detail_start_row", $response_detail['penyesuaians']);
+            $sheet->setCellValue("F$detail_start_row", $response_detail['penyesuaian']);
 
             $sheet->getStyle("E$detail_start_row")->getAlignment()->setWrapText(true);
             $sheet->getColumnDimension('E')->setWidth(40);
 
-            $sheet ->getStyle("A$detail_start_row:E$detail_start_row")->applyFromArray($styleArray);
-            $sheet ->getStyle("F$detail_start_row")->applyFromArray($style_number);
+            $sheet->getStyle("A$detail_start_row:E$detail_start_row")->applyFromArray($styleArray);
+            $sheet->getStyle("F$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
 
-            $penyesuaian += $response_detail['penyesuaian'];
             $detail_start_row++;
         }
 
         $total_start_row = $detail_start_row;
-        $sheet->mergeCells('A'.$total_start_row.':E'.$total_start_row);
-        $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A'.$total_start_row.':E'.$total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
-        $sheet->setCellValue("F$total_start_row", number_format((float) $penyesuaian, '2', '.', ','))->getStyle("F$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->mergeCells('A' . $total_start_row . ':E' . $total_start_row);
+        $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':E' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
 
+        $sheet->setCellValue("F$detail_start_row", "=SUM(F10:F" . ($detail_start_row - 1) . ")")->getStyle("F$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+
+        $sheet->getStyle("F$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);
         $sheet->getColumnDimension('C')->setAutoSize(true);

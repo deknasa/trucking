@@ -225,7 +225,7 @@ class InvoiceHeaderController extends MyController
 
         $header_right_columns = [
             [
-                'label' => 'Agen',
+                'label' => 'Customer',
                 'index' => 'agen',
             ],
             [
@@ -339,10 +339,7 @@ class InvoiceHeaderController extends MyController
                 $sheet->getStyle("A$detail_table_header_row:M$detail_table_header_row")->getFont()->setBold(true);
                 $sheet->getStyle("A$detail_table_header_row:M$detail_table_header_row")->getAlignment()->setHorizontal('center');
             }
-            $response_detail['omsets'] = number_format((float) $response_detail['omset'], '2', '.', ',');
-            $response_detail['extras'] = number_format((float) $response_detail['extra'], '2', '.', ',');
-            $response_detail['jumlahs'] = number_format((float) $response_detail['jumlah'], '2', '.', ',');
-
+        
             $tglsp = $response_detail["tglsp"];
             $timeStamp = strtotime($tglsp);
             $datetglsp = date('d-m-Y', $timeStamp); 
@@ -357,24 +354,25 @@ class InvoiceHeaderController extends MyController
             $sheet->setCellValue("G$detail_start_row", $response_detail['full']);
             $sheet->setCellValue("H$detail_start_row", $response_detail['empty']);
             $sheet->setCellValue("I$detail_start_row", $response_detail['fullEmpty']);
-            $sheet->setCellValue("J$detail_start_row", $response_detail['omsets']);
-            $sheet->setCellValue("K$detail_start_row", $response_detail['extras']);
-            $sheet->setCellValue("L$detail_start_row", $response_detail['jumlahs']);
+            $sheet->setCellValue("J$detail_start_row", $response_detail['omset']);
+            $sheet->setCellValue("K$detail_start_row", $response_detail['extra']);
+            $sheet->setCellValue("L$detail_start_row", $response_detail['jumlah']);
             $sheet->setCellValue("M$detail_start_row", $response_detail['keterangan']);
             
             $sheet->getStyle("M$detail_start_row")->getAlignment()->setWrapText(true);
             $sheet->getColumnDimension('M')->setWidth(50);
 
             $sheet->getStyle("A$detail_start_row:M$detail_start_row")->applyFromArray($styleArray);
-            $sheet->getStyle("J$detail_start_row:L$detail_start_row")->applyFromArray($style_number);
-            $jumlah += $response_detail['jumlah'];
+            $sheet->getStyle("J$detail_start_row:L$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
             $detail_start_row++;
         }
 
         $total_start_row = $detail_start_row;
         $sheet->mergeCells('A' . $total_start_row . ':K' . $total_start_row);
         $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':K' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
-        $sheet->setCellValue("L$total_start_row", number_format((float) $jumlah, '2', '.', ','))->getStyle("L$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->setCellValue("L$detail_start_row", "=SUM(L9:L" . ($detail_start_row - 1) . ")")->getStyle("L$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+
+        $sheet->getStyle("L$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
 
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);

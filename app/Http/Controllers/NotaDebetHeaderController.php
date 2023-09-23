@@ -257,28 +257,28 @@ class NotaDebetHeaderController extends MyController
                 $sheet->getStyle("A$detail_table_header_row:E$detail_table_header_row")->getFont()->setBold(true);
                 $sheet->getStyle("A$detail_table_header_row:E$detail_table_header_row")->getAlignment()->setHorizontal('center');
             }
-            $response_detail['lebihbayars'] = number_format((float) $response_detail['lebihbayar'], '2', '.', ',');
-        
             $sheet->setCellValue("A$detail_start_row", $response_index + 1);
             $sheet->setCellValue("B$detail_start_row", $response_detail['invoice_nobukti']);
             $sheet->setCellValue("C$detail_start_row", $response_detail['coalebihbayar']);
             $sheet->setCellValue("D$detail_start_row", $response_detail['keterangan']);
-            $sheet->setCellValue("E$detail_start_row", $response_detail['lebihbayars']);
+            $sheet->setCellValue("E$detail_start_row", $response_detail['lebihbayar']);
 
             $sheet->getStyle("D$detail_start_row")->getAlignment()->setWrapText(true);
             $sheet->getColumnDimension('D')->setWidth(40);
 
             $sheet ->getStyle("A$detail_start_row:E$detail_start_row")->applyFromArray($styleArray);
-            $sheet ->getStyle("E$detail_start_row")->applyFromArray($style_number);
+            $sheet ->getStyle("E$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
 
-            $lebihbayar += $response_detail['lebihbayar'];
             $detail_start_row++;
         }
 
         $total_start_row = $detail_start_row;
         $sheet->mergeCells('A'.$total_start_row.':D'.$total_start_row);
         $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A'.$total_start_row.':D'.$total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
-        $sheet->setCellValue("E$total_start_row", number_format((float) $lebihbayar, '2', '.', ','))->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+
+        $sheet->setCellValue("E$detail_start_row", "=SUM(E10:E" . ($detail_start_row - 1) . ")")->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+       
+         $sheet->getStyle("E$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
 
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);

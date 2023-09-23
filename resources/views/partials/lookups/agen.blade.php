@@ -21,12 +21,12 @@
           hidden: true
         },
         {
-          label: 'KODE AGEN (EMKL)',
+          label: 'KODE CUSTOMER',
           name: 'kodeagen',
           align: 'left',
         },
         {
-          label: 'NAMA AGEN (EMKL)',
+          label: 'NAMA CUSTOMER',
           name: 'namaagen',
           align: 'left'
         },

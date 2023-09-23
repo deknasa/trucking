@@ -140,7 +140,7 @@ class InvoiceChargeGandenganHeaderController extends MyController
                 'index' => 'tglproses',
             ],
             [
-                'label' => 'Agen',
+                'label' => 'Customer',
                 'index' => 'agen',
             ]
         ];

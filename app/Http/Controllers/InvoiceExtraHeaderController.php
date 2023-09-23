@@ -172,7 +172,7 @@ class InvoiceExtraHeaderController extends MyController
                 'index'=>'piutang_nobukti'
             ],
             [
-                'label'=>'Agen',
+                'label'=>'Customer',
                 'index'=>'agen'
             ],
             [
@@ -237,26 +237,24 @@ class InvoiceExtraHeaderController extends MyController
                 $sheet->getStyle("A$detail_table_header_row:C$detail_table_header_row")->getFont()->setBold(true);
                 $sheet->getStyle("A$detail_table_header_row:C$detail_table_header_row")->getAlignment()->setHorizontal('center');
             }
-            $response_detail['nominals'] = number_format((float) $response_detail['nominal'], '2', '.', ',');
-         
             $sheet->setCellValue("A$detail_start_row", $response_index + 1);
             $sheet->setCellValue("B$detail_start_row", $response_detail['keterangan']);
-            $sheet->setCellValue("C$detail_start_row", $response_detail['nominals']);
+            $sheet->setCellValue("C$detail_start_row", $response_detail['nominal']);
      
             $sheet->getStyle("B$detail_start_row")->getAlignment()->setWrapText(true);
             $sheet->getColumnDimension('B')->setWidth(50);
 
             $sheet ->getStyle("A$detail_start_row:B$detail_start_row")->applyFromArray($styleArray);
-            $sheet ->getStyle("C$detail_start_row")->applyFromArray($style_number);
-            
-            $nominal += $response_detail['nominal'];
+            $sheet ->getStyle("C$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
             $detail_start_row++;
          }
  
          $total_start_row = $detail_start_row;
          $sheet->mergeCells('A'.$total_start_row.':B'.$total_start_row);
          $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A'.$total_start_row.':B'.$total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
-         $sheet->setCellValue("C$total_start_row", number_format((float) $nominal, '2', '.', ','))->getStyle("C$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+         $sheet->setCellValue("C$detail_start_row", "=SUM(C11:C" . ($detail_start_row - 1) . ")")->getStyle("C$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+ 
+         $sheet->getStyle("C$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
  
          $sheet->getColumnDimension('A')->setAutoSize(true);
          $sheet->getColumnDimension('C')->setAutoSize(true);

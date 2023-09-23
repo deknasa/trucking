@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "7f25cb199cf6201800000f56ed0b2bef",
+  "ReportGuid": "23d8c906a93155d1a39813c4b28ce041",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportAgen.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1687935575000+0700)/",
+  "ReportChanged": "/Date(1695433530000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -251,7 +251,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "KODE AGEN (EMKL)"
+                "Value": "KODE CUSTOMER"
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
@@ -398,7 +398,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "NAMA AGEN (EMKL)"
+                "Value": "NAMA CUSTOMER"
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",

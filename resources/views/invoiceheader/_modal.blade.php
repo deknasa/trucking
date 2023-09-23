@@ -39,7 +39,7 @@
               <div class="row form-group">
                 <div class="col-12 col-md-2">
                   <label class="col-form-label">
-                    AGEN <span class="text-danger">*</span>
+                    CUSTOMER <span class="text-danger">*</span>
                   </label>
                 </div>
                 <div class="col-12 col-md-4">
@@ -767,7 +767,7 @@
             sortable: true,
           },
           {
-            label: "EMKL",
+            label: "CUSTOMER",
             name: "agen_id",
             sortable: true,
           },
@@ -1439,7 +1439,7 @@
 
   function initLookup() {
     $('.agen-lookup').lookup({
-      title: 'Agen Lookup',
+      title: 'Customer Lookup',
       fileName: 'agen',
       beforeProcess: function(test) {
         this.postData = {
