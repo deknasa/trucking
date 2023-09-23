@@ -565,7 +565,7 @@
               row = parseInt(selectedRows[angka]) - 1;
               let element;
 
-              if (indexes[0] == 'alatbayar' || indexes[0] == 'id' || indexes[0] == 'tglbukti' || indexes[0] == 'bank' || indexes[0] == 'nowarkat' || indexes[0] == 'agen' || indexes[0] == 'piutang_id') {
+              if (indexes[0] == 'alatbayar' || indexes[0] == 'statuspelunasan' || indexes[0] == 'id' || indexes[0] == 'tglbukti' || indexes[0] == 'bank' || indexes[0] == 'nowarkat' || indexes[0] == 'agen' || indexes[0] == 'piutang_id') {
                 if (indexes.length > 1) {
                   element = form.find(`[name="${indexes[0]}[]"]`)[row];
                 } else {
@@ -621,17 +621,16 @@
   })
 
 
-  // $(document).on('change', `#crudForm [name="statuspelunasan"]`, function() {
-  //   pelunasanText = $("[name=statuspelunasan] option:selected").text()
-  //   if ($.trim(pelunasanText) == 'NOTA DEBET') {
-  //     $('[name=bank]').parents('.row').hide()
-  //     $('[name=alatbayar]').parents('.row').hide()
-  //   }
-  //   if ($.trim(pelunasanText) == 'BANK/KAS') {
-  //     $('[name=bank]').parents('.row').show()
-  //     $('[name=alatbayar]').parents('.row').show()
-  //   }
-  // })
+  $(document).on('change', `#crudForm [name="statuspelunasan"]`, function() {
+    pelunasanText = $("[name=statuspelunasan] option:selected").text()
+    if ($.trim(pelunasanText) == 'NOTA DEBET') {
+      $('#tablePelunasan').jqGrid('setColProp', 'nominallebihbayar', { editable: false });
+      $('#tablePelunasan').jqGrid('setColProp', 'statusnotadebet', { editable: false });
+    }else{      
+      $('#tablePelunasan').jqGrid('setColProp', 'nominallebihbayar', { editable: true });
+      $('#tablePelunasan').jqGrid('setColProp', 'statusnotadebet', { editable: true });
+    }
+  })
 
   function setTotal() {
     let nominalDetails = $(`#table_body [name="bayarppd[]"]:not([disabled])`)
