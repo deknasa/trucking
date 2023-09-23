@@ -18,6 +18,7 @@
               <li><a href="#detail-tab">Details</a></li>
               <li><a href="#penerimaan-tab">Penerimaan Kas/bank</a></li>
               <li><a href="#jurnal-tab">Jurnal</a></li>
+              <li><a href="#pengeluaran-tab">Jurnal Pengeluaran</a></li>
             </ul>
             <div id="detail-tab">
               <table id="detail"></table>
@@ -27,6 +28,9 @@
             </div>
             <div id="jurnal-tab">
               <table id="jurnalGrid"></table>
+            </div>
+            <div id="pengeluaran-tab">
+              <table id="jurnalPengeluaranGrid"></table>
             </div>
           </div>
         </div>
@@ -41,6 +45,7 @@
 @include('pelunasanpiutangheader._detail')
 @include('penerimaan._penerimaan')
 @include('jurnalumum._jurnal')
+@include('pelunasanpiutangheader._jurnalpengeluaran')
 
 @push('scripts')
 <script>
@@ -72,6 +77,7 @@
     loadDetailGrid()
     loadPenerimaanGrid(nobukti)
     loadJurnalUmumGrid(nobukti)
+    loadJurnalPengeluaranGrid(nobukti)
 
      @isset($request['tgldari'])
       tgldariheader = `{{ $request['tgldari'] }}`;
@@ -344,6 +350,7 @@
         },
         onSelectRow: function(id) {
           let nobukti = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_penerimaan_nobuktihidden"]`).attr('title') ?? '';
+          let nobuktiPengeluaran = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_pengeluaran_nobukti"]`).attr('title') ?? '';
           if (nobukti == '-') {
             nobukti = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_penerimaangiro_nobuktihidden"]`).attr('title') ?? '';
           }
@@ -356,6 +363,7 @@
           loadDetailData(id)
           loadPenerimaanData(id, nobukti)
           loadJurnalUmumData(id, nobukti)
+          loadJurnalPengeluaranData(id, nobuktiPengeluaran)
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
