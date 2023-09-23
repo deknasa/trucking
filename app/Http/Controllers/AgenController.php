@@ -12,7 +12,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class AgenController extends MyController
 {
-    public $title = 'Agen';
+    public $title = 'Customer';
 
     /**
      * Fungsi index

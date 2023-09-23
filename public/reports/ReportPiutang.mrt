@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "4f74653374715d52e71b489eafb3b889",
+  "ReportGuid": "26bcc046f29463448cdbfabeddadb3c0",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "ReportPiutang.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportPiutang.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1689223805000+0700)/",
+  "ReportChanged": "/Date(1695374407000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -203,6 +203,30 @@
             "Name": "nominal",
             "NameInSource": "nominal",
             "Alias": "nominal",
+            "Type": "System.String"
+          },
+          "4": {
+            "Name": "tgldariheaderinvoiceheader",
+            "NameInSource": "tgldariheaderinvoiceheader",
+            "Alias": "tgldariheaderinvoiceheader",
+            "Type": "System.String"
+          },
+          "5": {
+            "Name": "tglsampaiheaderinvoiceheader",
+            "NameInSource": "tglsampaiheaderinvoiceheader",
+            "Alias": "tglsampaiheaderinvoiceheader",
+            "Type": "System.String"
+          },
+          "6": {
+            "Name": "tgldariheaderinvoiceextraheader",
+            "NameInSource": "tgldariheaderinvoiceextraheader",
+            "Alias": "tgldariheaderinvoiceextraheader",
+            "Type": "System.String"
+          },
+          "7": {
+            "Name": "tglsampaiheaderinvoiceextraheader",
+            "NameInSource": "tglsampaiheaderinvoiceextraheader",
+            "Alias": "tglsampaiheaderinvoiceextraheader",
             "Type": "System.String"
           }
         },
@@ -595,7 +619,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "Agen"
+                "Value": "Customer"
               },
               "VertAlignment": "Center",
               "Font": ";9;;",

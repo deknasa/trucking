@@ -133,7 +133,7 @@
             <div class="row form-group mb-5">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
-                  AGEN <span class="text-danger">*</span>
+                  CUSTOMER <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-8 col-md-10">
@@ -2157,7 +2157,7 @@
     })
 
     $('.agen-lookup').lookup({
-      title: 'Agen Detail Lookup',
+      title: 'Customer Lookup',
       fileName: 'agen',
       beforeProcess: function(test) {
         this.postData = {

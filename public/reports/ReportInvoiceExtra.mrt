@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "0c0ab9cf901ba55f31d2bd85fae55656",
+  "ReportGuid": "65fd2dbe3975c7b98882d6676ce7bae3",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "ReportInvoiceExtra.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportInvoiceExtra.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1689160655000+0700)/",
+  "ReportChanged": "/Date(1695433236000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -132,36 +132,30 @@
             "Type": "System.String"
           },
           "12": {
-            "Name": "jumlahcetak",
-            "NameInSource": "jumlahcetak",
-            "Alias": "jumlahcetak",
-            "Type": "System.String"
-          },
-          "13": {
             "Name": "judulLaporan",
             "NameInSource": "judulLaporan",
             "Alias": "judulLaporan",
             "Type": "System.String"
           },
-          "14": {
+          "13": {
             "Name": "judul",
             "NameInSource": "judul",
             "Alias": "judul",
             "Type": "System.String"
           },
-          "15": {
+          "14": {
             "Name": "tglcetak",
             "NameInSource": "tglcetak",
             "Alias": "tglcetak",
             "Type": "System.String"
           },
-          "16": {
+          "15": {
             "Name": "usercetak",
             "NameInSource": "usercetak",
             "Alias": "usercetak",
             "Type": "System.String"
           },
-          "17": {
+          "16": {
             "Name": "combo",
             "NameInSource": "combo",
             "Alias": "combo",
@@ -508,7 +502,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "Agen"
+                "Value": "Customer"
               },
               "VertAlignment": "Center",
               "Font": ";9;;",

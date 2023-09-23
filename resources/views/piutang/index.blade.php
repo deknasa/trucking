@@ -231,7 +231,7 @@
             }
           },
           {
-            label: 'AGEN',
+            label: 'CUSTOMER',
             name: 'agen_id',
             align: 'left'
           },

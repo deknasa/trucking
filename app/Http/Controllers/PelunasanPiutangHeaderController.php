@@ -296,7 +296,7 @@ class PelunasanPiutangHeaderController extends MyController
                 'index' => 'bank_id',
             ],
             [
-                'label' => 'Agen',
+                'label' => 'Customer',
                 'index' => 'agen_id',
             ],
         ];
@@ -412,30 +412,24 @@ class PelunasanPiutangHeaderController extends MyController
                 $sheet->getStyle("A$detail_table_header_row:J$detail_table_header_row")->getFont()->setBold(true);
                 $sheet->getStyle("A$detail_table_header_row:J$detail_table_header_row")->getAlignment()->setHorizontal('center');
             }
-            $response_detail['nominals'] = number_format((float) $response_detail['nominal'], '2', '.', ',');
-            $response_detail['nominalpiutangs'] = number_format((float) $response_detail['nominalpiutang'], '2', '.', ',');
-            $response_detail['nominallebihbayars'] = number_format((float) $response_detail['nominallebihbayar'], '2', '.', ',');
-            $response_detail['sisapiutangs'] = number_format((float) $response_detail['sisapiutang'], '2', '.', ',');
-            $response_detail['potongans'] = number_format((float) $response_detail['potongan'], '2', '.', ',');
-        
             $sheet->setCellValue("A$detail_start_row", $response_index + 1);
             $sheet->setCellValue("B$detail_start_row", $response_detail['piutang_nobukti']);
             $sheet->setCellValue("C$detail_start_row", $response_detail['invoice_nobukti']);
-            $sheet->setCellValue("D$detail_start_row", $response_detail['nominalpiutangs']);
-            $sheet->setCellValue("E$detail_start_row", $response_detail['nominals']);
-            $sheet->setCellValue("F$detail_start_row", $response_detail['potongans']);
-            $sheet->setCellValue("G$detail_start_row", $response_detail['nominallebihbayars']);
+            $sheet->setCellValue("D$detail_start_row", $response_detail['nominalpiutang']);
+            $sheet->setCellValue("E$detail_start_row", $response_detail['nominal']);
+            $sheet->setCellValue("F$detail_start_row", $response_detail['potongan']);
+            $sheet->setCellValue("G$detail_start_row", $response_detail['nominallebihbayar']);
             $sheet->setCellValue("H$detail_start_row", $response_detail['keteranganpotongan']);
             $sheet->setCellValue("I$detail_start_row", $response_detail['keterangan']);
-            $sheet->setCellValue("J$detail_start_row", $response_detail['sisapiutangs']);
+            $sheet->setCellValue("J$detail_start_row", $response_detail['sisapiutang']);
 
             $sheet->getStyle("H$detail_start_row:I$detail_start_row")->getAlignment()->setWrapText(true);
             $sheet->getColumnDimension('H')->setWidth(30);
             $sheet->getColumnDimension('I')->setWidth(30);
 
             $sheet ->getStyle("A$detail_start_row:J$detail_start_row")->applyFromArray($styleArray);
-            $sheet ->getStyle("D$detail_start_row:G$detail_start_row")->applyFromArray($style_number);
-            $sheet ->getStyle("J$detail_start_row")->applyFromArray($style_number);
+            $sheet ->getStyle("D$detail_start_row:G$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
+            $sheet ->getStyle("J$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
 
             $nominal += $response_detail['nominal'];
             $detail_start_row++;
@@ -444,8 +438,9 @@ class PelunasanPiutangHeaderController extends MyController
         $total_start_row = $detail_start_row;
         $sheet->mergeCells('A'.$total_start_row.':D'.$total_start_row);
         $sheet->setCellValue("A$total_start_row", 'Total Nominal Bayar')->getStyle('A'.$total_start_row.':D'.$total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
-        $sheet->setCellValue("E$total_start_row", number_format((float) $nominal, '2', '.', ','))->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
-
+        $sheet->setCellValue("E$detail_start_row", "=SUM(E10:E" . ($detail_start_row - 1) . ")")->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->getStyle("E$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+        
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);
         $sheet->getColumnDimension('C')->setAutoSize(true);

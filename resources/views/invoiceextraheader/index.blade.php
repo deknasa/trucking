@@ -270,7 +270,7 @@
             formatter: currencyFormat,
           },
           {
-            label: 'agen',
+            label: 'CUSTOMER',
             name: 'agen',
             align: 'left'
           },

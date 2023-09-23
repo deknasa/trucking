@@ -58,7 +58,7 @@
                   </div>
                 </div>
                 <div class="form-group ">
-                  <label class="col-sm-12 col-form-label">EMKL <span class="text-danger">*</span></label>
+                  <label class="col-sm-12 col-form-label">CUSTOMER <span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <input type="hidden" name="agen_id">
                     <input type="text" name="agen" class="form-control agen-lookup">
@@ -1729,7 +1729,7 @@
       }
     })
     $('.agen-lookup').lookup({
-      title: 'Agen Lookup',
+      title: 'Customer Lookup',
       fileName: 'agen',
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();

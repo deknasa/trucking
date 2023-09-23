@@ -55,7 +55,7 @@
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
-                  AGEN <span class="text-danger">*</span></label>
+                  CUSTOMER <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-md-10">
                 <input type="hidden" name="agen_id">
@@ -324,9 +324,9 @@
     activeGrid = null
 
     getMaxLength(form)
-    form.find('#btnSubmit').prop('disabled',false)
+    form.find('#btnSubmit').prop('disabled', false)
     if (form.data('action') == "view") {
-      form.find('#btnSubmit').prop('disabled',true)
+      form.find('#btnSubmit').prop('disabled', true)
     }
     initLookup()
     initSelect2(form.find('.select2bs4'), true)
@@ -452,6 +452,7 @@
           })
       })
   }
+
   function viewOrderanTrucking(orderanTruckingId) {
     let form = $('#crudForm')
 
@@ -477,15 +478,15 @@
       ])
       .then(() => {
         showOrderanTrucking(form, orderanTruckingId)
-        .then(orderanTruckingId => {
-              // form.find('.aksi').hide()
-              setFormBindKeys(form)
-              form.find('[name]').attr('disabled', 'disabled').css({
-                background: '#fff'
-              })
-              form.find('[name=id]').prop('disabled',false)
-              
+          .then(orderanTruckingId => {
+            // form.find('.aksi').hide()
+            setFormBindKeys(form)
+            form.find('[name]').attr('disabled', 'disabled').css({
+              background: '#fff'
             })
+            form.find('[name=id]').prop('disabled', false)
+
+          })
           .then(() => {
             $('#crudModal').modal('show')
             $('#crudForm').find(`.ui-datepicker-trigger`).attr('disabled', true)
@@ -592,7 +593,7 @@
     let agen = $('#crudForm').find(`[name="agen"]`).parents('.input-group')
     let jenisorder = $('#crudForm').find(`[name="jenisorder"]`).parents('.input-group')
     let pelanggan = $('#crudForm').find(`[name="pelanggan"]`).parents('.input-group')
-  
+
     if (!edit) {
 
       container.find('.button-clear').attr('disabled', true)
@@ -608,7 +609,7 @@
       pelanggan.find('.button-clear').attr('disabled', true)
       pelanggan.find('input').attr('readonly', true)
       pelanggan.children().find('.lookup-toggler').attr('disabled', true)
-    
+
 
     } else {
       console.log("true");
@@ -1035,7 +1036,7 @@
     })
 
     $('.agen-lookup').lookup({
-      title: 'Agen Lookup',
+      title: 'Customer Lookup',
       fileName: 'agen',
       beforeProcess: function(test) {
         this.postData = {

@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "6dd32d7be48f41d8beead2ef728dd2ea",
+  "ReportGuid": "11d37286ccc00ffcdeb5c0527f9e887f",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportPelunasanPiutang.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1689249279000+0700)/",
+  "ReportChanged": "/Date(1695374627000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -885,7 +885,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "Agen"
+                "Value": "Customer"
               },
               "VertAlignment": "Center",
               "Font": ";9;;",

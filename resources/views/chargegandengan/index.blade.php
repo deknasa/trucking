@@ -78,7 +78,7 @@
                         align:'left',
                     },
                     {
-                        label:'namaemkl',
+                        label:'NAMA CUSTOMER',
                         name:'namaemkl',
                         align:'left',
                     },

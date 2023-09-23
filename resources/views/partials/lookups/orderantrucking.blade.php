@@ -40,7 +40,7 @@
           name: 'container_id',
         },
         {
-          label: 'AGEN',
+          label: 'CUSTOMER',
           name: 'agen_id',
         },
         {

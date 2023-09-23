@@ -35,7 +35,7 @@
               <div class="form-group col-md-6">
                 <div class="row">
                   <div class="col-12 col-sm-3 col-md-4 col-form-label">
-                    <label>agen <span class="text-danger">*</span> </label>
+                    <label>CUSTOMER <span class="text-danger">*</span> </label>
                   </div>
                   <div class="col-12 col-sm-9 col-md-8">
                     <input type="text" name="agen" class="form-control agen-lookup">
@@ -1140,7 +1140,7 @@
   function initLookup() {
     // 
     $('.agen-lookup').lookup({
-      title: 'agen Lookup',
+      title: 'Customer Lookup',
       fileName: 'agen',
       beforeProcess: function(test) {
         this.postData = {

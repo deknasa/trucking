@@ -43,11 +43,11 @@
                         hidden: true
                     },
                     {
-                        label: 'KODE AGEN (EMKL)',
+                        label: 'KODE CUSTOMER',
                         name: 'kodeagen',
                     },
                     {
-                        label: 'NAMA AGEN (EMKL)',
+                        label: 'NAMA CUSTOMER',
                         name: 'namaagen',
                     },
                     {
@@ -388,7 +388,7 @@
                         class: 'btn btn-orange btn-sm mr-1',
                         onClick: () => {
                             selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-    
+
                             viewAgen(selectedId)
                         }
                     },
@@ -553,11 +553,10 @@
             getCekExport(params).then((response) => {
                     if ($('#rangeModal').data('action') == 'export') {
                         $.ajax({
-                            url: `{{ config('app.api_url ') }}agen/export?` + params,
+                            url: `${apiUrl}agen/export?${params}`,
                             type: 'GET',
-                            beforeSend: function(xhr) {
-                                xhr.setRequestHeader('Authorization', `Bearer {{ session('
-                                    access_token ') }}`);
+                            headers: {
+                                Authorization: `Bearer ${accessToken}`
                             },
                             xhrFields: {
                                 responseType: 'arraybuffer'
@@ -646,7 +645,7 @@
 
                 return new Promise((resolve, reject) => {
                     $.ajax({
-                        url: `${apiUrl}trado/export?${params}`,
+                        url: `${apiUrl}agen/export?${params}`,
                         dataType: "JSON",
                         headers: {
                             Authorization: `Bearer ${accessToken}`
