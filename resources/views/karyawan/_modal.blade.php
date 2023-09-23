@@ -11,7 +11,7 @@
         <form action="" method="post">
           <div class="modal-body">
 
-                   {{-- <div class="row form-group">
+            {{-- <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">ID</label>
               </div>
@@ -62,6 +62,16 @@
                 <select name="statusstaff" class="form-select select2bs4" style="width: 100%;">
                   <option value="">-- PILIH STATUS STAFF --</option>
                 </select>
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">
+                  JABATAN <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-12 col-md-10">
+                <input type="text" name="jabatan" class="form-control">
               </div>
             </div>
           </div>
@@ -193,9 +203,9 @@
     setFormBindKeys(form)
 
     activeGrid = null
-    form.find('#btnSubmit').prop('disabled',false)
+    form.find('#btnSubmit').prop('disabled', false)
     if (form.data('action') == "view") {
-      form.find('#btnSubmit').prop('disabled',true)
+      form.find('#btnSubmit').prop('disabled', true)
     }
 
     getMaxLength(form)
@@ -223,7 +233,7 @@
     $('#crudModalTitle').text('Create Karyawan')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-    
+
     Promise
       .all([
         setStatusAktifOptions(form),
@@ -315,6 +325,7 @@
           })
       })
   }
+
   function viewKaryawan(Id) {
     let form = $('#crudForm')
 
@@ -337,15 +348,15 @@
       ])
       .then(() => {
         showKaryawan(form, Id)
-        .then(Id => {
-              // form.find('.aksi').hide()
-              setFormBindKeys(form)
-              form.find('[name]').attr('disabled', 'disabled').css({
-                background: '#fff'
-              })
-              form.find('[name=id]').prop('disabled',false)
-              
+          .then(Id => {
+            // form.find('.aksi').hide()
+            setFormBindKeys(form)
+            form.find('[name]').attr('disabled', 'disabled').css({
+              background: '#fff'
             })
+            form.find('[name=id]').prop('disabled', false)
+
+          })
           .then(() => {
             $('#crudModal').modal('show')
           })

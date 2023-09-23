@@ -97,6 +97,11 @@
           }
         },
         {
+          label: 'JABATAN',
+          name: 'jabatan',
+          align: 'left'
+        },
+        {
           label: 'MODIFIEDBY',
           name: 'modifiedby',
           align: 'left'
