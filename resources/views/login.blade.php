@@ -87,6 +87,7 @@
                     </div>
                     <input type="text" readonly hidden name="latitude" id="latitude">
                     <input type="text" readonly hidden name="longitude" id="longitude">
+                    <input type="text" readonly hidden name="clientippublic" id="clientippublic">
                     <div id="error">
                     </div>
                     {{-- <a href="{{ config('app.api_url') }}">reset password</a> --}}
@@ -117,6 +118,9 @@
             var x = document.getElementById("demo");
 
             getLocation()
+            fetch('https://api.ipify.org?format=json')
+            .then(response => response.json())
+            .then(data => $('#clientippublic').val(data.ip));
             function getLocation() {
                 if (navigator.geolocation) {
                     navigator.geolocation.getCurrentPosition(showPosition);

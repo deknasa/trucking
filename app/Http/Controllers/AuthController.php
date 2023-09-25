@@ -49,8 +49,7 @@ class AuthController extends Controller
 
         $dataIp = $credentials;
         // $dataIp['ipclient'] = "192.168.12.3";
-        $dataIp['ipclient'] = $request->ip();
-
+        $dataIp['ipclient'] = $request->clientippublic;
         $cekIp = Http::withHeaders([
             'Accept' => 'application/json'
         ])->withOptions(['verify' => true])
