@@ -321,7 +321,7 @@
   <script src="{{ asset('libraries/tas-lib/js/pager.js?version='. config('app.version')) }}"></script>
   <script src="{{ asset('libraries/tas-lib/js/lookup.js?version='. config('app.version')) }}"></script>
   <script src="{{ asset('libraries/tas-lib/js/mains.js?version='. config('app.version')) }}"></script>
-  <script src="{{ asset('libraries/tas-lib/js/app.js?version='. config('app.version')) }}"></script>
+  {{-- <script src="{{ asset('libraries/tas-lib/js/app.js?version='. config('app.version')) }}"></script> --}}
 
   <!-- Pusher -->
 
@@ -401,20 +401,20 @@
       .focus(function() {})
 
     $(document).ready(function() {
-      Echo.channel('export')
-        .listen('UpdateExportProgress', event => {
-          $('.modal-body').append(`<div id="progressbar"></div>`)
+      // Echo.channel('export')
+      //   .listen('UpdateExportProgress', event => {
+      //     $('.modal-body').append(`<div id="progressbar"></div>`)
 
-          $(document).find('#progressbar').progressbar({
-            value: event.progress
-          })
+      //     $(document).find('#progressbar').progressbar({
+      //       value: event.progress
+      //     })
 
-          $('.ui-progressbar-value').addClass('text-center').text(`${parseInt(event.progress)}%`)
+      //     $('.ui-progressbar-value').addClass('text-center').text(`${parseInt(event.progress)}%`)
 
-          if (event.progress >= 100) {
-            $(document).find('#progressbar').remove()
-          }
-        })
+      //     if (event.progress >= 100) {
+      //       $(document).find('#progressbar').remove()
+      //     }
+      //   })
 
       $.ajax({
         url: `${apiUrl}error/geterrors`,
