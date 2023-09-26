@@ -33,6 +33,37 @@
             align: "right",
           },
           {
+            label: 'KETERANGAN',
+            name: 'keterangan',
+            width: '300px'
+          },
+          {
+            label: 'NO BUKTI PENERIMAAN TRUCKING',
+            name: 'penerimaantruckingheader_nobukti',
+            width: '200px'
+          },
+          {
+            label: 'NO SURAT PENGANTAR',
+            name: 'suratpengantar_nobukti',
+            width: '200px'
+          },
+          {
+            label: 'NOMINAL TAGIH',
+            name: 'nominaltagih',
+            formatter: currencyFormat,
+            align: "right",
+          },
+          {
+            label: 'STATUS TITIPAN EMKL',
+            name: 'statustitipanemkl',
+            width: '200px'
+          },
+          {
+            label: 'NO BUKTI PENGELUARAN STOK',
+            name: 'pengeluaranstok_nobukti',
+            width: '200px'
+          },
+          {
             label: 'stok',
             name: 'stok',
           },
@@ -45,16 +76,6 @@
             name: 'harga',
             formatter: currencyFormat,
             align: "right",
-          },
-          {
-            label: 'KETERANGAN',
-            name: 'keterangan',
-            width: '300px'
-          },
-          {
-            label: 'NO BUKTI PENERIMAAN TRUCKING',
-            name: 'penerimaantruckingheader_nobukti',
-            width: '200px'
           },
           {
             label: 'NO orderan TRUCKING',
@@ -131,6 +152,7 @@
             $(this).jqGrid('footerData', 'set', {
               nobukti: 'Total:',
               nominal: data.attributes.totalNominal,
+              nominaltagih: data.attributes.totalNominal,
             }, true)
           }
         }

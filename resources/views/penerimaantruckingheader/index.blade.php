@@ -223,6 +223,11 @@
            }
           },
           {
+            label: 'KETERANGAN',
+            name: 'keteranganheader',
+            align: 'left'
+          },
+          {
             label: 'USER BUKA CETAK',
             name: 'userbukacetak',
             align: 'left'

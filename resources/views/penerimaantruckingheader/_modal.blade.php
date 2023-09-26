@@ -74,7 +74,7 @@
                   jenisorder <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="hidden" id="jenisorder" name="jenisorder_id">
+                <input type="hidden" id="jenisorder" name="jenisorderan_id">
                 <input type="text" name="jenisorder" class="form-control jenisorder-lookup">
               </div>
             </div>
@@ -113,6 +113,16 @@
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="hidden" name="coa">
                 <input type="text" name="keterangancoa" class="form-control akunpusat-lookup">
+              </div>
+            </div>
+
+            <div class="row form-group" style="display:none;">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
+                  keterangan <span class="text-danger">*</span></label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="text" name="keteranganheader" class="form-control">
               </div>
             </div>
 
@@ -368,7 +378,7 @@
           value: null
         })
         data.push({
-          name: 'jenisorder_id',
+          name: 'jenisorderan_id',
           value: null
         })
         data.push({
@@ -443,7 +453,7 @@
           value: null
         })
         data.push({
-          name: 'jenisorder_id',
+          name: 'jenisorderan_id',
           value: null
         })
         data.push({
@@ -512,7 +522,6 @@
       } else if (KodePenerimaanId === "PBT") {
         data = []
 
-        console.log($('[name=jenisorder_id]').val());
         // console.log(form.find(`[name="jenisorder_id"]`).val());
         data.push({
           name: 'id',
@@ -521,6 +530,10 @@
         data.push({
           name: 'nobukti',
           value: form.find(`[name="nobukti"]`).val()
+        })
+        data.push({
+          name: 'keteranganheader',
+          value: form.find(`[name="keteranganheader"]`).val()
         })
         data.push({
           name: 'tglbukti',
@@ -555,10 +568,6 @@
           value: form.find(`[name="periodesampai"]`).val()
         })
         data.push({
-          name: 'jenisorder_id',
-          value: form.find(`[name="jenisorder_id"]`).val()
-        })
-        data.push({
           name: 'keterangancoa',
           value: form.find(`[name="keterangancoa"]`).val()
         })
@@ -576,10 +585,10 @@
         })
         data.push({
           name: 'jenisorderan_id',
-          value: form.find(`[name="jenisorder_id"]`).val()
+          value: form.find(`[name="jenisorderan_id"]`).val()
         })
         data.push({
-          name: 'jenisorderan',
+          name: 'jenisorder',
           value: form.find(`[name="jenisorder"]`).val()
         })
         data.push({
@@ -858,6 +867,7 @@
     $('#gbox_tablePinjaman').hide()
     $('#gbox_tablePinjamanKaryawan').hide()
     $('#gbox_tablePengembalianTitipan').hide()
+    $('[name=keteranganheader]').parents('.form-group').hide()
 
     $('[name=periodedari]').parents('.form-group').hide()
     $('[name=periodesampai]').parents('.form-group').hide()
@@ -868,7 +878,7 @@
     $('.tbl_pengeluarantruckingheader_nobukti').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
     $('[name=karyawanheader_id]').parents('.form-group').hide()
-    $('[name=jenisorder_id]').parents('.form-group').hide()
+    $('[name=jenisorderan_id]').parents('.form-group').hide()
     $('.colspan').attr('colspan', 2);
     $('#sisaColFoot').hide()
     $('#sisaFoot').hide()
@@ -879,11 +889,12 @@
 
   function tampilanPJP() {
     $('#btnReloadBbtGrid').parents('.row').hide()
+    $('[name=keteranganheader]').parents('.form-group').hide()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('.tbl_supir_id').hide()
     $('[name=periodedari]').parents('.form-group').hide()
     $('[name=periodesampai]').parents('.form-group').hide()
-    $('[name=jenisorder_id]').parents('.form-group').hide()
+    $('[name=jenisorderan_id]').parents('.form-group').hide()
     $('[name=supirheader_id]').parents('.form-group').show()
     $('[name=karyawanheader_id]').parents('.form-group').hide()
     $('#gbox_tablePinjaman').show()
@@ -896,6 +907,7 @@
 
   function tampilanPJPK() {
     $('#btnReloadBbtGrid').parents('.row').hide()
+    $('[name=keteranganheader]').parents('.form-group').hide()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('.tbl_supir_id').hide()
     $('[name=periodedari]').parents('.form-group').hide()
@@ -911,12 +923,13 @@
 
   function tampilanPBT() {
     $('#btnReloadBbtGrid').parents('.row').show()
+    $('[name=keteranganheader]').parents('.form-group').show()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('.tbl_supir_id').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
     $('[name=periodedari]').parents('.form-group').show()
     $('[name=periodesampai]').parents('.form-group').show()
-    $('[name=jenisorder_id]').parents('.form-group').show()
+    $('[name=jenisorderan_id]').parents('.form-group').show()
     $('[name=karyawanheader_id]').parents('.form-group').hide()
     $('#gbox_tablePinjaman').hide()
     $('#gbox_tablePinjamanKaryawan').hide()
@@ -938,10 +951,11 @@
     $('#gbox_tablePengembalianTitipan').hide()
     $('[name=periodedari]').parents('.form-group').hide()
     $('[name=periodesampai]').parents('.form-group').hide()
-    $('[name=jenisorder_id]').parents('.form-group').hide()
+    $('[name=jenisorderan_id]').parents('.form-group').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
     $('[name=karyawanheader_id]').parents('.form-group').hide()
     $('[name=keterangancoa]').parents('.form-group').hide()
+    $('[name=keteranganheader]').parents('.form-group').hide()
     $('.tbl_supir_id').show()
     $('.tbl_pengeluarantruckingheader_nobukti').hide()
     $('.tbl_sisa').hide()
@@ -956,7 +970,7 @@
     $('#detailList').show()
     $('#gbox_tablePinjaman').hide()
     $('#gbox_tablePinjamanKaryawan').hide()
-    $('[name=jenisorder_id]').parents('.form-group').hide()
+    $('[name=jenisorderan_id]').parents('.form-group').hide()
     $('#btnReloadBbtGrid').parents('.row').hide()
     $('[name=keterangancoa]').parents('.form-group').show()
     $('.tbl_supir_id').show()
@@ -1995,7 +2009,7 @@
 
     periodedari = $('[name=periodedari]').val()
     periodesampai = $('[name=periodesampai]').val()
-    jenisorder_id = $('[name=jenisorder_id]').val()
+    jenisorder_id = $('[name=jenisorderan_id]').val()
     if ((periodedari != '') || (periodesampai != '') || (jenisorder_id != '')) {
       return new Promise((resolve, reject) => {
         $.ajax({
@@ -2974,7 +2988,7 @@
         }
       },
       onSelectRow: (jenisorder, element) => {
-        $(`#crudForm`).find(`[name="jenisorder_id"]`).val(jenisorder.id)
+        $(`#crudForm`).find(`[name="jenisorderan_id"]`).val(jenisorder.id)
         element.val(jenisorder.keterangan)
         element.data('currentValue', element.val())
         // $('#tablePinjamanKaryawan').jqGrid("clearGridData");
@@ -3007,7 +3021,7 @@
       },
       onClear: (element) => {
         element.val('')
-        $(`#crudForm [name="jenisorder_id[]"]`).last().val('')
+        $(`#crudForm [name="jenisorderan_id"]`).last().val('')
         element.data('currentValue', element.val())
       }
     })
