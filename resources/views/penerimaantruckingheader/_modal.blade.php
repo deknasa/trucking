@@ -1058,7 +1058,7 @@
         $('#crudModal').modal('show')
       })
       .catch((error) => {
-        showDialog(error.statusText)
+        showDialog(error.responseJSON)
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
@@ -1101,7 +1101,7 @@
         $('#crudForm [name=karyawan]').siblings('.button-clear').remove()
       })
       .catch((error) => {
-        showDialog(error.statusText)
+        showDialog(error.responseJSON)
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
@@ -1134,7 +1134,7 @@
         $('#crudModal').modal('show')
       })
       .catch((error) => {
-        showDialog(error.statusText)
+        showDialog(error.responseJSON)
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
@@ -1197,7 +1197,7 @@
 
       })
       .catch((error) => {
-        showDialog(error.statusText)
+        showDialog(error.responseJSON)
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
@@ -1999,7 +1999,7 @@
     let idTitipan = $('#crudForm').find("[name=id]").val()
     if (aksi == 'edit') {
       url = `${apiUrl}penerimaantruckingheader/getpengembaliantitipan`
-    } else if (aksi == 'delete') {
+    } else if (aksi == 'delete' || aksi == 'view') {
       url = `${apiUrl}penerimaantruckingheader/getpengembaliantitipan`
       attribut = 'disabled'
       forCheckbox = 'disabled'
