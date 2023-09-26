@@ -683,13 +683,18 @@
                     form.find(`[name="tglbukti"]`).prop('readonly', true)
                     form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
                 }
-                supir = $('#crudForm').find(`[name="supir"]`).parents('.input-group')
-                supir.find('.button-clear').attr('disabled', true)
-                supir.children().find('.lookup-toggler').attr('disabled', true)
 
-                bank = $('#crudForm').find(`[name="bank"]`).parents('.input-group')
-                bank.find('.button-clear').attr('disabled', true)
-                bank.children().find('.lookup-toggler').attr('disabled', true)
+                if (isBank == 'YA') {
+
+                    supir = $('#crudForm').find(`[name="supir"]`).parents('.input-group')
+                    supir.find('.button-clear').attr('disabled', true)
+                    supir.children().find('.lookup-toggler').attr('disabled', true)
+
+                    bank = $('#crudForm').find(`[name="bank"]`).parents('.input-group')
+                    bank.find('.button-clear').attr('disabled', true)
+                    bank.children().find('.lookup-toggler').attr('disabled', true)
+
+                }
             })
             .catch((error) => {
                 showDialog(error.responseJSON)
@@ -733,12 +738,13 @@
             })
 
     }
+
     function viewPendapatanSupir(pendapatanId) {
 
         let form = $('#crudForm')
 
         $('.modal-loader').removeClass('d-none')
-        
+
         form.data('action', 'view')
         form.trigger('reset')
         form.find('#btnSubmit').html(`
@@ -874,7 +880,9 @@
                         }
                         if (index == 'bank') {
                             form.find('[name=pengeluaran_nobukti]').attr('readonly', true)
-                            form.find('[name=bank]').attr('readonly', true)
+                            if (isBank == 'YA') {
+                                form.find('[name=bank]').attr('readonly', true)
+                            }
                             element.data('current-value', value)
                         }
                     })
