@@ -472,6 +472,66 @@
             }
           },
           {
+            label: 'APPROVAL TITIPAN EMKL',
+            name: 'statusapprovalbiayatitipanemkl',
+            stype: 'select',
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['combotitipan'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['combotitipan'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+            `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              if (!value) {
+                return ''
+              }
+              let statusTitipan = JSON.parse(value)
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusTitipan.WARNA}; color: #fff;">
+                  <span>${statusTitipan.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              if (!rowObject.statusapprovalbiayatitipanemkl) {
+                return ` title=""`
+              }
+              let statusTitipan = JSON.parse(rowObject.statusapprovalbiayatitipanemkl)
+              return ` title="${statusTitipan.MEMO}"`
+            }
+          },
+          {
+            label: 'TGL APP TITIPAN EMKL',
+            name: 'tglapprovalbiayatitipanemkl',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
+          {
+            label: 'USER APP TITIPAN EMKL',
+            name: 'userapprovalbiayatitipanemkl',
+          },
+          {
             label: 'MODIFIEDBY',
             name: 'modifiedby',
           },
@@ -686,6 +746,14 @@
                 approvalEditTujuan(selectedId);
               }
             },
+            {
+              id: 'approvalTitipanEmkl',
+              text: "un/Approval Titipan EMKL",
+              onClick: () => {
+                selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                approvalTitipanEmkl(selectedId);
+              }
+            },
           ],
         }]
 
@@ -806,6 +874,9 @@
       if (!`{{ $myAuth->hasPermission('suratpengantar', 'approvalEditTujuan') }}`) {
         $('#approvalEditTujuan').attr('disabled', 'disabled')
       }
+      if (!`{{ $myAuth->hasPermission('suratpengantar', 'approvalTitipanEmkl') }}`) {
+        $('#approvalTitipanEmkl').attr('disabled', 'disabled')
+      }
       if (!`{{ $myAuth->hasPermission('suratpengantar', 'report') }}`) {
         $('#report').attr('disabled', 'disabled')
       }
@@ -874,6 +945,26 @@
             msg = `YAKIN approval Edit Surat Pengantar`
           }
           showConfirm(msg, response.data.nobukti, `suratpengantar/${response.data.id}/edittujuan`)
+        },
+      })
+    }
+
+    function approvalTitipanEmkl(id) {
+      getEditTujuan()
+      $.ajax({
+        url: `${apiUrl}suratpengantar/${id}`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          let msg = `YAKIN Unapproval Titipan EMKL`
+          console.log(statusEditTujuan, response.data.statusapprovalbiayatitipanemkl);
+          if (response.data.statusapprovalbiayatitipanemkl === statusEditTujuan) {
+            msg = `YAKIN approval Titipan EMKL`
+          }
+          showConfirm(msg, response.data.nobukti, `suratpengantar/${response.data.id}/titipanemkl`)
         },
       })
     }

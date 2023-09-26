@@ -430,6 +430,10 @@ class PenerimaanTruckingHeaderController extends MyController
                         'label' => 'Tanggal Dari',
                         'index' => 'periodedari',
                     ],
+                    [
+                        'label' => 'Keterangan',
+                        'index' => 'keteranganheader',
+                    ],
 
                 ];
                 $header_right_columns = [
