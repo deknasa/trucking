@@ -401,8 +401,6 @@ class JurnalUmumHeaderController extends MyController
                 $sheet->getStyle("A$detail_table_header_row:F$detail_table_header_row")->getFont()->setBold(true);
                 $sheet->getStyle("A$detail_table_header_row:F$detail_table_header_row")->getAlignment()->setHorizontal('center');
             }
-            $response_detail['nominaldebets'] = number_format((float) $response_detail['nominaldebet'], '2', '.', ',');
-            $response_detail['nominalkredits'] = number_format((float) $response_detail['nominalkredit'], '2', '.', ',');
 
             $tglBukti = $response_detail["tglbukti"];
             $timeStamp = strtotime($tglBukti);
@@ -413,16 +411,14 @@ class JurnalUmumHeaderController extends MyController
             $sheet->setCellValue("B$detail_start_row", $response_detail['coa']);
             $sheet->setCellValue("C$detail_start_row", $response_detail['keterangancoa']);
             $sheet->setCellValue("D$detail_start_row", $response_detail['keterangan']);
-            $sheet->setCellValue("E$detail_start_row", $response_detail['nominaldebets']);
-            $sheet->setCellValue("F$detail_start_row", $response_detail['nominalkredits']);
+            $sheet->setCellValue("E$detail_start_row", $response_detail['nominaldebet']);
+            $sheet->setCellValue("F$detail_start_row", $response_detail['nominalkredit']);
 
             $sheet->getStyle("D$detail_start_row")->getAlignment()->setWrapText(true);
             $sheet->getColumnDimension('D')->setWidth(50);
 
             $sheet ->getStyle("A$detail_start_row:D$detail_start_row")->applyFromArray($styleArray);
-            $sheet ->getStyle("E$detail_start_row:F$detail_start_row")->applyFromArray($style_number);
-            $totaldebet += $response_detail['nominaldebet'];
-            $totalkredit += $response_detail['nominalkredit'];
+            $sheet ->getStyle("E$detail_start_row:F$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
             $detail_start_row++;
         }
 
@@ -430,9 +426,10 @@ class JurnalUmumHeaderController extends MyController
         
         $sheet->mergeCells('A'.$total_start_row.':D'.$total_start_row);
         $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A'.$total_start_row.':D'.$total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
-        $sheet->setCellValue("E$total_start_row", number_format((float) $totaldebet, '2', '.', ','))->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
-        $sheet->setCellValue("F$total_start_row", number_format((float) $totalkredit, '2', '.', ','))->getStyle("F$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->setCellValue("E$total_start_row", "=SUM(E9:E" . ($detail_start_row - 1) . ")")->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->setCellValue("F$total_start_row", "=SUM(F9:F" . ($detail_start_row - 1) . ")")->getStyle("F$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
 
+        $sheet->getStyle("E$total_start_row:F$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);
         $sheet->getColumnDimension('C')->setAutoSize(true);

@@ -44,16 +44,16 @@
   let tglsampaiheader
   let isKomisi;
 
-  $(document).ready(function() {    
+  $(document).ready(function() {
     setIsKomisi()
     loadDetailGrid()
-  @isset($request['tgldari'])
-      tgldariheader = `{{ $request['tgldari'] }}`;
+    @isset($request['tgldari'])
+    tgldariheader = `{{ $request['tgldari'] }}`;
     @endisset
     @isset($request['tglsampai'])
-      tglsampaiheader = `{{ $request['tglsampai'] }}`;
+    tglsampaiheader = `{{ $request['tglsampai'] }}`;
     @endisset
-    setRange(false,tgldariheader,tglsampaiheader)
+    setRange(false, tgldariheader, tglsampaiheader)
     initDatepicker()
     $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('suratpengantar')
@@ -736,16 +736,20 @@
               id: 'approvalBatalMuat',
               text: "un/Approval Batal Muat",
               onClick: () => {
-                selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                approvalBatalMuat(selectedId);
+                if (`{{ $myAuth->hasPermission('suratpengantar', 'approvalBatalMuat') }}`) {
+                  selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                  approvalBatalMuat(selectedId);
+                }
               }
             },
             {
               id: 'approvalEditTujuan',
               text: "un/Approval Edit Surat Pengantar",
               onClick: () => {
-                selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                approvalEditTujuan(selectedId);
+                if (`{{ $myAuth->hasPermission('suratpengantar', 'approvalEditTujuan') }}`) {
+                  selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                  approvalEditTujuan(selectedId);
+                }
               }
             },
             {
@@ -753,7 +757,9 @@
               text: "un/Approval Titipan EMKL",
               onClick: () => {
                 selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                approvalTitipanEmkl(selectedId);
+                if (`{{ $myAuth->hasPermission('suratpengantar', 'approvalTitipanEmkl') }}`) {
+                  approvalTitipanEmkl(selectedId);
+                }
               }
             },
           ],
@@ -870,15 +876,12 @@
       if (!`{{ $myAuth->hasPermission('suratpengantar', 'destroy') }}`) {
         $('#delete').attr('disabled', 'disabled')
       }
-      if (!`{{ $myAuth->hasPermission('suratpengantar', 'approvalBatalMuat') }}`) {
-        $('#approvalBatalMuat').attr('disabled', 'disabled')
-      }
-      if (!`{{ $myAuth->hasPermission('suratpengantar', 'approvalEditTujuan') }}`) {
-        $('#approvalEditTujuan').attr('disabled', 'disabled')
-      }
-      if (!`{{ $myAuth->hasPermission('suratpengantar', 'approvalTitipanEmkl') }}`) {
-        $('#approvalTitipanEmkl').attr('disabled', 'disabled')
-      }
+      // if (!`{{ $myAuth->hasPermission('suratpengantar', 'approvalBatalMuat') }}`) {
+      //   $('#approvalBatalMuat').attr('disabled', 'disabled')
+      // }
+      // if (!`{{ $myAuth->hasPermission('suratpengantar', 'approvalEditTujuan') }}`) {
+      //   $('#approvalEditTujuan').attr('disabled', 'disabled')
+      // }
       if (!`{{ $myAuth->hasPermission('suratpengantar', 'report') }}`) {
         $('#report').attr('disabled', 'disabled')
       }
@@ -1052,7 +1055,7 @@
       window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
     })
   })
-  
+
   function setIsKomisi() {
     $.ajax({
       url: `${apiUrl}parameter/getparamfirst`,
