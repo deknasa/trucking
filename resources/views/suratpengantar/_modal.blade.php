@@ -338,7 +338,7 @@
                       GAJI KENEK </label>
                   </div>
                   <div class="col-12 col-md-4">
-                    <input type="text" name="gajikenek" id="gajikenek" class="form-control autonumeric" readonly>
+                    <input type="text" name="gajikenek" id="gajikenek" class="form-control text-right" readonly>
                   </div>
                 </div>
                 <div class="row form-group">
@@ -605,6 +605,7 @@
       data.filter((row) => row.name === 'qtyton')[0].value = AutoNumeric.getNumber($(`#crudForm [name="qtyton"]`)[0])
       data.filter((row) => row.name === 'omset')[0].value = AutoNumeric.getNumber($(`#crudForm [name="omset"]`)[0])
       data.filter((row) => row.name === 'komisisupir')[0].value = AutoNumeric.getNumber($(`#crudForm [name="komisisupir"]`)[0])
+      data.filter((row) => row.name === 'gajikenek')[0].value = AutoNumeric.getNumber($(`#crudForm [name="gajikenek"]`)[0])
       // })
 
       data.push({
@@ -1333,10 +1334,14 @@
           initAutoNumeric(form.find(`[name="nominalperalihan"]`))
           initAutoNumeric(form.find(`[name="persentaseperalihan"]`))
           initAutoNumeric(form.find(`[name="gajisupir"]`))
-          initAutoNumeric(form.find(`[name="gajikenek"]`))
           if(isKomisi == 'TIDAK'){
+            $(`#crudForm [name="gajikenek"]`).parents('.row').find('.col-form-label').text('KOMISI KENEK')
+            form.find(`[name="gajikenek"]`).attr('readonly', false)
             form.find(`[name="komisisupir"]`).attr('readonly', false)
+          }else{            
+            $(`#crudForm [name="gajikenek"]`).parents('.row').find('.col-form-label').text('GAJI KENEK')
           }
+          initAutoNumeric(form.find(`[name="gajikenek"]`))
           initAutoNumeric(form.find(`[name="komisisupir"]`))
           if (response.detail.length === 0) {
             addRow()
