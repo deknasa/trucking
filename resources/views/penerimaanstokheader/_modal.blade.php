@@ -493,8 +493,14 @@
           id = response.data.id
           $('#kodepenerimaanheader').val(response.data.penerimaanstok_id).trigger('change')
 
+          $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
+          $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
           $('#jqGrid').jqGrid('setGridParam', {
-            postData: {penerimaanheader_id: response.data.penerimaanstok_id},
+            postData: {
+              penerimaanheader_id: response.data.penerimaanstok_id,
+              tgldari: dateFormat(response.data.tgldariheader),
+              tglsampai: dateFormat(response.data.tglsampaiheader)
+            },
             page: response.data.page
           }).trigger('reloadGrid')
 
