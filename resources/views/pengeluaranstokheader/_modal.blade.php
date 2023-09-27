@@ -633,7 +633,7 @@
     $('[name=pengeluaranstok_nobukti]').parents('.form-group').hide()
     $('[name=servicein_nobukti]').parents('.form-group').show()
     $('[name=supplier]').parents('.form-group').hide()
-    $('[name=gudang]').parents('.form-group').hide()
+    $('[name=gudang]').parents('.form-group').show()
     $('.tbl_qty').show()
     $('.tbl_statusoli').show();
     $('.tbl_vulkanisirke').hide();
@@ -1401,7 +1401,7 @@
   }
 
   function lookupSelected(el) {
-    if ((kodePengeluaranStok == listKodePengeluaran[2]) || (kodePengeluaranStok == listKodePengeluaran[4]) || (kodePengeluaranStok == listKodePengeluaran[5])) {
+    if ((kodePengeluaranStok == listKodePengeluaran[1]) || (kodePengeluaranStok == listKodePengeluaran[2]) || (kodePengeluaranStok == listKodePengeluaran[4]) || (kodePengeluaranStok == listKodePengeluaran[5])) {
       // console.log(kodepengeluaranstok);
       // console.log(el);
       switch (el) {
@@ -2111,6 +2111,11 @@
     $('.gudang-lookup').lookup({
       title: 'Gudang Lookup',
       fileName: 'gudang',
+      beforeProcess: function(test) {
+        this.postData = {
+          pengeluaranstok_id: $(`#pengeluaranstokId`).val()
+        }
+      },
       onSelectRow: (gudang, element) => {
         element.val(gudang.gudang)
         $(`#${element[0]['name']}Id`).val(gudang.id)
