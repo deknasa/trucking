@@ -328,7 +328,8 @@
 
     $("#crudForm [name]").attr("autocomplete", "off");
 
-    $(document).on('click', "#addRow", function() {
+    $(document).on('click', "#addRow", function(event) {
+      event.preventDefault()
       let method = `POST`
       let url = `${apiUrl}pengeluarantruckingheader/addrow`
       let form = $('#crudForm')
@@ -371,6 +372,9 @@
           },
           data: data,
           success: response => {
+
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
             addRow()
           },
           error: error => {
@@ -391,11 +395,17 @@
     });
 
     $(document).on('click', '.delete-row', function(event) {
+      event.preventDefault()
       deleteRow($(this).parents('tr'))
     })
 
     $(document).on('input', `#table_body [name="nominal[]"]`, function(event) {
       setTotal()
+      if (KodePengeluaranId == 'BBT') {
+        $(this).parents("tr").find(`[name="nominaltagih[]"]`).val($(this).val())
+
+        initAutoNumeric($(this).parents("tr").find(`[name="nominaltagih[]"]`))
+      }
     })
 
     function rangeInvoice() {
@@ -3312,10 +3322,10 @@
                       <input type="text" id="harga_${index}" name="harga[]" class="form-control autonumeric nominal"> 
                     </td>
                     <td class="data_tbl tbl_nominal">
-                        <input type="text" id="nominal_${index}" name="nominal[]" class="form-control autonumeric nominal"> 
+                        <input type="text" id="nominal_${index}" name="nominal[]" class="form-control autonumeric nominal" autocomplete="off"> 
                     </td>
                     <td class="data_tbl tbl_nominaltagih kolom_bbt">
-                      <input id="nominaltagih_${index}" type="text" name="nominaltagih[]" class="form-control autonumeric nominaltagih"> 
+                      <input id="nominaltagih_${index}" type="text" name="nominaltagih[]" readonly class="form-control autonumeric nominaltagih"> 
                     </td>
                     <td class="data_tbl tbl_keterangan">
                         <input type="text" id="keterangan_${index}" name="keterangan[]" class="form-control"> 
@@ -3370,13 +3380,13 @@
                 initSelect2($(`#statustitipanemkl${index}`), true)
                 dataStatusBiaya.forEach(statusBiaya => {
                   let option = new Option(statusBiaya.text, statusBiaya.id)
-  
+
                   detailRow.find(`#statustitipanemkl${index}`).append(option).trigger('change')
                 });
                 detailRow.find(`[name="detail_statustitipanemkl[]"]`).val(detail.statustitipanemkl).trigger('change')
-  
+
               }
-  
+
               setTotal();
 
               $('.supir-lookup').last().lookup({
@@ -3562,7 +3572,7 @@
             })
 
           }
-          indexRow+=1
+          indexRow += 1
           setTampilanForm()
           setRowNumbers()
           if (form.data('action') === 'delete') {
@@ -3745,10 +3755,10 @@
           <input id="harga_${indexRow}" readonly type="text" name="harga[]" class="form-control autonumeric"> 
         </td>
         <td class="data_tbl tbl_nominal">
-          <input id="nominal_${indexRow}" type="text" name="nominal[]" class="form-control autonumeric nominal"> 
+          <input id="nominal_${indexRow}" type="text" name="nominal[]" class="form-control autonumeric nominal" autocomplete="off"> 
         </td>
         <td class="data_tbl tbl_nominaltagih kolom_bbt">
-          <input id="nominaltagih_${indexRow}" type="text" name="nominaltagih[]" class="form-control autonumeric nominaltagih"> 
+          <input id="nominaltagih_${indexRow}" type="text" name="nominaltagih[]" readonly class="form-control text-right nominaltagih"> 
         </td>
         <td class="data_tbl tbl_keterangan">
           <input id="keterangan_${indexRow}" type="text" name="keterangan[]" class="form-control"> 
