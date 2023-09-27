@@ -42,8 +42,10 @@
   var statusEditTujuan;
   let tgldariheader
   let tglsampaiheader
+  let isKomisi;
 
-  $(document).ready(function() {
+  $(document).ready(function() {    
+    setIsKomisi()
     loadDetailGrid()
   @isset($request['tgldari'])
       tgldariheader = `{{ $request['tgldari'] }}`;
@@ -1050,6 +1052,24 @@
       window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
     })
   })
+  
+  function setIsKomisi() {
+    $.ajax({
+      url: `${apiUrl}parameter/getparamfirst`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        grp: 'SURAT PENGANTAR',
+        subgrp: 'KOMISI'
+      },
+      success: response => {
+        isKomisi = $.trim(response.text)
+      }
+    })
+  }
 </script>
 @endpush()
 @endsection
