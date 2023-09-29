@@ -4,11 +4,14 @@
 
 @push('scripts')
 <script>
-  
   setRangeLookup()
   initDatepicker()
   $(document).on('click', '#btnReloadLookup', function(event) {
-    loadDataHeaderLookup('penerimaan', 'penerimaanLookup')
+    loadDataHeaderLookup('penerimaanheader', 'penerimaanLookup', {
+      bankId: `{!! $bankId ?? '' !!}`,
+      isBmt: `{!! $isBmt ?? '' !!}`,
+      nobuktiBmt: `{!! $nobuktiBmt ?? '' !!}`,
+    })
   })
   $('#penerimaanLookup').jqGrid({
       url: `{{ config('app.api_url') . 'penerimaanheader' }}`,
@@ -25,105 +28,85 @@
       idPrefix: 'penerimaanLookup',
       datatype: "json",
       colModel: [{
-            label: 'ID',
-            name: 'id',
-            align: 'right',
-            width: '50px',
-            search: false,
-            hidden: true
-          },
-          {
-            label: 'NO BUKTI',
-            name: 'nobukti',
-            align: 'left'
-          },
-          {
-            label: 'TGL BUKTI',
-            name: 'tglbukti',
-            align: 'left',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
-            }
-          },
-          {
-            label: 'PELANGGAN ',
-            name: 'pelanggan_id',
-            align: 'left'
-          },
-          {
-            label: 'AGEN ',
-            name: 'agen_id',
-            align: 'left'
-          },
-          {
-            label: 'BANK',
-            name: 'bank_id',
-            align: 'left'
-          },
-          {
-            label: 'DITERIMA DARI',
-            name: 'diterimadari',
-            align: 'left'
-          },
-          {
-            label: 'TGL Lunas',
-            name: 'tgllunas',
-            align: 'left',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
-            }
-          },
-          {
-            label: 'STATUS APPROVAL',
-            name: 'statusapproval',
-            align: 'left'
-          },
-          {
-            label: 'USER APPROVAL',
-            name: 'userapproval',
-            align: 'left'
-          },
-          {
-            label: 'TGL APPROVAL',
-            name: 'tglapproval',
-            align: 'left',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
-            }
-          },
-         
-          {
-            label: 'MODIFIEDBY',
-            name: 'modifiedby',
-            align: 'left'
-          },
-          {
-            label: 'CREATEDAT',
-            name: 'created_at',
-            align: 'right',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y H:i:s"
-            }
-          },
-          {
-            label: 'UPDATEDAT',
-            name: 'updated_at',
-            align: 'right',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y H:i:s"
-            }
-          },
-        ],
+          label: 'ID',
+          name: 'id',
+          align: 'right',
+          width: '50px',
+          search: false,
+          hidden: true
+        },
+        {
+          label: 'NO BUKTI',
+          name: 'nobukti',
+          align: 'left'
+        },
+        {
+          label: 'TGL BUKTI',
+          name: 'tglbukti',
+          align: 'left',
+          formatter: "date",
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y"
+          }
+        },
+        {
+          label: 'PELANGGAN ',
+          name: 'pelanggan_id',
+          align: 'left'
+        },
+        {
+          label: 'AGEN ',
+          name: 'agen_id',
+          align: 'left'
+        },
+        {
+          label: 'BANK',
+          name: 'bank_id',
+          align: 'left'
+        },
+        {
+          label: 'DITERIMA DARI',
+          name: 'diterimadari',
+          align: 'left'
+        },
+        {
+          label: 'TGL Lunas',
+          name: 'tgllunas',
+          align: 'left',
+          formatter: "date",
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y"
+          }
+        },
+
+        {
+          label: 'MODIFIEDBY',
+          name: 'modifiedby',
+          align: 'left'
+        },
+        {
+          label: 'CREATEDAT',
+          name: 'created_at',
+          align: 'right',
+          formatter: "date",
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y H:i:s"
+          }
+        },
+        {
+          label: 'UPDATEDAT',
+          name: 'updated_at',
+          align: 'right',
+          formatter: "date",
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y H:i:s"
+          }
+        },
+      ],
       autowidth: true,
       responsive: true,
       shrinkToFit: false,
@@ -163,7 +146,7 @@
         setGridLastRequest($(this), jqXHR)
       },
       loadComplete: function(data) {
-          changeJqGridRowListText()
+        changeJqGridRowListText()
         if (detectDeviceType() == 'desktop') {
           $(document).unbind('keydown')
           setCustomBindKeys($(this))

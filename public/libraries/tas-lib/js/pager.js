@@ -228,7 +228,7 @@ $.fn.customPager = function (option = {}) {
 
 		$(`#gbox_${$(this).getGridParam().id}`).after(`
 			<div class="col-12 bg-white grid-pager overflow-x-hidden">
-				<div class="row d-flex align-items-center text-center text-lg-left">
+				<div class="row d-flex align-items-center text-center text-lg-left" style="padding:5px;">
 					<div class="col-12 col-lg-6" id="left-nav">
 						${typeof option.buttons !== "undefined"
 				? option.buttons
@@ -271,7 +271,7 @@ $.fn.customPager = function (option = {}) {
 		`);
 
 		loadPagerHandler(`#${pagerHandlerId}`, grid);
-
+		$(`#gbox_${$(this).getGridParam().id}`).siblings('.grid-pager').find('button').removeClass('btn-sm')
 		grid.bind("jqGridLoadComplete.jqGrid", function (event, data) {
 			loadPagerHandlerInfo(`#${pagerHandlerId}`, grid);
 			loadPagerInfo(`#${pagerInfoId}`, grid);
