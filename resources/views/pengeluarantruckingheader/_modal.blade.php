@@ -1815,6 +1815,7 @@
     $('.tbl_pelanggan_id').hide()
     $('.tbl_nominaltagih').hide()
     $('.tbl_jenisorder').hide()
+    $('.kolom_bbt').hide()
 
   }
 
