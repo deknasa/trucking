@@ -368,6 +368,8 @@
               data: data,
               success: response => {
                 addRowTransfer()
+                $('.is-invalid').removeClass('is-invalid')
+                $('.invalid-feedback').remove()
               },
               error: error => {
                 if (error.status === 422) {
