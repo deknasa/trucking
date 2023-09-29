@@ -351,6 +351,8 @@
         data: data,
         success: response => {
           addRow()
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
         },
         error: error => {
           if (error.status === 422) {
@@ -479,8 +481,8 @@
           break;
         case 'delete':
           method = 'DELETE'
-          url = `${apiUrl}pengeluaranstokheader/${pengeluaranStokHeaderId}`
-          // url = `${apiUrl}pengeluaranstokheader/${pengeluaranStokHeaderId}?tgldariheader=${tgldariheader}&tglsampaiheader=${tglsampaiheader}&pengeluaranheader_id=${pengeluaranheader_id}&indexRow=${indexRow}&limit=${limit}&page=${page}`
+          // url = `${apiUrl}pengeluaranstokheader/${pengeluaranStokHeaderId}`
+          url = `${apiUrl}pengeluaranstokheader/${pengeluaranStokHeaderId}?tgldariheader=${tgldariheader}&tglsampaiheader=${tglsampaiheader}&pengeluaranheader_id=${pengeluaranheader_id}&indexRow=${indexRow}&limit=${limit}&page=${page}`
           break;
         default:
           method = 'POST'

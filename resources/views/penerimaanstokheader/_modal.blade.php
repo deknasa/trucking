@@ -469,8 +469,8 @@
           break;
         case 'delete':
           method = 'DELETE'
-          // url = `${apiUrl}penerimaanstokheader/${penerimaanStokHeaderId}?tgldariheader=${tgldariheader}&tglsampaiheader=${tglsampaiheader}&penerimaanheader_id=${penerimaanheader_id}&indexRow=${indexRow}&limit=${limit}&page=${page}`
-          url = `${apiUrl}penerimaanstokheader/${penerimaanStokHeaderId}`
+          url = `${apiUrl}penerimaanstokheader/${penerimaanStokHeaderId}?tgldariheader=${tgldariheader}&tglsampaiheader=${tglsampaiheader}&penerimaanheader_id=${penerimaanheader_id}&indexRow=${indexRow}&limit=${limit}&page=${page}`
+          // url = `${apiUrl}penerimaanstokheader/${penerimaanStokHeaderId}`
           break;
         default:
           method = 'POST'
