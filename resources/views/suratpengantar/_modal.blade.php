@@ -139,6 +139,13 @@
                     <input type="text" name="tarifrincian" class="form-control" readonly>
                   </div>
                 </div>
+                
+                <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">OMSET <span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <input type="text" name="omset" class="form-control" readonly>
+                  </div>
+                </div>
                 <div class="form-group " style="display:none">
                   <label class="col-sm-12 col-form-label">Lokasi BONGKAR/MUAT <span class="text-danger">*</span></label>
                   <div class="col-sm-12">
@@ -232,7 +239,6 @@
                           <label class="col-sm-12 col-form-label">Nominal Peralihan</label>
                           <div class="col-md-12" id="nominalPeralihanDiv">
                             <input type="text" name="nominalperalihan" class="form-control text-right" readonly>
-                            <input type="hidden" name="omset">
                           </div>
                         </div>
                       </div>
@@ -332,7 +338,7 @@
                       GAJI KENEK </label>
                   </div>
                   <div class="col-12 col-md-4">
-                    <input type="text" name="gajikenek" id="gajikenek" class="form-control autonumeric" readonly>
+                    <input type="text" name="gajikenek" id="gajikenek" class="form-control text-right" readonly>
                   </div>
                 </div>
                 <div class="row form-group">
@@ -341,7 +347,7 @@
                       KOMISI SUPIR </label>
                   </div>
                   <div class="col-12 col-md-4">
-                    <input type="text" name="komisisupir" id="komisisupir" class="form-control autonumeric" readonly>
+                    <input type="text" name="komisisupir" id="komisisupir" class="form-control text-right" readonly>
                   </div>
                 </div>
 
@@ -599,6 +605,9 @@
       }
       // $('#crudForm').find(`[name="qtyton"]`).each((index, element) => {
       data.filter((row) => row.name === 'qtyton')[0].value = AutoNumeric.getNumber($(`#crudForm [name="qtyton"]`)[0])
+      data.filter((row) => row.name === 'omset')[0].value = AutoNumeric.getNumber($(`#crudForm [name="omset"]`)[0])
+      data.filter((row) => row.name === 'komisisupir')[0].value = AutoNumeric.getNumber($(`#crudForm [name="komisisupir"]`)[0])
+      data.filter((row) => row.name === 'gajikenek')[0].value = AutoNumeric.getNumber($(`#crudForm [name="gajikenek"]`)[0])
       // })
 
       data.push({
@@ -1319,7 +1328,7 @@
           statuscontainerId = response.data.statuscontainer_id
           jenisorderId = response.data.jenisorder_id
           getTarifOmset(response.data.tarifrincian_id)
-          $('#crudForm ').find(`[name="omset"]`).val(response.data.omset)
+          // $('#crudForm ').find(`[name="omset"]`).val(response.data.omset)
           // getGaji(response.data.nominalplusborongan)
           initAutoNumeric(form.find(`[name="nominal"]`))
           initAutoNumeric(form.find(`[name="nominalTagih"]`))
@@ -1327,6 +1336,13 @@
           initAutoNumeric(form.find(`[name="nominalperalihan"]`))
           initAutoNumeric(form.find(`[name="persentaseperalihan"]`))
           initAutoNumeric(form.find(`[name="gajisupir"]`))
+          if(isKomisi == 'TIDAK'){
+            $(`#crudForm [name="gajikenek"]`).parents('.row').find('.col-form-label').text('KOMISI KENEK')
+            form.find(`[name="gajikenek"]`).attr('readonly', false)
+            form.find(`[name="komisisupir"]`).attr('readonly', false)
+          }else{            
+            $(`#crudForm [name="gajikenek"]`).parents('.row').find('.col-form-label').text('GAJI KENEK')
+          }
           initAutoNumeric(form.find(`[name="gajikenek"]`))
           initAutoNumeric(form.find(`[name="komisisupir"]`))
           if (response.detail.length === 0) {
@@ -1633,6 +1649,7 @@
         initAutoNumeric($('#crudForm').find('[name="komisisupir"]'))
         element.data('currentValue', element.val())
         getNominalSupir()
+        getTarifOmset(upahsupir.tarif_id)
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
@@ -2057,9 +2074,10 @@
       success: response => {
         if (response.dataTarif != null) {
 
-          $('#crudForm [name=lokasibongkarmuat]').first().val(response.dataTarif.tujuan)
-          $('#crudForm [name=hargaperton]').first().val(response.dataTarif.nominalton)
-          // $('#crudForm ').find(`[name="omset"]`).val(response.dataTarif.nominal)
+          // $('#crudForm [name=lokasibongkarmuat]').first().val(response.dataTarif.tujuan)
+          // $('#crudForm [name=hargaperton]').first().val(response.dataTarif.nominalton)
+          $('#crudForm ').find(`[name="omset"]`).val(response.dataTarif.nominal)          
+          initAutoNumeric($('#crudForm ').find(`[name="omset"]`))
         }
       },
       error: error => {

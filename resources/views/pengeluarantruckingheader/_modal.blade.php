@@ -232,6 +232,7 @@
                             <th class="data_tbl tbl_checkbox" style="display:none" width="1%">Pilih</th>
                             <th style="width: 20%; min-width: 200px;" class="data_tbl tbl_karyawan_id">Karyawan</th>
                             <th style="width: 20%; min-width: 200px;" class="data_tbl tbl_supir_id">SUPIR</th>
+                            <th style="width: 20%; min-width: 200px;" class="data_tbl tbl_statustitipanemkl kolom_bbt">Titipan EMKL</th>
                             <th style="width: 20%; min-width: 200px;" class="data_tbl tbl_suratpengantar_nobukti kolom_bbt">no bukti Sp</th>
                             <th style="width: 20%; min-width: 200px;" class="data_tbl tbl_trado_id kolom_bbt">trado</th>
                             <th style="width: 20%; min-width: 200px;" class="data_tbl tbl_container_id kolom_bbt">container</th>
@@ -327,7 +328,8 @@
 
     $("#crudForm [name]").attr("autocomplete", "off");
 
-    $(document).on('click', "#addRow", function() {
+    $(document).on('click', "#addRow", function(event) {
+      event.preventDefault()
       let method = `POST`
       let url = `${apiUrl}pengeluarantruckingheader/addrow`
       let form = $('#crudForm')
@@ -370,6 +372,9 @@
           },
           data: data,
           success: response => {
+
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
             addRow()
             $('.is-invalid').removeClass('is-invalid')
             $('.invalid-feedback').remove()
@@ -392,11 +397,17 @@
     });
 
     $(document).on('click', '.delete-row', function(event) {
+      event.preventDefault()
       deleteRow($(this).parents('tr'))
     })
 
     $(document).on('input', `#table_body [name="nominal[]"]`, function(event) {
       setTotal()
+      if (KodePengeluaranId == 'BBT') {
+        $(this).parents("tr").find(`[name="nominaltagih[]"]`).val($(this).val())
+
+        initAutoNumeric($(this).parents("tr").find(`[name="nominaltagih[]"]`))
+      }
     })
 
     function rangeInvoice() {
@@ -1157,7 +1168,7 @@
     $('.tbl_qty').hide()
     $('.tbl_checkbox').hide()
     $('.tbl_aksi').show()
-    $('.colspan').attr('colspan', 5);
+    $('.colspan').attr('colspan', 6);
     $('#tbl_addRow').show()
     $('.colmn-offset2').show()
   }
@@ -1925,6 +1936,7 @@
       .all([
         setStatusPostingOptions(form),
         setPostingPinjamanOptions(form),
+        setStatusBiayaTitipanOptions(),
         setDefaultBank(),
         addRow(),
         setTotal()
@@ -1961,6 +1973,7 @@
     Promise
       .all([
         setTglBukti(form),
+        setStatusBiayaTitipanOptions(),
         setStatusPostingOptions(form),
         setPostingPinjamanOptions(form),
       ])
@@ -2011,6 +2024,7 @@
       .all([
         setStatusPostingOptions(form),
         setPostingPinjamanOptions(form),
+        setStatusBiayaTitipanOptions(),
       ])
       .then(() => {
         showPengeluaranTruckingHeader(form, id)
@@ -2056,6 +2070,7 @@
       .all([
         setStatusPostingOptions(form),
         setPostingPinjamanOptions(form),
+        setStatusBiayaTitipanOptions(),
       ])
       .then(() => {
         showPengeluaranTruckingHeader(form, id)
@@ -3276,7 +3291,11 @@
                     <td class="data_tbl tbl_pengeluaranstokheader_nobukti">
                       <input type="text" id="pengeluaranstok_nobukti_${index}" name="pengeluaranstok_nobukti[]" data-current-value="${detail.pengeluaranstok_nobukti}" class="form-control pengeluaranstokheader-lookup">
                     </td>
-
+                    <td class="data_tbl tbl_statustitipanemkl kolom_bbt">
+                      <select name="detail_statustitipanemkl[]" class="form-select select2bs4" id="statustitipanemkl${index}" style="width: 100%;">
+                        <option value="">-- PILIH TITIPAN EMKL --</option>
+                      </select>     
+                    </td>
                     <td class="data_tbl tbl_suratpengantar_nobukti kolom_bbt">
                       <input id="suratpengantar_nobukti_${index}" type="text" name="suratpengantar_nobukti[]"  data-current-value="${detail.suratpengantar_nobukti}" class="form-control suratpengantar-lookup">
                     </td>
@@ -3305,10 +3324,10 @@
                       <input type="text" id="harga_${index}" name="harga[]" class="form-control autonumeric nominal"> 
                     </td>
                     <td class="data_tbl tbl_nominal">
-                        <input type="text" id="nominal_${index}" name="nominal[]" class="form-control autonumeric nominal"> 
+                        <input type="text" id="nominal_${index}" name="nominal[]" class="form-control autonumeric nominal" autocomplete="off"> 
                     </td>
                     <td class="data_tbl tbl_nominaltagih kolom_bbt">
-                      <input id="nominaltagih_${index}" type="text" name="nominaltagih[]" class="form-control autonumeric nominaltagih"> 
+                      <input id="nominaltagih_${index}" type="text" name="nominaltagih[]" readonly class="form-control autonumeric nominaltagih"> 
                     </td>
                     <td class="data_tbl tbl_keterangan">
                         <input type="text" id="keterangan_${index}" name="keterangan[]" class="form-control"> 
@@ -3358,6 +3377,17 @@
 
               initAutoNumeric(detailRow.find(`[name="nominal[]"]`))
               $('#detailList tbody').append(detailRow)
+
+              if (response.data.kodepengeluaran == 'BBT') {
+                initSelect2($(`#statustitipanemkl${index}`), true)
+                dataStatusBiaya.forEach(statusBiaya => {
+                  let option = new Option(statusBiaya.text, statusBiaya.id)
+
+                  detailRow.find(`#statustitipanemkl${index}`).append(option).trigger('change')
+                });
+                detailRow.find(`[name="detail_statustitipanemkl[]"]`).val(detail.statustitipanemkl).trigger('change')
+
+              }
 
               setTotal();
 
@@ -3540,10 +3570,11 @@
                 }
               })
 
-
+              indexRow = index
             })
 
           }
+          indexRow += 1
           setTampilanForm()
           setRowNumbers()
           if (form.data('action') === 'delete') {
@@ -3675,7 +3706,7 @@
 
     new AutoNumeric('#sisaFoot').set(bayar)
   }
-  index = 0;
+  indexRow = 0;
 
   function addRow() {
     let pengeluaranstokheader;
@@ -3684,67 +3715,78 @@
       <tr>
         <td></td>
         <td class="data_tbl tbl_supir_id">
-          <input id="supir_id_${index}" type="hidden" name="supir_id[]">
-          <input id="supir_${index}" type="text" name="supir[]"  class="form-control supir-lookup">
+          <input id="supir_id_${indexRow}" type="hidden" name="supir_id[]">
+          <input id="supir_${indexRow}" type="text" name="supir[]"  class="form-control supir-lookup">
+        </td>
+        <td class="data_tbl tbl_statustitipanemkl kolom_bbt">
+          <select name="detail_statustitipanemkl[]" class="form-select select2bs4" id="statustitipanemkl${indexRow}" style="width: 100%;">
+            <option value="">-- PILIH TITIPAN EMKL --</option>
+          </select>     
         </td>
         <td class="data_tbl tbl_suratpengantar_nobukti kolom_bbt">
-          <input id="suratpengantar_nobukti_${index}" type="text" name="suratpengantar_nobukti[]"  class="form-control suratpengantar-lookup">
+          <input id="suratpengantar_nobukti_${indexRow}" type="text" name="suratpengantar_nobukti[]"  class="form-control suratpengantar-lookup">
         </td>
         <td class="data_tbl tbl_trado_id kolom_bbt">
-          <input id="trado_id_${index}" type="text" name="trado_id[]"  class="form-control">
+          <input id="trado_id_${indexRow}" type="text" name="trado_id[]"  class="form-control">
         </td>
         <td class="data_tbl tbl_container_id kolom_bbt">
-          <input id="container_id_${index}" type="text" name="container_id[]"  class="form-control">
+          <input id="container_id_${indexRow}" type="text" name="container_id[]"  class="form-control">
         </td>
         <td class="data_tbl tbl_pelanggan_id kolom_bbt">
-          <input id="pelanggan_id_${index}" type="text" name="pelanggan_id[]"  class="form-control">
+          <input id="pelanggan_id_${indexRow}" type="text" name="pelanggan_id[]"  class="form-control">
         </td>  
         <td class="data_tbl tbl_karyawan_id">
-          <input id="karyawan_id_${index}" type="hidden" name="karyawan_id[]">
-          <input id="karyawawan_${index}" type="text" name="karyawawan[]"  class="form-control karyawan-lookup">
+          <input id="karyawan_id_${indexRow}" type="hidden" name="karyawan_id[]">
+          <input id="karyawawan_${indexRow}" type="text" name="karyawawan[]"  class="form-control karyawan-lookup">
         </td>
         <td class="data_tbl tbl_pengeluaranstokheader_nobukti">
-          <input id="pengeluaranstok_nobukti_${index}" type="text" name="pengeluaranstok_nobukti[]"  class="form-control pengeluaranstokheader-lookup">
+          <input id="pengeluaranstok_nobukti_${indexRow}" type="text" name="pengeluaranstok_nobukti[]"  class="form-control pengeluaranstokheader-lookup">
         </td>
         <td class="data_tbl tbl_stok_id">
-          <input id="stok_id_${index}" type="hidden" name="stok_id[]">
-          <input id="stok_${index}" type="text" name="stok[]"  class="form-control stok-lookup">
+          <input id="stok_id_${indexRow}" type="hidden" name="stok_id[]">
+          <input id="stok_${indexRow}" type="text" name="stok[]"  class="form-control stok-lookup">
         </td>
         <td class="data_tbl tbl_qty">
-          <input id="qty_${index}" type="text" name="qty[]" onkeyup="cal(${index})" class="form-control  qty"> 
+          <input id="qty_${indexRow}" type="text" name="qty[]" onkeyup="cal(${indexRow})" class="form-control  qty"> 
         </td>
 
         <td class="data_tbl tbl_penerimaantruckingheader">
-          <input id="penerimaantruckingheader_nobukti_${index}" type="text" name="penerimaantruckingheader_nobukti[]"  class="form-control penerimaantruckingheader-lookup">
+          <input id="penerimaantruckingheader_nobukti_${indexRow}" type="text" name="penerimaantruckingheader_nobukti[]"  class="form-control penerimaantruckingheader-lookup">
         </td>
         <td class="data_tbl tbl_harga">
-          <input id="harga_${index}" readonly type="text" name="harga[]" class="form-control autonumeric"> 
+          <input id="harga_${indexRow}" readonly type="text" name="harga[]" class="form-control autonumeric"> 
         </td>
         <td class="data_tbl tbl_nominal">
-          <input id="nominal_${index}" type="text" name="nominal[]" class="form-control autonumeric nominal"> 
+          <input id="nominal_${indexRow}" type="text" name="nominal[]" class="form-control autonumeric nominal" autocomplete="off"> 
         </td>
         <td class="data_tbl tbl_nominaltagih kolom_bbt">
-          <input id="nominaltagih_${index}" type="text" name="nominaltagih[]" class="form-control autonumeric nominaltagih"> 
+          <input id="nominaltagih_${indexRow}" type="text" name="nominaltagih[]" readonly class="form-control text-right nominaltagih"> 
         </td>
         <td class="data_tbl tbl_keterangan">
-          <input id="keterangan_${index}" type="text" name="keterangan[]" class="form-control"> 
+          <input id="keterangan_${indexRow}" type="text" name="keterangan[]" class="form-control"> 
         </td>
         <td class="data_tbl tbl_jenisorder kolom_bbt">
-          <input id="jenisorder_${index}" type="text" name="jenisorder_id[]" class="form-control"> 
+          <input id="jenisorder_${indexRow}" type="text" name="jenisorder_id[]" class="form-control"> 
         </td>
         <td>
             <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
         </td>
       </tr>
     `)
-    var row = index;
+    var row = indexRow;
     $('#detailList tbody').append(detailRow)
+    initSelect2($(`#statustitipanemkl${indexRow}`), true)
+    dataStatusBiaya.forEach(statusBiaya => {
+      let option = new Option(statusBiaya.text, statusBiaya.id)
+
+      detailRow.find(`#statustitipanemkl${indexRow}`).append(option).trigger('change')
+    });
     if (listKodePengeluaran[8] == KodePengeluaranId) {
 
-      $(`#trado_id_${index}`).prop('readonly', true);
-      $(`#container_id_${index}`).prop('readonly', true);
-      $(`#pelanggan_id_${index}`).prop('readonly', true);
-      $(`#jenisorder_${index}`).prop('readonly', true);
+      $(`#trado_id_${indexRow}`).prop('readonly', true);
+      $(`#container_id_${indexRow}`).prop('readonly', true);
+      $(`#pelanggan_id_${indexRow}`).prop('readonly', true);
+      $(`#jenisorder_${indexRow}`).prop('readonly', true);
     }
     $('.supir-lookup').last().lookup({
       title: 'Supir Lookup',
@@ -3924,7 +3966,7 @@
     initAutoNumeric(detailRow.find('.autonumeric'))
     setTampilanForm()
     setRowNumbers()
-    index++
+    indexRow++
   }
 
   function checkboxHandler(element) {
@@ -4177,6 +4219,17 @@
           Authorization: `Bearer ${accessToken}`
         },
         success: response => {
+          if ($('#crudForm').data('action') == 'edit') {
+            response.data.map((data) => {
+              if (data.pengeluarantrucking_id != null) {
+                selectedRowsSumbangan.push(data.id_detail)
+                selectedRowsSumbanganNobukti.push(data.noinvoice_detail)
+                selectedRowsSumbanganContainer.push(data.container_detail)
+                selectedRowsSumbanganJobtrucking.push(data.nojobtrucking_detail)
+                selectedRowsSumbanganNominal.push(data.nominal_detail)
+              }
+            })
+          }
           response.url = urlSumbangan
           resolve(response)
         },
@@ -4221,33 +4274,23 @@
           Authorization: `Bearer ${accessToken}`
         },
         success: response => {
-          if ($('#crudForm').data('action') == 'add') {
-            selectedRowsSumbangan = response.data.map((data) => data.id_detail)
-            selectedRowsSumbanganNobukti = response.data.map((data) => data.noinvoice_detail)
-            selectedRowsSumbanganContainer = response.data.map((data) => data.container_detail)
-            selectedRowsSumbanganJobtrucking = response.data.map((data) => data.nojobtrucking_detail)
-            selectedRowsSumbanganNominal = response.data.map((data) => data.nominal_detail)
-          } else if ($('#crudForm').data('action') == 'edit') {
-            response.data.map((data) => {
-              if (data.pengeluarantrucking_id != null) {
-                selectedRowsSumbangan.push(data.id_detail)
-                selectedRowsSumbanganNobukti.push(data.noinvoice_detail)
-                selectedRowsSumbanganContainer.push(data.container_detail)
-                selectedRowsSumbanganJobtrucking.push(data.nojobtrucking_detail)
-                selectedRowsSumbanganNominal.push(data.nominal_detail)
-              }
-            })
-            // $('#tableSumbangan').jqGrid("clearGridData");
-            $('#tableSumbangan').jqGrid('setGridParam', {
-              url: `${apiUrl}pengeluarantruckingheader/${urlSumbangan}`,
-              postData: {
-                tgldari: $('#crudForm').find('[name=tgldari]').val(),
-                tglsampai: $('#crudForm').find('[name=tglsampai]').val(),
-                aksi: $('#crudForm').data('action')
-              },
-              datatype: "json"
-            }).trigger('reloadGrid');
-          }
+          clearSelectedRowsSumbangan()
+          selectedRowsSumbangan = response.data.map((data) => data.id_detail)
+          selectedRowsSumbanganNobukti = response.data.map((data) => data.noinvoice_detail)
+          selectedRowsSumbanganContainer = response.data.map((data) => data.container_detail)
+          selectedRowsSumbanganJobtrucking = response.data.map((data) => data.nojobtrucking_detail)
+          selectedRowsSumbanganNominal = response.data.map((data) => data.nominal_detail)
+
+          // $('#tableSumbangan').jqGrid("clearGridData");
+          $('#tableSumbangan').jqGrid('setGridParam', {
+            url: `${apiUrl}pengeluarantruckingheader/${urlSumbangan}`,
+            postData: {
+              tgldari: $('#crudForm').find('[name=tgldari]').val(),
+              tglsampai: $('#crudForm').find('[name=tglsampai]').val(),
+              aksi: $('#crudForm').data('action')
+            },
+            datatype: "json"
+          }).trigger('reloadGrid');
         },
         error: error => {
           if (error.status === 422) {
@@ -5606,6 +5649,38 @@
         data: data,
         success: response => {
           isEditTgl = $.trim(response.text);
+          resolve()
+        },
+        error: error => {
+          reject(error)
+        }
+      })
+    })
+  }
+
+  let dataStatusBiaya = [];
+  const setStatusBiayaTitipanOptions = function() {
+    return new Promise((resolve, reject) => {
+
+      $.ajax({
+        url: `${apiUrl}parameter`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          filters: JSON.stringify({
+            "groupOp": "AND",
+            "rules": [{
+              "field": "grp",
+              "op": "cn",
+              "data": "BIAYA TITIPAN EMKL"
+            }]
+          })
+        },
+        success: response => {
+          dataStatusBiaya = response.data
           resolve()
         },
         error: error => {

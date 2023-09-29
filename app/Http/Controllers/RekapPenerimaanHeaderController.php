@@ -246,27 +246,25 @@ class RekapPenerimaanHeaderController extends MyController
                 $sheet->getStyle("A$detail_table_header_row:D$detail_table_header_row")->getFont()->setBold(true);
                 $sheet->getStyle("A$detail_table_header_row:D$detail_table_header_row")->getAlignment()->setHorizontal('center');
             }
-            $response_detail['nominals'] = number_format((float) $response_detail['nominal'], '2', '.', ',');
         
             $sheet->setCellValue("A$detail_start_row", $response_index + 1);
             $sheet->setCellValue("B$detail_start_row", $response_detail['keterangancoa']);
             $sheet->setCellValue("C$detail_start_row", $response_detail['keterangan']);
-            $sheet->setCellValue("D$detail_start_row", $response_detail['nominals']);
+            $sheet->setCellValue("D$detail_start_row", $response_detail['nominal']);
 
             $sheet->getStyle("D$detail_start_row")->getAlignment()->setWrapText(true);
             $sheet->getColumnDimension('D')->setWidth(50);
 
             $sheet ->getStyle("A$detail_start_row:C$detail_start_row")->applyFromArray($styleArray);
-            $sheet ->getStyle("D$detail_start_row")->applyFromArray($style_number);
-            $nominal += $response_detail['nominal'];
+            $sheet ->getStyle("D$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
             $detail_start_row++;
         }
 
         $total_start_row = $detail_start_row;
         $sheet->mergeCells('A'.$total_start_row.':C'.$total_start_row);
         $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A'.$total_start_row.':C'.$total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
-        $sheet->setCellValue("D$total_start_row", number_format((float) $nominal, '2', '.', ','))->getStyle("D$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
-
+        $sheet->setCellValue("D$total_start_row", "=SUM(D10:D" . ($detail_start_row - 1) . ")")->getStyle("D$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->getStyle("D$total_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
         //set autosize
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);

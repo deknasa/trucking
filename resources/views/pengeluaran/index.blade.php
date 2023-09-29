@@ -351,6 +351,11 @@
             }
           },
           {
+            label: 'NO BUKTI PENERIMAAN',
+            name: 'penerimaan_nobukti',
+            align: 'left'
+          },
+          {
             label: 'MODIFIEDBY',
             name: 'modifiedby',
             align: 'left'

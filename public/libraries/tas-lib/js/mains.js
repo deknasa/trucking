@@ -77,6 +77,7 @@ function initAutoNumeric(elements = null, options = null) {
 	let option = {
 		digitGroupSeparator: formats.THOUSANDSEPARATOR,
 		decimalCharacter: formats.DECIMALSEPARATOR,
+		modifyValueOnWheel : false
 	};
 
 	Object.assign(option, options)

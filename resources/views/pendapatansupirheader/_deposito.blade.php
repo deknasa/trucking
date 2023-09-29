@@ -11,13 +11,13 @@
     let indexRowDeposito
     let pageDeposito = 0
 
-    $("#depositoGrid")
+    $("#jurnaldepositoGrid")
       .jqGrid({
         datatype: 'local',
         data: [],
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
-        idPrefix: 'depositoGrid',
+        idPrefix: 'jurnaldepositoGrid',
         colModel: [{
             label: 'NO BUKTI',
             name: 'nobukti',
@@ -139,7 +139,7 @@
           postData: {
             nobukti: nobukti
           },})
-          clearGlobalSearch($('#depositoGrid'))
+          clearGlobalSearch($('#jurnaldepositoGrid'))
         },
       })
       .jqGrid("navGrid", pager, {
@@ -152,15 +152,15 @@
 
       .customPager()
     /* Append clear filter button */
-    loadClearFilter($('#depositoGrid'))
+    loadClearFilter($('#jurnaldepositoGrid'))
 
     /* Append global search */
-    loadGlobalSearch($('#depositoGrid'))
+    loadGlobalSearch($('#jurnaldepositoGrid'))
   }
 
   function loadDepositoData(id, nobukti) {
-    abortGridLastRequest($('#depositoGrid'))
-    $('#depositoGrid').setGridParam({
+    abortGridLastRequest($('#jurnaldepositoGrid'))
+    $('#jurnaldepositoGrid').setGridParam({
       url: `${apiUrl}pendapatansupirdetail/jurnal`,
       datatype: "json",
       postData: {

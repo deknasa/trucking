@@ -42,16 +42,18 @@
   var statusEditTujuan;
   let tgldariheader
   let tglsampaiheader
+  let isKomisi;
 
   $(document).ready(function() {
+    setIsKomisi()
     loadDetailGrid()
-  @isset($request['tgldari'])
-      tgldariheader = `{{ $request['tgldari'] }}`;
+    @isset($request['tgldari'])
+    tgldariheader = `{{ $request['tgldari'] }}`;
     @endisset
     @isset($request['tglsampai'])
-      tglsampaiheader = `{{ $request['tglsampai'] }}`;
+    tglsampaiheader = `{{ $request['tglsampai'] }}`;
     @endisset
-    setRange(false,tgldariheader,tglsampaiheader)
+    setRange(false, tgldariheader, tglsampaiheader)
     initDatepicker()
     $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('suratpengantar')
@@ -472,6 +474,66 @@
             }
           },
           {
+            label: 'APPROVAL TITIPAN EMKL',
+            name: 'statusapprovalbiayatitipanemkl',
+            stype: 'select',
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['combotitipan'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['combotitipan'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+            `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              if (!value) {
+                return ''
+              }
+              let statusTitipan = JSON.parse(value)
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusTitipan.WARNA}; color: #fff;">
+                  <span>${statusTitipan.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              if (!rowObject.statusapprovalbiayatitipanemkl) {
+                return ` title=""`
+              }
+              let statusTitipan = JSON.parse(rowObject.statusapprovalbiayatitipanemkl)
+              return ` title="${statusTitipan.MEMO}"`
+            }
+          },
+          {
+            label: 'TGL APP TITIPAN EMKL',
+            name: 'tglapprovalbiayatitipanemkl',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
+          {
+            label: 'USER APP TITIPAN EMKL',
+            name: 'userapprovalbiayatitipanemkl',
+          },
+          {
             label: 'MODIFIEDBY',
             name: 'modifiedby',
           },
@@ -674,16 +736,30 @@
               id: 'approvalBatalMuat',
               text: "un/Approval Batal Muat",
               onClick: () => {
-                selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                approvalBatalMuat(selectedId);
+                if (`{{ $myAuth->hasPermission('suratpengantar', 'approvalBatalMuat') }}`) {
+                  selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                  approvalBatalMuat(selectedId);
+                }
               }
             },
             {
               id: 'approvalEditTujuan',
               text: "un/Approval Edit Surat Pengantar",
               onClick: () => {
+                if (`{{ $myAuth->hasPermission('suratpengantar', 'approvalEditTujuan') }}`) {
+                  selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                  approvalEditTujuan(selectedId);
+                }
+              }
+            },
+            {
+              id: 'approvalTitipanEmkl',
+              text: "un/Approval Titipan EMKL",
+              onClick: () => {
                 selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                approvalEditTujuan(selectedId);
+                if (`{{ $myAuth->hasPermission('suratpengantar', 'approvalTitipanEmkl') }}`) {
+                  approvalTitipanEmkl(selectedId);
+                }
               }
             },
           ],
@@ -800,12 +876,12 @@
       if (!`{{ $myAuth->hasPermission('suratpengantar', 'destroy') }}`) {
         $('#delete').attr('disabled', 'disabled')
       }
-      if (!`{{ $myAuth->hasPermission('suratpengantar', 'approvalBatalMuat') }}`) {
-        $('#approvalBatalMuat').attr('disabled', 'disabled')
-      }
-      if (!`{{ $myAuth->hasPermission('suratpengantar', 'approvalEditTujuan') }}`) {
-        $('#approvalEditTujuan').attr('disabled', 'disabled')
-      }
+      // if (!`{{ $myAuth->hasPermission('suratpengantar', 'approvalBatalMuat') }}`) {
+      //   $('#approvalBatalMuat').attr('disabled', 'disabled')
+      // }
+      // if (!`{{ $myAuth->hasPermission('suratpengantar', 'approvalEditTujuan') }}`) {
+      //   $('#approvalEditTujuan').attr('disabled', 'disabled')
+      // }
       if (!`{{ $myAuth->hasPermission('suratpengantar', 'report') }}`) {
         $('#report').attr('disabled', 'disabled')
       }
@@ -874,6 +950,26 @@
             msg = `YAKIN approval Edit Surat Pengantar`
           }
           showConfirm(msg, response.data.nobukti, `suratpengantar/${response.data.id}/edittujuan`)
+        },
+      })
+    }
+
+    function approvalTitipanEmkl(id) {
+      getEditTujuan()
+      $.ajax({
+        url: `${apiUrl}suratpengantar/${id}`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          let msg = `YAKIN Unapproval Titipan EMKL`
+          console.log(statusEditTujuan, response.data.statusapprovalbiayatitipanemkl);
+          if (response.data.statusapprovalbiayatitipanemkl === statusEditTujuan) {
+            msg = `YAKIN approval Titipan EMKL`
+          }
+          showConfirm(msg, response.data.nobukti, `suratpengantar/${response.data.id}/titipanemkl`)
         },
       })
     }
@@ -959,6 +1055,24 @@
       window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
     })
   })
+
+  function setIsKomisi() {
+    $.ajax({
+      url: `${apiUrl}parameter/getparamfirst`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        grp: 'SURAT PENGANTAR',
+        subgrp: 'KOMISI'
+      },
+      success: response => {
+        isKomisi = $.trim(response.text)
+      }
+    })
+  }
 </script>
 @endpush()
 @endsection

@@ -118,6 +118,16 @@
               </div>
             </div>
 
+            <div class="row form-group bmt" style="display: none;">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
+                  NO BUKTI PENERIMAAN
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="text" name="nobukti_penerimaan" class="form-control bmt-lookup">
+              </div>
+            </div>
+
             <div class="table-scroll table-responsive">
               <table class="table table-bordered table-bindkeys" id="detailList" style="width: 1500px;">
                 <thead>
@@ -130,7 +140,7 @@
                     <th width="10%">Tgl jatuh tempo</th>
                     <th width="10%">No Invoice</th>
                     <th width="10%">Bank</th>
-                    <th width="1%" class="tbl_aksi">Aksi</th>
+                    <th width="1%" class="aksiBmt tbl_aksi">Aksi</th>
                   </tr>
                 </thead>
                 <tbody id="table_body" class="form-group">
@@ -146,7 +156,7 @@
                       <p class="text-right font-weight-bold autonumeric" id="total"></p>
                     </td>
                     <td colspan="4"></td>
-                    <td class="tbl_aksi">
+                    <td class="aksiBmt tbl_aksi">
                       <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
                     </td>
                   </tr>
@@ -217,9 +227,9 @@
           }
         },
       }).always(() => {
-          $('#processingLoader').addClass('d-none')
-          $(this).removeAttr('disabled')
-      })  
+        $('#processingLoader').addClass('d-none')
+        $(this).removeAttr('disabled')
+      })
     });
 
     $(document).on('change', `#crudForm [name="tglbukti"]`, function() {
@@ -434,6 +444,11 @@
       .then(() => {
         showDefault(form)
           .then(() => {
+            if (bankId == 3) {
+              $('.bmt').show()
+            } else {
+              $('.bmt').hide()
+            }
             clearSelectedRows()
             $('#gs_').prop('checked', false)
             $('#crudModal').modal('show')
@@ -519,11 +534,11 @@
             $('#crudForm').find(`[name="bank"]`).parents('.input-group').children().attr('disabled', true)
             $('#crudForm').find(`[name="bank"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled', true)
             $('#crudForm').find(`[name="bank"]`).attr('disabled', false).attr('readonly', true)
-            $('[name="bank_id"]').attr('readonly', true);
+            $('#crudForm').find('[name="bank_id"]').attr('readonly', true);
             $('#crudForm').find(`[name="alatbayar"]`).parents('.input-group').children().attr('disabled', true)
             $('#crudForm').find(`[name="alatbayar"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled', true)
             $('#crudForm').find(`[name="alatbayar"]`).attr('disabled', false).attr('readonly', true)
-            $('[name="alatbayar_id"]').attr('readonly', true);
+            $('#crudForm').find('[name="alatbayar_id"]').attr('readonly', true);
           })
           .catch((error) => {
             showDialog(error.responseJSON)
@@ -762,7 +777,17 @@
             if (index == 'bank') {
               element.data('current-value', value)
             }
+            if (index == 'nobukti_penerimaan') {
+              element.data('current-value', value)
+            }
           })
+
+          if (bankId == 3) {
+            $('.bmt').show()
+          } else {
+            $('.bmt').hide()
+          }
+
           $('#detailList tbody').html('')
           $.each(response.detail, (index, detail) => {
             let detailRow = $(`
@@ -1081,6 +1106,12 @@
         $('#crudForm [name=bank_id]').first().val(bank.id)
 
         bankId = bank.id
+
+        if (bankId == 3) {
+          $('.bmt').show()
+        } else {
+          $('.bmt').hide()
+        }
         element.val(bank.namabank)
         element.data('currentValue', element.val())
       },
@@ -1091,6 +1122,129 @@
         $('#crudForm [name=bank_id]').first().val('')
         element.val('')
         element.data('currentValue', element.val())
+      }
+    })
+
+    $('.bmt-lookup').lookup({
+      title: 'Penerimaan Kas/Bank Lookup',
+      fileName: 'penerimaan',
+      beforeProcess: function(test) {
+        this.postData = {
+          bankId: bankId,
+          isBmt: true,
+          nobuktiBmt: $('#crudForm [name=nobukti_penerimaan]').val()
+        }
+      },
+      onSelectRow: (penerimaan, element) => {
+        $('#table_body').html('')
+        $('.aksiBmt').hide()
+        element.val(penerimaan.nobukti)
+        getBMT(penerimaan.id)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $('.aksiBmt').show()
+        $('#table_body').html('')
+        addRow();
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+  }
+
+  function getBMT(bmtId) {
+    $.ajax({
+      url: `${apiUrl}penerimaandetail/getDetail`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`
+      },
+      data: {
+        penerimaan_id: bmtId
+      },
+      success: response => {
+        $.each(response.data, (index, detail) => {
+          let detailRow = $(`
+              <tr>
+                  <td></td>
+                  <td>
+                    <input type="hidden" name="coadebet[]">
+                    <input type="text" name="ketcoadebet[]" data-current-value="${detail.ketcoakredit}" class="form-control akunpusat-lookup">
+                  </td>                
+                  <td>
+                      <input type="text" name="keterangan_detail[]"  class="form-control">
+                  </td>
+                  <td>
+                      <input type="text" name="nominal_detail[]" class="form-control autonumeric nominal"> 
+                  </td>
+
+                  <td>
+                      <input type="text" name="nowarkat[]"  class="form-control">
+                  </td>
+                  <td>
+                      <div class="input-group">
+                          <input type="text" name="tgljatuhtempo[]" class="form-control datepicker">   
+                      </div>
+                  </td>
+                  <td>
+                      <input type="text" name="noinvoice[]" class="form-control">
+                  </td>
+                  <td>
+                      <input type="text" name="bank_detail[]" class="form-control">
+                  </td>
+              </tr>
+            `)
+
+          detailRow.find(`[name="nowarkat[]"]`).val(detail.nowarkat)
+          detailRow.find(`[name="tgljatuhtempo[]"]`).val(detail.tgljatuhtempo)
+          detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
+          detailRow.find(`[name="nominal_detail[]"]`).val(detail.nominal)
+          detailRow.find(`[name="coadebet[]"]`).val(detail.coakredit)
+          detailRow.find(`[name="ketcoadebet[]"]`).val(detail.ketcoakredit)
+          detailRow.find(`[name="noinvoice[]"]`).val(detail.invoice_nobukti)
+
+          initAutoNumeric(detailRow.find(`[name="nominal_detail[]"]`))
+
+          detailRow.find(`[name="tgljatuhtempo[]"]`).val(dateFormat(detail.tgljatuhtempo))
+          $('#detailList tbody').append(detailRow)
+
+          setTotal();
+
+          $('.akunpusat-lookup').last().lookup({
+            title: 'Kode Perk. Lookup',
+            fileName: 'akunpusat',
+            beforeProcess: function(test) {
+              // var levelcoa = $(`#levelcoa`).val();
+              this.postData = {
+                levelCoa: '3',
+                Aktif: 'AKTIF',
+              }
+            },
+            onSelectRow: (akunpusat, element) => {
+              $(`#crudForm [name="coadebet[]"]`).last().val(akunpusat.coa)
+              element.val(akunpusat.keterangancoa)
+              element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+              element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+              $(`#crudForm [name="coadebet[]"]`).last().val('')
+              element.val('')
+              element.data('currentValue', element.val())
+            }
+          })
+
+
+        })
+        setRowNumbers()
+      },
+      error: error => {
+        showDialog(error.responseJSON)
       }
     })
   }

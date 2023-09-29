@@ -103,10 +103,13 @@ class PenerimaanHeaderController extends MyController
 
     public function comboBank()
     {
+        $detailParams = [
+            'aktif' => 'AKTIF',
+        ];
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'bank');
+            ->get(config('app.api_url') . 'bank', $detailParams);
 
         return $response['data'];
     }
@@ -306,28 +309,27 @@ class PenerimaanHeaderController extends MyController
                     $sheet->getStyle("A$detail_table_header_row:D$detail_table_header_row")->getFont()->setBold(true);
                     $sheet->getStyle("A$detail_table_header_row:D$detail_table_header_row")->getAlignment()->setHorizontal('center');
                 }
-                $response_detail['nominals'] = number_format((float) $response_detail['nominal'], '2', '.', ',');
 
                 $sheet->setCellValue("A$detail_start_row", $response_index + 1);
                 $sheet->setCellValue("B$detail_start_row", $response_detail['coadebet']);
                 $sheet->setCellValue("C$detail_start_row", $response_detail['keterangan_detail']);
-                $sheet->setCellValue("D$detail_start_row", $response_detail['nominals']);
+                $sheet->setCellValue("D$detail_start_row", $response_detail['nominal']);
 
                 $sheet->getStyle("C$detail_start_row")->getAlignment()->setWrapText(true);
                 $sheet->getColumnDimension('C')->setWidth(50);
 
                 $sheet->getStyle("A$detail_start_row:D$detail_start_row")->applyFromArray($styleArray);
-                $sheet->getStyle("D$detail_start_row")->applyFromArray($style_number);
+                $sheet->getStyle("D$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
 
-                $nominal += $response_detail['nominal'];
                 $detail_start_row++;
             }
 
             $total_start_row = $detail_start_row;
             $sheet->mergeCells('A' . $total_start_row . ':C' . $total_start_row);
             $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':C' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
-            $sheet->setCellValue("D$total_start_row", number_format((float) $nominal, '2', '.', ','))->getStyle("D$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+            $sheet->setCellValue("D$total_start_row", "=SUM(D10:D" . ($detail_start_row - 1) . ")")->getStyle("D$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
 
+            $sheet->getStyle("D$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
             $sheet->getColumnDimension('A')->setAutoSize(true);
             $sheet->getColumnDimension('B')->setAutoSize(true);
             $sheet->getColumnDimension('D')->setAutoSize(true);
@@ -454,29 +456,26 @@ class PenerimaanHeaderController extends MyController
                     $sheet->getStyle("A$detail_table_header_row:G$detail_table_header_row")->getFont()->setBold(true);
                     $sheet->getStyle("A$detail_table_header_row:G$detail_table_header_row")->getAlignment()->setHorizontal('center');
                 }
-                $response_detail['nominals'] = number_format((float) $response_detail['nominal'], '2', '.', ',');
 
                 $sheet->setCellValue("A$detail_start_row", $response_index + 1);
                 $sheet->setCellValue("B$detail_start_row", $response_detail['coadebet']);
                 $sheet->setCellValue("C$detail_start_row", $response_detail['bank_detail']);
                 $sheet->setCellValue("D$detail_start_row", $response_detail['invoice_nobukti']);
                 $sheet->setCellValue("E$detail_start_row", $response_detail['keterangan_detail']);
-                $sheet->setCellValue("F$detail_start_row", $response_detail['nominals']);
+                $sheet->setCellValue("F$detail_start_row", $response_detail['nominal']);
 
                 $sheet->getStyle("E$detail_start_row")->getAlignment()->setWrapText(true);
                 $sheet->getColumnDimension('E')->setWidth(50);
 
                 $sheet->getStyle("A$detail_start_row:F$detail_start_row")->applyFromArray($styleArray);
-                $sheet->getStyle("F$detail_start_row")->applyFromArray($style_number);
-
-                $nominal += $response_detail['nominal'];
+                $sheet->getStyle("F$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
                 $detail_start_row++;
             }
             $total_start_row = $detail_start_row;
             $sheet->mergeCells('A' . $total_start_row . ':E' . $total_start_row);
             $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':E' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
-            $sheet->setCellValue("F$total_start_row", number_format((float) $nominal, '2', '.', ','))->getStyle("F$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
-
+            $sheet->setCellValue("F$total_start_row", "=SUM(F9:F" . ($detail_start_row - 1) . ")")->getStyle("F$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+            $sheet->getStyle("F$total_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
             $sheet->getColumnDimension('A')->setAutoSize(true);
             $sheet->getColumnDimension('B')->setAutoSize(true);
             $sheet->getColumnDimension('C')->setAutoSize(true);

@@ -18,8 +18,8 @@
               <li><a href="#detail-tab">Details</a></li>
               <li><a href="#pengeluaran-tab">Pengeluaran Kas/bank</a></li>
               <li><a href="#jurnal-tab">Jurnal</a></li>
-              <li class="deposito"><a href="#deposito-tab">Jurnal Deposito</a></li>
-              <li class="pinjaman"><a href="#pinjaman-tab">Jurnal Pinjaman</a></li>
+              <li class="deposito"><a href="#jurnaldeposito-tab">Jurnal Deposito</a></li>
+              <li class="pinjaman"><a href="#jurnalpinjaman-tab">Jurnal Pinjaman</a></li>
             </ul>
             <div id="detail-tab">
               <table id="detail"></table>
@@ -30,11 +30,11 @@
             <div id="jurnal-tab">
               <table id="jurnalGrid"></table>
             </div>
-            <div id="deposito-tab">
-              <table id="depositoGrid"></table>
+            <div id="jurnaldeposito-tab">
+              <table id="jurnaldepositoGrid"></table>
             </div>
-            <div id="pinjaman-tab">
-              <table id="pinjamanGrid"></table>
+            <div id="jurnalpinjaman-tab">
+              <table id="jurnalpinjamanGrid"></table>
             </div>
           </div>
         </div>
@@ -70,6 +70,8 @@
   let hasDetail = false
   let selectedRows = [];
   let isDeposito;
+  let isBank;
+
   function checkboxHandler(element) {
     let value = $(element).val();
     if (element.checked) {
@@ -97,6 +99,7 @@
     loadPinjamanJurnalGrid(nobukti)
     setTampilanIndex()
     setIsDeposito()
+    setIsValidateBank()
     setRange()
     initDatepicker()
     $(document).on('click', '#btnReload', function(event) {
@@ -292,7 +295,7 @@
             name: 'pengeluaran_nobukti',
             align: 'left',
             formatter: (value, options, rowData) => {
-              if ((value == null) ||( value == '')) {
+              if ((value == null) || (value == '')) {
                 return '';
               }
               let tgldari = rowData.tgldariheaderpengeluaranheader
@@ -301,8 +304,8 @@
               let formattedValue = $(`
               <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
              `)
-             return formattedValue[0].outerHTML
-           }
+              return formattedValue[0].outerHTML
+            }
           },
           {
             label: 'NAMA PERKIRAAN',
@@ -414,7 +417,7 @@
           changeJqGridRowListText()
 
           if (data.data.length === 0) {
-            $('#detail, #pengeluaranGrid, #jurnalGrid').each((index, element) => {
+            $('#detail, #pengeluaranGrid, #jurnalGrid', '#jurnaldepositoGrid', '#jurnalpinjamanGrid').each((index, element) => {
               abortGridLastRequest($(element))
               clearGridData($(element))
             })
@@ -547,7 +550,7 @@
             class: 'btn btn-orange btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              
+
               viewPendapatanSupir(selectedId)
             }
           },
@@ -808,23 +811,40 @@
     })
   }
 
-  function setIsDeposito()
-  {
+  function setIsDeposito() {
     $.ajax({
-        url: `${apiUrl}parameter/getparamfirst`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          grp: 'PENDAPATAN SUPIR',
-          subgrp: 'DEPOSITO'
-        },
-        success: response => {
-          isDeposito = response.text
-        }
-      })
+      url: `${apiUrl}parameter/getparamfirst`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        grp: 'PENDAPATAN SUPIR',
+        subgrp: 'DEPOSITO'
+      },
+      success: response => {
+        isDeposito = response.text
+      }
+    })
+  }
+
+  function setIsValidateBank() {
+    $.ajax({
+      url: `${apiUrl}parameter/getparamfirst`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        grp: 'PENDAPATAN SUPIR',
+        subgrp: 'BANK'
+      },
+      success: response => {
+        isBank = response.text
+      }
+    })
   }
 </script>
 @endpush()

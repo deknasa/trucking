@@ -11,13 +11,13 @@
     let indexRowPinjaman
     let pagePinjaman = 0
 
-    $("#pinjamanGrid")
+    $("#jurnalpinjamanGrid")
       .jqGrid({
         datatype: 'local',
         data: [],
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
-        idPrefix: 'pinjamanGrid',
+        idPrefix: 'jurnalpinjamanGrid',
         colModel: [{
             label: 'NO BUKTI',
             name: 'nobukti',
@@ -139,7 +139,7 @@
           postData: {
             nobukti: nobukti
           },})
-          clearGlobalSearch($('#pinjamanGrid'))
+          clearGlobalSearch($('#jurnalpinjamanGrid'))
         },
       })
       .jqGrid("navGrid", pager, {
@@ -152,15 +152,15 @@
 
       .customPager()
     /* Append clear filter button */
-    loadClearFilter($('#pinjamanGrid'))
+    loadClearFilter($('#jurnalpinjamanGrid'))
 
     /* Append global search */
-    loadGlobalSearch($('#pinjamanGrid'))
+    loadGlobalSearch($('#jurnalpinjamanGrid'))
   }
 
   function loadPinjamanData(id, nobukti) {
-    abortGridLastRequest($('#pinjamanGrid'))
-    $('#pinjamanGrid').setGridParam({
+    abortGridLastRequest($('#jurnalpinjamanGrid'))
+    $('#jurnalpinjamanGrid').setGridParam({
       url: `${apiUrl}pendapatansupirdetail/jurnal`,
       datatype: "json",
       postData: {
