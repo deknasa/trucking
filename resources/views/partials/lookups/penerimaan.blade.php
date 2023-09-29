@@ -11,13 +11,16 @@
     loadDataHeaderLookup('penerimaan', 'penerimaanLookup')
   })
   $('#penerimaanLookup').jqGrid({
-      url: `{{ config('app.api_url') . 'penerimaan' }}`,
+      url: `{{ config('app.api_url') . 'penerimaanheader' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
       iconSet: 'fontAwesome',
       postData: {
         tgldari: $('#tgldariheaderlookup').val(),
         tglsampai: $('#tglsampaiheaderlookup').val(),
+        bankId: `{!! $bankId ?? '' !!}`,
+        isBmt: `{!! $isBmt ?? '' !!}`,
+        nobuktiBmt: `{!! $nobuktiBmt ?? '' !!}`,
       },
       idPrefix: 'penerimaanLookup',
       datatype: "json",
@@ -50,6 +53,11 @@
             align: 'left'
           },
           {
+            label: 'AGEN ',
+            name: 'agen_id',
+            align: 'left'
+          },
+          {
             label: 'BANK',
             name: 'bank_id',
             align: 'left'
@@ -68,21 +76,6 @@
               srcformat: "ISO8601Long",
               newformat: "d-m-Y"
             }
-          },
-          {
-            label: 'CABANG',
-            name: 'cabang_id',
-            align: 'left'
-          },
-          {
-            label: 'STATUS KAS',
-            name: 'statuskas',
-            align: 'left'
-          },
-          {
-            label: 'NO RESI',
-            name: 'noresi',
-            align: 'left'
           },
           {
             label: 'STATUS APPROVAL',
@@ -105,26 +98,6 @@
             }
           },
          
-          {
-            label: 'STATUS BERKAS',
-            name: 'statusberkas',
-            align: 'left'
-          },
-          {
-            label: 'USER BERKAS',
-            name: 'userberkas',
-            align: 'left'
-          },
-          {
-            label: 'TANGGAL BERKAS',
-            name: 'tglberkas',
-            align: 'left',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
-            }
-          },
           {
             label: 'MODIFIEDBY',
             name: 'modifiedby',
