@@ -160,7 +160,9 @@
           },
           data: data,
           success: response => {
-              addRow()
+            addRow()
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
           },
           error: error => {
               if (error.status === 422) {
