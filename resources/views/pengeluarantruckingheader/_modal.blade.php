@@ -4217,6 +4217,17 @@
           Authorization: `Bearer ${accessToken}`
         },
         success: response => {
+          if ($('#crudForm').data('action') == 'edit') {
+            response.data.map((data) => {
+              if (data.pengeluarantrucking_id != null) {
+                selectedRowsSumbangan.push(data.id_detail)
+                selectedRowsSumbanganNobukti.push(data.noinvoice_detail)
+                selectedRowsSumbanganContainer.push(data.container_detail)
+                selectedRowsSumbanganJobtrucking.push(data.nojobtrucking_detail)
+                selectedRowsSumbanganNominal.push(data.nominal_detail)
+              }
+            })
+          }
           response.url = urlSumbangan
           resolve(response)
         },
@@ -4261,33 +4272,23 @@
           Authorization: `Bearer ${accessToken}`
         },
         success: response => {
-          if ($('#crudForm').data('action') == 'add') {
-            selectedRowsSumbangan = response.data.map((data) => data.id_detail)
-            selectedRowsSumbanganNobukti = response.data.map((data) => data.noinvoice_detail)
-            selectedRowsSumbanganContainer = response.data.map((data) => data.container_detail)
-            selectedRowsSumbanganJobtrucking = response.data.map((data) => data.nojobtrucking_detail)
-            selectedRowsSumbanganNominal = response.data.map((data) => data.nominal_detail)
-          } else if ($('#crudForm').data('action') == 'edit') {
-            response.data.map((data) => {
-              if (data.pengeluarantrucking_id != null) {
-                selectedRowsSumbangan.push(data.id_detail)
-                selectedRowsSumbanganNobukti.push(data.noinvoice_detail)
-                selectedRowsSumbanganContainer.push(data.container_detail)
-                selectedRowsSumbanganJobtrucking.push(data.nojobtrucking_detail)
-                selectedRowsSumbanganNominal.push(data.nominal_detail)
-              }
-            })
-            // $('#tableSumbangan').jqGrid("clearGridData");
-            $('#tableSumbangan').jqGrid('setGridParam', {
-              url: `${apiUrl}pengeluarantruckingheader/${urlSumbangan}`,
-              postData: {
-                tgldari: $('#crudForm').find('[name=tgldari]').val(),
-                tglsampai: $('#crudForm').find('[name=tglsampai]').val(),
-                aksi: $('#crudForm').data('action')
-              },
-              datatype: "json"
-            }).trigger('reloadGrid');
-          }
+          clearSelectedRowsSumbangan()
+          selectedRowsSumbangan = response.data.map((data) => data.id_detail)
+          selectedRowsSumbanganNobukti = response.data.map((data) => data.noinvoice_detail)
+          selectedRowsSumbanganContainer = response.data.map((data) => data.container_detail)
+          selectedRowsSumbanganJobtrucking = response.data.map((data) => data.nojobtrucking_detail)
+          selectedRowsSumbanganNominal = response.data.map((data) => data.nominal_detail)
+
+          // $('#tableSumbangan').jqGrid("clearGridData");
+          $('#tableSumbangan').jqGrid('setGridParam', {
+            url: `${apiUrl}pengeluarantruckingheader/${urlSumbangan}`,
+            postData: {
+              tgldari: $('#crudForm').find('[name=tgldari]').val(),
+              tglsampai: $('#crudForm').find('[name=tglsampai]').val(),
+              aksi: $('#crudForm').data('action')
+            },
+            datatype: "json"
+          }).trigger('reloadGrid');
         },
         error: error => {
           if (error.status === 422) {
