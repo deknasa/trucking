@@ -103,10 +103,13 @@ class PenerimaanHeaderController extends MyController
 
     public function comboBank()
     {
+        $detailParams = [
+            'aktif' => 'AKTIF',
+        ];
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'bank');
+            ->get(config('app.api_url') . 'bank', $detailParams);
 
         return $response['data'];
     }
