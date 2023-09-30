@@ -65,6 +65,10 @@
         //GST
         report.loadFile(`{{ asset('public/reports/ReportPengeluaranStokGST.mrt') }}`)
           break;
+        case '386':
+        //korv
+        report.loadFile(`{{ asset('public/reports/ReportPengeluaranStokKORV.mrt') }}`)
+          break;
         default:
         report.loadFile(`{{ asset('public/reports/ReportPengeluaranStokSPK.mrt') }}`)
           break;
@@ -79,8 +83,8 @@
       report.dictionary.synchronize()
 
       viewer.report = report
-      // designer.renderHtml("content")
-      // designer.report = report
+      designer.renderHtml("content")
+      designer.report = report
       
       viewer.onPrintReport = function (event) {
         triggerEvent(window, 'afterprint');
