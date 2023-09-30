@@ -41,7 +41,7 @@ html {
 .ui-jqgrid-bdiv td {
 	padding: 6px;
 }
-input[type=text]:focus,input[type=password]:focus {
+input[type=text]:focus,input[type=password]:focus, .select2-selection:focus {
 	background-color: #ffffee;
   }
 
@@ -620,4 +620,105 @@ span.textCard {
 
 .no-date .ui-datepicker-calendar {
     display: none;
+}
+
+@media (max-width: 767px) { 
+    .ui-datepicker table { 
+        font-size: 17px !important; 
+    } 
+	
+	html { 
+		font-size: 16px;  
+	} 
+	
+	.col-form-label{ 
+		font-size: 20px; 
+	} 
+	
+	.ui-datepicker{ 
+		width: 20em!important; 
+	} 
+	
+	.ui-datepicker-calendar{ 
+		position: relative; 
+	} 
+	
+	.ui-jqgrid tr.ui-search-toolbar td input{ 
+		font-size: 15px!important; 
+		padding: 13px; 
+		padding-right: 5px; 
+	} 
+	
+	.ui-jqgrid-bdiv td { 
+		padding: 13px; 
+	} 
+	
+	.ui-jqgrid .ui-jqgrid-bdiv { 
+		height: 447px!important; 
+	}
+
+}
+
+@media only screen and (max-width: 600px) { 
+    input[type=text],  
+	input[type=password] { 
+		font-size: 1.3rem !important; 
+		height: calc(1.5em + 0.75rem + 2px); 
+	} 
+ 
+ 	.select2-container .select2-selection--single{ 
+		height: 40px!important; 
+		/* height:calc(1.5em + 0.75rem + 2px) */ 
+	} 
+	
+	.ui-jqgrid .ui-jqgrid-view input{ 
+		font-size: 1.2rem!important; 
+	} 
+  
+   .select2-selection__placeholder{ 
+	vertical-align: middle; 
+	font-size: 1.3rem; 
+   } 
+ 
+	#sidebarButton {
+		padding-left: 0.5rem !important;
+		padding-right: 0.5rem !important;
+		font-size: 1.4rem;
+	}
+   
+}
+@media (min-width: 900px) { 
+
+	#sidebarButton {
+		padding-left: 1.5rem !important;
+		padding-right: 1.5rem !important;
+		font-size: 1.4rem;
+	}
+}
+
+.bg-pink {
+	background-color: #e83e8c;
+}
+
+.bg-green-slate {
+	background-color: #539165;
+}
+.bg-green-slate, .bg-green-slate>a{
+	color: #fff;
+}
+.bg-dark-orange {
+	background-color: #d74d26;
+}
+.bg-dark-orange, .bg-dark-orange>a {
+	color: #fff;
+}
+.bg-yellow-light {
+	background-color: #FFC436;
+}
+
+.bg-yellow-light, .bg-yellow-light>a {
+	color: #fff;
+}
+#sidebarButton>i {
+	color: #d81b60 !important;
 }
