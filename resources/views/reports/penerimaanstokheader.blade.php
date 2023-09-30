@@ -77,6 +77,10 @@
         //PST
         report.loadFile(`{{ asset('public/reports/ReportPenerimaanStokPSPK.mrt') }}`)
         break;
+      case '385':
+        //KORV
+        report.loadFile(`{{ asset('public/reports/ReportPenerimaanStokKORV.mrt') }}`)
+        break;
       default:
         report.loadFile(`{{ asset('public/reports/ReportPenerimaanSPB.mrt') }}`)
         break;
@@ -91,8 +95,8 @@
       report.dictionary.synchronize()
 
       viewer.report = report
-      // designer.renderHtml("content")
-      // designer.report = report
+      designer.renderHtml("content")
+      designer.report = report
       
       viewer.onPrintReport = function (event) {
         triggerEvent(window, 'afterprint');

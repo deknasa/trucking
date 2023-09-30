@@ -269,11 +269,11 @@ class PengeluaranStokHeaderController extends MyController
         $pengeluaranstok = $this->find($params,$id)['data'];
         $data = $pengeluaranstok;
         $i =0;
-    
+        
         $response = Http::withHeaders($this->httpHeaders)
         ->withOptions(['verify' => false])
         ->withToken(session('access_token'))
-        ->get(config('app.api_url') . 'pengeluaranstokdetail', ['pengeluaranstok_id' => $pengeluaranstok['id']]);
+        ->get(config('app.api_url') . 'pengeluaranstokdetail', ['pengeluaranstokheader_id' => $pengeluaranstok['id']]);
         $data["details"] =$response['data'];
         $data["user"] = Auth::user();
         $combo = $this->combo('list');
