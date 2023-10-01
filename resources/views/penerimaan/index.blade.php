@@ -347,12 +347,12 @@
             }
           },
           {
-            label: 'MODIFIEDBY',
+            label: 'MODIFIED BY',
             name: 'modifiedby',
             align: 'left'
           },
           {
-            label: 'CREATEDAT',
+            label: 'CREATED AT',
             name: 'created_at',
             align: 'left',
             formatter: "date",
@@ -362,7 +362,7 @@
             }
           },
           {
-            label: 'UPDATEDAT',
+            label: 'UPDATED AT',
             name: 'updated_at',
             align: 'left',
             formatter: "date",

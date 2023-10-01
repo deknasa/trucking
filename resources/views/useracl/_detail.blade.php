@@ -36,12 +36,12 @@
             width: '350px'
           },
           {
-            label: 'MODIFIEDBY',
+            label: 'MODIFIED BY',
             name: 'modifiedby',
             align: 'center'
           },
           {
-            label: 'UPDATEDAT',
+            label: 'UPDATED AT',
             name: 'updated_at',
             align: 'center'
           },

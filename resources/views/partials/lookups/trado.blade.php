@@ -141,11 +141,11 @@
           name: 'alamatstnk',
         },
         {
-          label: 'MODIFIEDBY',
+          label: 'MODIFIED BY',
           name: 'modifiedby',
         },
         {
-          label: 'CREATEDAT',
+          label: 'CREATED AT',
           name: 'created_at',
           align: 'right',
           formatter: "date",

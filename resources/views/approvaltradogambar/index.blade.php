@@ -101,11 +101,11 @@
             }
           },
           {
-            label: 'MODIFIEDBY',
+            label: 'MODIFIED BY',
             name: 'modifiedby',
             align: 'left'
           },{
-            label: 'CREATEDAT',
+            label: 'CREATED AT',
             name: 'created_at',
             formatter: "date",
             formatoptions: {
@@ -114,7 +114,7 @@
             }
           },
           {
-            label: 'UPDATEDAT',
+            label: 'UPDATED AT',
             name: 'updated_at',
             formatter: "date",
             formatoptions: {

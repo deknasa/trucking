@@ -267,11 +267,11 @@
             name: 'keterangan',
           },
           {
-            label: 'MODIFIEDBY',
+            label: 'MODIFIED BY',
             name: 'modifiedby',
           },
           {
-            label: 'CREATEDAT',
+            label: 'CREATED AT',
             name: 'created_at',
             align: 'right',
             formatter: "date",
@@ -281,7 +281,7 @@
             }
           },
           {
-            label: 'UPDATEDAT',
+            label: 'UPDATED AT',
             name: 'updated_at',
             align: 'right',
             formatter: "date",

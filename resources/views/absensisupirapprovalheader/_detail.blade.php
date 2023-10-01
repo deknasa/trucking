@@ -44,7 +44,7 @@
             formatter: currencyFormat,
           },
           // {
-          //   label: 'MODIFIEDBY',
+          //   label: 'MODIFIED BY',
           //   name: 'modifiedby',
           //   align: 'left'
           // },
