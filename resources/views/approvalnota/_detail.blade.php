@@ -68,7 +68,7 @@
                 align: 'right',
                 formatter: currencyFormat,
             }, {
-                label: 'modifiedby',
+                label: 'MODIFIED BY',
                 name: 'modifiedby',
                 align: 'left'
             }, )
@@ -119,7 +119,7 @@
                 align: 'right',
                 formatter: currencyFormat,
             }, {
-                label: 'modifiedby',
+                label: 'MODIFIED BY',
                 name: 'modifiedby',
                 align: 'left'
             }, )
@@ -287,7 +287,7 @@
                 align: 'right',
                 formatter: currencyFormat,
             }, {
-                label: 'modifiedby',
+                label: 'MODIFIED BY',
                 name: 'modifiedby',
                 align: 'left'
             })
@@ -346,7 +346,7 @@
                 align: 'right',
                 formatter: currencyFormat,
             }, {
-                label: 'modifiedby',
+                label: 'MODIFIED BY',
                 name: 'modifiedby',
                 align: 'left'
             })

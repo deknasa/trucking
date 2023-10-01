@@ -236,7 +236,7 @@
 
 
                     {
-                        label: 'MODIFIEDBY',
+                        label: 'MODIFIED BY',
                         name: 'modifiedby',
                     }
                 ],

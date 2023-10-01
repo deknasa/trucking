@@ -109,12 +109,12 @@
             }
           },
           {
-            label: 'MODIFIEDBY',
+            label: 'MODIFIED BY',
             name: 'modifiedby',
             align: 'left'
           },
           {
-            label: 'UPDATEDAT',
+            label: 'UPDATED AT',
             name: 'updated_at',
             formatter: "date",
             formatoptions: {
@@ -122,7 +122,7 @@
               newformat: "d-m-Y H:i:s"
             }
           }, {
-            label: 'CREATEDAT',
+            label: 'CREATED AT',
             name: 'created_at',
             formatter: "date",
             formatoptions: {

@@ -61,7 +61,7 @@
             name: 'keterangan',
           },
           {
-            label: 'modifiedby',
+            label: 'MODIFIED BY',
             name: 'modifiedby',
           },
           {

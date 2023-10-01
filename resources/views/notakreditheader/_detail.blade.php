@@ -95,7 +95,7 @@
             formatter: currencyFormat,
           },
           {
-            label: 'modifiedby',
+            label: 'MODIFIED BY',
             name: 'modifiedby',
             align: 'left'
           },

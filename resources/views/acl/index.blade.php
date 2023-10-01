@@ -73,12 +73,12 @@
             align: 'left'
           },
           {
-            label: 'MODIFIEDBY',
+            label: 'MODIFIED BY',
             name: 'modifiedby',
             align: 'left'
           },
           {
-            label: 'UPDATEDAT',
+            label: 'UPDATED AT',
             name: 'updated_at',
             align: 'right'
           },

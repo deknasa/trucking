@@ -15,11 +15,11 @@
             name: 'rolename',
           },
           {
-            label: 'MODIFIEDBY',
+            label: 'MODIFIED BY',
             name: 'modifiedby',
           },
           {
-            label: 'UPDATEDAT',
+            label: 'UPDATED AT',
             name: 'updated_at',
             formatter: "date",
             formatoptions: {
