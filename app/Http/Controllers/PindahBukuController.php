@@ -180,7 +180,11 @@ class PindahBukuController extends MyController
         //LOOPING HEADER        
         foreach ($header_columns as $header_column) {
             $sheet->setCellValue('A' . $header_start_row, $header_column['label']);
-            $sheet->setCellValue('B' . $header_start_row++, ': ' . $pindahBuku[$header_column['index']]);
+            if($header_column['index'] == 'tglbukti'){
+                $sheet->setCellValue('B' . $header_start_row++, ': ' . date('d-m-Y', strtotime($pindahBuku[$header_column['index']])));
+            }else{
+                $sheet->setCellValue('B' . $header_start_row++, ': ' . $pindahBuku[$header_column['index']]);
+            }
         }
         foreach ($detail_columns as $detail_columns_index => $detail_column) {
             $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_table_header_row, $detail_column['label'] ?? $detail_columns_index + 1);
@@ -209,7 +213,7 @@ class PindahBukuController extends MyController
         $sheet->getStyle("A$detail_table_header_row:E$detail_table_header_row")->getFont()->setBold(true);
         $sheet->getStyle("A$detail_table_header_row:E$detail_table_header_row")->applyFromArray($styleArray);
         $sheet->setCellValue("A$detail_start_row", $pindahBuku['kodealatbayar']);
-        $sheet->setCellValue("B$detail_start_row", $pindahBuku['tgljatuhtempo']);
+        $sheet->setCellValue("B$detail_start_row", date('d-m-Y', strtotime($pindahBuku['tgljatuhtempo'])));
         $sheet->setCellValue("C$detail_start_row", $pindahBuku['nowarkat']);
         $sheet->setCellValue("D$detail_start_row", $pindahBuku['keterangan']);
         $sheet->setCellValue("E$detail_start_row", $pindahBuku['nominal']);
