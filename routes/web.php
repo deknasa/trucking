@@ -1462,6 +1462,8 @@ Route::middleware(['auth', 'authorized'])->group(function () {
     Route::get('exportlaporanmingguansupir/index', [ExportLaporanMingguanSupirController::class, 'index']);
     Route::resource('exportlaporanmingguansupir', ExportLaporanMingguanSupirController::class);
 
+    Route::get('pindahbuku/export', [PindahBukuController::class, 'export'])->name('pindahbuku.export');
+    Route::get('pindahbuku/report', [PindahBukuController::class, 'report'])->name('pindahbuku.report');
     Route::get('pindahbuku/index', [PindahBukuController::class, 'index']);
     Route::resource('pindahbuku', PindahBukuController::class);
 
