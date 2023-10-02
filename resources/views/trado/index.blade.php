@@ -248,15 +248,33 @@
                     //     thousandsSeparator: ','
                     //   }
                     // },
-                    // {
-                    //   label: 'TGL ASURANSI MATI',
-                    //   name: 'tglasuransimati',
-                    //   formatter: "date",
-                    //   formatoptions: {
-                    //     srcformat: "ISO8601Long",
-                    //     newformat: "d-m-Y"
-                    //   }
-                    // },
+                    {
+                      label: 'TGL ASURANSI MATI',
+                      name: 'tglasuransimati',
+                      formatter: "date",
+                      formatoptions: {
+                        srcformat: "ISO8601Long",
+                        newformat: "d-m-Y"
+                      }
+                    },
+                    {
+                      label: 'TGL STNK MATI',
+                      name: 'tglstnkmati',
+                      formatter: "date",
+                      formatoptions: {
+                        srcformat: "ISO8601Long",
+                        newformat: "d-m-Y"
+                      }
+                    },
+                    {
+                      label: 'TGL SPEKSI MATI',
+                      name: 'tglspeksimati',
+                      formatter: "date",
+                      formatoptions: {
+                        srcformat: "ISO8601Long",
+                        newformat: "d-m-Y"
+                      }
+                    },
                     {
                         label: 'MODIFIED BY',
                         name: 'modifiedby',
