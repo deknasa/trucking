@@ -512,15 +512,19 @@
               id: 'approveun',
               text: "UN/APPROVAL status orderan trucking",
               onClick: () => {
-                approve()
+                if (`{{ $myAuth->hasPermission('orderantrucking', 'approval') }}`) {
+                  approve()
+                }
               }
             },
             {
               id: 'approvalEditOrderanTrucking',
               text: "un/Approval Edit orderan trucking",
               onClick: () => {
+                if (`{{ $myAuth->hasPermission('orderantrucking', 'approvaledit') }}`) {
+                  approvalEditOrderanTrucking();
+                }
                 // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                approvalEditOrderanTrucking();
               }
             },
           ],

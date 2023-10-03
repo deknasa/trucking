@@ -852,28 +852,34 @@
                                     id: 'approvalBlackListSupir',
                                     text: "un/Approval Black List Supir",
                                     onClick: () => {
-                                        selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                                        approvalBlackListSupir(selectedId)
+                                        if (`{{ $myAuth->hasPermission('supir', 'approvalBlackListSupir') }}`) {
+                                            selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                                            approvalBlackListSupir(selectedId)
+                                        }
                                     }
                                 },
                                 {
                                     id: 'approvalSupirLuarKota',
                                     text: "un/Approval Supir Luar Kota",
                                     onClick: () => {
-                                        selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                                        approvalSupirLuarKota(selectedId)
+                                        if (`{{ $myAuth->hasPermission('supir', 'approvalSupirLuarKota') }}`) {
+                                            selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                                            approvalSupirLuarKota(selectedId)
+                                        }
                                     }
                                 },
                                 {
                                     id: 'approvalSupirResign',
                                     text: "un/Approval Supir Resign",
                                     onClick: () => {
-                                        selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                                        if (selectedId == null || selectedId == '' || selectedId ==
-                                            undefined) {
-                                            showDialog('Harap pilih salah satu record')
-                                        } else {
-                                            supirResign(selectedId)
+                                        if (`{{ $myAuth->hasPermission('supir', 'approvalSupirResign') }}`) {
+                                            selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                                            if (selectedId == null || selectedId == '' || selectedId ==
+                                                undefined) {
+                                                showDialog('Harap pilih salah satu record')
+                                            } else {
+                                                supirResign(selectedId)
+                                            }
                                         }
                                     }
                                 },
