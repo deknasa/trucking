@@ -492,7 +492,7 @@
         buttons: [{
             id: 'add',
             innerHTML: '<i class="fa fa-plus"></i> ADD',
-            class: 'btn btn-primary btn-sm mr-1',
+            class: 'btn add btn-primary btn-sm mr-1',
             onClick: () => {
               createSupplier()
             }
@@ -513,7 +513,7 @@
           {
             id: 'delete',
             innerHTML: '<i class="fa fa-trash"></i> DELETE',
-            class: 'btn btn-danger btn-sm mr-1',
+            class: 'btn delete btn-danger btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               if (selectedId == null || selectedId == '' || selectedId == undefined) {

@@ -896,6 +896,7 @@
             delete response.data['parent_id'];
             delete response.data['parent'];
             delete response.data['penyesuaian'];
+            delete response.data['statuspostingtnl'];
           }
 
           $.each(response.data, (index, value) => {
@@ -929,10 +930,12 @@
             }
           })
 
-          $('#detailList tbody').html('')
-          $.each(response.detail, (index, detail) => {
-            // $.each(response.data.upahsupir_rincian, (index, detail) => {
-            let detailRow = $(`
+          
+          if (!parent) {
+            $('#detailList tbody').html('')
+            $.each(response.detail, (index, detail) => {
+              // $.each(response.data.upahsupir_rincian, (index, detail) => {
+              let detailRow = $(`
                 <tr>
                   <td></td>
                   
@@ -949,17 +952,20 @@
                 </tr>
               `)
 
-            detailRow.find(`[name="container_id[]"]`).val(detail.container_id)
-            detailRow.find(`[name="container[]"]`).val(detail.container)
-            detailRow.find(`[name="nominal[]"]`).val(detail.nominal)
+              detailRow.find(`[name="container_id[]"]`).val(detail.container_id)
+              detailRow.find(`[name="container[]"]`).val(detail.container)
+              detailRow.find(`[name="nominal[]"]`).val(detail.nominal)
 
-            $('#detailList tbody').append(detailRow)
+              $('#detailList tbody').append(detailRow)
 
-            initAutoNumeric(detailRow.find('.autonumeric'), {
-              minimumValue: 0
+              initAutoNumeric(detailRow.find('.autonumeric'), {
+                minimumValue: 0
+              })
+
             })
-
-          })
+          }else{
+            setUpRow()
+          }
           // setuprowshow(userId);
 
           setRowNumbers()
