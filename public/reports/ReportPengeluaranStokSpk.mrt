@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "d994c823e33591efd016df2644d50aee",
+  "ReportGuid": "feaefad353db50b959240e9e2813c2b8",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportPengeluaranStokSPK.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1696241320000+0700)/",
+  "ReportChanged": "/Date(1696297929000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -994,7 +994,7 @@
               "Guid": "034dc0a8d5c9f5e8844ba14a4dd34eaf",
               "CanGrow": true,
               "ClientRectangle": "110,34.24,102,4",
-              "ComponentPlacement": "gh.GroupHeaderBand1",
+              "ComponentPlacement": "pf.PageFooterBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -1454,9 +1454,8 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "No Polisi"
+                "Value": "{IIF(pengeluaranstokheader.trado==\"\",\r\nIIF(pengeluaranstokheader.gudang==\"\",\r\nIIF(pengeluaranstokheader.gandengan==\"\",\r\n\"Test\"\r\n,\"Gandengan\")\r\n,\"Gudang\")\r\n,\"No Polisi\")}"
               },
-              "VertAlignment": "Center",
               "Font": ";9;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
@@ -1475,7 +1474,6 @@
               "Text": {
                 "Value": ":"
               },
-              "VertAlignment": "Center",
               "Font": ";9;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
@@ -1514,9 +1512,8 @@
               },
               "MaxNumberOfLines": 6,
               "Text": {
-                "Value": "{pengeluaranstokheader.trado}"
+                "Value": "{IIF(pengeluaranstokheader.trado==\"\",\r\nIIF(pengeluaranstokheader.gudang==\"\",\r\nIIF(pengeluaranstokheader.gandengan==\"\",\r\n\"\"\r\n,pengeluaranstokheader.gandengan)\r\n,pengeluaranstokheader.gudang)\r\n,pengeluaranstokheader.trado)}"
               },
-              "VertAlignment": "Center",
               "Font": ";9;;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
@@ -1526,7 +1523,7 @@
               },
               "ShrinkFontToFit": true,
               "ShrinkFontToFitMinimumSize": 5,
-              "Type": "DataColumn"
+              "Type": "Expression"
             },
             "9": {
               "Ident": "StiText",
