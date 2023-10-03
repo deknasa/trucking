@@ -69,6 +69,14 @@
                   </div>
                 </div>
                 <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">Tgl asuransi Mati <span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <div class="input-group">
+                      <input type="text" name="tglasuransimati" class="form-control datepicker">
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group ">
                   <label class="col-sm-12 col-form-label">No Rangka <span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <input type="text" name="norangka" class="form-control">
@@ -150,6 +158,22 @@
                   <div class="col-sm-12">
                     <div class="input-group">
                       <input type="text" name="tglpajakstnk" class="form-control datepicker">
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">Tgl STNK Mati <span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <div class="input-group">
+                      <input type="text" name="tglstnkmati" class="form-control datepicker">
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group ">
+                  <label class="col-sm-12 col-form-label">Tgl Speksi Mati <span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <div class="input-group">
+                      <input type="text" name="tglspeksimati" class="form-control datepicker">
                     </div>
                   </div>
                 </div>
