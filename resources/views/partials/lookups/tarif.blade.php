@@ -3,7 +3,7 @@
 
 @push('scripts')
 <script>
- $('#tarifLookup').jqGrid({
+  $('#tarifLookup').jqGrid({
       url: `{{ config('app.api_url') . 'tarif' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
@@ -12,14 +12,15 @@
       postData: {
         aktif: `{!! $Aktif ?? '' !!}`,
         jenisOrder: `{!! $jenisOrder ?? '' !!}`,
-      },   
+        isParent: `{!! $isParent ?? '' !!}`,
+      },
       idPrefix: 'tarifLookup',
       colModel: [{
           label: 'ID',
           name: 'id',
           align: 'right',
           width: '50px',
-            search: false,
+          search: false,
           hidden: true
         },
         {
@@ -34,7 +35,7 @@
         //   label: 'CONTAINER',
         //   name: 'container_id',
         // },
-        
+
         {
           label: 'STATUS AKTIF',
           name: 'statusaktif',
@@ -154,9 +155,12 @@
           },
           formatter: (value, options, rowData) => {
             let statusSistemTon = JSON.parse(value)
-
+            if (!statusSistemTon) {
+              return ''
+            }
+            console.log(statusSistemTon)
             let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusSistemton.WARNA}; color: ${statusSistemton.WARNATULISAN};">
+                <div class="badge" style="background-color: ${statusSistemTon.WARNA}; color: ${statusSistemTon.WARNATULISAN};">
                   <span>${statusSistemTon.SINGKATAN}</span>
                 </div>
               `)
@@ -165,7 +169,9 @@
           },
           cellattr: (rowId, value, rowObject) => {
             let statusSistemTon = JSON.parse(rowObject.statussistemton)
-
+            if (!statusSistemTon) {
+              return ` title=""`
+            }
             return ` title="${statusSistemTon.MEMO}"`
           }
         },
@@ -176,12 +182,16 @@
         {
           label: 'KOTAID',
           name: 'kotaId',
-          hidden:true,
+          hidden: true,
           search: false,
         },
         {
           label: 'ZONA',
           name: 'zona_id',
+        },
+        {
+          label: 'jenis order',
+          name: 'jenisorder',
         },
         // {
         //   label: 'NOMINAL TON',
@@ -249,7 +259,9 @@
           },
           formatter: (value, options, rowData) => {
             let statusPenyHarga = JSON.parse(value)
-
+            if (!statusPenyHarga) {
+              return ''
+            }
             let formattedValue = $(`
                 <div class="badge" style="background-color: ${statusPenyHarga.WARNA}; color: #fff;">
                   <span>${statusPenyHarga.SINGKATAN}</span>
@@ -260,7 +272,9 @@
           },
           cellattr: (rowId, value, rowObject) => {
             let statusPenyHarga = JSON.parse(rowObject.statuspenyesuaianharga)
-
+            if (!statusPenyHarga) {
+              return ` title=""`
+            }
             return ` title="${statusPenyHarga.MEMO}"`
           }
         },
@@ -269,26 +283,26 @@
           name: 'modifiedby',
           align: 'left'
         },
-          {
-            label: 'CREATED AT',
-            name: 'created_at',
-            align: 'right',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y H:i:s"
-            }
-          },
-          {
-            label: 'UPDATED AT',
-            name: 'updated_at',
-            align: 'right',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y H:i:s"
-            }
-          },
+        {
+          label: 'CREATED AT',
+          name: 'created_at',
+          align: 'right',
+          formatter: "date",
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y H:i:s"
+          }
+        },
+        {
+          label: 'UPDATED AT',
+          name: 'updated_at',
+          align: 'right',
+          formatter: "date",
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y H:i:s"
+          }
+        },
       ],
       autowidth: true,
       responsive: true,
@@ -329,7 +343,7 @@
         setGridLastRequest($(this), jqXHR)
       },
       loadComplete: function(data) {
-          changeJqGridRowListText()
+        changeJqGridRowListText()
         if (detectDeviceType() == 'desktop') {
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
@@ -382,12 +396,12 @@
       groupOp: 'AND',
       disabledKeys: [16, 17, 18, 33, 34, 35, 36, 37, 38, 39, 40],
       beforeSearch: function() {
-          abortGridLastRequest($(this))
-          
-          clearGlobalSearch($('#tarifLookup'))
+        abortGridLastRequest($(this))
+
+        clearGlobalSearch($('#tarifLookup'))
       },
     })
     .customPager()
-    loadGlobalSearch($('#tarifLookup'))
-    loadClearFilter($('#tarifLookup'))
+  loadGlobalSearch($('#tarifLookup'))
+  loadClearFilter($('#tarifLookup'))
 </script>

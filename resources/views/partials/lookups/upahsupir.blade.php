@@ -11,6 +11,7 @@
       datatype: "json",
       postData: {
         aktif: `{!! $Aktif ?? '' !!}`,
+        isParent: `{!! $isParent ?? '' !!}`,
       },
       idPrefix: 'upahSupirLookup',
       colModel: [{

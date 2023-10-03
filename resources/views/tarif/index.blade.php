@@ -53,10 +53,6 @@
             name: 'parent_id',
           },
           {
-            label: 'UPAH SUPIR',
-            name: 'upahsupir_id',
-          },
-          {
             label: 'TUJUAN',
             name: 'tujuan',
           },
