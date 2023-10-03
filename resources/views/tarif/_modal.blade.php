@@ -22,6 +22,17 @@
               </div>
             </div> -->
 
+            <div class="row form-group jenisorder">
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">
+                  JENIS ORDER </label>
+              </div>
+              <div class="col-12 col-md-10">
+                <input type="hidden" name="jenisorder_id">
+                <input type="text" name="jenisorder" class="form-control jenisorder-lookup">
+              </div>
+            </div>
+
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
@@ -31,18 +42,6 @@
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="hidden" name="parent_id">
                 <input type="text" name="parent" class="form-control parent-lookup" autofocus>
-              </div>
-            </div>
-
-            <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2">
-                <label class="col-form-label">
-                  UPAH SUPIR
-                </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-10">
-                <input type="hidden" name="upahsupir_id">
-                <input type="text" name="upahsupir" class="form-control upahsupir-lookup">
               </div>
             </div>
 
@@ -175,17 +174,7 @@
                 <input type="text" name="zona" class="form-control zona-lookup">
               </div>
             </div>
-            
-            <div class="row form-group jenisorder">
-              <div class="col-12 col-md-2">
-                <label class="col-form-label">
-                  JENIS ORDER </label>
-              </div>
-              <div class="col-12 col-md-10">
-                <input type="hidden" name="jenisorder_id">
-                <input type="text" name="jenisorder" class="form-control jenisorder-lookup">
-              </div>
-            </div>
+
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
@@ -418,9 +407,9 @@
 
     activeGrid = null
 
-    form.find('#btnSubmit').prop('disabled',false)
+    form.find('#btnSubmit').prop('disabled', false)
     if (form.data('action') == "view") {
-      form.find('#btnSubmit').prop('disabled',true)
+      form.find('#btnSubmit').prop('disabled', true)
     }
 
     getMaxLength(form)
@@ -607,7 +596,7 @@
           })
       })
   }
-  
+
   function viewTarif(tarifId) {
     let form = $('#crudForm')
 
@@ -634,19 +623,19 @@
       ])
       .then(() => {
         showTarif(form, tarifId)
-        .then(SuratPengantarApprovalInputTripId => {
-          form.find('[name]').removeAttr('disabled')
-          form.find('select').each((index, select) => {
-            let element = $(select)
-            if (element.data('select2')) {
+          .then(SuratPengantarApprovalInputTripId => {
+            form.find('[name]').removeAttr('disabled')
+            form.find('select').each((index, select) => {
+              let element = $(select)
+              if (element.data('select2')) {
                 element.select2('destroy')
-            }
+              }
+            })
+            form.find('[name]').attr('disabled', 'disabled').css({
+              background: '#fff'
+            })
+            form.find('[name=id]').prop('disabled', false)
           })
-          form.find('[name]').attr('disabled', 'disabled').css({
-            background: '#fff'
-          })
-          form.find('[name=id]').prop('disabled',false)
-        })
           .then(() => {
             $('#crudModal').modal('show')
 
@@ -931,9 +920,12 @@
             }
             if (index == 'upahsupir') {
               element.data('current-value', value)
-            } 
-            if (index == 'statuspostingtnl') {
-              element.prop('disabled', true)
+            }
+            if (!parent) {
+              if (index == 'statuspostingtnl') {
+                element.prop('disabled', true)
+
+              }
             }
           })
 
@@ -1061,7 +1053,7 @@
         element.data('currentValue', element.val())
       }
     })
-    
+
     $('.jenisorder-lookup').lookup({
       title: 'Jenis Order Lookup',
       fileName: 'jenisorder',
@@ -1095,6 +1087,8 @@
         this.postData = {
 
           Aktif: 'AKTIF',
+          jenisOrder: $('#crudForm [name=jenisorder]').val(),
+          isParent: true
         }
       },
       onSelectRow: (tarif, element) => {

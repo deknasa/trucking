@@ -573,9 +573,9 @@
 
     activeGrid = null
 
-    form.find('#btnSubmit').prop('disabled',false)
+    form.find('#btnSubmit').prop('disabled', false)
     if (form.data('action') == "view") {
-      form.find('#btnSubmit').prop('disabled',true)
+      form.find('#btnSubmit').prop('disabled', true)
     }
 
     getMaxLength(form)
@@ -821,6 +821,7 @@
 
       })
   }
+
   function viewUpahSupir(id) {
     let form = $('#crudForm')
 
@@ -849,28 +850,28 @@
             initDropzone(form.data('action'), upahsupir)
           })
           .then(stokId => {
-          form.find('[name]').removeAttr('disabled')
-          form.find('select').each((index, select) => {
-            let element = $(select)
-            if (element.data('select2')) {
+            form.find('[name]').removeAttr('disabled')
+            form.find('select').each((index, select) => {
+              let element = $(select)
+              if (element.data('select2')) {
                 element.select2('destroy')
-            }
+              }
+            })
+            form.find('[name]').attr('disabled', 'disabled').css({
+              background: '#fff'
+            })
+            form.find('[name=id]').prop('disabled', false)
           })
-          form.find('[name]').attr('disabled', 'disabled').css({
-            background: '#fff'
-          })
-          form.find('[name=id]').prop('disabled',false)
-        })
           .then(() => {
             $('#crudModal').modal('show')
             $('#crudForm').find(`.btn.btn-easyui.lookup-toggler`).attr('disabled', true)
             $('#crudForm').find(`.ui-datepicker-trigger.btn.btn-easyui.text-easyui-dark`).attr('disabled', true)
-form.find(`.hasDatepicker`).prop('readonly', true)
-          form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
-          let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
-          name.attr('disabled', true)
-          name.find('.lookup-toggler').attr('disabled', true)
-          $(".dz-hidden-input").prop("disabled",true);
+            form.find(`.hasDatepicker`).prop('readonly', true)
+            form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
+            let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
+            name.attr('disabled', true)
+            name.find('.lookup-toggler').attr('disabled', true)
+            $(".dz-hidden-input").prop("disabled", true);
 
             $('#simpanKandang').hide()
           })
@@ -1298,9 +1299,11 @@ form.find(`.hasDatepicker`).prop('readonly', true)
             } else {
               element.val(value)
             }
-            
+
             if (index == 'statuspostingtnl') {
-              element.prop('disabled', true)
+              if (!parent) {
+                element.prop('disabled', true)
+              }
             }
             // if(!parent && aksiEdit == true){
             //   console.log('tru kaaa')
@@ -1748,6 +1751,14 @@ form.find(`.hasDatepicker`).prop('readonly', true)
     $('.upahsupir-lookup').lookup({
       title: 'upah supir Lookup',
       fileName: 'upahsupir',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+
+          Aktif: 'AKTIF',
+          isParent: true
+        }
+      },
       onSelectRow: (upahsupir, element) => {
         // console.log(element);
 
@@ -1963,7 +1974,7 @@ form.find(`.hasDatepicker`).prop('readonly', true)
       }
     })
 
-    
+
     $('.tarifmuatan-lookup').lookup({
       title: 'Tarif Muatan Lookup',
       fileName: 'tarif',
@@ -1989,7 +2000,7 @@ form.find(`.hasDatepicker`).prop('readonly', true)
         $('#crudForm [name=tarifmuatan_id]').val('')
       }
     })
-    
+
     $('.tarifbongkaran-lookup').lookup({
       title: 'Tarif Bongkaran Lookup',
       fileName: 'tarif',
@@ -2015,7 +2026,7 @@ form.find(`.hasDatepicker`).prop('readonly', true)
         $('#crudForm [name=tarifbongkaran_id]').val('')
       }
     })
-    
+
     $('.tarifexport-lookup').lookup({
       title: 'Tarif Export Lookup',
       fileName: 'tarif',
