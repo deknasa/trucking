@@ -509,15 +509,16 @@
               id: 'copy',
               text: "COPY",
               onClick: () => {
-
-                selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                  showDialog('Harap pilih salah satu record')
-                } else {
-                  cekValidasiAksi(selectedId, 'COPY')
+                if (`{{ $myAuth->hasPermission('jurnalumumheader', 'copy') }}`) {
+                  selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                  if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                    showDialog('Harap pilih salah satu record')
+                  } else {
+                    cekValidasiAksi(selectedId, 'COPY')
+                  }
+                  clearSelectedRows()
+                  $('#gs_').prop('checked', false)
                 }
-                clearSelectedRows()
-                $('#gs_').prop('checked', false)
               }
             },
 

@@ -422,8 +422,10 @@
                 id: 'approvalEdit',
                 text: "UN/APPROVAL Absensi Edit",
                 onClick: () => {
-                  selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                  approveEdit(selectedId)
+                  if (`{{ $myAuth->hasPermission('suratpengantar', 'approvalEditAbsensi') }}`) {
+                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                    approveEdit(selectedId)
+                  }
                 }
               },
 
@@ -440,8 +442,10 @@
                 id: 'cekAbsenTrado',
                 text: "Cek Absen Trado",
                 onClick: () => {
-                  selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                  cekAbsenTrado(selectedId)
+                  if (`{{ $myAuth->hasPermission('suratpengantar', 'cekabsensi') }}`) {
+                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                    cekAbsenTrado(selectedId)
+                  }
                 }
               },
 
