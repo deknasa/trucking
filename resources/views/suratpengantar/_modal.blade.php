@@ -1327,7 +1327,7 @@
           containerId = response.data.container_id
           statuscontainerId = response.data.statuscontainer_id
           jenisorderId = response.data.jenisorder_id
-          getTarifOmset(response.data.tarifrincian_id)
+          getTarifOmset(response.data.tarifrincian_id, response.data.container_id)
           // $('#crudForm ').find(`[name="omset"]`).val(response.data.omset)
           // getGaji(response.data.nominalplusborongan)
           initAutoNumeric(form.find(`[name="nominal"]`))
@@ -1649,7 +1649,7 @@
         initAutoNumeric($('#crudForm').find('[name="komisisupir"]'))
         element.data('currentValue', element.val())
         getNominalSupir()
-        getTarifOmset(upahsupir.tarif_id)
+        getTarifOmset(upahsupir.tarif_id, containerId)
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
@@ -1817,7 +1817,7 @@
         $('#crudForm [name=tarifrincian_id]').first().val(tarifrincian.id)
         element.val(tarifrincian.tujuan)
         element.data('currentValue', element.val())
-        getTarifOmset(tarifrincian.id)
+        getTarifOmset(tarifrincian.id, containerId)
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
@@ -2063,13 +2063,16 @@
   }
 
 
-  function getTarifOmset(id) {
+  function getTarifOmset(id, contId) {
     $.ajax({
       url: `${apiUrl}suratpengantar/${id}/getTarifOmset`,
       method: 'GET',
       dataType: 'JSON',
       headers: {
         'Authorization': `Bearer ${accessToken}`
+      },
+      data: {
+        container_id: contId
       },
       success: response => {
         if (response.dataTarif != null) {
