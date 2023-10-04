@@ -289,10 +289,10 @@
       })
 
       if (aksiEdit == false) {
-        data.push({
-          name: 'statusaktif',
-          value: statusAktif
-        })
+        // data.push({
+        //   name: 'statusaktif',
+        //   value: statusAktif
+        // })
         data.push({
           name: 'statussistemton',
           value: statusSistemTon
@@ -517,7 +517,7 @@
               name.find('.button-clear').attr('disabled', true)
               name.children().find('.lookup-toggler').attr('disabled', true)
               console.log(form.find(`[name="statusaktif"]`).val())
-              form.find(`[name="statusaktif"]`).prop('disabled', 'disabled')
+              // form.find(`[name="statusaktif"]`).prop('disabled', 'disabled')
               form.find(`[name="statussistemton"]`).prop('disabled', 'disabled')
               form.find(`[name="statuspenyesuaianharga"]`).prop('disabled', 'disabled')
               form.find(`[name="tglmulaiberlaku"]`).prop('readonly', true)
