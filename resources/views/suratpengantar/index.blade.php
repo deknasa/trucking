@@ -12,12 +12,28 @@
   </div>
   <div class="row mt-3">
     <div class="col-12">
-      <table id="detailGrid"></table>
+      <div class="card card-primary card-outline card-outline-tabs">
+        <div class="card-body border-bottom-0">
+          <div id="tabs">
+            <ul class="dejavu">
+              <li><a href="#detail-tab">Biaya Tambahan</a></li>
+              <li><a href="#rekap-tab">Rekap Customer</a></li>
+            </ul>
+            <div id="detail-tab">
+              <table id="detailGrid"></table>
+            </div>
+            <div id="rekap-tab">
+              <table id="rekapCustGrid"></table>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
 @include('suratpengantar._tambahan')
+@include('suratpengantar._customer')
 
 @include('suratpengantar._modal')
 
@@ -45,8 +61,10 @@
   let isKomisi;
 
   $(document).ready(function() {
+    $("#tabs").tabs()
     setIsKomisi()
     loadDetailGrid()
+    loadRekapCustGrid($('#tgldariheader').val(),$('#tglsampaiheader').val())
     @isset($request['tgldari'])
     tgldariheader = `{{ $request['tgldari'] }}`;
     @endisset
@@ -594,11 +612,12 @@
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
 
           loadDetailData(id)
+          loadRekapCustData($('#tgldariheader').val(),$('#tglsampaiheader').val())
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
           if (data.data.length === 0) {
-            $('#detailGrid').each((index, element) => {
+            $('#detailGrid, #rekapCustGrid').each((index, element) => {
               abortGridLastRequest($(element))
               clearGridData($(element))
             })
