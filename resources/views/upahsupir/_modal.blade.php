@@ -702,10 +702,11 @@
 
     initAutoNumeric(form.find(`[name="jarak"]`), {
       minimumValue: 0
-
-
     })
 
+    initAutoNumeric(form.find(`[name="jarakfullempty"]`), {
+      minimumValue: 0
+    })
   }
 
   function editUpahSupir(id) {
