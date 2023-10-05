@@ -748,44 +748,54 @@
           name: 'bank',
           value: form.find(`[name="bank"]`).val()
         })
-
-        $.each(selectedRowsSumbangan, function(index, item) {
-          data.push({
-            name: 'id_detail[]',
-            value: item
-          })
-        });
+        let bst_nominal = []
+        let bst_container_detail = []
+        let bst_noinvoice_detail = []
+        let bst_nojobtrucking_detail = []
+        let bst_keterangan = []
+        
+        // $.each(selectedRowsSumbangan, function(index, item) {
+        //   data.push({
+        //     name: 'id_detail[]',
+        //     value: item
+        //   })
+        // });
         $.each(selectedRowsSumbanganNominal, function(index, item) {
-          data.push({
-            name: 'nominal[]',
-            value: parseFloat(item.replaceAll(',', ''))
-          })
+          bst_nominal.push( parseFloat(item.replaceAll(',', '')))
+          bst_keterangan.push('SUMBANGAN SOSIAL')
         });
-        $.each(selectedRowsSumbanganContainer, function(index, item) {
-          data.push({
-            name: 'container_detail[]',
-            value: item
-          })
-        });
-        $.each(selectedRowsSumbanganNobukti, function(index, item) {
-          data.push({
-            name: 'noinvoice_detail[]',
-            value: item
-          })
-        });
-        $.each(selectedRowsSumbanganJobtrucking, function(index, item) {
-          data.push({
-            name: 'nojobtrucking_detail[]',
-            value: item
-          })
-        });
-        $.each(selectedRowsSumbangan, function(index, item) {
-          data.push({
-            name: 'keterangan[]',
-            value: 'SUMBANGAN SOSIAL'
-          })
-        });
+        // $.each(selectedRowsSumbanganContainer, function(index, item) {
+        //   data.push({
+        //     name: 'container_detail[]',
+        //     value: item
+        //   })
+        // });
+        // $.each(selectedRowsSumbanganNobukti, function(index, item) {
+        //   data.push({
+        //     name: 'noinvoice_detail[]',
+        //     value: item
+        //   })
+        // });
+        // $.each(selectedRowsSumbanganJobtrucking, function(index, item) {
+        //   data.push({
+        //     name: 'nojobtrucking_detail[]',
+        //     value: item
+        //   })
+        // });
+        
 
+        let requestData = {
+          'id_detail': selectedRowsSumbangan,
+          'nominal': bst_nominal,
+          'container_detail': selectedRowsSumbanganContainer,
+          'noinvoice_detail': selectedRowsSumbanganNobukti,
+          'nojobtrucking_detail': selectedRowsSumbanganJobtrucking,
+          'keterangan': bst_keterangan,
+        };     
+        data.push({
+          name: 'detail',
+          value: JSON.stringify(requestData)
+        })
       } else {
         data = $('#crudForm').serializeArray()
 
@@ -867,6 +877,8 @@
         value: data.find(item => item.name === "pengeluarantrucking_id").value
       })
 
+      // console.log(data);
+      // debugger;
 
       let kodepengeluaranheader = data.find(item => item.name === "pengeluarantrucking_id").value;
 

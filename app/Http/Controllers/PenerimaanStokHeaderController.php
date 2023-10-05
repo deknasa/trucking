@@ -291,8 +291,7 @@ class PenerimaanStokHeaderController extends MyController
         $response = Http::withHeaders($this->httpHeaders)
         ->withOptions(['verify' => false])
         ->withToken(session('access_token'))
-        ->get(config('app.api_url') . 'penerimaanstokdetail', ['penerimaanstokheader_id' => $penerimaanstok['id']]);
-
+        ->get(config('app.api_url') . 'penerimaanstokdetail', ['forReport' => true,'penerimaanstokheader_id' => $penerimaanstok['id']]);
         $data["details"] =$response['data'];
         $data["user"] = Auth::user();
         $combo = $this->combo('list');
