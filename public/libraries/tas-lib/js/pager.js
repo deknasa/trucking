@@ -10,7 +10,7 @@ function loadPagerHandler(element, grid) {
 			<span class="fas fa-backward"></span>
 		</button>
 		
-		<div class="d-flex align-items-center my-1 mx-3 justify-content-between gap-10">
+		<div class="d-flex align-items-center my-1 justify-content-between gap-10">
 			<span>Page</span>
 			<input id="${grid.getGridParam().id}_pagerInput" class="pager-input" value="${grid.getGridParam().page
 		}">
@@ -227,8 +227,8 @@ $.fn.customPager = function (option = {}) {
 		}
 
 		$(`#gbox_${$(this).getGridParam().id}`).after(`
-			<div class="col-12 bg-white grid-pager overflow-x-hidden">
-				<div class="row d-flex align-items-center text-center text-lg-left" style="padding:5px;">
+			<div class="bg-white grid-pager overflow-x-hidden">
+				<div class="row d-flex align-items-center text-lg-left">
 					<div class="col-12 col-lg-6" id="left-nav">
 						${typeof option.buttons !== "undefined"
 				? option.buttons
