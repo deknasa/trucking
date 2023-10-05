@@ -1304,6 +1304,18 @@
             delete response.data['parent_id'];
             delete response.data['parent'];
             delete response.data['penyesuaian'];
+            delete response.data['statuspostingtnl'];
+            delete response.data['tglmulaiberlaku'];
+            delete response.data['tarif'];
+            delete response.data['tarif_id'];
+            delete response.data['tarifbongkaran'];
+            delete response.data['tarifbongkaran_id'];
+            delete response.data['tarifexport'];
+            delete response.data['tarifexport_id'];
+            delete response.data['tarifimport'];
+            delete response.data['tarifimport_id'];
+            delete response.data['tarifmuatan'];
+            delete response.data['tarifmuatan_id'];
           }
           $.each(response.data, (index, value) => {
             let element = form.find(`[name="${index}"]`).not(':file')
@@ -1330,12 +1342,14 @@
             // }
           })
           if (parent) {
+
+            $('#crudForm').find('[name=tglmulaiberlaku]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change')
             jarakFE = parseFloat(response.data.jarak) * 2
             form.find(`[name="jarakfullempty"]`).val(jarakFE)
           }
           initAutoNumeric(form.find(`[name="jarak"]`), {
             minimumValue: 0
-          })          
+          })
           initAutoNumeric(form.find(`[name="jarakfullempty"]`), {
             minimumValue: 0
           })
