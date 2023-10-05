@@ -168,6 +168,21 @@
               </div>
             </div>
 
+            <div class="row form-group">
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">
+                  JARAK FULL/EMPTY<span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-12 col-md-10">
+                <div class="input-group">
+                  <input type="text" name="jarakfullempty" class="form-control" style="text-align: right">
+                  <div class="input-group-append">
+                    <span class="input-group-text" style="font-weight: bold;">KM</span>
+                  </div>
+                </div>
+              </div>
+            </div>
 
             <div class="row form-group">
               <div class="col-12 col-md-2">
@@ -476,6 +491,7 @@
       })
 
       data.filter((row) => row.name === 'jarak')[0].value = AutoNumeric.getNumber($(`#crudForm [name="jarak"]`)[0])
+      data.filter((row) => row.name === 'jarakfullempty')[0].value = AutoNumeric.getNumber($(`#crudForm [name="jarakfullempty"]`)[0])
 
       $.each(data, function(key, input) {
         formData.append(input.name, input.value);
@@ -1312,8 +1328,14 @@
             //   }
             // }
           })
-
+          if (parent) {
+            jarakFE = parseFloat(response.data.jarak) * 2
+            form.find(`[name="jarakfullempty"]`).val(jarakFE)
+          }
           initAutoNumeric(form.find(`[name="jarak"]`), {
+            minimumValue: 0
+          })          
+          initAutoNumeric(form.find(`[name="jarakfullempty"]`), {
             minimumValue: 0
           })
           // initAutoNumeric(form.find('.autonumeric'), {
@@ -1778,10 +1800,15 @@
         // Menghapus nilai autonumeric pada input jarak
         // $('#crudForm [name=jarak]').autoNumeric('remove')
         let jarakInput = $('#crudForm [name=jarak]').get(0); // Dapatkan elemen input jarak
+        let jarakFEInput = $('#crudForm [name=jarakfullempty]').get(0); // Dapatkan elemen input jarak
         let autoNumericInstance = AutoNumeric.getAutoNumericElement(jarakInput); // Dapatkan instance AutoNumeric dari elemen tersebut
+        let autoNumericInstanceFE = AutoNumeric.getAutoNumericElement(jarakFEInput); // Dapatkan instance AutoNumeric dari elemen tersebut
 
         if (autoNumericInstance) {
           autoNumericInstance.remove(); // Hapus efek AutoNumeric
+        }
+        if (autoNumericInstanceFE) {
+          autoNumericInstanceFE.remove(); // Hapus efek AutoNumeric
         }
 
 

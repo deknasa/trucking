@@ -240,6 +240,41 @@
               return ` title="${statusPostingTnl.MEMO}"`
             }
           },
+
+          {
+            label: 'MAP',
+            name: 'gambar',
+            align: 'center',
+            search: false,
+            formatter: (value, row) => {
+              let images = []
+
+              if (value) {
+                let files = JSON.parse(value)
+
+                files.forEach(file => {
+                  if (file == '') {
+                    file = 'no-image'
+                  }
+                  let image = new Image()
+                  image.width = 25
+                  image.height = 25
+                  image.src =
+                    `${apiUrl}upahsupir/${encodeURI(file)}/small`
+
+                  images.push(image.outerHTML)
+                });
+
+                return images.join(' ')
+              } else {
+                let image = new Image()
+                image.width = 25
+                image.height = 25
+                image.src = `${apiUrl}upahsupir/no-image/small`
+                return image.outerHTML
+              }
+            }
+          },
           {
             label: 'MODIFIED BY',
             name: 'modifiedby',
@@ -696,40 +731,40 @@
   })
 
   const setTampilanIndex = function() {
-      return new Promise((resolve, reject) => {
-        let data = [];
-        data.push({
-          name: 'grp',
-          value: 'UBAH TAMPILAN'
-        })
-        data.push({
-          name: 'text',
-          value: 'UPAHSUPIR'
-        })
-        $.ajax({
-          url: `${apiUrl}parameter/getparambytext`,
-          method: 'GET',
-          dataType: 'JSON',
-          headers: {
-            Authorization: `Bearer ${accessToken}`
-          },
-          data: data,
-          success: response => {
-            memo = JSON.parse(response.memo)
-            memo = memo.INPUT
-            if (memo != '') {
-              input = memo.split(',');
-              input.forEach(field => {
-                field = field.toLowerCase();
-                $(`.${field}`).hide()
-                $("#jqGrid").jqGrid("hideCol", field);
-              });
-            }
-
-          }
-        })
+    return new Promise((resolve, reject) => {
+      let data = [];
+      data.push({
+        name: 'grp',
+        value: 'UBAH TAMPILAN'
       })
-    }
+      data.push({
+        name: 'text',
+        value: 'UPAHSUPIR'
+      })
+      $.ajax({
+        url: `${apiUrl}parameter/getparambytext`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: data,
+        success: response => {
+          memo = JSON.parse(response.memo)
+          memo = memo.INPUT
+          if (memo != '') {
+            input = memo.split(',');
+            input.forEach(field => {
+              field = field.toLowerCase();
+              $(`.${field}`).hide()
+              $("#jqGrid").jqGrid("hideCol", field);
+            });
+          }
+
+        }
+      })
+    })
+  }
 </script>
 @endpush()
 @endsection
