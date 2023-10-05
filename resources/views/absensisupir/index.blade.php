@@ -16,10 +16,14 @@
           <div id="tabs">
             <ul class="dejavu">
               <li><a href="#detail-tab">Details</a></li>
+              <li><a href="#rekap-tab">Rekap Absen Trado</a></li>
               <li class="kasgantung_nobukti"><a href="#kasgantung-tab">KAS GANTUNG</a></li>
             </ul>
             <div id="detail-tab">
               <table id="detail"></table>
+            </div>
+            <div id="rekap-tab">
+              <table id="rekapAbsenTradoGrid"></table>
             </div>
             <div class="kasgantung_nobukti" id="kasgantung-tab">
               <table id="kasgantungGrid"></table>
@@ -35,6 +39,7 @@
 @include('absensisupir._modalabsesntrado')
 <!-- Detail -->
 @include('absensisupir._detail')
+@include('absensisupir._rekapabsentrado')
 @include('absensisupir._kasgantung')
 
 @push('scripts')
@@ -66,15 +71,16 @@
     $("#tabs").tabs()
     setTampilanIndex()
     loadDetailGrid()
+    loadRekapAbsenTradoGrid()
     loadKasGantungGrid()
 
     @isset($request['tgldari'])
-      tgldariheader = `{{ $request['tgldari'] }}`;
+    tgldariheader = `{{ $request['tgldari'] }}`;
     @endisset
     @isset($request['tglsampai'])
-      tglsampaiheader = `{{ $request['tglsampai'] }}`;
+    tglsampaiheader = `{{ $request['tglsampai'] }}`;
     @endisset
-    setRange(false,tgldariheader,tglsampaiheader)
+    setRange(false, tgldariheader, tglsampaiheader)
     initDatepicker()
     $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('absensisupirheader')
@@ -164,7 +170,7 @@
             name: 'kasgantung_nobukti',
             align: 'left',
             formatter: (value, options, rowData) => {
-              if ((value == null) ||( value == '')) {
+              if ((value == null) || (value == '')) {
                 return '';
               }
               let tgldari = rowData.tgldariheaderkasgantungheader
@@ -259,6 +265,7 @@
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
 
           loadDetailData(id)
+          loadRekapAbsenTradoData(id)
           if (showKasgantung) {
             loadKasGantungData(nobukti)
           }
@@ -379,7 +386,7 @@
             class: 'btn btn-orange btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              
+
               viewAbsensiSupir(selectedId)
             }
           },
