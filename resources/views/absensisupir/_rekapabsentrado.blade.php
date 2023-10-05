@@ -20,7 +20,7 @@
                 colModel: [{
                         label: 'keterangan',
                         name: 'keterangan',
-                        width: '200px',
+                        width: '500px',
                     },
                     {
                         label: 'JUMLAH',
