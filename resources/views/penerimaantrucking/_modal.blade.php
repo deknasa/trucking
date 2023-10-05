@@ -430,6 +430,7 @@
       ).trigger('change')
 
       $.ajax({
+        limit:0,
         url: `${apiUrl}parameter`,
         method: 'GET',
         dataType: 'JSON',

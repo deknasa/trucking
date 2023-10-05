@@ -438,6 +438,7 @@
           Authorization: `Bearer ${accessToken}`
         },
         data: {
+          limit:0,
           filters: JSON.stringify({
             "groupOp": "AND",
             "rules": [{
