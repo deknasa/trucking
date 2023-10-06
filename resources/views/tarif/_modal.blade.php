@@ -897,6 +897,9 @@
             delete response.data['parent'];
             delete response.data['penyesuaian'];
             delete response.data['statuspostingtnl'];
+            delete response.data['tglmulaiberlaku'];
+            delete response.data['jenisorder_id'];
+            delete response.data['jenisorder'];
           }
 
           $.each(response.data, (index, value) => {
@@ -930,7 +933,9 @@
             }
           })
 
-          
+          if (parent) {
+            $('#crudForm').find('[name=tglmulaiberlaku]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change')
+          }
           if (!parent) {
             $('#detailList tbody').html('')
             $.each(response.detail, (index, detail) => {
@@ -963,7 +968,7 @@
               })
 
             })
-          }else{
+          } else {
             setUpRow()
           }
           // setuprowshow(userId);

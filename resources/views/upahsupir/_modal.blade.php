@@ -1334,6 +1334,21 @@
                 element.prop('disabled', true)
               }
             }
+            if (index == 'tarif') {
+              element.data('currentValue', value)
+            }
+            if (index == 'tarifmuatan') {
+              element.data('currentValue', value)
+            }
+            if (index == 'tarifbongkaran') {
+              element.data('currentValue', value)
+            }
+            if (index == 'tarifexport') {
+              element.data('currentValue', value)
+            }
+            if (index == 'tarifimport') {
+              element.data('currentValue', value)
+            }
             // if(!parent && aksiEdit == true){
             //   console.log('tru kaaa')
             //   if (index == 'tujuan' || index == 'penyesuaian' || index == 'kotadari' || index == 'kotasampai' || index == 'zona' || index == 'parent' || index == 'tarif') {
@@ -1920,7 +1935,7 @@
 
         $('#crudForm').find(`[name=kotasampai]`).parents('.input-group').find('.input-group-append').hide()
         $('#crudForm').find(`[name=kotasampai]`).parents('.input-group').find('.button-clear').hide()
-        element.val(tarif.tujuan)
+        element.val(tarif.tujuan+' - '+tarif.penyesuaian)
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {
@@ -2030,7 +2045,7 @@
       },
       onSelectRow: (tarif, element) => {
         $('#crudForm [name=tarifmuatan_id]').first().val(tarif.id)
-        element.val(tarif.tujuan)
+        element.val(tarif.tujuan+' - '+tarif.penyesuaian)
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {
@@ -2056,7 +2071,7 @@
       },
       onSelectRow: (tarif, element) => {
         $('#crudForm [name=tarifbongkaran_id]').first().val(tarif.id)
-        element.val(tarif.tujuan)
+        element.val(tarif.tujuan+' - '+tarif.penyesuaian)
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {
