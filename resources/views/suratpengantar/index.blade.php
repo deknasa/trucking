@@ -64,7 +64,7 @@
     $("#tabs").tabs()
     setIsKomisi()
     loadDetailGrid()
-    loadRekapCustGrid($('#tgldariheader').val(),$('#tglsampaiheader').val())
+    loadRekapCustGrid($('#tgldariheader').val(), $('#tglsampaiheader').val())
     @isset($request['tgldari'])
     tgldariheader = `{{ $request['tgldari'] }}`;
     @endisset
@@ -612,7 +612,7 @@
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
 
           loadDetailData(id)
-          loadRekapCustData($('#tgldariheader').val(),$('#tglsampaiheader').val())
+          loadRekapCustData($('#tgldariheader').val(), $('#tglsampaiheader').val())
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
@@ -776,8 +776,11 @@
               text: "un/Approval Titipan EMKL",
               onClick: () => {
                 selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                rawCellValue = $("#jqGrid").jqGrid('getCell', selectedId, 'nobukti');
+                celValue = $("<div>").html(rawCellValue).text();
+                selectednobukti = celValue
                 if (`{{ $myAuth->hasPermission('suratpengantar', 'approvalTitipanEmkl') }}`) {
-                  approvalTitipanEmkl(selectedId);
+                  approvalTitipanEmkl(selectedId,selectednobukti);
                 }
               }
             },
@@ -973,7 +976,7 @@
       })
     }
 
-    function approvalTitipanEmkl(id) {
+    function approvalTitipanEmkl(id,noBukti) {
       getEditTujuan()
       $.ajax({
         url: `${apiUrl}suratpengantar/${id}`,
@@ -988,7 +991,7 @@
           if (response.data.statusapprovalbiayatitipanemkl === statusEditTujuan) {
             msg = `YAKIN approval Titipan EMKL`
           }
-          showConfirm(msg, response.data.nobukti, `suratpengantar/${response.data.id}/titipanemkl`)
+          showConfirm(msg, noBukti, `suratpengantar/titipanemkl?nobukti=${noBukti}`)
         },
       })
     }
