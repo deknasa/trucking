@@ -303,6 +303,11 @@
             newformat: "d-m-Y H:i:s"
           }
         },
+        {
+          label: 'Tujuan-Penyesuaian',
+          name: 'tujuanpenyesuaian',
+          align: 'left'
+        },
       ],
       autowidth: true,
       responsive: true,
