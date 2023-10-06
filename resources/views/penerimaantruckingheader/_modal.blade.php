@@ -299,7 +299,7 @@
               selectedRowIds: []
             })
             .trigger("reloadGrid");
-          initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePengembalianTitipan_nominal_titipan"]`).text(totalBayar))
+          // initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePengembalianTitipan_nominal_titipan"]`).text(totalBayar))
         }, 100);
 
       });
@@ -1901,7 +1901,7 @@
                 $(this)
                   .find(`tr input[value=${selectedRowId}]`)
                   .prop("checked", true);
-                initAutoNumeric($(this).find(`td[aria-describedby="tablePengembalianTitipan_nominal"]`))
+                // initAutoNumeric($(this).find(`td[aria-describedby="tablePengembalianTitipan_nominal"]`))
               });
           }, 100);
           // setTotalNominalKaryawan()
@@ -2220,10 +2220,13 @@
   }
 
   function setTotalNominalTitipan() {
-    let nominalDetails = $(`#tablePengembalianTitipan`).find(`td[aria-describedby="tablePengembalianTitipan_nominal_titipan"]`)
+    // let nominalDetails = $(`#tablePengembalianTitipan`).find(`td[aria-describedby="tablePengembalianTitipan_nominal_titipan"]`)
+    let checkboxEl = $(`#tablePengembalianTitipan`).find(`td input[type=checkbox]:checked`)
     let nominal = 0
-    $.each(nominalDetails, (index, nominalDetail) => {
-      nominaldetail = parseFloat($(nominalDetail).text().replaceAll(',', ''))
+    $.each(checkboxEl, (index, checkboxEls) => {
+      checkBoxVal = $(checkboxEls).val()
+      getNominal = $(`#tablePengembalianTitipan tr#${checkBoxVal}`).find(`td[aria-describedby="tablePengembalianTitipan_nominal_titipan"]`).text()
+      nominaldetail = parseFloat(getNominal.replaceAll(',', ''))
       nominals = (isNaN(nominaldetail)) ? 0 : nominaldetail;
       nominal += nominals
     });
