@@ -238,15 +238,19 @@
                             <th style="width: 20%; min-width: 200px;" class="data_tbl tbl_container_id kolom_bbt">container</th>
                             <th style="width: 20%; min-width: 200px;" class="data_tbl tbl_pelanggan_id kolom_bbt">pelanggan</th>
                             <th style="width: 20%; min-width: 200px;" class="data_tbl tbl_pengeluaranstokheader_nobukti">no bukti pengeluaran stok</th>
+                            <th style="width: 20%; min-width: 200px;" class="data_tbl tbl_penerimaanstokheader_nobukti tbl_tagihklaim">no bukti penerimaan stok</th>
                             <th style="width: 20%; min-width: 200px;" class="data_tbl tbl_stok_id">stok</th>
                             <th class="data_tbl tbl_penerimaantruckingheader" style="width: 20%; min-width: 200px;">NO BUKTI PENERIMAAN TRUCKING</th>
                             <th style="width:10%; min-width: 100px" class="data_tbl tbl_qty">qty</th>
                             <th style="width: 20%; min-width: 200px;" class="tbl_sisa">Sisa</th>
-                            <th style="width: 20%; min-width: 200px;" class="data_tbl tbl_harga">harga</th>
+                            <th style="width: 20%; min-width: 200px;" class="data_tbl tbl_harga">total harga</th>
                             <th style="width: 20%; min-width: 200px;" class="data_tbl tbl_nominal">Nominal</th>
                             <th style="width: 20%; min-width: 200px;" class="data_tbl tbl_nominaltagih kolom_bbt">tagihan</th>
                             <th class="data_tbl tbl_keterangan" style="width: 20%; min-width: 200px;">Keterangan</th>
+                            <th style="width: 20%; min-width: 200px;" class="data_tbl tbl_tagihklaim">Nominal Tambahan</th>
+                            <th style="width: 20%; min-width: 200px;" class="data_tbl tbl_tagihklaim">Keterangan Tambahan</th>
                             <th style="width: 20%; min-width: 200px;" class="data_tbl tbl_jenisorder kolom_bbt">jenis orderan</th>
+                            <th style="width: 20%; min-width: 200px;" class="data_tbl tbl_tagihklaim">total nominal</th>
                             <th style="width:5%; max-width: 25px;max-width: 15px" class="tbl_aksi">Aksi</th>
                           </tr>
                         </thead>
@@ -269,6 +273,12 @@
                             </td>
                             <td class="colmn-offset"></td>
                             <td class="colmn-offset2" style="display: none"></td>
+                            <td class="colmn-offset3" style="display: none">
+                              <p class="text-right font-weight-bold autonumeric" id="totalTambahan"></p>
+                            </td>
+                            <td class="colmn-offset4" style="display: none" colspan="2">
+                              <p class="text-right font-weight-bold autonumeric" id="totalKlaim"></p>
+                            </td>
                             <td id="tbl_addRow" class="tbl_aksi">
                               <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
                             </td>
@@ -345,6 +355,13 @@
             }
           })
         }
+        
+        if (KodePengeluaranId == "KLAIM") {
+            $('#crudForm').find(`[name="nominaltambahan[]"`).each((index, element) => {
+                data.filter((row) => row.name === 'nominaltambahan[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominaltambahan[]"]`)[index])
+              
+            })
+          }
         $('#crudForm').find(`[name="nominal[]"`).each((index, element) => {
           if (element.value != "" && AutoNumeric.getAutoNumericElement(element) !== null) {
             data.filter((row) => row.name === 'nominal[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal[]"]`)[index])
@@ -408,6 +425,36 @@
 
         initAutoNumeric($(this).parents("tr").find(`[name="nominaltagih[]"]`))
       }
+      if (KodePengeluaranId == 'KLAIM') {
+        nominaltambahan = AutoNumeric.getNumber($(this).parents("tr").find(`[name="nominaltambahan[]"]`)[0])
+        nominaltagihan = AutoNumeric.getNumber($(this)[0])
+        totalklaim = nominaltagihan + nominaltambahan
+        new AutoNumeric($(this).parents("tr").find(`[name="totalklaim[]"]`)[0]).set(totalklaim)
+        setTotalKlaim()
+        setTotalTambahan()
+        // initAutoNumeric($(this).parents("tr").find(`[name="nominaltagih[]"]`))
+      }
+    })
+
+
+    $(document).on('input', `#table_body [name="nominaltambahan[]"]`, function(event) {
+      setTotal()
+
+      nominaltagihan = AutoNumeric.getNumber($(this).parents("tr").find(`[name="nominal[]"]`)[0])
+      nominaltambahan = AutoNumeric.getNumber($(this)[0])
+      totalklaim = nominaltagihan + nominaltambahan
+      new AutoNumeric($(this).parents("tr").find(`[name="totalklaim[]"]`)[0]).set(totalklaim)
+      setTotalKlaim()
+      setTotalTambahan()
+    })
+    
+    $(document).on('input', `#table_body [name="qty[]"]`, function(event) {
+
+      harga = AutoNumeric.getNumber($(this).parents("tr").find(`[name="harga[]"]`)[0])
+      console.log(harga)
+      qty = AutoNumeric.getNumber($(this)[0]) ?? 0;
+      totalharga = qty*harga
+      new AutoNumeric($(this).parents("tr").find(`[name="totalharga[]"]`)[0]).set(totalharga)
     })
 
     function rangeInvoice() {
@@ -753,7 +800,7 @@
         let bst_noinvoice_detail = []
         let bst_nojobtrucking_detail = []
         let bst_keterangan = []
-        
+
         // $.each(selectedRowsSumbangan, function(index, item) {
         //   data.push({
         //     name: 'id_detail[]',
@@ -761,7 +808,7 @@
         //   })
         // });
         $.each(selectedRowsSumbanganNominal, function(index, item) {
-          bst_nominal.push( parseFloat(item.replaceAll(',', '')))
+          bst_nominal.push(parseFloat(item.replaceAll(',', '')))
           bst_keterangan.push('SUMBANGAN SOSIAL')
         });
         // $.each(selectedRowsSumbanganContainer, function(index, item) {
@@ -782,7 +829,7 @@
         //     value: item
         //   })
         // });
-        
+
 
         let requestData = {
           'id_detail': selectedRowsSumbangan,
@@ -791,7 +838,7 @@
           'noinvoice_detail': selectedRowsSumbanganNobukti,
           'nojobtrucking_detail': selectedRowsSumbanganJobtrucking,
           'keterangan': bst_keterangan,
-        };     
+        };
         data.push({
           name: 'detail',
           value: JSON.stringify(requestData)
@@ -805,6 +852,11 @@
               if (element.value != "" && AutoNumeric.getAutoNumericElement(element) !== null) {
                 data.filter((row) => row.name === 'nominaltagih[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominaltagih[]"]`)[index])
               }
+            })
+          }
+          if (KodePengeluaranId == "KLAIM") {
+            $('#crudForm').find(`[name="nominaltambahan[]"`).each((index, element) => {
+                data.filter((row) => row.name === 'nominaltambahan[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominaltambahan[]"]`)[index])
             })
           }
           $('#crudForm').find(`[name="nominal[]"`).each((index, element) => {
@@ -1106,6 +1158,9 @@
     $('.colspan').attr('colspan', 3);
     $('#tbl_addRow').show()
     $('.colmn-offset2').hide()
+    $('.colmn-offset3').hide()
+    $('.colmn-offset4').hide()
+    $('.tbl_tagihklaim').hide()
     // $('.colmn-offset').hide()
   }
 
@@ -1141,6 +1196,9 @@
     $('.colspan').attr('colspan', 3);
     $('#tbl_addRow').show()
     $('.colmn-offset2').hide()
+    $('.tbl_tagihklaim').hide()
+    $('.colmn-offset3').hide()
+    $('.colmn-offset4').hide()
     // $('.colmn-offset').hide()
   }
 
@@ -1183,6 +1241,9 @@
     $('.colspan').attr('colspan', 6);
     $('#tbl_addRow').show()
     $('.colmn-offset2').show()
+    $('.tbl_tagihklaim').hide()
+    $('.colmn-offset3').hide()
+    $('.colmn-offset4').hide()
   }
 
   function tampilanTDE() {
@@ -1192,6 +1253,9 @@
     $('[name=tradoheader_id]').parents('.form-group').hide()
     $('[name=postingpinjaman]').parents('.form-group').hide()
     $('.tbl_supir_id').hide()
+    $('.tbl_tagihklaim').hide()
+    $('.colmn-offset3').hide()
+    $('.colmn-offset4').hide()
     $('[name=jenisorderan_id]').parents('.form-group').hide()
     $('[name=supirheader_id]').parents('.form-group').show()
     $('[name=tgldari]').parents('.form-group').hide()
@@ -1254,6 +1318,9 @@
     $('#tbl_addRow').show()
     $('.colmn-offset2').hide()
     $('.kolom_bbt').hide()
+    $('.tbl_tagihklaim').hide()
+    $('.colmn-offset3').hide()
+    $('.colmn-offset4').hide()
     // $('.colmn-offset').hide()
     loadModalGrid()
   }
@@ -1294,6 +1361,9 @@
     $('.tbl_aksi').show()
     $('.colspan').attr('colspan', 2);
     $('.kolom_bbt').hide()
+    $('.tbl_tagihklaim').hide()
+    $('.colmn-offset3').hide()
+    $('.colmn-offset4').hide()
     $('#tbl_addRow').show()
     loadPelunasanBBMGrid()
   }
@@ -1335,6 +1405,9 @@
     $('.colspan').attr('colspan', 2);
     $('.kolom_bbt').hide()
     $('#tbl_addRow').show()
+    $('.tbl_tagihklaim').hide()
+    $('.colmn-offset3').hide()
+    $('.colmn-offset4').hide()
     $('.colmn-offset2').hide()
     // $('.colmn-offset').hide()
   }
@@ -1367,16 +1440,19 @@
     $('.tbl_supir_id').hide()
     $('.tbl_nominal').show()
     $('.tbl_karyawan_id').hide()
-    $('.nominal').prop('readonly', true)
     $('.tbl_harga').show()
     $('.tbl_stok_id').show()
     $('.tbl_pengeluaranstokheader_nobukti').show()
     $('.tbl_qty').show()
     $('.tbl_aksi').show()
-    $('.colspan').attr('colspan', 5);
+    $('.colspan').attr('colspan', 6);
     $('.kolom_bbt').hide()
     $('#tbl_addRow').show()
+    $('th.tbl_nominal').text('Nominal tagih')
+    $('.tbl_tagihklaim').show()
     $('.colmn-offset2').hide()
+    $('.colmn-offset3').show()
+    $('.colmn-offset4').show()
     // $('.colmn-offset').hide()
   }
 
@@ -1419,6 +1495,9 @@
     $('.colspan').attr('colspan', 2);
     $('#tbl_addRow').hide()
     $('.kolom_bbt').hide()
+    $('.tbl_tagihklaim').hide()
+    $('.colmn-offset3').hide()
+    $('.colmn-offset4').hide()
     // $('.colmn-offset').hide()
 
     $('#crudForm').find('[name=periode]').val($.datepicker.formatDate('mm-yy', new Date())).trigger('change');
@@ -1488,6 +1567,9 @@
     $('.colspan').attr('colspan', 2);
     $('#tbl_addRow').hide()
     $('.kolom_bbt').hide()
+    $('.tbl_tagihklaim').hide()
+    $('.colmn-offset3').hide()
+    $('.colmn-offset4').hide()
     // $('.colmn-offset').hide()
     $('#crudForm').find('[name=periode]').val($.datepicker.formatDate('mm-yy', new Date())).trigger('change');
     loadBLNGrid()
@@ -1555,6 +1637,9 @@
     $('.colspan').attr('colspan', 2);
     $('#tbl_addRow').hide()
     $('.kolom_bbt').hide()
+    $('.tbl_tagihklaim').hide()
+    $('.colmn-offset3').hide()
+    $('.colmn-offset4').hide()
     // $('.colmn-offset').hide()
     $('#crudForm').find('[name=periode]').val($.datepicker.formatDate('mm-yy', new Date())).trigger('change');
     loadBTUGrid()
@@ -1622,6 +1707,9 @@
     $('.colspan').attr('colspan', 2);
     $('#tbl_addRow').hide()
     $('.kolom_bbt').hide()
+    $('.tbl_tagihklaim').hide()
+    $('.colmn-offset3').hide()
+    $('.colmn-offset4').hide()
     // $('.colmn-offset').hide()
     $('#crudForm').find('[name=periode]').val($.datepicker.formatDate('mm-yy', new Date())).trigger('change');
     loadBPTGrid()
@@ -1690,6 +1778,9 @@
     $('.colspan').attr('colspan', 2);
     $('#tbl_addRow').hide()
     $('.kolom_bbt').hide()
+    $('.tbl_tagihklaim').hide()
+    $('.colmn-offset3').hide()
+    $('.colmn-offset4').hide()
     // $('.colmn-offset').hide()
     $('#crudForm').find('[name=periode]').val($.datepicker.formatDate('mm-yy', new Date())).trigger('change');
     loadBGSGrid()
@@ -1756,6 +1847,9 @@
     $('.colspan').attr('colspan', 2);
     $('#tbl_addRow').hide()
     $('.kolom_bbt').hide()
+    $('.tbl_tagihklaim').hide()
+    $('.colmn-offset3').hide()
+    $('.colmn-offset4').hide()
     // $('.colmn-offset').hide()
     $('#crudForm').find('[name=periode]').val($.datepicker.formatDate('mm-yy', new Date())).trigger('change');
     loadBITGrid()
@@ -1828,6 +1922,9 @@
     $('.tbl_nominaltagih').hide()
     $('.tbl_jenisorder').hide()
     $('.kolom_bbt').hide()
+    $('.tbl_tagihklaim').hide()
+    $('.colmn-offset3').hide()
+    $('.colmn-offset4').hide()
 
   }
 
@@ -1921,6 +2018,26 @@
       total += AutoNumeric.getNumber(nominalDetail)
     });
     new AutoNumeric('#total').set(total)
+  }
+
+  function setTotalKlaim() {
+    let totalKlaims = $(`#table_body [name="totalklaim[]"]`)
+    let total = 0
+
+    $.each(totalKlaims, (index, totalKlaim) => {
+      total += AutoNumeric.getNumber(totalKlaim)
+    });
+    new AutoNumeric('#totalKlaim').set(total)
+  }
+
+  function setTotalTambahan() {
+    let nominalTambahans = $(`#table_body [name="nominaltambahan[]"]`)
+    let total = 0
+
+    $.each(nominalTambahans, (index, nominalTambahan) => {
+      total += AutoNumeric.getNumber(nominalTambahan)
+    });
+    new AutoNumeric('#totalTambahan').set(total)
   }
 
   function createPengeluaranTruckingHeader() {
@@ -3304,6 +3421,10 @@
                     <td class="data_tbl tbl_pengeluaranstokheader_nobukti">
                       <input type="text" id="pengeluaranstok_nobukti_${index}" name="pengeluaranstok_nobukti[]" data-current-value="${detail.pengeluaranstok_nobukti}" class="form-control pengeluaranstokheader-lookup">
                     </td>
+                    
+                    <td class="data_tbl tbl_penerimaanstokheader_nobukti tbl_tagihklaim">
+                      <input id="penerimaanstok_nobukti_${index}" type="text" name="penerimaanstok_nobukti[]" data-current-value="${detail.penerimaanstok_nobukti}" class="form-control penerimaanstokheader-lookup">
+                    </td>
                     <td class="data_tbl tbl_statustitipanemkl kolom_bbt">
                       <select name="detail_statustitipanemkl[]" class="form-select select2bs4" id="statustitipanemkl${index}" style="width: 100%;">
                         <option value="">-- PILIH TITIPAN EMKL --</option>
@@ -3327,14 +3448,16 @@
                       <input type="text" id="stok_${index}" name="stok[]" data-current-value="${detail.stok}" class="form-control stok-lookup">
                     </td>
                     <td class="data_tbl tbl_qty">
-                      <input type="text" id="qty_${index}" name="qty[]" onkeyup="cal(${index})" class="form-control autonumeric qty"> 
+                      <input type="text" id="qty_${index}" name="qty[]" class="form-control autonumeric qty"> 
                     </td>
 
                     <td class="data_tbl tbl_penerimaantruckingheader">
                         <input type="text" id="penerimaantruckingheader_nobukti_${index}" name="penerimaantruckingheader_nobukti[]" data-current-value="${detail.penerimaantruckingheader_nobukti}" class="form-control penerimaantruckingheader-lookup">
                     </td>
                     <td class="data_tbl tbl_harga">
-                      <input type="text" id="harga_${index}" name="harga[]" class="form-control autonumeric nominal"> 
+                    
+                      <input id="totalharga_${indexRow}" readonly type="text" name="totalharga[]" class="form-control autonumeric"> 
+                      <input type="hidden" id="harga_${index}" name="harga[]" class="form-control autonumeric nominal"> 
                     </td>
                     <td class="data_tbl tbl_nominal">
                         <input type="text" id="nominal_${index}" name="nominal[]" class="form-control autonumeric nominal" autocomplete="off"> 
@@ -3345,8 +3468,18 @@
                     <td class="data_tbl tbl_keterangan">
                         <input type="text" id="keterangan_${index}" name="keterangan[]" class="form-control"> 
                     </td>
+        
+                    <td class="data_tbl tbl_tagihklaim">
+                      <input id="nominaltambahan_${index}" type="text" name="nominaltambahan[]" class="form-control autonumeric text-right nominaltambahan"> 
+                    </td>
+                    <td class="data_tbl tbl_tagihklaim">
+                      <input id="keterangantambahan_${index}" type="text" name="keterangantambahan[]" class="form-control"> 
+                    </td>
                     <td class="data_tbl tbl_jenisorder kolom_bbt">
                       <input id="jenisorder_${index}" type="text" name="jenisorder_id[]" class="form-control"> 
+                    </td>
+                    <td class="data_tbl tbl_tagihklaim">
+                      <input id="totalklaim_${index}" type="text" name="totalklaim[]" readonly class="form-control text-right totalklaim"> 
                     </td>
                     <td class="tbl_aksi">
                         <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
@@ -3359,10 +3492,12 @@
               detailRow.find(`[name="karyawan_id[]"]`).val(detail.karyawan_id)
               detailRow.find(`[name="karyawan[]"]`).val(detail.karyawan)
               detailRow.find(`[name="pengeluaranstok_nobukti[]"]`).val(detail.pengeluaranstok_nobukti)
+              detailRow.find(`[name="penerimaanstok_nobukti[]"]`).val(detail.penerimaanstok_nobukti)
               detailRow.find(`[name="stok_id[]"]`).val(detail.stok_id)
               detailRow.find(`[name="stok[]"]`).val(detail.stok)
               detailRow.find(`[name="qty[]"]`).val(detail.qty)
               detailRow.find(`[name="harga[]"]`).val(detail.harga)
+              detailRow.find(`[name="totalharga[]"]`).val(detail.total)
               detailRow.find(`[name="keterangan[]"]`).val(detail.keterangan)
               detailRow.find(`[name="suratpengantar_nobukti[]"]`).val(detail.suratpengantar_nobukti)
               detailRow.find(`[name="trado_id[]"]`).val(detail.trado_id)
@@ -3370,11 +3505,26 @@
               detailRow.find(`[name="pelanggan_id[]"]`).val(detail.pelanggan_id)
               detailRow.find(`[name="jenisorder_id[]"]`).val(response.data.jenisorderan)
               detailRow.find(`[name="penerimaantruckingheader_nobukti[]"]`).val(detail.penerimaantruckingheader_nobukti)
-              detailRow.find(`[name="nominal[]"]`).val(detail.nominal)
+              if (kodepengeluaran === "KLAIM"){
+                detailRow.find(`[name="nominal[]"]`).val(detail.nominaltagih)
+              }else{                
+                detailRow.find(`[name="nominal[]"]`).val(detail.nominal)
+              }
               detailRow.find(`[name="nominaltagih[]"]`).val(detail.nominaltagih)
+              detailRow.find(`[name="nominaltambahan[]"]`).val(detail.nominaltambahan)
+              detailRow.find(`[name="keterangantambahan[]"]`).val(detail.keterangantambahan)
+              detailRow.find(`[name="totalklaim[]"]`).val(detail.nominal)
+
               pengeluaranstokheader = detail.pengeluaranstokheader_id
               if (detail.pengeluaranstok_nobukti) {
                 initAutoNumeric(detailRow.find(`[name="qty[]"]`))
+                initAutoNumeric(detailRow.find(`[name="totalharga[]"]`))
+                // initAutoNumeric(detailRow.find(`[name="qty[]"]`),{'maximumValue':detail.maxqty})
+                initAutoNumeric(detailRow.find(`[name="harga[]"]`))
+              }
+               if (detail.penerimaanstok_nobukti) {
+                initAutoNumeric(detailRow.find(`[name="qty[]"]`))
+                initAutoNumeric(detailRow.find(`[name="totalharga[]"]`))
                 // initAutoNumeric(detailRow.find(`[name="qty[]"]`),{'maximumValue':detail.maxqty})
                 initAutoNumeric(detailRow.find(`[name="harga[]"]`))
               }
@@ -3389,6 +3539,8 @@
               }
 
               initAutoNumeric(detailRow.find(`[name="nominal[]"]`))
+              initAutoNumeric(detailRow.find(`[name="nominaltambahan[]"]`))
+              initAutoNumeric(detailRow.find(`[name="totalklaim[]"]`))
               $('#detailList tbody').append(detailRow)
 
               if (response.data.kodepengeluaran == 'BBT') {
@@ -3403,7 +3555,10 @@
               }
 
               setTotal();
-
+              if (kodepengeluaran === "KLAIM"){
+                setTotalKlaim()
+                setTotalTambahan()
+              }
               $('.supir-lookup').last().lookup({
                 title: 'Supir Lookup',
                 fileName: 'supir',
@@ -3485,14 +3640,47 @@
                   element.data('currentValue', element.val())
                 }
               })
+              $('.penerimaanstokheader-lookup').last().lookup({
+                title: 'penerimaan stok Lookup',
+                fileName: 'penerimaanstokheader',
+                beforeProcess: function(test) {
+                  // var levelcoa = $(`#levelcoa`).val();
+                  this.postData = {
+                    penerimaanstok_id: 1,
+                    Aktif: 'AKTIF',
+                  }
+                },
+                onSelectRow: (stok, element) => {
+                  penerimaanstokheader = stok.id
+                  element.val(stok.nobukti)
 
+                  element.data('currentValue', element.val())
+                },
+                onCancel: (element) => {
+                  element.val(element.data('currentValue'))
+                },
+                onClear: (element) => {
+                  detailRow.find(`[name="stok_id[]"]`).val('');
+                  detailRow.find(`[name="stok[]"]`).val('');
+                  detailRow.find(`[name="stok[]"]`).data('currentValue', element.val(''))
+
+                  // detailRow.find(`[name="harga[]"]`).val('');
+                  detailRow.find(`[name="qty[]"]`).val('');
+
+                  detailRow.find(`[name="nominal[]"]`).val('');
+                  setTotal();
+                  // element.parents('td').find(`[name="stok_id[]"]`).val('')
+                  element.val('')
+                  element.data('currentValue', element.val())
+                }
+              })
               $('.stok-lookup').last().lookup({
                 title: 'stok Lookup',
                 fileName: 'pengeluaranstokdetail',
                 beforeProcess: function(test) {
                   // var levelcoa = $(`#levelcoa`).val();
                   this.postData = {
-
+                    penerimaanstokheader_id: penerimaanstokheader,
                     pengeluaranstokheader_id: pengeluaranstokheader,
                   }
                 },
@@ -3721,8 +3909,10 @@
   }
   indexRow = 0;
 
+  let pengeluaranstokheader = '';
+  let penerimaanstokheader = '';
+
   function addRow() {
-    let pengeluaranstokheader;
 
     let detailRow = $(`
       <tr>
@@ -3755,19 +3945,23 @@
         <td class="data_tbl tbl_pengeluaranstokheader_nobukti">
           <input id="pengeluaranstok_nobukti_${indexRow}" type="text" name="pengeluaranstok_nobukti[]"  class="form-control pengeluaranstokheader-lookup">
         </td>
+        <td class="data_tbl tbl_penerimaanstokheader_nobukti tbl_tagihklaim">
+          <input id="penerimaanstok_nobukti_${indexRow}" type="text" name="penerimaanstok_nobukti[]"  class="form-control penerimaanstokheader-lookup">
+        </td>
         <td class="data_tbl tbl_stok_id">
           <input id="stok_id_${indexRow}" type="hidden" name="stok_id[]">
           <input id="stok_${indexRow}" type="text" name="stok[]"  class="form-control stok-lookup">
         </td>
         <td class="data_tbl tbl_qty">
-          <input id="qty_${indexRow}" type="text" name="qty[]" onkeyup="cal(${indexRow})" class="form-control  qty"> 
+          <input id="qty_${indexRow}" type="text" name="qty[]" class="form-control text-right qty"> 
         </td>
 
         <td class="data_tbl tbl_penerimaantruckingheader">
           <input id="penerimaantruckingheader_nobukti_${indexRow}" type="text" name="penerimaantruckingheader_nobukti[]"  class="form-control penerimaantruckingheader-lookup">
         </td>
         <td class="data_tbl tbl_harga">
-          <input id="harga_${indexRow}" readonly type="text" name="harga[]" class="form-control autonumeric"> 
+          <input id="harga_${indexRow}" readonly type="hidden" name="harga[]" class="form-control autonumeric"> 
+          <input id="totalharga_${indexRow}" readonly type="text" name="totalharga[]" class="form-control autonumeric"> 
         </td>
         <td class="data_tbl tbl_nominal">
           <input id="nominal_${indexRow}" type="text" name="nominal[]" class="form-control autonumeric nominal" autocomplete="off"> 
@@ -3778,8 +3972,18 @@
         <td class="data_tbl tbl_keterangan">
           <input id="keterangan_${indexRow}" type="text" name="keterangan[]" class="form-control"> 
         </td>
+        
+        <td class="data_tbl tbl_tagihklaim">
+          <input id="nominaltambahan_${indexRow}" type="text" name="nominaltambahan[]" class="form-control autonumeric text-right nominaltambahan"> 
+        </td>
+        <td class="data_tbl tbl_tagihklaim">
+          <input id="keterangantambahan_${indexRow}" type="text" name="keterangantambahan[]" class="form-control"> 
+        </td>
         <td class="data_tbl tbl_jenisorder kolom_bbt">
           <input id="jenisorder_${indexRow}" type="text" name="jenisorder_id[]" class="form-control"> 
+        </td>
+        <td class="data_tbl tbl_tagihklaim">
+          <input id="totalklaim_${indexRow}" type="text" name="totalklaim[]" readonly class="form-control text-right totalklaim"> 
         </td>
         <td>
             <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
@@ -3881,6 +4085,44 @@
         element.data('currentValue', element.val())
       }
     })
+
+    $('.penerimaanstokheader-lookup').last().lookup({
+      title: 'penerimaan stok Lookup',
+      fileName: 'penerimaanstokheader',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+          penerimaanstok_id: 5,
+          Aktif: 'AKTIF',
+        }
+      },
+      onSelectRow: (stok, element) => {
+        penerimaanstokheader = stok.id
+        element.val(stok.nobukti)
+
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $(`#stok_id_${row}`).val('');
+        $(`#stok_${row}`).val('');
+        $(`#stok_${row}`).data('currentValue', element.val(''))
+        // AutoNumeric($(`#qty_${row}`)[0]).set(0);
+        // $(`#qty_${row}`).val('');
+        // AutoNumeric($(`#harga_${row}`)[0]).set(0);
+        $(`#harga_${row}`).val('');
+        // AutoNumeric($(`#nominal_${row}`)[0]).set(0);
+        $(`#nominal_${row}`).val('');
+        setTotal();
+        // element.parents('td').find(`[name="stok_id[]"]`).val('')
+        element.val('')
+        penerimaanstokheader = ''
+        element.data('currentValue', element.val())
+      }
+    })
+
     $('.pengeluaranstokheader-lookup').last().lookup({
       title: 'pengeluaran stok Lookup',
       fileName: 'pengeluaranstokheader',
@@ -3912,6 +4154,7 @@
         $(`#nominal_${row}`).val('');
         setTotal();
         // element.parents('td').find(`[name="stok_id[]"]`).val('')
+        pengeluaranstokheader = ''
         element.val('')
         element.data('currentValue', element.val())
       }
@@ -3923,7 +4166,7 @@
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
-
+          penerimaanstokheader_id: penerimaanstokheader,
           pengeluaranstokheader_id: pengeluaranstokheader,
         }
       },
@@ -3931,6 +4174,8 @@
         element.parents('td').find(`[name="stok_id[]"]`).val(stok.stok_id)
         element.val(stok.stok)
         element.data('currentValue', element.val())
+        console.log(row, stok.qty, stok.harga)
+        $(`#qty_${row}`).val(stok.qty)
         initAutoNumeric($(`#qty_${row}`), {
           'maximumValue': stok.qty
         })
@@ -5271,6 +5516,10 @@
 
     setRowNumbers()
     setTotal()
+    if (KodePengeluaranId == 'KLAIM') {
+      setTotalKlaim()
+      setTotalTambahan()
+    }
   }
 
   function setRowNumbers() {
@@ -5306,18 +5555,21 @@
     }
   }
 
-  function cal(id) {
-    qty = $(`#qty_${id}`)[0];
-    harga = $(`#harga_${id}`)[0];
+  function cal(element) {
+    console.log(element.val())
+    // qty = $(`#qty_${id}`)[0];
+    // harga = $(`#harga_${id}`)[0];
 
-    qty = AutoNumeric.getNumber(qty);
-    harga = AutoNumeric.getNumber(harga);
-    console.log(harga);
-    total = qty * harga;
-    // nominaldiscount = total * (discount / 100);
-    // total -= nominaldiscount;
-    new AutoNumeric($(`#nominal_${id}`)[0]).set(total)
-    setTotal()
+    // qty = AutoNumeric.getNumber(qty);
+    // harga = AutoNumeric.getNumber(harga);
+    // console.log(harga);
+    // total = qty * harga;
+    // // nominaldiscount = total * (discount / 100);
+    // // total -= nominaldiscount;
+    // // new AutoNumeric($(`#nominal_${id}`)[0]).set(total)
+    // $(`#totalharga_${id}`).val(total)
+    // initAutoNumeric($(`#totalharga_${id}`))
+    // setTotal()
   }
 
   function initLookup() {

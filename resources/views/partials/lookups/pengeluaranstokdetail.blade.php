@@ -9,6 +9,7 @@
       iconSet: 'fontAwesome',
       datatype: "json",
       postData: {
+        penerimaanstokheader_id:  `{!! $penerimaanstokheader_id ?? '' !!}`, //dari klaim
         pengeluaranstokheader_id:  `{!! $pengeluaranstokheader_id ?? '' !!}`,
       },
       idPrefix: 'pengeluaranStokDetailLookup',

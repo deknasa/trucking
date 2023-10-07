@@ -5,7 +5,7 @@
         <div class="modal-header">
           <p class="modal-title" id="crudModalTitle"></p>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            
+
           </button>
         </div>
         <form action="" method="post">
@@ -20,7 +20,7 @@
               </div>
             </div> --}}
             <input type="hidden" name="id" class="form-control">
-            
+
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
@@ -86,7 +86,7 @@
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
-                NO TELEPON / HANDPHONE <span class="text-danger">*</span>
+                  NO TELEPON / HANDPHONE <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-md-10">
@@ -123,6 +123,29 @@
                 <select name="statustas" class="form-select select2bs4" style="width: 100%;">
                   <option value="">-- PILIH STATUS TAS --</option>
                 </select>
+              </div>
+            </div>
+
+            <div class="row form-group">
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">
+                  NAMA PERKIRAAN <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-12 col-md-10">
+                <input type="hidden" name="coa">
+                <input type="text" name="keterangancoa" class="form-control coa-lookup">
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-12 col-md-2">
+                <label class="col-form-label">
+                  NAMA PERKIRAAN (PENDAPATAN) <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-12 col-md-10">
+                <input type="hidden" name="coapendapatan">
+                <input type="text" name="keterangancoapendapatan" class="form-control coapendapatan-lookup">
               </div>
             </div>
             {{-- <div class="row form-group">
@@ -237,7 +260,9 @@
 
           id = response.data.id
 
-          $('#jqGrid').jqGrid('setGridParam', { page: response.data.page}).trigger('reloadGrid');
+          $('#jqGrid').jqGrid('setGridParam', {
+            page: response.data.page
+          }).trigger('reloadGrid');
 
           if (response.data.grp == 'FORMAT') {
             updateFormat(response.data)
@@ -267,16 +292,16 @@
 
     activeGrid = null
 
-    form.find('#btnSubmit').prop('disabled',false)
+    form.find('#btnSubmit').prop('disabled', false)
     if (form.data('action') == "view") {
-      form.find('#btnSubmit').prop('disabled',true)
+      form.find('#btnSubmit').prop('disabled', true)
     }
-    
+
     getMaxLength(form)
-    initSelect2(form.find(`[name="statustas"]`),true)
-    initSelect2(form.find(`[name="statusaktif"]`),true)
-    
-    
+    initSelect2(form.find(`[name="statustas"]`), true)
+    initSelect2(form.find(`[name="statusaktif"]`), true)
+
+
     initLookup()
   })
 
@@ -390,6 +415,7 @@
           })
       })
   }
+
   function viewAgen(agenId) {
     let form = $('#crudForm')
 
@@ -401,7 +427,7 @@
       <i class="fa fa-save"></i>
       Save
     `)
-    form.find('#btnSubmit').prop('disabled',true)
+    form.find('#btnSubmit').prop('disabled', true)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('View Customer')
     $('.is-invalid').removeClass('is-invalid')
@@ -414,25 +440,25 @@
       ])
       .then(() => {
         showAgen(form, agenId)
-        .then(agenId => {
-              // form.find('.aksi').hide()
-              setFormBindKeys(form)
-              initSelect2(form.find('.select2bs4'), true)
-              form.find('[name]').removeAttr('disabled')
-  
-              form.find('select').each((index, select) => {
-                let element = $(select)
-  
-                if (element.data('select2')) {
-                  element.select2('destroy')
-                }
-              })
-  
-              form.find('[name]').attr('disabled', 'disabled').css({
-                background: '#fff'
-              })
-              form.find('[name=id]').prop('disabled',false)
+          .then(agenId => {
+            // form.find('.aksi').hide()
+            setFormBindKeys(form)
+            initSelect2(form.find('.select2bs4'), true)
+            form.find('[name]').removeAttr('disabled')
+
+            form.find('select').each((index, select) => {
+              let element = $(select)
+
+              if (element.data('select2')) {
+                element.select2('destroy')
+              }
             })
+
+            form.find('[name]').attr('disabled', 'disabled').css({
+              background: '#fff'
+            })
+            form.find('[name=id]').prop('disabled', false)
+          })
           .then(() => {
             $('#crudModal').modal('show')
           })
@@ -459,10 +485,10 @@
             if (value !== null && value !== 0 && value !== undefined) {
               form.find(`[name=${index}]`).attr('maxlength', value)
 
-              if(index == 'nohp'){
+              if (index == 'nohp') {
                 form.find(`[name=nohp]`).attr('maxlength', 13)
               }
-              if(index == 'notelp'){
+              if (index == 'notelp') {
                 form.find(`[name=notelp]`).attr('maxlength', 13)
               }
             }
@@ -593,7 +619,7 @@
 
             if (element.is('select')) {
               element.val(value).trigger('change')
-            }  else {
+            } else {
               element.val(value)
             }
             if (index == 'keteranganjenisemkl') {
@@ -620,7 +646,7 @@
         this.postData = {
           Aktif: 'AKTIF',
         }
-      },      
+      },
       onSelectRow: (jenisemkl, element) => {
         $('#crudForm [name=jenisemkl]').first().val(jenisemkl.id)
         element.val(jenisemkl.keterangan)
@@ -630,8 +656,54 @@
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
-        
+
         $('#crudForm [name=jenisemkl]').first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+    $('.coa-lookup').last().lookup({
+      title: 'Coa Lookup',
+      fileName: 'akunpusat',
+      beforeProcess: function(test) {
+        this.postData = {
+          levelCoa: '3',
+          Aktif: 'AKTIF',
+        }
+      },
+      onSelectRow: (akunpusat, element) => {
+        $('#crudForm [name=coa]').first().val(akunpusat.coa)
+        element.val(akunpusat.keterangancoa)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $('#crudForm [name=coa]').first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+    $('.coapendapatan-lookup').last().lookup({
+      title: 'Coa Pendapatan Lookup',
+      fileName: 'akunpusat',
+      beforeProcess: function(test) {
+        this.postData = {
+          levelCoa: '3',
+          Aktif: 'AKTIF',
+        }
+      },
+      onSelectRow: (akunpusat, element) => {
+        $('#crudForm [name=coapendapatan]').first().val(akunpusat.coa)
+        element.val(akunpusat.keterangancoa)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $('#crudForm [name=coapendapatan]').first().val('')
         element.val('')
         element.data('currentValue', element.val())
       }
@@ -655,8 +727,7 @@
 
             if (element.is('select')) {
               element.val(value).trigger('change')
-            } 
-            else {
+            } else {
               element.val(value)
             }
           })
@@ -676,11 +747,11 @@
       },
       success: response => {
         var kondisi = response.kondisi
-          if (kondisi == true) {
-            showDialog(response.message['keterangan'])
-          } else {
-              deleteAgen(Id)
-          }
+        if (kondisi == true) {
+          showDialog(response.message['keterangan'])
+        } else {
+          deleteAgen(Id)
+        }
 
       }
     })
