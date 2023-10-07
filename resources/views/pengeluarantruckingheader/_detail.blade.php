@@ -64,6 +64,11 @@
             width: '200px'
           },
           {
+            label: 'NO BUKTI PENERIMAAN STOK',
+            name: 'penerimaanstok_nobukti',
+            width: '200px'
+          },
+          {
             label: 'stok',
             name: 'stok',
           },
@@ -72,10 +77,21 @@
             name: 'qty',
           },
           {
-            label: 'harga',
-            name: 'harga',
+            label: 'total harga',
+            name: 'total',
             formatter: currencyFormat,
             align: "right",
+          },
+          {
+            label: 'nominal tambahan',
+            name: 'nominaltambahan',
+            formatter: currencyFormat,
+            align: "right",
+          },
+          {
+            label: 'KET. TAMBAHAN',
+            name: 'keterangantambahan',
+            width: '200px'
           },
           {
             label: 'NO orderan TRUCKING',
