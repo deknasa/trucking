@@ -28,7 +28,10 @@ html {
 * {
 	text-transform: uppercase;
 }
-
+.login-page{ 
+	height: 100vh;  
+	overflow: hidden; 
+}
 .main-footer,
 .content-wrapper {
 	margin-left: 0 !important;
