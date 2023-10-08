@@ -5580,7 +5580,7 @@
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
-
+          roleInput: 'role',
           Aktif: 'AKTIF',
         }
       },
@@ -5610,7 +5610,6 @@
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
-
           Aktif: 'AKTIF',
         }
       },

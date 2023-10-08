@@ -3036,7 +3036,7 @@
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
-
+          roleInput: 'role',
         }
       },
       onSelectRow: (penerimaantrucking, element) => {

@@ -9,6 +9,11 @@
       iconSet: 'fontAwesome',
       datatype: "json",
       idPrefix: 'penerimaanStokLookup',
+      postData: {
+        aktif: `{!! $Aktif ?? '' !!}`,        
+        roleinput: `{!! $roleInput ?? '' !!}`,        
+        // filters: `{!! $filters ?? '' !!}`
+      },
       colModel: [{
           label: 'ID',
           name: 'id',

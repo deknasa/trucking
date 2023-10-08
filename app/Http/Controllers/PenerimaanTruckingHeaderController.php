@@ -86,10 +86,15 @@ class PenerimaanTruckingHeaderController extends MyController
     }
     public function comboKodepenerimaan()
     {
+        $params = [
+            'limit' => 0,
+            'roleinput' => 'role'
+        ];
+
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'penerimaantrucking');
+            ->get(config('app.api_url') . 'penerimaantrucking', $params);
 
         return $response['data'];
     }
