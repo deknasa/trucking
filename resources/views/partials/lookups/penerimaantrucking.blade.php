@@ -10,6 +10,11 @@
       iconSet: 'fontAwesome',
       datatype: "json",
       idPrefix: 'penerimaanTruckingLookup',
+      postData: {
+        aktif: `{!! $Aktif ?? '' !!}`,        
+        roleinput: `{!! $roleInput ?? '' !!}`,        
+        // filters: `{!! $filters ?? '' !!}`
+      },
       colModel: [{
           label: 'ID',
           name: 'id',

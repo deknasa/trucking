@@ -72,7 +72,8 @@ class PengeluaranTruckingHeaderController extends MyController
     public function comboKodepengeluaran()
     {
         $params = [
-            'limit' => 0
+            'limit' => 0,
+            'roleinput' => 'role'
         ];
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])

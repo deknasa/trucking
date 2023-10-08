@@ -2695,6 +2695,12 @@
     $('.penerimaanstok-lookup').lookup({
       title: 'penerimaan stok Lookup',
       fileName: 'penerimaanstok',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+          roleInput: 'role',
+        }
+      },
       onSelectRow: (penerimaanstok, element) => {
         setKodePenerimaan(penerimaanstok.kodepenerimaan)
         setIsDateAvailable(penerimaanstok.id)

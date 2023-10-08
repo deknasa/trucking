@@ -33,10 +33,15 @@ class PengeluaranStokHeaderController extends MyController
     
     public function comboKodepengeluaran()
     {
+        $params = [
+            'limit' => 0,
+            'roleinput' => 'role'
+        ];
+
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'pengeluaranstok');
+            ->get(config('app.api_url') . 'pengeluaranstok', $params);
 
         return $response['data'];
     }
