@@ -143,6 +143,11 @@ $('#stokLookup').jqGrid({
           name: 'qtymax',
           align: 'left',
       },
+      {
+          label: 'total vulkanisir',
+          name: 'totalvulkanisir',
+          align: 'left',
+      },
       
       {
           label: 'Status Service Rutin',
