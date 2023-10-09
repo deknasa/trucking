@@ -346,7 +346,7 @@
                       </div>
                       <div class="col-12 col-sm-9 col-md-8">
                         <div class="input-group">
-                          <input type="number"  name="detail_vulkanisirke[]" style="" class="form-control">                    
+                          <input type="number"  name="detail_vulkanisirke[]" style="" class="form-control" readonly>                    
 
                         </div>
                       </div>
@@ -2268,6 +2268,8 @@
         element.val(stok.namastok)
         $(`#detail_stok_id`).val(stok.id)
         $(`#status_stok`).val(stok.statusban)
+        $('#crudForm').find('[name=tglklaim]').val(stok.totalvulkanisir)
+
         element.data('currentValue', element.val())
         
       },

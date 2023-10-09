@@ -90,6 +90,16 @@
                 <input type="text" name="trado" class="form-control tradoheader-lookup">
               </div>
             </div>
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
+                  gandengan <span class="text-danger">*</span></label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="hidden" id="gandenganHaeaderId" name="gandenganheader_id">
+                <input type="text" name="gandengan" class="form-control gandenganheader-lookup">
+              </div>
+            </div>
 
 
             <div class="row form-group">
@@ -1131,6 +1141,7 @@
     $('[name=statusposting]').parents('.form-group').show()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=tradoheader_id]').parents('.form-group').hide()
+    $('[name=gandenganheader_id]').parents('.form-group').hide()
     $('[name=postingpinjaman]').parents('.form-group').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
     $('[name=tgldari]').parents('.form-group').hide()
@@ -1169,6 +1180,7 @@
     $('[name=statusposting]').parents('.form-group').show()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=tradoheader_id]').parents('.form-group').hide()
+    $('[name=gandenganheader_id]').parents('.form-group').hide()
     $('[name=postingpinjaman]').parents('.form-group').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
     $('[name=tgldari]').parents('.form-group').hide()
@@ -1208,6 +1220,7 @@
     $('[name=statusposting]').parents('.form-group').show()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=tradoheader_id]').parents('.form-group').hide()
+    $('[name=gandenganheader_id]').parents('.form-group').hide()
     $('[name=postingpinjaman]').parents('.form-group').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
     $('[name=jenisorderan_id]').parents('.form-group').show()
@@ -1251,6 +1264,7 @@
     $('[name=statusposting]').parents('.form-group').show()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=tradoheader_id]').parents('.form-group').hide()
+    $('[name=gandenganheader_id]').parents('.form-group').hide()
     $('[name=postingpinjaman]').parents('.form-group').hide()
     $('.tbl_supir_id').hide()
     $('.tbl_tagihklaim').hide()
@@ -1286,6 +1300,7 @@
     enabledKas(true);
     $('[name=statusposting]').parents('.form-group').show()
     $('[name=tradoheader_id]').parents('.form-group').hide()
+    $('[name=gandenganheader_id]').parents('.form-group').hide()
     $('[name=postingpinjaman]').parents('.form-group').hide()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
@@ -1332,6 +1347,7 @@
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=postingpinjaman]').parents('.form-group').hide()
     $('[name=tradoheader_id]').parents('.form-group').hide()
+    $('[name=gandenganheader_id]').parents('.form-group').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
     $('[name=jenisorderan_id]').parents('.form-group').hide()
     $('[name=tgldari]').parents('.form-group').show()
@@ -1373,6 +1389,7 @@
     $('[name=statusposting]').parents('.form-group').show()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=tradoheader_id]').parents('.form-group').hide()
+    $('[name=gandenganheader_id]').parents('.form-group').hide()
     $('[name=postingpinjaman]').parents('.form-group').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
     $('[name=jenisorderan_id]').parents('.form-group').hide()
@@ -1396,6 +1413,7 @@
     $('.tbl_penerimaantruckingheader').hide()
     $('.tbl_pengeluaranstokheader_nobukti').hide()
     $('[name=tradoheader_id]').parents('.form-group').hide()
+    $('[name=gandenganheader_id]').parents('.form-group').hide()
     $('.tbl_stok_id').hide()
     $('.nominal').prop('readonly', false)
     $('.tbl_harga').hide()
@@ -1419,6 +1437,7 @@
     $('[name=postingpinjaman]').parents('.form-group').show()
     $('[name=supirheader_id]').parents('.form-group').show()
     $('[name=tradoheader_id]').parents('.form-group').show()
+    $('[name=gandenganheader_id]').parents('.form-group').show()
     $('[name=jenisorderan_id]').parents('.form-group').hide()
     $('[name=tgldari]').prop('disabled', true)
     $('[name=tglsampai]').prop('disabled', true)
@@ -1463,6 +1482,7 @@
     enabledKas(true);
     $('[name=statusposting]').parents('.form-group').show()
     $('[name=tradoheader_id]').parents('.form-group').hide()
+    $('[name=gandenganheader_id]').parents('.form-group').hide()
     $('[name=pengeluarantrucking_nobukti]').parents('.form-group').hide()
     $('[name=postingpinjaman]').parents('.form-group').hide()
     $('[name=keterangancoa]').parents('.form-group').hide()
@@ -1535,6 +1555,7 @@
     enabledKas(true);
     $('[name=statusposting]').parents('.form-group').show()
     $('[name=tradoheader_id]').parents('.form-group').hide()
+    $('[name=gandenganheader_id]').parents('.form-group').hide()
     $('[name=pengeluarantrucking_nobukti]').parents('.form-group').hide()
     $('[name=postingpinjaman]').parents('.form-group').hide()
     $('[name=keterangancoa]').parents('.form-group').hide()
@@ -1605,6 +1626,7 @@
     enabledKas(true);
     $('[name=statusposting]').parents('.form-group').show()
     $('[name=tradoheader_id]').parents('.form-group').hide()
+    $('[name=gandenganheader_id]').parents('.form-group').hide()
     $('[name=pengeluarantrucking_nobukti]').parents('.form-group').hide()
     $('[name=postingpinjaman]').parents('.form-group').hide()
     $('[name=keterangancoa]').parents('.form-group').hide()
@@ -1675,6 +1697,7 @@
     enabledKas(true);
     $('[name=statusposting]').parents('.form-group').show()
     $('[name=tradoheader_id]').parents('.form-group').hide()
+    $('[name=gandenganheader_id]').parents('.form-group').hide()
     $('[name=pengeluarantrucking_nobukti]').parents('.form-group').hide()
     $('[name=postingpinjaman]').parents('.form-group').hide()
     $('[name=keterangancoa]').parents('.form-group').hide()
@@ -1746,6 +1769,7 @@
     enabledKas(true);
     $('[name=statusposting]').parents('.form-group').show()
     $('[name=tradoheader_id]').parents('.form-group').hide()
+    $('[name=gandenganheader_id]').parents('.form-group').hide()
     $('[name=pengeluarantrucking_nobukti]').parents('.form-group').hide()
     $('[name=postingpinjaman]').parents('.form-group').hide()
     $('[name=keterangancoa]').parents('.form-group').hide()
@@ -1815,6 +1839,7 @@
     enabledKas(true);
     $('[name=statusposting]').parents('.form-group').show()
     $('[name=tradoheader_id]').parents('.form-group').hide()
+    $('[name=gandenganheader_id]').parents('.form-group').hide()
     $('[name=pengeluarantrucking_nobukti]').parents('.form-group').hide()
     $('[name=postingpinjaman]').parents('.form-group').hide()
     $('[name=keterangancoa]').parents('.form-group').hide()
@@ -1886,6 +1911,7 @@
     $('.tbl_stok_id').hide()
     $('.tbl_qty').hide()
     $('[name=tradoheader_id]').parents('.form-group').hide()
+    $('[name=gandenganheader_id]').parents('.form-group').hide()
     $('[name=postingpinjaman]').parents('.form-group').hide()
     $('[name=jenisorderan_id]').parents('.form-group').hide()
     $('.tbl_supir_id').show()
@@ -5534,6 +5560,32 @@
     })
   }
 
+  function lookupSelected(el) {
+    switch (el) {
+        case 'trado':
+          $('#crudForm').find(`[name="gandengan"]`).attr('disabled', true)
+          $('#crudForm').find(`[name="gandengan"]`).parents('.input-group').children().attr('disabled', true)
+          $('#crudForm').find(`[name="gandengan"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled', true)
+          $('#gandenganHaeaderId').attr('disabled', true);
+          break;
+          case 'gandengan':
+            $('#crudForm').find(`[name="trado"]`).attr('disabled', true)
+            $('#crudForm').find(`[name="trado"]`).parents('.input-group').children().attr('disabled', true)
+            $('#crudForm').find(`[name="trado"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled', true)
+            $('#tradoHaeaderId').attr('disabled', true);
+        default:
+          break;
+      }
+  }
+  function enabledKorDisable() {
+      $('#crudForm').find(`[name="trado"]`).parents('.input-group').children().attr("disabled", false);
+      $('#crudForm').find(`[name="trado"]`).parents('.input-group').children().find(`.lookup-toggler`).attr("disabled", false);
+      $('#tradoHaeaderId').attr('disabled', false);
+      $('#crudForm').find(`[name="gandengan"]`).parents('.input-group').children().attr("disabled", false);
+      $('#crudForm').find(`[name="gandengan"]`).parents('.input-group').children().find(`.lookup-toggler`).attr("disabled", false);
+      $('#gandenganHaeaderId').attr('disabled', false);
+    }
+  
   function getMaxLength(form) {
     if (!form.attr('has-maxlength')) {
       $.ajax({
@@ -5696,31 +5748,7 @@
         $(`#tradoHaeaderId`).val(trado.id)
         element.val(trado.kodetrado)
         element.data('currentValue', element.val())
-
-        // $('#tableDeposito').jqGrid("clearGridData");
-        // $("#tableDeposito")
-        //   .jqGrid("setGridParam", {
-        //     selectedRowIds: []
-        //   })
-        //   .trigger("reloadGrid");
-
-        // getDataDeposito(trado.id).then((response) => {
-
-        //   console.log('before', $("#tableDeposito").jqGrid('getGridParam', 'selectedRowIds'))
-        //   setTimeout(() => {
-
-        //     $("#tableDeposito")
-        //       .jqGrid("setGridParam", {
-        //         datatype: "local",
-        //         data: response.data,
-        //         originalData: response.data,
-        //         rowNum: response.data.length,
-        //         selectedRowIds: []
-        //       })
-        //       .trigger("reloadGrid");
-        //   }, 100);
-
-        // });
+        lookupSelected(`trado`);
 
       },
       onCancel: (element) => {
@@ -5730,6 +5758,33 @@
         $(`#tradoHaeaderId`).val('')
         element.val('')
         element.data('currentValue', element.val())
+        enabledKorDisable()
+      }
+    })
+    $('.gandenganheader-lookup').last().lookup({
+      title: 'gandengan Lookup',
+      fileName: 'gandengan',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+
+          Aktif: 'AKTIF',
+        }
+      },
+      onSelectRow: (gandengan, element) => {
+        $(`#gandenganHaeaderId`).val(gandengan.id)
+        element.val(gandengan.keterangan)
+        element.data('currentValue', element.val())
+        lookupSelected(`gandengan`);
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $(`#gandenganHaeaderId`).val('')
+        element.val('')
+        element.data('currentValue', element.val())
+        enabledKorDisable()
       }
     })
 
