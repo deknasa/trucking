@@ -355,13 +355,13 @@
             }
           })
         }
-        
+
         if (KodePengeluaranId == "KLAIM") {
-            $('#crudForm').find(`[name="nominaltambahan[]"`).each((index, element) => {
-                data.filter((row) => row.name === 'nominaltambahan[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominaltambahan[]"]`)[index])
-              
-            })
-          }
+          $('#crudForm').find(`[name="nominaltambahan[]"`).each((index, element) => {
+            data.filter((row) => row.name === 'nominaltambahan[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominaltambahan[]"]`)[index])
+
+          })
+        }
         $('#crudForm').find(`[name="nominal[]"`).each((index, element) => {
           if (element.value != "" && AutoNumeric.getAutoNumericElement(element) !== null) {
             data.filter((row) => row.name === 'nominal[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal[]"]`)[index])
@@ -447,13 +447,13 @@
       setTotalKlaim()
       setTotalTambahan()
     })
-    
+
     $(document).on('input', `#table_body [name="qty[]"]`, function(event) {
 
       harga = AutoNumeric.getNumber($(this).parents("tr").find(`[name="harga[]"]`)[0])
       console.log(harga)
       qty = AutoNumeric.getNumber($(this)[0]) ?? 0;
-      totalharga = qty*harga
+      totalharga = qty * harga
       new AutoNumeric($(this).parents("tr").find(`[name="totalharga[]"]`)[0]).set(totalharga)
     })
 
@@ -856,7 +856,7 @@
           }
           if (KodePengeluaranId == "KLAIM") {
             $('#crudForm').find(`[name="nominaltambahan[]"`).each((index, element) => {
-                data.filter((row) => row.name === 'nominaltambahan[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominaltambahan[]"]`)[index])
+              data.filter((row) => row.name === 'nominaltambahan[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominaltambahan[]"]`)[index])
             })
           }
           $('#crudForm').find(`[name="nominal[]"`).each((index, element) => {
@@ -3505,9 +3505,9 @@
               detailRow.find(`[name="pelanggan_id[]"]`).val(detail.pelanggan_id)
               detailRow.find(`[name="jenisorder_id[]"]`).val(response.data.jenisorderan)
               detailRow.find(`[name="penerimaantruckingheader_nobukti[]"]`).val(detail.penerimaantruckingheader_nobukti)
-              if (kodepengeluaran === "KLAIM"){
+              if (kodepengeluaran === "KLAIM") {
                 detailRow.find(`[name="nominal[]"]`).val(detail.nominaltagih)
-              }else{                
+              } else {
                 detailRow.find(`[name="nominal[]"]`).val(detail.nominal)
               }
               detailRow.find(`[name="nominaltagih[]"]`).val(detail.nominaltagih)
@@ -3522,7 +3522,7 @@
                 // initAutoNumeric(detailRow.find(`[name="qty[]"]`),{'maximumValue':detail.maxqty})
                 initAutoNumeric(detailRow.find(`[name="harga[]"]`))
               }
-               if (detail.penerimaanstok_nobukti) {
+              if (detail.penerimaanstok_nobukti) {
                 initAutoNumeric(detailRow.find(`[name="qty[]"]`))
                 initAutoNumeric(detailRow.find(`[name="totalharga[]"]`))
                 // initAutoNumeric(detailRow.find(`[name="qty[]"]`),{'maximumValue':detail.maxqty})
@@ -3555,7 +3555,7 @@
               }
 
               setTotal();
-              if (kodepengeluaran === "KLAIM"){
+              if (kodepengeluaran === "KLAIM") {
                 setTotalKlaim()
                 setTotalTambahan()
               }
@@ -3689,11 +3689,13 @@
                   element.val(stok.stok)
                   element.data('currentValue', element.val())
                   console.log(stok.qty);
-                  detailRow.find(`[name="qty[]"]`).val(0);
+                  detailRow.find(`[name="qty[]"]`).val(stok.qty);
                   detailRow.find(`[name="harga[]"]`).val(stok.harga);
                   // new AutoNumeric(detailRow.find(`[name="qty[]"]`),{'maximumValue':stok.qty})
                   initAutoNumeric(detailRow.find(`[name="harga[]"]`))
                   // initAutoNumeric(detailRow.find(`[name="qty[]"]`),{'maximumValue':detail.maxqty})
+                  totalharga = parseFloat(stok.qty.replace(/,/g, '')) * parseFloat(stok.harga.replace(/,/g, ''));
+                  new AutoNumeric(element.parents("tr").find(`[name="totalharga[]"]`)[0]).set(totalharga)
 
 
 
@@ -4179,6 +4181,8 @@
         initAutoNumeric($(`#qty_${row}`), {
           'maximumValue': stok.qty
         })
+        totalharga = parseFloat(stok.qty.replace(/,/g, '')) * parseFloat(stok.harga.replace(/,/g, ''));
+        new AutoNumeric(element.parents("tr").find(`[name="totalharga[]"]`)[0]).set(totalharga)
         new AutoNumeric($(`#harga_${row}`)[0]).set(stok.harga)
       },
       onCancel: (element) => {
