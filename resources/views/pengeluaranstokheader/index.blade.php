@@ -179,7 +179,24 @@
             name: 'pengeluaranstok',
             align: 'left'
           },
-          
+          {
+            label: 'Pengeluaran trucking no BUKTI',
+            width: 230,
+            name: 'pengeluarantrucking_nobukti',
+            align: 'left',
+            formatter: (value, options, rowData) => {
+              if ((value == null) ||( value == '')) {
+                return '';
+              }
+              let tgldari = rowData.tgldariheaderpengeluarantruckingheader
+              let tglsampai = rowData.tglsampaiheaderpengeluarantruckingheader
+              let url = "{{route('pengeluarantruckingheader.index')}}"
+              let formattedValue = $(`
+              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
+             `)
+             return formattedValue[0].outerHTML
+           },
+          },
           {
             label: 'SERVICE IN NO BUKTI',
             width: 230,

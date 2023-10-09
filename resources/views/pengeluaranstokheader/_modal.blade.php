@@ -258,7 +258,7 @@
             </div>
             <div class="row mt-5">
               <div class="col-md-12">
-                <div class="card" style="max-height:500px; overflow-y: scroll;">
+                <div  id="detail-table" class="card" style="max-height:500px; overflow-y: scroll;">
                   <div class="card-body">
                     <table class="table table-bordered table-bindkeys" style="width: 100%; min-width: 500px;">
                       <thead>
@@ -290,6 +290,119 @@
                       </tfoot>
                     </table>
                   </div>
+                </div>
+                <div id="detail-afkir" class="row">
+                  <div class="form-group col-md-6">
+                    <div class="row">
+                      <div class="col-12 col-sm-3 col-md-4">
+                        <label class="col-form-label">Stok  <span class="text-danger">*</span> </label>
+                      </div>
+                      <div class="col-12 col-sm-9 col-md-8">
+                        <input type="text" name="detail_stok[]" class="form-control detail_stok_1 stok-lookup">
+                        <input type="text" class="detailstokId" id="detail_stok_id" name="detail_stok_id[]" readonly hidden>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group col-md-6">
+                    <div class="row">
+                      <div class="col-12 col-sm-3 col-md-4">
+                        <label class="col-form-label">status </label>
+                      </div>
+                      <div class="col-12 col-sm-9 col-md-8">
+                        <input type="text" name="status[]" id="status_stok" class="form-control" readonly>
+                        
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group col-md-6">
+                    <div class="row">
+                      <div class="col-12 col-sm-3 col-md-4">
+                        <label class="col-form-label">Pengeluaran Trucking No bukti  <span class="text-danger">*</span> </label>
+                      </div>
+                      <div class="col-12 col-sm-9 col-md-8">
+                        <input type="text" name="pengeluarantrucking_nobukti" class="form-control detail_stok_1 pengeluarantrucking-lookup">
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group col-md-6">
+                    <div class="row">
+                      <div class="col-12 col-sm-3 col-md-4">
+                        <label class="col-form-label">STATUS BAN  <span class="text-danger">*</span> </label>
+                      </div>
+                      <div class="col-12 col-sm-9 col-md-8">
+                        <select name="statusban[]" id="statusban" class="form-select select2bs4" style="width: 100%;">
+                          <option value="">-- PILIH STATUS BAN --</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group col-md-6">
+                    <div class="row">
+                      <div class="col-12 col-sm-3 col-md-4">
+                        <label class="col-form-label">vulkanisir Ke <span class="text-danger">*</span> </label>
+                      </div>
+                      <div class="col-12 col-sm-9 col-md-8">
+                        <div class="input-group">
+                          <input type="number"  name="detail_vulkanisirke[]" style="" class="form-control">                    
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group col-md-6">
+                    <div class="row">
+                      <div class="col-12 col-sm-3 col-md-4">
+                        <label class="col-form-label">tgl klaim </label>
+                      </div>
+                      <div class="col-12 col-sm-9 col-md-8">
+                        <div class="input-group">
+                          <input type="text" name="tglklaim" class="form-control " readonly>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group col-md-6">
+                    <div class="row">
+                      <div class="col-12 col-sm-3 col-md-4">
+                        <label class="col-form-label">no pinjaman </label>
+                      </div>
+                      <div class="col-12 col-sm-9 col-md-8">
+                        <input type="text" name="nobukti_pjt" class="form-control" readonly>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="form-group col-md-6">
+                    <div class="row">
+                      <div class="col-12 col-sm-3 col-md-4">
+                        <label class="col-form-label">jlh Hari </label>
+                      </div>
+                      <div class="col-12 col-sm-9 col-md-8">
+                        <input type="text" name="jlhhari" class="form-control" readonly>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="form-group col-md-12">
+                    <div class="row">
+                      <div class="col-12 col-sm-3 col-md-2">
+                        <label class="col-form-label">keterangan</label>
+                      </div>
+                      <div class="col-12 col-sm-9 col-md-10">
+                        <input type="text"  name="detail_keterangan[]" style="" class="form-control">                    
+                        
+                      </div>
+                    </div>
+                  </div>
+                  <input type="text"  name="qty_afkir[]" id="qty_afkir" hidden>                    
+
+                  
+                  
                 </div>
               </div>
             </div>
@@ -566,70 +679,17 @@
       case listKodePengeluaran[5]: //'KORV':
         tampilanKORV()
         break;
+      case listKodePengeluaran[6]: //'AFKIR':
+        tampilanAFKIR()
+        break;
       default:
         tampilanInit()
         break;
     }
   }
 
-  // function cekKodePengeluaran(kode) {
-  //   $.ajax({
-  //     url: `${apiUrl}parameter`,
-  //     method: 'GET',
-  //     dataType: 'JSON',
-  //     headers: {
-  //       Authorization: `Bearer ${accessToken}`
-  //     },
-  //     data: {
-  //       filters: JSON.stringify({
-  //         "groupOp": "AND",
-  //         "rules": [{
-  //             "field": "grp",
-  //             "op": "cn",
-  //             "data": "PENGELUARAN STOK"
-  //           },
-  //           {
-  //             "field": "id",
-  //             "op": "cn",
-  //             "data": kode
-  //           }
-  //         ]
-  //       })
-  //     },
-  //     success: response => {
-  //       if (kode) {
-  //         if (response.data[0].subgrp == "SPK STOK BUKTI") {
-  //           tampilanspk();
-  //           enabledKorDisable()
-  //           kodepengeluaranstok = "SPK";
-  //         } else if(response.data[0].subgrp == "RETUR BELI BUKTI") {
-  //           tampilanrbt();
-  //           enabledKorDisable()
-  //           kodepengeluaranstok = "RBT";
-  //         } else if(response.data[0].subgrp == "KOREKSI STOK MINUS BUKTI") {
-  //           tampilankor();
-  //           kodepengeluaranstok = "KOR";
-  //         }
-  //       } else{
-  //         console.log(kodepengeluaranstok);
-  //         tampilanall();
-  //       }
-  //     }
-  //   })
-
-  // }
 
   function tampilanspk() {
-    // $('[name=nobukti]').parents('.form-group').show()
-    // $('[name=tglbukti]').parents('.form-group').show()
-    // $('[name=pengeluaranstok]').parents('.form-group').show()
-    // $('[name=kerusakan]').parents('.form-group').show()
-    // $('[name=supir]').parents('.form-group').show()
-    // $('[name=trado]').parents('.form-group').show()
-    // $('[name=gandengan]').parents('.form-group').show()
-    // $('[name=gudang]').parents('.form-group').show()
-
-
     $('[name=statuspotongretur]').parents('.form-group').hide()
     $('[name=penerimaanstok_nobukti]').parents('.form-group').show()
     $('[name=pengeluaranstok_nobukti]').parents('.form-group').hide()
@@ -644,19 +704,14 @@
     $('.tbl_total').hide();
     $('.colspan').attr('colspan', 5);
     $('.sumrow').hide();
+    $("#detail-table").show();
+    $("#detail-afkir").hide();
+    $("#detail-afkir :input").attr("disabled", true);
+    
   }
 
 
   function tampilanrbt() {
-    // $('[name=nobukti]').parents('.form-group').show()
-    // $('[name=tglbukti]').parents('.form-group').show()
-    // $('[name=pengeluaranstok]').parents('.form-group').show()
-    // $('[name=supplier]').parents('.form-group').show()
-    // $('[name=penerimaanstok_nobukti]').parents('.form-group').show()
-    // $('[name=trado]').parents('.form-group').show()
-    // $('[name=gandengan]').parents('.form-group').show()
-    // $('[name=gudang]').parents('.form-group').show()
-    // $('[name=statuspotongretur]').parents('.form-group').show()
 
     $('[name=pengeluaranstok_nobukti]').parents('.form-group').hide()
     $('[name=servicein_nobukti]').parents('.form-group').hide()
@@ -672,17 +727,14 @@
     $('.tbl_statusoli').hide();
     $('.tbl_persentase').hide();
     $('.colspan').attr('colspan', 4);
+    $("#detail-table").show();
+    $("#detail-afkir").hide();
+    $("#detail-afkir :input").attr("disabled", true);
   }
 
   function tampilanPJA() {
-    // $('[name=nobukti]').parents('.form-group').show()
-    // $('[name=tglbukti]').parents('.form-group').show()
-    // $('[name=pengeluaranstok]').parents('.form-group').show()
-    // $('[name=supplier]').parents('.form-group').show()
+  
     $('[name=penerimaanstok_nobukti]').parents('.form-group').hide()
-    // $('[name=trado]').parents('.form-group').show()
-    // $('[name=gandengan]').parents('.form-group').show()
-    // $('[name=gudang]').parents('.form-group').show()
     $('[name=statuspotongretur]').parents('.form-group').hide()
 
     $('[name=pengeluaranstok_nobukti]').parents('.form-group').hide()
@@ -702,19 +754,14 @@
     $('.potongkas').show() //potong kas
     $('#titlePotongkas').html('POSTING Penerimaan')
     $('[name=tglkasmasuk]').parents('.form-group').show()
+    $("#detail-table").show();
+    $("#detail-afkir").hide();
+    $("#detail-afkir :input").attr("disabled", true);
   }
 
   function tampilanGST() {
-    // $('[name=nobukti]').parents('.form-group').show()
-    // $('[name=tglbukti]').parents('.form-group').show()
-    // $('[name=pengeluaranstok]').parents('.form-group').show()
+   
     $('[name=kerusakan]').parents('.form-group').hide()
-    // $('[name=supir]').parents('.form-group').show()
-    // $('[name=trado]').parents('.form-group').show()
-    // $('[name=gandengan]').parents('.form-group').show()
-    // $('[name=gudang]').parents('.form-group').show()
-
-
     $('[name=statuspotongretur]').parents('.form-group').hide()
     $('[name=penerimaanstok_nobukti]').parents('.form-group').hide()
     $('[name=pengeluaranstok_nobukti]').parents('.form-group').hide()
@@ -729,16 +776,12 @@
     $('.tbl_statusoli').hide();
     $('.colspan').attr('colspan', 4);
     $('.sumrow').hide();
+    $("#detail-table").show();
+    $("#detail-afkir").hide();
   }
 
 
   function tampilankor() {
-    // $('[name=nobukti]').parents('.form-group').show()
-    // $('[name=tglbukti]').parents('.form-group').show()
-    // $('[name=pengeluaranstok]').parents('.form-group').show()
-    // $('[name=trado]').parents('.form-group').show()
-    // $('[name=gandengan]').parents('.form-group').show()
-    // $('[name=gudang]').parents('.form-group').show()
     $('[name=supplier]').parents('.form-group').hide()
     $('[name=servicein_nobukti]').parents('.form-group').hide()
     $('[name=penerimaanstok_nobukti]').parents('.form-group').hide()
@@ -754,12 +797,12 @@
     $('.tbl_statusoli').hide();
     $('.colspan').attr('colspan', 4);
     $('.sumrow').hide();
+    $("#detail-table").show();
+    $("#detail-afkir").hide();
+    $("#detail-afkir :input").attr("disabled", true);
   }
 
   function tampilanKORV() {
-    // $('[name=nobukti]').parents('.form-group').show()
-    // $('[name=tglbukti]').parents('.form-group').show()
-    // $('[name=pengeluaranstok]').parents('.form-group').show()
     $('[name=trado]').parents('.form-group').hide()
     $('[name=gandengan]').parents('.form-group').hide()
     $('[name=gudang]').parents('.form-group').hide()
@@ -778,6 +821,29 @@
     $('.tbl_total').hide();
     $('.colspan').attr('colspan', 4);
     $('.sumrow').hide();
+    $("#detail-table").show();
+    $("#detail-afkir").hide();
+  }
+
+  function tampilanAFKIR() {
+
+    $('[name=nobukti]').parents('.form-group').show()
+    $('[name=tglbukti]').parents('.form-group').show()
+    $('[name=pengeluaranstok]').parents('.form-group').show()
+    $('[name=supplier]').parents('.form-group').hide()
+    $('[name=servicein_nobukti]').parents('.form-group').hide()
+    $('[name=penerimaanstok_nobukti]').parents('.form-group').hide()
+    $('[name=pengeluaranstok_nobukti]').parents('.form-group').hide()
+    $('[name=kerusakan]').parents('.form-group').hide()
+    $('[name=supir]').parents('.form-group').hide()
+    $('[name=trado]').parents('.form-group').hide()
+    $('[name=gandengan]').parents('.form-group').hide()
+    $('[name=gudang]').parents('.form-group').hide()
+    $('[name=statuspotongretur]').parents('.form-group').hide()
+    $("#detail-table").hide();
+    $('.rmv').parents('tr').remove();
+    $("#detail-afkir").show();
+    $("#detail-afkir :input").attr("disabled", false);
   }
 
   function tampilanall() {
@@ -794,7 +860,9 @@
     $('[name=gandengan]').parents('.form-group').show()
     $('[name=gudang]').parents('.form-group').show()
     $('[name=statuspotongretur]').parents('.form-group').show()
-
+    $("#detail-table").show();
+    $("#detail-afkir").hide();
+    $("#detail-afkir :input").attr("disabled", true);
     tampilanAllRow();
     // $('.data_tbl').show();
   }
@@ -813,7 +881,9 @@
     $('[name=gandengan]').parents('.form-group').hide()
     $('[name=gudang]').parents('.form-group').hide()
     $('[name=statuspotongretur]').parents('.form-group').hide()
-
+    $("#detail-table").show();
+    $("#detail-afkir").hide();
+    $("#detail-afkir :input").attr("disabled", true);
     tampilanAllRow();
     // $('.data_tbl').show();
   }
@@ -846,6 +916,7 @@
       }
     }
     initSelect2($('#statuspotongretur'), true)
+    initSelect2($(`#statusban`), true)
     if (form.data('action') !== 'add') {
       let pengeluaranstok = $('#crudForm').find(`[name="pengeluaranstok"]`).parents('.input-group')
       pengeluaranstok.children().attr('readonly', true)
@@ -905,12 +976,14 @@
     Promise
       .all([
         setStatusPotongReturOptions(form),
-        setStatusOliOptions()
+        setStatusOliOptions(),
+        setStatusBanOptions(form)
       ])
       .then(() => {
         $('#crudModal').modal('show')
         initLookup()
-        addRow()
+        // addRow()
+        initRow()
         sumary()
       })
       .catch((error) => {
@@ -942,7 +1015,8 @@
     Promise
       .all([
         setStatusPotongReturOptions(form),
-        setStatusOliOptions()
+        setStatusOliOptions(),
+        setStatusBanOptions(form)
       ])
       .then(() => {
         showPengeluaranstokHeader(form, pengeluaranStokHeaderId)
@@ -991,7 +1065,8 @@
     Promise
       .all([
         setStatusPotongReturOptions(form),
-        setStatusOliOptions()
+        setStatusOliOptions(),
+        setStatusBanOptions(form)
       ])
       .then(() => {
         showPengeluaranstokHeader(form, pengeluaranStokHeaderId)
@@ -1055,7 +1130,8 @@
     Promise
       .all([
         setStatusPotongReturOptions(form),
-        setStatusOliOptions()
+        setStatusOliOptions(),
+        setStatusBanOptions(form)
       ])
       .then(() => {
         showPengeluaranstokHeader(form, pengeluaranStokHeaderId)
@@ -1200,6 +1276,46 @@
     })
   }
 
+
+  const setStatusBanOptions = function(relatedForm) {
+    return new Promise((resolve, reject) => {
+      relatedForm.find('[name=statusban]').empty()
+      relatedForm.find('[name=statusban]').append(
+        new Option('-- PILIH STATUS BAN --', '', false, true)
+      ).trigger('change')
+
+      $.ajax({
+        url: `${apiUrl}parameter`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          filters: JSON.stringify({
+            "groupOp": "AND",
+            "rules": [{
+              "field": "grp",
+              "op": "cn",
+              "data": "STATUS KONDISI BAN"
+            }]
+          })
+        },
+        success: response => {
+          response.data.forEach(statusReuse => {
+            let option = new Option(statusReuse.text, statusReuse.id)
+
+            relatedForm.find('#statusban').append(option).trigger('change')
+          });
+
+          resolve()
+        },
+        error: error => {
+          reject(error)
+        }
+      })
+    })
+  }
   index = 0;
 
   function addRow() {
@@ -1333,7 +1449,14 @@
     sumary()
     setRowNumbers()
   }
-
+  function initRow() {
+    let countRow = $('.rmv').parents('tr').length
+    if (countRow <= 1) {
+      addRow()
+    }
+    sumary()
+    setRowNumbers()
+  }
   function resetRow() {
     $('.trow').remove()
   }
@@ -1591,73 +1714,87 @@
           if (listKodePengeluaran[1] == response.data.pengeluaranstok) {
             $.each(response.detail, (id, detail) => {
 
-          let detailRow = $(`
-            <tr class="trow">
-                  <td>
-                    <div class="baris">1</div>
-                  </td>
-                  
-                  <td>
-                    <input type="text"  name="detail_stok[]" id="detail_stok_${id}" class="form-control stok-lookup ">
-                    <input type="text" id="detailstokId_${id}" readonly hidden class="detailstokId" name="detail_stok_id[]">
-                  </td>
-                  <td>
-                    <input type="text"  name="detail_keterangan[]" style="" class="form-control">                    
-                  </td>
-                  <td class="data_tbl tbl_qty" >
-                    <input type="text"  name="detail_qty[]" id="detail_qty${id}" onkeyup="cal(${id})" style="text-align:right" class="form-control autonumeric number${id}">                    
-                  </td>
-                  <td class="data_tbl tbl_vulkanisirke"  style="display: none;" >
-                    <input type="text"  name="detail_vulkanisirke[]" style="" class="form-control">                    
-                  </td> 
-                  
-                  <td class="data_tbl tbl_harga">
-                    <input type="text"  name="detail_harga[]" id="detail_harga${id}" readonly style="text-align:right" class="autonumeric number${id} form-control">                    
-                  </td>  
-                  
-                  <td class="data_tbl tbl_persentase" style="display: none;">
-                    <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${id}" onkeyup="calculate(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
-                  </td>  
-                  <td class="data_tbl tbl_total">
-                    <input type="text"  name="totalItem[]" id="totalItem${id}" readonly onkeyup="calculate(${id})" style="text-align:right" class="form-control totalItem autonumeric number${id}">                    
-                  </td>  
-                  <td>
-                    <div class='btn btn-danger btn-sm rmv'>Hapus</div>
-                  </td>
-              </tr>
-          `)
-          detailRow.find(`[name="detail_nobukti[]"]`).val(detail.nobukti)
-          detailRow.find(`[name="detail_stok[]"]`).val(detail.stok)
-          detailRow.find(`[name="detail_stok_id[]"]`).val(detail.stok_id)
-          detailRow.find(`[name="detail_qty[]"]`).val(detail.qty)
-          detailRow.find(`[name="detail_harga[]"]`).val(detail.harga)
-          detailRow.find(`[name="detail_persentasediscount[]"]`).val(detail.persentasediscount)
-          // detailRow.find(`[name="totalItem[]"]`).val(detail.total)
-          detailRow.find(`[name="detail_keterangan[]"]`).val(detail.keterangan)
-          $('table #table_body').append(detailRow)
-          // initAutoNumeric($(`.number${id}`))
-          initAutoNumeric($(`#detail_qty${id}`),{'maximumValue':detail.qty})
-          initAutoNumeric($(`#detail_harga${id}`))
-          initAutoNumeric($(`#detail_persentasediscount${id}`))
-          initAutoNumeric($(`#totalItem${id}`))
-          cal(id)
-          setRowNumbers()
-          // $(`#detail_stok_${id}`).lookup({
-          //   title: 'stok Lookup',
-          //   fileName: 'stok',
-          //   onSelectRow: (stok, element) => {
-          //     element.val(stok.namastok)
-          //     parent = element.closest('td');
-          //     parent.children('.detailstokId').val(stok.id)
-          //     element.data('currentValue', element.val())
-          //   },
-          //   onCancel: (element) => {
-          //     element.val(element.data('currentValue'))
-          //   }
-          // })
-          id++;
-        })
+              let detailRow = $(`
+                <tr class="trow">
+                      <td>
+                        <div class="baris">1</div>
+                      </td>
+                      
+                      <td>
+                        <input type="text"  name="detail_stok[]" id="detail_stok_${id}" class="form-control stok-lookup ">
+                        <input type="text" id="detailstokId_${id}" readonly hidden class="detailstokId" name="detail_stok_id[]">
+                      </td>
+                      <td>
+                        <input type="text"  name="detail_keterangan[]" style="" class="form-control">                    
+                      </td>
+                      <td class="data_tbl tbl_qty" >
+                        <input type="text"  name="detail_qty[]" id="detail_qty${id}" onkeyup="cal(${id})" style="text-align:right" class="form-control autonumeric number${id}">                    
+                      </td>
+                      <td class="data_tbl tbl_vulkanisirke"  style="display: none;" >
+                        <input type="text"  name="detail_vulkanisirke[]" style="" class="form-control">                    
+                      </td> 
+                      
+                      <td class="data_tbl tbl_harga">
+                        <input type="text"  name="detail_harga[]" id="detail_harga${id}" readonly style="text-align:right" class="autonumeric number${id} form-control">                    
+                      </td>  
+                      
+                      <td class="data_tbl tbl_persentase" style="display: none;">
+                        <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${id}" onkeyup="calculate(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
+                      </td>  
+                      <td class="data_tbl tbl_total">
+                        <input type="text"  name="totalItem[]" id="totalItem${id}" readonly onkeyup="calculate(${id})" style="text-align:right" class="form-control totalItem autonumeric number${id}">                    
+                      </td>  
+                      <td>
+                        <div class='btn btn-danger btn-sm rmv'>Hapus</div>
+                      </td>
+                  </tr>
+              `)
+              detailRow.find(`[name="detail_nobukti[]"]`).val(detail.nobukti)
+              detailRow.find(`[name="detail_stok[]"]`).val(detail.stok)
+              detailRow.find(`[name="detail_stok_id[]"]`).val(detail.stok_id)
+              detailRow.find(`[name="detail_qty[]"]`).val(detail.qty)
+              detailRow.find(`[name="detail_harga[]"]`).val(detail.harga)
+              detailRow.find(`[name="detail_persentasediscount[]"]`).val(detail.persentasediscount)
+              // detailRow.find(`[name="totalItem[]"]`).val(detail.total)
+              detailRow.find(`[name="detail_keterangan[]"]`).val(detail.keterangan)
+              $('table #table_body').append(detailRow)
+              // initAutoNumeric($(`.number${id}`))
+              initAutoNumeric($(`#detail_qty${id}`),{'maximumValue':detail.qty})
+              initAutoNumeric($(`#detail_harga${id}`))
+              initAutoNumeric($(`#detail_persentasediscount${id}`))
+              initAutoNumeric($(`#totalItem${id}`))
+              cal(id)
+              setRowNumbers()
+              // $(`#detail_stok_${id}`).lookup({
+              //   title: 'stok Lookup',
+              //   fileName: 'stok',
+              //   onSelectRow: (stok, element) => {
+              //     element.val(stok.namastok)
+              //     parent = element.closest('td');
+              //     parent.children('.detailstokId').val(stok.id)
+              //     element.data('currentValue', element.val())
+              //   },
+              //   onCancel: (element) => {
+              //     element.val(element.data('currentValue'))
+              //   }
+              // })
+              id++;
+            })
             
+          }else if(listKodePengeluaran[6] == response.data.pengeluaranstok){
+            
+            form.find(`[name="detail_stok[]"]`).val(response.detail[0].stok)
+            form.find(`[name="detail_stok_id[]"]`).val(response.detail[0].stok_id)
+            form.find(`[name="pengeluarantrucking_nobukti"]`).val(response.data.pengeluarantrucking_nobukti)
+            form.find(`[name="statusban[]"]`).val(response.detail[0].statusban).trigger('change')
+            form.find(`[name="detail_vulkanisirke[]"]`).val(response.detail[0].vulkanisirke)
+            // form.find(`[name="tglklaim"]`).val()
+            // form.find(`[name="nobukti_pjt"]`).val()
+            // form.find(`[name="jlhhari"]`).val()
+            form.find(`[name="detail_keterangan[]"]`).val(response.detail[0].keterangan)
+            $(`#qty_afkir`).val(response.detail[0].qty)
+            console.log(response.detail[0].keterangan);
+
           }else{
             $.each(response.detail, (id, detail) => {
               let detailRow = $(`
@@ -1902,6 +2039,15 @@
     })
   }
 
+  function processJlhHari(pengeluarantrucking) {
+    let form = $('#crudForm')
+    console.log(pengeluarantrucking);
+    console.log(pengeluarantrucking.pengeluarantrucking_nobukti);
+    form.find('[name=tglklaim]').val(pengeluarantrucking.tglbukti)
+    form.find('[name=nobukti_pjt]').val(pengeluarantrucking.pengeluarantrucking_nobukti)
+    $('#qty_afkir').val(pengeluarantrucking.qty)
+    
+  }
   function cekValidasi(Id, Aksi) {
     $.ajax({
       url: `{{ config('app.api_url') }}pengeluaranstokheader/${Id}/cekvalidasi`,
@@ -2107,6 +2253,61 @@
         element.val('')
         element.data('currentValue', element.val())
         enabledKorDisable()
+      }
+    })
+
+    $(`.stok-lookup`).lookup({
+      title: 'stok Lookup',
+      fileName: 'stok',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+        }
+      },
+      onSelectRow: (stok, element) => {
+        element.val(stok.namastok)
+        $(`#detail_stok_id`).val(stok.id)
+        $(`#status_stok`).val(stok.statusban)
+        element.data('currentValue', element.val())
+        
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
+        $(`#detail_stok_id`).val('')
+        
+      }
+    })
+
+
+    $(`.pengeluarantrucking-lookup`).lookup({
+      title: 'pengeluaran trucking Lookup',
+      fileName: 'pengeluarantruckingheader',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+          pengeluarantruckingheader_id: 7, //klaim
+          stok_id: $(`#detail_stok_id`).val(),
+          pengeluaranstok_id: $(`#pengeluaranstokId`).val(),
+          Aktif: 'AKTIF',
+        }
+      },
+      onSelectRow: (pengeluarantrucking, element) => {
+        element.val(pengeluarantrucking.nobukti)
+        element.data('currentValue', element.val())
+
+        processJlhHari(pengeluarantrucking)
+        
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
       }
     })
 

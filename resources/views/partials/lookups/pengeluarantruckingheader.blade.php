@@ -17,6 +17,9 @@
       styleUI: 'Bootstrap4',
       iconSet: 'fontAwesome',
       postData: {
+        pengeluaranheader_id: `{!! $pengeluarantruckingheader_id ?? '' !!}`,
+        stok_id: `{!! $stok_id ?? '' !!}`,
+        pengeluaranstok_id: `{!! $pengeluaranstok_id ?? '' !!}`,
         tgldari: $('#tgldariheaderlookup').val(),
         tglsampai: $('#tglsampaiheaderlookup').val(),
       },
@@ -211,6 +214,17 @@
           label: 'NO BUKTI pengeluaran',
             width: 210,
           name: 'pengeluaran_nobukti',
+          align: 'left'
+        },
+        {
+          label: 'pengeluaran trucking Nobukti',
+          width: 210,
+          name: 'pengeluarantrucking_nobukti',
+          align: 'left'
+        },
+        {
+          label: 'qty',
+          name: 'qty',
           align: 'left'
         },
         {

@@ -108,6 +108,11 @@ $('#stokLookup').jqGrid({
         align: 'left'
       },
       {
+        label: 'statusban',
+        name: 'statusban',
+        align: 'left'
+      },
+      {
         label: 'jenistrado',
         name: 'jenistrado',
         align: 'left'
