@@ -54,7 +54,14 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="password" name="password" class="form-control">
+                <div class="input-group">
+                  <input type="password" name="password" class="form-control password">
+                  <div class="input-group-append">
+                    <div class="input-group-text focusPass">
+                      <span class="fas fa-eye toggle-password" toggle=".password"></span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
             <div class="row form-group">
@@ -68,7 +75,7 @@
                   <option value="">-- PILIH CABANG --</option>
                 </select>
               </div>
-            </div> 
+            </div>
             {{-- <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
@@ -91,7 +98,7 @@
                 <input type="text" name="dashboard" class="form-control">
               </div>
             </div>
-          
+
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
@@ -247,8 +254,8 @@
     activeGrid = null
 
     getMaxLength(form)
-       initSelect2(form.find('.select2bs4'), true)
-        initDatepicker()
+    initSelect2(form.find('.select2bs4'), true)
+    initDatepicker()
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
@@ -293,7 +300,7 @@
       })
   }
 
-  function editUser(userId) { 
+  function editUser(userId) {
     let form = $('#crudForm')
 
     $('.modal-loader').removeClass('d-none')
@@ -540,7 +547,7 @@
       })
     })
   }
-  
+
 
   function showUser(form, userId) {
     return new Promise((resolve, reject) => {

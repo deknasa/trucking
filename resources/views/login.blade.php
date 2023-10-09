@@ -7,8 +7,7 @@
     <title>Trucking | Log in</title>
 
     <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="{{ asset('libraries/adminlte/plugins/fontawesome-free/css/all.min.css') }}">
     <!-- icheck bootstrap -->
@@ -41,8 +40,7 @@
 
     <div class="login-box">
         <div class="login-logo">
-            <img class="mx-auto d-block" src="{{ asset('libraries/tas-lib/img/logo-min.png') }}" width="150"
-                height="150">
+            <img class="mx-auto d-block" src="{{ asset('libraries/tas-lib/img/logo-min.png') }}" width="150" height="150">
             <h5 style="font-family: 'Open Sans Condensed';">PT. TRANSPORINDO AGUNG SEJAHTERA</h5>
             <p style="font-family: 'Open Sans Condensed'; font-size:1rem" class="text-success">TRUCKING DEV</p>
         </div>
@@ -50,39 +48,39 @@
             <div class="card-body login-card-body">
                 <p class="login-box-msg">Login</p>
                 @error('user_not_found')
-                    <div class="alert alert-danger">
-                        {{ $message }}
-                    </div>
+                <div class="alert alert-danger">
+                    {{ $message }}
+                </div>
                 @enderror
                 <form action="{{ route('login.process') }}" method="POST">
                     @csrf
                     <div class="input-group mb-3">
-                        <input type="text" name="user" id="user"
-                            class="form-control @error('user') is-invalid @enderror" placeholder="User ID" autofocus>
+                        <input type="text" name="user" id="user" class="form-control @error('user') is-invalid @enderror" placeholder="User ID" autofocus>
                         <div class="input-group-append">
-                            <div class="input-group-text">
-                                <span class="fas fa-user"></span>
+                            <div class="input-group-text" style="background-color:#E0ECFF; color:white">
+                                <span class="fas fa-user" style="color:#0e2d5f;"></span>
                             </div>
                         </div>
                         @error('user')
-                            <div class="invalid-feedback">
-                                {{ $message }}
-                            </div>
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
                         @enderror
                     </div>
                     <div class="input-group mb-3">
-                        <input type="password" name="password" 
-                            id="password" class="form-control @error('password') is-invalid @enderror"
-                            placeholder="Password">
+                        <input type="password" name="password" id="password" class="form-control @error('password') is-invalid @enderror" placeholder="Password" style="text-transform: none;">
                         <div class="input-group-append">
-                            <div class="input-group-text">
-                                <span class="fas fa-lock"></span>
+                            <div class="input-group-text focusPass" style="border-right: none;">
+                                <span class="fas fa-eye toggle-password" toggle="#password"></span>
+                            </div>
+                            <div class="input-group-text" style="background-color:#E0ECFF; color:white">
+                                <span class="fas fa-lock" style="color:#0e2d5f;"></span>
                             </div>
                         </div>
                         @error('password')
-                            <div class="invalid-feedback">
-                                {{ $message }}
-                            </div>
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
                         @enderror
                     </div>
                     <input type="text" readonly hidden name="latitude" id="latitude">
@@ -115,31 +113,50 @@
 
     <script>
         $(document).ready(function() {
+
+            $("input").attr("autocomplete", "off");
+            $(document).on('focus', "#password", function(event) {
+                $(".focusPass").css("background-color", "#ffffee");
+            });
+            $(document).on('blur', "#password", function(event) {
+                $(".focusPass").css("background-color", "#ffffff");
+            });
+            
+            $(document).on('click', ".toggle-password", function(event) {
+                $(this).toggleClass("fa-eye fa-eye-slash");
+                var input = $($(this).attr("toggle"));
+                if (input.attr("type") == "password") {
+                    input.attr("type", "text");
+                } else {
+                    input.attr("type", "password");
+                }
+            });
             var x = document.getElementById("demo");
 
             getLocation()
             fetch('https://api.ipify.org?format=json')
-            .then(response => response.json())
-            .then(data => $('#clientippublic').val(data.ip));
+                .then(response => response.json())
+                .then(data => $('#clientippublic').val(data.ip));
+
             function getLocation() {
                 if (navigator.geolocation) {
                     navigator.geolocation.getCurrentPosition(showPosition);
-                } else { 
+                } else {
                     x.innerHTML = "Geolocation is not supported by this browser.";
                 }
             }
-            
+
             function showPosition(position) {
                 $('#latitude').val(position.coords.latitude)
                 $('#longitude').val(position.coords.longitude)
             }
-                
+
             $(document).on('click', '#resetPassword', function() {
                 let form = $('#user')
                 let user = $('#user').val();
 
 
-               
+
                 checkValidation(user)
                     .then((response) => {
                         $('#processingLoader').removeClass('d-none')

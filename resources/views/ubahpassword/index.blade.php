@@ -20,7 +20,12 @@
                                     <label class="col-sm-4 col-form-label">PASSWORD BARU <span class="text-danger">*</span></label>
                                     <div class="col-sm-12">
                                         <div class="input-group">
-                                            <input type="password" name="password" class="form-control">
+                                            <input type="password" name="password" class="form-control password">
+                                            <div class="input-group-append">
+                                                <div class="input-group-text focusPass">
+                                                    <span class="fas fa-eye toggle-password" toggle=".password"></span>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
