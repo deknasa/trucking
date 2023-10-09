@@ -16,11 +16,32 @@ $(document).ready(function () {
 	/* Remove autocomplete */
 	$("input").attr("autocomplete", "off");
 	$("input, textarea").attr("spellcheck", "false");
+	$("input[type=password]").css({"text-transform": "none", "border-right": "none"});	
+	$(".focusPass").css("background-color", "#ffffff");
+	
+	$('.delete-row').removeClass('btn-sm')
 
+	$(document).on('focus', ".password", function(event) {
+		$(".focusPass").css({"background-color":"#ffffee", "border-color":"#80bdff"});		
+	});
+	
+	$(document).on('blur', ".password", function(event) {
+		$(".focusPass").css({"background-color":"#fff", "border-color":"#ced4da"});
+	});
 	$(document).on("click", "#sidebar-overlay", () => {
 		$(document).trigger("sidebar:toggle");
 
 		sidebarIsOpen = false;
+	});
+	
+	$(document).on('click', ".toggle-password", function(event) {
+		$(this).toggleClass("fa-eye fa-eye-slash");
+		var input = $($(this).attr("toggle"));
+		if (input.attr("type") == "password") {
+			input.attr("type", "text");
+		} else {
+			input.attr("type", "password");
+		}
 	});
 
 	$(document).on("show.bs.modal", ".modal", function () {
