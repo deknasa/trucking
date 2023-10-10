@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "cc427d7afeea4149beeab2658a52f3a6",
+  "ReportGuid": "aec107a9545cda103b1b24e44b294ecb",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://localhost/truck/public/reports/ReportPenerimaanStokPO.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportPenerimaanStokPO.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1696492353000+0700)/",
+  "ReportChanged": "/Date(1696915759000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -1228,7 +1228,7 @@
               "Name": "Text41",
               "Guid": "034dc0a8d5c9f5e8844ba14a4dd34eaf",
               "CanGrow": true,
-              "ClientRectangle": "2,2,50.97,4.06",
+              "ClientRectangle": "160.78,13.02,50.97,4.06",
               "ComponentPlacement": "ph.PageHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -1237,6 +1237,7 @@
               "Text": {
                 "Value": "Hal:{PageNumber} dari {TotalPageCount}"
               },
+              "HorAlignment": "Right",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -1482,7 +1483,7 @@
           "Ident": "StiPageFooterBand",
           "Name": "PageFooterBand1",
           "PrintOn": "ExceptLastPage",
-          "ClientRectangle": "0,132.5,214,2",
+          "ClientRectangle": "0,157.6,214,2",
           "ComponentPlacement": "pf.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -2580,7 +2581,7 @@
       "Margins": {
         "Left": 1,
         "Right": 1,
-        "Top": 1.5,
+        "Top": 3,
         "Bottom": 3
       }
     }
