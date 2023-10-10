@@ -193,7 +193,7 @@
           },
           {
             label: 'Gudang',
-            name: 'gudangs',
+            name: 'gudang',
             align: 'left'
           },
           {
