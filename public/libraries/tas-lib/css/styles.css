@@ -28,6 +28,9 @@ html {
 * {
 	text-transform: uppercase;
 }
+body { 
+	overscroll-behavior: contain; 
+}
 .login-page{ 
 	height: 100vh;  
 	overflow: hidden; 
