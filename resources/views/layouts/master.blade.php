@@ -333,6 +333,7 @@
   <script type="text/javascript">
     let accessToken = `{{ session('access_token') }}`
     let accessTokenEmkl = `{{ session('access_token_emkl') }}`
+    let accessTokenTnl = `{{ session('access_token_tnl') }}`
     let accessTokenMdn = `{{ session('access_token_mdn') }}`
     let accessTokenJkt = `{{ session('access_token_jkt') }}`
     let accessTokenJktTnl = `{{ session('access_token_jkttnl') }}`
@@ -343,6 +344,7 @@
     let appUrl = `{{ url()->to('/') }}`
     let apiUrl = `{{ config('app.api_url') }}`
     let apiEmklUrl = `{{ config('app.emkl_api_url') }}`
+    let apiTruckingTnlUrl = `{{ config('app.trucking_api_tnl') }}`
     let apiTruckingMdnUrl = `{{ config('app.trucking_api_mdn_url') }}`
     let apiTruckingJktUrl = `{{ config('app.trucking_api_jkt_url') }}`
     let apiTruckingJktTnlUrl = `{{ config('app.trucking_api_jkttnl_url') }}`

@@ -11,7 +11,7 @@
   })
 
   $('#penerimaanStokHeaderLookup').jqGrid({
-      url: `{{ config('app.api_url') . 'penerimaanstokheader' }}`,
+      url: `{!! $url ?? config('app.api_url')  !!}`+'penerimaanstokheader',
       mtype: "GET",
       styleUI: 'Bootstrap4',
       iconSet: 'fontAwesome',
@@ -19,6 +19,7 @@
       postData: {
         penerimaanstok_id: `{!! $penerimaanstok_id ?? '' !!}`,
         stok_id: `{!! $stok_id ?? '' !!}`,
+        cabang: `{!! $cabang ?? '' !!}`,
         // filters: `{!! $filters ?? '' !!}`
         supplier_id: `{!! $supplier_id ?? '' !!}`,
         pengeluaranstok_id: `{!! $pengeluaranstok_id ?? '' !!}`,
@@ -55,11 +56,6 @@
             align: 'left'
           },
           {
-            label: 'KETERANGAN',
-            name: 'keterangan',
-            align: 'left'
-          },
-          {
             label: 'Penerimaan no bukti',
             name: 'penerimaanstok_nobukti',
             align: 'left'
@@ -71,7 +67,7 @@
           },
           {
             label: 'Gudang',
-            name: 'gudangs',
+            name: 'gudang',
             align: 'left'
           },
           {
@@ -92,11 +88,6 @@
           {
             label: 'no bukti Hutang',
             name: 'hutang_nobukti',
-            align: 'left'
-          },
-          {
-            label: 'Status format',
-            name: 'statusformat',
             align: 'left'
           },
           {
@@ -180,8 +171,12 @@
         if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
       },
       loadBeforeSend: function(jqXHR) {
-        jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
-
+        cab = `{!! $cabang ?? '' !!}`;
+        if(cab == 'TNL'){
+          jqXHR.setRequestHeader('Authorization', `Bearer ${accessTokenTnl}`)
+        }else{
+          jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+        }
         setGridLastRequest($(this), jqXHR)
       },
       loadComplete: function(data) {

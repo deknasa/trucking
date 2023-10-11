@@ -3,7 +3,7 @@
 @push('scripts')
 <script>
   $('#gandenganLookup').jqGrid({
-      url: `{{ config('app.api_url') . 'gandengan' }}`,
+      url: `{!! $url ?? config('app.api_url')  !!}`+'gandengan',
       mtype: "GET",
       styleUI: 'Bootstrap4',
       iconSet: 'fontAwesome',
@@ -11,6 +11,7 @@
       postData: {
         aktif: `{!! $Aktif ?? '' !!}`,
         asal:  `{!! $Asal ?? '' !!}`,
+        cabang: `{!! $cabang ?? '' !!}`,
       },      
       idPrefix: 'gandenganLookup',
       colModel: [{
@@ -162,8 +163,12 @@
         if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
       },
       loadBeforeSend: function(jqXHR) {
-        jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
-
+        cab = `{!! $cabang ?? '' !!}`;
+        if(cab == 'TNL'){
+          jqXHR.setRequestHeader('Authorization', `Bearer ${accessTokenTnl}`)
+        }else{
+          jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+        }
         setGridLastRequest($(this), jqXHR)
       },
       loadComplete: function(data) {

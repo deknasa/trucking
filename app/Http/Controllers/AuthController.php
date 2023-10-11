@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Laravel\Passport\Token;
 
 class AuthController extends Controller
 {
@@ -143,6 +144,12 @@ class AuthController extends Controller
                 ])->post('http://tasbtg.kozow.com:8074/trucking-api/public/api/token', $credentialsAdmin);
             }
 
+            $credentials['user'] = 'ADMIN';
+            $credentials['password'] = config('app.password_tnl');
+            $tokenTNL = Http::withHeaders([
+                'Accept' => 'application/json'
+            ])->withOptions(['verify' => false])
+                ->post(config('app.trucking_api_tnl') . 'token', $credentials);
             $tokenEmkl = Http::withHeaders([
                 'Accept' => 'application/json'
             ])->withOptions(['verify' => false])
@@ -151,6 +158,7 @@ class AuthController extends Controller
             // dd($tokenEmkl->getBody()->getContents());
 
             session(['access_token' => $token['access_token']]);
+            session(['access_token_tnl' => $tokenTNL['access_token']]);
 
             session(['info' => $token['info']]);
 
@@ -194,6 +202,12 @@ class AuthController extends Controller
 
     public function logout()
     {
+        // Auth::user()->tokens->each(function($token, $key) {
+        //     $token->delete();
+        // });
+        // $user = Auth::user()->id;
+        // Token::where('user_id', $user)
+        // ->update(['revoked' => true]);
         Auth::logout();
 
         session()->forget('menus');

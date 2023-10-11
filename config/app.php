@@ -257,6 +257,8 @@ return [
 
     'apppath' => 'c:/xampp/htdocs/truck/app/http/',
 
+    'password_tnl' => env('PASSWORD_TNL', "RFV$*)123wsx"),
+    'trucking_api_tnl' => env('TRUCKING_API_TNL', "http://tasjkt.kozow.com:8074/truckingtnl-api/public/api/"),
     'version' => '0.1.0',
     'trucking_api_mdn_url' => env('TRUCKING_API_MDN_URL', 'https://tasmdn.kozow.com:8074/trucking-api/public/api/'),
     'trucking_api_jkt_url' => env('TRUCKING_API_JKT_URL', 'http://tasjkt.kozow.com:8074/trucking-api/public/api/'),
