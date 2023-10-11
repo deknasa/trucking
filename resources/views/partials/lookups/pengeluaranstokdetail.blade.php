@@ -3,7 +3,7 @@
 
 <script>
   $('#pengeluaranStokDetailLookup').jqGrid({
-      url: `{{ config('app.api_url') . 'pengeluaranstokdetail' }}`,
+      url:`{!! $url ?? config('app.api_url')  !!}`+'pengeluaranstokdetail',
       mtype: "GET",
       styleUI: 'Bootstrap4',
       iconSet: 'fontAwesome',
@@ -11,6 +11,7 @@
       postData: {
         penerimaanstokheader_id:  `{!! $penerimaanstokheader_id ?? '' !!}`, //dari klaim
         pengeluaranstokheader_id:  `{!! $pengeluaranstokheader_id ?? '' !!}`,
+        cabang: `{!! $cabang ?? '' !!}`,
       },
       idPrefix: 'pengeluaranStokDetailLookup',
       colModel: [{
@@ -85,7 +86,7 @@
       rownumWidth: 45,
       rowList: [10, 20, 50, 0],
       sortable: true,
-      sortname: 'id',
+      sortname: 'nobukti',
       sortorder: 'asc',
       toolbar: [true, "top"],
       page: 1,
@@ -110,8 +111,12 @@
         if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
       },
       loadBeforeSend: function(jqXHR) {
-        jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
-
+        cab = `{!! $cabang ?? '' !!}`;
+        if(cab == 'TNL'){
+          jqXHR.setRequestHeader('Authorization', `Bearer ${accessTokenTnl}`)
+        }else{
+          jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+        }
         setGridLastRequest($(this), jqXHR)
       },
       loadComplete: function(data) {

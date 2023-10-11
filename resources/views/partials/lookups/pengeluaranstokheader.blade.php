@@ -12,12 +12,13 @@
   })
 
   $('#pengeluaranStokHeaderLookup').jqGrid({
-      url: `{{ config('app.api_url') . 'pengeluaranstokheader' }}`,
+      url: `{!! $url ?? config('app.api_url')  !!}`+'pengeluaranstokheader',
       mtype: "GET",
       styleUI: 'Bootstrap4',
       iconSet: 'fontAwesome',
       postData: {
         penerimaanstok_id: `{!! $penerimaanstok_id ?? '' !!}`,
+        cabang: `{!! $cabang ?? '' !!}`,
 
         tgldari: $('#tgldariheaderlookup').val(),
         tglsampai: $('#tglsampaiheaderlookup').val(),
@@ -48,11 +49,6 @@
             }
           },
           {
-            label: 'KETERANGAN',
-            name: 'keterangan',
-            align: 'left'
-          },
-          {
             label: 'Gudang',
             name: 'gudang',
             align: 'left'
@@ -60,6 +56,11 @@
           {
             label: 'Trado',
             name: 'trado',
+            align: 'left'
+          },
+          {
+            label: 'gandengan',
+            name: 'gandengan',
             align: 'left'
           },
           {
@@ -77,6 +78,11 @@
             name: 'pengeluaranstok',
             align: 'left'
           },
+          {
+            label: 'Pengeluaran trucking no BUKTI',
+            name: 'pengeluarantrucking_nobukti',
+            align: 'left'
+          },
           
           {
             label: 'SERVICE IN NO BUKTI',
@@ -86,7 +92,7 @@
          
           
           {
-            label: 'Penerimaan no bukti',
+            label: 'Penerimaan stok no bukti',
             name: 'penerimaanstok_nobukti',
             align: 'left'
           },
@@ -96,13 +102,13 @@
             align: 'left'
           },
           {
-            label: 'kerusakan',
-            name: 'kerusakan',
+            label: 'Penerimaan no bukti',
+            name: 'penerimaan_nobukti',
             align: 'left'
           },
           {
-            label: 'Status format',
-            name: 'statusformat',
+            label: 'kerusakan',
+            name: 'kerusakan',
             align: 'left'
           },
           {
@@ -165,7 +171,12 @@
         if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
       },
       loadBeforeSend: function(jqXHR) {
-        jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+        cab = `{!! $cabang ?? '' !!}`;
+        if(cab == 'TNL'){
+          jqXHR.setRequestHeader('Authorization', `Bearer ${accessTokenTnl}`)
+        }else{
+          jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+        }
 
         setGridLastRequest($(this), jqXHR)
       },

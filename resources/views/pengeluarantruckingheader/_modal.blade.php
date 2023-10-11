@@ -70,6 +70,19 @@
               </div>
             </div>
 
+            <div class="row form-group cabang">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
+                  CABANG <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <select name="statuscabang" class="form-select select2bs4" style="width: 100%;">
+                  <option value="">-- PILIH CABANG --</option>
+                </select>
+              </div>
+            </div>
+
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
@@ -343,7 +356,9 @@
   var listKodePengeluaran = []
   var listKeteranganPengeluaran = []
   let isEditTgl
-
+  let statuscabang = ''
+  let urlTNL = ''
+  let tokenTNL = ''
   $(document).ready(function() {
 
     $("#crudForm [name]").attr("autocomplete", "off");
@@ -465,6 +480,19 @@
       qty = AutoNumeric.getNumber($(this)[0]) ?? 0;
       totalharga = qty * harga
       new AutoNumeric($(this).parents("tr").find(`[name="totalharga[]"]`)[0]).set(totalharga)
+    })
+
+
+    $(document).on('change', `[name="statuscabang"]`, function(event) {
+      statuscabang = $(`[name="statuscabang"] option:selected`).text()
+      if (statuscabang == 'TNL') {
+        urlTNL = apiTruckingTnlUrl
+        tokenTNL = accessTokenTnl
+      } else {
+        urlTNL = apiUrl
+        tokenTNL = accessToken
+
+      }
     })
 
     function rangeInvoice() {
@@ -1172,6 +1200,7 @@
     $('.colmn-offset3').hide()
     $('.colmn-offset4').hide()
     $('.tbl_tagihklaim').hide()
+    $('.cabang').hide()
     // $('.colmn-offset').hide()
   }
 
@@ -1211,6 +1240,7 @@
     $('.tbl_tagihklaim').hide()
     $('.colmn-offset3').hide()
     $('.colmn-offset4').hide()
+    $('.cabang').hide()
     // $('.colmn-offset').hide()
   }
 
@@ -1257,6 +1287,7 @@
     $('.tbl_tagihklaim').hide()
     $('.colmn-offset3').hide()
     $('.colmn-offset4').hide()
+    $('.cabang').hide()
   }
 
   function tampilanTDE() {
@@ -1282,6 +1313,7 @@
     $('.tbl_qty').hide()
     $('.nominal').prop('readonly', false)
     $('.tbl_harga').hide()
+    $('.cabang').hide()
     $('.tbl_karyawan_id').hide()
     $('#detail-tde-section').show()
     $('#detail-bst-section').hide()
@@ -1336,6 +1368,7 @@
     $('.tbl_tagihklaim').hide()
     $('.colmn-offset3').hide()
     $('.colmn-offset4').hide()
+    $('.cabang').hide()
     // $('.colmn-offset').hide()
     loadModalGrid()
   }
@@ -1377,6 +1410,7 @@
     $('.tbl_aksi').show()
     $('.colspan').attr('colspan', 2);
     $('.kolom_bbt').hide()
+    $('.cabang').hide()
     $('.tbl_tagihklaim').hide()
     $('.colmn-offset3').hide()
     $('.colmn-offset4').hide()
@@ -1427,6 +1461,7 @@
     $('.colmn-offset3').hide()
     $('.colmn-offset4').hide()
     $('.colmn-offset2').hide()
+    $('.cabang').hide()
     // $('.colmn-offset').hide()
   }
 
@@ -1472,6 +1507,7 @@
     $('.colmn-offset2').hide()
     $('.colmn-offset3').show()
     $('.colmn-offset4').show()
+    $('.cabang').show()
     // $('.colmn-offset').hide()
   }
 
@@ -1518,6 +1554,7 @@
     $('.tbl_tagihklaim').hide()
     $('.colmn-offset3').hide()
     $('.colmn-offset4').hide()
+    $('.cabang').hide()
     // $('.colmn-offset').hide()
 
     $('#crudForm').find('[name=periode]').val($.datepicker.formatDate('mm-yy', new Date())).trigger('change');
@@ -1591,6 +1628,7 @@
     $('.tbl_tagihklaim').hide()
     $('.colmn-offset3').hide()
     $('.colmn-offset4').hide()
+    $('.cabang').hide()
     // $('.colmn-offset').hide()
     $('#crudForm').find('[name=periode]').val($.datepicker.formatDate('mm-yy', new Date())).trigger('change');
     loadBLNGrid()
@@ -1662,6 +1700,7 @@
     $('.tbl_tagihklaim').hide()
     $('.colmn-offset3').hide()
     $('.colmn-offset4').hide()
+    $('.cabang').hide()
     // $('.colmn-offset').hide()
     $('#crudForm').find('[name=periode]').val($.datepicker.formatDate('mm-yy', new Date())).trigger('change');
     loadBTUGrid()
@@ -1733,6 +1772,7 @@
     $('.tbl_tagihklaim').hide()
     $('.colmn-offset3').hide()
     $('.colmn-offset4').hide()
+    $('.cabang').hide()
     // $('.colmn-offset').hide()
     $('#crudForm').find('[name=periode]').val($.datepicker.formatDate('mm-yy', new Date())).trigger('change');
     loadBPTGrid()
@@ -1805,6 +1845,7 @@
     $('.tbl_tagihklaim').hide()
     $('.colmn-offset3').hide()
     $('.colmn-offset4').hide()
+    $('.cabang').hide()
     // $('.colmn-offset').hide()
     $('#crudForm').find('[name=periode]').val($.datepicker.formatDate('mm-yy', new Date())).trigger('change');
     loadBGSGrid()
@@ -1875,6 +1916,7 @@
     $('.tbl_tagihklaim').hide()
     $('.colmn-offset3').hide()
     $('.colmn-offset4').hide()
+    $('.cabang').hide()
     // $('.colmn-offset').hide()
     $('#crudForm').find('[name=periode]').val($.datepicker.formatDate('mm-yy', new Date())).trigger('change');
     loadBITGrid()
@@ -1951,6 +1993,7 @@
     $('.tbl_tagihklaim').hide()
     $('.colmn-offset3').hide()
     $('.colmn-offset4').hide()
+    $('.cabang').hide()
 
   }
 
@@ -2012,6 +2055,7 @@
     initMonthpicker()
     initSelect2(form.find(`[name="statusposting"]`), true)
     initSelect2(form.find(`[name="postingpinjaman"]`), true)
+    initSelect2(form.find(`[name="statuscabang"]`), true)
     if (form.data('action') == 'add') {
       if ($('#pengeluaranheader_id').val() != '') {
         let index = listIdPengeluaran.indexOf($('#pengeluaranheader_id').val());
@@ -2031,6 +2075,8 @@
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
     selectedRows = []
+    penerimaanstokheader = ''
+    pengeluaranstokheader = ''
     clearSelectedRowsSumbangan()
 
     $('#crudModal').find('.modal-body').html(modalBody)
@@ -2093,6 +2139,7 @@
         setStatusPostingOptions(form),
         setPostingPinjamanOptions(form),
         setStatusBiayaTitipanOptions(),
+        setStatusCabangOptions(form),
         setDefaultBank(),
         addRow(),
         setTotal()
@@ -2132,6 +2179,7 @@
         setStatusBiayaTitipanOptions(),
         setStatusPostingOptions(form),
         setPostingPinjamanOptions(form),
+        setStatusCabangOptions(form),
       ])
       .then(() => {
         showPengeluaranTruckingHeader(form, id)
@@ -2144,15 +2192,12 @@
               form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
             }
           })
+          .catch((error) => {
+            showDialog(error.responseJSON)
+          })
           .finally(() => {
             $('.modal-loader').addClass('d-none')
           })
-      })
-      .catch((error) => {
-        showDialog(error.responseJSON)
-      })
-      .finally(() => {
-        $('.modal-loader').addClass('d-none')
       })
 
   }
@@ -2181,6 +2226,7 @@
         setStatusPostingOptions(form),
         setPostingPinjamanOptions(form),
         setStatusBiayaTitipanOptions(),
+        setStatusCabangOptions(form),
       ])
       .then(() => {
         showPengeluaranTruckingHeader(form, id)
@@ -2227,6 +2273,7 @@
         setStatusPostingOptions(form),
         setPostingPinjamanOptions(form),
         setStatusBiayaTitipanOptions(),
+        setStatusCabangOptions(form),
       ])
       .then(() => {
         showPengeluaranTruckingHeader(form, id)
@@ -3138,6 +3185,10 @@
                 element.parent('.input-group').find('.button-clear').remove()
                 element.parent('.input-group').find('.input-group-append').remove()
               }
+            } else {
+              if (index == 'supir') {
+                element.data('current-value', value)
+              }
             }
 
             if (index == 'periodedari') {
@@ -3165,6 +3216,12 @@
               element.data('current-value', value).prop('readonly', true)
               element.parent('.input-group').find('.button-clear').remove()
               element.parent('.input-group').find('.input-group-append').remove()
+            }
+            if (index == 'trado') {
+              element.data('current-value', value)
+            }
+            if (index == 'gandengan') {
+              element.data('current-value', value)
             }
             if (index == 'keterangancoa') {
               element.data('current-value', value)
@@ -3542,6 +3599,7 @@
               detailRow.find(`[name="totalklaim[]"]`).val(detail.nominal)
 
               pengeluaranstokheader = detail.pengeluaranstokheader_id
+              penerimaanstokheader = detail.penerimaanstokheader_id
               if (detail.pengeluaranstok_nobukti) {
                 initAutoNumeric(detailRow.find(`[name="qty[]"]`))
                 initAutoNumeric(detailRow.find(`[name="totalharga[]"]`))
@@ -3638,8 +3696,11 @@
                 beforeProcess: function(test) {
                   // var levelcoa = $(`#levelcoa`).val();
                   this.postData = {
+                    cabang: statuscabang,
                     pengeluaranheader_id: 1,
                     Aktif: 'AKTIF',
+                    url: urlTNL,
+                    token: tokenTNL,
                   }
                 },
                 onSelectRow: (stok, element) => {
@@ -3672,8 +3733,11 @@
                 beforeProcess: function(test) {
                   // var levelcoa = $(`#levelcoa`).val();
                   this.postData = {
-                    penerimaanstok_id: 1,
+                    cabang: statuscabang,
+                    penerimaanstok_id: 5,
                     Aktif: 'AKTIF',
+                    url: urlTNL,
+                    token: tokenTNL,
                   }
                 },
                 onSelectRow: (stok, element) => {
@@ -3706,8 +3770,11 @@
                 beforeProcess: function(test) {
                   // var levelcoa = $(`#levelcoa`).val();
                   this.postData = {
-                    penerimaanstokheader_id: penerimaanstokheader,
-                    pengeluaranstokheader_id: pengeluaranstokheader,
+                    cabang: statuscabang,
+                    url: urlTNL,
+                    token: tokenTNL,
+                    penerimaanstokheader_id: detail.penerimaanstokheader_id,
+                    pengeluaranstokheader_id: detail.pengeluaranstokheader_id,
                   }
                 },
                 onSelectRow: (stok, element) => {
@@ -4121,7 +4188,10 @@
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
           penerimaanstok_id: 5,
+          cabang: statuscabang,
           Aktif: 'AKTIF',
+          url: urlTNL,
+          token: tokenTNL,
         }
       },
       onSelectRow: (stok, element) => {
@@ -4158,7 +4228,10 @@
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
 
+          cabang: statuscabang,
           Aktif: 'AKTIF',
+          url: urlTNL,
+          token: tokenTNL,
         }
       },
       onSelectRow: (stok, element) => {
@@ -4194,8 +4267,11 @@
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
+          cabang: statuscabang,
           penerimaanstokheader_id: penerimaanstokheader,
-          pengeluaranstokheader_id: pengeluaranstokheader,
+          pengeluaranstokheader_id: pengeluaranstokheader,          
+          url: urlTNL,
+          token: tokenTNL,
         }
       },
       onSelectRow: (stok, element) => {
@@ -5562,30 +5638,31 @@
 
   function lookupSelected(el) {
     switch (el) {
-        case 'trado':
-          $('#crudForm').find(`[name="gandengan"]`).attr('disabled', true)
-          $('#crudForm').find(`[name="gandengan"]`).parents('.input-group').children().attr('disabled', true)
-          $('#crudForm').find(`[name="gandengan"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled', true)
-          $('#gandenganHaeaderId').attr('disabled', true);
-          break;
-          case 'gandengan':
-            $('#crudForm').find(`[name="trado"]`).attr('disabled', true)
-            $('#crudForm').find(`[name="trado"]`).parents('.input-group').children().attr('disabled', true)
-            $('#crudForm').find(`[name="trado"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled', true)
-            $('#tradoHaeaderId').attr('disabled', true);
-        default:
-          break;
-      }
-  }
-  function enabledKorDisable() {
-      $('#crudForm').find(`[name="trado"]`).parents('.input-group').children().attr("disabled", false);
-      $('#crudForm').find(`[name="trado"]`).parents('.input-group').children().find(`.lookup-toggler`).attr("disabled", false);
-      $('#tradoHaeaderId').attr('disabled', false);
-      $('#crudForm').find(`[name="gandengan"]`).parents('.input-group').children().attr("disabled", false);
-      $('#crudForm').find(`[name="gandengan"]`).parents('.input-group').children().find(`.lookup-toggler`).attr("disabled", false);
-      $('#gandenganHaeaderId').attr('disabled', false);
+      case 'trado':
+        $('#crudForm').find(`[name="gandengan"]`).attr('disabled', true)
+        $('#crudForm').find(`[name="gandengan"]`).parents('.input-group').children().attr('disabled', true)
+        $('#crudForm').find(`[name="gandengan"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled', true)
+        $('#gandenganHaeaderId').attr('disabled', true);
+        break;
+      case 'gandengan':
+        $('#crudForm').find(`[name="trado"]`).attr('disabled', true)
+        $('#crudForm').find(`[name="trado"]`).parents('.input-group').children().attr('disabled', true)
+        $('#crudForm').find(`[name="trado"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled', true)
+        $('#tradoHaeaderId').attr('disabled', true);
+      default:
+        break;
     }
-  
+  }
+
+  function enabledKorDisable() {
+    $('#crudForm').find(`[name="trado"]`).parents('.input-group').children().attr("disabled", false);
+    $('#crudForm').find(`[name="trado"]`).parents('.input-group').children().find(`.lookup-toggler`).attr("disabled", false);
+    $('#tradoHaeaderId').attr('disabled', false);
+    $('#crudForm').find(`[name="gandengan"]`).parents('.input-group').children().attr("disabled", false);
+    $('#crudForm').find(`[name="gandengan"]`).parents('.input-group').children().find(`.lookup-toggler`).attr("disabled", false);
+    $('#gandenganHaeaderId').attr('disabled', false);
+  }
+
   function getMaxLength(form) {
     if (!form.attr('has-maxlength')) {
       $.ajax({
@@ -5740,8 +5817,10 @@
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
-
+          cabang: statuscabang,
           Aktif: 'AKTIF',
+          url: urlTNL,
+          token: tokenTNL,
         }
       },
       onSelectRow: (trado, element) => {
@@ -5767,8 +5846,10 @@
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
-
+          cabang: statuscabang,
           Aktif: 'AKTIF',
+          url: urlTNL,
+          token: tokenTNL,
         }
       },
       onSelectRow: (gandengan, element) => {
@@ -5918,6 +5999,38 @@
             if (postingPinjaman.text === "POSTING") {
               parameterPosting = postingPinjaman.id
             }
+          });
+          resolve()
+        },
+        error: error => {
+          reject(error)
+        }
+      })
+    })
+  }
+
+  const setStatusCabangOptions = function(relatedForm) {
+    return new Promise((resolve, reject) => {
+      relatedForm.find('[name=statuscabang]').empty()
+      relatedForm.find('[name=statuscabang]').append(
+        new Option('-- PILIH CABANG --', '', false, true)
+      ).trigger('change')
+      $.ajax({
+        url: `${apiUrl}parameter/combo`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          grp: 'LIST CABANG',
+          subgrp: 'LIST CABANG',
+        },
+        success: response => {
+          response.data.forEach(postingPinjaman => {
+            let option = new Option(postingPinjaman.text, postingPinjaman.id)
+            relatedForm.find('[name=statuscabang]').append(option).trigger('change')
+
           });
           resolve()
         },
