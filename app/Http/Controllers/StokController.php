@@ -15,6 +15,7 @@ class StokController  extends MyController
         $data = [
             'combo' => $this->comboList('list', 'STATUS AKTIF','STATUS AKTIF'),
             'comboservice' => $this->comboList('list', 'STATUS SERVICE RUTIN', 'STATUS SERVICE RUTIN'),
+            'comboreuse' => $this->comboList('list', 'STATUS REUSE', 'STATUS REUSE'),
         ];
         return view('stok.index', compact('title','data'));
     }

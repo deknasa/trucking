@@ -108,6 +108,7 @@ class AuthController extends Controller
             ])->withOptions(['verify' => false])
                 ->post(config('app.api_url') . 'token', $credentials);
 
+            $tokenUrlTas ='';
             if ($parametercabang->text == "PUSAT") {
                 $credentialsAdmin = [
                     'user' => 'admin',
@@ -142,6 +143,24 @@ class AuthController extends Controller
                     'Content-Type' => 'application/json',
                     'Accept' => 'application/json'
                 ])->post('http://tasbtg.kozow.com:8074/trucking-api/public/api/token', $credentialsAdmin);
+            }else{
+                $linkUrl =  DB::table('parameter')->where('grp', 'LINK URL')->where('subgrp', 'LINK URL')->first();
+                $linkUrlTas = strtolower($linkUrl->text);//http://tasjkt.kozow.com:8074/trucking-api/public/api/
+                if ($linkUrlTas != '') {
+                     $tokenUrlTas = Http::withHeaders([
+                        'Content-Type' => 'application/json',
+                        'Accept' => 'application/json'
+                    ])->post($linkUrlTas.'token', [
+                        'user' => 'ADMIN',
+                        'password' => getenv('PASSWORD_TNL'),
+                        'ipclient' => '',
+                        'ipserver' => '',
+                        'latitude' => '',
+                        'longitude' => '',
+                        'browser' => '',
+                        'os' => '',
+                    ]);
+                }
             }
 
             $credentials['user'] = 'ADMIN';
@@ -161,6 +180,7 @@ class AuthController extends Controller
             session(['access_token_tnl' => $tokenTNL['access_token']]);
 
             session(['info' => $token['info']]);
+            session(['link_url' => strtolower($linkUrl->text)]);
 
             session(['access_token_emkl' => $tokenEmkl['access_token']]);
             session(['menus' => (new Menu())->getMenu()]);
@@ -172,6 +192,10 @@ class AuthController extends Controller
                 session(['access_token_mks' => $tokenMakassar['access_token']]);
                 session(['access_token_sby' => $tokenSurabaya['access_token']]);
                 session(['access_token_btg' => $tokenBitung['access_token']]);
+            }else{
+                if ($linkUrlTas != '') {
+                    session(['access_token_url_tas' => $tokenUrlTas['access_token']]);
+                }
             }
 
             return redirect()->route('dashboard');

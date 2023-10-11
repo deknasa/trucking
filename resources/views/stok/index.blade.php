@@ -93,8 +93,8 @@
                         align: 'left',
                     },
                     {
-                        label: 'STATUS',
-                        name: 'statusAktif',
+                        label: 'STATUS aktif',
+                        name: 'statusaktif',
                         align: 'left',
                         stype: 'select',
                         searchoptions: {
@@ -119,26 +119,64 @@
                             }
                         },
                         formatter: (value, options, rowData) => {
-                            if (!value) {
-                                return ''
+            let statusaktif = JSON.parse(value)
+
+            let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusaktif.WARNA}; color: ${statusaktif.WARNATULISAN};">
+                  <span>${statusaktif.SINGKATAN}</span>
+                </div>
+              `)
+
+            return formattedValue[0].outerHTML
+          },
+          cellattr: (rowId, value, rowObject) => {
+            let statusaktif = JSON.parse(rowObject.statusaktif)
+
+            return ` title="${statusaktif.MEMO}"`
+          }
+                    },
+                    {
+                        label: 'STATUS reuse',
+                        name: 'statusreuse',
+                        align: 'left',
+                        stype: 'select',
+                        searchoptions: {
+                            value: `<?php
+                                    $i = 1;
+
+                                    foreach ($data['comboreuse'] as $status) :
+                                        echo "$status[param]:$status[parameter]";
+                                        if ($i !== count($data['comboreuse'])) {
+                                            echo ';';
+                                        }
+                                        $i++;
+                                    endforeach;
+
+                                    ?>
+                        `,
+                            dataInit: function(element) {
+                                $(element).select2({
+                                    width: 'resolve',
+                                    theme: "bootstrap4"
+                                });
                             }
-                            let statusAktif = JSON.parse(value)
-
-                            let formattedValue = $(`
-            <div class="badge" style="background-color: ${statusAktif.WARNA}; color: ${statusAktif.WARNATULISAN};">
-              <span>${statusAktif.SINGKATAN}</span>
-            </div>
-          `)
-
-                            return formattedValue[0].outerHTML
                         },
-                        cellattr: (rowId, value, rowObject) => {
-                            if (!rowObject.statusAktif) {
-                                return ` title=" "`
-                            }
-                            let statusAktif = JSON.parse(rowObject.statusAktif)
-                            return ` title="${statusAktif.MEMO}"`
-                        }
+                        formatter: (value, options, rowData) => {
+            let statusreuse = JSON.parse(value)
+
+            let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusreuse.WARNA}; color: ${statusreuse.WARNATULISAN};">
+                  <span>${statusreuse.SINGKATAN}</span>
+                </div>
+              `)
+
+            return formattedValue[0].outerHTML
+          },
+          cellattr: (rowId, value, rowObject) => {
+            let statusreuse = JSON.parse(rowObject.statusreuse)
+
+            return ` title="${statusreuse.MEMO}"`
+          }
                     },
 
                     {

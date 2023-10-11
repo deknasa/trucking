@@ -10,6 +10,7 @@ $('#stokLookup').jqGrid({
       datatype: "json",
       postData: {
         aktif: `{!! $Aktif ?? '' !!}`,
+        statusreuse: `{!! $statusreuse ?? '' !!}`,
         penerimaanstok_id: `{!! $penerimaanstok_id ?? '' !!}`,
         penerimaanstokheader_nobukti: `{!! $penerimaanstokheader_nobukti ?? '' !!}`,
       },         
@@ -29,7 +30,7 @@ $('#stokLookup').jqGrid({
         align: 'left',
       },
       {
-          label: 'Status',
+          label: 'Status aktif',
           name: 'statusaktif',
           stype: 'select',
           searchoptions: {
@@ -91,6 +92,75 @@ $('#stokLookup').jqGrid({
             let statusAktif = JSON.parse(rowObject.statusaktif)
 
             return ` title="${statusAktif.MEMO}"`
+          }
+        },      {
+          label: 'keterangan',
+          name: 'keterangan',
+          align: 'left',
+      },
+      {
+          label: 'Status Reuse',
+          name: 'statusreuse',
+          stype: 'select',
+          searchoptions: {
+            dataInit: function(element) {
+              $(element).select2({
+                width: 'resolve',
+                theme: "bootstrap4",
+                ajax: {
+                  url: `${apiUrl}parameter/combo`,
+                  dataType: 'JSON',
+                  headers: {
+                    Authorization: `Bearer ${accessToken}`
+                  },
+                  data: {
+                    grp: 'STATUS reuse',
+                    subgrp: 'STATUS reuse'
+                  },
+                  beforeSend: () => {
+                    // clear options
+                    $(element).data('select2').$results.children().filter((index, element) => {
+                      // clear options except index 0, which
+                      // is the "searching..." label
+                      if (index > 0) {
+                        element.remove()
+                      }
+                    })
+                  },
+                  processResults: (response) => {
+                    let formattedResponse = response.data.map(row => ({
+                      id: row.id,
+                      text: row.text
+                    }));
+
+                    formattedResponse.unshift({
+                      id: '',
+                      text: 'ALL'
+                    });
+
+                    return {
+                      results: formattedResponse
+                    };
+                  },
+                }
+              });
+            }
+          },
+          formatter: (value, options, rowData) => {
+            let statusreuse = JSON.parse(value)
+
+            let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusreuse.WARNA}; color: ${statusreuse.WARNATULISAN};">
+                  <span>${statusreuse.SINGKATAN}</span>
+                </div>
+              `)
+
+            return formattedValue[0].outerHTML
+          },
+          cellattr: (rowId, value, rowObject) => {
+            let statusreuse = JSON.parse(rowObject.statusreuse)
+
+            return ` title="${statusreuse.MEMO}"`
           }
         },      {
           label: 'keterangan',
