@@ -6,7 +6,7 @@
   "ReportFile": "http://localhost/trucking/public/reports/ReportPengeluaranKas.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1697007408000+0700)/",
+  "ReportChanged": "/Date(1697008244000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -257,7 +257,7 @@
         "0": {
           "Ident": "StiPageHeaderBand",
           "Name": "PageHeaderBand1",
-          "ClientRectangle": "0,4,211,39.12",
+          "ClientRectangle": "0,4,232,39.12",
           "ComponentPlacement": "ph.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -751,7 +751,7 @@
           "Ident": "StiPageFooterBand",
           "Name": "PageFooterBand1",
           "PrintOn": "ExceptLastPage",
-          "ClientRectangle": "0,157.57,211,2.03",
+          "ClientRectangle": "0,155.17,232,2.03",
           "ComponentPlacement": "pf.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -776,7 +776,7 @@
         "2": {
           "Ident": "StiDataBand",
           "Name": "DataBand1",
-          "ClientRectangle": "0,51.12,211,6",
+          "ClientRectangle": "0,51.12,232,6",
           "ComponentPlacement": "d.Page1",
           "Interaction": {
             "Ident": "StiBandInteraction"
@@ -954,7 +954,7 @@
         "3": {
           "Ident": "StiReportSummaryBand",
           "Name": "ReportSummaryBand1",
-          "ClientRectangle": "0,65.12,211,39.88",
+          "ClientRectangle": "0,65.12,232,39.88",
           "ComponentPlacement": "rs.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -1677,15 +1677,15 @@
           "ReferenceToGuid": "7c7bc3bb8ee8149d1ed43f979c69cc7f"
         }
       },
-      "PageWidth": 216,
+      "PageWidth": 240,
       "PageHeight": 139,
       "Watermark": {
         "TextBrush": "solid:50,0,0,0"
       },
       "Margins": {
-        "Left": 3,
+        "Left": 6,
         "Right": 2,
-        "Top": 3,
+        "Top": 5,
         "Bottom": 3
       }
     }
