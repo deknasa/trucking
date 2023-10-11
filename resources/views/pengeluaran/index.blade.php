@@ -102,13 +102,13 @@
     });
 
     @isset($request['tgldari'])
-      tgldariheader = `{{ $request['tgldari'] }}`;
+    tgldariheader = `{{ $request['tgldari'] }}`;
     @endisset
     @isset($request['tglsampai'])
-      tglsampaiheader = `{{ $request['tglsampai'] }}`;
+    tglsampaiheader = `{{ $request['tglsampai'] }}`;
     @endisset
-    
-    setRange(false,tgldariheader,tglsampaiheader)
+
+    setRange(false, tgldariheader, tglsampaiheader)
     initDatepicker()
     $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('pengeluaranheader', {
@@ -411,7 +411,7 @@
         },
         onSelectRow: function(id) {
           let nobukti = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title') ?? '';
-          
+
           activeGrid = $(this)
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
           page = $(this).jqGrid('getGridParam', 'page')
@@ -535,7 +535,7 @@
               } else {
                 cekValidasi(selectedId, 'EDIT')
               }
-              
+
             }
           },
           {
@@ -550,7 +550,7 @@
               } else {
                 cekValidasi(selectedId, 'DELETE')
               }
-              
+
             }
           },
           {
@@ -561,22 +561,54 @@
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               viewPengeluaran(selectedId)
             }
-          },  
+          },
           {
             id: 'report',
+            title: 'Report',
+            caption: 'Report',
             innerHTML: '<i class="fa fa-print"></i> REPORT',
-            class: 'btn btn-info btn-sm mr-1',
-            onClick: () => {
+            class: 'btn btn-info btn-sm mr-1 dropdown-toggle',
+            // onClick: () => {
 
-              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Harap pilih salah satu record')
-              } else {
-                window.open(`{{ route('pengeluaranheader.report') }}?id=${selectedId}`)
-              }
-              clearSelectedRows()
-              $('#gs_').prop('checked', false)
-            }
+            //   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+            //   if (selectedId == null || selectedId == '' || selectedId == undefined) {
+            //     showDialog('Harap pilih salah satu record')
+            //   } else {
+            //     window.open(`{{ route('pengeluaranheader.report') }}?id=${selectedId}`)
+            //   }
+            //   clearSelectedRows()
+            //   $('#gs_').prop('checked', false)
+            // }
+            dropmenuHTML: [{
+                id: 'reportPrinterBesar',
+                text: "Report Printer LQ-2180",
+                onClick: () => {
+                  selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                  if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                    showDialog('Harap pilih salah satu record')
+                  } else {
+                    window.open(`{{ route('pengeluaranheader.report') }}?id=${selectedId}`)
+                  }
+                  clearSelectedRows()
+                  $('#gs_').prop('checked', false)
+                }
+              },
+              {
+                id: 'reportPrinterKecil',
+                text: "Report Printer LQ LX-310",
+                onClick: () => {
+                  selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                  if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                    showDialog('Harap pilih salah satu record')
+                  } else {
+                    window.open(`{{ route('pengeluaranheader.report') }}?id=${selectedId}`)
+                  }
+                  clearSelectedRows()
+                  $('#gs_').prop('checked', false)
+                }
+              },
+
+            ],
           },
           {
             id: 'export',
@@ -646,35 +678,36 @@
       })
       .parent().addClass('px-1')
 
-      function permission() {
-    if (!`{{ $myAuth->hasPermission('pengeluaranheader', 'store') }}`) {
-      $('#add').attr('disabled', 'disabled')
-    }
+    function permission() {
+      if (!`{{ $myAuth->hasPermission('pengeluaranheader', 'store') }}`) {
+        $('#add').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('pengeluaranheader', 'show') }}`) {
-      $('#view').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('pengeluaranheader', 'show') }}`) {
+        $('#view').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('pengeluaranheader', 'update') }}`) {
-      $('#edit').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('pengeluaranheader', 'update') }}`) {
+        $('#edit').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('pengeluaranheader', 'destroy') }}`) {
-      $('#delete').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('pengeluaranheader', 'destroy') }}`) {
+        $('#delete').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('pengeluaranheader', 'export') }}`) {
-      $('#export').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('pengeluaranheader', 'export') }}`) {
+        $('#export').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('pengeluaranheader', 'report') }}`) {
-      $('#report').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('pengeluaranheader', 'report') }}`) {
+        $('#report').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('pengeluaranheader', 'approval') }}`) {
-      $('#approveun').attr('disabled', 'disabled')
-      $("#jqGrid").hideCol("");
-    }}
+      if (!`{{ $myAuth->hasPermission('pengeluaranheader', 'approval') }}`) {
+        $('#approveun').attr('disabled', 'disabled')
+        $("#jqGrid").hideCol("");
+      }
+    }
   })
 
   function clearSelectedRows() {
