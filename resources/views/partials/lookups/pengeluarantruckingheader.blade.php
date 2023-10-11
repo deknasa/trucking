@@ -1,3 +1,4 @@
+
 @include('layouts._rangeheaderlookup')
 <table id="pengeluaranTruckingHeaderLookup" class="lookup-grid" style="width: 100%;"></table>
 {{-- <div id="pengeluaranTruckingHeaderLookupPager"></div> --}}
@@ -7,12 +8,29 @@
   
   setRangeLookup()
   initDatepicker()
+  
+  var urlLookopTas = `{{ config('app.api_url') . 'pengeluarantruckingheader' }}`
+  var accessTokenLookup = accessToken
+  var from_tnl = ''
+  if (urlTas != '') {
+    console.log(accessTokenUrlTas,urlTas);
+    urlLookopTas = `${urlTas}pengeluarantruckingheader`
+    accessTokenLookup = accessTokenUrlTas
+    from_tnl = 'YA'
+  }
+  
   $(document).on('click', '#btnReloadLookup', function(event) {
-    loadDataHeaderLookup('pengeluarantruckingheader', 'pengeluaranTruckingHeaderLookup')
+
+    loadDataHeaderLookup('pengeluarantruckingheader', 'pengeluaranTruckingHeaderLookup',{
+      pengeluaranheader_id : `{!! $pengeluarantruckingheader_id ?? '' !!}`,
+      stok_id: `{!! $stok_id ?? '' !!}`,
+      from_tnl: from_tnl,
+      
+    },`${urlTas}pengeluarantruckingheader`)
   })
 
   $('#pengeluaranTruckingHeaderLookup').jqGrid({
-      url: `{{ config('app.api_url') . 'pengeluarantruckingheader' }}`,
+      url: urlLookopTas,
       mtype: "GET",
       styleUI: 'Bootstrap4',
       iconSet: 'fontAwesome',
@@ -20,6 +38,7 @@
         pengeluaranheader_id: `{!! $pengeluarantruckingheader_id ?? '' !!}`,
         stok_id: `{!! $stok_id ?? '' !!}`,
         pengeluaranstok_id: `{!! $pengeluaranstok_id ?? '' !!}`,
+        from_tnl: from_tnl,
         tgldari: $('#tgldariheaderlookup').val(),
         tglsampai: $('#tglsampaiheaderlookup').val(),
       },
@@ -225,7 +244,8 @@
         {
           label: 'qty',
           name: 'qty',
-          align: 'left'
+          align: 'left',
+          search: false,
         },
         {
           label: 'MODIFIED BY',
@@ -288,7 +308,7 @@
         if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
       },
       loadBeforeSend: function(jqXHR) {
-        jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+        jqXHR.setRequestHeader('Authorization', `Bearer ${accessTokenLookup}`)
 
         setGridLastRequest($(this), jqXHR)
       },

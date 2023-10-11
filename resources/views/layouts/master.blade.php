@@ -35,9 +35,8 @@
   <link rel="stylesheet" href="{{ asset('libraries/nestable2/1.6.0/css/jquery.nestable.min.css') }}" />
 
   <!-- Custom styles -->
-  <link rel="stylesheet" href="{{ asset('libraries/tas-lib/css/styles.css?version='. config('app.version')) }}">
-  <link rel="stylesheet" href="{{ asset('libraries/tas-lib/css/pager.css?version='. config('app.version')) }}">
-
+  <link rel="stylesheet" href="{{ asset('libraries/tas-lib/css/styles.css?version='. filemtime(base_path().'\public\libraries\tas-lib\css\styles.css')) }}">
+  <link rel="stylesheet" href="{{ asset('libraries/tas-lib/css/pager.css?version='. filemtime(base_path().'\public\libraries\tas-lib\css\styles.css')) }}">
   <link rel="stylesheet" href="{{ asset('libraries/adminlte/plugins/dropzone/dropzone.css') }}">
 
 </head>
@@ -318,10 +317,10 @@
   <script src="{{ asset('libraries/jquery-ui/1.13.1/jquery-ui.min.js') }}"></script>
 
   <!-- Custom global script -->
-  <script src="{{ asset('libraries/tas-lib/js/pager.js?version='. config('app.version')) }}"></script>
-  <script src="{{ asset('libraries/tas-lib/js/lookup.js?version='. config('app.version')) }}"></script>
-  <script src="{{ asset('libraries/tas-lib/js/mains.js?version='. config('app.version')) }}"></script>
-  {{-- <script src="{{ asset('libraries/tas-lib/js/app.js?version='. config('app.version')) }}"></script> --}}
+  <script src="{{ asset('libraries/tas-lib/js/pager.js?version='. filemtime(base_path().'\public\libraries\tas-lib\css\styles.css')) }}"></script>
+  <script src="{{ asset('libraries/tas-lib/js/lookup.js?version='. filemtime(base_path().'\public\libraries\tas-lib\css\styles.css')) }}"></script>
+  <script src="{{ asset('libraries/tas-lib/js/mains.js?version='. filemtime(base_path().'\public\libraries\tas-lib\css\styles.css')) }}"></script>
+  {{-- <script src="{{ asset('libraries/tas-lib/js/app.js?version='. filemtime(base_path().'\public\libraries\tas-lib\css\styles.css')) }}"></script> --}}
 
   <!-- Pusher -->
 
@@ -339,6 +338,8 @@
     let accessTokenMks = `{{ session('access_token_mks') }}`
     let accessTokenSby = `{{ session('access_token_sby') }}`
     let accessTokenBtg = `{{ session('access_token_btg') }}`
+    let accessTokenUrlTas = `{{ session('access_token_url_tas') }}`
+    let urlTas = `{{ session('link_url') }}`
     let info = `{{ session('info') }}`
     let appUrl = `{{ url()->to('/') }}`
     let apiUrl = `{{ config('app.api_url') }}`
@@ -607,7 +608,7 @@
     }
 
 
-    function loadDataHeaderLookup(url, grid, addtional = null) {
+    function loadDataHeaderLookup(url, grid, addtional = null,urlTas = null) {
       clearGlobalSearch($('#jqGrid'))
       let data = {
         tgldari: $('#tgldariheaderlookup').val(),
@@ -621,8 +622,12 @@
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
         clearGlobalSearch($('#jqGrid'))
+        let lookupUrl = `${apiUrl}${url}`
+        if (urlTas) {
+          lookupUrl = urlTas
+        }
         $(`#${grid}`).setGridParam({
-          url: `${apiUrl}${url}`,
+          url: lookupUrl,
           datatype: "json",
           postData: data,
 
