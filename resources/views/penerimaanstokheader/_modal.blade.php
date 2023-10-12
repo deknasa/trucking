@@ -2935,7 +2935,7 @@
         var penerimaanstokId = $(`#penerimaanstokId`).val();
         this.postData = {
           penerimaanstok_id: penerimaanstokId,
-          gudangdarike: 'ke',
+          // gudangdarike: 'ke',
           Aktif: 'AKTIF',
         }
       },
@@ -3011,7 +3011,7 @@
         var penerimaanstokId = $(`#penerimaanstokId`).val();
         this.postData = {
           penerimaanstok_id: penerimaanstokId,
-          gudangdarike: 'dari',
+          // gudangdarike: 'dari',
           Aktif: 'AKTIF',
         }
       },

@@ -62,7 +62,7 @@ class LaporanKeteranganPinjamanSupirController extends MyController
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setCellValue('A1', 'PT. TRANSPORINDO AGUNG SEJAHTERA');
+        $sheet->setCellValue('A1', $data[0]['judul']);
         $sheet->setCellValue('A2', 'Laporan Keterangan Pinjaman Supir');
         $sheet->setCellValue('A3', 'Periode: ' . $request->periode);
 

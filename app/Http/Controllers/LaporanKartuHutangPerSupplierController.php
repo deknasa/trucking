@@ -66,7 +66,6 @@ class LaporanKartuHutangPerSupplierController extends MyController
             ->get(config('app.api_url') . 'laporankartuhutangpersupplier/export', $detailParams);
 
         $pengeluaran = $responses['data'];
-
         $disetujui = $pengeluaran[0]['disetujui'] ?? '';
         $diperiksa = $pengeluaran[0]['diperiksa'] ?? '';
         $user = Auth::user();
@@ -74,8 +73,8 @@ class LaporanKartuHutangPerSupplierController extends MyController
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
-        $sheet->setCellValue('A1', 'PT. TRANSPORINDO AGUNG SEJAHTERA');
-        $sheet->setCellValue('A2', 'Laporan Kartu Hutang Per Supplier');
+        $sheet->setCellValue('A1', $pengeluaran[0]['judul']);
+        $sheet->setCellValue('A2', $pengeluaran[0]['judulLaporan']);
 
         $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
 

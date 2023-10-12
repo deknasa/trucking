@@ -271,6 +271,16 @@
             align: 'left'
           },
           {
+            label: 'gandengan',
+            name: 'gandengan',
+            align: 'left'
+          },
+          {
+            label: 'NO BUKTI Pengeluaran Trucking',
+            name: 'pengeluarantrucking_nobukti',
+            align: 'left'
+          },
+          {
             label: 'KODE PERKIRAAN',
             name: 'coa',
             align: 'left'

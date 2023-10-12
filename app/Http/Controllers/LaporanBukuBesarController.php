@@ -71,7 +71,7 @@ class LaporanBukuBesarController extends MyController
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setCellValue('A1', 'TAS ' . $dataheader['cabang']);
+        $sheet->setCellValue('A1', $bukubesar[0]['judul']);
         $sheet->getStyle("A1")->getFont()->setSize(20)->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:F1');

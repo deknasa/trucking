@@ -55,7 +55,6 @@ class LaporanHutangBBMController extends MyController
             ->get(config('app.api_url') . 'laporanhutangbbm/export', $detailParams);
 
         $data = $header['data'];
-        
         $disetujui = $data[0]['disetujui'] ?? '';
         $diperiksa = $data[0]['diperiksa'] ?? '';
 
@@ -63,15 +62,14 @@ class LaporanHutangBBMController extends MyController
         $sheet = $spreadsheet->getActiveSheet();
 
         $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setCellValue('A1', 'LAPORAN HUTANG BBM');
-        $sheet->getStyle("A1")->getFont()->setSize(20)->setBold(true);
+        
+        $sheet->setCellValue('A1', $data[0]['judul'] ?? '');
+        $sheet->setCellValue('A2', $data[0]['judulLaporan'] ?? '');
+        $sheet->setCellValue('A3', 'Periode: ' . $request->periode);
+        $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
-        $sheet->mergeCells('A1:D3');
 
-        $sheet->setCellValue('A4', 'PERIODE : ' . $request->sampai);
-        $sheet->getStyle("A4")->getFont()->setSize(12)->setBold(true);
-        $sheet->mergeCells('A4:B4');
-
+        $sheet->mergeCells('A1:F1');
 
 
         $detail_table_header_row = 6;
