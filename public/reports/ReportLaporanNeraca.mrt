@@ -1,19 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-<<<<<<< HEAD
   "ReportGuid": "78ed6ff5eb384dcd4949f8f3e0678fc9",
-=======
-  "ReportGuid": "09b14613f4c25c9effd534643e415830",
->>>>>>> 6c552a4b2c1ef772a0b480f69ff6243c43828595
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://tasjkt.kozow.com:8074/trucking/public/reports/ReportLaporanNeraca.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-<<<<<<< HEAD
   "ReportChanged": "/Date(1697106544000+0700)/",
-=======
-  "ReportChanged": "/Date(1697093806000+0700)/",
->>>>>>> 6c552a4b2c1ef772a0b480f69ff6243c43828595
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
