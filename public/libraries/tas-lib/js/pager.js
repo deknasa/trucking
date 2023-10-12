@@ -206,23 +206,44 @@ $.fn.customPager = function (option = {}) {
 		let extndBtn = "";
 		if (option.extndBtn) {
 			option.extndBtn.forEach(element => {
-				extndBtn += `<div class="btn-group dropup  scrollable-menu">`
-				extndBtn += `<button type="button" class="${element.class}" data-toggle="dropdown" id="${element.id}">
-				${element.innerHTML}
-				</button>`
-				extndBtn += `<ul class="dropdown-menu" id="menu-approve" aria-labelledby="${element.id}">`
-				if (element.dropmenuHTML) {
-					element.dropmenuHTML.forEach(dropmenuHTML => {
-						extndBtn += `<li><a class="dropdown-item" id='${dropmenuHTML.id}' href="#">${dropmenuHTML.text}</a></li>`
-						$(document).on("click", `#${dropmenuHTML.id}`, function (event) {
-							event.stopImmediatePropagation();
+				if( element.class.indexOf('dropdown-toggle') != -1 ){
+					
+					extndBtn += `<div class="btn-group dropup  scrollable-menu">`
+					extndBtn += `<button type="button" class="${element.class}" data-toggle="dropdown" id="${element.id}">
+					${element.innerHTML}
+					</button>`
+					extndBtn += `<ul class="dropdown-menu" id="menu-approve" aria-labelledby="${element.id}">`
+					if (element.dropmenuHTML) {
+						element.dropmenuHTML.forEach(dropmenuHTML => {
+							extndBtn += `<li><a class="dropdown-item" id='${dropmenuHTML.id}' href="#">${dropmenuHTML.text}</a></li>`
+							$(document).on("click", `#${dropmenuHTML.id}`, function (event) {
+								event.stopImmediatePropagation();
 
-							dropmenuHTML.onClick();
+								dropmenuHTML.onClick();
+							});
 						});
-					});
+					}
+					extndBtn += `</ul>`
+					extndBtn += "</div>"
+				}else{
+					let buttonElement = document.createElement("button");
+						buttonElement.id =
+							typeof element.id !== "undefined"
+								? element.id
+								: `customButton_${index}`;
+						buttonElement.className = element.class;
+						buttonElement.innerHTML = element.innerHTML;
+
+						if (element.onClick) {
+							$(document).on("click", `#${buttonElement.id}`, function (event) {
+								event.stopImmediatePropagation();
+
+								element.onClick();
+							});
+						}
+
+						extndBtn += buttonElement.outerHTML;
 				}
-				extndBtn += `</ul>`
-				extndBtn += "</div>"
 			});
 		}
 

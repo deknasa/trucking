@@ -15,7 +15,8 @@
   <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
   <script src="{{ asset('libraries/tas-lib/js/terbilang.js?version='. config('app.version')) }}"></script>
   <script type="text/javascript">
-    let pengeluaranheader = <?= json_encode($pengeluaran); ?>
+    let pengeluaranheader = <?= json_encode($pengeluaran); ?>;
+    let printer = <?= json_encode($printer); ?>;
 
     function Start() {
       Stimulsoft.Base.StiLicense.loadFromFile("{{ asset($stireport_path . 'license.php') }}");
@@ -43,7 +44,11 @@
       var dataSet = new Stimulsoft.System.Data.DataSet("Data")
 
       viewer.renderHtml('content')
-      report.loadFile(`{{ asset('public/reports/ReportPengeluaranKas.mrt') }}`)
+      if(printer['tipe'] == 'reportPrinterBesar'){
+        report.loadFile(`{{ asset('public/reports/ReportPengeluaranKas.mrt') }}`)
+      }else{        
+        report.loadFile(`{{ asset('public/reports/ReportPengeluaranKas.mrt') }}`)
+      }
 
       report.dictionary.dataSources.clear()
 

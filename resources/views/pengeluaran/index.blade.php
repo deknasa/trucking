@@ -541,7 +541,7 @@
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
                     showDialog('Harap pilih salah satu record')
                   } else {
-                    window.open(`{{ route('pengeluaranheader.report') }}?id=${selectedId}`)
+                    window.open(`{{ route('pengeluaranheader.report') }}?id=${selectedId}&printer=reportPrinterBesar`)
                   }
                   clearSelectedRows()
                   $('#gs_').prop('checked', false)
@@ -555,7 +555,7 @@
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
                     showDialog('Harap pilih salah satu record')
                   } else {
-                    window.open(`{{ route('pengeluaranheader.report') }}?id=${selectedId}`)
+                    window.open(`{{ route('pengeluaranheader.report') }}?id=${selectedId}&printer=reportPrinterKecil`)
                   }
                   clearSelectedRows()
                   $('#gs_').prop('checked', false)
