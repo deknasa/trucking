@@ -58,6 +58,13 @@
     <span><img src="{{ asset('libraries/tas-lib/img/loading-red.gif') }}" rel="preload">Loading ...</span>
   </div>
 
+  <div class="lookup-loader d-none">
+    <div class="lookup-loader-content d-flex align-items-center justify-content-center">
+      <img src="{{ asset('libraries/tas-lib/img/loading-blue.gif') }}" rel="preload">
+      Loading...
+    </div>
+  </div>
+  
   <div class="processing-loader d-none" id="processingLoader">
     <img src="{{ asset('libraries/tas-lib/img/loading-color.gif') }}" rel="preload">
     <span>Processing</span>
@@ -319,6 +326,7 @@
   <!-- Custom global script -->
   <script src="{{ asset('libraries/tas-lib/js/pager.js?version='. filemtime(base_path().'\public\libraries\tas-lib\css\styles.css')) }}"></script>
   <script src="{{ asset('libraries/tas-lib/js/lookup.js?version='. filemtime(base_path().'\public\libraries\tas-lib\css\styles.css')) }}"></script>
+  <script src="{{ asset('libraries/tas-lib/js/lookupMaster.js?version='. filemtime(base_path().'\public\libraries\tas-lib\css\styles.css')) }}"></script>
   <script src="{{ asset('libraries/tas-lib/js/mains.js?version='. filemtime(base_path().'\public\libraries\tas-lib\css\styles.css')) }}"></script>
   {{-- <script src="{{ asset('libraries/tas-lib/js/app.js?version='. filemtime(base_path().'\public\libraries\tas-lib\css\styles.css')) }}"></script> --}}
 

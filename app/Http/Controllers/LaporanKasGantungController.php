@@ -65,15 +65,16 @@ class LaporanKasGantungController extends MyController
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         
-        $sheet->setCellValue('A1', 'LAPORAN KAS GANTUNG');
-        
-        $sheet->getStyle("A1")->getFont()->setSize(20)->setBold(true);
+        $sheet->setCellValue('A1', $pengeluaran[0]['judul']);
+        $sheet->setCellValue('A2', $pengeluaran[0]['judulLaporan']);
+        $sheet->setCellValue('A3', 'Periode: ' . $request->periode);
     
+        $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
-        $sheet->mergeCells('A1:F3');
+        $sheet->mergeCells('A1:F1');
        
-        $header_start_row = 4;
-        $detail_start_row = 5;
+        $header_start_row = 5;
+        $detail_start_row = 6;
 
         $styleArray = array(
             'borders' => array(

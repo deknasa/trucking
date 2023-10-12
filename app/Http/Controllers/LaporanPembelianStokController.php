@@ -112,8 +112,8 @@ class LaporanPembelianStokController extends MyController
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
-        $sheet->setCellValue('A1', 'PT. TRANSPORINDO AGUNG SEJAHTERA');
-        $sheet->setCellValue('A2', 'Laporan Pembelian Stok');
+        $sheet->setCellValue('A1', $pengeluaran[0]['judul']);
+        $sheet->setCellValue('A2', $pengeluaran[0]['judulLaporan']);
         $sheet->setCellValue('A3', 'Periode: ' . $request->dari . ' S/D ' . $request->sampai);
         $sheet->setCellValue('A4', 'Stok: ' . $request->stokdari . ' S/D ' . $request->stoksampai);
 

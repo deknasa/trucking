@@ -119,8 +119,8 @@ class laporanpembelianController extends MyController
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
-        $sheet->setCellValue('A1', 'PT. TRANSPORINDO AGUNG SEJAHTERA');
-        $sheet->setCellValue('A2', 'Laporan Pembelian');
+        $sheet->setCellValue('A1', $pengeluaran[0]['judul']);
+        $sheet->setCellValue('A2', $pengeluaran[0]['judulLaporan']);
 
         $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
 

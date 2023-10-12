@@ -46,8 +46,6 @@ class ExportLaporanKasHarianController extends MyController
 
         $dataDua = $header['dataDua'];
 
-
-
         $spreadsheet = new Spreadsheet();
         $alphabets = array_merge(range('A', 'Z'), range('AA', 'AZ'), range('BA', 'BZ'), range('CA', 'CZ'));
         $sheetIndex = 0;
@@ -73,7 +71,7 @@ class ExportLaporanKasHarianController extends MyController
             $sheet->setTitle($date);
             $sheetIndex++;
 
-            $sheet->setCellValue('A1', 'PT. TRANSPORINDO AGUNG SEJAHTERA');
+            $sheet->setCellValue('A1', $data[0]['judul']);
             $sheet->getStyle("A1")->getFont()->setSize(20);
             $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
             $sheet->mergeCells('A1:J1');
@@ -192,7 +190,7 @@ class ExportLaporanKasHarianController extends MyController
         $rekapSheet->setTitle('LAPORAN REKAP');
         $sheetIndex++;
 
-        $rekapSheet->setCellValue('A1', 'PT. TRANSPORINDO AGUNG SEJAHTERA');
+        $rekapSheet->setCellValue('A1', $data[0]['judul']);
         $rekapSheet->getStyle("A1")->getFont()->setSize(20);
         $rekapSheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $rekapSheet->mergeCells('A1:J1');
@@ -311,7 +309,7 @@ class ExportLaporanKasHarianController extends MyController
         $rekap01Sheet->setTitle('LAPORAN REKAP 01');
         $sheetIndex++;
 
-        $rekap01Sheet->setCellValue('A1', 'PT. TRANSPORINDO AGUNG SEJAHTERA');
+        $rekap01Sheet->setCellValue('A1', $data[0]['judul']);
         $rekap01Sheet->getStyle("A1")->getFont()->setSize(20);
         $rekap01Sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $rekap01Sheet->mergeCells('A1:J1');
@@ -418,7 +416,7 @@ class ExportLaporanKasHarianController extends MyController
         $rekapPerkiraanSheet->setTitle('REKAP PERKIRAAN');
         $sheetIndex++;
 
-        $rekapPerkiraanSheet->setCellValue('A1', 'PT. TRANSPORINDO AGUNG SEJAHTERA');
+        $rekapPerkiraanSheet->setCellValue('A1', $data[0]['judul']);
         $rekapPerkiraanSheet->getStyle("A1")->getFont()->setSize(20);
         $rekapPerkiraanSheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $rekapPerkiraanSheet->mergeCells('A1:E1');

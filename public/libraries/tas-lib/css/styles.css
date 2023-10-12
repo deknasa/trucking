@@ -97,6 +97,10 @@ input[type=text]:focus,input[type=password]:focus, .select2-selection:focus {
 	z-index: 101;
 }
 
+.bdiv-lookup {
+	height: 300px!important;
+}
+
 .hidden {
 	display: none;
 }
@@ -416,6 +420,40 @@ select[readonly].select2-hidden-accessible + .select2-container {
     
 } */
 
+.loadingMessage{
+	position: relative;
+	bottom: 42px;
+	/* top: 100%; */
+	/* left: 2px; Ubah dari 50% menjadi 10px untuk menggeser ke kiri */
+	color: red;
+	transform: translateY(-50%);
+	display: none;
+	background-color: #e0ecff;
+	padding: 2px;
+	border-radius: 2px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	font-size: 16px;
+	color: #333;
+	width: 100%; 
+	height: 30px;
+	max-width: 100%;
+	
+	text-align: left; /* Atur teks menjadi kiri */
+}
+
+
+.loading-image {
+    width: 25px; /* Sesuaikan ukuran gambar sesuai kebutuhan */
+    margin-right: 10px; /* Jarak antara gambar dan teks */
+}
+
+.loading-text {
+	/* margin-top: 2px; */
+	display: inline-block;
+    color: black;
+	
+}
+
 .ui-th-div {
 	font-weight: normal !important;
 }
@@ -552,6 +590,28 @@ select[readonly].select2-hidden-accessible + .select2-container {
 	height: auto;
 }
 
+.lookup-loader {
+	position: fixed;
+	z-index: 9999;
+	height: 100vh;
+	display: flex;
+	align-items: center;
+	width: 100%;
+	justify-content: center;
+}
+
+.lookup-loader-content {
+	background: #d9edf7;
+	border: 1px solid #ddd;
+	font-family: dejavu;
+	padding: 8px;
+}
+
+.lookup-loader-content img {
+	width: 21px;
+	height: auto;
+}
+
 .table tr > th,
 .table tr > td {
 	border-color: #bad5ff;
@@ -676,6 +736,33 @@ span.textCard {
 	.ui-jqgrid .ui-jqgrid-bdiv { 
 		height: 447px!important; 
 	}
+	
+	.loadingMessage{
+		position: absolute;
+		/* bottom: 42px; */
+		top: 94%;
+		/* left: 2px; Ubah dari 50% menjadi 10px untuk menggeser ke kiri */
+		color: red;
+		transform: translateY(-50%);
+		display: none;
+		background-color: #e0ecff;
+		padding: 2px;
+		/* border-radius: 5px; */
+		box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+		font-size: 16px;
+		color: #333;
+		width: 100%; 
+		height: 50px;/* Ubah lebar sesuai kebutuhan Anda */
+		max-width: 100%;
+		text-align: left; /* Atur teks menjadi kiri */
+	}
+	.loading-text {
+		margin-top: 7px;
+		display: inline-block;
+		color: black;
+		
+	}
+
 
 }
 

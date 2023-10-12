@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "a619b7258ba0697aac1b90f3430c9971",
+  "ReportGuid": "09b14613f4c25c9effd534643e415830",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanNeraca.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1695199622000+0700)/",
+  "ReportChanged": "/Date(1697093806000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -120,21 +120,9 @@
             "Type": "System.String"
           },
           "15": {
-            "Name": "coabanding",
-            "NameInSource": "coabanding",
-            "Alias": "coabanding",
-            "Type": "System.String"
-          },
-          "16": {
-            "Name": "nominalbanding",
-            "NameInSource": "nominalbanding",
-            "Alias": "nominalbanding",
-            "Type": "System.String"
-          },
-          "17": {
-            "Name": "selisih",
-            "NameInSource": "selisih",
-            "Alias": "selisih",
+            "Name": "judul",
+            "NameInSource": "judul",
+            "Alias": "judul",
             "Type": "System.String"
           }
         },
@@ -184,28 +172,28 @@
             "Type": "System.String"
           },
           "2": {
+            "Name": "info",
+            "NameInSource": "info",
+            "Alias": "info",
+            "Type": "System.String"
+          },
+          "3": {
             "Name": "modifiedby",
             "NameInSource": "modifiedby",
             "Alias": "modifiedby",
             "Type": "System.String"
           },
-          "3": {
+          "4": {
             "Name": "created_at",
             "NameInSource": "created_at",
             "Alias": "created_at",
             "Type": "System.DateTime"
           },
-          "4": {
+          "5": {
             "Name": "updated_at",
             "NameInSource": "updated_at",
             "Alias": "updated_at",
             "Type": "System.DateTime"
-          },
-          "5": {
-            "Name": "info",
-            "NameInSource": "info",
-            "Alias": "info",
-            "Type": "System.String"
           },
           "6": {
             "Name": "pivot",
@@ -282,28 +270,28 @@
             "Type": "System.String"
           },
           "9": {
+            "Name": "info",
+            "NameInSource": "info",
+            "Alias": "info",
+            "Type": "System.String"
+          },
+          "10": {
             "Name": "modifiedby",
             "NameInSource": "modifiedby",
             "Alias": "modifiedby",
             "Type": "System.String"
           },
-          "10": {
+          "11": {
             "Name": "created_at",
             "NameInSource": "created_at",
             "Alias": "created_at",
             "Type": "System.DateTime"
           },
-          "11": {
+          "12": {
             "Name": "updated_at",
             "NameInSource": "updated_at",
             "Alias": "updated_at",
             "Type": "System.DateTime"
-          },
-          "12": {
-            "Name": "info",
-            "NameInSource": "info",
-            "Alias": "info",
-            "Type": "System.String"
           },
           "13": {
             "Name": "roles",
@@ -436,7 +424,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{parameter.judul}"
+                "Value": "{data.judul}"
               },
               "HorAlignment": "Center",
               "Font": ";10;Bold;",
