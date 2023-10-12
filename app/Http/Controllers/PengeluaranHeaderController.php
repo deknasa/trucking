@@ -187,10 +187,12 @@ class PengeluaranHeaderController extends MyController
         $combo = $this->comboreport('list');
         $key = array_search('CETAK', array_column( $combo, 'parameter')); 
         $pengeluaran["combo"] =  $combo[$key];
+        $printer['tipe'] = $request->printer;
+
         if($pengeluaran['tipe_bank'] === 'KAS')
-        { return view('reports.pengeluarankas', compact('pengeluaran', 'pengeluaran_details',));
+        { return view('reports.pengeluarankas', compact('pengeluaran', 'pengeluaran_details','printer'));
         } else {
-            return view('reports.pengeluaranbank', compact('pengeluaran', 'pengeluaran_details',));
+            return view('reports.pengeluaranbank', compact('pengeluaran', 'pengeluaran_details','printer'));
         }
     }
 
