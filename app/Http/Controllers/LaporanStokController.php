@@ -76,16 +76,12 @@ class LaporanStokController extends Controller
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
-        $sheet->setCellValue('A1', 'PT. TRANSPORINDO AGUNG SEJAHTERA');
+        $sheet->setCellValue('A1', $pengeluaran[0]['judul']);
         $sheet->setCellValue('A2', 'Laporan Stok');
         $sheet->setCellValue('A3', 'Bulan ' . date('M-Y',strtotime($pengeluaran[0]['tgldari'])));
-        $sheet->getStyle("A1")->getFont()->setSize(20)->setBold(true);
-        $sheet->getStyle("A2")->getFont()->setSize(18)->setBold(true);
-        $sheet->getStyle("A3")->getFont()->setSize(18)->setBold(true);
+        $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
 
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
-        $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
-        $sheet->getStyle('A3')->getAlignment()->setHorizontal('center');
         // $sheet->getStyle('A2')->getAlignment()->setHorizontal('left');
         $sheet->mergeCells('A1:K1');
         $sheet->mergeCells('A2:K2');

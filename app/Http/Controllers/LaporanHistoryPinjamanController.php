@@ -62,7 +62,8 @@ class LaporanHistoryPinjamanController extends MyController
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setCellValue('A1', 'Laporan History Pinjaman ');
+        $sheet->setCellValue('A1', $pengeluaran[0]['judul']);
+        $sheet->setCellValue('A2', 'Laporan History Pinjaman');
         $sheet->getStyle("A1")->getFont()->setSize(20)->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:E1');
@@ -113,6 +114,7 @@ class LaporanHistoryPinjamanController extends MyController
         foreach ($header_columns as $data_columns_index => $data_column) {
             $sheet->setCellValue($alphabets[$data_columns_index] . $header_start_row, $data_column['label'] ?? $data_columns_index + 1);
         }
+        $sheet->getStyle("A$header_start_row:E$header_start_row")->applyFromArray($styleArray)->getFont()->setBold(true);
         $totalnominal = 0;
         $totalSaldo = 0;
         foreach ($pengeluaran as $response_index => $response_detail) {
@@ -126,6 +128,8 @@ class LaporanHistoryPinjamanController extends MyController
                     $sheet->setCellValue($alphabets[$data_columns_index] . $detail_start_row, $response_detail[$data_column['index']]);
                 }
             }
+            
+            $sheet->getStyle("A$detail_start_row:E$detail_start_row")->applyFromArray($styleArray);
             $detail_start_row++;
         }
 
