@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "a619b7258ba0697aac1b90f3430c9971",
+  "ReportGuid": "78ed6ff5eb384dcd4949f8f3e0678fc9",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanNeraca.mrt",
+  "ReportFile": "http://tasjkt.kozow.com:8074/trucking/public/reports/ReportLaporanNeraca.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1695199622000+0700)/",
+  "ReportChanged": "/Date(1697106544000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -120,21 +120,9 @@
             "Type": "System.String"
           },
           "15": {
-            "Name": "coabanding",
-            "NameInSource": "coabanding",
-            "Alias": "coabanding",
-            "Type": "System.String"
-          },
-          "16": {
-            "Name": "nominalbanding",
-            "NameInSource": "nominalbanding",
-            "Alias": "nominalbanding",
-            "Type": "System.String"
-          },
-          "17": {
-            "Name": "selisih",
-            "NameInSource": "selisih",
-            "Alias": "selisih",
+            "Name": "judul",
+            "NameInSource": "judul",
+            "Alias": "judul",
             "Type": "System.String"
           }
         },
@@ -184,28 +172,28 @@
             "Type": "System.String"
           },
           "2": {
+            "Name": "info",
+            "NameInSource": "info",
+            "Alias": "info",
+            "Type": "System.String"
+          },
+          "3": {
             "Name": "modifiedby",
             "NameInSource": "modifiedby",
             "Alias": "modifiedby",
             "Type": "System.String"
           },
-          "3": {
+          "4": {
             "Name": "created_at",
             "NameInSource": "created_at",
             "Alias": "created_at",
             "Type": "System.DateTime"
           },
-          "4": {
+          "5": {
             "Name": "updated_at",
             "NameInSource": "updated_at",
             "Alias": "updated_at",
             "Type": "System.DateTime"
-          },
-          "5": {
-            "Name": "info",
-            "NameInSource": "info",
-            "Alias": "info",
-            "Type": "System.String"
           },
           "6": {
             "Name": "pivot",
@@ -282,28 +270,28 @@
             "Type": "System.String"
           },
           "9": {
+            "Name": "info",
+            "NameInSource": "info",
+            "Alias": "info",
+            "Type": "System.String"
+          },
+          "10": {
             "Name": "modifiedby",
             "NameInSource": "modifiedby",
             "Alias": "modifiedby",
             "Type": "System.String"
           },
-          "10": {
+          "11": {
             "Name": "created_at",
             "NameInSource": "created_at",
             "Alias": "created_at",
             "Type": "System.DateTime"
           },
-          "11": {
+          "12": {
             "Name": "updated_at",
             "NameInSource": "updated_at",
             "Alias": "updated_at",
             "Type": "System.DateTime"
-          },
-          "12": {
-            "Name": "info",
-            "NameInSource": "info",
-            "Alias": "info",
-            "Type": "System.String"
           },
           "13": {
             "Name": "roles",
@@ -430,13 +418,13 @@
               "Ident": "StiText",
               "Name": "Text1",
               "GrowToHeight": true,
-              "ClientRectangle": "7.65,0.29,7.19,0.94",
+              "ClientRectangle": "0.05,0.09,21.19,0.94",
               "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{parameter.judul}"
+                "Value": "{data.judul}"
               },
               "HorAlignment": "Center",
               "Font": ";10;Bold;",
@@ -449,27 +437,27 @@
               "Ident": "StiText",
               "Name": "Text6",
               "GrowToHeight": true,
-              "ClientRectangle": "7.62,1.2,7.2,0.6",
+              "ClientRectangle": "0.02,0.8,21.2,0.6",
               "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{parameter.judullaporan}"
+                "Value": "{ToUpperCase(parameter.judullaporan)}"
               },
               "HorAlignment": "Center",
               "Font": ";10;Bold;",
               "Border": ";;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
-              "Type": "DataColumn"
+              "Type": "Expression"
             },
             "4": {
               "Ident": "StiText",
               "Name": "Text18",
               "Guid": "7462b9011caae40416ba07a69e5e98e9",
               "GrowToHeight": true,
-              "ClientRectangle": "14.27,1.44,6.92,0.39",
+              "ClientRectangle": "14.27,0.24,6.92,0.39",
               "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -489,7 +477,7 @@
               "Name": "Text51",
               "Guid": "5b248faa297c85f35660c07160de2e34",
               "GrowToHeight": true,
-              "ClientRectangle": "10.54,1.91,10.67,0.41",
+              "ClientRectangle": "10.54,1.11,10.67,0.41",
               "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -535,7 +523,7 @@
               "Name": "Text24",
               "Guid": "f804cde4971da08ded783f26b427d4b7",
               "GrowToHeight": true,
-              "ClientRectangle": "0.25,2,2.52,0.39",
+              "ClientRectangle": "14.25,0.6,6.92,0.39",
               "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -848,18 +836,17 @@
               "Conditions": {
                 "0": {
                   "Ident": "StiCondition",
+                  "DataType": "Numeric",
                   "Column": "data.selisih",
                   "Value1": "0",
                   "Enabled": false,
                   "TextColor": "255,255,255",
+                  "BackColor": "242,242,242",
                   "BorderSides": "None"
                 }
               },
               "Interaction": {
                 "Ident": "StiInteraction"
-              },
-              "Text": {
-                "Value": "X"
               },
               "HorAlignment": "Right",
               "Font": ";10;Bold;",
