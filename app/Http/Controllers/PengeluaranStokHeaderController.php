@@ -284,6 +284,7 @@ class PengeluaranStokHeaderController extends MyController
         $combo = $this->combo('list');
         $key = array_search('CETAK', array_column( $combo, 'parameter')); 
         $data["combo"] =  $combo[$key];
+        $printer['tipe'] = $request->printer;
 
         $pengeluaranstokheaders = $data;
         $parameterStatusFormat = $this->statusFormat();
@@ -296,7 +297,7 @@ class PengeluaranStokHeaderController extends MyController
         $data['value'] = $persediaan['value'];
 
         $pengeluaranstokheaders = $data;
-        return view('reports.pengeluaranstokheader', compact('pengeluaranstokheaders'));
+        return view('reports.pengeluaranstokheader', compact('pengeluaranstokheaders','printer'));
     }
 
     public function export(Request $request)
