@@ -102,11 +102,13 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <select name="statusaktif" class="form-select select2bs4" style="width: 100%;">
+                 <select name="statusaktif" class="form-select select2bs4" style="width: 100%;">
                   <option value="">-- PILIH STATUS AKTIF --</option>
+
                 </select>
                 <!-- <input type="hidden" name="statusaktif_id" class="filled-row">
                 <input type="text" name="statusaktif_name" id="statusaktif_name" class="form-control lg-form statusaktif-lookup filled-row" autocomplete="off"> -->
+
               </div>
             </div>
             <div class="row form-group statussistemton">
@@ -116,12 +118,14 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <select name="statussistemton" class="form-select select2bs4" style="width: 100%;">
+                 <select name="statussistemton" class="form-select select2bs4" style="width: 100%;">
                   <option value="">-- PILIH SISTEM TON --</option>
+
                 </select>
 
                 <!-- <input type="hidden" name="statussistemton_id" class="filled-row">
                 <input type="text" name="statussistemton_name" id="statussistemton_name" class="form-control lg-form statussistemton-lookup filled-row" autocomplete="off"> -->
+
               </div>
             </div>
             {{-- <div class="row form-group">
@@ -154,9 +158,11 @@
               <div class="col-12 col-md-10">
                 <select name="statuspenyesuaianharga" class="form-select select2bs4" style="width: 100%;" z-index='3'>
                   <option value="">-- PILIH STATUS PENYESUAIAN HARGA --</option>
+
                 </select>
                 <!-- <input type="hidden" name="statuspenyesuaianharga_id" class="filled-row">
                 <input type="text" name="statuspenyesuaianharga_name" id="statuspenyesuaianharga_name" class="form-control lg-form statuspenyesuaianharga-lookup filled-row" autocomplete="off"> -->
+
               </div>
             </div>
             <div class="row form-group statuspostingtnl">
@@ -165,11 +171,13 @@
                   STATUS POSTING TNL <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-md-10">
-                <select name="statuspostingtnl" class="form-select select2bs4" style="width: 100%;" z-index='3'>
+                 <select name="statuspostingtnl" class="form-select select2bs4" style="width: 100%;" z-index='3'>
                   <option value="">-- PILIH STATUS POSTING TNL --</option>
+
                 </select>
                 <!-- <input type="hidden" name="statuspostingtnl_id" class="filled-row">
                 <input type="text" name="statuspostingtnl_name" id="statuspostingtnl_name" class="form-control lg-form statuspostingtnl-lookup filled-row" autocomplete="off"> -->
+
               </div>
             </div>
 
