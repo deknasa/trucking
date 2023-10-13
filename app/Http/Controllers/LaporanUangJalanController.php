@@ -109,12 +109,12 @@ class LaporanUangJalanController extends MyController
         $sheet = $spreadsheet->getActiveSheet();
       
       
-        $sheet->setCellValue('A1', 'LAPORAN UANG JALAN');
-        
-        $sheet->getStyle("A1")->getFont()->setSize(20)->setBold(true);
+        $sheet->setCellValue('A1', $data[0]['judul'] ?? '');
+        $sheet->setCellValue('A2',  $data[0]['judulLaporan'] ?? '');
+        $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
     
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
-        $sheet->mergeCells('A1:F3');
+        $sheet->mergeCells('A1:C1');
        
         $header_start_row = 4;
         $detail_start_row = 5;

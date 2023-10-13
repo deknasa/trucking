@@ -72,8 +72,8 @@ class LaporanPemotonganPinjamanPerEBSController extends MyController
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
       
-        $sheet->setCellValue('A1', 'PT. TRANSPORINDO AGUNG SEJAHTERA');
-        $sheet->setCellValue('A2', 'LAPORAN PEMOTONGAN PEMINJAMAN SUPIR PER EBS');
+        $sheet->setCellValue('A1', $pengeluaran[0]['judul'] ?? '');
+        $sheet->setCellValue('A2', $pengeluaran[0]['judulLaporan'] ?? '');
         
         // $sheet->getStyle("A1")->getFont()->setSize(20)->setBold(true);
     

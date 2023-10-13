@@ -69,8 +69,8 @@ class LaporanKartuHutangPrediksiController extends MyController
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         
-        $sheet->setCellValue('A1', 'PT. TRANSPORINDO AGUNG SEJAHTERA');
-        $sheet->setCellValue('A2', 'Laporan Kartu Hutang Prediksi (EBS)');
+        $sheet->setCellValue('A1', $data[0]['judul']);
+        $sheet->setCellValue('A2', $data[0]['judulLaporan']);
         $sheet->setCellValue('A3', 'Periode: ' . $request->sampai);
         // $sheet = $spreadsheet->getActiveSheet();
         // $sheet->setCellValue('b1', 'LAPORAN PINJAMAN SUPIR');
@@ -220,7 +220,7 @@ class LaporanKartuHutangPrediksiController extends MyController
 
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);
-        $sheet->getColumnDimension('C')->setWidth(150);
+        $sheet->getColumnDimension('C')->setAutoSize(true);
         $sheet->getColumnDimension('E')->setAutoSize(true);
         $sheet->getColumnDimension('F')->setAutoSize(true);
         $sheet->getColumnDimension('G')->setAutoSize(true);

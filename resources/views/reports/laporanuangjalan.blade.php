@@ -31,7 +31,7 @@
       var dataSet = new Stimulsoft.System.Data.DataSet("Data")
 
       viewer.renderHtml('content')
-      report.loadFile(`{{ asset('public/reports/ReportLaporanUangJalan (2) (2).mrt') }}`)
+      report.loadFile(`{{ asset('public/reports/ReportLaporanUangJalan.mrt') }}`)
 
       report.dictionary.dataSources.clear()
 

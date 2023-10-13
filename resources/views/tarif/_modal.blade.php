@@ -102,9 +102,11 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <select name="statusaktif" class="form-select select2bs4" style="width: 100%;">
+                <!-- <select name="statusaktif" class="form-select select2bs4" style="width: 100%;">
                   <option value="">-- PILIH STATUS AKTIF --</option>
-                </select>
+                </select> -->
+                <input type="hidden" name="statusaktif_id" class="filled-row">
+                <input type="text" name="statusaktif_name" id="statusaktif_name" class="form-control lg-form statusaktif-lookup filled-row" autocomplete="off">
               </div>
             </div>
             <div class="row form-group statussistemton">
@@ -114,9 +116,12 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <select name="statussistemton" class="form-select select2bs4" style="width: 100%;">
+                <!-- <select name="statussistemton" class="form-select select2bs4" style="width: 100%;">
                   <option value="">-- PILIH SISTEM TON --</option>
-                </select>
+                </select> -->
+
+                <input type="hidden" name="statussistemton_id" class="filled-row">
+                <input type="text" name="statussistemton_name" id="statussistemton_name" class="form-control lg-form statussistemton-lookup filled-row" autocomplete="off">
               </div>
             </div>
             {{-- <div class="row form-group">
@@ -147,9 +152,11 @@
                   STATUS PENYESUAIAN HARGA <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-md-10">
-                <select name="statuspenyesuaianharga" class="form-select select2bs4" style="width: 100%;" z-index='3'>
+                <!-- <select name="statuspenyesuaianharga" class="form-select select2bs4" style="width: 100%;" z-index='3'>
                   <option value="">-- PILIH STATUS PENYESUAIAN HARGA --</option>
-                </select>
+                </select> -->
+                <input type="hidden" name="statuspenyesuaianharga_id" class="filled-row">
+                <input type="text" name="statuspenyesuaianharga_name" id="statuspenyesuaianharga_name" class="form-control lg-form statuspenyesuaianharga-lookup filled-row" autocomplete="off">
               </div>
             </div>
             <div class="row form-group statuspostingtnl">
@@ -158,9 +165,11 @@
                   STATUS POSTING TNL <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-md-10">
-                <select name="statuspostingtnl" class="form-select select2bs4" style="width: 100%;" z-index='3'>
+                <!-- <select name="statuspostingtnl" class="form-select select2bs4" style="width: 100%;" z-index='3'>
                   <option value="">-- PILIH STATUS POSTING TNL --</option>
-                </select>
+                </select> -->
+                <input type="hidden" name="statuspostingtnl_id" class="filled-row">
+                <input type="text" name="statuspostingtnl_name" id="statuspostingtnl_name" class="form-control lg-form statuspostingtnl-lookup filled-row" autocomplete="off">
               </div>
             </div>
 
@@ -990,6 +999,134 @@
   }
 
   function initLookup() {
+    $('.statusaktif-lookup').lookupMaster({
+      title: 'Status Aktif Lookup',
+      fileName: 'parameterMaster',
+      beforeProcess: function(test) {
+        this.postData = {
+          url: `${apiUrl}parameter/combo`,
+          grp: 'STATUS AKTIF',
+          subgrp: 'STATUS AKTIF',
+          Aktif: 'AKTIF',
+          searching: 1,
+          valueName: 'statusaktif_id',
+          searchText: 'statusaktif-lookup',
+          singleColumn: true,
+          hideLabel: true,
+          title: 'Status Aktif',
+          typeSearch: 'ALL',
+        }
+      },
+      onSelectRow: (statusaktif, element) => {
+        $('#crudForm [name=statusaktif_id]').first().val(statusaktif.id)
+        element.val(statusaktif.text)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $('#crudForm [name=statusaktif_id]').first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+    $('.statussistemton-lookup').lookupMaster({
+      title: 'Sistem Ton Lookup',
+      fileName: 'parameterMaster',
+      beforeProcess: function(test) {
+        this.postData = {
+          url: `${apiUrl}parameter/combo`,
+          grp: 'SISTEM TON',
+          subgrp: 'SISTEM TON',
+          Aktif: 'AKTIF',
+          searching: 1,
+          valueName: 'statussistemton_id',
+          searchText: 'statussistemton-lookup',
+          singleColumn: true,
+          hideLabel: true,
+          title: 'Sistem Ton',
+          typeSearch: 'ALL',
+        }
+      },
+      onSelectRow: (sistemTon, element) => {
+        $('#crudForm [name=statussistemton_id]').first().val(sistemTon.id)
+        element.val(sistemTon.text)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $('#crudForm [name=statussistemton_id]').first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+    $('.statuspenyesuaianharga-lookup').lookupMaster({
+      title: 'Penyesuaian Harga Lookup',
+      fileName: 'parameterMaster',
+      beforeProcess: function(test) {
+        this.postData = {
+          url: `${apiUrl}parameter/combo`,
+          grp: 'PENYESUAIAN HARGA',
+          subgrp: 'PENYESUAIAN HARGA',
+          Aktif: 'AKTIF',
+          searching: 1,
+          valueName: 'statuspenyesuaianharga_id',
+          searchText: 'statuspenyesuaianharga-lookup',
+          singleColumn: true,
+          hideLabel: true,
+          title: 'Penyesuaian Harga',
+          typeSearch: 'ALL',
+        }
+      },
+      onSelectRow: (statuspenyesuaianharga, element) => {
+        $('#crudForm [name=statuspenyesuaianharga_id]').first().val(statuspenyesuaianharga.id)
+        element.val(statuspenyesuaianharga.text)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $('#crudForm [name=statuspenyesuaianharga_id]').first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+    $('.statuspostingtnl-lookup').lookupMaster({
+      title: 'Posting TNL Lookup',
+      fileName: 'parameterMaster',
+      beforeProcess: function(test) {
+        this.postData = {
+          url: `${apiUrl}parameter/combo`,
+          grp: 'STATUS POSTING TNL',
+          subgrp: 'STATUS POSTING TNL',
+          Aktif: 'AKTIF',
+          searching: 1,
+          valueName: 'statuspostingtnl_id',
+          searchText: 'statuspostingtnl-lookup',
+          singleColumn: true,
+          hideLabel: true,
+          title: 'Posting TNL',
+          typeSearch: 'ALL',
+        }
+      },
+      onSelectRow: (statuspostingtnl, element) => {
+        $('#crudForm [name=statuspostingtnl_id]').first().val(statuspostingtnl.id)
+        element.val(statuspostingtnl.text)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $('#crudForm [name=statuspostingtnl_id]').first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
     $('.container-lookup').lookup({
       title: 'Container Lookup',
       fileName: 'container',
