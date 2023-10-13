@@ -71,7 +71,12 @@
         $('#crudForm').find('[name=dari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         $('#crudForm').find('[name=sampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
-
+        if (!`{{ $myAuth->hasPermission('laporanpemotonganpinjamanperebs', 'report') }}`) {
+            $('#btnPreview').attr('disabled', 'disabled')
+        }
+        if (!`{{ $myAuth->hasPermission('laporanpemotonganpinjamanperebs', 'export') }}`) {
+            $('#btnExport').attr('disabled', 'disabled')
+        }
     })
 
     $(document).on('click', `#btnPreview`, function(event) {

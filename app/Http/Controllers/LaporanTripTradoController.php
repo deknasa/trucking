@@ -63,14 +63,14 @@ class LaporanTripTradoController extends MyController
         $sheet = $spreadsheet->getActiveSheet();
 
         $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setCellValue('A1', 'LAPORAN TRIP TRADO');
-        $sheet->getStyle("A1")->getFont()->setSize(20)->setBold(true);
+        $sheet->setCellValue('A1', $data[0]['judul']);
+        $sheet->setCellValue('A2', $data[0]['judulLaporan']);
+        $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
-        $sheet->mergeCells('A1:F3');
+        $sheet->mergeCells('A1:F1');
 
-        $sheet->setCellValue('A4', 'PERIODE : '.$request->dari. ' S/D '.$request->sampai);
-        $sheet->getStyle("A4")->getFont()->setSize(12)->setBold(true);
-        $sheet->mergeCells('A4:B4');
+        $sheet->setCellValue('A3', 'PERIODE : '.$request->dari. ' S/D '.$request->sampai);
+        $sheet->mergeCells('A3:B3');
 
 
 

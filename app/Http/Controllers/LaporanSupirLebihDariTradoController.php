@@ -76,15 +76,17 @@ class LaporanSupirLebihDariTradoController extends MyController
         $sheet = $spreadsheet->getActiveSheet();
       
       
-        $sheet->setCellValue('A1', 'LAPORAN SUPIR LEBIH DARI TRADO');
-        
-        $sheet->getStyle("A1")->getFont()->setSize(20)->setBold(true);
+        $sheet->setCellValue('A1', $pengeluaran[0]['judul'] ?? '');
+        $sheet->setCellValue('A2', $pengeluaran[0]['judulLaporan'] ?? '');
+        $sheet->setCellValue('A3', 'Periode: ' . $request->sampai);
+       
+        $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
     
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
-        $sheet->mergeCells('A1:C3');
+        $sheet->mergeCells('A1:C1');
        
-        $header_start_row = 4;
-        $detail_start_row = 5;
+        $header_start_row = 5;
+        $detail_start_row = 6;
 
         $styleArray = array(
             'borders' => array(
@@ -128,6 +130,8 @@ class LaporanSupirLebihDariTradoController extends MyController
 
         $lastColumn = $alphabets[$data_columns_index];
         $sheet->getStyle("A$header_start_row:$lastColumn$header_start_row")->getFont()->setBold(true);
+        $sheet->getStyle("A$header_start_row:$lastColumn$header_start_row")->applyFromArray($styleArray);
+        
         $totalDebet = 0;
         $totalKredit = 0;
         $totalSaldo = 0;

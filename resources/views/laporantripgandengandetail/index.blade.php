@@ -140,7 +140,7 @@
                 }
             },
             onSelectRow: (gandengan, element) => {
-                $('#crudForm [name=gandengandari_id]').first().val(gandengan.kodegandengan)
+                $('#crudForm [name=gandengandari_id]').first().val(gandengan.id)
                 element.val(gandengan.keterangan)
                 element.data('currentValue', element.val())
             },
@@ -162,7 +162,7 @@
                 }
             },
             onSelectRow: (gandengan, element) => {
-                $('#crudForm [name=gandengansampai_id]').first().val(gandengan.kodegandengan)
+                $('#crudForm [name=gandengansampai_id]').first().val(gandengan.id)
                 element.val(gandengan.keterangan)
                 element.data('currentValue', element.val())
             },

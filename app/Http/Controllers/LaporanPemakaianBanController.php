@@ -84,8 +84,8 @@ class LaporanPemakaianBanController extends MyController
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
-        $sheet->setCellValue('A1', $data[0]['judul']);
-        $sheet->setCellValue('A2', $data[0]['judulLaporan']);
+        $sheet->setCellValue('A1', $data[0]['judul'] ?? '');
+        $sheet->setCellValue('A2', $data[0]['judulLaporan'] ?? '');
         $sheet->setCellValue('A3', 'Periode: ' . $request->dari . ' s/d ' . $request->sampai);
         $sheet->setCellValue('A4', 'Posisi Akhir Ban: ' . $request->parameter);
         $sheet->setCellValue('A5', 'Jenis Laporan: ' . $request->jenislaporan);
