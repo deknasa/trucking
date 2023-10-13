@@ -359,6 +359,8 @@
   let statuscabang = ''
   let urlTNL = ''
   let tokenTNL = ''
+  let classHidden = [];
+
   $(document).ready(function() {
 
     $("#crudForm [name]").attr("autocomplete", "off");
@@ -1509,6 +1511,13 @@
     $('.colmn-offset4').show()
     $('.cabang').show()
     // $('.colmn-offset').hide()
+    if(classHidden.length > 0){
+      input = classHidden.split(',');
+      input.forEach(field => {
+        field = $.trim(field.toLowerCase());
+        $(`.${field}`).hide()
+      });
+    }
   }
 
 
@@ -2078,7 +2087,7 @@
     penerimaanstokheader = ''
     pengeluaranstokheader = ''
     clearSelectedRowsSumbangan()
-
+    classHidden = [];
     $('#crudModal').find('.modal-body').html(modalBody)
   })
 
@@ -2142,7 +2151,8 @@
         setStatusCabangOptions(form),
         setDefaultBank(),
         addRow(),
-        setTotal()
+        setTotal(),
+        setTampilan(form),
       ])
       .then(() => {
         $('#crudModal').modal('show')
@@ -2180,6 +2190,7 @@
         setStatusPostingOptions(form),
         setPostingPinjamanOptions(form),
         setStatusCabangOptions(form),
+        setTampilan(form),
       ])
       .then(() => {
         showPengeluaranTruckingHeader(form, id)
@@ -2227,6 +2238,7 @@
         setPostingPinjamanOptions(form),
         setStatusBiayaTitipanOptions(),
         setStatusCabangOptions(form),
+        setTampilan(form),
       ])
       .then(() => {
         showPengeluaranTruckingHeader(form, id)
@@ -2274,6 +2286,7 @@
         setPostingPinjamanOptions(form),
         setStatusBiayaTitipanOptions(),
         setStatusCabangOptions(form),
+        setTampilan(form),
       ])
       .then(() => {
         showPengeluaranTruckingHeader(form, id)
@@ -4269,7 +4282,7 @@
         this.postData = {
           cabang: statuscabang,
           penerimaanstokheader_id: penerimaanstokheader,
-          pengeluaranstokheader_id: pengeluaranstokheader,          
+          pengeluaranstokheader_id: pengeluaranstokheader,
           url: urlTNL,
           token: tokenTNL,
         }
@@ -6117,6 +6130,40 @@
         },
         success: response => {
           dataStatusBiaya = response.data
+          resolve()
+        },
+        error: error => {
+          reject(error)
+        }
+      })
+    })
+  }
+
+  const setTampilan = function(relatedForm) {
+    return new Promise((resolve, reject) => {
+      let data = [];
+      data.push({
+        name: 'grp',
+        value: 'UBAH TAMPILAN'
+      })
+      data.push({
+        name: 'text',
+        value: 'PENGELUARAN TRUCKING HEADER'
+      })
+      $.ajax({
+        url: `${apiUrl}parameter/getparambytext`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: data,
+        success: response => {
+          memo = JSON.parse(response.memo)
+          memo = memo.INPUT
+          if (memo != '') {
+            classHidden = memo;
+          }
           resolve()
         },
         error: error => {
