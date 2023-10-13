@@ -1293,12 +1293,23 @@
         },
         data: {
           filters: JSON.stringify({
-            "groupOp": "AND",
-            "rules": [{
-              "field": "grp",
-              "op": "cn",
-              "data": "STATUS KONDISI BAN"
-            }]
+            "groupOp": "ANDNOT",
+            "rules": [
+              {
+                "field": "grp",
+                "op": "cn",
+                "data": "STATUS KONDISI BAN",
+                "execpt_field": "text",
+                "execpt_data": "MASAK",
+              },
+              {
+                "field": "grp",
+                "op": "cn",
+                "data": "STATUS KONDISI BAN",
+                "execpt_field": "text",
+                "execpt_data": "MENTAH",
+              },
+            ]
           })
         },
         success: response => {

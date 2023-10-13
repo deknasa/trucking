@@ -45,7 +45,7 @@
 
       viewer.renderHtml('content')
       if(printer['tipe'] == 'reportPrinterBesar'){
-        report.loadFile(`{{ asset('public/reports/ReportPengeluaranKas.mrt') }}`)
+        report.loadFile(`{{ asset('public/reports/ReportPengeluaranKasBesar.mrt') }}`)
       }else{        
         report.loadFile(`{{ asset('public/reports/ReportPengeluaranKas.mrt') }}`)
       }
