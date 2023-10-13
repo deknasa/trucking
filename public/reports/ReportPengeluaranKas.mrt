@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "d1a844706cf1d744187f3c30c1df5daa",
+  "ReportGuid": "e5ac929e167645deb5dd4a14d2980a8f",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportPengeluaranKas.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1697010447000+0700)/",
+  "ReportChanged": "/Date(1697233401000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -257,7 +257,7 @@
         "0": {
           "Ident": "StiPageHeaderBand",
           "Name": "PageHeaderBand1",
-          "ClientRectangle": "0,4,226,39.12",
+          "ClientRectangle": "0,4,204,39.12",
           "ComponentPlacement": "ph.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -751,7 +751,7 @@
           "Ident": "StiPageFooterBand",
           "Name": "PageFooterBand1",
           "PrintOn": "ExceptLastPage",
-          "ClientRectangle": "0,149.17,226,2.03",
+          "ClientRectangle": "0,149.17,204,2.03",
           "ComponentPlacement": "pf.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -776,7 +776,7 @@
         "2": {
           "Ident": "StiDataBand",
           "Name": "DataBand1",
-          "ClientRectangle": "0,51.12,226,6",
+          "ClientRectangle": "0,51.12,204,6",
           "ComponentPlacement": "d.Page1",
           "Interaction": {
             "Ident": "StiBandInteraction"
@@ -954,7 +954,7 @@
         "3": {
           "Ident": "StiReportSummaryBand",
           "Name": "ReportSummaryBand1",
-          "ClientRectangle": "0,65.12,226,39.88",
+          "ClientRectangle": "0,65.12,204,39.88",
           "ComponentPlacement": "rs.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -1684,7 +1684,7 @@
       },
       "Margins": {
         "Left": 13,
-        "Right": 1,
+        "Right": 23,
         "Top": 10,
         "Bottom": 3
       }

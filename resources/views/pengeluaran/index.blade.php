@@ -522,20 +522,9 @@
             caption: 'Report',
             innerHTML: '<i class="fa fa-print"></i> REPORT',
             class: 'btn btn-info btn-sm mr-1 dropdown-toggle',
-            // onClick: () => {
-
-            //   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-            //   if (selectedId == null || selectedId == '' || selectedId == undefined) {
-            //     showDialog('Harap pilih salah satu record')
-            //   } else {
-            //     window.open(`{{ route('pengeluaranheader.report') }}?id=${selectedId}`)
-            //   }
-            //   clearSelectedRows()
-            //   $('#gs_').prop('checked', false)
-            // }
             dropmenuHTML: [{
                 id: 'reportPrinterBesar',
-                text: "Printer LQ-2180",
+                text: "Printer Lain(Faktur)",
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -549,7 +538,7 @@
               },
               {
                 id: 'reportPrinterKecil',
-                text: "Printer LQ LX-310",
+                text: "Printer Epson Seri LX(Faktur)",
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
