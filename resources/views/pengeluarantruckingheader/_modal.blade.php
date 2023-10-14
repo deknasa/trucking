@@ -779,18 +779,21 @@
         $.each(selectedRowsBLL, function(index, value) {
           dataBLL = $(`#table${KodePengeluaranId}`).jqGrid("getLocalRow", value);
           let selectedNominal = (dataBLL.nominal == undefined) ? 0 : dataBLL.nominal;
-          data.push({
-            name: 'nominal[]',
-            value: (isNaN(selectedNominal)) ? parseFloat(selectedNominal.replaceAll(',', '')) : selectedNominal
-          })
-          data.push({
-            name: 'keterangan[]',
-            value: dataBLL.keteranganbll
-          })
-          data.push({
-            name: 'supir_id[]',
-            value: dataBLL.id
-          })
+          if (selectedNominal != 0) {
+
+            data.push({
+              name: 'nominal[]',
+              value: (isNaN(selectedNominal)) ? parseFloat(selectedNominal.replaceAll(',', '')) : selectedNominal
+            })
+            data.push({
+              name: 'keterangan[]',
+              value: dataBLL.keteranganbll
+            })
+            data.push({
+              name: 'supir_id[]',
+              value: dataBLL.id
+            })
+          }
         })
       } else if (KodePengeluaranId == "BST") {
         data = []
@@ -1511,7 +1514,7 @@
     $('.colmn-offset4').show()
     $('.cabang').show()
     // $('.colmn-offset').hide()
-    if(classHidden.length > 0){
+    if (classHidden.length > 0) {
       input = classHidden.split(',');
       input.forEach(field => {
         field = $.trim(field.toLowerCase());
