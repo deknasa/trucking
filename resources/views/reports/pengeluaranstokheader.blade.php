@@ -16,15 +16,18 @@
   <script src="{{ asset('libraries/tas-lib/js/terbilang.js?version='. config('app.version')) }}"></script>
 
   <script type="text/javascript">
-    var pengeluaranstokheaders = <?= json_encode($pengeluaranstokheaders); ?>
+    let pengeluaranstokheaders = <?= json_encode($pengeluaranstokheaders); ?>;
+    let printer = <?= json_encode($printer); ?>;
+
 
     function Start() {
+      // dd(printer['tipe']);
       Stimulsoft.Base.StiLicense.loadFromFile("{{ asset($stireport_path . 'license.php') }}");
       var viewerOptions = new Stimulsoft.Viewer.StiViewerOptions()
-      
-      Stimulsoft.Report.Dictionary.StiFunctions.addFunction("MyCategory", "Terbilang", "Terbilang", "Terbilang", "", String, "Return Description", [Object], ["value"], ["Descriptions"], terbilang);      
+
+      Stimulsoft.Report.Dictionary.StiFunctions.addFunction("MyCategory", "Terbilang", "Terbilang", "Terbilang", "", String, "Return Description", [Object], ["value"], ["Descriptions"], terbilang);
       viewerOptions.toolbar.viewMode = Stimulsoft.Viewer.StiWebViewMode.Continuous;
-      
+
       var viewer = new Stimulsoft.Viewer.StiViewer(viewerOptions, "StiViewer", false)
       var report = new Stimulsoft.Report.StiReport()
 
@@ -44,34 +47,67 @@
       var dataSet = new Stimulsoft.System.Data.DataSet("Data")
 
       viewer.renderHtml('content')
-      switch (pengeluaranstokheaders.statusformat) {
-        case '135':
-        //spk
-        report.loadFile(`{{ asset('public/reports/ReportPengeluaranStokSPK.mrt') }}`)
-          break;
-        case '139':
-        //retur
-        report.loadFile(`{{ asset('public/reports/ReportPengeluaranStokRTR.mrt') }}`)
-          break;
-        case '221':
-        //KOR
-        report.loadFile(`{{ asset('public/reports/ReportPengeluaranStokKOR.mrt') }}`)
-          break;
-        case '340':
-        //PJA
-        report.loadFile(`{{ asset('public/reports/ReportPengeluaranStokPJA.mrt') }}`)
-          break;
-        case '353':
-        //GST
-        report.loadFile(`{{ asset('public/reports/ReportPengeluaranStokGST.mrt') }}`)
-          break;
-        case '386':
-        //korv
-        report.loadFile(`{{ asset('public/reports/ReportPengeluaranStokKORV.mrt') }}`)
-          break;
-        default:
-        report.loadFile(`{{ asset('public/reports/ReportPengeluaranStokSPK.mrt') }}`)
-          break;
+
+      if (printer['tipe'] == 'reportPrinterBesar') {
+        switch (pengeluaranstokheaders.statusformat) {
+          case '135':
+            //spk
+            report.loadFile(`{{ asset('public/reports/ReportPengeluaranStokSPKBesar.mrt') }}`)
+            break;
+          case '139':
+            //retur
+            report.loadFile(`{{ asset('public/reports/ReportPengeluaranStokRTRBesar.mrt') }}`)
+            break;
+          case '221':
+            //KOR
+            report.loadFile(`{{ asset('public/reports/ReportPengeluaranStokKORBesar.mrt') }}`)
+            break;
+          case '340':
+            //PJA
+            report.loadFile(`{{ asset('public/reports/ReportPengeluaranStokPJABesar.mrt') }}`)
+            break;
+          case '353':
+            //GST
+            report.loadFile(`{{ asset('public/reports/ReportPengeluaranStokGSTBesar.mrt') }}`)
+            break;
+          case '386':
+            //korv
+            report.loadFile(`{{ asset('public/reports/ReportPengeluaranStokKORVBesar.mrt') }}`)
+            break;
+          default:
+            report.loadFile(`{{ asset('public/reports/ReportPengeluaranStokSPKBesar.mrt') }}`)
+            break;
+        }
+      } else {
+        switch (pengeluaranstokheaders.statusformat) {
+          case '135':
+            //spk
+            report.loadFile(`{{ asset('public/reports/ReportPengeluaranStokSPK.mrt') }}`)
+            break;
+          case '139':
+            //retur
+            report.loadFile(`{{ asset('public/reports/ReportPengeluaranStokRTR.mrt') }}`)
+            break;
+          case '221':
+            //KOR
+            report.loadFile(`{{ asset('public/reports/ReportPengeluaranStokKOR.mrt') }}`)
+            break;
+          case '340':
+            //PJA
+            report.loadFile(`{{ asset('public/reports/ReportPengeluaranStokPJA.mrt') }}`)
+            break;
+          case '353':
+            //GST
+            report.loadFile(`{{ asset('public/reports/ReportPengeluaranStokGST.mrt') }}`)
+            break;
+          case '386':
+            //korv
+            report.loadFile(`{{ asset('public/reports/ReportPengeluaranStokKORV.mrt') }}`)
+            break;
+          default:
+            report.loadFile(`{{ asset('public/reports/ReportPengeluaranStokSPK.mrt') }}`)
+            break;
+        }
       }
       report.dictionary.dataSources.clear()
 
@@ -85,16 +121,17 @@
       viewer.report = report
       // designer.renderHtml("content")
       // designer.report = report
-      
-      viewer.onPrintReport = function (event) {
+
+      viewer.onPrintReport = function(event) {
         triggerEvent(window, 'afterprint');
       }
+
       function triggerEvent(el, type) {
         // IE9+ and other modern browsers
         if ('createEvent' in document) {
-            var e = document.createEvent('HTMLEvents');
-            e.initEvent(type, false, true);
-            el.dispatchEvent(e);
+          var e = document.createEvent('HTMLEvents');
+          e.initEvent(type, false, true);
+          el.dispatchEvent(e);
         } else {
           // IE8
           var e = document.createEventObject();
@@ -106,7 +143,7 @@
       window.addEventListener('afterprint', (event) => {
         var id = pengeluaranstokheaders.id
         var apiUrl = `{{ config('app.api_url') }}`;
-        
+
         $.ajax({
           url: `${apiUrl}pengeluaranstokheader/${id}/printreport`,
           method: 'GET',
@@ -117,32 +154,31 @@
           success: response => {
             location.reload();
           }
-    
+
         })
-          
+
       });
-      
+
     }
   </script>
 
   <script type="text/javascript">
-    $( document ).ready(function() {
+    $(document).ready(function() {
       var statuscetak = pengeluaranstokheaders.statuscetak
       var sudahcetak = pengeluaranstokheaders['combo']['id']
       if (statuscetak == sudahcetak) {
-        $(document).on('keydown', function(e) { 
-          if((e.ctrlKey || e.metaKey) && (e.key == "p" || e.charCode == 16 || e.charCode == 112 || e.keyCode == 80) ){
+        $(document).on('keydown', function(e) {
+          if ((e.ctrlKey || e.metaKey) && (e.key == "p" || e.charCode == 16 || e.charCode == 112 || e.keyCode == 80)) {
             alert("Document SUdah Pernah Dicetak ");
             e.cancelBubble = true;
             e.preventDefault();
             e.stopImmediatePropagation();
-          }  
-        });  
+          }
+        });
       }
 
 
     });
-        
   </script>
   <style>
     .stiJsViewerPage {
@@ -150,7 +186,9 @@
     }
   </style>
 </head>
+
 <body onLoad="Start()">
   <div id="content"></div>
 </body>
+
 </html>

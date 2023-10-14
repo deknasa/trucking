@@ -7,8 +7,8 @@
       <option value="">-- semua --</option>
       @foreach ($comboKodepengeluaran as $kodepengeluaran)
       {{-- @if ($kodepengeluaran['id'] === "1") selected @endif --}}
-        <option  value="{{$kodepengeluaran['id']}}"> {{$kodepengeluaran['keterangan']}} </option>
-        {{-- <option @if ($kodepengeluaran['statusdefault_text'] ==="YA") selected @endif value="{{$kodepengeluaran['id']}}"> {{$kodepengeluaran['namakodepengeluaran']}} </option> --}}
+      <option value="{{$kodepengeluaran['id']}}"> {{$kodepengeluaran['keterangan']}} </option>
+      {{-- <option @if ($kodepengeluaran['statusdefault_text'] ==="YA") selected @endif value="{{$kodepengeluaran['id']}}"> {{$kodepengeluaran['namakodepengeluaran']}} </option> --}}
       @endforeach
     </select>
   </div>
@@ -85,7 +85,7 @@
   let sortname = 'nobukti'
   let sortorder = 'asc'
   let autoNumericElements = []
-  let approveEditRequest =null ;
+  let approveEditRequest = null;
   let activeGrid;
   let tgldariheader
   let tglsampaiheader
@@ -93,39 +93,40 @@
   $(document).ready(function() {
     $("#tabs").tabs()
 
-    initSelect2($(`#kodepengeluaranheader`),false);
+    initSelect2($(`#kodepengeluaranheader`), false);
     pengeluaranStok($('#crudForm'));
     $('#crudModal').on('hidden.bs.modal', function() {
-       activeGrid = '#jqGrid'
-     })
-     @isset($request['tgldari'])
-      tgldariheader = `{{ $request['tgldari'] }}`;
+      activeGrid = '#jqGrid'
+    })
+    @isset($request['tgldari'])
+    tgldariheader = `{{ $request['tgldari'] }}`;
     @endisset
     @isset($request['tglsampai'])
-      tglsampaiheader = `{{ $request['tglsampai'] }}`;
+    tglsampaiheader = `{{ $request['tglsampai'] }}`;
     @endisset
-    setRange(false,tgldariheader,tglsampaiheader)
+    setRange(false, tgldariheader, tglsampaiheader)
     initDatepicker()
-    $(document).on('click','#btnReload', function(event) {
-      loadDataHeader('pengeluaranstokheader',{pengeluaranheader_id:$('#kodepengeluaranheader').val()})
+    $(document).on('click', '#btnReload', function(event) {
+      loadDataHeader('pengeluaranstokheader', {
+        pengeluaranheader_id: $('#kodepengeluaranheader').val()
+      })
     })
     // console.log(,);
-    
 
-    
+
+
     $("#jqGrid").jqGrid({
         url: `{{ config('app.api_url') . 'pengeluaranstokheader' }}`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         postData: {
-          tgldari:$('#tgldariheader').val() ,
-          tglsampai:$('#tglsampaiheader').val(),
-          pengeluaranheader_id:$('#kodepengeluaranheader').val(),
+          tgldari: $('#tgldariheader').val(),
+          tglsampai: $('#tglsampaiheader').val(),
+          pengeluaranheader_id: $('#kodepengeluaranheader').val(),
         },
         datatype: "json",
-        colModel: [
-          {
+        colModel: [{
             label: 'ID',
             name: 'id',
             align: 'right',
@@ -148,7 +149,7 @@
               newformat: "d-m-Y"
             }
           },
-          
+
           {
             label: 'Gudang',
             name: 'gudang',
@@ -185,7 +186,7 @@
             name: 'pengeluarantrucking_nobukti',
             align: 'left',
             formatter: (value, options, rowData) => {
-              if ((value == null) ||( value == '')) {
+              if ((value == null) || (value == '')) {
                 return '';
               }
               let tgldari = rowData.tgldariheaderpengeluarantruckingheader
@@ -194,8 +195,8 @@
               let formattedValue = $(`
               <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
              `)
-             return formattedValue[0].outerHTML
-           },
+              return formattedValue[0].outerHTML
+            },
           },
           {
             label: 'SERVICE IN NO BUKTI',
@@ -203,7 +204,7 @@
             name: 'servicein_nobukti',
             align: 'left',
             formatter: (value, options, rowData) => {
-              if ((value == null) ||( value == '')) {
+              if ((value == null) || (value == '')) {
                 return '';
               }
               let tgldari = rowData.tgldariheaderserviceinheader
@@ -212,18 +213,18 @@
               let formattedValue = $(`
               <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
              `)
-             return formattedValue[0].outerHTML
-           },
+              return formattedValue[0].outerHTML
+            },
           },
-         
-          
+
+
           {
             label: 'PENERIMAAN STOK NO BUKTI',
             width: 230,
             name: 'penerimaanstok_nobukti',
             align: 'left',
             formatter: (value, options, rowData) => {
-              if ((value == null) ||( value == '')) {
+              if ((value == null) || (value == '')) {
                 return '';
               }
               let tgldari = rowData.tgldariheaderpenerimaanstok
@@ -232,8 +233,8 @@
               let formattedValue = $(`
               <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
              `)
-             return formattedValue[0].outerHTML
-           },
+              return formattedValue[0].outerHTML
+            },
           },
           {
             label: 'Pengeluaran stok no bukti',
@@ -241,7 +242,7 @@
             name: 'pengeluaranstok_nobukti',
             align: 'left',
             formatter: (value, options, rowData) => {
-              if ((value == null) ||( value == '')) {
+              if ((value == null) || (value == '')) {
                 return '';
               }
               let tgldari = rowData.tgldariheaderpenerimaanheader
@@ -250,8 +251,8 @@
               let formattedValue = $(`
              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
              `)
-             return formattedValue[0].outerHTML
-           },
+              return formattedValue[0].outerHTML
+            },
           },
           {
             label: 'Penerimaan no bukti',
@@ -259,7 +260,7 @@
             width: 230,
             align: 'left',
             formatter: (value, options, rowData) => {
-              if ((value == null) ||( value == '')) {
+              if ((value == null) || (value == '')) {
                 return '';
               }
               let tgldari = rowData.tgldariheaderpenerimaanheader
@@ -268,8 +269,8 @@
               let formattedValue = $(`
              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
              `)
-             return formattedValue[0].outerHTML
-           },
+              return formattedValue[0].outerHTML
+            },
           },
           {
             label: 'hutang bayar nobukti',
@@ -277,7 +278,7 @@
             name: 'hutangbayar_nobukti',
             align: 'left',
             formatter: (value, options, rowData) => {
-              if ((value == null) ||( value == '')) {
+              if ((value == null) || (value == '')) {
                 return '';
               }
               let tgldari = rowData.tgldariheaderhutangbayarheader
@@ -286,8 +287,8 @@
               let formattedValue = $(`
              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
              `)
-             return formattedValue[0].outerHTML
-           },
+              return formattedValue[0].outerHTML
+            },
           },
           {
             label: 'kerusakan',
@@ -368,31 +369,31 @@
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
-          
+
           let pengeluaranstok = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_pengeluaranstok"]`).attr('title') ?? '';
           let nobukti = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title') ?? '';
           let statuspotong = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_statuspotongretur"]`).attr('title') ?? '';
           let penerimaan = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_penerimaan_nobukti"]`).attr('title') ?? '';
           let hutangbayar = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_hutangbayar_nobukti"]`).attr('title') ?? '';
           let pengeluaran = false;
-          if (pengeluaranstok =="PJA") {
+          if (pengeluaranstok == "PJA") {
             nobukti = $('#jqGrid').jqGrid('getCell', id, 'jqGrid_hutangbayar_nobukti')
             hutangbayar = false;
-          }else if (pengeluaranstok =="RTR") {
-            
-            if (statuspotong == 219) {//penerimaan
+          } else if (pengeluaranstok == "RTR") {
+
+            if (statuspotong == 219) { //penerimaan
               nobukti = penerimaan;
               hutangbayar = false;
-            }else if (statuspotong == 220) {//hutangbayar_nobukti
+            } else if (statuspotong == 220) { //hutangbayar_nobukti
               nobukti = hutangbayar;
               pengeluaran = hutangbayar;
             }
-            loadJurnalUmumData(id, nobukti,"pengeluaranstokdetail",statuspotong)
-          }else{
+            loadJurnalUmumData(id, nobukti, "pengeluaranstokdetail", statuspotong)
+          } else {
             loadJurnalUmumData(id, nobukti)
           }
           // loadPenerimaanData(id, nobukti)
-          
+
           loadHutangBayarData(id, hutangbayar)
           loadPengeluaranData(id, pengeluaran)
           loadPenerimaanData(id, penerimaan)
@@ -422,7 +423,7 @@
           totalRecord = $(this).getGridParam("records")
           limit = $(this).jqGrid('getGridParam', 'postData').limit
           postData = $(this).jqGrid('getGridParam', 'postData')
-          triggerClick = true  
+          triggerClick = true
 
           $('.clearsearchclass').click(function() {
             clearColumnSearch($(this))
@@ -474,6 +475,71 @@
       })
 
       .customPager({
+
+        extndBtn: [{
+            id: 'report',
+            title: 'Report',
+            caption: 'Report',
+            innerHTML: '<i class="fa fa-print"></i> REPORT',
+            class: 'btn btn-info btn-sm mr-1 dropdown-toggle',
+            dropmenuHTML: [{
+                id: 'reportPrinterBesar',
+                text: "Printer Lain(Faktur)",
+                onClick: () => {
+                  selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                  if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                    showDialog(pleaseSelectARow)
+                  } else {
+                    window.open(`{{ route('pengeluaranstokheader.report') }}?id=${selectedId}&printer=reportPrinterBesar`)
+                  }
+                  clearSelectedRows()
+                  $('#gs_').prop('checked', false)
+                }
+              },
+              {
+                id: 'reportPrinterKecil',
+                text: "Printer Epson Seri LX (Faktur)",
+                onClick: () => {
+                  selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                  if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                    showDialog(pleaseSelectARow)
+                  } else {
+                    window.open(`{{ route('pengeluaranstokheader.report') }}?id=${selectedId}&printer=reportPrinterKecil`)
+                  }
+                  clearSelectedRows()
+                  $('#gs_').prop('checked', false)
+                }
+              },
+
+            ],
+          },
+          {
+            id: 'export',
+            title: 'Export',
+            caption: 'Export',
+            innerHTML: '<i class="fas fa-file-export"></i> EXPORT',
+            class: 'btn btn-warning btn-sm mr-1',
+            onClick: () => {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog(pleaseSelectARow)
+              } else {
+                window.open(`{{ route('pengeluaranstokheader.export') }}?id=${selectedId}`)
+              }
+            }
+          },
+          {
+            id: 'approvalEdit',
+            title: 'approval Edit',
+            caption: 'approval Edit',
+            innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+            class: 'btn btn-purple btn-sm mr-1',
+            onClick: () => {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              approveEdit(selectedId)
+            }
+          }
+        ],
         buttons: [{
             id: 'add',
             innerHTML: '<i class="fa fa-plus"></i> ADD',
@@ -517,45 +583,45 @@
               viewPengeluaranstokHeader(selectedId)
             }
           },
-          {
-            id: 'report',
-            innerHTML: '<i class="fa fa-print"></i> REPORT',
-            class: 'btn btn-info btn-sm mr-1',
-            onClick: () => {
-              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog(pleaseSelectARow)
-              } else {
-                window.open(`{{ route('pengeluaranstokheader.report') }}?id=${selectedId}`)
-              }
-            }
-          },
-          {
-            id: 'export',
-            title: 'Export',
-            caption: 'Export',
-            innerHTML: '<i class="fas fa-file-export"></i> EXPORT',
-            class: 'btn btn-warning btn-sm mr-1',
-            onClick: () => {
-              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog(pleaseSelectARow)
-              } else {
-                window.open(`{{ route('pengeluaranstokheader.export') }}?id=${selectedId}`)
-              }
-            }
-          },
-          {
-            id: 'approvalEdit',
-            title: 'approval Edit',
-            caption: 'approval Edit',
-            innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-            class: 'btn btn-purple btn-sm mr-1',
-            onClick: () => {
-              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              approveEdit(selectedId)
-            }
-          }
+          // {
+          //   id: 'report',
+          //   innerHTML: '<i class="fa fa-print"></i> REPORT',
+          //   class: 'btn btn-info btn-sm mr-1',
+          //   onClick: () => {
+          //     selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+          //     if (selectedId == null || selectedId == '' || selectedId == undefined) {
+          //       showDialog(pleaseSelectARow)
+          //     } else {
+          //       window.open(`{{ route('pengeluaranstokheader.report') }}?id=${selectedId}`)
+          //     }
+          //   }
+          // },
+          // {
+          //   id: 'export',
+          //   title: 'Export',
+          //   caption: 'Export',
+          //   innerHTML: '<i class="fas fa-file-export"></i> EXPORT',
+          //   class: 'btn btn-warning btn-sm mr-1',
+          //   onClick: () => {
+          //     selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+          //     if (selectedId == null || selectedId == '' || selectedId == undefined) {
+          //       showDialog(pleaseSelectARow)
+          //     } else {
+          //       window.open(`{{ route('pengeluaranstokheader.export') }}?id=${selectedId}`)
+          //     }
+          //   }
+          // },
+          // {
+          //   id: 'approvalEdit',
+          //   title: 'approval Edit',
+          //   caption: 'approval Edit',
+          //   innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+          //   class: 'btn btn-purple btn-sm mr-1',
+          //   onClick: () => {
+          //     selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+          //     approveEdit(selectedId)
+          //   }
+          // }
         ]
 
       })
@@ -595,30 +661,31 @@
       .addClass('btn btn-sm btn-warning')
       .parent().addClass('px-1')
 
-      function permission() {
-    if (!`{{ $myAuth->hasPermission('pengeluaranstokheader', 'store') }}`) {
-      $('#add').attr('disabled', 'disabled')
-    }
+    function permission() {
+      if (!`{{ $myAuth->hasPermission('pengeluaranstokheader', 'store') }}`) {
+        $('#add').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('pengeluaranstokheader', 'show') }}`) {
-      $('#view').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('pengeluaranstokheader', 'show') }}`) {
+        $('#view').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('pengeluaranstokheader', 'update') }}`) {
-      $('#edit').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('pengeluaranstokheader', 'update') }}`) {
+        $('#edit').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('pengeluaranstokheader', 'destroy') }}`) {
-      $('#delete').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('pengeluaranstokheader', 'destroy') }}`) {
+        $('#delete').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('pengeluaranstokheader', 'export') }}`) {
-      $('#export').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('pengeluaranstokheader', 'export') }}`) {
+        $('#export').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('pengeluaranstokheader', 'report') }}`) {
-      $('#report').attr('disabled', 'disabled')
-    }}
+      if (!`{{ $myAuth->hasPermission('pengeluaranstokheader', 'report') }}`) {
+        $('#report').attr('disabled', 'disabled')
+      }
+    }
 
     $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {
@@ -695,11 +762,12 @@
         submitButton.removeAttr('disabled')
       }
     })
-getStatusEdit()
+    getStatusEdit()
+
     function approveEdit(id) {
       if (approveEditRequest) {
         approveEditRequest.abort();
-      }     
+      }
       approveEditRequest = $.ajax({
         url: `${apiUrl}pengeluaranstokheader/${id}`,
         method: 'GET',
@@ -714,10 +782,11 @@ getStatusEdit()
           if (response.data.statusedit_id === statusBisaEdit) {
             msg = `YAKIN UnApprove Status Edit `
           }
-          showConfirm(msg,response.data.nobukti,`pengeluaranstokheader/${response.data.id}/approvaledit`)
+          showConfirm(msg, response.data.nobukti, `pengeluaranstokheader/${response.data.id}/approvaledit`)
         },
       })
     }
+
     function getStatusEdit() {
       $.ajax({
         url: `${apiUrl}parameter`,
@@ -734,7 +803,7 @@ getStatusEdit()
               "field": "grp",
               "op": "cn",
               "data": "STATUS APPROVAL"
-            },{
+            }, {
               "field": "text",
               "op": "cn",
               "data": "APPROVAL"
@@ -742,7 +811,7 @@ getStatusEdit()
           })
         },
         success: response => {
-          statusBisaEdit =  response.data[0].id;
+          statusBisaEdit = response.data[0].id;
         }
       })
     }

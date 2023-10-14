@@ -1679,33 +1679,33 @@
         $('#gandengandariId').attr('disabled', true);
         $('#gudangdariId').attr('disabled', false);
 
-        if (KodePenerimaanId == listKodePenerimaan[4]) {
-          // GUDANG KANTOR
-          if ($('#gudangdariId').val() == 1) {
-            gudangke.attr('disabled', false)
-            gudangke.find('.lookup-toggler').attr('disabled', false)
-            $('#gudangkeId').attr('disabled', false);
-            $('#gudangkeId').val('');
-            $('#crudForm').find(`[name="gudangke"]`).val('');
+        // if (KodePenerimaanId == listKodePenerimaan[4]) {
+        //   // GUDANG KANTOR
+        //   if ($('#gudangdariId').val() == 1) {
+        //     gudangke.attr('disabled', false)
+        //     gudangke.find('.lookup-toggler').attr('disabled', false)
+        //     $('#gudangkeId').attr('disabled', false);
+        //     $('#gudangkeId').val('');
+        //     $('#crudForm').find(`[name="gudangke"]`).val('');
             
-            tradoke.attr('disabled', true)
-            tradoke.find('.lookup-toggler').attr('disabled', true)
-            $('#tradokeId').attr('disabled', true);
+        //     tradoke.attr('disabled', true)
+        //     tradoke.find('.lookup-toggler').attr('disabled', true)
+        //     $('#tradokeId').attr('disabled', true);
     
-            gandenganke.attr('disabled', true)
-            gandenganke.find('.lookup-toggler').attr('disabled', true)
-            $('#gandengankeId').attr('disabled', true);
-          }else{
-            tradoke.attr('disabled', false)
-            tradoke.find('.lookup-toggler').attr('disabled', false)
-            $('#tradokeId').attr('disabled', false);
+        //     gandenganke.attr('disabled', true)
+        //     gandenganke.find('.lookup-toggler').attr('disabled', true)
+        //     $('#gandengankeId').attr('disabled', true);
+        //   }else{
+        //     tradoke.attr('disabled', false)
+        //     tradoke.find('.lookup-toggler').attr('disabled', false)
+        //     $('#tradokeId').attr('disabled', false);
     
-            gandenganke.attr('disabled', false)
-            gandenganke.find('.lookup-toggler').attr('disabled', false)
-            $('#gandengankeId').attr('disabled', false);
-          }
+        //     gandenganke.attr('disabled', false)
+        //     gandenganke.find('.lookup-toggler').attr('disabled', false)
+        //     $('#gandengankeId').attr('disabled', false);
+        //   }
           
-        }
+        // }
 
         break;
       default:
