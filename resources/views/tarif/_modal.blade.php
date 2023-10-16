@@ -29,7 +29,7 @@
               </div>
               <div class="col-12 col-md-10">
                 <input type="hidden" name="jenisorder_id">
-                <input type="text" name="jenisorder" class="form-control jenisorder-lookup">
+                <input type="text" name="jenisorder" id="jenisorder" class="form-control jenisorder-lookup">
               </div>
             </div>
 
@@ -41,7 +41,7 @@
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="hidden" name="parent_id">
-                <input type="text" name="parent" class="form-control parent-lookup" autofocus>
+                <input type="text" name="parent" id="parent" class="form-control parent-lookup" autofocus>
               </div>
             </div>
 
@@ -52,7 +52,7 @@
               </div>
               <div class="col-12 col-md-10">
                 <input type="hidden" name="kota_id">
-                <input type="text" name="kota" class="form-control kota-lookup">
+                <input type="text" name="kota" id="kota" class="form-control kota-lookup">
               </div>
             </div>
             <div class="row form-group">
@@ -188,7 +188,7 @@
               </div>
               <div class="col-12 col-md-10">
                 <input type="hidden" name="zona_id">
-                <input type="text" name="zona" class="form-control zona-lookup">
+                <input type="text" name="zona" id="zona" class="form-control zona-lookup">
               </div>
             </div>
 
@@ -1160,14 +1160,21 @@
       }
     })
 
-    $('.kota-lookup').lookup({
+    $('.kota-lookup').lookupMaster({
       title: 'Kota Lookup',
-      fileName: 'kota',
+      fileName: 'kotaMaster',
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
 
           Aktif: 'AKTIF',
+          searching: 1,
+          valueName: 'kota_id',
+          searchText: 'kota-lookup',
+          singleColumn: '',
+          hideLabel: '',
+          title: 'kota',
+          typeSearch: 'ALL',
         }
       },
       onSelectRow: (kota, element) => {
@@ -1185,14 +1192,21 @@
       }
     })
 
-    $('.zona-lookup').lookup({
+    $('.zona-lookup').lookupMaster({
       title: 'Zona Lookup',
-      fileName: 'zona',
+      fileName: 'zonaMaster',
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
 
           Aktif: 'AKTIF',
+          searching: 1,
+          valueName: 'zona_id',
+          searchText: 'zona-lookup',
+          singleColumn: '',
+          hideLabel: '',
+          title: 'zona',
+          typeSearch: 'ALL',
         }
       },
       onSelectRow: (zona, element) => {
@@ -1210,14 +1224,21 @@
       }
     })
 
-    $('.jenisorder-lookup').lookup({
+    $('.jenisorder-lookup').lookupMaster({
       title: 'Jenis Order Lookup',
-      fileName: 'jenisorder',
+      fileName: 'jenisorderMaster',
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
 
-          Aktif: 'AKTIF',
+          Aktif: 'AKTIF',          
+          searching: 1,
+          valueName: 'jenisorder_id',
+          searchText: 'jenisorder-lookup',
+          singleColumn: '',
+          hideLabel: '',
+          title: 'jenisorder',
+          typeSearch: 'ALL',
         }
       },
       onSelectRow: (jenisorder, element) => {
@@ -1235,16 +1256,23 @@
       }
     })
 
-    $('.parent-lookup').lookup({
+    $('.parent-lookup').lookupMaster({
       title: 'Tarif Lookup',
-      fileName: 'tarif',
+      fileName: 'tarifMaster',
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
 
           Aktif: 'AKTIF',
           jenisOrder: $('#crudForm [name=jenisorder]').val(),
-          isParent: true
+          isParent: true,          
+          searching: 1,
+          valueName: 'parent_id',
+          searchText: 'parent-lookup',
+          singleColumn: '',
+          hideLabel: '',
+          title: 'parent',
+          typeSearch: 'ALL',
         }
       },
       onSelectRow: (tarif, element) => {
