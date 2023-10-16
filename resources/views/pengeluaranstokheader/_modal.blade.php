@@ -268,6 +268,7 @@
                           <th style="width: 20%; min-width: 200px;">keterangan</th>
                           <th class="tbl_qty" style="width:10%; min-width: 100px">qty</th>
                           <th class="data_tbl tbl_statusoli" style="width:10%; min-width: 100px">Status Oli</th>
+                          <th class="data_tbl tbl_statusban" style="width:10%; min-width: 100px">Status Ban</th>
                           <th class="data_tbl tbl_vulkanisirke" style="width:10%; min-width: 100px">vulkanisirke</th>
                           <th class="data_tbl tbl_harga" style="width: 20%; min-width: 200px;">harga</th>
                           <th class="data_tbl tbl_persentase" style="width:10%; min-width: 100px">persentase discount</th>
@@ -698,6 +699,7 @@
     $('[name=gudang]').parents('.form-group').show()
     $('.tbl_qty').show()
     $('.tbl_statusoli').show();
+    $('.tbl_statusban').hide();
     $('.tbl_vulkanisirke').hide();
     $('.tbl_harga').hide();
     $('.tbl_persentase').hide();
@@ -725,6 +727,7 @@
     $('.tbl_total').show()
     $('.tbl_vulkanisirke').hide();
     $('.tbl_statusoli').hide();
+    $('.tbl_statusban').hide();
     $('.tbl_persentase').hide();
     $('.colspan').attr('colspan', 4);
     $("#detail-table").show();
@@ -749,6 +752,7 @@
     $('.tbl_total').show()
     $('.tbl_vulkanisirke').hide();
     $('.tbl_statusoli').hide();
+    $('.tbl_statusban').hide();
     $('.tbl_persentase').hide();
     $('.colspan').attr('colspan', 4);
     $('.potongkas').show() //potong kas
@@ -774,6 +778,7 @@
     $('.tbl_persentase').hide();
     $('.tbl_total').hide();
     $('.tbl_statusoli').hide();
+    $('.tbl_statusban').hide();
     $('.colspan').attr('colspan', 4);
     $('.sumrow').hide();
     $("#detail-table").show();
@@ -795,6 +800,7 @@
     $('.tbl_persentase').hide();
     $('.tbl_total').hide();
     $('.tbl_statusoli').hide();
+    $('.tbl_statusban').hide();
     $('.colspan').attr('colspan', 4);
     $('.sumrow').hide();
     $("#detail-table").show();
@@ -812,14 +818,16 @@
     $('[name=pengeluaranstok_nobukti]').parents('.form-group').hide()
     $('[name=kerusakan]').parents('.form-group').hide()
     $('[name=supir]').parents('.form-group').hide()
+    $('.potongkas').hide()
     $('[name=statuspotongretur]').parents('.form-group').hide()
     $('.tbl_qty').hide()
     $('.tbl_vulkanisirke').show();
     $('.tbl_harga').hide();
     $('.tbl_persentase').hide();
     $('.tbl_statusoli').hide();
+    $('.tbl_statusban').show();
     $('.tbl_total').hide();
-    $('.colspan').attr('colspan', 4);
+    $('.colspan').attr('colspan', 5);
     $('.sumrow').hide();
     $("#detail-table").show();
     $("#detail-afkir").hide();
@@ -977,6 +985,7 @@
       .all([
         setStatusPotongReturOptions(form),
         setStatusOliOptions(),
+        setStatusBanDetailOptions(form),
         setStatusBanOptions(form)
       ])
       .then(() => {
@@ -1016,6 +1025,7 @@
       .all([
         setStatusPotongReturOptions(form),
         setStatusOliOptions(),
+        setStatusBanDetailOptions(form),
         setStatusBanOptions(form)
       ])
       .then(() => {
@@ -1327,6 +1337,46 @@
       })
     })
   }
+  let dataStatusBan
+  const setStatusBanDetailOptions = function(relatedForm) {
+    return new Promise((resolve, reject) => {
+      relatedForm.find('[name=statusban]').empty()
+      relatedForm.find('[name=statusban]').append(
+        new Option('-- PILIH STATUS BAN --', '', false, true)
+      ).trigger('change')
+
+      $.ajax({
+        url: `${apiUrl}parameter`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          filters: JSON.stringify({
+            "groupOp": "AND",
+            "rules": [
+              {
+                "field": "grp",
+                "op": "cn",
+                "data": "STATUS KONDISI BAN",
+               
+              },
+             
+            ]
+          })
+        },
+
+        success: response => {
+          dataStatusBan = response.data
+          resolve()
+        },
+        error: error => {
+          reject(error)
+        }
+      })
+    })
+  }
   index = 0;
 
   function addRow() {
@@ -1350,6 +1400,11 @@
                   <td class="data_tbl tbl_statusoli">
                     <select name="detail_statusoli[]" class="form-select select2bs4" id="statusoli${index}" style="width: 100%;">
                       <option value="">-- PILIH STATUS OLI --</option>
+                    </select>                 
+                  </td> 
+                  <td class="data_tbl tbl_statusban">
+                    <select name="detail_statusban[]" class="form-select select2bs4" id="statusban${index}" style="width: 100%;">
+                      <option value="">-- PILIH STATUS BAN --</option>
                     </select>                 
                   </td> 
                   <td class="data_tbl tbl_vulkanisirke">
@@ -1377,10 +1432,16 @@
     // // }
     $('table #table_body').append(detailRow)
     initSelect2($(`#statusoli${index}`), true)
+    initSelect2($(`#statusban${index}`), true)
     dataStatusOli.forEach(statusOli => {
       let option = new Option(statusOli.text, statusOli.id)
 
       detailRow.find(`#statusoli${index}`).append(option).trigger('change')
+    });
+    dataStatusBan.forEach(statusBan => {
+      let option = new Option(statusBan.text, statusBan.id)
+
+      detailRow.find(`#statusban${index}`).append(option).trigger('change')
     });
 
     var row = index;
@@ -1828,7 +1889,12 @@
                       <select name="detail_statusoli[]" class="form-select select2bs4" id="statusoli${id}" style="width: 100%;">
                         <option value="">-- PILIH STATUS OLI --</option>
                       </select>                 
-                    </td> 
+                    </td>
+                      <td class="data_tbl tbl_statusban">
+                        <select name="detail_statusban[]" class="form-select select2bs4" id="statusban${index}" style="width: 100%;">
+                          <option value="">-- PILIH STATUS BAN --</option>
+                        </select>                 
+                      </td> 
                       <td class="data_tbl tbl_vulkanisirke">
                         <input type="number"  name="detail_vulkanisirke[]" style="" class="form-control">                    
                       </td>  
@@ -1880,6 +1946,15 @@
   
                 detailRow.find(`[name="detail_statusoli[]"]`).val(detail.statusoli).trigger('change')
   
+              }else if(response.data.pengeluaranstok == 'KORV'){
+                initSelect2($(`#statusban${id}`), true)
+                
+                dataStatusBan.forEach(statusBan => {
+                  let option = new Option(statusBan.text, statusBan.id)
+            
+                  detailRow.find(`#statusban${id}`).append(option).trigger('change')
+                });
+                detailRow.find(`#statusban${id}`).val(detail.statusban).trigger('change')
               }
   
               // initAutoNumeric($(`.number${id}`))
