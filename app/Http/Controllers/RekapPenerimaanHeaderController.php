@@ -118,7 +118,8 @@ class RekapPenerimaanHeaderController extends MyController
         $combo = $this->combo('list');
         $key = array_search('CETAK', array_column( $combo, 'parameter')); 
         $rekappenerimaan["combo"] =  $combo[$key];
-        return view('reports.rekappenerimaanheader', compact('rekappenerimaan', 'rekappenerimaan_details'));
+        $printer['tipe'] = $request->printer;
+        return view('reports.rekappenerimaanheader', compact('rekappenerimaan', 'rekappenerimaan_details','printer'));
     }
 
     public function export(Request $request)

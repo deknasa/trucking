@@ -75,7 +75,8 @@ class HutangExtraHeaderController extends MyController
         $combo = $this->combo('list');
         $key = array_search('CETAK', array_column( $combo, 'parameter')); 
         $hutang["combo"] =  $combo[$key];
-        return view('reports.hutangextra', compact('hutang','hutang_details'));
+        $printer['tipe'] = $request->printer;
+        return view('reports.hutangextra', compact('hutang','hutang_details', 'printer'));
     }
 
     public function export(Request $request): void

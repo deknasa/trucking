@@ -76,7 +76,8 @@ class InvoiceChargeGandenganHeaderController extends MyController
         $combo = $this->combo('list');
         $key = array_search('CETAK', array_column( $combo, 'parameter')); 
         $chargegandengan["combo"] =  $combo[$key];
-        return view('reports.invoicechargegandengan', compact('chargegandengan', 'chargegandengan_details'));
+        $printer['tipe'] = $request->printer;
+        return view('reports.invoicechargegandengan', compact('chargegandengan', 'chargegandengan_details','printer'));
     }
 
     public function export(Request $request)

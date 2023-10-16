@@ -127,7 +127,8 @@ class KasGantungHeaderController extends MyController
         $combo = $this->combo('list');
         $key = array_search('CETAK', array_column( $combo, 'parameter')); 
         $kasgantung["combo"] =  $combo[$key];
-        return view('reports.kasgantung', compact('kasgantung', 'kasgantung_details',));
+        $printer['tipe'] = $request->printer;
+        return view('reports.kasgantung', compact('kasgantung', 'kasgantung_details','printer'));
     }
 
     public function comboCetak($aksi, $grp, $subgrp)

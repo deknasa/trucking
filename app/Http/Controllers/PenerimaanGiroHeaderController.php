@@ -164,7 +164,8 @@ class PenerimaanGiroHeaderController extends MyController
         $combo = $this->comboreport('list');
         $key = array_search('CETAK', array_column( $combo, 'parameter')); 
         $penerimaangiro["combo"] =  $combo[$key];
-        return view('reports.penerimaangiroheader', compact('penerimaangiro','penerimaangiro_details'));
+        $printer['tipe'] = $request->printer;
+        return view('reports.penerimaangiroheader', compact('penerimaangiro','penerimaangiro_details','printer'));
     }
 
     public function export(Request $request): void

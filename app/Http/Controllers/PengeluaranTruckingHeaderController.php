@@ -151,7 +151,8 @@ class PengeluaranTruckingHeaderController extends MyController
         $combo = $this->combo('list');
         $key = array_search('CETAK', array_column($combo, 'parameter'));
         $pengeluarantrucking["combo"] =  $combo[$key];
-        return view('reports.pengeluarantruckingheader', compact('pengeluarantrucking_details', 'pengeluarantrucking'));
+        $printer['tipe'] = $request->printer;
+        return view('reports.pengeluarantruckingheader', compact('pengeluarantrucking_details', 'pengeluarantrucking','printer'));
     }
 
     public function export(Request $request): void

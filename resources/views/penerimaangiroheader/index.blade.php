@@ -84,13 +84,13 @@
         loadJurnalUmumGrid(nobukti)
 
         @isset($request['tgldari'])
-            tgldariheader = `{{ $request['tgldari'] }}`;
+        tgldariheader = `{{ $request['tgldari'] }}`;
         @endisset
         @isset($request['tglsampai'])
-            tglsampaiheader = `{{ $request['tglsampai'] }}`;
+        tglsampaiheader = `{{ $request['tglsampai'] }}`;
         @endisset
-        setRange(false,tgldariheader,tglsampaiheader)
-        
+        setRange(false, tgldariheader, tglsampaiheader)
+
         initDatepicker()
         $(document).on('click', '#btnReload', function(event) {
             loadDataHeader('penerimaangiroheader')
@@ -124,7 +124,7 @@
                                 $(element).removeClass('form-control')
                                 $(element).parent().addClass('text-center')
 
-                                $(element).on('click', function() {                                    
+                                $(element).on('click', function() {
                                     $(element).attr('disabled', true)
                                     if ($(this).is(':checked')) {
                                         selectAllRows()
@@ -260,7 +260,7 @@
                         name: 'agen_id',
                         align: 'left'
                     },
-                    
+
                     {
                         label: 'POSTING DARI',
                         name: 'postingdari',
@@ -389,7 +389,7 @@
                             clearGridHeader($(element))
                         })
                     }
-                    
+
                     $(document).unbind('keydown')
                     setCustomBindKeys($(this))
                     initResize($(this))
@@ -442,7 +442,7 @@
                     }, 100)
 
                     $('#left-nav').find('button').attr('disabled', false)
-                    permission() 
+                    permission()
                     $('#gs_').attr('disabled', false)
                     setHighlight($(this))
                 }
@@ -463,6 +463,73 @@
             })
 
             .customPager({
+
+                extndBtn: [{
+                        id: 'report',
+                        title: 'Report',
+                        caption: 'Report',
+                        innerHTML: '<i class="fa fa-print"></i> REPORT',
+                        class: 'btn btn-info btn-sm mr-1 dropdown-toggle',
+                        dropmenuHTML: [{
+                                id: 'reportPrinterBesar',
+                                text: "Printer Lain(Faktur)",
+                                onClick: () => {
+                                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                                    if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                                        showDialog('Harap pilih salah satu record')
+                                    } else {
+                                        window.open(`{{ route('penerimaangiroheader.report') }}?id=${selectedId}&printer=reportPrinterBesar`)
+                                    }
+                                    clearSelectedRows()
+                                    $('#gs_').prop('checked', false)
+                                }
+                            },
+                            {
+                                id: 'reportPrinterKecil',
+                                text: "Printer Epson Seri LX(Faktur)",
+                                onClick: () => {
+                                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                                    if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                                        showDialog('Harap pilih salah satu record')
+                                    } else {
+                                        window.open(`{{ route('penerimaangiroheader.report') }}?id=${selectedId}&printer=reportPrinterKecil`)
+                                    }
+                                    clearSelectedRows()
+                                    $('#gs_').prop('checked', false)
+                                }
+                            },
+
+                        ],
+                    },
+                    {
+                        id: 'export',
+                        title: 'Export',
+                        caption: 'Export',
+                        innerHTML: '<i class="fas fa-file-export"></i> EXPORT',
+                        class: 'btn btn-warning btn-sm mr-1',
+                        onClick: () => {
+
+                            selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                            if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                                showDialog('Harap pilih salah satu record')
+                            } else {
+                                window.open(`{{ route('penerimaangiroheader.export') }}?id=${selectedId}`)
+                            }
+                            clearSelectedRows()
+                            $('#gs_').prop('checked', false)
+                        }
+                    },
+                    {
+                        id: 'approveun',
+                        innerHTML: '<i class="fas fa-check""></i> UN/APPROVAL',
+                        class: 'btn btn-purple btn-sm mr-1',
+                        onClick: () => {
+
+                            approve()
+
+                        }
+                    },
+                ],
                 buttons: [{
                         id: 'add',
                         innerHTML: '<i class="fa fa-plus"></i> ADD',
@@ -506,52 +573,8 @@
                         innerHTML: '<i class="fa fa-eye"></i> VIEW',
                         class: 'btn btn-orange btn-sm mr-1',
                         onClick: () => {
-                          selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                          viewPenerimaanGiro(selectedId)
-                        }
-                    },
-                    {
-                        id: 'report',
-                        innerHTML: '<i class="fa fa-print"></i> REPORT',
-                        class: 'btn btn-info btn-sm mr-1',
-                        onClick: () => {
-
                             selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                            if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                                showDialog('Harap pilih salah satu record')
-                            } else {
-                                window.open(`{{ route('penerimaangiroheader.report') }}?id=${selectedId}`)
-                            }
-                            clearSelectedRows()
-                            $('#gs_').prop('checked', false)
-                        }
-                    },
-                    {
-                        id: 'export',
-                        title: 'Export',
-                        caption: 'Export',
-                        innerHTML: '<i class="fas fa-file-export"></i> EXPORT',
-                        class: 'btn btn-warning btn-sm mr-1',
-                        onClick: () => {
-
-                            selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                            if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                                showDialog('Harap pilih salah satu record')
-                            } else {
-                                window.open(`{{ route('penerimaangiroheader.export') }}?id=${selectedId}`)
-                            }
-                            clearSelectedRows()
-                            $('#gs_').prop('checked', false)
-                        }
-                    },
-                    {
-                        id: 'approveun',
-                        innerHTML: '<i class="fas fa-check""></i> UN/APPROVAL',
-                        class: 'btn btn-purple btn-sm mr-1',
-                        onClick: () => {
-
-                            approve()
-
+                            viewPenerimaanGiro(selectedId)
                         }
                     },
                 ]
@@ -592,7 +615,7 @@
             })
             .parent().addClass('px-1')
 
-            
+
         function permission() {
             if (!`{{ $myAuth->hasPermission('penerimaangiroheader', 'store') }}`) {
                 $('#add').attr('disabled', 'disabled')
