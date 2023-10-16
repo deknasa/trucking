@@ -116,7 +116,8 @@ class PemutihanSupirController extends MyController
         $combo = $this->combo('list');
         $key = array_search('CETAK', array_column( $combo, 'parameter')); 
         $pemutihanSupir["combo"] =  $combo[$key];
-        return view('reports.pemutihansupir', compact('pemutihanSupir', 'pemutihanSupir_detail'));
+        $printer['tipe'] = $request->printer;
+        return view('reports.pemutihansupir', compact('pemutihanSupir', 'pemutihanSupir_detail','printer'));
     }
 
     public function export(Request $request):void

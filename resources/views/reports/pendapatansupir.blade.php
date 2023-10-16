@@ -17,6 +17,7 @@
   <script type="text/javascript">
     let pendapatansupirs = <?= json_encode($pendapatan); ?>;
     let showGajiSupir = <?= json_encode($showgajikenek); ?>;
+    let printer = <?= json_encode($printer); ?>;
 
     function Start() {
       Stimulsoft.Base.StiLicense.loadFromFile("{{ asset($stireport_path . 'license.php') }}");
@@ -45,9 +46,17 @@
 
       viewer.renderHtml('content')
       if (showGajiSupir == 'YA') {
-        report.loadFile(`{{ asset('public/reports/ReportPendapatanSupir(kenek).mrt') }}`)
+        if (printer['tipe'] == 'reportPrinterBesar') {
+          report.loadFile(`{{ asset('public/reports/ReportPendapatanSupir(kenek)Besar.mrt') }}`)
+        } else {
+          report.loadFile(`{{ asset('public/reports/ReportPendapatanSupir(kenek).mrt') }}`)
+        }
       } else {
-        report.loadFile(`{{ asset('public/reports/ReportPendapatanSupir.mrt') }}`)
+        if (printer['tipe'] == 'reportPrinterBesar') {
+          report.loadFile(`{{ asset('public/reports/ReportPendapatanSupirBesar.mrt') }}`)
+        } else {
+          report.loadFile(`{{ asset('public/reports/ReportPendapatanSupir.mrt') }}`)
+        }
       }
 
       report.dictionary.dataSources.clear()

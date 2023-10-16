@@ -134,7 +134,8 @@ class PenerimaanTruckingHeaderController extends MyController
         $combo = $this->combo('list');
         $key = array_search('CETAK', array_column($combo, 'parameter'));
         $penerimaantrucking["combo"] =  $combo[$key];
-        return view('reports.penerimaantruckingheader', compact('penerimaantrucking', 'penerimaantrucking_details'));
+        $printer['tipe'] = $request->printer;
+        return view('reports.penerimaantruckingheader', compact('penerimaantrucking', 'penerimaantrucking_details','printer'));
     }
 
     public function export(Request $request): void

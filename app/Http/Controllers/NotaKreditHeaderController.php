@@ -120,7 +120,8 @@ class NotaKreditHeaderController extends MyController
         $combo = $this->combo('list');
         $key = array_search('CETAK', array_column($combo, 'parameter'));
         $notakredit["combo"] =  $combo[$key];
-        return view('reports.notakreditheader', compact('notakredit', 'notakredit_detail'));
+        $printer['tipe'] = $request->printer;
+        return view('reports.notakreditheader', compact('notakredit', 'notakredit_detail','printer'));
     }
     /**
      * @ClassName

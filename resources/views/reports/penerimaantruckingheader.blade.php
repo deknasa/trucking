@@ -15,7 +15,8 @@
   <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
   <script src="{{ asset('libraries/tas-lib/js/terbilang.js?version='. config('app.version')) }}"></script>
   <script type="text/javascript">
-    let penerimaantruckings = <?= json_encode($penerimaantrucking); ?>
+    let penerimaantruckings = <?= json_encode($penerimaantrucking); ?>;
+    let printer = <?= json_encode($printer); ?>;
 
     function Start() {
       Stimulsoft.Base.StiLicense.loadFromFile("{{ asset($stireport_path . 'license.php') }}");
@@ -46,23 +47,43 @@
       switch (penerimaantruckings.statusformat) {
         case '126':
           //PJP
-          report.loadFile(`{{ asset('public/reports/ReportPenerimaanTruckingHeaderPJP.mrt') }}`)
+          if (printer['tipe'] == 'reportPrinterBesar') {
+            report.loadFile(`{{ asset('public/reports/ReportPenerimaanTruckingHeaderPJPBesar.mrt') }}`)
+          } else {
+            report.loadFile(`{{ asset('public/reports/ReportPenerimaanTruckingHeaderPJP.mrt') }}`)
+          }
           break;
         case '125':
           //DPO
-          report.loadFile(`{{ asset('public/reports/ReportPenerimaanTruckingHeaderDPO.mrt') }}`)
+          if (printer['tipe'] == 'reportPrinterBesar') {
+            report.loadFile(`{{ asset('public/reports/ReportPenerimaanTruckingHeaderDPOBesar.mrt') }}`)
+          } else {
+            report.loadFile(`{{ asset('public/reports/ReportPenerimaanTruckingHeaderDPO.mrt') }}`)
+          }
           break;
         case '265':
           //BBM
-          report.loadFile(`{{ asset('public/reports/ReportPenerimaanTruckingHeaderBBM.mrt') }}`)
+          if (printer['tipe'] == 'reportPrinterBesar') {
+            report.loadFile(`{{ asset('public/reports/ReportPenerimaanTruckingHeaderBBMBesar.mrt') }}`)
+          } else {
+            report.loadFile(`{{ asset('public/reports/ReportPenerimaanTruckingHeaderBBM.mrt') }}`)
+          }
           break;
         case '370':
           //PJPK
-          report.loadFile(`{{ asset('public/reports/ReportPenerimaanTruckingHeaderPJPK.mrt') }}`)
+          if (printer['tipe'] == 'reportPrinterBesar') {
+            report.loadFile(`{{ asset('public/reports/ReportPenerimaanTruckingHeaderPJPKBesar.mrt') }}`)
+          } else {
+            report.loadFile(`{{ asset('public/reports/ReportPenerimaanTruckingHeaderPJPK.mrt') }}`)
+          }
           break;
         default:
           //PBT
-          report.loadFile(`{{ asset('public/reports/ReportPenerimaanTruckingHeaderPBT.mrt') }}`)
+          if (printer['tipe'] == 'reportPrinterBesar') {
+            report.loadFile(`{{ asset('public/reports/ReportPenerimaanTruckingHeaderPBTBesar.mrt') }}`)
+          } else {
+            report.loadFile(`{{ asset('public/reports/ReportPenerimaanTruckingHeaderPBT.mrt') }}`)
+          }
           break;
       }
 

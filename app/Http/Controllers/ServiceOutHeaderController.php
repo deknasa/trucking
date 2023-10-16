@@ -247,7 +247,8 @@ class ServiceOutHeaderController extends MyController
         $combo = $this->combo('list');
         $key = array_search('CETAK', array_column( $combo, 'parameter')); 
         $serviceOut["combo"] =  $combo[$key];
-        return view('reports.serviceout', compact('serviceOut_details','serviceOut'));
+        $printer['tipe'] = $request->printer;
+        return view('reports.serviceout', compact('serviceOut_details','serviceOut','printer'));
     }
 
     public function export(Request $request): void

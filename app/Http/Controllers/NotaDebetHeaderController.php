@@ -122,7 +122,8 @@ class NotaDebetHeaderController extends MyController
         $combo = $this->combo('list');
         $key = array_search('CETAK', array_column( $combo, 'parameter')); 
         $notadebet["combo"] =  $combo[$key];
-        return view('reports.notadebetheader', compact('notadebet', 'notadebet_detail'));
+        $printer['tipe'] = $request->printer;
+        return view('reports.notadebetheader', compact('notadebet', 'notadebet_detail','printer'));
     }
 
     /**

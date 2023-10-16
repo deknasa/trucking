@@ -190,7 +190,8 @@ class ServiceInHeaderController extends MyController
         $combo = $this->comboReport('list');
         $key = array_search('CETAK', array_column( $combo, 'parameter')); 
         $serviceIn["combo"] =  $combo[$key];
-        return view('reports.servicein', compact('serviceIn','serviceIn_details'));
+        $printer['tipe'] = $request->printer;
+        return view('reports.servicein', compact('serviceIn','serviceIn_details', 'printer'));
     }
 
     public function export(Request $request): void

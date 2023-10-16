@@ -121,7 +121,8 @@ class PiutangHeaderController extends MyController
         $combo = $this->combo('list');
         $key = array_search('CETAK', array_column( $combo, 'parameter')); 
         $piutang["combo"] =  $combo[$key];
-        return view('reports.piutang', compact('piutang','piutang_details'));
+        $printer['tipe'] = $request->printer;
+        return view('reports.piutang', compact('piutang','piutang_details','printer'));
     }
 
     public function export(Request $request): void
