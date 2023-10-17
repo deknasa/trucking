@@ -601,7 +601,7 @@
                                 showDialog('Harap pilih salah satu record')
                             } else {
                                 viewPenerimaanGiro(selectedId)
-                            }                            }
+                            }                            
                             clearSelectedRows()
                             $('#gs_').prop('checked', false)
                         }
