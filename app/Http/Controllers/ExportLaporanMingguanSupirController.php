@@ -559,7 +559,7 @@ class ExportLaporanMingguanSupirController extends Controller
             $sheet->setCellValue("L$rowIndex", $response_detail['jobtrucking']);
             $sheet->setCellValue("M$rowIndex", $response_detail['omset'])->getStyle("M$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
             $sheet->setCellValue("N$rowIndex", $response_detail['omsettambahan'])->getStyle("N$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("O$rowIndex", "=(M$rowIndex:N$rowIndex)")->getStyle("O$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
+            $sheet->setCellValue("O$rowIndex", "=(M$rowIndex+N$rowIndex)")->getStyle("O$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
             $sheet->setCellValue("P$rowIndex", $response_detail['omsetextrabbm'])->getStyle("P$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
             $sheet->setCellValue("Q$rowIndex", $response_detail['invoice']);
             $sheet->setCellValue("R$rowIndex", $response_detail['borongan'])->getStyle("R$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
