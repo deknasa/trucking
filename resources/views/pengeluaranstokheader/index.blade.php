@@ -640,7 +640,7 @@
             },
             {
               id: 'approval-buka-cetak',
-              text: "un/Approval Buka Cetak PENERIMAAN STOK",
+              text: "un/Approval Buka Cetak PENGELUARAN STOK",
               onClick: () => {
                 if (`{{ $myAuth->hasPermission('approvalbukacetak', 'store') }}`) {
                   let tglbukacetak = $('#tgldariheader').val().split('-');
@@ -648,7 +648,7 @@
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
                     showDialog('Harap pilih salah satu record')
                   }else{
-                    approvalBukaCetak(tglbukacetak,'PENERIMAANSTOKHEADER',[selectedId]);
+                    approvalBukaCetak(tglbukacetak,'PENGELUARANSTOKHEADER',[selectedId]);
                   }
                 }
               }
