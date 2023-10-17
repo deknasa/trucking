@@ -1538,26 +1538,32 @@ function setSpaceBarCheckedHandler() {
       if (checkModal) {
         return;
       } else {
-        var selectedRowId = $("#jqGrid").jqGrid("getGridParam", "selrow");
-        if (selectedRowId) {
-          var $checkbox = $("#jqGrid").find(`tr#${selectedRowId} td input[type='checkbox']`);
-          // Toggle the checkbox state
-          let value = $checkbox.val();
-          if ($checkbox.is(':checked')) {
-            $checkbox.prop("checked", false);
-            $checkbox.parents('tr').removeClass('bg-light-blue')
-            for (var i = 0; i < selectedRows.length; i++) {
-              if (selectedRows[i] == value) {
-                selectedRows.splice(i, 1);
-              }
-            }
-          } else {
-            $checkbox.prop("checked", true);
-            selectedRows.push($checkbox.val())
-            $checkbox.parents('tr').addClass('bg-light-blue')
-          }
-          event.preventDefault();
-        }
+
+		// ALLOW FILTER PRESS SPACEBAR
+		if ($('.ui-search-toolbar input').is(':focus')) {
+			return;
+		}else{			
+        	var selectedRowId = $("#jqGrid").jqGrid("getGridParam", "selrow");
+			if (selectedRowId) {
+			var $checkbox = $("#jqGrid").find(`tr#${selectedRowId} td input[type='checkbox']`);
+			// Toggle the checkbox state
+			let value = $checkbox.val();
+			if ($checkbox.is(':checked')) {
+				$checkbox.prop("checked", false);
+				$checkbox.parents('tr').removeClass('bg-light-blue')
+				for (var i = 0; i < selectedRows.length; i++) {
+				if (selectedRows[i] == value) {
+					selectedRows.splice(i, 1);
+				}
+				}
+			} else {
+				$checkbox.prop("checked", true);
+				selectedRows.push($checkbox.val())
+				$checkbox.parents('tr').addClass('bg-light-blue')
+			}
+			event.preventDefault();
+			}			
+		}
       }
       document.body.style.overflow = "hidden";
     }
