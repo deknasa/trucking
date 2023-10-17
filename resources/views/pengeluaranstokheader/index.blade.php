@@ -631,6 +631,14 @@
           class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
           dropmenuHTML: [
             {
+              id: 'approvalEdit',
+              text: 'approval Edit',
+              onClick: () => {
+                selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                approveEdit(selectedId)
+              }
+            },
+            {
               id: 'approval-buka-cetak',
               text: "un/Approval Buka Cetak PENERIMAAN STOK",
               onClick: () => {
