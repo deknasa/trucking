@@ -147,6 +147,10 @@
             name: 'sampai_id',
           },
           {
+            label: 'PENYESUAIAN',
+            name: 'penyesuaian',
+          },
+          {
             label: 'GAJI SUPIR',
             name: 'gajisupir',
             align: 'right',
