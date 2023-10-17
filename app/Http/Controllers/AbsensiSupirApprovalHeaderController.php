@@ -110,7 +110,8 @@ class AbsensiSupirApprovalHeaderController extends MyController
         $combo = $this->combo('list');
         $key = array_search('CETAK', array_column( $combo, 'parameter')); 
         $absensiappheader["combo"] =  $combo[$key];
-        return view('reports.absensisupirapprovalheader', compact('absensiappheader', 'absensiappheader_details'));
+        $printer['tipe'] = $request->printer;
+        return view('reports.absensisupirapprovalheader', compact('absensiappheader', 'absensiappheader_details','printer'));
     }
 
     /**

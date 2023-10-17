@@ -149,7 +149,8 @@ class InvoiceHeaderController extends MyController
         $combo = $this->combo('list');
         $key = array_search('CETAK', array_column( $combo, 'parameter')); 
         $invoices["combo"] =  $combo[$key];
-        return view('reports.invoice', compact('invoice_detail', 'invoices'));
+        $printer['tipe'] = $request->printer;
+        return view('reports.invoice', compact('invoice_detail', 'invoices','printer'));
     }
 
     public function export(Request $request): void

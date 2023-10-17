@@ -107,7 +107,8 @@ class PengembalianKasGantungHeaderController extends MyController
         $combo = $this->combo('list');
         $key = array_search('CETAK', array_column( $combo, 'parameter')); 
         $pengembaliankasgantung["combo"] =  $combo[$key];
-        return view('reports.pengembaliankasgantungheader', compact('pengembaliankasgantung','pengembaliankasgantung_details'));
+        $printer['tipe'] = $request->printer;
+        return view('reports.pengembaliankasgantungheader', compact('pengembaliankasgantung','pengembaliankasgantung_details','printer'));
     }
 
     public function export(Request $request): void

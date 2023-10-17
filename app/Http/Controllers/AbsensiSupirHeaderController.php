@@ -154,7 +154,8 @@ class AbsensiSupirHeaderController extends MyController
         $combo = $this->combo('list');
         $key = array_search('CETAK', array_column( $combo, 'parameter')); 
         $absensi["combo"] =  $combo[$key];
-        return view('reports.absensi', compact('absensi', 'absensi_details'));
+        $printer['tipe'] = $request->printer;
+        return view('reports.absensi', compact('absensi', 'absensi_details','printer'));
     }
 
     public function get($params = [])

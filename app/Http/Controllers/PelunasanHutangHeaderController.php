@@ -75,7 +75,8 @@ class PelunasanHutangHeaderController extends MyController
         $combo = $this->combo('list');
         $key = array_search('CETAK', array_column( $combo, 'parameter')); 
         $pelunasanhutang["combo"] =  $combo[$key];
-        return view('reports.pelunasanhutang', compact('pelunasanhutang','pelunasanhutang_details'));
+        $printer['tipe'] = $request->printer;
+        return view('reports.pelunasanhutang', compact('pelunasanhutang','pelunasanhutang_details','printer'));
     }
 
     public function export(Request $request): void

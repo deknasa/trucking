@@ -117,7 +117,8 @@ class RekapPengeluaranHeaderController extends MyController
         $combo = $this->combo('list');
         $key = array_search('CETAK', array_column( $combo, 'parameter')); 
         $rekappengeluaran["combo"] =  $combo[$key];
-        return view('reports.rekappengeluaranheader', compact('rekappengeluaran','rekappengeluaran_details'));
+        $printer['tipe'] = $request->printer;
+        return view('reports.rekappengeluaranheader', compact('rekappengeluaran','rekappengeluaran_details','printer'));
     }
 
     public function export(Request $request)

@@ -14,8 +14,8 @@
   <script type="text/javascript" src="{{ asset($stireport_path . 'scripts/stimulsoft.designer.js') }}"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
   <script type="text/javascript">
-
-    let serviceOutheader = <?= json_encode($serviceOut); ?>
+    let serviceOutheader = <?= json_encode($serviceOut); ?>;
+    let printer = <?= json_encode($printer); ?>;
 
     function Start() {
       Stimulsoft.Base.StiLicense.loadFromFile("{{ asset($stireport_path . 'license.php') }}");
@@ -31,7 +31,7 @@
         viewerOptions.toolbar.showSaveButton = false;
         viewerOptions.toolbar.showOpenButton = false;
       }
-      
+
       var options = new Stimulsoft.Designer.StiDesignerOptions()
       options.appearance.fullScreenMode = true
 
@@ -40,7 +40,11 @@
       var dataSet = new Stimulsoft.System.Data.DataSet("Data")
 
       viewer.renderHtml('content')
-      report.loadFile(`{{ asset('public/reports/ReportServiceOut.mrt') }}`)
+      if (printer['tipe'] == 'reportPrinterBesar') {
+        report.loadFile(`{{ asset('public/reports/ReportServiceOutBesar.mrt') }}`)
+      } else {
+        report.loadFile(`{{ asset('public/reports/ReportServiceOut.mrt') }}`)
+      }
 
       report.dictionary.dataSources.clear()
 
@@ -52,19 +56,19 @@
       report.regData(dataSet.dataSetName, '', dataSet)
       report.dictionary.synchronize()
       // designer.report = report;
-    // designer.renderHtml('content');
+      // designer.renderHtml('content');
       viewer.report = report
 
-      viewer.onPrintReport = function (event) {
+      viewer.onPrintReport = function(event) {
         triggerEvent(window, 'afterprint');
       }
 
       function triggerEvent(el, type) {
         // IE9+ and other modern browsers
         if ('createEvent' in document) {
-            var e = document.createEvent('HTMLEvents');
-            e.initEvent(type, false, true);
-            el.dispatchEvent(e);
+          var e = document.createEvent('HTMLEvents');
+          e.initEvent(type, false, true);
+          el.dispatchEvent(e);
         } else {
           // IE8
           var e = document.createEventObject();
@@ -91,20 +95,20 @@
     }
   </script>
   <script type="text/javascript">
-    $( document ).ready(function() {
+    $(document).ready(function() {
       var statuscetak = serviceOutheader.statuscetak_id
       var sudahcetak = serviceOutheader['combo']['id']
       if (statuscetak == sudahcetak) {
-        $(document).on('keydown', function(e) { 
-          if((e.ctrlKey || e.metaKey) && (e.key == "p" || e.charCode == 16 || e.charCode == 112 || e.keyCode == 80) ){
+        $(document).on('keydown', function(e) {
+          if ((e.ctrlKey || e.metaKey) && (e.key == "p" || e.charCode == 16 || e.charCode == 112 || e.keyCode == 80)) {
             alert("Document Sudah Pernah Dicetak ");
             e.cancelBubble = true;
             e.preventDefault();
             e.stopImmediatePropagation();
-          }  
-        });  
+          }
+        });
       }
-    }); 
+    });
   </script>
   <style>
     .stiJsViewerPage {
@@ -112,7 +116,9 @@
     }
   </style>
 </head>
+
 <body onLoad="Start()">
   <div id="content"></div>
 </body>
+
 </html>

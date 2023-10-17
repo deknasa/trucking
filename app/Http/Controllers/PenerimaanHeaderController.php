@@ -166,10 +166,11 @@ class PenerimaanHeaderController extends MyController
         $combo = $this->combo('list');
         $key = array_search('CETAK', array_column( $combo, 'parameter')); 
         $penerimaan["combo"] =  $combo[$key];
+        $printer['tipe'] = $request->printer;
         if($penerimaan['tipe_bank'] === 'KAS')
-        { return view('reports.penerimaankas', compact('penerimaan', 'penerimaan_details',));
+        { return view('reports.penerimaankas', compact('penerimaan', 'penerimaan_details','printer'));
         } else {
-            return view('reports.penerimaanbank', compact('penerimaan', 'penerimaan_details',));
+            return view('reports.penerimaanbank', compact('penerimaan', 'penerimaan_details','printer'));
         }
     }
 
