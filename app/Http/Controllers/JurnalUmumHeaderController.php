@@ -270,7 +270,8 @@ class JurnalUmumHeaderController extends MyController
         $combo = $this->comboReport('list');
         $key = array_search('CETAK', array_column( $combo, 'parameter')); 
         $jurnal["combo"] =  $combo[$key];
-        return view('reports.jurnalumum', compact('jurnal', 'jurnal_details'));
+        $printer['tipe'] = $request->printer;
+        return view('reports.jurnalumum', compact('jurnal', 'jurnal_details', 'printer'));
     }
 
     public function export(Request $request): void
