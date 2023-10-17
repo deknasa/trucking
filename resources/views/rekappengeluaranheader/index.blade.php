@@ -428,7 +428,7 @@
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
                     showDialog('Harap pilih salah satu record')
                   } else {
-                    window.open(`{{ route('rekappengeluaranheader.report') }}?id=${selectedId}&printer=reportPrinterBesar`)
+                    window.open(`{{url('rekappengeluaranheader/report/${selectedId}?printer=reportPrinterBesar')}}`)
                   }
                 }
               },
@@ -440,7 +440,7 @@
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
                     showDialog('Harap pilih salah satu record')
                   } else {
-                    window.open(`{{ route('rekappengeluaranheader.report') }}?id=${selectedId}&printer=reportPrinterKecil`)
+                    window.open(`{{url('rekappengeluaranheader/report/${selectedId}?printer=reportPrinterKecil')}}`)
                   }
                 }
               },
