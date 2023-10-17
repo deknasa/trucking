@@ -485,6 +485,44 @@
       }
     }
 
+    function approvalBukaCetak(periode,table,selectedRows) {
+
+      $.ajax({
+                url: `${apiUrl}approvalbukacetak`,
+                method: 'POST',
+                dataType: 'JSON',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                data: {
+                    tableId: selectedRows,
+                    periode: periode,
+                    table: table,
+                    info : info
+                },
+                success: response => {
+                    $('.is-invalid').removeClass('is-invalid')
+                    $('.invalid-feedback').remove()
+                    $('#crudForm').trigger('reset')
+                    $('#crudModal').modal('hide')
+
+
+                    $('#jqGrid').jqGrid().trigger('reloadGrid');
+                    let data = $('#jqGrid').jqGrid("getGridParam", "postData");
+                    selectedRows = []
+                    clearSelectedRows()
+                },
+                error: error => {
+                   
+                        showDialog(error.statusText)
+                    
+                },
+            }).always(() => {
+                $('#processingLoader').addClass('d-none')
+                $(this).removeAttr('disabled')
+            })
+    }
+
 
 
 

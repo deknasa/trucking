@@ -461,7 +461,32 @@
               }
             }
           },
-        ]
+        ],
+        extndBtn: [{
+          id: 'approve',
+          title: 'Approve',
+          caption: 'Approve',
+          innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+          class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
+          dropmenuHTML: [
+            {
+              id: 'approval-buka-cetak',
+              text: "un/Approval Buka Cetak Piutang",
+              onClick: () => {
+                if (`{{ $myAuth->hasPermission('approvalbukacetak', 'store') }}`) {
+                  let tglbukacetak = $('#tgldariheader').val().split('-');
+                  tglbukacetak =tglbukacetak[1] + '-' + tglbukacetak[2];
+                  selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                  if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                    showDialog('Harap pilih salah satu record')
+                  }else{
+                    approvalBukaCetak(tglbukacetak,'PIUTANGHEADER',[selectedId]);
+                  }
+                }
+              }
+            },
+          ],
+        }]
 
       })
 
