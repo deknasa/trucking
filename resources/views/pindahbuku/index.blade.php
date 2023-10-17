@@ -322,6 +322,82 @@
       })
 
       .customPager({
+
+        extndBtn: [{
+            id: 'report',
+            title: 'Report',
+            caption: 'Report',
+            innerHTML: '<i class="fa fa-print"></i> REPORT',
+            class: 'btn btn-info btn-sm mr-1 dropdown-toggle',
+            dropmenuHTML: [{
+                id: 'reportPrinterBesar',
+                text: "Printer Lain(Faktur)",
+                onClick: () => {
+                  selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                  if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                    showDialog('Harap pilih salah satu record')
+                  } else {
+                    window.open(`{{ route('pindahbuku.report') }}?id=${selectedId}&printer=reportPrinterBesar`)
+                  }
+                }
+              },
+              {
+                id: 'reportPrinterKecil',
+                text: "Printer Epson Seri LX(Faktur)",
+                onClick: () => {
+                  selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                  if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                    showDialog('Harap pilih salah satu record')
+                  } else {
+                    window.open(`{{ route('pindahbuku.report') }}?id=${selectedId}&printer=reportPrinterKecil`)
+                  }
+                }
+              },
+
+            ],
+          },
+          {
+            id: 'export',
+            title: 'Export',
+            caption: 'Export',
+            innerHTML: '<i class="fas fa-file-export"></i> EXPORT',
+            class: 'btn btn-warning btn-sm mr-1',
+            onClick: () => {
+
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Harap pilih salah satu record')
+              } else {
+                window.open(`{{ route('pindahbuku.export') }}?id=${selectedId}`)
+              }
+            }
+          },
+          {
+            id: 'approve',
+            title: 'Approve',
+            caption: 'Approve',
+            innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+            class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
+            dropmenuHTML: [
+              {
+                id: 'approval-buka-cetak',
+                text: "un/Approval Buka Cetak PINDAH BUKU",
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('approvalbukacetak', 'store') }}`) {
+                    let tglbukacetak = $('#tgldariheader').val().split('-');
+                    tglbukacetak =tglbukacetak[1] + '-' + tglbukacetak[2];
+                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                    if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                      showDialog('Harap pilih salah satu record')
+                    }else{
+                      approvalBukaCetak(tglbukacetak,'PINDAHBUKU',[selectedId]);
+                    }
+                  }
+                }
+              },
+            ],
+          }
+        ],
         buttons: [{
             id: 'add',
             innerHTML: '<i class="fa fa-plus"></i> ADD',
@@ -365,62 +441,7 @@
               viewPindahBuku(selectedId)
             }
           },
-          {
-            id: 'report',
-            innerHTML: '<i class="fa fa-print"></i> REPORT',
-            class: 'btn btn-info btn-sm mr-1',
-            onClick: () => {
-
-              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Harap pilih salah satu record')
-              } else {
-                window.open(`{{ route('pindahbuku.report') }}?id=${selectedId}`)
-              }
-            }
-          },
-          {
-            id: 'export',
-            title: 'Export',
-            caption: 'Export',
-            innerHTML: '<i class="fas fa-file-export"></i> EXPORT',
-            class: 'btn btn-warning btn-sm mr-1',
-            onClick: () => {
-
-              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Harap pilih salah satu record')
-              } else {
-                window.open(`{{ route('pindahbuku.export') }}?id=${selectedId}`)
-              }
-            }
-          },
         ],
-        extndBtn: [{
-          id: 'approve',
-          title: 'Approve',
-          caption: 'Approve',
-          innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-          class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-          dropmenuHTML: [
-            {
-              id: 'approval-buka-cetak',
-              text: "un/Approval Buka Cetak PINDAH BUKU",
-              onClick: () => {
-                if (`{{ $myAuth->hasPermission('approvalbukacetak', 'store') }}`) {
-                  let tglbukacetak = $('#tgldariheader').val().split('-');
-                  tglbukacetak =tglbukacetak[1] + '-' + tglbukacetak[2];
-                  selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                  if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                    showDialog('Harap pilih salah satu record')
-                  }else{
-                    approvalBukaCetak(tglbukacetak,'PINDAHBUKU',[selectedId]);
-                  }
-                }
-              }
-            },
-          ],
-        }]
       })
 
     /* Append clear filter button */
