@@ -11,6 +11,7 @@ class Myauth
             '',
             'dashboard',
             // 'laporansaldoinventory',
+            // 'laporansaldoinventory',
             // 'tutupbuku',
             // 'approvalbukacetak',
             // 'approvalsupirgambar',
