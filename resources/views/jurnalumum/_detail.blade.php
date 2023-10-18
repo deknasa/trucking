@@ -45,6 +45,7 @@
           {
             label: 'NAMA PERKIRAAN',
             name: 'keterangancoa',
+            width: '350px'
           },
           {
             label: 'DEBET',

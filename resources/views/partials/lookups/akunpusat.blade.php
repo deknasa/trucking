@@ -97,7 +97,8 @@
         {
           label: 'NAMA',
           name: 'keterangancoa',
-          align: 'left'
+          align: 'left',
+          width: '350px'
         },
         {
           label: 'TYPE',

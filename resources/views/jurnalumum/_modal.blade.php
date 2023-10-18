@@ -106,14 +106,14 @@
 
     $(document).on('click', "#addRow", function() {
       event.preventDefault()
-      
+
       let method
       let url
       let form = $('#crudForm')
       let Id = form.find('[name=id]').val()
       let action = form.data('action')
       let data = $('#crudForm').serializeArray()
-      
+
       $('#crudForm').find(`[name="nominal_detail[]"`).each((index, element) => {
         data.filter((row) => row.name === 'nominal_detail[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal_detail[]"]`)[index])
       })
@@ -291,9 +291,9 @@
 
     activeGrid = null
 
-    form.find('#btnSubmit').prop('disabled',false)
+    form.find('#btnSubmit').prop('disabled', false)
     if (form.data('action') == "view") {
-      form.find('#btnSubmit').prop('disabled',true)
+      form.find('#btnSubmit').prop('disabled', true)
     }
 
     getMaxLength(form)
@@ -410,7 +410,7 @@
       })
 
   }
-  
+
   function viewJurnalUmumHeader(id) {
 
     let form = $('#crudForm')
@@ -422,7 +422,7 @@
       <i class="fa fa-save"></i>
       Save
     `)
-    form.find('#btnSubmit').prop('disabled',true)
+    form.find('#btnSubmit').prop('disabled', true)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('View Jurnal Umum')
     $('.is-invalid').removeClass('is-invalid')
@@ -436,19 +436,19 @@
         setFormBindKeys(form)
         initSelect2(form.find('.select2bs4'), true)
         form.find('[name]').removeAttr('disabled')
-  
+
         form.find('select').each((index, select) => {
           let element = $(select)
-  
+
           if (element.data('select2')) {
             element.select2('destroy')
           }
         })
-  
+
         form.find('[name]').attr('disabled', 'disabled').css({
           background: '#fff'
         })
-        form.find('[name=id]').prop('disabled',false)
+        form.find('[name=id]').prop('disabled', false)
       })
       .then(() => {
         clearSelectedRows()
@@ -456,7 +456,7 @@
         $('#crudModal').modal('show')
         form.find(`.hasDatepicker`).prop('readonly', true)
         form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
-        
+
         let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
         let nameFind = $('#crudForm').find(`[name]`).parents('.input-group')
         name.attr('disabled', true)
@@ -690,6 +690,12 @@
             $('.coakredit-lookup').last().lookup({
               title: 'Coa Kredit Lookup',
               fileName: 'akunpusat',
+              beforeProcess: function(test) {
+                this.postData = {
+                  levelCoa: '3',
+                  Aktif: 'AKTIF',
+                }
+              },
               onSelectRow: (akunpusat, element) => {
                 element.parents('td').find(`[name="coakredit_detail[]"]`).val(akunpusat.coa)
                 element.val(akunpusat.keterangancoa)
@@ -749,6 +755,12 @@
     $('.coadebet-lookup').last().lookup({
       title: 'Coa Debet Lookup',
       fileName: 'akunpusat',
+      beforeProcess: function() {
+        this.postData = {
+          levelCoa: '3',
+          Aktif: 'AKTIF',
+        }
+      },
       onSelectRow: (akunpusat, element) => {
         element.parents('td').find(`[name="coadebet_detail[]"]`).val(akunpusat.coa)
         element.val(akunpusat.keterangancoa)
@@ -767,6 +779,12 @@
     $('.coakredit-lookup').last().lookup({
       title: 'Coa Kredit Lookup',
       fileName: 'akunpusat',
+      beforeProcess: function(test) {
+        this.postData = {
+          levelCoa: '3',
+          Aktif: 'AKTIF',
+        }
+      },
       onSelectRow: (akunpusat, element) => {
         element.parents('td').find(`[name="coakredit_detail[]"]`).val(akunpusat.coa)
         element.val(akunpusat.keterangancoa)
@@ -951,7 +969,7 @@
       }
     })
   }
-  
+
   const setTglBukti = function(form) {
     return new Promise((resolve, reject) => {
       let data = [];
