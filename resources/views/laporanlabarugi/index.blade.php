@@ -138,7 +138,7 @@
 
                 setErrorMessages($('#crudForm'), error.responseJSON.errors);
             } else {
-                showDialog(error.statusText, error.responseJSON.message)
+                showDialog(error.responseJSON.message)
 
             }
         })
