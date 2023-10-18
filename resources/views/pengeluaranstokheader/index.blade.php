@@ -583,78 +583,70 @@
               viewPengeluaranstokHeader(selectedId)
             }
           },
-          // {
-          //   id: 'report',
-          //   innerHTML: '<i class="fa fa-print"></i> REPORT',
-          //   class: 'btn btn-info btn-sm mr-1',
-          //   onClick: () => {
-          //     selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-          //     if (selectedId == null || selectedId == '' || selectedId == undefined) {
-          //       showDialog(pleaseSelectARow)
-          //     } else {
-          //       window.open(`{{ route('pengeluaranstokheader.report') }}?id=${selectedId}`)
-          //     }
-          //   }
-          // },
-          // {
-          //   id: 'export',
-          //   title: 'Export',
-          //   caption: 'Export',
-          //   innerHTML: '<i class="fas fa-file-export"></i> EXPORT',
-          //   class: 'btn btn-warning btn-sm mr-1',
-          //   onClick: () => {
-          //     selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-          //     if (selectedId == null || selectedId == '' || selectedId == undefined) {
-          //       showDialog(pleaseSelectARow)
-          //     } else {
-          //       window.open(`{{ route('pengeluaranstokheader.export') }}?id=${selectedId}`)
-          //     }
-          //   }
-          // },
-          // {
-          //   id: 'approvalEdit',
-          //   title: 'approval Edit',
-          //   caption: 'approval Edit',
-          //   innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-          //   class: 'btn btn-purple btn-sm mr-1',
-          //   onClick: () => {
-          //     selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-          //     approveEdit(selectedId)
-          //   }
-          // }
         ],
-        extndBtn: [{
-          id: 'approve',
-          title: 'Approve',
-          caption: 'Approve',
-          innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-          class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-          dropmenuHTML: [
-            {
-              id: 'approvalEdit',
-              text: 'approval Edit',
-              onClick: () => {
-                selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                approveEdit(selectedId)
+        extndBtn: [
+          {
+            id: 'report',
+            innerHTML: '<i class="fa fa-print"></i> REPORT',
+            class: 'btn btn-info btn-sm mr-1',
+            onClick: () => {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog(pleaseSelectARow)
+              } else {
+                window.open(`{{ route('pengeluaranstokheader.report') }}?id=${selectedId}`)
               }
-            },
-            {
-              id: 'approval-buka-cetak',
-              text: "un/Approval Buka Cetak PENGELUARAN STOK",
-              onClick: () => {
-                if (`{{ $myAuth->hasPermission('approvalbukacetak', 'store') }}`) {
-                  let tglbukacetak = $('#tgldariheader').val().split('-');
-                  tglbukacetak =tglbukacetak[1] + '-' + tglbukacetak[2];
-                  if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                    showDialog('Harap pilih salah satu record')
-                  }else{
-                    approvalBukaCetak(tglbukacetak,'PENGELUARANSTOKHEADER',[selectedId]);
+            }
+          },
+          {
+            id: 'export',
+            title: 'Export',
+            caption: 'Export',
+            innerHTML: '<i class="fas fa-file-export"></i> EXPORT',
+            class: 'btn btn-warning btn-sm mr-1',
+            onClick: () => {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog(pleaseSelectARow)
+              } else {
+                window.open(`{{ route('pengeluaranstokheader.export') }}?id=${selectedId}`)
+              }
+            }
+          },
+          {
+            id: 'approve',
+            title: 'Approve',
+            caption: 'Approve',
+            innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+            class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
+            dropmenuHTML: [
+              {
+                id: 'approvalEdit',
+                text: 'approval Edit',
+                onClick: () => {
+                  selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                  approveEdit(selectedId)
+                }
+              },
+              {
+                id: 'approval-buka-cetak',
+                text: "un/Approval Buka Cetak PENGELUARAN STOK",
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('approvalbukacetak', 'store') }}`) {
+                    let tglbukacetak = $('#tgldariheader').val().split('-');
+                    tglbukacetak =tglbukacetak[1] + '-' + tglbukacetak[2];
+                    if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                      showDialog('Harap pilih salah satu record')
+                    }else{
+                      approvalBukaCetak(tglbukacetak,'PENGELUARANSTOKHEADER',[selectedId]);
+                    }
                   }
                 }
-              }
-            },
-          ],
-        }]
+              },
+            ],
+          }
+        ]
+          
 
       })
 
