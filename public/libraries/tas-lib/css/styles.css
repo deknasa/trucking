@@ -829,3 +829,6 @@ span.textCard {
 #sidebarButton>i {
 	color: #d81b60 !important;
 }
+.login-card-body .btn {
+	padding: 0.535rem 0.75rem;
+}

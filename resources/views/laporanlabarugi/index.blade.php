@@ -129,31 +129,19 @@
 
     $(document).on('click', `#btnExport`, function(event) {
         let sampai = $('#crudForm').find('[name=sampai]').val()
-        $.ajax({
-            url: `{{ route('laporanlabarugi.export') }}`,
-            method: 'GET',
-            data: {
-                sampai: sampai
-            },
-            success: function(response) {
-                // Handle the success response
-                var newWindow = window.open('','_blank');
-                newWindow.document.open();
-                newWindow.document.write(response);
-                newWindow.document.close();
-            },
-            error: function(error) {
-                console.log(error)
-                if (error.status === 422) {
-                    $('.is-invalid').removeClass('is-invalid');
-                    $('.invalid-feedback').remove();
-                    setErrorMessages($('#crudForm'), error.responseJSON.errors);
-                } else {
-                    showDialog(error.responseJSON.message);
-                }
-            }
-        });
+        getCekReport().then((response) => {
+            window.open(`{{ route('laporanlabarugi.export') }}?sampai=${sampai}`)
+        }).catch((error) => {
+            if (error.status === 422) {
+                $('.is-invalid').removeClass('is-invalid')
+                $('.invalid-feedback').remove()
 
+                setErrorMessages($('#crudForm'), error.responseJSON.errors);
+            } else {
+                showDialog(error.statusText, error.responseJSON.message)
+
+            }
+        })
     })
 
     function getCekReport() {

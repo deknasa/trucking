@@ -81,7 +81,7 @@ class LaporanLabaRugiController extends MyController
             $sheet->setCellValue('A2', 'Laporan Laba Rugi');
             $sheet->setCellValue('A3', 'Periode: ' . $request->sampai);
 
-            // $sheet->getStyle("A1")->getFont()->setSize(20)->setBold(true);
+            $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
 
             $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
             $sheet->getStyle('A2')->getAlignment()->setHorizontal('left');
@@ -130,7 +130,7 @@ class LaporanLabaRugiController extends MyController
             }
 
             $lastColumn = $alphabets[$data_columns_index];
-            $sheet->getStyle("A$header_start_row:$lastColumn$header_start_row")->getFont()->setBold(true);
+            $sheet->getStyle("A$header_start_row:$lastColumn$header_start_row")->applyFromArray($styleArray)->getFont()->setBold(true);
             $totalDebet = 0;
             $totalKredit = 0;
             $totalSaldo = 0;
@@ -144,6 +144,7 @@ class LaporanLabaRugiController extends MyController
 
                 // Gabungkan sel pada kolom "A" untuk label "Pendapatan :"
                 $sheet->mergeCells("A$detail_start_row:A$detail_start_row");
+                $sheet->getStyle("A$detail_start_row:B$detail_start_row")->applyFromArray($styleArray);
 
                 $detail_start_row++;
 
@@ -157,6 +158,7 @@ class LaporanLabaRugiController extends MyController
                         $sheet->setCellValue("A$detail_start_row", $keterangan_main);
                         $sheet->mergeCells("A$detail_start_row:A$detail_start_row");
 
+                        $sheet->getStyle("A$detail_start_row:B$detail_start_row")->applyFromArray($styleArray);
                         // Tingkatkan nomor baris
                         $detail_start_row++;
                     }
@@ -169,8 +171,9 @@ class LaporanLabaRugiController extends MyController
                     $sheet->setCellValue("B$detail_start_row", $response_detail['Nominal']);
 
                     // Tingkatkan nomor baris
+                    $sheet->getStyle("A$detail_start_row:B$detail_start_row")->applyFromArray($styleArray);
                     $detail_start_row++;
-
+                  
                     // Simpan nilai "KeteranganMain" untuk perbandingan selanjutnya
                     $previous_keterangan_main = $keterangan_main;
                 }
