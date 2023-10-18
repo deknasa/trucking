@@ -1,11 +1,16 @@
 @extends('layouts.master')
 
 @section('content')
+<style>
+    .ui-datepicker-calendar {
+        display: none;
+    }
+</style>
 <!-- Grid -->
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
-            <div class="card card-primary">
+            <div class="card card-easyui bordered mb-4">
                 <div class="card-header">
                 </div>
                 <form id="crudForm">
@@ -18,32 +23,20 @@
                                 </div>
                             </div>
                         </div>
-
-                        <div class="form-group row">
-                            <label class="col-12 col-sm-2 col-form-label mt-2">Divisi<span class="text-danger">*</span></label>
-                            <div class="col-sm-4 mt-2">
-                                <div class="input-group">
-                                    <input type="text" name="divisi" class="form-control">
-                                </div>
-                            </div>
-                        </div>
-
                         <div class="form-group row">
                             <label class="col-12 col-sm-2 col-form-label mt-2">Kas/Bank<span class="text-danger">*</span></label>
                             <div class="col-sm-4 mt-2">
-                                <div class="input-group">
-                                    <input type="hidden" name="bank_id">
-                                    <input type="text" name="bank" class="form-control bank-lookup">
-                                </div>
+                                <input type="hidden" name="bank_id">
+                                <input type="text" name="bank" class="form-control bank-lookup">
                             </div>
                         </div>
                         <div class="row">
 
                             <div class="col-sm-6 mt-4">
-                                <a id="btnExport" class="btn btn-secondary mr-2 ">
-                                    <i class="fas fa-sync"></i>
-                                    Ekspor
-                                </a>
+                                <button type="button" id="btnExport" class="btn btn-warning ">
+                                    <i class="fas fa-file-export"></i>
+                                    Export
+                                </button>
                             </div>
                         </div>
 
@@ -75,8 +68,10 @@
 
 
     $(document).ready(function() {
+
         initLookup()
-        $('#crudForm').find('[name=periode]').val($.datepicker.formatDate('mm-yy', new Date())).trigger('change');
+        $('#crudForm').find('[name=periode]').val($.datepicker.formatDate('mm-yy', new Date())).trigger(
+            'change');
 
         $('.datepicker').datepicker({
                 changeMonth: true,
@@ -90,16 +85,15 @@
             }).siblings(".ui-datepicker-trigger")
             .wrap(
                 `
-			<div class="input-group-append">
-			</div>
-		`
+    <div class="input-group-append">
+    </div>
+`
             )
-            .addClass("btn btn-primary").html(`
-			<i class="fa fa-calendar-alt"></i>
-		`);
+            .addClass("btn btn-easyui text-easyui-dark").html(`
+    <i class="fa fa-calendar-alt"></i>
+`);
 
-        
-        
+
         if (!`{{ $myAuth->hasPermission('exportlaporankasgantung', 'export') }}`) {
             $('#btnExport').attr('disabled', 'disabled')
         }
@@ -107,14 +101,48 @@
 
     $(document).on('click', `#btnExport`, function(event) {
         let periode = $('#crudForm').find('[name=periode]').val()
+        let bank_id = $('#crudForm').find('[name=bank_id]').val()
+        let bank = $('#crudForm').find('[name=bank]').val()
+        getCekExport().then((response) => {
+            window.open(` {{ route('exportlaporankasgantung.export') }}?periode=${periode}&bank_id=${bank_id}&bank=${bank}`)
+        }).catch((error) => {
+            if (error.status === 422) {
+                $('.is-invalid').removeClass('is-invalid')
+                $('.invalid-feedback').remove()
 
-        if (periode != '') {
+                setErrorMessages($('#crudForm'), error.responseJSON.errors);
+            } else {
+                showDialog(error.statusText, error.responseJSON.message)
 
-            window.open(`{{ route('exportlaporankasgantung.export') }}?periode=${periode}`)
-        } else {
-            showDialog('ISI SELURUH KOLOM')
-        }
+            }
+        })
     })
+
+    function getCekExport() {
+
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: `${apiUrl}exportlaporankasgantung/export`,
+                dataType: "JSON",
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                data: {
+                    periode: $('#crudForm').find('[name=periode]').val(),
+                    bank: $('#crudForm').find('[name=bank]').val(),
+                    bank_id: $('#crudForm').find('[name=bank_id]').val(),
+                    isCheck: true,
+                },
+                success: (response) => {
+                    resolve(response);
+                },
+                error: error => {
+                    reject(error)
+
+                },
+            });
+        });
+    }
 
 
     function initLookup() {
@@ -122,19 +150,6 @@
         $('.bank-lookup').lookup({
             title: 'Bank Lookup',
             fileName: 'bank',
-            beforeProcess: function(test) {
-                this.postData = {
-                    filters: JSON.stringify({
-                        "groupOp": "AND",
-                        "rules": [{
-                            "field": "tipe",
-                            "op": "cn",
-                            "data": type
-                        }]
-                    }),
-                    Aktif: 'AKTIF',
-                }
-            },
             onSelectRow: (bank, element) => {
                 $('#crudForm [name=bank_id]').first().val(bank.id)
                 element.val(bank.namabank)
@@ -144,8 +159,8 @@
                 element.val(element.data('currentValue'))
             },
             onClear: (element) => {
+                $('#crudForm [name=bank_id]').first().val('')
                 element.val('')
-                $(`#crudForm [name="bank_id"]`).first().val('')
                 element.data('currentValue', element.val())
             }
         })
