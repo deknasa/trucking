@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "78ed6ff5eb384dcd4949f8f3e0678fc9",
+  "ReportGuid": "4f56e124517cfa04082aea1112d1910d",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://tasjkt.kozow.com:8074/trucking/public/reports/ReportLaporanNeraca.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanNeraca.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1697106544000+0700)/",
+  "ReportChanged": "/Date(1697602824000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -531,6 +531,7 @@
               "Text": {
                 "Value": "User : {user_roles.rolename}"
               },
+              "HorAlignment": "Right",
               "Font": ";;Italic;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
@@ -730,11 +731,11 @@
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
               "TextFormat": {
-                "Ident": "StiNumberFormatService",
-                "NegativePattern": 1,
+                "Ident": "StiCurrencyFormatService",
                 "DecimalSeparator": ",",
                 "GroupSeparator": ".",
-                "State": "DecimalSeparator, GroupSeparator"
+                "State": "DecimalSeparator, GroupSeparator, CurrencySymbol",
+                "Symbol": ""
               },
               "Type": "Expression"
             }
@@ -819,11 +820,11 @@
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
               "TextFormat": {
-                "Ident": "StiNumberFormatService",
-                "NegativePattern": 1,
+                "Ident": "StiCurrencyFormatService",
                 "DecimalSeparator": ",",
                 "GroupSeparator": ".",
-                "State": "DecimalSeparator, GroupSeparator"
+                "State": "DecimalSeparator, GroupSeparator, CurrencySymbol",
+                "Symbol": ""
               }
             },
             "2": {
@@ -892,11 +893,11 @@
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
               "TextFormat": {
-                "Ident": "StiNumberFormatService",
-                "NegativePattern": 1,
+                "Ident": "StiCurrencyFormatService",
                 "DecimalSeparator": ",",
                 "GroupSeparator": ".",
-                "State": "DecimalSeparator, GroupSeparator"
+                "State": "DecimalSeparator, GroupSeparator, CurrencySymbol",
+                "Symbol": ""
               },
               "Type": "DataColumn"
             }
@@ -1019,11 +1020,11 @@
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
               "TextFormat": {
-                "Ident": "StiNumberFormatService",
-                "NegativePattern": 1,
+                "Ident": "StiCurrencyFormatService",
                 "DecimalSeparator": ",",
                 "GroupSeparator": ".",
-                "State": "DecimalSeparator, GroupSeparator"
+                "State": "DecimalSeparator, GroupSeparator, CurrencySymbol",
+                "Symbol": ""
               },
               "Type": "Expression"
             }

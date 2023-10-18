@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "f4bef6d14c9241409d615c0ce8b0a193",
+  "ReportGuid": "d64d1b9bbdd72167fc4794ba41921a76",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanLabaRugi.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1695024274000+0700)/",
+  "ReportChanged": "/Date(1697602713000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -66,54 +66,60 @@
             "Type": "System.String"
           },
           "6": {
+            "Name": "Nominalparent",
+            "NameInSource": "Nominalparent",
+            "Alias": "Nominalparent",
+            "Type": "System.String"
+          },
+          "7": {
             "Name": "CmpyName",
             "NameInSource": "CmpyName",
             "Alias": "CmpyName",
             "Type": "System.String"
           },
-          "7": {
+          "8": {
             "Name": "statuslabarugi",
             "NameInSource": "statuslabarugi",
             "Alias": "statuslabarugi",
             "Type": "System.String"
           },
-          "8": {
+          "9": {
             "Name": "bulan",
             "NameInSource": "bulan",
             "Alias": "bulan",
             "Type": "System.String"
           },
-          "9": {
+          "10": {
             "Name": "tahun",
             "NameInSource": "tahun",
             "Alias": "tahun",
             "Type": "System.String"
           },
-          "10": {
+          "11": {
             "Name": "Order",
             "NameInSource": "Order",
             "Alias": "Order",
             "Type": "System.String"
           },
-          "11": {
+          "12": {
             "Name": "Parent",
             "NameInSource": "Parent",
             "Alias": "Parent",
             "Type": "System.String"
           },
-          "12": {
+          "13": {
             "Name": "KeteranganParent",
             "NameInSource": "KeteranganParent",
             "Alias": "KeteranganParent",
             "Type": "System.String"
           },
-          "13": {
+          "14": {
             "Name": "disetujui",
             "NameInSource": "disetujui",
             "Alias": "disetujui",
             "Type": "System.String"
           },
-          "14": {
+          "15": {
             "Name": "diperiksa",
             "NameInSource": "diperiksa",
             "Alias": "diperiksa",
@@ -166,28 +172,28 @@
             "Type": "System.String"
           },
           "2": {
+            "Name": "info",
+            "NameInSource": "info",
+            "Alias": "info",
+            "Type": "System.String"
+          },
+          "3": {
             "Name": "modifiedby",
             "NameInSource": "modifiedby",
             "Alias": "modifiedby",
             "Type": "System.String"
           },
-          "3": {
+          "4": {
             "Name": "created_at",
             "NameInSource": "created_at",
             "Alias": "created_at",
             "Type": "System.DateTime"
           },
-          "4": {
+          "5": {
             "Name": "updated_at",
             "NameInSource": "updated_at",
             "Alias": "updated_at",
             "Type": "System.DateTime"
-          },
-          "5": {
-            "Name": "info",
-            "NameInSource": "info",
-            "Alias": "info",
-            "Type": "System.String"
           },
           "6": {
             "Name": "pivot",
@@ -264,28 +270,28 @@
             "Type": "System.String"
           },
           "9": {
+            "Name": "info",
+            "NameInSource": "info",
+            "Alias": "info",
+            "Type": "System.String"
+          },
+          "10": {
             "Name": "modifiedby",
             "NameInSource": "modifiedby",
             "Alias": "modifiedby",
             "Type": "System.String"
           },
-          "10": {
+          "11": {
             "Name": "created_at",
             "NameInSource": "created_at",
             "Alias": "created_at",
             "Type": "System.DateTime"
           },
-          "11": {
+          "12": {
             "Name": "updated_at",
             "NameInSource": "updated_at",
             "Alias": "updated_at",
             "Type": "System.DateTime"
-          },
-          "12": {
-            "Name": "info",
-            "NameInSource": "info",
-            "Alias": "info",
-            "Type": "System.String"
           },
           "13": {
             "Name": "roles",
@@ -451,7 +457,7 @@
               "Name": "Text18",
               "Guid": "7462b9011caae40416ba07a69e5e98e9",
               "GrowToHeight": true,
-              "ClientRectangle": "14.27,1.44,6.92,0.39",
+              "ClientRectangle": "14.27,0.24,6.92,0.39",
               "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -471,7 +477,7 @@
               "Name": "Text51",
               "Guid": "5b248faa297c85f35660c07160de2e34",
               "GrowToHeight": true,
-              "ClientRectangle": "10.54,1.91,10.67,0.41",
+              "ClientRectangle": "10.54,0.91,10.67,0.41",
               "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -517,7 +523,7 @@
               "Name": "Text24",
               "Guid": "f804cde4971da08ded783f26b427d4b7",
               "GrowToHeight": true,
-              "ClientRectangle": "0.25,2,2.52,0.39",
+              "ClientRectangle": "16.05,0.6,5.12,0.39",
               "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -525,6 +531,7 @@
               "Text": {
                 "Value": "User : {user_roles.rolename}"
               },
+              "HorAlignment": "Right",
               "Font": ";;Italic;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
@@ -723,13 +730,13 @@
               "Name": "Text10",
               "Guid": "cd9c9664cc9740a682bc27b398f14347",
               "GrowToHeight": true,
-              "ClientRectangle": "15,0.1,3.2,0.6",
+              "ClientRectangle": "15.8,0.1,5,0.6",
               "ComponentPlacement": "gh.GroupHeaderBand4",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{data.Nominal}"
+                "Value": "{Sum(data.Nominal)}"
               },
               "HorAlignment": "Right",
               "Font": ";9;Bold;",
@@ -737,11 +744,13 @@
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
               "TextFormat": {
-                "Ident": "StiNumberFormatService",
+                "Ident": "StiCurrencyFormatService",
                 "DecimalSeparator": ",",
                 "GroupSeparator": ".",
-                "State": "DecimalSeparator, GroupSeparator, NegativePattern"
-              }
+                "State": "DecimalSeparator, GroupSeparator, PositivePattern, NegativePattern, CurrencySymbol",
+                "Symbol": ""
+              },
+              "Type": "Expression"
             }
           },
           "Condition": {
@@ -790,15 +799,16 @@
                 "Value": "{data.Nominal}"
               },
               "HorAlignment": "Right",
-              "Font": ";9;Bold;",
+              "Font": ";9;;",
               "Border": ";;;;;;;solid:0,0,0",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
               "TextFormat": {
-                "Ident": "StiNumberFormatService",
+                "Ident": "StiCurrencyFormatService",
                 "DecimalSeparator": ",",
                 "GroupSeparator": ".",
-                "State": "DecimalSeparator, GroupSeparator, NegativePattern"
+                "State": "DecimalSeparator, GroupSeparator, GroupSize, PositivePattern, NegativePattern, CurrencySymbol",
+                "Symbol": ""
               }
             }
           },
@@ -871,10 +881,11 @@
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
               "TextFormat": {
-                "Ident": "StiNumberFormatService",
+                "Ident": "StiCurrencyFormatService",
                 "DecimalSeparator": ",",
                 "GroupSeparator": ".",
-                "State": "DecimalSeparator, GroupSeparator, NegativePattern"
+                "State": "DecimalSeparator, GroupSeparator, PositivePattern, NegativePattern, CurrencySymbol",
+                "Symbol": ""
               },
               "Type": "Expression"
             },
@@ -961,10 +972,11 @@
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
               "TextFormat": {
-                "Ident": "StiNumberFormatService",
+                "Ident": "StiCurrencyFormatService",
                 "DecimalSeparator": ",",
                 "GroupSeparator": ".",
-                "State": "DecimalSeparator, GroupSeparator, NegativePattern"
+                "State": "DecimalSeparator, GroupSeparator, PositivePattern, NegativePattern, CurrencySymbol",
+                "Symbol": ""
               },
               "Type": "Expression"
             }
