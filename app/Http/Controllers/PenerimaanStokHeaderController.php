@@ -328,7 +328,8 @@ class PenerimaanStokHeaderController extends MyController
         $data['valueKe'] = $persediaanKe['valueKe'];
         
         $penerimaanstokheaders = $data;
-        return view('reports.penerimaanstokheader', compact('penerimaanstokheaders'));
+        $printer['tipe'] = $request->printer;
+        return view('reports.penerimaanstokheader', compact('penerimaanstokheaders','printer'));
     }
 
     public function export(Request $request)
