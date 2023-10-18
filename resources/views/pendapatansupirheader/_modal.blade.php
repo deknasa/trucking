@@ -886,10 +886,14 @@
                             element.data('current-value', value)
                         }
                     })
+                    let totalNominal = 0;
+                    let totalKenek = 0;
                     $.each(response.detail, (index, detail) => {
 
                         if (detail.pendapatansupir_id != 0) {
 
+                            totalNominal += parseFloat(detail.nominal_detail)
+                            totalKenek += parseFloat(detail.gajikenek)
                             selectedRowsTrip.push(detail.id)
                             selectedTrip.push(detail.nobukti_trip)
                             selectedRic.push(detail.nobukti_ric)
@@ -918,6 +922,8 @@
                             },
                             datatype: "json"
                         }).trigger('reloadGrid');
+                        initAutoNumeric($('.footrow').find(`td[aria-describedby="modalgrid_nominal_detail"]`).text(totalNominal))
+                        initAutoNumeric($('.footrow').find(`td[aria-describedby="modalgrid_gajikenek"]`).text(totalKenek))
 
                     }, 50);
 
@@ -1167,8 +1173,8 @@
 
                         $(this).jqGrid('footerData', 'set', {
                             nobukti_trip: 'Total:',
-                            nominal_detail: data.attributes.totalNominal,
-                            gajikenek: data.attributes.totalGajiKenek,
+                            // nominal_detail: data.attributes.totalNominal,
+                            // gajikenek: data.attributes.totalGajiKenek,
                         }, true)
                     }
 
@@ -1380,6 +1386,25 @@
                 }
             }
         }
+
+        setTotalNominalTrip()
+    }
+
+
+    function setTotalNominalTrip() {
+        let nominal = 0
+        let kenek = 0
+        $.each(selectedRowsTrip, (index, val) => {
+            getNominal = selectedNominal[index];
+            nominals = parseFloat(getNominal.replaceAll(',', ''))
+            nominal += nominals
+
+            getKenek = selectedGajiKenek[index];
+            keneks = parseFloat(getKenek.replaceAll(',', ''))
+            kenek += keneks
+        })
+        initAutoNumeric($('.footrow').find(`td[aria-describedby="modalgrid_nominal_detail"]`).text(nominal))
+        initAutoNumeric($('.footrow').find(`td[aria-describedby="modalgrid_gajikenek"]`).text(kenek))
     }
 
     function loadDepositoGrid() {
@@ -2171,7 +2196,6 @@
                         input.forEach(field => {
                             field = $.trim(field.toLowerCase());
                             $(`.${field}`).hide()
-                            console.log($("#modalgrid").jqGrid("hideCol", `${field}`))
                             $("#modalgrid").jqGrid("hideCol", `${field}`);
                         });
                     }

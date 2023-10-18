@@ -85,7 +85,7 @@ class LaporanLabaRugiController extends MyController
 
             $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
             $sheet->getStyle('A2')->getAlignment()->setHorizontal('left');
-            $sheet->mergeCells('A1:B1');
+            $sheet->mergeCells('A1:C1');
             $sheet->mergeCells('A2:B2');
             $sheet->mergeCells('A3:B3');
             $sheet->mergeCells('A4:B4');
@@ -130,7 +130,9 @@ class LaporanLabaRugiController extends MyController
             }
 
             $lastColumn = $alphabets[$data_columns_index];
-            $sheet->getStyle("A$header_start_row:$lastColumn$header_start_row")->applyFromArray($styleArray)->getFont()->setBold(true);
+            $sheet->getStyle("A$header_start_row:C$header_start_row")->applyFromArray($styleArray)->getFont()->setBold(true);
+
+            $sheet->mergeCells("B$header_start_row:C$header_start_row");
             $totalDebet = 0;
             $totalKredit = 0;
             $totalSaldo = 0;
@@ -141,41 +143,110 @@ class LaporanLabaRugiController extends MyController
                 // Menambahkan baris untuk Pendapatan
                 // $sheet->setCellValue("A$detail_start_row", $no);
                 // Tulis label "Pendapatan :" pada kolom "A"
-
+                $previous_keterangan_main = '';
+                $previous_keterangan_type = '';
+                $total_per_keterangan_type = 0;
+                $total_start_row = 0;
+                $total_start_row_per_main = 0;
+                $start_last_main = 0;
+                $start_row_main = 0;
                 // Gabungkan sel pada kolom "A" untuk label "Pendapatan :"
                 $sheet->mergeCells("A$detail_start_row:A$detail_start_row");
-                $sheet->getStyle("A$detail_start_row:B$detail_start_row")->applyFromArray($styleArray);
+                $sheet->getStyle("A$detail_start_row:C$detail_start_row")->applyFromArray($styleArray);
 
-                $detail_start_row++;
+                // $detail_start_row++;
 
-                // Menulis data dan melakukan grup berdasarkan kolom "KeteranganMain"
-                $previous_keterangan_main = '';
                 foreach ($pengeluaran as $response_detail) {
                     $keterangan_main = $response_detail['keteranganmain'];
+                    $keterangan_type = $response_detail['KeteranganParent'];
 
                     if ($keterangan_main != $previous_keterangan_main) {
-                        // Jika nilai "KeteranganMain" berbeda dengan sebelumnya, buat grup baru
-                        $sheet->setCellValue("A$detail_start_row", $keterangan_main);
-                        $sheet->mergeCells("A$detail_start_row:A$detail_start_row");
+                        if ($previous_keterangan_main != '') {
 
-                        $sheet->getStyle("A$detail_start_row:B$detail_start_row")->applyFromArray($styleArray);
-                        // Tingkatkan nomor baris
+                            if ($total_per_keterangan_type > 0) {
+                                // $sheet->mergeCells("A$total_start_row:A$total_start_row");
+                                $sheet->setCellValue('C' . ($total_start_row - 1), "=SUM(B$total_start_row:B" . ($detail_start_row - 1) . ")");
+                                $sheet->getStyle("C" . ($total_start_row - 1))->applyFromArray($styleArray)->getFont()->setBold(true);
+                                $sheet->getStyle("C" . ($total_start_row - 1))->getNumberFormat()->setFormatCode("#,##0.00");
+                                $sheet->getStyle("A$total_start_row:C$total_start_row")->applyFromArray($styleArray);
+                            }
+                            $total_per_keterangan_type = 0;
+                            if ($total_start_row_per_main > 0) {
+                                $sheet->setCellValue("A$detail_start_row", "TOTAL $previous_keterangan_main");
+                                $sheet->setCellValue("C$detail_start_row", "=SUM(B$start_row_main:B" . ($detail_start_row - 1) . ")");
+                                $sheet->getStyle("C$detail_start_row")->applyFromArray($styleArray)->getFont()->setBold(true);
+                                $sheet->getStyle("C$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+                                $sheet->getStyle("A$detail_start_row:C$detail_start_row")->applyFromArray($styleArray);
+                                $detail_start_row += 2;
+                            }
+                            $total_start_row_per_main = 0;
+                        } 
+                        $start_last_main = $detail_start_row;                        
+
+                        $sheet->setCellValue("A$detail_start_row", $keterangan_main);
+                        $sheet->getStyle("A$detail_start_row:C$detail_start_row")->applyFromArray($styleArray);
+                        // $sheet->mergeCells("A$detail_start_row:A$detail_start_row");
                         $detail_start_row++;
+
+
+                        $previous_keterangan_type = '';
+                        $total_start_row = $detail_start_row;
+
+                        $total_start_row_per_main = $detail_start_row;
                     }
 
 
-                    // Tulis data pada kolom-kolom lain
-                    $sheet->setCellValue("A$detail_start_row", $response_detail['KeteranganParent']);
+                    if ($keterangan_type != $previous_keterangan_type) {
+                        
+                        if ($previous_keterangan_type != '') {
+
+                            // $sheet->mergeCells("A$total_start_row:A$total_start_row");
+                            $sheet->setCellValue('C' . ($total_start_row - 1), "=SUM(B$total_start_row:B" . ($detail_start_row - 1) . ")");
+                            $sheet->getStyle("C" . ($total_start_row - 1))->applyFromArray($styleArray)->getFont()->setBold(true);
+                            $sheet->getStyle("C" . ($total_start_row - 1))->getNumberFormat()->setFormatCode("#,##0.00");
+                            $sheet->setCellValue('C' . $total_start_row, '');
+                            $sheet->getStyle("A$total_start_row:C$total_start_row")->applyFromArray($styleArray);
+                            // $start_last_main = $total_start_row;
+                        } else {
+                            $start_row_main = $detail_start_row;
+                        }
+
+                        // $d = $detail_start_row+$c;
+
+                        $sheet->setCellValue("A$detail_start_row", $keterangan_type);
+                        $sheet->getStyle("A$detail_start_row:C$detail_start_row")->applyFromArray($styleArray);
+                        // $sheet->mergeCells("A$detail_start_row:A$detail_start_row");
+                        $detail_start_row++;
+
+                        $total_start_row = $detail_start_row;
+                    }
 
                     $sheet->setCellValue("A$detail_start_row", "      " . $response_detail['keterangancoa']);
                     $sheet->setCellValue("B$detail_start_row", $response_detail['Nominal']);
+                    $sheet->getStyle("B$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
 
-                    // Tingkatkan nomor baris
-                    $sheet->getStyle("A$detail_start_row:B$detail_start_row")->applyFromArray($styleArray);
+                    $total_per_keterangan_type = $detail_start_row;
+
                     $detail_start_row++;
-                  
-                    // Simpan nilai "KeteranganMain" untuk perbandingan selanjutnya
+                    $sheet->getStyle("A$detail_start_row:C$detail_start_row")->applyFromArray($styleArray);
+                    $total_start_row_per_main = $detail_start_row;
                     $previous_keterangan_main = $keterangan_main;
+                    $previous_keterangan_type = $keterangan_type;
+                }
+
+                if ($previous_keterangan_main != '') {
+                    if ($total_per_keterangan_type > 0) {
+                        // $sheet->mergeCells("A$total_start_row:A$total_start_row");
+                        $sheet->setCellValue('C' . ($total_start_row - 1), "=SUM(B$total_start_row:B" . ($detail_start_row - 1) . ")");
+                        $sheet->getStyle("C" . ($total_start_row - 1))->applyFromArray($styleArray)->getFont()->setBold(true);
+                        $sheet->getStyle("C" . ($total_start_row - 1))->getNumberFormat()->setFormatCode("#,##0.00");
+                        $sheet->getStyle("A$total_start_row:C$total_start_row")->applyFromArray($styleArray);
+                    }
+                    $sheet->setCellValue("A$detail_start_row", "TOTAL $previous_keterangan_main");
+                    $sheet->setCellValue("C$detail_start_row", "=SUM(B$start_last_main:B" . ($detail_start_row - 1) . ")");
+                    $sheet->getStyle("C$detail_start_row")->applyFromArray($styleArray)->getFont()->setBold(true);
+                    $sheet->getStyle("C$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+                    $sheet->getStyle("A$total_start_row:B$total_start_row")->applyFromArray($styleArray);
                 }
             }
 
@@ -199,47 +270,10 @@ class LaporanLabaRugiController extends MyController
             $sheet->getStyle("A" . ($detail_start_row + 1) . ":$lastColumn" . ($detail_start_row + 1))->getFont()->setBold(true);
 
 
-            //persetujuan
-            // $sheet->mergeCells('A' . ($detail_start_row + 3) . ':B' . ($detail_start_row + 3));
-            // $sheet->setCellValue('A' . ($detail_start_row + 3), 'Disetujui Oleh,');
-            // $sheet->mergeCells('C' . ($detail_start_row + 3). ($detail_start_row + 3));
-            // $sheet->setCellValue('C' . ($detail_start_row + 3), 'Diperiksa Oleh');
-            // $sheet->mergeCells('D' . ($detail_start_row + 3) . ':E' . ($detail_start_row + 3));
-            // $sheet->setCellValue('D' . ($detail_start_row + 3), 'Disusun Oleh,');
-
-
-            // $sheet->mergeCells('A' . ($detail_start_row + 6) . ':B' . ($detail_start_row + 6));
-            // $sheet->setCellValue('A' . ($detail_start_row + 6), '( ' . $disetujui . ' )');
-            // $sheet->mergeCells('C' . ($detail_start_row + 6) . ($detail_start_row + 6));
-            // $sheet->setCellValue('C' . ($detail_start_row + 6), '( ' . $diperiksa . ' )');
-            // $sheet->mergeCells('D' . ($detail_start_row + 6) . ':E' . ($detail_start_row + 6));
-            // $sheet->setCellValue('D' . ($detail_start_row + 6), '(                                          )');
-
-
-            // style persetujuan
-            // $sheet->getStyle('A' . ($detail_start_row + 3))->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-            // $sheet->getStyle('A' . ($detail_start_row + 3))->getFont()->setSize(12);
-            // $sheet->getStyle('C' . ($detail_start_row + 3))->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-            // $sheet->getStyle('C' . ($detail_start_row + 3))->getFont()->setSize(12);
-            // $sheet->getStyle('D' . ($detail_start_row + 3))->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-            // $sheet->getStyle('D' . ($detail_start_row + 3))->getFont()->setSize(12);
-
-
-            // $sheet->getStyle('A' . ($detail_start_row + 6))->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-            // $sheet->getStyle('A' . ($detail_start_row + 6))->getFont()->setSize(12);
-            // $sheet->getStyle('C' . ($detail_start_row + 6))->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-            // $sheet->getStyle('C' . ($detail_start_row + 6))->getFont()->setSize(12);
-            // $sheet->getStyle('D' . ($detail_start_row + 6))->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-            // $sheet->getStyle('D' . ($detail_start_row + 6))->getFont()->setSize(12);
-
-            // mengatur border top dan bottom pada cell Total
-            // $border_style = [
-            //     'borders' => [
-            //         'top' => ['borderStyle' => 'thin', 'color' => ['rgb' => '000000']],
-            //         'bottom' => ['borderStyle' => 'thin', 'color' => ['rgb' => '000000']]
-            //     ]
-            // ];
-            // $sheet->getStyle("A" . ($detail_start_row + 1) . ":$lastColumn" . ($detail_start_row + 1))->applyFromArray($border_style);
+            $sheet->getColumnDimension('A')->setAutoSize(true);
+            $sheet->getColumnDimension('B')->setAutoSize(true);
+            $sheet->getColumnDimension('C')->setAutoSize(true);
+    
 
 
             $writer = new Xlsx($spreadsheet);
