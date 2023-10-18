@@ -31,128 +31,165 @@ class ExportLaporanKasGantungController extends MyController
     {
         $detailParams = [
             'periode' => $request->periode,
+            'bank_id' => $request->bank_id,
+            'bank' => $request->bank
         ];
-        date_default_timezone_set("Asia/Jakarta");
-        
 
-        $monthNum  = intval(substr($request->periode, 0, 2));
-       
-        $yearNum  = substr($request->periode,3);
-        $monthName = $this->getBulan($monthNum);
-      
-        // $responses = Http::withHeaders($request->header())
-        //     ->withOptions(['verify' => false])
-        //     ->withToken(session('access_token'))
-        //     ->get(config('app.api_url') . 'exportlaporankasgantung/export', $detailParams);
+        // dd(config('app.api_url') . 'exportlaporankasgantung/export', $detailParams);
 
-        // $pengeluaran = $responses['data'];
-        // $user = Auth::user();
+        $header = Http::withHeaders(request()->header())
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'exportlaporankasgantung/export', $detailParams);
+
+        $data = $header['data'];
+
+   
 
         $spreadsheet = new Spreadsheet();
-        $sheet = $spreadsheet->getActiveSheet();
-        
-        $sheet->setCellValue('A1', 'LAPORAN KAS GANTUNG DIVISI ');
-        
-        $sheet->getStyle("A1")->getFont()->setSize(20)->setBold(true);
-    
-        $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
-        $sheet->mergeCells('A1:J3');
-       
-        $header_start_row = 4;
-        $detail_start_row = 5;
+        $alphabets = array_merge(range('A', 'Z'), range('AA', 'AZ'), range('BA', 'BZ'), range('CA', 'CZ'));
+        $sheetIndex = 0;
+        $sheetDates = array_unique(array_column($data, 'tgl'));
+        // dd( $sheetDates);
 
-        $styleArray = array(
-            'borders' => array(
-                'allBorders' => array(
+        // Create cell styles
+        $boldStyle = [
+            'font' => ['bold' => true],
+        ];
+
+        $borderStyle = [
+            'borders' => [
+                'allBorders' => [
                     'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-                ),
-            ),
-        );
-
-        $style_number = [
-            'alignment' => [
-                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT,
-            ],
-
-        ];
-
-        $alphabets = range('A', 'Z');
-
-        
-        
-        $header_columns = [
-            [
-                'label' => 'Tanggal',
-                'index' => 'tglbukti',
-            ],
-            [
-                'label' => 'No Bukti',
-                'index' => 'nobukti',
-            ],
-            [
-                'label' => 'Nama Perkiraan',
-                'index' => 'namaperkiraan',
-            ],
-            [
-                'label' => 'Keterangan',
-                'index' => 'keterangan',
-            ],
-            [
-                'label' => 'Debet',
-                'index' => 'debet',
-            ],
-            [
-                'label' => 'Kredit',
-                'index' => 'kredit',
-            ],
-            [
-                'label' => 'Saldo',
-                'index' => 'saldo',
+                ],
             ],
         ];
 
-        foreach ($header_columns as $data_columns_index => $data_column) {
-            $sheet->setCellValue($alphabets[$data_columns_index] . $header_start_row, $data_column['label'] ?? $data_columns_index + 1);
-        }
-        
-        $lastColumn = $alphabets[$data_columns_index];
-        $sheet->getStyle("A$header_start_row:$lastColumn$header_start_row")->getFont()->setBold(true);
-        
-        // LOOPING DETAIL
-        $no=1;
-        $totalNominal = 0;
-        // foreach ($pengeluaran as $response_index => $response_detail) {
+        // Laporan Gantung
+        foreach ($sheetDates as $date) {
+            $sheet = $spreadsheet->createSheet($sheetIndex);
+            $spreadsheet->setActiveSheetIndex($sheetIndex);
+            $sheet->setTitle($date);
+            $sheetIndex++;
 
-        //     $alphabets = range('A', 'Z');
-        //     foreach ($header_columns as $data_columns_index => $data_column) {
-        //         if($data_column['index'] == 'no'){
-                    
-        //             $sheet->setCellValue($alphabets[$data_columns_index] . $detail_start_row, $no++);
-        //             $sheet->getColumnDimension($alphabets[$data_columns_index])->setAutoSize(true);
-        //         }else{
+            $sheet->setCellValue('A1', $data[0]['judul']);
+            $sheet->getStyle("A1")->getFont()->setSize(20);
+            $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
+            $sheet->mergeCells('A1:J1');
 
-        //             $sheet->setCellValue($alphabets[$data_columns_index] . $detail_start_row, $response_detail[$data_column['index']]);
-        //             $sheet->getColumnDimension($alphabets[$data_columns_index])->setAutoSize(true);
-        //         }
-        //     }
+            $sheet->setCellValue('A2', 'LAPORAN KAS GANTUNG');
+            $sheet->getStyle("A2")->getFont()->setSize(16);
+            $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
+            $sheet->mergeCells('A2:J2');
+
+            $headerRow = 4;
+            $columnIndex = 0;
+            $headerColumns = [
+                'tgl' => 'TANGGAL',
+                'nobukti' => 'NO BUKTI',
+                'perkiraan' => 'PERKIRAAN',
+                'keterangan' => 'KETERANGAN',
+                'debet' => 'DEBET',
+                'kredit' => 'KREDIT',
+                'saldo' => 'SALDO',
+            ];
+
+            foreach ($headerColumns as $index => $label) {
+                $sheet->setCellValue($alphabets[$columnIndex] . $headerRow, $label);
+                $sheet->getColumnDimension($alphabets[$columnIndex])->setAutoSize(true);
+                $sheet->getStyle($alphabets[$columnIndex] . $headerRow)->applyFromArray($boldStyle);
+                $sheet->getStyle($alphabets[$columnIndex] . $headerRow)->applyFromArray($borderStyle);
+                $columnIndex++;
+            }
+
+            $filteredData = array_filter($data, function ($row) use ($date) {
+                return $row['tgl'] == $date && $row['jenislaporan'] != 'LAPORAN REKAP' && $row['jenislaporan'] != 'LAPORAN REKAP 01';
+            });
+
+            $dataRow = $headerRow + 1;
+            $columnIndex = 0;
+            $lastColumnIndex = array_search('saldo', array_keys($headerColumns)); // Get the index of the "saldo" column
+            $rowNumber = 1; // Initial row number
+
+            $totalDebet = 0;
+            $totalKredit = 0;
+
+            $previousRow = $dataRow - 1; // Initialize the previous row number
             
-        //     $totalNominal += $response_detail['nominal'];
-        //     $detail_start_row++;
-        // }
+            foreach ($filteredData as $row) {
+                // $sheet->setCellValue('A' . $dataRow, $rowNumber); // Set row number
+                // $sheet->getStyle('A' . $dataRow)->applyFromArray($borderStyle);
+
+                $columnIndex = 0; // Reset column index for each row
+                foreach ($row as $index => $value) {
+                    if ($columnIndex > $lastColumnIndex) {
+                        break; // Exit the loop if the column index exceeds the index of the "saldo" column
+                    }
+                    $sheet->setCellValue($alphabets[$columnIndex] . $dataRow, $value);
+                    $sheet->getStyle($alphabets[$columnIndex] . $dataRow)->applyFromArray($borderStyle);
+
+                    // Apply number format to debet, kredit, and saldo columns
+                    if ($index == 'debet' || $index == 'kredit' || $index == 'saldo') {
+                        $sheet->getStyle($alphabets[$columnIndex] . $dataRow)->getNumberFormat()->setFormatCode("#,##0.00");
+                        $sheet->getStyle($alphabets[$columnIndex] . $dataRow)->getNumberFormat()->applyFromArray($boldStyle);
+                    }
+
+                    // Apply date format to tgl column
+                    if ($index == 'tgl') {
+                        $sheet->getStyle($alphabets[$columnIndex] . $dataRow)->getNumberFormat()->setFormatCode('dd-mm-yyyy');
+                    }
+
+                    if ($index == 'debet') {
+                        $totalDebet += $value;
+                    }
+                    if ($index == 'kredit') {
+                        $totalKredit += $value;
+                    }
+
+                    $columnIndex++;
+                }
+
+                // Add the formula to the current row's J column
+                if ($dataRow == $headerRow + 1) {
+                    $sheet->setCellValue('G' . $dataRow, '=(E' . $dataRow . '-F' . $dataRow . ')' );
+                }
+                if ($dataRow > $headerRow + 1) {
+                    $sheet->setCellValue('G' . $dataRow, '=(G' . $previousRow . '+E' . $dataRow . ')-F' . $dataRow);
+                }
+                $sheet->getStyle('G' . $dataRow)->applyFromArray($borderStyle);
+                $sheet->getStyle('G' . $dataRow)->getNumberFormat()->setFormatCode("#,##0.00");
+
+                $previousRow = $dataRow; // Update the previous row number
+
+                $dataRow++;
+                $rowNumber++; // Increment row number
+            }
+
+
+            // Setelah perulangan selesai, tambahkan total ke sheet
+            $sheet->setCellValue('E' . $dataRow, "=SUM(E5:E" . ($dataRow - 1) . ")");
+            $sheet->getStyle('E' . $dataRow)->applyFromArray($borderStyle);
+            $sheet->getStyle('E' . $dataRow)->applyFromArray($boldStyle);
+            $sheet->getStyle('E' . $dataRow)->getNumberFormat()->setFormatCode("#,##0.00");
+
+            $sheet->setCellValue('F' . $dataRow, "=SUM(F5:F" . ($dataRow - 1) . ")");
+            $sheet->getStyle('F' . $dataRow)->applyFromArray($borderStyle);
+            $sheet->getStyle('F' . $dataRow)->applyFromArray($boldStyle);
+            $sheet->getStyle('F' . $dataRow)->getNumberFormat()->setFormatCode("#,##0.00");
+
+            // Merge cells untuk menampilkan teks "TOTAL"
+            $sheet->mergeCells('A' . $dataRow . ':D' . $dataRow);
+            $sheet->setCellValue('A' . $dataRow, 'TOTAL:');
+            $sheet->getStyle('A' . $dataRow . ':D' . $dataRow)->applyFromArray($boldStyle);
+            $sheet->getStyle('A' . $dataRow . ':D' . $dataRow)->applyFromArray($borderStyle);
+            $sheet->getStyle('A' . $dataRow . ':D' . $dataRow)->getAlignment()->setHorizontal('right');
+        }
+
      
-       
-        $sheet->getColumnDimension('A')->setAutoSize(true);
-        $sheet->getColumnDimension('B')->setAutoSize(true);
-        $sheet->getColumnDimension('C')->setAutoSize(true);
-        $sheet->getColumnDimension('D')->setAutoSize(true);
-        $sheet->getColumnDimension('E')->setAutoSize(true);
-        $sheet->getColumnDimension('F')->setAutoSize(true);
-
-
 
         $writer = new Xlsx($spreadsheet);
-        $filename = 'EXPORTKASGANTUNG' . date('dmYHis');
-        header('Content-Type: application/vnd.ms-excel');
+        $filename = 'LAPORAN KAS GANTUNG ' . date('dmYHis');
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
         header('Cache-Control: max-age=0');
 
