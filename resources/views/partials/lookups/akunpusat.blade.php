@@ -27,6 +27,7 @@
           label: 'STATUS AKTIF',
           name: 'statusaktif',
           align: 'left',
+          width: '100px',
           stype: 'select',
           searchoptions: {
             dataInit: function(element) {
@@ -98,7 +99,7 @@
           label: 'NAMA',
           name: 'keterangancoa',
           align: 'left',
-          width: '350px'
+          width: '500px'
         },
         {
           label: 'TYPE',
@@ -108,7 +109,8 @@
         {
           label: 'LEVEL',
           name: 'level',
-          align: 'left'
+          align: 'left',
+          width: '70px'
         },
         {
           label: 'PARENT',
