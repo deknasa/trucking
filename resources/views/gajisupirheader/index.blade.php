@@ -314,6 +314,8 @@
         rownumbers: true,
         rownumWidth: 45,
         rowList: [10, 20, 50, 0],
+        footerrow: true,
+        userDataOnFooter: true,
         toolbar: [true, "top"],
         sortable: true,
         sortname: sortname,
@@ -406,6 +408,20 @@
             }
           }, 100)
 
+          if (data.attributes) {
+            $(this).jqGrid('footerData', 'set', {
+              nobukti: 'Total:',
+              total: data.attributes.totalAll,
+              uangjalan: data.attributes.totalUangJalan,
+              bbm: data.attributes.totalBbm,
+              potonganpinjaman: data.attributes.totalDeposito,
+              potonganpinjamansemua: data.attributes.totalPotPinj,
+              deposito: data.attributes.totalPotSemua,
+              uangmakanberjenjang: data.attributes.totalJenjang,
+              uangmakanharian: data.attributes.totalMakan,
+              nominal: data.attributes.totalNominal,
+            }, true)
+          }
           $('#left-nav').find('button').attr('disabled', false)
           permission()
           setHighlight($(this))
