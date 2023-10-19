@@ -32,11 +32,11 @@
       var dataSet = new Stimulsoft.System.Data.DataSet("Data")
 
       viewer.renderHtml('content')
-      // if (printer['tipe'] == 'reportPrinterBesar') {
+      if (printer['tipe'] == 'reportPrinterBesar') {
         report.loadFile(`{{ asset('public/reports/ReportLaporanKasBankBesar.mrt') }}`)
-      // } else {
-      //   report.loadFile(`{{ asset('public/reports/ReportLaporanKasBank.mrt') }}`)
-      // }
+      } else {
+        report.loadFile(`{{ asset('public/reports/ReportLaporanKasBank.mrt') }}`)
+      }
 
 
       report.dictionary.dataSources.clear()
