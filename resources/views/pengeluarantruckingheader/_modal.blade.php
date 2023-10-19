@@ -4508,11 +4508,12 @@
               }
             })
           });
-          if (data.attributes) {
-            $(this).jqGrid('footerData', 'set', {
-              nominal_detail: data.attributes.totalNominal,
-            }, true)
-          }
+          setTotalNominalSumbangan()
+          // if (data.attributes) {
+          //   $(this).jqGrid('footerData', 'set', {
+          //     nominal_detail: data.attributes.totalNominal,
+          //   }, true)
+          // }
 
         }
       })
@@ -4567,8 +4568,19 @@
       }
     }
 
+    setTotalNominalSumbangan()
   }
 
+  function setTotalNominalSumbangan() {
+        let nominal = 0
+        $.each(selectedRowsSumbangan, (index, val) => {
+            getNominal = selectedRowsSumbanganNominal[index];
+            nominals = parseFloat(getNominal.replaceAll(',', ''))
+            nominal += nominals
+
+        })
+        initAutoNumeric($('.footrow').find(`td[aria-describedby="tableSumbangan_nominal_detail"]`).text(nominal))
+    }
   function clearSelectedRowsSumbangan() {
     selectedRowsSumbangan = []
     selectedRowsSumbanganNobukti = [];
