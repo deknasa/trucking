@@ -43,8 +43,8 @@
                                         Report
                                     </button>
                                     <ul class="dropdown-menu" id="menu-approve" aria-labelledby="btnPreview">
-                                        <li><a class="dropdown-item" id="reportPrinterBesar" href="#">Printer Lain(Faktur)</a></li>
-                                        <li><a class="dropdown-item" id="reportPrinterKecil" href="#">Printer Epson Seri LX(Faktur)</a></li>
+                                        <li><a class="dropdown-item" id="reportPrinterBesar" href="#">Printer Lain</a></li>
+                                        <li><a class="dropdown-item" id="reportPrinterKecil" href="#">Printer Epson Seri LX</a></li>
                                     </ul>
                                 </div>
                                 <button type="button" id="btnExport" class="btn btn-warning mr-1 ">
