@@ -1297,7 +1297,8 @@
         selectedSampai = [];
         selectedGajiKenek = [];
         selectedSupirId = [];
-        $('#modalgrid').trigger('reloadGrid')
+        $('#modalgrid').trigger('reloadGrid')        
+        setTotalNominalTrip()
     }
 
     function selectAllRowsTrip() {
@@ -1353,6 +1354,8 @@
                     },
                     datatype: "json"
                 }).trigger('reloadGrid');
+
+                setTotalNominalTrip()
             }
         })
 
