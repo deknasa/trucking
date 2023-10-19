@@ -190,34 +190,13 @@
             align: 'left',
           },
           {
-            label: 'Total',
-            name: 'total',
+            label: 'U. Borongan (Supir)',
+            name: 'nominal',
             align: 'right',
             formatter: currencyFormat,
           },
           {
-            label: 'TGL DARI',
-            name: 'tgldari',
-            align: 'left',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
-            }
-          },
-          {
-            label: 'TGL SAMPAI',
-            name: 'tglsampai',
-            align: 'left',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
-            }
-          },
-        
-          {
-            label: 'U. Borongan(Kenek)',
+            label: 'Komisi Kenek',
             name: 'gajikenek',
             align: 'right',
             formatter: currencyFormat,
@@ -228,10 +207,15 @@
             align: 'right',
             formatter: currencyFormat,
           },
-
           {
             label: 'Biaya Extra',
             name: 'biayaextra',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
+            label: 'Total',
+            name: 'total',
             align: 'right',
             formatter: currencyFormat,
           },
@@ -279,13 +263,13 @@
             align: 'right',
             formatter: currencyFormat,
           },
-
           {
-            label: 'NOMINAL',
-            name: 'nominal',
+            label: 'Nominal',
+            name: 'total',
             align: 'right',
             formatter: currencyFormat,
           },
+
           {
             label: 'USER BUKA CETAK',
             name: 'userbukacetak',
@@ -294,6 +278,26 @@
           {
             label: 'TGL CETAK',
             name: 'tglbukacetak',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
+          {
+            label: 'TGL DARI',
+            name: 'tgldari',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
+          {
+            label: 'TGL SAMPAI',
+            name: 'tglsampai',
             align: 'left',
             formatter: "date",
             formatoptions: {
