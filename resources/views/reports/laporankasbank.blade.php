@@ -14,7 +14,7 @@
   <script type="text/javascript" src="{{ asset($stireport_path . 'scripts/stimulsoft.designer.js') }}"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
   <script type="text/javascript">
-    // let printer = <?= json_encode($printer); ?>;
+    let printer = <?= json_encode($printer); ?>;
 
 
     function Start() {
