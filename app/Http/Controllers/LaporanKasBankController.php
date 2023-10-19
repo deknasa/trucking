@@ -42,8 +42,10 @@ class LaporanKasBankController extends MyController
             ->get(config('app.api_url') . 'laporankasbank/report', $detailParams);
 
         $data = $header['data'];
+        $printer['tipe'] = $request->printer;
+
         $user = Auth::user();
-        return view('reports.laporankasbank', compact('data', 'user', 'detailParams'));
+        return view('reports.laporankasbank', compact('data', 'user', 'detailParams','printer'));
     }
 
     public function export(Request $request): void
