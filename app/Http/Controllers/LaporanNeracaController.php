@@ -168,6 +168,7 @@ class LaporanNeracaController extends MyController
                         }
                         $total_start_row_per_main = 0;
                     }
+                    $start_last_main = $total_start_row;
 
                     $sheet->setCellValue("A$detail_start_row", $keterangan_main);
                     $sheet->getStyle("A$detail_start_row:C$detail_start_row")->applyFromArray($styleArray);
@@ -192,7 +193,7 @@ class LaporanNeracaController extends MyController
                         $sheet->getStyle("C" . ($total_start_row - 1))->getNumberFormat()->setFormatCode("#,##0.00");
                         $sheet->setCellValue('C' . $total_start_row, '');
                         $sheet->getStyle("A$total_start_row:C$total_start_row")->applyFromArray($styleArray);
-                        $start_last_main = $total_start_row;
+                        // $start_last_main = $total_start_row;
                     } else {
                         $start_row_main = $detail_start_row;
                     }
