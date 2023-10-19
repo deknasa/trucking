@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "d64d1b9bbdd72167fc4794ba41921a76",
+  "ReportGuid": "fdd842cc381c00c1463bfd8f89d7d62b",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanLabaRugi.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1697602713000+0700)/",
+  "ReportChanged": "/Date(1697683627000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -418,13 +418,13 @@
               "Ident": "StiText",
               "Name": "Text1",
               "GrowToHeight": true,
-              "ClientRectangle": "7.62,0.18,7.19,0.66",
+              "ClientRectangle": "0.15,0.18,21.03,0.66",
               "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{parameter.judul}"
+                "Value": "{data.CmpyName}"
               },
               "HorAlignment": "Center",
               "Font": ";10;Bold;",
