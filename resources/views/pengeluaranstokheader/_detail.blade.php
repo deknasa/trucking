@@ -35,7 +35,76 @@
             label: 'stok',
             name: 'stok',
           },
+          {
+            label: 'STATUS reuse',
+            name: 'statusreuse',
+            align: 'left',
+            stype: 'select',
+            searchoptions: {
+            dataInit: function(element) {
+              $(element).select2({
+                width: 'resolve',
+                theme: "bootstrap4",
+                ajax: {
+                  url: `${apiUrl}parameter/combo`,
+                  dataType: 'JSON',
+                  headers: {
+                    Authorization: `Bearer ${accessToken}`
+                  },
+                  data: {
+                    grp: 'STATUS reuse',
+                    subgrp: 'STATUS reuse'
+                  },
+                  beforeSend: () => {
+                    // clear options
+                    $(element).data('select2').$results.children().filter((index, element) => {
+                      // clear options except index 0, which
+                      // is the "searching..." label
+                      if (index > 0) {
+                        element.remove()
+                      }
+                    })
+                  },
+                  processResults: (response) => {
+                    let formattedResponse = response.data.map(row => ({
+                      id: row.id,
+                      text: row.text
+                    }));
 
+                    formattedResponse.unshift({
+                      id: '',
+                      text: 'ALL'
+                    });
+
+                    return {
+                      results: formattedResponse
+                    };
+                  },
+                }
+              });
+            }
+          },
+            formatter: (value, options, rowData) => {
+              if(!value){
+                return ''
+              }
+            let statusreuse = JSON.parse(value)
+            let formattedValue = $(`
+            <div class="badge" style="background-color: ${statusreuse.WARNA}; color: ${statusreuse.WARNATULISAN};">
+              <span>${statusreuse.SINGKATAN}</span>
+              </div>
+              `)
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              console.log(value);
+              if(!value){
+                return ''
+              }
+              let statusreuse = JSON.parse(rowObject.statusreuse)
+              return ` title="${statusreuse.MEMO}"`
+            }
+          },
           {
             label: 'qty',
             name: 'qty',

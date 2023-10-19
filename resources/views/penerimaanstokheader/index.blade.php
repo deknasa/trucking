@@ -434,18 +434,42 @@
               viewPenerimaanstokHeader(selectedId)
             }
           },
+         
+          
+        ],
+        extndBtn: [
           {
             id: 'report',
+            title: 'report',
+            caption: 'report',
             innerHTML: '<i class="fa fa-print"></i> REPORT',
-            class: 'btn btn-info btn-sm mr-1',
-            onClick: () => {
-              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Harap pilih salah satu record')
-              } else {
-                window.open(`{{ route('penerimaanstokheader.report') }}?id=${selectedId}`)
-              }
-            }
+            class: 'btn btn-info btn-sm mr-1 dropdown-toggle ',
+            dropmenuHTML: [
+              {
+                id: 'reportPrinterBesar',
+                text: 'Printer Lain(Faktur)',
+                onClick: () => {
+                  selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                  if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                    showDialog('Harap pilih salah satu record')
+                  } else {
+                    window.open(`{{ route('penerimaanstokheader.report') }}?id=${selectedId}&printer=reportPrinterBesar`)
+                  }
+                }
+              },
+              {
+                id: 'reportPrinterKecil',
+                text: "Printer Epson Seri LX(Faktur)",
+                onClick: () => {
+                  selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                  if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                    showDialog('Harap pilih salah satu record')
+                  } else {
+                    window.open(`{{ route('penerimaanstokheader.report') }}?id=${selectedId}&printer=reportPrinterKecil`)
+                  }
+                }
+              },
+            ]
           },
           {
             id: 'export',
@@ -462,9 +486,7 @@
               }
             }
           },
-          
-        ],
-        extndBtn: [{
+          {
           id: 'approve',
           title: 'Approve',
           caption: 'Approve',

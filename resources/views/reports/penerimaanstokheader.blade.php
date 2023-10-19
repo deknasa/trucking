@@ -16,8 +16,9 @@
   <script src="{{ asset('libraries/tas-lib/js/terbilang.js?version='. config('app.version')) }}"></script>
 
   <script type="text/javascript">
-    var penerimaanstokheaders = <?= json_encode($penerimaanstokheaders); ?>
-
+    var penerimaanstokheaders = <?= json_encode($penerimaanstokheaders); ?>;
+    var printer = <?= json_encode($printer); ?>;
+    console.log(printer['tipe'])
     function Start() {
       Stimulsoft.Base.StiLicense.loadFromFile("{{ asset($stireport_path . 'license.php') }}");
       var viewerOptions = new Stimulsoft.Viewer.StiViewerOptions()
@@ -44,46 +45,90 @@
       var dataSet = new Stimulsoft.System.Data.DataSet("Data")
 
       viewer.renderHtml('content')
-      switch (penerimaanstokheaders.statusformat) {
-        case '132':
-        //DOT
-        report.loadFile(`{{ asset('public/reports/ReportpenerimaanStokPGDO.mrt') }}`)
-        break;
-      case '133':
-        //POT
-        report.loadFile(`{{ asset('public/reports/ReportPenerimaanStokPO.mrt') }}`)//now
-        break;
-      case '134':
-        //SPB
-        report.loadFile(`{{ asset('public/reports/ReportPenerimaanStokSPB.mrt') }}`)
-        break;
-      case '136':
-        //KOR
-        report.loadFile(`{{ asset('public/reports/ReportPenerimaanStokKOR.mrt') }}`)
-        break;
-      case '137':
-        //PG
-        report.loadFile(`{{ asset('public/reports/ReportpenerimaanStokPG.mrt') }}`)
-        break;
-      case '138':
-        //SPBS
-        report.loadFile(`{{ asset('public/reports/ReportPenerimaanStokSPBS.mrt') }}`)
-        break;
-      case '352':
-        //PST
-        report.loadFile(`{{ asset('public/reports/ReportPenerimaanStokPST.mrt') }}`)
-        break;
-      case '361':
-        //PST
-        report.loadFile(`{{ asset('public/reports/ReportPenerimaanStokPSPK.mrt') }}`)
-        break;
-      case '385':
-        //KORV
-        report.loadFile(`{{ asset('public/reports/ReportPenerimaanStokKORV.mrt') }}`)
-        break;
-      default:
-        report.loadFile(`{{ asset('public/reports/ReportPenerimaanSPB.mrt') }}`)
-        break;
+      if (printer['tipe'] == 'reportPrinterBesar') {
+        switch (penerimaanstokheaders.statusformat) {
+          case '132':
+          //DOT
+            report.loadFile(`{{ asset('public/reports/ReportpenerimaanStokPGDOBesar.mrt') }}`)
+            break;
+          case '133':
+            //POT
+            report.loadFile(`{{ asset('public/reports/ReportPenerimaanStokPOBesar.mrt') }}`)//now
+            break;
+          case '134':
+            //SPB
+            report.loadFile(`{{ asset('public/reports/ReportPenerimaanStokSPBBesar.mrt') }}`)
+            break;
+          case '136':
+            //KOR
+            report.loadFile(`{{ asset('public/reports/ReportPenerimaanStokKORBesar.mrt') }}`)
+            break;
+          case '137':
+            //PG
+            report.loadFile(`{{ asset('public/reports/ReportpenerimaanStokPGBesar.mrt') }}`)
+            break;
+          case '138':
+            //SPBS
+            report.loadFile(`{{ asset('public/reports/ReportPenerimaanStokSPBSBesar.mrt') }}`)
+            break;
+          case '352':
+            //PST
+            report.loadFile(`{{ asset('public/reports/ReportPenerimaanStokPSTBesar.mrt') }}`)
+            break;
+          case '361':
+            //PST
+            report.loadFile(`{{ asset('public/reports/ReportPenerimaanStokPSPKBesar.mrt') }}`)
+            break;
+          case '385':
+            //KORV
+            report.loadFile(`{{ asset('public/reports/ReportPenerimaanStokKORVBesar.mrt') }}`)
+            break;
+          default:
+            report.loadFile(`{{ asset('public/reports/ReportPenerimaanSPBBesar.mrt') }}`)
+            break;
+        }
+      }else{
+        switch (penerimaanstokheaders.statusformat) {
+          case '132':
+          //DOT
+            report.loadFile(`{{ asset('public/reports/ReportpenerimaanStokPGDO.mrt') }}`)
+            break;
+          case '133':
+            //POT
+            report.loadFile(`{{ asset('public/reports/ReportPenerimaanStokPO.mrt') }}`)//now
+            break;
+          case '134':
+            //SPB
+            report.loadFile(`{{ asset('public/reports/ReportPenerimaanStokSPB.mrt') }}`)
+            break;
+          case '136':
+            //KOR
+            report.loadFile(`{{ asset('public/reports/ReportPenerimaanStokKOR.mrt') }}`)
+            break;
+          case '137':
+            //PG
+            report.loadFile(`{{ asset('public/reports/ReportpenerimaanStokPG.mrt') }}`)
+            break;
+          case '138':
+            //SPBS
+            report.loadFile(`{{ asset('public/reports/ReportPenerimaanStokSPBS.mrt') }}`)
+            break;
+          case '352':
+            //PST
+            report.loadFile(`{{ asset('public/reports/ReportPenerimaanStokPST.mrt') }}`)
+            break;
+          case '361':
+            //PST
+            report.loadFile(`{{ asset('public/reports/ReportPenerimaanStokPSPK.mrt') }}`)
+            break;
+          case '385':
+            //KORV
+            report.loadFile(`{{ asset('public/reports/ReportPenerimaanStokKORV.mrt') }}`)
+            break;
+          default:
+            report.loadFile(`{{ asset('public/reports/ReportPenerimaanSPB.mrt') }}`)
+            break;
+        }
       }
       report.dictionary.dataSources.clear()
 
@@ -95,8 +140,8 @@
       report.dictionary.synchronize()
 
       viewer.report = report
-      // designer.renderHtml("content")
-      // designer.report = report
+      designer.renderHtml("content")
+      designer.report = report
       
       viewer.onPrintReport = function (event) {
         triggerEvent(window, 'afterprint');

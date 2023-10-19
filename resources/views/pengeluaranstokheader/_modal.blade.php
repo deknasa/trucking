@@ -1380,7 +1380,7 @@
   index = 0;
 
   function addRow() {
-
+    console.log('addRow');
     let detailRow = $(`
     <tr class="trow">
                   <td>
@@ -1860,6 +1860,7 @@
             form.find(`[name="pengeluarantrucking_nobukti"]`).val(response.data.pengeluarantrucking_nobukti)
             form.find(`[name="statusban[]"]`).val(response.detail[0].statusban).trigger('change')
             form.find(`[name="detail_vulkanisirke[]"]`).val(response.detail[0].vulkanisirke)
+            form.find(`[name="jlhhari"]`).val(response.detail[0].jlhhari)
             // form.find(`[name="tglklaim"]`).val()
             // form.find(`[name="nobukti_pjt"]`).val()
             // form.find(`[name="jlhhari"]`).val()
@@ -1891,7 +1892,7 @@
                       </select>                 
                     </td>
                       <td class="data_tbl tbl_statusban">
-                        <select name="detail_statusban[]" class="form-select select2bs4" id="statusban${index}" style="width: 100%;">
+                        <select name="detail_statusban[]" class="form-select select2bs4" id="statusban${id}" style="width: 100%;">
                           <option value="">-- PILIH STATUS BAN --</option>
                         </select>                 
                       </td> 
@@ -1948,7 +1949,7 @@
   
               }else if(response.data.pengeluaranstok == 'KORV'){
                 initSelect2($(`#statusban${id}`), true)
-                
+                console.log($(`#statusban${id}`),id);
                 dataStatusBan.forEach(statusBan => {
                   let option = new Option(statusBan.text, statusBan.id)
             
@@ -2132,8 +2133,30 @@
     form.find('[name=tglklaim]').val(pengeluarantrucking.tglbukti)
     form.find('[name=nobukti_pjt]').val(pengeluarantrucking.pengeluarantrucking_nobukti)
     $('#qty_afkir').val(pengeluarantrucking.qty)
-    
+
   }
+  
+  function getJlhHari(stok_id) {
+    
+    $.ajax({
+      url: `${apiUrl}saldoumuraki/getUmurAki`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data:{
+        stok_id:stok_id,
+      },
+      success: response => {
+        $('[name=jlhhari]').val(response.data);
+      },
+      error: error => {
+        showDialog(error.statusText)
+      }
+    });
+  }
+  
   function cekValidasi(Id, Aksi) {
     $.ajax({
       url: `{{ config('app.api_url') }}pengeluaranstokheader/${Id}/cekvalidasi`,
@@ -2356,6 +2379,7 @@
         $(`#detail_stok_id`).val(stok.id)
         $(`#status_stok`).val(stok.statusban)
         $('#afkir_vulkanisirke').val(parseInt(stok.totalvulkanisir))
+        getJlhHari(stok.id)
 
         element.data('currentValue', element.val())
         
