@@ -284,7 +284,10 @@
       getDataPengembalianTitipan(reloadGrid).then((response) => {
         // console.log('before', $("#tablePinjamanKaryawan").jqGrid('getGridParam', 'selectedRowIds'))
         let totalBayar = 0
-
+        $('#gs_').prop('checked', false)
+       
+        $("#tablePengembalianTitipan")[0].p.selectedRowIds = [];
+        $('#tablePengembalianTitipan').jqGrid("clearGridData");
         $.each(response.data, (index, value) => {
           totalBayar += parseFloat(value.nominal_titipan)
         })
@@ -1778,18 +1781,48 @@
   })
 
   function loadPengembalianTitipanGrid() {
+    let disabled = '';
+    if ($('#crudForm').data('action') == 'delete') {
+      disabled = 'disabled'
+    }
     $("#tablePengembalianTitipan")
       .jqGrid({
         datatype: 'local',
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         colModel: [{
-            label: "",
-            name: "",
+          label: '',
+            name: '',
             width: 30,
-            formatter: 'checkbox',
-            search: false,
-            editable: false,
+            align: 'center',
+            sortable: false,
+            clear: false,
+            stype: 'input',
+            searchable: false,
+            searchoptions: {
+              type: 'checkbox',
+              clearSearch: false,
+              dataInit: function(element) {
+                dari = $('#crudForm').find(`[name="tgldari"]`).val()
+                sampai = $('#crudForm').find(`[name="tglsampai"]`).val()
+                let aksi = $('#crudForm').data('action')
+
+                $(element).removeClass('form-control')
+                $(element).parent().addClass('text-center')
+                if (disabled == '') {
+                  $(element).on('click', function() {
+                    if ($(this).is(':checked')) {
+                      selectAllRowsPBT()
+                    } else {
+                      clearSelectedRowsPBT()
+                    }
+                  })
+                } else {
+                  $(element).attr('disabled', true)
+                }
+
+              }
+            },
             formatter: function(value, rowOptions, rowData) {
               let disabled = '';
               if ($('#crudForm').data('action') == 'delete') {
@@ -2190,6 +2223,80 @@
       selectedRowIds: selectedRowIds,
     });
 
+  }
+
+  function clearSelectedRowsPBT() {
+    
+    $("#tablePengembalianTitipan")[0].p.selectedRowIds = [];
+    $('#tablePengembalianTitipan').trigger('reloadGrid');
+  }
+
+  function selectAllRowsPBT(reloadGrid = null) {
+    aksi = $('#crudForm').data('action')
+    let idTitipan = $('#crudForm').find("[name=id]").val()
+    if (aksi == 'edit') {
+      urlAll = `${apiUrl}penerimaantruckingheader/getpengembaliantitipan`
+      reloadGrid = 'reload'
+    } else if (aksi == 'delete' || aksi == 'view') {
+      urlAll = `${apiUrl}penerimaantruckingheader/getpengembaliantitipan`
+      attribut = 'disabled'
+      forCheckbox = 'disabled'
+    } else if (aksi == 'add') {
+      urlAll = `${apiUrl}penerimaantruckingheader/getpengembaliantitipan`
+    }
+
+    periodedari = $('[name=periodedari]').val()
+    periodesampai = $('[name=periodesampai]').val()
+    jenisorder_id = $('[name=jenisorderan_id]').val()
+
+    if ((periodedari != '') || (periodesampai != '') || (jenisorder_id != '')) {
+      return new Promise((resolve, reject) => {
+        $.ajax({
+          url: urlAll,
+          method: 'GET',
+          dataType: 'JSON',
+          data: {
+            periodedari: periodedari,
+            periodesampai: periodesampai,
+            jenisorderan_id: jenisorder_id,
+            id: idTitipan,
+            reloadGrid: reloadGrid,
+            limit: 0
+          },
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          },
+          success: response => {
+            clearSelectedRowsPBT()
+            selectedId = response.data.map((data) => data.id)
+
+            // $('#tablePengembalianTitipan').jqGrid("clearGridData");
+            $('#tablePengembalianTitipan').jqGrid('setGridParam', {
+              data: response.data,
+              originalData: response.data,
+              rowNum: response.data.length,
+              selectedRowIds: selectedId
+            }).trigger('reloadGrid');
+          },
+          error: error => {
+            if (error.status === 422) {
+              $('.is-invalid').removeClass('is-invalid')
+              $('.invalid-feedback').remove()
+
+
+              errors = error.responseJSON.errors
+              reject(errors)
+
+            } else {
+              showDialog(error.responseJSON)
+            }
+          },
+          error: error => {
+            reject(error)
+          }
+        })
+      })
+    }
   }
 
   function checkboxTitipan(element, rowId) {

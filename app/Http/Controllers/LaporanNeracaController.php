@@ -136,7 +136,8 @@ class LaporanNeracaController extends MyController
             $total_start_row = 0;
             $total_start_row_per_main = 0;
             $start_last_main = 0;
-
+            
+            $start_row_main = 0;
             $a = 0;
             $b = 0;
             $c = 0;
@@ -159,7 +160,7 @@ class LaporanNeracaController extends MyController
                         $total_per_keterangan_type = 0;
                         if ($total_start_row_per_main > 0) {
                             $sheet->setCellValue("A$detail_start_row", "TOTAL $previous_keterangan_main");
-                            $sheet->setCellValue("C$detail_start_row", "=SUM(B$total_start_row:B" . ($detail_start_row - 1) . ")");
+                            $sheet->setCellValue("C$detail_start_row", "=SUM(B$start_row_main:B" . ($detail_start_row - 1) . ")");
                             $sheet->getStyle("C$detail_start_row")->applyFromArray($styleArray)->getFont()->setBold(true);
                             $sheet->getStyle("C$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
                             $sheet->getStyle("A$detail_start_row:C$detail_start_row")->applyFromArray($styleArray);
@@ -192,6 +193,8 @@ class LaporanNeracaController extends MyController
                         $sheet->setCellValue('C' . $total_start_row, '');
                         $sheet->getStyle("A$total_start_row:C$total_start_row")->applyFromArray($styleArray);
                         $start_last_main = $total_start_row;
+                    } else {
+                        $start_row_main = $detail_start_row;
                     }
 
                     // $d = $detail_start_row+$c;
