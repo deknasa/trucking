@@ -150,6 +150,8 @@ class LaporanLabaRugiController extends MyController
                 $total_start_row_per_main = 0;
                 $start_last_main = 0;
                 $start_row_main = 0;
+                $rowPendapatan = '';
+
                 // Gabungkan sel pada kolom "A" untuk label "Pendapatan :"
                 $sheet->mergeCells("A$detail_start_row:A$detail_start_row");
                 $sheet->getStyle("A$detail_start_row:C$detail_start_row")->applyFromArray($styleArray);
@@ -172,6 +174,9 @@ class LaporanLabaRugiController extends MyController
                             }
                             $total_per_keterangan_type = 0;
                             if ($total_start_row_per_main > 0) {
+                                if ($previous_keterangan_main == 'PENDAPATAN :') {
+                                    $rowPendapatan = "C$detail_start_row";
+                                }
                                 $sheet->setCellValue("A$detail_start_row", "TOTAL $previous_keterangan_main");
                                 $sheet->setCellValue("C$detail_start_row", "=SUM(B$start_row_main:B" . ($detail_start_row - 1) . ")");
                                 $sheet->getStyle("C$detail_start_row")->applyFromArray($styleArray)->getFont()->setBold(true);
@@ -180,8 +185,8 @@ class LaporanLabaRugiController extends MyController
                                 $detail_start_row += 2;
                             }
                             $total_start_row_per_main = 0;
-                        } 
-                        $start_last_main = $detail_start_row;                        
+                        }
+                        $start_last_main = $detail_start_row;
 
                         $sheet->setCellValue("A$detail_start_row", $keterangan_main);
                         $sheet->getStyle("A$detail_start_row:C$detail_start_row")->applyFromArray($styleArray);
@@ -197,7 +202,7 @@ class LaporanLabaRugiController extends MyController
 
 
                     if ($keterangan_type != $previous_keterangan_type) {
-                        
+
                         if ($previous_keterangan_type != '') {
 
                             // $sheet->mergeCells("A$total_start_row:A$total_start_row");
@@ -250,8 +255,6 @@ class LaporanLabaRugiController extends MyController
                 }
             }
 
-
-
             //ukuran kolom
             $sheet->getColumnDimension('A')->setAutoSize(true);
             $sheet->getColumnDimension('B')->setAutoSize(true);
@@ -270,10 +273,19 @@ class LaporanLabaRugiController extends MyController
             $sheet->getStyle("A" . ($detail_start_row + 1) . ":$lastColumn" . ($detail_start_row + 1))->getFont()->setBold(true);
 
 
+            $detail_start_row++;
+            
+            $sheet->setCellValue("A$detail_start_row", "LABA (RUGI) BERSIH : ");
+            $sheet->setCellValue("C$detail_start_row", "=$rowPendapatan-ABS(C" . ($detail_start_row - 1) . ")");
+            $sheet->getStyle("A$detail_start_row:B$detail_start_row")->applyFromArray($styleArray);            
+            $sheet->mergeCells("A$detail_start_row:B$detail_start_row");
+            $sheet->getStyle("C$detail_start_row")->applyFromArray($styleArray)->getFont()->setBold(true);
+            $sheet->getStyle("C$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+
             $sheet->getColumnDimension('A')->setAutoSize(true);
             $sheet->getColumnDimension('B')->setAutoSize(true);
             $sheet->getColumnDimension('C')->setAutoSize(true);
-    
+
 
 
             $writer = new Xlsx($spreadsheet);
