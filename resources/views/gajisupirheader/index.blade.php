@@ -91,12 +91,12 @@
     loadAbsensiGrid()
 
     @isset($request['tgldari'])
-      tgldariheader = `{{ $request['tgldari'] }}`;
+    tgldariheader = `{{ $request['tgldari'] }}`;
     @endisset
     @isset($request['tglsampai'])
-      tglsampaiheader = `{{ $request['tglsampai'] }}`;
+    tglsampaiheader = `{{ $request['tglsampai'] }}`;
     @endisset
-    setRange(false,tgldariheader,tglsampaiheader)
+    setRange(false, tgldariheader, tglsampaiheader)
     initDatepicker()
     $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('gajisupirheader')
@@ -214,6 +214,26 @@
               srcformat: "ISO8601Long",
               newformat: "d-m-Y"
             }
+          },
+        
+          {
+            label: 'U. Borongan(Kenek)',
+            name: 'gajikenek',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
+            label: 'Komisi Supir',
+            name: 'komisisupir',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+
+          {
+            label: 'Biaya Extra',
+            name: 'biayaextra',
+            align: 'right',
+            formatter: currencyFormat,
           },
           {
             label: 'U. Jalan',
@@ -412,6 +432,9 @@
             $(this).jqGrid('footerData', 'set', {
               nobukti: 'Total:',
               total: data.attributes.totalAll,
+              komisisupir: data.attributes.totalKomisiSupir,
+              gajikenek: data.attributes.totalGajiKenek,
+              biayaextra: data.attributes.totalBiayaExtra,
               uangjalan: data.attributes.totalUangJalan,
               bbm: data.attributes.totalBbm,
               potonganpinjaman: data.attributes.totalDeposito,
@@ -488,7 +511,7 @@
             class: 'btn btn-orange btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              
+
               viewGajiSupirHeader(selectedId)
             }
           },
@@ -541,12 +564,12 @@
               onClick: () => {
                 if (`{{ $myAuth->hasPermission('approvalbukacetak', 'store') }}`) {
                   let tglbukacetak = $('#tgldariheader').val().split('-');
-                  tglbukacetak =tglbukacetak[1] + '-' + tglbukacetak[2];
+                  tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
                     showDialog('Harap pilih salah satu record')
-                  }else{
-                    approvalBukaCetak(tglbukacetak,'GAJISUPIRHEADER',[selectedId]);
+                  } else {
+                    approvalBukaCetak(tglbukacetak, 'GAJISUPIRHEADER', [selectedId]);
                   }
                 }
               }
