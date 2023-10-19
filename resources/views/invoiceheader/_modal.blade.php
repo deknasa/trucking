@@ -406,9 +406,9 @@
     setFormBindKeys(form)
 
     activeGrid = null
-    form.find('#btnSubmit').prop('disabled',false)
+    form.find('#btnSubmit').prop('disabled', false)
     if (form.data('action') == "view") {
-      form.find('#btnSubmit').prop('disabled',true)
+      form.find('#btnSubmit').prop('disabled', true)
     }
 
     getMaxLength(form)
@@ -1049,7 +1049,10 @@
       selectedRowIds: selectedRowIds,
     });
 
-
+    setTotalOmset()
+    setTotalExtra()
+    setTotalRetribusi()
+    setTotalAll()
     // initAutoNumeric($('.footrow').find(`td[aria-describedby="tableInvoice_potongan"]`).text(totalPotongan))
     // initAutoNumeric($('.footrow').find(`td[aria-describedby="tableInvoice_nominallebihbayar"]`).text(totalNominalLebih))
 
@@ -1058,12 +1061,12 @@
   function setTotalOmset() {
     let omsetDetails = $(`#tableInvoice`).find(`td[aria-describedby="tableInvoice_omset"]`)
     let omset = 0
-    let originalData = $("#tableInvoice").getGridParam("data");
-    $.each(originalData, function(index, value) {
-      lunas_omset = value.omset;
-      omsets = (isNaN(lunas_omset)) ? parseFloat(lunas_omset.replaceAll(',', '')) : parseFloat(lunas_omset)
-      omset += omsets
-
+    let selectedRowsPinjaman = $("#tableInvoice").getGridParam("selectedRowIds");
+    $.each(selectedRowsPinjaman, function(index, value) {
+      dataPinjaman = $("#tableInvoice").jqGrid("getLocalRow", value);
+      nominals = (dataPinjaman.omset == undefined || dataPinjaman.omset == '') ? 0 : dataPinjaman.omset;
+      omsets = (isNaN(nominals)) ? parseFloat(nominals.replaceAll(',', '')) : parseFloat(nominals)
+      omset = omset + omsets
     })
     // $.each(omsetDetails, (index, omsetDetail) => {
     //   omsetdetail = parseFloat($(omsetDetail).text().replaceAll(',', ''))
@@ -1076,12 +1079,12 @@
   function setTotalExtra() {
     let extraDetails = $(`#tableInvoice`).find(`td[aria-describedby="tableInvoice_nominalextra"]`)
     let extra = 0
-    let originalData = $("#tableInvoice").getGridParam("data");
-    $.each(originalData, function(index, value) {
-      lunas_extras = value.nominalextra;
+    let selectedRowsPinjaman = $("#tableInvoice").getGridParam("selectedRowIds");
+    $.each(selectedRowsPinjaman, function(index, value) {
+      dataPinjaman = $("#tableInvoice").jqGrid("getLocalRow", value);
+      lunas_extras = (dataPinjaman.nominalextra == undefined || dataPinjaman.nominalextra == '') ? 0 : dataPinjaman.nominalextra;
       extras = (isNaN(lunas_extras)) ? parseFloat(lunas_extras.replaceAll(',', '')) : parseFloat(lunas_extras)
-      extra += extras
-
+      extra = extra + extras
     })
     // $.each(extraDetails, (index, extraDetail) => {
     //   extradetail = parseFloat($(extraDetail).text().replaceAll(',', ''))
@@ -1113,12 +1116,12 @@
     let totalDetails = $(`#tableInvoice`).find(`td[aria-describedby="tableInvoice_total"]`)
     let total = 0
 
-    let originalData = $("#tableInvoice").getGridParam("data");
-    $.each(originalData, function(index, value) {
-      lunas_total = value.total;
+    let selectedRowsPinjaman = $("#tableInvoice").getGridParam("selectedRowIds");
+    $.each(selectedRowsPinjaman, function(index, value) {
+      dataPinjaman = $("#tableInvoice").jqGrid("getLocalRow", value);
+      lunas_total = (dataPinjaman.total == undefined || dataPinjaman.total == '') ? 0 : dataPinjaman.total;
       totals = (isNaN(lunas_total)) ? parseFloat(lunas_total.replaceAll(',', '')) : parseFloat(lunas_total)
-      total += totals
-
+      total = total + totals
     })
     // $.each(totalDetails, (index, totalDetail) => {
     //   totaldetail = parseFloat($(totalDetail).text().replaceAll(',', ''))
@@ -1185,8 +1188,12 @@
                 selectedRowIds: selectedIdInv
               })
               .trigger("reloadGrid");
-            initAutoNumeric($('.footrow').find(`td[aria-describedby="tableInvoice_nominalretribusi"]`).text(totalRetribusi))
+            // initAutoNumeric($('.footrow').find(`td[aria-describedby="tableInvoice_nominalretribusi"]`).text(totalRetribusi))
 
+            setTotalOmset()
+            setTotalExtra()
+            setTotalRetribusi()
+            setTotalAll()
             resolve()
           });
         },

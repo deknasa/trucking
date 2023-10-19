@@ -37,10 +37,16 @@
                         </div>
                         <div class="row">
                             <div class="col-sm-6 mt-4">
-                                <button type="button" id="btnPreview" class="btn btn-info mr-1 ">
-                                    <i class="fas fa-print"></i>
-                                    Report
-                                </button>
+                                <div class="btn-group dropup  scrollable-menu">
+                                    <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" id="btnPreview">
+                                        <i class="fas fa-print"></i>
+                                        Report
+                                    </button>
+                                    <ul class="dropdown-menu" id="menu-approve" aria-labelledby="btnPreview">
+                                        <li><a class="dropdown-item" id="reportPrinterBesar" href="#">Printer Lain(Faktur)</a></li>
+                                        <li><a class="dropdown-item" id="reportPrinterKecil" href="#">Printer Epson Seri LX(Faktur)</a></li>
+                                    </ul>
+                                </div>
                                 <button type="button" id="btnExport" class="btn btn-warning mr-1 ">
                                     <i class="fas fa-file-export"></i>
                                     Export
@@ -89,14 +95,37 @@
         }
     })
 
-    $(document).on('click', `#btnPreview`, function(event) {
+    $(document).on('click', `#reportPrinterBesar`, function(event) {
         let dari = $('#crudForm').find('[name=dari]').val()
         let sampai = $('#crudForm').find('[name=sampai]').val()
         let bank_id = $('#crudForm').find('[name=bank_id]').val()
         let bank = $('#crudForm').find('[name=bank]').val()
 
         getCekReport().then((response) => {
-            window.open(`{{ route('laporankasbank.report') }}?dari=${dari}&sampai=${sampai}&bank=${bank}&bank_id=${bank_id}`)
+            window.open(`{{ route('laporankasbank.report') }}?dari=${dari}&sampai=${sampai}&bank=${bank}&bank_id=${bank_id}&printer=reportPrinterBesar`)
+        }).catch((error) => {
+            if (error.status === 422) {
+                $('.is-invalid').removeClass('is-invalid')
+                $('.invalid-feedback').remove()
+
+                setErrorMessages($('#crudForm'), error.responseJSON.errors);
+            } else {
+                showDialog(error.responseJSON)
+
+            }
+        })
+
+    })
+    
+
+    $(document).on('click', `#reportPrinterKecil`, function(event) {
+        let dari = $('#crudForm').find('[name=dari]').val()
+        let sampai = $('#crudForm').find('[name=sampai]').val()
+        let bank_id = $('#crudForm').find('[name=bank_id]').val()
+        let bank = $('#crudForm').find('[name=bank]').val()
+
+        getCekReport().then((response) => {
+            window.open(`{{ route('laporankasbank.report') }}?dari=${dari}&sampai=${sampai}&bank=${bank}&bank_id=${bank_id}&printer=reportPrinterKecil`)
         }).catch((error) => {
             if (error.status === 422) {
                 $('.is-invalid').removeClass('is-invalid')
