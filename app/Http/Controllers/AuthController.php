@@ -110,39 +110,39 @@ class AuthController extends Controller
 
             $tokenUrlTas ='';
             if ($parametercabang->text == "PUSAT") {
-                // $credentialsAdmin = [
-                //     'user' => 'admin',
-                //     'password' => '123456'
-                // ];
-                // $tokenMedan = Http::withHeaders([
-                //     'Content-Type' => 'application/json',
-                //     'Accept' => 'application/json'
-                // ])->post('https://tasmdn.kozow.com:8074/trucking-api/public/api/token', $credentialsAdmin);
+                $credentialsAdmin = [
+                    'user' => 'admin',
+                    'password' => '123456'
+                ];
+                $tokenMedan = Http::withHeaders([
+                    'Content-Type' => 'application/json',
+                    'Accept' => 'application/json'
+                ])->post('https://tasmdn.kozow.com:8074/trucking-api/public/api/token', $credentialsAdmin);
 
-                // $tokenJakarta = Http::withHeaders([
-                //     'Content-Type' => 'application/json',
-                //     'Accept' => 'application/json'
-                // ])->post('http://tasjkt.kozow.com:8074/trucking-api/public/api/token', $credentialsAdmin);
+                $tokenJakarta = Http::withHeaders([
+                    'Content-Type' => 'application/json',
+                    'Accept' => 'application/json'
+                ])->post('http://tasjkt.kozow.com:8074/trucking-api/public/api/token', $credentialsAdmin);
 
-                // $tokenJakartaTnl = Http::withHeaders([
-                //     'Content-Type' => 'application/json',
-                //     'Accept' => 'application/json'
-                // ])->post('http://tasjkt.kozow.com:8074/truckingtnl-api/public/api/token', $credentialsAdmin);
+                $tokenJakartaTnl = Http::withHeaders([
+                    'Content-Type' => 'application/json',
+                    'Accept' => 'application/json'
+                ])->post('http://tasjkt.kozow.com:8074/truckingtnl-api/public/api/token', $credentialsAdmin);
 
-                // $tokenMakassar = Http::withHeaders([
-                //     'Content-Type' => 'application/json',
-                //     'Accept' => 'application/json'
-                // ])->post('http://tasmks.kozow.com:8074/trucking-api/public/api/token', $credentialsAdmin);
+                $tokenMakassar = Http::withHeaders([
+                    'Content-Type' => 'application/json',
+                    'Accept' => 'application/json'
+                ])->post('http://tasmks.kozow.com:8074/trucking-api/public/api/token', $credentialsAdmin);
 
-                // $tokenSurabaya = Http::withHeaders([
-                //     'Content-Type' => 'application/json',
-                //     'Accept' => 'application/json'
-                // ])->post('http://tassby.kozow.com:8074/trucking-api/public/api/token', $credentialsAdmin);
+                $tokenSurabaya = Http::withHeaders([
+                    'Content-Type' => 'application/json',
+                    'Accept' => 'application/json'
+                ])->post('http://tassby.kozow.com:8074/trucking-api/public/api/token', $credentialsAdmin);
 
-                // $tokenBitung = Http::withHeaders([
-                //     'Content-Type' => 'application/json',
-                //     'Accept' => 'application/json'
-                // ])->post('http://tasbtg.kozow.com:8074/trucking-api/public/api/token', $credentialsAdmin);
+                $tokenBitung = Http::withHeaders([
+                    'Content-Type' => 'application/json',
+                    'Accept' => 'application/json'
+                ])->post('http://tasbtg.kozow.com:8074/trucking-api/public/api/token', $credentialsAdmin);
             }else{
                 $linkUrl =  DB::table('parameter')->where('grp', 'LINK URL')->where('subgrp', 'LINK URL')->first();
                 $linkUrlTas = strtolower($linkUrl->text);//http://tasjkt.kozow.com:8074/trucking-api/public/api/
@@ -165,33 +165,33 @@ class AuthController extends Controller
 
             $credentials['user'] = 'ADMIN';
             $credentials['password'] = config('app.password_tnl');
-            // $tokenTNL = Http::withHeaders([
-            //     'Accept' => 'application/json'
-            // ])->withOptions(['verify' => false])
-            //     ->post(config('app.trucking_api_tnl') . 'token', $credentials);
-            // $tokenEmkl = Http::withHeaders([
-            //     'Accept' => 'application/json'
-            // ])->withOptions(['verify' => false])
-            //     ->post(config('app.emkl_api_url') . 'oauth/token', $credentialsEmkl);
+            $tokenTNL = Http::withHeaders([
+                'Accept' => 'application/json'
+            ])->withOptions(['verify' => false])
+                ->post(config('app.trucking_api_tnl') . 'token', $credentials);
+            $tokenEmkl = Http::withHeaders([
+                'Accept' => 'application/json'
+            ])->withOptions(['verify' => false])
+                ->post(config('app.emkl_api_url') . 'oauth/token', $credentialsEmkl);
 
             // dd($tokenEmkl->getBody()->getContents());
 
             session(['access_token' => $token['access_token']]);
-            // session(['access_token_tnl' => $tokenTNL['access_token']]);
+            session(['access_token_tnl' => $tokenTNL['access_token']]);
 
             session(['info' => $token['info']]);
             session(['link_url' => strtolower($linkUrl->text)]);
 
-            // session(['access_token_emkl' => $tokenEmkl['access_token']]);
+            session(['access_token_emkl' => $tokenEmkl['access_token']]);
             session(['menus' => (new Menu())->getMenu()]);
 
             if ($parametercabang->text == "PUSAT") {
-                // session(['access_token_mdn' => $tokenMedan['access_token']]);
-                // session(['access_token_jkt' => $tokenJakarta['access_token']]);
-                // session(['access_token_jkttnl' => $tokenJakartaTnl['access_token']]);
-                // session(['access_token_mks' => $tokenMakassar['access_token']]);
-                // session(['access_token_sby' => $tokenSurabaya['access_token']]);
-                // session(['access_token_btg' => $tokenBitung['access_token']]);
+                session(['access_token_mdn' => $tokenMedan['access_token']]);
+                session(['access_token_jkt' => $tokenJakarta['access_token']]);
+                session(['access_token_jkttnl' => $tokenJakartaTnl['access_token']]);
+                session(['access_token_mks' => $tokenMakassar['access_token']]);
+                session(['access_token_sby' => $tokenSurabaya['access_token']]);
+                session(['access_token_btg' => $tokenBitung['access_token']]);
             }else{
                 if ($linkUrlTas != '') {
                     session(['access_token_url_tas' => $tokenUrlTas['access_token']]);
