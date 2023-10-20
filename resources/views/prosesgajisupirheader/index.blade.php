@@ -249,6 +249,24 @@
             formatter: currencyFormat,
           },
           {
+            label: 'KOMISI SUPIR',
+            name: 'komisisupir',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
+            label: 'KOMISI KENEK',
+            name: 'gajikenek',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
+            label: 'BIAYA EXTRA',
+            name: 'biayaextra',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
             label: 'U. JALAN',
             name: 'uangjalan',
             align: 'right',
@@ -519,6 +537,9 @@
               deposito: data.attributes.totalDeposito,
               uangmakanberjenjang: data.attributes.totalMakanBerjenjang,
               uangmakanharian: data.attributes.totalMakan,
+              komisisupir: data.attributes.totalKomisiSupir,
+              gajikenek: data.attributes.totalGajiKenek,
+              biayaextra: data.attributes.totalBiayaExtra,
             }, true)
           }
           $('#left-nav').find('button').attr('disabled', false)

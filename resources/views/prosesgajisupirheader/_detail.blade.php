@@ -40,7 +40,7 @@
             name: 'supir_id',
           },
           {
-            label: 'BORONGAN',
+            label: 'TOTAL',
             name: 'total',
             align: 'right',
             formatter: currencyFormat,
@@ -91,6 +91,24 @@
           {
             label: 'Komisi Supir',
             name: 'komisisupir',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
+            label: 'Gaji Supir',
+            name: 'gajisupir',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
+            label: 'Komisi Kenek',
+            name: 'gajikenek',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
+            label: 'Biaya Extra',
+            name: 'biayaextra',
             align: 'right',
             formatter: currencyFormat,
           },
@@ -173,6 +191,9 @@
               potonganpinjamansemua: data.attributes.totalPinjamanSemua,
               deposito: data.attributes.totalDeposito,
               komisisupir: data.attributes.totalKomisi,
+              gajisupir: data.attributes.totalGajiSupir,
+              gajikenek: data.attributes.totalGajiKenek,
+              biayaextra: data.attributes.totalBiayaExtra,
               tolsupir: data.attributes.totalTol
             }, true)
           }
