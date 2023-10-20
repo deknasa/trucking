@@ -126,6 +126,12 @@
             align: 'left',
             width: '300px'
           },
+          {
+            label: 'TOTAL',
+            name: 'total',
+            formatter: currencyFormat,
+            align: "right",
+          },
         ],
         autowidth: true,
         shrinkToFit: false,

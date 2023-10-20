@@ -21,10 +21,17 @@
 
                         <div class="row">
                             <div class="col-sm-6 mt-4">
-                                <button type="button" id="btnPreview" class="btn btn-info mr-1 ">
-                                    <i class="fas fa-print"></i>
-                                    Report
-                                </button>
+                                <div class="btn-group dropup  scrollable-menu">
+                                    <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" id="btnPreview">
+                                        <i class="fas fa-print"></i>
+                                        Report
+                                    </button>
+                                    <ul class="dropdown-menu" id="menu-approve" aria-labelledby="btnPreview">
+                                        <li><a class="dropdown-item" id="reportPrinterBesar" href="#">Printer Lain</a></li>
+                                        <li><a class="dropdown-item" id="reportPrinterKecil" href="#">Printer Epson Seri LX</a></li>
+                                    </ul>
+                                </div>
+
                                 <button type="button" id="btnExport" class="btn btn-warning mr-1 ">
                                     <i class="fas fa-file-export"></i>
                                     Export
@@ -32,9 +39,9 @@
                             </div>
                         </div>
 
-                    
-                         
-                       
+
+
+
 
                     </div>
                 </form>
@@ -68,7 +75,7 @@
         initDatepicker()
         $('#crudForm').find('[name=periode]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
-        
+
         if (!`{{ $myAuth->hasPermission('laporankasgantung', 'report') }}`) {
             $('#btnPreview').attr('disabled', 'disabled')
         }
@@ -80,16 +87,55 @@
 
     })
 
-    $(document).on('click', `#btnPreview`, function(event) {
+    // $(document).on('click', `#btnPreview`, function(event) {
+    //     let periode = $('#crudForm').find('[name=periode]').val()
+
+    //     if (periode != '') {
+
+    //         window.open(`{{ route('laporankasgantung.report') }}?periode=${periode}`)
+    //     } else {
+    //         showDialog('ISI SELURUH KOLOM')
+    //     }
+    // })
+
+    $(document).on('click', `#reportPrinterBesar`, function(event) {
         let periode = $('#crudForm').find('[name=periode]').val()
 
-        if (periode != '') {
+        getCekReport().then((response) => {
+            window.open(`{{ route('laporankasgantung.report') }}?periode=${periode}&printer=reportPrinterBesar`)
+        }).catch((error) => {
+            if (error.status === 422) {
+                $('.is-invalid').removeClass('is-invalid')
+                $('.invalid-feedback').remove()
 
-            window.open(`{{ route('laporankasgantung.report') }}?periode=${periode}`)
-        } else {
-            showDialog('ISI SELURUH KOLOM')
-        }
+                setErrorMessages($('#crudForm'), error.responseJSON.errors);
+            } else {
+                showDialog(error.responseJSON)
+
+            }
+        })
+
     })
+
+    $(document).on('click', `#reportPrinterKecil`, function(event) {
+        let periode = $('#crudForm').find('[name=periode]').val()
+
+        getCekReport().then((response) => {
+            window.open(`{{ route('laporankasgantung.report') }}?periode=${periode}&printer=reportPrinterKecil`)
+        }).catch((error) => {
+            if (error.status === 422) {
+                $('.is-invalid').removeClass('is-invalid')
+                $('.invalid-feedback').remove()
+
+                setErrorMessages($('#crudForm'), error.responseJSON.errors);
+            } else {
+                showDialog(error.responseJSON)
+
+            }
+        })
+
+    })
+
 
     $(document).on('click', `#btnExport`, function(event) {
         let periode = $('#crudForm').find('[name=periode]').val()
@@ -102,6 +148,29 @@
         }
     })
 
+    function getCekReport() {
+
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: `${apiUrl}laporankasgantung/report`,
+                dataType: "JSON",
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                data: {
+                    periode: $('#crudForm').find('[name=periode]').val(),
+                    isCheck: true,
+                },
+                success: (response) => {
+                    resolve(response);
+                },
+                error: error => {
+                    reject(error)
+
+                },
+            });
+        });
+    }
 </script>
 @endpush()
 @endsection
