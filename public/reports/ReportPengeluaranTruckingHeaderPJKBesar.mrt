@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "b89c14a50b178a2f46bb9b23e808c659",
+  "ReportGuid": "b2b4bcf1d18c99eb5f5b07d63a7a97b3",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://localhost/trucking/public/reports/ReportPengeluaranTruckingHeaderPJK.mrt",
+  "ReportFile": "ReportPengeluaranTruckingHeaderPJKBesar.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1697508712000+0700)/",
+  "ReportChanged": "/Date(1697772393000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -1041,7 +1041,7 @@
           "Ident": "StiPageFooterBand",
           "Name": "PageFooterBand1",
           "PrintOn": "ExceptLastPage",
-          "ClientRectangle": "0,260.4,205,6",
+          "ClientRectangle": "0,145.2,205,6",
           "ComponentPlacement": "pf.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -1053,7 +1053,7 @@
               "Ident": "StiHorizontalLinePrimitive",
               "Name": "HorizontalLinePrimitive5",
               "Guid": "a31e0966d470befa355122aaf53fa80d",
-              "ClientRectangle": "4,-0.4,198.09,0.254",
+              "ClientRectangle": "4.06,0,198.15,0.254",
               "ComponentPlacement": "pf.PageFooterBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -1901,7 +1901,7 @@
         }
       },
       "PageWidth": 216,
-      "PageHeight": 279.4,
+      "PageHeight": 139,
       "Watermark": {
         "TextBrush": "solid:50,0,0,0"
       },
