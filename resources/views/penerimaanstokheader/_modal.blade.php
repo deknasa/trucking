@@ -2587,6 +2587,7 @@
           setKodePenerimaan(response.data.penerimaanstok);
 
           $.each(response.detail, (id, detail) => {
+            let option
             initSelect2($(`#statusban${id}`), true)
             let detailRow = $(`
               <tr class="trow" data-id="${id}">
@@ -2714,7 +2715,7 @@
             })
             
             dataStatusBan.forEach(statusBan => {
-              let option = new Option(statusBan.text, statusBan.id)
+              option = new Option(statusBan.text, statusBan.id)
         
             });
             detailRow.find(`#statusban${id}`).append(option).trigger('change')
