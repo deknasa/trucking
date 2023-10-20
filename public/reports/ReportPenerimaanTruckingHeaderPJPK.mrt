@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "8c8a091ae39a3b9459a98150c0645d75",
+  "ReportGuid": "4ba4c3a8471f273d81a5edf29acdbad2",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://localhost/trucking/public/reports/ReportPenerimaanTruckingHeaderPJPK.mrt",
+  "ReportFile": "ReportPenerimaanTruckingHeaderPJPK.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1697448289000+0700)/",
+  "ReportChanged": "/Date(1697771568000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -1020,7 +1020,7 @@
           "Ident": "StiPageFooterBand",
           "Name": "PageFooterBand1",
           "PrintOn": "ExceptLastPage",
-          "ClientRectangle": "0,262.24,204,4.16",
+          "ClientRectangle": "0,172.24,204,4.16",
           "ComponentPlacement": "pf.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -1032,7 +1032,7 @@
               "Ident": "StiHorizontalLinePrimitive",
               "Name": "HorizontalLinePrimitive1",
               "Guid": "374fb51f55b6680337048a892bd2f1d8",
-              "ClientRectangle": "4,1.76,198.12,0.254",
+              "ClientRectangle": "4.06,0,198.12,0.254",
               "ComponentPlacement": "pf.PageFooterBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -1499,7 +1499,7 @@
             "13": {
               "Ident": "StiEndPointPrimitive",
               "Name": "EndPointPrimitive23",
-              "ClientRectangle": "202.22,8.57,0,0",
+              "ClientRectangle": "202.22,0.57,0,0",
               "ComponentPlacement": "pf.PageFooterBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -1546,7 +1546,7 @@
               "Ident": "StiHorizontalLinePrimitive",
               "Name": "HorizontalLinePrimitive3",
               "Guid": "7d7f9c62aff724b116ab5bce94ae1b13",
-              "ClientRectangle": "4,8.23,198.12,0.254",
+              "ClientRectangle": "4.06,8.23,198.12,0.254",
               "ComponentPlacement": "pf.PageFooterBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -1558,7 +1558,7 @@
               "Ident": "StiHorizontalLinePrimitive",
               "Name": "HorizontalLinePrimitive14",
               "Guid": "cb6d34d872993449cb64207a4f9a7892",
-              "ClientRectangle": "4,0.1,198.12,0.254",
+              "ClientRectangle": "4.06,0.1,198.12,0.254",
               "ComponentPlacement": "pf.PageFooterBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -1673,6 +1673,24 @@
                 "Ident": "StiInteraction"
               },
               "ReferenceToGuid": "4db69f9d89d654ab2dda7d9256327708"
+            },
+            "31": {
+              "Ident": "StiStartPointPrimitive",
+              "Name": "StartPointPrimitive13",
+              "ClientRectangle": "202.22,0,0,0",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "ReferenceToGuid": "7fad1636948006924ebc1c21852fae71"
+            },
+            "32": {
+              "Ident": "StiEndPointPrimitive",
+              "Name": "EndPointPrimitive13",
+              "ClientRectangle": "202.22,8,0,0",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "ReferenceToGuid": "7fad1636948006924ebc1c21852fae71"
             }
           },
           "PrintAtBottom": true
@@ -1789,7 +1807,7 @@
           "Ident": "StiVerticalLinePrimitive",
           "Name": "VerticalLinePrimitive23",
           "Guid": "9b144182f54c3840cc83803898ad95fa",
-          "ClientRectangle": "202.22,61.95,0.254,26.62",
+          "ClientRectangle": "202.22,61.95,0.254,18.62",
           "ComponentPlacement": "p.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -1892,10 +1910,22 @@
           },
           "StartCap": ";;;",
           "EndCap": ";;;"
+        },
+        "22": {
+          "Ident": "StiVerticalLinePrimitive",
+          "Name": "VerticalLinePrimitive3",
+          "Guid": "7fad1636948006924ebc1c21852fae71",
+          "ClientRectangle": "202.22,80,0.254,8",
+          "ComponentPlacement": "p.Page1",
+          "Interaction": {
+            "Ident": "StiInteraction"
+          },
+          "StartCap": ";;;",
+          "EndCap": ";;;"
         }
       },
       "PageWidth": 240,
-      "PageHeight": 279.4,
+      "PageHeight": 139,
       "Watermark": {
         "TextBrush": "solid:50,0,0,0"
       },
