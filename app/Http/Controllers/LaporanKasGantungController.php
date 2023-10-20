@@ -41,8 +41,12 @@ class LaporanKasGantungController extends MyController
           
         $data = $header['data'];
         $user = Auth::user();
+
+        $printer['tipe'] = $request->printer;
+
+
     //   dd($data);
-        return view('reports.laporankasgantung', compact('data', 'user', 'detailParams'));
+        return view('reports.laporankasgantung', compact('data', 'user', 'detailParams','printer'));
     }
 
 
