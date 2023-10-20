@@ -621,7 +621,59 @@
       })
   }
 
+  function clearSelectedRowsPengembalian() {
+    getSelectedRows = $("#tablePengembalian").getGridParam("selectedRowIds");
+    $("#tablePengembalian")[0].p.selectedRowIds = [];
+    $.each(getSelectedRows, function(index, value) {
+      let originalGridData = $("#tablePengembalian")
+        .jqGrid("getGridParam", "originalData")
+        .find((row) => row.id == value);
+
+      if ($('#crudForm').data('action') == 'edit') {
+        sisa = parseFloat(originalGridData.sisa) + parseFloat(originalGridData.nominal)
+      } else {
+        sisa = parseFloat(originalGridData.sisa)
+      }
+      $("#tablePengembalian").jqGrid(
+        "setCell",
+        value,
+        "sisa",
+        sisa
+      );
+      $("#tablePengembalian").jqGrid("setCell", value, "nominal", 0);
+      $(`#tablePengembalian tr#${value}`).find(`td[aria-describedby="tablePinjaman_nominal"]`).attr("value", 0)
+      $("#tablePengembalian").jqGrid("setCell", value, "keterangandetail", null);
+      $("#tablePengembalian").jqGrid("setCell", value, "coadetail", null);
+    })
+
+    $('#tablePengembalian').trigger('reloadGrid');
+    setTotalNominal()
+    setTotalSisa()
+  }
+
+  function selectAllRowsPengembalian() {
+
+    let originalData = $("#tablePengembalian").getGridParam("data");
+    let getSelectedRows = originalData.map((data) => data.id);
+    $("#tablePengembalian")[0].p.selectedRowIds = [];
+
+    setTimeout(() => {
+      $("#tablePengembalian")
+        .jqGrid("setGridParam", {
+          selectedRowIds: getSelectedRows
+        })
+        .trigger("reloadGrid");
+
+      setTotalNominal()
+      setTotalSisa()
+    })
+  }
+
   function loadPengembalianGrid() {
+    let disabled = '';
+    if ($('#crudForm').data('action') == 'delete') {
+      disabled = 'disabled'
+    }
     //console.log('test')
     $("#tablePengembalian")
       .jqGrid({
@@ -632,9 +684,32 @@
             label: "",
             name: "",
             width: 30,
-            formatter: 'checkbox',
-            search: false,
-            editable: false,
+            align: 'center',
+            sortable: false,
+            clear: false,
+            stype: 'input',
+            searchable: false,
+            searchoptions: {
+              type: 'checkbox',
+              clearSearch: false,
+              dataInit: function(element) {
+
+                $(element).removeClass('form-control')
+                $(element).parent().addClass('text-center')
+                if (disabled == '') {
+                  $(element).on('click', function() {
+                    if ($(this).is(':checked')) {
+                      selectAllRowsPengembalian()
+                    } else {
+                      clearSelectedRowsPengembalian()
+                    }
+                  })
+                } else {
+                  $(element).attr('disabled', true)
+                }
+
+              }
+            },
             formatter: function(value, rowOptions, rowData) {
               let disabled = '';
               if (($('#crudForm').data('action') == 'delete') || ($('#crudForm').data('action') == 'view')) {
