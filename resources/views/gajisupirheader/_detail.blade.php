@@ -205,6 +205,7 @@
               tolsupir: data.attributes.totalTolSupir,
               biayaextra: data.attributes.totalBiayaExtra,
               uangmakanberjenjang: data.attributes.totalUangMakanBerjenjang,
+              total: data.attributes.total,
             }, true)
           }
         }
