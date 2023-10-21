@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "f58b3deac6a261d0220f950910f70b78",
+  "ReportGuid": "5d45f38142d932d3f4a4e8590e711c6b",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://localhost/truck/public/reports/ReportLaporanSaldoInventory.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanSaldoInventory.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1689239840000+0700)/",
+  "ReportChanged": "/Date(1697866777000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -34,87 +34,111 @@
             "Type": "System.String"
           },
           "1": {
+            "Name": "judul",
+            "NameInSource": "judul",
+            "Alias": "judul",
+            "Type": "System.String"
+          },
+          "2": {
             "Name": "lokasi",
             "NameInSource": "lokasi",
             "Alias": "lokasi",
             "Type": "System.String"
           },
-          "2": {
+          "3": {
             "Name": "namalokasi",
             "NameInSource": "namalokasi",
             "Alias": "namalokasi",
             "Type": "System.String"
           },
-          "3": {
+          "4": {
             "Name": "kategori",
             "NameInSource": "kategori",
             "Alias": "kategori",
             "Type": "System.String"
           },
-          "4": {
+          "5": {
             "Name": "tgldari",
             "NameInSource": "tgldari",
             "Alias": "tgldari",
             "Type": "System.DateTime"
           },
-          "5": {
+          "6": {
             "Name": "tglsampai",
             "NameInSource": "tglsampai",
             "Alias": "tglsampai",
             "Type": "System.DateTime"
           },
-          "6": {
+          "7": {
             "Name": "stokdari",
             "NameInSource": "stokdari",
             "Alias": "stokdari",
             "Type": "System.String"
           },
-          "7": {
+          "8": {
             "Name": "stoksampai",
             "NameInSource": "stoksampai",
             "Alias": "stoksampai",
             "Type": "System.String"
           },
-          "8": {
+          "9": {
             "Name": "vulkanisirke",
             "NameInSource": "vulkanisirke",
             "Alias": "vulkanisirke",
             "Type": "System.String"
           },
-          "9": {
+          "10": {
+            "Name": "id",
+            "NameInSource": "id",
+            "Alias": "id",
+            "Type": "System.String"
+          },
+          "11": {
             "Name": "kodebarang",
             "NameInSource": "kodebarang",
             "Alias": "kodebarang",
             "Type": "System.String"
           },
-          "10": {
+          "12": {
             "Name": "namabarang",
             "NameInSource": "namabarang",
             "Alias": "namabarang",
             "Type": "System.String"
           },
-          "11": {
+          "13": {
             "Name": "tanggal",
             "NameInSource": "tanggal",
             "Alias": "tanggal",
             "Type": "System.String"
           },
-          "12": {
+          "14": {
             "Name": "qty",
             "NameInSource": "qty",
             "Alias": "qty",
             "Type": "System.String"
           },
-          "13": {
+          "15": {
             "Name": "satuan",
             "NameInSource": "satuan",
             "Alias": "satuan",
             "Type": "System.String"
           },
-          "14": {
+          "16": {
             "Name": "nominal",
             "NameInSource": "nominal",
             "Alias": "nominal",
+            "Type": "System.String"
+          },
+          "17": {
+            "Name": "disetujui",
+            "NameInSource": "disetujui",
+            "Alias": "disetujui",
+            "Type": "System.String"
+          },
+          "18": {
+            "Name": "diperiksa",
+            "NameInSource": "diperiksa",
+            "Alias": "diperiksa",
             "Type": "System.String"
           }
         },
@@ -164,30 +188,36 @@
             "Type": "System.String"
           },
           "2": {
+            "Name": "info",
+            "NameInSource": "info",
+            "Alias": "info",
+            "Type": "System.String"
+          },
+          "3": {
             "Name": "modifiedby",
             "NameInSource": "modifiedby",
             "Alias": "modifiedby",
             "Type": "System.String"
           },
-          "3": {
+          "4": {
             "Name": "created_at",
             "NameInSource": "created_at",
             "Alias": "created_at",
             "Type": "System.DateTime"
           },
-          "4": {
+          "5": {
             "Name": "updated_at",
             "NameInSource": "updated_at",
             "Alias": "updated_at",
             "Type": "System.DateTime"
           },
-          "5": {
+          "6": {
             "Name": "pivot",
             "NameInSource": "pivot",
             "Alias": "pivot",
             "Type": "System.String"
           },
-          "6": {
+          "7": {
             "Name": "relationId",
             "NameInSource": "relationId",
             "Alias": "relationId",
@@ -256,24 +286,30 @@
             "Type": "System.String"
           },
           "9": {
+            "Name": "info",
+            "NameInSource": "info",
+            "Alias": "info",
+            "Type": "System.String"
+          },
+          "10": {
             "Name": "modifiedby",
             "NameInSource": "modifiedby",
             "Alias": "modifiedby",
             "Type": "System.String"
           },
-          "10": {
+          "11": {
             "Name": "created_at",
             "NameInSource": "created_at",
             "Alias": "created_at",
             "Type": "System.DateTime"
           },
-          "11": {
+          "12": {
             "Name": "updated_at",
             "NameInSource": "updated_at",
             "Alias": "updated_at",
             "Type": "System.DateTime"
           },
-          "12": {
+          "13": {
             "Name": "roles",
             "NameInSource": "roles",
             "Alias": "roles",
@@ -318,30 +354,24 @@
             "Type": "System.String"
           },
           "5": {
-            "Name": "tgldari",
-            "NameInSource": "tgldari",
-            "Alias": "tgldari",
+            "Name": "priode",
+            "NameInSource": "priode",
+            "Alias": "priode",
             "Type": "System.String"
           },
           "6": {
-            "Name": "tglsampai",
-            "NameInSource": "tglsampai",
-            "Alias": "tglsampai",
-            "Type": "System.String"
-          },
-          "7": {
             "Name": "stokdari_id",
             "NameInSource": "stokdari_id",
             "Alias": "stokdari_id",
             "Type": "System.String"
           },
-          "8": {
+          "7": {
             "Name": "stoksampai_id",
             "NameInSource": "stoksampai_id",
             "Alias": "stoksampai_id",
             "Type": "System.String"
           },
-          "9": {
+          "8": {
             "Name": "dataFilter",
             "NameInSource": "dataFilter",
             "Alias": "dataFilter",
@@ -405,20 +435,20 @@
             "0": {
               "Ident": "StiText",
               "Name": "Text2",
-              "ClientRectangle": "88,0,34,6",
+              "ClientRectangle": "2,0,204,6",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "TAS PUSAT"
+                "Value": "{data.judul}"
               },
               "HorAlignment": "Center",
-              "Font": ";14;Bold;",
+              "Font": ";12;Bold;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
-              "Type": "Expression"
+              "Type": "DataColumn"
             },
             "1": {
               "Ident": "StiText",
@@ -882,7 +912,7 @@
             "25": {
               "Ident": "StiText",
               "Name": "Text3",
-              "ClientRectangle": "70,6,72,6",
+              "ClientRectangle": "2,6,204,6",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -891,7 +921,7 @@
                 "Value": "{data.header}"
               },
               "HorAlignment": "Center",
-              "Font": ";14;Bold;",
+              "Font": ";12;Bold;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black"
@@ -1001,7 +1031,7 @@
               "Name": "HorizontalLinePrimitive5",
               "Guid": "c31ef64cd362e1c40820b60b86c9f2a2",
               "ClientRectangle": "4,6,200,0.254",
-              "ComponentPlacement": "gf.GroupFooterBand1",
+              "ComponentPlacement": "gh.GroupHeaderBand2",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -1013,7 +1043,7 @@
               "Name": "HorizontalLinePrimitive6",
               "Guid": "63f7fba31e9202fce4f0126e1b7db5bc",
               "ClientRectangle": "4,12,200,0.254",
-              "ComponentPlacement": "gf.GroupFooterBand1",
+              "ComponentPlacement": "gh.GroupHeaderBand2",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
