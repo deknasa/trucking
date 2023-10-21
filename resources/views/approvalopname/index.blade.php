@@ -26,8 +26,11 @@
                                 </label>
                             </div>
                             <div class="col-12 col-md-10">
-                                <select name="statusopname" class="form-select select2bs4" style="width: 100%;">
-                                    <option value="">-- PILIH STATUS OPNAME --</option>
+                                <select name="statusopname" id="statusopname" class="form-select select2bs4" style="width: 100%;">
+                                    {{-- <option value=""> </option> --}}
+                                    @foreach ($status as $statusppname)
+                                    <option value="{{$statusppname['id']}}"> {{$statusppname['text']}} </option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
@@ -53,11 +56,10 @@
 @push('scripts')
 <script>
     $(document).ready(function() {
+        let form = $('#crudForm')
         initDatepicker()
-        // $('#crudForm').find('[name=statusterakhir]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+        initSelect2($(`#statusopname`), false)
         statusterakhir()
-        setStatusOpnameOptions(form)
-
         function statusterakhir() {
             $.ajax({
                 url: `${apiUrl}approvalopname`,
@@ -67,7 +69,8 @@
                     Authorization: `Bearer ${accessToken}`
                 },
                 success: response => {
-                    $('#crudForm').find('[name=statusterakhir]').trigger('change');
+                    $('#crudForm').find('[name=statusterakhir]').val(response.terakhir).trigger('change');
+                    $('#crudForm').find('[name=statusopname]').val(response.status).trigger('change');
 
                 },
                 error: error => {
@@ -80,89 +83,84 @@
         $('#crudForm').find('[name=statusopname]').trigger('change');
     })
 
-    
-  const setStatusOpnameOptions = function(relatedForm) {
-    return new Promise((resolve, reject) => {
-      relatedForm.find('[name=statusopname]').empty()
-      relatedForm.find('[name=statusopname]').append(
-        new Option('-- PILIH STATUS OPNAME --', '', false, true)
-      ).trigger('change')
 
-      $.ajax({
-        url: `${apiUrl}parameter`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          filters: JSON.stringify({
-            "groupOp": "AND",
-            "rules": [{
-              "field": "grp",
-              "op": "cn",
-              "data": "STATUS OPNAME"
-            }]
-          })
-        },
-        success: response => {
-          response.data.forEach(statusOpname => {
-            let option = new Option(statusOpname.text, statusOpname.id)
+    // const setStatusOpnameOptions = function(relatedForm) {
+    //     return new Promise((resolve, reject) => {
+    //         relatedForm.find('[name=statusopname]').empty()
+    //         relatedForm.find('[name=statusopname]').append(
+    //             new Option('-- PILIH STATUS OPNAME --', '', false, true)
+    //         ).trigger('change')
 
-            relatedForm.find('[name=statusopname]').append(option).trigger('change')
-          });
+    //         $.ajax({
+    //             url: `${apiUrl}parameter`,
+    //             method: 'GET',
+    //             dataType: 'JSON',
+    //             headers: {
+    //                 Authorization: `Bearer ${accessToken}`
+    //             },
+    //             data: {
+    //                 filters: JSON.stringify({
+    //                     "groupOp": "AND",
+    //                     "rules": [{
+    //                         "field": "grp",
+    //                         "op": "cn",
+    //                         "data": "STATUS APPROVAL"
+    //                     }]
+    //                 })
+    //             },
+    //             success: response => {
+    //                 response.data.forEach(statusOpname => {
+    //                     let option = new Option(statusOpname.text, statusOpname.id)
 
-          resolve()
-        },
-        error: error => {
-          reject(error)
-        }
-      })
-    })
-  }
+    //                     relatedForm.find('[name=statusopname]').append(option).trigger('change')
+    //                 });
+
+    //                 resolve()
+    //             },
+    //             error: error => {
+    //                 reject(error)
+    //             }
+    //         })
+    //     })
+    // }
 
     $(document).on('click', `#btnSubmit`, function(event) {
         let statusterakhir = $('#crudForm').find('[name=statusterakhir]').val()
         let statusopname = $('#crudForm').find('[name=statusopname]').val()
         let form = $('#crudForm')
         let data = $('#crudForm').serializeArray()
-        if (statusterakhir != '' && statusopname != '') {
-            $.ajax({
-                url: `${apiUrl}approvalopname`,
-                method: 'POST',
-                dataType: 'JSON',
-                headers: {
-                    Authorization: `Bearer ${accessToken}`
-                },
-                data: data,
-                success: response => {
+        $.ajax({
+            url: `${apiUrl}approvalopname`,
+            method: 'POST',
+            dataType: 'JSON',
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            },
+            data: data,
+            success: response => {
+                $('.is-invalid').removeClass('is-invalid')
+                $('.invalid-feedback').remove()
+                showDialog(response.message)
+
+                $('#crudForm').find('[name=statusterakhir]').val(response.text).trigger('change');
+                $('#crudForm').find('[name=statusopname]').val(response.statusapproval).trigger('change');
+
+            },
+            error: error => {
+                if (error.status === 422) {
                     $('.is-invalid').removeClass('is-invalid')
                     $('.invalid-feedback').remove()
-                    showDialog(response.message)
+                    setErrorMessages(form, error.responseJSON.errors);
+                } else if (error.status === 423) {
+                    // console.log(error);
+                    showDialog(error.responseJSON.statusText)
 
-                    $('#crudForm').find('[name=statusterakhir]').val(response.data['text']).trigger('change');
-                    $('#crudForm').find('[name=statusopname]').val('').trigger('change');
+                } else {
+                    showDialog(error.statusText)
+                }
+            },
+        })
 
-                },
-                error: error => {
-                    if (error.status === 422) {
-                        $('.is-invalid').removeClass('is-invalid')
-                        $('.invalid-feedback').remove()
-                        setErrorMessages(form, error.responseJSON.errors);
-                    } else if (error.status === 423) {
-                        // console.log(error);
-                        showDialog(error.responseJSON.statusText)
-
-                    } else {
-                        showDialog(error.statusText)
-                    }
-                },
-            })
-
-
-        } else {
-            showDialog('ISI SELURUH KOLOM')
-        }
     })
 </script>
 @endpush()
