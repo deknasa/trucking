@@ -550,7 +550,10 @@
           id = response.data.id
 
           $('#jqGrid').trigger('reloadGrid', {
-            page: response.data.page
+            page: response.data.page,
+            postData: {
+                proses: 'reload'
+            }
           }).trigger('reloadGrid');
 
           if (id == 0) {

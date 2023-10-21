@@ -771,14 +771,14 @@
         .jqGrid("getGridParam", "originalData")
         .find((row) => row.id == rowId);
       if ($('#crudForm').data('action') == 'edit') {
-        if (parseFloat(originalGridData.bayar) != 0) {
+        if (parseFloat(localRow.bayar) != 0) {
           localRow.bayar = parseFloat(originalGridData.bayar)
-          $("#tablePelunasan").jqGrid("setCell", rowId, "sisa", localRow.sisa);
-        } else if (parseFloat(originalGridData.potongan) != 0) {
+          $("#tablePelunasan").jqGrid("setCell", rowId, "sisa", originalGridData.sisa);
+        } else if (parseFloat(localRow.potongan) != 0) {
           localRow.bayar = 0
-          $("#tablePelunasan").jqGrid("setCell", rowId, "sisa", localRow.sisa);
+          $("#tablePelunasan").jqGrid("setCell", rowId, "sisa", originalGridData.sisa);
         } else {
-          localRow.bayar = parseFloat(originalGridData.sisa)
+          localRow.bayar = parseFloat(localRow.sisa)
           $("#tablePelunasan").jqGrid("setCell", rowId, "sisa", 0);
         }
 
