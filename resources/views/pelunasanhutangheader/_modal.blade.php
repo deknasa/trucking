@@ -777,14 +777,14 @@
         .find((row) => row.id == rowId);
       if ($('#crudForm').data('action') == 'edit') {
 
-        if (parseFloat(originalGridData.bayar) != 0) {
+        if (parseFloat(localRow.bayar) != 0) {
           localRow.bayar = parseFloat(originalGridData.bayar)
-          $("#tableHutang").jqGrid("setCell", rowId, "sisa", localRow.sisa);
+          $("#tableHutang").jqGrid("setCell", rowId, "sisa", originalGridData.sisa);
           localRow.total = parseFloat(originalGridData.bayar) + parseFloat(originalGridData.potongan)
         } else {
-          localRow.bayar = parseFloat(originalGridData.sisa)
+          localRow.bayar = parseFloat(localRow.sisa)
+          localRow.total = parseFloat(localRow.sisa)
           $("#tableHutang").jqGrid("setCell", rowId, "sisa", 0);
-          localRow.total = parseFloat(originalGridData.sisa)
         }
         $("#tableHutang").jqGrid("setCell", rowId, "potongan", localRow.potongan);
         $("#tableHutang").jqGrid("setCell", rowId, "bayar", localRow.bayar);
