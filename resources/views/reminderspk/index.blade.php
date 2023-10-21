@@ -57,33 +57,13 @@
                         hidden: true
                     },
                     {
-                        label: 'NO BUKTI',
-                        name: 'nobukti',
+                        label: 'GUDANG',
+                        name: 'gudang',
                         align: 'left'
                     },
                     {
-                        label: 'TGL BUKTI',
-                        name: 'tglbukti',
-                        align: 'left',
-                        formatter: "date",
-                        formatoptions: {
-                            srcformat: "ISO8601Long",
-                            newformat: "d-m-Y"
-                        }
-                    },
-                    {
-                        label: 'TRADO',
-                        name: 'trado',
-                        align: 'left'
-                    },
-                    {
-                        label: 'Nama Barang',
-                        name: 'namabarang',
-                        align: 'left'
-                    },
-                    {
-                        label: 'SATUAN',
-                        name: 'satuan',
+                        label: 'NAMA BARANG',
+                        name: 'stok',
                         align: 'left'
                     },
                     {
@@ -93,33 +73,12 @@
                         formatter: currencyFormat,
                     },
                     {
-                        label: 'HARGA SATUAN',
-                        name: 'hargasatuan',
+                        label: 'TOTAL',
+                        name: 'total',
                         align: 'right',
                         formatter: currencyFormat,
                     },
-                    {
-                        label: 'JENIS BIAYA',
-                        name: 'jenisbiaya',
-                        align: 'left'
-                    },
-                    {
-                        label: 'NOMINAL DISC',
-                        name: 'nominaldisc',
-                        align: 'right',
-                        formatter: currencyFormat,
-                    },
-                    {
-                        label: 'NOMINAL',
-                        name: 'nominal',
-                        align: 'right',
-                        formatter: currencyFormat,
-                    },
-                    {
-                        label: 'KETERANGAN',
-                        name: 'keterangan',
-                        align: 'left'
-                    },
+
                 ],
                 autowidth: true,
                 shrinkToFit: false,
