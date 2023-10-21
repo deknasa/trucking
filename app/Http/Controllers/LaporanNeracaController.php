@@ -42,8 +42,9 @@ class LaporanNeracaController extends MyController
 
 
         $user = Auth::user();
+        $printer['tipe'] = $request->printer;
 
-        return view('reports.laporanneraca', compact('data', 'user', 'detailParams'));
+        return view('reports.laporanneraca', compact('data', 'user', 'detailParams','printer'));
     }
 
     public function export(Request $request)
