@@ -1312,34 +1312,8 @@
   }
 
   function selectAllRowsPinjaman() {
-    let getSelectedRows = [];
     let originalData = $("#tablePinjaman").getGridParam("data");
-    $.each(originalData, function(index, value) {
-      getSelectedRows.push(value.id);
-      rowId = value.id
-      let localRow = $("#tablePinjaman").jqGrid("getLocalRow", rowId);
-
-      let originalGridData = $("#tablePinjaman")
-        .jqGrid("getGridParam", "originalData")
-        .find((row) => row.id == rowId);
-      if ($('#crudForm').data('action') == 'edit') {
-        if (parseFloat(originalGridData.nominal) != 0) {
-          localRow.nominal = parseFloat(originalGridData.nominal)
-          $("#tablePinjaman").jqGrid("setCell", rowId, "sisa", localRow.sisa);
-        } else {
-          localRow.nominal = parseFloat(originalGridData.sisa)
-          $("#tablePinjaman").jqGrid("setCell", rowId, "sisa", 0);
-        }
-      } else {
-        localRow.nominal = originalGridData.sisa
-        $("#tablePinjaman").jqGrid("setCell", rowId, "sisa", 0);
-      }
-
-      $("#tablePinjaman").jqGrid("setCell", rowId, "nominal", localRow.nominal);
-      initAutoNumeric($(`#tablePinjaman tr#${rowId}`).find(`td[aria-describedby="tablePinjaman_nominal"]`))
-
-    })
-
+    let getSelectedRows = originalData.map((data) => data.id);
     $("#tablePinjaman")[0].p.selectedRowIds = [];
     $("#tablePinjaman")
       .jqGrid("setGridParam", {
@@ -1657,34 +1631,8 @@
   }
 
   function selectAllRowsPinjKaryawan() {
-    let getSelectedRows = [];
     let originalData = $("#tablePinjamanKaryawan").getGridParam("data");
-    $.each(originalData, function(index, value) {
-      getSelectedRows.push(value.id);
-      rowId = value.id
-      let localRow = $("#tablePinjamanKaryawan").jqGrid("getLocalRow", rowId);
-
-      let originalGridData = $("#tablePinjamanKaryawan")
-        .jqGrid("getGridParam", "originalData")
-        .find((row) => row.id == rowId);
-      if ($('#crudForm').data('action') == 'edit') {
-        if (parseFloat(originalGridData.nominal) != 0) {
-          localRow.nominal = parseFloat(originalGridData.nominal)
-          $("#tablePinjamanKaryawan").jqGrid("setCell", rowId, "sisa", localRow.sisa);
-        } else {
-          localRow.nominal = parseFloat(originalGridData.sisa)
-          $("#tablePinjamanKaryawan").jqGrid("setCell", rowId, "sisa", 0);
-        }
-      } else {
-        localRow.nominal = originalGridData.sisa
-        $("#tablePinjamanKaryawan").jqGrid("setCell", rowId, "sisa", 0);
-      }
-
-      $("#tablePinjamanKaryawan").jqGrid("setCell", rowId, "nominal", localRow.nominal);
-      initAutoNumeric($(`#tablePinjamanKaryawan tr#${rowId}`).find(`td[aria-describedby="tablePinjamanKaryawan_nominal"]`))
-
-    })
-
+    let getSelectedRows = originalData.map((data) => data.id);
     $("#tablePinjamanKaryawan")[0].p.selectedRowIds = [];
     $("#tablePinjamanKaryawan")
       .jqGrid("setGridParam", {
