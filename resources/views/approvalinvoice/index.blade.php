@@ -352,7 +352,7 @@
                         }
                     },
                     {
-                        label: 'Agen',
+                        label: 'CUSTOMER',
                         name: 'agen',
                         align: 'left'
                     },

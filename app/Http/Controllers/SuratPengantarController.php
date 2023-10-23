@@ -368,7 +368,7 @@ class SuratPengantarController extends MyController
                 'index' => 'sampai_id',
             ],
             [
-                'label' => 'AGEN',
+                'label' => 'CUSTOMER',
                 'index' => 'agen_id',
             ],
             [
