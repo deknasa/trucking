@@ -183,7 +183,17 @@ class LaporanStokController extends Controller
                     if ($data_column['index'] == 'tglbukti') {
                         $value = date('d-m-Y',strtotime($value));
                     }
-
+                    if ($data_column['index'] == 'nominalsaldo') {
+                        if ($response_detail['baris'] != 1) {
+                            $value = '=(K' . ($detail_start_row - 1) . '+F' . $detail_start_row . ')-H' . $detail_start_row;
+                        }
+                    }
+                    if ($data_column['index'] == 'qtysaldo') {
+                        if ($response_detail['baris'] != 1) {
+                            $value = '=(J' . ($detail_start_row - 1) . '+E' . $detail_start_row . ')-G' . $detail_start_row;
+                        }
+                    }
+                    
                     $sheet->setCellValue($alphabets[$data_columns_index] . $detail_start_row, $value);
                 }
 
