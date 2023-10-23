@@ -248,12 +248,12 @@
             align: 'right',
             formatter: currencyFormat,
           },
-          {
-            label: 'GAJI SUPIR',
-            name: 'gajisupir',
-            align: 'right',
-            formatter: currencyFormat,
-          },
+          // {
+          //   label: 'GAJI SUPIR',
+          //   name: 'gajisupir',
+          //   align: 'right',
+          //   formatter: currencyFormat,
+          // },
           {
             label: 'KOMISI SUPIR',
             name: 'komisisupir',
