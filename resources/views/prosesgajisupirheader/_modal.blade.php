@@ -850,7 +850,13 @@
                         align: "right",
                     },
                     {
-                        label: 'GAJI KENEK',
+                        label: 'BIAYA EXTRA',
+                        name: 'extra',
+                        formatter: currencyFormat,
+                        align: "right",
+                    },                    
+                    {
+                        label: 'KOMISI KENEK',
                         name: 'gajikenek',
                         formatter: currencyFormat,
                         align: "right",
@@ -861,12 +867,7 @@
                         formatter: currencyFormat,
                         align: "right",
                     },
-                    {
-                        label: 'BIAYA EXTRA',
-                        name: 'extra',
-                        formatter: currencyFormat,
-                        align: "right",
-                    },
+                   
                     {
                         label: 'TOL',
                         name: 'tolsupir',
