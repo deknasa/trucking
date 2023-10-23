@@ -249,6 +249,12 @@
             formatter: currencyFormat,
           },
           {
+            label: 'GAJI SUPIR',
+            name: 'gajisupir',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
             label: 'KOMISI SUPIR',
             name: 'komisisupir',
             align: 'right',
@@ -539,6 +545,7 @@
               uangmakanharian: data.attributes.totalMakan,
               komisisupir: data.attributes.totalKomisiSupir,
               gajikenek: data.attributes.totalGajiKenek,
+              gajisupir: data.attributes.totalGajiSupir,
               biayaextra: data.attributes.totalBiayaExtra,
             }, true)
           }

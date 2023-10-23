@@ -1,7 +1,7 @@
 @push('scripts')
 <script>
   function loadDetailGrid() {
-    let sortnameDetail = 'nobukti'
+    let sortnameDetail = 'gajisupir_nobukti'
     let sortorderDetail = 'asc'
     let totalRecordDetail
     let limitDetail
@@ -212,15 +212,6 @@
           clearGlobalSearch($('#detail'))
         },
       })
-
-      .jqGrid("navGrid", pager, {
-        search: false,
-        refresh: false,
-        add: false,
-        edit: false,
-        del: false,
-      })
-
       .customPager()
 
     /* Append clear filter button */
@@ -237,7 +228,8 @@
       url: `${apiUrl}prosesgajisupirdetail`,
       datatype: "json",
       postData: {
-        prosesgajisupir_id: id
+        prosesgajisupir_id: id,
+        proses: 'reload'
       },
       page: 1
     }).trigger('reloadGrid')
