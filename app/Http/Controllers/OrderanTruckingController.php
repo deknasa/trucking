@@ -199,7 +199,7 @@ class OrderanTruckingController extends MyController
                 'index' => 'container_id',
             ],
             [
-                'label' => 'AGEN',
+                'label' => 'CUSTOMER',
                 'index' => 'agen_id',
             ],
             [
