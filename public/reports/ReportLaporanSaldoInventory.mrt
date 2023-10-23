@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "d4e731d48e9f5f7fe834cd88df072860",
+  "ReportGuid": "c249d6f7e7e78e40f0311653f6e3c86f",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanSaldoInventory.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1697867496000+0700)/",
+  "ReportChanged": "/Date(1698024617000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -623,19 +623,19 @@
               "Ident": "StiText",
               "Name": "Text7",
               "Guid": "7b3109dfb0700c2c66b96f4ed648f6b2",
-              "ClientRectangle": "4,40,28,6",
+              "ClientRectangle": "4,40,30,6",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{data.lokasi}"
+                "Value": "Gudang"
               },
               "Font": ";9;Bold;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
-              "Type": "DataColumn"
+              "Type": "Expression"
             },
             "11": {
               "Ident": "StiText",
