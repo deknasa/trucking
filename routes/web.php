@@ -233,6 +233,7 @@ use App\Http\Controllers\AkuntansiController;
 use App\Http\Controllers\ApprovalBukaTanggalSuratPengantarController;
 use App\Http\Controllers\ExpAsuransiController;
 use App\Http\Controllers\ExportLaporanMingguanSupirController;
+use App\Http\Controllers\ExportRicController;
 use App\Http\Controllers\ExpSimController;
 use App\Http\Controllers\ExpStnkController;
 use App\Http\Controllers\HutangExtraDetailController;
@@ -1566,6 +1567,10 @@ Route::middleware(['auth', 'authorized'])->group(function () {
     Route::get('pelunasanhutangheader/export', [PelunasanHutangHeaderController::class, 'export'])->name('pelunasanhutangheader.export');
     Route::get('pelunasanhutangheader/report', [PelunasanHutangHeaderController::class, 'report'])->name('pelunasanhutangheader.report');
     Route::resource('pelunasanhutangheader', PelunasanHutangHeaderController::class);
+
+    Route::get('exportric/export', [ExportRicController::class, 'export'])->name('exportric.export');
+    Route::get('exportric/index', [ExportRicController::class, 'index']);
+    Route::resource('exportric', ExportRicController::class);
 });
 
 Route::patch('format', [FormatController::class, 'update']);

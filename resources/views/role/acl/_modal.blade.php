@@ -63,12 +63,18 @@
     let form = $('#userAclForm')
 
     $('#processingLoader').removeClass('d-none')
+    let dataAcos = {
+      'aco_ids': selectedRows,
+    };
+
+    let jsonData = JSON.stringify(dataAcos);
+
     $.ajax({
       url: `${apiUrl}role/${roleId}/acl`,
       method: 'POST',
       dataType: 'JSON',
       data: {
-        aco_ids: selectedRows
+        aco_ids: jsonData
       },
       headers: {
         Authorization: `Bearer ${accessToken}`
