@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "4f56e124517cfa04082aea1112d1910d",
+  "ReportGuid": "4d2af1ceb0174f37ed638ebdccb7ae9c",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanNeraca.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1697602824000+0700)/",
+  "ReportChanged": "/Date(1698043331000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -120,9 +120,21 @@
             "Type": "System.String"
           },
           "15": {
-            "Name": "judul",
-            "NameInSource": "judul",
-            "Alias": "judul",
+            "Name": "coabanding",
+            "NameInSource": "coabanding",
+            "Alias": "coabanding",
+            "Type": "System.String"
+          },
+          "16": {
+            "Name": "nominalbanding",
+            "NameInSource": "nominalbanding",
+            "Alias": "nominalbanding",
+            "Type": "System.String"
+          },
+          "17": {
+            "Name": "selisih",
+            "NameInSource": "selisih",
+            "Alias": "selisih",
             "Type": "System.String"
           }
         },
@@ -848,6 +860,9 @@
               },
               "Interaction": {
                 "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "X"
               },
               "HorAlignment": "Right",
               "Font": ";10;Bold;",
