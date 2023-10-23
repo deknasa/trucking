@@ -20,7 +20,7 @@
             label: 'NO RINCIAN',
             name: 'gajisupir_nobukti',
             formatter: (value, options, rowData) => {
-              if ((value == null) ||( value == '')) {
+              if ((value == null) || (value == '')) {
                 return '';
               }
               let tgldari = rowData.tgldariheadergajisupirheaderheader
@@ -28,8 +28,8 @@
               let url = "{{route('gajisupirheader.index')}}"
               let formattedValue = $(`<a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>`)
               return formattedValue[0].outerHTML
-          },
-          
+            },
+
           },
           {
             label: 'NO BK',
@@ -39,6 +39,31 @@
             label: 'SUPIR',
             name: 'supir_id',
           },
+          {
+            label: 'Gaji Supir',
+            name: 'gajisupir',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
+            label: 'Biaya Extra',
+            name: 'biayaextra',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
+            label: 'Komisi Supir',
+            name: 'komisisupir',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
+            label: 'Komisi Kenek',
+            name: 'gajikenek',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+
           {
             label: 'TOTAL',
             name: 'total',
@@ -88,30 +113,8 @@
             align: 'right',
             formatter: currencyFormat,
           },
-          {
-            label: 'Komisi Supir',
-            name: 'komisisupir',
-            align: 'right',
-            formatter: currencyFormat,
-          },
-          {
-            label: 'Gaji Supir',
-            name: 'gajisupir',
-            align: 'right',
-            formatter: currencyFormat,
-          },
-          {
-            label: 'Komisi Kenek',
-            name: 'gajikenek',
-            align: 'right',
-            formatter: currencyFormat,
-          },
-          {
-            label: 'Biaya Extra',
-            name: 'biayaextra',
-            align: 'right',
-            formatter: currencyFormat,
-          },
+
+
           {
             label: 'TOL',
             name: 'tolsupir',

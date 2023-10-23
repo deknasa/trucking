@@ -266,12 +266,12 @@
             align: 'right',
             formatter: currencyFormat,
           },
-          {
-            label: 'BIAYA EXTRA',
-            name: 'biayaextra',
-            align: 'right',
-            formatter: currencyFormat,
-          },
+          // {
+          //   label: 'BIAYA EXTRA',
+          //   name: 'biayaextra',
+          //   align: 'right',
+          //   formatter: currencyFormat,
+          // },
           {
             label: 'U. JALAN',
             name: 'uangjalan',
