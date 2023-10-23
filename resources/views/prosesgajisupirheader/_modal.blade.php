@@ -854,12 +854,6 @@
                         name: 'extra',
                         formatter: currencyFormat,
                         align: "right",
-                    },                    
-                    {
-                        label: 'KOMISI KENEK',
-                        name: 'gajikenek',
-                        formatter: currencyFormat,
-                        align: "right",
                     },
                     {
                         label: 'KOMISI SUPIR',
@@ -867,7 +861,14 @@
                         formatter: currencyFormat,
                         align: "right",
                     },
-                   
+                    {
+                        label: 'KOMISI KENEK',
+                        name: 'gajikenek',
+                        formatter: currencyFormat,
+                        align: "right",
+                    },
+
+
                     {
                         label: 'TOL',
                         name: 'tolsupir',
