@@ -108,7 +108,7 @@ class AuthController extends Controller
             ])->withOptions(['verify' => false])
                 ->post(config('app.api_url') . 'token', $credentials);
 
-            $tokenUrlTas ='';
+            $tokenUrlTas = '';
             if ($parametercabang->text == "PUSAT") {
                 $credentialsAdmin = [
                     'user' => 'admin',
@@ -143,14 +143,14 @@ class AuthController extends Controller
                     'Content-Type' => 'application/json',
                     'Accept' => 'application/json'
                 ])->post('http://tasbtg.kozow.com:8074/trucking-api/public/api/token', $credentialsAdmin);
-            }else{
+            } else {
                 $linkUrl =  DB::table('parameter')->where('grp', 'LINK URL')->where('subgrp', 'LINK URL')->first();
-                $linkUrlTas = strtolower($linkUrl->text);//http://tasjkt.kozow.com:8074/trucking-api/public/api/
+                $linkUrlTas = strtolower($linkUrl->text); //http://tasjkt.kozow.com:8074/trucking-api/public/api/
                 if ($linkUrlTas != '') {
-                     $tokenUrlTas = Http::withHeaders([
+                    $tokenUrlTas = Http::withHeaders([
                         'Content-Type' => 'application/json',
                         'Accept' => 'application/json'
-                    ])->post($linkUrlTas.'token', [
+                    ])->post($linkUrlTas . 'token', [
                         'user' => 'ADMIN',
                         'password' => getenv('PASSWORD_TNL'),
                         'ipclient' => '',
@@ -163,12 +163,19 @@ class AuthController extends Controller
                 }
             }
 
-            $credentials['user'] = 'ADMIN';
-            $credentials['password'] = config('app.password_tnl');
-            $tokenTNL = Http::withHeaders([
-                'Accept' => 'application/json'
-            ])->withOptions(['verify' => false])
-                ->post(config('app.trucking_api_tnl') . 'token', $credentials);
+            $isPostingTNL = DB::table('parameter')->where('grp', 'STATUS POSTING TNL')->where('text', 'POSTING TNL')->first();
+            $tokenTNL = '';
+            if ($isPostingTNL->default == 'YA') {
+
+                $credentials['user'] = 'ADMIN';
+                $credentials['password'] = config('app.password_tnl');
+                $getTokenTNL = Http::withHeaders([
+                    'Accept' => 'application/json'
+                ])->withOptions(['verify' => false])
+                    ->post(config('app.trucking_api_tnl') . 'token', $credentials);
+
+                $tokenTNL = $getTokenTNL['access_token'];
+            }
             $tokenEmkl = Http::withHeaders([
                 'Accept' => 'application/json'
             ])->withOptions(['verify' => false])
@@ -177,7 +184,7 @@ class AuthController extends Controller
             // dd($tokenEmkl->getBody()->getContents());
 
             session(['access_token' => $token['access_token']]);
-            session(['access_token_tnl' => $tokenTNL['access_token']]);
+            session(['access_token_tnl' => $tokenTNL]);
 
             session(['info' => $token['info']]);
             session(['link_url' => strtolower($linkUrl->text)]);
@@ -192,7 +199,7 @@ class AuthController extends Controller
                 session(['access_token_mks' => $tokenMakassar['access_token']]);
                 session(['access_token_sby' => $tokenSurabaya['access_token']]);
                 session(['access_token_btg' => $tokenBitung['access_token']]);
-            }else{
+            } else {
                 if ($linkUrlTas != '') {
                     session(['access_token_url_tas' => $tokenUrlTas['access_token']]);
                 }
@@ -207,9 +214,10 @@ class AuthController extends Controller
     }
 
     // Mendapatkan jenis web browser pengunjung
-    private function get_client_browser() {
+    private function get_client_browser()
+    {
         $browser = '';
-        if(strpos($_SERVER['HTTP_USER_AGENT'], 'Netscape'))
+        if (strpos($_SERVER['HTTP_USER_AGENT'], 'Netscape'))
             $browser = 'Netscape';
         else if (strpos($_SERVER['HTTP_USER_AGENT'], 'Firefox'))
             $browser = 'Firefox';

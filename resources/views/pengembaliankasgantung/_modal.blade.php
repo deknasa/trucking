@@ -642,7 +642,6 @@
       );
       $("#tablePengembalian").jqGrid("setCell", value, "nominal", 0);
       $(`#tablePengembalian tr#${value}`).find(`td[aria-describedby="tablePinjaman_nominal"]`).attr("value", 0)
-      $("#tablePengembalian").jqGrid("setCell", value, "keterangandetail", null);
       $("#tablePengembalian").jqGrid("setCell", value, "coadetail", null);
     })
 
@@ -808,7 +807,7 @@
           {
             label: "KETERANGAN",
             name: "keterangandetail",
-            width: '300px',
+            width: '400px',
             sortable: false,
             editable: true,
             editoptions: {
@@ -1067,7 +1066,6 @@
         );
         $("#tablePengembalian").jqGrid("setCell", rowId, "nominal", 0);
         $(`#tablePengembalian tr#${rowId}`).find(`td[aria-describedby="tablePinjaman_nominal"]`).attr("value", 0)
-        $("#tablePengembalian").jqGrid("setCell", rowId, "keterangandetail", null);
         $("#tablePengembalian").jqGrid("setCell", rowId, "coadetail", null);
         setTotalNominal()
         setTotalSisa()
