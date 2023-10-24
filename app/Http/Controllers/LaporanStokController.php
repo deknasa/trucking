@@ -185,12 +185,12 @@ class LaporanStokController extends Controller
                     }
                     if ($data_column['index'] == 'nominalsaldo') {
                         if ($response_detail['baris'] != 1) {
-                            $value = '=(K' . ($detail_start_row - 1) . '+F' . $detail_start_row . ')-H' . $detail_start_row;
+                            $value = '=(F' . ($detail_start_row ) . '-H' . $detail_start_row . ')';
                         } 
                     }
                     if ($data_column['index'] == 'qtysaldo') {
                         if ($response_detail['baris'] != 1) {
-                            $value = '=(E' . ($detail_start_row ) . '-G' . $detail_start_row . ')';
+                            $value = '=(J' . ($detail_start_row - 1) . '+E' . $detail_start_row . ')-G' . $detail_start_row;
                         }
                     }
                     
