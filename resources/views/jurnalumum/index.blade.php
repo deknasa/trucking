@@ -35,7 +35,7 @@
   let rowNum = 10
   let hasDetail = false
   let selectedRows = [];
-
+  reloadGrid()
   function checkboxHandler(element) {
     let value = $(element).val();
     if (element.checked) {
@@ -425,7 +425,7 @@
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
                     showDialog('Harap pilih salah satu record')
                   } else {
-                    window.open(`{{ route('jurnalumumheader.report') }}?id=${selectedId}&printer=reportPrinterBesar`)
+                    cekApproval(selectedId, 'PRINTER BESAR')
                   }
                   clearSelectedRows()
                   $('#gs_').prop('checked', false)
@@ -439,7 +439,7 @@
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
                     showDialog('Harap pilih salah satu record')
                   } else {
-                    window.open(`{{ route('jurnalumumheader.report') }}?id=${selectedId}&printer=reportPrinterKecil`)
+                    cekApproval(selectedId, 'PRINTER KECIL')
                   }
                   clearSelectedRows()
                   $('#gs_').prop('checked', false)

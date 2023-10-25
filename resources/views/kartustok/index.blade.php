@@ -49,6 +49,15 @@
                                 <input type="text" name="kelompok" class="form-control kelompok-lookup">
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-12 col-sm-2 col-form-label mt-2">
+                                <label class="">STATUS TAMPIL<span class="text-danger">*</span></label>
+                            </div>
+                            <div class="col-sm-4 mt-2">
+                                <select name="statustampil" id="statustampil" class="form-select select2bs4" style="width: 100%;">
+                                </select>
+                            </div>
+                        </div>
 
 
                         <div class="row">
@@ -126,38 +135,40 @@
     $(document).ready(function() {
 
         initSelect2($('#crudForm').find('[name=filter]'), false)
+        initSelect2($('#crudForm').find('[name=statustampil]'), false)
         initLookup()
         setFilterOptions($('#crudForm'))
+        setStatusTampilOptions($('#crudForm'))
         initDatepicker()
 
 
         showDefault($('#crudForm'))
             .then(response => {
-                console.log(response);
-                $.each(response.data.stokdari, (index, value) => {
-                    let element = form.find(`[name="${index}"]`);
-                    element.val(value);
-                });
-                $.each(response.data.stoksampai, (index, value) => {
-                    let element = form.find(`[name="${index}"]`);
-                    element.val(value);
-                });
-                $.each(response.data.gudang, (index, value) => {
-                    let element = form.find(`[name="${index}"]`);
-                    element.val(value);
-                });
-                $.each(response.data.filter, (index, value) => {
-                    let element = form.find(`[name="${index}"]`);
-                    element.val(value).trigger('change');
-                });
-                $.each(response.data.trado, (index, value) => {
-                    let element = form.find(`[name="${index}"]`);
-                    element.val(value);
-                });
-                $.each(response.data.gandengan, (index, value) => {
-                    let element = form.find(`[name="${index}"]`);
-                    element.val(value);
-                });
+                // console.log(response);
+                // $.each(response.data.stokdari, (index, value) => {
+                //     let element = form.find(`[name="${index}"]`);
+                //     element.val(value);
+                // });
+                // $.each(response.data.stoksampai, (index, value) => {
+                //     let element = form.find(`[name="${index}"]`);
+                //     element.val(value);
+                // });
+                // $.each(response.data.gudang, (index, value) => {
+                //     let element = form.find(`[name="${index}"]`);
+                //     element.val(value);
+                // });
+                // $.each(response.data.filter, (index, value) => {
+                //     let element = form.find(`[name="${index}"]`);
+                //     element.val(value).trigger('change');
+                // });
+                // $.each(response.data.trado, (index, value) => {
+                //     let element = form.find(`[name="${index}"]`);
+                //     element.val(value);
+                // });
+                // $.each(response.data.gandengan, (index, value) => {
+                //     let element = form.find(`[name="${index}"]`);
+                //     element.val(value);
+                // });
                 let filter = $('#crudForm').find('[name=filter]').val()
                 let dataFilter = ''
                 if (filter == '186') {
@@ -189,6 +200,8 @@
                         trado: $('#crudForm').find('[name=trado]').val(),
                         trado_id: $('#crudForm').find('[name=trado_id]').val(),
                         proses: 'reload',
+                        kelompok_id: $('#crudForm').find('[name=kelompok_id]').val(),
+                        statustampil: $('#crudForm').find('[name=statustampil]').val(),
                         datafilter: dataFilter,
 
                     },
@@ -222,6 +235,7 @@
             let kelompok_id = $('#crudForm').find('[name=kelompok_id]').val()
             let dari = $('#crudForm').find('[name=dari]').val()
             let sampai = $('#crudForm').find('[name=sampai]').val()
+            let statustampil = $('#crudForm').find('[name=statustampil]').val()
             let filter = $('#crudForm').find('[name=filter]').val()
             let dataFilter = ''
             if (filter == '186') {
@@ -241,6 +255,7 @@
                         stokdari_id: stokdari_id,
                         stoksampai_id: stoksampai_id,
                         kelompok_id: kelompok_id,
+                        statustampil: statustampil,
                         dari: dari,
                         sampai: sampai,
                         filter: filter,
@@ -485,6 +500,7 @@
                         let kelompok_id = $('#crudForm').find('[name=kelompok_id]').val()
                         let dari = $('#crudForm').find('[name=dari]').val()
                         let sampai = $('#crudForm').find('[name=sampai]').val()
+                        let statustampil = $('#crudForm').find('[name=statustampil]').val()
                         let filter = $('#crudForm').find('[name=filter]').val()
                         let proses = 'reload'
                         let dataFilter = ''
@@ -501,7 +517,7 @@
                         if (dari != '' && sampai != '' && filter != '') {
 
                             window.open(
-                                `{{ route('kartustok.export') }}?dari=${dari}&sampai=${sampai}&stokdari_id=${stokdari_id}&stoksampai_id=${stoksampai_id}&kelompok_id=${kelompok_id}&filter=${filter}&datafilter=${dataFilter}&proses=${proses}`
+                                `{{ route('kartustok.export') }}?dari=${dari}&sampai=${sampai}&stokdari_id=${stokdari_id}&stoksampai_id=${stoksampai_id}&kelompok_id=${kelompok_id}&statustampil=${statustampil}&filter=${filter}&datafilter=${dataFilter}&proses=${proses}`
                             )
                         } else {
                             showDialog('ISI SELURUH KOLOM')
@@ -517,6 +533,7 @@
                         let kelompok_id = $('#crudForm').find('[name=kelompok_id]').val()
                         let dari = $('#crudForm').find('[name=dari]').val()
                         let sampai = $('#crudForm').find('[name=sampai]').val()
+                        let statustampil = $('#crudForm').find('[name=statustampil]').val()
                         let filter = $('#crudForm').find('[name=filter]').val()
                         let dataFilter = ''
                         let proses = 'reload'
@@ -533,7 +550,7 @@
                         if (dari != '' && sampai != '' && filter != '') {
 
                             window.open(
-                                `{{ route('kartustok.report') }}?dari=${dari}&sampai=${sampai}&stokdari_id=${stokdari_id}&stoksampai_id=${stoksampai_id}&kelompok_id=${kelompok_id}&filter=${filter}&datafilter=${dataFilter}&proses=${proses}`
+                                `{{ route('kartustok.report') }}?dari=${dari}&sampai=${sampai}&stokdari_id=${stokdari_id}&stoksampai_id=${stoksampai_id}&kelompok_id=${kelompok_id}&statustampil=${statustampil}&filter=${filter}&datafilter=${dataFilter}&proses=${proses}`
                             )
                         } else {
                             showDialog('ISI SELURUH KOLOM')
@@ -558,7 +575,7 @@
             }
         }
 
-        showDefault($('#crudForm'))
+        // showDefault($('#crudForm'))
     })
 
     function showDefault(form) {
@@ -571,6 +588,14 @@
                     Authorization: `Bearer ${accessToken}`
                 },
                 success: response => {
+                    $.each(response.data, (index, value) => {
+                        let element = form.find(`[name="${index}"]`)
+                        if (element.is('select')) {
+                            element.val(value).trigger('change')
+                        } else {
+                            element.val(value)
+                        }
+                    })
                     resolve(response);
                 },
                 error: error => {
@@ -750,6 +775,42 @@
                     response.data.forEach(stokPersediaan => {
                         let option = new Option(stokPersediaan.text, stokPersediaan.id)
                         relatedForm.find('[name=filter]').append(option).trigger(
+                            'change')
+                    });
+
+                }
+            })
+        })
+    }
+    const setStatusTampilOptions = function(relatedForm) {
+        return new Promise((resolve, reject) => {
+            relatedForm.find('[name=statustampil]').empty()
+            relatedForm.find('[name=statustampil]').append(
+                new Option('-- SEMUA --', '0', false, true)
+            ).trigger('change')
+
+            let data = [];
+            data.push({
+                name: 'grp',
+                value: 'STATUS TAMPILAN KARTU STOK'
+            })
+            data.push({
+                name: 'subgrp',
+                value: 'STATUS TAMPILAN KARTU STOK'
+            })
+            $.ajax({
+                url: `${apiUrl}parameter/combo`,
+                method: 'GET',
+                dataType: 'JSON',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                data: data,
+                success: response => {
+
+                    response.data.forEach(statusTampil => {
+                        let option = new Option(statusTampil.text, statusTampil.id)
+                        relatedForm.find('[name=statustampil]').append(option).trigger(
                             'change')
                     });
 

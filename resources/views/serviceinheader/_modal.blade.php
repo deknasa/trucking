@@ -142,13 +142,13 @@
                 },
                 error: error => {
                     if (error.status === 422) {
-                    $('.is-invalid').removeClass('is-invalid')
-                    $('.invalid-feedback').remove()
-        
-                    setErrorMessages(form, error.responseJSON.errors);
-                  } else {
-                    showDialog(error.responseJSON)
-                  }
+                        $('.is-invalid').removeClass('is-invalid')
+                        $('.invalid-feedback').remove()
+
+                        setErrorMessages(form, error.responseJSON.errors);
+                    } else {
+                        showDialog(error.responseJSON)
+                    }
                 },
             }).always(() => {
                 $('#processingLoader').addClass('d-none')
@@ -281,11 +281,11 @@
 
         activeGrid = null
 
-        form.find('#btnSubmit').prop('disabled',false)
+        form.find('#btnSubmit').prop('disabled', false)
         if (form.data('action') == "view") {
-          form.find('#btnSubmit').prop('disabled',true)
+            form.find('#btnSubmit').prop('disabled', true)
         }
-        
+
         getMaxLength(form)
         initLookup()
         initDatepicker()
@@ -338,7 +338,7 @@
                 showServicein(form, id)
             ])
             .then(() => {
-                $('#crudModal').modal('show') 
+                $('#crudModal').modal('show')
                 if (isEditTgl == 'TIDAK') {
                     form.find(`[name="tglbukti"]`).prop('readonly', true)
                     form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
@@ -383,6 +383,7 @@
             })
 
     }
+
     function viewServicein(id) {
         let form = $('#crudForm')
 
@@ -394,7 +395,7 @@
           <i class="fa fa-save"></i>
           Save
         `)
-        form.find('#btnSubmit').prop('disabled',true)
+        form.find('#btnSubmit').prop('disabled', true)
         form.find(`.sometimes`).hide()
         $('#crudModalTitle').text('View Service in')
         $('.is-invalid').removeClass('is-invalid')
@@ -407,12 +408,12 @@
             .then(id => {
                 setFormBindKeys(form)
                 form.find('[name]').removeAttr('disabled')
-    
+
                 form.find('select').each((index, select) => {
                     let element = $(select)
-      
+
                     if (element.data('select2')) {
-                      element.select2('destroy')
+                        element.select2('destroy')
                     }
                 })
                 form.find('[name]').attr('disabled', 'disabled').css({
@@ -599,6 +600,11 @@
                     if (kodestatus == '1') {
                         showDialog(response.message['keterangan'])
                     } else {
+                        if (Aksi == 'PRINTER BESAR') {
+                            window.open(`{{ route('serviceinheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
+                        } else if (Aksi == 'PRINTER KECIL') {
+                            window.open(`{{ route('serviceinheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
+                        }
                         if (Aksi == 'EDIT') {
                             editServicein(Id)
                         }
@@ -618,7 +624,7 @@
         let countRow = $('.delete-row').parents('tr').length
         row.remove()
         if (countRow <= 1) {
-          addRow()
+            addRow()
         }
 
 

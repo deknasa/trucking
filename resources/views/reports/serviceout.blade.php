@@ -88,6 +88,7 @@
             Authorization: `Bearer {{ session('access_token') }}`
           },
           success: response => {
+            window.opener.reloadGrid();
             window.close();
           }
         })

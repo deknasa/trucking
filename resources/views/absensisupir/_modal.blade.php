@@ -947,19 +947,16 @@
   }
 
   function cekValidasi(Id, Aksi) {
-    let url
-    if (Aksi == 'EDIT') {
-      url = `{{ config('app.api_url') }}absensisupirheader/${Id}/cekvalidasi`;
-    }
-    if (Aksi == 'DELETE') {
-      url = `{{ config('app.api_url') }}absensisupirheader/${Id}/cekvalidasi`;
-    }
+   
     $.ajax({
-      url: url,
+      url: `{{ config('app.api_url') }}absensisupirheader/${Id}/cekvalidasi`,
       method: 'POST',
       dataType: 'JSON',
       beforeSend: request => {
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+      },
+      data: {
+        aksi: Aksi
       },
       success: response => {
         var kodenobukti = response.kodenobukti
@@ -968,6 +965,11 @@
           if (kodestatus == '1') {
             showDialog(response.message['keterangan'])
           } else {
+            if(Aksi == 'PRINTER BESAR'){
+              window.open(`{{ route('absensisupirheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
+            } else if(Aksi == 'PRINTER KECIL'){
+              window.open(`{{ route('absensisupirheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
+            } 
             if (Aksi == 'EDIT') {
               editAbsensiSupir(Id)
             }

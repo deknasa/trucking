@@ -143,13 +143,13 @@
                 },
                 error: error => {
                     if (error.status === 422) {
-                    $('.is-invalid').removeClass('is-invalid')
-                    $('.invalid-feedback').remove()
-        
-                    setErrorMessages(form, error.responseJSON.errors);
-                  } else {
-                    showDialog(error.responseJSON)
-                  }
+                        $('.is-invalid').removeClass('is-invalid')
+                        $('.invalid-feedback').remove()
+
+                        setErrorMessages(form, error.responseJSON.errors);
+                    } else {
+                        showDialog(error.responseJSON)
+                    }
                 },
             }).always(() => {
                 $('#processingLoader').addClass('d-none')
@@ -287,9 +287,9 @@
         initLookup()
         initDatepicker()
 
-        form.find('#btnSubmit').prop('disabled',false)
+        form.find('#btnSubmit').prop('disabled', false)
         if (form.data('action') == "view") {
-          form.find('#btnSubmit').prop('disabled',true)
+            form.find('#btnSubmit').prop('disabled', true)
         }
     })
 
@@ -389,6 +389,7 @@
             })
 
     }
+
     function viewServiceOut(id) {
         let form = $('#crudForm')
 
@@ -400,7 +401,7 @@
           <i class="fa fa-save"></i>
           Save
         `)
-        form.find('#btnSubmit').prop('disabled',true)
+        form.find('#btnSubmit').prop('disabled', true)
         form.find(`.sometimes`).hide()
         $('#crudModalTitle').text('View Service Out')
         $('.is-invalid').removeClass('is-invalid')
@@ -413,12 +414,12 @@
             .then(id => {
                 setFormBindKeys(form)
                 form.find('[name]').removeAttr('disabled')
-    
+
                 form.find('select').each((index, select) => {
                     let element = $(select)
-      
+
                     if (element.data('select2')) {
-                      element.select2('destroy')
+                        element.select2('destroy')
                     }
                 })
                 form.find('[name]').attr('disabled', 'disabled').css({
@@ -568,7 +569,7 @@
         let countRow = $('.delete-row').parents('tr').length
         row.remove()
         if (countRow <= 1) {
-          addRow()
+            addRow()
         }
 
 
@@ -598,6 +599,11 @@
                     if (kodestatus == '1') {
                         showDialog(response.message['keterangan'])
                     } else {
+                        if (Aksi == 'PRINTER BESAR') {
+                            window.open(`{{ route('serviceoutheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
+                        } else if (Aksi == 'PRINTER KECIL') {
+                            window.open(`{{ route('serviceoutheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
+                        }
                         if (Aksi == 'EDIT') {
                             editServiceOut(Id)
                         }
