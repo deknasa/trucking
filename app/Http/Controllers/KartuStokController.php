@@ -36,6 +36,8 @@ class KartuStokController extends MyController
             'sampai' => $request->sampai,
             'filter' => $request->filter,
             'datafilter' => $request->datafilter,
+            'statustampil' => $request->statustampil,
+            'kelompok_id' => $request->kelompok_id,
             'limit'=>0
         ];
 
@@ -67,6 +69,8 @@ class KartuStokController extends MyController
             'sampai' => $request->sampai,
             'filter' => $request->filter,
             'datafilter' => $request->datafilter,
+            'statustampil' => $request->statustampil,
+            'kelompok_id' => $request->kelompok_id,
             'limit'=>0
         ];
 
