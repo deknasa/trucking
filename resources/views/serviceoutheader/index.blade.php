@@ -36,7 +36,7 @@
   let autoNumericElements = []
   let tgldariheader
   let tglsampaiheader
-
+  reloadGrid()
   $(document).ready(function() {
     @isset($request['tgldari'])
       tgldariheader = `{{ $request['tgldari'] }}`;
@@ -298,7 +298,7 @@
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
                     showDialog('Harap pilih salah satu record')
                   } else {
-                    window.open(`{{ route('serviceoutheader.report') }}?id=${selectedId}&printer=reportPrinterBesar`)
+                    cekValidasi(selectedId, 'PRINTER BESAR')
                   }
                 }
               },
@@ -310,7 +310,7 @@
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
                     showDialog('Harap pilih salah satu record')
                   } else {
-                    window.open(`{{ route('serviceoutheader.report') }}?id=${selectedId}&printer=reportPrinterKecil`)
+                    cekValidasi(selectedId, 'PRINTER KECIL')
                   }
                 }
               },

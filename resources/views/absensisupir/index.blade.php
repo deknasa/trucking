@@ -65,7 +65,7 @@
   let showKasgantung = true;
   let tgldariheader
   let tglsampaiheader
-
+  reloadGrid()
   $(document).ready(function() {
 
     $("#tabs").tabs()
@@ -361,7 +361,7 @@
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
                     showDialog('Harap pilih salah satu record')
                   } else {
-                    window.open(`{{ route('absensisupirheader.report') }}?id=${selectedId}&printer=reportPrinterBesar`)
+                    cekValidasi(selectedId, 'PRINTER BESAR')
                   }
                 }
               },
@@ -373,7 +373,7 @@
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
                     showDialog('Harap pilih salah satu record')
                   } else {
-                    window.open(`{{ route('absensisupirheader.report') }}?id=${selectedId}&printer=reportPrinterKecil`)
+                    cekValidasi(selectedId, 'PRINTER KECIL')
                   }
                 }
               },
@@ -409,6 +409,21 @@
                   if (`{{ $myAuth->hasPermission('suratpengantar', 'approvalEditAbsensi') }}`) {
                     selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                     approveEdit(selectedId)
+                  }
+                }
+              },
+              {
+                id: 'approval-buka-cetak',
+                text: "un/Approval Buka Cetak Absensi",
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('approvalbukacetak', 'store') }}`) {
+                    let tglbukacetak = $('#tgldariheader').val().split('-');
+                    tglbukacetak =tglbukacetak[1] + '-' + tglbukacetak[2];
+                    if (selectedRows.length < 1) {
+                      showDialog('Harap pilih salah satu record')
+                    }else{
+                      approvalBukaCetak(tglbukacetak,'ABSENSISUPIRHEADER',selectedRows);
+                    }
                   }
                 }
               },
