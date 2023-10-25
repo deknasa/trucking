@@ -15,11 +15,30 @@ class PengeluaranStokHeaderController extends MyController
     public function index(Request $request)
     {
         $title = $this->title;
+        $data = [
+            'combocetak' => $this->comboList('list', 'STATUSCETAK', 'STATUSCETAK')
+        ];
         $comboKodepengeluaran = $this->comboKodepengeluaran();
-        $data = array_merge(compact('title','comboKodepengeluaran'),
+        $data = array_merge(compact('title','comboKodepengeluaran','data'),
             ["request"=>$request->all()]
         );
         return view('pengeluaranstokheader.index', $data);
+    }
+    public function comboList($aksi, $grp, $subgrp)
+    {
+
+        $status = [
+            'status' => $aksi,
+            'grp' => $grp,
+            'subgrp' => $subgrp,
+        ];
+
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'parameter/combolist', $status);
+
+        return $response['data'];
     }
 
     public function create()

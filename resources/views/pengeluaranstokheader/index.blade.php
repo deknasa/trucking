@@ -89,7 +89,7 @@
   let activeGrid;
   let tgldariheader
   let tglsampaiheader
-
+  reloadGrid()
   $(document).ready(function() {
     $("#tabs").tabs()
 
@@ -133,6 +133,54 @@
             width: '50px',
             search: false,
             hidden: true
+          },
+          {
+            label: 'STATUS CETAK',
+            name: 'statuscetak',
+            align: 'left',
+            stype: 'select',
+            searchoptions: {
+
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['combocetak'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['combocetak'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+              `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              let statusCetak = JSON.parse(value)
+              if (!statusCetak) {
+                return ''
+              }
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusCetak.WARNA}; color: #fff;">
+                  <span>${statusCetak.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusCetak = JSON.parse(rowObject.statuscetak)
+              if (!statusCetak) {
+                return ` title=" "`
+              }
+              return ` title="${statusCetak.MEMO}"`
+            }
           },
           {
             label: 'NO BUKTI',
@@ -475,71 +523,6 @@
       })
 
       .customPager({
-
-        extndBtn: [{
-            id: 'report',
-            title: 'Report',
-            caption: 'Report',
-            innerHTML: '<i class="fa fa-print"></i> REPORT',
-            class: 'btn btn-info btn-sm mr-1 dropdown-toggle',
-            dropmenuHTML: [{
-                id: 'reportPrinterBesar',
-                text: "Printer Lain(Faktur)",
-                onClick: () => {
-                  selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                  if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                    showDialog(pleaseSelectARow)
-                  } else {
-                    window.open(`{{ route('pengeluaranstokheader.report') }}?id=${selectedId}&printer=reportPrinterBesar`)
-                  }
-                  clearSelectedRows()
-                  $('#gs_').prop('checked', false)
-                }
-              },
-              {
-                id: 'reportPrinterKecil',
-                text: "Printer Epson Seri LX (Faktur)",
-                onClick: () => {
-                  selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                  if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                    showDialog(pleaseSelectARow)
-                  } else {
-                    window.open(`{{ route('pengeluaranstokheader.report') }}?id=${selectedId}&printer=reportPrinterKecil`)
-                  }
-                  clearSelectedRows()
-                  $('#gs_').prop('checked', false)
-                }
-              },
-
-            ],
-          },
-          {
-            id: 'export',
-            title: 'Export',
-            caption: 'Export',
-            innerHTML: '<i class="fas fa-file-export"></i> EXPORT',
-            class: 'btn btn-warning btn-sm mr-1',
-            onClick: () => {
-              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog(pleaseSelectARow)
-              } else {
-                window.open(`{{ route('pengeluaranstokheader.export') }}?id=${selectedId}`)
-              }
-            }
-          },
-          {
-            id: 'approvalEdit',
-            title: 'approval Edit',
-            caption: 'approval Edit',
-            innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-            class: 'btn btn-purple btn-sm mr-1',
-            onClick: () => {
-              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              approveEdit(selectedId)
-            }
-          }
-        ],
         buttons: [{
             id: 'add',
             innerHTML: '<i class="fa fa-plus"></i> ADD',
@@ -600,7 +583,7 @@
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
                     showDialog('Harap pilih salah satu record')
                   } else {
-                    window.open(`{{ route('pengeluaranstokheader.report') }}?id=${selectedId}&printer=reportPrinterBesar`)
+                    cekValidasi(selectedId, 'PRINTER BESAR')
                   }
                 }
               },
@@ -612,7 +595,7 @@
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
                     showDialog('Harap pilih salah satu record')
                   } else {
-                    window.open(`{{ route('pengeluaranstokheader.report') }}?id=${selectedId}&printer=reportPrinterKecil`)
+                    cekValidasi(selectedId, 'PRINTER KECIL')
                   }
                 }
               },

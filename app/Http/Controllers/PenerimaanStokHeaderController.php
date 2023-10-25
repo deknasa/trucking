@@ -16,12 +16,31 @@ class PenerimaanStokHeaderController extends MyController
     public function index(Request $request)
     {
         $title = $this->title;
+        $data = [
+            'combocetak' => $this->comboList('list', 'STATUSCETAK', 'STATUSCETAK')
+        ];
         $comboKodepenerimaan = $this->comboKodepenerimaan();
-        $data = array_merge(compact('title','comboKodepenerimaan'),
+        $data = array_merge(compact('title','comboKodepenerimaan','data'),
             ["request"=>$request->all()]
         );
 
         return view('penerimaanstokheader.index', $data);
+    }
+    public function comboList($aksi, $grp, $subgrp)
+    {
+
+        $status = [
+            'status' => $aksi,
+            'grp' => $grp,
+            'subgrp' => $subgrp,
+        ];
+
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'parameter/combolist', $status);
+
+        return $response['data'];
     }
 
     public function create()
