@@ -173,6 +173,7 @@
           },
           success: response => {
             // location.reload();
+            window.opener.reloadGrid();
             window.close();
 
           }

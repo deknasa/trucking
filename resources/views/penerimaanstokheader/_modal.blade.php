@@ -2474,6 +2474,9 @@
       beforeSend: request => {
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
+      data: {
+        aksi: Aksi
+      },
       success: response => {
         var kodenobukti = response.kodenobukti
         if (kodenobukti == '1') {
@@ -2481,6 +2484,11 @@
           if (kodestatus == '1') {
             showDialog(response.message['keterangan'])
           } else {
+            if(Aksi == 'PRINTER BESAR'){
+              window.open(`{{ route('penerimaanstokheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
+            } else if(Aksi == 'PRINTER KECIL'){
+              window.open(`{{ route('penerimaanstokheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
+            } 
             if (Aksi == 'EDIT') {
               editPenerimaanstokHeader(Id)
             }
