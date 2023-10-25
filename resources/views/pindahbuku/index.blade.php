@@ -35,7 +35,7 @@
   let sortorder = 'asc'
   let autoNumericElements = []
   let rowNum = 10
-
+  reloadGrid()
   $(document).ready(function() {
 
     setRange()
@@ -337,7 +337,7 @@
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
                     showDialog('Harap pilih salah satu record')
                   } else {
-                    window.open(`{{ route('pindahbuku.report') }}?id=${selectedId}&printer=reportPrinterBesar`)
+                    cekValidasi(selectedId, 'PRINTER BESAR')
                   }
                 }
               },
@@ -349,7 +349,7 @@
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
                     showDialog('Harap pilih salah satu record')
                   } else {
-                    window.open(`{{ route('pindahbuku.report') }}?id=${selectedId}&printer=reportPrinterKecil`)
+                    cekValidasi(selectedId, 'PRINTER KECIL')
                   }
                 }
               },
@@ -378,24 +378,22 @@
             caption: 'Approve',
             innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
             class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-            dropmenuHTML: [
-              {
-                id: 'approval-buka-cetak',
-                text: "un/Approval Buka Cetak PINDAH BUKU",
-                onClick: () => {
-                  if (`{{ $myAuth->hasPermission('approvalbukacetak', 'store') }}`) {
-                    let tglbukacetak = $('#tgldariheader').val().split('-');
-                    tglbukacetak =tglbukacetak[1] + '-' + tglbukacetak[2];
-                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                    if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                      showDialog('Harap pilih salah satu record')
-                    }else{
-                      approvalBukaCetak(tglbukacetak,'PINDAHBUKU',[selectedId]);
-                    }
+            dropmenuHTML: [{
+              id: 'approval-buka-cetak',
+              text: "un/Approval Buka Cetak PINDAH BUKU",
+              onClick: () => {
+                if (`{{ $myAuth->hasPermission('approvalbukacetak', 'store') }}`) {
+                  let tglbukacetak = $('#tgldariheader').val().split('-');
+                  tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
+                  selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                  if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                    showDialog('Harap pilih salah satu record')
+                  } else {
+                    approvalBukaCetak(tglbukacetak, 'PINDAHBUKU', [selectedId]);
                   }
                 }
-              },
-            ],
+              }
+            }, ],
           }
         ],
         buttons: [{
@@ -491,6 +489,29 @@
     }
 
   })
+
+  function cekValidasi(Id, Aksi) {
+    $.ajax({
+      url: `{{ config('app.api_url') }}pindahbuku/${Id}/cekvalidasi`,
+      method: 'POST',
+      dataType: 'JSON',
+      beforeSend: request => {
+        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+      },
+      success: response => {
+        var error = response.error
+        if (error) {
+          showDialog(response)
+        } else {
+          if (Aksi == 'PRINTER BESAR') {
+            window.open(`{{ route('pindahbuku.report') }}?id=${Id}&printer=reportPrinterBesar`)
+          } else if (Aksi == 'PRINTER KECIL') {
+            window.open(`{{ route('pindahbuku.report') }}?id=${Id}&printer=reportPrinterKecil`)
+          } 
+        }
+      }
+    })
+  }
 </script>
 @endpush()
 @endsection

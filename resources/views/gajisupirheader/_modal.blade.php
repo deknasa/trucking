@@ -518,15 +518,15 @@
                     }
                     // setTimeout(() => {
 
-                        $("#tablePotPribadi")
-                            .jqGrid("setGridParam", {
-                                datatype: "local",
-                                data: response.data,
-                                originalData: response.data,
-                                rowNum: response.data.length,
-                                selectedRowIds: selectedRowIdPP
-                            })
-                            .trigger("reloadGrid");
+                    $("#tablePotPribadi")
+                        .jqGrid("setGridParam", {
+                            datatype: "local",
+                            data: response.data,
+                            originalData: response.data,
+                            rowNum: response.data.length,
+                            selectedRowIds: selectedRowIdPP
+                        })
+                        .trigger("reloadGrid");
                     // }, 100);
 
                 });
@@ -1016,9 +1016,9 @@
         setFormBindKeys(form)
 
         activeGrid = null
-        form.find('#btnSubmit').prop('disabled',false)
+        form.find('#btnSubmit').prop('disabled', false)
         if (form.data('action') == "view") {
-          form.find('#btnSubmit').prop('disabled',true)
+            form.find('#btnSubmit').prop('disabled', true)
         }
 
         getMaxLength(form)
@@ -1149,12 +1149,12 @@
             })
 
     }
-    
+
     function viewGajiSupirHeader(Id) {
         let form = $('#crudForm')
 
         $('.modal-loader').removeClass('d-none')
-        
+
         form.data('action', 'view')
         form.trigger('reset')
         form.find('#btnSubmit').html(`
@@ -1199,7 +1199,11 @@
                 if (error) {
                     showDialog(response)
                 } else {
-                    cekValidasiAksi(Id, Aksi)
+                    if (Aksi == 'PRINTER') {
+                        window.open(`{{ route('gajisupirheader.report') }}?id=${Id}`)
+                    } else {
+                        cekValidasiAksi(Id, Aksi)
+                    }
                 }
             }
         })

@@ -77,6 +77,7 @@
     }
 
     setSpaceBarCheckedHandler()
+    reloadGrid()
 
     $(document).ready(function() {
         $("#tabs").tabs()
@@ -475,7 +476,7 @@
                                     if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                         showDialog('Harap pilih salah satu record')
                                     } else {
-                                        window.open(`{{ route('hutangextraheader.report') }}?id=${selectedId}&printer=reportPrinterBesar`)
+                                        cekValidasi(selectedId, 'PRINTER BESAR')
                                     }
                                 }
                             },
@@ -487,7 +488,7 @@
                                     if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                         showDialog('Harap pilih salah satu record')
                                     } else {
-                                        window.open(`{{ route('hutangextraheader.report') }}?id=${selectedId}&printer=reportPrinterKecil`)
+                                        cekValidasi(selectedId, 'PRINTER KECIL')
                                     }
                                 }
                             },

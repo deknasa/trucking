@@ -51,7 +51,7 @@
 
   }
   setSpaceBarCheckedHandler()
-
+  reloadGrid()
   $(document).ready(function() {
 
     $('#lookup').hide()
@@ -428,7 +428,7 @@
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
                     showDialog('Harap pilih salah satu record')
                   } else {
-                    window.open(`{{url('rekappengeluaranheader/report/${selectedId}?printer=reportPrinterBesar')}}`)
+                    cekValidasi(selectedId, 'PRINTER BESAR')
                   }
                 }
               },
@@ -440,7 +440,7 @@
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
                     showDialog('Harap pilih salah satu record')
                   } else {
-                    window.open(`{{url('rekappengeluaranheader/report/${selectedId}?printer=reportPrinterKecil')}}`)
+                    cekValidasi(selectedId, 'PRINTER KECIL')
                   }
                 }
               },

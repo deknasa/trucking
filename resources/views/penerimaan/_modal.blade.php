@@ -205,32 +205,32 @@
                 data.filter((row) => row.name === 'nominal_detail[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal_detail[]"]`)[index])
             })
             $.ajax({
-              url: url,
-              method: method,
-              dataType: 'JSON',
-              headers: {
-                Authorization: `Bearer ${accessToken}`
-              },
-              data: data,
-              success: response => {
-                addRow()
-                $('.is-invalid').removeClass('is-invalid')
-                $('.invalid-feedback').remove()
-              },
-              error: error => {
-                if (error.status === 422) {
-                  $('.is-invalid').removeClass('is-invalid')
-                  $('.invalid-feedback').remove()
-                  setErrorMessages(form, error.responseJSON.errors);
-                } else {
-                  showDialog(error.responseJSON)
-                }
-              },
+                url: url,
+                method: method,
+                dataType: 'JSON',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                data: data,
+                success: response => {
+                    addRow()
+                    $('.is-invalid').removeClass('is-invalid')
+                    $('.invalid-feedback').remove()
+                },
+                error: error => {
+                    if (error.status === 422) {
+                        $('.is-invalid').removeClass('is-invalid')
+                        $('.invalid-feedback').remove()
+                        setErrorMessages(form, error.responseJSON.errors);
+                    } else {
+                        showDialog(error.responseJSON)
+                    }
+                },
             }).always(() => {
                 $('#processingLoader').addClass('d-none')
                 $(this).removeAttr('disabled')
-            })  
-        });     
+            })
+        });
         $(document).on('change', `#crudForm [name="tgllunas"]`, function() {
             $('#crudForm').find(`[name="tgljatuhtempo[]"]`).val($(this).val()).trigger('change');
         });
@@ -576,21 +576,21 @@
 
                 showPenerimaan(form, id)
                     .then(id => {
-                     clearSelectedRows()
-                      $('#gs_').prop('checked', false)
-                      $('#crudModal').modal('show')
-                      $('#crudForm [name=tglbukti]').attr('readonly', true)
-                      $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
-                      $('#crudForm [name=tgllunas]').attr('readonly', true)
-                      $('#crudForm [name=tgllunas]').siblings('.input-group-append').remove()
-                      $('#crudForm [name=bank]').parent('.input-group').find('.button-clear').remove()
-                      $('#crudForm [name=bank]').parent('.input-group').find('.input-group-append').remove()
-                      form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
-                      let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
-                      name.attr('disabled', true)
-                      name.find('.lookup-toggler').attr('disabled', true)
-                      name.find('.lookup-toggler').attr('disabled', true)
-                      $('#crudForm').find(`.tbl_aksi`).hide()
+                        clearSelectedRows()
+                        $('#gs_').prop('checked', false)
+                        $('#crudModal').modal('show')
+                        $('#crudForm [name=tglbukti]').attr('readonly', true)
+                        $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
+                        $('#crudForm [name=tgllunas]').attr('readonly', true)
+                        $('#crudForm [name=tgllunas]').siblings('.input-group-append').remove()
+                        $('#crudForm [name=bank]').parent('.input-group').find('.button-clear').remove()
+                        $('#crudForm [name=bank]').parent('.input-group').find('.input-group-append').remove()
+                        form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
+                        let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
+                        name.attr('disabled', true)
+                        name.find('.lookup-toggler').attr('disabled', true)
+                        name.find('.lookup-toggler').attr('disabled', true)
+                        $('#crudForm').find(`.tbl_aksi`).hide()
                         // form.find('.aksi').hide()
                         setFormBindKeys(form)
                         initSelect2(form.find('.select2bs4'), true)
@@ -642,12 +642,21 @@
             beforeSend: request => {
                 request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
             },
+            data: {
+                aksi: Aksi
+            },
             success: response => {
                 var error = response.error
                 if (error) {
                     showDialog(response)
                 } else {
-                    cekValidasiAksi(Id, Aksi)
+                    if (Aksi == 'PRINTER BESAR') {
+                        window.open(`{{ route('penerimaanheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
+                    } else if (Aksi == 'PRINTER KECIL') {
+                        window.open(`{{ route('penerimaanheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
+                    } else {
+                        cekValidasiAksi(Id, Aksi)
+                    }
                 }
             }
         })
@@ -1002,7 +1011,7 @@
         let countRow = $('.delete-row').parents('tr').length
         row.remove()
         if (countRow <= 1) {
-          addRow()
+            addRow()
         }
         setRowNumbers()
         setTotal()

@@ -76,6 +76,7 @@
 
     }
     setSpaceBarCheckedHandler()
+    reloadGrid()
     $(document).ready(function() {
         $("#tabs").tabs()
 
@@ -478,7 +479,7 @@
                                     if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                         showDialog('Harap pilih salah satu record')
                                     } else {
-                                        window.open(`{{ route('penerimaangiroheader.report') }}?id=${selectedId}&printer=reportPrinterBesar`)
+                                        cekValidasi(selectedId, 'PRINTER BESAR')
                                     }
                                     clearSelectedRows()
                                     $('#gs_').prop('checked', false)
@@ -492,7 +493,7 @@
                                     if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                         showDialog('Harap pilih salah satu record')
                                     } else {
-                                        window.open(`{{ route('penerimaangiroheader.report') }}?id=${selectedId}&printer=reportPrinterKecil`)
+                                        cekValidasi(selectedId, 'PRINTER KECIL')
                                     }
                                     clearSelectedRows()
                                     $('#gs_').prop('checked', false)
@@ -520,34 +521,34 @@
                         }
                     },
                     {
-                      id: 'approve',
-                      title: 'Approve',
-                      caption: 'Approve',
-                      innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-                      class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-                      dropmenuHTML: [{
-                          id: 'approveun',
-                          text: "UN/APPROVAL Status PENERIMAAN GIRO",
-                          onClick: () => {
-                            approve()
-                          }
-                        },
-                        {
-                          id: 'approval-buka-cetak',
-                          text: "un/Approval Buka Cetak PENERIMAAN GIRO",
-                          onClick: () => {
-                            if (`{{ $myAuth->hasPermission('approvalbukacetak', 'store') }}`) {
-                              let tglbukacetak = $('#tgldariheader').val().split('-');
-                              tglbukacetak =tglbukacetak[1] + '-' + tglbukacetak[2];
-                              if (selectedRows.length < 1) {
-                                showDialog('Harap pilih salah satu record')
-                              }else{
-                                approvalBukaCetak(tglbukacetak,'PENERIMAANGIROHEADER',selectedRows);
-                              }
-                            }
-                          }
-                        },
-                      ],
+                        id: 'approve',
+                        title: 'Approve',
+                        caption: 'Approve',
+                        innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+                        class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
+                        dropmenuHTML: [{
+                                id: 'approveun',
+                                text: "UN/APPROVAL Status PENERIMAAN GIRO",
+                                onClick: () => {
+                                    approve()
+                                }
+                            },
+                            {
+                                id: 'approval-buka-cetak',
+                                text: "un/Approval Buka Cetak PENERIMAAN GIRO",
+                                onClick: () => {
+                                    if (`{{ $myAuth->hasPermission('approvalbukacetak', 'store') }}`) {
+                                        let tglbukacetak = $('#tgldariheader').val().split('-');
+                                        tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
+                                        if (selectedRows.length < 1) {
+                                            showDialog('Harap pilih salah satu record')
+                                        } else {
+                                            approvalBukaCetak(tglbukacetak, 'PENERIMAANGIROHEADER', selectedRows);
+                                        }
+                                    }
+                                }
+                            },
+                        ],
                     }
                 ],
                 buttons: [{
@@ -601,7 +602,7 @@
                                 showDialog('Harap pilih salah satu record')
                             } else {
                                 viewPenerimaanGiro(selectedId)
-                            }                            
+                            }
                             clearSelectedRows()
                             $('#gs_').prop('checked', false)
                         }

@@ -167,7 +167,7 @@
             $('#crudForm').find(`[name="nominal[]"`).each((index, element) => {
                 data.filter((row) => row.name === 'nominal[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal[]"]`)[index])
             })
-      
+
             $.ajax({
                 url: url,
                 method: method,
@@ -193,7 +193,7 @@
             }).always(() => {
                 $('#processingLoader').addClass('d-none')
                 $(this).removeAttr('disabled')
-            })  
+            })
         });
 
         $(document).on('change', `#crudForm [name="tgllunas"]`, function() {
@@ -469,9 +469,9 @@
         setFormBindKeys(form)
 
         activeGrid = null
-        form.find('#btnSubmit').prop('disabled',false)
+        form.find('#btnSubmit').prop('disabled', false)
         if (form.data('action') == "view") {
-          form.find('#btnSubmit').prop('disabled',true)
+            form.find('#btnSubmit').prop('disabled', true)
         }
         getMaxLength(form)
         initLookup()
@@ -644,18 +644,19 @@
                 $('.modal-loader').addClass('d-none')
             })
     }
+
     function viewPenerimaanGiro(id) {
 
         let form = $('#crudForm')
         $('.modal-loader').removeClass('d-none')
-        
+
         form.data('action', 'view')
         form.trigger('reset')
         form.find('#btnSubmit').html(`
           <i class="fa fa-save"></i>
           Save
         `)
-        form.find('#btnSubmit').prop('disabled',true)
+        form.find('#btnSubmit').prop('disabled', true)
         form.find(`.sometimes`).hide()
         $('#crudModalTitle').text('View Penerimaan Giro')
         $('.is-invalid').removeClass('is-invalid')
@@ -669,19 +670,19 @@
                 setFormBindKeys(form)
                 initSelect2(form.find('.select2bs4'), true)
                 form.find('[name]').removeAttr('disabled')
-        
+
                 form.find('select').each((index, select) => {
-                let element = $(select)
-        
-                if (element.data('select2')) {
-                    element.select2('destroy')
-                }
+                    let element = $(select)
+
+                    if (element.data('select2')) {
+                        element.select2('destroy')
+                    }
                 })
-        
+
                 form.find('[name]').attr('disabled', 'disabled').css({
-                background: '#fff'
+                    background: '#fff'
                 })
-                form.find('[name=id]').prop('disabled',false)
+                form.find('[name=id]').prop('disabled', false)
             })
             .then(() => {
                 clearSelectedRows()
@@ -689,7 +690,7 @@
                 $('#crudModal').modal('show')
                 form.find(`.hasDatepicker`).prop('readonly', true)
                 form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
-                
+
                 let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
                 let nameFind = $('#crudForm').find(`[name]`).parents('.input-group')
                 name.attr('disabled', true)
@@ -732,6 +733,9 @@
             beforeSend: request => {
                 request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
             },
+            data: {
+                aksi: Aksi
+            },
             success: response => {
                 var kodenobukti = response.kodenobukti
                 if (kodenobukti == '1') {
@@ -739,7 +743,13 @@
                     if (kodestatus == '1') {
                         showDialog(response.message['keterangan'])
                     } else {
-                        cekValidasiAksi(Id, Aksi)
+                        if (Aksi == 'PRINTER BESAR') {
+                            window.open(`{{ route('penerimaangiroheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
+                        } else if (Aksi == 'PRINTER KECIL') {
+                            window.open(`{{ route('penerimaangiroheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
+                        } else {
+                            cekValidasiAksi(Id, Aksi)
+                        }
                     }
 
                 } else {
@@ -1032,7 +1042,7 @@
         let countRow = $('.delete-row').parents('tr').length
         row.remove()
         if (countRow <= 1) {
-          addRow()
+            addRow()
         }
 
         setRowNumbers()

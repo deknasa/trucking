@@ -1250,7 +1250,13 @@
         if (error) {
           showDialog(response)
         } else {
-          cekValidasiAksi(Id, Aksi)
+            if(Aksi == 'PRINTER BESAR'){
+              window.open(`{{ route('penerimaantruckingheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
+            } else if(Aksi == 'PRINTER KECIL'){
+              window.open(`{{ route('penerimaantruckingheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
+            } else {
+              cekValidasiAksi(Id, Aksi)
+            }
         }
 
       }

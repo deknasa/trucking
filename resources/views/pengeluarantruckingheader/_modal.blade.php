@@ -3249,7 +3249,13 @@
           if (kodestatus == '1') {
             showDialog(response.message['keterangan'])
           } else {
-            cekValidasiAksi(Id, Aksi)
+            if(Aksi == 'PRINTER BESAR'){
+              window.open(`{{ route('pengeluarantruckingheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
+            } else if(Aksi == 'PRINTER KECIL'){
+              window.open(`{{ route('pengeluarantruckingheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
+            } else {
+              cekValidasiAksi(Id, Aksi)
+            }
           }
 
         } else {

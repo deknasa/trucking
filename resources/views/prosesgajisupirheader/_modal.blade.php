@@ -1162,12 +1162,19 @@
             beforeSend: request => {
                 request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
             },
+            data: {
+                aksi: Aksi
+            },
             success: response => {
                 var error = response.error
                 if (error) {
                     showDialog(response)
                 } else {
-                    cekValidasiAksi(Id, Aksi)
+                    if (Aksi == 'PRINTER') {
+                        window.open(`{{ route('prosesgajisupirheader.report') }}?id=${Id}`)
+                    } else {
+                        cekValidasiAksi(Id, Aksi)
+                    }
                 }
             }
         })
