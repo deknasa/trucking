@@ -814,12 +814,21 @@
             beforeSend: request => {
                 request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
             },
+            data: {
+                aksi: Aksi
+            },
             success: response => {
                 var error = response.error
                 if (error) {
                     showDialog(response)
                 } else {
-                    cekValidasiAksi(Id, Aksi)
+                    if (Aksi == 'PRINTER BESAR') {
+                        window.open(`{{ route('pendapatansupirheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
+                    } else if (Aksi == 'PRINTER KECIL') {
+                        window.open(`{{ route('pendapatansupirheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
+                    } else {
+                        cekValidasiAksi(Id, Aksi)
+                    }
                 }
             }
         })
@@ -1297,7 +1306,7 @@
         selectedSampai = [];
         selectedGajiKenek = [];
         selectedSupirId = [];
-        $('#modalgrid').trigger('reloadGrid')        
+        $('#modalgrid').trigger('reloadGrid')
         setTotalNominalTrip()
     }
 

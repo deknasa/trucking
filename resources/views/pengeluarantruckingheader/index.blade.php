@@ -6,8 +6,8 @@
     <select name="pengeluaranheader_id" id="pengeluaranheader_id" class="form-select select2" style="width: 100%;">
       <option value="">-- PILIH Pengeluaran trucking --</option>
       @foreach ($comboKodepengeluaran as $kodepengeluaran)
-        <option @if ($kodepengeluaran['id'] == "1") selected @endif value="{{$kodepengeluaran['id']}}"> {{$kodepengeluaran['keterangan']}} </option>
-        {{-- <option @if ($kodepengeluaran['statusdefault_text'] ==="YA") selected @endif value="{{$kodepengeluaran['id']}}"> {{$kodepengeluaran['namakodepengeluaran']}} </option> --}}
+      <option @if ($kodepengeluaran['id']=="1" ) selected @endif value="{{$kodepengeluaran['id']}}"> {{$kodepengeluaran['keterangan']}} </option>
+      {{-- <option @if ($kodepengeluaran['statusdefault_text'] ==="YA") selected @endif value="{{$kodepengeluaran['id']}}"> {{$kodepengeluaran['namakodepengeluaran']}} </option> --}}
       @endforeach
     </select>
   </div>
@@ -78,6 +78,8 @@
   let tgldariheader
   let tglsampaiheader
 
+  reloadGrid()
+  
   $(document).ready(function() {
     $("#tabs").tabs()
     pengeluaranTrucking($('#crudForm'))
@@ -85,20 +87,22 @@
     loadDetailGrid()
     loadPengeluaranGrid(nobukti)
     loadJurnalUmumGrid(nobukti)
-    
-    initSelect2($('#pengeluaranheader_id'),false)
-    
+
+    initSelect2($('#pengeluaranheader_id'), false)
+
     @isset($request['tgldari'])
-      tgldariheader = `{{ $request['tgldari'] }}`;
+    tgldariheader = `{{ $request['tgldari'] }}`;
     @endisset
     @isset($request['tglsampai'])
-      tglsampaiheader = `{{ $request['tglsampai'] }}`;
+    tglsampaiheader = `{{ $request['tglsampai'] }}`;
     @endisset
-    setRange(false,tgldariheader,tglsampaiheader)
+    setRange(false, tgldariheader, tglsampaiheader)
     initDatepicker()
-    $(document).on('click','#btnReload', function(event) {
+    $(document).on('click', '#btnReload', function(event) {
       console.log($('#pengeluaranheader_id').val());
-      loadDataHeader('pengeluarantruckingheader',{pengeluaranheader_id:$('#pengeluaranheader_id').val()})
+      loadDataHeader('pengeluarantruckingheader', {
+        pengeluaranheader_id: $('#pengeluaranheader_id').val()
+      })
     })
 
     $("#jqGrid").jqGrid({
@@ -107,10 +111,10 @@
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         datatype: "json",
-         postData: {
-          tgldari:$('#tgldariheader').val() ,
-          tglsampai:$('#tglsampaiheader').val(),
-          pengeluaranheader_id:$('#pengeluaranheader_id').val(),
+        postData: {
+          tgldari: $('#tgldariheader').val(),
+          tglsampai: $('#tglsampaiheader').val(),
+          pengeluaranheader_id: $('#pengeluaranheader_id').val(),
 
         },
         colModel: [{
@@ -127,7 +131,7 @@
             align: 'left',
             stype: 'select',
             searchoptions: {
-              
+
               value: `<?php
                       $i = 1;
 
@@ -158,7 +162,7 @@
                   <span>${statusCetak.SINGKATAN}</span>
                 </div>
               `)
-              
+
               return formattedValue[0].outerHTML
             },
             cellattr: (rowId, value, rowObject) => {
@@ -196,7 +200,7 @@
             name: 'penerimaantrucking_nobukti',
             align: 'left',
             formatter: (value, options, rowData) => {
-              if ((value == null) ||( value == '')) {
+              if ((value == null) || (value == '')) {
                 return '';
               }
               let tgldari = rowData.tgldariheaderpenerimaantrucking
@@ -205,8 +209,8 @@
               let formattedValue = $(`
               <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
              `)
-             return formattedValue[0].outerHTML
-           }
+              return formattedValue[0].outerHTML
+            }
           },
           {
             label: 'BANK',
@@ -218,27 +222,27 @@
             name: 'statusposting',
             align: 'left',
             stype: 'select',
-              searchoptions: {
-                value: `<?php
-                        $i = 1;
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
 
-                        foreach ($data['combostatusposting'] as $status) :
-                          echo "$status[param]:$status[parameter]";
-                          if ($i !== count($data['combostatusposting'])) {
-                            echo ";";
-                          }
-                          $i++;
-                        endforeach
+                      foreach ($data['combostatusposting'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['combostatusposting'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
 
-                        ?>
+                      ?>
               `,
-                dataInit: function(element) {
-                  $(element).select2({
-                    width: 'resolve',
-                    theme: "bootstrap4"
-                  });
-                }
-              },
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
             formatter: (value, options, rowData) => {
               let statusPosting = JSON.parse(value)
               if (!statusPosting) {
@@ -249,7 +253,7 @@
                   <span>${statusPosting.SINGKATAN}</span>
                 </div>
               `)
-              
+
               return formattedValue[0].outerHTML
             },
             cellattr: (rowId, value, rowObject) => {
@@ -291,7 +295,7 @@
             name: 'pengeluaran_nobukti',
             align: 'left',
             formatter: (value, options, rowData) => {
-              if ((value == null) ||( value == '')) {
+              if ((value == null) || (value == '')) {
                 return '';
               }
               let tgldari = rowData.tgldariheaderpengeluaranheader
@@ -300,8 +304,8 @@
               let formattedValue = $(`
               <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
              `)
-             return formattedValue[0].outerHTML
-           }
+              return formattedValue[0].outerHTML
+            }
           },
           {
             label: 'USER BUKA CETAK',
@@ -380,7 +384,7 @@
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
-          
+
           loadDetailData(id)
           loadPengeluaranData(id, nobukti)
           loadJurnalUmumData(id, nobukti)
@@ -403,13 +407,13 @@
           setCustomBindKeys($(this))
           initResize($(this))
 
-        /* Set global variables */
+          /* Set global variables */
           sortname = $(this).jqGrid("getGridParam", "sortname")
           sortorder = $(this).jqGrid("getGridParam", "sortorder")
           totalRecord = $(this).getGridParam("records")
           limit = $(this).jqGrid('getGridParam', 'postData').limit
           postData = $(this).jqGrid('getGridParam', 'postData')
-          triggerClick = true  
+          triggerClick = true
 
           $('.clearsearchclass').click(function() {
             clearColumnSearch($(this))
@@ -441,7 +445,7 @@
           }, 100)
 
           $('#left-nav').find('button').attr('disabled', false)
-          permission() 
+          permission()
           setHighlight($(this))
         }
       })
@@ -461,7 +465,7 @@
       })
 
       .customPager({
-        
+
         extndBtn: [{
             id: 'report',
             title: 'Report',
@@ -476,7 +480,7 @@
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
                     showDialog('Harap pilih salah satu record')
                   } else {
-                    window.open(`{{ route('pengeluarantruckingheader.report') }}?id=${selectedId}&printer=reportPrinterBesar`)
+                    cekValidasi(selectedId, 'PRINTER BESAR')
                   }
                 }
               },
@@ -488,7 +492,7 @@
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
                     showDialog('Harap pilih salah satu record')
                   } else {
-                    window.open(`{{ route('pengeluarantruckingheader.report') }}?id=${selectedId}&printer=reportPrinterKecil`)
+                    cekValidasi(selectedId, 'PRINTER KECIL')
                   }
                 }
               },
@@ -517,24 +521,22 @@
             caption: 'Approve',
             innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
             class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-            dropmenuHTML: [
-              {
-                id: 'approval-buka-cetak',
-                text: "un/Approval Buka Cetak PENGELUARAN TRUCKING ",
-                onClick: () => {
-                  if (`{{ $myAuth->hasPermission('approvalbukacetak', 'store') }}`) {
-                    let tglbukacetak = $('#tgldariheader').val().split('-');
-                    tglbukacetak =tglbukacetak[1] + '-' + tglbukacetak[2];
-                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                    if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                      showDialog('Harap pilih salah satu record')
-                    }else{
-                      approvalBukaCetak(tglbukacetak,'PENGELUARANTRUCKINGHEADER',[selectedId]);
-                    }
+            dropmenuHTML: [{
+              id: 'approval-buka-cetak',
+              text: "un/Approval Buka Cetak PENGELUARAN TRUCKING ",
+              onClick: () => {
+                if (`{{ $myAuth->hasPermission('approvalbukacetak', 'store') }}`) {
+                  let tglbukacetak = $('#tgldariheader').val().split('-');
+                  tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
+                  selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                  if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                    showDialog('Harap pilih salah satu record')
+                  } else {
+                    approvalBukaCetak(tglbukacetak, 'PENGELUARANTRUCKINGHEADER', [selectedId]);
                   }
                 }
-              },
-            ],
+              }
+            }, ],
           }
         ],
         buttons: [{
@@ -553,7 +555,7 @@
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
-              }else {
+              } else {
                 cekValidasi(selectedId, 'EDIT')
               }
             }
@@ -579,7 +581,7 @@
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               viewPengeluaranTruckingHeader(selectedId)
             }
-          }, 
+          },
         ],
       })
 
@@ -610,30 +612,31 @@
       .addClass('btn btn-sm btn-warning')
       .parent().addClass('px-1')
 
-      function permission() {
-    if (!`{{ $myAuth->hasPermission('pengeluarantruckingheader', 'store') }}`) {
-      $('#add').attr('disabled', 'disabled')
-    }
+    function permission() {
+      if (!`{{ $myAuth->hasPermission('pengeluarantruckingheader', 'store') }}`) {
+        $('#add').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('pengeluaranstokheader', 'show') }}`) {
-      $('#view').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('pengeluaranstokheader', 'show') }}`) {
+        $('#view').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('pengeluarantruckingheader', 'update') }}`) {
-      $('#edit').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('pengeluarantruckingheader', 'update') }}`) {
+        $('#edit').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('pengeluarantruckingheader', 'destroy') }}`) {
-      $('#delete').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('pengeluarantruckingheader', 'destroy') }}`) {
+        $('#delete').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('pengeluarantruckingheader', 'export') }}`) {
-      $('#export').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('pengeluarantruckingheader', 'export') }}`) {
+        $('#export').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('pengeluarantruckingheader', 'report') }}`) {
-      $('#report').attr('disabled', 'disabled')
-    }}
+      if (!`{{ $myAuth->hasPermission('pengeluarantruckingheader', 'report') }}`) {
+        $('#report').attr('disabled', 'disabled')
+      }
+    }
 
 
     // $("#tabs").on('click', 'li.ui-state-active', function() {
@@ -646,10 +649,9 @@
     //     loadGrid(hutangBayarId, nobukti)
     //   })
     // })
-    
+
   })
 
-  
 </script>
 @endpush()
 @endsection

@@ -504,12 +504,21 @@
       beforeSend: request => {
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
+      data: {
+        aksi: Aksi
+      },
       success: response => {
         var error = response.error
         if (error) {
           showDialog(response)
         } else {
-          cekValidasiAksi(Id, Aksi)
+          if (Aksi == 'PRINTER BESAR') {
+            window.open(`{{url('notadebetheader/report/${Id}?printer=reportPrinterBesar')}}`)
+          } else if (Aksi == 'PRINTER KECIL') {
+            window.open(`{{url('notadebetheader/report/${Id}?printer=reportPrinterKecil')}}`)
+          } else {
+            cekValidasiAksi(Id, Aksi)
+          }
         }
       }
     })
@@ -572,7 +581,7 @@
             }
 
           })
-          
+
           $('#detailList tbody').html('')
           $.each(response.detail, (index, detail) => {
             let detailRow = $(`

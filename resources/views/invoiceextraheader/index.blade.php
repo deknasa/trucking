@@ -79,7 +79,7 @@
 
   }
   setSpaceBarCheckedHandler()
-  
+  reloadGrid()
   $(document).ready(function() {
     $("#tabs").tabs()
 
@@ -505,7 +505,7 @@
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
                     showDialog('Harap pilih salah satu record')
                   } else {
-                    window.open(`{{ route('invoiceextraheader.report') }}?id=${selectedId}&printer=reportPrinterBesar`)
+                    cekValidasi(selectedId, 'PRINTER BESAR')
                   }
                   clearSelectedRows()
                   $('#gs_').prop('checked', false)
@@ -519,7 +519,7 @@
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
                     showDialog('Harap pilih salah satu record')
                   } else {
-                    window.open(`{{ route('invoiceextraheader.report') }}?id=${selectedId}&printer=reportPrinterKecil`)
+                    cekValidasi(selectedId, 'PRINTER KECIL')
                   }
                   clearSelectedRows()
                   $('#gs_').prop('checked', false)

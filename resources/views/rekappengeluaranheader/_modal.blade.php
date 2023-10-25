@@ -219,7 +219,7 @@
       data.push({
         name: 'limit',
         value: limit
-      }) 
+      })
       data.push({
         name: 'tgldariheader',
         value: $('#tgldariheader').val()
@@ -549,6 +549,9 @@
       beforeSend: request => {
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
+      data: {
+        aksi: Aksi
+      },
       success: response => {
         var kodenobukti = response.kodenobukti
         if (kodenobukti == '1') {
@@ -556,10 +559,13 @@
           if (kodestatus == '1') {
             showDialog(response.message['keterangan'])
           } else {
-            if (Aksi == 'EDIT') {
+            if (Aksi == 'PRINTER BESAR') {
+              window.open(`{{url('rekappengeluaranheader/report/${Id}?printer=reportPrinterBesar')}}`)
+            } else if (Aksi == 'PRINTER KECIL') {
+              window.open(`{{url('rekappengeluaranheader/report/${Id}?printer=reportPrinterKecil')}}`)
+            } else if (Aksi == 'EDIT') {
               showDialog('REKAP PENGELUARAN TIDAK BISA DIEDIT')
-            }
-            if (Aksi == 'DELETE') {
+            } else if (Aksi == 'DELETE') {
               deleteRekapPengeluaranHeader(Id)
             }
           }

@@ -496,6 +496,9 @@
       beforeSend: request => {
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
+      data: {
+        aksi: Aksi
+      },
       success: response => {
         var kodenobukti = response.kodenobukti
         if (kodenobukti == '1') {
@@ -503,11 +506,13 @@
           if (kodestatus == '1') {
             showDialog(response.message['keterangan'])
           } else {
-            if (Aksi == 'EDIT') {
+            if(Aksi == 'PRINTER BESAR'){
+              window.open(`{{ route('rekappenerimaanheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
+            } else if(Aksi == 'PRINTER KECIL'){
+              window.open(`{{ route('rekappenerimaanheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
+            } else if (Aksi == 'EDIT') {
               showDialog('REKAP PENERIMAAN TIDAK BISA DIEDIT')
-              // editRekapPenerimaanHeader(Id)
-            }
-            if (Aksi == 'DELETE') {
+            } else if (Aksi == 'DELETE') {
               deleteRekapPenerimaanHeader(Id)
             }
           }

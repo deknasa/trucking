@@ -627,7 +627,7 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                window.open(`{{ route('prosesgajisupirheader.report') }}?id=${selectedId}`)
+                cekValidasi(selectedId, 'PRINTER')
               }
             }
           },
