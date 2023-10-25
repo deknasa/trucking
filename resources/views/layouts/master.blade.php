@@ -36,7 +36,7 @@
 
   <!-- Custom styles -->
   <link rel="stylesheet" href="{{ asset('libraries/tas-lib/css/styles.css?version='. filemtime(base_path().'\public\libraries\tas-lib\css\styles.css')) }}">
-  <link rel="stylesheet" href="{{ asset('libraries/tas-lib/css/pager.css?version='. filemtime(base_path().'\public\libraries\tas-lib\css\styles.css')) }}">
+  <link rel="stylesheet" href="{{ asset('libraries/tas-lib/css/pager.css?version='. filemtime(base_path().'\public\libraries\tas-lib\css\pager.css')) }}">
   <link rel="stylesheet" href="{{ asset('libraries/adminlte/plugins/dropzone/dropzone.css') }}">
 
 </head>
@@ -324,10 +324,10 @@
   <script src="{{ asset('libraries/jquery-ui/1.13.1/jquery-ui.min.js') }}"></script>
 
   <!-- Custom global script -->
-  <script src="{{ asset('libraries/tas-lib/js/pager.js?version='. filemtime(base_path().'\public\libraries\tas-lib\css\styles.css')) }}"></script>
-  <script src="{{ asset('libraries/tas-lib/js/lookup.js?version='. filemtime(base_path().'\public\libraries\tas-lib\css\styles.css')) }}"></script>
-  <script src="{{ asset('libraries/tas-lib/js/lookupMaster.js?version='. filemtime(base_path().'\public\libraries\tas-lib\css\styles.css')) }}"></script>
-  <script src="{{ asset('libraries/tas-lib/js/mains.js?version='. filemtime(base_path().'\public\libraries\tas-lib\css\styles.css')) }}"></script>
+  <script src="{{ asset('libraries/tas-lib/js/pager.js?version='. filemtime(base_path().'\public\libraries\tas-lib\js\pager.css')) }}"></script>
+  <script src="{{ asset('libraries/tas-lib/js/lookup.js?version='. filemtime(base_path().'\public\libraries\tas-lib\js\lookup.css')) }}"></script>
+  <script src="{{ asset('libraries/tas-lib/js/lookupMaster.js?version='. filemtime(base_path().'\public\libraries\tas-lib\js\lookupMaster.css')) }}"></script>
+  <script src="{{ asset('libraries/tas-lib/js/mains.js?version='. filemtime(base_path().'\public\libraries\tas-lib\js\mains.css')) }}"></script>
   {{-- <script src="{{ asset('libraries/tas-lib/js/app.js?version='. filemtime(base_path().'\public\libraries\tas-lib\css\styles.css')) }}"></script> --}}
 
   <!-- Pusher -->

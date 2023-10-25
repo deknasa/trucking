@@ -45,8 +45,9 @@ class LaporanBukuBesarController extends MyController
 
         $data = $header['data'];
         $dataheader = $header['dataheader'];
+        $printer['tipe'] = $request->printer;
         $user = Auth::user();
-        return view('reports.laporanbukubesar', compact('data', 'user', 'dataheader'));
+        return view('reports.laporanbukubesar', compact('data', 'user', 'dataheader','printer'));
     }
 
     public function export(Request $request): void

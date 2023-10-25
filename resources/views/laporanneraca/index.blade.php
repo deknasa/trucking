@@ -28,10 +28,16 @@
                         <div class="row">
 
                             <div class="col-sm-6 mt-4">
-                                <button type="button" id="btnPreview" class="btn btn-info mr-1 ">
-                                    <i class="fas fa-print"></i>
-                                    Report
-                                </button>
+                                <div class="btn-group dropup  scrollable-menu">
+                                    <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" id="btnPreview">
+                                        <i class="fas fa-print"></i>
+                                        Report
+                                    </button>
+                                    <ul class="dropdown-menu" id="menu-approve" aria-labelledby="btnPreview">
+                                        <li><a class="dropdown-item" id="reportPrinterBesar" href="#">Printer Lain</a></li>
+                                        <li><a class="dropdown-item" id="reportPrinterKecil" href="#">Printer Epson Seri LX</a></li>
+                                    </ul>
+                                </div>
                                 <button type="button" id="btnExport" class="btn btn-warning mr-1 ">
                                     <i class="fas fa-file-export"></i>
                                     Export
@@ -99,7 +105,7 @@
 
     })
 
-    $(document).on('click', `#btnPreview`, function(event) {
+    $(document).on('click', `#reportPrinterBesar`, function(event) {
         let sampai = $('#crudForm').find('[name=sampai]').val()
 
 
@@ -107,7 +113,29 @@
             // $.ajax({
             //     url: `{{ route('laporanneraca.report') }}?sampai=${sampai}`,
             // });
-            window.open(`{{ route('laporanneraca.report') }}?sampai=${sampai}`)
+            window.open(`{{ route('laporanneraca.report') }}?sampai=${sampai}&printer=reportPrinterBesar`)
+        }).catch((error) => {
+            if (error.status === 422) {
+                $('.is-invalid').removeClass('is-invalid')
+                $('.invalid-feedback').remove()
+
+                setErrorMessages($('#crudForm'), error.responseJSON.errors);
+            } else {
+                showDialog(error.statusText, error.responseJSON.message)
+
+            }
+        })
+
+    })
+    $(document).on('click', `#reportPrinterKecil`, function(event) {
+        let sampai = $('#crudForm').find('[name=sampai]').val()
+
+
+        getCekReport().then((response) => {
+            // $.ajax({
+            //     url: `{{ route('laporanneraca.report') }}?sampai=${sampai}`,
+            // });
+            window.open(`{{ route('laporanneraca.report') }}?sampai=${sampai}&printer=reportPrinterKecil`)
         }).catch((error) => {
             if (error.status === 422) {
                 $('.is-invalid').removeClass('is-invalid')
