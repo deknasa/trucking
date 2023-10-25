@@ -2337,8 +2337,57 @@
 
   }
 
+  function clearSelectedRowsBBM() {
+    getSelectedRows = $("#tablePelunasanbbm").getGridParam("selectedRowIds");
+    $("#tablePelunasanbbm")[0].p.selectedRowIds = [];
+    $.each(getSelectedRows, function(index, value) {
+      let originalGridData = $("#tablePelunasanbbm")
+        .jqGrid("getGridParam", "originalData")
+        .find((row) => row.id == value);
+
+      sisa = 0
+      if ($('#crudForm').data('action') == 'edit') {
+        sisa = (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.nominal))
+      } else {
+        sisa = originalGridData.sisa
+      }
+
+      $("#tablePelunasanbbm").jqGrid(
+        "setCell",
+        value,
+        "sisa",
+        sisa
+      );
+      $("#tablePelunasanbbm").jqGrid("setCell", value, "nominal", 0);
+    })
+    $('#tablePelunasanbbm').trigger('reloadGrid');
+    setTotalNominalPelunasan()
+    setTotalSisaPelunasan()
+  }
+
+  function selectAllRowsBBM() {
+
+    let originalData = $("#tablePelunasanbbm").getGridParam("data");
+    let getSelectedRows = originalData.map((data) => data.id);
+    $("#tablePelunasanbbm")[0].p.selectedRowIds = [];
+
+    setTimeout(() => {
+      $("#tablePelunasanbbm")
+        .jqGrid("setGridParam", {
+          selectedRowIds: getSelectedRows
+        })
+        .trigger("reloadGrid");
+
+        setTotalNominalPelunasan()
+        setTotalSisaPelunasan()
+    })
+  }
   function loadPelunasanBBMGrid() {
 
+    let disabled = '';
+    if ($('#crudForm').data('action') == 'delete') {
+      disabled = 'disabled'
+    }
     $("#tablePelunasanbbm")
       .jqGrid({
         datatype: 'local',
@@ -2348,9 +2397,32 @@
             label: "",
             name: "",
             width: 30,
-            formatter: 'checkbox',
-            search: false,
-            editable: false,
+            align: 'center',
+            sortable: false,
+            clear: false,
+            stype: 'input',
+            searchable: false,
+            searchoptions: {
+              type: 'checkbox',
+              clearSearch: false,
+              dataInit: function(element) {
+
+                $(element).removeClass('form-control')
+                $(element).parent().addClass('text-center')
+                if (disabled == '') {
+                  $(element).on('click', function() {
+                    if ($(this).is(':checked')) {
+                      selectAllRowsBBM()
+                    } else {
+                      clearSelectedRowsBBM()
+                    }
+                  })
+                } else {
+                  $(element).attr('disabled', true)
+                }
+
+              }
+            },
             formatter: function(value, rowOptions, rowData) {
               let disabled = '';
               if ($('#crudForm').data('action') == 'delete') {
@@ -2649,8 +2721,8 @@
         );
 
         $("#tablePelunasanbbm").jqGrid("setCell", rowId, "nominal", 0);
-        setTotalNominalDeposito()
-        setTotalSisaDeposito()
+        setTotalNominalPelunasan()
+        setTotalSisaPelunasan()
       } else {
         selectedRowIds.push(rowId);
 
@@ -2668,8 +2740,8 @@
         }
 
         initAutoNumeric($(`#tablePelunasanbbm tr#${rowId}`).find(`td[aria-describedby="tablePelunasanbbm_nominal"]`))
-        setTotalNominalDeposito()
-        setTotalSisaDeposito()
+        setTotalNominalPelunasan()
+        setTotalSisaPelunasan()
       }
     });
 
@@ -2715,7 +2787,60 @@
     initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePelunasanbbm_sisa"]`).text(sisa))
   }
 
+
+  function clearSelectedRowsDeposito() {
+    getSelectedRows = $("#tableDeposito").getGridParam("selectedRowIds");
+    $("#tableDeposito")[0].p.selectedRowIds = [];
+    $.each(getSelectedRows, function(index, value) {
+      let originalGridData = $("#tableDeposito")
+        .jqGrid("getGridParam", "originalData")
+        .find((row) => row.id == value);
+
+      sisa = 0
+      if ($('#crudForm').data('action') == 'edit') {
+        sisa = (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.nominal))
+      } else {
+        sisa = originalGridData.sisa
+      }
+
+      $("#tableDeposito").jqGrid(
+        "setCell",
+        value,
+        "sisa",
+        sisa
+      );
+      $("#tableDeposito").jqGrid("setCell", value, "nominal", 0);
+    })
+    $('#tableDeposito').trigger('reloadGrid');
+    setTotalNominalDeposito()
+    setTotalSisaDeposito()
+  }
+
+  function selectAllRowsDeposito() {
+
+    let originalData = $("#tableDeposito").getGridParam("data");
+    let getSelectedRows = originalData.map((data) => data.id);
+    $("#tableDeposito")[0].p.selectedRowIds = [];
+
+    setTimeout(() => {
+      $("#tableDeposito")
+        .jqGrid("setGridParam", {
+          selectedRowIds: getSelectedRows
+        })
+        .trigger("reloadGrid");
+
+        setTotalNominalDeposito()
+        setTotalSisaDeposito()
+    })
+  }
+
+
   function loadDepositoGrid() {
+    
+    let disabled = '';
+    if ($('#crudForm').data('action') == 'delete') {
+      disabled = 'disabled'
+    }
     $("#tableDeposito")
       .jqGrid({
         datatype: 'local',
@@ -2725,9 +2850,32 @@
             label: "",
             name: "",
             width: 30,
-            formatter: 'checkbox',
-            search: false,
-            editable: false,
+            align: 'center',
+            sortable: false,
+            clear: false,
+            stype: 'input',
+            searchable: false,
+            searchoptions: {
+              type: 'checkbox',
+              clearSearch: false,
+              dataInit: function(element) {
+
+                $(element).removeClass('form-control')
+                $(element).parent().addClass('text-center')
+                if (disabled == '') {
+                  $(element).on('click', function() {
+                    if ($(this).is(':checked')) {
+                      selectAllRowsDeposito()
+                    } else {
+                      clearSelectedRowsDeposito()
+                    }
+                  })
+                } else {
+                  $(element).attr('disabled', true)
+                }
+
+              }
+            },
             formatter: function(value, rowOptions, rowData) {
               let disabled = '';
               if ($('#crudForm').data('action') == 'delete') {
@@ -3101,7 +3249,13 @@
           if (kodestatus == '1') {
             showDialog(response.message['keterangan'])
           } else {
-            cekValidasiAksi(Id, Aksi)
+            if(Aksi == 'PRINTER BESAR'){
+              window.open(`{{ route('pengeluarantruckingheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
+            } else if(Aksi == 'PRINTER KECIL'){
+              window.open(`{{ route('pengeluarantruckingheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
+            } else {
+              cekValidasiAksi(Id, Aksi)
+            }
           }
 
         } else {
@@ -4572,15 +4726,16 @@
   }
 
   function setTotalNominalSumbangan() {
-        let nominal = 0
-        $.each(selectedRowsSumbangan, (index, val) => {
-            getNominal = selectedRowsSumbanganNominal[index];
-            nominals = parseFloat(getNominal.replaceAll(',', ''))
-            nominal += nominals
+    let nominal = 0
+    $.each(selectedRowsSumbangan, (index, val) => {
+      getNominal = selectedRowsSumbanganNominal[index];
+      nominals = parseFloat(getNominal.replaceAll(',', ''))
+      nominal += nominals
 
-        })
-        initAutoNumeric($('.footrow').find(`td[aria-describedby="tableSumbangan_nominal_detail"]`).text(nominal))
-    }
+    })
+    initAutoNumeric($('.footrow').find(`td[aria-describedby="tableSumbangan_nominal_detail"]`).text(nominal))
+  }
+
   function clearSelectedRowsSumbangan() {
     selectedRowsSumbangan = []
     selectedRowsSumbanganNobukti = [];

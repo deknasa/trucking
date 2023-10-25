@@ -285,7 +285,7 @@
         // console.log('before', $("#tablePinjamanKaryawan").jqGrid('getGridParam', 'selectedRowIds'))
         let totalBayar = 0
         $('#gs_').prop('checked', false)
-       
+
         $("#tablePengembalianTitipan")[0].p.selectedRowIds = [];
         $('#tablePengembalianTitipan').jqGrid("clearGridData");
         $.each(response.data, (index, value) => {
@@ -1250,7 +1250,13 @@
         if (error) {
           showDialog(response)
         } else {
-          cekValidasiAksi(Id, Aksi)
+            if(Aksi == 'PRINTER BESAR'){
+              window.open(`{{ route('penerimaantruckingheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
+            } else if(Aksi == 'PRINTER KECIL'){
+              window.open(`{{ route('penerimaantruckingheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
+            } else {
+              cekValidasiAksi(Id, Aksi)
+            }
         }
 
       }
@@ -1282,7 +1288,54 @@
     })
   }
 
+
+  function clearSelectedRowsPinjaman() {
+    getSelectedRows = $("#tablePinjaman").getGridParam("selectedRowIds");
+    $("#tablePinjaman")[0].p.selectedRowIds = [];
+    $.each(getSelectedRows, function(index, value) {
+      let originalGridData = $("#tablePinjaman")
+        .jqGrid("getGridParam", "originalData")
+        .find((row) => row.id == value);
+
+      sisa = 0
+      if ($('#crudForm').data('action') == 'edit') {
+        sisa = (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.nominal))
+      } else {
+        sisa = originalGridData.sisa
+      }
+
+      $("#tablePinjaman").jqGrid(
+        "setCell",
+        value,
+        "sisa",
+        sisa
+      );
+      $("#tablePinjaman").jqGrid("setCell", value, "nominal", 0);
+    })
+    $('#tablePinjaman').trigger('reloadGrid');
+    setTotalNominal()
+    setTotalSisa()
+  }
+
+  function selectAllRowsPinjaman() {
+    let originalData = $("#tablePinjaman").getGridParam("data");
+    let getSelectedRows = originalData.map((data) => data.id);
+    $("#tablePinjaman")[0].p.selectedRowIds = [];
+    $("#tablePinjaman")
+      .jqGrid("setGridParam", {
+        selectedRowIds: getSelectedRows
+      })
+      .trigger("reloadGrid");
+    setTotalNominal()
+    setTotalSisa()
+  }
+
   function loadPinjamanGrid() {
+    let disabled = '';
+    if ($('#crudForm').data('action') == 'delete') {
+      disabled = 'disabled'
+    }
+
     $("#tablePinjaman")
       .jqGrid({
         datatype: 'local',
@@ -1292,9 +1345,32 @@
             label: "",
             name: "",
             width: 30,
-            formatter: 'checkbox',
-            search: false,
-            editable: false,
+            align: 'center',
+            sortable: false,
+            clear: false,
+            stype: 'input',
+            searchable: false,
+            searchoptions: {
+              type: 'checkbox',
+              clearSearch: false,
+              dataInit: function(element) {
+
+                $(element).removeClass('form-control')
+                $(element).parent().addClass('text-center')
+                if (disabled == '') {
+                  $(element).on('click', function() {
+                    if ($(this).is(':checked')) {
+                      selectAllRowsPinjaman()
+                    } else {
+                      clearSelectedRowsPinjaman()
+                    }
+                  })
+                } else {
+                  $(element).attr('disabled', true)
+                }
+
+              }
+            },
             formatter: function(value, rowOptions, rowData) {
               let disabled = '';
               if ($('#crudForm').data('action') == 'delete') {
@@ -1532,8 +1608,52 @@
     })
   })
 
+  function clearSelectedRowsPinjKaryawan() {
+    getSelectedRows = $("#tablePinjamanKaryawan").getGridParam("selectedRowIds");
+    $("#tablePinjamanKaryawan")[0].p.selectedRowIds = [];
+    $.each(getSelectedRows, function(index, value) {
+      let originalGridData = $("#tablePinjamanKaryawan")
+        .jqGrid("getGridParam", "originalData")
+        .find((row) => row.id == value);
+
+      sisa = 0
+      if ($('#crudForm').data('action') == 'edit') {
+        sisa = (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.nominal))
+      } else {
+        sisa = originalGridData.sisa
+      }
+
+      $("#tablePinjamanKaryawan").jqGrid(
+        "setCell",
+        value,
+        "sisa",
+        sisa
+      );
+      $("#tablePinjamanKaryawan").jqGrid("setCell", value, "nominal", 0);
+    })
+    $('#tablePinjamanKaryawan').trigger('reloadGrid');
+    setTotalNominalKaryawan()
+    setTotalSisaKaryawan()
+  }
+
+  function selectAllRowsPinjKaryawan() {
+    let originalData = $("#tablePinjamanKaryawan").getGridParam("data");
+    let getSelectedRows = originalData.map((data) => data.id);
+    $("#tablePinjamanKaryawan")[0].p.selectedRowIds = [];
+    $("#tablePinjamanKaryawan")
+      .jqGrid("setGridParam", {
+        selectedRowIds: getSelectedRows
+      })
+      .trigger("reloadGrid");
+    setTotalNominalKaryawan()
+    setTotalSisaKaryawan()
+  }
 
   function loadPinjamanKaryawanGrid() {
+    let disabled = '';
+    if ($('#crudForm').data('action') == 'delete') {
+      disabled = 'disabled'
+    }
     $("#tablePinjamanKaryawan")
       .jqGrid({
         datatype: 'local',
@@ -1543,9 +1663,32 @@
             label: "",
             name: "",
             width: 30,
-            formatter: 'checkbox',
-            search: false,
-            editable: false,
+            align: 'center',
+            sortable: false,
+            clear: false,
+            stype: 'input',
+            searchable: false,
+            searchoptions: {
+              type: 'checkbox',
+              clearSearch: false,
+              dataInit: function(element) {
+
+                $(element).removeClass('form-control')
+                $(element).parent().addClass('text-center')
+                if (disabled == '') {
+                  $(element).on('click', function() {
+                    if ($(this).is(':checked')) {
+                      selectAllRowsPinjKaryawan()
+                    } else {
+                      clearSelectedRowsPinjKaryawan()
+                    }
+                  })
+                } else {
+                  $(element).attr('disabled', true)
+                }
+
+              }
+            },
             formatter: function(value, rowOptions, rowData) {
               let disabled = '';
               if ($('#crudForm').data('action') == 'delete') {
@@ -1791,7 +1934,7 @@
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         colModel: [{
-          label: '',
+            label: '',
             name: '',
             width: 30,
             align: 'center',
@@ -2226,77 +2369,27 @@
   }
 
   function clearSelectedRowsPBT() {
-    
+
     $("#tablePengembalianTitipan")[0].p.selectedRowIds = [];
     $('#tablePengembalianTitipan').trigger('reloadGrid');
+    setTotalNominalTitipan()
   }
 
   function selectAllRowsPBT(reloadGrid = null) {
-    aksi = $('#crudForm').data('action')
-    let idTitipan = $('#crudForm').find("[name=id]").val()
-    if (aksi == 'edit') {
-      urlAll = `${apiUrl}penerimaantruckingheader/getpengembaliantitipan`
-      reloadGrid = 'reload'
-    } else if (aksi == 'delete' || aksi == 'view') {
-      urlAll = `${apiUrl}penerimaantruckingheader/getpengembaliantitipan`
-      attribut = 'disabled'
-      forCheckbox = 'disabled'
-    } else if (aksi == 'add') {
-      urlAll = `${apiUrl}penerimaantruckingheader/getpengembaliantitipan`
-    }
 
-    periodedari = $('[name=periodedari]').val()
-    periodesampai = $('[name=periodesampai]').val()
-    jenisorder_id = $('[name=jenisorderan_id]').val()
+    let originalData = $("#tablePengembalianTitipan").getGridParam("data");
+    let getSelectedRows = originalData.map((data) => data.id);
+    $("#tablePengembalianTitipan")[0].p.selectedRowIds = [];
 
-    if ((periodedari != '') || (periodesampai != '') || (jenisorder_id != '')) {
-      return new Promise((resolve, reject) => {
-        $.ajax({
-          url: urlAll,
-          method: 'GET',
-          dataType: 'JSON',
-          data: {
-            periodedari: periodedari,
-            periodesampai: periodesampai,
-            jenisorderan_id: jenisorder_id,
-            id: idTitipan,
-            reloadGrid: reloadGrid,
-            limit: 0
-          },
-          headers: {
-            Authorization: `Bearer ${accessToken}`
-          },
-          success: response => {
-            clearSelectedRowsPBT()
-            selectedId = response.data.map((data) => data.id)
-
-            // $('#tablePengembalianTitipan').jqGrid("clearGridData");
-            $('#tablePengembalianTitipan').jqGrid('setGridParam', {
-              data: response.data,
-              originalData: response.data,
-              rowNum: response.data.length,
-              selectedRowIds: selectedId
-            }).trigger('reloadGrid');
-          },
-          error: error => {
-            if (error.status === 422) {
-              $('.is-invalid').removeClass('is-invalid')
-              $('.invalid-feedback').remove()
-
-
-              errors = error.responseJSON.errors
-              reject(errors)
-
-            } else {
-              showDialog(error.responseJSON)
-            }
-          },
-          error: error => {
-            reject(error)
-          }
+    setTimeout(() => {
+      $("#tablePengembalianTitipan")
+        .jqGrid("setGridParam", {
+          selectedRowIds: getSelectedRows
         })
-      })
-    }
+        .trigger("reloadGrid");
+
+      setTotalNominalTitipan()
+    })
   }
 
   function checkboxTitipan(element, rowId) {
@@ -2328,15 +2421,14 @@
 
   function setTotalNominalTitipan() {
     // let nominalDetails = $(`#tablePengembalianTitipan`).find(`td[aria-describedby="tablePengembalianTitipan_nominal_titipan"]`)
-    let checkboxEl = $(`#tablePengembalianTitipan`).find(`td input[type=checkbox]:checked`)
     let nominal = 0
-    $.each(checkboxEl, (index, checkboxEls) => {
-      checkBoxVal = $(checkboxEls).val()
-      getNominal = $(`#tablePengembalianTitipan tr#${checkBoxVal}`).find(`td[aria-describedby="tablePengembalianTitipan_nominal_titipan"]`).text()
-      nominaldetail = parseFloat(getNominal.replaceAll(',', ''))
-      nominals = (isNaN(nominaldetail)) ? 0 : nominaldetail;
-      nominal += nominals
-    });
+    let selectedRowsPinjaman = $("#tablePengembalianTitipan").getGridParam("selectedRowIds");
+    $.each(selectedRowsPinjaman, function(index, value) {
+      dataPinjaman = $("#tablePengembalianTitipan").jqGrid("getLocalRow", value);
+      nominals = (dataPinjaman.nominal_titipan == undefined || dataPinjaman.nominal_titipan == '') ? 0 : dataPinjaman.nominal_titipan;
+      getNominal = (isNaN(nominals)) ? parseFloat(nominals.replaceAll(',', '')) : parseFloat(nominals)
+      nominal = nominal + getNominal
+    })
     initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePengembalianTitipan_nominal_titipan"]`).text(nominal))
   }
 

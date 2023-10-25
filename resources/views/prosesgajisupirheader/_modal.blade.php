@@ -303,6 +303,9 @@
     let selectedBBM = [];
     let selectedRIC = [];
     let selectedSupir = [];
+    let selectedGajiSupir = [];
+    let selectedGajiKenek = [];
+    let selectedExtra = [];
     let sortnameRincian = 'nobuktiric'
     let sortorderRincian = 'asc';
     let pageRincian = 0;
@@ -328,6 +331,9 @@
             selectedKomisi.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_komisisupir"]`).text());
             selectedMakan.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_uangmakanharian"]`).text());
             selectedMakanBerjenjang.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_uangmakanberjenjang"]`).text());
+            selectedGajiSupir.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_gajisupir"]`).text());
+            selectedGajiKenek.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_gajikenek"]`).text());
+            selectedExtra.push($(element).parents('tr').find(`td[aria-describedby="rekapRincian_extra"]`).text());
             countNominal()
             $(element).parents('tr').addClass('bg-light-blue')
         } else {
@@ -346,6 +352,9 @@
                     selectedKomisi.splice(i, 1);
                     selectedMakan.splice(i, 1);
                     selectedMakanBerjenjang.splice(i, 1);
+                    selectedGajiSupir.splice(i, 1);
+                    selectedGajiKenek.splice(i, 1);
+                    selectedExtra.splice(i, 1);
                 }
             }
 
@@ -363,6 +372,9 @@
         komisi = 0;
         makan = 0;
         berjenjang = 0;
+        gajisupir = 0;
+        gajikenek = 0;
+        extra = 0;
         $.each(selectedPP, function(index, item) {
             potPribadi = potPribadi + parseFloat(item.replace(/,/g, ''))
         });
@@ -390,6 +402,15 @@
         $.each(selectedMakanBerjenjang, function(index, item) {
             berjenjang = berjenjang + parseFloat(item.replace(/,/g, ''))
         });
+        $.each(selectedGajiSupir, function(index, item) {
+            gajisupir = gajisupir + parseFloat(item.replace(/,/g, ''))
+        });
+        $.each(selectedGajiKenek, function(index, item) {
+            gajikenek = gajikenek + parseFloat(item.replace(/,/g, ''))
+        });
+        $.each(selectedExtra, function(index, item) {
+            extra = extra + parseFloat(item.replace(/,/g, ''))
+        });
 
         // postingRincian = borongan + makan
         postingRincian = borongan
@@ -409,6 +430,9 @@
         initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_komisisupir"]`).text(komisi))
         initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_uangmakanharian"]`).text(makan))
         initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_uangmakanberjenjang"]`).text(berjenjang))
+        initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_gajisupir"]`).text(gajisupir))
+        initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_gajikenek"]`).text(gajikenek))
+        initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_extra"]`).text(extra))
     }
 
     $(document).ready(function() {
@@ -556,6 +580,17 @@
                 value: limit
             })
 
+            data.push({
+                name: 'tgldariheader',
+                value: $('#tgldariheader').val()
+            })
+            data.push({
+                name: 'tglsampaiheader',
+                value: $('#tglsampaiheader').val()
+            })
+
+            let tgldariheader = $('#tgldariheader').val();
+            let tglsampaiheader = $('#tglsampaiheader').val()
             console.log(data);
 
             switch (action) {
@@ -569,7 +604,7 @@
                     break;
                 case 'delete':
                     method = 'DELETE'
-                    url = `${apiUrl}prosesgajisupirheader/${Id}`
+                    url = `${apiUrl}prosesgajisupirheader/${Id}?tgldariheader=${tgldariheader}&tglsampaiheader=${tglsampaiheader}&indexRow=${indexRow}&limit=${limit}&page=${page}`
                     break;
                 default:
                     method = 'POST'
@@ -599,22 +634,13 @@
                     $('#jqGrid').jqGrid('setGridParam', {
                         page: response.data.page,
                         postData: {
+                            proses: 'reload',
                             tgldari: dateFormat(response.data.tgldariheader),
                             tglsampai: dateFormat(response.data.tglsampaiheader)
                         }
                     }).trigger('reloadGrid');
 
-                    selectedRows = []
-                    selectedPP = [];
-                    selectedPS = [];
-                    selectedDeposito = [];
-                    selectedBBM = [];
-                    selectedRIC = [];
-                    selectedSupir = [];
-                    selectedBorongan = [];
-                    selectedKomisi = [];
-                    selectedJalan = [];
-                    selectedMakan = [];
+                    clearSelectedRows()
                     if (id == 0) {
                         $('#detail').jqGrid().trigger('reloadGrid')
                     }
@@ -650,10 +676,10 @@
         initDatepicker()
         getMaxLength(form)
         initAutoNumeric()
-        
-        form.find('#btnSubmit').prop('disabled',false)
+
+        form.find('#btnSubmit').prop('disabled', false)
         if (form.data('action') == "view") {
-          form.find('#btnSubmit').prop('disabled',true)
+            form.find('#btnSubmit').prop('disabled', true)
         }
     })
 
@@ -670,6 +696,9 @@
         selectedJalan = [];
         selectedMakan = [];
         selectedMakanBerjenjang = [];
+        selectedGajiKenek = [];
+        selectedGajiSupir = [];
+        selectedExtra = [];
         $('#crudModal').find('.modal-body').html(modalBody)
     })
 
@@ -815,11 +844,31 @@
                         align: "right",
                     },
                     {
+                        label: 'GAJI SUPIR',
+                        name: 'gajisupir',
+                        formatter: currencyFormat,
+                        align: "right",
+                    },
+                    {
+                        label: 'BIAYA EXTRA',
+                        name: 'extra',
+                        formatter: currencyFormat,
+                        align: "right",
+                    },
+                    {
                         label: 'KOMISI SUPIR',
                         name: 'komisisupir',
                         formatter: currencyFormat,
                         align: "right",
                     },
+                    {
+                        label: 'KOMISI KENEK',
+                        name: 'gajikenek',
+                        formatter: currencyFormat,
+                        align: "right",
+                    },
+
+
                     {
                         label: 'TOL',
                         name: 'tolsupir',
@@ -1048,6 +1097,7 @@
                 $('.modal-loader').addClass('d-none')
             })
     }
+
     function viewProsesGajiSupirHeader(Id) {
         let form = $('#crudForm')
 
@@ -1057,7 +1107,7 @@
           <i class="fa fa-save"></i>
           Save
         `)
-        form.find('#btnSubmit').prop('disabled',true)
+        form.find('#btnSubmit').prop('disabled', true)
         form.find(`.sometimes`).hide()
         $('#crudModalTitle').text('View Proses Gaji Supir')
         $('.is-invalid').removeClass('is-invalid')
@@ -1071,12 +1121,12 @@
             .then(id => {
                 setFormBindKeys(form)
                 form.find('[name]').removeAttr('disabled')
-    
+
                 form.find('select').each((index, select) => {
                     let element = $(select)
-      
+
                     if (element.data('select2')) {
-                      element.select2('destroy')
+                        element.select2('destroy')
                     }
                 })
                 form.find('[name]').attr('disabled', 'disabled').css({
@@ -1087,7 +1137,7 @@
             .then(() => {
                 $('#crudModal').modal('show')
                 clearSelectedRows()
-            $('#gs_').prop('checked', false)
+                $('#gs_').prop('checked', false)
                 form.find(`.hasDatepicker`).prop('readonly', true)
                 form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
                 let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
@@ -1112,12 +1162,19 @@
             beforeSend: request => {
                 request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
             },
+            data: {
+                aksi: Aksi
+            },
             success: response => {
                 var error = response.error
                 if (error) {
                     showDialog(response)
                 } else {
-                    cekValidasiAksi(Id, Aksi)
+                    if (Aksi == 'PRINTER') {
+                        window.open(`{{ route('prosesgajisupirheader.report') }}?id=${Id}`)
+                    } else {
+                        cekValidasiAksi(Id, Aksi)
+                    }
                 }
             }
         })
@@ -1182,6 +1239,9 @@
                     selectedRows.push(detail.idric)
 
                     selectedBorongan.push(detail.borongan)
+                    selectedGajiSupir.push(detail.gajisupir)
+                    selectedGajiKenek.push(detail.gajikenek)
+                    selectedExtra.push(detail.extra)
                     selectedJalan.push(detail.uangjalan)
                     selectedKomisi.push(detail.komisisupir)
                     selectedMakan.push(detail.uangmakanharian)
@@ -1316,6 +1376,9 @@
 
                 selectedRows = response.data.map((data) => data.idric)
                 selectedBorongan = response.data.map((data) => data.borongan)
+                selectedGajiSupir = response.data.map((data) => data.gajisupir)
+                selectedGajiKenek = response.data.map((data) => data.gajikenek)
+                selectedExtra = response.data.map((data) => data.extra)
                 selectedJalan = response.data.map((data) => data.uangjalan)
                 selectedKomisi = response.data.map((data) => data.komisisupir)
                 selectedMakan = response.data.map((data) => data.uangmakanharian)
@@ -1460,6 +1523,9 @@
     function clearSelectedRows() {
         selectedRows = [];
         selectedBorongan = [];
+        selectedGajiSupir = [];
+        selectedExtra = [];
+        selectedGajiKenek = [];
         selectedJalan = [];
         selectedKomisi = [];
         selectedMakan = [];
@@ -1544,6 +1610,9 @@
             success: (response) => {
                 selectedRows = response.data.map((data) => data.idric)
                 selectedBorongan = response.data.map((data) => data.borongan)
+                selectedGajiSupir = response.data.map((data) => data.gajisupir)
+                selectedGajiKenek = response.data.map((data) => data.gajikenek)
+                selectedExtra = response.data.map((data) => data.extra)
                 selectedJalan = response.data.map((data) => data.uangjalan)
                 selectedKomisi = response.data.map((data) => data.komisisupir)
                 selectedMakan = response.data.map((data) => data.uangmakanharian)

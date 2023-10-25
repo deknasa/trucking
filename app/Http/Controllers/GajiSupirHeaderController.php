@@ -270,7 +270,7 @@ class GajiSupirHeaderController extends MyController
                 'index' => 'nocont',
             ],
             [
-                'label' => 'AGEN',
+                'label' => 'CUSTOMER',
                 'index' => 'agen',
             ],
             [

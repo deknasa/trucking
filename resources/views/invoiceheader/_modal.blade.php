@@ -610,8 +610,42 @@
     }
   })
 
+  function clearSelectedRowsInvoice() {
+    getSelectedRows = $("#tableInvoice").getGridParam("selectedRowIds");
+    $("#tableInvoice")[0].p.selectedRowIds = [];
+    $('#tableInvoice').trigger('reloadGrid');
+    setTotalOmset()
+    setTotalExtra()
+    setTotalRetribusi()
+    setTotalAll()
+  }
+
+  function selectAllRowsInvoice() {
+
+    let originalData = $("#tableInvoice").getGridParam("data");
+    let getSelectedRows = originalData.map((data) => data.id);
+    $("#tableInvoice")[0].p.selectedRowIds = [];
+
+    setTimeout(() => {
+      $("#tableInvoice")
+        .jqGrid("setGridParam", {
+          selectedRowIds: getSelectedRows
+        })
+        .trigger("reloadGrid");
+
+      setTotalOmset()
+      setTotalExtra()
+      setTotalRetribusi()
+      setTotalAll()
+    })
+  }
 
   function loadInvoiceGrid() {
+
+    let disabled = '';
+    if ($('#crudForm').data('action') == 'delete') {
+      disabled = 'disabled'
+    }
     $("#tableInvoice")
       .jqGrid({
         datatype: 'local',
@@ -621,9 +655,32 @@
             label: "",
             name: "",
             width: 30,
-            formatter: 'checkbox',
-            search: false,
-            editable: false,
+            align: 'center',
+            sortable: false,
+            clear: false,
+            stype: 'input',
+            searchable: false,
+            searchoptions: {
+              type: 'checkbox',
+              clearSearch: false,
+              dataInit: function(element) {
+
+                $(element).removeClass('form-control')
+                $(element).parent().addClass('text-center')
+                if (disabled == '') {
+                  $(element).on('click', function() {
+                    if ($(this).is(':checked')) {
+                      selectAllRowsInvoice()
+                    } else {
+                      clearSelectedRowsInvoice()
+                    }
+                  })
+                } else {
+                  $(element).attr('disabled', true)
+                }
+
+              }
+            },
             formatter: function(value, rowOptions, rowData) {
               let disabled = '';
               if ($('#crudForm').data('action') == 'delete') {
@@ -1302,12 +1359,21 @@
       beforeSend: request => {
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
+      data: {
+        aksi: Aksi
+      },
       success: response => {
         var error = response.error
         if (error) {
           showDialog(response)
         } else {
-          cekValidasiAksi(Id, Aksi)
+          if (Aksi == 'PRINTER BESAR') {
+            window.open(`{{ route('invoiceheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
+          } else if (Aksi == 'PRINTER KECIL') {
+            window.open(`{{ route('invoiceheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
+          } else {
+            cekValidasiAksi(Id, Aksi)
+          }
         }
       }
     })

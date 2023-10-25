@@ -41,6 +41,15 @@
                                 <input type="text" name="stoksampai" class="form-control stoksampai-lookup">
                             </div>
                         </div>
+                        <div class="row">
+                            <label class="col-12 col-sm-2 col-form-label mt-2">Kategori<span class="text-danger">*</span></label>
+
+                            <div class="col-sm-4 mt-2">
+                                <input type="hidden" name="kelompok_id">
+                                <input type="text" name="kelompok" class="form-control kelompok-lookup">
+                            </div>
+                        </div>
+
 
                         <div class="row">
                             <label class="col-12 col-sm-2 col-form-label mt-2">FILTER<span class="text-danger">*</span></label>
@@ -180,7 +189,7 @@
                         trado: $('#crudForm').find('[name=trado]').val(),
                         trado_id: $('#crudForm').find('[name=trado_id]').val(),
                         proses: 'reload',
-                        datafilter:dataFilter,
+                        datafilter: dataFilter,
 
                     },
                     datatype: "json"
@@ -210,6 +219,7 @@
 
             let stokdari_id = $('#crudForm').find('[name=stokdari_id]').val()
             let stoksampai_id = $('#crudForm').find('[name=stoksampai_id]').val()
+            let kelompok_id = $('#crudForm').find('[name=kelompok_id]').val()
             let dari = $('#crudForm').find('[name=dari]').val()
             let sampai = $('#crudForm').find('[name=sampai]').val()
             let filter = $('#crudForm').find('[name=filter]').val()
@@ -224,12 +234,13 @@
                 dataFilter = $('#crudForm').find('[name=gandengan_id]').val()
             }
 
-            if ( dari != '' && sampai != '' && filter != '') {
+            if (dari != '' && sampai != '' && filter != '') {
 
                 $('#jqGrid').jqGrid('setGridParam', {
                     postData: {
                         stokdari_id: stokdari_id,
                         stoksampai_id: stoksampai_id,
+                        kelompok_id: kelompok_id,
                         dari: dari,
                         sampai: sampai,
                         filter: filter,
@@ -471,6 +482,7 @@
                     onClick: function(event) {
                         let stokdari_id = $('#crudForm').find('[name=stokdari_id]').val()
                         let stoksampai_id = $('#crudForm').find('[name=stoksampai_id]').val()
+                        let kelompok_id = $('#crudForm').find('[name=kelompok_id]').val()
                         let dari = $('#crudForm').find('[name=dari]').val()
                         let sampai = $('#crudForm').find('[name=sampai]').val()
                         let filter = $('#crudForm').find('[name=filter]').val()
@@ -478,18 +490,18 @@
                         let dataFilter = ''
                         if (filter == '186') {
                             dataFilter = $('#crudForm').find('[name=gudang_id]').val()
-                        }else if (filter == '187') {
+                        } else if (filter == '187') {
                             dataFilter = $('#crudForm').find('[name=trado_id]').val()
-                        }else if (filter == '188') {
+                        } else if (filter == '188') {
                             dataFilter = $('#crudForm').find('[name=gandengan_id]').val()
-                        }else {
+                        } else {
                             let dataFilter = '1'
                         }
 
-                        if (stokdari_id != '' && stoksampai_id != '' && dari != '' && sampai != '' && filter != '') {
+                        if (dari != '' && sampai != '' && filter != '') {
 
                             window.open(
-                                `{{ route('kartustok.export') }}?dari=${dari}&sampai=${sampai}&stokdari_id=${stokdari_id}&stoksampai_id=${stoksampai_id}&filter=${filter}&datafilter=${dataFilter}&proses=${proses}`
+                                `{{ route('kartustok.export') }}?dari=${dari}&sampai=${sampai}&stokdari_id=${stokdari_id}&stoksampai_id=${stoksampai_id}&kelompok_id=${kelompok_id}&filter=${filter}&datafilter=${dataFilter}&proses=${proses}`
                             )
                         } else {
                             showDialog('ISI SELURUH KOLOM')
@@ -502,6 +514,7 @@
                     onClick: function(event) {
                         let stokdari_id = $('#crudForm').find('[name=stokdari_id]').val()
                         let stoksampai_id = $('#crudForm').find('[name=stoksampai_id]').val()
+                        let kelompok_id = $('#crudForm').find('[name=kelompok_id]').val()
                         let dari = $('#crudForm').find('[name=dari]').val()
                         let sampai = $('#crudForm').find('[name=sampai]').val()
                         let filter = $('#crudForm').find('[name=filter]').val()
@@ -517,10 +530,10 @@
                             dataFilter = $('#crudForm').find('[name=gandengan_id]').val()
                         }
 
-                        if (stokdari_id != '' && stoksampai_id != '' && dari != '' && sampai != '' && filter != '') {
+                        if (dari != '' && sampai != '' && filter != '') {
 
                             window.open(
-                                `{{ route('kartustok.report') }}?dari=${dari}&sampai=${sampai}&stokdari_id=${stokdari_id}&stoksampai_id=${stoksampai_id}&filter=${filter}&datafilter=${dataFilter}&proses=${proses}`
+                                `{{ route('kartustok.report') }}?dari=${dari}&sampai=${sampai}&stokdari_id=${stokdari_id}&stoksampai_id=${stoksampai_id}&kelompok_id=${kelompok_id}&filter=${filter}&datafilter=${dataFilter}&proses=${proses}`
                             )
                         } else {
                             showDialog('ISI SELURUH KOLOM')
@@ -683,6 +696,29 @@
                 element.data('currentValue', element.val())
             }
         })
+        $('.kelompok-lookup').lookup({
+            title: 'Kelompok Lookup',
+            fileName: 'kelompok',
+            beforeProcess: function(test) {
+                this.postData = {
+                    Aktif: 'AKTIF',
+                }
+            },
+            onSelectRow: (kelompok, element) => {
+                $('#crudForm [name=kelompok_id]').first().val(kelompok.id)
+                element.val(kelompok.kodekelompok)
+                element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+                element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+                $('#crudForm [name=kelompok_id]').first().val('')
+                element.val('')
+                element.data('currentValue', element.val())
+            }
+        })
+
     }
 
     const setFilterOptions = function(relatedForm) {

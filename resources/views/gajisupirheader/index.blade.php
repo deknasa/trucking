@@ -77,7 +77,7 @@
   let currentTab = 'detail'
   let tgldariheader
   let tglsampaiheader
-
+  reloadGrid()
   $(document).ready(function() {
     $("#tabs-detail").tabs()
 
@@ -528,7 +528,7 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                window.open(`{{ route('gajisupirheader.report') }}?id=${selectedId}`)
+                cekValidasi(selectedId, 'PRINTER')
               }
             }
           },

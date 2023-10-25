@@ -1574,3 +1574,7 @@ function setSpaceBarCheckedHandler() {
     }
   });
 }
+
+function reloadGrid() {
+    $("#jqGrid").trigger('reloadGrid');
+  }

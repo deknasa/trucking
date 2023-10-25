@@ -81,6 +81,8 @@
 
   }
   setSpaceBarCheckedHandler()
+  reloadGrid()
+
   $(document).ready(function() {
     $("#tabs").tabs()
 
@@ -542,7 +544,7 @@
                     showDialog('Harap pilih salah satu record')
                   } else {
 
-                    window.open(`{{url('notadebetheader/report/${selectedId}?printer=reportPrinterBesar')}}`)
+                    cekValidasi(selectedId, 'PRINTER BESAR')
                   }
                 }
               },
@@ -554,7 +556,7 @@
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
                     showDialog('Harap pilih salah satu record')
                   } else {
-                    window.open(`{{url('notadebetheader/report/${selectedId}?printer=reportPrinterKecil')}}`)
+                    cekValidasi(selectedId, 'PRINTER KECIL')
                   }
                 }
               },

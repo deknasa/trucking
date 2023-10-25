@@ -5,7 +5,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
-            <div class="card card-primary">
+            <div class="card card-easyui bordered mb-4">
                 <div class="card-header">
                 </div>
                 <form id="crudForm">
@@ -116,7 +116,7 @@
                                     </div>
                                 </div>
                             </div>
-                            {{-- <label class="col-12 col-sm-3 col-form-label mt-2">Priode<span class="text-danger"></span></label> --}}
+                            {{-- <label class="col-12 col-sm-3 col-form-label mt-2">Periode<span class="text-danger"></span></label> --}}
                             <div class="col-md-6">
                                 <div class="row">
                                     <h5 class="col-12 col-sm-3 text-center mt-2">s/d</h5>
@@ -177,6 +177,9 @@
 
 @push('scripts')
 <script>
+  let indexRow = 0;
+  let id = "";
+  let triggerClick = true;
     $(document).ready(function() {
         initLookup()
         initDatepicker()
@@ -223,12 +226,12 @@
             // (kelompok_id != '') &&
             // (statusreuse != '') &&
             // (statusban != '') &&
-            (filter != '') &&
+            // (filter != '') &&
             (jenistgltampil != '') &&
-            (priode != '') &&
+            (priode != '') 
             // (stokdari_id != '') &&
             // (stoksampai_id != '') &&
-            (dataFilter != '')
+            // (dataFilter != '')
         ) {
             window.open(`{{ route('laporansaldoinventory.report') }}?kelompok_id=${kelompok_id}&statusreuse=${statusreuse}&statusban=${statusban}&filter=${filter}&jenistgltampil=${jenistgltampil}&priode=${priode}&stokdari_id=${stokdari_id}&stoksampai_id=${stoksampai_id}&dataFilter=${dataFilter}`)
 
@@ -367,6 +370,50 @@
             },
             onClear: (element) => {
                 $('#crudForm [name=gudang_id]').first().val('')
+                element.val('')
+                element.data('currentValue', element.val())
+            }
+        })
+        $('.trado-lookup').lookup({
+            title: 'Trado lookup',
+            fileName: 'trado',
+            beforeProcess: function(test) {
+                this.postData = {
+                    Aktif: 'AKTIF',
+                }
+            },
+            onSelectRow: (trado, element) => {
+                $('#crudForm [name=trado_id]').first().val(trado.id)
+                element.val(trado.kodetrado)
+                element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+                element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+                $('#crudForm [name=trado_id]').first().val('')
+                element.val('')
+                element.data('currentValue', element.val())
+            }
+        })
+        $('.gandengan-lookup').lookup({
+            title: 'Gandengan lookup',
+            fileName: 'gandengan',
+            beforeProcess: function(test) {
+                this.postData = {
+                    Aktif: 'AKTIF',
+                }
+            },
+            onSelectRow: (gandengan, element) => {
+                $('#crudForm [name=gandengan_id]').first().val(gandengan.id)
+                element.val(gandengan.kodegandengan)
+                element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+                element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+                $('#crudForm [name=gandengan_id]').first().val('')
                 element.val('')
                 element.data('currentValue', element.val())
             }

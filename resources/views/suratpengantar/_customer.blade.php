@@ -17,7 +17,7 @@
                 iconSet: 'fontAwesome',
                 idPrefix: 'rekapCustGrid',
                 colModel: [{
-                        label: 'agen',
+                        label: 'CUSTOMER',
                         name: 'agen',
                     },
                     {

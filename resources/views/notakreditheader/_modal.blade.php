@@ -467,12 +467,21 @@
       beforeSend: request => {
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
+      data: {
+        aksi: Aksi
+      },
       success: response => {
         var error = response.error
         if (error) {
           showDialog(response)
         } else {
-          cekValidasiAksi(Id, Aksi)
+          if (Aksi == 'PRINTER BESAR') {
+            window.open(`{{ route('notakreditheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
+          } else if (Aksi == 'PRINTER KECIL') {
+            window.open(`{{ route('notakreditheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
+          } else {
+            cekValidasiAksi(Id, Aksi)
+          }
         }
       }
     })
@@ -516,7 +525,7 @@
         },
         success: response => {
           sum = 0;
-         
+
           $.each(response.data, (index, value) => {
             bankId = response.data.bank_id
             let element = form.find(`[name="${index}"]`)
@@ -641,8 +650,8 @@
   //             <td>
   //               <textarea disabled name="keterangandetail[]" class="form-control" id=""  rows="1"></textarea>
   //             </td>
-            
-            
+
+
   //             <input type="hidden" value="${detail.invoice_nobukti}" disabled name="deatail_invoice_nobukti_pelunasan[]" readonly>
   //         </tr>`)
   //         $('#detailList tbody').append(detailRow)
@@ -730,10 +739,10 @@
   //             ${detail.penyesuaian}
   //             <input type="hidden" value="${detail.penyesuaian}" name="deatail_penyesuaian_pelunasan[]"  readonly>
   //           </td>
-            
+
   //             <input type="hidden" value="${detail.invoice_nobukti}" name="deatail_invoice_nobukti_pelunasan[]" readonly>
-            
-            
+
+
   //           <td><textarea name="keterangandetail[]" class="form-control" id=""  rows="1">${detail.keterangan}</textarea></td>
   //         </tr>`)
   //         $('#detailList tbody').append(detailRow)
@@ -771,7 +780,7 @@
     }
   }
 
-  
+
   function showDefault(form) {
     return new Promise((resolve, reject) => {
       $.ajax({

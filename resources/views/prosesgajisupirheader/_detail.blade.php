@@ -1,7 +1,7 @@
 @push('scripts')
 <script>
   function loadDetailGrid() {
-    let sortnameDetail = 'nobukti'
+    let sortnameDetail = 'gajisupir_nobukti'
     let sortorderDetail = 'asc'
     let totalRecordDetail
     let limitDetail
@@ -20,7 +20,7 @@
             label: 'NO RINCIAN',
             name: 'gajisupir_nobukti',
             formatter: (value, options, rowData) => {
-              if ((value == null) ||( value == '')) {
+              if ((value == null) || (value == '')) {
                 return '';
               }
               let tgldari = rowData.tgldariheadergajisupirheaderheader
@@ -28,8 +28,8 @@
               let url = "{{route('gajisupirheader.index')}}"
               let formattedValue = $(`<a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>`)
               return formattedValue[0].outerHTML
-          },
-          
+            },
+
           },
           {
             label: 'NO BK',
@@ -40,7 +40,32 @@
             name: 'supir_id',
           },
           {
-            label: 'BORONGAN',
+            label: 'Gaji Supir',
+            name: 'gajisupir',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
+            label: 'Biaya Extra',
+            name: 'biayaextra',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
+            label: 'Komisi Supir',
+            name: 'komisisupir',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
+            label: 'Komisi Kenek',
+            name: 'gajikenek',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+
+          {
+            label: 'TOTAL',
             name: 'total',
             align: 'right',
             formatter: currencyFormat,
@@ -88,12 +113,8 @@
             align: 'right',
             formatter: currencyFormat,
           },
-          {
-            label: 'Komisi Supir',
-            name: 'komisisupir',
-            align: 'right',
-            formatter: currencyFormat,
-          },
+
+
           {
             label: 'TOL',
             name: 'tolsupir',
@@ -173,6 +194,9 @@
               potonganpinjamansemua: data.attributes.totalPinjamanSemua,
               deposito: data.attributes.totalDeposito,
               komisisupir: data.attributes.totalKomisi,
+              gajisupir: data.attributes.totalGajiSupir,
+              gajikenek: data.attributes.totalGajiKenek,
+              biayaextra: data.attributes.totalBiayaExtra,
               tolsupir: data.attributes.totalTol
             }, true)
           }
@@ -191,15 +215,6 @@
           clearGlobalSearch($('#detail'))
         },
       })
-
-      .jqGrid("navGrid", pager, {
-        search: false,
-        refresh: false,
-        add: false,
-        edit: false,
-        del: false,
-      })
-
       .customPager()
 
     /* Append clear filter button */
@@ -216,7 +231,8 @@
       url: `${apiUrl}prosesgajisupirdetail`,
       datatype: "json",
       postData: {
-        prosesgajisupir_id: id
+        prosesgajisupir_id: id,
+        proses: 'reload'
       },
       page: 1
     }).trigger('reloadGrid')

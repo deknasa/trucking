@@ -328,12 +328,21 @@
       beforeSend: request => {
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
+      data: {
+        aksi: Aksi
+      },
       success: response => {
         var error = response.error
         if (error) {
           showDialog(response)
         } else {
-          cekValidasiAksi(Id, Aksi)
+            if(Aksi == 'PRINTER BESAR'){
+              window.open(`{{ route('invoiceextraheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
+            } else if(Aksi == 'PRINTER KECIL'){
+              window.open(`{{ route('invoiceextraheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
+            } else {
+              cekValidasiAksi(Id, Aksi)
+            }
         }
       }
     })

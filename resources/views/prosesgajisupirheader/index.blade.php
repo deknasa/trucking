@@ -248,6 +248,30 @@
             align: 'right',
             formatter: currencyFormat,
           },
+          // {
+          //   label: 'GAJI SUPIR',
+          //   name: 'gajisupir',
+          //   align: 'right',
+          //   formatter: currencyFormat,
+          // },
+          {
+            label: 'KOMISI SUPIR',
+            name: 'komisisupir',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
+            label: 'KOMISI KENEK',
+            name: 'gajikenek',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          // {
+          //   label: 'BIAYA EXTRA',
+          //   name: 'biayaextra',
+          //   align: 'right',
+          //   formatter: currencyFormat,
+          // },
           {
             label: 'U. JALAN',
             name: 'uangjalan',
@@ -519,6 +543,10 @@
               deposito: data.attributes.totalDeposito,
               uangmakanberjenjang: data.attributes.totalMakanBerjenjang,
               uangmakanharian: data.attributes.totalMakan,
+              komisisupir: data.attributes.totalKomisiSupir,
+              gajikenek: data.attributes.totalGajiKenek,
+              gajisupir: data.attributes.totalGajiSupir,
+              biayaextra: data.attributes.totalBiayaExtra,
             }, true)
           }
           $('#left-nav').find('button').attr('disabled', false)
@@ -599,7 +627,7 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                window.open(`{{ route('prosesgajisupirheader.report') }}?id=${selectedId}`)
+                cekValidasi(selectedId, 'PRINTER')
               }
             }
           },
