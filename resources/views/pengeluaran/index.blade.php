@@ -742,6 +742,7 @@
         tgldari: $('#tgldariheader').val(),
         tglsampai: $('#tglsampaiheader').val(),
         bank_id: $('#bankheader').val(),
+        filters: $('#jqGrid').jqGrid('getGridParam','postData').filters
       },
       success: (response) => {
         selectedRows = response.data.map((pengeluaran) => pengeluaran.id)

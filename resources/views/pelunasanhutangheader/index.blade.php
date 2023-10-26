@@ -687,6 +687,7 @@
         limit: 0,
         tgldari: $('#tgldariheader').val(),
         tglsampai: $('#tglsampaiheader').val(),
+        filters: $('#jqGrid').jqGrid('getGridParam','postData').filters
       },
       success: (response) => {
         selectedRows = response.data.map((row) => row.id)
