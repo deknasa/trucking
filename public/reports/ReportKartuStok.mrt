@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "5c5eef9e9f35b73d1598f8ab2d301180",
+  "ReportGuid": "b683f34e93a50d143f3d7f76b8897444",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportKartuStok.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1698226407000+0700)/",
+  "ReportChanged": "/Date(1698305550000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -112,6 +112,36 @@
             "Type": "System.String"
           },
           "14": {
+            "Name": "stok_id",
+            "NameInSource": "stok_id",
+            "Alias": "stok_id",
+            "Type": "System.String"
+          },
+          "15": {
+            "Name": "gudang_id",
+            "NameInSource": "gudang_id",
+            "Alias": "gudang_id",
+            "Type": "System.String"
+          },
+          "16": {
+            "Name": "trado_id",
+            "NameInSource": "trado_id",
+            "Alias": "trado_id",
+            "Type": "System.String"
+          },
+          "17": {
+            "Name": "gandengan_id",
+            "NameInSource": "gandengan_id",
+            "Alias": "gandengan_id",
+            "Type": "System.String"
+          },
+          "18": {
+            "Name": "iddata",
+            "NameInSource": "iddata",
+            "Alias": "iddata",
+            "Type": "System.String"
+          },
+          "19": {
             "Name": "satuan",
             "NameInSource": "satuan",
             "Alias": "satuan",
@@ -1856,33 +1886,6 @@
             },
             "5": {
               "Ident": "StiText",
-              "Name": "Text39",
-              "Guid": "c4a6ec9b8c8ad14171df31c7ea3ad860",
-              "CanGrow": true,
-              "ClientRectangle": "176,0,8,8",
-              "ComponentPlacement": "gf.GroupFooterBand2",
-              "Interaction": {
-                "Ident": "StiInteraction"
-              },
-              "MaxNumberOfLines": 6,
-              "Text": {
-                "Value": "{Sum(data.qtysaldo)}"
-              },
-              "HorAlignment": "Right",
-              "VertAlignment": "Center",
-              "Font": ";9;Bold;",
-              "Border": ";;;;;;;solid:Black",
-              "Brush": "solid:",
-              "TextBrush": "solid:Black",
-              "TextFormat": {
-                "Ident": "StiNumberFormatService",
-                "NegativePattern": 1,
-                "GroupSeparator": ","
-              },
-              "Type": "Totals"
-            },
-            "6": {
-              "Ident": "StiText",
               "Name": "Text42",
               "Guid": "f578881951aeabe61c30becf8c0be925",
               "CanGrow": true,
@@ -1906,6 +1909,38 @@
                 "NegativePattern": 1,
                 "GroupSeparator": ",",
                 "State": "DecimalSeparator, GroupSeparator"
+              },
+              "Type": "DataColumn"
+            },
+            "6": {
+              "Ident": "StiText",
+              "Name": "Text13",
+              "Guid": "695ad307ae17342ecc22a8280dee7c0d",
+              "CanGrow": true,
+              "ClientRectangle": "176.02,0.02,8,8",
+              "ComponentPlacement": "d.DataBand1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "MaxNumberOfLines": 6,
+              "Text": {
+                "Value": "{data.qtysaldo}"
+              },
+              "HorAlignment": "Right",
+              "VertAlignment": "Center",
+              "Font": ";9;Bold;",
+              "Border": ";;;;;;;solid:Black",
+              "Brush": "solid:",
+              "TextBrush": "solid:Black",
+              "TextOptions": {
+                "WordWrap": true
+              },
+              "ShrinkFontToFit": true,
+              "ShrinkFontToFitMinimumSize": 5,
+              "TextFormat": {
+                "Ident": "StiNumberFormatService",
+                "NegativePattern": 1,
+                "GroupSeparator": ","
               },
               "Type": "DataColumn"
             },
@@ -2082,63 +2117,6 @@
               "Type": "DataColumn"
             },
             "5": {
-              "Ident": "StiText",
-              "Name": "Text68",
-              "Guid": "7796e1583382cdd02b2db369107f6927",
-              "CanGrow": true,
-              "ClientRectangle": "176,0,8,8",
-              "ComponentPlacement": "gf.GroupFooterBand3",
-              "Interaction": {
-                "Ident": "StiInteraction"
-              },
-              "MaxNumberOfLines": 6,
-              "Text": {
-                "Value": "{Sum(data.qtysaldo)}"
-              },
-              "HorAlignment": "Right",
-              "VertAlignment": "Center",
-              "Font": ";9;Bold;",
-              "Border": ";;;;;;;solid:Black",
-              "Brush": "solid:",
-              "TextBrush": "solid:Black",
-              "TextFormat": {
-                "Ident": "StiNumberFormatService",
-                "NegativePattern": 1,
-                "DecimalSeparator": ",",
-                "GroupSeparator": ","
-              },
-              "Type": "Totals"
-            },
-            "6": {
-              "Ident": "StiText",
-              "Name": "Text69",
-              "Guid": "767e24272f56097122d5f8c9a6541669",
-              "CanGrow": true,
-              "ClientRectangle": "185.5,0,26,8",
-              "ComponentPlacement": "gf.GroupFooterBand3",
-              "Interaction": {
-                "Ident": "StiInteraction"
-              },
-              "MaxNumberOfLines": 6,
-              "Text": {
-                "Value": "{data.nilaisaldo}"
-              },
-              "HorAlignment": "Right",
-              "VertAlignment": "Center",
-              "Font": ";9;Bold;",
-              "Border": ";;;;;;;solid:Black",
-              "Brush": "solid:",
-              "TextBrush": "solid:Black",
-              "TextFormat": {
-                "Ident": "StiNumberFormatService",
-                "NegativePattern": 1,
-                "DecimalSeparator": ",",
-                "GroupSeparator": ",",
-                "State": "DecimalSeparator, GroupSeparator"
-              },
-              "Type": "DataColumn"
-            },
-            "7": {
               "Ident": "StiHorizontalLinePrimitive",
               "Name": "HorizontalLinePrimitive6",
               "Guid": "94d24a16d86d319c4a4015bcf4aff0c2",
@@ -2150,7 +2128,7 @@
               "StartCap": ";;;",
               "EndCap": ";;;"
             },
-            "8": {
+            "6": {
               "Ident": "StiHorizontalLinePrimitive",
               "Name": "HorizontalLinePrimitive7",
               "Guid": "b195a7323bccb6e987638d9cd4566b75",
