@@ -143,8 +143,11 @@ $.fn.lookup = function (options) {
 
 		lookupModal.on("hidden.bs.modal", function () {
 			lookupModal.remove();
-			initDatepicker()
 			element.focus();
+			let isInModal = $(element).closest('.modal').length > 0; 
+			if (isInModal) { 
+				initDatepicker()
+			}
 		});
 
 		$(document)
