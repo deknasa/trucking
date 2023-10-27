@@ -405,6 +405,7 @@
     activeGrid = '#jqGrid'
 
     $('#crudModal').find('.modal-body').html(modalBody)
+    initDatepicker('datepickerIndex')
   })
 
   function setTotal() {
@@ -845,7 +846,7 @@
             initAutoNumeric(detailRow.find(`[name="nominal_detail[]"]`))
 
             detailRow.find(`[name="tgljatuhtempo[]"]`).val(dateFormat(detail.tgljatuhtempo))
-            $('#detailList tbody').append(detailRow)
+            $('#detailList>#table_body').append(detailRow)
 
             setTotal();
 
@@ -931,7 +932,7 @@
       </tr>
     `)
 
-    $('#detailList tbody').append(detailRow)
+    $('#detailList>#table_body').append(detailRow)
 
 
     $('.akunpusat-lookup').last().lookup({
@@ -958,7 +959,7 @@
         element.data('currentValue', element.val())
       }
     })
-    initAutoNumeric(detailRow.find('.autonumeric'))
+    initAutoNumeric(detailRow.find(`[name="nominal_detail[]"]`))
     tglbukti = $('#crudForm').find(`[name="tglbukti"]`).val()
     detailRow.find(`[name="tgljatuhtempo[]"]`).val(tglbukti).trigger('change');
 
@@ -974,10 +975,11 @@
     }
     setRowNumbers()
     setTotal()
+    initDatepicker()
   }
 
   function setRowNumbers() {
-    let elements = $('#detailList tbody tr td:nth-child(1)')
+    let elements = $('#detailList>#table_body>tr>td:nth-child(1)')
 
     elements.each((index, element) => {
       $(element).text(index + 1)
@@ -1219,7 +1221,7 @@
           initAutoNumeric(detailRow.find(`[name="nominal_detail[]"]`))
 
           detailRow.find(`[name="tgljatuhtempo[]"]`).val(dateFormat(detail.tgljatuhtempo))
-          $('#detailList tbody').append(detailRow)
+          $('#detailList>#table_body').append(detailRow)
 
           setTotal();
 

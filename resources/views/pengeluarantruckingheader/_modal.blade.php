@@ -2092,6 +2092,7 @@
     clearSelectedRowsSumbangan()
     classHidden = [];
     $('#crudModal').find('.modal-body').html(modalBody)
+    initDatepicker('datepickerIndex')
   })
 
   function setTotal() {

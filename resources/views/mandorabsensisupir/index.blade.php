@@ -9,7 +9,7 @@
               <label class="col-12 col-sm-2 col-form-label mt-2">Tgl absensi<span class="text-danger">*</span></label>
               <div class="col-sm-4 mt-2">
                   <div class="input-group">
-                      <input type="text" name="tglbukaabsensi" id="tglbukaabsensi" class="form-control datepicker">
+                      <input type="text" name="tglbukaabsensi" id="tglbukaabsensi" class="form-control datepickerIndex">
                       <input type="text" name="tglshow" id="tglshow" class="form-control " style="display:none">
                   </div>
               </div>
@@ -58,7 +58,7 @@
   $(document).ready(function() {
 
     // loadGrid()
-    initDatepicker()
+    initDatepicker('datepickerIndex')
     // mendapatkan tanggal hari ini
     let today = new Date();
     // let tglBuka = new Date(today.getFullYear(), today.getMonth(), 1);

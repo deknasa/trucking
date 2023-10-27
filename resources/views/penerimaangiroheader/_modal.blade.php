@@ -483,6 +483,7 @@
         activeGrid = '#jqGrid'
 
         $('#crudModal').find('.modal-body').html(modalBody)
+        initDatepicker('datepickerIndex')
     })
 
 
@@ -868,7 +869,7 @@
                         detailRow.find(`[name="bulanbeban[]"]`).val(dateFormat(detail.bulanbeban))
 
                         initAutoNumeric(detailRow.find(`[name="nominal[]"]`))
-                        $('#detailList tbody').append(detailRow)
+                        $('#detailList>#table_body').append(detailRow)
 
                         setTotal();
 
@@ -978,7 +979,7 @@
       </tr>
     `)
 
-        $('#detailList tbody').append(detailRow)
+        $('#detailList>#table_body').append(detailRow)
         $('.bank-lookup').last().lookup({
             title: 'Bank Lookup',
             fileName: 'bank',
@@ -1047,10 +1048,11 @@
 
         setRowNumbers()
         setTotal()
+        initDatepicker()
     }
 
     function setRowNumbers() {
-        let elements = $('#detailList tbody tr td:nth-child(1)')
+    let elements = $('#detailList>#table_body>tr>td:nth-child(1)')
 
         elements.each((index, element) => {
             $(element).text(index + 1)

@@ -36,18 +36,15 @@
                         </div>
 
                         <div class="row form-group">
-                            <div class="col-12 col-sm-3 col-md-2">
+                            <div class="col-12 col-sm-2 col-md-2">
                                 <label class="col-form-label">
                                     TRADO <span class="text-danger">*</span>
                                 </label>
                             </div>
-                            <div class="col-8 col-md-10">
+                            <div class="col-12 col-sm-4 col-md-4">
                                 <input type="hidden" name="trado_id">
                                 <input type="text" name="trado" class="form-control trado-lookup">
                             </div>
-                        </div>
-
-                        <div class="row form-group">
                             <div class="col-12 col-sm-2 col-md-2">
                                 <label class="col-form-label">
                                     TGL MASUK <span class="text-danger">*</span>
@@ -67,13 +64,13 @@
                                     <div class="card-body">
 
                                         <div class="table-responsive table-scroll ">
-                                            <table class="table table-bordered table-bindkeys" id="detailList">
+                                            <table class="table table-bordered table-bindkeys" id="detailList" style="width: 1000px;">
                                                 <thead>
                                                     <tr>
-                                                        <th style="width:5%; max-width: 25px;min-width: 15px">No</th>
-                                                        <th style="width:40%;">Mekanik</th>
-                                                        <th style="width:40%;">Keterangan</th>
-                                                        <th class="tbl_aksi" style="width:5%; max-width: 25px;min-width: 15px">Aksi</th>
+                                                        <th width="2%">No</th>
+                                                        <th width="48%">Mekanik</th>
+                                                        <th width="48%">Keterangan</th>
+                                                        <th width="2%" class="tbl_aksi">Aksi</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -295,6 +292,7 @@
         activeGrid = '#jqGrid'
 
         $('#crudModal').find('.modal-body').html(modalBody)
+        initDatepicker('datepickerIndex')
     })
 
     function createServicein() {

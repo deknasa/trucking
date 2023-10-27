@@ -129,7 +129,7 @@
                                     <tr>
                                         <th width="1%">No</th>
                                         <th width="5%">Nama Perkiraan</th>
-                                        <th width="4%">Tgl jatuh tempo</th>
+                                        <th width="6%">Tgl jatuh tempo</th>
                                         <th width="4%">No warkat</th>
                                         <th width="7%">Bank Pelanggan</th>
                                         <th width="10%">Keterangan</th>
@@ -386,6 +386,7 @@
     $('#crudModal').on('hidden.bs.modal', () => {
         activeGrid = '#jqGrid'
         $('#crudModal').find('.modal-body').html(modalBody)
+        initDatepicker('datepickerIndex')
     })
 
     function setTotal() {
@@ -807,7 +808,7 @@
                             initAutoNumeric(detailRow.find(`[name="nominal_detail[]"]`))
                             detailRow.find(`[name="tgljatuhtempo[]"]`).val(dateFormat(detail.tgljatuhtempo))
                             detailRow.find(`[name="bulanbeban[]"]`).val(dateFormat(detail.bulanbeban))
-                            $('#detailList tbody').append(detailRow)
+                            $('#detailList>#table_body').append(detailRow)
                             setTotal();
                             $('.akunpusat-lookup').last().lookup({
                                 title: 'Kode Perk. Lookup',
@@ -901,7 +902,7 @@
                             initAutoNumeric(detailRow.find(`[name="nominal_detail[]"]`))
                             detailRow.find(`[name="tgljatuhtempo[]"]`).val(dateFormat(detail.tgljatuhtempo))
                             detailRow.find(`[name="bulanbeban[]"]`).val(dateFormat(detail.bulanbeban))
-                            $('#detailList tbody').append(detailRow)
+                            $('#detailList>#table_body').append(detailRow)
                             setTotal();
 
                         })
@@ -953,7 +954,7 @@
         </td>
       </tr>
     `)
-        $('#detailList tbody').append(detailRow)
+        $('#detailList>#table_body').append(detailRow)
         $('.akunpusat-lookup').last().lookup({
             title: 'Kode Perkiraan Lookup',
             fileName: 'akunpusat',
@@ -1015,10 +1016,11 @@
         }
         setRowNumbers()
         setTotal()
+        initDatepicker()
     }
 
     function setRowNumbers() {
-        let elements = $('#detailList tbody tr td:nth-child(1)')
+        let elements = $('#detailList>#table_body>tr>td:nth-child(1)')
         elements.each((index, element) => {
             $(element).text(index + 1)
         })
@@ -1248,7 +1250,7 @@
                     initAutoNumeric(detailRow.find(`[name="nominal_detail[]"]`))
                     detailRow.find(`[name="tgljatuhtempo[]"]`).val(dateFormat(detail.tgljatuhtempo))
                     detailRow.find(`[name="bulanbeban[]"]`).val(dateFormat(detail.bulanbeban))
-                    $('#detailList tbody').append(detailRow)
+                    $('#detailList>#table_body').append(detailRow)
                     setTotal();
 
                 })

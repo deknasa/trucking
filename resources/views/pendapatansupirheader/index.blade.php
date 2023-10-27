@@ -101,7 +101,7 @@
     setIsDeposito()
     setIsValidateBank()
     setRange()
-    initDatepicker()
+    initDatepicker('datepickerIndex')
     $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('pendapatansupirheader')
       selectedRows = []

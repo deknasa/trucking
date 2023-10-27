@@ -584,6 +584,7 @@
 
         $('#crudModal').find('.modal-body').html(modalBody)
         clearSelectedRowsTrip()
+        initDatepicker('datepickerIndex')
     })
 
     function createPendapatanSupir() {

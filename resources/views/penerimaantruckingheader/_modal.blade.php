@@ -1021,6 +1021,7 @@
     activeGrid = '#jqGrid'
 
     $('#crudModal').find('.modal-body').html(modalBody)
+    initDatepicker('datepickerIndex')
   })
 
   function setTotal() {

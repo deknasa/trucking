@@ -99,7 +99,7 @@
     tglsampaiheader = `{{ $request['tglsampai'] }}`;
     @endisset
     setRange(false, tgldariheader, tglsampaiheader)
-    initDatepicker()
+    initDatepicker('datepickerIndex')
     $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('notadebetheader')
       selectedRows = []
