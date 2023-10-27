@@ -143,7 +143,7 @@ $.fn.lookup = function (options) {
 
 		lookupModal.on("hidden.bs.modal", function () {
 			lookupModal.remove();
-
+			initDatepicker()
 			element.focus();
 		});
 

@@ -24,7 +24,7 @@
                   <input type="text" name="nobukti" class="form-control" readonly>
                 </div>
 
-                <div class="col-12 col-md-2 text-right">
+                <div class="col-12 col-md-2 ">
                   <label class="col-form-label">
                     TGL BUKTI <span class="text-danger">*</span>
                   </label>
@@ -46,7 +46,7 @@
                   <input type="hidden" name="agen_id">
                   <input type="text" name="agen" class="form-control agen-lookup">
                 </div>
-                <div class="col-12 col-md-2 text-right">
+                <div class="col-12 col-md-2 ">
                   <label class="col-form-label">
                     TGL JATUH TEMPO <span class="text-danger">*</span>
                   </label>
@@ -70,7 +70,7 @@
                   </select>
                 </div>
 
-                <div class="col-12 col-md-2  text-right">
+                <div class="col-12 col-md-2  ">
                   <label class="col-form-label">
                     Jenis Order <span class="text-danger">*</span>
                   </label>
@@ -94,7 +94,7 @@
                   </div>
                 </div>
 
-                <div class="col-12 col-md-2  text-right">
+                <div class="col-12 col-md-2  ">
                   <label class="col-form-label">
                     TGL SAMPAI <span class="text-danger">*</span>
                   </label>
@@ -422,6 +422,7 @@
     activeGrid = '#jqGrid'
 
     $('#crudModal').find('.modal-body').html(modalBody)
+    initDatepicker('datepickerIndex')
   })
 
   function createInvoiceHeader() {

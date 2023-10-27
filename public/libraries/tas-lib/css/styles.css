@@ -308,8 +308,14 @@ input[type=text]:focus,input[type=password]:focus, .select2-selection:focus {
 	/* overflow-x: hidden; */
 }
 
+.ui-datepicker-div{
+	z-index: 0!important;
+}
+
 .ui-datepicker {
 	z-index: 9999 !important;
+	display: inline-block; 
+	position: absolute!important;
 }
 
 .no-scroll {
@@ -540,14 +546,14 @@ select[readonly].select2-hidden-accessible + .select2-container {
   max-height: 400px;
   border: 1px solid #dee2e6;
 }
-.table-scroll table {
+.table-scroll>table {
   border-collapse: separate;
   border-spacing: 0;
   margin: 10px;
 }
 
-.table-scroll th,
-.table-scroll td {
+.table-scroll>table>th,
+.table-scroll>table>td {
   padding: 0.75rem;
   vertical-align: top;
 }

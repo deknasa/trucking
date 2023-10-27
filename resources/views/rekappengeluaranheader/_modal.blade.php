@@ -355,6 +355,7 @@
     activeGrid = '#jqGrid'
     $('#crudModal').find('.modal-body').html(modalBody)
     parameterPengeluaran = {};
+    initDatepicker('datepickerIndex')
 
   })
 
