@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "50709a4e67d6a644b9df11d60ebd091a",
+  "ReportGuid": "462c53ebbc2d8e5f61e0b056040d3a03",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportKartuStok.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1698315699000+0700)/",
+  "ReportChanged": "/Date(1698393631000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -1489,7 +1489,7 @@
               "Name": "Text51",
               "Guid": "4efb3bdd8956c57da73df9be3ce2e70b",
               "CanGrow": true,
-              "ClientRectangle": "102,0,8,8",
+              "ClientRectangle": "100,0,10,8",
               "ComponentPlacement": "d.DataBand1",
               "Conditions": {
                 "0": {
@@ -1531,7 +1531,7 @@
               "Name": "Text52",
               "Guid": "62d0473c8a37cf34b1c1b2977d1db995",
               "CanGrow": true,
-              "ClientRectangle": "111.5,0,26,8",
+              "ClientRectangle": "111.5,0,24,8",
               "ComponentPlacement": "d.DataBand1",
               "Conditions": {
                 "0": {
@@ -1574,7 +1574,7 @@
               "Name": "Text57",
               "Guid": "913ab007462371989a7aa395596ea329",
               "CanGrow": true,
-              "ClientRectangle": "140,0,8,8",
+              "ClientRectangle": "138,0,10,8",
               "ComponentPlacement": "d.DataBand1",
               "Conditions": {
                 "0": {
@@ -1785,7 +1785,7 @@
               "Name": "Text17",
               "Guid": "feb676bfeec161ce62f8e1ddffa38b48",
               "CanGrow": true,
-              "ClientRectangle": "102,0,8,8",
+              "ClientRectangle": "100,0,10,8",
               "ComponentPlacement": "gf.GroupFooterBand2",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -1812,7 +1812,7 @@
               "Name": "Text5",
               "Guid": "3c276a5c68f1b178565cebe7aff34277",
               "CanGrow": true,
-              "ClientRectangle": "111.5,0,26,8",
+              "ClientRectangle": "111.5,0,24,8",
               "ComponentPlacement": "gf.GroupFooterBand2",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -1840,7 +1840,7 @@
               "Name": "Text20",
               "Guid": "136a5194889f7ad332334aa25fec8959",
               "CanGrow": true,
-              "ClientRectangle": "140,0,8,8",
+              "ClientRectangle": "138,0,10,8",
               "ComponentPlacement": "gf.GroupFooterBand2",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -1950,38 +1950,10 @@
             },
             "1": {
               "Ident": "StiText",
-              "Name": "Text54",
-              "Guid": "79efb5ca5aee797f81857674a98ca2d1",
-              "CanGrow": true,
-              "ClientRectangle": "102,0,8,8",
-              "ComponentPlacement": "gf.GroupFooterBand3",
-              "Interaction": {
-                "Ident": "StiInteraction"
-              },
-              "MaxNumberOfLines": 6,
-              "Text": {
-                "Value": "{Sum(data.qtymasuk)}"
-              },
-              "HorAlignment": "Right",
-              "VertAlignment": "Center",
-              "Font": ";9;Bold;",
-              "Border": ";;;;;;;solid:Black",
-              "Brush": "solid:",
-              "TextBrush": "solid:Black",
-              "TextFormat": {
-                "Ident": "StiNumberFormatService",
-                "NegativePattern": 1,
-                "DecimalSeparator": ",",
-                "GroupSeparator": ","
-              },
-              "Type": "Totals"
-            },
-            "2": {
-              "Ident": "StiText",
               "Name": "Text65",
               "Guid": "586e4c90f9b5e9aac4161763a2f723c8",
               "CanGrow": true,
-              "ClientRectangle": "111.5,0,26,8",
+              "ClientRectangle": "111.5,0,24,8",
               "ComponentPlacement": "gf.GroupFooterBand3",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -2005,12 +1977,41 @@
               },
               "Type": "Totals"
             },
+            "2": {
+              "Ident": "StiText",
+              "Name": "Text67",
+              "Guid": "c0835d2312a76ca9043a975b6f35997b",
+              "CanGrow": true,
+              "ClientRectangle": "149.5,0,24,8",
+              "ComponentPlacement": "gf.GroupFooterBand3",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "MaxNumberOfLines": 6,
+              "Text": {
+                "Value": "{Sum(data.nilaikeluar)}"
+              },
+              "HorAlignment": "Right",
+              "VertAlignment": "Center",
+              "Font": ";9;Bold;",
+              "Border": ";;;;;;;solid:Black",
+              "Brush": "solid:",
+              "TextBrush": "solid:Black",
+              "TextFormat": {
+                "Ident": "StiNumberFormatService",
+                "NegativePattern": 1,
+                "DecimalSeparator": ",",
+                "GroupSeparator": ",",
+                "State": "DecimalSeparator, GroupSeparator"
+              },
+              "Type": "Totals"
+            },
             "3": {
               "Ident": "StiText",
-              "Name": "Text66",
-              "Guid": "856ac796686483f5661b1141d67fc6e4",
+              "Name": "Text13",
+              "Guid": "57716806d54af8cb31eac6ced2e3b1fb",
               "CanGrow": true,
-              "ClientRectangle": "140,0,8,8",
+              "ClientRectangle": "137.58,0.02,10,8",
               "ComponentPlacement": "gf.GroupFooterBand3",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -2029,23 +2030,24 @@
                 "Ident": "StiNumberFormatService",
                 "NegativePattern": 1,
                 "DecimalSeparator": ",",
-                "GroupSeparator": ","
+                "GroupSeparator": ",",
+                "State": "DecimalSeparator, GroupSeparator"
               },
               "Type": "Totals"
             },
             "4": {
               "Ident": "StiText",
-              "Name": "Text67",
-              "Guid": "c0835d2312a76ca9043a975b6f35997b",
+              "Name": "Text19",
+              "Guid": "270de1e0cc8756f46e35f266683fb4b2",
               "CanGrow": true,
-              "ClientRectangle": "149.5,0,24,8",
+              "ClientRectangle": "99.51,0.02,10,8",
               "ComponentPlacement": "gf.GroupFooterBand3",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "MaxNumberOfLines": 6,
               "Text": {
-                "Value": "{Sum(data.nilaikeluar)}"
+                "Value": "{Sum(data.qtymasuk)}"
               },
               "HorAlignment": "Right",
               "VertAlignment": "Center",
