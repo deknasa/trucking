@@ -148,7 +148,7 @@ class LaporanSaldoInventoryController extends Controller
                 "label" => "kodebarang",
             ],
             [
-                "index" => "namabarang",
+                "index" => "keterangan",
                 "label" => "namabarang",
             ],
             [
