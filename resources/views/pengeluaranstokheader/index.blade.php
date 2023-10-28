@@ -108,7 +108,8 @@
     initDatepicker('datepickerIndex')
     $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('pengeluaranstokheader', {
-        pengeluaranheader_id: $('#kodepengeluaranheader').val()
+        pengeluaranheader_id: $('#kodepengeluaranheader').val(),
+        proses: 'reload'
       })
     })
     // console.log(,);
