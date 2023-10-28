@@ -81,10 +81,16 @@ class LaporanSaldoInventoryController extends Controller
         $data = $header['data'];
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setCellValue('A1', $data[0]['header']);
+        
+        $sheet->setCellValue('A1', $header['judul']);
         $sheet->getStyle("A1")->getFont()->setSize(20)->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:G1');
+
+        $sheet->setCellValue('A2', 'LAPORAN SALDO INVENTORY');
+        $sheet->getStyle("A2")->getFont()->setSize(16)->setBold(true);
+        $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
+        $sheet->mergeCells('A2:G2');
 
         $sheet->setCellValue('A4', 'PERIODE');
         $sheet->getStyle("A4")->getFont()->setSize(12)->setBold(true);
@@ -95,20 +101,24 @@ class LaporanSaldoInventoryController extends Controller
         $sheet->setCellValue('A5', 'STOK');
         $sheet->getStyle("A5")->getFont()->setSize(12)->setBold(true);
         $sheet->getStyle("B5")->getFont()->setSize(12)->setBold(true);
-
-        $sheet->setCellValue('B5', ': ' .  $data[0]['stokdari'] . " S/D" . " " . $data[0]['stoksampai']);
+        $stokdari = $data[0]['stokdari'] ?? " ";
+        $stoksampai = $data[0]['stoksampai'] ?? " ";
+        $kategori = $data[0]['kategori'] ?? " ";
+        $lokasi = $data[0]['lokasi'] ?? " ";
+        $namalokasi = $data[0]['namalokasi'] ?? " ";
+        $sheet->setCellValue('B5', ': ' .  $stokdari . " S/D" . " " . $stoksampai);
 
         $sheet->setCellValue('A6', 'KATEGORI');
         $sheet->getStyle("A6")->getFont()->setSize(12)->setBold(true);
         $sheet->getStyle("B6")->getFont()->setSize(12)->setBold(true);
 
-        $sheet->setCellValue('B6', ': ' .  $data[0]['kategori']);
+        $sheet->setCellValue('B6', ': ' .  $kategori);
 
-        $sheet->setCellValue('A7', $data[0]['lokasi']);
+        $sheet->setCellValue('A7', $lokasi);
         $sheet->getStyle("A7")->getFont()->setSize(12)->setBold(true);
         $sheet->getStyle("B7")->getFont()->setSize(12)->setBold(true);
 
-        $sheet->setCellValue('B7', ': ' .  $data[0]['namalokasi']);
+        $sheet->setCellValue('B7', ': ' .  $namalokasi);
 
         $sheet->getStyle("C4")->getFont()->setSize(12)->setBold(true);
 
@@ -207,9 +217,12 @@ class LaporanSaldoInventoryController extends Controller
 
         //total
         $totalSaldo = "=SUM(G7:G" . ($detail_start_row - 1) . ")";
+        $totalQty = "=SUM(E7:E" . ($detail_start_row - 1) . ")";
         $sheet->setCellValue("A$detail_start_row", "TOTAL")->getStyle("A$detail_start_row:G$detail_start_row")->applyFromArray($style_number);
         $sheet->setCellValue("G$detail_start_row", $totalSaldo)->getStyle("G$detail_start_row")->applyFromArray($style_number);
         $sheet->setCellValue("G$detail_start_row", $totalSaldo)->getStyle("G$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+        $sheet->setCellValue("E$detail_start_row", $totalQty)->getStyle("E$detail_start_row")->applyFromArray($style_number);
+        $sheet->setCellValue("E$detail_start_row", $totalQty)->getStyle("E$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
 
         // set diketahui dibuat
         $ttd_start_row = $detail_start_row + 2;
