@@ -94,7 +94,7 @@
                     {
                         label: 'Status',
                         name: 'statusbatas',
-                        width: 100,
+                        width: 200,
                         stype: 'select',
                         searchoptions: {
                             value: `<?php
