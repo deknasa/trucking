@@ -60,6 +60,11 @@ class PendapatanSupirHeaderController extends MyController
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'pendapatansupirheader/' . $id . '/export')['data'];
+        
+            $pendapatansupir = Http::withHeaders($request->header())
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'pendapatansupirheader/' . $id . '/exportsupir')['data'];
 
         //FETCH DETAIL
         $detailParams = [
@@ -72,6 +77,14 @@ class PendapatanSupirHeaderController extends MyController
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'pendapatansupirdetail', $detailParams)['data'];
 
+
+    
+            $pendapatansupir_details = Http::withHeaders($request->header())
+                ->withOptions(['verify' => false])
+                ->withToken(session('access_token'))
+                ->get(config('app.api_url') . 'pendapatansupirdetail/detailsupir', $detailParams)['data'];
+    
+    
         $tampilanParams = [
             'grp' => 'PENDAPATAN SUPIR',
             'subgrp' => 'GAJI KENEK',
@@ -86,7 +99,8 @@ class PendapatanSupirHeaderController extends MyController
         $key = array_search('CETAK', array_column($combo, 'parameter'));
         $pendapatan["combo"] =  $combo[$key];
         $printer['tipe'] = $request->printer;
-        return view('reports.pendapatansupir', compact('pendapatan', 'pendapatan_details', 'showgajikenek','printer'));
+
+        return view('reports.pendapatansupir', compact('pendapatan', 'pendapatan_details', 'showgajikenek', 'printer','pendapatansupir', 'pendapatansupir_details'));
     }
 
     public function export(Request $request): void
@@ -308,7 +322,7 @@ class PendapatanSupirHeaderController extends MyController
             $sheet->setCellValue("C$detail_start_row",  "=SUM(C8:C" . ($dataRow - 1) . ")")->getStyle("C$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
 
             $sheet->getStyle("C$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
-            
+
             $sheet->getColumnDimension('A')->setAutoSize(true);
             $sheet->getColumnDimension('B')->setAutoSize(true);
             $sheet->getColumnDimension('C')->setAutoSize(true);
