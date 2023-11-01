@@ -270,6 +270,7 @@
                           <th class="data_tbl tbl_statusoli" style="width:10%; min-width: 100px">Status Oli</th>
                           <th class="data_tbl tbl_statusban" style="width:10%; min-width: 100px">Status Ban</th>
                           <th class="data_tbl tbl_vulkanisirke" style="width:10%; min-width: 100px">vulkanisirke</th>
+                          <th class="data_tbl tbl_vulkanisirtotal" style="width:10%; min-width: 100px">vulkanisir</th>
                           <th class="data_tbl tbl_harga" style="width: 20%; min-width: 200px;">harga</th>
                           <th class="data_tbl tbl_persentase" style="width:10%; min-width: 100px">persentase discount</th>
                           <th class="data_tbl tbl_total" style="width: 20%; min-width: 200px;">Total</th>
@@ -701,6 +702,7 @@
     $('.tbl_statusoli').show();
     $('.tbl_statusban').hide();
     $('.tbl_vulkanisirke').hide();
+    $('.tbl_vulkanisirtotal').hide();
     $('.tbl_harga').hide();
     $('.tbl_persentase').hide();
     $('.tbl_total').hide();
@@ -726,6 +728,7 @@
     $('.tbl_harga').show()
     $('.tbl_total').show()
     $('.tbl_vulkanisirke').hide();
+    $('.tbl_vulkanisirtotal').hide();
     $('.tbl_statusoli').hide();
     $('.tbl_statusban').hide();
     $('.tbl_persentase').hide();
@@ -751,6 +754,7 @@
     $('.tbl_harga').show()
     $('.tbl_total').show()
     $('.tbl_vulkanisirke').hide();
+    $('.tbl_vulkanisirtotal').hide();
     $('.tbl_statusoli').hide();
     $('.tbl_statusban').hide();
     $('.tbl_persentase').hide();
@@ -774,6 +778,7 @@
     $('[name=gudang]').parents('.form-group').hide()
     $('.tbl_qty').show()
     $('.tbl_vulkanisirke').hide();
+    $('.tbl_vulkanisirtotal').hide();
     $('.tbl_harga').hide();
     $('.tbl_persentase').hide();
     $('.tbl_total').hide();
@@ -796,6 +801,7 @@
     $('[name=statuspotongretur]').parents('.form-group').hide()
     $('.tbl_qty').show()
     $('.tbl_vulkanisirke').hide();
+    $('.tbl_vulkanisirtotal').hide();
     $('.tbl_harga').hide();
     $('.tbl_persentase').hide();
     $('.tbl_total').hide();
@@ -822,12 +828,13 @@
     $('[name=statuspotongretur]').parents('.form-group').hide()
     $('.tbl_qty').hide()
     $('.tbl_vulkanisirke').show();
+    $('.tbl_vulkanisirtotal').show();
     $('.tbl_harga').hide();
     $('.tbl_persentase').hide();
     $('.tbl_statusoli').hide();
     $('.tbl_statusban').show();
     $('.tbl_total').hide();
-    $('.colspan').attr('colspan', 5);
+    $('.colspan').attr('colspan', 6);
     $('.sumrow').hide();
     $("#detail-table").show();
     $("#detail-afkir").hide();
@@ -898,6 +905,7 @@
 
   function tampilanAllRow() {
     $('.tbl_vulkanisirke').hide()
+    $('.tbl_vulkanisirtotal').hide()
     $('.tbl_qty').show()
     $('.tbl_harga').show()
     $('.tbl_persentase').show()
@@ -1377,6 +1385,26 @@
       })
     })
   }
+
+
+  function setKorv(row,stok_id) {
+    $.ajax({
+      url: `${apiUrl}stok/${stok_id}/getvulkan`,
+      method: 'POST',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      success: response => {
+        $(`#vulkanisirtotal${row}`).val(response.data.totalvulkan)
+        $(`#statusban${row}`).val(response.data.statusban).trigger('change')
+      },
+      error: error => {
+        showDialog(error.responseJSON)
+      }
+    })
+  }
+
   index = 0;
 
   function addRow() {
@@ -1410,6 +1438,9 @@
                   <td class="data_tbl tbl_vulkanisirke">
                       <input type="number"  name="detail_vulkanisirke[]" style="" class="form-control">                    
                     </td> 
+                  <td class="data_tbl tbl_vulkanisirtotal">
+                      <input type="number"  name="detail_vulkanisirtotal[]" id="vulkanisirtotal${index}" style="" class="form-control">                    
+                    </td> 
                   <td class="data_tbl tbl_harga">
                     <input type="text"  name="detail_harga[]" id="detail_harga${index}" readonly style="text-align:right" class="form-control autonumeric number${index}">
                   </td>  
@@ -1439,11 +1470,10 @@
       detailRow.find(`#statusoli${index}`).append(option).trigger('change')
     });
     dataStatusBan.forEach(statusBan => {
-      let option = new Option(statusBan.text, statusBan.id)
-
+      option = new Option(statusBan.text, statusBan.id)
       detailRow.find(`#statusban${index}`).append(option).trigger('change')
     });
-
+      
     var row = index;
     $(`.detail_stok_${row}`).lookup({
       title: 'stok Lookup',
@@ -1460,6 +1490,7 @@
         parent = element.closest('td');
         parent.children('.detailstokId').val(stok.id)
         element.data('currentValue', element.val())
+        setKorv(row,stok.id);
         let service = stok.servicerutin_text;
 
         let elStatusOli = element.parents('tr').find(`td [name="detail_statusoli[]"]`);
@@ -1785,7 +1816,6 @@
          
           if (listKodePengeluaran[1] == response.data.pengeluaranstok) {
             $.each(response.detail, (id, detail) => {
-
               let detailRow = $(`
                 <tr class="trow">
                       <td>
@@ -1805,6 +1835,9 @@
                       <td class="data_tbl tbl_vulkanisirke"  style="display: none;" >
                         <input type="text"  name="detail_vulkanisirke[]" style="" class="form-control">                    
                       </td> 
+                      <td class="data_tbl tbl_vulkanisirtotal"  style="display: none;" >
+                        <input type="text"  name="detail_vulkanisirtotal[]" id="vulkanisirtotal${id}" style="" class="form-control">                    
+                      </td> 
                       
                       <td class="data_tbl tbl_harga">
                         <input type="text"  name="detail_harga[]" id="detail_harga${id}" readonly style="text-align:right" class="autonumeric number${id} form-control">                    
@@ -1821,6 +1854,7 @@
                       </td>
                   </tr>
               `)
+              
               detailRow.find(`[name="detail_nobukti[]"]`).val(detail.nobukti)
               detailRow.find(`[name="detail_stok[]"]`).val(detail.stok)
               detailRow.find(`[name="detail_stok_id[]"]`).val(detail.stok_id)
@@ -1829,6 +1863,8 @@
               detailRow.find(`[name="detail_persentasediscount[]"]`).val(detail.persentasediscount)
               // detailRow.find(`[name="totalItem[]"]`).val(detail.total)
               detailRow.find(`[name="detail_keterangan[]"]`).val(detail.keterangan)
+              initSelect2($(`#statusban${id}`), true)
+              initSelect2($(`#statusoli${id}`), true)
               $('table #table_body').append(detailRow)
               // initAutoNumeric($(`.number${id}`))
               initAutoNumeric($(`#detail_qty${id}`),{'maximumValue':detail.qty})
@@ -1899,6 +1935,9 @@
                       <td class="data_tbl tbl_vulkanisirke">
                         <input type="number"  name="detail_vulkanisirke[]" style="" class="form-control">                    
                       </td>  
+                      <td class="data_tbl tbl_vulkanisirtotal">
+                        <input type="number"  name="detail_vulkanisirtotal[]" id="vulkanisirtotal${id}" style="" class="form-control">                    
+                      </td>  
                       <td class="data_tbl tbl_harga">
                         <input type="text"  name="detail_harga[]" id="detail_harga${id}" readonly style="text-align:right" class="autonumeric number${id} form-control">                    
                       </td>  
@@ -1914,7 +1953,14 @@
                       </td>
                   </tr>
               `)
-  
+
+              
+              dataStatusBan.forEach(statusBan => {
+                option = new Option(statusBan.text, statusBan.id)
+                console.log(option);
+                detailRow.find(`#statusban${id}`).append(option).trigger('change')
+              });
+                
               detailRow.find(`[name="detail_nobukti[]"]`).val(detail.nobukti)
               detailRow.find(`[name="detail_stok[]"]`).val(detail.stok)
               detailRow.find(`[name="detail_stok_id[]"]`).val(detail.stok_id)
@@ -1925,10 +1971,12 @@
               detailRow.find(`[name="totalItem[]"]`).val(detail.total)
               detailRow.find(`[name="detail_keterangan[]"]`).val(detail.keterangan)
               $('table #table_body').append(detailRow)
+              initSelect2($(`#statusban${id}`), true)
+              initSelect2($(`#statusoli${id}`), true)
+              setKorv(id,detail.stok_id);
   
               if (response.data.pengeluaranstok == 'SPK') {
                 service = detail.statusservicerutin;
-                initSelect2($(`#statusoli${id}`), true)
                 dataStatusOli.forEach(statusOli => {
                   let option = new Option(statusOli.text, statusOli.id)
   
@@ -1947,15 +1995,6 @@
   
                 detailRow.find(`[name="detail_statusoli[]"]`).val(detail.statusoli).trigger('change')
   
-              }else if(response.data.pengeluaranstok == 'KORV'){
-                initSelect2($(`#statusban${id}`), true)
-                console.log($(`#statusban${id}`),id);
-                dataStatusBan.forEach(statusBan => {
-                  let option = new Option(statusBan.text, statusBan.id)
-            
-                  detailRow.find(`#statusban${id}`).append(option).trigger('change')
-                });
-                detailRow.find(`#statusban${id}`).val(detail.statusban).trigger('change')
               }
   
               // initAutoNumeric($(`.number${id}`))
@@ -1979,6 +2018,7 @@
                   parent = element.closest('td');
                   parent.children('.detailstokId').val(stok.id)
                   element.data('currentValue', element.val())
+                  setKorv(row,stok.id);
                   let service = stok.servicerutin_text;
   
                   let elStatusOli = element.parents('tr').find(`td [name="detail_statusoli[]"]`);
@@ -2072,6 +2112,9 @@
                   </td>
                   <td class="data_tbl tbl_vulkanisirke"  style="display: none;" >
                     <input type="text"  name="detail_vulkanisirke[]" style="" class="form-control">                    
+                  </td> 
+                  <td class="data_tbl tbl_vulkanisirtotal"  style="display: none;" >
+                    <input type="text"  name="detail_vulkanisirtotal[]" id="vulkanisirtotal${id}" style="" class="form-control">                    
                   </td> 
                   
                   <td class="data_tbl tbl_harga">

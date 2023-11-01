@@ -218,6 +218,27 @@ $('#stokLookup').jqGrid({
           name: 'totalvulkanisir',
           align: 'left',
       },
+      {
+          label: 'statusban_id',
+          name: 'statusban_id',
+          align: 'left',
+          search: false,
+          hidden: true
+      },
+      {
+          label: 'vulkanplus',
+          name: 'vulkanplus',
+          align: 'left',
+          search: false,
+          hidden: true
+      },
+      {
+          label: 'vulkanminus',
+          name: 'vulkanminus',
+          align: 'left',
+          search: false,
+          hidden: true
+      },
       
       {
           label: 'Status Service Rutin',
