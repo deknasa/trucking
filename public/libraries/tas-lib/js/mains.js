@@ -922,7 +922,7 @@ function initDatepicker(classDatepicker = 'datepicker') {
 				$(element).css({
 					position: "relative",
 				});
-
+				calendar.removeClass("no-date");
 				let isInModal = $(element).closest('.modal').length > 0; 
 				if (isInModal) { 
 					$('.ui-datepicker').insertAfter(element); 
