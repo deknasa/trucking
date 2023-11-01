@@ -94,7 +94,7 @@
                     {
                         label: 'Status',
                         name: 'statusbatas',
-                        width: 100,
+                        width: 200,
                         stype: 'select',
                         searchoptions: {
                             value: `<?php
@@ -141,7 +141,8 @@
                     {
                         label: 'NO POL',
                         name: 'nopol',
-                        align: 'left'
+                        align: 'left',
+                        width: 200,
                     },
                     {
                         label: 'TANGGAL',
@@ -156,7 +157,8 @@
                     {
                         label: 'STATUS',
                         name: 'status',
-                        align: 'left'
+                        align: 'left',
+                        width: 300,
                     },
                     {
                         label: 'KM',

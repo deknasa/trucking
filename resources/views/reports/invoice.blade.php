@@ -17,6 +17,7 @@
   <script type="text/javascript">
     let invoiceheaders = <?= json_encode($invoices); ?>;
     let printer = <?= json_encode($printer); ?>;
+    let format = <?= json_encode($format); ?>;
 
     function Start() {
       Stimulsoft.Base.StiLicense.loadFromFile("{{ asset($stireport_path . 'license.php') }}");
@@ -45,9 +46,17 @@
 
       viewer.renderHtml('content')
       if (printer['tipe'] == 'reportPrinterBesar') {
-        report.loadFile(`{{ asset('public/reports/ReportInvoiceBesar.mrt') }}`)
+        if ($.trim(format['cetak']) == 'FORMAT 1') {
+          report.loadFile(`{{ asset('public/reports/ReportInvoiceBesar.mrt') }}`)
+        } else {
+          report.loadFile(`{{ asset('public/reports/ReportInvoiceBesarFormat2.mrt') }}`)
+        }
       } else {
-        report.loadFile(`{{ asset('public/reports/ReportInvoice.mrt') }}`)
+        if ($.trim(format['cetak']) == 'FORMAT 1') {
+          report.loadFile(`{{ asset('public/reports/ReportInvoice.mrt') }}`)
+        } else {
+          report.loadFile(`{{ asset('public/reports/ReportInvoiceFormat2.mrt') }}`)
+        }
       }
 
       report.dictionary.dataSources.clear()

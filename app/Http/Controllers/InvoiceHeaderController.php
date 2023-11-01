@@ -146,11 +146,21 @@ class InvoiceHeaderController extends MyController
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'invoicedetail', $detailParams)['data'];
             
+        $paramCetak = [
+            'grp' => 'STATUS CETAKAN',
+            'subgrp' => 'INVOICE'
+        ];
+        $statusCetakan = Http::withHeaders(request()->header())
+        ->withOptions(['verify' => false])
+        ->withToken(session('access_token'))
+        ->get(config('app.api_url') . 'parameter/getparamfirst', $paramCetak);
+            
         $combo = $this->combo('list');
         $key = array_search('CETAK', array_column( $combo, 'parameter')); 
         $invoices["combo"] =  $combo[$key];
         $printer['tipe'] = $request->printer;
-        return view('reports.invoice', compact('invoice_detail', 'invoices','printer'));
+        $format['cetak'] = $statusCetakan['text'];
+        return view('reports.invoice', compact('invoice_detail', 'invoices','printer','format'));
     }
 
     public function export(Request $request): void

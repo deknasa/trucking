@@ -501,6 +501,7 @@
           $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
           $('#jqGrid').jqGrid('setGridParam', {
             postData: {
+              proses: 'reload',
               penerimaanheader_id: response.data.penerimaanstok_id,
               tgldari: dateFormat(response.data.tgldariheader),
               tglsampai: dateFormat(response.data.tglsampaiheader)
@@ -1972,6 +1973,7 @@
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
     $('#crudModal').find('.modal-body').html(modalBody)
+    initDatepicker('datepickerIndex')
   })
 
 
@@ -2105,6 +2107,7 @@
 
     Promise
       .all([
+        setStatusBanOptions(form),
         showPenerimaanstokHeader(form, penerimaanStokHeaderId)
       ])
       .then(penerimaanStokHeaderId => {
@@ -2162,6 +2165,7 @@
 
     Promise
       .all([
+        setStatusBanOptions(form),
         showPenerimaanstokHeader(form, penerimaanStokHeaderId)
       ])
       .then(penerimaanStokHeaderId => {

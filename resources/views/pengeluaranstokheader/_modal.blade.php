@@ -258,7 +258,7 @@
             </div>
             <div class="row mt-5">
               <div class="col-md-12">
-                <div  id="detail-table" class="card" style="max-height:500px; overflow-y: scroll;">
+                <div id="detail-table" class="card" style="max-height:500px; overflow-y: scroll;">
                   <div class="card-body">
                     <table class="table table-bordered table-bindkeys" style="width: 100%; min-width: 500px;">
                       <thead>
@@ -297,7 +297,7 @@
                   <div class="form-group col-md-6">
                     <div class="row">
                       <div class="col-12 col-sm-3 col-md-4">
-                        <label class="col-form-label">Stok  <span class="text-danger">*</span> </label>
+                        <label class="col-form-label">Stok <span class="text-danger">*</span> </label>
                       </div>
                       <div class="col-12 col-sm-9 col-md-8">
                         <input type="text" name="detail_stok[]" class="form-control detail_stok_1 stok-lookup">
@@ -313,7 +313,7 @@
                       </div>
                       <div class="col-12 col-sm-9 col-md-8">
                         <input type="text" name="status[]" id="status_stok" class="form-control" readonly>
-                        
+
                       </div>
                     </div>
                   </div>
@@ -321,7 +321,7 @@
                   <div class="form-group col-md-6">
                     <div class="row">
                       <div class="col-12 col-sm-3 col-md-4">
-                        <label class="col-form-label">Pengeluaran Trucking No bukti  <span class="text-danger">*</span> </label>
+                        <label class="col-form-label">Pengeluaran Trucking No bukti <span class="text-danger">*</span> </label>
                       </div>
                       <div class="col-12 col-sm-9 col-md-8">
                         <input type="text" name="pengeluarantrucking_nobukti" class="form-control detail_stok_1 pengeluarantrucking-lookup">
@@ -332,7 +332,7 @@
                   <div class="form-group col-md-6">
                     <div class="row">
                       <div class="col-12 col-sm-3 col-md-4">
-                        <label class="col-form-label">STATUS BAN  <span class="text-danger">*</span> </label>
+                        <label class="col-form-label">STATUS BAN <span class="text-danger">*</span> </label>
                       </div>
                       <div class="col-12 col-sm-9 col-md-8">
                         <select name="statusban[]" id="statusban" class="form-select select2bs4" style="width: 100%;">
@@ -348,7 +348,7 @@
                       </div>
                       <div class="col-12 col-sm-9 col-md-8">
                         <div class="input-group">
-                          <input type="number" id="afkir_vulkanisirke" name="detail_vulkanisirke[]" style="" class="form-control" readonly>                    
+                          <input type="number" id="afkir_vulkanisirke" name="detail_vulkanisirke[]" style="" class="form-control" readonly>
 
                         </div>
                       </div>
@@ -378,7 +378,7 @@
                       </div>
                     </div>
                   </div>
-                  
+
                   <div class="form-group col-md-6">
                     <div class="row">
                       <div class="col-12 col-sm-3 col-md-4">
@@ -389,22 +389,22 @@
                       </div>
                     </div>
                   </div>
-                  
+
                   <div class="form-group col-md-12">
                     <div class="row">
                       <div class="col-12 col-sm-3 col-md-2">
                         <label class="col-form-label">keterangan</label>
                       </div>
                       <div class="col-12 col-sm-9 col-md-10">
-                        <input type="text"  name="detail_keterangan[]" style="" class="form-control">                    
-                        
+                        <input type="text" name="detail_keterangan[]" style="" class="form-control">
+
                       </div>
                     </div>
                   </div>
-                  <input type="text"  name="qty_afkir[]" id="qty_afkir" hidden>                    
+                  <input type="text" name="qty_afkir[]" id="qty_afkir" hidden>
 
-                  
-                  
+
+
                 </div>
               </div>
             </div>
@@ -437,7 +437,7 @@
   $(document).ready(function() {
     $(document).on('click', '#addRow', function(event) {
       event.preventDefault()
-      
+
       let method = `POST`
       let url = `${apiUrl}pengeluaranstokheader/addrow`
       let form = $('#crudForm')
@@ -451,11 +451,11 @@
       $('#crudForm').find(`[name="detail_harga[]"]`).each((index, element) => {
         data.filter((row) => row.name === 'detail_harga[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="detail_harga[]"]`)[index])
       })
-  
+
       $('#crudForm').find(`[name="detail_persentasediscount[]"]`).each((index, element) => {
         data.filter((row) => row.name === 'detail_persentasediscount[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="detail_persentasediscount[]"]`)[index])
       })
-      
+
       $.ajax({
         url: url,
         method: method,
@@ -572,15 +572,16 @@
         name: 'tglsampaiheader',
         value: $('#tglsampaiheader').val()
       })
-      if (action == 'add') {
+      if (action != 'delete') {
         data.push({
           name: 'pengeluaranheader_id',
           value: data.find(item => item.name === "pengeluaranstok_id").value
         })
-        pengeluaranheader_id = data.find(item => item.name === "pengeluaranstok_id").value
-      } else {
-        pengeluaranheader_id = $('#kodepengeluaranheader').val();
+        // pengeluaranheader_id = data.find(item => item.name === "pengeluaranstok_id").value
       }
+      // else {
+      let pengeluaranheader_id = $('#kodepengeluaranheader').val();
+      // }
       // console.log(action,$('#kodepengeluaranheader').val());
       let tgldariheader = $('#tgldariheader').val();
       let tglsampaiheader = $('#tglsampaiheader').val()
@@ -627,6 +628,7 @@
           $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
           $('#jqGrid').jqGrid('setGridParam', {
             postData: {
+              proses: 'reload',
               pengeluaranheader_id: response.data.pengeluaranstok_id,
               tgldari: dateFormat(response.data.tgldariheader),
               tglsampai: dateFormat(response.data.tglsampaiheader)
@@ -711,7 +713,7 @@
     $("#detail-table").show();
     $("#detail-afkir").hide();
     $("#detail-afkir :input").attr("disabled", true);
-    
+
   }
 
 
@@ -739,7 +741,7 @@
   }
 
   function tampilanPJA() {
-  
+
     $('[name=penerimaanstok_nobukti]').parents('.form-group').hide()
     $('[name=statuspotongretur]').parents('.form-group').hide()
 
@@ -768,7 +770,7 @@
   }
 
   function tampilanGST() {
-   
+
     $('[name=kerusakan]').parents('.form-group').hide()
     $('[name=statuspotongretur]').parents('.form-group').hide()
     $('[name=penerimaanstok_nobukti]').parents('.form-group').hide()
@@ -938,7 +940,7 @@
       pengeluaranstok.children().attr('readonly', true)
       pengeluaranstok.children().find('.lookup-toggler').attr('disabled', true)
       pengeluaranstok.find('button.button-clear').remove()
-      
+
       let penerimaanstok_nobukti = $('#crudForm').find(`[name="penerimaanstok_nobukti"]`).parents('.input-group')
       penerimaanstok_nobukti.children().attr('readonly', true)
       penerimaanstok_nobukti.children().find('.lookup-toggler').attr('disabled', true)
@@ -954,9 +956,9 @@
       $('#statuspotongretur').attr('readonly', true);
 
     }
-    form.find('#btnSubmit').prop('disabled',false)
+    form.find('#btnSubmit').prop('disabled', false)
     if (form.data('action') == "view") {
-      form.find('#btnSubmit').prop('disabled',true)
+      form.find('#btnSubmit').prop('disabled', true)
     }
     // getMaxLength(form)
   })
@@ -964,6 +966,7 @@
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
     $('#crudModal').find('.modal-body').html(modalBody)
+    initDatepicker('datepickerIndex')
   })
 
   function createPengeluaranstokHeader() {
@@ -1129,6 +1132,7 @@
       })
     initLookup()
   }
+
   function viewPengeluaranstokHeader(pengeluaranStokHeaderId) {
     let form = $('#crudForm')
     $('.modal-loader').removeClass('d-none')
@@ -1139,7 +1143,7 @@
       <i class="fa fa-save"></i>
       Save
     `)
-    form.find('#btnSubmit').prop('disabled',true)
+    form.find('#btnSubmit').prop('disabled', true)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('View Pengeluaran Stok')
     $('.is-invalid').removeClass('is-invalid')
@@ -1176,7 +1180,7 @@
           .then(() => {
             $('#crudModal').modal('show')
             $('#crudForm').find(`.ui-datepicker-trigger`).attr('disabled', true)
-            
+
             form.find(`.hasDatepicker`).prop('readonly', true)
             form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
             let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
@@ -1312,8 +1316,7 @@
         data: {
           filters: JSON.stringify({
             "groupOp": "ANDNOT",
-            "rules": [
-              {
+            "rules": [{
                 "field": "grp",
                 "op": "cn",
                 "data": "STATUS KONDISI BAN",
@@ -1363,14 +1366,13 @@
         data: {
           filters: JSON.stringify({
             "groupOp": "AND",
-            "rules": [
-              {
+            "rules": [{
                 "field": "grp",
                 "op": "cn",
                 "data": "STATUS KONDISI BAN",
-               
+
               },
-             
+
             ]
           })
         },
@@ -1552,6 +1554,7 @@
     sumary()
     setRowNumbers()
   }
+
   function initRow() {
     let countRow = $('.rmv').parents('tr').length
     if (countRow <= 1) {
@@ -1560,6 +1563,7 @@
     sumary()
     setRowNumbers()
   }
+
   function resetRow() {
     $('.trow').remove()
   }
@@ -1813,7 +1817,7 @@
             form.find(`[name="gandengan"]`).data('currentValue', form.find(`[name="gandengan"]`).val())
           }
           $('#detailList tbody').html('')
-         
+
           if (listKodePengeluaran[1] == response.data.pengeluaranstok) {
             $.each(response.detail, (id, detail) => {
               let detailRow = $(`
@@ -1867,7 +1871,9 @@
               initSelect2($(`#statusoli${id}`), true)
               $('table #table_body').append(detailRow)
               // initAutoNumeric($(`.number${id}`))
-              initAutoNumeric($(`#detail_qty${id}`),{'maximumValue':detail.qty})
+              initAutoNumeric($(`#detail_qty${id}`), {
+                'maximumValue': detail.qty
+              })
               initAutoNumeric($(`#detail_harga${id}`))
               initAutoNumeric($(`#detail_persentasediscount${id}`))
               initAutoNumeric($(`#totalItem${id}`))
@@ -1888,9 +1894,9 @@
               // })
               id++;
             })
-            
-          }else if(listKodePengeluaran[6] == response.data.pengeluaranstok){
-            
+
+          } else if (listKodePengeluaran[6] == response.data.pengeluaranstok) {
+
             form.find(`[name="detail_stok[]"]`).val(response.detail[0].stok)
             form.find(`[name="detail_stok_id[]"]`).val(response.detail[0].stok_id)
             form.find(`[name="pengeluarantrucking_nobukti"]`).val(response.data.pengeluarantrucking_nobukti)
@@ -1904,7 +1910,7 @@
             $(`#qty_afkir`).val(response.detail[0].qty)
             console.log(response.detail[0].keterangan);
 
-          }else{
+          } else {
             $.each(response.detail, (id, detail) => {
               let detailRow = $(`
                 <tr class="trow">
@@ -1960,7 +1966,7 @@
                 console.log(option);
                 detailRow.find(`#statusban${id}`).append(option).trigger('change')
               });
-                
+
               detailRow.find(`[name="detail_nobukti[]"]`).val(detail.nobukti)
               detailRow.find(`[name="detail_stok[]"]`).val(detail.stok)
               detailRow.find(`[name="detail_stok_id[]"]`).val(detail.stok_id)
@@ -1971,34 +1977,38 @@
               detailRow.find(`[name="totalItem[]"]`).val(detail.total)
               detailRow.find(`[name="detail_keterangan[]"]`).val(detail.keterangan)
               $('table #table_body').append(detailRow)
+
               initSelect2($(`#statusban${id}`), true)
               initSelect2($(`#statusoli${id}`), true)
               setKorv(id,detail.stok_id);
   
+
               if (response.data.pengeluaranstok == 'SPK') {
                 service = detail.statusservicerutin;
                 dataStatusOli.forEach(statusOli => {
                   let option = new Option(statusOli.text, statusOli.id)
-  
+
                   detailRow.find(`#statusoli${id}`).append(option).trigger('change')
                 });
-  
+
                 if (service == 'PERGANTIAN BATERE' || service == 'PERGANTIAN SARINGAN HAWA') {
                   detailRow.find(`#statusoli${id} option:contains('TAMBAH')`).remove()
                   detailRow.trigger('change')
                 } else if (service == null) {
-  
+
                   detailRow.find(`#statusoli${id} option:contains('TAMBAH')`).remove()
                   detailRow.find(`#statusoli${id} option:contains('GANTI')`).remove()
                   detailRow.find(`#statusoli${id}`).trigger('change')
                 }
-  
+
                 detailRow.find(`[name="detail_statusoli[]"]`).val(detail.statusoli).trigger('change')
-  
+
               }
-  
+
               // initAutoNumeric($(`.number${id}`))
-              initAutoNumeric($(`#detail_qty${id}`),{'maximumValue':detail.qty})
+              initAutoNumeric($(`#detail_qty${id}`), {
+                'maximumValue': detail.qty
+              })
               initAutoNumeric($(`#detail_harga${id}`))
               initAutoNumeric($(`#detail_persentasediscount${id}`))
               initAutoNumeric($(`#totalItem${id}`))
@@ -2020,34 +2030,34 @@
                   element.data('currentValue', element.val())
                   setKorv(row,stok.id);
                   let service = stok.servicerutin_text;
-  
+
                   let elStatusOli = element.parents('tr').find(`td [name="detail_statusoli[]"]`);
                   elStatusOli.find(`option:contains('TAMBAH')`).remove()
                   elStatusOli.find(`option:contains('GANTI')`).remove()
-  
+
                   if (service == 'PERGANTIAN BATERE' || service == 'PERGANTIAN SARINGAN HAWA') {
                     dataStatusOli.forEach(statusOli => {
                       let option = new Option(statusOli.text, statusOli.id)
-  
+
                       elStatusOli.append(option).trigger('change')
                     });
-  
+
                     elStatusOli.find(`option:contains('TAMBAH')`).remove()
                     elStatusOli.trigger('change')
                   } else if (service == '') {
                     dataStatusOli.forEach(statusOli => {
                       let option = new Option(statusOli.text, statusOli.id)
-  
+
                       elStatusOli.append(option).trigger('change')
                     });
-  
+
                     elStatusOli.find(`option:contains('TAMBAH')`).remove()
                     elStatusOli.find(`option:contains('GANTI')`).remove()
                     elStatusOli.trigger('change')
                   } else {
                     dataStatusOli.forEach(statusOli => {
                       let option = new Option(statusOli.text, statusOli.id)
-  
+
                       elStatusOli.append(option).trigger('change')
                     });
                   }
@@ -2084,9 +2094,9 @@
       headers: {
         Authorization: `Bearer ${accessToken}`
       },
-      data:{
-        penerimaanstokheader_id:detail_id,
-        pengeluaranstok_id:$('#pengeluaranstokId').val(),
+      data: {
+        penerimaanstokheader_id: detail_id,
+        pengeluaranstok_id: $('#pengeluaranstokId').val(),
       },
       success: response => {
         console.log(response);
@@ -2142,7 +2152,9 @@
           detailRow.find(`[name="detail_keterangan[]"]`).val(detail.keterangan)
           $('table #table_body').append(detailRow)
           // initAutoNumeric($(`.number${id}`))
-          initAutoNumeric($(`#detail_qty${id}`),{'maximumValue':detail.qty})
+          initAutoNumeric($(`#detail_qty${id}`), {
+            'maximumValue': detail.qty
+          })
           initAutoNumeric($(`#detail_harga${id}`))
           initAutoNumeric($(`#detail_persentasediscount${id}`))
           initAutoNumeric($(`#totalItem${id}`))
@@ -2178,9 +2190,9 @@
     $('#qty_afkir').val(pengeluarantrucking.qty)
 
   }
-  
+
   function getJlhHari(stok_id) {
-    
+
     $.ajax({
       url: `${apiUrl}saldoumuraki/getUmurAki`,
       method: 'GET',
@@ -2188,8 +2200,8 @@
       headers: {
         Authorization: `Bearer ${accessToken}`
       },
-      data:{
-        stok_id:stok_id,
+      data: {
+        stok_id: stok_id,
       },
       success: response => {
         $('[name=jlhhari]').val(response.data);
@@ -2199,7 +2211,7 @@
       }
     });
   }
-  
+
   function cekValidasi(Id, Aksi) {
     $.ajax({
       url: `{{ config('app.api_url') }}pengeluaranstokheader/${Id}/cekvalidasi`,
@@ -2218,11 +2230,11 @@
           if (kodestatus == '1') {
             showDialog(response.message['keterangan'])
           } else {
-            if(Aksi == 'PRINTER BESAR'){
+            if (Aksi == 'PRINTER BESAR') {
               window.open(`{{ route('pengeluaranstokheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
-            } else if(Aksi == 'PRINTER KECIL'){
+            } else if (Aksi == 'PRINTER KECIL') {
               window.open(`{{ route('pengeluaranstokheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
-            } 
+            }
             if (Aksi == 'EDIT') {
               editPengeluaranstokHeader(Id)
             }
@@ -2433,7 +2445,7 @@
         getJlhHari(stok.id)
 
         element.data('currentValue', element.val())
-        
+
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
@@ -2442,7 +2454,7 @@
         element.val('')
         element.data('currentValue', element.val())
         $(`#detail_stok_id`).val('')
-        
+
       }
     })
 
@@ -2464,7 +2476,7 @@
         element.data('currentValue', element.val())
 
         processJlhHari(pengeluarantrucking)
-        
+
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))

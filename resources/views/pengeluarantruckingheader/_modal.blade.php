@@ -2092,6 +2092,7 @@
     clearSelectedRowsSumbangan()
     classHidden = [];
     $('#crudModal').find('.modal-body').html(modalBody)
+    initDatepicker('datepickerIndex')
   })
 
   function setTotal() {
@@ -2285,6 +2286,7 @@
 
     Promise
       .all([
+        setTglBukti(form),
         setStatusPostingOptions(form),
         setPostingPinjamanOptions(form),
         setStatusBiayaTitipanOptions(),
@@ -2328,7 +2330,7 @@
           })
       })
       .catch((error) => {
-        showDialog(error.statusText)
+        showDialog(error.responseJSON)
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
@@ -2378,10 +2380,11 @@
         })
         .trigger("reloadGrid");
 
-        setTotalNominalPelunasan()
-        setTotalSisaPelunasan()
+      setTotalNominalPelunasan()
+      setTotalSisaPelunasan()
     })
   }
+
   function loadPelunasanBBMGrid() {
 
     let disabled = '';
@@ -2654,18 +2657,18 @@
   function getDataPelunasanBBM(dari, sampai, id) {
     aksi = $('#crudForm').data('action')
     data = {}
-    if (aksi == 'edit') {
+    if (aksi == 'add') {
+      urlBBM = `${apiUrl}pengeluarantruckingheader/getpelunasan`
+    } else if (aksi == 'delete') {
+      urlBBM = `${apiUrl}pengeluarantruckingheader/${id}/delete/geteditpelunasan`
+      attribut = 'disabled'
+      forCheckbox = 'disabled'
+    } else {      
       if (id != undefined) {
         urlBBM = `${apiUrl}pengeluarantruckingheader/${id}/edit/geteditpelunasan`
       } else {
         urlBBM = `${apiUrl}pengeluarantruckingheader/getpelunasan`
       }
-    } else if (aksi == 'delete') {
-      urlBBM = `${apiUrl}pengeluarantruckingheader/${id}/delete/geteditpelunasan`
-      attribut = 'disabled'
-      forCheckbox = 'disabled'
-    } else if (aksi == 'add') {
-      urlBBM = `${apiUrl}pengeluarantruckingheader/getpelunasan`
     }
 
     return new Promise((resolve, reject) => {
@@ -2829,14 +2832,14 @@
         })
         .trigger("reloadGrid");
 
-        setTotalNominalDeposito()
-        setTotalSisaDeposito()
+      setTotalNominalDeposito()
+      setTotalSisaDeposito()
     })
   }
 
 
   function loadDepositoGrid() {
-    
+
     let disabled = '';
     if ($('#crudForm').data('action') == 'delete') {
       disabled = 'disabled'
@@ -2974,7 +2977,19 @@
             label: "KETERANGAN",
             name: "keterangan",
             sortable: false,
-            editable: false,
+            editable: true,
+            editoptions: {
+              dataEvents: [{
+                type: "keyup",
+                fn: function(event, rowObject) {
+                  let localRow = $("#tableDeposito").jqGrid(
+                    "getLocalRow",
+                    rowObject.rowId
+                  );
+                  localRow.keterangandetail = event.target.value;
+                }
+              }]
+            },
             width: 500
           },
           {
@@ -3109,20 +3124,19 @@
   function getDataDeposito(supirId, id) {
     aksi = $('#crudForm').data('action')
     data = {}
-    if (aksi == 'edit') {
+    if (aksi == 'add') {
+      url = `${apiUrl}pengeluarantruckingheader/getdeposito`
+    } else if (aksi == 'delete') {
+      url = `${apiUrl}pengeluarantruckingheader/${id}/delete/gettarikdeposito`
+      attribut = 'disabled'
+      forCheckbox = 'disabled'
+    } else {
       console.log(id)
       if (id != undefined) {
         url = `${apiUrl}pengeluarantruckingheader/${id}/edit/gettarikdeposito`
       } else {
         url = `${apiUrl}pengeluarantruckingheader/getdeposito`
       }
-    } else if (aksi == 'delete') {
-      url = `${apiUrl}pengeluarantruckingheader/${id}/delete/gettarikdeposito`
-      attribut = 'disabled'
-      forCheckbox = 'disabled'
-    } else if (aksi == 'add') {
-      url = `${apiUrl}pengeluarantruckingheader/getdeposito`
-
     }
 
     return new Promise((resolve, reject) => {
@@ -3249,9 +3263,9 @@
           if (kodestatus == '1') {
             showDialog(response.message['keterangan'])
           } else {
-            if(Aksi == 'PRINTER BESAR'){
+            if (Aksi == 'PRINTER BESAR') {
               window.open(`{{ route('pengeluarantruckingheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
-            } else if(Aksi == 'PRINTER KECIL'){
+            } else if (Aksi == 'PRINTER KECIL') {
               window.open(`{{ route('pengeluarantruckingheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
             } else {
               cekValidasiAksi(Id, Aksi)

@@ -425,6 +425,7 @@
     activeGrid = '#jqGrid'
     $('#crudModal').find('.modal-body').html(modalBody)
     clearSelectedRows()
+    initDatepicker('datepickerIndex')
   })
 
   function cekValidasi(Id, Aksi) {

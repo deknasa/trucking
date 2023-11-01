@@ -80,15 +80,14 @@
                   </div>
                 </div>
               </div>
-              <div class="col-md-6 mb-3">
-                <div class="row">
-                  <button id="btnTampil" type="button" class="btn btn-primary"><i class="fas fa-sync"></i>
-                    RELOAD
-                  </button>
-                </div>
+            </div>
+            <div class="row mb-2 mt-1">
+              <div class="col-12 col-md-12">
+                <button id="btnTampil" type="button" class="btn btn-primary"><i class="fas fa-sync"></i>
+                  RELOAD
+                </button>
               </div>
             </div>
-
             <div class="border p-3">
               <h6>Posting Penerimaan</h6>
 
@@ -393,6 +392,7 @@
     activeGrid = '#jqGrid'
     $('#crudModal').find('.modal-body').html(modalBody)
     editedData = {}
+    initDatepicker('datepickerIndex')
   })
 
   function rangeKasgantung() {
@@ -1330,9 +1330,9 @@
           if (kodestatus == '1') {
             showDialog(response.message['keterangan'])
           } else {
-            if(Aksi == 'PRINTER BESAR'){
+            if (Aksi == 'PRINTER BESAR') {
               window.open(`{{ route('pengembaliankasgantungheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
-            } else if(Aksi == 'PRINTER KECIL'){
+            } else if (Aksi == 'PRINTER KECIL') {
               window.open(`{{ route('pengembaliankasgantungheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
             } else {
               cekValidasiAksi(Id, Aksi)

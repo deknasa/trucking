@@ -24,7 +24,7 @@
                   <input type="text" name="nobukti" class="form-control" readonly>
                 </div>
 
-                <div class="col-12 col-md-2 text-right">
+                <div class="col-12 col-md-2">
                   <label class="col-form-label">
                     TGL BUKTI <span class="text-danger">*</span>
                   </label>
@@ -265,6 +265,7 @@
     activeGrid = '#jqGrid'
 
     $('#crudModal').find('.modal-body').html(modalBody)
+    initDatepicker('datepickerIndex')
   })
 
   function createOpname() {

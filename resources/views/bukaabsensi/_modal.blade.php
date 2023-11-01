@@ -9,7 +9,7 @@
           </button>
         </div>
         <form action="" method="post">
-          <div class="modal-body">
+          <div class="modal-body" style="height: 30vh;">
             <input type="text" name="id" class="form-control"  hidden readonly>
             
             <div class="row form-group">

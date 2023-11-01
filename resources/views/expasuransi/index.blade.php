@@ -48,7 +48,7 @@
                     {
                         label: 'Status',
                         name: 'status',
-                        width: 100,
+                        width: 250,
                         stype: 'select',
                         searchoptions: {
                             value: `<?php

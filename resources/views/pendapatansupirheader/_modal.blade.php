@@ -331,64 +331,39 @@
                 name: 'tglsampai',
                 value: form.find(`[name="tglsampai"]`).val()
             })
+            data.push({
+                name: 'jumlahdetail',
+                value: selectedRowsTrip.length
+            })
             // data.push({
             //     name: 'periode',
             //     value: form.find(`[name="periode"]`).val()
             // })
 
-
-            let rowLength = 0
-            $.each(selectedRowsTrip, function(index, item) {
-                data.push({
-                    name: 'id_detail[]',
-                    value: item
-                })
-                rowLength++
-            });
-            $.each(selectedTrip, function(index, item) {
-                data.push({
-                    name: 'nobukti_trip[]',
-                    value: item
-                })
-            });
-            $.each(selectedRic, function(index, item) {
-                data.push({
-                    name: 'nobukti_ric[]',
-                    value: item
-                })
-            });
-            $.each(selectedDari, function(index, item) {
-                data.push({
-                    name: 'dari_id[]',
-                    value: item
-                })
-            });
-            $.each(selectedSampai, function(index, item) {
-                data.push({
-                    name: 'sampai_id[]',
-                    value: item
-                })
-            });
+            let nominalTrip = [];
+            let kenekTrip = [];
             $.each(selectedNominal, function(index, item) {
-                data.push({
-                    name: 'nominal_detail[]',
-                    value: parseFloat(item.replaceAll(',', ''))
-                })
+                nominalTrip.push(parseFloat(item.replaceAll(',', '')))
             });
             $.each(selectedGajiKenek, function(index, item) {
-                data.push({
-                    name: 'gajikenek[]',
-                    value: parseFloat(item.replaceAll(',', ''))
-                })
-            });
-            $.each(selectedSupirId, function(index, item) {
-                data.push({
-                    name: 'supirtrip[]',
-                    value: parseFloat(item.replaceAll(',', ''))
-                })
+                kenekTrip.push(parseFloat(item.replaceAll(',', '')))
             });
 
+            let requestDataTrip = {
+                'id_detail': selectedRowsTrip,
+                'nobukti_trip': selectedTrip,
+                'nobukti_ric': selectedRic,
+                'dari_id': selectedDari,
+                'sampai_id': selectedSampai,
+                'nominal_detail': nominalTrip,
+                'gajikenek': kenekTrip,
+                'supirtrip': selectedSupirId
+            };
 
+            data.push({
+                name: 'detail',
+                value: JSON.stringify(requestDataTrip)
+            })
             // DEPOSITO
 
             let selectedRowsDepo = $(`#tableDeposito`).getGridParam("selectedRowIds");
@@ -446,10 +421,6 @@
                 }
             });
 
-            data.push({
-                name: 'jumlahdetail',
-                value: rowLength
-            })
             data.push({
                 name: 'sortIndex',
                 value: $('#jqGrid').getGridParam().sortname
@@ -584,6 +555,7 @@
 
         $('#crudModal').find('.modal-body').html(modalBody)
         clearSelectedRowsTrip()
+        initDatepicker('datepickerIndex')
     })
 
     function createPendapatanSupir() {

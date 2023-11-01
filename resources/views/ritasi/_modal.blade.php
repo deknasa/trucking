@@ -255,6 +255,7 @@
     $('#crudModal').find('.modal-body').html(modalBody)
     tradoLookup = ''
     supirLookup = ''
+    initDatepicker('datepickerIndex')
   })
 
   function createRitasi() {

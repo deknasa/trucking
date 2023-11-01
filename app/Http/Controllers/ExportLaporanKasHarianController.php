@@ -85,8 +85,6 @@ class ExportLaporanKasHarianController extends MyController
             $columnIndex = 0;
             $headerColumns = [
                 'no' => 'NO',
-                'jenislaporan' => 'JENIS LAPORAN',
-                'jenis' => 'JENIS',
                 'tgl' => 'TANGGAL',
                 'nobukti' => 'NO BUKTI',
                 'perkiraan' => 'PERKIRAAN',
@@ -121,12 +119,14 @@ class ExportLaporanKasHarianController extends MyController
             foreach ($filteredData as $row) {
                 $sheet->setCellValue('A' . $dataRow, $rowNumber); // Set row number
                 $sheet->getStyle('A' . $dataRow)->applyFromArray($borderStyle);
-
+                unset($row['jenislaporan']);
+                unset($row['jenis']);
                 $columnIndex = 1; // Reset column index for each row
                 foreach ($row as $index => $value) {
                     if ($columnIndex > $lastColumnIndex) {
                         break; // Exit the loop if the column index exceeds the index of the "saldo" column
                     }
+                    
                     $sheet->setCellValue($alphabets[$columnIndex] . $dataRow, $value);
                     $sheet->getStyle($alphabets[$columnIndex] . $dataRow)->applyFromArray($borderStyle);
 
@@ -153,10 +153,10 @@ class ExportLaporanKasHarianController extends MyController
 
                 // Add the formula to the current row's J column
                 if ($dataRow > $headerRow + 1) {
-                    $sheet->setCellValue('J' . $dataRow, '=(J' . $previousRow . '+H' . $dataRow . ')-I' . $dataRow);
+                    $sheet->setCellValue('H' . $dataRow, '=(H' . $previousRow . '+F' . $dataRow . ')-G' . $dataRow);
                 }
-                $sheet->getStyle('J' . $dataRow)->applyFromArray($borderStyle);
-                $sheet->getStyle('J' . $dataRow)->getNumberFormat()->setFormatCode("#,##0.00");
+                $sheet->getStyle('H' . $dataRow)->applyFromArray($borderStyle);
+                $sheet->getStyle('H' . $dataRow)->getNumberFormat()->setFormatCode("#,##0.00");
 
                 $previousRow = $dataRow; // Update the previous row number
 
@@ -166,22 +166,22 @@ class ExportLaporanKasHarianController extends MyController
 
 
             // Setelah perulangan selesai, tambahkan total ke sheet
-            $sheet->setCellValue('H' . $dataRow, "=SUM(H5:H" . ($dataRow - 1) . ")");
-            $sheet->getStyle('H' . $dataRow)->applyFromArray($borderStyle);
-            $sheet->getStyle('H' . $dataRow)->applyFromArray($boldStyle);
-            $sheet->getStyle('H' . $dataRow)->getNumberFormat()->setFormatCode("#,##0.00");
+            $sheet->setCellValue('F' . $dataRow, "=SUM(F5:F" . ($dataRow - 1) . ")");
+            $sheet->getStyle('F' . $dataRow)->applyFromArray($borderStyle);
+            $sheet->getStyle('F' . $dataRow)->applyFromArray($boldStyle);
+            $sheet->getStyle('F' . $dataRow)->getNumberFormat()->setFormatCode("#,##0.00");
 
-            $sheet->setCellValue('I' . $dataRow, "=SUM(I5:I" . ($dataRow - 1) . ")");
-            $sheet->getStyle('I' . $dataRow)->applyFromArray($borderStyle);
-            $sheet->getStyle('I' . $dataRow)->applyFromArray($boldStyle);
-            $sheet->getStyle('I' . $dataRow)->getNumberFormat()->setFormatCode("#,##0.00");
+            $sheet->setCellValue('G' . $dataRow, "=SUM(G5:G" . ($dataRow - 1) . ")");
+            $sheet->getStyle('G' . $dataRow)->applyFromArray($borderStyle);
+            $sheet->getStyle('G' . $dataRow)->applyFromArray($boldStyle);
+            $sheet->getStyle('G' . $dataRow)->getNumberFormat()->setFormatCode("#,##0.00");
 
             // Merge cells untuk menampilkan teks "TOTAL"
-            $sheet->mergeCells('A' . $dataRow . ':G' . $dataRow);
+            $sheet->mergeCells('A' . $dataRow . ':E' . $dataRow);
             $sheet->setCellValue('A' . $dataRow, 'TOTAL:');
-            $sheet->getStyle('A' . $dataRow . ':G' . $dataRow)->applyFromArray($boldStyle);
-            $sheet->getStyle('A' . $dataRow . ':G' . $dataRow)->applyFromArray($borderStyle);
-            $sheet->getStyle('A' . $dataRow . ':G' . $dataRow)->getAlignment()->setHorizontal('right');
+            $sheet->getStyle('A' . $dataRow . ':E' . $dataRow)->applyFromArray($boldStyle);
+            $sheet->getStyle('A' . $dataRow . ':E' . $dataRow)->applyFromArray($borderStyle);
+            $sheet->getStyle('A' . $dataRow . ':E' . $dataRow)->getAlignment()->setHorizontal('right');
         }
 
         // Laporan Rekap
@@ -204,8 +204,6 @@ class ExportLaporanKasHarianController extends MyController
         $rekapColumnIndex = 0;
         $rekapHeaderColumns = [
             'no' => 'NO',
-            'jenislaporan' => 'JENIS LAPORAN',
-            'jenis' => 'JENIS',
             'tgl' => 'TANGGAL',
             'nobukti' => 'NO BUKTI',
             'perkiraan' => 'PERKIRAAN',
@@ -240,7 +238,8 @@ class ExportLaporanKasHarianController extends MyController
         foreach ($filteredRekapData as $row) {
             $rekapSheet->setCellValue('A' . $rekapDataRow, $rekapRowNumber); // Set row number
             $rekapSheet->getStyle('A' . $rekapDataRow)->applyFromArray($borderStyle);
-
+            unset($row['jenislaporan']);
+            unset($row['jenis']);
             $rekapColumnIndex = 1; // Reset column index for each row
             foreach ($row as $index => $value) {
                 if ($rekapColumnIndex > $lastRekapColumnIndex) {
@@ -271,10 +270,10 @@ class ExportLaporanKasHarianController extends MyController
 
             // Add the formula to the current row's J column
             if ($rekapDataRow > $rekapHeaderRow + 1) {
-                $rekapSheet->setCellValue('J' . $rekapDataRow, '=(J' . $previousRow . '+H' . $rekapDataRow . ')-I' . $rekapDataRow);
+                $rekapSheet->setCellValue('H' . $rekapDataRow, '=(H' . $previousRow . '+F' . $rekapDataRow . ')-G' . $rekapDataRow);
             }
-            $rekapSheet->getStyle('J' . $rekapDataRow)->applyFromArray($borderStyle);
-            $rekapSheet->getStyle('J' . $rekapDataRow)->getNumberFormat()->setFormatCode("#,##0.00");
+            $rekapSheet->getStyle('H' . $rekapDataRow)->applyFromArray($borderStyle);
+            $rekapSheet->getStyle('H' . $rekapDataRow)->getNumberFormat()->setFormatCode("#,##0.00");
 
             $previousRow = $rekapDataRow; // Update the previous row number
 
@@ -284,22 +283,22 @@ class ExportLaporanKasHarianController extends MyController
         }
 
         // Setelah perulangan selesai, tambahkan total ke sheet
-        $rekapSheet->setCellValue('H' . $rekapDataRow, "=SUM(H5:H" . ($rekapDataRow - 1) . ")");
-        $rekapSheet->getStyle('H' . $rekapDataRow)->applyFromArray($borderStyle);
-        $rekapSheet->getStyle('H' . $rekapDataRow)->applyFromArray($boldStyle);
-        $rekapSheet->getStyle('H' . $rekapDataRow)->getNumberFormat()->setFormatCode("#,##0.00");
+        $rekapSheet->setCellValue('F' . $rekapDataRow, "=SUM(F5:F" . ($rekapDataRow - 1) . ")");
+        $rekapSheet->getStyle('F' . $rekapDataRow)->applyFromArray($borderStyle);
+        $rekapSheet->getStyle('F' . $rekapDataRow)->applyFromArray($boldStyle);
+        $rekapSheet->getStyle('F' . $rekapDataRow)->getNumberFormat()->setFormatCode("#,##0.00");
 
-        $rekapSheet->setCellValue('I' . $rekapDataRow, "=SUM(I5:I" . ($rekapDataRow - 1) . ")");
-        $rekapSheet->getStyle('I' . $rekapDataRow)->applyFromArray($borderStyle);
-        $rekapSheet->getStyle('I' . $rekapDataRow)->applyFromArray($boldStyle);
-        $rekapSheet->getStyle('I' . $rekapDataRow)->getNumberFormat()->setFormatCode("#,##0.00");
+        $rekapSheet->setCellValue('G' . $rekapDataRow, "=SUM(G5:G" . ($rekapDataRow - 1) . ")");
+        $rekapSheet->getStyle('G' . $rekapDataRow)->applyFromArray($borderStyle);
+        $rekapSheet->getStyle('G' . $rekapDataRow)->applyFromArray($boldStyle);
+        $rekapSheet->getStyle('G' . $rekapDataRow)->getNumberFormat()->setFormatCode("#,##0.00");
 
         // Merge cells untuk menampilkan teks "TOTAL"
-        $rekapSheet->mergeCells('A' . $rekapDataRow . ':G' . $rekapDataRow);
+        $rekapSheet->mergeCells('A' . $rekapDataRow . ':E' . $rekapDataRow);
         $rekapSheet->setCellValue('A' . $rekapDataRow, 'TOTAL:');
-        $rekapSheet->getStyle('A' . $rekapDataRow . ':G' . $rekapDataRow)->applyFromArray($boldStyle);
-        $rekapSheet->getStyle('A' . $rekapDataRow . ':G' . $rekapDataRow)->applyFromArray($borderStyle);
-        $rekapSheet->getStyle('A' . $rekapDataRow . ':G' . $rekapDataRow)->getAlignment()->setHorizontal('right');
+        $rekapSheet->getStyle('A' . $rekapDataRow . ':E' . $rekapDataRow)->applyFromArray($boldStyle);
+        $rekapSheet->getStyle('A' . $rekapDataRow . ':E' . $rekapDataRow)->applyFromArray($borderStyle);
+        $rekapSheet->getStyle('A' . $rekapDataRow . ':E' . $rekapDataRow)->getAlignment()->setHorizontal('right');
 
 
 
@@ -323,8 +322,6 @@ class ExportLaporanKasHarianController extends MyController
         $rekap01ColumnIndex = 0;
         $rekap01HeaderColumns = [
             'no' => 'NO',
-            'jenislaporan' => 'JENIS LAPORAN',
-            'jenis' => 'JENIS',
             'tgl' => 'TANGGAL',
             'nobukti' => 'NO BUKTI',
             'perkiraan' => 'PERKIRAAN',
@@ -357,6 +354,8 @@ class ExportLaporanKasHarianController extends MyController
             $rekap01Sheet->setCellValue('A' . $rekap01DataRow, $rekap01RowNumber); // Set row number
             $rekap01Sheet->getStyle('A' . $rekap01DataRow)->applyFromArray($borderStyle);
 
+            unset($row['jenislaporan']);
+            unset($row['jenis']);
             $rekap01ColumnIndex = 1; // Reset column index for each row
             foreach ($row as $index => $value) {
                 if ($rekap01ColumnIndex > $lastRekap01ColumnIndex) {
@@ -380,10 +379,10 @@ class ExportLaporanKasHarianController extends MyController
 
             // Add the formula to the current row's J column
             if ($rekap01DataRow > $rekap01HeaderRow + 1) {
-                $rekap01Sheet->setCellValue('J' . $rekap01DataRow, '=(J' . $previousRow . '+H' . $rekap01DataRow . ')-I' . $rekap01DataRow);
+                $rekap01Sheet->setCellValue('H' . $rekap01DataRow, '=(H' . $previousRow . '+F' . $rekap01DataRow . ')-G' . $rekap01DataRow);
             }
-            $rekap01Sheet->getStyle('J' . $rekap01DataRow)->applyFromArray($borderStyle);
-            $rekap01Sheet->getStyle('J' . $rekap01DataRow)->getNumberFormat()->setFormatCode("#,##0.00");
+            $rekap01Sheet->getStyle('H' . $rekap01DataRow)->applyFromArray($borderStyle);
+            $rekap01Sheet->getStyle('H' . $rekap01DataRow)->getNumberFormat()->setFormatCode("#,##0.00");
 
             $previousRow = $rekap01DataRow; // Update the previous row number
 
@@ -392,22 +391,22 @@ class ExportLaporanKasHarianController extends MyController
         }
 
         // Setelah perulangan selesai, tambahkan total ke sheet
-        $rekap01Sheet->setCellValue('H' . $rekap01DataRow, "=SUM(H5:H" . ($rekap01DataRow - 1) . ")");
-        $rekap01Sheet->getStyle('H' . $rekap01DataRow)->applyFromArray($borderStyle);
-        $rekap01Sheet->getStyle('H' . $rekap01DataRow)->applyFromArray($boldStyle);
-        $rekap01Sheet->getStyle('H' . $rekap01DataRow)->getNumberFormat()->setFormatCode("#,##0.00");
+        $rekap01Sheet->setCellValue('F' . $rekap01DataRow, "=SUM(F5:F" . ($rekap01DataRow - 1) . ")");
+        $rekap01Sheet->getStyle('F' . $rekap01DataRow)->applyFromArray($borderStyle);
+        $rekap01Sheet->getStyle('F' . $rekap01DataRow)->applyFromArray($boldStyle);
+        $rekap01Sheet->getStyle('F' . $rekap01DataRow)->getNumberFormat()->setFormatCode("#,##0.00");
 
-        $rekap01Sheet->setCellValue('I' . $rekap01DataRow, "=SUM(I5:I" . ($rekap01DataRow - 1) . ")");
-        $rekap01Sheet->getStyle('I' . $rekap01DataRow)->applyFromArray($borderStyle);
-        $rekap01Sheet->getStyle('I' . $rekap01DataRow)->applyFromArray($boldStyle);
-        $rekap01Sheet->getStyle('I' . $rekap01DataRow)->getNumberFormat()->setFormatCode("#,##0.00");
+        $rekap01Sheet->setCellValue('G' . $rekap01DataRow, "=SUM(G5:G" . ($rekap01DataRow - 1) . ")");
+        $rekap01Sheet->getStyle('G' . $rekap01DataRow)->applyFromArray($borderStyle);
+        $rekap01Sheet->getStyle('G' . $rekap01DataRow)->applyFromArray($boldStyle);
+        $rekap01Sheet->getStyle('G' . $rekap01DataRow)->getNumberFormat()->setFormatCode("#,##0.00");
 
         // Merge cells untuk menampilkan teks "TOTAL"
-        $rekap01Sheet->mergeCells('A' . $rekap01DataRow . ':G' . $rekap01DataRow);
+        $rekap01Sheet->mergeCells('A' . $rekap01DataRow . ':E' . $rekap01DataRow);
         $rekap01Sheet->setCellValue('A' . $rekap01DataRow, 'TOTAL:');
-        $rekap01Sheet->getStyle('A' . $rekap01DataRow . ':G' . $rekap01DataRow)->applyFromArray($boldStyle);
-        $rekap01Sheet->getStyle('A' . $rekap01DataRow . ':G' . $rekap01DataRow)->applyFromArray($borderStyle);
-        $rekap01Sheet->getStyle('A' . $rekap01DataRow . ':G' . $rekap01DataRow)->getAlignment()->setHorizontal('right');
+        $rekap01Sheet->getStyle('A' . $rekap01DataRow . ':E' . $rekap01DataRow)->applyFromArray($boldStyle);
+        $rekap01Sheet->getStyle('A' . $rekap01DataRow . ':E' . $rekap01DataRow)->applyFromArray($borderStyle);
+        $rekap01Sheet->getStyle('A' . $rekap01DataRow . ':E' . $rekap01DataRow)->getAlignment()->setHorizontal('right');
 
 
         // Laporan Rekap Perkiraan
