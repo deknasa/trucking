@@ -39,6 +39,14 @@
             name: 'nobuktirincian',
           },
           {
+            label: 'NO POL',
+            name: 'tradodetail',
+          },
+          {
+            label: 'SUPIR',
+            name: 'supirdetail',
+          },
+          {
             label: 'DARI',
             name: 'dari',
           },
@@ -47,17 +55,23 @@
             name: 'sampai',
           },
           {
-            label: 'NOMINAL',
+            label: 'KOMISI SUPIR',
             name: 'nominal',
             align: 'right',
             formatter: currencyFormat
           },
           {
-            label: 'GAJI KENEK',
+            label: 'KOMISI KENEK',
             name: 'gajikenek',
             align: 'right',
             formatter: currencyFormat
-          }
+          },
+          {
+            label: 'TOTAL',
+            name: 'totaldetail',
+            align: 'right',
+            formatter: currencyFormat
+          },
         ],
         autowidth: true,
         shrinkToFit: false,
@@ -124,6 +138,7 @@
               nobukti: 'Total:',
               nominal: data.attributes.totalNominal,
               gajikenek: data.attributes.totalGajiKenek,
+              totaldetail: data.attributes.totalAll
             }, true)
           }
         }
