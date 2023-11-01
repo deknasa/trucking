@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "896a7a5ae698265aa5dca96a1858c85e",
+  "ReportGuid": "fb05988ab65cc2a7f9cc276677201d2a",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanSaldoInventory.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1698724047000+0700)/",
+  "ReportChanged": "/Date(1698808414000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -593,7 +593,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "Kategori : {data.kategori}"
+                "Value": "Kelompok : {data.kategori}"
               },
               "VertAlignment": "Center",
               "Font": ";;Bold;",

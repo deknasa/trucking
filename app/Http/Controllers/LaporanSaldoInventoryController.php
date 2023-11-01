@@ -146,19 +146,19 @@ class LaporanSaldoInventoryController extends Controller
             ],
             [
                 "index" => "Tanggal",
-                "label" => "tanggal",
+                "label" => "Tanggal",
             ],
             [
                 "index" => "QTY",
-                "label" => "qty",
+                "label" => "QTY",
             ],
             [
                 "index" => "Satuan",
-                "label" => "satuan",
+                "label" => "Satuan",
             ],
             [
                 "index" => "Saldo",
-                "label" => "saldo",
+                "label" => "Saldo",
             ]
         ];
 
@@ -193,10 +193,10 @@ class LaporanSaldoInventoryController extends Controller
                     $sheet->getStyle("F$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
                     $sheet->getStyle("D$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
                     $sheet->getStyle("F$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
-                    $detail_start_row++;
+                    $detail_start_row+=2;
                 }
                 $sheet->setCellValue('A' . ($detail_start_row), $response_detail['lokasi']);
-                $sheet->setCellValue('B' . ($detail_start_row), 'Kategori : ' . $response_detail['kategori']);
+                $sheet->setCellValue('B' . ($detail_start_row), 'Kelompok : ' . $response_detail['kategori']);
 
                 $sheet->getStyle("A$detail_start_row:F$detail_start_row")->applyFromArray($styleArray)->getFont()->setBold(true);
                 $detail_start_row++;
