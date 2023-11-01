@@ -249,6 +249,7 @@
                     <th class="data_tbl tbl_harga" style="width: 20%; min-width: 200px;">harga</th>
                     <th class="data_tbl tbl_qty" style="width:10%; min-width: 100px">qty </th>
                     <th class="data_tbl tbl_vulkanisirke" style="width:10%; min-width: 100px">vulkanisir ke</th>
+                    <th class="data_tbl tbl_vulkanisirtotal" style="width:10%; min-width: 100px">vulkanisir</th>
                     <th class="data_tbl tbl_total_sebelum" style="width: 20%; min-width: 200px;">Total Sebelum disc</th>
                     <th class="data_tbl tbl_statusban" style="width:10%; min-width: 100px">Status Ban</th>
                     <th class="data_tbl tbl_persentase" style="width:10%; min-width: 100px">persentase discount</th>
@@ -591,6 +592,7 @@
     $('[name=gandenganke]').parents('.form-group').hide()
     $('[name=coa]').parents('.form-group').hide()
     $('.tbl_vulkanisirke').hide();
+    $('.tbl_vulkanisirtotal').hide();
     $('.tbl_statusban').hide();
     $('.tbl_persentase').hide();
     $('.tbl_total').hide();
@@ -622,6 +624,7 @@
     $('[name=gandenganke]').parents('.form-group').hide()
     $('[name=coa]').parents('.form-group').hide()
     $('.tbl_vulkanisirke').hide();
+    $('.tbl_vulkanisirtotal').hide();
     $('.tbl_statusban').hide();
     $('.tbl_harga').hide();
     $('.tbl_persentase').hide();
@@ -652,6 +655,7 @@
     $('[name=gandenganke]').parents('.form-group').hide()
     $('[name=coa]').parents('.form-group').hide()
     $('.tbl_vulkanisirke').hide();
+    $('.tbl_vulkanisirtotal').hide();
     $('.tbl_statusban').hide();
     $('.colspan').attr('colspan', 7);
     $('.tbl_total_sebelum').show();
@@ -672,6 +676,7 @@
     $('[name=supplier_id]').parents('.form-group').hide()
     $('[name=nobon]').parents('.form-group').hide()
     $('.tbl_vulkanisirke').hide();
+    $('.tbl_vulkanisirtotal').hide();
 
     $('[name=gudangdari]').parents('.form-group').show()
     $('[name=gudangke]').parents('.form-group').show()
@@ -717,6 +722,7 @@
     $('.tbl_qty').show()
     $('.tbl_statusban').hide();
     $('.tbl_vulkanisirke').hide();
+    $('.tbl_vulkanisirtotal').hide();
     $('.tbl_harga').hide();
     $('.tbl_persentase').hide();
     $('.tbl_total').hide();
@@ -744,6 +750,7 @@
     $('[name=gandengandari]').parents('.form-group').hide()
     $('[name=gandenganke]').parents('.form-group').hide()
     $('.tbl_vulkanisirke').hide();
+    $('.tbl_vulkanisirtotal').hide();
     $('.tbl_statusban').hide();
     $('.tbl_total_sebelum').show();
     $('.tbl_penerimaanstok_nobukti').show();
@@ -771,6 +778,7 @@
     $('.tbl_total_sebelum').hide();
     $('.colspan').attr('colspan', 6);
     $('.tbl_vulkanisirke').hide();
+    $('.tbl_vulkanisirtotal').hide();
     $('.tbl_statusban').hide();
     // $('[name=nobon]').val('')
     // $('[name=supplier]').attr('readonly', false);
@@ -831,6 +839,7 @@
     $('[name=gandenganke]').parents('.form-group').hide()
     $('[name=coa]').parents('.form-group').hide()
     $('.tbl_vulkanisirke').hide();
+    $('.tbl_vulkanisirtotal').hide();
     $('.tbl_statusban').hide();
     $('.tbl_total_sebelum').hide();
     $('.colspan').attr('colspan', 5);
@@ -858,6 +867,7 @@
     $('[name=gandenganke]').parents('.form-group').hide()
     $('[name=coa]').parents('.form-group').hide()
     $('.tbl_vulkanisirke').hide();
+    $('.tbl_vulkanisirtotal').hide();
     $('.tbl_statusban').hide();
     $('.tbl_total_sebelum').hide();
     $('.colspan').attr('colspan', 5);
@@ -892,11 +902,12 @@
     $('.tbl_penerimaanstok_nobukti').hide();
     $('.tbl_qty').hide()
     $('.tbl_vulkanisirke').show();
+    $('.tbl_vulkanisirtotal').show();
     $('.tbl_statusban').show();
     $('.tbl_harga').hide();
     $('.tbl_persentase').hide();
     $('.tbl_total').hide();
-    $('.colspan').attr('colspan', 4);
+    $('.colspan').attr('colspan', 6);
     $('.sumrow').hide();
     
     $('#addRow').show()
@@ -919,6 +930,7 @@
     $('[name=gandenganke]').parents('.form-group').hide()
     $('[name=coa]').parents('.form-group').hide()
     $('.tbl_vulkanisirke').hide();
+    $('.tbl_vulkanisirtotal').hide();
     $('.tbl_statusban').hide();
     $('.tbl_total_sebelum').hide();
     $('.tbl_penerimaanstok_nobukti').show();
@@ -992,6 +1004,10 @@
 
                   <td class="data_tbl tbl_vulkanisirke">
                     <input type="number"  name="detail_vulkanisirke[]" style="" class="form-control">                    
+                  </td>
+                  
+                  <td class="data_tbl tbl_vulkanisirtotal">
+                    <input type="number"  name="detail_vulkanisirtotal[]" style="" class="form-control">                    
                   </td>
 
 
@@ -1136,6 +1152,10 @@
 
                   <td class="data_tbl tbl_vulkanisirke">
                     <input type="number"  name="detail_vulkanisirke[]" style="" class="form-control">                    
+                  </td>
+
+                  <td class="data_tbl tbl_vulkanisirtotal">
+                    <input type="number"  name="detail_vulkanisirtotal[]" style="" class="form-control">                    
                   </td>
 
                   <td class="data_tbl tbl_persentase">
@@ -1286,6 +1306,10 @@
               <td class="data_tbl tbl_vulkanisirke">
                 <input type="number"  name="detail_vulkanisirke[]" style="" class="form-control">                    
               </td>
+
+              <td class="data_tbl tbl_vulkanisirtotal">
+                    <input type="number"  name="detail_vulkanisirtotal[]" style="" class="form-control">                    
+                  </td>
 
               <td class="data_tbl tbl_persentase">
                 <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${id}" onkeyup="calculate(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
@@ -1444,6 +1468,10 @@
                     <input type="number"  name="detail_vulkanisirke[]" style="" max="100" class="form-control">                    
                   </td> 
                   
+                  <td class="data_tbl tbl_vulkanisirtotal">
+                    <input type="number"  name="detail_vulkanisirtotal[]" style="" max="100" class="form-control">                    
+                  </td>
+                  
                   <td class="data_tbl tbl_persentase">
                     <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${id}" onkeyup="cal(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
                   </td>  
@@ -1573,7 +1601,11 @@
 
                   <td class="data_tbl tbl_vulkanisirke">
                     <input type="number"  name="detail_vulkanisirke[]" style="" max="100" class="form-control">                    
-                  </td>  
+                  </td>
+                  
+                  <td class="data_tbl tbl_vulkanisirtotal">
+                    <input type="number"  name="detail_vulkanisirtotal[]" style="" max="100" class="form-control">                    
+                  </td>
                   
                   <td class="data_tbl tbl_persentase">
                     <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${id}" onkeyup="cal(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
@@ -2245,6 +2277,27 @@
     }
   }
 
+  function setKorv(row,stok_id) {
+
+    $.ajax({
+        url: `${apiUrl}stok/${stok_id}/getvulkan`,
+        method: 'POST',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          $(`#vulkanisirtotal${row}`).val(response.data.totalvulkan)
+          $(`#statusban${row}`).val(response.data.statusban).trigger('change')
+
+        },
+        error: error => {
+          showDialog(error.responseJSON)
+        }
+      })
+          
+          
+  }
 
   index = 0;
 
@@ -2278,8 +2331,12 @@
                   </td>
 
                   <td class="data_tbl tbl_vulkanisirke">
-                    <input type="number"  name="detail_vulkanisirke[]" style="" max="100" class="form-control" >                    
+                    <input type="number"  name="detail_vulkanisirke[]" id="vulkanisirke${index}" style="" max="100" class="form-control" >                    
                   </td> 
+
+                  <td class="data_tbl tbl_vulkanisirtotal">
+                    <input type="number"  name="detail_vulkanisirtotal[]" id="vulkanisirtotal${index}" style="" max="100" class="form-control">                    
+                  </td>
 
                   <td class="data_tbl tbl_total_sebelum">
                     <input type="text"  name="total_sebelum[]" id="total_sebelum${index}" style="text-align:right"  onkeyup="calculate(${index})" class="form-control total_sebelum autonumeric number${index}" >
@@ -2330,6 +2387,7 @@
         parent = element.closest('td');
         parent.children('.detailstokId').val(stok.id)
         element.data('currentValue', element.val())
+        setKorv(row,stok.id);
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
@@ -2599,8 +2657,7 @@
           setKodePenerimaan(response.data.penerimaanstok);
 
           $.each(response.detail, (id, detail) => {
-            let option
-            initSelect2($(`#statusban${id}`), true)
+
             let detailRow = $(`
               <tr class="trow" data-id="${id}">
                     <td>
@@ -2632,6 +2689,10 @@
                       <input type="number"  name="detail_vulkanisirke[]" style="" max="100" class="form-control">                    
                     </td>  
 
+                    <td class="data_tbl tbl_vulkanisirtotal">
+                      <input type="number"  name="detail_vulkanisirtotal[]" id="vulkanisirtotal${id}" style="" max="100" class="form-control">                    
+                    </td>
+
                     <td class="data_tbl tbl_total_sebelum">
                       <input type="text"  name="total_sebelum[]" id="total_sebelum${id}" style="text-align:right"  onkeyup="calculate(${id})" class="form-control total_sebelum autonumeric number${id}" >
                     </td>
@@ -2656,7 +2717,11 @@
                 </tr>
             `)
             // console.log(KodePenerimaanId , listKodePenerimaan[7]);
-            
+           
+            dataStatusBan.forEach(statusBan => {
+              option = new Option(statusBan.text, statusBan.id)
+              detailRow.find(`#statusban${index}`).append(option).trigger('change')
+            });
             if (KodePenerimaanId === listKodePenerimaan[7]) {
               detailRow.find(`[name="detail_harga[]"]`).prop('readonly',true);
               detailRow.find(`[name="detail_persentasediscount[]"]`).prop('readonly',true);
@@ -2677,6 +2742,8 @@
             detailRow.find(`[name="total_sebelum[]"]`).val(totalSSebelumDiscount)
             detailRow.find(`[name="detail_keterangan[]"]`).val(detail.keterangan)
             $('table #table_body').append(detailRow)
+            initSelect2($(`#statusban${id}`), true)
+            setKorv(id,detail.stok_id);
             initAutoNumeric($(`.number${id}`))
             setRowNumbers()
             $(`#detail_stok_${id}`).lookup({
@@ -2696,6 +2763,8 @@
                 parent = element.closest('td');
                 parent.children('.detailstokId').val(stok.id)
                 element.data('currentValue', element.val())
+                setKorv(id,stok.id);
+
               },
               onCancel: (element) => {
                 element.val(element.data('currentValue'))
@@ -2726,11 +2795,11 @@
               }
             })
             
-            dataStatusBan.forEach(statusBan => {
-              option = new Option(statusBan.text, statusBan.id)
+            // dataStatusBan.forEach(statusBan => {
+            //   option = new Option(statusBan.text, statusBan.id)
         
-            });
-            detailRow.find(`#statusban${id}`).append(option).trigger('change')
+            //   detailRow.find(`#statusban${id}`).append(option).trigger('change')
+            // });
 
             id++;
           })

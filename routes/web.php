@@ -8,6 +8,9 @@ use App\Http\Controllers\AbsensiSupirApprovalHeaderController;
 use App\Http\Controllers\ApprovalTransaksiHeaderController;
 use App\Http\Controllers\ApprovalInvoiceHeaderController;
 use App\Http\Controllers\ReminderServiceController;
+use App\Http\Controllers\ToEmailController;
+use App\Http\Controllers\CcEmailController;
+use App\Http\Controllers\BccEmailController;
 
 use App\Http\Controllers\ApprovalSupirGambarController;
 use App\Http\Controllers\ApprovalSupirKeteranganController;
@@ -1571,6 +1574,11 @@ Route::middleware(['auth', 'authorized'])->group(function () {
     Route::get('exportric/export', [ExportRicController::class, 'export'])->name('exportric.export');
     Route::get('exportric/index', [ExportRicController::class, 'index']);
     Route::resource('exportric', ExportRicController::class);
+
+
+    Route::resource('toemail', ToEmailController::class);
+    Route::resource('ccemail', CcEmailController::class);
+    Route::resource('bccemail', BccEmailController::class);
 });
 
 Route::patch('format', [FormatController::class, 'update']);
