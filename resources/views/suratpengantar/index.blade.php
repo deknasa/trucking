@@ -585,6 +585,7 @@
         height: 350,
         rowNum: rowNum,
         rownumbers: true,
+        footerrow: true,
         rownumWidth: 45,
         rowList: [10, 20, 50, 0],
         toolbar: [true, "top"],
@@ -670,6 +671,13 @@
           $('#left-nav').find('button').attr('disabled', false)
           permission()
           setHighlight($(this))
+
+          if (data.attributes) {
+            $(this).jqGrid('footerData', 'set', {
+              nobukti: 'Total:',
+              jarak: data.attributes.totalJarak,
+            }, true)
+          }
         },
       })
 
