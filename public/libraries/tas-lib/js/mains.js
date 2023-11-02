@@ -895,8 +895,8 @@ function startTime() {
 	}, 1000);
 }
 
-function initDatepicker() {
-	let element = $(document).find(".datepicker");
+function initDatepicker(classDatepicker = 'datepicker') {
+	let element =  $(document).find('.'+classDatepicker); 
 
 	if (!offDays) {
 		offDays = getOffDays();
@@ -922,7 +922,12 @@ function initDatepicker() {
 				$(element).css({
 					position: "relative",
 				});
-
+				calendar.removeClass("no-date");
+				let isInModal = $(element).closest('.modal').length > 0; 
+				if (isInModal) { 
+					$('.ui-datepicker').insertAfter(element); 
+				} 
+ 
 				// Dirty hack, but we can't do anything without it (for now, in jQuery UI 1.8.20)
 				setTimeout(function () {
 					calendar.position({

@@ -303,6 +303,7 @@
         activeGrid = '#jqGrid'
 
         $('#crudModal').find('.modal-body').html(modalBody)
+        initDatepicker('datepickerIndex')
     })
 
     function setTotal() {
@@ -545,8 +546,8 @@
                         initAutoNumeric(detailRow.find(`[name="total_detail[]"]`))
 
 
-                        $('#detailList tbody').append(detailRow)
-                        initDatepicker(detailRow.find('.datepicker'))
+                        $('#detailList>#table_body').append(detailRow)
+                        initDatepicker()
                         setTotal()
                     })
 
@@ -588,8 +589,8 @@
         detailRow.find(`[name="tgljatuhtempo[]"]`).val(tglbukti).trigger('change');
 
 
-        $('#detailList tbody').append(detailRow)
-        initDatepicker(detailRow.find('.datepicker'))
+        $('#detailList>#table_body').append(detailRow)
+        initDatepicker()
 
         initAutoNumeric(detailRow.find('.autonumeric'))
 
@@ -608,10 +609,11 @@
 
         setRowNumbers()
         setTotal()
+        initDatepicker()
     }
 
     function setRowNumbers() {
-        let elements = $('#detailList tbody tr td:nth-child(1)')
+        let elements = $('#detailList>#table_body>tr>td:nth-child(1)')
 
         elements.each((index, element) => {
             $(element).text(index + 1)

@@ -63,7 +63,9 @@
 
       dataSet.readJson({
         'pendapatan': <?= json_encode($pendapatan); ?>,
-        'pendapatan_details': <?= json_encode($pendapatan_details); ?>
+        'pendapatan_details': <?= json_encode($pendapatan_details); ?>,
+        'pendapatansupir': <?= json_encode($pendapatansupir); ?>,
+        'pendapatansupir_details': <?= json_encode($pendapatansupir_details); ?>
       })
 
       report.regData(dataSet.dataSetName, '', dataSet)

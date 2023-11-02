@@ -43,6 +43,10 @@
           },
 
           {
+            label: 'NO POL',
+            name: 'trado',
+          },
+          {
             label: 'DARI',
             name: 'dari',
           },
