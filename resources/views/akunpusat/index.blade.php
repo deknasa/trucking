@@ -49,7 +49,7 @@
                         name: 'coa',
                     },
                     {
-                        label: 'keterangan kode perkiraan',
+                        label: 'nama perkiraan',
                         width: 220,
                         name: 'keterangancoa',
                     },
