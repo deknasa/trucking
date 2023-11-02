@@ -1,6 +1,11 @@
 @extends('layouts.master')
 
 @section('content')
+<style>
+  .ui-datepicker-calendar {
+    display: none;
+  }
+</style>
 <!-- Grid -->
 <div class="container-fluid">
     <div class="row">
@@ -21,10 +26,10 @@
                         <div class="row">
 
                             <div class="col-sm-6 mt-4">
-                                <a id="btnreload" class="btn btn-primary mr-2 ">
+                                <!-- <a id="btnreload" class="btn btn-primary mr-2 ">
                                     <i class="fas fa-sync"></i>
                                     Reload
-                                </a>
+                                </a> -->
                                 <button type="button" id="btnExport" class="btn btn-warning mr-1 ">
                                     <i class="fas fa-file-export"></i>
                                     Export
