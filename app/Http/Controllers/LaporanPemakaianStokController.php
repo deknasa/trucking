@@ -144,6 +144,10 @@ class LaporanPemakaianStokController extends Controller
                 "index"=> 'nominal',
             ],
             [
+                "label"=>"Saldo",
+                "index"=> 'saldo',
+            ],
+            [
                 "label"=>"Keterangan",
                 "index"=> 'keterangan',
             ],
@@ -156,11 +160,13 @@ class LaporanPemakaianStokController extends Controller
         $lastColumn = $alphabets[$data_columns_index];
         $sheet->getStyle("A$header_start_row:$lastColumn$header_start_row")->getFont()->setBold(true);
  
+        $rowAwal = 6;
         $no = 1;
         if (is_array($pengeluaran) || is_iterable($pengeluaran)) {
             // Menulis data dan melakukan grup berdasarkan kolom "KeteranganMain"
             
             $previous_kodetrado = '';
+            // dd($pengeluaran);
             foreach ($pengeluaran as $response_detail) {
                 $kodetrado = $response_detail['kodetrado'];
                 
@@ -170,7 +176,14 @@ class LaporanPemakaianStokController extends Controller
                 foreach ($header_columns as $data_columns_index => $data_column) {
                     if ($data_column['index'] == 'no') {
                         $value = $no;
-                    }else {
+                    } else if($data_column['index'] == 'saldo'){
+                        if ($previous_kodetrado !== $kodetrado) {
+                            $value = "=SUM(I$rowAwal:I".($detail_start_row-2).")";
+                            $rowAwal = $detail_start_row;
+                        }else{
+                            $value = '';
+                        }
+                    } else {
                         $value = $response_detail[$data_column['index']];
                     }
                     
@@ -178,7 +191,11 @@ class LaporanPemakaianStokController extends Controller
                         $value = date('d-m-Y',strtotime($value));
                     }
 
-                    $sheet->setCellValue($alphabets[$data_columns_index] . $detail_start_row, $value);
+                    if ($data_column['index'] == 'saldo') {
+                        $sheet->setCellValue($alphabets[$data_columns_index] . ($detail_start_row-2), $value);
+                    }else{
+                        $sheet->setCellValue($alphabets[$data_columns_index] . $detail_start_row, $value);
+                    }
                 }
 
                 // Tingkatkan nomor baris
@@ -186,6 +203,9 @@ class LaporanPemakaianStokController extends Controller
                 $no++;
                 $previous_kodetrado = $kodetrado;
             }
+            
+            $value = "=SUM(I$rowAwal:I".($detail_start_row-1).")";
+            $sheet->setCellValue($alphabets[9] . ($detail_start_row-1), $value);
             
         }
         //ukuran kolom
@@ -195,8 +215,9 @@ class LaporanPemakaianStokController extends Controller
         $detail_start_row++;
         // menambahkan sel Total pada baris terakhir + 1
         $sheet->setCellValue("B" . ($detail_start_row), 'TOTAL');
-        $sheet->setCellValue("F" . ($detail_start_row), "=SUM(F".($header_start_row + 1).":F" . $detail_start_row . ")");
-        $sheet->setCellValue("I" . ($detail_start_row), "=SUM(I".($header_start_row + 1).":I" . $detail_start_row . ")");
+        $sheet->setCellValue("F" . ($detail_start_row), "=SUM(F".($header_start_row + 1).":F" . ($detail_start_row-2) . ")");
+        $sheet->setCellValue("I" . ($detail_start_row), "=SUM(I".($header_start_row + 1).":I" . ($detail_start_row-2) . ")");
+        $sheet->setCellValue("J" . ($detail_start_row), "=SUM(J".($header_start_row + 1).":J" . ($detail_start_row-2) . ")");
 
         //FORMAT
         $numberColumn =[
@@ -204,6 +225,7 @@ class LaporanPemakaianStokController extends Controller
             "satuan",
             "harga",
             "nominal",
+            "saldo"
         ];
         foreach ($header_columns as $data_columns_index => $data_column) {
             if (in_array($data_column['index'],$numberColumn)) {
