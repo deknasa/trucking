@@ -187,9 +187,9 @@
           }
         },
         {
-          label: 'STATUS ACCOUNT PAYABLE',
+          label: 'STATUS PARENT',
           width: 210,
-          name: 'statusaccountpayable',
+          name: 'statusparent',
           align: 'left',
 
           stype: 'select',
@@ -205,8 +205,8 @@
                     Authorization: `Bearer ${accessToken}`
                   },
                   data: {
-                    grp: 'STATUS ACCOUNT PAYABLE',
-                    subgrp: 'STATUS ACCOUNT PAYABLE'
+                    grp: 'STATUS PARENT',
+                    subgrp: 'STATUS PARENT'
                   },
                   beforeSend: () => {
                     // clear options
@@ -238,20 +238,26 @@
             }
           },
           formatter: (value, options, rowData) => {
-            let statusAccPayable = JSON.parse(value)
+            if (!value) {
+              return ''
+            }
+            let statusParent = JSON.parse(value)
 
             let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusAccPayable.WARNA}; color: #fff;">
-                  <span>${statusAccPayable.SINGKATAN}</span>
+                <div class="badge" style="background-color: ${statusParent.WARNA}; color: #fff;">
+                  <span>${statusParent.SINGKATAN}</span>
                 </div>
               `)
 
             return formattedValue[0].outerHTML
           },
           cellattr: (rowId, value, rowObject) => {
-            let statusAccPayable = JSON.parse(rowObject.statusaccountpayable)
+            if (!rowObject.statusparent) {
+              return ` title=""`
+            }
+            let statusParent = JSON.parse(rowObject.statusparent)
 
-            return ` title="${statusAccPayable.MEMO}"`
+            return ` title="${statusParent.MEMO}"`
           }
         },
         {

@@ -60,6 +60,14 @@
                 <input type="hidden" name="akuntansi_id">
                 <input type="text" name="akuntansi" class="form-control akuntansi-lookup">
               </div>
+            </div>            
+            <div class="row form-group">
+              <label class="col-12 col-md-2 col-form-label">STATUS PARENT<span class="text-danger">*</span></label>
+              <div class="col-12 col-md-10">
+                <select name="statusparent" class="form-select select2bs4" style="width: 100%;">
+                  <option value="">-- PILIH STATUS PARENT --</option>
+                </select>
+              </div>
             </div>
             <div class="row form-group">
               <div class="col-12 col-md-2">
@@ -76,14 +84,6 @@
               <div class="col-12 col-md-10">
                 <select name="statuscoa" class="form-select select2bs4" style="width: 100%;">
                   <option value="">-- PILIH status kode perkiraan --</option>
-                </select>
-              </div>
-            </div>
-            <div class="row form-group">
-              <label class="col-12 col-md-2 col-form-label">STATUS PARENT<span class="text-danger">*</span></label>
-              <div class="col-12 col-md-10">
-                <select name="statusaccountpayable" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH STATUS ACCOUNT PAYABLE --</option>
                 </select>
               </div>
             </div>
@@ -278,7 +278,7 @@
     Promise
       .all([
         setStatusCoaOptions(form),
-        setStatusAccountPayableOptions(form),
+        setStatusParentOptions(form),
         setStatusLabaRugiOptions(form),
         setStatusNeracaOptions(form),
         setStatusAktifOptions(form),
@@ -346,7 +346,7 @@
     Promise
       .all([
         setStatusCoaOptions(form),
-        setStatusAccountPayableOptions(form),
+        setStatusParentOptions(form),
         setStatusLabaRugiOptions(form),
         setStatusNeracaOptions(form),
         setStatusAktifOptions(form),
@@ -384,7 +384,7 @@
     Promise
       .all([
         setStatusCoaOptions(form),
-        setStatusAccountPayableOptions(form),
+        setStatusParentOptions(form),
         setStatusLabaRugiOptions(form),
         setStatusNeracaOptions(form),
         setStatusAktifOptions(form),
@@ -422,7 +422,7 @@
     Promise
       .all([
         setStatusCoaOptions(form),
-        setStatusAccountPayableOptions(form),
+        setStatusParentOptions(form),
         setStatusLabaRugiOptions(form),
         setStatusNeracaOptions(form),
         setStatusAktifOptions(form),
@@ -521,11 +521,11 @@
     })
   }
 
-  const setStatusAccountPayableOptions = function(relatedForm) {
+  const setStatusParentOptions = function(relatedForm) {
     return new Promise((resolve, reject) => {
-      relatedForm.find('[name=statusaccountpayable]').empty()
-      relatedForm.find('[name=statusaccountpayable]').append(
-        new Option('-- PILIH STATUS ACCOUNT PAYABLE --', '', false, true)
+      relatedForm.find('[name=statusparent]').empty()
+      relatedForm.find('[name=statusparent]').append(
+        new Option('-- PILIH STATUS PARENT --', '', false, true)
       ).trigger('change')
 
       $.ajax({
@@ -541,15 +541,15 @@
             "rules": [{
               "field": "grp",
               "op": "cn",
-              "data": "STATUS ACCOUNT PAYABLE"
+              "data": "STATUS PARENT"
             }]
           })
         },
         success: response => {
-          response.data.forEach(statusAccountPayable => {
-            let option = new Option(statusAccountPayable.text, statusAccountPayable.id)
+          response.data.forEach(statusParent => {
+            let option = new Option(statusParent.text, statusParent.id)
 
-            relatedForm.find('[name=statusaccountpayable]').append(option).trigger('change')
+            relatedForm.find('[name=statusparent]').append(option).trigger('change')
           });
 
           resolve()

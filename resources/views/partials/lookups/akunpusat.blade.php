@@ -10,8 +10,8 @@
       postData: {
         level: `{!! $levelCoa ?? '' !!}`,
         potongan: `{!! $potongan ?? '' !!}`,
-        aktif: `{!! $Aktif ?? '' !!}`,        
-        supplier: `{!! $Supplier ?? '' !!}`,        
+        aktif: `{!! $Aktif ?? '' !!}`,
+        supplier: `{!! $Supplier ?? '' !!}`,
         // filters: `{!! $filters ?? '' !!}`
       },
       idPrefix: 'akunPusatLookup',
@@ -20,7 +20,7 @@
           name: 'id',
           align: 'right',
           width: '70px',
-            search: false,
+          search: false,
           hidden: true
         },
         {
@@ -118,10 +118,11 @@
           align: 'left'
         },
         {
-          label: 'status kode perkiraan', width: 210,
+          label: 'status kode perkiraan',
+          width: 210,
           name: 'statuscoa',
           align: 'left',
-          
+
           stype: 'select',
           searchoptions: {
             dataInit: function(element) {
@@ -185,11 +186,11 @@
           }
         },
         {
-          label: 'STATUS ACCOUNT PAYABLE',
-width: 210,
-          name: 'statusaccountpayable',
+          label: 'STATUS PARENT',
+          width: 210,
+          name: 'statusparent',
           align: 'left',
-          
+
           stype: 'select',
           searchoptions: {
             dataInit: function(element) {
@@ -203,8 +204,8 @@ width: 210,
                     Authorization: `Bearer ${accessToken}`
                   },
                   data: {
-                    grp: 'STATUS ACCOUNT PAYABLE',
-                    subgrp: 'STATUS ACCOUNT PAYABLE'
+                    grp: 'STATUS PARENT',
+                    subgrp: 'STATUS PARENT'
                   },
                   beforeSend: () => {
                     // clear options
@@ -236,20 +237,26 @@ width: 210,
             }
           },
           formatter: (value, options, rowData) => {
-            let statusAccPayable = JSON.parse(value)
+            if (!value) {
+              return ''
+            }
+            let statusParent = JSON.parse(value)
 
             let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusAccPayable.WARNA}; color: #fff;">
-                  <span>${statusAccPayable.SINGKATAN}</span>
+                <div class="badge" style="background-color: ${statusParent.WARNA}; color: #fff;">
+                  <span>${statusParent.SINGKATAN}</span>
                 </div>
               `)
 
             return formattedValue[0].outerHTML
           },
           cellattr: (rowId, value, rowObject) => {
-            let statusAccPayable = JSON.parse(rowObject.statusaccountpayable)
+            if (!rowObject.statusparent) {
+              return ` title=""`
+            }
+            let statusParent = JSON.parse(rowObject.statusparent)
 
-            return ` title="${statusAccPayable.MEMO}"`
+            return ` title="${statusParent.MEMO}"`
           }
         },
         {
@@ -322,7 +329,7 @@ width: 210,
           label: 'STATUS LABA RUGI',
           name: 'statuslabarugi',
           align: 'left',
-          
+
           stype: 'select',
           searchoptions: {
             dataInit: function(element) {
@@ -387,7 +394,7 @@ width: 210,
         },
         {
           label: 'kode perkiraan main',
- width: 200,
+          width: 200,
           name: 'coamain',
           align: 'left'
         },
@@ -396,26 +403,26 @@ width: 210,
           name: 'modifiedby',
           align: 'left'
         },
-          {
-            label: 'CREATED AT',
-            name: 'created_at',
-            align: 'right',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y H:i:s"
-            }
-          },
-          {
-            label: 'UPDATED AT',
-            name: 'updated_at',
-            align: 'right',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y H:i:s"
-            }
-          },
+        {
+          label: 'CREATED AT',
+          name: 'created_at',
+          align: 'right',
+          formatter: "date",
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y H:i:s"
+          }
+        },
+        {
+          label: 'UPDATED AT',
+          name: 'updated_at',
+          align: 'right',
+          formatter: "date",
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y H:i:s"
+          }
+        },
       ],
       autowidth: true,
       responsive: true,
@@ -456,7 +463,7 @@ width: 210,
         setGridLastRequest($(this), jqXHR)
       },
       loadComplete: function(data) {
-          changeJqGridRowListText()
+        changeJqGridRowListText()
         if (detectDeviceType() == 'desktop') {
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
