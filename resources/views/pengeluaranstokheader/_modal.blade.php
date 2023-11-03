@@ -1441,7 +1441,7 @@
                       <input type="number"  name="detail_vulkanisirke[]" style="" class="form-control">                    
                     </td> 
                   <td class="data_tbl tbl_vulkanisirtotal">
-                      <input type="number"  name="detail_vulkanisirtotal[]" id="vulkanisirtotal${index}" style="" class="form-control">                    
+                      <input type="number"  name="detail_vulkanisirtotal[]" readonly id="vulkanisirtotal${index}" style="" class="form-control">                    
                     </td> 
                   <td class="data_tbl tbl_harga">
                     <input type="text"  name="detail_harga[]" id="detail_harga${index}" readonly style="text-align:right" class="form-control autonumeric number${index}">
@@ -1840,7 +1840,7 @@
                         <input type="text"  name="detail_vulkanisirke[]" style="" class="form-control">                    
                       </td> 
                       <td class="data_tbl tbl_vulkanisirtotal"  style="display: none;" >
-                        <input type="text"  name="detail_vulkanisirtotal[]" id="vulkanisirtotal${id}" style="" class="form-control">                    
+                        <input type="text"  name="detail_vulkanisirtotal[]" readonly id="vulkanisirtotal${id}" style="" class="form-control">                    
                       </td> 
                       
                       <td class="data_tbl tbl_harga">
@@ -1942,7 +1942,7 @@
                         <input type="number"  name="detail_vulkanisirke[]" style="" class="form-control">                    
                       </td>  
                       <td class="data_tbl tbl_vulkanisirtotal">
-                        <input type="number"  name="detail_vulkanisirtotal[]" id="vulkanisirtotal${id}" style="" class="form-control">                    
+                        <input type="number"  name="detail_vulkanisirtotal[]" readonly id="vulkanisirtotal${id}" style="" class="form-control">                    
                       </td>  
                       <td class="data_tbl tbl_harga">
                         <input type="text"  name="detail_harga[]" id="detail_harga${id}" readonly style="text-align:right" class="autonumeric number${id} form-control">                    
@@ -2124,7 +2124,7 @@
                     <input type="text"  name="detail_vulkanisirke[]" style="" class="form-control">                    
                   </td> 
                   <td class="data_tbl tbl_vulkanisirtotal"  style="display: none;" >
-                    <input type="text"  name="detail_vulkanisirtotal[]" id="vulkanisirtotal${id}" style="" class="form-control">                    
+                    <input type="text"  name="detail_vulkanisirtotal[]" readonly id="vulkanisirtotal${id}" style="" class="form-control">                    
                   </td> 
                   
                   <td class="data_tbl tbl_harga">
