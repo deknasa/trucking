@@ -247,6 +247,24 @@
     })
   })
 
+  
+  $(document).on('change', $('#crudForm').find('[name=statusparent]'), function(event) {
+    let par =  $(`#crudForm [name="statusparent"] option:selected`).text()
+    console.log(par)
+    if (par == 'PARENT') {
+      setTimeout(() => {
+        $('#crudForm [name=parent]').attr('readonly', true)
+        $('#crudForm [name=parent]').parents('.input-group').find('.input-group-append').hide()
+        $('#crudForm [name=parent]').parents('.input-group').find('.button-clear').hide()
+
+      }, 500);
+    } else if (par == 'BUKAN PARENT') {
+      $('#crudForm [name=parent]').attr('readonly', false)
+      $('#crudForm [name=parent]').parents('.input-group').find('.input-group-append').show()
+      $('#crudForm [name=parent]').parents('.input-group').find('.button-clear').show()
+    }
+  });
+  
   $('#crudModal').on('shown.bs.modal', () => {
     let form = $('#crudForm')
 
