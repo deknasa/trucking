@@ -69,6 +69,7 @@ class LaporanPembelianBarangController extends Controller
             ->get(config('app.api_url') . 'laporanpembelianbarang/export', $detailParams);
 
         $pengeluaran = $responses['data'];
+        $judul = $pengeluaran[0]['judul'] ?? '';
         $disetujui = $pengeluaran[0]['disetujui'] ?? '';
         $diperiksa = $pengeluaran[0]['diperiksa'] ?? '';
         $user = Auth::user();
@@ -76,7 +77,7 @@ class LaporanPembelianBarangController extends Controller
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
-        $sheet->setCellValue('A1', 'PT. TRANSPORINDO AGUNG SEJAHTERA');
+        $sheet->setCellValue('A1', $judul);
         $sheet->setCellValue('A2', 'Laporan Pembelian Barang');
         $sheet->setCellValue('A3', 'Bulan ' . date('M-Y',strtotime($pengeluaran[0]['tglbukti'])));
         $sheet->getStyle("A1")->getFont()->setSize(20)->setBold(true);
