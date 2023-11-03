@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "6b51b93ea857044770259d35e3217566",
+  "ReportGuid": "3f4d75657ee2095da37ad84be7206638",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportPengeluaranBank.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1697516043000+0700)/",
+  "ReportChanged": "/Date(1698987054000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -383,7 +383,7 @@
               "Name": "Text16",
               "Guid": "06932b450000a7cace13d3968dec857b",
               "CanGrow": true,
-              "ClientRectangle": "115.06,15.56,66,6",
+              "ClientRectangle": "115.06,15.56,86,6",
               "ComponentPlacement": "ph.PageHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -1234,7 +1234,7 @@
               "ReferenceToGuid": "aaed2403dab9169c1e9b20dbbdf9d3bd"
             }
           },
-          "DataSourceName": "penerimaan_details",
+          "DataSourceName": "pengeluaran_details",
           "Sort": {
             "0": "ASC",
             "1": "FNInvoice",
