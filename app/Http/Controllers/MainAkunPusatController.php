@@ -28,7 +28,7 @@ class MainAkunPusatController extends MyController
         $data = [
             'comboaktif' => $this->comboList('list', 'STATUS AKTIF', 'STATUS AKTIF'),
             'combocoa' => $this->comboList('list', 'status kode perkiraan', 'status kode perkiraan'),
-            'comboaccountpayable' => $this->comboList('list', 'STATUS ACCOUNT PAYABLE', 'STATUS ACCOUNT PAYABLE'),
+            'comboparent' => $this->comboList('list', 'STATUS PARENT', 'STATUS PARENT'),
             'comboneraca' => $this->comboList('list', 'STATUS NERACA', 'STATUS NERACA'),
             'combolabarugi' => $this->comboList('list', 'STATUS LABA RUGI', 'STATUS LABA RUGI'),
         ];
