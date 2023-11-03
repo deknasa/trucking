@@ -423,6 +423,11 @@
             newformat: "d-m-Y H:i:s"
           }
         },
+        {
+          label: 'kode-keterangan',
+          name: 'kodeket',
+          align: 'left'
+        },
       ],
       autowidth: true,
       responsive: true,

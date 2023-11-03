@@ -182,7 +182,8 @@
               </div>
               <div class="col-8 col-md-9">
                 <div class="input-group">
-                  <input type="text" name="coa" class="form-control akunpusat-lookup">
+                  <input type="hidden" name="coa">
+                  <input type="text" name="ketcoa" class="form-control akunpusat-lookup">
                 </div>
               </div>
             </div>
@@ -891,6 +892,9 @@
             if (index == 'statuspostingtnl') {
               element.prop('disabled', true)
             }
+            if (index == 'ketcoa') {
+              element.data('current-value', value)
+            }
           })
           if (form.data('action') === 'delete') {
             form.find('[name]').addClass('disabled')
@@ -938,7 +942,8 @@
         }
       },
       onSelectRow: (akunpusat, element) => {
-        element.val(akunpusat.coa)
+        $('#crudForm [name=coa]').val(akunpusat.coa)
+        element.val(akunpusat.kodeket)
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {
