@@ -143,6 +143,18 @@
                     <input type="hidden" name="supir_id">
                     <input type="hidden" name="absensidetail_id">
                     <input type="text" name="trado" class="form-control absensisupirdetail-lookup">
+                    <table class="table table-striped table-bordered table-responsive tableInfo" style="display:none">
+                      <thead>
+                        <tr>
+                          <th>Keterangan</th>
+                          <th>KM trado</th>
+                          <th>KM total</th>
+                        </tr>
+                      </thead>
+                      <tbody id="infoTrado">
+
+                      </tbody>
+                    </table>
                   </div>
                 </div>
 
@@ -953,6 +965,40 @@
     })
   }
 
+  function getInfoTrado(trado) {
+    $.ajax({
+      url: `${apiUrl}inputtrip/getinfo`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`
+      },
+      data: {
+        trado_id: trado,
+        upah_id: $('#crudForm').find(`[name="upah_id"]`).val(),
+        statuscontainer_id: $('#crudForm').find(`[name="statuscontainer_id"]`).val()
+      },
+      success: response => {
+        $('.tableInfo').show()
+        $('#infoTrado').html('')
+        $.each(response.data, (index, detail) => {
+          let detailRow = $(`
+              <tr>
+                <td> ${detail.status} </td>
+                <td> ${detail.kmperjalanan} </td>
+                <td> ${detail.kmtotal} </td>
+              </tr>
+            `)
+
+          $('#infoTrado').append(detailRow)
+        })
+        console.log(response)
+      },
+      error: error => {
+        showDialog(error.statusText)
+      }
+    })
+  }
 
   function getpelabuhan(id) {
     $.ajax({
@@ -1238,6 +1284,7 @@
         tradoId = absensi.trado_id
         element.val(absensi.trado)
         element.data('currentValue', element.val())
+        getInfoTrado(tradoId)
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
