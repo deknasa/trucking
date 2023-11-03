@@ -266,6 +266,7 @@ use App\Http\Controllers\StatusGandenganTruckController;
 use App\Http\Controllers\StatusOliTradoController;
 use App\Http\Controllers\StokPusatController;
 use App\Http\Controllers\UbahPasswordController;
+use App\Http\Controllers\ReminderEmailController;
 
 /*
 |--------------------------------------------------------------------------
@@ -1579,6 +1580,7 @@ Route::middleware(['auth', 'authorized'])->group(function () {
     Route::resource('toemail', ToEmailController::class);
     Route::resource('ccemail', CcEmailController::class);
     Route::resource('bccemail', BccEmailController::class);
+    Route::resource('reminderemail', ReminderEmailController::class);
 });
 
 Route::patch('format', [FormatController::class, 'update']);

@@ -29,7 +29,7 @@
        
         {
           label: 'Status',
-          name: 'statusaktif',
+          name: 'statusaktif_memo',
           stype: 'select',
           searchoptions: {
             dataInit: function(element) {
