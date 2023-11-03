@@ -1007,7 +1007,7 @@
                   </td>
                   
                   <td class="data_tbl tbl_vulkanisirtotal">
-                    <input type="number"  name="detail_vulkanisirtotal[]" style="" class="form-control">                    
+                    <input type="number"  name="detail_vulkanisirtotal[]" readonly style="" class="form-control">                    
                   </td>
 
 
@@ -1155,7 +1155,7 @@
                   </td>
 
                   <td class="data_tbl tbl_vulkanisirtotal">
-                    <input type="number"  name="detail_vulkanisirtotal[]" style="" class="form-control">                    
+                    <input type="number"  name="detail_vulkanisirtotal[]" readonly style="" class="form-control">                    
                   </td>
 
                   <td class="data_tbl tbl_persentase">
@@ -1308,7 +1308,7 @@
               </td>
 
               <td class="data_tbl tbl_vulkanisirtotal">
-                    <input type="number"  name="detail_vulkanisirtotal[]" style="" class="form-control">                    
+                    <input type="number"  name="detail_vulkanisirtotal[]" readonly style="" class="form-control">                    
                   </td>
 
               <td class="data_tbl tbl_persentase">
@@ -1469,7 +1469,7 @@
                   </td> 
                   
                   <td class="data_tbl tbl_vulkanisirtotal">
-                    <input type="number"  name="detail_vulkanisirtotal[]" style="" max="100" class="form-control">                    
+                    <input type="number"  name="detail_vulkanisirtotal[]" readonly style="" max="100" class="form-control">                    
                   </td>
                   
                   <td class="data_tbl tbl_persentase">
@@ -1604,7 +1604,7 @@
                   </td>
                   
                   <td class="data_tbl tbl_vulkanisirtotal">
-                    <input type="number"  name="detail_vulkanisirtotal[]" style="" max="100" class="form-control">                    
+                    <input type="number"  name="detail_vulkanisirtotal[]" readonly style="" max="100" class="form-control">                    
                   </td>
                   
                   <td class="data_tbl tbl_persentase">
@@ -2335,7 +2335,7 @@
                   </td> 
 
                   <td class="data_tbl tbl_vulkanisirtotal">
-                    <input type="number"  name="detail_vulkanisirtotal[]" id="vulkanisirtotal${index}" style="" max="100" class="form-control">                    
+                    <input type="number"  name="detail_vulkanisirtotal[]" readonly id="vulkanisirtotal${index}" style="" max="100" class="form-control">                    
                   </td>
 
                   <td class="data_tbl tbl_total_sebelum">
@@ -2690,7 +2690,7 @@
                     </td>  
 
                     <td class="data_tbl tbl_vulkanisirtotal">
-                      <input type="number"  name="detail_vulkanisirtotal[]" id="vulkanisirtotal${id}" style="" max="100" class="form-control">                    
+                      <input type="number"  name="detail_vulkanisirtotal[]" readonly id="vulkanisirtotal${id}" style="" max="100" class="form-control">                    
                     </td>
 
                     <td class="data_tbl tbl_total_sebelum">
