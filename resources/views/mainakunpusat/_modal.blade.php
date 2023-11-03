@@ -60,7 +60,7 @@
                 <input type="hidden" name="akuntansi_id">
                 <input type="text" name="akuntansi" class="form-control akuntansi-lookup">
               </div>
-            </div>            
+            </div>
             <div class="row form-group">
               <label class="col-12 col-md-2 col-form-label">STATUS PARENT<span class="text-danger">*</span></label>
               <div class="col-12 col-md-10">
@@ -69,7 +69,7 @@
                 </select>
               </div>
             </div>
-            <div class="row form-group">
+            <div class="row form-group parent">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
                   kode perkiraan parent
@@ -237,6 +237,23 @@
     })
   })
 
+
+  $(document).on('change', $('#crudForm').find('[name=statusparent]'), function(event) {
+    let par =  $(`#crudForm [name="statusparent"] option:selected`).text()
+    console.log(par)
+    if (par == 'PARENT') {
+      setTimeout(() => {
+        $('#crudForm [name=parent]').attr('readonly', true)
+        $('#crudForm [name=parent]').parents('.input-group').find('.input-group-append').hide()
+        $('#crudForm [name=parent]').parents('.input-group').find('.button-clear').hide()
+
+      }, 500);
+    } else if (par == 'BUKAN PARENT') {
+      $('#crudForm [name=parent]').attr('readonly', false)
+      $('#crudForm [name=parent]').parents('.input-group').find('.input-group-append').show()
+      $('#crudForm [name=parent]').parents('.input-group').find('.button-clear').show()
+    }
+  });
   $('#crudModal').on('shown.bs.modal', () => {
     let form = $('#crudForm')
 
@@ -244,9 +261,9 @@
 
     activeGrid = null
 
-    form.find('#btnSubmit').prop('disabled',false)
+    form.find('#btnSubmit').prop('disabled', false)
     if (form.data('action') == "view") {
-      form.find('#btnSubmit').prop('disabled',true)
+      form.find('#btnSubmit').prop('disabled', true)
     }
 
     getMaxLength(form)
@@ -342,7 +359,6 @@
     $('#crudModalTitle').text('Edit Akun Pusat')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-
     Promise
       .all([
         setStatusCoaOptions(form),
@@ -363,6 +379,7 @@
             $('.modal-loader').addClass('d-none')
           })
       })
+
   }
 
   function deleteMainAkunPusat(akunPusatId) {
@@ -429,15 +446,15 @@
       ])
       .then(() => {
         showMainAkunPusat(form, akunPusatId)
-        .then(akunPusatId => {
-              // form.find('.aksi').hide()
-              setFormBindKeys(form)
-              form.find('[name]').attr('disabled', 'disabled').css({
-                background: '#fff'
-              })
-              form.find('[name=id]').prop('disabled',false)
-              
+          .then(akunPusatId => {
+            // form.find('.aksi').hide()
+            setFormBindKeys(form)
+            form.find('[name]').attr('disabled', 'disabled').css({
+              background: '#fff'
             })
+            form.find('[name=id]').prop('disabled', false)
+
+          })
           .then(() => {
             $('#crudModal').modal('show')
             let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
@@ -723,8 +740,8 @@
       })
     })
   }
-  
-  function cekValidasi(Id,aksi) {
+
+  function cekValidasi(Id, aksi) {
     $.ajax({
       url: `{{ config('app.api_url') }}mainakunpusat/${Id}/cekValidasi`,
       method: 'GET',
@@ -737,9 +754,9 @@
         if (kondisi == true) {
           showDialog(response.message['keterangan'])
         } else {
-          if(aksi == 'edit'){
+          if (aksi == 'edit') {
             editMainAkunPusat(Id)
-          }else{
+          } else {
             deleteMainAkunPusat(Id)
           }
         }
