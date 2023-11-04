@@ -100,16 +100,28 @@ class LaporanSaldoInventoryController extends Controller
         $sheet->setCellValue('A5', 'STOK');
         $sheet->getStyle("A5")->getFont()->setSize(12)->setBold(true);
         $sheet->getStyle("B5")->getFont()->setSize(12)->setBold(true);
+
         $stokdari = $data[0]['stokdari'] ?? " ";
         $stoksampai = $data[0]['stoksampai'] ?? " ";
-        $kategori = $data[0]['kategori'] ?? " ";
+        $kategori = $data[0]['kategori'] ?? "ALL";
         $lokasi = $data[0]['lokasi'] ?? " ";
         $namalokasi = $data[0]['namalokasi'] ?? " ";
         $sheet->setCellValue('B5', ': ' .  $stokdari . " S/D" . " " . $stoksampai);
+        $kelompok = ($request->kelompok != '') ? $request->kelompok : 'ALL';
+
+        $sheet->setCellValue('A6', 'KATEGORI');
+        $sheet->getStyle("A6")->getFont()->setSize(12)->setBold(true);
+        $sheet->getStyle("B6")->getFont()->setSize(12)->setBold(true);
+        $sheet->setCellValue('B6', ': ' . $kelompok);
+
+        $sheet->setCellValue('A7', $lokasi);
+        $sheet->getStyle("A7")->getFont()->setSize(12)->setBold(true);
+        $sheet->getStyle("B7")->getFont()->setSize(12)->setBold(true);
+        $sheet->setCellValue('B7', ': ' . $namalokasi);
 
         $sheet->getStyle("C4")->getFont()->setSize(12)->setBold(true);
 
-        $detail_table_header_row = 7;
+        $detail_table_header_row = 9;
         $detail_start_row = $detail_table_header_row + 1;
 
         $alphabets = range('A', 'Z');
@@ -121,7 +133,18 @@ class LaporanSaldoInventoryController extends Controller
                 ),
             ),
         );
+        $styleHeader = [
 
+            'alignment' => [
+                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+            ],
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+            ],
+        ];
         $style_number = [
             'alignment' => [
                 'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT,
@@ -137,12 +160,12 @@ class LaporanSaldoInventoryController extends Controller
 
         $header_columns = [
             [
-                "index" => "No",
-                "label" => "No.",
+                "index" => "vulkanisir ke/no",
+                "label" => "Vulkanisir Ke/No",
             ],
             [
                 "index" => "Nm. Brg",
-                "label" => "Nm. Brg",
+                "label" => "Nama Barang",
             ],
             [
                 "index" => "Tanggal",
@@ -150,7 +173,7 @@ class LaporanSaldoInventoryController extends Controller
             ],
             [
                 "index" => "QTY",
-                "label" => "QTY",
+                "label" => "Qty",
             ],
             [
                 "index" => "Satuan",
@@ -158,7 +181,7 @@ class LaporanSaldoInventoryController extends Controller
             ],
             [
                 "index" => "Saldo",
-                "label" => "Saldo",
+                "label" => "Nominal",
             ]
         ];
 
@@ -166,15 +189,9 @@ class LaporanSaldoInventoryController extends Controller
 
 
         // LOOPING DETAIL
-        $totalSaldo = 0;
         $previous_kategori = '';
-        $previous_keterangan_type = '';
-        $total_per_keterangan_type = 0;
-        $total_start_row = $detail_table_header_row;
-        $total_start_row_per_main = 0;
-        $start_last_main = 0;
-        $isEndGroup = false;
         $start_row_main = 0;
+        $no = 1;
         foreach ($data as $response_index => $response_detail) {
 
             $kategori = $response_detail['kategori'];
@@ -183,45 +200,43 @@ class LaporanSaldoInventoryController extends Controller
 
                     $cellQty[] = "D$detail_start_row";
                     $cellTotal[] = "F$detail_start_row";
-                    $sheet->setCellValue("A$detail_start_row", "JUMLAH $previous_kategori");
+                    $sheet->setCellValue("B$detail_start_row", "TOTAL $previous_kategori");
                     $sheet->setCellValue("D$detail_start_row", "=SUM(D$start_row_main:D" . ($detail_start_row - 1) . ")");
                     $sheet->setCellValue("F$detail_start_row", "=SUM(F$start_row_main:F" . ($detail_start_row - 1) . ")");
 
-                    $sheet->mergeCells("A$detail_start_row:C$detail_start_row");
                     $sheet->getStyle("A$detail_start_row:F$detail_start_row")->applyFromArray($styleArray)->getFont()->setBold(true);
                     $sheet->getStyle("D$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
                     $sheet->getStyle("F$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
                     $sheet->getStyle("D$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
                     $sheet->getStyle("F$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
-                    $detail_start_row+=2;
+                    $detail_start_row += 2;
                 }
-                $sheet->setCellValue('A' . ($detail_start_row), $response_detail['lokasi']);
-                $sheet->setCellValue('B' . ($detail_start_row), 'Kelompok : ' . $response_detail['kategori']);
-
-                $sheet->getStyle("A$detail_start_row:F$detail_start_row")->applyFromArray($styleArray)->getFont()->setBold(true);
-                $detail_start_row++;
-
-                foreach ($header_columns as $detail_columns_index => $detail_column) {
-                    $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, $detail_column['label'] ?? $detail_columns_index + 1);
+                if ($previous_kategori == '') {
+                    foreach ($header_columns as $detail_columns_index => $detail_column) {
+                        $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, $detail_column['label'] ?? $detail_columns_index + 1);
+                    }
+                    $sheet->getStyle("A$detail_start_row:F$detail_start_row")->applyFromArray($styleHeader)->getFont()->setBold(true);
+                    $detail_start_row++;
                 }
-                $sheet->getStyle("A$detail_start_row:F$detail_start_row")->applyFromArray($styleArray)->getFont()->setBold(true);
-                $detail_start_row++;
 
                 $start_row_main = $detail_start_row;
-                $sheet->setCellValue('A' . ($detail_start_row), $response_detail['lokasi']);
-                $sheet->setCellValue('B' . ($detail_start_row), $response_detail['namalokasi']);
-
-                $sheet->getStyle("A$detail_start_row:F$detail_start_row")->applyFromArray($styleArray)->getFont()->setBold(true);
-                $detail_start_row++;
-
-                $sheet->setCellValue('A' . ($detail_start_row), $response_detail['kategori']);
+                if ($kategori == 'BAN') {
+                    $sheet->setCellValue('A' . ($detail_start_row), 'Vulkan Ke');
+                } else {
+                    $sheet->setCellValue('A' . ($detail_start_row), 'No');
+                }
                 $sheet->setCellValue('B' . ($detail_start_row), $response_detail['kategori']);
-
-                $sheet->getStyle("A$detail_start_row:F$detail_start_row")->applyFromArray($styleArray)->getFont()->setBold(true);
+                $sheet->getStyle("A$detail_start_row")->applyFromArray($styleHeader)->getFont()->setBold(true);
+                $sheet->getStyle("B$detail_start_row:F$detail_start_row")->applyFromArray($styleArray)->getFont()->setBold(true);
                 $detail_start_row++;
                 $detail_start_row = $detail_start_row;
             }
-            $sheet->setCellValue("A$detail_start_row", $response_detail['vulkanisirke']);
+
+            if ($kategori == 'BAN') {
+                $sheet->setCellValue("A$detail_start_row", $response_detail['vulkanisirke']);
+            } else {
+                $sheet->setCellValue("A$detail_start_row", $no++);
+            }
             $sheet->setCellValue("B$detail_start_row", $response_detail['namabarang']);
             $sheet->setCellValue("C$detail_start_row", date('d-m-Y', strtotime($response_detail['tanggal'])));
             $sheet->setCellValue("D$detail_start_row", $response_detail['qty']);
@@ -239,11 +254,10 @@ class LaporanSaldoInventoryController extends Controller
         if ($previous_kategori != '') {
             $cellQty[] = "D$detail_start_row";
             $cellTotal[] = "F$detail_start_row";
-            $sheet->setCellValue("A$detail_start_row", "JUMLAH $previous_kategori");
+            $sheet->setCellValue("B$detail_start_row", "TOTAL $previous_kategori");
             $sheet->setCellValue("D$detail_start_row", "=SUM(D$start_row_main:D" . ($detail_start_row - 1) . ")");
             $sheet->setCellValue("F$detail_start_row", "=SUM(F$start_row_main:F" . ($detail_start_row - 1) . ")");
 
-            $sheet->mergeCells("A$detail_start_row:C$detail_start_row");
             $sheet->getStyle("A$detail_start_row:F$detail_start_row")->applyFromArray($styleArray)->getFont()->setBold(true);
             $sheet->getStyle("D$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
             $sheet->getStyle("F$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
@@ -255,11 +269,10 @@ class LaporanSaldoInventoryController extends Controller
 
         $qty = implode("+", $cellQty);
         $total = implode("+", $cellTotal);
-        $sheet->setCellValue("A$detail_start_row", "GRAND TOTAL");
+        $sheet->setCellValue("B$detail_start_row", "GRAND TOTAL");
         $sheet->setCellValue("D$detail_start_row", "=$qty");
         $sheet->setCellValue("F$detail_start_row", "=$total");
 
-        $sheet->mergeCells("A$detail_start_row:C$detail_start_row");
         $sheet->getStyle("A$detail_start_row:F$detail_start_row")->applyFromArray($styleArray)->getFont()->setBold(true);
         $sheet->getStyle("D$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
         $sheet->getStyle("F$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);

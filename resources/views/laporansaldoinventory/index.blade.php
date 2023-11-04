@@ -243,6 +243,7 @@
 
     $(document).on('click', `#btnExport`, function(event) {
         let kelompok_id = $('#crudForm').find('[name=kelompok_id]').val()
+        let kelompok = $('#crudForm').find('[name=kelompok]').val()
         let statusreuse = $('#crudForm').find('[name=statusreuse]').val()
         let statusban = $('#crudForm').find('[name=statusban]').val()
         let filter = $('#crudForm').find('[name=filter]').val()
@@ -275,7 +276,7 @@
             // (stoksampai_id != '') &&
             (dataFilter != '')
         ) {
-            window.open(`{{ route('laporansaldoinventory.export') }}?kelompok_id=${kelompok_id}&statusreuse=${statusreuse}&statusban=${statusban}&filter=${filter}&jenistgltampil=${jenistgltampil}&priode=${priode}&stokdari_id=${stokdari_id}&stoksampai_id=${stoksampai_id}&dataFilter=${dataFilter}`)
+            window.open(`{{ route('laporansaldoinventory.export') }}?kelompok_id=${kelompok_id}&kelompok=${kelompok}&statusreuse=${statusreuse}&statusban=${statusban}&filter=${filter}&jenistgltampil=${jenistgltampil}&priode=${priode}&stokdari_id=${stokdari_id}&stoksampai_id=${stoksampai_id}&dataFilter=${dataFilter}`)
         } else {
             showDialog('ISI SELURUH KOLOM')
         }
