@@ -76,7 +76,8 @@
                 </label>
               </div>
               <div class="col-12 col-md-10">
-                <input type="text" name="parent" class="form-control parent-lookup">
+                <input type="hidden" name="parent">
+                <input type="text" name="parentnama" class="form-control parent-lookup">
               </div>
             </div>
             <div class="row form-group">
@@ -110,7 +111,8 @@
                 </label>
               </div>
               <div class="col-12 col-md-10">
-                <input type="text" name="coamain" class="form-control coamain-lookup">
+                <input type="hidden" name="coamain">
+                <input type="text" name="coamainket" class="form-control coamain-lookup">
               </div>
             </div>
             <div class="row form-group">
@@ -253,15 +255,15 @@
     console.log(par)
     if (par == 'PARENT') {
       setTimeout(() => {
-        $('#crudForm [name=parent]').attr('readonly', true)
-        $('#crudForm [name=parent]').parents('.input-group').find('.input-group-append').hide()
-        $('#crudForm [name=parent]').parents('.input-group').find('.button-clear').hide()
+        $('#crudForm [name=parentnama]').attr('readonly', true)
+        $('#crudForm [name=parentnama]').parents('.input-group').find('.input-group-append').hide()
+        $('#crudForm [name=parentnama]').parents('.input-group').find('.button-clear').hide()
 
       }, 500);
     } else if (par == 'BUKAN PARENT') {
-      $('#crudForm [name=parent]').attr('readonly', false)
-      $('#crudForm [name=parent]').parents('.input-group').find('.input-group-append').show()
-      $('#crudForm [name=parent]').parents('.input-group').find('.button-clear').show()
+      $('#crudForm [name=parentnama]').attr('readonly', false)
+      $('#crudForm [name=parentnama]').parents('.input-group').find('.input-group-append').show()
+      $('#crudForm [name=parentnama]').parents('.input-group').find('.button-clear').show()
     }
   });
   
@@ -744,10 +746,10 @@
             if (index == 'akuntansi') {
               element.data('current-value', value)
             }
-            if (index == 'parent') {
+            if (index == 'parentnama') {
               element.data('current-value', value)
             }
-            if (index == 'coamain') {
+            if (index == 'coamainket') {
               element.data('current-value', value)
             }
           })
@@ -851,13 +853,15 @@
         }
       },
       onSelectRow: (akunpusat, element) => {
-        element.val(akunpusat.coa)
+        $('#crudForm [name=parent]').val(akunpusat.coa)
+        element.val(akunpusat.kodeket)
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
+        $('#crudForm [name=parent]').val('')
         element.val('')
         element.data('currentValue', element.val())
       }
@@ -874,13 +878,15 @@
         }
       },
       onSelectRow: (akunpusat, element) => {
-        element.val(akunpusat.coa)
+        $('#crudForm [name=coamain]').val(akunpusat.coa)
+        element.val(akunpusat.kodeket)
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
+        $('#crudForm [name=coamain]').val('')
         element.val('')
         element.data('currentValue', element.val())
       }

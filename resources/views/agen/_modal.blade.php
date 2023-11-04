@@ -673,7 +673,7 @@
       },
       onSelectRow: (akunpusat, element) => {
         $('#crudForm [name=coa]').first().val(akunpusat.coa)
-        element.val(akunpusat.keterangancoa)
+        element.val(akunpusat.kodeket)
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {
@@ -696,7 +696,7 @@
       },
       onSelectRow: (akunpusat, element) => {
         $('#crudForm [name=coapendapatan]').first().val(akunpusat.coa)
-        element.val(akunpusat.keterangancoa)
+        element.val(akunpusat.kodeket)
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {
