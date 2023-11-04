@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class ImportDataCabangController extends Controller
+class ImportDataCabangController extends MyController
 {
-    public $title = 'Hutang Detail';
+    public $title = 'Import Data Cabang';
 
     public function index(Request $request)
     {
