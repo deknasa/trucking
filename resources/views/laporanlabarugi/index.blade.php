@@ -26,6 +26,14 @@
                             </div>
                         </div>
                         <div class="row">
+                            <label class="col-12 col-sm-2 col-form-label mt-2">Cabang<span class="text-danger">*</span></label>
+
+                            <div class="col-sm-4 mt-2">
+                                <input type="hidden" name="cabang_id">
+                                <input type="text" name="cabang" class="form-control cabang-lookup">
+                            </div>
+                        </div>
+                        <div class="row">
 
                             <div class="col-sm-6 mt-4">
                                 <button type="button" id="btnPreview" class="btn btn-info mr-1 ">
@@ -67,6 +75,7 @@
 
     $(document).ready(function() {
 
+        initLookup()
         $('#crudForm').find('[name=sampai]').val($.datepicker.formatDate('mm-yy', new Date())).trigger('change');
 
         $('.datepicker').datepicker({
@@ -89,6 +98,16 @@
 			<i class="fa fa-calendar-alt"></i>
 		`);
 
+        let idcabang = `<?php $data['idcabang']['text'] ?>`;
+
+        if (idcabang != 1) {
+            $('#crudForm [name=cabang]').attr('readonly', true)
+            $('#crudForm [name=cabang]').parents('.input-group').find('.input-group-append').hide()
+            $('#crudForm [name=cabang]').parents('.input-group').find('.button-clear').hide()
+        }
+        $('#crudForm [name=cabang_id]').val(`<?= $cabang['id'] ?>`);
+        $('#crudForm [name=cabang]').val(`<?= $cabang['namacabang'] ?>`);
+
         if (!`{{ $myAuth->hasPermission('laporanlabarugi', 'report') }}`) {
             $('#btnPreview').attr('disabled', 'disabled')
         }
@@ -101,15 +120,17 @@
     $(document).on('click', `#btnPreview`, function(event) {
 
         let sampai = $('#crudForm').find('[name=sampai]').val()
+        let cabang_id = $('#crudForm').find('[name=cabang_id]').val()
         $.ajax({
             url: `{{ route('laporanlabarugi.report') }}`,
             method: 'GET',
             data: {
-                sampai: sampai
+                sampai: sampai,
+                cabang_id: cabang_id
             },
             success: function(response) {
                 // Handle the success response
-                var newWindow = window.open('','_blank');
+                var newWindow = window.open('', '_blank');
                 newWindow.document.open();
                 newWindow.document.write(response);
                 newWindow.document.close();
@@ -129,8 +150,9 @@
 
     $(document).on('click', `#btnExport`, function(event) {
         let sampai = $('#crudForm').find('[name=sampai]').val()
+        let cabang_id = $('#crudForm').find('[name=cabang_id]').val()
         getCekReport().then((response) => {
-            window.open(`{{ route('laporanlabarugi.export') }}?sampai=${sampai}`)
+            window.open(`{{ route('laporanlabarugi.export') }}?sampai=${sampai}&cabang_id=${cabang_id}`)
         }).catch((error) => {
             if (error.status === 422) {
                 $('.is-invalid').removeClass('is-invalid')
@@ -155,6 +177,7 @@
                 },
                 data: {
                     sampai: $('#crudForm').find('[name=sampai]').val(),
+                    cabang_id: $('#crudForm').find('[name=cabang_id]').val(),
                     isCheck: true,
                 },
                 success: (response) => {
@@ -166,6 +189,31 @@
                 },
             });
         });
+    }
+
+    function initLookup() {
+        $('.cabang-lookup').lookup({
+            title: 'Cabang Lookup',
+            fileName: 'cabang',
+            beforeProcess: function(test) {
+                this.postData = {
+                    Aktif: 'AKTIF',
+                }
+            },
+            onSelectRow: (cabang, element) => {
+                $('#crudForm [name=cabang_id]').first().val(cabang.id)
+                element.val(cabang.namacabang)
+                element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+                element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+                $('#crudForm [name=cabang_id]').first().val('')
+                element.val('')
+                element.data('currentValue', element.val())
+            }
+        })
     }
 </script>
 @endpush()

@@ -17,10 +17,36 @@ class LaporanNeracaController extends MyController
     {
         $title = $this->title;
         $data = [
-            'pagename' => 'Menu Utama Laporan Neraca',
+            'idcabang' => $this->comboList('ID CABANG','ID CABANG'),
+        ];
+        $getCabang = $this->getCabang($data['idcabang']['text']);
+        $cabang  = $getCabang['data'];
+
+        return view('laporanneraca.index', compact('title','data','cabang'));
+    }
+    
+    public function comboList($grp, $subgrp)
+    {
+        $status = [
+            'grp' => $grp,
+            'subgrp' => $subgrp,
         ];
 
-        return view('laporanneraca.index', compact('title'));
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'parameter/getparamfirst', $status);
+
+        return $response;
+    }
+    public function getCabang($id)
+    {
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . "cabang/$id");
+
+        return $response;
     }
 
     public function report(Request $request)
@@ -30,7 +56,8 @@ class LaporanNeracaController extends MyController
             'judul' => 'PT. TRANSPORINDO AGUNG SEJAHTERA',
             'judullaporan' => 'Laporan Neraca',
             'tanggal_cetak' => date('d-m-Y H:i:s'),
-            'sampai' => $request->sampai
+            'sampai' => $request->sampai,
+            'cabang_id' => $request->cabang_id,
         ];
 
         $header = Http::withHeaders(request()->header())
@@ -54,7 +81,8 @@ class LaporanNeracaController extends MyController
             'judul' => 'PT. TRANSPORINDO AGUNG SEJAHTERA',
             'judullaporan' => 'Laporan Neraca',
             'tanggal_cetak' => date('d-m-Y H:i:s'),
-            'sampai' => $request->sampai
+            'sampai' => $request->sampai,
+            'cabang_id' => $request->cabang_id,
         ];
 
         $header = Http::withHeaders(request()->header())

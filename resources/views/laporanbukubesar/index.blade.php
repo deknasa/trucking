@@ -42,6 +42,14 @@
                             </div>
                         </div>
                         <div class="row">
+                            <label class="col-12 col-sm-2 col-form-label mt-2">Cabang<span class="text-danger">*</span></label>
+
+                            <div class="col-sm-4 mt-2">
+                                <input type="hidden" name="cabang_id">
+                                <input type="text" name="cabang" class="form-control cabang-lookup">
+                            </div>
+                        </div>
+                        <div class="row">
 
                             <div class="col-sm-6 mt-4">
                                 <div class="btn-group dropup  scrollable-menu">
@@ -94,6 +102,15 @@
 
         $('#crudForm').find('[name=dari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         $('#crudForm').find('[name=sampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+        let idcabang = `<?php $data['idcabang']['text'] ?>`;
+
+        if (idcabang != 1) {
+            $('#crudForm [name=cabang]').attr('readonly', true)
+            $('#crudForm [name=cabang]').parents('.input-group').find('.input-group-append').hide()
+            $('#crudForm [name=cabang]').parents('.input-group').find('.button-clear').hide()
+        }
+        $('#crudForm [name=cabang_id]').val(`<?= $cabang['id'] ?>`);
+        $('#crudForm [name=cabang]').val(`<?= $cabang['namacabang'] ?>`);
 
         if (!`{{ $myAuth->hasPermission('laporanbukubesar', 'report') }}`) {
             $('#btnPreview').attr('disabled', 'disabled')
@@ -107,8 +124,9 @@
         let coasampai_id = $('#crudForm').find('[name=coasampai_id]').val()
         let coadari = $('#crudForm').find('[name=coadari]').val()
         let coasampai = $('#crudForm').find('[name=coasampai]').val()
+        let cabang_id = $('#crudForm').find('[name=cabang_id]').val()
         getCekReport().then((response) => {
-            window.open(`{{ route('laporanbukubesar.report') }}?dari=${dari}&sampai=${sampai}&coadari=${coadari}&coasampai=${coasampai}&coadari_id=${coadari_id}&coasampai_id=${coasampai_id}&printer=reportPrinterBesar`)
+            window.open(`{{ route('laporanbukubesar.report') }}?dari=${dari}&sampai=${sampai}&coadari=${coadari}&coasampai=${coasampai}&coadari_id=${coadari_id}&coasampai_id=${coasampai_id}&cabang_id=${cabang_id}&printer=reportPrinterBesar`)
         }).catch((error) => {
             if (error.status === 422) {
                 $('.is-invalid').removeClass('is-invalid')
@@ -128,8 +146,9 @@
         let coasampai_id = $('#crudForm').find('[name=coasampai_id]').val()
         let coadari = $('#crudForm').find('[name=coadari]').val()
         let coasampai = $('#crudForm').find('[name=coasampai]').val()
+        let cabang_id = $('#crudForm').find('[name=cabang_id]').val()
         getCekReport().then((response) => {
-            window.open(`{{ route('laporanbukubesar.report') }}?dari=${dari}&sampai=${sampai}&coadari=${coadari}&coasampai=${coasampai}&coadari_id=${coadari_id}&coasampai_id=${coasampai_id}&printer=reportPrinterKecil`)
+            window.open(`{{ route('laporanbukubesar.report') }}?dari=${dari}&sampai=${sampai}&coadari=${coadari}&coasampai=${coasampai}&coadari_id=${coadari_id}&coasampai_id=${coasampai_id}&cabang_id=${cabang_id}&printer=reportPrinterKecil`)
         }).catch((error) => {
             if (error.status === 422) {
                 $('.is-invalid').removeClass('is-invalid')
@@ -150,10 +169,11 @@
         let coasampai_id = $('#crudForm').find('[name=coasampai_id]').val()
         let coadari = $('#crudForm').find('[name=coadari]').val()
         let coasampai = $('#crudForm').find('[name=coasampai]').val()
+        let cabang_id = $('#crudForm').find('[name=cabang_id]').val()
 
         if (dari != '' && sampai != '') {
 
-            window.open(`{{ route('laporanbukubesar.export') }}?dari=${dari}&sampai=${sampai}&coadari=${coadari}&coasampai=${coasampai}&coadari_id=${coadari_id}&coasampai_id=${coasampai_id}`)
+            window.open(`{{ route('laporanbukubesar.export') }}?dari=${dari}&sampai=${sampai}&coadari=${coadari}&coasampai=${coasampai}&coadari_id=${coadari_id}&coasampai_id=${coasampai_id}&cabang_id=${cabang_id}`)
         } else {
             showDialog('ISI SELURUH KOLOM')
         }
@@ -175,6 +195,7 @@
                     coadari_id: $('#crudForm').find('[name=coadari_id]').val(),
                     coasampai: $('#crudForm').find('[name=coasampai]').val(),
                     coasampai_id: $('#crudForm').find('[name=coasampai_id]').val(),
+                    cabang_id: $('#crudForm').find('[name=cabang_id]').val(),
                     isCheck: true,
                 },
                 success: (response) => {
@@ -232,6 +253,28 @@
             },
             onClear: (element) => {
                 $('#crudForm [name=coasampai_id]').first().val('')
+                element.val('')
+                element.data('currentValue', element.val())
+            }
+        })
+        $('.cabang-lookup').lookup({
+            title: 'Cabang Lookup',
+            fileName: 'cabang',
+            beforeProcess: function(test) {
+                this.postData = {
+                    Aktif: 'AKTIF',
+                }
+            },
+            onSelectRow: (cabang, element) => {
+                $('#crudForm [name=cabang_id]').first().val(cabang.id)
+                element.val(cabang.namacabang)
+                element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+                element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+                $('#crudForm [name=cabang_id]').first().val('')
                 element.val('')
                 element.data('currentValue', element.val())
             }

@@ -21,10 +21,34 @@ class LaporanBukuBesarController extends MyController
     {
         $title = $this->title;
         $data = [
-            'pagename' => 'Menu Utama Laporan Buku Besar',
+            'idcabang' => $this->comboList('ID CABANG','ID CABANG'),
+        ];
+        $getCabang = $this->getCabang($data['idcabang']['text']);
+        $cabang  = $getCabang['data'];
+        return view('laporanbukubesar.index', compact('title', 'data','cabang'));
+    }
+    public function comboList($grp, $subgrp)
+    {
+        $status = [
+            'grp' => $grp,
+            'subgrp' => $subgrp,
         ];
 
-        return view('laporanbukubesar.index', compact('title'));
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'parameter/getparamfirst', $status);
+
+        return $response;
+    }
+    public function getCabang($id)
+    {
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . "cabang/$id");
+
+        return $response;
     }
 
     public function report(Request $request)
@@ -36,6 +60,7 @@ class LaporanBukuBesarController extends MyController
             'coasampai_id' => $request->coasampai_id,
             'coadari' => $request->coadari,
             'coasampai' => $request->coasampai,
+            'cabang_id' => $request->cabang_id,
         ];
 
         $header = Http::withHeaders(request()->header())
@@ -59,6 +84,7 @@ class LaporanBukuBesarController extends MyController
             'coasampai_id' => $request->coasampai_id,
             'coadari' => $request->coadari,
             'coasampai' => $request->coasampai,
+            'cabang_id' => $request->cabang_id,
         ];
 
         $responses = Http::withHeaders($request->header())
