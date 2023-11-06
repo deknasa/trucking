@@ -20,12 +20,35 @@ class LaporanLabaRugiController extends MyController
     {
         $title = $this->title;
         $data = [
-            'pagename' => 'Menu Utama Laporan Laba Rugi',
+            'idcabang' => $this->comboList('ID CABANG','ID CABANG'),
+        ];
+        $getCabang = $this->getCabang($data['idcabang']['text']);
+        $cabang  = $getCabang['data'];
+        return view('laporanlabarugi.index', compact('title','data','cabang'));
+    }
+    public function comboList($grp, $subgrp)
+    {
+        $status = [
+            'grp' => $grp,
+            'subgrp' => $subgrp,
         ];
 
-        return view('laporanlabarugi.index', compact('title'));
-    }
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'parameter/getparamfirst', $status);
 
+        return $response;
+    }
+    public function getCabang($id)
+    {
+        $response = Http::withHeaders($this->httpHeaders)
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . "cabang/$id");
+
+        return $response;
+    }
     public function report(Request $request)
     {
         date_default_timezone_set('Asia/Jakarta');
@@ -34,6 +57,7 @@ class LaporanLabaRugiController extends MyController
             'judullaporan' => 'Laporan Laba Rugi',
             'tanggal_cetak' => date('d-m-Y H:i:s'),
             'sampai' => $request->sampai,
+            'cabang_id' => $request->cabang_id,
 
         ];
         $header = Http::withHeaders(request()->header())
@@ -59,6 +83,7 @@ class LaporanLabaRugiController extends MyController
             'judullaporan' => 'Laporan  Laba Rugi',
             'tanggal_cetak' => date('d-m-Y H:i:s'),
             'sampai' => $request->sampai,
+            'cabang_id' => $request->cabang_id,
 
 
         ];
