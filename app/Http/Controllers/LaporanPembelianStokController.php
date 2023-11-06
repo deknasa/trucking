@@ -157,7 +157,7 @@ class LaporanPembelianStokController extends MyController
                 'index' => 'nobukti',
             ],
             [
-                'label' => 'Tanggal Bukti',
+                'label' => 'Tgl Bukti',
                 'index' => 'tglbukti',
             ],
             [
@@ -181,7 +181,7 @@ class LaporanPembelianStokController extends MyController
                 'index' => 'harga',
             ],
             [
-                'label' => 'NOMINAL DISKON',
+                'label' => 'DISKON',
                 'index' => 'nominaldiscount',
             ],
             [
@@ -249,18 +249,18 @@ class LaporanPembelianStokController extends MyController
 
 
         //ukuran kolom
-        $sheet->getColumnDimension('A')->setAutoSize(true);
+        $sheet->getColumnDimension('A')->setWidth(4);
         $sheet->getColumnDimension('B')->setAutoSize(true);
-        $sheet->getColumnDimension('C')->setAutoSize(true);
-        $sheet->getColumnDimension('D')->setAutoSize(true);
+        $sheet->getColumnDimension('C')->setWidth(12);
+        $sheet->getColumnDimension('D')->setWidth(19);
         $sheet->getColumnDimension('E')->setAutoSize(true);
-        $sheet->getColumnDimension('F')->setAutoSize(true);
+        $sheet->getColumnDimension('F')->setWidth(30);
         $sheet->getColumnDimension('G')->setAutoSize(true);
         $sheet->getColumnDimension('H')->setAutoSize(true);
         $sheet->getColumnDimension('I')->setAutoSize(true);
         $sheet->getColumnDimension('J')->setAutoSize(true);
         $sheet->getColumnDimension('K')->setAutoSize(true);
-        $sheet->getColumnDimension('L')->setWidth(150);
+        $sheet->getColumnDimension('L')->setWidth(56);
 
 
 

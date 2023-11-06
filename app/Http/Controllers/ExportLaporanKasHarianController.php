@@ -84,24 +84,27 @@ class ExportLaporanKasHarianController extends MyController
             $headerRow = 4;
             $columnIndex = 0;
             $headerColumns = [
-                'no' => 'NO',
-                'tgl' => 'TANGGAL',
-                'nobukti' => 'NO BUKTI',
-                'perkiraan' => 'PERKIRAAN',
-                'keterangan' => 'KETERANGAN',
-                'debet' => 'DEBET',
-                'kredit' => 'KREDIT',
-                'saldo' => 'SALDO',
+                'no' => 'No',
+                'tgl' => 'Tanggal',
+                'nobukti' => 'No Bukti',
+                'perkiraan' => 'Perkiraan',
+                'keterangan' => 'Keterangan',
+                'debet' => 'Debet',
+                'kredit' => 'Kredit',
+                'saldo' => 'Saldo',
             ];
 
             foreach ($headerColumns as $index => $label) {
                 $sheet->setCellValue($alphabets[$columnIndex] . $headerRow, $label);
-                $sheet->getColumnDimension($alphabets[$columnIndex])->setAutoSize(true);
+                if ($index != 'keterangan') {
+                    $sheet->getColumnDimension($alphabets[$columnIndex])->setAutoSize(true);
+                }
                 $sheet->getStyle($alphabets[$columnIndex] . $headerRow)->applyFromArray($boldStyle);
                 $sheet->getStyle($alphabets[$columnIndex] . $headerRow)->applyFromArray($borderStyle);
                 $columnIndex++;
             }
 
+            $sheet->getColumnDimension('E')->setWidth(71);
             $filteredData = array_filter($data, function ($row) use ($date) {
                 return $row['tgl'] == $date && $row['jenislaporan'] != 'LAPORAN REKAP' && $row['jenislaporan'] != 'LAPORAN REKAP 01';
             });
@@ -115,7 +118,7 @@ class ExportLaporanKasHarianController extends MyController
             $totalKredit = 0;
 
             $previousRow = $dataRow - 1; // Initialize the previous row number
-            
+
             foreach ($filteredData as $row) {
                 $sheet->setCellValue('A' . $dataRow, $rowNumber); // Set row number
                 $sheet->getStyle('A' . $dataRow)->applyFromArray($borderStyle);
@@ -126,7 +129,7 @@ class ExportLaporanKasHarianController extends MyController
                     if ($columnIndex > $lastColumnIndex) {
                         break; // Exit the loop if the column index exceeds the index of the "saldo" column
                     }
-                    
+
                     $sheet->setCellValue($alphabets[$columnIndex] . $dataRow, $value);
                     $sheet->getStyle($alphabets[$columnIndex] . $dataRow)->applyFromArray($borderStyle);
 
@@ -203,24 +206,28 @@ class ExportLaporanKasHarianController extends MyController
         $rekapHeaderRow = 4;
         $rekapColumnIndex = 0;
         $rekapHeaderColumns = [
-            'no' => 'NO',
-            'tgl' => 'TANGGAL',
-            'nobukti' => 'NO BUKTI',
-            'perkiraan' => 'PERKIRAAN',
-            'keterangan' => 'KETERANGAN',
-            'debet' => 'DEBET',
-            'kredit' => 'KREDIT',
-            'saldo' => 'SALDO',
+            'no' => 'No',
+            'tgl' => 'Tanggal',
+            'nobukti' => 'No Bukti',
+            'perkiraan' => 'Perkiraan',
+            'keterangan' => 'Keterangan',
+            'debet' => 'Debet',
+            'kredit' => 'Kredit',
+            'saldo' => 'Saldo',
         ];
 
         foreach ($rekapHeaderColumns as $index => $label) {
             $rekapSheet->setCellValue($alphabets[$rekapColumnIndex] . $rekapHeaderRow, $label);
-            $rekapSheet->getColumnDimension($alphabets[$rekapColumnIndex])->setAutoSize(true);
+            if ($index != 'keterangan' && $index != 'perkiraan') {
+                $rekapSheet->getColumnDimension($alphabets[$rekapColumnIndex])->setAutoSize(true);
+            }
             $rekapSheet->getStyle($alphabets[$rekapColumnIndex] . $rekapHeaderRow)->applyFromArray($boldStyle);
             $rekapSheet->getStyle($alphabets[$rekapColumnIndex] . $rekapHeaderRow)->applyFromArray($borderStyle);
             $rekapColumnIndex++;
         }
 
+        $rekapSheet->getColumnDimension('D')->setWidth(25);
+        $rekapSheet->getColumnDimension('E')->setWidth(70);
         $filteredRekapData = array_filter($data, function ($row) {
             return $row['jenislaporan'] == 'LAPORAN REKAP';
         });
@@ -321,24 +328,28 @@ class ExportLaporanKasHarianController extends MyController
         $rekap01HeaderRow = 4;
         $rekap01ColumnIndex = 0;
         $rekap01HeaderColumns = [
-            'no' => 'NO',
-            'tgl' => 'TANGGAL',
-            'nobukti' => 'NO BUKTI',
-            'perkiraan' => 'PERKIRAAN',
-            'keterangan' => 'KETERANGAN',
-            'debet' => 'DEBET',
-            'kredit' => 'KREDIT',
-            'saldo' => 'SALDO',
+            'no' => 'No',
+            'tgl' => 'Tanggal',
+            'nobukti' => 'No Bukti',
+            'perkiraan' => 'Perkiraan',
+            'keterangan' => 'Keterangan',
+            'debet' => 'Debet',
+            'kredit' => 'Kredit',
+            'saldo' => 'Saldo',
         ];
 
         foreach ($rekap01HeaderColumns as $index => $label) {
             $rekap01Sheet->setCellValue($alphabets[$rekap01ColumnIndex] . $rekap01HeaderRow, $label);
-            $rekap01Sheet->getColumnDimension($alphabets[$rekap01ColumnIndex])->setAutoSize(true);
+            if ($index != 'keterangan' && $index != 'perkiraan') {
+                $rekap01Sheet->getColumnDimension($alphabets[$rekap01ColumnIndex])->setAutoSize(true);
+            }
             $rekap01Sheet->getStyle($alphabets[$rekap01ColumnIndex] . $rekap01HeaderRow)->applyFromArray($boldStyle);
             $rekap01Sheet->getStyle($alphabets[$rekap01ColumnIndex] . $rekap01HeaderRow)->applyFromArray($borderStyle);
             $rekap01ColumnIndex++;
         }
 
+        $rekap01Sheet->getColumnDimension('D')->setWidth(30);
+        $rekap01Sheet->getColumnDimension('E')->setWidth(79);
         $filteredRekap01Data = array_filter($data, function ($row) {
             return $row['jenislaporan'] == 'LAPORAN REKAP 01';
         });
@@ -428,11 +439,11 @@ class ExportLaporanKasHarianController extends MyController
         $rekapPerkiraanHeaderRow = 4;
         $rekapPerkiraanColumnIndex = 0;
         $rekapPerkiraanHeaderColumns = [
-            'no' => 'NO',
-            'coa' => 'COA',
-            'perkiraan' => 'PERKIRAAN',
-            'nominaldebet' => 'NOMINAL DEBET',
-            'nominalkredit' => 'NOMINAL KREDIT',
+            'no' => 'No',
+            'coa' => 'Coa',
+            'perkiraan' => 'Perkiraan',
+            'nominaldebet' => 'Nominal Debet',
+            'nominalkredit' => 'Nominal Kredit',
         ];
 
         foreach ($rekapPerkiraanHeaderColumns as $index => $label) {

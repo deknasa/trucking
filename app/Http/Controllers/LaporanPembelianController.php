@@ -161,7 +161,7 @@ class laporanpembelianController extends MyController
                 'index' => 'nobukti',
             ],
             [
-                'label' => 'Tanggal Bukti',
+                'label' => 'Tgl Bukti',
                 'index' => 'tglbukti',
             ],
             [
@@ -237,12 +237,12 @@ class laporanpembelianController extends MyController
 
         //ukuran kolom
         $sheet->getColumnDimension('A')->setAutoSize(true);
-        $sheet->getColumnDimension('B')->setAutoSize(true);
-        $sheet->getColumnDimension('C')->setAutoSize(true);
-        $sheet->getColumnDimension('D')->setAutoSize(true);
+        $sheet->getColumnDimension('B')->setWidth(14);
+        $sheet->getColumnDimension('C')->setWidth(22);
+        $sheet->getColumnDimension('D')->setWidth(33);
         $sheet->getColumnDimension('E')->setAutoSize(true);
-        $sheet->getColumnDimension('F')->setAutoSize(true);
-        $sheet->getColumnDimension('G')->setWidth(150);
+        $sheet->getColumnDimension('F')->setWidth(8);
+        $sheet->getColumnDimension('G')->setWidth(78);
 
 
 

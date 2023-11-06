@@ -112,42 +112,42 @@ class LaporanKartuHutangPerSupplierController extends MyController
 
         $header_columns = [
             [
-                'label' => 'NO',
+                'label' => 'No',
             ],
             [
-                'label' => 'NO BUKTI',
+                'label' => 'No Bukti',
                 'index' => 'nobukti',
             ],
             [
-                'label' => 'NAMA SUPPLIER',
+                'label' => 'Nama Supplier',
                 'index' => 'namasupplier',
             ],
             [
-                'label' => 'TANGGAL',
+                'label' => 'Tgl Bukti',
                 'index' => 'tglbukti',
             ],
             [
-                'label' => 'TGL JATUH TEMPO',
+                'label' => 'Tgl Jatuh Tempo',
                 'index' => 'tgljatuhtempo',
             ],
             [
-                'label' => 'CICILAN',
+                'label' => 'Cicilan',
                 'index' => 'cicil',
             ],
             [
-                'label' => 'NOMINAL',
+                'label' => 'Nominal',
                 'index' => 'nominal',
             ],
             [
-                'label' => 'BAYAR',
+                'label' => 'Bayar',
                 'index' => 'bayar',
             ],
             [
-                'label' => 'SALDO',
+                'label' => 'Saldo',
                 'index' => 'Saldo',
             ],
             [
-                'label' => 'KETERANGAN',
+                'label' => 'Keterangan',
                 'index' => 'keterangan',
             ],
 
@@ -211,14 +211,14 @@ class LaporanKartuHutangPerSupplierController extends MyController
         //ukuran kolom
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);
-        $sheet->getColumnDimension('C')->setAutoSize(true);
-        $sheet->getColumnDimension('D')->setAutoSize(true);
-        $sheet->getColumnDimension('E')->setAutoSize(true);
-        $sheet->getColumnDimension('F')->setAutoSize(true);
+        $sheet->getColumnDimension('C')->setWidth(28);
+        $sheet->getColumnDimension('D')->setWidth(12);
+        $sheet->getColumnDimension('E')->setWidth(13);
+        $sheet->getColumnDimension('F')->setWidth(8);
         $sheet->getColumnDimension('G')->setAutoSize(true);
         $sheet->getColumnDimension('H')->setAutoSize(true);
         $sheet->getColumnDimension('I')->setAutoSize(true);
-        $sheet->getColumnDimension('J')->setWidth(150);
+        $sheet->getColumnDimension('J')->setWidth(65);
 
         $rowKosong = "";
         // menambahkan sel Total pada baris terakhir + 1

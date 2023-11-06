@@ -44,7 +44,7 @@ class LaporanStokController extends Controller
 
         if ($header->successful()) {
             $data = $header['data'];
-            $user = Auth::user(); 
+            $user = Auth::user();
             // return response()->json(['url' => route('reports.laporanstok', compact('data', 'user', 'detailParams'))]);
             return view('reports.laporanstok', compact('data', 'user', 'detailParams'));
         } else {
@@ -78,7 +78,7 @@ class LaporanStokController extends Controller
 
         $sheet->setCellValue('A1', $pengeluaran[0]['judul']);
         $sheet->setCellValue('A2', 'Laporan Stok');
-        $sheet->setCellValue('A3', 'Bulan ' . date('M-Y',strtotime($pengeluaran[0]['tgldari'])));
+        $sheet->setCellValue('A3', 'Bulan ' . date('M-Y', strtotime($pengeluaran[0]['tgldari'])));
         $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
 
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
@@ -112,50 +112,50 @@ class LaporanStokController extends Controller
         $header_columns = [
 
             [
-                "label"=>"No",
-                "index"=> 'no' ,
+                "label" => "No",
+                "index" => 'no',
             ],
             [
-                "label"=>"No Bukti",
-                "index"=> 'nobukti',
+                "label" => "No Bukti",
+                "index" => 'nobukti',
             ],
             [
-                "label"=>"Tanggal",
-                "index"=> 'tglbukti',
+                "label" => "Tanggal",
+                "index" => 'tglbukti',
             ],
             [
-                "label"=>"Nama Stock",
-                "index"=> 'namabarang',
+                "label" => "Nama Stock",
+                "index" => 'namabarang',
             ],
             [
-                "label"=>"Qty Masuk",
-                "index"=> 'qtymasuk',
+                "label" => "Qty Masuk",
+                "index" => 'qtymasuk',
             ],
             [
-                "label"=>"Nominal Masuk",
-                "index"=> 'nominalmasuk',
+                "label" => "Nominal Masuk",
+                "index" => 'nominalmasuk',
             ],
             [
-                "label"=>"Qty Keluar",
-                "index"=> 'qtykeluar',
+                "label" => "Qty Keluar",
+                "index" => 'qtykeluar',
             ],
             [
-                "label"=>"Nominal Keluar",
-                "index"=> 'nominalkeluar',
+                "label" => "Nominal Keluar",
+                "index" => 'nominalkeluar',
             ],
             [
-                "label"=>"Keterangan",
-                "index"=> 'keterangan',
+                "label" => "Keterangan",
+                "index" => 'keterangan',
             ],
             [
-                "label"=>"Qty Saldo",
-                "index"=> 'qtysaldo',
+                "label" => "Qty Saldo",
+                "index" => 'qtysaldo',
             ],
             [
-                "label"=>"Nominal Saldo",
-                "index"=> 'nominalsaldo',
+                "label" => "Nominal Saldo",
+                "index" => 'nominalsaldo',
             ],
-            
+
         ];
 
         foreach ($header_columns as $data_columns_index => $data_column) {
@@ -164,7 +164,7 @@ class LaporanStokController extends Controller
 
         $lastColumn = $alphabets[$data_columns_index];
         $sheet->getStyle("A$header_start_row:$lastColumn$header_start_row")->getFont()->setBold(true);
- 
+
         $no = 1;
         if (is_array($pengeluaran) || is_iterable($pengeluaran)) {
             foreach ($pengeluaran as $response_detail) {
@@ -176,50 +176,52 @@ class LaporanStokController extends Controller
                 foreach ($header_columns as $data_columns_index => $data_column) {
                     if ($data_column['index'] == 'no') {
                         $value = $no;
-                    }else {
+                    } else {
                         $value = $response_detail[$data_column['index']];
                     }
-                    
+
                     if ($data_column['index'] == 'tglbukti') {
-                        $value = date('d-m-Y',strtotime($value));
+                        $value = date('d-m-Y', strtotime($value));
                     }
                     if ($data_column['index'] == 'nominalsaldo') {
                         if ($response_detail['baris'] != 1) {
-                            $value = '=(F' . ($detail_start_row ) . '-H' . $detail_start_row . ')';
-                        } 
+                            $value = '=(F' . ($detail_start_row) . '-H' . $detail_start_row . ')';
+                        }
                     }
                     if ($data_column['index'] == 'qtysaldo') {
                         if ($response_detail['baris'] != 1) {
                             $value = '=(J' . ($detail_start_row - 1) . '+E' . $detail_start_row . ')-G' . $detail_start_row;
                         }
                     }
-                    
+
                     $sheet->setCellValue($alphabets[$data_columns_index] . $detail_start_row, $value);
                 }
 
-                
+
                 // Tingkatkan nomor baris
                 $detail_start_row++;
                 $no++;
-                
             }
-            
         }
         //ukuran kolom
         foreach ($header_columns as $data_columns_index => $data_column) {
-            $sheet->getColumnDimension($alphabets[$data_columns_index])->setAutoSize(true);
+            if ($data_column['index'] == 'namabarang') {
+                $sheet->getColumnDimension($alphabets[$data_columns_index])->setWidth(50);
+            } else {
+                $sheet->getColumnDimension($alphabets[$data_columns_index])->setAutoSize(true);
+            }
         }
 
         $detail_start_row++;
         // menambahkan sel Total pada baris terakhir + 1
         $sheet->setCellValue("B" . ($detail_start_row), 'TOTAL');
-        $sheet->setCellValue("F" . ($detail_start_row), "=SUM(F".($header_start_row + 1).":F" . $detail_start_row . ")");
-        $sheet->setCellValue("H" . ($detail_start_row), "=SUM(H".($header_start_row + 1).":H" . $detail_start_row . ")");
-        $sheet->setCellValue("K" . ($detail_start_row), "=SUM(K".($header_start_row + 1).":K" . $detail_start_row . ")");
+        $sheet->setCellValue("F" . ($detail_start_row), "=SUM(F" . ($header_start_row + 1) . ":F" . $detail_start_row . ")");
+        $sheet->setCellValue("H" . ($detail_start_row), "=SUM(H" . ($header_start_row + 1) . ":H" . $detail_start_row . ")");
+        $sheet->setCellValue("K" . ($detail_start_row), "=SUM(K" . ($header_start_row + 1) . ":K" . $detail_start_row . ")");
 
 
         //FORMAT
-        $numberColumn =[
+        $numberColumn = [
             "qtymasuk",
             "nominalmasuk",
             "qtykeluar",
@@ -228,8 +230,8 @@ class LaporanStokController extends Controller
             "nominalsaldo"
         ];
         foreach ($header_columns as $data_columns_index => $data_column) {
-            if (in_array($data_column['index'],$numberColumn)) {
-                $sheet->getStyle($alphabets[$data_columns_index]. ($header_start_row + 1) . ":".$alphabets[$data_columns_index]. ($detail_start_row + 1))->getNumberFormat()->setFormatCode("#,##0.00");
+            if (in_array($data_column['index'], $numberColumn)) {
+                $sheet->getStyle($alphabets[$data_columns_index] . ($header_start_row + 1) . ":" . $alphabets[$data_columns_index] . ($detail_start_row + 1))->getNumberFormat()->setFormatCode("#,##0.00");
             }
         }
         // $sheet->getStyle("A$header_start_row:$lastColumn$header_start_row")->getFont()->setBold(true);
@@ -285,5 +287,4 @@ class LaporanStokController extends Controller
 
         $writer->save('php://output');
     }
-
 }

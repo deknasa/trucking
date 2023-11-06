@@ -291,7 +291,7 @@ class LaporanBukuBesarController extends MyController
         $sheet->setCellValue("C" . ($ttd_start_row + 3), '(                )');
         $sheet->setCellValue("F" . ($ttd_start_row + 3), '(                )');
 
-        $sheet->getColumnDimension('C')->setWidth(150);
+        $sheet->getColumnDimension('C')->setWidth(81);
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);
         $sheet->getColumnDimension('D')->setAutoSize(true);

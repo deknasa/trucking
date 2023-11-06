@@ -173,8 +173,9 @@ class LaporanKasBankController extends MyController
             $sheet->getStyle("A$detail_start_row:G$detail_start_row")->applyFromArray($styleArray);
             $sheet->getStyle("E$detail_start_row:G$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
 
-            $sheet->getStyle("D$detail_start_row")->getAlignment()->setWrapText(true);
-            $sheet->getColumnDimension('D')->setWidth(150);
+            // $sheet->getStyle("D$detail_start_row")->getAlignment()->setWrapText(true);
+            $sheet->getColumnDimension('B')->setWidth(19);
+            $sheet->getColumnDimension('D')->setWidth(72);
             $previousRow = $dataRow; // Update the previous row number
 
             $dataRow++;
@@ -193,9 +194,8 @@ class LaporanKasBankController extends MyController
         $sheet->getStyle("F$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
         $sheet->getStyle("G$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
 
-        $sheet->getColumnDimension('A')->setAutoSize(true);
-        $sheet->getColumnDimension('B')->setAutoSize(true);
-        $sheet->getColumnDimension('C')->setAutoSize(true);
+        $sheet->getColumnDimension('A')->setWidth(12);
+        $sheet->getColumnDimension('C')->setWidth(30);
         $sheet->getColumnDimension('E')->setAutoSize(true);
         $sheet->getColumnDimension('F')->setAutoSize(true);
         $sheet->getColumnDimension('G')->setAutoSize(true);

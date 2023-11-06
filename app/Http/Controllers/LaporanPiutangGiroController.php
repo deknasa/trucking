@@ -101,23 +101,23 @@ class LaporanPiutangGiroController extends MyController
 
         $header_columns = [
             [
-                'label' => 'NO BUKTI',
+                'label' => 'No Bukti',
                 'index' => 'nobukti',
             ],
             [
-                'label' => 'TANGGAL BUKTI',
+                'label' => 'Tgl Bukti',
                 'index' => 'tglbukti',
             ],
             [
-                'label' => 'NO WARKAT',
+                'label' => 'No Warkat',
                 'index' => 'nowarkat',
             ],
             [
-                'label' => 'TGL JATUH TEMPO',
+                'label' => 'Tgl Jatuh Tempo',
                 'index' => 'tgljatuhtempo',
             ],
             [
-                'label' => 'NOMINAL',
+                'label' => 'Nominal',
                 'index' => 'nominal',
             ],
 
@@ -172,7 +172,7 @@ class LaporanPiutangGiroController extends MyController
         //ukuran kolom
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);
-        $sheet->getColumnDimension('C')->setAutoSize(true);
+        $sheet->getColumnDimension('C')->setWidth(90);
         $sheet->getColumnDimension('D')->setAutoSize(true);
         $sheet->getColumnDimension('E')->setAutoSize(true);
 
