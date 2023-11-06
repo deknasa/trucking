@@ -103,19 +103,19 @@ class LaporanRekapTitipanEmklController extends MyController
         $header_columns = [
             [
                 "index"=>"nobukti",
-                "label"=>"NO BUKTI"
+                "label"=>"No Bukti"
             ],
             [
                 "index"=>"tglbukti",
-                "label"=>"TGL BUKTI"
+                "label"=>"Tgl Bukti"
             ],
             [
                 "index"=>"keterangan",
-                "label"=>"KETERANGAN"
+                "label"=>"Keterangan"
             ],
             [
                 "index"=>"nominal",
-                "label"=>"NOMINAL"
+                "label"=>"Nominal"
             ],
             
         ];
@@ -179,7 +179,7 @@ class LaporanRekapTitipanEmklController extends MyController
         $sheet->getColumnDimension('B')->setAutoSize(true);
         $sheet->getColumnDimension('D')->setAutoSize(true);
         // $sheet->getColumnDimension('E')->setAutoSize(true);
-        $sheet->getColumnDimension('C')->setWidth(150);
+        $sheet->getColumnDimension('C')->setWidth(122);
         $sheet->getColumnDimension('A')->setWidth(20);
 
 

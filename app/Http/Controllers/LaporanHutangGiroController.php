@@ -146,27 +146,27 @@ class LaporanHutangGiroController extends MyController
 
         $header_columns = [
             [
-                'label' => 'NO BUKTI',
+                'label' => 'No Bukti',
                 'index' => 'nobukti',
             ],
             [
-                'label' => 'TANGGAL BUKTI',
+                'label' => 'Tgl Bukti',
                 'index' => 'tglbukti',
             ],
             [
-                'label' => 'KETERANGAN',
+                'label' => 'Keterangan',
                 'index' => 'keterangan',
             ],
             [
-                'label' => 'NO WARKAT',
+                'label' => 'No Warkat',
                 'index' => 'nowarkat',
             ],
             [
-                'label' => 'TGL JATUH TEMPO',
+                'label' => 'Tgl Jatuh Tempo',
                 'index' => 'tgljatuhtempo',
             ],
             [
-                'label' => 'NOMINAL',
+                'label' => 'Nominal',
                 'index' => 'nominal',
             ],
 
@@ -226,7 +226,7 @@ class LaporanHutangGiroController extends MyController
         $sheet->getColumnDimension('D')->setAutoSize(true);
         $sheet->getColumnDimension('E')->setAutoSize(true);
         $sheet->getColumnDimension('F')->setAutoSize(true);
-        $sheet->getColumnDimension('C')->setWidth(150);        
+        $sheet->getColumnDimension('C')->setWidth(85);        
 
 
 

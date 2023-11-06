@@ -62,6 +62,7 @@ class LaporanTitipanEmklController extends MyController
             'tgldari' => $request->tgldari,
             'tglsampai' => $request->tglsampai,
             'jenisorder' => $request->jenisorder,
+            'periode' => $request->periode,
         ];
 
         $responses = Http::withHeaders($request->header())
@@ -70,7 +71,8 @@ class LaporanTitipanEmklController extends MyController
             ->get(config('app.api_url') . 'laporantitipanemkl/export', $detailParams);
 
         $pengeluaran = $responses['data'];
-
+        $jenis = $responses['jenisorder'];
+        // dd($pengeluaran);
         $disetujui = $pengeluaran[0]['disetujui'] ?? '';
         $diperiksa = $pengeluaran[0]['diperiksa'] ?? '';
         $user = Auth::user();
@@ -78,9 +80,9 @@ class LaporanTitipanEmklController extends MyController
         $sheet = $spreadsheet->getActiveSheet();
         $jenisorder = $pengeluaran[0]['jenisorder'] ?? '';
         $sheet->setCellValue('A1', $pengeluaran[0]['judul']??'');
-        $sheet->setCellValue('A2', $pengeluaran[0]['judulLaporan']??'');
+        $sheet->setCellValue('A2', $pengeluaran[0]['judullaporan']??'');
         $sheet->setCellValue('A3', 'Periode: ' . $request->tgldari .'s/d'.$request->tgldari );
-        $sheet->setCellValue('A4', 'Jenis Order: ' . $jenisorder);
+        $sheet->setCellValue('A4', 'Jenis Order: ' . $jenis);
 
         $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
 
@@ -118,31 +120,31 @@ class LaporanTitipanEmklController extends MyController
         $header_columns = [
             [
                 "index"=>"tglbukti",
-                "label"=>"tglbukti",
+                "label"=>"Tgl Bukti",
             ],
             [
                 "index"=>"day",
-                "label"=>"day",
+                "label"=>"Day",
             ],
             [
                 "index"=>"tujuan",
-                "label"=>"tujuan",
+                "label"=>"Tujuan",
             ],
             [
                 "index"=>"shipper",
-                "label"=>"shipper",
+                "label"=>"Shipper",
             ],
             [
                 "index"=>"container",
-                "label"=>"container",
+                "label"=>"Container",
             ],
             [
                 "index"=>"nosp",
-                "label"=>"nosp",
+                "label"=>"No Sp",
             ],
             [
                 "index"=>"nominal",
-                "label"=>"nominal",
+                "label"=>"Nominal",
             ],
         ];
 
@@ -161,8 +163,8 @@ class LaporanTitipanEmklController extends MyController
                     $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
                 }
 
-                if ($tradoPrev != $response_detail['trado_id']) {
-                    $sheet->mergeCells('A' . $detail_start_row . ':F' . $detail_start_row);
+                if ($tradoPrev != $response_detail['trado']) {
+                    $sheet->mergeCells('A' . $detail_start_row . ':G' . $detail_start_row);
                     $sheet->setCellValue("A$detail_start_row", $response_detail['trado'])->getStyle('A' . $detail_start_row . ':F' . $detail_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
                     $detail_start_row++;
                 }
@@ -179,7 +181,7 @@ class LaporanTitipanEmklController extends MyController
                 $sheet->getStyle("A$detail_start_row:G$detail_start_row")->applyFromArray($styleArray);
                 $sheet->getStyle("G$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
                 $detail_start_row++;
-                $tradoPrev = $response_detail['trado_id'];
+                $tradoPrev = $response_detail['trado'];
             }
         }
 
@@ -202,12 +204,12 @@ class LaporanTitipanEmklController extends MyController
         $sheet->setCellValue("E" . ($ttd_start_row + 3), '(                )');
 
         //ukuran kolom
-        $sheet->getColumnDimension('A')->setAutoSize(true);
-        $sheet->getColumnDimension('B')->setAutoSize(true);
-        $sheet->getColumnDimension('C')->setAutoSize(true);
-        $sheet->getColumnDimension('D')->setAutoSize(true);
+        $sheet->getColumnDimension('A')->setWidth(18);
+        $sheet->getColumnDimension('B')->setWidth(13);
+        $sheet->getColumnDimension('C')->setWidth(26);
+        $sheet->getColumnDimension('D')->setWidth(33);
         $sheet->getColumnDimension('E')->setAutoSize(true);
-        $sheet->getColumnDimension('F')->setAutoSize(true);
+        $sheet->getColumnDimension('F')->setWidth(27);
         $sheet->getColumnDimension('G')->setAutoSize(true);
 
 

@@ -115,39 +115,39 @@ class LaporanKartuPiutangPerAgenController extends MyController
                 'label' => 'No',
             ],
             [
-                'label' => 'NO BUKTI',
+                'label' => 'No Bukti',
                 'index' => 'nobukti',
             ],
             [
-                'label' => 'NAMA AGEN',
+                'label' => 'Nama Agen',
                 'index' => 'namaagen',
             ],
             [
-                'label' => 'TANGGAL',
+                'label' => 'Tgl Bukti',
                 'index' => 'tglbukti',
             ],
             [
-                'label' => 'TGL JATUH TEMPO',
+                'label' => 'Tgl Jatuh Tempo',
                 'index' => 'tgljatuhtempo',
             ],
             [
-                'label' => 'CICILAN',
+                'label' => 'Cicilan',
                 'index' => 'cicil',
             ],
             [
-                'label' => 'NOMINAL',
+                'label' => 'Nominal',
                 'index' => 'nominal',
             ],
             [
-                'label' => 'BAYAR',
+                'label' => 'Bayar',
                 'index' => 'bayar',
             ],
             [
-                'label' => 'SALDO',
+                'label' => 'Saldo',
                 'index' => 'Saldo',
             ],
             [
-                'label' => 'KETERANGAN',
+                'label' => 'Keterangan',
                 'index' => 'keterangan',
             ],
 
@@ -193,8 +193,7 @@ class LaporanKartuPiutangPerAgenController extends MyController
                 // $sheet->getStyle("B$detail_start_row:B$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
                 // $sheet->getStyle("D$detail_start_row:D$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
 
-                $sheet->getStyle("J$detail_start_row")->getAlignment()->setWrapText(true);
-                $sheet->getColumnDimension('J')->setWidth(100);
+                // $sheet->getStyle("J$detail_start_row")->getAlignment()->setWrapText(true);
 
                 //    $totalKredit += $response_detail['kredit'];
                 //     $totalDebet += $response_detail['debet'];
@@ -236,14 +235,14 @@ class LaporanKartuPiutangPerAgenController extends MyController
         //ukuran kolom
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);
-        $sheet->getColumnDimension('C')->setAutoSize(true);
-        $sheet->getColumnDimension('D')->setAutoSize(true);
-        $sheet->getColumnDimension('E')->setAutoSize(true);
-        $sheet->getColumnDimension('F')->setAutoSize(true);
+        $sheet->getColumnDimension('C')->setWidth(11);
+        $sheet->getColumnDimension('D')->setWidth(12);
+        $sheet->getColumnDimension('E')->setWidth(13);
+        $sheet->getColumnDimension('F')->setWidth(8);
         $sheet->getColumnDimension('G')->setAutoSize(true);
         $sheet->getColumnDimension('H')->setAutoSize(true);
         $sheet->getColumnDimension('I')->setAutoSize(true);
-
+        $sheet->getColumnDimension('J')->setWidth(70);
 
         // menambahkan sel Total pada baris terakhir + 1
         // $sheet->setCellValue("A" . ($detail_start_row + 1), 'Total');

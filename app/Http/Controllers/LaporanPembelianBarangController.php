@@ -44,7 +44,7 @@ class LaporanPembelianBarangController extends Controller
 
         if ($header->successful()) {
             $data = $header['data'];
-            $user = Auth::user(); 
+            $user = Auth::user();
             // return response()->json(['url' => route('reports.laporanpembelianbarang', compact('data', 'user', 'detailParams'))]);
             return view('reports.laporanpembelianbarang', compact('data', 'user', 'detailParams'));
         } else {
@@ -79,14 +79,10 @@ class LaporanPembelianBarangController extends Controller
 
         $sheet->setCellValue('A1', $judul);
         $sheet->setCellValue('A2', 'Laporan Pembelian Barang');
-        $sheet->setCellValue('A3', 'Bulan ' . date('M-Y',strtotime($pengeluaran[0]['tglbukti'])));
-        $sheet->getStyle("A1")->getFont()->setSize(20)->setBold(true);
-        $sheet->getStyle("A2")->getFont()->setSize(18)->setBold(true);
-        $sheet->getStyle("A3")->getFont()->setSize(18)->setBold(true);
+        $sheet->setCellValue('A3', 'Bulan ' . date('M-Y', strtotime($pengeluaran[0]['tglbukti'])));
+        $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
 
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
-        $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
-        $sheet->getStyle('A3')->getAlignment()->setHorizontal('center');
         // $sheet->getStyle('A2')->getAlignment()->setHorizontal('left');
         $sheet->mergeCells('A1:I1');
         $sheet->mergeCells('A2:I2');
@@ -113,41 +109,61 @@ class LaporanPembelianBarangController extends Controller
 
         $header_columns = [
             [
-                "label"=>"No",
-                "index"=> 'no' ,
+                "label" => "No",
+                "index" => 'no',
             ],
             [
-                "label"=>"No Bukti",
-                "index"=> 'nobukti',
+                "label" => "No Bukti",
+                "index" => 'nobukti',
             ],
             [
-                "label"=>"Tanggal",
-                "index"=> 'tglbukti',
+                "label" => "Tanggal",
+                "index" => 'tglbukti',
             ],
             [
-                "label"=>"Nama Stock",
-                "index"=> 'namastok',
+                "label" => "Nama Stock",
+                "index" => 'namastok',
             ],
             [
-                "label"=>"Qty",
-                "index"=> 'qty',
+                "label" => "Qty",
+                "index" => 'qty',
             ],
             [
-                "label"=>"Satuan",
-                "index"=> 'satuan',
+                "label" => "Satuan",
+                "index" => 'satuan',
             ],
             [
-                "label"=>"Harga",
-                "index"=> 'harga',
+                "label" => "Harga",
+                "index" => 'harga',
             ],
             [
-                "label"=>"Nominal",
-                "index"=> 'nominal',
+                "label" => "Nominal",
+                "index" => 'nominal',
             ],
             [
-                "label"=>"Keterangan",
-                "index"=> 'keterangan',
+                "label" => "Keterangan",
+                "index" => 'keterangan',
             ],
+        ];
+        $styleArray = array(
+            'borders' => array(
+                'allBorders' => array(
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ),
+            ),
+        );
+
+        $style_number = [
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT,
+            ],
+
+            'borders' => [
+                'top' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+                'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+                'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+                'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN]
+            ]
         ];
 
         foreach ($header_columns as $data_columns_index => $data_column) {
@@ -155,55 +171,82 @@ class LaporanPembelianBarangController extends Controller
         }
 
         $lastColumn = $alphabets[$data_columns_index];
-        $sheet->getStyle("A$header_start_row:$lastColumn$header_start_row")->getFont()->setBold(true);
- 
+        $sheet->getStyle("A$header_start_row:$lastColumn$header_start_row")->applyFromArray($styleArray)->getFont()->setBold(true);
+
         $no = 1;
         if (is_array($pengeluaran) || is_iterable($pengeluaran)) {
             foreach ($pengeluaran as $response_detail) {
                 foreach ($header_columns as $data_columns_index => $data_column) {
                     if ($data_column['index'] == 'no') {
                         $value = $no;
-                    }else {
+                    } else {
                         $value = $response_detail[$data_column['index']];
                     }
-                    
+
                     if ($data_column['index'] == 'tglbukti') {
-                        $value = date('d-m-Y',strtotime($value));
+                        $value = date('d-m-Y', strtotime($value));
                     }
 
                     $sheet->setCellValue($alphabets[$data_columns_index] . $detail_start_row, $value);
                 }
 
-                
+
+                $sheet->getStyle("A$detail_start_row:I$detail_start_row")->applyFromArray($styleArray);
+                $sheet->getStyle("E$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+                $sheet->getStyle("G$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+                $sheet->getStyle("H$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
                 // Tingkatkan nomor baris
                 $detail_start_row++;
                 $no++;
-                
             }
-            
         }
         //ukuran kolom
         foreach ($header_columns as $data_columns_index => $data_column) {
-            $sheet->getColumnDimension($alphabets[$data_columns_index])->setAutoSize(true);
+            if ($data_column['index'] == 'namastok') {
+                $sheet->getColumnDimension($alphabets[$data_columns_index])->setWidth(33);
+            } else if ($data_column['index'] == 'satuan') {
+                $sheet->getColumnDimension($alphabets[$data_columns_index])->setWidth(8);
+            } else if ($data_column['index'] == 'keterangan') {
+                $sheet->getColumnDimension($alphabets[$data_columns_index])->setWidth(66);
+            } else {
+                $sheet->getColumnDimension($alphabets[$data_columns_index])->setAutoSize(true);
+            }
         }
 
         // menambahkan sel Total pada baris terakhir + 1
-        $sheet->setCellValue("B" . ($detail_start_row), 'TOTAL');
-        $sheet->setCellValue("E" . ($detail_start_row), "=SUM(E".($header_start_row + 1).":E" . $detail_start_row . ")");
-        $sheet->setCellValue("H" . ($detail_start_row), "=SUM(H".($header_start_row + 1).":H" . $detail_start_row . ")");
 
+        $total_start_row = $detail_start_row;
+        $sheet->mergeCells('A' . $total_start_row . ':D' . $total_start_row);
+        $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':I' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
+
+        $totalDebet = "=SUM(E6:E" . ($detail_start_row - 1) . ")";
+        $sheet->setCellValue("E$total_start_row", $totalDebet)->getStyle("E$total_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->setCellValue("E$total_start_row", $totalDebet)->getStyle("E$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+
+        $totalDebet = "=SUM(H6:H" . ($detail_start_row - 1) . ")";
+        $sheet->setCellValue("H$total_start_row", $totalDebet)->getStyle("H$total_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->setCellValue("H$total_start_row", $totalDebet)->getStyle("H$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+        
+        $ttd_start_row = $detail_start_row + 2;
+        $sheet->setCellValue("B$ttd_start_row", 'Disetujui Oleh,');
+        $sheet->setCellValue("D$ttd_start_row", 'Diperiksa Oleh,');
+        $sheet->setCellValue("F$ttd_start_row", 'Disusun Oleh,');
+
+        $sheet->setCellValue("B" . ($ttd_start_row + 3), '( ' . $disetujui . ' )');
+        $sheet->setCellValue("D" . ($ttd_start_row + 3), '( ' . $diperiksa . ' )');
+        $sheet->setCellValue("F" . ($ttd_start_row + 3), '(                )');
         //FORMAT
-        $numberColumn =[
-            "qty",
-            "satuan",
-            "harga",
-            "nominal",
-        ];
-        foreach ($header_columns as $data_columns_index => $data_column) {
-            if (in_array($data_column['index'],$numberColumn)) {
-                $sheet->getStyle($alphabets[$data_columns_index]. ($header_start_row + 1) . ":".$alphabets[$data_columns_index]. ($detail_start_row + 1))->getNumberFormat()->setFormatCode("#,##0.00");
-            }
-        }
+        // $numberColumn =[
+        //     "qty",
+        //     "satuan",
+        //     "harga",
+        //     "nominal",
+        // ];
+        // foreach ($header_columns as $data_columns_index => $data_column) {
+        //     if (in_array($data_column['index'],$numberColumn)) {
+        //         $sheet->getStyle($alphabets[$data_columns_index]. ($header_start_row + 1) . ":".$alphabets[$data_columns_index]. ($detail_start_row + 1))->getNumberFormat()->setFormatCode("#,##0.00");
+        //     }
+        // }
 
         //persetujuan
         // $sheet->mergeCells('A' . ($detail_start_row + 3) . ':B' . ($detail_start_row + 3));
@@ -256,5 +299,4 @@ class LaporanPembelianBarangController extends Controller
 
         $writer->save('php://output');
     }
-
 }

@@ -220,14 +220,14 @@ class LaporanPemakaianBanController extends MyController
         $sheet->setCellValue("C" . ($ttd_start_row + 3), '( ' . $diperiksa . ' )');
         $sheet->setCellValue("F" . ($ttd_start_row + 3), '(                )');
 
-        $sheet->getColumnDimension('A')->setAutoSize(true);
+        $sheet->getColumnDimension('A')->setWidth(26);
         $sheet->getColumnDimension('B')->setAutoSize(true);
         $sheet->getColumnDimension('C')->setAutoSize(true);
         $sheet->getColumnDimension('D')->setAutoSize(true);
         $sheet->getColumnDimension('E')->setAutoSize(true);
         $sheet->getColumnDimension('F')->setAutoSize(true);
         $sheet->getColumnDimension('G')->setAutoSize(true);
-        $sheet->getColumnDimension('H')->setAutoSize(true);
+        $sheet->getColumnDimension('H')->setWidth(26);
         $sheet->getColumnDimension('I')->setAutoSize(true);
         $sheet->getColumnDimension('J')->setAutoSize(true);
         $sheet->getColumnDimension('K')->setAutoSize(true);

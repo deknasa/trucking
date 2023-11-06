@@ -44,7 +44,7 @@ class LaporanPemakaianStokController extends Controller
 
         if ($header->successful()) {
             $data = $header['data'];
-            $user = Auth::user(); 
+            $user = Auth::user();
             // return response()->json(['url' => route('reports.laporanpemakaianstok', compact('data', 'user', 'detailParams'))]);
             return view('reports.laporanpemakaianstok', compact('data', 'user', 'detailParams'));
         } else {
@@ -72,13 +72,12 @@ class LaporanPemakaianStokController extends Controller
         $disetujui = $pengeluaran[0]['disetujui'] ?? '';
         $diperiksa = $pengeluaran[0]['diperiksa'] ?? '';
         $user = Auth::user();
-        // dd($pengeluaran);
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
         $sheet->setCellValue('A1', $pengeluaran[0]['judul']);
         $sheet->setCellValue('A2', 'Laporan Pemakaian Stok');
-        $sheet->setCellValue('A3', 'Bulan ' . date('M-Y',strtotime($pengeluaran[0]['tglbukti'])));
+        $sheet->setCellValue('A3', 'Bulan ' . date('M-Y', strtotime($pengeluaran[0]['tglbukti'])));
         $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
 
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
@@ -108,48 +107,48 @@ class LaporanPemakaianStokController extends Controller
 
         $header_columns = [
             [
-                "label"=>"No",
-                "index"=> 'no' ,
+                "label" => "No",
+                "index" => 'no',
             ],
             [
-                "label"=>"No Bukti",
-                "index"=> 'nobukti',
+                "label" => "No Bukti",
+                "index" => 'nobukti',
             ],
             [
-                "label"=>"Tanggal",
-                "index"=> 'tglbukti',
+                "label" => "Tanggal",
+                "index" => 'tglbukti',
             ],
             [
-                "label"=>"No Pol/Gandengan",
-                "index"=> 'kodetrado',
+                "label" => "No Pol/Gandengan",
+                "index" => 'kodetrado',
             ],
             [
-                "label"=>"Nama Stock",
-                "index"=> 'namastok',
+                "label" => "Nama Stock",
+                "index" => 'namastok',
             ],
             [
-                "label"=>"Qty",
-                "index"=> 'qty',
+                "label" => "Qty",
+                "index" => 'qty',
             ],
             [
-                "label"=>"Satuan",
-                "index"=> 'satuan',
+                "label" => "Satuan",
+                "index" => 'satuan',
             ],
             [
-                "label"=>"Harga",
-                "index"=> 'harga',
+                "label" => "Harga",
+                "index" => 'harga',
             ],
             [
-                "label"=>"Nominal",
-                "index"=> 'nominal',
+                "label" => "Nominal",
+                "index" => 'nominal',
             ],
             [
-                "label"=>"Saldo",
-                "index"=> 'saldo',
+                "label" => "Saldo",
+                "index" => 'saldo',
             ],
             [
-                "label"=>"Keterangan",
-                "index"=> 'keterangan',
+                "label" => "Keterangan",
+                "index" => 'keterangan',
             ],
         ];
 
@@ -159,41 +158,45 @@ class LaporanPemakaianStokController extends Controller
 
         $lastColumn = $alphabets[$data_columns_index];
         $sheet->getStyle("A$header_start_row:$lastColumn$header_start_row")->getFont()->setBold(true);
- 
+
         $rowAwal = 6;
         $no = 1;
         if (is_array($pengeluaran) || is_iterable($pengeluaran)) {
             // Menulis data dan melakukan grup berdasarkan kolom "KeteranganMain"
-            
+
             $previous_kodetrado = '';
             // dd($pengeluaran);
             foreach ($pengeluaran as $response_detail) {
                 $kodetrado = $response_detail['kodetrado'];
-                
+
                 if ($previous_kodetrado !== $kodetrado) {
                     $detail_start_row++;
                 }
                 foreach ($header_columns as $data_columns_index => $data_column) {
                     if ($data_column['index'] == 'no') {
                         $value = $no;
-                    } else if($data_column['index'] == 'saldo'){
-                        if ($previous_kodetrado !== $kodetrado) {
-                            $value = "=SUM(I$rowAwal:I".($detail_start_row-2).")";
-                            $rowAwal = $detail_start_row;
-                        }else{
-                            $value = '';
+                    } else if ($data_column['index'] == 'saldo') {
+                        if ($previous_kodetrado != '') {
+                            if ($previous_kodetrado !== $kodetrado) {
+                                $value = "=SUM(I$rowAwal:I" . ($detail_start_row - 2) . ")";
+                                $rowAwal = $detail_start_row;
+                            } else {
+                                $value = '';
+                            }
                         }
                     } else {
                         $value = $response_detail[$data_column['index']];
                     }
-                    
+
                     if ($data_column['index'] == 'tglbukti') {
-                        $value = date('d-m-Y',strtotime($value));
+                        $value = date('d-m-Y', strtotime($value));
                     }
 
                     if ($data_column['index'] == 'saldo') {
-                        $sheet->setCellValue($alphabets[$data_columns_index] . ($detail_start_row-2), $value);
-                    }else{
+                        if ($previous_kodetrado != '') {
+                            $sheet->setCellValue($alphabets[$data_columns_index] . ($detail_start_row - 2), $value);
+                        }
+                    } else {
                         $sheet->setCellValue($alphabets[$data_columns_index] . $detail_start_row, $value);
                     }
                 }
@@ -203,24 +206,34 @@ class LaporanPemakaianStokController extends Controller
                 $no++;
                 $previous_kodetrado = $kodetrado;
             }
-            
-            $value = "=SUM(I$rowAwal:I".($detail_start_row-1).")";
-            $sheet->setCellValue($alphabets[9] . ($detail_start_row-1), $value);
-            
+
+            $value = "=SUM(I$rowAwal:I" . ($detail_start_row - 1) . ")";
+            $sheet->setCellValue($alphabets[9] . ($detail_start_row - 1), $value);
         }
         //ukuran kolom
         foreach ($header_columns as $data_columns_index => $data_column) {
-            $sheet->getColumnDimension($alphabets[$data_columns_index])->setAutoSize(true);
+
+            if ($data_column['index'] == 'kodetrado') {
+                $sheet->getColumnDimension($alphabets[$data_columns_index])->setWidth(12);
+            } else if ($data_column['index'] == 'namastok') {
+                $sheet->getColumnDimension($alphabets[$data_columns_index])->setWidth(33);
+            } else if ($data_column['index'] == 'qty') {
+                $sheet->getColumnDimension($alphabets[$data_columns_index])->setWidth(7);
+            } else if ($data_column['index'] == 'keterangan') {
+                $sheet->getColumnDimension($alphabets[$data_columns_index])->setWidth(63);
+            } else {
+                $sheet->getColumnDimension($alphabets[$data_columns_index])->setAutoSize(true);
+            }
         }
         $detail_start_row++;
         // menambahkan sel Total pada baris terakhir + 1
         $sheet->setCellValue("B" . ($detail_start_row), 'TOTAL');
-        $sheet->setCellValue("F" . ($detail_start_row), "=SUM(F".($header_start_row + 1).":F" . ($detail_start_row-2) . ")");
-        $sheet->setCellValue("I" . ($detail_start_row), "=SUM(I".($header_start_row + 1).":I" . ($detail_start_row-2) . ")");
-        $sheet->setCellValue("J" . ($detail_start_row), "=SUM(J".($header_start_row + 1).":J" . ($detail_start_row-2) . ")");
+        $sheet->setCellValue("F" . ($detail_start_row), "=SUM(F" . ($header_start_row + 1) . ":F" . ($detail_start_row - 2) . ")");
+        $sheet->setCellValue("I" . ($detail_start_row), "=SUM(I" . ($header_start_row + 1) . ":I" . ($detail_start_row - 2) . ")");
+        $sheet->setCellValue("J" . ($detail_start_row), "=SUM(J" . ($header_start_row + 1) . ":J" . ($detail_start_row - 2) . ")");
 
         //FORMAT
-        $numberColumn =[
+        $numberColumn = [
             "qty",
             "satuan",
             "harga",
@@ -228,10 +241,19 @@ class LaporanPemakaianStokController extends Controller
             "saldo"
         ];
         foreach ($header_columns as $data_columns_index => $data_column) {
-            if (in_array($data_column['index'],$numberColumn)) {
-                $sheet->getStyle($alphabets[$data_columns_index]. ($header_start_row + 2) . ":".$alphabets[$data_columns_index]. ($detail_start_row + 2))->getNumberFormat()->setFormatCode("#,##0.00");
+            if (in_array($data_column['index'], $numberColumn)) {
+                $sheet->getStyle($alphabets[$data_columns_index] . ($header_start_row + 2) . ":" . $alphabets[$data_columns_index] . ($detail_start_row + 2))->getNumberFormat()->setFormatCode("#,##0.00");
             }
         }
+        
+        $ttd_start_row = $detail_start_row + 2;
+        $sheet->setCellValue("B$ttd_start_row", 'Disetujui Oleh,');
+        $sheet->setCellValue("D$ttd_start_row", 'Diperiksa Oleh,');
+        $sheet->setCellValue("F$ttd_start_row", 'Disusun Oleh,');
+
+        $sheet->setCellValue("B" . ($ttd_start_row + 3), '( ' . $disetujui . ' )');
+        $sheet->setCellValue("D" . ($ttd_start_row + 3), '( ' . $diperiksa . ' )');
+        $sheet->setCellValue("F" . ($ttd_start_row + 3), '(                )');
 
         //persetujuan
         // $sheet->mergeCells('A' . ($detail_start_row + 3) . ':B' . ($detail_start_row + 3));
@@ -284,5 +306,4 @@ class LaporanPemakaianStokController extends Controller
 
         $writer->save('php://output');
     }
-
 }
