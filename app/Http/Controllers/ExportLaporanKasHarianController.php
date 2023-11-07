@@ -348,11 +348,11 @@ class ExportLaporanKasHarianController extends MyController
         foreach ($rekap01HeaderColumns as $index => $label) {
             $rekap01Sheet->setCellValue($alphabets[$rekap01ColumnIndex] . $rekap01HeaderRow, $label);
             if ($index == 'keterangan') {
-                $rekap01Sheet->getColumnDimension($alphabets[$rekap01ColumnIndex])->setWidth(79);
+                $rekap01Sheet->getColumnDimension($alphabets[$rekap01ColumnIndex])->setWidth(70);
             } else if ($index == 'no') {
                 $rekap01Sheet->getColumnDimension($alphabets[$rekap01ColumnIndex])->setWidth(4);
             } else if ($index == 'perkiraan') {
-                $rekap01Sheet->getColumnDimension($alphabets[$rekap01ColumnIndex])->setWidth(30);
+                $rekap01Sheet->getColumnDimension($alphabets[$rekap01ColumnIndex])->setWidth(25);
             } else {
                 $rekap01Sheet->getColumnDimension($alphabets[$rekap01ColumnIndex])->setAutoSize(true);
             }
