@@ -1503,10 +1503,10 @@
     $('.tbl_stok_id').show()
     $('.tbl_pengeluaranstokheader_nobukti').show()
     $('.tbl_qty').show()
-    $('.tbl_aksi').show()
+    $('.tbl_aksi').hide()
     $('.colspan').attr('colspan', 6);
     $('.kolom_bbt').hide()
-    $('#tbl_addRow').show()
+    $('#tbl_addRow').hide()
     $('th.tbl_nominal').text('Nominal tagih')
     $('.tbl_tagihklaim').show()
     $('.colmn-offset2').hide()
@@ -4264,7 +4264,7 @@
         <td class="data_tbl tbl_tagihklaim">
           <input id="totalklaim_${indexRow}" type="text" name="totalklaim[]" readonly class="form-control text-right totalklaim"> 
         </td>
-        <td>
+        <td class="tbl_aksi">
             <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
         </td>
       </tr>
