@@ -259,8 +259,8 @@ class LaporanBukuBesarController extends MyController
                     }
                 }
                 // $sheet->setCellValue("F$detail_start_row", $response_detail['Saldo']);
-                $sheet->getStyle("C$detail_start_row")->getAlignment()->setWrapText(true);
-                $sheet->getColumnDimension('C')->setWidth(150);
+                // $sheet->getStyle("C$detail_start_row")->getAlignment()->setWrapText(true);
+                // $sheet->getColumnDimension('C')->setWidth(150);
                 
                 $sheet->getStyle("D$detail_start_row:F$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
                 $totalKredit += $response_detail['kredit'];
