@@ -67,17 +67,13 @@ class LaporanKasBankController extends MyController
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setCellValue('A1', $data[0]['judul']);
-        $sheet->getStyle("A1")->getFont()->setSize(20);
+        $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:G1');
 
         $sheet->setCellValue('A2', $data[0]['judulLaporan']);
-        $sheet->getStyle("A2")->getFont()->setSize(16);
-        $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
-        $sheet->mergeCells('A2:G2');
-
-        $sheet->setCellValue('A4', 'Periode');
-        $sheet->setCellValue('B4', ': ' . $detailParams['dari'] . ' s/d ' . $detailParams['sampai']);
+        $sheet->setCellValue('A3', 'Periode');
+        $sheet->setCellValue('B3', ': ' . $detailParams['dari'] . ' s/d ' . $detailParams['sampai']);
 
         $detail_table_header_row = 6;
         $detail_start_row = $detail_table_header_row + 2;
@@ -174,8 +170,6 @@ class LaporanKasBankController extends MyController
             $sheet->getStyle("E$detail_start_row:G$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
 
             // $sheet->getStyle("D$detail_start_row")->getAlignment()->setWrapText(true);
-            $sheet->getColumnDimension('B')->setWidth(19);
-            $sheet->getColumnDimension('D')->setWidth(72);
             $previousRow = $dataRow; // Update the previous row number
 
             $dataRow++;
@@ -195,13 +189,15 @@ class LaporanKasBankController extends MyController
         $sheet->getStyle("G$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
 
         $sheet->getColumnDimension('A')->setWidth(12);
-        $sheet->getColumnDimension('C')->setWidth(30);
+        $sheet->getColumnDimension('B')->setWidth(19);
+        $sheet->getColumnDimension('C')->setWidth(25);
+        $sheet->getColumnDimension('D')->setWidth(72);
         $sheet->getColumnDimension('E')->setAutoSize(true);
         $sheet->getColumnDimension('F')->setAutoSize(true);
         $sheet->getColumnDimension('G')->setAutoSize(true);
 
         $writer = new Xlsx($spreadsheet);
-        $filename = 'Laporan Kas/Bank' . date('dmYHis');
+        $filename = 'LAPORAN KAS BANK' . date('dmYHis');
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
         header('Cache-Control: max-age=0');

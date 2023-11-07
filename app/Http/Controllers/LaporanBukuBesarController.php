@@ -291,9 +291,9 @@ class LaporanBukuBesarController extends MyController
         $sheet->setCellValue("C" . ($ttd_start_row + 3), '(                )');
         $sheet->setCellValue("F" . ($ttd_start_row + 3), '(                )');
 
-        $sheet->getColumnDimension('C')->setWidth(81);
-        $sheet->getColumnDimension('A')->setAutoSize(true);
-        $sheet->getColumnDimension('B')->setAutoSize(true);
+        $sheet->getColumnDimension('C')->setWidth(87);
+        $sheet->getColumnDimension('A')->setWidth(12);
+        $sheet->getColumnDimension('B')->setWidth(18);
         $sheet->getColumnDimension('D')->setAutoSize(true);
         $sheet->getColumnDimension('E')->setAutoSize(true);
         $sheet->getColumnDimension('F')->setAutoSize(true);
@@ -301,7 +301,7 @@ class LaporanBukuBesarController extends MyController
 
 
         $writer = new Xlsx($spreadsheet);
-        $filename = 'Laporan Buku Besar' . date('dmYHis');
+        $filename = 'LAPORAN BUKU BESAR ' . date('dmYHis');
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
         header('Cache-Control: max-age=0');

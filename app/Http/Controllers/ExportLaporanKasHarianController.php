@@ -72,14 +72,14 @@ class ExportLaporanKasHarianController extends MyController
             $sheetIndex++;
 
             $sheet->setCellValue('A1', $data[0]['judul']);
-            $sheet->getStyle("A1")->getFont()->setSize(20);
+            $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
             $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
-            $sheet->mergeCells('A1:J1');
+            $sheet->mergeCells('A1:H1');
 
             $sheet->setCellValue('A2', 'LAPORAN KAS HARIAN');
-            $sheet->getStyle("A2")->getFont()->setSize(16);
-            $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
-            $sheet->mergeCells('A2:J2');
+            // $sheet->getStyle("A2")->getFont()->setSize(16);
+            // $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
+            // $sheet->mergeCells('A2:J2');
 
             $headerRow = 4;
             $columnIndex = 0;
@@ -96,7 +96,11 @@ class ExportLaporanKasHarianController extends MyController
 
             foreach ($headerColumns as $index => $label) {
                 $sheet->setCellValue($alphabets[$columnIndex] . $headerRow, $label);
-                if ($index != 'keterangan') {
+                if ($index == 'keterangan') {
+                    $sheet->getColumnDimension($alphabets[$columnIndex])->setWidth(71);
+                } else if ($index == 'no') {
+                    $sheet->getColumnDimension($alphabets[$columnIndex])->setWidth(4);
+                } else {
                     $sheet->getColumnDimension($alphabets[$columnIndex])->setAutoSize(true);
                 }
                 $sheet->getStyle($alphabets[$columnIndex] . $headerRow)->applyFromArray($boldStyle);
@@ -104,7 +108,6 @@ class ExportLaporanKasHarianController extends MyController
                 $columnIndex++;
             }
 
-            $sheet->getColumnDimension('E')->setWidth(71);
             $filteredData = array_filter($data, function ($row) use ($date) {
                 return $row['tgl'] == $date && $row['jenislaporan'] != 'LAPORAN REKAP' && $row['jenislaporan'] != 'LAPORAN REKAP 01';
             });
@@ -182,8 +185,8 @@ class ExportLaporanKasHarianController extends MyController
             // Merge cells untuk menampilkan teks "TOTAL"
             $sheet->mergeCells('A' . $dataRow . ':E' . $dataRow);
             $sheet->setCellValue('A' . $dataRow, 'TOTAL:');
-            $sheet->getStyle('A' . $dataRow . ':E' . $dataRow)->applyFromArray($boldStyle);
-            $sheet->getStyle('A' . $dataRow . ':E' . $dataRow)->applyFromArray($borderStyle);
+            $sheet->getStyle('A' . $dataRow . ':H' . $dataRow)->applyFromArray($boldStyle);
+            $sheet->getStyle('A' . $dataRow . ':H' . $dataRow)->applyFromArray($borderStyle);
             $sheet->getStyle('A' . $dataRow . ':E' . $dataRow)->getAlignment()->setHorizontal('right');
         }
 
@@ -194,14 +197,14 @@ class ExportLaporanKasHarianController extends MyController
         $sheetIndex++;
 
         $rekapSheet->setCellValue('A1', $data[0]['judul']);
-        $rekapSheet->getStyle("A1")->getFont()->setSize(20);
+        $rekapSheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
         $rekapSheet->getStyle('A1')->getAlignment()->setHorizontal('center');
-        $rekapSheet->mergeCells('A1:J1');
+        $rekapSheet->mergeCells('A1:H1');
 
         $rekapSheet->setCellValue('A2', 'LAPORAN REKAP');
-        $rekapSheet->getStyle("A2")->getFont()->setSize(16);
-        $rekapSheet->getStyle('A2')->getAlignment()->setHorizontal('center');
-        $rekapSheet->mergeCells('A2:J2');
+        // $rekapSheet->getStyle("A2")->getFont()->setSize(16);
+        // $rekapSheet->getStyle('A2')->getAlignment()->setHorizontal('center');
+        // $rekapSheet->mergeCells('A2:J2');
 
         $rekapHeaderRow = 4;
         $rekapColumnIndex = 0;
@@ -218,7 +221,13 @@ class ExportLaporanKasHarianController extends MyController
 
         foreach ($rekapHeaderColumns as $index => $label) {
             $rekapSheet->setCellValue($alphabets[$rekapColumnIndex] . $rekapHeaderRow, $label);
-            if ($index != 'keterangan' && $index != 'perkiraan') {
+            if ($index == 'keterangan') {
+                $rekapSheet->getColumnDimension($alphabets[$rekapColumnIndex])->setWidth(70);
+            } else if ($index == 'no') {
+                $rekapSheet->getColumnDimension($alphabets[$rekapColumnIndex])->setWidth(4);
+            } else if ($index == 'perkiraan') {
+                $rekapSheet->getColumnDimension($alphabets[$rekapColumnIndex])->setWidth(25);
+            } else {
                 $rekapSheet->getColumnDimension($alphabets[$rekapColumnIndex])->setAutoSize(true);
             }
             $rekapSheet->getStyle($alphabets[$rekapColumnIndex] . $rekapHeaderRow)->applyFromArray($boldStyle);
@@ -226,8 +235,6 @@ class ExportLaporanKasHarianController extends MyController
             $rekapColumnIndex++;
         }
 
-        $rekapSheet->getColumnDimension('D')->setWidth(25);
-        $rekapSheet->getColumnDimension('E')->setWidth(70);
         $filteredRekapData = array_filter($data, function ($row) {
             return $row['jenislaporan'] == 'LAPORAN REKAP';
         });
@@ -303,8 +310,8 @@ class ExportLaporanKasHarianController extends MyController
         // Merge cells untuk menampilkan teks "TOTAL"
         $rekapSheet->mergeCells('A' . $rekapDataRow . ':E' . $rekapDataRow);
         $rekapSheet->setCellValue('A' . $rekapDataRow, 'TOTAL:');
-        $rekapSheet->getStyle('A' . $rekapDataRow . ':E' . $rekapDataRow)->applyFromArray($boldStyle);
-        $rekapSheet->getStyle('A' . $rekapDataRow . ':E' . $rekapDataRow)->applyFromArray($borderStyle);
+        $rekapSheet->getStyle('A' . $rekapDataRow . ':H' . $rekapDataRow)->applyFromArray($boldStyle);
+        $rekapSheet->getStyle('A' . $rekapDataRow . ':H' . $rekapDataRow)->applyFromArray($borderStyle);
         $rekapSheet->getStyle('A' . $rekapDataRow . ':E' . $rekapDataRow)->getAlignment()->setHorizontal('right');
 
 
@@ -316,14 +323,14 @@ class ExportLaporanKasHarianController extends MyController
         $sheetIndex++;
 
         $rekap01Sheet->setCellValue('A1', $data[0]['judul']);
-        $rekap01Sheet->getStyle("A1")->getFont()->setSize(20);
+        $rekap01Sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
         $rekap01Sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
-        $rekap01Sheet->mergeCells('A1:J1');
+        $rekap01Sheet->mergeCells('A1:H1');
 
         $rekap01Sheet->setCellValue('A2', 'LAPORAN REKAP 01');
-        $rekap01Sheet->getStyle("A2")->getFont()->setSize(16);
-        $rekap01Sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
-        $rekap01Sheet->mergeCells('A2:J2');
+        // $rekap01Sheet->getStyle("A2")->getFont()->setSize(16);
+        // $rekap01Sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
+        // $rekap01Sheet->mergeCells('A2:J2');
 
         $rekap01HeaderRow = 4;
         $rekap01ColumnIndex = 0;
@@ -340,7 +347,13 @@ class ExportLaporanKasHarianController extends MyController
 
         foreach ($rekap01HeaderColumns as $index => $label) {
             $rekap01Sheet->setCellValue($alphabets[$rekap01ColumnIndex] . $rekap01HeaderRow, $label);
-            if ($index != 'keterangan' && $index != 'perkiraan') {
+            if ($index == 'keterangan') {
+                $rekap01Sheet->getColumnDimension($alphabets[$rekap01ColumnIndex])->setWidth(79);
+            } else if ($index == 'no') {
+                $rekap01Sheet->getColumnDimension($alphabets[$rekap01ColumnIndex])->setWidth(4);
+            } else if ($index == 'perkiraan') {
+                $rekap01Sheet->getColumnDimension($alphabets[$rekap01ColumnIndex])->setWidth(30);
+            } else {
                 $rekap01Sheet->getColumnDimension($alphabets[$rekap01ColumnIndex])->setAutoSize(true);
             }
             $rekap01Sheet->getStyle($alphabets[$rekap01ColumnIndex] . $rekap01HeaderRow)->applyFromArray($boldStyle);
@@ -348,8 +361,6 @@ class ExportLaporanKasHarianController extends MyController
             $rekap01ColumnIndex++;
         }
 
-        $rekap01Sheet->getColumnDimension('D')->setWidth(30);
-        $rekap01Sheet->getColumnDimension('E')->setWidth(79);
         $filteredRekap01Data = array_filter($data, function ($row) {
             return $row['jenislaporan'] == 'LAPORAN REKAP 01';
         });
@@ -415,8 +426,8 @@ class ExportLaporanKasHarianController extends MyController
         // Merge cells untuk menampilkan teks "TOTAL"
         $rekap01Sheet->mergeCells('A' . $rekap01DataRow . ':E' . $rekap01DataRow);
         $rekap01Sheet->setCellValue('A' . $rekap01DataRow, 'TOTAL:');
-        $rekap01Sheet->getStyle('A' . $rekap01DataRow . ':E' . $rekap01DataRow)->applyFromArray($boldStyle);
-        $rekap01Sheet->getStyle('A' . $rekap01DataRow . ':E' . $rekap01DataRow)->applyFromArray($borderStyle);
+        $rekap01Sheet->getStyle('A' . $rekap01DataRow . ':H' . $rekap01DataRow)->applyFromArray($boldStyle);
+        $rekap01Sheet->getStyle('A' . $rekap01DataRow . ':H' . $rekap01DataRow)->applyFromArray($borderStyle);
         $rekap01Sheet->getStyle('A' . $rekap01DataRow . ':E' . $rekap01DataRow)->getAlignment()->setHorizontal('right');
 
 
@@ -427,14 +438,14 @@ class ExportLaporanKasHarianController extends MyController
         $sheetIndex++;
 
         $rekapPerkiraanSheet->setCellValue('A1', $data[0]['judul']);
-        $rekapPerkiraanSheet->getStyle("A1")->getFont()->setSize(20);
+        $rekapPerkiraanSheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
         $rekapPerkiraanSheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $rekapPerkiraanSheet->mergeCells('A1:E1');
 
         $rekapPerkiraanSheet->setCellValue('A2', 'LAPORAN REKAP PERKIRAAN');
-        $rekapPerkiraanSheet->getStyle("A2")->getFont()->setSize(16);
-        $rekapPerkiraanSheet->getStyle('A2')->getAlignment()->setHorizontal('center');
-        $rekapPerkiraanSheet->mergeCells('A2:E2');
+        // $rekapPerkiraanSheet->getStyle("A2")->getFont()->setSize(16);
+        // $rekapPerkiraanSheet->getStyle('A2')->getAlignment()->setHorizontal('center');
+        // $rekapPerkiraanSheet->mergeCells('A2:E2');
 
         $rekapPerkiraanHeaderRow = 4;
         $rekapPerkiraanColumnIndex = 0;
@@ -448,7 +459,11 @@ class ExportLaporanKasHarianController extends MyController
 
         foreach ($rekapPerkiraanHeaderColumns as $index => $label) {
             $rekapPerkiraanSheet->setCellValue($alphabets[$rekapPerkiraanColumnIndex] . $rekapPerkiraanHeaderRow, $label);
-            $rekapPerkiraanSheet->getColumnDimension($alphabets[$rekapPerkiraanColumnIndex])->setAutoSize(true);
+            if ($index == 'no') {
+                $rekapPerkiraanSheet->getColumnDimension($alphabets[$rekapPerkiraanColumnIndex])->setWidth(4);
+            } else {
+                $rekapPerkiraanSheet->getColumnDimension($alphabets[$rekapPerkiraanColumnIndex])->setAutoSize(true);
+            }
             $rekapPerkiraanSheet->getStyle($alphabets[$rekapPerkiraanColumnIndex] . $rekapPerkiraanHeaderRow)->applyFromArray($boldStyle);
             $rekapPerkiraanSheet->getStyle($alphabets[$rekapPerkiraanColumnIndex] . $rekapPerkiraanHeaderRow)->applyFromArray($borderStyle);
             $rekapPerkiraanColumnIndex++;
