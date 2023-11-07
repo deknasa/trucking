@@ -310,6 +310,10 @@
                     method = 'DELETE'
                     url = `${apiUrl}penerimaanheader/${Id}?tgldariheader=${tgldariheader}&tglsampaiheader=${tglsampaiheader}&bankheader=${bankheader}&indexRow=${indexRow}&limit=${limit}&page=${page}`
                     break;
+                case 'editcoa':
+                    method = 'POST'
+                    url = `${apiUrl}penerimaanheader/${Id}/editcoa`
+                    break;
                 default:
                     method = 'POST'
                     url = `${apiUrl}penerimaanheader`
@@ -518,6 +522,78 @@
             })
     }
 
+    function editCoa(id) {
+        let form = $('#crudForm')
+        $('.modal-loader').removeClass('d-none')
+        form.data('action', 'editcoa')
+        penerimaanGiro = ''
+        form.trigger('reset')
+        form.find('#btnSubmit').html(`
+      <i class="fa fa-save"></i>
+      Simpan
+    `)
+        $('#crudModalTitle').text('Edit Kode Perkiraan')
+        $('.is-invalid').removeClass('is-invalid')
+        $('.invalid-feedback').remove()
+        Promise
+            .all([
+                setTglBukti(form),
+                setStatusKasOptions(form)
+            ])
+            .then(() => {
+                showPenerimaan(form, id)
+                    .then(() => {
+                        clearSelectedRows()
+                        form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
+                        // let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
+                        // name.attr('readonly', true)
+                        // name.find('.lookup-toggler').attr('disabled', true)
+                        // name.find('.lookup-toggler').attr('disabled', true)
+                        $('#crudForm').find(`.tbl_aksi`).hide()
+                        // // form.find('.aksi').hide()
+                        // setFormBindKeys(form)
+                        // initSelect2(form.find('.select2bs4'), true)
+
+                        form.find('[name]').attr('readonly', 'readonly').css({
+                            background: '#fff'
+                        })
+
+                        form.find(`[name="ketcoakredit[]"]`).prop('readonly', false)
+                        form.find(`[name="coakredit[]"]`).prop('readonly', false)
+                    })
+                    .then(() => {
+                        clearSelectedRows()
+                        $('#gs_').prop('checked', false)
+                        $('#crudModal').modal('show')
+                        $('#crudForm [name=tglbukti]').attr('readonly', true)
+                        $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
+                        $('#crudForm [name=tgllunas]').attr('readonly', true)
+                        $('#crudForm [name=tgllunas]').siblings('.input-group-append').remove()
+                        $('#crudForm [name=bank]').parent('.input-group').find('.button-clear').remove()
+                        $('#crudForm [name=bank]').parent('.input-group').find('.input-group-append').remove()
+                        $('#crudForm [name=pelanggan]').parent('.input-group').find('.button-clear').remove()
+                        $('#crudForm [name=pelanggan]').parent('.input-group').find('.input-group-append').remove()
+                        $('#crudForm [name=penerimaangiro_nobukti]').parent('.input-group').find('.button-clear').remove()
+                        $('#crudForm [name=penerimaangiro_nobukti]').parent('.input-group').find('.input-group-append').remove()
+
+                        $(`#crudForm [name="bankpelanggan[]"]`).parent('.input-group').find('.button-clear').remove()
+                        $(`#crudForm [name="bankpelanggan[]"]`).parent('.input-group').find('.input-group-append').remove()
+                        // form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
+                        // let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
+                        // name.attr('readonly', true)
+                        // name.find('.lookup-toggler').attr('disabled', true)
+                        // name.find('.lookup-toggler').attr('disabled', true)
+
+                    })
+                    .catch((error) => {
+                        showDialog(error.responseJSON)
+                    })
+                    .finally(() => {
+                        $('.modal-loader').addClass('d-none')
+                    })
+            })
+    }
+
     function deletePenerimaan(id) {
         let form = $('#crudForm')
         $('.modal-loader').removeClass('d-none')
@@ -669,13 +745,24 @@
             url: `{{ config('app.api_url') }}penerimaanheader/${Id}/cekValidasiAksi`,
             method: 'POST',
             dataType: 'JSON',
+            data: {
+                aksi: Aksi
+            },
             beforeSend: request => {
                 request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
             },
             success: response => {
                 var error = response.error
                 if (error) {
-                    showDialog(response)
+                    if (response.editcoa) {
+                        if (Aksi == 'EDIT') {
+                            editCoa(Id)
+                        } else {
+                            showDialog(response)
+                        }
+                    } else {
+                        showDialog(response)
+                    }
                 } else {
                     if (Aksi == 'EDIT') {
                         editPenerimaan(Id)
