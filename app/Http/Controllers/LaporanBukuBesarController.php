@@ -180,7 +180,7 @@ class LaporanBukuBesarController extends MyController
         foreach ($detail_columns as $detail_columns_index => $detail_column) {
             $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_table_header_row, $detail_column['label'] ?? $detail_columns_index + 1);
         }
-        $sheet->getStyle("A$detail_table_header_row:F$detail_table_header_row")->applyFromArray($styleArray)->getFont()->setBold(true);
+        $sheet->getStyle("A$detail_table_header_row:F$detail_table_header_row")->getFont()->setBold(true);
 
         // LOOPING DETAIL
         $totalKredit = 0;
@@ -262,7 +262,7 @@ class LaporanBukuBesarController extends MyController
                 // $sheet->getStyle("C$detail_start_row")->getAlignment()->setWrapText(true);
                 // $sheet->getColumnDimension('C')->setWidth(150);
                 
-                $sheet->getStyle("D$detail_start_row:F$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+                $sheet->getStyle("D$detail_start_row:F$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
                 $totalKredit += $response_detail['kredit'];
                 $totalDebet += $response_detail['debet'];
                 $totalSaldo += $response_detail['Saldo'];
@@ -277,7 +277,7 @@ class LaporanBukuBesarController extends MyController
             $sheet->setCellValue("E$detail_start_row", "=SUM(E" . ($detail_start_row - count($group)) . ":E" . ($detail_start_row - 1) . ")")->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
             $sheet->setCellValue("F$detail_start_row", "=F" . ($detail_start_row - 1))->getStyle("F$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
 
-            $sheet->getStyle("D$detail_start_row:F$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+            $sheet->getStyle("D$detail_start_row:F$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
             $detail_start_row += 2; // Add an empty row between groups
         }
 

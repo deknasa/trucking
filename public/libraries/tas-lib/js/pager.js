@@ -250,7 +250,7 @@ $.fn.customPager = function (option = {}) {
 		$(`#gbox_${$(this).getGridParam().id}`).after(`
 			<div class="bg-white grid-pager overflow-x-hidden">
 				<div class="row d-flex align-items-center text-lg-left">
-					<div class="col-12 col-lg-6" id="left-nav">
+					<div class="col-12 col-lg-7" id="left-nav">
 						${typeof option.buttons !== "undefined"
 				? option.buttons
 					.map((button, index) => {
@@ -278,7 +278,7 @@ $.fn.customPager = function (option = {}) {
 			}
 							${extndBtn}
 					</div>
-					<div class="col-12 col-lg-6">
+					<div class="col-12 col-lg-5">
 						<div class="row d-flex align-items-center justify-content-center justify-content-lg-end pr-2">
 							<div id="${pagerHandlerId}" class="pager-handler d-flex align-items-center justify-content-center mx-2">
 							</div>
