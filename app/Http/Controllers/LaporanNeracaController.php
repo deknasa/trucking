@@ -281,7 +281,7 @@ class LaporanNeracaController extends MyController
 
 
         $writer = new Xlsx($spreadsheet);
-        $filename = 'EXPORTLAPORANNERACA' . date('dmYHis');
+        $filename = 'LAPORAN NERACA ' . date('dmYHis');
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
         header('Cache-Control: max-age=0');
