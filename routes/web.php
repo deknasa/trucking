@@ -1580,9 +1580,13 @@ Route::middleware(['auth', 'authorized'])->group(function () {
     Route::resource('exportric', ExportRicController::class);
 
 
+    Route::get('toemail/index', [ToEmailController::class,'index']);
     Route::resource('toemail', ToEmailController::class);
+    Route::get('ccemail/index', [CcEmailController::class,'index']);
     Route::resource('ccemail', CcEmailController::class);
+    Route::get('bccemail/index', [BccEmailController::class,'index']);
     Route::resource('bccemail', BccEmailController::class);
+    Route::get('reminderemail/index', [ReminderEmailController::class,'index']);
     Route::resource('reminderemail', ReminderEmailController::class);
 });
 
