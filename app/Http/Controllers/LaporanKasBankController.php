@@ -11,7 +11,8 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-
+use PhpOffice\PhpSpreadsheet\Shared\Date;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
 class LaporanKasBankController extends MyController
 {
@@ -72,8 +73,15 @@ class LaporanKasBankController extends MyController
         $sheet->mergeCells('A1:G1');
 
         $sheet->setCellValue('A2', $data[0]['judulLaporan']);
-        $sheet->setCellValue('A3', 'Periode');
-        $sheet->setCellValue('B3', ': ' . $detailParams['dari'] . ' s/d ' . $detailParams['sampai']);
+        $sheet->mergeCells('A2:B2');
+        $sheet->setCellValue('A3', 'Tanggal : ' . date('d-M-Y', strtotime($detailParams['dari'])) . ' s/d ' . date('d-M-Y', strtotime($detailParams['sampai'])));
+        $sheet->mergeCells('A3:B3');
+        $sheet->setCellValue('A4', 'Buku Kas/Bank : '. $request->bank);
+        $sheet->mergeCells('A4:B4');
+
+        $sheet->getStyle("A2")->getFont()->setBold(true);
+        $sheet->getStyle("A3:B3")->getFont()->setBold(true);
+        $sheet->getStyle("A4:B4")->getFont()->setBold(true);
 
         $detail_table_header_row = 6;
         $detail_start_row = $detail_table_header_row + 2;
@@ -150,8 +158,12 @@ class LaporanKasBankController extends MyController
             foreach ($detail_columns as $detail_columns_index => $detail_column) {
                 $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
             }
-
-            $sheet->setCellValue("A$detail_start_row", ($response_detail['tglbukti'] != null) ? date('d-m-Y', strtotime($response_detail['tglbukti'])) : '');
+ 
+            $dateValue = ($response_detail['tglbukti'] != null) ? Date::PHPToExcel(date('Y-m-d',strtotime($response_detail['tglbukti']))) : ''; 
+            $sheet->setCellValue("A$detail_start_row", $dateValue);
+            $sheet->getStyle("A$detail_start_row") 
+            ->getNumberFormat() 
+            ->setFormatCode(NumberFormat::FORMAT_DATE_XLSXTAS);
             $sheet->setCellValue("B$detail_start_row", $response_detail['nobukti']);
             $sheet->setCellValue("C$detail_start_row", $response_detail['keterangancoa']);
             $sheet->setCellValue("D$detail_start_row", $response_detail['keterangan']);
@@ -167,7 +179,7 @@ class LaporanKasBankController extends MyController
             }
 
             $sheet->getStyle("A$detail_start_row:G$detail_start_row")->applyFromArray($styleArray);
-            $sheet->getStyle("E$detail_start_row:G$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
+            $sheet->getStyle("E$detail_start_row:G$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
             // $sheet->getStyle("D$detail_start_row")->getAlignment()->setWrapText(true);
             $previousRow = $dataRow; // Update the previous row number
@@ -184,12 +196,12 @@ class LaporanKasBankController extends MyController
         $sheet->setCellValue("F$detail_start_row",  "=SUM(F8:F" . ($dataRow - 1) . ")")->getStyle("F$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
         $sheet->setCellValue("G$detail_start_row",  "=G".($dataRow-1))->getStyle("G$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
 
-        $sheet->getStyle("E$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
-        $sheet->getStyle("F$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
-        $sheet->getStyle("G$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+        $sheet->getStyle("E$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+        $sheet->getStyle("F$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+        $sheet->getStyle("G$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
-        $sheet->getColumnDimension('A')->setWidth(12);
-        $sheet->getColumnDimension('B')->setWidth(19);
+        $sheet->getColumnDimension('A')->setAutoSize(true);
+        $sheet->getColumnDimension('B')->setAutoSize(true);
         $sheet->getColumnDimension('C')->setWidth(25);
         $sheet->getColumnDimension('D')->setWidth(72);
         $sheet->getColumnDimension('E')->setAutoSize(true);

@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
@@ -78,12 +79,17 @@ class ExportLaporanKasGantungController extends MyController
             ],
         ];
 
+        $englishMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        $indonesianMonths = ['JANUARI', 'FEBRUARI', 'MARET', 'APRIL', 'MEI', 'JUNI', 'JULI', 'AGUSTUS', 'SEPTEMBER', 'OKTOBER', 'NOVEMBER', 'DESEMBER'];
+
         // Laporan Gantung
         foreach ($sheetDates as $date) {
             $sheet = $spreadsheet->createSheet($sheetIndex);
             $spreadsheet->setActiveSheetIndex($sheetIndex);
-            $sheet->setTitle($date);
+            $sheet->setTitle(ltrim(date('d', strtotime($date)), 0));
             $sheetIndex++;
+
+            $tanggal = str_replace($englishMonths, $indonesianMonths, date('d - M - Y', strtotime($date)));
 
             $sheet->setCellValue('A1', $data[0]['judul']);
             $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
@@ -91,9 +97,15 @@ class ExportLaporanKasGantungController extends MyController
             $sheet->mergeCells('A1:G1');
 
             $sheet->setCellValue('A2', 'LAPORAN KAS GANTUNG');
-            $sheet->mergeCells('A2:B2');
+            $sheet->getStyle("A2")->getFont()->setSize(16)->setBold(true);
+            $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
+            $sheet->mergeCells('A2:G2');
+            $sheet->setCellValue('A3', 'PER ' . $tanggal);
+            $sheet->getStyle("A3")->getFont()->setSize(16)->setBold(true);
+            $sheet->getStyle('A3')->getAlignment()->setHorizontal('center');
+            $sheet->mergeCells('A3:G3');
 
-            $headerRow = 4;
+            $headerRow = 5;
             $columnIndex = 0;
             $headerColumns = [
                 'tgl' => 'Tanggal',
@@ -111,7 +123,7 @@ class ExportLaporanKasGantungController extends MyController
                     $sheet->getColumnDimension($alphabets[$columnIndex])->setAutoSize(true);
                 }
                 $sheet->getStyle($alphabets[$columnIndex] . $headerRow)->applyFromArray($boldStyle);
-                $sheet->getStyle($alphabets[$columnIndex] . $headerRow)->applyFromArray($borderStyle);
+                // $sheet->getStyle($alphabets[$columnIndex] . $headerRow)->applyFromArray($borderStyle);
                 $columnIndex++;
             }
 
@@ -139,17 +151,21 @@ class ExportLaporanKasGantungController extends MyController
                     if ($columnIndex > $lastColumnIndex) {
                         break; // Exit the loop if the column index exceeds the index of the "saldo" column
                     }
-                    $sheet->setCellValue($alphabets[$columnIndex] . $dataRow, $value);
-                    $sheet->getStyle($alphabets[$columnIndex] . $dataRow)->applyFromArray($borderStyle);
-
+                    if ($index == 'tglbukti') {
+                        $dateValue = ($value != null) ? Date::PHPToExcel(date('Y-m-d', strtotime($value))) : '';
+                        $sheet->setCellValue($alphabets[$columnIndex] . $dataRow, $dateValue);
+                    } else {
+                        $sheet->setCellValue($alphabets[$columnIndex] . $dataRow, $value);
+                        // $sheet->getStyle($alphabets[$columnIndex] . $dataRow)->applyFromArray($borderStyle);
+                    }
                     // Apply number format to debet, kredit, and saldo columns
                     if ($index == 'debet' || $index == 'kredit' || $index == 'saldo') {
-                        $sheet->getStyle($alphabets[$columnIndex] . $dataRow)->getNumberFormat()->setFormatCode("#,##0.00");
+                        $sheet->getStyle($alphabets[$columnIndex] . $dataRow)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
                         $sheet->getStyle($alphabets[$columnIndex] . $dataRow)->getNumberFormat()->applyFromArray($boldStyle);
                     }
 
                     // Apply date format to tgl column
-                    if ($index == 'tgl') {
+                    if ($index == 'tglbukti') {
                         $sheet->getStyle($alphabets[$columnIndex] . $dataRow)->getNumberFormat()->setFormatCode('dd-mm-yyyy');
                     }
 
@@ -170,8 +186,8 @@ class ExportLaporanKasGantungController extends MyController
                 if ($dataRow > $headerRow + 1) {
                     $sheet->setCellValue('G' . $dataRow, '=(G' . $previousRow . '+E' . $dataRow . ')-F' . $dataRow);
                 }
-                $sheet->getStyle('G' . $dataRow)->applyFromArray($borderStyle);
-                $sheet->getStyle('G' . $dataRow)->getNumberFormat()->setFormatCode("#,##0.00");
+                // $sheet->getStyle('G' . $dataRow)->applyFromArray($borderStyle);
+                $sheet->getStyle('G' . $dataRow)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
                 $previousRow = $dataRow; // Update the previous row number
 
@@ -181,26 +197,26 @@ class ExportLaporanKasGantungController extends MyController
 
 
             // Setelah perulangan selesai, tambahkan total ke sheet
-            $sheet->setCellValue('E' . $dataRow, "=SUM(E5:E" . ($dataRow - 1) . ")");
-            $sheet->getStyle('E' . $dataRow)->applyFromArray($borderStyle);
+            $sheet->setCellValue('E' . $dataRow, "=SUM(E6:E" . ($dataRow - 1) . ")");
+            // $sheet->getStyle('E' . $dataRow)->applyFromArray($borderStyle);
             $sheet->getStyle('E' . $dataRow)->applyFromArray($boldStyle);
-            $sheet->getStyle('E' . $dataRow)->getNumberFormat()->setFormatCode("#,##0.00");
+            $sheet->getStyle('E' . $dataRow)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
-            $sheet->setCellValue('F' . $dataRow, "=SUM(F5:F" . ($dataRow - 1) . ")");
-            $sheet->getStyle('F' . $dataRow)->applyFromArray($borderStyle);
+            $sheet->setCellValue('F' . $dataRow, "=SUM(F6:F" . ($dataRow - 1) . ")");
+            // $sheet->getStyle('F' . $dataRow)->applyFromArray($borderStyle);
             $sheet->getStyle('F' . $dataRow)->applyFromArray($boldStyle);
-            $sheet->getStyle('F' . $dataRow)->getNumberFormat()->setFormatCode("#,##0.00");
+            $sheet->getStyle('F' . $dataRow)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
             $sheet->setCellValue('G' . $dataRow, "=(E" . ($dataRow) . "-F" . ($dataRow)  . ")");
-            $sheet->getStyle('G' . $dataRow)->applyFromArray($borderStyle);
+            // $sheet->getStyle('G' . $dataRow)->applyFromArray($borderStyle);
             $sheet->getStyle('G' . $dataRow)->applyFromArray($boldStyle);
-            $sheet->getStyle('G' . $dataRow)->getNumberFormat()->setFormatCode("#,##0.00");
+            $sheet->getStyle('G' . $dataRow)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
             // Merge cells untuk menampilkan teks "TOTAL"
             $sheet->mergeCells('A' . $dataRow . ':D' . $dataRow);
             $sheet->setCellValue('A' . $dataRow, 'TOTAL:');
             $sheet->getStyle('A' . $dataRow . ':D' . $dataRow)->applyFromArray($boldStyle);
-            $sheet->getStyle('A' . $dataRow . ':D' . $dataRow)->applyFromArray($borderStyle);
+            // $sheet->getStyle('A' . $dataRow . ':D' . $dataRow)->applyFromArray($borderStyle);
             $sheet->getStyle('A' . $dataRow . ':D' . $dataRow)->getAlignment()->setHorizontal('right');
         }
 
@@ -211,16 +227,18 @@ class ExportLaporanKasGantungController extends MyController
         $rekapPerkiraanSheet->setTitle('REKAPITULASI');
         $sheetIndex++;
 
+        $bulan = $this->getBulan(substr($request->periode, 0, 2));
+        $tahun = substr($request->periode, 3, 4);
         $rekapPerkiraanSheet->setCellValue('A1', $data[0]['judul']);
         $rekapPerkiraanSheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
         $rekapPerkiraanSheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $rekapPerkiraanSheet->mergeCells('A1:F1');
 
         $rekapPerkiraanSheet->setCellValue('A2', 'LAPORAN REKAP KAS GANTUNG');
-        $rekapPerkiraanSheet->getStyle("A2")->getFont()->setSize(13)->setBold(true);
+        $rekapPerkiraanSheet->getStyle("A2")->getFont()->setSize(16)->setBold(true);
         $rekapPerkiraanSheet->getStyle('A2')->getAlignment()->setHorizontal('center');
-        $rekapPerkiraanSheet->setCellValue('A3', 'Periode: ' . $request->periode);
-        $rekapPerkiraanSheet->getStyle("A3")->getFont()->setSize(13)->setBold(true);
+        $rekapPerkiraanSheet->setCellValue('A3', 'PERIODE : ' . $bulan . ' - ' . $tahun);
+        $rekapPerkiraanSheet->getStyle("A3")->getFont()->setSize(16)->setBold(true);
         $rekapPerkiraanSheet->getStyle('A3')->getAlignment()->setHorizontal('center');
         $rekapPerkiraanSheet->mergeCells('A2:F2');
         $rekapPerkiraanSheet->mergeCells('A3:F3');
@@ -264,12 +282,19 @@ class ExportLaporanKasGantungController extends MyController
             // if($nobuktiAwal != $prevNobukti){
 
             // }
-            $rekapPerkiraanSheet->setCellValue($alphabets[$rekapPerkiraanColumnIndex] . $rekapPerkiraanDataRow, $row['tglbukti']);
+            if ($row['jenis'] != "3") {
+                
+                $dateValue = ($row['tglbukti'] != null) ? Date::PHPToExcel(date('Y-m-d', strtotime($row['tglbukti']))) : '';
+                $rekapPerkiraanSheet->setCellValue($alphabets[$rekapPerkiraanColumnIndex] . $rekapPerkiraanDataRow, $dateValue);                
+                $rekapPerkiraanSheet->getStyle($alphabets[$rekapPerkiraanColumnIndex] . $rekapPerkiraanDataRow)->getNumberFormat()->setFormatCode('dd-mm-yyyy');
+            }
             // $rekapPerkiraanSheet->getColumnDimension($alphabets[$rekapPerkiraanColumnIndex])->setAutoSize(true);
             // $rekapPerkiraanSheet->getStyle($alphabets[$rekapPerkiraanColumnIndex] . $rekapPerkiraanDataRow)->applyFromArray($borderStyle);
             $rekapPerkiraanColumnIndex++;
 
-            $rekapPerkiraanSheet->setCellValue($alphabets[$rekapPerkiraanColumnIndex] . $rekapPerkiraanDataRow, $row['nobukti']);
+            if ($row['jenis'] != "3") {
+                $rekapPerkiraanSheet->setCellValue($alphabets[$rekapPerkiraanColumnIndex] . $rekapPerkiraanDataRow, $row['nobukti']);
+            }
             // $rekapPerkiraanSheet->getColumnDimension($alphabets[$rekapPerkiraanColumnIndex])->setAutoSize(true);
             // $rekapPerkiraanSheet->getStyle($alphabets[$rekapPerkiraanColumnIndex] . $rekapPerkiraanDataRow)->applyFromArray($borderStyle);
             $rekapPerkiraanColumnIndex++;
@@ -286,19 +311,19 @@ class ExportLaporanKasGantungController extends MyController
             $rekapPerkiraanSheet->setCellValue($alphabets[$rekapPerkiraanColumnIndex] . $rekapPerkiraanDataRow, $row['nominal']);
             // $rekapPerkiraanSheet->getColumnDimension($alphabets[$rekapPerkiraanColumnIndex])->setAutoSize(true);
             // $rekapPerkiraanSheet->getStyle($alphabets[$rekapPerkiraanColumnIndex] . $rekapPerkiraanDataRow)->applyFromArray($borderStyle);
-            $rekapPerkiraanSheet->getStyle($alphabets[$rekapPerkiraanColumnIndex] . $rekapPerkiraanDataRow)->getNumberFormat()->setFormatCode("#,##0.00");
+            $rekapPerkiraanSheet->getStyle($alphabets[$rekapPerkiraanColumnIndex] . $rekapPerkiraanDataRow)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
             $rekapPerkiraanColumnIndex++;
 
             $rekapPerkiraanSheet->setCellValue($alphabets[$rekapPerkiraanColumnIndex] . $rekapPerkiraanDataRow, $row['nominalbayar']);
             // $rekapPerkiraanSheet->getColumnDimension($alphabets[$rekapPerkiraanColumnIndex])->setAutoSize(true);
             // $rekapPerkiraanSheet->getStyle($alphabets[$rekapPerkiraanColumnIndex] . $rekapPerkiraanDataRow)->applyFromArray($borderStyle);
-            $rekapPerkiraanSheet->getStyle($alphabets[$rekapPerkiraanColumnIndex] . $rekapPerkiraanDataRow)->getNumberFormat()->setFormatCode("#,##0.00");
+            $rekapPerkiraanSheet->getStyle($alphabets[$rekapPerkiraanColumnIndex] . $rekapPerkiraanDataRow)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
             $rekapPerkiraanColumnIndex++;
 
             $rekapPerkiraanSheet->setCellValue($alphabets[$rekapPerkiraanColumnIndex] . $rekapPerkiraanDataRow, $row['sisa']);
             // $rekapPerkiraanSheet->getColumnDimension($alphabets[$rekapPerkiraanColumnIndex])->setAutoSize(true);
             // $rekapPerkiraanSheet->getStyle($alphabets[$rekapPerkiraanColumnIndex] . $rekapPerkiraanDataRow)->applyFromArray($borderStyle);
-            $rekapPerkiraanSheet->getStyle($alphabets[$rekapPerkiraanColumnIndex] . $rekapPerkiraanDataRow)->getNumberFormat()->setFormatCode("#,##0.00");
+            $rekapPerkiraanSheet->getStyle($alphabets[$rekapPerkiraanColumnIndex] . $rekapPerkiraanDataRow)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
             $rekapPerkiraanColumnIndex++;
 
 
@@ -325,19 +350,19 @@ class ExportLaporanKasGantungController extends MyController
         $rekapPerkiraanSheet->setCellValue('D' . $rekapPerkiraanDataRow, "=SUM(D5:D" . ($rekapPerkiraanDataRow - 1) . ")");
         $rekapPerkiraanSheet->getStyle('D' . $rekapPerkiraanDataRow)->applyFromArray($borderStyle);
         $rekapPerkiraanSheet->getStyle('D' . $rekapPerkiraanDataRow)->applyFromArray($boldStyle);
-        $rekapPerkiraanSheet->getStyle('D' . $rekapPerkiraanDataRow)->getNumberFormat()->setFormatCode("#,##0.00");
+        $rekapPerkiraanSheet->getStyle('D' . $rekapPerkiraanDataRow)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
         // Menghitung total kolom E (nominalkredit)
         $rekapPerkiraanSheet->setCellValue('E' . $rekapPerkiraanDataRow, "=SUM(E5:E" . ($rekapPerkiraanDataRow - 1) . ")");
         $rekapPerkiraanSheet->getStyle('E' . $rekapPerkiraanDataRow)->applyFromArray($borderStyle);
         $rekapPerkiraanSheet->getStyle('E' . $rekapPerkiraanDataRow)->applyFromArray($boldStyle);
-        $rekapPerkiraanSheet->getStyle('E' . $rekapPerkiraanDataRow)->getNumberFormat()->setFormatCode("#,##0.00");
+        $rekapPerkiraanSheet->getStyle('E' . $rekapPerkiraanDataRow)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
         // Menghitung total kolom F (nominalsisa)
         $rekapPerkiraanSheet->setCellValue('F' . $rekapPerkiraanDataRow, "=SUM(F5:F" . ($rekapPerkiraanDataRow - 1) . ")");
         $rekapPerkiraanSheet->getStyle('F' . $rekapPerkiraanDataRow)->applyFromArray($borderStyle);
         $rekapPerkiraanSheet->getStyle('F' . $rekapPerkiraanDataRow)->applyFromArray($boldStyle);
-        $rekapPerkiraanSheet->getStyle('F' . $rekapPerkiraanDataRow)->getNumberFormat()->setFormatCode("#,##0.00");
+        $rekapPerkiraanSheet->getStyle('F' . $rekapPerkiraanDataRow)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
         // Merge cells A hingga C dan tampilkan tulisan "TOTAL:"
         $rekapPerkiraanSheet->mergeCells('A' . $rekapPerkiraanDataRow . ':C' . $rekapPerkiraanDataRow);

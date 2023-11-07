@@ -101,12 +101,16 @@ class LaporanLabaRugiController extends MyController
             // dd($pengeluaran);
             $spreadsheet = new Spreadsheet();
             $sheet = $spreadsheet->getActiveSheet();
-
+            $bulan = $this->getBulan(substr($request->sampai,0,2));
+            $tahun = substr($request->sampai,3,4);
+            
             $sheet->setCellValue('A1', $pengeluaran[0]['CmpyName']);
             $sheet->setCellValue('A2', 'Laporan Laba Rugi');
-            $sheet->setCellValue('A3', 'Periode: ' . $request->sampai);
+            $sheet->setCellValue('A3', 'Periode : '. $bulan .' - '.$tahun);
 
             $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
+            $sheet->getStyle("A2")->getFont()->setBold(true);
+            $sheet->getStyle("A3")->getFont()->setBold(true);
 
             $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
             $sheet->getStyle('A2')->getAlignment()->setHorizontal('left');
@@ -194,7 +198,7 @@ class LaporanLabaRugiController extends MyController
                                 // $sheet->mergeCells("A$total_start_row:A$total_start_row");
                                 $sheet->setCellValue('C' . ($total_start_row - 1), "=SUM(B$total_start_row:B" . ($detail_start_row - 1) . ")");
                                 $sheet->getStyle("C" . ($total_start_row - 1))->applyFromArray($styleArray)->getFont()->setBold(true);
-                                $sheet->getStyle("C" . ($total_start_row - 1))->getNumberFormat()->setFormatCode("#,##0.00");
+                                $sheet->getStyle("C" . ($total_start_row - 1))->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
                                 $sheet->getStyle("A$total_start_row:C$total_start_row")->applyFromArray($styleArray);
                             }
                             $total_per_keterangan_type = 0;
@@ -205,7 +209,7 @@ class LaporanLabaRugiController extends MyController
                                 $sheet->setCellValue("A$detail_start_row", "TOTAL $previous_keterangan_main");
                                 $sheet->setCellValue("C$detail_start_row", "=SUM(B$start_row_main:B" . ($detail_start_row - 1) . ")");
                                 $sheet->getStyle("C$detail_start_row")->applyFromArray($styleArray)->getFont()->setBold(true);
-                                $sheet->getStyle("C$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+                                $sheet->getStyle("C$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
                                 $sheet->getStyle("A$detail_start_row:C$detail_start_row")->applyFromArray($styleArray);
                                 $detail_start_row += 2;
                             }
@@ -233,7 +237,7 @@ class LaporanLabaRugiController extends MyController
                             // $sheet->mergeCells("A$total_start_row:A$total_start_row");
                             $sheet->setCellValue('C' . ($total_start_row - 1), "=SUM(B$total_start_row:B" . ($detail_start_row - 1) . ")");
                             $sheet->getStyle("C" . ($total_start_row - 1))->applyFromArray($styleArray)->getFont()->setBold(true);
-                            $sheet->getStyle("C" . ($total_start_row - 1))->getNumberFormat()->setFormatCode("#,##0.00");
+                            $sheet->getStyle("C" . ($total_start_row - 1))->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
                             $sheet->setCellValue('C' . $total_start_row, '');
                             $sheet->getStyle("A$total_start_row:C$total_start_row")->applyFromArray($styleArray);
                             // $start_last_main = $total_start_row;
@@ -253,7 +257,7 @@ class LaporanLabaRugiController extends MyController
 
                     $sheet->setCellValue("A$detail_start_row", "      " . $response_detail['keterangancoa']);
                     $sheet->setCellValue("B$detail_start_row", $response_detail['Nominal']);
-                    $sheet->getStyle("B$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+                    $sheet->getStyle("B$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
                     $total_per_keterangan_type = $detail_start_row;
 
@@ -269,13 +273,13 @@ class LaporanLabaRugiController extends MyController
                         // $sheet->mergeCells("A$total_start_row:A$total_start_row");
                         $sheet->setCellValue('C' . ($total_start_row - 1), "=SUM(B$total_start_row:B" . ($detail_start_row - 1) . ")");
                         $sheet->getStyle("C" . ($total_start_row - 1))->applyFromArray($styleArray)->getFont()->setBold(true);
-                        $sheet->getStyle("C" . ($total_start_row - 1))->getNumberFormat()->setFormatCode("#,##0.00");
+                        $sheet->getStyle("C" . ($total_start_row - 1))->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
                         $sheet->getStyle("A$total_start_row:C$total_start_row")->applyFromArray($styleArray);
                     }
                     $sheet->setCellValue("A$detail_start_row", "TOTAL $previous_keterangan_main");
                     $sheet->setCellValue("C$detail_start_row", "=SUM(B$start_last_main:B" . ($detail_start_row - 1) . ")");
                     $sheet->getStyle("C$detail_start_row")->applyFromArray($styleArray)->getFont()->setBold(true);
-                    $sheet->getStyle("C$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+                    $sheet->getStyle("C$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
                     $sheet->getStyle("A$total_start_row:B$total_start_row")->applyFromArray($styleArray);
                 }
             }
@@ -294,7 +298,7 @@ class LaporanLabaRugiController extends MyController
 
             //FORMAT
             // set format ribuan untuk kolom D dan E
-            $sheet->getStyle("B" . ($detail_start_row + 1) . ":B" . ($detail_start_row + 1))->getNumberFormat()->setFormatCode("#,##0.00");
+            $sheet->getStyle("B" . ($detail_start_row + 1) . ":B" . ($detail_start_row + 1))->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
             $sheet->getStyle("A" . ($detail_start_row + 1) . ":$lastColumn" . ($detail_start_row + 1))->getFont()->setBold(true);
 
 
@@ -305,7 +309,7 @@ class LaporanLabaRugiController extends MyController
             $sheet->getStyle("A$detail_start_row:B$detail_start_row")->applyFromArray($styleArray);            
             $sheet->mergeCells("A$detail_start_row:B$detail_start_row");
             $sheet->getStyle("C$detail_start_row")->applyFromArray($styleArray)->getFont()->setBold(true);
-            $sheet->getStyle("C$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+            $sheet->getStyle("C$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
             $sheet->getColumnDimension('A')->setAutoSize(true);
             $sheet->getColumnDimension('B')->setAutoSize(true);
@@ -322,6 +326,49 @@ class LaporanLabaRugiController extends MyController
             $writer->save('php://output');
         } else {
             return response()->json($responses->json(), $responses->status());
+        }
+    }
+
+    
+    public function getBulan($bln)
+    {
+        switch ($bln) {
+            case 1:
+                return "Januari";
+                break;
+            case 2:
+                return "Februari";
+                break;
+            case 3:
+                return "Maret";
+                break;
+            case 4:
+                return "April";
+                break;
+            case 5:
+                return "Mei";
+                break;
+            case 6:
+                return "Juni";
+                break;
+            case 7:
+                return "Juli";
+                break;
+            case 8:
+                return "Agustus";
+                break;
+            case 9:
+                return "September";
+                break;
+            case 10:
+                return "Oktober";
+                break;
+            case 11:
+                return "November";
+                break;
+            case 12:
+                return "Desember";
+                break;
         }
     }
 }
