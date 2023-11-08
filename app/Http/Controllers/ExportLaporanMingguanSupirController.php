@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
@@ -174,24 +175,24 @@ class ExportLaporanMingguanSupirController extends Controller
                     $startTotalIndex = $rowIndex - $groupRowCount;
                     $endTotalIndex = $rowIndex - 1;
 
-                    $sheet->setCellValue("M$rowIndex", "=SUM(M$startTotalIndex:M$endTotalIndex)")->getStyle("M$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-                    $sheet->setCellValue("N$rowIndex", "=SUM(M$startTotalIndex:N$endTotalIndex)")->getStyle("N$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-                    $sheet->setCellValue("Q$rowIndex", "=SUM(Q$startTotalIndex:Q$endTotalIndex)")->getStyle("Q$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-                    $sheet->setCellValue("T$rowIndex", "=SUM(T$startTotalIndex:T$endTotalIndex)")->getStyle("T$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-                    $sheet->setCellValue("V$rowIndex", "=SUM(V$startTotalIndex:V$endTotalIndex)")->getStyle("V$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-                    $sheet->setCellValue("W$rowIndex", "=SUM(W$startTotalIndex:W$endTotalIndex)")->getStyle("W$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-                    $sheet->setCellValue("X$rowIndex", "=SUM(X$startTotalIndex:X$endTotalIndex)")->getStyle("X$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-                    $sheet->setCellValue("Y$rowIndex", "=SUM(Y$startTotalIndex:Y$endTotalIndex)")->getStyle("Y$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-                    $sheet->setCellValue("Z$rowIndex", "=SUM(Z$startTotalIndex:Z$endTotalIndex)")->getStyle("Z$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-                    $sheet->setCellValue("AC$rowIndex", "=SUM(AC$startTotalIndex:AC$endTotalIndex)")->getStyle("AC$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-                    $sheet->setCellValue("AD$rowIndex", "=SUM(AD$startTotalIndex:AD$endTotalIndex)")->getStyle("AD$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-                    $sheet->setCellValue("AF$rowIndex", "=SUM(AF$startTotalIndex:AF$endTotalIndex)")->getStyle("AF$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-                    $sheet->setCellValue("AG$rowIndex", "=SUM(AG$startTotalIndex:AG$endTotalIndex)")->getStyle("AG$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-                    $sheet->setCellValue("AI$rowIndex", "=SUM(AI$startTotalIndex:AI$endTotalIndex)")->getStyle("AI$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-                    $sheet->setCellValue("AJ$rowIndex", "=SUM(AJ$startTotalIndex:AJ$endTotalIndex)")->getStyle("AJ$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-                    $sheet->setCellValue("AK$rowIndex", "=SUM(AK$startTotalIndex:AK$endTotalIndex)")->getStyle("AK$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-                    $sheet->setCellValue("AL$rowIndex", "=SUM(AL$startTotalIndex:AL$endTotalIndex)")->getStyle("AL$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-                    $sheet->setCellValue("AM$rowIndex", "=SUM(AM$startTotalIndex:AM$endTotalIndex)")->getStyle("AM$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
+                    $sheet->setCellValue("M$rowIndex", "=SUM(M$startTotalIndex:M$endTotalIndex)")->getStyle("M$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                    $sheet->setCellValue("N$rowIndex", "=SUM(M$startTotalIndex:N$endTotalIndex)")->getStyle("N$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                    $sheet->setCellValue("Q$rowIndex", "=SUM(Q$startTotalIndex:Q$endTotalIndex)")->getStyle("Q$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                    $sheet->setCellValue("T$rowIndex", "=SUM(T$startTotalIndex:T$endTotalIndex)")->getStyle("T$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                    $sheet->setCellValue("V$rowIndex", "=SUM(V$startTotalIndex:V$endTotalIndex)")->getStyle("V$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                    $sheet->setCellValue("W$rowIndex", "=SUM(W$startTotalIndex:W$endTotalIndex)")->getStyle("W$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                    $sheet->setCellValue("X$rowIndex", "=SUM(X$startTotalIndex:X$endTotalIndex)")->getStyle("X$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                    $sheet->setCellValue("Y$rowIndex", "=SUM(Y$startTotalIndex:Y$endTotalIndex)")->getStyle("Y$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                    $sheet->setCellValue("Z$rowIndex", "=SUM(Z$startTotalIndex:Z$endTotalIndex)")->getStyle("Z$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                    $sheet->setCellValue("AC$rowIndex", "=SUM(AC$startTotalIndex:AC$endTotalIndex)")->getStyle("AC$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                    $sheet->setCellValue("AD$rowIndex", "=SUM(AD$startTotalIndex:AD$endTotalIndex)")->getStyle("AD$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                    $sheet->setCellValue("AF$rowIndex", "=SUM(AF$startTotalIndex:AF$endTotalIndex)")->getStyle("AF$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                    $sheet->setCellValue("AG$rowIndex", "=SUM(AG$startTotalIndex:AG$endTotalIndex)")->getStyle("AG$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                    $sheet->setCellValue("AI$rowIndex", "=SUM(AI$startTotalIndex:AI$endTotalIndex)")->getStyle("AI$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                    $sheet->setCellValue("AJ$rowIndex", "=SUM(AJ$startTotalIndex:AJ$endTotalIndex)")->getStyle("AJ$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                    $sheet->setCellValue("AK$rowIndex", "=SUM(AK$startTotalIndex:AK$endTotalIndex)")->getStyle("AK$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                    $sheet->setCellValue("AL$rowIndex", "=SUM(AL$startTotalIndex:AL$endTotalIndex)")->getStyle("AL$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                    $sheet->setCellValue("AM$rowIndex", "=SUM(AM$startTotalIndex:AM$endTotalIndex)")->getStyle("AM$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
                     $groupRowCount = 0;
                     $rowIndex++;
                     $rowIndex++; // Move to the next row
@@ -202,8 +203,10 @@ class ExportLaporanMingguanSupirController extends Controller
                 // Store the starting row index of the current group
                 $groupStartIndex = $rowIndex;
             }
-
-            $sheet->setCellValue("A$rowIndex", $response_detail['tglbukti']);
+            $dateValue = ($response_detail['tglbukti'] != null) ? Date::PHPToExcel(date('Y-m-d',strtotime($response_detail['tglbukti']))) : ''; 
+           
+            $sheet->setCellValue("A$rowIndex", $dateValue);
+            $sheet->getStyle("A$rowIndex")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
             $sheet->setCellValue("C$rowIndex", $response_detail['namasupir']);
             $sheet->setCellValue("D$rowIndex", $response_detail['rute']);
             $sheet->setCellValue("E$rowIndex", $response_detail['qty']);
@@ -214,44 +217,44 @@ class ExportLaporanMingguanSupirController extends Controller
             $sheet->setCellValue("J$rowIndex", $response_detail['spempty']);
             $sheet->setCellValue("K$rowIndex", $response_detail['spfullempty']);
             $sheet->setCellValue("L$rowIndex", $response_detail['jobtrucking']);
-            $sheet->setCellValue("M$rowIndex", $response_detail['omset'])->getStyle("M$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("N$rowIndex", $response_detail['omsettambahan'])->getStyle("N$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("O$rowIndex", $response_detail['omsetextrabbm'])->getStyle("O$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
+            $sheet->setCellValue("M$rowIndex", $response_detail['omset'])->getStyle("M$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->setCellValue("N$rowIndex", $response_detail['omsettambahan'])->getStyle("N$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->setCellValue("O$rowIndex", $response_detail['omsetextrabbm'])->getStyle("O$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
             $sheet->setCellValue("P$rowIndex", $response_detail['invoice']);
-            $sheet->setCellValue("Q$rowIndex", $response_detail['borongan'])->getStyle("Q$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
+            $sheet->setCellValue("Q$rowIndex", $response_detail['borongan'])->getStyle("Q$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
             $sheet->setCellValue("R$rowIndex", $response_detail['nobuktiebs']);
             $sheet->setCellValue("S$rowIndex", $response_detail['pengeluarannobuktiebs']);
-            $sheet->setCellValue("T$rowIndex", $response_detail['voucher'])->getStyle("T$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
+            $sheet->setCellValue("T$rowIndex", $response_detail['voucher'])->getStyle("T$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
             $sheet->setCellValue("U$rowIndex", $response_detail['novoucher']);
-            $sheet->setCellValue("V$rowIndex", $response_detail['gajisupir'])->getStyle("V$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("W$rowIndex", $response_detail['komisi'])->getStyle("W$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("X$rowIndex", $response_detail['gajikenek'])->getStyle("X$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("Y$rowIndex", $response_detail['gajimingguan'])->getStyle("Y$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("Z$rowIndex", $response_detail['gajilain'])->getStyle("Z$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
+            $sheet->setCellValue("V$rowIndex", $response_detail['gajisupir'])->getStyle("V$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->setCellValue("W$rowIndex", $response_detail['komisi'])->getStyle("W$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->setCellValue("X$rowIndex", $response_detail['gajikenek'])->getStyle("X$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->setCellValue("Y$rowIndex", $response_detail['gajimingguan'])->getStyle("Y$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->setCellValue("Z$rowIndex", $response_detail['gajilain'])->getStyle("Z$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
             $sheet->setCellValue("AA$rowIndex", $response_detail['ket']);
             $sheet->setCellValue("AB$rowIndex", $response_detail['nobuktikbtkomisi']);
-            $sheet->setCellValue("AC$rowIndex", $response_detail['uanglain'])->getStyle("AC$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("AD$rowIndex", $response_detail['uangbon'])->getStyle("AD$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
+            $sheet->setCellValue("AC$rowIndex", $response_detail['uanglain'])->getStyle("AC$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->setCellValue("AD$rowIndex", $response_detail['uangbon'])->getStyle("AD$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
             $sheet->setCellValue("AE$rowIndex", $response_detail['nobuktikbtebs2']);
-            $sheet->setCellValue("AF$rowIndex", $response_detail['ritasi'])->getStyle("AF$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("AG$rowIndex", $response_detail['extrabbm'])->getStyle("AG$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
+            $sheet->setCellValue("AF$rowIndex", $response_detail['ritasi'])->getStyle("AF$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->setCellValue("AG$rowIndex", $response_detail['extrabbm'])->getStyle("AG$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
             $sheet->setCellValue("AH$rowIndex", $response_detail['ketritasi']);
-            $sheet->setCellValue("AI$rowIndex", $response_detail['uangjalan'])->getStyle("AI$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("AJ$rowIndex", $response_detail['uangbbm'])->getStyle("AJ$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("AK$rowIndex", $response_detail['uangmakan'])->getStyle("AK$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("AL$rowIndex", $response_detail['totalbiaya'])->getStyle("AL$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("AM$rowIndex", $response_detail['sisa'])->getStyle("AM$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
+            $sheet->setCellValue("AI$rowIndex", $response_detail['uangjalan'])->getStyle("AI$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->setCellValue("AJ$rowIndex", $response_detail['uangbbm'])->getStyle("AJ$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->setCellValue("AK$rowIndex", $response_detail['uangmakan'])->getStyle("AK$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->setCellValue("AL$rowIndex", $response_detail['totalbiaya'])->getStyle("AL$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->setCellValue("AM$rowIndex", $response_detail['sisa'])->getStyle("AM$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
             $sheet->setCellValue("AN$rowIndex", $response_detail['nobukti']);
-            $sheet->setCellValue("AO$rowIndex", $response_detail['bongkarmuat'])->getStyle("AO$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
+            $sheet->setCellValue("AO$rowIndex", $response_detail['bongkarmuat'])->getStyle("AO$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
             $sheet->setCellValue("AP$rowIndex", $response_detail['panjar']);
             $sheet->setCellValue("AQ$rowIndex", $response_detail['mandor']);
             $sheet->setCellValue("AR$rowIndex", $response_detail['supirex']);
-            $sheet->setCellValue("AS$rowIndex", $response_detail['liter'])->getStyle("AS$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
+            $sheet->setCellValue("AS$rowIndex", $response_detail['liter'])->getStyle("AS$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
             $rowIndex++;
 
             // Store the current group details in an array
             $group[] = $response_detail;
-            $sheet->getColumnDimension('A')->setWidth(10);
+            $sheet->getColumnDimension('A')->setWidth(12);
             $previous_nopol = $nopol;
             $groupRowCount++;
         }
@@ -264,24 +267,24 @@ class ExportLaporanMingguanSupirController extends Controller
             $startTotalIndex = $groupStartIndex;
             $endTotalIndex = $rowIndex - 1;
 
-            $sheet->setCellValue("M$rowIndex", "=SUM(M$startTotalIndex:M$endTotalIndex)")->getStyle("M$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("N$rowIndex", "=SUM(N$startTotalIndex:N$endTotalIndex)")->getStyle("N$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("Q$rowIndex", "=SUM(Q$startTotalIndex:Q$endTotalIndex)")->getStyle("Q$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("T$rowIndex", "=SUM(T$startTotalIndex:T$endTotalIndex)")->getStyle("T$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("V$rowIndex", "=SUM(V$startTotalIndex:V$endTotalIndex)")->getStyle("V$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("W$rowIndex", "=SUM(W$startTotalIndex:W$endTotalIndex)")->getStyle("W$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("X$rowIndex", "=SUM(X$startTotalIndex:X$endTotalIndex)")->getStyle("X$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("Y$rowIndex", "=SUM(Y$startTotalIndex:Y$endTotalIndex)")->getStyle("Y$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("Z$rowIndex", "=SUM(Z$startTotalIndex:Z$endTotalIndex)")->getStyle("Z$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("AC$rowIndex", "=SUM(AC$startTotalIndex:AC$endTotalIndex)")->getStyle("AC$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("AD$rowIndex", "=SUM(AD$startTotalIndex:AD$endTotalIndex)")->getStyle("AD$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("AF$rowIndex", "=SUM(AF$startTotalIndex:AF$endTotalIndex)")->getStyle("AF$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("AG$rowIndex", "=SUM(AG$startTotalIndex:AG$endTotalIndex)")->getStyle("AG$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("AI$rowIndex", "=SUM(AI$startTotalIndex:AI$endTotalIndex)")->getStyle("AI$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("AJ$rowIndex", "=SUM(AJ$startTotalIndex:AJ$endTotalIndex)")->getStyle("AJ$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("AK$rowIndex", "=SUM(AK$startTotalIndex:AK$endTotalIndex)")->getStyle("AK$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("AL$rowIndex", "=SUM(AL$startTotalIndex:AL$endTotalIndex)")->getStyle("AL$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("AM$rowIndex", "=SUM(AM$startTotalIndex:AM$endTotalIndex)")->getStyle("AM$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
+            $sheet->setCellValue("M$rowIndex", "=SUM(M$startTotalIndex:M$endTotalIndex)")->getStyle("M$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->setCellValue("N$rowIndex", "=SUM(N$startTotalIndex:N$endTotalIndex)")->getStyle("N$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->setCellValue("Q$rowIndex", "=SUM(Q$startTotalIndex:Q$endTotalIndex)")->getStyle("Q$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->setCellValue("T$rowIndex", "=SUM(T$startTotalIndex:T$endTotalIndex)")->getStyle("T$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->setCellValue("V$rowIndex", "=SUM(V$startTotalIndex:V$endTotalIndex)")->getStyle("V$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->setCellValue("W$rowIndex", "=SUM(W$startTotalIndex:W$endTotalIndex)")->getStyle("W$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->setCellValue("X$rowIndex", "=SUM(X$startTotalIndex:X$endTotalIndex)")->getStyle("X$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->setCellValue("Y$rowIndex", "=SUM(Y$startTotalIndex:Y$endTotalIndex)")->getStyle("Y$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->setCellValue("Z$rowIndex", "=SUM(Z$startTotalIndex:Z$endTotalIndex)")->getStyle("Z$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->setCellValue("AC$rowIndex", "=SUM(AC$startTotalIndex:AC$endTotalIndex)")->getStyle("AC$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->setCellValue("AD$rowIndex", "=SUM(AD$startTotalIndex:AD$endTotalIndex)")->getStyle("AD$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->setCellValue("AF$rowIndex", "=SUM(AF$startTotalIndex:AF$endTotalIndex)")->getStyle("AF$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->setCellValue("AG$rowIndex", "=SUM(AG$startTotalIndex:AG$endTotalIndex)")->getStyle("AG$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->setCellValue("AI$rowIndex", "=SUM(AI$startTotalIndex:AI$endTotalIndex)")->getStyle("AI$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->setCellValue("AJ$rowIndex", "=SUM(AJ$startTotalIndex:AJ$endTotalIndex)")->getStyle("AJ$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->setCellValue("AK$rowIndex", "=SUM(AK$startTotalIndex:AK$endTotalIndex)")->getStyle("AK$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->setCellValue("AL$rowIndex", "=SUM(AL$startTotalIndex:AL$endTotalIndex)")->getStyle("AL$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->setCellValue("AM$rowIndex", "=SUM(AM$startTotalIndex:AM$endTotalIndex)")->getStyle("AM$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
         }
         $sheet->getColumnDimension('B')->setAutoSize(true);
         $sheet->getColumnDimension('C')->setAutoSize(true);
@@ -441,7 +444,7 @@ class ExportLaporanMingguanSupirController extends Controller
         $sheet->mergeCells("Q$detail_table_header_row:Q" . ($detail_table_header_row + 2));
         $sheet->setCellValue("R$detail_table_header_row", 'Biaya Operasional')->getStyle("R1")->applyFromArray($styleHeader)->getFont()->setSize(14)->setBold(true);
         $sheet->mergeCells("R$detail_table_header_row:AG$detail_table_header_row");
-        $sheet->setCellValue("R" . ($detail_table_header_row + 1), 'Uang Jalan')->getStyle("R2")->applyFromArray($styleHeader)->getFont()->setSize(14)->setBold(true);
+        $sheet->setCellValue("R" . ($detail_table_header_row + 1), 'Borongan')->getStyle("R2")->applyFromArray($styleHeader)->getFont()->setSize(14)->setBold(true);
         $sheet->mergeCells("R" . ($detail_table_header_row + 1) . ":R" . ($detail_table_header_row + 2));
         $sheet->setCellValue("S" . ($detail_table_header_row + 1), 'EBS')->getStyle("S2")->applyFromArray($styleHeader)->getFont()->setSize(14)->setBold(true);
         $sheet->mergeCells("S" . ($detail_table_header_row + 1) . ":S" . ($detail_table_header_row + 2));
@@ -495,7 +498,7 @@ class ExportLaporanMingguanSupirController extends Controller
         $sheet->mergeCells("AP$detail_table_header_row:AP" . ($detail_table_header_row + 2));
         $sheet->setCellValue("AQ$detail_table_header_row", 'Panjar')->getStyle("AQ1")->applyFromArray($styleHeader)->getFont()->setSize(14)->setBold(true);
         $sheet->mergeCells("AQ$detail_table_header_row:AQ" . ($detail_table_header_row + 2));
-        $sheet->setCellValue("AR$detail_table_header_row", 'Liter')->getStyle("AT1")->applyFromArray($styleHeader)->getFont()->setSize(14)->setBold(true);
+        $sheet->setCellValue("AR$detail_table_header_row", 'Liter')->getStyle("AR1")->applyFromArray($styleHeader)->getFont()->setSize(14)->setBold(true);
         $sheet->mergeCells("AR$detail_table_header_row:AR" . ($detail_table_header_row + 2));
 
 
@@ -516,25 +519,25 @@ class ExportLaporanMingguanSupirController extends Controller
                     $startTotalIndex = $rowIndex - $groupRowCount;
                     $endTotalIndex = $rowIndex - 1;
 
-                    $sheet->setCellValue("M$rowIndex", "=SUM(M$startTotalIndex:M$endTotalIndex)")->getStyle("M$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-                    $sheet->setCellValue("N$rowIndex", "=SUM(N$startTotalIndex:N$endTotalIndex)")->getStyle("N$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-                    $sheet->setCellValue("O$rowIndex", "=SUM(O$startTotalIndex:O$endTotalIndex)")->getStyle("O$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-                    $sheet->setCellValue("R$rowIndex", "=SUM(R$startTotalIndex:R$endTotalIndex)")->getStyle("R$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-                    $sheet->setCellValue("U$rowIndex", "=SUM(U$startTotalIndex:U$endTotalIndex)")->getStyle("U$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-                    $sheet->setCellValue("W$rowIndex", "=SUM(W$startTotalIndex:W$endTotalIndex)")->getStyle("W$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-                    $sheet->setCellValue("X$rowIndex", "=SUM(X$startTotalIndex:X$endTotalIndex)")->getStyle("X$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-                    $sheet->setCellValue("Y$rowIndex", "=SUM(Y$startTotalIndex:Y$endTotalIndex)")->getStyle("Y$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-                    $sheet->setCellValue("Z$rowIndex", "=SUM(Z$startTotalIndex:Z$endTotalIndex)")->getStyle("Z$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-                    $sheet->setCellValue("AA$rowIndex", "=SUM(AA$startTotalIndex:AA$endTotalIndex)")->getStyle("AA$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-                    $sheet->setCellValue("AD$rowIndex", "=SUM(AD$startTotalIndex:AD$endTotalIndex)")->getStyle("AD$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-                    $sheet->setCellValue("AE$rowIndex", "=SUM(AE$startTotalIndex:AE$endTotalIndex)")->getStyle("AE$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-                    $sheet->setCellValue("AG$rowIndex", "=SUM(AG$startTotalIndex:AG$endTotalIndex)")->getStyle("AG$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-                    $sheet->setCellValue("AH$rowIndex", "=SUM(AH$startTotalIndex:AH$endTotalIndex)")->getStyle("AH$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-                    $sheet->setCellValue("AJ$rowIndex", "=SUM(AJ$startTotalIndex:AJ$endTotalIndex)")->getStyle("AJ$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-                    $sheet->setCellValue("AK$rowIndex", "=SUM(AK$startTotalIndex:AL$endTotalIndex)")->getStyle("AK$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-                    $sheet->setCellValue("AL$rowIndex", "=SUM(AL$startTotalIndex:AL$endTotalIndex)")->getStyle("AL$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-                    $sheet->setCellValue("AM$rowIndex", "=SUM(AM$startTotalIndex:AM$endTotalIndex)")->getStyle("AM$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-                    $sheet->setCellValue("AN$rowIndex", "=SUM(AN$startTotalIndex:AN$endTotalIndex)")->getStyle("AN$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
+                    $sheet->setCellValue("M$rowIndex", "=SUM(M$startTotalIndex:M$endTotalIndex)")->getStyle("M$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                    $sheet->setCellValue("N$rowIndex", "=SUM(N$startTotalIndex:N$endTotalIndex)")->getStyle("N$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                    $sheet->setCellValue("O$rowIndex", "=SUM(O$startTotalIndex:O$endTotalIndex)")->getStyle("O$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                    $sheet->setCellValue("R$rowIndex", "=SUM(R$startTotalIndex:R$endTotalIndex)")->getStyle("R$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                    $sheet->setCellValue("U$rowIndex", "=SUM(U$startTotalIndex:U$endTotalIndex)")->getStyle("U$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                    $sheet->setCellValue("W$rowIndex", "=SUM(W$startTotalIndex:W$endTotalIndex)")->getStyle("W$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                    $sheet->setCellValue("X$rowIndex", "=SUM(X$startTotalIndex:X$endTotalIndex)")->getStyle("X$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                    $sheet->setCellValue("Y$rowIndex", "=SUM(Y$startTotalIndex:Y$endTotalIndex)")->getStyle("Y$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                    $sheet->setCellValue("Z$rowIndex", "=SUM(Z$startTotalIndex:Z$endTotalIndex)")->getStyle("Z$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                    $sheet->setCellValue("AA$rowIndex", "=SUM(AA$startTotalIndex:AA$endTotalIndex)")->getStyle("AA$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                    $sheet->setCellValue("AD$rowIndex", "=SUM(AD$startTotalIndex:AD$endTotalIndex)")->getStyle("AD$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                    $sheet->setCellValue("AE$rowIndex", "=SUM(AE$startTotalIndex:AE$endTotalIndex)")->getStyle("AE$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                    $sheet->setCellValue("AG$rowIndex", "=SUM(AG$startTotalIndex:AG$endTotalIndex)")->getStyle("AG$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                    $sheet->setCellValue("AH$rowIndex", "=SUM(AH$startTotalIndex:AH$endTotalIndex)")->getStyle("AH$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                    $sheet->setCellValue("AJ$rowIndex", "=SUM(AJ$startTotalIndex:AJ$endTotalIndex)")->getStyle("AJ$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                    $sheet->setCellValue("AK$rowIndex", "=SUM(AK$startTotalIndex:AK$endTotalIndex)")->getStyle("AK$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                    $sheet->setCellValue("AL$rowIndex", "=SUM(AL$startTotalIndex:AL$endTotalIndex)")->getStyle("AL$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                    $sheet->setCellValue("AM$rowIndex", "=SUM(AM$startTotalIndex:AM$endTotalIndex)")->getStyle("AM$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                    $sheet->setCellValue("AN$rowIndex", "=O$rowIndex-AM$rowIndex")->getStyle("AN$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
                     $groupRowCount = 0;
                     $rowIndex++;
                     $rowIndex++; // Move to the next row
@@ -545,8 +548,10 @@ class ExportLaporanMingguanSupirController extends Controller
                 // Store the starting row index of the current group
                 $groupStartIndex = $rowIndex;
             }
-
-            $sheet->setCellValue("A$rowIndex", $response_detail['tglbukti']);
+            $dateValue = ($response_detail['tglbukti'] != null) ? Date::PHPToExcel(date('Y-m-d',strtotime($response_detail['tglbukti']))) : ''; 
+           
+            $sheet->setCellValue("A$rowIndex", $dateValue);
+            $sheet->getStyle("A$rowIndex")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
             $sheet->setCellValue("C$rowIndex", $response_detail['namasupir']);
             $sheet->setCellValue("D$rowIndex", $response_detail['rute']);
             $sheet->setCellValue("E$rowIndex", $response_detail['qty']);
@@ -557,43 +562,43 @@ class ExportLaporanMingguanSupirController extends Controller
             $sheet->setCellValue("J$rowIndex", $response_detail['spempty']);
             $sheet->setCellValue("K$rowIndex", $response_detail['spfullempty']);
             $sheet->setCellValue("L$rowIndex", $response_detail['jobtrucking']);
-            $sheet->setCellValue("M$rowIndex", $response_detail['omset'])->getStyle("M$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("N$rowIndex", $response_detail['omsettambahan'])->getStyle("N$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("O$rowIndex", "=(M$rowIndex+N$rowIndex)")->getStyle("O$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("P$rowIndex", $response_detail['omsetextrabbm'])->getStyle("P$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
+            $sheet->setCellValue("M$rowIndex", $response_detail['omset'])->getStyle("M$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->setCellValue("N$rowIndex", $response_detail['omsettambahan'])->getStyle("N$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->setCellValue("O$rowIndex", "=(M$rowIndex+N$rowIndex)")->getStyle("O$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->setCellValue("P$rowIndex", $response_detail['omsetextrabbm'])->getStyle("P$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
             $sheet->setCellValue("Q$rowIndex", $response_detail['invoice']);
-            $sheet->setCellValue("R$rowIndex", $response_detail['borongan'])->getStyle("R$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
+            $sheet->setCellValue("R$rowIndex", $response_detail['borongan'])->getStyle("R$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
             $sheet->setCellValue("S$rowIndex", $response_detail['nobuktiebs']);
             $sheet->setCellValue("T$rowIndex", $response_detail['pengeluarannobuktiebs']);
-            $sheet->setCellValue("U$rowIndex", $response_detail['voucher'])->getStyle("U$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
+            $sheet->setCellValue("U$rowIndex", $response_detail['voucher'])->getStyle("U$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
             $sheet->setCellValue("V$rowIndex", $response_detail['novoucher']);
-            $sheet->setCellValue("W$rowIndex", $response_detail['komisi'])->getStyle("W$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("X$rowIndex", $response_detail['gajikenek'])->getStyle("X$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("Y$rowIndex", $response_detail['gajimingguan'])->getStyle("Y$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("Z$rowIndex", $response_detail['gajilain'])->getStyle("Z$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("AA$rowIndex", $response_detail['ket']);
-            $sheet->setCellValue("AB$rowIndex", $response_detail['nobuktikbtkomisi']);
-            $sheet->setCellValue("AC$rowIndex", $response_detail['uanglain'])->getStyle("AC$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("AD$rowIndex", $response_detail['tolsupir'])->getStyle("AD$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("AE$rowIndex", $response_detail['uangbon'])->getStyle("AE$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
+            $sheet->setCellValue("W$rowIndex", $response_detail['komisi'])->getStyle("W$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->setCellValue("X$rowIndex", $response_detail['gajikenek'])->getStyle("X$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->setCellValue("Y$rowIndex", $response_detail['gajimingguan'])->getStyle("Y$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->setCellValue("Z$rowIndex", $response_detail['gajilain'])->getStyle("Z$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->setCellValue("AA$rowIndex", $response_detail['uanglain'])->getStyle("AA$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->setCellValue("AB$rowIndex", $response_detail['ket']);
+            $sheet->setCellValue("AC$rowIndex", $response_detail['nobuktikbtkomisi']);
+            $sheet->setCellValue("AD$rowIndex", $response_detail['tolsupir'])->getStyle("AD$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->setCellValue("AE$rowIndex", $response_detail['uangbon'])->getStyle("AE$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
             $sheet->setCellValue("AF$rowIndex", $response_detail['nobuktikbtebs2']);
-            $sheet->setCellValue("AG$rowIndex", $response_detail['ritasi'])->getStyle("AG$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("AH$rowIndex", $response_detail['extrabbm'])->getStyle("AH$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
+            $sheet->setCellValue("AG$rowIndex", $response_detail['ritasi'])->getStyle("AG$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->setCellValue("AH$rowIndex", $response_detail['extrabbm'])->getStyle("AH$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
             $sheet->setCellValue("AI$rowIndex", $response_detail['ketuanglain']);
-            $sheet->setCellValue("AJ$rowIndex", $response_detail['uangjalan'])->getStyle("AJ$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("AK$rowIndex", $response_detail['uangbbm'])->getStyle("AK$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("AL$rowIndex", $response_detail['uangmakan'])->getStyle("AL$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("AM$rowIndex", $response_detail['totalbiaya'])->getStyle("AM$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("AN$rowIndex", $response_detail['sisa'])->getStyle("AN$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
+            $sheet->setCellValue("AJ$rowIndex", $response_detail['uangjalan'])->getStyle("AJ$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->setCellValue("AK$rowIndex", $response_detail['uangbbm'])->getStyle("AK$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->setCellValue("AL$rowIndex", $response_detail['uangmakan'])->getStyle("AL$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->setCellValue("AM$rowIndex", $response_detail['totalbiaya'])->getStyle("AM$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->setCellValue("AN$rowIndex", $response_detail['sisa'])->getStyle("AN$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
             $sheet->setCellValue("AO$rowIndex", $response_detail['nobukti']);
-            $sheet->setCellValue("AP$rowIndex", $response_detail['bongkarmuat'])->getStyle("AP$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
+            $sheet->setCellValue("AP$rowIndex", $response_detail['bongkarmuat'])->getStyle("AP$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
             $sheet->setCellValue("AQ$rowIndex", $response_detail['panjar']);
-            $sheet->setCellValue("AR$rowIndex", $response_detail['liter'])->getStyle("AR$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
+            $sheet->setCellValue("AR$rowIndex", $response_detail['liter'])->getStyle("AR$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
             $rowIndex++;
 
             // Store the current group details in an array
             $group[] = $response_detail;
-            $sheet->getColumnDimension('A')->setWidth(10);
+            $sheet->getColumnDimension('A')->setWidth(12);
             $previous_nopol = $nopol;
             $groupRowCount++;
         }
@@ -606,25 +611,25 @@ class ExportLaporanMingguanSupirController extends Controller
             $startTotalIndex = $groupStartIndex;
             $endTotalIndex = $rowIndex - 1;
 
-            $sheet->setCellValue("M$rowIndex", "=SUM(M$startTotalIndex:M$endTotalIndex)")->getStyle("M$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("N$rowIndex", "=SUM(N$startTotalIndex:N$endTotalIndex)")->getStyle("N$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("O$rowIndex", "=SUM(O$startTotalIndex:O$endTotalIndex)")->getStyle("O$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("T$rowIndex", "=SUM(T$startTotalIndex:T$endTotalIndex)")->getStyle("T$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("U$rowIndex", "=SUM(U$startTotalIndex:U$endTotalIndex)")->getStyle("U$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("W$rowIndex", "=SUM(W$startTotalIndex:W$endTotalIndex)")->getStyle("W$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("X$rowIndex", "=SUM(X$startTotalIndex:X$endTotalIndex)")->getStyle("X$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("Y$rowIndex", "=SUM(Y$startTotalIndex:Y$endTotalIndex)")->getStyle("Y$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("Z$rowIndex", "=SUM(Z$startTotalIndex:Z$endTotalIndex)")->getStyle("Z$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("AA$rowIndex", "=SUM(AA$startTotalIndex:AA$endTotalIndex)")->getStyle("AA$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("AD$rowIndex", "=SUM(AD$startTotalIndex:AD$endTotalIndex)")->getStyle("AD$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("AE$rowIndex", "=SUM(AE$startTotalIndex:AE$endTotalIndex)")->getStyle("AE$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("AG$rowIndex", "=SUM(AG$startTotalIndex:AG$endTotalIndex)")->getStyle("AG$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("AH$rowIndex", "=SUM(AH$startTotalIndex:AH$endTotalIndex)")->getStyle("AH$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("AJ$rowIndex", "=SUM(AJ$startTotalIndex:AJ$endTotalIndex)")->getStyle("AJ$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("AK$rowIndex", "=SUM(AK$startTotalIndex:AK$endTotalIndex)")->getStyle("AK$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("AL$rowIndex", "=SUM(AL$startTotalIndex:AL$endTotalIndex)")->getStyle("AL$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("AM$rowIndex", "=SUM(AM$startTotalIndex:AM$endTotalIndex)")->getStyle("AM$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->setCellValue("AN$rowIndex", "=SUM(AN$startTotalIndex:AN$endTotalIndex)")->getStyle("AN$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00");
+            $sheet->setCellValue("M$rowIndex", "=SUM(M$startTotalIndex:M$endTotalIndex)")->getStyle("M$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->setCellValue("N$rowIndex", "=SUM(N$startTotalIndex:N$endTotalIndex)")->getStyle("N$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->setCellValue("O$rowIndex", "=SUM(O$startTotalIndex:O$endTotalIndex)")->getStyle("O$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->setCellValue("R$rowIndex", "=SUM(R$startTotalIndex:R$endTotalIndex)")->getStyle("R$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->setCellValue("U$rowIndex", "=SUM(U$startTotalIndex:U$endTotalIndex)")->getStyle("U$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->setCellValue("W$rowIndex", "=SUM(W$startTotalIndex:W$endTotalIndex)")->getStyle("W$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->setCellValue("X$rowIndex", "=SUM(X$startTotalIndex:X$endTotalIndex)")->getStyle("X$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->setCellValue("Y$rowIndex", "=SUM(Y$startTotalIndex:Y$endTotalIndex)")->getStyle("Y$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->setCellValue("Z$rowIndex", "=SUM(Z$startTotalIndex:Z$endTotalIndex)")->getStyle("Z$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->setCellValue("AA$rowIndex", "=SUM(AA$startTotalIndex:AA$endTotalIndex)")->getStyle("AA$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->setCellValue("AD$rowIndex", "=SUM(AD$startTotalIndex:AD$endTotalIndex)")->getStyle("AD$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->setCellValue("AE$rowIndex", "=SUM(AE$startTotalIndex:AE$endTotalIndex)")->getStyle("AE$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->setCellValue("AG$rowIndex", "=SUM(AG$startTotalIndex:AG$endTotalIndex)")->getStyle("AG$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->setCellValue("AH$rowIndex", "=SUM(AH$startTotalIndex:AH$endTotalIndex)")->getStyle("AH$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->setCellValue("AJ$rowIndex", "=SUM(AJ$startTotalIndex:AJ$endTotalIndex)")->getStyle("AJ$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->setCellValue("AK$rowIndex", "=SUM(AK$startTotalIndex:AK$endTotalIndex)")->getStyle("AK$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->setCellValue("AL$rowIndex", "=SUM(AL$startTotalIndex:AL$endTotalIndex)")->getStyle("AL$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->setCellValue("AM$rowIndex", "=SUM(AM$startTotalIndex:AM$endTotalIndex)")->getStyle("AM$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->setCellValue("AN$rowIndex", "=SUM(O$rowIndex-AM$rowIndex)")->getStyle("AN$rowIndex")->applyFromArray($styleArray2)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
         }
         $sheet->getColumnDimension('B')->setAutoSize(true);
         $sheet->getColumnDimension('C')->setAutoSize(true);
