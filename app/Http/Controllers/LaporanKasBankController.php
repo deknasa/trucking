@@ -163,7 +163,7 @@ class LaporanKasBankController extends MyController
             $sheet->setCellValue("A$detail_start_row", $dateValue);
             $sheet->getStyle("A$detail_start_row") 
             ->getNumberFormat() 
-            ->setFormatCode(NumberFormat::FORMAT_DATE_XLSXTAS);
+            ->setFormatCode('dd-mm-yyyy');
             $sheet->setCellValue("B$detail_start_row", $response_detail['nobukti']);
             $sheet->setCellValue("C$detail_start_row", $response_detail['keterangancoa']);
             $sheet->setCellValue("D$detail_start_row", $response_detail['keterangan']);

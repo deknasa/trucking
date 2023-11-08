@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Menu;
-use Illuminate\Contracts\View\View;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Http;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Http\RedirectResponse;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
@@ -118,20 +119,21 @@ class laporanpembelianController extends MyController
         // dd($pengeluaran);
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-
         $sheet->setCellValue('A1', $pengeluaran[0]['judul']);
-        $sheet->setCellValue('A2', $pengeluaran[0]['judulLaporan']);
-
         $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
-
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
-        $sheet->getStyle('A2')->getAlignment()->setHorizontal('left');
-        $sheet->setCellValue('A3', 'Periode: ' . $request->dari . ' S/D ' . $request->sampai);
-        $sheet->setCellValue('A4', 'Status: ' . $request->status);
         $sheet->mergeCells('A1:G1');
-        $sheet->mergeCells('A2:G2');
-        $sheet->mergeCells('A3:G3');
-        $sheet->mergeCells('A4:G4');
+        
+        $sheet->setCellValue('A2', $pengeluaran[0]['judulLaporan']);
+        // $sheet->mergeCells('A2:B2');
+        $sheet->setCellValue('A3', 'Tanggal : ' . date('d-M-Y', strtotime($detailParams['dari'])) . ' s/d ' . date('d-M-Y', strtotime($detailParams['sampai'])));
+        // $sheet->mergeCells('A3:B3');
+        $sheet->setCellValue('A4', 'Status : '. $request->status);
+        // $sheet->mergeCells('A4:B4');
+
+        $sheet->getStyle("A2")->getFont()->setBold(true);
+        $sheet->getStyle("A3:B3")->getFont()->setBold(true);
+        $sheet->getStyle("A4:B4")->getFont()->setBold(true);
 
         $header_start_row = 6;
         $detail_start_row = 7;
@@ -206,7 +208,11 @@ class laporanpembelianController extends MyController
                 }
 
                 $sheet->setCellValue("A$detail_start_row", $response_detail['nobukti']);
-                $sheet->setCellValue("B$detail_start_row", date('d-m-Y', strtotime($response_detail['tglbukti'])));
+                $dateValue = ($response_detail['tglbukti'] != null) ? Date::PHPToExcel(date('Y-m-d',strtotime($response_detail['tglbukti']))) : ''; 
+                $sheet->setCellValue("B$detail_start_row", $dateValue);
+                $sheet->getStyle("B$detail_start_row") 
+                ->getNumberFormat() 
+                ->setFormatCode('dd-mm-yyyy');
                 $sheet->setCellValue("C$detail_start_row", $response_detail['namasupplier']);
                 $sheet->setCellValue("D$detail_start_row", $response_detail['namastok']);
                 $sheet->setCellValue("E$detail_start_row", $response_detail['qty']);
@@ -236,13 +242,13 @@ class laporanpembelianController extends MyController
         $sheet->setCellValue("F" . ($ttd_start_row + 3), '(                )');
 
         //ukuran kolom
-        $sheet->getColumnDimension('A')->setAutoSize(true);
+        $sheet->getColumnDimension('A')->setWidth(18);
         $sheet->getColumnDimension('B')->setWidth(14);
         $sheet->getColumnDimension('C')->setWidth(22);
         $sheet->getColumnDimension('D')->setWidth(33);
         $sheet->getColumnDimension('E')->setAutoSize(true);
         $sheet->getColumnDimension('F')->setWidth(8);
-        $sheet->getColumnDimension('G')->setWidth(78);
+        $sheet->getColumnDimension('G')->setWidth(72);
 
 
 
