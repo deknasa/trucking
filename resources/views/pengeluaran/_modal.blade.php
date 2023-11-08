@@ -317,6 +317,10 @@
           method = 'DELETE'
           url = `${apiUrl}pengeluaranheader/${Id}?tgldariheader=${tgldariheader}&tglsampaiheader=${tglsampaiheader}&bankheader=${bankheader}&indexRow=${indexRow}&limit=${limit}&page=${page}`
           break;
+        case 'editcoa':
+          method = 'POST'
+          url = `${apiUrl}pengeluaranheader/${Id}/editcoa`
+          break;
         default:
           method = 'POST'
           url = `${apiUrl}pengeluaranheader`
@@ -553,6 +557,67 @@
 
   }
 
+  function editCoa(id) {
+    let form = $('#crudForm')
+    $('.modal-loader').removeClass('d-none')
+    form.data('action', 'editcoa')
+    penerimaanGiro = ''
+    form.trigger('reset')
+    form.find('#btnSubmit').html(`
+      <i class="fa fa-save"></i>
+      Simpan
+    `)
+    $('#crudModalTitle').text('Edit Kode Perkiraan')
+    $('.is-invalid').removeClass('is-invalid')
+    $('.invalid-feedback').remove()
+    Promise
+      .all([
+        setTglBukti(form),
+        setStatusJenisTransaksiOptions(form),
+      ])
+      .then(() => {
+        showPengeluaran(form, id)
+          .then(() => {
+            clearSelectedRows()
+            form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
+            // let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
+            // name.attr('readonly', true)
+            // name.find('.lookup-toggler').attr('disabled', true)
+            // name.find('.lookup-toggler').attr('disabled', true)
+            $('#crudForm').find(`.tbl_aksi`).hide()
+            // // form.find('.aksi').hide()
+            // setFormBindKeys(form)
+            // initSelect2(form.find('.select2bs4'), true)
+
+            form.find('[name]').attr('readonly', 'readonly').css({
+              background: '#fff'
+            })
+
+            form.find(`[name="ketcoadebet[]"]`).prop('readonly', false)
+            form.find(`[name="coadebet[]"]`).prop('readonly', false)
+          })
+          .then(() => {
+            clearSelectedRows()
+            $('#gs_').prop('checked', false)
+            $('#crudModal').modal('show')
+            $('#crudForm [name=tglbukti]').attr('readonly', true)
+            $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
+            $('#crudForm [name=bank]').parent('.input-group').find('.button-clear').remove()
+            $('#crudForm [name=bank]').parent('.input-group').find('.input-group-append').remove()
+            $('#crudForm [name=alatbayar]').parent('.input-group').find('.button-clear').remove()
+            $('#crudForm [name=alatbayar]').parent('.input-group').find('.input-group-append').remove()
+            $('#crudForm [name=pelanggan]').parent('.input-group').find('.button-clear').remove()
+            $('#crudForm [name=pelanggan]').parent('.input-group').find('.input-group-append').remove()
+          })
+          .catch((error) => {
+            showDialog(error.responseJSON)
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
+      })
+  }
+
   function deletePengeluaran(id) {
 
     let form = $('#crudForm')
@@ -670,9 +735,9 @@
           if (kodestatus == '1') {
             showDialog(response.message['keterangan'])
           } else {
-            if(Aksi == 'PRINTER BESAR'){
+            if (Aksi == 'PRINTER BESAR') {
               window.open(`{{ route('pengeluaranheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
-            } else if(Aksi == 'PRINTER KECIL'){
+            } else if (Aksi == 'PRINTER KECIL') {
               window.open(`{{ route('pengeluaranheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
             } else {
               cekValidasiAksi(Id, Aksi)
@@ -698,7 +763,15 @@
       success: response => {
         var kondisi = response.kondisi
         if (kondisi == true) {
-          showDialog(response.message['keterangan'])
+          if (response.editcoa) {
+            if (Aksi == 'EDIT') {
+              editCoa(Id)
+            } else {
+              showDialog(response.message['keterangan'])
+            }
+          } else {
+            showDialog(response.message['keterangan'])
+          }
         } else {
           if (Aksi == 'EDIT') {
             editPengeluaran(Id)
