@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "b83af43f6f80755dda7c8b3a670894b6",
+  "ReportGuid": "46264c49d1e6cb09d7c74d48f9bfe89e",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://localhost/truck/public/reports/ReportLaporanNeracaBesar.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanNeracaBesar.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1697865542000+0700)/",
+  "ReportChanged": "/Date(1699425392000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -120,9 +120,21 @@
             "Type": "System.String"
           },
           "15": {
-            "Name": "judul",
-            "NameInSource": "judul",
-            "Alias": "judul",
+            "Name": "coabanding",
+            "NameInSource": "coabanding",
+            "Alias": "coabanding",
+            "Type": "System.String"
+          },
+          "16": {
+            "Name": "nominalbanding",
+            "NameInSource": "nominalbanding",
+            "Alias": "nominalbanding",
+            "Type": "System.String"
+          },
+          "17": {
+            "Name": "selisih",
+            "NameInSource": "selisih",
+            "Alias": "selisih",
             "Type": "System.String"
           }
         },
@@ -330,6 +342,12 @@
             "NameInSource": "sampai",
             "Alias": "sampai",
             "Type": "System.String"
+          },
+          "4": {
+            "Name": "cabang_id",
+            "NameInSource": "cabang_id",
+            "Alias": "cabang_id",
+            "Type": "System.String"
           }
         },
         "NameInSource": "Data.parameter"
@@ -424,7 +442,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{data.judul}"
+                "Value": "{data.CmpyName}"
               },
               "HorAlignment": "Center",
               "Font": ";10;Bold;",

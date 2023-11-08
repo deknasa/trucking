@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "4d2af1ceb0174f37ed638ebdccb7ae9c",
+  "ReportGuid": "33742f7aed9eaa21533e42bc6aa44986",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://localhost/truck/public/reports/ReportLaporanNeraca.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanNeraca.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1698043331000+0700)/",
+  "ReportChanged": "/Date(1699425286000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -342,6 +342,12 @@
             "NameInSource": "sampai",
             "Alias": "sampai",
             "Type": "System.String"
+          },
+          "4": {
+            "Name": "cabang_id",
+            "NameInSource": "cabang_id",
+            "Alias": "cabang_id",
+            "Type": "System.String"
           }
         },
         "NameInSource": "Data.parameter"
@@ -436,7 +442,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{data.judul}"
+                "Value": "{data.CmpyName}"
               },
               "HorAlignment": "Center",
               "Font": ";10;Bold;",
