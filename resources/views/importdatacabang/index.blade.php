@@ -17,7 +17,7 @@
                 <form id="crudForm">
                     <div class="card-body">
                         <div class="form-group row">
-                            <label class="col-12 col-sm-2 col-form-label mt-2">Periode<span class="text-danger">*</span></label>
+                            <label class="col-12 col-sm-4 col-md-2  col-form-label mt-2">Periode<span class="text-danger">*</span></label>
                             <div class="col-sm-4 mt-2">
                                 <div class="input-group">
                                     <input type="text" name="periode" class="form-control datepicker">
@@ -25,7 +25,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <label class="col-12 col-sm-2 col-form-label mt-2">Cabang<span class="text-danger">*</span></label>
+                            <label class="col-12 col-sm-4 col-md-2  col-form-label mt-2">Cabang<span class="text-danger">*</span></label>
 
                             <div class="col-12 col-sm-4 col-md-4">
                                 <select name="cabang" id="cabang" class="form-select select2bs4" style="width: 100%;">
@@ -34,7 +34,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <label class="col-12 col-sm-2 col-form-label mt-2">tipe import<span class="text-danger">*</span></label>
+                            <label class="col-12 col-sm-4 col-md-2  col-form-label mt-2">tipe import<span class="text-danger">*</span></label>
 
                             <div class="col-12 col-sm-4 col-md-4">
                                 <select name="import" id="import" class="form-select select2bs4" style="width: 100%;">
@@ -128,8 +128,6 @@
                 success: response => {
                     console.log(response.message);
                     showSuccessDialog(response.message, response.data.nobukti)
-                    enabledUpahSupir()
-                    createSuratPengantar()
                 },
                 error: error => {
                     console.log('postdata ', error)
