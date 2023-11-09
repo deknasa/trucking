@@ -105,8 +105,8 @@ class LaporanLabaRugiController extends MyController
             $tahun = substr($request->sampai,3,4);
             
             $sheet->setCellValue('A1', $pengeluaran[0]['CmpyName']);
-            $sheet->setCellValue('A2', 'Laporan Laba Rugi');
-            $sheet->setCellValue('A3', 'Periode : '. $bulan .' - '.$tahun);
+            $sheet->setCellValue('A2', 'LAPORAN LABA RUGI');
+            $sheet->setCellValue('A3', 'PERIODE : '. $bulan .' - '.$tahun);
 
             $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
             $sheet->getStyle("A2")->getFont()->setBold(true);
@@ -334,40 +334,40 @@ class LaporanLabaRugiController extends MyController
     {
         switch ($bln) {
             case 1:
-                return "Januari";
+                return "JANUARI";
                 break;
             case 2:
-                return "Februari";
+                return "FEBRUARI";
                 break;
             case 3:
-                return "Maret";
+                return "MARET";
                 break;
             case 4:
-                return "April";
+                return "APRIL";
                 break;
             case 5:
-                return "Mei";
+                return "MEI";
                 break;
             case 6:
-                return "Juni";
+                return "JUNI";
                 break;
             case 7:
-                return "Juli";
+                return "JULI";
                 break;
             case 8:
-                return "Agustus";
+                return "AGUSTUS";
                 break;
             case 9:
-                return "September";
+                return "SEPTEMBER";
                 break;
             case 10:
-                return "Oktober";
+                return "OKTOBER";
                 break;
             case 11:
-                return "November";
+                return "NOVEMBER";
                 break;
             case 12:
-                return "Desember";
+                return "DESEMBER";
                 break;
         }
     }

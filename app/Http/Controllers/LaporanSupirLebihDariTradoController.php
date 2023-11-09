@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
@@ -78,12 +79,14 @@ class LaporanSupirLebihDariTradoController extends MyController
       
         $sheet->setCellValue('A1', $pengeluaran[0]['judul'] ?? '');
         $sheet->setCellValue('A2', $pengeluaran[0]['judulLaporan'] ?? '');
-        $sheet->setCellValue('A3', 'Periode: ' . $request->sampai);
+        $sheet->setCellValue('A3', 'PERIODE : ' .date('d-M-Y', strtotime($detailParams['dari'])) . ' s/d ' . date('d-M-Y', strtotime($detailParams['sampai'])));
        
         $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
     
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:C1');
+        $sheet->getStyle("A2")->getFont()->setBold(true);        
+        $sheet->getStyle("A3")->getFont()->setBold(true);
        
         $header_start_row = 5;
         $detail_start_row = 6;
@@ -113,11 +116,11 @@ class LaporanSupirLebihDariTradoController extends MyController
                 'index' => 'namasupir',
             ],
             [
-                'label' => 'TGL BUKTI',
+                'label' => 'Tgl Bukti',
                 'index' => 'tglbukti',
             ],
             [
-                'label' => 'JUMLAH',
+                'label' => 'Jumlah',
                 'index' => 'jumlah',
             ],
             
@@ -141,15 +144,16 @@ class LaporanSupirLebihDariTradoController extends MyController
             foreach ($header_columns as $detail_columns_index => $detail_column) {
                 $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
             }
-
+            $dateValue = ($response_detail['tglbukti'] != null) ? Date::PHPToExcel(date('Y-m-d',strtotime($response_detail['tglbukti']))) : ''; 
+            
             $sheet->setCellValue("A$detail_start_row", $response_detail['namasupir']);
-            $sheet->setCellValue("B$detail_start_row", date('d-m-Y', strtotime($response_detail['tglbukti'])));
-            $sheet->setCellValue("C$detail_start_row", number_format($response_detail['jumlah'], 2, ',', '.'));
+            $sheet->setCellValue("B$detail_start_row", $dateValue);
+            $sheet->setCellValue("C$detail_start_row", $response_detail['jumlah']);
 
             $sheet->getStyle("C$detail_start_row")->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
             $sheet->getStyle("A$detail_start_row:C$detail_start_row")->applyFromArray($styleArray);
-            $sheet->getStyle("C$detail_start_row:C$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
-            // $sheet->getStyle("B$detail_start_row:B$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
+            $sheet->getStyle("C$detail_start_row:C$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->getStyle("B$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
             // $sheet->getStyle("D$detail_start_row:D$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
             
 
@@ -228,7 +232,7 @@ $sheet->getStyle('C' . ($detail_start_row + 6))->getFont()->setSize(12);
 
 
         $writer = new Xlsx($spreadsheet);
-        $filename = 'EXPORTLAPORANSUPIRLEBIHDARITRADO' . date('dmYHis');
+        $filename = 'LAPORAN 1 SUPIR LEBIH DARI 1 TRADO ' . date('dmYHis');
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
         header('Cache-Control: max-age=0');

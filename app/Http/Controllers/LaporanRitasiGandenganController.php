@@ -50,12 +50,20 @@ class LaporanRitasiGandenganController extends MyController
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setCellValue('A1', 'Laporan Ritasi Gandengan : ' . $monthName . ' - ' . $yearNum);
+        // $sheet->setCellValue('A1', 'Laporan Ritasi Gandengan : ' . $monthName . ' - ' . $yearNum);
+        $sheet->setCellValue('A1', $header['judul'] ?? '');
+        $sheet->setCellValue('A2','LAPORAN RITASI GANDENGAN');
+        $sheet->setCellValue('A3', 'PERIODE : ' . $monthName . ' - ' . $yearNum);
+        $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
+        $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
+        $sheet->getStyle("A2")->getFont()->setBold(true);        
+        $sheet->getStyle("A3")->getFont()->setBold(true);
 
+        $sheet->mergeCells('A1:AG1');
         $totalTanggal = count($ritasi[0]) - 1;
 
         // SET DATA
-        $rowIndex = 4;
+        $rowIndex = 6;
         $columnIndex = 1;
         foreach ($ritasi as $data) {
             $noPol = $data['gandengan']; // Ganti 'no_pol' dengan indeks yang sesuai
@@ -84,16 +92,16 @@ class LaporanRitasiGandenganController extends MyController
 
         // SET HEADER
         $columnIndexHeader = 2;
-        $sheet->setCellValue('A3', 'Gandengan');
+        $sheet->setCellValue('A5', 'Gandengan');
         for ($i = 1; $i <= $totalTanggal; $i++) {
-            $cell = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($columnIndexHeader) . '3';
+            $cell = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($columnIndexHeader) . '5';
             $sheet->setCellValue($cell, $i);
             $columnIndexHeader++;
         }
 
-        $cell = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($columnIndexHeader) . '3';
+        $cell = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($columnIndexHeader) . '5';
         $sheet->setCellValue($cell, 'Total');
-        $cellRange = "A3:$cell";
+        $cellRange = "A5:$cell";
 
         $cell = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($columnIndexHeader) . $rowIndex;
         $cellFooter = "A" . $rowIndex . ":$cell";
@@ -141,7 +149,7 @@ class LaporanRitasiGandenganController extends MyController
 
             if ($columnLabel != 'A') {
 
-                $cellBody = $columnLabel . "4:" . $columnLabel . $rowIndex;
+                $cellBody = $columnLabel . "6:" . $columnLabel . $rowIndex;
                 $sheet->getStyle($cellBody)->applyFromArray($styleBody);
             }
         }
@@ -152,13 +160,13 @@ class LaporanRitasiGandenganController extends MyController
             $columnLabel = $this->alphabetLoop($columnIndex);
             if ($columnLabel != 'A') {
 
-                $cellBody = $columnLabel . "4:" . $columnLabel . $rowIndex;
-                $sheet->setCellValue($columnLabel . ($rowIndex), "=SUM(" . $columnLabel . "4:" . $columnLabel . $rowIndex . ")");
+                $cellBody = $columnLabel . "6:" . $columnLabel . $rowIndex;
+                $sheet->setCellValue($columnLabel . ($rowIndex), "=SUM(" . $columnLabel . "6:" . $columnLabel . $rowIndex . ")");
             }
         }
 
         $writer = new Xlsx($spreadsheet);
-        $filename = 'LAPORANRITASIGANDENGAN' . date('dmYHis');
+        $filename = 'LAPORAN RITASI GANDENGAN ' . date('dmYHis');
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
         header('Cache-Control: max-age=0');
