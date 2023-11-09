@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Menu;
-use Illuminate\Contracts\View\View;
-use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Http;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Http\RedirectResponse;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
@@ -79,16 +80,28 @@ class LaporanTitipanEmklController extends MyController
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         $jenisorder = $pengeluaran[0]['jenisorder'] ?? '';
-        $sheet->setCellValue('A1', $pengeluaran[0]['judul']??'');
-        $sheet->setCellValue('A2', $pengeluaran[0]['judullaporan']??'');
-        $sheet->setCellValue('A3', 'Periode: ' . $request->tgldari .'s/d'.$request->tgldari );
-        $sheet->setCellValue('A4', 'Jenis Order: ' . $jenis);
-
+        $sheet->setCellValue('A1', $pengeluaran[0]['judul']);
         $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
-
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
-        $sheet->getStyle('A2')->getAlignment()->setHorizontal('left');
         $sheet->mergeCells('A1:E1');
+
+        $englishMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        $indonesianMonths = ['JANUARI', 'FEBRUARI', 'MARET', 'APRIL', 'MEI', 'JUNI', 'JULI', 'AGUSTUS', 'SEPTEMBER', 'OKTOBER', 'NOVEMBER', 'DESEMBER'];
+        $tgldari = str_replace($englishMonths, $indonesianMonths, date('d - M - Y', strtotime($request->tgldari)));
+        $tglsampai = str_replace($englishMonths, $indonesianMonths, date('d - M - Y', strtotime($request->tglsampai)));
+        
+        $sheet->setCellValue('A2', strtoupper($pengeluaran[0]['judullaporan']));
+        $sheet->getStyle("A2")->getFont()->setBold(true);
+        $sheet->mergeCells('A2:E2');
+        
+        $sheet->setCellValue('A3', strtoupper( 'Periode: ' . date('d - M - Y', strtotime($request->tgldari)) .' s/d '.date('d - M - Y', strtotime($request->tglsampai)) ));
+        $sheet->getStyle("A3")->getFont()->setBold(true);
+        $sheet->mergeCells('A3:E3');
+
+        $sheet->setCellValue('A4', strtoupper('Jenis Order: ' . $jenis));
+        $sheet->getStyle("A4")->getFont()->setBold(true);
+        $sheet->mergeCells('A4:E4');
+
 
         $header_start_row = 6;
         $detail_start_row = 7;
@@ -170,6 +183,11 @@ class LaporanTitipanEmklController extends MyController
                 }
 
                 $sheet->setCellValue("A$detail_start_row", date('d-m-Y', strtotime($response_detail['tglbukti'])));
+                $dateValue = ($response_detail['tglbukti'] != null) ? Date::PHPToExcel(date('Y-m-d',strtotime($response_detail['tglbukti']))) : ''; 
+                $sheet->setCellValue("A$detail_start_row", $dateValue);
+                $sheet->getStyle("A$detail_start_row") 
+                ->getNumberFormat() 
+                ->setFormatCode('dd-mm-yyyy');
                 $sheet->setCellValue("B$detail_start_row", $response_detail['day']);
                 $sheet->setCellValue("C$detail_start_row", $response_detail['tujuan']);
                 $sheet->setCellValue("D$detail_start_row", $response_detail['shipper']);
@@ -177,9 +195,10 @@ class LaporanTitipanEmklController extends MyController
                 $sheet->setCellValue("F$detail_start_row", $response_detail['nosp']);
                 $sheet->setCellValue("G$detail_start_row", $response_detail['nominal']);
                 
-
+                
+                $sheet->getStyle("F$detail_start_row")->getAlignment()->setHorizontal('left');
                 $sheet->getStyle("A$detail_start_row:G$detail_start_row")->applyFromArray($styleArray);
-                $sheet->getStyle("G$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+                $sheet->getStyle("G$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
                 $detail_start_row++;
                 $tradoPrev = $response_detail['trado'];
             }
@@ -192,7 +211,7 @@ class LaporanTitipanEmklController extends MyController
 
         $totalDebet = "=SUM(G6:G" . ($detail_start_row - 1) . ")";
         $sheet->setCellValue("G$total_start_row", $totalDebet)->getStyle("G$total_start_row")->applyFromArray($style_number);
-        $sheet->setCellValue("G$total_start_row", $totalDebet)->getStyle("G$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+        $sheet->setCellValue("G$total_start_row", $totalDebet)->getStyle("G$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
         $ttd_start_row = $detail_start_row + 2;
         $sheet->setCellValue("A$ttd_start_row", 'Disetujui Oleh,');

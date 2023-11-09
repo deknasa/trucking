@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 
 class LaporanPiutangGiroController extends MyController
 {
@@ -63,14 +64,20 @@ class LaporanPiutangGiroController extends MyController
         $sheet = $spreadsheet->getActiveSheet();
 
         $sheet->setCellValue('A1', $pengeluaran[0]['judul']);
-        $sheet->setCellValue('A2', $pengeluaran[0]['judulLaporan']);
-        $sheet->setCellValue('A3', 'Periode: ' . $request->periode);
-
         $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
-
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
-        $sheet->getStyle('A2')->getAlignment()->setHorizontal('left');
         $sheet->mergeCells('A1:E1');
+
+        $englishMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        $indonesianMonths = ['JANUARI', 'FEBRUARI', 'MARET', 'APRIL', 'MEI', 'JUNI', 'JULI', 'AGUSTUS', 'SEPTEMBER', 'OKTOBER', 'NOVEMBER', 'DESEMBER'];
+        
+        $tanggal = str_replace($englishMonths, $indonesianMonths, date('d - M - Y', strtotime($request->periode)));
+
+        $sheet->setCellValue('A2', strtoupper($pengeluaran[0]['judulLaporan']));
+        $sheet->setCellValue('A3', strtoupper('Periode : ' . $tanggal));
+        $sheet->getStyle("A2")->getFont()->setBold(true);
+        $sheet->getStyle("A3")->getFont()->setBold(true);
+
 
         $header_start_row = 5;
         $detail_start_row = 6;
@@ -125,7 +132,7 @@ class LaporanPiutangGiroController extends MyController
 
 
         foreach ($header_columns as $data_columns_index => $data_column) {
-            $sheet->setCellValue($alphabets[$data_columns_index] . $header_start_row, $data_column['label'] ?? $data_columns_index + 1);
+            $sheet->setCellValue($alphabets[$data_columns_index] . $header_start_row, ucfirst($data_column['label']) ?? $data_columns_index + 1);
         }
 
         $lastColumn = $alphabets[$data_columns_index];
@@ -139,14 +146,23 @@ class LaporanPiutangGiroController extends MyController
                 }
 
                 $sheet->setCellValue("A$detail_start_row", $response_detail['nobukti']);
-                $sheet->setCellValue("B$detail_start_row", date('d-m-Y', strtotime($response_detail['tglbukti'])));
+                $dateValue = ($response_detail['tglbukti'] != null) ? Date::PHPToExcel(date('Y-m-d',strtotime($response_detail['tglbukti']))) : ''; 
+                $sheet->setCellValue("B$detail_start_row", $dateValue);
+                $sheet->getStyle("B$detail_start_row") 
+                ->getNumberFormat() 
+                ->setFormatCode('dd-mm-yyyy');
+
                 $sheet->setCellValue("C$detail_start_row", $response_detail['nowarkat']);
-                $sheet->setCellValue("D$detail_start_row", date('d-m-Y', strtotime($response_detail['tgljatuhtempo'])));
+                $dateValue = ($response_detail['tgljatuhtempo'] != null) ? Date::PHPToExcel(date('Y-m-d',strtotime($response_detail['tgljatuhtempo']))) : ''; 
+                $sheet->setCellValue("D$detail_start_row", $dateValue);
+                $sheet->getStyle("D$detail_start_row") 
+                ->getNumberFormat() 
+                ->setFormatCode('dd-mm-yyyy');
                 $sheet->setCellValue("E$detail_start_row", $response_detail['nominal']);
 
 
                 $sheet->getStyle("A$detail_start_row:E$detail_start_row")->applyFromArray($styleArray);
-                $sheet->getStyle("E$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+                $sheet->getStyle("E$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
                 $detail_start_row++;
             }
         }
@@ -158,7 +174,7 @@ class LaporanPiutangGiroController extends MyController
 
         $totalDebet = "=SUM(E6:E" . ($detail_start_row - 1) . ")";
         $sheet->setCellValue("E$total_start_row", $totalDebet)->getStyle("E$total_start_row")->applyFromArray($style_number);
-        $sheet->setCellValue("E$total_start_row", $totalDebet)->getStyle("E$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+        $sheet->setCellValue("E$total_start_row", $totalDebet)->getStyle("E$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
         $ttd_start_row = $detail_start_row + 2;
         $sheet->setCellValue("A$ttd_start_row", 'Disetujui Oleh,');
@@ -170,16 +186,16 @@ class LaporanPiutangGiroController extends MyController
         $sheet->setCellValue("E" . ($ttd_start_row + 3), '(                )');
 
         //ukuran kolom
-        $sheet->getColumnDimension('A')->setAutoSize(true);
-        $sheet->getColumnDimension('B')->setAutoSize(true);
-        $sheet->getColumnDimension('C')->setWidth(90);
-        $sheet->getColumnDimension('D')->setAutoSize(true);
-        $sheet->getColumnDimension('E')->setAutoSize(true);
+        $sheet->getColumnDimension('A')->setWidth(24);
+        $sheet->getColumnDimension('B')->setWidth(20);
+        $sheet->getColumnDimension('C')->setWidth(64);
+        $sheet->getColumnDimension('D')->setWidth(24);
+        $sheet->getColumnDimension('E')->setWidth(24);
 
 
 
         $writer = new Xlsx($spreadsheet);
-        $filename = 'LAPORAN PIUTANG GIRO' . date('dmYHis');
+        $filename = 'LAPORAN PIUTANG GIRO ' . date('dmYHis');
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
         header('Cache-Control: max-age=0');

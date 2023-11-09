@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Menu;
-use Illuminate\Contracts\View\View;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Http;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Http\RedirectResponse;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
@@ -113,17 +114,20 @@ class LaporanPembelianStokController extends MyController
         $sheet = $spreadsheet->getActiveSheet();
 
         $sheet->setCellValue('A1', $pengeluaran[0]['judul']);
-        $sheet->setCellValue('A2', $pengeluaran[0]['judulLaporan']);
-        $sheet->setCellValue('A3', 'Periode: ' . $request->dari . ' S/D ' . $request->sampai);
-        $sheet->setCellValue('A4', 'Stok: ' . $request->stokdari . ' S/D ' . $request->stoksampai);
-
         $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
-
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
-        $sheet->getStyle('A2')->getAlignment()->setHorizontal('left');
         $sheet->mergeCells('A1:L1');
+
+        $sheet->setCellValue('A2', strtoupper($pengeluaran[0]['judulLaporan']));
+        $sheet->getStyle("A2")->getFont()->setBold(true);
         $sheet->mergeCells('A2:L2');
+
+        $sheet->setCellValue('A3', strtoupper('Periode: ' . date('d - M - Y', strtotime($request->dari)) . ' S/D ' . date('d - M - Y', strtotime($request->sampai))));
+        $sheet->getStyle("A3")->getFont()->setBold(true);
         $sheet->mergeCells('A3:L3');
+
+        $sheet->setCellValue('A4', strtoupper('Stok: ' . $request->stokdari . ' S/D ' . $request->stoksampai));
+        $sheet->getStyle("A4")->getFont()->setBold(true);
         $sheet->mergeCells('A4:L4');
 
         $header_start_row = 6;
@@ -222,7 +226,11 @@ class LaporanPembelianStokController extends MyController
 
                 $sheet->setCellValue("A$detail_start_row", $no);
                 $sheet->setCellValue("B$detail_start_row", $response_detail['nobukti']);
-                $sheet->setCellValue("C$detail_start_row", date('d-m-Y', strtotime($response_detail['tglbukti'])));
+                $dateValue = ($response_detail['tglbukti'] != null) ? Date::PHPToExcel(date('Y-m-d',strtotime($response_detail['tglbukti']))) : ''; 
+                $sheet->setCellValue("C$detail_start_row", $dateValue);
+                $sheet->getStyle("C$detail_start_row") 
+                ->getNumberFormat() 
+                ->setFormatCode('dd-mm-yyyy');
                 $sheet->setCellValue("D$detail_start_row", $response_detail['namasupplier']);
                 $sheet->setCellValue("E$detail_start_row", $response_detail['stok_id']);
                 $sheet->setCellValue("F$detail_start_row", $response_detail['namastok']);
@@ -234,7 +242,7 @@ class LaporanPembelianStokController extends MyController
                 $sheet->setCellValue("L$detail_start_row", $response_detail['keterangan']);
 
                 $sheet->getStyle("A$detail_start_row:L$detail_start_row")->applyFromArray($styleArray);
-                $sheet->getStyle("C$detail_start_row:L$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+                $sheet->getStyle("D$detail_start_row:L$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
                 // $sheet->getStyle("B$detail_start_row:B$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
                 // $sheet->getStyle("D$detail_start_row:D$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
 
@@ -256,9 +264,9 @@ class LaporanPembelianStokController extends MyController
         $sheet->getColumnDimension('E')->setAutoSize(true);
         $sheet->getColumnDimension('F')->setWidth(30);
         $sheet->getColumnDimension('G')->setAutoSize(true);
-        $sheet->getColumnDimension('H')->setAutoSize(true);
-        $sheet->getColumnDimension('I')->setAutoSize(true);
-        $sheet->getColumnDimension('J')->setAutoSize(true);
+        $sheet->getColumnDimension('H')->setWidth(20);
+        $sheet->getColumnDimension('I')->setWidth(20);
+        $sheet->getColumnDimension('J')->setWidth(20);
         $sheet->getColumnDimension('K')->setAutoSize(true);
         $sheet->getColumnDimension('L')->setWidth(56);
 
@@ -272,7 +280,7 @@ class LaporanPembelianStokController extends MyController
 
         //FORMAT
         // set format ribuan untuk kolom D dan E
-        $sheet->getStyle("D" . ($detail_start_row + 1) . ":E" . ($detail_start_row + 1))->getNumberFormat()->setFormatCode("#,##0.00");
+        $sheet->getStyle("D" . ($detail_start_row + 1) . ":E" . ($detail_start_row + 1))->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
         $sheet->getStyle("A" . ($detail_start_row + 1) . ":$lastColumn" . ($detail_start_row + 1))->getFont()->setBold(true);
 
 
@@ -285,17 +293,17 @@ class LaporanPembelianStokController extends MyController
 
         $totalNominal = "=SUM(H7:H" . ($detail_start_row - 1) . ")";
         $sheet->setCellValue("H$total_start_row", $totalNominal)->getStyle("H$total_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
-        $sheet->setCellValue("H$total_start_row", $totalNominal)->getStyle("H$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+        $sheet->setCellValue("H$total_start_row", $totalNominal)->getStyle("H$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
         $sheet->setCellValue("H$total_start_row", $totalNominal)->getStyle("H$total_start_row")->applyFromArray($styleArray);
 
         $totalNominal = "=SUM(I7:I" . ($detail_start_row - 1) . ")";
         $sheet->setCellValue("I$total_start_row", $totalNominal)->getStyle("I$total_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
-        $sheet->setCellValue("I$total_start_row", $totalNominal)->getStyle("I$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+        $sheet->setCellValue("I$total_start_row", $totalNominal)->getStyle("I$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
         $sheet->setCellValue("I$total_start_row", $totalNominal)->getStyle("I$total_start_row")->applyFromArray($styleArray);
 
         $totalNominal = "=SUM(J7:J" . ($detail_start_row - 1) . ")";
         $sheet->setCellValue("J$total_start_row", $totalNominal)->getStyle("J$total_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
-        $sheet->setCellValue("J$total_start_row", $totalNominal)->getStyle("J$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+        $sheet->setCellValue("J$total_start_row", $totalNominal)->getStyle("J$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
         $sheet->setCellValue("J$total_start_row", $totalNominal)->getStyle("J$total_start_row")->applyFromArray($styleArray);
 
         $sheet->setCellValue("K$total_start_row", $rowKosong)->getStyle("K$total_start_row")->applyFromArray($styleArray);

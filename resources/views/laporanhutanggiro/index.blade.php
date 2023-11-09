@@ -94,9 +94,7 @@
         let periode = $('#crudForm').find('[name=periode]').val()
 
         getCekExport().then((response) => {
-            window.open(
-                window.open(`{{ route('laporanhutanggiro.export') }}?periode=${periode}`)
-            )
+            window.open(`{{ route('laporanhutanggiro.export') }}?periode=${periode}`)
         }).catch((error) => {
             if (error.status === 422) {
                 return showDialog(error.responseJSON.errors.export);
