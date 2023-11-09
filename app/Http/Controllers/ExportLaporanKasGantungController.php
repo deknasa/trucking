@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
 
 class ExportLaporanKasGantungController extends MyController
@@ -228,6 +229,7 @@ class ExportLaporanKasGantungController extends MyController
         $sheetIndex++;
 
         $bulan = $this->getBulan(substr($request->periode, 0, 2));
+        $bulan1 = substr($request->periode, 0, 2);
         $tahun = substr($request->periode, 3, 4);
         $rekapPerkiraanSheet->setCellValue('A1', $data[0]['judul']);
         $rekapPerkiraanSheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
@@ -237,7 +239,7 @@ class ExportLaporanKasGantungController extends MyController
         $rekapPerkiraanSheet->setCellValue('A2', 'LAPORAN REKAP KAS GANTUNG');
         $rekapPerkiraanSheet->getStyle("A2")->getFont()->setSize(16)->setBold(true);
         $rekapPerkiraanSheet->getStyle('A2')->getAlignment()->setHorizontal('center');
-        $rekapPerkiraanSheet->setCellValue('A3', 'PERIODE : ' . $bulan . ' - ' . $tahun);
+        $rekapPerkiraanSheet->setCellValue('A3', 'PERIODE : ' . $bulan1 . ' - ' . $tahun);
         $rekapPerkiraanSheet->getStyle("A3")->getFont()->setSize(16)->setBold(true);
         $rekapPerkiraanSheet->getStyle('A3')->getAlignment()->setHorizontal('center');
         $rekapPerkiraanSheet->mergeCells('A2:F2');

@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
 
 class LaporanKasGantungController extends MyController
@@ -69,13 +71,20 @@ class LaporanKasGantungController extends MyController
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         
-        $sheet->setCellValue('A1', $pengeluaran[0]['judul']);
-        $sheet->setCellValue('A2', $pengeluaran[0]['judulLaporan']);
-        $sheet->setCellValue('A3', 'Periode: ' . $request->periode);
-    
+        $sheet->setCellValue('A1', $pengeluaran[0]['judul'] ?? '');
         $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
-        $sheet->mergeCells('A1:F1');
+        $sheet->mergeCells('A1:F1');        
+        $sheet->setCellValue('A2',  $pengeluaran[0]['judulLaporan'] ?? '');
+        $sheet->mergeCells('A2:B2');        
+        $sheet->setCellValue('A3', 'Periode: ' . date('d-M-Y', strtotime($request->periode)) );
+        $sheet->mergeCells('A3:B3');       
+        $sheet->getStyle("A2")->getFont()->setBold(true);
+        $sheet->getStyle("A3:B3")->getFont()->setBold(true); 
+
+        $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
+        $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
+
        
         $header_start_row = 5;
         $detail_start_row = 6;
@@ -93,6 +102,12 @@ class LaporanKasGantungController extends MyController
                 'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT,
             ],
 
+            'borders' => [
+                'top' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+                'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+                'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+                'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN]
+            ]
         ];
 
         $alphabets = range('A', 'Z');
@@ -101,7 +116,7 @@ class LaporanKasGantungController extends MyController
         
         $header_columns = [
             [
-                'label' => 'Tanggal',
+                'label' => 'Tgl Bukti',
                 'index' => 'tanggal',
             ],
             [
@@ -131,11 +146,15 @@ class LaporanKasGantungController extends MyController
             $sheet->setCellValue($alphabets[$data_columns_index] . $header_start_row, $data_column['label'] ?? $data_columns_index + 1);
         }
 
+        $sheet->getStyle("A$header_start_row:F$header_start_row")->applyFromArray($styleArray)->getFont()->setBold(true);
+
+
         $lastColumn = $alphabets[$data_columns_index];
         $sheet->getStyle("A$header_start_row:$lastColumn$header_start_row")->getFont()->setBold(true);
         $totalDebet = 0;
         $totalKredit = 0;
         $totalSaldo = 0;
+        $dataRow = $header_start_row + 1;
         if (is_array($pengeluaran) || is_iterable($pengeluaran)) {
  foreach ($pengeluaran as $response_index => $response_detail) {
 
@@ -143,12 +162,23 @@ class LaporanKasGantungController extends MyController
                 $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
             }
 
-            $sheet->setCellValue("A$detail_start_row", $response_detail['tanggal']);
+            $dateValue = ($response_detail['tanggal'] != null) ? Date::PHPToExcel(date('Y-m-d',strtotime($response_detail['tanggal']))) : ''; 
+            $sheet->setCellValue("A$detail_start_row", $dateValue);
+            $sheet->getStyle("A$detail_start_row") 
+            ->getNumberFormat() 
+            ->setFormatCode('dd-mm-yyyy');          
             $sheet->setCellValue("B$detail_start_row", $response_detail['nobukti']);
             $sheet->setCellValue("C$detail_start_row", $response_detail['keterangan']);
             $sheet->setCellValue("D$detail_start_row", $response_detail['debet']);
             $sheet->setCellValue("E$detail_start_row", $response_detail['kredit']);
-            $sheet->setCellValue("F$detail_start_row", $response_detail['Saldo']);
+
+            if($detail_start_row == 6){
+                $sheet->setCellValue('F' . $detail_start_row, $response_detail['Saldo']);
+            }else{
+                if ($dataRow > $header_start_row + 1) {
+                    $sheet->setCellValue('F' . $dataRow, '=(F' . $previousRow . '+D' . $dataRow . ')-E' . $dataRow);
+                }
+            }
 
             $sheet->getStyle("A$detail_start_row:F$detail_start_row")->applyFromArray($styleArray);
              $sheet->getStyle("D$detail_start_row:F$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
@@ -164,23 +194,39 @@ class LaporanKasGantungController extends MyController
        
 
         //ukuran kolom
-        $sheet->getColumnDimension('A')->setWidth(15);
-        $sheet->getColumnDimension('B')->setWidth(20);
-        $sheet->getColumnDimension('C')->setWidth(150);
-        $sheet->getColumnDimension('D')->setWidth(18);
-        $sheet->getColumnDimension('E')->setWidth(18);
-        $sheet->getColumnDimension('F')->setWidth(18);
+        $sheet->getColumnDimension('A')->setAutoSize(true);
+        $sheet->getColumnDimension('B')->setAutoSize(true);
+        $sheet->getColumnDimension('C')->setWidth(72);
+        $sheet->getColumnDimension('D')->setAutoSize(true);
+        $sheet->getColumnDimension('E')->setAutoSize(true);
+        $sheet->getColumnDimension('F')->setAutoSize(true);
 
 // menambahkan sel Total pada baris terakhir + 1
-$sheet->setCellValue("A" . ($detail_start_row + 1), 'Total');
-$sheet->setCellValue("D" . ($detail_start_row + 1), "=SUM(D5:D" . $detail_start_row . ")");
-$sheet->setCellValue("E" . ($detail_start_row + 1), "=SUM(E5:E" . $detail_start_row . ")");
+// $sheet->setCellValue("A" . ($detail_start_row ), 'Total');
+$total_start_row = $detail_start_row;
+$sheet->mergeCells('A' . $total_start_row . ':C' . $total_start_row);
+$sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':C' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
+
+$totalDebet = "=SUM(D6:D" . ($detail_start_row-1) . ")";
+$sheet->setCellValue("D" . ($detail_start_row ), "=SUM(D6:D" . $detail_start_row . ")");
+$sheet->setCellValue("D$total_start_row", $totalDebet)->getStyle("D$total_start_row")->applyFromArray($style_number);
+$sheet->setCellValue("D$total_start_row", $totalDebet)->getStyle("D$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+
+$totalKredit = "=SUM(E6:E" . ($detail_start_row-1) . ")";
+$sheet->setCellValue("E" . ($detail_start_row ), "=SUM(E6:E" . $detail_start_row . ")");
+$sheet->setCellValue("E$total_start_row", $totalKredit)->getStyle("E$total_start_row")->applyFromArray($style_number);
+$sheet->setCellValue("E$total_start_row", $totalKredit)->getStyle("E$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+
+$totalSaldo = "=D".$total_start_row."-E" .$total_start_row;
+$sheet->setCellValue("F$total_start_row", $totalSaldo)->getStyle("F$total_start_row")->applyFromArray($style_number);
+$sheet->setCellValue("F$total_start_row", $totalSaldo)->getStyle("F$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+
 
 
 //FORMAT
 // set format ribuan untuk kolom D dan E
-$sheet->getStyle("D".($detail_start_row+1).":E".($detail_start_row+1))->getNumberFormat()->setFormatCode("#,##0.00");
-$sheet->getStyle("A" . ($detail_start_row + 1) . ":$lastColumn" . ($detail_start_row + 1))->getFont()->setBold(true);
+$sheet->getStyle("D".($detail_start_row).":E".($detail_start_row))->getNumberFormat()->setFormatCode("#,##0.00");
+$sheet->getStyle("A" . ($detail_start_row ) . ":$lastColumn" . ($detail_start_row ))->getFont()->setBold(true);
 
 
 //persetujuan
@@ -197,7 +243,7 @@ $sheet->setCellValue('A' . ($detail_start_row + 6), '( ' . $disetujui . ' )');
 $sheet->mergeCells('C' . ($detail_start_row + 6) . ($detail_start_row + 6));
 $sheet->setCellValue('C' . ($detail_start_row + 6), '( ' . $diperiksa . ' )');
 $sheet->mergeCells('D' . ($detail_start_row + 6) . ':E' . ($detail_start_row + 6));
-$sheet->setCellValue('D' . ($detail_start_row + 6), '(                                          )');
+$sheet->setCellValue('D' . ($detail_start_row + 6), '(                                 )');
 
 
 // style persetujuan
@@ -223,7 +269,7 @@ $border_style = [
         'bottom' => ['borderStyle' => 'thin', 'color' => ['rgb' => '000000']]
     ]
 ];
-$sheet->getStyle("A" . ($detail_start_row + 1) . ":$lastColumn" . ($detail_start_row + 1))->applyFromArray($border_style);
+$sheet->getStyle("A" . ($detail_start_row ) . ":$lastColumn" . ($detail_start_row ))->applyFromArray($border_style);
 
 
       
