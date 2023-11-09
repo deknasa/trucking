@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
@@ -86,11 +87,15 @@ class LaporanPemakaianBanController extends MyController
 
         $sheet->setCellValue('A1', $data[0]['judul'] ?? '');
         $sheet->setCellValue('A2', $data[0]['judulLaporan'] ?? '');
-        $sheet->setCellValue('A3', 'Periode: ' . $request->dari . ' s/d ' . $request->sampai);
-        $sheet->setCellValue('A4', 'Posisi Akhir Ban: ' . $request->parameter);
-        $sheet->setCellValue('A5', 'Jenis Laporan: ' . $request->jenislaporan);
+        $sheet->setCellValue('A3', 'PERIODE : ' . date('d-M-Y', strtotime($detailParams['dari'])) . ' s/d ' . date('d-M-Y', strtotime($detailParams['sampai'])));
+        $sheet->setCellValue('A4', 'POSISI AKHIR BAN : ' . $parameter);
+        $sheet->setCellValue('A5', 'JENIS LAPORAN : ' . $request->jenislaporan);
         $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
+        $sheet->getStyle("A2")->getFont()->setBold(true);
+        $sheet->getStyle("A3")->getFont()->setBold(true);
+        $sheet->getStyle("A4")->getFont()->setBold(true);
+        $sheet->getStyle("A5")->getFont()->setBold(true);
 
         $sheet->mergeCells('A1:F1');
 
@@ -188,10 +193,12 @@ class LaporanPemakaianBanController extends MyController
             foreach ($header_columns as $detail_columns_index => $detail_column) {
                 $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
             }
+            $tanggal = ($response_detail['tanggal'] != null) ? Date::PHPToExcel(date('Y-m-d',strtotime($response_detail['tanggal']))) : ''; 
+           
 
             $sheet->setCellValue("A$detail_start_row", $response_detail['nobanA']);
             $sheet->setCellValue("B$detail_start_row", $response_detail['nobukti']);
-            $sheet->setCellValue("C$detail_start_row", date('d-m-Y', strtotime($response_detail['tanggal'])));
+            $sheet->setCellValue("C$detail_start_row", $tanggal);
             $sheet->setCellValue("D$detail_start_row", $response_detail['gudang']);
             $sheet->setCellValue("E$detail_start_row", $response_detail['kondisiakhir']);
             $sheet->setCellValue("F$detail_start_row", $response_detail['nopg']);
@@ -236,7 +243,7 @@ class LaporanPemakaianBanController extends MyController
 
 
         $writer = new Xlsx($spreadsheet);
-        $filename = 'LAPORAN PEMAKAIAN BAN' . date('dmYHis');
+        $filename = 'LAPORAN PEMAKAIAN BAN ' . date('dmYHis');
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
         header('Cache-Control: max-age=0');

@@ -65,11 +65,14 @@ class LaporanRekapSumbanganController extends MyController
 
         $sheet->setCellValue('A1', $data[0]['judul'] ?? '');
         $sheet->setCellValue('A2',  $data[0]['judulLaporan'] ?? '');
-        $sheet->setCellValue('A3', 'Periode: ' . $request->dari." S/D ".$request->sampai);
+        $sheet->setCellValue('A3', 'PERIODE : ' .date('d-M-Y', strtotime($detailParams['dari'])) . ' s/d ' . date('d-M-Y', strtotime($detailParams['sampai'])));
         $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:D1');
         $sheet->mergeCells('A3:B3');
+        $sheet->getStyle("A2")->getFont()->setBold(true);        
+        $sheet->getStyle("A3")->getFont()->setBold(true);
+       
 
 
         $detail_table_header_row = 6;
@@ -140,7 +143,7 @@ class LaporanRekapSumbanganController extends MyController
            
 
             $sheet->getStyle("A$detail_start_row:D$detail_start_row")->applyFromArray($styleArray);
-             $sheet->getStyle("C$detail_start_row:C$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+             $sheet->getStyle("C$detail_start_row:C$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
             //  $sheet->getStyle("A$detail_start_row:A$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
            
 
@@ -157,7 +160,7 @@ class LaporanRekapSumbanganController extends MyController
 
        $total = "=SUM(C6:C" . ($detail_start_row-1) . ")";
        $sheet->setCellValue("C$total_start_row", $total)->getStyle("C$total_start_row")->applyFromArray($style_number);
-       $sheet->setCellValue("C$total_start_row", $total)->getStyle("C$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+       $sheet->setCellValue("C$total_start_row", $total)->getStyle("C$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
        $sheet->getStyle("D$detail_start_row:D$detail_start_row")->applyFromArray($styleArray);
 
@@ -180,7 +183,7 @@ class LaporanRekapSumbanganController extends MyController
 
 
         $writer = new Xlsx($spreadsheet);
-        $filename = 'LAPORAN REKAP SUMBANGAN' . date('dmYHis');
+        $filename = 'LAPORAN REKAP SUMBANGAN ' . date('dmYHis');
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
         header('Cache-Control: max-age=0');

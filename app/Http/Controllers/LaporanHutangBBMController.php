@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
@@ -62,12 +63,17 @@ class LaporanHutangBBMController extends MyController
         $sheet = $spreadsheet->getActiveSheet();
 
         $sheet = $spreadsheet->getActiveSheet();
-        
+        $englishMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        $indonesianMonths = ['JANUARI', 'FEBRUARI', 'MARET', 'APRIL', 'MEI', 'JUNI', 'JULI', 'AGUSTUS', 'SEPTEMBER', 'OKTOBER', 'NOVEMBER', 'DESEMBER'];
+        $tanggal = str_replace($englishMonths, $indonesianMonths, date('d - M - Y', strtotime($request->sampai)));
+
         $sheet->setCellValue('A1', $data[0]['judul'] ?? '');
         $sheet->setCellValue('A2', $data[0]['judulLaporan'] ?? '');
-        $sheet->setCellValue('A3', 'Periode: ' . $request->periode);
+        $sheet->setCellValue('A3', 'PERIODE : ' . $tanggal);
         $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
+        $sheet->getStyle("A2")->getFont()->setBold(true);        
+        $sheet->getStyle("A3")->getFont()->setBold(true);
 
         $sheet->mergeCells('A1:F1');
 
@@ -132,15 +138,15 @@ class LaporanHutangBBMController extends MyController
             foreach ($header_columns as $detail_columns_index => $detail_column) {
                 $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
             }
-
-            $sheet->setCellValue("A$detail_start_row", $response_detail['tanggal']);
+            $dateValue = ($response_detail['tanggal'] != null) ? Date::PHPToExcel(date('Y-m-d',strtotime($response_detail['tanggal']))) : ''; 
+            $sheet->setCellValue("A$detail_start_row", $dateValue);
             $sheet->setCellValue("B$detail_start_row", $response_detail['keterangan']);
             $sheet->setCellValue("C$detail_start_row", $response_detail['nominal']);
             $sheet->setCellValue("D$detail_start_row", $response_detail['Saldo']);
 
 
             $sheet->getStyle("A$detail_start_row:D$detail_start_row")->applyFromArray($styleArray);
-            $sheet->getStyle("C$detail_start_row:D$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+            $sheet->getStyle("C$detail_start_row:D$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
             $sheet->getStyle("A$detail_start_row:A$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
 
 
@@ -157,7 +163,7 @@ class LaporanHutangBBMController extends MyController
 
         $totalFull = "=SUM(C6:C" . ($detail_start_row - 1) . ")";
         $sheet->setCellValue("C$total_start_row", $totalFull)->getStyle("C$total_start_row")->applyFromArray($style_number)->getFont()->setBold(true);;
-        $sheet->setCellValue("C$total_start_row", $totalFull)->getStyle("C$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+        $sheet->setCellValue("C$total_start_row", $totalFull)->getStyle("C$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
         $sheet->getStyle("D$detail_start_row:D$detail_start_row")->applyFromArray($styleArray);
 
@@ -170,15 +176,15 @@ class LaporanHutangBBMController extends MyController
         $sheet->setCellValue("B" . ($ttd_start_row + 3), '( ' . $diperiksa . ' )');
         $sheet->setCellValue("C" . ($ttd_start_row + 3), '(                )');
 
-        $sheet->getColumnDimension('A')->setAutoSize(true);
-        $sheet->getColumnDimension('B')->setWidth(150);
+        $sheet->getColumnDimension('A')->setWidth(28);
+        $sheet->getColumnDimension('B')->setWidth(100);
         $sheet->getColumnDimension('C')->setAutoSize(true);
         $sheet->getColumnDimension('D')->setAutoSize(true);
 
 
 
         $writer = new Xlsx($spreadsheet);
-        $filename = 'LAPORAN HUTANG BBM' . date('dmYHis');
+        $filename = 'LAPORAN HUTANG BBM ' . date('dmYHis');
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
         header('Cache-Control: max-age=0');

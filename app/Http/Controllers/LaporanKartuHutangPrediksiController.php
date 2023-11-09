@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
@@ -68,14 +69,17 @@ class LaporanKartuHutangPrediksiController extends MyController
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-        
+
         $sheet->setCellValue('A1', $data[0]['judul']);
         $sheet->setCellValue('A2', $data[0]['judulLaporan']);
-        $sheet->setCellValue('A3', 'Periode: ' . $request->sampai);
+        $sheet->setCellValue('A3', 'PERIODE : ' .date('d-M-Y', strtotime($detailParams['dari'])) . ' s/d ' . date('d-M-Y', strtotime($detailParams['sampai'])));
         // $sheet = $spreadsheet->getActiveSheet();
         // $sheet->setCellValue('b1', 'LAPORAN PINJAMAN SUPIR');
         $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
+
+        $sheet->getStyle("A2")->getFont()->setBold(true);        
+        $sheet->getStyle("A3")->getFont()->setBold(true);
 
         // $sheet->setCellValue('A4', 'PERIODE');
         // $sheet->getStyle("A4")->getFont()->setSize(12)->setBold(true);
@@ -161,9 +165,10 @@ class LaporanKartuHutangPrediksiController extends MyController
             foreach ($header_columns as $detail_columns_index => $detail_column) {
                 $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
             }
-
+            $dateValue = ($response_detail['tanggal'] != null) ? Date::PHPToExcel(date('Y-m-d',strtotime($response_detail['tanggal']))) : ''; 
+            
             $sheet->setCellValue("A$detail_start_row", $response_detail['noebs']);
-            $sheet->setCellValue("B$detail_start_row", date('d-m-Y', strtotime($response_detail['tanggal'])));
+            $sheet->setCellValue("B$detail_start_row", $dateValue);
             $sheet->setCellValue("C$detail_start_row", $response_detail['nobukti']);
             $sheet->setCellValue("D$detail_start_row", $response_detail['keterangan']);
             $sheet->setCellValue("E$detail_start_row", $response_detail['nominal']);
@@ -179,11 +184,9 @@ class LaporanKartuHutangPrediksiController extends MyController
             }
 
             $sheet->getStyle("A$detail_start_row:G$detail_start_row")->applyFromArray($styleArray);
-             $sheet->getStyle("E$detail_start_row:G$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+             $sheet->getStyle("E$detail_start_row:G$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
              $sheet->getStyle("B$detail_start_row:B$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
            
-             $sheet->getStyle("D$detail_start_row")->getAlignment()->setWrapText(true);
-             $sheet->getColumnDimension('D')->setWidth(100);
              $previousRow = $dataRow; // Update the previous row number
 
              $dataRow++;
@@ -198,16 +201,16 @@ class LaporanKartuHutangPrediksiController extends MyController
        $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':D' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
 
        $totalDebet = "=SUM(E6:E" . ($detail_start_row-1) . ")";
-       $sheet->setCellValue("E$total_start_row", $totalDebet)->getStyle("E$total_start_row")->applyFromArray($style_number);
-       $sheet->setCellValue("E$total_start_row", $totalDebet)->getStyle("E$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+       $sheet->setCellValue("E$total_start_row", $totalDebet)->getStyle("E$total_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+       $sheet->setCellValue("E$total_start_row", $totalDebet)->getStyle("E$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
        $totalKredit = "=SUM(F6:F" . ($detail_start_row-1) . ")";
-       $sheet->setCellValue("F$total_start_row", $totalKredit)->getStyle("F$total_start_row")->applyFromArray($style_number);
-       $sheet->setCellValue("F$total_start_row", $totalKredit)->getStyle("F$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+       $sheet->setCellValue("F$total_start_row", $totalKredit)->getStyle("F$total_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+       $sheet->setCellValue("F$total_start_row", $totalKredit)->getStyle("F$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
        $totalSaldo = "=E".$total_start_row."-F" .$total_start_row;
-       $sheet->setCellValue("G$total_start_row", $totalSaldo)->getStyle("G$total_start_row")->applyFromArray($style_number);
-       $sheet->setCellValue("G$total_start_row", $totalSaldo)->getStyle("G$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+       $sheet->setCellValue("G$total_start_row", $totalSaldo)->getStyle("G$total_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+       $sheet->setCellValue("G$total_start_row", $totalSaldo)->getStyle("G$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
         $ttd_start_row = $detail_start_row + 2;
         $sheet->setCellValue("A$ttd_start_row", 'Disetujui Oleh,');
@@ -218,9 +221,10 @@ class LaporanKartuHutangPrediksiController extends MyController
         $sheet->setCellValue("C" . ($ttd_start_row + 3), '( ' . $diperiksa . ' )');
         $sheet->setCellValue("F" . ($ttd_start_row + 3), '(                )');
 
-        $sheet->getColumnDimension('A')->setAutoSize(true);
+        $sheet->getColumnDimension('A')->setWidth(21);
         $sheet->getColumnDimension('B')->setAutoSize(true);
         $sheet->getColumnDimension('C')->setAutoSize(true);
+        $sheet->getColumnDimension('D')->setWidth(74);
         $sheet->getColumnDimension('E')->setAutoSize(true);
         $sheet->getColumnDimension('F')->setAutoSize(true);
         $sheet->getColumnDimension('G')->setAutoSize(true);
@@ -228,7 +232,7 @@ class LaporanKartuHutangPrediksiController extends MyController
 
 
         $writer = new Xlsx($spreadsheet);
-        $filename = 'LAPORAN KARTU HUTANG PREDIKI (EBS)' . date('dmYHis');
+        $filename = 'LAPORAN KARTU HUTANG PREDIKSI (EBS) ' . date('dmYHis');
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
         header('Cache-Control: max-age=0');

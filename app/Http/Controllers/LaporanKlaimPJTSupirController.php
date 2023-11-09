@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
@@ -73,11 +74,14 @@ class LaporanKlaimPJTSupirController extends MyController
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setCellValue('A1', $data[0]['judul'] ?? '');
         $sheet->setCellValue('A2', $data[0]['judulLaporan'] ?? '');
-        $sheet->setCellValue('A3', 'Periode: '.$request->dari.' s/d ' . $request->sampai);
-        $sheet->setCellValue('A4', 'Kelompok: '.$request->kelompok);
+        $sheet->setCellValue('A3', 'PERIODE : ' .date('d-M-Y', strtotime($detailParams['dari'])) . ' s/d ' . date('d-M-Y', strtotime($detailParams['sampai'])));
+        $sheet->setCellValue('A4', 'KELOMPOK : '.$request->kelompok);
         $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:F1');
+        $sheet->getStyle("A2")->getFont()->setBold(true);        
+        $sheet->getStyle("A3")->getFont()->setBold(true);
+        $sheet->getStyle("A4")->getFont()->setBold(true);
 
         $detail_table_header_row = 6;
         $detail_start_row = $detail_table_header_row + 1;
@@ -145,20 +149,19 @@ class LaporanKlaimPJTSupirController extends MyController
             foreach ($header_columns as $detail_columns_index => $detail_column) {
                 $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
             }
-
+            $dateValue = ($response_detail['tglbukti'] != null) ? Date::PHPToExcel(date('Y-m-d',strtotime($response_detail['tglbukti']))) : ''; 
+           
             $sheet->setCellValue("A$detail_start_row", $response_detail['nobukti']);
-            $sheet->setCellValue("B$detail_start_row", date('d-m-Y', strtotime($response_detail['tglbukti'])));
+            $sheet->setCellValue("B$detail_start_row", $dateValue);
             $sheet->setCellValue("C$detail_start_row", $response_detail['keterangan']);
             $sheet->setCellValue("D$detail_start_row", $response_detail['namasupir']);
             $sheet->setCellValue("E$detail_start_row", $response_detail['namastok']);
             $sheet->setCellValue("F$detail_start_row", $response_detail['nominal']);
 
             $sheet->getStyle("A$detail_start_row:F$detail_start_row")->applyFromArray($styleArray);
-            $sheet->getStyle("F$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+            $sheet->getStyle("F$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
             $sheet->getStyle("B$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
 
-            $sheet->getStyle("C$detail_start_row")->getAlignment()->setWrapText(true);
-            $sheet->getColumnDimension('C')->setWidth(100);
            
             $detail_start_row++;
         }
@@ -172,7 +175,7 @@ class LaporanKlaimPJTSupirController extends MyController
 
         $totalDebet = "=SUM(F6:F" . ($detail_start_row - 1) . ")";
         $sheet->setCellValue("F$total_start_row", $totalDebet)->getStyle("F$total_start_row")->applyFromArray($style_number);
-        $sheet->setCellValue("F$total_start_row", $totalDebet)->getStyle("F$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+        $sheet->setCellValue("F$total_start_row", $totalDebet)->getStyle("F$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
         $ttd_start_row = $detail_start_row + 2;
         $sheet->setCellValue("A$ttd_start_row", 'Disetujui Oleh,');
@@ -183,16 +186,17 @@ class LaporanKlaimPJTSupirController extends MyController
         $sheet->setCellValue("C" . ($ttd_start_row + 3), '( ' . $diperiksa . ' )');
         $sheet->setCellValue("F" . ($ttd_start_row + 3), '(                )');
 
-        $sheet->getColumnDimension('A')->setAutoSize(true);
+        $sheet->getColumnDimension('A')->setWidth(20);
         $sheet->getColumnDimension('B')->setAutoSize(true);
-        $sheet->getColumnDimension('D')->setAutoSize(true);
-        $sheet->getColumnDimension('E')->setAutoSize(true);
+        $sheet->getColumnDimension('C')->setWidth(81);
+        $sheet->getColumnDimension('D')->setWidth(16);
+        $sheet->getColumnDimension('E')->setWidth(32);
         $sheet->getColumnDimension('F')->setAutoSize(true);
 
 
 
         $writer = new Xlsx($spreadsheet);
-        $filename = 'LAPORAN KLAIM PJT SUPIR' . date('dmYHis');
+        $filename = 'LAPORAN KLAIM PJT SUPIR ' . date('dmYHis');
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
         header('Cache-Control: max-age=0');

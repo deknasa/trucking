@@ -48,9 +48,20 @@ class LaporanRitasiTradoController extends MyController
         // dd($pengeluaran);
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setCellValue('A1', 'Laporan Ritasi Trado : ' . $monthName . ' - ' . $yearNum);
+        // $sheet->setCellValue('A1', 'Laporan Ritasi Trado : ' . $monthName . ' - ' . $yearNum);
+
+        $sheet->setCellValue('A1', $responses['judul'] ?? '');
+        $sheet->setCellValue('A2','LAPORAN RITASI TRADO');
+        $sheet->setCellValue('A3', 'PERIODE : ' . $monthName . ' - ' . $yearNum);
+        $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
+        $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
+        $sheet->getStyle("A2")->getFont()->setBold(true);        
+        $sheet->getStyle("A3")->getFont()->setBold(true);
+
+        $sheet->mergeCells('A1:AF1');
+
         $totalTanggal = count($pengeluaran[0]) - 1;
-        $rowIndex = 4;
+        $rowIndex = 6;
         $columnIndex = 1;
 
         foreach ($pengeluaran as $data) {
@@ -79,16 +90,16 @@ class LaporanRitasiTradoController extends MyController
 
         // SET HEADER
         $columnIndexHeader = 2;
-        $sheet->setCellValue('A3', 'No Pol');
+        $sheet->setCellValue('A5', 'No Pol');
         for ($i = 1; $i <= $totalTanggal; $i++) {
-            $cell = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($columnIndexHeader) . '3';
+            $cell = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($columnIndexHeader) . '5';
             $sheet->setCellValue($cell, $i);
             $columnIndexHeader++;
         }
 
-        $cell = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($columnIndexHeader) . '3';
+        $cell = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($columnIndexHeader) . '5';
         $sheet->setCellValue($cell, 'Total');
-        $cellRange = "A3:$cell";
+        $cellRange = "A5:$cell";
 
         $cell = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($columnIndexHeader) . $rowIndex;
         $cellFooter = "A" . $rowIndex . ":$cell";
@@ -145,7 +156,7 @@ class LaporanRitasiTradoController extends MyController
 
             if ($columnLabel != 'A') {
 
-                $cellBody = $columnLabel . "4:" . $columnLabel . $rowIndex;
+                $cellBody = $columnLabel . "6:" . $columnLabel . $rowIndex;
                 $sheet->getStyle($cellBody)->applyFromArray($styleBody);
             }
         }
@@ -156,13 +167,13 @@ class LaporanRitasiTradoController extends MyController
             $columnLabel = $this->alphabetLoop($columnIndex);
             if ($columnLabel != 'A') {
 
-                $cellBody = $columnLabel . "4:" . $columnLabel . $rowIndex;
-                $sheet->setCellValue($columnLabel . ($rowIndex), "=SUM(" . $columnLabel . "4:" . $columnLabel . $rowIndex . ")");
+                $cellBody = $columnLabel . "6:" . $columnLabel . $rowIndex;
+                $sheet->setCellValue($columnLabel . ($rowIndex), "=SUM(" . $columnLabel . "6:" . $columnLabel . $rowIndex . ")");
             }
         }
 
         $writer = new Xlsx($spreadsheet);
-        $filename = 'LAPORANRITASITRADO' . date('dmYHis');
+        $filename = 'LAPORAN RITASI TRADO ' . date('dmYHis');
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
         header('Cache-Control: max-age=0');

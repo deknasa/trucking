@@ -69,9 +69,10 @@ class LaporanTripTradoController extends MyController
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:F1');
 
-        $sheet->setCellValue('A3', 'PERIODE : '.$request->dari. ' S/D '.$request->sampai);
+        $sheet->setCellValue('A3', 'PERIODE : '.date('d-M-Y', strtotime($detailParams['dari'])) . ' s/d ' . date('d-M-Y', strtotime($detailParams['sampai'])));
+        $sheet->getStyle("A2")->getFont()->setBold(true);        
+        $sheet->getStyle("A3")->getFont()->setBold(true);
         $sheet->mergeCells('A3:B3');
-
 
 
         $detail_table_header_row = 6;
@@ -155,8 +156,8 @@ class LaporanTripTradoController extends MyController
            
 
             $sheet->getStyle("A$detail_start_row:F$detail_start_row")->applyFromArray($styleArray);
-             $sheet->getStyle("B$detail_start_row:C$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
-             $sheet->getStyle("E$detail_start_row:F$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+             $sheet->getStyle("B$detail_start_row:C$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+             $sheet->getStyle("E$detail_start_row:F$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
             //  $sheet->getStyle("A$detail_start_row:A$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
            
 
@@ -176,19 +177,19 @@ class LaporanTripTradoController extends MyController
 
        $totalFull = "=SUM(B6:B" . ($detail_start_row-1) . ")";
        $sheet->setCellValue("B$total_start_row", $totalFull)->getStyle("B$total_start_row")->applyFromArray($style_number);
-       $sheet->setCellValue("B$total_start_row", $totalFull)->getStyle("B$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+       $sheet->setCellValue("B$total_start_row", $totalFull)->getStyle("B$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
        $totalEmpty= "=SUM(C6:C" . ($detail_start_row-1) . ")";
        $sheet->setCellValue("C$total_start_row", $totalEmpty)->getStyle("C$total_start_row")->applyFromArray($style_number);
-       $sheet->setCellValue("C$total_start_row", $totalEmpty)->getStyle("C$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+       $sheet->setCellValue("C$total_start_row", $totalEmpty)->getStyle("C$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
        $totalFullPort= "=SUM(E6:E" . ($detail_start_row-1) . ")";
        $sheet->setCellValue("E$total_start_row", $totalFullPort)->getStyle("E$total_start_row")->applyFromArray($style_number);
-       $sheet->setCellValue("E$total_start_row", $totalFullPort)->getStyle("E$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+       $sheet->setCellValue("E$total_start_row", $totalFullPort)->getStyle("E$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
        $totalEmptyPort= "=SUM(F6:F" . ($detail_start_row-1) . ")";
        $sheet->setCellValue("F$total_start_row", $totalEmptyPort)->getStyle("F$total_start_row")->applyFromArray($style_number);
-       $sheet->setCellValue("F$total_start_row", $totalEmptyPort)->getStyle("F$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+       $sheet->setCellValue("F$total_start_row", $totalEmptyPort)->getStyle("F$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
        $sheet->getStyle("D$detail_start_row:D$detail_start_row")->applyFromArray($styleArray);
 
@@ -211,7 +212,7 @@ class LaporanTripTradoController extends MyController
 
 
         $writer = new Xlsx($spreadsheet);
-        $filename = 'LAPORAN TRIP TRADO' . date('dmYHis');
+        $filename = 'LAPORAN TRIP TRADO ' . date('dmYHis');
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
         header('Cache-Control: max-age=0');

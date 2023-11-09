@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
@@ -74,16 +75,17 @@ class LaporanPemotonganPinjamanPerEBSController extends MyController
       
         $sheet->setCellValue('A1', $pengeluaran[0]['judul'] ?? '');
         $sheet->setCellValue('A2', $pengeluaran[0]['judulLaporan'] ?? '');
+        $sheet->setCellValue('A3', 'PERIODE : ' .date('d-M-Y', strtotime($detailParams['dari'])) . ' s/d ' . date('d-M-Y', strtotime($detailParams['sampai'])));
         
-        // $sheet->getStyle("A1")->getFont()->setSize(20)->setBold(true);
+        $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
     
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
-        $sheet->getStyle('A2')->getAlignment()->setHorizontal('left');
         $sheet->mergeCells('A1:T1');
-        $sheet->mergeCells('A2:T2');
+        $sheet->getStyle("A2")->getFont()->setBold(true);        
+        $sheet->getStyle("A3")->getFont()->setBold(true);
        
-        $header_start_row = 4;
-        $detail_start_row = 5;
+        $header_start_row = 5;
+        $detail_start_row = 6;
 
         $styleArray = array(
             'borders' => array(
@@ -106,83 +108,83 @@ class LaporanPemotonganPinjamanPerEBSController extends MyController
         
         $header_columns = [
             [
-                'label' => 'NO BUKTI',
+                'label' => 'No Bukti',
                 'index' => 'nobukti',
             ],
             [
-                'label' => 'TGL BUKTI',
+                'label' => 'Tgl Bukti',
                 'index' => 'tglbukti',
             ],
             [
-                'label' => 'GAJI SUPIR NO BUKTI',
+                'label' => 'Gaji Supir No Bukti',
                 'index' => 'gajisupir_nobukti',
             ],
             [
-                'label' => 'NAMA SUPIR',
+                'label' => 'Nama Supir',
                 'index' => 'namasupir',
             ],
             [
-                'label' => 'TOTAL',
+                'label' => 'Total',
                 'index' => 'total',
             ],
             [
-                'label' => 'UANG JALAN',
+                'label' => 'Uang Jalan',
                 'index' => 'uangjalan',
             ],
             [
-                'label' => 'BBM',
+                'label' => 'Bbm',
                 'index' => 'bbm',
             ],
             [
-                'label' => 'POTONGAN PINJAMAN',
+                'label' => 'Potongan Pinjaman',
                 'index' => 'potonganpinjaman',
             ],
             [
-                'label' => 'DEPOSITO',
+                'label' => 'Deposito',
                 'index' => 'deposito',
             ],
             [
-                'label' => 'POTONGAN PINJAMAN SEMUA',
+                'label' => 'Potongan Pinjaman Semua',
                 'index' => 'potonganpinjamansemua',
             ],
             [
-                'label' => 'NO POLISI',
+                'label' => 'No Polisi',
                 'index' => 'nopolisi',
             ],
             [
-                'label' => 'TGL DARI',
+                'label' => 'Tgl Dari',
                 'index' => 'tgldari',
             ],
             [
-                'label' => 'TGL SAMPAI',
+                'label' => 'Tgl Sampai',
                 'index' => 'tglsampai',
             ],
             [
-                'label' => 'KOMISI SUPIR',
+                'label' => 'Komisi Supir',
                 'index' => 'komisisupir',
             ],
             [
-                'label' => 'TOL SUPIR',
+                'label' => 'Tol Supir',
                 'index' => 'tolsupir',
             ],
             [
-                'label' => 'VOUCHER',
+                'label' => 'Voucher',
                 'index' => 'voucher',
             ],
             [
-                'label' => 'TGL DARI',
+                'label' => 'Tgl Dari',
                 'index' => 'tanggaldari',
             ],
             [
-                'label' => 'TGL SAMPAI',
+                'label' => 'Tgl Sampai',
                 'index' => 'tanggalsampai',
             ],
             [
-                'label' => 'KETERANGAN PINJAMAN SUPIR',
+                'label' => 'Keterangan Pinjaman Supir',
                 'index' => 'keteranganpinjamansupir',
             ],
             [
-                'label' => 'KETERANGAN PINJAMAN SUPIR SEMUA',
+                'label' => 'Keterangan Pinjaman Supir Semua',
                 'index' => 'keteranganpinjamansupirsemua',
             ],
 
@@ -196,7 +198,7 @@ class LaporanPemotonganPinjamanPerEBSController extends MyController
         }
 
         $lastColumn = $alphabets[$data_columns_index];
-        $sheet->getStyle("A$header_start_row:$lastColumn$header_start_row")->getFont()->setBold(true);
+        $sheet->getStyle("A$header_start_row:$lastColumn$header_start_row")->applyFromArray($styleArray)->getFont()->setBold(true);
         $totalDebet = 0;
         $totalKredit = 0;
         $totalSaldo = 0;
@@ -206,9 +208,14 @@ class LaporanPemotonganPinjamanPerEBSController extends MyController
             foreach ($header_columns as $detail_columns_index => $detail_column) {
                 $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
             }
-
+            $dateValue = ($response_detail['tanggal'] != null) ? Date::PHPToExcel(date('Y-m-d',strtotime($response_detail['tanggal']))) : ''; 
+            $tgldari = ($response_detail['tgldari'] != null) ? Date::PHPToExcel(date('Y-m-d',strtotime($response_detail['tgldari']))) : ''; 
+            $tglsampai = ($response_detail['tglsampai'] != null) ? Date::PHPToExcel(date('Y-m-d',strtotime($response_detail['tglsampai']))) : ''; 
+            $tanggaldari = ($response_detail['tanggaldari'] != null) ? Date::PHPToExcel(date('Y-m-d',strtotime($response_detail['tanggaldari']))) : ''; 
+            $tanggalsampai = ($response_detail['tanggalsampai'] != null) ? Date::PHPToExcel(date('Y-m-d',strtotime($response_detail['tanggalsampai']))) : ''; 
+            
             $sheet->setCellValue("A$detail_start_row", $response_detail['nobukti']);
-            $sheet->setCellValue("B$detail_start_row", date('d-m-Y', strtotime($response_detail['tglbukti'])));
+            $sheet->setCellValue("B$detail_start_row", $dateValue);
             $sheet->setCellValue("D$detail_start_row", $response_detail['gajisupir_nobukti']);
             $sheet->setCellValue("D$detail_start_row", $response_detail['namasupir']);
             $sheet->setCellValue("E$detail_start_row", $response_detail['total']);
@@ -218,21 +225,22 @@ class LaporanPemotonganPinjamanPerEBSController extends MyController
             $sheet->setCellValue("I$detail_start_row", $response_detail['deposito']);
             $sheet->setCellValue("J$detail_start_row", $response_detail['potonganpinjamansemua']);
             $sheet->setCellValue("K$detail_start_row", $response_detail['nopolisi']);
-            $sheet->setCellValue("L$detail_start_row", $response_detail['tgldari']);
-            $sheet->setCellValue("M$detail_start_row", $response_detail['tglsampai']);
+            $sheet->setCellValue("L$detail_start_row", $tgldari);
+            $sheet->setCellValue("M$detail_start_row", $tglsampai);
             $sheet->setCellValue("N$detail_start_row", $response_detail['komisisupir']);
             $sheet->setCellValue("O$detail_start_row", $response_detail['tolsupir']);
             $sheet->setCellValue("P$detail_start_row", $response_detail['voucher']);
-            $sheet->setCellValue("Q$detail_start_row", $response_detail['tanggaldari']);
-            $sheet->setCellValue("R$detail_start_row", $response_detail['tanggalsampai']);
+            $sheet->setCellValue("Q$detail_start_row", $tanggaldari);
+            $sheet->setCellValue("R$detail_start_row", $tanggalsampai);
             $sheet->setCellValue("S$detail_start_row", $response_detail['keteranganpinjamansupir']);
             $sheet->setCellValue("T$detail_start_row", $response_detail['keteranganpinjamansupirsemua']);
 
             
             $sheet->getStyle("A$detail_start_row:T$detail_start_row")->applyFromArray($styleArray);
-            $sheet->getStyle("C$detail_start_row:T$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
-            // $sheet->getStyle("B$detail_start_row:B$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
-            // $sheet->getStyle("D$detail_start_row:D$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
+            $sheet->getStyle("C$detail_start_row:T$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->getStyle("B$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
+            $sheet->getStyle("L$detail_start_row:M$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
+            $sheet->getStyle("Q$detail_start_row:R$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
             
 
         //    $totalKredit += $response_detail['kredit'];
@@ -262,8 +270,8 @@ class LaporanPemotonganPinjamanPerEBSController extends MyController
         $sheet->getColumnDimension('P')->setWidth(20);
         $sheet->getColumnDimension('Q')->setWidth(20);
         $sheet->getColumnDimension('R')->setWidth(20);
-        $sheet->getColumnDimension('S')->setWidth(150);
-        $sheet->getColumnDimension('T')->setWidth(150);
+        $sheet->getColumnDimension('S')->setWidth(63);
+        $sheet->getColumnDimension('T')->setWidth(63);
 
 // menambahkan sel Total pada baris terakhir + 1
 // $sheet->setCellValue("A" . ($detail_start_row + 1), 'Total');
@@ -273,7 +281,7 @@ class LaporanPemotonganPinjamanPerEBSController extends MyController
 
 //FORMAT
 // set format ribuan untuk kolom D dan E
-$sheet->getStyle("D".($detail_start_row+1).":E".($detail_start_row+1))->getNumberFormat()->setFormatCode("#,##0.00");
+$sheet->getStyle("D".($detail_start_row+1).":E".($detail_start_row+1))->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 $sheet->getStyle("A" . ($detail_start_row + 1) . ":$lastColumn" . ($detail_start_row + 1))->getFont()->setBold(true);
 
 
@@ -324,7 +332,7 @@ $sheet->getStyle("A" . ($detail_start_row + 1) . ":$lastColumn" . ($detail_start
 
 
         $writer = new Xlsx($spreadsheet);
-        $filename = 'EXPORTPEMOTONGANPINJAMANPEREBS' . date('dmYHis');
+        $filename = 'LAPORAN PEMOTONGAN PINJAMAN PER-EBS ' . date('dmYHis');
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
         header('Cache-Control: max-age=0');

@@ -1450,6 +1450,7 @@ Route::middleware(['auth', 'authorized'])->group(function () {
     Route::get('laporankartupiutangperagen/index', [LaporanKartuPiutangPerAgenController::class, 'index']);
     Route::resource('laporankartupiutangperagen', LaporanKartuPiutangPerAgenController::class);
 
+    Route::get('laporanbangudangsementara/export', [LaporanBanGudangSementaraController::class, 'export'])->name('laporanbangudangsementara.export');
     Route::get('laporanbangudangsementara/report', [LaporanBanGudangSementaraController::class, 'report'])->name('laporanbangudangsementara.report');
     Route::get('laporanbangudangsementara/index', [LaporanBanGudangSementaraController::class, 'index']);
     Route::resource('laporanbangudangsementara', LaporanBanGudangSementaraController::class);

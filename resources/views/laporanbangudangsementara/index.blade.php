@@ -17,6 +17,10 @@
                                 <button type="button" id="btnPreview" class="btn btn-info mr-1 ">
                                     <i class="fas fa-print"></i>
                                     Report
+                                </button> 
+                                <button type="button" id="btnExport" class="btn btn-warning mr-1 ">
+                                    <i class="fas fa-file-export"></i>
+                                    Export
                                 </button>
                             </div>
                         </div>
@@ -54,6 +58,9 @@
         if (!`{{ $myAuth->hasPermission('laporanbangudangsementara', 'report') }}`) {
             $('#btnPreview').attr('disabled', 'disabled')
         }
+        if (!`{{ $myAuth->hasPermission('laporanbangudangsementara', 'export') }}`) {
+            $('#btnExport').attr('disabled', 'disabled')
+        }
 
     })
 
@@ -61,6 +68,12 @@
       
 
             window.open(`{{ route('laporanbangudangsementara.report') }}`)
+        
+    })
+    $(document).on('click', `#btnExport`, function(event) {
+      
+
+            window.open(`{{ route('laporanbangudangsementara.export') }}`)
         
     })
 

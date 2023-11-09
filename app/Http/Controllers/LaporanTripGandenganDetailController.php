@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
@@ -74,11 +75,13 @@ class LaporanTripGandenganDetailController extends MyController
 
         $sheet->setCellValue('A1', $data[0]['judul'] ?? '');
         $sheet->setCellValue('A2', $data[0]['judulLaporan'] ?? '');
-        $sheet->setCellValue('A3', 'Periode: ' . $request->sampai);
+        $sheet->setCellValue('A3', 'PERIODE : ' .date('d-M-Y', strtotime($detailParams['dari'])) . ' s/d ' . date('d-M-Y', strtotime($detailParams['sampai'])));
         // $sheet = $spreadsheet->getActiveSheet();
         // $sheet->setCellValue('b1', 'LAPORAN PINJAMAN SUPIR');
         $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
+        $sheet->getStyle("A2")->getFont()->setBold(true);        
+        $sheet->getStyle("A3")->getFont()->setBold(true);
 
         // $sheet->setCellValue('A4', 'PERIODE');
         // $sheet->getStyle("A4")->getFont()->setSize(12)->setBold(true);
@@ -170,9 +173,10 @@ class LaporanTripGandenganDetailController extends MyController
             foreach ($header_columns as $detail_columns_index => $detail_column) {
                 $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
             }
-
+            $dateValue = ($response_detail['tanggal'] != null) ? Date::PHPToExcel(date('Y-m-d',strtotime($response_detail['tanggal']))) : ''; 
+            
             $sheet->setCellValue("A$detail_start_row", $response_detail['gandengan']);
-            $sheet->setCellValue("B$detail_start_row", date('d-m-Y', strtotime($response_detail['tanggal'])));
+            $sheet->setCellValue("B$detail_start_row", $dateValue);
             $sheet->setCellValue("C$detail_start_row", $response_detail['nosp']);
             $sheet->setCellValue("D$detail_start_row", $response_detail['supir']);
             $sheet->setCellValue("E$detail_start_row", $response_detail['nocont']);
@@ -197,20 +201,20 @@ class LaporanTripGandenganDetailController extends MyController
         $sheet->setCellValue("C" . ($ttd_start_row + 3), '( ' . $diperiksa . ' )');
         $sheet->setCellValue("F" . ($ttd_start_row + 3), '(                )');
 
-        $sheet->getColumnDimension('A')->setAutoSize(true);
+        $sheet->getColumnDimension('A')->setWidth(16);
         $sheet->getColumnDimension('B')->setAutoSize(true);
         $sheet->getColumnDimension('C')->setAutoSize(true);
-        $sheet->getColumnDimension('D')->setAutoSize(true);
+        $sheet->getColumnDimension('D')->setWidth(28);
         $sheet->getColumnDimension('E')->setAutoSize(true);
         $sheet->getColumnDimension('F')->setAutoSize(true);
         $sheet->getColumnDimension('G')->setAutoSize(true);
         $sheet->getColumnDimension('H')->setAutoSize(true);
-        $sheet->getColumnDimension('I')->setWidth(150);
+        $sheet->getColumnDimension('I')->setWidth(50);
 
 
 
         $writer = new Xlsx($spreadsheet);
-        $filename = 'LAPORAN TRIP GANDENGAN DETAIL' . date('dmYHis');
+        $filename = 'LAPORAN TRIP GANDENGAN DETAIL ' . date('dmYHis');
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
         header('Cache-Control: max-age=0');
