@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Menu;
-use Illuminate\Contracts\View\View;
-use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Http;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Http\RedirectResponse;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
@@ -74,18 +75,26 @@ class LaporanKartuHutangPerSupplierController extends MyController
         $sheet = $spreadsheet->getActiveSheet();
 
         $sheet->setCellValue('A1', $pengeluaran[0]['judul']);
-        $sheet->setCellValue('A2', $pengeluaran[0]['judulLaporan']);
-
         $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
-
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
-        $sheet->getStyle('A2')->getAlignment()->setHorizontal('left');
-        $sheet->setCellValue('A3', 'Periode: ' . $request->dari);
-        $sheet->setCellValue('A4', 'Agen: ' . $request->supplierdari . ' S/D ' . $request->suppliersampai);
         $sheet->mergeCells('A1:J1');
+
+        $englishMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        $indonesianMonths = ['JANUARI', 'FEBRUARI', 'MARET', 'APRIL', 'MEI', 'JUNI', 'JULI', 'AGUSTUS', 'SEPTEMBER', 'OKTOBER', 'NOVEMBER', 'DESEMBER'];
+        $tanggal = str_replace($englishMonths, $indonesianMonths, date('d - M - Y', strtotime($request->dari)));
+        
+        $sheet->setCellValue('A2', strtoupper($pengeluaran[0]['judulLaporan']));
+        $sheet->getStyle("A2")->getFont()->setBold(true);
         $sheet->mergeCells('A2:J2');
+        
+        $sheet->setCellValue('A3', strtoupper('Periode : ' . $tanggal));
+        $sheet->getStyle("A3")->getFont()->setBold(true);
         $sheet->mergeCells('A3:J3');
+
+        $sheet->setCellValue('A4', strtoupper('Agen : ' . $request->supplierdari . ' S/D ' . $request->suppliersampai));
+        $sheet->getStyle("A4")->getFont()->setBold(true);
         $sheet->mergeCells('A4:J4');
+
 
         $header_start_row = 6;
         $detail_start_row = 7;
@@ -155,7 +164,7 @@ class LaporanKartuHutangPerSupplierController extends MyController
 
 
         foreach ($header_columns as $data_columns_index => $data_column) {
-            $sheet->setCellValue($alphabets[$data_columns_index] . $header_start_row, $data_column['label'] ?? $data_columns_index + 1);
+            $sheet->setCellValue($alphabets[$data_columns_index] . $header_start_row, ucfirst($data_column['label']) ?? $data_columns_index + 1);
         }
 
         $lastColumn = $alphabets[$data_columns_index];
@@ -182,8 +191,18 @@ class LaporanKartuHutangPerSupplierController extends MyController
                 $sheet->setCellValue("A$detail_start_row", $no);
                 $sheet->setCellValue("B$detail_start_row", $response_detail['nobukti']);
                 $sheet->setCellValue("C$detail_start_row", $response_detail['namasupplier']);
-                $sheet->setCellValue("D$detail_start_row", date('d-m-Y', strtotime($response_detail['tglbukti'])));
-                $sheet->setCellValue("E$detail_start_row", date('d-m-Y', strtotime($response_detail['tgljatuhtempo'])));
+                $dateValue = ($response_detail['tglbukti'] != null) ? Date::PHPToExcel(date('Y-m-d',strtotime($response_detail['tglbukti']))) : ''; 
+                $sheet->setCellValue("D$detail_start_row", $dateValue);
+                $sheet->getStyle("D$detail_start_row") 
+                ->getNumberFormat() 
+                ->setFormatCode('dd-mm-yyyy');
+
+                $dateValue = ($response_detail['tgljatuhtempo'] != null) ? Date::PHPToExcel(date('Y-m-d',strtotime($response_detail['tgljatuhtempo']))) : ''; 
+                $sheet->setCellValue("E$detail_start_row", $dateValue);
+                $sheet->getStyle("E$detail_start_row") 
+                ->getNumberFormat() 
+                ->setFormatCode('dd-mm-yyyy');
+
                 $sheet->setCellValue("F$detail_start_row", $response_detail['cicil']);
                 $sheet->setCellValue("G$detail_start_row", $response_detail['nominal']);
                 $sheet->setCellValue("H$detail_start_row", $response_detail['bayar']);
@@ -191,12 +210,11 @@ class LaporanKartuHutangPerSupplierController extends MyController
                 $sheet->setCellValue("J$detail_start_row", $response_detail['keterangan']);
 
                 $sheet->getStyle("A$detail_start_row:J$detail_start_row")->applyFromArray($styleArray);
-                $sheet->getStyle("C$detail_start_row:J$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+                $sheet->getStyle("F$detail_start_row:I$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
                 // $sheet->getStyle("B$detail_start_row:B$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
                 // $sheet->getStyle("D$detail_start_row:D$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
 
                 $sheet->getStyle("J$detail_start_row")->getAlignment()->setWrapText(true);
-                $sheet->getColumnDimension('J')->setWidth(100);
 
                 //    $totalKredit += $response_detail['kredit'];
                 //     $totalDebet += $response_detail['debet'];
@@ -212,13 +230,13 @@ class LaporanKartuHutangPerSupplierController extends MyController
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);
         $sheet->getColumnDimension('C')->setWidth(28);
-        $sheet->getColumnDimension('D')->setWidth(12);
-        $sheet->getColumnDimension('E')->setWidth(13);
+        $sheet->getColumnDimension('D')->setWidth(14);
+        $sheet->getColumnDimension('E')->setWidth(14);
         $sheet->getColumnDimension('F')->setWidth(8);
-        $sheet->getColumnDimension('G')->setAutoSize(true);
-        $sheet->getColumnDimension('H')->setAutoSize(true);
-        $sheet->getColumnDimension('I')->setAutoSize(true);
-        $sheet->getColumnDimension('J')->setWidth(65);
+        $sheet->getColumnDimension('G')->setWidth(24);
+        $sheet->getColumnDimension('H')->setWidth(24);
+        $sheet->getColumnDimension('I')->setWidth(24);
+        $sheet->getColumnDimension('J')->setWidth(45);
 
         $rowKosong = "";
         // menambahkan sel Total pada baris terakhir + 1
@@ -229,17 +247,17 @@ class LaporanKartuHutangPerSupplierController extends MyController
 
         $totalNominal = "=SUM(G7:G" . ($detail_start_row - 1) . ")";
         $sheet->setCellValue("G$total_start_row", $totalNominal)->getStyle("G$total_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
-        $sheet->setCellValue("G$total_start_row", $totalNominal)->getStyle("G$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+        $sheet->setCellValue("G$total_start_row", $totalNominal)->getStyle("G$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
         $sheet->setCellValue("G$total_start_row", $totalNominal)->getStyle("G$total_start_row")->applyFromArray($styleArray);
 
         $totalBayar = "=SUM(H7:H" . ($detail_start_row - 1) . ")";
         $sheet->setCellValue("H$total_start_row", $totalBayar)->getStyle("H$total_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
-        $sheet->setCellValue("H$total_start_row", $totalBayar)->getStyle("H$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+        $sheet->setCellValue("H$total_start_row", $totalBayar)->getStyle("H$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
         $sheet->setCellValue("H$total_start_row", $totalBayar)->getStyle("H$total_start_row")->applyFromArray($styleArray);
 
         // $totalSaldo = "=SUM(I7:I" . ($detail_start_row - 1) . ")";
         // $sheet->setCellValue("I$total_start_row", $totalSaldo)->getStyle("I$total_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
-        // $sheet->setCellValue("I$total_start_row", $totalSaldo)->getStyle("I$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+        // $sheet->setCellValue("I$total_start_row", $totalSaldo)->getStyle("I$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
         // $sheet->setCellValue("I$total_start_row", $totalSaldo)->getStyle("I$total_start_row")->applyFromArray($styleArray);
 
         $sheet->setCellValue("I$total_start_row", $rowKosong)->getStyle("I$total_start_row")->applyFromArray($styleArray);
@@ -249,7 +267,7 @@ class LaporanKartuHutangPerSupplierController extends MyController
 
         //FORMAT
         // set format ribuan untuk kolom D dan E
-        $sheet->getStyle("D" . ($detail_start_row + 1) . ":E" . ($detail_start_row + 1))->getNumberFormat()->setFormatCode("#,##0.00");
+        $sheet->getStyle("D" . ($detail_start_row + 1) . ":E" . ($detail_start_row + 1))->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
         $sheet->getStyle("A" . ($detail_start_row + 1) . ":$lastColumn" . ($detail_start_row + 1))->getFont()->setBold(true);
 
 
