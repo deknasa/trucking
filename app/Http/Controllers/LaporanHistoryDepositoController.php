@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Menu;
-use Illuminate\Contracts\View\View;
-use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Http;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Http\RedirectResponse;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
@@ -74,17 +75,21 @@ class LaporanHistoryDepositoController extends MyController
         $sheet = $spreadsheet->getActiveSheet();
 
         $sheet->setCellValue('A1', $pengeluaran[0]['judul']);
-        $sheet->setCellValue('A2', 'Laporan History Deposito');
-        $sheet->setCellValue('A3', 'SUPIR: ' . $request->supirdari);
-
-        // $sheet->getStyle("A1")->getFont()->setSize(20)->setBold(true);
-
-        $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
-        $sheet->getStyle('A2')->getAlignment()->setHorizontal('left');
+        $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:E1');
+        
+        $sheet->setCellValue('A2', 'Laporan History Deposito');
+        
+        $sheet->setCellValue('A2', strtoupper('Laporan History Deposito'));
+        $sheet->getStyle("A2")->getFont()->setBold(true);
         $sheet->mergeCells('A2:E2');
+
+        $sheet->setCellValue('A3', strtoupper('SUPIR: ' . $request->supirdari));
+        $sheet->getStyle("A3")->getFont()->setBold(true);
         $sheet->mergeCells('A3:E3');
+
+
         $header_start_row = 5;
         $detail_start_row = 6;
 
@@ -149,14 +154,19 @@ class LaporanHistoryDepositoController extends MyController
                 }
 
                 $sheet->setCellValue("A$detail_start_row", $response_detail['nobukti']);
-                $sheet->setCellValue("B$detail_start_row", date('d-m-Y', strtotime($response_detail['tglbukti'])));
+                $dateValue = ($response_detail['tglbukti'] != null) ? Date::PHPToExcel(date('Y-m-d',strtotime($response_detail['tglbukti']))) : ''; 
+                $sheet->setCellValue("B$detail_start_row", $dateValue);
+                $sheet->getStyle("B$detail_start_row") 
+                ->getNumberFormat() 
+                ->setFormatCode('dd-mm-yyyy');
+
                 $sheet->setCellValue("C$detail_start_row", $response_detail['keterangan']);
                 $sheet->setCellValue("D$detail_start_row", $response_detail['nominal']);
                 $sheet->setCellValue("E$detail_start_row", $response_detail['Saldo']);
 
 
                 $sheet->getStyle("A$detail_start_row:E$detail_start_row")->applyFromArray($styleArray);
-                $sheet->getStyle("C$detail_start_row:E$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+                $sheet->getStyle("C$detail_start_row:E$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
                 // $sheet->getStyle("B$detail_start_row:B$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
                 // $sheet->getStyle("D$detail_start_row:D$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
 
@@ -174,7 +184,7 @@ class LaporanHistoryDepositoController extends MyController
         $sheet->getColumnDimension('B')->setAutoSize(true);
         $sheet->getColumnDimension('D')->setAutoSize(true);
         $sheet->getColumnDimension('E')->setAutoSize(true);
-        $sheet->getColumnDimension('C')->setWidth(150);
+        $sheet->getColumnDimension('C')->setWidth(50);
 
 
         // menambahkan sel Total pada baris terakhir + 1
@@ -185,7 +195,7 @@ class LaporanHistoryDepositoController extends MyController
 
         //FORMAT
         // set format ribuan untuk kolom D dan E
-        $sheet->getStyle("D" . ($detail_start_row + 1) . ":E" . ($detail_start_row + 1))->getNumberFormat()->setFormatCode("#,##0.00");
+        $sheet->getStyle("D" . ($detail_start_row + 1) . ":E" . ($detail_start_row + 1))->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
         $sheet->getStyle("A" . ($detail_start_row + 1) . ":$lastColumn" . ($detail_start_row + 1))->getFont()->setBold(true);
 
 
