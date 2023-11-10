@@ -259,7 +259,7 @@ class LaporanStokController extends Controller
         ];
         foreach ($header_columns as $data_columns_index => $data_column) {
             if (in_array($data_column['index'], $numberColumn)) {
-                $sheet->getStyle($alphabets[$data_columns_index] . ($header_start_row + 1) . ":" . $alphabets[$data_columns_index] . ($detail_start_row + 1))->getNumberFormat()->setFormatCode("#,##0.000_);(#,##0.000)");
+                $sheet->getStyle($alphabets[$data_columns_index] . ($header_start_row + 1) . ":" . $alphabets[$data_columns_index] . ($detail_start_row + 1))->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
             }
         }
         // $sheet->getStyle("A$header_start_row:$lastColumn$header_start_row")->getFont()->setBold(true);
