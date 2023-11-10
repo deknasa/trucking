@@ -62,11 +62,22 @@ class LaporanDepositoSupirController extends MyController
         $sheet = $spreadsheet->getActiveSheet();
         
         $sheet->setCellValue('A1', $data[0]['judul']);
-        $sheet->setCellValue('A2', 'Laporan Deposito Supir');
-        $sheet->setCellValue('A3', 'Periode: ' . $request->sampai);
         $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:G1');
+        
+        $englishMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        $indonesianMonths = ['JANUARI', 'FEBRUARI', 'MARET', 'APRIL', 'MEI', 'JUNI', 'JULI', 'AGUSTUS', 'SEPTEMBER', 'OKTOBER', 'NOVEMBER', 'DESEMBER'];
+        $tglsampai = str_replace($englishMonths, $indonesianMonths, date('d - M - Y', strtotime($request->sampai)));
+        
+        $sheet->setCellValue('A2', strtoupper('Laporan Deposito Supir'));
+        $sheet->getStyle("A2")->getFont()->setBold(true);
+        $sheet->mergeCells('A2:G2');
+
+        $sheet->setCellValue('A3', strtoupper( 'Periode: ' . $tglsampai ));
+        $sheet->getStyle("A3")->getFont()->setBold(true);
+        $sheet->mergeCells('A3:G3');
+
 
         $header_start_row = 5;
         $detail_start_row = $header_start_row + 1;
@@ -149,6 +160,7 @@ class LaporanDepositoSupirController extends MyController
         // set header
         foreach ($header_columns as $data_columns_index => $data_column) {
             $sheet->setCellValue($alphabets[$data_columns_index] . $header_start_row, $data_column['label']);
+            $sheet->getStyle($alphabets[$data_columns_index] . $header_start_row)->getFont()->setBold(true);
         }
 
         // group data by Keterangan
@@ -160,10 +172,12 @@ class LaporanDepositoSupirController extends MyController
             }
             $data_by_keterangan[$keterangan][] = $row_data;
         }
-
         // Set detail grouped by Keterangan
         foreach ($data_by_keterangan as $keterangan => $rows) {
             $sheet->setCellValue('A' . $detail_start_row, $keterangan);
+            $sheet->mergeCells("A$detail_start_row:G$detail_start_row");
+            $sheet->getStyle("A$detail_start_row")->getFont()->setBold(true);
+
             foreach ($header_columns as $data_columns_index => $data_column) {
                 foreach ($rows as $row_index => $row_data) {
                     $sheet->setCellValue($alphabets[$data_columns_index] . ($detail_start_row + $row_index + 1), $row_data[$data_column['index']]);
@@ -196,12 +210,12 @@ class LaporanDepositoSupirController extends MyController
             $column_end = $detail_start_row - 1;
             for ($i = $column_start; $i <= $column_end; $i++) {
                 $cell = $column . $i;
-                $sheet->getStyle($cell)->getNumberFormat()->setFormatCode("#,##0.00");
+                $sheet->getStyle($cell)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
             }
         }
-        $sheet->getStyle("E$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
-        $sheet->getStyle("F$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
-        $sheet->getStyle("G$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+        $sheet->getStyle("E$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+        $sheet->getStyle("F$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+        $sheet->getStyle("G$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
         // set diketahui dibuat
         $ttd_start_row = $total_start_row + 2;
@@ -221,7 +235,7 @@ class LaporanDepositoSupirController extends MyController
         $sheet->getColumnDimension('E')->setAutoSize(true);
         $sheet->getColumnDimension('F')->setAutoSize(true);
         $sheet->getColumnDimension('G')->setAutoSize(true);
-        $sheet->getColumnDimension('C')->setWidth(150);        
+        $sheet->getColumnDimension('C')->setWidth(50);        
 
         $sheet->getStyle("A4")->applyFromArray($styleArray3);
         $sheet->getStyle("B4")->applyFromArray($styleArray3);

@@ -28,6 +28,8 @@
     let postData
     let sortname = 'namastok'
     let sortorder = 'asc'
+    let approveEditRequest =null ;
+
     let autoNumericElements = []
 
     $(document).ready(function() {
@@ -469,7 +471,26 @@
                             $('#rangeModal').modal('show')
                         }
                     },
-                ]
+                ],
+                extndBtn: [
+                    {
+                        id: 'approve',
+                        title: 'Approve',
+                        caption: 'Approve',
+                        innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+                        class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
+                        dropmenuHTML: [
+                            {
+                                id: 'approvalTanpaKlaim',
+                                text: ' UN/APPROVAL Tanpa Klaim',
+                                onClick: () => {
+                                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                                    approvalTanpaKlaim(selectedId)
+                                }
+                            },
+                        ],
+                    }
+                ]    
 
             })
 
@@ -720,6 +741,61 @@
             });
         }
 
+        function approvalTanpaKlaim(id) {
+            if (approveEditRequest) {
+                approveEditRequest.abort();
+            }     
+            approveEditRequest = $.ajax({
+                url: `${apiUrl}stok/${id}`,
+                method: 'GET',
+                dataType: 'JSON',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                success: response => {
+                    let msg = `YAKIN Approve Status Boleh Tanpa Klaim `
+                    console.log(response.data);
+                    if (response.data.statusapprovaltanpaklaim === statusTanpaKlaim) {
+                        msg = `YAKIN UnApprove Status Boleh Tanpa Klaim `
+                    }
+                    showConfirm(msg,response.data.nobukti,`stok/${response.data.id}/approvalklaim`)
+                },
+            })
+        }
+
+        getStatusTanpaKlaim()
+        function getStatusTanpaKlaim() {
+            $.ajax({
+                url: `${apiUrl}parameter`,
+                method: 'GET',
+                dataType: 'JSON',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                data: {
+                    limit: 0,
+                    filters: JSON.stringify({
+                        "groupOp": "AND",
+                        "rules": [{
+                            "field": "grp",
+                            "op": "cn",
+                            "data": "STATUS APPROVAL"
+                        },{
+                            "field": "text",
+                            "op": "cn",
+                            "data": "APPROVAL"
+                        }]
+                    })
+                },
+                success: response => {
+                    statusTanpaKlaim =  response.data[0].id;
+                }
+            })
+        }
+                
+                
+                        
+                    
 
     })
 </script>
