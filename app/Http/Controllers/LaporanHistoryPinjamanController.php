@@ -63,10 +63,13 @@ class LaporanHistoryPinjamanController extends MyController
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setCellValue('A1', $pengeluaran[0]['judul']);
-        $sheet->setCellValue('A2', 'Laporan History Pinjaman');
-        $sheet->getStyle("A1")->getFont()->setSize(20)->setBold(true);
+        $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:E1');
+        
+        $sheet->setCellValue('A2', strtoupper('Laporan History Pinjaman'));
+        $sheet->getStyle("A2")->getFont()->setBold(true);
+        $sheet->mergeCells('A2:E2');
 
         $header_start_row = 4;
         $detail_start_row = 5;
@@ -123,7 +126,10 @@ class LaporanHistoryPinjamanController extends MyController
             foreach ($header_columns as $data_columns_index => $data_column) {
                 if (($data_column['index'] == 'nominal') || ($data_column['index'] == 'Saldo')) {
                     // $response_detail[$data_column['index']] = (number_format((float) $response_detail[$data_column['index']], '2', '.', ','))->applyFromArray($style_number);
-                    $sheet->setCellValue($alphabets[$data_columns_index] . $detail_start_row, $response_detail[$data_column['index']])->getStyle($alphabets[$data_columns_index] . $detail_start_row)->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
+                    $sheet->setCellValue($alphabets[$data_columns_index] . $detail_start_row, $response_detail[$data_column['index']])
+                    ->getStyle($alphabets[$data_columns_index] . $detail_start_row)
+                    ->applyFromArray($style_number)
+                    ->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
                 } else {
                     $sheet->setCellValue($alphabets[$data_columns_index] . $detail_start_row, $response_detail[$data_column['index']]);
                 }
@@ -138,7 +144,7 @@ class LaporanHistoryPinjamanController extends MyController
 
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);
-        $sheet->getColumnDimension('C')->setAutoSize(true);
+        $sheet->getColumnDimension('C')->setWidth(50);
         $sheet->getColumnDimension('D')->setAutoSize(true);
         $sheet->getColumnDimension('E')->setAutoSize(true);
         // $sheet->getColumnDimension('F')->setAutoSize(true);

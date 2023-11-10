@@ -79,8 +79,6 @@ class LaporanHistoryDepositoController extends MyController
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:E1');
         
-        $sheet->setCellValue('A2', 'Laporan History Deposito');
-        
         $sheet->setCellValue('A2', strtoupper('Laporan History Deposito'));
         $sheet->getStyle("A2")->getFont()->setBold(true);
         $sheet->mergeCells('A2:E2');
