@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
@@ -21,11 +22,11 @@ class LaporanBukuBesarController extends MyController
     {
         $title = $this->title;
         $data = [
-            'idcabang' => $this->comboList('ID CABANG','ID CABANG'),
+            'idcabang' => $this->comboList('ID CABANG', 'ID CABANG'),
         ];
         $getCabang = $this->getCabang($data['idcabang']['text']);
         $cabang  = $getCabang['data'];
-        return view('laporanbukubesar.index', compact('title', 'data','cabang'));
+        return view('laporanbukubesar.index', compact('title', 'data', 'cabang'));
     }
     public function comboList($grp, $subgrp)
     {
@@ -72,7 +73,7 @@ class LaporanBukuBesarController extends MyController
         $dataheader = $header['dataheader'];
         $printer['tipe'] = $request->printer;
         $user = Auth::user();
-        return view('reports.laporanbukubesar', compact('data', 'user', 'dataheader','printer'));
+        return view('reports.laporanbukubesar', compact('data', 'user', 'dataheader', 'printer'));
     }
 
     public function export(Request $request): void
@@ -93,6 +94,7 @@ class LaporanBukuBesarController extends MyController
             ->get(config('app.api_url') . 'laporanbukubesar/export', $detailParams);
 
         $bukubesar = $responses['data'];
+        // dd($bukubesar);
         $dataheader = $responses['dataheader'];
         $user = Auth::user();
 
@@ -151,7 +153,7 @@ class LaporanBukuBesarController extends MyController
 
         $detail_columns = [
             [
-                'label' => 'Tgl Bukti',
+                'label' => 'Tanggal',
                 'index' => 'tglbukti',
             ],
             [
@@ -177,10 +179,10 @@ class LaporanBukuBesarController extends MyController
         ];
 
 
-        foreach ($detail_columns as $detail_columns_index => $detail_column) {
-            $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_table_header_row, $detail_column['label'] ?? $detail_columns_index + 1);
-        }
-        $sheet->getStyle("A$detail_table_header_row:F$detail_table_header_row")->getFont()->setBold(true);
+        // foreach ($detail_columns as $detail_columns_index => $detail_column) {
+        //     $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_table_header_row, $detail_column['label'] ?? $detail_columns_index + 1);
+        // }
+        // $sheet->getStyle("A$detail_table_header_row:F$detail_table_header_row")->getFont()->setBold(true);
 
         // LOOPING DETAIL
         $totalKredit = 0;
@@ -189,12 +191,15 @@ class LaporanBukuBesarController extends MyController
         $prevKeteranganCoa = null;
 
         $groupedData = [];
-        foreach ($bukubesar as $row) {
-            $coa = $row['coa'];
-            if (!isset($groupedData[$coa])) {
-                $groupedData[$coa] = [];
+        if (is_array($bukubesar)) {
+
+            foreach ($bukubesar as $row) {
+                $coa = $row['coa'];
+                if (!isset($groupedData[$coa])) {
+                    $groupedData[$coa] = [];
+                }
+                $groupedData[$coa][] = $row;
             }
-            $groupedData[$coa][] = $row;
         }
 
         // foreach ($bukubesar as $response_index => $response_detail) {
@@ -234,53 +239,65 @@ class LaporanBukuBesarController extends MyController
         // $sheet->setCellValue("D$detail_start_row", number_format((float) $totalDebet, '2', ',', '.'))->getStyle("D$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
         // $sheet->setCellValue("E$detail_start_row", number_format((float) $totalKredit, '2', ',', '.'))->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
         // $sheet->setCellValue("F$detail_start_row", number_format((float) $totalSaldo, '2', ',', '.'))->getStyle("F$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
-        foreach ($groupedData as $coa => $group) {
-            $sheet->mergeCells("A$detail_start_row:F$detail_start_row");
-            $sheet->setCellValue("A$detail_start_row", $coa . ' ' . $group[0]['keterangancoa'])->getStyle('A' . $detail_start_row . ':F' . $detail_start_row)->applyFromArray($styleArray);
-            $sheet->getStyle("A$detail_start_row")->getFont()->setSize(12)->setBold(true);
-            $sheet->getStyle("A$detail_start_row")->getAlignment()->setHorizontal('center');
-            $detail_start_row++;
+        if (is_array($bukubesar)) {
 
-            $dataRow = $detail_table_header_row + 2;
-            $previousRow = $dataRow - 1;
-            foreach ($group as $response_index => $response_detail) {
-                // ... (your existing code for filling in details)
-                $sheet->setCellValue("A$detail_start_row", ($response_detail['tglbukti'] != null) ? date('d-m-Y', strtotime($response_detail['tglbukti'])) : '');
-                $sheet->setCellValue("B$detail_start_row", $response_detail['nobukti']);
-                $sheet->setCellValue("C$detail_start_row", $response_detail['keterangan']);
-                $sheet->setCellValue("D$detail_start_row", $response_detail['debet']);
-                $sheet->setCellValue("E$detail_start_row", $response_detail['kredit']);
-                if ($response_detail['nobukti'] == '') {
-                    $sheet->setCellValue('F' . $detail_start_row, $response_detail['Saldo']);
-                    $previousRow = $detail_start_row;
-                } else {
-                    if ($detail_start_row > $detail_table_header_row + 1) {
-                        $sheet->setCellValue('F' . $detail_start_row, '=(F' . $previousRow . '+D' . $detail_start_row . ')-E' . $detail_start_row);
-                    }
-                }
-                // $sheet->setCellValue("F$detail_start_row", $response_detail['Saldo']);
-                // $sheet->getStyle("C$detail_start_row")->getAlignment()->setWrapText(true);
-                // $sheet->getColumnDimension('C')->setWidth(150);
-                
-                $sheet->getStyle("D$detail_start_row:F$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
-                $totalKredit += $response_detail['kredit'];
-                $totalDebet += $response_detail['debet'];
-                $totalSaldo += $response_detail['Saldo'];
-                $previousRow = $detail_start_row;
+            foreach ($groupedData as $coa => $group) {
+                $sheet->mergeCells("A$detail_start_row:F$detail_start_row");
+                $sheet->setCellValue("A$detail_start_row", 'Kode Perkiraan : '.$coa . ' (' . $group[0]['keterangancoa'] .')')->getStyle('A' . $detail_start_row . ':F' . $detail_start_row);
+                // $sheet->getStyle("A$detail_start_row")->getFont()->setSize(12)->setBold(true);
+                // $sheet->getStyle("A$detail_start_row")->getAlignment()->setHorizontal('center');
                 $detail_start_row++;
-                $prevKeteranganCoa = $response_detail['keterangancoa'];
+
+                // table header
+                foreach ($detail_columns as $detail_columns_index => $detail_column) {
+                    $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, $detail_column['label'] ?? $detail_columns_index + 1);
+                }
+                $sheet->getStyle("A$detail_start_row:F$detail_start_row")->getFont()->setBold(true);
+                $detail_start_row++;
+
+
+                $dataRow = $detail_table_header_row + 2;
+                $previousRow = $dataRow - 1;
+                foreach ($group as $response_index => $response_detail) {
+                    // ... (your existing code for filling in details)
+                    $dateValue = ($response_detail['tglbukti'] != null) ? Date::PHPToExcel(date('Y-m-d',strtotime($response_detail['tglbukti']))) : ''; 
+            
+                    $sheet->setCellValue("A$detail_start_row", $dateValue);
+                    $sheet->setCellValue("B$detail_start_row", ($response_detail['nobukti'] == '') ? $response_detail['keterangan'] : $response_detail['nobukti']);
+                    $sheet->setCellValue("C$detail_start_row", ($response_detail['keterangan'] == 'SALDO AWAL') ? '' : $response_detail['keterangan']);
+                    $sheet->setCellValue("D$detail_start_row", ($response_detail['keterangan'] == 'SALDO AWAL') ? 0 : $response_detail['debet']);
+                    $sheet->setCellValue("E$detail_start_row", ($response_detail['keterangan'] == 'SALDO AWAL') ? 0 : $response_detail['kredit']);
+                    if ($response_detail['nobukti'] == '') {
+                        $sheet->setCellValue('F' . $detail_start_row, $response_detail['Saldo']);
+                        $previousRow = $detail_start_row;
+                    } else {
+                        if ($detail_start_row > $detail_table_header_row + 1) {
+                            $sheet->setCellValue('F' . $detail_start_row, '=(F' . $previousRow . '+D' . $detail_start_row . ')-E' . $detail_start_row);
+                        }
+                    }
+                    // $sheet->setCellValue("F$detail_start_row", $response_detail['Saldo']);
+                    // $sheet->getStyle("C$detail_start_row")->getAlignment()->setWrapText(true);
+                    // $sheet->getColumnDimension('C')->setWidth(150);
+                    $sheet->getStyle("A$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
+                    $sheet->getStyle("D$detail_start_row:F$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                    $totalKredit += $response_detail['kredit'];
+                    $totalDebet += $response_detail['debet'];
+                    $totalSaldo += $response_detail['Saldo'];
+                    $previousRow = $detail_start_row;
+                    $detail_start_row++;
+                    $prevKeteranganCoa = $response_detail['keterangancoa'];
+                }
+                // Display the group totals at the end of the group
+                // $sheet->mergeCells('A' . $detail_start_row . ':C' . $detail_start_row);
+                $sheet->setCellValue("C$detail_start_row", 'Total')->getStyle('C' . $detail_start_row)->getFont()->setBold(true);
+                $sheet->setCellValue("D$detail_start_row", "=SUM(D" . ($detail_start_row - count($group)) . ":D" . ($detail_start_row - 1) . ")")->getStyle("D$detail_start_row")->getFont()->setBold(true);
+                $sheet->setCellValue("E$detail_start_row", "=SUM(E" . ($detail_start_row - count($group)) . ":E" . ($detail_start_row - 1) . ")")->getStyle("E$detail_start_row")->getFont()->setBold(true);
+                // $sheet->setCellValue("F$detail_start_row", "=F" . ($detail_start_row - 1))->getStyle("F$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+
+                $sheet->getStyle("D$detail_start_row:F$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                $detail_start_row += 2; // Add an empty row between groups
             }
-            // Display the group totals at the end of the group
-            $sheet->mergeCells('A' . $detail_start_row . ':C' . $detail_start_row);
-            $sheet->setCellValue("A$detail_start_row", 'Total')->getStyle('A' . $detail_start_row . ':C' . $detail_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
-            $sheet->setCellValue("D$detail_start_row", "=SUM(D" . ($detail_start_row - count($group)) . ":D" . ($detail_start_row - 1) . ")")->getStyle("D$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
-            $sheet->setCellValue("E$detail_start_row", "=SUM(E" . ($detail_start_row - count($group)) . ":E" . ($detail_start_row - 1) . ")")->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
-            $sheet->setCellValue("F$detail_start_row", "=F" . ($detail_start_row - 1))->getStyle("F$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
-
-            $sheet->getStyle("D$detail_start_row:F$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
-            $detail_start_row += 2; // Add an empty row between groups
         }
-
 
         $ttd_start_row = $detail_start_row + 2;
         $sheet->setCellValue("A$ttd_start_row", 'Disetujui Oleh,');
