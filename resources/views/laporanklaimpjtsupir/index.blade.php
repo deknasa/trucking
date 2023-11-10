@@ -25,7 +25,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <label class="col-12 col-sm-2 col-form-label mt-2">JENIS STOK<span class="text-danger">*</span></label>
+                            <label class="col-12 col-sm-2 col-form-label mt-2">JENIS STOK</label>
                             <div class="col-sm-4 mt-2">
                                 <input type="hidden" name="kelompok_id">
                                 <input type="text" name="kelompok" class="form-control kelompok-lookup">
@@ -130,7 +130,7 @@
         let kelompok_id = $('#crudForm').find('[name=kelompok_id]').val()
         let kelompok = $('#crudForm').find('[name=kelompok]').val()
 
-        if (dari != '' && sampai != '' && kelompok != '') {
+        if (dari != '' && sampai != '') {
 
             window.open(`{{ route('laporanklaimpjtsupir.export') }}?sampai=${sampai}&dari=${dari}&kelompok_id=${kelompok_id}&kelompok=${kelompok}`)
         } else {

@@ -176,19 +176,19 @@ class LaporanTripTradoController extends MyController
        $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':A' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
 
        $totalFull = "=SUM(B6:B" . ($detail_start_row-1) . ")";
-       $sheet->setCellValue("B$total_start_row", $totalFull)->getStyle("B$total_start_row")->applyFromArray($style_number);
+       $sheet->setCellValue("B$total_start_row", $totalFull)->getStyle("B$total_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
        $sheet->setCellValue("B$total_start_row", $totalFull)->getStyle("B$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
        $totalEmpty= "=SUM(C6:C" . ($detail_start_row-1) . ")";
-       $sheet->setCellValue("C$total_start_row", $totalEmpty)->getStyle("C$total_start_row")->applyFromArray($style_number);
+       $sheet->setCellValue("C$total_start_row", $totalEmpty)->getStyle("C$total_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
        $sheet->setCellValue("C$total_start_row", $totalEmpty)->getStyle("C$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
        $totalFullPort= "=SUM(E6:E" . ($detail_start_row-1) . ")";
-       $sheet->setCellValue("E$total_start_row", $totalFullPort)->getStyle("E$total_start_row")->applyFromArray($style_number);
+       $sheet->setCellValue("E$total_start_row", $totalFullPort)->getStyle("E$total_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
        $sheet->setCellValue("E$total_start_row", $totalFullPort)->getStyle("E$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
        $totalEmptyPort= "=SUM(F6:F" . ($detail_start_row-1) . ")";
-       $sheet->setCellValue("F$total_start_row", $totalEmptyPort)->getStyle("F$total_start_row")->applyFromArray($style_number);
+       $sheet->setCellValue("F$total_start_row", $totalEmptyPort)->getStyle("F$total_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
        $sheet->setCellValue("F$total_start_row", $totalEmptyPort)->getStyle("F$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
        $sheet->getStyle("D$detail_start_row:D$detail_start_row")->applyFromArray($styleArray);
