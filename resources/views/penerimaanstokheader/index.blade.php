@@ -7,8 +7,8 @@
       <option value="">-- semua --</option>
       @foreach ($comboKodepenerimaan as $kodepenerimaan)
       {{-- @if ($kodepenerimaan['id'] === "1") selected @endif --}}
-        <option  value="{{$kodepenerimaan['id']}}"> {{$kodepenerimaan['keterangan']}} </option>
-        {{-- <option @if ($kodepenerimaan['statusdefault_text'] ==="YA") selected @endif value="{{$kodepenerimaan['id']}}"> {{$kodepenerimaan['namakodepenerimaan']}} </option> --}}
+      <option value="{{$kodepenerimaan['id']}}"> {{$kodepenerimaan['keterangan']}} </option>
+      {{-- <option @if ($kodepenerimaan['statusdefault_text'] ==="YA") selected @endif value="{{$kodepenerimaan['id']}}"> {{$kodepenerimaan['namakodepenerimaan']}} </option> --}}
       @endforeach
     </select>
   </div>
@@ -51,8 +51,8 @@
     </div>
   </div>
   {{-- @isset($request['tgldari']) ? $request['tgldari'] : 'null' }} --}}
-  
- 
+
+
 </div>
 @include('penerimaanstokheader._modal')
 <!-- Detail -->
@@ -80,10 +80,36 @@
   let currentTab = 'detail'
   let parampostok
   let activeGrid
-  let approveEditRequest =null ;
+  let dataAcos = <?php echo json_encode($acosPenerimaan); ?>;
+  let approveEditRequest = null;
   let tgldariheader
   let tglsampaiheader
   reloadGrid()
+
+  $(document).on('change', $('#crudForm').find('[name=kodepenerimaanheader]'), function(event) {
+    setPermissionAcos()
+  })
+
+  function setPermissionAcos() {
+    let selectedIdPenerimaan = $(`[name="kodepenerimaanheader"] option:selected`).val();
+    if (selectedIdPenerimaan != '') {
+      let isKodepenerimaanInData = dataAcos.some(item => parseInt(item.id) == selectedIdPenerimaan);
+      if (isKodepenerimaanInData) {
+        $('#add').attr('disabled', false)
+        $('#edit').attr('disabled', false)
+        $('#delete').attr('disabled', false)
+      } else {
+        $('#add').attr('disabled', true)
+        $('#edit').attr('disabled', true)
+        $('#delete').attr('disabled', true)
+      }
+    } else {
+      $('#add').attr('disabled', false)
+      $('#edit').attr('disabled', false)
+      $('#delete').attr('disabled', false)
+    }
+  }
+
   $(document).ready(function() {
     penerimaanStok($('#crudForm'))
     $("#tabs").tabs()
@@ -93,19 +119,19 @@
     loadHutangGrid(nobukti)
     loadJurnalUmumGrid(nobukti)
 
-    initSelect2($(`#kodepenerimaanheader`),false)
+    initSelect2($(`#kodepenerimaanheader`), false)
 
     @isset($request['tgldari'])
-      tgldariheader = `{{ $request['tgldari'] }}`;
+    tgldariheader = `{{ $request['tgldari'] }}`;
     @endisset
     @isset($request['tglsampai'])
-      tglsampaiheader = `{{ $request['tglsampai'] }}`;
+    tglsampaiheader = `{{ $request['tglsampai'] }}`;
     @endisset
-    setRange(false,tgldariheader,tglsampaiheader)
+    setRange(false, tgldariheader, tglsampaiheader)
     initDatepicker('datepickerIndex')
-    $(document).on('click','#btnReload', function(event) {
-      loadDataHeader('penerimaanstokheader',{
-        penerimaanheader_id:$('#kodepenerimaanheader').val(),
+    $(document).on('click', '#btnReload', function(event) {
+      loadDataHeader('penerimaanstokheader', {
+        penerimaanheader_id: $('#kodepenerimaanheader').val(),
         proses: 'reload'
       })
     })
@@ -120,11 +146,11 @@
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         postData: {
-          tgldari:$('#tgldariheader').val() ,
-          tglsampai:$('#tglsampaiheader').val(),
-          penerimaanheader_id:$('#kodepenerimaanheader').val(),
+          tgldari: $('#tgldariheader').val(),
+          tglsampai: $('#tglsampaiheader').val(),
+          penerimaanheader_id: $('#kodepenerimaanheader').val(),
         },
-        datatype: "json",        
+        datatype: "json",
         colModel: [{
             label: 'ID',
             name: 'id',
@@ -212,7 +238,7 @@
             name: 'penerimaanstok_nobukti',
             align: 'left',
             formatter: (value, options, rowData) => {
-              if ((value == null) ||( value == '')) {
+              if ((value == null) || (value == '')) {
                 return '';
               }
               let tgldari = rowData.tgldariheadernobuktipenerimaanstok
@@ -221,8 +247,8 @@
               let formattedValue = $(`
               <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
              `)
-             return formattedValue[0].outerHTML
-           }
+              return formattedValue[0].outerHTML
+            }
           },
           {
             label: 'Pengeluaran no bukti',
@@ -230,7 +256,7 @@
             name: 'pengeluaranstok_nobukti',
             align: 'left',
             formatter: (value, options, rowData) => {
-              if ((value == null) ||( value == '')) {
+              if ((value == null) || (value == '')) {
                 return '';
               }
               let tgldari = rowData.tgldariheaderpengeluaranstok
@@ -239,8 +265,8 @@
               let formattedValue = $(`
               <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
              `)
-             return formattedValue[0].outerHTML
-           }
+              return formattedValue[0].outerHTML
+            }
           },
           {
             label: 'Gudang',
@@ -267,7 +293,7 @@
             name: 'hutang_nobukti',
             align: 'left',
             formatter: (value, options, rowData) => {
-              if ((value == null) ||( value == '')) {
+              if ((value == null) || (value == '')) {
                 return '';
               }
               let tgldari = rowData.tgldariheaderhutangheader
@@ -276,8 +302,8 @@
               let formattedValue = $(`
               <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
              `)
-             return formattedValue[0].outerHTML
-           }
+              return formattedValue[0].outerHTML
+            }
           },
           {
             label: 'gudang dari',
@@ -352,7 +378,7 @@
         onSelectRow: function(id) {
           let penerimaanstok = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_penerimaanstok"]`).attr('title') ?? '';
           let nobukti = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title') ?? '';
-          if (penerimaanstok =="SPB" || penerimaanstok =="SPBS") {
+          if (penerimaanstok == "SPB" || penerimaanstok == "SPBS") {
             nobukti = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_hutang_nobukti"]`).attr('title') ?? '';
           }
 
@@ -383,7 +409,7 @@
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))
-         
+
           /* Set global variables */
           sortname = $(this).jqGrid("getGridParam", "sortname")
           sortorder = $(this).jqGrid("getGridParam", "sortorder")
@@ -423,6 +449,7 @@
 
           $('#left-nav').find('button').attr('disabled', false)
           permission()
+          setPermissionAcos()
           setHighlight($(this))
         }
       })
@@ -485,18 +512,16 @@
               viewPenerimaanstokHeader(selectedId)
             }
           },
-         
-          
+
+
         ],
-        extndBtn: [
-          {
+        extndBtn: [{
             id: 'report',
             title: 'report',
             caption: 'report',
             innerHTML: '<i class="fa fa-print"></i> REPORT',
             class: 'btn btn-info btn-sm mr-1 dropdown-toggle ',
-            dropmenuHTML: [
-              {
+            dropmenuHTML: [{
                 id: 'reportPrinterBesar',
                 text: 'Printer Lain(Faktur)',
                 onClick: () => {
@@ -538,38 +563,40 @@
             }
           },
           {
-          id: 'approve',
-          title: 'Approve',
-          caption: 'Approve',
-          innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-          class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-          dropmenuHTML: [
-            {
-              id: 'approvalEdit',
-              text: ' UN/APPROVAL status Edit',
-              onClick: () => {
-                selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                approveEdit(selectedId)
-              }
-            },
-            {
-              id: 'approval-buka-cetak',
-              text: "un/Approval Buka Cetak PENERIMAAN STOK",
-              onClick: () => {
-                if (`{{ $myAuth->hasPermission('approvalbukacetak', 'store') }}`) {
-                  let tglbukacetak = $('#tgldariheader').val().split('-');
-                  tglbukacetak =tglbukacetak[1] + '-' + tglbukacetak[2];
-                  selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                  if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                    showDialog('Harap pilih salah satu record')
-                  }else{
-                    approvalBukaCetak(tglbukacetak,'PENERIMAANSTOKHEADER',[selectedId]);
+            id: 'approve',
+            title: 'Approve',
+            caption: 'Approve',
+            innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+            class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
+            dropmenuHTML: [{
+                id: 'approvalEdit',
+                text: ' UN/APPROVAL status Edit',
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('penerimaanstokheader', 'approvalEdit') }}`) {
+                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                    approveEdit(selectedId)
                   }
                 }
-              }
-            },
-          ],
-        }]
+              },
+              {
+                id: 'approval-buka-cetak',
+                text: "un/Approval Buka Cetak PENERIMAAN STOK",
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('approvalbukacetak', 'store') }}`) {
+                    let tglbukacetak = $('#tgldariheader').val().split('-');
+                    tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
+                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                    if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                      showDialog('Harap pilih salah satu record')
+                    } else {
+                      approvalBukaCetak(tglbukacetak, 'PENERIMAANSTOKHEADER', [selectedId]);
+                    }
+                  }
+                }
+              },
+            ],
+          }
+        ]
       })
 
     /* Append clear filter button */
@@ -599,30 +626,31 @@
       .addClass('btn btn-sm btn-warning')
       .parent().addClass('px-1')
 
-      function permission() {
-    if (!`{{ $myAuth->hasPermission('penerimaanstokheader', 'store') }}`) {
-      $('#add').attr('disabled', 'disabled')
-    }
+    function permission() {
+      if (!`{{ $myAuth->hasPermission('penerimaanstokheader', 'store') }}`) {
+        $('#add').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('penerimaanstokheader', 'update') }}`) {
-      $('#edit').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('penerimaanstokheader', 'update') }}`) {
+        $('#edit').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('penerimaanstokheader', 'show') }}`) {
-      $('#view').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('penerimaanstokheader', 'show') }}`) {
+        $('#view').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('penerimaanstokheader', 'destroy') }}`) {
-      $('#delete').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('penerimaanstokheader', 'destroy') }}`) {
+        $('#delete').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('penerimaanstokheader', 'export') }}`) {
-      $('#export').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('penerimaanstokheader', 'export') }}`) {
+        $('#export').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('penerimaanstokheader', 'report') }}`) {
-      $('#report').attr('disabled', 'disabled')
-    }}
+      if (!`{{ $myAuth->hasPermission('penerimaanstokheader', 'report') }}`) {
+        $('#report').attr('disabled', 'disabled')
+      }
+    }
 
     $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {
@@ -701,10 +729,11 @@
     })
 
     getStatusEdit()
+
     function approveEdit(id) {
       if (approveEditRequest) {
         approveEditRequest.abort();
-      }     
+      }
       approveEditRequest = $.ajax({
         url: `${apiUrl}penerimaanstokheader/${id}`,
         method: 'GET',
@@ -719,10 +748,11 @@
           if (response.data.statusedit_id === statusBisaEdit) {
             msg = `YAKIN UnApprove Status Edit `
           }
-          showConfirm(msg,response.data.nobukti,`penerimaanstokheader/${response.data.id}/approvaledit`)
+          showConfirm(msg, response.data.nobukti, `penerimaanstokheader/${response.data.id}/approvaledit`)
         },
       })
     }
+
     function getStatusEdit() {
       $.ajax({
         url: `${apiUrl}parameter`,
@@ -739,7 +769,7 @@
               "field": "grp",
               "op": "cn",
               "data": "STATUS APPROVAL"
-            },{
+            }, {
               "field": "text",
               "op": "cn",
               "data": "APPROVAL"
@@ -747,11 +777,11 @@
           })
         },
         success: response => {
-          statusBisaEdit =  response.data[0].id;
+          statusBisaEdit = response.data[0].id;
         }
       })
     }
-    
+
   })
 </script>
 @endpush()

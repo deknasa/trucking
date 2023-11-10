@@ -19,8 +19,10 @@ class PengeluaranTruckingHeaderController extends MyController
             'combostatusposting' => $this->comboList('list', 'STATUS POSTING', 'STATUS POSTING'),
             'combocetak' => $this->comboList('list', 'STATUSCETAK', 'STATUSCETAK'),
         ];
-        $comboKodepengeluaran  = $this->comboKodepengeluaran();
-        $data = array_merge(compact('title', 'data', 'comboKodepengeluaran'),
+        $combo  = $this->comboKodepengeluaran();
+        $comboKodepengeluaran = $combo['data'];
+        $acosPengeluaran = $combo['acos'];
+        $data = array_merge(compact('title', 'data', 'comboKodepengeluaran','acosPengeluaran'),
             ["request"=>$request->all()]
         );
         return view('pengeluarantruckingheader.index', $data);
@@ -80,7 +82,7 @@ class PengeluaranTruckingHeaderController extends MyController
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'pengeluarantrucking', $params);
 
-        return $response['data'];
+        return $response;
     }
     public function comboList($aksi, $grp, $subgrp)
     {

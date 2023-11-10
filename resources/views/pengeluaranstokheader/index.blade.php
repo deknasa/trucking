@@ -86,10 +86,35 @@
   let sortorder = 'asc'
   let autoNumericElements = []
   let approveEditRequest = null;
+  let dataAcos = <?php echo json_encode($acosPengeluaran); ?>;
   let activeGrid;
   let tgldariheader
   let tglsampaiheader
   reloadGrid()
+
+  $(document).on('change', $('#crudForm').find('[name=kodepengeluaranheader]'), function(event) {
+    setPermissionAcos()
+  })
+
+  function setPermissionAcos() {
+    let selectedIdPengeluaran = $(`[name="kodepengeluaranheader"] option:selected`).val();
+    if (selectedIdPengeluaran != '') {
+      let isKodepengeluaranInData = dataAcos.some(item => parseInt(item.id) == selectedIdPengeluaran);
+      if (isKodepengeluaranInData) {
+        $('#add').attr('disabled', false)
+        $('#edit').attr('disabled', false)
+        $('#delete').attr('disabled', false)
+      } else {
+        $('#add').attr('disabled', true)
+        $('#edit').attr('disabled', true)
+        $('#delete').attr('disabled', true)
+      }
+    } else {
+      $('#add').attr('disabled', false)
+      $('#edit').attr('disabled', false)
+      $('#delete').attr('disabled', false)
+    }
+  }
   $(document).ready(function() {
     $("#tabs").tabs()
 
@@ -505,6 +530,7 @@
 
           $('#left-nav').find('button').attr('disabled', false)
           permission()
+          setPermissionAcos()
           setHighlight($(this))
         }
       })
@@ -568,15 +594,13 @@
             }
           },
         ],
-        extndBtn: [
-          {
+        extndBtn: [{
             id: 'report',
             title: 'report',
             caption: 'report',
             innerHTML: '<i class="fa fa-print"></i> REPORT',
             class: 'btn btn-info btn-sm mr-1 dropdown-toggle ',
-            dropmenuHTML: [
-              {
+            dropmenuHTML: [{
                 id: 'reportPrinterBesar',
                 text: 'Printer Lain(Faktur)',
                 onClick: () => {
@@ -623,13 +647,15 @@
             caption: 'Approve',
             innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
             class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-            dropmenuHTML: [
-              {
+            dropmenuHTML: [{
                 id: 'approvalEdit',
                 text: 'approval Edit',
                 onClick: () => {
-                  selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                  approveEdit(selectedId)
+
+                  if (`{{ $myAuth->hasPermission('pengeluaranstokheader', 'approvalEdit') }}`) {
+                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                    approveEdit(selectedId)
+                  }
                 }
               },
               {
@@ -638,11 +664,11 @@
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('approvalbukacetak', 'store') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');
-                    tglbukacetak =tglbukacetak[1] + '-' + tglbukacetak[2];
+                    tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
                     if (selectedId == null || selectedId == '' || selectedId == undefined) {
                       showDialog('Harap pilih salah satu record')
-                    }else{
-                      approvalBukaCetak(tglbukacetak,'PENGELUARANSTOKHEADER',[selectedId]);
+                    } else {
+                      approvalBukaCetak(tglbukacetak, 'PENGELUARANSTOKHEADER', [selectedId]);
                     }
                   }
                 }
@@ -650,7 +676,7 @@
             ],
           }
         ]
-          
+
 
       })
 
