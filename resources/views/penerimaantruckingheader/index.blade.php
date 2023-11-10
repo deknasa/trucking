@@ -73,6 +73,7 @@
   let sortname = 'nobukti'
   let sortorder = 'asc'
   let autoNumericElements = []
+  let dataAcos = <?php echo json_encode($acosPenerimaan); ?>;
   let rowNum = 10
   let hasDetail = false
   let activeGrid 
@@ -81,6 +82,28 @@
   let tglsampaiheader
 
   reloadGrid()
+  $(document).on('change', $('#crudForm').find('[name=penerimaanheader_id]'), function(event) {
+    setPermissionAcos()
+  })
+  function setPermissionAcos() {
+    let selectedIdPenerimaan = $(`[name="penerimaanheader_id"] option:selected`).val();
+    if (selectedIdPenerimaan != '') {
+      let isKodepengeluaranInData = dataAcos.some(item => parseInt(item.id) == selectedIdPenerimaan);
+      if (isKodepengeluaranInData) {
+        $('#add').attr('disabled', false)
+        $('#edit').attr('disabled', false)
+        $('#delete').attr('disabled', false)
+      } else {
+        $('#add').attr('disabled', true)
+        $('#edit').attr('disabled', true)
+        $('#delete').attr('disabled', true)
+      }
+    } else {
+      $('#add').attr('disabled', false)
+      $('#edit').attr('disabled', false)
+      $('#delete').attr('disabled', false)
+    }
+  }
   $(document).ready(function() {
     $("#tabs").tabs()
     penerimaanTrucking($('#crudForm'))
@@ -366,6 +389,7 @@
 
           $('#left-nav').find('button').attr('disabled', false)
           permission()
+          setPermissionAcos()
           setHighlight($(this))
         }
       })

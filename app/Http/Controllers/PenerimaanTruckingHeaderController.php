@@ -18,8 +18,10 @@ class PenerimaanTruckingHeaderController extends MyController
         $data = [
             'combocetak' => $this->comboList('list', 'STATUSCETAK', 'STATUSCETAK')
         ];
-        $comboKodepenerimaan = $this->comboKodepenerimaan();
-        $data = array_merge(compact('title', 'data', 'comboKodepenerimaan'),
+        $combo = $this->comboKodepenerimaan();
+        $comboKodepenerimaan = $combo['data'];
+        $acosPenerimaan = $combo['acos'];
+        $data = array_merge(compact('title', 'data', 'comboKodepenerimaan','acosPenerimaan'),
         ["request"=>$request->all()]
     );
         return view('penerimaantruckingheader.index', $data);
@@ -96,7 +98,7 @@ class PenerimaanTruckingHeaderController extends MyController
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'penerimaantrucking', $params);
 
-        return $response['data'];
+        return $response;
     }
 
     public function combo($aksi)

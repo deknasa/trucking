@@ -19,9 +19,12 @@ class PenerimaanStokHeaderController extends MyController
         $data = [
             'combocetak' => $this->comboList('list', 'STATUSCETAK', 'STATUSCETAK')
         ];
-        $comboKodepenerimaan = $this->comboKodepenerimaan();
-        $data = array_merge(compact('title','comboKodepenerimaan','data'),
-            ["request"=>$request->all()]
+        $combo = $this->comboKodepenerimaan();
+        $comboKodepenerimaan = $combo['data'];
+        $acosPenerimaan = $combo['acos'];
+        $data = array_merge(
+            compact('title', 'comboKodepenerimaan', 'acosPenerimaan', 'data'),
+            ["request" => $request->all()]
         );
 
         return view('penerimaanstokheader.index', $data);
@@ -49,7 +52,7 @@ class PenerimaanStokHeaderController extends MyController
 
         $combo = $this->combo();
 
-        return view('penerimaanstokheader.add', compact('title','combo'));
+        return view('penerimaanstokheader.add', compact('title', 'combo'));
     }
 
     public function store(Request $request)
@@ -103,21 +106,21 @@ class PenerimaanStokHeaderController extends MyController
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . "penerimaanstokheader/$id");
-            // dd($response->getBody()->getContents());
+        // dd($response->getBody()->getContents());
 
         $penerimaanstokheader = $response['data'];
         $kode = $response['kode'];
 
-        if($kode == 'PJT'){
+        if ($kode == 'PJT') {
             $penerimaanstokheaderNoBukti = $this->getNoBukti('PINJAMAN SUPIR', 'PINJAMAN SUPIR', 'penerimaanstokheader');
-        }else{
+        } else {
             $penerimaanstokheaderNoBukti = $this->getNoBukti('BIAYA LAIN SUPIR', 'BIAYA LAIN SUPIR', 'penerimaanstokheader');
         }
 
 
         $combo = $this->combo();
 
-        return view('penerimaanstokheader.edit', compact('title', 'penerimaanstokheader','combo', 'penerimaanstokheaderNoBukti'));
+        return view('penerimaanstokheader.edit', compact('title', 'penerimaanstokheader', 'combo', 'penerimaanstokheaderNoBukti'));
     }
 
     public function update(Request $request, $id)
@@ -155,10 +158,10 @@ class PenerimaanStokHeaderController extends MyController
                 ->get(config('app.api_url') . "penerimaanstokheader/$id");
 
             $penerimaanstokheader = $response['data'];
-            
+
             $combo = $this->combo();
 
-            return view('penerimaanstokheader.delete', compact('title','combo', 'penerimaanstokheader'));
+            return view('penerimaanstokheader.delete', compact('title', 'combo', 'penerimaanstokheader'));
         } catch (\Throwable $th) {
             return redirect()->route('penerimaanstokheader.index');
         }
@@ -172,7 +175,7 @@ class PenerimaanStokHeaderController extends MyController
             ->withToken(session('access_token'))
             ->delete(config('app.api_url') . "penerimaanstokheader/$id");
 
-            
+
         return response($response);
     }
 
@@ -202,10 +205,10 @@ class PenerimaanStokHeaderController extends MyController
             'grp' => 'STATUSCETAK',
             'subgrp' => 'STATUSCETAK',
         ];
-                
+
         $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'user/combostatus',$status);
+            ->get(config('app.api_url') . 'user/combostatus', $status);
 
         return $response['data'];
     }
@@ -221,10 +224,10 @@ class PenerimaanStokHeaderController extends MyController
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'penerimaanstok', $params);
-
-        return $response['data'];
+        // dd($response['acos']);
+        return $response;
     }
-    public function find($params,$id)
+    public function find($params, $id)
     {
         $params = [
             'offset' => $params['offset'] ?? request()->offset ?? ((request()->page - 1) * request()->rows),
@@ -237,66 +240,66 @@ class PenerimaanStokHeaderController extends MyController
         return $response = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'penerimaanstokheader/'.$id);
+            ->get(config('app.api_url') . 'penerimaanstokheader/' . $id);
     }
 
-    public function persediaan($gudang,$trado,$gandengan)
+    public function persediaan($gudang, $trado, $gandengan)
     {
         $kolom = null;
         $value = 0;
-        if(!empty($gudang)) {
+        if (!empty($gudang)) {
             $kolom = "Gudang";
             $value = $gudang;
-          } elseif(!empty($trado)) {
+        } elseif (!empty($trado)) {
             $kolom = "Trado";
             $value = $trado;
-          } elseif(!empty($gandengan)) {
+        } elseif (!empty($gandengan)) {
             $kolom = "Gandengan";
             $value = $gandengan;
-          }
-          return [
-            "column"=>$kolom,
-            "value"=>$value
+        }
+        return [
+            "column" => $kolom,
+            "value" => $value
         ];
     }
 
-    public function persediaanDari($gudangDari,$tradoDari,$gandenganDari)
+    public function persediaanDari($gudangDari, $tradoDari, $gandenganDari)
     {
         $kolom = null;
         $value = 0;
-        if(!empty($gudangDari)) {
+        if (!empty($gudangDari)) {
             $kolom = "Dari Gudang";
             $value = $gudangDari;
-          } elseif(!empty($tradoDari)) {
+        } elseif (!empty($tradoDari)) {
             $kolom = "Dari Trado";
             $value = $tradoDari;
-          } elseif(!empty($gandenganDari)) {
+        } elseif (!empty($gandenganDari)) {
             $kolom = "Dari Gandengan";
             $value = $gandenganDari;
-          }
-          return [
-            "columnDari"=>$kolom,
-            "valueDari"=>$value
+        }
+        return [
+            "columnDari" => $kolom,
+            "valueDari" => $value
         ];
     }
 
-    public function persediaanKe($gudangKe,$tradoKe,$gandenganKe)
+    public function persediaanKe($gudangKe, $tradoKe, $gandenganKe)
     {
         $kolom = null;
         $value = 0;
-        if(!empty($gudangKe)) {
+        if (!empty($gudangKe)) {
             $kolom = "Ke Gudang";
             $value = $gudangKe;
-          } elseif(!empty($tradoKe)) {
+        } elseif (!empty($tradoKe)) {
             $kolom = "Ke Trado";
             $value = $tradoKe;
-          } elseif(!empty($gandenganKe)) {
+        } elseif (!empty($gandenganKe)) {
             $kolom = "Ke Gandengan";
             $value = $gandenganKe;
-          }
-          return [
-            "columnKe"=>$kolom,
-            "valueKe"=>$value
+        }
+        return [
+            "columnKe" => $kolom,
+            "valueKe" => $value
         ];
     }
 
@@ -309,46 +312,46 @@ class PenerimaanStokHeaderController extends MyController
 
         ];
         $id = $request->id;
-        $penerimaanstok = $this->find($params,$id)['data'];
+        $penerimaanstok = $this->find($params, $id)['data'];
         $data = $penerimaanstok;
-        $i =0;
-        
+        $i = 0;
+
         $response = Http::withHeaders($this->httpHeaders)
-        ->withOptions(['verify' => false])
-        ->withToken(session('access_token'))
-        ->get(config('app.api_url') . 'penerimaanstokdetail', ['forReport' => true,'penerimaanstokheader_id' => $penerimaanstok['id']]);
-        $data["details"] =$response['data'];
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'penerimaanstokdetail', ['forReport' => true, 'penerimaanstokheader_id' => $penerimaanstok['id']]);
+        $data["details"] = $response['data'];
         $data["user"] = Auth::user();
         $combo = $this->combo('list');
-        
-        $key = array_search('CETAK', array_column( $combo, 'parameter')); 
+
+        $key = array_search('CETAK', array_column($combo, 'parameter'));
         $data["combo"] =  $combo[$key];
         $penerimaanstokheaders = $data;
 
         $trado = $penerimaanstokheaders['trado'];
         $gandengan = $penerimaanstokheaders['gandengan'];
         $gudang = $penerimaanstokheaders['gudang'];
-        $persediaan = $this->persediaan($gudang,$trado,$gandengan);
+        $persediaan = $this->persediaan($gudang, $trado, $gandengan);
         $data['column'] = $persediaan['column'];
         $data['value'] = $persediaan['value'];
 
         $tradoDari = $penerimaanstokheaders['tradodari'];
         $gandenganDari = $penerimaanstokheaders['gandengandari'];
         $gudangDari = $penerimaanstokheaders['gudangdari'];
-        $persediaanDari = $this->persediaanDari($gudangDari,$tradoDari,$gandenganDari);
+        $persediaanDari = $this->persediaanDari($gudangDari, $tradoDari, $gandenganDari);
         $data['columnDari'] = $persediaanDari['columnDari'];
         $data['valueDari'] = $persediaanDari['valueDari'];
 
         $tradoKe = $penerimaanstokheaders['tradoke'];
         $gandenganKe = $penerimaanstokheaders['gandenganke'];
         $gudangKe = $penerimaanstokheaders['gudangke'];
-        $persediaanKe = $this->persediaanKe($gudangKe,$tradoKe,$gandenganKe);
+        $persediaanKe = $this->persediaanKe($gudangKe, $tradoKe, $gandenganKe);
         $data['columnKe'] = $persediaanKe['columnKe'];
         $data['valueKe'] = $persediaanKe['valueKe'];
-        
+
         $penerimaanstokheaders = $data;
         $printer['tipe'] = $request->printer;
-        return view('reports.penerimaanstokheader', compact('penerimaanstokheaders','printer'));
+        return view('reports.penerimaanstokheader', compact('penerimaanstokheaders', 'printer'));
     }
 
     public function export(Request $request)
@@ -360,26 +363,26 @@ class PenerimaanStokHeaderController extends MyController
 
         ];
         $id = $request->id;
-        $penerimaanstok = $this->find($params,$id)['data'];
+        $penerimaanstok = $this->find($params, $id)['data'];
         $data = $penerimaanstok;
-        $i =0;
+        $i = 0;
         $response = Http::withHeaders($this->httpHeaders)
-        ->withOptions(['verify' => false])
-        ->withToken(session('access_token'))
-        ->get(config('app.api_url') . 'penerimaanstokdetail', ['penerimaanstokheader_id' => $penerimaanstok['id']]);
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'penerimaanstokdetail', ['penerimaanstokheader_id' => $penerimaanstok['id']]);
         $penerimaanstok_details = $response['data'];
         $penerimaanstokheaders = $data;
 
         $tglBukti = $penerimaanstokheaders["tglbukti"];
         $timeStamp = strtotime($tglBukti);
-        $dateTglBukti = date('d-m-Y', $timeStamp); 
+        $dateTglBukti = date('d-m-Y', $timeStamp);
         $penerimaanstokheaders['tglbukti'] = $dateTglBukti;
 
         $parenttglbukti = $penerimaanstokheaders["parrenttglbukti"];
         $timeStamp = strtotime($parenttglbukti);
-        $dateparenttglbukti = date('d-m-Y', $timeStamp); 
+        $dateparenttglbukti = date('d-m-Y', $timeStamp);
         $penerimaanstokheaders['parrenttglbukti'] = $dateparenttglbukti;
-        
+
         // dd($penerimaanstokheaders['statusformat']);
         switch ($penerimaanstokheaders['statusformat']) {
             case '132':
@@ -499,7 +502,7 @@ class PenerimaanStokHeaderController extends MyController
                 header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
                 header('Cache-Control: max-age=0');
                 $writer->save('php://output');
-            break;
+                break;
             case '133':
                 //POT
                 $spreadsheet = new Spreadsheet();
@@ -627,7 +630,7 @@ class PenerimaanStokHeaderController extends MyController
                 header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
                 header('Cache-Control: max-age=0');
                 $writer->save('php://output');
-            break;
+                break;
             case '134':
                 //SPB
                 $spreadsheet = new Spreadsheet();
@@ -778,20 +781,20 @@ class PenerimaanStokHeaderController extends MyController
                 header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
                 header('Cache-Control: max-age=0');
                 $writer->save('php://output');
-            break;
+                break;
             case '136':
                 //KOR
                 $trado = $penerimaanstokheaders['trado'];
                 $gandengan = $penerimaanstokheaders['gandengan'];
                 $gudang = $penerimaanstokheaders['gudang'];
-                $persediaan = $this->persediaan($gudang,$trado,$gandengan);
+                $persediaan = $this->persediaan($gudang, $trado, $gandengan);
                 $data['column'] = $persediaan['column'];
                 $data['value'] = $persediaan['value'];
 
                 $penerimaanstokheaders = $data;
                 $tglBukti = $penerimaanstokheaders["tglbukti"];
                 $timeStamp = strtotime($tglBukti);
-                $dateTglBukti = date('d-m-Y', $timeStamp); 
+                $dateTglBukti = date('d-m-Y', $timeStamp);
                 $penerimaanstokheaders['tglbukti'] = $dateTglBukti;
 
                 $spreadsheet = new Spreadsheet();
@@ -918,20 +921,20 @@ class PenerimaanStokHeaderController extends MyController
                 header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
                 header('Cache-Control: max-age=0');
                 $writer->save('php://output');
-            break;
+                break;
             case '137':
                 //PG
                 $tradoDari = $penerimaanstokheaders['tradodari'];
                 $gandenganDari = $penerimaanstokheaders['gandengandari'];
                 $gudangDari = $penerimaanstokheaders['gudangdari'];
-                $persediaanDari = $this->persediaanDari($gudangDari,$tradoDari,$gandenganDari);
+                $persediaanDari = $this->persediaanDari($gudangDari, $tradoDari, $gandenganDari);
                 $data['columnDari'] = $persediaanDari['columnDari'];
                 $data['valueDari'] = $persediaanDari['valueDari'];
-        
+
                 $tradoKe = $penerimaanstokheaders['tradoke'];
                 $gandenganKe = $penerimaanstokheaders['gandenganke'];
                 $gudangKe = $penerimaanstokheaders['gudangke'];
-                $persediaanKe = $this->persediaanKe($gudangKe,$tradoKe,$gandenganKe);
+                $persediaanKe = $this->persediaanKe($gudangKe, $tradoKe, $gandenganKe);
                 $data['columnKe'] = $persediaanKe['columnKe'];
                 $data['valueKe'] = $persediaanKe['valueKe'];
 
@@ -1052,7 +1055,7 @@ class PenerimaanStokHeaderController extends MyController
                 header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
                 header('Cache-Control: max-age=0');
                 $writer->save('php://output');
-            break;
+                break;
             case '138':
                 //SPBS
                 $spreadsheet = new Spreadsheet();
@@ -1203,7 +1206,7 @@ class PenerimaanStokHeaderController extends MyController
                 header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
                 header('Cache-Control: max-age=0');
                 $writer->save('php://output');
-            break;
+                break;
             case '352':
                 //PST
                 $spreadsheet = new Spreadsheet();
@@ -1334,7 +1337,7 @@ class PenerimaanStokHeaderController extends MyController
                 header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
                 header('Cache-Control: max-age=0');
                 $writer->save('php://output');
-            break;
+                break;
             case '361':
                 //PSPK
                 $spreadsheet = new Spreadsheet();
@@ -1465,9 +1468,9 @@ class PenerimaanStokHeaderController extends MyController
                 header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
                 header('Cache-Control: max-age=0');
                 $writer->save('php://output');
-            break;
+                break;
             default:
-            break;
+                break;
         }
     }
 }
