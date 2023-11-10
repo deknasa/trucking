@@ -2,19 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Menu;
-use Illuminate\Contracts\View\View;
-use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Http;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Http\RedirectResponse;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class LaporanPemakaianStokController extends Controller
 {
-    public $title = 'Laporan Pemakaian Stok';
+    public $title = 'Laporan Pemakaian Barang';
 
     public function index(Request $request)
     {
@@ -76,14 +77,19 @@ class LaporanPemakaianStokController extends Controller
         $sheet = $spreadsheet->getActiveSheet();
 
         $sheet->setCellValue('A1', $pengeluaran[0]['judul']);
-        $sheet->setCellValue('A2', 'Laporan Pemakaian Stok');
-        $sheet->setCellValue('A3', 'Bulan ' . date('M-Y', strtotime($pengeluaran[0]['tglbukti'])));
         $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
-
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
-        // $sheet->getStyle('A2')->getAlignment()->setHorizontal('left');
         $sheet->mergeCells('A1:J1');
+
+        $englishMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        $indonesianMonths = ['JANUARI', 'FEBRUARI', 'MARET', 'APRIL', 'MEI', 'JUNI', 'JULI', 'AGUSTUS', 'SEPTEMBER', 'OKTOBER', 'NOVEMBER', 'DESEMBER'];
+
+        $sheet->setCellValue('A2', strtoupper('Laporan Pemakaian Stok'));
+        $sheet->getStyle("A2")->getFont()->setBold(true);
         $sheet->mergeCells('A2:J2');
+
+        $sheet->setCellValue('A3', strtoupper( 'Bulan ' . date('M-Y', strtotime($pengeluaran[0]['tglbukti'])) ));
+        $sheet->getStyle("A3")->getFont()->setBold(true);
         $sheet->mergeCells('A3:J3');
 
         $header_start_row = 5;
@@ -196,6 +202,14 @@ class LaporanPemakaianStokController extends Controller
                         if ($previous_kodetrado != '') {
                             $sheet->setCellValue($alphabets[$data_columns_index] . ($detail_start_row - 2), $value);
                         }
+                    } else if ($data_column['index'] == 'tglbukti') {
+                        $dateValue = ($value != null) ? Date::PHPToExcel(date('Y-m-d',strtotime($value))) : ''; 
+                        $sheet->setCellValue($alphabets[$data_columns_index] . ($detail_start_row - 2), $dateValue);
+                        $sheet->getStyle($alphabets[$data_columns_index] . ($detail_start_row - 2)) 
+                        ->getNumberFormat() 
+                        ->setFormatCode('dd-mm-yyyy');
+                        // $sheet->setCellValue($alphabets[$data_columns_index] . ($detail_start_row - 2), $dateValue);
+                        
                     } else {
                         $sheet->setCellValue($alphabets[$data_columns_index] . $detail_start_row, $value);
                     }
@@ -242,7 +256,7 @@ class LaporanPemakaianStokController extends Controller
         ];
         foreach ($header_columns as $data_columns_index => $data_column) {
             if (in_array($data_column['index'], $numberColumn)) {
-                $sheet->getStyle($alphabets[$data_columns_index] . ($header_start_row + 2) . ":" . $alphabets[$data_columns_index] . ($detail_start_row + 2))->getNumberFormat()->setFormatCode("#,##0.00");
+                $sheet->getStyle($alphabets[$data_columns_index] . ($header_start_row + 2) . ":" . $alphabets[$data_columns_index] . ($detail_start_row + 2))->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
             }
         }
         
@@ -299,7 +313,7 @@ class LaporanPemakaianStokController extends Controller
 
 
         $writer = new Xlsx($spreadsheet);
-        $filename = 'EXPORT LAPORAN PEMAKAIAN STOK' . date('dmYHis');
+        $filename = 'EXPORT LAPORAN PEMAKAIAN BARANG' . date('dmYHis');
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
         header('Cache-Control: max-age=0');

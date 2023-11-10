@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Menu;
-use Illuminate\Contracts\View\View;
-use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Http;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Http\RedirectResponse;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
@@ -69,6 +70,8 @@ class LaporanStokController extends Controller
             ->get(config('app.api_url') . 'laporanstok/export', $detailParams);
 
         $pengeluaran = $responses['data'];
+        $judul = $pengeluaran[0]['judul'] ?? '';
+
         $disetujui = $pengeluaran[0]['disetujui'] ?? '';
         $diperiksa = $pengeluaran[0]['diperiksa'] ?? '';
         $user = Auth::user();
@@ -76,16 +79,29 @@ class LaporanStokController extends Controller
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
-        $sheet->setCellValue('A1', $pengeluaran[0]['judul']);
-        $sheet->setCellValue('A2', 'Laporan Stok');
-        $sheet->setCellValue('A3', 'Bulan ' . date('M-Y', strtotime($pengeluaran[0]['tgldari'])));
+        $sheet->setCellValue('A1', $judul);
         $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
-
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
-        // $sheet->getStyle('A2')->getAlignment()->setHorizontal('left');
         $sheet->mergeCells('A1:K1');
+
+        $sheet->setCellValue('A2', strtoupper('Laporan Pembelian Stok'));
+        $sheet->getStyle("A2")->getFont()->setBold(true);
         $sheet->mergeCells('A2:K2');
+
+        $sheet->setCellValue('A3', strtoupper( 'Bulan ' . date('M-Y', strtotime($pengeluaran[0]['tglbukti'])) ));
+        $sheet->getStyle("A3")->getFont()->setBold(true);
         $sheet->mergeCells('A3:K3');
+
+        // $sheet->setCellValue('A1', $pengeluaran[0]['judul']);
+        // $sheet->setCellValue('A2', 'Laporan Stok');
+        // $sheet->setCellValue('A3', 'Bulan ' . date('M-Y', strtotime($pengeluaran[0]['tgldari'])));
+        // $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
+
+        // $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
+        // // $sheet->getStyle('A2')->getAlignment()->setHorizontal('left');
+        // $sheet->mergeCells('A1:K1');
+        // $sheet->mergeCells('A2:K2');
+        // $sheet->mergeCells('A3:K3');
 
         $header_start_row = 5;
         $detail_start_row = 6;
@@ -194,7 +210,16 @@ class LaporanStokController extends Controller
                         }
                     }
 
-                    $sheet->setCellValue($alphabets[$data_columns_index] . $detail_start_row, $value);
+                    if ($data_column['index'] == 'tglbukti') {
+                        $dateValue = ($value != null) ? Date::PHPToExcel(date('Y-m-d',strtotime($value))) : ''; 
+                        $sheet->setCellValue($alphabets[$data_columns_index] . $detail_start_row, $dateValue);
+                        $sheet->getStyle($alphabets[$data_columns_index] . $detail_start_row) 
+                        ->getNumberFormat() 
+                        ->setFormatCode('dd-mm-yyyy');
+                        
+                    } else{
+                        $sheet->setCellValue($alphabets[$data_columns_index] . $detail_start_row, $value);
+                    }
                 }
 
 
@@ -231,7 +256,7 @@ class LaporanStokController extends Controller
         ];
         foreach ($header_columns as $data_columns_index => $data_column) {
             if (in_array($data_column['index'], $numberColumn)) {
-                $sheet->getStyle($alphabets[$data_columns_index] . ($header_start_row + 1) . ":" . $alphabets[$data_columns_index] . ($detail_start_row + 1))->getNumberFormat()->setFormatCode("#,##0.00");
+                $sheet->getStyle($alphabets[$data_columns_index] . ($header_start_row + 1) . ":" . $alphabets[$data_columns_index] . ($detail_start_row + 1))->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
             }
         }
         // $sheet->getStyle("A$header_start_row:$lastColumn$header_start_row")->getFont()->setBold(true);
@@ -280,7 +305,7 @@ class LaporanStokController extends Controller
 
 
         $writer = new Xlsx($spreadsheet);
-        $filename = 'EXPORT LAPORAN STOK' . date('dmYHis');
+        $filename = 'LAPORAN PEMAKAIAN BARANG ' . date('dmYHis');
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
         header('Cache-Control: max-age=0');

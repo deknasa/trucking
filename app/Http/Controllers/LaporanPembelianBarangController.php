@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Menu;
-use Illuminate\Contracts\View\View;
-use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Http;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Http\RedirectResponse;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
@@ -78,14 +79,16 @@ class LaporanPembelianBarangController extends Controller
         $sheet = $spreadsheet->getActiveSheet();
 
         $sheet->setCellValue('A1', $judul);
-        $sheet->setCellValue('A2', 'Laporan Pembelian Barang');
-        $sheet->setCellValue('A3', 'Bulan ' . date('M-Y', strtotime($pengeluaran[0]['tglbukti'])));
         $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
-
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
-        // $sheet->getStyle('A2')->getAlignment()->setHorizontal('left');
         $sheet->mergeCells('A1:I1');
+
+        $sheet->setCellValue('A2', strtoupper('Laporan Pembelian Stok'));
+        $sheet->getStyle("A2")->getFont()->setBold(true);
         $sheet->mergeCells('A2:I2');
+
+        $sheet->setCellValue('A3', strtoupper( 'Bulan ' . date('M-Y', strtotime($pengeluaran[0]['tglbukti'])) ));
+        $sheet->getStyle("A3")->getFont()->setBold(true);
         $sheet->mergeCells('A3:I3');
 
         $header_start_row = 5;
@@ -186,15 +189,23 @@ class LaporanPembelianBarangController extends Controller
                     if ($data_column['index'] == 'tglbukti') {
                         $value = date('d-m-Y', strtotime($value));
                     }
-
-                    $sheet->setCellValue($alphabets[$data_columns_index] . $detail_start_row, $value);
+                    if ($data_column['index'] == 'tglbukti') {
+                        $dateValue = ($value != null) ? Date::PHPToExcel(date('Y-m-d',strtotime($value))) : ''; 
+                        $sheet->setCellValue($alphabets[$data_columns_index] . $detail_start_row, $dateValue);
+                        $sheet->getStyle($alphabets[$data_columns_index] . $detail_start_row) 
+                        ->getNumberFormat() 
+                        ->setFormatCode('dd-mm-yyyy');
+                        
+                    } else{
+                        $sheet->setCellValue($alphabets[$data_columns_index] . $detail_start_row, $value);
+                    }
                 }
 
 
                 $sheet->getStyle("A$detail_start_row:I$detail_start_row")->applyFromArray($styleArray);
-                $sheet->getStyle("E$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
-                $sheet->getStyle("G$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
-                $sheet->getStyle("H$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+                $sheet->getStyle("E$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                $sheet->getStyle("G$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                $sheet->getStyle("H$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
                 // Tingkatkan nomor baris
                 $detail_start_row++;
                 $no++;
@@ -221,11 +232,11 @@ class LaporanPembelianBarangController extends Controller
 
         $totalDebet = "=SUM(E6:E" . ($detail_start_row - 1) . ")";
         $sheet->setCellValue("E$total_start_row", $totalDebet)->getStyle("E$total_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
-        $sheet->setCellValue("E$total_start_row", $totalDebet)->getStyle("E$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+        $sheet->setCellValue("E$total_start_row", $totalDebet)->getStyle("E$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
         $totalDebet = "=SUM(H6:H" . ($detail_start_row - 1) . ")";
         $sheet->setCellValue("H$total_start_row", $totalDebet)->getStyle("H$total_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
-        $sheet->setCellValue("H$total_start_row", $totalDebet)->getStyle("H$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+        $sheet->setCellValue("H$total_start_row", $totalDebet)->getStyle("H$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
         
         $ttd_start_row = $detail_start_row + 2;
         $sheet->setCellValue("B$ttd_start_row", 'Disetujui Oleh,');
@@ -244,7 +255,7 @@ class LaporanPembelianBarangController extends Controller
         // ];
         // foreach ($header_columns as $data_columns_index => $data_column) {
         //     if (in_array($data_column['index'],$numberColumn)) {
-        //         $sheet->getStyle($alphabets[$data_columns_index]. ($header_start_row + 1) . ":".$alphabets[$data_columns_index]. ($detail_start_row + 1))->getNumberFormat()->setFormatCode("#,##0.00");
+        //         $sheet->getStyle($alphabets[$data_columns_index]. ($header_start_row + 1) . ":".$alphabets[$data_columns_index]. ($detail_start_row + 1))->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
         //     }
         // }
 

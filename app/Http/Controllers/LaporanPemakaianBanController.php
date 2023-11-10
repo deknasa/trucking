@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Menu;
-use Illuminate\Contracts\View\View;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Http;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Http\RedirectResponse;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -85,19 +85,32 @@ class LaporanPemakaianBanController extends MyController
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
-        $sheet->setCellValue('A1', $data[0]['judul'] ?? '');
-        $sheet->setCellValue('A2', $data[0]['judulLaporan'] ?? '');
-        $sheet->setCellValue('A3', 'PERIODE : ' . date('d-M-Y', strtotime($detailParams['dari'])) . ' s/d ' . date('d-M-Y', strtotime($detailParams['sampai'])));
-        $sheet->setCellValue('A4', 'POSISI AKHIR BAN : ' . $parameter);
-        $sheet->setCellValue('A5', 'JENIS LAPORAN : ' . $request->jenislaporan);
+        $sheet->setCellValue('A1', $data[0]['judul']);
         $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
-        $sheet->getStyle("A2")->getFont()->setBold(true);
-        $sheet->getStyle("A3")->getFont()->setBold(true);
-        $sheet->getStyle("A4")->getFont()->setBold(true);
-        $sheet->getStyle("A5")->getFont()->setBold(true);
+        $sheet->mergeCells('A1:E1');
 
-        $sheet->mergeCells('A1:F1');
+        $englishMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        $indonesianMonths = ['JANUARI', 'FEBRUARI', 'MARET', 'APRIL', 'MEI', 'JUNI', 'JULI', 'AGUSTUS', 'SEPTEMBER', 'OKTOBER', 'NOVEMBER', 'DESEMBER'];
+        $tgldari = str_replace($englishMonths, $indonesianMonths, date('d - M - Y', strtotime($request->tgldari)));
+        $tglsampai = str_replace($englishMonths, $indonesianMonths, date('d - M - Y', strtotime($request->tglsampai)));
+        
+        $sheet->setCellValue('A2', strtoupper($data[0]['judulLaporan']));
+        $sheet->getStyle("A2")->getFont()->setBold(true);
+        $sheet->mergeCells('A2:E2');
+        
+        $sheet->setCellValue('A3', strtoupper( 'Periode: ' . date('d - M - Y', strtotime($request->dari)) .' s/d '.date('d - M - Y', strtotime($request->sampai)) ));
+        $sheet->getStyle("A3")->getFont()->setBold(true);
+        $sheet->mergeCells('A3:E3');
+        
+        $sheet->setCellValue('A4', strtoupper( 'Posisi akhir ban : ' . $request->parameter));
+        $sheet->getStyle("A4")->getFont()->setBold(true);
+        $sheet->mergeCells('A4:E4');
+        
+        $sheet->setCellValue('A5', strtoupper('Jenis Laporan: ' . $request->jenislaporan));
+        $sheet->getStyle("A5")->getFont()->setBold(true);
+        $sheet->mergeCells('A5:E5');
+        
 
         $detail_table_header_row = 8;
         $detail_start_row = $detail_table_header_row + 1;
@@ -198,7 +211,12 @@ class LaporanPemakaianBanController extends MyController
 
             $sheet->setCellValue("A$detail_start_row", $response_detail['nobanA']);
             $sheet->setCellValue("B$detail_start_row", $response_detail['nobukti']);
-            $sheet->setCellValue("C$detail_start_row", $tanggal);
+            $sheet->setCellValue("C$detail_start_row", date('d-m-Y', strtotime($response_detail['tanggal'])));
+            $dateValue = ($response_detail['tanggal'] != null) ? Date::PHPToExcel(date('Y-m-d',strtotime($response_detail['tanggal']))) : ''; 
+                $sheet->setCellValue("C$detail_start_row", $dateValue);
+                $sheet->getStyle("C$detail_start_row") 
+                ->getNumberFormat() 
+                ->setFormatCode('dd-mm-yyyy');
             $sheet->setCellValue("D$detail_start_row", $response_detail['gudang']);
             $sheet->setCellValue("E$detail_start_row", $response_detail['kondisiakhir']);
             $sheet->setCellValue("F$detail_start_row", $response_detail['nopg']);
@@ -211,7 +229,6 @@ class LaporanPemakaianBanController extends MyController
 
 
             $sheet->getStyle("A$detail_start_row:L$detail_start_row")->applyFromArray($styleArray);
-            $sheet->getStyle("C$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
 
             $detail_start_row++;
         }
@@ -229,7 +246,7 @@ class LaporanPemakaianBanController extends MyController
 
         $sheet->getColumnDimension('A')->setWidth(26);
         $sheet->getColumnDimension('B')->setAutoSize(true);
-        $sheet->getColumnDimension('C')->setAutoSize(true);
+        $sheet->getColumnDimension('C')->setWidth(12);
         $sheet->getColumnDimension('D')->setAutoSize(true);
         $sheet->getColumnDimension('E')->setAutoSize(true);
         $sheet->getColumnDimension('F')->setAutoSize(true);
