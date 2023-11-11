@@ -419,7 +419,7 @@ class JurnalUmumHeaderController extends MyController
             $sheet->getColumnDimension('D')->setWidth(50);
 
             $sheet ->getStyle("A$detail_start_row:D$detail_start_row")->applyFromArray($styleArray);
-            $sheet ->getStyle("E$detail_start_row:F$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
+            $sheet ->getStyle("E$detail_start_row:F$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
             $detail_start_row++;
         }
 
@@ -430,7 +430,7 @@ class JurnalUmumHeaderController extends MyController
         $sheet->setCellValue("E$total_start_row", "=SUM(E9:E" . ($detail_start_row - 1) . ")")->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
         $sheet->setCellValue("F$total_start_row", "=SUM(F9:F" . ($detail_start_row - 1) . ")")->getStyle("F$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
 
-        $sheet->getStyle("E$total_start_row:F$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+        $sheet->getStyle("E$total_start_row:F$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);
         $sheet->getColumnDimension('C')->setAutoSize(true);

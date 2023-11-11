@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Menu;
-use Illuminate\Contracts\View\View;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Http;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Http\RedirectResponse;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
@@ -121,8 +122,8 @@ class PindahBukuController extends MyController
         $sheet->getStyle("A2")->getFont()->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
-        $sheet->mergeCells('A1:G1');
-        $sheet->mergeCells('A2:G2');
+        $sheet->mergeCells('A1:E1');
+        $sheet->mergeCells('A2:E2');
 
         $header_start_row = 4;
         $header_start_row_right = 4;
@@ -215,22 +216,27 @@ class PindahBukuController extends MyController
         $sheet->getStyle("A$detail_table_header_row:E$detail_table_header_row")->applyFromArray($styleArray);
         $sheet->setCellValue("A$detail_start_row", $pindahBuku['kodealatbayar']);
         $sheet->setCellValue("B$detail_start_row", date('d-m-Y', strtotime($pindahBuku['tgljatuhtempo'])));
+        $dateValue = ($pindahBuku['tgljatuhtempo'] != null) ? Date::PHPToExcel(date('Y-m-d',strtotime($pindahBuku['tgljatuhtempo']))) : ''; 
+        $sheet->setCellValue("D$detail_start_row", $dateValue);
+        $sheet->getStyle("D$detail_start_row") 
+        ->getNumberFormat() 
+        ->setFormatCode('dd-mm-yyyy');
         $sheet->setCellValue("C$detail_start_row", $pindahBuku['nowarkat']);
         $sheet->setCellValue("D$detail_start_row", $pindahBuku['keterangan']);
         $sheet->setCellValue("E$detail_start_row", $pindahBuku['nominal']);
         $sheet->getStyle('A' . $detail_start_row . ':D' . $detail_start_row)->applyFromArray($styleArray);
-        $sheet->getStyle("E$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
+        $sheet->getStyle("E$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
         
         $total_start_row = $detail_start_row+1;
         $sheet->mergeCells('A' . $total_start_row . ':D' . $total_start_row);
         $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':D' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
         $sheet->setCellValue("E$total_start_row", "=SUM(E11:E" . ($detail_start_row) . ")")->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
-        $sheet->getStyle("E$total_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
+        $sheet->getStyle("E$total_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);
         $sheet->getColumnDimension('C')->setAutoSize(true);
-        $sheet->getColumnDimension('D')->setAutoSize(true);
+        $sheet->getColumnDimension('D')->setWidth(50);
         $sheet->getColumnDimension('E')->setAutoSize(true);
 
         $writer = new Xlsx($spreadsheet);

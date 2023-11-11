@@ -308,7 +308,8 @@ Route::get('reset-password/{token}', [ResetPasswordController::class, 'index'])-
 
 
 Route::middleware(['auth', 'authorized'])->group(function () {
-    Route::get('importdatacabang', [ImportDataCabangController::class, 'index']);
+    Route::get('importdatacabang/index', [ImportDataCabangController::class, 'index']);
+	Route::get('importdatacabang', [ImportDataCabangController::class, 'index']);
 
     Route::get('/', [DashboardController::class, 'index'])->name('/');
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
