@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
-use Illuminate\View\View;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
@@ -325,6 +326,11 @@ class PenerimaanGiroHeaderController extends MyController
             $sheet->setCellValue("B$detail_start_row", $response_detail['namacoakredit']);
             $sheet->setCellValue("C$detail_start_row", $response_detail['bank_id']);
             $sheet->setCellValue("D$detail_start_row", $response_detail['tgljatuhtempo']);
+            $dateValue = ($response_detail['tgljatuhtempo'] != null) ? Date::PHPToExcel(date('Y-m-d',strtotime($response_detail['tgljatuhtempo']))) : ''; 
+                $sheet->setCellValue("D$detail_start_row", $dateValue);
+                $sheet->getStyle("D$detail_start_row") 
+                ->getNumberFormat() 
+                ->setFormatCode('dd-mm-yyyy');
             $sheet->setCellValue("E$detail_start_row", $response_detail['invoice_nobukti']);
             $sheet->setCellValue("F$detail_start_row", $response_detail['keterangan']);
             $sheet->setCellValue("G$detail_start_row", $response_detail['nominal']);
@@ -333,7 +339,7 @@ class PenerimaanGiroHeaderController extends MyController
             $sheet->getColumnDimension('F')->setWidth(50);
 
             $sheet->getStyle("A$detail_start_row:G$detail_start_row")->applyFromArray($styleArray);
-            $sheet->getStyle("G$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
+            $sheet->getStyle("G$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
             $detail_start_row++;
         }
@@ -343,7 +349,7 @@ class PenerimaanGiroHeaderController extends MyController
         $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':F' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
         $sheet->setCellValue("G$detail_start_row", "=SUM(G9:G" . ($detail_start_row - 1) . ")")->getStyle("G$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
 
-        $sheet->getStyle("G$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+        $sheet->getStyle("G$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);
         $sheet->getColumnDimension('C')->setAutoSize(true);
