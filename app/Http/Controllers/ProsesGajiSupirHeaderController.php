@@ -239,10 +239,10 @@ class ProsesGajiSupirHeaderController extends MyController
             $sheet->setCellValue("A$detail_start_row", $response_index + 1);
             $sheet->setCellValue("B$detail_start_row", $response_detail['keterangan']);
             $sheet->setCellValue("C$detail_start_row", $response_detail['nominal']);
-            $sheet->getStyle("B$detail_start_row")->getAlignment()->setWrapText(true);
+            // $sheet->getStyle("B$detail_start_row")->getAlignment()->setWrapText(true);
             $sheet->getColumnDimension('B')->setWidth(50);
             $sheet->getStyle("A$detail_start_row:C$detail_start_row")->applyFromArray($styleArray);
-            $sheet->getStyle("C$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
+            $sheet->getStyle("C$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
             $detail_start_row++;
         }
 
@@ -251,7 +251,7 @@ class ProsesGajiSupirHeaderController extends MyController
         $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':B' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
         $sheet->setCellValue("C$total_start_row","=SUM(C8:C" . ($detail_start_row - 1) . ")")->getStyle("C$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
         
-        $sheet->getStyle("C$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+        $sheet->getStyle("C$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('C')->setAutoSize(true);

@@ -7,6 +7,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\View\View;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
@@ -25,7 +26,7 @@ class ProsesUangJalanSupirHeaderController extends MyController
             'combocetak' => $this->comboCetak('list', 'STATUSCETAK', 'STATUSCETAK'),
             'comboapproval' => $this->comboList('list', 'STATUS APPROVAL', 'STATUS APPROVAL'),
         ];
-        return view('prosesuangjalansupir.index', compact('title','data'));
+        return view('prosesuangjalansupir.index', compact('title', 'data'));
     }
 
     public function comboCetak($aksi, $grp, $subgrp)
@@ -102,10 +103,10 @@ class ProsesUangJalanSupirHeaderController extends MyController
             'status' => $aksi,
             'grp' => 'STATUSCETAK',
             'subgrp' => 'STATUSCETAK',
-        ]; 
+        ];
         $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'user/combostatus',$status);
+            ->get(config('app.api_url') . 'user/combostatus', $status);
         return $response['data'];
     }
 
@@ -116,8 +117,8 @@ class ProsesUangJalanSupirHeaderController extends MyController
         $uangjalansupir = Http::withHeaders($request->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') .'prosesuangjalansupirheader/'.$id.'/export')['data'];
-        
+            ->get(config('app.api_url') . 'prosesuangjalansupirheader/' . $id . '/export')['data'];
+
         //FETCH DETAIL
         $detailParams = [
             'forReport' => true,
@@ -126,12 +127,12 @@ class ProsesUangJalanSupirHeaderController extends MyController
         $uangjalansupir_detail = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') .'prosesuangjalansupirdetail', $detailParams)['data'];
+            ->get(config('app.api_url') . 'prosesuangjalansupirdetail', $detailParams)['data'];
 
         $combo = $this->combo('list');
-        $key = array_search('CETAK', array_column( $combo, 'parameter')); 
+        $key = array_search('CETAK', array_column($combo, 'parameter'));
         $uangjalansupir["combo"] =  $combo[$key];
-        return view('reports.prosesuangjalansupir', compact('uangjalansupir','uangjalansupir_detail'));
+        return view('reports.prosesuangjalansupir', compact('uangjalansupir', 'uangjalansupir_detail'));
     }
 
     public function export(Request $request): void
@@ -139,10 +140,10 @@ class ProsesUangJalanSupirHeaderController extends MyController
         //FETCH HEADER
         $id = $request->id;
         $uangjalansupir = Http::withHeaders($request->header())
-        ->withOptions(['verify' => false])
-        ->withToken(session('access_token'))
-        ->get(config('app.api_url') .'prosesuangjalansupirheader/'.$id.'/export')['data'];
-        
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'prosesuangjalansupirheader/' . $id . '/export')['data'];
+
         //FETCH DETAIL
         $detailParams = [
             'forExport' => true,
@@ -151,11 +152,11 @@ class ProsesUangJalanSupirHeaderController extends MyController
         $uangjalansupir_detail = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') .'prosesuangjalansupirdetail', $detailParams)['data'];
+            ->get(config('app.api_url') . 'prosesuangjalansupirdetail', $detailParams)['data'];
 
         $tglBukti = $uangjalansupir["tglbukti"];
         $timeStamp = strtotime($tglBukti);
-        $dateTglBukti = date('d-m-Y', $timeStamp); 
+        $dateTglBukti = date('d-m-Y', $timeStamp);
         $uangjalansupir['tglbukti'] = $dateTglBukti;
 
         $spreadsheet = new Spreadsheet();
@@ -246,12 +247,12 @@ class ProsesUangJalanSupirHeaderController extends MyController
             [
                 'label' => 'NO BUKTI PENGEMBALIAN KAS GANTUNG',
                 'index' => 'pengembaliankasgantung_nobukti',
-                
+
             ],
             [
                 'label' => 'TANGGAL PENGEMBALIAN KAS GANTUNG',
                 'index' => 'pengembaliankasgantung_tglbukti',
-                
+
             ],
             [
                 'label' => 'BANK PENGEMBALIAN KAS GANTUNG',
@@ -260,18 +261,18 @@ class ProsesUangJalanSupirHeaderController extends MyController
             [
                 'label' => 'NOMINAL',
                 'index' => 'nominal',
-                
+
             ]
         ];
 
         //LOOPING HEADER
         foreach ($header_columns as $header_column) {
             $sheet->setCellValue('B' . $header_start_row, $header_column['label']);
-            $sheet->setCellValue('C' . $header_start_row++, ': '.$uangjalansupir[$header_column['index']]);
+            $sheet->setCellValue('C' . $header_start_row++, ': ' . $uangjalansupir[$header_column['index']]);
         }
         foreach ($header_right_columns as $header_right_column) {
             $sheet->setCellValue('D' . $header_right_start_row, $header_right_column['label']);
-            $sheet->setCellValue('E' . $header_right_start_row++, ': '.$uangjalansupir[$header_right_column['index']]);
+            $sheet->setCellValue('E' . $header_right_start_row++, ': ' . $uangjalansupir[$header_right_column['index']]);
         }
 
         foreach ($detail_columns as $detail_columns_index => $detail_column) {
@@ -286,73 +287,68 @@ class ProsesUangJalanSupirHeaderController extends MyController
         );
 
         $style_number = [
-			'alignment' => [
-				'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT, 
-			],
-            
-			'borders' => [
-				'top' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
-				'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN], 
-				'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
-				'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN] 
-			]
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT,
+            ],
+
+            'borders' => [
+                'top' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+                'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+                'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+                'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN]
+            ]
         ];
 
-        $sheet ->getStyle("A$detail_table_header_row:N$detail_table_header_row")->applyFromArray($styleArray);
+        $sheet->getStyle("A$detail_table_header_row:N$detail_table_header_row")->applyFromArray($styleArray);
 
         // LOOPING DETAIL
         $nominal = 0;
         foreach ($uangjalansupir_detail as $response_index => $response_detail) {
-            
+
             foreach ($detail_columns as $detail_columns_index => $detail_column) {
                 $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
                 $sheet->getStyle("A$detail_table_header_row:N$detail_table_header_row")->getFont()->setBold(true);
                 $sheet->getStyle("A$detail_table_header_row:N$detail_table_header_row")->getAlignment()->setHorizontal('center');
             }
-            $response_detail['nominals'] = number_format((float) $response_detail['nominal'], '2', ',', '.');
-            $tglBukti = $response_detail["penerimaantrucking_tglbukti"];
-            $timeStamp = strtotime($tglBukti);
-            $dateTglBukti = date('d-m-Y', $timeStamp); 
-            $response_detail['penerimaantrucking_tglbukti'] = $dateTglBukti;
 
-            $pengeluaran = $response_detail["pengeluarantrucking_tglbukti"];
-            $timeStamp = strtotime($pengeluaran);
-            $datepengeluaran = date('d-m-Y', $timeStamp); 
-            $response_detail['pengeluarantrucking_tglbukti'] = $datepengeluaran;
+            $penerimaantrucking_tglbukti = ($response_detail['penerimaantrucking_tglbukti'] != null) ? Date::PHPToExcel(date('Y-m-d', strtotime($response_detail['penerimaantrucking_tglbukti']))) : '';
+            $pengeluarantrucking_tglbukti = ($response_detail['pengeluarantrucking_tglbukti'] != null) ? Date::PHPToExcel(date('Y-m-d', strtotime($response_detail['pengeluarantrucking_tglbukti']))) : '';
+            $pengembaliankasgantung_tglbukti = ($response_detail['pengembaliankasgantung_tglbukti'] != null) ? Date::PHPToExcel(date('Y-m-d', strtotime($response_detail['pengembaliankasgantung_tglbukti']))) : '';
 
-            $pengembalian = $response_detail["pengembaliankasgantung_tglbukti"];
-            $timeStamp = strtotime($pengembalian);
-            $datepengembalian = date('d-m-Y', $timeStamp); 
-            $response_detail['pengembaliankasgantung_tglbukti'] = $datepengembalian;
-        
-            $sheet->setCellValue("A$detail_start_row", $response_index + 1);    
+            $sheet->setCellValue("A$detail_start_row", $response_index + 1);
             $sheet->setCellValue("B$detail_start_row", $response_detail['nobukti']);
             $sheet->setCellValue("C$detail_start_row", $response_detail['penerimaantrucking_nobukti']);
-            $sheet->setCellValue("D$detail_start_row", $response_detail['penerimaantrucking_tglbukti']);
+            $sheet->setCellValue("D$detail_start_row", $penerimaantrucking_tglbukti);
             $sheet->setCellValue("E$detail_start_row", $response_detail['penerimaantrucking_bank_id']);
             $sheet->setCellValue("F$detail_start_row", $response_detail['statusprosesuangjalan']);
             $sheet->setCellValue("G$detail_start_row", $response_detail['pengeluarantrucking_nobukti']);
-            $sheet->setCellValue("H$detail_start_row", $response_detail['pengeluarantrucking_tglbukti']);
+            $sheet->setCellValue("H$detail_start_row", $pengeluarantrucking_tglbukti);
             $sheet->setCellValue("I$detail_start_row", $response_detail['pengeluarantrucking_bank_id']);
             $sheet->setCellValue("J$detail_start_row", $response_detail['keterangan']);
             $sheet->setCellValue("K$detail_start_row", $response_detail['pengembaliankasgantung_nobukti']);
-            $sheet->setCellValue("L$detail_start_row", $response_detail['pengembaliankasgantung_tglbukti']);
+            $sheet->setCellValue("L$detail_start_row", $pengembaliankasgantung_tglbukti);
             $sheet->setCellValue("M$detail_start_row", $response_detail['pengembaliankasgantung_bank_id']);
-            $sheet->setCellValue("N$detail_start_row", $response_detail['nominals']);
+            $sheet->setCellValue("N$detail_start_row", $response_detail['nominal']);
 
             $sheet->getStyle("J$detail_start_row")->getAlignment()->setWrapText(true);
             $sheet->getColumnDimension('J')->setWidth(50);
 
-            $sheet ->getStyle("A$detail_start_row:M$detail_start_row")->applyFromArray($styleArray);
-            $sheet ->getStyle("N$detail_start_row")->applyFromArray($style_number);
-            $nominal += $response_detail['nominal'];
+            $sheet->getStyle("A$detail_start_row:M$detail_start_row")->applyFromArray($styleArray);
+            $sheet->getStyle("N$detail_start_row")->applyFromArray($style_number);
+            $sheet->getStyle("N$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+
+            $sheet->getStyle("D$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
+            $sheet->getStyle("H$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
+            $sheet->getStyle("L$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
             $detail_start_row++;
         }
 
         $total_start_row = $detail_start_row;
-        $sheet->mergeCells('A'.$total_start_row.':M'.$total_start_row);
-        $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A'.$total_start_row.':M'.$total_start_row)->applyFromArray($style_number)->getFont()->setBold(true);
-        $sheet->setCellValue("N$total_start_row", number_format((float) $nominal, '2', ',', '.'))->getStyle("N$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->mergeCells('A' . $total_start_row . ':M' . $total_start_row);
+        $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':M' . $total_start_row)->applyFromArray($style_number)->getFont()->setBold(true);
+        $total = "=SUM(N".($detail_table_header_row + 1).":N" . ($detail_start_row - 1) . ")";
+        $sheet->setCellValue("N$total_start_row", $total)->getStyle("N$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->getStyle("N$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);

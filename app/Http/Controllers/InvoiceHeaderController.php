@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
@@ -351,13 +352,10 @@ class InvoiceHeaderController extends MyController
                 $sheet->getStyle("A$detail_table_header_row:M$detail_table_header_row")->getAlignment()->setHorizontal('center');
             }
         
-            $tglsp = $response_detail["tglsp"];
-            $timeStamp = strtotime($tglsp);
-            $datetglsp = date('d-m-Y', $timeStamp); 
-            $response_detail['tglsp'] = $datetglsp;
+            $tglSp = ($response_detail['tglsp'] != null) ? Date::PHPToExcel(date('Y-m-d',strtotime($response_detail['tglsp']))) : ''; 
 
             $sheet->setCellValue("A$detail_start_row", $response_index + 1);
-            $sheet->setCellValue("B$detail_start_row", $response_detail['tglsp']);
+            $sheet->setCellValue("B$detail_start_row", $tglSp);
             $sheet->setCellValue("C$detail_start_row", $response_detail['shipper']);
             $sheet->setCellValue("D$detail_start_row", $response_detail['tujuan']);
             $sheet->setCellValue("E$detail_start_row", $response_detail['nocont']);
@@ -370,11 +368,11 @@ class InvoiceHeaderController extends MyController
             $sheet->setCellValue("L$detail_start_row", $response_detail['jumlah']);
             $sheet->setCellValue("M$detail_start_row", $response_detail['keterangan']);
             
-            $sheet->getStyle("M$detail_start_row")->getAlignment()->setWrapText(true);
-            $sheet->getColumnDimension('M')->setWidth(50);
+            $sheet->getColumnDimension('M')->setWidth(30);
 
             $sheet->getStyle("A$detail_start_row:M$detail_start_row")->applyFromArray($styleArray);
-            $sheet->getStyle("J$detail_start_row:L$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
+            $sheet->getStyle("B$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
+            $sheet->getStyle("J$detail_start_row:L$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
             $detail_start_row++;
         }
 
@@ -383,7 +381,7 @@ class InvoiceHeaderController extends MyController
         $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':K' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
         $sheet->setCellValue("L$detail_start_row", "=SUM(L9:L" . ($detail_start_row - 1) . ")")->getStyle("L$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
 
-        $sheet->getStyle("L$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+        $sheet->getStyle("L$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);
@@ -399,7 +397,7 @@ class InvoiceHeaderController extends MyController
         $sheet->getColumnDimension('L')->setAutoSize(true);
 
         $writer = new Xlsx($spreadsheet);
-        $filename = 'Laporan Invoice' . date('dmYHis');
+        $filename = 'Laporan Invoice ' . date('dmYHis');
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
         header('Cache-Control: max-age=0');

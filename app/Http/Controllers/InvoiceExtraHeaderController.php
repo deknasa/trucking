@@ -140,6 +140,9 @@ class InvoiceExtraHeaderController extends MyController
         $timeStamp = strtotime($tglBukti);
         $dateTglBukti = date('d-m-Y', $timeStamp); 
         $invoiceextra['tglbukti'] = $dateTglBukti;
+        
+        $tglBukti = $invoiceextra["tgljatuhtempo"];
+        $invoiceextra['tgljatuhtempo'] = date('d-m-Y', strtotime($tglBukti));
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
@@ -242,11 +245,10 @@ class InvoiceExtraHeaderController extends MyController
             $sheet->setCellValue("B$detail_start_row", $response_detail['keterangan']);
             $sheet->setCellValue("C$detail_start_row", $response_detail['nominal']);
      
-            $sheet->getStyle("B$detail_start_row")->getAlignment()->setWrapText(true);
             $sheet->getColumnDimension('B')->setWidth(50);
 
             $sheet ->getStyle("A$detail_start_row:B$detail_start_row")->applyFromArray($styleArray);
-            $sheet ->getStyle("C$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
+            $sheet ->getStyle("C$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
             $detail_start_row++;
          }
  
@@ -255,13 +257,13 @@ class InvoiceExtraHeaderController extends MyController
          $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A'.$total_start_row.':B'.$total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
          $sheet->setCellValue("C$detail_start_row", "=SUM(C11:C" . ($detail_start_row - 1) . ")")->getStyle("C$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
  
-         $sheet->getStyle("C$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+         $sheet->getStyle("C$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
  
          $sheet->getColumnDimension('A')->setAutoSize(true);
          $sheet->getColumnDimension('C')->setAutoSize(true);
 
         $writer = new Xlsx($spreadsheet);
-        $filename = 'Laporan Invoice Extra' . date('dmYHis');
+        $filename = 'Laporan Invoice Extra ' . date('dmYHis');
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
         header('Cache-Control: max-age=0');

@@ -283,7 +283,7 @@ class AbsensiSupirApprovalHeaderController extends MyController
         $sheet->getColumnDimension('D')->setAutoSize(true);
 
         $writer = new Xlsx($spreadsheet);
-        $filename = 'LaporanAbsensiSupirApproval' . date('dmYHis');
+        $filename = 'Laporan Absensi Supir Approval ' . date('dmYHis');
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
         header('Cache-Control: max-age=0');
