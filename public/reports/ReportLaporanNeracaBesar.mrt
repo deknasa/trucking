@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "46264c49d1e6cb09d7c74d48f9bfe89e",
+  "ReportGuid": "79d8c8091a7ccc7fc85f56119cfbccaf",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanNeracaBesar.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanNeraca.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1699425392000+0700)/",
+  "ReportChanged": "/Date(1699673099000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -408,7 +408,7 @@
               "Ident": "StiShape",
               "Name": "Shape1",
               "GrowToHeight": true,
-              "ClientRectangle": "0.25,2.47,20.26,0.67",
+              "ClientRectangle": "0.25,2.47,20.06,0.67",
               "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -629,7 +629,7 @@
               "Name": "Text5",
               "Guid": "65f8126645670a4f5ad897bbcd9e9ab2",
               "GrowToHeight": true,
-              "ClientRectangle": "11,2.54,9.38,0.41",
+              "ClientRectangle": "11,2.54,9.18,0.41",
               "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -735,7 +735,7 @@
               "Name": "Text2",
               "Guid": "c7c22ae470f58bd1a4e5aa2c8256a3b2",
               "GrowToHeight": true,
-              "ClientRectangle": "10.95,-0.01,9.4,0.6",
+              "ClientRectangle": "10.95,-0.01,7.4,0.6",
               "ComponentPlacement": "gh.GroupHeaderBand3",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -749,11 +749,11 @@
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
               "TextFormat": {
-                "Ident": "StiNumberFormatService",
-                "NegativePattern": 1,
+                "Ident": "StiCurrencyFormatService",
                 "DecimalSeparator": ",",
                 "GroupSeparator": ".",
-                "State": "DecimalSeparator, GroupSeparator"
+                "State": "DecimalSeparator, GroupSeparator, CurrencySymbol",
+                "Symbol": ""
               },
               "Type": "Expression"
             }
@@ -838,11 +838,11 @@
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
               "TextFormat": {
-                "Ident": "StiNumberFormatService",
-                "NegativePattern": 1,
+                "Ident": "StiCurrencyFormatService",
                 "DecimalSeparator": ",",
                 "GroupSeparator": ".",
-                "State": "DecimalSeparator, GroupSeparator"
+                "State": "DecimalSeparator, GroupSeparator, CurrencySymbol",
+                "Symbol": ""
               }
             },
             "2": {
@@ -867,6 +867,9 @@
               "Interaction": {
                 "Ident": "StiInteraction"
               },
+              "Text": {
+                "Value": "X"
+              },
               "HorAlignment": "Right",
               "Font": ";10;Bold;",
               "Border": ";;;;;;;solid:0,0,0",
@@ -886,7 +889,7 @@
               "Name": "Text12",
               "Guid": "41a4539c2826792ab7677d737f5b4709",
               "GrowToHeight": true,
-              "ClientRectangle": "15.82,0.04,3.51,0.58",
+              "ClientRectangle": "16.82,0.04,3.51,0.58",
               "ComponentPlacement": "d.DataBand1",
               "Conditions": {
                 "0": {
@@ -911,11 +914,11 @@
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
               "TextFormat": {
-                "Ident": "StiNumberFormatService",
-                "NegativePattern": 1,
+                "Ident": "StiCurrencyFormatService",
                 "DecimalSeparator": ",",
                 "GroupSeparator": ".",
-                "State": "DecimalSeparator, GroupSeparator"
+                "State": "DecimalSeparator, GroupSeparator, CurrencySymbol",
+                "Symbol": ""
               },
               "Type": "DataColumn"
             }
@@ -984,7 +987,7 @@
               "Name": "Shape12",
               "Guid": "9d3bc2e52c68e3bb3fbd3eb208ef0bce",
               "GrowToHeight": true,
-              "ClientRectangle": "0.36,0.01,20.22,1",
+              "ClientRectangle": "0.36,0.01,20.02,1",
               "ComponentPlacement": "gf.GroupFooterBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -1024,7 +1027,7 @@
               "Name": "Text8",
               "Guid": "6daf90590ed5d9d99905bc58ec6ddb42",
               "GrowToHeight": true,
-              "ClientRectangle": "10.74,0.21,9.6,0.6",
+              "ClientRectangle": "10.74,0.21,7.6,0.6",
               "ComponentPlacement": "gf.GroupFooterBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -1038,11 +1041,11 @@
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
               "TextFormat": {
-                "Ident": "StiNumberFormatService",
-                "NegativePattern": 1,
+                "Ident": "StiCurrencyFormatService",
                 "DecimalSeparator": ",",
                 "GroupSeparator": ".",
-                "State": "DecimalSeparator, GroupSeparator"
+                "State": "DecimalSeparator, GroupSeparator, CurrencySymbol",
+                "Symbol": ""
               },
               "Type": "Expression"
             }
