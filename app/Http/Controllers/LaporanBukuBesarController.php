@@ -199,7 +199,9 @@ class LaporanBukuBesarController extends MyController
 
                     if ($row['keterangan'] == 'SALDO AWAL') {
                         if ($row['Saldo'] != 0) {
-                            $groupedData[$coa] = [];
+                            if($row['Saldo'] < -(0.001) || $row['Saldo'] > 0.001){
+                                $groupedData[$coa] = [];
+                            }
                         }
                     }
                 }
