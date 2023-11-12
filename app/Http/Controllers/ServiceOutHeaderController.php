@@ -364,7 +364,7 @@ class ServiceOutHeaderController extends MyController
             $sheet->setCellValue("B$detail_start_row", $response_detail['servicein_nobukti']);
             $sheet->setCellValue("C$detail_start_row", $response_detail['keterangan']);
 
-            $sheet->getStyle("C$detail_start_row")->getAlignment()->setWrapText(true);
+            // $sheet->getStyle("C$detail_start_row")->getAlignment()->setWrapText(true);
             $sheet->getColumnDimension('C')->setWidth(50);
 
             $sheet ->getStyle("A$detail_start_row:C$detail_start_row")->applyFromArray($styleArray);

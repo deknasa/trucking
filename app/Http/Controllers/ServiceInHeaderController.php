@@ -308,7 +308,6 @@ class ServiceInHeaderController extends MyController
             $sheet->setCellValue("B$detail_start_row", $response_detail['karyawan_id']);
             $sheet->setCellValue("C$detail_start_row", $response_detail['keterangan']);
 
-            $sheet->getStyle("C$detail_start_row")->getAlignment()->setWrapText(true);
             $sheet->getColumnDimension('C')->setWidth(50);
 
             $sheet ->getStyle("A$detail_start_row:C$detail_start_row")->applyFromArray($styleArray);

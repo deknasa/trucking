@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use stdClass;
@@ -328,36 +329,36 @@ class RitasiController extends MyController
                 $sheet->getStyle("A$detail_table_header_row:K$detail_table_header_row")->getFont()->setBold(true);
                 $sheet->getStyle("A$detail_table_header_row:K$detail_table_header_row")->getAlignment()->setHorizontal('center');
             }
-            $response_detail['gajis'] = number_format((float) $response_detail['gaji'], '2', '.', ',');
-
-            $tglBukti = $response_detail["tglbukti"];
-            $timeStamp = strtotime($tglBukti);
-            $dateTglBukti = date('d-m-Y', $timeStamp); 
-            $response_detail['tglbukti'] = $dateTglBukti;
+            $dateValue = ($response_detail['tglbukti'] != null) ? Date::PHPToExcel(date('Y-m-d',strtotime($response_detail['tglbukti']))) : ''; 
+           
 
             $sheet->setCellValue("A$detail_start_row", $response_index + 1);
             $sheet->setCellValue("B$detail_start_row", $response_detail['nobukti']);
             $sheet->setCellValue("C$detail_start_row", $response_detail['suratpengantar_nobukti']);
             $sheet->setCellValue("D$detail_start_row", $response_detail['supir_id']);
-            $sheet->setCellValue("E$detail_start_row", $response_detail['tglbukti']);
+            $sheet->setCellValue("E$detail_start_row", $dateValue);
             $sheet->setCellValue("F$detail_start_row", $response_detail['statusritasi']);
             $sheet->setCellValue("G$detail_start_row", $response_detail['trado_id']);
             $sheet->setCellValue("H$detail_start_row", $response_detail['dari_id']);
             $sheet->setCellValue("I$detail_start_row", $response_detail['sampai_id']);
             $sheet->setCellValue("J$detail_start_row", $response_detail['jarak']);
-            $sheet->setCellValue("K$detail_start_row", $response_detail['gajis']);
+            $sheet->setCellValue("K$detail_start_row", $response_detail['gaji']);
 
             $sheet ->getStyle("A$detail_start_row:J$detail_start_row")->applyFromArray($styleArray);
+            $sheet->getStyle("J$detail_start_row:K$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
             $sheet ->getStyle("K$detail_start_row")->applyFromArray($style_number);
 
-            $nominal += $response_detail['gaji'];
+            $sheet->getStyle("E$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
             $detail_start_row++;
         }
         $total_start_row = $detail_start_row;
         //Total
         $sheet->mergeCells('A'.$total_start_row.':J'.$total_start_row);
         $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A'.$total_start_row.':J'.$total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
-        $sheet->setCellValue("K$total_start_row", number_format((float) $nominal, '2', '.', ','))->getStyle("K$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        
+        $total = "=SUM(K".($detail_table_header_row + 1).":K" . ($detail_start_row - 1) . ")";
+        $sheet->setCellValue("K$total_start_row", $total)->getStyle("K$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->getStyle("K$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);
