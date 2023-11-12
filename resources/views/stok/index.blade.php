@@ -188,6 +188,16 @@
 
                     },
                     {
+                        label: 'Umur Aki',
+                        name: 'umuraki',
+                        align: 'right',
+                    },
+                    {
+                        label: 'Vulkanisir',
+                        name: 'vulkan',
+                        align: 'right',
+                    },
+                    {
                         label: 'nama terpusat',
                         name: 'namaterpusat',
                         align: 'left',
