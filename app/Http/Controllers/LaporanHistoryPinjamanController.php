@@ -70,9 +70,13 @@ class LaporanHistoryPinjamanController extends MyController
         $sheet->setCellValue('A2', strtoupper('Laporan History Pinjaman'));
         $sheet->getStyle("A2")->getFont()->setBold(true);
         $sheet->mergeCells('A2:E2');
+        $sheet->setCellValue('A3', 'Supir dari: ' .  $pengeluaran[0]['supirdari'] . ' Sampai ' . $pengeluaran[0]['supirsampai']);
+        $sheet->getStyle("A3")->getFont()->setBold(true);
 
-        $header_start_row = 4;
-        $detail_start_row = 5;
+        $sheet->mergeCells('A3:B3');       
+
+        $header_start_row = 5;
+        $detail_start_row = 6;
 
         $styleArray = array(
             'borders' => array(
@@ -87,6 +91,12 @@ class LaporanHistoryPinjamanController extends MyController
                 'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT,
             ],
 
+            'borders' => [
+                'top' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+                'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+                'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+                'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN]
+            ]
         ];
 
         $alphabets = range('A', 'Z');
@@ -105,6 +115,10 @@ class LaporanHistoryPinjamanController extends MyController
                 'index' => 'namasupir',
             ],
             [
+                'label' => 'Keterangan',
+                'index' => 'keterangan',
+            ],
+            [
                 'label' => 'Nominal',
                 'index' => 'nominal',
             ],
@@ -117,7 +131,7 @@ class LaporanHistoryPinjamanController extends MyController
         foreach ($header_columns as $data_columns_index => $data_column) {
             $sheet->setCellValue($alphabets[$data_columns_index] . $header_start_row, $data_column['label'] ?? $data_columns_index + 1);
         }
-        $sheet->getStyle("A$header_start_row:E$header_start_row")->applyFromArray($styleArray)->getFont()->setBold(true);
+        $sheet->getStyle("A$header_start_row:F$header_start_row")->applyFromArray($styleArray)->getFont()->setBold(true);
         $totalnominal = 0;
         $totalSaldo = 0;
         foreach ($pengeluaran as $response_index => $response_detail) {
@@ -135,18 +149,29 @@ class LaporanHistoryPinjamanController extends MyController
                 }
             }
             
-            $sheet->getStyle("A$detail_start_row:E$detail_start_row")->applyFromArray($styleArray);
+            $sheet->getStyle("A$detail_start_row:F$detail_start_row")->applyFromArray($styleArray);
             $detail_start_row++;
         }
+
+        
 
         $lastColumn = $alphabets[$data_columns_index];
         $sheet->getStyle("A$header_start_row:$lastColumn$header_start_row")->getFont()->setBold(true);
 
+        $total_start_row = $detail_start_row;
+        $sheet->mergeCells('A' . $total_start_row . ':D' . $total_start_row);
+        $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':D' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
+
+        $totalDebet = "=SUM(E6:E" . ($detail_start_row-1) . ")";
+        $sheet->setCellValue("E$total_start_row", $totalDebet)->getStyle("E$total_start_row")->applyFromArray($style_number);
+        $sheet->setCellValue("E$total_start_row", $totalDebet)->getStyle("E$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);
-        $sheet->getColumnDimension('C')->setWidth(50);
-        $sheet->getColumnDimension('D')->setAutoSize(true);
+        $sheet->getColumnDimension('C')->setAutoSize(true);
+        $sheet->getColumnDimension('D')->setWidth(72);
         $sheet->getColumnDimension('E')->setAutoSize(true);
+        $sheet->getColumnDimension('F')->setAutoSize(true);
         // $sheet->getColumnDimension('F')->setAutoSize(true);
         $total_start_row = $detail_start_row;
         // $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A'.$total_start_row.':C'.$total_start_row)->getFont()->setBold(true);
