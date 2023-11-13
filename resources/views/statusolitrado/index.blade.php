@@ -162,12 +162,6 @@
                         name: 'satuan',
                         align: 'left'
                     },
-                    {
-                        label: 'KM',
-                        name: 'km',
-                        align: 'right',
-                        formatter: currencyFormat,
-                    },
                 ],
                 autowidth: true,
                 shrinkToFit: false,
