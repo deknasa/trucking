@@ -63,7 +63,7 @@ class LaporanHistoryPinjamanController extends MyController
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setCellValue('A1', $pengeluaran[0]['judul']);
+        $sheet->setCellValue('A1', $pengeluaran[0]['judul'] ?? '');
         $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:E1');
@@ -71,7 +71,7 @@ class LaporanHistoryPinjamanController extends MyController
         $sheet->setCellValue('A2', strtoupper('Laporan History Pinjaman'));
         $sheet->getStyle("A2")->getFont()->setBold(true);
         $sheet->mergeCells('A2:E2');
-        $sheet->setCellValue('A3', 'Supir dari: ' .  $pengeluaran[0]['supirdari'] . ' Sampai ' . $pengeluaran[0]['supirsampai']);
+        $sheet->setCellValue('A3', 'SUPIR : ' .  $responses['supirdari'] . ' S/D ' . $responses['supirsampai'] );
         $sheet->getStyle("A3")->getFont()->setBold(true);
 
         $sheet->mergeCells('A3:B3');       
