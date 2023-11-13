@@ -194,21 +194,10 @@ class LaporanBukuBesarController extends MyController
         if (is_array($bukubesar)) {
             foreach ($bukubesar as $row) {
                 $coa = $row['coa'];
-
                 if (!isset($groupedData[$coa])) {
-
-                    if ($row['keterangan'] == 'SALDO AWAL') {
-                        if ($row['Saldo'] != 0) {
-                            if($row['Saldo'] < -(0.001) || $row['Saldo'] > 0.001){
-                                $groupedData[$coa] = [];
-                            }
-                        }
-                    }
+                    $groupedData[$coa] = [];
                 }
-
-                    if (isset($groupedData[$coa])) {
-                        $groupedData[$coa][] = $row;
-                    }
+                $groupedData[$coa][] = $row;
             }
         }
         // dd($groupedData);
