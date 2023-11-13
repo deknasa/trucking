@@ -1317,7 +1317,7 @@
                 colModel: [{
                         label: "",
                         name: "",
-                        width: 30,
+                        width: 40,
                         formatter: 'checkbox',
                         search: false,
                         editable: false,
@@ -1326,7 +1326,7 @@
                             if ($('#crudForm').data('action') == 'delete') {
                                 disabled = 'disabled'
                             }
-                            return `<input type="checkbox" value="${rowData.id}" ${disabled} onChange="checkboxPotSemuaHandler(this, ${rowData.id})">`;
+                            return `<input type="checkbox" class="checkbox-jqgrid" value="${rowData.id}" ${disabled} onChange="checkboxPotSemuaHandler(this, ${rowData.id})">`;
                         },
                     },
                     {
@@ -1721,7 +1721,7 @@
                 colModel: [{
                         label: "",
                         name: "",
-                        width: 30,
+                        width: 40,
                         formatter: 'checkbox',
                         search: false,
                         editable: false,
@@ -1730,7 +1730,7 @@
                             if ($('#crudForm').data('action') == 'delete') {
                                 disabled = 'disabled'
                             }
-                            return `<input type="checkbox" value="${rowData.id}" ${disabled} onChange="checkboxPotPribadiHandler(this, ${rowData.id})">`;
+                            return `<input type="checkbox" class="checkbox-jqgrid" value="${rowData.id}" ${disabled} onChange="checkboxPotPribadiHandler(this, ${rowData.id})">`;
                         },
                     },
                     {
@@ -2104,7 +2104,7 @@
                 colModel: [{
                         label: '',
                         name: '',
-                        width: 30,
+                        width: 40,
                         align: 'center',
                         sortable: false,
                         clear: false,
@@ -2121,6 +2121,7 @@
                                 $(element).attr('id', 'gsUangjalan')
                                 $(element).removeClass('form-control')
                                 $(element).parent().addClass('text-center')
+                                $(element).addClass('checkbox-selectall')
                                 if (disabled == '') {
                                     $(element).on('click', function() {
                                         $(element).attr('disabled', true)
@@ -2137,7 +2138,7 @@
                             }
                         },
                         formatter: (value, rowOptions, rowData) => {
-                            return `<input type="checkbox" name="absensiId[]" value="${rowData.absensi_id}" ${disabled} onchange="checkboxAbsensiHandler(this)">`
+                            return `<input type="checkbox" class="checkbox-jqgrid" name="absensiId[]" value="${rowData.absensi_id}" ${disabled} onchange="checkboxAbsensiHandler(this)">`
                         },
                     },
                     {
@@ -2510,14 +2511,14 @@
                 colModel: [{
                         label: '',
                         name: '',
-                        width: 30,
+                        width: 40,
                         align: 'center',
                         sortable: false,
                         formatter: 'checkbox',
                         search: false,
                         editable: false,
                         formatter: (value, rowOptions, rowData) => {
-                            return `<input type="checkbox" name="rincianId[]" value="${rowData.id}" ${disabled} onchange="checkboxHandler(this, ${rowData.id})">`
+                            return `<input type="checkbox" class="checkbox-jqgrid" name="rincianId[]" value="${rowData.id}" ${disabled} onchange="checkboxHandler(this, ${rowData.id})">`
                         },
                     },
                     {

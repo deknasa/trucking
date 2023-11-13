@@ -832,7 +832,7 @@
         colModel: [{
             label: "",
             name: "",
-            width: 30,
+            width: 40,
             align: 'center',
             sortable: false,
             clear: false,
@@ -845,6 +845,7 @@
 
                 $(element).removeClass('form-control')
                 $(element).parent().addClass('text-center')
+                $(element).addClass('checkbox-selectall')
                 if (disabled == '') {
                   $(element).on('click', function() {
                     if ($(this).is(':checked')) {
@@ -864,7 +865,7 @@
               if ($('#crudForm').data('action') == 'delete') {
                 disabled = 'disabled'
               }
-              return `<input type="checkbox" value="${rowData.id}" ${disabled} onChange="checkboxHutangHandler(this, ${rowData.id})">`;
+              return `<input type="checkbox" class="checkbox-jqgrid" value="${rowData.id}" ${disabled} onChange="checkboxHutangHandler(this, ${rowData.id})">`;
             },
           },
           {
@@ -1509,8 +1510,8 @@
           // detailRow.find(`[name="nominal[]"]`).val(detail.nominal)
 
           // initAutoNumericNoMinus(detailRow.find(`[name="bayar[]"]`))
-          initAutoNumericNoMinus(detailRow.find(`[name="potongan[]"]`))
-          initAutoNumericNoMinus(detailRow.find(`[name="total[]"]`))
+          initAutoNumeric(detailRow.find(`[name="potongan[]"]`))
+          initAutoNumeric(detailRow.find(`[name="total[]"]`))
           initAutoNumeric(detailRow.find(`[name="nominal[]"]`))
           initAutoNumeric(detailRow.find(`[name="sisa[]"]`))
           initAutoNumeric(detailRow.find(`[name="sisaAwal[]"]`))
@@ -1683,8 +1684,8 @@
           `)
 
           initAutoNumeric(detailRow.find(`[name="bayar[]"]`).not(':disabled'))
-          initAutoNumericNoMinus(detailRow.find(`[name="potongan[]"]`))
-          initAutoNumericNoMinus(detailRow.find(`[name="total[]"]`))
+          initAutoNumeric(detailRow.find(`[name="potongan[]"]`))
+          initAutoNumeric(detailRow.find(`[name="total[]"]`))
           initAutoNumeric(detailRow.find(`[name="nominal[]"]`))
           initAutoNumeric(detailRow.find(`[name="sisa[]"]`))
           initAutoNumeric(detailRow.find(`[name="sisaAwal[]"]`))
@@ -1902,22 +1903,6 @@
     new AutoNumeric('#totalHutang').set(gt)
   }
 
-  function initAutoNumericNoMinus(elements = null) {
-    let option = {
-      digitGroupSeparator: formats.THOUSANDSEPARATOR,
-      decimalCharacter: formats.DECIMALSEPARATOR,
-      minimumValue: 0
-
-    };
-
-    if (elements == null) {
-      new AutoNumeric.multiple(".autonumeric", option);
-    } else {
-      $.each(elements, (index, element) => {
-        new AutoNumeric(element, option);
-      });
-    }
-  }
 
   function initLookup() {
     $('.coa-lookup').lookup({

@@ -682,7 +682,7 @@
         colModel: [{
             label: "",
             name: "",
-            width: 30,
+            width: 40,
             align: 'center',
             sortable: false,
             clear: false,
@@ -695,6 +695,7 @@
 
                 $(element).removeClass('form-control')
                 $(element).parent().addClass('text-center')
+                $(element).addClass('checkbox-selectall')
                 if (disabled == '') {
                   $(element).on('click', function() {
                     if ($(this).is(':checked')) {
@@ -714,7 +715,7 @@
               if (($('#crudForm').data('action') == 'delete') || ($('#crudForm').data('action') == 'view')) {
                 disabled = 'disabled'
               }
-              return `<input type="checkbox" value="${rowData.id}" ${disabled} onChange="checkboxHandler(this, ${rowData.id})">`;
+              return `<input type="checkbox" class="checkbox-jqgrid" value="${rowData.id}" ${disabled} onChange="checkboxHandler(this, ${rowData.id})">`;
             },
           },
           {

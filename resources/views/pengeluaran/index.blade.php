@@ -134,7 +134,7 @@
         colModel: [{
             label: '',
             name: '',
-            width: 30,
+            width: 40,
             align: 'center',
             sortable: false,
             clear: false,
@@ -146,7 +146,7 @@
               dataInit: function(element) {
                 $(element).removeClass('form-control')
                 $(element).parent().addClass('text-center')
-
+                $(element).addClass('checkbox-selectall')
                 $(element).on('click', function() {
                   $(element).attr('disabled', true)
                   if ($(this).is(':checked')) {
@@ -159,7 +159,7 @@
               }
             },
             formatter: (value, rowOptions, rowData) => {
-              return `<input type="checkbox" name="pengeluaranId[]" value="${rowData.id}" onchange="checkboxHandler(this)">`
+              return `<input type="checkbox" name="pengeluaranId[]" class="checkbox-jqgrid" value="${rowData.id}" onchange="checkboxHandler(this)">`
             },
           },
           {
