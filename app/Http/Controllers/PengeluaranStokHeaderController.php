@@ -326,7 +326,7 @@ class PengeluaranStokHeaderController extends MyController
             'rows' => $request->sampai - $request->dari + 1,
             'withRelations' => true,
         ];
-        
+
         $id = $request->id;
         $pengeluaranstok = $this->find($params,$id)['data'];
         $data = $pengeluaranstok;
@@ -345,7 +345,6 @@ class PengeluaranStokHeaderController extends MyController
         $data['column'] = $persediaan['column'];
         $data['value'] = $persediaan['value'];
         $pengeluaranstokheaders = $data;
-
         $tglbukti = $pengeluaranstokheaders["tglbukti"];
         $timeStamp = strtotime($tglbukti);
         $datetglbukti = date('d-m-Y', $timeStamp); 
@@ -457,18 +456,16 @@ class PengeluaranStokHeaderController extends MyController
                         $sheet->getStyle("A$detail_table_header_row:F$detail_table_header_row")->getFont()->setBold(true);
                         $sheet->getStyle("A$detail_table_header_row:F$detail_table_header_row")->getAlignment()->setHorizontal('center');
                     }
-                    $response_detail['hargas'] = number_format((float) $response_detail['harga'], '2', '.', ',');
-                    $response_detail['totals'] = number_format((float) $response_detail['total'], '2', '.', ',');
                     $sheet->setCellValue("A$detail_start_row", $response_index + 1);
                     $sheet->setCellValue("B$detail_start_row", $response_detail['stok']);
                     $sheet->setCellValue("C$detail_start_row", $response_detail['qty']);
-                    $sheet->setCellValue("D$detail_start_row", $response_detail['hargas']);
-                    $sheet->setCellValue("E$detail_start_row", $response_detail['totals']);
+                    $sheet->setCellValue("D$detail_start_row", $response_detail['harga']);
+                    $sheet->setCellValue("E$detail_start_row", $response_detail['total']);
                     $sheet->setCellValue("F$detail_start_row", $response_detail['keterangan']);
                     $sheet->getStyle("F$detail_start_row")->getAlignment()->setWrapText(true);
                     $sheet->getColumnDimension('F')->setWidth(70);
                     $sheet->getStyle("A$detail_start_row:F$detail_start_row")->applyFromArray($styleArray);
-                    $sheet->getStyle("D$detail_start_row:E$detail_start_row")->applyFromArray($style_number);
+                    $sheet->getStyle("D$detail_start_row:E$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
                     $nominal += $response_detail['total'];
                     $detail_start_row++;
                 }
@@ -476,7 +473,8 @@ class PengeluaranStokHeaderController extends MyController
                 $total_start_row = $detail_start_row;
                 $sheet->mergeCells('A' . $total_start_row . ':D' . $total_start_row);
                 $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':D' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
-                $sheet->setCellValue("E$total_start_row", number_format((float) $nominal, '2', '.', ','))->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+                $sheet->setCellValue("E$total_start_row", $nominal)->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+                $sheet->getStyle("E$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
                 $sheet->getColumnDimension('A')->setAutoSize(true);
                 $sheet->getColumnDimension('B')->setAutoSize(true);
                 $sheet->getColumnDimension('C')->setAutoSize(true);
@@ -589,18 +587,17 @@ class PengeluaranStokHeaderController extends MyController
                         $sheet->getStyle("A$detail_table_header_row:F$detail_table_header_row")->getFont()->setBold(true);
                         $sheet->getStyle("A$detail_table_header_row:F$detail_table_header_row")->getAlignment()->setHorizontal('center');
                     }
-                    $response_detail['hargas'] = number_format((float) $response_detail['harga'], '2', '.', ',');
-                    $response_detail['totals'] = number_format((float) $response_detail['total'], '2', '.', ',');
+                    
                     $sheet->setCellValue("A$detail_start_row", $response_index + 1);
                     $sheet->setCellValue("B$detail_start_row", $response_detail['stok']);
                     $sheet->setCellValue("C$detail_start_row", $response_detail['qty']);
-                    $sheet->setCellValue("D$detail_start_row", $response_detail['hargas']);
-                    $sheet->setCellValue("E$detail_start_row", $response_detail['totals']);
+                    $sheet->setCellValue("D$detail_start_row", $response_detail['harga']);
+                    $sheet->setCellValue("E$detail_start_row", $response_detail['total']);
                     $sheet->setCellValue("F$detail_start_row", $response_detail['keterangan']);
                     $sheet->getStyle("F$detail_start_row")->getAlignment()->setWrapText(true);
                     $sheet->getColumnDimension('F')->setWidth(70);
                     $sheet->getStyle("A$detail_start_row:F$detail_start_row")->applyFromArray($styleArray);
-                    $sheet->getStyle("D$detail_start_row:E$detail_start_row")->applyFromArray($style_number);
+                    $sheet->getStyle("D$detail_start_row:E$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
                     $nominal += $response_detail['total'];
                     $detail_start_row++;
                 }
@@ -608,7 +605,8 @@ class PengeluaranStokHeaderController extends MyController
                 $total_start_row = $detail_start_row;
                 $sheet->mergeCells('A' . $total_start_row . ':D' . $total_start_row);
                 $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':D' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
-                $sheet->setCellValue("E$total_start_row", number_format((float) $nominal, '2', '.', ','))->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+                $sheet->setCellValue("E$total_start_row", $nominal)->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+                $sheet->getStyle("E$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
                 $sheet->getColumnDimension('A')->setAutoSize(true);
                 $sheet->getColumnDimension('B')->setAutoSize(true);
                 $sheet->getColumnDimension('C')->setAutoSize(true);
@@ -717,18 +715,17 @@ class PengeluaranStokHeaderController extends MyController
                         $sheet->getStyle("A$detail_table_header_row:F$detail_table_header_row")->getFont()->setBold(true);
                         $sheet->getStyle("A$detail_table_header_row:F$detail_table_header_row")->getAlignment()->setHorizontal('center');
                     }
-                    $response_detail['hargas'] = number_format((float) $response_detail['harga'], '2', '.', ',');
-                    $response_detail['totals'] = number_format((float) $response_detail['total'], '2', '.', ',');
                     $sheet->setCellValue("A$detail_start_row", $response_index + 1);
                     $sheet->setCellValue("B$detail_start_row", $response_detail['stok']);
                     $sheet->setCellValue("C$detail_start_row", $response_detail['qty']);
-                    $sheet->setCellValue("D$detail_start_row", $response_detail['hargas']);
-                    $sheet->setCellValue("E$detail_start_row", $response_detail['totals']);
+                    $sheet->setCellValue("D$detail_start_row", $response_detail['harga']);
+                    $sheet->setCellValue("E$detail_start_row", $response_detail['total']);
                     $sheet->setCellValue("F$detail_start_row", $response_detail['keterangan']);
                     $sheet->getStyle("F$detail_start_row")->getAlignment()->setWrapText(true);
                     $sheet->getColumnDimension('F')->setWidth(70);
                     $sheet->getStyle("A$detail_start_row:F$detail_start_row")->applyFromArray($styleArray);
-                    $sheet->getStyle("D$detail_start_row:E$detail_start_row")->applyFromArray($style_number);
+                    $sheet->getStyle("D$detail_start_row:E$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+
                     $nominal += $response_detail['total'];
                     $detail_start_row++;
                 }
@@ -736,7 +733,8 @@ class PengeluaranStokHeaderController extends MyController
                 $total_start_row = $detail_start_row;
                 $sheet->mergeCells('A' . $total_start_row . ':D' . $total_start_row);
                 $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':D' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
-                $sheet->setCellValue("E$total_start_row", number_format((float) $nominal, '2', '.', ','))->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+                $sheet->setCellValue("E$total_start_row", $nominal)->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+                $sheet->getStyle("E$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
                 $sheet->getColumnDimension('A')->setAutoSize(true);
                 $sheet->getColumnDimension('B')->setAutoSize(true);
                 $sheet->getColumnDimension('C')->setAutoSize(true);
@@ -860,18 +858,17 @@ class PengeluaranStokHeaderController extends MyController
                         $sheet->getStyle("A$detail_table_header_row:F$detail_table_header_row")->getFont()->setBold(true);
                         $sheet->getStyle("A$detail_table_header_row:F$detail_table_header_row")->getAlignment()->setHorizontal('center');
                     }
-                    $response_detail['hargas'] = number_format((float) $response_detail['harga'], '2', '.', ',');
-                    $response_detail['totals'] = number_format((float) $response_detail['total'], '2', '.', ',');
                     $sheet->setCellValue("A$detail_start_row", $response_index + 1);
                     $sheet->setCellValue("B$detail_start_row", $response_detail['stok']);
                     $sheet->setCellValue("C$detail_start_row", $response_detail['qty']);
-                    $sheet->setCellValue("D$detail_start_row", $response_detail['hargas']);
-                    $sheet->setCellValue("E$detail_start_row", $response_detail['totals']);
+                    $sheet->setCellValue("D$detail_start_row", $response_detail['harga']);
+                    $sheet->setCellValue("E$detail_start_row", $response_detail['total']);
                     $sheet->setCellValue("F$detail_start_row", $response_detail['keterangan']);
                     $sheet->getStyle("F$detail_start_row")->getAlignment()->setWrapText(true);
                     $sheet->getColumnDimension('F')->setWidth(50);
                     $sheet->getStyle("A$detail_start_row:F$detail_start_row")->applyFromArray($styleArray);
-                    $sheet->getStyle("D$detail_start_row:E$detail_start_row")->applyFromArray($style_number);
+                    $sheet->getStyle("D$detail_start_row:E$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+
                     $nominal += $response_detail['total'];
                     $detail_start_row++;
                 }
@@ -879,7 +876,8 @@ class PengeluaranStokHeaderController extends MyController
                 $total_start_row = $detail_start_row;
                 $sheet->mergeCells('A' . $total_start_row . ':D' . $total_start_row);
                 $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':D' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
-                $sheet->setCellValue("E$total_start_row", number_format((float) $nominal, '2', '.', ','))->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+                $sheet->setCellValue("E$total_start_row", $nominal)->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+                $sheet->getStyle("E$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
                 $sheet->getColumnDimension('A')->setAutoSize(true);
                 $sheet->getColumnDimension('B')->setAutoSize(true);
                 $sheet->getColumnDimension('C')->setAutoSize(true);
@@ -988,18 +986,17 @@ class PengeluaranStokHeaderController extends MyController
                         $sheet->getStyle("A$detail_table_header_row:F$detail_table_header_row")->getFont()->setBold(true);
                         $sheet->getStyle("A$detail_table_header_row:F$detail_table_header_row")->getAlignment()->setHorizontal('center');
                     }
-                    $response_detail['hargas'] = number_format((float) $response_detail['harga'], '2', '.', ',');
-                    $response_detail['totals'] = number_format((float) $response_detail['total'], '2', '.', ',');
                     $sheet->setCellValue("A$detail_start_row", $response_index + 1);
                     $sheet->setCellValue("B$detail_start_row", $response_detail['stok']);
                     $sheet->setCellValue("C$detail_start_row", $response_detail['qty']);
-                    $sheet->setCellValue("D$detail_start_row", $response_detail['hargas']);
-                    $sheet->setCellValue("E$detail_start_row", $response_detail['totals']);
+                    $sheet->setCellValue("D$detail_start_row", $response_detail['harga']);
+                    $sheet->setCellValue("E$detail_start_row", $response_detail['total']);
                     $sheet->setCellValue("F$detail_start_row", $response_detail['keterangan']);
                     $sheet->getStyle("F$detail_start_row")->getAlignment()->setWrapText(true);
                     $sheet->getColumnDimension('F')->setWidth(70);
                     $sheet->getStyle("A$detail_start_row:F$detail_start_row")->applyFromArray($styleArray);
-                    $sheet->getStyle("D$detail_start_row:E$detail_start_row")->applyFromArray($style_number);
+                    $sheet->getStyle("D$detail_start_row:E$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+
                     $nominal += $response_detail['total'];
                     $detail_start_row++;
                 }
@@ -1008,6 +1005,8 @@ class PengeluaranStokHeaderController extends MyController
                 $sheet->mergeCells('A' . $total_start_row . ':D' . $total_start_row);
                 $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':D' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
                 $sheet->setCellValue("E$total_start_row", number_format((float) $nominal, '2', '.', ','))->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+                $sheet->getStyle("E$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+
                 $sheet->getColumnDimension('A')->setAutoSize(true);
                 $sheet->getColumnDimension('B')->setAutoSize(true);
                 $sheet->getColumnDimension('C')->setAutoSize(true);

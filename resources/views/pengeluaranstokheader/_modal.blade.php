@@ -1087,6 +1087,7 @@
       .all([
         setStatusPotongReturOptions(form),
         setStatusOliOptions(),
+        setStatusBanDetailOptions(form),
         setStatusBanOptions(form)
       ])
       .then(() => {
@@ -1153,11 +1154,13 @@
       .all([
         setStatusPotongReturOptions(form),
         setStatusOliOptions(),
+        setStatusBanDetailOptions(form),
         setStatusBanOptions(form)
       ])
       .then(() => {
         showPengeluaranstokHeader(form, pengeluaranStokHeaderId)
           .then(penerimaanStokHeaderId => {
+            console.log(penerimaanStokHeaderId);
             setFormBindKeys(form)
             initDatepicker()
             initSelect2(form.find('.select2bs4'), true)
@@ -2075,7 +2078,7 @@
           setKodePengeluaran(response.data.pengeluaranstok);
           enabledKorDisable()
           lookupSelected(persediaan)
-          resolve()
+          resolve(response.data)
         },
         error: error => {
           reject(error)
