@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
@@ -144,7 +145,10 @@ class LaporanHistoryPinjamanController extends MyController
                     ->getStyle($alphabets[$data_columns_index] . $detail_start_row)
                     ->applyFromArray($style_number)
                     ->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
-                } else {
+                } else if($data_column['index'] == 'tglbukti'){                    
+                    $dateValue = ($response_detail['tglbukti'] != null) ? Date::PHPToExcel(date('Y-m-d', strtotime($response_detail['tglbukti']))) : '';                    
+                    $sheet->setCellValue($alphabets[$data_columns_index] . $detail_start_row, $dateValue)->getStyle($alphabets[$data_columns_index] . $detail_start_row)->getNumberFormat()->setFormatCode('dd-mm-yyyy');
+                }else {
                     $sheet->setCellValue($alphabets[$data_columns_index] . $detail_start_row, $response_detail[$data_column['index']]);
                 }
             }
@@ -160,10 +164,10 @@ class LaporanHistoryPinjamanController extends MyController
 
         $total_start_row = $detail_start_row;
         $sheet->mergeCells('A' . $total_start_row . ':D' . $total_start_row);
-        $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':D' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
+        $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':F' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
 
         $totalDebet = "=SUM(E6:E" . ($detail_start_row-1) . ")";
-        $sheet->setCellValue("E$total_start_row", $totalDebet)->getStyle("E$total_start_row")->applyFromArray($style_number);
+        $sheet->setCellValue("E$total_start_row", $totalDebet)->getStyle("E$total_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
         $sheet->setCellValue("E$total_start_row", $totalDebet)->getStyle("E$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
 
         $sheet->getColumnDimension('A')->setAutoSize(true);
@@ -182,7 +186,7 @@ class LaporanHistoryPinjamanController extends MyController
 
 
         $writer = new Xlsx($spreadsheet);
-        $filename = 'LAPORANHISTORYPINJAMAN' . date('dmYHis');
+        $filename = 'LAPORAN HISTORY PINJAMAN ' . date('dmYHis');
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
         header('Cache-Control: max-age=0');
