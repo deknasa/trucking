@@ -1375,7 +1375,7 @@
               detailRow.find(`[name="nominalTagih[]"]`).val(detail.nominaltagih)
               $('#detailList tbody').append(detailRow)
 
-              initAutoNumeric(detailRow.find('.autonumeric'))
+              initAutoNumericMinus(detailRow.find('.autonumeric'))
 
               $('#detailList tbody').append(detailRow)
 
@@ -1424,7 +1424,7 @@
 
     $('#detailList tbody').append(detailRow)
 
-    initAutoNumeric(detailRow.find('.autonumeric'))
+    initAutoNumericMinus(detailRow.find('.autonumeric'))
     setRowNumbers()
   }
 
