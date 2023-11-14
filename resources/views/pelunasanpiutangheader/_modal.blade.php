@@ -829,7 +829,7 @@
         colModel: [{
             label: "",
             name: "",
-            width: 30,
+            width: 40,
             align: 'center',
             sortable: false,
             clear: false,
@@ -842,6 +842,7 @@
 
                 $(element).removeClass('form-control')
                 $(element).parent().addClass('text-center')
+                $(element).addClass('checkbox-selectall')
                 if (disabled == '') {
                   $(element).on('click', function() {
                     if ($(this).is(':checked')) {
@@ -861,7 +862,7 @@
               if ($('#crudForm').data('action') == 'delete') {
                 disabled = 'disabled'
               }
-              return `<input type="checkbox" value="${rowData.id}" ${disabled} onChange="checkboxHandler(this, ${rowData.id})">`;
+              return `<input type="checkbox" class="checkbox-jqgrid" value="${rowData.id}" ${disabled} onChange="checkboxHandler(this, ${rowData.id})">`;
             },
           },
           {
@@ -1989,15 +1990,15 @@
           detailRow.find(`[name="coapotonganppd[]"]`).val(detail.coapotongan)
           if (aksi == 'edit') {
 
-            initAutoNumericNoMinus(detailRow.find(`[name="bayarppd[]"]`).not(':disabled'))
-            initAutoNumericNoMinus(detailRow.find(`[name="potonganppd[]"]`).not(':disabled'))
-            initAutoNumericNoMinus(detailRow.find(`[name="nominallebihbayarppd[]"]`).not(':disabled'))
+            initAutoNumeric(detailRow.find(`[name="bayarppd[]"]`).not(':disabled'))
+            initAutoNumeric(detailRow.find(`[name="potonganppd[]"]`).not(':disabled'))
+            initAutoNumeric(detailRow.find(`[name="nominallebihbayarppd[]"]`).not(':disabled'))
           }
           if (aksi == 'delete') {
 
-            initAutoNumericNoMinus(detailRow.find(`[name="bayarppd[]"]`))
-            initAutoNumericNoMinus(detailRow.find(`[name="potonganppd[]"]`))
-            initAutoNumericNoMinus(detailRow.find(`[name="nominallebihbayarppd[]"]`))
+            initAutoNumeric(detailRow.find(`[name="bayarppd[]"]`))
+            initAutoNumeric(detailRow.find(`[name="potonganppd[]"]`))
+            initAutoNumeric(detailRow.find(`[name="nominallebihbayarppd[]"]`))
 
           }
           initAutoNumeric(detailRow.find(`[name="nominal[]"]`))
@@ -2185,23 +2186,6 @@
     }
   }
 
-
-  function initAutoNumericNoMinus(elements = null) {
-    let option = {
-      digitGroupSeparator: formats.THOUSANDSEPARATOR,
-      decimalCharacter: formats.DECIMALSEPARATOR,
-      minimumValue: 0
-
-    };
-
-    if (elements == null) {
-      new AutoNumeric.multiple(".autonumeric", option);
-    } else {
-      $.each(elements, (index, element) => {
-        new AutoNumeric(element, option);
-      });
-    }
-  }
 
 
   function showDefault(form) {

@@ -1251,13 +1251,13 @@
         if (error) {
           showDialog(response)
         } else {
-            if(Aksi == 'PRINTER BESAR'){
-              window.open(`{{ route('penerimaantruckingheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
-            } else if(Aksi == 'PRINTER KECIL'){
-              window.open(`{{ route('penerimaantruckingheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
-            } else {
-              cekValidasiAksi(Id, Aksi)
-            }
+          if (Aksi == 'PRINTER BESAR') {
+            window.open(`{{ route('penerimaantruckingheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
+          } else if (Aksi == 'PRINTER KECIL') {
+            window.open(`{{ route('penerimaantruckingheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
+          } else {
+            cekValidasiAksi(Id, Aksi)
+          }
         }
 
       }
@@ -1345,7 +1345,7 @@
         colModel: [{
             label: "",
             name: "",
-            width: 30,
+            width: 40,
             align: 'center',
             sortable: false,
             clear: false,
@@ -1358,6 +1358,7 @@
 
                 $(element).removeClass('form-control')
                 $(element).parent().addClass('text-center')
+                $(element).addClass('checkbox-selectall')
                 if (disabled == '') {
                   $(element).on('click', function() {
                     if ($(this).is(':checked')) {
@@ -1377,7 +1378,7 @@
               if ($('#crudForm').data('action') == 'delete') {
                 disabled = 'disabled'
               }
-              return `<input type="checkbox" value="${rowData.id}" ${disabled} onChange="checkboxHandler(this, ${rowData.id})">`;
+              return `<input type="checkbox" class="checkbox-jqgrid" value="${rowData.id}" ${disabled} onChange="checkboxHandler(this, ${rowData.id})">`;
             },
           },
           {
@@ -1663,7 +1664,7 @@
         colModel: [{
             label: "",
             name: "",
-            width: 30,
+            width: 40,
             align: 'center',
             sortable: false,
             clear: false,
@@ -1676,6 +1677,7 @@
 
                 $(element).removeClass('form-control')
                 $(element).parent().addClass('text-center')
+                $(element).addClass('checkbox-selectall')
                 if (disabled == '') {
                   $(element).on('click', function() {
                     if ($(this).is(':checked')) {
@@ -1695,7 +1697,7 @@
               if ($('#crudForm').data('action') == 'delete') {
                 disabled = 'disabled'
               }
-              return `<input type="checkbox" value="${rowData.id}" ${disabled} onChange="checkboxHandlerKaryawan(this, ${rowData.id})">`;
+              return `<input type="checkbox" class="checkbox-jqgrid" value="${rowData.id}" ${disabled} onChange="checkboxHandlerKaryawan(this, ${rowData.id})">`;
             },
           },
           {
@@ -1937,7 +1939,7 @@
         colModel: [{
             label: '',
             name: '',
-            width: 30,
+            width: 40,
             align: 'center',
             sortable: false,
             clear: false,
@@ -1953,6 +1955,7 @@
 
                 $(element).removeClass('form-control')
                 $(element).parent().addClass('text-center')
+                $(element).addClass('checkbox-selectall')
                 if (disabled == '') {
                   $(element).on('click', function() {
                     if ($(this).is(':checked')) {
@@ -1972,7 +1975,7 @@
               if ($('#crudForm').data('action') == 'delete') {
                 disabled = 'disabled'
               }
-              return `<input type="checkbox" value="${rowData.id}" ${disabled} onChange="checkboxTitipan(this, ${rowData.id})">`;
+              return `<input type="checkbox" class="checkbox-jqgrid" value="${rowData.id}" ${disabled} onChange="checkboxTitipan(this, ${rowData.id})">`;
             },
           },
           {

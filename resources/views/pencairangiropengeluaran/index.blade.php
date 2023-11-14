@@ -232,7 +232,7 @@
                         name: 'id',
                         index: 'Pilih',
                         formatter: (value) => {
-                            return `<input type="checkbox" value="${value}" onchange="checkboxHandler(this)">`
+                            return `<input type="checkbox" class="checkbox-jqgrid" value="${value}" onchange="checkboxHandler(this)">`
                         },
                         editable: true,
                         edittype: 'checkbox',

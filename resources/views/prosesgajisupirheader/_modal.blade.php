@@ -717,7 +717,7 @@
                 colModel: [{
                         label: '',
                         name: '',
-                        width: 30,
+                        width: 40,
                         align: 'center',
                         sortable: false,
                         clear: false,
@@ -734,6 +734,8 @@
                                 $(element).attr('id', 'gsRincian')
                                 $(element).removeClass('form-control')
                                 $(element).parent().addClass('text-center')
+                                $(element).addClass('checkbox-selectall')
+                                
                                 if (disabled == '') {
                                     $(element).on('click', function() {
                                         $(element).attr('disabled', true)
@@ -749,7 +751,7 @@
                             }
                         },
                         formatter: (value, rowOptions, rowData) => {
-                            return `<input type="checkbox" name="rincianId[]" value="${rowData.idric}" ${disabled} onchange="checkboxHandler(this)">`
+                            return `<input type="checkbox" class="checkbox-jqgrid" name="rincianId[]" value="${rowData.idric}" ${disabled} onchange="checkboxHandler(this)">`
                         },
                     },
                     {
