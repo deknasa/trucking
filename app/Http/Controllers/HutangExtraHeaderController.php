@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
@@ -219,13 +220,18 @@ class HutangExtraHeaderController extends MyController
             $response_detail['tgljatuhtempo'] = $datetgljatuhtempo;
         
             $sheet->setCellValue("A$detail_start_row", $response_index + 1);
-            $sheet->setCellValue("B$detail_start_row", $response_detail['tgljatuhtempo']);
+            // $sheet->setCellValue("B$detail_start_row", $response_detail['tgljatuhtempo']);
+            $dateValue = ($response_detail['tgljatuhtempo'] != null) ? Date::PHPToExcel(date('Y-m-d',strtotime($response_detail['tgljatuhtempo']))) : ''; 
+            $sheet->setCellValue("B$detail_start_row", $dateValue);
+            $sheet->getStyle("B$detail_start_row") 
+            ->getNumberFormat() 
+            ->setFormatCode('dd-mm-yyyy');
             $sheet->setCellValue("C$detail_start_row", $response_detail['keterangan']);
             $sheet->setCellValue("D$detail_start_row", $response_detail['total']);
 
             $sheet->getStyle("C$detail_start_row")->getAlignment()->setWrapText(true);
             $sheet->getColumnDimension('C')->setWidth(50);
-            $sheet->getStyle("D$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+            $sheet->getStyle("D$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
             $sheet ->getStyle("A$detail_start_row:C$detail_start_row")->applyFromArray($styleArray);
             $sheet ->getStyle("D$detail_start_row")->applyFromArray($style_number);
@@ -238,7 +244,7 @@ class HutangExtraHeaderController extends MyController
         $sheet->mergeCells('A'.$total_start_row.':C'.$total_start_row);
         $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A'.$total_start_row.':C'.$total_start_row)->applyFromArray($style_number)->getFont()->setBold(true);
         $sheet->setCellValue("D$total_start_row", $total)->getStyle("D$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
-        $sheet->getStyle("D$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+        $sheet->getStyle("D$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);

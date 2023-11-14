@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
-use Illuminate\View\View;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
@@ -259,13 +260,18 @@ class HutangHeaderController extends MyController
             $response_detail['tgljatuhtempo'] = $datetgljatuhtempo;
         
             $sheet->setCellValue("A$detail_start_row", $response_index + 1);
-            $sheet->setCellValue("B$detail_start_row", $response_detail['tgljatuhtempo']);
+            // $sheet->setCellValue("B$detail_start_row", $response_detail['tgljatuhtempo']);
+            $dateValue = ($response_detail['tgljatuhtempo'] != null) ? Date::PHPToExcel(date('Y-m-d',strtotime($response_detail['tgljatuhtempo']))) : ''; 
+            $sheet->setCellValue("B$detail_start_row", $dateValue);
+            $sheet->getStyle("B$detail_start_row") 
+            ->getNumberFormat() 
+            ->setFormatCode('dd-mm-yyyy');
             $sheet->setCellValue("C$detail_start_row", $response_detail['keterangan']);
             $sheet->setCellValue("D$detail_start_row", $response_detail['total']);
 
             $sheet->getStyle("C$detail_start_row")->getAlignment()->setWrapText(true);
             $sheet->getColumnDimension('C')->setWidth(50);
-            $sheet->getStyle("D$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+            $sheet->getStyle("D$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
             $sheet ->getStyle("A$detail_start_row:D$detail_start_row")->applyFromArray($styleArray);
             $sheet ->getStyle("D$detail_start_row")->applyFromArray($style_number);

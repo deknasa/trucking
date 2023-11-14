@@ -275,7 +275,7 @@ class NotaKreditHeaderController extends MyController
             $sheet->getColumnDimension('E')->setWidth(40);
 
             $sheet->getStyle("A$detail_start_row:E$detail_start_row")->applyFromArray($styleArray);
-            $sheet->getStyle("F$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
+            $sheet->getStyle("F$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
             $detail_start_row++;
         }
@@ -286,7 +286,7 @@ class NotaKreditHeaderController extends MyController
 
         $sheet->setCellValue("F$detail_start_row", "=SUM(F10:F" . ($detail_start_row - 1) . ")")->getStyle("F$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
 
-        $sheet->getStyle("F$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+        $sheet->getStyle("F$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);
         $sheet->getColumnDimension('C')->setAutoSize(true);
