@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Menu;
-use Illuminate\Contracts\View\View;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Response;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
+use Illuminate\Http\Response;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Http\RedirectResponse;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
@@ -206,15 +207,22 @@ class HistoriPenerimaanStokController extends MyController
 
             $sheet->setCellValue("A$detail_start_row", $response_detail['kodebarang']);
             $sheet->setCellValue("B$detail_start_row", $response_detail['namabarang']);
-            $sheet->setCellValue("C$detail_start_row", date('d-m-Y', strtotime($response_detail['tglbukti'])));
+            // $sheet->setCellValue("C$detail_start_row", date('d-m-Y', strtotime($response_detail['tglbukti'])));
+            $dateValue = ($response_detail['tglbukti'] != null) ? Date::PHPToExcel(date('Y-m-d',strtotime($response_detail['tglbukti']))) : ''; 
+            $sheet->setCellValue("C$detail_start_row", $dateValue);
+            $sheet->getStyle("C$detail_start_row") 
+            ->getNumberFormat() 
+            ->setFormatCode('dd-mm-yyyy');
+
             $sheet->setCellValue("D$detail_start_row", $response_detail['nobukti']);
             $sheet->setCellValue("E$detail_start_row", $response_detail['kategori_id']);
-            $sheet->setCellValue("F$detail_start_row", number_format((float) $response_detail['qtymasuk'], '2', '.', ','));
-            $sheet->setCellValue("G$detail_start_row", number_format((float) $response_detail['nilaimasuk'], '2', '.', ','));
-            $sheet->setCellValue("H$detail_start_row", number_format((float) $response_detail['total'], '2', '.', ','));
+            $sheet->setCellValue("F$detail_start_row", $response_detail['qtymasuk']);
+            $sheet->setCellValue("G$detail_start_row", $response_detail['nilaimasuk']);
+            $sheet->setCellValue("H$detail_start_row", $response_detail['total']);
            
             $sheet->getStyle("A$detail_start_row:H$detail_start_row")->applyFromArray($styleArray);
             $sheet->getStyle("F$detail_start_row:H$detail_start_row")->applyFromArray($style_number);
+            $sheet->getStyle("F$detail_start_row:H$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
             $detail_start_row++;
         }
         

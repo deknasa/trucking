@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Menu;
-use Illuminate\Contracts\View\View;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Http;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Http\RedirectResponse;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
@@ -229,15 +230,20 @@ class KartuStokController extends MyController
 
             $sheet->setCellValue("A$detail_start_row", $response_detail['kodebarang']);
             $sheet->setCellValue("B$detail_start_row", $response_detail['namabarang']);
-            $sheet->setCellValue("C$detail_start_row", date('d-m-Y', strtotime($response_detail['tglbukti'])));
+
+            $dateValue = ($response_detail['tglbukti'] != null) ? Date::PHPToExcel(date('Y-m-d',strtotime($response_detail['tglbukti']))) : ''; 
+                $sheet->setCellValue("C$detail_start_row", $dateValue);
+                $sheet->getStyle("C$detail_start_row") 
+                ->getNumberFormat() 
+                ->setFormatCode('dd-mm-yyyy');
             $sheet->setCellValue("D$detail_start_row", $response_detail['nobukti']);
             $sheet->setCellValue("E$detail_start_row", $response_detail['kategori_id']);
-            $sheet->setCellValue("F$detail_start_row", number_format((float) $response_detail['qtymasuk'], '2', '.', ','));
-            $sheet->setCellValue("G$detail_start_row", number_format((float) $response_detail['nilaimasuk'], '2', '.', ','));
-            $sheet->setCellValue("H$detail_start_row", number_format((float) $response_detail['qtykeluar'], '2', '.', ','));
-            $sheet->setCellValue("I$detail_start_row", number_format((float) $response_detail['nilaikeluar'], '2', '.', ','));
-            $sheet->setCellValue("J$detail_start_row", number_format((float) $response_detail['qtysaldo'], '2', '.', ','));
-            $sheet->setCellValue("K$detail_start_row", number_format((float) $response_detail['nilaisaldo'], '2', '.', ','));
+            $sheet->setCellValue("F$detail_start_row",  $response_detail['qtymasuk'])->getStyle("F$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->setCellValue("G$detail_start_row",  $response_detail['nilaimasuk'])->getStyle("G$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->setCellValue("H$detail_start_row",  $response_detail['qtykeluar'])->getStyle("H$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->setCellValue("I$detail_start_row",  $response_detail['nilaikeluar'])->getStyle("I$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->setCellValue("J$detail_start_row",  $response_detail['qtysaldo'])->getStyle("J$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->setCellValue("K$detail_start_row",  $response_detail['nilaisaldo'])->getStyle("K$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
             $sheet->getStyle("A$detail_start_row:J$detail_start_row")->applyFromArray($styleArray);
             $sheet->getStyle("F$detail_start_row:K$detail_start_row")->applyFromArray($style_number);

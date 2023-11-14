@@ -188,7 +188,7 @@ class LaporanJurnalUmumController extends MyController
         $totalDebet = 0;
         $totalKredit = 0;
         $totalSaldo = 0;
-        $no
+        $no;
         if (is_array($pengeluaran) || is_iterable($pengeluaran)) {
  foreach ($pengeluaran as $response_index => $response_detail) {
 

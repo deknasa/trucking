@@ -230,8 +230,8 @@ class PelunasanHutangHeaderController extends MyController
 
            $sheet->getStyle("G$detail_start_row")->getAlignment()->setWrapText(true);
            $sheet->getColumnDimension('G')->setWidth(50);
-           $sheet->getStyle("D$detail_start_row:F$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
-           $sheet->getStyle("H$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
+           $sheet->getStyle("D$detail_start_row:F$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+           $sheet->getStyle("H$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
            $sheet ->getStyle("A$detail_start_row:H$detail_start_row")->applyFromArray($styleArray);
            $sheet ->getStyle("D$detail_start_row:F$detail_start_row")->applyFromArray($style_number);
@@ -245,7 +245,7 @@ class PelunasanHutangHeaderController extends MyController
        $sheet->mergeCells('A'.$total_start_row.':D'.$total_start_row);
        $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A'.$total_start_row.':D'.$total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
        $sheet->setCellValue("E$total_start_row", "=SUM(E9:E" . ($detail_start_row-1) . ")")->getStyle("E$total_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
-       $sheet->getStyle("E$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+       $sheet->getStyle("E$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
        
        $sheet ->getStyle("F$detail_start_row:H$detail_start_row")->applyFromArray($styleArray);        
 

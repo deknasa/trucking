@@ -429,8 +429,8 @@ class PelunasanPiutangHeaderController extends MyController
             $sheet->getColumnDimension('I')->setWidth(30);
 
             $sheet ->getStyle("A$detail_start_row:J$detail_start_row")->applyFromArray($styleArray);
-            $sheet ->getStyle("D$detail_start_row:G$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet ->getStyle("J$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
+            $sheet ->getStyle("D$detail_start_row:G$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet ->getStyle("J$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
             $nominal += $response_detail['nominal'];
             $detail_start_row++;
@@ -440,7 +440,7 @@ class PelunasanPiutangHeaderController extends MyController
         $sheet->mergeCells('A'.$total_start_row.':D'.$total_start_row);
         $sheet->setCellValue("A$total_start_row", 'Total Nominal Bayar')->getStyle('A'.$total_start_row.':D'.$total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
         $sheet->setCellValue("E$detail_start_row", "=SUM(E10:E" . ($detail_start_row - 1) . ")")->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
-        $sheet->getStyle("E$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+        $sheet->getStyle("E$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
         
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);
