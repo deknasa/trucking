@@ -1573,6 +1573,8 @@
           }, 100);
           setTotalNominal()
           setTotalSisa()
+          setTotalPinjaman()
+          setTotalBayarPinjaman()
           setHighlight($(this))
         },
       })
@@ -2742,6 +2744,29 @@
     })
   }
 
+  function setTotalPinjaman() {
+    let jlhpinj = 0
+    let originalData = $("#tablePinjaman").getGridParam("data");
+    $.each(originalData, function(index, value) {
+      lunas_jlhpinj = value.jlhpinjaman;
+      jlhpinjs = (isNaN(lunas_jlhpinj)) ? parseFloat(lunas_jlhpinj.replaceAll(',', '')) : parseFloat(lunas_jlhpinj)
+      jlhpinj += jlhpinjs
+
+    })
+    initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePinjaman_jlhpinjaman"]`).text(jlhpinj))
+  }
+  function setTotalBayarPinjaman() {
+    let bayarpinj = 0
+    let originalData = $("#tablePinjaman").getGridParam("data");
+    $.each(originalData, function(index, value) {
+      lunas_bayarpinj = value.totalbayar;
+      bayarpinjs = (isNaN(lunas_bayarpinj)) ? parseFloat(lunas_bayarpinj.replaceAll(',', '')) : parseFloat(lunas_bayarpinj)
+      bayarpinj += bayarpinjs
+
+    })
+    initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePinjaman_totalbayar"]`).text(bayarpinj))
+  }
+  
   function setTotalNominal() {
     let nominalDetails = $(`#tablePinjaman`).find(`td[aria-describedby="tablePinjaman_nominal"]`)
     let nominal = 0
