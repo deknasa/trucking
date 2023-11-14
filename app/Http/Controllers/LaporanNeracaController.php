@@ -21,6 +21,7 @@ class LaporanNeracaController extends MyController
         ];
         $getCabang = $this->getCabang($data['idcabang']['text']);
         $cabang  = $getCabang['data'];
+        
 
         return view('laporanneraca.index', compact('title','data','cabang'));
     }
