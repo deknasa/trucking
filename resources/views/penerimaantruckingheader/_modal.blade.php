@@ -1394,6 +1394,20 @@
             sortable: true,
           },
           {
+            label: "Jlh Pinjaman",
+            name: "jlhpinjaman",
+            sortable: true,
+            align: "right",
+            formatter: currencyFormat,
+          },
+          {
+            label: "Total Bayar",
+            name: "totalbayar",
+            sortable: true,
+            align: "right",
+            formatter: currencyFormat,
+          },
+          {
             label: "SISA",
             name: "sisa",
             sortable: true,
