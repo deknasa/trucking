@@ -114,6 +114,17 @@
                 <input type="text" id="jenistradoId" name="jenistrado_id" readonly hidden>
               </div>
             </div>
+
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">satuan </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="text" name="satuan" class="form-control satuan-lookup">
+                <input type="text" id="satuanId" name="satuan_id" readonly hidden>
+              </div>
+            </div>
+
             <div class="row form-group">
 
               <div class="col-12 col-sm-3 col-md-2">
@@ -1115,6 +1126,24 @@
       onSelectRow: (kategori, element) => {
         element.val(kategori.kodekategori)
         $(`#${element[0]['name']}Id`).val(kategori.id)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $(`#${element[0]['name']}Id`).val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+
+    $('.satuan-lookup').lookup({
+      title: 'satuan Lookup',
+      fileName: 'satuan',
+      onSelectRow: (satuan, element) => {
+        element.val(satuan.satuan)
+        $(`#${element[0]['name']}Id`).val(satuan.id)
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {
