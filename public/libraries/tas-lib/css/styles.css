@@ -291,25 +291,123 @@ input[type=text]:focus,input[type=password]:focus, .select2-selection:focus {
 	/* background-color:  #25588f; */
 }
 
-.modal.modal-fullscreen .modal-dialog {
+.modal-lookup .modal-dialog {
 	width: 95vw;
 	padding: 0;
 	max-width: none;
 }
 
-.modal.modal-fullscreen .modal-content {
+.modal-lookup .modal-content {
 	height: auto;
 	height: 100%;
 	border: none;
 }
 
-.modal.modal-fullscreen .modal-body {
+.modal-lookup .modal-body {
 	overflow-y: auto;
 }
 
 /* .modal.modal-fullscreen .modal-footer {
 	background: inherit;
 } */
+
+/* Not with modal-header */
+#crudModal {
+	padding-right: 0px !important;
+	padding-left: 0px !important;
+}
+
+#crudModal .modal-dialog {
+	max-width: 100%;
+	margin: 0;
+	height: 100%;
+}
+
+#crudModal .modal-content {
+	height: 100%;
+	border: 0;
+	border-radius: 0;
+	background-color: #ffcc99;
+}
+
+#crudModal .modal-body {
+	overflow-y: auto;
+	height: calc(100vh - 56px);
+	border: 0;
+	border-radius: 0;
+}
+
+#crudModal .modal-footer {
+	border: 0;
+	border-radius: 0;
+	background-color: #DCDCDC;
+}
+
+/* Not with modal-header (For ACL) */
+#userAclModal {
+	padding-right: 0px !important;
+	padding-left: 0px !important;
+}
+
+#userAclModal .modal-dialog {
+	max-width: 100%;
+	margin: 0;
+	height: 100%;
+}
+
+#userAclModal .modal-content {
+	height: 100%;
+	border: 0;
+	border-radius: 0;
+	background-color: #ffcc99;
+}
+
+#userAclModal .modal-body {
+	overflow-y: auto;
+	height: calc(100vh - 56px);
+	border: 0;
+	border-radius: 0;
+}
+
+#userAclModal .modal-footer {
+	border: 0;
+	border-radius: 0;
+	background-color: #DCDCDC;
+}
+
+/* Not with modal-header (For user role) */
+#userRoleModal {
+	padding-right: 0px !important;
+	padding-left: 0px !important;
+}
+
+#userRoleModal .modal-dialog {
+	max-width: 100%;
+	margin: 0;
+	height: 100%;
+}
+
+#userRoleModal .modal-content {
+	height: 100%;
+	border: 0;
+	border-radius: 0;
+	background-color: #ffcc99;
+}
+
+
+
+#userRoleModal .modal-body {
+	overflow-y: auto;
+	height: calc(100vh - 56px);
+	border: 0;
+	border-radius: 0;
+}
+
+#userRoleModal .modal-footer {
+	border: 0;
+	border-radius: 0;
+	background-color: #DCDCDC;
+}
 
 .highlight {
 	background-color: yellow;

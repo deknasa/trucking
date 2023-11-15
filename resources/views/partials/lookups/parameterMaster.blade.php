@@ -177,28 +177,43 @@ $idLookup = isset($id) ? $id : null;
             serializeGridData: function(postData, searching) {
                 searching = `{{ $searching }}`
                 searchText = `.{{ $searchText }} `
-                // let gridId = $(this).getGridParam().id
-                // $(`#gbox_${gridId}`).find('.bdiv-lookup').css('height', '100x')
+
+                aksi = `{!! $aksi ?? '' !!}`
+
                 postData.sort_indexes = [postData.sort_index];
                 postData.sort_orders = [postData.sort_order];
 
-
+                console.log('serialize')
                 var colModel = $(this).jqGrid("getGridParam", "colModel"),
                     l = colModel.length,
                     i,
                     rules = [],
                     searchValue = $(searchText).val(),
                     cm;
+                currentValue = $(searchText).data('currentValue')
 
+                if (!currentValue) {
+                    var typeSearch = `{{ $typeSearch ?? '' }}`
+                    if (typeSearch === 'ALL') {
+                        for (i = 0; i < l; i++) {
+                            cm = colModel[i];
 
-                var typeSearch = '{{ $typeSearch ?? '
-                ' }}'
-
-
-                if (typeSearch === 'ALL') {
-
-                    for (i = 0; i < l; i++) {
-                        cm = colModel[i];
+                            if (cm.search !== false && (cm.stype === undefined || cm.stype === "text")) {
+                                rules.push({
+                                    field: cm.name,
+                                    op: "cn",
+                                    data: searchValue.toUpperCase(),
+                                });
+                                postData.filters = JSON.stringify({
+                                    groupOp: "OR",
+                                    rules: rules,
+                                });
+                            }
+                        }
+                        postData.searching = searching;
+                        postData.searchText = searchText;
+                    } else {
+                        cm = colModel[searching];
 
                         if (cm.search !== false && (cm.stype === undefined || cm.stype === "text")) {
                             rules.push({
@@ -206,105 +221,118 @@ $idLookup = isset($id) ? $id : null;
                                 op: "cn",
                                 data: searchValue.toUpperCase(),
                             });
-
-
                             postData.filters = JSON.stringify({
-                                groupOp: "OR",
+                                groupOp: "AND",
                                 rules: rules,
                             });
-
-
+                            $(searchText).focus()
                         }
-
-
+                        postData.searching = searching;
+                        postData.searchText = searchText;
                     }
-
-                    $(searchText).focus()
-
-                    postData.searching = searching;
-                    postData.searchText = searchText;
-
-
-
                 } else {
-                    cm = colModel[searching];
+                    $(searchText).on("input", function(event) {
+                        var typeSearch = `{{ $typeSearch ?? '' }}`
+                        if (typeSearch === 'ALL') {
+                            for (i = 0; i < l; i++) {
+                                cm = colModel[i];
+                                if (cm.search !== false && (cm.stype === undefined || cm.stype === "text")) {
 
-                    if (cm.search !== false && (cm.stype === undefined || cm.stype === "text")) {
+                                    postData.filters = JSON.stringify({
+                                        groupOp: "OR",
+                                        rules: [{
+                                            field: cm.name,
+                                            op: "cn",
+                                            data: $(searchText).val().toUpperCase()
+                                        }]
+                                    });
+                                }
+                            }
+                            postData.searching = searching;
+                            postData.searchText = searchText;
+                        } else {
+                            cm = colModel[searching];
 
-                        rules.push({
-                            field: cm.name,
-                            op: "cn",
-                            data: searchValue.toUpperCase(),
-                        });
+                            if (cm.search !== false && (cm.stype === undefined || cm.stype === "text")) {
 
-
-                        postData.filters = JSON.stringify({
-                            groupOp: "AND",
-                            rules: rules,
-                        });
-
-                        $(searchText).focus()
-                    }
-
-                    postData.searching = searching;
-                    postData.searchText = searchText;
-
+                                postData.filters = JSON.stringify({
+                                    groupOp: "AND",
+                                    rules: [{
+                                        field: cm.name,
+                                        op: "cn",
+                                        data: $(searchText).val().toUpperCase()
+                                    }]
+                                });
+                                $(searchText).focus()
+                            }
+                            postData.searching = searching;
+                            postData.searchText = searchText;
+                        }
+                        delete postData.sort_index;
+                        delete postData.sort_order;
+                    })
                 }
 
-                delete postData.sort_index;
-                delete postData.sort_order;
-
                 return postData;
-
             },
-
             loadBeforeSend: function(jqXHR) {
                 $('.loadingMessage').show();
                 idTop = selector.attr('id')
-
-
                 $(`#load_${idTop}`).remove()
 
                 if (detectDeviceType() == 'mobile') {
 
                     $('.lookup-grid tr:not(.jqgfirstrow) td').css('padding', '12px')
-                    $('.lookup-grid tr:not(.jqgfirstrow) td').css('font-size', '1.2rem')
+                    $('.lookup-grid tr:not(.jqgfirstrow) td').css('font-size', '1rem')
 
-                    $(`#gview_${idTop} .ui-th-column `).css('font-size', '1.2rem')
+                    $(`#gview_${idTop} .ui-th-column `).css('font-size', '1rem')
+                    var title = `{{ $title ?? '' }}`
+                    var label = $("<label>").attr("for", "searchText")
+                        .css({
+                            "font-weight": "normal",
+                            "padding-left": "10px",
+                            "padding-top": "5px"
+                        })
+                        .text(title);
 
-                }
-
-                var title = '{{ $title ?? '
-                ' }}'
-                var label = $("<label>").attr("for", "searchText")
-                    .css({
-                        "font-weight": "normal",
-                        "padding-left": "10px",
-                        "padding-top": "5px"
+                    $(`#gbox_${idTop}`).find('.ui-userdata-top').css({
+                        "height": "1px",
                     })
-                    .text(title);
+                } else {
+                    var title = `{{ $title ?? '' }}`
+                    var label = $("<label>").attr("for", "searchText")
+                        .css({
+                            "font-weight": "normal",
+                            "padding-left": "10px",
+                            "padding-top": "1px"
+                        })
+                        .text(title);
+
+                    $(`#gbox_${idTop}`).find('.ui-jqgrid').css({
+                        "min-height": "24px!important"
+                    })
+
+                    $(`#gbox_${idTop}`).find('.ui-userdata-top').css({
+                        "height": "1px",
+                        "min-height": "25px"
+                    })
+                }
 
                 // Mengecek apakah label belum ada sebelumnya
                 if ($(`#t_${idTop} label[for='searchText']`).length === 0) {
                     $(`#t_${idTop}`).append(label);
                 }
 
-                var hideLabel = '{{ $hideLabel ?? '
-                ' }}'
+                var hideLabel = `{{ $hideLabel ?? '' }}`
 
                 if (hideLabel) {
                     $(`#gbox_${idTop}`).find('.ui-jqgrid-hdiv').hide()
                 }
-
-
                 $('.ui-scroll-popup').addClass('d-none')
                 $('.modal-loader-content').addClass('d-none')
 
-
-
                 jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
                 setGridLastRequest($(this), jqXHR)
-
             },
             onSelectRow: function(id) {
                 activeGrid = this;
@@ -328,12 +356,10 @@ $idLookup = isset($id) ? $id : null;
                 var colModel = selector.jqGrid('getGridParam', 'colModel');
                 var firstColumnName = colModel[1].name;
 
-
                 if (detectDeviceType() == 'mobile') {
                     $('.lookup-grid tr:not(.jqgfirstrow) td').css('padding', '12px')
-                    $('.lookup-grid tr:not(.jqgfirstrow) td').css('font-size', '1.2rem')
-                    $(`#gview_${idTop} .ui-th-column `).css('font-size', '1.2rem')
-
+                    $('.lookup-grid tr:not(.jqgfirstrow) td').css('font-size', '1rem')
+                    $(`#gview_${idTop} .ui-th-column `).css('font-size', '1rem')
                 }
 
                 let modal = $('#crudModal')
@@ -343,7 +369,6 @@ $idLookup = isset($id) ? $id : null;
                 changeJqGridRowListText();
 
                 if (data.data.length === 0) {
-
                     $('#parameterGrid').each((index, element) => {
                         abortGridLastRequest($(element))
                         clearGridHeader($(element))
@@ -383,12 +408,9 @@ $idLookup = isset($id) ? $id : null;
                 $('.clearsearchclass').click(function() {
                     clearColumnSearch($(this))
                 })
-
                 $(this).setGridWidth($('#lookupCabang').prev().width())
                 setHighlight($(this))
             },
-
-
         })
 
         .jqGrid("setLabel", "rn", "No.")

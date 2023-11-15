@@ -2,15 +2,16 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
-        <div class="modal-header">
+        <!-- <div class="modal-header">
           <p class="modal-title" id="crudModalTitle"></p>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            
+
           </button>
-        </div>
+        </div> -->
         <form action="" method="post">
-          <div class="modal-body">
-           {{-- <div class="row form-group">
+          <!-- TAMBAH INI -->
+          <div class="modal-body modal-master">
+            {{-- <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">ID</label>
               </div>
@@ -46,7 +47,7 @@
               </div>
               <div class="col-12 col-md-10">
                 <input type="hidden" name="subkelompok_id">
-                <input type="text" name="subkelompok" class="form-control subkelompok-lookup">
+                <input type="text" name="subkelompok" id="subkelompok" class="form-control subkelompok-lookup">
               </div>
             </div>
             <div class="row form-group">
@@ -56,9 +57,8 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <select name="statusaktif" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH STATUS AKTIF --</option>
-                </select>
+                <input type="hidden" name="statusaktif">
+                <input type="text" name="statusaktifnama" id="statusaktifnama" class="form-control lg-form status-lookup">
               </div>
             </div>
           </div>
@@ -174,9 +174,9 @@
 
             setErrorMessages(form, error.responseJSON.errors);
           } else {
-            if(error.responseJSON.errors){
+            if (error.responseJSON.errors) {
               showDialog(error.statusText, error.responseJSON.errors.join('<hr>'))
-            } else if(error.responseJSON.message) {
+            } else if (error.responseJSON.message) {
               showDialog(error.statusText, error.responseJSON.message)
             } else {
               showDialog(error.statusText, error.statusText)
@@ -198,9 +198,9 @@
 
     activeGrid = null
 
-    form.find('#btnSubmit').prop('disabled',false)
+    form.find('#btnSubmit').prop('disabled', false)
     if (form.data('action') == "view") {
-      form.find('#btnSubmit').prop('disabled',true)
+      form.find('#btnSubmit').prop('disabled', true)
     }
 
     getMaxLength(form)
@@ -220,35 +220,35 @@
     let form = $('#crudForm')
 
     $('.modal-loader').removeClass('d-none')
-    
+
     form.data('action', 'add')
     form.trigger('reset')
     form.find('#btnSubmit').html(`
       <i class="fa fa-save"></i>
       Simpan
     `)
-    
+
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Create Kategori')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
     Promise
-    .all([
-      setStatusAktifOptions(form),
-    ])
-    .then(() => {
-      showDefault(form)
-        .then(() => {
-          $('#crudModal').modal('show')
-        })
-        .catch((error) => {
-          showDialog(error.statusText)
-        })
-        .finally(() => {
-          $('.modal-loader').addClass('d-none')
-        })
-    })
+      .all([
+        setStatusAktifOptions(form),
+      ])
+      .then(() => {
+        showDefault(form)
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .catch((error) => {
+            showDialog(error.statusText)
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
+      })
   }
 
   function editKategori(kategoriId) {
@@ -318,6 +318,7 @@
           })
       })
   }
+
   function viewKategori(kategoriId) {
     let form = $('#crudForm')
 
@@ -339,15 +340,15 @@
       ])
       .then(() => {
         showKategori(form, kategoriId)
-        .then(kategoriId => {
-              // form.find('.aksi').hide()
-              setFormBindKeys(form)
-              form.find('[name]').attr('disabled', 'disabled').css({
-                background: '#fff'
-              })
-              form.find('[name=id]').prop('disabled',false)
-              
+          .then(kategoriId => {
+            // form.find('.aksi').hide()
+            setFormBindKeys(form)
+            form.find('[name]').attr('disabled', 'disabled').css({
+              background: '#fff'
             })
+            form.find('[name=id]').prop('disabled', false)
+
+          })
           .then(() => {
             $('#crudModal').modal('show')
             let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
@@ -450,6 +451,11 @@
             if (index == 'subkelompok') {
               element.data('current-value', value)
             }
+
+            // TAMBAH INI
+            if (index == 'statusaktifnama') {
+              element.data('current-value', value)
+            }
           })
 
           if (form.data('action') === 'delete') {
@@ -458,7 +464,7 @@
           }
 
           resolve()
-        }, 
+        },
         error: error => {
           reject(error)
         }
@@ -468,9 +474,20 @@
 
   function initLookup() {
 
-    $('.subkelompok-lookup').lookup({
+    $('.subkelompok-lookup').lookupMaster({
       title: 'Subkelompok Lookup',
-      fileName: 'subkelompok',
+      fileName: 'subkelompokMaster',
+      typeSearch: 'ALL',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+          searching: 1,
+          valueName: 'subkelompok_id',
+          searchText: 'subkelompok-lookup',
+          title: 'Sub Kelompok',
+          typeSearch: 'ALL',
+        }
+      },
       onSelectRow: (subkelompok, element) => {
         $('#crudForm [name=subkelompok_id]').first().val(subkelompok.id)
         element.val(subkelompok.keterangan)
@@ -485,6 +502,38 @@
         element.data('currentValue', element.val())
       }
     })
+
+    $(`.status-lookup`).lookupMaster({
+      title: 'Status Aktif Lookup',
+      fileName: 'parameterMaster',
+      beforeProcess: function() {
+        this.postData = {
+          url: `${apiUrl}parameter/combo`,
+          grp: 'STATUS AKTIF',
+          subgrp: 'STATUS AKTIF',
+          searching: 1,
+          valueName: `statusaktif`,
+          searchText: `status-lookup`,
+          singleColumn: true,
+          hideLabel: true,
+          title: 'Status Aktif'
+        };
+      },
+      onSelectRow: (status, element) => {
+        $('#crudForm [name=statusaktif]').first().val(status.id)
+        element.val(status.text)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'));
+      },
+      onClear: (element) => {
+        let status_id_input = element.parents('td').find(`[name="statusaktif"]`).first();
+        status_id_input.val('');
+        element.val('');
+        element.data('currentValue', element.val());
+      },
+    });
   }
 
   function showDefault(form) {
@@ -504,8 +553,7 @@
 
             if (element.is('select')) {
               element.val(value).trigger('change')
-            } 
-            else {
+            } else {
               element.val(value)
             }
           })
@@ -517,7 +565,7 @@
       })
     })
   }
-  
+
   function cekValidasidelete(Id) {
     $.ajax({
       url: `{{ config('app.api_url') }}kategori/${Id}/cekValidasi`,
@@ -528,11 +576,11 @@
       },
       success: response => {
         var kondisi = response.kondisi
-          if (kondisi == true) {
-            showDialog(response.message['keterangan'])
-          } else {
-              deleteKategori(Id)
-          }
+        if (kondisi == true) {
+          showDialog(response.message['keterangan'])
+        } else {
+          deleteKategori(Id)
+        }
 
       }
     })

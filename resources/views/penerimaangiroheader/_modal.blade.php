@@ -4,7 +4,7 @@
             <div class="modal-content">
                 <form action="" method="post">
                     <!-- TAMBAH INI KHUSUS MASTER DETAIL -->
-                    <div class="modal-body modal-overflow" style="overflow-y: auto; overflow-x: auto;">
+                    <div class="modal-body modal-master modal-overflow" style="overflow: auto;">
                         <input type="hidden" name="id">
 
                         <div class="row form-group">
@@ -79,42 +79,41 @@
                             </table>
                         </div> -->
                         <!-- TAMBAH INI KHUSUS MASTER DETAIL -->
-                        <div class="overflow scroll-container mb-2" style="  width: 100%; height: 700px;overflow: auto;border: 1px solid #ccc; ">
-                            <div class="table-container" style="width: fit-content;">
-                            <table class="table table-bordered table-bindkeys " id="detailList" style="width:2000px;">
-                                <thead>
+                        <div class="overflow scroll-container mb-2">
+                            <div class="table-container">
+                                <table class="table table-bordered table-bindkeys " id="detailList">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 10px; min-width: 10px;">No</th>
+                                            <th style="width: 150px; min-width: 150px;">Tgl jatuh tempo</th>
+                                            <th style="width: 180px; min-width: 180px;">No warkat</th>
+                                            <th style="width: 210px; min-width: 210px;">Bank</th>
+                                            <th style="width: 200px; min-width: 200px;">Bank Pelanggan</th>
+                                            <th style="width: 350px; min-width: 350px;">Keterangan</th>
+                                            <th style="width: 250px; min-width: 250px;">Nominal</th>
+                                            <th style="width: 200px; min-width: 200px;">Jenis Biaya</th>
+                                            <th style="width: 150px; min-width: 150px;">Bulan Beban</th>
+                                            <th style="width: 10px; min-width: 10px;" class="tbl_aksi">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="table_body">
+                                    </tbody>
+                                    <tfoot>
 
-                                    <tr>
-                                        <th style="width: 10px; min-width: 10px;">No</th>
-                                        <th style="width: 250px; min-width: 250px;">Tgl jatuh tempo</th>
-                                        <th style="width: 250px; min-width: 250px;">No warkat</th>
-                                        <th style="width: 250px; min-width: 250px;">Bank Pelanggan</th>
-                                        <th style="width: 250px; min-width: 250px;">Bank</th>
-                                        <th style="width: 350px; min-width: 350px;">Keterangan</th>
-                                        <th style="width: 250px; min-width: 250px;">Nominal</th>
-                                        <th style="width: 250px; min-width: 250px;">Jenis Biaya</th>
-                                        <th style="width: 250px; min-width: 250px;">Bulan Beban</th>
-                                        <th style="width: 10px; min-width: 10px;" class="tbl_aksi">Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="table_body">
-                                </tbody>
-                                <tfoot>
-
-                                    <tr>
-                                        <td colspan="6">
-                                            <p class="text-right font-weight-bold">TOTAL :</p>
-                                        </td>
-                                        <td>
-                                            <p class="text-right font-weight-bold autonumeric" id="total"></p>
-                                        </td>
-                                        <td colspan="2"></td>
-                                        <td class="tbl_aksi">
-                                            <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
-                                        </td>
-                                    </tr>
-                                </tfoot>
-                            </table>
+                                        <tr>
+                                            <td colspan="6">
+                                                <p class="text-right font-weight-bold">TOTAL :</p>
+                                            </td>
+                                            <td>
+                                                <p class="text-right font-weight-bold autonumeric" id="total"></p>
+                                            </td>
+                                            <td colspan="2"></td>
+                                            <td class="tbl_aksi">
+                                                <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
                             </div>
                         </div>
 
@@ -153,44 +152,43 @@
         });
 
         $(document).on('click', "#addRow", function() {
-            // event.preventDefault()
-            // let method = `POST`
-            // let url = `${apiUrl}penerimaangiroheader/addrow`
-            // let form = $('#crudForm')
-            // let Id = form.find('[name=id]').val()
-            // let action = form.data('action')
-            // let data = $('#crudForm').serializeArray()
-            // $('#crudForm').find(`[name="nominal[]"`).each((index, element) => {
-            //     data.filter((row) => row.name === 'nominal[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal[]"]`)[index])
-            // })
+            event.preventDefault()
+            let method = `POST`
+            let url = `${apiUrl}penerimaangiroheader/addrow`
+            let form = $('#crudForm')
+            let Id = form.find('[name=id]').val()
+            let action = form.data('action')
+            let data = $('#crudForm').serializeArray()
+            $('#crudForm').find(`[name="nominal[]"`).each((index, element) => {
+                data.filter((row) => row.name === 'nominal[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal[]"]`)[index])
+            })
 
-            // $.ajax({
-            //     url: url,
-            //     method: method,
-            //     dataType: 'JSON',
-            //     headers: {
-            //         Authorization: `Bearer ${accessToken}`
-            //     },
-            //     data: data,
-            //     success: response => {
-            //         addRow()
-            //         $('.is-invalid').removeClass('is-invalid')
-            //         $('.invalid-feedback').remove()
-            //     },
-            //     error: error => {
-            //         if (error.status === 422) {
-            //             $('.is-invalid').removeClass('is-invalid')
-            //             $('.invalid-feedback').remove()
-            //             setErrorMessages(form, error.responseJSON.errors);
-            //         } else {
-            //             showDialog(error.responseJSON)
-            //         }
-            //     },
-            // }).always(() => {
-            //     $('#processingLoader').addClass('d-none')
-            //     $(this).removeAttr('disabled')
-            // })
-            addRow()
+            $.ajax({
+                url: url,
+                method: method,
+                dataType: 'JSON',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                data: data,
+                success: response => {
+                    addRow()
+                    $('.is-invalid').removeClass('is-invalid')
+                    $('.invalid-feedback').remove()
+                },
+                error: error => {
+                    if (error.status === 422) {
+                        $('.is-invalid').removeClass('is-invalid')
+                        $('.invalid-feedback').remove()
+                        setErrorMessages(form, error.responseJSON.errors);
+                    } else {
+                        showDialog(error.responseJSON)
+                    }
+                },
+            }).always(() => {
+                $('#processingLoader').addClass('d-none')
+                $(this).removeAttr('disabled')
+            })
         });
 
         $(document).on('change', `#crudForm [name="tgllunas"]`, function() {
@@ -816,7 +814,7 @@
                     $.each(response.detail, (index, detail) => {
                         // TAMBAHIN INI
                         selectIndex = index;
-                        
+
                         let readOnly = (detail.pelunasanpiutang_nobukti != '-') ? 'readonly' : '';
                         let detailRow = $(`
                         <tr class="${detail.pelunasanpiutang_nobukti}">
@@ -960,14 +958,13 @@
             <input type="text" name="nowarkat[]"  class="form-control">
         </td>
         <td>
-            <input type="hidden" name="bankpelanggan_id[]">
-            <input type="text" name="bankpelanggan[]" id="bankpelanggan_${selectIndex}" class="form-control bankpelanggan-lookup${selectIndex}">
-        </td>
-        <td>
             <input type="hidden" name="bank_id[]">
             <input type="text" name="bank[]" id="bank_${selectIndex}" class="form-control bank-lookup${selectIndex}">
         </td>
-      
+        <td>
+            <input type="hidden" name="bankpelanggan_id[]">
+            <input type="text" name="bankpelanggan[]" id="bankpelanggan_${selectIndex}" class="form-control bankpelanggan-lookup${selectIndex}">
+        </td>
         <td>
         <input type="text" name="keterangan_detail[]" class="form-control">
         </td>
@@ -990,13 +987,12 @@
 
         $('#detailList>#table_body').append(detailRow)
         initLookupDetail(selectIndex);
-        console.log('add ',selectIndex)
         initAutoNumeric(detailRow.find('.autonumeric'))
         if ($('#crudForm [name=agen]').val() != '') {
-            $('#crudForm').find(`[name="tgljatuhtempo[]"]`).val(formattedDate).trigger('change');
+            detailRow.find(`[name="tgljatuhtempo[]"]`).val(formattedDate).trigger('change');
         } else {
             tgllunas = $('#crudForm').find(`[name="tgllunas"]`).val()
-            $('#crudForm').find(`[name="tgljatuhtempo[]"]`).val(tgllunas).trigger('change');
+            detailRow.find(`[name="tgljatuhtempo[]"]`).val(tgllunas).trigger('change');
         }
 
         initDatepicker()
@@ -1075,7 +1071,7 @@
     function deleteRow(row) {
         let countRow = $('.delete-row').parents('tr').length
         row.remove()
-        
+
         if (countRow <= 1) {
             // TAMBAH INI
             selectIndex = 0

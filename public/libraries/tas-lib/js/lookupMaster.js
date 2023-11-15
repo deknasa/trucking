@@ -30,6 +30,8 @@ $.fn.lookupMaster = function (options) {
         singlecolumn: null,
         detail: null,
         typeSearch: null,
+        rowIndex: null,
+        totalRow: null,
         postData: {},
         beforeProcess: function () {},
         onShowLookup: function (rowData, element) {},
@@ -90,7 +92,7 @@ $.fn.lookupMaster = function (options) {
 
                     let detailElement = $(".overflow");
 
-                    detailElement.css("overflow", "auto");
+                    // detailElement.css("overflow", "auto");
                 }
 
                 activeLookupElement = lookupContainer;
@@ -106,9 +108,10 @@ $.fn.lookupMaster = function (options) {
 
                     let detailElement = $(".overflow");
 
-                    detailElement.css("overflow", "auto");
+                    // detailElement.css("overflow", "auto");
                 } else {
-                    activateLookup(element, element.val());
+                    activateLookupMaster(element, element.val());
+                    element.focus();
                     activate = true;
                     bindKey = false;
                 }
@@ -120,11 +123,12 @@ $.fn.lookupMaster = function (options) {
                 adjustScrollForMobile();
             }
         });
+
         element.on("input", function (event) {
             const searchValue = element.val();
             if (!activate) {
                 delay(function () {
-                    activateLookup(element, searchValue);
+                    activateLookupMaster(element, searchValue);
                     activate = true;
                 }, 50);
             } else {
@@ -145,12 +149,12 @@ $.fn.lookupMaster = function (options) {
         });
     });
 
-    async function activateLookup(element, searchValue = null, singlecolumn) {
+    async function activateLookupMaster(element, searchValue = null, singlecolumn) {
         settings.beforeProcess();
         settings.onShowLookup();
 
         const detail = settings.detail;
-        const statusAktif = settings.statusAktif;
+        const miniSize = settings.miniSize;
 
         idElement = $(element).attr("id");
 
@@ -158,24 +162,19 @@ $.fn.lookupMaster = function (options) {
 
         const boxRect = box.getBoundingClientRect();
 
-        const width = boxRect.width;
+        const width = element[0].offsetWidth;
+
 
         let getId = element.attr("id");
 
         let detailElement = $(".overflow");
-        // let modalBody = $(".modal-overflow");
-
-        // let prevOverflow = detailElement.css("overflow");
-
-        // detailElement.css("overflow", "visible");
 
         let lookupContainer = element.siblings(`#lookup-${getId}`);
 
         let singleColumn = settings.singlecolumn;
 
         if (lookupContainer.length === 0) {
-            if (statusAktif) {
-                
+            if (miniSize) {
                 let detailElement = $(".overflow");
                 let modalBody = $(".modal-overflow");
 
@@ -197,9 +196,9 @@ $.fn.lookupMaster = function (options) {
                     ).insertAfter(element);
                 }
             } else {
-             
                 if (detail) {
                     let detailElement = $(".overflow");
+
                     let modalBody = $(".modal-overflow");
 
                     let prevOverflow = detailElement.css("overflow");
@@ -209,7 +208,6 @@ $.fn.lookupMaster = function (options) {
                     console.log($(".lookup-bdiv"));
 
                     if (detectDeviceType() == "desktop") {
-                     
                         lookupContainer = $(
                             '<div id="lookup-' +
                                 getId +
@@ -223,9 +221,7 @@ $.fn.lookupMaster = function (options) {
                         ).insertAfter(element);
                     }
                 } else {
-                    
                     if (detectDeviceType() == "desktop") {
-                        console.log('sini')
                         lookupContainer = $(
                             '<div id="lookup-' +
                                 getId +
@@ -255,11 +251,6 @@ $.fn.lookupMaster = function (options) {
                 lookupBody.html(response);
                 let grid = lookupBody.find(".lookup-grid");
 
-                // document.querySelector('.modal').addEventListener('touchmove', function(e) {
-
-                //     e.preventDefault(); // Mencegah aksi default dari peristiwa sentuh
-                // });
-
                 function preventScroll(e) {
                     e.preventDefault();
                     e.stopPropagation();
@@ -267,32 +258,9 @@ $.fn.lookupMaster = function (options) {
                     return false;
                 }
 
-                function disable() {
-                    // document
-                    //     .querySelector(".modal-body :not(.lookup-body)")
-                    //     .addEventListener("wheel", preventScroll);
-                    let modalElement = document.querySelector("#crudModal");
-                    let lookupElement = document.getElementById(
-                        "lookup-customer_name"
-                    );
-
-                    document
-                        .querySelector(".modal-overflow")
-                        .addEventListener("touchmove", function (e) {
-                            // Check if the event target has the class .lookup
-                            if (
-                                e.target !== lookupElement &&
-                                !lookupElement.contains(e.target)
-                            ) {
-                                e.preventDefault(); // Prevent the default action of touchmove
-                            }
-                        });
-                }
-
                 // disable();
                 let lookupLabel = settings.fileName;
 
-                // $(".ui-jqgrid-hdiv").addClass(lookupLabel);
                 $(".ui-jqgrid-bdiv").addClass("bdiv-lookup");
                 $(".jqgrid-rownum").addClass("rowNum-lookup");
 
@@ -455,7 +423,7 @@ $.fn.lookupMaster = function (options) {
                     grid.jqGrid("setGridParam", {
                         onCellSelect: function (id) {
                             handleSelectedRow(id, lookupContainer, element);
-                            element.focus();
+                            // element.focus();
                             activate = false;
                             bindKey = false;
                         },
@@ -497,7 +465,7 @@ $.fn.lookupMaster = function (options) {
                 lookupContainer.remove();
                 element.data("hasLookup", false);
 
-                detailElement.css("overflow", "auto");
+                // detailElement.css("overflow", "auto");
 
                 activate = false;
             }
@@ -505,25 +473,111 @@ $.fn.lookupMaster = function (options) {
 
         const modal = $(".modal-body");
 
-        if (modal.length) {
+        // document.addEventListener('DOMContentLoaded', function() {
+
+        //     lastTdElements.forEach(td => {
+        //       // Menambahkan event listener untuk setiap elemen <td>
+        //       td.addEventListener('click', function() {
+        //         // Memeriksa apakah elemen ini adalah elemen terakhir dalam tabel
+        //         if (this === this.parentElement.lastElementChild) {
+        //           // Jika ya, jalankan scrollIntoView()
+        //           this.scrollIntoView();
+        //         }
+        //       });
+        //     });
+        //   });
+
+        // document.addEventListener("focusin", function (event) {
+           
+        //     const focusedElement = event.target;
+        //     if (focusedElement && focusedElement.closest('tr')) {
+        //     const focusElement = focusedElement.closest('tr').parentElement.querySelectorAll('.table-lookup tbody tr:last-child')
+
+        
+            
+        //     const rowIndexElement =  $(focusedElement.closest('tr')).attr("data-trindex")
+         
+        //     const lastElement = document.querySelectorAll('.table-lookup tbody tr:last-child');
+        //     totalRowsElement = $(focusElement[0]).attr("data-trindex")
+            
+         
+        //     const tableContaint = $(".scroll-container");
+        //     if (tableContaint.length) {
+        //         const lookupTop = lookupContainer.offset().top;
+        //         const lookupBottom = lookupContainer.offset().top + lookupContainer.outerHeight();
+        //         const tableContaintBottom = tableContaint.offset().top + tableContaint.height();
+        //         const tableContaintTop = tableContaint.offset().top;
+        //         if (totalRowsElement <= rowIndexElement) {
+                   
+        //             tableContaint.animate(
+        //                 {
+        //                     scrollTop: 3000,
+        //                 },
+        //                 300
+        //             );
+        //         }
+        
+        //     }
+        // }
+               
+
+            
+        // });
+
+        const modalheader =  $(".modal-master");
+        if (modalheader.length) {
+            console.log('masuk')
             const lookupTop = lookupContainer.offset().top;
 
             const lookupBottom =
                 lookupContainer.offset().top + lookupContainer.outerHeight();
-            const modalBottom = modal.offset().top + modal.height();
-            const modalTop = modal.offset().top;
-
-            if (lookupTop > 568.4375) {
+            const modalBottom = modalheader.offset().top + modalheader.height();
+            const modalTop = modalheader.offset().top;
+           
+            if (lookupTop >= 573.5) {
+                
                 const scrollDistance =
                     lookupTop + lookupContainer.height() - modalBottom + 50; // Jarak scroll yang diinginkan
 
-                modal.animate(
+                modalheader.animate(
                     {
-                        scrollTop: modalBottom + scrollDistance,
+                        scrollTop: modalBottom + scrollDistance + 50,
                     },
-                    300
+                    500
                 );
             }
+        }
+        // const tableContaint = $(".scroll-container");
+        //     if (tableContaint.length) {
+        //         const lookupTop = lookupContainer.offset().top;
+
+        //         const lookupBottom = lookupContainer.offset().top + lookupContainer.outerHeight();
+        //         const tableContaintBottom = tableContaint.offset().top + tableContaint.height();
+        //         const tableContaintTop = tableContaint.offset().top;
+
+                
+        //         if (settings.totalRow <= settings.rowIndex) {
+
+        //             tableContaint.animate(
+        //                 {
+        //                     scrollTop: 5000,
+        //                 },
+        //                 300
+        //             );
+        //         }
+        
+        //     }
+
+
+        const aktifElement = document.activeElement;
+        const containtModal = document.querySelector(".scroll-container"); // Ganti dengan selektor sesuai struktur Anda
+
+        if (aktifElement && "scrollIntoView" in aktifElement && containtModal) {
+            aktifElement.scrollIntoView({
+                behavior: "instant",
+                block: "start",
+                inline: "end",
+            });
         }
 
         window.addEventListener("resize", () => {
@@ -538,7 +592,7 @@ $.fn.lookupMaster = function (options) {
 
                 let detailElement = $(".overflow");
 
-                detailElement.css("overflow", "auto");
+                // detailElement.css("overflow", "auto");
 
                 lookupContainer.remove();
                 element.data("hasLookup", false);
@@ -581,8 +635,6 @@ $.fn.lookupMaster = function (options) {
                 lookupContainer.find(".lookup-grid").getRowData(id)
             );
 
-            // if (rowData.name) {
-
             element.val(rowData.name);
             settings.onSelectRow(rowData, element);
 
@@ -593,8 +645,7 @@ $.fn.lookupMaster = function (options) {
 
             let detailElement = $(".overflow");
 
-            detailElement.css("overflow", "auto");
-            // }
+            // detailElement.css("overflow", "auto");
         }
     }
 
@@ -624,7 +675,7 @@ $.fn.lookupMaster = function (options) {
         if (searchValue) {
             /* Determine user selection listener */
             if (detectDeviceType() == "desktop") {
-                timeout = 100;
+                timeout = 150;
             } else if (detectDeviceType() == "mobile") {
                 timeout = 50;
             }
@@ -647,7 +698,12 @@ $.fn.lookupMaster = function (options) {
                         cm.search !== false &&
                         (cm.stype === undefined || cm.stype === "text")
                     ) {
-                        grid.jqGrid("setGridParam", {
+                        // grid.jqGrid("setGridParam", {
+                        //     field: cm.name,
+                        //     op: "cn",
+                        //     data: element.val().toUpperCase(),
+                        // });
+                        rules.push({
                             field: cm.name,
                             op: "cn",
                             data: searchValue.toUpperCase(),
@@ -665,9 +721,20 @@ $.fn.lookupMaster = function (options) {
                                 op: "cn",
                                 data: searchValue.toUpperCase(),
                             });
+
+                            // rules.push({
+                            //     field: cm.name,
+                            //     op: "cn",
+                            //     data: searchValue.toUpperCase(),
+                            // });
                         }
                     }
                     postData.filter_group = "OR";
+
+                    postData.filters = JSON.stringify({
+                        groupOp: "OR",
+                        rules: rules,
+                    });
 
                     grid.jqGrid("setGridParam", {
                         search: true,
@@ -703,11 +770,18 @@ $.fn.lookupMaster = function (options) {
                         cm.search !== false &&
                         (cm.stype === undefined || cm.stype === "text")
                     ) {
+                        console.log("masuk sinii");
                         grid.jqGrid("setGridParam", {
                             field: cm.name,
                             op: "cn",
                             data: searchValue.toUpperCase(),
                         });
+
+                        // rules.push({
+                        //     field: cm.name,
+                        //     op: "cn",
+                        //     data: searchValue.toUpperCase(),
+                        // });
                     }
 
                     postData.filter_group = "OR";
@@ -742,14 +816,18 @@ $.fn.lookupMaster = function (options) {
                     cm.search !== false &&
                     (cm.stype === undefined || cm.stype === "text")
                 ) {
-                    delete postData.filters[cm.name];
+                    postData.filters = JSON.stringify({
+                        groupOp: "AND",
+                        rules: [
+                            {
+                                field: cm.name,
+                                op: "cn",
+                                data: "",
+                            },
+                        ],
+                    });
                 }
             }
-
-            grid.jqGrid("setGridParam", {
-                postData: postData,
-                search: false,
-            });
 
             grid.trigger("reloadGrid", [
                 {
