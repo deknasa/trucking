@@ -289,14 +289,14 @@ class PendapatanSupirHeaderController extends MyController
 
             foreach ($pendapatan_details as $response_index => $response_detail) {
 
-                foreach ($detail_columns as $detail_columns_index => $detail_column) {
-                    $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
-                    $sheet->getStyle("A$detail_table_header_row:D$detail_table_header_row")->getFont()->setBold(true);
-                    $sheet->getStyle("A$detail_table_header_row:D$detail_table_header_row")->getAlignment()->setHorizontal('center');
-                }
+                // foreach ($detail_columns as $detail_columns_index => $detail_column) {
+                //     $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
+                //     $sheet->getStyle("A$detail_table_header_row:D$detail_table_header_row")->getFont()->setBold(true);
+                //     $sheet->getStyle("A$detail_table_header_row:D$detail_table_header_row")->getAlignment()->setHorizontal('center');
+                // }
 
                 $sheet->setCellValue("A$detail_start_row", $response_index + 1);
-                $sheet->setCellValue("B$detail_start_row", $response_detail['kodetrado']);
+                $sheet->setCellValue("B$detail_start_row", $response_detail['kode_trado']);
                 $sheet->setCellValue("C$detail_start_row", $response_detail['total']);
                 $sheet->setCellValue("D$detail_start_row", $response_index + 1);
 
@@ -309,7 +309,7 @@ class PendapatanSupirHeaderController extends MyController
                 }
 
                 $sheet->getStyle("A$detail_start_row:D$detail_start_row")->applyFromArray($styleArray);
-                $sheet->getStyle("C$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
+                $sheet->getStyle("C$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
                 $spreadsheet->getActiveSheet()->getRowDimension($detail_start_row)->setRowHeight(28);
                 $dataRow++;
                 $detail_start_row++;
@@ -321,7 +321,7 @@ class PendapatanSupirHeaderController extends MyController
             $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':B' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
             $sheet->setCellValue("C$detail_start_row",  "=SUM(C8:C" . ($dataRow - 1) . ")")->getStyle("C$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
 
-            $sheet->getStyle("C$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+            $sheet->getStyle("C$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
             $sheet->getColumnDimension('A')->setAutoSize(true);
             $sheet->getColumnDimension('B')->setAutoSize(true);
@@ -333,11 +333,11 @@ class PendapatanSupirHeaderController extends MyController
 
             foreach ($pendapatan_details as $response_index => $response_detail) {
 
-                foreach ($detail_columns as $detail_columns_index => $detail_column) {
-                    $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
-                    $sheet->getStyle("A$detail_table_header_row:G$detail_table_header_row")->getFont()->setBold(true);
-                    $sheet->getStyle("A$detail_table_header_row:G$detail_table_header_row")->getAlignment()->setHorizontal('center');
-                }
+                // foreach ($detail_columns as $detail_columns_index => $detail_column) {
+                //     $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
+                //     $sheet->getStyle("A$detail_table_header_row:G$detail_table_header_row")->getFont()->setBold(true);
+                //     $sheet->getStyle("A$detail_table_header_row:G$detail_table_header_row")->getAlignment()->setHorizontal('center');
+                // }
                 $response_detail['nominals'] = number_format((float) $response_detail['nominal'], '2', '.', ',');
 
                 $sheet->setCellValue("A$detail_start_row", $response_index + 1);
@@ -349,7 +349,7 @@ class PendapatanSupirHeaderController extends MyController
                 $sheet->setCellValue("G$detail_start_row", $response_detail['nominal']);
 
                 $sheet->getStyle("A$detail_start_row:G$detail_start_row")->applyFromArray($styleArray);
-                $sheet->getStyle("G$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
+                $sheet->getStyle("G$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
                 // $total += $response_detail['nominal'];
                 $dataRow++;
@@ -362,7 +362,7 @@ class PendapatanSupirHeaderController extends MyController
             $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':F' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
             $sheet->setCellValue("G$detail_start_row",  "=SUM(G8:G" . ($dataRow - 1) . ")")->getStyle("G$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
 
-            $sheet->getStyle("G$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+            $sheet->getStyle("G$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
             $sheet->getColumnDimension('A')->setAutoSize(true);
             $sheet->getColumnDimension('B')->setAutoSize(true);

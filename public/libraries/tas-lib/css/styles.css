@@ -21,8 +21,9 @@
 	font-weight: normal;
 }
 
+/* FONT GLOBAL */
 html {
-	font-size: 14px;
+	font-size: 13px;
 }
 
 * {
@@ -44,9 +45,19 @@ body {
 	display: block !important;
 }
 
-.ui-jqgrid-bdiv td {
-	padding: 6px;
+/* START PADDING GRID */
+.jqgrow td {
+	padding-top: 5px!important;
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-bottom: 3px;
 }
+
+.ui-jqgrid-labels th{
+	padding:0.6rem!important;
+}
+/* END PADDING GRID */
+
 input[type=text]:focus,input[type=password]:focus, .select2-selection:focus {
 	background-color: #ffffee;
   }
@@ -280,25 +291,123 @@ input[type=text]:focus,input[type=password]:focus, .select2-selection:focus {
 	/* background-color:  #25588f; */
 }
 
-.modal.modal-fullscreen .modal-dialog {
+.modal-lookup .modal-dialog {
 	width: 95vw;
 	padding: 0;
 	max-width: none;
 }
 
-.modal.modal-fullscreen .modal-content {
+.modal-lookup .modal-content {
 	height: auto;
 	height: 100%;
 	border: none;
 }
 
-.modal.modal-fullscreen .modal-body {
+.modal-lookup .modal-body {
 	overflow-y: auto;
 }
 
 /* .modal.modal-fullscreen .modal-footer {
 	background: inherit;
 } */
+
+/* Not with modal-header */
+#crudModal {
+	padding-right: 0px !important;
+	padding-left: 0px !important;
+}
+
+#crudModal .modal-dialog {
+	max-width: 100%;
+	margin: 0;
+	height: 100%;
+}
+
+#crudModal .modal-content {
+	height: 100%;
+	border: 0;
+	border-radius: 0;
+	background-color: #ffcc99;
+}
+
+#crudModal .modal-body {
+	overflow-y: auto;
+	height: calc(100vh - 56px);
+	border: 0;
+	border-radius: 0;
+}
+
+#crudModal .modal-footer {
+	border: 0;
+	border-radius: 0;
+	background-color: #DCDCDC;
+}
+
+/* Not with modal-header (For ACL) */
+#userAclModal {
+	padding-right: 0px !important;
+	padding-left: 0px !important;
+}
+
+#userAclModal .modal-dialog {
+	max-width: 100%;
+	margin: 0;
+	height: 100%;
+}
+
+#userAclModal .modal-content {
+	height: 100%;
+	border: 0;
+	border-radius: 0;
+	background-color: #ffcc99;
+}
+
+#userAclModal .modal-body {
+	overflow-y: auto;
+	height: calc(100vh - 56px);
+	border: 0;
+	border-radius: 0;
+}
+
+#userAclModal .modal-footer {
+	border: 0;
+	border-radius: 0;
+	background-color: #DCDCDC;
+}
+
+/* Not with modal-header (For user role) */
+#userRoleModal {
+	padding-right: 0px !important;
+	padding-left: 0px !important;
+}
+
+#userRoleModal .modal-dialog {
+	max-width: 100%;
+	margin: 0;
+	height: 100%;
+}
+
+#userRoleModal .modal-content {
+	height: 100%;
+	border: 0;
+	border-radius: 0;
+	background-color: #ffcc99;
+}
+
+
+
+#userRoleModal .modal-body {
+	overflow-y: auto;
+	height: calc(100vh - 56px);
+	border: 0;
+	border-radius: 0;
+}
+
+#userRoleModal .modal-footer {
+	border: 0;
+	border-radius: 0;
+	background-color: #DCDCDC;
+}
 
 .highlight {
 	background-color: yellow;
@@ -708,6 +817,7 @@ span.textCard {
     display: none;
 }
 
+/* START MOBILE DISPLAY*/
 @media (max-width: 767px) {
     .ui-datepicker table { 
         font-size: 17px !important; 
@@ -716,10 +826,22 @@ span.textCard {
 	html { 
 		font-size: 16px;  
 	} 
+
+	.jqgrow td {
+		padding-top: 8px!important;
+		padding-left: 5px!important;
+		padding-right: 3px!important;
+		padding-bottom: 10px!important;
+		/* padding: 6px; */
+	}
+
+	.checkbox-jqgrid{
+		margin:0 7px!important;
+	}
 	
-	.col-form-label{ 
+	/* .col-form-label{ 
 		font-size: 20px; 
-	} 
+	}  */
 	
 	.ui-datepicker{ 
 		width: 20em!important; 
@@ -735,9 +857,9 @@ span.textCard {
 		padding-right: 5px; 
 	} 
 	
-	.ui-jqgrid-bdiv td { 
+	/* .ui-jqgrid-bdiv td { 
 		padding: 13px; 
-	} 
+	}  */
 	
 	.ui-jqgrid .ui-jqgrid-bdiv { 
 		height: 447px!important; 
@@ -771,6 +893,7 @@ span.textCard {
 
 
 }
+/* END MOBILE DISPLAY*/
 
 @media only screen and (max-width: 600px) { 
     input[type=text],  
@@ -800,8 +923,16 @@ span.textCard {
 	}
    
 }
-@media (min-width: 900px) { 
 
+/* CHECKBOX POSITION */
+.checkbox-selectall{
+	margin:0 3px 11px!important;
+}
+
+@media (min-width: 900px) { 
+	.checkbox-jqgrid{
+		margin:0 10px!important;
+	}
 	#sidebarButton {
 		padding-left: 1.5rem !important;
 		padding-right: 1.5rem !important;

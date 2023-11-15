@@ -26,8 +26,9 @@ class PemutihanSupirController extends MyController
         $data = [
             'combocetak' => $this->comboCetak('list', 'STATUSCETAK', 'STATUSCETAK'),
         ];
-        $data = array_merge(compact('title', 'data'),
-            ["request"=>$request->all()]
+        $data = array_merge(
+            compact('title', 'data'),
+            ["request" => $request->all()]
         );
 
         return view('pemutihansupir.index', $data);
@@ -87,10 +88,10 @@ class PemutihanSupirController extends MyController
             'status' => $aksi,
             'grp' => 'STATUSCETAK',
             'subgrp' => 'STATUSCETAK',
-        ]; 
+        ];
         $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'user/combostatus',$status);
+            ->get(config('app.api_url') . 'user/combostatus', $status);
         return $response['data'];
     }
 
@@ -99,36 +100,10 @@ class PemutihanSupirController extends MyController
         //FETCH HEADER
         $id = $request->id;
         $pemutihanSupir = Http::withHeaders($request->header())
-           ->withOptions(['verify' => false])
-           ->withToken(session('access_token'))
-           ->get(config('app.api_url') .'pemutihansupir/'.$id.'/export')['data'];
-       
-       //FETCH DETAIL
-       $detailParams = [
-           'pemutihansupir_id' => $request->id
-       ];
-       $pemutihanSupir_detail = Http::withHeaders(request()->header())
-           ->withOptions(['verify' => false])
-           ->withToken(session('access_token'))
-           ->get(config('app.api_url') .'pemutihansupirdetail', $detailParams)['data'];
-           
-        
-        $combo = $this->combo('list');
-        $key = array_search('CETAK', array_column( $combo, 'parameter')); 
-        $pemutihanSupir["combo"] =  $combo[$key];
-        $printer['tipe'] = $request->printer;
-        return view('reports.pemutihansupir', compact('pemutihanSupir', 'pemutihanSupir_detail','printer'));
-    }
-
-    public function export(Request $request):void
-    {
-         //FETCH HEADER
-         $id = $request->id;
-         $pemutihanSupir = Http::withHeaders($request->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') .'pemutihansupir/'.$id.'/export')['data'];
-        
+            ->get(config('app.api_url') . 'pemutihansupir/' . $id . '/export')['data'];
+
         //FETCH DETAIL
         $detailParams = [
             'pemutihansupir_id' => $request->id
@@ -136,11 +111,37 @@ class PemutihanSupirController extends MyController
         $pemutihanSupir_detail = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') .'pemutihansupirdetail', $detailParams)['data'];
+            ->get(config('app.api_url') . 'pemutihansupirdetail', $detailParams)['data'];
+
+
+        $combo = $this->combo('list');
+        $key = array_search('CETAK', array_column($combo, 'parameter'));
+        $pemutihanSupir["combo"] =  $combo[$key];
+        $printer['tipe'] = $request->printer;
+        return view('reports.pemutihansupir', compact('pemutihanSupir', 'pemutihanSupir_detail', 'printer'));
+    }
+
+    public function export(Request $request): void
+    {
+        //FETCH HEADER
+        $id = $request->id;
+        $pemutihanSupir = Http::withHeaders($request->header())
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'pemutihansupir/' . $id . '/export')['data'];
+
+        //FETCH DETAIL
+        $detailParams = [
+            'pemutihansupir_id' => $request->id
+        ];
+        $pemutihanSupir_detail = Http::withHeaders(request()->header())
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'pemutihansupirdetail', $detailParams)['data'];
 
         $tglBukti = $pemutihanSupir["tglbukti"];
         $timeStamp = strtotime($tglBukti);
-        $dateTglBukti = date('d-m-Y', $timeStamp); 
+        $dateTglBukti = date('d-m-Y', $timeStamp);
         $pemutihanSupir['tglbukti'] = $dateTglBukti;
 
         $spreadsheet = new Spreadsheet();
@@ -211,14 +212,14 @@ class PemutihanSupirController extends MyController
             ]
         ];
 
-         //LOOPING HEADER        
-         foreach ($header_columns as $header_column) {
+        //LOOPING HEADER        
+        foreach ($header_columns as $header_column) {
             $sheet->setCellValue('B' . $header_start_row, $header_column['label']);
-            $sheet->setCellValue('C' . $header_start_row++, ': '.$pemutihanSupir[$header_column['index']]);
+            $sheet->setCellValue('C' . $header_start_row++, ': ' . $pemutihanSupir[$header_column['index']]);
         }
         foreach ($header_right_columns as $header_right_column) {
             $sheet->setCellValue('D' . $header_right_start_row, $header_right_column['label']);
-            $sheet->setCellValue('E' . $header_right_start_row++, ': '.$pemutihanSupir[$header_right_column['index']]);
+            $sheet->setCellValue('E' . $header_right_start_row++, ': ' . $pemutihanSupir[$header_right_column['index']]);
         }
         foreach ($detail_columns as $detail_columns_index => $detail_column) {
             $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_table_header_row, $detail_column['label'] ?? $detail_columns_index + 1);
@@ -232,45 +233,45 @@ class PemutihanSupirController extends MyController
         );
 
         $style_number = [
-			'alignment' => [
-				'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT, 
-			],
-            
-			'borders' => [
-				'top' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
-				'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN], 
-				'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
-				'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN] 
-			]
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT,
+            ],
+
+            'borders' => [
+                'top' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+                'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+                'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+                'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN]
+            ]
         ];
-        $sheet ->getStyle("A$detail_table_header_row:D$detail_table_header_row")->applyFromArray($styleArray);
+        $sheet->getStyle("A$detail_table_header_row:D$detail_table_header_row")->applyFromArray($styleArray);
 
         // LOOPING DETAIL
         $nominal = 0;
         foreach ($pemutihanSupir_detail as $response_index => $response_detail) {
-            
+
             foreach ($detail_columns as $detail_columns_index => $detail_column) {
                 $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
                 $sheet->getStyle("A$detail_table_header_row:D$detail_table_header_row")->getFont()->setBold(true);
                 $sheet->getStyle("A$detail_table_header_row:D$detail_table_header_row")->getAlignment()->setHorizontal('center');
             }
-            $response_detail['nominals'] = number_format((float) $response_detail['nominal'], '2', '.', ',');
-        
-            $sheet->setCellValue("A$detail_start_row", $response_index + 1);    
+
+            $sheet->setCellValue("A$detail_start_row", $response_index + 1);
             $sheet->setCellValue("B$detail_start_row", $response_detail['pengeluarantrucking_nobukti']);
             $sheet->setCellValue("C$detail_start_row", $response_detail['statusposting']);
-            $sheet->setCellValue("D$detail_start_row", $response_detail['nominals']);
+            $sheet->setCellValue("D$detail_start_row", $response_detail['nominal']);
 
-            $sheet ->getStyle("A$detail_start_row:C$detail_start_row")->applyFromArray($styleArray);
-            $sheet ->getStyle("D$detail_start_row")->applyFromArray($style_number);
-            $nominal += $response_detail['nominal'];
+            $sheet->getStyle("A$detail_start_row:C$detail_start_row")->applyFromArray($styleArray);
+            $sheet->getStyle("D$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
             $detail_start_row++;
         }
 
         $total_start_row = $detail_start_row;
-        $sheet->mergeCells('A'.$total_start_row.':C'.$total_start_row);
-        $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A'.$total_start_row.':C'.$total_start_row)->applyFromArray($style_number)->getFont()->setBold(true);
-        $sheet->setCellValue("D$total_start_row", number_format((float) $nominal, '2', '.', ','))->getStyle("D$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->mergeCells('A' . $total_start_row . ':C' . $total_start_row);
+        $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':C' . $total_start_row)->applyFromArray($style_number)->getFont()->setBold(true);
+        $total = "=SUM(D" . ($detail_table_header_row + 1) . ":D" . ($detail_start_row - 1) . ")";
+        $sheet->setCellValue("D$total_start_row", $total)->getStyle("D$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->getStyle("D$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);
@@ -286,5 +287,4 @@ class PemutihanSupirController extends MyController
 
         $writer->save('php://output');
     }
-
 }

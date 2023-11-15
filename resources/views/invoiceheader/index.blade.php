@@ -62,7 +62,7 @@
   let selectedRows = [];
   let tgldariheader
   let tglsampaiheader
-  let activeGrid 
+  let activeGrid
 
   function checkboxHandler(element) {
     let value = $(element).val();
@@ -91,12 +91,12 @@
     loadJurnalUmumGrid(nobukti)
 
     @isset($request['tgldari'])
-      tgldariheader = `{{ $request['tgldari'] }}`;
+    tgldariheader = `{{ $request['tgldari'] }}`;
     @endisset
     @isset($request['tglsampai'])
-      tglsampaiheader = `{{ $request['tglsampai'] }}`;
+    tglsampaiheader = `{{ $request['tglsampai'] }}`;
     @endisset
-    setRange(false,tgldariheader,tglsampaiheader)
+    setRange(false, tgldariheader, tglsampaiheader)
     initDatepicker('datepickerIndex')
     $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('invoiceheader')
@@ -117,7 +117,7 @@
         colModel: [{
             label: '',
             name: '',
-            width: 30,
+            width: 40,
             align: 'center',
             sortable: false,
             clear: false,
@@ -129,6 +129,7 @@
               dataInit: function(element) {
                 $(element).removeClass('form-control')
                 $(element).parent().addClass('text-center')
+                $(element).addClass('checkbox-selectall')
 
                 $(element).on('click', function() {
                   $(element).attr('disabled', true)
@@ -142,7 +143,7 @@
               }
             },
             formatter: (value, rowOptions, rowData) => {
-              return `<input type="checkbox" name="invoiceId[]" value="${rowData.id}" onchange="checkboxHandler(this)">`
+              return `<input type="checkbox" name="invoiceId[]" class="checkbox-jqgrid" value="${rowData.id}" onchange="checkboxHandler(this)">`
             },
           },
           {
@@ -299,7 +300,7 @@
             name: 'piutang_nobukti',
             align: 'left',
             formatter: (value, options, rowData) => {
-              if ((value == null) ||( value == '')) {
+              if ((value == null) || (value == '')) {
                 return '';
               }
               let tgldari = rowData.tgldariheaderpiutangheader
@@ -498,7 +499,7 @@
       })
 
       .customPager({
-        
+
         extndBtn: [{
             id: 'report',
             title: 'Report',
@@ -573,11 +574,11 @@
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('approvalbukacetak', 'store') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');
-                    tglbukacetak =tglbukacetak[1] + '-' + tglbukacetak[2];
+                    tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
                     if (selectedRows.length < 1) {
                       showDialog('Harap pilih salah satu record')
-                    }else{
-                      approvalBukaCetak(tglbukacetak,'INVOICEHEADER',selectedRows);
+                    } else {
+                      approvalBukaCetak(tglbukacetak, 'INVOICEHEADER', selectedRows);
                     }
                   }
                 }
@@ -613,7 +614,7 @@
             id: 'delete',
             innerHTML: '<i class="fa fa-trash"></i> DELETE',
             class: 'btn btn-danger btn-sm mr-1',
-            onClick: () => {              
+            onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
@@ -628,7 +629,7 @@
             class: 'btn btn-orange btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              
+
               viewInvoiceHeader(selectedId)
             }
           },
@@ -669,34 +670,36 @@
         'color': '#fff'
       })
       .parent().addClass('px-1')
-      function permission() {
-    if (!`{{ $myAuth->hasPermission('invoiceheader', 'store') }}`) {
-      $('#add').attr('disabled', 'disabled')
-    }
-    if (!`{{ $myAuth->hasPermission('invoiceheader', 'show') }}`) {
+
+    function permission() {
+      if (!`{{ $myAuth->hasPermission('invoiceheader', 'store') }}`) {
+        $('#add').attr('disabled', 'disabled')
+      }
+      if (!`{{ $myAuth->hasPermission('invoiceheader', 'show') }}`) {
         $('#view').attr('disabled', 'disabled')
       }
 
-    if (!`{{ $myAuth->hasPermission('invoiceheader', 'update') }}`) {
-      $('#edit').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('invoiceheader', 'update') }}`) {
+        $('#edit').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('invoiceheader', 'destroy') }}`) {
-      $('#delete').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('invoiceheader', 'destroy') }}`) {
+        $('#delete').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('invoiceheader', 'export') }}`) {
-      $('#export').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('invoiceheader', 'export') }}`) {
+        $('#export').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('invoiceheader', 'report') }}`) {
-      $('#report').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('invoiceheader', 'report') }}`) {
+        $('#report').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('invoiceheader', 'approval') }}`) {
-      $('#approveun').attr('disabled', 'disabled')
-      $("#jqGrid").hideCol("");
-    }}
+      if (!`{{ $myAuth->hasPermission('invoiceheader', 'approval') }}`) {
+        $('#approveun').attr('disabled', 'disabled')
+        $("#jqGrid").hideCol("");
+      }
+    }
     $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {
         $.each(autoNumericElements, (index, autoNumericElement) => {
@@ -762,8 +765,8 @@
     //   })
     // })
   })
-  
-  
+
+
   function clearSelectedRows() {
     selectedRows = []
 
@@ -782,7 +785,7 @@
         limit: 0,
         tgldari: $('#tgldariheader').val(),
         tglsampai: $('#tglsampaiheader').val(),
-        filters: $('#jqGrid').jqGrid('getGridParam','postData').filters
+        filters: $('#jqGrid').jqGrid('getGridParam', 'postData').filters
       },
       success: (response) => {
         selectedRows = response.data.map((row) => row.id)

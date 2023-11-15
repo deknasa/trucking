@@ -995,7 +995,7 @@
                 colModel: [{
                         label: '',
                         name: '',
-                        width: 30,
+                        width: 40,
                         align: 'center',
                         sortable: false,
                         clear: false,
@@ -1008,6 +1008,7 @@
                                 $(element).attr('id', 'gsTrip')
                                 let agen_id = $('#crudForm').find(`[name=agen_id]`).val()
                                 let tglproses = $('#crudForm').find(`[name=tglproses]`).val()
+                                $(element).addClass('checkbox-selectall')
 
                                 $(element).removeClass('form-control')
                                 $(element).parent().addClass('text-center')
@@ -1027,7 +1028,7 @@
                             }
                         },
                         formatter: (value, rowOptions, rowData) => {
-                            return `<input type="checkbox" name="idgrid[]" value="${rowData.id}" ${disabled} onchange="checkboxHandlerTrip(this)">`
+                            return `<input type="checkbox" class="checkbox-jqgrid" name="idgrid[]" value="${rowData.id}" ${disabled} onchange="checkboxHandlerTrip(this)">`
                         },
                     },
                     {
@@ -1592,7 +1593,7 @@
                 colModel: [{
                         label: "",
                         name: "",
-                        width: 30,
+                        width: 40,
                         formatter: 'checkbox',
                         search: false,
                         editable: false,
@@ -1601,7 +1602,7 @@
                             if ($('#crudForm').data('action') == 'delete') {
                                 disabled = 'disabled'
                             }
-                            return `<input type="checkbox" value="${rowData.id}" ${disabled} onChange="checkboxPotPribadiHandler(this, ${rowData.id})">`;
+                            return `<input type="checkbox" class="checkbox-jqgrid" value="${rowData.id}" ${disabled} onChange="checkboxPotPribadiHandler(this, ${rowData.id})">`;
                         },
                     },
                     {

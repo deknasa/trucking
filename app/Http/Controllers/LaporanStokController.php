@@ -84,14 +84,14 @@ class LaporanStokController extends Controller
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:K1');
 
-        $sheet->setCellValue('A2', strtoupper('Laporan Pembelian Stok'));
+        $sheet->setCellValue('A2', strtoupper('Laporan Pemakaian Stok'));
         $sheet->getStyle("A2")->getFont()->setBold(true);
         $sheet->mergeCells('A2:K2');
 
         $sheet->setCellValue('A3', strtoupper( 'Bulan ' . date('M-Y', strtotime($pengeluaran[0]['tglbukti'])) ));
         $sheet->getStyle("A3")->getFont()->setBold(true);
         $sheet->mergeCells('A3:K3');
-
+        $sheet->getColumnDimension('I')->setWidth(60);  
         // $sheet->setCellValue('A1', $pengeluaran[0]['judul']);
         // $sheet->setCellValue('A2', 'Laporan Stok');
         // $sheet->setCellValue('A3', 'Bulan ' . date('M-Y', strtotime($pengeluaran[0]['tgldari'])));
@@ -123,7 +123,7 @@ class LaporanStokController extends Controller
 
         $alphabets = range('A', 'Z');
 
-
+       
 
         $header_columns = [
 
@@ -202,6 +202,7 @@ class LaporanStokController extends Controller
                     if ($data_column['index'] == 'nominalsaldo') {
                         if ($response_detail['baris'] != 1) {
                             $value = '=(F' . ($detail_start_row) . '-H' . $detail_start_row . ')';
+                            // $value = $response_detail[$data_column['index']];
                         }
                     }
                     if ($data_column['index'] == 'qtysaldo') {
@@ -232,7 +233,9 @@ class LaporanStokController extends Controller
         foreach ($header_columns as $data_columns_index => $data_column) {
             if ($data_column['index'] == 'namabarang') {
                 $sheet->getColumnDimension($alphabets[$data_columns_index])->setWidth(50);
-            } else {
+            } else if ($data_column['index'] == 'keterangan') {
+                    $sheet->getColumnDimension($alphabets[$data_columns_index])->setWidth(72);
+                } else {
                 $sheet->getColumnDimension($alphabets[$data_columns_index])->setAutoSize(true);
             }
         }
@@ -303,6 +306,17 @@ class LaporanStokController extends Controller
         // ];
         // $sheet->getStyle("A" . ($detail_start_row + 1) . ":$lastColumn" . ($detail_start_row + 1))->applyFromArray($border_style);
 
+        $sheet->getColumnDimension('A')->setAutoSize(true);
+        $sheet->getColumnDimension('B')->setAutoSize(true);
+        $sheet->getColumnDimension('C')->setAutoSize(true);
+        $sheet->getColumnDimension('D')->setWidth(38);
+        $sheet->getColumnDimension('E')->setAutoSize(true);
+        $sheet->getColumnDimension('F')->setAutoSize(true);
+        $sheet->getColumnDimension('G')->setAutoSize(true);        
+        $sheet->getColumnDimension('H')->setAutoSize(true);        
+        $sheet->getColumnDimension('I')->setWidth(60);        
+        $sheet->getColumnDimension('J')->setAutoSize(true);        
+        $sheet->getColumnDimension('K')->setAutoSize(true);        
 
         $writer = new Xlsx($spreadsheet);
         $filename = 'LAPORAN PEMAKAIAN BARANG ' . date('dmYHis');

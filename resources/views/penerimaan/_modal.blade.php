@@ -423,7 +423,7 @@
         $('#crudForm').find('[name=tgllunas]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         $('#table_body').html('')
         addRow();
-        initAutoNumeric(form.find('.nominal'))
+        initAutoNumericMinus(form.find('.nominal'))
 
         Promise
             .all([
@@ -892,7 +892,7 @@
                             detailRow.find(`[name="bankpelanggan[]"]`).val(detail.bankpelanggan)
                             detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
                             detailRow.find(`[name="nominal_detail[]"]`).val(detail.nominal)
-                            initAutoNumeric(detailRow.find(`[name="nominal_detail[]"]`))
+                            initAutoNumericMinus(detailRow.find(`[name="nominal_detail[]"]`))
                             detailRow.find(`[name="tgljatuhtempo[]"]`).val(dateFormat(detail.tgljatuhtempo))
                             detailRow.find(`[name="bulanbeban[]"]`).val(dateFormat(detail.bulanbeban))
                             $('#detailList>#table_body').append(detailRow)
@@ -986,7 +986,7 @@
                             detailRow.find(`[name="bankpelanggan[]"]`).val(detail.bankpelanggan)
                             detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
                             detailRow.find(`[name="nominal_detail[]"]`).val(detail.nominal)
-                            initAutoNumeric(detailRow.find(`[name="nominal_detail[]"]`))
+                            initAutoNumericMinus(detailRow.find(`[name="nominal_detail[]"]`))
                             detailRow.find(`[name="tgljatuhtempo[]"]`).val(dateFormat(detail.tgljatuhtempo))
                             detailRow.find(`[name="bulanbeban[]"]`).val(dateFormat(detail.bulanbeban))
                             $('#detailList>#table_body').append(detailRow)
@@ -1088,7 +1088,7 @@
                 element.data('currentValue', element.val())
             }
         })
-        initAutoNumeric(detailRow.find('.autonumeric'))
+        initAutoNumericMinus(detailRow.find('.autonumeric'))
         tgllunas = $('#crudForm').find(`[name="tgllunas"]`).val()
         detailRow.find(`[name="tgljatuhtempo[]"]`).val(tgllunas).trigger('change');
         initDatepicker()
@@ -1334,7 +1334,7 @@
                     detailRow.find(`[name="bankpelanggan[]"]`).val(detail.bankpelanggan)
                     detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
                     detailRow.find(`[name="nominal_detail[]"]`).val(detail.nominal)
-                    initAutoNumeric(detailRow.find(`[name="nominal_detail[]"]`))
+                    initAutoNumericMinus(detailRow.find(`[name="nominal_detail[]"]`))
                     detailRow.find(`[name="tgljatuhtempo[]"]`).val(dateFormat(detail.tgljatuhtempo))
                     detailRow.find(`[name="bulanbeban[]"]`).val(dateFormat(detail.bulanbeban))
                     $('#detailList>#table_body').append(detailRow)

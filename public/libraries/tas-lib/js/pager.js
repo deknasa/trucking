@@ -10,7 +10,7 @@ function loadPagerHandler(element, grid) {
 			<span class="fas fa-backward"></span>
 		</button>
 		
-		<div class="d-flex align-items-center my-1 justify-content-between gap-10">
+		<div class="d-flex align-items-center my-1  justify-content-between gap-10">
 			<span>Page</span>
 			<input id="${grid.getGridParam().id}_pagerInput" class="pager-input" value="${grid.getGridParam().page
 		}">
@@ -206,51 +206,33 @@ $.fn.customPager = function (option = {}) {
 		let extndBtn = "";
 		if (option.extndBtn) {
 			option.extndBtn.forEach(element => {
-				if( element.class.indexOf('dropdown-toggle') != -1 ){
-					
-					extndBtn += `<div class="btn-group dropup  scrollable-menu">`
-					extndBtn += `<button type="button" class="${element.class}" data-toggle="dropdown" id="${element.id}">
-					${element.innerHTML}
-					</button>`
-					extndBtn += `<ul class="dropdown-menu" id="menu-approve" aria-labelledby="${element.id}">`
-					if (element.dropmenuHTML) {
-						element.dropmenuHTML.forEach(dropmenuHTML => {
-							extndBtn += `<li><a class="dropdown-item" id='${dropmenuHTML.id}' href="#">${dropmenuHTML.text}</a></li>`
-							$(document).on("click", `#${dropmenuHTML.id}`, function (event) {
-								event.stopImmediatePropagation();
+				extndBtn += `<div class="btn-group dropup  scrollable-menu">`
+				extndBtn += `<button type="button" class="${element.class}" data-toggle="dropdown" id="${element.id}">
+				${element.innerHTML}
+				</button>`
+				extndBtn += `<ul class="dropdown-menu" id="menu-approve" aria-labelledby="${element.id}">`
+				if (element.dropmenuHTML) {
+					element.dropmenuHTML.forEach(dropmenuHTML => {
+						extndBtn += `<li><a class="dropdown-item" id='${dropmenuHTML.id}' href="#">${dropmenuHTML.text}</a></li>`
+						$(document).on("click", `#${dropmenuHTML.id}`, function (event) {
+							event.stopImmediatePropagation();
 
-								dropmenuHTML.onClick();
-							});
+							dropmenuHTML.onClick();
 						});
-					}
-					extndBtn += `</ul>`
-					extndBtn += "</div>"
-				}else{
-					let buttonElement = document.createElement("button");
-						buttonElement.id =
-							typeof element.id !== "undefined"
-								? element.id
-								: `customButton_${index}`;
-						buttonElement.className = element.class;
-						buttonElement.innerHTML = element.innerHTML;
-
-						if (element.onClick) {
-							$(document).on("click", `#${buttonElement.id}`, function (event) {
-								event.stopImmediatePropagation();
-
-								element.onClick();
-							});
-						}
-
-						extndBtn += buttonElement.outerHTML;
+					});
 				}
+				extndBtn += `</ul>`
+				extndBtn += "</div>"
 			});
 		}
 
-		$(`#gbox_${$(this).getGridParam().id}`).after(`
-			<div class="bg-white grid-pager overflow-x-hidden">
+	
+
+		if (detectDeviceType() == "desktop") {
+			$(`#gbox_${$(this).getGridParam().id}`).after(`
+			<div class=" bg-white grid-pager overflow-x-hidden">
 				<div class="row d-flex align-items-center text-lg-left">
-					<div class="col-12 col-lg-7" id="left-nav">
+					<div class="col-8 id="left-nav">
 						${typeof option.buttons !== "undefined"
 				? option.buttons
 					.map((button, index) => {
@@ -278,8 +260,8 @@ $.fn.customPager = function (option = {}) {
 			}
 							${extndBtn}
 					</div>
-					<div class="col-12 col-lg-5">
-						<div class="row d-flex align-items-center justify-content-center justify-content-lg-end pr-2">
+					<div class="col-4">
+						<div class="row d-flex align-items-center justify-content-center justify-content-lg-end pr-3">
 							<div id="${pagerHandlerId}" class="pager-handler d-flex align-items-center justify-content-center mx-2">
 							</div>
 							<div id="${pagerInfoId}" class="pager-info">
@@ -291,8 +273,68 @@ $.fn.customPager = function (option = {}) {
 			
 		`);
 
+		}else if(detectDeviceType() == "mobile"){
+			$(`#gbox_${$(this).getGridParam().id}`).after(`
+				<div class="row d-flex align-items-center grid-overflow text-lg-left">
+					<div class="col-12 col-lg-6" id="left-nav" style="overflow: hidden; ">
+						<div style="display: flex; overflow-x: auto; padding: 5px; white-space: nowrap; background-color:white;">
+
+							${typeof option.buttons !== "undefined"
+								? option.buttons
+									.map((button, index) => {
+										let buttonElement = document.createElement("button");
+										buttonElement.id =
+											typeof button.id !== "undefined"
+												? button.id
+												: `customButton_${index}`;
+										buttonElement.className = button.class;
+										buttonElement.style.setProperty('margin-right', '6px', 'important');
+										buttonElement.innerHTML = button.innerHTML;
+
+										if (button.onClick) {
+											$(document).on("click", `#${buttonElement.id}`, function (event) {
+												event.stopImmediatePropagation();
+
+												button.onClick();
+											});
+										}
+
+										return buttonElement.outerHTML;
+									})
+									.join("")
+								: ''}
+
+							${extndBtn}
+						</div>
+					</div>
+				</div>
+
+					<div class="col-12 col-lg-6">
+						<div class="row d-flex align-items-center justify-content-center justify-content-lg-end pr-3" style="background-color:white;">
+							<div id="${pagerHandlerId}" class="pager-handler d-flex align-items-center justify-content-center mx-2">
+							</div>
+							<div id="${pagerInfoId}" class="pager-info">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			
+		`);
+		
+		}
+		
+		$(`#gbox_${$(this).getGridParam().id}`).siblings('.grid-overflow').find('button').removeClass('btn-sm');
+		$(`#gbox_${$(this).getGridParam().id}`).siblings('.grid-pager').find('button').removeClass('btn-sm');
+		
 		loadPagerHandler(`#${pagerHandlerId}`, grid);
-		$(`#gbox_${$(this).getGridParam().id}`).siblings('.grid-pager').find('button').removeClass('btn-sm')
+		
+		// if (detectDeviceType() == "desktop") {
+			
+		// }
+		
+		
 		grid.bind("jqGridLoadComplete.jqGrid", function (event, data) {
 			loadPagerHandlerInfo(`#${pagerHandlerId}`, grid);
 			loadPagerInfo(`#${pagerInfoId}`, grid);

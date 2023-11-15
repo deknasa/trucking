@@ -950,6 +950,7 @@
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
+        $('#crudForm [name=coa]').val('')
         element.val('')
         element.data('currentValue', element.val())
       }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
@@ -224,19 +225,22 @@ class InvoiceChargeGandenganHeaderController extends MyController
             }
         
             // dd('here');
+            $tglTrip = ($response_detail['tgltrip'] != null) ? Date::PHPToExcel(date('Y-m-d',strtotime($response_detail['tgltrip']))) : ''; 
+            $tglAkhir = ($response_detail['tglakhir'] != null) ? Date::PHPToExcel(date('Y-m-d',strtotime($response_detail['tglakhir']))) : ''; 
 
             $sheet->setCellValue("A$detail_start_row", $response_index + 1);    
             $sheet->setCellValue("B$detail_start_row", $response_detail['gandengan']);
             $sheet->setCellValue("C$detail_start_row", $response_detail['jobtrucking']);
-            $sheet->setCellValue("D$detail_start_row", date('d-m-Y', strtotime($response_detail['tgltrip'])));
-            $sheet->setCellValue("E$detail_start_row", date('d-m-Y', strtotime($response_detail['tglakhir'])));
+            $sheet->setCellValue("D$detail_start_row", $tglTrip);
+            $sheet->setCellValue("E$detail_start_row", $tglAkhir);
             $sheet->setCellValue("F$detail_start_row", $response_detail['orderan']);
             $sheet->setCellValue("G$detail_start_row", $response_detail['jumlahhari']);
             $sheet->setCellValue("H$detail_start_row", $response_detail['namagudang']);
             $sheet->setCellValue("I$detail_start_row", $response_detail['nominal']);
 
             $sheet ->getStyle("A$detail_start_row:I$detail_start_row")->applyFromArray($styleArray);
-            $sheet->getStyle("I$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+            $sheet->getStyle("D$detail_start_row:E$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
+            $sheet->getStyle("I$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
             
             $sheet ->getStyle("I$detail_start_row")->applyFromArray($style_number);
             $nominal += $response_detail['nominal'];
@@ -249,7 +253,7 @@ class InvoiceChargeGandenganHeaderController extends MyController
 
         $sheet->setCellValue("I$detail_start_row", "=SUM(I10:I" . ($detail_start_row - 1) . ")")->getStyle("I$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
 
-        $sheet->getStyle("I$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+        $sheet->getStyle("I$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);
@@ -262,7 +266,7 @@ class InvoiceChargeGandenganHeaderController extends MyController
         $sheet->getColumnDimension('I')->setAutoSize(true);
 
         $writer = new Xlsx($spreadsheet);
-        $filename = 'Laporan Invoice Extra Gandengan' . date('dmYHis');
+        $filename = 'LAPORAN INVOICE CHARGE GANDENGAN ' . date('dmYHis');
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
         header('Cache-Control: max-age=0');

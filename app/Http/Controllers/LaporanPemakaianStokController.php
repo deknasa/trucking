@@ -204,8 +204,8 @@ class LaporanPemakaianStokController extends Controller
                         }
                     } else if ($data_column['index'] == 'tglbukti') {
                         $dateValue = ($value != null) ? Date::PHPToExcel(date('Y-m-d',strtotime($value))) : ''; 
-                        $sheet->setCellValue($alphabets[$data_columns_index] . ($detail_start_row - 2), $dateValue);
-                        $sheet->getStyle($alphabets[$data_columns_index] . ($detail_start_row - 2)) 
+                        $sheet->setCellValue($alphabets[$data_columns_index] . ($detail_start_row ), $dateValue);
+                        $sheet->getStyle($alphabets[$data_columns_index] . ($detail_start_row )) 
                         ->getNumberFormat() 
                         ->setFormatCode('dd-mm-yyyy');
                         // $sheet->setCellValue($alphabets[$data_columns_index] . ($detail_start_row - 2), $dateValue);

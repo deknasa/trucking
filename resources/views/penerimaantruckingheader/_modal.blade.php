@@ -1251,13 +1251,13 @@
         if (error) {
           showDialog(response)
         } else {
-            if(Aksi == 'PRINTER BESAR'){
-              window.open(`{{ route('penerimaantruckingheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
-            } else if(Aksi == 'PRINTER KECIL'){
-              window.open(`{{ route('penerimaantruckingheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
-            } else {
-              cekValidasiAksi(Id, Aksi)
-            }
+          if (Aksi == 'PRINTER BESAR') {
+            window.open(`{{ route('penerimaantruckingheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
+          } else if (Aksi == 'PRINTER KECIL') {
+            window.open(`{{ route('penerimaantruckingheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
+          } else {
+            cekValidasiAksi(Id, Aksi)
+          }
         }
 
       }
@@ -1345,7 +1345,7 @@
         colModel: [{
             label: "",
             name: "",
-            width: 30,
+            width: 40,
             align: 'center',
             sortable: false,
             clear: false,
@@ -1358,6 +1358,7 @@
 
                 $(element).removeClass('form-control')
                 $(element).parent().addClass('text-center')
+                $(element).addClass('checkbox-selectall')
                 if (disabled == '') {
                   $(element).on('click', function() {
                     if ($(this).is(':checked')) {
@@ -1377,7 +1378,7 @@
               if ($('#crudForm').data('action') == 'delete') {
                 disabled = 'disabled'
               }
-              return `<input type="checkbox" value="${rowData.id}" ${disabled} onChange="checkboxHandler(this, ${rowData.id})">`;
+              return `<input type="checkbox" class="checkbox-jqgrid" value="${rowData.id}" ${disabled} onChange="checkboxHandler(this, ${rowData.id})">`;
             },
           },
           {
@@ -1391,6 +1392,20 @@
             width: 250,
             name: "nobukti",
             sortable: true,
+          },
+          {
+            label: "Jlh Pinjaman",
+            name: "jlhpinjaman",
+            sortable: true,
+            align: "right",
+            formatter: currencyFormat,
+          },
+          {
+            label: "Total Bayar",
+            name: "totalbayar",
+            sortable: true,
+            align: "right",
+            formatter: currencyFormat,
           },
           {
             label: "SISA",
@@ -1558,6 +1573,8 @@
           }, 100);
           setTotalNominal()
           setTotalSisa()
+          setTotalPinjaman()
+          setTotalBayarPinjaman()
           setHighlight($(this))
         },
       })
@@ -1663,7 +1680,7 @@
         colModel: [{
             label: "",
             name: "",
-            width: 30,
+            width: 40,
             align: 'center',
             sortable: false,
             clear: false,
@@ -1676,6 +1693,7 @@
 
                 $(element).removeClass('form-control')
                 $(element).parent().addClass('text-center')
+                $(element).addClass('checkbox-selectall')
                 if (disabled == '') {
                   $(element).on('click', function() {
                     if ($(this).is(':checked')) {
@@ -1695,7 +1713,7 @@
               if ($('#crudForm').data('action') == 'delete') {
                 disabled = 'disabled'
               }
-              return `<input type="checkbox" value="${rowData.id}" ${disabled} onChange="checkboxHandlerKaryawan(this, ${rowData.id})">`;
+              return `<input type="checkbox" class="checkbox-jqgrid" value="${rowData.id}" ${disabled} onChange="checkboxHandlerKaryawan(this, ${rowData.id})">`;
             },
           },
           {
@@ -1937,7 +1955,7 @@
         colModel: [{
             label: '',
             name: '',
-            width: 30,
+            width: 40,
             align: 'center',
             sortable: false,
             clear: false,
@@ -1953,6 +1971,7 @@
 
                 $(element).removeClass('form-control')
                 $(element).parent().addClass('text-center')
+                $(element).addClass('checkbox-selectall')
                 if (disabled == '') {
                   $(element).on('click', function() {
                     if ($(this).is(':checked')) {
@@ -1972,7 +1991,7 @@
               if ($('#crudForm').data('action') == 'delete') {
                 disabled = 'disabled'
               }
-              return `<input type="checkbox" value="${rowData.id}" ${disabled} onChange="checkboxTitipan(this, ${rowData.id})">`;
+              return `<input type="checkbox" class="checkbox-jqgrid" value="${rowData.id}" ${disabled} onChange="checkboxTitipan(this, ${rowData.id})">`;
             },
           },
           {
@@ -2725,6 +2744,29 @@
     })
   }
 
+  function setTotalPinjaman() {
+    let jlhpinj = 0
+    let originalData = $("#tablePinjaman").getGridParam("data");
+    $.each(originalData, function(index, value) {
+      lunas_jlhpinj = value.jlhpinjaman;
+      jlhpinjs = (isNaN(lunas_jlhpinj)) ? parseFloat(lunas_jlhpinj.replaceAll(',', '')) : parseFloat(lunas_jlhpinj)
+      jlhpinj += jlhpinjs
+
+    })
+    initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePinjaman_jlhpinjaman"]`).text(jlhpinj))
+  }
+  function setTotalBayarPinjaman() {
+    let bayarpinj = 0
+    let originalData = $("#tablePinjaman").getGridParam("data");
+    $.each(originalData, function(index, value) {
+      lunas_bayarpinj = value.totalbayar;
+      bayarpinjs = (isNaN(lunas_bayarpinj)) ? parseFloat(lunas_bayarpinj.replaceAll(',', '')) : parseFloat(lunas_bayarpinj)
+      bayarpinj += bayarpinjs
+
+    })
+    initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePinjaman_totalbayar"]`).text(bayarpinj))
+  }
+  
   function setTotalNominal() {
     let nominalDetails = $(`#tablePinjaman`).find(`td[aria-describedby="tablePinjaman_nominal"]`)
     let nominal = 0

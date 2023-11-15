@@ -102,8 +102,8 @@
 
         $('#crudForm').find('[name=dari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         $('#crudForm').find('[name=sampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-        let idcabang = `<?php $data['idcabang']['text'] ?>`;
-
+        // let idcabang = `<?php $data['idcabang']['text'] ?>`;
+        let idcabang = `<?= $cabang['id'] ?>`;
         if (idcabang != 1) {
             $('#crudForm [name=cabang]').attr('readonly', true)
             $('#crudForm [name=cabang]').parents('.input-group').find('.input-group-append').hide()

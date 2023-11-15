@@ -18,10 +18,13 @@ class PenerimaanTruckingHeaderController extends MyController
         $data = [
             'combocetak' => $this->comboList('list', 'STATUSCETAK', 'STATUSCETAK')
         ];
-        $comboKodepenerimaan = $this->comboKodepenerimaan();
-        $data = array_merge(compact('title', 'data', 'comboKodepenerimaan'),
-        ["request"=>$request->all()]
-    );
+        $combo = $this->comboKodepenerimaan();
+        $comboKodepenerimaan = $combo['data'];
+        $acosPenerimaan = $combo['acos'];
+        $data = array_merge(
+            compact('title', 'data', 'comboKodepenerimaan', 'acosPenerimaan'),
+            ["request" => $request->all()]
+        );
         return view('penerimaantruckingheader.index', $data);
     }
 
@@ -96,7 +99,7 @@ class PenerimaanTruckingHeaderController extends MyController
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'penerimaantrucking', $params);
 
-        return $response['data'];
+        return $response;
     }
 
     public function combo($aksi)
@@ -135,7 +138,7 @@ class PenerimaanTruckingHeaderController extends MyController
         $key = array_search('CETAK', array_column($combo, 'parameter'));
         $penerimaantrucking["combo"] =  $combo[$key];
         $printer['tipe'] = $request->printer;
-        return view('reports.penerimaantruckingheader', compact('penerimaantrucking', 'penerimaantrucking_details','printer'));
+        return view('reports.penerimaantruckingheader', compact('penerimaantrucking', 'penerimaantrucking_details', 'printer'));
     }
 
     public function export(Request $request): void
@@ -286,11 +289,11 @@ class PenerimaanTruckingHeaderController extends MyController
                     $sheet->setCellValue("C$detail_start_row", $response_detail['keterangan']);
                     $sheet->setCellValue("D$detail_start_row", $response_detail['nominal']);
 
-                    $sheet->getStyle("C$detail_start_row")->getAlignment()->setWrapText(true);
-                    $sheet->getColumnDimension('C')->setWidth(150);
+                    // $sheet->getStyle("C$detail_start_row")->getAlignment()->setWrapText(true);
+                    $sheet->getColumnDimension('C')->setWidth(60);
 
                     $sheet->getStyle("A$detail_start_row:D$detail_start_row")->applyFromArray($styleArray);
-                    $sheet->getStyle("D$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
+                    $sheet->getStyle("D$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
                     $detail_start_row++;
                 }
@@ -299,7 +302,8 @@ class PenerimaanTruckingHeaderController extends MyController
                 $sheet->mergeCells('A' . $total_start_row . ':C' . $total_start_row);
                 $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':C' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
                 $totalNominal = "=SUM(D" . ($detail_table_header_row + 1) . ":D" . ($detail_start_row - 1) . ")";
-                $sheet->setCellValue("D$total_start_row", $totalNominal)->getStyle("D$total_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
+                $sheet->setCellValue("D$total_start_row", $totalNominal)->getStyle("D$total_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                $sheet->getStyle("D$total_start_row")->getFont()->setBold(true);
 
                 $sheet->getColumnDimension('A')->setAutoSize(true);
                 $sheet->getColumnDimension('B')->setAutoSize(true);
@@ -388,11 +392,11 @@ class PenerimaanTruckingHeaderController extends MyController
                     $sheet->setCellValue("B$detail_start_row", $response_detail['keterangan']);
                     $sheet->setCellValue("C$detail_start_row", $response_detail['nominal']);
 
-                    $sheet->getStyle("B$detail_start_row")->getAlignment()->setWrapText(true);
-                    $sheet->getColumnDimension('B')->setWidth(150);
+                    // $sheet->getStyle("B$detail_start_row")->getAlignment()->setWrapText(true);
+                    $sheet->getColumnDimension('B')->setWidth(60);
 
                     $sheet->getStyle("A$detail_start_row:C$detail_start_row")->applyFromArray($styleArray);
-                    $sheet->getStyle("C$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
+                    $sheet->getStyle("C$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
                     $detail_start_row++;
                 }
@@ -401,7 +405,8 @@ class PenerimaanTruckingHeaderController extends MyController
                 $sheet->mergeCells('A' . $total_start_row . ':B' . $total_start_row);
                 $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':B' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
                 $totalNominal = "=SUM(C" . ($detail_table_header_row + 1) . ":C" . ($detail_start_row - 1) . ")";
-                $sheet->setCellValue("C$total_start_row", $totalNominal)->getStyle("C$total_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
+                $sheet->setCellValue("C$total_start_row", $totalNominal)->getStyle("C$total_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                $sheet->getStyle("C$total_start_row")->getFont()->setBold(true);
 
                 $sheet->getColumnDimension('A')->setAutoSize(true);
                 $sheet->getColumnDimension('C')->setAutoSize(true);
@@ -417,8 +422,8 @@ class PenerimaanTruckingHeaderController extends MyController
             case '410':
                 // PBT
 
-                $penerimaantrucking['periodedari'] = date('d-m-Y',strtotime($penerimaantrucking["periodedari"]));
-                $penerimaantrucking['periodesampai'] = date('d-m-Y',strtotime($penerimaantrucking["periodesampai"]));
+                $penerimaantrucking['periodedari'] = date('d-m-Y', strtotime($penerimaantrucking["periodedari"]));
+                $penerimaantrucking['periodesampai'] = date('d-m-Y', strtotime($penerimaantrucking["periodesampai"]));
                 $header_columns = [
                     [
                         'label' => 'No Bukti',
@@ -472,7 +477,7 @@ class PenerimaanTruckingHeaderController extends MyController
                     // $sheet->setCellValue('E' . $header_right_start_row++, ': ' . $penerimaantrucking[$header_right_column['index']]);
                 }
 
-                $detail_table_header_row = 9;
+                $detail_table_header_row = 10;
                 $detail_start_row = $detail_table_header_row + 1;
                 $detail_columns = [
                     [
@@ -517,11 +522,11 @@ class PenerimaanTruckingHeaderController extends MyController
                     $sheet->setCellValue("D$detail_start_row", $response_detail['keterangan']);
                     $sheet->setCellValue("E$detail_start_row", $response_detail['nominal']);
 
-                    $sheet->getStyle("D$detail_start_row")->getAlignment()->setWrapText(true);
-                    $sheet->getColumnDimension('D')->setWidth(150);
+                    // $sheet->getStyle("D$detail_start_row")->getAlignment()->setWrapText(true);
+                    $sheet->getColumnDimension('D')->setWidth(60);
 
                     $sheet->getStyle("A$detail_start_row:E$detail_start_row")->applyFromArray($styleArray);
-                    $sheet->getStyle("E$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
+                    $sheet->getStyle("E$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
                     $detail_start_row++;
                 }
@@ -530,15 +535,16 @@ class PenerimaanTruckingHeaderController extends MyController
                 $sheet->mergeCells('A' . $total_start_row . ':D' . $total_start_row);
                 $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':D' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
                 $totalNominal = "=SUM(E" . ($detail_table_header_row + 1) . ":E" . ($detail_start_row - 1) . ")";
-                $sheet->setCellValue("E$total_start_row", $totalNominal)->getStyle("E$total_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
+                $sheet->setCellValue("E$total_start_row", $totalNominal)->getStyle("E$total_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                $sheet->getStyle("E$total_start_row")->getFont()->setBold(true);
 
                 $sheet->getColumnDimension('A')->setAutoSize(true);
                 $sheet->getColumnDimension('B')->setAutoSize(true);
-                $sheet->getColumnDimension('C')->setAutoSize(true);
+                $sheet->getColumnDimension('C')->setWidth(17);
                 $sheet->getColumnDimension('E')->setAutoSize(true);
 
                 $writer = new Xlsx($spreadsheet);
-                $filename = 'Laporan Penerimaan Trucking (PBT)' . date('dmYHis');
+                $filename = 'Laporan Penerimaan Trucking (TTE) ' . date('dmYHis');
                 header('Content-Type: application/vnd.ms-excel');
                 header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
                 header('Cache-Control: max-age=0');
@@ -663,11 +669,11 @@ class PenerimaanTruckingHeaderController extends MyController
                     $sheet->setCellValue("D$detail_start_row", $response_detail['keterangan']);
                     $sheet->setCellValue("E$detail_start_row", $response_detail['nominal']);
 
-                    $sheet->getStyle("D$detail_start_row")->getAlignment()->setWrapText(true);
-                    $sheet->getColumnDimension('D')->setWidth(150);
+                    // $sheet->getStyle("D$detail_start_row")->getAlignment()->setWrapText(true);
+                    $sheet->getColumnDimension('D')->setWidth(60);
 
                     $sheet->getStyle("A$detail_start_row:D$detail_start_row")->applyFromArray($styleArray);
-                    $sheet->getStyle("E$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
+                    $sheet->getStyle("E$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
                     $detail_start_row++;
                 }
@@ -676,7 +682,8 @@ class PenerimaanTruckingHeaderController extends MyController
                 $sheet->mergeCells('A' . $total_start_row . ':D' . $total_start_row);
                 $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':D' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
                 $totalNominal = "=SUM(E" . ($detail_table_header_row + 1) . ":E" . ($detail_start_row - 1) . ")";
-                $sheet->setCellValue("E$total_start_row", $totalNominal)->getStyle("E$total_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
+                $sheet->setCellValue("E$total_start_row", $totalNominal)->getStyle("E$total_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                $sheet->getStyle("E$total_start_row")->getFont()->setBold(true);
 
                 $sheet->getColumnDimension('A')->setAutoSize(true);
                 $sheet->getColumnDimension('B')->setAutoSize(true);

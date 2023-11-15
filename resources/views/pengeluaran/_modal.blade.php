@@ -916,7 +916,7 @@
             detailRow.find(`[name="noinvoice[]"]`).val(detail.noinvoice)
             detailRow.find(`[name="bank_detail[]"]`).val(detail.bank)
 
-            initAutoNumeric(detailRow.find(`[name="nominal_detail[]"]`))
+            initAutoNumericMinus(detailRow.find(`[name="nominal_detail[]"]`))
 
             detailRow.find(`[name="tgljatuhtempo[]"]`).val(dateFormat(detail.tgljatuhtempo))
             $('#detailList>#table_body').append(detailRow)
@@ -1032,7 +1032,7 @@
         element.data('currentValue', element.val())
       }
     })
-    initAutoNumeric(detailRow.find(`[name="nominal_detail[]"]`))
+    initAutoNumericMinus(detailRow.find(`[name="nominal_detail[]"]`))
     tglbukti = $('#crudForm').find(`[name="tglbukti"]`).val()
     detailRow.find(`[name="tgljatuhtempo[]"]`).val(tglbukti).trigger('change');
 
@@ -1291,7 +1291,7 @@
           detailRow.find(`[name="ketcoadebet[]"]`).val(detail.ketcoakredit)
           detailRow.find(`[name="noinvoice[]"]`).val(detail.invoice_nobukti)
 
-          initAutoNumeric(detailRow.find(`[name="nominal_detail[]"]`))
+          initAutoNumericMinus(detailRow.find(`[name="nominal_detail[]"]`))
 
           detailRow.find(`[name="tgljatuhtempo[]"]`).val(dateFormat(detail.tgljatuhtempo))
           $('#detailList>#table_body').append(detailRow)

@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
@@ -62,17 +63,21 @@ class LaporanHistoryPinjamanController extends MyController
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setCellValue('A1', $pengeluaran[0]['judul']);
+        $sheet->setCellValue('A1', $pengeluaran[0]['judul'] ?? '');
         $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:E1');
-        
+
         $sheet->setCellValue('A2', strtoupper('Laporan History Pinjaman'));
         $sheet->getStyle("A2")->getFont()->setBold(true);
         $sheet->mergeCells('A2:E2');
+        $sheet->setCellValue('A3', 'SUPIR : ' .  $responses['supirdari'] . ' S/D ' . $responses['supirsampai']);
+        $sheet->getStyle("A3")->getFont()->setBold(true);
 
-        $header_start_row = 4;
-        $detail_start_row = 5;
+        $sheet->mergeCells('A3:B3');
+
+        $header_start_row = 5;
+        $detail_start_row = 6;
 
         $styleArray = array(
             'borders' => array(
@@ -81,12 +86,41 @@ class LaporanHistoryPinjamanController extends MyController
                 ),
             ),
         );
-
+        $borderVertical = [
+            'borders' => [
+                'left' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+                'right' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+            ],
+        ];
+        $borderOutsideStyle = [
+            'borders' => [
+                'left' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+                'right' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+                'top' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+            ],
+        ];
         $style_number = [
             'alignment' => [
                 'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT,
+            ], 
+            'borders' => [
+                'left' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+                'right' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
             ],
-
         ];
 
         $alphabets = range('A', 'Z');
@@ -105,6 +139,10 @@ class LaporanHistoryPinjamanController extends MyController
                 'index' => 'namasupir',
             ],
             [
+                'label' => 'Keterangan',
+                'index' => 'keterangan',
+            ],
+            [
                 'label' => 'Nominal',
                 'index' => 'nominal',
             ],
@@ -117,36 +155,69 @@ class LaporanHistoryPinjamanController extends MyController
         foreach ($header_columns as $data_columns_index => $data_column) {
             $sheet->setCellValue($alphabets[$data_columns_index] . $header_start_row, $data_column['label'] ?? $data_columns_index + 1);
         }
-        $sheet->getStyle("A$header_start_row:E$header_start_row")->applyFromArray($styleArray)->getFont()->setBold(true);
+        $sheet->getStyle("A$header_start_row:F$header_start_row")->applyFromArray($styleArray)->getFont()->setBold(true);
         $totalnominal = 0;
         $totalSaldo = 0;
+        $prevNobukti = '';
+        $kelang = 1;
         foreach ($pengeluaran as $response_index => $response_detail) {
+            $nobuktiAwal = $response_detail['nobuktipinjaman'];
             $totalnominal += $response_detail['nominal'];
             $totalSaldo += $response_detail['Saldo'];
             foreach ($header_columns as $data_columns_index => $data_column) {
                 if (($data_column['index'] == 'nominal') || ($data_column['index'] == 'Saldo')) {
                     // $response_detail[$data_column['index']] = (number_format((float) $response_detail[$data_column['index']], '2', '.', ','))->applyFromArray($style_number);
                     $sheet->setCellValue($alphabets[$data_columns_index] . $detail_start_row, $response_detail[$data_column['index']])
-                    ->getStyle($alphabets[$data_columns_index] . $detail_start_row)
-                    ->applyFromArray($style_number)
-                    ->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                        ->getStyle($alphabets[$data_columns_index] . $detail_start_row)
+                        ->applyFromArray($style_number)
+                        ->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                } else if ($data_column['index'] == 'tglbukti') {
+                    $dateValue = ($response_detail['tglbukti'] != null) ? Date::PHPToExcel(date('Y-m-d', strtotime($response_detail['tglbukti']))) : '';
+                    $sheet->setCellValue($alphabets[$data_columns_index] . $detail_start_row, $dateValue)->getStyle($alphabets[$data_columns_index] . $detail_start_row)->getNumberFormat()->setFormatCode('dd-mm-yyyy');
                 } else {
-                    $sheet->setCellValue($alphabets[$data_columns_index] . $detail_start_row, $response_detail[$data_column['index']]);
+                    $sheet->setCellValue($alphabets[$data_columns_index] . $detail_start_row, $response_detail[$data_column['index']])->getStyle($alphabets[$data_columns_index] . $detail_start_row)
+                        ->applyFromArray($borderVertical);
                 }
             }
-            
-            $sheet->getStyle("A$detail_start_row:E$detail_start_row")->applyFromArray($styleArray);
+
+            if ($nobuktiAwal != $prevNobukti) {
+                if ($prevNobukti != '') {
+                    // $sheet->getStyle("A" . ($detail_start_row - $kelang) . ":F" . ($detail_start_row - 1))->applyFromArray($borderOutsideStyle);
+                    $sheet->getStyle("A$detail_start_row:F$detail_start_row")->applyFromArray($borderOutsideStyle);
+                }
+            } else {
+
+                $sheet->getStyle("A$detail_start_row:F$detail_start_row")->applyFromArray($borderVertical);
+                $kelang++;
+            }
+            // $sheet->getStyle("A$detail_start_row:F$detail_start_row")->applyFromArray($styleArray);
             $detail_start_row++;
+
+            $prevNobukti = $response_detail['nobuktipinjaman'];
         }
+
+        if ($prevNobukti != '') {
+            $sheet->getStyle("A" . ($detail_start_row - $kelang) . ":F" . ($detail_start_row - 1))->applyFromArray($borderOutsideStyle);
+        }
+
 
         $lastColumn = $alphabets[$data_columns_index];
         $sheet->getStyle("A$header_start_row:$lastColumn$header_start_row")->getFont()->setBold(true);
 
+        $total_start_row = $detail_start_row;
+        $sheet->mergeCells('A' . $total_start_row . ':D' . $total_start_row);
+        $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':F' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
+
+        $totalDebet = "=SUM(E6:E" . ($detail_start_row - 1) . ")";
+        $sheet->setCellValue("E$total_start_row", $totalDebet)->getStyle("E$total_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->setCellValue("E$total_start_row", $totalDebet)->getStyle("E$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);
-        $sheet->getColumnDimension('C')->setWidth(50);
-        $sheet->getColumnDimension('D')->setAutoSize(true);
+        $sheet->getColumnDimension('C')->setAutoSize(true);
+        $sheet->getColumnDimension('D')->setWidth(72);
         $sheet->getColumnDimension('E')->setAutoSize(true);
+        $sheet->getColumnDimension('F')->setAutoSize(true);
         // $sheet->getColumnDimension('F')->setAutoSize(true);
         $total_start_row = $detail_start_row;
         // $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A'.$total_start_row.':C'.$total_start_row)->getFont()->setBold(true);
@@ -157,7 +228,7 @@ class LaporanHistoryPinjamanController extends MyController
 
 
         $writer = new Xlsx($spreadsheet);
-        $filename = 'LAPORANHISTORYPINJAMAN' . date('dmYHis');
+        $filename = 'LAPORAN HISTORY PINJAMAN ' . date('dmYHis');
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
         header('Cache-Control: max-age=0');

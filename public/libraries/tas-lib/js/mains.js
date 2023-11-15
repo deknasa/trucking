@@ -98,7 +98,26 @@ function initAutoNumeric(elements = null, options = null) {
 	let option = {
 		digitGroupSeparator: formats.THOUSANDSEPARATOR,
 		decimalCharacter: formats.DECIMALSEPARATOR,
-		modifyValueOnWheel : false
+		modifyValueOnWheel : false,
+		minimumValue: 0
+	};
+
+	Object.assign(option, options)
+
+	if (elements == null) {
+		new AutoNumeric.multiple(".autonumeric", option);
+	} else {
+		$.each(elements, (index, element) => {
+			new AutoNumeric(element, option);
+		});
+	}
+}
+
+function initAutoNumericMinus(elements = null, options = null) {
+	let option = {
+		digitGroupSeparator: formats.THOUSANDSEPARATOR,
+		decimalCharacter: formats.DECIMALSEPARATOR,
+		modifyValueOnWheel : false,
 	};
 
 	Object.assign(option, options)

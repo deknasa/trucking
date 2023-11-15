@@ -21,6 +21,7 @@ class LaporanNeracaController extends MyController
         ];
         $getCabang = $this->getCabang($data['idcabang']['text']);
         $cabang  = $getCabang['data'];
+        
 
         return view('laporanneraca.index', compact('title','data','cabang'));
     }
@@ -91,13 +92,12 @@ class LaporanNeracaController extends MyController
             ->get(config('app.api_url') . 'laporanneraca/export', $detailParams);
 
         $data = $header['data'];
-
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         $bulan = $this->getBulan(substr($request->sampai,0,2));
         $tahun = substr($request->sampai,3,4);
 
-        $sheet->setCellValue('A1', $data[0]['judul']);
+        $sheet->setCellValue('A1', $data[0]['CmpyName']);
         $sheet->setCellValue('A2', 'LAPORAN NERACA');
         $sheet->setCellValue('A3', 'PERIODE : '. $bulan .' - '.$tahun);
 
@@ -219,12 +219,11 @@ class LaporanNeracaController extends MyController
                 if ($keterangan_type != $previous_keterangan_type) {
 
                     if ($previous_keterangan_type != '') {
-
                         // $sheet->mergeCells("A$total_start_row:A$total_start_row");
                         $sheet->setCellValue('C' . ($total_start_row - 1), "=SUM(B$total_start_row:B" . ($detail_start_row - 1) . ")");
                         $sheet->getStyle("C" . ($total_start_row - 1))->applyFromArray($styleArray)->getFont()->setBold(true);
                         $sheet->getStyle("C" . ($total_start_row - 1))->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
-                        $sheet->setCellValue('C' . $total_start_row, '');
+                        // $sheet->setCellValue('C' . $total_start_row, '');
                         $sheet->getStyle("A$total_start_row:C$total_start_row")->applyFromArray($styleArray);
                         // $start_last_main = $total_start_row;
                     } else {
@@ -243,6 +242,13 @@ class LaporanNeracaController extends MyController
                 
                 $sheet->setCellValue("A$detail_start_row", "      " . $response_detail['KeteranganCoa']);
                 $sheet->setCellValue("B$detail_start_row", $response_detail['Nominal']);
+                if($response_detail['selisih'] != 0){
+                    
+                    $sheet->setCellValue("C$detail_start_row", "X");
+                    $sheet->setCellValue("D$detail_start_row", $response_detail['nominalbanding']);
+                    $sheet->getStyle("D$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                    $sheet->getStyle("C$detail_start_row:D$detail_start_row")->getFont()->setBold(true);
+                }
                 $sheet->getStyle("B$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
                 $total_per_keterangan_type += $response_detail['Nominal'];
@@ -253,6 +259,7 @@ class LaporanNeracaController extends MyController
                 $previous_keterangan_main = $keterangan_main;
                 $previous_keterangan_type = $keterangan_type;
             }
+
             if ($previous_keterangan_main != '') {
                 if ($total_per_keterangan_type > 0) {
                     // $sheet->mergeCells("A$total_start_row:A$total_start_row");
@@ -280,6 +287,7 @@ class LaporanNeracaController extends MyController
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);
         $sheet->getColumnDimension('C')->setAutoSize(true);
+        $sheet->getColumnDimension('D')->setAutoSize(true);
 
 
 

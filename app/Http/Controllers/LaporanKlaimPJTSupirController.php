@@ -60,7 +60,7 @@ class LaporanKlaimPJTSupirController extends MyController
             'kelompok_id' => $request->kelompok_id,
         ];
 
-
+        $kelompok = ($request->kelompok_id != '') ? $request->kelompok : 'SEMUA';
         $header = Http::withHeaders(request()->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
@@ -75,7 +75,7 @@ class LaporanKlaimPJTSupirController extends MyController
         $sheet->setCellValue('A1', $data[0]['judul'] ?? '');
         $sheet->setCellValue('A2', $data[0]['judulLaporan'] ?? '');
         $sheet->setCellValue('A3', 'PERIODE : ' .date('d-M-Y', strtotime($detailParams['dari'])) . ' s/d ' . date('d-M-Y', strtotime($detailParams['sampai'])));
-        $sheet->setCellValue('A4', 'KELOMPOK : '.$request->kelompok);
+        $sheet->setCellValue('A4', 'KELOMPOK : '.$kelompok);
         $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:F1');
@@ -174,7 +174,7 @@ class LaporanKlaimPJTSupirController extends MyController
         $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':E' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
 
         $totalDebet = "=SUM(F6:F" . ($detail_start_row - 1) . ")";
-        $sheet->setCellValue("F$total_start_row", $totalDebet)->getStyle("F$total_start_row")->applyFromArray($style_number);
+        $sheet->setCellValue("F$total_start_row", $totalDebet)->getStyle("F$total_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
         $sheet->setCellValue("F$total_start_row", $totalDebet)->getStyle("F$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
         $ttd_start_row = $detail_start_row + 2;

@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "33742f7aed9eaa21533e42bc6aa44986",
+  "ReportGuid": "79d8c8091a7ccc7fc85f56119cfbccaf",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanNeraca.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1699425286000+0700)/",
+  "ReportChanged": "/Date(1699673038000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -735,7 +735,7 @@
               "Name": "Text2",
               "Guid": "c7c22ae470f58bd1a4e5aa2c8256a3b2",
               "GrowToHeight": true,
-              "ClientRectangle": "10.95,-0.01,9.4,0.6",
+              "ClientRectangle": "10.95,-0.01,7.4,0.6",
               "ComponentPlacement": "gh.GroupHeaderBand3",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -889,7 +889,7 @@
               "Name": "Text12",
               "Guid": "41a4539c2826792ab7677d737f5b4709",
               "GrowToHeight": true,
-              "ClientRectangle": "15.82,0.04,3.51,0.58",
+              "ClientRectangle": "16.82,0.04,3.51,0.58",
               "ComponentPlacement": "d.DataBand1",
               "Conditions": {
                 "0": {
@@ -1027,7 +1027,7 @@
               "Name": "Text8",
               "Guid": "6daf90590ed5d9d99905bc58ec6ddb42",
               "GrowToHeight": true,
-              "ClientRectangle": "10.74,0.21,9.6,0.6",
+              "ClientRectangle": "10.74,0.21,7.6,0.6",
               "ComponentPlacement": "gf.GroupFooterBand1",
               "Interaction": {
                 "Ident": "StiInteraction"

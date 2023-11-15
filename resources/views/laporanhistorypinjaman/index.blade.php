@@ -81,19 +81,23 @@
     $(document).on('click', `#btnExport`, function(event) {
         let supirdari_id = $('#crudForm').find('[name=supirdari_id]').val()
         let supirsampai_id = $('#crudForm').find('[name=supirsampai_id]').val()
-        if ((supirdari_id == '') || (supirsampai_id =='')) {
-            showDialog('ISI SELURUH KOLOM')
-        } else {
+        if ((supirdari_id == '') && (supirsampai_id == '')) {
             window.open(`{{ route('laporanhistorypinjaman.export') }}?supirdari_id=${supirdari_id}&supirsampai_id=${supirsampai_id}`)
+        } else if ((supirdari_id != '') && (supirsampai_id != '')) {
+            window.open(`{{ route('laporanhistorypinjaman.export') }}?supirdari_id=${supirdari_id}&supirsampai_id=${supirsampai_id}`)
+        } else {
+            showDialog('ISI SELURUH KOLOM')
         }
     })
     $(document).on('click', `#btnPreview`, function(event) {
         let supirdari_id = $('#crudForm').find('[name=supirdari_id]').val()
         let supirsampai_id = $('#crudForm').find('[name=supirsampai_id]').val()
-        if ((supirdari_id == '') || (supirsampai_id =='')) {
-            showDialog('ISI SELURUH KOLOM')
-        } else {
+        if ((supirdari_id == '') && (supirsampai_id == '')) {
             window.open(`{{ route('laporanhistorypinjaman.report') }}?supirdari_id=${supirdari_id}&supirsampai_id=${supirsampai_id}`)
+        } else if ((supirdari_id != '') && (supirsampai_id != '')) {
+            window.open(`{{ route('laporanhistorypinjaman.report') }}?supirdari_id=${supirdari_id}&supirsampai_id=${supirsampai_id}`)
+        } else {
+            showDialog('ISI SELURUH KOLOM')
         }
     })
 
@@ -131,7 +135,7 @@
             },
             onSelectRow: (supir, element) => {
                 $('#crudForm [name=supirsampai_id]').first().val(supir.id)
-                element.val(supir.namasupir)                
+                element.val(supir.namasupir)
                 element.data('currentValue', element.val())
             },
             onCancel: (element) => {

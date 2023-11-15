@@ -189,10 +189,9 @@ class LaporanBukuBesarController extends MyController
         $totalDebet = 0;
         $totalSaldo = 0;
         $prevKeteranganCoa = null;
-
+        // dd($bukubesar);
         $groupedData = [];
         if (is_array($bukubesar)) {
-
             foreach ($bukubesar as $row) {
                 $coa = $row['coa'];
                 if (!isset($groupedData[$coa])) {
@@ -201,7 +200,7 @@ class LaporanBukuBesarController extends MyController
                 $groupedData[$coa][] = $row;
             }
         }
-
+        // dd($groupedData);
         // foreach ($bukubesar as $response_index => $response_detail) {
 
         //     if ($response_detail['keterangancoa'] !== $prevKeteranganCoa) {
@@ -240,10 +239,10 @@ class LaporanBukuBesarController extends MyController
         // $sheet->setCellValue("E$detail_start_row", number_format((float) $totalKredit, '2', ',', '.'))->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
         // $sheet->setCellValue("F$detail_start_row", number_format((float) $totalSaldo, '2', ',', '.'))->getStyle("F$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
         if (is_array($bukubesar)) {
-
+            // dd($groupedData)
             foreach ($groupedData as $coa => $group) {
                 $sheet->mergeCells("A$detail_start_row:F$detail_start_row");
-                $sheet->setCellValue("A$detail_start_row", 'Kode Perkiraan : '.$coa . ' (' . $group[0]['keterangancoa'] .')')->getStyle('A' . $detail_start_row . ':F' . $detail_start_row);
+                $sheet->setCellValue("A$detail_start_row", 'Kode Perkiraan : ' . $coa . ' (' . $group[0]['keterangancoa'] . ')')->getStyle('A' . $detail_start_row . ':F' . $detail_start_row);
                 // $sheet->getStyle("A$detail_start_row")->getFont()->setSize(12)->setBold(true);
                 // $sheet->getStyle("A$detail_start_row")->getAlignment()->setHorizontal('center');
                 $detail_start_row++;
@@ -260,13 +259,14 @@ class LaporanBukuBesarController extends MyController
                 $previousRow = $dataRow - 1;
                 foreach ($group as $response_index => $response_detail) {
                     // ... (your existing code for filling in details)
-                    $dateValue = ($response_detail['tglbukti'] != null) ? Date::PHPToExcel(date('Y-m-d',strtotime($response_detail['tglbukti']))) : ''; 
-            
+                    $dateValue = ($response_detail['tglbukti'] != null) ? Date::PHPToExcel(date('Y-m-d', strtotime($response_detail['tglbukti']))) : '';
+
                     $sheet->setCellValue("A$detail_start_row", $dateValue);
                     $sheet->setCellValue("B$detail_start_row", ($response_detail['nobukti'] == '') ? $response_detail['keterangan'] : $response_detail['nobukti']);
                     $sheet->setCellValue("C$detail_start_row", ($response_detail['keterangan'] == 'SALDO AWAL') ? '' : $response_detail['keterangan']);
                     $sheet->setCellValue("D$detail_start_row", ($response_detail['keterangan'] == 'SALDO AWAL') ? 0 : $response_detail['debet']);
                     $sheet->setCellValue("E$detail_start_row", ($response_detail['keterangan'] == 'SALDO AWAL') ? 0 : $response_detail['kredit']);
+
                     if ($response_detail['nobukti'] == '') {
                         $sheet->setCellValue('F' . $detail_start_row, $response_detail['Saldo']);
                         $previousRow = $detail_start_row;

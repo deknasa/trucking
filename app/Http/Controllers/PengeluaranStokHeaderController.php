@@ -18,8 +18,10 @@ class PengeluaranStokHeaderController extends MyController
         $data = [
             'combocetak' => $this->comboList('list', 'STATUSCETAK', 'STATUSCETAK')
         ];
-        $comboKodepengeluaran = $this->comboKodepengeluaran();
-        $data = array_merge(compact('title','comboKodepengeluaran','data'),
+        $combo = $this->comboKodepengeluaran();
+        $comboKodepengeluaran = $combo['data'];
+        $acosPengeluaran = $combo['acos'];
+        $data = array_merge(compact('title','comboKodepengeluaran', 'acosPengeluaran','data'),
             ["request"=>$request->all()]
         );
         return view('pengeluaranstokheader.index', $data);
@@ -62,7 +64,7 @@ class PengeluaranStokHeaderController extends MyController
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'pengeluaranstok', $params);
 
-        return $response['data'];
+        return $response;
     }
 
     public function store(Request $request)

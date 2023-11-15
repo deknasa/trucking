@@ -100,7 +100,7 @@
         initSelect2($('#crudForm').find('[name=status]'), false)
         setStatusOptions($('#crudForm'))
 
-        $('#btnTampil').click(function(event) {
+        $(document).on('click', "#btnTampil", function() {
             $('#jqGrid').jqGrid('setGridParam', {
                 postData: {
                     status: $('#crudForm').find('[name=status]').val(),
@@ -161,12 +161,6 @@
                         label: 'SATUAN',
                         name: 'satuan',
                         align: 'left'
-                    },
-                    {
-                        label: 'KM',
-                        name: 'km',
-                        align: 'right',
-                        formatter: currencyFormat,
                     },
                 ],
                 autowidth: true,
@@ -283,8 +277,13 @@
                     innerHTML: '<i class="fas fa-file-export"></i> EXPORT',
                     class: 'btn btn-warning btn-sm mr-1',
                     onClick: () => {
-
-                        window.open(`{{ route('statusolitrado.export') }}`)
+                        let status = $('#crudForm').find('[name=status]').val();
+                        let statustext = $('#crudForm').find('[name=status] option:selected').text();
+                        let dari = $('#crudForm').find('[name=dari]').val();
+                        let sampai = $('#crudForm').find('[name=sampai]').val();
+                        let trado_id = $('#crudForm').find('[name=trado_id]').val();
+                        let trado = $('#crudForm').find('[name=trado]').val();
+                        window.open(`{{ route('statusolitrado.export') }}?status=${status}&dari=${dari}&sampai=${sampai}&trado_id=${trado_id}&trado=${trado}&statustext=${statustext}`)
                     }
                 }, ]
 
@@ -345,7 +344,7 @@
         })
     }
 
-    function initLookup(){
+    function initLookup() {
         $('.trado-lookup').lookup({
             title: 'Trado Lookup',
             fileName: 'trado',
