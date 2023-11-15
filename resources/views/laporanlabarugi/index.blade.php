@@ -98,8 +98,8 @@
 			<i class="fa fa-calendar-alt"></i>
 		`);
 
-        let idcabang = `<?php $data['idcabang']['text'] ?>`;
-
+        // let idcabang = `<?php $data['idcabang']['text'] ?>`;
+        let idcabang = `<?= $cabang['id'] ?>`;
         if (idcabang != 1) {
             $('#crudForm [name=cabang]').attr('readonly', true)
             $('#crudForm [name=cabang]').parents('.input-group').find('.input-group-append').hide()
