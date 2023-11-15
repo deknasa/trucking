@@ -64,7 +64,7 @@
       Loading...
     </div>
   </div>
-  
+
   <div class="processing-loader d-none" id="processingLoader">
     <img src="{{ asset('libraries/tas-lib/img/loading-color.gif') }}" rel="preload">
     <span>Processing</span>
@@ -485,42 +485,45 @@
       }
     }
 
-    function approvalBukaCetak(periode,table,selectedRows) {
+    function approvalBukaCetak(periode, table, selectedRows) {
 
       $.ajax({
-                url: `${apiUrl}approvalbukacetak`,
-                method: 'POST',
-                dataType: 'JSON',
-                headers: {
-                    Authorization: `Bearer ${accessToken}`
-                },
-                data: {
-                    tableId: selectedRows,
-                    periode: periode,
-                    table: table,
-                    info : info
-                },
-                success: response => {
-                    $('.is-invalid').removeClass('is-invalid')
-                    $('.invalid-feedback').remove()
-                    $('#crudForm').trigger('reset')
-                    $('#crudModal').modal('hide')
+        url: `${apiUrl}approvalbukacetak`,
+        method: 'POST',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          tableId: selectedRows,
+          periode: periode,
+          table: table,
+          info: info
+        },
+        success: response => {
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+          $('#crudForm').trigger('reset')
+          $('#crudModal').modal('hide')
 
+          $('#jqGrid').jqGrid('setGridParam', {
+            postData: {
+              proses: 'reload',
+            }
+          }).trigger('reloadGrid');
+          let data = $('#jqGrid').jqGrid("getGridParam", "postData");
+          selectedRows = []
+          clearSelectedRows()
+        },
+        error: error => {
 
-                    $('#jqGrid').jqGrid().trigger('reloadGrid');
-                    let data = $('#jqGrid').jqGrid("getGridParam", "postData");
-                    selectedRows = []
-                    clearSelectedRows()
-                },
-                error: error => {
-                   
-                        showDialog(error.statusText)
-                    
-                },
-            }).always(() => {
-                $('#processingLoader').addClass('d-none')
-                $(this).removeAttr('disabled')
-            })
+          showDialog(error.statusText)
+
+        },
+      }).always(() => {
+        $('#processingLoader').addClass('d-none')
+        $(this).removeAttr('disabled')
+      })
     }
 
 
@@ -664,7 +667,7 @@
     }
 
 
-    function loadDataHeaderLookup(url, grid, addtional = null,urlTas = null) {
+    function loadDataHeaderLookup(url, grid, addtional = null, urlTas = null) {
       clearGlobalSearch($('#jqGrid'))
       let data = {
         tgldari: $('#tgldariheaderlookup').val(),
