@@ -80,7 +80,7 @@ $.fn.lookup = function (options) {
 		settings.onShowLookup();
 
 		let lookupModal = $(`
-      <div class="modal modal-fullscreen" id="lookupModal" tabindex="-1" aria-labelledby="lookupModalLabel" aria-hidden="true">
+      <div class="modal modal-lookup" id="lookupModal" tabindex="-1" aria-labelledby="lookupModalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <form action="#" id="crudForm">
             <div class="modal-content">
