@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "79d8c8091a7ccc7fc85f56119cfbccaf",
+  "ReportGuid": "5d8491f09a4ad6a5228580ce4f6ba5fe",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanNeraca.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanNeracaBesar.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1699673099000+0700)/",
+  "ReportChanged": "/Date(1700017604000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -135,6 +135,12 @@
             "Name": "selisih",
             "NameInSource": "selisih",
             "Alias": "selisih",
+            "Type": "System.String"
+          },
+          "18": {
+            "Name": "judul",
+            "NameInSource": "judul",
+            "Alias": "judul",
             "Type": "System.String"
           }
         },
@@ -561,7 +567,7 @@
               "Name": "Text26",
               "Guid": "2c67001fc541e6b695ea447ae20206e3",
               "GrowToHeight": true,
-              "ClientRectangle": "0.2,1.6,1.78,0.41",
+              "ClientRectangle": "0.2,2.01,1.78,0.41",
               "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -585,7 +591,7 @@
               "Ident": "StiText",
               "Name": "Text27",
               "GrowToHeight": true,
-              "ClientRectangle": "2.4,1.6,3,0.4",
+              "ClientRectangle": "2.39,2.01,3,0.4",
               "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -604,7 +610,7 @@
               "Name": "Text33",
               "Guid": "413af3a1a938283921604b7823bf1ff5",
               "GrowToHeight": true,
-              "ClientRectangle": "2,1.6,0.38,0.41",
+              "ClientRectangle": "2.01,2.01,0.38,0.41",
               "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -649,6 +655,26 @@
                 "Top": 0,
                 "Bottom": 0
               },
+              "Type": "Expression"
+            },
+            "12": {
+              "Ident": "StiText",
+              "Name": "Text13",
+              "Guid": "f673d820556b0693f3c350a88b27b465",
+              "GrowToHeight": true,
+              "ClientRectangle": "0.03,1.4,20.4,0.6",
+              "ComponentPlacement": "h.ap.HeaderBand1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "{data.Cabang}"
+              },
+              "HorAlignment": "Center",
+              "Font": ";10;Bold;",
+              "Border": ";;;;;;;solid:0,0,0",
+              "Brush": "solid:",
+              "TextBrush": "solid:0,0,0",
               "Type": "Expression"
             }
           },
