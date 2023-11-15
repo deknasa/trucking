@@ -192,7 +192,7 @@ class OpnameHeaderController extends MyController
             $sheet->getColumnDimension('B')->setWidth(60);
 
             $sheet->getStyle("A$detail_start_row:B$detail_start_row")->applyFromArray($styleArray);
-            $sheet->getStyle("C$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00");
+            $sheet->getStyle("C$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
             $detail_start_row++;
         }
 
