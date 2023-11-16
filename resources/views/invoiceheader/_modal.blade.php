@@ -231,32 +231,34 @@
       let selectedRowsInvoice = $("#tableInvoice").getGridParam("selectedRowIds");
       data.push({
         name: 'jumlahdetail',
-        value: selectedRowsInvoice
+        value: selectedRowsInvoice.length
       })
+      nominalextra = []
+      nominalretribusi = []
+      omset = []
+      sp_id = []
       $.each(selectedRowsInvoice, function(index, value) {
         dataInvoice = $("#tableInvoice").jqGrid("getLocalRow", value);
         let selectedExtra = dataInvoice.nominalextra
         let selectedOmset = dataInvoice.omset
         let selectedRetribusi = (dataInvoice.nominalretribusi == undefined) ? 0 : dataInvoice.nominalretribusi;
-        console.log(selectedExtra)
-        console.log(isNaN(selectedExtra))
-        data.push({
-          name: 'nominalextra[]',
-          value: (isNaN(selectedExtra)) ? parseFloat(selectedExtra.replaceAll(',', '')) : selectedExtra
-        })
-        data.push({
-          name: 'nominalretribusi[]',
-          value: (isNaN(selectedRetribusi)) ? parseFloat(selectedRetribusi.replaceAll(',', '')) : selectedRetribusi
-        })
-        data.push({
-          name: 'omset[]',
-          value: (isNaN(selectedOmset)) ? parseFloat(selectedOmset.replaceAll(',', '')) : selectedOmset
-        })
-        data.push({
-          name: 'sp_id[]',
-          value: dataInvoice.sp_id
-        })
+
+
+        nominalextra.push((isNaN(selectedExtra)) ? parseFloat(selectedExtra.replaceAll(',', '')) : selectedExtra)
+        nominalretribusi.push((isNaN(selectedRetribusi)) ? parseFloat(selectedRetribusi.replaceAll(',', '')) : selectedRetribusi)
+        omset.push((isNaN(selectedOmset)) ? parseFloat(selectedOmset.replaceAll(',', '')) : selectedOmset)
+        sp_id.push(dataInvoice.sp_id)
       });
+      let requestData = {
+        'nominalextra': nominalextra,
+        'nominalretribusi': nominalretribusi,
+        'omset': omset,
+        'sp_id': sp_id,
+      };
+      data.push({
+        name: 'detail',
+        value: JSON.stringify(requestData)
+      })
 
       data.push({
         name: 'sortIndex',
@@ -935,7 +937,10 @@
                 $(this)
                   .find(`tr input[value=${selectedRowId}]`)
                   .prop("checked", true);
-                initAutoNumeric($(this).find(`td[aria-describedby="tableInvoice_nominalretribusi"]`))
+                  invoiceData = $("#tableInvoice").jqGrid("getLocalRow", selectedRowId)
+                  if(invoiceData.nominalretribusi > 0){
+                    initAutoNumeric($(this).find(`tr#${selectedRowId} td[aria-describedby="tableInvoice_nominalretribusi"]`))
+                  }
               });
           }, 100);
 
