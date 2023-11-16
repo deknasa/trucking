@@ -1027,6 +1027,9 @@ function initDatepicker(classDatepicker = 'datepicker') {
 			<i class="fa fa-calendar-alt"></i>
 		`);
 
+	element.on("input", function (event) {
+		element.datepicker("widget").hide()
+	});
 	element.on("keydown", function (event) {
 		if (event.keyCode === 115) {
 			if (element.datepicker("widget").not(":visible")) {

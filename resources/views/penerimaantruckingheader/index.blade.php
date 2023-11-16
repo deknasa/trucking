@@ -247,6 +247,16 @@
            }
           },
           {
+            label: 'SUPIR',
+            name: 'supir_id',
+            align: 'left'
+          },
+          {
+            label: 'KARYAWAN',
+            name: 'karyawan_id',
+            align: 'left'
+          },
+          {
             label: 'KETERANGAN',
             name: 'keteranganheader',
             align: 'left'

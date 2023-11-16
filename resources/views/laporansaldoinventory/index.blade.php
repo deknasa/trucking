@@ -27,7 +27,8 @@
                             <div class="col-md-6">
                                 <div class="row">
                                     <label class="col-12 col-sm-3  col-form-label mt-2">status reuse<span class="text-danger"></span></label>
-                                    <div class="col-sm-9 mt-2"><!-- offset-sm-1 -->
+                                    <div class="col-sm-9 mt-2">
+                                        <!-- offset-sm-1 -->
                                         <div class="input-group">
                                             <select name="statusreuse" id="statusreuse" class="form-select select2bs4" style="width: 100%;">
                                             </select>
@@ -156,14 +157,14 @@
 
                         <div class=" row">
                             <div class="col-md-6 mt-4">
-                                <a id="btnPreview" class="btn btn-info mr-1 ">
+                                <button type="button" id="btnPreview" class="btn btn-info mr-1 ">
                                     <i class="fas fa-print"></i>
-                                    Cetak
-                                </a>
-                                <a id="btnExport" class="btn btn-warning mr-2 ">
+                                    Report
+                                </button>
+                                <button type="button" id="btnExport" class="btn btn-warning mr-2 ">
                                     <i class="fas fa-file-export"></i>
                                     Export
-                                </a>
+                                </button>
 
                             </div>
                         </div>
@@ -177,9 +178,9 @@
 
 @push('scripts')
 <script>
-  let indexRow = 0;
-  let id = "";
-  let triggerClick = true;
+    let indexRow = 0;
+    let id = "";
+    let triggerClick = true;
     $(document).ready(function() {
         initLookup()
         initDatepicker()
@@ -228,7 +229,7 @@
             // (statusban != '') &&
             // (filter != '') &&
             (jenistgltampil != '') &&
-            (priode != '') 
+            (priode != '')
             // (stokdari_id != '') &&
             // (stoksampai_id != '') &&
             // (dataFilter != '')
@@ -265,7 +266,7 @@
             dataFilter = gandengan_id
         }
 
-        if(
+        if (
             //(kelompok_id != '') &&
             // (statusreuse != '') &&
             // (statusban != '') &&
