@@ -27,6 +27,7 @@
     let sortorder = 'asc'
     let autoNumericElements = []
     let indexRow = 0;
+    let approveEditRequest =null ;
 
     $(document).ready(function() {
         $("#jqGrid").jqGrid({
@@ -97,6 +98,79 @@
                             return ` title="${statusAktif.MEMO}"`
                         }
                     },
+
+                    {
+                        label: 'koneksi',
+                        name: 'statuskoneksi_memo',
+                        width: 100,
+                        stype: 'select',
+                        searchoptions: {
+                            dataInit: function(element) {
+                                $(element).select2({
+                                    width: 'resolve',
+                                    theme: "bootstrap4",
+                                    ajax: {
+                                        url: `${apiUrl}parameter/combo`,
+                                        dataType: 'JSON',
+                                        headers: {
+                                            Authorization: `Bearer ${accessToken}`
+                                        },
+                                        data: {
+                                            grp: 'STATUS KONEKSI',
+                                            subgrp: 'STATUS KONEKSI'
+                                        },
+                                        beforeSend: () => {
+                                            // clear options
+                                            $(element).data('select2').$results.children().filter((index, element) => {
+                                                // clear options except index 0, which
+                                                // is the "searching..." label
+                                                if (index > 0) {
+                                                    element.remove()
+                                                }
+                                            })
+                                        },
+                                        processResults: (response) => {
+                                            let formattedResponse = response.data.map(row => ({
+                                                id: row.text,
+                                                text: row.text
+                                            }));
+                                            
+                                            formattedResponse.unshift({
+                                                id: '',
+                                                text: 'ALL'
+                                            });
+                                            
+                                            return {
+                                                results: formattedResponse
+                                            };
+                                        },
+                                    }
+                                });
+                            }
+                        },
+                        formatter: (value, options, rowData) => {
+                          let statuskoneksi_memo = JSON.parse(value)
+                            if (!statuskoneksi_memo) {
+                                return ``
+                            }
+                          let formattedValue = $(`
+                              <div class="badge" style="background-color: ${statuskoneksi_memo.WARNA}; color: ${statuskoneksi_memo.WARNATULISAN};">
+                                <span>${statuskoneksi_memo.SINGKATAN}</span>
+                              </div>
+                            `)
+              
+                          return formattedValue[0].outerHTML
+                        },
+                        cellattr: (rowId, value, rowObject) => {
+                          let statuskoneksi_memo = JSON.parse(rowObject.statuskoneksi_memo)
+                          if (!statuskoneksi_memo) {
+                                return ``
+                            }
+                          return ` title="${statuskoneksi_memo.MEMO}"`
+                        }
+                        
+                    },
+
                     {
                         label: 'MODIFIED BY',
                         name: 'modifiedby',
@@ -291,7 +365,26 @@
                             $('#rangeModal').modal('show')
                         }
                     },
-                ]
+                ],
+                extndBtn: [
+                    {
+                        id: 'approve',
+                        title: 'Approve',
+                        caption: 'Approve',
+                        innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+                        class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
+                        dropmenuHTML: [
+                            {
+                                id: 'approvalKoneksi',
+                                text: ' UN/APPROVAL KONEKSI',
+                                onClick: () => {
+                                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                                    approvalKoneksi(selectedId)
+                                }
+                            },
+                        ],
+                    }
+                ]   
             })
 
         /* Append clear filter button */
@@ -374,6 +467,57 @@
             })
         })
 
+
+        function approvalKoneksi(id) {
+            if (approveEditRequest) {
+                approveEditRequest.abort();
+            }     
+            approveEditRequest = $.ajax({
+                url: `${apiUrl}cabang/${id}`,
+                method: 'GET',
+                dataType: 'JSON',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                success: response => {
+                    let msg = `YAKIN SET KONEKSI MENJADI ONLINE`
+                    if (response.data.statuskoneksi === statusKoneksiOffline) {
+                        msg = `YAKIN SET KONEKSI MENJADI OFFLINE `
+                    }
+                    showConfirm(msg,response.data.namacabang,`cabang/${response.data.id}/approvalkonensi`)
+                },
+            })
+        }
+
+        getStatusOffline()
+        function getStatusOffline() {
+            $.ajax({
+                url: `${apiUrl}parameter`,
+                method: 'GET',
+                dataType: 'JSON',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                data: {
+                    limit: 0,
+                    filters: JSON.stringify({
+                        "groupOp": "AND",
+                        "rules": [{
+                            "field": "grp",
+                            "op": "cn",
+                            "data": "STATUS KONEKSI"
+                        },{
+                            "field": "text",
+                            "op": "cn",
+                            "data": "OFFLINE"
+                        }]
+                    })
+                },
+                success: response => {
+                    statusKoneksiOffline =  response.data[0].id;
+                }
+            })
+        }
         // MODAL HIDDEN, REMOVE KOTAK MERAH
         $('#rangeModal').on('hidden.bs.modal', function() {
 
