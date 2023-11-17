@@ -136,11 +136,13 @@ class LaporanRekapTitipanEmklController extends MyController
 
         // Group data by jenislaporan
         $groupedData = [];
-        foreach ($pengeluaran as $row) {
-            $jenislaporan = $row['jenislaporan'];
-            $groupedData[$jenislaporan][] = $row;
-        }
+        if (is_array($pengeluaran)) {
 
+            foreach ($pengeluaran as $row) {
+                $jenislaporan = $row['jenislaporan'];
+                $groupedData[$jenislaporan][] = $row;
+            }
+        }
         $prevJenis = '';
         $sumTotal = [];
         $no = 1;
