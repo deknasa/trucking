@@ -70,8 +70,8 @@
                     <div class="input-group mb-3">
                         <input type="password" name="password" id="password" class="form-control @error('password') is-invalid @enderror" placeholder="Password" style="text-transform: none;">
                         <div class="input-group-append">
-                            <div class="input-group-text focusPass" style="background-color:#E0ECFF; color:white">
-                                <span class="fas fa-eye toggle-password" toggle="#password" style="color:#0e2d5f;"></span>
+                            <div class="input-group-text focusPass" style="background-color:#E0ECFF; color:white; width:32px!important">
+                                <span class="fas fa-eye toggle-password" toggle="#password" style="color:#0e2d5f; position:relative; right:1px"></span>
                             </div>
                         </div>
                         @error('password')

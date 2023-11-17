@@ -192,71 +192,89 @@ class LaporanSaldoInventoryController extends Controller
         $previous_kategori = '';
         $start_row_main = 0;
         $no = 1;
-        foreach ($data as $response_index => $response_detail) {
+        if (is_array($data) || is_iterable($data)) {
+            $cellQty = [];
+            $cellTotal = [];
+            foreach ($data as $response_index => $response_detail) {
 
-            $kategori = $response_detail['kategori'];
-            if ($kategori != $previous_kategori) {
-                if ($previous_kategori != '') {
+                $kategori = $response_detail['kategori'];
+                if ($kategori != $previous_kategori) {
+                    if ($previous_kategori != '') {
 
-                    $cellQty[] = "D$detail_start_row";
-                    $cellTotal[] = "F$detail_start_row";
-                    $sheet->setCellValue("B$detail_start_row", "TOTAL $previous_kategori");
-                    $sheet->setCellValue("D$detail_start_row", "=SUM(D$start_row_main:D" . ($detail_start_row - 1) . ")");
-                    $sheet->setCellValue("F$detail_start_row", "=SUM(F$start_row_main:F" . ($detail_start_row - 1) . ")");
+                        $cellQty[] = "D$detail_start_row";
+                        $cellTotal[] = "F$detail_start_row";
+                        $sheet->setCellValue("B$detail_start_row", "TOTAL $previous_kategori");
+                        $sheet->setCellValue("D$detail_start_row", "=SUM(D$start_row_main:D" . ($detail_start_row - 1) . ")");
+                        $sheet->setCellValue("F$detail_start_row", "=SUM(F$start_row_main:F" . ($detail_start_row - 1) . ")");
 
-                    $sheet->getStyle("A$detail_start_row:F$detail_start_row")->applyFromArray($styleArray)->getFont()->setBold(true);
-                    $sheet->getStyle("D$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
-                    $sheet->getStyle("F$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
-                    $sheet->getStyle("D$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
-                    $sheet->getStyle("F$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
-                    $detail_start_row += 2;
-                }
-                if ($previous_kategori == '') {
-                    foreach ($header_columns as $detail_columns_index => $detail_column) {
-                        $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, $detail_column['label'] ?? $detail_columns_index + 1);
+                        $sheet->getStyle("A$detail_start_row:F$detail_start_row")->applyFromArray($styleArray)->getFont()->setBold(true);
+                        $sheet->getStyle("D$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+                        $sheet->getStyle("F$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+                        $sheet->getStyle("D$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+                        $sheet->getStyle("F$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+                        $detail_start_row += 2;
                     }
-                    $sheet->getStyle("A$detail_start_row:F$detail_start_row")->applyFromArray($styleHeader)->getFont()->setBold(true);
+                    if ($previous_kategori == '') {
+                        foreach ($header_columns as $detail_columns_index => $detail_column) {
+                            $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, $detail_column['label'] ?? $detail_columns_index + 1);
+                        }
+                        $sheet->getStyle("A$detail_start_row:F$detail_start_row")->applyFromArray($styleHeader)->getFont()->setBold(true);
+                        $detail_start_row++;
+                    }
+
+                    $start_row_main = $detail_start_row;
+                    if ($kategori == 'BAN') {
+                        $sheet->setCellValue('A' . ($detail_start_row), 'Vulkan Ke');
+                    } else {
+                        $sheet->setCellValue('A' . ($detail_start_row), 'No');
+                    }
+                    $sheet->setCellValue('B' . ($detail_start_row), $response_detail['kategori']);
+                    $sheet->getStyle("A$detail_start_row")->applyFromArray($styleHeader)->getFont()->setBold(true);
+                    $sheet->getStyle("B$detail_start_row:F$detail_start_row")->applyFromArray($styleArray)->getFont()->setBold(true);
                     $detail_start_row++;
+                    $detail_start_row = $detail_start_row;
                 }
 
-                $start_row_main = $detail_start_row;
                 if ($kategori == 'BAN') {
-                    $sheet->setCellValue('A' . ($detail_start_row), 'Vulkan Ke');
+                    $sheet->setCellValue("A$detail_start_row", $response_detail['vulkanisirke']);
                 } else {
-                    $sheet->setCellValue('A' . ($detail_start_row), 'No');
+                    $sheet->setCellValue("A$detail_start_row", $no++);
                 }
-                $sheet->setCellValue('B' . ($detail_start_row), $response_detail['kategori']);
-                $sheet->getStyle("A$detail_start_row")->applyFromArray($styleHeader)->getFont()->setBold(true);
-                $sheet->getStyle("B$detail_start_row:F$detail_start_row")->applyFromArray($styleArray)->getFont()->setBold(true);
+                $sheet->setCellValue("B$detail_start_row", $response_detail['namabarang']);
+                $sheet->setCellValue("C$detail_start_row", date('d-m-Y', strtotime($response_detail['tanggal'])));
+                $sheet->setCellValue("D$detail_start_row", $response_detail['qty']);
+                $sheet->setCellValue("E$detail_start_row", $response_detail['satuan']);
+                $sheet->setCellValue("F$detail_start_row", $response_detail['nominal']);
+
+                $sheet->getStyle("A$detail_start_row:F$detail_start_row")->applyFromArray($styleArray);
+                $sheet->getStyle("D$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+                $sheet->getStyle("F$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+
                 $detail_start_row++;
-                $detail_start_row = $detail_start_row;
+                $previous_kategori = $kategori;
             }
 
-            if ($kategori == 'BAN') {
-                $sheet->setCellValue("A$detail_start_row", $response_detail['vulkanisirke']);
-            } else {
-                $sheet->setCellValue("A$detail_start_row", $no++);
+            if ($previous_kategori != '') {
+                $cellQty[] = "D$detail_start_row";
+                $cellTotal[] = "F$detail_start_row";
+                $sheet->setCellValue("B$detail_start_row", "TOTAL $previous_kategori");
+                $sheet->setCellValue("D$detail_start_row", "=SUM(D$start_row_main:D" . ($detail_start_row - 1) . ")");
+                $sheet->setCellValue("F$detail_start_row", "=SUM(F$start_row_main:F" . ($detail_start_row - 1) . ")");
+
+                $sheet->getStyle("A$detail_start_row:F$detail_start_row")->applyFromArray($styleArray)->getFont()->setBold(true);
+                $sheet->getStyle("D$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+                $sheet->getStyle("F$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+                $sheet->getStyle("D$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+                $sheet->getStyle("F$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
             }
-            $sheet->setCellValue("B$detail_start_row", $response_detail['namabarang']);
-            $sheet->setCellValue("C$detail_start_row", date('d-m-Y', strtotime($response_detail['tanggal'])));
-            $sheet->setCellValue("D$detail_start_row", $response_detail['qty']);
-            $sheet->setCellValue("E$detail_start_row", $response_detail['satuan']);
-            $sheet->setCellValue("F$detail_start_row", $response_detail['nominal']);
-
-            $sheet->getStyle("A$detail_start_row:F$detail_start_row")->applyFromArray($styleArray);
-            $sheet->getStyle("D$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
-            $sheet->getStyle("F$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
-
             $detail_start_row++;
-            $previous_kategori = $kategori;
-        }
 
-        if ($previous_kategori != '') {
-            $cellQty[] = "D$detail_start_row";
-            $cellTotal[] = "F$detail_start_row";
-            $sheet->setCellValue("B$detail_start_row", "TOTAL $previous_kategori");
-            $sheet->setCellValue("D$detail_start_row", "=SUM(D$start_row_main:D" . ($detail_start_row - 1) . ")");
-            $sheet->setCellValue("F$detail_start_row", "=SUM(F$start_row_main:F" . ($detail_start_row - 1) . ")");
+
+            $qty = implode("+", $cellQty);
+            $total = implode("+", $cellTotal);
+            $sheet->setCellValue("B$detail_start_row", "GRAND TOTAL");
+            $sheet->setCellValue("D$detail_start_row", "=$qty");
+            $sheet->setCellValue("F$detail_start_row", "=$total");
 
             $sheet->getStyle("A$detail_start_row:F$detail_start_row")->applyFromArray($styleArray)->getFont()->setBold(true);
             $sheet->getStyle("D$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
@@ -264,20 +282,6 @@ class LaporanSaldoInventoryController extends Controller
             $sheet->getStyle("D$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
             $sheet->getStyle("F$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
         }
-        $detail_start_row++;
-
-
-        $qty = implode("+", $cellQty);
-        $total = implode("+", $cellTotal);
-        $sheet->setCellValue("B$detail_start_row", "GRAND TOTAL");
-        $sheet->setCellValue("D$detail_start_row", "=$qty");
-        $sheet->setCellValue("F$detail_start_row", "=$total");
-
-        $sheet->getStyle("A$detail_start_row:F$detail_start_row")->applyFromArray($styleArray)->getFont()->setBold(true);
-        $sheet->getStyle("D$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
-        $sheet->getStyle("F$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
-        $sheet->getStyle("D$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
-        $sheet->getStyle("F$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
         // set diketahui dibuat
         $ttd_start_row = $detail_start_row + 2;
         $sheet->setCellValue("B$ttd_start_row", 'Disetujui Oleh,');
