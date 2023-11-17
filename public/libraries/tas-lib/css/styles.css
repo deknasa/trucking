@@ -734,9 +734,10 @@ select[readonly].select2-hidden-accessible + .select2-container {
 
 .ui-datepicker {
 	font-family: dejavu !important;
-	font-size: 1rem;
 }
-
+.ui-datepicker table { 
+	font-size: 1rem !important; 
+} 
 .ui-tabs {
 	font-size: 1rem;
 	background: #fff;
@@ -832,16 +833,11 @@ span.textCard {
 		padding-left: 5px!important;
 		padding-right: 3px!important;
 		padding-bottom: 10px!important;
-		/* padding: 6px; */
 	}
 
 	.checkbox-jqgrid{
 		margin:0 7px!important;
 	}
-	
-	/* .col-form-label{ 
-		font-size: 20px; 
-	}  */
 	
 	.ui-datepicker{ 
 		width: 20em!important; 
@@ -856,26 +852,19 @@ span.textCard {
 		padding: 13px; 
 		padding-right: 5px; 
 	} 
-	
-	/* .ui-jqgrid-bdiv td { 
-		padding: 13px; 
-	}  */
-	
+		
 	.ui-jqgrid .ui-jqgrid-bdiv { 
 		height: 447px!important; 
 	}
 	
 	.loadingMessage{
 		position: absolute;
-		/* bottom: 42px; */
 		top: 94%;
-		/* left: 2px; Ubah dari 50% menjadi 10px untuk menggeser ke kiri */
 		color: red;
 		transform: translateY(-50%);
 		display: none;
 		background-color: #e0ecff;
 		padding: 2px;
-		/* border-radius: 5px; */
 		box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 		font-size: 16px;
 		color: #333;
@@ -891,12 +880,7 @@ span.textCard {
 		
 	}
 
-
-}
-/* END MOBILE DISPLAY*/
-
-@media only screen and (max-width: 600px) { 
-    input[type=text],  
+	input[type=text],  
 	input[type=password] { 
 		font-size: 1.3rem !important; 
 		height: calc(1.5em + 0.75rem + 2px); 
@@ -906,11 +890,7 @@ span.textCard {
 		height: 40px!important; 
 		/* height:calc(1.5em + 0.75rem + 2px) */ 
 	} 
-	
-	.ui-jqgrid .ui-jqgrid-view input{ 
-		font-size: 1.2rem!important; 
-	} 
-  
+	  
    .select2-selection__placeholder{ 
 	vertical-align: middle; 
 	font-size: 1.3rem; 
@@ -921,8 +901,8 @@ span.textCard {
 		padding-right: 0.5rem !important;
 		font-size: 1.4rem;
 	}
-   
 }
+/* END MOBILE DISPLAY*/
 
 /* CHECKBOX POSITION */
 .checkbox-selectall{
