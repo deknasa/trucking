@@ -150,16 +150,19 @@ class LaporanRekapTitipanEmklController extends MyController
 
                 foreach ($header_columns as $data_columns_index => $data_column) {
                     if ($jenislaporan == 'PIUTANG LAIN') {
-                        if($data_column['index'] != 'jenisorder'){                            
+                        if ($data_column['index'] != 'jenisorder') {
                             $sheet->setCellValue($alphabets[$data_columns_index] . $detail_start_row, $data_column['label'] ?? $data_columns_index + 1);
+                            $lastColumn = $alphabets[$data_columns_index];
+                            $sheet->getStyle("A$detail_start_row:$lastColumn$detail_start_row")->applyFromArray($styleArray)->getFont()->setBold(true);
                         }
-                    }else{
+                    } else {
                         $sheet->setCellValue($alphabets[$data_columns_index] . $detail_start_row, $data_column['label'] ?? $data_columns_index + 1);
+                        $lastColumn = $alphabets[$data_columns_index];
+                        $sheet->getStyle("A$detail_start_row:$lastColumn$detail_start_row")->applyFromArray($styleArray)->getFont()->setBold(true);
                     }
                 }
 
-                $lastColumn = $alphabets[$data_columns_index];
-                $sheet->getStyle("A$detail_start_row:$lastColumn$detail_start_row")->applyFromArray($styleArray)->getFont()->setBold(true);
+
                 $detail_start_row++;
                 $totalCell = 'E' . ($detail_start_row + count($group));
 
@@ -174,14 +177,22 @@ class LaporanRekapTitipanEmklController extends MyController
                     $sheet->setCellValue("E$detail_start_row", $response_detail['nominal']);
                     $sheet->setCellValue("F$detail_start_row", $response_detail['jenisorder']);
 
-                    $sheet->getStyle("A$detail_start_row:F$detail_start_row")->applyFromArray($styleArray);
+                    if ($jenislaporan == 'PIUTANG LAIN') {
+                        $sheet->getStyle("A$detail_start_row:E$detail_start_row")->applyFromArray($styleArray);
+                    } else {
+                        $sheet->getStyle("A$detail_start_row:F$detail_start_row")->applyFromArray($styleArray);
+                    }
                     $sheet->getStyle("C$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
                     $sheet->getStyle("E$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
                     $detail_start_row++;
                 }
                 // $sheet->setCellValue("E$detail_start_row", $response_detail['saldo']);
                 $sheet->mergeCells("A$detail_start_row:D$detail_start_row");
-                $sheet->getStyle("A$detail_start_row:F$detail_start_row")->applyFromArray($styleArray);
+                if ($jenislaporan == 'PIUTANG LAIN') {
+                    $sheet->getStyle("A$detail_start_row:E$detail_start_row")->applyFromArray($styleArray);
+                } else {
+                    $sheet->getStyle("A$detail_start_row:F$detail_start_row")->applyFromArray($styleArray);
+                }
                 $sheet->getStyle("E$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
                 $sheet->setCellValue('A' . $detail_start_row, 'TOTAL ' . $jenislaporan)->getStyle("A$detail_start_row")->getFont()->setBold(true);
                 $sheet->getStyle("A$detail_start_row")->getAlignment()->setHorizontal('center');
@@ -194,10 +205,10 @@ class LaporanRekapTitipanEmklController extends MyController
         }
 
         //total
-        $total_start_row = $detail_start_row-2;
+        $total_start_row = $detail_start_row - 2;
 
         $sheet->mergeCells("A$total_start_row:D$total_start_row");
-        $sheet->setCellValue("A$total_start_row", 'TOTAL')->getStyle('A' . $total_start_row . ':F' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
+        $sheet->setCellValue("A$total_start_row", 'TOTAL')->getStyle('A' . $total_start_row . ':E' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
 
         $sheet->getStyle("A$total_start_row")->getAlignment()->setHorizontal('center');
 
