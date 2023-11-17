@@ -70,11 +70,8 @@
                     <div class="input-group mb-3">
                         <input type="password" name="password" id="password" class="form-control @error('password') is-invalid @enderror" placeholder="Password" style="text-transform: none;">
                         <div class="input-group-append">
-                            <div class="input-group-text focusPass" style="border-right: none;">
-                                <span class="fas fa-eye toggle-password" toggle="#password"></span>
-                            </div>
-                            <div class="input-group-text" style="background-color:#E0ECFF; color:white">
-                                <span class="fas fa-lock" style="color:#0e2d5f;"></span>
+                            <div class="input-group-text focusPass" style="background-color:#E0ECFF; color:white">
+                                <span class="fas fa-eye toggle-password" toggle="#password" style="color:#0e2d5f;"></span>
                             </div>
                         </div>
                         @error('password')
@@ -115,12 +112,6 @@
         $(document).ready(function() {
 
             $("input").attr("autocomplete", "off");
-            $(document).on('focus', "#password", function(event) {
-                $(".focusPass").css("background-color", "#ffffee");
-            });
-            $(document).on('blur', "#password", function(event) {
-                $(".focusPass").css("background-color", "#ffffff");
-            });
             
             $(document).on('click', ".toggle-password", function(event) {
                 $(this).toggleClass("fa-eye fa-eye-slash");

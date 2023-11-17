@@ -236,12 +236,6 @@
             }
           },
           {
-            label: 'U. borongan',
-            name: 'total',
-            align: 'right',
-            formatter: currencyFormat,
-          },
-          {
             label: 'U. borongan (post kas keluar)',
             width: 280,
             name: 'totalposting',
@@ -263,6 +257,12 @@
           {
             label: 'KOMISI KENEK',
             name: 'gajikenek',
+            align: 'right',
+            formatter: currencyFormat,
+          },
+          {
+            label: 'TOTAL',
+            name: 'total',
             align: 'right',
             formatter: currencyFormat,
           },
