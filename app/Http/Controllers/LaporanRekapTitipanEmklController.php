@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
@@ -27,7 +28,7 @@ class LaporanRekapTitipanEmklController extends MyController
         return view('laporanrekaptitipanemkl.index', compact('title'));
     }
 
-    
+
 
     public function report(Request $request)
     {
@@ -65,12 +66,14 @@ class LaporanRekapTitipanEmklController extends MyController
 
         $sheet->setCellValue('A1', $pengeluaran[0]['judul']);
         $sheet->setCellValue('A2', $pengeluaran[0]['judullaporan']);
-        $sheet->setCellValue('A3', 'Periode: ' . $request->periode);
+        $sheet->setCellValue('A3', 'Periode : ' . date('d-M-Y', strtotime($request->periode)));
 
         $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
 
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->getStyle('A2')->getAlignment()->setHorizontal('left');
+        $sheet->getStyle("A2")->getFont()->setBold(true);
+        $sheet->getStyle("A3")->getFont()->setBold(true);
         $sheet->mergeCells('A1:E1');
 
         $header_start_row = 5;
@@ -102,22 +105,29 @@ class LaporanRekapTitipanEmklController extends MyController
 
         $header_columns = [
             [
-                "index"=>"nobukti",
-                "label"=>"No Bukti"
+                "label" => "No"
             ],
             [
-                "index"=>"tglbukti",
-                "label"=>"Tgl Bukti"
+                "index" => "nobukti",
+                "label" => "No Bukti"
             ],
             [
-                "index"=>"keterangan",
-                "label"=>"Keterangan"
+                "index" => "tglbukti",
+                "label" => "Tanggal"
             ],
             [
-                "index"=>"nominal",
-                "label"=>"Nominal"
+                "index" => "keterangan",
+                "label" => "Keterangan"
             ],
-            
+            [
+                "index" => "nominal",
+                "label" => "Nominal"
+            ],
+            [
+                "index" => "jenisorder",
+                "label" => "Jenis Order"
+            ],
+
         ];
 
         $tradoPrev = null;
@@ -125,62 +135,81 @@ class LaporanRekapTitipanEmklController extends MyController
             $sheet->setCellValue($alphabets[$data_columns_index] . $header_start_row, $data_column['label'] ?? $data_columns_index + 1);
         }
 
+        // Group data by jenislaporan
+        $groupedData = [];
+        foreach ($pengeluaran as $row) {
+            $jenislaporan = $row['jenislaporan'];
+            $groupedData[$jenislaporan][] = $row;
+        }
         $lastColumn = $alphabets[$data_columns_index];
         $sheet->getStyle("A$header_start_row:$lastColumn$header_start_row")->applyFromArray($styleArray)->getFont()->setBold(true);
 
+        $prevJenis = '';
+        $sumTotal = [];
+        $no = 1;
         if (is_array($pengeluaran) || is_iterable($pengeluaran)) {
-            foreach ($pengeluaran as $response_index => $response_detail) {
+            foreach ($groupedData as $jenislaporan => $group) {
+                $totalCell = 'E' . ($detail_start_row + count($group));
+                foreach ($group as $response_detail) {
+                    $dateValue = ($response_detail['tglbukti'] != null) ? Date::PHPToExcel(date('Y-m-d', strtotime($response_detail['tglbukti']))) : '';
+                    
+                    $sheet->setCellValue("A$detail_start_row", $no++);
+                    $sheet->setCellValue("B$detail_start_row", $response_detail['nobukti']);
+                    $sheet->setCellValue("C$detail_start_row", $dateValue);
+                    $sheet->setCellValue("D$detail_start_row", $response_detail['keterangan']);
+                    $sheet->setCellValue("E$detail_start_row", $response_detail['nominal']);
+                    $sheet->setCellValue("F$detail_start_row", $response_detail['jenisorder']);
 
-                foreach ($header_columns as $detail_columns_index => $detail_column) {
-                    $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
+                    $sheet->getStyle("A$detail_start_row:F$detail_start_row")->applyFromArray($styleArray);
+                    $sheet->getStyle("C$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
+                    $sheet->getStyle("E$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+                    $detail_start_row++;
                 }
-
-
-                $sheet->setCellValue("A$detail_start_row", $response_detail['nobukti']);
-                $sheet->setCellValue("B$detail_start_row", date('d-m-Y', strtotime($response_detail['tglbukti'])));
-                $sheet->setCellValue("C$detail_start_row", $response_detail['keterangan']);
-                $sheet->setCellValue("D$detail_start_row", $response_detail['nominal']);
                 // $sheet->setCellValue("E$detail_start_row", $response_detail['saldo']);
-                // $sheet->getStyle("C$detail_start_row")->getAlignment()->setWrapText(true);
-                // $sheet->getColumnDimension('C')->setWidth(150);
-                // $sheet->getColumnDimension('A')->setWidth(20);
-
-
-                $sheet->getStyle("A$detail_start_row:D$detail_start_row")->applyFromArray($styleArray);
-                $sheet->getStyle("D$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
-                // $sheet->getStyle("E$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+                $sheet->mergeCells("A$detail_start_row:D$detail_start_row");
+                $sheet->getStyle("A$detail_start_row:F$detail_start_row")->applyFromArray($styleArray);
+                $sheet->getStyle("E$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+                $sheet->setCellValue('A' . $detail_start_row, 'TOTAL ' . $jenislaporan)->getStyle("A$detail_start_row")->getFont()->setBold(true);
+                $sheet->getStyle("A$detail_start_row")->getAlignment()->setHorizontal('center');
+                $sheet->setCellValue('E' . $detail_start_row, "=SUM(E" . ($detail_start_row - count($group)) . ":$totalCell)")->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+                array_push($sumTotal, 'E' . $detail_start_row);
                 $detail_start_row++;
+
+                $no = 1;
             }
         }
 
         //total
         $total_start_row = $detail_start_row;
-        $sheet->mergeCells('A' . $total_start_row . ':C' . $total_start_row);
-        $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':C' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
+        
+        $sheet->mergeCells("A$detail_start_row:D$detail_start_row");
+        $sheet->setCellValue("A$total_start_row", 'TOTAL')->getStyle('A' . $total_start_row . ':F' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
+        
+        $sheet->getStyle("A$total_start_row")->getAlignment()->setHorizontal('center');
 
         // $totalDebet = "=SUM(E6:E" . ($detail_start_row - 1) . ")";
         // $sheet->setCellValue("E$total_start_row", $totalDebet)->getStyle("E$total_start_row")->applyFromArray($style_number);
         // $sheet->setCellValue("E$total_start_row", $totalDebet)->getStyle("E$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
-        $totalDebet = "=SUM(D6:D" . ($detail_start_row - 1) . ")";
-        $sheet->setCellValue("D$total_start_row", $totalDebet)->getStyle("D$total_start_row")->applyFromArray($style_number);
-        $sheet->setCellValue("D$total_start_row", $totalDebet)->getStyle("D$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+        $totalDebet = "=" . implode('+', $sumTotal);
+        $sheet->setCellValue("E$total_start_row", $totalDebet)->getStyle("E$total_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->setCellValue("E$total_start_row", $totalDebet)->getStyle("E$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
 
         $ttd_start_row = $detail_start_row + 2;
-        $sheet->setCellValue("A$ttd_start_row", 'Disetujui Oleh,');
-        $sheet->setCellValue("C$ttd_start_row", 'Diperiksa Oleh,');
-        $sheet->setCellValue("E$ttd_start_row", 'Disusun Oleh,');
+        // $sheet->setCellValue("A$ttd_start_row", 'Disetujui Oleh,');
+        // $sheet->setCellValue("C$ttd_start_row", 'Diperiksa Oleh,');
+        // $sheet->setCellValue("E$ttd_start_row", 'Disusun Oleh,');
 
-        $sheet->setCellValue("A" . ($ttd_start_row + 3), '(                )');
-        $sheet->setCellValue("C" . ($ttd_start_row + 3), '(                )');
-        $sheet->setCellValue("E" . ($ttd_start_row + 3), '(                )');
+        // $sheet->setCellValue("A" . ($ttd_start_row + 3), '(                )');
+        // $sheet->setCellValue("C" . ($ttd_start_row + 3), '(                )');
+        // $sheet->setCellValue("E" . ($ttd_start_row + 3), '(                )');
 
         //ukuran kolom
-        // $sheet->getColumnDimension('A')->setAutoSize(true);
-        $sheet->getColumnDimension('B')->setAutoSize(true);
-        $sheet->getColumnDimension('D')->setAutoSize(true);
-        // $sheet->getColumnDimension('E')->setAutoSize(true);
-        $sheet->getColumnDimension('C')->setWidth(122);
-        $sheet->getColumnDimension('A')->setWidth(20);
+        $sheet->getColumnDimension('A')->setWidth(4);
+        $sheet->getColumnDimension('B')->setWidth(20);
+        $sheet->getColumnDimension('C')->setWidth(11);
+        $sheet->getColumnDimension('D')->setWidth(74);
+        $sheet->getColumnDimension('E')->setAutoSize(true);
+        $sheet->getColumnDimension('F')->setAutoSize(true);
 
 
 
