@@ -47,9 +47,8 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <select name="statusaktif" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH STATUS AKTIF --</option>
-                </select>
+                <input type="hidden" name="statusaktif">
+                <input type="text" name="statusaktifnama" data-target-name="statusaktif" id="statusaktifnama" class="form-control lg-form status-lookup">
               </div>
             </div>
 
@@ -277,7 +276,7 @@ if(error.responseJSON.errors){
     if (form.data('action') == "view") {
       form.find('#btnSubmit').prop('disabled',true)
     }
-    
+    initLookup()
     getMaxLength(form)
     initSelect2(form.find('.select2bs4'), true)
   })
@@ -308,19 +307,16 @@ if(error.responseJSON.errors){
 
     Promise
     .all([
-      setStatusAktifOptions(form),
+      showDefault(form)
     ])
     .then(() => {
-      showDefault(form)
-        .then(() => {
-          $('#crudModal').modal('show')
-        })
-        .catch((error) => {
-            showDialog(error.statusText)
-          })
-        .finally(() => {
-          $('.modal-loader').addClass('d-none')
-        })
+      $('#crudModal').modal('show')
+    })
+    .catch((error) => {
+        showDialog(error.statusText)
+      })
+    .finally(() => {
+      $('.modal-loader').addClass('d-none')
     })
   }
 
@@ -364,19 +360,16 @@ if(error.responseJSON.errors){
 
     Promise
       .all([
-        setStatusAktifOptions(form),
+        showAbsenTrado(form, absenTradoId)
       ])
       .then(() => {
-        showAbsenTrado(form, absenTradoId)
-          .then(() => {
-            $('#crudModal').modal('show')
-          })
-          .catch((error) => {
-            showDialog(error.statusText)
-          })
-          .finally(() => {
-            $('.modal-loader').addClass('d-none')
-          })
+        $('#crudModal').modal('show')
+      })
+      .catch((error) => {
+        showDialog(error.statusText)
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
       })
   }
 
@@ -398,19 +391,16 @@ if(error.responseJSON.errors){
 
     Promise
       .all([
-        setStatusAktifOptions(form),
+        showAbsenTrado(form, absenTradoId)
       ])
       .then(() => {
-        showAbsenTrado(form, absenTradoId)
-          .then(() => {
-            $('#crudModal').modal('show')
-          })
-          .catch((error) => {
-            showDialog(error.statusText)
-          })
-          .finally(() => {
-            $('.modal-loader').addClass('d-none')
-          })
+        $('#crudModal').modal('show')
+      })
+      .catch((error) => {
+        showDialog(error.statusText)
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
       })
   }
 
@@ -432,40 +422,39 @@ if(error.responseJSON.errors){
     $('.invalid-feedback').remove()
 
     Promise
-      .all([
-        setStatusAktifOptions(form),
-      ])
-      .then(() => {
-        showAbsenTrado(form, absenTradoId)
-            .then(absenTradoId => {
-              form.find('.aksi').hide()
-              setFormBindKeys(form)
-              initSelect2(form.find('.select2bs4'), true)
-              form.find('[name]').removeAttr('disabled')
-  
-              form.find('select').each((index, select) => {
-                let element = $(select)
-  
-                if (element.data('select2')) {
-                  element.select2('destroy')
-                }
-              })
-  
-              form.find('[name]').attr('disabled', 'disabled').css({
-                background: '#fff'
-              })
-              form.find('[name=id]').prop('disabled',false)
-            })
-          .then(() => {
-            $('#crudModal').modal('show')
-          })
-          .catch((error) => {
-            showDialog(error.statusText)
-          })
-          .finally(() => {
-            $('.modal-loader').addClass('d-none')
-          })
+    .all([
+      showAbsenTrado(form, absenTradoId)
+    ])
+    .then(absenTradoId => {
+      form.find('.aksi').hide()
+      setFormBindKeys(form)
+      initSelect2(form.find('.select2bs4'), true)
+      form.find('[name]').removeAttr('disabled')
+
+      form.find('select').each((index, select) => {
+        let element = $(select)
+
+        if (element.data('select2')) {
+          element.select2('destroy')
+        }
       })
+
+      form.find('[name]').attr('disabled', 'disabled').css({
+        background: '#fff'
+      })
+      form.find('[name=id]').prop('disabled',false)
+    })
+    .then(() => {
+      $('#crudModal').modal('show')
+    })
+    .catch((error) => {
+      showDialog(error.statusText)
+    })
+    .finally(() => {
+      $('.modal-loader').addClass('d-none')
+    })
+    
+    
   }
 
   function getMaxLength(form) {
@@ -646,6 +635,9 @@ if(error.responseJSON.errors){
             else {
               element.val(value)
             }
+            if (index == 'statusaktifnama') {
+              element.data('current-value', value)
+            }
           })
           resolve()
         },
@@ -656,7 +648,40 @@ if(error.responseJSON.errors){
     })
   }
 
-
+  function initLookup() {
+    $(`.status-lookup`).lookupMaster({
+        title: 'Status Aktif Lookup',
+        fileName: 'parameterMaster',
+        beforeProcess: function() {
+          this.postData = {
+            url: `${apiUrl}parameter/combo`,
+            grp: 'STATUS AKTIF',
+            subgrp: 'STATUS AKTIF',
+            searching: 1,
+            valueName: `statusaktif`,
+            searchText: `status-lookup`,
+            singleColumn: true,
+            hideLabel: true,
+            title: 'Status Aktif'
+          };
+        },
+        onSelectRow: (status, element) => {
+          let elId = element.data('targetName')
+          $(`#crudForm [name=${elId}]`).first().val(status.id)
+          element.val(status.text)
+          element.data('currentValue', element.val())
+        },
+        onCancel: (element) => {
+          element.val(element.data('currentValue'));
+        },
+        onClear: (element) => {
+          let elId = element.data('targetName')
+          $(`#crudForm [name=${elId}]`).first().val('')
+          element.val('')
+          element.data('currentValue', element.val())
+        },
+      });
+  }
   function addRow() {
     let detailRow = (`
         <tr>

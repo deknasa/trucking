@@ -26,9 +26,8 @@
                   STATUS RITASI <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-md-10">
-                <select name="statusritasi" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH STATUS RITASI --</option>
-                </select>
+                <input type="hidden" name="statusritasi">
+                <input type="text" name="statusritasinama" data-target-name="statusritasi" id="statusritasinama" class="form-control lg-form statusritasi-lookup">
               </div>
             </div>
             {{-- <div class="row form-group">
@@ -58,9 +57,8 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <select name="statusaktif" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH STATUS AKTIF --</option>
-                </select>
+                <input type="hidden" name="statusaktif">
+                <input type="text" name="statusaktifnama" data-target-name="statusaktif" id="statusaktifnama" class="form-control lg-form status-lookup">
               </div>
             </div>
           </div>
@@ -194,7 +192,7 @@
     setFormBindKeys(form)
 
     activeGrid = null
-
+    initLookup()
     getMaxLength(form)
     initSelect2(form.find('.select2bs4'), true)
   })
@@ -247,22 +245,18 @@
     })
     
     Promise
-      .all([
-        setStatusAktifOptions(form),
-        setStatusRitasiOptions(form)
-      ])
-      .then(() => {
-        showDefault(form)
-          .then(() => {
-            $('#crudModal').modal('show')
-          })
-          .catch((error) => {
-            showDialog(error.statusText)
-          })
-          .finally(() => {
-            $('.modal-loader').addClass('d-none')
-          })
-      })
+    .all([
+      showDefault(form)
+    ])
+    .then(() => {
+      $('#crudModal').modal('show')
+    })
+    .catch((error) => {
+      showDialog(error.statusText)
+    })
+    .finally(() => {
+      $('.modal-loader').addClass('d-none')
+    })
   }
 
   function editDataRitasi(id) {
@@ -287,23 +281,19 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form),
-        setStatusRitasiOptions(form)
+        showDataRitasi(form, id)
       ])
       .then(() => {
-        showDataRitasi(form, id)
-        .then(() => {
-            $('#crudModal').modal('show')
-            form.find(`[name="nominal"]`).parent('.input-group').find('.button-clear').remove()
-            form.find(`[name="nominal"]`).parent('.input-group').find('.input-group-append').remove()
-
-          })
-          .catch((error) => {
-            showDialog(error.statusText)
-          })
-          .finally(() => {
-            $('.modal-loader').addClass('d-none')
-          })
+        $('#crudModal').modal('show')
+        form.find(`[name="nominal"]`).parent('.input-group').find('.button-clear').remove()
+        form.find(`[name="nominal"]`).parent('.input-group').find('.input-group-append').remove()
+  
+      })
+      .catch((error) => {
+        showDialog(error.statusText)
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
       })
   }
 
@@ -325,20 +315,16 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form),
-        setStatusRitasiOptions(form)
+        showDataRitasi(form, id)
       ])
       .then(() => {
-        showDataRitasi(form, id)
-          .then(() => {
-            $('#crudModal').modal('show')
-          })
-          .catch((error) => {
-            showDialog(error.statusText)
-          })
-          .finally(() => {
-            $('.modal-loader').addClass('d-none')
-          })
+        $('#crudModal').modal('show')
+      })
+      .catch((error) => {
+        showDialog(error.statusText)
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
       })
   }
 
@@ -462,6 +448,12 @@
             } else {
               element.val(value)
             }
+            if (index == 'statusaktifnama') {
+              element.data('current-value', value)
+            }
+            if (index == 'statusritasinama') {
+              element.data('current-value', value)
+            }
           })
 
           if (form.data('action') === 'delete') {
@@ -485,7 +477,7 @@
   function showDefault(form) {
     return new Promise((resolve, reject) => {
       $.ajax({
-        url: `${apiUrl}container/default`,
+        url: `${apiUrl}dataritasi/default`,
         method: 'GET',
         dataType: 'JSON',
         headers: {
@@ -502,6 +494,13 @@
             } else {
               element.val(value)
             }
+
+            if (index == 'statusaktifnama') {
+              element.data('current-value', value)
+            }
+            if (index == 'statusritasinama') {
+              element.data('current-value', value)
+            }
           })
           resolve()
         },
@@ -510,6 +509,73 @@
         }
       })
     })
+  }
+
+  function initLookup() {
+    $(`.status-lookup`).lookupMaster({
+        title: 'Status Aktif Lookup',
+        fileName: 'parameterMaster',
+        beforeProcess: function() {
+          this.postData = {
+            url: `${apiUrl}parameter/combo`,
+            grp: 'STATUS AKTIF',
+            subgrp: 'STATUS AKTIF',
+            searching: 1,
+            valueName: `statusaktif`,
+            searchText: `status-lookup`,
+            singleColumn: true,
+            hideLabel: true,
+            title: 'Status Aktif'
+          };
+        },
+        onSelectRow: (status, element) => {
+          let elId = element.data('targetName')
+          $(`#crudForm [name=${elId}]`).first().val(status.id)
+          element.val(status.text)
+          element.data('currentValue', element.val())
+        },
+        onCancel: (element) => {
+          element.val(element.data('currentValue'));
+        },
+        onClear: (element) => {
+          let elId = element.data('targetName')
+          $(`#crudForm [name=${elId}]`).first().val('')
+          element.val('')
+          element.data('currentValue', element.val())
+        },
+      });
+    $(`.statusritasi-lookup`).lookupMaster({
+        title: 'Status ritasi Lookup',
+        fileName: 'parameterMaster',
+        beforeProcess: function() {
+          this.postData = {
+            url: `${apiUrl}parameter/combo`,
+            grp: 'STATUS RITASI',
+            subgrp: 'STATUS RITASI',
+            searching: 1,
+            valueName: `statusritasi`,
+            searchText: `status-lookup`,
+            singleColumn: true,
+            hideLabel: true,
+            title: 'STATUS RITASI'
+          };
+        },
+        onSelectRow: (status, element) => {
+          let elId = element.data('targetName')
+          $(`#crudForm [name=${elId}]`).first().val(status.id)
+          element.val(status.text)
+          element.data('currentValue', element.val())
+        },
+        onCancel: (element) => {
+          element.val(element.data('currentValue'));
+        },
+        onClear: (element) => {
+          let elId = element.data('targetName')
+          $(`#crudForm [name=${elId}]`).first().val('')
+          element.val('')
+          element.data('currentValue', element.val())
+        },
+      });
   }
 </script>
 @endpush()
