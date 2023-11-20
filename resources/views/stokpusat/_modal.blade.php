@@ -160,7 +160,7 @@
     let modalBody = $('#crudModal').find('.modal-body').html()
     let jumlahRow = 0;
     let kelompokId
-    let sortnameMdn = 'namastok';
+    let sortnameMdn = 'FKStck';
     let sortorderMdn = 'asc';
     let pageMdn = 0;
     let totalRecordMdn
@@ -196,7 +196,7 @@
     let selectedGbrJktTnl
     let selectedNamaJktTnl
 
-    let sortnameSby = 'namastok';
+    let sortnameSby = 'FKStck';
     let sortorderSby = 'asc';
     let pageSby = 0;
     let totalRecordSby
@@ -208,7 +208,7 @@
     let selectedGbrSby
     let selectedNamaSby
 
-    let sortnameMks = 'namastok';
+    let sortnameMks = 'FKStck';
     let sortorderMks = 'asc';
     let pageMks = 0;
     let totalRecordMks
@@ -220,7 +220,7 @@
     let selectedGbrMks
     let selectedNamaMks
 
-    let sortnameBtg = 'namastok';
+    let sortnameBtg = 'FKStck';
     let sortorderBtg = 'asc';
     let pageBtg = 0;
     let totalRecordBtg
@@ -237,10 +237,9 @@
 
         $(document).on('click', '#btnTampil', function(event) {
             event.preventDefault()
-
             $('#tableMedan')
                 .jqGrid('setGridParam', {
-                    url: `${apiTruckingMdnUrl}stok`,
+                    url: `${apiUrl}stokpusat/datamdn`,
                     mtype: "GET",
                     datatype: "json",
                     postData: {
@@ -248,42 +247,12 @@
                         aktif: "AKTIF",
                     },
                     loadBeforeSend: function(jqXHR) {
-                        jqXHR.setRequestHeader('Authorization', `Bearer ${accessTokenMdn}`)
+                        jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
                     },
                 }).trigger('reloadGrid');
-
-
-            $('#tableJkt')
-                .jqGrid('setGridParam', {
-                    url: `${apiTruckingJktUrl}stok`,
-                    mtype: "GET",
-                    datatype: "json",
-                    postData: {
-                        kelompok_id: kelompokId,
-                        aktif: "AKTIF",
-                    },
-                    loadBeforeSend: function(jqXHR) {
-                        jqXHR.setRequestHeader('Authorization', `Bearer ${accessTokenJkt}`)
-                    },
-                }).trigger('reloadGrid');
-
-            $('#tableJktTnl')
-                .jqGrid('setGridParam', {
-                    url: `${apiTruckingJktTnlUrl}stok`,
-                    mtype: "GET",
-                    datatype: "json",
-                    postData: {
-                        kelompok_id: kelompokId,
-                        aktif: "AKTIF",
-                    },
-                    loadBeforeSend: function(jqXHR) {
-                        jqXHR.setRequestHeader('Authorization', `Bearer ${accessTokenJktTnl}`)
-                    },
-                }).trigger('reloadGrid');
-
             $('#tableMks')
                 .jqGrid('setGridParam', {
-                    url: `${apiTruckingMksUrl}stok`,
+                    url: `${apiUrl}stokpusat/datamks`,
                     mtype: "GET",
                     datatype: "json",
                     postData: {
@@ -291,13 +260,12 @@
                         aktif: "AKTIF",
                     },
                     loadBeforeSend: function(jqXHR) {
-                        jqXHR.setRequestHeader('Authorization', `Bearer ${accessTokenMks}`)
+                        jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
                     },
                 }).trigger('reloadGrid');
-
             $('#tableSby')
                 .jqGrid('setGridParam', {
-                    url: `${apiTruckingSbyUrl}stok`,
+                    url: `${apiUrl}stokpusat/datasby`,
                     mtype: "GET",
                     datatype: "json",
                     postData: {
@@ -305,23 +273,23 @@
                         aktif: "AKTIF",
                     },
                     loadBeforeSend: function(jqXHR) {
-                        jqXHR.setRequestHeader('Authorization', `Bearer ${accessTokenSby}`)
+                        jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+                    },
+                }).trigger('reloadGrid');
+            $('#tableBtg')
+                .jqGrid('setGridParam', {
+                    url: `${apiUrl}stokpusat/datamnd`,
+                    mtype: "GET",
+                    datatype: "json",
+                    postData: {
+                        kelompok_id: kelompokId,
+                        aktif: "AKTIF",
+                    },
+                    loadBeforeSend: function(jqXHR) {
+                        jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
                     },
                 }).trigger('reloadGrid');
 
-            $('#tableBtg')
-                .jqGrid('setGridParam', {
-                    url: `${apiTruckingBtgUrl}stok`,
-                    mtype: "GET",
-                    datatype: "json",
-                    postData: {
-                        kelompok_id: kelompokId,
-                        aktif: "AKTIF",
-                    },
-                    loadBeforeSend: function(jqXHR) {
-                        jqXHR.setRequestHeader('Authorization', `Bearer ${accessTokenBtg}`)
-                    },
-                }).trigger('reloadGrid');
 
         })
         $('#btnSubmit').click(function(event) {
@@ -847,11 +815,11 @@
                         stype: 'input',
                         search: false,
                         formatter: (value, rowOptions, rowData) => {
-                            if (value == '') {
+                            // if (value == null) {
                                 return `<input type="checkbox" name="stokmdn_gbr[]" value="${rowData.gambar}" disabled>`
-                            } else {
-                                return `<input type="checkbox" name="stokmdn_gbr[]" value="${JSON.parse(rowData.gambar)[0]}" checked disabled>`
-                            }
+                            // } else {
+                            //     return `<input type="checkbox" name="stokmdn_gbr[]" value="${JSON.parse(rowData.gambar)[0]}" checked disabled>`
+                            // }
                         },
                     },
                     {
@@ -1303,11 +1271,11 @@
                         stype: 'input',
                         search: false,
                         formatter: (value, rowOptions, rowData) => {
-                            if (value == '') {
+                            // if (value == null) {
                                 return `<input type="checkbox" name="stokmks_gbr[]" value="${rowData.gambar}" disabled>`
-                            } else {
-                                return `<input type="checkbox" name="stokmks_gbr[]" value="${JSON.parse(rowData.gambar)[0]}" checked disabled>`
-                            }
+                            // } else {
+                            //     return `<input type="checkbox" name="stokmks_gbr[]" value="${JSON.parse(rowData.gambar)[0]}" checked disabled>`
+                            // }
                         },
                     },
                     {
@@ -1453,11 +1421,11 @@
                         stype: 'input',
                         search: false,
                         formatter: (value, rowOptions, rowData) => {
-                            if (value == '') {
+                            // if (value == null) {
                                 return `<input type="checkbox" name="stoksby_gbr[]" value="${rowData.gambar}" disabled>`
-                            } else {
-                                return `<input type="checkbox" name="stoksby_gbr[]" value="${JSON.parse(rowData.gambar)[0]}" checked disabled>`
-                            }
+                            // } else {
+                            //     return `<input type="checkbox" name="stoksby_gbr[]" value="${JSON.parse(rowData.gambar)[0]}" checked disabled>`
+                            // }
                         },
                     },
                     {
@@ -1603,11 +1571,12 @@
                         stype: 'input',
                         search: false,
                         formatter: (value, rowOptions, rowData) => {
-                            if (value == '') {
+                            // console.log('value ', value)
+                            // if (value == null) {
                                 return `<input type="checkbox" name="stokbtg_gbr[]" value="${rowData.gambar}" disabled>`
-                            } else {
-                                return `<input type="checkbox" name="stokbtg_gbr[]" value="${JSON.parse(rowData.gambar)[0]}" checked disabled>`
-                            }
+                            // } else {
+                            //     return `<input type="checkbox" name="stokbtg_gbr[]" value="${JSON.parse(rowData.gambar)[0]}" checked disabled>`
+                            // }
                         },
                     },
                     {
