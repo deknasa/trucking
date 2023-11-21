@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "5fee64dc943bdf7cffd625ba221af21e",
+  "ReportGuid": "e39abbaaeeaec5ce794aecc6dbb776b8",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanKartuPiutangPerAgen.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1700533198000+0700)/",
+  "ReportChanged": "/Date(1700534242000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -1715,7 +1715,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{Sum(DataBand1,data.nominalhutang)-Sum(DataBand1,data.nominalbayar)}"
+                "Value": "{Sum(DataBand1,data.nominalpiutang)-Sum(DataBand1,data.nominallunas)}"
               },
               "CanBreak": true,
               "HorAlignment": "Right",
