@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "69a369f7c17246a6d928a3e89249281f",
+  "ReportGuid": "239343d1a1215e647fa1aef8b748f52f",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanBukuBesarBesar.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1699722203000+0700)/",
+  "ReportChanged": "/Date(1700556249000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -55,7 +55,7 @@
             "Name": "tglbukti",
             "NameInSource": "tglbukti",
             "Alias": "tglbukti",
-            "Type": "System.DateTime"
+            "Type": "System.String"
           },
           "5": {
             "Name": "nobukti",
@@ -109,6 +109,12 @@
             "Name": "usercetak",
             "NameInSource": "usercetak",
             "Alias": "usercetak",
+            "Type": "System.String"
+          },
+          "14": {
+            "Name": "Cabang",
+            "NameInSource": "Cabang",
+            "Alias": "Cabang",
             "Type": "System.String"
           }
         },
@@ -413,7 +419,7 @@
               "Ident": "StiText",
               "Name": "Text2",
               "Guid": "3afc9db84341b82dd09703dbe221311a",
-              "ClientRectangle": "2,8,202.06,9.38",
+              "ClientRectangle": "2.29,5.65,202.06,9.38",
               "ComponentPlacement": "ph.PageHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -751,6 +757,26 @@
                 "Value": "{dataheader.ketcoasampai}"
               },
               "Font": ";9;;",
+              "Border": ";;;;;;;solid:Black",
+              "Brush": "solid:",
+              "TextBrush": "solid:Black",
+              "Type": "DataColumn"
+            },
+            "20": {
+              "Ident": "StiText",
+              "Name": "Text19",
+              "Guid": "6cfb34f7b6e36bf606dc37f23d83e2cc",
+              "ClientRectangle": "2.03,11.75,202.06,9.38",
+              "ComponentPlacement": "ph.PageHeaderBand1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "{data.Cabang}"
+              },
+              "HorAlignment": "Center",
+              "VertAlignment": "Center",
+              "Font": ";10;Bold;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
