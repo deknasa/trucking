@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "799f8bd9cac5e17bae53b7635a0186a4",
+  "ReportGuid": "715864e3d7ec798fcd448c033e802f22",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanKartuHutangPerSupplier.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1700492602000+0700)/",
+  "ReportChanged": "/Date(1700540932000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -677,6 +677,7 @@
           },
           "Border": ";;;;;;;solid:Black",
           "Brush": "solid:",
+          "SortDirection": "Descending",
           "Condition": {
             "Value": "{data.jenishutang}"
           }
@@ -1428,7 +1429,7 @@
               "Ident": "StiText",
               "Name": "Text19",
               "Guid": "43253f3a7733045f5ebca3715f95df19",
-              "ClientRectangle": "1.04,-0.07,3.81,0.74",
+              "ClientRectangle": "1.04,-0.07,4.81,0.74",
               "ComponentPlacement": "gf.GroupFooterBand4",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -1436,7 +1437,6 @@
               "Text": {
                 "Value": "TOTAL {data.jenishutang}"
               },
-              "HorAlignment": "Center",
               "VertAlignment": "Center",
               "Font": ";9;Bold;",
               "Border": ";;;;;;;solid:0,0,0",
@@ -1602,7 +1602,7 @@
               "Ident": "StiText",
               "Name": "Text28",
               "Guid": "c72a0b5625cd78f6986fd0200ae10f4c",
-              "ClientRectangle": "1.09,0.02,4.7,0.74",
+              "ClientRectangle": "1.04,0.02,4.7,0.74",
               "ComponentPlacement": "rs.ReportSummaryBand1",
               "Interaction": {
                 "Ident": "StiInteraction"

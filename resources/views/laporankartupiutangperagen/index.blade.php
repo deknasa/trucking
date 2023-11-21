@@ -36,7 +36,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label class="col-12 col-sm-1 col-form-label mt-2">AGEN (DARI)<span class="text-danger">*</span></label>
+                            <label class="col-12 col-sm-1 col-form-label mt-2">AGEN (DARI)</label>
                             <div class="col-sm-5 mt-2">
                                 <input type="hidden" name="agendari_id">
                                 <input type="text" name="agendari" class="form-control agendari-lookup">
