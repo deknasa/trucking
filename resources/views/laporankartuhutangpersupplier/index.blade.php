@@ -37,7 +37,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label class="col-12 col-sm-1 col-form-label mt-2">SUPPLIER<span class="text-danger">*</span></label>
+                            <label class="col-12 col-sm-1 col-form-label mt-2">SUPPLIER</label>
                             <div class="col-sm-5 mt-2">
                                 <input type="hidden" name="supplierdari_id">
                                 <input type="text" name="supplierdari" class="form-control supplierdari-lookup">

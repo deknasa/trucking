@@ -82,11 +82,11 @@ class LaporanKartuHutangPerSupplierController extends MyController
         $englishMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
         $indonesianMonths = ['JANUARI', 'FEBRUARI', 'MARET', 'APRIL', 'MEI', 'JUNI', 'JULI', 'AGUSTUS', 'SEPTEMBER', 'OKTOBER', 'NOVEMBER', 'DESEMBER'];
         $tanggal = str_replace($englishMonths, $indonesianMonths, date('d - M - Y', strtotime($request->dari)));
-        
+
         $sheet->setCellValue('A2', strtoupper($pengeluaran[0]['judulLaporan']));
         $sheet->getStyle("A2")->getFont()->setBold(true);
         $sheet->mergeCells('A2:J2');
-        
+
         $sheet->setCellValue('A3', strtoupper('Periode : ' . $tanggal));
         $sheet->getStyle("A3")->getFont()->setBold(true);
         $sheet->mergeCells('A3:J3');
@@ -115,6 +115,14 @@ class LaporanKartuHutangPerSupplierController extends MyController
 
         ];
 
+        $borderHorizontal = [
+            'borders' => [
+                'top' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+            ],
+        ];
+
         $alphabets = range('A', 'Z');
 
 
@@ -128,24 +136,16 @@ class LaporanKartuHutangPerSupplierController extends MyController
                 'index' => 'nobukti',
             ],
             [
-                'label' => 'Nama Supplier',
-                'index' => 'namasupplier',
-            ],
-            [
-                'label' => 'Tgl Bukti',
+                'label' => 'Tgl SPB',
                 'index' => 'tglbukti',
-            ],
-            [
-                'label' => 'Tgl Jatuh Tempo',
-                'index' => 'tgljatuhtempo',
-            ],
-            [
-                'label' => 'Cicilan',
-                'index' => 'cicil',
             ],
             [
                 'label' => 'Nominal',
                 'index' => 'nominal',
+            ],
+            [
+                'label' => 'Tgl Bayar',
+                'index' => 'tglbayar',
             ],
             [
                 'label' => 'Bayar',
@@ -155,120 +155,129 @@ class LaporanKartuHutangPerSupplierController extends MyController
                 'label' => 'Saldo',
                 'index' => 'Saldo',
             ],
-            [
-                'label' => 'Keterangan',
-                'index' => 'keterangan',
-            ],
 
         ];
 
 
-        foreach ($header_columns as $data_columns_index => $data_column) {
-            $sheet->setCellValue($alphabets[$data_columns_index] . $header_start_row, ucfirst($data_column['label']) ?? $data_columns_index + 1);
-        }
+        // foreach ($header_columns as $data_columns_index => $data_column) {
+        //     $sheet->setCellValue($alphabets[$data_columns_index] . $header_start_row, ucfirst($data_column['label']) ?? $data_columns_index + 1);
+        // }
 
-        $lastColumn = $alphabets[$data_columns_index];
+        // $lastColumn = $alphabets[$data_columns_index];
 
-        $sheet->getStyle("A$header_start_row:$lastColumn$header_start_row")->getFont()->setBold(true);
-        $sheet->getStyle("A$header_start_row:$lastColumn$header_start_row")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+        // $sheet->getStyle("A$header_start_row:$lastColumn$header_start_row")->getFont()->setBold(true);
+        // $sheet->getStyle("A$header_start_row:$lastColumn$header_start_row")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
         $totalDebet = 0;
         $totalKredit = 0;
         $totalSaldo = 0;
         $no = 1;
-        $supplier='';
+        $supplier = '';
+        $groupedData = [];
+        if (is_array($pengeluaran)) {
+
+            foreach ($pengeluaran as $row) {
+                $supplier = $row['supplier_id'];
+                $groupedData[$supplier][] = $row;
+            }
+        }
         if (is_array($pengeluaran) || is_iterable($pengeluaran)) {
-            foreach ($pengeluaran as $response_index => $response_detail) {
-                if ($no != 1) {
-                    if ($response_detail['namasupplier'] != $supplier) {
-                        $detail_start_row++;
-                    }
-                }
+            foreach ($groupedData as $supplier => $group) {
 
-                foreach ($header_columns as $detail_columns_index => $detail_column) {
-                    $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
-                }
-                $sheet->setCellValue("A$detail_start_row", $no);
-                $sheet->setCellValue("B$detail_start_row", $response_detail['nobukti']);
-                $sheet->setCellValue("C$detail_start_row", $response_detail['namasupplier']);
-                $dateValue = ($response_detail['tglbukti'] != null) ? Date::PHPToExcel(date('Y-m-d',strtotime($response_detail['tglbukti']))) : ''; 
-                $sheet->setCellValue("D$detail_start_row", $dateValue);
-                $sheet->getStyle("D$detail_start_row") 
-                ->getNumberFormat() 
-                ->setFormatCode('dd-mm-yyyy');
 
-                $dateValue = ($response_detail['tgljatuhtempo'] != null) ? Date::PHPToExcel(date('Y-m-d',strtotime($response_detail['tgljatuhtempo']))) : ''; 
-                $sheet->setCellValue("E$detail_start_row", $dateValue);
-                $sheet->getStyle("E$detail_start_row") 
-                ->getNumberFormat() 
-                ->setFormatCode('dd-mm-yyyy');
-
-                $sheet->setCellValue("F$detail_start_row", $response_detail['cicil']);
-                $sheet->setCellValue("G$detail_start_row", $response_detail['nominal']);
-                $sheet->setCellValue("H$detail_start_row", $response_detail['bayar']);
-                $sheet->setCellValue("I$detail_start_row", $response_detail['Saldo']);
-                $sheet->setCellValue("J$detail_start_row", $response_detail['keterangan']);
-
-                $sheet->getStyle("A$detail_start_row:J$detail_start_row")->applyFromArray($styleArray);
-                $sheet->getStyle("F$detail_start_row:I$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
-                // $sheet->getStyle("B$detail_start_row:B$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
-                // $sheet->getStyle("D$detail_start_row:D$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
-
-                $sheet->getStyle("J$detail_start_row")->getAlignment()->setWrapText(true);
-
-                //    $totalKredit += $response_detail['kredit'];
-                //     $totalDebet += $response_detail['debet'];
-                //     $totalSaldo += $response_detail['Saldo'];
+                $sheet->setCellValue("A$detail_start_row", 'Supplier : ' . $supplier)->getStyle("A$detail_start_row")->getFont()->setBold(true);
                 $detail_start_row++;
-                $no++;
-                $supplier=$response_detail['namasupplier'];
+                foreach ($header_columns as $data_columns_index => $data_column) {
+
+                    $sheet->setCellValue($alphabets[$data_columns_index] . $detail_start_row, $data_column['label'] ?? $data_columns_index + 1);
+                    $lastColumn = $alphabets[$data_columns_index];
+                    $sheet->getStyle("A$detail_start_row:$lastColumn$detail_start_row")->applyFromArray($styleArray)->getFont()->setBold(true);
+                }
+                $detail_start_row++;
+
+                // DATA
+                $prevNobukti = '';
+
+                foreach ($group as $response_detail) {
+                    $nobukti = $response_detail['nobuktihutang'];
+                    $tglbukti = ($response_detail['tglbukti'] != null) ? Date::PHPToExcel(date('Y-m-d', strtotime($response_detail['tglbukti']))) : '';
+                    $tglbayar = ($response_detail['tglbayar'] != null) ? Date::PHPToExcel(date('Y-m-d', strtotime($response_detail['tglbayar']))) : '';
+
+                    $sheet->setCellValue("B$detail_start_row", $response_detail['nobukti']);
+                    $sheet->setCellValue("C$detail_start_row", $tglbukti);
+                    $sheet->setCellValue("D$detail_start_row", $response_detail['nominalhutang']);
+                    $sheet->setCellValue("E$detail_start_row", $tglbayar);
+                    $sheet->setCellValue("F$detail_start_row", $response_detail['nominalbayar']);
+                    $sheet->setCellValue("G$detail_start_row", $response_detail['saldo']);
+
+                    if ($nobukti != $prevNobukti) {
+                        $sheet->setCellValue("A$detail_start_row", $no++);
+                        if ($prevNobukti != '') {
+
+                            $sheet->getStyle("A" . ($detail_start_row) . ":G" . ($detail_start_row))->applyFromArray($borderHorizontal);
+                        }
+                    }
+                    
+                    $sheet->getStyle("A" . ($detail_start_row))->getBorders()->getLeft()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                    $sheet->getStyle("G" . ($detail_start_row))->getBorders()->getRight()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+
+                    $sheet->getStyle("C$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
+                    $sheet->getStyle("D$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+                    $sheet->getStyle("E$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
+                    $sheet->getStyle("F$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+                    $sheet->getStyle("G$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+                    $detail_start_row++;
+                    $prevNobukti = $nobukti;
+                }
+                if ($prevNobukti != '') {
+                    $sheet->getStyle("A" . ($detail_start_row) . ":G" . ($detail_start_row))->applyFromArray($borderHorizontal);
+                }
+                $no = 1;
+                $detail_start_row++;
             }
         }
 
 
         //ukuran kolom
-        $sheet->getColumnDimension('A')->setAutoSize(true);
+        $sheet->getColumnDimension('A')->setWidth(4);
         $sheet->getColumnDimension('B')->setAutoSize(true);
-        $sheet->getColumnDimension('C')->setWidth(28);
-        $sheet->getColumnDimension('D')->setWidth(14);
-        $sheet->getColumnDimension('E')->setWidth(14);
-        $sheet->getColumnDimension('F')->setWidth(8);
-        $sheet->getColumnDimension('G')->setWidth(24);
-        $sheet->getColumnDimension('H')->setWidth(24);
-        $sheet->getColumnDimension('I')->setWidth(24);
-        $sheet->getColumnDimension('J')->setWidth(45);
+        $sheet->getColumnDimension('C')->setAutoSize(true);
+        $sheet->getColumnDimension('D')->setAutoSize(true);
+        $sheet->getColumnDimension('E')->setAutoSize(true);
+        $sheet->getColumnDimension('F')->setAutoSize(true);
+        $sheet->getColumnDimension('G')->setAutoSize(true);
 
-        $rowKosong = "";
-        // menambahkan sel Total pada baris terakhir + 1
+        // $rowKosong = "";
+        // // menambahkan sel Total pada baris terakhir + 1
 
-        $total_start_row = $detail_start_row;
-        $sheet->mergeCells('A' . $total_start_row . ':F' . $total_start_row);
-        $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':F' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
+        // $total_start_row = $detail_start_row;
+        // $sheet->mergeCells('A' . $total_start_row . ':F' . $total_start_row);
+        // $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':F' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
 
-        $totalNominal = "=SUM(G7:G" . ($detail_start_row - 1) . ")";
-        $sheet->setCellValue("G$total_start_row", $totalNominal)->getStyle("G$total_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
-        $sheet->setCellValue("G$total_start_row", $totalNominal)->getStyle("G$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
-        $sheet->setCellValue("G$total_start_row", $totalNominal)->getStyle("G$total_start_row")->applyFromArray($styleArray);
+        // $totalNominal = "=SUM(G7:G" . ($detail_start_row - 1) . ")";
+        // $sheet->setCellValue("G$total_start_row", $totalNominal)->getStyle("G$total_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        // $sheet->setCellValue("G$total_start_row", $totalNominal)->getStyle("G$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+        // $sheet->setCellValue("G$total_start_row", $totalNominal)->getStyle("G$total_start_row")->applyFromArray($styleArray);
 
-        $totalBayar = "=SUM(H7:H" . ($detail_start_row - 1) . ")";
-        $sheet->setCellValue("H$total_start_row", $totalBayar)->getStyle("H$total_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
-        $sheet->setCellValue("H$total_start_row", $totalBayar)->getStyle("H$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
-        $sheet->setCellValue("H$total_start_row", $totalBayar)->getStyle("H$total_start_row")->applyFromArray($styleArray);
+        // $totalBayar = "=SUM(H7:H" . ($detail_start_row - 1) . ")";
+        // $sheet->setCellValue("H$total_start_row", $totalBayar)->getStyle("H$total_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        // $sheet->setCellValue("H$total_start_row", $totalBayar)->getStyle("H$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+        // $sheet->setCellValue("H$total_start_row", $totalBayar)->getStyle("H$total_start_row")->applyFromArray($styleArray);
 
-        // $totalSaldo = "=SUM(I7:I" . ($detail_start_row - 1) . ")";
-        // $sheet->setCellValue("I$total_start_row", $totalSaldo)->getStyle("I$total_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
-        // $sheet->setCellValue("I$total_start_row", $totalSaldo)->getStyle("I$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
-        // $sheet->setCellValue("I$total_start_row", $totalSaldo)->getStyle("I$total_start_row")->applyFromArray($styleArray);
+        // // $totalSaldo = "=SUM(I7:I" . ($detail_start_row - 1) . ")";
+        // // $sheet->setCellValue("I$total_start_row", $totalSaldo)->getStyle("I$total_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        // // $sheet->setCellValue("I$total_start_row", $totalSaldo)->getStyle("I$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+        // // $sheet->setCellValue("I$total_start_row", $totalSaldo)->getStyle("I$total_start_row")->applyFromArray($styleArray);
 
-        $sheet->setCellValue("I$total_start_row", $rowKosong)->getStyle("I$total_start_row")->applyFromArray($styleArray);
-        $sheet->setCellValue("J$total_start_row", $rowKosong)->getStyle("J$total_start_row")->applyFromArray($styleArray);
-      
+        // $sheet->setCellValue("I$total_start_row", $rowKosong)->getStyle("I$total_start_row")->applyFromArray($styleArray);
+        // $sheet->setCellValue("J$total_start_row", $rowKosong)->getStyle("J$total_start_row")->applyFromArray($styleArray);
 
 
-        //FORMAT
-        // set format ribuan untuk kolom D dan E
-        $sheet->getStyle("D" . ($detail_start_row + 1) . ":E" . ($detail_start_row + 1))->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
-        $sheet->getStyle("A" . ($detail_start_row + 1) . ":$lastColumn" . ($detail_start_row + 1))->getFont()->setBold(true);
+
+        // //FORMAT
+        // // set format ribuan untuk kolom D dan E
+        // $sheet->getStyle("D" . ($detail_start_row + 1) . ":E" . ($detail_start_row + 1))->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+        // $sheet->getStyle("A" . ($detail_start_row + 1) . ":$lastColumn" . ($detail_start_row + 1))->getFont()->setBold(true);
 
 
         //persetujuan
