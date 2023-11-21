@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "e39abbaaeeaec5ce794aecc6dbb776b8",
+  "ReportGuid": "1b3d45b63720324fec3cc2fed3e12c94",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanKartuPiutangPerAgen.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1700534242000+0700)/",
+  "ReportChanged": "/Date(1700535053000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -575,7 +575,7 @@
               "Ident": "StiText",
               "Name": "Text29",
               "Guid": "b5a5a5f0249b519169d80139f3df266c",
-              "ClientRectangle": "2.44,1.91,8.6,0.6",
+              "ClientRectangle": "2.46,2.01,15.44,0.61",
               "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -594,7 +594,7 @@
               "Ident": "StiText",
               "Name": "Text30",
               "Guid": "f9e0dacc24784ff49e0cd8a323264a87",
-              "ClientRectangle": "0.25,1.91,2.58,0.61",
+              "ClientRectangle": "0.3,1.99,1.9,0.61",
               "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -644,7 +644,7 @@
               "Ident": "StiText",
               "Name": "Text34",
               "Guid": "d974454d94b45d23ac70aa3d87789b22",
-              "ClientRectangle": "2.08,1.94,0.38,0.61",
+              "ClientRectangle": "2.08,2.01,0.38,0.61",
               "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -842,7 +842,7 @@
               "Guid": "42c83aa35769af8abf2068e27a969346",
               "CanGrow": true,
               "GrowToHeight": true,
-              "ClientRectangle": "2.37,0.24,4.67,0.51",
+              "ClientRectangle": "2.39,0.31,4.67,0.41",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -876,7 +876,7 @@
               "Ident": "StiText",
               "Name": "Text10",
               "Guid": "fe2c949715df25bb013bc09e9907ea7f",
-              "ClientRectangle": "0.17,0.24,1.95,0.44",
+              "ClientRectangle": "0.18,0.28,1.93,0.41",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -901,7 +901,7 @@
               "Ident": "StiText",
               "Name": "Text12",
               "Guid": "2689c21558098e1defc0aeabe0eee8f0",
-              "ClientRectangle": "2.05,0.24,0.38,0.61",
+              "ClientRectangle": "2.06,0.16,0.38,0.61",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -1256,7 +1256,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{data.tglbayar}"
+                "Value": "{data.tgllunas}"
               },
               "CanBreak": true,
               "Font": ";9;;",
