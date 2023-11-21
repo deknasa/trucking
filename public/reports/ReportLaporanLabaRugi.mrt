@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "fdd842cc381c00c1463bfd8f89d7d62b",
+  "ReportGuid": "e9107ca0f0825e24b48144474f2b36b8",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanLabaRugi.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1697683627000+0700)/",
+  "ReportChanged": "/Date(1700555559000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -123,6 +123,18 @@
             "Name": "diperiksa",
             "NameInSource": "diperiksa",
             "Alias": "diperiksa",
+            "Type": "System.String"
+          },
+          "16": {
+            "Name": "judul",
+            "NameInSource": "judul",
+            "Alias": "judul",
+            "Type": "System.String"
+          },
+          "17": {
+            "Name": "Cabang",
+            "NameInSource": "Cabang",
+            "Alias": "Cabang",
             "Type": "System.String"
           }
         },
@@ -330,6 +342,12 @@
             "NameInSource": "sampai",
             "Alias": "sampai",
             "Type": "System.String"
+          },
+          "4": {
+            "Name": "cabang_id",
+            "NameInSource": "cabang_id",
+            "Alias": "cabang_id",
+            "Type": "System.String"
           }
         },
         "NameInSource": "Data.parameter"
@@ -437,7 +455,7 @@
               "Ident": "StiText",
               "Name": "Text6",
               "GrowToHeight": true,
-              "ClientRectangle": "7.59,0.9,7.2,0.6",
+              "ClientRectangle": "0.2,0.79,20.98,0.61",
               "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -543,7 +561,7 @@
               "Name": "Text26",
               "Guid": "2c67001fc541e6b695ea447ae20206e3",
               "GrowToHeight": true,
-              "ClientRectangle": "0.2,1.6,1.78,0.41",
+              "ClientRectangle": "0.28,1.89,1.78,0.41",
               "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -567,7 +585,7 @@
               "Ident": "StiText",
               "Name": "Text27",
               "GrowToHeight": true,
-              "ClientRectangle": "2.4,1.6,3,0.4",
+              "ClientRectangle": "2.46,1.89,3,0.4",
               "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -586,7 +604,7 @@
               "Name": "Text33",
               "Guid": "413af3a1a938283921604b7823bf1ff5",
               "GrowToHeight": true,
-              "ClientRectangle": "2,1.6,0.38,0.41",
+              "ClientRectangle": "2.08,1.89,0.38,0.41",
               "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -632,6 +650,26 @@
                 "Bottom": 0
               },
               "Type": "Expression"
+            },
+            "12": {
+              "Ident": "StiText",
+              "Name": "Text13",
+              "Guid": "541d81752180a3b8f12e81da1ee12849",
+              "GrowToHeight": true,
+              "ClientRectangle": "0.18,1.43,20.98,0.61",
+              "ComponentPlacement": "h.ap.HeaderBand1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "{data.Cabang}"
+              },
+              "HorAlignment": "Center",
+              "Font": ";10;Bold;",
+              "Border": ";;;;;;;solid:0,0,0",
+              "Brush": "solid:",
+              "TextBrush": "solid:0,0,0",
+              "Type": "DataColumn"
             }
           },
           "CanBreak": true
