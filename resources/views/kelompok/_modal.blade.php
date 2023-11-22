@@ -9,7 +9,7 @@
           </button>
         </div>
         <form action="" method="post">
-          <div class="modal-body">
+          <div class="modal-body modal-master">
             <!--{{-- <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">ID</label>
@@ -48,9 +48,8 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <select name="statusaktif" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH STATUS AKTIF --</option>
-                </select>
+                <input type="hidden" name="statusaktif">
+                <input type="text" name="statusaktifnama" data-target-name="statusaktif" id="statusaktifnama" class="form-control lg-form status-lookup">
               </div>
             </div>
           </div>
@@ -189,6 +188,7 @@
     }
 
     getMaxLength(form)
+    initLookup()
     initSelect2(form.find('.select2bs4'), true)
   })
 
@@ -215,21 +215,18 @@
     $('.invalid-feedback').remove()
 
     Promise
-      .all([
-        setStatusAktifOptions(form),
-      ])
-      .then(() => {
-        showDefault(form)
-          .then(() => {
-            $('#crudModal').modal('show')
-          })
-          .catch((error) => {
-            showDialog(error.statusText)
-          })
-          .finally(() => {
-            $('.modal-loader').addClass('d-none')
-          })
-      })
+    .all([
+      showDefault(form)
+    ])
+    .then(() => {
+      $('#crudModal').modal('show')
+    })
+    .catch((error) => {
+      showDialog(error.statusText)
+    })
+    .finally(() => {
+      $('.modal-loader').addClass('d-none')
+    })
   }
 
   function editKelompok(kelompokId) {
@@ -249,21 +246,18 @@
     $('.invalid-feedback').remove()
 
     Promise
-      .all([
-        setStatusAktifOptions(form),
-      ])
-      .then(() => {
-        showKelompok(form, kelompokId)
-          .then(() => {
-            $('#crudModal').modal('show')
-          })
-          .catch((error) => {
-            showDialog(error.statusText)
-          })
-          .finally(() => {
-            $('.modal-loader').addClass('d-none')
-          })
-      })
+    .all([
+      showKelompok(form, kelompokId)
+    ])
+    .then(() => {
+      $('#crudModal').modal('show')
+    })
+    .catch((error) => {
+      showDialog(error.statusText)
+    })
+    .finally(() => {
+      $('.modal-loader').addClass('d-none')
+    })
   }
 
   function deleteKelompok(kelompokId) {
@@ -283,41 +277,39 @@
     $('.invalid-feedback').remove()
 
     Promise
-      .all([
-        setStatusAktifOptions(form),
-      ])
-      .then(() => {
-        showKelompok(form, kelompokId)
-          .then(kelompok => {
-            initSelect2(form.find('.select2bs4'), true)
-            form.find('[name]').removeAttr('disabled')
-
-            form.find('select').each((index, select) => {
-              let element = $(select)
-
-              if (element.data('select2')) {
-                element.select2('destroy')
-              }
-            })
-            form.find('[name]').attr('disabled', 'disabled').css({
-              background: '#fff'
-            })
-
-          })
-          .then(() => {
-            $('#crudModal').modal('show')
-            let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
-            name.attr('disabled', true)
-            name.find('.lookup-toggler').attr('disabled', true)
-
-          })
-          .catch((error) => {
-            showDialog(error.statusText)
-          })
-          .finally(() => {
-            $('.modal-loader').addClass('d-none')
-          })
+    .all([
+      showKelompok(form, kelompokId)
+    ])
+    .then(kelompok => {
+      initSelect2(form.find('.select2bs4'), true)
+      form.find('[name]').removeAttr('disabled')
+      
+      form.find('select').each((index, select) => {
+        let element = $(select)
+        
+        if (element.data('select2')) {
+          element.select2('destroy')
+        }
       })
+      form.find('[name]').attr('disabled', 'disabled').css({
+        background: '#fff'
+      })
+      
+    })
+    .then(() => {
+      $('#crudModal').modal('show')
+      let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
+      name.attr('disabled', true)
+      name.find('.lookup-toggler').attr('disabled', true)
+      
+    })
+    .catch((error) => {
+      showDialog(error.statusText)
+    })
+    .finally(() => {
+      $('.modal-loader').addClass('d-none')
+    })
+
   }
   function viewKelompok(kelompokId) {
     let form = $('#crudForm')
@@ -336,41 +328,38 @@
     $('.invalid-feedback').remove()
 
     Promise
-      .all([
-        setStatusAktifOptions(form),
-      ])
-      .then(() => {
-        showKelompok(form, kelompokId)
-          .then(kelompok => {
-            initSelect2(form.find('.select2bs4'), true)
-            form.find('[name]').removeAttr('disabled')
-
-            form.find('select').each((index, select) => {
-              let element = $(select)
-
-              if (element.data('select2')) {
-                element.select2('destroy')
-              }
-            })
-            form.find('[name]').attr('disabled', 'disabled').css({
-              background: '#fff'
-            })
-
-          })
-          .then(() => {
-            $('#crudModal').modal('show')
-            let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
-            name.attr('disabled', true)
-            name.find('.lookup-toggler').attr('disabled', true)
-
-          })
-          .catch((error) => {
-            showDialog(error.statusText)
-          })
-          .finally(() => {
-            $('.modal-loader').addClass('d-none')
-          })
+    .all([
+      showKelompok(form, kelompokId)
+    ])
+    .then(kelompok => {
+      initSelect2(form.find('.select2bs4'), true)
+      form.find('[name]').removeAttr('disabled')
+      
+      form.find('select').each((index, select) => {
+        let element = $(select)
+        
+        if (element.data('select2')) {
+          element.select2('destroy')
+        }
       })
+      form.find('[name]').attr('disabled', 'disabled').css({
+        background: '#fff'
+      })
+      
+    })
+    .then(() => {
+      $('#crudModal').modal('show')
+      let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
+      name.attr('disabled', true)
+      name.find('.lookup-toggler').attr('disabled', true)
+      
+    })
+    .catch((error) => {
+      showDialog(error.statusText)
+    })
+    .finally(() => {
+      $('.modal-loader').addClass('d-none')
+    })
   }
 
   function getMaxLength(form) {
@@ -455,13 +444,16 @@
             } else {
               element.val(value)
             }
+            if (index == 'statusaktifnama') {
+            element.data('current-value', value)
+          }
           })
 
           if (form.data('action') === 'delete') {
             form.find('[name]').addClass('disabled')
             initDisabled()
           }
-
+            
           resolve()
         },
         error: error => {
@@ -491,6 +483,9 @@
             } else {
               element.val(value)
             }
+            if (index == 'statusaktifnama') {
+              element.data('current-value', value)
+            }
           })
           resolve()
         },
@@ -499,6 +494,41 @@
         }
       })
     })
+  }
+
+  function initLookup() {
+    $(`.status-lookup`).lookupMaster({
+      title: 'Status Aktif Lookup',
+      fileName: 'parameterMaster',
+      beforeProcess: function() {
+        this.postData = {
+          url: `${apiUrl}parameter/combo`,
+          grp: 'STATUS AKTIF',
+          subgrp: 'STATUS AKTIF',
+          searching: 1,
+          valueName: `statusaktif`,
+          searchText: `status-lookup`,
+          singleColumn: true,
+          hideLabel: true,
+          title: 'Status Aktif'
+        };  
+      },
+      onSelectRow: (status, element) => {
+        let elId = element.data('targetName')
+        $(`#crudForm [name=${elId}]`).first().val(status.id)
+        element.val(status.text)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'));
+      },
+      onClear: (element) => {
+        let elId = element.data('targetName')
+        $(`#crudForm [name=${elId}]`).first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      },
+    });
   }
 
   function cekValidasidelete(Id) {

@@ -9,7 +9,7 @@
           </button>
         </div>
         <form action="" method="post">
-          <div class="modal-body">
+          <div class="modal-body modal-master">
            {{-- <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">ID</label>
@@ -46,9 +46,8 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <select name="statusaktif" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH STATUS AKTIF --</option>
-                </select>
+                <input type="hidden" name="statusaktif">
+                <input type="text" name="statusaktifnama" data-target-name="statusaktif" id="statusaktifnama" class="form-control lg-form status-lookup">
               </div>
             </div>
           </div>
@@ -185,6 +184,7 @@
     }
 
     getMaxLength(form)
+    initLookup()
     initSelect2(form.find('.select2bs4'), true)
   })
 
@@ -209,21 +209,19 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
     Promise
-      .all([
-        setStatusAktifOptions(form),
-      ])
-      .then(() => {
-        showDefault(form)
-          .then(() => {
-            $('#crudModal').modal('show')
-          })
-          .catch((error) => {
-            showDialog(error.statusText)
-          })
-          .finally(() => {
-            $('.modal-loader').addClass('d-none')
-          })
-      })
+    .all([
+      showDefault(form)
+    ])
+    .then(() => {
+      $('#crudModal').modal('show')
+    })
+    .catch((error) => {
+      console.log(error);
+      showDialog(error.statusText)
+    })
+    .finally(() => {
+      $('.modal-loader').addClass('d-none')
+    })
   }
 
   function editMerk(merkId) {
@@ -243,21 +241,18 @@
     $('.invalid-feedback').remove()
 
     Promise
-      .all([
-        setStatusAktifOptions(form),
-      ])
-      .then(() => {
-        showMerk(form, merkId)
-          .then(() => {
-            $('#crudModal').modal('show')
-          })
-          .catch((error) => {
-            showDialog(error.statusText)
-          })
-          .finally(() => {
-            $('.modal-loader').addClass('d-none')
-          })
-      })
+    .all([
+      showMerk(form, merkId)
+    ])
+    .then(() => {
+      $('#crudModal').modal('show')
+    })
+    .catch((error) => {
+      showDialog(error.statusText)
+    })
+    .finally(() => {
+      $('.modal-loader').addClass('d-none')
+    })
   }
 
   function deleteMerk(merkId) {
@@ -277,21 +272,18 @@
     $('.invalid-feedback').remove()
 
     Promise
-      .all([
-        setStatusAktifOptions(form),
-      ])
-      .then(() => {
-        showMerk(form, merkId)
-          .then(() => {
-            $('#crudModal').modal('show')
-          })
-          .catch((error) => {
-            showDialog(error.statusText)
-          })
-          .finally(() => {
-            $('.modal-loader').addClass('d-none')
-          })
-      })
+    .all([
+      showMerk(form, merkId)
+    ])
+    .then(() => {
+      $('#crudModal').modal('show')
+    })
+    .catch((error) => {
+      showDialog(error.statusText)
+    })
+    .finally(() => {
+      $('.modal-loader').addClass('d-none')
+    })
   }
 
   function viewMerk(merkId) {
@@ -310,30 +302,28 @@
     $('.invalid-feedback').remove()
 
     Promise
-      .all([
-        setStatusAktifOptions(form),
-      ])
-      .then(() => {
-        showMerk(form, merkId)
-        .then(merkId => {
-              // form.find('.aksi').hide()
-              setFormBindKeys(form)
-              form.find('[name]').attr('disabled', 'disabled').css({
-                background: '#fff'
-              })
-              form.find('[name=id]').prop('disabled',false)
-              
-            })
-          .then(() => {
-            $('#crudModal').modal('show')
-          })
-          .catch((error) => {
-            showDialog(error.statusText)
-          })
-          .finally(() => {
-            $('.modal-loader').addClass('d-none')
-          })
+    .all([
+      showMerk(form, merkId)
+    ])
+    .then(merkId => {
+      // form.find('.aksi').hide()
+      setFormBindKeys(form)
+      form.find('[name]').attr('disabled', 'disabled').css({
+        background: '#fff'
       })
+      form.find('[name=id]').prop('disabled',false)
+      
+    })
+    .then(() => {
+      $('#crudModal').modal('show')
+    })
+    .catch((error) => {
+      showDialog(error.statusText)
+    })
+    .finally(() => {
+      $('.modal-loader').addClass('d-none')
+    })
+
   }
 
   function getMaxLength(form) {
@@ -418,11 +408,16 @@
             } else {
               element.val(value)
             }
+            if (index == 'statusaktifnama') {
+              element.data('current-value', value)
+            }
           })
           if (form.data('action') === 'delete') {
             form.find('[name]').addClass('disabled')
             initDisabled()
           }
+          
+          
           resolve()
         },
         error: error => {
@@ -443,7 +438,6 @@
         },
         success: response => {
           $.each(response.data, (index, value) => {
-            console.log(value)
             let element = form.find(`[name="${index}"]`)
             // let element = form.find(`[name="statusaktif"]`)
 
@@ -452,6 +446,9 @@
             } 
             else {
               element.val(value)
+            }
+            if (index == 'statusaktifnama') {
+              element.data('current-value', value)
             }
           })
           resolve()
@@ -482,5 +479,41 @@
       }
     })
   }
+
+  function initLookup() {
+    $(`.status-lookup`).lookupMaster({
+      title: 'Status Aktif Lookup',
+      fileName: 'parameterMaster',
+      beforeProcess: function() {
+        this.postData = {
+          url: `${apiUrl}parameter/combo`,
+          grp: 'STATUS AKTIF',
+          subgrp: 'STATUS AKTIF',
+          searching: 1,
+          valueName: `statusaktif`,
+          searchText: `status-lookup`,
+          singleColumn: true,
+          hideLabel: true,
+          title: 'Status Aktif'
+        };  
+      },
+      onSelectRow: (status, element) => {
+        let elId = element.data('targetName')
+        $(`#crudForm [name=${elId}]`).first().val(status.id)
+        element.val(status.text)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'));
+      },
+      onClear: (element) => {
+        let elId = element.data('targetName')
+        $(`#crudForm [name=${elId}]`).first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      },
+    });
+  }
+
 </script>
 @endpush()
