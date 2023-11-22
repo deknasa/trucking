@@ -150,13 +150,14 @@ use App\Http\Controllers\HutangBayarDetailController;
 use App\Http\Controllers\HutangBayarHeaderController;
 use App\Http\Controllers\HutangExtraDetailController;
 use App\Http\Controllers\HutangExtraHeaderController;
+use App\Http\Controllers\LaporanDataJurnalController;
 use App\Http\Controllers\LaporanHutangGiroController;
 use App\Http\Controllers\LaporanJurnalUmumController;
 use App\Http\Controllers\LaporanKasGantungController;
 use App\Http\Controllers\MainTypeAkuntansiController;
 use App\Http\Controllers\PengeluaranDetailController;
-use App\Http\Controllers\PengeluaranHeaderController;
 
+use App\Http\Controllers\PengeluaranHeaderController;
 use App\Http\Controllers\UpahRitasiRincianController;
 use App\Http\Controllers\AbsensiSupirDetailController;
 use App\Http\Controllers\AbsensiSupirHeaderController;
@@ -199,9 +200,9 @@ use App\Http\Controllers\JurnalUmumPusatDetailController;
 use App\Http\Controllers\JurnalUmumPusatHeaderController;
 use App\Http\Controllers\LaporanOrderPembelianController;
 use App\Http\Controllers\LaporanRekapSumbanganController;
+
+
 use App\Http\Controllers\LaporanSaldoInventoryController;
-
-
 use App\Http\Controllers\PelunasanHutangHeaderController;
 use App\Http\Controllers\PendapatanSupirDetailController;
 use App\Http\Controllers\PendapatanSupirHeaderController;
@@ -1198,6 +1199,12 @@ Route::middleware(['auth', 'authorized'])->group(function () {
     Route::get('laporanbukubesar/report', [LaporanBukuBesarController::class, 'report'])->name('laporanbukubesar.report');
     Route::get('laporanbukubesar/index', [LaporanBukuBesarController::class, 'index']);
     Route::resource('laporanbukubesar', LaporanBukuBesarController::class);
+
+    Route::get('laporandatajurnal/report', [LaporanDataJurnalController::class, 'report'])->name('laporandatajurnal.report');
+    Route::get('laporandatajurnal/export', [LaporanDataJurnalController::class, 'export'])->name('laporandatajurnal.export');
+    Route::get('laporandatajurnal/index', [LaporanDataJurnalController::class, 'index'])->name('laporandatajurnal.index');
+    Route::get('laporandatajurnal', [LaporanDataJurnalController::class, 'index']);
+
 
     Route::get('prosesuangjalansupirheader/index', [ProsesUangJalanSupirHeaderController::class, 'index']);
     Route::get('prosesuangjalansupirheader/get', [ProsesUangJalanSupirHeaderController::class, 'get'])->name('prosesuangjalansupirheader.get');
