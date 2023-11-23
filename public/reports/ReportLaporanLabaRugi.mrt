@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "e9107ca0f0825e24b48144474f2b36b8",
+  "ReportGuid": "95ffa538c6db7285de84a33638ea4239",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanLabaRugi.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1700555559000+0700)/",
+  "ReportChanged": "/Date(1700709867000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -783,8 +783,7 @@
               "TextBrush": "solid:0,0,0",
               "TextFormat": {
                 "Ident": "StiCurrencyFormatService",
-                "DecimalSeparator": ",",
-                "GroupSeparator": ".",
+                "GroupSeparator": ",",
                 "State": "DecimalSeparator, GroupSeparator, PositivePattern, NegativePattern, CurrencySymbol",
                 "Symbol": ""
               },
@@ -843,9 +842,8 @@
               "TextBrush": "solid:0,0,0",
               "TextFormat": {
                 "Ident": "StiCurrencyFormatService",
-                "DecimalSeparator": ",",
-                "GroupSeparator": ".",
-                "State": "DecimalSeparator, GroupSeparator, GroupSize, PositivePattern, NegativePattern, CurrencySymbol",
+                "GroupSeparator": ",",
+                "State": "DecimalSeparator, GroupSeparator, PositivePattern, NegativePattern, CurrencySymbol",
                 "Symbol": ""
               }
             }
@@ -920,8 +918,7 @@
               "TextBrush": "solid:0,0,0",
               "TextFormat": {
                 "Ident": "StiCurrencyFormatService",
-                "DecimalSeparator": ",",
-                "GroupSeparator": ".",
+                "GroupSeparator": ",",
                 "State": "DecimalSeparator, GroupSeparator, PositivePattern, NegativePattern, CurrencySymbol",
                 "Symbol": ""
               },
@@ -1011,8 +1008,7 @@
               "TextBrush": "solid:0,0,0",
               "TextFormat": {
                 "Ident": "StiCurrencyFormatService",
-                "DecimalSeparator": ",",
-                "GroupSeparator": ".",
+                "GroupSeparator": ",",
                 "State": "DecimalSeparator, GroupSeparator, PositivePattern, NegativePattern, CurrencySymbol",
                 "Symbol": ""
               },
