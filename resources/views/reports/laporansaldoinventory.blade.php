@@ -17,6 +17,8 @@
       // dd( json_encode($data));
   @endphp
   <script type="text/javascript">
+        var opname = <?= json_encode($opname); ?>;
+
     
     
     function Start() {
@@ -34,7 +36,12 @@
       var dataSet = new Stimulsoft.System.Data.DataSet("Data")
 
       viewer.renderHtml('content')
-      report.loadFile(`{{ asset('public/reports/ReportLaporanSaldoInventory.mrt') }}`)
+      if (opname['opname'] == '1') {
+        report.loadFile(`{{ asset('public/reports/ReportLaporanSaldoInventoryopname.mrt') }}`)
+      } else {
+        report.loadFile(`{{ asset('public/reports/ReportLaporanSaldoInventory.mrt') }}`)
+      }
+      
 
       report.dictionary.dataSources.clear()
 
