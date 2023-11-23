@@ -47,7 +47,9 @@ class LaporanSaldoInventoryController extends Controller
 
         $data = $header['data'];
         $user = Auth::user();
-        return view('reports.laporansaldoinventory', compact('data', 'user', 'detailParams'));
+        $opname['opname'] = $header['opname'];
+
+        return view('reports.laporansaldoinventory', compact('data', 'user', 'detailParams', 'opname'));
     }
 
     public function export(Request $request): void
