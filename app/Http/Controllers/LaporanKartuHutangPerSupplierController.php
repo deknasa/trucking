@@ -236,10 +236,10 @@ class LaporanKartuHutangPerSupplierController extends MyController
                         $sheet->getStyle("G" . ($detail_start_row))->getBorders()->getRight()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
                         $sheet->getStyle("C$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
-                        $sheet->getStyle("D$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+                        $sheet->getStyle("D$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
                         $sheet->getStyle("E$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
-                        $sheet->getStyle("F$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
-                        $sheet->getStyle("G$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+                        $sheet->getStyle("F$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                        $sheet->getStyle("G$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
                         $detail_start_row++;
                         $prevNobukti = $nobukti;
                     }
@@ -251,9 +251,9 @@ class LaporanKartuHutangPerSupplierController extends MyController
                     $detail_start_row++;
                 }
                 $detail_start_row--;
-                $sheet->getStyle("F$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
-                $sheet->getStyle("G$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
-                $sheet->getStyle("D$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+                $sheet->getStyle("F$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                $sheet->getStyle("G$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                $sheet->getStyle("D$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
                 $sheet->setCellValue('A' . $detail_start_row, 'TOTAL ' . $jenishutang)->getStyle("A$detail_start_row")->getFont()->setBold(true);
                 $sheet->setCellValue('F' . $detail_start_row, "=SUM(F$startcell:$bayarCell)")->getStyle("F$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
                 $sheet->setCellValue('D' . $detail_start_row, "=SUM(D$startcell:$nominalCell)")->getStyle("D$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
@@ -276,11 +276,11 @@ class LaporanKartuHutangPerSupplierController extends MyController
             $totalBayar = "=" . implode('+', $sumBayar);
             $totalNominal = "=" . implode('+', $sumNominal);
             $sheet->setCellValue("D$total_start_row", $totalNominal)->getStyle("D$total_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
-            $sheet->getStyle("D$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+            $sheet->getStyle("D$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
             $sheet->setCellValue("F$total_start_row", $totalBayar)->getStyle("F$total_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
-            $sheet->getStyle("F$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+            $sheet->getStyle("F$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
             $sheet->setCellValue("G$total_start_row", "=D$total_start_row-F$total_start_row")->getStyle("G$total_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
-            $sheet->getStyle("G$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+            $sheet->getStyle("G$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
             $sheet->getStyle("A" . ($total_start_row) . ":G" . ($total_start_row))->getBorders()->getTop()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
             $sheet->getStyle("A" . ($total_start_row) . ":G" . ($total_start_row))->getBorders()->getBottom()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
