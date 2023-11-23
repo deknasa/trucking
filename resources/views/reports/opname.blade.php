@@ -16,7 +16,8 @@
   <script src="{{ asset('libraries/tas-lib/js/terbilang.js?version='. config('app.version')) }}"></script>
  <script type="text/javascript">
     
-    let opnameHeader = <?= json_encode($opname); ?>
+    let opnameHeader = <?= json_encode($opname); ?>;
+    let jenisReport = <?= $report; ?>;
 
     function Start() {
       Stimulsoft.Base.StiLicense.loadFromFile("{{ asset($stireport_path . 'license.php') }}");
@@ -44,6 +45,9 @@
       var dataSet = new Stimulsoft.System.Data.DataSet("Data")
 
       viewer.renderHtml('content')
+      // if (jenisReport == 'stokBanding') {
+        
+      // }
       report.loadFile(`{{ asset('public/reports/ReportOpname.mrt') }}`)
 
       report.dictionary.dataSources.clear()

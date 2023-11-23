@@ -44,7 +44,19 @@
                 </div>
                 <div class="col-12 col-sm-9 col-md-10">
                   <input type="hidden" name="gudang_id">
-                  <input type="text" name="gudang" class="form-control gudang-lookup">
+                  <input type="text" name="gudang" id="gudang" class="form-control gudang-lookup">
+                </div>
+              </div>
+
+              <div class="row form-group">
+                <div class="col-12 col-sm-3 col-md-2">
+                  <label class="col-form-label">
+                    kelompok
+                  </label>
+                </div>
+                <div class="col-12 col-sm-9 col-md-10">
+                  <input type="hidden" name="kelompok_id">
+                  <input type="text" name="kelompok" id="kelompok" class="form-control kelompok-lookup">
                 </div>
               </div>
 
@@ -109,12 +121,15 @@
       let selectedRowsStok = $("#tableOpname").getGridParam("selectedRowIds");
       dataQty = []
       dataStokId = []
+      dataTanggal = []
       dataQtyFisik = []
       $.each(selectedRowsStok, function(index, value) {
         dataOpname = $("#tableOpname").jqGrid("getLocalRow", value);
         let selectedQty = dataOpname.qty
+        let selectedTanggal = dataOpname.tanggal
         let selectedQtyFisik = (dataOpname.qtyfisik == undefined) ? 0 : dataOpname.qtyfisik;
 
+        dataTanggal.push(selectedTanggal)
         dataQty.push((isNaN(selectedQty)) ? parseFloat(selectedQty.replaceAll(',', '')) : selectedQty)
         dataQtyFisik.push((isNaN(selectedQtyFisik)) ? parseFloat(selectedQtyFisik.replaceAll(',', '')) : selectedQtyFisik)
         dataStokId.push(dataOpname.id)
@@ -147,6 +162,7 @@
       let requestData = {
         'qty': dataQty,
         'qtyfisik': dataQtyFisik,
+        'tglbuktimasuk': dataTanggal,
         'stok_id': dataStokId
       };
 
@@ -164,6 +180,8 @@
           tglbukti: form.find(`[name="tglbukti"]`).val(),
           gudang: form.find(`[name="gudang"]`).val(),
           gudang_id: form.find(`[name="gudang_id"]`).val(),
+          gkelompokg: form.find(`[name="kelompok"]`).val(),
+          kelompok_id: form.find(`[name="kelompok_id"]`).val(),
           keterangan: form.find(`[name="keterangan"]`).val(),
           detail: jsonData,
           sortIndex: $('#jqGrid').getGridParam().sortname,
@@ -311,6 +329,8 @@
         $('#crudModal').modal('show')
         $('#crudForm').find("[name=gudang]").parents('.input-group').find('.input-group-append').hide()
         $('#crudForm').find("[name=gudang]").parents('.input-group').find('.button-clear').hide()
+        $('#crudForm').find("[name=kelompok]").parents('.input-group').find('.input-group-append').hide()
+        $('#crudForm').find("[name=kelompok]").parents('.input-group').find('.button-clear').hide()
 
       }).catch((error) => {
         showDialog(error.responseJSON)
@@ -347,6 +367,8 @@
         $('#crudModal').modal('show')
         $('#crudForm').find("[name=gudang]").parents('.input-group').find('.input-group-append').hide()
         $('#crudForm').find("[name=gudang]").parents('.input-group').find('.button-clear').hide()
+        $('#crudForm').find("[name=kelompok]").parents('.input-group').find('.input-group-append').hide()
+        $('#crudForm').find("[name=kelompok]").parents('.input-group').find('.button-clear').hide()
       })
       .catch((error) => {
         showDialog(error.responseJSON)
@@ -366,7 +388,7 @@
       url = `${invId}/getEdit`
     }
 
-    if ($('#crudForm').find(`[name="gudang_id"]`).val() != '') {
+    if (($('#crudForm').find(`[name="gudang_id"]`).val() != '') ) {
 
       $('#loaderGrid').removeClass('d-none')
       getDataOpname(url).then((response) => {
@@ -383,9 +405,12 @@
             .trigger("reloadGrid");
         }, 100);
 
+      }).finally(() => {
+        $('#processingLoader').addClass('d-none')
+        $('#loaderGrid').addClass('d-none')
       });
     } else {
-      showDialog('Harap memilih gudang')
+      showDialog('Harap memilih gudang ')
     }
   })
 
@@ -406,6 +431,8 @@
             label: "NAMA BARANG",
             name: "namabarang",
             sortable: true,
+            width: '500px'
+
           },
           {
             label: "TANGGAL",
@@ -566,6 +593,10 @@
       value: form.find(`[name="gudang_id"]`).val()
     })
     data.push({
+      name: 'kelompok_id',
+      value: form.find(`[name="kelompok_id"]`).val()
+    })
+    data.push({
       name: 'tglbukti',
       value: form.find(`[name="tglbukti"]`).val()
     })
@@ -594,6 +625,8 @@
           resolve(response);
         },
         error: error => {
+          showDialog(error.responseJSON)
+          
           reject(error)
         }
       });
@@ -679,6 +712,7 @@
             initDisabled()
           }
           $('#crudForm').find("[name=gudang]").prop('readonly', true);
+          $('#crudForm').find("[name=kelompok]").prop('readonly', true);
 
           loadOpnameGrid();
 
@@ -722,18 +756,32 @@
           if(Aksi == 'DELETE') {
             deleteOpname(Id)
           }
+          if (Aksi == 'Stok Bukti') {
+            window.open(`{{ route('opnameheader.report') }}?id=${selectedId}&report=stokBukti`)
+
+          }
+          if (Aksi == 'Stok Banding') {
+            window.open(`{{ route('opnameheader.report') }}?id=${selectedId}&report=stokBanding`)
+
+          }
         }
       }
     })
   }
 
   function initLookup() {
-    $('.gudang-lookup').lookup({
-      title: 'Gudang Lookup',
-      fileName: 'gudang',
+    $('.gudang-lookup').lookupMaster({
+      title: 'gudang Lookup',
+      fileName: 'gudangMaster',
+      typeSearch: 'ALL',
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
+          searching: 1,
+          valueName: 'gudang_id',
+          searchText: 'gudang-lookup',
+          title: 'Gudang',
+          typeSearch: 'ALL',
         }
       },
       onSelectRow: (gudang, element) => {
@@ -742,11 +790,38 @@
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {
-        console.log(element.val())
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
         $('#crudForm [name=gudang_id]').first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+    $('.kelompok-lookup').lookupMaster({
+      title: 'kelompok Lookup',
+      fileName: 'kelompokMaster',
+      typeSearch: 'ALL',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+          searching: 1,
+          valueName: 'kelompok_id',
+          searchText: 'kelompok-lookup',
+          title: 'kelompok',
+          typeSearch: 'ALL',
+        }
+      },
+      onSelectRow: (kelompok, element) => {
+        $('#crudForm [name=kelompok_id]').first().val(kelompok.id)
+        element.val(kelompok.kodekelompok)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $('#crudForm [name=kelompok_id]').first().val('')
         element.val('')
         element.data('currentValue', element.val())
       }

@@ -58,7 +58,8 @@ class OpnameHeaderController extends MyController
         $combo = $this->combo('list');
         $key = array_search('CETAK', array_column( $combo, 'parameter')); 
         $opname["combo"] =  $combo[$key];
-        return view('reports.opname', compact('opname','opname_details'));
+        $report = $request->report;
+        return view('reports.opname', compact('opname','opname_details','report'));
     }
     public function combo($aksi)
     {

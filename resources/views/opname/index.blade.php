@@ -325,18 +325,66 @@
               }
             }
           },
-          {
+          // {
+          //   id: 'report',
+          //   innerHTML: '<i class="fa fa-print"></i> REPORT',
+          //   class: 'btn btn-info btn-sm mr-1',
+          //   onClick: () => {
+          //     selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+          //     if (selectedId == null || selectedId == '' || selectedId == undefined) {
+          //       showDialog('Harap pilih salah satu record')
+          //     } else {
+          //       window.open(`{{ route('opnameheader.report') }}?id=${selectedId}`)
+          //     }
+          //   }
+          // },
+          // {
+          //   id: 'export',
+          //   title: 'Export',
+          //   caption: 'Export',
+          //   innerHTML: '<i class="fas fa-file-export"></i> EXPORT',
+          //   class: 'btn btn-warning btn-sm mr-1',
+          //   onClick: () => {
+          //     selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+          //     if (selectedId == null || selectedId == '' || selectedId == undefined) {
+          //       showDialog('Harap pilih salah satu record')
+          //     } else {
+          //       window.open(`{{ route('opnameheader.export') }}?id=${selectedId}`)
+          //     }
+          //   }
+          // },  
+        ],
+        extndBtn: [{
             id: 'report',
+            title: 'report',
+            caption: 'report',
             innerHTML: '<i class="fa fa-print"></i> REPORT',
-            class: 'btn btn-info btn-sm mr-1',
-            onClick: () => {
-              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Harap pilih salah satu record')
-              } else {
-                window.open(`{{ route('opnameheader.report') }}?id=${selectedId}`)
-              }
-            }
+            class: 'btn btn-info btn-sm mr-1 dropdown-toggle ',
+            dropmenuHTML: [{
+                id: 'reportStokBukti',
+                text: 'report Stok Bukti',//blank
+                onClick: () => {
+                  selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                  if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                    showDialog('Harap pilih salah satu record')
+                  } else {
+                    cekValidasi(selectedId, 'Stok Bukti')
+                  }
+                }
+              },
+              {
+                id: 'reportStokBaning',
+                text: "report Stok Banding",
+                onClick: () => {
+                  selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                  if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                    showDialog('Harap pilih salah satu record')
+                  } else {
+                    cekValidasi(selectedId, 'Stok Banding')
+                  }
+                }
+              },
+            ]
           },
           {
             id: 'export',
@@ -353,6 +401,40 @@
               }
             }
           },  
+          // {
+          //   id: 'approve',
+          //   title: 'Approve',
+          //   caption: 'Approve',
+          //   innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+          //   class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
+          //   dropmenuHTML: [{
+          //       id: 'approvalEdit',
+          //       text: ' UN/APPROVAL status Edit',
+          //       onClick: () => {
+          //         if (`{{ $myAuth->hasPermission('penerimaanstokheader', 'approvalEdit') }}`) {
+          //           selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+          //           approveEdit(selectedId)
+          //         }
+          //       }
+          //     },
+          //     {
+          //       id: 'approval-buka-cetak',
+          //       text: "un/Approval Buka Cetak PENERIMAAN STOK",
+          //       onClick: () => {
+          //         if (`{{ $myAuth->hasPermission('approvalbukacetak', 'store') }}`) {
+          //           let tglbukacetak = $('#tgldariheader').val().split('-');
+          //           tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
+          //           selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+          //           if (selectedId == null || selectedId == '' || selectedId == undefined) {
+          //             showDialog('Harap pilih salah satu record')
+          //           } else {
+          //             approvalBukaCetak(tglbukacetak, 'PENERIMAANSTOKHEADER', [selectedId]);
+          //           }
+          //         }
+          //       }
+          //     },
+          //   ],
+          // }
         ]
 
       })

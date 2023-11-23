@@ -28,14 +28,25 @@
             {
               label: 'stok',
               name: 'stok',
-              width: '200px'
+              width: '400px'
             },
             {
               label: 'QTY',
               name: 'qty',
               align: 'right',
-              formatter: currencyFormat
+              formatter: currencyFormat,
+              hidden:true
             },
+            {
+            label: "TANGGAL",
+            name: "tanggal",
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
             {
               label: 'QTY FISIK',
               name: 'qtyfisik',
