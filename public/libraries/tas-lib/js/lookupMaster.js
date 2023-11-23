@@ -677,7 +677,7 @@ $.fn.lookupMaster = function (options) {
             if (detectDeviceType() == "desktop") {
                 timeout = 150;
             } else if (detectDeviceType() == "mobile") {
-                timeout = 50;
+                timeout = 150;
             }
 
             if (settings.typeSearch === "ALL") {
