@@ -810,7 +810,11 @@
         getStatusApproval()
         .then(statusApproval=>{
           if (response.data.statusapproval === statusApproval) {
-            window.open(`{{ route('opnameheader.report') }}?id=${selectedId}&report=stokBanding`)
+            if (Aksi == "export") {
+              window.open(`{{ route('opnameheader.export') }}?id=${selectedId}&export=stokBanding`)
+            }else{
+              window.open(`{{ route('opnameheader.report') }}?id=${selectedId}&report=stokBanding`)
+            }
           }else{
             showDialog('Data Belum di Approval');
           }

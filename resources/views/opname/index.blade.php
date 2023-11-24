@@ -397,34 +397,7 @@
               }
             }
           },
-          // {
-          //   id: 'report',
-          //   innerHTML: '<i class="fa fa-print"></i> REPORT',
-          //   class: 'btn btn-info btn-sm mr-1',
-          //   onClick: () => {
-          //     selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-          //     if (selectedId == null || selectedId == '' || selectedId == undefined) {
-          //       showDialog('Harap pilih salah satu record')
-          //     } else {
-          //       window.open(`{{ route('opnameheader.report') }}?id=${selectedId}`)
-          //     }
-          //   }
-          // },
-          // {
-          //   id: 'export',
-          //   title: 'Export',
-          //   caption: 'Export',
-          //   innerHTML: '<i class="fas fa-file-export"></i> EXPORT',
-          //   class: 'btn btn-warning btn-sm mr-1',
-          //   onClick: () => {
-          //     selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-          //     if (selectedId == null || selectedId == '' || selectedId == undefined) {
-          //       showDialog('Harap pilih salah satu record')
-          //     } else {
-          //       window.open(`{{ route('opnameheader.export') }}?id=${selectedId}`)
-          //     }
-          //   }
-          // },  
+
         ],
         extndBtn: [{
             id: 'report',
@@ -452,7 +425,7 @@
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
                     showDialog('Harap pilih salah satu record')
                   } else {
-                    cekValidasiReportBanding(selectedId, 'Stok Banding')
+                    cekValidasiReportBanding(selectedId, 'report')
                   }
                 }
               },
@@ -463,15 +436,32 @@
             title: 'Export',
             caption: 'Export',
             innerHTML: '<i class="fas fa-file-export"></i> EXPORT',
-            class: 'btn btn-warning btn-sm mr-1',
-            onClick: () => {
-              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Harap pilih salah satu record')
-              } else {
-                window.open(`{{ route('opnameheader.export') }}?id=${selectedId}`)
-              }
-            }
+            class: 'btn btn-warning btn-sm mr-1  dropdown-toggle ',
+            dropmenuHTML: [{
+                id: 'exportStokBukti',
+                text: 'export Stok Bukti',//blank
+                onClick: () => {
+                  selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                  if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                    showDialog('Harap pilih salah satu record')
+                  } else {
+                    window.open(`{{ route('opnameheader.export') }}?id=${selectedId}`)
+                  }
+                }
+              },
+              {
+                id: 'exportStokBaning',
+                text: "export Stok Banding",
+                onClick: () => {
+                  selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                  if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                    showDialog('Harap pilih salah satu record')
+                  } else {
+                    cekValidasiReportBanding(selectedId, 'export')
+                  }
+                }
+              },
+            ]
           },  
           {
             id: 'approve',
@@ -480,10 +470,10 @@
             innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
             class: 'btn btn-purple btn-sm mr-1',
             onClick: () => {
-              // if (`{{ $myAuth->hasPermission('opnameheader', 'approval') }}`) {
+              if (`{{ $myAuth->hasPermission('opnameheader', 'approval') }}`) {
                 selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                 approve(selectedId)
-              // }
+              }
             }
           }
         ]
@@ -537,7 +527,7 @@
         if (!`{{ $myAuth->hasPermission('opnameheader', 'report') }}`) {
           $('#report').attr('disabled', 'disabled')
         }
-        if (!`{{ $myAuth->hasPermission('opnameheader', 'report') }}`) {
+        if (!`{{ $myAuth->hasPermission('opnameheader', 'approve') }}`) {
           $('#approve').attr('disabled', 'disabled')
         }
       }
