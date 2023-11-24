@@ -179,6 +179,7 @@ use App\Http\Controllers\BukaPengeluaranStokController;
 use App\Http\Controllers\LaporanPemakaianBanController;
 use App\Http\Controllers\PengeluaranTruckingController;
 use App\Http\Controllers\LaporanDepositoSupirController;
+use App\Http\Controllers\LaporanDepositoKaryawanController;
 use App\Http\Controllers\LaporanKlaimPJTSupirController;
 use App\Http\Controllers\LaporanMutasiKasBankController;
 use App\Http\Controllers\LaporanPemakaianStokController;
@@ -1220,6 +1221,11 @@ Route::middleware(['auth', 'authorized'])->group(function () {
     Route::get('laporandepositosupir/export', [LaporanDepositoSupirController::class, 'export'])->name('laporandepositosupir.export');
     Route::get('laporandepositosupir/index', [LaporanDepositoSupirController::class, 'index']);
     Route::resource('laporandepositosupir', LaporanDepositoSupirController::class);
+
+    Route::get('laporandepositokaryawan/report', [LaporanDepositoKaryawanController::class, 'report'])->name('laporandepositokaryawan.report');
+    Route::get('laporandepositokaryawan/export', [LaporanDepositoKaryawanController::class, 'export'])->name('laporandepositokaryawan.export');
+    Route::get('laporandepositokaryawan/index', [LaporanDepositoKaryawanController::class, 'index']);
+    Route::resource('laporandepositokaryawan', LaporanDepositoKaryawanController::class);
 
     Route::get('laporanlabarugi/report', [LaporanLabaRugiController::class, 'report'])->name('laporanlabarugi.report');
     Route::get('laporanlabarugi/export', [LaporanLabaRugiController::class, 'export'])->name('laporanlabarugi.export');
