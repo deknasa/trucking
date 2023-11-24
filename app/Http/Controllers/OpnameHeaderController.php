@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
@@ -89,6 +90,7 @@ class OpnameHeaderController extends MyController
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'opnameheader/'.$id.'/getEdit')['data'];
 
+        
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setCellValue('A1', $opname['judul']);
@@ -99,12 +101,12 @@ class OpnameHeaderController extends MyController
         $sheet->getStyle("A2")->getFont()->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
-        $sheet->mergeCells('A1:C1');
-        $sheet->mergeCells('A2:C2');
+        $sheet->mergeCells('A1:D1');
+        $sheet->mergeCells('A2:D2');
 
         $header_start_row = 4;
         $header_right_start_row = 4;
-        $detail_table_header_row = 9;
+        $detail_table_header_row = 10;
         $detail_start_row = $detail_table_header_row + 1;
 
         $alphabets = range('A', 'Z');
@@ -123,6 +125,10 @@ class OpnameHeaderController extends MyController
                 'index' => 'gudang',
             ],
             [
+                'label' => 'Kelompok',
+                'index' => 'kelompok',
+            ],
+            [
                 'label' => 'Keterangan',
                 'index' => 'keterangan',
             ],
@@ -130,14 +136,18 @@ class OpnameHeaderController extends MyController
 
         $detail_columns = [
             [
-                'label' => 'NO',
+                'label' => 'No',
             ],
             [
-                'label' => 'NAMA STOK',
+                'label' => 'Nama Stok',
                 'index' => 'namabarang',
             ],
             [
-                'label' => 'QTY',
+                'label' => 'Tanggal Bukti Masuk',
+                'index' => 'tanggal',
+            ],
+            [
+                'label' => 'Qty Fisik',
                 'index' => 'qtyfisik',
                 'format' => 'currency'
             ]
@@ -173,7 +183,7 @@ class OpnameHeaderController extends MyController
         ];
 
         // $sheet->getStyle("A$detail_table_header_row:G$detail_table_header_row")->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FF1F456E');
-        $sheet->getStyle("A$detail_table_header_row:C$detail_table_header_row")->applyFromArray($styleArray);
+        $sheet->getStyle("A$detail_table_header_row:D$detail_table_header_row")->applyFromArray($styleArray);
 
         // LOOPING DETAIL
         $total = 0;
@@ -181,19 +191,27 @@ class OpnameHeaderController extends MyController
 
             foreach ($detail_columns as $detail_columns_index => $detail_column) {
                 $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
-                $sheet->getStyle("A$detail_table_header_row:C$detail_table_header_row")->getFont()->setBold(true);
-                $sheet->getStyle("A$detail_table_header_row:C$detail_table_header_row")->getAlignment()->setHorizontal('center');
+                $sheet->getStyle("A$detail_table_header_row:D$detail_table_header_row")->getFont()->setBold(true);
+                $sheet->getStyle("A$detail_table_header_row:D$detail_table_header_row")->getAlignment()->setHorizontal('center');
             }
 
             $sheet->setCellValue("A$detail_start_row", $response_index + 1);
             $sheet->setCellValue("B$detail_start_row", $response_detail['namabarang']);
-            $sheet->setCellValue("C$detail_start_row", $response_detail['qtyfisik']);
+            
+            $dateValue = ($response_detail['tanggal'] != null) ? Date::PHPToExcel(date('Y-m-d',strtotime($response_detail['tanggal']))) : ''; 
+            $sheet->setCellValue("C$detail_start_row", $dateValue);
+            $sheet->getStyle("C$detail_start_row") 
+            ->getNumberFormat() 
+            ->setFormatCode('dd-mm-yyyy');
+
+            // $sheet->setCellValue("C$detail_start_row", $response_detail['tanggal']);
+            $sheet->setCellValue("D$detail_start_row", $response_detail['qtyfisik']);
 
             $sheet->getStyle("B$detail_start_row")->getAlignment()->setWrapText(true);
             $sheet->getColumnDimension('B')->setWidth(60);
 
-            $sheet->getStyle("A$detail_start_row:B$detail_start_row")->applyFromArray($styleArray);
-            $sheet->getStyle("C$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->getStyle("A$detail_start_row:C$detail_start_row")->applyFromArray($styleArray);
+            $sheet->getStyle("D$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
             $detail_start_row++;
         }
 
