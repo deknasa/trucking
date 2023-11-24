@@ -1318,7 +1318,7 @@ function showConfirm(statusText = "", message = "", urlDestination = "") {
 	$("#dialog-confirm").dialog({
 		modal: true,
 		open: function () {
-			console.log($(this));
+			// console.log($(this));
 		},
 		buttons: [
 			{

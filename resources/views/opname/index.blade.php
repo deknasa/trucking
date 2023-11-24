@@ -34,6 +34,8 @@
   let autoNumericElements = []
   let rowNum = 10
   let hasDetail = false
+  let approveRequest = null;
+
 
   $(document).ready(function() {
     setRange()
@@ -108,6 +110,76 @@
               return ` title="${statusCetak.MEMO}"`
             }
           },
+          {
+          label: 'Status approval',
+          name: 'statusapproval',
+          stype: 'select',
+          searchoptions: {
+            dataInit: function(element) {
+              $(element).select2({
+                width: 'resolve',
+                theme: "bootstrap4",
+                ajax: {
+                  url: `${apiUrl}parameter/combo`,
+                  dataType: 'JSON',
+                  headers: {
+                    Authorization: `Bearer ${accessToken}`
+                  },
+                  data: {
+                    grp: 'STATUS APPROVAL',
+                    subgrp: 'STATUS APPROVAL'
+                  },
+                  beforeSend: () => {
+                    // clear options
+                    $(element).data('select2').$results.children().filter((index, element) => {
+                      // clear options except index 0, which
+                      // is the "searching..." label
+                      if (index > 0) {
+                        element.remove()
+                      }
+                    })
+                  },
+                  processResults: (response) => {
+                    let formattedResponse = response.data.map(row => ({
+                      id: row.id,
+                      text: row.text
+                    }));
+                    
+                    formattedResponse.unshift({
+                      id: '',
+                      text: 'ALL'
+                    });
+                    
+                    return {
+                      results: formattedResponse
+                    };
+                  },
+                }
+              });
+            }
+          },
+          formatter: (value, options, rowData) => {
+            let statusAktif = JSON.parse(value)
+            if (!statusAktif) {
+              return ''
+            }
+            let formattedValue = $(`
+            <div class="badge" style="background-color: ${statusAktif.WARNA}; color: ${statusAktif.WARNATULISAN};">
+              <span>${statusAktif.SINGKATAN}</span>
+              </div>
+              `)
+              
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusAktif = JSON.parse(rowObject.statusapproval)
+              if (!statusAktif) {
+                return ''
+              } 
+              return ` title="${statusAktif.MEMO}"`
+            }
+          },
+          
           {
             label: 'NO BUKTI',
             name: 'nobukti',
@@ -380,7 +452,7 @@
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
                     showDialog('Harap pilih salah satu record')
                   } else {
-                    cekValidasi(selectedId, 'Stok Banding')
+                    cekValidasiReportBanding(selectedId, 'Stok Banding')
                   }
                 }
               },
@@ -401,40 +473,19 @@
               }
             }
           },  
-          // {
-          //   id: 'approve',
-          //   title: 'Approve',
-          //   caption: 'Approve',
-          //   innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-          //   class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-          //   dropmenuHTML: [{
-          //       id: 'approvalEdit',
-          //       text: ' UN/APPROVAL status Edit',
-          //       onClick: () => {
-          //         if (`{{ $myAuth->hasPermission('penerimaanstokheader', 'approvalEdit') }}`) {
-          //           selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-          //           approveEdit(selectedId)
-          //         }
-          //       }
-          //     },
-          //     {
-          //       id: 'approval-buka-cetak',
-          //       text: "un/Approval Buka Cetak PENERIMAAN STOK",
-          //       onClick: () => {
-          //         if (`{{ $myAuth->hasPermission('approvalbukacetak', 'store') }}`) {
-          //           let tglbukacetak = $('#tgldariheader').val().split('-');
-          //           tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
-          //           selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-          //           if (selectedId == null || selectedId == '' || selectedId == undefined) {
-          //             showDialog('Harap pilih salah satu record')
-          //           } else {
-          //             approvalBukaCetak(tglbukacetak, 'PENERIMAANSTOKHEADER', [selectedId]);
-          //           }
-          //         }
-          //       }
-          //     },
-          //   ],
-          // }
+          {
+            id: 'approve',
+            title: 'Approve',
+            caption: 'Approve',
+            innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+            class: 'btn btn-purple btn-sm mr-1',
+            onClick: () => {
+              // if (`{{ $myAuth->hasPermission('opnameheader', 'approval') }}`) {
+                selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                approve(selectedId)
+              // }
+            }
+          }
         ]
 
       })
@@ -467,26 +518,61 @@
       .parent().addClass('px-1')
 
       function permission() {
-    if (!`{{ $myAuth->hasPermission('opnameheader', 'store') }}`) {
-      $('#add').attr('disabled', 'disabled')
+        if (!`{{ $myAuth->hasPermission('opnameheader', 'store') }}`) {
+          $('#add').attr('disabled', 'disabled')
+        }
+    
+        if (!`{{ $myAuth->hasPermission('opnameheader', 'update') }}`) {
+          $('#edit').attr('disabled', 'disabled')
+        }
+    
+        if (!`{{ $myAuth->hasPermission('opnameheader', 'destroy') }}`) {
+          $('#delete').attr('disabled', 'disabled')
+        }
+    
+        if (!`{{ $myAuth->hasPermission('opnameheader', 'export') }}`) {
+          $('#export').attr('disabled', 'disabled')
+        }
+    
+        if (!`{{ $myAuth->hasPermission('opnameheader', 'report') }}`) {
+          $('#report').attr('disabled', 'disabled')
+        }
+        if (!`{{ $myAuth->hasPermission('opnameheader', 'report') }}`) {
+          $('#approve').attr('disabled', 'disabled')
+        }
+      }
+
+    
+   
+    function approve(id) {
+      if (approveRequest) {
+        approveRequest.abort();
+      }
+      approveRequest = $.ajax({
+        url: `${apiUrl}opnameheader/${id}`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          getStatusApproval()
+          .then(statusApproval=>{
+            
+            // console.log(statusApproval);
+            let msg = `YAKIN Approve Opname `
+            if (response.data.statusapproval === statusApproval) {
+              msg = `YAKIN UnApprove Opname `
+            }
+            showConfirm(msg, response.data.nobukti, `opnameheader/${response.data.id}/approval`)
+
+          })
+        },
+      })
     }
 
-    if (!`{{ $myAuth->hasPermission('opnameheader', 'update') }}`) {
-      $('#edit').attr('disabled', 'disabled')
-    }
-
-    if (!`{{ $myAuth->hasPermission('opnameheader', 'destroy') }}`) {
-      $('#delete').attr('disabled', 'disabled')
-    }
-
-    if (!`{{ $myAuth->hasPermission('opnameheader', 'export') }}`) {
-      $('#export').attr('disabled', 'disabled')
-    }
-
-    if (!`{{ $myAuth->hasPermission('opnameheader', 'report') }}`) {
-      $('#report').attr('disabled', 'disabled')
-    }}
-
+    
+   
   })
 </script>
 @endpush()

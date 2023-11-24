@@ -736,7 +736,40 @@
       })
     })
   }
-
+  function getStatusApproval() {
+      return new Promise((resolve, reject) => {
+        $.ajax({
+          url: `${apiUrl}parameter`,
+          method: 'GET',
+          dataType: 'JSON',
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          },
+          data: {
+            limit: 0,
+            filters: JSON.stringify({
+              "groupOp": "AND",
+              "rules": [{
+                "field": "grp",
+                "op": "cn",
+                "data": "STATUS APPROVAL"
+              }, {
+                "field": "text",
+                "op": "cn",
+                "data": "APPROVAL"
+              }]
+            })
+          },
+          success: response => {
+            statusApproval = response.data[0].id;
+            resolve(statusApproval)
+          },
+          error:error=>{
+            reject(error)
+          }
+        })
+      })
+    }
   function cekValidasi(Id, Aksi) {
     $.ajax({
       url: `{{ config('app.api_url') }}opnameheader/${Id}/cekvalidasi`,
@@ -760,11 +793,29 @@
             window.open(`{{ route('opnameheader.report') }}?id=${selectedId}&report=stokBukti`)
 
           }
-          if (Aksi == 'Stok Banding') {
-            window.open(`{{ route('opnameheader.report') }}?id=${selectedId}&report=stokBanding`)
-
-          }
+          
         }
+      }
+    })
+  }
+  function cekValidasiReportBanding(Id, Aksi) {
+    $.ajax({
+      url: `{{ config('app.api_url') }}opnameheader/${Id}`,
+      method: 'get',
+      dataType: 'JSON',
+      beforeSend: request => {
+        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+      },
+      success: response => {
+        getStatusApproval()
+        .then(statusApproval=>{
+          if (response.data.statusapproval === statusApproval) {
+            window.open(`{{ route('opnameheader.report') }}?id=${selectedId}&report=stokBanding`)
+          }else{
+            showDialog('Data Belum di Approval');
+          }
+
+        })
       }
     })
   }

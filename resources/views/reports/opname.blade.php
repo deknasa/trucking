@@ -17,7 +17,7 @@
  <script type="text/javascript">
     
     let opnameHeader = <?= json_encode($opname); ?>;
-    let jenisReport = <?= $report; ?>;
+    let jenisReport = "{{$report}}"
 
     function Start() {
       Stimulsoft.Base.StiLicense.loadFromFile("{{ asset($stireport_path . 'license.php') }}");
@@ -45,10 +45,12 @@
       var dataSet = new Stimulsoft.System.Data.DataSet("Data")
 
       viewer.renderHtml('content')
-      // if (jenisReport == 'stokBanding') {
+      report.loadFile(`{{ asset('public/reports/ReportOpnameBanding.mrt') }}`)
+      if (jenisReport == 'stokBanding') {
+      }else{
+        report.loadFile(`{{ asset('public/reports/ReportOpnameBukti.mrt') }}`)
+      }
         
-      // }
-      report.loadFile(`{{ asset('public/reports/ReportOpname.mrt') }}`)
 
       report.dictionary.dataSources.clear()
 
@@ -59,8 +61,8 @@
 
       report.regData(dataSet.dataSetName, '', dataSet)
       report.dictionary.synchronize()
-    //   designer.report = report;
-    //   designer.renderHtml('content');
+      // designer.report = report;
+      // designer.renderHtml('content');
       viewer.report = report
       viewer.onPrintReport = function (event) {
         triggerEvent(window, 'afterprint');
