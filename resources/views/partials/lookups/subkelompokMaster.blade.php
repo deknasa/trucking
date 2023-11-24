@@ -268,9 +268,9 @@ $idLookup = isset($id) ? $id : null;
       if (detectDeviceType() == 'mobile') {
 
         $('.lookup-grid tr:not(.jqgfirstrow) td').css('padding', '12px')
-        $('.lookup-grid tr:not(.jqgfirstrow) td').css('font-size', '1.2rem')
+        $('.lookup-grid tr:not(.jqgfirstrow) td').css('font-size', '1rem')
 
-        $(`#gview_${idTop} .ui-th-column `).css('font-size', '1.2rem')
+        $(`#gview_${idTop} .ui-th-column `).css('font-size', '1rem')
         var title = `{{ $title ?? '' }}`
         var label = $("<label>").attr("for", "searchText")
           .css({
@@ -343,8 +343,8 @@ $idLookup = isset($id) ? $id : null;
 
       if (detectDeviceType() == 'mobile') {
         $('.lookup-grid tr:not(.jqgfirstrow) td').css('padding', '12px')
-        $('.lookup-grid tr:not(.jqgfirstrow) td').css('font-size', '1.2rem')
-        $(`#gview_${idTop} .ui-th-column `).css('font-size', '1.2rem')
+        $('.lookup-grid tr:not(.jqgfirstrow) td').css('font-size', '1rem')
+        $(`#gview_${idTop} .ui-th-column `).css('font-size', '1rem')
       }
 
       let modal = $('#crudModal')
