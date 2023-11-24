@@ -405,7 +405,20 @@
             caption: 'report',
             innerHTML: '<i class="fa fa-print"></i> REPORT',
             class: 'btn btn-info btn-sm mr-1 dropdown-toggle ',
-            dropmenuHTML: [{
+            dropmenuHTML: [
+              {
+                id: 'reportStokOpname',
+                text: 'report Stok Opname',//blank
+                onClick: () => {
+                  selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                  if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                    showDialog('Harap pilih salah satu record')
+                  } else {
+                    cekValidasi(selectedId, 'Stok Opname')
+                  }
+                }
+              },
+              {
                 id: 'reportStokBukti',
                 text: 'report Stok Bukti',//blank
                 onClick: () => {
@@ -445,7 +458,19 @@
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
                     showDialog('Harap pilih salah satu record')
                   } else {
-                    window.open(`{{ route('opnameheader.export') }}?id=${selectedId}`)
+                    window.open(`{{ route('opnameheader.export') }}?id=${selectedId}&export=stokOpname`)
+                  }
+                }
+              },
+              {
+                id: 'exportStokBukti',
+                text: 'export Stok Opname',//blank
+                onClick: () => {
+                  selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                  if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                    showDialog('Harap pilih salah satu record')
+                  } else {
+                    window.open(`{{ route('opnameheader.export') }}?id=${selectedId}&export=stokBukti`)
                   }
                 }
               },

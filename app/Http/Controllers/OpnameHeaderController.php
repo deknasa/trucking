@@ -81,6 +81,9 @@ class OpnameHeaderController extends MyController
         if ($request->export =="stokBanding") {
             $jenis = 'banding';
         }
+        if ($request->export == "stokOpname") {
+            $jenis = 'opname';
+        }
         //FETCH HEADER
         $id = $request->id;
         $opname = Http::withHeaders($request->header())
@@ -94,7 +97,7 @@ class OpnameHeaderController extends MyController
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'opnameheader/'.$id.'/getEdit')['data'];
 
-        
+        // dd($opname_details);
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setCellValue('A1', $opname['judul']);
@@ -143,7 +146,7 @@ class OpnameHeaderController extends MyController
                 'index' => 'keterangan',
             ],
         ];
-                
+
         if ($jenis == "banding") {
             $detail_columns = [
                 [
@@ -165,6 +168,11 @@ class OpnameHeaderController extends MyController
                 [
                     'label' => 'Qty Fisik',
                     'index' => 'qtyfisik',
+                    'format' => 'currency'
+                ],
+                [
+                    'label' => 'Selisih',
+                    'index' => 'selisih',
                     'format' => 'currency'
                 ]
             ];
@@ -219,7 +227,7 @@ class OpnameHeaderController extends MyController
         ];
 
         if ($jenis =="banding") {
-            $sheet->getStyle("A$detail_table_header_row:E$detail_table_header_row")->applyFromArray($styleArray);
+            $sheet->getStyle("A$detail_table_header_row:F$detail_table_header_row")->applyFromArray($styleArray);
         }else {
             $sheet->getStyle("A$detail_table_header_row:D$detail_table_header_row")->applyFromArray($styleArray);
         }
@@ -231,8 +239,8 @@ class OpnameHeaderController extends MyController
             foreach ($detail_columns as $detail_columns_index => $detail_column) {
                 $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
                 if ($jenis == "banding") {
-                    $sheet->getStyle("A$detail_table_header_row:E$detail_table_header_row")->getFont()->setBold(true);
-                    $sheet->getStyle("A$detail_table_header_row:E$detail_table_header_row")->getAlignment()->setHorizontal('center');
+                    $sheet->getStyle("A$detail_table_header_row:F$detail_table_header_row")->getFont()->setBold(true);
+                    $sheet->getStyle("A$detail_table_header_row:F$detail_table_header_row")->getAlignment()->setHorizontal('center');
                 }else{
                     $sheet->getStyle("A$detail_table_header_row:D$detail_table_header_row")->getFont()->setBold(true);
                     $sheet->getStyle("A$detail_table_header_row:D$detail_table_header_row")->getAlignment()->setHorizontal('center');
@@ -252,6 +260,9 @@ class OpnameHeaderController extends MyController
             if ($jenis =="banding") {
                 $sheet->setCellValue("D$detail_start_row", $response_detail['qty']);
                 $sheet->setCellValue("E$detail_start_row", $response_detail['qtyfisik']);
+                $sheet->setCellValue("F$detail_start_row", "=D$detail_start_row - E$detail_start_row");
+            }else if($jenis == 'opname'){
+                $sheet->setCellValue("D$detail_start_row", null);
             }else{
                 $sheet->setCellValue("D$detail_start_row", $response_detail['qtyfisik']);
             }
@@ -262,6 +273,7 @@ class OpnameHeaderController extends MyController
             $sheet->getStyle("D$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
             if ($jenis =="banding") {
                 $sheet->getStyle("E$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                $sheet->getStyle("F$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
             }
             $detail_start_row++;
         }
@@ -271,6 +283,7 @@ class OpnameHeaderController extends MyController
         $sheet->getColumnDimension('D')->setAutoSize(true);
         if ($jenis =="banding") {
             $sheet->getColumnDimension('E')->setAutoSize(true);
+            $sheet->getColumnDimension('F')->setAutoSize(true);
         }
 
         $writer = new Xlsx($spreadsheet);

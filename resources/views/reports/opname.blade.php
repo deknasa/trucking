@@ -47,8 +47,10 @@
       viewer.renderHtml('content')
       report.loadFile(`{{ asset('public/reports/ReportOpnameBanding.mrt') }}`)
       if (jenisReport == 'stokBanding') {
-      }else{
+      }else if(jenisReport == "stokBukti"){
         report.loadFile(`{{ asset('public/reports/ReportOpnameBukti.mrt') }}`)
+      }else if(jenisReport == "stokOpname"){
+        report.loadFile(`{{ asset('public/reports/ReportOpname.mrt') }}`)
       }
         
 
