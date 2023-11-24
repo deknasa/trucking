@@ -882,7 +882,7 @@ span.textCard {
 
 	input[type=text],  
 	input[type=password] { 
-		font-size: 1.3rem !important; 
+		font-size: 1rem!important; 
 		height: calc(1.5em + 0.75rem + 2px); 
 	} 
  
