@@ -183,10 +183,10 @@ class AuthController extends Controller
 
                 $tokenTNL = $getTokenTNL['access_token'];
             }
-            // $tokenEmkl = Http::withHeaders([
-            //     'Accept' => 'application/json'
-            // ])->withOptions(['verify' => false])
-            //     ->post(config('app.emkl_api_url') . 'oauth/token', $credentialsEmkl);
+            $tokenEmkl = Http::withHeaders([
+                'Accept' => 'application/json'
+            ])->withOptions(['verify' => false])
+                ->post(config('app.emkl_api_url') . 'oauth/token', $credentialsEmkl);
 
             // dd($tokenEmkl->getBody()->getContents());
 
@@ -196,7 +196,7 @@ class AuthController extends Controller
             session(['info' => $token['info']]);
             session(['link_url' => strtolower($linkUrl->text)]);
 
-            // session(['access_token_emkl' => $tokenEmkl['access_token']]);
+            session(['access_token_emkl' => $tokenEmkl['access_token']]);
             session(['menus' => (new Menu())->getMenu()]);
             if ($parametercabang->text == "PUSAT") {
                 // session(['access_token_mdn' => $tokenMdn]);
