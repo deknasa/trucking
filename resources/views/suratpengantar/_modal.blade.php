@@ -1328,6 +1328,7 @@
           containerId = response.data.container_id
           statuscontainerId = response.data.statuscontainer_id
           jenisorderId = response.data.jenisorder_id
+          nominalSupir = response.data.gajisupir
           getTarifOmset(response.data.tarifrincian_id, response.data.container_id)
           // $('#crudForm ').find(`[name="omset"]`).val(response.data.omset)
           // getGaji(response.data.nominalplusborongan)
@@ -1708,7 +1709,8 @@
         this.postData = {
 
           Aktif: 'AKTIF',
-          AbsensiId: true
+          AbsensiId: true,
+          tgltrip: $('#crudForm [name=tglbukti]').val(),
         }
       },
       onSelectRow: (supir, element) => {
