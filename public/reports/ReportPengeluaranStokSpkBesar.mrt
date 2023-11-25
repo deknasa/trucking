@@ -1008,7 +1008,7 @@
               },
               "MaxNumberOfLines": 6,
               "Text": {
-                "Value": "LAPORAN PENGELUAN STOK (SPK)"
+                "Value": "LAPORAN PENGELUARAN STOK (SPK)"
               },
               "HorAlignment": "Center",
               "Font": ";10;Bold;",

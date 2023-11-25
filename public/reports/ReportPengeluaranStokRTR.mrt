@@ -1022,7 +1022,7 @@
               },
               "MaxNumberOfLines": 6,
               "Text": {
-                "Value": "Laporan Purchase Return (RTR)"
+                "Value": "LAPORAN PURCHASE RETURN (RTR)"
               },
               "HorAlignment": "Center",
               "Font": ";10;Bold;",

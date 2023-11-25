@@ -125,11 +125,12 @@ class LaporanDataJurnalController extends MyController
             $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, $detail_column['label'] ?? $detail_columns_index + 1);
         }
         $sheet->getStyle("A$detail_start_row:I$detail_start_row")->getFont()->setBold(true);
+        $sheet->getStyle("A$detail_start_row:I$detail_start_row")->applyFromArray($styleArray);
         $detail_start_row++;
 
 
         $dataRow = $detail_table_header_row + 2;
-        $previousRow = $dataRow - 1;
+        $first_row = $dataRow;
         foreach ($bukubesar as $response_index => $response_detail) {
             foreach ($detail_columns as $detail_columns_index => $detail_column) {
                 $data = $response_detail[$detail_column['index']];
@@ -142,11 +143,23 @@ class LaporanDataJurnalController extends MyController
                     ->getNumberFormat() 
                     ->setFormatCode('dd-mm-yyyy');
                 }
+                $sheet->getStyle($alphabets[$detail_columns_index] . $dataRow)->applyFromArray($styleArray);
+
             }
-            $sheet->getStyle("G$dataRow:H$dataRow")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->getStyle("G$dataRow:H$dataRow")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
             $dataRow++;
         }
+        $last_detail=$dataRow -1;
+        $total_start_row = $dataRow;
+        $sheet->mergeCells('A' . $total_start_row . ':F' . $total_start_row);
+        $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':F' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
+        $sheet->setCellValue("G$total_start_row", "=SUM(G$first_row:G$last_detail)")->getStyle("G$total_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->setCellValue("H$total_start_row", "=SUM(H$first_row:H$last_detail)")->getStyle("H$total_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->getStyle("G$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+        $sheet->getStyle("H$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+        $sheet->getStyle('A' . $total_start_row . ':I' . $total_start_row)->applyFromArray($styleArray);
+
         $detail_start_row = $dataRow;
         $detail_start_row += 2; // Add an empty row between groups
        

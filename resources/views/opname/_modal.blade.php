@@ -792,7 +792,7 @@
           if (Aksi == 'Stok Bukti') {
             window.open(`{{ route('opnameheader.report') }}?id=${selectedId}&report=stokBukti`)
           }
-          if (Aksi == 'Stok Bukti') {
+          if (Aksi == 'Stok Opname') {
             window.open(`{{ route('opnameheader.report') }}?id=${selectedId}&report=stokOpname`)
           }
         }
