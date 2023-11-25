@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
@@ -58,7 +59,8 @@ class OpnameHeaderController extends MyController
         $combo = $this->combo('list');
         $key = array_search('CETAK', array_column( $combo, 'parameter')); 
         $opname["combo"] =  $combo[$key];
-        return view('reports.opname', compact('opname','opname_details'));
+        $report = $request->report;
+        return view('reports.opname', compact('opname','opname_details','report'));
     }
     public function combo($aksi)
     {
@@ -75,6 +77,13 @@ class OpnameHeaderController extends MyController
 
     public function export(Request $request): void
     {
+        $jenis = 'bukti';
+        if ($request->export =="stokBanding") {
+            $jenis = 'banding';
+        }
+        if ($request->export == "stokOpname") {
+            $jenis = 'opname';
+        }
         //FETCH HEADER
         $id = $request->id;
         $opname = Http::withHeaders($request->header())
@@ -88,6 +97,7 @@ class OpnameHeaderController extends MyController
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'opnameheader/'.$id.'/getEdit')['data'];
 
+        // dd($opname_details);
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setCellValue('A1', $opname['judul']);
@@ -98,12 +108,18 @@ class OpnameHeaderController extends MyController
         $sheet->getStyle("A2")->getFont()->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
-        $sheet->mergeCells('A1:C1');
-        $sheet->mergeCells('A2:C2');
+       
+        if ($jenis =="banding") {
+            $sheet->mergeCells('A1:E1');
+            $sheet->mergeCells('A2:E2');
+        }else {
+            $sheet->mergeCells('A1:D1');
+            $sheet->mergeCells('A2:D2');
+        }
 
         $header_start_row = 4;
         $header_right_start_row = 4;
-        $detail_table_header_row = 9;
+        $detail_table_header_row = 10;
         $detail_start_row = $detail_table_header_row + 1;
 
         $alphabets = range('A', 'Z');
@@ -122,25 +138,64 @@ class OpnameHeaderController extends MyController
                 'index' => 'gudang',
             ],
             [
+                'label' => 'Kelompok',
+                'index' => 'kelompok',
+            ],
+            [
                 'label' => 'Keterangan',
                 'index' => 'keterangan',
             ],
         ];
 
-        $detail_columns = [
-            [
-                'label' => 'NO',
-            ],
-            [
-                'label' => 'NAMA STOK',
-                'index' => 'namabarang',
-            ],
-            [
-                'label' => 'QTY',
-                'index' => 'qtyfisik',
-                'format' => 'currency'
-            ]
-        ];
+        if ($jenis == "banding") {
+            $detail_columns = [
+                [
+                    'label' => 'No',
+                ],
+                [
+                    'label' => 'Nama Stok',
+                    'index' => 'namabarang',
+                ],
+                [
+                    'label' => 'Tanggal Bukti Masuk',
+                    'index' => 'tanggal',
+                ],
+                [
+                    'label' => 'Qty',
+                    'index' => 'qty',
+                    'format' => 'currency'
+                ],
+                [
+                    'label' => 'Qty Fisik',
+                    'index' => 'qtyfisik',
+                    'format' => 'currency'
+                ],
+                [
+                    'label' => 'Selisih',
+                    'index' => 'selisih',
+                    'format' => 'currency'
+                ]
+            ];
+        }else{
+            $detail_columns = [
+                [
+                    'label' => 'No',
+                ],
+                [
+                    'label' => 'Nama Stok',
+                    'index' => 'namabarang',
+                ],
+                [
+                    'label' => 'Tanggal Bukti Masuk',
+                    'index' => 'tanggal',
+                ],
+                [
+                    'label' => 'Qty Fisik',
+                    'index' => 'qtyfisik',
+                    'format' => 'currency'
+                ]
+            ];
+        }
 
         //LOOPING HEADER        
         foreach ($header_columns as $header_column) {
@@ -171,8 +226,11 @@ class OpnameHeaderController extends MyController
             ]
         ];
 
-        // $sheet->getStyle("A$detail_table_header_row:G$detail_table_header_row")->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FF1F456E');
-        $sheet->getStyle("A$detail_table_header_row:C$detail_table_header_row")->applyFromArray($styleArray);
+        if ($jenis =="banding") {
+            $sheet->getStyle("A$detail_table_header_row:F$detail_table_header_row")->applyFromArray($styleArray);
+        }else {
+            $sheet->getStyle("A$detail_table_header_row:D$detail_table_header_row")->applyFromArray($styleArray);
+        }
 
         // LOOPING DETAIL
         $total = 0;
@@ -180,25 +238,53 @@ class OpnameHeaderController extends MyController
 
             foreach ($detail_columns as $detail_columns_index => $detail_column) {
                 $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
-                $sheet->getStyle("A$detail_table_header_row:C$detail_table_header_row")->getFont()->setBold(true);
-                $sheet->getStyle("A$detail_table_header_row:C$detail_table_header_row")->getAlignment()->setHorizontal('center');
+                if ($jenis == "banding") {
+                    $sheet->getStyle("A$detail_table_header_row:F$detail_table_header_row")->getFont()->setBold(true);
+                    $sheet->getStyle("A$detail_table_header_row:F$detail_table_header_row")->getAlignment()->setHorizontal('center');
+                }else{
+                    $sheet->getStyle("A$detail_table_header_row:D$detail_table_header_row")->getFont()->setBold(true);
+                    $sheet->getStyle("A$detail_table_header_row:D$detail_table_header_row")->getAlignment()->setHorizontal('center');
+                }
             }
 
             $sheet->setCellValue("A$detail_start_row", $response_index + 1);
             $sheet->setCellValue("B$detail_start_row", $response_detail['namabarang']);
-            $sheet->setCellValue("C$detail_start_row", $response_detail['qtyfisik']);
+            
+            $dateValue = ($response_detail['tanggal'] != null) ? Date::PHPToExcel(date('Y-m-d',strtotime($response_detail['tanggal']))) : ''; 
+            $sheet->setCellValue("C$detail_start_row", $dateValue);
+            $sheet->getStyle("C$detail_start_row") 
+            ->getNumberFormat() 
+            ->setFormatCode('dd-mm-yyyy');
 
+            // $sheet->setCellValue("C$detail_start_row", $response_detail['tanggal']);
+            if ($jenis =="banding") {
+                $sheet->setCellValue("D$detail_start_row", $response_detail['qty']);
+                $sheet->setCellValue("E$detail_start_row", $response_detail['qtyfisik']);
+                $sheet->setCellValue("F$detail_start_row", "=D$detail_start_row - E$detail_start_row");
+            }else if($jenis == 'opname'){
+                $sheet->setCellValue("D$detail_start_row", null);
+            }else{
+                $sheet->setCellValue("D$detail_start_row", $response_detail['qtyfisik']);
+            }
             $sheet->getStyle("B$detail_start_row")->getAlignment()->setWrapText(true);
             $sheet->getColumnDimension('B')->setWidth(60);
 
-            $sheet->getStyle("A$detail_start_row:B$detail_start_row")->applyFromArray($styleArray);
-            $sheet->getStyle("C$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->getStyle("A$detail_start_row:C$detail_start_row")->applyFromArray($styleArray);
+            $sheet->getStyle("D$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            if ($jenis =="banding") {
+                $sheet->getStyle("E$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                $sheet->getStyle("F$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            }
             $detail_start_row++;
         }
 
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('C')->setAutoSize(true);
         $sheet->getColumnDimension('D')->setAutoSize(true);
+        if ($jenis =="banding") {
+            $sheet->getColumnDimension('E')->setAutoSize(true);
+            $sheet->getColumnDimension('F')->setAutoSize(true);
+        }
 
         $writer = new Xlsx($spreadsheet);
         $filename = 'Laporan Opname' . date('dmYHis');
