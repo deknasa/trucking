@@ -107,7 +107,10 @@ input[type=text]:focus,input[type=password]:focus, .select2-selection:focus {
 	overflow: auto;
 	z-index: 101;
 }
-
+.ui-jqgrid tr.ui-search-toolbar td input{ 
+	padding: 15px; 
+	padding-right: 5px; 
+} 
 .bdiv-lookup {
 	height: 300px!important;
 }
@@ -848,8 +851,7 @@ span.textCard {
 	} 
 	
 	.ui-jqgrid tr.ui-search-toolbar td input{ 
-		font-size: 15px!important; 
-		padding: 13px; 
+		padding: 11px; 
 		padding-right: 5px; 
 	} 
 		

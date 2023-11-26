@@ -23,7 +23,7 @@
     let totalRecord
     let limit
     let postData
-    let sortname = 'namastok'
+    let sortname = 'namaterpusat'
     let sortorder = 'asc'
     let autoNumericElements = []
     let rowNum = 10
@@ -43,12 +43,56 @@
                         hidden: true
                     },
                     {
-                        label: 'NAMA STOK',
-                        name: 'namastok',
+                        label: 'NAMA TERPUSAT',
+                        name: 'namaterpusat',
                     },
                     {
-                        label: 'KELOMPOK',
-                        name: 'kelompok',
+                        label: 'ID MEDAN',
+                        name: 'idmedan',
+                    },
+                    {
+                        label: 'NAMA MEDAN',
+                        name: 'namamedan',
+                    },
+                    {
+                        label: 'ID SURABAYA',
+                        name: 'idsurabaya',
+                    },
+                    {
+                        label: 'NAMA SURABAYA',
+                        name: 'namasurabaya',
+                    },
+                    {
+                        label: 'ID JAKARTA',
+                        name: 'idjakarta',
+                    },
+                    {
+                        label: 'NAMA JAKARTA',
+                        name: 'namajakarta',
+                    },
+                    {
+                        label: 'ID JKT TNL',
+                        name: 'idjakartatnl',
+                    },
+                    {
+                        label: 'NAMA JKT TNL',
+                        name: 'namajakartatnl',
+                    },
+                    {
+                        label: 'ID MAKASSAR',
+                        name: 'idmakassar',
+                    },
+                    {
+                        label: 'NAMA MAKASSAR',
+                        name: 'namamakassar',
+                    },
+                    {
+                        label: 'ID BITUNG',
+                        name: 'idmanado',
+                    },
+                    {
+                        label: 'NAMA BITUNG',
+                        name: 'namamanado',
                     },
                     {
                         label: 'MODIFIED BY',

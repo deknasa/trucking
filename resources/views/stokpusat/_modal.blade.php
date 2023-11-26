@@ -46,7 +46,7 @@
                                     <div class="row">
                                         <div class="col-md-3" id="imageMdn">
                                             <div>
-                                                <img id="imgMedan" style="border: 1px solid #00000096; width:135px; height:135px">
+                                                <img id="imgMedan" style="border: 1px solid #00000096; width:135px; height:150px">
                                             </div>
                                         </div>
                                         <div class="col-md-9">
@@ -61,7 +61,7 @@
                                     <div class="row">
                                         <div class="col-md-3" id="imageMdn">
                                             <div>
-                                                <img id="imgSby" style="border: 1px solid #00000096; width:135px; height:135px">
+                                                <img id="imgSby" style="border: 1px solid #00000096; width:135px; height:150px">
                                             </div>
                                         </div>
                                         <div class="col-md-9">
@@ -78,7 +78,7 @@
                                     <div class="row">
                                         <div class="col-md-3" id="imageMdn">
                                             <div>
-                                                <img id="imgJkt" style="border: 1px solid #00000096; width:135px; height:135px">
+                                                <img id="imgJkt" style="border: 1px solid #00000096; width:135px; height:150px">
                                             </div>
                                         </div>
                                         <div class="col-md-9">
@@ -93,7 +93,7 @@
                                     <div class="row">
                                         <div class="col-md-3" id="imageMdn">
                                             <div>
-                                                <img id="imgJktTnl" style="border: 1px solid #00000096; width:135px; height:135px">
+                                                <img id="imgJktTnl" style="border: 1px solid #00000096; width:135px; height:150px">
                                             </div>
                                         </div>
                                         <div class="col-md-9">
@@ -112,7 +112,7 @@
                                     <div class="row">
                                         <div class="col-md-3" id="imageMdn">
                                             <div>
-                                                <img id="imgMks" style="border: 1px solid #00000096; width:135px; height:135px">
+                                                <img id="imgMks" style="border: 1px solid #00000096; width:135px; height:150px">
                                             </div>
                                         </div>
                                         <div class="col-md-9">
@@ -127,7 +127,7 @@
                                     <div class="row">
                                         <div class="col-md-3" id="imageMdn">
                                             <div>
-                                                <img id="imgBtg" style="border: 1px solid #00000096; width:135px; height:135px">
+                                                <img id="imgBtg" style="border: 1px solid #00000096; width:135px; height:150px">
                                             </div>
                                         </div>
                                         <div class="col-md-9">
@@ -246,6 +246,11 @@
                         kelompok_id: kelompokId,
                         aktif: "AKTIF",
                     },
+                    loadError: function(jqXHR, textStatus, errorThrown) {
+                        if(jqXHR.status == 500) {
+                            showDialog("SERVER MEDAN TIDAK BISA DIAKSES")
+                        }
+                    },
                     loadBeforeSend: function(jqXHR) {
                         jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
                     },
@@ -258,6 +263,11 @@
                     postData: {
                         kelompok_id: kelompokId,
                         aktif: "AKTIF",
+                    },
+                    loadError: function(jqXHR, textStatus, errorThrown) {
+                        if(jqXHR.status == 500) {
+                            showDialog("SERVER MAKASSAR TIDAK BISA DIAKSES")
+                        }
                     },
                     loadBeforeSend: function(jqXHR) {
                         jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
@@ -272,6 +282,11 @@
                         kelompok_id: kelompokId,
                         aktif: "AKTIF",
                     },
+                    loadError: function(jqXHR, textStatus, errorThrown) {
+                        if(jqXHR.status == 500) {
+                            showDialog("SERVER SURABAYA TIDAK BISA DIAKSES")
+                        }
+                    },
                     loadBeforeSend: function(jqXHR) {
                         jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
                     },
@@ -285,13 +300,149 @@
                         kelompok_id: kelompokId,
                         aktif: "AKTIF",
                     },
+                    loadError: function(jqXHR, textStatus, errorThrown) {
+                        if(jqXHR.status == 500) {
+                            showDialog("SERVER BITUNG TIDAK BISA DIAKSES")
+                        }
+                    },
                     loadBeforeSend: function(jqXHR) {
                         jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
                     },
                 }).trigger('reloadGrid');
 
 
+            if (accessTokenJkt == '') {
+
+                $.ajax({
+                    url: `${apiUrl}stokpusat/datajkt`,
+                    method: "GET",
+                    dataType: 'JSON',
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`
+                    },
+                    success: response => {
+
+                        $.ajax({
+                            url: `${appUrl}/stokpusat/tokenjkt?token=${response.data}`,
+                            method: "GET",
+                            dataType: 'JSON',
+                            headers: {
+                                Authorization: `Bearer ${accessToken}`
+                            },
+                            success: response => {
+
+                                accessTokenJkt = response.data
+                                $('#tableJkt')
+                                    .jqGrid('setGridParam', {
+                                        url: `${apiTruckingJktUrl}stok`,
+                                        mtype: "GET",
+                                        datatype: "json",
+                                        postData: {
+                                            kelompok_id: kelompokId,
+                                            aktif: "AKTIF",
+                                        },
+                                        loadBeforeSend: function(jqXHR) {
+                                            jqXHR.setRequestHeader('Authorization', `Bearer ${response.data}`)
+                                        },
+                                    }).trigger('reloadGrid');
+                            }
+                        })
+
+
+                    },
+                    error: error => {
+                        if (error.status === 422) {
+                            $('.is-invalid').removeClass('is-invalid')
+                            $('.invalid-feedback').remove()
+
+                            setErrorMessages(form, error.responseJSON.errors);
+                        } else {
+                            showDialog(error.responseJSON)
+                        }
+                    },
+                })
+
+            } else {
+                $('#tableJkt')
+                    .jqGrid('setGridParam', {
+                        url: `${apiTruckingJktUrl}stokK`,
+                        mtype: "GET",
+                        datatype: "json",
+                        postData: {
+                            kelompok_id: kelompokId,
+                            aktif: "AKTIF",
+                        },
+                        loadBeforeSend: function(jqXHR) {
+                            jqXHR.setRequestHeader('Authorization', `Bearer ${accessTokenJkt}`)
+                        },
+                    }).trigger('reloadGrid');
+            }
+
+
+
+            if (accessTokenJktTnl == '') {
+                $.ajax({
+                    url: `${apiUrl}stokpusat/datajkttnl`,
+                    method: "GET",
+                    dataType: 'JSON',
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`
+                    },
+                    success: response => {
+                        $.ajax({
+                            url: `${appUrl}/stokpusat/tokenjkttnl?token=${response.data}`,
+                            method: "GET",
+                            dataType: 'JSON',
+                            headers: {
+                                Authorization: `Bearer ${accessToken}`
+                            },
+                            success: response => {
+
+                                accessTokenJktTnl = response.data
+                                $('#tableJktTnl')
+                                    .jqGrid('setGridParam', {
+                                        url: `${apiTruckingJktTnlUrl}stok`,
+                                        mtype: "GET",
+                                        datatype: "json",
+                                        postData: {
+                                            kelompok_id: kelompokId,
+                                            aktif: "AKTIF",
+                                        },
+                                        loadBeforeSend: function(jqXHR) {
+                                            jqXHR.setRequestHeader('Authorization', `Bearer ${response.data}`)
+                                        },
+                                    }).trigger('reloadGrid');
+                            }
+                        })
+                    },
+                    error: error => {
+                        if (error.status === 422) {
+                            $('.is-invalid').removeClass('is-invalid')
+                            $('.invalid-feedback').remove()
+
+                            setErrorMessages(form, error.responseJSON.errors);
+                        } else {
+                            showDialog(error.responseJSON)
+                        }
+                    },
+                })
+            } else {
+                $('#tableJktTnl')
+                    .jqGrid('setGridParam', {
+                        url: `${apiTruckingJktTnlUrl}stok`,
+                        mtype: "GET",
+                        datatype: "json",
+                        postData: {
+                            kelompok_id: kelompokId,
+                            aktif: "AKTIF",
+                        },
+                        loadBeforeSend: function(jqXHR) {
+                            jqXHR.setRequestHeader('Authorization', `Bearer ${accessTokenJktTnl}`)
+                        },
+                    }).trigger('reloadGrid');
+            }
         })
+
         $('#btnSubmit').click(function(event) {
             event.preventDefault()
 
@@ -631,23 +782,25 @@
                     selectedNamaMdn = response.mdn.namastok
                     if (selectedGbrMdn != '') {
                         selectedGbrMdn = JSON.parse(response.mdn.gambar)[0]
-                        $('#imgMedan').attr('src', `${apiUrl}stokpusat/${JSON.parse(response.mdn.gambar)[0]}/gambar`);
+                        $('#imgMedan').attr('src', `${apiUrl}stokpusat/mdn/${JSON.parse(response.mdn.gambar)[0]}/gambar`);
                     }
                     jumlahRow++
                 }
 
                 $('#tableMedan').jqGrid("clearGridData");
-                $('#tableMedan').jqGrid('setGridParam', {
-                    url: `${apiTruckingMdnUrl}stok`,
-                    postData: {
-                        kelompok_id: kelompokId,
-                        aktif: "AKTIF",
-                    },
-                    datatype: "json",
-                    loadBeforeSend: function(jqXHR) {
-                        jqXHR.setRequestHeader('Authorization', `Bearer ${accessTokenMdn}`)
-                    },
-                }).trigger('reloadGrid');
+                $('#tableMedan')
+                    .jqGrid('setGridParam', {
+                        url: `${apiUrl}stokpusat/datamdn`,
+                        mtype: "GET",
+                        datatype: "json",
+                        postData: {
+                            kelompok_id: kelompokId,
+                            aktif: "AKTIF",
+                        },
+                        loadBeforeSend: function(jqXHR) {
+                            jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+                        },
+                    }).trigger('reloadGrid');
 
                 loadGridSurabaya()
                 if (response.sby != null) {
@@ -656,24 +809,26 @@
                     selectedNamaSby = response.sby.namastok
                     if (selectedGbrSby != '') {
                         selectedGbrSby = JSON.parse(response.sby.gambar)[0]
-                        $('#imgSby').attr('src', `${apiUrl}stokpusat/${JSON.parse(response.sby.gambar)[0]}/gambar`);
+                        $('#imgSby').attr('src', `${apiUrl}stokpusat/sby/${JSON.parse(response.sby.gambar)[0]}/gambar`);
                     }
 
                     jumlahRow++
                 }
 
                 $('#tableSby').jqGrid("clearGridData");
-                $('#tableSby').jqGrid('setGridParam', {
-                    url: `${apiTruckingSbyUrl}stok`,
-                    postData: {
-                        kelompok_id: kelompokId,
-                        aktif: "AKTIF",
-                    },
-                    datatype: "json",
-                    loadBeforeSend: function(jqXHR) {
-                        jqXHR.setRequestHeader('Authorization', `Bearer ${accessTokenSby}`)
-                    }
-                }).trigger('reloadGrid');
+                $('#tableSby')
+                    .jqGrid('setGridParam', {
+                        url: `${apiUrl}stokpusat/datasby`,
+                        mtype: "GET",
+                        datatype: "json",
+                        postData: {
+                            kelompok_id: kelompokId,
+                            aktif: "AKTIF",
+                        },
+                        loadBeforeSend: function(jqXHR) {
+                            jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+                        },
+                    }).trigger('reloadGrid');
 
                 loadGridJakarta()
                 if (response.jkt != null) {
@@ -682,23 +837,78 @@
                     selectedNamaJkt = response.jkt.namastok
                     if (selectedGbrJkt != '') {
                         selectedGbrJkt = JSON.parse(response.jkt.gambar)[0]
-                        $('#imgJkt').attr('src', `${apiUrl}stokpusat/${JSON.parse(response.jkt.gambar)[0]}/gambar`);
+                        $('#imgJkt').attr('src', `${apiUrl}stokpusat/jkt/${JSON.parse(response.jkt.gambar)[0]}/gambar`);
                     }
                     jumlahRow++
                 }
 
                 $('#tableJkt').jqGrid("clearGridData");
-                $('#tableJkt').jqGrid('setGridParam', {
-                    url: `${apiTruckingJktUrl}stok`,
-                    postData: {
-                        kelompok_id: kelompokId,
-                        aktif: "AKTIF",
-                    },
-                    datatype: "json",
-                    loadBeforeSend: function(jqXHR) {
-                        jqXHR.setRequestHeader('Authorization', `Bearer ${accessTokenJkt}`)
-                    }
-                }).trigger('reloadGrid');
+                if (accessTokenJkt == '') {
+
+                    $.ajax({
+                        url: `${apiUrl}stokpusat/datajkt`,
+                        method: "GET",
+                        dataType: 'JSON',
+                        headers: {
+                            Authorization: `Bearer ${accessToken}`
+                        },
+                        success: response => {
+
+                            $.ajax({
+                                url: `${appUrl}/stokpusat/tokenjkt?token=${response.data}`,
+                                method: "GET",
+                                dataType: 'JSON',
+                                headers: {
+                                    Authorization: `Bearer ${accessToken}`
+                                },
+                                success: response => {
+
+                                    accessTokenJkt = response.data
+                                    $('#tableJkt')
+                                        .jqGrid('setGridParam', {
+                                            url: `${apiTruckingJktUrl}stok`,
+                                            mtype: "GET",
+                                            datatype: "json",
+                                            postData: {
+                                                kelompok_id: kelompokId,
+                                                aktif: "AKTIF",
+                                            },
+                                            loadBeforeSend: function(jqXHR) {
+                                                jqXHR.setRequestHeader('Authorization', `Bearer ${response.data}`)
+                                            },
+                                        }).trigger('reloadGrid');
+                                }
+                            })
+
+
+                        },
+                        error: error => {
+                            if (error.status === 422) {
+                                $('.is-invalid').removeClass('is-invalid')
+                                $('.invalid-feedback').remove()
+
+                                setErrorMessages(form, error.responseJSON.errors);
+                            } else {
+                                showDialog(error.responseJSON)
+                            }
+                        },
+                    })
+
+                } else {
+                    $('#tableJkt')
+                        .jqGrid('setGridParam', {
+                            url: `${apiTruckingJktUrl}stok`,
+                            mtype: "GET",
+                            datatype: "json",
+                            postData: {
+                                kelompok_id: kelompokId,
+                                aktif: "AKTIF",
+                            },
+                            loadBeforeSend: function(jqXHR) {
+                                jqXHR.setRequestHeader('Authorization', `Bearer ${accessTokenJkt}`)
+                            },
+                        }).trigger('reloadGrid');
+                }
 
                 loadGridJakartaTNL()
                 if (response.tnl != null) {
@@ -707,23 +917,74 @@
                     selectedNamaJktTnl = response.tnl.namastok
                     if (selectedGbrJktTnl != '') {
                         selectedGbrJktTnl = JSON.parse(response.tnl.gambar)[0]
-                        $('#imgJktTnl').attr('src', `${apiUrl}stokpusat/${JSON.parse(response.tnl.gambar)[0]}/gambar`);
+                        $('#imgJktTnl').attr('src', `${apiUrl}stokpusat/jkttnl/${JSON.parse(response.tnl.gambar)[0]}/gambar`);
                     }
                     jumlahRow++
                 }
 
                 $('#tableJktTnl').jqGrid("clearGridData");
-                $('#tableJktTnl').jqGrid('setGridParam', {
-                    url: `${apiTruckingJktTnlUrl}stok`,
-                    postData: {
-                        kelompok_id: kelompokId,
-                        aktif: "AKTIF",
-                    },
-                    datatype: "json",
-                    loadBeforeSend: function(jqXHR) {
-                        jqXHR.setRequestHeader('Authorization', `Bearer ${accessTokenJktTnl}`)
-                    }
-                }).trigger('reloadGrid');
+
+                if (accessTokenJktTnl == '') {
+                    $.ajax({
+                        url: `${apiUrl}stokpusat/datajkttnl`,
+                        method: "GET",
+                        dataType: 'JSON',
+                        headers: {
+                            Authorization: `Bearer ${accessToken}`
+                        },
+                        success: response => {
+                            $.ajax({
+                                url: `${appUrl}/stokpusat/tokenjkttnl?token=${response.data}`,
+                                method: "GET",
+                                dataType: 'JSON',
+                                headers: {
+                                    Authorization: `Bearer ${accessToken}`
+                                },
+                                success: response => {
+
+                                    accessTokenJktTnl = response.data
+                                    $('#tableJktTnl')
+                                        .jqGrid('setGridParam', {
+                                            url: `${apiTruckingJktTnlUrl}stok`,
+                                            mtype: "GET",
+                                            datatype: "json",
+                                            postData: {
+                                                kelompok_id: kelompokId,
+                                                aktif: "AKTIF",
+                                            },
+                                            loadBeforeSend: function(jqXHR) {
+                                                jqXHR.setRequestHeader('Authorization', `Bearer ${response.data}`)
+                                            },
+                                        }).trigger('reloadGrid');
+                                }
+                            })
+                        },
+                        error: error => {
+                            if (error.status === 422) {
+                                $('.is-invalid').removeClass('is-invalid')
+                                $('.invalid-feedback').remove()
+
+                                setErrorMessages(form, error.responseJSON.errors);
+                            } else {
+                                showDialog(error.responseJSON)
+                            }
+                        },
+                    })
+                } else {
+                    $('#tableJktTnl')
+                        .jqGrid('setGridParam', {
+                            url: `${apiTruckingJktTnlUrl}stok`,
+                            mtype: "GET",
+                            datatype: "json",
+                            postData: {
+                                kelompok_id: kelompokId,
+                                aktif: "AKTIF",
+                            },
+                            loadBeforeSend: function(jqXHR) {
+                                jqXHR.setRequestHeader('Authorization', `Bearer ${accessTokenJktTnl}`)
+                            },
+                        }).trigger('reloadGrid');
+                }
 
                 loadGridMakassar()
                 if (response.mks != null) {
@@ -732,24 +993,27 @@
                     selectedNamaMks = response.mks.namastok
                     if (selectedGbrMks != '') {
                         selectedGbrMks = JSON.parse(response.mks.gambar)[0]
-                        $('#imgMks').attr('src', `${apiUrl}stokpusat/${JSON.parse(response.mks.gambar)[0]}/gambar`);
+                        console.log(selectedGbrMks)
+                        $('#imgMks').attr('src', `${apiUrl}stokpusat/mks/${JSON.parse(response.mks.gambar)[0]}/gambar`);
                     }
 
                     jumlahRow++
                 }
 
                 $('#tableMks').jqGrid("clearGridData");
-                $('#tableMks').jqGrid('setGridParam', {
-                    url: `${apiTruckingMksUrl}stok`,
-                    postData: {
-                        kelompok_id: kelompokId,
-                        aktif: "AKTIF",
-                    },
-                    datatype: "json",
-                    loadBeforeSend: function(jqXHR) {
-                        jqXHR.setRequestHeader('Authorization', `Bearer ${accessTokenMks}`)
-                    }
-                }).trigger('reloadGrid');
+                $('#tableMks')
+                    .jqGrid('setGridParam', {
+                        url: `${apiUrl}stokpusat/datamks`,
+                        mtype: "GET",
+                        datatype: "json",
+                        postData: {
+                            kelompok_id: kelompokId,
+                            aktif: "AKTIF",
+                        },
+                        loadBeforeSend: function(jqXHR) {
+                            jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+                        },
+                    }).trigger('reloadGrid');
 
                 loadGridBitung()
                 if (response.btg != null) {
@@ -758,24 +1022,26 @@
                     selectedNamaBtg = response.btg.namastok
                     if (selectedGbrBtg != '') {
                         selectedGbrBtg = JSON.parse(response.btg.gambar)[0]
-                        $('#imgBtg').attr('src', `${apiUrl}stokpusat/${JSON.parse(response.btg.gambar)[0]}/gambar`);
+                        $('#imgBtg').attr('src', `${apiUrl}stokpusat/btg/${JSON.parse(response.btg.gambar)[0]}/gambar`);
                     }
                     jumlahRow++
 
                 }
 
                 $('#tableBtg').jqGrid("clearGridData");
-                $('#tableBtg').jqGrid('setGridParam', {
-                    url: `${apiTruckingBtgUrl}stok`,
-                    postData: {
-                        kelompok_id: kelompokId,
-                        aktif: "AKTIF",
-                    },
-                    datatype: "json",
-                    loadBeforeSend: function(jqXHR) {
-                        jqXHR.setRequestHeader('Authorization', `Bearer ${accessTokenBtg}`)
-                    }
-                }).trigger('reloadGrid');
+                $('#tableBtg')
+                    .jqGrid('setGridParam', {
+                        url: `${apiUrl}stokpusat/datamnd`,
+                        mtype: "GET",
+                        datatype: "json",
+                        postData: {
+                            kelompok_id: kelompokId,
+                            aktif: "AKTIF",
+                        },
+                        loadBeforeSend: function(jqXHR) {
+                            jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+                        },
+                    }).trigger('reloadGrid');
 
 
                 if (aksi == 'delete') {
@@ -815,11 +1081,11 @@
                         stype: 'input',
                         search: false,
                         formatter: (value, rowOptions, rowData) => {
-                            // if (value == null) {
+                            if (rowData.gambar == '') {
                                 return `<input type="checkbox" name="stokmdn_gbr[]" value="${rowData.gambar}" disabled>`
-                            // } else {
-                            //     return `<input type="checkbox" name="stokmdn_gbr[]" value="${JSON.parse(rowData.gambar)[0]}" checked disabled>`
-                            // }
+                            } else {
+                                return `<input type="checkbox" name="stokmdn_gbr[]" value="${rowData.gambar}" checked disabled>`
+                            }
                         },
                     },
                     {
@@ -1271,11 +1537,11 @@
                         stype: 'input',
                         search: false,
                         formatter: (value, rowOptions, rowData) => {
-                            // if (value == null) {
+                            if (rowData.gambar == '') {
                                 return `<input type="checkbox" name="stokmks_gbr[]" value="${rowData.gambar}" disabled>`
-                            // } else {
-                            //     return `<input type="checkbox" name="stokmks_gbr[]" value="${JSON.parse(rowData.gambar)[0]}" checked disabled>`
-                            // }
+                            } else {
+                                return `<input type="checkbox" name="stokmks_gbr[]" value="${rowData.gambar}" checked disabled>`
+                            }
                         },
                     },
                     {
@@ -1421,11 +1687,11 @@
                         stype: 'input',
                         search: false,
                         formatter: (value, rowOptions, rowData) => {
-                            // if (value == null) {
+                            if (rowData.gambar == '') {
                                 return `<input type="checkbox" name="stoksby_gbr[]" value="${rowData.gambar}" disabled>`
-                            // } else {
-                            //     return `<input type="checkbox" name="stoksby_gbr[]" value="${JSON.parse(rowData.gambar)[0]}" checked disabled>`
-                            // }
+                            } else {
+                                return `<input type="checkbox" name="stoksby_gbr[]" value="${rowData.gambar}" checked disabled>`
+                            }
                         },
                     },
                     {
@@ -1572,11 +1838,11 @@
                         search: false,
                         formatter: (value, rowOptions, rowData) => {
                             // console.log('value ', value)
-                            // if (value == null) {
+                            if (rowData.gambar == '') {
                                 return `<input type="checkbox" name="stokbtg_gbr[]" value="${rowData.gambar}" disabled>`
-                            // } else {
-                            //     return `<input type="checkbox" name="stokbtg_gbr[]" value="${JSON.parse(rowData.gambar)[0]}" checked disabled>`
-                            // }
+                            } else {
+                                return `<input type="checkbox" name="stokbtg_gbr[]" value="${rowData.gambar}" checked disabled>`
+                            }
                         },
                     },
                     {
@@ -1696,43 +1962,54 @@
     }
 
     function getGambarMdn(id, checkRow = false) {
-        $.ajax({
-            url: `${apiTruckingMdnUrl}stok/getGambar`,
-            method: 'GET',
-            dataType: 'JSON',
-            headers: {
-                Authorization: `Bearer ${accessTokenMdn}`
-            },
-            data: {
-                id: id
-            },
-            success: response => {
-                if (!checkRow) {
-                    $('#imgMedan').attr('src', `${apiTruckingMdnUrl}stok/${response.gambar}/medium`);
-                }
+        let gbrmdn = $(`#tableMedan tbody tr#${id}`).find(`td [name="stokmdn_gbr[]"]`).val()
+        // if (!checkRow) {
+        if (gbrmdn != '') {
+            $('#imgMedan').attr('src', `{{ config('app.pic_url_mdn') }}view.php?path=${gbrmdn}`);
+        } else {
+            $('#imgMedan').attr('src', `{{ config('app.pic_url_mdn') }}no-image.jpg`);
+        }
+        // }
+        if (id == selectedRowsMdn[0]) {
+            selectedGbrMdn = gbrmdn
+        }
+        // $.ajax({
+        //     url: `${apiTruckingMdnUrl}stok/getGambar`,
+        //     method: 'GET',
+        //     dataType: 'JSON',
+        //     headers: {
+        //         Authorization: `Bearer ${accessTokenMdn}`
+        //     },
+        //     data: {
+        //         id: id
+        //     },
+        //     success: response => {
+        //         if (!checkRow) {
+        //             $('#imgMedan').attr('src', `${apiTruckingMdnUrl}stok/${response.gambar}/medium`);
+        //         }
 
-                if (response.gambar != 'no-image') {
-                    let cekGambarMdn = $(`#tableMedan tbody tr#${selectedRowsMdn[0]}`).find(`td [name="stokmdn_gbr[]"]`).val();
-                    if (cekGambarMdn == response.gambar) {
-                        selectedGbrMdn = response.gambar
-                    } else {
-                        if (id == selectedRowsMdn[0]) {
-                            selectedGbrMdn = response.gambar
-                        }
-                    }
-                }
-            },
-            error: error => {
-                if (error.status === 422) {
-                    $('.is-invalid').removeClass('is-invalid')
-                    $('.invalid-feedback').remove()
+        //         if (response.gambar != 'no-image') {
+        //             let cekGambarMdn = $(`#tableMedan tbody tr#${selectedRowsMdn[0]}`).find(`td [name="stokmdn_gbr[]"]`).val();
+        //             if (cekGambarMdn == response.gambar) {
+        //                 selectedGbrMdn = response.gambar
+        //             } else {
+        //                 if (id == selectedRowsMdn[0]) {
+        //                     selectedGbrMdn = response.gambar
+        //                 }
+        //             }
+        //         }
+        //     },
+        //     error: error => {
+        //         if (error.status === 422) {
+        //             $('.is-invalid').removeClass('is-invalid')
+        //             $('.invalid-feedback').remove()
 
-                    setErrorMessages(form, error.responseJSON.errors);
-                } else {
-                    showDialog(error.responseJSON)
-                }
-            },
-        })
+        //             setErrorMessages(form, error.responseJSON.errors);
+        //         } else {
+        //             showDialog(error.responseJSON)
+        //         }
+        //     },
+        // })
     }
 
     function getGambarJkt(id, checkRow = false) {
@@ -1816,123 +2093,166 @@
 
 
     function getGambarMks(id, checkRow = false) {
-        $.ajax({
-            url: `${apiTruckingMksUrl}stok/getGambar`,
-            method: 'GET',
-            dataType: 'JSON',
-            headers: {
-                Authorization: `Bearer ${accessTokenMks}`
-            },
-            data: {
-                id: id
-            },
-            success: response => {
-                if (!checkRow) {
-                    $('#imgMks').attr('src', `${apiTruckingMksUrl}stok/${response.gambar}/medium`);
-                }
+        let gbrmks = $(`#tableMks tbody tr#${id}`).find(`td [name="stokmks_gbr[]"]`).val()
+        // if (!checkRow) {
+        if (gbrmks != '') {
+            $('#imgMks').attr('src', `{{ config('app.pic_url_mks') }}view.php?path=${gbrmks}`);
+        } else {
+            $('#imgMks').attr('src', `{{ config('app.pic_url_mks') }}no-image.jpg`);
+        }
+        // }
+        if (id == selectedRowsMks[0]) {
+            selectedGbrMks = gbrmks
+        }
+        // $.ajax({
+        //     url: `${apiTruckingMksUrl}stok/getGambar`,
+        //     method: 'GET',
+        //     dataType: 'JSON',
+        //     headers: {
+        //         Authorization: `Bearer ${accessTokenMks}`
+        //     },
+        //     data: {
+        //         id: id
+        //     },
+        //     success: response => {
+        //         if (!checkRow) {
+        //             $('#imgMks').attr('src', `${apiTruckingMksUrl}stok/${response.gambar}/medium`);
+        //         }
 
-                if (response.gambar != 'no-image') {
-                    let cekGambarMks = $(`#tableMks tbody tr#${selectedRowsMks[0]}`).find(`td [name="stokmks_gbr[]"]`).val();
-                    if (cekGambarMks == response.gambar) {
-                        selectedGbrMks = response.gambar
-                    } else {
-                        if (id == selectedRowsMks[0]) {
-                            selectedGbrMks = response.gambar
-                        }
-                    }
-                }
-            },
-            error: error => {
-                if (error.status === 422) {
-                    $('.is-invalid').removeClass('is-invalid')
-                    $('.invalid-feedback').remove()
+        //         if (response.gambar != 'no-image') {
+        //             let cekGambarMks = $(`#tableMks tbody tr#${selectedRowsMks[0]}`).find(`td [name="stokmks_gbr[]"]`).val();
+        //             if (cekGambarMks == response.gambar) {
+        //                 selectedGbrMks = response.gambar
+        //             } else {
+        //                 if (id == selectedRowsMks[0]) {
+        //                     selectedGbrMks = response.gambar
+        //                 }
+        //             }
+        //         }
+        //     },
+        //     error: error => {
+        //         if (error.status === 422) {
+        //             $('.is-invalid').removeClass('is-invalid')
+        //             $('.invalid-feedback').remove()
 
-                    setErrorMessages(form, error.responseJSON.errors);
-                } else {
-                    showDialog(error.responseJSON)
-                }
-            },
-        })
+        //             setErrorMessages(form, error.responseJSON.errors);
+        //         } else {
+        //             showDialog(error.responseJSON)
+        //         }
+        //     },
+        // })
     }
 
     function getGambarSby(id, checkRow = false) {
-        $.ajax({
-            url: `${apiTruckingSbyUrl}stok/getGambar`,
-            method: 'GET',
-            dataType: 'JSON',
-            headers: {
-                Authorization: `Bearer ${accessTokenSby}`
-            },
-            data: {
-                id: id
-            },
-            success: response => {
-                if (!checkRow) {
-                    $('#imgSby').attr('src', `${apiTruckingSbyUrl}stok/${response.gambar}/medium`);
-                }
+        let gbrsby = $(`#tableSby tbody tr#${id}`).find(`td [name="stoksby_gbr[]"]`).val()
+        // if (!checkRow) {
+        if (gbrsby != '') {
+            $('#imgSby').attr('src', `{{ config('app.pic_url_sby') }}view.php?path=${gbrsby}`);
+        } else {
+            $('#imgSby').attr('src', `{{ config('app.pic_url_sby') }}no-image.jpg`);
+        }
+        // }
+        if (id == selectedRowsSby[0]) {
+            selectedGbrSby = gbrsby
+        }
+        // if (response.gambar != 'no-image') {
+        //     let cekGambarSby = $(`#tableSby tbody tr#${selectedRowsSby[0]}`).find(`td [name="stoksby_gbr[]"]`).val();
+        //     if (cekGambarSby == response.gambar) {
+        //         selectedGbrSby = response.gambar
+        //     } else {
+        //         if (id == selectedRowsSby[0]) {
+        //             selectedGbrSby = response.gambar
+        //         }
+        //     }
+        // }
+        // $.ajax({
+        //     url: `${apiTruckingSbyUrl}stok/getGambar`,
+        //     method: 'GET',
+        //     dataType: 'JSON',
+        //     headers: {
+        //         Authorization: `Bearer ${accessTokenSby}`
+        //     },
+        //     data: {
+        //         id: id
+        //     },
+        //     success: response => {
+        //         if (!checkRow) {
+        //             $('#imgSby').attr('src', `${apiTruckingSbyUrl}stok/${response.gambar}/medium`);
+        //         }
 
-                if (response.gambar != 'no-image') {
-                    let cekGambarSby = $(`#tableSby tbody tr#${selectedRowsSby[0]}`).find(`td [name="stoksby_gbr[]"]`).val();
-                    if (cekGambarSby == response.gambar) {
-                        selectedGbrSby = response.gambar
-                    } else {
-                        if (id == selectedRowsSby[0]) {
-                            selectedGbrSby = response.gambar
-                        }
-                    }
-                }
-            },
-            error: error => {
-                if (error.status === 422) {
-                    $('.is-invalid').removeClass('is-invalid')
-                    $('.invalid-feedback').remove()
+        //         if (response.gambar != 'no-image') {
+        //             let cekGambarSby = $(`#tableSby tbody tr#${selectedRowsSby[0]}`).find(`td [name="stoksby_gbr[]"]`).val();
+        //             if (cekGambarSby == response.gambar) {
+        //                 selectedGbrSby = response.gambar
+        //             } else {
+        //                 if (id == selectedRowsSby[0]) {
+        //                     selectedGbrSby = response.gambar
+        //                 }
+        //             }
+        //         }
+        //     },
+        //     error: error => {
+        //         if (error.status === 422) {
+        //             $('.is-invalid').removeClass('is-invalid')
+        //             $('.invalid-feedback').remove()
 
-                    setErrorMessages(form, error.responseJSON.errors);
-                } else {
-                    showDialog(error.responseJSON)
-                }
-            },
-        })
+        //             setErrorMessages(form, error.responseJSON.errors);
+        //         } else {
+        //             showDialog(error.responseJSON)
+        //         }
+        //     },
+        // })
     }
 
     function getGambarBtg(id, checkRow = false) {
-        $.ajax({
-            url: `${apiTruckingBtgUrl}stok/getGambar`,
-            method: 'GET',
-            dataType: 'JSON',
-            headers: {
-                Authorization: `Bearer ${accessTokenBtg}`
-            },
-            data: {
-                id: id
-            },
-            success: response => {
-                if (!checkRow) {
-                    $('#imgBtg').attr('src', `${apiTruckingBtgUrl}stok/${response.gambar}/medium`);
-                }
+        let gbrbtg = $(`#tableBtg tbody tr#${id}`).find(`td [name="stokbtg_gbr[]"]`).val()
+        // if (!checkRow) {
+        if (gbrbtg != '') {
+            $('#imgBtg').attr('src', `{{ config('app.pic_url_btg') }}view.php?path=${gbrbtg}`);
+        } else {
+            $('#imgBtg').attr('src', `{{ config('app.pic_url_btg') }}no-image.jpg`);
+        }
+        // }
+        if (id == selectedRowsBtg[0]) {
+            selectedGbrBtg = gbrbtg
+        }
+        // $.ajax({
+        //     url: `${apiTruckingBtgUrl}stok/getGambar`,
+        //     method: 'GET',
+        //     dataType: 'JSON',
+        //     headers: {
+        //         Authorization: `Bearer ${accessTokenBtg}`
+        //     },
+        //     data: {
+        //         id: id
+        //     },
+        //     success: response => {
+        //         if (!checkRow) {
+        //             $('#imgBtg').attr('src', `${apiTruckingBtgUrl}stok/${response.gambar}/medium`);
+        //         }
 
-                if (response.gambar != 'no-image') {
-                    let cekGambarBtg = $(`#tableBtg tbody tr#${selectedRowsBtg[0]}`).find(`td [name="stokbtg_gbr[]"]`).val();
-                    if (cekGambarBtg == response.gambar) {
-                        selectedGbrBtg = response.gambar
-                    } else {
-                        if (id == selectedRowsBtg[0]) {
-                            selectedGbrBtg = response.gambar
-                        }
-                    }
-                }
-            },
-            error: error => {
-                if (error.status === 422) {
-                    $('.is-invalid').removeClass('is-invalid')
-                    $('.invalid-feedback').remove()
+        //         if (response.gambar != 'no-image') {
+        //             let cekGambarBtg = $(`#tableBtg tbody tr#${selectedRowsBtg[0]}`).find(`td [name="stokbtg_gbr[]"]`).val();
+        //             if (cekGambarBtg == response.gambar) {
+        //                 selectedGbrBtg = response.gambar
+        //             } else {
+        //                 if (id == selectedRowsBtg[0]) {
+        //                     selectedGbrBtg = response.gambar
+        //                 }
+        //             }
+        //         }
+        //     },
+        //     error: error => {
+        //         if (error.status === 422) {
+        //             $('.is-invalid').removeClass('is-invalid')
+        //             $('.invalid-feedback').remove()
 
-                    setErrorMessages(form, error.responseJSON.errors);
-                } else {
-                    showDialog(error.responseJSON)
-                }
-            },
-        })
+        //             setErrorMessages(form, error.responseJSON.errors);
+        //         } else {
+        //             showDialog(error.responseJSON)
+        //         }
+        //     },
+        // })
     }
 
     function clearSelectedRows() {

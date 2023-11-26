@@ -266,5 +266,9 @@ return [
     'trucking_api_mks_url' => env('TRUCKING_API_MKS_URL', 'http://tasmks.kozow.com:8074/trucking-api/public/api/'),
     'trucking_api_sby_url' => env('TRUCKING_API_SBY_URL', 'http://tassby.kozow.com:8074/trucking-api/public/api/'),
     'trucking_api_btg_url' => env('TRUCKING_API_BTG_URL', 'http://tasbtg.kozow.com:8074/trucking-api/public/api/'),
+    'pic_url_mdn' => env('PIC_URL_MDN', 'https://tasmdn.kozow.com:8073/Gambar/'),
+    'pic_url_sby' => env('PIC_URL_SBY', 'http://tassby.kozow.com:8073/Gambar/'),
+    'pic_url_mks' => env('PIC_URL_MKS', 'http://tasmks.kozow.com:8073/Gambar/'),
+    'pic_url_btg' => env('PIC_URL_BTG', 'http://tasbtg.kozow.com:8073/Gambar/'),
 
 ];
