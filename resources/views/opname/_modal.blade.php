@@ -773,10 +773,14 @@
       beforeSend: request => {
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
+      data: {
+                aksi: Aksi
+            },
       success: response => {
         var error = response.error
         if (error) {
-          showDialog(response)
+          // console.log(response);
+          showDialog(response.message['keterangan'])
         } else {
           if(Aksi == 'EDIT'){
             editOpname(Id)
