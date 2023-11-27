@@ -12,6 +12,7 @@ $('#stokLookup').jqGrid({
         aktif: `{!! $Aktif ?? '' !!}`,
         statusreuse: `{!! $statusreuse ?? '' !!}`,
         penerimaanstok_id: `{!! $penerimaanstok_id ?? '' !!}`,
+        pengeluaranstok_id: `{!! $pengeluaranstok_id ?? '' !!}`,
         penerimaanstokheader_nobukti: `{!! $penerimaanstokheader_nobukti ?? '' !!}`,
       },         
       idPrefix: 'stokLookup',
@@ -239,7 +240,34 @@ $('#stokLookup').jqGrid({
           search: false,
           hidden: true
       },
-      
+      {
+          label: 'penerimaanstokdetail_keterangan',
+          name: 'penerimaanstokdetail_keterangan',
+          align: 'left',
+          search: false,
+          hidden: true
+      },   
+      {
+          label: 'penerimaanstokdetail_qty',
+          name: 'penerimaanstokdetail_qty',
+          align: 'left',
+          search: false,
+          hidden: true
+      },   
+      {
+          label: 'penerimaanstokdetail_harga',
+          name: 'penerimaanstokdetail_harga',
+          align: 'left',
+          search: false,
+          hidden: true
+      },   
+      {
+          label: 'penerimaanstokdetail_total',
+          name: 'penerimaanstokdetail_total',
+          align: 'left',
+          search: false,
+          hidden: true
+      },      
       {
           label: 'Status Service Rutin',
           name: 'statusservicerutin',

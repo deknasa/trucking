@@ -491,39 +491,6 @@
 
             .customPager({
                 buttons: [{
-                    id: 'export',
-                    innerHTML: '<i class="fas fa-file-export"></i> EXPORT',
-                    class: 'btn btn-warning btn-sm mr-1',
-                    onClick: function(event) {
-                        let stokdari_id = $('#crudForm').find('[name=stokdari_id]').val()
-                        let stoksampai_id = $('#crudForm').find('[name=stoksampai_id]').val()
-                        let kelompok_id = $('#crudForm').find('[name=kelompok_id]').val()
-                        let dari = $('#crudForm').find('[name=dari]').val()
-                        let sampai = $('#crudForm').find('[name=sampai]').val()
-                        let statustampil = $('#crudForm').find('[name=statustampil]').val()
-                        let filter = $('#crudForm').find('[name=filter]').val()
-                        let proses = 'reload'
-                        let dataFilter = ''
-                        if (filter == '186') {
-                            dataFilter = $('#crudForm').find('[name=gudang_id]').val()
-                        } else if (filter == '187') {
-                            dataFilter = $('#crudForm').find('[name=trado_id]').val()
-                        } else if (filter == '188') {
-                            dataFilter = $('#crudForm').find('[name=gandengan_id]').val()
-                        } else {
-                            let dataFilter = '1'
-                        }
-
-                        if (dari != '' && sampai != '' && filter != '') {
-
-                            window.open(
-                                `{{ route('kartustok.export') }}?dari=${dari}&sampai=${sampai}&stokdari_id=${stokdari_id}&stoksampai_id=${stoksampai_id}&kelompok_id=${kelompok_id}&statustampil=${statustampil}&filter=${filter}&datafilter=${dataFilter}&proses=${proses}`
-                            )
-                        } else {
-                            showDialog('ISI SELURUH KOLOM')
-                        }
-                    }
-                }, {
                     id: 'report',
                     innerHTML: '<i class="fa fa-print"></i> REPORT',
                     class: 'btn btn-info btn-sm mr-1',
@@ -556,6 +523,39 @@
                             showDialog('ISI SELURUH KOLOM')
                         }
                     }
+                }, {
+                    id: 'export',
+                    innerHTML: '<i class="fas fa-file-export"></i> EXPORT',
+                    class: 'btn btn-warning btn-sm mr-1',
+                    onClick: function(event) {
+                        let stokdari_id = $('#crudForm').find('[name=stokdari_id]').val()
+                        let stoksampai_id = $('#crudForm').find('[name=stoksampai_id]').val()
+                        let kelompok_id = $('#crudForm').find('[name=kelompok_id]').val()
+                        let dari = $('#crudForm').find('[name=dari]').val()
+                        let sampai = $('#crudForm').find('[name=sampai]').val()
+                        let statustampil = $('#crudForm').find('[name=statustampil]').val()
+                        let filter = $('#crudForm').find('[name=filter]').val()
+                        let proses = 'reload'
+                        let dataFilter = ''
+                        if (filter == '186') {
+                            dataFilter = $('#crudForm').find('[name=gudang_id]').val()
+                        } else if (filter == '187') {
+                            dataFilter = $('#crudForm').find('[name=trado_id]').val()
+                        } else if (filter == '188') {
+                            dataFilter = $('#crudForm').find('[name=gandengan_id]').val()
+                        } else {
+                            let dataFilter = '1'
+                        }
+
+                        if (dari != '' && sampai != '' && filter != '') {
+
+                            window.open(
+                                `{{ route('kartustok.export') }}?dari=${dari}&sampai=${sampai}&stokdari_id=${stokdari_id}&stoksampai_id=${stoksampai_id}&kelompok_id=${kelompok_id}&statustampil=${statustampil}&filter=${filter}&datafilter=${dataFilter}&proses=${proses}`
+                            )
+                        } else {
+                            showDialog('ISI SELURUH KOLOM')
+                        }
+                    }
                 }, ]
             })
 
@@ -566,12 +566,13 @@
         loadGlobalSearch($('#jqGrid'))
 
         function permission() {
-            if (!`{{ $myAuth->hasPermission('kartustok', 'export') }}`) {
-                $('#export').attr('disabled', 'disabled')
-            }
+
 
             if (!`{{ $myAuth->hasPermission('kartustok', 'report') }}`) {
                 $('#report').attr('disabled', 'disabled')
+            }
+            if (!`{{ $myAuth->hasPermission('kartustok', 'export') }}`) {
+                $('#export').attr('disabled', 'disabled')
             }
         }
 
