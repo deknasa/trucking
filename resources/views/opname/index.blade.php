@@ -552,7 +552,7 @@
         if (!`{{ $myAuth->hasPermission('opnameheader', 'report') }}`) {
           $('#report').attr('disabled', 'disabled')
         }
-        if (!`{{ $myAuth->hasPermission('opnameheader', 'approve') }}`) {
+        if (!`{{ $myAuth->hasPermission('opnameheader', 'approval') }}`) {
           $('#approve').attr('disabled', 'disabled')
         }
       }
