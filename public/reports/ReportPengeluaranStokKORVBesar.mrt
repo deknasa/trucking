@@ -1414,7 +1414,7 @@
           },
           "MaxNumberOfLines": 6,
           "Text": {
-            "Value": "Laporan Koreksi Pengeluaran Stok (KORV)"
+            "Value": "LAPORAN KOREKSI PENGELUARAN STOK (KORV)"
           },
           "HorAlignment": "Center",
           "Font": ";10;Bold;",

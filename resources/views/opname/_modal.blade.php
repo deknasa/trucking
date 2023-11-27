@@ -2,12 +2,7 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
-        <div class="modal-header">
-          <p class="modal-title" id="crudModalTitle"></p>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-
-          </button>
-        </div>
+        
         <form action="" method="post">
 
           <div class="modal-body">
@@ -792,7 +787,7 @@
           if (Aksi == 'Stok Bukti') {
             window.open(`{{ route('opnameheader.report') }}?id=${selectedId}&report=stokBukti`)
           }
-          if (Aksi == 'Stok Bukti') {
+          if (Aksi == 'Stok Opname') {
             window.open(`{{ route('opnameheader.report') }}?id=${selectedId}&report=stokOpname`)
           }
         }

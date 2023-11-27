@@ -420,7 +420,7 @@
               },
               {
                 id: 'reportStokBukti',
-                text: 'report Stok Bukti',//blank
+                text: 'report Stok Bukti',
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
