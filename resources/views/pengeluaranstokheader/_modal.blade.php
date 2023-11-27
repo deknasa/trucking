@@ -2,7 +2,7 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
-        
+
         <form action="" method="post">
           <div class="modal-body">
 
@@ -1387,7 +1387,7 @@
   }
 
 
-  function setKorv(row,stok_id) {
+  function setKorv(row, stok_id) {
     $.ajax({
       url: `${apiUrl}stok/${stok_id}/getvulkan`,
       method: 'POST',
@@ -1405,7 +1405,8 @@
     })
   }
 
-  index = 0;
+  var row = 0;
+
 
   function addRow() {
     console.log('addRow');
@@ -1416,22 +1417,22 @@
                   </td>
                   
                   <td>
-                    <input type="text"  name="detail_stok[]" id="" class="form-control detail_stok_${index}">
-                    <input type="text" id="detailstokId_${index}" readonly hidden class="detailstokId" name="detail_stok_id[]">
+                    <input type="text"  name="detail_stok[]" id="" class="form-control detail_stok_${row}">
+                    <input type="text" id="detailstokId_${row}" readonly hidden class="detailstokId" name="detail_stok_id[]">
                   </td>                 
                   <td>
-                    <input type="text"  name="detail_keterangan[]" style="" class="form-control">                    
+                    <input type="text"  name="detail_keterangan[]" id="detail_keterangan${row}" style="" class="form-control">                    
                   </td>
                   <td class="data_tbl tbl_qty">
-                    <input type="text"  name="detail_qty[]" id="detail_qty${index}" onkeyup="calculate(${index})" style="text-align:right" class="form-control autonumeric number${index}">
+                    <input type="text"  name="detail_qty[]" id="detail_qty${row}" onkeyup="calculate(${row})" style="text-align:right" class="form-control autonumeric number${row}">
                   </td>  
                   <td class="data_tbl tbl_statusoli">
-                    <select name="detail_statusoli[]" class="form-select select2bs4" id="statusoli${index}" style="width: 100%;">
+                    <select name="detail_statusoli[]" class="form-select select2bs4" id="statusoli${row}" style="width: 100%;">
                       <option value="">-- PILIH STATUS OLI --</option>
                     </select>                 
                   </td> 
                   <td class="data_tbl tbl_statusban">
-                    <select name="detail_statusban[]" class="form-select select2bs4" id="statusban${index}" style="width: 100%;">
+                    <select name="detail_statusban[]" class="form-select select2bs4" id="statusban${row}" style="width: 100%;">
                       <option value="">-- PILIH STATUS BAN --</option>
                     </select>                 
                   </td> 
@@ -1439,17 +1440,17 @@
                       <input type="number"  name="detail_vulkanisirke[]" style="" class="form-control">                    
                     </td> 
                   <td class="data_tbl tbl_vulkanisirtotal">
-                      <input type="number"  name="detail_vulkanisirtotal[]" readonly id="vulkanisirtotal${index}" style="" class="form-control">                    
+                      <input type="number"  name="detail_vulkanisirtotal[]" readonly id="vulkanisirtotal${row}" style="" class="form-control">                    
                     </td> 
                   <td class="data_tbl tbl_harga">
-                    <input type="text"  name="detail_harga[]" id="detail_harga${index}" readonly style="text-align:right" class="form-control autonumeric number${index}">
+                    <input type="text"  name="detail_harga[]" id="detail_harga${row}" readonly style="text-align:right" class="form-control autonumeric number${row}">
                   </td>  
                   
                   <td class="data_tbl tbl_persentase">
-                    <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${index}" onkeyup="calculate(${index})" style="text-align:right" class="form-control autonumeric number${index}">
+                    <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${row}" onkeyup="calculate(${row})" style="text-align:right" class="form-control autonumeric number${row}">
                   </td>  
                   <td class="data_tbl tbl_total">
-                    <input type="text"  name="totalItem[]"  id="totalItem${index}" onkeyup="calculate(${index})" style="text-align:right" class="form-control totalItem autonumeric number${index}">                    
+                    <input type="text"  name="totalItem[]"  id="totalItem${row}" onkeyup="calculate(${row})" style="text-align:right" class="form-control totalItem autonumeric number${row}">                    
                   </td>  
                   
                   <td class="data_tbl tbl_aksi" >
@@ -1462,19 +1463,28 @@
 
     // // }
     $('table #table_body').append(detailRow)
-    initSelect2($(`#statusoli${index}`), true)
-    initSelect2($(`#statusban${index}`), true)
+    initSelect2($(`#statusoli${row}`), true)
+    initSelect2($(`#statusban${row}`), true)
     dataStatusOli.forEach(statusOli => {
       let option = new Option(statusOli.text, statusOli.id)
 
-      detailRow.find(`#statusoli${index}`).append(option).trigger('change')
+      detailRow.find(`#statusoli${row}`).append(option).trigger('change')
     });
     dataStatusBan.forEach(statusBan => {
       option = new Option(statusBan.text, statusBan.id)
-      detailRow.find(`#statusban${index}`).append(option).trigger('change')
+      detailRow.find(`#statusban${row}`).append(option).trigger('change')
     });
-      
-    var row = index;
+
+    var nobuktipenerimaan = '';
+    var idpengeluaranstok = '';
+    var penerimaanstok_nobukti = $('#crudModal').find(`[name=penerimaanstok_nobukti]`).val();
+    var pengeluaranstokId = $(`#pengeluaranstokId`).val();
+
+
+    if (kodePengeluaranStok == listKodePengeluaran[1]) {
+      idpengeluaranstok = pengeluaranstokId;
+      nobuktipenerimaan = penerimaanstok_nobukti;
+    }
     $(`.detail_stok_${row}`).lookup({
       title: 'stok Lookup',
       fileName: 'stok',
@@ -1483,6 +1493,12 @@
         this.postData = {
 
           Aktif: 'AKTIF',
+          // if  (kodePengeluaranStok=listKodePengeluaran[1])  {
+          pengeluaranstok_id: idpengeluaranstok,
+          penerimaanstokheader_nobukti: nobuktipenerimaan,
+          // },
+
+
         }
       },
       onSelectRow: (stok, element) => {
@@ -1490,12 +1506,22 @@
         parent = element.closest('td');
         parent.children('.detailstokId').val(stok.id)
         element.data('currentValue', element.val())
-        setKorv(row,stok.id);
+        setKorv(row, stok.id);
         let service = stok.servicerutin_text;
 
         let elStatusOli = element.parents('tr').find(`td [name="detail_statusoli[]"]`);
         elStatusOli.find(`option:contains('TAMBAH')`).remove()
         elStatusOli.find(`option:contains('GANTI')`).remove()
+        if (kodePengeluaranStok == listKodePengeluaran[1]) {
+          $(`#detail_keterangan${row}`).val(stok.penerimaanstokdetail_keterangan);
+          console.log(stok.penerimaanstokdetail_qty);
+          console.log($(`#detail_qty${row}`));
+          $(`#detail_qty${row}`).val(stok.penerimaanstokdetail_qty);
+
+          $(`#detail_harga${row}`).val(stok.penerimaanstokdetail_harga);
+          $(`#totalItem${row}`).val(stok.penerimaanstokdetail_total);
+          initAutoNumeric($(`#detail_qty${row}`))
+        }
 
         if (service == 'PERGANTIAN BATERE' || service == 'PERGANTIAN SARINGAN HAWA') {
           dataStatusOli.forEach(statusOli => {
@@ -1537,15 +1563,16 @@
         });
       }
     })
-    initAutoNumeric($(`.number${index}`))
+    initAutoNumeric($(`.number${row}`))
     setTampilanForm()
     setRowNumbers()
-    index++;
+    row++;
   }
 
-  function deleteRow(row) {
+  function deleteRow(rows) {
     let countRow = $('.rmv').parents('tr').length
-    row.remove()
+    rows.remove()
+    row--
     if (countRow <= 1) {
       addRow()
     }
@@ -1856,7 +1883,7 @@
                       </td>
                   </tr>
               `)
-              
+
               detailRow.find(`[name="detail_nobukti[]"]`).val(detail.nobukti)
               detailRow.find(`[name="detail_stok[]"]`).val(detail.stok)
               detailRow.find(`[name="detail_stok_id[]"]`).val(detail.stok_id)
@@ -1891,6 +1918,7 @@
               //   }
               // })
               id++;
+              row = id;
             })
 
           } else if (listKodePengeluaran[6] == response.data.pengeluaranstok) {
@@ -1958,7 +1986,7 @@
                   </tr>
               `)
 
-              
+
               dataStatusBan.forEach(statusBan => {
                 option = new Option(statusBan.text, statusBan.id)
                 console.log(option);
@@ -1978,8 +2006,8 @@
 
               initSelect2($(`#statusban${id}`), true)
               initSelect2($(`#statusoli${id}`), true)
-              setKorv(id,detail.stok_id);
-  
+              setKorv(id, detail.stok_id);
+
 
               if (response.data.pengeluaranstok == 'SPK') {
                 service = detail.statusservicerutin;
@@ -2026,7 +2054,7 @@
                   parent = element.closest('td');
                   parent.children('.detailstokId').val(stok.id)
                   element.data('currentValue', element.val())
-                  setKorv(row,stok.id);
+                  setKorv(row, stok.id);
                   let service = stok.servicerutin_text;
 
                   let elStatusOli = element.parents('tr').find(`td [name="detail_statusoli[]"]`);
@@ -2066,6 +2094,9 @@
               })
               id++;
               index++;
+              row = id;
+
+
             })
           }
           sumary()
@@ -2171,6 +2202,7 @@
           //     element.val(element.data('currentValue'))
           //   }
           // })
+          row=id;
           id++;
         })
         sumary()
