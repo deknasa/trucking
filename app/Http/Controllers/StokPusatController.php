@@ -15,4 +15,20 @@ class StokPusatController extends MyController
         return view('stokpusat.index', compact('title'));
     }
 
+    public function tokenJkt(Request $request)
+    {
+        session(['access_token_jkt' => $request->token]);
+        $token = session('access_token_jkt');
+        return response([
+            'data' => $token
+        ]);
+    }
+    public function tokenJktTnl(Request $request)
+    {
+        session(['access_token_jkttnl' => $request->token]);
+        $token = session('access_token_jkttnl');
+        return response([
+            'data' => $token
+        ]);
+    }
 }

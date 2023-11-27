@@ -309,9 +309,11 @@ Route::get('reset-password/success', [ResetPasswordController::class, 'success']
 Route::get('reset-password/{token}', [ResetPasswordController::class, 'index'])->name('reset-password.index')->middleware('jwt');
 
 
+Route::get('stokpusat/tokenjkt', [StokPusatController::class, 'tokenJkt']);
+Route::get('stokpusat/tokenjkttnl', [StokPusatController::class, 'tokenJktTnl']);
 Route::middleware(['auth', 'authorized'])->group(function () {
     Route::get('importdatacabang/index', [ImportDataCabangController::class, 'index']);
-	Route::get('importdatacabang', [ImportDataCabangController::class, 'index']);
+    Route::get('importdatacabang', [ImportDataCabangController::class, 'index']);
 
     Route::get('/', [DashboardController::class, 'index'])->name('/');
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -1595,13 +1597,13 @@ Route::middleware(['auth', 'authorized'])->group(function () {
     Route::resource('exportric', ExportRicController::class);
 
 
-    Route::get('toemail/index', [ToEmailController::class,'index']);
+    Route::get('toemail/index', [ToEmailController::class, 'index']);
     Route::resource('toemail', ToEmailController::class);
-    Route::get('ccemail/index', [CcEmailController::class,'index']);
+    Route::get('ccemail/index', [CcEmailController::class, 'index']);
     Route::resource('ccemail', CcEmailController::class);
-    Route::get('bccemail/index', [BccEmailController::class,'index']);
+    Route::get('bccemail/index', [BccEmailController::class, 'index']);
     Route::resource('bccemail', BccEmailController::class);
-    Route::get('reminderemail/index', [ReminderEmailController::class,'index']);
+    Route::get('reminderemail/index', [ReminderEmailController::class, 'index']);
     Route::resource('reminderemail', ReminderEmailController::class);
 });
 
