@@ -45,8 +45,8 @@
       var dataSet = new Stimulsoft.System.Data.DataSet("Data")
 
       viewer.renderHtml('content')
-      report.loadFile(`{{ asset('public/reports/ReportOpnameBanding.mrt') }}`)
       if (jenisReport == 'stokBanding') {
+        report.loadFile(`{{ asset('public/reports/ReportOpnameBanding.mrt') }}`)
       }else if(jenisReport == "stokBukti"){
         report.loadFile(`{{ asset('public/reports/ReportOpnameBukti.mrt') }}`)
       }else if(jenisReport == "stokOpname"){

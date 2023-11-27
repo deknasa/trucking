@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "010a254e0b8352efee697514fc381e90",
+  "ReportGuid": "e8a8371134f5488f1f6c0a0eea41950c",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://localhost/truck/public/reports/ReportOpnameBukti.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportOpnameBukti.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1700818294000+0700)/",
+  "ReportChanged": "/Date(1701053307000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -173,7 +173,7 @@
             "Name": "tanggal",
             "NameInSource": "tanggal",
             "Alias": "tanggal",
-            "Type": "System.DateTime"
+            "Type": "System.String"
           },
           "3": {
             "Name": "qty",
@@ -1066,8 +1066,8 @@
               "ShrinkFontToFit": true,
               "ShrinkFontToFitMinimumSize": 5,
               "TextFormat": {
-                "Ident": "StiCustomFormatService",
-                "StringFormat": "dd-MM-yyyy"
+                "Ident": "StiDateFormatService",
+                "StringFormat": "dd/MM/yyyy"
               },
               "Type": "DataColumn"
             },
