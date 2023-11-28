@@ -2498,7 +2498,7 @@
         element.val(stok.namastok)
         $(`#detail_stok_id`).val(stok.id)
         $(`#status_stok`).val(stok.statusban)
-        $('#afkir_vulkanisirke').val(parseInt(stok.totalvulkanisir))
+        $('#afkir_vulkanisirke').val(parseInt(stok.vulkan))
         getJlhHari(stok.id)
 
         element.data('currentValue', element.val())
