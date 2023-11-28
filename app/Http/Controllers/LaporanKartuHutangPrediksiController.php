@@ -16,13 +16,13 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class LaporanKartuHutangPrediksiController extends MyController
 {
-    public $title = 'Laporan Kartu Hutang Prediksi (EBS)';
+    public $title = 'Laporan Kartu Hutang Prediksi';
 
     public function index(Request $request)
     {
         $title = $this->title;
         $data = [
-            'pagename' => 'Menu Utama Laporan Kartu Hutang Prediksi (EBS)',
+            'pagename' => 'Menu Utama Laporan Kartu Hutang Prediksi',
         ];
 
         return view('laporankartuhutangprediksi.index', compact('title'));
@@ -119,16 +119,12 @@ class LaporanKartuHutangPrediksiController extends MyController
 
         $header_columns = [
             [
-                'label' => 'No Bukti EBS',
+                'label' => 'No Bukti',
                 'index' => 'noebs',
             ],
             [
                 'label' => 'Tanggal',
                 'index' => 'tanggal',
-            ],
-            [
-                'label' => 'No Bukti',
-                'index' => 'nobukti',
             ],
             [
                 'label' => 'Keterangan',
@@ -152,7 +148,7 @@ class LaporanKartuHutangPrediksiController extends MyController
         foreach ($header_columns as $detail_columns_index => $detail_column) {
             $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_table_header_row, $detail_column['label'] ?? $detail_columns_index + 1);
         }
-        $sheet->getStyle("A$detail_table_header_row:G$detail_table_header_row")->applyFromArray($styleArray)->getFont()->setBold(true);
+        $sheet->getStyle("A$detail_table_header_row:F$detail_table_header_row")->applyFromArray($styleArray)->getFont()->setBold(true);
 
         // LOOPING DETAIL
         $totalDebet = 0;
@@ -169,22 +165,21 @@ class LaporanKartuHutangPrediksiController extends MyController
             
             $sheet->setCellValue("A$detail_start_row", $response_detail['noebs']);
             $sheet->setCellValue("B$detail_start_row", $dateValue);
-            $sheet->setCellValue("C$detail_start_row", $response_detail['nobukti']);
-            $sheet->setCellValue("D$detail_start_row", $response_detail['keterangan']);
-            $sheet->setCellValue("E$detail_start_row", $response_detail['nominal']);
-            $sheet->setCellValue("F$detail_start_row", $response_detail['bayar']);
+            $sheet->setCellValue("C$detail_start_row", $response_detail['keterangan']);
+            $sheet->setCellValue("D$detail_start_row", $response_detail['nominal']);
+            $sheet->setCellValue("E$detail_start_row", $response_detail['bayar']);
             // $sheet->setCellValue("F$detail_start_row", $response_detail['Saldo']);
 
             if($detail_start_row == 7){
-                $sheet->setCellValue('G' . $detail_start_row, $response_detail['saldo']);
+                $sheet->setCellValue('F' . $detail_start_row, $response_detail['saldo']);
             }else{
                 if ($dataRow > $detail_table_header_row + 1) {
-                    $sheet->setCellValue('G' . $dataRow, '=(G' . $previousRow . '+E' . $dataRow . ')-F' . $dataRow);
+                    $sheet->setCellValue('F' . $dataRow, '=(F' . $previousRow . '+D' . $dataRow . ')-E' . $dataRow);
                 }
             }
 
-            $sheet->getStyle("A$detail_start_row:G$detail_start_row")->applyFromArray($styleArray);
-             $sheet->getStyle("E$detail_start_row:G$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->getStyle("A$detail_start_row:F$detail_start_row")->applyFromArray($styleArray);
+             $sheet->getStyle("D$detail_start_row:F$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
              $sheet->getStyle("B$detail_start_row:B$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
            
              $previousRow = $dataRow; // Update the previous row number
@@ -200,39 +195,38 @@ class LaporanKartuHutangPrediksiController extends MyController
        $sheet->mergeCells('A' . $total_start_row . ':D' . $total_start_row);
        $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':D' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
 
-       $totalDebet = "=SUM(E6:E" . ($detail_start_row-1) . ")";
-       $sheet->setCellValue("E$total_start_row", $totalDebet)->getStyle("E$total_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
-       $sheet->setCellValue("E$total_start_row", $totalDebet)->getStyle("E$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+       $totalDebet = "=SUM(D6:D" . ($detail_start_row-1) . ")";
+       $sheet->setCellValue("D$total_start_row", $totalDebet)->getStyle("D$total_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+       $sheet->setCellValue("D$total_start_row", $totalDebet)->getStyle("D$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
-       $totalKredit = "=SUM(F6:F" . ($detail_start_row-1) . ")";
-       $sheet->setCellValue("F$total_start_row", $totalKredit)->getStyle("F$total_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
-       $sheet->setCellValue("F$total_start_row", $totalKredit)->getStyle("F$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+       $totalKredit = "=SUM(E6:E" . ($detail_start_row-1) . ")";
+       $sheet->setCellValue("E$total_start_row", $totalKredit)->getStyle("E$total_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+       $sheet->setCellValue("E$total_start_row", $totalKredit)->getStyle("E$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
-       $totalSaldo = "=E".$total_start_row."-F" .$total_start_row;
-       $sheet->setCellValue("G$total_start_row", $totalSaldo)->getStyle("G$total_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
-       $sheet->setCellValue("G$total_start_row", $totalSaldo)->getStyle("G$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+       $totalSaldo = "=D".$total_start_row."-E" .$total_start_row;
+       $sheet->setCellValue("F$total_start_row", $totalSaldo)->getStyle("F$total_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+       $sheet->setCellValue("F$total_start_row", $totalSaldo)->getStyle("F$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
         $ttd_start_row = $detail_start_row + 2;
         $sheet->setCellValue("A$ttd_start_row", 'Disetujui Oleh,');
         $sheet->setCellValue("C$ttd_start_row", 'Diperiksa Oleh,');
-        $sheet->setCellValue("F$ttd_start_row", 'Disusun Oleh,');
+        $sheet->setCellValue("E$ttd_start_row", 'Disusun Oleh,');
 
         $sheet->setCellValue("A" . ($ttd_start_row + 3), '( ' . $disetujui . ' )');
         $sheet->setCellValue("C" . ($ttd_start_row + 3), '( ' . $diperiksa . ' )');
-        $sheet->setCellValue("F" . ($ttd_start_row + 3), '(                )');
+        $sheet->setCellValue("E" . ($ttd_start_row + 3), '(                )');
 
         $sheet->getColumnDimension('A')->setWidth(21);
         $sheet->getColumnDimension('B')->setAutoSize(true);
-        $sheet->getColumnDimension('C')->setAutoSize(true);
-        $sheet->getColumnDimension('D')->setWidth(74);
+        $sheet->getColumnDimension('C')->setWidth(74);
+        $sheet->getColumnDimension('D')->setAutoSize(true);
         $sheet->getColumnDimension('E')->setAutoSize(true);
         $sheet->getColumnDimension('F')->setAutoSize(true);
-        $sheet->getColumnDimension('G')->setAutoSize(true);
 
 
 
         $writer = new Xlsx($spreadsheet);
-        $filename = 'LAPORAN KARTU HUTANG PREDIKSI (EBS) ' . date('dmYHis');
+        $filename = 'LAPORAN KARTU HUTANG PREDIKSI' . date('dmYHis');
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
         header('Cache-Control: max-age=0');

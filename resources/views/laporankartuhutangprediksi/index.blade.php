@@ -11,13 +11,13 @@
                 <form id="crudForm">
                     <div class="card-body">
                         <div class="form-group row">
-                            <label class="col-12 col-sm-2 col-form-label mt-2">Periode<span class="text-danger">*</span></label>
+                            <!-- <label class="col-12 col-sm-2 col-form-label mt-2">Periode<span class="text-danger">*</span></label>
                             <div class="col-sm-4 mt-2">
                                 <div class="input-group">
                                     <input type="text" name="dari" class="form-control datepicker">
                                 </div>
-                            </div>
-                            <h5 class="mt-3">s/d</h5>
+                            </div> -->
+                            <label class="col-12 col-sm-2 col-form-label mt-2">Periode<span class="text-danger">*</span></label>
                             <div class="col-sm-4 mt-2">
                                 <div class="input-group">
                                     <input type="text" name="sampai" class="form-control datepicker">

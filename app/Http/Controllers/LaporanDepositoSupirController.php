@@ -86,10 +86,6 @@ class LaporanDepositoSupirController extends MyController
 
         $header_columns = [
             [
-                'label' => 'Deposito Ke',
-                'index' => 'cicil',
-            ],
-            [
                 'label' => 'Supir',
                 'index' => 'namasupir',
             ],
@@ -98,7 +94,7 @@ class LaporanDepositoSupirController extends MyController
                 'index' => 'keterangandeposito',
             ],
             [
-                'label' => 'Nominal',
+                'label' => 'Saldo Awal',
                 'index' => 'saldo',
             ],
             [
@@ -175,7 +171,7 @@ class LaporanDepositoSupirController extends MyController
         // Set detail grouped by Keterangan
         foreach ($data_by_keterangan as $keterangan => $rows) {
             $sheet->setCellValue('A' . $detail_start_row, $keterangan);
-            $sheet->mergeCells("A$detail_start_row:G$detail_start_row");
+            $sheet->mergeCells("A$detail_start_row:F$detail_start_row");
             $sheet->getStyle("A$detail_start_row")->getFont()->setBold(true);
 
             foreach ($header_columns as $data_columns_index => $data_column) {
@@ -191,31 +187,34 @@ class LaporanDepositoSupirController extends MyController
         
         //total
         $total_start_row = $detail_start_row;
-        $sheet->mergeCells('A' . $total_start_row . ':D' . $total_start_row);
-        $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':F' . $total_start_row)->applyFromArray($styleArray2)->getFont()->setBold(true);
+        $sheet->mergeCells('A' . $total_start_row . ':C' . $total_start_row);
+        $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':E' . $total_start_row)->applyFromArray($styleArray2)->getFont()->setBold(true);
         
-        $totalnomdeposito = "=SUM(E6:E" . ($detail_start_row-2) . ")";
-        $sheet->setCellValue("E$total_start_row", $totalnomdeposito)->getStyle("E$total_start_row")->applyFromArray($style_number);
+        $totalnomdeposito = "=SUM(D6:D" . ($detail_start_row-2) . ")";
+        $sheet->setCellValue("D$total_start_row", $totalnomdeposito)->getStyle("D$total_start_row")->applyFromArray($style_number);
 
-        $totalpenarikan = "=SUM(F6:F" . ($detail_start_row-2) . ")";
-        $sheet->setCellValue("F$total_start_row", $totalpenarikan)->getStyle("F$total_start_row")->applyFromArray($style_number);
+        $totalpenarikan = "=SUM(E6:E" . ($detail_start_row-2) . ")";
+        $sheet->setCellValue("E$total_start_row", $totalpenarikan)->getStyle("E$total_start_row")->applyFromArray($style_number);
 
-        $total = "=SUM(G6:G" . ($detail_start_row-2) . ")";
-        $sheet->setCellValue("G$total_start_row", $total)->getStyle("G$total_start_row")->applyFromArray($style_number);
+        $total = "=SUM(F6:F" . ($detail_start_row-2) . ")";
+        $sheet->setCellValue("F$total_start_row", $total)->getStyle("F$total_start_row")->applyFromArray($style_number);
         
         //format currency
-        $currency_columns = ['D', 'E', 'F', 'G'];
+        $currency_columns = ['C', 'D', 'E', 'F'];
         foreach ($currency_columns as $column) {
             $column_start = $header_start_row + 1;
             $column_end = $detail_start_row - 1;
             for ($i = $column_start; $i <= $column_end; $i++) {
                 $cell = $column . $i;
                 $sheet->getStyle($cell)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+
             }
+            // $sheet->setCellValue('F' . $detail_start_row, "=C$detail_start_row+D$detail_start_row-E$detail_start_row")->getStyle("F$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
         }
+        $sheet->getStyle("D$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
         $sheet->getStyle("E$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
         $sheet->getStyle("F$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
-        $sheet->getStyle("G$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+
 
         // set diketahui dibuat
         $ttd_start_row = $total_start_row + 2;
@@ -230,12 +229,11 @@ class LaporanDepositoSupirController extends MyController
 
         //style header
         $sheet->getColumnDimension('A')->setAutoSize(true);
-        $sheet->getColumnDimension('B')->setAutoSize(true);
+        $sheet->getColumnDimension('C')->setAutoSize(true);
         $sheet->getColumnDimension('D')->setAutoSize(true);
         $sheet->getColumnDimension('E')->setAutoSize(true);
         $sheet->getColumnDimension('F')->setAutoSize(true);
-        $sheet->getColumnDimension('G')->setAutoSize(true);
-        $sheet->getColumnDimension('C')->setWidth(50);        
+        $sheet->getColumnDimension('B')->setWidth(50);        
 
         $sheet->getStyle("A4")->applyFromArray($styleArray3);
         $sheet->getStyle("B4")->applyFromArray($styleArray3);
@@ -243,7 +241,6 @@ class LaporanDepositoSupirController extends MyController
         $sheet->getStyle("D4")->applyFromArray($styleArray3);
         $sheet->getStyle("E4")->applyFromArray($styleArray3);
         $sheet->getStyle("F4")->applyFromArray($styleArray3);
-        $sheet->getStyle("G4")->applyFromArray($styleArray3);
 
         $writer = new Xlsx($spreadsheet);
         $filename = 'LAPORANDEPOSITO' . date('dmYHis');
