@@ -29,6 +29,7 @@
     let sortorder = 'asc'
     let autoNumericElements = []
     let rowNum = 10
+    // let selectedRows = [];
 
     $(document).ready(function() {
         $("#jqGrid").jqGrid({
@@ -249,31 +250,31 @@
                     //   }
                     // },
                     {
-                      label: 'TGL ASURANSI MATI',
-                      name: 'tglasuransimati',
-                      formatter: "date",
-                      formatoptions: {
-                        srcformat: "ISO8601Long",
-                        newformat: "d-m-Y"
-                      }
+                        label: 'TGL ASURANSI MATI',
+                        name: 'tglasuransimati',
+                        formatter: "date",
+                        formatoptions: {
+                            srcformat: "ISO8601Long",
+                            newformat: "d-m-Y"
+                        }
                     },
                     {
-                      label: 'TGL STNK MATI',
-                      name: 'tglstnkmati',
-                      formatter: "date",
-                      formatoptions: {
-                        srcformat: "ISO8601Long",
-                        newformat: "d-m-Y"
-                      }
+                        label: 'TGL STNK MATI',
+                        name: 'tglstnkmati',
+                        formatter: "date",
+                        formatoptions: {
+                            srcformat: "ISO8601Long",
+                            newformat: "d-m-Y"
+                        }
                     },
                     {
-                      label: 'TGL SPEKSI MATI',
-                      name: 'tglspeksimati',
-                      formatter: "date",
-                      formatoptions: {
-                        srcformat: "ISO8601Long",
-                        newformat: "d-m-Y"
-                      }
+                        label: 'TGL SPEKSI MATI',
+                        name: 'tglspeksimati',
+                        formatter: "date",
+                        formatoptions: {
+                            srcformat: "ISO8601Long",
+                            newformat: "d-m-Y"
+                        }
                     },
                     {
                         label: 'MODIFIED BY',
@@ -860,10 +861,10 @@
                         innerHTML: '<i class="fa fa-eye"></i> VIEW',
                         class: 'btn btn-orange btn-sm mr-1',
                         onClick: () => {
-                          selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                          viewTrado(selectedId)
+                            selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                            viewTrado(selectedId)
                         }
-                      },
+                    },
                     {
                         id: 'report',
                         innerHTML: '<i class="fa fa-print"></i> REPORT',
@@ -884,7 +885,59 @@
                             $('#rangeModal').modal('show')
                         }
                     },
-                ]
+                ],
+                extndBtn: [{
+                    id: 'approve',
+                    title: 'Approve',
+                    caption: 'Approve',
+                    innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+                    class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
+                    dropmenuHTML: [{
+                            id: 'approveun',
+                            text: "UN/APPROVAL Reminder Oli Mesin",
+                            onClick: () => {
+                                if (`{{ $myAuth->hasPermission('trado', 'approvalmesin') }}`) {
+                                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                                    approvalMesin(selectedId)
+                                }
+                            }
+                        },
+                        {
+                            id: 'approvalPersneling',
+                            text: "un/Approval Reminder Oli Persneling",
+                            onClick: () => {
+                                if (`{{ $myAuth->hasPermission('trado', 'approvalpersneling') }}`) {
+                                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+
+                                    approvalPersneling(selectedId);
+                                }
+                                // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                            }
+                        },
+                        {
+                            id: 'approvalGardan',
+                            text: "un/Approval Reminder Oli Gardan",
+                            onClick: () => {
+                                if (`{{ $myAuth->hasPermission('trado', 'approvalgardan') }}`) {
+                                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                                    approvalGardan(selectedId);
+                                }
+                                // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                            }
+                        },
+                        {
+                            id: 'approvalSaringanHawa',
+                            text: "un/Approval Reminder Oli Saringan Hawa",
+                            onClick: () => {
+                                if (`{{ $myAuth->hasPermission('trado', 'approvalsaringanhawa') }}`) {
+                                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                                    approvalSaringanHawa(selectedId);
+                                }
+                                // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                            }
+                        },
+                    ],
+                }]
             })
 
         /* Append clear filter button */
@@ -925,7 +978,7 @@
             if (!`{{ $myAuth->hasPermission('trado', 'show') }}`) {
                 $('#view').attr('disabled', 'disabled')
             }
-       
+
             if (!`{{ $myAuth->hasPermission('trado', 'destroy') }}`) {
                 $('#delete').attr('disabled', 'disabled')
             }

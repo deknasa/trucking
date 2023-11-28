@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "1b3d45b63720324fec3cc2fed3e12c94",
+  "ReportGuid": "921e4e3f55315e1445efa14f2942878e",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanKartuPiutangPerAgen.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1700535053000+0700)/",
+  "ReportChanged": "/Date(1701147907000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -1405,18 +1405,7 @@
         "8": {
           "Ident": "StiGroupFooterBand",
           "Name": "GroupFooterBand1",
-          "ClientRectangle": "0,11.8,21.3,0.01",
-          "ComponentPlacement": "gf.Page1",
-          "Interaction": {
-            "Ident": "StiInteraction"
-          },
-          "Border": ";;;;;;;solid:Black",
-          "Brush": "solid:"
-        },
-        "9": {
-          "Ident": "StiGroupFooterBand",
-          "Name": "GroupFooterBand4",
-          "ClientRectangle": "0,12.61,21.3,0.64",
+          "ClientRectangle": "0,11.8,21.3,0.61",
           "ComponentPlacement": "gf.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -1428,15 +1417,14 @@
               "Ident": "StiText",
               "Name": "Text19",
               "Guid": "43253f3a7733045f5ebca3715f95df19",
-              "ClientRectangle": "1.04,-0.07,3.81,0.74",
-              "ComponentPlacement": "gf.GroupFooterBand4",
+              "ClientRectangle": "1.04,-0.08,3.81,0.74",
+              "ComponentPlacement": "gf.GroupFooterBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "TOTAL {data.jenispiutang}"
+                "Value": "TOTAL "
               },
-              "HorAlignment": "Center",
               "VertAlignment": "Center",
               "Font": ";9;Bold;",
               "Border": ";;;;;;;solid:0,0,0",
@@ -1456,8 +1444,8 @@
               "Guid": "0d5a8b95dd6fa948d3f0f9812e7d716f",
               "CanGrow": true,
               "GrowToHeight": true,
-              "ClientRectangle": "8.43,0.03,3.12,0.53",
-              "ComponentPlacement": "gf.GroupFooterBand4",
+              "ClientRectangle": "8.43,0.02,3.12,0.53",
+              "ComponentPlacement": "gf.GroupFooterBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -1496,8 +1484,8 @@
               "Guid": "f4879865bb811a0bf638927a3b6f0e90",
               "CanGrow": true,
               "GrowToHeight": true,
-              "ClientRectangle": "14.83,0.11,2.82,0.53",
-              "ComponentPlacement": "gf.GroupFooterBand4",
+              "ClientRectangle": "14.83,0.1,2.82,0.53",
+              "ComponentPlacement": "gf.GroupFooterBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -1536,13 +1524,13 @@
               "Guid": "31bbfd96dbc93a133a2051b2ac9cd9a1",
               "CanGrow": true,
               "GrowToHeight": true,
-              "ClientRectangle": "18.39,0.08,2.82,0.53",
-              "ComponentPlacement": "gf.GroupFooterBand4",
+              "ClientRectangle": "18.39,0.07,2.82,0.53",
+              "ComponentPlacement": "gf.GroupFooterBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{Sum(DataBand1,data.nominalhutang)-Sum(DataBand1,data.nominalbayar)}"
+                "Value": "{Sum(DataBand1,data.nominalpiutang)-Sum(DataBand1,data.nominallunas)}"
               },
               "CanBreak": true,
               "HorAlignment": "Right",
@@ -1575,8 +1563,8 @@
               "Name": "Shape9",
               "Guid": "ddde1bcbca3f148d2da98ca99eea6600",
               "GrowToHeight": true,
-              "ClientRectangle": "0.14,0.49,21.05,0.27",
-              "ComponentPlacement": "gf.GroupFooterBand4",
+              "ClientRectangle": "0.15,0.48,21.05,0.27",
+              "ComponentPlacement": "gf.GroupFooterBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
@@ -1586,6 +1574,17 @@
               }
             }
           }
+        },
+        "9": {
+          "Ident": "StiGroupFooterBand",
+          "Name": "GroupFooterBand4",
+          "ClientRectangle": "0,13.21,21.3,0.04",
+          "ComponentPlacement": "gf.Page1",
+          "Interaction": {
+            "Ident": "StiInteraction"
+          },
+          "Border": ";;;;;;;solid:Black",
+          "Brush": "solid:"
         },
         "10": {
           "Ident": "StiReportSummaryBand",

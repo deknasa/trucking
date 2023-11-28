@@ -91,7 +91,14 @@ class LaporanKartuHutangPerSupplierController extends MyController
         $sheet->getStyle("A3")->getFont()->setBold(true);
         $sheet->mergeCells('A3:J3');
 
-        $sheet->setCellValue('A4', strtoupper('Agen : ' . $request->supplierdari . ' S/D ' . $request->suppliersampai));
+        $supplierdari = $request->supplierdari ?? '';
+        $suppliersampai = $request->suppliersampai ?? '';
+        if ($supplierdari == '' || $suppliersampai == '') {
+            $sheet->setCellValue('A4', strtoupper('Supplier : SEMUA'));
+        } else {
+            $sheet->setCellValue('A4', strtoupper('Supplier : ' . $request->supplierdari . ' S/D ' . $request->suppliersampai));
+        }
+
         $sheet->getStyle("A4")->getFont()->setBold(true);
         $sheet->mergeCells('A4:J4');
 
@@ -185,12 +192,16 @@ class LaporanKartuHutangPerSupplierController extends MyController
 
         $sumBayar = [];
         $sumNominal = [];
+        $hutangbayarcell = [];
+        $hutangnominalcell = [];
+        $hit = 0;
         if (is_array($pengeluaran) || is_iterable($pengeluaran)) {
             foreach ($groupedData as $jenishutang => $group) {
-                $startcell = $detail_start_row;
-
+                $startcell = $detail_start_row + 2;
+                $hit = $hit + 1;
 
                 foreach ($group as $supplier => $row) {
+                    $startcellsuplier = $detail_start_row + 2;
                     $sheet->setCellValue("A$detail_start_row", 'Supplier : ' . $supplier)->getStyle("A$detail_start_row")->getFont()->setBold(true);
                     $detail_start_row++;
                     foreach ($header_columns as $data_columns_index => $data_column) {
@@ -244,6 +255,34 @@ class LaporanKartuHutangPerSupplierController extends MyController
                         $prevNobukti = $nobukti;
                     }
 
+
+                    $bayarCell = 'F' . ($detail_start_row  - 1);
+                    $nominalCell = 'D' . ($detail_start_row  - 1);
+
+                    $sheet->getStyle("F$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                    $sheet->getStyle("G$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                    $sheet->getStyle("D$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                    $sheet->setCellValue('A' . $detail_start_row, 'TOTAL ')->getStyle("A$detail_start_row")->getFont()->setBold(true);
+                    $sheet->setCellValue('F' . $detail_start_row, "=SUM(F$startcellsuplier:$bayarCell)")->getStyle("F$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+                    $sheet->setCellValue('D' . $detail_start_row, "=SUM(D$startcellsuplier:$nominalCell)")->getStyle("D$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+                    $sheet->setCellValue('G' . $detail_start_row, "=D$detail_start_row-F$detail_start_row")->getStyle("G$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+            
+                    $sheet->getStyle("A" . ($detail_start_row) . ":G" . ($detail_start_row))->getBorders()->getTop()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                    $sheet->getStyle("A" . ($detail_start_row) . ":G" . ($detail_start_row))->getBorders()->getBottom()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                    $sheet->getStyle("A" . ($detail_start_row))->getBorders()->getLeft()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                    $sheet->getStyle("G" . ($detail_start_row))->getBorders()->getRight()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                    array_push($hutangbayarcell, 'F' . $detail_start_row);
+                    array_push($hutangnominalcell, 'D' . $detail_start_row);
+                    // if ($hit==1) {
+                    //     $hutangbayarcell='F' . ($detail_start_row);
+                    //     $hutangnominalcell='D' . ($detail_start_row);
+                    // } else {
+                    //     $hutangbayarcell='+F' . ($detail_start_row);
+                    //     $hutangnominalcell='+D' . ($detail_start_row);
+
+                    // }
+                    $detail_start_row++;
+
                     if ($prevNobukti != '') {
                         $sheet->getStyle("A" . ($detail_start_row) . ":G" . ($detail_start_row))->applyFromArray($borderHorizontal);
                     }
@@ -251,13 +290,20 @@ class LaporanKartuHutangPerSupplierController extends MyController
                     $detail_start_row++;
                 }
                 $detail_start_row--;
+                $hutangtotalBayar = "=" . implode('+', $hutangbayarcell);
+                $hutangtotalNominal = "=" . implode('+', $hutangnominalcell);
+
+                $detail_start_row ++;
                 $sheet->getStyle("F$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
                 $sheet->getStyle("G$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
                 $sheet->getStyle("D$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
                 $sheet->setCellValue('A' . $detail_start_row, 'TOTAL ' . $jenishutang)->getStyle("A$detail_start_row")->getFont()->setBold(true);
-                $sheet->setCellValue('F' . $detail_start_row, "=SUM(F$startcell:$bayarCell)")->getStyle("F$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
-                $sheet->setCellValue('D' . $detail_start_row, "=SUM(D$startcell:$nominalCell)")->getStyle("D$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+                $sheet->setCellValue('F' . $detail_start_row, $hutangtotalBayar)->getStyle("F$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+                $sheet->setCellValue('D' . $detail_start_row, $hutangtotalNominal)->getStyle("D$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+                // $sheet->setCellValue('F' . $detail_start_row, "=SUM(F$startcell:$bayarCell)")->getStyle("F$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+                // $sheet->setCellValue('D' . $detail_start_row, "=SUM(D$startcell:$nominalCell)")->getStyle("D$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
                 $sheet->setCellValue('G' . $detail_start_row, "=D$detail_start_row-F$detail_start_row")->getStyle("G$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+          
                 array_push($sumBayar, 'F' . $detail_start_row);
                 array_push($sumNominal, 'D' . $detail_start_row);
 
@@ -269,6 +315,9 @@ class LaporanKartuHutangPerSupplierController extends MyController
 
                 $detail_start_row += 3;
             }
+            
+            // array_push($sumBayar, 'F' . $detail_start_row);
+            // array_push($sumNominal, 'D' . $detail_start_row);
 
             $total_start_row = $detail_start_row - 2;
 
@@ -297,7 +346,7 @@ class LaporanKartuHutangPerSupplierController extends MyController
         $sheet->getColumnDimension('E')->setAutoSize(true);
         $sheet->getColumnDimension('F')->setAutoSize(true);
         $sheet->getColumnDimension('G')->setAutoSize(true);
-        
+
 
         $ttd_start_row = $detail_start_row + 2;
         $sheet->setCellValue("B$ttd_start_row", 'Disetujui Oleh,');

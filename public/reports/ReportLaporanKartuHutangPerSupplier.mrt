@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "715864e3d7ec798fcd448c033e802f22",
+  "ReportGuid": "7ef1f30ad948ea4fb33ca317cd504374",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanKartuHutangPerSupplier.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1700540932000+0700)/",
+  "ReportChanged": "/Date(1701146696000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -1406,18 +1406,180 @@
         "8": {
           "Ident": "StiGroupFooterBand",
           "Name": "GroupFooterBand1",
-          "ClientRectangle": "0,11.8,21.3,0.01",
+          "ClientRectangle": "0,11.8,21.3,0.61",
           "ComponentPlacement": "gf.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
           },
           "Border": ";;;;;;;solid:Black",
-          "Brush": "solid:"
+          "Brush": "solid:",
+          "Components": {
+            "0": {
+              "Ident": "StiText",
+              "Name": "Text36",
+              "Guid": "2aa1ad4b98c35123a4c1ab9502e94ed9",
+              "ClientRectangle": "1.04,-0.07,4.81,0.74",
+              "ComponentPlacement": "gf.GroupFooterBand4",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "TOTAL "
+              },
+              "VertAlignment": "Center",
+              "Font": ";9;Bold;",
+              "Border": ";;;;;;;solid:0,0,0",
+              "Brush": "empty",
+              "TextBrush": "solid:0,0,0",
+              "Margins": {
+                "Left": 3,
+                "Right": 0,
+                "Top": 0,
+                "Bottom": 0
+              },
+              "Type": "Expression"
+            },
+            "1": {
+              "Ident": "StiText",
+              "Name": "Text37",
+              "Guid": "435cbd4949d9d5ec1c6885b8ace7fc62",
+              "CanGrow": true,
+              "GrowToHeight": true,
+              "ClientRectangle": "8.43,0.04,3.12,0.53",
+              "ComponentPlacement": "gf.GroupFooterBand4",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "{Sum(DataBand1,data.nominalhutang)}"
+              },
+              "CanBreak": true,
+              "HorAlignment": "Right",
+              "Font": ";9;;",
+              "Border": ";0,255,255,255;;;;;;solid:0,0,0",
+              "Brush": "solid:",
+              "TextBrush": "solid:0,0,0",
+              "TextOptions": {
+                "WordWrap": true
+              },
+              "Margins": {
+                "Left": 3,
+                "Right": 0,
+                "Top": 0,
+                "Bottom": 0
+              },
+              "ShrinkFontToFit": true,
+              "ShrinkFontToFitMinimumSize": 5,
+              "TextFormat": {
+                "Ident": "StiNumberFormatService",
+                "NegativePattern": 1,
+                "DecimalSeparator": ",",
+                "GroupSeparator": ".",
+                "State": "DecimalSeparator, GroupSeparator"
+              },
+              "Type": "Totals"
+            },
+            "2": {
+              "Ident": "StiText",
+              "Name": "Text38",
+              "Guid": "e916e78bcab775ca4945c4e1f72453f6",
+              "CanGrow": true,
+              "GrowToHeight": true,
+              "ClientRectangle": "14.83,0.11,2.82,0.53",
+              "ComponentPlacement": "gf.GroupFooterBand4",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "{Sum(DataBand1,data.nominalbayar)}"
+              },
+              "CanBreak": true,
+              "HorAlignment": "Right",
+              "Font": ";9;;",
+              "Border": ";0,255,255,255;;;;;;solid:0,0,0",
+              "Brush": "solid:",
+              "TextBrush": "solid:0,0,0",
+              "TextOptions": {
+                "WordWrap": true
+              },
+              "Margins": {
+                "Left": 3,
+                "Right": 0,
+                "Top": 0,
+                "Bottom": 0
+              },
+              "ShrinkFontToFit": true,
+              "ShrinkFontToFitMinimumSize": 5,
+              "TextFormat": {
+                "Ident": "StiNumberFormatService",
+                "NegativePattern": 1,
+                "DecimalSeparator": ",",
+                "GroupSeparator": ".",
+                "State": "DecimalSeparator, GroupSeparator"
+              },
+              "Type": "Totals"
+            },
+            "3": {
+              "Ident": "StiText",
+              "Name": "Text39",
+              "Guid": "2425f4919f155ff37c1ed97cbaaf1948",
+              "CanGrow": true,
+              "GrowToHeight": true,
+              "ClientRectangle": "18.39,0.09,2.82,0.53",
+              "ComponentPlacement": "gf.GroupFooterBand4",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "{Sum(DataBand1,data.nominalhutang)-Sum(DataBand1,data.nominalbayar)}"
+              },
+              "CanBreak": true,
+              "HorAlignment": "Right",
+              "Font": ";9;;",
+              "Border": ";0,255,255,255;;;;;;solid:0,0,0",
+              "Brush": "solid:",
+              "TextBrush": "solid:0,0,0",
+              "TextOptions": {
+                "WordWrap": true
+              },
+              "Margins": {
+                "Left": 3,
+                "Right": 0,
+                "Top": 0,
+                "Bottom": 0
+              },
+              "ShrinkFontToFit": true,
+              "ShrinkFontToFitMinimumSize": 5,
+              "TextFormat": {
+                "Ident": "StiNumberFormatService",
+                "NegativePattern": 1,
+                "DecimalSeparator": ",",
+                "GroupSeparator": ".",
+                "State": "DecimalSeparator, GroupSeparator"
+              },
+              "Type": "Expression"
+            },
+            "4": {
+              "Ident": "StiShape",
+              "Name": "Shape5",
+              "Guid": "2717ae435eb49760eda77a19750e38ef",
+              "GrowToHeight": true,
+              "ClientRectangle": "0.15,0.5,21.05,0.27",
+              "ComponentPlacement": "gf.GroupFooterBand4",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Brush": "solid:",
+              "ShapeType": {
+                "Ident": "StiHorizontalLineShapeType"
+              }
+            }
+          }
         },
         "9": {
           "Ident": "StiGroupFooterBand",
           "Name": "GroupFooterBand4",
-          "ClientRectangle": "0,12.61,21.3,0.64",
+          "ClientRectangle": "0,13.21,21.3,0.64",
           "ComponentPlacement": "gf.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -1590,7 +1752,7 @@
         "10": {
           "Ident": "StiReportSummaryBand",
           "Name": "ReportSummaryBand1",
-          "ClientRectangle": "0,14.05,21.3,0.76",
+          "ClientRectangle": "0,14.65,21.3,0.76",
           "ComponentPlacement": "rs.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
