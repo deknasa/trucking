@@ -42,6 +42,7 @@ use App\Http\Controllers\LogTrailController;
 use App\Http\Controllers\PenerimaController;
 
 use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\TripInapController;
 use App\Http\Controllers\UserRoleController;
 use App\Http\Controllers\AkunPusatController;
 use App\Http\Controllers\AkuntansiController;
@@ -63,15 +64,15 @@ use App\Http\Controllers\StokPusatController;
 use App\Http\Controllers\TutupBukuController;
 use App\Http\Controllers\UpahSupirController;
 use App\Http\Controllers\AbsenTradoController;
-use App\Http\Controllers\DataRitasiController;
 
+use App\Http\Controllers\DataRitasiController;
 use App\Http\Controllers\JenisOrderController;
 use App\Http\Controllers\JenisTradoController;
 use App\Http\Controllers\LogAbsensiController;
 use App\Http\Controllers\MandorTripController;
 use App\Http\Controllers\PindahBukuController;
-use App\Http\Controllers\UpahRitasiController;
 
+use App\Http\Controllers\UpahRitasiController;
 use App\Http\Controllers\BukaAbsensiController;
 use App\Http\Controllers\ExpAsuransiController;
 use App\Http\Controllers\HistoryTripController;
@@ -91,19 +92,19 @@ use App\Http\Controllers\InvoiceHeaderController;
 use App\Http\Controllers\LaporanNeracaController;
 use App\Http\Controllers\MainAkunPusatController;
 use App\Http\Controllers\PiutangDetailController;
-use App\Http\Controllers\PiutangHeaderController;
 
+use App\Http\Controllers\PiutangHeaderController;
 use App\Http\Controllers\ReminderEmailController;
 use App\Http\Controllers\ResetPasswordController;
-use App\Http\Controllers\TypeAkuntansiController;
 
+use App\Http\Controllers\TypeAkuntansiController;
 use App\Http\Controllers\ApprovalOpnameController;
 use App\Http\Controllers\BlackListSupirController;
+
 use App\Http\Controllers\LaporanArusKasController;
-
 use App\Http\Controllers\LaporanKasBankController;
-use App\Http\Controllers\PemutihanSupirController;
 
+use App\Http\Controllers\PemutihanSupirController;
 use App\Http\Controllers\PenerimaanStokController;
 use App\Http\Controllers\StatusOliTradoController;
 use App\Http\Controllers\StokPersediaanController;
@@ -120,24 +121,24 @@ use App\Http\Controllers\ReminderServiceController;
 use App\Http\Controllers\ServiceInDetailController;
 use App\Http\Controllers\ServiceInHeaderController;
 use App\Http\Controllers\StatusContainerController;
-use App\Http\Controllers\ImportDataCabangController;
 
+use App\Http\Controllers\ImportDataCabangController;
 use App\Http\Controllers\JurnalUmumDetailController;
 use App\Http\Controllers\JurnalUmumHeaderController;
 use App\Http\Controllers\KasGantungDetailController;
+
 use App\Http\Controllers\KasGantungHeaderController;
-
 use App\Http\Controllers\LaporanBukuBesarController;
-use App\Http\Controllers\LaporanHutangBBMController;
 
+use App\Http\Controllers\LaporanHutangBBMController;
 use App\Http\Controllers\LaporanKartuStokController;
 use App\Http\Controllers\LaporanKasHarianController;
-use App\Http\Controllers\LaporanPembelianController;
 
+use App\Http\Controllers\LaporanPembelianController;
 use App\Http\Controllers\LaporanTripTradoController;
 use App\Http\Controllers\LaporanUangJalanController;
-use App\Http\Controllers\NotaKreditDetailController;
 
+use App\Http\Controllers\NotaKreditDetailController;
 use App\Http\Controllers\NotaKreditHeaderController;
 use App\Http\Controllers\PenerimaanDetailController;
 use App\Http\Controllers\PenerimaanHeaderController;
@@ -155,8 +156,8 @@ use App\Http\Controllers\LaporanHutangGiroController;
 use App\Http\Controllers\LaporanJurnalUmumController;
 use App\Http\Controllers\LaporanKasGantungController;
 use App\Http\Controllers\MainTypeAkuntansiController;
-use App\Http\Controllers\PengeluaranDetailController;
 
+use App\Http\Controllers\PengeluaranDetailController;
 use App\Http\Controllers\PengeluaranHeaderController;
 use App\Http\Controllers\UpahRitasiRincianController;
 use App\Http\Controllers\AbsensiSupirDetailController;
@@ -179,7 +180,6 @@ use App\Http\Controllers\BukaPengeluaranStokController;
 use App\Http\Controllers\LaporanPemakaianBanController;
 use App\Http\Controllers\PengeluaranTruckingController;
 use App\Http\Controllers\LaporanDepositoSupirController;
-use App\Http\Controllers\LaporanDepositoKaryawanController;
 use App\Http\Controllers\LaporanKlaimPJTSupirController;
 use App\Http\Controllers\LaporanMutasiKasBankController;
 use App\Http\Controllers\LaporanPemakaianStokController;
@@ -232,6 +232,7 @@ use App\Http\Controllers\ApprovalTradoKeteranganController;
 use App\Http\Controllers\ApprovalTransaksiHeaderController;
 use App\Http\Controllers\ExportLaporanKasGantungController;
 use App\Http\Controllers\ExportPengeluaranBarangController;
+use App\Http\Controllers\LaporanDepositoKaryawanController;
 use App\Http\Controllers\LaporanRekapTitipanEmklController;
 use App\Http\Controllers\LaporanPenyesuaianBarangController;
 use App\Http\Controllers\PenerimaanTruckingDetailController;
@@ -1605,6 +1606,10 @@ Route::middleware(['auth', 'authorized'])->group(function () {
     Route::resource('bccemail', BccEmailController::class);
     Route::get('reminderemail/index', [ReminderEmailController::class, 'index']);
     Route::resource('reminderemail', ReminderEmailController::class);
+
+    Route::get('tripinap/index', [TripInapController::class, 'index']);
+    Route::resource('tripinap', TripInapController::class);
+
 });
 
 Route::patch('format', [FormatController::class, 'update']);

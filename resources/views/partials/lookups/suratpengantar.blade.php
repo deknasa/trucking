@@ -20,6 +20,8 @@
         tglsampai: $('#tglsampaiheaderlookup').val(),
         pengeluarantruckingheader: `{!! $pengeluarantruckingheader ?? '' !!}`,
         jenisorder_id: `{!! $jenisorder_id ?? '' !!}`,
+        tglabsensi: `{!! $tglabsensi ?? '' !!}`,
+        trado_id: `{!! $trado_id ?? '' !!}`,
       },
       idPrefix: 'suratpengantarLookup',
       colModel: [{
