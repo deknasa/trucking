@@ -1000,8 +1000,8 @@
         $('#crudModal').modal('show')
         initLookup()
         // addRow()
-        initRow()
-        sumary()
+        initRowcreate()
+        // sumary()
       })
       .catch((error) => {
         showDialog(error.statusText)
@@ -1597,6 +1597,15 @@
     setRowNumbers()
   }
 
+  function initRowcreate() {
+    let countRow = $('.rmv').parents('tr').length
+    if (countRow <= 1) {
+      addRow()
+    }
+    // sumary()
+    setRowNumbers()
+  }
+
   function resetRow() {
     $('.trow').remove()
   }
@@ -1935,6 +1944,7 @@
               // })
               id++;
               row = id;
+              index=id;
             })
 
           } else if (listKodePengeluaran[6] == response.data.pengeluaranstok) {
@@ -2111,7 +2121,7 @@
               id++;
               index++;
               row = id;
-
+              index=id;
 
             })
           }
@@ -2219,6 +2229,7 @@
           //   }
           // })
           id++;
+          index=id;
         })
         sumary()
 
