@@ -15,13 +15,13 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class LaporanKartuPiutangPerAgenController extends MyController
 {
-    public $title = 'Laporan Kartu Piutang Per Agen';
+    public $title = 'Laporan Kartu Piutang Per Customer';
 
     public function index(Request $request)
     {
         $title = $this->title;
         $data = [
-            'pagename' => 'Menu Utama Laporan Kartu Piutang Per Agen',
+            'pagename' => 'Menu Utama Laporan Kartu Piutang Per Customer',
         ];
 
         return view('laporankartupiutangperagen.index', compact('title'));
@@ -92,7 +92,14 @@ class LaporanKartuPiutangPerAgenController extends MyController
         $sheet->getStyle("A3")->getFont()->setBold(true);
         $sheet->mergeCells('A3:J3');
 
-        $sheet->setCellValue('A4', strtoupper('Agen : ' . $request->agendari . ' S/D ' . $request->agensampai));
+        $agendari=$request->agendari ?? '';
+        $agensampai=$request->agensampai ?? '';
+        if ($agendari=='' || $agensampai=='') {
+            $sheet->setCellValue('A4', strtoupper('Customer : SEMUA'));
+        } else {
+            $sheet->setCellValue('A4', strtoupper('Customer : ' . $request->agendari . ' S/D ' . $request->agensampai));
+        }
+
         $sheet->getStyle("A4")->getFont()->setBold(true);
         $sheet->mergeCells('A4:J4');
 
@@ -181,6 +188,7 @@ class LaporanKartuPiutangPerAgenController extends MyController
 
 
                 foreach ($group as $customer => $row) {
+                    $startcellcustomer = $detail_start_row + 2;
                     $sheet->setCellValue("A$detail_start_row", 'Customer : ' . $customer)->getStyle("A$detail_start_row")->getFont()->setBold(true);
                     $detail_start_row++;
                     foreach ($header_columns as $data_columns_index => $data_column) {
@@ -233,6 +241,21 @@ class LaporanKartuPiutangPerAgenController extends MyController
                         $detail_start_row++;
                         $prevNobukti = $nobukti;
                     }
+                    
+                    $sheet->getStyle("F$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                    $sheet->getStyle("G$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                    $sheet->getStyle("D$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                $sheet->setCellValue('A' . $detail_start_row, 'TOTAL ' )->getStyle("A$detail_start_row")->getFont()->setBold(true);
+                $sheet->setCellValue('F' . $detail_start_row, "=SUM(F$startcellcustomer:$bayarCell)")->getStyle("F$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+                $sheet->setCellValue('D' . $detail_start_row, "=SUM(D$startcellcustomer:$nominalCell)")->getStyle("D$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+                $sheet->setCellValue('G' . $detail_start_row, "=D$detail_start_row-F$detail_start_row")->getStyle("G$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+                array_push($sumBayar, 'F' . $detail_start_row);
+                array_push($sumNominal, 'D' . $detail_start_row);
+                $sheet->getStyle("A" . ($detail_start_row) . ":G" . ($detail_start_row))->getBorders()->getTop()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                $sheet->getStyle("A" . ($detail_start_row) . ":G" . ($detail_start_row))->getBorders()->getBottom()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                $sheet->getStyle("A" . ($detail_start_row))->getBorders()->getLeft()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                $sheet->getStyle("G" . ($detail_start_row))->getBorders()->getRight()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                $detail_start_row++;
 
                     if ($prevNobukti != '') {
                         $sheet->getStyle("A" . ($detail_start_row) . ":G" . ($detail_start_row))->applyFromArray($borderHorizontal);
@@ -240,27 +263,27 @@ class LaporanKartuPiutangPerAgenController extends MyController
                     $no = 1;
                     $detail_start_row++;
                 }
-                $detail_start_row--;
-                $sheet->getStyle("F$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
-                $sheet->getStyle("G$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
-                $sheet->getStyle("D$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
-                $sheet->setCellValue('A' . $detail_start_row, 'TOTAL ' . $jenispiutang)->getStyle("A$detail_start_row")->getFont()->setBold(true);
-                $sheet->setCellValue('F' . $detail_start_row, "=SUM(F$startcell:$bayarCell)")->getStyle("F$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
-                $sheet->setCellValue('D' . $detail_start_row, "=SUM(D$startcell:$nominalCell)")->getStyle("D$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
-                $sheet->setCellValue('G' . $detail_start_row, "=D$detail_start_row-F$detail_start_row")->getStyle("G$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
-                array_push($sumBayar, 'F' . $detail_start_row);
-                array_push($sumNominal, 'D' . $detail_start_row);
+                // $detail_start_row--;
+                // $sheet->getStyle("F$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                // $sheet->getStyle("G$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                // $sheet->getStyle("D$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                // $sheet->setCellValue('A' . $detail_start_row, 'TOTAL ' . $jenispiutang)->getStyle("A$detail_start_row")->getFont()->setBold(true);
+                // $sheet->setCellValue('F' . $detail_start_row, "=SUM(F$startcell:$bayarCell)")->getStyle("F$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+                // $sheet->setCellValue('D' . $detail_start_row, "=SUM(D$startcell:$nominalCell)")->getStyle("D$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+                // $sheet->setCellValue('G' . $detail_start_row, "=D$detail_start_row-F$detail_start_row")->getStyle("G$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+                // array_push($sumBayar, 'F' . $detail_start_row);
+                // array_push($sumNominal, 'D' . $detail_start_row);
 
-                $sheet->getStyle("A" . ($detail_start_row) . ":G" . ($detail_start_row))->getBorders()->getTop()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-                $sheet->getStyle("A" . ($detail_start_row) . ":G" . ($detail_start_row))->getBorders()->getBottom()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-                $sheet->getStyle("A" . ($detail_start_row))->getBorders()->getLeft()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-                $sheet->getStyle("G" . ($detail_start_row))->getBorders()->getRight()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                // $sheet->getStyle("A" . ($detail_start_row) . ":G" . ($detail_start_row))->getBorders()->getTop()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                // $sheet->getStyle("A" . ($detail_start_row) . ":G" . ($detail_start_row))->getBorders()->getBottom()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                // $sheet->getStyle("A" . ($detail_start_row))->getBorders()->getLeft()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                // $sheet->getStyle("G" . ($detail_start_row))->getBorders()->getRight()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
 
                 $detail_start_row += 3;
             }
 
-            $total_start_row = $detail_start_row - 2;
+            $total_start_row = $detail_start_row - 3;
 
             $sheet->setCellValue('A' . $total_start_row, 'TOTAL KARTU PIUTANG')->getStyle("A$total_start_row")->getFont()->setBold(true);
             $totalBayar = "=" . implode('+', $sumBayar);
@@ -299,7 +322,7 @@ class LaporanKartuPiutangPerAgenController extends MyController
 
 
         $writer = new Xlsx($spreadsheet);
-        $filename = 'LAPORAN KARTU PIUTANG PER AGEN' . date('dmYHis');
+        $filename = 'LAPORAN KARTU PIUTANG PER CUSTOMER' . date('dmYHis');
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
         header('Cache-Control: max-age=0');
