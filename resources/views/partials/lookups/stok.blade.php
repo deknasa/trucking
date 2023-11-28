@@ -216,7 +216,7 @@ $('#stokLookup').jqGrid({
       },
       {
           label: 'total vulkanisir',
-          name: 'totalvulkanisir',
+          name: 'vulkan',
           align: 'left',
       },
       {
