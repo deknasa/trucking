@@ -178,7 +178,7 @@ class LaporanDepositoKaryawanController extends MyController
                 foreach ($rows as $row_index => $row_data) {
                     if ($data_column['index'] == 'total') {
                         $baris = $detail_start_row + $row_index + 1;
-                        $sheet->setCellValue($alphabets[$data_columns_index] . ($detail_start_row + $row_index + 1), "=D$baris+E$baris-F$baris");
+                        $sheet->setCellValue($alphabets[$data_columns_index] . ($detail_start_row + $row_index + 1), "=C$baris+D$baris-E$baris");
                     } else {
                         $sheet->setCellValue($alphabets[$data_columns_index] . ($detail_start_row + $row_index + 1), $row_data[$data_column['index']]);
                     }
