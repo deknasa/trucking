@@ -1525,6 +1525,7 @@
             $(`#statusoli${row}`).remove()
             $(`#statusban${row}`).remove()
             initAutoNumeric($(`.number${row}`))
+            sumary()
           }
         }
 
