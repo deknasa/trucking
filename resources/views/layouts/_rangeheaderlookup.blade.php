@@ -21,7 +21,7 @@
             @stack('addtional-field')
             <div class="row">
 
-                <div class="col-sm-6 mt-4">
+                <div class="col-sm-6">
                     <a id="btnReloadLookup" class="btn btn-primary mr-2 ">
                         <i class="fas fa-sync-alt"></i>
                         Reload

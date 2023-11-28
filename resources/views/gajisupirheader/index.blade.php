@@ -191,7 +191,7 @@
           },
           {
             label: 'U. Borongan (Supir)',
-            name: 'nominal',
+            name: 'gajisupir',
             align: 'right',
             formatter: currencyFormat,
           },
@@ -265,7 +265,7 @@
           },
           {
             label: 'Nominal',
-            name: 'total',
+            name: 'nominal',
             align: 'right',
             formatter: currencyFormat,
           },
@@ -447,6 +447,7 @@
               uangmakanberjenjang: data.attributes.totalJenjang,
               uangmakanharian: data.attributes.totalMakan,
               nominal: data.attributes.totalNominal,
+              gajisupir: data.attributes.totalGajiSupir,
             }, true)
           }
           $('#left-nav').find('button').attr('disabled', false)

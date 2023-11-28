@@ -128,7 +128,7 @@
                             <i class="fa fa-save"></i>
                             Simpan
                         </button>
-                        <button class="btn btn-secondary" data-dismiss="modal">
+                        <button class="btn btn-batal btn-secondary">
                             <i class="fa fa-times"></i>
                             Batal
                         </button>
@@ -198,6 +198,43 @@
         $(document).on('click', '.delete-row', function(event) {
             deleteRow($(this).parents('tr'))
         })
+        // $(document).on('click', '.btn-batal', function(event) {
+        //     if ($('#crudForm').data('action') == 'edit') {
+
+        //         event.preventDefault()
+        //         $.ajax({
+        //             url: `{{ config('app.api_url') }}penerimaangiroheader/editingat`,
+        //             method: 'POST',
+        //             dataType: 'JSON',
+        //             headers: {
+        //                 Authorization: `Bearer ${accessToken}`
+        //             },
+        //             data: {
+        //                 id: $('#crudForm').find('[name=id]').val(),
+        //                 btn: 'batal'
+        //             },
+        //             success: response => {
+        //                 $("#crudModal").modal("hide")
+        //             },
+        //             error: error => {
+        //                 if (error.status === 422) {
+        //                     $('.is-invalid').removeClass('is-invalid')
+        //                     $('.invalid-feedback').remove()
+
+        //                     setErrorMessages(form, error.responseJSON.errors);
+        //                 } else {
+        //                     showDialog(error.responseJSON)
+        //                 }
+        //             },
+        //         }).always(() => {
+        //             $('#processingLoader').addClass('d-none')
+        //             $(this).removeAttr('disabled')
+        //         })
+        //     } else {                
+        //         $("#crudModal").modal("hide")
+        //     }
+        // })
+
 
         $(document).on('input', `#table_body [name="nominal[]"]`, function(event) {
             setTotal()
@@ -592,19 +629,33 @@
         Promise
             .all([
                 setTglBukti(form),
-                showPenerimaanGiro(form, id)
+                editingAt(id, 'EDIT'),
             ])
             .then(() => {
-                clearSelectedRows()
-                $('#gs_').prop('checked', false)
-                $('#crudModal').modal('show')
-                if (isEditTgl == 'TIDAK') {
-                    form.find(`[name="tglbukti"]`).prop('readonly', true)
-                    form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
-                }
+                showPenerimaanGiro(form, id).then(() => {
+                        clearSelectedRows()
+                        $('#gs_').prop('checked', false)
+                        $('#crudModal').modal('show')
+                        if (isEditTgl == 'TIDAK') {
+                            form.find(`[name="tglbukti"]`).prop('readonly', true)
+                            form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+                        }
+                    })
+                    .catch((error) => {
+                        showDialog(error.responseJSON)
+                    })
+                    .finally(() => {
+                        $('.modal-loader').addClass('d-none')
+                    })
             })
             .catch((error) => {
-                showDialog(error.responseJSON)
+                if (error.status === 422) {
+                    $('.is-invalid').removeClass('is-invalid')
+                    $('.invalid-feedback').remove()
+                    setErrorMessages(form, error.responseJSON.errors);
+                } else {
+                    showDialog(error.responseJSON)
+                }
             })
             .finally(() => {
                 $('.modal-loader').addClass('d-none')
@@ -641,6 +692,29 @@
             .finally(() => {
                 $('.modal-loader').addClass('d-none')
             })
+    }
+
+    function editingAt(id, btn) {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: `{{ config('app.api_url') }}penerimaangiroheader/editingat`,
+                method: 'POST',
+                dataType: 'JSON',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                data: {
+                    id: id,
+                    btn: btn
+                },
+                success: response => {
+                    resolve()
+                },
+                error: error => {
+                    reject(error)
+                }
+            })
+        })
     }
 
     function viewPenerimaanGiro(id) {

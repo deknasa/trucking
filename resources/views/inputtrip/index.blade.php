@@ -58,6 +58,13 @@
                   </div>
                 </div>
 
+                <div class="form-group nobukti_tripasal">
+                  <label class="col-sm-12 col-form-label">TRIP ASAL</label>
+                  <div class="col-sm-12">
+                    <input type="text" name="nobukti_tripasal" class="form-control suratpengantar-lookup">
+                  </div>
+                </div>
+
                 <div class="form-group ">
                   <label class="col-sm-12 col-form-label">CUSTOMER <span class="text-danger">*</span></label>
                   <div class="col-sm-12">
@@ -279,9 +286,10 @@
   let tinggalGandengan
   let longTripId
   let kodeStatusContainer
+  let isTripAsal = true;
 
   $(document).ready(function() {
-
+    $('.nobukti_tripasal').hide()
     $(document).on('click', "#addRow", function() {
       addRow()
     });
@@ -329,6 +337,8 @@
         data: data,
         success: response => {
           console.log(response.message);
+
+          $('.tableInfo').hide()
           showSuccessDialog(response.message, response.data.nobukti)
           enabledUpahSupir()
           createSuratPengantar()
@@ -443,6 +453,17 @@
       $(`#crudForm [name="gandenganasal"]`).parents('.form-group').hide()
     } else {
       $(`#crudForm [name="gandenganasal"]`).parents('.form-group').show()
+    }
+  })
+
+
+  $(`#crudForm [name="statusgudangsama"]`).on('change', function(event) {
+    if ($(this).val() == 204) {
+      if (isTripAsal) {
+        $('.nobukti_tripasal').show()
+      }
+    } else {
+      $('.nobukti_tripasal').hide()
     }
   })
 
@@ -607,6 +628,9 @@
             input = memo.split(',');
             input.forEach(field => {
               field = $.trim(field.toLowerCase());
+              if (field == 'nobukti_tripasal') {
+                isTripAsal = false
+              }
               $(`.${field}`).hide()
             });
           }
@@ -1047,6 +1071,29 @@
 
 
   function initLookup() {
+    $('.suratpengantar-lookup').lookup({
+      title: 'Surat Pengantar Lookup',
+      fileName: 'suratpengantar',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+          Aktif: 'AKTIF',
+          jenisorder_id: 2
+        }
+      },
+      onSelectRow: (suratpengantar, element) => {
+        element.val(suratpengantar.nobukti)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+
     $('.kotadari-lookup').lookup({
       title: 'Kota Dari Lookup',
       fileName: 'kotazona',

@@ -1249,6 +1249,7 @@ function showDialog(response) {
 	$("#dialog-warning-message").html(`
 		<span class="fa fa-exclamation-triangle" aria-hidden="true" style="font-size:25px;"></span>
 	`)
+	console.log($.type(response))
 	if ($.type(response) === "object") {
 		if ("file" in response) {
 			$("#dialog-message").append(
@@ -1291,6 +1292,7 @@ function showDialog(response) {
 			
 			$(".ui-dialog-titlebar-close").find("p").remove();
 		}
+		
 	} else {
 		$("#dialog-warning-message").append(
 			`<p class="text-dark">${response}</p>`
