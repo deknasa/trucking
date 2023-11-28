@@ -2,7 +2,7 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
-       
+
         <form action="" method="post">
           <div class="modal-body">
             <input type="hidden" name="id">
@@ -134,7 +134,7 @@
                     <input type="text" name="tarifrincian" class="form-control" readonly>
                   </div>
                 </div>
-                
+
                 <div class="form-group ">
                   <label class="col-sm-12 col-form-label">OMSET <span class="text-danger">*</span></label>
                   <div class="col-sm-12">
@@ -309,6 +309,13 @@
                     </select>
                   </div>
                 </div>
+
+                <div class="form-group nobukti_tripasal">
+                  <label class="col-sm-12 col-form-label">TRIP ASAL</label>
+                  <div class="col-sm-12">
+                    <input type="text" name="nobukti_tripasal" class="form-control suratpengantar-lookup">
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -429,6 +436,7 @@
   let editUpahZona
   let indexDetail = 0
   $(document).ready(function() {
+    $('.nobukti_tripasal').hide()
 
     // $(document).on('input', `#crudForm [name="nominalperalihan"]`, function(event) {
     //   setPersentase()
@@ -466,32 +474,32 @@
       $('#crudForm').find(`[name="nominalTagih[]"]`).each((index, element) => {
         data.filter((row) => row.name === 'nominalTagih[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominalTagih[]"]`)[index])
       })
-      
+
       $.ajax({
-          url: url,
-          method: method,
-          dataType: 'JSON',
-          headers: {
-              Authorization: `Bearer ${accessToken}`
-          },
-          data: data,
-          success: response => {
-            addRow()
+        url: url,
+        method: method,
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: data,
+        success: response => {
+          addRow()
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+        },
+        error: error => {
+          if (error.status === 422) {
             $('.is-invalid').removeClass('is-invalid')
             $('.invalid-feedback').remove()
-          },
-          error: error => {
-              if (error.status === 422) {
-                  $('.is-invalid').removeClass('is-invalid')
-                  $('.invalid-feedback').remove()
-                  setErrorMessages(form, error.responseJSON.errors);
-              } else {
-                  showDialog(error.responseJSON)
-              }
-          },
+            setErrorMessages(form, error.responseJSON.errors);
+          } else {
+            showDialog(error.responseJSON)
+          }
+        },
       }).always(() => {
-          $('#processingLoader').addClass('d-none')
-          $(this).removeAttr('disabled')
+        $('#processingLoader').addClass('d-none')
+        $(this).removeAttr('disabled')
       })
     });
 
@@ -703,6 +711,15 @@
     })
   })
 
+
+  $(`#crudForm [name="statusgudangsama"]`).on('change', function(event) {
+    if ($(this).val() == 204) {
+      $('.nobukti_tripasal').show()
+    } else {
+      $('.nobukti_tripasal').hide()
+    }
+  })
+
   function getNominalSupir() {
     totalNominalSupir = nominalPlusBorongan + nominalSupir;
 
@@ -715,9 +732,9 @@
 
     setFormBindKeys(form)
 
-    form.find('#btnSubmit').prop('disabled',false)
+    form.find('#btnSubmit').prop('disabled', false)
     if (form.data('action') == "view") {
-      form.find('#btnSubmit').prop('disabled',true)
+      form.find('#btnSubmit').prop('disabled', true)
     }
 
     activeGrid = null
@@ -912,6 +929,7 @@
           })
       })
   }
+
   function viewSuratPengantar(id) {
     let form = $('#crudForm')
 
@@ -937,19 +955,19 @@
       ])
       .then(() => {
         showSuratPengantar(form, id)
-        .then(id => {
-          form.find('[name]').removeAttr('disabled')
-          form.find('select').each((index, select) => {
-            let element = $(select)
-            if (element.data('select2')) {
+          .then(id => {
+            form.find('[name]').removeAttr('disabled')
+            form.find('select').each((index, select) => {
+              let element = $(select)
+              if (element.data('select2')) {
                 element.select2('destroy')
-            }
+              }
+            })
+            form.find('[name]').attr('disabled', 'disabled').css({
+              background: '#fff'
+            })
+            form.find('[name=id]').prop('disabled', false)
           })
-          form.find('[name]').attr('disabled', 'disabled').css({
-            background: '#fff'
-          })
-          form.find('[name=id]').prop('disabled',false)
-        })
           .then(() => {
             $('#crudModal').modal('show')
             form.find(`.hasDatepicker`).prop('readonly', true)
@@ -1333,12 +1351,14 @@
           initAutoNumeric(form.find(`[name="nominalperalihan"]`))
           initAutoNumeric(form.find(`[name="persentaseperalihan"]`))
           initAutoNumeric(form.find(`[name="gajisupir"]`))
-          if(isKomisi == 'TIDAK'){
+          if (isKomisi == 'TIDAK') {
             $(`#crudForm [name="gajikenek"]`).parents('.row').find('.col-form-label').text('KOMISI KENEK')
             form.find(`[name="gajikenek"]`).attr('readonly', false)
             form.find(`[name="komisisupir"]`).attr('readonly', false)
-          }else{            
+          } else {
             $(`#crudForm [name="gajikenek"]`).parents('.row').find('.col-form-label').text('GAJI KENEK')
+            form.find(`[name="gajikenek"]`).attr('readonly', false)
+
           }
           initAutoNumeric(form.find(`[name="gajikenek"]`))
           initAutoNumeric(form.find(`[name="komisisupir"]`))
@@ -1425,9 +1445,9 @@
   }
 
   function deleteRow(row) {
-    if($('#detailList tbody').find('tr').length > 1){
+    if ($('#detailList tbody').find('tr').length > 1) {
       row.remove()
-    }else{
+    } else {
       row.remove()
       addRow()
     }
@@ -1446,6 +1466,29 @@
   }
 
   function initLookup() {
+    $('.suratpengantar-lookup').lookup({
+      title: 'Surat Pengantar Lookup',
+      fileName: 'suratpengantar',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+          Aktif: 'AKTIF',
+          jenisorder_id: 2
+        }
+      },
+      onSelectRow: (suratpengantar, element) => {
+        element.val(suratpengantar.nobukti)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+    
     $('.kotadari-lookup').lookup({
       title: 'Kota Dari Lookup',
       fileName: 'kotazona',
@@ -2078,7 +2121,7 @@
 
           // $('#crudForm [name=lokasibongkarmuat]').first().val(response.dataTarif.tujuan)
           // $('#crudForm [name=hargaperton]').first().val(response.dataTarif.nominalton)
-          $('#crudForm ').find(`[name="omset"]`).val(response.dataTarif.nominal)          
+          $('#crudForm ').find(`[name="omset"]`).val(response.dataTarif.nominal)
           initAutoNumeric($('#crudForm ').find(`[name="omset"]`))
         }
       },

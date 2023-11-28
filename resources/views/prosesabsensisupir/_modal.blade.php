@@ -3,7 +3,6 @@
     <form action="#" id="crudForm">
       <div class="modal-content">
         
-        </div>
         <form action="" method="post">
           <div class="modal-body">
            {{-- <div class="row form-group">
