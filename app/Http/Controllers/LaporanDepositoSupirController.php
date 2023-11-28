@@ -176,7 +176,12 @@ class LaporanDepositoSupirController extends MyController
 
             foreach ($header_columns as $data_columns_index => $data_column) {
                 foreach ($rows as $row_index => $row_data) {
-                    $sheet->setCellValue($alphabets[$data_columns_index] . ($detail_start_row + $row_index + 1), $row_data[$data_column['index']]);
+                    if($data_column['index'] == 'total'){
+                        $baris = $detail_start_row + $row_index + 1;
+                        $sheet->setCellValue($alphabets[$data_columns_index] . ($detail_start_row + $row_index + 1), "=C$baris+D$baris-E$baris");
+                    }else{
+                        $sheet->setCellValue($alphabets[$data_columns_index] . ($detail_start_row + $row_index + 1), $row_data[$data_column['index']]);
+                    }
                 }
             }
             $detail_start_row += count($rows) + 2;
@@ -243,7 +248,7 @@ class LaporanDepositoSupirController extends MyController
         $sheet->getStyle("F4")->applyFromArray($styleArray3);
 
         $writer = new Xlsx($spreadsheet);
-        $filename = 'LAPORANDEPOSITO' . date('dmYHis');
+        $filename = 'LAPORAN DEPOSITO SUPIR ' . date('dmYHis');
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
         header('Cache-Control: max-age=0');

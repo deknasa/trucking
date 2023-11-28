@@ -60,21 +60,21 @@ class LaporanDepositoKaryawanController extends MyController
         $diperiksa = $data[0]['diperiksa'] ?? '';
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-        
+
         $sheet->setCellValue('A1', $data[0]['judul']);
         $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:G1');
-        
+
         $englishMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
         $indonesianMonths = ['JANUARI', 'FEBRUARI', 'MARET', 'APRIL', 'MEI', 'JUNI', 'JULI', 'AGUSTUS', 'SEPTEMBER', 'OKTOBER', 'NOVEMBER', 'DESEMBER'];
         $tglsampai = str_replace($englishMonths, $indonesianMonths, date('d - M - Y', strtotime($request->sampai)));
-        
+
         $sheet->setCellValue('A2', strtoupper('Laporan Deposito Karyawan'));
         $sheet->getStyle("A2")->getFont()->setBold(true);
         $sheet->mergeCells('A2:G2');
 
-        $sheet->setCellValue('A3', strtoupper( 'Periode: ' . $tglsampai ));
+        $sheet->setCellValue('A3', strtoupper('Periode: ' . $tglsampai));
         $sheet->getStyle("A3")->getFont()->setBold(true);
         $sheet->mergeCells('A3:G3');
 
@@ -176,29 +176,34 @@ class LaporanDepositoKaryawanController extends MyController
 
             foreach ($header_columns as $data_columns_index => $data_column) {
                 foreach ($rows as $row_index => $row_data) {
-                    $sheet->setCellValue($alphabets[$data_columns_index] . ($detail_start_row + $row_index + 1), $row_data[$data_column['index']]);
+                    if ($data_column['index'] == 'total') {
+                        $baris = $detail_start_row + $row_index + 1;
+                        $sheet->setCellValue($alphabets[$data_columns_index] . ($detail_start_row + $row_index + 1), "=D$baris+E$baris-F$baris");
+                    } else {
+                        $sheet->setCellValue($alphabets[$data_columns_index] . ($detail_start_row + $row_index + 1), $row_data[$data_column['index']]);
+                    }
                 }
             }
             $detail_start_row += count($rows) + 2;
         }
-        
+
         //format decimal
         $sheet->getStyle("A6:A$detail_start_row")->applyFromArray($styleArray)->getNumberFormat()->setFormatCode("0.0");
-        
+
         //total
         $total_start_row = $detail_start_row;
         $sheet->mergeCells('A' . $total_start_row . ':C' . $total_start_row);
         $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':E' . $total_start_row)->applyFromArray($styleArray2)->getFont()->setBold(true);
-        
-        $totalnomdeposito = "=SUM(D6:D" . ($detail_start_row-2) . ")";
+
+        $totalnomdeposito = "=SUM(D6:D" . ($detail_start_row - 2) . ")";
         $sheet->setCellValue("D$total_start_row", $totalnomdeposito)->getStyle("D$total_start_row")->applyFromArray($style_number);
 
-        $totalpenarikan = "=SUM(E6:E" . ($detail_start_row-2) . ")";
+        $totalpenarikan = "=SUM(E6:E" . ($detail_start_row - 2) . ")";
         $sheet->setCellValue("E$total_start_row", $totalpenarikan)->getStyle("E$total_start_row")->applyFromArray($style_number);
 
-        $total = "=SUM(F6:F" . ($detail_start_row-2) . ")";
+        $total = "=SUM(F6:F" . ($detail_start_row - 2) . ")";
         $sheet->setCellValue("F$total_start_row", $total)->getStyle("F$total_start_row")->applyFromArray($style_number);
-        
+
         //format currency
         $currency_columns = ['C', 'D', 'E', 'F'];
         foreach ($currency_columns as $column) {
@@ -230,7 +235,7 @@ class LaporanDepositoKaryawanController extends MyController
         $sheet->getColumnDimension('D')->setAutoSize(true);
         $sheet->getColumnDimension('E')->setAutoSize(true);
         $sheet->getColumnDimension('F')->setAutoSize(true);
-        $sheet->getColumnDimension('B')->setWidth(50);        
+        $sheet->getColumnDimension('B')->setWidth(50);
 
         $sheet->getStyle("A4")->applyFromArray($styleArray3);
         $sheet->getStyle("B4")->applyFromArray($styleArray3);
@@ -240,7 +245,7 @@ class LaporanDepositoKaryawanController extends MyController
         $sheet->getStyle("F4")->applyFromArray($styleArray3);
 
         $writer = new Xlsx($spreadsheet);
-        $filename = 'LAPORANDEPOSITO' . date('dmYHis');
+        $filename = 'LAPORAN DEPOSITO KARYAWAN' . date('dmYHis');
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
         header('Cache-Control: max-age=0');
