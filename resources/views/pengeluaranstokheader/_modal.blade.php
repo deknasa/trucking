@@ -429,6 +429,8 @@
   let pengeluaranheader_id
   var listKodePengeluaran = [];
   var listIdPengeluaran = [];
+  var index = 0;
+
   $(document).ready(function() {
     $(document).on('click', '#addRow', function(event) {
       event.preventDefault()
@@ -919,12 +921,12 @@
     initDatepicker()
     if (form.data('action') == 'add') {
       if ($('#kodepengeluaranheader').val() != '') {
-        let index = listIdPengeluaran.indexOf($('#kodepengeluaranheader').val());
-        setKodePengeluaran(listKodePengeluaran[index]);
+        let IdPengeluaran = listIdPengeluaran.indexOf($('#kodepengeluaranheader').val());
+        setKodePengeluaran(listKodePengeluaran[IdPengeluaran]);
         setIsDateAvailable($('#kodepengeluaranheader').val())
 
-        $('#crudForm').find(`[name="pengeluaranstok"]`).val(listKodePengeluaran[index])
-        $('#crudForm').find(`[name="pengeluaranstok"]`).data('currentValue', listKodePengeluaran[index])
+        $('#crudForm').find(`[name="pengeluaranstok"]`).val(listKodePengeluaran[IdPengeluaran])
+        $('#crudForm').find(`[name="pengeluaranstok"]`).data('currentValue', listKodePengeluaran[IdPengeluaran])
         $('#crudForm').find(`[name="pengeluaranstok_id"]`).val($('#kodepengeluaranheader').val())
       }
     }
@@ -1405,11 +1407,9 @@
     })
   }
 
-  var row = 0;
 
 
   function addRow() {
-    console.log('addRow');
     let detailRow = $(`
     <tr class="trow">
                   <td>
@@ -1417,22 +1417,22 @@
                   </td>
                   
                   <td>
-                    <input type="text"  name="detail_stok[]" id="" class="form-control detail_stok_${row}">
-                    <input type="text" id="detailstokId_${row}" readonly hidden class="detailstokId" name="detail_stok_id[]">
+                    <input type="text"  name="detail_stok[]" id="" class="form-control detail_stok_${index}">
+                    <input type="text" id="detailstokId_${index}" readonly hidden class="detailstokId" name="detail_stok_id[]">
                   </td>                 
                   <td>
-                    <input type="text"  name="detail_keterangan[]" id="detail_keterangan${row}" style="" class="form-control">                    
+                    <input type="text"  name="detail_keterangan[]" id="detail_keterangan${index}" style="" class="form-control">                    
                   </td>
                   <td class="data_tbl tbl_qty">
-                    <input type="text"  name="detail_qty[]" id="detail_qty${row}" onkeyup="calculate(${row})" style="text-align:right" class="form-control autonumeric number${row}">
+                    <input type="text"  name="detail_qty[]" id="detail_qty${index}" onkeyup="calculate(${index})" style="text-align:right" class="form-control autonumeric number${index}">
                   </td>  
                   <td class="data_tbl tbl_statusoli">
-                    <select name="detail_statusoli[]" class="form-select select2bs4" id="statusoli${row}" style="width: 100%;">
+                    <select name="detail_statusoli[]" class="form-select select2bs4" id="statusoli${index}" style="width: 100%;">
                       <option value="">-- PILIH STATUS OLI --</option>
                     </select>                 
                   </td> 
                   <td class="data_tbl tbl_statusban">
-                    <select name="detail_statusban[]" class="form-select select2bs4" id="statusban${row}" style="width: 100%;">
+                    <select name="detail_statusban[]" class="form-select select2bs4" id="statusban${index}" style="width: 100%;">
                       <option value="">-- PILIH STATUS BAN --</option>
                     </select>                 
                   </td> 
@@ -1440,17 +1440,17 @@
                       <input type="number"  name="detail_vulkanisirke[]" style="" class="form-control">                    
                     </td> 
                   <td class="data_tbl tbl_vulkanisirtotal">
-                      <input type="number"  name="detail_vulkanisirtotal[]" readonly id="vulkanisirtotal${row}" style="" class="form-control">                    
+                      <input type="number"  name="detail_vulkanisirtotal[]" readonly id="vulkanisirtotal${index}" style="" class="form-control">                    
                     </td> 
                   <td class="data_tbl tbl_harga">
-                    <input type="text"  name="detail_harga[]" id="detail_harga${row}" readonly style="text-align:right" class="form-control autonumeric number${row}">
+                    <input type="text"  name="detail_harga[]" id="detail_harga${index}" readonly style="text-align:right" class="form-control autonumeric number${index}">
                   </td>  
                   
                   <td class="data_tbl tbl_persentase">
-                    <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${row}" onkeyup="calculate(${row})" style="text-align:right" class="form-control autonumeric number${row}">
+                    <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${index}" onkeyup="calculate(${index})" style="text-align:right" class="form-control autonumeric number${index}">
                   </td>  
                   <td class="data_tbl tbl_total">
-                    <input type="text"  name="totalItem[]"  id="totalItem${row}" onkeyup="calculate(${row})" style="text-align:right" class="form-control totalItem autonumeric number${row}">                    
+                    <input type="text"  name="totalItem[]"  id="totalItem${index}" onkeyup="calculate(${index})" style="text-align:right" class="form-control totalItem autonumeric number${index}">                    
                   </td>  
                   
                   <td class="data_tbl tbl_aksi" >
@@ -1463,17 +1463,18 @@
 
     // // }
     $('table #table_body').append(detailRow)
-    initSelect2($(`#statusoli${row}`), true)
-    initSelect2($(`#statusban${row}`), true)
+    initSelect2($(`#statusoli${index}`), true)
+    initSelect2($(`#statusban${index}`), true)
     dataStatusOli.forEach(statusOli => {
       let option = new Option(statusOli.text, statusOli.id)
 
-      detailRow.find(`#statusoli${row}`).append(option).trigger('change')
+      detailRow.find(`#statusoli${index}`).append(option).trigger('change')
     });
     dataStatusBan.forEach(statusBan => {
       option = new Option(statusBan.text, statusBan.id)
-      detailRow.find(`#statusban${row}`).append(option).trigger('change')
+      detailRow.find(`#statusban${index}`).append(option).trigger('change')
     });
+    var row = index;
 
     var nobuktipenerimaan = '';
     var idpengeluaranstok = '';
@@ -1512,15 +1513,19 @@
         let elStatusOli = element.parents('tr').find(`td [name="detail_statusoli[]"]`);
         elStatusOli.find(`option:contains('TAMBAH')`).remove()
         elStatusOli.find(`option:contains('GANTI')`).remove()
+        console.log(kodePengeluaranStok , listKodePengeluaran[1]);
         if (kodePengeluaranStok == listKodePengeluaran[1]) {
-          $(`#detail_keterangan${row}`).val(stok.penerimaanstokdetail_keterangan);
-          console.log(stok.penerimaanstokdetail_qty);
-          console.log($(`#detail_qty${row}`));
-          $(`#detail_qty${row}`).val(stok.penerimaanstokdetail_qty);
-
-          $(`#detail_harga${row}`).val(stok.penerimaanstokdetail_harga);
-          $(`#totalItem${row}`).val(stok.penerimaanstokdetail_total);
-          initAutoNumeric($(`#detail_qty${row}`))
+          if (nobuktipenerimaan != '') {
+            console.log('asda');
+            $(`#detail_keterangan${row}`).val(stok.penerimaanstokdetail_keterangan);
+            $(`#detail_qty${row}`).val(stok.penerimaanstokdetail_qty);
+            $(`#detail_harga${row}`).val(stok.penerimaanstokdetail_harga);
+            $(`#totalItem${row}`).val(stok.penerimaanstokdetail_total);
+            $(`#totalItem${row}`).prop('readonly',true)
+            $(`#statusoli${row}`).remove()
+            $(`#statusban${row}`).remove()
+            initAutoNumeric($(`.number${row}`))
+          }
         }
 
         if (service == 'PERGANTIAN BATERE' || service == 'PERGANTIAN SARINGAN HAWA') {
@@ -1563,16 +1568,19 @@
         });
       }
     })
-    initAutoNumeric($(`.number${row}`))
+    if (kodePengeluaranStok != listKodePengeluaran[1]) {
+      if (nobuktipenerimaan == '') {
+        initAutoNumeric($(`.number${row}`))
+      }
+    }
     setTampilanForm()
     setRowNumbers()
-    row++;
+    index++;
   }
 
-  function deleteRow(rows) {
+  function deleteRow(row) {
     let countRow = $('.rmv').parents('tr').length
-    rows.remove()
-    row--
+    row.remove()
     if (countRow <= 1) {
       addRow()
     }
@@ -1602,6 +1610,14 @@
   }
 
   function calculate(id) {
+
+    if (kodePengeluaranStok == listKodePengeluaran[1]) {
+      if ($('#crudModal').find(`[name=penerimaanstok_nobukti]`).val() != '') {
+        return cal(id)
+      }
+    }
+    
+    
     qty = $(`#detail_qty${id}`)[0];
     discount = $(`#detail_persentasediscount${id}`)[0];
     totalItem = $(`#totalItem${id}`)[0];
@@ -2140,7 +2156,7 @@
                   </td>
                   
                   <td>
-                    <input type="text"  name="detail_stok[]" id="detail_stok_${id}" class="form-control stok-lookup ">
+                    <input type="text"  name="detail_stok[]" id="detail_stok_${id}" readonly class="form-control stok-lookup ">
                     <input type="text" id="detailstokId_${id}" readonly hidden class="detailstokId" name="detail_stok_id[]">
                   </td>
                   <td>
@@ -2202,7 +2218,6 @@
           //     element.val(element.data('currentValue'))
           //   }
           // })
-          row=id;
           id++;
         })
         sumary()
