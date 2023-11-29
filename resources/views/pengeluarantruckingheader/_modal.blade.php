@@ -2985,7 +2985,7 @@
                     "getLocalRow",
                     rowObject.rowId
                   );
-                  localRow.keterangandetail = event.target.value;
+                  localRow.keterangan = event.target.value;
                 }
               }]
             },
@@ -3109,6 +3109,7 @@
     $.each(selectedRowsPengembalian, function(index, value) {
       $('#tableDeposito').jqGrid('saveCell', value, 7); //emptycell
       $('#tableDeposito').jqGrid('saveCell', value, 5); //nominal
+      $('#tableDeposito').jqGrid('saveCell', value, 6); //keterangan
     })
 
   });
@@ -3117,6 +3118,7 @@
     $.each(selectedRowsPengembalian, function(index, value) {
       $('#tableDeposito').jqGrid('saveCell', value, 7); //emptycell
       $('#tableDeposito').jqGrid('saveCell', value, 5); //nominal
+      $('#tableDeposito').jqGrid('saveCell', value, 6); //keterangan
     })
   })
 
