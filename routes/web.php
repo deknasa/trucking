@@ -271,6 +271,7 @@ use App\Http\Controllers\SuratPengantarApprovalInputTripController;
 use App\Http\Controllers\ApprovalBukaTanggalSuratPengantarController;
 use App\Http\Controllers\LaporanPemotonganPinjamanDepositoController;
 use App\Http\Controllers\ExportRincianMingguanPendapatanSupirController;
+use App\Http\Controllers\LaporanMingguanSupirBedaMandorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -1610,6 +1611,9 @@ Route::middleware(['auth', 'authorized'])->group(function () {
     Route::get('tripinap/index', [TripInapController::class, 'index']);
     Route::resource('tripinap', TripInapController::class);
 
+    Route::get('laporanmingguansupirbedamandor/export', [LaporanMingguanSupirBedaMandorController::class, 'export'])->name('laporanmingguansupirbedamandor.export');
+    Route::get('laporanmingguansupirbedamandor/index', [LaporanMingguanSupirBedaMandorController::class, 'index']);
+    Route::resource('laporanmingguansupirbedamandor', LaporanMingguanSupirBedaMandorController::class);
 });
 
 Route::patch('format', [FormatController::class, 'update']);
