@@ -347,7 +347,7 @@
             innerHTML: '<i class="fa fa-plus"></i> ADD',
             class: 'btn btn-primary btn-sm mr-1',
             onClick: function(event) {
-              createBccemail()
+              createBccEmail()
             }
           },
           {
