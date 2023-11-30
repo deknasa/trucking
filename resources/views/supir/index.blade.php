@@ -57,6 +57,10 @@
                                 name: 'namaalias',
                             },
                             {
+                                label: 'MANDOR',
+                                name: 'mandor_id',
+                            },
+                            {
                                 label: 'TGL LAHIR',
                                 name: 'tgllahir',
                                 width: 130,
