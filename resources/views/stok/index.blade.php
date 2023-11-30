@@ -317,6 +317,9 @@
 
                 autowidth: true,
                 shrinkToFit: false,
+                postData: {
+                    dari:"index"
+                  },
                 height: 350,
                 rowNum: 10,
                 rownumbers: true,
