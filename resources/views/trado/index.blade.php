@@ -54,6 +54,14 @@
                         name: 'kodetrado',
                     },
                     {
+                        label: 'MANDOR',
+                        name: 'mandor_id',
+                    },
+                    {
+                        label: 'SUPIR',
+                        name: 'supir_id',
+                    },
+                    {
                         label: 'STATUS AKTIF',
                         name: 'statusaktif',
                         stype: 'select',
