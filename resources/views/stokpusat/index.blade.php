@@ -45,6 +45,7 @@
                     {
                         label: 'NAMA TERPUSAT',
                         name: 'namaterpusat',
+                        width: '300px'
                     },
                     {
                         label: 'ID MEDAN',

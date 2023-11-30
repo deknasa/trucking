@@ -2,7 +2,7 @@
     <div class="modal-dialog">
         <form action="#" id="crudForm">
             <div class="modal-content">
-                
+
                 <form action="" method="post">
                     <div class="modal-body">
 
@@ -242,7 +242,7 @@
                         aktif: "AKTIF",
                     },
                     loadError: function(jqXHR, textStatus, errorThrown) {
-                        if(jqXHR.status == 500) {
+                        if (jqXHR.status == 500) {
                             showDialog("SERVER MEDAN TIDAK BISA DIAKSES")
                         }
                     },
@@ -260,7 +260,7 @@
                         aktif: "AKTIF",
                     },
                     loadError: function(jqXHR, textStatus, errorThrown) {
-                        if(jqXHR.status == 500) {
+                        if (jqXHR.status == 500) {
                             showDialog("SERVER MAKASSAR TIDAK BISA DIAKSES")
                         }
                     },
@@ -278,7 +278,7 @@
                         aktif: "AKTIF",
                     },
                     loadError: function(jqXHR, textStatus, errorThrown) {
-                        if(jqXHR.status == 500) {
+                        if (jqXHR.status == 500) {
                             showDialog("SERVER SURABAYA TIDAK BISA DIAKSES")
                         }
                     },
@@ -296,7 +296,7 @@
                         aktif: "AKTIF",
                     },
                     loadError: function(jqXHR, textStatus, errorThrown) {
-                        if(jqXHR.status == 500) {
+                        if (jqXHR.status == 500) {
                             showDialog("SERVER BITUNG TIDAK BISA DIAKSES")
                         }
                     },
@@ -360,7 +360,7 @@
             } else {
                 $('#tableJkt')
                     .jqGrid('setGridParam', {
-                        url: `${apiTruckingJktUrl}stokK`,
+                        url: `${apiTruckingJktUrl}stok`,
                         mtype: "GET",
                         datatype: "json",
                         postData: {
@@ -626,7 +626,10 @@
                     clearSelectedRows()
 
                     $('#jqGrid').jqGrid('setGridParam', {
-                        page: response.data.page
+                        page: response.data.page,
+                        postData: {
+                            proses: 'reload',
+                        }
                     }).trigger('reloadGrid');
 
                     if (response.data.grp == 'FORMAT') {
