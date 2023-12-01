@@ -59,9 +59,13 @@
                 sortorder: sortorderDetail,
                 page: pageDetail,
                 viewrecords: true,
-                postData: {
-                    spk_id: id
-                },
+                // postData: {
+                //     stok_id: stok_Id,
+                //     trado_id: trado_Id,
+                //     gandengan_id: gandengan_Id,
+                //     gudang: nama_gudang,
+                //     stok: nama_stok
+                // },
                 prmNames: {
                     sort: 'sortIndex',
                     order: 'sortOrder',
@@ -143,14 +147,18 @@
         loadGlobalSearch($('#detailGrid'))
     }
 
-    function loadDetailData(id) {
+    function loadDetailData(stok_Id,trado_Id,gandengan_Id,nama_gudang,nama_stok) {
         abortGridLastRequest($('#detailGrid'))
 
         $('#detailGrid').setGridParam({
             url: `${apiUrl}reminderspkdetail`,
             datatype: "json",
             postData: {
-                spk_id: id
+                stok_id: stok_Id,
+                trado_id: trado_Id,
+                gandengan_id: gandengan_Id,
+                gudang: nama_gudang,
+                stok: nama_stok,
             },
             page: 1
         }).trigger('reloadGrid')

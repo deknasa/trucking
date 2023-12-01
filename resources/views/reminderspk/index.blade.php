@@ -26,6 +26,11 @@
     let pager = '#jqGridPager'
     let popup = "";
     let id = "";
+    let stok_id = "";
+    let gandengan_id = "";
+    let trado_id = "";
+    let gudang = "";
+    let stok = "";
     let triggerClick = true;
     let highlightSearch;
     let totalRecord
@@ -60,6 +65,30 @@
                         label: 'GUDANG',
                         name: 'gudang',
                         align: 'left'
+                    },
+                    {
+                        label: 'GANDENGAN ID',
+                        name: 'gandengan_id',
+                        align: 'left',
+                        hidden: true
+                    },
+                    {
+                        label: 'TRADO ID',
+                        name: 'trado_id',
+                        align: 'left',
+                        hidden: true
+                    },
+                    {
+                        label: 'STOK ID',
+                        name: 'stok_id',
+                        align: 'left',
+                        hidden: true
+                    },
+                    {
+                        label: 'GANDENGAN_ID',
+                        name: 'gandengan_id',
+                        align: 'left',
+                        hidden: true
                     },
                     {
                         label: 'NAMA BARANG',
@@ -116,7 +145,7 @@
                     if (indexRow >= limit) {
                         indexRow = (indexRow - limit * (page - 1))
                     }
-                    loadDetailData(id)
+                    loadDetailData(stok_id,trado_id,gandengan_id,gudang,stok)
                 },
                 loadComplete: function(data) {
 
