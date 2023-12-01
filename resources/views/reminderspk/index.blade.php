@@ -148,9 +148,9 @@
                     stok_id = $('#jqGrid').jqGrid('getCell', id, 'stok_id');
                     trado_id = $('#jqGrid').jqGrid('getCell', id, 'trado_id');
                     gandengan_id = $('#jqGrid').jqGrid('getCell', id, 'gandengan_id');
-                    gudang =  $('<div/>').html($('#jqGrid').jqGrid('getCell', 1, 'gudang')).text();
-                    stok =  $('<div/>').html($('#jqGrid').jqGrid('getCell', 1, 'stok')).text();
-                    
+                    gudang =  $('<div/>').html($('#jqGrid').jqGrid('getCell', id, 'gudang')).text();
+                    stok =  $('<div/>').html($('#jqGrid').jqGrid('getCell', id, 'stok')).text();
+
                     loadDetailData(stok_id,trado_id,gandengan_id,gudang,stok)
                 },
                 loadComplete: function(data) {

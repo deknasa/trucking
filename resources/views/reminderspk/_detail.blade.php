@@ -42,13 +42,19 @@
                     {
                         label: 'QTY',
                         name: 'qty',
+                        align: 'right',
+                        formatter: currencyFormat,
                     },
                     {
                         label: 'HARGA SATUAN',
                         name: 'hargasatuan',
+                        align: 'right',
+                        formatter: currencyFormat,
                     },   {
                         label: 'TOTAL',
                         name: 'total',
+                        align: 'right',
+                        formatter: currencyFormat,
                     },
                 ],
                 autowidth: true,
