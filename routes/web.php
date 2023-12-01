@@ -157,6 +157,7 @@ use App\Http\Controllers\LaporanJurnalUmumController;
 use App\Http\Controllers\LaporanKasGantungController;
 use App\Http\Controllers\MainTypeAkuntansiController;
 
+use App\Http\Controllers\PengajuanTripInapController;
 use App\Http\Controllers\PengeluaranDetailController;
 use App\Http\Controllers\PengeluaranHeaderController;
 use App\Http\Controllers\UpahRitasiRincianController;
@@ -200,9 +201,9 @@ use App\Http\Controllers\HistoriPenerimaanStokController;
 use App\Http\Controllers\JurnalUmumPusatDetailController;
 use App\Http\Controllers\JurnalUmumPusatHeaderController;
 use App\Http\Controllers\LaporanOrderPembelianController;
+
+
 use App\Http\Controllers\LaporanRekapSumbanganController;
-
-
 use App\Http\Controllers\LaporanSaldoInventoryController;
 use App\Http\Controllers\PelunasanHutangHeaderController;
 use App\Http\Controllers\PendapatanSupirDetailController;
@@ -1610,6 +1611,9 @@ Route::middleware(['auth', 'authorized'])->group(function () {
 
     Route::get('tripinap/index', [TripInapController::class, 'index']);
     Route::resource('tripinap', TripInapController::class);
+    
+    Route::get('pengajuantripinap/index', [PengajuanTripInapController::class, 'index']);
+    Route::resource('pengajuantripinap', PengajuanTripInapController::class);
 
     Route::get('laporanmingguansupirbedamandor/export', [LaporanMingguanSupirBedaMandorController::class, 'export'])->name('laporanmingguansupirbedamandor.export');
     Route::get('laporanmingguansupirbedamandor/index', [LaporanMingguanSupirBedaMandorController::class, 'index']);

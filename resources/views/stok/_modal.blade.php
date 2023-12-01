@@ -923,6 +923,7 @@
     }else{
       $('#crudForm').find(`[name="namaterpusat"]`).prop('disabled',true)
     }
+    $('#crudForm').find(`[name="namaterpusat"]`).prop('disabled',true)
   }
 
   function assignAttachment(dropzone, data) {
