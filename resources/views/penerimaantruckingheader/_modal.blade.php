@@ -1100,7 +1100,7 @@
         setTotal()
       ])
       .then(() => {
-        $('#btnReloadPJP').prop('disabled', false)
+        $('#btnReloadPJP').parents('.row').show()
         $('#crudModal').modal('show')
       })
       .catch((error) => {
@@ -1140,7 +1140,7 @@
           form.find(`[name="tglbukti"]`).prop('readonly', true)
           form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
         }
-        $('#btnReloadPJP').prop('disabled', true)
+        $('#btnReloadPJP').parents('.row').hide()
         $('#crudForm [name=supirheader]').attr('readonly', true)
         $('#crudForm [name=supir]').siblings('.input-group-append').remove()
         $('#crudForm [name=supir]').siblings('.button-clear').remove()
