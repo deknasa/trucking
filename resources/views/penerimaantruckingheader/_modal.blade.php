@@ -2,7 +2,7 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
-        
+
         <form action="" method="post">
 
           <div class="modal-body">
@@ -44,7 +44,7 @@
             <div class="row form-group" style="display:none;">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
-                  supir <span class="text-danger">*</span></label>
+                  supir </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="hidden" id="supirHaeaderId" name="supirheader_id">
@@ -129,6 +129,16 @@
                 </a>
               </div>
             </div>
+
+            <div class="row mb-3">
+              <div class="col-sm-6 m-1">
+                <a id="btnReloadPJP" class="btn btn-primary mr-2 ">
+                  <i class="fas fa-sync-alt"></i>
+                  Reload
+                </a>
+              </div>
+            </div>
+
 
             <div class="border p-3">
               <h6>Posting Penerimaan</h6>
@@ -304,6 +314,33 @@
 
     });
 
+    $(document).on('click', "#btnReloadPJP", function() {
+      // reloadGrid = null;
+      // if ($('#crudForm').data('action') == 'edit') {
+      //   reloadGrid = 'reload'
+      // }
+
+      let supirheader_id = $(`#crudForm [name="supirheader_id"]`).val()
+
+      getDataPinjaman(supirheader_id).then((response) => {
+
+        $("#tablePinjaman")[0].p.selectedRowIds = [];
+        setTimeout(() => {
+
+          $("#tablePinjaman")
+            .jqGrid("setGridParam", {
+              datatype: "local",
+              data: response.data,
+              originalData: response.data,
+              rowNum: response.data.length,
+              selectedRowIds: []
+            })
+            .trigger("reloadGrid");
+        }, 100);
+
+      });
+    });
+
     $(document).on('click', '.delete-row', function(event) {
       deleteRow($(this).parents('tr'))
     })
@@ -413,7 +450,7 @@
           })
           data.push({
             name: 'supir_id[]',
-            value: form.find(`[name="supirheader_id"]`).val()
+            value: dataPinjaman.pinj_supirid
           })
           data.push({
             name: 'pjp_id[]',
@@ -864,6 +901,7 @@
 
   function tampilanBBM() {
     $('#btnReloadBbtGrid').parents('.row').hide()
+    $('#btnReloadPJP').parents('.row').hide()
     $('#detailList').show()
     $('#gbox_tablePinjaman').hide()
     $('#gbox_tablePinjamanKaryawan').hide()
@@ -890,6 +928,7 @@
 
   function tampilanPJP() {
     $('#btnReloadBbtGrid').parents('.row').hide()
+    $('#btnReloadPJP').parents('.row').show()
     $('[name=keteranganheader]').parents('.form-group').hide()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('.tbl_supir_id').hide()
@@ -908,6 +947,7 @@
 
   function tampilanPJPK() {
     $('#btnReloadBbtGrid').parents('.row').hide()
+    $('#btnReloadPJP').parents('.row').hide()
     $('[name=keteranganheader]').parents('.form-group').hide()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('.tbl_supir_id').hide()
@@ -924,6 +964,7 @@
 
   function tampilanPBT() {
     $('#btnReloadBbtGrid').parents('.row').show()
+    $('#btnReloadPJP').parents('.row').hide()
     $('[name=keteranganheader]').parents('.form-group').show()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('.tbl_supir_id').hide()
@@ -946,6 +987,7 @@
 
   function tampilanDPO() {
     $('#btnReloadBbtGrid').parents('.row').hide()
+    $('#btnReloadPJP').parents('.row').hide()
     $('#detailList').show()
     $('#gbox_tablePinjaman').hide()
     $('#gbox_tablePinjamanKaryawan').hide()
@@ -969,6 +1011,7 @@
 
   function tampilanall() {
     $('#detailList').show()
+    $('#btnReloadPJP').parents('.row').hide()
     $('#gbox_tablePinjaman').hide()
     $('#gbox_tablePinjamanKaryawan').hide()
     $('[name=jenisorderan_id]').parents('.form-group').hide()
@@ -1057,6 +1100,7 @@
         setTotal()
       ])
       .then(() => {
+        $('#btnReloadPJP').parents('.row').show()
         $('#crudModal').modal('show')
       })
       .catch((error) => {
@@ -1096,6 +1140,7 @@
           form.find(`[name="tglbukti"]`).prop('readonly', true)
           form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
         }
+        $('#btnReloadPJP').parents('.row').hide()
         $('#crudForm [name=supirheader]').attr('readonly', true)
         $('#crudForm [name=supir]').siblings('.input-group-append').remove()
         $('#crudForm [name=supir]').siblings('.button-clear').remove()
@@ -1384,6 +1429,17 @@
             search: false,
           },
           {
+            label: "SUPIR",
+            name: "pinj_supir",
+            sortable: true,
+          },
+          {
+            label: "SUPIR_ID",
+            name: "pinj_supirid",
+            hidden: true,
+            search: false
+          },
+          {
             label: "no bukti pengeluaran TRUCKING",
             width: 250,
             name: "nobukti",
@@ -1609,16 +1665,16 @@
   $(document).on('click', '#resetdatafilter_tablePinjaman', function(event) {
     selectedRowsPengembalian = $("#tablePinjaman").getGridParam("selectedRowIds");
     $.each(selectedRowsPengembalian, function(index, value) {
-      $('#tablePinjaman').jqGrid('saveCell', value, 7); //emptycell
-      $('#tablePinjaman').jqGrid('saveCell', value, 5); //nominal
+      $('#tablePinjaman').jqGrid('saveCell', value, 11); //emptycell
+      $('#tablePinjaman').jqGrid('saveCell', value, 9); //nominal
     })
 
   });
   $(document).on('click', '#gbox_tablePinjaman .ui-jqgrid-hbox .ui-jqgrid-htable thead .ui-search-toolbar th td a.clearsearchclass', function(event) {
     selectedRowsPengembalian = $("#tablePinjaman").getGridParam("selectedRowIds");
     $.each(selectedRowsPengembalian, function(index, value) {
-      $('#tablePinjaman').jqGrid('saveCell', value, 7); //emptycell
-      $('#tablePinjaman').jqGrid('saveCell', value, 5); //nominal
+      $('#tablePinjaman').jqGrid('saveCell', value, 11); //emptycell
+      $('#tablePinjaman').jqGrid('saveCell', value, 9); //nominal
     })
   })
 
@@ -2122,6 +2178,7 @@
 
   function getDataPinjaman(supirId, id) {
     aksi = $('#crudForm').data('action')
+    supirId = (supirId == '') ? 0 : supirId;
     if (aksi == 'edit') {
       console.log(id)
       if (id != undefined) {
@@ -2449,15 +2506,20 @@
   }
 
   function setTotalSisa() {
-    let sisaDetails = $(`#tablePinjaman`).find(`td[aria-describedby="tablePinjaman_sisa"]`)
+    // let sisaDetails = $(`#tablePinjaman`).find(`td[aria-describedby="tablePinjaman_sisa"]`)
     let sisa = 0
-    let originalData = $("#tablePinjaman").getGridParam("data");
-    $.each(originalData, function(index, value) {
-      sisas = value.sisa;
-      sisas = (isNaN(sisas)) ? parseFloat(sisas.replaceAll(',', '')) : parseFloat(sisas)
-      sisa += sisas
+    // let originalData = $("#tablePinjaman").getGridParam("data");
+    // $.each(originalData, function(index, value) {
+    //   sisas = value.sisa;
+    //   sisas = (isNaN(sisas)) ? parseFloat(sisas.replaceAll(',', '')) : parseFloat(sisas)
+    //   sisa += sisas
 
-    })
+    // })
+    $("#tablePinjaman").find("tbody tr").each(function() {
+      $(this).find(`td[aria-describedby="tablePinjaman_sisa"]`).map(function() {
+        sisa = sisa + parseFloat($(this).text().replaceAll(',', ''));
+      });
+    });
     initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePinjaman_sisa"]`).text(sisa))
   }
 
@@ -2742,27 +2804,44 @@
 
   function setTotalPinjaman() {
     let jlhpinj = 0
-    let originalData = $("#tablePinjaman").getGridParam("data");
-    $.each(originalData, function(index, value) {
-      lunas_jlhpinj = value.jlhpinjaman;
-      jlhpinjs = (isNaN(lunas_jlhpinj)) ? parseFloat(lunas_jlhpinj.replaceAll(',', '')) : parseFloat(lunas_jlhpinj)
-      jlhpinj += jlhpinjs
+    $("#tablePinjaman").find("tbody tr").each(function() {
+      $(this).find(`td[aria-describedby="tablePinjaman_jlhpinjaman"]`).map(function() {
+        jlhpinj = jlhpinj + parseFloat($(this).text().replaceAll(',', ''));
+      });
+    });
+    // let originalData = $("#tablePinjaman").getGridParam("data");
+    // $.each(originalData, function(index, value) {
+    //   lunas_jlhpinj = value.jlhpinjaman;
+    //   jlhpinjs = (isNaN(lunas_jlhpinj)) ? parseFloat(lunas_jlhpinj.replaceAll(',', '')) : parseFloat(lunas_jlhpinj)
+    //   jlhpinj += jlhpinjs
 
-    })
+    // })
     initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePinjaman_jlhpinjaman"]`).text(jlhpinj))
   }
+
   function setTotalBayarPinjaman() {
     let bayarpinj = 0
     let originalData = $("#tablePinjaman").getGridParam("data");
-    $.each(originalData, function(index, value) {
-      lunas_bayarpinj = value.totalbayar;
-      bayarpinjs = (isNaN(lunas_bayarpinj)) ? parseFloat(lunas_bayarpinj.replaceAll(',', '')) : parseFloat(lunas_bayarpinj)
-      bayarpinj += bayarpinjs
+    var filteredData = [];
 
-    })
+    // Iterate through the rows and add filtered data to the array
+    $("#tablePinjaman").find("tbody tr").each(function() {
+      $(this).find(`td[aria-describedby="tablePinjaman_totalbayar"]`).map(function() {
+        bayarpinj = bayarpinj + parseFloat($(this).text().replaceAll(',', ''));
+      });
+    });
+    // $.each(originalData, function(index, value) {
+    //   // if ($("#tablePinjaman").jqGrid('getRowData', value.id).columnName.includes('filterText')) {
+    //   //       console.log(row)
+    //   //   }
+    //   lunas_bayarpinj = value.totalbayar;
+    //   bayarpinjs = (isNaN(lunas_bayarpinj)) ? parseFloat(lunas_bayarpinj.replaceAll(',', '')) : parseFloat(lunas_bayarpinj)
+    //   bayarpinj += bayarpinjs
+
+    // })
     initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePinjaman_totalbayar"]`).text(bayarpinj))
   }
-  
+
   function setTotalNominal() {
     let nominalDetails = $(`#tablePinjaman`).find(`td[aria-describedby="tablePinjaman_nominal"]`)
     let nominal = 0
@@ -3141,30 +3220,7 @@
         $(`#crudForm [name="supirheader_id"]`).last().val(supir.id)
         element.val(supir.namasupir)
         element.data('currentValue', element.val())
-        $('#tablePinjaman').jqGrid("clearGridData");
-        $("#tablePinjaman")
-          .jqGrid("setGridParam", {
-            selectedRowIds: []
-          })
-          .trigger("reloadGrid");
 
-        getDataPinjaman(supir.id).then((response) => {
-
-          $("#tablePinjaman")[0].p.selectedRowIds = [];
-          setTimeout(() => {
-
-            $("#tablePinjaman")
-              .jqGrid("setGridParam", {
-                datatype: "local",
-                data: response.data,
-                originalData: response.data,
-                rowNum: response.data.length,
-                selectedRowIds: []
-              })
-              .trigger("reloadGrid");
-          }, 100);
-
-        });
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))

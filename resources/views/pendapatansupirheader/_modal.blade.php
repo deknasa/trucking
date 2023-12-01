@@ -1807,6 +1807,8 @@
                     }, 100);
                     // setTotalNominal()
                     setTotalSisaPotPribadi()
+                    setTotalPinjaman()
+                    setTotalBayarPinjaman()
                     setHighlight($(this))
                 },
             })
@@ -1858,6 +1860,30 @@
             $('#tablePinjaman').jqGrid('saveCell', value, 10); //nominal
         })
     })
+
+    function setTotalPinjaman() {
+        let jlhpinj = 0
+        $("#tablePinjaman").find("tbody tr").each(function() {
+            $(this).find(`td[aria-describedby="tablePinjaman_jlhpinjaman"]`).map(function() {
+                jlhpinj = jlhpinj + parseFloat($(this).text().replaceAll(',', ''));
+            });
+        });
+        initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePinjaman_jlhpinjaman"]`).text(jlhpinj))
+    }
+
+    function setTotalBayarPinjaman() {
+        let bayarpinj = 0
+        let originalData = $("#tablePinjaman").getGridParam("data");
+        var filteredData = [];
+
+        // Iterate through the rows and add filtered data to the array
+        $("#tablePinjaman").find("tbody tr").each(function() {
+            $(this).find(`td[aria-describedby="tablePinjaman_totalbayar"]`).map(function() {
+                bayarpinj = bayarpinj + parseFloat($(this).text().replaceAll(',', ''));
+            });
+        });
+        initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePinjaman_totalbayar"]`).text(bayarpinj))
+    }
 
     function getDataPinjaman() {
         aksi = $('#crudForm').data('action')
@@ -1961,13 +1987,18 @@
     function setTotalSisaPotPribadi() {
         let pinj_sisaDetails = $(`#tablePinjaman`).find(`td[aria-describedby="tablePinjaman_pinj_sisa"]`)
         let pinj_sisa = 0
-        let originalData = $("#tablePinjaman").getGridParam("data");
-        $.each(originalData, function(index, value) {
-            sisa = value.pinj_sisa;
-            sisa = (isNaN(sisa)) ? parseFloat(sisa.replaceAll(',', '')) : parseFloat(sisa)
-            pinj_sisa += sisa
+        // let originalData = $("#tablePinjaman").getGridParam("data");
+        // $.each(originalData, function(index, value) {
+        //     sisa = value.pinj_sisa;
+        //     sisa = (isNaN(sisa)) ? parseFloat(sisa.replaceAll(',', '')) : parseFloat(sisa)
+        //     pinj_sisa += sisa
 
-        })
+        // })
+        $("#tablePinjaman").find("tbody tr").each(function() {
+            $(this).find(`td[aria-describedby="tablePinjaman_pinj_sisa"]`).map(function() {
+                pinj_sisa = pinj_sisa + parseFloat($(this).text().replaceAll(',', ''));
+            });
+        });
         initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePinjaman_pinj_sisa"]`).text(pinj_sisa))
     }
 
