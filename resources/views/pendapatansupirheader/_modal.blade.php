@@ -1887,11 +1887,11 @@
 
     function getDataPinjaman() {
         aksi = $('#crudForm').data('action')
-        urlPotPribadi = `${apiUrl}pendapatansupirheader/getPinjaman`
         let supirId = $('#crudForm').find('[name=supir_id]').val();
         if (supirId == '') {
             supirId = 0;
         }
+        urlPotPribadi = `${apiUrl}pendapatansupirheader/${supirId}/getPinjaman`
         return new Promise((resolve, reject) => {
             $.ajax({
                 url: urlPotPribadi,
@@ -1899,7 +1899,6 @@
                 data: {
                     nobukti: $('#crudForm').find('[name=nobukti]').val(),
                     tglbukti: $('#crudForm').find('[name=tglbukti]').val(),
-                    supir_id: supirId,
                 },
                 headers: {
                     Authorization: `Bearer ${accessToken}`
