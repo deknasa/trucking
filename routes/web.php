@@ -172,6 +172,7 @@ use App\Http\Controllers\LaporanPiutangGiroController;
 use App\Http\Controllers\LaporanRitasiTradoController;
 use App\Http\Controllers\LaporanTitipanEmklController;
 use App\Http\Controllers\MandorAbsensiSupirController;
+use App\Http\Controllers\InvoiceLunasKePusatController;
 use App\Http\Controllers\penerimaanTruckingController;
 use App\Http\Controllers\ProsesAbsensiSupirController;
 use App\Http\Controllers\ApprovalHutangBayarController;
@@ -468,6 +469,10 @@ Route::middleware(['auth', 'authorized'])->group(function () {
 
     Route::get('mandorabsensisupir/index', [MandorAbsensiSupirController::class, 'index']);
     Route::resource('mandorabsensisupir', MandorAbsensiSupirController::class);
+
+    Route::get('invoicelunaskepusat/index', [InvoiceLunasKePusatController::class, 'index']);
+    Route::resource('invoicelunaskepusat', InvoiceLunasKePusatController::class);
+
 
     Route::get('historytrip/index', [HistoryTripController::class, 'index']);
     Route::get('listtrip/index', [ListTripController::class, 'index']);
