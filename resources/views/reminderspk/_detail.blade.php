@@ -23,7 +23,7 @@
                     },
                     {
                         label: 'TANGGAL',
-                        name: 'tanggal',
+                        name: 'tglbukti',
                         align: 'left',
                         formatter: "date",
                         formatoptions: {
@@ -32,16 +32,23 @@
                         }
                     },
                     {
-                        label: 'TRADO',
-                        name: 'trado',
+                        label: 'GUDANG',
+                        name: 'gudang',
                     },
                     {
                         label: 'NAMA BARANG',
-                        name: 'namabarang',
+                        name: 'namastok',
                     },
                     {
-                        label: 'SATUAN',
-                        name: 'satuan',
+                        label: 'QTY',
+                        name: 'qty',
+                    },
+                    {
+                        label: 'HARGA SATUAN',
+                        name: 'hargasatuan',
+                    },   {
+                        label: 'TOTAL',
+                        name: 'total',
                     },
                 ],
                 autowidth: true,
