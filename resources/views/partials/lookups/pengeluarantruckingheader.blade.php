@@ -20,13 +20,16 @@
   }
   
   $(document).on('click', '#btnReloadLookup', function(event) {
-
+    let url_tnl = null
+    if (urlTas != '') {
+      url_tnl = `${urlTas}pengeluarantruckingheader`
+    }
     loadDataHeaderLookup('pengeluarantruckingheader', 'pengeluaranTruckingHeaderLookup',{
       pengeluaranheader_id : `{!! $pengeluarantruckingheader_id ?? '' !!}`,
       stok_id: `{!! $stok_id ?? '' !!}`,
       from_tnl: from_tnl,
       
-    },`${urlTas}pengeluarantruckingheader`)
+    },url_tnl)
   })
 
   $('#pengeluaranTruckingHeaderLookup').jqGrid({
