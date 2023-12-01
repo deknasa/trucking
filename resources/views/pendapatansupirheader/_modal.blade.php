@@ -2,7 +2,7 @@
     <div class="modal-dialog">
         <form action="#" id="crudForm">
             <div class="modal-content">
-                
+
                 <form action="" method="post">
 
                     <div class="modal-body">
@@ -1633,6 +1633,20 @@
                         }
                     },
                     {
+                        label: "Jlh Pinjaman",
+                        name: "jlhpinjaman",
+                        sortable: true,
+                        align: "right",
+                        formatter: currencyFormat,
+                    },
+                    {
+                        label: "Total Bayar",
+                        name: "totalbayar",
+                        sortable: true,
+                        align: "right",
+                        formatter: currencyFormat,
+                    },
+                    {
                         label: "SISA",
                         name: "pinj_sisa",
                         sortable: true,
@@ -1832,16 +1846,16 @@
     $(document).on('click', '#resetdatafilter_tablePinjaman', function(event) {
         selectedRowsPengembalian = $("#tablePinjaman").getGridParam("selectedRowIds");
         $.each(selectedRowsPengembalian, function(index, value) {
-            $('#tablePinjaman').jqGrid('saveCell', value, 10); //emptycell
-            $('#tablePinjaman').jqGrid('saveCell', value, 8); //nominal
+            $('#tablePinjaman').jqGrid('saveCell', value, 12); //emptycell
+            $('#tablePinjaman').jqGrid('saveCell', value, 10); //nominal
         })
 
     });
     $(document).on('click', '#gbox_tablePinjaman .ui-jqgrid-hbox .ui-jqgrid-htable thead .ui-search-toolbar th td a.clearsearchclass', function(event) {
         selectedRowsPengembalian = $("#tablePinjaman").getGridParam("selectedRowIds");
         $.each(selectedRowsPengembalian, function(index, value) {
-            $('#tablePinjaman').jqGrid('saveCell', value, 10); //emptycell
-            $('#tablePinjaman').jqGrid('saveCell', value, 8); //nominal
+            $('#tablePinjaman').jqGrid('saveCell', value, 12); //emptycell
+            $('#tablePinjaman').jqGrid('saveCell', value, 10); //nominal
         })
     })
 
