@@ -2,7 +2,7 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
-        
+
         <form action="" method="post">
           <div class="modal-body">
 
@@ -15,8 +15,7 @@
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <div class="input-group">
-
-                  <input type="text" name="tglbukti"  class="form-control  datepicker" readonly>
+                  <input type="text" name="tglbukti" class="form-control datepicker" readonly>
                 </div>
 
               </div>
@@ -28,7 +27,8 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="nobukti" class="form-control"  readonly>
+                <input type="hidden" name="invoiceheader_id" readonly>
+                <input type="text" name="nobukti" class="form-control" readonly>
               </div>
             </div>
             <div class="row form-group">
@@ -38,7 +38,8 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="agen_id" class="form-control" readonly>
+                <input type="hidden" name="agen_id" class="form-control">
+                <input type="text" name="agen" class="form-control" readonly>
               </div>
             </div>
 
@@ -49,10 +50,10 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="nominal" class="form-control autonumeric" readonly>
+                <input type="text" name="nominal" class="form-control text-right" readonly>
               </div>
             </div>
-            
+
 
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
@@ -61,7 +62,9 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="tglbayar" class="form-control  datepicker" >
+                <div class="input-group">
+                  <input type="text" name="tglbayar" class="form-control  datepicker">
+                </div>
               </div>
             </div>
             <div class="row form-group">
@@ -71,7 +74,7 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="bayar" class="form-control autonumeric">
+                <input type="text" name="bayar" class="form-control text-right">
               </div>
             </div>
 
@@ -82,7 +85,7 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="text" name="sisa" class="form-control autonumeric" readonly>
+                <input type="text" name="sisa" class="form-control text-right" readonly>
               </div>
             </div>
           </div>
@@ -107,6 +110,14 @@
   let hasFormBindKeys = false
   let modalBody = $('#crudModal').find('.modal-body').html()
   $(document).ready(function() {
+
+    $(document).on('input', `#crudForm [name="bayar"]`, function(event) {
+      let nominal = AutoNumeric.getNumber($(`#crudForm [name="nominal"]`)[0])
+      let bayar = AutoNumeric.getNumber($(this)[0])
+      sisa = nominal - bayar
+      new AutoNumeric($(`#crudForm [name="sisa"]`)[0]).set(sisa)
+    })
+
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
 
@@ -116,6 +127,9 @@
       let invoicelunaskepusatId = form.find('[name=id]').val()
       let action = form.data('action')
       let data = $('#crudForm').serializeArray()
+      data.filter((row) => row.name === 'nominal')[0].value = AutoNumeric.getNumber($(`#crudForm [name="nominal"]`)[0])
+      data.filter((row) => row.name === 'bayar')[0].value = AutoNumeric.getNumber($(`#crudForm [name="bayar"]`)[0])
+      data.filter((row) => row.name === 'sisa')[0].value = AutoNumeric.getNumber($(`#crudForm [name="sisa"]`)[0])
 
       data.push({
         name: 'sortIndex',
@@ -153,20 +167,20 @@
           value: limit
         })
       }
-      
+
       switch (action) {
-        case 'store':
+        case 'add':
           method = 'POST'
           url = `${apiUrl}invoicelunaskepusat`
 
           break;
         case 'edit':
           method = 'PATCH'
-          url = `${apiUrl}invoicelunaskepusat/${invoicelunaskepusatId}/update`
+          url = `${apiUrl}invoicelunaskepusat/${invoicelunaskepusatId}`
           break;
         case 'delete':
           method = 'DELETE'
-          url = `${apiUrl}invoicelunaskepusat/${invoicelunaskepusatId}/delete`
+          url = `${apiUrl}invoicelunaskepusat/${invoicelunaskepusatId}?indexRow=${indexRow}`
           break;
         default:
           method = 'POST'
@@ -186,7 +200,8 @@
         },
         data: data,
         success: response => {
-          indexRow = response.data.position - 1;
+          indexRow = response.data.position;
+          // id = response.data.position;
           $('#crudForm').trigger('reset')
           $('#crudModal').modal('hide')
 
@@ -203,18 +218,7 @@
             $('.is-invalid').removeClass('is-invalid')
             $('.invalid-feedback').remove()
 
-            let errorMessages = error.responseJSON.errors
-
-            
-            if (errorMessages['tglbukti'] && errorMessages['tglbukti'].length > 0) {
-              form.find(`[name=tglbukti]`).addClass("is-invalid")
-              $(`
-                <div class="invalid-feedback">
-                ${errorMessages['tglbukti'][0].toLowerCase()}
-                </div>
-              `).appendTo(form.find(`[name=tglbukti]`).parent())
-            }
-            
+            setErrorMessages(form, error.responseJSON.errors);
           } else {
             showDialog(error.responseJSON)
           }
@@ -238,13 +242,13 @@
     getMaxLength(form)
     // initSelect2()
 
-   
+
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
     $('#crudModal').find('.modal-body').html(modalBody)
-    initDatepicker('datepickerIndex')
+    initMonthpicker()
   })
 
 
@@ -253,7 +257,7 @@
 
     $('.modal-loader').removeClass('d-none')
 
-    form.data('action', 'store')
+    form.data('action', 'add')
     form.trigger('reset')
     form.find('#btnSubmit').html(`
     <i class="fa fa-save"></i>
@@ -273,6 +277,7 @@
       ])
       .then(() => {
         $('#crudModal').modal('show')
+        form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
       })
       .catch((error) => {
         showDialog(error.statusText)
@@ -330,6 +335,7 @@
       ])
       .then(() => {
         $('#crudModal').modal('show')
+        form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
       })
       .catch((error) => {
         showDialog(error.statusText)
@@ -370,7 +376,7 @@
         $('.modal-loader').addClass('d-none')
       })
 
-  
+
 
   }
 
@@ -384,23 +390,23 @@
         headers: {
           Authorization: `Bearer ${accessToken}`
         },
-        data :{
-          tanggal : $('#tglbukti').val()
+        data: {
+          tanggal: $('#tglbukti').val()
         },
         success: response => {
           $.each(response.data, (index, value) => {
             let element = form.find(`[name="${index}"]`)
-            if (element.attr("name") == 'tglbukti') {
-              if (value) {
-                let result = value.split('-');
-
-                element.val(result[2] + '-' + result[1] + '-' + result[0]);
-              }
+            if (element.hasClass('datepicker')) {
+              element.val(dateFormat(value))
             } else {
               element.val(value)
             }
           })
- 
+          let sisa = parseFloat(response.data.nominal) - parseFloat(response.data.bayar)
+
+          initAutoNumeric(form.find(`[name="nominal"]`))
+          initAutoNumeric(form.find(`[name="bayar"]`))
+          new AutoNumeric($(`#crudForm [name="sisa"]`)[0]).set(sisa)
           if (form.data('action') === 'delete') {
             form.find('[name]').addClass('disabled')
             initDisabled()
@@ -422,17 +428,17 @@
       headers: {
         Authorization: `Bearer ${accessToken}`
       },
-      data :{
-          tanggal : $('#tglshow').val()
-        },
+      data: {
+        tanggal: $('#tglshow').val()
+      },
       success: response => {
         if (response.errors) {
           showDialog(response.message)
         } else {
           if (aksi == 'edit') {
-            editAbsensi(invoiceheader_id)
+            editInvoicelunaskepusat(invoiceheader_id)
           } else {
-            deleteAbsensi(invoiceheader_id)
+            deleteInvoicelunaskepusat(invoiceheader_id)
           }
         }
       }
@@ -447,8 +453,8 @@
       headers: {
         Authorization: `Bearer ${accessToken}`
       },
-      data :{
-          periode : $('#periode').val()
+      data: {
+        periode: $('#periode').val()
       },
       success: response => {
         if (response.errors) {
@@ -488,13 +494,5 @@
   //     })
   //   })
   // }
-
-
-
-
-
-
-
- 
 </script>
 @endpush()
