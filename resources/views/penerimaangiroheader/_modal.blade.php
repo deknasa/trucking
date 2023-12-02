@@ -198,42 +198,42 @@
         $(document).on('click', '.delete-row', function(event) {
             deleteRow($(this).parents('tr'))
         })
-        // $(document).on('click', '.btn-batal', function(event) {
-        //     if ($('#crudForm').data('action') == 'edit') {
+        $(document).on('click', '.btn-batal', function(event) {
+            if ($('#crudForm').data('action') == 'edit') {
 
-        //         event.preventDefault()
-        //         $.ajax({
-        //             url: `{{ config('app.api_url') }}penerimaangiroheader/editingat`,
-        //             method: 'POST',
-        //             dataType: 'JSON',
-        //             headers: {
-        //                 Authorization: `Bearer ${accessToken}`
-        //             },
-        //             data: {
-        //                 id: $('#crudForm').find('[name=id]').val(),
-        //                 btn: 'batal'
-        //             },
-        //             success: response => {
-        //                 $("#crudModal").modal("hide")
-        //             },
-        //             error: error => {
-        //                 if (error.status === 422) {
-        //                     $('.is-invalid').removeClass('is-invalid')
-        //                     $('.invalid-feedback').remove()
+                event.preventDefault()
+                $.ajax({
+                    url: `{{ config('app.api_url') }}penerimaangiroheader/editingat`,
+                    method: 'POST',
+                    dataType: 'JSON',
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`
+                    },
+                    data: {
+                        id: $('#crudForm').find('[name=id]').val(),
+                        btn: 'batal'
+                    },
+                    success: response => {
+                        $("#crudModal").modal("hide")
+                    },
+                    error: error => {
+                        if (error.status === 422) {
+                            $('.is-invalid').removeClass('is-invalid')
+                            $('.invalid-feedback').remove()
 
-        //                     setErrorMessages(form, error.responseJSON.errors);
-        //                 } else {
-        //                     showDialog(error.responseJSON)
-        //                 }
-        //             },
-        //         }).always(() => {
-        //             $('#processingLoader').addClass('d-none')
-        //             $(this).removeAttr('disabled')
-        //         })
-        //     } else {                
-        //         $("#crudModal").modal("hide")
-        //     }
-        // })
+                            setErrorMessages(form, error.responseJSON.errors);
+                        } else {
+                            showDialog(error.responseJSON)
+                        }
+                    },
+                }).always(() => {
+                    $('#processingLoader').addClass('d-none')
+                    $(this).removeAttr('disabled')
+                })
+            } else {                
+                $("#crudModal").modal("hide")
+            }
+        })
 
 
         $(document).on('input', `#table_body [name="nominal[]"]`, function(event) {

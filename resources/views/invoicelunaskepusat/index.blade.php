@@ -360,6 +360,14 @@
               }
             }
           },
+          {
+            id: 'export',
+            innerHTML: '<i class="fas fa-file-export"></i> EXPORT',
+            class: 'btn btn-warning btn-sm mr-1',
+            onClick: () => {
+              window.open(`{{ route('invoicelunaskepusat.export') }}?periode=`+$('#periode').val())
+            }
+          },
 
         ]
       })
@@ -391,7 +399,19 @@
       .parent().addClass('px-1')
 
     if (!`{{ $myAuth->hasPermission('invoicelunaskepusat', 'store') }}`) {
-      $('#absen').attr('disabled', 'disabled')
+      $('#add').attr('disabled', 'disabled')
+    }
+
+    if (!`{{ $myAuth->hasPermission('invoicelunaskepusat', 'update') }}`) {
+      $('#edit').attr('disabled', 'disabled')
+    }
+
+    if (!`{{ $myAuth->hasPermission('invoicelunaskepusat', 'destroy') }}`) {
+      $('#delete').attr('disabled', 'disabled')
+    }
+
+    if (!`{{ $myAuth->hasPermission('invoicelunaskepusat', 'export') }}`) {
+      $('#export').attr('disabled', 'disabled')
     }
 
 

@@ -470,6 +470,7 @@ Route::middleware(['auth', 'authorized'])->group(function () {
     Route::get('mandorabsensisupir/index', [MandorAbsensiSupirController::class, 'index']);
     Route::resource('mandorabsensisupir', MandorAbsensiSupirController::class);
 
+    Route::get('invoicelunaskepusat/export', [InvoiceLunasKePusatController::class, 'export'])->name('invoicelunaskepusat.export');
     Route::get('invoicelunaskepusat/index', [InvoiceLunasKePusatController::class, 'index']);
     Route::resource('invoicelunaskepusat', InvoiceLunasKePusatController::class);
 
