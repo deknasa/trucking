@@ -41,11 +41,11 @@ body {
 	margin-left: 0 !important;
 }
 /* custom hover jqgrid */
-.ui-jqgrid-btable tbody tr.table-active:hover > td, 
+/* .ui-jqgrid-btable tbody tr.table-active:hover > td, 
 .ui-jqgrid-htable thead tr > th.table-active:hover { 
  color:black!important; 
  background-color: white!important; 
-}
+} */
 .sidebar-open #sidebar-overlay {
 	display: block !important;
 }
