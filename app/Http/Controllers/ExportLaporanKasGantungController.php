@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Menu;
+use Exception;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -46,6 +47,10 @@ class ExportLaporanKasGantungController extends MyController
 
         $data = $header['data'];
 
+        if(count($data) == 0){
+            throw new \Exception('TIDAK ADA DATA');
+        }
+        
         $dataDua = $header['dataDua'];
 
         $spreadsheet = new Spreadsheet();
@@ -103,7 +108,7 @@ class ExportLaporanKasGantungController extends MyController
 
             $tanggal = str_replace($englishMonths, $indonesianMonths, date('d - M - Y', strtotime($date)));
 
-            $sheet->setCellValue('A1', $data[0]['judul']);
+            $sheet->setCellValue('A1', $header['judul']);
             $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
             $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
             $sheet->mergeCells('A1:G1');
@@ -242,7 +247,7 @@ class ExportLaporanKasGantungController extends MyController
         $bulan = $this->getBulan(substr($request->periode, 0, 2));
         $bulan1 = substr($request->periode, 0, 2);
         $tahun = substr($request->periode, 3, 4);
-        $rekapPerkiraanSheet->setCellValue('A1', $data[0]['judul']);
+        $rekapPerkiraanSheet->setCellValue('A1', $header['judul']);
         $rekapPerkiraanSheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
         $rekapPerkiraanSheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $rekapPerkiraanSheet->mergeCells('A1:F1');
