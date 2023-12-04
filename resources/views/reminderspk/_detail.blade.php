@@ -9,7 +9,8 @@
         let triggerClickDetail
         let indexRowDetail
         let pageDetail = 0
-
+        let rowNumDetail = 0
+        
         $("#detailGrid")
             .jqGrid({
                 datatype: 'local',
@@ -50,7 +51,7 @@
                         name: 'hargasatuan',
                         align: 'right',
                         formatter: currencyFormat,
-                    },   {
+                    }, {
                         label: 'TOTAL',
                         name: 'total',
                         align: 'right',
@@ -60,7 +61,7 @@
                 autowidth: true,
                 shrinkToFit: false,
                 height: 350,
-                rowNum: 10,
+                rowNum: 0,
                 rownumbers: true,
                 rownumWidth: 45,
                 rowList: [10, 20, 50, 0],
@@ -119,7 +120,9 @@
                     if (indexRowDetail > $(this).getDataIDs().length - 1) {
                         indexRowDetail = $(this).getDataIDs().length - 1;
                     }
-
+                    if (rowNumDetail == 0) {
+                        $('#detailGrid_rowList option[value=0]').attr('selected', 'selected');
+                    }
                     setHighlight($(this))
 
                     if (data.attributes) {
@@ -160,7 +163,7 @@
         loadGlobalSearch($('#detailGrid'))
     }
 
-    function loadDetailData(stok_Id,trado_Id,gandengan_Id,nama_gudang,nama_stok) {
+    function loadDetailData(stok_Id, trado_Id, gandengan_Id, nama_gudang, nama_stok) {
         abortGridLastRequest($('#detailGrid'))
 
         $('#detailGrid').setGridParam({
