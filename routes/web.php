@@ -1584,6 +1584,7 @@ Route::middleware(['auth', 'authorized'])->group(function () {
     Route::get('statusolitrado/index', [StatusOliTradoController::class, 'index']);
     Route::resource('statusolitrado', StatusOliTradoController::class);
 
+    Route::get('reminderspkdetail/export', [ReminderSpkController::class, 'export'])->name('reminderspkdetail.export');
     Route::get('reminderspk/index', [ReminderSpkController::class, 'index']);
     Route::resource('reminderspk', ReminderSpkController::class);
     Route::get('spkharian/index', [SpkHarianController::class, 'index']);

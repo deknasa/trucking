@@ -148,10 +148,10 @@
                     stok_id = $('#jqGrid').jqGrid('getCell', id, 'stok_id');
                     trado_id = $('#jqGrid').jqGrid('getCell', id, 'trado_id');
                     gandengan_id = $('#jqGrid').jqGrid('getCell', id, 'gandengan_id');
-                    gudang =  $('<div/>').html($('#jqGrid').jqGrid('getCell', id, 'gudang')).text();
-                    stok =  $('<div/>').html($('#jqGrid').jqGrid('getCell', id, 'stok')).text();
+                    gudang = $('<div/>').html($('#jqGrid').jqGrid('getCell', id, 'gudang')).text();
+                    stok = $('<div/>').html($('#jqGrid').jqGrid('getCell', id, 'stok')).text();
 
-                    loadDetailData(stok_id,trado_id,gandengan_id,gudang,stok)
+                    loadDetailData(stok_id, trado_id, gandengan_id, gudang, stok)
                 },
                 loadComplete: function(data) {
 
@@ -223,7 +223,18 @@
                 }
             })
 
-            .customPager()
+            .customPager({
+                buttons: [{
+                    id: 'export',
+                    title: 'Export',
+                    caption: 'Export',
+                    innerHTML: '<i class="fas fa-file-export"></i> EXPORT',
+                    class: 'btn btn-warning btn-sm mr-1',
+                    onClick: function(event) {
+                        window.open(`{{ route('reminderspkdetail.export') }}`)
+                    }
+                }, ]
+            })
 
         /* Append clear filter button */
         loadClearFilter($('#jqGrid'))
