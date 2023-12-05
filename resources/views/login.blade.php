@@ -89,7 +89,7 @@
                     <a href="javascript: void(0)" id="resetPassword" style="text-decoration: underline ">reset password</a>
                     <div class="row">
                         <div class="col-md-4 offset-md-8">
-                            <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+                            <button type="submit" class="btn btn-primary btn-block" onclick="signInFunction(this)">Sign In</button>
                         </div>
                     </div>
                 </form>
@@ -112,7 +112,7 @@
         $(document).ready(function() {
 
             $("input").attr("autocomplete", "off");
-            
+
             $(document).on('click', ".toggle-password", function(event) {
                 $(this).toggleClass("fa-eye fa-eye-slash");
                 var input = $($(this).attr("toggle"));
@@ -234,6 +234,12 @@
             }
 
         })
+
+        function signInFunction(button) {
+            $(button).prop('disabled', true)
+            $('#processingLoader').removeClass('d-none')
+            $('form').submit();
+        }
     </script>
 </body>
 

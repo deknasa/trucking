@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Menu;
+use Exception;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -45,6 +46,10 @@ class ExportLaporanKasGantungController extends MyController
             ->get(config('app.api_url') . 'exportlaporankasgantung/export', $detailParams);
 
         $data = $header['data'];
+
+        if(count($data) == 0){
+            throw new \Exception('TIDAK ADA DATA');
+        }
 
         $dataDua = $header['dataDua'];
 
