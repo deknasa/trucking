@@ -59,10 +59,12 @@
   let tgldariheader
   let tglsampaiheader
   let isKomisi;
+  let isApprovalBiayaTambahan;
 
   $(document).ready(function() {
     $("#tabs").tabs()
     setIsKomisi()
+    setApprovalBiayaTambahan()
     loadDetailGrid()
     loadRekapCustGrid($('#tgldariheader').val(), $('#tglsampaiheader').val())
     @isset($request['tgldari'])
@@ -792,7 +794,7 @@
                 celValue = $("<div>").html(rawCellValue).text();
                 selectednobukti = celValue
                 if (`{{ $myAuth->hasPermission('suratpengantar', 'approvalTitipanEmkl') }}`) {
-                  approvalTitipanEmkl(selectedId,selectednobukti);
+                  approvalTitipanEmkl(selectedId, selectednobukti);
                 }
               }
             },
@@ -988,7 +990,7 @@
       })
     }
 
-    function approvalTitipanEmkl(id,noBukti) {
+    function approvalTitipanEmkl(id, noBukti) {
       getEditTujuan()
       $.ajax({
         url: `${apiUrl}suratpengantar/${id}`,
@@ -1104,6 +1106,33 @@
       },
       success: response => {
         isKomisi = $.trim(response.text)
+      }
+    })
+  }
+
+
+  function setApprovalBiayaTambahan() {
+    $.ajax({
+      url: `${apiUrl}parameter/getparamfirst`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        grp: 'SURAT PENGANTAR BIAYA TAMBAHAN',
+        subgrp: 'APPROVAL'
+      },
+      success: response => {
+        isApprovalBiayaTambahan = $.trim(response.text)
+        if (isApprovalBiayaTambahan == 'TIDAK') {
+
+          $("#detailGrid").jqGrid("hideCol", '');
+          $("#detailGrid").jqGrid("hideCol", 'statusapproval');
+          $("#detailGrid").jqGrid("hideCol", 'userapproval');
+          $("#detailGrid").jqGrid("hideCol", 'tglapproval');
+          $("#approvalbiayatambahan").hide()
+        }
       }
     })
   }
