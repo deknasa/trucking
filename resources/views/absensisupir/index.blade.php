@@ -406,7 +406,7 @@
                 id: 'approvalEdit',
                 text: "UN/APPROVAL Absensi Edit",
                 onClick: () => {
-                  if (`{{ $myAuth->hasPermission('suratpengantar', 'approvalEditAbsensi') }}`) {
+                  if (`{{ $myAuth->hasPermission('absensisupirheader', 'approvalEditAbsensi') }}`) {
                     selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                     approveEdit(selectedId)
                   }
@@ -419,10 +419,11 @@
                   if (`{{ $myAuth->hasPermission('approvalbukacetak', 'store') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');
                     tglbukacetak =tglbukacetak[1] + '-' + tglbukacetak[2];
-                    if (selectedRows.length < 1) {
+                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                    if (selectedId == null || selectedId == '' || selectedId == undefined) {
                       showDialog('Harap pilih salah satu record')
                     }else{
-                      approvalBukaCetak(tglbukacetak,'ABSENSISUPIRHEADER',selectedRows);
+                      approvalBukaCetak(tglbukacetak,'ABSENSISUPIRHEADER',[selectedId]);
                     }
                   }
                 }
