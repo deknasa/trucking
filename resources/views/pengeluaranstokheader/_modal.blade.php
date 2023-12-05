@@ -1040,13 +1040,6 @@
         showPengeluaranstokHeader(form, pengeluaranStokHeaderId)
           .then(() => {
             $('#crudModal').modal('show')
-            if ($('#crudForm').find("[name=gudang]")) {
-              lookupSelected(`gudang`);
-            } else if ($('#crudForm').find("[name=gandengan]")) {
-              lookupSelected('gandengan')
-            } else if ($('#crudForm').find("[name=trado]")) {
-              lookupSelected('trado')
-            }
             // // penerimaanOrServicein
             // if ($('#crudForm').find("[name=servicein_nobukti]").val() !== "") {
             //   penerimaanOrServicein('penerimaan');
@@ -1737,7 +1730,6 @@
   }
 
   function enabledKorDisable() {
-    console.log('adasd');
     $('#crudForm').find(`[name="gudang"]`).parents('.input-group').children().attr("disabled", false);
     $('#crudForm').find(`[name="gudang"]`).parents('.input-group').children().find(`.lookup-toggler`).attr("disabled", false);
     $('#gudangId').attr('disabled', false);
@@ -2016,7 +2008,6 @@
 
               dataStatusBan.forEach(statusBan => {
                 option = new Option(statusBan.text, statusBan.id)
-                console.log(option);
                 detailRow.find(`#statusban${id}`).append(option).trigger('change')
               });
 

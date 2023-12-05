@@ -97,7 +97,6 @@
               return formattedValue[0].outerHTML
             },
             cellattr: (rowId, value, rowObject) => {
-              console.log(value);
               if(!value){
                 return ''
               }
