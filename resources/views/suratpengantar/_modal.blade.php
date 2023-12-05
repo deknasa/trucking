@@ -561,7 +561,42 @@
       }
     })
     $(document).on('click', '.delete-row', function(event) {
-      deleteRow($(this).parents('tr'))
+      if (isApprovalBiayaTambahan == 'YA') {
+        $.ajax({
+          url: `${apiUrl}suratpengantar/deleterow`,
+          method: 'POST',
+          dataType: 'JSON',
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          },
+          data: {
+            id: $(this).parents('tr').find(`[name="tambahan_id[]"]`).val()
+          },
+          success: response => {
+            let status = response.data;
+            if (status) {
+              deleteRow($(this).parents('tr'))
+            } else {
+              showDialog('SUDAH DIAPPROVAL')
+            }
+          },
+          error: error => {
+            if (error.status === 422) {
+              $('.is-invalid').removeClass('is-invalid')
+              $('.invalid-feedback').remove()
+              setErrorMessages($('#crudForm'), error.responseJSON.errors);
+            } else {
+              showDialog(error.responseJSON)
+            }
+          },
+        }).always(() => {
+          $('#processingLoader').addClass('d-none')
+          $(this).removeAttr('disabled')
+        })
+
+      } else {
+        deleteRow($(this).parents('tr'))
+      }
     })
 
 
@@ -1372,6 +1407,7 @@
                           <td></td>
                           <td>
                             <input type="text" name="keterangan_detail[]" class="form-control">
+                            <input type="hidden" name="tambahan_id[]">
                           </td>
                           <td>
                             <input type="text" name="nominal[]" class="form-control autonumeric">
@@ -1386,6 +1422,7 @@
                       `)
 
               detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keteranganbiaya)
+              detailRow.find(`[name="tambahan_id[]"]`).val(detail.id)
 
               detailRow.find(`[name="nominal[]"]`).val(detail.nominal)
               detailRow.find(`[name="nominalTagih[]"]`).val(detail.nominaltagih)
@@ -1425,6 +1462,7 @@
         <td></td>
         <td>
           <input type="text" name="keterangan_detail[]" class="form-control">
+          <input type="hidden" name="tambahan_id[]">
         </td>
         <td>
           <input type="text" name="nominal[]" class="form-control autonumeric" value="0">
@@ -1488,7 +1526,7 @@
         element.data('currentValue', element.val())
       }
     })
-    
+
     $('.kotadari-lookup').lookup({
       title: 'Kota Dari Lookup',
       fileName: 'kotazona',

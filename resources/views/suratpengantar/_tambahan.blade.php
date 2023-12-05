@@ -1,6 +1,49 @@
-
 @push('scripts')
 <script>
+  let selectedRowsTambahan = [];
+
+  function clearSelectedRowsTambahan() {
+    selectedRowsTambahan = []
+
+    $('#detailGrid').trigger('reloadGrid')
+  }
+
+  function selectAllRowsTambahan(id) {
+    $.ajax({
+      url: `${apiUrl}suratpengantarbiayatambahan`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        limit: 0,
+        suratpengantar_id: $('#detailGrid').jqGrid('getGridParam', 'postData').suratpengantar_id,
+        filters: $('#detailGrid').jqGrid('getGridParam', 'postData').filters
+      },
+      success: (response) => {
+        selectedRowsTambahan = response.data.map((jurnal) => jurnal.id)
+        $('#detailGrid').trigger('reloadGrid')
+      }
+    })
+  }
+
+  function checkboxHandlerTambahan(element) {
+    let value = $(element).val();
+    if (element.checked) {
+      selectedRowsTambahan.push($(element).val())
+      $(element).parents('tr').addClass('bg-light-blue')
+    } else {
+      $(element).parents('tr').removeClass('bg-light-blue')
+      for (var i = 0; i < selectedRowsTambahan.length; i++) {
+        if (selectedRowsTambahan[i] == value) {
+          selectedRowsTambahan.splice(i, 1);
+        }
+      }
+    }
+
+  }
+
   function loadDetailGrid() {
     let sortnameDetail = 'nobukti'
     let sortorderDetail = 'asc'
@@ -18,12 +61,52 @@
         iconSet: 'fontAwesome',
         idPrefix: 'detailGrid',
         colModel: [{
+            label: '',
+            name: '',
+            width: 40,
+            align: 'center',
+            sortable: false,
+            clear: false,
+            stype: 'input',
+            searchable: false,
+            searchoptions: {
+              type: 'checkbox',
+              clearSearch: false,
+              dataInit: function(element) {
+                $(element).removeClass('form-control')
+                $(element).parent().addClass('text-center')
+                $(element).addClass('checkbox-selectall')
+
+                $(element).on('click', function() {
+                  $(element).attr('disabled', true)
+                  if ($(this).is(':checked')) {
+                    selectAllRowsTambahan()
+                  } else {
+                    clearSelectedRowsTambahan()
+                  }
+                })
+
+              }
+            },
+            formatter: (value, rowOptions, rowData) => {
+              return `<input type="checkbox" name="tambahanId[]" class="checkbox-jqgrid" value="${rowData.id}" onchange="checkboxHandlerTambahan(this)">`
+            },
+          }, {
+            label: 'ID',
+            name: 'id',
+            align: 'right',
+            width: '50px',
+            search: false,
+            hidden: true
+          },
+          {
             label: 'NO BUKTI',
             name: 'nobukti',
           },
           {
             label: 'KETERANGAN BIAYA TAMBAHAN',
             name: 'keteranganbiaya',
+            width: '200px'
           },
           {
             label: 'NOMINAL SUPIR',
@@ -36,6 +119,67 @@
             name: 'nominaltagih',
             align: 'right',
             formatter: currencyFormat,
+          },
+
+          {
+            label: 'STATUS APPROVAL',
+            name: 'statusapproval',
+            stype: 'select',
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['combotitipan'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['combotitipan'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+            `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              if (!value) {
+                return ''
+              }
+              let statusApprovalBiayaTambahan = JSON.parse(value)
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusApprovalBiayaTambahan.WARNA}; color: #fff;">
+                  <span>${statusApprovalBiayaTambahan.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              if (!rowObject.statusapproval) {
+                return ` title=""`
+              }
+              let statusApprovalBiayaTambahan = JSON.parse(rowObject.statusapproval)
+              return ` title="${statusApprovalBiayaTambahan.MEMO}"`
+            }
+          },
+          {
+            label: 'TGL APPROVAL',
+            name: 'tglapproval',
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y H:i:s"
+            }
+          },
+          {
+            label: 'USER APPROVAL',
+            name: 'userapproval',
           },
         ],
         autowidth: true,
@@ -80,6 +224,17 @@
           setCustomBindKeys($(this))
           initResize($(this))
 
+          $.each(selectedRowsTambahan, function(key, value) {
+
+            $('#detailGrid tbody tr').each(function(row, tr) {
+              if ($(this).find(`td input:checkbox`).val() == value) {
+                $(this).find(`td input:checkbox`).prop('checked', true)
+                $(this).addClass('bg-light-blue')
+              }
+            })
+
+          });
+
           /* Set global variables */
           sortnameDetail = $(this).jqGrid("getGridParam", "sortname")
           sortorderDetail = $(this).jqGrid("getGridParam", "sortorder")
@@ -105,6 +260,8 @@
               nominaltagih: data.attributes.totalNominalTagih,
             }, true)
           }
+
+          $('#gs_detailGrid').attr('disabled', false)
         }
       })
       .jqGrid("setLabel", "rn", "No.")
@@ -116,20 +273,22 @@
         disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
           abortGridLastRequest($(this))
-          
+
           clearGlobalSearch($('#detailGrid'))
         },
       })
-
-      .jqGrid("navGrid", pager, {
-        search: false,
-        refresh: false,
-        add: false,
-        edit: false,
-        del: false,
+      .customPager({
+        buttons: [{
+          id: 'approvalbiayatambahan',
+          innerHTML: '<i class="fas fa-check""></i> UN/APPROVAL',
+          class: 'btn btn-purple btn-sm mr-1',
+          onClick: () => {
+            console.log(`{{ $myAuth->hasPermission('suratpengantar', 'approval') }}`)
+            approveBiayaTambahan()
+          }
+        }, ]
       })
 
-      .customPager()
     /* Append clear filter button */
     loadClearFilter($('#detailGrid'))
 
@@ -137,10 +296,14 @@
     loadGlobalSearch($('#detailGrid'))
   }
 
-  function loadDetailData(id) {
-        abortGridLastRequest($('#detailGrid'))
+  if (!`{{ $myAuth->hasPermission('suratpengantar', 'approval') }}`) {
+    $('#approvalbiayatambahan').attr('disabled', 'disabled')
+  }
 
-        $('#detailGrid').setGridParam({
+  function loadDetailData(id) {
+    abortGridLastRequest($('#detailGrid'))
+
+    $('#detailGrid').setGridParam({
       url: `${apiUrl}suratpengantarbiayatambahan`,
       datatype: "json",
       postData: {
@@ -148,6 +311,40 @@
       },
       page: 1
     }).trigger('reloadGrid')
+  }
+
+  function approveBiayaTambahan() {
+    event.preventDefault()
+    $.ajax({
+      url: `${apiUrl}suratpengantarbiayatambahan/approval`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        id: selectedRowsTambahan
+      },
+      success: response => {
+        $('#crudForm').trigger('reset')
+        $('#crudModal').modal('hide')
+        selectedRowsTambahan = []
+        $('#detailGrid').jqGrid().trigger('reloadGrid');
+      },
+      error: error => {
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+
+          setErrorMessages($('#crudForm'), error.responseJSON.errors);
+        } else {
+          showDialog(error.responseJSON)
+        }
+      },
+    }).always(() => {
+      $('#processingLoader').addClass('d-none')
+      $(this).removeAttr('disabled')
+    })
   }
 </script>
 @endpush
