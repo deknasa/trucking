@@ -191,7 +191,7 @@ class LaporanPinjamanSupirController extends MyController
             }
 
             $sheet->getStyle("A$detail_start_row:G$detail_start_row")->applyFromArray($styleArray);
-             $sheet->getStyle("E$detail_start_row:G$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+             $sheet->getStyle("E$detail_start_row:G$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
              $sheet->getStyle("A$detail_start_row:A$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
            
             //  $sheet->getStyle("D$detail_start_row")->getAlignment()->setWrapText(true);
@@ -214,15 +214,15 @@ class LaporanPinjamanSupirController extends MyController
 
        $totalDebet = "=SUM(E6:E" . ($detail_start_row-1) . ")";
        $sheet->setCellValue("E$total_start_row", $totalDebet)->getStyle("E$total_start_row")->applyFromArray($style_number);
-       $sheet->setCellValue("E$total_start_row", $totalDebet)->getStyle("E$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+       $sheet->setCellValue("E$total_start_row", $totalDebet)->getStyle("E$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
        $totalKredit = "=SUM(F6:F" . ($detail_start_row-1) . ")";
        $sheet->setCellValue("F$total_start_row", $totalKredit)->getStyle("F$total_start_row")->applyFromArray($style_number);
-       $sheet->setCellValue("F$total_start_row", $totalKredit)->getStyle("F$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+       $sheet->setCellValue("F$total_start_row", $totalKredit)->getStyle("F$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
        $totalSaldo = "=E".$total_start_row."-F" .$total_start_row;
        $sheet->setCellValue("G$total_start_row", $totalSaldo)->getStyle("G$total_start_row")->applyFromArray($style_number);
-       $sheet->setCellValue("G$total_start_row", $totalSaldo)->getStyle("G$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00");
+       $sheet->setCellValue("G$total_start_row", $totalSaldo)->getStyle("G$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
         $ttd_start_row = $detail_start_row + 2;
         $sheet->setCellValue("A$ttd_start_row", 'Disetujui Oleh,');
