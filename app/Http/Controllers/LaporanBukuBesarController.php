@@ -94,7 +94,10 @@ class LaporanBukuBesarController extends MyController
             ->get(config('app.api_url') . 'laporanbukubesar/export', $detailParams);
 
         $bukubesar = $responses['data'];
-        // dd($bukubesar);
+        
+        if(count($bukubesar) == 0){
+            throw new \Exception('TIDAK ADA DATA');
+        }
         $dataheader = $responses['dataheader'];
         $user = Auth::user();
 

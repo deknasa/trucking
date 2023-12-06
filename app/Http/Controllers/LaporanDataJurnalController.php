@@ -33,6 +33,11 @@ class LaporanDataJurnalController extends MyController
             ->get(config('app.api_url') . 'laporandatajurnal/export', $detailParams);
 
         $bukubesar = $responses['data'];
+        
+        if(count($bukubesar) == 0){
+            throw new \Exception('TIDAK ADA DATA');
+        }
+
         $dataheader = $detailParams;
         $user = Auth::user();
 

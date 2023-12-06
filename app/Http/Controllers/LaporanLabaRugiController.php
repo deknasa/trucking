@@ -93,8 +93,12 @@ class LaporanLabaRugiController extends MyController
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'laporanlabarugi/export', $detailParams);
 
-        if ($responses->successful()) {
             $pengeluaran = $responses['data'];
+
+            if(count($pengeluaran) == 0){
+                throw new \Exception('TIDAK ADA DATA');
+            }
+
             $disetujui = $pengeluaran[0]['disetujui'] ?? '';
             $diperiksa = $pengeluaran[0]['diperiksa'] ?? '';
             $user = Auth::user();
@@ -273,9 +277,7 @@ class LaporanLabaRugiController extends MyController
             header('Cache-Control: max-age=0');
 
             $writer->save('php://output');
-        } else {
-            return response()->json($responses->json(), $responses->status());
-        }
+        
     }
 
 

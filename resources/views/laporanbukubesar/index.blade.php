@@ -163,6 +163,8 @@
     })
 
     $(document).on('click', `#btnExport`, function(event) {
+        $('#processingLoader').removeClass('d-none')
+
         let dari = $('#crudForm').find('[name=dari]').val()
         let sampai = $('#crudForm').find('[name=sampai]').val()
         let coadari_id = $('#crudForm').find('[name=coadari_id]').val()
@@ -173,7 +175,35 @@
 
         if (dari != '' && sampai != '') {
 
-            window.open(`{{ route('laporanbukubesar.export') }}?dari=${dari}&sampai=${sampai}&coadari=${coadari}&coasampai=${coasampai}&coadari_id=${coadari_id}&coasampai_id=${coasampai_id}&cabang_id=${cabang_id}`)
+            $.ajax({
+                url: `{{ route('laporanbukubesar.export') }}?dari=${dari}&sampai=${sampai}&coadari=${coadari}&coasampai=${coasampai}&coadari_id=${coadari_id}&coasampai_id=${coasampai_id}&cabang_id=${cabang_id}`,
+                type: 'GET',
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
+                },
+                xhrFields: {
+                    responseType: 'arraybuffer'
+                },
+                success: function(response, status, xhr) {
+                    if (xhr.status === 200) {
+                        if (response !== undefined) {
+                            var blob = new Blob([response], {
+                                type: 'cabang/vnd.ms-excel'
+                            });
+                            var link = document.createElement('a');
+                            link.href = window.URL.createObjectURL(blob);
+                            link.download = `LAPORAN BUKU BESAR ${new Date().getTime()}.xlsx`;
+                            link.click();
+                        }
+                    }
+                    
+                    $('#processingLoader').addClass('d-none')
+                },
+                error: function(xhr, status, error) {
+                    $('#processingLoader').addClass('d-none')
+                    showDialog('TIDAK ADA DATA')
+                }
+            })
         } else {
             showDialog('ISI SELURUH KOLOM')
         }
