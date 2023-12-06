@@ -1208,6 +1208,9 @@
                 datatype: "local",
                 styleUI: 'Bootstrap4',
                 iconSet: 'fontAwesome',
+                postData:{
+                    'dari' : 'index'
+                },
                 colModel: [{
                         label: 'Pilih',
                         name: 'pilih',
@@ -1360,6 +1363,9 @@
                 datatype: "local",
                 styleUI: 'Bootstrap4',
                 iconSet: 'fontAwesome',
+                postData:{
+                    'dari' : 'index'
+                },
                 colModel: [{
                         label: 'Pilih',
                         name: 'pilih',
