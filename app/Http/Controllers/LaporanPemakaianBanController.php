@@ -51,7 +51,9 @@ class LaporanPemakaianBanController extends MyController
             ->get(config('app.api_url') . 'laporanpemakaianban/report', $detailParams);
 
         $data = $header['data'];
-
+        if(count($data) == 0){
+            throw new \Exception('TIDAK ADA DATA');
+        }
         $user = Auth::user();
 
         return view('reports.laporanpemakaianban', compact('data', 'user', 'detailParams'));
