@@ -27,6 +27,11 @@
             width: '200px'
           },
           {
+            label: 'KARYAWAN',
+            name: 'karyawan_id',
+            width: '200px'
+          },
+          {
             label: 'NOMINAL',
             name: 'nominal',
             formatter: currencyFormat,

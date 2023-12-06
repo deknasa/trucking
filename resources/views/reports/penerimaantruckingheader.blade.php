@@ -77,6 +77,14 @@
             report.loadFile(`{{ asset('public/reports/ReportPenerimaanTruckingHeaderPJPK.mrt') }}`)
           }
           break;
+        case '544':
+          //DPOK
+          if (printer['tipe'] == 'reportPrinterBesar') {
+            report.loadFile(`{{ asset('public/reports/ReportPenerimaanTruckingHeaderDPOKBesar.mrt') }}`)
+          } else {
+            report.loadFile(`{{ asset('public/reports/ReportPenerimaanTruckingHeaderDPOK.mrt') }}`)
+          }
+          break;
         default:
           //PBT
           if (printer['tipe'] == 'reportPrinterBesar') {
