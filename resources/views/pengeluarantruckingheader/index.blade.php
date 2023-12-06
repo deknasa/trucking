@@ -302,6 +302,11 @@
             align: 'left'
           },
           {
+            label: 'karyawan',
+            name: 'karyawan',
+            align: 'left'
+          },
+          {
             label: 'NO BUKTI Pengeluaran Trucking',
             name: 'pengeluarantrucking_nobukti',
             align: 'left'

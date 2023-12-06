@@ -118,6 +118,14 @@
             report.loadFile(`{{ asset('public/reports/ReportPengeluaranTruckingHeaderBBT.mrt') }}`)
           }
           break;
+        case '545':
+          //tde
+          if (printer['tipe'] == 'reportPrinterBesar') {
+            report.loadFile(`{{ asset('public/reports/ReportPengeluaranTruckingHeaderTDEKBesar.mrt') }}`)
+          } else {
+            report.loadFile(`{{ asset('public/reports/ReportPengeluaranTruckingHeaderTDEK.mrt') }}`)
+          }
+          break;
         default:
           if (printer['tipe'] == 'reportPrinterBesar') {
             report.loadFile(`{{ asset('public/reports/ReportPengeluaranTruckingHeaderBLLBesar.mrt') }}`)
