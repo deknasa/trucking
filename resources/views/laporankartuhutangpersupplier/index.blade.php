@@ -142,27 +142,41 @@
     })
 
     $(document).on('click', `#btnExport`, function(event) {
+        $('#processingLoader').removeClass('d-none')
+
         let dari = $('#crudForm').find('[name=dari]').val()
         let supplierdari_id = $('#crudForm').find('[name=supplierdari_id]').val()
         let suppliersampai_id = $('#crudForm').find('[name=suppliersampai_id]').val()
         let supplierdari = $('#crudForm').find('[name=supplierdari]').val()
         let suppliersampai = $('#crudForm').find('[name=suppliersampai]').val()
 
-        getCekExport().then((response) => {
-            window.open(
-                `{{ route('laporankartuhutangpersupplier.export') }}?dari=${dari}&supplierdari_id=${supplierdari_id}&suppliersampai_id=${suppliersampai_id}&supplierdari=${supplierdari}&suppliersampai=${suppliersampai}`
-            )
-        }).catch((error) => {
-            if (error.status === 422) {
-                $('.is-invalid').removeClass('is-invalid')
-                $('.invalid-feedback').remove()
-
-                // return showDialog(error.responseJSON.errors.export);
-
-                setErrorMessages($('#crudForm'), error.responseJSON.errors);
-            } else {
-                showDialog(error.statusText, error.responseJSON.message)
-
+        $.ajax({
+            url: `{{ route('laporankartuhutangpersupplier.export') }}?dari=${dari}&supplierdari_id=${supplierdari_id}&suppliersampai_id=${suppliersampai_id}&supplierdari=${supplierdari}&suppliersampai=${suppliersampai}`,
+            type: 'GET',
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
+            },
+            xhrFields: {
+                responseType: 'arraybuffer'
+            },
+            success: function(response, status, xhr) {
+                if (xhr.status === 200) {
+                    if (response !== undefined) {
+                        var blob = new Blob([response], {
+                            type: 'cabang/vnd.ms-excel'
+                        });
+                        var link = document.createElement('a');
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = 'LAPORAN KARTU HUTANG PER SUPPLIER ' + new Date().getTime() + '.xlsx';
+                        link.click();
+                    }
+                }
+                
+                $('#processingLoader').addClass('d-none')
+            },
+            error: function(xhr, status, error) {
+                $('#processingLoader').addClass('d-none')
+                showDialog('TIDAK ADA DATA')
             }
         })
     })
