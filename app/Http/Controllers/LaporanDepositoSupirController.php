@@ -56,6 +56,10 @@ class LaporanDepositoSupirController extends MyController
 
         $data = $header['data'];
 
+        if(count($data) == 0){
+            throw new \Exception('TIDAK ADA DATA');
+        }
+
         $disetujui = $data[0]['disetujui'] ?? '';
         $diperiksa = $data[0]['diperiksa'] ?? '';
         $spreadsheet = new Spreadsheet();
