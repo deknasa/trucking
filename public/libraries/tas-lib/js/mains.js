@@ -1380,59 +1380,59 @@ $(document).ready(function () {
 		.addClass("active");
 });
 
-$("#search").keyup(function () {
-	$(this).data("val", $(this).val());
-});
+// $("#search").keyup(function () {
+// 	$(this).data("val", $(this).val());
+// });
 
-$("#search").on("input", function (e) {
-	var code = $(this).val();
-	var test = $("#" + code).attr("id");
-	var attr = $("#" + test).attr("href");
+// $("#search").on("input", function (e) {
+// 	var code = $(this).val();
+// 	var test = $("#" + code).attr("id");
+// 	var attr = $("#" + test).attr("href");
 
-	$(".sidebar .hover").removeClass("hover");
+// 	$(".sidebar .hover").removeClass("hover");
 
-	if (code === "") {
-		$(".selected").click().removeClass("selected");
-	} else {
-		if (
-			$("#" + test).hasClass("selected") ||
-			$("#" + test).hasClass("selected-link")
-		) {
-			var prev = $(this).data("val");
-			$("#" + prev)
-				.removeClass("selected")
-				.click();
-			$("#" + prev).removeClass("active selected-link");
-		} else {
-			if (attr != "javascript:void(0)") {
-				var link = $("#" + test).addClass("selected-link");
-				$(document).on("keypress", function (e) {
-					if (e.keyCode == 13) {
-						if ($(link).hasClass("selected-link")) {
-							$(link)[0].click();
-						} else {
-							return false;
-						}
-					}
-				});
-			} else {
-				if (
-					$("#" + test)
-						.parent(".nav-item")
-						.hasClass("menu-is-opening menu-open") ||
-					$("#" + test)
-						.parent(".nav-item")
-						.hasClass("menu-open")
-				) {
-					$("#" + test).addClass("selected");
-				} else {
-					$("#" + test)[0].click();
-					$("#" + test).addClass("selected");
-				}
-			}
-		}
-	}
-});
+// 	if (code === "") {
+// 		$(".selected").click().removeClass("selected");
+// 	} else {
+// 		if (
+// 			$("#" + test).hasClass("selected") ||
+// 			$("#" + test).hasClass("selected-link")
+// 		) {
+// 			var prev = $(this).data("val");
+// 			$("#" + prev)
+// 				.removeClass("selected")
+// 				.click();
+// 			$("#" + prev).removeClass("active selected-link");
+// 		} else {
+// 			if (attr != "javascript:void(0)") {
+// 				var link = $("#" + test).addClass("selected-link");
+// 				$(document).on("keypress", function (e) {
+// 					if (e.keyCode == 13) {
+// 						if ($(link).hasClass("selected-link")) {
+// 							$(link)[0].click();
+// 						} else {
+// 							return false;
+// 						}
+// 					}
+// 				});
+// 			} else {
+// 				if (
+// 					$("#" + test)
+// 						.parent(".nav-item")
+// 						.hasClass("menu-is-opening menu-open") ||
+// 					$("#" + test)
+// 						.parent(".nav-item")
+// 						.hasClass("menu-open")
+// 				) {
+// 					$("#" + test).addClass("selected");
+// 				} else {
+// 					$("#" + test)[0].click();
+// 					$("#" + test).addClass("selected");
+// 				}
+// 			}
+// 		}
+// 	}
+// });
 
 /* Table bindkeys */
 $(document).on("keydown", ".table-bindkeys [name]", function (event) {
