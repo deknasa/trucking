@@ -57,6 +57,11 @@ class LaporanPiutangGiroController extends MyController
             ->get(config('app.api_url') . 'laporanpiutanggiro/export', $detailParams);
 
         $pengeluaran = $responses['data'];
+
+        if(count($pengeluaran) == 0){
+            throw new \Exception('TIDAK ADA DATA');
+        }
+        
         $disetujui = $pengeluaran[0]['disetujui'] ?? '';
         $diperiksa = $pengeluaran[0]['diperiksa'] ?? '';
         $user = Auth::user();

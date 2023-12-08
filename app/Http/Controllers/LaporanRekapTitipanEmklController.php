@@ -59,6 +59,10 @@ class LaporanRekapTitipanEmklController extends MyController
 
         $pengeluaran = $responses['data'];
 
+        if(count($pengeluaran) == 0){
+            throw new \Exception('TIDAK ADA DATA');
+        }
+
         // dd($pengeluaran);
         $user = Auth::user();
         $spreadsheet = new Spreadsheet();

@@ -91,26 +91,45 @@
     })
 
     $(document).on('click', `#btnExport`, function(event) {
+        $('#processingLoader').removeClass('d-none')
+
         let trado_id = $('#crudForm').find('[name=trado_id]').val()
         let trado = $('#crudForm').find('[name=trado]').val()
         
-        getCekExport().then((response) => {
-            if(response.data.length == 0){
-                showDialog("Tidak ada data")
-            }else{
-                window.open(`{{ route('laporanpinjamanperunittrado.export') }}?trado=${trado}&trado_id=${trado_id}`)
-            }
-        }).catch((error) => {
-            if (error.status === 422) {
-                $('.is-invalid').removeClass('is-invalid')
-                $('.invalid-feedback').remove()
+        if (trado_id != '') {
+            $.ajax({
+                url: `{{ route('laporanpinjamanperunittrado.export') }}?trado=${trado}&trado_id=${trado_id}`,
+                type: 'GET',
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
+                },
+                xhrFields: {
+                    responseType: 'arraybuffer'
+                },
+                success: function(response, status, xhr) {
+                    if (xhr.status === 200) {
+                        if (response !== undefined) {
+                            var blob = new Blob([response], {
+                                type: 'cabang/vnd.ms-excel'
+                            });
+                            var link = document.createElement('a');
+                            link.href = window.URL.createObjectURL(blob);
+                            link.download = 'LAP. PINJAMAN PER TRADO ' + new Date().getTime() + '.xlsx';
+                            link.click();
+                        }
+                    }
+                    
+                    $('#processingLoader').addClass('d-none')
+                },
+                error: function(xhr, status, error) {
+                    $('#processingLoader').addClass('d-none')
+                    showDialog('TIDAK ADA DATA')
+                }
+            })
+        } else {
+            showDialog('ISI SELURUH KOLOM')
+        }
 
-                setErrorMessages($('#crudForm'), error.responseJSON.errors);
-            } else {
-                showDialog(error.responseJSON)
-
-            }
-        })
 
     })
 

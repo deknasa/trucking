@@ -72,6 +72,11 @@ class LaporanTitipanEmklController extends MyController
             ->get(config('app.api_url') . 'laporantitipanemkl/export', $detailParams);
 
         $pengeluaran = $responses['data'];
+
+        if(count($pengeluaran) == 0){
+            throw new \Exception('TIDAK ADA DATA');
+        }
+        
         $jenis = $responses['jenisorder'];
         // dd($pengeluaran);
         $disetujui = $pengeluaran[0]['disetujui'] ?? '';

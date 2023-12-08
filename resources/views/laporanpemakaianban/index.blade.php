@@ -138,6 +138,8 @@
 
 
     $(document).on('click', `#btnExport`, function(event) {
+        $('#processingLoader').removeClass('d-none')
+
         let sampai = $('#crudForm').find('[name=sampai]').val()
         let dari = $('#crudForm').find('[name=dari]').val()
         let posisiakhirtrado = $('#crudForm').find('[name=posisiakhirtrado]').val()
@@ -150,7 +152,35 @@
 
         if (sampai != '' && dari != '') {
 
-            window.open(`{{ route('laporanpemakaianban.export') }}?sampai=${sampai}&dari=${dari}&posisiakhirtrado_id=${posisiakhirtradoId}&posisiakhirtrado=${posisiakhirtrado}&posisiakhirgandengan_id=${posisiakhirgandenganId}&posisiakhirgandengan=${posisiakhirgandengan}&jenislaporan_id=${jenislaporan_id}&jenislaporan=${jenislaporan}`)
+            $.ajax({
+                url: `{{ route('laporanpemakaianban.export') }}?sampai=${sampai}&dari=${dari}&posisiakhirtrado_id=${posisiakhirtradoId}&posisiakhirtrado=${posisiakhirtrado}&posisiakhirgandengan_id=${posisiakhirgandenganId}&posisiakhirgandengan=${posisiakhirgandengan}&jenislaporan_id=${jenislaporan_id}&jenislaporan=${jenislaporan}`,
+                type: 'GET',
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
+                },
+                xhrFields: {
+                    responseType: 'arraybuffer'
+                },
+                success: function(response, status, xhr) {
+                    if (xhr.status === 200) {
+                        if (response !== undefined) {
+                            var blob = new Blob([response], {
+                                type: 'cabang/vnd.ms-excel'
+                            });
+                            var link = document.createElement('a');
+                            link.href = window.URL.createObjectURL(blob);
+                            link.download = 'LAP. PEMAKAIAN BAN ' + new Date().getTime() + '.xlsx';
+                            link.click();
+                        }
+                    }
+                    
+                    $('#processingLoader').addClass('d-none')
+                },
+                error: function(xhr, status, error) {
+                    $('#processingLoader').addClass('d-none')
+                    showDialog('TIDAK ADA DATA')
+                }
+            })
         } else {
             showDialog('ISI SELURUH KOLOM')
         }

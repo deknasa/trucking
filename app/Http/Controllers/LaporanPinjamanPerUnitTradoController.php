@@ -53,6 +53,10 @@ class LaporanPinjamanPerUnitTradoController extends Controller
             ->get(config('app.api_url') . 'laporanpinjamanperunittrado/export', $detailParams);
 
         $data = $header['data'];
+
+        if(count($data) == 0){
+            throw new \Exception('TIDAK ADA DATA');
+        }
         
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();

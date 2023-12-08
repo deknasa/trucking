@@ -141,22 +141,39 @@
     })
 
     $(document).on('click', `#btnExport`, function(event) {
+        $('#processingLoader').removeClass('d-none')
+
         let dari = $('#crudForm').find('[name=dari]').val()
         let sampai = $('#crudForm').find('[name=sampai]').val()
         let bank_id = $('#crudForm').find('[name=bank_id]').val()
         let bank = $('#crudForm').find('[name=bank]').val()
-
-        getCekExport().then((response) => {
-            window.open(`{{ route('laporankasbank.export') }}?dari=${dari}&sampai=${sampai}&bank=${bank}&bank_id=${bank_id}`)
-        }).catch((error) => {
-            if (error.status === 422) {
-                $('.is-invalid').removeClass('is-invalid')
-                $('.invalid-feedback').remove()
-
-                setErrorMessages($('#crudForm'), error.responseJSON.errors);
-            } else {
-                showDialog(error.responseJSON)
-
+        $.ajax({
+            url: `{{ route('laporankasbank.export') }}?dari=${dari}&sampai=${sampai}&bank=${bank}&bank_id=${bank_id}`,
+            type: 'GET',
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
+            },
+            xhrFields: {
+                responseType: 'arraybuffer'
+            },
+            success: function(response, status, xhr) {
+                if (xhr.status === 200) {
+                    if (response !== undefined) {
+                        var blob = new Blob([response], {
+                            type: 'cabang/vnd.ms-excel'
+                        });
+                        var link = document.createElement('a');
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = `LAPORAN ${bank} ${new Date().getTime()}.xlsx`;
+                        link.click();
+                    }
+                }
+                
+                $('#processingLoader').addClass('d-none')
+            },
+            error: function(xhr, status, error) {
+                $('#processingLoader').addClass('d-none')
+                showDialog('TIDAK ADA DATA')
             }
         })
 

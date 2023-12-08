@@ -96,12 +96,42 @@
     })
 
     $(document).on('click', `#btnExport`, function(event) {
+         $('#processingLoader').removeClass('d-none')
         let periode = $('#crudForm').find('[name=periode]').val()
         let jenis = $('#crudForm').find('[name=jenis]').val()
 
         if (jenis != '' && periode != '') {
+            $.ajax({
+                
+                url: `{{ route('laporanketeranganpinjamansupir.export') }}?periode=${periode}&jenis=${jenis}`,
+                type: 'GET',
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
+                },
+                xhrFields: {
+                    responseType: 'arraybuffer'
+                },
+                success: function(response, status, xhr) {
+                    if (xhr.status === 200) {
+                        if (response !== undefined) {
+                            var blob = new Blob([response], {
+                                type: 'cabang/vnd.ms-excel'
+                            });
+                            var link = document.createElement('a');
+                            link.href = window.URL.createObjectURL(blob);
+                            link.download = 'LAP. KETERANGAN PINJAMAN' + new Date().getTime() + '.xlsx';
+                            link.click();
+                        }
+                    }
+                    
+                    $('#processingLoader').addClass('d-none')
+                },
+                error: function(xhr, status, error) {
+                    $('#processingLoader').addClass('d-none')
+                    showDialog('TIDAK ADA DATA')
+                }
+            })
 
-            window.open(`{{ route('laporanketeranganpinjamansupir.export') }}?periode=${periode}&jenis=${jenis}`)
         } else {
             showDialog('ISI SELURUH KOLOM')
         }

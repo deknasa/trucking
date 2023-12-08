@@ -51,6 +51,10 @@ class ExportLaporanKasHarianController extends MyController
             ->get(config('app.api_url') . 'exportlaporankasharian/export', $detailParams);
 
         $data = $header['data'];
+        if(count($data) == 0){
+            throw new \Exception('TIDAK ADA DATA');
+        }
+        
         $dataDua = $header['dataDua'];
 
         $spreadsheet = new Spreadsheet();

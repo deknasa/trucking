@@ -101,49 +101,53 @@
 
 
     $(document).on('click', `#btnExport`, function(event) {
+        $('#processingLoader').removeClass('d-none')
+
         let periode = $('#crudForm').find('[name=periode]').val()
         let bank_id = $('#crudForm').find('[name=bank_id]').val()
         let bank = $('#crudForm').find('[name=bank]').val()
-        getCekExport().then((response) => {
-            window.open(` {{ route('exportlaporankasharian.export') }}?periode=${periode}&bank_id=${bank_id}&bank=${bank}`)
-        }).catch((error) => {
-            if (error.status === 422) {
-                $('.is-invalid').removeClass('is-invalid')
-                $('.invalid-feedback').remove()
+        var kasbank
+        var norek
+        if (bank_id == 1) {
+            kasbank = 'KAS HARIAN';
+            norek = '';
+        } else {
+            kasbank = 'BANK';
+            norek = `( ${bank} )`;
+        }
 
-                setErrorMessages($('#crudForm'), error.responseJSON.errors);
-            } else {
-                showDialog(error.statusText, error.responseJSON.message)
-
+        $.ajax({
+            url: `{{ route('exportlaporankasharian.export') }}?periode=${periode}&bank_id=${bank_id}&bank=${bank}`,
+            type: 'GET',
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
+            },
+            xhrFields: {
+                responseType: 'arraybuffer'
+            },
+            success: function(response, status, xhr) {
+                if (xhr.status === 200) {
+                    if (response !== undefined) {
+                        var blob = new Blob([response], {
+                            type: 'cabang/vnd.ms-excel'
+                        });
+                        var link = document.createElement('a');
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = `LAPORAN ${kasbank} ${norek}  ${new Date().getTime()}.xlsx`;
+                        link.click();
+                    }
+                }
+                
+                $('#processingLoader').addClass('d-none')
+            },
+            error: function(xhr, status, error) {
+                $('#processingLoader').addClass('d-none')
+                showDialog('TIDAK ADA DATA')
             }
         })
     })
 
-    function getCekExport() {
-
-        return new Promise((resolve, reject) => {
-            $.ajax({
-                url: `${apiUrl}exportlaporankasharian/export`,
-                dataType: "JSON",
-                headers: {
-                    Authorization: `Bearer ${accessToken}`
-                },
-                data: {
-                    periode: $('#crudForm').find('[name=periode]').val(),
-                    bank: $('#crudForm').find('[name=bank]').val(),
-                    bank_id: $('#crudForm').find('[name=bank_id]').val(),
-                    isCheck: true,
-                },
-                success: (response) => {
-                    resolve(response);
-                },
-                error: error => {
-                    reject(error)
-
-                },
-            });
-        });
-    }
+   
 
 
     function initLookup() {

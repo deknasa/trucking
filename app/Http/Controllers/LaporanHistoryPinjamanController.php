@@ -59,6 +59,10 @@ class LaporanHistoryPinjamanController extends MyController
             ->get(config('app.api_url') . 'laporanhistorypinjaman/export', $detailParams);
 
         $pengeluaran = $responses['data'];
+
+        if(count($pengeluaran) == 0){
+            throw new \Exception('TIDAK ADA DATA');
+        }
         $user = Auth::user();
 
         $spreadsheet = new Spreadsheet();

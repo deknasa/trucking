@@ -57,6 +57,10 @@
             name: 'vulkanisirke',
           },
           {
+            label: 'statusban',
+            name: 'statusban',
+          },
+          {
             label: 'TOTAL',
             name: 'total',
             align: 'right',

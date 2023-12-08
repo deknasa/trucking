@@ -133,6 +133,8 @@
     })
 
     $(document).on('click', `#btnExport`, function(event) {
+        $('#processingLoader').removeClass('d-none')
+
         let dari = $('#crudForm').find('[name=dari]').val()
         let sampai = $('#crudForm').find('[name=sampai]').val()
         let stokdari_id = $('#crudForm').find('[name=stokdari_id]').val()
@@ -140,22 +142,34 @@
         let stokdari = $('#crudForm').find('[name=stokdari]').val()
         let stoksampai = $('#crudForm').find('[name=stoksampai]').val()
         let status = $('#crudForm').find('[name=status]').val()
-
-        getCekReport().then((response) => {
-            window.open(
-                `{{ route('laporanpembelianstok.export') }}?dari=${dari}&sampai=${sampai}&stokdari_id=${stokdari_id}&stoksampai_id=${stoksampai_id}&stokdari=${stokdari}&stoksampai=${stoksampai}`
-            )
-        }).catch((error) => {
-            if (error.status === 422) {
-                $('.is-invalid').removeClass('is-invalid')
-                $('.invalid-feedback').remove()
-
-                // return showDialog(error.responseJSON.errors.export);
-
-                setErrorMessages($('#crudForm'), error.responseJSON.errors);
-            } else {
-                showDialog(error.statusText, error.responseJSON.message)
-
+        
+        $.ajax({
+            url: `{{ route('laporanpembelianstok.export') }}?dari=${dari}&sampai=${sampai}&stokdari_id=${stokdari_id}&stoksampai_id=${stoksampai_id}&stokdari=${stokdari}&stoksampai=${stoksampai}`,
+            type: 'GET',
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
+            },
+            xhrFields: {
+                responseType: 'arraybuffer'
+            },
+            success: function(response, status, xhr) {
+                if (xhr.status === 200) {
+                    if (response !== undefined) {
+                        var blob = new Blob([response], {
+                            type: 'cabang/vnd.ms-excel'
+                        });
+                        var link = document.createElement('a');
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = 'LAP. PEMBELIAN PER STOK ' + new Date().getTime() + '.xlsx';
+                        link.click();
+                    }
+                }
+                
+                $('#processingLoader').addClass('d-none')
+            },
+            error: function(xhr, status, error) {
+                $('#processingLoader').addClass('d-none')
+                showDialog('TIDAK ADA DATA')
             }
         })
 

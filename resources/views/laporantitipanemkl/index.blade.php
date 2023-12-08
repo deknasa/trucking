@@ -136,23 +136,40 @@
     })
 
     $(document).on('click', `#btnExport`, function(event) {
+        $('#processingLoader').removeClass('d-none')
+        
         let jenisorder = $('#crudForm').find('[name=jenisorder]').val()
         let tgldari = $('#crudForm').find('[name=tgldari]').val()
         let tglsampai = $('#crudForm').find('[name=tglsampai]').val()
         let periode = $('#crudForm').find('[name=periode]').val()
 
-        getCekExport().then((response) => {
-            // window.open(
-                window.open(`{{ route('laporantitipanemkl.export') }}?jenisorder=${jenisorder}&tgldari=${tgldari}&tglsampai=${tglsampai}&periode=${periode}`)
-            // )
-        }).catch((error) => {
-            if (error.status === 422) {
-                $('.is-invalid').removeClass('is-invalid')
-                $('.invalid-feedback').remove()
-                setErrorMessages($('#crudForm'), error.responseJSON.errors);
-            } else {
-                showDialog(error.statusText, error.responseJSON.message)
-
+        $.ajax({
+            url: `{{ route('laporantitipanemkl.export') }}?jenisorder=${jenisorder}&tgldari=${tgldari}&tglsampai=${tglsampai}&periode=${periode}`,
+            type: 'GET',
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
+            },
+            xhrFields: {
+                responseType: 'arraybuffer'
+            },
+            success: function(response, status, xhr) {
+                if (xhr.status === 200) {
+                    if (response !== undefined) {
+                        var blob = new Blob([response], {
+                            type: 'cabang/vnd.ms-excel'
+                        });
+                        var link = document.createElement('a');
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = 'LAPORAN REKAP TITIPAN EMKL BELUM LUNAS ' + new Date().getTime() + '.xlsx';
+                        link.click();
+                    }
+                }
+                
+                $('#processingLoader').addClass('d-none')
+            },
+            error: function(xhr, status, error) {
+                $('#processingLoader').addClass('d-none')
+                showDialog('TIDAK ADA DATA')
             }
         })
 
