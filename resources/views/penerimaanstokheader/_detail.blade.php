@@ -57,7 +57,7 @@
             name: 'vulkanisirke',
           },
           {
-            label: 'statusban',
+            label: 'status ban',
             name: 'statusban',
           },
           {
