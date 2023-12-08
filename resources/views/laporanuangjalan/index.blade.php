@@ -165,7 +165,39 @@
         let supirsampai= $('#crudForm').find('[name=supirsampai_id]').val()
         let status= $('#crudForm').find('[name=status]').val()
         if (ricdari != '' && ricsampai != '' && ambildari != '' && ambilsampai) {
-        window.open(`{{ route('laporanuangjalan.export') }}?ricdari=${ricdari}&ricsampai=${ricsampai}&ambildari=${ambildari}&ambilsampai=${ambilsampai}&supirdari=${supirdari}&supirsampai=${supirsampai}`)
+            $('#processingLoader').removeClass('d-none')
+            
+            $.ajax({
+                url: `{{ route('laporanuangjalan.export') }}?ricdari=${ricdari}&ricsampai=${ricsampai}&ambildari=${ambildari}&ambilsampai=${ambilsampai}&supirdari=${supirdari}&supirsampai=${supirsampai}`,
+                type: 'GET',
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
+                },
+                xhrFields: {
+                    responseType: 'arraybuffer'
+                },
+                success: function(response, status, xhr) {
+                    if (xhr.status === 200) {
+                        if (response !== undefined) {
+                            var blob = new Blob([response], {
+                                type: 'cabang/vnd.ms-excel'
+                            });
+                            var link = document.createElement('a');
+                            link.href = window.URL.createObjectURL(blob);
+                            link.download = 'LAP. UANG JALAN ' + new Date().getTime() + '.xlsx';
+                            link.click();
+                        }
+                    }
+                    
+                    $('#processingLoader').addClass('d-none')
+                },
+                error: function(xhr, status, error) {
+                    $('#processingLoader').addClass('d-none')
+                    showDialog('TIDAK ADA DATA')
+                }
+            })    
+            
+            
         } else {
         showDialog('ISI SELURUH KOLOM')
         }

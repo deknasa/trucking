@@ -283,7 +283,37 @@
                         let sampai = $('#crudForm').find('[name=sampai]').val();
                         let trado_id = $('#crudForm').find('[name=trado_id]').val();
                         let trado = $('#crudForm').find('[name=trado]').val();
-                        window.open(`{{ route('statusolitrado.export') }}?status=${status}&dari=${dari}&sampai=${sampai}&trado_id=${trado_id}&trado=${trado}&statustext=${statustext}`)
+                        $('#processingLoader').removeClass('d-none')
+
+                        $.ajax({
+                            url: `{{ route('statusolitrado.export') }}?status=${status}&dari=${dari}&sampai=${sampai}&trado_id=${trado_id}&trado=${trado}&statustext=${statustext}`,
+                            type: 'GET',
+                            beforeSend: function(xhr) {
+                                xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
+                            },
+                            xhrFields: {
+                                responseType: 'arraybuffer'
+                            },
+                            success: function(response, status, xhr) {
+                                if (xhr.status === 200) {
+                                    if (response !== undefined) {
+                                        var blob = new Blob([response], {
+                                            type: 'cabang/vnd.ms-excel'
+                                        });
+                                        var link = document.createElement('a');
+                                        link.href = window.URL.createObjectURL(blob);
+                                        link.download = 'REMINDER STATUS OLI TRADO ' + new Date().getTime() + '.xlsx';
+                                        link.click();
+                                    }
+                                }
+                                
+                                $('#processingLoader').addClass('d-none')
+                            },
+                            error: function(xhr, status, error) {
+                                $('#processingLoader').addClass('d-none')
+                                showDialog('TIDAK ADA DATA')
+                            }
+                        })    
                     }
                 }, ]
 

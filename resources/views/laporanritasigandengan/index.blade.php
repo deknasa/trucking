@@ -92,8 +92,37 @@
   $(document).on('click', `#btnExport`, function(event) {
 
     let periode = $('#crudForm').find('[name=periode]').val()
-    window.open(`{{ route('laporanritasigandengan.export') }}?periode=${periode}`)
-    
+
+    $('#processingLoader').removeClass('d-none')
+    $.ajax({
+        url: `{{ route('laporanritasigandengan.export') }}?periode=${periode}`,
+        type: 'GET',
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
+        },
+        xhrFields: {
+            responseType: 'arraybuffer'
+        },
+        success: function(response, status, xhr) {
+            if (xhr.status === 200) {
+                if (response !== undefined) {
+                    var blob = new Blob([response], {
+                        type: 'cabang/vnd.ms-excel'
+                    });
+                    var link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = 'LAP. RITASI GANDENGAN ' + new Date().getTime() + '.xlsx';
+                    link.click();
+                }
+            }
+            
+            $('#processingLoader').addClass('d-none')
+        },
+        error: function(xhr, status, error) {
+            $('#processingLoader').addClass('d-none')
+            showDialog('TIDAK ADA DATA')
+        }
+    })    
   })
 </script>
 @endpush()

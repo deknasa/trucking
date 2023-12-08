@@ -293,7 +293,36 @@
                     class: 'btn btn-warning btn-sm mr-1',
                     onClick: () => {
                         statusReminder = $('#crudForm').find('[name=status]').val();
-                        window.open(`{{ route('reminderoli.export') }}?status=${statusReminder}`)
+                        $('#processingLoader').removeClass('d-none')
+                        $.ajax({
+                            url: `{{ route('reminderoli.export') }}?status=${statusReminder}`,
+                            type: 'GET',
+                            beforeSend: function(xhr) {
+                                xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
+                            },
+                            xhrFields: {
+                                responseType: 'arraybuffer'
+                            },
+                            success: function(response, status, xhr) {
+                                if (xhr.status === 200) {
+                                    if (response !== undefined) {
+                                        var blob = new Blob([response], {
+                                            type: 'cabang/vnd.ms-excel'
+                                        });
+                                        var link = document.createElement('a');
+                                        link.href = window.URL.createObjectURL(blob);
+                                        link.download = 'REMINDER OLI ' + new Date().getTime() + '.xlsx';
+                                        link.click();
+                                    }
+                                }
+                                
+                                $('#processingLoader').addClass('d-none')
+                            },
+                            error: function(xhr, status, error) {
+                                $('#processingLoader').addClass('d-none')
+                                showDialog('TIDAK ADA DATA')
+                            }
+                        })    
                     }
                 }, ]
 

@@ -123,7 +123,37 @@
 
         if (dari != '' && sampai != '') {
 
-            window.open(`{{ route('laporantripgandengandetail.export') }}?sampai=${sampai}&dari=${dari}&gandengandari_id=${gandengandari_id}&gandengansampai_id=${gandengansampai_id}&gandengandari=${gandengandari}&gandengansampai=${gandengansampai}`)
+            $('#processingLoader').removeClass('d-none')
+            
+            $.ajax({
+                url: `{{ route('laporantripgandengandetail.export') }}?sampai=${sampai}&dari=${dari}&gandengandari_id=${gandengandari_id}&gandengansampai_id=${gandengansampai_id}&gandengandari=${gandengandari}&gandengansampai=${gandengansampai}`,
+                type: 'GET',
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
+                },
+                xhrFields: {
+                    responseType: 'arraybuffer'
+                },
+                success: function(response, status, xhr) {
+                    if (xhr.status === 200) {
+                        if (response !== undefined) {
+                            var blob = new Blob([response], {
+                                type: 'cabang/vnd.ms-excel'
+                            });
+                            var link = document.createElement('a');
+                            link.href = window.URL.createObjectURL(blob);
+                            link.download = 'LAP. TRIP GANDENGAN ' + new Date().getTime() + '.xlsx';
+                            link.click();
+                        }
+                    }
+                    
+                    $('#processingLoader').addClass('d-none')
+                },
+                error: function(xhr, status, error) {
+                    $('#processingLoader').addClass('d-none')
+                    showDialog('TIDAK ADA DATA')
+                }
+            })
         } else {
             showDialog('ISI SELURUH KOLOM')
         }

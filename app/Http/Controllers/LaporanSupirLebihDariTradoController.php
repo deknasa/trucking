@@ -69,6 +69,9 @@ class LaporanSupirLebihDariTradoController extends MyController
             ->get(config('app.api_url') . 'laporansupirlebihdaritrado/export', $detailParams);
         
         $pengeluaran = $responses['data'];
+        if(count($pengeluaran) == 0){
+            throw new \Exception('TIDAK ADA DATA');
+        }
         $disetujui = $pengeluaran[0]['disetujui'] ?? '';
         $diperiksa = $pengeluaran[0]['diperiksa'] ?? '';
         $user = Auth::user();
@@ -196,7 +199,7 @@ $sheet->setCellValue('C' . ($detail_start_row + 3), 'Disusun Oleh,');
 
 $sheet->mergeCells('A' . ($detail_start_row + 6) . ':A' . ($detail_start_row + 6));
 $sheet->setCellValue('A' . ($detail_start_row + 6), '( ' . $disetujui . ' )');
-$sheet->mergeCells('B' . ($detail_start_row + 6) . ($detail_start_row + 6));
+$sheet->mergeCells('B' . ($detail_start_row + 6)  . ':B' . ($detail_start_row + 6));
 $sheet->setCellValue('B' . ($detail_start_row + 6), '( ' . $diperiksa . ' )');
 $sheet->mergeCells('C' . ($detail_start_row + 6) . ':C' . ($detail_start_row + 6));
 $sheet->setCellValue('C' . ($detail_start_row + 6), '(                      )');
