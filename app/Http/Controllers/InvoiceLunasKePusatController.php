@@ -41,6 +41,24 @@ class InvoiceLunasKePusatController extends MyController
         return $response['data'];
     }
 
+    public function report(Request $request)
+    {
+        $detailParams = [
+            'periode' => $request->periode,
+            'invId' => $request->invId,
+            'forReport' => true,
+            'limit' => 0,
+            'sortIndex' => 'invoiceheader_id'
+        ];
+        $getData = Http::withHeaders($request->header())
+            ->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'invoicelunaskepusat/report', $detailParams);
+        $data = $getData['data'];
+
+        return view('reports.invoicelunaskepusat', compact('data'));
+    }
+
     public function export(Request $request): void
     {
         //FETCH HEADER
