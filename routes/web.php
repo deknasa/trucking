@@ -273,7 +273,9 @@ use App\Http\Controllers\SuratPengantarApprovalInputTripController;
 use App\Http\Controllers\ApprovalBukaTanggalSuratPengantarController;
 use App\Http\Controllers\LaporanPemotonganPinjamanDepositoController;
 use App\Http\Controllers\ExportRincianMingguanPendapatanSupirController;
+use App\Http\Controllers\LaporanBiayaSupirController;
 use App\Http\Controllers\LaporanMingguanSupirBedaMandorController;
+use App\Http\Controllers\SupirSerapController;
 
 /*
 |--------------------------------------------------------------------------
@@ -470,6 +472,7 @@ Route::middleware(['auth', 'authorized'])->group(function () {
     Route::get('mandorabsensisupir/index', [MandorAbsensiSupirController::class, 'index']);
     Route::resource('mandorabsensisupir', MandorAbsensiSupirController::class);
 
+    Route::get('invoicelunaskepusat/report', [InvoiceLunasKePusatController::class, 'report'])->name('invoicelunaskepusat.report');
     Route::get('invoicelunaskepusat/export', [InvoiceLunasKePusatController::class, 'export'])->name('invoicelunaskepusat.export');
     Route::get('invoicelunaskepusat/index', [InvoiceLunasKePusatController::class, 'index']);
     Route::resource('invoicelunaskepusat', InvoiceLunasKePusatController::class);
@@ -1625,6 +1628,15 @@ Route::middleware(['auth', 'authorized'])->group(function () {
     Route::get('laporanmingguansupirbedamandor/export', [LaporanMingguanSupirBedaMandorController::class, 'export'])->name('laporanmingguansupirbedamandor.export');
     Route::get('laporanmingguansupirbedamandor/index', [LaporanMingguanSupirBedaMandorController::class, 'index']);
     Route::resource('laporanmingguansupirbedamandor', LaporanMingguanSupirBedaMandorController::class);
+    
+    Route::get('supirserap/report', [SupirSerapController::class, 'report'])->name('supirserap.report');
+    Route::get('supirserap/export', [SupirSerapController::class, 'export'])->name('supirserap.export');
+    Route::get('supirserap/index', [SupirSerapController::class, 'index']);
+    Route::resource('supirserap', SupirSerapController::class);
+
+    Route::get('laporanbiayasupir/export', [LaporanBiayaSupirController::class, 'export'])->name('laporanbiayasupir.export');
+    Route::get('laporanbiayasupir/index', [LaporanBiayaSupirController::class, 'index']);
+    Route::resource('laporanbiayasupir', LaporanBiayaSupirController::class);
 });
 
 Route::patch('format', [FormatController::class, 'update']);

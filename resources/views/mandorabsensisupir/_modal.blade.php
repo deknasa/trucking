@@ -2,7 +2,7 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
-        
+
         <form action="" method="post">
           <div class="modal-body">
 
@@ -144,7 +144,7 @@
           value: limit
         })
       }
-      
+
       switch (action) {
         case 'store':
           method = 'POST'
@@ -221,7 +221,7 @@
                 </div>
               `).appendTo(form.find(`[name=tglbukti]`).parent())
             }
-            
+
           } else {
             showDialog(error.responseJSON)
           }
@@ -258,7 +258,7 @@
   })
 
 
-  function createAbsensi(tradoId) {
+  function createAbsensi(tradoId,supirId) {
     let form = $('#crudForm')
 
     $('.modal-loader').removeClass('d-none')
@@ -279,10 +279,16 @@
     Promise
       .all([
         showDefault(form),
-        showAbsensi(form, tradoId)
+        showAbsensi(form, tradoId,supirId)
       ])
       .then(() => {
         $('#crudModal').modal('show')
+        if (isTradoMilikSupir == 'YA') {
+          
+          form.find(`[name="supir"]`).prop('readonly', true)
+          form.find(`[name="supir"]`).parent('.input-group').find('.button-clear').remove()
+          form.find(`[name="supir"]`).parent('.input-group').find('.input-group-append').remove()
+        }
       })
       .catch((error) => {
         showDialog(error.statusText)
@@ -294,7 +300,7 @@
           timeStyle: "medium",
         });
         time = time.split('.')
-        $('#crudForm').find('[name=jam]').val(time[0]+":"+time[1]);
+        $('#crudForm').find('[name=jam]').val(time[0] + ":" + time[1]);
       })
   }
 
@@ -323,7 +329,7 @@
     }
   }
 
-  function editAbsensi(tradoId) {
+  function editAbsensi(tradoId,supirId) {
     let form = $('#crudForm')
 
     $('.modal-loader').removeClass('d-none')
@@ -342,10 +348,16 @@
 
     Promise
       .all([
-        showAbsensi(form, tradoId)
+        showAbsensi(form, tradoId,supirId)
       ])
       .then(() => {
         $('#crudModal').modal('show')
+        if (isTradoMilikSupir == 'YA') {
+          
+          form.find(`[name="supir"]`).prop('readonly', true)
+          form.find(`[name="supir"]`).parent('.input-group').find('.button-clear').remove()
+          form.find(`[name="supir"]`).parent('.input-group').find('.input-group-append').remove()
+        }
       })
       .catch((error) => {
         showDialog(error.statusText)
@@ -355,7 +367,7 @@
       })
   }
 
-  function deleteAbsensi(tradoId) {
+  function deleteAbsensi(tradoId,supirId) {
     let form = $('#crudForm')
 
     $('.modal-loader').removeClass('d-none')
@@ -374,10 +386,16 @@
 
     Promise
       .all([
-        showAbsensi(form, tradoId)
+        showAbsensi(form, tradoId,supirId)
       ])
       .then(() => {
         $('#crudModal').modal('show')
+        if (isTradoMilikSupir == 'YA') {
+          
+          form.find(`[name="supir"]`).prop('readonly', true)
+          form.find(`[name="supir"]`).parent('.input-group').find('.button-clear').remove()
+          form.find(`[name="supir"]`).parent('.input-group').find('.input-group-append').remove()
+        }
       })
       .catch((error) => {
         showDialog(error.statusText)
@@ -389,7 +407,7 @@
   }
 
 
-  function showAbsensi(form, tradoId) {
+  function showAbsensi(form, tradoId,supirId) {
     return new Promise((resolve, reject) => {
       $.ajax({
         url: `${apiUrl}mandorabsensisupir/${tradoId}`,
@@ -398,8 +416,9 @@
         headers: {
           Authorization: `Bearer ${accessToken}`
         },
-        data :{
-          tanggal : $('#tglshow').val()
+        data: {
+          tanggal: $('#tglshow').val(),
+          supir_id: supirId
         },
         success: response => {
           $.each(response.data, (index, value) => {
@@ -431,7 +450,7 @@
     })
   }
 
-  function cekValidasi(tradoId, aksi) {
+  function cekValidasi(tradoId,supirId, aksi) {
     $.ajax({
       url: `${apiUrl}mandorabsensisupir/${tradoId}/cekvalidasi`,
       method: 'GET',
@@ -439,24 +458,25 @@
       headers: {
         Authorization: `Bearer ${accessToken}`
       },
-      data :{
-          tanggal : $('#tglshow').val()
-        },
+      data: {
+        tanggal: $('#tglshow').val(),
+        supir_id: supirId
+      },
       success: response => {
         if (response.errors) {
           showDialog(response.message)
         } else {
           if (aksi == 'edit') {
-            editAbsensi(tradoId)
+            editAbsensi(tradoId,supirId)
           } else {
-            deleteAbsensi(tradoId)
+            deleteAbsensi(tradoId,supirId)
           }
         }
       }
     })
   }
 
-  function cekValidasiAdd(tradoId) {
+  function cekValidasiAdd(tradoId, supirId) {
     $.ajax({
       url: `${apiUrl}mandorabsensisupir/${tradoId}/cekvalidasiadd`,
       method: 'GET',
@@ -464,14 +484,15 @@
       headers: {
         Authorization: `Bearer ${accessToken}`
       },
-      data :{
-          tanggal : $('#tglshow').val()
+      data: {
+        tanggal: $('#tglshow').val(),
+        supir_id: supirId
       },
       success: response => {
         if (response.errors) {
           showDialog(response.message)
         } else {
-          createAbsensi(tradoId)
+          createAbsensi(tradoId,supirId)
         }
       }
     })
@@ -517,7 +538,9 @@
       success: response => {
 
         kodeabsen = response.data.kodeabsen
-        setSupirEnable()
+        if(isTradoMilikSupir != 'YA'){
+          setSupirEnable()
+        }
       },
       error: error => {
         showDialog(error.statusText)

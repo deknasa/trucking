@@ -13,6 +13,7 @@
         aktif: `{!! $Aktif ?? '' !!}`,
         trado_id: `{!! $trado_id ?? '' !!}`,
         cabang: `{!! $cabang ?? '' !!}`,
+        supirserap: `{!! $supirserap ?? '' !!}`,
       },
       idPrefix: 'tradoLookup',
       colModel: [{
@@ -547,6 +548,16 @@
         //     return ` title="${statusMobilStoring.MEMO}"`
         //   }
         // },
+        {
+          label: 'supir',
+          name: 'supir_id',
+        },
+        {
+          label: 'supirid',
+          name: 'supirid',
+          search: false,
+          hidden: true
+        },
         {
           label: 'MANDOR',
           name: 'mandor_id',

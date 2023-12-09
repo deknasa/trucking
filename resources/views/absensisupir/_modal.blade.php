@@ -275,9 +275,9 @@
 
     activeGrid = null
 
-    form.find('#btnSubmit').prop('disabled',false)
+    form.find('#btnSubmit').prop('disabled', false)
     if (form.data('action') == "view") {
-      form.find('#btnSubmit').prop('disabled',true)
+      form.find('#btnSubmit').prop('disabled', true)
     }
 
     getMaxLength(form)
@@ -539,6 +539,13 @@
             $('#crudModal').modal('show')
             form.find('[name=tglbukti]').attr('readonly', true)
             form.find('[name=tglbukti]').siblings('.input-group-append').remove()
+
+            if (isTradoMilikSupir == 'YA') {
+
+              form.find(`[name="supir[]"]`).prop('readonly', true)
+              form.find(`[name="supir[]"]`).parent('.input-group').find('.button-clear').remove()
+              form.find(`[name="supir[]"]`).parent('.input-group').find('.input-group-append').remove()
+            }
           })
           .catch((error) => {
             showDialog(error.responseJSON)
@@ -584,6 +591,7 @@
           })
       })
   }
+
   function viewAbsensiSupir(absensiId) {
     let form = $('#crudForm')
 
@@ -595,7 +603,7 @@
       <i class="fa fa-save"></i>
       Save
     `)
-    form.find('#btnSubmit').prop('disabled',true)
+    form.find('#btnSubmit').prop('disabled', true)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('View Absensi Supir')
     $('.is-invalid').removeClass('is-invalid')
@@ -608,26 +616,26 @@
       ])
       .then(() => {
         setTampilan(form)
-        .then(absensiId => {
-              setFormBindKeys(form)
-              initSelect2(form.find('.select2bs4'), true)
-              form.find('[name]').removeAttr('disabled')
-  
-              form.find('select').each((index, select) => {
-                let element = $(select)
-  
-                if (element.data('select2')) {
-                  element.select2('destroy')
-                }
-              })
-  
-              form.find('[name]').attr('disabled', 'disabled').css({
-                background: '#fff'
-              })
-              form.find('[name=id]').prop('disabled',false)
-  
+          .then(absensiId => {
+            setFormBindKeys(form)
+            initSelect2(form.find('.select2bs4'), true)
+            form.find('[name]').removeAttr('disabled')
+
+            form.find('select').each((index, select) => {
+              let element = $(select)
+
+              if (element.data('select2')) {
+                element.select2('destroy')
+              }
             })
-        .then(() => {
+
+            form.find('[name]').attr('disabled', 'disabled').css({
+              background: '#fff'
+            })
+            form.find('[name=id]').prop('disabled', false)
+
+          })
+          .then(() => {
             $('#crudModal').modal('show')
             form.find('[name=tglbukti]').attr('readonly', true)
             form.find('[name=tglbukti]').siblings('.input-group-append').remove()
@@ -776,6 +784,7 @@
                 element.data('currentValue', element.val())
               }
             })
+
           })
 
           setRowNumbers()
@@ -948,7 +957,7 @@
   }
 
   function cekValidasi(Id, Aksi) {
-   
+
     $.ajax({
       url: `{{ config('app.api_url') }}absensisupirheader/${Id}/cekvalidasi`,
       method: 'POST',
@@ -966,11 +975,11 @@
           if (kodestatus == '1') {
             showDialog(response.message['keterangan'])
           } else {
-            if(Aksi == 'PRINTER BESAR'){
+            if (Aksi == 'PRINTER BESAR') {
               window.open(`{{ route('absensisupirheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
-            } else if(Aksi == 'PRINTER KECIL'){
+            } else if (Aksi == 'PRINTER KECIL') {
               window.open(`{{ route('absensisupirheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
-            } 
+            }
             if (Aksi == 'EDIT') {
               editAbsensiSupir(Id)
             }
