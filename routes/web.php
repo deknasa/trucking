@@ -274,6 +274,7 @@ use App\Http\Controllers\ApprovalBukaTanggalSuratPengantarController;
 use App\Http\Controllers\LaporanPemotonganPinjamanDepositoController;
 use App\Http\Controllers\ExportRincianMingguanPendapatanSupirController;
 use App\Http\Controllers\LaporanMingguanSupirBedaMandorController;
+use App\Http\Controllers\SupirSerapController;
 
 /*
 |--------------------------------------------------------------------------
@@ -1625,6 +1626,11 @@ Route::middleware(['auth', 'authorized'])->group(function () {
     Route::get('laporanmingguansupirbedamandor/export', [LaporanMingguanSupirBedaMandorController::class, 'export'])->name('laporanmingguansupirbedamandor.export');
     Route::get('laporanmingguansupirbedamandor/index', [LaporanMingguanSupirBedaMandorController::class, 'index']);
     Route::resource('laporanmingguansupirbedamandor', LaporanMingguanSupirBedaMandorController::class);
+    
+    Route::get('supirserap/report', [SupirSerapController::class, 'report'])->name('supirserap.report');
+    Route::get('supirserap/export', [SupirSerapController::class, 'export'])->name('supirserap.export');
+    Route::get('supirserap/index', [SupirSerapController::class, 'index']);
+    Route::resource('supirserap', SupirSerapController::class);
 });
 
 Route::patch('format', [FormatController::class, 'update']);

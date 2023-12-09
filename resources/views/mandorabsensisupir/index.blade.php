@@ -55,8 +55,9 @@
   let sortorder = 'asc'
   let autoNumericElements = []
   let rowNum = 0
+  let isTradoMilikSupir = ''
   $(document).ready(function() {
-
+    setTradoMilikSupir()
     // loadGrid()
     initDatepicker('datepickerIndex')
     // mendapatkan tanggal hari ini
@@ -69,7 +70,7 @@
     
 
     $(document).on('click','#btnReload', function(event) {
-      loadDataAbsensiMandor('mandorabsensisupir',{tglbukaabsensi:$('#tglbukaabsensi').val()})
+      loadDataAbsensiMandor('mandorabsensisupir',{tglbukaabsensi:$('#tglbukaabsensi').val(),sortIndex:'kodetrado'})
     })
     
     function loadDataAbsensiMandor(url, addtional = null) {
@@ -310,7 +311,7 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                cekValidasiAdd(rowData.trado_id)
+                cekValidasiAdd(rowData.trado_id,rowData.supir_id)
               }
             }
           },
@@ -325,7 +326,7 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                cekValidasi(rowData.trado_id, 'edit')
+                cekValidasi(rowData.trado_id,rowData.supir_id, 'edit')
               }
             }
           },
@@ -339,7 +340,7 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                cekValidasi(rowData.trado_id, 'delete')
+                cekValidasi(rowData.trado_id,rowData.supir_id, 'delete')
               }
             }
           },
@@ -446,6 +447,24 @@
     //   })
     // }
   })
+
+  function setTradoMilikSupir() {
+    $.ajax({
+      url: `${apiUrl}parameter/getparamfirst`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        grp: 'ABSENSI SUPIR',
+        subgrp: 'TRADO MILIK SUPIR'
+      },
+      success: response => {
+        isTradoMilikSupir = $.trim(response.text)
+      }
+    })
+  }
 </script>
 @endpush()
 @endsection

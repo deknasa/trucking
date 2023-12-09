@@ -1786,6 +1786,7 @@
 
           Aktif: 'AKTIF',
           AbsensiId: true,
+          trado_id:  $('#crudForm [name=trado_id]').val(),
           tgltrip: $('#crudForm [name=tglbukti]').val(),
         }
       },
