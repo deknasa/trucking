@@ -27,7 +27,9 @@ class ReminderSpkController extends MyController
             ->get(config('app.api_url') . 'reminderspkdetail/export');
 
         $data = $header['data'];
-
+        if(count($data) == 0){
+            throw new \Exception('TIDAK ADA DATA');
+        }
         foreach ($data as $row) {
             $gudang_header = $row['gudang_header'];
             $stok_header = $row['stok_header'];

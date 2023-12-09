@@ -363,7 +363,9 @@ class ExportLaporanMingguanSupirController extends Controller
             // dd(config('app.api_url') . 'exportlaporanmingguansupir/export', $detailParams);
 
         $data = $header['data'];
-
+        if(count($data) == 0){
+            throw new \Exception('TIDAK ADA DATA');
+        }
         if ($data[0]['formatric'] == '1') {
             $this->export1($data, $request->dari,$request->sampai,$request->tradodari_id,$request->tradosampai_id,$request->tradodari,$request->tradosampai);
         } else {

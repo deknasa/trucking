@@ -39,6 +39,9 @@ class LaporanRitasiGandenganController extends MyController
             ->get(config('app.api_url') . 'laporanritasigandengan/export', $detailParams);
 
         $ritasi = $header['data'];
+        if(count($ritasi) == 0){
+            throw new \Exception('TIDAK ADA DATA');
+        }
         // echo json_encode($data);
         // die;
         // dd($ritasi);

@@ -44,6 +44,11 @@ class LaporanRitasiTradoController extends MyController
             ->get(config('app.api_url') . 'laporanritasitrado/export', $detailParams);
 
         $pengeluaran = $responses['data'];
+
+        if(count($pengeluaran) == 0){
+            throw new \Exception('TIDAK ADA DATA');
+        }
+
         $user = Auth::user();
         // dd($pengeluaran);
         $spreadsheet = new Spreadsheet();

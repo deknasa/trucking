@@ -119,7 +119,38 @@
 
         if (dari != '' && sampai != '') {
 
-            window.open(`{{ route('laporankartuhutangprediksi.export') }}?sampai=${sampai}&dari=${dari}`)
+            $('#processingLoader').removeClass('d-none')
+
+            $.ajax({
+                url: `{{ route('laporankartuhutangprediksi.export') }}?sampai=${sampai}&dari=${dari}`,
+                type: 'GET',
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
+                },
+                xhrFields: {
+                    responseType: 'arraybuffer'
+                },
+                success: function(response, status, xhr) {
+                    if (xhr.status === 200) {
+                        if (response !== undefined) {
+                            var blob = new Blob([response], {
+                                type: 'cabang/vnd.ms-excel'
+                            });
+                            var link = document.createElement('a');
+                            link.href = window.URL.createObjectURL(blob);
+                            link.download = 'LAP. KARTU HUTANG PREDIKSI  ' + new Date().getTime() + '.xlsx';
+                            link.click();
+                        }
+                    }
+                    
+                    $('#processingLoader').addClass('d-none')
+                },
+                error: function(xhr, status, error) {
+                    $('#processingLoader').addClass('d-none')
+                    showDialog('TIDAK ADA DATA')
+                }
+            })
+            
         } else {
             showDialog('ISI SELURUH KOLOM')
         }

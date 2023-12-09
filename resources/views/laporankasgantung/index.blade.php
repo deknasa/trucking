@@ -138,11 +138,12 @@
 
 
     $(document).on('click', `#btnExport`, function(event) {
-        $('#processingLoader').removeClass('d-none')
 
         let periode = $('#crudForm').find('[name=periode]').val()
 
         if (periode != '') {
+            $('#processingLoader').removeClass('d-none')
+
             $.ajax({
                 url: `{{ route('laporankasgantung.export') }}?periode=${periode}`,
                 type: 'GET',
@@ -160,7 +161,7 @@
                             });
                             var link = document.createElement('a');
                             link.href = window.URL.createObjectURL(blob);
-                            link.download = 'LAP. PINJAMAN PER TRADO ' + new Date().getTime() + '.xlsx';
+                            link.download = 'LAP. KAS GANTUNG ' + new Date().getTime() + '.xlsx';
                             link.click();
                         }
                     }

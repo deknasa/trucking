@@ -56,6 +56,11 @@ class LaporanTripTradoController extends MyController
             ->get(config('app.api_url') . 'laporantriptrado/report', $detailParams);
 
         $data = $header['data'];
+
+        if(count($data) == 0){
+            throw new \Exception('TIDAK ADA DATA');
+        }
+        
         $disetujui = $data[0]['disetujui'] ?? '';
         $diperiksa = $data[0]['diperiksa'] ?? '';
 

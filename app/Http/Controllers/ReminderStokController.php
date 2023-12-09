@@ -49,7 +49,9 @@ class ReminderStokController extends MyController
             ->get(config('app.api_url') . 'reminderstok', $detailParams);
 
         $data = $header['data'];
-
+        if(count($data) == 0){
+            throw new \Exception('TIDAK ADA DATA');
+        }
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setCellValue('A1', $data[0]['judul']);
