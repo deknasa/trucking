@@ -144,6 +144,7 @@ use App\Http\Controllers\PenerimaanDetailController;
 use App\Http\Controllers\PenerimaanHeaderController;
 use App\Http\Controllers\ServiceOutDetailController;
 use App\Http\Controllers\ServiceOutHeaderController;
+use App\Http\Controllers\TarikDataAbsensiController;
 use App\Http\Controllers\UpahSupirRincianController;
 use App\Http\Controllers\ApprovalBukaCetakController;
 use App\Http\Controllers\ExportLaporanStokController;
@@ -155,8 +156,8 @@ use App\Http\Controllers\LaporanDataJurnalController;
 use App\Http\Controllers\LaporanHutangGiroController;
 use App\Http\Controllers\LaporanJurnalUmumController;
 use App\Http\Controllers\LaporanKasGantungController;
-use App\Http\Controllers\MainTypeAkuntansiController;
 
+use App\Http\Controllers\MainTypeAkuntansiController;
 use App\Http\Controllers\PengajuanTripInapController;
 use App\Http\Controllers\PengeluaranDetailController;
 use App\Http\Controllers\PengeluaranHeaderController;
@@ -172,13 +173,13 @@ use App\Http\Controllers\LaporanPiutangGiroController;
 use App\Http\Controllers\LaporanRitasiTradoController;
 use App\Http\Controllers\LaporanTitipanEmklController;
 use App\Http\Controllers\MandorAbsensiSupirController;
-use App\Http\Controllers\InvoiceLunasKePusatController;
 use App\Http\Controllers\penerimaanTruckingController;
 use App\Http\Controllers\ProsesAbsensiSupirController;
 use App\Http\Controllers\ApprovalHutangBayarController;
 use App\Http\Controllers\ApprovalSupirGambarController;
 use App\Http\Controllers\ApprovalTradoGambarController;
 use App\Http\Controllers\BukaPengeluaranStokController;
+use App\Http\Controllers\InvoiceLunasKePusatController;
 use App\Http\Controllers\LaporanPemakaianBanController;
 use App\Http\Controllers\PengeluaranTruckingController;
 use App\Http\Controllers\LaporanDepositoSupirController;
@@ -201,9 +202,9 @@ use App\Http\Controllers\ExportRincianMingguanController;
 use App\Http\Controllers\HistoriPenerimaanStokController;
 use App\Http\Controllers\JurnalUmumPusatDetailController;
 use App\Http\Controllers\JurnalUmumPusatHeaderController;
+
+
 use App\Http\Controllers\LaporanOrderPembelianController;
-
-
 use App\Http\Controllers\LaporanRekapSumbanganController;
 use App\Http\Controllers\LaporanSaldoInventoryController;
 use App\Http\Controllers\PelunasanHutangHeaderController;
@@ -264,6 +265,7 @@ use App\Http\Controllers\LapKartuHutangPerVendorDetailController;
 use App\Http\Controllers\LaporanKartuHutangPerSupplierController;
 use App\Http\Controllers\LaporanPemotonganPinjamanDepoController;
 use App\Http\Controllers\LaporanKeteranganPinjamanSupirController;
+use App\Http\Controllers\LaporanMingguanSupirBedaMandorController;
 use App\Http\Controllers\PencairanGiroPengeluaranDetailController;
 use App\Http\Controllers\PencairanGiroPengeluaranHeaderController;
 use App\Http\Controllers\LaporanKartuPiutangPerPelangganController;
@@ -273,7 +275,6 @@ use App\Http\Controllers\SuratPengantarApprovalInputTripController;
 use App\Http\Controllers\ApprovalBukaTanggalSuratPengantarController;
 use App\Http\Controllers\LaporanPemotonganPinjamanDepositoController;
 use App\Http\Controllers\ExportRincianMingguanPendapatanSupirController;
-use App\Http\Controllers\LaporanMingguanSupirBedaMandorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -1216,6 +1217,10 @@ Route::middleware(['auth', 'authorized'])->group(function () {
     Route::get('laporandatajurnal/export', [LaporanDataJurnalController::class, 'export'])->name('laporandatajurnal.export');
     Route::get('laporandatajurnal/index', [LaporanDataJurnalController::class, 'index'])->name('laporandatajurnal.index');
     Route::get('laporandatajurnal', [LaporanDataJurnalController::class, 'index']);
+    
+    Route::get('tarikdataabsensi/export', [TarikDataAbsensiController::class, 'export'])->name('tarikdataabsensi.export');
+    Route::get('tarikdataabsensi/index', [TarikDataAbsensiController::class, 'index'])->name('tarikdataabsensi.index');
+    Route::get('tarikdataabsensi', [TarikDataAbsensiController::class, 'index']);
 
 
     Route::get('prosesuangjalansupirheader/index', [ProsesUangJalanSupirHeaderController::class, 'index']);
