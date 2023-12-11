@@ -60,6 +60,27 @@
   let sortorder = 'asc'
   let autoNumericElements = []
   let rowNum = 0
+  let selectedRows = [];
+
+
+  function checkboxHandler(element) {
+    let value = $(element).val();
+    if (element.checked) {
+      selectedRows.push($(element).val())
+      $(element).parents('tr').addClass('bg-light-blue')
+    } else {
+      $(element).parents('tr').removeClass('bg-light-blue')
+      for (var i = 0; i < selectedRows.length; i++) {
+        if (selectedRows[i] == value) {
+          selectedRows.splice(i, 1);
+        }
+      }
+    }
+
+  }
+
+  setSpaceBarCheckedHandler()
+
   $(document).ready(function() {
 
     // loadGrid()
@@ -135,6 +156,38 @@
         },
         datatype: "json",
         colModel: [{
+            label: '',
+            name: '',
+            width: 40,
+            align: 'center',
+            sortable: false,
+            clear: false,
+            stype: 'input',
+            searchable: false,
+            searchoptions: {
+              type: 'checkbox',
+              clearSearch: false,
+              dataInit: function(element) {
+                $(element).removeClass('form-control')
+                $(element).parent().addClass('text-center')
+                $(element).addClass('checkbox-selectall')
+
+                $(element).on('click', function() {
+                  $(element).attr('disabled', true)
+                  if ($(this).is(':checked')) {
+                    selectAllRows()
+                  } else {
+                    clearSelectedRows()
+                  }
+                })
+
+              }
+            },
+            formatter: (value, rowOptions, rowData) => {
+              return `<input type="checkbox" name="invId[]" class="checkbox-jqgrid" value="${rowData.invoiceheader_id}" onchange="checkboxHandler(this)">`
+            },
+          },
+          {
             label: 'id',
             name: 'id',
             width: '50px',
@@ -361,11 +414,19 @@
             }
           },
           {
+            id: 'report',
+            innerHTML: '<i class="fa fa-print"></i> REPORT',
+            class: 'btn btn-info btn-sm mr-1',
+            onClick: () => {
+              window.open(`{{ route('invoicelunaskepusat.report') }}?periode=` + $('#periode').val()+`&invId=${selectedRows}`)
+            }
+          },
+          {
             id: 'export',
             innerHTML: '<i class="fas fa-file-export"></i> EXPORT',
             class: 'btn btn-warning btn-sm mr-1',
             onClick: () => {
-              window.open(`{{ route('invoicelunaskepusat.export') }}?periode=`+$('#periode').val())
+              window.open(`{{ route('invoicelunaskepusat.export') }}?periode=` + $('#periode').val())
             }
           },
 
@@ -414,6 +475,9 @@
       $('#export').attr('disabled', 'disabled')
     }
 
+    if (!`{{ $myAuth->hasPermission('invoicelunaskepusat', 'report') }}`) {
+      $('#report').attr('disabled', 'disabled')
+    }
 
 
     $('#rangeModal').on('shown.bs.modal', function() {
@@ -462,6 +526,32 @@
     })
 
   })
+
+  function clearSelectedRows() {
+    selectedRows = []
+
+    $('#jqGrid').trigger('reloadGrid')
+  }
+
+  function selectAllRows() {
+    $.ajax({
+      url: `${apiUrl}invoicelunaskepusat`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        limit: 0,
+        periode: $('#periode').val(),
+        filters: $('#jqGrid').jqGrid('getGridParam', 'postData').filters
+      },
+      success: (response) => {
+        selectedRows = response.data.map((invoice) => invoice.invoiceheader_id)
+        $('#jqGrid').trigger('reloadGrid')
+      }
+    })
+  }
 </script>
 @endpush()
 @endsection

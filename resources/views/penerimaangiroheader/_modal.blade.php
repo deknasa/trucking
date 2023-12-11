@@ -199,9 +199,8 @@
             deleteRow($(this).parents('tr'))
         })
         $(document).on('click', '.btn-batal', function(event) {
+            event.preventDefault()
             if ($('#crudForm').data('action') == 'edit') {
-
-                event.preventDefault()
                 $.ajax({
                     url: `{{ config('app.api_url') }}penerimaangiroheader/editingat`,
                     method: 'POST',

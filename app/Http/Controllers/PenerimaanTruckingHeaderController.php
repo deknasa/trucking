@@ -152,6 +152,7 @@ class PenerimaanTruckingHeaderController extends MyController
 
         //FETCH DETAIL
         $detailParams = [
+            'forReport' => true,
             'penerimaantruckingheader_id' => $request->id,
         ];
 
@@ -545,6 +546,115 @@ class PenerimaanTruckingHeaderController extends MyController
 
                 $writer = new Xlsx($spreadsheet);
                 $filename = 'Laporan Penerimaan Trucking (TTE) ' . date('dmYHis');
+                header('Content-Type: application/vnd.ms-excel');
+                header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+                header('Cache-Control: max-age=0');
+                $writer->save('php://output');
+                break;
+            case '544':
+                // DPOK
+
+                $header_columns = [
+                    [
+                        'label' => 'No Bukti',
+                        'index' => 'nobukti',
+                    ],
+                    [
+                        'label' => 'Tanggal',
+                        'index' => 'tglbukti',
+                    ],
+                    [
+                        'label' => 'No Bukti Penerimaan',
+                        'index' => 'penerimaan_nobukti',
+                    ],
+
+                ];
+                $header_right_columns = [
+                    [
+                        'label' => 'Penerimaan Trucking',
+                        'index' => 'penerimaantrucking_id',
+                    ],
+                    [
+                        'label' => 'Bank',
+                        'index' => 'bank_id',
+                    ],
+                    [
+                        'label' => 'Nama Perkiraan',
+                        'index' => 'coa',
+                    ],
+                ];
+
+
+                //LOOPING HEADER        
+                foreach ($header_columns as $header_column) {
+                    $sheet->setCellValue('B' . $header_start_row, $header_column['label']);
+                    $sheet->setCellValue('C' . $header_start_row++, ': ' . $penerimaantrucking[$header_column['index']]);
+                }
+                foreach ($header_right_columns as $header_right_column) {
+                    $sheet->setCellValue('D' . $header_right_start_row++, $header_right_column['label'] . ': ' . $penerimaantrucking[$header_right_column['index']]);
+                    // $sheet->setCellValue('E' . $header_right_start_row++, ': ' . $penerimaantrucking[$header_right_column['index']]);
+                }
+                $detail_columns = [
+                    [
+                        'label' => 'NO',
+                    ],
+                    [
+                        'label' => 'KARYAWAN',
+                        'index' => 'karyawan_id',
+                    ],
+                    [
+                        'label' => 'KETERANGAN',
+                        'index' => 'keterangan'
+                    ],
+                    [
+                        'label' => 'NOMINAL',
+                        'index' => 'nominal',
+                        'format' => 'currency'
+                    ]
+                ];
+
+                foreach ($detail_columns as $detail_columns_index => $detail_column) {
+                    $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_table_header_row, $detail_column['label'] ?? $detail_columns_index + 1);
+                }
+                $sheet->getStyle("A$detail_table_header_row:D$detail_table_header_row")->applyFromArray($styleArray);
+
+                // LOOPING DETAIL
+                $nominal = 0;
+                foreach ($penerimaantrucking_details as $response_index => $response_detail) {
+
+                    foreach ($detail_columns as $detail_columns_index => $detail_column) {
+                        $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
+                        $sheet->getStyle("A$detail_table_header_row:D$detail_table_header_row")->getFont()->setBold(true);
+                        $sheet->getStyle("A$detail_table_header_row:D$detail_table_header_row")->getAlignment()->setHorizontal('center');
+                    }
+
+                    $sheet->setCellValue("A$detail_start_row", $response_index + 1);
+                    $sheet->setCellValue("B$detail_start_row", $response_detail['karyawan_id']);
+                    $sheet->setCellValue("C$detail_start_row", $response_detail['keterangan']);
+                    $sheet->setCellValue("D$detail_start_row", $response_detail['nominal']);
+
+                    // $sheet->getStyle("C$detail_start_row")->getAlignment()->setWrapText(true);
+                    $sheet->getColumnDimension('C')->setWidth(60);
+
+                    $sheet->getStyle("A$detail_start_row:D$detail_start_row")->applyFromArray($styleArray);
+                    $sheet->getStyle("D$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+
+                    $detail_start_row++;
+                }
+
+                $total_start_row = $detail_start_row;
+                $sheet->mergeCells('A' . $total_start_row . ':C' . $total_start_row);
+                $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':C' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
+                $totalNominal = "=SUM(D" . ($detail_table_header_row + 1) . ":D" . ($detail_start_row - 1) . ")";
+                $sheet->setCellValue("D$total_start_row", $totalNominal)->getStyle("D$total_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                $sheet->getStyle("D$total_start_row")->getFont()->setBold(true);
+
+                $sheet->getColumnDimension('A')->setAutoSize(true);
+                $sheet->getColumnDimension('B')->setAutoSize(true);
+                $sheet->getColumnDimension('D')->setAutoSize(true);
+
+                $writer = new Xlsx($spreadsheet);
+                $filename = 'Laporan Penerimaan Trucking (DPOK)' . date('dmYHis');
                 header('Content-Type: application/vnd.ms-excel');
                 header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
                 header('Cache-Control: max-age=0');

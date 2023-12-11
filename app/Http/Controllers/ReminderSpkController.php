@@ -63,6 +63,14 @@ class ReminderSpkController extends MyController
         $header_columns = [
             ['label' => ''],
             [
+                'label' => 'No Bukti',
+                'index' => 'nobukti',
+            ],
+            [
+                'label' => 'Tanggal',
+                'index' => 'tglbukti',
+            ],
+            [
                 'label' => 'Gudang',
                 'index' => 'gudang',
             ],
@@ -71,12 +79,36 @@ class ReminderSpkController extends MyController
                 'index' => 'namabarang',
             ],
             [
+                'label' => 'Satuan',
+                'index' => 'satuan',
+            ],
+            [
                 'label' => 'Qty',
                 'index' => 'qty',
             ],
             [
+                'label' => 'Hrg Sat',
+                'index' => 'hargasatuan',
+            ],
+            [
                 'label' => 'Total',
                 'index' => 'total',
+            ],
+            [
+                'label' => 'Potongan Disc',
+                'index' => 'persentasediscount',
+            ],
+            [
+                'label' => 'Nominal Disc',
+                'index' => 'nominaldiscount',
+            ],
+            [
+                'label' => 'Nominal',
+                'index' => 'nominal',
+            ],
+            [
+                'label' => 'Keterangan',
+                'index' => 'keterangan',
             ],
         ];
         $detail_columns = [
@@ -100,6 +132,10 @@ class ReminderSpkController extends MyController
                 'index' => 'namabarang',
             ],
             [
+                'label' => 'Satuan',
+                'index' => 'satuan',
+            ],
+            [
                 'label' => 'Qty',
                 'index' => 'qty',
             ],
@@ -111,6 +147,22 @@ class ReminderSpkController extends MyController
                 'label' => 'Total',
                 'index' => 'total',
             ],
+            [
+                'label' => 'Potongan Disc',
+                'index' => 'persentasediscount',
+            ],
+            [
+                'label' => 'Nominal Disc',
+                'index' => 'nominaldiscount',
+            ],
+            [
+                'label' => 'Nominal',
+                'index' => 'nominal',
+            ],
+            [
+                'label' => 'Keterangan',
+                'index' => 'keterangan',
+            ],
 
         ];
 
@@ -118,6 +170,7 @@ class ReminderSpkController extends MyController
         $groupHeaderRow = 4;
         $detail_start_row = $groupHeaderRow + 1;
         foreach ($groupedData as $gudang => $group) {
+            $noHeader = 1;
             foreach ($group as $stok => $row) {
 
                 foreach ($header_columns as $data_columns_index => $data_column) {
@@ -127,12 +180,22 @@ class ReminderSpkController extends MyController
                     $sheet->getStyle("A$groupHeaderRow:$lastColumn$groupHeaderRow")->applyFromArray($styleArray)->getFont()->setBold(true);
                 }
                 $groupHeaderRow++;
-                $sheet->setCellValue("B$groupHeaderRow", $row[0]['gudang_header']);
-                $sheet->setCellValue("C$groupHeaderRow", $row[0]['stok_header']);
-                $sheet->setCellValue("D$groupHeaderRow", $row[0]['qty_header'])->getStyle("D$groupHeaderRow")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
-                $sheet->setCellValue("E$groupHeaderRow", $row[0]['total_header'])->getStyle("E$groupHeaderRow")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                $tglbukti = ($row[0]['tglbukti_header'] != null) ? Date::PHPToExcel(date('Y-m-d', strtotime($row[0]['tglbukti_header']))) : '';
+                $sheet->setCellValue("B$groupHeaderRow", $row[0]['nobukti_header']);
+                $sheet->setCellValue("C$groupHeaderRow", $tglbukti);
+                $sheet->setCellValue("D$groupHeaderRow", $row[0]['gudang_header']);
+                $sheet->setCellValue("E$groupHeaderRow", $row[0]['stok_header']);
+                $sheet->setCellValue("F$groupHeaderRow", $row[0]['satuan_header']);
+                $sheet->setCellValue("G$groupHeaderRow", $row[0]['qty_header'])->getStyle("G$groupHeaderRow")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                $sheet->setCellValue("H$groupHeaderRow", $row[0]['hargasatuan_header'])->getStyle("H$groupHeaderRow")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                $sheet->setCellValue("I$groupHeaderRow", $row[0]['total_header'])->getStyle("I$groupHeaderRow")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                $sheet->setCellValue("J$groupHeaderRow", $row[0]['persentasediscount_header'])->getStyle("J$groupHeaderRow")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                $sheet->setCellValue("K$groupHeaderRow", $row[0]['nominaldiscount_header'])->getStyle("K$groupHeaderRow")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                $sheet->setCellValue("L$groupHeaderRow", "=I$groupHeaderRow-K$groupHeaderRow")->getStyle("L$groupHeaderRow")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                $sheet->setCellValue("M$groupHeaderRow", $row[0]['keterangan_header']);
 
-                $sheet->getStyle("A$groupHeaderRow:E$groupHeaderRow")->applyFromArray($styleArray);
+                $sheet->getStyle("C$groupHeaderRow")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
+                $sheet->getStyle("A$groupHeaderRow:M$groupHeaderRow")->applyFromArray($styleArray)->getFont()->setBold(true);
                 $groupHeaderRow++;
 
                 $detail_start_row = $groupHeaderRow + 1;
@@ -154,13 +217,18 @@ class ReminderSpkController extends MyController
                     $sheet->setCellValue("C$detail_start_row", $tglbukti);
                     $sheet->setCellValue("D$detail_start_row", $response_detail['gudang']);
                     $sheet->setCellValue("E$detail_start_row", $response_detail['namastok']);
-                    $sheet->setCellValue("F$detail_start_row", $response_detail['qty']);
-                    $sheet->setCellValue("G$detail_start_row", $response_detail['hargasatuan']);
-                    $sheet->setCellValue("H$detail_start_row", $response_detail['total']);
+                    $sheet->setCellValue("F$detail_start_row", $response_detail['satuan']);
+                    $sheet->setCellValue("G$detail_start_row", $response_detail['qty']);
+                    $sheet->setCellValue("H$detail_start_row", $response_detail['hargasatuan']);
+                    $sheet->setCellValue("I$detail_start_row", $response_detail['total']);
+                    $sheet->setCellValue("J$detail_start_row", $response_detail['persentasediscount']);
+                    $sheet->setCellValue("K$detail_start_row", $response_detail['nominaldiscount']);
+                    $sheet->setCellValue("L$detail_start_row", "=I$detail_start_row-K$detail_start_row");
+                    $sheet->setCellValue("M$detail_start_row", $response_detail['keterangan']);
 
 
                     $sheet->getStyle("C$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
-                    $sheet->getStyle("F$detail_start_row:H$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+                    $sheet->getStyle("G$detail_start_row:L$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
                     $sheet->getStyle("A$detail_start_row:$lastColumn$detail_start_row")->applyFromArray($styleArray);
                     $detail_start_row++;
@@ -178,6 +246,11 @@ class ReminderSpkController extends MyController
         $sheet->getColumnDimension('F')->setAutoSize(true);
         $sheet->getColumnDimension('G')->setAutoSize(true);
         $sheet->getColumnDimension('H')->setAutoSize(true);
+        $sheet->getColumnDimension('I')->setAutoSize(true);
+        $sheet->getColumnDimension('J')->setAutoSize(true);
+        $sheet->getColumnDimension('K')->setAutoSize(true);
+        $sheet->getColumnDimension('L')->setAutoSize(true);
+        $sheet->getColumnDimension('M')->setAutoSize(true);
         $writer = new Xlsx($spreadsheet);
         $filename = 'REMINDER SPK' . date('dmYHis');
         header('Content-Type: application/vnd.ms-excel');

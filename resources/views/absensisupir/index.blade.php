@@ -65,6 +65,7 @@
   let showKasgantung = true;
   let tgldariheader
   let tglsampaiheader
+  let isTradoMilikSupir = ''
   reloadGrid()
   $(document).ready(function() {
 
@@ -73,7 +74,7 @@
     loadDetailGrid()
     loadRekapAbsenTradoGrid()
     loadKasGantungGrid()
-
+    setTradoMilikSupir()
     @isset($request['tgldari'])
     tgldariheader = `{{ $request['tgldari'] }}`;
     @endisset
@@ -453,14 +454,7 @@
             ],
           }
         ],
-        buttons: [{
-            id: 'add',
-            innerHTML: '<i class="fa fa-plus"></i> ADD',
-            class: 'btn btn-primary btn-sm mr-1',
-            onClick: function(event) {
-              createAbsensiSupir()
-            }
-          },
+        buttons: [
           {
             id: 'edit',
             innerHTML: '<i class="fa fa-pen"></i> EDIT',
@@ -708,6 +702,24 @@
 
         }
       })
+    })
+  }
+
+  function setTradoMilikSupir() {
+    $.ajax({
+      url: `${apiUrl}parameter/getparamfirst`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        grp: 'ABSENSI SUPIR',
+        subgrp: 'TRADO MILIK SUPIR'
+      },
+      success: response => {
+        isTradoMilikSupir = $.trim(response.text)
+      }
     })
   }
 

@@ -42,7 +42,7 @@ class Menu
             <a id="' . (strtolower($menu['menukode'])) . '" href="' . (count($menu['child']) > 0 ? 'javascript:void(0)' : ($menu['link'] != '' ? strtolower(url($menu['link'])) : strtolower(url($menu['menuexe'])))) . '" class="nav-link ' . (@$currentMenu->id == $menu['menuid'] ? 'active hover' : '') . '">
               <i class="nav-icon ' . (strtolower($menu['menuicon']) ?? 'far fa-circle') . '"></i>
               <p>
-                ' . (substr($menu['menukode'], -1)) . '. ' . $menu['menuname'] . '
+                ' . $menu['menuname'] . '
                 ' . (count($menu['child']) > 0 ? '<i class="right fas fa-angle-left"></i>' : '') . '
               </p>
             </a>

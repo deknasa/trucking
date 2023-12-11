@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "b28143d61047d72230cde666a5f66261",
+  "ReportGuid": "2eca171c864f67cf800880d3e77aa0c2",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportPenerimaanTruckingHeaderDPOBesar.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1697771440000+0700)/",
+  "ReportChanged": "/Date(1701836149000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -143,13 +143,13 @@
             "Name": "periodedari",
             "NameInSource": "periodedari",
             "Alias": "periodedari",
-            "Type": "System.String"
+            "Type": "System.DateTime"
           },
           "8": {
             "Name": "periodesampai",
             "NameInSource": "periodesampai",
             "Alias": "periodesampai",
-            "Type": "System.String"
+            "Type": "System.DateTime"
           },
           "9": {
             "Name": "jenisorder_id",
@@ -400,7 +400,7 @@
               "Ident": "StiText",
               "Name": "Text4",
               "Guid": "4e424d160d7e27a516a13a4dca9075fa",
-              "ClientRectangle": "121.89,23.94,32,6",
+              "ClientRectangle": "105.92,23.94,32,6",
               "ComponentPlacement": "ph.PageHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -438,7 +438,7 @@
               "Name": "Text14",
               "Guid": "65761f329059de895ec96fdb1f7bd0f4",
               "CanGrow": true,
-              "ClientRectangle": "38,18,68,6",
+              "ClientRectangle": "38.1,18.1,61.74,5.84",
               "ComponentPlacement": "ph.PageHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -464,7 +464,7 @@
               "Name": "Text15",
               "Guid": "2a6b5128eff264a87e0a97c5279bf92f",
               "CanGrow": true,
-              "ClientRectangle": "38,24,68,6",
+              "ClientRectangle": "38.1,23.94,61.74,6.1",
               "ComponentPlacement": "ph.PageHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -494,7 +494,7 @@
               "Name": "Text16",
               "Guid": "06932b450000a7cace13d3968dec857b",
               "CanGrow": true,
-              "ClientRectangle": "156.02,23.94,46.16,6.1",
+              "ClientRectangle": "139.95,23.94,62.3,6.1",
               "ComponentPlacement": "ph.PageHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -557,7 +557,7 @@
               "Name": "Text34",
               "Guid": "9cb9fbcab275e721855bf2b89f74057d",
               "CanGrow": true,
-              "ClientRectangle": "38,30,68,6",
+              "ClientRectangle": "38.1,30.04,61.74,5.84",
               "ComponentPlacement": "ph.PageHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -619,7 +619,7 @@
               "Ident": "StiText",
               "Name": "Text9",
               "Guid": "34520b9edbdfa5e0b7b68d3f83b0e432",
-              "ClientRectangle": "153.89,18.1,2,6",
+              "ClientRectangle": "137.92,18.1,2,6",
               "ComponentPlacement": "ph.PageHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -637,7 +637,7 @@
               "Ident": "StiText",
               "Name": "Text27",
               "Guid": "8bdc82f2568931c00ee6b62cd32e1e1d",
-              "ClientRectangle": "121.89,18.1,32,6",
+              "ClientRectangle": "105.92,18.1,32,6",
               "ComponentPlacement": "ph.PageHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -656,7 +656,7 @@
               "Ident": "StiText",
               "Name": "Text39",
               "Guid": "11f2d4c678f43b7ac62f3a3f3cfae324",
-              "ClientRectangle": "153.89,23.94,2,6",
+              "ClientRectangle": "137.92,23.94,2,6",
               "ComponentPlacement": "ph.PageHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -675,7 +675,7 @@
               "Name": "Text44",
               "Guid": "0188fe09e835dd8a7833b6c858a4abb8",
               "CanGrow": true,
-              "ClientRectangle": "156.02,18.1,46.16,5.84",
+              "ClientRectangle": "139.95,18.1,62.3,5.84",
               "ComponentPlacement": "ph.PageHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -766,7 +766,7 @@
               "Ident": "StiText",
               "Name": "Text6",
               "Guid": "10dcc9904bc74b4d7fc4d65c59b4c5ee",
-              "ClientRectangle": "121.89,30.04,32,6",
+              "ClientRectangle": "105.92,30.04,32,6",
               "ComponentPlacement": "ph.PageHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -785,7 +785,7 @@
               "Ident": "StiText",
               "Name": "Text18",
               "Guid": "bd73499f157e36b9b3654b862d9049e8",
-              "ClientRectangle": "153.89,30.04,2,6",
+              "ClientRectangle": "137.92,30.04,2,6",
               "ComponentPlacement": "ph.PageHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -804,7 +804,7 @@
               "Name": "Text23",
               "Guid": "9812ed6565526829b384928adcf15c67",
               "CanGrow": true,
-              "ClientRectangle": "156.02,30.04,46.16,6.1",
+              "ClientRectangle": "139.95,30.04,62.3,6.1",
               "ComponentPlacement": "ph.PageHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"

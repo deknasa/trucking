@@ -26,6 +26,10 @@
             name: 'supir_id',
           },
           {
+            label: 'KARYAWAN',
+            name: 'karyawan_id',
+          },
+          {
             label: 'NO BUKTI PENGELUARAN TRUCKING',
             name: 'pengeluarantruckingheader_nobukti',
             width: 250,

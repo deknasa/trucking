@@ -177,6 +177,7 @@
                     <th style="width:5%; max-width: 25px;max-width: 15px" class="">No</th>
                     <th class="data_tbl tbl_checkbox" style="display:none" width="1%">Pilih</th>
                     <th style="width: 20%; min-width: 200px;" class="tbl_supir_id">SUPIR </th>
+                    <th style="width: 20%; min-width: 200px;" class="tbl_karyawan_id">KARYAWAN </th>
                     <th style="width: 20%; min-width: 200px;" class="tbl_pengeluarantruckingheader_nobukti">NO BUKTI PENGELUARAN TRUCKING</th>
                     <th style="width: 20%; min-width: 200px;" class="tbl_sisa">Sisa </th>
                     <th style="width: 20%; min-width: 200px;" class="tbl_keterangan">Keterangan</th>
@@ -189,7 +190,7 @@
                 </tbody>
                 <tfoot>
                   <tr>
-                    <td colspan="3" class="colspan">
+                    <td colspan="4" class="colspan">
                       <p class="text-right font-weight-bold">TOTAL :</p>
                     </td>
                     <td id="sisaColFoot" style="display: none">
@@ -893,6 +894,9 @@
       case 'PBT':
         tampilanPBT()
         break;
+      case 'DPOK':
+        tampilanDPOK()
+        break;
       default:
         tampilanall()
         break;
@@ -912,6 +916,7 @@
     $('[name=periodesampai]').parents('.form-group').hide()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('.tbl_supir_id').hide()
+    $('.tbl_karyawan_id').hide()
     $('.tbl_sisa').hide()
     $('.colmn-offset').hide()
     $('.tbl_pengeluarantruckingheader_nobukti').hide()
@@ -932,6 +937,7 @@
     $('[name=keteranganheader]').parents('.form-group').hide()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('.tbl_supir_id').hide()
+    $('.tbl_karyawan_id').hide()
     $('[name=periodedari]').parents('.form-group').hide()
     $('[name=periodesampai]').parents('.form-group').hide()
     $('[name=jenisorderan_id]').parents('.form-group').hide()
@@ -951,6 +957,7 @@
     $('[name=keteranganheader]').parents('.form-group').hide()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('.tbl_supir_id').hide()
+    $('.tbl_karyawan_id').hide()
     $('[name=periodedari]').parents('.form-group').hide()
     $('[name=periodesampai]').parents('.form-group').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
@@ -968,6 +975,7 @@
     $('[name=keteranganheader]').parents('.form-group').show()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('.tbl_supir_id').hide()
+    $('.tbl_karyawan_id').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
     $('[name=periodedari]').parents('.form-group').show()
     $('[name=periodesampai]').parents('.form-group').show()
@@ -1000,9 +1008,35 @@
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=keteranganheader]').parents('.form-group').hide()
     $('.tbl_supir_id').show()
+    $('.tbl_karyawan_id').hide()
     $('.tbl_pengeluarantruckingheader_nobukti').hide()
     $('.tbl_sisa').hide()
-    $('.tbl_aksi').hide()
+    $('.tbl_aksi').show()
+    $('.colmn-offset').hide()
+    $('.colspan').attr('colspan', 3);
+    $('#sisaColFoot').hide()
+    $('#sisaFoot').hide()
+  }
+
+  function tampilanDPOK() {
+    $('#btnReloadBbtGrid').parents('.row').hide()
+    $('#btnReloadPJP').parents('.row').hide()
+    $('#detailList').show()
+    $('#gbox_tablePinjaman').hide()
+    $('#gbox_tablePinjamanKaryawan').hide()
+    $('#gbox_tablePengembalianTitipan').hide()
+    $('[name=periodedari]').parents('.form-group').hide()
+    $('[name=periodesampai]').parents('.form-group').hide()
+    $('[name=jenisorderan_id]').parents('.form-group').hide()
+    $('[name=supirheader_id]').parents('.form-group').hide()
+    $('[name=karyawanheader_id]').parents('.form-group').hide()
+    $('[name=keterangancoa]').parents('.form-group').hide()
+    $('[name=keteranganheader]').parents('.form-group').hide()
+    $('.tbl_supir_id').hide()
+    $('.tbl_karyawan_id').show()
+    $('.tbl_pengeluarantruckingheader_nobukti').hide()
+    $('.tbl_sisa').hide()
+    $('.tbl_aksi').show()
     $('.colmn-offset').hide()
     $('.colspan').attr('colspan', 3);
     $('#sisaColFoot').hide()
@@ -1018,6 +1052,7 @@
     $('#btnReloadBbtGrid').parents('.row').hide()
     $('[name=keterangancoa]').parents('.form-group').show()
     $('.tbl_supir_id').show()
+    $('.tbl_karyawan_id').hide()
     $('.tbl_sisa').hide()
     $('.tbl_pengeluarantruckingheader_nobukti').show()
     $('[name=supirheader_id]').parents('.form-group').hide()
@@ -2710,6 +2745,10 @@
                         <input type="hidden" name="supir_id[]">
                         <input type="text" name="supir[]" data-current-value="${detail.supir}" class="form-control supir-lookup">
                     </td>
+                    <td class="tbl_karyawan_id">
+                      <input type="hidden" name="karyawan_id[]">
+                      <input type="text" name="karyawandetail[]" data-current-value="${detail.karyawandetail}" class="form-control karyawan-lookup">
+                    </td>
                     <td class="tbl_pengeluarantruckingheader_nobukti">
                         <input type="text" name="pengeluarantruckingheader_nobukti[]" data-current-value="${detail.pengeluarantruckingheader_nobukti}" class="form-control pengeluarantruckingheader-lookup">
                     </td>
@@ -2727,6 +2766,8 @@
 
               detailRow.find(`[name="supir_id[]"]`).val(detail.supir_id)
               detailRow.find(`[name="supir[]"]`).val(detail.supir)
+              detailRow.find(`[name="karyawan_id[]"]`).val(detail.karyawan_id)
+              detailRow.find(`[name="karyawandetail[]"]`).val(detail.karyawandetail)
               detailRow.find(`[name="pengeluarantruckingheader_nobukti[]"]`).val(detail.pengeluarantruckingheader_nobukti)
               detailRow.find(`[name="keterangan[]"]`).val(detail.keterangan)
               detailRow.find(`[name="nominal[]"]`).val(detail.nominal)
@@ -2760,6 +2801,29 @@
                 }
               })
 
+              $('.karyawan-lookup').last().lookup({
+                title: 'Karyawan Lookup',
+                fileName: 'karyawan',
+                beforeProcess: function(test) {
+                  this.postData = {
+                    Aktif: 'AKTIF',
+
+                  }
+                },
+                onSelectRow: (karyawan, element) => {
+                  element.parents('td').find(`[name="karyawan_id[]"]`).val(karyawan.id)
+                  element.val(karyawan.namakaryawan)
+                  element.data('currentValue', element.val())
+                },
+                onCancel: (element) => {
+                  element.val(element.data('currentValue'))
+                },
+                onClear: (element) => {
+                  element.val('')
+                  element.parents('td').find(`[name="karyawan_id[]"]`).val('')
+                  element.data('currentValue', element.val())
+                }
+              })
               $('.pengeluarantruckingheader-lookup').last().lookup({
                 title: 'Pengeluaran Trucking Lookup',
                 fileName: 'pengeluarantruckingheader',
@@ -3023,6 +3087,10 @@
           <input type="hidden" name="supir_id[]">
           <input type="text" name="supir[]"  class="form-control supir-lookup">
         </td>
+        <td class="tbl_karyawan_id">
+          <input type="hidden" name="karyawan_id[]">
+          <input type="text" name="karyawandetail[]"  class="form-control karyawan-lookup">
+        </td>
         <td class="tbl_pengeluarantruckingheader_nobukti">
           <input type="text" name="pengeluarantruckingheader_nobukti[]"  class="form-control pengeluarantruckingheader-lookup">
         </td>
@@ -3050,7 +3118,7 @@
         }
       },
       onSelectRow: (supir, element) => {
-        $(`#crudForm [name="supir_id[]"]`).last().val(supir.id)
+        element.parents('td').find(`[name="supir_id[]"]`).val(supir.id)        
         element.val(supir.namasupir)
         element.data('currentValue', element.val())
       },
@@ -3059,7 +3127,31 @@
       },
       onClear: (element) => {
         element.val('')
-        $(`#crudForm [name="supir_id[]"]`).last().val('')
+        element.parents('td').find(`[name="supir_id[]"]`).val('')  
+        element.data('currentValue', element.val())
+      }
+    })
+    
+    $('.karyawan-lookup').last().lookup({
+      title: 'Karyawan Lookup',
+      fileName: 'karyawan',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+
+        }
+      },
+      onSelectRow: (karyawan, element) => {
+        element.parents('td').find(`[name="karyawan_id[]"]`).val(karyawan.id)
+        element.val(karyawan.namakaryawan)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.parents('td').find(`[name="karyawan_id[]"]`).val('')
         element.data('currentValue', element.val())
       }
     })
