@@ -328,6 +328,10 @@
         value: rowLength
       })
       data.push({
+        name: 'jumlahposting',
+        value: selectedRowsPosting.length
+      })
+      data.push({
         name: 'sortIndex',
         value: $('#jqGrid').getGridParam().sortname
       })
