@@ -2,7 +2,7 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm" enctype="multipart/form-data">
       <div class="modal-content">
-        
+
         <form action="" method="post">
           <div class="modal-body">
             <input type="hidden" name="id">
@@ -67,7 +67,7 @@
                     <input type="text" name="nosim" id="nosim" maxlength="15" class="form-control numbernoseparate">
                   </div>
                 </div>
-                
+
                 <div class="row form-group statuspostingtnl">
                   <div class="col-12 col-md-2">
                     <label class="col-form-label">
@@ -135,7 +135,7 @@
                 <div class="form-group row">
                   <label class="col-sm-2 col-form-label">No Bukti Pemutihan</label>
                   <div class="col-sm-10">
-                    <input type="text" name="pemutihansupir_nobukti" class="form-control pemutihan-lookup">
+                    <input type="text" name="pemutihansupir_nobukti" class="form-control" readonly>
                   </div>
                 </div>
 
@@ -319,16 +319,17 @@
                 </div>
               </div>
             </div>
-            <div class="modal-footer justify-content-start">
-              <button id="btnSubmit" class="btn btn-primary">
-                <i class="fa fa-save"></i>
-                Simpan
-              </button>
-              <button class="btn btn-secondary" data-dismiss="modal">
-                <i class="fa fa-times"></i>
-                Batal
-              </button>
-            </div>
+
+          </div>
+          <div class="modal-footer justify-content-start">
+            <button id="btnSubmit" class="btn btn-primary">
+              <i class="fa fa-save"></i>
+              Simpan
+            </button>
+            <button class="btn btn-secondary" data-dismiss="modal">
+              <i class="fa fa-times"></i>
+              Batal
+            </button>
           </div>
         </form>
       </div>
@@ -505,7 +506,7 @@
     let form = $('#crudForm')
 
     $('.modal-loader').removeClass('d-none')
-    form.find('#btnSubmit').prop('disabled',false)
+    form.find('#btnSubmit').prop('disabled', false)
 
     form.find('[name]').removeAttr('disabled')
     form.trigger('reset')
@@ -555,7 +556,7 @@
     let form = $('#crudForm')
 
     $('.modal-loader').removeClass('d-none')
-    form.find('#btnSubmit').prop('disabled',false)
+    form.find('#btnSubmit').prop('disabled', false)
 
     form.find('[name]').removeAttr('disabled')
     form.data('action', 'edit')
@@ -602,7 +603,7 @@
     let form = $('#crudForm')
 
     $('.modal-loader').removeClass('d-none')
-    form.find('#btnSubmit').prop('disabled',false)
+    form.find('#btnSubmit').prop('disabled', false)
 
     form.data('action', 'delete')
     form.trigger('reset')
@@ -649,6 +650,7 @@
           })
       })
   }
+
   function viewSupir(id) {
     let form = $('#crudForm')
 
@@ -660,8 +662,8 @@
       <i class="fa fa-save"></i>
       Save
     `)
-    form.find('#btnSubmit').prop('disabled',true)
-    
+    form.find('#btnSubmit').prop('disabled', true)
+
 
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('View Supir')
@@ -697,7 +699,7 @@
             let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
             name.attr('disabled', true)
             name.find('.lookup-toggler').attr('disabled', true)
-            $(".dz-hidden-input").prop("disabled",true);
+            $(".dz-hidden-input").prop("disabled", true);
 
           })
           .catch((error) => {
@@ -708,7 +710,7 @@
           })
       })
   }
-  
+
   const showSupir = function(form, id) {
     return new Promise((resolve, reject) => {
       $.ajax({
