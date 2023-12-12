@@ -49,7 +49,7 @@
                                 align: 'left'
                             },
                             {
-                                label: 'NAMA GANDENGAN',
+                                label: 'KETERANGAN',
                                 name: 'keterangan',
                                 align: 'left'
                             },
