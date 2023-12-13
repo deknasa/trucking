@@ -2,12 +2,12 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
-        
+
         <form action="" method="post">
           <div class="modal-body">
-            
+
             <input type="hidden" name="id" class="form-control" readonly>
-            
+
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
@@ -213,11 +213,11 @@
 
     activeGrid = null
 
-    form.find('#btnSubmit').prop('disabled',false)
+    form.find('#btnSubmit').prop('disabled', false)
     if (form.data('action') == "view") {
-      form.find('#btnSubmit').prop('disabled',true)
+      form.find('#btnSubmit').prop('disabled', true)
     }
-    
+
     getMaxLength(form)
     initLookup()
     initSelect2(form.find('.select2bs4'), true)
@@ -353,7 +353,7 @@
       <i class="fa fa-save"></i>
       Save
     `)
-    form.find('#btnSubmit').prop('disabled',true)
+    form.find('#btnSubmit').prop('disabled', true)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('View Kas/Bank')
     $('.is-invalid').removeClass('is-invalid')
@@ -368,26 +368,26 @@
       ])
       .then(() => {
         showBank(form, bankId)
-        .then(bankId => {
-              // form.find('.aksi').hide()
-              setFormBindKeys(form)
-              initSelect2(form.find('.select2bs4'), true)
-              form.find('[name]').removeAttr('disabled')
-  
-              form.find('select').each((index, select) => {
-                let element = $(select)
-  
-                if (element.data('select2')) {
-                  element.select2('destroy')
-                }
-              })
-  
-              form.find('[name]').attr('disabled', 'disabled').css({
-                background: '#fff'
-              })
-              form.find('[name=id]').prop('disabled',false)
-              
+          .then(bankId => {
+            // form.find('.aksi').hide()
+            setFormBindKeys(form)
+            initSelect2(form.find('.select2bs4'), true)
+            form.find('[name]').removeAttr('disabled')
+
+            form.find('select').each((index, select) => {
+              let element = $(select)
+
+              if (element.data('select2')) {
+                element.select2('destroy')
+              }
             })
+
+            form.find('[name]').attr('disabled', 'disabled').css({
+              background: '#fff'
+            })
+            form.find('[name=id]').prop('disabled', false)
+
+          })
           .then(() => {
             $('#crudModal').modal('show')
             let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
@@ -520,6 +520,7 @@
           Authorization: `Bearer ${accessToken}`
         },
         data: {
+          limit: 0,
           filters: JSON.stringify({
             "groupOp": "AND",
             "rules": [{
