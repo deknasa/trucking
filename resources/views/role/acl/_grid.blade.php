@@ -1,4 +1,4 @@
-@include('role.acl._modal')
+
 
 @push('scripts')
 <script>
@@ -109,18 +109,7 @@
         },
       })
 
-      .customPager({
-        buttons: [{
-          id: 'editRoleAcl',
-          innerHTML: '<i class="fa fa-pen"></i> EDIT',
-          class: 'btn btn-success btn-sm',
-          onClick: () => {
-            let roleId = $('#jqGrid').jqGrid('getGridParam', 'selrow')
-
-            editRoleAcl(roleId)
-          }
-        }]
-      })
+      .customPager()
 
     loadClearFilter($('#roleAclGrid'))
     loadGlobalSearch($('#roleAclGrid'))
