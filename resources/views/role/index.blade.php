@@ -368,10 +368,10 @@
                     getCekExport(params).then((response) => {
                         if ($('#rangeModal').data('action') == 'export') {
                             $.ajax({
-                                url: '{{ config('app.api_url') }}role/export?' + params,
+                                url: `{{ config('app.api_url') }}role/export?` + params,
                                 type: 'GET',
                                 beforeSend: function(xhr) {
-                                    xhr.setRequestHeader('Authorization', 'Bearer {{ session('access_token') }}');
+                                    xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
                                 },
                                 xhrFields: {
                                     responseType: 'arraybuffer'
@@ -439,7 +439,7 @@
                                     }
                                 });
                                 $(".is-invalid").first().focus();
-          $('#processingLoader').addClass('d-none')
+                                $('#processingLoader').addClass('d-none')
 
                             } else {
                                 showDialog(error.statusText)
