@@ -158,11 +158,11 @@
           <div class="modal-footer justify-content-start">
             <button id="btnSubmit" class="btn btn-primary">
               <i class="fa fa-save"></i>
-              Simpan
+              Save
             </button>
             <button class="btn btn-secondary" data-dismiss="modal">
               <i class="fa fa-times"></i>
-              Batal
+              Cancel
             </button>
           </div>
         </form>
@@ -222,19 +222,19 @@
       switch (action) {
         case 'add':
           method = 'POST'
-          url = `${apiUrl}agen`
+          url = `${apiUrl}customer`
           break;
         case 'edit':
           method = 'PATCH'
-          url = `${apiUrl}agen/${agenId}`
+          url = `${apiUrl}customer/${agenId}`
           break;
         case 'delete':
           method = 'DELETE'
-          url = `${apiUrl}agen/${agenId}`
+          url = `${apiUrl}customer/${agenId}`
           break;
         default:
           method = 'POST'
-          url = `${apiUrl}agen`
+          url = `${apiUrl}customer`
           break;
       }
 
@@ -313,7 +313,7 @@
     form.trigger('reset')
     form.find('#btnSubmit').html(`
     <i class="fa fa-save"></i>
-    Simpan
+    Save
   `)
     form.data('action', 'add')
     form.find(`.sometimes`).show()
@@ -350,7 +350,7 @@
     form.trigger('reset')
     form.find('#btnSubmit').html(`
     <i class="fa fa-save"></i>
-    Simpan
+    Save
   `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Edit Customer')
@@ -384,8 +384,8 @@
     form.data('action', 'delete')
     form.trigger('reset')
     form.find('#btnSubmit').html(`
-    <i class="fa fa-save"></i>
-    Hapus
+    <i class="fa fa-trash"></i>
+    Delete
   `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Delete Customer')
@@ -469,7 +469,7 @@
   function getMaxLength(form) {
     if (!form.attr('has-maxlength')) {
       $.ajax({
-        url: `${apiUrl}agen/field_length`,
+        url: `${apiUrl}customer/field_length`,
         method: 'GET',
         dataType: 'JSON',
         headers: {
@@ -602,7 +602,7 @@
   function showAgen(form, agenId) {
     return new Promise((resolve, reject) => {
       $.ajax({
-        url: `${apiUrl}agen/${agenId}`,
+        url: `${apiUrl}customer/${agenId}`,
         method: 'GET',
         dataType: 'JSON',
         headers: {
@@ -664,6 +664,7 @@
         this.postData = {
           levelCoa: '3',
           Aktif: 'AKTIF',
+          KeteranganCoa: 'PIUTANG USAHA',
         }
       },
       onSelectRow: (akunpusat, element) => {
@@ -687,6 +688,8 @@
         this.postData = {
           levelCoa: '3',
           Aktif: 'AKTIF',
+          KeteranganCoa: 'PENDAPATAN -',
+
         }
       },
       onSelectRow: (akunpusat, element) => {
@@ -708,7 +711,7 @@
   function showDefault(form) {
     return new Promise((resolve, reject) => {
       $.ajax({
-        url: `${apiUrl}agen/default`,
+        url: `${apiUrl}customer/default`,
         method: 'GET',
         dataType: 'JSON',
         headers: {
@@ -734,7 +737,7 @@
 
   function cekValidasidelete(Id) {
     $.ajax({
-      url: `{{ config('app.api_url') }}agen/${Id}/cekValidasi`,
+      url: `{{ config('app.api_url') }}customer/${Id}/cekValidasi`,
       method: 'POST',
       dataType: 'JSON',
       beforeSend: request => {

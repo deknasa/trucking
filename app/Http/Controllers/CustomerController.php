@@ -10,7 +10,7 @@ use Illuminate\View\View;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
-class AgenController extends MyController
+class CustomerController extends MyController
 {
     public $title = 'Customer';
 
@@ -29,7 +29,7 @@ class AgenController extends MyController
             'jenisemkl' => $this->getJenisEmkl(),
         ];
 
-        return view('agen.index', compact('title', 'combo'));
+        return view('customer.index', compact('title', 'combo'));
     }
 
     /**
@@ -47,7 +47,7 @@ class AgenController extends MyController
 
         $response = Http::withHeaders(request()->header())
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'agen', $params);
+            ->get(config('app.api_url') . 'customer', $params);
 
         $data = [
             'total' => $response['attributes']['totalPages'] ?? [],
@@ -79,7 +79,7 @@ class AgenController extends MyController
             'jenisemkl' => $this->getJenisEmkl(),
         ];
 
-        return view('agen.add', compact('title', 'combo'));
+        return view('customer.add', compact('title', 'combo'));
     }
 
     /**
@@ -101,7 +101,7 @@ class AgenController extends MyController
             $response = Http::withHeaders($this->httpHeaders)
                 ->withOptions(['verify' => false])
                 ->withToken(session('access_token'))
-                ->post(config('app.api_url') . 'agen', $request->all());
+                ->post(config('app.api_url') . 'customer', $request->all());
 
             return response($response, $response->status());
         } catch (\Throwable $th) {
@@ -120,9 +120,9 @@ class AgenController extends MyController
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . "agen/$id");
+            ->get(config('app.api_url') . "customer/$id");
 
-        $agen = $response['data'];
+        $customer = $response['data'];
 
         $combo = [
             'statusaktif' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
@@ -130,7 +130,7 @@ class AgenController extends MyController
             'jenisemkl' => $this->getJenisEmkl(),
         ];
 
-        return view('agen.edit', compact('title', 'agen', 'combo'));
+        return view('customer.edit', compact('title', 'customer', 'combo'));
     }
 
     public function update(Request $request, $id): Response
@@ -148,7 +148,7 @@ class AgenController extends MyController
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->patch(config('app.api_url') . "agen/$id", $request->all());
+            ->patch(config('app.api_url') . "customer/$id", $request->all());
 
         return response($response);
     }
@@ -165,9 +165,9 @@ class AgenController extends MyController
             $response = Http::withHeaders($this->httpHeaders)
                 ->withOptions(['verify' => false])
                 ->withToken(session('access_token'))
-                ->get(config('app.api_url') . "agen/$id");
+                ->get(config('app.api_url') . "customer/$id");
 
-            $agen = $response['data'];
+            $customer = $response['data'];
 
             $combo = [
                 'statusaktif' => $this->getParameter('STATUS AKTIF', 'STATUS AKTIF'),
@@ -175,9 +175,9 @@ class AgenController extends MyController
                 'jenisemkl' => $this->getJenisEmkl(),
             ];
 
-            return view('agen.delete', compact('title', 'agen', 'combo'));
+            return view('customer.delete', compact('title', 'customer', 'combo'));
         } catch (\Throwable $th) {
-            return redirect()->route('agen.index');
+            return redirect()->route('customer.index');
         }
     }
 
@@ -191,7 +191,7 @@ class AgenController extends MyController
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->delete(config('app.api_url') . "agen/$id", $request->all());
+            ->delete(config('app.api_url') . "customer/$id", $request->all());
 
         return response($response);
     }
@@ -201,7 +201,7 @@ class AgenController extends MyController
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'agen/field_length');
+            ->get(config('app.api_url') . 'customer/field_length');
 
         return response($response['data']);
     }
@@ -214,12 +214,12 @@ class AgenController extends MyController
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'agen', $request->all());
+            ->get(config('app.api_url') . 'customer', $request->all());
 
-        $agens = $response['data'];
+        $customers = $response['data'];
 
         $i = 0;
-        foreach ($agens as $index => $params) {
+        foreach ($customers as $index => $params) {
 
             $statusaktif = $params['statusaktif'];
             $statusApproval = $params['statusapproval'];
@@ -233,13 +233,13 @@ class AgenController extends MyController
             $statusApproval = $resultApproval['MEMO'];
             $statusTas = $resultTas['MEMO'];
 
-            $agens[$i]['statusaktif'] = $statusaktif;
-            $agens[$i]['statusapproval'] = $statusApproval;
-            $agens[$i]['statustas'] = $statusTas;
+            $customers[$i]['statusaktif'] = $statusaktif;
+            $customers[$i]['statusapproval'] = $statusApproval;
+            $customers[$i]['statustas'] = $statusTas;
             $i++;
         }
 
-        return view('reports.agen', compact('agens'));
+        return view('reports.customer', compact('customers'));
     }
 
     /**
@@ -252,19 +252,19 @@ class AgenController extends MyController
             'rows' => $request->sampai - $request->dari + 1,
         ];
 
-        $agens = $this->get($params)['rows'];
+        $customers = $this->get($params)['rows'];
 
         $columns = [
             [
                 'label' => 'No',
             ],
             [
-                'label' => 'Kode Agen',
-                'index' => 'kodeagen',
+                'label' => 'Kode customer',
+                'index' => 'kodecustomer',
             ],
             [
-                'label' => 'Nama Agen',
-                'index' => 'namaagen',
+                'label' => 'Nama customer',
+                'index' => 'namacustomer',
             ],
             [
                 'label' => 'Keterangan',
@@ -320,6 +320,6 @@ class AgenController extends MyController
             ],
         ];
 
-        $this->toExcel($this->title, $agens, $columns);
+        $this->toExcel($this->title, $customers, $columns);
     }
 }

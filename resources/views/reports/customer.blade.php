@@ -36,7 +36,7 @@
       report.dictionary.dataSources.clear()
 
       dataSet.readJson({
-        'agen': <?= json_encode($agens); ?>,
+        'agen': <?= json_encode($customers); ?>,
       })
 
       report.regData(dataSet.dataSetName, '', dataSet)

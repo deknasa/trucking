@@ -596,8 +596,8 @@
         penerimaanGiro = ''
         form.trigger('reset')
         form.find('#btnSubmit').html(`
-      <i class="fa fa-save"></i>
-      Hapus
+      <i class="fa fa-times"></i>
+              Delete
     `)
         $('#crudModalTitle').text('Delete Penerimaan')
         $('.is-invalid').removeClass('is-invalid')
