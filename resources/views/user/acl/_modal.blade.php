@@ -214,17 +214,17 @@
           {
             label: 'Class',
             name: 'class',
-            width: '300px',
+            width: '500px',
           },
           {
             label: 'Method',
             name: 'method',
-            width: '200px',
+            width: '300px',
           },
           {
             label: 'Nama',
             name: 'nama',
-            width: '300px',
+            width: '500px',
           },
         ],
         autowidth: true,
