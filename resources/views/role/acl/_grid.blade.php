@@ -25,7 +25,7 @@
           {
             label: 'MODIFIED BY',
             name: 'modifiedby',
-            align: 'center'
+            align: 'left'
           },
           {
             label: 'UPDATED AT',
