@@ -141,7 +141,7 @@
     })
 
     showRoleAcl(roleId)
-    loadAcoGrid()
+    loadAcoGrid(roleId)
   }
 
   function showRoleAcl(roleId) {
@@ -159,12 +159,15 @@
     })
   }
 
-  function loadAcoGrid() {
+  function loadAcoGrid(roleId) {
     $('#acoGrid')
       .jqGrid({
         styleUI: 'Bootstrap4',
         datatype: 'json',
         url: `${apiUrl}acos`,
+        postData: {
+          role_id: roleId
+        },
         colModel: [{
             label: '',
             name: '',
