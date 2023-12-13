@@ -12,11 +12,12 @@
         idPrefix: 'userAclGrid',
         colModel: [{
             label: 'CLASS',
-            width: '300px',
+            width: '500px',
             name: 'class',
           },
           {
             label: 'METHOD',
+            width: '300px',
             name: 'method',
           },
           {

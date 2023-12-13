@@ -13,12 +13,13 @@
         colModel: [{
             label: 'CLASS',
             name: 'class',
-            width: '300px',
+            width: '500px',
             align: 'left'
           },
           {
             label: 'METHOD',
             name: 'method',
+            width: '300px',
             align: 'left'
           },
           {
