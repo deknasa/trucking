@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\AclController;
-use App\Http\Controllers\AgenController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BankController;
 use App\Http\Controllers\KotaController;
@@ -571,13 +571,13 @@ Route::middleware(['auth', 'authorized'])->group(function () {
     Route::get('absentrado/get', [AbsenTradoController::class, 'get'])->name('absentrado.get');
     Route::resource('absentrado', AbsenTradoController::class);
 
-    Route::get('agen/field_length', [AgenController::class, 'fieldLength'])->name('agen.field_length');
-    Route::get('agen/{id}/delete', [AgenController::class, 'delete'])->name('agen.delete');
-    Route::get('agen/index', [AgenController::class, 'index']);
-    Route::get('agen/report', [AgenController::class, 'report'])->name('agen.report');
-    Route::get('agen/export', [AgenController::class, 'export'])->name('agen.export');
-    Route::get('agen/get', [AgenController::class, 'get'])->name('agen.get');
-    Route::resource('agen', AgenController::class);
+    Route::get('customer/field_length', [CustomerController::class, 'fieldLength'])->name('customer.field_length');
+    Route::get('customer/{id}/delete', [CustomerController::class, 'delete'])->name('customer.delete');
+    Route::get('customer/index', [CustomerController::class, 'index']);
+    Route::get('customer/report', [CustomerController::class, 'report'])->name('customer.report');
+    Route::get('customer/export', [CustomerController::class, 'export'])->name('customer.export');
+    Route::get('customer/get', [CustomerController::class, 'get'])->name('customer.get');
+    Route::resource('customer', CustomerController::class);
 
     Route::get('akunpusat/field_length', [AkunPusatController::class, 'fieldLength'])->name('akunpusat.field_length');
     Route::get('akunpusat/{id}/delete', [AkunPusatController::class, 'delete'])->name('akunpusat.delete');

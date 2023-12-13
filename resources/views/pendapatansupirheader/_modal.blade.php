@@ -680,8 +680,8 @@
         form.data('action', 'delete')
         form.trigger('reset')
         form.find('#btnSubmit').html(`
-      <i class="fa fa-save"></i>
-      Hapus
+      <i class="fa fa-times"></i>
+              Delete
     `)
         $('#crudModalTitle').text('Delete Pendapatan Supir')
         $('.is-invalid').removeClass('is-invalid')

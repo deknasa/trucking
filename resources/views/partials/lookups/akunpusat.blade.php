@@ -11,6 +11,7 @@
         level: `{!! $levelCoa ?? '' !!}`,
         potongan: `{!! $potongan ?? '' !!}`,
         aktif: `{!! $Aktif ?? '' !!}`,
+        keterangancoa: `{!! $KeteranganCoa ?? '' !!}`,
         supplier: `{!! $Supplier ?? '' !!}`,
         // filters: `{!! $filters ?? '' !!}`
       },

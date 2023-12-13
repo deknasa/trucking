@@ -141,11 +141,11 @@
           <div class="modal-footer justify-content-start">
             <button id="btnSubmit" class="btn btn-primary">
               <i class="fa fa-save"></i>
-              Simpan
+              Save
             </button>
             <button id="btnBatal" class="btn btn-secondary" data-dismiss="modal">
               <i class="fa fa-times"></i>
-              Batal
+              Cancel
             </button>
           </div>
         </form>
@@ -541,7 +541,7 @@
     form.trigger('reset')
     form.find('#btnSubmit').html(`
     <i class="fa fa-save"></i>
-    Simpan
+    Save
   `)
 
     form.data('action', 'add')
@@ -564,7 +564,7 @@
     form.trigger('reset')
     form.find('#btnSubmit').html(`
     <i class="fa fa-save"></i>
-    Simpan
+    Save
   `)
     $('#crudModalTitle').text('Edit Pelunasan Hutang')
     $('.is-invalid').removeClass('is-invalid')
@@ -610,8 +610,8 @@
     form.data('action', 'delete')
     form.trigger('reset')
     form.find('#btnSubmit').html(`
-    <i class="fa fa-save"></i>
-    Hapus
+    <i class="fa fa-trash"></i>
+    Delete
   `)
     $('#crudModalTitle').text('Delete Pelunasan Hutang')
     $('.is-invalid').removeClass('is-invalid')

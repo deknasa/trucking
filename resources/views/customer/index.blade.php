@@ -10,7 +10,7 @@
     </div>
 </div>
 
-@include('agen._modal')
+@include('customer._modal')
 
 @push('scripts')
 <script>
@@ -30,7 +30,7 @@
 
     $(document).ready(function() {
         $("#jqGrid").jqGrid({
-                url: `${apiUrl}agen`,
+                url: `${apiUrl}customer`,
                 mtype: "GET",
                 styleUI: 'Bootstrap4',
                 iconSet: 'fontAwesome',
@@ -463,31 +463,31 @@
 
 
         function permission() {
-            if (!`{{ $myAuth->hasPermission('agen', 'store') }}`) {
+            if (!`{{ $myAuth->hasPermission('customer', 'store') }}`) {
                 $('#add').attr('disabled', 'disabled')
             }
 
-            if (!`{{ $myAuth->hasPermission('agen', 'show') }}`) {
+            if (!`{{ $myAuth->hasPermission('customer', 'show') }}`) {
                 $('#view').attr('disabled', 'disabled')
             }
 
-            if (!`{{ $myAuth->hasPermission('agen', 'update') }}`) {
+            if (!`{{ $myAuth->hasPermission('customer', 'update') }}`) {
                 $('#edit').attr('disabled', 'disabled')
             }
 
-            if (!`{{ $myAuth->hasPermission('agen', 'destroy') }}`) {
+            if (!`{{ $myAuth->hasPermission('customer', 'destroy') }}`) {
                 $('#delete').attr('disabled', 'disabled')
             }
 
-            if (!`{{ $myAuth->hasPermission('agen', 'export') }}`) {
+            if (!`{{ $myAuth->hasPermission('customer', 'export') }}`) {
                 $('#export').attr('disabled', 'disabled')
             }
 
-            if (!`{{ $myAuth->hasPermission('agen', 'report') }}`) {
+            if (!`{{ $myAuth->hasPermission('customer', 'report') }}`) {
                 $('#report').attr('disabled', 'disabled')
             }
 
-            if (!`{{ $myAuth->hasPermission('agen', 'approval') }}`) {
+            if (!`{{ $myAuth->hasPermission('customer', 'approval') }}`) {
                 $('#approval').attr('disabled', 'disabled')
             }
         }
@@ -553,7 +553,7 @@
             getCekExport(params).then((response) => {
                     if ($('#rangeModal').data('action') == 'export') {
                         $.ajax({
-                            url: `${apiUrl}agen/export?${params}`,
+                            url: `${apiUrl}customer/export?${params}`,
                             type: 'GET',
                             headers: {
                                 Authorization: `Bearer ${accessToken}`
@@ -565,11 +565,11 @@
                                 if (xhr.status === 200) {
                                     if (response !== undefined) {
                                         var blob = new Blob([response], {
-                                            type: 'agen/vnd.ms-excel'
+                                            type: 'customer/vnd.ms-excel'
                                         });
                                         var link = document.createElement('a');
                                         link.href = window.URL.createObjectURL(blob);
-                                        link.download = 'laporanagen' + new Date().getTime() + '.xlsx';
+                                        link.download = 'LaporanCustomer' + new Date().getTime() + '.xlsx';
                                         link.click();
                                     }
                                     $('#rangeModal').modal('hide')
@@ -584,7 +584,7 @@
                             submitButton.removeAttr('disabled')
                         })
                     } else if ($('#rangeModal').data('action') == 'report') {
-                        window.open(`{{ route('agen.report') }}?${params}`)
+                        window.open(`{{ route('customer.report') }}?${params}`)
                         submitButton.removeAttr('disabled')
                         $('#processingLoader').addClass('d-none')
                         $('#rangeModal').modal('hide')
@@ -645,7 +645,7 @@
 
                 return new Promise((resolve, reject) => {
                     $.ajax({
-                        url: `${apiUrl}agen/export?${params}`,
+                        url: `${apiUrl}customer/export?${params}`,
                         dataType: "JSON",
                         headers: {
                             Authorization: `Bearer ${accessToken}`
@@ -665,7 +665,7 @@
 
         function handleApproval(id) {
             $.ajax({
-                url: `${apiUrl}agen/${id}/approval`,
+                url: `${apiUrl}customer/${id}/approval`,
                 method: 'POST',
                 dataType: 'JSON',
                 beforeSend: request => {

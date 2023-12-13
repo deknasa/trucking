@@ -76,11 +76,11 @@
           <div class="modal-footer justify-content-start">
             <button id="btnSubmit" class="btn btn-primary">
               <i class="fa fa-save"></i>
-              Simpan
+              Save
             </button>
             <button class="btn btn-secondary" data-dismiss="modal">
               <i class="fa fa-times"></i>
-              Batal
+              Cancel
             </button>
           </div>
         </form>
@@ -382,8 +382,8 @@
     form.data('action', 'delete')
     form.trigger('reset')
     form.find('#btnSubmit').html(`
-      <i class="fa fa-save"></i>
-      Hapus
+      <i class="fa fa-times"></i>
+              Delete
     `)
     $('#crudModalTitle').text('Delete Jurnal Umum')
     $('.is-invalid').removeClass('is-invalid')

@@ -226,8 +226,8 @@
         form.data('action', 'delete')
         form.trigger('reset')
         form.find('#btnSubmit').html(`
-      <i class="fa fa-save"></i>
-      Hapus
+      <i class="fa fa-times"></i>
+              Delete
     `)
         form.find(`.sometimes`).hide()
         $('#crudModalTitle').text('Delete Karyawan')
