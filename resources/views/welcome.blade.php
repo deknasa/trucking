@@ -18,7 +18,7 @@
                         <div class="icon">
                             <i class="fas fa-truck"></i>
                         </div>
-                        <a href="trado" class="small-box-footer trado">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        <a href="trado?status=AKTIF" class="small-box-footer trado">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                
@@ -33,7 +33,7 @@
                         <div class="icon">
                             <i class="fas fa-user"></i>
                         </div>
-                        <a href="supir" class="small-box-footer supir">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        <a href="supir?status=AKTIF" class="small-box-footer supir">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                  <!-- ./col -->
@@ -47,7 +47,7 @@
                         <div class="icon">
                             <i class="fas fa-truck"></i>
                         </div>
-                        <a href="trado" class="small-box-footer trado">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        <a href="trado?status=NON%20AKTIF" class="small-box-footer trado">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -61,7 +61,7 @@
                         <div class="icon">
                             <i class="fas fa-user"></i>
                         </div>
-                        <a href="supir" class="small-box-footer supir">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        <a href="supir?status=NON%20AKTIF" class="small-box-footer supir">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- ./col -->

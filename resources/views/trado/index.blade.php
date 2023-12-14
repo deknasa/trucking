@@ -28,9 +28,21 @@
     let sortname = 'keterangan'
     let sortorder = 'asc'
     let autoNumericElements = []
-    let rowNum = 10
-    // let selectedRows = [];
+    let rowNum = 10;
 
+    var statusAktif = new URLSearchParams(window.location.search).get('status');
+    // let selectedRows = [];
+    let filterDashboard = {}
+    if (statusAktif != '') {
+        filterDashboard.filters = JSON.stringify({
+            "groupOp": "AND",
+            "rules": [{
+                "field": "statusaktif",
+                "op": "cn",
+                "data": statusAktif
+            }]
+        })
+    }
     $(document).ready(function() {
         $("#jqGrid").jqGrid({
                 url: `${apiUrl}trado`,
@@ -38,6 +50,7 @@
                 styleUI: 'Bootstrap4',
                 iconSet: 'fontAwesome',
                 datatype: "json",
+                postData: filterDashboard,
                 colModel: [{
                         label: 'ID',
                         name: 'id',
@@ -84,6 +97,12 @@
                                     width: 'resolve',
                                     theme: "bootstrap4"
                                 });
+                                var statusAktif = new URLSearchParams(window.location.search).get('status');
+
+                                if (statusAktif != '') {
+                                    // Set the selected value in the dropdown and trigger change event
+                                    $(element).val(statusAktif).trigger('change');
+                                }
                             }
                         },
                         formatter: (value, options, rowData) => {
@@ -1065,12 +1084,10 @@
             getCekExport(params).then((response) => {
                     if ($('#rangeModal').data('action') == 'export') {
                         $.ajax({
-                            url: '{{ config('
-                            app.api_url ') }}trado/export?' + params,
+                            url: `{{ config('app.api_url ') }}trado/export?` + params,
                             type: 'GET',
                             beforeSend: function(xhr) {
-                                xhr.setRequestHeader('Authorization', 'Bearer {{ session('
-                                    access_token ') }}');
+                                xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token ') }}`);
                             },
                             xhrFields: {
                                 responseType: 'arraybuffer'
