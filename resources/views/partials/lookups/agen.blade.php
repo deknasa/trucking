@@ -3,7 +3,7 @@
 @push('scripts')
 <script>
   $('#agenLookup').jqGrid({
-      url: `{{ config('app.api_url') . 'agen' }}`,
+      url: `{{ config('app.api_url') . 'customer' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
       iconSet: 'fontAwesome',
