@@ -10,9 +10,9 @@ class Myauth
         'class' => [
             '',
             'dashboard',
-            'toemail',
-            'ccemail',
-            'bccemail',
+            // 'toemail',
+            // 'ccemail',
+            // 'bccemail',
             // 'laporansaldoinventory',
             // 'tutupbuku',
             // 'approvalbukacetak',
