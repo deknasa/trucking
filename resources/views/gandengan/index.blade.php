@@ -46,29 +46,35 @@
                             {
                                 label: 'GANDENGAN',
                                 name: 'kodegandengan',
-                                align: 'left'
+                                align: 'left',
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_1
                             },
                             {
                                 label: 'KETERANGAN',
                                 name: 'keterangan',
-                                align: 'left'
+                                align: 'left',
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
                             },
                             {
                                 label: 'NO POLISI',
                                 name: 'trado',
-                                align: 'left'
+                                align: 'left',
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_1
                             },
                             {
                                 label: 'JLH BAN',
                                 name: 'jumlahroda',
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_1
                             },
                             {
                                 label: 'JLH BAN SERAP',
                                 name: 'jumlahbanserap',
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_1
                             },
                             {
                                 label: 'Status',
                                 name: 'statusaktif',
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_1 : sm_mobile_1,
                                 width: 100,
                                 stype: 'select',
                                 searchoptions: {
@@ -112,7 +118,8 @@
                             {
                                 label: 'MODIFIED BY',
                                 name: 'modifiedby',
-                                align: 'left'
+                                align: 'left',
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_2
                             },
                             {
                                 label: 'UPDATED AT',
@@ -121,7 +128,8 @@
                                 formatoptions: {
                                     srcformat: "ISO8601Long",
                                     newformat: "d-m-Y H:i:s"
-                                }
+                                },
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_2
                             }, {
                                 label: 'CREATED AT',
                                 name: 'created_at',
@@ -129,7 +137,8 @@
                                 formatoptions: {
                                     srcformat: "ISO8601Long",
                                     newformat: "d-m-Y H:i:s"
-                                }
+                                },
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_2
                             },
                         ],
                         autowidth: true,
