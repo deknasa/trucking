@@ -444,7 +444,29 @@
           {
             label: 'Status',
             name: 'status',
-            width: '150px',
+            width: 100,
+            stype: 'select',
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['combostatus'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['combostatus'])) {
+                          echo ';';
+                        }
+                        $i++;
+                      endforeach;
+
+                      ?>
+            `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
           },
         ],
         autowidth: true,

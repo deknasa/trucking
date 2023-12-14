@@ -18,12 +18,33 @@ class RoleController extends MyController
     {
         $title = $this->title;
         $data = [
-            'pagename' => 'Menu Utama Role'
+            'pagename' => 'Menu Utama Role',
+            'combostatus' => $this->comboList(),
         ];
-
         return view('role.index', compact('title', 'data'));
     }
 
+    public function comboList()
+    {
+
+        $data = [
+            [
+                "id" => "0",
+                "parameter" => "ALL",
+                "param" => "",
+            ], [
+                "id" => "1",
+                "parameter" => "AKTIF",
+                "param" => "AKTIF",
+            ], [
+                "id" => "2",
+                "parameter" => "TIDAK AKTIF",
+                "param" => "TIDAK AKTIF",
+            ]
+        ];
+
+        return $data;
+    }
 
     public function aclGrid()
     {
