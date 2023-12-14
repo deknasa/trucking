@@ -62,6 +62,7 @@
                         name: 'gambar',
                         align: 'center',
                         search: false,
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         formatter: (value, row) => {
                             let images = []
                             if (value.length) {
@@ -93,6 +94,7 @@
                         label: 'NAMA',
                         name: 'namastok',
                         align: 'left',
+                        width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2
                     },
                     {
                         label: 'STATUS aktif',
