@@ -1677,7 +1677,7 @@
   }
 
   function lookupSelected(el) {
-    if ((kodePengeluaranStok == listKodePengeluaran[1]) || (kodePengeluaranStok == listKodePengeluaran[2]) || (kodePengeluaranStok == listKodePengeluaran[4]) || (kodePengeluaranStok == listKodePengeluaran[5])) {
+    if ((kodePengeluaranStok == listKodePengeluaran[0]) ||(kodePengeluaranStok == listKodePengeluaran[1]) || (kodePengeluaranStok == listKodePengeluaran[2]) || (kodePengeluaranStok == listKodePengeluaran[4]) || (kodePengeluaranStok == listKodePengeluaran[5])) {
       // console.log(kodepengeluaranstok);
       // console.log(el);
       switch (el) {
@@ -1710,22 +1710,22 @@
         default:
           break;
       }
-    } else if (kodePengeluaranStok == listKodePengeluaran[0]) {
-      switch (el) {
-        case 'trado':
-          $('#crudForm').find(`[name="gandengan"]`).attr('disabled', true)
-          $('#crudForm').find(`[name="gandengan"]`).parents('.input-group').children().attr('disabled', true)
-          $('#crudForm').find(`[name="gandengan"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled', true)
-          $('#gandenganId').attr('disabled', true);
-          break;
-        case 'gandengan':
-          $('#crudForm').find(`[name="trado"]`).attr('disabled', true)
-          $('#crudForm').find(`[name="trado"]`).parents('.input-group').children().attr('disabled', true)
-          $('#crudForm').find(`[name="trado"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled', true)
-          $('#tradoId').attr('disabled', true);
-        default:
-          break;
-      }
+    // } else if (kodePengeluaranStok == listKodePengeluaran[0]) {
+    //   switch (el) {
+    //     case 'trado':
+    //       $('#crudForm').find(`[name="gandengan"]`).attr('disabled', true)
+    //       $('#crudForm').find(`[name="gandengan"]`).parents('.input-group').children().attr('disabled', true)
+    //       $('#crudForm').find(`[name="gandengan"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled', true)
+    //       $('#gandenganId').attr('disabled', true);
+    //       break;
+    //     case 'gandengan':
+    //       $('#crudForm').find(`[name="trado"]`).attr('disabled', true)
+    //       $('#crudForm').find(`[name="trado"]`).parents('.input-group').children().attr('disabled', true)
+    //       $('#crudForm').find(`[name="trado"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled', true)
+    //       $('#tradoId').attr('disabled', true);
+    //     default:
+    //       break;
+    //   }
     }
   }
 

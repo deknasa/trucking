@@ -1641,7 +1641,7 @@
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=statusposting]').parents('.form-group').hide()
     $('[name=karyawanheader_id]').parents('.form-group').hide()
-    $('[name=postingpinjaman]').parents('.form-group').show()
+    $('[name=postingpinjaman]').parents('.form-group').hide()
     $('[name=supirheader_id]').parents('.form-group').show()
     $('[name=tradoheader_id]').parents('.form-group').show()
     $('[name=gandenganheader_id]').parents('.form-group').show()
@@ -2248,7 +2248,7 @@
     initDatepicker()
     initMonthpicker()
     initSelect2(form.find(`[name="statusposting"]`), true)
-    initSelect2(form.find(`[name="postingpinjaman"]`), true)
+    // initSelect2(form.find(`[name="postingpinjaman"]`), true)
     initSelect2(form.find(`[name="statuscabang"]`), true)
     if (form.data('action') == 'add') {
       if ($('#pengeluaranheader_id').val() != '') {
@@ -2332,7 +2332,7 @@
     Promise
       .all([
         setStatusPostingOptions(form),
-        setPostingPinjamanOptions(form),
+        // setPostingPinjamanOptions(form),
         setStatusBiayaTitipanOptions(),
         setStatusCabangOptions(form),
         setDefaultBank(),
@@ -2374,7 +2374,7 @@
         setTglBukti(form),
         setStatusBiayaTitipanOptions(),
         setStatusPostingOptions(form),
-        setPostingPinjamanOptions(form),
+        // setPostingPinjamanOptions(form),
         setStatusCabangOptions(form),
         setTampilan(form),
       ])
@@ -2429,7 +2429,7 @@
     Promise
       .all([
         setStatusPostingOptions(form),
-        setPostingPinjamanOptions(form),
+        // setPostingPinjamanOptions(form),
         setStatusBiayaTitipanOptions(),
         setStatusCabangOptions(form),
         setTampilan(form),
@@ -2487,7 +2487,7 @@
       .all([
         setTglBukti(form),
         setStatusPostingOptions(form),
-        setPostingPinjamanOptions(form),
+        // setPostingPinjamanOptions(form),
         setStatusBiayaTitipanOptions(),
         setStatusCabangOptions(form),
         setTampilan(form),
