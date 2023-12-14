@@ -6,9 +6,9 @@ use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Http;
 
-class PelangganController extends MyController
+class ShipperController extends MyController
 {
-    public $title = 'Pelanggan';
+    public $title = 'Shipper';
 
     /**
      * @ClassName
@@ -17,11 +17,11 @@ class PelangganController extends MyController
     {
         $title = $this->title;
         $data = [
-            'pagename' => 'Menu Utama Pelanggan',
+            'pagename' => 'Menu Utama Shipper',
             'combo' => $this->combo('list')
         ];
 
-        return view('pelanggan.index', compact('title', 'data'));
+        return view('shipper.index', compact('title', 'data'));
     }
     
     /**
@@ -31,7 +31,7 @@ class PelangganController extends MyController
     {
         $title = $this->title;
 
-        return view('pelanggan.add', compact('title'));
+        return view('shipper.add', compact('title'));
     }
     
     /**
@@ -44,11 +44,11 @@ class PelangganController extends MyController
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . "pelanggan/$id");
+            ->get(config('app.api_url') . "shipper/$id");
 
-        $pelanggan = $response['data'];
+        $shipper = $response['data'];
 
-        return view('pelanggan.edit', compact('title', 'pelanggan'));
+        return view('shipper.edit', compact('title', 'shipper'));
     }
 
     /**
@@ -62,13 +62,13 @@ class PelangganController extends MyController
             $response = Http::withHeaders($this->httpHeaders)
                 ->withOptions(['verify' => false])
                 ->withToken(session('access_token'))
-                ->get(config('app.api_url') . "pelanggan/$id");
+                ->get(config('app.api_url') . "shipper/$id");
 
-            $pelanggan = $response['data'];
+            $shipper = $response['data'];
 
-            return view('pelanggan.delete', compact('title', 'pelanggan'));
+            return view('shipper.delete', compact('title', 'shipper'));
         } catch (\Throwable $th) {
-            return redirect()->route('pelanggan.index');
+            return redirect()->route('shipper.index');
         }
     }
 
@@ -85,7 +85,7 @@ class PelangganController extends MyController
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'pelanggan/combostatus', $status);
+            ->get(config('app.api_url') . 'shipper/combostatus', $status);
 
         return $response['data'];
     }
@@ -94,12 +94,12 @@ class PelangganController extends MyController
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'pelanggan', $request->all());
+            ->get(config('app.api_url') . 'shipper', $request->all());
 
-        $pelanggans = $response['data'];
+        $shippers = $response['data'];
 
         $i = 0;
-        foreach ($pelanggans as $index => $params) {
+        foreach ($shippers as $index => $params) {
 
             $statusaktif = $params['statusaktif'];
 
@@ -107,10 +107,10 @@ class PelangganController extends MyController
 
             $statusaktif = $result['MEMO'];
 
-            $pelanggans[$i]['statusaktif'] = $statusaktif;
+            $shippers[$i]['statusaktif'] = $statusaktif;
             $i++;
         }
 
-        return view('reports.pelanggan', compact('pelanggans'));
+        return view('reports.shipper', compact('shippers'));
     }
 }

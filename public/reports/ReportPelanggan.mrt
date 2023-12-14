@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "b255db917cfccee16eac2b8580407666",
+  "ReportGuid": "b15bc28c06b69851968a9dabff8e2ad8",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportPelanggan.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1687592275000+0700)/",
+  "ReportChanged": "/Date(1702546298000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -47,84 +47,90 @@
             "Type": "System.String"
           },
           "3": {
+            "Name": "namakontak",
+            "NameInSource": "namakontak",
+            "Alias": "namakontak",
+            "Type": "System.String"
+          },
+          "4": {
             "Name": "keterangan",
             "NameInSource": "keterangan",
             "Alias": "keterangan",
             "Type": "System.String"
           },
-          "4": {
+          "5": {
             "Name": "telp",
             "NameInSource": "telp",
             "Alias": "telp",
             "Type": "System.String"
           },
-          "5": {
+          "6": {
             "Name": "alamat",
             "NameInSource": "alamat",
             "Alias": "alamat",
             "Type": "System.String"
           },
-          "6": {
+          "7": {
             "Name": "alamat2",
             "NameInSource": "alamat2",
             "Alias": "alamat2",
             "Type": "System.String"
           },
-          "7": {
+          "8": {
             "Name": "kota",
             "NameInSource": "kota",
             "Alias": "kota",
             "Type": "System.String"
           },
-          "8": {
+          "9": {
             "Name": "kodepos",
             "NameInSource": "kodepos",
             "Alias": "kodepos",
             "Type": "System.String"
           },
-          "9": {
+          "10": {
             "Name": "modifiedby",
             "NameInSource": "modifiedby",
             "Alias": "modifiedby",
             "Type": "System.String"
           },
-          "10": {
+          "11": {
             "Name": "statusaktif",
             "NameInSource": "statusaktif",
             "Alias": "statusaktif",
             "Type": "System.String"
           },
-          "11": {
+          "12": {
             "Name": "created_at",
             "NameInSource": "created_at",
             "Alias": "created_at",
             "Type": "System.String"
           },
-          "12": {
+          "13": {
             "Name": "updated_at",
             "NameInSource": "updated_at",
             "Alias": "updated_at",
             "Type": "System.String"
           },
-          "13": {
+          "14": {
             "Name": "judulLaporan",
             "NameInSource": "judulLaporan",
             "Alias": "judulLaporan",
             "Type": "System.String"
           },
-          "14": {
+          "15": {
             "Name": "judul",
             "NameInSource": "judul",
             "Alias": "judul",
             "Type": "System.String"
           },
-          "15": {
+          "16": {
             "Name": "tglcetak",
             "NameInSource": "tglcetak",
             "Alias": "tglcetak",
             "Type": "System.String"
           },
-          "16": {
+          "17": {
             "Name": "usercetak",
             "NameInSource": "usercetak",
             "Alias": "usercetak",
@@ -221,7 +227,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "KODE PELANGGAN"
+                "Value": "KODE SHIPPER"
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
@@ -368,7 +374,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "NAMA PELANGGAN"
+                "Value": "NAMA SHIPPER"
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",

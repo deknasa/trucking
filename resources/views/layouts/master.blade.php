@@ -128,7 +128,7 @@
           </div>
           <div class="modal-footer">
             <button type="submit" class="btn btn-primary">Report</button>
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
           </div>
         </form>
       </div>
@@ -160,7 +160,7 @@
           </div>
           <div class="modal-footer">
             <button type="submit" class="btn btn-primary" id="btnImport">Import</button>
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
           </div>
         </form>
       </div>
@@ -205,7 +205,7 @@
           </div>
           <div class="modal-footer">
             <button type="submit" class="btn btn-primary">Report</button>
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
           </div>
         </form>
       </div>
@@ -241,7 +241,7 @@
           </div>
           <div class="modal-footer">
             <button type="submit" class="btn btn-primary">Report</button>
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
           </div>
         </form>
       </div>

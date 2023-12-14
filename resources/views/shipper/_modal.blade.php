@@ -18,7 +18,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-3">
                 <label class="col-form-label">
-                  nama pelanggan <span class="text-danger">*</span>
+                  nama shipper <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-9">
@@ -28,7 +28,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-3">
                 <label class="col-form-label">
-                  alias pelanggan <span class="text-danger">*</span>
+                  alias shipper <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-9">
@@ -187,19 +187,19 @@
       switch (action) {
         case 'add':
           method = 'POST'
-          url = `${apiUrl}pelanggan`
+          url = `${apiUrl}shipper`
           break;
         case 'edit':
           method = 'PATCH'
-          url = `${apiUrl}pelanggan/${pelangganId}`
+          url = `${apiUrl}shipper/${pelangganId}`
           break;
         case 'delete':
           method = 'DELETE'
-          url = `${apiUrl}pelanggan/${pelangganId}`
+          url = `${apiUrl}shipper/${pelangganId}`
           break;
         default:
           method = 'POST'
-          url = `${apiUrl}pelanggan`
+          url = `${apiUrl}shipper`
           break;
       }
 
@@ -279,7 +279,7 @@
   `)
     form.data('action', 'add')
     form.find(`.sometimes`).show()
-    $('#crudModalTitle').text('Create Pelanggan')
+    $('#crudModalTitle').text('Create Shipper')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -346,7 +346,7 @@
   function showDefault(form) {
     return new Promise((resolve, reject) => {
       $.ajax({
-        url: `${apiUrl}pelanggan/default`,
+        url: `${apiUrl}shipper/default`,
         method: 'GET',
         dataType: 'JSON',
         headers: {
@@ -384,7 +384,7 @@
     Save
   `)
     form.find(`.sometimes`).hide()
-    $('#crudModalTitle').text('Edit Pelanggan')
+    $('#crudModalTitle').text('Edit Shipper')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -419,7 +419,7 @@
     Delete
   `)
     form.find(`.sometimes`).hide()
-    $('#crudModalTitle').text('Delete Pelanggan')
+    $('#crudModalTitle').text('Delete Shipper')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -452,7 +452,7 @@
       Save
     `)
     form.find(`.sometimes`).hide()
-    $('#crudModalTitle').text('View Pelanggan')
+    $('#crudModalTitle').text('View Shipper')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -496,7 +496,7 @@
   function getMaxLength(form) {
     if (!form.attr('has-maxlength')) {
       $.ajax({
-        url: `${apiUrl}pelanggan/field_length`,
+        url: `${apiUrl}shipper/field_length`,
         method: 'GET',
         dataType: 'JSON',
         headers: {
@@ -527,7 +527,7 @@
   function showPelanggan(form, pelangganId) {
     return new Promise((resolve, reject) => {
       $.ajax({
-        url: `${apiUrl}pelanggan/${pelangganId}`,
+        url: `${apiUrl}shipper/${pelangganId}`,
         method: 'GET',
         dataType: 'JSON',
         headers: {
@@ -558,7 +558,7 @@
   
   function cekValidasidelete(Id) {
     $.ajax({
-      url: `{{ config('app.api_url') }}pelanggan/${Id}/cekValidasi`,
+      url: `{{ config('app.api_url') }}shipper/${Id}/cekValidasi`,
       method: 'POST',
       dataType: 'JSON',
       beforeSend: request => {
