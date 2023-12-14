@@ -22,9 +22,31 @@ class UserController extends MyController
             'combocabang' => $this->combocabang('list'),
             'statusaktif' => $this->comboStatusAktif('list','STATUS AKTIF','STATUS AKTIF'),
             'statusakses' => $this->comboStatusAktif('list','STATUS AKSES','STATUS AKSES'),
+            'combostatus' => $this->comboList(),
         ];
 
         return view('user.index', compact('title', 'data'));
+    }
+    public function comboList()
+    {
+
+        $data = [
+            [
+                "id" => "0",
+                "parameter" => "ALL",
+                "param" => "",
+            ], [
+                "id" => "1",
+                "parameter" => "AKTIF",
+                "param" => "AKTIF",
+            ], [
+                "id" => "2",
+                "parameter" => "TIDAK AKTIF",
+                "param" => "TIDAK AKTIF",
+            ]
+        ];
+
+        return $data;
     }
 
     public function comboStatusAktif($aksi,$grp,$subgrp)

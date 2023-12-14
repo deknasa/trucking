@@ -1,4 +1,3 @@
-@include('user.acl._modal')
 
 @push('scripts')
 <script>
@@ -105,18 +104,7 @@
           clearGlobalSearch($('#acoGrid'))
         },
       })
-      .customPager({
-        buttons: [{
-          id: 'editUserAcl',
-          innerHTML: '<i class="fa fa-pen"></i> EDIT',
-          class: 'btn btn-success btn-sm',
-          onClick: () => {
-            let userId = $('#jqGrid').jqGrid('getGridParam', 'selrow')
-
-            editUserAcl(userId)
-          }
-        }]
-      })
+      .customPager()
 
     loadClearFilter($('#userAclGrid'))
     loadGlobalSearch($('#userAclGrid'))
