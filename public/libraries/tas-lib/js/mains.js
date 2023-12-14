@@ -2,6 +2,31 @@ let sidebarIsOpen = false;
 let formats;
 let offDays;
 let addedRules;
+let sm_dekstop_1 = '50px';
+let sm_dekstop_2 = '100px';
+let sm_dekstop_3 = '150px';
+let sm_dekstop_4 = '200px';
+let md_dekstop_1 = '250px';
+let md_dekstop_2 = '300px';
+let md_dekstop_3 = '350px';
+let md_dekstop_4 = '400px';
+let lg_dekstop_1 = '450px';
+let lg_dekstop_2 = '500px';
+let lg_dekstop_3 = '550px';
+let lg_dekstop_4 = '600px';
+
+let sm_mobile_1 = '150px';
+let sm_mobile_2 = '200px';
+let sm_mobile_3 = '250px';
+let sm_mobile_4 = '300px';
+let md_mobile_1 = '350px';
+let md_mobile_2 = '400px';
+let md_mobile_3 = '450px';
+let md_mobile_4 = '5000px';
+let lg_mobile_1 = '550px';
+let lg_mobile_2 = '600px';
+let lg_mobile_3 = '650px';
+let lg_mobile_4 = '700px';
 
 $(document).ready(function () {
 	setFormats();
@@ -491,6 +516,12 @@ function setCustomBindKeys(grid) {
 							$(activeGrid)
 								.resetSelection()
 								.setSelection(gridIds[currentIndex + 1]);
+								
+						} else{
+
+							$(".ui-jqgrid-bdiv").animate({
+								scrollTop: 10,
+							});
 						}
 					}
 					if (13 === e.keyCode) {
