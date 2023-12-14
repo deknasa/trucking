@@ -507,10 +507,10 @@
                     getCekExport(params).then((response) => {
                         if ($('#rangeModal').data('action') == 'export') {
                             $.ajax({
-                                url: '{{ config('app.api_url') }}user/export?' + params,
+                                url: `{{ config('app.api_url') }}user/export?` + params,
                                 type: 'GET',
                                 beforeSend: function(xhr) {
-                                    xhr.setRequestHeader('Authorization', 'Bearer {{ session('access_token') }}');
+                                    xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
                                 },
                                 xhrFields: {
                                     responseType: 'arraybuffer'

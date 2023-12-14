@@ -1,4 +1,3 @@
-@include('user.role._modal')
 
 @push('scripts')
 <script>
@@ -99,18 +98,7 @@
         },
       })
 
-      .customPager({
-        buttons: [{
-          id: 'editUserRole',
-          innerHTML: '<i class="fa fa-pen"></i> EDIT',
-          class: 'btn btn-success btn-sm',
-          onClick: () => {
-            let userId = $('#jqGrid').jqGrid('getGridParam', 'selrow')
-
-            editUserRole(userId)
-          }
-        }]
-      })
+      .customPager()
     loadClearFilter($('#userRoleGrid'))
     loadGlobalSearch($('#userRoleGrid'))
   }
