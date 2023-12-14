@@ -57,7 +57,7 @@ use App\Http\Controllers\JenisEmklController;
 use App\Http\Controllers\KartuStokController;
 use App\Http\Controllers\KerusakanController;
 use App\Http\Controllers\ParameterController;
-use App\Http\Controllers\PelangganController;
+use App\Http\Controllers\ShipperController;
 use App\Http\Controllers\ReportAllController;
 use App\Http\Controllers\SpkHarianController;
 use App\Http\Controllers\StokPusatController;
@@ -740,11 +740,11 @@ Route::middleware(['auth', 'authorized'])->group(function () {
     Route::get('penerima/index', [PenerimaController::class, 'index']);
     Route::resource('penerima', PenerimaController::class);
 
-    Route::get('pelanggan/report', [PelangganController::class, 'report'])->name('pelanggan.report');
-    Route::get('pelanggan/{id}/delete', [PelangganController::class, 'delete'])->name('pelanggan.delete');
-    Route::get('pelanggan/get', [PelangganController::class, 'get'])->name('pelanggan.get');
-    Route::get('pelanggan/index', [PelangganController::class, 'index']);
-    Route::resource('pelanggan', PelangganController::class);
+    Route::get('shipper/report', [ShipperController::class, 'report'])->name('shipper.report');
+    Route::get('shipper/{id}/delete', [ShipperController::class, 'delete'])->name('shipper.delete');
+    Route::get('shipper/get', [ShipperController::class, 'get'])->name('shipper.get');
+    Route::get('shipper/index', [ShipperController::class, 'index']);
+    Route::resource('shipper', ShipperController::class);
 
     Route::get('statuscontainer/report', [StatusContainerController::class, 'report'])->name('statuscontainer.report');
     Route::get('statuscontainer/{id}/delete', [StatusContainerController::class, 'delete'])->name('statuscontainer.delete');

@@ -4,7 +4,7 @@
 @push('scripts')
 <script>
    $('#pelangganLookup').jqGrid({
-      url: `{{ config('app.api_url') . 'pelanggan' }}`,
+      url: `{{ config('app.api_url') . 'shipper' }}`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
       iconSet: 'fontAwesome',
@@ -22,55 +22,69 @@
           hidden: true
         },
         {
-          label: 'PELANGGAN',
+          label: 'kode shipper',
           name: 'kodepelanggan',
           align: 'left',
+          width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1
         },
         {
-          label: 'NAMA PELANGGAN',
+          label: 'NAMA SHIPPER',
           name: 'namapelanggan',
-          align: 'left'
+          align: 'left',
+          width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2
         },
         {
           label: 'NO TELEPON',
           name: 'telp',
-          align: 'left'
+          align: 'left',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
         },
         {
           label: 'ALAMAT',
           name: 'alamat',
-          align: 'left'
+          align: 'left',
+          width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1
+
         },
         {
           label: 'ALAMAT 2',
           name: 'alamat2',
-          align: 'left'
+          align: 'left',
+          width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2
+
         },
         {
           label: 'KOTA',
           name: 'kota',
-          align: 'left'
+          align: 'left',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
+
         },
         {
           label: 'KODE POS',
           name: 'kodepos',
-          align: 'left'
+          align: 'left',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
         },
         {
           label: 'KETERANGAN',
           name: 'keterangan',
-          align: 'left'
+          align: 'left',
+          width: (detectDeviceType() == "desktop") ? lg_dekstop_3 : lg_mobile_3
+
         },
         
         {
           label: 'MODIFIED BY',
           name: 'modifiedby',
-          align: 'left'
+          align: 'left',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : md_mobile_3
         },
           {
             label: 'CREATED AT',
             name: 'created_at',
             align: 'right',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : md_mobile_4,
             formatter: "date",
             formatoptions: {
               srcformat: "ISO8601Long",
@@ -81,6 +95,7 @@
             label: 'UPDATED AT',
             name: 'updated_at',
             align: 'right',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : md_mobile_4,
             formatter: "date",
             formatoptions: {
               srcformat: "ISO8601Long",

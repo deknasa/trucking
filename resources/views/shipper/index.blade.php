@@ -13,7 +13,7 @@
 </div>
 </div>
 
-@include('pelanggan._modal')
+@include('shipper._modal')
 
 @push('scripts')
 <script>
@@ -34,7 +34,7 @@
 
   $(document).ready(function() {
     $("#jqGrid").jqGrid({
-        url: `${apiUrl}pelanggan`,
+        url: `${apiUrl}shipper`,
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
@@ -47,17 +47,19 @@
             hidden: true
           },
           {
-            label: 'kode pelanggan',
+            label: 'kode shipper',
             name: 'kodepelanggan',
+            width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1
           },
           {
-            label: 'nama pelanggan',
+            label: 'nama shipper',
             name: 'namapelanggan',
+            width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2
           },
           {
             label: 'Status',
             name: 'statusaktif',
-            width: 100,
+             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             stype: 'select',
             searchoptions: {
               value: `<?php
@@ -98,35 +100,45 @@
           {
             label: 'NO TELEPON/HANDPHONE',
             name: 'telp',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
+
           },
           {
             label: 'alamat (1)',
             name: 'alamat',
+            width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1
           },
           {
             label: 'alamat (2)',
             name: 'alamat2',
+            width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2
           },
           {
             label: 'kota',
             name: 'kota',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
           },
           {
             label: 'kode pos',
             name: 'kodepos',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
           },
           {
             label: 'keterangan',
             name: 'keterangan',
+            width: (detectDeviceType() == "desktop") ? lg_dekstop_3 : lg_mobile_3
+
           },
           {
             label: 'MODIFIED BY',
             name: 'modifiedby',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : md_mobile_3
           },
           {
             label: 'CREATED AT',
             name: 'created_at',
             align: 'right',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : md_mobile_4,
             formatter: "date",
             formatoptions: {
               srcformat: "ISO8601Long",
@@ -137,6 +149,7 @@
             label: 'UPDATED AT',
             name: 'updated_at',
             align: 'right',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : md_mobile_4,
             formatter: "date",
             formatoptions: {
               srcformat: "ISO8601Long",
@@ -341,27 +354,27 @@
       .parent().addClass('px-1')
 
     function permission() {
-      if (!`{{ $myAuth->hasPermission('pelanggan', 'store') }}`) {
+      if (!`{{ $myAuth->hasPermission('shipper', 'store') }}`) {
         $('#add').attr('disabled', 'disabled')
       }
 
-      if (!`{{ $myAuth->hasPermission('pelanggan', 'update') }}`) {
+      if (!`{{ $myAuth->hasPermission('shipper', 'update') }}`) {
         $('#edit').attr('disabled', 'disabled')
       }
 
-      if (!`{{ $myAuth->hasPermission('pelanggan', 'show') }}`) {
+      if (!`{{ $myAuth->hasPermission('shipper', 'show') }}`) {
         $('#view').attr('disabled', 'disabled')
       }
 
-      if (!`{{ $myAuth->hasPermission('pelanggan', 'destroy') }}`) {
+      if (!`{{ $myAuth->hasPermission('shipper', 'destroy') }}`) {
         $('#delete').attr('disabled', 'disabled')
       }
 
-      if (!`{{ $myAuth->hasPermission('pelanggan', 'export') }}`) {
+      if (!`{{ $myAuth->hasPermission('shipper', 'export') }}`) {
         $('#export').attr('disabled', 'disabled')
       }
 
-      if (!`{{ $myAuth->hasPermission('pelanggan', 'report') }}`) {
+      if (!`{{ $myAuth->hasPermission('shipper', 'report') }}`) {
         $('#report').attr('disabled', 'disabled')
       }
     }
@@ -425,7 +438,7 @@
       getCekExport(params).then((response) => {
           if ($('#rangeModal').data('action') == 'export') {
             $.ajax({
-              url: `{{ config('app.api_url ') }}pelanggan/export?` + params,
+              url: `{{ config('app.api_url ') }}shipper/export?` + params,
               type: 'GET',
               beforeSend: function(xhr) {
                 xhr.setRequestHeader('Authorization', `Bearer {{ session('
@@ -438,11 +451,11 @@
                 if (xhr.status === 200) {
                   if (response !== undefined) {
                     var blob = new Blob([response], {
-                      type: 'pelanggan/vnd.ms-excel'
+                      type: 'shipper/vnd.ms-excel'
                     });
                     var link = document.createElement('a');
                     link.href = window.URL.createObjectURL(blob);
-                    link.download = 'pelanggan' + new Date().getTime() + '.xlsx';
+                    link.download = 'Shipper' + new Date().getTime() + '.xlsx';
                     link.click();
                   }
                   $('#rangeModal').modal('hide')
@@ -457,7 +470,7 @@
               submitButton.removeAttr('disabled')
             })
           } else if ($('#rangeModal').data('action') == 'report') {
-            window.open(`{{ route('pelanggan.report') }}?${params}`)
+            window.open(`{{ route('shipper.report') }}?${params}`)
             submitButton.removeAttr('disabled')
             $('#processingLoader').addClass('d-none')
             $('#rangeModal').modal('hide')
@@ -506,7 +519,7 @@
 
       return new Promise((resolve, reject) => {
         $.ajax({
-          url: `${apiUrl}pelanggan/export?${params}`,
+          url: `${apiUrl}shipper/export?${params}`,
           dataType: "JSON",
           headers: {
             Authorization: `Bearer ${accessToken}`
