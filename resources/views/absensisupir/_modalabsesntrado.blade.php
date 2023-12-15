@@ -27,15 +27,13 @@
           </div>
         </div>
           
-        <div class="row">
+        <div class="row form-group">
           <table id="gridStatusAbsen"></table>
-          <div id="gridStatusAbsenPager"></div>
         </div>
         
-        <div class="row">
+        <div class="row form-group">
           {{-- <div class=" col-12"> --}}
             <table id="modalgrid"></table>
-            <div id="modalgridPager"></div>
           {{-- </div> --}}
         </div>
           
@@ -53,7 +51,7 @@
 @push('scripts')
 <script>
   let modalAbsen = $('#cekAbsenTradoModal').find('.modal-body').html()
-
+  let rowNumAbsen = 0
   $(document).ready(function() {
 
 
@@ -127,43 +125,6 @@
               return ` title="${rowData.statusKeterangan}"`
             }
           },
-  
-          // {
-          //   label: 'STATUS TRIP',
-          //   name: 'statustrip',
-          //   align: 'left',
-
-          //   formatter: (value, options, rowData) => {
-          //     if (value!='') {
-          //       let statusTrip = JSON.parse(value)
-          //       if (!statusTrip) {
-          //         return ''
-          //       }
-          //       let formattedValue = $(`
-          //       <div class="badge" style="background-color: ${statusTrip.WARNA}; color: #fff;">
-          //         <span>${statusTrip.SINGKATAN}</span>
-          //       </div>
-          //     `)
-
-          //       return formattedValue[0].outerHTML
-          //     } 
-
-          //     return ''
-          //   },
-          //   cellattr: (rowId, value, rowObject) => {
-          //     try {
-          //       let statusTrip = JSON.parse(rowObject.statustrip)
-
-          //       if (!statusTrip) {
-          //         return ` title=" "`
-          //       }
-                
-          //       return ` title="${statusTrip.MEMO}"`
-          //     } catch (error) {
-          //       return ``
-          //     }
-          //   }
-          // },
           {
             label: 'KETERANGAN',
             name: 'keterangan_detail',
@@ -202,13 +163,12 @@
         autowidth: true,
         shrinkToFit: false,
         height: 350,
-        rowNum: 10,
+        rowNum: 50,
         rownumbers: true,
         rownumWidth: 45,
-        rowList: [10, 20, 50],
+        rowList: [0],
         toolbar: [true, "top"],
         sortable: true,
-        // pager:"#modalgridPager",
         viewrecords: true,
         footerrow:true,
         
@@ -233,7 +193,6 @@
           }
 
           $('#modalgrid').setSelection($('#modalgrid').getDataIDs()[0])
-
           setHighlight($(this))
           $(this).jqGrid('footerData', 'set', {
             trado: 'Total:',
@@ -253,7 +212,7 @@
           clearGlobalSearch($('#detail'))
         },
       })
-      .customPager()
+      .customPager({})
       /* Append clear filter button */
     loadClearFilter($('#modalgrid'))
     
@@ -315,7 +274,7 @@
             jumlah: total,
           }, true)
         }
-      }).customPager()
+      }).customPager({})
   }
 
   function showAbsensiSupirCek(form, absensiId) {
@@ -329,7 +288,8 @@
       },
       data:{
         absensi_id: absensiId,
-        notIndex:"true" 
+        notIndex:"true", 
+        limit: 0
       },
       success: response => {
         $.each(response.data, (index, value) => {
