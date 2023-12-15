@@ -1453,7 +1453,7 @@
                   </td>  
                   
                   <td class="data_tbl tbl_aksi" >
-                    <div class='btn btn-danger btn-sm rmv'>Hapus</div>
+                    <div class='btn btn-danger btn-sm rmv'>Delete</div>
                   </td>
               </tr>
     `)
@@ -1903,7 +1903,7 @@
                         <input type="text"  name="totalItem[]" id="totalItem${id}" readonly onkeyup="calculate(${id})" style="text-align:right" class="form-control totalItem autonumeric number${id}">                    
                       </td>  
                       <td>
-                        <div class='btn btn-danger btn-sm rmv'>Hapus</div>
+                        <div class='btn btn-danger btn-sm rmv'>Delete</div>
                       </td>
                   </tr>
               `)
@@ -2006,7 +2006,7 @@
                         <input type="text" readonly name="totalItem[]" id="totalItem${id}" onkeyup="calculate(${id})" style="text-align:right" class="form-control totalItem autonumeric number${id}">                    
                       </td>  
                       <td class="data_tbl tbl_aksi" >
-                        <div class='btn btn-danger btn-sm rmv'>Hapus</div>
+                        <div class='btn btn-danger btn-sm rmv'>Delete</div>
                       </td>
                   </tr>
               `)
@@ -2191,7 +2191,7 @@
                     <input type="text"  name="totalItem[]" id="totalItem${id}" readonly onkeyup="calculate(${id})" style="text-align:right" class="form-control totalItem autonumeric number${id}">                    
                   </td>  
                   <td>
-                    <div class='btn btn-danger btn-sm rmv'>Hapus</div>
+                    <div class='btn btn-danger btn-sm rmv'>Delete</div>
                   </td>
               </tr>
           `)

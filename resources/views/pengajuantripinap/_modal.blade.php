@@ -208,7 +208,7 @@
         $('#crudModal').find('#crudForm').trigger('reset')
         form.find('#btnSubmit').html(`
         <i class="fa fa-save"></i>
-        Simpan
+        Save
         `)
         form.data('action', 'add')
         $('#crudModalTitle').text('Add Service in')

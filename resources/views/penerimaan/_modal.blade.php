@@ -596,7 +596,7 @@
         penerimaanGiro = ''
         form.trigger('reset')
         form.find('#btnSubmit').html(`
-      <i class="fa fa-times"></i>
+      <i class="fa fa-trash"></i>
               Delete
     `)
         $('#crudModalTitle').text('Delete Penerimaan')
@@ -875,7 +875,7 @@
                                 <input type="text" name="nominal_detail[]" class="form-control autonumeric"  ${readOnly}> 
                             </td>
                             <td class="tbl_aksi">
-                                <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
+                                <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
                             </td>
                         </tr>
                         `)
@@ -1032,7 +1032,7 @@
           <input type="text" name="nominal_detail[]" class="form-control autonumeric"> 
         </td>
         <td class="aksiGiro tbl_aksi">
-            <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
+            <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
         </td>
       </tr>
     `)

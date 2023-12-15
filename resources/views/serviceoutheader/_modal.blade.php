@@ -479,7 +479,7 @@
                                 <input type="text" name="keterangan_detail[]" class="form-control">
                             </td>
                             <td class="tbl_aksi">
-                            <div class='btn btn-danger btn-sm delete-row '>Hapus</div>
+                            <div class='btn btn-danger btn-sm delete-row '>Delete</div>
                         </td>
                         </tr>`)
 
@@ -534,7 +534,7 @@
             <input type="text" name="keterangan_detail[]" class="form-control">
         </td>
         <td>
-        <div class='btn btn-danger btn-sm delete-row '>Hapus</div>
+        <div class='btn btn-danger btn-sm delete-row '>Delete</div>
         </td>
     </tr>`)
 

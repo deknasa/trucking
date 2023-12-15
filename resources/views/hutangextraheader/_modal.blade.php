@@ -529,7 +529,7 @@
                     <input type="text" name="total_detail[]" style="text-align:right" class="form-control text-right autonumeric" > 
                 </td>
                 <td class="tbl_aksi" >
-                  <div class='btn btn-danger btn-sm delete-row '>Hapus</div>
+                  <div class='btn btn-danger btn-sm delete-row '>Delete</div>
                 </td>
               </tr>
             `)
@@ -576,7 +576,7 @@
               <input type="text" name="total_detail[]" style="text-align:right" class="form-control text-right autonumeric" > 
           </td>
           <td class="tbl_aksi" >
-            <div class='btn btn-danger btn-sm delete-row'>Hapus</div>
+            <div class='btn btn-danger btn-sm delete-row'>Delete</div>
           </td>
       </tr>`)
 

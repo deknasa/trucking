@@ -1020,7 +1020,7 @@
                   </td>
 
                   <td>
-                    <div class='btn btn-danger btn-sm rmv'>Hapus</div>
+                    <div class='btn btn-danger btn-sm rmv'>Delete</div>
                   </td>
               </tr>
           `)
@@ -1162,7 +1162,7 @@
                   </td>
 
                   <td class="tbl_aksi">
-                    <div class='btn btn-danger btn-sm rmv'>Hapus</div>
+                    <div class='btn btn-danger btn-sm rmv'>Delete</div>
                   </td>
               </tr>
           `)
@@ -1315,7 +1315,7 @@
               </td>
 
               <td class="tbl_aksi">
-                <div class='btn btn-danger btn-sm rmv'>Hapus</div>
+                <div class='btn btn-danger btn-sm rmv'>Delete</div>
               </td>
           </tr>
       `)
@@ -1476,7 +1476,7 @@
                   </td>
 
                   <td>
-                    <div class='btn btn-danger btn-sm rmv'>Hapus</div>
+                    <div class='btn btn-danger btn-sm rmv'>Delete</div>
                   </td>
               </tr>
           `)
@@ -1611,7 +1611,7 @@
                   </td>
     
                   <td>
-                    <div class='btn btn-danger btn-sm rmv'>Hapus</div>
+                    <div class='btn btn-danger btn-sm rmv'>Delete</div>
                   </td>
               </tr>
           `)
@@ -2365,7 +2365,7 @@
                   </td>
 
                   <td>
-                    <div class='btn btn-danger btn-sm rmv'>Hapus</div>
+                    <div class='btn btn-danger btn-sm rmv'>Delete</div>
                   </td>
               </tr>
     `)
@@ -2720,7 +2720,7 @@
                     </td>
 
                     <td class="data_tbl tbl_aksi">
-                      <div class='btn btn-danger btn-sm rmv'>Hapus</div>
+                      <div class='btn btn-danger btn-sm rmv'>Delete</div>
                     </td>
                 </tr>
             `)

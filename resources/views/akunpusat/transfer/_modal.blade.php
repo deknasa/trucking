@@ -32,8 +32,8 @@
                 </div>
                 <div class="modal-footer">
                     <div class="mr-auto">
-                        <button type="button" id="btnSubmitTransfer" class="btn btn-primary"><i class="fa fa-upload"></i> TRANSFER</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">BATAL</button>
+                        <button type="button" id="btnSubmitTransfer" class="btn btn-primary"><i class="fa fa-upload"></i> Transfer</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fa fa-times"></i> Cancel</button>
                     </div>
                 </div>
             </div>
