@@ -384,7 +384,7 @@
             class: 'btn btn-orange btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              viewBccemail(selectedId)
+              viewBccEmail(selectedId)
             }
           },
         ]
