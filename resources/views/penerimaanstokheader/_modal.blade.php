@@ -2033,49 +2033,62 @@
         setStatusBanOptions(form),
         showPenerimaanstokHeader(form, penerimaanStokHeaderId)
       ])
-      .then(penerimaanStokHeaderId => {
-            setFormBindKeys(form)
-            initDatepicker()
-            initSelect2(form.find('.select2bs4'), true)
-            form.find('[name=tglbukti]').removeAttr('disabled')
-    
-            form.find('[name=tglbukti]').attr('readonly', 'readonly').css({
-              background: '#fff'
-            })
-
+      .then((showPenerimaanstok) => {
+        let data = showPenerimaanstok[1];
+        // console.log(data.statuseditketerangan_id == statusBisaEdit);
+        // console.log(data.statuseditketerangan_id == statusBisaEdit);
+        
+          initDatepicker()
+          initSelect2(form.find('.select2bs4'), true)
+          form.find('[name=tglbukti]').removeAttr('disabled')
+  
+          form.find('[name=tglbukti]').attr('readonly', 'readonly').css({
+            background: '#fff'
           })
-      .then(() => {
-        $('#crudModal').modal('show')
-        $('#crudForm').find(`.ui-datepicker-trigger`).attr('disabled', true)
-        if ( $('#crudForm').find("[name=gudang]").val()) {
-            lookupSelected(`gudang`);
-        }else if ( $('#crudForm').find("[name=gandengan]").val()) {
-            lookupSelected('gandengan')
-        }else if ( $('#crudForm').find("[name=trado]").val()) {
-            lookupSelected('trado')
-        }
-
-        if ( $('#crudForm').find("[name=gudangke]").val()) {
-            lookupSelectedKe(`gudangke`);
-        }else if ( $('#crudForm').find("[name=gandenganke]").val()) {
-          lookupSelectedKe('gandenganke')
-        }else if ( $('#crudForm').find("[name=tradoke]").val()) {
-          lookupSelectedKe('tradoke')
-        }
-
-        if ( $('#crudForm').find("[name=gudangdari]").val()) {
-            lookupSelectedDari(`gudangdari`);
-        }else if ( $('#crudForm').find("[name=gandengandari]").val()) {
-          lookupSelectedDari('gandengandari')
-        }else if ( $('#crudForm').find("[name=tradodari]").val()) {
-          lookupSelectedDari('tradodari')
-        }
           
+          $('#crudModal').modal('show')
+          $('#crudForm').find(`.ui-datepicker-trigger`).attr('disabled', true)
+          if ( $('#crudForm').find("[name=gudang]").val()) {
+              lookupSelected(`gudang`);
+          }else if ( $('#crudForm').find("[name=gandengan]").val()) {
+              lookupSelected('gandengan')
+          }else if ( $('#crudForm').find("[name=trado]").val()) {
+              lookupSelected('trado')
+          }
+  
+          if ( $('#crudForm').find("[name=gudangke]").val()) {
+              lookupSelectedKe(`gudangke`);
+          }else if ( $('#crudForm').find("[name=gandenganke]").val()) {
+            lookupSelectedKe('gandenganke')
+          }else if ( $('#crudForm').find("[name=tradoke]").val()) {
+            lookupSelectedKe('tradoke')
+          }
+  
+          if ( $('#crudForm').find("[name=gudangdari]").val()) {
+              lookupSelectedDari(`gudangdari`);
+          }else if ( $('#crudForm').find("[name=gandengandari]").val()) {
+            lookupSelectedDari('gandengandari')
+          }else if ( $('#crudForm').find("[name=tradodari]").val()) {
+            lookupSelectedDari('tradodari')
+          }
 
+        if ((data.statuseditketerangan_id == statusBisaEdit) && (data.statusedit_id != statusBisaEdit)) {
+          form.find('[name]').attr('readonly', 'readonly')
+          form.find('[name=id]').prop('disabled',false)
+          form.find('[name="detail_keterangan[]"]').prop('readonly', false)
+          // console.log();
+          
+          let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
+          name.attr('readonly', true)
+          name.find('.lookup-toggler').attr('disabled', true)
+          
+          $('.tbl_aksi').hide()
+          
+        }
 
-// let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
-// name.attr('disabled', true)
-// name.find('.lookup-toggler').attr('disabled', true)
+        // let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
+        // name.attr('disabled', true)
+        // name.find('.lookup-toggler').attr('disabled', true)
       })
       .catch((error) => {
         showDialog(error.statusText)
@@ -2237,7 +2250,7 @@
 
         success: response => {
           dataStatusBan = response.data
-          resolve()
+          resolve(dataStatusBan)
         },
         error: error => {
           reject(error)
@@ -2817,7 +2830,7 @@
           else{
             $('#addRow').show()
           }
-          resolve()
+          resolve(response.data)
         },
         error: error => {
           reject(error)

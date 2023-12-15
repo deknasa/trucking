@@ -1030,31 +1030,37 @@
     $('.invalid-feedback').remove()
 
     Promise
-      .all([
-        setStatusPotongReturOptions(form),
-        setStatusOliOptions(),
-        setStatusBanDetailOptions(form),
-        setStatusBanOptions(form)
-      ])
-      .then(() => {
-        showPengeluaranstokHeader(form, pengeluaranStokHeaderId)
-          .then(() => {
-            $('#crudModal').modal('show')
-            // // penerimaanOrServicein
-            // if ($('#crudForm').find("[name=servicein_nobukti]").val() !== "") {
-            //   penerimaanOrServicein('penerimaan');
-            // } else if ($('#crudForm').find("[name=penerimaanstok_nobukti]").val() !== "") {
-            //   penerimaanOrServicein('servicein');
-            // }
-
-          })
-          .catch((error) => {
-            showDialog(error.statusText)
-          })
-          .finally(() => {
-            $('.modal-loader').addClass('d-none')
-          })
-      })
+    .all([
+      setStatusPotongReturOptions(form),
+      setStatusOliOptions(),
+      setStatusBanDetailOptions(form),
+      setStatusBanOptions(form),
+      showPengeluaranstokHeader(form, pengeluaranStokHeaderId)
+    ])
+    .then((showPengeluaranStok) => {
+      
+      let data = showPengeluaranStok[4];
+      $('#crudModal').modal('show')
+      if ((data.statuseditketerangan_id == statusBisaEdit) && (data.statusedit_id != statusBisaEdit)) {
+        form.find('[name]').attr('readonly', 'readonly')
+        form.find('[name=id]').prop('disabled',false)
+        form.find('[name="detail_keterangan[]"]').prop('readonly', false)
+        // console.log();
+        
+        let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
+        name.attr('readonly', true)
+        name.find('.lookup-toggler').attr('disabled', true)
+        
+        $('.tbl_aksi').hide()
+      }
+      
+    })
+    .catch((error) => {
+      showDialog(error.statusText)
+    })
+    .finally(() => {
+      $('.modal-loader').addClass('d-none')
+    })
     initLookup()
   }
 
@@ -2460,7 +2466,7 @@
       },
 
       onSelectRow: (gandengan, element) => {
-        element.val(gandengan.keterangan)
+        element.val(gandengan.kodegandengan)
         $(`#${element[0]['name']}Id`).val(gandengan.id)
         element.data('currentValue', element.val())
         lookupSelected(`gandengan`);

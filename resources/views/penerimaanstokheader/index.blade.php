@@ -579,6 +579,16 @@
                 }
               },
               {
+                id: 'approvalEditKeterangan',
+                text: ' UN/APPROVAL status Edit Keterangan',
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('penerimaanstokheader', 'approvalEditKeterangan') }}`) {
+                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                    approveEditKeterangan(selectedId)
+                  }
+                }
+              },
+              {
                 id: 'approval-buka-cetak',
                 text: "un/Approval Buka Cetak PENERIMAAN STOK",
                 onClick: () => {
@@ -749,6 +759,29 @@
             msg = `YAKIN UnApprove Status Edit `
           }
           showConfirm(msg, response.data.nobukti, `penerimaanstokheader/${response.data.id}/approvaledit`)
+        },
+      })
+    }
+    
+    function approveEditKeterangan(id) {
+      if (approveEditRequest) {
+        approveEditRequest.abort();
+      }
+      approveEditRequest = $.ajax({
+        url: `${apiUrl}penerimaanstokheader/${id}`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          let msg = `YAKIN Approve Status Edit Keterangan`
+
+          console.log(response.data);
+          if (response.data.statuseditketerangan_id === statusBisaEdit) {
+            msg = `YAKIN UnApprove Status Edit Keterangan`
+          }
+          showConfirm(msg, response.data.nobukti, `penerimaanstokheader/${response.data.id}/approvaleditketerangan`)
         },
       })
     }
