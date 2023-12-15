@@ -256,8 +256,8 @@
 
         form.trigger('reset')
         form.find('#btnSubmit').html(`
-            <i class="fa fa-save"></i>
-            Hapus
+            <i class="fa fa-trash"></i>
+            Delete
         `)
         form.data('action', 'delete')
         form.find(`.sometimes`).show()

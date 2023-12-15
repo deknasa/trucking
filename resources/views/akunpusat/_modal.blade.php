@@ -130,7 +130,7 @@
             </button>
             <button class="btn btn-secondary" data-dismiss="modal">
               <i class="fa fa-times"></i>
-              Batal
+              Cancel
             </button>
           </div>
         </form>

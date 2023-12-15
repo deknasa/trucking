@@ -103,12 +103,12 @@ $indexRow = $_GET['indexRow'] ?? '';
               @if(isset($action) && $action == 'delete')
               Delete
               @else
-              Simpan
+              Save
               @endif
             </button>
             <a href="{{ route('absensisupir.index') }}" class="btn btn-danger">
-              <i class="fa fa-window-close"></i>
-              BATAL
+              <i class="fa fa-times"></i>
+              Cancel
             </a>
           </div>
         </form>

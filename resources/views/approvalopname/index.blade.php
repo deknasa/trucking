@@ -41,7 +41,7 @@
                             <div class="col-sm-6 mt-4">
                                 <a id="btnSubmit" class="btn btn-primary mr-2 ">
                                     <i class="fas fa-save"></i>
-                                    Simpan
+                                    Save
                                 </a>
 
                             </div>

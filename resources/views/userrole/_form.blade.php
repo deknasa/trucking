@@ -96,7 +96,7 @@ $indexRow = $_GET['indexRow'] ?? '';
               @if(isset($action) && $action == 'delete')
               Delete
               @else
-              Simpan
+              Save
               @endif
             </button>
             <a href="{{ route('userrole.index') }}" class="btn btn-danger">

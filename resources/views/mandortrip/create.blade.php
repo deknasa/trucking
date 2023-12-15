@@ -140,11 +140,11 @@
               <div class="card-footer justify-content-start">
                 <button id="btnSubmit" class="btn btn-primary">
                   <i class="fa fa-save"></i>
-                  Simpan
+                  Save
                 </button>
                 <button class="btn btn-secondary" type="reset">
                   <i class="fa fa-times"></i>
-                  Batal
+                  Cancel
                 </button>
               </div>
             </form>
