@@ -572,7 +572,7 @@
                 id: 'approval-buka-cetak',
                 text: "un/Approval Buka Cetak INVOICE",
                 onClick: () => {
-                  if (`{{ $myAuth->hasPermission('approvalbukacetak', 'store') }}`) {
+                  if (`{{ $myAuth->hasPermission('invoiceheader', 'approvalbukacetak') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');
                     tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
                     if (selectedRows.length < 1) {

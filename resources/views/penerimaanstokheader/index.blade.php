@@ -592,7 +592,7 @@
                 id: 'approval-buka-cetak',
                 text: "un/Approval Buka Cetak PENERIMAAN STOK",
                 onClick: () => {
-                  if (`{{ $myAuth->hasPermission('approvalbukacetak', 'store') }}`) {
+                  if (`{{ $myAuth->hasPermission('penerimaanstokheader', 'approvalbukacetak') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');
                     tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
                     selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
