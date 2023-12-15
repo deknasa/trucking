@@ -93,7 +93,7 @@
               @if(isset($action) && $action == 'delete')
               Delete
               @else
-              Simpan
+              Save
               @endif
             </button>
             <a href="{{ route('absensisupir.index') }}" class="btn btn-danger">

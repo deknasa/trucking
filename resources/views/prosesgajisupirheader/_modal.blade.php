@@ -1071,8 +1071,8 @@
         form.data('action', 'delete')
         form.trigger('reset')
         form.find('#btnSubmit').html(`
-            <i class="fa fa-save"></i>
-            Hapus
+            <i class="fa fa-trash"></i>
+            Delete
         `)
         $('#crudModalTitle').text('Delete Proses Gaji Supir')
         $('.is-invalid').removeClass('is-invalid')

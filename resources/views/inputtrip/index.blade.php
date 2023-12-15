@@ -244,7 +244,7 @@
               <div class="card-footer justify-content-start">
                 <button id="btnSubmit" class="btn btn-primary">
                   <i class="fa fa-save"></i>
-                  Simpan
+                  Save
                 </button>
 
               </div>
