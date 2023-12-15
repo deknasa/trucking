@@ -998,7 +998,7 @@
         form.trigger('reset')
         form.find('#btnSubmit').html(`
             <i class="fa fa-save"></i>
-            Simpan
+            Save
         `)
 
         form.data('action', 'add')
@@ -1040,7 +1040,7 @@
         form.trigger('reset')
         form.find('#btnSubmit').html(`
             <i class="fa fa-save"></i>
-            Simpan
+            Save
         `)
         $('#crudModalTitle').text('Edit Proses Gaji Supir')
         $('.is-invalid').removeClass('is-invalid')
