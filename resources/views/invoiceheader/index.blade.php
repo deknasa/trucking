@@ -565,7 +565,10 @@
                 id: 'approveun',
                 text: "UN/APPROVAL Status INVOICE",
                 onClick: () => {
-                  approve()
+
+                  if (`{{ $myAuth->hasPermission('invoiceheader', 'approval') }}`) {
+                    approve()
+                  }
                 }
               },
               {
@@ -695,10 +698,10 @@
         $('#report').attr('disabled', 'disabled')
       }
 
-      if (!`{{ $myAuth->hasPermission('invoiceheader', 'approval') }}`) {
-        $('#approveun').attr('disabled', 'disabled')
-        $("#jqGrid").hideCol("");
-      }
+      // if (!`{{ $myAuth->hasPermission('invoiceheader', 'approval') }}`) {
+      //   $('#approveun').attr('disabled', 'disabled')
+      //   // $("#jqGrid").hideCol("");
+      // }
     }
     $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {
