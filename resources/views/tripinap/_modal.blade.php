@@ -272,7 +272,7 @@
         form.trigger('reset')
         form.find('#btnSubmit').html(`
             <i class="fa fa-save"></i>
-            Simpan
+            Save
         `)
         $('#crudModalTitle').text('Edit Service In ')
         $('.is-invalid').removeClass('is-invalid')

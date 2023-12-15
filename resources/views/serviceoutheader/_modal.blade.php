@@ -298,7 +298,7 @@
         form.trigger('reset')
         form.find('#btnSubmit').html(`
             <i class="fa fa-save"></i>
-            Simpan
+            Save
         `)
         form.data('action', 'add')
         $('#crudModalTitle').text('Add Service Out')
@@ -322,7 +322,7 @@
         form.trigger('reset')
         form.find('#btnSubmit').html(`
             <i class="fa fa-save"></i>
-            Simpan
+            Save
         `)
         $('#crudModalTitle').text('Edit Service Out ')
         $('.is-invalid').removeClass('is-invalid')
