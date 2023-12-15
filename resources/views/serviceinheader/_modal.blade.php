@@ -296,7 +296,7 @@
         $('#crudModal').find('#crudForm').trigger('reset')
         form.find('#btnSubmit').html(`
         <i class="fa fa-save"></i>
-        Simpan
+        Save
         `)
         form.data('action', 'add')
         $('#crudModalTitle').text('Add Service in')
@@ -477,7 +477,7 @@
                             </td>
 
                             <td class="tbl_aksi">
-                                <div class='btn btn-danger btn-sm delete-row'>Hapus</div>
+                                <div class='btn btn-danger btn-sm delete-row'>Delete</div>
                             </td>
                         </tr>`)
 
@@ -544,7 +544,7 @@
             </td>
 
             <td class="tbl_aksi">
-                <div class='btn btn-danger btn-sm delete-row'>Hapus</div>
+                <div class='btn btn-danger btn-sm delete-row'>Delete</div>
             </td>
         </tr>`)
 

@@ -1620,7 +1620,7 @@
           <input type="text" name="ritasike[]" class="form-control ritasike-lookup" readonly>
         </td>
         <td>
-          <button type="button" class="btn btn-danger btn-sm delete-row">HAPUS</button>
+          <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
         </td>
       </tr>
     `)

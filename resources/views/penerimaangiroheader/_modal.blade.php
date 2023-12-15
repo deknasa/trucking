@@ -310,7 +310,7 @@
         //                                 </div>
         //                             </td>
         //                             <td>
-        //                                 <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
+        //                                 <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
         //                             </td>
         //                         </tr>
         //                         `)
@@ -669,7 +669,7 @@
         form.data('action', 'delete')
         form.trigger('reset')
         form.find('#btnSubmit').html(`
-      <i class="fa fa-times"></i>
+      <i class="fa fa-trash"></i>
               Delete
     `)
         $('#crudModalTitle').text('Delete Penerimaan Giro')
@@ -923,7 +923,7 @@
                                 </div>
                             </td>
                             <td class="tbl_aksi">
-                                <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
+                                <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
                             </td>
                         </tr>
                         `)
@@ -1053,7 +1053,7 @@
             </div>
         </td>
         <td class="tbl_aksi">
-            <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
+            <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
         </td>
       </tr>
     `)

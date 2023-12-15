@@ -590,7 +590,7 @@
                 <input type="text" name="nominal_detail[]" class="form-control nominal autonumeric">
               </td>
               <td class="tbl_aksi">
-                <button type="button" class="btn btn-danger btn-sm delete-row">HAPUS</button>
+                <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
               </td>
             </tr>
             `)
@@ -1010,7 +1010,7 @@
           <input type="text" name="nominal_detail[]" class="form-control nominal autonumeric">
         </td>
         <td class="tbl_aksi">
-          <button type="button" class="btn btn-danger btn-sm delete-row">HAPUS</button>
+          <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
         </td>
       </tr>
     `)

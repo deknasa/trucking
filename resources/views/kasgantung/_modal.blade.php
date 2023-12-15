@@ -101,7 +101,7 @@
                       </div>
                     </td>
                     <td class="tbl_aksi">
-                      <div class="btn btn-danger btn-sm delete-row">HAPUS</div>
+                      <div class="btn btn-danger btn-sm delete-row">Delete</div>
                     </td>
                   </tr>
                 </tbody>
@@ -644,7 +644,7 @@
                   <input type="text" name="nominal[]" class="form-control autonumeric nominal">
                 </td>
                 <td class="tbl_aksi">
-                  <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
+                  <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
                 </td>
               </tr>
             `)
@@ -683,7 +683,7 @@
           <input type="text" name="nominal[]" class="form-control autonumeric nominal">
         </td>
         <td class="tbl_aksi">
-          <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
+          <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
         </td>
       </tr>
     `)
