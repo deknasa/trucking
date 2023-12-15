@@ -98,7 +98,7 @@
             </button>
             <a href="{{ route('absensisupir.index') }}" class="btn btn-danger">
               <i class="fa fa-window-close"></i>
-              BATAL
+              Cancel
             </a>
           </div>
         </form>

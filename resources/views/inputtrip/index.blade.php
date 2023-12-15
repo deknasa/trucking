@@ -570,7 +570,7 @@
     let form = $('#crudForm')
 
     form.trigger('reset')
-    form.find('#btnSubmit').html(`  <i class="fa fa-save"></i> Simpan `)
+    form.find('#btnSubmit').html(`  <i class="fa fa-save"></i> Save `)
     form.data('action', 'add')
     // form.find(`.sometimes`).show()
     $('.is-invalid').removeClass('is-invalid')

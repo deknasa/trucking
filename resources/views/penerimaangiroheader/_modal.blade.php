@@ -126,11 +126,11 @@
                     <div class="modal-footer justify-content-start">
                         <button id="btnSubmit" class="btn btn-primary">
                             <i class="fa fa-save"></i>
-                            Simpan
+                            Save
                         </button>
                         <button class="btn btn-batal btn-secondary">
                             <i class="fa fa-times"></i>
-                            Batal
+                            Cancel
                         </button>
                     </div>
                 </form>
@@ -591,7 +591,7 @@
         $('#crudModal').find('#crudForm').trigger('reset')
         form.find('#btnSubmit').html(`
       <i class="fa fa-save"></i>
-      Simpan
+      Save
     `)
         form.data('action', 'add')
 
@@ -619,7 +619,7 @@
         form.trigger('reset')
         form.find('#btnSubmit').html(`
       <i class="fa fa-save"></i>
-      Simpan
+      Save
         `)
         $('#crudModalTitle').text('Edit Penerimaan Giro')
         $('.is-invalid').removeClass('is-invalid')

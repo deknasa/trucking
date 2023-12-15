@@ -19,11 +19,11 @@
           </div>
           <div class="card-footer">
             <button type="submit" id="btnSimpan" class="btn btn-primary">
-              <i class="fa fa-save"></i> Simpan
+              <i class="fa fa-save"></i> Save
             </button>
             <a href="{{ route('menu.index') }}" class="btn btn-danger">
               <i class="fa fa-window-close"></i>
-              BATAL
+              Cancel
             </a>
           </div>
         </form>

@@ -101,7 +101,7 @@ $indexRow = $_GET['indexRow'] ?? '';
             </button>
             <a href="{{ route('userrole.index') }}" class="btn btn-danger">
               <i class="fa fa-window-close"></i>
-              BATAL
+              Cancel
             </a>
           </div>
         </form>
