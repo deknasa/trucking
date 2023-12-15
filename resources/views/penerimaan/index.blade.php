@@ -23,7 +23,7 @@
       <table id="jqGrid"></table>
     </div>
   </div>
-  
+
   <div class="row mt-3">
     <div class="col-12">
       <div class="card card-primary card-outline card-outline-tabs">
@@ -73,7 +73,7 @@
   let selectedRows = [];
   let tgldariheader
   let tglsampaiheader
-  
+
   function checkboxHandler(element) {
     let value = $(element).val();
     if (element.checked) {
@@ -104,12 +104,12 @@
     });
 
     @isset($request['tgldari'])
-      tgldariheader = `{{ $request['tgldari'] }}`;
+    tgldariheader = `{{ $request['tgldari'] }}`;
     @endisset
     @isset($request['tglsampai'])
-      tglsampaiheader = `{{ $request['tglsampai'] }}`;
+    tglsampaiheader = `{{ $request['tglsampai'] }}`;
     @endisset
-    setRange(false,tgldariheader,tglsampaiheader)
+    setRange(false, tgldariheader, tglsampaiheader)
     initDatepicker('datepickerIndex')
     $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('penerimaanheader', {
@@ -150,7 +150,7 @@
                 $(element).addClass('checkbox-selectall')
 
                 $(element).on('click', function() {
-                  
+
                   $(element).attr('disabled', true)
                   if ($(this).is(':checked')) {
                     selectAllRows()
@@ -481,7 +481,7 @@
 
 
           $('#left-nav').find('button').attr('disabled', false)
-          permission() 
+          permission()
           setHighlight($(this))
           $('#gs_').attr('disabled', false)
         }
@@ -502,7 +502,7 @@
       })
 
       .customPager({
-        
+
         extndBtn: [{
             id: 'report',
             title: 'Report',
@@ -568,7 +568,9 @@
                 id: 'approveun',
                 text: "UN/APPROVAL Status penerimaan",
                 onClick: () => {
-                  approve()
+                  if (`{{ $myAuth->hasPermission('penerimaanheader', 'approval') }}`) {
+                    approve()
+                  }
                 }
               },
               {
@@ -577,11 +579,11 @@
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('penerimaanheader', 'approvalbukacetak') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');
-                    tglbukacetak =tglbukacetak[1] + '-' + tglbukacetak[2];
+                    tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
                     if (selectedRows.length < 1) {
                       showDialog('Harap pilih salah satu record')
-                    }else{
-                      approvalBukaCetak(tglbukacetak,'PENERIMAANHEADER',selectedRows);
+                    } else {
+                      approvalBukaCetak(tglbukacetak, 'PENERIMAANHEADER', selectedRows);
                     }
                   }
                 }
@@ -605,14 +607,14 @@
             innerHTML: '<i class="fa fa-pen"></i> EDIT',
             class: 'btn btn-success btn-sm mr-1',
             onClick: function(event) {
-              
+
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
                 cekValidasi(selectedId, 'EDIT')
               }
-              
+
             }
           },
           {
@@ -620,14 +622,14 @@
             innerHTML: '<i class="fa fa-trash"></i> DELETE',
             class: 'btn btn-danger btn-sm mr-1',
             onClick: () => {
-              
+
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
                 cekValidasi(selectedId, 'DELETE')
               }
-              
+
             }
           },
           {
@@ -638,7 +640,7 @@
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               viewPenerimaan(selectedId)
             }
-          },  
+          },
         ],
       })
 
@@ -670,35 +672,31 @@
       .parent().addClass('px-1')
 
 
-      function permission() {
-    if (!`{{ $myAuth->hasPermission('penerimaanheader', 'store') }}`) {
-      $('#add').attr('disabled', 'disabled')
-    }
+    function permission() {
+      if (!`{{ $myAuth->hasPermission('penerimaanheader', 'store') }}`) {
+        $('#add').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('penerimaanheader', 'show') }}`) {
-      $('#view').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('penerimaanheader', 'show') }}`) {
+        $('#view').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('penerimaanheader', 'update') }}`) {
-      $('#edit').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('penerimaanheader', 'update') }}`) {
+        $('#edit').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('penerimaanheader', 'destroy') }}`) {
-      $('#delete').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('penerimaanheader', 'destroy') }}`) {
+        $('#delete').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('penerimaanheader', 'export') }}`) {
-      $('#export').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('penerimaanheader', 'export') }}`) {
+        $('#export').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('penerimaanheader', 'report') }}`) {
-      $('#report').attr('disabled', 'disabled')
+      if (!`{{ $myAuth->hasPermission('penerimaanheader', 'report') }}`) {
+        $('#report').attr('disabled', 'disabled')
+      }
     }
-
-    if (!`{{ $myAuth->hasPermission('penerimaanheader', 'approval') }}`) {
-      $('#approveun').attr('disabled', 'disabled')
-      $("#jqGrid").hideCol("");
-    }}
   })
 
   function clearSelectedRows() {
@@ -720,7 +718,7 @@
         tgldari: $('#tgldariheader').val(),
         tglsampai: $('#tglsampaiheader').val(),
         bank: $('#bankheader').val(),
-        filters: $('#jqGrid').jqGrid('getGridParam','postData').filters
+        filters: $('#jqGrid').jqGrid('getGridParam', 'postData').filters
       },
       success: (response) => {
         selectedRows = response.data.map((penerimaan) => penerimaan.id)

@@ -396,7 +396,7 @@
 
           $('#left-nav').find('button').attr('disabled', false)
           permission()
-          $('#gs_').attr('disabled', false)          
+          $('#gs_').attr('disabled', false)
           setHighlight($(this))
         }
       })
@@ -416,7 +416,7 @@
       })
 
       .customPager({
-        
+
         extndBtn: [{
             id: 'report',
             title: 'Report',
@@ -476,7 +476,9 @@
                 id: 'approveun',
                 text: "UN/APPROVAL Status REKAP PENERIMAAN",
                 onClick: () => {
-                  handleApproval()
+                  if (`{{ $myAuth->hasPermission('rekappenerimaanheader', 'approval') }}`) {
+                    handleApproval()
+                  }
                 }
               },
               {
@@ -485,11 +487,11 @@
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('rekappenerimaanheader', 'approvalbukacetak') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');
-                    tglbukacetak =tglbukacetak[1] + '-' + tglbukacetak[2];
+                    tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
                     if (selectedRows.length < 1) {
                       showDialog('Harap pilih salah satu record')
-                    }else{
-                      approvalBukaCetak(tglbukacetak,'REKAPPENERIMAANHEADER',selectedRows);
+                    } else {
+                      approvalBukaCetak(tglbukacetak, 'REKAPPENERIMAANHEADER', selectedRows);
                     }
                   }
                 }
@@ -574,9 +576,6 @@
       if (!`{{ $myAuth->hasPermission('rekappenerimaanheader', 'report') }}`) {
         $('#report').addClass('ui-disabled')
       }
-      if (!`{{ $myAuth->hasPermission('rekappenerimaanheader', 'approval') }}`) {
-        $('#approval').addClass('ui-disabled')
-      }
     }
 
     $('#rangeModal').on('shown.bs.modal', function() {
@@ -629,38 +628,38 @@
     // })
 
   })
-  
-  function handleApproval() {
-      $.ajax({
-        url: `${apiUrl}rekappenerimaanheader/approval`,
-        method: 'POST',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          rekapId: selectedRows
-        },
-        success: response => {
-          $('#loader').addClass('d-none')
-          $('#jqGrid').trigger('reloadGrid')
-          selectedRows = []
-          $('#gs_').prop('checked', false)
-        },
-        error: error => {
-          if (error.status === 422) {
-            $('.is-invalid').removeClass('is-invalid')
-            $('.invalid-feedback').remove()
 
-            setErrorMessages($('#crudForm'), error.responseJSON.errors);
-          } else {
-            showDialog(error.responseJSON)
-          }
-        },
-      }).always(() => {
-        $('#processingLoader').addClass('d-none')
-      })
-    }
+  function handleApproval() {
+    $.ajax({
+      url: `${apiUrl}rekappenerimaanheader/approval`,
+      method: 'POST',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        rekapId: selectedRows
+      },
+      success: response => {
+        $('#loader').addClass('d-none')
+        $('#jqGrid').trigger('reloadGrid')
+        selectedRows = []
+        $('#gs_').prop('checked', false)
+      },
+      error: error => {
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+
+          setErrorMessages($('#crudForm'), error.responseJSON.errors);
+        } else {
+          showDialog(error.responseJSON)
+        }
+      },
+    }).always(() => {
+      $('#processingLoader').addClass('d-none')
+    })
+  }
 
   function clearSelectedRows() {
     selectedRows = []
@@ -680,7 +679,7 @@
         limit: 0,
         tgldari: $('#tgldariheader').val(),
         tglsampai: $('#tglsampaiheader').val(),
-        filters: $('#jqGrid').jqGrid('getGridParam','postData').filters
+        filters: $('#jqGrid').jqGrid('getGridParam', 'postData').filters
       },
       success: (response) => {
         selectedRows = response.data.map((row) => row.id)

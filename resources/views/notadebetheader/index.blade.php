@@ -590,7 +590,9 @@
                 id: 'approveun',
                 text: "UN/APPROVAL Status NOTA DEBET",
                 onClick: () => {
-                  approve()
+                  if (`{{ $myAuth->hasPermission('notadebetheader', 'approval') }}`) {
+                    approve()
+                  }
                 }
               },
               {
@@ -599,11 +601,11 @@
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('notadebetheader', 'approvalbukacetak') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');
-                    tglbukacetak =tglbukacetak[1] + '-' + tglbukacetak[2];
+                    tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
                     if (selectedRows.length < 1) {
                       showDialog('Harap pilih salah satu record')
-                    }else{
-                      approvalBukaCetak(tglbukacetak,'NOTADEBETHEADER',selectedRows);
+                    } else {
+                      approvalBukaCetak(tglbukacetak, 'NOTADEBETHEADER', selectedRows);
                     }
                   }
                 }
@@ -704,10 +706,6 @@
 
       if (!`{{ $myAuth->hasPermission('notadebetheader', 'report') }}`) {
         $('#report').attr('disabled', 'disabled')
-      }
-      if (!`{{ $myAuth->hasPermission('notadebetheader', 'approval') }}`) {
-        $('#approveun').attr('disabled', 'disabled')
-        $("#jqGrid").hideCol("");
       }
     }
 
@@ -827,7 +825,7 @@
         limit: 0,
         tgldari: $('#tgldariheader').val(),
         tglsampai: $('#tglsampaiheader').val(),
-        filters: $('#jqGrid').jqGrid('getGridParam','postData').filters
+        filters: $('#jqGrid').jqGrid('getGridParam', 'postData').filters
       },
       success: (response) => {
         selectedRows = response.data.map((row) => row.id)

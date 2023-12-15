@@ -91,12 +91,12 @@
 
     setRange()
     @isset($request['tgldari'])
-      tgldariheader = `{{ $request['tgldari'] }}`;
+    tgldariheader = `{{ $request['tgldari'] }}`;
     @endisset
     @isset($request['tglsampai'])
-      tglsampaiheader = `{{ $request['tglsampai'] }}`;
+    tglsampaiheader = `{{ $request['tglsampai'] }}`;
     @endisset
-    setRange(false,tgldariheader,tglsampaiheader)
+    setRange(false, tgldariheader, tglsampaiheader)
     initDatepicker('datepickerIndex')
     $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('invoiceextraheader')
@@ -281,7 +281,7 @@
             name: 'piutang_nobukti',
             align: 'left',
             formatter: (value, options, rowData) => {
-              if ((value == null) ||( value == '')) {
+              if ((value == null) || (value == '')) {
                 return '';
               }
               let tgldari = rowData.tgldariheaderpiutangheader
@@ -398,7 +398,7 @@
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
-          
+
           loadDetailData(id)
           loadPiutangData(id, nobukti)
           loadJurnalUmumData(id, nobukti)
@@ -491,7 +491,7 @@
       })
 
       .customPager({
-        
+
         extndBtn: [{
             id: 'report',
             title: 'Report',
@@ -557,7 +557,9 @@
                 id: 'approveun',
                 text: "UN/APPROVAL Status INVOICEEXTRA",
                 onClick: () => {
-                  approve()
+                  if (`{{ $myAuth->hasPermission('invoiceextraheader', 'approval') }}`) {
+                    approve()
+                  }
                 }
               },
               {
@@ -566,11 +568,11 @@
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('invoiceextraheader', 'approvalbukacetak') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');
-                    tglbukacetak =tglbukacetak[1] + '-' + tglbukacetak[2];
+                    tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
                     if (selectedRows.length < 1) {
                       showDialog('Harap pilih salah satu record')
-                    }else{
-                      approvalBukaCetak(tglbukacetak,'INVOICEEXTRAHEADER',selectedRows);
+                    } else {
+                      approvalBukaCetak(tglbukacetak, 'INVOICEEXTRAHEADER', selectedRows);
                     }
                   }
                 }
@@ -629,7 +631,7 @@
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               viewInvoiceExtraHeader(selectedId)
             }
-          },  
+          },
         ]
 
       })
@@ -661,35 +663,32 @@
       .addClass('btn btn-sm btn-warning')
       .parent().addClass('px-1')
 
-      function permission() {
-    if (!`{{ $myAuth->hasPermission('invoiceextraheader', 'store') }}`) {
-      $('#add').attr('disabled', 'disabled')
-    }
-    
-    if (!`{{ $myAuth->hasPermission('invoiceextraheader', 'show') }}`) {
-      $('#view').attr('disabled', 'disabled')
-    }
-    
-    if (!`{{ $myAuth->hasPermission('invoiceextraheader', 'update') }}`) {
-      $('#edit').attr('disabled', 'disabled')
-    }
+    function permission() {
+      if (!`{{ $myAuth->hasPermission('invoiceextraheader', 'store') }}`) {
+        $('#add').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('invoiceextraheader', 'destroy') }}`) {
-      $('#delete').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('invoiceextraheader', 'show') }}`) {
+        $('#view').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('invoiceextraheader', 'export') }}`) {
-      $('#export').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('invoiceextraheader', 'update') }}`) {
+        $('#edit').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('invoiceextraheader', 'report') }}`) {
-      $('#report').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('invoiceextraheader', 'destroy') }}`) {
+        $('#delete').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('invoiceextraheader', 'approval') }}`) {
-      $('#approveun').attr('disabled', 'disabled')
-      $("#jqGrid").hideCol("");
-    }}
+      if (!`{{ $myAuth->hasPermission('invoiceextraheader', 'export') }}`) {
+        $('#export').attr('disabled', 'disabled')
+      }
+
+      if (!`{{ $myAuth->hasPermission('invoiceextraheader', 'report') }}`) {
+        $('#report').attr('disabled', 'disabled')
+      }
+
+    }
 
     $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {
@@ -764,7 +763,7 @@
         limit: 0,
         tgldari: $('#tgldariheader').val(),
         tglsampai: $('#tglsampaiheader').val(),
-        filters: $('#jqGrid').jqGrid('getGridParam','postData').filters
+        filters: $('#jqGrid').jqGrid('getGridParam', 'postData').filters
       },
       success: (response) => {
         selectedRows = response.data.map((row) => row.id)
