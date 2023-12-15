@@ -602,7 +602,7 @@
                 id: 'approval-buka-cetak',
                 text: "un/Approval Buka Cetak NOTA KREDIT",
                 onClick: () => {
-                  if (`{{ $myAuth->hasPermission('approvalbukacetak', 'store') }}`) {
+                  if (`{{ $myAuth->hasPermission('notakreditheader', 'approvalbukacetak') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');
                     tglbukacetak =tglbukacetak[1] + '-' + tglbukacetak[2];
                     if (selectedRows.length < 1) {
