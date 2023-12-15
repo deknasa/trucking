@@ -530,7 +530,10 @@
                                 id: 'approveun',
                                 text: "UN/APPROVAL Status PENERIMAAN GIRO",
                                 onClick: () => {
-                                    approve()
+
+                                    if (`{{ $myAuth->hasPermission('penerimaangiroheader', 'approval') }}`) {
+                                        approve()
+                                    }
                                 }
                             },
                             {
@@ -672,10 +675,6 @@
                 $('#approval').attr('disabled', 'disabled')
             }
 
-            if (!`{{ $myAuth->hasPermission('penerimaangiroheader', 'approval') }}`) {
-                $('#approveun').attr('disabled', 'disabled')
-                $("#jqGrid").hideCol("");
-            }
         }
 
         $('#rangeModal').on('shown.bs.modal', function() {
