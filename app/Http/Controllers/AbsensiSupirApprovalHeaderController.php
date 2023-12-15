@@ -11,7 +11,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 class AbsensiSupirApprovalHeaderController extends MyController
 {
 
-    public $title = 'Absesi Supir Aproval';
+    public $title = 'Absensi Supir Aproval';
 
     public function index(Request $request)
     {
