@@ -647,7 +647,8 @@
             caption: 'Approve',
             innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
             class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-            dropmenuHTML: [{
+            dropmenuHTML: [
+              {
                 id: 'approvalEdit',
                 text: 'approval Edit',
                 onClick: () => {
@@ -655,6 +656,16 @@
                   if (`{{ $myAuth->hasPermission('pengeluaranstokheader', 'approvalEdit') }}`) {
                     selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                     approveEdit(selectedId)
+                  }
+                }
+              },
+              {
+                id: 'approvalEditKeterangan',
+                text: ' UN/APPROVAL status Edit Keterangan',
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('pengeluaranstokheader', 'approvalEditKeterangan') }}`) {
+                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                    approveEditKeterangan(selectedId)
                   }
                 }
               },
@@ -837,6 +848,30 @@
             msg = `YAKIN UnApprove Status Edit `
           }
           showConfirm(msg, response.data.nobukti, `pengeluaranstokheader/${response.data.id}/approvaledit`)
+        },
+      })
+    }
+
+     
+    function approveEditKeterangan(id) {
+      if (approveEditRequest) {
+        approveEditRequest.abort();
+      }
+      approveEditRequest = $.ajax({
+        url: `${apiUrl}pengeluaranstokheader/${id}`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          let msg = `YAKIN Approve Status Edit Keterangan`
+
+          console.log(response.data);
+          if (response.data.statuseditketerangan_id === statusBisaEdit) {
+            msg = `YAKIN UnApprove Status Edit Keterangan`
+          }
+          showConfirm(msg, response.data.nobukti, `pengeluaranstokheader/${response.data.id}/approvaleditketerangan`)
         },
       })
     }
