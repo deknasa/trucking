@@ -4,13 +4,13 @@
       <div class="modal-header">
         <p class="modal-title" id="crudModalTitle">Cek Absensi Trado</p>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          
+
         </button>
       </div>
       <div class="modal-body">
-        
+
         <div class="row form-group">
-          
+
           <div class="col-12 col-sm-3 col-md-2">
             <label class="col-form-label">no bukti </label>
           </div>
@@ -20,31 +20,36 @@
           <div class="col-12 col-sm-3 col-md-2">
             <label class="col-form-label">TGL BUKTI </label>
           </div>
-          <div class="col-12 col-sm-9 col-md-4">  
+          <div class="col-12 col-sm-9 col-md-4">
             <div class="input-group">
               <input type="text" name="tglbukti" class="form-control" readonly>
             </div>
           </div>
         </div>
-          
-        <div class="row">
+
+        <div class="row form-group">
           <table id="gridStatusAbsen"></table>
-          <div id="gridStatusAbsenPager"></div>
         </div>
-        
-        <div class="row">
+
+        <div class="row form-group">
           {{-- <div class=" col-12"> --}}
-            <table id="modalgrid"></table>
-            <div id="modalgridPager"></div>
+          <table id="modalgrid"></table>
           {{-- </div> --}}
         </div>
-          
 
 
-            
 
-          
-        
+
+
+
+
+      </div>
+      <div class="modal-footer">
+        <div class="mr-auto">
+          <button type="button" class="btn btn-secondary close-button" data-dismiss="modal" aria-label="Close">
+            Close
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -53,7 +58,7 @@
 @push('scripts')
 <script>
   let modalAbsen = $('#cekAbsenTradoModal').find('.modal-body').html()
-
+  let rowNumAbsen = 0
   $(document).ready(function() {
 
 
@@ -94,11 +99,11 @@
 
   function loadModalGrid(mydata) {
     $("#modalgrid").jqGrid({
-    
+
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         datatype: "local",
-        data:mydata,
+        data: mydata,
         colModel: [{
             label: 'TRADO',
             name: 'trado'
@@ -120,50 +125,13 @@
                   <span>${value}</span>
                 </div>
               `)
-              
+
               return formattedValue[0].outerHTML
             },
             cellattr: (rowId, value, rowData) => {
               return ` title="${rowData.statusKeterangan}"`
             }
           },
-  
-          // {
-          //   label: 'STATUS TRIP',
-          //   name: 'statustrip',
-          //   align: 'left',
-
-          //   formatter: (value, options, rowData) => {
-          //     if (value!='') {
-          //       let statusTrip = JSON.parse(value)
-          //       if (!statusTrip) {
-          //         return ''
-          //       }
-          //       let formattedValue = $(`
-          //       <div class="badge" style="background-color: ${statusTrip.WARNA}; color: #fff;">
-          //         <span>${statusTrip.SINGKATAN}</span>
-          //       </div>
-          //     `)
-
-          //       return formattedValue[0].outerHTML
-          //     } 
-
-          //     return ''
-          //   },
-          //   cellattr: (rowId, value, rowObject) => {
-          //     try {
-          //       let statusTrip = JSON.parse(rowObject.statustrip)
-
-          //       if (!statusTrip) {
-          //         return ` title=" "`
-          //       }
-                
-          //       return ` title="${statusTrip.MEMO}"`
-          //     } catch (error) {
-          //       return ``
-          //     }
-          //   }
-          // },
           {
             label: 'KETERANGAN',
             name: 'keterangan_detail',
@@ -171,8 +139,8 @@
           {
             label: 'JAM',
             name: 'jam',
-            formatter:'date',
-            formatoptions:{
+            formatter: 'date',
+            formatoptions: {
               srcformat: "H:i:s",
               newformat: "H:i",
               // userLocalTime : true
@@ -202,17 +170,16 @@
         autowidth: true,
         shrinkToFit: false,
         height: 350,
-        rowNum: 10,
+        rowNum: 50,
         rownumbers: true,
         rownumWidth: 45,
-        rowList: [10, 20, 50],
+        rowList: [0],
         toolbar: [true, "top"],
         sortable: true,
-        // pager:"#modalgridPager",
         viewrecords: true,
-        footerrow:true,
-        
-       
+        footerrow: true,
+
+
         loadComplete: function(data) {
           changeJqGridRowListText()
           initResize($(this))
@@ -233,7 +200,6 @@
           }
 
           $('#modalgrid').setSelection($('#modalgrid').getDataIDs()[0])
-
           setHighlight($(this))
           $(this).jqGrid('footerData', 'set', {
             trado: 'Total:',
@@ -249,73 +215,74 @@
         disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
           abortGridLastRequest($(this))
-          
+
           clearGlobalSearch($('#detail'))
         },
       })
-      .customPager()
-      /* Append clear filter button */
+      .customPager({})
+    /* Append clear filter button */
     loadClearFilter($('#modalgrid'))
-    
+
     /* Append global search */
     loadGlobalSearch($('#modalgrid'))
   }
+
   function loadGridStatusAbsen(mydata) {
     $("#gridStatusAbsen").jqGrid({
-    
-        styleUI: 'Bootstrap4',
-        iconSet: 'fontAwesome',
-        datatype: "local",
-        data:mydata,
-        colModel: [{
-            label: 'kode',
-            width:65,
-            name: 'kodeabsen'
+
+      styleUI: 'Bootstrap4',
+      iconSet: 'fontAwesome',
+      datatype: "local",
+      data: mydata,
+      colModel: [{
+          label: 'kode',
+          width: 65,
+          name: 'kodeabsen'
+        },
+        {
+          label: 'jlh',
+          width: 65,
+          name: 'jumlah',
+          formatter: 'number',
+          formatoptions: {
+            thousandsSeparator: ",",
+            decimalPlaces: 0
           },
-          {
-            label: 'jlh',
-            width:65,
-            name: 'jumlah',
-            formatter: 'number',
-            formatoptions: {
-              thousandsSeparator: ",",
-              decimalPlaces: 0
-            },
-            align: "right",
-          },
-        ],
-        autowidth: true,
-        shrinkToFit: false,
-        height: 100,
-        rowNum: 10,
-        rownumbers: true,
-        rownumWidth: 45,
-        rowList: [10, 20, 50],
-        toolbar: [true, "top"],
-        sortable: true,
-        // pager:"#gridStatusAbsenPager",
-        viewrecords: true,
-        footerrow:true,
+          align: "right",
+        },
+      ],
+      autowidth: true,
+      shrinkToFit: false,
+      height: 100,
+      rowNum: 10,
+      rownumbers: true,
+      rownumWidth: 45,
+      rowList: [10, 20, 50],
+      toolbar: [true, "top"],
+      sortable: true,
+      // pager:"#gridStatusAbsenPager",
+      viewrecords: true,
+      footerrow: true,
 
 
-       
-        loadComplete: function(data) {
-          changeJqGridRowListText()
-          initResize($(this))
 
-          let nominals = $(this).jqGrid("getCol", "jumlah")
-          let total = 0
+      loadComplete: function(data) {
+        changeJqGridRowListText()
+        initResize($(this))
 
-          if (nominals.length > 0) {
-            total = nominals.reduce((previousValue, currentValue) => previousValue + currencyUnformat(currentValue), 0)
-          }
+        let nominals = $(this).jqGrid("getCol", "jumlah")
+        let total = 0
 
-          $(this).jqGrid('footerData', 'set', {
-            kodeabsen: 'Total:',
-            jumlah: total,
-          }, true)
+        if (nominals.length > 0) {
+          total = nominals.reduce((previousValue, currentValue) => previousValue + currencyUnformat(currentValue), 0)
         }
-      }).customPager()
+
+        $(this).jqGrid('footerData', 'set', {
+          kodeabsen: 'Total:',
+          jumlah: total,
+        }, true)
+      }
+    }).customPager({})
   }
 
   function showAbsensiSupirCek(form, absensiId) {
@@ -327,9 +294,10 @@
       headers: {
         Authorization: `Bearer ${accessToken}`
       },
-      data:{
+      data: {
         absensi_id: absensiId,
-        notIndex:"true" 
+        notIndex: "true",
+        limit: 0
       },
       success: response => {
         $.each(response.data, (index, value) => {
@@ -341,9 +309,9 @@
             element.val(value)
           }
         })
-        let row ="";
+        let row = "";
         $.each(response.absenTrado, (index, value) => {
-          
+
           row += `
           <div class="row">
             <div class="col-12 col-md-6">
@@ -353,7 +321,8 @@
               <input type="text" value="${value.jumlah}" class="form-control" readonly>
             </div>
           </div>
-          `});
+          `
+        });
         // $("#statusAbsen").html(row);
         loadModalGrid(response.detail)
         loadGridStatusAbsen(response.absenTrado)
@@ -361,6 +330,5 @@
       }
     })
   }
-  
 </script>
 @endpush
