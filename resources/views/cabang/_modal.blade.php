@@ -311,7 +311,7 @@
     form.trigger('reset')
     form.find('#btnSubmit').html(`
       <i class="fa fa-save"></i>
-      Simpan
+      Save
     `)
     form.data('action', 'add')
     form.find(`.sometimes`).show()
@@ -349,7 +349,7 @@
     form.trigger('reset')
     form.find('#btnSubmit').html(`
       <i class="fa fa-save"></i>
-      Simpan
+      Save
     `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Edit Cabang')

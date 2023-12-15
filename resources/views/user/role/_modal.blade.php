@@ -120,7 +120,7 @@
     form.trigger('reset')
     form.find('#btnSubmitUserRole').html(`
       <i class="fa fa-save"></i>
-      SIMPAN
+      Save
     `)
 
     form.find(`.sometimes`).hide()
