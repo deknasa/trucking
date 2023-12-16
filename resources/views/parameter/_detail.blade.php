@@ -21,11 +21,13 @@
                 datatype: "local",
                 colModel: [{
                         label: 'KEY',
-                        name: 'key'
+                        name: 'key',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : md_mobile_4,            
                     },
                     {
                         label: 'VALUE',
-                        name: 'value'
+                        name: 'value',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : md_mobile_4,            
                     }
                 ],
                 autowidth: true,

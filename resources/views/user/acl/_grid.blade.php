@@ -12,20 +12,24 @@
         colModel: [{
             label: 'CLASS',
             width: '500px',
+            width: (detectDeviceType() == "desktop") ? md_dekstop_3 : md_mobile_3,            
             name: 'class',
           },
           {
             label: 'METHOD',
             width: '300px',
             name: 'method',
+            width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,            
           },
           {
             label: 'MODIFIED BY',
             name: 'modifiedby',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,            
           },
           {
             label: 'UPDATED AT',
             name: 'updated_at',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,            
             formatter: "date",
             formatoptions: {
               srcformat: "ISO8601Long",

@@ -55,16 +55,20 @@
           {
             label: 'USER',
             name: 'user',
-            align: 'left'
+            align: 'left',
+            width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
           },
           {
             label: 'MODIFIED BY',
             name: 'modifiedby',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,            
             align: 'left'
           },
           {
             label: 'UPDATED AT',
             name: 'updated_at',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,            
+            
             align: 'right'
           },
         ],

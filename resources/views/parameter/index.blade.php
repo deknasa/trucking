@@ -48,36 +48,44 @@
                     {
                         label: 'GROUP',
                         name: 'grp',
+                        width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
                     },
                     {
                         label: 'SUBGROUP',
                         name: 'subgrp',
+                        width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
                     },
                     {
                         label: 'NAMA PARAMETER',
                         name: 'text',
+                        width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
                     },
                     {
                         label: 'KELOMPOK',
                         name: 'kelompok',
+                        width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
                     },
                     {
                         label: 'DEFAULT',
                         name: 'default',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2
                     },
                     {
                         label: 'TYPE',
                         name: 'type',
+                        width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1
                     },
                     {
                         label: 'MODIFIED BY',
                         name: 'modifiedby',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,            
                     },
                     {
                         label: 'CREATED AT',
                         name: 'created_at',
                         align: 'right',
                         formatter: "date",
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,            
                         formatoptions: {
                             srcformat: "ISO8601Long",
                             newformat: "d-m-Y H:i:s"
@@ -88,6 +96,7 @@
                         name: 'updated_at',
                         align: 'right',
                         formatter: "date",
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,            
                         formatoptions: {
                             srcformat: "ISO8601Long",
                             newformat: "d-m-Y H:i:s"

@@ -27,22 +27,24 @@
             label: 'Hak',
             name: 'nama',
             align: 'left',
-            width: '350px'
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,            
           },
           {
             label: 'Nama Controller',
             name: 'class',
             align: 'left',
-            width: '350px'
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,            
           },
           {
             label: 'MODIFIED BY',
             name: 'modifiedby',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,            
             align: 'center'
           },
           {
             label: 'UPDATED AT',
             name: 'updated_at',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,            
             align: 'center'
           },
         ],
