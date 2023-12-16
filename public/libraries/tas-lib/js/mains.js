@@ -1346,6 +1346,7 @@ function showDialog(response) {
 }
 
 function showConfirm(statusText = "", message = "", urlDestination = "") {
+	var def = $.Deferred();
 	$("#dialog-confirm").find("p").remove();
 	$("#dialog-confirm").append(`<p> ${statusText} </p><p> ${message} </p>`);
 	$("#dialog-confirm").dialog({
@@ -1361,7 +1362,10 @@ function showConfirm(statusText = "", message = "", urlDestination = "") {
 				},
 				click: function () {
 					$(this).dialog("close");
-					processResult(true, urlDestination);
+					if(urlDestination != ""){
+						processResult(true, urlDestination);
+					}
+					def.resolve()
 				},
 			},
 			{
@@ -1372,10 +1376,12 @@ function showConfirm(statusText = "", message = "", urlDestination = "") {
 				click: function () {
 					$(this).dialog("close");
 					processResult(false);
+					def.reject()
 				},
 			},
 		],
 	});
+	return def.promise();
 }
 
 $(document).ready(function () {
