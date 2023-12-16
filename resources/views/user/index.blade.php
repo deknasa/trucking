@@ -74,21 +74,27 @@
                                 label: 'USER',
                                 name: 'user',
                                 align: 'left',
+                                width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
                             },
                             {
                                 label: 'NAMA USER',
                                 name: 'name',
-                                align: 'left'
+                                align: 'left',
+                                width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
                             },
                              {
                                 label: 'EMAIL',
                                 name: 'email',
-                                align: 'left'
+                                align: 'left',
+                                width: (detectDeviceType() == "desktop") ?sm_dekstop_4 : sm_mobile_4,
+
                             },
                             {
                                 label: 'DASHBOARD',
                                 name: 'dashboard',
-                                align: 'left'
+                                align: 'left',
+                                width: (detectDeviceType() == "desktop") ?sm_dekstop_2 : sm_mobile_2,
+
                             },
                           
                            
@@ -102,8 +108,9 @@
                             {
                                 label: 'Cabang',
                                 name: 'cabang_id',
-                                width: 150,
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                                 stype: 'select',
+
                                 searchoptions: {
                                     value: `<?php
                                     $i = 1;
@@ -131,7 +138,7 @@
                             {
                                 label: 'Status',
                                 name: 'statusaktif',
-                                width: 150,
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                                 stype: 'select',
                                 searchoptions: {
                                     value: `<?php
@@ -174,7 +181,7 @@
                             {
                                 label: 'Status AKSES',
                                 name: 'statusakses',
-                                width: 150,
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                                 stype: 'select',
                                 searchoptions: {
                                     value: `<?php
@@ -217,12 +224,14 @@
                             {
                                 label: 'MODIFIED BY',
                                 name: 'modifiedby',
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,            
                                 align: 'left'
                             },
                             {
                                 label: 'CREATED AT',
                                 name: 'created_at',
                                 align: 'right',
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,            
                                 formatter: "date",
                                 formatoptions: {
                                     srcformat: "ISO8601Long",
@@ -234,6 +243,7 @@
                                 name: 'updated_at',
                                 align: 'right',
                                 formatter: "date",
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,            
                                 formatoptions: {
                                     srcformat: "ISO8601Long",
                                     newformat: "d-m-Y H:i:s"

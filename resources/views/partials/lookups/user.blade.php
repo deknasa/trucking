@@ -22,41 +22,49 @@
           label: 'USER',
           name: 'user',
           align: 'left',
+          width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
         },
         {
           label: 'NAMA USER',
           name: 'name',
+          width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
           align: 'left'
         },
         {
           label: 'DASHBOARD',
           name: 'dashboard',
+          width: (detectDeviceType() == "desktop") ?sm_dekstop_2 : sm_mobile_2,
           align: 'left'
         },
         {
           label: 'ID KARYAWAN',
           name: 'karyawan_id',
+          width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
           align: 'right'
         },
         {
           label: 'Cabang',
           name: 'cabang_id',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           width: 150,
         },
         {
           label: 'Status',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           name: 'statusaktif',
           width: 150,
         },
         {
           label: 'MODIFIED BY',
           name: 'modifiedby',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,            
           align: 'left'
         },
           {
             label: 'CREATED AT',
             name: 'created_at',
             align: 'right',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,            
             formatter: "date",
             formatoptions: {
               srcformat: "ISO8601Long",
@@ -67,6 +75,7 @@
             label: 'UPDATED AT',
             name: 'updated_at',
             align: 'right',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,            
             formatter: "date",
             formatoptions: {
               srcformat: "ISO8601Long",
