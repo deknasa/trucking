@@ -59,11 +59,11 @@
   `);
   jobEmkl = $('#crudForm [name=nojobemkl]').val()
   Promise.all([
-      getTglJob(jobEmkl),
-      showDefault()
-    ]).then((response) => {
-      loadOrderanEmkl()
-    })
+    getTglJob(jobEmkl),
+    showDefault()
+  ]).then((response) => {
+    loadOrderanEmkl()
+  })
   $('#btnPreview').click(function(event) {
     loadOrderanEmkl()
   })
@@ -77,11 +77,13 @@
           label: 'NO JOB',
           name: 'nojob',
           align: 'left',
+          width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1
         },
         {
           label: 'TANGGAL',
           name: 'tgl',
           align: 'left',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
           formatter: "date",
           formatoptions: {
             srcformat: "ISO8601Long",
@@ -91,21 +93,25 @@
         {
           label: 'NO CONTAINER',
           name: 'nocont',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
           align: 'left'
         },
         {
           label: 'NO SEAL',
           name: 'noseal',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           align: 'left'
         },
         {
           label: 'JENIS ORDERAN',
           name: 'jenisorderan',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           align: 'left'
         },
         {
-          label: 'PELANGGAN',
+          label: 'SHIPPER',
           name: 'pelanggan',
+          width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
           align: 'left'
         },
       ],
@@ -143,7 +149,7 @@
         if (indexRow >= rows) indexRow = (indexRow - rows * (page - 1))
       },
       loadComplete: function(data) {
-          changeJqGridRowListText()
+        changeJqGridRowListText()
         if (detectDeviceType() == 'desktop') {
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
@@ -219,6 +225,7 @@
       })
     })
   }
+
   function showDefault() {
     return new Promise(function(resolve, reject) {
       $('#lookupModal')
@@ -236,6 +243,7 @@
       resolve('test');
     })
   }
+
   function getTglJob(job) {
     return new Promise(function(resolve, reject) {
       $.ajax({
@@ -265,8 +273,9 @@
       })
     })
   }
+
   function loadOrderanEmkl() {
-   
+
     $('#orderanemklLookup')
       .jqGrid('setGridParam', {
         url: `${apiEmklUrl}orderanemkl`,

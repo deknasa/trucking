@@ -22,10 +22,12 @@
       colModel: [{
           label: 'JOB TRUCKING',
           name: 'jobtrucking',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
         },
         {
           label: 'TGL BUKTI',
           name: 'tglbukti',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
           align: 'right',
           formatter: "date",
           formatoptions: {
@@ -36,22 +38,27 @@
         {
           label: 'SUPIR',
           name: 'supir',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
         },
         {
           label: 'TRADO',
           name: 'trado',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
         },
         {
           label: 'DARI',
           name: 'kotadari',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
         },
         {
           label: 'SAMPAI',
           name: 'kotasampai',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
         },
         {
           label: 'NOBUKTI',
           name: 'nobukti',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
         },
 
       ],

@@ -70,7 +70,7 @@
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
-                  PELANGGAN <span class="text-danger">*</span></label>
+                  SHIPPER <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-md-10">
                 <input type="hidden" name="pelanggan_id">
@@ -1079,7 +1079,7 @@
       }
     })
     $('.pelanggan-lookup').lookup({
-      title: 'Pelanggan Lookup',
+      title: 'Shipper Lookup',
       fileName: 'pelanggan',
       beforeProcess: function(test) {
         this.postData = {

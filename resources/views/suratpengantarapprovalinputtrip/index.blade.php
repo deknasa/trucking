@@ -46,6 +46,7 @@
           {
             label: 'TGL BUKTI',
             name: 'tglbukti',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
             align: 'left',
             formatter: "date",
             formatoptions: {
@@ -54,12 +55,15 @@
             }
           },
           {
-            label: 'Jumlah trip',
+            label: 'jlh trip',
             name: 'jumlahtrip',
+            align: 'right',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
           }, {
             label: 'STATUS APPROVAL',
             name: 'statusapproval',
             align: 'left',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             stype: 'select',
             searchoptions: {
               value: `<?php
@@ -106,10 +110,12 @@
           {
             label: 'MODIFIED BY',
             name: 'modifiedby',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'CREATED AT',
             name: 'created_at',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
             align: 'right',
             formatter: "date",
             formatoptions: {
@@ -120,6 +126,7 @@
           {
             label: 'UPDATED AT',
             name: 'updated_at',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
             align: 'right',
             formatter: "date",
             formatoptions: {
@@ -302,7 +309,7 @@
     if (!`{{ $myAuth->hasPermission('suratpengantarapprovalinputtrip', 'show') }}`) {
       $('#view').attr('disabled', 'disabled')
     }
-      
+
     if (!`{{ $myAuth->hasPermission('suratpengantarapprovalinputtrip', 'update') }}`) {
       $('#edit').attr('disabled', 'disabled')
     }

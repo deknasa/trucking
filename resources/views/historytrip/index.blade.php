@@ -90,34 +90,41 @@
           {
             label: 'NO BUKTI',
             name: 'nobukti',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'TGL BUKTI',
             name: 'tglbukti',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
             formatter: 'date',
             formatoptions: {
               newformat: 'd-m-Y'
             }
           },
           {
-            label: 'PELANGGAN',
+            label: 'SHIPPER',
             name: 'pelanggan_id',
+            width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1
           },
           {
             label: 'KETERANGAN',
             name: 'keterangan',
+            width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1
           },
           {
             label: 'DARI',
             name: 'dari_id',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
           },
           {
             label: 'SAMPAI',
             name: 'sampai_id',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
           },
           {
             label: 'CONTAINER',
-            name: 'container_id'
+            name: 'container_id',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3
           },
           // {
           //   label: 'NO CONT',
@@ -130,14 +137,17 @@
           {
             label: 'STATUS CONTAINER',
             name: 'statuscontainer_id',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
           },
           {
             label: 'TRADO',
             name: 'trado_id',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3
           },
           {
             label: 'SUPIR',
             name: 'supir_id',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
           },
           // {
           //   label: 'NOJOB',
@@ -151,6 +161,7 @@
           {
             label: 'LONGTRIP',
             name: 'statuslongtrip',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             stype: 'select',
             searchoptions: {
               value: `<?php
@@ -215,10 +226,12 @@
           {
             label: 'CUSTOMER',
             name: 'agen_id',
+            width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2
           },
           {
             label: 'JENIS ORDER',
             name: 'jenisorder_id',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3
           },
           // {
           //   label: 'STATUS PERALIHAN',
@@ -290,7 +303,8 @@
           //   }
           // },
           {
-            label: 'TARIF',
+            label: 'LOKASI BONGKAR MUAT',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
             name: 'tarif_id',
           },
           // {
@@ -313,10 +327,12 @@
           {
             label: 'MODIFIED BY',
             name: 'modifiedby',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'CREATED AT',
             name: 'created_at',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
             align: 'right',
             formatter: "date",
             formatoptions: {
@@ -327,6 +343,7 @@
           {
             label: 'UPDATED AT',
             name: 'updated_at',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
             align: 'right',
             formatter: "date",
             formatoptions: {

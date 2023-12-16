@@ -51,37 +51,37 @@
         {
           label: 'SHIPPER',
           name: 'pelanggan_id',
-          width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2
+          width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1
         },
         {
           label: 'KETERANGAN',
           name: 'keterangan',
-          width: (detectDeviceType() == "desktop") ? lg_dekstop_2 : lg_mobile_2
+          width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1
         },
         {
           label: 'DARI',
           name: 'dari_id',
-          width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
         },
         {
           label: 'SAMPAI',
           name: 'sampai_id',
-          width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
         },
         {
           label: 'CONTAINER',
           name: 'container_id',
-          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : md_mobile_3
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3
         },
         {
           label: 'NO CONT',
           name: 'nocont',
-          width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
         },
         {
           label: 'NO CONT2',
           name: 'nocont2',
-          width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
         },
         {
           label: 'FULL/EMPTY',
@@ -218,7 +218,7 @@
         {
           label: 'JENIS ORDER',
           name: 'jenisorder_id',
-          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : md_mobile_3
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3
         },
         {
           label: 'STATUS PERALIHAN',
@@ -320,13 +320,13 @@
         {
           label: 'MODIFIED BY',
           name: 'modifiedby',
-          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : md_mobile_3,            
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
         },
         {
           label: 'CREATED AT',
           name: 'created_at',
           align: 'right',
-          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : md_mobile_4,            
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
           formatter: "date",
           formatoptions: {
             srcformat: "ISO8601Long",
@@ -337,7 +337,7 @@
           label: 'UPDATED AT',
           name: 'updated_at',
           align: 'right',
-          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : md_mobile_4,            
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
 
           formatter: "date",
           formatoptions: {
