@@ -243,7 +243,7 @@
           <input type="text" name="value[]" class="form-control">
         </td>
         <td class="tbl_aksi">
-          <div class='btn btn-danger btn-sm delete-row'>Hapus</div>
+          <div class='btn btn-danger btn-sm delete-row'>Delete</div>
         </td>
       </tr>
     `)
@@ -260,7 +260,7 @@
           <input type="text" name="value[]" class="form-control">
         </td>
         <td class="tbl_aksi">
-          <div class='btn btn-danger btn-sm delete-row'>Hapus</div>
+          <div class='btn btn-danger btn-sm delete-row'>Delete</div>
         </td>
       </tr>
       <tr>
@@ -271,7 +271,7 @@
           <input type="text" name="value[]" class="form-control">
         </td>
         <td class="tbl_aksi">
-          <div class='btn btn-danger btn-sm delete-row'>Hapus</div>
+          <div class='btn btn-danger btn-sm delete-row'>Delete</div>
         </td>
       </tr>
       <tr>
@@ -282,7 +282,7 @@
           <input type="text" name="value[]" class="form-control">
         </td>
         <td class="tbl_aksi">
-          <div class='btn btn-danger btn-sm delete-row'>Hapus</div>
+          <div class='btn btn-danger btn-sm delete-row'>Delete</div>
         </td>
       </tr>
     `)
@@ -311,7 +311,7 @@
     form.trigger('reset')
     form.find('#btnSubmit').html(`
       <i class="fa fa-save"></i>
-      Simpan
+      Save
     `)
     form.data('action', 'add')
     form.find(`.sometimes`).show()
@@ -349,7 +349,7 @@
     form.trigger('reset')
     form.find('#btnSubmit').html(`
       <i class="fa fa-save"></i>
-      Simpan
+      Save
     `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Edit Cabang')
@@ -383,7 +383,7 @@
     form.data('action', 'delete')
     form.trigger('reset')
     form.find('#btnSubmit').html(`
-      <i class="fa fa-times"></i>
+      <i class="fa fa-trash"></i>
               Delete
     `)
     form.find(`.sometimes`).hide()
@@ -580,7 +580,7 @@
                     </div>
                   </td>
                   <td class="tbl_aksi">
-                      <div class='btn btn-danger btn-sm delete-row'>Hapus</div>
+                      <div class='btn btn-danger btn-sm delete-row'>Delete</div>
                   </td>
               </tr>`)
 

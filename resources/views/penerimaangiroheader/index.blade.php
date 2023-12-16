@@ -530,14 +530,17 @@
                                 id: 'approveun',
                                 text: "UN/APPROVAL Status PENERIMAAN GIRO",
                                 onClick: () => {
-                                    approve()
+
+                                    if (`{{ $myAuth->hasPermission('penerimaangiroheader', 'approval') }}`) {
+                                        approve()
+                                    }
                                 }
                             },
                             {
                                 id: 'approval-buka-cetak',
                                 text: "un/Approval Buka Cetak PENERIMAAN GIRO",
                                 onClick: () => {
-                                    if (`{{ $myAuth->hasPermission('approvalbukacetak', 'store') }}`) {
+                                    if (`{{ $myAuth->hasPermission('penerimaangiroheader', 'approvalbukacetak') }}`) {
                                         let tglbukacetak = $('#tgldariheader').val().split('-');
                                         tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
                                         if (selectedRows.length < 1) {
@@ -672,10 +675,6 @@
                 $('#approval').attr('disabled', 'disabled')
             }
 
-            if (!`{{ $myAuth->hasPermission('penerimaangiroheader', 'approval') }}`) {
-                $('#approveun').attr('disabled', 'disabled')
-                $("#jqGrid").hideCol("");
-            }
         }
 
         $('#rangeModal').on('shown.bs.modal', function() {

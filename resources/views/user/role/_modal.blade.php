@@ -37,8 +37,8 @@
         </div>
         <div class="modal-footer">
           <div class="mr-auto">
-            <button type="button" id="btnSubmitUserRole" class="btn btn-primary">SIMPAN</button>
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">BATAL</button>
+            <button type="button" id="btnSubmitUserRole" class="btn btn-primary"> Save</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal"> <i class="fa fa-times"></i>Cancel</button>
           </div>
         </div>
       </div>
@@ -120,7 +120,7 @@
     form.trigger('reset')
     form.find('#btnSubmitUserRole').html(`
       <i class="fa fa-save"></i>
-      SIMPAN
+      Save
     `)
 
     form.find(`.sometimes`).hide()

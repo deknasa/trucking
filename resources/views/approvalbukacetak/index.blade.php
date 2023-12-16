@@ -464,7 +464,7 @@
         loadGlobalSearch($('#jqGrid'))
 
         function permission() {
-            if (!`{{ $myAuth->hasPermission('approvalbukacetak', 'store') }}`) {
+            if (!`{{ $myAuth->hasPermission('approvalbukacetak', 'approvalbukacetak') }}`) {
                 $('#btnSubmit').attr('disabled', 'disabled')
             }
         }

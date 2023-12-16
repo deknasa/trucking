@@ -36,7 +36,7 @@
       report.dictionary.dataSources.clear()
 
       dataSet.readJson({
-        'pelanggan': <?= json_encode($pelanggans); ?>,
+        'pelanggan': <?= json_encode($shippers); ?>,
       })
 
       report.regData(dataSet.dataSetName, '', dataSet)

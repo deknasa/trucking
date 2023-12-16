@@ -91,11 +91,11 @@
                     <div class="modal-footer justify-content-start">
                         <button id="btnSubmit" class="btn btn-primary">
                             <i class="fa fa-save"></i>
-                            Simpan
+                            Save
                         </button>
                         <button class="btn btn-secondary" data-dismiss="modal">
                             <i class="fa fa-times"></i>
-                            Batal
+                            Cancel
                         </button>
                     </div>
                 </form>
@@ -298,7 +298,7 @@
         form.trigger('reset')
         form.find('#btnSubmit').html(`
             <i class="fa fa-save"></i>
-            Simpan
+            Save
         `)
         form.data('action', 'add')
         $('#crudModalTitle').text('Add Service Out')
@@ -322,7 +322,7 @@
         form.trigger('reset')
         form.find('#btnSubmit').html(`
             <i class="fa fa-save"></i>
-            Simpan
+            Save
         `)
         $('#crudModalTitle').text('Edit Service Out ')
         $('.is-invalid').removeClass('is-invalid')
@@ -357,8 +357,8 @@
         form.data('action', 'delete')
         form.trigger('reset')
         form.find('#btnSubmit').html(`
-            <i class="fa fa-save"></i>
-            Hapus
+            <i class="fa fa-trash"></i>
+            Delete
         `)
         form.find(`.sometimes`).hide()
         $('#crudModalTitle').text('Delete Service Out')
@@ -479,7 +479,7 @@
                                 <input type="text" name="keterangan_detail[]" class="form-control">
                             </td>
                             <td class="tbl_aksi">
-                            <div class='btn btn-danger btn-sm delete-row '>Hapus</div>
+                            <div class='btn btn-danger btn-sm delete-row '>Delete</div>
                         </td>
                         </tr>`)
 
@@ -534,7 +534,7 @@
             <input type="text" name="keterangan_detail[]" class="form-control">
         </td>
         <td>
-        <div class='btn btn-danger btn-sm delete-row '>Hapus</div>
+        <div class='btn btn-danger btn-sm delete-row '>Delete</div>
         </td>
     </tr>`)
 

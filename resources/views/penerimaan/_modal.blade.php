@@ -155,11 +155,11 @@
                     <div class="modal-footer justify-content-start">
                         <button id="btnSubmit" class="btn btn-primary">
                             <i class="fa fa-save"></i>
-                            Simpan
+                            Save
                         </button>
                         <button class="btn btn-secondary" data-dismiss="modal">
                             <i class="fa fa-times"></i>
-                            Batal
+                            Cancel
                         </button>
                     </div>
                 </form>
@@ -408,7 +408,7 @@
         $('#crudModal').find('#crudForm').trigger('reset')
         form.find('#btnSubmit').html(`
       <i class="fa fa-save"></i>
-      Simpan
+      Save
     `)
         form.data('action', 'add')
         $('#crudModalTitle').text('Add Penerimaan')
@@ -482,7 +482,7 @@
         form.trigger('reset')
         form.find('#btnSubmit').html(`
       <i class="fa fa-save"></i>
-      Simpan
+      Save
     `)
         $('#crudModalTitle').text('Edit Penerimaan')
         $('.is-invalid').removeClass('is-invalid')
@@ -525,7 +525,7 @@
         form.trigger('reset')
         form.find('#btnSubmit').html(`
       <i class="fa fa-save"></i>
-      Simpan
+      Save
     `)
         $('#crudModalTitle').text('Edit Kode Perkiraan')
         $('.is-invalid').removeClass('is-invalid')
@@ -596,7 +596,7 @@
         penerimaanGiro = ''
         form.trigger('reset')
         form.find('#btnSubmit').html(`
-      <i class="fa fa-times"></i>
+      <i class="fa fa-trash"></i>
               Delete
     `)
         $('#crudModalTitle').text('Delete Penerimaan')
@@ -875,7 +875,7 @@
                                 <input type="text" name="nominal_detail[]" class="form-control autonumeric"  ${readOnly}> 
                             </td>
                             <td class="tbl_aksi">
-                                <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
+                                <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
                             </td>
                         </tr>
                         `)
@@ -1032,7 +1032,7 @@
           <input type="text" name="nominal_detail[]" class="form-control autonumeric"> 
         </td>
         <td class="aksiGiro tbl_aksi">
-            <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
+            <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
         </td>
       </tr>
     `)

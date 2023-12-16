@@ -414,7 +414,7 @@
       })
 
       .customPager({
-        
+
         extndBtn: [{
             id: 'report',
             title: 'Report',
@@ -474,20 +474,22 @@
                 id: 'approveun',
                 text: "UN/APPROVAL Status REKAP PENGELUARAN",
                 onClick: () => {
-                  handleApproval()
+                  if (`{{ $myAuth->hasPermission('rekappengeluaranheader', 'approval') }}`) {
+                    handleApproval()
+                  }
                 }
               },
               {
                 id: 'approval-buka-cetak',
                 text: "un/Approval Buka Cetak REKAP PENGELUARAN",
                 onClick: () => {
-                  if (`{{ $myAuth->hasPermission('approvalbukacetak', 'store') }}`) {
+                  if (`{{ $myAuth->hasPermission('rekappengeluaranheader', 'approvalbukacetak') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');
-                    tglbukacetak =tglbukacetak[1] + '-' + tglbukacetak[2];
+                    tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
                     if (selectedRows.length < 1) {
                       showDialog('Harap pilih salah satu record')
-                    }else{
-                      approvalBukaCetak(tglbukacetak,'REKAPPENGELUARANHEADER',selectedRows);
+                    } else {
+                      approvalBukaCetak(tglbukacetak, 'REKAPPENGELUARANHEADER', selectedRows);
                     }
                   }
                 }
@@ -572,9 +574,6 @@
       if (!`{{ $myAuth->hasPermission('rekappengeluaranheader', 'report') }}`) {
         $('#report').addClass('ui-disabled')
       }
-      if (!`{{ $myAuth->hasPermission('rekappengeluaranheader', 'approval') }}`) {
-        $('#approval').addClass('ui-disabled')
-      }
     }
 
     $('#rangeModal').on('shown.bs.modal', function() {
@@ -630,7 +629,7 @@
   })
 
   function handleApproval() {
-    
+
     event.preventDefault()
     $.ajax({
       url: `${apiUrl}rekappengeluaranheader/approval`,
@@ -681,7 +680,7 @@
         limit: 0,
         tgldari: $('#tgldariheader').val(),
         tglsampai: $('#tglsampaiheader').val(),
-        filters: $('#jqGrid').jqGrid('getGridParam','postData').filters
+        filters: $('#jqGrid').jqGrid('getGridParam', 'postData').filters
       },
       success: (response) => {
         selectedRows = response.data.map((row) => row.id)

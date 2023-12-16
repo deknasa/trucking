@@ -565,14 +565,17 @@
                 id: 'approveun',
                 text: "UN/APPROVAL Status INVOICE",
                 onClick: () => {
-                  approve()
+
+                  if (`{{ $myAuth->hasPermission('invoiceheader', 'approval') }}`) {
+                    approve()
+                  }
                 }
               },
               {
                 id: 'approval-buka-cetak',
                 text: "un/Approval Buka Cetak INVOICE",
                 onClick: () => {
-                  if (`{{ $myAuth->hasPermission('approvalbukacetak', 'store') }}`) {
+                  if (`{{ $myAuth->hasPermission('invoiceheader', 'approvalbukacetak') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');
                     tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
                     if (selectedRows.length < 1) {
@@ -695,10 +698,10 @@
         $('#report').attr('disabled', 'disabled')
       }
 
-      if (!`{{ $myAuth->hasPermission('invoiceheader', 'approval') }}`) {
-        $('#approveun').attr('disabled', 'disabled')
-        $("#jqGrid").hideCol("");
-      }
+      // if (!`{{ $myAuth->hasPermission('invoiceheader', 'approval') }}`) {
+      //   $('#approveun').attr('disabled', 'disabled')
+      //   // $("#jqGrid").hideCol("");
+      // }
     }
     $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {

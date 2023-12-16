@@ -48,11 +48,11 @@
         <div class="modal-footer justify-content-start">
           <button id="resignSubmit" class="btn btn-primary">
             <i class="fa fa-save"></i>
-            Simpan
+            Save
           </button>
           <button class="btn btn-secondary" data-dismiss="modal">
             <i class="fa fa-times"></i>
-            Batal
+            Cancel
           </button>
         </div>
 

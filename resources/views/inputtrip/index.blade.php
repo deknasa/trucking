@@ -166,7 +166,7 @@
                 </div>
 
                 <div class="form-group ">
-                  <label class="col-sm-12 col-form-label">PELANGGAN <span class="text-danger">*</span></label>
+                  <label class="col-sm-12 col-form-label">SHIPPER <span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <input type="hidden" name="pelanggan_id">
                     <input type="text" name="pelanggan" class="form-control pelanggan-lookup">
@@ -244,7 +244,7 @@
               <div class="card-footer justify-content-start">
                 <button id="btnSubmit" class="btn btn-primary">
                   <i class="fa fa-save"></i>
-                  Simpan
+                  Save
                 </button>
 
               </div>
@@ -570,7 +570,7 @@
     let form = $('#crudForm')
 
     form.trigger('reset')
-    form.find('#btnSubmit').html(`  <i class="fa fa-save"></i> Simpan `)
+    form.find('#btnSubmit').html(`  <i class="fa fa-save"></i> Save `)
     form.data('action', 'add')
     // form.find(`.sometimes`).show()
     $('.is-invalid').removeClass('is-invalid')
@@ -1187,7 +1187,7 @@
     })
 
     $('.pelanggan-lookup').lookup({
-      title: 'Pelanggan Lookup',
+      title: 'Shipper Lookup',
       fileName: 'pelanggan',
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
@@ -1620,7 +1620,7 @@
           <input type="text" name="ritasike[]" class="form-control ritasike-lookup" readonly>
         </td>
         <td>
-          <button type="button" class="btn btn-danger btn-sm delete-row">HAPUS</button>
+          <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
         </td>
       </tr>
     `)

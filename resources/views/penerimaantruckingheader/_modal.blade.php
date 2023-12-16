@@ -1117,7 +1117,7 @@
     $('#crudModal').find('#crudForm').trigger('reset')
     form.find('#btnSubmit').html(`
       <i class="fa fa-save"></i>
-      Simpan
+      Save
     `)
     form.data('action', 'add')
 
@@ -1156,7 +1156,7 @@
     form.trigger('reset')
     form.find('#btnSubmit').html(`
       <i class="fa fa-save"></i>
-      Simpan
+      Save
     `)
     $('#crudModalTitle').text('Edit Penerimaan Truck')
     $('.is-invalid').removeClass('is-invalid')
@@ -1198,7 +1198,7 @@
     form.data('action', 'delete')
     form.trigger('reset')
     form.find('#btnSubmit').html(`
-      <i class="fa fa-times"></i>
+      <i class="fa fa-trash"></i>
               Delete
     `)
     $('#crudModalTitle').text('Delete Penerimaan Truck')
@@ -2759,7 +2759,7 @@
                         <input type="text" name="nominal[]" class="form-control autonumeric nominal"> 
                     </td>
                     <td  class="tbl_aksi">
-                        <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
+                        <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
                     </td>
                 </tr>
               `)
@@ -3101,7 +3101,7 @@
           <input type="text" name="nominal[]" class="form-control autonumeric nominal"> 
         </td>
         <td  class="tbl_aksi">
-            <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
+            <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
         </td>
       </tr>
     `)

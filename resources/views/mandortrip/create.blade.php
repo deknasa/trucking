@@ -140,11 +140,11 @@
               <div class="card-footer justify-content-start">
                 <button id="btnSubmit" class="btn btn-primary">
                   <i class="fa fa-save"></i>
-                  Simpan
+                  Save
                 </button>
                 <button class="btn btn-secondary" type="reset">
                   <i class="fa fa-times"></i>
-                  Batal
+                  Cancel
                 </button>
               </div>
             </form>
@@ -303,7 +303,7 @@
     let form = $('#crudForm')
 
     form.trigger('reset')
-    form.find('#btnSubmit').html(`  <i class="fa fa-save"></i> Simpan `)
+    form.find('#btnSubmit').html(`  <i class="fa fa-save"></i> Save `)
     form.data('action', 'add')
     // form.find(`.sometimes`).show()
     $('.is-invalid').removeClass('is-invalid')

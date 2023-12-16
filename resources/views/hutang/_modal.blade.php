@@ -335,7 +335,7 @@
     $('#crudModal').find('#crudForm').trigger('reset')
     form.find('#btnSubmit').html(`
       <i class="fa fa-save"></i>
-      Simpan
+      Save
     `)
     form.data('action', 'add')
     // form.find(`.sometimes`).show()
@@ -359,7 +359,7 @@
     form.trigger('reset')
     form.find('#btnSubmit').html(`
                 <i class="fa fa-save"></i>
-                Simpan
+                Save
               `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Edit Hutang')
@@ -393,8 +393,8 @@
     form.data('action', 'delete')
     form.trigger('reset')
     form.find('#btnSubmit').html(`
-                <i class="fa fa-save"></i>
-                Hapus
+                <i class="fa fa-trash"></i>
+                Delete
               `)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Delete Hutang')
@@ -645,7 +645,7 @@
                     <input type="text" name="total_detail[]" style="text-align:right" class="form-control text-right autonumeric" > 
                 </td>
                 <td class="tbl_aksi">
-                  <div class='btn btn-danger btn-sm delete-row '>Hapus</div>
+                  <div class='btn btn-danger btn-sm delete-row '>Delete</div>
                 </td>
               </tr>
             `)
@@ -692,7 +692,7 @@
               <input type="text" name="total_detail[]" style="text-align:right" class="form-control text-right autonumeric" > 
           </td>
           <td class="tbl_aksi">
-            <div class='btn btn-danger btn-sm delete-row'>Hapus</div>
+            <div class='btn btn-danger btn-sm delete-row'>Delete</div>
           </td>
       </tr>`)
 

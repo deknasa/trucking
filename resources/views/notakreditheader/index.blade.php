@@ -20,13 +20,13 @@
               <li><a href="#jurnal-tab">Jurnal</a></li>
             </ul>
             <div id="detail-tab">
-            <table id="detail"></table>
+              <table id="detail"></table>
             </div>
             <div id="pelunasan-tab">
-            <table id="pelunasanGrid"></table>
+              <table id="pelunasanGrid"></table>
             </div>
             <div id="jurnal-tab">
-            <table id="jurnalGrid"></table>
+              <table id="jurnalGrid"></table>
             </div>
           </div>
         </div>
@@ -84,18 +84,18 @@
     $("#tabs").tabs()
 
     let nobukti_pelunasan = $('#jqGrid').jqGrid('getCell', id, 'pelunasanpiutang_nobukti')
-          let nobukti_jurnal = $('#jqGrid').jqGrid('getCell', id, 'nobukti')
+    let nobukti_jurnal = $('#jqGrid').jqGrid('getCell', id, 'nobukti')
     loadDetailGrid()
     loadPelunasanGrid(nobukti_pelunasan)
     loadJurnalUmumGrid(nobukti_jurnal)
 
     @isset($request['tgldari'])
-      tgldariheader = `{{ $request['tgldari'] }}`;
+    tgldariheader = `{{ $request['tgldari'] }}`;
     @endisset
     @isset($request['tglsampai'])
-      tglsampaiheader = `{{ $request['tglsampai'] }}`;
+    tglsampaiheader = `{{ $request['tglsampai'] }}`;
     @endisset
-    setRange(false,tgldariheader,tglsampaiheader)
+    setRange(false, tgldariheader, tglsampaiheader)
     initDatepicker('datepickerIndex')
     $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('notakreditheader')
@@ -253,11 +253,11 @@
             label: 'NO BUKTI',
             name: 'nobukti',
             align: 'left'
-          },          {
+          }, {
             label: 'NO BUKTI',
             name: 'nobuktihidden',
             align: 'left',
-            hidden:true
+            hidden: true
           },
           {
             label: 'TGL BUKTI',
@@ -299,8 +299,8 @@
               let formattedValue = $(`
               <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
              `)
-             return formattedValue[0].outerHTML
-           }
+              return formattedValue[0].outerHTML
+            }
           },
           {
             label: 'BANK',
@@ -317,7 +317,7 @@
             name: 'pengeluaran_nobukti',
             align: 'left',
             formatter: (value, options, rowData) => {
-              if ((value == null) ||( value == '')) {
+              if ((value == null) || (value == '')) {
                 return '';
               }
               let tgldari = rowData.tgldariheaderpengeluaranheader
@@ -326,8 +326,8 @@
               let formattedValue = $(`
               <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
              `)
-             return formattedValue[0].outerHTML
-           }
+              return formattedValue[0].outerHTML
+            }
           },
           {
             label: 'user approval',
@@ -429,7 +429,7 @@
         },
         onSelectRow: function(id) {
           let nobukti_pelunasan = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_pelunasanpiutang_nobukti"]`).attr('title') ?? '';
-          let nobukti_jurnal =$(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_nobuktihidden"]`).attr('title') ?? '';
+          let nobukti_jurnal = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_nobuktihidden"]`).attr('title') ?? '';
           let nobukti_pengeluaran = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_pengeluaran_nobukti"]`).attr('title') ?? '';
 
           activeGrid = $(this)
@@ -514,7 +514,7 @@
           }, 100)
 
           $('#left-nav').find('button').attr('disabled', false)
-          permission() 
+          permission()
           $('#gs_').attr('disabled', false)
           setHighlight($(this))
         }
@@ -535,7 +535,7 @@
       })
 
       .customPager({
-        
+
         extndBtn: [{
             id: 'report',
             title: 'Report',
@@ -595,20 +595,22 @@
                 id: 'approveun',
                 text: "UN/APPROVAL Status NOTA KREDIT",
                 onClick: () => {
-                  approve()
+                  if (`{{ $myAuth->hasPermission('notakreditheader', 'approval') }}`) {
+                    approve()
+                  }
                 }
               },
               {
                 id: 'approval-buka-cetak',
                 text: "un/Approval Buka Cetak NOTA KREDIT",
                 onClick: () => {
-                  if (`{{ $myAuth->hasPermission('approvalbukacetak', 'store') }}`) {
+                  if (`{{ $myAuth->hasPermission('notakreditheader', 'approvalbukacetak') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');
-                    tglbukacetak =tglbukacetak[1] + '-' + tglbukacetak[2];
+                    tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
                     if (selectedRows.length < 1) {
                       showDialog('Harap pilih salah satu record')
-                    }else{
-                      approvalBukaCetak(tglbukacetak,'NOTAKREDITHEADER',selectedRows);
+                    } else {
+                      approvalBukaCetak(tglbukacetak, 'NOTAKREDITHEADER', selectedRows);
                     }
                   }
                 }
@@ -616,8 +618,7 @@
             ],
           }
         ],
-        buttons: [
-          {
+        buttons: [{
             id: 'add',
             innerHTML: '<i class="fa fa-plus"></i> ADD',
             class: 'btn btn-primary btn-sm mr-1',
@@ -694,30 +695,27 @@
       .addClass('btn btn-sm btn-warning')
       .parent().addClass('px-1')
 
-      function permission() {
-    if (!`{{ $myAuth->hasPermission('notakreditheader', 'store') }}`) {
-      $('#add').addClass('ui-disabled')
-    }
+    function permission() {
+      if (!`{{ $myAuth->hasPermission('notakreditheader', 'store') }}`) {
+        $('#add').addClass('ui-disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('notakreditheader', 'update') }}`) {
-      $('#edit').addClass('ui-disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('notakreditheader', 'update') }}`) {
+        $('#edit').addClass('ui-disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('notakreditheader', 'destroy') }}`) {
-      $('#delete').addClass('ui-disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('notakreditheader', 'destroy') }}`) {
+        $('#delete').addClass('ui-disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('notakreditheader', 'export') }}`) {
-      $('#export').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('notakreditheader', 'export') }}`) {
+        $('#export').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('notakreditheader', 'report') }}`) {
-      $('#report').attr('disabled', 'disabled')
+      if (!`{{ $myAuth->hasPermission('notakreditheader', 'report') }}`) {
+        $('#report').attr('disabled', 'disabled')
+      }
     }
-    if (!`{{ $myAuth->hasPermission('notakreditheader', 'approval') }}`) {
-      $('#approveun').attr('disabled', 'disabled')
-      $("#jqGrid").hideCol("");
-    }}
 
     $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {
@@ -784,7 +782,7 @@
       })
     }
   })
-  
+
   function clearSelectedRows() {
     selectedRows = []
 
@@ -803,7 +801,7 @@
         limit: 0,
         tgldari: $('#tgldariheader').val(),
         tglsampai: $('#tglsampaiheader').val(),
-        filters: $('#jqGrid').jqGrid('getGridParam','postData').filters
+        filters: $('#jqGrid').jqGrid('getGridParam', 'postData').filters
       },
       success: (response) => {
         selectedRows = response.data.map((row) => row.id)

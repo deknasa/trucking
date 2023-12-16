@@ -90,12 +90,12 @@
     loadJurnalUmumGrid(nobukti)
 
     @isset($request['tgldari'])
-      tgldariheader = `{{ $request['tgldari'] }}`;
+    tgldariheader = `{{ $request['tgldari'] }}`;
     @endisset
     @isset($request['tglsampai'])
-      tglsampaiheader = `{{ $request['tglsampai'] }}`;
+    tglsampaiheader = `{{ $request['tglsampai'] }}`;
     @endisset
-    setRange(false,tgldariheader,tglsampaiheader)
+    setRange(false, tgldariheader, tglsampaiheader)
     initDatepicker('datepickerIndex')
     $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('hutangheader')
@@ -477,7 +477,7 @@
         },
       })
       .customPager({
-        
+
         extndBtn: [{
             id: 'report',
             title: 'Report',
@@ -537,20 +537,22 @@
                 id: 'approveun',
                 text: "UN/APPROVAL Status hutang",
                 onClick: () => {
-                  approve()
+                  if (`{{ $myAuth->hasPermission('hutangheader', 'approval') }}`) {
+                    approve()
+                  }
                 }
               },
               {
                 id: 'approval-buka-cetak',
                 text: "un/Approval Buka Cetak hutang",
                 onClick: () => {
-                  if (`{{ $myAuth->hasPermission('approvalbukacetak', 'store') }}`) {
+                  if (`{{ $myAuth->hasPermission('hutangheader', 'approvalbukacetak') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');
-                    tglbukacetak =tglbukacetak[1] + '-' + tglbukacetak[2];
+                    tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
                     if (selectedRows.length < 1) {
                       showDialog('Harap pilih salah satu record')
-                    }else{
-                      approvalBukaCetak(tglbukacetak,'HUTANGHEADER',selectedRows);
+                    } else {
+                      approvalBukaCetak(tglbukacetak, 'HUTANGHEADER', selectedRows);
                     }
                   }
                 }
@@ -609,7 +611,7 @@
             }
           },
         ]
-   
+
 
       })
     /* Append clear filter button */
@@ -662,9 +664,6 @@
 
       if (!`{{ $myAuth->hasPermission('hutangheader', 'report') }}`) {
         $('#report').attr('disabled', 'disabled')
-      }
-      if (!`{{ $myAuth->hasPermission('hutangheader', 'approval') }}`) {
-        $('#approval').addClass('ui-disabled')
       }
     }
 
@@ -779,7 +778,7 @@
         limit: 0,
         tgldari: $('#tgldariheader').val(),
         tglsampai: $('#tglsampaiheader').val(),
-        filters: $('#jqGrid').jqGrid('getGridParam','postData').filters
+        filters: $('#jqGrid').jqGrid('getGridParam', 'postData').filters
       },
       success: (response) => {
         selectedRows = response.data.map((hutang) => hutang.id)

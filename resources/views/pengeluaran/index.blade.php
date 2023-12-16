@@ -573,35 +573,37 @@
             }
           },
           {
-          id: 'approve',
-          title: 'Approve',
-          caption: 'Approve',
-          innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-          class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-          dropmenuHTML: [{
-              id: 'approveun',
-              text: "UN/APPROVAL Status PENGELUARAN",
-              onClick: () => {
-                approve()
-              }
-            },
-            {
-              id: 'approval-buka-cetak',
-              text: "un/Approval Buka Cetak PENGELUARAN",
-              onClick: () => {
-                if (`{{ $myAuth->hasPermission('approvalbukacetak', 'store') }}`) {
-                  let tglbukacetak = $('#tgldariheader').val().split('-');
-                  tglbukacetak =tglbukacetak[1] + '-' + tglbukacetak[2];
-                  if (selectedRows.length < 1) {
-                    showDialog('Harap pilih salah satu record')
-                  }else{
-                    approvalBukaCetak(tglbukacetak,'PENGELUARANHEADER',selectedRows);
+            id: 'approve',
+            title: 'Approve',
+            caption: 'Approve',
+            innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+            class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
+            dropmenuHTML: [{
+                id: 'approveun',
+                text: "UN/APPROVAL Status PENGELUARAN",
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('pengeluaranheader', 'approval') }}`) {
+                    approve()
                   }
                 }
-              }
-            },
-          ],
-        }
+              },
+              {
+                id: 'approval-buka-cetak',
+                text: "un/Approval Buka Cetak PENGELUARAN",
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('pengeluaranheader', 'approvalbukacetak') }}`) {
+                    let tglbukacetak = $('#tgldariheader').val().split('-');
+                    tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
+                    if (selectedRows.length < 1) {
+                      showDialog('Harap pilih salah satu record')
+                    } else {
+                      approvalBukaCetak(tglbukacetak, 'PENGELUARANHEADER', selectedRows);
+                    }
+                  }
+                }
+              },
+            ],
+          }
         ],
         buttons: [{
             id: 'add',
@@ -715,11 +717,6 @@
       if (!`{{ $myAuth->hasPermission('pengeluaranheader', 'report') }}`) {
         $('#report').attr('disabled', 'disabled')
       }
-
-      if (!`{{ $myAuth->hasPermission('pengeluaranheader', 'approval') }}`) {
-        $('#approveun').attr('disabled', 'disabled')
-        $("#jqGrid").hideCol("");
-      }
     }
   })
 
@@ -742,7 +739,7 @@
         tgldari: $('#tgldariheader').val(),
         tglsampai: $('#tglsampaiheader').val(),
         bank_id: $('#bankheader').val(),
-        filters: $('#jqGrid').jqGrid('getGridParam','postData').filters
+        filters: $('#jqGrid').jqGrid('getGridParam', 'postData').filters
       },
       success: (response) => {
         selectedRows = response.data.map((pengeluaran) => pengeluaran.id)

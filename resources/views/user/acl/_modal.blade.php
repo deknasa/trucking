@@ -33,8 +33,8 @@
         </div>
         <div class="modal-footer">
           <div class="mr-auto">
-            <button type="button" id="btnSubmitUserAcl" class="btn btn-primary">SIMPAN</button>
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">BATAL</button>
+            <button type="button" id="btnSubmitUserAcl" class="btn btn-primary"> Save</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fa fa-times"></i> Cancel</button>
           </div>
         </div>
       </div>
@@ -118,7 +118,7 @@
     form.trigger('reset')
     form.find('#btnSubmitUserAcl').html(`
       <i class="fa fa-save"></i>
-      SIMPAN
+      Save
     `)
     form.find(`.sometimes`).hide()
     $('#userAclModalTitle').text('Edit User Role')

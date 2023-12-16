@@ -153,7 +153,7 @@
                       <input type="text" name="liter[]" class="form-control autonumeric">
                     </td>
                     <td>
-                      <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
+                      <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
                     </td>
                   </tr>
                 </tbody>

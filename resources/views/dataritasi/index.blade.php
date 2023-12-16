@@ -297,21 +297,21 @@
                     .parent().addClass('px-1')
 
 
-                if (!`{{ $myAuth->hasPermission('container', 'store') }}`) {
+                if (!`{{ $myAuth->hasPermission('dataritasi', 'store') }}`) {
                     $('#add').attr('disabled', 'disabled')
                 }
 
-                if (!`{{ $myAuth->hasPermission('container', 'update') }}`) {
+                if (!`{{ $myAuth->hasPermission('dataritasi', 'update') }}`) {
                     $('#edit').attr('disabled', 'disabled')
                 }
 
-                if (!`{{ $myAuth->hasPermission('container', 'destroy') }}`) {
+                if (!`{{ $myAuth->hasPermission('dataritasi', 'destroy') }}`) {
                     $('#delete').attr('disabled', 'disabled')
                 }
-                if (!`{{ $myAuth->hasPermission('container', 'export') }}`) {
+                if (!`{{ $myAuth->hasPermission('dataritasi', 'export') }}`) {
                     $('#export').attr('disabled', 'disabled')
                 }
-                if (!`{{ $myAuth->hasPermission('container', 'report') }}`) {
+                if (!`{{ $myAuth->hasPermission('dataritasi', 'report') }}`) {
                     $('#report').attr('disabled', 'disabled')
                 }
                 $('#rangeModal').on('shown.bs.modal', function() {

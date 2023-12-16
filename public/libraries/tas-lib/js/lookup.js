@@ -93,7 +93,7 @@ $.fn.lookup = function (options) {
               <div class="modal-footer">
                 <div class="mr-auto">
                   <button type="button" class="btn btn-secondary close-button" data-dismiss="modal" aria-label="Close">
-                  Tutup
+                  Close
                   </button>
                 </div>
               </div>

@@ -67,6 +67,7 @@ class Myauth
             'transfergrid',
             'absensigrid',
             'rolegrid',
+            'cekabsensi'
         ],
     ];
 

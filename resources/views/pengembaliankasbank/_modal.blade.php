@@ -381,7 +381,7 @@
     $('#crudModal').find('#crudForm').trigger('reset')
     form.find('#btnSubmit').html(`
       <i class="fa fa-save"></i>
-      Simpan
+      Save
     `)
     form.data('action', 'add')
     $('#crudModalTitle').text('Add Pengembalian Kas Bank')
@@ -446,7 +446,7 @@
     form.trigger('reset')
     form.find('#btnSubmit').html(`
       <i class="fa fa-save"></i>
-      Simpan
+      Save
     `)
     $('#crudModalTitle').text('Edit Pengembalian Kas Bank')
     $('.is-invalid').removeClass('is-invalid')
@@ -471,7 +471,7 @@
     form.data('action', 'delete')
     form.trigger('reset')
     form.find('#btnSubmit').html(`
-      <i class="fa fa-times"></i>
+      <i class="fa fa-trash"></i>
               Delete
     `)
     $('#crudModalTitle').text('Delete Pengembalian Kas Bank')
@@ -669,7 +669,7 @@
                       </div>
                   </td>
                   <td class="tbl_aksi">
-                      <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
+                      <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
                   </td>
               </tr>
             `)
@@ -759,7 +759,7 @@
           </div>
         </td>
         <td class="tbl_aksi">
-            <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
+            <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
         </td>
       </tr>
     `)

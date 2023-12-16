@@ -341,7 +341,7 @@
                       <input type="text" name="liter[]" class="form-control autonumeric">
                     </td>
                     {{-- <td>
-                      <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
+                      <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
                     </td> --}}
                   </tr>
                 </tbody>
@@ -660,7 +660,7 @@
     $('#crudModal').find('#crudForm').trigger('reset')
     form.find('#btnSubmit').html(`
       <i class="fa fa-save"></i>
-      Simpan
+      Save
     `)
     form.data('action', 'add')
 
@@ -1559,7 +1559,7 @@
           <input type="text" name="liter[]" class="form-control autonumeric">
         </td>
         <td>
-          <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
+          <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
         </td>
       </tr>
     `)

@@ -61,9 +61,9 @@
   let hasDetail = false
   let currentTab = 'detail'
   let selectedRows = [];
- let tgldariheader
+  let tgldariheader
   let tglsampaiheader
-  
+
   function checkboxHandler(element) {
     let value = $(element).val();
     if (element.checked) {
@@ -92,12 +92,12 @@
     loadJurnalUmumGrid(nobukti)
 
     @isset($request['tgldari'])
-      tgldariheader = `{{ $request['tgldari'] }}`;
+    tgldariheader = `{{ $request['tgldari'] }}`;
     @endisset
     @isset($request['tglsampai'])
-      tglsampaiheader = `{{ $request['tglsampai'] }}`;
+    tglsampaiheader = `{{ $request['tglsampai'] }}`;
     @endisset
-    setRange(false,tgldariheader,tglsampaiheader)
+    setRange(false, tgldariheader, tglsampaiheader)
     initDatepicker('datepickerIndex')
     $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('pelunasanhutangheader')
@@ -272,7 +272,7 @@
             name: 'pengeluaran_nobukti',
             align: 'left',
             formatter: (value, options, rowData) => {
-              if ((value == null) ||( value == '')) {
+              if ((value == null) || (value == '')) {
                 return '';
               }
               let tgldari = rowData.tgldariheaderpengeluaranheader
@@ -281,8 +281,8 @@
               let formattedValue = $(`
               <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
              `)
-             return formattedValue[0].outerHTML
-           }
+              return formattedValue[0].outerHTML
+            }
           },
           {
             label: 'NAMA PERKIRAAN',
@@ -467,7 +467,7 @@
           }, 100)
 
           $('#left-nav').find('button').attr('disabled', false)
-          permission() 
+          permission()
           $('#gs_').attr('disabled', false)
           setHighlight($(this))
         }
@@ -488,7 +488,7 @@
       })
 
       .customPager({
-        
+
         extndBtn: [{
             id: 'report',
             title: 'Report',
@@ -554,20 +554,22 @@
                 id: 'approveun',
                 text: "UN/APPROVAL Status PELUNASAN HUTANG",
                 onClick: () => {
-                  approve()
+                  if (`{{ $myAuth->hasPermission('pelunasanhutangheader', 'approval') }}`) {
+                    approve()
+                  }
                 }
               },
               {
                 id: 'approval-buka-cetak',
                 text: "un/Approval Buka Cetak PELUNASAN HUTANG",
                 onClick: () => {
-                  if (`{{ $myAuth->hasPermission('approvalbukacetak', 'store') }}`) {
+                  if (`{{ $myAuth->hasPermission('pelunasanhutangheader', 'approvalbukacetak') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');
-                    tglbukacetak =tglbukacetak[1] + '-' + tglbukacetak[2];
+                    tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
                     if (selectedRows.length < 1) {
                       showDialog('Harap pilih salah satu record')
-                    }else{
-                      approvalBukaCetak(tglbukacetak,'PELUNASANHUTANGHEADER',selectedRows);
+                    } else {
+                      approvalBukaCetak(tglbukacetak, 'PELUNASANHUTANGHEADER', selectedRows);
                     }
                   }
                 }
@@ -612,7 +614,7 @@
                 cekValidasi(selectedId, 'DELETE')
               }
             }
-          },         
+          },
         ],
       })
 
@@ -643,33 +645,30 @@
       .addClass('btn btn-sm btn-warning')
       .parent().addClass('px-1')
 
-      function permission() {
-    if (!`{{ $myAuth->hasPermission('pelunasanhutangheader', 'store') }}`) {
-      $('#add').attr('disabled', 'disabled')
-    }
+    function permission() {
+      if (!`{{ $myAuth->hasPermission('pelunasanhutangheader', 'store') }}`) {
+        $('#add').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('pelunasanhutangheader', 'update') }}`) {
-      $('#edit').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('pelunasanhutangheader', 'update') }}`) {
+        $('#edit').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('pelunasanhutangheader', 'destroy') }}`) {
-      $('#delete').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('pelunasanhutangheader', 'destroy') }}`) {
+        $('#delete').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('pelunasanhutangheader', 'export') }}`) {
-      $('#export').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('pelunasanhutangheader', 'export') }}`) {
+        $('#export').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('pelunasanhutangheader', 'report') }}`) {
-      $('#report').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('pelunasanhutangheader', 'report') }}`) {
+        $('#report').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('pelunasanhutangheader', 'approval') }}`) {
-      $('#approveun').attr('disabled', 'disabled')
-      $("#jqGrid").hideCol("");
-    }}
+    }
   })
-  
+
   function clearSelectedRows() {
     selectedRows = []
 
@@ -688,7 +687,7 @@
         limit: 0,
         tgldari: $('#tgldariheader').val(),
         tglsampai: $('#tglsampaiheader').val(),
-        filters: $('#jqGrid').jqGrid('getGridParam','postData').filters
+        filters: $('#jqGrid').jqGrid('getGridParam', 'postData').filters
       },
       success: (response) => {
         selectedRows = response.data.map((row) => row.id)

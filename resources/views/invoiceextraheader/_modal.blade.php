@@ -376,7 +376,7 @@
     form.trigger('reset')
     form.find('#btnSubmit').html(`
       <i class="fa fa-save"></i>
-      Simpan
+      Save
     `)
     form.data('action', 'add')
     form.find(`.sometimes`).show()
@@ -558,7 +558,7 @@
                     <input type="text"  name="nominal_detail[]" id="nominal_detail" text-align:right" class="form-control autonumeric nominal number${rowIndex}">
                   </td>                  
                   <td class="tbl_aksi">
-                    <button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>
+                    <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
                   </td>
               </tr>
     `)
@@ -638,7 +638,7 @@
                       <input type="text"  name="nominal_detail[]" id="nominal_detail${id}"  style="text-align:right" class="autonumeric nominal form-control">                    
                     </td>  
                     <td class="tbl_aksi">
-                      <div class='btn btn-danger btn-sm rmv delete-row'>Hapus</div>
+                      <div class='btn btn-danger btn-sm rmv delete-row'>Delete</div>
                     </td>
                 </tr>
             `)
