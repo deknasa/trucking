@@ -149,6 +149,7 @@
                         label: 'STATUS APPROVAL',
                         name: 'statusapproval',
                         align: 'left',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         stype: 'select',
                         searchoptions: {
 
@@ -197,6 +198,7 @@
                         label: 'STATUS CETAK',
                         name: 'statuscetak',
                         align: 'left',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         stype: 'select',
                         searchoptions: {
 
@@ -240,6 +242,7 @@
                     {
                         label: 'NO BUKTI',
                         name: 'nobukti',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         align: 'left'
                     },
                     {
@@ -247,6 +250,7 @@
                         name: 'tglbukti',
                         align: 'left',
                         formatter: "date",
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
                         formatoptions: {
                             srcformat: "ISO8601Long",
                             newformat: "d-m-Y"
@@ -255,11 +259,13 @@
                     {
                         label: 'POSTING DARI',
                         name: 'postingdari',
+                        width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
                         align: 'left'
                     },
                     {
                         label: 'NO BUKTI HUTANG',
                         name: 'hutang_nobukti',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         align: 'left',
                         formatter: (value, options, rowData) => {
                             if ((value == null) || (value == '')) {
@@ -277,6 +283,7 @@
                     {
                         label: 'NAMA PERKIRAAN',
                         name: 'coa',
+                        width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
                         align: 'left'
                     },
                     {
@@ -289,15 +296,18 @@
                         name: 'total',
                         align: 'right',
                         formatter: currencyFormat,
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                     },
                     {
                         label: 'USER APPROVAL',
                         name: 'userapproval',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         align: 'left'
                     },
                     {
                         label: 'TGL APPROVAL',
                         name: 'tglapproval',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
                         align: 'left',
                         formatter: "date",
                         formatoptions: {
@@ -308,11 +318,13 @@
                     {
                         label: 'USER BUKA CETAK',
                         name: 'userbukacetak',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         align: 'left'
                     },
                     {
                         label: 'TGL BUKA CETAK',
                         name: 'tglbukacetak',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
                         align: 'left',
                         formatter: "date",
                         formatoptions: {
@@ -323,6 +335,7 @@
                     {
                         label: 'MODIFIED BY',
                         name: 'modifiedby',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         align: 'left'
                     },
                     {
@@ -330,6 +343,7 @@
                         name: 'created_at',
                         align: 'right',
                         formatter: "date",
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                         formatoptions: {
                             srcformat: "ISO8601Long",
                             newformat: "d-m-Y H:i:s"
@@ -340,6 +354,7 @@
                         name: 'updated_at',
                         align: 'right',
                         formatter: "date",
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                         formatoptions: {
                             srcformat: "ISO8601Long",
                             newformat: "d-m-Y H:i:s"
