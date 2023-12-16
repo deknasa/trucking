@@ -46,11 +46,12 @@
                         label: 'KARYAWAN/SUPIR/KENEK',
                         name: 'karyawan',
                         align: 'left',
-                        width: '250px',
+                        width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
                     },
                     {
                         label: 'TGL RESIGN',
                         name: 'tglresign',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
                         align: 'left',
                         formatter: "date",
                         formatoptions: {
@@ -62,6 +63,7 @@
                         label: 'STATUS',
                         name: 'statusaktif',
                         align: 'left',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         stype: 'select',
                         searchoptions: {
                             value: `<?php

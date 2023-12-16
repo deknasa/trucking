@@ -4,7 +4,7 @@
       <div class="modal-content">
         
         <form action="" method="post">
-          <div class="modal-body" style="height: 30vh;">
+          <div class="modal-body">
             <input type="text" name="id" class="form-control"  hidden readonly>
             
             <div class="row form-group">

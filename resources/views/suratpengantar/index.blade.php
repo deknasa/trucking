@@ -142,27 +142,27 @@
           {
             label: 'SHIPPER',
             name: 'pelanggan_id',
-            width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2
+            width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1
           },
           {
             label: 'KETERANGAN',
             name: 'keterangan',
-            width: (detectDeviceType() == "desktop") ? lg_dekstop_2 : lg_mobile_2
+            width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1
           },
           {
             label: 'DARI',
             name: 'dari_id',
-            width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
           },
           {
             label: 'SAMPAI',
             name: 'sampai_id',
-            width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
           },
           {
             label: 'PENYESUAIAN',
             name: 'penyesuaian',
-            width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
           },
           {
             label: 'GAJI SUPIR',
@@ -207,22 +207,22 @@
           {
             label: 'JENIS ORDER',
             name: 'jenisorder_id',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : md_mobile_3
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3
           },
           {
             label: 'CONTAINER',
             name: 'container_id',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : md_mobile_3
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3
           },
           {
             label: 'no conT',
             name: 'nocont',
-            width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
           },
           {
             label: 'no seaL',
             name: 'noseal',
-            width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3
           },
           {
             label: 'FULL/EMPTY',
@@ -345,7 +345,7 @@
           },
           {
             label: 'LOKASI BONGKAR MUAT',
-            width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
             name: 'tarif_id',
 
           },
@@ -467,7 +467,7 @@
             label: 'EDIT SURAT PENGANTAR',
             name: 'statusapprovaleditsuratpengantar',
             stype: 'select',
-            width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
             searchoptions: {
               value: `<?php
                       $i = 1;
@@ -511,9 +511,9 @@
             }
           },
           {
-            label: 'TGL APPROVAL EDIT',
+            label: 'TGL APP EDIT',
             name: 'tglapprovaleditsuratpengantar',
-            width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
             align: 'left',
             formatter: "date",
             formatoptions: {
@@ -522,14 +522,14 @@
             }
           },
           {
-            label: 'USER APPROVAL EDIT',
+            label: 'USER APP EDIT',
             name: 'userapprovaleditsuratpengantar',
-            width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'TGL BATAS EDIT',
             name: 'tglbataseditsuratpengantar',
-            width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
             align: 'right',
             formatter: "date",
             formatoptions: {
@@ -540,7 +540,7 @@
           {
             label: 'APPROVAL TITIPAN EMKL',
             name: 'statusapprovalbiayatitipanemkl',
-            width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
             stype: 'select',
             searchoptions: {
               value: `<?php
@@ -588,7 +588,7 @@
             label: 'TGL APP TITIPAN EMKL',
             name: 'tglapprovalbiayatitipanemkl',
             align: 'left',
-            width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
             formatter: "date",
             formatoptions: {
               srcformat: "ISO8601Long",
@@ -598,18 +598,18 @@
           {
             label: 'USER APP TITIPAN EMKL',
             name: 'userapprovalbiayatitipanemkl',
-            width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'MODIFIED BY',
             name: 'modifiedby',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : md_mobile_3,            
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'CREATED AT',
             name: 'created_at',
             align: 'right',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : md_mobile_4,            
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
             formatter: "date",
             formatoptions: {
               srcformat: "ISO8601Long",
@@ -620,7 +620,7 @@
             label: 'UPDATED AT',
             name: 'updated_at',
             align: 'right',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : md_mobile_4,            
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
             formatter: "date",
             formatoptions: {
               srcformat: "ISO8601Long",

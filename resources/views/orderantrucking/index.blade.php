@@ -113,6 +113,7 @@
             label: 'STATUS APPROVAL',
             name: 'statusapprovalbukatrip',
             align: 'left',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             stype: 'select',
             searchoptions: {
               value: `<?php
@@ -166,11 +167,13 @@
           {
             label: 'NO BUKTI',
             name: 'nobukti',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'TGL BUKTI',
             name: 'tglbukti',
             formatter: "date",
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
             formatoptions: {
               srcformat: "ISO8601Long",
               newformat: "d-m-Y"
@@ -179,46 +182,57 @@
           {
             label: 'CONTAINER',
             name: 'container_id',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
           },
           {
             label: 'CUSTOMER',
             name: 'agen_id',
+            width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2
           },
           {
             label: 'JENIS ORDER',
             name: 'jenisorder_id',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
-            label: 'PELANGGAN',
+            label: 'SHIPPER',
             name: 'pelanggan_id',
+            width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
           },
           {
             label: 'no job EMKL (1)',
             name: 'nojobemkl',
+            width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1
           },
           {
             label: 'no conT (1)',
             name: 'nocont',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
           },
           {
             label: 'no seaL (1)',
             name: 'noseal',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'no job EMKL (2)',
             name: 'nojobemkl2',
+            width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1
           },
           {
             label: 'no conT (2)',
             name: 'nocont2',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
           },
           {
             label: 'no seaL (2)',
             name: 'noseal2',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'EDIT ORDERAN TRUCKING',
             name: 'statusapprovaledit',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'left',
             stype: 'select',
             searchoptions: {
@@ -266,6 +280,7 @@
           {
             label: 'TGL APPROVAL EDIT',
             name: 'tglapprovaledit',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
             align: 'left',
             formatter: "date",
             formatoptions: {
@@ -276,10 +291,12 @@
           {
             label: 'USER APPROVAL EDIT',
             name: 'userapprovaledit',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,  
           },
           {
             label: 'TGL BATAS EDIT',
             name: 'tglbataseditorderantrucking',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
             align: 'right',
             formatter: "date",
             formatoptions: {
@@ -290,10 +307,12 @@
           {
             label: 'MODIFIED BY',
             name: 'modifiedby',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,  
           },
           {
             label: 'CREATED AT',
             name: 'created_at',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
             align: 'right',
             formatter: "date",
             formatoptions: {
@@ -304,6 +323,7 @@
           {
             label: 'UPDATED AT',
             name: 'updated_at',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
             align: 'right',
             formatter: "date",
             formatoptions: {

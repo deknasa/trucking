@@ -35,23 +35,25 @@
                 styleUI: 'Bootstrap4',
                 iconSet: 'fontAwesome',
                 postData: {
-                    proses:'reload',
+                    proses: 'reload',
                 },
                 datatype: "json",
-                colModel: [
-                    {
-                        label:'jobtrucking',
-                        name:'jobtrucking',
-                        align:'left',
+                colModel: [{
+                        label: 'job trucking',
+                        name: 'jobtrucking',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+                        align: 'left',
                     },
                     {
-                        label:'gandengan',
-                        name:'gandengan',
-                        align:'left',
+                        label: 'gandengan',
+                        name: 'gandengan',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+                        align: 'left',
                     },
                     {
-                        label:'tglawal',
-                        name:'tglawal',
+                        label: 'tgl awal',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+                        name: 'tglawal',
                         formatter: "date",
                         formatoptions: {
                             srcformat: "ISO8601Long",
@@ -59,8 +61,9 @@
                         }
                     },
                     {
-                        label:'tglkembali',
-                        name:'tglkembali',
+                        label: 'tgl kembali',
+                        name: 'tglkembali',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         formatter: "date",
                         formatoptions: {
                             srcformat: "ISO8601Long",
@@ -68,66 +71,78 @@
                         }
                     },
                     {
-                        label:'jumlahhari',
-                        name:'jumlahhari',
-                        align:'left',
+                        label: 'JLH HARI',
+                        name: 'jumlahhari',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+                        align: 'right',
                     },
                     {
-                        label:'jenisorder',
-                        name:'jenisorder',
-                        align:'left',
+                        label: 'jenis order',
+                        name: 'jenisorder',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+                        align: 'left',
                     },
                     {
-                        label:'NAMA CUSTOMER',
-                        name:'namaemkl',
-                        align:'left',
+                        label: 'CUSTOMER',
+                        name: 'namaemkl',
+                        width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
+                        align: 'left',
                     },
                     {
-                        label:'ukurancontainer',
-                        name:'ukurancontainer',
-                        align:'left',
+                        label: 'CONTAINER',
+                        name: 'ukurancontainer',
+                        align: 'left',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3
                     },
                     {
-                        label:'nojob',
-                        name:'nojob',
-                        align:'left',
+                        label: 'no job',
+                        name: 'nojob',
+                        align: 'left',
+                        width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1
                     },
                     {
-                        label:'nojob2',
-                        name:'nojob2',
-                        align:'left',
+                        label: 'no job 2',
+                        name: 'nojob2',
+                        align: 'left',
+                        width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1
                     },
                     {
-                        label:'nocont',
-                        name:'nocont',
-                        align:'left',
+                        label: 'no cont',
+                        name: 'nocont',
+                        align: 'left',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
                     },
                     {
-                        label:'nocont2',
-                        name:'nocont2',
-                        align:'left',
+                        label: 'no cont 2',
+                        name: 'nocont2',
+                        align: 'left',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
                     },
                     {
-                        label:'trado',
-                        name:'trado',
-                        align:'left',
+                        label: 'trado',
+                        name: 'trado',
+                        align: 'left',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3
                     },
                     {
-                        label:'supir',
-                        name:'supir',
-                        align:'left',
+                        label: 'supir',
+                        name: 'supir',
+                        align: 'left',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
                     },
                     {
-                        label:'namagudang',
-                        name:'namagudang',
-                        align:'left',
+                        label: 'gudang',
+                        name: 'namagudang',
+                        align: 'left',
+                        width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2
                     },
                     {
-                        label:'noinvoice',
-                        name:'noinvoice',
-                        align:'left',
+                        label: 'INVOICE NO BUKTI',
+                        name: 'noinvoice',
+                        align: 'left',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3
                     },
-                   
+
                 ],
                 autowidth: true,
                 shrinkToFit: false,
@@ -158,8 +173,8 @@
                             proses: "page"
                         }
                     })
-                        jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
-                    
+                    jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+
                     setGridLastRequest($(this), jqXHR)
                 },
                 onSelectRow: function(id) {
@@ -294,116 +309,116 @@
             let params
             let actionUrl = ``
             let submitButton = $(this).find('button:submit')
-            
+
             /* Clear validation messages */
             $('.is-invalid').removeClass('is-invalid')
             $('.invalid-feedback').remove()
-      
+
             /* Set params value */
             for (var key in postData) {
-              if (params != "") {
-                params += "&";
-              }
-              params += key + "=" + encodeURIComponent(postData[key]);
+                if (params != "") {
+                    params += "&";
+                }
+                params += key + "=" + encodeURIComponent(postData[key]);
             }
-            
+
             // window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
-            
+
             let formRange = $('#formRangeTgl')
             let dari = formRange.find('[name=dari]').val()
             let sampai = formRange.find('[name=sampai]').val()
             params += `&dari=${dari}&sampai=${sampai}`
-      
+
             getCekExport(params)
-            .then((response) => {
-              if ($('#formRangeTgl').data('action') == 'export') {
-                $.ajax({
-                    url: `{{ config('app.api_url') }}chargegandengan/export?` + params,
-                    type: 'GET',
-                    beforeSend: function(xhr) {
-                        xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
-                    },
-                    xhrFields: {
-                        responseType: 'arraybuffer'
-                    },
-                    success: function(response, status, xhr) {
-                        if (xhr.status === 200) {
-                            if (response !== undefined) {
-                                var blob = new Blob([response], {
-                                    type: 'chargegandengan/vnd.ms-excel'
-                                });
-                                var link = document.createElement('a');
-                                link.href = window.URL.createObjectURL(blob);
-                                link.download = 'chargegandengan' + new Date().getTime() + '.xlsx';
-                                link.click();
+                .then((response) => {
+                    if ($('#formRangeTgl').data('action') == 'export') {
+                        $.ajax({
+                            url: `{{ config('app.api_url') }}chargegandengan/export?` + params,
+                            type: 'GET',
+                            beforeSend: function(xhr) {
+                                xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
+                            },
+                            xhrFields: {
+                                responseType: 'arraybuffer'
+                            },
+                            success: function(response, status, xhr) {
+                                if (xhr.status === 200) {
+                                    if (response !== undefined) {
+                                        var blob = new Blob([response], {
+                                            type: 'chargegandengan/vnd.ms-excel'
+                                        });
+                                        var link = document.createElement('a');
+                                        link.href = window.URL.createObjectURL(blob);
+                                        link.download = 'chargegandengan' + new Date().getTime() + '.xlsx';
+                                        link.click();
+                                    }
+                                    $('#rangeTglModal').modal('hide')
+                                    console.log('hide');
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                $('#processingLoader').addClass('d-none')
+                                submitButton.removeAttr('disabled')
                             }
-                            $('#rangeTglModal').modal('hide')
-                            console.log('hide');
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        $('#processingLoader').addClass('d-none')
-                        submitButton.removeAttr('disabled')
+                        }).always(() => {
+                            $('#processingLoader').addClass('d-none')
+                            submitButton.removeAttr('disabled')
+                        })
                     }
-                }).always(() => {
-                    $('#processingLoader').addClass('d-none')
-                    submitButton.removeAttr('disabled')
-                })  
-              }
-            }).catch((error) => {
-                if (error.status === 422) {
-                    $('.is-invalid').removeClass('is-invalid')
-                    $('.invalid-feedback').remove()
-                    let status
-                    if (error.responseJSON.hasOwnProperty('status') == false) {
-                        status = false
-                    } else {
-                        status = true
-                    }
-                    statusText = error.statusText
-                    errors = error.responseJSON.errors
-                    $.each(errors, (index, error) => {
-                        let indexes = index.split(".");
-                        if (status === false) {
-                            indexes[0] = 'sampai'
+                }).catch((error) => {
+                    if (error.status === 422) {
+                        $('.is-invalid').removeClass('is-invalid')
+                        $('.invalid-feedback').remove()
+                        let status
+                        if (error.responseJSON.hasOwnProperty('status') == false) {
+                            status = false
+                        } else {
+                            status = true
                         }
-                        let element;
-                        element = $('#formRangeTgl').find(`[name="${indexes[0]}"]`)[
-                            0];
-                        if ($(element).length > 0 && !$(element).is(":hidden")) {
-                            $(element).addClass("is-invalid");
-                            $(`
+                        statusText = error.statusText
+                        errors = error.responseJSON.errors
+                        $.each(errors, (index, error) => {
+                            let indexes = index.split(".");
+                            if (status === false) {
+                                indexes[0] = 'sampai'
+                            }
+                            let element;
+                            element = $('#formRangeTgl').find(`[name="${indexes[0]}"]`)[
+                                0];
+                            if ($(element).length > 0 && !$(element).is(":hidden")) {
+                                $(element).addClass("is-invalid");
+                                $(`
                                             <div class="invalid-feedback">
                                             ${error[0].toLowerCase()}
                                             </div>
                                     `).appendTo($(element).parent());
-                        } else {
-                            setTimeout(() => {
-                                return showDialog(error);
-                            }, 100)
-                        }
-                    });
-                    $(".is-invalid").first().focus();
-                    $('#processingLoader').addClass('d-none')
+                            } else {
+                                setTimeout(() => {
+                                    return showDialog(error);
+                                }, 100)
+                            }
+                        });
+                        $(".is-invalid").first().focus();
+                        $('#processingLoader').addClass('d-none')
 
-                } else {
-                    showDialog(error.statusText)
-                }
-            }).finally(() => {
-                $('.ui-button').click()
-                submitButton.removeAttr('disabled')
-            })
+                    } else {
+                        showDialog(error.statusText)
+                    }
+                }).finally(() => {
+                    $('.ui-button').click()
+                    submitButton.removeAttr('disabled')
+                })
         })
-        
+
 
         function getExport() {
             let params
 
             for (var key in postData) {
-              if (params != "") {
-                params += "&";
-              }
-              params += key + "=" + encodeURIComponent(postData[key]);
+                if (params != "") {
+                    params += "&";
+                }
+                params += key + "=" + encodeURIComponent(postData[key]);
             }
             $('#processingLoader').removeClass('d-none')
 
@@ -436,9 +451,9 @@
                 }
             }).always(() => {
                 $('#processingLoader').addClass('d-none')
-            }) 
+            })
         }
-                        
+
 
         function getCekExport(params) {
             params += `&cekExport=true`
@@ -457,14 +472,14 @@
                         resolve(response);
                     },
                     error: error => {
-                        reject(error)               
+                        reject(error)
                     },
                 });
             });
         }
-        
-                
-            
+
+
+
 
         function permission() {
             if (!`{{ $myAuth->hasPermission('chargegandengan', 'store') }}`) {
@@ -487,7 +502,7 @@
             }
         }
 
-       
+
 
 
 

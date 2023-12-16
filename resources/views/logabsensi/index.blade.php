@@ -55,13 +55,14 @@
                         label: 'KARYAWAN/SUPIR/KENEK',
                         name: 'karyawan',
                         align: 'left',
-                        width: '250px',
+                        width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
                     },
                     {
                         label: 'TANGGAL',
                         name: 'tanggal',
                         align: 'left',
                         formatter: "date",
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
                         formatoptions: {
                             srcformat: "ISO8601Long",
                             newformat: "d-m-Y"
@@ -70,16 +71,19 @@
                     {
                         label: 'JADWAL KERJA',
                         name: 'jadwalkerja',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         align: 'left'
                     },
                     {
                         label: 'STATUS',
                         name: 'statusabsen',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         align: 'left'
                     },
                     {
                         label: 'LOG WAKTU',
                         name: 'logwaktu',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         align: 'left'
                     },
 

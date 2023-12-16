@@ -23,25 +23,30 @@
           {
             label: 'NO BUKTI',
             name: 'nobukti',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,  
             align: 'left'
           },
           {
             label: 'TRADO',
-            name: 'trado'
+            name: 'trado',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,  
           },
           {
             label: 'SUPIR',
             name: 'supir',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,  
           },
           {
             label: 'SUPIR SERAP',
             name: 'supirserap',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,  
           },
           {
             label: 'UANG JALAN',
             name: 'uangjalan',
             align: 'right',
             formatter: currencyFormat,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3, 
           },
           // {
           //   label: 'MODIFIED BY',

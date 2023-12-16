@@ -106,15 +106,18 @@
         data: mydata,
         colModel: [{
             label: 'TRADO',
-            name: 'trado'
+            name: 'trado',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'SUPIR',
             name: 'supir',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
           },
           {
             label: 'STATUS',
             name: 'status',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
             formatter: (value, options, rowData) => {
               let statusAbsen = JSON.parse(rowData.memo)
               if (!statusAbsen) {
@@ -135,11 +138,13 @@
           {
             label: 'KETERANGAN',
             name: 'keterangan_detail',
+            width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1,
           },
           {
             label: 'JAM',
             name: 'jam',
             formatter: 'date',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
             formatoptions: {
               srcformat: "H:i:s",
               newformat: "H:i",
@@ -149,21 +154,15 @@
           {
             label: 'UANG JALAN',
             name: 'uangjalan',
-            formatter: 'number',
-            formatoptions: {
-              thousandsSeparator: ",",
-              decimalPlaces: 0
-            },
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            formatter: currencyFormat,
             align: "right",
           },
           {
-            label: 'JUMLAH TRIP',
+            label: 'JLH TRIP',
             name: 'jumlahtrip',
-            formatter: 'number',
-            formatoptions: {
-              thousandsSeparator: ",",
-              decimalPlaces: 0
-            },
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+            formatter: currencyFormat,
             align: "right",
           },
         ],

@@ -1,4 +1,3 @@
-
 @push('scripts')
 <script>
     function loadRekapAbsenTradoGrid() {
@@ -20,11 +19,12 @@
                 colModel: [{
                         label: 'keterangan',
                         name: 'keterangan',
-                        width: '500px',
+                        width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1,
                     },
                     {
                         label: 'JUMLAH',
                         name: 'jumlah',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
                     },
                 ],
                 autowidth: true,
