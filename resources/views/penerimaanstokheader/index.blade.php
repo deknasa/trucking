@@ -745,8 +745,8 @@
         approveEditRequest.abort();
       }
       approveEditRequest = $.ajax({
-        url: `${apiUrl}penerimaanstokheader/${id}`,
-        method: 'GET',
+        url: `${apiUrl}penerimaanstokheader/${id}/approvaledit?to=show`,
+        method: 'POST',
         dataType: 'JSON',
         headers: {
           Authorization: `Bearer ${accessToken}`
@@ -754,11 +754,19 @@
         success: response => {
           let msg = `YAKIN Approve Status Edit `
 
-          console.log(response.data);
           if (response.data.statusedit_id === statusBisaEdit) {
             msg = `YAKIN UnApprove Status Edit `
           }
-          showConfirm(msg, response.data.nobukti, `penerimaanstokheader/${response.data.id}/approvaledit`)
+
+          if (response.is_before_opname) {
+            showConfirm('Yakin ingin mengedit data ?', 'stok Sudah Melewati Batas Stok Opname')
+            .done(function() {
+              showConfirm(msg, response.data.nobukti, `penerimaanstokheader/${response.data.id}/approvaledit?to=confirm`)
+            })
+          }else{
+            showConfirm(msg, response.data.nobukti, `penerimaanstokheader/${response.data.id}/approvaledit?to=confirm`)
+          }
+
         },
       })
     }
