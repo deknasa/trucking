@@ -157,6 +157,7 @@
           {
             label: 'status approval',
             name: 'statusapproval_memo',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'left',
             stype: 'select',
             searchoptions: {
@@ -205,6 +206,7 @@
           {
             label: 'STATUS CETAK',
             name: 'statuscetak_memo',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'left',
             stype: 'select',
             searchoptions: {
@@ -252,6 +254,7 @@
           {
             label: 'NO BUKTI',
             name: 'nobukti',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'left'
           }, {
             label: 'NO BUKTI',
@@ -264,6 +267,7 @@
             name: 'tglbukti',
             align: 'left',
             formatter: "date",
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
             formatoptions: {
               srcformat: "ISO8601Long",
               newformat: "d-m-Y"
@@ -274,6 +278,7 @@
             name: 'tgllunas',
             align: 'left',
             formatter: "date",
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
             formatoptions: {
               srcformat: "ISO8601Long",
               newformat: "d-m-Y"
@@ -289,6 +294,7 @@
             width: 250,
             name: 'pelunasanpiutang_nobukti',
             align: 'left',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             formatter: (value, options, rowData) => {
               // if ((value == null) ||( value == '')) {
               //   return '';
@@ -316,6 +322,7 @@
             label: 'NO BUKTI PENGELUARAN',
             name: 'pengeluaran_nobukti',
             align: 'left',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
             formatter: (value, options, rowData) => {
               if ((value == null) || (value == '')) {
                 return '';
@@ -332,6 +339,7 @@
           {
             label: 'user approval',
             name: 'userapproval',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'left'
           },
           {
@@ -339,6 +347,7 @@
             name: 'tglapproval',
             align: 'left',
             formatter: "date",
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
             formatoptions: {
               srcformat: "ISO8601Long",
               newformat: "d-m-Y"
@@ -347,6 +356,7 @@
           {
             label: 'user buka cetak',
             name: 'userbukacetak',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'left'
           },
           {
@@ -354,6 +364,7 @@
             name: 'tglbukacetak',
             align: 'left',
             formatter: "date",
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
             formatoptions: {
               srcformat: "ISO8601Long",
               newformat: "d-m-Y"
@@ -362,6 +373,7 @@
           {
             label: 'posting dari',
             name: 'postingdari',
+            width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
             align: 'left'
           },
           {
@@ -374,6 +386,7 @@
           {
             label: 'MODIFIED BY',
             name: 'modifiedby',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'left'
           },
           {
@@ -381,6 +394,7 @@
             name: 'created_at',
             align: 'right',
             formatter: "date",
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
             formatoptions: {
               srcformat: "ISO8601Long",
               newformat: "d-m-Y H:i:s"
@@ -391,6 +405,7 @@
             name: 'updated_at',
             align: 'right',
             formatter: "date",
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
             formatoptions: {
               srcformat: "ISO8601Long",
               newformat: "d-m-Y H:i:s"

@@ -204,12 +204,14 @@
           {
             label: 'NO BUKTI',
             name: 'nobukti',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             // width: '50px',
             // search: false,
           },
           {
             label: 'TGL BUKTI',
             name: 'tglbukti',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
             align: 'left',
             formatter: "date",
             formatoptions: {
@@ -225,6 +227,7 @@
             label: 'NOMINAL',
             name: 'nominal',
             align: 'right',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             formatter: currencyFormat,
           },
           {
@@ -232,6 +235,7 @@
             name: 'tglbayar',
             align: 'left',
             formatter: "date",
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
             formatoptions: {
               srcformat: "ISO8601Long",
               newformat: "d-m-Y"
@@ -241,12 +245,14 @@
             label: 'BAYAR',
             name: 'bayar',
             align: 'right',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             formatter: currencyFormat,
           },
           {
             label: 'SISA',
             name: 'sisa',
             align: 'right',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             formatter: currencyFormat,
           },
 

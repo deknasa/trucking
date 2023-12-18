@@ -93,31 +93,37 @@
                         label: 'No Gandengan',
                         name: 'nogandengan',
                         align: 'left',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
                     },
                     {
                         label: 'CONTAINER',
                         name: 'container',
                         align: 'left',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
                     },
                     {
                         label: 'GUDANG',
                         name: 'gudang',
                         align: 'left',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                     },
                     {
                         label: 'LOKASI AWAL',
                         name: 'lokasiawal',
                         align: 'left',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                     },
                     {
                         label: 'ORDERAN',
                         name: 'orderan',
                         align: 'left',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                     },
                     {
                         label: 'SP',
                         name: 'sp',
                         align: 'left',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                     },
                     {
                         label: 'JENIS',

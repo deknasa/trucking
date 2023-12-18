@@ -23,6 +23,7 @@
           {
             label: 'NO BUKTI HUTANG',
             name: 'hutang_nobukti',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             formatter: (value, options, rowData) => {
               if ((value == null) ||( value == '')) {
                 return '';
@@ -39,18 +40,21 @@
           {
             label: 'KETERANGAN',
             name: 'keterangan',
+            width: (detectDeviceType() == "desktop") ? lg_dekstop_2 : lg_mobile_2
           },
           {
             label: 'NOMINAL',
             name: 'nominal',
             align: 'right',
             formatter: currencyFormat,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'POTONGAN',
             name: 'potongan',
             align: 'right',
             formatter: currencyFormat,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
         ],
         autowidth: true,

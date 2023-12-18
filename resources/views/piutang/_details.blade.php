@@ -20,14 +20,17 @@
         colModel: [{
             label: 'NO BUKTI',
             name: 'nobukti',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'KETERANGAN',
             name: 'keterangan',
+            width: (detectDeviceType() == "desktop") ? lg_dekstop_2 : lg_mobile_2,
           },
           {
             label: 'NO BUKTI INVOICE',
             name: 'invoice_nobukti',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             formatter: (value, options, rowData) => {
               let tgldari
               let tglsampai
@@ -57,6 +60,7 @@
             label: 'NOMINAL',
             name: 'nominal',
             align: 'right',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             formatter: currencyFormat,
           },
         ],

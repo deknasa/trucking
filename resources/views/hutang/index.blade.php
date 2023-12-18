@@ -157,6 +157,7 @@
             name: 'statusapproval',
             align: 'left',
             stype: 'select',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             searchoptions: {
               value: `<?php
                       $i = 1;
@@ -206,6 +207,7 @@
             name: 'statuscetak',
             align: 'left',
             stype: 'select',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             searchoptions: {
 
               value: `<?php
@@ -248,12 +250,14 @@
           {
             label: 'NO BUKTI',
             name: 'nobukti',
-            align: 'left'
+            align: 'left',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'TGL BUKTI',
             name: 'tglbukti',
             align: 'left',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
             formatter: "date",
             formatoptions: {
               srcformat: "ISO8601Long",
@@ -263,39 +267,46 @@
           {
             label: 'POSTING DARI',
             name: 'postingdari',
-            align: 'left'
+            align: 'left',
+            width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
           },
           {
             label: 'NAMA PERKIRAAN',
             name: 'coa',
-            align: 'left'
+            align: 'left',
+            width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
           },
           {
             label: 'SUPPLIER',
             name: 'supplier_id',
-            align: 'left'
+            align: 'left',
+            width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2
           },
           {
             label: 'TOTAL',
             name: 'total',
             align: 'right',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             formatter: currencyFormat,
           },
           {
             label: 'NOMINAL BAYAR',
             name: 'nominalbayar',
             align: 'right',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             formatter: currencyFormat,
           },
           {
             label: 'SISA HUTANG',
             name: 'sisahutang',
             align: 'right',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             formatter: currencyFormat,
           },
           {
             label: 'USER APPROVAL',
             name: 'userapproval',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'left'
           },
           {
@@ -303,6 +314,7 @@
             name: 'tglapproval',
             align: 'left',
             formatter: "date",
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
             formatoptions: {
               srcformat: "ISO8601Long",
               newformat: "d-m-Y"
@@ -311,6 +323,7 @@
           {
             label: 'USER BUKA CETAK',
             name: 'userbukacetak',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'left'
           },
           {
@@ -318,6 +331,7 @@
             name: 'tglbukacetak',
             align: 'left',
             formatter: "date",
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
             formatoptions: {
               srcformat: "ISO8601Long",
               newformat: "d-m-Y"
@@ -326,12 +340,14 @@
           {
             label: 'MODIFIED BY',
             name: 'modifiedby',
-            align: 'left'
+            align: 'left',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'CREATED AT',
             name: 'created_at',
             align: 'right',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
             formatter: "date",
             formatoptions: {
               srcformat: "ISO8601Long",
@@ -342,6 +358,7 @@
             label: 'UPDATED AT',
             name: 'updated_at',
             align: 'right',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
             formatter: "date",
             formatoptions: {
               srcformat: "ISO8601Long",

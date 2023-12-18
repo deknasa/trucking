@@ -20,16 +20,19 @@
         colModel: [{
             label: 'NO BUKTI',
             name: 'nobukti',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
 
           {
             label: 'KETERANGAN',
             name: 'keterangan',
+            width: (detectDeviceType() == "desktop") ? lg_dekstop_2 : lg_mobile_2
           },
           {
             label: 'TGL JATUH TEMPO',
             name: 'tgljatuhtempo',
             formatter: "date",
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
             formatoptions: {
               srcformat: "ISO8601Long",
               newformat: "d-m-Y"
@@ -39,6 +42,7 @@
             label: 'TOTAL',
             name: 'total',
             align: 'right',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             formatter: currencyFormat,
           },
         ],
