@@ -23,7 +23,7 @@
           name: 'id',
           align: 'right',
           width: '70px',
-            search: false,
+          search: false,
           hidden: true
         },
         {
@@ -117,6 +117,9 @@
           width: 190,
           align: 'left',
           formatter: (value, options, rowData) => {
+            if (!value) {
+              return ''
+            }
             let statusFormatPenerimaan = JSON.parse(value)
 
             let formattedValue = $(`
@@ -128,6 +131,9 @@
             return formattedValue[0].outerHTML
           },
           cellattr: (rowId, value, rowObject) => {
+            if (!rowObject.formatpenerimaan) {
+              return ` title=""`
+            }
             let statusFormatPenerimaan = JSON.parse(rowObject.formatpenerimaan)
 
             return ` title="${statusFormatPenerimaan.MEMO}"`
@@ -140,21 +146,27 @@
 
           align: 'left',
           formatter: (value, options, rowData) => {
-              let statusFormatPengeluaran = JSON.parse(value)
+            if (!value) {
+              return ''
+            }
+            let statusFormatPengeluaran = JSON.parse(value)
 
-              let formattedValue = $(`
+            let formattedValue = $(`
                 <div class="badge" style="background-color: ${statusFormatPengeluaran.WARNA}; color: #fff;">
                   <span>${statusFormatPengeluaran.SINGKATAN}</span>
                 </div>
               `)
 
-              return formattedValue[0].outerHTML
-            },
-            cellattr: (rowId, value, rowObject) => {
-              let statusFormatPengeluaran = JSON.parse(rowObject.formatpengeluaran)
-
-              return ` title="${statusFormatPengeluaran.MEMO}"`
+            return formattedValue[0].outerHTML
+          },
+          cellattr: (rowId, value, rowObject) => {
+            if (!rowObject.formatpengeluaran) {
+              return ` title=""`
             }
+            let statusFormatPengeluaran = JSON.parse(rowObject.formatpengeluaran)
+
+            return ` title="${statusFormatPengeluaran.MEMO}"`
+          }
         },
         {
           label: 'MODIFIED BY',
@@ -221,7 +233,7 @@
         setGridLastRequest($(this), jqXHR)
       },
       loadComplete: function(data) {
-          changeJqGridRowListText()
+        changeJqGridRowListText()
         if (detectDeviceType() == 'desktop') {
           $(document).unbind('keydown')
           setCustomBindKeys($(this))

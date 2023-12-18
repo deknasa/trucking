@@ -20,10 +20,12 @@
         colModel: [{
             label: 'NO BUKTI',
             name: 'jobtrucking',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'TGL MASUK GUDANG',
             name: 'tgltrip',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
             formatter: "date",
             formatoptions: {
               srcformat: "ISO8601Long",
@@ -33,6 +35,7 @@
           {
             label: 'TGL KELUAR GUDANG',
             name: 'tglakhir',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
             formatter: "date",
             formatoptions: {
               srcformat: "ISO8601Long",
@@ -40,35 +43,42 @@
             }
           },
           {
-            label: 'jumlah Hari',
+            label: 'jlh Hari',
             name: 'jumlahhari',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
             align: 'right',
           },
           {
             label: 'NOMINAL',
             name: 'nominal',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'right',
             formatter: currencyFormat,
           },
           {
             label: 'JENIS ORDER',
             name: 'jenisorder',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'NAMA GUDANG',
             name: 'namagudang',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'No Polisi',
             name: 'nopolisi',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'GANDENGAN',
             name: 'gandengan',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'keterangan',
             name: 'keterangan',
+            width: (detectDeviceType() == "desktop") ? lg_dekstop_3 : lg_mobile_3,
           },
         ],
         autowidth: true,

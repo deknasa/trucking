@@ -1333,16 +1333,19 @@
                     {
                         label: "SUPIR",
                         name: "pinjSemua_supir",
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                         sortable: true,
                     },
                     {
                         label: "no bukti pinjaman",
                         name: "pinjSemua_nobukti",
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         sortable: true,
                     },
                     {
                         label: "tgl bukti pinjaman",
                         name: "pinjSemua_tglbukti",
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
                         sortable: true,
                         formatter: "date",
                         formatoptions: {
@@ -1353,6 +1356,7 @@
                     {
                         label: "SISA",
                         name: "pinjSemua_sisa",
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         sortable: true,
                         align: "right",
                         formatter: currencyFormat,
@@ -1360,6 +1364,7 @@
                     {
                         label: "NOMINAL",
                         name: "nominalPS",
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         align: "right",
                         editable: true,
                         editoptions: {
@@ -1430,6 +1435,7 @@
                     {
                         label: "KETERANGAN",
                         name: "pinjSemua_keterangan",
+                        width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1,
                         sortable: false,
                         editable: false,
                         width: 500
@@ -1737,11 +1743,13 @@
                     {
                         label: "no bukti pinjaman",
                         name: "pinjPribadi_nobukti",
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         sortable: true,
                     },
                     {
                         label: "tgl bukti pinjaman",
                         name: "pinjPribadi_tglbukti",
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
                         sortable: true,
                         formatter: "date",
                         formatoptions: {
@@ -1753,12 +1761,14 @@
                         label: "SISA",
                         name: "pinjPribadi_sisa",
                         sortable: true,
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         align: "right",
                         formatter: currencyFormat,
                     },
                     {
                         label: "NOMINAL",
                         name: "nominalPP",
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         align: "right",
                         editable: true,
                         editoptions: {
@@ -1819,6 +1829,7 @@
                     {
                         label: "KETERANGAN",
                         name: "pinjPribadi_keterangan",
+                        width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1,
                         sortable: false,
                         editable: false,
                         width: 500
@@ -2147,11 +2158,13 @@
                     {
                         label: 'NO BUKTI',
                         name: 'absensi_nobukti',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         align: 'left',
                     },
                     {
                         label: 'TGL BUKTI',
                         name: 'absensi_tglbukti',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
                         align: 'left',
                         formatter: "date",
                         formatoptions: {
@@ -2162,6 +2175,7 @@
                     {
                         label: 'UANG JALAN',
                         name: 'absensi_uangjalan',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         formatter: currencyFormat,
                         align: "right",
                     },
@@ -2527,11 +2541,13 @@
                     {
                         label: 'NO BUKTI',
                         name: 'nobuktitrip',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         align: 'left',
                     },
                     {
                         label: 'TGL BUKTI',
                         name: 'tglbuktisp',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
                         align: 'left',
                         formatter: "date",
                         formatoptions: {
@@ -2542,31 +2558,37 @@
                     {
                         label: 'TRADO',
                         name: 'trado_id',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         align: 'left'
                     },
                     {
                         label: 'DARI',
                         name: 'dari_id',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         align: 'left'
                     },
                     {
                         label: 'SAMPAI',
                         name: 'sampai_id',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         align: 'left'
                     },
                     {
                         label: 'NO CONT',
                         name: 'nocont',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         align: 'left'
                     },
                     {
                         label: 'NO SP',
                         name: 'nosp',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         align: 'left'
                     },
                     {
                         label: "UANG MAKAN BERJENJANG",
                         name: "uangmakanberjenjang",
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         align: "right",
                         editable: true,
                         editoptions: {
@@ -2608,52 +2630,61 @@
                     {
                         label: 'GAJI SUPIR',
                         name: 'gajisupir',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         formatter: currencyFormat,
                         align: "right",
                     },
                     {
                         label: 'GAJI KENEK',
                         name: 'gajikenek',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         formatter: currencyFormat,
                         align: "right",
                     },
                     {
                         label: 'KOMISI SUPIR',
                         name: 'komisisupir',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         formatter: currencyFormat,
                         align: "right",
                     },
                     {
                         label: 'TOL SUPIR',
                         name: 'tolsupir',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         formatter: currencyFormat,
                         align: "right",
                     },
                     {
                         label: 'NO BUKTI RITASI',
                         name: 'ritasi_nobukti',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         align: 'left'
                     },
                     {
                         label: 'UPAH RITASI',
                         name: 'upahritasi',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         formatter: currencyFormat,
                         align: "right",
                     },
                     {
                         label: 'STATUS RITASI',
                         name: 'statusritasi',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         align: 'left'
                     },
                     {
                         label: 'BIAYA EXTRA',
                         name: 'biayaextra',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         formatter: currencyFormat,
                         align: "right",
                     },
                     {
                         label: 'KET. BIAYA EXTRA',
                         name: 'keteranganbiaya',
+                        width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1,
                         align: 'left',
                         width: '200px'
                     },

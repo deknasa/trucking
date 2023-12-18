@@ -27,12 +27,12 @@
         colModel: [{
             label: 'NO BUKTI SERVICE IN',
             name: 'servicein_nobukti',
-            width: 200
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
           },
           {
             label: 'KETERANGAN',
             name: 'keterangan',
-            width: 200
+            width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1,
           }
         ],
         autowidth: true,
