@@ -18,7 +18,7 @@
                         <div class="row form-group">
                             <div class="col-12 col-md-2">
                                 <label class="col-form-label">
-                                    KODE TRADO <span class="text-danger">*</span>
+                                    NO POLISI <span class="text-danger">*</span>
                                 </label>
                             </div>
                             <div class="col-12 col-md-10">

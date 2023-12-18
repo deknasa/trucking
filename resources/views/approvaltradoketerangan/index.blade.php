@@ -42,7 +42,7 @@
             hidden: true
           },
           {
-            label: 'KODE TRADO',
+            label: 'NO POLISI',
             name: 'kodetrado',
             align: 'left'
           },
