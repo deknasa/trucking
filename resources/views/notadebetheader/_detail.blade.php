@@ -26,16 +26,19 @@
           {
             label: 'NO BUKTI',
             name: 'nobukti',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'KETERANGAN',
             name: 'keterangan',
+            width: (detectDeviceType() == "desktop") ? lg_dekstop_2 : lg_mobile_2,
           },
           {
             label: 'TGL TERIMA',
             name: 'tglterima',
             align: 'left',
             formatter: "date",
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
             formatoptions: {
               srcformat: "ISO8601Long",
               newformat: "d-m-Y"
@@ -44,12 +47,14 @@
           {
             label: 'KODE PERKIRAAN LEBIH BAYAR',
             name: 'coalebihbayar',
+            width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
             width: 200
           },
           {
             label: 'INVOICE NO BUKTI',
             name: 'invoice_nobukti',
             align: 'left',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             formatter: (value, options, rowData) => {
               let tgldari
               let tglsampai
@@ -79,23 +84,27 @@
             label: 'NOMINAL PIUTANG',
             name: 'nominal',
             align: 'right',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             formatter: currencyFormat,
           },
           {
             label: 'nominal bayar',
             name: 'nominalbayar',
             align: 'right',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             formatter: currencyFormat,
           },
           {
             label: 'lebih bayar',
             name: 'lebihbayar',
             align: 'right',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             formatter: currencyFormat,
           },
           {
             label: 'MODIFIED BY',
             name: 'modifiedby',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'left'
           },
         ],
