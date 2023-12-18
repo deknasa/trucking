@@ -21,9 +21,11 @@
         colModel: [{
             label: 'NO BUKTI',
             name: 'nobukti',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },{
             label: 'TGL BUKTI',
             name: 'tglbukti',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
             formatter: "date",
             formatoptions: {
               srcformat: "ISO8601Long",
@@ -33,27 +35,31 @@
           {
             label: 'KODE PERKIRAAN',
             name: 'coa',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'NAMA PERKIRAAN',
             name: 'keterangancoa',
+            width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
           },
           {
             label: 'DEBET',
             name: 'nominaldebet',
             align: 'right',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             formatter: currencyFormat,
           },
           {
             label: 'KREDIT',
             name: 'nominalkredit',
             align: 'right',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             formatter: currencyFormat,
           },
           {
             label: 'KETERANGAN',
             name: 'keterangan',
-            width: '500px'
+            width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1,
           }
         ],
         autowidth: true,

@@ -158,6 +158,7 @@
           {
             label: 'STATUS APPROVAL',
             name: 'statusapproval',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'left',
             stype: 'select',
             searchoptions: {
@@ -205,6 +206,7 @@
           {
             label: 'STATUS CETAK',
             name: 'statuscetak',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'left',
             stype: 'select',
             searchoptions: {
@@ -252,11 +254,13 @@
           {
             label: 'NO BUKTI',
             name: 'nobukti',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'left'
           },
           {
             label: 'TGL BUKTI',
             name: 'tglbukti',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
             align: 'left',
             formatter: "date",
             formatoptions: {
@@ -267,18 +271,21 @@
           {
             label: 'NOMINAL',
             name: 'nominal',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'right',
             formatter: currencyFormat,
           },
           {
             label: 'CUSTOMER',
             name: 'agen',
+            width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
             align: 'left'
           },
 
           {
             label: 'NO BUKTI PIUTANG',
             name: 'piutang_nobukti',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
             align: 'left',
             formatter: (value, options, rowData) => {
               if ((value == null) || (value == '')) {
@@ -294,6 +301,7 @@
           {
             label: 'TGL JATUH TEMPO',
             name: 'tgljatuhtempo',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_2,
             align: 'left',
             formatter: "date",
             formatoptions: {
@@ -304,11 +312,13 @@
           {
             label: 'USER APPROVAL',
             name: 'userapproval',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'left'
           },
           {
             label: 'TGL APPROVAL',
             name: 'tglapproval',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
             align: 'left',
             formatter: "date",
             formatoptions: {
@@ -319,11 +329,13 @@
           {
             label: 'USER BUKA CETAK',
             name: 'userbukacetak',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'left'
           },
           {
             label: 'TGL CETAK',
             name: 'tglbukacetak',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
             align: 'left',
             formatter: "date",
             formatoptions: {
@@ -334,11 +346,13 @@
           {
             label: 'MODIFIED BY',
             name: 'modifiedby',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'left'
           },
           {
             label: 'CREATED AT',
             name: 'created_at',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
             align: 'left',
             formatter: "date",
             formatoptions: {
@@ -349,6 +363,7 @@
           {
             label: 'UPDATED AT',
             name: 'updated_at',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
             align: 'left',
             formatter: "date",
             formatoptions: {

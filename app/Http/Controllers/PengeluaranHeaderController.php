@@ -112,6 +112,7 @@ class PengeluaranHeaderController extends MyController
     {
         $detailParams = [
             'aktif' => 'AKTIF',
+            'format' => 'pengeluaran'
         ];
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])

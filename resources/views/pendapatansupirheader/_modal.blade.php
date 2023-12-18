@@ -1035,6 +1035,7 @@
                     {
                         label: 'SUPIR',
                         name: 'namasupir',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                     },
                     {
                         label: 'SUPIRID',
@@ -1045,10 +1046,12 @@
                     {
                         label: 'NO BUKTI TRIP',
                         name: 'nobukti_trip',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                     },
                     {
                         label: 'TGL TRIP',
                         name: 'tgl_trip',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
                         align: 'left',
                         formatter: "date",
                         formatoptions: {
@@ -1059,10 +1062,12 @@
                     {
                         label: 'NO BUKTI RIC',
                         name: 'nobukti_ric',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                     },
                     {
                         label: 'DARI',
                         name: 'dari',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                     },
                     {
                         label: 'dari_id',
@@ -1073,6 +1078,7 @@
                     {
                         label: 'SAMPAI',
                         name: 'sampai',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                     },
                     {
                         label: 'sampai_id',
@@ -1083,12 +1089,14 @@
                     {
                         label: 'NOMINAL',
                         name: 'nominal_detail',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         align: 'right',
                         formatter: currencyFormat,
                     },
                     {
                         label: 'GAJI KENEK',
                         name: 'gajikenek',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         align: 'right',
                         formatter: currencyFormat,
                     },
@@ -1408,11 +1416,12 @@
                         label: "SUPIR",
                         name: "supirdeposito",
                         sortable: true,
-                        width: '250px'
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_dekstop_4,
                     },
                     {
                         label: "NOMINAL",
                         name: "nominal",
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         align: "right",
                         editable: true,
                         editoptions: {
@@ -1609,6 +1618,7 @@
                     {
                         label: "SUPIR",
                         name: "pinj_supir",
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                         sortable: true,
                     },
                     {
@@ -1620,11 +1630,13 @@
                     {
                         label: "no bukti pinjaman",
                         name: "pinj_nobukti",
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         sortable: true,
                     },
                     {
                         label: "tgl bukti pinjaman",
                         name: "pinj_tglbukti",
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
                         sortable: true,
                         formatter: "date",
                         formatoptions: {
@@ -1635,6 +1647,7 @@
                     {
                         label: "Jlh Pinjaman",
                         name: "jlhpinjaman",
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         sortable: true,
                         align: "right",
                         formatter: currencyFormat,
@@ -1642,6 +1655,7 @@
                     {
                         label: "Total Bayar",
                         name: "totalbayar",
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         sortable: true,
                         align: "right",
                         formatter: currencyFormat,
@@ -1649,6 +1663,7 @@
                     {
                         label: "SISA",
                         name: "pinj_sisa",
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         sortable: true,
                         align: "right",
                         formatter: currencyFormat,
@@ -1656,6 +1671,7 @@
                     {
                         label: "NOMINAL",
                         name: "pinj_nominal",
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         align: "right",
                         editable: true,
                         editoptions: {
@@ -1730,7 +1746,7 @@
                         name: "pinj_keterangan",
                         sortable: false,
                         editable: false,
-                        width: 500
+                        width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1,
                     },
                     {
                         label: "empty",

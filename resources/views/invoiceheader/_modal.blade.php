@@ -704,10 +704,12 @@
             label: "JOB TRUCKING",
             name: "jobtrucking",
             sortable: true,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: "TGL OTOBON",
             name: "tglsp",
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_2,
             align: 'left',
             formatter: "date",
             formatoptions: {
@@ -718,31 +720,37 @@
           {
             label: "NO CONT",
             name: "nocont",
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
             sortable: true,
           },
           {
             label: "no sp full",
             name: "nospfull",
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             sortable: true,
           },
           {
             label: "no sp empty",
             name: "nospempty",
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             sortable: true,
           },
           {
             label: "no sp full empty",
             name: "nospfullempty",
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
             sortable: true,
           },
           {
             label: "TARIF",
             name: "tarif_id",
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
             sortable: true,
           },
           {
             label: "OMSET",
             name: "omset",
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             sortable: true,
             align: "right",
             formatter: currencyFormat,
@@ -750,6 +758,7 @@
           {
             label: "BIAYA TAMBAHAN",
             name: "nominalextra",
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             sortable: true,
             align: "right",
             formatter: currencyFormat,
@@ -757,6 +766,7 @@
           {
             label: "RETRIBUSI",
             name: "nominalretribusi",
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: "right",
             editable: true,
             editoptions: {
@@ -813,6 +823,7 @@
           {
             label: "TOTAL",
             name: "total",
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             sortable: true,
             align: "right",
             formatter: currencyFormat,
@@ -820,16 +831,19 @@
           {
             label: "BAGIAN",
             name: "jenisorder_id",
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             sortable: true,
           },
           {
             label: "CUSTOMER",
             name: "agen_id",
+            width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
             sortable: true,
           },
           {
             label: "LONG TRIP",
             name: "statuslongtrip",
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
             align: "center",
             sortable: false,
             search: false,
@@ -844,6 +858,7 @@
           {
             label: "PERALIHAN",
             name: "statusperalihan",
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
             align: "center",
             sortable: false,
             search: false,
@@ -858,6 +873,7 @@
           {
             label: "KETERANGAN",
             name: "keterangan",
+            width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1,
             sortable: true,
           },
           {

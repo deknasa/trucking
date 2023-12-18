@@ -24,17 +24,17 @@
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         datatype: "local",
-        colModel: [
-            {
-              label: 'MEKANIK',
-              name: 'karyawan_id',
-            },
-            {
-              label: 'KETERANGAN',
-              name: 'keterangan',
-              width: 200
-            }
-          ],
+        colModel: [{
+            label: 'MEKANIK',
+            name: 'karyawan_id',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+          },
+          {
+            label: 'KETERANGAN',
+            name: 'keterangan',
+            width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1,
+          }
+        ],
         autowidth: true,
         shrinkToFit: false,
         height: 350,
@@ -76,7 +76,7 @@
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))
-          
+
           /* Set global variables */
           sortnameDetail = $(this).jqGrid("getGridParam", "sortname")
           sortorderDetail = $(this).jqGrid("getGridParam", "sortorder")
@@ -105,7 +105,7 @@
         disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
           abortGridLastRequest($(this))
-          
+
           clearGlobalSearch($('#detail'))
         },
       })
@@ -118,24 +118,24 @@
         del: false,
       })
       .customPager()
-      
+
     /* Append clear filter button */
     loadClearFilter($('#detail'))
-    
+
     /* Append global search */
     loadGlobalSearch($('#detail'))
   }
 
   function loadDetailData(id) {
-        abortGridLastRequest($('#detail'))
+    abortGridLastRequest($('#detail'))
 
-        $('#detail').setGridParam({
+    $('#detail').setGridParam({
       url: `${apiUrl}serviceindetail`,
       datatype: "json",
       postData: {
         servicein_id: id
       },
-      page:1
+      page: 1
     }).trigger('reloadGrid')
   }
 </script>

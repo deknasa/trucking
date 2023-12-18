@@ -20,14 +20,17 @@
         colModel: [{
             label: 'NO BUKTI',
             name: 'nobukti',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'NO BUKTI TRIP',
             name: 'nobuktitrip',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'TGL TRIP',
             name: 'tgltrip',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
             formatter: "date",
             formatoptions: {
               srcformat: "ISO8601Long",
@@ -37,38 +40,46 @@
           {
             label: 'NO BUKTI RIC',
             name: 'nobuktirincian',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'NO POL',
             name: 'tradodetail',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'SUPIR',
             name: 'supirdetail',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
           },
           {
             label: 'DARI',
             name: 'dari',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'SAMPAI',
             name: 'sampai',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'KOMISI SUPIR',
             name: 'nominal',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'right',
             formatter: currencyFormat
           },
           {
             label: 'KOMISI KENEK',
             name: 'gajikenek',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'right',
             formatter: currencyFormat
           },
           {
             label: 'TOTAL',
             name: 'totaldetail',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'right',
             formatter: currencyFormat
           },

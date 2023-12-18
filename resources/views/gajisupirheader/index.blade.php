@@ -124,6 +124,7 @@
           {
             label: 'STATUS CETAK',
             name: 'statuscetak',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'left',
             stype: 'select',
             searchoptions: {
@@ -172,11 +173,13 @@
           {
             label: 'NO BUKTI',
             name: 'nobukti',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'left'
           },
           {
             label: 'TGL BUKTI',
             name: 'tglbukti',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
             align: 'left',
             formatter: "date",
             formatoptions: {
@@ -187,40 +190,47 @@
           {
             label: 'SUPIR',
             name: 'supir_id',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
             align: 'left',
           },
           {
             label: 'U. Borongan (Supir)',
             name: 'gajisupir',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
             align: 'right',
             formatter: currencyFormat,
           },
           {
             label: 'Komisi Kenek',
             name: 'gajikenek',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'right',
             formatter: currencyFormat,
           },
           {
             label: 'Komisi Supir',
             name: 'komisisupir',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'right',
             formatter: currencyFormat,
           },
           {
             label: 'Biaya Extra',
             name: 'biayaextra',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'right',
             formatter: currencyFormat,
           },
           {
             label: 'Total',
             name: 'total',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'right',
             formatter: currencyFormat,
           },
           {
             label: 'U. Jalan',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             name: 'uangjalan',
             align: 'right',
             formatter: currencyFormat,
@@ -228,44 +238,49 @@
           {
             label: 'U. BBM',
             name: 'bbm',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'right',
             formatter: currencyFormat,
           },
           {
             label: 'Pot. pinjaman',
             name: 'potonganpinjaman',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'right',
             formatter: currencyFormat,
           },
           {
             label: 'POT. PINJAMAN (SEMUA)',
-            width: 210,
-            width: 210,
             name: 'potonganpinjamansemua',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
             align: 'right',
             formatter: currencyFormat,
           },
           {
             label: 'DEPOSITO',
             name: 'deposito',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'right',
             formatter: currencyFormat,
           },
           {
             label: 'U. MAKAN HARIAN',
             name: 'uangmakanharian',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'right',
             formatter: currencyFormat,
           },
           {
             label: 'U. MAKAN BERJENJANG',
             name: 'uangmakanberjenjang',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
             align: 'right',
             formatter: currencyFormat,
           },
           {
             label: 'Nominal',
             name: 'nominal',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'right',
             formatter: currencyFormat,
           },
@@ -273,11 +288,13 @@
           {
             label: 'USER BUKA CETAK',
             name: 'userbukacetak',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'left'
           },
           {
             label: 'TGL CETAK',
             name: 'tglbukacetak',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'left',
             formatter: "date",
             formatoptions: {
@@ -288,6 +305,7 @@
           {
             label: 'TGL DARI',
             name: 'tgldari',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'left',
             formatter: "date",
             formatoptions: {
@@ -298,6 +316,7 @@
           {
             label: 'TGL SAMPAI',
             name: 'tglsampai',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'left',
             formatter: "date",
             formatoptions: {
@@ -308,11 +327,13 @@
           {
             label: 'MODIFIED BY',
             name: 'modifiedby',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'left'
           },
           {
             label: 'CREATED AT',
             name: 'created_at',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
             align: 'left',
             formatter: "date",
             formatoptions: {
@@ -323,6 +344,7 @@
           {
             label: 'UPDATED AT',
             name: 'updated_at',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
             align: 'left',
             formatter: "date",
             formatoptions: {

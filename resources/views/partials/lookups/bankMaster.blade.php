@@ -104,6 +104,9 @@ $idLookup = isset($id) ? $id : null;
         width: 190,
         align: 'left',
         formatter: (value, options, rowData) => {
+          if (!value) {
+            return ''
+          }
           let statusFormatPenerimaan = JSON.parse(value)
 
           let formattedValue = $(`
@@ -115,6 +118,9 @@ $idLookup = isset($id) ? $id : null;
           return formattedValue[0].outerHTML
         },
         cellattr: (rowId, value, rowObject) => {
+          if (!rowObject.formatpenerimaan) {
+            return ` title=""`
+          }
           let statusFormatPenerimaan = JSON.parse(rowObject.formatpenerimaan)
 
           return ` title="${statusFormatPenerimaan.MEMO}"`
@@ -127,6 +133,9 @@ $idLookup = isset($id) ? $id : null;
 
         align: 'left',
         formatter: (value, options, rowData) => {
+          if (!value) {
+            return ''
+          }
           let statusFormatPengeluaran = JSON.parse(value)
 
           let formattedValue = $(`
@@ -138,6 +147,9 @@ $idLookup = isset($id) ? $id : null;
           return formattedValue[0].outerHTML
         },
         cellattr: (rowId, value, rowObject) => {
+          if (!rowObject.formatpengeluaran) {
+            return ` title=""`
+          }
           let statusFormatPengeluaran = JSON.parse(rowObject.formatpengeluaran)
 
           return ` title="${statusFormatPengeluaran.MEMO}"`

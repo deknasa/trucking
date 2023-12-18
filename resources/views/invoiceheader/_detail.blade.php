@@ -20,38 +20,45 @@
         colModel: [{
             label: 'NO BUKTI',
             name: 'nobukti',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'KETERANGAN',
             name: 'keterangan',
+            width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1,
           },
           {
             label: 'NOMINAL',
             name: 'nominal',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'right',
             formatter: currencyFormat,
           },
           {
             label: 'NOMINAL EXTRA',
             name: 'nominalextra',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'right',
             formatter: currencyFormat,
           },
           {
             label: 'NOMINAL RETRIBUSI',
             name: 'nominalretribusi',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
             align: 'right',
             formatter: currencyFormat,
           },
           {
             label: 'TOTAL',
             name: 'total',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'right',
             formatter: currencyFormat,
           },
           {
             label: 'NO BUKTI ORDERAN',
             name: 'orderantrucking_nobukti',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
             formatter: (value, options, rowData) => {
               if ((value == null) ||( value == '')) {
                 return '';
@@ -66,7 +73,7 @@
           {
             label: 'NO BUKTI SP',
             name: 'suratpengantar_nobukti',
-            width: 300,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             formatter: (value, options, rowData) => {
               if ((value == null) ||( value == '')) {
                 return '';

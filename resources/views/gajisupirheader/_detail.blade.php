@@ -20,6 +20,7 @@
           {
             label: 'NO TRIP',
             name: 'suratpengantar_nobukti',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             formatter: (value, options, rowData) => {
               if ((value == null) ||( value == '')) {
                 return '';
@@ -32,9 +33,10 @@
             },
           },
           {
-            label: 'TANGGAL BON',
+            label: 'TGL BON',
             name: 'tglsp',
             align: 'left',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
             formatter: "date",
             formatoptions: {
               srcformat: "ISO8601Long",
@@ -45,56 +47,67 @@
           {
             label: 'NO POL',
             name: 'trado',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'DARI',
             name: 'dari',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'TUJUAN',
             name: 'sampai',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'NO CONT',
             name: 'nocont',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
           },
           {
             label: 'NO SP',
             name: 'nosp',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'U. MAKAN BERJENJANG',
             name: 'uangmakanberjenjang',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
             align: 'right',
             formatter: currencyFormat,
           },
           {
             label: 'GAJI SUPIR',
             name: 'gajisupir',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'right',
             formatter: currencyFormat,
           },
           {
             label: 'GAJI KENEK',
             name: 'gajikenek',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'right',
             formatter: currencyFormat,
           },
           {
             label: 'KOMISI SUPIR',
             name: 'komisisupir',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'right',
             formatter: currencyFormat,
           },
           {
             label: 'TOL SUPIR',
             name: 'tolsupir',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             formatter: currencyFormat,
             align: "right",
           },
           {
             label: 'NO BUKTI RITASI',
             name: 'ritasi_nobukti',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'left',
             formatter: (value, options, rowData) => {
               if ((value == null) ||( value == '')) {
@@ -110,29 +123,34 @@
           {
             label: 'UPAH RITASI',
             name: 'upahritasi',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             formatter: currencyFormat,
             align: "right",
           },
           {
             label: 'STATUS RITASI',
             name: 'statusritasi',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'left'
           },
           {
             label: 'BIAYA EXTRA',
             name: 'biayaextra',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             formatter: currencyFormat,
             align: "right",
           },
           {
             label: 'KET. BIAYA EXTRA',
             name: 'keteranganbiayatambahan',
+            width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1,
             align: 'left',
             width: '300px'
           },
           {
             label: 'TOTAL',
             name: 'total',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             formatter: currencyFormat,
             align: "right",
           },
