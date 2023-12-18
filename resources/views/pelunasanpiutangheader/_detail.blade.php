@@ -20,10 +20,12 @@
         colModel: [{
             label: 'NO BUKTI',
             name: 'nobukti',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'NO BUKTI PIUTANG',
             name: 'piutang_nobukti',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             formatter: (value, options, rowData) => {
               if ((value == null) ||( value == '')) {
                 return '';
@@ -41,6 +43,7 @@
             label: 'NO BUKTI INVOICE',
             name: 'invoice_nobukti',
             align: 'left',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             formatter: (value, options, rowData) => {
               let tgldari
               let tglsampai
@@ -69,20 +72,24 @@
           {
             label: 'KETERANGAN',
             name: 'keterangan',
+            width: (detectDeviceType() == "desktop") ? lg_dekstop_2 : lg_mobile_2
           },
           {
             label: 'NOMINAL',
             name: 'nominal',
             align: 'right',
             formatter: currencyFormat,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'KET. POTONGAN',
             name: 'keteranganpotongan',
+            width: (detectDeviceType() == "desktop") ? lg_dekstop_2 : lg_mobile_2
           },
           {
             label: 'KODE PERKIRAAN POTONGAN',
             name: 'coapotongan',
+            width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
             width: 220
           },
           {
@@ -90,12 +97,14 @@
             name: 'potongan',
             align: 'right',
             formatter: currencyFormat,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'NOMINAL LEBIH BAYAR',
             name: 'nominallebihbayar',
             align: 'right',
             formatter: currencyFormat,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
         ],
         autowidth: true,
