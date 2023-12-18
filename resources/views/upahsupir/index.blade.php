@@ -498,11 +498,11 @@
           },
           {
             id: 'import',
-            innerHTML: '<i class="fas fa-file-upload"></i> UPDATE HARGA',
+            innerHTML: '<i class="fas fa-file-upload"></i> IMPORT',
             class: 'btn btn-purple btn-sm mr-1',
             onClick: () => {
               // $('#importModal').data('action', 'import')
-              $('#importModal').find('button:submit').html(`Update Harga`)
+              $('#importModal').find('button:submit').html(`Import`)
               $('#importModal').modal('show')
             }
           },
@@ -563,8 +563,8 @@
       if (!`{{ $myAuth->hasPermission('upahsupir', 'report') }}`) {
         $('#report').attr('disabled', 'disabled')
       }
-      if (!`{{ $myAuth->hasPermission('upahsupir', 'updateharga') }}`) {
-        $('#approvalEdit').attr('disabled', 'disabled')
+      if (!`{{ $myAuth->hasPermission('upahsupir', 'import') }}`) {
+        $('#import').attr('disabled', 'disabled')
       }
     }
 
