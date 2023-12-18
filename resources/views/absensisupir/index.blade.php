@@ -208,6 +208,72 @@
               srcformat: "ISO8601Long",
               newformat: "d-m-Y"
             }
+          },          
+          {
+            label: 'STATUS APP EDIT',
+            name: 'statusapprovaleditabsensi',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            align: 'left',
+            stype: 'select',
+            searchoptions: {
+
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['comboedit'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['comboedit'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+              `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              let statusAppEdit = JSON.parse(value)
+              if (!statusAppEdit) {
+                return ''
+              }
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusAppEdit.WARNA}; color: #fff;">
+                  <span>${statusAppEdit.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusAppEdit = JSON.parse(rowObject.statusapprovaleditabsensi)
+              if (!statusAppEdit) {
+                return ` title=" "`
+              }
+              return ` title="${statusAppEdit.MEMO}"`
+            }
+          },
+          {
+            label: 'USER APP EDIT',
+            name: 'userapprovaleditabsensi',
+            align: 'left',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,  
+          },
+          {
+            label: 'TGL APP EDIT',
+            name: 'tglapprovaleditabsensi',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_2,
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
           },
           {
             label: 'MODIFIED BY',

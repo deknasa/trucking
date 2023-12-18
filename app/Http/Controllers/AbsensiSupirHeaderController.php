@@ -21,6 +21,7 @@ class AbsensiSupirHeaderController extends MyController
 
         $data = [
             'combocetak' => $this->comboCetak('list', 'STATUSCETAK', 'STATUSCETAK'),
+            'comboedit' => $this->comboCetak('list', 'STATUS EDIT ABSENSI', 'STATUS EDIT ABSENSI'),
         ];
         $data = array_merge(compact('title', 'data'),
             ["request"=>$request->all()]
