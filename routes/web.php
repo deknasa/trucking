@@ -275,7 +275,9 @@ use App\Http\Controllers\SuratPengantarApprovalInputTripController;
 use App\Http\Controllers\ApprovalBukaTanggalSuratPengantarController;
 use App\Http\Controllers\LaporanPemotonganPinjamanDepositoController;
 use App\Http\Controllers\ExportRincianMingguanPendapatanSupirController;
+use App\Http\Controllers\LapanganController;
 use App\Http\Controllers\LaporanBiayaSupirController;
+use App\Http\Controllers\OtobonController;
 use App\Http\Controllers\SupirSerapController;
 
 /*
@@ -1642,6 +1644,14 @@ Route::middleware(['auth', 'authorized'])->group(function () {
     Route::get('laporanbiayasupir/export', [LaporanBiayaSupirController::class, 'export'])->name('laporanbiayasupir.export');
     Route::get('laporanbiayasupir/index', [LaporanBiayaSupirController::class, 'index']);
     Route::resource('laporanbiayasupir', LaporanBiayaSupirController::class);
+    
+    Route::get('otobon/report', [OtobonController::class, 'report'])->name('otobon.report');
+    Route::get('otobon/index', [OtobonController::class, 'index']);
+    Route::resource('otobon', OtobonController::class);
+    
+    Route::get('lapangan/report', [LapanganController::class, 'report'])->name('lapangan.report');
+    Route::get('lapangan/index', [LapanganController::class, 'index']);
+    Route::resource('lapangan', LapanganController::class);
 });
 
 Route::patch('format', [FormatController::class, 'update']);
