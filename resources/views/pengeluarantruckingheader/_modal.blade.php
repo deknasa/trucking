@@ -254,6 +254,12 @@
             <div id="detail-bit-section">
               <table id="tableBIT"></table>
             </div>
+            <div id="detail-otok-section">
+              <table id="tableOTOK"></table>
+            </div>
+            <div id="detail-otol-section">
+              <table id="tableOTOL"></table>
+            </div>
 
             <div class="row mt-5">
               <div class="col-md-12">
@@ -671,7 +677,7 @@
             value: dataDeposito.id
           })
         });
-      } else  if (KodePengeluaranId == "TDEK") {
+      } else if (KodePengeluaranId == "TDEK") {
         data = []
 
         data.push({
@@ -1275,6 +1281,12 @@
         break;
       case 'TDEK': //listKodePengeluaran[15]:
         tampilanTDEK()
+        break;
+      case 'OTOK': //listKodePengeluaran[16]:
+        tampilanOTOK()
+        break;
+      case 'OTOL': //listKodePengeluaran[17]:
+        tampilanOTOL()
         break;
       default:
         tampilanall()
@@ -2139,6 +2151,105 @@
     }
   }
 
+  function tampilanOTOK() {
+    $('#detailList tbody').html('')
+    enabledKas(true);
+    $('[name=statusposting]').parents('.form-group').show()
+    $('[name=tradoheader_id]').parents('.form-group').hide()
+    $('[name=gandenganheader_id]').parents('.form-group').hide()
+    $('[name=postingpinjaman]').parents('.form-group').hide()
+    $('[name=karyawanheader_id]').parents('.form-group').hide()
+    $('[name=keterangancoa]').parents('.form-group').hide()
+    $('[name=supirheader_id]').parents('.form-group').hide()
+    $('[name=jenisorderan_id]').parents('.form-group').hide()
+    $('[name=tgldari]').parents('.form-group').show()
+    $('[name=tgldari]').prop('disabled', false)
+    $('[name=tglsampai]').prop('disabled', false)
+    $('[name=periode]').parents('.form-group').hide()
+    $('[name=periode]').prop('disabled', true)
+    $('#detail-bst-section').hide()
+    $('#detail-bll-section').hide()
+    $('#detail-bln-section').hide()
+    $('#detail-btu-section').hide()
+    $('#detail-bpt-section').hide()
+    $('#detail-bgs-section').hide()
+    $('#detail-bit-section').hide()
+    $('#detail-tdek-section').hide()
+    $('#detail-otok-section').show()
+    $('#detail-otol-section').hide()
+    $('#detail-default-section').parents('.card').hide()
+    $('#detail-tde-section').hide()
+    $('.tbl_checkbox').hide()
+    $('.tbl_karyawan_id').hide()
+    $('.tbl_penerimaantruckingheader').hide()
+    $('.tbl_pengeluaranstokheader_nobukti').hide()
+    $('.tbl_stok_id').hide()
+    $('.tbl_qty').hide()
+    $('.nominal').prop('readonly', false)
+    $('.tbl_harga').hide()
+    $('.tbl_supir_id').show()
+    $('.tbl_aksi').show()
+    $('.colspan').attr('colspan', 2);
+    $('#tbl_addRow').show()
+    $('.colmn-offset2').hide()
+    $('.kolom_bbt').hide()
+    $('.tbl_tagihklaim').hide()
+    $('.colmn-offset3').hide()
+    $('.colmn-offset4').hide()
+    $('.cabang').hide()
+    // $('.colmn-offset').hide()
+    loadOTOKGrid()
+  }
+  function tampilanOTOL() {
+    $('#detailList tbody').html('')
+    enabledKas(true);
+    $('[name=statusposting]').parents('.form-group').show()
+    $('[name=tradoheader_id]').parents('.form-group').hide()
+    $('[name=gandenganheader_id]').parents('.form-group').hide()
+    $('[name=postingpinjaman]').parents('.form-group').hide()
+    $('[name=karyawanheader_id]').parents('.form-group').hide()
+    $('[name=keterangancoa]').parents('.form-group').hide()
+    $('[name=supirheader_id]').parents('.form-group').hide()
+    $('[name=jenisorderan_id]').parents('.form-group').hide()
+    $('[name=tgldari]').parents('.form-group').show()
+    $('[name=tgldari]').prop('disabled', false)
+    $('[name=tglsampai]').prop('disabled', false)
+    $('[name=periode]').parents('.form-group').hide()
+    $('[name=periode]').prop('disabled', true)
+    $('#detail-bst-section').hide()
+    $('#detail-bll-section').hide()
+    $('#detail-bln-section').hide()
+    $('#detail-btu-section').hide()
+    $('#detail-bpt-section').hide()
+    $('#detail-bgs-section').hide()
+    $('#detail-bit-section').hide()
+    $('#detail-tdek-section').hide()
+    $('#detail-otok-section').hide()
+    $('#detail-otol-section').show()
+    $('#detail-default-section').parents('.card').hide()
+    $('#detail-tde-section').hide()
+    $('.tbl_checkbox').hide()
+    $('.tbl_karyawan_id').hide()
+    $('.tbl_penerimaantruckingheader').hide()
+    $('.tbl_pengeluaranstokheader_nobukti').hide()
+    $('.tbl_stok_id').hide()
+    $('.tbl_qty').hide()
+    $('.nominal').prop('readonly', false)
+    $('.tbl_harga').hide()
+    $('.tbl_supir_id').show()
+    $('.tbl_aksi').show()
+    $('.colspan').attr('colspan', 2);
+    $('#tbl_addRow').show()
+    $('.colmn-offset2').hide()
+    $('.kolom_bbt').hide()
+    $('.tbl_tagihklaim').hide()
+    $('.colmn-offset3').hide()
+    $('.colmn-offset4').hide()
+    $('.cabang').hide()
+    // $('.colmn-offset').hide()
+    loadOTOLGrid()
+  }
+
   function tampilanall() {
     enabledKas(true);
     $('[name=keterangancoa]').parents('.form-group').show()
@@ -2168,6 +2279,8 @@
     $('#detail-bgs-section').hide()
     $('#detail-bit-section').hide()
     $('#detail-tdek-section').hide()
+    $('#detail-otok-section').hide()
+    $('#detail-otol-section').hide()
     $('#detail-default-section').parents('.card').show()
     $('.colspan').attr('colspan', 3);
     $('#sisaColFoot').hide()
@@ -2389,12 +2502,12 @@
               form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
             }
             if (KodePengeluaranId === "TDE") {
-                form.find(`[name="supirheader"]`).parent('.input-group').find('.button-clear').remove()
-                form.find(`[name="supirheader"]`).parent('.input-group').find('.input-group-append').remove()
+              form.find(`[name="supirheader"]`).parent('.input-group').find('.button-clear').remove()
+              form.find(`[name="supirheader"]`).parent('.input-group').find('.input-group-append').remove()
             }
             if (KodePengeluaranId === "TDEK") {
-                form.find(`[name="karyawanheader"]`).parent('.input-group').find('.button-clear').remove()
-                form.find(`[name="karyawanheader"]`).parent('.input-group').find('.input-group-append').remove()
+              form.find(`[name="karyawanheader"]`).parent('.input-group').find('.button-clear').remove()
+              form.find(`[name="karyawanheader"]`).parent('.input-group').find('.input-group-append').remove()
             }
           })
           .catch((error) => {
@@ -2441,14 +2554,14 @@
             $('#crudForm [name=statusposting]').attr('disabled', true)
             form.find(`[name="tglbukti"]`).prop('readonly', true)
             form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
-            
+
             if (KodePengeluaranId === "TDEK") {
-                form.find(`[name="karyawanheader"]`).parent('.input-group').find('.button-clear').remove()
-                form.find(`[name="karyawanheader"]`).parent('.input-group').find('.input-group-append').remove()
+              form.find(`[name="karyawanheader"]`).parent('.input-group').find('.button-clear').remove()
+              form.find(`[name="karyawanheader"]`).parent('.input-group').find('.input-group-append').remove()
             }
             if (KodePengeluaranId === "TDE") {
-                form.find(`[name="supirheader"]`).parent('.input-group').find('.button-clear').remove()
-                form.find(`[name="supirheader"]`).parent('.input-group').find('.input-group-append').remove()
+              form.find(`[name="supirheader"]`).parent('.input-group').find('.button-clear').remove()
+              form.find(`[name="supirheader"]`).parent('.input-group').find('.input-group-append').remove()
             }
           })
       })
@@ -3452,7 +3565,7 @@
   }
 
 
-  
+
   function clearSelectedRowsDepositoKaryawan() {
     getSelectedRowsDepoKaryawan = $("#tableDepositoKaryawan").getGridParam("selectedRowIds");
     $("#tableDepositoKaryawan")[0].p.selectedRowIds = [];
@@ -3833,7 +3946,7 @@
       .jqGrid("getGridParam", "originalData")
       .find((row) => row.id == rowId);
 
-      editableColumnsDepoKaryawan.forEach((editableColumn) => {
+    editableColumnsDepoKaryawan.forEach((editableColumn) => {
 
       if (!isChecked) {
         for (var i = 0; i < selectedRowDepoKaryawanIds.length; i++) {

@@ -34,10 +34,11 @@
           {
             label: 'NO BUKTI',
             name: 'nobukti',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'NO BUKTI PENERIMAAN',
-            width: 230,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
             name: 'penerimaantrucking_nobukti',
             formatter: (value, options, rowData) => {
               if ((value == null) ||( value == '')) {
@@ -55,6 +56,7 @@
           {
             label: 'TGL PENERIMAAN',
             name: 'penerimaantrucking_tglbukti',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             formatter: "date",
             formatoptions: {
               srcformat: "ISO8601Long",
@@ -64,10 +66,11 @@
           {
             label: 'BANK PENERIMAAN',
             name: 'penerimaantrucking_bank_id',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'NO BUKTI pengeluaran',
-            width: 210,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
             name: 'pengeluarantrucking_nobukti',
             formatter: (value, options, rowData) => {
               if ((value == null) ||( value == '')) {
@@ -85,6 +88,7 @@
           {
             label: 'TGL PENGELUARAN',
             name: 'pengeluarantrucking_tglbukti',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             formatter: "date",
             formatoptions: {
               srcformat: "ISO8601Long",
@@ -94,10 +98,12 @@
           {
             label: 'BANK PENGELUARAN',
             name: 'pengeluarantrucking_bank_id',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'NO BUKTI PENGEMBALIAN KAS GANTUNG',
             name: 'pengembaliankasgantung_nobukti',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
             formatter: (value, options, rowData) => {
               if ((value == null) ||( value == '')) {
                 return '';
@@ -114,6 +120,7 @@
           {
             label: 'TGL PENGEMBALIAN KAS GANTUNG',
             name: 'pengembaliankasgantung_tglbukti',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             formatter: "date",
             formatoptions: {
               srcformat: "ISO8601Long",
@@ -123,18 +130,22 @@
           {
             label: 'BANK PENGEMBALIAN KAS GANTUNG',
             name: 'pengembaliankasgantung_bank_id',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'PROSES UANG JALAN',
             name: 'statusprosesuangjalan',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'KETERANGAN',
             name: 'keterangan',
+            width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1,
           },
           {
             label: 'NOMINAL',
             name: 'nominal',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'right',
             formatter: currencyFormat
           },

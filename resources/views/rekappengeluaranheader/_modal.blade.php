@@ -580,10 +580,12 @@
         colModel: [{
             label: 'NO BUKTI',
             name: 'nobukti_pengeluaran',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'TGL BUKTI',
             name: 'tglbukti_pengeluaran',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
             formatter: "date",
             formatoptions: {
               srcformat: "ISO8601Long",
@@ -593,6 +595,7 @@
           {
             label: 'NOMINAL',
             name: 'nominal_detail',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'right',
             formatter: currencyFormat,
           },

@@ -722,11 +722,13 @@
           {
             label: "NO BUKTI",
             name: "nobukti",
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             sortable: true,
           },
           {
             label: "TGL BUKTI",
             name: "tglbukti",
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
             align: 'left',
             formatter: "date",
             formatoptions: {
@@ -737,6 +739,7 @@
           {
             label: "SISA",
             name: "sisa",
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             sortable: true,
             align: "right",
             formatter: currencyFormat,
@@ -744,6 +747,7 @@
           {
             label: "NOMINAL",
             name: "nominal",
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: "right",
             editable: true,
             editoptions: {
@@ -803,7 +807,7 @@
           {
             label: "KETERANGAN",
             name: "keterangandetail",
-            width: '400px',
+            width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1,
             sortable: false,
             editable: true,
             editoptions: {

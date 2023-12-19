@@ -68,6 +68,7 @@
           {
             label: 'STATUS CETAK',
             name: 'statuscetak',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'left',
             stype: 'select',
             searchoptions: {
@@ -116,10 +117,12 @@
           {
             label: 'NO BUKTI',
             name: 'nobukti',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'TGL BUKTI',
             name: 'tglbukti',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
             align: 'left',
             formatter: "date",
             formatoptions: {
@@ -130,14 +133,16 @@
           {
             label: 'SUPIR',
             name: 'supir',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
           },
           {
             label: 'BANK',
             name: 'bank',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'NO BUKTI PENERIMAAN',
-            width: 230,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
             name: 'penerimaan_nobukti',
             formatter: (value, options, rowData) => {
               if ((value == null) ||( value == '')) {
@@ -155,18 +160,18 @@
           {
             label: 'NAMA PERKIRAAN',
             name: 'coa',
-            width: 250
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
           },
           {
             label: 'PENGELUARAN SUPIR',
-            width: 250,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             name: 'pengeluaransupir',
             align: 'right',
             formatter: currencyFormat
           },
           {
             label: 'NO BUKTI PENERIMAAN TRUCKING POSTING',
-            width: 230,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
             name: 'penerimaantruckingposting_nobukti',
             formatter: (value, options, rowData) => {
               if ((value == null) ||( value == '')) {
@@ -183,7 +188,7 @@
           },
           {
             label: 'NO BUKTI PENERIMAAN TRUCKING NON POSTING',
-            width: 230,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
             name: 'penerimaantruckingnonposting_nobukti',
             formatter: (value, options, rowData) => {
               if ((value == null) ||( value == '')) {
@@ -201,10 +206,12 @@
           {
             label: 'MODIFIED BY',
             name: 'modifiedby',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'CREATED AT',
             name: 'created_at',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
             align: 'right',
             formatter: "date",
             formatoptions: {
@@ -215,6 +222,7 @@
           {
             label: 'UPDATED AT',
             name: 'updated_at',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
             align: 'right',
             formatter: "date",
             formatoptions: {

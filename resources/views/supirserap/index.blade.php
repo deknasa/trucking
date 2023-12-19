@@ -97,6 +97,7 @@
                     {
                         label: 'TGL ABSENSI',
                         name: 'tglabsensi',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         align: 'left',
                         formatter: "date",
                         formatoptions: {
@@ -107,22 +108,22 @@
                     {
                         label: 'TRADO',
                         name: 'trado_id',
-                        width: '130px',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                     },
                     {
                         label: 'SUPIR',
                         name: 'supir_id',
-                        width: '200px',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
                     },
                     {
                         label: 'SUPIR SERAP',
                         name: 'supirserap_id',
-                        width: '200px',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
                     },
                     {
                         label: 'Status Approval',
                         name: 'statusapproval',
-                        width: 100,
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         stype: 'select',
                         searchoptions: {
                             value: `<?php
@@ -165,11 +166,13 @@
                     {
                         label: 'USER APPROVAL',
                         name: 'userapproval',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         align: 'left'
                     },
                     {
                         label: 'TGL APPROVAL',
                         name: 'tglapproval',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         align: 'left',
                         formatter: "date",
                         formatoptions: {
@@ -179,11 +182,13 @@
                     },
                     {
                         label: 'MODIFIED BY',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         name: 'modifiedby',
                         align: 'left'
                     }, {
                         label: 'CREATED AT',
                         name: 'created_at',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                         formatter: "date",
                         formatoptions: {
                             srcformat: "ISO8601Long",
@@ -193,6 +198,7 @@
                     {
                         label: 'UPDATED AT',
                         name: 'updated_at',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                         formatter: "date",
                         formatoptions: {
                             srcformat: "ISO8601Long",

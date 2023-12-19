@@ -21,14 +21,17 @@
         colModel: [{
             label: 'NO BUKTI',
             name: 'nobukti',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'NO WARKAT',
             name: 'nowarkat',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'TGL JATUH TEMPO',
             name: 'tgljatuhtempo',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
             formatter: "date",
             formatoptions: {
               srcformat: "ISO8601Long",
@@ -38,43 +41,50 @@
           {
             label: 'KETERANGAN',
             name: 'keterangan',
+            width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1,
           },
           {
             label: 'NOMINAL',
             name: 'nominal',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'right',
             formatter: currencyFormat
           },
           {
             label: 'KODE PERKIRAAN DEBET', 
-    width: 220,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
             name: 'coadebet',
           },
           {
             label: 'KODE PERKIRAAN kredit', 
-         width: 220,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
             name: 'coakredit',
           },
 
           {
             label: 'BANK',
             name: 'bank_id',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'INVOICE NO BUKTI',
             name: 'invoice_nobukti',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
           },
           {
-            label: 'PELUNASAN PIUTANG NO BUKTI', width: 240,
+            label: 'PELUNASAN PIUTANG NO BUKTI', 
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
             name: 'pelunasanpiutang_nobukti',
           },
           {
             label: 'BANK PELANGGAN',
             name: 'bankpelanggan_id',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'BULAN BEBAN',
             name: 'bulanbeban',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
         ],
         autowidth: true,
