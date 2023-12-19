@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "9eb08dc7d91ac0b898b3a4469e8fe708",
+  "ReportGuid": "d10f475e453eba60a7b914f7f63d8f4c",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://localhost/trucking/public/reports/ReportPembelianStok5.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportPembelianStok.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1687917580000+0700)/",
+  "ReportChanged": "/Date(1702977468000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -118,6 +118,18 @@
             "NameInSource": "usercetak",
             "Alias": "usercetak",
             "Type": "System.String"
+          },
+          "15": {
+            "Name": "disetujui",
+            "NameInSource": "disetujui",
+            "Alias": "disetujui",
+            "Type": "System.String"
+          },
+          "16": {
+            "Name": "diperiksa",
+            "NameInSource": "diperiksa",
+            "Alias": "diperiksa",
+            "Type": "System.String"
           }
         },
         "NameInSource": "Data.data"
@@ -166,30 +178,36 @@
             "Type": "System.String"
           },
           "2": {
+            "Name": "info",
+            "NameInSource": "info",
+            "Alias": "info",
+            "Type": "System.String"
+          },
+          "3": {
             "Name": "modifiedby",
             "NameInSource": "modifiedby",
             "Alias": "modifiedby",
             "Type": "System.String"
           },
-          "3": {
+          "4": {
             "Name": "created_at",
             "NameInSource": "created_at",
             "Alias": "created_at",
             "Type": "System.DateTime"
           },
-          "4": {
+          "5": {
             "Name": "updated_at",
             "NameInSource": "updated_at",
             "Alias": "updated_at",
             "Type": "System.DateTime"
           },
-          "5": {
+          "6": {
             "Name": "pivot",
             "NameInSource": "pivot",
             "Alias": "pivot",
             "Type": "System.String"
           },
-          "6": {
+          "7": {
             "Name": "relationId",
             "NameInSource": "relationId",
             "Alias": "relationId",
@@ -246,24 +264,42 @@
             "Type": "System.String"
           },
           "7": {
+            "Name": "statusakses",
+            "NameInSource": "statusakses",
+            "Alias": "statusakses",
+            "Type": "System.String"
+          },
+          "8": {
+            "Name": "email",
+            "NameInSource": "email",
+            "Alias": "email",
+            "Type": "System.String"
+          },
+          "9": {
+            "Name": "info",
+            "NameInSource": "info",
+            "Alias": "info",
+            "Type": "System.String"
+          },
+          "10": {
             "Name": "modifiedby",
             "NameInSource": "modifiedby",
             "Alias": "modifiedby",
             "Type": "System.String"
           },
-          "8": {
+          "11": {
             "Name": "created_at",
             "NameInSource": "created_at",
             "Alias": "created_at",
             "Type": "System.DateTime"
           },
-          "9": {
+          "12": {
             "Name": "updated_at",
             "NameInSource": "updated_at",
             "Alias": "updated_at",
             "Type": "System.DateTime"
           },
-          "10": {
+          "13": {
             "Name": "roles",
             "NameInSource": "roles",
             "Alias": "roles",
@@ -329,12 +365,6 @@
             "Name": "stoksampai_id",
             "NameInSource": "stoksampai_id",
             "Alias": "stoksampai_id",
-            "Type": "System.String"
-          },
-          "9": {
-            "Name": "status",
-            "NameInSource": "status",
-            "Alias": "status",
             "Type": "System.String"
           }
         },
@@ -588,7 +618,7 @@
               "Ident": "StiText",
               "Name": "Text18",
               "Guid": "7462b9011caae40416ba07a69e5e98e9",
-              "ClientRectangle": "9.07,1.44,12.12,0.39",
+              "ClientRectangle": "17.47,0.44,3.72,0.39",
               "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -608,7 +638,7 @@
               "Ident": "StiText",
               "Name": "Text51",
               "Guid": "5b248faa297c85f35660c07160de2e34",
-              "ClientRectangle": "10.54,1.91,10.67,0.41",
+              "ClientRectangle": "10.54,1.31,10.67,0.41",
               "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -756,20 +786,6 @@
             },
             "17": {
               "Ident": "StiShape",
-              "Name": "Shape8",
-              "Guid": "556008d5880709f8854e0d2f437b152a",
-              "ClientRectangle": "21.04,3.18,0.65,0.79",
-              "ComponentPlacement": "h.ap.HeaderBand1",
-              "Interaction": {
-                "Ident": "StiInteraction"
-              },
-              "Brush": "solid:",
-              "ShapeType": {
-                "Ident": "StiVerticalLineShapeType"
-              }
-            },
-            "18": {
-              "Ident": "StiShape",
               "Name": "Shape11",
               "Guid": "aba63efdb1b2baa16b1e06e89c24b092",
               "ClientRectangle": "0.74,3.84,0.62,0.06",
@@ -782,11 +798,11 @@
                 "Ident": "StiVerticalLineShapeType"
               }
             },
-            "19": {
+            "18": {
               "Ident": "StiText",
               "Name": "Text24",
               "Guid": "f804cde4971da08ded783f26b427d4b7",
-              "ClientRectangle": "0.25,2,2.52,0.39",
+              "ClientRectangle": "18.65,0.8,2.52,0.39",
               "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -794,13 +810,14 @@
               "Text": {
                 "Value": "{data.usercetak}"
               },
+              "HorAlignment": "Right",
               "Font": ";;Italic;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
               "Type": "DataColumn"
             },
-            "20": {
+            "19": {
               "Ident": "StiText",
               "Name": "Text25",
               "ClientRectangle": "2,0.8,2.4,0.6",
@@ -817,7 +834,7 @@
               "Brush": "solid:",
               "TextBrush": "solid:Black"
             },
-            "21": {
+            "20": {
               "Ident": "StiText",
               "Name": "Text26",
               "Guid": "2c67001fc541e6b695ea447ae20206e3",
@@ -842,7 +859,7 @@
               },
               "Type": "Expression"
             },
-            "22": {
+            "21": {
               "Ident": "StiText",
               "Name": "Text27",
               "ClientRectangle": "4.8,0.8,3,0.6",
@@ -859,7 +876,7 @@
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0"
             },
-            "23": {
+            "22": {
               "Ident": "StiText",
               "Name": "Text28",
               "Guid": "f0596e5368b233002105407d463a81b5",
@@ -884,7 +901,7 @@
               },
               "Type": "Expression"
             },
-            "24": {
+            "23": {
               "Ident": "StiShape",
               "Name": "Shape10",
               "Guid": "f22101ccc020173bfd206cedfc596c13",
@@ -898,7 +915,7 @@
                 "Ident": "StiHorizontalLineShapeType"
               }
             },
-            "25": {
+            "24": {
               "Ident": "StiText",
               "Name": "Text11",
               "Guid": "64b6164033c01eb657ef8366049dce73",
@@ -917,7 +934,7 @@
               "TextBrush": "solid:Black",
               "Type": "Expression"
             },
-            "26": {
+            "25": {
               "Ident": "StiText",
               "Name": "Text29",
               "Guid": "bfc52faf2e38adfe6db6e1d81933dcc5",
@@ -942,7 +959,7 @@
               },
               "Type": "Expression"
             },
-            "27": {
+            "26": {
               "Ident": "StiText",
               "Name": "Text30",
               "Guid": "82f6d5edcf538f86f9983e86f251700a",
@@ -967,7 +984,7 @@
               },
               "Type": "Expression"
             },
-            "28": {
+            "27": {
               "Ident": "StiText",
               "Name": "Text17",
               "Guid": "b20856c07ebf9466f255c0879cb7402e",
@@ -992,7 +1009,7 @@
               },
               "Type": "Expression"
             },
-            "29": {
+            "28": {
               "Ident": "StiShape",
               "Name": "Shape4",
               "Guid": "040acf307d193f268cdd3c4a951a8937",
@@ -1006,7 +1023,7 @@
                 "Ident": "StiHorizontalLineShapeType"
               }
             },
-            "30": {
+            "29": {
               "Ident": "StiShape",
               "Name": "Shape5",
               "Guid": "3834d94cf88a336731e7be551fe46cdd",
@@ -1020,7 +1037,7 @@
                 "Ident": "StiLeftAndRightLineShapeType"
               }
             },
-            "31": {
+            "30": {
               "Ident": "StiShape",
               "Name": "Shape9",
               "Guid": "f34acf15e569b983b4c0a35587f2b2ff",
@@ -1034,7 +1051,7 @@
                 "Ident": "StiLeftAndRightLineShapeType"
               }
             },
-            "32": {
+            "31": {
               "Ident": "StiText",
               "Name": "Text5",
               "Guid": "8f265c8934cbd15cf56fe909aaccd01d",
@@ -1060,7 +1077,7 @@
               },
               "Type": "Expression"
             },
-            "33": {
+            "32": {
               "Ident": "StiText",
               "Name": "Text10",
               "Guid": "de91c8896c58d7fcee0949fd645fa267",
@@ -1086,7 +1103,7 @@
               },
               "Type": "Expression"
             },
-            "34": {
+            "33": {
               "Ident": "StiText",
               "Name": "Text31",
               "Guid": "7d91e4dccac99102b7feca387b30bc5d",

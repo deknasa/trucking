@@ -45,6 +45,7 @@ class LaporanTitipanEmklController extends MyController
             'tgldari' => $request->tgldari,
             'tglsampai' => $request->tglsampai,
             'jenisorder' => $request->jenisorder,
+            'periode' => $request->periode,
         ];
 
         $header = Http::withHeaders(request()->header())

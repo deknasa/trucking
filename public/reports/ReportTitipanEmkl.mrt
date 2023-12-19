@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "f2a9b0e8606ee1ec4884bb299ad62ee7",
+  "ReportGuid": "a7c06604654dde6c836f3c567b6c43e9",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://localhost/truck/public/reports/ReportTitipanEmkl.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportTitipanEmkl.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1692946532000+0700)/",
+  "ReportChanged": "/Date(1702976843000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -36,15 +36,15 @@
             "Type": "System.String"
           },
           "1": {
-            "Name": "trado",
-            "NameInSource": "trado",
-            "Alias": "trado",
+            "Name": "judullaporan",
+            "NameInSource": "judullaporan",
+            "Alias": "judullaporan",
             "Type": "System.String"
           },
           "2": {
-            "Name": "trado_id",
-            "NameInSource": "trado_id",
-            "Alias": "trado_id",
+            "Name": "trado",
+            "NameInSource": "trado",
+            "Alias": "trado",
             "Type": "System.String"
           },
           "3": {
@@ -72,15 +72,15 @@
             "Type": "System.String"
           },
           "7": {
-            "Name": "container_id",
-            "NameInSource": "container_id",
-            "Alias": "container_id",
-            "Type": "System.String"
-          },
-          "8": {
             "Name": "container",
             "NameInSource": "container",
             "Alias": "container",
+            "Type": "System.String"
+          },
+          "8": {
+            "Name": "nocont",
+            "NameInSource": "nocont",
+            "Alias": "nocont",
             "Type": "System.String"
           },
           "9": {
@@ -93,6 +93,42 @@
             "Name": "nominal",
             "NameInSource": "nominal",
             "Alias": "nominal",
+            "Type": "System.String"
+          },
+          "11": {
+            "Name": "urut",
+            "NameInSource": "urut",
+            "Alias": "urut",
+            "Type": "System.String"
+          },
+          "12": {
+            "Name": "uruttrado",
+            "NameInSource": "uruttrado",
+            "Alias": "uruttrado",
+            "Type": "System.String"
+          },
+          "13": {
+            "Name": "disetujui",
+            "NameInSource": "disetujui",
+            "Alias": "disetujui",
+            "Type": "System.String"
+          },
+          "14": {
+            "Name": "diperiksa",
+            "NameInSource": "diperiksa",
+            "Alias": "diperiksa",
+            "Type": "System.String"
+          },
+          "15": {
+            "Name": "tglcetak",
+            "NameInSource": "tglcetak",
+            "Alias": "tglcetak",
+            "Type": "System.String"
+          },
+          "16": {
+            "Name": "usercetak",
+            "NameInSource": "usercetak",
+            "Alias": "usercetak",
             "Type": "System.String"
           }
         },
@@ -142,30 +178,36 @@
             "Type": "System.String"
           },
           "2": {
+            "Name": "info",
+            "NameInSource": "info",
+            "Alias": "info",
+            "Type": "System.String"
+          },
+          "3": {
             "Name": "modifiedby",
             "NameInSource": "modifiedby",
             "Alias": "modifiedby",
             "Type": "System.String"
           },
-          "3": {
+          "4": {
             "Name": "created_at",
             "NameInSource": "created_at",
             "Alias": "created_at",
             "Type": "System.DateTime"
           },
-          "4": {
+          "5": {
             "Name": "updated_at",
             "NameInSource": "updated_at",
             "Alias": "updated_at",
             "Type": "System.DateTime"
           },
-          "5": {
+          "6": {
             "Name": "pivot",
             "NameInSource": "pivot",
             "Alias": "pivot",
             "Type": "System.String"
           },
-          "6": {
+          "7": {
             "Name": "relationId",
             "NameInSource": "relationId",
             "Alias": "relationId",
@@ -234,24 +276,30 @@
             "Type": "System.String"
           },
           "9": {
+            "Name": "info",
+            "NameInSource": "info",
+            "Alias": "info",
+            "Type": "System.String"
+          },
+          "10": {
             "Name": "modifiedby",
             "NameInSource": "modifiedby",
             "Alias": "modifiedby",
             "Type": "System.String"
           },
-          "10": {
+          "11": {
             "Name": "created_at",
             "NameInSource": "created_at",
             "Alias": "created_at",
             "Type": "System.DateTime"
           },
-          "11": {
+          "12": {
             "Name": "updated_at",
             "NameInSource": "updated_at",
             "Alias": "updated_at",
             "Type": "System.DateTime"
           },
-          "12": {
+          "13": {
             "Name": "roles",
             "NameInSource": "roles",
             "Alias": "roles",
@@ -281,6 +329,12 @@
             "Name": "jenisorder",
             "NameInSource": "jenisorder",
             "Alias": "jenisorder",
+            "Type": "System.String"
+          },
+          "3": {
+            "Name": "periode",
+            "NameInSource": "periode",
+            "Alias": "periode",
             "Type": "System.String"
           }
         },
@@ -341,7 +395,7 @@
         "1": {
           "Ident": "StiHeaderBand",
           "Name": "HeaderBand1",
-          "ClientRectangle": "0,0.4,21.3,4.3",
+          "ClientRectangle": "0,0.4,21.3,4.2",
           "ComponentPlacement": "h.ap.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -352,7 +406,7 @@
             "0": {
               "Ident": "StiShape",
               "Name": "Shape2",
-              "ClientRectangle": "1.02,3.45,3.42,0.76",
+              "ClientRectangle": "1.02,3.45,3.02,0.76",
               "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -417,7 +471,7 @@
               "Ident": "StiText",
               "Name": "Text2",
               "Guid": "0ec1f34220ac10ba01d24ef1c15bd18b",
-              "ClientRectangle": "4.52,3.57,1.8,0.6",
+              "ClientRectangle": "4.12,3.57,2.2,0.6",
               "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -481,7 +535,7 @@
               "Ident": "StiText",
               "Name": "Text18",
               "Guid": "7462b9011caae40416ba07a69e5e98e9",
-              "ClientRectangle": "9.07,2.44,12.12,0.39",
+              "ClientRectangle": "16.07,0.64,5.12,0.39",
               "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -495,13 +549,13 @@
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
-              "Type": "DataColumn"
+              "Type": "Expression"
             },
             "7": {
               "Ident": "StiText",
               "Name": "Text51",
               "Guid": "5b248faa297c85f35660c07160de2e34",
-              "ClientRectangle": "10.54,2.91,10.67,0.41",
+              "ClientRectangle": "10.54,1.51,10.67,0.41",
               "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -519,7 +573,7 @@
               "Ident": "StiText",
               "Name": "Text13",
               "Guid": "e7345ebc5aff7b5bc9869586d1d5cdc2",
-              "ClientRectangle": "12.4,3.56,2,0.6",
+              "ClientRectangle": "12.8,3.56,2,0.6",
               "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -571,7 +625,7 @@
               "Ident": "StiText",
               "Name": "Text24",
               "Guid": "f804cde4971da08ded783f26b427d4b7",
-              "ClientRectangle": "0.25,3,2.52,0.39",
+              "ClientRectangle": "17.05,1,4.12,0.39",
               "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -579,11 +633,12 @@
               "Text": {
                 "Value": "{data.usercetak}"
               },
+              "HorAlignment": "Right",
               "Font": ";;Italic;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:0,0,0",
-              "Type": "DataColumn"
+              "Type": "Expression"
             },
             "11": {
               "Ident": "StiText",
@@ -657,7 +712,7 @@
               "Ident": "StiShape",
               "Name": "Shape4",
               "Guid": "7884c5f664d056b12ec63b1b95c6a0ee",
-              "ClientRectangle": "14.31,3.47,0.65,0.74",
+              "ClientRectangle": "14.51,3.47,0.65,0.74",
               "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -740,7 +795,7 @@
               "Ident": "StiShape",
               "Name": "Shape3",
               "Guid": "30d7ee8d822515429d7534a1b79f2ef2",
-              "ClientRectangle": "6.38,3.45,5.85,0.76",
+              "ClientRectangle": "6.38,3.45,6.45,0.76",
               "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -754,7 +809,7 @@
               "Ident": "StiText",
               "Name": "Text4",
               "Guid": "f130aa62b1f985be2ad79fdf761179be",
-              "ClientRectangle": "6.57,3.56,5.5,0.6",
+              "ClientRectangle": "6.57,3.56,5.9,0.6",
               "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -780,7 +835,7 @@
               "Ident": "StiText",
               "Name": "Text12",
               "Guid": "584a2296e952d6a5b8c3e53725f2e7a3",
-              "ClientRectangle": "14.8,3.6,2.8,0.6",
+              "ClientRectangle": "15,3.6,2.6,0.6",
               "ComponentPlacement": "h.ap.HeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -834,7 +889,8 @@
         "2": {
           "Ident": "StiGroupHeaderBand",
           "Name": "GroupHeaderBand1",
-          "ClientRectangle": "0,5.5,21.3,0.8",
+          "ClientRectangle": "0,5.4,21.3,0.7",
+          "ComponentPlacement": "gh.Page1",
           "Interaction": {
             "Ident": "StiBandInteraction"
           },
@@ -845,12 +901,14 @@
               "Ident": "StiText",
               "Name": "Text23",
               "ClientRectangle": "0.4,0.1,2.4,0.6",
+              "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "Text": {
                 "Value": "{data.trado}"
               },
+              "VertAlignment": "Center",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
               "TextBrush": "solid:Black",
@@ -859,17 +917,33 @@
             "1": {
               "Ident": "StiShape",
               "Name": "Shape6",
-              "Guid": "f604e7262494b6a500ae76b1a89873fb",
-              "GrowToHeight": true,
-              "ClientRectangle": "0.2,0.5,21.02,0.4",
-              "ComponentPlacement": "d.DataBand1",
+              "ClientRectangle": "0.2,-0.2,21,0.2",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "Brush": "solid:",
               "ShapeType": {
                 "Ident": "StiHorizontalLineShapeType"
-              }
+              },
+              "Font": ";;Italic;",
+              "HorAlignment": "Right",
+              "VertAlignment": "Top"
+            },
+            "2": {
+              "Ident": "StiShape",
+              "Name": "Shape7",
+              "Guid": "4782eb26b60cd64048e179023b654a84",
+              "ClientRectangle": "0.2,0.6,21,0.2",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Brush": "solid:",
+              "ShapeType": {
+                "Ident": "StiHorizontalLineShapeType"
+              },
+              "Font": ";;Italic;",
+              "HorAlignment": "Right",
+              "VertAlignment": "Top"
             }
           },
           "Condition": {
@@ -879,7 +953,7 @@
         "3": {
           "Ident": "StiDataBand",
           "Name": "DataBand1",
-          "ClientRectangle": "0,7.1,21.3,0.71",
+          "ClientRectangle": "0,6.9,21.3,0.71",
           "ComponentPlacement": "d.Page1",
           "Interaction": {
             "Ident": "StiBandInteraction"
@@ -925,7 +999,7 @@
               "Guid": "0e495134760184402730fe0cf2a838ce",
               "CanGrow": true,
               "GrowToHeight": true,
-              "ClientRectangle": "1.19,0.1,3.03,0.51",
+              "ClientRectangle": "1.19,0.1,2.63,0.51",
               "ComponentPlacement": "d.DataBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -961,7 +1035,7 @@
               "Guid": "e760f6d0932d0eb40786027951ca89dd",
               "CanGrow": true,
               "GrowToHeight": true,
-              "ClientRectangle": "4.58,0.1,1.67,0.51",
+              "ClientRectangle": "4.18,0.1,2.07,0.51",
               "ComponentPlacement": "d.DataBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -993,7 +1067,7 @@
               "Guid": "cd3b239e91d6ae4352bba29155253e20",
               "CanGrow": true,
               "GrowToHeight": true,
-              "ClientRectangle": "9.68,0.1,2.45,0.51",
+              "ClientRectangle": "9.28,0.1,3.45,0.51",
               "ComponentPlacement": "d.DataBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -1001,7 +1075,6 @@
               "Text": {
                 "Value": "{data.shipper}"
               },
-              "CanBreak": true,
               "Font": ";9;;",
               "Border": ";0,255,255,255;;;;;;solid:0,0,0",
               "Brush": "solid:",
@@ -1070,7 +1143,7 @@
               "Guid": "af4d1839be66e2721c66264f30f761de",
               "CanGrow": true,
               "GrowToHeight": true,
-              "ClientRectangle": "12.27,0.09,2.23,0.51",
+              "ClientRectangle": "12.87,0.09,1.63,0.51",
               "ComponentPlacement": "d.DataBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -1101,27 +1174,12 @@
               "Type": "DataColumn"
             },
             "6": {
-              "Ident": "StiShape",
-              "Name": "Shape12",
-              "Guid": "9d3bc2e52c68e3bb3fbd3eb208ef0bce",
-              "GrowToHeight": true,
-              "ClientRectangle": "0.2,0.5,21.02,0.4",
-              "ComponentPlacement": "d.DataBand1",
-              "Interaction": {
-                "Ident": "StiInteraction"
-              },
-              "Brush": "solid:",
-              "ShapeType": {
-                "Ident": "StiHorizontalLineShapeType"
-              }
-            },
-            "7": {
               "Ident": "StiText",
               "Name": "Text16",
               "Guid": "3df926ef23f0f97d1229dff8715846d9",
               "CanGrow": true,
               "GrowToHeight": true,
-              "ClientRectangle": "6.4,0.1,3.05,0.51",
+              "ClientRectangle": "6.4,0.1,2.85,0.51",
               "ComponentPlacement": "d.DataBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -1153,7 +1211,7 @@
               },
               "Type": "DataColumn"
             },
-            "8": {
+            "7": {
               "Ident": "StiText",
               "Name": "Text19",
               "Guid": "17e2c97739517c0bd22197ed3b51c66b",
@@ -1184,90 +1242,6 @@
               "ShrinkFontToFit": true,
               "ShrinkFontToFitMinimumSize": 5,
               "Type": "DataColumn"
-            },
-            "9": {
-              "Ident": "StiShape",
-              "Name": "Shape7",
-              "Guid": "88fda6d821dfc2791b07f3ba5eb1eb34",
-              "ClientRectangle": "0.8,0.1,0.65,0.52",
-              "ComponentPlacement": "h.ap.HeaderBand1",
-              "Interaction": {
-                "Ident": "StiInteraction"
-              },
-              "Brush": "solid:",
-              "ShapeType": {
-                "Ident": "StiVerticalLineShapeType"
-              }
-            },
-            "10": {
-              "Ident": "StiShape",
-              "Name": "Shape8",
-              "Guid": "3eaaefa005cc78a23954c3c69eaf6b90",
-              "ClientRectangle": "4.2,0.1,0.65,0.52",
-              "ComponentPlacement": "h.ap.HeaderBand1",
-              "Interaction": {
-                "Ident": "StiInteraction"
-              },
-              "Brush": "solid:",
-              "ShapeType": {
-                "Ident": "StiVerticalLineShapeType"
-              }
-            },
-            "11": {
-              "Ident": "StiShape",
-              "Name": "Shape9",
-              "Guid": "7ea5762e5bb76202feccd1685b496610",
-              "ClientRectangle": "6,0.1,0.65,0.52",
-              "ComponentPlacement": "h.ap.HeaderBand1",
-              "Interaction": {
-                "Ident": "StiInteraction"
-              },
-              "Brush": "solid:",
-              "ShapeType": {
-                "Ident": "StiVerticalLineShapeType"
-              }
-            },
-            "12": {
-              "Ident": "StiShape",
-              "Name": "Shape10",
-              "Guid": "88a00b255e3f6eb4c721d96e2fcff22e",
-              "ClientRectangle": "11.8,0.1,0.65,0.52",
-              "ComponentPlacement": "h.ap.HeaderBand1",
-              "Interaction": {
-                "Ident": "StiInteraction"
-              },
-              "Brush": "solid:",
-              "ShapeType": {
-                "Ident": "StiVerticalLineShapeType"
-              }
-            },
-            "13": {
-              "Ident": "StiShape",
-              "Name": "Shape11",
-              "Guid": "f70f569bd0c25c70b2833af9fd7f056b",
-              "ClientRectangle": "14.4,0.1,0.65,0.52",
-              "ComponentPlacement": "h.ap.HeaderBand1",
-              "Interaction": {
-                "Ident": "StiInteraction"
-              },
-              "Brush": "solid:",
-              "ShapeType": {
-                "Ident": "StiVerticalLineShapeType"
-              }
-            },
-            "14": {
-              "Ident": "StiShape",
-              "Name": "Shape13",
-              "Guid": "289a90612eedf12ca30ae32c728cbe00",
-              "ClientRectangle": "17.4,0.1,0.65,0.52",
-              "ComponentPlacement": "h.ap.HeaderBand1",
-              "Interaction": {
-                "Ident": "StiInteraction"
-              },
-              "Brush": "solid:",
-              "ShapeType": {
-                "Ident": "StiVerticalLineShapeType"
-              }
             }
           },
           "DataSourceName": "data"
