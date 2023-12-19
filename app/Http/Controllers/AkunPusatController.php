@@ -27,7 +27,6 @@ class AkunPusatController extends MyController
 
         $data = [
             'comboaktif' => $this->comboList('list', 'STATUS AKTIF', 'STATUS AKTIF'),
-            'combocoa' => $this->comboList('list', 'status kode perkiraan', 'status kode perkiraan'),
             'comboparent' => $this->comboList('list', 'STATUS PARENT', 'STATUS PARENT'),
             'comboneraca' => $this->comboList('list', 'STATUS NERACA', 'STATUS NERACA'),
             'combolabarugi' => $this->comboList('list', 'STATUS LABA RUGI', 'STATUS LABA RUGI'),
@@ -132,27 +131,23 @@ class AkunPusatController extends MyController
         foreach ($akunpusats as $index => $params) {
 
             $statusaktif = $params['statusaktif'];
-            $statuscoa = $params['statuscoa'];
-            $statusAkunPayable = $params['statusaccountpayable'];
+            $statusParent = $params['statusparent'];
             $statusNeraca = $params['statusneraca'];
             $statusLabaRugi = $params['statuslabarugi'];
 
             $result = json_decode($statusaktif, true);
-            $resultStatuscoa = json_decode($statuscoa, true);
-            $resultAkunPayable = json_decode($statusAkunPayable, true);
+            $resultParent = json_decode($statusParent, true);
             $resultNeraca = json_decode($statusNeraca, true);
             $resultLabaRugi = json_decode($statusLabaRugi, true);
 
             $format = $result['MEMO'];
-            $statusStatuscoa = $resultStatuscoa['MEMO'];
-            $statusAkunPayable = $resultAkunPayable['MEMO'];
+            $statusParent = $resultParent['MEMO'];
             $statusNeraca = $resultNeraca['MEMO'];
             $statusLabaRugi = $resultLabaRugi['MEMO'];
 
 
             $akunpusats[$i]['statusaktif'] = $format;
-            $akunpusats[$i]['statuscoa'] = $statusStatuscoa;
-            $akunpusats[$i]['statusaccountpayable'] = $statusAkunPayable;
+            $akunpusats[$i]['statusparent'] = $statusParent;
             $akunpusats[$i]['statusneraca'] = $statusNeraca;
             $akunpusats[$i]['statuslabarugi'] = $statusLabaRugi;
 

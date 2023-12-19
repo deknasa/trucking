@@ -111,51 +111,6 @@
             name: 'parent',
           },
           {
-            label: 'status kode perkiraan',
-            width: 210,
-            name: 'statuscoa',
-            align: 'left',
-            stype: 'select',
-            searchoptions: {
-
-              value: `<?php
-                      $i = 1;
-
-                      foreach ($data['combocoa'] as $status) :
-                        echo "$status[param]:$status[parameter]";
-                        if ($i !== count($data['combocoa'])) {
-                          echo ";";
-                        }
-                        $i++;
-                      endforeach
-
-                      ?>
-              `,
-              dataInit: function(element) {
-                $(element).select2({
-                  width: 'resolve',
-                  theme: "bootstrap4"
-                });
-              }
-            },
-            formatter: (value, options, rowData) => {
-              let statusCoa = JSON.parse(value)
-
-              let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusCoa.WARNA}; color: #fff;">
-                  <span>${statusCoa.SINGKATAN}</span>
-                </div>
-              `)
-
-              return formattedValue[0].outerHTML
-            },
-            cellattr: (rowId, value, rowObject) => {
-              let statusCoa = JSON.parse(rowObject.statuscoa)
-
-              return ` title="${statusCoa.MEMO}"`
-            }
-          },
-          {
             label: 'STATUS PARENT',
             width: 210,
             name: 'statusparent',
@@ -579,110 +534,103 @@
       let actionUrl = ``
 
 
+
+      /* Clear validation messages */
+      $('.is-invalid').removeClass('is-invalid')
+      $('.invalid-feedback').remove()
+      let submitButton = $(this).find('button:submit')
+
+      submitButton.attr('disabled', 'disabled')
+      $('#processingLoader').removeClass('d-none')
+
+      /* Set params value */
+      for (var key in postData) {
+        if (params != "") {
+          params += "&";
+        }
+        params += key + "=" + encodeURIComponent(postData[key]);
+      }
+
+      // window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
+      let formRange = $('#formRange')
+      let offset = parseInt(formRange.find('[name=dari]').val()) - 1
+      let limit = parseInt(formRange.find('[name=sampai]').val().replace('.', '')) - offset
+      params += `&offset=${offset}&limit=${limit}`
+
       getCekExport(params).then((response) => {
-        if ($('#rangeModal').data('action') == 'export') {
-          actionUrl = `{{ route('akunpusat.export') }}`
-        } else if ($('#rangeModal').data('action') == 'report') {
-          actionUrl = `{{ route('akunpusat.report') }}`
-        }
-
-        /* Clear validation messages */
-        $('.is-invalid').removeClass('is-invalid')
-        $('.invalid-feedback').remove()
-        let submitButton = $(this).find('button:submit')
-
-        submitButton.attr('disabled', 'disabled')
-        $('#processingLoader').removeClass('d-none')
-
-        /* Set params value */
-        for (var key in postData) {
-          if (params != "") {
-            params += "&";
-          }
-          params += key + "=" + encodeURIComponent(postData[key]);
-        }
-
-        // window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
-        let formRange = $('#formRange')
-        let offset = parseInt(formRange.find('[name=dari]').val()) - 1
-        let limit = parseInt(formRange.find('[name=sampai]').val().replace('.', '')) - offset
-        params += `&offset=${offset}&limit=${limit}`
-
-        getCekExport(params).then((response) => {
-            if ($('#rangeModal').data('action') == 'export') {
-              $.ajax({
-                url: `{{ config('app.api_url ') }}mainakunpusat/export?` + params,
-                type: 'GET',
-                beforeSend: function(xhr) {
-                  xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token ') }}`);
-                },
-                xhrFields: {
-                  responseType: 'arraybuffer'
-                },
-                success: function(response, status, xhr) {
-                  if (xhr.status === 200) {
-                    if (response !== undefined) {
-                      var blob = new Blob([response], {
-                        type: 'mainakunpusat/vnd.ms-excel'
-                      });
-                      var link = document.createElement('a');
-                      link.href = window.URL.createObjectURL(blob);
-                      link.download = 'mainakunpusat' + new Date().getTime() + '.xlsx';
-                      link.click();
-                    }
-                    $('#rangeModal').modal('hide')
+          if ($('#rangeModal').data('action') == 'export') {
+            $.ajax({
+              url: `{{ config('app.api_url') }}mainakunpusat/export?` + params,
+              type: 'GET',
+              headers: {
+                Authorization: `Bearer ${accessToken}`
+              },
+              xhrFields: {
+                responseType: 'arraybuffer'
+              },
+              success: function(response, status, xhr) {
+                if (xhr.status === 200) {
+                  if (response !== undefined) {
+                    var blob = new Blob([response], {
+                      type: 'mainakunpusat/vnd.ms-excel'
+                    });
+                    var link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = 'laporanmainakunpusat' + new Date().getTime() + '.xlsx';
+                    link.click();
                   }
-                },
-
-                error: function(xhr, status, error) {
-                  $('#processingLoader').addClass('d-none')
-                  submitButton.removeAttr('disabled')
+                  $('#rangeModal').modal('hide')
                 }
-              }).always(() => {
+              },
+
+              error: function(xhr, status, error) {
                 $('#processingLoader').addClass('d-none')
                 submitButton.removeAttr('disabled')
-              })
-            } else if ($('#rangeModal').data('action') == 'report') {
-              window.open(`{{ route('mainakunpusat.report') }}?${params}`)
-              submitButton.removeAttr('disabled')
+              }
+            }).always(() => {
               $('#processingLoader').addClass('d-none')
-              $('#rangeModal').modal('hide')
-            }
-          })
-          .catch((error) => {
-            if (error.status === 422) {
-              $('.is-invalid').removeClass('is-invalid')
-              $('.invalid-feedback').remove()
-              errors = error.responseJSON.errors
+              submitButton.removeAttr('disabled')
+            })
+          } else if ($('#rangeModal').data('action') == 'report') {
+            window.open(`{{ route('mainakunpusat.report') }}?${params}`)
+            submitButton.removeAttr('disabled')
+            $('#processingLoader').addClass('d-none')
+            $('#rangeModal').modal('hide')
+          }
+        })
+        .catch((error) => {
+          if (error.status === 422) {
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+            errors = error.responseJSON.errors
 
-              $.each(errors, (index, error) => {
-                let indexes = index.split(".");
-                indexes[0] = 'sampai'
-                let element;
-                element = $('#rangeModal').find(`[name="${indexes[0]}"]`)[0];
+            $.each(errors, (index, error) => {
+              let indexes = index.split(".");
+              indexes[0] = 'sampai'
+              let element;
+              element = $('#rangeModal').find(`[name="${indexes[0]}"]`)[0];
 
-                $(element).addClass("is-invalid");
-                $(`
+              $(element).addClass("is-invalid");
+              $(`
               <div class="invalid-feedback">
               ${error[0].toLowerCase()}
               </div>
 			    `).appendTo($(element).parent());
 
-              });
+            });
 
-              $(".is-invalid").first().focus();
-              $('#processingLoader').addClass('d-none')
-            } else {
-              showDialog(error.statusText)
-            }
-          })
+            $(".is-invalid").first().focus();
+            $('#processingLoader').addClass('d-none')
+          } else {
+            showDialog(error.statusText)
+          }
+        })
 
-          .finally(() => {
-            $('.ui-button').click()
+        .finally(() => {
+          $('.ui-button').click()
 
-            submitButton.removeAttr('disabled')
-          })
-      })
+          submitButton.removeAttr('disabled')
+        })
 
 
       function getCekExport(params) {
