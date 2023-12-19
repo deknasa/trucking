@@ -513,7 +513,7 @@
           {
             label: 'TGL APP EDIT',
             name: 'tglapprovaleditsuratpengantar',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
             align: 'left',
             formatter: "date",
             formatoptions: {

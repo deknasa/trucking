@@ -292,9 +292,9 @@
             align: 'left'
           },
           {
-            label: 'TGL CETAK',
+            label: 'TGL BUKA CETAK',
             name: 'tglbukacetak',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_2,
             align: 'left',
             formatter: "date",
             formatoptions: {

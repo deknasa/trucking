@@ -254,11 +254,13 @@
                     {
                         label: 'NO BUKTI',
                         name: 'nobukti',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         align: 'left'
                     },
                     {
                         label: 'TGL BUKTI',
                         name: 'tglbukti',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
                         align: 'left',
                         formatter: "date",
                         formatoptions: {
@@ -268,7 +270,7 @@
                     },
                     {
                         label: 'NO BUKTI pengeluaran',
-                        width: 210,
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
                         name: 'pengeluaran_nobukti',
                         align: 'left',
                         formatter: (value, options, rowData) => {
@@ -287,32 +289,38 @@
                     {
                         label: 'ALAT BAYAR',
                         name: 'alatbayar_id',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         align: 'left'
                     },
                     {
                         label: 'BANK',
                         name: 'bank_id',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         align: 'left'
                     },
                     {
                         label: 'DIBAYAR KE',
                         name: 'dibayarke',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         align: 'left'
                     },
                     {
                         label: 'NOMINAL',
                         name: 'nominal',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         align: 'right',
                         formatter: currencyFormat
                     },
                     {
                         label: 'MODIFIED BY',
                         name: 'modifiedby',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         align: 'left'
                     },
                     {
                         label: 'CREATED AT',
                         name: 'created_at',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                         align: 'right',
                         formatter: "date",
                         formatoptions: {
@@ -323,6 +331,7 @@
                     {
                         label: 'UPDATED AT',
                         name: 'updated_at',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                         align: 'right',
                         formatter: "date",
                         formatoptions: {

@@ -18,18 +18,22 @@
         colModel: [{
             label: 'NO BUKTI',
             name: 'nobukti',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'KETERANGAN',
             name: 'keterangan',
+            width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1,
           },
           {
             label: 'KODE PERKIRAAN',
             name: 'coa',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
           },
           {
             label: 'NOMINAL',
             name: 'nominal',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'right',
             formatter: currencyFormat,
           }

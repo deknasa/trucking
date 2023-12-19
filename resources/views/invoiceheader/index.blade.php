@@ -329,7 +329,7 @@
           {
             label: 'TGL APPROVAL',
             name: 'tglapproval',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_2,
             align: 'left',
             formatter: "date",
             formatoptions: {
@@ -344,9 +344,9 @@
             align: 'left'
           },
           {
-            label: 'TGL CETAK',
+            label: 'TGL BUKA CETAK',
             name: 'tglbukacetak',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_2,
             align: 'left',
             formatter: "date",
             formatoptions: {

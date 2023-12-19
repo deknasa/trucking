@@ -28,11 +28,12 @@
         colModel: [{
             label: 'NO BUKTI',
             name: 'nobukti',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'NO BUKTI PENGELUARAN TRUCKING',
             name: 'pengeluarantrucking_nobukti',
-            width: 250,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
             formatter: (value, options, rowData) => {
               if ((value == null) ||( value == '')) {
                 return '';
@@ -50,11 +51,13 @@
             label: 'NOMINAL',
             name: 'nominal',
             align: 'right',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             formatter: currencyFormat,
           },
           {
             label: 'Status POSTING',
             name: 'statusposting',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           }
 
         ],

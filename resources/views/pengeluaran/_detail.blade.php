@@ -22,32 +22,36 @@
           },
           {
             label: 'KODE PERKIRAAN DEBET',
-            width: 220,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
             name: 'coadebet',
           },
           {
             label: 'KODE PERKIRAAN kredit',
-            width: 220,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
             name: 'coakredit',
           },
 
           {
             label: 'KETERANGAN',
             name: 'keterangan',
+            width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1,
           },
           {
             label: 'NOMINAL',
             name: 'nominal',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'right',
             formatter: currencyFormat,
           },
           {
             label: 'NO WARKAT',
             name: 'nowarkat',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'TGL JATUH TEMPO',
             name: 'tgljatuhtempo',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             formatter: "date",
             formatoptions: {
               srcformat: "ISO8601Long",
@@ -57,10 +61,12 @@
           {
             label: 'NO INVOICE',
             name: 'noinvoice',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'BANK',
             name: 'bank',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
         ],
         autowidth: true,

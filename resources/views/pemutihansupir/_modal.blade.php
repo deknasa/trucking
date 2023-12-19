@@ -645,11 +645,13 @@
           {
             label: 'NO BUKTI',
             name: 'nobukti_posting',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'left',
           },
           {
             label: 'TGL BUKTI',
             name: 'tglbukti_posting',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
             align: 'left',
             formatter: "date",
             formatoptions: {
@@ -659,19 +661,21 @@
           },
           {
             label: 'NO BUKTI pengeluaran',
-            width: 210,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
             name: 'pengeluaran_posting',
             align: 'left'
           },
           {
             label: 'NOMINAL PINJAMAN',
             name: 'nominal_posting',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             formatter: currencyFormat,
             align: "right",
           },
           {
             label: 'SISA PINJAMAN',
             name: 'sisa_posting',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             formatter: currencyFormat,
             align: "right",
           },
@@ -679,7 +683,7 @@
             label: 'KETERANGAN',
             name: 'keterangan_posting',
             align: 'left',
-            width: 250
+            width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1,
           },
         ],
         autowidth: true,
@@ -812,11 +816,13 @@
           {
             label: 'NO BUKTI',
             name: 'nobukti_nonposting',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'left',
           },
           {
             label: 'TGL BUKTI',
             name: 'tglbukti_nonposting',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
             align: 'left',
             formatter: "date",
             formatoptions: {
@@ -826,19 +832,21 @@
           },
           {
             label: 'NO BUKTI pengeluaran',
-            width: 210,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
             name: 'pengeluaran_nonposting',
             align: 'left'
           },
           {
             label: 'NOMINAL PINJAMAN',
             name: 'nominal_nonposting',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             formatter: currencyFormat,
             align: "right",
           },
           {
             label: 'SISA PINJAMAN',
             name: 'sisa_nonposting',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             formatter: currencyFormat,
             align: "right",
           },
@@ -846,7 +854,7 @@
             label: 'KETERANGAN',
             name: 'keterangan_nonposting',
             align: 'left',
-            width: 250
+            width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1,
           },
         ],
         autowidth: true,

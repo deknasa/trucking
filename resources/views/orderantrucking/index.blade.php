@@ -278,9 +278,9 @@
             }
           },
           {
-            label: 'TGL APPROVAL EDIT',
+            label: 'TGL APP EDIT',
             name: 'tglapprovaledit',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
             align: 'left',
             formatter: "date",
             formatoptions: {
@@ -289,7 +289,7 @@
             }
           },
           {
-            label: 'USER APPROVAL EDIT',
+            label: 'USER APP EDIT',
             name: 'userapprovaledit',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,  
           },
