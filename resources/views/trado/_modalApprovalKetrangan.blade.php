@@ -1,8 +1,8 @@
-<div class="modal modal-fullscreen approval-modal" id="crudModalApprovalGambar" tabindex="-1" aria-labelledby="crudModalApprovalGambarLabel" aria-hidden="true">
+<div class="modal modal-fullscreen approval-modal" id="crudModalApprovalKetrangan" tabindex="-1" aria-labelledby="crudModalApprovalKetranganLabel" aria-hidden="true">
     <div class="modal-dialog">
-        <form action="#" id="crudFormApprovalGambar">
+        <form action="#" id="crudFormApprovalKetrangan">
             <div class="modal-content">
-               
+                
                 <form action="" method="post">
                     <div class="modal-body">
 
@@ -51,7 +51,7 @@
                         </div>
                     </div>
                     <div class="modal-footer justify-content-start">
-                        <button id="btnSubmitApprovalGambar" class="btn btn-primary">
+                        <button id="btnSubmitApprovalKetrangan" class="btn btn-primary">
                             <i class="fa fa-save"></i>
                             Save
                         </button>
@@ -68,37 +68,37 @@
 
 @push('scripts')
 <script>
-    let modalBodyApprovalGambar = $('#crudModalApprovalGambar').find('.modal-body').html()
+    let modalBodyApprovalKetrangan = $('#crudModalApprovalKetrangan').find('.modal-body').html()
 
     $(document).ready(function() {
-        $('#btnSubmitApprovalGambar').click(function(event) {
+        $('#btnSubmitApprovalKetrangan').click(function(event) {
             event.preventDefault()
 
             let method
             let url
-            let form = $('#crudFormApprovalGambar')
+            let form = $('#crudFormApprovalKetrangan')
             let approvalTradoId = form.find('[name=id]').val()
             let action = form.data('action')
-            let data = $('#crudFormApprovalGambar').serializeArray()
+            let data = $('#crudFormApprovalKetrangan').serializeArray()
 
            
 
             switch (action) {
                 case 'add':
                     method = 'POST'
-                    url = `${apiUrl}approvaltradogambar`
+                    url = `${apiUrl}approvaltradoketerangan`
                     break;
                 case 'edit':
                     method = 'PATCH'
-                    url = `${apiUrl}approvaltradogambar/${approvalTradoId}`
+                    url = `${apiUrl}approvaltradoketerangan/${approvalTradoId}`
                     break;
                 case 'delete':
                     method = 'DELETE'
-                    url = `${apiUrl}approvaltradogambar/${approvalTradoId}`
+                    url = `${apiUrl}approvaltradoketerangan/${approvalTradoId}`
                     break;
                 default:
                     method = 'POST'
-                    url = `${apiUrl}approvaltradogambar`
+                    url = `${apiUrl}approvaltradoketerangan`
                     break;
             }
 
@@ -114,14 +114,13 @@
                 },
                 data: data,
                 success: response => {
-                    $('#crudFormApprovalGambar').trigger('reset')
-                    $('#crudModalApprovalGambar').modal('hide')
+                    $('#crudFormApprovalKetrangan').trigger('reset')
+                    $('#crudModalApprovalKetrangan').modal('hide')
 
                    
 
                     $('#jqGrid').trigger('reloadGrid');
 
-                    
                 },
                 error: error => {
                     if (error.status === 422) {
@@ -140,8 +139,8 @@
         })
     })
 
-    $('#crudModalApprovalGambar').on('shown.bs.modal', () => {
-        let form = $('#crudFormApprovalGambar')
+    $('#crudModalApprovalKetrangan').on('shown.bs.modal', () => {
+        let form = $('#crudFormApprovalKetrangan')
 
         setFormBindKeys(form)
 
@@ -152,50 +151,48 @@
         initSelect2(form.find('.select2bs4'), true)
     })
 
-    $('#crudModalApprovalGambar').on('hidden.bs.modal', () => {
+    $('#crudModalApprovalKetrangan').on('hidden.bs.modal', () => {
         activeGrid = '#jqGrid'
 
-        $('#crudModalApprovalGambar').find('.modal-body').html(modalBodyApprovalGambar)
+        $('#crudModalApprovalKetrangan').find('.modal-body').html(modalBodyApprovalKetrangan)
     })
 
 
-    function approvalTradoGambar(trado_id) {
-        let form = $('#crudFormApprovalGambar')
-        
+    function approvalTradoKeterangan(Id) {
+        let form = $('#crudFormApprovalKetrangan')
+
         $('.modal-loader').removeClass('d-none')
         
         form.trigger('reset')
-        form.find('#btnSubmit').html(`<i class="fa fa-save"></i> Save`)
+        form.find('#btnSubmitApprovalKetrangan').html(`<i class="fa fa-save"></i> Save`)
         
         form.find(`.sometimes`).show()
-        $('#crudModalApprovalGambarTitle').text('Approval Trado Gambar')
-        $('.is-invalid').removeClass('is-invalid')
+        $('#crudModalApprovalKetranganTitle').text('Approval Trado Keterangan')
+       $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
 
         Promise
         .all([
             setStatusApprovalOptions(form),
-            showApprovalTradoGambar(form, trado_id)
-        ])
-        .then((response) => {
-            console.log(response[1].id);
-            let approvalGambar = response[1];
-            $('#crudModalApprovalGambar').modal('show')
+            showApprovalTradoKeterangan(form, Id)
+        ]).then((response) => {
+            let approvalKeterangan = response[1];
+            $('#crudModalApprovalKetrangan').modal('show')
             form.data('action', 'add')
-            if (approvalGambar.id){
+            if (approvalKeterangan.id){
                 form.data('action', 'edit')
             }
         })
         .finally(() => {
             $('.modal-loader').addClass('d-none')
-        })
+        })    
+
     }
 
-
-    function showApprovalTradoGambar(form, Id) {
+    function showApprovalTradoKeterangan(form, Id) {
         return new Promise((resolve, reject) => {
             $.ajax({
-                url: `${apiUrl}approvaltradogambar`,
+                url: `${apiUrl}approvaltradoketerangan`,
                 method: 'GET',
                 dataType: 'JSON',
                 data:{trado_id:Id},
@@ -203,7 +200,6 @@
                     Authorization: `Bearer ${accessToken}`
                 },
                 success: response => {
-                    // console.log(response);
                     $.each(response.data, (index, value) => {
                         let element = form.find(`[name="${index}"]`)
 
@@ -231,36 +227,7 @@
         })
 
     }
-    const setStatusApprovalOptions = function(relatedForm) {
-        return new Promise((resolve, reject) => {
-            relatedForm.find('[name=statusapproval]').empty()
-            relatedForm.find('[name=statusapproval]').append(
-                new Option('-- PILIH STATUS APPROVAL --', '', false, true)
-            ).trigger('change')
-
-            $.ajax({
-                url: `${apiUrl}parameter/combo`,
-                method: 'GET',
-                dataType: 'JSON',
-                headers: {
-                    Authorization: `Bearer ${accessToken}`
-                },
-                data: {
-                    grp: 'STATUS APPROVAL',
-                    subgrp: 'STATUS APPROVAL'
-                },
-                success: response => {
-                    response.data.forEach(statusApproval => {
-                        let option = new Option(statusApproval.text, statusApproval.id)
-
-                        relatedForm.find('[name=statusapproval]').append(option).trigger('change')
-                    });
-
-                    resolve()
-                }
-            })
-        })
-    }
+    
 
 </script>
 @endpush()

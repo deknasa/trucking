@@ -12,6 +12,7 @@
 
 @include('trado._modal')
 @include('trado._modalApprovalGambar')
+@include('trado._modalApprovalKetrangan')
 
 @push('scripts')
 <script>
@@ -975,6 +976,17 @@
                                 // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                             }
                         },
+                        {
+                            id: 'approvalTradoKeterangan',
+                            text: "un/Approval Trado tanpa Keterangan",
+                            onClick: () => {
+                                if (`{{ $myAuth->hasPermission('approvaltradoketerangan', 'update') }}`) {
+                                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                                    approvalTradoKeterangan(selectedId);
+                                }
+                                // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                            }
+                        },
                     ],
                 }]
             })
@@ -1204,6 +1216,37 @@
                 });
             });
         }
+
+        const setStatusApprovalOptions = function(relatedForm) {
+        return new Promise((resolve, reject) => {
+            relatedForm.find('[name=statusapproval]').empty()
+            relatedForm.find('[name=statusapproval]').append(
+                new Option('-- PILIH STATUS APPROVAL --', '', false, true)
+            ).trigger('change')
+
+            $.ajax({
+                url: `${apiUrl}parameter/combo`,
+                method: 'GET',
+                dataType: 'JSON',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                data: {
+                    grp: 'STATUS APPROVAL',
+                    subgrp: 'STATUS APPROVAL'
+                },
+                success: response => {
+                    response.data.forEach(statusApproval => {
+                        let option = new Option(statusApproval.text, statusApproval.id)
+
+                        relatedForm.find('[name=statusapproval]').append(option).trigger('change')
+                    });
+
+                    resolve()
+                }
+            })
+        })
+    }
     })
 </script>
 @endpush()
