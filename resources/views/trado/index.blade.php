@@ -11,6 +11,7 @@
 </div>
 
 @include('trado._modal')
+@include('trado._modalApprovalGambar')
 
 @push('scripts')
 <script>
@@ -959,6 +960,17 @@
                                 if (`{{ $myAuth->hasPermission('trado', 'approvalsaringanhawa') }}`) {
                                     selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                                     approvalSaringanHawa(selectedId);
+                                }
+                                // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                            }
+                        },
+                        {
+                            id: 'approvalTradoGambar',
+                            text: "un/Approval Trado tanpa Gambar",
+                            onClick: () => {
+                                if (`{{ $myAuth->hasPermission('approvaltradogambar', 'update') }}`) {
+                                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                                    approvalTradoGambar(selectedId);
                                 }
                                 // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                             }
