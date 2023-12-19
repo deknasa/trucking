@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "785a2529314df4bae52d6f4dd425806e",
+  "ReportGuid": "15a2f4319c470e92011da8c1cdf7a21f",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanNeracaBesar.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1700710654000+0700)/",
+  "ReportChanged": "/Date(1702974534000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -120,18 +120,30 @@
             "Type": "System.String"
           },
           "15": {
-            "Name": "judul",
-            "NameInSource": "judul",
-            "Alias": "judul",
+            "Name": "coabanding",
+            "NameInSource": "coabanding",
+            "Alias": "coabanding",
             "Type": "System.String"
           },
           "16": {
+            "Name": "nominalbanding",
+            "NameInSource": "nominalbanding",
+            "Alias": "nominalbanding",
+            "Type": "System.String"
+          },
+          "17": {
             "Name": "selisih",
             "NameInSource": "selisih",
             "Alias": "selisih",
             "Type": "System.String"
           },
-          "17": {
+          "18": {
+            "Name": "judul",
+            "NameInSource": "judul",
+            "Alias": "judul",
+            "Type": "System.String"
+          },
+          "19": {
             "Name": "Cabang",
             "NameInSource": "Cabang",
             "Alias": "Cabang",
@@ -547,7 +559,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "User : {user_roles.rolename}"
+                "Value": "User : {user.name}"
               },
               "HorAlignment": "Right",
               "Font": ";;Italic;",

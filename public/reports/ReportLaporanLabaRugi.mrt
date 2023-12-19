@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "95ffa538c6db7285de84a33638ea4239",
+  "ReportGuid": "b6a2dc89cd53f685502306a5a424f3b4",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanLabaRugi.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1700709867000+0700)/",
+  "ReportChanged": "/Date(1702974643000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -36,9 +36,9 @@
             "Type": "System.String"
           },
           "1": {
-            "Name": "ordermain",
-            "NameInSource": "ordermain",
-            "Alias": "ordermain",
+            "Name": "OrderMain",
+            "NameInSource": "OrderMain",
+            "Alias": "OrderMain",
             "Type": "System.String"
           },
           "2": {
@@ -547,7 +547,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "User : {user_roles.rolename}"
+                "Value": "User : {user.name}"
               },
               "HorAlignment": "Right",
               "Font": ";;Italic;",
