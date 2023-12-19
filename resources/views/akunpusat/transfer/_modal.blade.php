@@ -294,51 +294,6 @@
                         name: 'parent',
                     },
                     {
-                        label: 'status kode perkiraan',
-                        width: 210,
-                        name: 'statuscoa',
-                        align: 'left',
-                        stype: 'select',
-                        searchoptions: {
-
-                            value: `<?php
-                                    $i = 1;
-
-                                    foreach ($data['combocoa'] as $status) :
-                                        echo "$status[param]:$status[parameter]";
-                                        if ($i !== count($data['combocoa'])) {
-                                            echo ';';
-                                        }
-                                        $i++;
-                                    endforeach;
-
-                                    ?>
-              `,
-                            dataInit: function(element) {
-                                $(element).select2({
-                                    width: 'resolve',
-                                    theme: "bootstrap4"
-                                });
-                            }
-                        },
-                        formatter: (value, options, rowData) => {
-                            let statusCoa = JSON.parse(value)
-
-                            let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusCoa.WARNA}; color: #fff;">
-                  <span>${statusCoa.SINGKATAN}</span>
-                </div>
-              `)
-
-                            return formattedValue[0].outerHTML
-                        },
-                        cellattr: (rowId, value, rowObject) => {
-                            let statusCoa = JSON.parse(rowObject.statuscoa)
-
-                            return ` title="${statusCoa.MEMO}"`
-                        }
-                    },
-                    {
                         label: 'STATUS PARENT',
                         width: 210,
                         name: 'statusparent',

@@ -76,14 +76,6 @@
               </div>
             </div>
             <div class="row form-group">
-              <label class="col-12 col-md-2 col-form-label">status kode perkiraan<span class="text-danger">*</span></label>
-              <div class="col-12 col-md-10">
-                <select name="statuscoa" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH status kode perkiraan --</option>
-                </select>
-              </div>
-            </div>
-            <div class="row form-group">
               <label class="col-12 col-md-2 col-form-label">STATUS NERACA<span class="text-danger">*</span></label>
               <div class="col-12 col-md-10">
                 <select name="statusneraca" class="form-select select2bs4" style="width: 100%;">
@@ -302,7 +294,6 @@
 
     Promise
       .all([
-        setStatusCoaOptions(form),
         setStatusParent(form),
         setStatusLabaRugiOptions(form),
         setStatusNeracaOptions(form),
@@ -370,7 +361,6 @@
 
     Promise
       .all([
-        setStatusCoaOptions(form),
         setStatusParent(form),
         setStatusLabaRugiOptions(form),
         setStatusNeracaOptions(form),
@@ -408,7 +398,6 @@
 
     Promise
       .all([
-        setStatusCoaOptions(form),
         setStatusParent(form),
         setStatusLabaRugiOptions(form),
         setStatusNeracaOptions(form),
@@ -446,7 +435,6 @@
 
     Promise
       .all([
-        setStatusCoaOptions(form),
         setStatusParent(form),
         setStatusLabaRugiOptions(form),
         setStatusNeracaOptions(form),
