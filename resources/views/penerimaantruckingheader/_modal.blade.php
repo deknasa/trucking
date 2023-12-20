@@ -1466,6 +1466,7 @@
           {
             label: "SUPIR",
             name: "pinj_supir",
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
             sortable: true,
           },
           {
@@ -1476,13 +1477,14 @@
           },
           {
             label: "no bukti pengeluaran TRUCKING",
-            width: 250,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
             name: "nobukti",
             sortable: true,
           },
           {
             label: "Jlh Pinjaman",
             name: "jlhpinjaman",
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             sortable: true,
             align: "right",
             formatter: currencyFormat,
@@ -1490,6 +1492,7 @@
           {
             label: "Total Bayar",
             name: "totalbayar",
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             sortable: true,
             align: "right",
             formatter: currencyFormat,
@@ -1497,6 +1500,7 @@
           {
             label: "SISA",
             name: "sisa",
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             sortable: true,
             align: "right",
             formatter: currencyFormat,
@@ -1504,6 +1508,7 @@
           {
             label: "NOMINAL",
             index: 'nominal',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             name: "nominal",
             align: "right",
             editable: true,
@@ -1577,7 +1582,7 @@
             name: "keterangan",
             sortable: false,
             editable: false,
-            width: 500
+            width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1,
           },
           {
             label: "empty",
@@ -1811,13 +1816,14 @@
           },
           {
             label: "no bukti pengeluaran TRUCKING",
-            width: 250,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
             name: "nobukti",
             sortable: true,
           },
           {
             label: "SISA",
             name: "sisa",
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             sortable: true,
             align: "right",
             formatter: currencyFormat,
@@ -1825,6 +1831,7 @@
           {
             label: "NOMINAL",
             index: 'nominal',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             name: "nominal",
             align: "right",
             editable: true,
@@ -1898,7 +1905,7 @@
             name: "keterangan",
             sortable: false,
             editable: false,
-            width: 500
+            width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1,
           },
           {
             label: "empty",
@@ -2089,13 +2096,14 @@
           },
           {
             label: "no bukti pengeluaran TRUCKING",
-            width: 250,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
             name: "nobukti_titipan",
             sortable: true,
           },
           {
             label: 'TGL BUKTI',
             name: 'tglbukti_titipan',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
             align: 'left',
             formatter: "date",
             formatoptions: {
@@ -2106,6 +2114,7 @@
           {
             label: "nominal",
             name: "nominal_titipan",
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             sortable: true,
             align: "right",
             formatter: currencyFormat,
@@ -2116,11 +2125,12 @@
             name: "keterangan_titipan",
             sortable: false,
             editable: false,
-            width: 200
+            width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1,
           },
           {
-            label: "jenisorder",
+            label: "jenis order",
             name: "jenisorder_id",
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             sortable: false,
             editable: false,
             // width: 500

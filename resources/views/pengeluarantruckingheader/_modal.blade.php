@@ -82,6 +82,28 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
+                  customer <span class="text-danger">*</span></label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="hidden" name="agen_id">
+                <input type="text" name="agen" class="form-control agen-lookup">
+              </div>
+            </div>
+
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
+                  container <span class="text-danger">*</span></label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="hidden" name="containerheader_id">
+                <input type="text" name="containerheader" class="form-control containerheader-lookup">
+              </div>
+            </div>
+
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
                   supir <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
@@ -191,6 +213,15 @@
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="text" name="pengeluarantrucking_nobukti" id="pengeluarantrucking_nobukti" class="form-control" readonly>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-sm-6 m-1">
+                <button id="btnReloadOtokGrid" class="btn btn-primary mr-2 ">
+                  <i class="fas fa-sync-alt"></i>
+                  Reload
+                </button>
               </div>
             </div>
 
@@ -378,6 +409,34 @@
   let urlTNL = ''
   let tokenTNL = ''
   let classHidden = [];
+
+  let sortnameOtok = 'noinvoice_detail';
+  let sortorderOtok = 'asc';
+  let pageOtok = 0;
+  let totalRecordOtok
+  let limitOtok
+  let postDataOtok
+  let triggerClickOtok
+  let indexRowOtok
+  let selectedRowsOtok = [];
+  let selectedRowsOtokNobukti = [];
+  let selectedRowsOtokJobtrucking = [];
+  let selectedRowsOtokKeterangan = [];
+  let selectedRowsOtokNominal = [];
+  
+  let sortnameOtol = 'noinvoice_detail';
+  let sortorderOtol = 'asc';
+  let pageOtol = 0;
+  let totalRecordOtol
+  let limitOtol
+  let postDataOtol
+  let triggerClickOtol
+  let indexRowOtol
+  let selectedRowsOtol = [];
+  let selectedRowsOtolNobukti = [];
+  let selectedRowsOtolJobtrucking = [];
+  let selectedRowsOtolKeterangan = [];
+  let selectedRowsOtolNominal = [];
 
   $(document).ready(function() {
 
@@ -956,35 +1015,10 @@
         let bst_nojobtrucking_detail = []
         let bst_keterangan = []
 
-        // $.each(selectedRowsSumbangan, function(index, item) {
-        //   data.push({
-        //     name: 'id_detail[]',
-        //     value: item
-        //   })
-        // });
         $.each(selectedRowsSumbanganNominal, function(index, item) {
           bst_nominal.push(parseFloat(item.replaceAll(',', '')))
           bst_keterangan.push('SUMBANGAN SOSIAL')
         });
-        // $.each(selectedRowsSumbanganContainer, function(index, item) {
-        //   data.push({
-        //     name: 'container_detail[]',
-        //     value: item
-        //   })
-        // });
-        // $.each(selectedRowsSumbanganNobukti, function(index, item) {
-        //   data.push({
-        //     name: 'noinvoice_detail[]',
-        //     value: item
-        //   })
-        // });
-        // $.each(selectedRowsSumbanganJobtrucking, function(index, item) {
-        //   data.push({
-        //     name: 'nojobtrucking_detail[]',
-        //     value: item
-        //   })
-        // });
-
 
         let requestData = {
           'id_detail': selectedRowsSumbangan,
@@ -994,6 +1028,111 @@
           'nojobtrucking_detail': selectedRowsSumbanganJobtrucking,
           'keterangan': bst_keterangan,
         };
+        data.push({
+          name: 'detail',
+          value: JSON.stringify(requestData)
+        })
+      } else if (KodePengeluaranId == "OTOK" || KodePengeluaranId == "OTOL") {
+        data = []
+
+        data.push({
+          name: 'id',
+          value: form.find(`[name="id"]`).val()
+        })
+        data.push({
+          name: 'nobukti',
+          value: form.find(`[name="nobukti"]`).val()
+        })
+        data.push({
+          name: 'tglbukti',
+          value: form.find(`[name="tglbukti"]`).val()
+        })
+        data.push({
+          name: 'pengeluarantrucking_id',
+          value: form.find(`[name="pengeluarantrucking_id"]`).val()
+        })
+        data.push({
+          name: 'pengeluarantrucking',
+          value: form.find(`[name="pengeluarantrucking"]`).val()
+        })
+        data.push({
+          name: 'tgldari',
+          value: form.find(`[name="tgldari"]`).val()
+        })
+        data.push({
+          name: 'tglsampai',
+          value: form.find(`[name="tglsampai"]`).val()
+        })
+        data.push({
+          name: 'statusposting',
+          value: form.find(`[name="statusposting"]`).val()
+        })
+        data.push({
+          name: 'bank_id',
+          value: form.find(`[name="bank_id"]`).val()
+        })
+        data.push({
+          name: 'bank',
+          value: form.find(`[name="bank"]`).val()
+        })
+        data.push({
+          name: 'agen_id',
+          value: form.find(`[name="agen_id"]`).val()
+        })
+        data.push({
+          name: 'agen',
+          value: form.find(`[name="agen"]`).val()
+        })
+        data.push({
+          name: 'containerheader_id',
+          value: form.find(`[name="containerheader_id"]`).val()
+        })
+        data.push({
+          name: 'containerheader',
+          value: form.find(`[name="containerheader"]`).val()
+        })
+        let oto_nominal = []
+        let oto_keterangan = []
+        let requestData = {}
+
+
+        if (KodePengeluaranId == "OTOK") {
+          $.each(selectedRowsOtokNominal, function(index, item) {
+            oto_nominal.push(parseFloat(item.replaceAll(',', '')))
+            oto_keterangan.push('OTOBON KANTOR')
+          });
+          console.log('tok')
+          requestData = {
+            'id_detail': selectedRowsOtok,
+            'nominal': oto_nominal,
+            'noinvoice_detail': selectedRowsOtokNobukti,
+            'nojobtrucking_detail': selectedRowsOtokJobtrucking,
+            'keterangan': oto_keterangan,
+          };
+
+          data.push({
+            name: 'jumlahdetail',
+            value: selectedRowsOtokNominal.length
+          })
+        } else {
+          $.each(selectedRowsOtolNominal, function(index, item) {
+            oto_nominal.push(parseFloat(item.replaceAll(',', '')))
+            oto_keterangan.push('OTOBON LAPANGAN')
+          });
+
+          requestData = {
+            'id_detail': selectedRowsOtol,
+            'nominal': oto_nominal,
+            'noinvoice_detail': selectedRowsOtolNobukti,
+            'nojobtrucking_detail': selectedRowsOtolJobtrucking,
+            'keterangan': oto_keterangan,
+          };
+          data.push({
+            name: 'jumlahdetail',
+            value: selectedRowsOtolNominal.length
+          })
+        }
+        console.log(requestData)
         data.push({
           name: 'detail',
           value: JSON.stringify(requestData)
@@ -1145,6 +1284,8 @@
 
           selectedRows = []
           clearSelectedRowsSumbangan()
+          clearSelectedRowsOTOK()
+          clearSelectedRowsOTOL()
           if (id == 0) {
             $('#detail').jqGrid().trigger('reloadGrid')
           }
@@ -1296,9 +1437,12 @@
 
   function tampilanPJT() {
     $('.kolom_bbt').hide()
+    $('#btnReloadOtokGrid').hide()
     $('[name=statusposting]').parents('.form-group').show()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=tradoheader_id]').parents('.form-group').hide()
+    $('[name=agen_id]').parents('.form-group').hide()
+    $('[name=containerheader_id]').parents('.form-group').hide()
     $('[name=gandenganheader_id]').parents('.form-group').hide()
     $('[name=postingpinjaman]').parents('.form-group').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
@@ -1338,9 +1482,12 @@
 
   function tampilanPJK() {
     $('.kolom_bbt').hide()
+    $('#btnReloadOtokGrid').hide()
     $('[name=statusposting]').parents('.form-group').show()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=tradoheader_id]').parents('.form-group').hide()
+    $('[name=agen_id]').parents('.form-group').hide()
+    $('[name=containerheader_id]').parents('.form-group').hide()
     $('[name=gandenganheader_id]').parents('.form-group').hide()
     $('[name=postingpinjaman]').parents('.form-group').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
@@ -1381,9 +1528,12 @@
   function tampilanBBT() { //titipan Emkl
 
     $('.kolom_bbt').show()
+    $('#btnReloadOtokGrid').hide()
     $('[name=statusposting]').parents('.form-group').show()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=tradoheader_id]').parents('.form-group').hide()
+    $('[name=agen_id]').parents('.form-group').hide()
+    $('[name=containerheader_id]').parents('.form-group').hide()
     $('[name=gandenganheader_id]').parents('.form-group').hide()
     $('[name=postingpinjaman]').parents('.form-group').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
@@ -1428,8 +1578,11 @@
 
   function tampilanTDE() {
     $('.kolom_bbt').hide()
+    $('#btnReloadOtokGrid').hide()
     $('[name=statusposting]').parents('.form-group').show()
     $('[name=keterangancoa]').parents('.form-group').hide()
+    $('[name=agen_id]').parents('.form-group').hide()
+    $('[name=containerheader_id]').parents('.form-group').hide()
     $('[name=tradoheader_id]').parents('.form-group').hide()
     $('[name=karyawanheader_id]').parents('.form-group').hide()
     $('[name=gandenganheader_id]').parents('.form-group').hide()
@@ -1467,8 +1620,11 @@
 
   function tampilanTDEK() {
     $('.kolom_bbt').hide()
+    $('#btnReloadOtokGrid').hide()
     $('[name=statusposting]').parents('.form-group').show()
     $('[name=keterangancoa]').parents('.form-group').hide()
+    $('[name=agen_id]').parents('.form-group').hide()
+    $('[name=containerheader_id]').parents('.form-group').hide()
     $('[name=tradoheader_id]').parents('.form-group').hide()
     $('[name=karyawanheader_id]').parents('.form-group').show()
     $('[name=gandenganheader_id]').parents('.form-group').hide()
@@ -1507,8 +1663,11 @@
   function tampilanBST() {
     $('#detailList tbody').html('')
     enabledKas(true);
+    $('#btnReloadOtokGrid').hide()
     $('[name=statusposting]').parents('.form-group').show()
     $('[name=tradoheader_id]').parents('.form-group').hide()
+    $('[name=agen_id]').parents('.form-group').hide()
+    $('[name=containerheader_id]').parents('.form-group').hide()
     $('[name=gandenganheader_id]').parents('.form-group').hide()
     $('[name=postingpinjaman]').parents('.form-group').hide()
     $('[name=karyawanheader_id]').parents('.form-group').hide()
@@ -1555,9 +1714,12 @@
   function tampilanKBBM() {
     $('#detailList tbody').html('')
     enabledKas(true);
+    $('#btnReloadOtokGrid').hide()
     $('[name=statusposting]').parents('.form-group').show()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=postingpinjaman]').parents('.form-group').hide()
+    $('[name=agen_id]').parents('.form-group').hide()
+    $('[name=containerheader_id]').parents('.form-group').hide()
     $('[name=tradoheader_id]').parents('.form-group').hide()
     $('[name=karyawanheader_id]').parents('.form-group').hide()
     $('[name=gandenganheader_id]').parents('.form-group').hide()
@@ -1601,9 +1763,12 @@
 
   function tampilanBSB() {
     enabledKas(true);
+    $('#btnReloadOtokGrid').hide()
     $('[name=statusposting]').parents('.form-group').show()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=karyawanheader_id]').parents('.form-group').hide()
+    $('[name=agen_id]').parents('.form-group').hide()
+    $('[name=containerheader_id]').parents('.form-group').hide()
     $('[name=tradoheader_id]').parents('.form-group').hide()
     $('[name=gandenganheader_id]').parents('.form-group').hide()
     $('[name=postingpinjaman]').parents('.form-group').hide()
@@ -1650,9 +1815,12 @@
 
   function tampilanKLAIM() {
     enabledKas(false);
+    $('#btnReloadOtokGrid').hide()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=statusposting]').parents('.form-group').hide()
     $('[name=karyawanheader_id]').parents('.form-group').hide()
+    $('[name=agen_id]').parents('.form-group').hide()
+    $('[name=containerheader_id]').parents('.form-group').hide()
     $('[name=postingpinjaman]').parents('.form-group').hide()
     $('[name=supirheader_id]').parents('.form-group').show()
     $('[name=tradoheader_id]').parents('.form-group').show()
@@ -1708,9 +1876,12 @@
     console.log('bll')
     $('#detailList tbody').html('')
     enabledKas(true);
+    $('#btnReloadOtokGrid').hide()
     $('[name=statusposting]').parents('.form-group').show()
     $('[name=tradoheader_id]').parents('.form-group').hide()
     $('[name=gandenganheader_id]').parents('.form-group').hide()
+    $('[name=agen_id]').parents('.form-group').hide()
+    $('[name=containerheader_id]').parents('.form-group').hide()
     $('[name=karyawanheader_id]').parents('.form-group').hide()
     $('[name=pengeluarantrucking_nobukti]').parents('.form-group').hide()
     $('[name=postingpinjaman]').parents('.form-group').hide()
@@ -1784,9 +1955,12 @@
   function tampilanBLN() {
     $('#detailList tbody').html('')
     enabledKas(true);
+    $('#btnReloadOtokGrid').hide()
     $('[name=statusposting]').parents('.form-group').show()
     $('[name=tradoheader_id]').parents('.form-group').hide()
     $('[name=gandenganheader_id]').parents('.form-group').hide()
+    $('[name=agen_id]').parents('.form-group').hide()
+    $('[name=containerheader_id]').parents('.form-group').hide()
     $('[name=pengeluarantrucking_nobukti]').parents('.form-group').hide()
     $('[name=karyawanheader_id]').parents('.form-group').hide()
     $('[name=postingpinjaman]').parents('.form-group').hide()
@@ -1858,9 +2032,12 @@
   function tampilanBTU() {
     $('#detailList tbody').html('')
     enabledKas(true);
+    $('#btnReloadOtokGrid').hide()
     $('[name=statusposting]').parents('.form-group').show()
     $('[name=tradoheader_id]').parents('.form-group').hide()
     $('[name=gandenganheader_id]').parents('.form-group').hide()
+    $('[name=agen_id]').parents('.form-group').hide()
+    $('[name=containerheader_id]').parents('.form-group').hide()
     $('[name=pengeluarantrucking_nobukti]').parents('.form-group').hide()
     $('[name=karyawanheader_id]').parents('.form-group').hide()
     $('[name=postingpinjaman]').parents('.form-group').hide()
@@ -1932,9 +2109,12 @@
   function tampilanBPT() {
     $('#detailList tbody').html('')
     enabledKas(true);
+    $('#btnReloadOtokGrid').hide()
     $('[name=statusposting]').parents('.form-group').show()
     $('[name=tradoheader_id]').parents('.form-group').hide()
     $('[name=gandenganheader_id]').parents('.form-group').hide()
+    $('[name=agen_id]').parents('.form-group').hide()
+    $('[name=containerheader_id]').parents('.form-group').hide()
     $('[name=pengeluarantrucking_nobukti]').parents('.form-group').hide()
     $('[name=karyawanheader_id]').parents('.form-group').hide()
     $('[name=postingpinjaman]').parents('.form-group').hide()
@@ -2007,9 +2187,12 @@
   function tampilanBGS() {
     $('#detailList tbody').html('')
     enabledKas(true);
+    $('#btnReloadOtokGrid').hide()
     $('[name=statusposting]').parents('.form-group').show()
     $('[name=tradoheader_id]').parents('.form-group').hide()
     $('[name=gandenganheader_id]').parents('.form-group').hide()
+    $('[name=agen_id]').parents('.form-group').hide()
+    $('[name=containerheader_id]').parents('.form-group').hide()
     $('[name=pengeluarantrucking_nobukti]').parents('.form-group').hide()
     $('[name=karyawanheader_id]').parents('.form-group').hide()
     $('[name=postingpinjaman]').parents('.form-group').hide()
@@ -2080,9 +2263,12 @@
   function tampilanBIT() {
     $('#detailList tbody').html('')
     enabledKas(true);
+    $('#btnReloadOtokGrid').hide()
     $('[name=statusposting]').parents('.form-group').show()
     $('[name=tradoheader_id]').parents('.form-group').hide()
     $('[name=gandenganheader_id]').parents('.form-group').hide()
+    $('[name=agen_id]').parents('.form-group').hide()
+    $('[name=containerheader_id]').parents('.form-group').hide()
     $('[name=pengeluarantrucking_nobukti]').parents('.form-group').hide()
     $('[name=karyawanheader_id]').parents('.form-group').hide()
     $('[name=postingpinjaman]').parents('.form-group').hide()
@@ -2154,14 +2340,18 @@
   function tampilanOTOK() {
     $('#detailList tbody').html('')
     enabledKas(true);
+    $('#btnReloadOtokGrid').show()
     $('[name=statusposting]').parents('.form-group').show()
     $('[name=tradoheader_id]').parents('.form-group').hide()
+    $('[name=agen_id]').parents('.form-group').show()
+    $('[name=containerheader_id]').parents('.form-group').show()
     $('[name=gandenganheader_id]').parents('.form-group').hide()
     $('[name=postingpinjaman]').parents('.form-group').hide()
     $('[name=karyawanheader_id]').parents('.form-group').hide()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
     $('[name=jenisorderan_id]').parents('.form-group').hide()
+    $('[name=pengeluarantrucking_nobukti]').parents('.form-group').hide()
     $('[name=tgldari]').parents('.form-group').show()
     $('[name=tgldari]').prop('disabled', false)
     $('[name=tglsampai]').prop('disabled', false)
@@ -2200,16 +2390,21 @@
     // $('.colmn-offset').hide()
     loadOTOKGrid()
   }
+
   function tampilanOTOL() {
     $('#detailList tbody').html('')
     enabledKas(true);
+    $('#btnReloadOtokGrid').show()
     $('[name=statusposting]').parents('.form-group').show()
+    $('[name=agen_id]').parents('.form-group').show()
+    $('[name=containerheader_id]').parents('.form-group').show()
     $('[name=tradoheader_id]').parents('.form-group').hide()
     $('[name=gandenganheader_id]').parents('.form-group').hide()
     $('[name=postingpinjaman]').parents('.form-group').hide()
     $('[name=karyawanheader_id]').parents('.form-group').hide()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
+    $('[name=pengeluarantrucking_nobukti]').parents('.form-group').hide()
     $('[name=jenisorderan_id]').parents('.form-group').hide()
     $('[name=tgldari]').parents('.form-group').show()
     $('[name=tgldari]').prop('disabled', false)
@@ -2252,10 +2447,13 @@
 
   function tampilanall() {
     enabledKas(true);
+    $('#btnReloadOtokGrid').hide()
     $('[name=keterangancoa]').parents('.form-group').show()
     $('.tbl_stok_id').hide()
     $('.tbl_qty').hide()
     $('[name=tradoheader_id]').parents('.form-group').hide()
+    $('[name=agen_id]').parents('.form-group').hide()
+    $('[name=containerheader_id]').parents('.form-group').hide()
     $('[name=gandenganheader_id]').parents('.form-group').hide()
     $('[name=karyawanheader_id]').parents('.form-group').hide()
     $('[name=postingpinjaman]').parents('.form-group').hide()
@@ -2349,6 +2547,61 @@
 
   }
 
+  $(document).on('click', "#btnReloadOtokGrid", function(event) {
+    event.preventDefault()
+    reloadGrid = null;
+    if ($('#crudForm').data('action') == 'edit') {
+      reloadGrid = 'reload'
+    }
+    if (KodePengeluaranId == 'OTOK') {
+      clearSelectedRowsOTOK()
+      getDataOTOK().then((response) => {
+        // console.log('before', $("#tablePinjamanKaryawan").jqGrid('getGridParam', 'selectedRowIds'))
+        $('.is-invalid').removeClass('is-invalid')
+        $('.invalid-feedback').remove()
+
+        $('#tableOTOK').jqGrid('setGridParam', {
+          url: `${apiUrl}pengeluarantruckingheader/${response.url}`,
+          postData: {
+            tgldari: $('#crudForm').find('[name=tgldari]').val(),
+            tglsampai: $('#crudForm').find('[name=tglsampai]').val(),
+            agen_id: $('#crudForm').find('[name=agen_id]').val(),
+            container_id: $('#crudForm').find('[name=containerheader_id]').val(),
+            aksi: $('#crudForm').data('action')
+          },
+          datatype: "json"
+        }).trigger('reloadGrid');
+
+      }).catch((errors) => {
+        setErrorMessages($('#crudForm'), errors)
+      });
+    } else {
+
+      clearSelectedRowsOTOL()
+      getDataOTOL().then((response) => {
+        // console.log('before', $("#tablePinjamanKaryawan").jqGrid('getGridParam', 'selectedRowIds'))
+        $('.is-invalid').removeClass('is-invalid')
+        $('.invalid-feedback').remove()
+        // console.log(response)
+        $('#tableOTOL').jqGrid('setGridParam', {
+          url: `${apiUrl}pengeluarantruckingheader/${response.url}`,
+          postData: {
+            tgldari: $('#crudForm').find('[name=tgldari]').val(),
+            tglsampai: $('#crudForm').find('[name=tglsampai]').val(),
+            agen_id: $('#crudForm').find('[name=agen_id]').val(),
+            container_id: $('#crudForm').find('[name=containerheader_id]').val(),
+            aksi: $('#crudForm').data('action')
+          },
+          datatype: "json"
+        }).trigger('reloadGrid');
+
+      }).catch((errors) => {
+        setErrorMessages($('#crudForm'), errors)
+      });
+    }
+
+  });
+
   $('#crudModal').on('shown.bs.modal', () => {
     let form = $('#crudForm')
 
@@ -2385,6 +2638,8 @@
     penerimaanstokheader = ''
     pengeluaranstokheader = ''
     clearSelectedRowsSumbangan()
+    clearSelectedRowsOTOK()
+    clearSelectedRowsOTOL()
     classHidden = [];
     $('#crudModal').find('.modal-body').html(modalBody)
     initDatepicker('datepickerIndex')
@@ -2551,6 +2806,7 @@
         showPengeluaranTruckingHeader(form, id)
           .then(() => {
             $('#crudModal').modal('show')
+            $('#btnReloadOtokGrid').prop('disabled', true)
             $('#crudForm [name=statusposting]').attr('disabled', true)
             form.find(`[name="tglbukti"]`).prop('readonly', true)
             form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
@@ -3210,11 +3466,13 @@
           {
             label: "Nobukti PENERIMAAN TRUCKING",
             name: "nobukti",
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
             sortable: true,
           },
           {
             label: "SISA",
             name: "sisa",
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             sortable: true,
             align: "right",
             formatter: currencyFormat,
@@ -3222,6 +3480,7 @@
           {
             label: "NOMINAL",
             name: "nominal",
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: "right",
             editable: true,
             editoptions: {
@@ -3304,7 +3563,7 @@
                 }
               }]
             },
-            width: 500
+            width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1,
           },
           {
             label: "empty",
@@ -3672,11 +3931,13 @@
           {
             label: "Nobukti PENERIMAAN TRUCKING",
             name: "nobukti",
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
             sortable: true,
           },
           {
             label: "SISA",
             name: "sisa",
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             sortable: true,
             align: "right",
             formatter: currencyFormat,
@@ -3684,6 +3945,7 @@
           {
             label: "NOMINAL",
             name: "nominal",
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: "right",
             editable: true,
             editoptions: {
@@ -3766,7 +4028,7 @@
                 }
               }]
             },
-            width: 500
+            width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1,
           },
           {
             label: "empty",
@@ -4176,6 +4438,12 @@
             if (index == 'trado') {
               element.data('current-value', value)
             }
+            if (index == 'agen') {
+              element.data('current-value', value)
+            }
+            if (index == 'containerheader') {
+              element.data('current-value', value)
+            }
             if (index == 'gandengan') {
               element.data('current-value', value)
             }
@@ -4260,6 +4528,56 @@
                 postData: {
                   tgldari: $('#crudForm').find('[name=tgldari]').val(),
                   tglsampai: $('#crudForm').find('[name=tglsampai]').val(),
+                  aksi: 'show'
+                },
+                datatype: "json"
+              }).trigger('reloadGrid');
+            }, 100);
+
+          } else if (kodepengeluaran === "OTOK") {
+            $('#detailList tbody').html('')
+            $.each(response.detail, (index, detail) => {
+              if (detail.pengeluarantrucking_id != null) {
+                selectedRowsOtok.push(detail.id_detail)
+                selectedRowsOtokJobtrucking.push(detail.nojobtrucking_detail)
+                selectedRowsOtokNobukti.push(detail.noinvoice_detail)
+                selectedRowsOtokNominal.push(detail.nominal_detail)
+              }
+            })
+            // $('#tableSumbangan').jqGrid("clearGridData");
+            setTimeout(() => {
+              $('#tableOTOK').jqGrid('setGridParam', {
+                url: `${apiUrl}pengeluarantruckingheader/${id}/geteditotok`,
+                postData: {
+                  tgldari: $('#crudForm').find('[name=tgldari]').val(),
+                  tglsampai: $('#crudForm').find('[name=tglsampai]').val(),
+                  agen_id: $('#crudForm').find('[name=agen_id]').val(),
+                  container_id: $('#crudForm').find('[name=containerheader_id]').val(),
+                  aksi: 'show'
+                },
+                datatype: "json"
+              }).trigger('reloadGrid');
+            }, 100);
+
+          } else if (kodepengeluaran === "OTOL") {
+            $('#detailList tbody').html('')
+            $.each(response.detail, (index, detail) => {
+              if (detail.pengeluarantrucking_id != null) {
+                selectedRowsOtol.push(detail.id_detail)
+                selectedRowsOtolJobtrucking.push(detail.nojobtrucking_detail)
+                selectedRowsOtolNobukti.push(detail.noinvoice_detail)
+                selectedRowsOtolNominal.push(detail.nominal_detail)
+              }
+            })
+            // $('#tableSumbangan').jqGrid("clearGridData");
+            setTimeout(() => {
+              $('#tableOTOL').jqGrid('setGridParam', {
+                url: `${apiUrl}pengeluarantruckingheader/${id}/geteditotol`,
+                postData: {
+                  tgldari: $('#crudForm').find('[name=tgldari]').val(),
+                  tglsampai: $('#crudForm').find('[name=tglsampai]').val(),
+                  agen_id: $('#crudForm').find('[name=agen_id]').val(),
+                  container_id: $('#crudForm').find('[name=containerheader_id]').val(),
                   aksi: 'show'
                 },
                 datatype: "json"
@@ -5394,18 +5712,22 @@
           {
             label: 'no invoice',
             name: 'noinvoice_detail',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'no job',
             name: 'nojobtrucking_detail',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'container',
             name: 'container_detail',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'nominal',
             name: 'nominal_detail',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'right',
             formatter: currencyFormat,
           },
@@ -5691,11 +6013,12 @@
             label: "SUPIR",
             name: "supirbiaya",
             sortable: true,
-            width: '250px'
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
           },
           {
             label: "NOMINAL",
             name: "nominal",
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: "right",
             editable: true,
             editoptions: {
@@ -5746,7 +6069,7 @@
           {
             label: "KETERANGAN",
             name: "keteranganbll",
-            width: '300px',
+            width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1,
             sortable: false,
             editable: true,
             editoptions: {
@@ -5864,11 +6187,12 @@
             label: "SUPIR",
             name: "supirbiaya",
             sortable: true,
-            width: '250px'
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
           },
           {
             label: "NOMINAL",
             name: "nominal",
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: "right",
             editable: true,
             editoptions: {
@@ -5919,7 +6243,7 @@
           {
             label: "KETERANGAN",
             name: "keteranganbll",
-            width: '300px',
+            width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1,
             sortable: false,
             editable: true,
             editoptions: {
@@ -6016,11 +6340,12 @@
             label: "SUPIR",
             name: "supirbiaya",
             sortable: true,
-            width: '250px'
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
           },
           {
             label: "NOMINAL",
             name: "nominal",
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: "right",
             editable: true,
             editoptions: {
@@ -6071,7 +6396,7 @@
           {
             label: "KETERANGAN",
             name: "keteranganbll",
-            width: '300px',
+            width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1,
             sortable: false,
             editable: true,
             editoptions: {
@@ -6168,11 +6493,12 @@
             label: "SUPIR",
             name: "supirbiaya",
             sortable: true,
-            width: '250px'
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
           },
           {
             label: "NOMINAL",
             name: "nominal",
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: "right",
             editable: true,
             editoptions: {
@@ -6223,7 +6549,7 @@
           {
             label: "KETERANGAN",
             name: "keteranganbll",
-            width: '300px',
+            width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1,
             sortable: false,
             editable: true,
             editoptions: {
@@ -6320,11 +6646,12 @@
             label: "SUPIR",
             name: "supirbiaya",
             sortable: true,
-            width: '250px'
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
           },
           {
             label: "NOMINAL",
             name: "nominal",
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: "right",
             editable: true,
             editoptions: {
@@ -6375,7 +6702,7 @@
           {
             label: "KETERANGAN",
             name: "keteranganbll",
-            width: '300px',
+            width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1,
             sortable: false,
             editable: true,
             editoptions: {
@@ -6472,11 +6799,12 @@
             label: "SUPIR",
             name: "supirbiaya",
             sortable: true,
-            width: '250px'
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
           },
           {
             label: "NOMINAL",
             name: "nominal",
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: "right",
             editable: true,
             editoptions: {
@@ -6527,7 +6855,7 @@
           {
             label: "KETERANGAN",
             name: "keteranganbll",
-            width: '300px',
+            width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1,
             sortable: false,
             editable: true,
             editoptions: {
@@ -6607,6 +6935,664 @@
     // loadGlobalSearch($('#tableDeposito'))
   }
 
+  // TABLE OTOK
+  function loadOTOKGrid() {
+    let disabled = '';
+    if ($('#crudForm').data('action') == 'delete') {
+      disabled = 'disabled'
+    }
+    $("#tableOTOK").jqGrid({
+        styleUI: 'Bootstrap4',
+        iconSet: 'fontAwesome',
+        datatype: "local",
+        colModel: [{
+            label: '',
+            name: '',
+            width: 40,
+            align: 'center',
+            sortable: false,
+            clear: false,
+            stype: 'input',
+            searchable: false,
+            searchoptions: {
+              type: 'checkbox',
+              clearSearch: false,
+              dataInit: function(element) {
+                dari = $('#crudForm').find(`[name="tgldari"]`).val()
+                sampai = $('#crudForm').find(`[name="tglsampai"]`).val()
+                let aksi = $('#crudForm').data('action')
+
+                $(element).removeClass('form-control')
+                $(element).parent().addClass('text-center')
+                $(element).addClass('checkbox-selectall')
+                if (disabled == '') {
+                  $(element).on('click', function() {
+                    if ($(this).is(':checked')) {
+                      selectAllRowsOTOK()
+                    } else {
+                      clearSelectedRowsOTOK()
+                    }
+                  })
+                } else {
+                  $(element).attr('disabled', true)
+                }
+
+              }
+            },
+            formatter: (value, rowOptions, rowData) => {
+              return `<input type="checkbox" class="checkbox-jqgrid" name="otokId[]" value="${rowData.id_detail}" ${disabled} onchange="checkboxOTOKHandler(this)">`
+            },
+          },
+          {
+            label: 'no invoice',
+            name: 'noinvoice_detail',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+          },
+          {
+            label: 'no job',
+            name: 'nojobtrucking_detail',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+          },
+          {
+            label: 'nominal',
+            name: 'nominal_detail',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            align: 'right',
+            formatter: currencyFormat,
+          },
+        ],
+        autowidth: true,
+        shrinkToFit: false,
+        height: 400,
+        rowNum: 10,
+        rownumbers: true,
+        rownumWidth: 45,
+        rowList: [10, 20, 50, 0],
+        footerrow: true,
+        userDataOnFooter: true,
+        toolbar: [true, "top"],
+        sortable: true,
+        sortname: sortnameOtok,
+        sortorder: sortorderOtok,
+        page: pageOtok,
+        viewrecords: true,
+        prmNames: {
+          sort: 'sortIndex',
+          order: 'sortOrder',
+          rows: 'limit'
+        },
+        jsonReader: {
+          root: 'data',
+          total: 'attributes.totalPages',
+          records: 'attributes.totalRows',
+        },
+        loadBeforeSend: function(jqXHR) {
+          jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+
+          setGridLastRequest($(this), jqXHR)
+        },
+
+        onSelectRow: function(id) {
+          activeGrid = $(this)
+        },
+        loadComplete: function(data) {
+          let grid = $(this)
+          changeJqGridRowListText()
+
+          $(document).unbind('keydown')
+          setCustomBindKeys($(this))
+          initResize($(this))
+
+          /* Set global variables */
+          sortnameOtok = $(this).jqGrid("getGridParam", "sortname")
+          sortorderOtok = $(this).jqGrid("getGridParam", "sortorder")
+          totalRecordOtok = $(this).getGridParam("records")
+          limitOtok = $(this).jqGrid('getGridParam', 'postData').limit
+          postDataOtok = $(this).jqGrid('getGridParam', 'postData')
+          triggerClickOtok = true
+
+          $('.clearsearchclass').click(function() {
+            clearColumnSearch($(this))
+          })
+
+          if (indexRowOtok > $(this).getDataIDs().length - 1) {
+            indexRowOtok = $(this).getDataIDs().length - 1;
+          }
+
+          setHighlight($(this))
+
+          $.each(selectedRowsOtok, function(key, value) {
+            $(grid).find('tbody tr').each(function(row, tr) {
+              if ($(this).find(`td input:checkbox`).val() == value) {
+                $(this).addClass('bg-light-blue')
+                $(this).find(`td input:checkbox`).prop('checked', true)
+              }
+            })
+          });
+          setTotalNominalOTOK()
+
+        }
+      })
+      .jqGrid("setLabel", "rn", "No.")
+      .jqGrid('filterToolbar', {
+        stringResult: true,
+        searchOnEnter: false,
+        defaultSearch: 'cn',
+        groupOp: 'AND',
+        disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
+        beforeSearch: function() {
+          $(this).setGridParam({
+            postData: {
+              tgldari: $('#crudForm [name=tgldari]').val(),
+              tglsampai: $('#crudForm [name=tglsampai]').val(),
+            },
+          })
+          clearGlobalSearch($('#tableOTOK'))
+        },
+        afterSearch: function() {
+          console.log($(this).getGridParam())
+        }
+      })
+      .customPager({})
+    /* Append clear filter button */
+    loadClearFilter($('#tableOTOK'))
+
+    /* Append global search */
+    loadGlobalSearch($('#tableOTOK'))
+  }
+
+  function checkboxOTOKHandler(element) {
+    let value = $(element).val();
+    if (element.checked) {
+      selectedRowsOtok.push($(element).val())
+      selectedRowsOtokNobukti.push($(element).parents('tr').find(`td[aria-describedby="tableOTOK_noinvoice_detail"]`).text())
+      selectedRowsOtokJobtrucking.push($(element).parents('tr').find(`td[aria-describedby="tableOTOK_nojobtrucking_detail"]`).text())
+      selectedRowsOtokNominal.push($(element).parents('tr').find(`td[aria-describedby="tableOTOK_nominal_detail"]`).text())
+
+      $(element).parents('tr').addClass('bg-light-blue')
+    } else {
+      $(element).parents('tr').removeClass('bg-light-blue')
+      for (var i = 0; i < selectedRowsOtok.length; i++) {
+        if (selectedRowsOtok[i] == value) {
+          selectedRowsOtok.splice(i, 1);
+          selectedRowsOtokNobukti.splice(i, 1);
+          selectedRowsOtokJobtrucking.splice(i, 1);
+          selectedRowsOtokNominal.splice(i, 1);
+        }
+      }
+    }
+
+    setTotalNominalOTOK()
+  }
+
+  function setTotalNominalOTOK() {
+    let nominal = 0
+    $.each(selectedRowsOtok, (index, val) => {
+      getNominal = selectedRowsOtokNominal[index];
+      nominals = parseFloat(getNominal.replaceAll(',', ''))
+      nominal += nominals
+
+    })
+    initAutoNumeric($('.footrow').find(`td[aria-describedby="tableOTOK_nominal_detail"]`).text(nominal))
+  }
+
+  function clearSelectedRowsOTOK() {
+    selectedRowsOtok = []
+    selectedRowsOtokNobukti = [];
+    selectedRowsOtokJobtrucking = [];
+    selectedRowsOtokNominal = [];
+    $('#tableOTOK').trigger('reloadGrid')
+  }
+
+  function getDataOTOK() {
+    if ($('#crudForm').data('action') == 'edit') {
+      otokId = $(`#crudForm`).find(`[name="id"]`).val()
+      urlOtok = `${otokId}/geteditotok`
+    } else {
+      urlOtok = 'getotok'
+    }
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `${apiUrl}pengeluarantruckingheader/${urlOtok}`,
+        method: 'GET',
+        dataType: 'JSON',
+        data: {
+          tgldari: $('#crudForm').find('[name=tgldari]').val(),
+          tglsampai: $('#crudForm').find('[name=tglsampai]').val(),
+          agen_id: $('#crudForm').find('[name=agen_id]').val(),
+          container_id: $('#crudForm').find('[name=containerheader_id]').val(),
+          limit: 0
+        },
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          if ($('#crudForm').data('action') == 'edit') {
+            response.data.map((data) => {
+              if (data.pengeluarantrucking_id != null) {
+                selectedRowsOtok.push(data.id_detail)
+                selectedRowsOtokNobukti.push(data.noinvoice_detail)
+                selectedRowsOtokJobtrucking.push(data.nojobtrucking_detail)
+                selectedRowsOtokNominal.push(data.nominal_detail)
+              }
+            })
+          }
+          response.url = urlOtok
+          resolve(response)
+        },
+        error: error => {
+          if (error.status === 422) {
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+
+
+            errors = error.responseJSON.errors
+            reject(errors)
+
+          } else {
+            showDialog(error.responseJSON)
+          }
+        },
+        error: error => {
+          reject(error)
+        }
+      })
+    })
+  }
+
+  function selectAllRowsOTOK() {
+    if ($('#crudForm').data('action') == 'edit') {
+      otokId = $(`#crudForm`).find(`[name="id"]`).val()
+      urlOtok = `${otokId}/geteditotok`
+    } else {
+      urlOtok = 'getotok'
+    }
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `${apiUrl}pengeluarantruckingheader/${urlOtok}`,
+        method: 'GET',
+        dataType: 'JSON',
+        data: {
+          tgldari: $('#crudForm').find('[name=tgldari]').val(),
+          tglsampai: $('#crudForm').find('[name=tglsampai]').val(),
+          agen_id: $('#crudForm').find('[name=agen_id]').val(),
+          container_id: $('#crudForm').find('[name=containerheader_id]').val(),
+          limit: 0
+        },
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          clearSelectedRowsOTOK()
+          selectedRowsOtok = response.data.map((data) => data.id_detail)
+          selectedRowsOtokNobukti = response.data.map((data) => data.noinvoice_detail)
+          selectedRowsOtokJobtrucking = response.data.map((data) => data.nojobtrucking_detail)
+          selectedRowsOtokNominal = response.data.map((data) => data.nominal_detail)
+
+          // $('#tableOTOK').jqGrid("clearGridData");
+          $('#tableOTOK').jqGrid('setGridParam', {
+            url: `${apiUrl}pengeluarantruckingheader/${urlOtok}`,
+            postData: {
+              tgldari: $('#crudForm').find('[name=tgldari]').val(),
+              tglsampai: $('#crudForm').find('[name=tglsampai]').val(),
+              agen_id: $('#crudForm').find('[name=agen_id]').val(),
+              container_id: $('#crudForm').find('[name=containerheader_id]').val(),
+              aksi: $('#crudForm').data('action')
+            },
+            datatype: "json"
+          }).trigger('reloadGrid');
+        },
+        error: error => {
+          if (error.status === 422) {
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+
+
+            errors = error.responseJSON.errors
+            reject(errors)
+
+          } else {
+            showDialog(error.responseJSON)
+          }
+        },
+        error: error => {
+          reject(error)
+        }
+      })
+    })
+  }
+  // END OTOK
+
+  
+  // TABLE OTOL
+  function loadOTOLGrid() {
+    let disabled = '';
+    if ($('#crudForm').data('action') == 'delete') {
+      disabled = 'disabled'
+    }
+    $("#tableOTOL").jqGrid({
+        styleUI: 'Bootstrap4',
+        iconSet: 'fontAwesome',
+        datatype: "local",
+        colModel: [{
+            label: '',
+            name: '',
+            width: 40,
+            align: 'center',
+            sortable: false,
+            clear: false,
+            stype: 'input',
+            searchable: false,
+            searchoptions: {
+              type: 'checkbox',
+              clearSearch: false,
+              dataInit: function(element) {
+                dari = $('#crudForm').find(`[name="tgldari"]`).val()
+                sampai = $('#crudForm').find(`[name="tglsampai"]`).val()
+                let aksi = $('#crudForm').data('action')
+
+                $(element).removeClass('form-control')
+                $(element).parent().addClass('text-center')
+                $(element).addClass('checkbox-selectall')
+                if (disabled == '') {
+                  $(element).on('click', function() {
+                    if ($(this).is(':checked')) {
+                      selectAllRowsOTOL()
+                    } else {
+                      clearSelectedRowsOTOL()
+                    }
+                  })
+                } else {
+                  $(element).attr('disabled', true)
+                }
+
+              }
+            },
+            formatter: (value, rowOptions, rowData) => {
+              return `<input type="checkbox" class="checkbox-jqgrid" name="otolId[]" value="${rowData.id_detail}" ${disabled} onchange="checkboxOTOLHandler(this)">`
+            },
+          },
+          {
+            label: 'no invoice',
+            name: 'noinvoice_detail',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+          },
+          {
+            label: 'no job',
+            name: 'nojobtrucking_detail',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+          },
+          {
+            label: 'nominal',
+            name: 'nominal_detail',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            align: 'right',
+            formatter: currencyFormat,
+          },
+        ],
+        autowidth: true,
+        shrinkToFit: false,
+        height: 400,
+        rowNum: 10,
+        rownumbers: true,
+        rownumWidth: 45,
+        rowList: [10, 20, 50, 0],
+        footerrow: true,
+        userDataOnFooter: true,
+        toolbar: [true, "top"],
+        sortable: true,
+        sortname: sortnameOtol,
+        sortorder: sortorderOtol,
+        page: pageOtol,
+        viewrecords: true,
+        prmNames: {
+          sort: 'sortIndex',
+          order: 'sortOrder',
+          rows: 'limit'
+        },
+        jsonReader: {
+          root: 'data',
+          total: 'attributes.totalPages',
+          records: 'attributes.totalRows',
+        },
+        loadBeforeSend: function(jqXHR) {
+          jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
+
+          setGridLastRequest($(this), jqXHR)
+        },
+
+        onSelectRow: function(id) {
+          activeGrid = $(this)
+        },
+        loadComplete: function(data) {
+          let grid = $(this)
+          changeJqGridRowListText()
+
+          $(document).unbind('keydown')
+          setCustomBindKeys($(this))
+          initResize($(this))
+
+          /* Set global variables */
+          sortnameOtol = $(this).jqGrid("getGridParam", "sortname")
+          sortorderOtol = $(this).jqGrid("getGridParam", "sortorder")
+          totalRecordOtol = $(this).getGridParam("records")
+          limitOtol = $(this).jqGrid('getGridParam', 'postData').limit
+          postDataOtol = $(this).jqGrid('getGridParam', 'postData')
+          triggerClickOtol = true
+
+          $('.clearsearchclass').click(function() {
+            clearColumnSearch($(this))
+          })
+
+          if (indexRowOtol > $(this).getDataIDs().length - 1) {
+            indexRowOtol = $(this).getDataIDs().length - 1;
+          }
+
+          setHighlight($(this))
+
+          $.each(selectedRowsOtol, function(key, value) {
+            $(grid).find('tbody tr').each(function(row, tr) {
+              if ($(this).find(`td input:checkbox`).val() == value) {
+                $(this).addClass('bg-light-blue')
+                $(this).find(`td input:checkbox`).prop('checked', true)
+              }
+            })
+          });
+          setTotalNominalOTOL()
+
+        }
+      })
+      .jqGrid("setLabel", "rn", "No.")
+      .jqGrid('filterToolbar', {
+        stringResult: true,
+        searchOnEnter: false,
+        defaultSearch: 'cn',
+        groupOp: 'AND',
+        disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
+        beforeSearch: function() {
+          $(this).setGridParam({
+            postData: {
+              tgldari: $('#crudForm [name=tgldari]').val(),
+              tglsampai: $('#crudForm [name=tglsampai]').val(),
+            },
+          })
+          clearGlobalSearch($('#tableOTOL'))
+        },
+        afterSearch: function() {
+          console.log($(this).getGridParam())
+        }
+      })
+      .customPager({})
+    /* Append clear filter button */
+    loadClearFilter($('#tableOTOL'))
+
+    /* Append global search */
+    loadGlobalSearch($('#tableOTOL'))
+  }
+
+  function checkboxOTOLHandler(element) {
+    let value = $(element).val();
+    if (element.checked) {
+      selectedRowsOtol.push($(element).val())
+      selectedRowsOtolNobukti.push($(element).parents('tr').find(`td[aria-describedby="tableOTOL_noinvoice_detail"]`).text())
+      selectedRowsOtolJobtrucking.push($(element).parents('tr').find(`td[aria-describedby="tableOTOL_nojobtrucking_detail"]`).text())
+      selectedRowsOtolNominal.push($(element).parents('tr').find(`td[aria-describedby="tableOTOL_nominal_detail"]`).text())
+
+      $(element).parents('tr').addClass('bg-light-blue')
+    } else {
+      $(element).parents('tr').removeClass('bg-light-blue')
+      for (var i = 0; i < selectedRowsOtol.length; i++) {
+        if (selectedRowsOtol[i] == value) {
+          selectedRowsOtol.splice(i, 1);
+          selectedRowsOtolNobukti.splice(i, 1);
+          selectedRowsOtolJobtrucking.splice(i, 1);
+          selectedRowsOtolNominal.splice(i, 1);
+        }
+      }
+    }
+
+    setTotalNominalOTOL()
+  }
+
+  function setTotalNominalOTOL() {
+    let nominal = 0
+    $.each(selectedRowsOtol, (index, val) => {
+      getNominal = selectedRowsOtolNominal[index];
+      nominals = parseFloat(getNominal.replaceAll(',', ''))
+      nominal += nominals
+
+    })
+    initAutoNumeric($('.footrow').find(`td[aria-describedby="tableOTOL_nominal_detail"]`).text(nominal))
+  }
+
+  function clearSelectedRowsOTOL() {
+    selectedRowsOtol = []
+    selectedRowsOtolNobukti = [];
+    selectedRowsOtolJobtrucking = [];
+    selectedRowsOtolNominal = [];
+    $('#tableOTOL').trigger('reloadGrid')
+  }
+
+  function getDataOTOL() {
+    if ($('#crudForm').data('action') == 'edit') {
+      otolId = $(`#crudForm`).find(`[name="id"]`).val()
+      urlOtol = `${otolId}/geteditotol`
+    } else {
+      urlOtol = 'getotol'
+    }
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `${apiUrl}pengeluarantruckingheader/${urlOtol}`,
+        method: 'GET',
+        dataType: 'JSON',
+        data: {
+          tgldari: $('#crudForm').find('[name=tgldari]').val(),
+          tglsampai: $('#crudForm').find('[name=tglsampai]').val(),
+          agen_id: $('#crudForm').find('[name=agen_id]').val(),
+          container_id: $('#crudForm').find('[name=containerheader_id]').val(),
+          limit: 0
+        },
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          if ($('#crudForm').data('action') == 'edit') {
+            
+        // console.log('getDataOTOL',response)
+            response.data.map((data) => {
+              if (data.pengeluarantrucking_id != null) {
+                selectedRowsOtol.push(data.id_detail)
+                selectedRowsOtolNobukti.push(data.noinvoice_detail)
+                selectedRowsOtolJobtrucking.push(data.nojobtrucking_detail)
+                selectedRowsOtolNominal.push(data.nominal_detail)
+              }
+            })
+          }
+          response.url = urlOtol
+          resolve(response)
+        },
+        error: error => {
+          if (error.status === 422) {
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+
+
+            errors = error.responseJSON.errors
+            reject(errors)
+
+          } else {
+            showDialog(error.responseJSON)
+          }
+        },
+        error: error => {
+          reject(error)
+        }
+      })
+    })
+  }
+
+  function selectAllRowsOTOL() {
+    if ($('#crudForm').data('action') == 'edit') {
+      otolId = $(`#crudForm`).find(`[name="id"]`).val()
+      urlOtol = `${otolId}/geteditotol`
+    } else {
+      urlOtol = 'getotol'
+    }
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `${apiUrl}pengeluarantruckingheader/${urlOtol}`,
+        method: 'GET',
+        dataType: 'JSON',
+        data: {
+          tgldari: $('#crudForm').find('[name=tgldari]').val(),
+          tglsampai: $('#crudForm').find('[name=tglsampai]').val(),
+          agen_id: $('#crudForm').find('[name=agen_id]').val(),
+          container_id: $('#crudForm').find('[name=containerheader_id]').val(),
+          limit: 0
+        },
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          clearSelectedRowsOTOL()
+          selectedRowsOtol = response.data.map((data) => data.id_detail)
+          selectedRowsOtolNobukti = response.data.map((data) => data.noinvoice_detail)
+          selectedRowsOtolJobtrucking = response.data.map((data) => data.nojobtrucking_detail)
+          selectedRowsOtolNominal = response.data.map((data) => data.nominal_detail)
+
+          // $('#tableOTOK').jqGrid("clearGridData");
+          $('#tableOTOL').jqGrid('setGridParam', {
+            url: `${apiUrl}pengeluarantruckingheader/${urlOtol}`,
+            postData: {
+              tgldari: $('#crudForm').find('[name=tgldari]').val(),
+              tglsampai: $('#crudForm').find('[name=tglsampai]').val(),
+              agen_id: $('#crudForm').find('[name=agen_id]').val(),
+              container_id: $('#crudForm').find('[name=containerheader_id]').val(),
+              aksi: $('#crudForm').data('action')
+            },
+            datatype: "json"
+          }).trigger('reloadGrid');
+        },
+        error: error => {
+          if (error.status === 422) {
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+
+
+            errors = error.responseJSON.errors
+            reject(errors)
+
+          } else {
+            showDialog(error.responseJSON)
+          }
+        },
+        error: error => {
+          reject(error)
+        }
+      })
+    })
+  }
+  // END OTOL
   function resetGrid() {
     $('#detail-list-grid').html('');
     $('#modalgrid').jqGrid('clearGridData')
@@ -6755,6 +7741,52 @@
       },
       onClear: (element) => {
         $('#crudForm [name=bank_id]').first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+    $('.agen-lookup').lookup({
+      title: 'Customer Lookup',
+      fileName: 'agen',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+          Aktif: 'AKTIF',
+        }
+      },
+      onSelectRow: (agen, element) => {
+        $('#crudForm [name=agen_id]').first().val(agen.id)
+        element.val(agen.namaagen)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $('#crudForm [name=agen_id]').first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+    $('.containerheader-lookup').lookup({
+      title: 'Container Lookup',
+      fileName: 'container',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+          Aktif: 'AKTIF',
+        }
+      },
+      onSelectRow: (container, element) => {
+        $('#crudForm [name=containerheader_id]').first().val(container.id)
+        element.val(container.keterangan)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $('#crudForm [name=containerheader_id]').first().val('')
         element.val('')
         element.data('currentValue', element.val())
       }

@@ -20,93 +20,100 @@
         colModel: [{
             label: 'NO BUKTI',
             name: 'nobukti',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'SUPIR',
             name: 'supir_id',
-            width: '200px'
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
           },
           {
             label: 'KARYAWAN',
             name: 'karyawan_id',
-            width: '200px'
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
           },
           {
             label: 'NOMINAL',
             name: 'nominal',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             formatter: currencyFormat,
             align: "right",
           },
           {
             label: 'KETERANGAN',
             name: 'keterangan',
-            width: '300px'
+            width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1,
           },
           {
             label: 'NO BUKTI PENERIMAAN TRUCKING',
             name: 'penerimaantruckingheader_nobukti',
-            width: '200px'
+            width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
           },
           {
             label: 'NO SURAT PENGANTAR',
             name: 'suratpengantar_nobukti',
-            width: '200px'
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
           },
           {
             label: 'NOMINAL TAGIH',
             name: 'nominaltagih',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             formatter: currencyFormat,
             align: "right",
           },
           {
             label: 'STATUS TITIPAN EMKL',
             name: 'statustitipanemkl',
-            width: '200px'
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
           },
           {
             label: 'NO BUKTI PENGELUARAN STOK',
             name: 'pengeluaranstok_nobukti',
-            width: '200px'
+            width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
           },
           {
             label: 'NO BUKTI PENERIMAAN STOK',
             name: 'penerimaanstok_nobukti',
-            width: '200px'
+            width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
           },
           {
             label: 'stok',
             name: 'stok',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
           },
           {
             label: 'qty',
             name: 'qty',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
           },
           {
             label: 'total harga',
             name: 'total',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             formatter: currencyFormat,
             align: "right",
           },
           {
             label: 'nominal tambahan',
             name: 'nominaltambahan',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             formatter: currencyFormat,
             align: "right",
           },
           {
             label: 'KET. TAMBAHAN',
             name: 'keterangantambahan',
-            width: '200px'
+            width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1,
           },
           {
             label: 'NO orderan TRUCKING',
             name: 'orderantrucking_nobukti',
-            width: '200px'
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'NO invoice',
             name: 'invoice_nobukti',
-            width: '200px'
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
         ],
         autowidth: true,

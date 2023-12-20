@@ -150,6 +150,7 @@
           {
             label: 'STATUS CETAK',
             name: 'statuscetak',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'left',
             stype: 'select',
             searchoptions: {
@@ -198,11 +199,13 @@
           {
             label: 'NO BUKTI',
             name: 'nobukti',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'left'
           },
           {
             label: 'TGL BUKTI',
             name: 'tglbukti',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
             align: 'left',
             formatter: "date",
             formatoptions: {
@@ -212,13 +215,13 @@
           },
           {
             label: 'PENGELUARAN TRUCKING ',
-            width: 200,
+            width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
             name: 'pengeluarantrucking_id',
             align: 'left'
           },
           {
             label: 'NO BUKTI PENERIMAAN TRUCKING',
-            width: 200,
+            width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
             name: 'penerimaantrucking_nobukti',
             align: 'left',
             formatter: (value, options, rowData) => {
@@ -237,11 +240,13 @@
           {
             label: 'BANK',
             name: 'bank_id',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'left'
           },
           {
             label: 'STATUS POSTING',
             name: 'statusposting',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'left',
             stype: 'select',
             searchoptions: {
@@ -289,36 +294,42 @@
           {
             label: 'supir',
             name: 'supir',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
             align: 'left'
           },
           {
             label: 'trado',
             name: 'trado',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'left'
           },
           {
             label: 'gandengan',
             name: 'gandengan',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'left'
           },
           {
             label: 'karyawan',
             name: 'karyawan',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
             align: 'left'
           },
           {
             label: 'NO BUKTI Pengeluaran Trucking',
             name: 'pengeluarantrucking_nobukti',
+            width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
             align: 'left'
           },
           {
             label: 'KODE PERKIRAAN',
             name: 'coa',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
             align: 'left'
           },
           {
             label: 'NO BUKTI pengeluaran',
-            width: 210,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
             name: 'pengeluaran_nobukti',
             align: 'left',
             formatter: (value, options, rowData) => {
@@ -337,11 +348,13 @@
           {
             label: 'USER BUKA CETAK',
             name: 'userbukacetak',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'left'
           },
           {
-            label: 'TGL CETAK',
+            label: 'TGL BUKA CETAK',
             name: 'tglbukacetak',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'left',
             formatter: "date",
             formatoptions: {
@@ -352,11 +365,13 @@
           {
             label: 'MODIFIED BY',
             name: 'modifiedby',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'left'
           },
           {
             label: 'CREATED AT',
             name: 'created_at',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
             align: 'right',
             formatter: "date",
             formatoptions: {
@@ -367,6 +382,7 @@
           {
             label: 'UPDATED AT',
             name: 'updated_at',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
             align: 'right',
             formatter: "date",
             formatoptions: {
