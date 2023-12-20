@@ -62,6 +62,12 @@
                                 width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_1
                             },
                             {
+                                label: 'Container',
+                                name: 'container',
+                                align: 'left',
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_1
+                            },
+                            {
                                 label: 'JLH BAN',
                                 name: 'jumlahroda',
                                 width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_1
@@ -119,7 +125,7 @@
                                 label: 'MODIFIED BY',
                                 name: 'modifiedby',
                                 align: 'left',
-                                width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_2
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                             },
                             {
                                 label: 'UPDATED AT',
@@ -129,7 +135,8 @@
                                     srcformat: "ISO8601Long",
                                     newformat: "d-m-Y H:i:s"
                                 },
-                                width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_2
+                                align: 'right',
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                             }, {
                                 label: 'CREATED AT',
                                 name: 'created_at',
@@ -138,7 +145,8 @@
                                     srcformat: "ISO8601Long",
                                     newformat: "d-m-Y H:i:s"
                                 },
-                                width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_2
+                                align: 'right',
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                             },
                         ],
                         autowidth: true,
