@@ -26,17 +26,20 @@
         {
           label: 'KATEGORI',
           name: 'kodekategori',
+          width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
           align: 'left',
         },
         {
           label: 'KETERANGAN',
           name: 'keterangan',
+          width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
           align: 'left'
         },
        
         {
           label: 'STATUS AKTIF',
           name: 'status',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           stype: 'select',
           searchoptions: {
             dataInit: function(element) {
@@ -102,11 +105,13 @@
         {
           label: 'MODIFIED BY',
           name: 'modifiedby',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           align: 'left'
         },
         {
           label: 'CREATED AT',
           name: 'created_at',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
           align: 'right',
           formatter: "date",
           formatoptions: {
@@ -117,6 +122,7 @@
         {
           label: 'UPDATED AT',
           name: 'updated_at',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
           align: 'right',
           formatter: "date",
           formatoptions: {

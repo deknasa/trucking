@@ -54,18 +54,22 @@
                             {
                                 label: 'kode penerimaan',
                                 name: 'kodepenerimaan',
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                             },
                             {
                                 label: 'keterangan',
                                 name: 'keterangan',
+                                width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
                             },
                             {
                                 label: 'KODE PERKIRAAN',
                                 name: 'coa',
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
                             },
                             {
                                 label: 'Format',
                                 name: 'format',
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                                 formatter: (value, options, rowData) => {
                                     let Format = JSON.parse(value)
 
@@ -86,7 +90,7 @@
                             {
                                 label: 'status hitung stok',
                                 name: 'statushitungstok',
-                                width: 180,
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
                                 stype: 'select',
                                 searchoptions: {
 
@@ -130,10 +134,12 @@
                             {
                                 label: 'MODIFIED BY',
                                 name: 'modifiedby',
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                             },
                             {
                                 label: 'CREATED AT',
                                 name: 'created_at',
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                                 align: 'right',
                                 formatter: "date",
                                 formatoptions: {
@@ -144,6 +150,7 @@
                             {
                                 label: 'UPDATED AT',
                                 name: 'updated_at',
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                                 align: 'right',
                                 formatter: "date",
                                 formatoptions: {

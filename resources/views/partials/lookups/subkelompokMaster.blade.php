@@ -46,6 +46,7 @@ $idLookup = isset($id) ? $id : null;
       {
         label: 'Sub kelompok',
         name: 'kodesubkelompok',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
       },
     ];
   } else {
@@ -60,18 +61,22 @@ $idLookup = isset($id) ? $id : null;
       {
         label: 'Sub kelompok',
         name: 'kodesubkelompok',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
       },
       {
         label: 'Keterangan',
         name: 'keterangan',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
       },
       {
         label: 'Kelompok',
         name: 'kelompok_id',
+          width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
       },
       {
         label: 'Status Aktif',
         name: 'statusaktif',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
         formatter: (value, options, rowData) => {
           let statusAktif = JSON.parse(value)
 
@@ -92,10 +97,12 @@ $idLookup = isset($id) ? $id : null;
       {
         label: "Modified By",
         name: "modifiedby",
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
       },
       {
         label: "Created At",
         name: "created_at",
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
         formatter: "date",
         formatoptions: {
           srcformat: "ISO8601Long",
@@ -105,6 +112,7 @@ $idLookup = isset($id) ? $id : null;
       {
         label: "Updated At",
         name: "updated_at",
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
         formatter: "date",
         formatoptions: {
           srcformat: "ISO8601Long",

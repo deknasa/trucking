@@ -46,6 +46,7 @@ $idLookup = isset($id) ? $id : null;
       {
         label: 'NAMA BANK',
         name: 'namabank',
+        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
         align: 'left'
       },
     ];
@@ -61,21 +62,25 @@ $idLookup = isset($id) ? $id : null;
       {
         label: 'BANK',
         name: 'kodebank',
+        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
         align: 'left',
       },
       {
         label: 'NAMA BANK',
         name: 'namabank',
+        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
         align: 'left'
       },
       {
         label: 'KETERANGAN',
         name: 'keterangan',
+        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
         align: 'left'
       },
       {
         label: 'Status Aktif',
         name: 'statusaktif',
+        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
         formatter: (value, options, rowData) => {
           let statusAktif = JSON.parse(value)
 
@@ -96,10 +101,12 @@ $idLookup = isset($id) ? $id : null;
       {
         label: "Modified By",
         name: "modifiedby",
+        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
       },
       {
         label: "Created At",
         name: "created_at",
+        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
         formatter: "date",
         formatoptions: {
           srcformat: "ISO8601Long",
@@ -109,6 +116,7 @@ $idLookup = isset($id) ? $id : null;
       {
         label: "Updated At",
         name: "updated_at",
+        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
         formatter: "date",
         formatoptions: {
           srcformat: "ISO8601Long",
@@ -310,7 +318,7 @@ $idLookup = isset($id) ? $id : null;
       if ($(`#t_${idTop} label[for='searchText']`).length === 0) {
         $(`#t_${idTop}`).append(label);
       }
-      
+
       var hideLabel = `{{ $hideLabel ?? '' }}`
 
       if (hideLabel) {

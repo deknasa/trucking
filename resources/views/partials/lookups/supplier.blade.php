@@ -10,59 +10,68 @@
       datatype: "json",
       postData: {
         aktif: `{!! $Aktif ?? '' !!}`,
-      },   
+      },
       idPrefix: 'supplierLookup',
       colModel: [{
           label: 'ID',
           name: 'id',
           align: 'right',
           width: '70px',
-            search: false,
+          search: false,
           hidden: true
         },
         {
           label: 'NAMA',
           name: 'namasupplier',
+          width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
           align: 'left',
         },
         {
           label: 'NAMA KONTAK',
           name: 'namakontak',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
           align: 'left',
         },
         {
           label: 'ALAMAT',
           name: 'alamat',
+          width: (detectDeviceType() == "desktop") ? md_dekstop_3 : md_mobile_3,
           align: 'left'
         },
         {
           label: 'KOTA',
           name: 'kota',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           align: 'left'
         },
         {
           label: 'KODE POS',
           name: 'kodepos',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
           align: 'left'
         },
         {
           label: 'NO TELEPON (1)',
           name: 'notelp1',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
           align: 'left'
         },
         {
           label: 'NO TELEPON (2)',
           name: 'notelp2',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
           align: 'left'
         },
         {
           label: 'EMAIL',
           name: 'email',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
           align: 'left',
         },
         {
           label: 'STATUS AKTIF',
           name: 'statusaktif',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           align: 'left',
           stype: 'select',
           searchoptions: {
@@ -129,46 +138,55 @@
         {
           label: 'WEB',
           name: 'web',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           align: 'left',
         },
         {
           label: 'NAMA PEMILIK',
           name: 'namapemilik',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
           align: 'left',
         },
         {
           label: 'JENIS USAHA',
           name: 'jenisusaha',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
           align: 'left',
         },
         {
           label: 'TOP',
           name: 'top',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
           align: 'left',
         },
         {
           label: 'BANK',
           name: 'bank',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           align: 'left',
         },
         {
           label: 'REKENING BANK',
           name: 'rekeningbank',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
           align: 'left',
         },
         {
           label: 'NAMA REKENING',
           name: 'namarekening',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           align: 'left',
         },
         {
           label: 'JABATAN',
           name: 'jabatan',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           align: 'left',
         },
         {
           label: 'STATUS DAFTAR HARGA',
           name: 'statusdaftarharga',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           align: 'left',
           stype: 'select',
           searchoptions: {
@@ -235,28 +253,36 @@
         {
           label: 'KATEGORI USAHA',
           name: 'kategoriusaha',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           align: 'left',
         },
-          {
-            label: 'CREATED AT',
-            name: 'created_at',
-            align: 'right',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y H:i:s"
-            }
-          },
-          {
-            label: 'UPDATED AT',
-            name: 'updated_at',
-            align: 'right',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y H:i:s"
-            }
-          },
+        {
+          label: 'MODIFIED BY',
+          name: 'modifiedby',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+        },
+        {
+          label: 'CREATED AT',
+          name: 'created_at',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+          align: 'right',
+          formatter: "date",
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y H:i:s"
+          }
+        },
+        {
+          label: 'UPDATED AT',
+          name: 'updated_at',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+          align: 'right',
+          formatter: "date",
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y H:i:s"
+          }
+        },
       ],
       autowidth: true,
       responsive: true,
@@ -297,7 +323,7 @@
         setGridLastRequest($(this), jqXHR)
       },
       loadComplete: function(data) {
-          changeJqGridRowListText()
+        changeJqGridRowListText()
         if (detectDeviceType() == 'desktop') {
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
@@ -343,26 +369,26 @@
 
     .jqGrid("setLabel", "rn", "No.")
     .jqGrid('filterToolbar', {
-        stringResult: true,
-        searchOnEnter: false,
-        defaultSearch: 'cn',
-        groupOp: 'AND',
-        disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
-        beforeSearch: function() {
-          abortGridLastRequest($(this))
-          
-          clearGlobalSearch($('#detail'))
-        },
-      })
+      stringResult: true,
+      searchOnEnter: false,
+      defaultSearch: 'cn',
+      groupOp: 'AND',
+      disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
+      beforeSearch: function() {
+        abortGridLastRequest($(this))
 
-      .jqGrid("navGrid", pager, {
-        search: false,
-        refresh: false,
-        add: false,
-        edit: false,
-        del: false,
-      })
-      .customPager()
+        clearGlobalSearch($('#detail'))
+      },
+    })
+
+    .jqGrid("navGrid", pager, {
+      search: false,
+      refresh: false,
+      add: false,
+      edit: false,
+      del: false,
+    })
+    .customPager()
 
   loadGlobalSearch($('#supplierLookup'))
   loadClearFilter($('#supplierLookup'))

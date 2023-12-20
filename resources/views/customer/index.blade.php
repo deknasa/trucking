@@ -45,18 +45,22 @@
                     {
                         label: 'KODE CUSTOMER',
                         name: 'kodeagen',
+                        width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
                     },
                     {
                         label: 'NAMA CUSTOMER',
                         name: 'namaagen',
+                        width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
                     },
                     {
                         label: 'KETERANGAN',
                         name: 'keterangan',
+                        width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
                     },
                     {
                         label: 'STATUS',
                         name: 'statusaktif',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         stype: 'select',
                         searchoptions: {
                             value: `:ALL;<?php
@@ -100,28 +104,34 @@
                     {
                         label: 'NAMA PERUSAHAAN',
                         name: 'namaperusahaan',
+                        width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
                     },
                     {
                         label: 'ALAMAT',
                         name: 'alamat',
+                        width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
                     },
                     {
                         label: 'NO TELEPON / HANDPHONE',
                         name: 'notelp',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
                     },
                     {
                         label: 'NAMA KONTAK',
                         name: 'contactperson',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                     },
                     {
                         label: 'STATUS PEMBAYARAN (TOP)',
                         name: 'top',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
                         align: 'right',
                         formatter: currencyFormat
                     },
                     {
                         label: 'STATUS APPROVAL',
                         name: 'statusapproval',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         stype: 'select',
                         searchoptions: {
                             value: `:ALL;<?php
@@ -165,10 +175,12 @@
                     {
                         label: 'USER APPROVAL',
                         name: 'userapproval',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                     },
                     {
                         label: 'TGL APPROVAL',
                         name: 'tglapproval',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         align: 'left',
                         formatter: "date",
                         formatoptions: {
@@ -179,6 +191,7 @@
                     {
                         label: 'STATUS TAS',
                         name: 'statustas',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         stype: 'select',
                         searchoptions: {
                             value: `:ALL;<?php
@@ -224,10 +237,12 @@
                     {
                         label: 'MODIFIED BY',
                         name: 'modifiedby',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                     },
                     {
                         label: 'CREATED AT',
                         name: 'created_at',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                         align: 'right',
                         formatter: "date",
                         formatoptions: {
@@ -238,6 +253,7 @@
                     {
                         label: 'UPDATED AT',
                         name: 'updated_at',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                         align: 'right',
                         formatter: "date",
                         formatoptions: {

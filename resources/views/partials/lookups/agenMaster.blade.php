@@ -46,6 +46,7 @@ $idLookup = isset($id) ? $id : null;
       {
         label: 'NAMA CUSTOMER',
         name: 'namaagen',
+        width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
         align: 'left'
       },
     ];
@@ -61,21 +62,25 @@ $idLookup = isset($id) ? $id : null;
       {
         label: 'KODE CUSTOMER',
         name: 'kodeagen',
+        width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
         align: 'left',
       },
       {
         label: 'NAMA CUSTOMER',
         name: 'namaagen',
+        width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
         align: 'left'
       },
       {
         label: 'KETERANGAN',
         name: 'keterangan',
+        width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
         align: 'left'
       },
       {
         label: 'Status Aktif',
         name: 'statusaktif',
+        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
         formatter: (value, options, rowData) => {
           let statusAktif = JSON.parse(value)
 
@@ -96,26 +101,31 @@ $idLookup = isset($id) ? $id : null;
       {
         label: 'NAMA PERUSAHAAN',
         name: 'namaperusahaan',
+        width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
         align: 'left'
       },
       {
         label: 'ALAMAT',
         name: 'alamat',
+        width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
         align: 'left'
       },
       {
         label: 'NO TELEPON / HANDPHONE',
         name: 'notelp',
+        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
         align: 'left'
       },
       {
         label: 'NAMA KONTAK',
         name: 'contactperson',
+        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
         align: 'left'
       },
       {
         label: 'STATUS PEMBAYARAN (TOP)',
         name: 'top',
+        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
         align: 'right',
         formatter: currencyFormat
       },
@@ -142,15 +152,18 @@ $idLookup = isset($id) ? $id : null;
       {
         label: 'JENIS EMKL',
         name: 'jenisemkl',
+        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
         align: 'left'
       },
       {
         label: "Modified By",
         name: "modifiedby",
+        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
       },
       {
         label: "Created At",
         name: "created_at",
+        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
         formatter: "date",
         formatoptions: {
           srcformat: "ISO8601Long",
@@ -160,6 +173,7 @@ $idLookup = isset($id) ? $id : null;
       {
         label: "Updated At",
         name: "updated_at",
+        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
         formatter: "date",
         formatoptions: {
           srcformat: "ISO8601Long",

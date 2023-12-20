@@ -46,18 +46,22 @@
                     {
                         label: 'Nama Penerima',
                         name: 'namapenerima',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
                     },
                     {
                         label: 'NPWP',
                         name: 'npwp',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                     },
                     {
                         label: 'No KTP',
                         name: 'noktp',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                     },
                     {
                         label: 'status',
                         name: 'statusaktif',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         stype: 'select',
                         searchoptions: {
                             value: `<?php
@@ -100,7 +104,7 @@
                     {
                         label: 'status karyawan',
                         name: 'statuskaryawan',
-                        width: 180,
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         stype: 'select',
                         searchoptions: {
                             value: `<?php
@@ -143,10 +147,12 @@
                     {
                         label: 'MODIFIED BY',
                         name: 'modifiedby',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                     },
                     {
                         label: 'CREATED AT',
                         name: 'created_at',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                         align: 'right',
                         formatter: "date",
                         formatoptions: {
@@ -157,6 +163,7 @@
                     {
                         label: 'UPDATED AT',
                         name: 'updated_at',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                         align: 'right',
                         formatter: "date",
                         formatoptions: {

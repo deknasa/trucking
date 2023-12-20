@@ -46,14 +46,17 @@
                             {
                                 label: 'KODE MERK',
                                 name: 'kodemerk',
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                             },
                             {
                                 label: 'KETERANGAN',
                                 name: 'keterangan',
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                             },
                             {
                                 label: 'STATUS',
                                 name: 'statusaktif',
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                                 stype: 'select',
                                 searchoptions: {
                                     value: `<?php
@@ -68,7 +71,7 @@
                                     endforeach;
                                     
                                     ?>
-            `,
+                                `,
                                     dataInit: function(element) {
                                         $(element).select2({
                                             width: 'resolve',
@@ -96,10 +99,12 @@
                             {
                                 label: 'MODIFIED BY',
                                 name: 'modifiedby',
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                             },
                             {
                                 label: 'CREATED AT',
                                 name: 'created_at',
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                                 align: 'right',
                                 formatter: "date",
                                 formatoptions: {
@@ -110,6 +115,7 @@
                             {
                                 label: 'UPDATED AT',
                                 name: 'updated_at',
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                                 align: 'right',
                                 formatter: "date",
                                 formatoptions: {
