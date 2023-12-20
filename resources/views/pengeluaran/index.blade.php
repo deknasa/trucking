@@ -282,12 +282,6 @@
             }
           },
           {
-            label: 'SHIPPER ',
-            name: 'pelanggan_id',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-            align: 'left'
-          },
-          {
             label: 'ALAT BAYAR',
             name: 'alatbayar_id',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,

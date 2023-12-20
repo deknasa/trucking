@@ -288,13 +288,7 @@
             }
           },
           {
-            label: 'SHIPPER',
-            name: 'pelanggan_id',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-            align: 'left'
-          },
-          {
-            label: 'AGEN ',
+            label: 'CUSTOMER ',
             name: 'agen_id',
             width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
             align: 'left'
