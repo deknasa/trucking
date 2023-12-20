@@ -46,6 +46,18 @@
                 <input type="text" name="trado" class="form-control trado-lookup">
               </div>
             </div>
+            
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
+                 Container
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="hidden" name="container_id">
+                <input type="text" name="container" class="form-control container-lookup">
+              </div>
+            </div>
 
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
@@ -426,6 +438,34 @@
           element.val(trado.kodetrado)
           element.data('currentValue', element.val())
           console.log(trado)
+        },
+      
+        onCancel: (element) => {
+          element.val(element.data('currentValue'))
+        },
+        onClear: (element) => {
+          $('#crudForm [name=trado_id]').first().val('')
+          element.val('')
+          element.data('currentValue', element.val())
+        }
+      })
+    }
+    if (!$('.container-lookup').data('hasLookup')) {
+      $('.container-lookup').lookup({
+        title: 'container Lookup',
+        fileName: 'container',
+        beforeProcess: function(test) {
+          // var levelcoa = $(`#levelcoa`).val();
+          this.postData = {
+
+            Aktif: 'AKTIF',
+          }
+        },
+        onSelectRow: (container, element) => {
+          $('#crudForm [name=container_id]').first().val(container.id)
+          element.val(container.kodecontainer)
+          element.data('currentValue', element.val())
+          console.log(container)
         },
       
         onCancel: (element) => {
