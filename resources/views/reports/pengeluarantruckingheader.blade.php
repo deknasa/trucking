@@ -125,6 +125,15 @@
           } else {
             report.loadFile(`{{ asset('public/reports/ReportPengeluaranTruckingHeaderTDEK.mrt') }}`)
           }
+          break;          
+        case '556':
+        case '557':
+          //OTOK&OTOL
+          if (printer['tipe'] == 'reportPrinterBesar') {
+            report.loadFile(`{{ asset('public/reports/ReportPengeluaranTruckingHeaderOTOBesar.mrt') }}`)
+          } else {
+            report.loadFile(`{{ asset('public/reports/ReportPengeluaranTruckingHeaderOTO.mrt') }}`)
+          }
           break;
         default:
           if (printer['tipe'] == 'reportPrinterBesar') {
