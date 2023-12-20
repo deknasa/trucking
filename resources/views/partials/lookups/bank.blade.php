@@ -29,26 +29,31 @@
         {
           label: 'KAS/BANK',
           name: 'kodebank',
+          width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_1,
           align: 'left',
         },
         {
           label: 'NAMA KAS/BANK',
           name: 'namabank',
+          width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_1,
           align: 'left'
         },
         {
           label: 'KODE PERKIRAAN',
           name: 'coa',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
           align: 'left'
         },
         {
           label: 'TIPE',
           name: 'tipe',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
           align: 'left'
         },
         {
           label: 'STATUS AKTIF',
           name: 'statusaktif',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           stype: 'select',
           searchoptions: {
             dataInit: function(element) {
@@ -114,7 +119,7 @@
         {
           label: 'FORMAT PENERIMAAN',
           name: 'formatpenerimaan',
-          width: 190,
+          width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
           align: 'left',
           formatter: (value, options, rowData) => {
             if (!value) {
@@ -142,7 +147,7 @@
         {
           label: 'FORMAT PENGELUARAN',
           name: 'formatpengeluaran',
-          width: 190,
+          width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
 
           align: 'left',
           formatter: (value, options, rowData) => {
@@ -171,11 +176,13 @@
         {
           label: 'MODIFIED BY',
           name: 'modifiedby',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           align: 'left'
         },
         {
           label: 'CREATED AT',
           name: 'created_at',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
           align: 'right',
           formatter: "date",
           formatoptions: {
@@ -186,6 +193,7 @@
         {
           label: 'UPDATED AT',
           name: 'updated_at',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
           align: 'right',
           formatter: "date",
           formatoptions: {

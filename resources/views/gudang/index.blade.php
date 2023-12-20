@@ -46,10 +46,12 @@
                             {
                                 label: 'GUDANG',
                                 name: 'gudang',
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
                             },
                             {
                                 label: 'STATUS',
                                 name: 'statusaktif',
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                                 stype: 'select',
                                 searchoptions: {
                                     value: `<?php
@@ -64,7 +66,7 @@
                                     endforeach;
                                     
                                     ?>
-            `,
+                                    `,
                                     dataInit: function(element) {
                                         $(element).select2({
                                             width: 'resolve',
@@ -76,10 +78,10 @@
                                     let statusAktif = JSON.parse(value)
 
                                     let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusAktif.WARNA}; color: ${statusAktif.WARNATULISAN};">
-                  <span>${statusAktif.SINGKATAN}</span>
-                </div>
-              `)
+                                        <div class="badge" style="background-color: ${statusAktif.WARNA}; color: ${statusAktif.WARNATULISAN};">
+                                        <span>${statusAktif.SINGKATAN}</span>
+                                        </div>
+                                    `)
 
                                     return formattedValue[0].outerHTML
                                 },
@@ -93,10 +95,12 @@
                             {
                                 label: 'MODIFIED BY',
                                 name: 'modifiedby',
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                             },
                             {
                                 label: 'CREATED AT',
                                 name: 'created_at',
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                                 align: 'right',
                                 formatter: "date",
                                 formatoptions: {
@@ -107,6 +111,7 @@
                             {
                                 label: 'UPDATED AT',
                                 name: 'updated_at',
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                                 align: 'right',
                                 formatter: "date",
                                 formatoptions: {

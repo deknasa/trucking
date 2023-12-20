@@ -29,10 +29,12 @@ $('#stokLookup').jqGrid({
         label: 'NAMA',
         name: 'namastok',
         align: 'left',
+        width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1
       },
       {
           label: 'Status aktif',
           name: 'statusaktif',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           stype: 'select',
           searchoptions: {
             dataInit: function(element) {
@@ -102,6 +104,7 @@ $('#stokLookup').jqGrid({
       {
           label: 'Status Reuse',
           name: 'statusreuse',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           stype: 'select',
           searchoptions: {
             dataInit: function(element) {
@@ -171,52 +174,62 @@ $('#stokLookup').jqGrid({
       {
           label: 'nama terpusat',
           name: 'namaterpusat',
+          width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
           align: 'left',
       },
       {
         label: 'kelompok',
         name: 'kelompok',
+        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
         align: 'left'
       },
       {
         label: 'statusban',
         name: 'statusban',
+        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
         align: 'left'
       },
       {
         label: 'jenistrado',
         name: 'jenistrado',
+        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
         align: 'left'
       },
       {
         label: 'subkelompok',
         name: 'subkelompok',
+        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
         align: 'left'
       },
       {
         label: 'kategori',
         name: 'kategori',
+        width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
         align: 'left'
       },
       {
         label: 'merk',
         name: 'merk',
+        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
         align: 'left'
       },
       
       {
           label: 'qty min',
           name: 'qtymin',
+        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
           align: 'left',
       },
       {
           label: 'qty max',
           name: 'qtymax',
+        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
           align: 'left',
       },
       {
           label: 'total vulkanisir',
           name: 'vulkan',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           align: 'left',
       },
       {
@@ -271,6 +284,7 @@ $('#stokLookup').jqGrid({
       {
           label: 'Status Service Rutin',
           name: 'statusservicerutin',
+        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           stype: 'select',
           searchoptions: {
             dataInit: function(element) {
@@ -348,11 +362,13 @@ $('#stokLookup').jqGrid({
       {
           label: 'MODIFIED BY',
           name: 'modifiedby',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           align: 'left',
       },
           {
             label: 'CREATED AT',
             name: 'created_at',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
             align: 'right',
             formatter: "date",
             formatoptions: {
@@ -363,6 +379,7 @@ $('#stokLookup').jqGrid({
           {
             label: 'UPDATED AT',
             name: 'updated_at',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
             align: 'right',
             formatter: "date",
             formatoptions: {

@@ -25,16 +25,19 @@
         {
           label: 'ALAT BAYAR',
           name: 'kodealatbayar',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           align: 'left',
         },
         {
           label: 'NAMA ALAT BAYAR',
           name: 'namaalatbayar',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           align: 'left',
         },
         {
           label: 'BANK',
           name: 'bank',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           align: 'left'
         },
         {
@@ -45,11 +48,13 @@
         {
           label: 'KETERANGAN',
           name: 'keterangan',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           align: 'left'
         },
         {
           label: 'STATUS LANGSUNG CAIR',
           name: 'statuslangsungcair',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           stype: 'select',
           searchoptions: {
             dataInit: function(element) {
@@ -115,6 +120,7 @@
         {
           label: 'STATUS DEFAULT',
           name: 'statusdefault',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           stype: 'select',
           searchoptions: {
             dataInit: function(element) {
@@ -180,11 +186,13 @@
         {
           label: 'MODIFIED BY',
           name: 'modifiedby',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           align: 'left'
         },
           {
             label: 'CREATED AT',
             name: 'created_at',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
             align: 'right',
             formatter: "date",
             formatoptions: {
@@ -195,6 +203,7 @@
           {
             label: 'UPDATED AT',
             name: 'updated_at',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
             align: 'right',
             formatter: "date",
             formatoptions: {

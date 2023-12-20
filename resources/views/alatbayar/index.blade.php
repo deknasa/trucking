@@ -47,18 +47,22 @@
                             {
                                 label: 'KODE ALAT BAYAR',
                                 name: 'kodealatbayar',
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                             },
                             {
                                 label: 'NAMA ALAT BAYAR',
                                 name: 'namaalatbayar',
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                             },
                             {
                                 label: 'KETERANGAN',
                                 name: 'keterangan',
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                             },
                             {
                                 label: 'STATUS LANGSUNG CAIR',
                                 name: 'statuslangsungcair',
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                                 align: 'left',
                                 stype: 'select',
                                 searchoptions: {
@@ -103,6 +107,7 @@
                             {
                                 label: 'STATUS DEFAULT',
                                 name: 'statusdefault',
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                                 align: 'left',
                                 stype: 'select',
                                 searchoptions: {
@@ -147,7 +152,7 @@
                             {
                                 label: 'Status',
                                 name: 'statusaktif',
-                                width: 100,
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                                 stype: 'select',
                                 searchoptions: {
                                     value: `<?php
@@ -190,14 +195,17 @@
                             {
                                 label: 'BANK',
                                 name: 'bank',
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                             },
                             {
                                 label: 'MODIFIED BY',
                                 name: 'modifiedby',
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                             },
                             {
                                 label: 'CREATED AT',
                                 name: 'created_at',
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                                 align: 'right',
                                 formatter: "date",
                                 formatoptions: {
@@ -208,6 +216,7 @@
                             {
                                 label: 'UPDATED AT',
                                 name: 'updated_at',
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                                 align: 'right',
                                 formatter: "date",
                                 formatoptions: {

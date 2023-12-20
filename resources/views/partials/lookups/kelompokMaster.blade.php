@@ -46,6 +46,7 @@ $idLookup = isset($id) ? $id : null;
       {
         label: 'Kelompok',
         name: 'kodekelompok',
+        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
         align: 'left'
       },
     ];
@@ -60,14 +61,17 @@ $idLookup = isset($id) ? $id : null;
           {
             label: 'Kelompok',
             name: 'kodekelompok',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'Keterangan',
             name: 'keterangan',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
           },
           {
             label: 'Status Aktif',
             name: 'statusaktif',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           stype: 'select',
           searchoptions: {
             dataInit: function(element) {
@@ -133,10 +137,12 @@ $idLookup = isset($id) ? $id : null;
           {
             label: 'MODIFIED BY',
             name: 'modifiedby',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'CREATED AT',
             name: 'created_at',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
             align: 'right',
             formatter: "date",
             formatoptions: {
@@ -147,6 +153,7 @@ $idLookup = isset($id) ? $id : null;
           {
             label: 'UPDATED AT',
             name: 'updated_at',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
             align: 'right',
             formatter: "date",
             formatoptions: {

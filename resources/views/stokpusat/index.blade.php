@@ -45,63 +45,77 @@
                     {
                         label: 'NAMA TERPUSAT',
                         name: 'namaterpusat',
-                        width: '300px'
+                        width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
                     },
                     {
                         label: 'ID MEDAN',
                         name: 'idmedan',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                     },
                     {
                         label: 'NAMA MEDAN',
                         name: 'namamedan',
+                        width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
                     },
                     {
                         label: 'ID SURABAYA',
                         name: 'idsurabaya',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                     },
                     {
                         label: 'NAMA SURABAYA',
                         name: 'namasurabaya',
+                        width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
                     },
                     {
                         label: 'ID JAKARTA',
                         name: 'idjakarta',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                     },
                     {
                         label: 'NAMA JAKARTA',
                         name: 'namajakarta',
+                        width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
                     },
                     {
                         label: 'ID JKT TNL',
                         name: 'idjakartatnl',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                     },
                     {
                         label: 'NAMA JKT TNL',
                         name: 'namajakartatnl',
+                        width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
                     },
                     {
                         label: 'ID MAKASSAR',
                         name: 'idmakassar',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                     },
                     {
                         label: 'NAMA MAKASSAR',
                         name: 'namamakassar',
+                        width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
                     },
                     {
                         label: 'ID BITUNG',
                         name: 'idmanado',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                     },
                     {
                         label: 'NAMA BITUNG',
                         name: 'namamanado',
+                        width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
                     },
                     {
                         label: 'MODIFIED BY',
                         name: 'modifiedby',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                     },
                     {
                         label: 'CREATED AT',
                         name: 'created_at',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                         align: 'right',
                         formatter: "date",
                         formatoptions: {
@@ -112,6 +126,7 @@
                     {
                         label: 'UPDATED AT',
                         name: 'updated_at',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                         align: 'right',
                         formatter: "date",
                         formatoptions: {

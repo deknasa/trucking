@@ -28,7 +28,7 @@
           label: 'STATUS AKTIF',
           name: 'statusaktif',
           align: 'left',
-          width: '100px',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           stype: 'select',
           searchoptions: {
             dataInit: function(element) {
@@ -94,33 +94,36 @@
         {
           label: 'KODE PERKIRAAN',
           name: 'coa',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           align: 'left',
         },
         {
           label: 'NAMA',
           name: 'keterangancoa',
           align: 'left',
-          width: '500px'
+          width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
         },
         {
           label: 'TYPE',
           name: 'type',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           align: 'left'
         },
         {
           label: 'LEVEL',
           name: 'level',
           align: 'left',
-          width: '70px'
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
         },
         {
           label: 'PARENT',
           name: 'parent',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           align: 'left'
         },
         {
           label: 'STATUS PARENT',
-          width: 210,
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           name: 'statusparent',
           align: 'left',
 
@@ -195,6 +198,7 @@
         {
           label: 'STATUS NERACA',
           name: 'statusneraca',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           align: 'left',
           stype: 'select',
           searchoptions: {
@@ -261,6 +265,7 @@
         {
           label: 'STATUS LABA RUGI',
           name: 'statuslabarugi',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           align: 'left',
 
           stype: 'select',
@@ -327,18 +332,20 @@
         },
         {
           label: 'kode perkiraan main',
-          width: 200,
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
           name: 'coamain',
           align: 'left'
         },
         {
           label: 'MODIFIED BY',
           name: 'modifiedby',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           align: 'left'
         },
         {
           label: 'CREATED AT',
           name: 'created_at',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
           align: 'right',
           formatter: "date",
           formatoptions: {
@@ -349,6 +356,7 @@
         {
           label: 'UPDATED AT',
           name: 'updated_at',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
           align: 'right',
           formatter: "date",
           formatoptions: {
@@ -359,6 +367,7 @@
         {
           label: 'kode-keterangan',
           name: 'kodeket',
+            width: (detectDeviceType() == "desktop") ? md_dekstop_3 : md_mobile_3,
           align: 'left'
         },
       ],

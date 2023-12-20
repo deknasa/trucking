@@ -109,6 +109,7 @@
           {
             label: 'STATUS APPROVAL',
             name: 'statusapproval',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'left',
             stype: 'select',
             searchoptions: {
@@ -158,48 +159,59 @@
           {
             label: 'nama supplier',
             name: 'namasupplier',
+            width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
           },
           {
             label: 'nama kontak',
             name: 'namakontak',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
           },
           {
             label: 'alamat',
             name: 'alamat',
+            width: (detectDeviceType() == "desktop") ? md_dekstop_3 : md_mobile_3,
           },
 
           {
             label: 'kota',
             name: 'kota',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'kode pos',
             name: 'kodepos',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
           },
           {
             label: 'NO TELEPON/HANDPHONE (1)',
             name: 'notelp1',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
           },
           {
             label: 'NO TELEPON/HANDPHONE (2)',
             name: 'notelp2',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
           },
           {
             label: 'email',
             name: 'email',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
           },
 
           {
             label: 'web',
             name: 'web',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'nama pemilik',
             name: 'namapemilik',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
           },
           {
             label: 'jenis usaha',
             name: 'jenisusaha',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
           },
           // {
           //   label: 'top',
@@ -208,28 +220,33 @@
           {
             label: 'bank',
             name: 'bank',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'rekening bank',
             name: 'rekeningbank',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
           },
 
           {
             label: 'jabatan',
             name: 'jabatan',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'keterangan',
             name: 'keterangan',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'syarat pembayaran',
             name: 'top',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'status daftar harga',
             name: 'statusdaftarharga',
-            width: 180,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
             stype: 'select',
             searchoptions: {
               value: `<?php
@@ -267,7 +284,7 @@
           {
             label: 'status aktif',
             name: 'statusaktif',
-            width: 130,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             stype: 'select',
             searchoptions: {
               value: `<?php
@@ -304,7 +321,7 @@
           {
             label: 'status posting tnl',
             name: 'statuspostingtnl',
-            width: 130,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
             stype: 'select',
             searchoptions: {
               value: `<?php
@@ -347,15 +364,18 @@
           {
             label: 'kategori usaha',
             name: 'kategoriusaha',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
 
           {
             label: 'MODIFIED BY',
             name: 'modifiedby',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'CREATED AT',
             name: 'created_at',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
             align: 'right',
             formatter: "date",
             formatoptions: {
@@ -366,6 +386,7 @@
           {
             label: 'UPDATED AT',
             name: 'updated_at',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
             align: 'right',
             formatter: "date",
             formatoptions: {

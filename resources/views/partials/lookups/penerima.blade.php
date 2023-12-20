@@ -21,18 +21,22 @@
         {
           label: 'NAMA PENERIMA',
           name: 'namapenerima',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
         },
         {
           label: 'NPWP',
           name: 'npwp',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
         },
         {
           label: 'NO KTP',
           name: 'noktp',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
         },
         {
           label: 'STATUS AKTIF',
           name: 'statusaktif',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           stype: 'select',
           searchoptions: {
             dataInit: function(element) {
@@ -98,6 +102,7 @@
         {
           label: 'STATUS KARYAWAN',
           name: 'statuskaryawan',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           stype: 'select',
           searchoptions: {
             dataInit: function(element) {
@@ -163,10 +168,12 @@
         {
           label: 'MODIFIED BY',
           name: 'modifiedby',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
         },
         {
           label: 'CREATED AT',
           name: 'created_at',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
           align: 'right',
           formatter: "date",
           formatoptions: {
@@ -177,6 +184,7 @@
         {
           label: 'UPDATED AT',
           name: 'updated_at',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
           align: 'right',
           formatter: "date",
           formatoptions: {
