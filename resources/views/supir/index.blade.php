@@ -12,6 +12,7 @@
 
 @include('supir._modal')
 @include('supir._modalSupirResign')
+@include('supir._modalHistoryMandor')
 
 @push('scripts')
 <script>
@@ -866,48 +867,73 @@
                     },
                 ],
                 extndBtn: [{
-                    id: 'approve',
-                    title: 'Approve',
-                    caption: 'Approve',
-                    innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-                    class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-                    dropmenuHTML: [{
-                            id: 'approvalBlackListSupir',
-                            text: "un/Approval Black List Supir",
-                            onClick: () => {
-                                if (`{{ $myAuth->hasPermission('supir', 'approvalBlackListSupir') }}`) {
-                                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                                    approvalBlackListSupir(selectedId)
+                        id: 'approve',
+                        title: 'Approve',
+                        caption: 'Approve',
+                        innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+                        class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
+                        dropmenuHTML: [{
+                                id: 'approvalBlackListSupir',
+                                text: "un/Approval Black List Supir",
+                                onClick: () => {
+                                    if (`{{ $myAuth->hasPermission('supir', 'approvalBlackListSupir') }}`) {
+                                        selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                                        approvalBlackListSupir(selectedId)
+                                    }
                                 }
-                            }
-                        },
-                        {
-                            id: 'approvalSupirLuarKota',
-                            text: "un/Approval Supir Luar Kota",
-                            onClick: () => {
-                                if (`{{ $myAuth->hasPermission('supir', 'approvalSupirLuarKota') }}`) {
-                                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                                    approvalSupirLuarKota(selectedId)
+                            },
+                            {
+                                id: 'approvalSupirLuarKota',
+                                text: "un/Approval Supir Luar Kota",
+                                onClick: () => {
+                                    if (`{{ $myAuth->hasPermission('supir', 'approvalSupirLuarKota') }}`) {
+                                        selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                                        approvalSupirLuarKota(selectedId)
+                                    }
                                 }
-                            }
-                        },
-                        {
-                            id: 'approvalSupirResign',
-                            text: "un/Approval Supir Resign",
+                            },
+                            {
+                                id: 'approvalSupirResign',
+                                text: "un/Approval Supir Resign",
+                                onClick: () => {
+                                    if (`{{ $myAuth->hasPermission('supir', 'approvalSupirResign') }}`) {
+                                        selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                                        if (selectedId == null || selectedId == '' || selectedId ==
+                                            undefined) {
+                                            showDialog('Harap pilih salah satu record')
+                                        } else {
+                                            supirResign(selectedId)
+                                        }
+                                    }
+                                }
+                            },
+
+                        ]
+                    },
+
+                    {
+                        id: 'lainnya',
+                        title: 'Lainnya',
+                        caption: 'Lainnya',
+                        innerHTML: '<i class="fa fa-check"></i> LAINNYA',
+                        class: 'btn btn-secondary btn-sm mr-1 dropdown-toggle ',
+                        dropmenuHTML: [{
+                            id: 'historyMandor',
+                            text: "History Supir Milik Mandor",
                             onClick: () => {
-                                if (`{{ $myAuth->hasPermission('supir', 'approvalSupirResign') }}`) {
+                                if (`{{ $myAuth->hasPermission('supir', 'historyMandor') }}`) {
                                     selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                                     if (selectedId == null || selectedId == '' || selectedId ==
                                         undefined) {
                                         showDialog('Harap pilih salah satu record')
                                     } else {
-                                        supirResign(selectedId)
+                                        editSupirMilikMandor(selectedId)
                                     }
                                 }
                             }
-                        },
-                    ]
-                }]
+                        }, ],
+                    }
+                ]
             })
 
         /* Append clear filter button */
