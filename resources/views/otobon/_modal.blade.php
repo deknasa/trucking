@@ -401,7 +401,7 @@
             },
             onClear: (element) => {
 
-                $('#crudForm [name=agen]').first().val('')
+                $('#crudForm [name=agen_id]').first().val('')
                 element.val('')
                 element.data('currentValue', element.val())
             }
