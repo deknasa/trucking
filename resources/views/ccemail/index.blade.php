@@ -53,6 +53,7 @@
           name: 'statusaktif_memo',
           align: 'left',
           stype: 'select',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
           searchoptions: {
             dataInit: function(element) {
               $(element).select2({
@@ -117,28 +118,33 @@
           {
             label: 'nama',
             name: 'nama',
-            align: 'left'
+            align: 'left',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
           },
           {
             label: 'email',
             name: 'email',
-            align: 'left'
+            align: 'left',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
           },
           {
             label: 'reminderemail',
             name: 'reminderemail',
-            align: 'left'
+            align: 'left',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
           },
           {
             label: 'MODIFIED BY',
             name: 'modifiedby',
-            align: 'left'
+            align: 'left',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
           },
           {
             label: 'CREATED AT',
             name: 'created_at',
             align: 'right',
             formatter: "date",
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
             formatoptions: {
               srcformat: "ISO8601Long",
               newformat: "d-m-Y H:i:s"
@@ -148,6 +154,7 @@
             label: 'UPDATED AT',
             name: 'updated_at',
             align: 'right',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
             formatter: "date",
             formatoptions: {
               srcformat: "ISO8601Long",
