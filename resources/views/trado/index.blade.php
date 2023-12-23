@@ -63,37 +63,44 @@
                     {
                         label: 'KETERANGAN',
                         name: 'keterangan',
+                        width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
                     },
                     {
                         label: 'NO POLISI',
                         name: 'kodetrado',
+                        width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
                     },
                     {
                         label: 'MANDOR',
                         name: 'mandor_id',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                     },
                     {
                         label: 'SUPIR',
                         name: 'supir_id',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                     },
                     {
                         label: 'STATUS AKTIF',
                         name: 'statusaktif',
                         stype: 'select',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
                         searchoptions: {
-                            value: `<?php
-                                    $i = 1;
-
-                                    foreach ($data['statusaktif'] as $status) :
-                                        echo "$status[param]:$status[parameter]";
-                                        if ($i !== count($data['statusaktif'])) {
-                                            echo ';';
-                                        }
-                                        $i++;
-                                    endforeach;
-
-                                    ?>
-                  `,
+                            value: `
+                            <?php
+                                $i = 1;
+                                
+                                foreach ($data['statusaktif'] as $status) :
+                                    echo "$status[param]:$status[parameter]";
+                                    if ($i !== count($data['statusaktif'])) {
+                                        echo ';';
+                                    }
+                                    $i++;
+                                endforeach;
+                            
+                            ?>
+                            `,
+                            
                             dataInit: function(element) {
                                 $(element).select2({
                                     width: 'resolve',
@@ -109,14 +116,14 @@
                         },
                         formatter: (value, options, rowData) => {
                             let statusAktif = JSON.parse(value)
-
+                            
                             let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusAktif.WARNA}; color: ${statusAktif.WARNATULISAN};">
-                  <span>${statusAktif.SINGKATAN}</span>
-                </div>
-              `)
+                            <div class="badge" style="background-color: ${statusAktif.WARNA}; color: ${statusAktif.WARNATULISAN};">
+                                <span>${statusAktif.SINGKATAN}</span>
+                            </div>
+                            `)
+                            return formattedValue[0].outerHTML 
 
-                            return formattedValue[0].outerHTML
                         },
                         cellattr: (rowId, value, rowObject) => {
                             let statusAktif = JSON.parse(rowObject.statusaktif)
@@ -128,49 +135,60 @@
                     {
                         label: 'TAHUN',
                         name: 'tahun',
+                        align: 'right',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
                     },
                     {
                         label: 'MEREK',
                         name: 'merek',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                     },
                     {
                         label: 'no rangka',
                         name: 'norangka',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                     },
                     {
                         label: 'no mesin',
                         name: 'nomesin',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                     },
                     {
                         label: 'NAMA PEMILIK',
                         name: 'nama',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                     },
                     {
                         label: 'NO. STNK',
                         name: 'nostnk',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                     },
                     {
                         label: 'ALAMAT STNK',
                         name: 'alamatstnk',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                     },
                     {
                         label: 'JENIS PLAT',
                         name: 'statusjenisplat',
                         stype: 'select',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
                         searchoptions: {
-                            value: `<?php
-                                    $i = 1;
-
-                                    foreach ($data['statusjenisplat'] as $status) :
-                                        echo "$status[param]:$status[parameter]";
-                                        if ($i !== count($data['statusjenisplat'])) {
-                                            echo ';';
-                                        }
-                                        $i++;
-                                    endforeach;
-
-                                    ?>
-              `,
+                            value: `
+                                <?php
+                                $i = 1;
+                                
+                                foreach ($data['statusjenisplat'] as $status) :
+                                    echo "$status[param]:$status[parameter]";
+                                    if ($i !== count($data['statusjenisplat'])) {
+                                        echo ';';
+                                    }
+                                    $i++;
+                                endforeach;
+                                
+                                ?>
+                            `,
+                            
                             dataInit: function(element) {
                                 $(element).select2({
                                     width: 'resolve',
@@ -182,10 +200,10 @@
                             let statusJenisPlat = JSON.parse(value)
 
                             let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusJenisPlat.WARNA}; color: #fff;">
-                  <span>${statusJenisPlat.SINGKATAN}</span>
-                </div>
-              `)
+                                <div class="badge" style="background-color: ${statusJenisPlat.WARNA}; color: #fff;">
+                                <span>${statusJenisPlat.SINGKATAN}</span>
+                                </div>
+                            `)
 
                             return formattedValue[0].outerHTML
                         },
@@ -199,6 +217,7 @@
                         label: 'TGL PAJAK STNK',
                         name: 'tglpajakstnk',
                         formatter: "date",
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
                         formatoptions: {
                             srcformat: "ISO8601Long",
                             newformat: "d-m-Y"
@@ -207,56 +226,69 @@
                     {
                         label: 'TIPE',
                         name: 'tipe',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                     },
                     {
                         label: 'JENIS',
                         name: 'jenis',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                     },
                     {
                         label: 'ISI SILINDER',
                         name: 'isisilinder',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
                     },
                     {
                         label: 'WARNA',
                         name: 'warna',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                     },
                     {
                         label: 'BAHAN BAKAR',
                         name: 'jenisbahanbakar',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                     },
                     {
                         label: 'JLH SUMBU',
                         name: 'jumlahsumbu',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
                     },
                     {
                         label: 'JLH BAN',
                         name: 'jumlahroda',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
                     },
                     {
                         label: 'MODEL',
                         name: 'model',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                     },
                     {
                         label: 'BPKB',
                         name: 'nobpkb',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                     },
                     {
                         label: 'JLH BAN SERAP',
                         name: 'jumlahbanserap',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
                     },
                     {
                         label: 'PLUS BORONGAN',
                         name: 'nominalplusborongan',
                         align: 'right',
                         formatter: currencyFormat,
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
                     },
                     {
                         label: 'MILIK MANDOR',
                         name: 'mandor_id',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                     },
                     {
                         label: 'MILIK SUPIR',
                         name: 'supir_id',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                     },
                     // {
                     //   label: 'KM AWAL',
@@ -282,6 +314,7 @@
                         label: 'TGL ASURANSI MATI',
                         name: 'tglasuransimati',
                         formatter: "date",
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
                         formatoptions: {
                             srcformat: "ISO8601Long",
                             newformat: "d-m-Y"
@@ -291,6 +324,7 @@
                         label: 'TGL STNK MATI',
                         name: 'tglstnkmati',
                         formatter: "date",
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
                         formatoptions: {
                             srcformat: "ISO8601Long",
                             newformat: "d-m-Y"
@@ -300,6 +334,7 @@
                         label: 'TGL SPEKSI MATI',
                         name: 'tglspeksimati',
                         formatter: "date",
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
                         formatoptions: {
                             srcformat: "ISO8601Long",
                             newformat: "d-m-Y"
@@ -308,12 +343,14 @@
                     {
                         label: 'MODIFIED BY',
                         name: 'modifiedby',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
                     },
                     {
                         label: 'CREATED AT',
                         name: 'created_at',
                         align: 'right',
                         formatter: "date",
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                         formatoptions: {
                             srcformat: "ISO8601Long",
                             newformat: "d-m-Y H:i:s"
@@ -324,6 +361,7 @@
                         name: 'updated_at',
                         align: 'right',
                         formatter: "date",
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                         formatoptions: {
                             srcformat: "ISO8601Long",
                             newformat: "d-m-Y H:i:s"
@@ -334,6 +372,7 @@
                         name: 'tglserviceopname',
                         width: 200,
                         formatter: "date",
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
                         formatoptions: {
                             srcformat: "ISO8601Long",
                             newformat: "d-m-Y"
@@ -344,6 +383,7 @@
                         name: 'statusstandarisasi',
                         width: 200,
                         stype: 'select',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
                         searchoptions: {
                             value: `<?php
                                     $i = 1;
@@ -391,6 +431,7 @@
                     {
                         label: 'TGL GANTI AKI AKHIR',
                         name: 'tglgantiakiterakhir',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
                         width: 200,
                         formatter: "date",
                         formatoptions: {
@@ -402,6 +443,7 @@
                         label: 'STATUS MUTASI',
                         name: 'statusmutasi',
                         stype: 'select',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
                         searchoptions: {
                             value: `<?php
                                     $i = 1;
@@ -445,6 +487,7 @@
                         name: 'statusvalidasikendaraan',
                         width: 200,
                         stype: 'select',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
                         searchoptions: {
                             value: `<?php
                                     $i = 1;
@@ -488,6 +531,7 @@
                         name: 'statusmobilstoring',
                         width: 200,
                         stype: 'select',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
                         searchoptions: {
                             value: `<?php
                                     $i = 1;
@@ -532,6 +576,7 @@
                         name: 'statusabsensisupir',
                         width: 200,
                         stype: 'select',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
                         searchoptions: {
                             value: `<?php
                                     $i = 1;
@@ -575,6 +620,7 @@
                         label: 'STATUS BAN EDIT',
                         name: 'statusappeditban',
                         stype: 'select',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
                         searchoptions: {
                             value: `<?php
                                     $i = 1;
@@ -618,6 +664,7 @@
                         name: 'statuslewatvalidasi',
                         width: 200,
                         stype: 'select',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
                         searchoptions: {
                             value: `<?php
                                     $i = 1;
