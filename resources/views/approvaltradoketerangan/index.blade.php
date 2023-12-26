@@ -44,11 +44,13 @@
           {
             label: 'NO POLISI',
             name: 'kodetrado',
+            width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
             align: 'left'
           },
           {
             label: 'TGL BATAS',
             name: 'tglbatas',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
             align: 'left',
             formatter: "date",
             formatoptions: {
@@ -61,6 +63,7 @@
             label: 'STATUS APPROVAL',
             name: 'statusapproval',
             width: 100,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
             stype: 'select',
             searchoptions: {
               value: `<?php
@@ -103,11 +106,13 @@
           {
             label: 'MODIFIED BY',
             name: 'modifiedby',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
             align: 'left'
           },{
             label: 'CREATED AT',
             name: 'created_at',
             formatter: "date",
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
             formatoptions: {
               srcformat: "ISO8601Long",
               newformat: "d-m-Y H:i:s"
@@ -117,6 +122,7 @@
             label: 'UPDATED AT',
             name: 'updated_at',
             formatter: "date",
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
             formatoptions: {
               srcformat: "ISO8601Long",
               newformat: "d-m-Y H:i:s"

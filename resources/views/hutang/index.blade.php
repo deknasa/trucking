@@ -341,7 +341,7 @@
             label: 'MODIFIED BY',
             name: 'modifiedby',
             align: 'left',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
           },
           {
             label: 'CREATED AT',

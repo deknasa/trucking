@@ -66,19 +66,23 @@
                     {
                         label: 'NAMA',
                         name: 'namasupir',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                     },
                     {
                         label: 'ALIAS',
                         name: 'namaalias',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                     },
                     {
                         label: 'MANDOR',
                         name: 'mandor_id',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                     },
                     {
                         label: 'TGL LAHIR',
                         name: 'tgllahir',
-                        width: 130,
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+                        align:'right',
                         formatter: "date",
                         formatoptions: {
                             srcformat: "ISO8601Long",
@@ -88,19 +92,23 @@
                     {
                         label: 'ALAMAT',
                         name: 'alamat',
+                        width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
                     },
                     {
                         label: 'KOTA',
                         name: 'kota',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                     },
                     {
                         label: 'NO TELEPON',
                         name: 'telp',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                     },
                     {
                         label: 'STATUS',
                         name: 'statusaktif',
                         stype: 'select',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
                         searchoptions: {
                             value: `<?php
                                     $i = 1;
@@ -147,7 +155,7 @@
                     {
                         label: 'NOM. DEPOSIT SALDO AWAL',
                         name: 'nominaldepositsa',
-                        width: 200,
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         align: 'right',
                         formatter: currencyFormat,
                     },
@@ -155,12 +163,13 @@
                         label: 'DEPOSIT KE',
                         name: 'depositke',
                         align: 'right',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
                         formatter: currencyFormat,
                     },
                     {
                         label: 'NOM. PINJ SALDO AWAL',
                         name: 'nominalpinjamansaldoawal',
-                        width: 200,
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         align: 'right',
                         formatter: currencyFormat,
                     },
@@ -176,6 +185,8 @@
                         label: 'TGL EXP SIM',
                         name: 'tglexpsim',
                         formatter: "date",
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+                        align:'right',
                         formatoptions: {
                             srcformat: "ISO8601Long",
                             newformat: "d-m-Y"
@@ -185,6 +196,8 @@
                         label: 'TGL TERBIT SIM',
                         name: 'tglterbitsim',
                         formatter: "date",
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+                        align:'right',
                         formatoptions: {
                             srcformat: "ISO8601Long",
                             newformat: "d-m-Y"
@@ -197,10 +210,12 @@
                     {
                         label: 'KTP',
                         name: 'noktp',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                     },
                     {
                         label: 'KK',
                         name: 'nokk',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                     },
                     // {
                     //   label: 'UPDATE GBR',

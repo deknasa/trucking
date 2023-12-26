@@ -70,6 +70,7 @@
                                 label: 'ROLE',
                                 name: 'rolename',
                                 align: 'left',
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                                 searchoptions: {
                                     sopt: ['cn'],
                                     defaultValue: "<?= @$_GET['rolename'] ?>"
@@ -79,13 +80,15 @@
                             {
                                 label: 'MODIFIED BY',
                                 name: 'modifiedby',
-                                align: 'left'
+                                align: 'left',
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
                             },
                             {
                                 label: 'CREATED AT',
                                 name: 'created_at',
                                 align: 'right',
                                 formatter: "date",
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                                 formatoptions: {
                                     srcformat: "ISO8601Long",
                                     newformat: "d-m-Y H:i:s"
@@ -96,6 +99,7 @@
                                 name: 'updated_at',
                                 align: 'right',
                                 formatter: "date",
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                                 formatoptions: {
                                     srcformat: "ISO8601Long",
                                     newformat: "d-m-Y H:i:s"
