@@ -24,16 +24,19 @@
           label: 'KODE ABSEN',
           name: 'kodeabsen',
           align: 'left',
+          width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
         },
         {
           label: 'KETERANGAN',
           name: 'keterangan',
-          align: 'left'
+          align: 'left',
+          width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
         },
         {
           label: 'STATUS AKTIF',
           name: 'statusaktif',
           stype: 'select',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
           searchoptions: {
             dataInit: function(element) {
               $(element).select2({
@@ -98,13 +101,15 @@
         {
           label: 'MODIFIED BY',
           name: 'modifiedby',
-          align: 'left'
+          align: 'left',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
         },
           {
             label: 'CREATED AT',
             name: 'created_at',
             align: 'right',
             formatter: "date",
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
             formatoptions: {
               srcformat: "ISO8601Long",
               newformat: "d-m-Y H:i:s"
@@ -115,6 +120,7 @@
             name: 'updated_at',
             align: 'right',
             formatter: "date",
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
             formatoptions: {
               srcformat: "ISO8601Long",
               newformat: "d-m-Y H:i:s"
