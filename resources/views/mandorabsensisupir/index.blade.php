@@ -153,11 +153,13 @@
           {
             label: 'Supir',
             name: 'namasupir',
+            editable: true,
             width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
           },
           {
             label: 'JAM',
             name: 'jam',
+            editable: true,
             formatter: 'date',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
             formatoptions: {
@@ -169,16 +171,25 @@
           {
             label: 'status',
             name: 'absentrado',
+            editable: true,
             width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
           },
           {
             label: 'keterangan',
             name: 'keterangan',
+            editable: true,
+            // editoptions: {
+            //   dataEvents: [{
+            //     type: "keyup",
+                
+            //   }, ]
+            // },
             width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1
           },
           {
             label: 'TGL BUKTI',
             name: 'tglbukti',
+            editable: true,
             width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
             align: 'right',
             formatter: "date",
@@ -192,7 +203,9 @@
         autowidth: true,
         shrinkToFit: false,
         height: 350,
+        cellEdit: true,
         rowNum: rowNum,
+        cellsubmit: "clientArray",
         rownumbers: true,
         rownumWidth: 45,
         rowList: [10, 20, 50, 0],
@@ -308,48 +321,48 @@
       .customPager({
         buttons: [{
             id: 'absen',
-            innerHTML: '<i class="fa fa-plus"></i> ADD',
+            innerHTML: '<i class="fa fa-save"></i> Save',
             class: 'btn btn-primary btn-sm mr-1',
-            onClick: () => {
+            // onClick: () => {
 
-              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              let rowData = $("#jqGrid").jqGrid("getRowData", selectedId);
-              if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Harap pilih salah satu record')
-              } else {
-                cekValidasiAdd(rowData.trado_id,rowData.supir_id)
-              }
-            }
+            //   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+            //   let rowData = $("#jqGrid").jqGrid("getRowData", selectedId);
+            //   if (selectedId == null || selectedId == '' || selectedId == undefined) {
+            //     showDialog('Harap pilih salah satu record')
+            //   } else {
+            //     cekValidasiAdd(rowData.trado_id,rowData.supir_id)
+            //   }
+            // }
           },
-          {
-            id: 'edit',
-            innerHTML: '<i class="fa fa-pen"></i> EDIT',
-            class: 'btn btn-success btn-sm mr-1',
-            onClick: () => {
-              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              let rowData = $("#jqGrid").jqGrid("getRowData", selectedId);
+          // {
+          //   id: 'edit',
+          //   innerHTML: '<i class="fa fa-pen"></i> EDIT',
+          //   class: 'btn btn-success btn-sm mr-1',
+          //   onClick: () => {
+          //     selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+          //     let rowData = $("#jqGrid").jqGrid("getRowData", selectedId);
 
-              if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Harap pilih salah satu record')
-              } else {
-                cekValidasi(rowData.trado_id,rowData.supir_id, 'edit')
-              }
-            }
-          },
-          {
-            id: 'delete',
-            innerHTML: '<i class="fa fa-trash"></i> DELETE',
-            class: 'btn btn-danger btn-sm mr-1',
-            onClick: () => {
-              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              let rowData = $("#jqGrid").jqGrid("getRowData", selectedId);
-              if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Harap pilih salah satu record')
-              } else {
-                cekValidasi(rowData.trado_id,rowData.supir_id, 'delete')
-              }
-            }
-          },
+          //     if (selectedId == null || selectedId == '' || selectedId == undefined) {
+          //       showDialog('Harap pilih salah satu record')
+          //     } else {
+          //       cekValidasi(rowData.trado_id,rowData.supir_id, 'edit')
+          //     }
+          //   }
+          // },
+          // {
+          //   id: 'delete',
+          //   innerHTML: '<i class="fa fa-trash"></i> DELETE',
+          //   class: 'btn btn-danger btn-sm mr-1',
+          //   onClick: () => {
+          //     selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+          //     let rowData = $("#jqGrid").jqGrid("getRowData", selectedId);
+          //     if (selectedId == null || selectedId == '' || selectedId == undefined) {
+          //       showDialog('Harap pilih salah satu record')
+          //     } else {
+          //       cekValidasi(rowData.trado_id,rowData.supir_id, 'delete')
+          //     }
+          //   }
+          // },
 
         ]
       })
