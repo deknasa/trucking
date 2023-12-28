@@ -40,6 +40,8 @@
   <link rel="stylesheet" href="{{ asset('libraries/tas-lib/css/pager.css?version='. filemtime(base_path().'\public\libraries\tas-lib\css\pager.css')) }}">
   <link rel="stylesheet" href="{{ asset('libraries/adminlte/plugins/dropzone/dropzone.css') }}">
 
+  @stack('style')
+
 </head>
 
 <body class="hold-transition sidebar-collapse layout-fixed">

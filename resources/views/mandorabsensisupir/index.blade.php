@@ -38,7 +38,19 @@
 </div>
 
 @include('mandorabsensisupir._modal')
-
+@push('style')
+<style>
+ 
+  
+  .ui-jqgrid .ui-jqgrid-btable tbody tr.jqgrow td {
+    white-space: unset;
+  }
+  .ui-jqgrid .ui-jqgrid-btable tbody tr.jqgrow td .input-group {
+    flex-wrap: nowrap;
+  }
+    
+</style>
+@endpush
 @push('scripts')
 <script>
   let indexRow = 0;
@@ -89,6 +101,12 @@
           postData: data,
           page: 1
         }).trigger('reloadGrid')
+        // $('#jqGrid').jqGrid('setGridParam',{
+        //   test:response.data
+        // })
+        // console.log(
+        //   $('#jqGrid').jqGrid('getGridParam')
+        // );
       }).catch((error) => {
         if (error.status === 422) {
             $('.is-invalid').removeClass('is-invalid')
@@ -113,7 +131,6 @@
         mtype: "GET",
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
-        datatype: "json",
         postData: {
           tglbukaabsensi:$('#tglbukaabsensi').val()
         },
@@ -146,6 +163,13 @@
             hidden: true
           },
           {
+            label: 'absen_id',
+            name: 'absen_id',
+            width: '50px',
+            search: false,
+            hidden: true
+          },
+          {
             label: 'Trado',
             name: 'kodetrado',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
@@ -154,13 +178,60 @@
             label: 'Supir',
             name: 'namasupir',
             editable: true,
+            editoptions: {
+              autocomplete: 'off',
+              class: 'supirtrado-lookup',
+              dataInit: function(element) {
+                
+                $('.supirtrado-lookup').last().lookup({
+                  title: 'Supir Lookup',
+                  fileName: 'supir',
+                  beforeProcess: function(test) {
+                    this.postData = {
+                      Aktif: 'AKTIF',
+                    }
+                  },
+                  onSelectRow: (supir, el) => {
+                    el.val(supir.namasupir)
+                    el.data('currentValue', supir.namasupir)
+                    let rowId = $("#jqGrid").jqGrid('getGridParam', 'selrow');
+                    // console.log(rowId,supir.id);
+                    $("#jqGrid").jqGrid('setCell', rowId, 'supir_id', supir.id);
+                    // $("#jqGrid").jqGrid('setCell', rowId, 'namasupir', supir.namasupir);
+                  },
+                  onCancel: (element) => {
+                    element.val(element.data('currentValue'))
+                  },
+                  onClear: (element) => {
+                    element.val('')
+                  }
+                })
+              }
+            },
             width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
           },
           {
             label: 'JAM',
             name: 'jam',
             editable: true,
-            formatter: 'date',
+            editoptions: {
+              autocomplete: 'off',
+              class:'inputmask-time',
+              dataInit: function(element) {
+                Inputmask("datetime", {
+                  inputFormat: "HH:MM",
+                  max: 24
+                }).mask(".inputmask-time");
+
+                let date = new Date();
+                let time = date.toLocaleString("id", {
+                  timeStyle: "medium",
+                });
+                time = time.split('.')
+                $(element).val(time[0] + ":" + time[1]);
+              }
+            },
+            // formatter: 'date',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
             formatoptions: {
               srcformat: "H:i:s",
@@ -172,12 +243,45 @@
             label: 'status',
             name: 'absentrado',
             editable: true,
+            editoptions: {
+              autocomplete: 'off',
+              class: 'statusabsentrado-lookup',
+              dataInit: function(element) {
+                
+                $('.statusabsentrado-lookup').last().lookup({
+                  title: 'Absen Trado Lookup',
+                  fileName: 'absentrado',
+                  beforeProcess: function(test) {
+                    this.postData = {
+                      Aktif: 'AKTIF',
+                    }
+                  },
+                  onSelectRow: (supir, el) => {
+                    el.val(absentrado.keterangan)
+                    el.data('currentValue', absentrado.keterangan)
+                    let rowId = $("#jqGrid").jqGrid('getGridParam', 'selrow');
+                    // console.log(rowId,supir.id);
+                    $("#jqGrid").jqGrid('setCell', rowId, 'absen_id', absentrado.id);
+                    // $("#jqGrid").jqGrid('setCell', rowId, 'namasupir', supir.namasupir);
+                  },
+                  onCancel: (element) => {
+                    element.val(element.data('currentValue'))
+                  },
+                  onClear: (element) => {
+                    element.val('')
+                  }
+                })
+              }
+            },
             width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
           },
           {
             label: 'keterangan',
             name: 'keterangan',
             editable: true,
+            editoptions: {
+              autocomplete: 'off'
+            },
             // editoptions: {
             //   dataEvents: [{
             //     type: "keyup",
@@ -189,10 +293,29 @@
           {
             label: 'TGL BUKTI',
             name: 'tglbukti',
-            editable: true,
+            // editable: false,
+            // editoptions: {
+            //   autocomplete: 'off',
+            //   readonly:true,
+            //   // dataInit: function(element) {
+            //   //   let rowId = $("#jqGrid").jqGrid('getGridParam', 'selrow');
+            //   //   let tglbukaabsensi = $('#tglbukaabsensi').val()
+            //   //   $("#jqGrid").jqGrid('setCell', rowId, 'tglbukti', tglbukaabsensi);
+            //   // }
+            // },
+            formatter: (value, options, rowData) => {
+              // console.log(value, $('#tglbukaabsensi').val());
+              let rowId = $("#jqGrid").jqGrid('getGridParam', 'selrow');
+              let data = value
+              if (!value) {
+                $("#jqGrid").jqGrid('setCell', rowId, 'tglbukti', $('#tglbukaabsensi').val());
+                data = $('#tglbukaabsensi').val()
+              }
+              return data;
+            },
             width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
             align: 'right',
-            formatter: "date",
+            // formatter: "date",
             formatoptions: {
               srcformat: "ISO8601Long",
               newformat: "d-m-Y"
@@ -225,7 +348,27 @@
           total: 'attributes.total',
           records: 'attributes.records',
         },
+        // afterRestoreCell: function(rowId, value, indexRow, indexColumn) {
+        //   let originalGridData = $("#jqGrid")
+        //     .jqGrid("getGridParam", "originalData")
+        //     .find((row) => row.id == rowId);
 
+        //   let localRow = $("#jqGrid").jqGrid("getLocalRow", rowId);
+        // },
+        afterSaveCell: function (rowid, cellname, value, iRow, iCol) {
+          // Di sini Anda dapat mengakses nilai baru dari kolom yang diedit dan memperbarui kolom lainnya.
+          if (cellname === 'namasupir') {
+            // console.log(value);
+            // var namasupir = // ... hitung nilai baru untuk kolom 'age' berdasarkan nilai 'name'
+            $("#jqGrid").jqGrid('setCell', rowid, 'namasupir', value);
+          }
+          // if (cellname === 'tglbukti') {
+          //   // console.log(value);
+          //   // var tglbukti = // ... hitung nilai baru untuk kolom 'age' berdasarkan nilai 'name'
+          //   $("#jqGrid").jqGrid('setCell', rowid, 'tglbukti', value);
+          // }
+          // console.log(rowid, cellname, value, iRow, iCol);
+        },
         loadBeforeSend: function(jqXHR) {
           jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
 
@@ -317,22 +460,17 @@
           clearGlobalSearch($('#jqGrid'))
         },
       })
-
+      .excelLikeGrid()
       .customPager({
         buttons: [{
             id: 'absen',
             innerHTML: '<i class="fa fa-save"></i> Save',
             class: 'btn btn-primary btn-sm mr-1',
-            // onClick: () => {
-
-            //   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-            //   let rowData = $("#jqGrid").jqGrid("getRowData", selectedId);
-            //   if (selectedId == null || selectedId == '' || selectedId == undefined) {
-            //     showDialog('Harap pilih salah satu record')
-            //   } else {
-            //     cekValidasiAdd(rowData.trado_id,rowData.supir_id)
-            //   }
-            // }
+            onClick: () => {
+              let rowData = $("#jqGrid").jqGrid('getRowData');
+              console.log(rowData)
+              // console.log($("#jqGrid").jqGrid("getLocalRow"));
+            }
           },
           // {
           //   id: 'edit',
@@ -443,28 +581,28 @@
 
       window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
     })
-    // function loadGrid() {
-    //   $.ajax({
-    //       url: `${apiUrl}mandorabsensisupir`,
-    //       method: 'GET',
-    //     dataType: 'JSON',
-    //     data: {
-    //       limit: 0,
-    //       sortIndex:'trado_id',
-    //       sortOrder:'asc',
-    //     },
-    //     headers: {
-    //       Authorization: `Bearer ${accessToken}`
-    //     },
-    //     success: response => {
-    //       $('#jqGrid').setGridParam({
-    //         datatype: "local",
-    //         data:response.data,
-    //         rowNum: response.data.length
-    //       }).trigger('reloadGrid')
-    //     }
-    //   })
-    // }
+    function loadGrid() {
+      $.ajax({
+          url: `${apiUrl}mandorabsensisupir`,
+          method: 'GET',
+        dataType: 'JSON',
+        data: {
+          limit: 0,
+          sortIndex:'trado_id',
+          sortOrder:'asc',
+        },
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          $('#jqGrid').setGridParam({
+            datatype: "local",
+            data:response.data,
+            rowNum: response.data.length
+          }).trigger('reloadGrid')
+        }
+      })
+    }
   })
 
   function setTradoMilikSupir() {
