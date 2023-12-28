@@ -28,10 +28,12 @@
           label: 'PENGELUARAN',
           name: 'kodepengeluaran',
           align: 'left',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_1,
         },
         {
           label: 'KETERANGAN',
           name: 'keterangan',
+          width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
           align: 'left'
         },
         // {
@@ -60,27 +62,28 @@
         // },
         {
           label: 'KODE PERKIRAAN DEBET', 
-    width: 220,
+          width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
           name: 'coadebet_keterangan',
         },
         {
           label: 'KODE PERKIRAAN kredit', 
-         width: 220,
+          width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
           name: 'coakredit_keterangan',
         },
         {
           label: 'KODE PERKIRAAN posting debet',
-       width: 240,
+          width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
           name: 'coapostingdebet_keterangan',
         },
         {
           label: 'KODE PERKIRAAN posting kredit', 
-width: 240,
+          width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
           name: 'coapostingkredit_keterangan',
         },
         {
           label: 'FORMAT BUKTI',
           name: 'format',
+          width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
           formatter: (value, options, rowData) => {
             let statusFormat = JSON.parse(value)
             let Format = JSON.parse(value)
@@ -103,6 +106,7 @@ width: 240,
         {
           label: 'MODIFIED BY',
           name: 'modifiedby',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
           align: 'left'
         },
         {
@@ -110,6 +114,7 @@ width: 240,
           name: 'created_at',
           align: 'right',
           formatter: "date",
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
           formatoptions: {
             srcformat: "ISO8601Long",
             newformat: "d-m-Y H:i:s"
@@ -120,6 +125,7 @@ width: 240,
           name: 'updated_at',
           align: 'right',
           formatter: "date",
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
           formatoptions: {
             srcformat: "ISO8601Long",
             newformat: "d-m-Y H:i:s"

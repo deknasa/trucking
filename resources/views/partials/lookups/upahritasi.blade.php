@@ -21,29 +21,34 @@
           {
             label: 'DARI',
             name: 'kotadari_id',
+            width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
             align: 'left'
           },
           {
             label: 'TUJUAN',
             name: 'kotasampai_id',
+            width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
             align: 'left'
           },
           {
             label: 'JARAK',
             name: 'jarak',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
             align: 'right',
             formatter: currencyFormat
           },
           
           {
-            label: 'STATUS',
+            label: 'STATUS AKTIF',
             name: 'statusaktif',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             stype: 'select',
           },
           {
             label: 'TGL MULAI BERLAKU',
             name: 'tglmulaiberlaku',
             formatter: "date",
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             formatoptions: {
               srcformat: "ISO8601Long",
               newformat: "d-m-Y"
@@ -54,11 +59,13 @@
           {
             label: 'MODIFIED BY',
             name: 'modifiedby',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
             align: 'left'
           },
           {
             label: 'CREATED AT',
             name: 'created_at',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
             align: 'right',
             formatter: "date",
             formatoptions: {
@@ -69,6 +76,7 @@
           {
             label: 'UPDATED AT',
             name: 'updated_at',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
             align: 'right',
             formatter: "date",
             formatoptions: {

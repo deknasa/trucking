@@ -51,30 +51,35 @@
           },
           {
             label: 'DARI',
-            name: 'kotadari_id',
+            width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
             align: 'left'
+
           },
           {
             label: 'TUJUAN',
             name: 'kotasampai_id',
+            width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
             align: 'left'
           },
           {
             label: 'JARAK',
             name: 'jarak',
             align: 'right',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
             // formatter: currencyFormat
           },
           {
             label: 'NOMINAL SUPIR',
             name: 'nominalsupir',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'right',
             formatter: currencyFormat
           },
           {
-            label: 'STATUS',
+            label: 'STATUS AKTIF',
             name: 'statusaktif',
             stype: 'select',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             searchoptions: {
               value: `<?php
                       $i = 1;
@@ -117,6 +122,7 @@
             label: 'TGL MULAI BERLAKU',
             name: 'tglmulaiberlaku',
             formatter: "date",
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             formatoptions: {
               srcformat: "ISO8601Long",
               newformat: "d-m-Y"
@@ -162,6 +168,7 @@
           {
             label: 'MODIFIED BY',
             name: 'modifiedby',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
             align: 'left'
           },
           {
@@ -169,6 +176,7 @@
             name: 'created_at',
             align: 'right',
             formatter: "date",
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
             formatoptions: {
               srcformat: "ISO8601Long",
               newformat: "d-m-Y H:i:s"
@@ -179,6 +187,7 @@
             name: 'updated_at',
             align: 'right',
             formatter: "date",
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
             formatoptions: {
               srcformat: "ISO8601Long",
               newformat: "d-m-Y H:i:s"

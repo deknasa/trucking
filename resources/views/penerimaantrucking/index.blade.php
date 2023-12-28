@@ -46,31 +46,38 @@
                             {
                                 label: 'KODE PENERIMAAN',
                                 name: 'kodepenerimaan',
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_1,
                             },
                             {
                                 label: 'KETERANGAN',
                                 name: 'keterangan',
+                                width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
                             },
                             {
                                 label: 'coa debet',
                                 name: 'coadebet_keterangan',
+                                width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
                             },
                             {
                                 label: 'coa kredit',
                                 name: 'coakredit_keterangan',
+                                width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
                             },
                             {
                                 label: 'coa posting debet',
                                 name: 'coapostingdebet_keterangan',
+                                width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
                             },
                             {
                                 label: 'coa posting kredit',
                                 name: 'coapostingkredit_keterangan',
+                                width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
                             },
                             {
                                 label: 'FORMAT',
                                 name: 'format',
                                 align: 'left',
+                                width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
                                 formatter: (value, options, rowData) => {
                                     let Format = JSON.parse(value)
                                     let formattedValue = Format.SINGKATAN
@@ -93,11 +100,14 @@
                             {
                                 label: 'MODIFIED BY',
                                 name: 'modifiedby',
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
                             },
                             {
                                 label: 'CREATED AT',
                                 name: 'created_at',
                                 align: 'right',
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+
                                 formatter: "date",
                                 formatoptions: {
                                     srcformat: "ISO8601Long",
@@ -108,6 +118,7 @@
                                 label: 'UPDATED AT',
                                 name: 'updated_at',
                                 align: 'right',
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                                 formatter: "date",
                                 formatoptions: {
                                     srcformat: "ISO8601Long",

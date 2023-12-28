@@ -46,39 +46,44 @@
                             {
                                 label: 'KODE PENGELUARAN',
                                 name: 'kodepengeluaran',
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_1,
                             },
                             {
                                 label: 'KETERANGAN',
                                 name: 'keterangan',
+                                width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
                             },
                             {
                                 label: 'KODE PERKIRAAN DEBET',
-                                width: 220,
+                                width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
                                 name: 'coadebet_keterangan',
                             },
                             {
                                 label: 'KODE PERKIRAAN kredit',
-                                width: 220,
+                                width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
                                 name: 'coakredit_keterangan',
                             },
                             {
                                 label: 'KODE PERKIRAAN posting debet',
-                                width: 240,
+                                width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
                                 name: 'coapostingdebet_keterangan',
                             },
                             {
                                 label: 'KODE PERKIRAAN posting kredit',
-                                width: 240,
+                                width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
                                 name: 'coapostingkredit_keterangan',
                             },
                             {
                                 label: 'FORMAT',
                                 name: 'format',
+                                width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
+                                hidden: true
                             },
                             {
                                 label: 'FORMAT',
                                 name: 'format',
                                 align: 'left',
+                                width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
                                 formatter: (value, options, rowData) => {
                                     let Format = JSON.parse(value)
 
@@ -99,12 +104,14 @@
                             {
                                 label: 'MODIFIED BY',
                                 name: 'modifiedby',
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
                             },
                             {
                                 label: 'CREATED AT',
                                 name: 'created_at',
                                 align: 'right',
                                 formatter: "date",
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                                 formatoptions: {
                                     srcformat: "ISO8601Long",
                                     newformat: "d-m-Y H:i:s"
@@ -115,6 +122,7 @@
                                 name: 'updated_at',
                                 align: 'right',
                                 formatter: "date",
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                                 formatoptions: {
                                     srcformat: "ISO8601Long",
                                     newformat: "d-m-Y H:i:s"

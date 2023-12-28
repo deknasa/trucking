@@ -46,14 +46,17 @@
                             {
                                 label: 'NAMA MANDOR',
                                 name: 'namamandor',
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                             },
                             {
                                 label: 'KETERANGAN',
                                 name: 'keterangan',
+                                width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_2,
                             },
                             {
                                 label: 'STATUS',
                                 name: 'statusaktif',
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                                 stype: 'select',
                                 searchoptions: {
                                     value: `<?php
@@ -96,12 +99,14 @@
                             {
                                 label: 'MODIFIED BY',
                                 name: 'modifiedby',
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                             },
                             {
                                 label: 'CREATED AT',
                                 name: 'created_at',
                                 align: 'right',
                                 formatter: "date",
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                                 formatoptions: {
                                     srcformat: "ISO8601Long",
                                     newformat: "d-m-Y H:i:s"
@@ -112,6 +117,7 @@
                                 name: 'updated_at',
                                 align: 'right',
                                 formatter: "date",
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                                 formatoptions: {
                                     srcformat: "ISO8601Long",
                                     newformat: "d-m-Y H:i:s"
