@@ -46,16 +46,19 @@
                             {
                                 label: 'kode status container',
                                 name: 'kodestatuscontainer',
-                                width: 200,
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                             },
                             {
                                 label: 'keterangan',
                                 name: 'keterangan',
+                                width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_2,
+
                             },
                             {
                                 label: 'STATUS',
                                 name: 'statusaktif',
                                 stype: 'select',
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                                 searchoptions: {
                                     value: `:ALL;<?php
                                     $i = 1;
@@ -98,12 +101,14 @@
                             {
                                 label: 'MODIFIED BY',
                                 name: 'modifiedby',
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                             },
                             {
                                 label: 'CREATED AT',
                                 name: 'created_at',
                                 align: 'right',
                                 formatter: "date",
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                                 formatoptions: {
                                     srcformat: "ISO8601Long",
                                     newformat: "d-m-Y H:i:s"
@@ -112,6 +117,7 @@
                             {
                                 label: 'UPDATED AT',
                                 name: 'updated_at',
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                                 align: 'right',
                                 formatter: "date",
                                 formatoptions: {

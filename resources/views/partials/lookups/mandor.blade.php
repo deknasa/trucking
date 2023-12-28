@@ -23,16 +23,19 @@
         {
           label: 'NAMA mandor',
           name: 'namamandor',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
           align: 'left'
         },
         {
           label: 'KETERANGAN',
           name: 'keterangan',
+          width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_2,
           align: 'left'
         },
         {
           label: 'STATUS AKTIF',
           name: 'statusaktif',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           align: 'left',
           width: 100,
           stype: 'select',
@@ -100,12 +103,14 @@
         {
           label: 'MODIFIED BY',
           name: 'modifiedby',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           align: 'left'
         },
         {
           label: 'CREATED AT',
           name: 'created_at',
           align: 'right',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
           formatter: "date",
           formatoptions: {
             srcformat: "ISO8601Long",
@@ -117,6 +122,8 @@
           name: 'updated_at',
           align: 'right',
           formatter: "date",
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+
           formatoptions: {
             srcformat: "ISO8601Long",
             newformat: "d-m-Y H:i:s"

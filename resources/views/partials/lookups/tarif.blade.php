@@ -26,10 +26,12 @@
         {
           label: 'TUJUAN',
           name: 'tujuan',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
         },
         {
           label: 'PENYESUAIAN',
           name: 'penyesuaian',
+          width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
         },
         // {
         //   label: 'CONTAINER',
@@ -40,6 +42,7 @@
           label: 'STATUS AKTIF',
           name: 'statusaktif',
           stype: 'select',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           searchoptions: {
             dataInit: function(element) {
               $(element).select2({
@@ -108,6 +111,7 @@
         {
           label: 'SISTEM TON',
           name: 'statussistemton',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           stype: 'select',
           searchoptions: {
             dataInit: function(element) {
@@ -178,6 +182,7 @@
         {
           label: 'KOTA',
           name: 'kota_id',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
         },
         {
           label: 'KOTAID',
@@ -188,10 +193,12 @@
         {
           label: 'ZONA',
           name: 'zona_id',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
         },
         {
           label: 'jenis order',
           name: 'jenisorder',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
         },
         // {
         //   label: 'NOMINAL TON',
@@ -212,6 +219,7 @@
         {
           label: 'STATUS PENYESUAIAN HARGA',
           name: 'statuspenyesuaianharga',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           stype: 'select',
           searchoptions: {
             dataInit: function(element) {
@@ -280,6 +288,7 @@
         },
         {
           label: 'MODIFIED BY',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           name: 'modifiedby',
           align: 'left'
         },
@@ -287,6 +296,7 @@
           label: 'CREATED AT',
           name: 'created_at',
           align: 'right',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
           formatter: "date",
           formatoptions: {
             srcformat: "ISO8601Long",
@@ -298,6 +308,7 @@
           name: 'updated_at',
           align: 'right',
           formatter: "date",
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
           formatoptions: {
             srcformat: "ISO8601Long",
             newformat: "d-m-Y H:i:s"
@@ -306,6 +317,7 @@
         {
           label: 'Tujuan-Penyesuaian',
           name: 'tujuanpenyesuaian',
+          width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
           align: 'left'
         },
       ],

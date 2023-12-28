@@ -23,22 +23,26 @@
         {
           label: 'CONTAINER',
           name: 'kodecontainer',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           align: 'left'
         },
         {
           label: 'NOMINAL SUMBANGAN',
           name: 'nominalsumbangan',
+          width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
           align: "right",
           formatter: currencyFormat,
         },
         {
           label: 'KETERANGAN',
           name: 'keterangan',
+          width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_2,
           align: 'left'
         },
         {
           label: 'Status',
           name: 'statusaktif',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           stype: 'select',
           searchoptions: {
             dataInit: function(element) {
@@ -104,6 +108,7 @@
         {
           label: 'MODIFIED BY',
           name: 'modifiedby',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           align: 'left'
         },
         {
@@ -111,6 +116,7 @@
           name: 'created_at',
           align: 'right',
           formatter: "date",
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
           formatoptions: {
             srcformat: "ISO8601Long",
             newformat: "d-m-Y H:i:s"
@@ -121,6 +127,8 @@
           name: 'updated_at',
           align: 'right',
           formatter: "date",
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+
           formatoptions: {
             srcformat: "ISO8601Long",
             newformat: "d-m-Y H:i:s"

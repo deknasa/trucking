@@ -30,27 +30,33 @@
         {
           label: 'TUJUAN',
           name: 'kotasampai_id',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
           align: 'left'
         },
         {
           label: 'PENYESUAIAN',
           name: 'penyesuaian',
+          width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
           align: 'left'
         },
         {
           label: 'JARAK',
           name: 'jarak',
           align: 'right',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+
           // formatter: currencyFormat
         },
         {
           label: 'ZONA',
           name: 'zona_id',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
           align: 'left'
         },
         {
           label: 'STATUS AKTIF',
           name: 'statusaktif',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           stype: 'select',
           searchoptions: {
             dataInit: function(element) {
@@ -117,6 +123,7 @@
           label: 'TGL MULAI BERLAKU',
           name: 'tglmulaiberlaku',
           formatter: "date",
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
           formatoptions: {
             srcformat: "ISO8601Long",
             newformat: "d-m-Y"
@@ -125,6 +132,8 @@
         {
           label: 'MODIFIED BY',
           name: 'modifiedby',
+          
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           align: 'left'
         },
         {
@@ -132,6 +141,7 @@
           name: 'created_at',
           align: 'right',
           formatter: "date",
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
           formatoptions: {
             srcformat: "ISO8601Long",
             newformat: "d-m-Y H:i:s"
@@ -142,6 +152,7 @@
           name: 'updated_at',
           align: 'right',
           formatter: "date",
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
           formatoptions: {
             srcformat: "ISO8601Long",
             newformat: "d-m-Y H:i:s"

@@ -46,14 +46,17 @@
                             {
                                 label: 'KODE JENIS ORDER',
                                 name: 'kodejenisorder',
+                                width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
                             },
                             {
                                 label: 'KETERANGAN',
                                 name: 'keterangan',
+                                width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
                             },
                             {
                                 label: 'STATUS AKTIF',
                                 name: 'statusaktif',
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
                                 stype: 'select',
                                 searchoptions: {
                                     value: `<?php
@@ -96,12 +99,15 @@
                             {
                                 label: 'MODIFIED BY',
                                 name: 'modifiedby',
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
                             },
                             {
                                 label: 'CREATED AT',
                                 name: 'created_at',
                                 align: 'right',
                                 formatter: "date",
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+
                                 formatoptions: {
                                     srcformat: "ISO8601Long",
                                     newformat: "d-m-Y H:i:s"
@@ -111,6 +117,7 @@
                                 label: 'UPDATED AT',
                                 name: 'updated_at',
                                 align: 'right',
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                                 formatter: "date",
                                 formatoptions: {
                                     srcformat: "ISO8601Long",

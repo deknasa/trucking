@@ -31,20 +31,24 @@
           label: 'KOTA',
           name: 'kodekota',
           align: 'left',
+          width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
         },
         {
           label: 'KETERANGAN',
           name: 'keterangan',
-          align: 'left'
+          align: 'left',
+          width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
         },
         {
           label: 'ZONA',
           name: 'zona_id',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           align: 'left'
         },
         {
           label: 'STATUS AKTIF',
           name: 'statusaktif',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
           stype: 'select',
           searchoptions: {
             dataInit: function(element) {
@@ -110,12 +114,14 @@
         {
           label: 'MODIFIED BY',
           name: 'modifiedby',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
           align: 'left'
         },
         {
           label: 'CREATED AT',
           name: 'created_at',
           align: 'right',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
           formatter: "date",
           formatoptions: {
             srcformat: "ISO8601Long",
@@ -127,6 +133,7 @@
           name: 'updated_at',
           align: 'right',
           formatter: "date",
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
           formatoptions: {
             srcformat: "ISO8601Long",
             newformat: "d-m-Y H:i:s"
