@@ -10,11 +10,11 @@
                         <div class="row form-group">
                             <div class="col-12 col-md-2">
                                 <label class="col-form-label">
-                                    SUPIR
+                                    TRADO
                                 </label>
                             </div>
                             <div class="col-12 col-md-10">
-                                <input type="text" name="supir" class="form-control" readonly>
+                                <input type="text" name="trado" class="form-control" readonly>
                             </div>
                         </div>
                         <div class="row form-group">
@@ -127,7 +127,7 @@
             })
             console.log(data)
             $.ajax({
-                url: `${apiUrl}supir/historymandor`,
+                url: `${apiUrl}trado/historymandor`,
                 method: 'POST',
                 dataType: 'JSON',
                 headers: {
@@ -182,7 +182,7 @@
         $('#crudModalHistoryMandor').find('.modal-body').html(modalBodyHistoryMandor)
     })
 
-    function editSupirMilikMandor(Id) {
+    function editTradoMilikMandor(Id) {
         let form = $('#crudFormHistoryMandor')
 
         $('.modal-loader').removeClass('d-none')
@@ -197,10 +197,10 @@
         $('#crudModalHistoryMandorTitle').text('HistorySupirMilikMandor')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
-        loadSupirMandorGrid()
+        loadTradoMandor()
         Promise
             .all([
-                showSupirMilikMandor(form, Id)
+                showTradoMilikMandor(form, Id)
             ])
             .then(() => {
                 $('#crudModalHistoryMandor').modal('show')
@@ -213,10 +213,10 @@
             })
     }
 
-    function showSupirMilikMandor(form, id) {
+    function showTradoMilikMandor(form, id) {
         return new Promise((resolve, reject) => {
             $.ajax({
-                url: `${apiUrl}supir/${id}/gethistorymandor`,
+                url: `${apiUrl}trado/${id}/gethistorymandor`,
                 method: 'GET',
                 dataType: 'JSON',
                 headers: {
@@ -237,7 +237,7 @@
                     setTimeout(() => {
 
                         $('#tableHistoryMandor').jqGrid('setGridParam', {
-                            url: `${apiUrl}supir/${id}/getlisthistorymandor`,
+                            url: `${apiUrl}trado/${id}/getlisthistorymandor`,
                             datatype: "json"
                         }).trigger('reloadGrid');
                     }, 100);
@@ -282,7 +282,7 @@
         })
     }
 
-    function loadSupirMandorGrid() {
+    function loadTradoMandor() {
         let disabled = '';
         if ($('#crudForm').data('action') == 'delete') {
             disabled = 'disabled'
@@ -298,8 +298,8 @@
                         search: false,
                         hidden: true
                     }, {
-                        label: 'SUPIR',
-                        name: 'namasupirgrid',
+                        label: 'TRADO',
+                        name: 'tradogrid',
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
                     },
                     {

@@ -13,6 +13,8 @@
 @include('trado._modal')
 @include('trado._modalApprovalGambar')
 @include('trado._modalApprovalKetrangan')
+@include('trado._modalHistoryTradoSupir')
+@include('trado._modalHistoryTradoMandor')
 
 @push('scripts')
 <script>
@@ -86,28 +88,24 @@
                         stype: 'select',
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
                         searchoptions: {
-                            value: `
-                            <?php
-                                $i = 1;
-                                
-                                foreach ($data['statusaktif'] as $status) :
-                                    echo "$status[param]:$status[parameter]";
-                                    if ($i !== count($data['statusaktif'])) {
-                                        echo ';';
-                                    }
-                                    $i++;
-                                endforeach;
-                            
-                            ?>
-                            `,
-                            
+                            value: `<?php
+                                    $i = 1;
+                                    foreach ($data['statusaktif'] as $status) :
+                                        echo "$status[param]:$status[parameter]";
+                                        if ($i !== count($data['statusaktif'])) {
+                                            echo ';';
+                                        }
+                                        $i++;
+                                    endforeach;
+                                    ?>
+              `,
+
                             dataInit: function(element) {
                                 $(element).select2({
                                     width: 'resolve',
                                     theme: "bootstrap4"
                                 });
                                 var statusAktif = new URLSearchParams(window.location.search).get('status');
-
                                 if (statusAktif != '') {
                                     // Set the selected value in the dropdown and trigger change event
                                     $(element).val(statusAktif).trigger('change');
@@ -116,13 +114,13 @@
                         },
                         formatter: (value, options, rowData) => {
                             let statusAktif = JSON.parse(value)
-                            
+
                             let formattedValue = $(`
                             <div class="badge" style="background-color: ${statusAktif.WARNA}; color: ${statusAktif.WARNATULISAN};">
                                 <span>${statusAktif.SINGKATAN}</span>
                             </div>
                             `)
-                            return formattedValue[0].outerHTML 
+                            return formattedValue[0].outerHTML
 
                         },
                         cellattr: (rowId, value, rowObject) => {
@@ -174,21 +172,18 @@
                         stype: 'select',
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
                         searchoptions: {
-                            value: `
-                                <?php
-                                $i = 1;
-                                
-                                foreach ($data['statusjenisplat'] as $status) :
-                                    echo "$status[param]:$status[parameter]";
-                                    if ($i !== count($data['statusjenisplat'])) {
-                                        echo ';';
-                                    }
-                                    $i++;
-                                endforeach;
-                                
-                                ?>
-                            `,
-                            
+                            value: `<?php
+                                    $i = 1;
+                                    foreach ($data['statusjenisplat'] as $status) :
+                                        echo "$status[param]:$status[parameter]";
+                                        if ($i !== count($data['statusjenisplat'])) {
+                                            echo ';';
+                                        }
+                                        $i++;
+                                    endforeach;
+                                    ?>
+              `,
+
                             dataInit: function(element) {
                                 $(element).select2({
                                     width: 'resolve',
@@ -279,16 +274,6 @@
                         align: 'right',
                         formatter: currencyFormat,
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
-                    },
-                    {
-                        label: 'MILIK MANDOR',
-                        name: 'mandor_id',
-                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
-                    },
-                    {
-                        label: 'MILIK SUPIR',
-                        name: 'supir_id',
-                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                     },
                     // {
                     //   label: 'KM AWAL',
@@ -387,7 +372,6 @@
                         searchoptions: {
                             value: `<?php
                                     $i = 1;
-
                                     foreach ($data['statusstandarisasi'] as $status) :
                                         echo "$status[param]:$status[parameter]";
                                         if ($i !== count($data['statusstandarisasi'])) {
@@ -395,7 +379,6 @@
                                         }
                                         $i++;
                                     endforeach;
-
                                     ?>
         `,
                             dataInit: function(element) {
@@ -447,7 +430,6 @@
                         searchoptions: {
                             value: `<?php
                                     $i = 1;
-
                                     foreach ($data['statusmutasi'] as $status) :
                                         echo "$status[param]:$status[parameter]";
                                         if ($i !== count($data['statusmutasi'])) {
@@ -455,7 +437,6 @@
                                         }
                                         $i++;
                                     endforeach;
-
                                     ?>
         `,
                             dataInit: function(element) {
@@ -491,7 +472,6 @@
                         searchoptions: {
                             value: `<?php
                                     $i = 1;
-
                                     foreach ($data['statusvalidasikendaraan'] as $status) :
                                         echo "$status[param]:$status[parameter]";
                                         if ($i !== count($data['statusvalidasikendaraan'])) {
@@ -499,7 +479,6 @@
                                         }
                                         $i++;
                                     endforeach;
-
                                     ?>
   `,
                             dataInit: function(element) {
@@ -535,7 +514,6 @@
                         searchoptions: {
                             value: `<?php
                                     $i = 1;
-
                                     foreach ($data['statusmobilstoring'] as $status) :
                                         echo "$status[param]:$status[parameter]";
                                         if ($i !== count($data['statusmobilstoring'])) {
@@ -543,7 +521,6 @@
                                         }
                                         $i++;
                                     endforeach;
-
                                     ?>
   `,
                             dataInit: function(element) {
@@ -580,7 +557,6 @@
                         searchoptions: {
                             value: `<?php
                                     $i = 1;
-
                                     foreach ($data['statusabsensisupir'] as $status) :
                                         echo "$status[param]:$status[parameter]";
                                         if ($i !== count($data['statusabsensisupir'])) {
@@ -588,7 +564,6 @@
                                         }
                                         $i++;
                                     endforeach;
-
                                     ?>
   `,
                             dataInit: function(element) {
@@ -624,7 +599,6 @@
                         searchoptions: {
                             value: `<?php
                                     $i = 1;
-
                                     foreach ($data['statusappeditban'] as $status) :
                                         echo "$status[param]:$status[parameter]";
                                         if ($i !== count($data['statusappeditban'])) {
@@ -632,7 +606,6 @@
                                         }
                                         $i++;
                                     endforeach;
-
                                     ?>
   `,
                             dataInit: function(element) {
@@ -668,7 +641,6 @@
                         searchoptions: {
                             value: `<?php
                                     $i = 1;
-
                                     foreach ($data['statuslewatvalidasi'] as $status) :
                                         echo "$status[param]:$status[parameter]";
                                         if ($i !== count($data['statuslewatvalidasi'])) {
@@ -676,7 +648,6 @@
                                         }
                                         $i++;
                                     endforeach;
-
                                     ?>
   `,
                             dataInit: function(element) {
@@ -963,79 +934,118 @@
                     },
                 ],
                 extndBtn: [{
-                    id: 'approve',
-                    title: 'Approve',
-                    caption: 'Approve',
-                    innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-                    class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-                    dropmenuHTML: [{
-                            id: 'approveun',
-                            text: "UN/APPROVAL Reminder Oli Mesin",
-                            onClick: () => {
-                                if (`{{ $myAuth->hasPermission('trado', 'approvalmesin') }}`) {
-                                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                                    approvalMesin(selectedId)
+                        id: 'approve',
+                        title: 'Approve',
+                        caption: 'Approve',
+                        innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+                        class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
+                        dropmenuHTML: [{
+                                id: 'approveun',
+                                text: "UN/APPROVAL Reminder Oli Mesin",
+                                onClick: () => {
+                                    if (`{{ $myAuth->hasPermission('trado', 'approvalmesin') }}`) {
+                                        selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                                        approvalMesin(selectedId)
+                                    }
                                 }
-                            }
-                        },
-                        {
-                            id: 'approvalPersneling',
-                            text: "un/Approval Reminder Oli Persneling",
-                            onClick: () => {
-                                if (`{{ $myAuth->hasPermission('trado', 'approvalpersneling') }}`) {
-                                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                            },
+                            {
+                                id: 'approvalPersneling',
+                                text: "un/Approval Reminder Oli Persneling",
+                                onClick: () => {
+                                    if (`{{ $myAuth->hasPermission('trado', 'approvalpersneling') }}`) {
+                                        selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
 
-                                    approvalPersneling(selectedId);
+                                        approvalPersneling(selectedId);
+                                    }
+                                    // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                                 }
-                                // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                            }
-                        },
-                        {
-                            id: 'approvalGardan',
-                            text: "un/Approval Reminder Oli Gardan",
+                            },
+                            {
+                                id: 'approvalGardan',
+                                text: "un/Approval Reminder Oli Gardan",
+                                onClick: () => {
+                                    if (`{{ $myAuth->hasPermission('trado', 'approvalgardan') }}`) {
+                                        selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                                        approvalGardan(selectedId);
+                                    }
+                                    // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                                }
+                            },
+                            {
+                                id: 'approvalSaringanHawa',
+                                text: "un/Approval Reminder Oli Saringan Hawa",
+                                onClick: () => {
+                                    if (`{{ $myAuth->hasPermission('trado', 'approvalsaringanhawa') }}`) {
+                                        selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                                        approvalSaringanHawa(selectedId);
+                                    }
+                                    // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                                }
+                            },
+                            {
+                                id: 'approvalTradoGambar',
+                                text: "un/Approval Trado tanpa Gambar",
+                                onClick: () => {
+                                    if (`{{ $myAuth->hasPermission('approvaltradogambar', 'update') }}`) {
+                                        selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                                        approvalTradoGambar(selectedId);
+                                    }
+                                    // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                                }
+                            },
+                            {
+                                id: 'approvalTradoKeterangan',
+                                text: "un/Approval Trado tanpa Keterangan",
+                                onClick: () => {
+                                    if (`{{ $myAuth->hasPermission('approvaltradoketerangan', 'update') }}`) {
+                                        selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                                        approvalTradoKeterangan(selectedId);
+                                    }
+                                    // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                                }
+                            },
+                        ],
+                    },
+
+
+                    {
+                        id: 'lainnya',
+                        title: 'Lainnya',
+                        caption: 'Lainnya',
+                        innerHTML: '<i class="fa fa-check"></i> LAINNYA',
+                        class: 'btn btn-secondary btn-sm mr-1 dropdown-toggle ',
+                        dropmenuHTML: [{
+                            id: 'historyMandor',
+                            text: "History Trado Milik Mandor",
                             onClick: () => {
-                                if (`{{ $myAuth->hasPermission('trado', 'approvalgardan') }}`) {
+                                if (`{{ $myAuth->hasPermission('trado', 'historyTradoMandor') }}`) {
                                     selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                                    approvalGardan(selectedId);
+                                    if (selectedId == null || selectedId == '' || selectedId ==
+                                        undefined) {
+                                        showDialog('Harap pilih salah satu record')
+                                    } else {
+                                        editTradoMilikMandor(selectedId)
+                                    }
                                 }
-                                // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                             }
-                        },
-                        {
-                            id: 'approvalSaringanHawa',
-                            text: "un/Approval Reminder Oli Saringan Hawa",
+                        }, {
+                            id: 'historySupir',
+                            text: "History Trado Milik Supir",
                             onClick: () => {
-                                if (`{{ $myAuth->hasPermission('trado', 'approvalsaringanhawa') }}`) {
+                                if (`{{ $myAuth->hasPermission('trado', 'historyTradoSupir') }}`) {
                                     selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                                    approvalSaringanHawa(selectedId);
+                                    if (selectedId == null || selectedId == '' || selectedId ==
+                                        undefined) {
+                                        showDialog('Harap pilih salah satu record')
+                                    } else {
+                                        editTradoMilikSupir(selectedId)
+                                    }
                                 }
-                                // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                             }
-                        },
-                        {
-                            id: 'approvalTradoGambar',
-                            text: "un/Approval Trado tanpa Gambar",
-                            onClick: () => {
-                                if (`{{ $myAuth->hasPermission('approvaltradogambar', 'update') }}`) {
-                                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                                    approvalTradoGambar(selectedId);
-                                }
-                                // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                            }
-                        },
-                        {
-                            id: 'approvalTradoKeterangan',
-                            text: "un/Approval Trado tanpa Keterangan",
-                            onClick: () => {
-                                if (`{{ $myAuth->hasPermission('approvaltradoketerangan', 'update') }}`) {
-                                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                                    approvalTradoKeterangan(selectedId);
-                                }
-                                // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                            }
-                        },
-                    ],
-                }]
+                        }, ],
+                    }
+                ]
             })
 
         /* Append clear filter button */
@@ -1265,35 +1275,35 @@
         }
 
         const setStatusApprovalOptions = function(relatedForm) {
-        return new Promise((resolve, reject) => {
-            relatedForm.find('[name=statusapproval]').empty()
-            relatedForm.find('[name=statusapproval]').append(
-                new Option('-- PILIH STATUS APPROVAL --', '', false, true)
-            ).trigger('change')
+            return new Promise((resolve, reject) => {
+                relatedForm.find('[name=statusapproval]').empty()
+                relatedForm.find('[name=statusapproval]').append(
+                    new Option('-- PILIH STATUS APPROVAL --', '', false, true)
+                ).trigger('change')
 
-            $.ajax({
-                url: `${apiUrl}parameter/combo`,
-                method: 'GET',
-                dataType: 'JSON',
-                headers: {
-                    Authorization: `Bearer ${accessToken}`
-                },
-                data: {
-                    grp: 'STATUS APPROVAL',
-                    subgrp: 'STATUS APPROVAL'
-                },
-                success: response => {
-                    response.data.forEach(statusApproval => {
-                        let option = new Option(statusApproval.text, statusApproval.id)
+                $.ajax({
+                    url: `${apiUrl}parameter/combo`,
+                    method: 'GET',
+                    dataType: 'JSON',
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`
+                    },
+                    data: {
+                        grp: 'STATUS APPROVAL',
+                        subgrp: 'STATUS APPROVAL'
+                    },
+                    success: response => {
+                        response.data.forEach(statusApproval => {
+                            let option = new Option(statusApproval.text, statusApproval.id)
 
-                        relatedForm.find('[name=statusapproval]').append(option).trigger('change')
-                    });
+                            relatedForm.find('[name=statusapproval]').append(option).trigger('change')
+                        });
 
-                    resolve()
-                }
+                        resolve()
+                    }
+                })
             })
-        })
-    }
+        }
     })
 </script>
 @endpush()
