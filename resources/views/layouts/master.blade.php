@@ -92,6 +92,15 @@
     <p></p>
   </div>
 
+  <div id="dialog-confirm-force" title="Pesan" class="text-center " style="display: none;">
+    <span class="fa fa-exclamation-triangle text-warning" aria-hidden="true" style="font-size:25px;"></span>
+    <p></p>
+  </div>
+
+  <div id="dialog-force-message" title="Pesan" class="text-center text-warning" style="display: none;">
+    <span class="fa fa-exclamation-triangle" aria-hidden="true" style="font-size:25px;"></span>
+    <p></p>
+  </div>
   <!-- Modal for report and export -->
   <div class="modal fade" id="rangeModal" tabindex="-1" aria-labelledby="rangeModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -248,6 +257,63 @@
     </div>
   </div>
 
+
+  <!-- Modal for approve kacab-->
+  <div class="modal fade" id="approveKacab" tabindex="-1" aria-labelledby="approveKacabLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <p class="modal-title">Force Edit</p>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+
+          </button>
+        </div>
+        <form id="formApproveKacab" target="_blank">
+          @csrf
+          <div class="modal-body">
+
+            <div class="form-group row">
+              <div class="col-sm-2">
+                <label class="col-form-label">Username</label>
+              </div>
+              <div class="col-sm-10">
+                <div class="input-group">
+                  <input type="hidden" name="id">
+                  <input type="text" name="username" id="username" class="form-control" autofocus>
+                  <div class="input-group-append">
+                    <div class="input-group-text" style="background-color:#E0ECFF; color:white">
+                      <span class="fas fa-user" style="color:#0e2d5f;"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class="col-sm-2">
+                <label class="col-form-label">Password</label>
+              </div>
+              <div class="col-sm-10">
+                <div class="input-group">
+                  <input type="password" name="password" class="form-control password">
+                  <div class="input-group-append">
+                    <div class="input-group-text focusPass" style="background-color:#E0ECFF; color:white;">
+                      <span class="fas fa-eye toggle-password" toggle=".password" style="color:#0e2d5f;"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="modal-footer">
+            <button type="submit" id="approvalKacab" class="btn btn-primary">Submit</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
   <div class="wrapper">
     @include('layouts._navbar')
     @include('layouts._sidebar')
@@ -362,6 +428,7 @@
     let apiTruckingSbyUrl = `{{ config('app.trucking_api_sby_url') }}`
     let apiTruckingBtgUrl = `{{ config('app.trucking_api_btg_url') }}`
     var pleaseSelectARow;
+    let isAllowedForceEdit = false
 
     function separatorNumber(object) {
       var value = parseInt(object.value.replaceAll('.', '').replaceAll(',', ''));
@@ -374,20 +441,31 @@
 
       return true;
     }
+    // Pusher.logToConsole = true;
 
-    // var pusher = new Pusher('05155f3ff434cbf8e5f9', {
-    //   cluster: 'ap1',
-    //   encrypted: false
+    // var pusher = new Pusher('ad75cb7e8c752de64286', {
+    //   cluster: 'ap1'
     // });
 
+    // // pusher.connection.bind('error', function(err) {
+    // //   console.error(err);
+    // // });
+
     // var channel = pusher.subscribe('data-channel');
-    // channel.bind('App\\Events\\LaporanNeracaEventPusher', function(response) {
-    //   console.log("asdf");
+    // console.log('dashboad')
+    // channel.bind("App\\Events\\NewNotification", (response) => {
+
     //   var message = JSON.parse(response.message);
-    //   console.log("Baca Berhasil diproses");
-    //   if (message.id == <?= auth()->user()->id ?>) {
-    //     alert("Laporan Neraca Sudah Berhasil Proses");
+    //   if (message.olduser == '<?= auth()->user()->name ?>') {
+    //     showDialogForce(message.message)
+    //     // $("#dialog-force-message").dialog({
+    //     //   close: function(event, ui) {
+    //     //     isAllowedForceEdit = true
+    //     //     approveKacab(message.id)
+    //     //   },
+    //     // });
     //   }
+    //   console.log('data', response);
     // });
 
     $(".formatdate").datepicker({
@@ -517,8 +595,20 @@
           clearSelectedRows()
         },
         error: error => {
+          $(`#dialog-warning-message`).append(
+            `<p class="text-dark">${error.responseJSON.errors.tableId}</p>`
+          );
 
-          showDialog(error.statusText)
+          $("#dialog-warning-message").dialog({
+            modal: true,
+            buttons: [{
+              text: "Ok",
+              click: function() {
+                $(this).dialog("close");
+              },
+            }, ]
+          });
+          $(".ui-dialog-titlebar-close").find("p").remove();
 
         },
       }).always(() => {
