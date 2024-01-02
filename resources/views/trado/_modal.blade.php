@@ -2,7 +2,7 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm" enctype="multipart/form-data">
       <div class="modal-content">
-        
+
         <form action="" method="post">
           <div class="modal-body">
 
@@ -604,6 +604,7 @@
           })
       })
   }
+
   function viewTrado(id) {
     let form = $('#crudForm')
 
@@ -662,7 +663,7 @@
             let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
             name.attr('disabled', true)
             name.find('.lookup-toggler').attr('disabled', true)
-            $(".dz-hidden-input").prop("disabled",true);
+            $(".dz-hidden-input").prop("disabled", true);
 
           })
           .catch((error) => {
@@ -797,11 +798,15 @@
           addRemoveLinks: true,
           dictRemoveFile: buttonRemoveDropzone,
           acceptedFiles: 'image/*',
+          minFilesize: 200, // Set the minimum file size in kilobytes
           paramName: $(element).data('field'),
           init: function() {
             dropzones.push(this)
             this.on("addedfile", function(file) {
               if (this.files.length > 5) {
+                this.removeFile(file);
+              }
+              if (file.size < (this.options.minFilesize * 1024)) {
                 this.removeFile(file);
               }
             });
@@ -1063,7 +1068,7 @@
     })
   }
 
-  
+
   function approvalMesin(id) {
     event.preventDefault()
 
@@ -1146,7 +1151,7 @@
     })
   }
 
-  
+
   function approvalGardan(id) {
     event.preventDefault()
 
@@ -1189,7 +1194,7 @@
   }
 
 
-  
+
   function approvalSaringanHawa(id) {
     event.preventDefault()
 
