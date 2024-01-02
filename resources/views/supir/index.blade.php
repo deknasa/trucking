@@ -936,7 +936,7 @@
                             id: 'historyMandor',
                             text: "History Supir Milik Mandor",
                             onClick: () => {
-                                if (`{{ $myAuth->hasPermission('supir', 'historyMandor') }}`) {
+                                if (`{{ $myAuth->hasPermission('supir', 'historySupirMandor') }}`) {
                                     selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                                     if (selectedId == null || selectedId == '' || selectedId ==
                                         undefined) {

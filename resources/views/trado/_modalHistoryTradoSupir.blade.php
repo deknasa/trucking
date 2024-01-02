@@ -1,6 +1,6 @@
-<div class="modal modal-fullscreen" id="crudModalHistoryMandor" tabindex="-1" aria-labelledby="crudModalHistoryMandorLabel" aria-hidden="true">
+<div class="modal modal-fullscreen" id="crudModalHistorySupir" tabindex="-1" aria-labelledby="crudModalHistorySupirLabel" aria-hidden="true">
     <div class="modal-dialog">
-        <form action="#" id="crudFormHistoryMandor">
+        <form action="#" id="crudFormHistorySupir">
             <div class="modal-content">
 
                 <form action="" method="post">
@@ -10,33 +10,33 @@
                         <div class="row form-group">
                             <div class="col-12 col-md-2">
                                 <label class="col-form-label">
-                                    SUPIR
+                                    TRADO
                                 </label>
                             </div>
                             <div class="col-12 col-md-10">
+                                <input type="text" name="trado" class="form-control" readonly>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-12 col-md-2">
+                                <label class="col-form-label">
+                                    Supir Lama
+                                </label>
+                            </div>
+                            <div class="col-12 col-md-10">
+                                <input type="hidden" name="supir_id">
                                 <input type="text" name="supir" class="form-control" readonly>
                             </div>
                         </div>
                         <div class="row form-group">
                             <div class="col-12 col-md-2">
                                 <label class="col-form-label">
-                                    Mandor Lama
+                                    Supir Baru<span class="text-danger">*</span>
                                 </label>
                             </div>
                             <div class="col-12 col-md-10">
-                                <input type="hidden" name="mandor_id">
-                                <input type="text" name="mandor" class="form-control" readonly>
-                            </div>
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-12 col-md-2">
-                                <label class="col-form-label">
-                                    Mandor Baru<span class="text-danger">*</span>
-                                </label>
-                            </div>
-                            <div class="col-12 col-md-10">
-                                <input type="hidden" name="mandorbaru_id">
-                                <input type="text" name="mandorbaru" class="form-control mandor-lookup">
+                                <input type="hidden" name="supirbaru_id">
+                                <input type="text" name="supirbaru" class="form-control supirbaru-lookup">
                             </div>
                         </div>
                         <div class="row form-group">
@@ -53,11 +53,11 @@
                         </div>
 
                         <div class="mt-3">
-                            <table id="tableHistoryMandor"></table>
+                            <table id="tableHistorySupir"></table>
                         </div>
                     </div>
                     <div class="modal-footer justify-content-start">
-                        <button id="btnSubmitHistoryMandor" class="btn btn-primary">
+                        <button id="btnSubmitHistorySupir" class="btn btn-primary">
                             <i class="fa fa-save"></i>
                             Save
                         </button>
@@ -75,24 +75,24 @@
 @push('scripts')
 <script>
     hasFormBindKeys = false
-    let modalBodyHistoryMandor = $('#crudModalHistoryMandor').find('.modal-body').html()
+    let modalBodyHistorySupir = $('#crudModalHistorySupir').find('.modal-body').html()
 
-    let sortnameHistoryMandor = 'tanggalberlakugrid';
-    let sortorderHistoryMandor = 'asc';
-    let pageHistoryMandor = 0;
-    let totalRecordHistoryMandor
-    let limitHistoryMandor
-    let postDataHistoryMandor
-    let triggerClickHistoryMandor
-    let indexRowHistoryMandor
+    let sortnameHistorySupir = 'tanggalberlakugrid';
+    let sortorderHistorySupir = 'asc';
+    let pageHistorySupir = 0;
+    let totalRecordHistorySupir
+    let limitHistorySupir
+    let postDataHistorySupir
+    let triggerClickHistorySupir
+    let indexRowHistorySupir
 
     $(document).ready(function() {
-        $('#btnSubmitHistoryMandor').click(function(event) {
+        $('#btnSubmitHistorySupir').click(function(event) {
             event.preventDefault()
 
             let method
             let url
-            let form = $('#crudFormHistoryMandor')
+            let form = $('#crudFormHistorySupir')
             $(this).attr('disabled', '')
             $('#processingLoader').removeClass('d-none')
 
@@ -127,7 +127,7 @@
             })
             console.log(data)
             $.ajax({
-                url: `${apiUrl}supir/historymandor`,
+                url: `${apiUrl}trado/historysupir`,
                 method: 'POST',
                 dataType: 'JSON',
                 headers: {
@@ -135,8 +135,8 @@
                 },
                 data: data,
                 success: response => {
-                    $('#crudFormHistoryMandor').trigger('reset')
-                    $('#crudModalHistoryMandor').modal('hide')
+                    $('#crudFormHistorySupir').trigger('reset')
+                    $('#crudModalHistorySupir').modal('hide')
 
                     id = response.data.id
 
@@ -165,45 +165,45 @@
         })
     })
 
-    $('#crudModalHistoryMandor').on('shown.bs.modal', () => {
-        let form = $('#crudFormHistoryMandor')
+    $('#crudModalHistorySupir').on('shown.bs.modal', () => {
+        let form = $('#crudFormHistorySupir')
 
         setFormBindKeys(form)
 
         activeGrid = null
 
-        form.find('#btnSubmitHistoryMandor').prop('disabled', false)
-        initLookupHistoryMandor()
+        form.find('#btnSubmitHistorySupir').prop('disabled', false)
+        initLookupHistorySupir()
         initDatepicker()
     })
 
-    $('#crudModalHistoryMandor').on('hidden.bs.modal', () => {
+    $('#crudModalHistorySupir').on('hidden.bs.modal', () => {
         activeGrid = '#jqGrid'
-        $('#crudModalHistoryMandor').find('.modal-body').html(modalBodyHistoryMandor)
+        $('#crudModalHistorySupir').find('.modal-body').html(modalBodyHistorySupir)
     })
 
-    function editSupirMilikMandor(Id) {
-        let form = $('#crudFormHistoryMandor')
+    function editTradoMilikSupir(Id) {
+        let form = $('#crudFormHistorySupir')
 
         $('.modal-loader').removeClass('d-none')
 
         form.data('action', 'edit')
         form.trigger('reset')
-        form.find('#btnSubmitHistoryMandor').html(`
+        form.find('#btnSubmitHistorySupir').html(`
             <i class="fa fa-save"></i>
             Save
         `)
         form.find(`.sometimes`).hide()
-        $('#crudModalHistoryMandorTitle').text('HistorySupirMilikMandor')
+        $('#crudModalHistorySupirTitle').text('HistorySupirMilikSupir')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
-        loadSupirMandorGrid()
+        loadTradoSupir()
         Promise
             .all([
-                showSupirMilikMandor(form, Id)
+                showTradoMilikSupir(form, Id)
             ])
             .then(() => {
-                $('#crudModalHistoryMandor').modal('show')
+                $('#crudModalHistorySupir').modal('show')
             })
             .catch((error) => {
                 showDialog(error.responseJSON)
@@ -213,10 +213,10 @@
             })
     }
 
-    function showSupirMilikMandor(form, id) {
+    function showTradoMilikSupir(form, id) {
         return new Promise((resolve, reject) => {
             $.ajax({
-                url: `${apiUrl}supir/${id}/gethistorymandor`,
+                url: `${apiUrl}trado/${id}/gethistorysupir`,
                 method: 'GET',
                 dataType: 'JSON',
                 headers: {
@@ -236,8 +236,8 @@
                     })
                     setTimeout(() => {
 
-                        $('#tableHistoryMandor').jqGrid('setGridParam', {
-                            url: `${apiUrl}supir/${id}/getlisthistorymandor`,
+                        $('#tableHistorySupir').jqGrid('setGridParam', {
+                            url: `${apiUrl}trado/${id}/getlisthistorysupir`,
                             datatype: "json"
                         }).trigger('reloadGrid');
                     }, 100);
@@ -256,18 +256,18 @@
         })
     }
 
-    function initLookupHistoryMandor() {
-        $('.mandor-lookup').lookup({
-            title: 'Mandor Lookup',
-            fileName: 'mandor',
+    function initLookupHistorySupir() {
+        $('.supirbaru-lookup').lookup({
+            title: 'Supir Lookup',
+            fileName: 'supir',
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
                 }
             },
-            onSelectRow: (mandor, element) => {
-                $('#crudFormHistoryMandor [name=mandorbaru_id]').first().val(mandor.id)
-                element.val(mandor.namamandor)
+            onSelectRow: (supir, element) => {
+                $('#crudFormHistorySupir [name=supirbaru_id]').first().val(supir.id)
+                element.val(supir.namasupir)
                 element.data('currentValue', element.val())
             },
             onCancel: (element) => {
@@ -275,19 +275,19 @@
             },
             onClear: (element) => {
 
-                $('#crudFormHistoryMandor [name=mandorbaru_id]').first().val('')
+                $('#crudFormHistorySupir [name=supirbaru_id]').first().val('')
                 element.val('')
                 element.data('currentValue', element.val())
             }
         })
     }
 
-    function loadSupirMandorGrid() {
+    function loadTradoSupir() {
         let disabled = '';
         if ($('#crudForm').data('action') == 'delete') {
             disabled = 'disabled'
         }
-        $("#tableHistoryMandor").jqGrid({
+        $("#tableHistorySupir").jqGrid({
                 styleUI: 'Bootstrap4',
                 iconSet: 'fontAwesome',
                 datatype: "local",
@@ -298,18 +298,18 @@
                         search: false,
                         hidden: true
                     }, {
-                        label: 'SUPIR',
-                        name: 'namasupirgrid',
+                        label: 'TRADO',
+                        name: 'tradogrid',
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
                     },
                     {
-                        label: 'MANDOR LAMA',
-                        name: 'mandorlamagrid',
+                        label: 'SUPIR LAMA',
+                        name: 'supirlamagrid',
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                     },
                     {
-                        label: 'MANDOR BARU',
-                        name: 'mandorbarugrid',
+                        label: 'SUPIR BARU',
+                        name: 'supirbarugrid',
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                     },
                     {
@@ -334,9 +334,9 @@
                 userDataOnFooter: true,
                 toolbar: [true, "top"],
                 sortable: true,
-                sortname: sortnameHistoryMandor,
-                sortorder: sortorderHistoryMandor,
-                page: pageHistoryMandor,
+                sortname: sortnameHistorySupir,
+                sortorder: sortorderHistorySupir,
+                page: pageHistorySupir,
                 viewrecords: true,
                 prmNames: {
                     sort: 'sortIndex',
@@ -366,19 +366,19 @@
                     initResize($(this))
 
                     /* Set global variables */
-                    sortnameHistoryMandor = $(this).jqGrid("getGridParam", "sortname")
-                    sortorderHistoryMandor = $(this).jqGrid("getGridParam", "sortorder")
-                    totalRecordHistoryMandor = $(this).getGridParam("records")
-                    limitHistoryMandor = $(this).jqGrid('getGridParam', 'postData').limit
-                    postDataHistoryMandor = $(this).jqGrid('getGridParam', 'postData')
-                    triggerClickHistoryMandor = true
+                    sortnameHistorySupir = $(this).jqGrid("getGridParam", "sortname")
+                    sortorderHistorySupir = $(this).jqGrid("getGridParam", "sortorder")
+                    totalRecordHistorySupir = $(this).getGridParam("records")
+                    limitHistorySupir = $(this).jqGrid('getGridParam', 'postData').limit
+                    postDataHistorySupir = $(this).jqGrid('getGridParam', 'postData')
+                    triggerClickHistorySupir = true
 
                     $('.clearsearchclass').click(function() {
                         clearColumnSearch($(this))
                     })
 
-                    if (indexRowHistoryMandor > $(this).getDataIDs().length - 1) {
-                        indexRowHistoryMandor = $(this).getDataIDs().length - 1;
+                    if (indexRowHistorySupir > $(this).getDataIDs().length - 1) {
+                        indexRowHistorySupir = $(this).getDataIDs().length - 1;
                     }
 
                     setHighlight($(this))
@@ -393,7 +393,7 @@
                 groupOp: 'AND',
                 disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
                 beforeSearch: function() {
-                    clearGlobalSearch($('#tableHistoryMandor'))
+                    clearGlobalSearch($('#tableHistorySupir'))
                 },
                 afterSearch: function() {
                     console.log($(this).getGridParam())
@@ -401,10 +401,10 @@
             })
             .customPager({})
         /* Append clear filter button */
-        loadClearFilter($('#tableHistoryMandor'))
+        loadClearFilter($('#tableHistorySupir'))
 
         /* Append global search */
-        loadGlobalSearch($('#tableHistoryMandor'))
+        loadGlobalSearch($('#tableHistorySupir'))
     }
 </script>
 @endpush()
