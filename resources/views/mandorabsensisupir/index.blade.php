@@ -66,6 +66,7 @@
   let sortname = 'kodetrado'
   let sortorder = 'asc'
   let autoNumericElements = []
+  let dataAbsensi = {}
   let rowNum = 0
   let isTradoMilikSupir = ''
   $(document).ready(function() {
@@ -78,7 +79,7 @@
     let formattedTglBuka = $.datepicker.formatDate('dd-mm-yy', today);
     $('#tglBuka').find('[name=tglbukaabsensi]').val(formattedTglBuka).trigger('change');
     $('#tglshow').val(formattedTglBuka);
-
+    isEditing()
     
 
     $(document).on('click','#btnReload', function(event) {
@@ -172,7 +173,7 @@
           {
             label: 'Trado',
             name: 'kodetrado',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
           },
           {
             label: 'Supir',
@@ -214,6 +215,7 @@
             label: 'JAM',
             name: 'jam',
             editable: true,
+            formatter: 'date',
             editoptions: {
               autocomplete: 'off',
               class:'inputmask-time',
@@ -256,7 +258,7 @@
                       Aktif: 'AKTIF',
                     }
                   },
-                  onSelectRow: (supir, el) => {
+                  onSelectRow: (absentrado, el) => {
                     el.val(absentrado.keterangan)
                     el.data('currentValue', absentrado.keterangan)
                     let rowId = $("#jqGrid").jqGrid('getGridParam', 'selrow');
@@ -280,31 +282,17 @@
             name: 'keterangan',
             editable: true,
             editoptions: {
-              autocomplete: 'off'
+              autocomplete: 'off',
+              dataEvents: [{
+                type: "keyup",
+              }]
             },
-            // editoptions: {
-            //   dataEvents: [{
-            //     type: "keyup",
-                
-            //   }, ]
-            // },
             width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1
           },
           {
             label: 'TGL BUKTI',
             name: 'tglbukti',
-            // editable: false,
-            // editoptions: {
-            //   autocomplete: 'off',
-            //   readonly:true,
-            //   // dataInit: function(element) {
-            //   //   let rowId = $("#jqGrid").jqGrid('getGridParam', 'selrow');
-            //   //   let tglbukaabsensi = $('#tglbukaabsensi').val()
-            //   //   $("#jqGrid").jqGrid('setCell', rowId, 'tglbukti', tglbukaabsensi);
-            //   // }
-            // },
             formatter: (value, options, rowData) => {
-              // console.log(value, $('#tglbukaabsensi').val());
               let rowId = $("#jqGrid").jqGrid('getGridParam', 'selrow');
               let data = value
               if (!value) {
@@ -319,6 +307,19 @@
             formatoptions: {
               srcformat: "ISO8601Long",
               newformat: "d-m-Y"
+            }
+          },
+          {
+            label: 'action',
+            name: 'action',
+            formatter: (value, options, rowData) => {
+              let trado_id = rowData.trado_id
+              let supir_id = rowData.supir_id
+              let id = rowData.id
+              let formattedValue = $(`
+              <button data-trado="${trado_id}" data-supir="${supir_id}" data-id="${id}" class="btn btn-danger btn-sm delete-row"><i class="fa fa-trash"></i> Delete</button>              
+             `)
+              return formattedValue[0].outerHTML
             }
           },
 
@@ -348,26 +349,29 @@
           total: 'attributes.total',
           records: 'attributes.records',
         },
-        // afterRestoreCell: function(rowId, value, indexRow, indexColumn) {
-        //   let originalGridData = $("#jqGrid")
-        //     .jqGrid("getGridParam", "originalData")
-        //     .find((row) => row.id == rowId);
-
-        //   let localRow = $("#jqGrid").jqGrid("getLocalRow", rowId);
-        // },
         afterSaveCell: function (rowid, cellname, value, iRow, iCol) {
-          // Di sini Anda dapat mengakses nilai baru dari kolom yang diedit dan memperbarui kolom lainnya.
           if (cellname === 'namasupir') {
-            // console.log(value);
-            // var namasupir = // ... hitung nilai baru untuk kolom 'age' berdasarkan nilai 'name'
             $("#jqGrid").jqGrid('setCell', rowid, 'namasupir', value);
+            pushToObject(rowid,'namasupir', value);
           }
-          // if (cellname === 'tglbukti') {
-          //   // console.log(value);
-          //   // var tglbukti = // ... hitung nilai baru untuk kolom 'age' berdasarkan nilai 'name'
-          //   $("#jqGrid").jqGrid('setCell', rowid, 'tglbukti', value);
-          // }
-          // console.log(rowid, cellname, value, iRow, iCol);
+          if (cellname === 'absentrado') {
+            $("#jqGrid").jqGrid('setCell', rowid, 'absentrado', value);
+            pushToObject(rowid,'absentrado', value);
+          }
+          if (cellname === 'jam') {
+            $("#jqGrid").jqGrid('setCell', rowid, 'jam', value);
+            pushToObject(rowid,'jam', value);
+          }
+          if (cellname === 'keterangan') {
+            $("#jqGrid").jqGrid('setCell', rowid, 'keterangan', value);
+            pushToObject(rowid,'keterangan', value);
+          }
+          if (cellname === 'tglbukti') {
+            $("#jqGrid").jqGrid('setCell', rowid, 'tglbukti', value);
+            pushToObject(rowid,'tglbukti', value);
+          }
+
+
         },
         loadBeforeSend: function(jqXHR) {
           jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
@@ -467,9 +471,9 @@
             innerHTML: '<i class="fa fa-save"></i> Save',
             class: 'btn btn-primary btn-sm mr-1',
             onClick: () => {
-              let rowData = $("#jqGrid").jqGrid('getRowData');
-              console.log(rowData)
-              // console.log($("#jqGrid").jqGrid("getLocalRow"));
+              // let rowData = $("#jqGrid").jqGrid('getRowData');
+              submitAll()
+              // console.log(Object.keys(dataAbsensi));
             }
           },
           // {
@@ -534,7 +538,27 @@
     if (!`{{ $myAuth->hasPermission('mandorabsensisupir', 'store') }}`) {
       $('#absen').attr('disabled', 'disabled')
     }
-
+    isEditing()
+    function pushToObject(id, cell, value) {
+      
+      if (dataAbsensi.hasOwnProperty(String(id))) {
+        delete dataAbsensi[String(id)]; 
+      }
+      dataAbsensi[id] = {
+        id : $("#jqGrid").jqGrid('getCell', id, 'id'),
+        trado_id : $("#jqGrid").jqGrid('getCell', id, 'trado_id'),
+        supir_id : $("#jqGrid").jqGrid('getCell', id, 'supir_id'),
+        absen_id : $("#jqGrid").jqGrid('getCell', id, 'absen_id'),
+        kodetrado : $("#jqGrid").jqGrid('getCell', id, 'kodetrado'),
+        namasupir : $("#jqGrid").jqGrid('getCell', id, 'namasupir'),
+        jam : $("#jqGrid").jqGrid('getCell', id, 'jam'),
+        absentrado : $("#jqGrid").jqGrid('getCell', id, 'absentrado'),
+        keterangan : $("#jqGrid").jqGrid('getCell', id, 'keterangan'),
+        tglbukti : $("#jqGrid").jqGrid('getCell', id, 'tglbukti'),
+      }
+      isEditing()
+      // console.log();
+    }
 
 
     $('#rangeModal').on('shown.bs.modal', function() {
@@ -603,8 +627,128 @@
         }
       })
     }
+
+    
+    function submitAll() {
+      // $(this).attr('disabled', '')
+      // $('#processingLoader').removeClass('d-none')
+      $.ajax({
+        url:  `${apiUrl}mandorabsensisupir`,
+        method: 'POST',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {data:JSON.stringify(dataAbsensi)},
+        success: response => {
+          
+          $('#jqGrid').jqGrid().trigger('reloadGrid')
+          dataAbsensi = {}
+          isEditing()
+        },
+        error: error => {
+          $(".ui-state-error").removeClass("ui-state-error");
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+          errors = error.responseJSON.errors
+          $.each(errors, (index, error) => {
+            selectedRows = $("#jqGrid").getGridParam("selectedRowIds");
+            let indexes = index.split(".");
+            let angka = indexes[0]
+            row = parseInt(angka) - 1;
+            let element;
+            element = $(`#jqGrid tr#${parseInt(angka)}`).find(`td[aria-describedby="jqGrid_${indexes[1]}"]`)
+            $(element).addClass("ui-state-error");
+            $(element).attr("title", error[0].toLowerCase())
+          });
+        },
+      }).always(() => {
+        $('#processingLoader').addClass('d-none')
+        $(this).removeAttr('disabled')
+      })
+    }
+  
+
   })
 
+  $(document).on('click', '.delete-row', function(event) {
+    let tradoId = $(this).data('trado')
+    let supirId = $(this).data('supir')
+    let id = $(this).data('id')
+    cekValidasi(tradoId,supirId, 'deleteFromAll',id)
+  })
+
+  function deleteFromAll(tradoId,supirId){
+    $.ajax({
+      url: `${apiUrl}mandorabsensisupir/${tradoId}`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        tanggal: $('#tglshow').val(),
+        supir_id: supirId
+      },
+      success: response => {
+
+        let waktuAwal = response.data.jam;
+        // Membuat objek Date dari waktu awal
+        let dateObj = new Date("2000-01-01 " + waktuAwal);
+        // Mendapatkan jam dan menit
+        let jam = dateObj.getHours();
+        let menit = dateObj.getMinutes();
+        // Menggabungkan jam dan menit dalam format "hh:mm"
+        let waktuAkhir = (jam < 10 ? "0" : "") + jam + ":" + (menit < 10 ? "0" : "") + menit;
+        // console.log(waktuAkhir); // Output: "10:34"
+
+        response.data.jam = waktuAkhir
+        console.log(response.data.jam);
+        let msg = `YAKIN HAPUS ABSENSI `
+        showConfirm(msg, response.data.trado)
+        .then(function() {
+          $.ajax({
+            url: `${apiUrl}mandorabsensisupir/${response.data.id}/delete`,
+            method: 'DELETE',
+            dataType: 'JSON',
+            data: response.data
+            ,
+            headers: {
+              Authorization: `Bearer ${accessToken}`
+            },
+            success: response => {
+              $('#jqGrid').jqGrid().trigger('reloadGrid')
+              
+            },
+          })
+            
+        })
+        
+      },
+      error: error => {
+        reject(error)
+      }
+    })
+    isEditing()
+  }
+  function deleteStatic(id,message) {
+    if (dataAbsensi.hasOwnProperty(String(id))) {
+      delete dataAbsensi[String(id)]; 
+      $('#jqGrid').jqGrid().trigger('reloadGrid')
+    }else{
+      showDialog(message)
+    }
+    isEditing()
+  }
+
+  function isEditing() {
+    // console.log(jQuery.isEmptyObject(dataAbsensi));
+    if (jQuery.isEmptyObject(dataAbsensi)) {
+      $('#absen').prop('disabled', true)
+    }else{
+      $('#absen').prop('disabled', false)
+    }
+  }
   function setTradoMilikSupir() {
     $.ajax({
       url: `${apiUrl}parameter/getparamfirst`,

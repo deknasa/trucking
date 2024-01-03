@@ -450,7 +450,7 @@
     })
   }
 
-  function cekValidasi(tradoId,supirId, aksi) {
+  function cekValidasi(tradoId,supirId, aksi,rowId = null) {
     $.ajax({
       url: `${apiUrl}mandorabsensisupir/${tradoId}/cekvalidasi`,
       method: 'GET',
@@ -464,10 +464,17 @@
       },
       success: response => {
         if (response.errors) {
-          showDialog(response.message)
+          if (aksi =="deleteFromAll") {
+            deleteStatic(rowId,response.message);
+          }else{
+            showDialog(response.message)
+          }
+          
         } else {
           if (aksi == 'edit') {
             editAbsensi(tradoId,supirId)
+          } else if (aksi =="deleteFromAll") {
+            deleteFromAll(tradoId,supirId)
           } else {
             deleteAbsensi(tradoId,supirId)
           }
