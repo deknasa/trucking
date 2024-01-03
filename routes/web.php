@@ -277,6 +277,9 @@ use App\Http\Controllers\LaporanPemotonganPinjamanDepositoController;
 use App\Http\Controllers\ExportRincianMingguanPendapatanSupirController;
 use App\Http\Controllers\LapanganController;
 use App\Http\Controllers\LaporanBiayaSupirController;
+use App\Http\Controllers\LaporanHistorySupirMilikMandorController;
+use App\Http\Controllers\LaporanHistoryTradoMilikMandorController;
+use App\Http\Controllers\LaporanHistoryTradoMilikSupirController;
 use App\Http\Controllers\OtobonController;
 use App\Http\Controllers\SupirSerapController;
 
@@ -1652,6 +1655,21 @@ Route::middleware(['auth', 'authorized'])->group(function () {
     Route::get('lapangan/report', [LapanganController::class, 'report'])->name('lapangan.report');
     Route::get('lapangan/index', [LapanganController::class, 'index']);
     Route::resource('lapangan', LapanganController::class);
+    
+    Route::get('laporanhistorysupirmilikmandor/report', [LaporanHistorySupirMilikMandorController::class, 'report'])->name('laporanhistorysupirmilikmandor.report');
+    Route::get('laporanhistorysupirmilikmandor/export', [LaporanHistorySupirMilikMandorController::class, 'export'])->name('laporanhistorysupirmilikmandor.export');
+    Route::get('laporanhistorysupirmilikmandor/index', [LaporanHistorySupirMilikMandorController::class, 'index']);
+    Route::resource('laporanhistorysupirmilikmandor', LaporanHistorySupirMilikMandorController::class);
+    
+    Route::get('laporanhistorytradomilikmandor/report', [LaporanHistoryTradoMilikMandorController::class, 'report'])->name('laporanhistorytradomilikmandor.report');
+    Route::get('laporanhistorytradomilikmandor/export', [LaporanHistoryTradoMilikMandorController::class, 'export'])->name('laporanhistorytradomilikmandor.export');
+    Route::get('laporanhistorytradomilikmandor/index', [LaporanHistoryTradoMilikMandorController::class, 'index']);
+    Route::resource('laporanhistorytradomilikmandor', LaporanHistoryTradoMilikMandorController::class);
+    
+    Route::get('laporanhistorytradomiliksupir/report', [LaporanHistoryTradoMilikSupirController::class, 'report'])->name('laporanhistorytradomiliksupir.report');
+    Route::get('laporanhistorytradomiliksupir/export', [LaporanHistoryTradoMilikSupirController::class, 'export'])->name('laporanhistorytradomiliksupir.export');
+    Route::get('laporanhistorytradomiliksupir/index', [LaporanHistoryTradoMilikSupirController::class, 'index']);
+    Route::resource('laporanhistorytradomiliksupir', LaporanHistoryTradoMilikSupirController::class);
 });
 
 Route::patch('format', [FormatController::class, 'update']);
