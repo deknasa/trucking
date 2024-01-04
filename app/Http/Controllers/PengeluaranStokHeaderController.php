@@ -300,7 +300,7 @@ class PengeluaranStokHeaderController extends MyController
         $response = Http::withHeaders($this->httpHeaders)
         ->withOptions(['verify' => false])
         ->withToken(session('access_token'))
-        ->get(config('app.api_url') . 'pengeluaranstokdetail', ['pengeluaranstokheader_id' => $pengeluaranstok['id']]);
+        ->get(config('app.api_url') . 'pengeluaranstokdetail', ['pengeluaranstokheader_id' => $pengeluaranstok['id'], 'limit' => 0]);
         $data["details"] =$response['data'];
         $data["user"] = Auth::user();
         $combo = $this->combo('list');
@@ -337,7 +337,7 @@ class PengeluaranStokHeaderController extends MyController
         $response = Http::withHeaders($this->httpHeaders)
         ->withOptions(['verify' => false])
         ->withToken(session('access_token'))
-        ->get(config('app.api_url') . 'pengeluaranstokdetail', ['pengeluaranstokheader_id' => $pengeluaranstok['id']]);
+        ->get(config('app.api_url') . 'pengeluaranstokdetail', ['pengeluaranstokheader_id' => $pengeluaranstok['id'], 'limit' => 0]);
         $pengeluaranstok_details = $response['data'];
 
         $pengeluaranstokheaders = $data;
