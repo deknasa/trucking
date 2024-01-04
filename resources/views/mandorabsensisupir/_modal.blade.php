@@ -450,7 +450,7 @@
     })
   }
 
-  function cekValidasi(tradoId,supirId, aksi) {
+  function cekValidasi(tradoId,supirId, aksi,rowId = null) {
     $.ajax({
       url: `${apiUrl}mandorabsensisupir/${tradoId}/cekvalidasi`,
       method: 'GET',
@@ -464,10 +464,17 @@
       },
       success: response => {
         if (response.errors) {
-          showDialog(response.message)
+          if (aksi =="deleteFromAll") {
+            deleteStatic(rowId,response.message);
+          }else{
+            showDialog(response.message)
+          }
+          
         } else {
           if (aksi == 'edit') {
             editAbsensi(tradoId,supirId)
+          } else if (aksi =="deleteFromAll") {
+            deleteFromAll(tradoId,supirId)
           } else {
             deleteAbsensi(tradoId,supirId)
           }
@@ -572,28 +579,28 @@
 
 
   function initLookup() {
-    $('.supir-lookup').lookup({
-      title: 'Supir Lookup',
-      fileName: 'supir',
-      beforeProcess: function(test) {
-        this.postData = {
-          Aktif: 'AKTIF',
-        }
-      },
-      onSelectRow: (supir, element) => {
-        $(`#crudForm [name="supir_id"]`).first().val(supir.id)
-        element.val(supir.namasupir)
-        element.data('currentValue', element.val())
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
-      },
-      onClear: (element) => {
-        element.val('')
-        $(`#crudForm [name="supir_id"]`).first().val('')
-        element.data('currentValue', element.val())
-      }
-    })
+    // $('.supir-lookup').lookup({
+    //   title: 'Supir Lookup',
+    //   fileName: 'supir',
+    //   beforeProcess: function(test) {
+    //     this.postData = {
+    //       Aktif: 'AKTIF',
+    //     }
+    //   },
+    //   onSelectRow: (supir, element) => {
+    //     $(`#crudForm [name="supir_id"]`).first().val(supir.id)
+    //     element.val(supir.namasupir)
+    //     element.data('currentValue', element.val())
+    //   },
+    //   onCancel: (element) => {
+    //     element.val(element.data('currentValue'))
+    //   },
+    //   onClear: (element) => {
+    //     element.val('')
+    //     $(`#crudForm [name="supir_id"]`).first().val('')
+    //     element.data('currentValue', element.val())
+    //   }
+    // })
 
 
     $('.absentrado-lookup').lookup({
