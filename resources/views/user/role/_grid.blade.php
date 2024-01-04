@@ -12,14 +12,17 @@
         colModel: [{
             label: 'ROLE',
             name: 'rolename',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,            
           },
           {
             label: 'MODIFIED BY',
             name: 'modifiedby',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,            
           },
           {
             label: 'UPDATED AT',
             name: 'updated_at',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,            
             formatter: "date",
             formatoptions: {
               srcformat: "ISO8601Long",

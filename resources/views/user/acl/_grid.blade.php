@@ -11,16 +11,20 @@
         idPrefix: 'userAclGrid',
         colModel: [{
             label: 'CLASS',
-            width: '500px',
             width: (detectDeviceType() == "desktop") ? md_dekstop_3 : md_mobile_3,            
             name: 'class',
           },
           {
             label: 'METHOD',
-            width: '300px',
             name: 'method',
             width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,            
           },
+          {
+            label: 'KETERANGAN',
+            name: 'keterangan',
+            width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
+            align: 'left'
+          },            
           {
             label: 'MODIFIED BY',
             name: 'modifiedby',

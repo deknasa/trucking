@@ -212,19 +212,27 @@
             },
           },
           {
-            label: 'Class',
+            label: 'CLASS',
             name: 'class',
-            width: '500px',
+            width: (detectDeviceType() == "desktop") ? md_dekstop_3 : md_mobile_3,
+            align: 'left'
           },
           {
-            label: 'Method',
+            label: 'METHOD',
             name: 'method',
-            width: '300px',
+            width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
+            align: 'left'
           },
+          {
+            label: 'KETERANGAN',
+            name: 'keterangan',
+            width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
+            align: 'left'
+          },          
           {
             label: 'Nama',
             name: 'nama',
-            width: '500px',
+            width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
           },
         ],
         autowidth: true,
