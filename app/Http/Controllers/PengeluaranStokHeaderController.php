@@ -290,6 +290,7 @@ class PengeluaranStokHeaderController extends MyController
             'offset' => $request->dari - 1,
             'rows' => $request->sampai - $request->dari + 1,
             'withRelations' => true,
+            'limit'=> 0
         ];
         $id = $request->id;
         $pengeluaranstok = $this->find($params,$id)['data'];
