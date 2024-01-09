@@ -9,6 +9,9 @@
       styleUI: 'Bootstrap4',
       iconSet: 'fontAwesome',
       datatype: "json",
+      postData: {
+        role: `{!! $role ?? '' !!}`,
+      },
       idPrefix: 'userLookup',
       colModel: [{
           label: 'ID',

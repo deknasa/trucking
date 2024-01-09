@@ -54,6 +54,10 @@
                                 width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_2,
                             },
                             {
+                                label: 'user',
+                                name: 'user',
+                            },
+                            {
                                 label: 'STATUS',
                                 name: 'statusaktif',
                                 width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
