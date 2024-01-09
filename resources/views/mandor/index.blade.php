@@ -52,6 +52,10 @@
                                 name: 'keterangan',
                             },
                             {
+                                label: 'user',
+                                name: 'user',
+                            },
+                            {
                                 label: 'STATUS',
                                 name: 'statusaktif',
                                 stype: 'select',
