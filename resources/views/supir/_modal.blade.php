@@ -842,7 +842,7 @@
           addRemoveLinks: true,
           dictRemoveFile: buttonRemoveDropzone,
           acceptedFiles: 'image/*',
-          minFilesize: 200, // Set the minimum file size in kilobytes
+          minFilesize: 100, // Set the minimum file size in kilobytes
           paramName: $(element).data('field'),
           init: function() {
             dropzones.push(this)
