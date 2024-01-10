@@ -46,7 +46,7 @@ $idLookup = isset($id) ? $id : null;
       {
         label: 'Sub kelompok',
         name: 'kodesubkelompok',
-          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
       },
     ];
   } else {
@@ -61,22 +61,22 @@ $idLookup = isset($id) ? $id : null;
       {
         label: 'Sub kelompok',
         name: 'kodesubkelompok',
-          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
       },
       {
         label: 'Keterangan',
         name: 'keterangan',
-          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
       },
       {
         label: 'Kelompok',
         name: 'kelompok_id',
-          width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
+        width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
       },
       {
         label: 'Status Aktif',
         name: 'statusaktif',
-          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
         formatter: (value, options, rowData) => {
           let statusAktif = JSON.parse(value)
 
@@ -97,12 +97,12 @@ $idLookup = isset($id) ? $id : null;
       {
         label: "Modified By",
         name: "modifiedby",
-          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
       },
       {
         label: "Created At",
         name: "created_at",
-          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
         formatter: "date",
         formatoptions: {
           srcformat: "ISO8601Long",
@@ -112,7 +112,7 @@ $idLookup = isset($id) ? $id : null;
       {
         label: "Updated At",
         name: "updated_at",
-          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
         formatter: "date",
         formatoptions: {
           srcformat: "ISO8601Long",
@@ -138,6 +138,7 @@ $idLookup = isset($id) ? $id : null;
     fixed: true,
     rownumbers: false,
     rownumWidth: 0,
+    rowNum: `{!! $limit ?? 11 !!}`,
     rowList: [10, 20, 50, 0],
     sortable: true,
     sortname: 'id',
@@ -175,94 +176,69 @@ $idLookup = isset($id) ? $id : null;
       postData.sort_indexes = [postData.sort_index];
       postData.sort_orders = [postData.sort_order];
 
-      console.log('serialize')
       var colModel = $(this).jqGrid("getGridParam", "colModel"),
         l = colModel.length,
         i,
         rules = [],
         searchValue = $(searchText).val(),
         cm;
-      currentValue = $(searchText).data('currentValue')
 
-      if (!currentValue) {
+      input = $(searchText).data('input')
+
+      if (input) {
         var typeSearch = `{{ $typeSearch ?? '' }}`
+
         if (typeSearch === 'ALL') {
+
           for (i = 0; i < l; i++) {
             cm = colModel[i];
 
-            if (cm.search !== false && (cm.stype === undefined || cm.stype === "text")) {
+            if (cm.search !== false && (cm.stype === undefined || cm.stype ===
+                "text")) {
               rules.push({
                 field: cm.name,
                 op: "cn",
                 data: searchValue.toUpperCase(),
               });
+
+
               postData.filters = JSON.stringify({
                 groupOp: "OR",
                 rules: rules,
               });
             }
+
           }
+
+          // $(searchText).focus()
+
           postData.searching = searching;
           postData.searchText = searchText;
+
         } else {
           cm = colModel[searching];
 
-          if (cm.search !== false && (cm.stype === undefined || cm.stype === "text")) {
-            rules.push({
-              field: cm.name,
-              op: "cn",
-              data: searchValue.toUpperCase(),
-            });
+          if (cm.search !== false && (cm.stype === undefined || cm.stype ===
+              "text")) {
+
             postData.filters = JSON.stringify({
               groupOp: "AND",
-              rules: rules,
+              rules: [{
+                field: cm.name,
+                op: "cn",
+                data: $(searchText).val().toUpperCase()
+              }]
             });
+
             $(searchText).focus()
           }
+
           postData.searching = searching;
           postData.searchText = searchText;
         }
-      } else {
-        $(searchText).on("input", function(event) {
-          var typeSearch = `{{ $typeSearch ?? '' }}`
-          if (typeSearch === 'ALL') {
-            for (i = 0; i < l; i++) {
-              cm = colModel[i];
-              if (cm.search !== false && (cm.stype === undefined || cm.stype === "text")) {
 
-                postData.filters = JSON.stringify({
-                  groupOp: "OR",
-                  rules: [{
-                    field: cm.name,
-                    op: "cn",
-                    data: $(searchText).val().toUpperCase()
-                  }]
-                });
-              }
-            }
-            postData.searching = searching;
-            postData.searchText = searchText;
-          } else {
-            cm = colModel[searching];
-
-            if (cm.search !== false && (cm.stype === undefined || cm.stype === "text")) {
-
-              postData.filters = JSON.stringify({
-                groupOp: "AND",
-                rules: [{
-                  field: cm.name,
-                  op: "cn",
-                  data: $(searchText).val().toUpperCase()
-                }]
-              });
-              $(searchText).focus()
-            }
-            postData.searching = searching;
-            postData.searchText = searchText;
-          }
-          delete postData.sort_index;
-          delete postData.sort_order;
-        })
+        delete postData.sort_index;
+        delete postData.sort_order;
       }
 
       return postData;
