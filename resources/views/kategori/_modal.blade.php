@@ -478,6 +478,7 @@
       title: 'Subkelompok Lookup',
       fileName: 'subkelompokMaster',
       typeSearch: 'ALL',
+      searching: 1,
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
@@ -506,6 +507,8 @@
     $(`.status-lookup`).lookupMaster({
       title: 'Status Aktif Lookup',
       fileName: 'parameterMaster',
+      typeSearch: 'ALL',
+      searching: 1,
       beforeProcess: function() {
         this.postData = {
           url: `${apiUrl}parameter/combo`,
