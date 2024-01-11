@@ -184,7 +184,7 @@ class LaporanPinjamanSupirKaryawanController extends MyController
                 $sheet->setCellValue('G' . $detail_start_row, $response_detail['Saldo']);
             } else {
                 if ($dataRow > $detail_table_header_row + 1) {
-                    $sheet->setCellValue('G' . $dataRow, '=(G' . $previousRow . '-F' . $dataRow . ')-E' . $dataRow);
+                    $sheet->setCellValue('G' . $dataRow, '=(G' . $previousRow . '+E' . $dataRow . ')-F' . $dataRow);
                 }
             }
 
