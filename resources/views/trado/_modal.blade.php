@@ -816,7 +816,7 @@
 
       element.dropzone.removeAllFiles()
 
-      if (action == 'edit' || action == 'delete') {
+      if (action == 'edit' || action == 'delete' || action == 'view') {
         assignAttachment(element.dropzone, data)
       }
     })
