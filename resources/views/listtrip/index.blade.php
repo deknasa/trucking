@@ -13,6 +13,7 @@
   </div>
 </div>
 
+@include('listtrip._modal')
 @push('scripts')
 <script>
   let indexRow = 0;
@@ -47,11 +48,10 @@
 
   $(document).ready(function() {
     let indexUrl = `${apiUrl}listtrip`
-    initLookup()
 
     setRange()
     initDatepicker('datepickerIndex')
-    $(document).on('click','#btnReload', function(event) {
+    $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('listtrip')
     })
 
@@ -61,8 +61,8 @@
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         postData: {
-          tgldari:$('#tgldariheader').val() ,
-          tglsampai:$('#tglsampaiheader').val() 
+          tgldari: $('#tgldariheader').val(),
+          tglsampai: $('#tglsampaiheader').val()
         },
         datatype: "json",
         colModel: [{
@@ -83,17 +83,23 @@
             label: 'TGL BUKTI',
             name: 'tglbukti',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },          
+          {
+            label: 'CUSTOMER',
+            name: 'agen_id',
+            width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2
           },
           {
-            label: 'SHIPPER',
-            name: 'pelanggan_id',
-            width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1
+            label: 'JENIS ORDER',
+            name: 'jenisorder_id',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3
           },
-          {
-            label: 'KETERANGAN',
-            name: 'keterangan',
-            width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1
-          },
+          
           {
             label: 'DARI',
             name: 'dari_id',
@@ -105,18 +111,15 @@
             width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
           },
           {
+            label: 'SHIPPER',
+            name: 'pelanggan_id',
+            width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1
+          },
+          {
             label: 'CONTAINER',
             name: 'container_id',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3
-          },
-          // {
-          //   label: 'NO CONT',
-          //   name: 'nocont'
-          // },
-          // {
-          //   label: 'NO CONT2',
-          //   name: 'nocont2'
-          // },
+          },          
           {
             label: 'STATUS CONTAINER',
             name: 'statuscontainer_id',
@@ -132,14 +135,11 @@
             name: 'supir_id',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
           },
-          // {
-          //   label: 'NOJOB',
-          //   name: 'nojob',
-          // },
-          // {
-          //   label: 'NOJOB2',
-          //   name: 'nojob2',
-          // },
+          {
+            label: 'KETERANGAN',
+            name: 'keterangan',
+            width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1
+          },
           {
             label: 'LONGTRIP',
             name: 'statuslongtrip',
@@ -187,125 +187,11 @@
               return ` title="${statusLongTrip.MEMO}"`
             }
           },
-          // {
-          //   label: 'GAJI SUPIR',
-          //   name: 'gajisupir',
-          //   formatter: 'currency',
-          //   formatoptions: {
-          //     decimalSeparator: ',',
-          //     thousandsSeparator: '.'
-          //   }
-          // },
-          // {
-          //   label: 'GAJI KENEK',
-          //   name: 'gajikenek',
-          //   formatter: 'currency',
-          //   formatoptions: {
-          //     decimalSeparator: ',',
-          //     thousandsSeparator: '.'
-          //   }
-          // },
-          {
-            label: 'CUSTOMER',
-            name: 'agen_id',
-            width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2
-          },
-          {
-            label: 'JENIS ORDER',
-            name: 'jenisorder_id',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3
-          },
-          // {
-          //   label: 'STATUS PERALIHAN',
-          //   name: 'statusperalihan',
-          //   stype: 'select',
-          //   searchoptions: {
-          //     dataInit: function(element) {
-          //       $(element).select2({
-          //         width: 'resolve',
-          //         theme: "bootstrap4",
-          //         ajax: {
-          //           url: `${apiUrl}parameter/combo`,
-          //           dataType: 'JSON',
-          //           headers: {
-          //             Authorization: `Bearer ${accessToken}`
-          //           },
-          //           data: {
-          //             grp: 'STATUS PERALIHAN',
-          //             subgrp: 'STATUS PERALIHAN'
-          //           },
-          //           beforeSend: () => {
-          //             // clear options
-          //             $(element).data('select2').$results.children().filter((index, element) => {
-          //               // clear options except index 0, which
-          //               // is the "searching..." label
-          //               if (index > 0) {
-          //                 element.remove()
-          //               }
-          //             })
-          //           },
-          //           processResults: (response) => {
-          //             let formattedResponse = response.data.map(row => ({
-          //               id: row.text,
-          //               text: row.text
-          //             }));
-
-          //             formattedResponse.unshift({
-          //               id: '',
-          //               text: 'ALL'
-          //             });
-
-          //             return {
-          //               results: formattedResponse
-          //             };
-          //           },
-          //         }
-          //       });
-          //     }
-          //   },
-          //   formatter: (value, options, rowData) => {
-          //     let statusPeralihan = JSON.parse(value)
-          //     if (!statusPeralihan) {
-          //       return '';
-          //     }
-          //     let formattedValue = $(`
-          //         <div class="badge" style="background-color: ${statusPeralihan.WARNA}; color: #fff;">
-          //           <span>${statusPeralihan.SINGKATAN}</span>
-          //         </div>
-          //       `)
-
-          //     return formattedValue[0].outerHTML
-          //   },
-          //   cellattr: (rowId, value, rowObject) => {
-          //     let statusPeralihan = JSON.parse(rowObject.statusperalihan)
-          //     if (!statusPeralihan) {
-          //       return '';
-          //     }
-          //     return ` title="${statusPeralihan.MEMO}"`
-          //   }
-          // },
           {
             label: 'LOKASI BONGKAR MUAT',
             name: 'tarif_id',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
           },
-          // {
-          //   label: 'NOMINAL PERALIHAN',
-          //   name: 'nominalperalihan',
-          //   formatter: 'currency',
-          //   formatoptions: {
-          //     decimalSeparator: ',',
-          //     thousandsSeparator: '.'
-          //   }
-          // },
-          // {
-          //   label: 'NO SP',
-          //   name: 'nosp',
-          // },
-          // {
-          //   label: 'TGL SP',
-          //   name: 'tglsp',
-          // },
           {
             label: 'MODIFIED BY',
             name: 'modifiedby',
@@ -409,7 +295,7 @@
           } else {
             $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
           }
-
+          permission()
           setHighlight($(this))
         },
       })
@@ -422,12 +308,50 @@
         groupOp: 'AND',
         beforeSearch: function() {
           abortGridLastRequest($(this))
-          
+
           clearGlobalSearch($('#jqGrid'))
         }
       })
 
-      .customPager()
+      .customPager({
+
+        buttons: [{
+            id: 'edit',
+            innerHTML: '<i class="fa fa-pen"></i> EDIT',
+            class: 'btn btn-success btn-sm mr-1',
+            onClick: () => {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Harap pilih salah satu record')
+              } else {
+                cekValidasi(selectedId, 'EDIT')
+              }
+            }
+          },
+          {
+            id: 'delete',
+            innerHTML: '<i class="fa fa-trash"></i> DELETE',
+            class: 'btn btn-danger btn-sm mr-1',
+            onClick: () => {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Harap pilih salah satu record')
+              } else {
+                cekValidasi(selectedId, 'DELETE')
+              }
+            }
+          },
+          {
+            id: 'view',
+            innerHTML: '<i class="fa fa-eye"></i> VIEW',
+            class: 'btn btn-orange btn-sm mr-1',
+            onClick: () => {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              viewTrip(selectedId)
+            }
+          },
+        ]
+      })
 
 
 
@@ -438,44 +362,17 @@
     /* Append global search */
     loadGlobalSearch($('#jqGrid'))
 
-
-
-
+    function permission() {
+      if (!`{{ $myAuth->hasPermission('listtrip', 'update') }}`) {
+        $('#edit').attr('disabled', 'disabled')
+      }
+      
+      if (!`{{ $myAuth->hasPermission('listtrip', 'destroy') }}`) {
+        $('#delete').attr('disabled', 'disabled')
+      }
+    }
 
   })
-
-  function initLookup() {
-    $('.supir-lookup').lookup({
-      title: 'Supir Lookup',
-      fileName: 'supir',
-      beforeProcess: function(test) {
-        // var levelcoa = $(`#levelcoa`).val();
-        this.postData = {
-
-          Aktif: 'AKTIF',
-        }
-      },
-      onSelectRow: (supir, element) => {
-        $('#crudForm [name=supir_id]').first().val(supir.id)
-        element.val(supir.namasupir)
-        element.data('currentValue', element.val())
-        $('#jqGrid').jqGrid('setGridParam', {
-          postData: {
-            supir_id: $('#crudForm').find('[name=supir_id]').val(),
-          },
-        }).trigger('reloadGrid');
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'))
-      },
-      onClear: (element) => {
-        $('#crudForm [name=supir_id]').first().val('')
-        element.val('')
-        element.data('currentValue', element.val())
-        // getGaji()
-      }
-    })
-  }
 </script>
 @endpush()
 @endsection

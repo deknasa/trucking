@@ -1207,6 +1207,7 @@
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
+        pelangganId = 0
         $('#crudForm [name=pelanggan_id]').first().val('')
         element.val('')
         element.data('currentValue', element.val())
@@ -1235,6 +1236,7 @@
         enabledUpahSupir()
       },
       onClear: (element) => {
+        containerId = 0
         $('#crudForm [name=container_id]').first().val('')
         $('#crudForm [name=upah_id]').val('')
         $('#crudForm [name=upah]').val('').data('currentValue', '')
@@ -1277,6 +1279,7 @@
         enabledUpahSupir()
       },
       onClear: (element) => {
+        statuscontainerId = 0
         $('#crudForm [name=statuscontainer_id]').first().val('')
         $('#crudForm [name=upah_id]').val('')
         $('#crudForm [name=upah]').val('').data('currentValue', '')
@@ -1308,6 +1311,7 @@
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
+        tradoId = 0
         $('#crudForm [name=trado_id]').first().val('')
         element.val('')
         element.data('currentValue', element.val())
@@ -1337,6 +1341,7 @@
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
+        tradoId = 0
         $('#crudForm [name=trado_id]').first().val('')
         $('#crudForm [name=supir_id]').first().val('')
         $('#crudForm [name=absensidetail_id]').first().val('')
@@ -1422,6 +1427,7 @@
         enabledUpahSupir()
       },
       onClear: (element) => {
+        jenisorderId = 0
         $('#crudForm [name=jenisorder_id]').first().val('')
         $('#crudForm [name=upah_id]').val('')
         $('#crudForm [name=upah]').val('').data('currentValue', '')
@@ -1454,6 +1460,7 @@
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
+        tarifrincianId = 0
         $('#crudForm [name=tarifrincian_id]').val('')
         $('#crudForm [name=omset]').first().val('')
         $('#crudForm [name=penyesuaian]').val('')
@@ -1507,6 +1514,7 @@
         // enabledKota()
       },
       onClear: (element) => {
+        tarifrincianId = 0
         $('#crudForm [name=upah_id]').val('')
         clearUpahSupir()
         element.val('')

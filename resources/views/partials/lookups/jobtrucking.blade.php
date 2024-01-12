@@ -9,6 +9,9 @@
       iconSet: 'fontAwesome',
       datatype: "json",
       postData: {
+        edit: `{!! $edit ?? 'false' !!}`,
+        idtrip: `{!! $idtrip ?? '' !!}`,
+        statuscontainer_id: `{!! $statuscontainer_id ?? '' !!}`,
         container_id: `{!! $container_id ?? '' !!}`,
         jenisorder_id: `{!! $jenisorder_id ?? '' !!}`,
         pelanggan_id: `{!! $pelanggan_id ?? '' !!}`,
