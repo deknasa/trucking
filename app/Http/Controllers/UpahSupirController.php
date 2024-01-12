@@ -279,17 +279,18 @@ class UpahSupirController extends MyController
 
     public function export(Request $request): void
     {
-        $upahsupir = Http::withHeaders($request->header())
+        $get = Http::withHeaders($request->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'upahsupir/export?dari=' . $request->dari . '&sampai=' . $request->sampai)['data'];
+            ->get(config('app.api_url') . 'upahsupir/export?dari=' . $request->dari . '&sampai=' . $request->sampai);
 
-        if ($upahsupir == null) {
+        if ($get == null) {
             echo "<script>window.close();</script>";
         } else {
+            $upahsupir = $get['data'];
             $spreadsheet = new Spreadsheet();
             $sheet = $spreadsheet->getActiveSheet();
-            $sheet->setCellValue('A1', 'PT. TRANSPORINDO AGUNG SEJAHTERA');
+            $sheet->setCellValue('A1',  $get['judul']);
             $sheet->getStyle("A1")->getFont()->setSize(12);
             $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
             $sheet->mergeCells('A1:I1');

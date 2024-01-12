@@ -213,7 +213,7 @@ class KategoriController extends MyController
         $i = 0;
         foreach ($kategoris as $index => $params) {
 
-            $statusaktif = $params['statusaktif'];
+            $statusaktif = $params['status'];
 
             $result = json_decode($statusaktif, true);
 

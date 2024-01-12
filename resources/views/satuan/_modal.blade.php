@@ -2,10 +2,10 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
-        
+
         <form action="" method="post">
           <div class="modal-body modal-master">
-           {{-- <div class="row form-group">
+            {{-- <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">ID</label>
               </div>
@@ -164,6 +164,10 @@
     setFormBindKeys(form)
 
     activeGrid = null
+    form.find('#btnSubmit').prop('disabled', false)
+    if (form.data('action') == "view") {
+      form.find('#btnSubmit').prop('disabled', true)
+    }
     initLookup()
     getMaxLength(form)
     initSelect2(form.find('.select2bs4'), true)
@@ -191,18 +195,18 @@
     $('.invalid-feedback').remove()
 
     Promise
-    .all([
-      showDefault(form)
-    ])
-    .then(() => {
-      $('#crudModal').modal('show')
-    })
-    .catch((error) => {
-      showDialog(error.statusText)
-    })
-    .finally(() => {
-      $('.modal-loader').addClass('d-none')
-    })
+      .all([
+        showDefault(form)
+      ])
+      .then(() => {
+        $('#crudModal').modal('show')
+      })
+      .catch((error) => {
+        showDialog(error.statusText)
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
   }
 
   function editSatuan(satuanId) {
@@ -222,18 +226,18 @@
     $('.invalid-feedback').remove()
 
     Promise
-    .all([
-      showSatuan(form, satuanId)
-    ])
-    .then(() => {
-      $('#crudModal').modal('show')
-    })
-    .catch((error) => {
-      showDialog(error.statusText)
-    })
-    .finally(() => {
-      $('.modal-loader').addClass('d-none')
-    })
+      .all([
+        showSatuan(form, satuanId)
+      ])
+      .then(() => {
+        $('#crudModal').modal('show')
+      })
+      .catch((error) => {
+        showDialog(error.statusText)
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
   }
 
   function deleteSatuan(satuanId) {
@@ -253,18 +257,61 @@
     $('.invalid-feedback').remove()
 
     Promise
-    .all([
-      showSatuan(form, satuanId)
-    ])
-    .then(() => {
-      $('#crudModal').modal('show')
-    })
-    .catch((error) => {
-      showDialog(error.statusText)
-    })
-    .finally(() => {
-      $('.modal-loader').addClass('d-none')
-    })
+      .all([
+        showSatuan(form, satuanId)
+      ])
+      .then(() => {
+        $('#crudModal').modal('show')
+      })
+      .catch((error) => {
+        showDialog(error.statusText)
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
+  }
+
+  function viewSatuan(satuanId) {
+    let form = $('#crudForm')
+
+    $('.modal-loader').removeClass('d-none')
+
+    form.data('action', 'view')
+    form.trigger('reset')
+    form.find('#btnSubmit').html(`
+      <i class="fa fa-save"></i>
+      Save
+    `)
+    form.find(`.sometimes`).hide()
+    $('#crudModalTitle').text('View Satuan')
+    $('.is-invalid').removeClass('is-invalid')
+    $('.invalid-feedback').remove()
+
+    Promise
+      .all([
+        showSatuan(form, satuanId)
+      ])
+      .then(satuanId => {
+        // form.find('.aksi').hide()
+        setFormBindKeys(form)
+        form.find('[name]').attr('disabled', 'disabled').css({
+          background: '#fff'
+        })
+        form.find('[name=id]').prop('disabled', false)
+
+      })
+      .then(() => {
+        $('#crudModal').modal('show')
+        let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
+        name.attr('disabled', true)
+        name.find('.lookup-toggler').attr('disabled', true)
+      })
+      .catch((error) => {
+        showDialog(error.statusText)
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
   }
 
   function getMaxLength(form) {
@@ -365,7 +412,7 @@
       })
     })
   }
-  
+
   function showDefault(form) {
     return new Promise((resolve, reject) => {
       $.ajax({
@@ -383,8 +430,7 @@
 
             if (element.is('select')) {
               element.val(value).trigger('change')
-            } 
-            else {
+            } else {
               element.val(value)
             }
 
@@ -401,7 +447,7 @@
     })
   }
 
-  
+
   function initLookup() {
     $(`.status-lookup`).lookupMaster({
       title: 'Status Aktif Lookup',
@@ -417,7 +463,7 @@
           singleColumn: true,
           hideLabel: true,
           title: 'Status Aktif'
-        };  
+        };
       },
       onSelectRow: (status, element) => {
         let elId = element.data('targetName')
@@ -436,6 +482,5 @@
       },
     });
   }
-
 </script>
 @endpush()

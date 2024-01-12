@@ -54,7 +54,7 @@
                                 width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
                             },
                             {
-                                label: 'STATUS AKTIF',
+                                label: 'STATUS',
                                 name: 'statusaktif',
                                 width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
                                 stype: 'select',
@@ -99,7 +99,7 @@
                             {
                                 label: 'MODIFIED BY',
                                 name: 'modifiedby',
-                                width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                             },
                             {
                                 label: 'CREATED AT',
@@ -401,10 +401,10 @@
                     getCekExport(params).then((response) => {
                         if ($('#rangeModal').data('action') == 'export') {
                             $.ajax({
-                                url: '{{ config('app.api_url') }}jenisorder/export?' + params,
+                                url: `${apiUrl}jenisorder/export?${params}`,
                                 type: 'GET',
                                 beforeSend: function(xhr) {
-                                    xhr.setRequestHeader('Authorization', 'Bearer {{ session('access_token') }}');
+                                    xhr.setRequestHeader('Authorization', `Bearer ${accessToken}`);
                                 },
                                 xhrFields: {
                                     responseType: 'arraybuffer'

@@ -260,6 +260,16 @@
                                 }
                             },
                             {
+                                id: 'view',
+                                innerHTML: '<i class="fa fa-eye"></i> VIEW',
+                                class: 'btn btn-orange btn-sm mr-1',
+                                onClick: () => {
+                                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+            
+                                    viewDataRitasi(selectedId)
+                                }
+                            },
+                            {
                                 id: 'report',
                                 innerHTML: '<i class="fa fa-print"></i> REPORT',
                                 class: 'btn btn-info btn-sm mr-1',
@@ -379,10 +389,10 @@
                     getCekExport(params).then((response) => {
                         if ($('#rangeModal').data('action') == 'export') {
                             $.ajax({
-                                url: '{{ config('app.api_url') }}dataritasi/export?' + params,
+                                url: `${apiUrl}dataritasi/export?${params}`,
                                 type: 'GET',
                                 beforeSend: function(xhr) {
-                                    xhr.setRequestHeader('Authorization', 'Bearer {{ session('access_token') }}');
+                                    xhr.setRequestHeader('Authorization', `Bearer ${accessToken}`);
                                 },
                                 xhrFields: {
                                     responseType: 'arraybuffer'
