@@ -2,12 +2,12 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
-        
+
         <form action="" method="post">
           <div class="modal-body">
             {{-- <input type="hidden" name="id"> --}}
 
-           {{-- <div class="row form-group">
+            {{-- <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">ID</label>
               </div>
@@ -63,22 +63,19 @@
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="hidden" name="type">
-                <input type="text" name="grup" class="form-control parameter-lookup">
+                <input type="text" name="grup" id="grup" class="form-control parameter-lookup">
               </div>
             </div>
 
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
-                  Default 
+                  Default
                 </label>
               </div>
-
-              
               <div class="col-12 col-sm-9 col-md-10">
-                <select name="default" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH STATUS DEFAULT --</option>
-                </select>
+                <input type="hidden" name="default">
+                <input type="text" name="defaultnama" id="defaultnama" class="form-control lg-form default-lookup">
               </div>
             </div>
 
@@ -145,33 +142,33 @@
       let Id = form.find('[name=id]').val()
       let action = form.data('action')
       let data = $('#crudForm').serializeArray()
-      
+
       $.ajax({
-          url: url,
-          method: method,
-          dataType: 'JSON',
-          headers: {
-              Authorization: `Bearer ${accessToken}`
-          },
-          data: data,
-          success: response => {
-            addRow()
+        url: url,
+        method: method,
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: data,
+        success: response => {
+          addRow()
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+        },
+        error: error => {
+          if (error.status === 422) {
             $('.is-invalid').removeClass('is-invalid')
             $('.invalid-feedback').remove()
-          },
-          error: error => {
-              if (error.status === 422) {
-                  $('.is-invalid').removeClass('is-invalid')
-                  $('.invalid-feedback').remove()
-                  setErrorMessages(form, error.responseJSON.errors);
-              } else {
-                  showDialog(error.responseJSON)
-              }
-          },
+            setErrorMessages(form, error.responseJSON.errors);
+          } else {
+            showDialog(error.responseJSON)
+          }
+        },
       }).always(() => {
-          $('#processingLoader').addClass('d-none')
-          $(this).removeAttr('disabled')
-      })  
+        $('#processingLoader').addClass('d-none')
+        $(this).removeAttr('disabled')
+      })
     });
 
     $(document).on('click', '.delete-row', function(event) {
@@ -180,7 +177,7 @@
 
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
-      
+
       let cekHex
       $('#detailList tbody tr').each(function(row, tr) {
         let key = $(this).find(`[name="key[]"]`).val()
@@ -300,9 +297,9 @@
     setFormBindKeys(form)
 
     activeGrid = null
-    form.find('#btnSubmit').prop('disabled',false)
+    form.find('#btnSubmit').prop('disabled', false)
     if (form.data('action') == "view") {
-      form.find('#btnSubmit').prop('disabled',true)
+      form.find('#btnSubmit').prop('disabled', true)
     }
 
     getMaxLength(form)
@@ -335,20 +332,15 @@
     addRow()
 
     Promise
-      .all([
-        setDefaultOptions(form)
-      ])
+    showDefault(form)
       .then(() => {
-        showDefault(form)
-        .then(() => {
-          $('#crudModal').modal('show')
-        })
-        .catch((error) => {
-            showDialog(error.statusText)
-        })
-        .finally(() => {
-          $('.modal-loader').addClass('d-none')
-        })
+        $('#crudModal').modal('show')
+      })
+      .catch((error) => {
+        showDialog(error.statusText)
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
       })
   }
 
@@ -369,20 +361,16 @@
     $('.invalid-feedback').remove()
 
     Promise
-      .all([
-        setDefaultOptions(form)
-      ])
+
+    showParameter(form, parameterId)
       .then(() => {
-        showParameter(form, parameterId)
-          .then(() => {
-            $('#crudModal').modal('show')
-          })
-          .catch((error) => {
-            showDialog(error.statusText)
-          })
-          .finally(() => {
-            $('.modal-loader').addClass('d-none')
-          })
+        $('#crudModal').modal('show')
+      })
+      .catch((error) => {
+        showDialog(error.statusText)
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
       })
   }
 
@@ -403,20 +391,15 @@
     $('.invalid-feedback').remove()
 
     Promise
-      .all([
-        setDefaultOptions(form)
-      ])
+    showParameter(form, parameterId)
       .then(() => {
-        showParameter(form, parameterId)
-          .then(() => {
-            $('#crudModal').modal('show')
-          })
-          .catch((error) => {
-            showDialog(error.statusText)
-          })
-          .finally(() => {
-            $('.modal-loader').addClass('d-none')
-          })
+        $('#crudModal').modal('show')
+      })
+      .catch((error) => {
+        showDialog(error.statusText)
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
       })
   }
 
@@ -431,55 +414,50 @@
       <i class="fa fa-save"></i>
       Save
     `)
-    form.find('#btnSubmit').prop('disabled',true)
+    form.find('#btnSubmit').prop('disabled', true)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('View Parameter')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
     Promise
-      .all([
-        setDefaultOptions(form)
-      ])
-      .then(() => {
-        showParameter(form, parameterId)
-        .then(userId => {
+    showParameter(form, parameterId)
+      .then(userId => {
         setFormBindKeys(form)
         initSelect2(form.find('.select2bs4'), true)
         form.find('[name]').removeAttr('disabled')
-  
+
         form.find('select').each((index, select) => {
           let element = $(select)
-  
+
           if (element.data('select2')) {
             element.select2('destroy')
           }
         })
-  
+
         form.find('[name]').attr('disabled', 'disabled').css({
           background: '#fff'
         })
-        form.find('[name=id]').prop('disabled',false)
+        form.find('[name=id]').prop('disabled', false)
       })
-        .then(() => {
-            $('#crudModal').modal('show')
+      .then(() => {
+        $('#crudModal').modal('show')
 
-            form.find(`.hasDatepicker`).prop('readonly', true)
-            form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
-            
-            let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
-            let nameFind = $('#crudForm').find(`[name]`).parents('.input-group')
-            name.attr('disabled', true)
-            name.find('.lookup-toggler').remove()
-            nameFind.find('button.button-clear').remove()
-            $('#crudForm').find(`.tbl_aksi`).hide()
-          })
-          .catch((error) => {
-            showDialog(error.statusText)
-          })
-          .finally(() => {
-            $('.modal-loader').addClass('d-none')
-          })
+        form.find(`.hasDatepicker`).prop('readonly', true)
+        form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
+
+        let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
+        let nameFind = $('#crudForm').find(`[name]`).parents('.input-group')
+        name.attr('disabled', true)
+        name.find('.lookup-toggler').remove()
+        nameFind.find('button.button-clear').remove()
+        $('#crudForm').find(`.tbl_aksi`).hide()
+      })
+      .catch((error) => {
+        showDialog(error.statusText)
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
       })
   }
 
@@ -494,9 +472,9 @@
         },
         success: response => {
           $.each(response.data, (index, value) => {
-            console.log(index,value)
+            console.log(index, value)
             let element = form.find(`[name="${index}"]`)
-            
+
             if (element.is('select')) {
               element.val(value).trigger('change')
             } else {
@@ -581,6 +559,12 @@
             } else {
               element.val(value)
             }
+            if (index == 'grup') {
+              element.data('current-value', value)
+            }
+            if (index == 'defaultnama') {
+              element.data('current-value', value)
+            }
           })
 
           let memo = response.data.memo
@@ -625,7 +609,7 @@
                 detailRow.find(`[name="key[]"]`).addClass('disabled')
                 initDisabled()
               }
-              if(index == 'JURNAL'){
+              if (index == 'JURNAL') {
                 detailRow.find(`[name="key[]"]`).addClass('disabled')
                 initDisabled()
                 detailRow.find(`[name="value[]"]`).addClass("coa-lookup")
@@ -706,9 +690,21 @@
   }
 
   function initLookup() {
-    $('.parameter-lookup').lookup({
+    $('.parameter-lookup').lookupMaster({
       title: 'Parameter Lookup',
-      fileName: 'parameter',
+      fileName: 'parameterMaster',
+      typeSearch: 'ALL',
+      searching: 1,
+      beforeProcess: function() {
+        this.postData = {
+          url: `${apiUrl}parameter`,
+          searching: 1,
+          valueName: `grup`,
+          searchText: `parameter-lookup`,
+          title: 'Parameter',
+          typeSearch: 'ALL',
+        };
+      },
       onSelectRow: (parameter, element) => {
         $(`#crudForm [name="type"]`).first().val(parameter.id)
         element.val(parameter.grp)
@@ -723,6 +719,39 @@
         element.data('currentValue', element.val())
       }
     })
+
+    $(`.default-lookup`).lookupMaster({
+      title: 'default Lookup',
+      fileName: 'parameterMaster',
+      typeSearch: 'ALL',
+      searching: 1,
+      beforeProcess: function() {
+        this.postData = {
+          url: `${apiUrl}parameter/combo`,
+          grp: 'STATUS DEFAULT PARAMETER',
+          searching: 1,
+          valueName: `defaultname`,
+          searchText: `default-lookup`,
+          singleColumn: true,
+          hideLabel: true,
+          title: 'default'
+        };
+      },
+      onSelectRow: (status, element) => {
+        $('#crudForm [name=default]').first().val(status.text)
+        element.val(status.text)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'));
+      },
+      onClear: (element) => {
+        let status_id_input = element.parents('td').find(`[name="default"]`).first();
+        status_id_input.val('');
+        element.val('');
+        element.data('currentValue', element.val());
+      },
+    });
   }
 
   function addRow() {
@@ -763,7 +792,7 @@
     if ($(this).val().toLowerCase() == 'warna') {
       $(this).parent().siblings().find(`[name="value[]"]`).wrap('<div class="input-group"></div>');
       $(this).parent().siblings().find(`.input-group`).prepend(inputColor);
-    } else if($(this).val().toLowerCase() == 'jurnal') {
+    } else if ($(this).val().toLowerCase() == 'jurnal') {
       // $(this).parent().siblings().removeClass('input-group');
       $(this).parent().siblings().find(`[name="value[]"]`).addClass("coa-lookup")
       $('.coa-lookup').last().lookup({
@@ -781,9 +810,9 @@
           element.data('currentValue', element.val())
         }
       })
-    }else {
+    } else {
       console.log($(this))
-      
+
       $(this).parent().siblings().find('.input-group-append').remove()
       $(this).parent().siblings().find('.input-group .btn').remove()
       $(this).parent().siblings().find(`[name="value[]"]`).removeClass("coa-lookup")
