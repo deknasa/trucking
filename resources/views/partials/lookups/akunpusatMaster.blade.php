@@ -144,7 +144,7 @@ $idLookup = isset($id) ? $id : null;
       aktif: `{!! $Aktif ?? '' !!}`,
       supplier: `{!! $Supplier ?? '' !!}`,
     },
-    idPrefix: 'salesLookup',
+    idPrefix: 'akunpusatLookup',
     colModel: column,
     height: 350,
     fixed: true,
@@ -194,18 +194,16 @@ $idLookup = isset($id) ? $id : null;
         searchValue = $(searchText).val(),
         cm;
 
-      currentValue = $(searchText).data('currentValue')
-      if (!currentValue) {
+      input = $(searchText).data('input')
 
-        var typeSearch = '{{ $typeSearch ?? '
-        ' }}'
+      if (input) {
+        var typeSearch = `{{ $typeSearch ?? '' }}`
         if (typeSearch === 'ALL') {
 
           for (i = 0; i < l; i++) {
             cm = colModel[i];
 
-            if (cm.search !== false && (cm.stype === undefined || cm.stype ===
-                "text")) {
+            if (cm.search !== false && (cm.stype === undefined || cm.stype === "text")) {
               rules.push({
                 field: cm.name,
                 op: "cn",
@@ -216,84 +214,34 @@ $idLookup = isset($id) ? $id : null;
                 rules: rules,
               });
             }
-          }
 
-          // $(searchText).focus()
+          }
           postData.searching = searching;
           postData.searchText = searchText;
+
         } else {
           cm = colModel[searching];
 
-          if (cm.search !== false && (cm.stype === undefined || cm.stype === "text")) {
+          if (cm.search !== false && (cm.stype === undefined || cm.stype ==="text")) {
 
-            rules.push({
-              field: cm.name,
-              op: "cn",
-              data: searchValue.toUpperCase(),
-            });
             postData.filters = JSON.stringify({
               groupOp: "AND",
-              rules: rules,
+              rules: [{
+                field: cm.name,
+                op: "cn",
+                data: $(searchText).val().toUpperCase()
+              }]
             });
+
             $(searchText).focus()
           }
 
           postData.searching = searching;
           postData.searchText = searchText;
         }
-      } else {
-        $(searchText).on("input", function(event) {
-          var typeSearch = '{{ $typeSearch ?? '
-          ' }}'
 
-          // if(aksi == 'edit'){}
-          if (typeSearch === 'ALL') {
-
-            for (i = 0; i < l; i++) {
-              cm = colModel[i];
-
-              if (cm.search !== false && (cm.stype === undefined || cm.stype ===
-                  "text")) {
-
-                postData.filters = JSON.stringify({
-                  groupOp: "OR",
-                  rules: [{
-                    field: cm.name,
-                    op: "cn",
-                    data: $(searchText).val().toUpperCase()
-                  }]
-                });
-              }
-            }
-
-            // $(searchText).focus()
-            postData.searching = searching;
-            postData.searchText = searchText;
-          } else {
-
-            cm = colModel[searching];
-
-            if (cm.search !== false && (cm.stype === undefined || cm.stype ===
-                "text")) {
-
-              postData.filters = JSON.stringify({
-                groupOp: "AND",
-                rules: [{
-                  field: cm.name,
-                  op: "cn",
-                  data: $(searchText).val().toUpperCase()
-                }]
-              });
-              $(searchText).focus()
-            }
-
-            postData.searching = searching;
-            postData.searchText = searchText;
-          }
-
-          delete postData.sort_index;
-          delete postData.sort_order;
-        })
+        delete postData.sort_index;
+        delete postData.sort_order;
       }
 
       return postData;

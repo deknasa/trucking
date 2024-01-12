@@ -1,9 +1,9 @@
 <?php
 if (isset($id)) { ?>
-  <table id="kelompokLookup<?= $id ?>" class="lookup-grid"></table>
+  <table id="akuntansiLookup<?= $id ?>" class="lookup-grid"></table>
 <?php
 } else { ?>
-  <table id="kelompokLookup" class="lookup-grid"></table>
+  <table id="akuntansiLookup" class="lookup-grid"></table>
 <?php } ?>
 <div class="loadingMessage">
   <img class="loading-image" src="{{ asset('libraries/tas-lib/img/loading-lookup.gif') }}" alt="Loading">
@@ -19,7 +19,7 @@ $idLookup = isset($id) ? $id : null;
   var idLookup = '{{ $idLookup }}';
   var idTop
 
-  selector = $(`#kelompokLookup{{ isset($id) ? $id : null }} `)
+  selector = $(`#akuntansiLookup{{ isset($id) ? $id : null }} `)
 
 
   var singleColumn = `{{ $singleColumn ?? '' }}`
@@ -27,9 +27,9 @@ $idLookup = isset($id) ? $id : null;
 
   //  use this witdh if single column lookup
   if (detectDeviceType() == "desktop" && singleColumn !== '') {
-    width = '1600px'
+    width = '500px'
   } else if (detectDeviceType() == "mobile") {
-    width = '350px'
+    width = '450px'
 
   }
 
@@ -44,128 +44,141 @@ $idLookup = isset($id) ? $id : null;
         search: false,
       },
       {
-        label: 'Kelompok',
-        name: 'kodekelompok',
+        label: 'KODE AKUNTANSI',
+        name: 'kodeakuntansi',
         width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
         align: 'left'
       },
+      {
+        label: 'KETERANGAN',
+        name: 'keterangan',
+        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+        align: 'left'
+      },
+
     ];
+
+
   } else {
-    column = [{
-            label: 'ID',
-            name: 'id',
-            width: '50px',
-            search: false,
-            hidden: true
-          },
-          {
-            label: 'Kelompok',
-            name: 'kodekelompok',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-          },
-          {
-            label: 'Keterangan',
-            name: 'keterangan',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
-          },
-          {
-            label: 'Status Aktif',
-            name: 'statusaktif',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-          stype: 'select',
-          searchoptions: {
-            dataInit: function(element) {
-              $(element).select2({
-                width: 'resolve',
-                theme: "bootstrap4",
-                ajax: {
-                  url: `${apiUrl}parameter/combo`,
-                  dataType: 'JSON',
-                  headers: {
-                    Authorization: `Bearer ${accessToken}`
-                  },
-                  data: {
-                    grp: 'STATUS AKTIF',
-                    subgrp: 'STATUS AKTIF'
-                  },
-                  beforeSend: () => {
-                    // clear options
-                    $(element).data('select2').$results.children().filter((index, element) => {
-                      // clear options except index 0, which
-                      // is the "searching..." label
-                      if (index > 0) {
-                        element.remove()
-                      }
-                    })
-                  },
-                  processResults: (response) => {
-                    let formattedResponse = response.data.map(row => ({
-                      id: row.text,
-                      text: row.text
-                    }));
-
-                    formattedResponse.unshift({
-                      id: '',
-                      text: 'ALL'
-                    });
-
-                    return {
-                      results: formattedResponse
-                    };
-                  },
-                }
-              });
-            }
-          },
-          formatter: (value, options, rowData) => {
-            let statusAktif = JSON.parse(value)
-
-            let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusAktif.WARNA}; color: ${statusAktif.WARNATULISAN};">
-                  <span>${statusAktif.SINGKATAN}</span>
-                </div>
-              `)
-
-            return formattedValue[0].outerHTML
-          },
-          cellattr: (rowId, value, rowObject) => {
-            let statusAktif = JSON.parse(rowObject.statusaktif)
-
-            return ` title="${statusAktif.MEMO}"`
+    column = [
+      {
+        label: 'ID',
+        name: 'id',
+        align: 'right',
+        width: '70px',
+        search: false,
+        hidden: true
+      },
+      {
+        label: 'KODE AKUNTANSI',
+        name: 'kodeakuntansi',
+        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+        align: 'left'
+      },
+      {
+        label: 'KETERANGAN',
+        name: 'keterangan',
+        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+        align: 'left'
+      },
+      {
+        label: 'Status',
+        name: 'statusaktif',
+        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+        stype: 'select',
+        searchoptions: {
+          dataInit: function(element) {
+            $(element).select2({
+              width: 'resolve',
+              theme: "bootstrap4",
+              ajax: {
+                url: `${apiUrl}parameter/combo`,
+                dataType: 'JSON',
+                headers: {
+                  Authorization: `Bearer ${accessToken}`
+                },
+                data: {
+                  grp: 'STATUS AKTIF',
+                  subgrp: 'STATUS AKTIF'
+                },
+                beforeSend: () => {
+                  // clear options
+                  $(element).data('select2').$results.children().filter((index, element) => {
+                    // clear options except index 0, which
+                    // is the "searching..." label
+                    if (index > 0) {
+                      element.remove()
+                    }
+                  })
+                },
+                processResults: (response) => {
+                  let formattedResponse = response.data.map(row => ({
+                    id: row.text,
+                    text: row.text
+                  }));
+                  formattedResponse.unshift({
+                    
+                    id: '',
+                    text: 'ALL'
+                  });
+                  
+                  return {
+                    results: formattedResponse
+                  };
+                },
+              }
+            });
           }
-          },
-          {
-            label: 'MODIFIED BY',
-            name: 'modifiedby',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-          },
-          {
-            label: 'CREATED AT',
-            name: 'created_at',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
-            align: 'right',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y H:i:s"
-            }
-          },
-          {
-            label: 'UPDATED AT',
-            name: 'updated_at',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
-            align: 'right',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y H:i:s"
-            }
-          },
-    ]
+        },
+        formatter: (value, options, rowData) => {
+          let statusAktif = JSON.parse(value)
+          
+          let formattedValue = $(`
+          <div class="badge" style="background-color: ${statusAktif.WARNA}; color: ${statusAktif.WARNATULISAN};">
+            <span>${statusAktif.SINGKATAN}</span>
+           </div>`)
+           return formattedValue[0].outerHTML
+        },
+        
+        cellattr: (rowId, value, rowObject) => {
+          let statusAktif = JSON.parse(rowObject.statusaktif)
+          
+          return ` title="${statusAktif.MEMO}"`
+        }
+      },
+      {
+        label: 'MODIFIED BY',
+        name: 'modifiedby',
+        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+        align: 'left'
+      },
+      {
+        label: 'UPDATED AT',
+        name: 'updated_at',
+        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+        formatter: "date",
+        formatoptions: {
+          srcformat: "ISO8601Long",
+          newformat: "d-m-Y H:i:s"
+        }
+      },
+      {
+        label: 'CREATED AT',
+        name: 'created_at',
+        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+        formatter: "date",
+        formatoptions: {
+          srcformat: "ISO8601Long",
+          newformat: "d-m-Y H:i:s"
+        }
+      },
+    ]  
   }
+    
+    
 
   selector.jqGrid({
-    url: `{{ config('app.api_url') . 'kelompok' }}`,
+    url: `{{ config('app.api_url') . 'akuntansi' }}`,
     mtype: "GET",
     styleUI: 'Bootstrap4',
     iconSet: 'fontAwesome',
@@ -173,7 +186,7 @@ $idLookup = isset($id) ? $id : null;
     postData: {
       aktif: `{!! $Aktif ?? '' !!}`,
     },
-    idPrefix: 'kelompokLookup',
+    idPrefix: 'akuntansiLookup',
     colModel: column,
     height: 350,
     fixed: true,
@@ -227,7 +240,6 @@ $idLookup = isset($id) ? $id : null;
 
       if (input) {
         var typeSearch = `{{ $typeSearch ?? '' }}`
-
         if (typeSearch === 'ALL') {
 
           for (i = 0; i < l; i++) {
@@ -280,8 +292,8 @@ $idLookup = isset($id) ? $id : null;
     loadBeforeSend: function(jqXHR) {
       $('.loadingMessage').show();
       idTop = selector.attr('id')
-      $(`#load_${idTop}`).remove()
 
+      $(`#load_${idTop}`).remove()
       if (detectDeviceType() == 'mobile') {
 
         $('.lookup-grid tr:not(.jqgfirstrow) td').css('padding', '12px')
@@ -324,17 +336,22 @@ $idLookup = isset($id) ? $id : null;
       if ($(`#t_${idTop} label[for='searchText']`).length === 0) {
         $(`#t_${idTop}`).append(label);
       }
-      
+
       var hideLabel = `{{ $hideLabel ?? '' }}`
 
       if (hideLabel) {
         $(`#gbox_${idTop}`).find('.ui-jqgrid-hdiv').hide()
       }
+
+
       $('.ui-scroll-popup').addClass('d-none')
       $('.modal-loader-content').addClass('d-none')
 
+
+
       jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
       setGridLastRequest($(this), jqXHR)
+
     },
     onSelectRow: function(id) {
       activeGrid = this;
@@ -358,10 +375,12 @@ $idLookup = isset($id) ? $id : null;
       var colModel = selector.jqGrid('getGridParam', 'colModel');
       var firstColumnName = colModel[1].name;
 
+
       if (detectDeviceType() == 'mobile') {
         $('.lookup-grid tr:not(.jqgfirstrow) td').css('padding', '12px')
         $('.lookup-grid tr:not(.jqgfirstrow) td').css('font-size', '1.2rem')
         $(`#gview_${idTop} .ui-th-column `).css('font-size', '1.2rem')
+
       }
 
       let modal = $('#crudModal')
@@ -371,6 +390,7 @@ $idLookup = isset($id) ? $id : null;
       changeJqGridRowListText();
 
       if (data.data.length === 0) {
+
         $('#parameterGrid').each((index, element) => {
           abortGridLastRequest($(element))
           clearGridHeader($(element))
@@ -410,9 +430,11 @@ $idLookup = isset($id) ? $id : null;
       $('.clearsearchclass').click(function() {
         clearColumnSearch($(this))
       })
+
       $(this).setGridWidth($('#lookupCabang').prev().width())
       setHighlight($(this))
     },
+
   })
 </script>
 
