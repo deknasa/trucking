@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "6c20fe01a205c57578846c7ef562f26d",
+  "ReportGuid": "0246603e18200c56f233c3df9c799f9f",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportSupir.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1687425762000+0700)/",
+  "ReportChanged": "/Date(1705052496000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -221,48 +221,72 @@
             "Type": "System.String"
           },
           "32": {
+            "Name": "statuspostingtnl",
+            "NameInSource": "statuspostingtnl",
+            "Alias": "statuspostingtnl",
+            "Type": "System.String"
+          },
+          "33": {
             "Name": "tglberhentisupir",
             "NameInSource": "tglberhentisupir",
             "Alias": "tglberhentisupir",
             "Type": "System.DateTime"
           },
-          "33": {
+          "34": {
+            "Name": "tgldariheaderpemutihansupir",
+            "NameInSource": "tgldariheaderpemutihansupir",
+            "Alias": "tgldariheaderpemutihansupir",
+            "Type": "System.String"
+          },
+          "35": {
+            "Name": "tglsampaiheaderpemutihansupir",
+            "NameInSource": "tglsampaiheaderpemutihansupir",
+            "Alias": "tglsampaiheaderpemutihansupir",
+            "Type": "System.String"
+          },
+          "36": {
             "Name": "modifiedby",
             "NameInSource": "modifiedby",
             "Alias": "modifiedby",
             "Type": "System.String"
           },
-          "34": {
+          "37": {
             "Name": "created_at",
             "NameInSource": "created_at",
             "Alias": "created_at",
             "Type": "System.String"
           },
-          "35": {
+          "38": {
             "Name": "updated_at",
             "NameInSource": "updated_at",
             "Alias": "updated_at",
             "Type": "System.String"
           },
-          "36": {
+          "39": {
+            "Name": "mandor_id",
+            "NameInSource": "mandor_id",
+            "Alias": "mandor_id",
+            "Type": "System.String"
+          },
+          "40": {
             "Name": "judulLaporan",
             "NameInSource": "judulLaporan",
             "Alias": "judulLaporan",
             "Type": "System.String"
           },
-          "37": {
+          "41": {
             "Name": "judul",
             "NameInSource": "judul",
             "Alias": "judul",
             "Type": "System.String"
           },
-          "38": {
+          "42": {
             "Name": "tglcetak",
             "NameInSource": "tglcetak",
             "Alias": "tglcetak",
             "Type": "System.String"
           },
-          "39": {
+          "43": {
             "Name": "usercetak",
             "NameInSource": "usercetak",
             "Alias": "usercetak",
@@ -814,7 +838,7 @@
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "SUPIR OLD"
+                "Value": "SUPIR LAMA"
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
