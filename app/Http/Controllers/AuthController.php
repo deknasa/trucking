@@ -17,7 +17,8 @@ class AuthController extends Controller
     {
         $title = 'Login';
 
-        return view('login', compact('title'));
+        $parametercabang = DB::table('parameter')->where('grp', 'CABANG')->where('subgrp', 'CABANG')->first();
+        return view('login', compact('title', 'parametercabang'));
     }
 
     /**
@@ -58,7 +59,7 @@ class AuthController extends Controller
 
         $isLocal = $cekIp['data']['status'];
         $user = User::where('user', $request->user)->first();
-        $cabang = DB::table('cabang')->where('kodecabang', 'PST')->first();
+        // $cabang = DB::table('cabang')->where('kodecabang', 'PST')->first();
 
         if (!$isLocal) {
 
@@ -192,6 +193,7 @@ class AuthController extends Controller
 
             session(['access_token' => $token['access_token']]);
             session(['access_token_tnl' => $tokenTNL]);
+            session(['cabang' =>  $parametercabang->text]);
 
             session(['info' => $token['info']]);
             session(['link_url' => strtolower($linkUrl->text)]);
@@ -249,6 +251,7 @@ class AuthController extends Controller
         Auth::logout();
 
         session()->forget('menus');
+        session()->forget('cabang');
         session()->forget('access_token_mdn');
         session()->forget('access_token_jkt');
         session()->forget('access_token_jkttnl');
