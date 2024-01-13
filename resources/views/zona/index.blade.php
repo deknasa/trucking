@@ -58,7 +58,7 @@
                                 label: 'STATUS',
                                 name: 'statusaktif',
                                 stype: 'select',
-                                width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                                 searchoptions: {
                                     value: `<?php
                                     $i = 1;
@@ -100,7 +100,7 @@
                             {
                                 label: 'MODIFIED BY',
                                 name: 'modifiedby',
-                                width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                             },
                             {
                                 label: 'CREATED AT',
@@ -253,6 +253,16 @@
                                 }
                             },
                             {
+                                id: 'view',
+                                innerHTML: '<i class="fa fa-eye"></i> VIEW',
+                                class: 'btn btn-orange btn-sm mr-1',
+                                onClick: () => {
+                                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+            
+                                    viewZona(selectedId)
+                                }
+                            },
+                            {
                                 id: 'report',
                                 innerHTML: '<i class="fa fa-print"></i> REPORT',
                                 class: 'btn btn-info btn-sm mr-1',
@@ -387,10 +397,10 @@
                     getCekExport(params).then((response) => {
                         if ($('#rangeModal').data('action') == 'export') {
                             $.ajax({
-                                url: '{{ config('app.api_url') }}zona/export?' + params,
+                                url: `${apiUrl}zona/export?${params}`,
                                 type: 'GET',
                                 beforeSend: function(xhr) {
-                                    xhr.setRequestHeader('Authorization', 'Bearer {{ session('access_token') }}');
+                                    xhr.setRequestHeader('Authorization', `Bearer ${accessToken}`);
                                 },
                                 xhrFields: {
                                     responseType: 'arraybuffer'

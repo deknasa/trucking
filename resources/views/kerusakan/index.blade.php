@@ -51,7 +51,7 @@
                         label: 'STATUS',
                         name: 'statusaktif',
                         stype: 'select',
-                        width: (detectDeviceType() == "desktop") ? sm_dekstop_1 : sm_mobile_1,
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
                         searchoptions: {
                             value: `<?php
                                     $i = 1;
@@ -382,10 +382,10 @@
                     getCekExport(params).then((response) => {
                         if ($('#rangeModal').data('action') == 'export') {
                             $.ajax({
-                                url: '{{ config('app.api_url') }}kerusakan/export?' + params,
+                                url: `${apiUrl}kerusakan/export?${params}`,
                                 type: 'GET',
                                 beforeSend: function(xhr) {
-                                    xhr.setRequestHeader('Authorization', 'Bearer {{ session('access_token') }}');
+                                    xhr.setRequestHeader('Authorization', `Bearer ${accessToken}`);
                                 },
                                 xhrFields: {
                                     responseType: 'arraybuffer'

@@ -86,7 +86,7 @@ class PengeluaranTruckingController extends MyController
 
             $result = json_decode($statusaktif, true);
 
-            $statusaktif = $result['MEMO'];
+            $statusaktif = $result['SINGKATAN'];
 
 
             $pengeluaranTruckings[$i]['format'] = $statusaktif;

@@ -235,25 +235,28 @@ class TarifController extends MyController
     public function export(Request $request): void
     {
 
-        $tarif = Http::withHeaders($request->header())
+        $get = Http::withHeaders($request->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'tarif/listpivot?dari=' . $request->dari . '&sampai=' . $request->sampai)['data'];
+            ->get(config('app.api_url') . 'tarif/listpivot?dari=' . $request->dari . '&sampai=' . $request->sampai);
 
-        if ($tarif == null) {
+        if ($get['data'] == null) {
             echo "<script>window.close();</script>";
         } else {
             // dd($tarif);
+            $tarif = $get['data'];
             $spreadsheet = new Spreadsheet();
             $sheet = $spreadsheet->getActiveSheet();
-            $sheet->setCellValue('A1', 'PT. TRANSPORINDO AGUNG SEJAHTERA');
+            $sheet->setCellValue('A1', $get['judul']);
             $sheet->getStyle("A1")->getFont()->setSize(12);
+            $sheet->getStyle("A1")->getFont()->setBold(true);
             $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
             $sheet->mergeCells('A1:I1');
 
             $sheet->setCellValue('A2', 'Laporan Tarif');
             $sheet->getStyle("A2")->getFont()->setSize(12);
-            $sheet->getStyle('A2')->getAlignment()->setHorizontal('left');
+            $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
+            $sheet->getStyle("A2")->getFont()->setBold(true);
             $sheet->mergeCells('A2:I2');
 
             $header_start_row = 3;

@@ -68,7 +68,7 @@ class PenerimaanTruckingController extends MyController
         foreach ($penerimaanTruckings as $index => $params) {
             $statusaktif = $params['format'];
             $result = json_decode($statusaktif, true);
-            $statusaktif = $result['MEMO'];
+            $statusaktif = $result['SINGKATAN'];
             $penerimaanTruckings[$i]['format'] = $statusaktif;
             $i++;
         }
