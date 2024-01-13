@@ -266,15 +266,15 @@ class UpahSupirController extends MyController
             'upahsupir_id' => $request->id
         ];
 
-        $upahsupir_detail = Http::withHeaders(request()->header())
-            ->withOptions(['verify' => false])
-            ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'upahsupirrincian', $detailParams);
+        $upahsupir_detail = Http::withHeaders($request->header())
+        ->withOptions(['verify' => false])
+        ->withToken(session('access_token'))
+        ->get(config('app.api_url') . 'upahsupir/export?dari=' . $request->dari . '&sampai=' . $request->sampai);
 
         $upahsupir_details = $upahsupir_detail['data'];
-        $user = $upahsupir_detail['user'];
+        $judul = $upahsupir_detail['judul'];
 
-        return view('reports.upahsupir', compact('upahsupir_details', 'user'));
+        return view('reports.upahsupir', compact('upahsupir_details', 'judul'));
     }
 
     public function export(Request $request): void
@@ -290,14 +290,16 @@ class UpahSupirController extends MyController
             $upahsupir = $get['data'];
             $spreadsheet = new Spreadsheet();
             $sheet = $spreadsheet->getActiveSheet();
-            $sheet->setCellValue('A1',  $get['judul']);
+            $sheet->setCellValue('A1',  $get['judul']['text']);
             $sheet->getStyle("A1")->getFont()->setSize(12);
+            $sheet->getStyle("A1")->getFont()->setBold(true);
             $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
             $sheet->mergeCells('A1:I1');
 
             $sheet->setCellValue('A2', 'Laporan Upah Supir');
             $sheet->getStyle("A2")->getFont()->setSize(12);
-            $sheet->getStyle('A2')->getAlignment()->setHorizontal('left');
+            $sheet->getStyle("A2")->getFont()->setBold(true);
+            $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
             $sheet->mergeCells('A2:I2');
 
             $header_start_row = 3;
