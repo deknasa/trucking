@@ -280,7 +280,7 @@
       form.find('#btnSubmit').prop('disabled', true)
     }
 
-    getMaxLength(form)
+    // getMaxLength(form)
     initDatepicker()
   })
 

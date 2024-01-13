@@ -37,7 +37,7 @@
 
       dataSet.readJson({
         'tarif': <?= json_encode($tarif_details); ?>,
-        'user': <?= json_encode($user); ?>
+        'judul': <?= json_encode($judul); ?>
       })
 
       report.regData(dataSet.dataSetName, '', dataSet)
