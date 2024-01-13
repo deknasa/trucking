@@ -556,37 +556,39 @@
 
   function initLookup() {
     $(`.status-lookup`).lookupMaster({
-      title: 'Status Aktif Lookup',
-      fileName: 'parameterMaster',
-      beforeProcess: function() {
-        this.postData = {
-          url: `${apiUrl}parameter/combo`,
-          grp: 'STATUS AKTIF',
-          subgrp: 'STATUS AKTIF',
-          searching: 1,
-          valueName: `statusaktif`,
-          searchText: `status-lookup`,
-          singleColumn: true,
-          hideLabel: true,
-          title: 'Status Aktif'
-        };
-      },
-      onSelectRow: (status, element) => {
-        let elId = element.data('targetName')
-        $(`#crudForm [name=${elId}]`).first().val(status.id)
-        element.val(status.text)
-        element.data('currentValue', element.val())
-      },
-      onCancel: (element) => {
-        element.val(element.data('currentValue'));
-      },
-      onClear: (element) => {
-        let elId = element.data('targetName')
-        $(`#crudForm [name=${elId}]`).first().val('')
-        element.val('')
-        element.data('currentValue', element.val())
-      },
-    });
+        title: 'Status Aktif Lookup',
+        fileName: 'parameterMaster',
+        typeSearch: 'ALL',
+        searching: 1,
+        beforeProcess: function() {
+          this.postData = {
+            url: `${apiUrl}parameter/combo`,
+            grp: 'STATUS AKTIF',
+            subgrp: 'STATUS AKTIF',
+            searching: 1,
+            valueName: `statusaktif`,
+            searchText: `status-lookup`,
+            singleColumn: true,
+            hideLabel: true,
+            title: 'Status Aktif'
+          };
+        },
+        onSelectRow: (status, element) => {
+          let elId = element.data('targetName')
+          $(`#crudForm [name=${elId}]`).first().val(status.id)
+          element.val(status.text)
+          element.data('currentValue', element.val())
+        },
+        onCancel: (element) => {
+          element.val(element.data('currentValue'));
+        },
+        onClear: (element) => {
+          let elId = element.data('targetName')
+          $(`#crudForm [name=${elId}]`).first().val('')
+          element.val('')
+          element.data('currentValue', element.val())
+        },
+      });
     $(`.statusritasi-lookup`).lookupMaster({
       title: 'Status ritasi Lookup',
       fileName: 'parameterMaster',

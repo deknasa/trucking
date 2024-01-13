@@ -40,7 +40,7 @@
               <label class="col-sm-3 col-md-2 col-form-label">KELOMPOK<span class="text-danger">*</span></label>
               <div class="col-sm-9 col-md-10">
                 <input type="hidden" name="kelompok_id">
-                <input type="text" name="kelompok" class="form-control kelompok-lookup">
+                <input type="text" name="kelompok" id="kelompok" class="form-control kelompok-lookup">
               </div>
             </div>
             <div class="row form-group">
@@ -50,9 +50,8 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <select name="statusaktif" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH STATUS AKTIF --</option>
-                </select>
+                <input type="hidden" name="statusaktif">
+                <input type="text" name="statusaktifnama" data-target-name="statusaktif" id="statusaktifnama" class="form-control lg-form status-lookup">
               </div>
             </div>
           </div>
@@ -493,9 +492,55 @@
   }
 
   function initLookup(){
-    $('.kelompok-lookup').lookup({
+    $(`.status-lookup`).lookupMaster({
+      title: 'Status Aktif Lookup',
+      fileName: 'parameterMaster',
+      typeSearch: 'ALL',
+      searching: 1,
+      beforeProcess: function() {
+        this.postData = {
+          url: `${apiUrl}parameter/combo`,
+          grp: 'STATUS AKTIF',
+          subgrp: 'STATUS AKTIF',
+          searching: 1,
+          valueName: `statusaktif`,
+          searchText: `status-lookup`,
+          singleColumn: true,
+          hideLabel: true,
+          title: 'Status Aktif'
+        };
+      },
+      onSelectRow: (status, element) => {
+        let elId = element.data('targetName')
+        $(`#crudForm [name=${elId}]`).first().val(status.id)
+        element.val(status.text)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'));
+      },
+      onClear: (element) => {
+        let elId = element.data('targetName')
+        $(`#crudForm [name=${elId}]`).first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      },
+    });
+    $('.kelompok-lookup').lookupMaster({
       title: 'Kelompok Lookup',
-      fileName: 'kelompok',
+      fileName: 'kelompokMaster',
+      typeSearch: 'ALL',
+      searching: 1,
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+          searching: 1,
+          valueName: 'kelompok_id',
+          searchText: 'kelompok-lookup',
+          title: 'Kelompok',
+          typeSearch: 'ALL',
+        }
+      },
       onSelectRow: (kelompok, element) => {
         $('#crudForm [name=kelompok_id]').first().val(kelompok.id)
         element.val(kelompok.keterangan)

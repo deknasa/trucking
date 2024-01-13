@@ -50,7 +50,7 @@
               </div>
               <div class="col-12 col-md-10">
                   <input type="hidden" name="akuntansi_id">
-                  <input type="text" name="akuntansi" class="form-control akuntansi-lookup">
+                  <input type="text" name="akuntansi"  data-target-name="akuntansi" id="akuntansi" class="form-control lg-form  akuntansi-lookup">
               </div>
             </div>
 
@@ -81,9 +81,8 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <select name="statusaktif" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH STATUS AKTIF --</option>
-                </select>
+                <input type="hidden" name="statusaktif">
+                <input type="text" name="statusaktifnama" data-target-name="statusaktif" id="statusaktifnama" class="form-control lg-form status-lookup">
               </div>
             </div>
           </div>
@@ -592,14 +591,21 @@
   }
 
   function initLookup() {
-    $('.akuntansi-lookup').lookup({
+    $('.akuntansi-lookup').lookupMaster({
       title: 'akuntansi Lookup',
-      fileName: 'akuntansi',
+      fileName: 'akuntansiMaster',
+      typeSearch: 'ALL',
+      searching: 1,
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
-
           Aktif: 'AKTIF',
+          searching: 1,
+          valueName: `akuntansi_id`,
+          searchText: `akuntansi-lookup`,
+          singleColumn: true,
+          hideLabel: true,
+          title: 'Status Aktif'
         }
       },
       onSelectRow: (akuntansi, element) => {
@@ -617,6 +623,41 @@
         element.data('currentValue', element.val())
       }
     })
+
+    $(`.status-lookup`).lookupMaster({
+      title: 'Status Aktif Lookup',
+      fileName: 'parameterMaster',
+      typeSearch: 'ALL',
+      searching: 1,
+      beforeProcess: function() {
+        this.postData = {
+          url: `${apiUrl}parameter/combo`,
+          grp: 'STATUS AKTIF',
+          subgrp: 'STATUS AKTIF',
+          searching: 1,
+          valueName: `statusaktif`,
+          searchText: `status-lookup`,
+          singleColumn: true,
+          hideLabel: true,
+          title: 'Status Aktif'
+        };
+      },
+      onSelectRow: (status, element) => {
+        let elId = element.data('targetName')
+        $(`#crudForm [name=${elId}]`).first().val(status.id)
+        element.val(status.text)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'));
+      },
+      onClear: (element) => {
+        let elId = element.data('targetName')
+        $(`#crudForm [name=${elId}]`).first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      },
+    });
   }
 </script>
 @endpush()
