@@ -11,6 +11,8 @@
 </div>
 
 @include('supir._modal')
+@include('supir._modalApprovalKeterangan')
+@include('supir._modalApprovalGambar')
 @include('supir._modalSupirResign')
 @include('supir._modalHistoryMandor')
 
@@ -920,6 +922,28 @@
                                             supirResign(selectedId)
                                         }
                                     }
+                                }
+                            },
+                            {
+                                id: 'approvalSupirKeterangan',
+                                text: "un/Approval Supir tanpa Keterangan",
+                                onClick: () => {
+                                    if (`{{ $myAuth->hasPermission('approvalsupirketerangan', 'update') }}`) {
+                                        selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                                        approvalSupirKeterangan(selectedId);
+                                    }
+                                    // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                                }
+                            },
+                            {
+                                id: 'approvalSupirGambar',
+                                text: "un/Approval Supir tanpa Gambar",
+                                onClick: () => {
+                                    if (`{{ $myAuth->hasPermission('approvalsupirgambar', 'update') }}`) {
+                                        selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                                        approvalSupirGambar(selectedId);
+                                    }
+                                    // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                                 }
                             },
 
