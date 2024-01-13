@@ -490,12 +490,16 @@
             innerHTML: '<i class="fa fa-print"></i> REPORT',
             class: 'btn btn-info btn-sm mr-1',
             onClick: () => {
-              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Harap pilih salah satu record')
-              } else {
-                window.open(`{{ route('upahsupir.report') }}?id=${selectedId}`)
-              }
+              // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              // if (selectedId == null || selectedId == '' || selectedId == undefined) {
+              //   showDialog('Harap pilih salah satu record')
+              // } else {
+              //   window.open(`{{ route('upahsupir.report') }}?id=${selectedId}`)
+              // }
+
+              $('#formRangeTgl').data('action', 'report')
+              $('#rangeTglModal').find('button:submit').html(`Report`)
+              $('#rangeTglModal').modal('show')
             }
           },
           {
@@ -511,6 +515,7 @@
               // } else {
               //   window.open(`{{ route('upahsupir.export') }}?id=${selectedId}`)
               // }
+              $('#formRangeTgl').data('action', 'export')
               $('#rangeTglModal').find('button:submit').html(`Export`)
               $('#rangeTglModal').modal('show')
             }
@@ -602,7 +607,11 @@
 
       getCekExport()
         .then((response) => {
-          let actionUrl = `{{ route('upahsupir.export') }}`
+          if ($('#formRangeTgl').data('action') == 'export') {
+            actionUrl = `{{ route('upahsupir.export') }}`
+          } else {
+            actionUrl = `{{ route('upahsupir.report') }}`
+          }
 
           /* Clear validation messages */
           $('.is-invalid').removeClass('is-invalid')
@@ -612,6 +621,7 @@
           window.open(`${actionUrl}?${$('#formRangeTgl').serialize()}`)
         })
         .catch((error) => {
+
           setErrorMessages($('#formRangeTgl'), error.responseJSON.errors);
         })
     })

@@ -463,12 +463,10 @@
               // $('#rangeModal').data('action', 'report')
               // $('#rangeModal').find('button:submit').html(`Report`)
               // $('#rangeModal').modal('show')
-              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Harap pilih salah satu record')
-              } else {
-                window.open(`{{ route('tarif.report') }}?id=${selectedId}`)
-              }
+
+              $('#formRangeTgl').data('action', 'report')
+              $('#rangeTglModal').find('button:submit').html(`Report`)
+              $('#rangeTglModal').modal('show')
             }
           },
           {
@@ -479,6 +477,7 @@
               // $('#rangeModal').data('action', 'export')
               // $('#rangeModal').find('button:submit').html(`Export`)
               // $('#rangeModal').modal('show')
+              $('#formRangeTgl').data('action', 'export')
               $('#rangeTglModal').find('button:submit').html(`Export`)
               $('#rangeTglModal').modal('show')
             }
@@ -538,8 +537,11 @@
 
       getCekExport()
         .then((response) => {
-          let actionUrl = `{{ route('tarif.export') }}`
-
+          if ($('#formRangeTgl').data('action') == 'export') {
+            actionUrl = `{{ route('tarif.export') }}`
+          } else {
+            actionUrl = `{{ route('tarif.report') }}`
+          }
           /* Clear validation messages */
           $('.is-invalid').removeClass('is-invalid')
           $('.invalid-feedback').remove()
@@ -754,41 +756,40 @@
   })
 
   const setTampilanIndex = function() {
-      return new Promise((resolve, reject) => {
-        let data = [];
-        data.push({
-          name: 'grp',
-          value: 'UBAH TAMPILAN'
-        })
-        data.push({
-          name: 'text',
-          value: 'TARIF'
-        })
-        $.ajax({
-          url: `${apiUrl}parameter/getparambytext`,
-          method: 'GET',
-          dataType: 'JSON',
-          headers: {
-            Authorization: `Bearer ${accessToken}`
-          },
-          data: data,
-          success: response => {
-            memo = JSON.parse(response.memo)
-            memo = memo.INPUT
-            if (memo != '') {
-              input = memo.split(',');
-              input.forEach(field => {
-                field = $.trim(field.toLowerCase());
-                $(`.${field}`).hide()
-                $("#jqGrid").jqGrid("hideCol", field);
-              });
-            }
-
-          }
-        })
+    return new Promise((resolve, reject) => {
+      let data = [];
+      data.push({
+        name: 'grp',
+        value: 'UBAH TAMPILAN'
       })
-    }
+      data.push({
+        name: 'text',
+        value: 'TARIF'
+      })
+      $.ajax({
+        url: `${apiUrl}parameter/getparambytext`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: data,
+        success: response => {
+          memo = JSON.parse(response.memo)
+          memo = memo.INPUT
+          if (memo != '') {
+            input = memo.split(',');
+            input.forEach(field => {
+              field = $.trim(field.toLowerCase());
+              $(`.${field}`).hide()
+              $("#jqGrid").jqGrid("hideCol", field);
+            });
+          }
 
+        }
+      })
+    })
+  }
 </script>
 @endpush()
 @endsection

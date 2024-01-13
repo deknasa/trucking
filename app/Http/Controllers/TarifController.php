@@ -247,7 +247,7 @@ class TarifController extends MyController
             $tarif = $get['data'];
             $spreadsheet = new Spreadsheet();
             $sheet = $spreadsheet->getActiveSheet();
-            $sheet->setCellValue('A1', $get['judul']);
+            $sheet->setCellValue('A1', $get['judul']['text']);
             $sheet->getStyle("A1")->getFont()->setSize(12);
             $sheet->getStyle("A1")->getFont()->setBold(true);
             $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
@@ -310,7 +310,7 @@ class TarifController extends MyController
                 $sheet->getStyle("E$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
                 $sheet->getStyle("F$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
                 $sheet->getStyle("G$detail_start_row")->getNumberFormat()->setFormatCode('#,##0.00');
-                foreach ($header_columns as $data_columns_index => $data_column) {                    
+                foreach ($header_columns as $data_columns_index => $data_column) {
                     if ($data_columns_index == 2) {
                         $tgl = date('Y/m/d', strtotime($response_detail[$data_column['index']]));
                         $excelDateValue = \PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel(
@@ -344,15 +344,15 @@ class TarifController extends MyController
             'tarif_id' => $request->id
         ];
 
-        $tarif_detail = Http::withHeaders(request()->header())
+        $tarif_detail = Http::withHeaders($request->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'tarifrincian', $detailParams);
+            ->get(config('app.api_url') . 'tarif/listpivot?dari=' . $request->dari . '&sampai=' . $request->sampai);
 
         $tarif_details = $tarif_detail['data'];
 
-        $user = $tarif_detail['user'];
+        $judul = $tarif_detail['judul'];
 
-        return view('reports.tarif', compact('tarif_details', 'user'));
+        return view('reports.tarif', compact('tarif_details', 'judul'));
     }
 }

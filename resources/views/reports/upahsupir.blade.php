@@ -35,7 +35,7 @@
 
       dataSet.readJson({
         'upahsupir': <?= json_encode($upahsupir_details); ?>,
-        'user': <?= json_encode($user); ?>
+        'judul': <?= json_encode($judul); ?>
       })
 
       report.regData(dataSet.dataSetName, '', dataSet)
