@@ -1928,6 +1928,7 @@
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
+          withPusat: 0,
           // bankId: bankId
           alatbayar: bankId
         }

@@ -2131,6 +2131,7 @@
                 this.postData = {
 
                     Aktif: 'AKTIF',
+                    withPusat: 0
                 }
             },
             onSelectRow: (bank, element) => {
