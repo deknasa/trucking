@@ -141,6 +141,10 @@ class InvoiceLunasKePusatController extends MyController
                 'index' => 'bayar'
             ],
             [
+                'label' => 'NK',
+                'index' => 'nk'
+            ],
+            [
                 'label' => 'SISA',
                 'index' => 'sisa'
             ]
@@ -150,7 +154,7 @@ class InvoiceLunasKePusatController extends MyController
         foreach ($detail_columns as $detail_columns_index => $detail_column) {
             $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_table_header_row, $detail_column['label'] ?? $detail_columns_index + 1);
         }
-        $sheet->getStyle("A$detail_table_header_row:G$detail_table_header_row")->applyFromArray($styleArray)->getFont()->setBold(true);
+        $sheet->getStyle("A$detail_table_header_row:H$detail_table_header_row")->applyFromArray($styleArray)->getFont()->setBold(true);
 
         foreach ($data as $response_index => $response_detail) {
 
@@ -164,14 +168,15 @@ class InvoiceLunasKePusatController extends MyController
             $sheet->setCellValue("D$detail_start_row", $response_detail['nominal']);
             $sheet->setCellValue("E$detail_start_row", $tglBayar);
             $sheet->setCellValue("F$detail_start_row", $response_detail['bayar']);
+            $sheet->setCellValue("G$detail_start_row", $response_detail['potongan']);
 
-            $rumus = "=D$detail_start_row-F$detail_start_row";
-            $sheet->setCellValue("G$detail_start_row", $rumus);
+            $rumus = "=D$detail_start_row-(F$detail_start_row+G$detail_start_row)";
+            $sheet->setCellValue("H$detail_start_row", $rumus);
 
 
-            $sheet->getStyle("A$detail_start_row:G$detail_start_row")->applyFromArray($styleArray);
+            $sheet->getStyle("A$detail_start_row:H$detail_start_row")->applyFromArray($styleArray);
             $sheet->getStyle("D$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
-            $sheet->getStyle("F$detail_start_row:G$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            $sheet->getStyle("F$detail_start_row:H$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
             $sheet->getStyle("A$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
             $sheet->getStyle("E$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
 
@@ -185,11 +190,14 @@ class InvoiceLunasKePusatController extends MyController
         $sheet->setCellValue("D$detail_start_row", "=SUM(D6:D" . ($detail_start_row - 1) . ")")->getStyle("D$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
         $sheet->setCellValue("F$detail_start_row", "=SUM(F6:F" . ($detail_start_row - 1) . ")")->getStyle("F$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
 
+        $sheet->setCellValue("H$detail_start_row",  "=SUM(H6:H" . ($detail_start_row - 1) . ")")->getStyle("H$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
         $sheet->setCellValue("G$detail_start_row",  "=SUM(G6:G" . ($detail_start_row - 1) . ")")->getStyle("G$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+
 
         $sheet->getStyle("D$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
         $sheet->getStyle("F$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
         $sheet->getStyle("G$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+        $sheet->getStyle("H$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
         $sheet->getColumnDimension('A')->setWidth(12);
         $sheet->getColumnDimension('B')->setAutoSize(true);
@@ -198,6 +206,7 @@ class InvoiceLunasKePusatController extends MyController
         $sheet->getColumnDimension('E')->setAutoSize(true);
         $sheet->getColumnDimension('F')->setAutoSize(true);
         $sheet->getColumnDimension('G')->setAutoSize(true);
+        $sheet->getColumnDimension('H')->setAutoSize(true);
 
         $writer = new Xlsx($spreadsheet);
         $filename = 'LAPORAN INVOICE LUNAS KE PUSAT' . date('dmYHis');
