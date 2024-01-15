@@ -2,7 +2,7 @@
     <div class="modal-dialog">
         <form action="#" id="crudForm">
             <div class="modal-content">
-                
+
                 <form action="" method="post">
 
                     <div class="modal-body">
@@ -730,7 +730,7 @@
                                 $(element).removeClass('form-control')
                                 $(element).parent().addClass('text-center')
                                 $(element).addClass('checkbox-selectall')
-                                
+
                                 if (disabled == '') {
                                     $(element).on('click', function() {
                                         $(element).attr('disabled', true)
@@ -1516,6 +1516,7 @@
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
+                    withPusat: 0
 
                 }
             },

@@ -16,6 +16,7 @@
         bankId: `{!! $bankId ?? '' !!}`,
         bankExclude: `{!! $bankExclude ?? '' !!}`,
         alatbayar: `{!! $alatbayar ?? '' !!}`,
+        withPusat: `{!! $withPusat ?? '' !!}`,
       },
       idPrefix: 'bankLookup',
       colModel: [{

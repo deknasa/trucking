@@ -1030,37 +1030,37 @@
     $('.invalid-feedback').remove()
 
     Promise
-    .all([
-      setStatusPotongReturOptions(form),
-      setStatusOliOptions(),
-      setStatusBanDetailOptions(form),
-      setStatusBanOptions(form),
-      showPengeluaranstokHeader(form, pengeluaranStokHeaderId)
-    ])
-    .then((showPengeluaranStok) => {
-      
-      let data = showPengeluaranStok[4];
-      $('#crudModal').modal('show')
-      if ((data.statuseditketerangan_id == statusBisaEdit) && (data.statusedit_id != statusBisaEdit)) {
-        form.find('[name]').attr('readonly', 'readonly')
-        form.find('[name=id]').prop('disabled',false)
-        form.find('[name="detail_keterangan[]"]').prop('readonly', false)
-        // console.log();
-        
-        let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
-        name.attr('readonly', true)
-        name.find('.lookup-toggler').attr('disabled', true)
-        
-        $('.tbl_aksi').hide()
-      }
-      
-    })
-    .catch((error) => {
-      showDialog(error.statusText)
-    })
-    .finally(() => {
-      $('.modal-loader').addClass('d-none')
-    })
+      .all([
+        setStatusPotongReturOptions(form),
+        setStatusOliOptions(),
+        setStatusBanDetailOptions(form),
+        setStatusBanOptions(form),
+        showPengeluaranstokHeader(form, pengeluaranStokHeaderId)
+      ])
+      .then((showPengeluaranStok) => {
+
+        let data = showPengeluaranStok[4];
+        $('#crudModal').modal('show')
+        if ((data.statuseditketerangan_id == statusBisaEdit) && (data.statusedit_id != statusBisaEdit)) {
+          form.find('[name]').attr('readonly', 'readonly')
+          form.find('[name=id]').prop('disabled', false)
+          form.find('[name="detail_keterangan[]"]').prop('readonly', false)
+          // console.log();
+
+          let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
+          name.attr('readonly', true)
+          name.find('.lookup-toggler').attr('disabled', true)
+
+          $('.tbl_aksi').hide()
+        }
+
+      })
+      .catch((error) => {
+        showDialog(error.statusText)
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
     initLookup()
   }
 
@@ -1512,7 +1512,7 @@
         let elStatusOli = element.parents('tr').find(`td [name="detail_statusoli[]"]`);
         elStatusOli.find(`option:contains('TAMBAH')`).remove()
         elStatusOli.find(`option:contains('GANTI')`).remove()
-        console.log(kodePengeluaranStok , listKodePengeluaran[1]);
+        console.log(kodePengeluaranStok, listKodePengeluaran[1]);
         if (kodePengeluaranStok == listKodePengeluaran[1]) {
           if (nobuktipenerimaan != '') {
             console.log('asda');
@@ -1520,7 +1520,7 @@
             $(`#detail_qty${row}`).val(stok.penerimaanstokdetail_qty);
             $(`#detail_harga${row}`).val(stok.penerimaanstokdetail_harga);
             $(`#totalItem${row}`).val(stok.penerimaanstokdetail_total);
-            $(`#totalItem${row}`).prop('readonly',true)
+            $(`#totalItem${row}`).prop('readonly', true)
             $(`#statusoli${row}`).remove()
             $(`#statusban${row}`).remove()
             initAutoNumeric($(`.number${row}`))
@@ -1625,8 +1625,8 @@
         return cal(id)
       }
     }
-    
-    
+
+
     qty = $(`#detail_qty${id}`)[0];
     discount = $(`#detail_persentasediscount${id}`)[0];
     totalItem = $(`#totalItem${id}`)[0];
@@ -1683,7 +1683,7 @@
   }
 
   function lookupSelected(el) {
-    if ((kodePengeluaranStok == listKodePengeluaran[0]) ||(kodePengeluaranStok == listKodePengeluaran[1]) || (kodePengeluaranStok == listKodePengeluaran[2]) || (kodePengeluaranStok == listKodePengeluaran[4]) || (kodePengeluaranStok == listKodePengeluaran[5])) {
+    if ((kodePengeluaranStok == listKodePengeluaran[0]) || (kodePengeluaranStok == listKodePengeluaran[1]) || (kodePengeluaranStok == listKodePengeluaran[2]) || (kodePengeluaranStok == listKodePengeluaran[4]) || (kodePengeluaranStok == listKodePengeluaran[5])) {
       // console.log(kodepengeluaranstok);
       // console.log(el);
       switch (el) {
@@ -1716,22 +1716,22 @@
         default:
           break;
       }
-    // } else if (kodePengeluaranStok == listKodePengeluaran[0]) {
-    //   switch (el) {
-    //     case 'trado':
-    //       $('#crudForm').find(`[name="gandengan"]`).attr('disabled', true)
-    //       $('#crudForm').find(`[name="gandengan"]`).parents('.input-group').children().attr('disabled', true)
-    //       $('#crudForm').find(`[name="gandengan"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled', true)
-    //       $('#gandenganId').attr('disabled', true);
-    //       break;
-    //     case 'gandengan':
-    //       $('#crudForm').find(`[name="trado"]`).attr('disabled', true)
-    //       $('#crudForm').find(`[name="trado"]`).parents('.input-group').children().attr('disabled', true)
-    //       $('#crudForm').find(`[name="trado"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled', true)
-    //       $('#tradoId').attr('disabled', true);
-    //     default:
-    //       break;
-    //   }
+      // } else if (kodePengeluaranStok == listKodePengeluaran[0]) {
+      //   switch (el) {
+      //     case 'trado':
+      //       $('#crudForm').find(`[name="gandengan"]`).attr('disabled', true)
+      //       $('#crudForm').find(`[name="gandengan"]`).parents('.input-group').children().attr('disabled', true)
+      //       $('#crudForm').find(`[name="gandengan"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled', true)
+      //       $('#gandenganId').attr('disabled', true);
+      //       break;
+      //     case 'gandengan':
+      //       $('#crudForm').find(`[name="trado"]`).attr('disabled', true)
+      //       $('#crudForm').find(`[name="trado"]`).parents('.input-group').children().attr('disabled', true)
+      //       $('#crudForm').find(`[name="trado"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled', true)
+      //       $('#tradoId').attr('disabled', true);
+      //     default:
+      //       break;
+      //   }
     }
   }
 
@@ -1943,7 +1943,7 @@
               // })
               id++;
               row = id;
-              index=id;
+              index = id;
             })
 
           } else if (listKodePengeluaran[6] == response.data.pengeluaranstok) {
@@ -2119,7 +2119,7 @@
               id++;
               index++;
               row = id;
-              index=id;
+              index = id;
 
             })
           }
@@ -2227,7 +2227,7 @@
           //   }
           // })
           id++;
-          index=id;
+          index = id;
         })
         sumary()
 
@@ -2415,6 +2415,13 @@
     $('.bank-lookup').lookup({
       title: 'bank Lookup',
       fileName: 'bank',
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+          withPusat: 0
+
+        }
+      },
       onSelectRow: (bank, element) => {
         element.val(bank.namabank)
         $(`#${element[0]['name']}Id`).val(bank.id)

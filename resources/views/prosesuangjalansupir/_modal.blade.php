@@ -2,7 +2,7 @@
     <div class="modal-dialog">
         <form action="#" id="crudForm">
             <div class="modal-content">
-                
+
                 <form action="" method="post">
 
                     <div class="modal-body">
@@ -352,33 +352,33 @@
                 data.filter((row) => row.name === 'nilaitransfer[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nilaitransfer[]"]`)[index])
                 nilaiTransfer = nilaiTransfer + AutoNumeric.getNumber($(`#crudForm [name="nilaitransfer[]"]`)[index])
             })
-      
+
             $.ajax({
-              url: url,
-              method: method,
-              dataType: 'JSON',
-              headers: {
-                Authorization: `Bearer ${accessToken}`
-              },
-              data: data,
-              success: response => {
-                addRowTransfer()
-                $('.is-invalid').removeClass('is-invalid')
-                $('.invalid-feedback').remove()
-              },
-              error: error => {
-                if (error.status === 422) {
-                  $('.is-invalid').removeClass('is-invalid')
-                  $('.invalid-feedback').remove()
-                  setErrorMessages(form, error.responseJSON.errors);
-                } else {
-                  showDialog(error.responseJSON)
-                }
-              },
+                url: url,
+                method: method,
+                dataType: 'JSON',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                data: data,
+                success: response => {
+                    addRowTransfer()
+                    $('.is-invalid').removeClass('is-invalid')
+                    $('.invalid-feedback').remove()
+                },
+                error: error => {
+                    if (error.status === 422) {
+                        $('.is-invalid').removeClass('is-invalid')
+                        $('.invalid-feedback').remove()
+                        setErrorMessages(form, error.responseJSON.errors);
+                    } else {
+                        showDialog(error.responseJSON)
+                    }
+                },
             }).always(() => {
-              $('#processingLoader').addClass('d-none')
-              $(this).removeAttr('disabled')
-            })  
+                $('#processingLoader').addClass('d-none')
+                $(this).removeAttr('disabled')
+            })
         });
 
         $(document).on('click', '.delete-row', function(event) {
@@ -1474,6 +1474,7 @@
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
+                    withPusat: 0
                 }
             },
             onSelectRow: (bank, element) => {
@@ -1636,6 +1637,7 @@
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
+                    withPusat: 0
                 }
             },
             onSelectRow: (bank, element) => {
@@ -1659,6 +1661,7 @@
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
+                    withPusat: 0
                 }
             },
             onSelectRow: (bank, element) => {
@@ -1681,6 +1684,7 @@
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
+                    withPusat: 0
                 }
             },
             onSelectRow: (bank, element) => {

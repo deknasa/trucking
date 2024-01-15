@@ -77,6 +77,16 @@
                 <input type="text" name="bayar" class="form-control text-right">
               </div>
             </div>
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
+                  NK
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="text" name="potongan" class="form-control text-right">
+              </div>
+            </div>
 
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
@@ -113,8 +123,16 @@
 
     $(document).on('input', `#crudForm [name="bayar"]`, function(event) {
       let nominal = AutoNumeric.getNumber($(`#crudForm [name="nominal"]`)[0])
+      let potongan = AutoNumeric.getNumber($(`#crudForm [name="potongan"]`)[0])
       let bayar = AutoNumeric.getNumber($(this)[0])
-      sisa = nominal - bayar
+      sisa = nominal - (bayar + potongan)
+      new AutoNumeric($(`#crudForm [name="sisa"]`)[0]).set(sisa)
+    })
+    $(document).on('input', `#crudForm [name="potongan"]`, function(event) {
+      let nominal = AutoNumeric.getNumber($(`#crudForm [name="nominal"]`)[0])
+      let bayar = AutoNumeric.getNumber($(`#crudForm [name="bayar"]`)[0])
+      let potongan = AutoNumeric.getNumber($(this)[0])
+      sisa = nominal - (bayar + potongan)
       new AutoNumeric($(`#crudForm [name="sisa"]`)[0]).set(sisa)
     })
 
@@ -128,6 +146,7 @@
       let action = form.data('action')
       let data = $('#crudForm').serializeArray()
       data.filter((row) => row.name === 'nominal')[0].value = AutoNumeric.getNumber($(`#crudForm [name="nominal"]`)[0])
+      data.filter((row) => row.name === 'potongan')[0].value = AutoNumeric.getNumber($(`#crudForm [name="potongan"]`)[0])
       data.filter((row) => row.name === 'bayar')[0].value = AutoNumeric.getNumber($(`#crudForm [name="bayar"]`)[0])
       data.filter((row) => row.name === 'sisa')[0].value = AutoNumeric.getNumber($(`#crudForm [name="sisa"]`)[0])
 
@@ -402,10 +421,11 @@
               element.val(value)
             }
           })
-          let sisa = parseFloat(response.data.nominal) - parseFloat(response.data.bayar)
+          let sisa = parseFloat(response.data.nominal) - (parseFloat(response.data.bayar) + parseFloat(response.data.potongan))
 
           initAutoNumeric(form.find(`[name="nominal"]`))
           initAutoNumeric(form.find(`[name="bayar"]`))
+          initAutoNumeric(form.find(`[name="potongan"]`))
           new AutoNumeric($(`#crudForm [name="sisa"]`)[0]).set(sisa)
           if (form.data('action') === 'delete') {
             form.find('[name]').addClass('disabled')

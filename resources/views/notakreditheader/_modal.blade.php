@@ -902,6 +902,7 @@
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
+          withPusat: 0
 
         }
       },
