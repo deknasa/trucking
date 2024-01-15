@@ -63,68 +63,57 @@ $idLookup = isset($id) ? $id : null;
                 sortable: false,
                 search: false,
             },
-
             {
-                label: "Name",
-                name: "name",
-
+                label: 'GROUP',
+                name: 'grp',
+                width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
             },
             {
-                label: "Code",
-                name: "code",
-                searchoptions: {
-                    sopt: ['cn']
+                label: 'SUB GROUP',
+                name: 'subgrp',
+                width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
+            },
+            {
+                label: 'KELOMPOK',
+                name: 'kelompok',
+                width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
+            },
+            {
+                label: 'TEXT',
+                name: 'text',
+                width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
+            },
+            {
+                label: 'MEMO',
+                name: 'memo',
+                width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1,
+            },
+            {
+                label: 'MODIFIED BY',
+                name: 'modifiedby',
+                width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            },
+            {
+                label: 'CREATED AT',
+                name: 'created_at',
+                align: 'right',
+                width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+                formatter: "date",
+                formatoptions: {
+                    srcformat: "ISO8601Long",
+                    newformat: "d-m-Y H:i:s"
                 }
             },
             {
-                label: "Contact",
-                name: "contactname",
-            },
-            {
-                label: "Description",
-                name: "description",
-            },
-            {
-                label: "Telephone",
-                name: "telephone",
-            },
-            {
-                label: "Address",
-                name: "address",
-            },
-            {
-                label: "City",
-                name: "city",
-            },
-            {
-                label: "Postal Code",
-                name: "postalcode",
-            },
-            {
-                label: "Status Aktif",
-                name: "status_aktif",
-            },
-            {
-                label: "Modified By",
-                name: "modified_by",
-            },
-            {
-                label: "Created At",
-                name: "created_at",
+                label: 'UPDATED AT',
+                name: 'updated_at',
+                align: 'right',
                 formatter: "date",
+                width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                 formatoptions: {
                     srcformat: "ISO8601Long",
-                    newformat: "d-m-Y H:i:s",
-                },
-            },
-            {
-                label: "Updated At",
-                name: "updated_at",
-                formatter: "date",
-                formatoptions: {
-                    srcformat: "ISO8601Long",
-                    newformat: "d-m-Y H:i:s",
-                },
+                    newformat: "d-m-Y H:i:s"
+                }
             },
         ]
     }

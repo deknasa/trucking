@@ -896,9 +896,6 @@
               if(this.files.length > 5){
                 this.removeFile(file);
               }
-              if (file.size < (this.options.minFilesize * 1024)) {
-                this.removeFile(file);
-              }
               checkIsPhotExist(this.files, data)
             });
 
