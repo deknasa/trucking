@@ -2,7 +2,7 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
-        
+
         <form action="" method="post">
           <div class="modal-body">
 
@@ -237,9 +237,9 @@
     $('.invalid-feedback').remove()
 
     initAutoNumeric(form.find(`[name="nominal"]`), {
-      minimumValue:0
+      minimumValue: 0
     })
-    
+
     Promise
       .all([
         setStatusAktifOptions(form),
@@ -286,7 +286,7 @@
       ])
       .then(() => {
         showAkuntansi(form, id)
-        .then(() => {
+          .then(() => {
             $('#crudModal').modal('show')
             form.find(`[name="nominal"]`).parent('.input-group').find('.button-clear').remove()
             form.find(`[name="nominal"]`).parent('.input-group').find('.input-group-append').remove()
@@ -336,6 +336,53 @@
       })
   }
 
+  function viewAkuntansi(Id) {
+    let form = $('#crudForm')
+
+    $('.modal-loader').removeClass('d-none')
+
+    form.data('action', 'view')
+    form.trigger('reset')
+    form.find('#btnSubmit').html(`
+      <i class="fa fa-save"></i>
+      Save
+    `)
+    form.find(`.sometimes`).hide()
+    $('#crudModalTitle').text('View Akuntansi')
+    $('.is-invalid').removeClass('is-invalid')
+    $('.invalid-feedback').remove()
+
+    Promise
+      .all([
+        setStatusAktifOptions(form),
+        setStatusRitasiOptions(form)
+      ])
+      .then(() => {
+        showAkuntansi(form, Id)
+          .then(Id => {
+            // form.find('.aksi').hide()
+            setFormBindKeys(form)
+            form.find('[name]').attr('disabled', 'disabled').css({
+              background: '#fff'
+            })
+            form.find('[name=id]').prop('disabled', false)
+
+          })
+          .then(() => {
+            $('#crudModal').modal('show')
+            let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
+            name.attr('disabled', true)
+            name.find('.lookup-toggler').attr('disabled', true)
+          })
+          .catch((error) => {
+            showDialog(error.statusText)
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
+      })
+  }
+
   function getMaxLength(form) {
     if (!form.attr('has-maxlength')) {
       $.ajax({
@@ -350,7 +397,7 @@
             if (value !== null && value !== 0 && value !== undefined) {
               form.find(`[name=${index}]`).attr('maxlength', value)
             }
-          
+
           })
 
           form.attr('has-maxlength', true)
@@ -463,8 +510,8 @@
             initDisabled()
           }
 
-          initAutoNumeric(form.find(`[name="nominal"]`),{
-            minimumValue:0
+          initAutoNumeric(form.find(`[name="nominal"]`), {
+            minimumValue: 0
           })
 
           resolve()
