@@ -68,9 +68,8 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <select name="cabang_id" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH CABANG --</option>
-                </select>
+                <input type="hidden" name="cabang_id">
+                <input type="text" name="cabang" id="cabang" class="form-control cabang-lookup">
               </div>
             </div>
             {{-- <div class="row form-group">
@@ -103,9 +102,9 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <select name="statusaktif" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH STATUS AKTIF --</option>
-                </select>
+                <input type="hidden" name="statusaktif">
+                <input type="text" name="statusaktifnama" id="statusaktifnama" class="form-control lg-form statusaktif-lookup">
+
               </div>
             </div>
             <div class="row form-group">
@@ -115,9 +114,8 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <select name="statusakses" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH STATUS AKSES --</option>
-                </select>
+                <input type="hidden" name="statusakses">
+                <input type="text" name="statusaksesnama" id="statusaksesnama" class="form-control lg-form statusakses-lookup">
               </div>
             </div>
 
@@ -201,6 +199,10 @@
         value: form.find('[name=cabang_id]').val()
       })
       data.push({
+        name: 'cabang',
+        value: form.find('[name=cabang]').val()
+      })
+      data.push({
         name: 'dashboard',
         value: form.find('[name=dashboard]').val()
       })
@@ -211,6 +213,14 @@
       data.push({
         name: 'statusakses',
         value: form.find('[name=statusakses]').val()
+      })
+      data.push({
+        name: 'statusaktifnama',
+        value: form.find('[name=statusaktifnama]').val()
+      })
+      data.push({
+        name: 'statusaksesnama',
+        value: form.find('[name=statusaksesnama]').val()
       })
       data.push({
         name: 'aco_ids',
@@ -295,12 +305,12 @@
           })
           $('#userRoleGrid').trigger('reloadGrid', {
             postData: {
-                proses: 'reload'
+              proses: 'reload'
             }
           }).trigger('reloadGrid');
           $('#userAclGrid').trigger('reloadGrid', {
             postData: {
-                proses: 'reload'
+              proses: 'reload'
             }
           }).trigger('reloadGrid');
 
@@ -335,6 +345,7 @@
     getMaxLength(form)
     initSelect2(form.find('.select2bs4'), true)
     initDatepicker()
+    initLookup()
 
     $('#multiple')
       .select2({
@@ -366,23 +377,15 @@
     $('.invalid-feedback').remove()
 
     Promise
-      .all([
-        setCabangOptions(form),
-        setStatusKaryawanOptions(form),
-        setStatusAktifOptions(form),
-        setStatusAkses(form)
-      ])
+    showDefault(form)
       .then(() => {
-        showDefault(form)
-          .then(() => {
-            $('#crudModal').modal('show')
-          })
-          .catch((error) => {
-            showDialog(error.responseJSON)
-          })
-          .finally(() => {
-            $('.modal-loader').addClass('d-none')
-          })
+        $('#crudModal').modal('show')
+      })
+      .catch((error) => {
+        showDialog(error.responseJSON)
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
       })
   }
 
@@ -404,10 +407,6 @@
     loadAcoGrid(userId)
     Promise
       .all([
-        setCabangOptions(form),
-        setStatusKaryawanOptions(form),
-        setStatusAktifOptions(form),
-        setStatusAkses(form),
         setRoleOptions(form)
       ])
       .then(() => {
@@ -449,10 +448,6 @@
 
     Promise
       .all([
-        setCabangOptions(form),
-        setStatusKaryawanOptions(form),
-        setStatusAktifOptions(form),
-        setStatusAkses(form),
         setRoleOptions(form)
       ])
       .then(() => {
@@ -664,7 +659,7 @@
         success: response => {
 
           let roleIds = []
-
+          
           $.each(response.data, (index, value) => {
             let element = form.find(`[name="${index}"]`)
 
@@ -673,10 +668,20 @@
             } else {
               element.val(value)
             }
+
+            if (index == 'cabang') {
+              element.data('current-value', value)
+            }
+            if (index == 'statusaktifnama') {
+              element.data('current-value', value)
+            }
+            if (index == 'statusaksesnama') {
+              element.data('current-value', value)
+            }
           })
 
-          response.data.roles.forEach((role) => {
-            roleIds.push(role.id)
+          response.roles.forEach((role) => {
+            roleIds.push(role.role_id)
           });
 
           form.find(`[name="role_ids[]"]`).val(roleIds).change()
@@ -858,7 +863,7 @@
             name: 'keterangan',
             width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
             align: 'left'
-          },          
+          },
           {
             label: 'Nama',
             name: 'nama',
@@ -981,6 +986,106 @@
 
     loadClearFilter($('#acoGrid'))
     loadGlobalSearch($('#acoGrid'))
+  }
+
+  function initLookup() {
+
+    $('.cabang-lookup').lookupMaster({
+      title: 'Cabang Lookup',
+      fileName: 'cabangMaster',
+      typeSearch: 'ALL',
+      searching: 1,
+      beforeProcess: function(test) {
+        this.postData = {
+          Aktif: 'AKTIF',
+          searching: 1,
+          valueName: 'cabang',
+          searchText: 'cabang-lookup',
+          title: 'CABANG',
+          typeSearch: 'ALL',
+        }
+      },
+      onSelectRow: (cabang, element) => {
+        $('#crudForm [name=cabang_id]').first().val(cabang.id)
+        element.val(cabang.namacabang)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        $('#crudForm [name=cabang_id]').first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+
+    $(`.statusaktif-lookup`).lookupMaster({
+      title: 'Status Aktif Lookup',
+      fileName: 'parameterMaster',
+      typeSearch: 'ALL',
+      searching: 1,
+      beforeProcess: function() {
+        this.postData = {
+          url: `${apiUrl}parameter/combo`,
+          grp: 'STATUS AKTIF',
+          subgrp: 'STATUS AKTIF',
+          searching: 1,
+          valueName: `statusaktifnama`,
+          searchText: `statusaktif-lookup`,
+          singleColumn: true,
+          hideLabel: true,
+          title: 'Status Aktif'
+        };
+      },
+      onSelectRow: (status, element) => {
+        $('#crudForm [name=statusaktif]').first().val(status.id)
+        element.val(status.text)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'));
+      },
+      onClear: (element) => {
+        $('#crudForm [name=statusaktif]').first().val('')
+        element.val('');
+        element.data('currentValue', element.val());
+      },
+    });
+
+    $(`.statusakses-lookup`).lookupMaster({
+      title: 'Status Akses Lookup',
+      fileName: 'parameterMaster',
+      typeSearch: 'ALL',
+      searching: 1,
+      beforeProcess: function() {
+        this.postData = {
+          url: `${apiUrl}parameter/combo`,
+          grp: 'STATUS AKSES',
+          subgrp: 'STATUS AKSES',
+          searching: 1,
+          valueName: `statusaksesnama`,
+          searchText: `statusakses-lookup`,
+          singleColumn: true,
+          hideLabel: true,
+          title: 'Status Akses'
+        };
+      },
+      onSelectRow: (status, element) => {
+        $('#crudForm [name=statusakses]').first().val(status.id)
+        element.val(status.text)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'));
+      },
+      onClear: (element) => {
+        $('#crudForm [name=statusakses]').first().val('')
+        element.val('');
+        element.data('currentValue', element.val());
+      },
+    });
+
   }
 </script>
 @endpush()
