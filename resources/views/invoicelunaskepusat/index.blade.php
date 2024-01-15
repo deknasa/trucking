@@ -249,6 +249,13 @@
             formatter: currencyFormat,
           },
           {
+            label: 'NK',
+            name: 'potongan',
+            align: 'right',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            formatter: currencyFormat,
+          },
+          {
             label: 'SISA',
             name: 'sisa',
             align: 'right',
