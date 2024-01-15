@@ -207,12 +207,8 @@ class OrderanTruckingController extends MyController
                 'index' => 'jenisorder_id',
             ],
             [
-                'label' => 'PELANGGAN',
+                'label' => 'SHIPPER',
                 'index' => 'pelanggan_id',
-            ],
-            [
-                'label' => 'TUUAN',
-                'index' => 'tarif_id',
             ],
             [
                 'label' => 'NO JOB EMKL(1)',
@@ -237,10 +233,6 @@ class OrderanTruckingController extends MyController
             [
                 'label' => 'NO SEAL(2)',
                 'index' => 'noseal2',
-            ],
-            [
-                'label' => 'NOMINAL',
-                'index' => 'nominal',
             ],
         ];
 
@@ -272,14 +264,14 @@ class OrderanTruckingController extends MyController
                 'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN] 
             ]
         ];
-        $sheet ->getStyle("A$detail_table_header_row:O$detail_table_header_row")->applyFromArray($styleArray);
+        $sheet ->getStyle("A$detail_table_header_row:M$detail_table_header_row")->applyFromArray($styleArray);
 
         $nominal = 0;
         foreach ($orderanTruck as $response_index => $response_detail) {
             foreach ($columns as $detail_columns_index => $detail_column) {
                 $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
-                $sheet->getStyle("A$detail_table_header_row:O$detail_table_header_row")->getFont()->setBold(true);
-                $sheet->getStyle("A$detail_table_header_row:O$detail_table_header_row")->getAlignment()->setHorizontal('center');
+                $sheet->getStyle("A$detail_table_header_row:M$detail_table_header_row")->getFont()->setBold(true);
+                $sheet->getStyle("A$detail_table_header_row:M$detail_table_header_row")->getAlignment()->setHorizontal('center');
             }
             $response_detail['nominals'] = number_format((float) $response_detail['nominal'], '2', '.', ',');
 
@@ -295,26 +287,17 @@ class OrderanTruckingController extends MyController
             $sheet->setCellValue("E$detail_start_row", $response_detail['agen_id']);
             $sheet->setCellValue("F$detail_start_row", $response_detail['jenisorder_id']);
             $sheet->setCellValue("G$detail_start_row", $response_detail['pelanggan_id']);
-            $sheet->setCellValue("H$detail_start_row", $response_detail['tarif_id']);
-            $sheet->setCellValue("I$detail_start_row", $response_detail['nojobemkl']);
-            $sheet->setCellValue("J$detail_start_row", $response_detail['nocont']);
-            $sheet->setCellValue("K$detail_start_row", $response_detail['noseal']);
-            $sheet->setCellValue("L$detail_start_row", $response_detail['nojobemkl2']);
-            $sheet->setCellValue("M$detail_start_row", $response_detail['nocont2']);
-            $sheet->setCellValue("N$detail_start_row", $response_detail['noseal2']);
-            $sheet->setCellValue("O$detail_start_row", $response_detail['nominals']);
+            $sheet->setCellValue("H$detail_start_row", $response_detail['nojobemkl']);
+            $sheet->setCellValue("I$detail_start_row", $response_detail['nocont']);
+            $sheet->setCellValue("J$detail_start_row", $response_detail['noseal']);
+            $sheet->setCellValue("K$detail_start_row", $response_detail['nojobemkl2']);
+            $sheet->setCellValue("L$detail_start_row", $response_detail['nocont2']);
+            $sheet->setCellValue("M$detail_start_row", $response_detail['noseal2']);
 
-            $sheet ->getStyle("A$detail_start_row:O$detail_start_row")->applyFromArray($styleArray);
-            $sheet ->getStyle("O$detail_start_row")->applyFromArray($style_number);
+            $sheet ->getStyle("A$detail_start_row:M$detail_start_row")->applyFromArray($styleArray);
 
-            $nominal += $response_detail['nominal'];
             $detail_start_row++;
         }
-        $total_start_row = $detail_start_row;
-        //Total
-        $sheet->mergeCells('A'.$total_start_row.':N'.$total_start_row);
-        $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A'.$total_start_row.':N'.$total_start_row)->applyFromArray($style_number)->getFont()->setBold(true);
-        $sheet->setCellValue("O$total_start_row", number_format((float) $nominal, '2', '.', ','))->getStyle("O$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
 
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);
