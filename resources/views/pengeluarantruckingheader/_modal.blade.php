@@ -1462,6 +1462,7 @@
     $('#detail-tdek-section').hide()
     $('#detail-default-section').parents('.card').show()
     $('.tbl_pengeluaranstokheader_nobukti').hide()
+    $('.tbl_penerimaantruckingheader').hide()
     $('.tbl_stok_id').hide()
     $('.tbl_qty').hide()
     $('.nominal').prop('readonly', false)
@@ -1470,7 +1471,7 @@
     $('.tbl_supir_id').show()
     $('.tbl_karyawan_id').hide()
     $('.tbl_aksi').show()
-    $('.colspan').attr('colspan', 3);
+    $('.colspan').attr('colspan', 2);
     $('#tbl_addRow').show()
     $('.colmn-offset2').hide()
     $('.colmn-offset3').hide()
@@ -1507,6 +1508,7 @@
     $('#detail-tdek-section').hide()
     $('#detail-default-section').parents('.card').show()
     $('.tbl_pengeluaranstokheader_nobukti').hide()
+    $('.tbl_penerimaantruckingheader').hide()
     $('.tbl_stok_id').hide()
     $('.tbl_qty').hide()
     $('.nominal').prop('readonly', false)
@@ -1515,7 +1517,7 @@
     $('.tbl_supir_id').hide()
     $('.tbl_karyawan_id').show()
     $('.tbl_aksi').show()
-    $('.colspan').attr('colspan', 3);
+    $('.colspan').attr('colspan', 2);
     $('#tbl_addRow').show()
     $('.colmn-offset2').hide()
     $('.tbl_tagihklaim').hide()
