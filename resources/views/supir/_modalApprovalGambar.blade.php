@@ -2,11 +2,11 @@
   <div class="modal-dialog">
     <form action="#" id="crudFormApprovalGambar">
       <div class="modal-content">
-        
+
         <form action="" method="post">
           <div class="modal-body">
             <input type="text" name="id" class="form-control" hidden readonly>
-            
+
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
@@ -23,7 +23,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
-                  No KTP  <span class="text-danger">*</span>
+                  No KTP <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
@@ -48,7 +48,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
-                  STATUS APPROVAL  <span class="text-danger">*</span>
+                  STATUS APPROVAL <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
@@ -61,7 +61,7 @@
             </div>
 
             <div class="col-12 col-sm-9 col-md-10">
-              
+
             </div>
           </div>
           <div class="modal-footer justify-content-start">
@@ -218,7 +218,7 @@
 
   }
 
-  function approvalSupirGambar (id) {
+  function approvalSupirGambar(id) {
     let form = $('#crudFormApprovalGambar')
 
     form.data('action', 'edit')
@@ -231,31 +231,34 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
     Promise
-    .all([
-      setStatusApprovalOptions(form),
-      showApprovalSupirGambar(form, id)
-    ])
-    .then((response) => {
-      let approvalGambar = response[1];
-      $('#crudModalApprovalGambar').modal('show')
-      form.data('action', 'add')
-      if (approvalGambar.id){
-          form.data('action', 'edit')
-      }
-      $('#crudModalApprovalGambar').modal('show')
-    })
-    .catch((error) => {
-      showDialog(error.statusText)
-    })
-    .finally(() => {
-      $('.modal-loader').addClass('d-none')
-    })
-      
-        
-            
+      .all([
+        setStatusApprovalOptions(form),
+      ])
+      .then(() => {
+        showApprovalSupirGambar(form, id)
+          .then((response) => {
+            let approvalGambar = response;
+            $('#crudModalApprovalGambar').modal('show')
+            form.data('action', 'add')
+            if (approvalGambar.id) {
+              form.data('action', 'edit')
+            }
+            $('#crudModalApprovalGambar').modal('show')
+          })
+          .catch((error) => {
+            showDialog(error.statusText)
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
+
+      })
+
+
+
   }
 
-  
+
 
   function showApprovalSupirGambar(form, Id) {
     return new Promise((resolve, reject) => {
@@ -263,14 +266,16 @@
         url: `${apiUrl}approvalsupirgambar`,
         method: 'GET',
         dataType: 'JSON',
-        data:{supir_id:Id},
+        data: {
+          supir_id: Id
+        },
         headers: {
           Authorization: `Bearer ${accessToken}`
         },
         success: response => {
           $.each(response.data, (index, value) => {
             let element = form.find(`[name="${index}"]`)
-            
+
             if (element.is('select')) {
               element.val(value).trigger('change')
             } else if (element.hasClass('datepicker')) {
@@ -280,14 +285,14 @@
             } else {
               element.val(value)
             }
-            if(index == 'namasupir'){
+            if (index == 'namasupir') {
               element.prop('readonly', true)
             }
-            if(index == 'noktp'){
+            if (index == 'noktp') {
               element.prop('readonly', true)
             }
           })
-         
+
           resolve(response.data)
 
         },
@@ -297,6 +302,5 @@
       })
     })
   }
- 
 </script>
 @endpush()

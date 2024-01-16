@@ -1,11 +1,11 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "6d663f5ed46a9e898bd1ecefcdb49a70",
+  "ReportGuid": "2ed5d0f7c76036ce1bc4db5eef3a1d43",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportTrado.mrt",
   "ReportCreated": "/Date(1627890106000+0700)/",
-  "ReportChanged": "/Date(1687425887000+0700)/",
+  "ReportChanged": "/Date(1705386881000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Centimeters",
@@ -65,246 +65,276 @@
             "Type": "System.DateTime"
           },
           "6": {
+            "Name": "tglspeksimati",
+            "NameInSource": "tglspeksimati",
+            "Alias": "tglspeksimati",
+            "Type": "System.DateTime"
+          },
+          "7": {
+            "Name": "tglstnkmati",
+            "NameInSource": "tglstnkmati",
+            "Alias": "tglstnkmati",
+            "Type": "System.DateTime"
+          },
+          "8": {
             "Name": "merek",
             "NameInSource": "merek",
             "Alias": "merek",
             "Type": "System.String"
           },
-          "7": {
+          "9": {
             "Name": "norangka",
             "NameInSource": "norangka",
             "Alias": "norangka",
             "Type": "System.String"
           },
-          "8": {
+          "10": {
             "Name": "nomesin",
             "NameInSource": "nomesin",
             "Alias": "nomesin",
             "Type": "System.String"
           },
-          "9": {
+          "11": {
             "Name": "nama",
             "NameInSource": "nama",
             "Alias": "nama",
             "Type": "System.String"
           },
-          "10": {
+          "12": {
             "Name": "nostnk",
             "NameInSource": "nostnk",
             "Alias": "nostnk",
             "Type": "System.String"
           },
-          "11": {
+          "13": {
             "Name": "alamatstnk",
             "NameInSource": "alamatstnk",
             "Alias": "alamatstnk",
             "Type": "System.String"
           },
-          "12": {
+          "14": {
             "Name": "modifiedby",
             "NameInSource": "modifiedby",
             "Alias": "modifiedby",
             "Type": "System.String"
           },
-          "13": {
+          "15": {
             "Name": "created_at",
             "NameInSource": "created_at",
             "Alias": "created_at",
             "Type": "System.String"
           },
-          "14": {
+          "16": {
             "Name": "tglserviceopname",
             "NameInSource": "tglserviceopname",
             "Alias": "tglserviceopname",
             "Type": "System.DateTime"
           },
-          "15": {
+          "17": {
             "Name": "keteranganprogressstandarisasi",
             "NameInSource": "keteranganprogressstandarisasi",
             "Alias": "keteranganprogressstandarisasi",
             "Type": "System.String"
           },
-          "16": {
+          "18": {
             "Name": "tglpajakstnk",
             "NameInSource": "tglpajakstnk",
             "Alias": "tglpajakstnk",
             "Type": "System.DateTime"
           },
-          "17": {
+          "19": {
             "Name": "tglgantiakiterakhir",
             "NameInSource": "tglgantiakiterakhir",
             "Alias": "tglgantiakiterakhir",
-            "Type": "System.String"
+            "Type": "System.DateTime"
           },
-          "18": {
+          "20": {
             "Name": "tipe",
             "NameInSource": "tipe",
             "Alias": "tipe",
             "Type": "System.String"
           },
-          "19": {
+          "21": {
             "Name": "jenis",
             "NameInSource": "jenis",
             "Alias": "jenis",
             "Type": "System.String"
           },
-          "20": {
+          "22": {
             "Name": "isisilinder",
             "NameInSource": "isisilinder",
             "Alias": "isisilinder",
             "Type": "System.String"
           },
-          "21": {
+          "23": {
             "Name": "warna",
             "NameInSource": "warna",
             "Alias": "warna",
             "Type": "System.String"
           },
-          "22": {
+          "24": {
             "Name": "jenisbahanbakar",
             "NameInSource": "jenisbahanbakar",
             "Alias": "jenisbahanbakar",
             "Type": "System.String"
           },
-          "23": {
+          "25": {
             "Name": "jumlahsumbu",
             "NameInSource": "jumlahsumbu",
             "Alias": "jumlahsumbu",
             "Type": "System.String"
           },
-          "24": {
+          "26": {
             "Name": "jumlahroda",
             "NameInSource": "jumlahroda",
             "Alias": "jumlahroda",
             "Type": "System.String"
           },
-          "25": {
+          "27": {
             "Name": "model",
             "NameInSource": "model",
             "Alias": "model",
             "Type": "System.String"
           },
-          "26": {
+          "28": {
+            "Name": "tahun",
+            "NameInSource": "tahun",
+            "Alias": "tahun",
+            "Type": "System.String"
+          },
+          "29": {
             "Name": "nominalplusborongan",
             "NameInSource": "nominalplusborongan",
             "Alias": "nominalplusborongan",
             "Type": "System.String"
           },
-          "27": {
+          "30": {
             "Name": "nobpkb",
             "NameInSource": "nobpkb",
             "Alias": "nobpkb",
             "Type": "System.String"
           },
-          "28": {
+          "31": {
             "Name": "jumlahbanserap",
             "NameInSource": "jumlahbanserap",
             "Alias": "jumlahbanserap",
             "Type": "System.String"
           },
-          "29": {
+          "32": {
             "Name": "photostnk",
             "NameInSource": "photostnk",
             "Alias": "photostnk",
             "Type": "System.String"
           },
-          "30": {
+          "33": {
             "Name": "photobpkb",
             "NameInSource": "photobpkb",
             "Alias": "photobpkb",
             "Type": "System.String"
           },
-          "31": {
+          "34": {
             "Name": "phototrado",
             "NameInSource": "phototrado",
             "Alias": "phototrado",
             "Type": "System.String"
           },
-          "32": {
+          "35": {
             "Name": "statusaktif",
             "NameInSource": "statusaktif",
             "Alias": "statusaktif",
             "Type": "System.String"
           },
-          "33": {
+          "36": {
             "Name": "statusstandarisasi",
             "NameInSource": "statusstandarisasi",
             "Alias": "statusstandarisasi",
             "Type": "System.String"
           },
-          "34": {
+          "37": {
             "Name": "statusjenisplat",
             "NameInSource": "statusjenisplat",
             "Alias": "statusjenisplat",
             "Type": "System.String"
           },
-          "35": {
+          "38": {
             "Name": "statusmutasi",
             "NameInSource": "statusmutasi",
             "Alias": "statusmutasi",
             "Type": "System.String"
           },
-          "36": {
+          "39": {
             "Name": "statusvalidasikendaraan",
             "NameInSource": "statusvalidasikendaraan",
             "Alias": "statusvalidasikendaraan",
             "Type": "System.String"
           },
-          "37": {
+          "40": {
             "Name": "statusmobilstoring",
             "NameInSource": "statusmobilstoring",
             "Alias": "statusmobilstoring",
             "Type": "System.String"
           },
-          "38": {
+          "41": {
             "Name": "statusappeditban",
             "NameInSource": "statusappeditban",
             "Alias": "statusappeditban",
             "Type": "System.String"
           },
-          "39": {
+          "42": {
             "Name": "statuslewatvalidasi",
             "NameInSource": "statuslewatvalidasi",
             "Alias": "statuslewatvalidasi",
             "Type": "System.String"
           },
-          "40": {
+          "43": {
+            "Name": "statusabsensisupir",
+            "NameInSource": "statusabsensisupir",
+            "Alias": "statusabsensisupir",
+            "Type": "System.String"
+          },
+          "44": {
             "Name": "mandor_id",
             "NameInSource": "mandor_id",
             "Alias": "mandor_id",
             "Type": "System.String"
           },
-          "41": {
+          "45": {
+            "Name": "supirid",
+            "NameInSource": "supirid",
+            "Alias": "supirid",
+            "Type": "System.String"
+          },
+          "46": {
             "Name": "supir_id",
             "NameInSource": "supir_id",
             "Alias": "supir_id",
             "Type": "System.String"
           },
-          "42": {
+          "47": {
             "Name": "updated_at",
             "NameInSource": "updated_at",
             "Alias": "updated_at",
             "Type": "System.String"
           },
-          "43": {
+          "48": {
             "Name": "judulLaporan",
             "NameInSource": "judulLaporan",
             "Alias": "judulLaporan",
             "Type": "System.String"
           },
-          "44": {
+          "49": {
             "Name": "judul",
             "NameInSource": "judul",
             "Alias": "judul",
             "Type": "System.String"
           },
-          "45": {
+          "50": {
             "Name": "tglcetak",
             "NameInSource": "tglcetak",
             "Alias": "tglcetak",
             "Type": "System.String"
           },
-          "46": {
+          "51": {
             "Name": "usercetak",
             "NameInSource": "usercetak",
             "Alias": "usercetak",
@@ -353,22 +383,6 @@
           }
         },
         "2": {
-          "Ident": "StiShape",
-          "Name": "Shape17",
-          "Guid": "0bbaee866dd1d1fc7bc0367e3747691d",
-          "ClientRectangle": "0.23,26.64,20.75,1.65",
-          "ComponentPlacement": "p.Page1",
-          "Interaction": {
-            "Ident": "StiInteraction"
-          },
-          "Brush": "solid:",
-          "ShapeType": {
-            "Ident": "StiHorizontalLineShapeType"
-          },
-          "HorAlignment": "Left",
-          "VertAlignment": "Top"
-        },
-        "3": {
           "Ident": "StiHeaderBand",
           "Name": "HeaderBand1",
           "ClientRectangle": "0,0.4,21.1,7.7",
@@ -1637,7 +1651,7 @@
             }
           }
         },
-        "4": {
+        "3": {
           "Ident": "StiDataBand",
           "Name": "DataBand2",
           "ClientRectangle": "0,8.9,21.1,5",
