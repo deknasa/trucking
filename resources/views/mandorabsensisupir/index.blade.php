@@ -62,6 +62,7 @@
   let triggerClick = true;
   let highlightSearch;
   let totalRecord
+  let tradoMilikSupir
   let limit
   let postData
   let sortname = 'kodetrado'
@@ -168,6 +169,28 @@
           hidden: true
         },
         {
+          label: 'namasupir_old',
+          name: 'namasupir_old',
+          width: '50px',
+          search: false,
+          sortable:false,
+          hidden: true,
+          // formatter: (value, options, rowData) => {
+          //   return rowData.namasupir
+          // }
+        },
+        {
+          label: 'supir_id_old',
+          name: 'supir_id_old',
+          width: '50px',
+          search: false,
+          sortable:false,
+          hidden: true,
+          // formatter: (value, options, rowData) => {
+          //   return rowData.supir_id
+          // }
+        },
+        {
           label: 'Trado',
           name: 'kodetrado',
           width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
@@ -180,7 +203,6 @@
             autocomplete: 'off',
             class: 'supirtrado-lookup',
             dataInit: function(element) {
-              
               $('.supirtrado-lookup').last().lookup({
                 title: 'Supir Lookup',
                 fileName: 'supir',
@@ -221,12 +243,12 @@
                 max: 24
               }).mask(".inputmask-time");
               
-              let date = new Date();
-              let time = date.toLocaleString("id", {
-                timeStyle: "medium",
-              });
-              time = time.split('.')
-              $(element).val(time[0] + ":" + time[1]);
+              // let date = new Date();
+              // let time = date.toLocaleString("id", {
+              //   timeStyle: "medium",
+              // });
+              // time = time.split('.')
+              // $(element).val(time[0] + ":" + time[1]);
             }
           },
           // formatter: 'date',
@@ -257,15 +279,22 @@
                 onSelectRow: (absentrado, el) => {
                   el.val(absentrado.keterangan)
                   el.data('currentValue', absentrado.keterangan)
+                  getabsentrado(absentrado.id).then((response) => {
+                    setSupirEnableIndex(response,rowId)
+                  })
                   let rowId = $("#jqGrid").jqGrid('getGridParam', 'selrow');
                   $("#jqGrid").jqGrid('setCell', rowId, 'absen_id', absentrado.id);
-                  // $("#jqGrid").jqGrid('setCell', rowId, 'namasupir', supir.namasupir);
+                  
                 },
                 onCancel: (element) => {
                   element.val(element.data('currentValue'))
                 },
                 onClear: (element) => {
                   element.val('')
+                  
+                  let rowId = $("#jqGrid").jqGrid('getGridParam', 'selrow');
+                  setSupirEnableIndex(false,rowId)
+                  $("#jqGrid").jqGrid('setCell', rowId, 'absen_id', null);
                 }
               })
             }
@@ -365,7 +394,6 @@
           $("#jqGrid").jqGrid('setCell', rowid, 'tglbukti', value);
           pushToObject(rowid,'tglbukti', value);
         }
-        console.log(rowid);
       },
       loadBeforeSend: function(jqXHR) {
         jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)  
@@ -388,6 +416,7 @@
         // sortname = $(this).jqGrid("getGridParam", "sortname")
         // sortorder = $(this).jqGrid("getGridParam", "sortorder")
         totalRecord = $(this).getGridParam("records")
+        tradoMilikSupir = data.attributes.tradosupir;
         limit = $(this).jqGrid('getGridParam', 'postData').limit
         postData = $(this).jqGrid('getGridParam', 'postData')
         triggerClick = true
@@ -422,6 +451,11 @@
           $('#jqGrid_rowList option[value=0]').attr('selected','selected');
         }
         setHighlight($(this))
+        if (tradoMilikSupir === true) {
+          $("#jqGrid").jqGrid('setColProp', 'namasupir', { editable: false });
+        } else {
+          $("#jqGrid").jqGrid('setColProp', 'namasupir', { editable: true });
+        }
         loadStaticData();
       },
       loadError: function (jqXHR, textStatus, errorThrown) {
@@ -500,7 +534,6 @@
     }
     isEditing()
     function pushToObject(id, cell, value) {
-      
       if (dataAbsensi.hasOwnProperty(String(id))) {
         delete dataAbsensi[String(id)]; 
       }
@@ -698,7 +731,6 @@
   }
 
   function isEditing() {
-    // console.log(jQuery.isEmptyObject(dataAbsensi));
     if (jQuery.isEmptyObject(dataAbsensi)) {
       $('#absen').prop('disabled', true)
     }else{
@@ -726,7 +758,6 @@
   function loadStaticData(){
     // $("#tablePelunasan").jqGrid("setCell", rowId, "bayar", 0);
     // $("#jqGrid").jqGrid('setCell', rowid, 'namasupir', value);
-    console.log('stataic',dataAbsensi);
     for (const key in dataAbsensi) {
       if (dataAbsensi.hasOwnProperty(key)) {
         const item = dataAbsensi[key];
@@ -742,6 +773,18 @@
         $("#jqGrid").jqGrid('setCell', key, 'action', item.action);
       }
     }  
+  }
+
+  function setSupirEnableIndex(kodeabsensitrado,rowId) {
+    if (kodeabsensitrado) {
+      $("#jqGrid").jqGrid('setCell', rowId, 'namasupir', null);
+      $("#jqGrid").jqGrid('setCell', rowId, 'supir_id', null);
+    }else{
+      let namasupir_old = $("#jqGrid").jqGrid('getCell', rowId, 'namasupir_old')
+      let supir_id_old = $("#jqGrid").jqGrid('getCell', rowId, 'supir_id_old')
+      $("#jqGrid").jqGrid('setCell', rowId, 'namasupir',namasupir_old);
+      $("#jqGrid").jqGrid('setCell', rowId, 'supir_id',supir_id_old);
+    }
   }
 </script>
 @endpush()
