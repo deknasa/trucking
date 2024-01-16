@@ -3329,7 +3329,7 @@
       },
       onClear: (element) => {
         element.val('')
-        $(`#crudForm [name="supir_id[]"]`).last().val('')
+        $(`#crudForm [name="supirheader_id"]`).last().val('')
         element.data('currentValue', element.val())
       }
     })
@@ -3375,7 +3375,7 @@
       },
       onClear: (element) => {
         element.val('')
-        $(`#crudForm [name="karyawan_id[]"]`).last().val('')
+        $(`#crudForm [name="karyawanheader_id"]`).last().val('')
         element.data('currentValue', element.val())
       }
     })

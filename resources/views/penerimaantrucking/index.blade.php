@@ -250,7 +250,7 @@
                                     if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                         showDialog('Harap pilih salah satu record')
                                     } else {
-                                        cekValidasidelete(selectedId)
+                                        showDialog("hanya bisa diakses oleh IT. karena data ini berhubungan dengan transaksi")
                                     }
                                 }
                             },
