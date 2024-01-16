@@ -15,10 +15,14 @@ class PengeluaranTruckingController extends MyController
     public function index(Request $request)
     {
         $title = $this->title;
+        $data = [
+            'combo' => $this->comboStatusAktif('list'),
+        ];
 
-        return view('pengeluarantrucking.index', compact('title'));
+
+        return view('pengeluarantrucking.index', compact('title', 'data'));
     }
-    
+
     /**
      * @ClassName
      */
@@ -66,7 +70,7 @@ class PengeluaranTruckingController extends MyController
             return redirect()->route('pengeluarantrucking.index');
         }
     }
-    
+
     /**
      * @ClassName
      */
@@ -91,12 +95,26 @@ class PengeluaranTruckingController extends MyController
 
             $pengeluaranTruckings[$i]['format'] = $statusaktif;
 
-        
+
             $i++;
-
-
         }
 
         return view('reports.pengeluarantrucking', compact('pengeluaranTruckings'));
+    }
+
+    public function comboStatusAktif($aksi)
+    {
+
+        $status = [
+            'status' => $aksi,
+            'grp' => 'STATUS AKTIF',
+            'subgrp' => 'STATUS AKTIF',
+        ];
+
+        $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
+            ->withToken(session('access_token'))
+            ->get(config('app.api_url') . 'user/combostatus', $status);
+
+        return $response['data'];
     }
 }
