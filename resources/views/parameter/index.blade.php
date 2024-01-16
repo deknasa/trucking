@@ -78,14 +78,14 @@
                     {
                         label: 'MODIFIED BY',
                         name: 'modifiedby',
-                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,            
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                     },
                     {
                         label: 'CREATED AT',
                         name: 'created_at',
                         align: 'right',
                         formatter: "date",
-                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,            
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                         formatoptions: {
                             srcformat: "ISO8601Long",
                             newformat: "d-m-Y H:i:s"
@@ -96,7 +96,7 @@
                         name: 'updated_at',
                         align: 'right',
                         formatter: "date",
-                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,            
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                         formatoptions: {
                             srcformat: "ISO8601Long",
                             newformat: "d-m-Y H:i:s"
@@ -247,11 +247,11 @@
                         innerHTML: '<i class="fa fa-eye"></i> VIEW',
                         class: 'btn btn-orange btn-sm mr-1',
                         onClick: () => {
-                          selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                          viewParameter(selectedId)
+                            selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                            viewParameter(selectedId)
                         }
                     },
-                        // {
+                    // {
                     //     id: 'reload',
                     //     innerHTML: '<i class="fas fa-sync-alt"></i> RELOAD',
                     //     class: 'btn btn-dark btn-sm mr-1',
@@ -313,11 +313,11 @@
             if (!`{{ $myAuth->hasPermission('parameter', 'store') }}`) {
                 $('#add').attr('disabled', 'disabled')
             }
-       
+
             if (!`{{ $myAuth->hasPermission('parameter', 'show') }}`) {
                 $('#view').attr('disabled', 'disabled')
             }
-                
+
             if (!`{{ $myAuth->hasPermission('parameter', 'update') }}`) {
                 $('#edit').attr('disabled', 'disabled')
             }
@@ -394,47 +394,47 @@
             params += `&offset=${offset}&limit=${limit}`
 
             getCekExport(params).then((response) => {
-                if ($('#rangeModal').data('action') == 'export') {
-                    $.ajax({
-                        url: '{{ config('app.api_url') }}parameter/export?' + params,
-                        type: 'GET',
-                        beforeSend: function(xhr) {
-                            xhr.setRequestHeader('Authorization', 'Bearer {{ session('access_token') }}');
-                        },
-                        xhrFields: {
-                            responseType: 'arraybuffer'
-                        },
-                        success: function(response, status, xhr) {
-                          if (xhr.status === 200) {
-                            if (response !== undefined) {
-                              var blob = new Blob([response], {
-                                type: 'parameter/vnd.ms-excel'
-                              });
-                              var link = document.createElement('a');
-                              link.href = window.URL.createObjectURL(blob);
-                              link.download = 'parameter' + new Date().getTime() + '.xlsx';
-                              link.click();
+                    if ($('#rangeModal').data('action') == 'export') {
+                        $.ajax({
+                            url: `${apiUrl}parameter/export?${params}`,
+                            type: 'GET',
+                            beforeSend: function(xhr) {
+                                xhr.setRequestHeader('Authorization', `Bearer ${accessToken}`);
+                            },
+                            xhrFields: {
+                                responseType: 'arraybuffer'
+                            },
+                            success: function(response, status, xhr) {
+                                if (xhr.status === 200) {
+                                    if (response !== undefined) {
+                                        var blob = new Blob([response], {
+                                            type: 'parameter/vnd.ms-excel'
+                                        });
+                                        var link = document.createElement('a');
+                                        link.href = window.URL.createObjectURL(blob);
+                                        link.download = 'parameter' + new Date().getTime() + '.xlsx';
+                                        link.click();
+                                    }
+                                    $('#rangeModal').modal('hide')
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                $('#processingLoader').addClass('d-none')
+                                submitButton.removeAttr('disabled')
                             }
-                            $('#rangeModal').modal('hide')
-                          }
-                        },
-                        error: function(xhr, status, error) {
-                                    $('#processingLoader').addClass('d-none')
-                          submitButton.removeAttr('disabled')
-                        }
-                    }).always(() => {
-                        $('#processingLoader').addClass('d-none')
+                        }).always(() => {
+                            $('#processingLoader').addClass('d-none')
+                            submitButton.removeAttr('disabled')
+                        })
+                    } else if ($('#rangeModal').data('action') == 'report') {
+                        window.open(`{{ route('parameter.report') }}?${params}`)
                         submitButton.removeAttr('disabled')
-                    })
-                } else if ($('#rangeModal').data('action') == 'report') {
-                    window.open(`{{ route('parameter.report') }}?${params}`)
-                    submitButton.removeAttr('disabled')
-                    $('#processingLoader').addClass('d-none')
-                    $('#rangeModal').modal('hide')
-                }  
-                        
-            })
-                
+                        $('#processingLoader').addClass('d-none')
+                        $('#rangeModal').modal('hide')
+                    }
+
+                })
+
                 .catch((error) => {
                     if (error.status === 422) {
                         $('.is-invalid').removeClass('is-invalid')
@@ -469,7 +469,7 @@
                             }
                         });
                         $(".is-invalid").first().focus();
-          $('#processingLoader').addClass('d-none')
+                        $('#processingLoader').addClass('d-none')
 
                     } else {
                         showDialog(error.statusText)

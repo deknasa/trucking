@@ -27,7 +27,7 @@
     let sortorder = 'asc'
     let autoNumericElements = []
     let indexRow = 0;
-    let approveEditRequest =null ;
+    let approveEditRequest = null;
 
     $(document).ready(function() {
         $("#jqGrid").jqGrid({
@@ -136,12 +136,12 @@
                                                 id: row.text,
                                                 text: row.text
                                             }));
-                                            
+
                                             formattedResponse.unshift({
                                                 id: '',
                                                 text: 'ALL'
                                             });
-                                            
+
                                             return {
                                                 results: formattedResponse
                                             };
@@ -151,26 +151,26 @@
                             }
                         },
                         formatter: (value, options, rowData) => {
-                          let statuskoneksi_memo = JSON.parse(value)
+                            let statuskoneksi_memo = JSON.parse(value)
                             if (!statuskoneksi_memo) {
                                 return ``
                             }
-                          let formattedValue = $(`
+                            let formattedValue = $(`
                               <div class="badge" style="background-color: ${statuskoneksi_memo.WARNA}; color: ${statuskoneksi_memo.WARNATULISAN};">
                                 <span>${statuskoneksi_memo.SINGKATAN}</span>
                               </div>
                             `)
-              
-                          return formattedValue[0].outerHTML
+
+                            return formattedValue[0].outerHTML
                         },
                         cellattr: (rowId, value, rowObject) => {
-                          let statuskoneksi_memo = JSON.parse(rowObject.statuskoneksi_memo)
-                          if (!statuskoneksi_memo) {
+                            let statuskoneksi_memo = JSON.parse(rowObject.statuskoneksi_memo)
+                            if (!statuskoneksi_memo) {
                                 return ``
                             }
-                          return ` title="${statuskoneksi_memo.MEMO}"`
+                            return ` title="${statuskoneksi_memo.MEMO}"`
                         }
-                        
+
                     },
 
                     {
@@ -371,25 +371,21 @@
                         }
                     },
                 ],
-                extndBtn: [
-                    {
-                        id: 'approve',
-                        title: 'Approve',
-                        caption: 'Approve',
-                        innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-                        class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-                        dropmenuHTML: [
-                            {
-                                id: 'approvalKoneksi',
-                                text: ' UN/APPROVAL KONEKSI',
-                                onClick: () => {
-                                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                                    approvalKoneksi(selectedId)
-                                }
-                            },
-                        ],
-                    }
-                ]   
+                extndBtn: [{
+                    id: 'approve',
+                    title: 'Approve',
+                    caption: 'Approve',
+                    innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+                    class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
+                    dropmenuHTML: [{
+                        id: 'approvalKoneksi',
+                        text: ' UN/APPROVAL KONEKSI',
+                        onClick: () => {
+                            selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                            approvalKoneksi(selectedId)
+                        }
+                    }, ],
+                }]
             })
 
         /* Append clear filter button */
@@ -476,7 +472,7 @@
         function approvalKoneksi(id) {
             if (approveEditRequest) {
                 approveEditRequest.abort();
-            }     
+            }
             approveEditRequest = $.ajax({
                 url: `${apiUrl}cabang/${id}`,
                 method: 'GET',
@@ -489,12 +485,13 @@
                     if (response.data.statuskoneksi === statusKoneksiOffline) {
                         msg = `YAKIN SET KONEKSI MENJADI OFFLINE `
                     }
-                    showConfirm(msg,response.data.namacabang,`cabang/${response.data.id}/approvalkonensi`)
+                    showConfirm(msg, response.data.namacabang, `cabang/${response.data.id}/approvalkonensi`)
                 },
             })
         }
 
         getStatusOffline()
+
         function getStatusOffline() {
             $.ajax({
                 url: `${apiUrl}parameter`,
@@ -511,7 +508,7 @@
                             "field": "grp",
                             "op": "cn",
                             "data": "STATUS KONEKSI"
-                        },{
+                        }, {
                             "field": "text",
                             "op": "cn",
                             "data": "OFFLINE"
@@ -519,7 +516,7 @@
                     })
                 },
                 success: response => {
-                    statusKoneksiOffline =  response.data[0].id;
+                    statusKoneksiOffline = response.data[0].id;
                 }
             })
         }
@@ -555,10 +552,10 @@
             getCekExport(params).then((response) => {
                 if ($('#rangeModal').data('action') == 'export') {
                     $.ajax({
-                        url: `{{ config('app.api_url') }}cabang/export?` + params,
+                        url: `${apiUrl}cabang/export?${params}`,
                         type: 'GET',
                         beforeSend: function(xhr) {
-                            xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
+                            xhr.setRequestHeader('Authorization', `Bearer ${accessToken}`);
                         },
                         xhrFields: {
                             responseType: 'arraybuffer'

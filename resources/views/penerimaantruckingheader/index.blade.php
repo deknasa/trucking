@@ -6,9 +6,9 @@
     <select name="penerimaanheader_id" id="penerimaanheader_id" class="form-select select2" style="width: 100%;">
       <option value="">-- PILIH penerimaan trucking --</option>
       @foreach ($comboKodepenerimaan as $kodepenerimaan)
-        <option value="{{$kodepenerimaan['id']}}"> {{$kodepenerimaan['keterangan']}}  </option>
-        {{-- <option @if ($kodepenerimaan['statusdefault_text'] ==="YA") selected @endif value="{{$kodepenerimaan['id']}}"> {{$kodepenerimaan['namakodepenerimaan']}} </option> --}}
-        {{-- @if ($kodepenerimaan['id'] == "1") selected @endif  --}}
+      <option @if ($kodepenerimaan['id']=="1" ) selected @endif value="{{$kodepenerimaan['id']}}"> {{$kodepenerimaan['keterangan']}} </option>
+      {{-- <option @if ($kodepenerimaan['statusdefault_text'] ==="YA") selected @endif value="{{$kodepenerimaan['id']}}"> {{$kodepenerimaan['namakodepenerimaan']}} </option> --}}
+      {{-- @if ($kodepenerimaan['id'] == "1") selected @endif  --}}
       @endforeach
     </select>
   </div>
@@ -20,7 +20,7 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-12">
- @include('layouts._rangeheader')      
+      @include('layouts._rangeheader')
       <table id="jqGrid"></table>
     </div>
   </div>
@@ -76,7 +76,7 @@
   let dataAcos = <?php echo json_encode($acosPenerimaan); ?>;
   let rowNum = 10
   let hasDetail = false
-  let activeGrid 
+  let activeGrid
   let currentTab = 'detail'
   let tgldariheader
   let tglsampaiheader
@@ -85,6 +85,7 @@
   $(document).on('change', $('#crudForm').find('[name=penerimaanheader_id]'), function(event) {
     setPermissionAcos()
   })
+
   function setPermissionAcos() {
     let selectedIdPenerimaan = $(`[name="penerimaanheader_id"] option:selected`).val();
     if (selectedIdPenerimaan != '') {
@@ -119,15 +120,17 @@
     });
 
     @isset($request['tgldari'])
-      tgldariheader = `{{ $request['tgldari'] }}`;
+    tgldariheader = `{{ $request['tgldari'] }}`;
     @endisset
     @isset($request['tglsampai'])
-      tglsampaiheader = `{{ $request['tglsampai'] }}`;
+    tglsampaiheader = `{{ $request['tglsampai'] }}`;
     @endisset
-    setRange(false,tgldariheader,tglsampaiheader)
+    setRange(false, tgldariheader, tglsampaiheader)
     initDatepicker('datepickerIndex')
-    $(document).on('click','#btnReload', function(event) {
-      loadDataHeader('penerimaantruckingheader',{penerimaanheader_id:$('#penerimaanheader_id').val()})
+    $(document).on('click', '#btnReload', function(event) {
+      loadDataHeader('penerimaantruckingheader', {
+        penerimaanheader_id: $('#penerimaanheader_id').val()
+      })
     })
 
     $("#jqGrid").jqGrid({
@@ -136,9 +139,9 @@
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         postData: {
-          tgldari:$('#tgldariheader').val() ,
-          tglsampai:$('#tglsampaiheader').val(),
-          penerimaanheader_id:$('#penerimaanheader_id').val(),
+          tgldari: $('#tgldariheader').val(),
+          tglsampai: $('#tglsampaiheader').val(),
+          penerimaanheader_id: $('#penerimaanheader_id').val(),
         },
         datatype: "json",
         colModel: [{
@@ -156,7 +159,7 @@
             align: 'left',
             stype: 'select',
             searchoptions: {
-              
+
               value: `<?php
                       $i = 1;
 
@@ -180,21 +183,21 @@
             formatter: (value, options, rowData) => {
               let statusCetak = JSON.parse(value)
               if (!statusCetak) {
-                            return ''
-                          }
+                return ''
+              }
               let formattedValue = $(`
                 <div class="badge" style="background-color: ${statusCetak.WARNA}; color: #fff;">
                   <span>${statusCetak.SINGKATAN}</span>
                 </div>
               `)
-              
+
               return formattedValue[0].outerHTML
             },
             cellattr: (rowId, value, rowObject) => {
               let statusCetak = JSON.parse(rowObject.statuscetak)
               if (!statusCetak) {
                 return ` title=" "`
-                          }
+              }
               return ` title="${statusCetak.MEMO}"`
             }
           },
@@ -239,7 +242,7 @@
             name: 'penerimaan_nobukti',
             align: 'left',
             formatter: (value, options, rowData) => {
-              if ((value == null) ||( value == '')) {
+              if ((value == null) || (value == '')) {
                 return '';
               }
               let tgldari = rowData.tgldariheaderpenerimaanheader
@@ -248,8 +251,8 @@
               let formattedValue = $(`
               <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
              `)
-             return formattedValue[0].outerHTML
-           }
+              return formattedValue[0].outerHTML
+            }
           },
           {
             label: 'SUPIR',
@@ -350,7 +353,7 @@
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
-          
+
           loadDetailData(id)
           loadPenerimaanData(id, nobukti)
           loadJurnalUmumData(id, nobukti)
@@ -379,7 +382,7 @@
           totalRecord = $(this).getGridParam("records")
           limit = $(this).jqGrid('getGridParam', 'postData').limit
           postData = $(this).jqGrid('getGridParam', 'postData')
-          triggerClick = true  
+          triggerClick = true
 
           $('.clearsearchclass').click(function() {
             clearColumnSearch($(this))
@@ -432,7 +435,7 @@
       })
 
       .customPager({
-        
+
         extndBtn: [{
             id: 'report',
             title: 'Report',
@@ -488,24 +491,22 @@
             caption: 'Approve',
             innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
             class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-            dropmenuHTML: [
-              {
-                id: 'approval-buka-cetak',
-                text: "un/Approval Buka Cetak PENERIMAAN TRUCKING ",
-                onClick: () => {
-                  if (`{{ $myAuth->hasPermission('penerimaantruckingheader', 'approvalbukacetak') }}`) {
-                    let tglbukacetak = $('#tgldariheader').val().split('-');
-                    tglbukacetak =tglbukacetak[1] + '-' + tglbukacetak[2];
-                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                    if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                      showDialog('Harap pilih salah satu record')
-                    }else{
-                      approvalBukaCetak(tglbukacetak,'PENERIMAANTRUCKINGHEADER',[selectedId]);
-                    }
+            dropmenuHTML: [{
+              id: 'approval-buka-cetak',
+              text: "un/Approval Buka Cetak PENERIMAAN TRUCKING ",
+              onClick: () => {
+                if (`{{ $myAuth->hasPermission('penerimaantruckingheader', 'approvalbukacetak') }}`) {
+                  let tglbukacetak = $('#tgldariheader').val().split('-');
+                  tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
+                  selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                  if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                    showDialog('Harap pilih salah satu record')
+                  } else {
+                    approvalBukaCetak(tglbukacetak, 'PENERIMAANTRUCKINGHEADER', [selectedId]);
                   }
                 }
-              },
-            ],
+              }
+            }, ],
           }
         ],
         buttons: [{
@@ -524,7 +525,7 @@
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
-              }else {
+              } else {
                 cekValidasi(selectedId, 'EDIT')
               }
             }
@@ -581,33 +582,32 @@
       .addClass('btn btn-sm btn-warning')
       .parent().addClass('px-1')
 
-      function permission() {
-    if (!`{{ $myAuth->hasPermission('penerimaantruckingheader', 'store') }}`) {
-      $('#add').attr('disabled', 'disabled')
-    }
+    function permission() {
+      if (!`{{ $myAuth->hasPermission('penerimaantruckingheader', 'store') }}`) {
+        $('#add').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('penerimaangiroheader', 'show') }}`) {
-      $('#view').attr('disabled', 'disabled')
-    }
-    
-    if (!`{{ $myAuth->hasPermission('penerimaantruckingheader', 'update') }}`) {
-      $('#edit').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('penerimaangiroheader', 'show') }}`) {
+        $('#view').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('penerimaantruckingheader', 'destroy') }}`) {
-      $('#delete').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('penerimaantruckingheader', 'update') }}`) {
+        $('#edit').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('penerimaantruckingheader', 'export') }}`) {
-      $('#export').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('penerimaantruckingheader', 'destroy') }}`) {
+        $('#delete').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('penerimaantruckingheader', 'report') }}`) {
-      $('#report').attr('disabled', 'disabled')
-    }}
+      if (!`{{ $myAuth->hasPermission('penerimaantruckingheader', 'export') }}`) {
+        $('#export').attr('disabled', 'disabled')
+      }
+
+      if (!`{{ $myAuth->hasPermission('penerimaantruckingheader', 'report') }}`) {
+        $('#report').attr('disabled', 'disabled')
+      }
+    }
   })
-
-  
 </script>
 @endpush()
 @endsection
