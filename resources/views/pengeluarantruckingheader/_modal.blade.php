@@ -225,6 +225,15 @@
               </div>
             </div>
 
+            <div class="row mb-3">
+              <div class="col-sm-6 m-1">
+                <button id="btnReloadSumbanganGrid" class="btn btn-primary mr-2 ">
+                  <i class="fas fa-sync-alt"></i>
+                  Reload
+                </button>
+              </div>
+            </div>
+
             <div class="border p-3 mb-3 posting-border">
               <h6>Posting Pengeluaran</h6>
 
@@ -423,7 +432,7 @@
   let selectedRowsOtokJobtrucking = [];
   let selectedRowsOtokKeterangan = [];
   let selectedRowsOtokNominal = [];
-  
+
   let sortnameOtol = 'noinvoice_detail';
   let sortorderOtol = 'asc';
   let pageOtol = 0;
@@ -581,26 +590,26 @@
       if (tgldari !== "" && tglsampai !== "") {
         if (KodePengeluaranId == 'BST') {
 
-          clearSelectedRowsSumbangan()
-          getDataSumbangan()
-            .then((response) => {
-              $('.is-invalid').removeClass('is-invalid')
-              $('.invalid-feedback').remove()
+          // clearSelectedRowsSumbangan()
+          // getDataSumbangan()
+          //   .then((response) => {
+          //     $('.is-invalid').removeClass('is-invalid')
+          //     $('.invalid-feedback').remove()
 
-              // $('#tableSumbangan').jqGrid("clearGridData");
-              $('#tableSumbangan').jqGrid('setGridParam', {
-                url: `${apiUrl}pengeluarantruckingheader/${response.url}`,
-                postData: {
-                  tgldari: $('#crudForm').find('[name=tgldari]').val(),
-                  tglsampai: $('#crudForm').find('[name=tglsampai]').val(),
-                  aksi: $('#crudForm').data('action')
-                },
-                datatype: "json"
-              }).trigger('reloadGrid');
-            })
-            .catch((errors) => {
-              setErrorMessages($('#crudForm'), errors)
-            })
+          //     // $('#tableSumbangan').jqGrid("clearGridData");
+          //     $('#tableSumbangan').jqGrid('setGridParam', {
+          //       url: `${apiUrl}pengeluarantruckingheader/${response.url}`,
+          //       postData: {
+          //         tgldari: $('#crudForm').find('[name=tgldari]').val(),
+          //         tglsampai: $('#crudForm').find('[name=tglsampai]').val(),
+          //         aksi: $('#crudForm').data('action')
+          //       },
+          //       datatype: "json"
+          //     }).trigger('reloadGrid');
+          //   })
+          //   .catch((errors) => {
+          //     setErrorMessages($('#crudForm'), errors)
+          //   })
 
         } else if (KodePengeluaranId == 'KBBM') {
           $('#tablePelunasanbbm').jqGrid("clearGridData");
@@ -1438,6 +1447,7 @@
   function tampilanPJT() {
     $('.kolom_bbt').hide()
     $('#btnReloadOtokGrid').hide()
+    $('#btnReloadSumbanganGrid').hide()
     $('[name=statusposting]').parents('.form-group').show()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=tradoheader_id]').parents('.form-group').hide()
@@ -1484,6 +1494,7 @@
   function tampilanPJK() {
     $('.kolom_bbt').hide()
     $('#btnReloadOtokGrid').hide()
+    $('#btnReloadSumbanganGrid').hide()
     $('[name=statusposting]').parents('.form-group').show()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=tradoheader_id]').parents('.form-group').hide()
@@ -1531,6 +1542,7 @@
 
     $('.kolom_bbt').show()
     $('#btnReloadOtokGrid').hide()
+    $('#btnReloadSumbanganGrid').hide()
     $('[name=statusposting]').parents('.form-group').show()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=tradoheader_id]').parents('.form-group').hide()
@@ -1581,6 +1593,7 @@
   function tampilanTDE() {
     $('.kolom_bbt').hide()
     $('#btnReloadOtokGrid').hide()
+    $('#btnReloadSumbanganGrid').hide()
     $('[name=statusposting]').parents('.form-group').show()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=agen_id]').parents('.form-group').hide()
@@ -1623,6 +1636,7 @@
   function tampilanTDEK() {
     $('.kolom_bbt').hide()
     $('#btnReloadOtokGrid').hide()
+    $('#btnReloadSumbanganGrid').hide()
     $('[name=statusposting]').parents('.form-group').show()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=agen_id]').parents('.form-group').hide()
@@ -1666,6 +1680,7 @@
     $('#detailList tbody').html('')
     enabledKas(true);
     $('#btnReloadOtokGrid').hide()
+    $('#btnReloadSumbanganGrid').show()
     $('[name=statusposting]').parents('.form-group').show()
     $('[name=tradoheader_id]').parents('.form-group').hide()
     $('[name=agen_id]').parents('.form-group').hide()
@@ -1717,6 +1732,7 @@
     $('#detailList tbody').html('')
     enabledKas(true);
     $('#btnReloadOtokGrid').hide()
+    $('#btnReloadSumbanganGrid').hide()
     $('[name=statusposting]').parents('.form-group').show()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=postingpinjaman]').parents('.form-group').hide()
@@ -1766,6 +1782,7 @@
   function tampilanBSB() {
     enabledKas(true);
     $('#btnReloadOtokGrid').hide()
+    $('#btnReloadSumbanganGrid').hide()
     $('[name=statusposting]').parents('.form-group').show()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=karyawanheader_id]').parents('.form-group').hide()
@@ -1818,6 +1835,7 @@
   function tampilanKLAIM() {
     enabledKas(false);
     $('#btnReloadOtokGrid').hide()
+    $('#btnReloadSumbanganGrid').hide()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=statusposting]').parents('.form-group').hide()
     $('[name=karyawanheader_id]').parents('.form-group').hide()
@@ -1879,6 +1897,7 @@
     $('#detailList tbody').html('')
     enabledKas(true);
     $('#btnReloadOtokGrid').hide()
+    $('#btnReloadSumbanganGrid').hide()
     $('[name=statusposting]').parents('.form-group').show()
     $('[name=tradoheader_id]').parents('.form-group').hide()
     $('[name=gandenganheader_id]').parents('.form-group').hide()
@@ -1958,6 +1977,7 @@
     $('#detailList tbody').html('')
     enabledKas(true);
     $('#btnReloadOtokGrid').hide()
+    $('#btnReloadSumbanganGrid').hide()
     $('[name=statusposting]').parents('.form-group').show()
     $('[name=tradoheader_id]').parents('.form-group').hide()
     $('[name=gandenganheader_id]').parents('.form-group').hide()
@@ -2035,6 +2055,7 @@
     $('#detailList tbody').html('')
     enabledKas(true);
     $('#btnReloadOtokGrid').hide()
+    $('#btnReloadSumbanganGrid').hide()
     $('[name=statusposting]').parents('.form-group').show()
     $('[name=tradoheader_id]').parents('.form-group').hide()
     $('[name=gandenganheader_id]').parents('.form-group').hide()
@@ -2112,6 +2133,7 @@
     $('#detailList tbody').html('')
     enabledKas(true);
     $('#btnReloadOtokGrid').hide()
+    $('#btnReloadSumbanganGrid').hide()
     $('[name=statusposting]').parents('.form-group').show()
     $('[name=tradoheader_id]').parents('.form-group').hide()
     $('[name=gandenganheader_id]').parents('.form-group').hide()
@@ -2190,6 +2212,7 @@
     $('#detailList tbody').html('')
     enabledKas(true);
     $('#btnReloadOtokGrid').hide()
+    $('#btnReloadSumbanganGrid').hide()
     $('[name=statusposting]').parents('.form-group').show()
     $('[name=tradoheader_id]').parents('.form-group').hide()
     $('[name=gandenganheader_id]').parents('.form-group').hide()
@@ -2266,6 +2289,7 @@
     $('#detailList tbody').html('')
     enabledKas(true);
     $('#btnReloadOtokGrid').hide()
+    $('#btnReloadSumbanganGrid').hide()
     $('[name=statusposting]').parents('.form-group').show()
     $('[name=tradoheader_id]').parents('.form-group').hide()
     $('[name=gandenganheader_id]').parents('.form-group').hide()
@@ -2343,6 +2367,7 @@
     $('#detailList tbody').html('')
     enabledKas(true);
     $('#btnReloadOtokGrid').show()
+    $('#btnReloadSumbanganGrid').hide()
     $('[name=statusposting]').parents('.form-group').show()
     $('[name=tradoheader_id]').parents('.form-group').hide()
     $('[name=agen_id]').parents('.form-group').show()
@@ -2397,6 +2422,7 @@
     $('#detailList tbody').html('')
     enabledKas(true);
     $('#btnReloadOtokGrid').show()
+    $('#btnReloadSumbanganGrid').hide()
     $('[name=statusposting]').parents('.form-group').show()
     $('[name=agen_id]').parents('.form-group').show()
     $('[name=containerheader_id]').parents('.form-group').show()
@@ -2450,6 +2476,7 @@
   function tampilanall() {
     enabledKas(true);
     $('#btnReloadOtokGrid').hide()
+    $('#btnReloadSumbanganGrid').hide()
     $('[name=keterangancoa]').parents('.form-group').show()
     $('.tbl_stok_id').hide()
     $('.tbl_qty').hide()
@@ -2549,6 +2576,38 @@
 
   }
 
+  $(document).on('click', "#btnReloadSumbanganGrid", function(event) {
+    event.preventDefault()
+    reloadGrid = null;
+    if ($('#crudForm').data('action') == 'edit') {
+      reloadGrid = 'reload'
+    }
+
+    var tgldari = $('#crudForm').find(`[name="tgldari"]`).val()
+    var tglsampai = $('#crudForm').find(`[name="tglsampai"]`).val()
+    clearSelectedRowsSumbangan()
+    getDataSumbangan()
+      .then((response) => {
+        $('.is-invalid').removeClass('is-invalid')
+        $('.invalid-feedback').remove()
+
+        // $('#tableSumbangan').jqGrid("clearGridData");
+        $('#tableSumbangan').jqGrid('setGridParam', {
+          url: `${apiUrl}pengeluarantruckingheader/${response.url}`,
+          postData: {
+            tgldari: $('#crudForm').find('[name=tgldari]').val(),
+            tglsampai: $('#crudForm').find('[name=tglsampai]').val(),
+            aksi: $('#crudForm').data('action'),
+            proses: 'reload'
+          },
+          datatype: "json"
+        }).trigger('reloadGrid');
+      })
+      .catch((errors) => {
+        setErrorMessages($('#crudForm'), errors)
+      })
+
+  })
   $(document).on('click', "#btnReloadOtokGrid", function(event) {
     event.preventDefault()
     reloadGrid = null;
@@ -5900,7 +5959,8 @@
         data: {
           tgldari: $('#crudForm').find('[name=tgldari]').val(),
           tglsampai: $('#crudForm').find('[name=tglsampai]').val(),
-          limit: 0
+          limit: 0,
+          proses: 'reload'
         },
         headers: {
           Authorization: `Bearer ${accessToken}`
@@ -7265,7 +7325,7 @@
   }
   // END OTOK
 
-  
+
   // TABLE OTOL
   function loadOTOLGrid() {
     let disabled = '';
@@ -7499,8 +7559,8 @@
         },
         success: response => {
           if ($('#crudForm').data('action') == 'edit') {
-            
-        // console.log('getDataOTOL',response)
+
+            // console.log('getDataOTOL',response)
             response.data.map((data) => {
               if (data.pengeluarantrucking_id != null) {
                 selectedRowsOtol.push(data.id_detail)
