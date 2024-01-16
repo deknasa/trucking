@@ -833,6 +833,7 @@
     let buttonRemoveDropzone = `<i class="fas fa-times-circle"></i>`
     $('.dropzoneImg').each((index, element) => {
       if (!element.dropzone) {
+        console.log($(element).data('field'))
         let newDropzone = new Dropzone(element, {
           url: 'test',
           previewTemplate: document.querySelector('.dz-preview').innerHTML,
@@ -850,8 +851,12 @@
               if (this.files.length > 5) {
                 this.removeFile(file);
               }
-              if (file.size < (this.options.minFilesize * 1024)) {
-                this.removeFile(file);
+              if ($(element).data('field') != 'photosupir') {
+
+                if (file.size < (this.options.minFilesize * 1024)) {
+                  showDialog('ukuran file minimal 100 kb')
+                  this.removeFile(file);
+                }
               }
             });
           }

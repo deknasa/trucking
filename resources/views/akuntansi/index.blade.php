@@ -249,6 +249,16 @@
             }
           },
           {
+            id: 'view',
+            innerHTML: '<i class="fa fa-eye"></i> VIEW',
+            class: 'btn btn-orange btn-sm mr-1',
+            onClick: () => {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+
+              viewAkuntansi(selectedId)
+            }
+          },
+          {
             id: 'delete',
             innerHTML: '<i class="fa fa-trash"></i> DELETE',
             class: 'btn btn-danger btn-sm mr-1',

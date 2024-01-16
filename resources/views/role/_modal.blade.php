@@ -429,7 +429,7 @@
           {
             label: 'CLASS',
             name: 'class',
-            width: (detectDeviceType() == "desktop") ? md_dekstop_3 : md_mobile_3,
+            width: (detectDeviceType() == "desktop") ? lg_dekstop_3 : lg_mobile_3,
             align: 'left'
           },
           {
@@ -447,7 +447,7 @@
           {
             label: 'Nama',
             name: 'nama',
-            width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
+            width: (detectDeviceType() == "desktop") ? lg_dekstop_2 : lg_mobile_2,
           },
           {
             label: 'Status',
