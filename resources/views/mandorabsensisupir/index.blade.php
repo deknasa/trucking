@@ -216,6 +216,9 @@
                   el.data('currentValue', supir.namasupir)
                   let rowId = $("#jqGrid").jqGrid('getGridParam', 'selrow');
                   $("#jqGrid").jqGrid('setCell', rowId, 'supir_id', supir.id);
+                  
+                  $("#jqGrid").jqGrid('setCell', rowId, 'namasupir_old', supir.namasupir);
+                  $("#jqGrid").jqGrid('setCell', rowId, 'supir_id_old', supir.id);
                   // $("#jqGrid").jqGrid('setCell', rowId, 'namasupir', supir.namasupir);
                 },
                 onCancel: (element) => {
@@ -223,6 +226,8 @@
                 },
                 onClear: (element) => {
                   element.val('')
+                  $("#jqGrid").jqGrid('setCell', rowId, 'namasupir_old', null);
+                  $("#jqGrid").jqGrid('setCell', rowId, 'supir_id_old', null);
                 }
               })
             }
@@ -541,6 +546,7 @@
         id : $("#jqGrid").jqGrid('getCell', id, 'id'),
         trado_id : $("#jqGrid").jqGrid('getCell', id, 'trado_id'),
         supir_id : $("#jqGrid").jqGrid('getCell', id, 'supir_id'),
+        supirold_id : $("#jqGrid").jqGrid('getCell', id, 'supir_id_old'),
         absen_id : $("#jqGrid").jqGrid('getCell', id, 'absen_id'),
         kodetrado : $("#jqGrid").jqGrid('getCell', id, 'kodetrado'),
         namasupir : $("#jqGrid").jqGrid('getCell', id, 'namasupir'),
