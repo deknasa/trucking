@@ -53,7 +53,7 @@
                                 label: 'KETERANGAN',
                                 name: 'keterangan',
                                 align: 'left',
-                                width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
+                                width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2
                             },
                             {
                                 label: 'NO POLISI',
