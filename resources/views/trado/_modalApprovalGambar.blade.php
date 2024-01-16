@@ -2,7 +2,7 @@
     <div class="modal-dialog">
         <form action="#" id="crudFormApprovalGambar">
             <div class="modal-content">
-               
+
                 <form action="" method="post">
                     <div class="modal-body">
 
@@ -81,7 +81,7 @@
             let action = form.data('action')
             let data = $('#crudFormApprovalGambar').serializeArray()
 
-           
+
 
             switch (action) {
                 case 'add':
@@ -117,11 +117,11 @@
                     $('#crudFormApprovalGambar').trigger('reset')
                     $('#crudModalApprovalGambar').modal('hide')
 
-                   
+
 
                     $('#jqGrid').trigger('reloadGrid');
 
-                    
+
                 },
                 error: error => {
                     if (error.status === 422) {
@@ -161,34 +161,39 @@
 
     function approvalTradoGambar(trado_id) {
         let form = $('#crudFormApprovalGambar')
-        
+
         $('.modal-loader').removeClass('d-none')
-        
+
         form.trigger('reset')
         form.find('#btnSubmit').html(`<i class="fa fa-save"></i> Save`)
-        
+
         form.find(`.sometimes`).show()
         $('#crudModalApprovalGambarTitle').text('Approval Trado Gambar')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
 
         Promise
-        .all([
-            setStatusApprovalOptions(form),
-            showApprovalTradoGambar(form, trado_id)
-        ])
-        .then((response) => {
-            console.log(response[1].id);
-            let approvalGambar = response[1];
-            $('#crudModalApprovalGambar').modal('show')
-            form.data('action', 'add')
-            if (approvalGambar.id){
-                form.data('action', 'edit')
-            }
-        })
-        .finally(() => {
-            $('.modal-loader').addClass('d-none')
-        })
+            .all([
+                setStatusApprovalOptions(form)
+            ])
+            .then(() => {
+                console.log('here')
+                showApprovalTradoGambar(form, trado_id)
+                    .then((response) => {
+                        let approvalGambar = response;
+                        $('#crudModalApprovalGambar').modal('show')
+                        form.data('action', 'add')
+                        if (approvalGambar.id) {
+                            form.data('action', 'edit')
+                        }
+                    })
+                    .catch((error) => {
+                        showDialog(error.responseJSON)
+                    })
+                    .finally(() => {
+                        $('.modal-loader').addClass('d-none')
+                    })
+            })
     }
 
 
@@ -198,7 +203,9 @@
                 url: `${apiUrl}approvaltradogambar`,
                 method: 'GET',
                 dataType: 'JSON',
-                data:{trado_id:Id},
+                data: {
+                    trado_id: Id
+                },
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 },
@@ -216,7 +223,7 @@
                         } else {
                             element.val(value)
                         }
-                        if(index == 'kodetrado'){
+                        if (index == 'kodetrado') {
                             element.prop('readonly', true)
                         }
                     })
@@ -261,6 +268,5 @@
             })
         })
     }
-
 </script>
 @endpush()
