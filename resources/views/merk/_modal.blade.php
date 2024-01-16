@@ -479,6 +479,8 @@
     $(`.status-lookup`).lookupMaster({
       title: 'Status Aktif Lookup',
       fileName: 'parameterMaster',
+      typeSearch: 'ALL',
+      searching: 1,
       beforeProcess: function() {
         this.postData = {
           url: `${apiUrl}parameter/combo`,

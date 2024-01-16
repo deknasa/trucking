@@ -43,7 +43,7 @@
               </div>
               <div class="col-12 col-md-10">
                 <input type="hidden" name="coa">
-                <input type="text" name="keterangancoa" class="form-control akunpusat-lookup">
+                <input type="text" name="keterangancoa" id="keterangancoa" class="form-control akunpusat-lookup">
               </div>
             </div>
 
@@ -55,9 +55,8 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <select name="format" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH STATUS FORMAT --</option>
-                </select>
+                <input type="hidden" name="format">
+                <input type="text" name="formatnama" data-target-name="format" id="formatnama" class="form-control lg-form format-lookup">
               </div>
             </div>
             <div class="row form-group">
@@ -67,9 +66,8 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <select name="statushitungstok" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH STATUS FORMAT --</option>
-                </select>
+                <input type="hidden" name="statushitungstok">
+                <input type="text" name="statushitungstoknama" data-target-name="statushitungstok" id="statushitungstoknama" class="form-control lg-form statushitungstok-lookup">
               </div>
             </div>
            
@@ -237,20 +235,16 @@
     $('.invalid-feedback').remove()
     Promise
     .all([
-      setStatusFormatListOptions(form),
-      setStatusHitungListOptions(form),
+      showDefault(form)
     ])
     .then(() => {
-      showDefault(form)
-        .then(() => {
-          $('#crudModal').modal('show')
-        })
-        .catch((error) => {
-          showDialog(error.statusText)
-        })
-        .finally(() => {
-          $('.modal-loader').addClass('d-none')
-        })
+      $('#crudModal').modal('show')
+    })
+    .catch((error) => {
+      showDialog(error.statusText)
+    })
+    .finally(() => {
+      $('.modal-loader').addClass('d-none')
     })
   }
 
@@ -272,22 +266,17 @@
 
     Promise
       .all([
-        setStatusFormatListOptions(form),
-        setStatusHitungListOptions(form),
+        showPengeluaranStok(form, pengeluaranstokId)
       ])
       .then(() => {
-        showPengeluaranStok(form, pengeluaranstokId)
-          .then(() => {
-            $('#crudModal').modal('show')
-          })
-          .catch((error) => {
-            showDialog(error.statusText)
-          })
-          .finally(() => {
-            $('.modal-loader').addClass('d-none')
-          })
+        $('#crudModal').modal('show')
       })
-    
+      .catch((error) => {
+        showDialog(error.statusText)
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
   }
 
   function deletePengeluaranStok(pengeluaranstokId) {
@@ -306,22 +295,18 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
     Promise
-      .all([
-        setStatusFormatListOptions(form),
-        setStatusHitungListOptions(form),
-      ])
-      .then(() => {
-        showPengeluaranStok(form, pengeluaranstokId)
-          .then(() => {
-            $('#crudModal').modal('show')
-          })
-          .catch((error) => {
-            showDialog(error.statusText)
-          })
-          .finally(() => {
-            $('.modal-loader').addClass('d-none')
-          })
-      })
+    .all([
+      showPengeluaranStok(form, pengeluaranstokId)
+    ])
+    .then(() => {
+      $('#crudModal').modal('show')
+    })
+    .catch((error) => {
+      showDialog(error.statusText)
+    })
+    .finally(() => {
+      $('.modal-loader').addClass('d-none')
+    })
   }
   function viewPengeluaranStok(pengeluaranstokId) {
     let form = $('#crudForm')
@@ -339,43 +324,40 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
     Promise
-      .all([
-        setStatusFormatListOptions(form),
-        setStatusHitungListOptions(form),
-      ])
-      .then(() => {
-        showPengeluaranStok(form, pengeluaranstokId)
-        .then(pengeluaranstokId => {
-        // form.find('.aksi').hide()
-        setFormBindKeys(form)
-        initSelect2(form.find('.select2bs4'), true)
-        form.find('[name]').removeAttr('disabled')
+    .all([
+      showPengeluaranStok(form, pengeluaranstokId)
+    ])
+    .then(pengeluaranstokId => {
+      // form.find('.aksi').hide()
+      setFormBindKeys(form)
+      initSelect2(form.find('.select2bs4'), true)
+      form.find('[name]').removeAttr('disabled')
+      
+      form.find('select').each((index, select) => {
+        let element = $(select)
+        if (element.data('select2')) {
+          element.select2('destroy')
+        }
+      })
+      form.find('[name]').attr('disabled', 'disabled').css({
+        background: '#fff'
+      })
+      form.find('[name=id]').prop('disabled',false)
+    })
+    .then(() => {
+      $('#crudModal').modal('show')
+      form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
+      let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
+      name.attr('disabled', true)
+      name.find('.lookup-toggler').attr('disabled', true)
+    })
+    .catch((error) => {
+      showDialog(error.statusText)
+    })
+    .finally(() => {
+      $('.modal-loader').addClass('d-none')
+    })
     
-        form.find('select').each((index, select) => {
-          let element = $(select)
-          if (element.data('select2')) {
-              element.select2('destroy')
-          }
-        })
-        form.find('[name]').attr('disabled', 'disabled').css({
-          background: '#fff'
-        })
-        form.find('[name=id]').prop('disabled',false)
-      })
-          .then(() => {
-            $('#crudModal').modal('show')
-            form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
-            let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
-            name.attr('disabled', true)
-            name.find('.lookup-toggler').attr('disabled', true)
-          })
-          .catch((error) => {
-            showDialog(error.statusText)
-          })
-          .finally(() => {
-            $('.modal-loader').addClass('d-none')
-          })
-      })
   }
 
   const setStatusFormatListOptions = function(relatedForm) {
@@ -518,14 +500,21 @@
   }
 
   function initLookup() {
-    $('.akunpusat-lookup').lookup({
+    $('.akunpusat-lookup').lookupMaster({
       title: 'akun pusat Lookup',
-      fileName: 'akunpusat',
+      fileName: 'akunpusatMaster',
+      typeSearch: 'ALL',
+      searching: 1,
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
           levelCoa: '3',
-          Aktif: 'AKTIF',          
+          Aktif: 'AKTIF',     
+          searching: 1,
+          typeSearch: 'ALL',
+          valueName: `keterangancoa`,
+          searchText: `akunpusat-lookup`,
+          title: 'COA'     
         }
       },      
       onSelectRow: (akunpusat, element) => {
@@ -543,27 +532,72 @@
       }
     })
 
-    $('.trado-lookup').lookup({
-      title: 'Trado Lookup',
-      fileName: 'trado',
-      beforeProcess: function(test) {
+    $(`.format-lookup`).lookupMaster({
+      title: 'Status Format',
+      fileName: 'parameterMaster',
+      typeSearch: 'ALL',
+      searching: 1,
+      beforeProcess: function() {
         this.postData = {
-          Aktif: 'AKTIF',
-
-        }
-      },      
-      onSelectRow: (trado, element) => {
-        element.val(trado.kodetrado)
+          url: `${apiUrl}parameter/combo`,
+          grp: 'PENGELUARAN STOK',
+          searching: 1,
+          valueName: `format`,
+          searchText: `format-lookup`,
+          singleColumn: true,
+          hideLabel: true,
+          title: 'Status Format'
+        };
+      },
+      onSelectRow: (status, element) => {
+        let elId = element.data('targetName')
+        $(`#crudForm [name=${elId}]`).first().val(status.id)
+        element.val(status.text)
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {
-        element.val(element.data('currentValue'))
+        element.val(element.data('currentValue'));
       },
       onClear: (element) => {
+        let elId = element.data('targetName')
+        $(`#crudForm [name=${elId}]`).first().val('')
         element.val('')
         element.data('currentValue', element.val())
-      }
-    })
+      },
+    });
+    $(`.statushitungstok-lookup`).lookupMaster({
+      title: 'status hitung stok',
+      fileName: 'parameterMaster',
+      typeSearch: 'ALL',
+      searching: 1,
+      beforeProcess: function() {
+        this.postData = {
+          url: `${apiUrl}parameter/combo`,
+          grp: 'STATUS HITUNG STOK',
+          searching: 1,
+          valueName: `statushitungstok`,
+          searchText: `statushitungstok-lookup`,
+          singleColumn: true,
+          hideLabel: true,
+          title: 'status hitung stok'
+        };
+      },
+      onSelectRow: (status, element) => {
+        let elId = element.data('targetName')
+        $(`#crudForm [name=${elId}]`).first().val(status.id)
+        element.val(status.text)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'));
+      },
+      onClear: (element) => {
+        let elId = element.data('targetName')
+        $(`#crudForm [name=${elId}]`).first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      },
+    });
   }
   function showDefault(form) {
     return new Promise((resolve, reject) => {

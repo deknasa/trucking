@@ -535,23 +535,21 @@
   }
 
   function getabsentrado(id) {
-    $.ajax({
-      url: `${apiUrl}mandorabsensisupir/${id}/getabsentrado`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        'Authorization': `Bearer ${accessToken}`
-      },
-      success: response => {
-
-        kodeabsen = response.data.kodeabsen
-        if(isTradoMilikSupir != 'YA'){
-          setSupirEnable()
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `${apiUrl}mandorabsensisupir/${id}/getabsentrado`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        },
+        success: response => {
+          resolve(response.data)
+        },
+        error: error => {
+          reject(error)
         }
-      },
-      error: error => {
-        showDialog(error.statusText)
-      }
+      })
     })
   }
 

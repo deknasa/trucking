@@ -723,7 +723,6 @@
         ...data,
         ...reload
       }
-      console.log(data)
       return new Promise((resolve, reject) => {
         $.ajax({
           url: `${apiUrl}${url}`,
