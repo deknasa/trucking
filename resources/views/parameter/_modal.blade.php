@@ -697,9 +697,8 @@
       searching: 1,
       beforeProcess: function() {
         this.postData = {
-          url: `${apiUrl}parameter`,
           searching: 1,
-          valueName: `grup`,
+          valueName: `type`,
           searchText: `parameter-lookup`,
           title: 'Parameter',
           typeSearch: 'ALL',

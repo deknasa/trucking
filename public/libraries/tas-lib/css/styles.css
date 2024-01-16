@@ -704,27 +704,26 @@ select[readonly].select2-hidden-accessible + .select2-container {
     
 } */
 
-.loadingMessage{
-	position: relative;
-	bottom: 42px;
-	/* top: 100%; */
-	/* left: 2px; Ubah dari 50% menjadi 10px untuk menggeser ke kiri */
-	color: red;
-	transform: translateY(-50%);
-	display: none;
-	background-color: #e0ecff;
-	padding: 2px;
-	border-radius: 2px;
-	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-	font-size: 16px;
-	color: #333;
-	width: 100%; 
-	height: 30px;
-	max-width: 100%;
-	
-	text-align: left; /* Atur teks menjadi kiri */
-}
+.loadingMessage {
+    position: relative;
+    bottom: 27px;
+    /* top: 100%; */
+    /* left: 2px; Ubah dari 50% menjadi 10px untuk menggeser ke kiri */
+    color: red;
+    transform: translateY(-50%);
+    display: none;
+    background-color: #e0ecff;
+    padding: 2px;
+    border-radius: 2px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    font-size: 13px;
+    color: #333;
+    width: 100%;
+    height: 30px;
+    max-width: 100%;
 
+    text-align: left; /* Atur teks menjadi kiri */
+}
 
 .loading-image {
     width: 25px; /* Sesuaikan ukuran gambar sesuai kebutuhan */
@@ -1025,22 +1024,25 @@ span.textCard {
 		height: 447px!important; 
 	}
 	
-	.loadingMessage{
-		position: absolute;
-		top: 94%;
-		color: red;
-		transform: translateY(-50%);
-		display: none;
-		background-color: #e0ecff;
-		padding: 2px;
-		box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-		font-size: 16px;
-		color: #333;
-		width: 100%; 
-		height: 50px;/* Ubah lebar sesuai kebutuhan Anda */
-		max-width: 100%;
-		text-align: left; /* Atur teks menjadi kiri */
-	}
+	.loadingMessage {
+        position: absolute;
+        /* bottom: 42px; */
+        top: 94%;
+        /* left: 2px; Ubah dari 50% menjadi 10px untuk menggeser ke kiri */
+        color: red;
+        transform: translateY(-50%);
+        display: none;
+        background-color: #e0ecff;
+        padding: 2px;
+        /* border-radius: 5px; */
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        font-size: 13px;
+        color: #333;
+        width: 100%;
+        height: 50px; /* Ubah lebar sesuai kebutuhan Anda */
+        max-width: 100%;
+        text-align: left; /* Atur teks menjadi kiri */
+    }
 	.loading-text {
 		margin-top: 7px;
 		display: inline-block;
@@ -1116,4 +1118,33 @@ span.textCard {
 }
 .login-card-body .btn {
 	padding: 0.535rem 0.75rem;
+}
+.mob-span-title{
+	width: 160px;
+    display: inline-block;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+	font-weight: bold;
+}
+
+.mob-span-body{
+	min-width: 100px;
+    display: inline-block;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+li.mob-li{
+	display: flex;
+	align-items: center;
+	border-bottom: 1px solid #ebebeb; /* Add a bottom border for each li */
+	padding: 5px 0; /* Optional padding for better spacing */
+}
+
+ul.mob-ul {
+	list-style-type: none;
+	padding: 0;
+	margin: 0px 0px -10px 5px;
 }

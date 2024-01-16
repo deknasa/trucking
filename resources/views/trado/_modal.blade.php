@@ -806,8 +806,14 @@
               if (this.files.length > 5) {
                 this.removeFile(file);
               }
-              if (file.size < (this.options.minFilesize * 1024)) {
-                this.removeFile(file);
+
+              if ($(element).data('field') == 'photobpkb' || $(element).data('field') == 'photostnk') {
+
+                if (file.size < (this.options.minFilesize * 1024)) {
+                  showDialog('ukuran file minimal 100 kb')
+                  this.removeFile(file);
+
+                }
               }
             });
           }

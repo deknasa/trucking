@@ -2,7 +2,7 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
-       
+
         <form action="" method="post">
           <div class="modal-body">
             <input type="hidden" name="id">
@@ -547,7 +547,7 @@
           $('#jqGrid').trigger('reloadGrid', {
             page: response.data.page,
             postData: {
-                proses: 'reload'
+              proses: 'reload'
             }
           }).trigger('reloadGrid');
 
@@ -1072,6 +1072,7 @@
                 this.removeFile(file);
               }
               if (file.size < (this.options.minFilesize * 1024)) {
+                showDialog('ukuran file minimal 100 kb')
                 this.removeFile(file);
               }
             });
@@ -1079,7 +1080,7 @@
         })
       }
       element.dropzone.removeAllFiles()
-      if (action == 'edit' || action == 'delete'  || action == 'view') {
+      if (action == 'edit' || action == 'delete' || action == 'view') {
         assignAttachment(element.dropzone, data)
       }
     })
@@ -1937,7 +1938,7 @@
 
         $('#crudForm').find(`[name=kotasampai]`).parents('.input-group').find('.input-group-append').hide()
         $('#crudForm').find(`[name=kotasampai]`).parents('.input-group').find('.button-clear').hide()
-        element.val(tarif.tujuan+' - '+tarif.penyesuaian)
+        element.val(tarif.tujuan + ' - ' + tarif.penyesuaian)
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {
@@ -2047,7 +2048,7 @@
       },
       onSelectRow: (tarif, element) => {
         $('#crudForm [name=tarifmuatan_id]').first().val(tarif.id)
-        element.val(tarif.tujuan+' - '+tarif.penyesuaian)
+        element.val(tarif.tujuan + ' - ' + tarif.penyesuaian)
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {
@@ -2073,7 +2074,7 @@
       },
       onSelectRow: (tarif, element) => {
         $('#crudForm [name=tarifbongkaran_id]').first().val(tarif.id)
-        element.val(tarif.tujuan+' - '+tarif.penyesuaian)
+        element.val(tarif.tujuan + ' - ' + tarif.penyesuaian)
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {

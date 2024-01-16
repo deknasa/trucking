@@ -704,11 +704,10 @@
       getCekExport(params).then((response) => {
           if ($('#rangeModal').data('action') == 'export') {
             $.ajax({
-              url: `{{ config('app.api_url ') }}supplier/export?` + params,
+              url: `${apiUrl}supplier/export?${params}`,
               type: 'GET',
               beforeSend: function(xhr) {
-                xhr.setRequestHeader('Authorization', `Bearer {{ session('
-                  access_token ') }}`);
+                xhr.setRequestHeader('Authorization', `Bearer ${accessToken}`);
               },
               xhrFields: {
                 responseType: 'arraybuffer'

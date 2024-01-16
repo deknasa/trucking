@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "9515f5c398bba5c308eb9e389bce6b27",
+  "ReportGuid": "a4cb4c04b02952daa28e3ae1cadf6b2e",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportSuratPengantar.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1687745873000+0700)/",
+  "ReportChanged": "/Date(1705294944000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -643,7 +643,7 @@
               },
               "MaxNumberOfLines": 6,
               "Text": {
-                "Value": "AGEN"
+                "Value": "CUSTOMER"
               },
               "HorAlignment": "Center",
               "VertAlignment": "Center",
