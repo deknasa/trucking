@@ -777,13 +777,18 @@
 
   function setSupirEnableIndex(kodeabsensitrado,rowId) {
     if (kodeabsensitrado) {
-      $("#jqGrid").jqGrid('setCell', rowId, 'namasupir', null);
+      $("#jqGrid").jqGrid('setCell', rowId, 'namasupir', null,'not-editable-cell');
       $("#jqGrid").jqGrid('setCell', rowId, 'supir_id', null);
     }else{
       let namasupir_old = $("#jqGrid").jqGrid('getCell', rowId, 'namasupir_old')
       let supir_id_old = $("#jqGrid").jqGrid('getCell', rowId, 'supir_id_old')
       $("#jqGrid").jqGrid('setCell', rowId, 'namasupir',namasupir_old);
       $("#jqGrid").jqGrid('setCell', rowId, 'supir_id',supir_id_old);
+     
+      let rowElement = $("#jqGrid").jqGrid("getInd", rowId, true);
+      // Find the <td> element with aria-describedby="jqGrid_namasupir"
+      let tdWithAria = $(rowElement).find('td[aria-describedby="jqGrid_namasupir"]');
+      tdWithAria.removeClass('not-editable-cell');
     }
   }
 </script>
