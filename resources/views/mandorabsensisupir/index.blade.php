@@ -248,12 +248,6 @@
                 max: 24
               }).mask(".inputmask-time");
               
-              // let date = new Date();
-              // let time = date.toLocaleString("id", {
-              //   timeStyle: "medium",
-              // });
-              // time = time.split('.')
-              // $(element).val(time[0] + ":" + time[1]);
             }
           },
           // formatter: 'date',
@@ -262,6 +256,25 @@
             srcformat: "H:i:s",
             newformat: "H:i",
             // userLocalTime : true
+          },
+          formatter: (value, options, rowData) => {
+            if (!value) {
+              return ''
+            }
+            // String waktu
+            let waktuString = value;
+            
+            // Memisahkan string menjadi bagian-bagian
+            let [jamStr, menitStr, detikStr] = waktuString.split(':');
+            
+            // Parsing nilai sebagai angka
+            let jam = parseInt(jamStr, 10);
+            let menit = parseInt(menitStr, 10);
+            let detik = parseInt(detikStr, 10);
+            if (jam === 0 && menit === 0 && detik === 0) {
+              return ''
+            } 
+            return `${jamStr}:${menitStr}`
           }
         },
         {
@@ -767,11 +780,17 @@
     for (const key in dataAbsensi) {
       if (dataAbsensi.hasOwnProperty(key)) {
         const item = dataAbsensi[key];
+        let nama_supir
+        if (item.supir_id) {
+          nama_supir = item.namasupir
+        }else{
+          nama_supir = null;
+        }
         $("#jqGrid").jqGrid('setCell', key, 'trado_id', item.trado_id);
         $("#jqGrid").jqGrid('setCell', key, 'supir_id', item.supir_id);
         $("#jqGrid").jqGrid('setCell', key, 'absen_id', item.absen_id);
         $("#jqGrid").jqGrid('setCell', key, 'kodetrado', item.kodetrado);
-        $("#jqGrid").jqGrid('setCell', key, 'namasupir', item.namasupir);
+        $("#jqGrid").jqGrid('setCell', key, 'namasupir', nama_supir);
         $("#jqGrid").jqGrid('setCell', key, 'jam', item.jam);
         $("#jqGrid").jqGrid('setCell', key, 'absentrado', item.absentrado);
         $("#jqGrid").jqGrid('setCell', key, 'keterangan', item.keterangan);
