@@ -2848,6 +2848,14 @@
 
             }
 
+            if (KodePengeluaranId === "KLAIM") {
+              if(form.find(`[name="trado"]`).val() != '')
+              {
+                lookupSelected(`trado`)
+              }else{
+                lookupSelected(`gandengan`)
+              }
+            }
             if (isEditTgl == 'TIDAK') {
               form.find(`[name="tglbukti"]`).prop('readonly', true)
               form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
@@ -2904,6 +2912,25 @@
             $('#crudModal').modal('show')
             $('#btnReloadOtokGrid').prop('disabled', true)
             $('#crudForm [name=statusposting]').attr('disabled', true)
+            if ($('#crudForm [name=statusposting]').val() == '84') {
+
+              $('.posting-border').hide()
+              $('#crudForm [name=bank_id]').first().val('')
+              $('#crudForm [name=bank]').first().val('')
+              $('#crudForm [name=bank]').first().data('currentValue', '')
+
+            }
+
+            
+            if (KodePengeluaranId === "KLAIM") {
+              if(form.find(`[name="trado"]`).val() != '')
+              {
+                lookupSelected(`trado`)
+              }else{
+                lookupSelected(`gandengan`)
+              }
+            }
+
             form.find(`[name="tglbukti"]`).prop('readonly', true)
             form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
 
@@ -2980,6 +3007,22 @@
           .then(() => {
             $('#crudModal').modal('show')
             $('#crudForm [name=statusposting]').attr('disabled', true)
+            if ($('#crudForm [name=statusposting]').val() == '84') {
+
+              $('.posting-border').hide()
+              $('#crudForm [name=bank_id]').first().val('')
+              $('#crudForm [name=bank]').first().val('')
+              $('#crudForm [name=bank]').first().data('currentValue', '')
+
+            }
+            if (KodePengeluaranId === "KLAIM") {
+              if(form.find(`[name="trado"]`).val() != '')
+              {
+                lookupSelected(`trado`)
+              }else{
+                lookupSelected(`gandengan`)
+              }
+            }
             $('#crudForm').find(`.ui-datepicker-trigger`).attr('disabled', true)
 
             form.find(`.hasDatepicker`).prop('readonly', true)
