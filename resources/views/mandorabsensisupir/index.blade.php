@@ -297,9 +297,6 @@
                 onSelectRow: (absentrado, el) => {
                   el.val(absentrado.keterangan)
                   el.data('currentValue', absentrado.keterangan)
-                  getabsentrado(absentrado.id).then((response) => {
-                    setSupirEnableIndex(response,rowId)
-                  })
                   let rowId = $("#jqGrid").jqGrid('getGridParam', 'selrow');
                   $("#jqGrid").jqGrid('setCell', rowId, 'absen_id', absentrado.id);
                   
@@ -555,6 +552,10 @@
       if (dataAbsensi.hasOwnProperty(String(id))) {
         delete dataAbsensi[String(id)]; 
       }
+      let absen_id =$("#jqGrid").jqGrid('getCell', id, 'absen_id')
+      getabsentrado(absen_id).then((response) => {
+        setSupirEnableIndex(response,id)
+      })
       dataAbsensi[id] = {
         id : $("#jqGrid").jqGrid('getCell', id, 'id'),
         trado_id : $("#jqGrid").jqGrid('getCell', id, 'trado_id'),
@@ -569,6 +570,7 @@
         tglbukti : $("#jqGrid").jqGrid('getCell', id, 'tglbukti'),
       }
       isEditing()
+      console.log(dataAbsensi);
     }
     
     
@@ -713,7 +715,11 @@
         response.data.jam = waktuAkhir
 
         let msg = `YAKIN HAPUS ABSENSI `
-        showConfirm(msg, response.data.trado)
+        let supirtrado = `${response.data.trado}`
+        if (response.data.supir){
+          supirtrado +=` - ${response.data.supir}`
+        }
+        showConfirm(msg, supirtrado)
         .then(function() {
           $.ajax({
             url: `${apiUrl}mandorabsensisupir/${response.data.id}/delete`,
@@ -801,6 +807,8 @@
   }
 
   function setSupirEnableIndex(kodeabsensitrado,rowId) {
+    console.log(kodeabsensitrado,rowId);
+
     if (kodeabsensitrado) {
       $("#jqGrid").jqGrid('setCell', rowId, 'namasupir', null,'not-editable-cell');
       $("#jqGrid").jqGrid('setCell', rowId, 'supir_id', null);
