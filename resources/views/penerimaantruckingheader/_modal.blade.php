@@ -3128,7 +3128,7 @@
         }
       },
       onSelectRow: (supir, element) => {
-        element.parents('td').find(`[name="supir_id[]"]`).val(supir.id)        
+        element.parents('td').find(`[name="supir_id[]"]`).val(supir.id)
         element.val(supir.namasupir)
         element.data('currentValue', element.val())
       },
@@ -3137,11 +3137,11 @@
       },
       onClear: (element) => {
         element.val('')
-        element.parents('td').find(`[name="supir_id[]"]`).val('')  
+        element.parents('td').find(`[name="supir_id[]"]`).val('')
         element.data('currentValue', element.val())
       }
     })
-    
+
     $('.karyawan-lookup').last().lookup({
       title: 'Karyawan Lookup',
       fileName: 'karyawan',
@@ -3322,7 +3322,23 @@
         $(`#crudForm [name="supirheader_id"]`).last().val(supir.id)
         element.val(supir.namasupir)
         element.data('currentValue', element.val())
+        getDataPinjaman(supir.id).then((response) => {
 
+          $("#tablePinjaman")[0].p.selectedRowIds = [];
+          setTimeout(() => {
+
+            $("#tablePinjaman")
+              .jqGrid("setGridParam", {
+                datatype: "local",
+                data: response.data,
+                originalData: response.data,
+                rowNum: response.data.length,
+                selectedRowIds: []
+              })
+              .trigger("reloadGrid");
+          }, 100);
+
+        });
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
