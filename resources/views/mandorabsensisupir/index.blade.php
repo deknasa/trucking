@@ -817,6 +817,7 @@
     if (kodeabsensitrado) {
       $("#jqGrid").jqGrid('setCell', rowId, 'namasupir', null,'not-editable-cell');
       $("#jqGrid").jqGrid('setCell', rowId, 'supir_id', null);
+      $("#jqGrid").jqGrid('setCell', rowId, 'jam', null);
     }else{
       let namasupir_old = $("#jqGrid").jqGrid('getCell', rowId, 'namasupir_old')
       let supir_id_old = $("#jqGrid").jqGrid('getCell', rowId, 'supir_id_old')
