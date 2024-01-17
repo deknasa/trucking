@@ -1480,9 +1480,9 @@
     $('.tbl_checkbox').hide()
     $('.tbl_supir_id').show()
     $('.tbl_karyawan_id').hide()
-    $('.tbl_aksi').show()
+    $('.tbl_aksi').hide()
     $('.colspan').attr('colspan', 2);
-    $('#tbl_addRow').show()
+    $('#tbl_addRow').hide()
     $('.colmn-offset2').hide()
     $('.colmn-offset3').hide()
     $('.colmn-offset4').hide()
@@ -1527,9 +1527,9 @@
     $('.tbl_checkbox').hide()
     $('.tbl_supir_id').hide()
     $('.tbl_karyawan_id').show()
-    $('.tbl_aksi').show()
+    $('.tbl_aksi').hide()
     $('.colspan').attr('colspan', 2);
-    $('#tbl_addRow').show()
+    $('#tbl_addRow').hide()
     $('.colmn-offset2').hide()
     $('.tbl_tagihklaim').hide()
     $('.colmn-offset3').hide()
