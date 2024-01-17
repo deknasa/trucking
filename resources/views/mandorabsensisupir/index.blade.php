@@ -308,7 +308,7 @@
                   element.val('')
                   
                   let rowId = $("#jqGrid").jqGrid('getGridParam', 'selrow');
-                  setSupirEnableIndex(false,rowId)
+                  // setSupirEnableIndex(false,rowId)
                   $("#jqGrid").jqGrid('setCell', rowId, 'absen_id', null);
                 }
               })
@@ -395,7 +395,17 @@
         }
         if (cellname === 'absentrado') {
           $("#jqGrid").jqGrid('setCell', rowid, 'absentrado', value);
-          pushToObject(rowid,'absentrado', value);
+          let absen_id =$("#jqGrid").jqGrid('getCell', rowid, 'absen_id')
+          console.log(absen_id);
+          getabsentrado(absen_id).then((response) => {
+            setSupirEnableIndex(response,rowid)
+          })
+          .catch(()=>{
+            setSupirEnableIndex(false,rowid)
+          })
+          .then(()=>{
+            pushToObject(rowid,'absentrado', value);
+          })
         }
         if (cellname === 'jam') {
           $("#jqGrid").jqGrid('setCell', rowid, 'jam', value);
@@ -552,10 +562,6 @@
       if (dataAbsensi.hasOwnProperty(String(id))) {
         delete dataAbsensi[String(id)]; 
       }
-      let absen_id =$("#jqGrid").jqGrid('getCell', id, 'absen_id')
-      getabsentrado(absen_id).then((response) => {
-        setSupirEnableIndex(response,id)
-      })
       dataAbsensi[id] = {
         id : $("#jqGrid").jqGrid('getCell', id, 'id'),
         trado_id : $("#jqGrid").jqGrid('getCell', id, 'trado_id'),
@@ -807,7 +813,6 @@
   }
 
   function setSupirEnableIndex(kodeabsensitrado,rowId) {
-    console.log(kodeabsensitrado,rowId);
 
     if (kodeabsensitrado) {
       $("#jqGrid").jqGrid('setCell', rowId, 'namasupir', null,'not-editable-cell');
