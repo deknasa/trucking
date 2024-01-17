@@ -21,15 +21,16 @@
         colModel: [{
             label: 'NO BUKTI',
             name: 'nobukti',
+            width: (detectDeviceType() == "desktop") ?  sm_dekstop_4 : sm_mobile_3,
           },
           {
             label: 'KODE PERKIRAAN DEBET', 
-            width: 220,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
             name: 'coadebet',
           },
           {
             label: 'KODE PERKIRAAN kredit', 
-         width: 220,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
             name: 'coakredit',
           },
 

@@ -217,7 +217,8 @@ class PenerimaanStokHeaderController extends MyController
 
         $params = [
             'limit' => 0,
-            'roleinput' => 'role'
+            'roleinput' => 'role',
+            'sortIndex' => 'keterangan'
         ];
 
         $response = Http::withHeaders($this->httpHeaders)

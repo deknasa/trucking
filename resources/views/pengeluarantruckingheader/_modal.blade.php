@@ -1375,6 +1375,7 @@
   })
 
   function setKodePengeluaran(kode) {
+    console.log('kodepengeluaranid', kode)
     KodePengeluaranId = kode;
     // tampilanall()
     $('#detailList tbody').html('')
@@ -1488,6 +1489,8 @@
     $('.colmn-offset4').hide()
     $('.tbl_tagihklaim').hide()
     $('.cabang').hide()
+
+    $('[name=pengeluarantrucking_nobukti]').parents('.form-group').hide()
     // $('.colmn-offset').hide()
   }
 
@@ -1495,7 +1498,7 @@
     $('.kolom_bbt').hide()
     $('#btnReloadOtokGrid').hide()
     $('#btnReloadSumbanganGrid').hide()
-    $('[name=statusposting]').parents('.form-group').show()
+    $('[name=statusposting]').parents('.form-group').hide()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=tradoheader_id]').parents('.form-group').hide()
     $('[name=agen_id]').parents('.form-group').hide()
@@ -1535,15 +1538,19 @@
     $('.colmn-offset3').hide()
     $('.colmn-offset4').hide()
     $('.cabang').hide()
+
+    // enabledKas(true);
+    $('[name=pengeluarantrucking_nobukti]').parents('.form-group').hide()
     // $('.colmn-offset').hide()
   }
 
   function tampilanBBT() { //titipan Emkl
 
+    // enabledKas(true);
     $('.kolom_bbt').show()
     $('#btnReloadOtokGrid').hide()
     $('#btnReloadSumbanganGrid').hide()
-    $('[name=statusposting]').parents('.form-group').show()
+    $('[name=statusposting]').parents('.form-group').hide()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=tradoheader_id]').parents('.form-group').hide()
     $('[name=agen_id]').parents('.form-group').hide()
@@ -1592,9 +1599,10 @@
 
   function tampilanTDE() {
     $('.kolom_bbt').hide()
+    // enabledKas(true);
     $('#btnReloadOtokGrid').hide()
     $('#btnReloadSumbanganGrid').hide()
-    $('[name=statusposting]').parents('.form-group').show()
+    $('[name=statusposting]').parents('.form-group').hide()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=agen_id]').parents('.form-group').hide()
     $('[name=containerheader_id]').parents('.form-group').hide()
@@ -1630,14 +1638,16 @@
     $('#detail-bit-section').hide()
     $('#detail-tdek-section').hide()
     $('#detail-default-section').parents('.card').hide()
+    $('[name=pengeluarantrucking_nobukti]').parents('.form-group').hide()
     loadDepositoGrid()
   }
 
   function tampilanTDEK() {
     $('.kolom_bbt').hide()
+    // enabledKas(true);
     $('#btnReloadOtokGrid').hide()
     $('#btnReloadSumbanganGrid').hide()
-    $('[name=statusposting]').parents('.form-group').show()
+    $('[name=statusposting]').parents('.form-group').hide()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=agen_id]').parents('.form-group').hide()
     $('[name=containerheader_id]').parents('.form-group').hide()
@@ -1672,16 +1682,17 @@
     $('#detail-bgs-section').hide()
     $('#detail-bit-section').hide()
     $('#detail-tdek-section').show()
+    $('[name=pengeluarantrucking_nobukti]').parents('.form-group').hide()
     $('#detail-default-section').parents('.card').hide()
     loadDepositoKaryawanGrid()
   }
 
   function tampilanBST() {
     $('#detailList tbody').html('')
-    enabledKas(true);
+    // enabledKas(true);
     $('#btnReloadOtokGrid').hide()
     $('#btnReloadSumbanganGrid').show()
-    $('[name=statusposting]').parents('.form-group').show()
+    $('[name=statusposting]').parents('.form-group').hide()
     $('[name=tradoheader_id]').parents('.form-group').hide()
     $('[name=agen_id]').parents('.form-group').hide()
     $('[name=containerheader_id]').parents('.form-group').hide()
@@ -1724,16 +1735,17 @@
     $('.colmn-offset3').hide()
     $('.colmn-offset4').hide()
     $('.cabang').hide()
+    $('[name=pengeluarantrucking_nobukti]').parents('.form-group').hide()
     // $('.colmn-offset').hide()
     loadModalGrid()
   }
 
   function tampilanKBBM() {
     $('#detailList tbody').html('')
-    enabledKas(true);
+    // enabledKas(true);
     $('#btnReloadOtokGrid').hide()
     $('#btnReloadSumbanganGrid').hide()
-    $('[name=statusposting]').parents('.form-group').show()
+    $('[name=statusposting]').parents('.form-group').hide()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=postingpinjaman]').parents('.form-group').hide()
     $('[name=agen_id]').parents('.form-group').hide()
@@ -1775,15 +1787,16 @@
     $('.tbl_tagihklaim').hide()
     $('.colmn-offset3').hide()
     $('.colmn-offset4').hide()
+    $('[name=pengeluarantrucking_nobukti]').parents('.form-group').hide()
     $('#tbl_addRow').show()
     loadPelunasanBBMGrid()
   }
 
   function tampilanBSB() {
-    enabledKas(true);
+    // enabledKas(true);
     $('#btnReloadOtokGrid').hide()
     $('#btnReloadSumbanganGrid').hide()
-    $('[name=statusposting]').parents('.form-group').show()
+    $('[name=statusposting]').parents('.form-group').hide()
     $('[name=keterangancoa]').parents('.form-group').hide()
     $('[name=karyawanheader_id]').parents('.form-group').hide()
     $('[name=agen_id]').parents('.form-group').hide()
@@ -1828,12 +1841,13 @@
     $('.colmn-offset3').hide()
     $('.colmn-offset4').hide()
     $('.colmn-offset2').hide()
+    $('[name=pengeluarantrucking_nobukti]').parents('.form-group').hide()
     $('.cabang').hide()
     // $('.colmn-offset').hide()
   }
 
   function tampilanKLAIM() {
-    enabledKas(false);
+    // enabledKas(false);
     $('#btnReloadOtokGrid').hide()
     $('#btnReloadSumbanganGrid').hide()
     $('[name=keterangancoa]').parents('.form-group').hide()
@@ -1895,10 +1909,10 @@
   function tampilanBLL() {
     console.log('bll')
     $('#detailList tbody').html('')
-    enabledKas(true);
+    // enabledKas(true);
     $('#btnReloadOtokGrid').hide()
     $('#btnReloadSumbanganGrid').hide()
-    $('[name=statusposting]').parents('.form-group').show()
+    $('[name=statusposting]').parents('.form-group').hide()
     $('[name=tradoheader_id]').parents('.form-group').hide()
     $('[name=gandenganheader_id]').parents('.form-group').hide()
     $('[name=agen_id]').parents('.form-group').hide()
@@ -1975,10 +1989,10 @@
 
   function tampilanBLN() {
     $('#detailList tbody').html('')
-    enabledKas(true);
+    // enabledKas(true);
     $('#btnReloadOtokGrid').hide()
     $('#btnReloadSumbanganGrid').hide()
-    $('[name=statusposting]').parents('.form-group').show()
+    $('[name=statusposting]').parents('.form-group').hide()
     $('[name=tradoheader_id]').parents('.form-group').hide()
     $('[name=gandenganheader_id]').parents('.form-group').hide()
     $('[name=agen_id]').parents('.form-group').hide()
@@ -2053,10 +2067,10 @@
 
   function tampilanBTU() {
     $('#detailList tbody').html('')
-    enabledKas(true);
+    // enabledKas(true);
     $('#btnReloadOtokGrid').hide()
     $('#btnReloadSumbanganGrid').hide()
-    $('[name=statusposting]').parents('.form-group').show()
+    $('[name=statusposting]').parents('.form-group').hide()
     $('[name=tradoheader_id]').parents('.form-group').hide()
     $('[name=gandenganheader_id]').parents('.form-group').hide()
     $('[name=agen_id]').parents('.form-group').hide()
@@ -2131,10 +2145,10 @@
 
   function tampilanBPT() {
     $('#detailList tbody').html('')
-    enabledKas(true);
+    // enabledKas(true);
     $('#btnReloadOtokGrid').hide()
     $('#btnReloadSumbanganGrid').hide()
-    $('[name=statusposting]').parents('.form-group').show()
+    $('[name=statusposting]').parents('.form-group').hide()
     $('[name=tradoheader_id]').parents('.form-group').hide()
     $('[name=gandenganheader_id]').parents('.form-group').hide()
     $('[name=agen_id]').parents('.form-group').hide()
@@ -2210,10 +2224,10 @@
 
   function tampilanBGS() {
     $('#detailList tbody').html('')
-    enabledKas(true);
+    // enabledKas(true);
     $('#btnReloadOtokGrid').hide()
     $('#btnReloadSumbanganGrid').hide()
-    $('[name=statusposting]').parents('.form-group').show()
+    $('[name=statusposting]').parents('.form-group').hide()
     $('[name=tradoheader_id]').parents('.form-group').hide()
     $('[name=gandenganheader_id]').parents('.form-group').hide()
     $('[name=agen_id]').parents('.form-group').hide()
@@ -2287,10 +2301,10 @@
 
   function tampilanBIT() {
     $('#detailList tbody').html('')
-    enabledKas(true);
+    // enabledKas(true);
     $('#btnReloadOtokGrid').hide()
     $('#btnReloadSumbanganGrid').hide()
-    $('[name=statusposting]').parents('.form-group').show()
+    $('[name=statusposting]').parents('.form-group').hide()
     $('[name=tradoheader_id]').parents('.form-group').hide()
     $('[name=gandenganheader_id]').parents('.form-group').hide()
     $('[name=agen_id]').parents('.form-group').hide()
@@ -2365,10 +2379,10 @@
 
   function tampilanOTOK() {
     $('#detailList tbody').html('')
-    enabledKas(true);
+    // enabledKas(true);
     $('#btnReloadOtokGrid').show()
     $('#btnReloadSumbanganGrid').hide()
-    $('[name=statusposting]').parents('.form-group').show()
+    $('[name=statusposting]').parents('.form-group').hide()
     $('[name=tradoheader_id]').parents('.form-group').hide()
     $('[name=agen_id]').parents('.form-group').show()
     $('[name=containerheader_id]').parents('.form-group').show()
@@ -2420,10 +2434,10 @@
 
   function tampilanOTOL() {
     $('#detailList tbody').html('')
-    enabledKas(true);
+    // enabledKas(true);
     $('#btnReloadOtokGrid').show()
     $('#btnReloadSumbanganGrid').hide()
-    $('[name=statusposting]').parents('.form-group').show()
+    $('[name=statusposting]').parents('.form-group').hide()
     $('[name=agen_id]').parents('.form-group').show()
     $('[name=containerheader_id]').parents('.form-group').show()
     $('[name=tradoheader_id]').parents('.form-group').hide()
@@ -2478,6 +2492,7 @@
     $('#btnReloadOtokGrid').hide()
     $('#btnReloadSumbanganGrid').hide()
     $('[name=keterangancoa]').parents('.form-group').show()
+    $('[name=statusposting]').parents('.form-group').hide()
     $('.tbl_stok_id').hide()
     $('.tbl_qty').hide()
     $('[name=tradoheader_id]').parents('.form-group').hide()
@@ -2562,10 +2577,21 @@
     let statusposting_id = $('#crudForm').find('[name=statusposting]').val()
     // console.log(enabled,parameterPosting , statusposting_id);
     // if (statusposting_id) {
-    //   console.log(enabled);
-    if (enabled) {
-      $('.posting-border').show()
-      setDefaultBank()
+    if (KodePengeluaranId != 'KLAIM') {
+      if (KodePengeluaranId == 'PJT') {
+        if (enabled) {
+          $('.posting-border').show()
+          setDefaultBank()
+        } else {
+          $('.posting-border').hide()
+          $('#crudForm [name=bank_id]').first().val('')
+          $('#crudForm [name=bank]').first().val('')
+          $('#crudForm [name=bank]').first().data('currentValue', '')
+        }
+      } else {
+        $('.posting-border').show()
+        // setDefaultBank()
+      }
     } else {
       $('.posting-border').hide()
       $('#crudForm [name=bank_id]').first().val('')
@@ -2813,6 +2839,15 @@
             $('#crudModal').modal('show')
             // $('#crudForm [name=tglbukti]').attr('readonly', true)
             $('#crudForm [name=statusposting]').attr('disabled', true)
+            if ($('#crudForm [name=statusposting]').val() == '84') {
+
+              $('.posting-border').hide()
+              $('#crudForm [name=bank_id]').first().val('')
+              $('#crudForm [name=bank]').first().val('')
+              $('#crudForm [name=bank]').first().data('currentValue', '')
+
+            }
+
             if (isEditTgl == 'TIDAK') {
               form.find(`[name="tglbukti"]`).prop('readonly', true)
               form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
