@@ -98,6 +98,12 @@
             align: 'right',
           },
           {
+            label: 'JARAK FULL/EMPTY',
+            name: 'jarakfullempty',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
+            align: 'right',
+          },
+          {
             label: 'ZONA',
             name: 'zona_id',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
