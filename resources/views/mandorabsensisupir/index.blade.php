@@ -713,7 +713,11 @@
         response.data.jam = waktuAkhir
 
         let msg = `YAKIN HAPUS ABSENSI `
-        showConfirm(msg, response.data.trado)
+        let supirtrado = `${response.data.trado}`
+        if (response.data.supir){
+          supirtrado +=` - ${response.data.supir}`
+        }
+        showConfirm(msg, supirtrado)
         .then(function() {
           $.ajax({
             url: `${apiUrl}mandorabsensisupir/${response.data.id}/delete`,
