@@ -7,7 +7,7 @@
       <option value="">-- semua --</option>
       @foreach ($comboKodepenerimaan as $kodepenerimaan)
       {{-- @if ($kodepenerimaan['id'] === "1") selected @endif --}}
-      <option @if ($kodepenerimaan['kodepenerimaan']=="SPB" ) selected @endif value="{{$kodepenerimaan['id']}}"> {{$kodepenerimaan['keterangan']}} </option>
+      <option value="{{$kodepenerimaan['id']}}"> {{$kodepenerimaan['keterangan']}} </option>
       {{-- <option @if ($kodepenerimaan['statusdefault_text'] ==="YA") selected @endif value="{{$kodepenerimaan['id']}}"> {{$kodepenerimaan['namakodepenerimaan']}} </option> --}}
       @endforeach
       
@@ -112,6 +112,7 @@
   }
 
   $(document).ready(function() {
+    $("#kodepenerimaanheader").val($("#kodepenerimaanheader option:eq(1)").val()).trigger('change');
     penerimaanStok($('#crudForm'))
     $("#tabs").tabs()
 

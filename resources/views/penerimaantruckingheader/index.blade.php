@@ -6,7 +6,7 @@
     <select name="penerimaanheader_id" id="penerimaanheader_id" class="form-select select2" style="width: 100%;">
       <option value="">-- PILIH penerimaan trucking --</option>
       @foreach ($comboKodepenerimaan as $kodepenerimaan)
-      <option @if ($kodepenerimaan['id']=="1" ) selected @endif value="{{$kodepenerimaan['id']}}"> {{$kodepenerimaan['keterangan']}} </option>
+      <option value="{{$kodepenerimaan['id']}}"> {{$kodepenerimaan['keterangan']}} </option>
       {{-- <option @if ($kodepenerimaan['statusdefault_text'] ==="YA") selected @endif value="{{$kodepenerimaan['id']}}"> {{$kodepenerimaan['namakodepenerimaan']}} </option> --}}
       {{-- @if ($kodepenerimaan['id'] == "1") selected @endif  --}}
       @endforeach
@@ -106,6 +106,7 @@
     }
   }
   $(document).ready(function() {
+    $("#penerimaanheader_id").val($("#penerimaanheader_id option:eq(1)").val()).trigger('change');
     $("#tabs").tabs()
     penerimaanTrucking($('#crudForm'))
 

@@ -7,7 +7,7 @@
       <option value="">-- semua --</option>
       @foreach ($comboKodepengeluaran as $kodepengeluaran)
       {{-- @if ($kodepengeluaran['id'] === "1") selected @endif --}}
-      <option @if ($kodepengeluaran['kodepengeluaran']=="SPK" ) selected @endif value="{{$kodepengeluaran['id']}}"> {{$kodepengeluaran['keterangan']}} </option>
+      <option value="{{$kodepengeluaran['id']}}"> {{$kodepengeluaran['keterangan']}} </option>
       {{-- <option @if ($kodepengeluaran['statusdefault_text'] ==="YA") selected @endif value="{{$kodepengeluaran['id']}}"> {{$kodepengeluaran['namakodepengeluaran']}} </option> --}}
       @endforeach
     </select>
@@ -116,6 +116,7 @@
     }
   }
   $(document).ready(function() {
+    $("#kodepengeluaranheader").val($("#kodepengeluaranheader option:eq(1)").val()).trigger('change');
     $("#tabs").tabs()
 
     initSelect2($(`#kodepengeluaranheader`), false);
