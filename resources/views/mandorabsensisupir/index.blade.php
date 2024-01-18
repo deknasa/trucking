@@ -70,6 +70,7 @@
   let autoNumericElements = []
   let dataAbsensi = {}
   let rowNum = 0
+  let firstTime = true
   let isTradoMilikSupir = ''
   $(document).ready(function() {
     setTradoMilikSupir()
@@ -190,7 +191,34 @@
           //   return rowData.supir_id
           // }
         },
-        {
+        // {
+        //   label: 'sudah absen',
+        //   name: 'sudah_absen',
+        //   width: '50px',
+        //   search: false,
+        //   sortable:false,
+        //   hidden: false,
+        //   formatter: (value, options, rowData) => {
+        //     if (!rowData.memo) {
+        //       return ''
+        //     }
+        //     let statusAbsensi = JSON.parse(rowData.memo)
+        //     let formattedValue = $(`
+        //     <div class="badge" style="background-color: ${statusAbsensi.WARNA}; color: ${statusAbsensi.WARNATULISAN};">
+        //       <span>${statusAbsensi.SINGKATAN}</span>
+        //     </div>
+        //     `)
+        //     return formattedValue[0].outerHTML
+        //   },
+        //   cellattr: (rowId, value, rowData) => {
+        //     if (!rowData.memo) {
+        //       return ''
+        //     }
+        //     let statusAbsensi = JSON.parse(rowData.memo)
+        //     return ` title="${statusAbsensi.MEMO}"`
+        //   }
+        // },
+        {  
           label: 'Trado',
           name: 'kodetrado',
           width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
@@ -482,6 +510,13 @@
           } else {
             $("#jqGrid").jqGrid('setColProp', 'namasupir', { editable: true });
           }
+          if (firstTime) {
+            $.each(data.data, (index, absensi) => {
+              console.log(absensi.id);
+              pushToObject(absensi.id, null, null)
+            })
+            firstTime = false
+          }
         }
         loadStaticData();
       },
@@ -578,7 +613,6 @@
         tglbukti : $("#jqGrid").jqGrid('getCell', id, 'tglbukti'),
       }
       isEditing()
-      console.log(dataAbsensi);
     }
     
     
