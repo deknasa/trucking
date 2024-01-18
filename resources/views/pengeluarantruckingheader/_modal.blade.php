@@ -44,7 +44,7 @@
 
             <div class="row form-group">
               <div class="col-12 col-sm-2 col-md-2">
-                <label class="col-form-label">
+                <label class="col-form-label tgldari">
                   TGL DARI <span class="text-danger">*</span>
                 </label>
               </div>
@@ -55,7 +55,7 @@
               </div>
 
               <div class="col-12 col-sm-2 col-md-2">
-                <label class="col-form-label">
+                <label class="col-form-label tglsampai">
                   TGL SAMPAI <span class="text-danger">*</span>
                 </label>
               </div>
@@ -293,6 +293,9 @@
             </div>
             <div id="detail-bit-section">
               <table id="tableBIT"></table>
+            </div>
+            <div id="detail-bsm-section">
+              <table id="tableBSM"></table>
             </div>
             <div id="detail-otok-section">
               <table id="tableOTOK"></table>
@@ -916,7 +919,7 @@
             value: dataPelunasanBBM.id
           })
         })
-      } else if (KodePengeluaranId == "BLL" || KodePengeluaranId == "BLN" || KodePengeluaranId == "BTU" || KodePengeluaranId == "BPT" || KodePengeluaranId == "BGS" || KodePengeluaranId == "BIT") {
+      } else if (KodePengeluaranId == "BLL" || KodePengeluaranId == "BLN" || KodePengeluaranId == "BTU" || KodePengeluaranId == "BPT" || KodePengeluaranId == "BGS" || KodePengeluaranId == "BIT" || KodePengeluaranId == "BSM") {
         data = []
 
         data.push({
@@ -940,10 +943,6 @@
           value: form.find(`[name="pengeluarantrucking"]`).val()
         })
         data.push({
-          name: 'periode',
-          value: form.find(`[name="periode"]`).val()
-        })
-        data.push({
           name: 'statusposting',
           value: form.find(`[name="statusposting"]`).val()
         })
@@ -955,6 +954,24 @@
           name: 'bank',
           value: form.find(`[name="bank"]`).val()
         })
+        if (KodePengeluaranId == "BSM") {
+
+          data.push({
+            name: 'tgldari',
+            value: form.find(`[name="tgldari"]`).val()
+          })
+          data.push({
+            name: 'tglsampai',
+            value: form.find(`[name="tglsampai"]`).val()
+          })
+
+        } else {
+
+          data.push({
+            name: 'periode',
+            value: form.find(`[name="periode"]`).val()
+          })
+        }
         let selectedRowsBLL = $(`#table${KodePengeluaranId}`).getGridParam("selectedRowIds");
         $.each(selectedRowsBLL, function(index, value) {
           dataBLL = $(`#table${KodePengeluaranId}`).jqGrid("getLocalRow", value);
@@ -1439,6 +1456,9 @@
       case 'OTOL': //listKodePengeluaran[17]:
         tampilanOTOL()
         break;
+      case 'BSM': //listKodePengeluaran[17]:
+        tampilanBSM()
+        break;
       default:
         tampilanall()
         break;
@@ -1471,6 +1491,9 @@
     $('#detail-bit-section').hide()
     $('#detail-tde-section').hide()
     $('#detail-tdek-section').hide()
+    $('#detail-bsm-section').hide()
+    $('#detail-otok-section').hide()
+    $('#detail-otol-section').hide()
     $('#detail-default-section').parents('.card').show()
     $('.tbl_pengeluaranstokheader_nobukti').hide()
     $('.tbl_penerimaantruckingheader').hide()
@@ -1520,6 +1543,9 @@
     $('#detail-bgs-section').hide()
     $('#detail-bit-section').hide()
     $('#detail-tdek-section').hide()
+    $('#detail-bsm-section').hide()
+    $('#detail-otok-section').hide()
+    $('#detail-otol-section').hide()
     $('#detail-default-section').parents('.card').show()
     $('.tbl_pengeluaranstokheader_nobukti').hide()
     $('.tbl_penerimaantruckingheader').hide()
@@ -1573,6 +1599,9 @@
     $('#detail-bit-section').hide()
     $('#detail-tde-section').hide()
     $('#detail-tdek-section').hide()
+    $('#detail-bsm-section').hide()
+    $('#detail-otok-section').hide()
+    $('#detail-otol-section').hide()
     $('#detail-default-section').parents('.card').show()
     $('.tbl_pengeluaranstokheader_nobukti').hide()
 
@@ -1637,6 +1666,9 @@
     $('#detail-bgs-section').hide()
     $('#detail-bit-section').hide()
     $('#detail-tdek-section').hide()
+    $('#detail-bsm-section').hide()
+    $('#detail-otok-section').hide()
+    $('#detail-otol-section').hide()
     $('#detail-default-section').parents('.card').hide()
     $('[name=pengeluarantrucking_nobukti]').parents('.form-group').hide()
     loadDepositoGrid()
@@ -1681,6 +1713,9 @@
     $('#detail-bpt-section').hide()
     $('#detail-bgs-section').hide()
     $('#detail-bit-section').hide()
+    $('#detail-bsm-section').hide()
+    $('#detail-otok-section').hide()
+    $('#detail-otol-section').hide()
     $('#detail-tdek-section').show()
     $('[name=pengeluarantrucking_nobukti]').parents('.form-group').hide()
     $('#detail-default-section').parents('.card').hide()
@@ -1703,6 +1738,8 @@
     $('[name=supirheader_id]').parents('.form-group').hide()
     $('[name=jenisorderan_id]').parents('.form-group').hide()
     $('[name=tgldari]').parents('.form-group').show()
+    $(".tgldari").text("TGL DARI ");
+    $(".tglsampai").text("TGL SAMPAI ");
     $('[name=tgldari]').prop('disabled', false)
     $('[name=tglsampai]').prop('disabled', false)
     $('[name=periode]').parents('.form-group').hide()
@@ -1715,6 +1752,9 @@
     $('#detail-bgs-section').hide()
     $('#detail-bit-section').hide()
     $('#detail-tdek-section').hide()
+    $('#detail-bsm-section').hide()
+    $('#detail-otok-section').hide()
+    $('#detail-otol-section').hide()
     $('#detail-default-section').parents('.card').hide()
     $('#detail-tde-section').hide()
     $('.tbl_checkbox').hide()
@@ -1756,6 +1796,8 @@
     $('[name=supirheader_id]').parents('.form-group').hide()
     $('[name=jenisorderan_id]').parents('.form-group').hide()
     $('[name=tgldari]').parents('.form-group').show()
+    $(".tgldari").text("TGL DARI ");
+    $(".tglsampai").text("TGL SAMPAI ");
     $('[name=tgldari]').prop('disabled', false)
     $('[name=tglsampai]').prop('disabled', false)
     $('[name=periode]').parents('.form-group').hide()
@@ -1768,6 +1810,9 @@
     $('#detail-bgs-section').hide()
     $('#detail-bit-section').hide()
     $('#detail-tdek-section').hide()
+    $('#detail-bsm-section').hide()
+    $('#detail-otok-section').hide()
+    $('#detail-otol-section').hide()
     $('#detail-default-section').parents('.card').hide()
     $('#detail-tde-section').hide()
     $('#detail-kbbm-section').show()
@@ -1821,6 +1866,9 @@
     $('#detail-tde-section').hide()
     $('#detail-kbbm-section').hide()
     $('#detail-tdek-section').hide()
+    $('#detail-bsm-section').hide()
+    $('#detail-otok-section').hide()
+    $('#detail-otol-section').hide()
     $('#detail-default-section').parents('.card').show()
     $('.tbl_checkbox').hide()
     $('.tbl_karyawan_id').hide()
@@ -1875,6 +1923,9 @@
     $('#detail-bgs-section').hide()
     $('#detail-bit-section').hide()
     $('#detail-tdek-section').hide()
+    $('#detail-bsm-section').hide()
+    $('#detail-otok-section').hide()
+    $('#detail-otol-section').hide()
     $('#detail-default-section').parents('.card').show()
     $('.tbl_checkbox').hide()
     $('.tbl_penerimaantruckingheader').hide()
@@ -1936,6 +1987,9 @@
     $('#detail-bit-section').hide()
     $('#detail-bst-section').hide()
     $('#detail-tdek-section').hide()
+    $('#detail-bsm-section').hide()
+    $('#detail-otok-section').hide()
+    $('#detail-otol-section').hide()
     $('#detail-default-section').parents('.card').hide()
     $('#detail-tde-section').hide()
     $('.tbl_checkbox').hide()
@@ -2016,6 +2070,9 @@
     $('#detail-bit-section').hide()
     $('#detail-bst-section').hide()
     $('#detail-tdek-section').hide()
+    $('#detail-bsm-section').hide()
+    $('#detail-otok-section').hide()
+    $('#detail-otol-section').hide()
     $('#detail-default-section').parents('.card').hide()
     $('#detail-tde-section').hide()
     $('.tbl_checkbox').hide()
@@ -2094,6 +2151,9 @@
     $('#detail-bit-section').hide()
     $('#detail-bst-section').hide()
     $('#detail-tdek-section').hide()
+    $('#detail-bsm-section').hide()
+    $('#detail-otok-section').hide()
+    $('#detail-otol-section').hide()
     $('#detail-default-section').parents('.card').hide()
     $('#detail-tde-section').hide()
     $('.tbl_checkbox').hide()
@@ -2172,6 +2232,9 @@
     $('#detail-bit-section').hide()
     $('#detail-bst-section').hide()
     $('#detail-tdek-section').hide()
+    $('#detail-bsm-section').hide()
+    $('#detail-otok-section').hide()
+    $('#detail-otol-section').hide()
     $('#detail-default-section').parents('.card').hide()
     $('#detail-tde-section').hide()
     $('.tbl_checkbox').hide()
@@ -2251,6 +2314,9 @@
     $('#detail-bit-section').hide()
     $('#detail-bst-section').hide()
     $('#detail-tdek-section').hide()
+    $('#detail-bsm-section').hide()
+    $('#detail-otok-section').hide()
+    $('#detail-otol-section').hide()
     $('#detail-default-section').parents('.card').hide()
     $('#detail-tde-section').hide()
     $('.tbl_checkbox').hide()
@@ -2328,6 +2394,9 @@
     $('#detail-bit-section').show()
     $('#detail-bst-section').hide()
     $('#detail-tdek-section').hide()
+    $('#detail-bsm-section').hide()
+    $('#detail-otok-section').hide()
+    $('#detail-otol-section').hide()
     $('#detail-default-section').parents('.card').hide()
     $('#detail-tde-section').hide()
     $('.tbl_checkbox').hide()
@@ -2394,6 +2463,8 @@
     $('[name=jenisorderan_id]').parents('.form-group').hide()
     $('[name=pengeluarantrucking_nobukti]').parents('.form-group').hide()
     $('[name=tgldari]').parents('.form-group').show()
+    $(".tgldari").text("PERIODE DARI ");
+    $(".tglsampai").text("PERIODE SAMPAI ");
     $('[name=tgldari]').prop('disabled', false)
     $('[name=tglsampai]').prop('disabled', false)
     $('[name=periode]').parents('.form-group').hide()
@@ -2408,6 +2479,7 @@
     $('#detail-tdek-section').hide()
     $('#detail-otok-section').show()
     $('#detail-otol-section').hide()
+    $('#detail-bsm-section').hide()
     $('#detail-default-section').parents('.card').hide()
     $('#detail-tde-section').hide()
     $('.tbl_checkbox').hide()
@@ -2449,6 +2521,9 @@
     $('[name=pengeluarantrucking_nobukti]').parents('.form-group').hide()
     $('[name=jenisorderan_id]').parents('.form-group').hide()
     $('[name=tgldari]').parents('.form-group').show()
+
+    $(".tgldari").text("PERIODE DARI ");
+    $(".tglsampai").text("PERIODE SAMPAI ");
     $('[name=tgldari]').prop('disabled', false)
     $('[name=tglsampai]').prop('disabled', false)
     $('[name=periode]').parents('.form-group').hide()
@@ -2463,6 +2538,7 @@
     $('#detail-tdek-section').hide()
     $('#detail-otok-section').hide()
     $('#detail-otol-section').show()
+    $('#detail-bsm-section').hide()
     $('#detail-default-section').parents('.card').hide()
     $('#detail-tde-section').hide()
     $('.tbl_checkbox').hide()
@@ -2485,6 +2561,90 @@
     $('.cabang').hide()
     // $('.colmn-offset').hide()
     loadOTOLGrid()
+  }
+
+
+  function tampilanBSM() {
+    $('#detailList tbody').html('')
+    // enabledKas(true);
+    $('#btnReloadOtokGrid').hide()
+    $('#btnReloadSumbanganGrid').hide()
+    $('[name=statusposting]').parents('.form-group').hide()
+    $('[name=tradoheader_id]').parents('.form-group').hide()
+    $('[name=gandenganheader_id]').parents('.form-group').hide()
+    $('[name=agen_id]').parents('.form-group').hide()
+    $('[name=containerheader_id]').parents('.form-group').hide()
+    $('[name=pengeluarantrucking_nobukti]').parents('.form-group').hide()
+    $('[name=karyawanheader_id]').parents('.form-group').hide()
+    $('[name=postingpinjaman]').parents('.form-group').hide()
+    $('[name=keterangancoa]').parents('.form-group').hide()
+    $('[name=supirheader_id]').parents('.form-group').hide()
+    $('[name=jenisorderan_id]').parents('.form-group').hide()
+    $('[name=tgldari]').parents('.form-group').show()
+    $(".tgldari").text("PERIODE DARI ");
+    $(".tglsampai").text("PERIODE SAMPAI ");
+    $('[name=tgldari]').prop('disabled', false)
+    $('[name=tglsampai]').prop('disabled', false)
+    $('[name=periode]').parents('.form-group').hide()
+    $('[name=periode]').prop('disabled', true)
+    $('#detail-bll-section').hide()
+    $('#detail-bln-section').hide()
+    $('#detail-btu-section').hide()
+    $('#detail-bpt-section').hide()
+    $('#detail-bgs-section').hide()
+    $('#detail-bit-section').hide()
+    $('#detail-bst-section').hide()
+    $('#detail-tdek-section').hide()
+    $('#detail-bsm-section').show()
+    $('#detail-otok-section').hide()
+    $('#detail-otol-section').hide()
+    $('#detail-default-section').parents('.card').hide()
+    $('#detail-tde-section').hide()
+    $('.tbl_checkbox').hide()
+    $('.tbl_karyawan_id').hide()
+    $('.tbl_penerimaantruckingheader').hide()
+    $('.tbl_pengeluaranstokheader_nobukti').hide()
+    $('.tbl_stok_id').hide()
+    $('.tbl_qty').hide()
+    $('.nominal').prop('readonly', false)
+    $('.tbl_harga').hide()
+    $('.tbl_supir_id').show()
+    $('.tbl_aksi').show()
+    $('.colspan').attr('colspan', 2);
+    $('#tbl_addRow').hide()
+    $('.kolom_bbt').hide()
+    $('.tbl_tagihklaim').hide()
+    $('.colmn-offset3').hide()
+    $('.colmn-offset4').hide()
+    $('.cabang').hide()
+    // $('.colmn-offset').hide()
+    $('#crudForm').find('[name=periode]').val($.datepicker.formatDate('mm-yy', new Date())).trigger('change');
+    loadBSMGrid()
+    if ($('#crudForm').data('action') == 'add') {
+
+      getDataBiayaLapangan().then((response) => {
+        let selectedIdBsm = []
+
+        $.each(response.data, (index, value) => {
+          selectedIdBsm.push(value.id)
+        })
+        $('#tableBSM').jqGrid("clearGridData");
+        setTimeout(() => {
+
+          $("#tableBSM")
+            .jqGrid("setGridParam", {
+              datatype: "local",
+              data: response.data,
+              originalData: response.data,
+              rowNum: response.data.length,
+              selectedRowIds: selectedIdBsm
+            })
+            .trigger("reloadGrid");
+        }, 100);
+        initAutoNumeric($('.footrow').find(`td[aria-describedby="tableBSM_nominal"]`).text(0))
+
+      });
+    }
   }
 
   function tampilanall() {
@@ -2849,10 +3009,9 @@
             }
 
             if (KodePengeluaranId === "KLAIM") {
-              if(form.find(`[name="trado"]`).val() != '')
-              {
+              if (form.find(`[name="trado"]`).val() != '') {
                 lookupSelected(`trado`)
-              }else{
+              } else {
                 lookupSelected(`gandengan`)
               }
             }
@@ -2921,12 +3080,11 @@
 
             }
 
-            
+
             if (KodePengeluaranId === "KLAIM") {
-              if(form.find(`[name="trado"]`).val() != '')
-              {
+              if (form.find(`[name="trado"]`).val() != '') {
                 lookupSelected(`trado`)
-              }else{
+              } else {
                 lookupSelected(`gandengan`)
               }
             }
@@ -3016,10 +3174,9 @@
 
             }
             if (KodePengeluaranId === "KLAIM") {
-              if(form.find(`[name="trado"]`).val() != '')
-              {
+              if (form.find(`[name="trado"]`).val() != '') {
                 lookupSelected(`trado`)
-              }else{
+              } else {
                 lookupSelected(`gandengan`)
               }
             }
@@ -4763,7 +4920,9 @@
 
               $.each(response.data, (index, value) => {
                 selectedIdBll.push(value.id)
-                totalBiaya += parseFloat(value.nominal)
+                if(value.nominal != null && value.nominal != '' && value.nominal != 'null'){
+                  totalBiaya += parseFloat(value.nominal)
+                }
               })
               $('#tableBLL').jqGrid("clearGridData");
               setTimeout(() => {
@@ -4792,7 +4951,9 @@
 
               $.each(response.data, (index, value) => {
                 selectedIdBln.push(value.id)
-                totalBiaya += parseFloat(value.nominal)
+                if(value.nominal != null && value.nominal != '' && value.nominal != 'null'){
+                  totalBiaya += parseFloat(value.nominal)
+                }
               })
               $('#tableBLN').jqGrid("clearGridData");
               setTimeout(() => {
@@ -4821,7 +4982,9 @@
 
               $.each(response.data, (index, value) => {
                 selectedIdBtu.push(value.id)
-                totalBiaya += parseFloat(value.nominal)
+                if(value.nominal != null && value.nominal != '' && value.nominal != 'null'){
+                  totalBiaya += parseFloat(value.nominal)
+                }
               })
               $('#tableBTU').jqGrid("clearGridData");
               setTimeout(() => {
@@ -4850,7 +5013,9 @@
 
               $.each(response.data, (index, value) => {
                 selectedIdBpt.push(value.id)
-                totalBiaya += parseFloat(value.nominal)
+                if(value.nominal != null && value.nominal != '' && value.nominal != 'null'){
+                  totalBiaya += parseFloat(value.nominal)
+                }
               })
               $('#tableBPT').jqGrid("clearGridData");
               setTimeout(() => {
@@ -4879,7 +5044,9 @@
 
               $.each(response.data, (index, value) => {
                 selectedIdBgs.push(value.id)
-                totalBiaya += parseFloat(value.nominal)
+                if(value.nominal != null && value.nominal != '' && value.nominal != 'null'){
+                  totalBiaya += parseFloat(value.nominal)
+                }
               })
               $('#tableBGS').jqGrid("clearGridData");
               setTimeout(() => {
@@ -4908,7 +5075,9 @@
 
               $.each(response.data, (index, value) => {
                 selectedIdBit.push(value.id)
-                totalBiaya += parseFloat(value.nominal)
+                if(value.nominal != null && value.nominal != '' && value.nominal != 'null'){
+                  totalBiaya += parseFloat(value.nominal)
+                }
               })
               $('#tableBIT').jqGrid("clearGridData");
               setTimeout(() => {
@@ -4925,6 +5094,37 @@
                 initAutoNumeric($('#tableBIT tbody tr').find(`td[aria-describedby="tableBIT_nominal"]`))
               }, 100);
               initAutoNumeric($('.footrow').find(`td[aria-describedby="tableBIT_nominal"]`).text(totalBiaya))
+
+            });
+
+          } else if (kodepengeluaran === "BSM") {
+
+            getDataBiayaLapangan().then((response) => {
+
+              let selectedIdBsm = []
+              let totalBiaya = 0
+
+              $.each(response.data, (index, value) => {
+                selectedIdBsm.push(value.id)
+                if(value.nominal != null && value.nominal != '' && value.nominal != 'null'){
+                  totalBiaya += parseFloat(value.nominal)
+                }
+              })
+              $('#tableBSM').jqGrid("clearGridData");
+              setTimeout(() => {
+
+                $("#tableBSM")
+                  .jqGrid("setGridParam", {
+                    datatype: "local",
+                    data: response.data,
+                    originalData: response.data,
+                    rowNum: response.data.length,
+                    selectedRowIds: selectedIdBsm
+                  })
+                  .trigger("reloadGrid");
+                initAutoNumeric($('#tableBSM tbody tr').find(`td[aria-describedby="tableBSM_nominal"]`))
+              }, 100);
+              initAutoNumeric($('.footrow').find(`td[aria-describedby="tableBSM_nominal"]`).text(totalBiaya))
 
             });
 
@@ -7074,6 +7274,160 @@
     /* Append global search */
     // loadGlobalSearch($('#tableDeposito'))
   }
+
+  // TABLE BSM
+  function loadBSMGrid() {
+    $("#tableBSM")
+      .jqGrid({
+        datatype: 'local',
+        styleUI: 'Bootstrap4',
+        iconSet: 'fontAwesome',
+        colModel: [{
+            label: "id",
+            name: "id",
+            hidden: true,
+            search: false,
+          },
+          {
+            label: "SUPIR",
+            name: "supirbiaya",
+            sortable: true,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
+          },
+          {
+            label: "NOMINAL",
+            name: "nominal",
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            align: "right",
+            editable: true,
+            editoptions: {
+              dataInit: function(element, id) {
+                initAutoNumeric($('#crudForm').find(`[id="${id.id}"]`))
+              },
+              dataEvents: [{
+                type: "keyup",
+                fn: function(event, rowObject) {
+                  let originalGridData = $("#tableBSM")
+                    .jqGrid("getGridParam", "originalData")
+                    .find((row) => row.id == rowObject.rowId);
+
+                  let localRow = $("#tableBSM").jqGrid(
+                    "getLocalRow",
+                    rowObject.rowId
+                  );
+                  let totalSisa
+                  localRow.nominal = event.target.value;
+
+                  let nominal = AutoNumeric.getNumber($('#crudForm').find(`[id="${rowObject.id}"]`)[0])
+
+                  if (nominal < 0) {
+                    showDialog('NOMINAL tidak boleh minus')
+                    $("#tableBSM").jqGrid(
+                      "setCell",
+                      rowObject.rowId,
+                      "nominal",
+                      0
+                    );
+                    nominal = AutoNumeric.getNumber($('#crudForm').find(`[id="${rowObject.id}"]`)[0])
+                  }
+                  nominalDetails = $(`#tableBSM tr:not(#${rowObject.rowId})`).find(`td[aria-describedby="tableBSM_nominal"]`)
+                  ttlBayar = 0
+                  $.each(nominalDetails, (index, nominalDetail) => {
+                    ttlBayarDetail = parseFloat($(nominalDetail).attr('title').replaceAll(',', ''))
+                    ttlBayars = (isNaN(ttlBayarDetail)) ? 0 : ttlBayarDetail;
+                    ttlBayar += ttlBayars
+                  });
+                  ttlBayar += nominal
+                  initAutoNumeric($('.footrow').find(`td[aria-describedby="tableBSM_nominal"]`).text(ttlBayar))
+                },
+              }, ],
+            },
+            sortable: false,
+            sorttype: "int",
+          },
+          {
+            label: "KETERANGAN",
+            name: "keteranganbll",
+            width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1,
+            sortable: false,
+            editable: true,
+            editoptions: {
+              dataEvents: [{
+                type: "keyup",
+                fn: function(event, rowObject) {
+                  let localRow = $("#tableBSM").jqGrid(
+                    "getLocalRow",
+                    rowObject.rowId
+                  );
+                  localRow.keteranganbll = event.target.value;
+                }
+              }, ]
+            }
+          },
+        ],
+        autowidth: true,
+        shrinkToFit: false,
+        height: 400,
+        rownumbers: true,
+        rownumWidth: 45,
+        footerrow: true,
+        userDataOnFooter: true,
+        toolbar: [true, "top"],
+        pgbuttons: false,
+        pginput: false,
+        cellEdit: true,
+        cellsubmit: "clientArray",
+        editableColumns: ["nominal"],
+        selectedRowIds: [],
+        afterRestoreCell: function(rowId, value, indexRow, indexColumn) {
+          let originalGridData = $("#tableBSM")
+            .jqGrid("getGridParam", "originalData")
+            .find((row) => row.id == rowId);
+
+          let localRow = $("#tableBSM").jqGrid("getLocalRow", rowId);
+        },
+        validationCell: function(cellobject, errormsg, iRow, iCol) {
+          console.log(cellobject);
+          console.log(errormsg);
+          console.log(iRow);
+          console.log(iCol);
+        },
+        loadComplete: function() {
+          setHighlight($(this))
+        },
+      })
+      .jqGrid("setLabel", "rn", "No.")
+      .jqGrid("navGrid", "#tablePager", {
+        add: false,
+        edit: false,
+        del: false,
+        refresh: false,
+        search: false,
+      })
+      .jqGrid("filterToolbar", {
+        searchOnEnter: false,
+      })
+      .jqGrid("excelLikeGrid", {
+        beforeDeleteCell: function(rowId, iRow, iCol, event) {
+          let localRow = $("#tableBSM").jqGrid("getLocalRow", rowId);
+
+          $("#tableBSM").jqGrid(
+            "setCell",
+            rowId,
+            "sisa",
+            parseInt(localRow.sisa) + parseInt(localRow.nominal)
+          );
+
+          return true;
+        },
+      });
+    /* Append clear filter button */
+    loadClearFilter($('#tableBSM'))
+
+    /* Append global search */
+    // loadGlobalSearch($('#tableDeposito'))
+  }
+
 
   // TABLE OTOK
   function loadOTOKGrid() {
