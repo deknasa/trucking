@@ -234,49 +234,49 @@
           },
           width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
         },
-        {
-          label: 'JAM',
-          name: 'jam',
-          editable: true,
-          formatter: 'date',
-          editoptions: {
-            autocomplete: 'off',
-            class:'inputmask-time',
-            dataInit: function(element) {
-              Inputmask("datetime", {
-                inputFormat: "HH:MM",
-                max: 24
-              }).mask(".inputmask-time");
+        // {
+        //   label: 'JAM',
+        //   name: 'jam',
+        //   editable: true,
+        //   formatter: 'date',
+        //   editoptions: {
+        //     autocomplete: 'off',
+        //     class:'inputmask-time',
+        //     dataInit: function(element) {
+        //       Inputmask("datetime", {
+        //         inputFormat: "HH:MM",
+        //         max: 24
+        //       }).mask(".inputmask-time");
               
-            }
-          },
-          // formatter: 'date',
-          width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
-          formatoptions: {
-            srcformat: "H:i:s",
-            newformat: "H:i",
-            // userLocalTime : true
-          },
-          formatter: (value, options, rowData) => {
-            if (!value) {
-              return ''
-            }
-            // String waktu
-            let waktuString = value;
+        //     }
+        //   },
+        //   // formatter: 'date',
+        //   width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+        //   formatoptions: {
+        //     srcformat: "H:i:s",
+        //     newformat: "H:i",
+        //     // userLocalTime : true
+        //   },
+        //   formatter: (value, options, rowData) => {
+        //     if (!value) {
+        //       return ''
+        //     }
+        //     // String waktu
+        //     let waktuString = value;
             
-            // Memisahkan string menjadi bagian-bagian
-            let [jamStr, menitStr, detikStr] = waktuString.split(':');
+        //     // Memisahkan string menjadi bagian-bagian
+        //     let [jamStr, menitStr, detikStr] = waktuString.split(':');
             
-            // Parsing nilai sebagai angka
-            let jam = parseInt(jamStr, 10);
-            let menit = parseInt(menitStr, 10);
-            let detik = parseInt(detikStr, 10);
-            if (jam === 0 && menit === 0 && detik === 0) {
-              return ''
-            } 
-            return `${jamStr}:${menitStr}`
-          }
-        },
+        //     // Parsing nilai sebagai angka
+        //     let jam = parseInt(jamStr, 10);
+        //     let menit = parseInt(menitStr, 10);
+        //     let detik = parseInt(detikStr, 10);
+        //     if (jam === 0 && menit === 0 && detik === 0) {
+        //       return ''
+        //     } 
+        //     return `${jamStr}:${menitStr}`
+        //   }
+        // },
         {
           label: 'status',
           name: 'absentrado',
@@ -407,10 +407,10 @@
             pushToObject(rowid,'absentrado', value);
           })
         }
-        if (cellname === 'jam') {
-          $("#jqGrid").jqGrid('setCell', rowid, 'jam', value);
-          pushToObject(rowid,'jam', value);
-        }
+        // if (cellname === 'jam') {
+        //   $("#jqGrid").jqGrid('setCell', rowid, 'jam', value);
+        //   pushToObject(rowid,'jam', value);
+        // }
         if (cellname === 'keterangan') {
           $("#jqGrid").jqGrid('setCell', rowid, 'keterangan', value);
           pushToObject(rowid,'keterangan', value);
@@ -572,7 +572,7 @@
         absen_id : $("#jqGrid").jqGrid('getCell', id, 'absen_id'),
         kodetrado : $("#jqGrid").jqGrid('getCell', id, 'kodetrado'),
         namasupir : $("#jqGrid").jqGrid('getCell', id, 'namasupir'),
-        jam : $("#jqGrid").jqGrid('getCell', id, 'jam'),
+        // jam : $("#jqGrid").jqGrid('getCell', id, 'jam'),
         absentrado : $("#jqGrid").jqGrid('getCell', id, 'absentrado'),
         keterangan : $("#jqGrid").jqGrid('getCell', id, 'keterangan'),
         tglbukti : $("#jqGrid").jqGrid('getCell', id, 'tglbukti'),
@@ -711,16 +711,16 @@
       },
       success: response => {
 
-        let waktuAwal = response.data.jam;
-        // Membuat objek Date dari waktu awal
-        let dateObj = new Date("2000-01-01 " + waktuAwal);
-        // Mendapatkan jam dan menit
-        let jam = dateObj.getHours();
-        let menit = dateObj.getMinutes();
-        // Menggabungkan jam dan menit dalam format "hh:mm"
-        let waktuAkhir = (jam < 10 ? "0" : "") + jam + ":" + (menit < 10 ? "0" : "") + menit;
+        // let waktuAwal = response.data.jam;
+        // // Membuat objek Date dari waktu awal
+        // let dateObj = new Date("2000-01-01 " + waktuAwal);
+        // // Mendapatkan jam dan menit
+        // let jam = dateObj.getHours();
+        // let menit = dateObj.getMinutes();
+        // // Menggabungkan jam dan menit dalam format "hh:mm"
+        // let waktuAkhir = (jam < 10 ? "0" : "") + jam + ":" + (menit < 10 ? "0" : "") + menit;
 
-        response.data.jam = waktuAkhir
+        // response.data.jam = waktuAkhir
 
         let msg = `YAKIN HAPUS ABSENSI `
         let supirtrado = `${response.data.trado}`
@@ -805,7 +805,7 @@
         $("#jqGrid").jqGrid('setCell', key, 'absen_id', item.absen_id);
         $("#jqGrid").jqGrid('setCell', key, 'kodetrado', item.kodetrado);
         $("#jqGrid").jqGrid('setCell', key, 'namasupir', nama_supir);
-        $("#jqGrid").jqGrid('setCell', key, 'jam', item.jam);
+        // $("#jqGrid").jqGrid('setCell', key, 'jam', item.jam);
         $("#jqGrid").jqGrid('setCell', key, 'absentrado', item.absentrado);
         $("#jqGrid").jqGrid('setCell', key, 'keterangan', item.keterangan);
         $("#jqGrid").jqGrid('setCell', key, 'tglbukti', item.tglbukti);
@@ -819,7 +819,7 @@
     if (kodeabsensitrado) {
       $("#jqGrid").jqGrid('setCell', rowId, 'namasupir', null,'not-editable-cell');
       $("#jqGrid").jqGrid('setCell', rowId, 'supir_id', null);
-      $("#jqGrid").jqGrid('setCell', rowId, 'jam', null);
+      // $("#jqGrid").jqGrid('setCell', rowId, 'jam', null);
     }else{
       let namasupir_old = $("#jqGrid").jqGrid('getCell', rowId, 'namasupir_old')
       let supir_id_old = $("#jqGrid").jqGrid('getCell', rowId, 'supir_id_old')
