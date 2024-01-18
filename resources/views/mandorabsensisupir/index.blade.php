@@ -512,7 +512,7 @@
           }
           // if (firstTime) {
             $.each(data.data, (index, absensi) => {
-              console.log(absensi.id);
+              // console.log(absensi.id);
               pushToObject(absensi.id, null, null)
             })
             // firstTime = false
