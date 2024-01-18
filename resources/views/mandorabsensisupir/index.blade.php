@@ -510,13 +510,13 @@
           } else {
             $("#jqGrid").jqGrid('setColProp', 'namasupir', { editable: true });
           }
-          if (firstTime) {
+          // if (firstTime) {
             $.each(data.data, (index, absensi) => {
               console.log(absensi.id);
               pushToObject(absensi.id, null, null)
             })
-            firstTime = false
-          }
+            // firstTime = false
+          // }
         }
         loadStaticData();
       },
