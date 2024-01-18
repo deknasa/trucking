@@ -441,7 +441,6 @@
         // sortname = $(this).jqGrid("getGridParam", "sortname")
         // sortorder = $(this).jqGrid("getGridParam", "sortorder")
         totalRecord = $(this).getGridParam("records")
-        tradoMilikSupir = data.attributes.tradosupir;
         limit = $(this).jqGrid('getGridParam', 'postData').limit
         postData = $(this).jqGrid('getGridParam', 'postData')
         triggerClick = true
@@ -476,10 +475,13 @@
           $('#jqGrid_rowList option[value=0]').attr('selected','selected');
         }
         setHighlight($(this))
-        if (tradoMilikSupir === true) {
-          $("#jqGrid").jqGrid('setColProp', 'namasupir', { editable: false });
-        } else {
-          $("#jqGrid").jqGrid('setColProp', 'namasupir', { editable: true });
+        if (data.attributes !== undefined) {
+          tradoMilikSupir = data.attributes.tradosupir;
+          if (data.attributes.tradosupir === true) {
+            $("#jqGrid").jqGrid('setColProp', 'namasupir', { editable: false });
+          } else {
+            $("#jqGrid").jqGrid('setColProp', 'namasupir', { editable: true });
+          }
         }
         loadStaticData();
       },
