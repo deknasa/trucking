@@ -27,6 +27,29 @@
     let sortorder = 'asc'
     let autoNumericElements = []
     let rowNum = 10
+    let selectedRows = [];
+    let selectedRowsCustomer = [];
+
+
+    function checkboxHandler(element) {
+        let value = $(element).val();
+        if (element.checked) {
+            selectedRows.push($(element).val())
+            selectedRowsCustomer.push($(element).parents('tr').find(`td[aria-describedby="jqGrid_kodeagen"]`).text())
+            $(element).parents('tr').addClass('bg-light-blue')
+
+
+        } else {
+            $(element).parents('tr').removeClass('bg-light-blue')
+            for (var i = 0; i < selectedRows.length; i++) {
+                if (selectedRows[i] == value) {
+                    selectedRows.splice(i, 1);
+                    selectedRowsCustomer.splice(i, 1);
+                }
+            }
+        }
+
+    }
 
     $(document).ready(function() {
         $("#jqGrid").jqGrid({
@@ -36,6 +59,38 @@
                 iconSet: 'fontAwesome',
                 datatype: "json",
                 colModel: [{
+                        label: '',
+                        name: 'check',
+                        width: 30,
+                        align: 'center',
+                        sortable: false,
+                        clear: false,
+                        stype: 'input',
+                        searchable: false,
+                        searchoptions: {
+                            type: 'checkbox',
+                            clearSearch: false,
+                            dataInit: function(element) {
+                                $(element).removeClass('form-control')
+                                $(element).parent().addClass('text-center')
+
+                                $(element).on('click', function() {
+
+                                    $(element).attr('disabled', true)
+                                    if ($(this).is(':checked')) {
+                                        selectAllRows()
+                                    } else {
+                                        clearSelectedRows()
+                                    }
+                                })
+
+                            }
+                        },
+                        formatter: (value, rowOptions, rowData) => {
+                            return `<input type="checkbox" name="Id[]" value="${rowData.id}" onchange="checkboxHandler(this)">`
+                        },
+                    },
+                    {
                         label: 'ID',
                         name: 'id',
                         width: '50px',
@@ -438,19 +493,35 @@
                             $('#rangeModal').modal('show')
                         }
                     },
-                    {
-                        id: 'approval',
-                        innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-                        class: 'btn btn-purple btn-sm mr-1',
-                        onClick: () => {
-                            let id = $('#jqGrid').jqGrid('getGridParam', 'selrow')
 
-                            $('#processingLoader').removeClass('d-none')
+                ],
+                extndBtn: [{
+                    id: 'approve',
+                    title: 'Approve',
+                    caption: 'Approve',
+                    innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+                    class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
+                    dropmenuHTML: [{
+                            id: 'approveun',
+                            text: "UN/APPROVAL Data",
+                            onClick: () => {
 
-                            handleApproval(id)
-                        }
-                    },
-                ]
+                                approve()
+
+                            }
+                        },
+                        {
+                            id: 'approvalnonaktif',
+                            text: "Approval Non Aktif",
+                            onClick: () => {
+
+                                approvenonaktif()
+
+                            }
+                        },
+
+                    ],
+                }]
             })
 
         /* Append clear filter button */

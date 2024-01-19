@@ -31,6 +31,29 @@
   let autoNumericElements = []
   let rowNum = 10
   let hasDetail = false
+  let selectedRows = [];
+  let selectedRowsTarif = [];
+
+
+  function checkboxHandler(element) {
+    let value = $(element).val();
+    if (element.checked) {
+      selectedRows.push($(element).val())
+      selectedRowsTarif.push($(element).parents('tr').find(`td[aria-describedby="jqGrid_tujuan"]`).text())
+      $(element).parents('tr').addClass('bg-light-blue')
+
+
+    } else {
+      $(element).parents('tr').removeClass('bg-light-blue')
+      for (var i = 0; i < selectedRows.length; i++) {
+        if (selectedRows[i] == value) {
+          selectedRows.splice(i, 1);
+          selectedRowsTarif.splice(i, 1);
+        }
+      }
+    }
+
+  }
 
   $(document).ready(function() {
 
@@ -42,6 +65,38 @@
         iconSet: 'fontAwesome',
         datatype: "json",
         colModel: [{
+            label: '',
+            name: 'check',
+            width: 30,
+            align: 'center',
+            sortable: false,
+            clear: false,
+            stype: 'input',
+            searchable: false,
+            searchoptions: {
+              type: 'checkbox',
+              clearSearch: false,
+              dataInit: function(element) {
+                $(element).removeClass('form-control')
+                $(element).parent().addClass('text-center')
+
+                $(element).on('click', function() {
+
+                  $(element).attr('disabled', true)
+                  if ($(this).is(':checked')) {
+                    selectAllRows()
+                  } else {
+                    clearSelectedRows()
+                  }
+                })
+
+              }
+            },
+            formatter: (value, rowOptions, rowData) => {
+              return `<input type="checkbox" name="Id[]" value="${rowData.id}" onchange="checkboxHandler(this)">`
+            },
+          },
+          {
             label: 'ID',
             name: 'id',
             width: '50px',
@@ -491,6 +546,16 @@
               // $('#importModal').data('action', 'import')
               $('#importModal').find('button:submit').html(`Import`)
               $('#importModal').modal('show')
+            }
+          },
+          {
+            id: 'approveun',
+            innerHTML: '<i class="fas fa-check""></i> APPROVAL NON AKTIF',
+            class: 'btn btn-purple btn-sm mr-1',
+            onClick: () => {
+
+              approvenonaktif()
+
             }
           },
         ]

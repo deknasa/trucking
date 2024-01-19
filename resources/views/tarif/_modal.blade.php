@@ -1474,6 +1474,53 @@
     })
   }
 
+  
+  function approvenonaktif() {
+
+event.preventDefault()
+
+let form = $('#crudForm')
+$(this).attr('disabled', '')
+$('#processingLoader').removeClass('d-none')
+
+$.ajax({
+  url: `${apiUrl}tarif/approvalnonaktif`,
+  method: 'POST',
+  dataType: 'JSON',
+  headers: {
+    Authorization: `Bearer ${accessToken}`
+  },
+  data: {
+    Id: selectedRows,
+    nama: selectedRowsTarif
+  },
+  success: response => {
+    $('#crudForm').trigger('reset')
+    $('#crudModal').modal('hide')
+
+    $('#jqGrid').jqGrid().trigger('reloadGrid');
+    selectedRows = []
+    selectedRowsTarif = []
+    $('#gs_').prop('checked', false)
+  },
+  error: error => {
+    if (error.status === 422) {
+      $('.is-invalid').removeClass('is-invalid')
+      $('.invalid-feedback').remove()
+
+      setErrorMessages(form, error.responseJSON.errors);
+    } else {
+      showDialog(error.responseJSON)
+    }
+  },
+}).always(() => {
+  $('#processingLoader').addClass('d-none')
+  $(this).removeAttr('disabled')
+})
+
+}
+
+
   function cekValidasidelete(Id, aksi) {
     $.ajax({
       url: `{{ config('app.api_url') }}tarif/${Id}/cekValidasi`,

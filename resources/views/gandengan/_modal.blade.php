@@ -2,7 +2,7 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
-        
+
         <form action="" method="post">
           <div class="modal-body">
             {{-- <div class="row form-group">
@@ -46,11 +46,11 @@
                 <input type="text" name="trado" class="form-control trado-lookup">
               </div>
             </div>
-            
+
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
-                 Container
+                  Container
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
@@ -188,9 +188,10 @@
           $('#crudModal').modal('hide')
 
           id = response.data.id
-          $('#jqGrid').jqGrid('setGridParam', { 
-            page: response.data.page})
-          .trigger('reloadGrid');
+          $('#jqGrid').jqGrid('setGridParam', {
+              page: response.data.page
+            })
+            .trigger('reloadGrid');
 
           if (response.data.grp == 'FORMAT') {
             updateFormat(response.data)
@@ -220,9 +221,9 @@
 
     activeGrid = null
 
-    form.find('#btnSubmit').prop('disabled',false)
+    form.find('#btnSubmit').prop('disabled', false)
     if (form.data('action') == "view") {
-      form.find('#btnSubmit').prop('disabled',true)
+      form.find('#btnSubmit').prop('disabled', true)
     }
 
     getMaxLength(form)
@@ -268,7 +269,7 @@
             $('.modal-loader').addClass('d-none')
           })
       })
-      initLookup()
+    initLookup()
   }
 
   function editGandengan(gandenganId) {
@@ -302,7 +303,7 @@
             $('.modal-loader').addClass('d-none')
           })
       })
-      initLookup()
+    initLookup()
   }
 
   function deleteGandengan(gandenganId) {
@@ -361,26 +362,26 @@
       ])
       .then(() => {
         showGandengan(form, gandenganId)
-        .then(gandenganId => {
-              // form.find('.aksi').hide()
-              setFormBindKeys(form)
-              initSelect2(form.find('.select2bs4'), true)
-              form.find('[name]').removeAttr('disabled')
-  
-              form.find('select').each((index, select) => {
-                let element = $(select)
-  
-                if (element.data('select2')) {
-                  element.select2('destroy')
-                }
-              })
-  
-              form.find('[name]').attr('disabled', 'disabled').css({
-                background: '#fff'
-              })
-              form.find('[name=id]').prop('disabled',false)
-              
+          .then(gandenganId => {
+            // form.find('.aksi').hide()
+            setFormBindKeys(form)
+            initSelect2(form.find('.select2bs4'), true)
+            form.find('[name]').removeAttr('disabled')
+
+            form.find('select').each((index, select) => {
+              let element = $(select)
+
+              if (element.data('select2')) {
+                element.select2('destroy')
+              }
             })
+
+            form.find('[name]').attr('disabled', 'disabled').css({
+              background: '#fff'
+            })
+            form.find('[name=id]').prop('disabled', false)
+
+          })
           .then(() => {
             $('#crudModal').modal('show')
           })
@@ -439,7 +440,7 @@
           element.data('currentValue', element.val())
           console.log(trado)
         },
-      
+
         onCancel: (element) => {
           element.val(element.data('currentValue'))
         },
@@ -467,7 +468,7 @@
           element.data('currentValue', element.val())
           console.log(container)
         },
-      
+
         onCancel: (element) => {
           element.val(element.data('currentValue'))
         },
@@ -565,7 +566,7 @@
               element.val(value)
             }
           })
-          
+
           if (form.data('action') === 'delete') {
             form.find('[name]').addClass('disabled')
             initDisabled()
@@ -578,7 +579,7 @@
       })
     })
   }
-  
+
   function showDefault(form) {
     return new Promise((resolve, reject) => {
       $.ajax({
@@ -596,8 +597,7 @@
 
             if (element.is('select')) {
               element.val(value).trigger('change')
-            } 
-            else {
+            } else {
               element.val(value)
             }
           })
@@ -609,7 +609,52 @@
       })
     })
   }
-  
+
+  function approvenonaktif() {
+
+    event.preventDefault()
+
+    let form = $('#crudForm')
+    $(this).attr('disabled', '')
+    $('#processingLoader').removeClass('d-none')
+
+    $.ajax({
+      url: `${apiUrl}gandengan/approvalnonaktif`,
+      method: 'POST',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        Id: selectedRows,
+        nama: selectedRowsGandengan
+      },
+      success: response => {
+        $('#crudForm').trigger('reset')
+        $('#crudModal').modal('hide')
+
+        $('#jqGrid').jqGrid().trigger('reloadGrid');
+        selectedRows = []
+        selectedRowsGandengan = []
+        $('#gs_').prop('checked', false)
+      },
+      error: error => {
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+
+          setErrorMessages(form, error.responseJSON.errors);
+        } else {
+          showDialog(error.responseJSON)
+        }
+      },
+    }).always(() => {
+      $('#processingLoader').addClass('d-none')
+      $(this).removeAttr('disabled')
+    })
+
+  }
+
   function cekValidasidelete(Id) {
     $.ajax({
       url: `{{ config('app.api_url') }}gandengan/${Id}/cekValidasi`,
@@ -620,15 +665,14 @@
       },
       success: response => {
         var kondisi = response.kondisi
-          if (kondisi == true) {
-            showDialog(response.message['keterangan'])
-          } else {
-              deleteGandengan(Id)
-          }
+        if (kondisi == true) {
+          showDialog(response.message['keterangan'])
+        } else {
+          deleteGandengan(Id)
+        }
 
       }
     })
   }
-
 </script>
 @endpush()
