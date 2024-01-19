@@ -47,11 +47,10 @@ $idLookup = isset($id) ? $id : null;
         label: 'NO POLISI',
         name: 'kodetrado',
       },
-      
+
     ];
   } else {
-    column = [
-      {
+    column = [{
         label: 'TRADO',
         name: 'trado'
       },
@@ -69,16 +68,16 @@ $idLookup = isset($id) ? $id : null;
       },
       {
         label: 'JAM',
-        name: 'jam', 
-        formatter:'date',
-        formatoptions:{
+        name: 'jam',
+        formatter: 'date',
+        formatoptions: {
           srcformat: "H:i:s",
           newformat: "H:i",
           // userLocalTime : true
         }
       },
-      
-      
+
+
       {
         label: 'id',
         name: 'id',
@@ -103,12 +102,20 @@ $idLookup = isset($id) ? $id : null;
       {
         label: 'UANG JALAN',
         name: 'uangjalan',
-        formatter: 'number', 
-        formatoptions:{thousandsSeparator: ",", decimalPlaces: 0},
+        formatter: 'number',
+        formatoptions: {
+          thousandsSeparator: ",",
+          decimalPlaces: 0
+        },
         align: "right",
       },
+      {
+        label: 'TRADO - SUPIR',
+        name: 'tradosupir',
+        width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
+      },
     ]
-    
+
   }
 
   selector.jqGrid({
@@ -118,17 +125,18 @@ $idLookup = isset($id) ? $id : null;
     iconSet: 'fontAwesome',
     datatype: "json",
     postData: {
-        aktif: `{!! $Aktif ?? '' !!}`,
-        trado_id: `{!! $trado_id ?? '' !!}`,
-        cabang: `{!! $cabang ?? '' !!}`,
-        absensiId: `{!! $absensiId ?? '' !!}`,
-        tgltrip: `{!! $tgltrip ?? '' !!}`,
+      aktif: `{!! $Aktif ?? '' !!}`,
+      trado_id: `{!! $trado_id ?? '' !!}`,
+      cabang: `{!! $cabang ?? '' !!}`,
+      absensiId: `{!! $absensiId ?? '' !!}`,
+      tgltrip: `{!! $tgltrip ?? '' !!}`,
 
-      },
+    },
     idPrefix: 'tradoLookup',
     colModel: column,
     height: 350,
     fixed: true,
+    rowNum: `{!! $limit ?? 15 !!}`,
     rownumbers: false,
     rownumWidth: 0,
     rowList: [10, 20, 50, 0],

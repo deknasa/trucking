@@ -31,8 +31,55 @@
   let rowNum = 10
   let tgldariheader
   let tglsampaiheader
-  let approveRequest =null
+  let approveRequest = null
+  let selectedRows = [];
   reloadGrid()
+
+  function checkboxHandler(element) {
+    let value = $(element).val();
+    if (element.checked) {
+      selectedRows.push($(element).val())
+      $(element).parents('tr').addClass('bg-light-blue')
+
+
+    } else {
+      $(element).parents('tr').removeClass('bg-light-blue')
+      for (var i = 0; i < selectedRows.length; i++) {
+        if (selectedRows[i] == value) {
+          selectedRows.splice(i, 1);
+        }
+      }
+    }
+
+  }
+
+  function clearSelectedRows() {
+    selectedRows = []
+
+    $('#jqGrid').trigger('reloadGrid')
+  }
+
+  function selectAllRows() {
+    $.ajax({
+      url: `${apiUrl}pengajuantripinap`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        limit: 0,
+        sortIndex: $('#jqGrid').jqGrid("getGridParam", "postData").sortIndex,
+        sortOrder: $('#jqGrid').jqGrid("getGridParam", "postData").sortOrder,
+        filters: $('#jqGrid').jqGrid("getGridParam", "postData").filters
+      },
+      success: (response) => {
+        selectedRows = response.data.map((supplier) => supplier.id)
+        $('#jqGrid').trigger('reloadGrid')
+      }
+    })
+  }
+
   $(document).ready(function() {
 
     $("#jqGrid").jqGrid({
@@ -42,6 +89,38 @@
         iconSet: 'fontAwesome',
         datatype: "json",
         colModel: [{
+            label: '',
+            name: '',
+            width: 30,
+            align: 'center',
+            sortable: false,
+            clear: false,
+            stype: 'input',
+            searchable: false,
+            searchoptions: {
+              type: 'checkbox',
+              clearSearch: false,
+              dataInit: function(element) {
+                $(element).removeClass('form-control')
+                $(element).parent().addClass('text-center')
+
+                $(element).on('click', function() {
+
+                  $(element).attr('disabled', true)
+                  if ($(this).is(':checked')) {
+                    selectAllRows()
+                  } else {
+                    clearSelectedRows()
+                  }
+                })
+
+              }
+            },
+            formatter: (value, rowOptions, rowData) => {
+              return `<input type="checkbox" name="Id[]" value="${rowData.id}" onchange="checkboxHandler(this)">`
+            },
+          },
+          {
             label: 'ID',
             name: 'id',
             align: 'right',
@@ -56,52 +135,29 @@
             align: 'left',
             stype: 'select',
             searchoptions: {
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['comboapproval'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['comboapproval'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+            `,
               dataInit: function(element) {
                 $(element).select2({
                   width: 'resolve',
-                  theme: "bootstrap4",
-                  ajax: {
-                    url: `${apiUrl}parameter/combo`,
-                    dataType: 'JSON',
-                    headers: {
-                      Authorization: `Bearer ${accessToken}`
-                    },
-                    data: {
-                      grp: 'STATUS APPROVAL',
-                      subgrp: 'STATUS APPROVAL'
-                    },
-                    beforeSend: () => {
-                      // clear options
-                      $(element).data('select2').$results.children().filter((index, element) => {
-                        // clear options except index 0, which
-                        // is the "searching..." label
-                        if (index > 0) {
-                          element.remove()
-                        }
-                      })
-                    },
-                    processResults: (response) => {
-                      let formattedResponse = response.data.map(row => ({
-                        id: row.text,
-                        text: row.text
-                      }));
-
-                      formattedResponse.unshift({
-                        id: '',
-                        text: 'ALL'
-                      });
-
-                      return {
-                        results: formattedResponse
-                      };
-                    },
-                  }
+                  theme: "bootstrap4"
                 });
               }
             },
             formatter: (value, options, rowData) => {
               let statusApproval = JSON.parse(value)
-              if(!statusApproval){
+              if (!statusApproval) {
                 return ''
               }
 
@@ -115,7 +171,7 @@
             },
             cellattr: (rowId, value, rowObject) => {
               let statusApproval = JSON.parse(rowObject.statusapproval)
-              if(!statusApproval){
+              if (!statusApproval) {
                 return ''
               }
 
@@ -151,7 +207,7 @@
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'left'
           },
-          
+
           {
             label: 'CREATED AT',
             name: 'created_at',
@@ -209,8 +265,8 @@
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
-          
-         
+
+
 
         },
         loadComplete: function(data) {
@@ -228,13 +284,24 @@
           setCustomBindKeys($(this))
           initResize($(this))
 
+          $.each(selectedRows, function(key, value) {
+
+            $('#jqGrid tbody tr').each(function(row, tr) {
+              if ($(this).find(`td input:checkbox`).val() == value) {
+                $(this).find(`td input:checkbox`).prop('checked', true)
+                $(this).addClass('bg-light-blue')
+              }
+            })
+
+          });
+
           /* Set global variables */
           sortname = $(this).jqGrid("getGridParam", "sortname")
           sortorder = $(this).jqGrid("getGridParam", "sortorder")
           totalRecord = $(this).getGridParam("records")
           limit = $(this).jqGrid('getGridParam', 'postData').limit
           postData = $(this).jqGrid('getGridParam', 'postData')
-          triggerClick = true  
+          triggerClick = true
 
           $('.clearsearchclass').click(function() {
             clearColumnSearch($(this))
@@ -267,6 +334,7 @@
 
           $('#left-nav').find('button').attr('disabled', false)
           permission()
+          $('#gs_').attr('disabled', false)
           setHighlight($(this))
         }
       })
@@ -286,57 +354,57 @@
       })
 
       .customPager({
-        
+
         extndBtn: [
-        //  {
-        //     id: 'report',
-        //     title: 'Report',
-        //     caption: 'Report',
-        //     innerHTML: '<i class="fa fa-print"></i> REPORT',
-        //     class: 'btn btn-info btn-sm mr-1 dropdown-toggle',
-        //     dropmenuHTML: [{
-        //         id: 'reportPrinterBesar',
-        //         text: "Printer Lain(Faktur)",
-        //         onClick: () => {
-        //           selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-        //           if (selectedId == null || selectedId == '' || selectedId == undefined) {
-        //             showDialog('Harap pilih salah satu record')
-        //           } else {
-        //             cekValidasi(selectedId, 'PRINTER BESAR')
-        //           }
-        //         }
-        //       },
-        //       {
-        //         id: 'reportPrinterKecil',
-        //         text: "Printer Epson Seri LX(Faktur)",
-        //         onClick: () => {
-        //           selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-        //           if (selectedId == null || selectedId == '' || selectedId == undefined) {
-        //             showDialog('Harap pilih salah satu record')
-        //           } else {
-        //             cekValidasi(selectedId, 'PRINTER KECIL')
-        //           }
-        //         }
-        //       },
+          //  {
+          //     id: 'report',
+          //     title: 'Report',
+          //     caption: 'Report',
+          //     innerHTML: '<i class="fa fa-print"></i> REPORT',
+          //     class: 'btn btn-info btn-sm mr-1 dropdown-toggle',
+          //     dropmenuHTML: [{
+          //         id: 'reportPrinterBesar',
+          //         text: "Printer Lain(Faktur)",
+          //         onClick: () => {
+          //           selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+          //           if (selectedId == null || selectedId == '' || selectedId == undefined) {
+          //             showDialog('Harap pilih salah satu record')
+          //           } else {
+          //             cekValidasi(selectedId, 'PRINTER BESAR')
+          //           }
+          //         }
+          //       },
+          //       {
+          //         id: 'reportPrinterKecil',
+          //         text: "Printer Epson Seri LX(Faktur)",
+          //         onClick: () => {
+          //           selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+          //           if (selectedId == null || selectedId == '' || selectedId == undefined) {
+          //             showDialog('Harap pilih salah satu record')
+          //           } else {
+          //             cekValidasi(selectedId, 'PRINTER KECIL')
+          //           }
+          //         }
+          //       },
 
-        //     ],
-        //   },
-        //   {
-        //     id: 'export',
-        //     title: 'Export',
-        //     caption: 'Export',
-        //     innerHTML: '<i class="fas fa-file-export"></i> EXPORT',
-        //     class: 'btn btn-warning btn-sm mr-1',
-        //     onClick: () => {
+          //     ],
+          //   },
+          //   {
+          //     id: 'export',
+          //     title: 'Export',
+          //     caption: 'Export',
+          //     innerHTML: '<i class="fas fa-file-export"></i> EXPORT',
+          //     class: 'btn btn-warning btn-sm mr-1',
+          //     onClick: () => {
 
-        //       selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-        //       if (selectedId == null || selectedId == '' || selectedId == undefined) {
-        //         showDialog('Harap pilih salah satu record')
-        //       } else {
-                // window.open(`{{ route('serviceinheader.export') }}?id=${selectedId}`)
-        //       }
-        //     }
-        //   },
+          //       selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+          //       if (selectedId == null || selectedId == '' || selectedId == undefined) {
+          //         showDialog('Harap pilih salah satu record')
+          //       } else {
+          // window.open(`{{ route('serviceinheader.export') }}?id=${selectedId}`)
+          //       }
+          //     }
+          //   },
           {
             id: 'approve',
             title: 'Approve',
@@ -345,9 +413,7 @@
             class: 'btn btn-purple btn-sm mr-1',
             onClick: () => {
               if (`{{ $myAuth->hasPermission('pengajuantripinap', 'approval') }}`) {
-                selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                console.log(selectedId);
-                approve(selectedId)
+                approve()
               }
             }
           }
@@ -370,7 +436,7 @@
                 showDialog('Harap pilih salah satu record')
               } else {
                 cekValidasi(selectedId, 'EDIT')
-                
+
               }
             }
           },
@@ -384,7 +450,7 @@
                 showDialog('Harap pilih salah satu record')
               } else {
                 cekValidasi(selectedId, 'DELETE')
-                
+
               }
             }
           },
@@ -395,6 +461,27 @@
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               viewPengajuanTripInap(selectedId)
+            }
+          },
+          {
+            id: 'report',
+            innerHTML: '<i class="fa fa-print"></i> REPORT',
+            class: 'btn btn-info btn-sm mr-1',
+            onClick: () => {
+
+              $('#formRangeTgl').data('action', 'report')
+              $('#rangeTglModal').find('button:submit').html(`Report`)
+              $('#rangeTglModal').modal('show')
+            }
+          },
+          {
+            id: 'export',
+            innerHTML: '<i class="fa fa-file-export"></i> EXPORT',
+            class: 'btn btn-warning btn-sm mr-1',
+            onClick: () => {
+              $('#formRangeTgl').data('action', 'export')
+              $('#rangeTglModal').find('button:submit').html(`Export`)
+              $('#rangeTglModal').modal('show')
             }
           },
         ]
@@ -427,65 +514,54 @@
       .addClass('btn btn-sm btn-warning')
       .parent().addClass('px-1')
 
-      function permission() {
-    if (!`{{ $myAuth->hasPermission('pengajuantripinap', 'store') }}`) {
-      $('#add').attr('disabled', 'disabled')
-    }
-
-    if (!`{{ $myAuth->hasPermission('pengajuantripinap', 'update') }}`) {
-      $('#edit').attr('disabled', 'disabled')
-    }
-
-    if (!`{{ $myAuth->hasPermission('pengajuantripinap', 'show') }}`) {
-      $('#view').attr('disabled', 'disabled')
-    }
-
-    if (!`{{ $myAuth->hasPermission('pengajuantripinap', 'destroy') }}`) {
-      $('#delete').attr('disabled', 'disabled')
-    }
-
-    if (!`{{ $myAuth->hasPermission('pengajuantripinap', 'export') }}`) {
-      $('#export').attr('disabled', 'disabled')
-    }
-
-    if (!`{{ $myAuth->hasPermission('pengajuantripinap', 'report') }}`) {
-      $('#report').attr('disabled', 'disabled')
-    }
-    if (!`{{ $myAuth->hasPermission('pengajuantripinap', 'approval') }}`) {
-      $('#approve').attr('disabled', 'disabled')
-    }}
-
-    $('#rangeModal').on('shown.bs.modal', function() {
-      if (autoNumericElements.length > 0) {
-        $.each(autoNumericElements, (index, autoNumericElement) => {
-          autoNumericElement.remove()
-        })
+    function permission() {
+      if (!`{{ $myAuth->hasPermission('pengajuantripinap', 'store') }}`) {
+        $('#add').attr('disabled', 'disabled')
       }
 
-      $('#formRange [name]:not(:hidden)').first().focus()
+      if (!`{{ $myAuth->hasPermission('pengajuantripinap', 'update') }}`) {
+        $('#edit').attr('disabled', 'disabled')
+      }
 
-      $('#formRange [name=sidx]').val($('#jqGrid').jqGrid('getGridParam').postData.sidx)
-      $('#formRange [name=sord]').val($('#jqGrid').jqGrid('getGridParam').postData.sord)
-      $('#formRange [name=dari]').val((indexRow + 1) + (limit * (page - 1)))
-      $('#formRange [name=sampai]').val(totalRecord)
+      if (!`{{ $myAuth->hasPermission('pengajuantripinap', 'show') }}`) {
+        $('#view').attr('disabled', 'disabled')
+      }
 
-      autoNumericElements = new AutoNumeric.multiple('#formRange .autonumeric-report', {
-        digitGroupSeparator: ',',
-        decimalCharacter: '.',
-        decimalPlaces: 0,
-        allowDecimalPadding: false,
-        minimumValue: 1,
-        maximumValue: totalRecord
-      })
+      if (!`{{ $myAuth->hasPermission('pengajuantripinap', 'destroy') }}`) {
+        $('#delete').attr('disabled', 'disabled')
+      }
+
+      if (!`{{ $myAuth->hasPermission('pengajuantripinap', 'export') }}`) {
+        $('#export').attr('disabled', 'disabled')
+      }
+
+      if (!`{{ $myAuth->hasPermission('pengajuantripinap', 'report') }}`) {
+        $('#report').attr('disabled', 'disabled')
+      }
+      if (!`{{ $myAuth->hasPermission('pengajuantripinap', 'approval') }}`) {
+        $('#approve').attr('disabled', 'disabled')
+      }
+    }
+
+
+    $('#rangeTglModal').on('shown.bs.modal', function() {
+
+
+      initDatepicker()
+
+      $('#formRangeTgl').find('[name=dari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+      $('#formRangeTgl').find('[name=sampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+
     })
 
-    $('#formRange').submit(function(event) {
+    $('#formRangeTgl').submit(event => {
       event.preventDefault()
 
       let params
-      let submitButton = $(this).find('button:submit')
 
-      submitButton.attr('disabled', 'disabled')
+      let submitButton = $(this).find('button:submit')
+      $('#processingLoader').removeClass('d-none')
+
 
       /* Set params value */
       for (var key in postData) {
@@ -495,15 +571,16 @@
         params += key + "=" + encodeURIComponent(postData[key]);
       }
 
-      let formRange = $('#formRange')
-      let offset = parseInt(formRange.find('[name=dari]').val()) - 1
-      let limit = parseInt(formRange.find('[name=sampai]').val().replace('.', '')) - offset
-      params += `&offset=${offset}&limit=${limit}`
+      let formRangeTgl = $('#formRangeTgl')
+      let dari = formRangeTgl.find('[name=dari]').val()
+      let sampai = formRangeTgl.find('[name=sampai]').val()
+      params += `&dari=${dari}&sampai=${sampai}`
 
-      if ($('#rangeModal').data('action') == 'export') {
+      console.log('here')
+      if ($('#formRangeTgl').data('action') == 'export') {
         let xhr = new XMLHttpRequest()
-        xhr.open('GET', `{{ config('app.api_url') }}pengajuantripinap/export?${params}`, true)
-        xhr.setRequestHeader("Authorization", `Bearer {{ session('access_token') }}`)
+        xhr.open('GET', `${apiUrl}pengajuantripinap/export?${params}`, true)
+        xhr.setRequestHeader("Authorization", `Bearer ${accessToken}`)
         xhr.responseType = 'arraybuffer'
 
         xhr.onload = function(e) {
@@ -519,18 +596,22 @@
               link.click()
 
               submitButton.removeAttr('disabled')
+              $('#processingLoader').addClass('d-none')
             }
+          } else {
+            showDialog('TIDAK ADA DATA')
+            $('#processingLoader').addClass('d-none')
           }
         }
 
         xhr.send()
-      } else if ($('#rangeModal').data('action') == 'report') {
-        // window.open(`{{ route('serviceinheader.report') }}?${params}`)
+      } else if ($('#formRangeTgl').data('action') == 'report') {
+        window.open(`{{ route('pengajuantripinap.report') }}?${params}`)
 
+        $('#processingLoader').addClass('d-none')
         submitButton.removeAttr('disabled')
       }
     })
-
 
     function getStatusApproval() {
       return new Promise((resolve, reject) => {
@@ -560,37 +641,48 @@
             statusApproval = response.data[0].id;
             resolve(statusApproval)
           },
-          error:error=>{
+          error: error => {
             reject(error)
           }
         })
       })
     }
 
-    function approve(id) {
-      if (approveRequest) {
-        approveRequest.abort();
-      }
-      approveRequest = $.ajax({
-        url: `${apiUrl}pengajuantripinap/${id}`,
-        method: 'GET',
+    function approve() {
+      event.preventDefault()
+
+      let form = $('#crudForm')
+      $(this).attr('disabled', '')
+      $('#processingLoader').removeClass('d-none')
+
+      $.ajax({
+        url: `${apiUrl}pengajuantripinap/approval`,
+        method: 'POST',
         dataType: 'JSON',
         headers: {
           Authorization: `Bearer ${accessToken}`
         },
-        success: response => {
-          getStatusApproval()
-          .then(statusApproval=>{
-            
-            // console.log(statusApproval);
-            let msg = `YAKIN Approve trip inap `
-            if (response.data.statusapproval === statusApproval) {
-              msg = `YAKIN UnApprove trip inap `
-            }
-            showConfirm(msg, response.data.nobukti, `pengajuantripinap/${response.data.id}/approval`)
-
-          })
+        data: {
+          Id: selectedRows
         },
+        success: response => {
+          $('#jqGrid').jqGrid().trigger('reloadGrid');
+          selectedRows = []
+          $('#gs_').prop('checked', false)
+        },
+        error: error => {
+          if (error.status === 422) {
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+
+            setErrorMessages(form, error.responseJSON.errors);
+          } else {
+            showDialog(error.responseJSON)
+          }
+        },
+      }).always(() => {
+        $('#processingLoader').addClass('d-none')
+        $(this).removeAttr('disabled')
       })
     }
   })

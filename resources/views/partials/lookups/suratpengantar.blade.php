@@ -22,6 +22,7 @@
         jenisorder_id: `{!! $jenisorder_id ?? '' !!}`,
         tglabsensi: `{!! $tglabsensi ?? '' !!}`,
         trado_id: `{!! $trado_id ?? '' !!}`,
+        supir_id: `{!! $supir_id ?? '' !!}`,
       },
       idPrefix: 'suratpengantarLookup',
       colModel: [{

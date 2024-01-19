@@ -29,7 +29,6 @@
                                 <div class="col-12 col-sm-9 col-md-10">
                                     <input type="hidden" name="trado_id">
                                     <input type="hidden" name="supir_id">
-                                    {{-- <input type="text" name="trado" id="trado" class="form-control trado-lookup"> --}}
                                     <input type="text" name="trado" id="trado" class="form-control absensisupirdetail-lookup">
                                 </div>
                             </div>
@@ -519,7 +518,7 @@
             onSelectRow: (absensi, element) => {
                 $('#crudForm [name=trado_id]').first().val(absensi.trado_id)
                 $('#crudForm [name=supir_id]').first().val(absensi.supir_id)
-                element.val(absensi.trado)
+                element.val(absensi.tradosupir)
                 element.data('currentValue', element.val())
             },
             onCancel: (element) => {

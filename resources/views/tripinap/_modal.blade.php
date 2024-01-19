@@ -2,71 +2,72 @@
     <div class="modal-dialog">
         <form action="#" id="crudForm">
             <div class="modal-content">
-                
+
                 <form action="" method="post">
 
                     <div class="modal-body">
                         <input type="hidden" name="id">
 
-                       
-                            
-                            <div class="row form-group">
-                                <div class="col-12 col-sm-3 col-md-2">
-                                    <label class="col-form-label">absensi <span class="text-danger">*</span> </label>
-                                </div>
-                                <div class="col-12 col-sm-9 col-md-10">
-                                    <input type="hidden" name="absensi_id">
-                                    <input type="text" name="tglabsensi" id="tglabsensi" class="form-control absensisupir-lookup">
-                                </div>
-                            </div>
-                            
-                            <div class="row form-group">
-                                <div class="col-12 col-sm-3 col-md-2">
-                                    <label class="col-form-label">
-                                        Trado <span class="text-danger">*</span>
-                                    </label>
-                                </div>
-                                <div class="col-12 col-sm-9 col-md-10">
-                                    <input type="hidden" name="trado_id">
-                                    <input type="text" name="trado" id="trado" class="form-control trado-lookup">
-                                </div>
-                            </div>
-                            
-                            <div class="row form-group">
-                                <div class="col-12 col-sm-3 col-md-2">
-                                    <label class="col-form-label">
-                                        surat pengantar no bukti <span class="text-danger">*</span>
-                                    </label>
-                                </div>
-                                <div class="col-12 col-sm-9 col-md-10">
-                                    <input type="text" name="suratpengantar_nobukti" id="suratpengantar_nobukti" class="form-control suratpengantar-lookup">
-                                </div>
-                            </div>
 
 
-                            <div class="row form-group">
-                                <div class="col-12 col-sm-3 col-md-2">
-                                    <label class="col-form-label">
-                                        jam masuk <span class="text-danger">*</span>
-                                    </label>
-                                </div>
-                                <div class="col-12 col-sm-9 col-md-10">
-                                    <input type="text" class="form-control inputmask-time" name="jammasukinap">
-                                </div>
+                        <div class="row form-group">
+                            <div class="col-12 col-sm-3 col-md-2">
+                                <label class="col-form-label">absensi <span class="text-danger">*</span> </label>
                             </div>
-                            
-                            <div class="row form-group">
-                                <div class="col-12 col-sm-3 col-md-2">
-                                    <label class="col-form-label">
-                                        jam keluar <span class="text-danger">*</span>
-                                    </label>
-                                </div>
-                                <div class="col-12 col-sm-9 col-md-10">
-                                    <input type="text" class="form-control inputmask-time" name="jamkeluarinap">
-                                </div>
+                            <div class="col-12 col-sm-9 col-md-10">
+                                <input type="hidden" name="absensi_id">
+                                <input type="text" name="tglabsensi" id="tglabsensi" class="form-control absensisupir-lookup">
                             </div>
-                            
-                      
+                        </div>
+
+                        <div class="row form-group">
+                            <div class="col-12 col-sm-3 col-md-2">
+                                <label class="col-form-label">
+                                    Trado <span class="text-danger">*</span>
+                                </label>
+                            </div>
+                            <div class="col-12 col-sm-9 col-md-10">
+                                <input type="hidden" name="trado_id">
+                                <input type="hidden" name="supir_id">
+                                <input type="text" name="trado" id="trado" class="form-control absensisupirdetail-lookup">
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <div class="col-12 col-sm-3 col-md-2">
+                                <label class="col-form-label">
+                                    surat pengantar no bukti <span class="text-danger">*</span>
+                                </label>
+                            </div>
+                            <div class="col-12 col-sm-9 col-md-10">
+                                <input type="text" name="suratpengantar_nobukti" id="suratpengantar_nobukti" class="form-control suratpengantar-lookup">
+                            </div>
+                        </div>
+
+
+                        <div class="row form-group">
+                            <div class="col-12 col-sm-3 col-md-2">
+                                <label class="col-form-label">
+                                    jam masuk <span class="text-danger">*</span>
+                                </label>
+                            </div>
+                            <div class="col-12 col-sm-9 col-md-10">
+                                <input type="text" class="form-control inputmask-time" name="jammasukinap">
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <div class="col-12 col-sm-3 col-md-2">
+                                <label class="col-form-label">
+                                    jam keluar <span class="text-danger">*</span>
+                                </label>
+                            </div>
+                            <div class="col-12 col-sm-9 col-md-10">
+                                <input type="text" class="form-control inputmask-time" name="jamkeluarinap">
+                            </div>
+                        </div>
+
+
 
                     </div>
                     <div class="modal-footer justify-content-start">
@@ -219,9 +220,9 @@
         }
         initSelect2(form.find('.select2bs4'), true)
         Inputmask("datetime", {
-              inputFormat: "HH:MM",
-              max: 24
-            }).mask(".inputmask-time");
+            inputFormat: "HH:MM",
+            max: 24
+        }).mask(".inputmask-time");
 
         initLookup()
         initDatepicker()
@@ -248,19 +249,19 @@
         $('.invalid-feedback').remove()
 
         Promise
-        .all([
-          setStatusAktifOptions(form),
-        ])
-        .then(() => {
-            $('#crudModal').modal('show')
-        })
-        .catch((error) => {
-            showDialog(error.statusText)
-        })
-        .finally(() => {
-            $('.modal-loader').addClass('d-none')
-        })
-        
+            .all([
+                setStatusAktifOptions(form),
+            ])
+            .then(() => {
+                $('#crudModal').modal('show')
+            })
+            .catch((error) => {
+                showDialog(error.statusText)
+            })
+            .finally(() => {
+                $('.modal-loader').addClass('d-none')
+            })
+
     }
 
     function editTripInap(id) {
@@ -279,19 +280,19 @@
         $('.invalid-feedback').remove()
 
         Promise
-        .all([
-            showTripInap(form, id)
-        ])
-        .then(() => {
-            $('#crudModal').modal('show')
-        })
-        .catch((error) => {
-            showDialog(error.responseJSON)
-        })
-        .finally(() => {
-            $('.modal-loader').addClass('d-none')
-        })
-        
+            .all([
+                showTripInap(form, id)
+            ])
+            .then(() => {
+                $('#crudModal').modal('show')
+            })
+            .catch((error) => {
+                showDialog(error.responseJSON)
+            })
+            .finally(() => {
+                $('.modal-loader').addClass('d-none')
+            })
+
     }
 
     function deleteTripInap(id) {
@@ -311,18 +312,18 @@
         $('.invalid-feedback').remove()
 
         Promise
-        .all([
-            showTripInap(form, id)
-        ])
-        .then(() => {
-            $('#crudModal').modal('show')
-        })
-        .catch((error) => {
-            showDialog(error.responseJSON)
-        })
-        .finally(() => {
-            $('.modal-loader').addClass('d-none')
-        })
+            .all([
+                showTripInap(form, id)
+            ])
+            .then(() => {
+                $('#crudModal').modal('show')
+            })
+            .catch((error) => {
+                showDialog(error.responseJSON)
+            })
+            .finally(() => {
+                $('.modal-loader').addClass('d-none')
+            })
 
     }
 
@@ -412,7 +413,7 @@
                         }
 
                     })
-                  
+
                     if (form.data('action') === 'delete') {
                         form.find('[name]').addClass('disabled')
                         initDisabled()
@@ -427,14 +428,14 @@
     }
 
     function cekValidasi(Id, Aksi) {
-        
+
         if (Aksi == 'EDIT') {
             editTripInap(Id)
         }
         if (Aksi == 'DELETE') {
             deleteTripInap(Id)
         }
-  
+
     }
 
     const setStatusAktifOptions = function(relatedForm) {
@@ -444,7 +445,7 @@
             relatedForm.find('[name=statusaktif]').append(
                 new Option('-- PILIH STATUS AKTIF --', '', false, true)
             ).trigger('change')
-            
+
             $.ajax({
                 url: `${apiUrl}parameter`,
                 method: 'GET',
@@ -475,9 +476,9 @@
             })
         })
     }
-    
-    
-        
+
+
+
 
     function getMaxLength(form) {
         if (!form.attr('has-maxlength')) {
@@ -516,7 +517,7 @@
             },
             onSelectRow: (absensisupir, element) => {
                 absensiId = absensisupir.id
-                
+
                 $('#crudForm [name=absensi_id]').first().val(absensisupir.id)
                 element.val(absensisupir.tglbukti)
                 element.data('currentValue', element.val())
@@ -536,6 +537,7 @@
             title: 'trado Lookup',
             fileName: 'tradoMaster',
             typeSearch: 'ALL',
+            searching: 1,
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
@@ -544,11 +546,13 @@
                     searchText: 'trado-lookup',
                     title: 'TRADO',
                     typeSearch: 'ALL',
-                    absensiId:absensiId
+                    absensiId: absensiId
                 }
             },
             onSelectRow: (trado, element) => {
                 $('#crudForm [name=trado_id]').first().val(trado.id)
+                $('#crudForm [name=supir_id]').val(trado.supirid)
+                console.log(trado.supir_id, trado.supirid)
                 element.val(trado.kodetrado)
                 element.data('currentValue', element.val())
             },
@@ -557,6 +561,7 @@
             },
             onClear: (element) => {
                 $('#crudForm [name=trado_id]').first().val('')
+                $('#crudForm [name=supir_id]').val('')
                 element.val('')
                 element.data('currentValue', element.val())
             }
@@ -595,14 +600,15 @@
             beforeProcess: function(test) {
                 // var levelcoa = $(`#levelcoa`).val();
                 this.postData = {
-                    tglabsensi:$('#crudForm [name=tglabsensi]').first().val(),
-                    trado_id:$('#crudForm [name=trado_id]').first().val(),
+                    tglabsensi: $('#crudForm [name=tglabsensi]').first().val(),
+                    trado_id: $('#crudForm [name=trado_id]').first().val(),
+                    supir_id: $('#crudForm [name=supir_id]').first().val(),
                     Aktif: 'AKTIF',
                 }
             },
             onSelectRow: (suratpengantar, element) => {
                 element.val(suratpengantar.nobukti)
-               
+
                 element.data('currentValue', element.val())
             },
             onCancel: (element) => {
@@ -611,15 +617,40 @@
             onClear: (element) => {
                 element.val('')
                 element.data('currentValue', element.val())
-                
+
             }
         })
 
-        
-    }
-    
 
-    
-    
+        $('.absensisupirdetail-lookup').lookup({
+            title: 'Trado Lookup',
+            fileName: 'absensisupirdetail',
+            beforeProcess: function(test) {
+                // var levelcoa = $(`#levelcoa`).val();
+                this.postData = {
+                    tgltrip: $('#crudForm [name=tglabsensi]').val(),
+                    Aktif: 'AKTIF',
+                }
+            },
+            onSelectRow: (absensi, element) => {
+                console.log(absensi);
+                $('#crudForm [name=trado_id]').first().val(absensi.trado_id)
+                $('#crudForm [name=supir_id]').first().val(absensi.supir_id)
+                element.val(absensi.tradosupir)
+                element.data('currentValue', element.val())
+                getInfoTrado(tradoId)
+            },
+            onCancel: (element) => {
+                element.val(element.data('currentValue'))
+            },
+            onClear: (element) => {
+                tradoId = 0
+                $('#crudForm [name=trado_id]').first().val('')
+                $('#crudForm [name=supir_id]').first().val('')
+                element.val('')
+                element.data('currentValue', element.val())
+            }
+        })
+    }
 </script>
 @endpush()

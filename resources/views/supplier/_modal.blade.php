@@ -701,7 +701,7 @@
         $('#jqGrid').jqGrid().trigger('reloadGrid');
         selectedRows = []
         selectedRowsSupplier = []
-        $('#gs_').prop('checked', false)
+        $('#gs_check').prop('checked', false)
       },
       error: error => {
         if (error.status === 422) {
