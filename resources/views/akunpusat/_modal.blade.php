@@ -42,7 +42,7 @@
               </div>
               <div class="col-12 col-md-10">
                 <input type="hidden" name="type_id">
-                <input type="text" name="type" class="form-control type-lookup">
+                <input type="text" name="type"  data-target-name="type" id="type" class="form-control lg-form type-lookup">
               </div>
             </div>
             <div class="row form-group">
@@ -53,15 +53,14 @@
               </div>
               <div class="col-12 col-md-10">
                 <input type="hidden" name="akuntansi_id">
-                <input type="text" name="akuntansi" class="form-control akuntansi-lookup">
+                  <input type="text" name="akuntansi"  data-target-name="akuntansi" id="akuntansi" class="form-control lg-form  akuntansi-lookup">
               </div>
-            </div>            
+            </div>
             <div class="row form-group">
               <label class="col-12 col-md-2 col-form-label">STATUS PARENT<span class="text-danger">*</span></label>
               <div class="col-12 col-md-10">
-                <select name="statusparent" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH STATUS PARENT --</option>
-                </select>
+                <input type="hidden" name="statusparent">
+                <input type="text" name="statusparentnama" data-target-name="statusparent" id="statusparentnama" class="form-control lg-form statusparent-lookup">
               </div>
             </div>
             <div class="row form-group">
@@ -72,23 +71,21 @@
               </div>
               <div class="col-12 col-md-10">
                 <input type="hidden" name="parent">
-                <input type="text" name="parentnama" class="form-control parent-lookup">
+                <input type="text" name="parentnama"  data-target-name="parentnama" id="parentnama" class="form-control lg-form  parent-lookup">
               </div>
             </div>
             <div class="row form-group">
               <label class="col-12 col-md-2 col-form-label">STATUS NERACA<span class="text-danger">*</span></label>
               <div class="col-12 col-md-10">
-                <select name="statusneraca" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH STATUS NERACA --</option>
-                </select>
+                <input type="hidden" name="statusneraca">
+                <input type="text" name="statusneracanama" data-target-name="statusneraca" id="statusneracanama" class="form-control lg-form statusneraca-lookup">
               </div>
             </div>
             <div class="row form-group">
               <label class="col-12 col-md-2 col-form-label">STATUS LABA RUGI<span class="text-danger">*</span></label>
               <div class="col-12 col-md-10">
-                <select name="statuslabarugi" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH STATUS LABA RUGI --</option>
-                </select>
+                <input type="hidden" name="statuslabarugi">
+                <input type="text" name="statuslabaruginama" data-target-name="statuslabarugi" id="statuslabaruginama" class="form-control lg-form statuslabarugi-lookup">
               </div>
             </div>
             <div class="row form-group">
@@ -99,7 +96,7 @@
               </div>
               <div class="col-12 col-md-10">
                 <input type="hidden" name="coamain">
-                <input type="text" name="coamainket" class="form-control coamain-lookup">
+                <input type="text" name="coamainket"  data-target-name="coamainket" id="coamainket" class="form-control lg-form  coamain-lookup">
               </div>
             </div>
             <div class="row form-group">
@@ -109,9 +106,8 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <select name="statusaktif" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH STATUS AKTIF --</option>
-                </select>
+                <input type="hidden" name="statusaktif">
+                <input type="text" name="statusaktifnama" data-target-name="statusaktif" id="statusaktifnama" class="form-control lg-form status-lookup">
               </div>
             </div>
           </div>
@@ -253,6 +249,21 @@
       $('#crudForm [name=parentnama]').parents('.input-group').find('.button-clear').show()
     }
   });
+
+  function activateParent(par) { 
+    if (par == 'BUKAN PARENT') {
+      $('#crudForm [name=parentnama]').attr('readonly', false)
+      $('#crudForm [name=parentnama]').parents('.input-group').find('.input-group-append').show()
+      $('#crudForm [name=parentnama]').parents('.input-group').find('.button-clear').show()
+    }  else {
+      setTimeout(() => {
+
+        $('#crudForm [name=parentnama]').attr('readonly', true)
+        $('#crudForm [name=parentnama]').parents('.input-group').find('.input-group-append').hide()
+        $('#crudForm [name=parentnama]').parents('.input-group').find('.button-clear').hide()
+      }, 500);
+    }
+  }
   
   $('#crudModal').on('shown.bs.modal', () => {
     let form = $('#crudForm')
@@ -332,6 +343,20 @@
               element.val(value).trigger('change')
             } else {
               element.val(value)
+            }
+
+            if (index == 'type') {
+              element.data('current-value', value)
+            }
+            if (index == 'akuntansi') {
+              element.data('current-value', value)
+            }
+            if (index == 'parentnama') {
+              element.data('current-value', value)
+            }
+            if (index == 'statusparentnama') {
+              activateParent(value);
+                
             }
           })
           resolve()
@@ -735,6 +760,10 @@
             if (index == 'coamainket') {
               element.data('current-value', value)
             }
+            if (index == 'statusparentnama') {
+              activateParent(value);
+                
+            }
           })
 
           if (form.data('action') === 'delete') {
@@ -775,14 +804,19 @@
   }
 
   function initLookup() {
-    $('.type-lookup').lookup({
+    $('.type-lookup').lookupMaster({
       title: 'Type Akuntansi Lookup',
-      fileName: 'typeakuntansi',
+      fileName: 'typeakuntansiMaster',
+      typeSearch: 'ALL',
+      searching: 1,
       beforeProcess: function(test) {
-        // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
-
           Aktif: 'AKTIF',
+          searching: 1,
+          valueName: `type_id`,
+          searchText: `type-lookup`,
+          // singleColumn: false,
+          title: 'Tipe akuntansi'
         }
       },
       onSelectRow: (type, element) => {
@@ -800,20 +834,27 @@
       }
     })
 
-    $('.akuntansi-lookup').lookup({
-      title: 'Akuntansi Lookup',
-      fileName: 'akuntansi',
+    $('.akuntansi-lookup').lookupMaster({
+      title: 'akuntansi Lookup',
+      fileName: 'akuntansiMaster',
+      typeSearch: 'ALL',
+      searching: 1,
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
-
           Aktif: 'AKTIF',
+          searching: 1,
+          valueName: `akuntansi_id`,
+          searchText: `akuntansi-lookup`,
+          // singleColumn: false,
+          title: 'akuntansi'
         }
       },
       onSelectRow: (akuntansi, element) => {
         $('#crudForm [name=akuntansi_id]').val(akuntansi.id)
         element.val(akuntansi.kodeakuntansi)
         element.data('currentValue', element.val())
+      
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
@@ -825,14 +866,21 @@
       }
     })
 
-    $('.parent-lookup').lookup({
+    $('.parent-lookup').lookupMaster({
       title: 'Akun Pusat Lookup',
-      fileName: 'akunpusat',
+      fileName: 'akunpusatMaster',
+      typeSearch: 'ALL',
+      searching: 1,
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
 
           Aktif: 'AKTIF',
+          searching: 1,
+          valueName: `parentnama`,
+          searchText: `parent-lookup`,
+          // singleColumn: true,
+          title: 'Main Akun Pusat Lookup'
         }
       },
       onSelectRow: (akunpusat, element) => {
@@ -850,14 +898,19 @@
       }
     })
 
-    $('.coamain-lookup').lookup({
+    $('.coamain-lookup').lookupMaster({
       title: 'Main Akun Pusat Lookup',
-      fileName: 'mainakunpusat',
+      fileName: 'mainakunpusatMaster',
+      typeSearch: 'ALL',
+      searching: 1,
       beforeProcess: function(test) {
-        // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
-
           Aktif: 'AKTIF',
+          searching: 1,
+          valueName: `parentnama`,
+          searchText: `parent-lookup`,
+          // singleColumn: true,
+          title: 'Main Akun Pusat Lookup'
         }
       },
       onSelectRow: (akunpusat, element) => {
@@ -874,6 +927,144 @@
         element.data('currentValue', element.val())
       }
     })
+
+    $(`.status-lookup`).lookupMaster({
+      title: 'Status Aktif Lookup',
+      fileName: 'parameterMaster',
+      typeSearch: 'ALL',
+      searching: 1,
+      beforeProcess: function() {
+        this.postData = {
+          url: `${apiUrl}parameter/combo`,
+          grp: 'STATUS AKTIF',
+          subgrp: 'STATUS AKTIF',
+          searching: 1,
+          valueName: `statusaktif`,
+          searchText: `status-lookup`,
+          singleColumn: true,
+          hideLabel: true,
+          title: 'Status Aktif'
+        };
+      },
+      onSelectRow: (status, element) => {
+        let elId = element.data('targetName')
+        $(`#crudForm [name=${elId}]`).first().val(status.id)
+        element.val(status.text)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'));
+      },
+      onClear: (element) => {
+        let elId = element.data('targetName')
+        $(`#crudForm [name=${elId}]`).first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      },
+    });
+    $(`.statusparent-lookup`).lookupMaster({
+      title: 'status parent Lookup',
+      fileName: 'parameterMaster',
+      typeSearch: 'ALL',
+      searching: 1,
+      beforeProcess: function() {
+        this.postData = {
+          url: `${apiUrl}parameter/combo`,
+          grp: 'STATUS PARENT',
+          // subgrp: 'STATUS PARENT',
+          searching: 1,
+          valueName: `statusparent`,
+          searchText: `statusparent-lookup`,
+          singleColumn: true,
+          hideLabel: true,
+          title: 'STATUS PARENT'
+        };
+      },
+      onSelectRow: (status, element) => {
+        let elId = element.data('targetName')
+        $(`#crudForm [name=${elId}]`).first().val(status.id)
+        element.val(status.text)
+        element.data('currentValue', element.val())
+        activateParent(status.text)
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'));
+      },
+      onClear: (element) => {
+        let elId = element.data('targetName')
+        $(`#crudForm [name=${elId}]`).first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
+        activateParent('')
+      },
+    });
+    $(`.statusneraca-lookup`).lookupMaster({
+      title: 'status neraca Lookup',
+      fileName: 'parameterMaster',
+      typeSearch: 'ALL',
+      searching: 1,
+      beforeProcess: function() {
+        this.postData = {
+          url: `${apiUrl}parameter/combo`,
+          grp: 'STATUS NERACA',
+          searching: 1,
+          valueName: `statusneraca`,
+          searchText: `statusneraca-lookup`,
+          singleColumn: true,
+          hideLabel: true,
+          title: 'STATUS NERACA'
+        };
+      },
+      onSelectRow: (status, element) => {
+        let elId = element.data('targetName')
+        $(`#crudForm [name=${elId}]`).first().val(status.id)
+        element.val(status.text)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'));
+      },
+      onClear: (element) => {
+        let elId = element.data('targetName')
+        $(`#crudForm [name=${elId}]`).first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      },
+    });
+    $(`.statuslabarugi-lookup`).lookupMaster({
+      title: 'Status status labarugi Lookup',
+      fileName: 'parameterMaster',
+      typeSearch: 'ALL',
+      searching: 1,
+      beforeProcess: function() {
+        this.postData = {
+          url: `${apiUrl}parameter/combo`,
+          grp: 'STATUS LABA RUGI',
+          // subgrp: 'STATUS LABA RUGI',
+          searching: 1,
+          valueName: `statuslabarugi`,
+          searchText: `statuslabarugi-lookup`,
+          singleColumn: true,
+          hideLabel: true,
+          title: 'STATUS LABA RUGI'
+        };
+      },
+      onSelectRow: (status, element) => {
+        let elId = element.data('targetName')
+        $(`#crudForm [name=${elId}]`).first().val(status.id)
+        element.val(status.text)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'));
+      },
+      onClear: (element) => {
+        let elId = element.data('targetName')
+        $(`#crudForm [name=${elId}]`).first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      },
+    });
   }
 </script>
 @endpush()
