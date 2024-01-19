@@ -701,7 +701,8 @@
               <td class="uangjalan">
                 <input type="text" class="form-control uangjalan autonumeric" name="uangjalan[]" value="${detail.uangjalan}">
               </td>
-            
+              <input type="hidden" name="namasupir_old[]" value="${detail.namasupir_old}">
+              <input type="hidden" name="supirold_id[]" value="${detail.supir_id_old}">
 
             </tr>
             `)
