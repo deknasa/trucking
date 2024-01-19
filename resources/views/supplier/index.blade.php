@@ -583,7 +583,34 @@
 
             }
           },
-        ]
+        ],
+        extndBtn: [{
+          id: 'approve',
+          title: 'Approve',
+          caption: 'Approve',
+          innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+          class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
+          dropmenuHTML: [{
+              id: 'approveun',
+              text: "UN/APPROVAL Data",
+              onClick: () => {
+
+                approve()
+
+              }
+            },
+            {
+              id: 'approvalnonaktif',
+              text: "Approval Non Aktif",
+              onClick: () => {
+
+                approvenonaktif()
+
+              }
+            },
+
+          ],
+        }]
       })
 
     /* Append clear filter button */
@@ -621,7 +648,7 @@
       if (!`{{ $myAuth->hasPermission('supplier', 'show') }}`) {
         $('#view').attr('disabled', 'disabled')
       }
-        
+
       if (!`{{ $myAuth->hasPermission('supplier', 'update') }}`) {
         $('#edit').attr('disabled', 'disabled')
       }
