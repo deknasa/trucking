@@ -1630,9 +1630,11 @@ Route::middleware(['auth', 'authorized'])->group(function () {
     Route::resource('reminderemail', ReminderEmailController::class);
 
     Route::get('tripinap/index', [TripInapController::class, 'index']);
+    Route::get('tripinap/report', [TripInapController::class, 'report'])->name('tripinap.report');
     Route::resource('tripinap', TripInapController::class);
     
     Route::get('pengajuantripinap/index', [PengajuanTripInapController::class, 'index']);
+    Route::get('pengajuantripinap/report', [PengajuanTripInapController::class, 'report'])->name('pengajuantripinap.report');
     Route::resource('pengajuantripinap', PengajuanTripInapController::class);
 
     Route::get('laporanmingguansupirbedamandor/export', [LaporanMingguanSupirBedaMandorController::class, 'export'])->name('laporanmingguansupirbedamandor.export');

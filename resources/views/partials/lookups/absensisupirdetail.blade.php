@@ -75,6 +75,11 @@
             formatter: currencyFormat,
             align: "right",
           },
+          {
+            label: 'TRADO - SUPIR',
+            name: 'tradosupir',
+            width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
+          },
         ],
       autowidth: true,
       responsive: true,

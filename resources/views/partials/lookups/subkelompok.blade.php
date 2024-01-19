@@ -11,8 +11,8 @@
       datatype: "json",
       postData: {
         aktif: `{!! $Aktif ?? '' !!}`,
-        kelompok:`{!! $kelompok_id ?? '' !!}`
-      },   
+        kelompok: `{!! $kelompok_id ?? '' !!}`
+      },
       // postData: {
       // },
       // idPrefix: 'subKelompokLookup',
@@ -20,7 +20,7 @@
           label: 'ID',
           name: 'id',
           width: '50px',
-            search: false,
+          search: false,
           hidden: true
         },
         {
@@ -136,7 +136,7 @@
       responsive: true,
       shrinkToFit: false,
       height: 450,
-      rowNum: 10,
+      rowNum: `{!! $limit ?? 15 !!}`,
       rownumbers: true,
       rownumWidth: 45,
       rowList: [10, 20, 50, 0],
@@ -171,7 +171,7 @@
         setGridLastRequest($(this), jqXHR)
       },
       loadComplete: function(data) {
-          changeJqGridRowListText()
+        changeJqGridRowListText()
         if (detectDeviceType() == 'desktop') {
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
@@ -236,7 +236,7 @@
       del: false,
     })
     .customPager()
-      
+
   loadGlobalSearch($('#subKelompokLookup'))
   loadClearFilter($('#subKelompokLookup'))
 </script>

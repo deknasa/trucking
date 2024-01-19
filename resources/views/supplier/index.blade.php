@@ -489,6 +489,7 @@
             $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
           }
           $('#left-nav').find('button').attr('disabled', false)
+          $('#gs_check').prop('disabled', false)
           permission()
           setHighlight($(this))
         },
