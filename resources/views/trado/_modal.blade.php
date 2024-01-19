@@ -1242,6 +1242,52 @@
     })
   }
 
+  function approvenonaktif() {
+
+    event.preventDefault()
+
+    let form = $('#crudForm')
+    $(this).attr('disabled', '')
+    $('#processingLoader').removeClass('d-none')
+
+    $.ajax({
+      url: `${apiUrl}trado/approvalnonaktif`,
+      method: 'POST',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        Id: selectedRows,
+        nama: selectedRowsTrado
+      },
+      success: response => {
+        $('#crudForm').trigger('reset')
+        $('#crudModal').modal('hide')
+
+        $('#jqGrid').jqGrid().trigger('reloadGrid');
+        selectedRows = []
+        selectedRowsTrado = []
+        $('#gs_').prop('checked', false)
+      },
+      error: error => {
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+
+          setErrorMessages(form, error.responseJSON.errors);
+        } else {
+          showDialog(error.responseJSON)
+        }
+      },
+    }).always(() => {
+      $('#processingLoader').addClass('d-none')
+      $(this).removeAttr('disabled')
+    })
+
+  }
+
+
   function getMaxLength(form) {
     if (!form.attr('has-maxlength')) {
       $.ajax({

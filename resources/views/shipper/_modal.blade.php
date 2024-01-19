@@ -2,11 +2,11 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
-        
+
         <form action="" method="post">
           <div class="modal-body">
 
-           {{-- <div class="row form-group">
+            {{-- <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">ID</label>
               </div>
@@ -252,9 +252,9 @@
 
     activeGrid = null
 
-    form.find('#btnSubmit').prop('disabled',false)
+    form.find('#btnSubmit').prop('disabled', false)
     if (form.data('action') == "view") {
-      form.find('#btnSubmit').prop('disabled',true)
+      form.find('#btnSubmit').prop('disabled', true)
     }
 
     getMaxLength(form)
@@ -364,7 +364,8 @@
             }
           })
           resolve()
-        }, error: error => {
+        },
+        error: error => {
           reject(error)
         }
       })
@@ -440,6 +441,7 @@
           })
       })
   }
+
   function viewPelanggan(pelangganId) {
     let form = $('#crudForm')
 
@@ -462,25 +464,25 @@
       ])
       .then(() => {
         showPelanggan(form, pelangganId)
-        .then(pelangganId => {
-           // form.find('.aksi').hide()
-           setFormBindKeys(form)
-              initSelect2(form.find('.select2bs4'), true)
-              form.find('[name]').removeAttr('disabled')
-  
-              form.find('select').each((index, select) => {
-                let element = $(select)
-  
-                if (element.data('select2')) {
-                  element.select2('destroy')
-                }
-              })
-              form.find('[name]').attr('disabled', 'disabled').css({
-                background: '#fff'
-              })
-              form.find('[name=id]').prop('disabled',false)
-              
+          .then(pelangganId => {
+            // form.find('.aksi').hide()
+            setFormBindKeys(form)
+            initSelect2(form.find('.select2bs4'), true)
+            form.find('[name]').removeAttr('disabled')
+
+            form.find('select').each((index, select) => {
+              let element = $(select)
+
+              if (element.data('select2')) {
+                element.select2('destroy')
+              }
             })
+            form.find('[name]').attr('disabled', 'disabled').css({
+              background: '#fff'
+            })
+            form.find('[name=id]').prop('disabled', false)
+
+          })
           .then(() => {
             $('#crudModal').modal('show')
           })
@@ -506,10 +508,10 @@
           $.each(response.data, (index, value) => {
             if (value !== null && value !== 0 && value !== undefined) {
               form.find(`[name=${index}]`).attr('maxlength', value)
-              if(index == 'kodepos'){
+              if (index == 'kodepos') {
                 form.find(`[name=${index}]`).attr('maxlength', 5)
-              } 
-              if(index == 'telp'){
+              }
+              if (index == 'telp') {
                 form.find(`[name=${index}]`).attr('maxlength', 13)
               }
             }
@@ -555,7 +557,53 @@
       })
     })
   }
-  
+
+
+  function approvenonaktif() {
+
+    event.preventDefault()
+
+    let form = $('#crudForm')
+    $(this).attr('disabled', '')
+    $('#processingLoader').removeClass('d-none')
+
+    $.ajax({
+      url: `${apiUrl}shipper/approvalnonaktif`,
+      method: 'POST',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        Id: selectedRows,
+        nama: selectedRowsShipper
+      },
+      success: response => {
+        $('#crudForm').trigger('reset')
+        $('#crudModal').modal('hide')
+
+        $('#jqGrid').jqGrid().trigger('reloadGrid');
+        selectedRows = []
+        selectedRowsShipper = []
+        $('#gs_').prop('checked', false)
+      },
+      error: error => {
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+
+          setErrorMessages(form, error.responseJSON.errors);
+        } else {
+          showDialog(error.responseJSON)
+        }
+      },
+    }).always(() => {
+      $('#processingLoader').addClass('d-none')
+      $(this).removeAttr('disabled')
+    })
+
+  }
+
   function cekValidasidelete(Id) {
     $.ajax({
       url: `{{ config('app.api_url') }}shipper/${Id}/cekValidasi`,
@@ -566,11 +614,11 @@
       },
       success: response => {
         var kondisi = response.kondisi
-          if (kondisi == true) {
-            showDialog(response.message['keterangan'])
-          } else {
-              deletePelanggan(Id)
-          }
+        if (kondisi == true) {
+          showDialog(response.message['keterangan'])
+        } else {
+          deletePelanggan(Id)
+        }
 
       }
     })

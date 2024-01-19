@@ -2,7 +2,7 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
-        
+
         <form action="" method="post">
           <div class="modal-body">
 
@@ -734,6 +734,99 @@
       })
     })
   }
+
+
+  function approve() {
+
+    event.preventDefault()
+
+    let form = $('#crudForm')
+    $(this).attr('disabled', '')
+    $('#processingLoader').removeClass('d-none')
+
+    $.ajax({
+      url: `${apiUrl}customer/approval`,
+      method: 'POST',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        Id: selectedRows,
+        nama: selectedRowsCustomer
+      },
+      success: response => {
+        $('#crudForm').trigger('reset')
+        $('#crudModal').modal('hide')
+
+        $('#jqGrid').jqGrid().trigger('reloadGrid');
+        selectedRows = []
+        selectedRowsCustomer = []
+        $('#gs_').prop('checked', false)
+      },
+      error: error => {
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+
+          setErrorMessages(form, error.responseJSON.errors);
+        } else {
+          showDialog(error.responseJSON)
+        }
+      },
+    }).always(() => {
+      $('#processingLoader').addClass('d-none')
+      $(this).removeAttr('disabled')
+    })
+
+  }
+
+
+  function approvenonaktif() {
+
+    event.preventDefault()
+
+    let form = $('#crudForm')
+    $(this).attr('disabled', '')
+    $('#processingLoader').removeClass('d-none')
+
+    $.ajax({
+      url: `${apiUrl}customer/approvalnonaktif`,
+      method: 'POST',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        Id: selectedRows,
+        nama: selectedRowsCustomer
+      },
+      success: response => {
+        $('#crudForm').trigger('reset')
+        $('#crudModal').modal('hide')
+
+        $('#jqGrid').jqGrid().trigger('reloadGrid');
+        selectedRows = []
+        selectedRowsCustomer = []
+        $('#gs_').prop('checked', false)
+      },
+      error: error => {
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+
+          setErrorMessages(form, error.responseJSON.errors);
+        } else {
+          showDialog(error.responseJSON)
+        }
+      },
+    }).always(() => {
+      $('#processingLoader').addClass('d-none')
+      $(this).removeAttr('disabled')
+    })
+
+  }
+
 
   function cekValidasidelete(Id) {
     $.ajax({
