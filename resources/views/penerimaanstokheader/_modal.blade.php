@@ -652,8 +652,9 @@
     $('.tbl_vulkanisirke').hide();
     $('.tbl_vulkanisirtotal').hide();
     $('.tbl_statusban').hide();
-    $('.colspan').attr('colspan', 7);
+    $('.colspan').attr('colspan', 6);
     $('.tbl_total_sebelum').show();
+    $('.tbl_penerimaanstok_nobukti').hide();
 
     $('.sumrow').show();
     
