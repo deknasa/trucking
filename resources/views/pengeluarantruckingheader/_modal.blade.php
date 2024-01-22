@@ -320,7 +320,7 @@
                             <th style="width: 20%; min-width: 200px;" class="data_tbl tbl_suratpengantar_nobukti kolom_bbt">no bukti Sp</th>
                             <th style="width: 20%; min-width: 200px;" class="data_tbl tbl_trado_id kolom_bbt">trado</th>
                             <th style="width: 20%; min-width: 200px;" class="data_tbl tbl_container_id kolom_bbt">container</th>
-                            <th style="width: 20%; min-width: 200px;" class="data_tbl tbl_pelanggan_id kolom_bbt">pelanggan</th>
+                            <th style="width: 20%; min-width: 200px;" class="data_tbl tbl_pelanggan_id kolom_bbt">shipper</th>
                             <th style="width: 20%; min-width: 200px;" class="data_tbl tbl_pengeluaranstokheader_nobukti">no bukti pengeluaran stok</th>
                             <th style="width: 20%; min-width: 200px;" class="data_tbl tbl_penerimaanstokheader_nobukti tbl_tagihklaim">no bukti penerimaan stok</th>
                             <th style="width: 20%; min-width: 200px;" class="data_tbl tbl_stok_id">stok</th>
@@ -1891,7 +1891,7 @@
     $('.colmn-offset2').hide()
     $('[name=pengeluarantrucking_nobukti]').parents('.form-group').hide()
     $('.cabang').hide()
-    // $('.colmn-offset').hide()
+    $('.colmn-offset').show()
   }
 
   function tampilanKLAIM() {
@@ -2651,7 +2651,18 @@
     enabledKas(true);
     $('#btnReloadOtokGrid').hide()
     $('#btnReloadSumbanganGrid').hide()
-    $('[name=keterangancoa]').parents('.form-group').show()
+    if (KodePengeluaranId == 'BLS') {
+      $('.colmn-offset').show()
+      $('.tbl_penerimaantruckingheader').show()
+      $('[name=keterangancoa]').parents('.form-group').show()
+      $('.colspan').attr('colspan', 3);
+    } else {
+      $('.colspan').attr('colspan', 2);
+      $('.colmn-offset').show()
+      $('.tbl_penerimaantruckingheader').hide()
+      $('[name=keterangancoa]').parents('.form-group').hide()
+    }
+    $('[name=pengeluarantrucking_nobukti]').parents('.form-group').hide()
     $('[name=statusposting]').parents('.form-group').hide()
     $('.tbl_stok_id').hide()
     $('.tbl_qty').hide()
@@ -2664,7 +2675,6 @@
     $('[name=jenisorderan_id]').parents('.form-group').hide()
     $('.tbl_supir_id').show()
     $('.tbl_sisa').hide()
-    $('.tbl_penerimaantruckingheader').show()
     $('[name=supirheader_id]').parents('.form-group').hide()
     $('[name=tgldari]').parents('.form-group').hide()
     $('[name=tgldari]').prop('disabled', true)
@@ -2684,11 +2694,9 @@
     $('#detail-otok-section').hide()
     $('#detail-otol-section').hide()
     $('#detail-default-section').parents('.card').show()
-    $('.colspan').attr('colspan', 3);
     $('#sisaColFoot').hide()
     $('#sisaFoot').hide()
     $('.tbl_karyawan_id').hide()
-    $('.colmn-offset').show()
     $('.tbl_nominal').prop('readonly', false)
     $('.tbl_harga').hide()
     $('.tbl_pengeluaranstokheader_nobukti').hide()
@@ -4920,7 +4928,7 @@
 
               $.each(response.data, (index, value) => {
                 selectedIdBll.push(value.id)
-                if(value.nominal != null && value.nominal != '' && value.nominal != 'null'){
+                if (value.nominal != null && value.nominal != '' && value.nominal != 'null') {
                   totalBiaya += parseFloat(value.nominal)
                 }
               })
@@ -4951,7 +4959,7 @@
 
               $.each(response.data, (index, value) => {
                 selectedIdBln.push(value.id)
-                if(value.nominal != null && value.nominal != '' && value.nominal != 'null'){
+                if (value.nominal != null && value.nominal != '' && value.nominal != 'null') {
                   totalBiaya += parseFloat(value.nominal)
                 }
               })
@@ -4982,7 +4990,7 @@
 
               $.each(response.data, (index, value) => {
                 selectedIdBtu.push(value.id)
-                if(value.nominal != null && value.nominal != '' && value.nominal != 'null'){
+                if (value.nominal != null && value.nominal != '' && value.nominal != 'null') {
                   totalBiaya += parseFloat(value.nominal)
                 }
               })
@@ -5013,7 +5021,7 @@
 
               $.each(response.data, (index, value) => {
                 selectedIdBpt.push(value.id)
-                if(value.nominal != null && value.nominal != '' && value.nominal != 'null'){
+                if (value.nominal != null && value.nominal != '' && value.nominal != 'null') {
                   totalBiaya += parseFloat(value.nominal)
                 }
               })
@@ -5044,7 +5052,7 @@
 
               $.each(response.data, (index, value) => {
                 selectedIdBgs.push(value.id)
-                if(value.nominal != null && value.nominal != '' && value.nominal != 'null'){
+                if (value.nominal != null && value.nominal != '' && value.nominal != 'null') {
                   totalBiaya += parseFloat(value.nominal)
                 }
               })
@@ -5075,7 +5083,7 @@
 
               $.each(response.data, (index, value) => {
                 selectedIdBit.push(value.id)
-                if(value.nominal != null && value.nominal != '' && value.nominal != 'null'){
+                if (value.nominal != null && value.nominal != '' && value.nominal != 'null') {
                   totalBiaya += parseFloat(value.nominal)
                 }
               })
@@ -5106,7 +5114,7 @@
 
               $.each(response.data, (index, value) => {
                 selectedIdBsm.push(value.id)
-                if(value.nominal != null && value.nominal != '' && value.nominal != 'null'){
+                if (value.nominal != null && value.nominal != '' && value.nominal != 'null') {
                   totalBiaya += parseFloat(value.nominal)
                 }
               })
@@ -8194,6 +8202,7 @@
         this.postData = {
           roleInput: 'role',
           Aktif: 'AKTIF',
+          isLookup: true
         }
       },
       onSelectRow: (pengeluarantrucking, element) => {

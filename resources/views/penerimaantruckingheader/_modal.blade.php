@@ -1050,14 +1050,16 @@
     $('#gbox_tablePinjamanKaryawan').hide()
     $('[name=jenisorderan_id]').parents('.form-group').hide()
     $('#btnReloadBbtGrid').parents('.row').hide()
-    $('[name=keterangancoa]').parents('.form-group').show()
+    $('[name=keterangancoa]').parents('.form-group').hide()
+    $('[name=periodedari]').parents('.form-group').hide()
+    $('[name=periodesampai]').parents('.form-group').hide()
     $('.tbl_supir_id').show()
     $('.tbl_karyawan_id').hide()
     $('.tbl_sisa').hide()
-    $('.tbl_pengeluarantruckingheader_nobukti').show()
+    $('.tbl_pengeluarantruckingheader_nobukti').hide()
     $('[name=supirheader_id]').parents('.form-group').hide()
     $('[name=karyawanheader_id]').parents('.form-group').hide()
-    $('.colspan').attr('colspan', 4);
+    $('.colspan').attr('colspan', 3);
     $('#sisaColFoot').hide()
     $('#sisaFoot').hide()
     $('.colmn-offset').hide()
@@ -3449,6 +3451,7 @@
         this.postData = {
           Aktif: 'AKTIF',
           roleInput: 'role',
+          isLookup: true
         }
       },
       onSelectRow: (penerimaantrucking, element) => {

@@ -13,6 +13,7 @@
       postData: {
         aktif: `{!! $Aktif ?? '' !!}`,        
         roleinput: `{!! $roleInput ?? '' !!}`,        
+        isLookup: `{!! $isLookup ?? '' !!}`,        
         // filters: `{!! $filters ?? '' !!}`
       },
       colModel: [{
