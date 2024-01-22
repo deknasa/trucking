@@ -60,8 +60,7 @@ $idLookup = isset($id) ? $id : null;
 
 
   } else {
-    column = [
-      {
+    column = [{
         label: 'ID',
         name: 'id',
         align: 'right',
@@ -105,12 +104,12 @@ $idLookup = isset($id) ? $id : null;
                     id: row.text,
                     text: row.text
                   }));
-                  
+
                   formattedResponse.unshift({
                     id: '',
                     text: 'ALL'
                   });
-                  
+
                   return {
                     results: formattedResponse
                   };
@@ -121,16 +120,16 @@ $idLookup = isset($id) ? $id : null;
         },
         formatter: (value, options, rowData) => {
           let statusAktif = JSON.parse(value)
-          
+
           let formattedValue = $(`
           <div class="badge" style="background-color: ${statusAktif.WARNA}; color: ${statusAktif.WARNATULISAN};">
             <span>${statusAktif.SINGKATAN}</span>
           </div>`)
-          
+
           return formattedValue[0].outerHTML
         },
         cellattr: (rowId, value, rowObject) => {
-          let statusAktif = JSON.parse(rowObject.statusaktif)  
+          let statusAktif = JSON.parse(rowObject.statusaktif)
           return ` title="${statusAktif.MEMO}"`
         }
       },
@@ -174,7 +173,7 @@ $idLookup = isset($id) ? $id : null;
         width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
         name: 'statusparent',
         align: 'left',
-        
+
         stype: 'select',
         searchoptions: {
           dataInit: function(element) {
@@ -206,12 +205,12 @@ $idLookup = isset($id) ? $id : null;
                     id: row.text,
                     text: row.text
                   }));
-                  
+
                   formattedResponse.unshift({
                     id: '',
                     text: 'ALL'
                   });
-                  
+
                   return {
                     results: formattedResponse
                   };
@@ -225,13 +224,13 @@ $idLookup = isset($id) ? $id : null;
             return ''
           }
           let statusParent = JSON.parse(value)
-          
+
           let formattedValue = $(`
           <div class="badge" style="background-color: ${statusParent.WARNA}; color: #fff;">
             <span>${statusParent.SINGKATAN}</span>
           </div>
           `)
-          
+
           return formattedValue[0].outerHTML
         },
         cellattr: (rowId, value, rowObject) => {
@@ -239,7 +238,7 @@ $idLookup = isset($id) ? $id : null;
             return ` title=""`
           }
           let statusParent = JSON.parse(rowObject.statusparent)
-          
+
           return ` title="${statusParent.MEMO}"`
         }
       },
@@ -279,12 +278,12 @@ $idLookup = isset($id) ? $id : null;
                     id: row.text,
                     text: row.text
                   }));
-                  
+
                   formattedResponse.unshift({
                     id: '',
                     text: 'ALL'
                   });
-                  
+
                   return {
                     results: formattedResponse
                   };
@@ -295,7 +294,7 @@ $idLookup = isset($id) ? $id : null;
         },
         formatter: (value, options, rowData) => {
           let statusNeraca = JSON.parse(value)
-          
+
           let formattedValue = $(`
           <div class="badge" style="background-color: ${statusNeraca.WARNA}; color: #fff;">
             <span>${statusNeraca.SINGKATAN}</span>
@@ -305,7 +304,7 @@ $idLookup = isset($id) ? $id : null;
         },
         cellattr: (rowId, value, rowObject) => {
           let statusNeraca = JSON.parse(rowObject.statusneraca)
-          
+
           return ` title="${statusNeraca.MEMO}"`
         }
       },
@@ -314,7 +313,7 @@ $idLookup = isset($id) ? $id : null;
         name: 'statuslabarugi',
         width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
         align: 'left',
-        
+
         stype: 'select',
         searchoptions: {
           dataInit: function(element) {
@@ -346,12 +345,12 @@ $idLookup = isset($id) ? $id : null;
                     id: row.text,
                     text: row.text
                   }));
-                  
+
                   formattedResponse.unshift({
                     id: '',
                     text: 'ALL'
                   });
-                  
+
                   return {
                     results: formattedResponse
                   };
@@ -362,18 +361,18 @@ $idLookup = isset($id) ? $id : null;
         },
         formatter: (value, options, rowData) => {
           let statusLabaRugi = JSON.parse(value)
-          
+
           let formattedValue = $(`
           <div class="badge" style="background-color: ${statusLabaRugi.WARNA}; color: #fff;">
           <span>${statusLabaRugi.SINGKATAN}</span>
           </div>
           `)
-          
+
           return formattedValue[0].outerHTML
         },
         cellattr: (rowId, value, rowObject) => {
           let statusLabaRugi = JSON.parse(rowObject.statuslabarugi)
-          
+
           return ` title="${statusLabaRugi.MEMO}"`
         }
       },
@@ -411,10 +410,10 @@ $idLookup = isset($id) ? $id : null;
         width: (detectDeviceType() == "desktop") ? md_dekstop_3 : md_mobile_3,
         align: 'left'
       },
-    ]  
+    ]
   }
-  
-  
+
+
   selector.jqGrid({
     url: `{{ config('app.api_url') . 'mainakunpusat' }}`,
     mtype: "GET",
@@ -423,6 +422,9 @@ $idLookup = isset($id) ? $id : null;
     datatype: "json",
     postData: {
       aktif: `{!! $Aktif ?? '' !!}`,
+      level: `{!! $levelCoa ?? '' !!}`,
+      potongan: `{!! $potongan ?? '' !!}`,
+      isParent: `{!! $isParent ?? '' !!}`,
     },
     idPrefix: 'mainakunpusatLookup',
     colModel: column,
@@ -502,7 +504,7 @@ $idLookup = isset($id) ? $id : null;
         } else {
           cm = colModel[searching];
 
-          if (cm.search !== false && (cm.stype === undefined || cm.stype ==="text")) {
+          if (cm.search !== false && (cm.stype === undefined || cm.stype === "text")) {
 
             postData.filters = JSON.stringify({
               groupOp: "AND",

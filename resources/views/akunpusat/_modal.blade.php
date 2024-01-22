@@ -42,20 +42,10 @@
               </div>
               <div class="col-12 col-md-10">
                 <input type="hidden" name="type_id">
+                <input type="hidden" name="akuntansi_id">                
                 <input type="text" name="type" class="form-control type-lookup">
               </div>
-            </div>
-            <div class="row form-group">
-              <div class="col-12 col-md-2">
-                <label class="col-form-label">
-                  akuntansi <span class="text-danger">*</span>
-                </label>
-              </div>
-              <div class="col-12 col-md-10">
-                <input type="hidden" name="akuntansi_id">
-                <input type="text" name="akuntansi" class="form-control akuntansi-lookup">
-              </div>
-            </div>            
+            </div>           
             <div class="row form-group">
               <label class="col-12 col-md-2 col-form-label">STATUS PARENT<span class="text-danger">*</span></label>
               <div class="col-12 col-md-10">
@@ -94,7 +84,7 @@
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
-                  kode perkiraan main <span class="text-danger">*</span>
+                  kode perkiraan pusat <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-md-10">
@@ -243,6 +233,8 @@
     if (par == 'PARENT') {
       setTimeout(() => {
         $('#crudForm [name=parentnama]').attr('readonly', true)
+        $('#crudForm [name=parent]').val('')
+        $('#crudForm [name=parentnama]').val('')
         $('#crudForm [name=parentnama]').parents('.input-group').find('.input-group-append').hide()
         $('#crudForm [name=parentnama]').parents('.input-group').find('.button-clear').hide()
 
@@ -787,6 +779,7 @@
       },
       onSelectRow: (type, element) => {
         $('#crudForm [name=type_id]').val(type.id)
+        $('#crudForm [name=akuntansi_id]').val(type.akuntansi_id)
         element.val(type.kodetype)
         element.data('currentValue', element.val())
       },
@@ -795,6 +788,7 @@
       },
       onClear: (element) => {
         $('#crudForm [name=type_id]').val('')
+        $('#crudForm [name=akuntansi_id]').val('')
         element.val('')
         element.data('currentValue', element.val())
       }
@@ -833,6 +827,7 @@
         this.postData = {
 
           Aktif: 'AKTIF',
+          isParent: true,
         }
       },
       onSelectRow: (akunpusat, element) => {
