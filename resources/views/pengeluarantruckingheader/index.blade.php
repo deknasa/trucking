@@ -4,7 +4,7 @@
   <label class="col-12 col-sm-2 col-form-label mt-2">pengeluaran trucking<span class="text-danger">*</span></label>
   <div class="col-sm-4 mt-2">
     <select name="pengeluaranheader_id" id="pengeluaranheader_id" class="form-select select2" style="width: 100%;">
-      <option value="">-- PILIH Pengeluaran trucking --</option>
+      <option value="">-- SEMUA --</option>
       @foreach ($comboKodepengeluaran as $kodepengeluaran)
       <option value="{{$kodepengeluaran['id']}}"> {{$kodepengeluaran['keterangan']}} </option>
       {{-- <option @if ($kodepengeluaran['statusdefault_text'] ==="YA") selected @endif value="{{$kodepengeluaran['id']}}"> {{$kodepengeluaran['namakodepengeluaran']}} </option> --}}
@@ -103,7 +103,7 @@
     }
   }
   $(document).ready(function() {
-    $("#pengeluaranheader_id").val($("#pengeluaranheader_id option:eq(1)").val()).trigger('change');
+    // $("#pengeluaranheader_id").val($("#pengeluaranheader_id option:eq(1)").val()).trigger('change');
     $("#tabs").tabs()
     pengeluaranTrucking($('#crudForm'))
     let nobukti = $('#jqGrid').jqGrid('getCell', id, 'pengeluaran_nobukti')
