@@ -41,6 +41,12 @@
             align: 'left'
           },
           {
+            label: 'AKUNTANSIID',
+            name: 'akuntansi_id',
+            hidden: true,
+            search: false
+          },
+          {
             label: 'KETERANGAN',
             name: 'keterangantype',
             width: (detectDeviceType() == "desktop") ? md_dekstop_3 : md_mobile_3,
