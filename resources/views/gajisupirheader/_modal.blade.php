@@ -2,7 +2,7 @@
     <div class="modal-dialog">
         <form action="#" id="crudForm">
             <div class="modal-content">
-                
+
                 <form action="" method="post">
 
                     <div class="modal-body">
@@ -251,6 +251,8 @@
     let selectedRowsAbsensi = [];
     let selectedRowsAbsensiNobukti = [];
     let selectedRowsAbsensiUangjalan = [];
+    let selectedRowsAbsensiTrado = [];
+    let isReload = false;
 
     function checkboxHandler(element, rowId) {
 
@@ -325,7 +327,7 @@
         initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_gajikenek"]`).text(gajiKenek))
         initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_komisisupir"]`).text(komisi))
         initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_upahritasi"]`).text(upahRitasi))
-        initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_biayaextra"]`).text(biayaExtra))
+        initAutoNumericMinus($('.footrow').find(`td[aria-describedby="rekapRincian_biayaextra"]`).text(biayaExtra))
         initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_tolsupir"]`).text(tol))
         hitungSisa()
     }
@@ -335,6 +337,7 @@
         if (element.checked) {
             selectedRowsAbsensi.push($(element).val())
             selectedRowsAbsensiNobukti.push($(element).parents('tr').find(`td[aria-describedby="tableAbsensi_absensi_nobukti"]`).text())
+            selectedRowsAbsensiTrado.push($(element).parents('tr').find(`td[aria-describedby="tableAbsensi_absensi_tradoid"]`).text())
             selectedRowsAbsensiUangjalan.push($(element).parents('tr').find(`td[aria-describedby="tableAbsensi_absensi_uangjalan"]`).text())
             hitungUangJalan()
 
@@ -346,6 +349,7 @@
                     selectedRowsAbsensi.splice(i, 1);
                     selectedRowsAbsensiNobukti.splice(i, 1);
                     selectedRowsAbsensiUangjalan.splice(i, 1);
+                    selectedRowsAbsensiTrado.splice(i, 1);
                 }
             }
             hitungUangJalan()
@@ -466,9 +470,11 @@
 
                     $("#rekapRincian")[0].p.selectedRowIds = [];
                     let selectedTrip = []
-                    $.each(response.data, (index, value) => {
-                        selectedTrip.push(value.id)
-                    })
+                    if ($('#crudForm').data('action') == 'add') {
+                        $.each(response.data, (index, value) => {
+                            selectedTrip.push(value.id)
+                        })
+                    }
                     // selectedRows = response.data.map((data) => data.id)
                     // selectedNobukti = response.data.map((data) => data.nobuktitrip)
                     // selectedGajiSupir = response.data.map((data) => data.gajisupir)
@@ -481,6 +487,12 @@
                     // selectedTolSupir = response.data.map((data) => data.tolsupir)
                     // selectedRitasi = response.data.map((data) => data.ritasi_nobukti)
 
+
+                    if ($('#crudForm').data('action') == 'edit') {
+                        isReload = true;
+                        $(`[name="rincianId[]"]`).prop('disabled', false)
+
+                    }
                     $('#rekapRincian').jqGrid('setGridParam', {
                         datatype: "local",
                         data: response.data,
@@ -491,7 +503,7 @@
                     hitung(selectedTrip)
                 })
                 .catch((error) => {
-
+                    console.log('error getrip ', error)
                     $('#loaderGrid').addClass('d-none')
                     if (error.status === 422) {
                         $('.is-invalid').removeClass('is-invalid')
@@ -531,6 +543,27 @@
                         $('.is-invalid').removeClass('is-invalid')
                         $('.invalid-feedback').remove()
 
+                        if ($('#crudForm').data('action') == 'add') {
+                            selectedRowsAbsensi = []
+                            selectedRowsAbsensiNobukti = []
+                            selectedRowsAbsensiUangjalan = []
+                            selectedRowsAbsensiTrado = []
+                            $.each(response.data, (index, value) => {
+                                selectedRowsAbsensi.push(value.absensi_id)
+                                selectedRowsAbsensiNobukti.push(value.absensi_nobukti)
+                                selectedRowsAbsensiUangjalan.push(value.absensi_uangjalan)
+                                selectedRowsAbsensiTrado.push(value.absensi_tradoid)
+                            })
+                        }
+                        if ($('#crudForm').data('action') == 'edit') {
+                            selectedRowsAbsensi = []
+                            selectedRowsAbsensiNobukti = []
+                            selectedRowsAbsensiUangjalan = []
+                            selectedRowsAbsensiTrado = []
+                            isReload = true;
+                            $(`[name="absensiId[]"]`).prop('disabled', false)
+
+                        }
                         $('#tableAbsensi').jqGrid('setGridParam', {
                             url: `${apiUrl}gajisupirheader/${urlAbsensi}`,
                             postData: {
@@ -541,8 +574,11 @@
                             },
                             datatype: "json"
                         }).trigger('reloadGrid');
+                        hitungUangJalan()
                     })
                     .catch((error) => {
+
+                        console.log('error getabsen ', error)
                         if (error.status === 422) {
                             $('.is-invalid').removeClass('is-invalid')
                             $('.invalid-feedback').remove()
@@ -699,6 +735,12 @@
             $.each(selectedRowsAbsensiNobukti, function(index, item) {
                 data.push({
                     name: 'absensi_nobukti[]',
+                    value: item
+                })
+            });
+            $.each(selectedRowsAbsensiTrado, function(index, item) {
+                data.push({
+                    name: 'absensi_trado_id[]',
                     value: item
                 })
             });
@@ -1037,6 +1079,7 @@
         selectedRowsAbsensi = []
         selectedRowsAbsensiNobukti = [];
         selectedRowsAbsensiUangjalan = [];
+        isReload = false
         $('#crudModal').find('.modal-body').html(modalBody)
         initDatepicker('datepickerIndex')
     })
@@ -2179,6 +2222,20 @@
                         formatter: currencyFormat,
                         align: "right",
                     },
+                    {
+                        label: 'TRADO',
+                        name: 'absensi_trado',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+                        align: 'left',
+                    },
+                    {
+                        label: 'TRADO ID',
+                        name: 'absensi_tradoid',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+                        align: 'left',
+                        hidden: true,
+                        search: false
+                    },
                 ],
                 autowidth: true,
                 shrinkToFit: false,
@@ -2245,11 +2302,27 @@
                             if ($(this).find(`td input:checkbox`).val() == value) {
                                 $(this).addClass('bg-light-blue')
                                 $(this).find(`td input:checkbox`).prop('checked', true)
+
+                                if ($('#crudForm').data('action') == 'edit') {
+                                    if (isReload) {
+                                        $(this).find(`td input:checkbox`).prop("disabled", false);
+                                    } else {
+                                        $(this).find(`td input:checkbox`).prop("disabled", true);
+                                    }
+                                }
                             }
                         })
                     });
-
-                    $('#gsUangjalan').attr('disabled', false)
+                    if ($('#crudForm').data('action') == 'add') {
+                        $('#gsUangjalan').attr('disabled', false)
+                    }
+                    if ($('#crudForm').data('action') == 'edit') {
+                        if (isReload) {
+                            $('#gsUangjalan').attr('disabled', false)
+                        } else {
+                            $('#gsUangjalan').attr('disabled', true)
+                        }
+                    }
                 }
             })
 
@@ -2482,6 +2555,7 @@
                     selectedRowsAbsensi.push(detail.absensi_id)
                     selectedRowsAbsensiNobukti.push(detail.absensi_nobukti)
                     selectedRowsAbsensiUangjalan.push(detail.absensi_uangjalan)
+                    selectedRowsAbsensiTrado.push(detail.absensi_tradoid)
                 })
 
                 $('#tableAbsensi').jqGrid("clearGridData");
@@ -2737,6 +2811,14 @@
                                 $(this)
                                     .find(`tr input[value=${selectedRowId}]`)
                                     .prop("checked", true);
+
+                                if ($('#crudForm').data('action') == 'edit') {
+                                    if (isReload) {
+                                        $(this).find(`tr input[value=${selectedRowId}]`).prop("disabled", false);
+                                    } else {
+                                        $(this).find(`tr input[value=${selectedRowId}]`).prop("disabled", true);
+                                    }
+                                }
                                 initAutoNumeric($(this).find(`td[aria-describedby="rekapRincian_uangmakanberjenjang"]`))
                             });
                     }, 100);
@@ -3158,6 +3240,7 @@
         selectedRowsAbsensi = []
         selectedRowsAbsensiNobukti = [];
         selectedRowsAbsensiUangjalan = [];
+        selectedRowsAbsensiTrado = [];
         $('#tableAbsensi').trigger('reloadGrid')
     }
 
@@ -3188,6 +3271,7 @@
                 selectedRowsAbsensi = response.data.map((data) => data.absensi_id)
                 selectedRowsAbsensiNobukti = response.data.map((data) => data.absensi_nobukti)
                 selectedRowsAbsensiUangjalan = response.data.map((data) => data.absensi_uangjalan)
+                selectedRowsAbsensiTrado = response.data.map((data) => data.absensi_tradoid)
 
                 $('#tableAbsensi').jqGrid('setGridParam', {
                     url: `${apiUrl}gajisupirheader/${urlAbsensi}`,
