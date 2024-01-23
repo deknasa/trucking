@@ -48,6 +48,7 @@ use App\Http\Controllers\AkunPusatController;
 use App\Http\Controllers\AkuntansiController;
 use App\Http\Controllers\AlatBayarController;
 use App\Http\Controllers\ContainerController;
+use App\Http\Controllers\TarifDiscountHargaController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExportRicController;
 use App\Http\Controllers\GandenganController;
@@ -549,6 +550,14 @@ Route::middleware(['auth', 'authorized'])->group(function () {
     Route::get('container/export', [ContainerController::class, 'export'])->name('container.export');
     Route::get('container/report', [ContainerController::class, 'report'])->name('container.report');
     Route::resource('container', ContainerController::class);
+
+    Route::get('tarifdiscountharga/field_length', [TarifDiscountHargaController::class, 'fieldLength'])->name('tarifdiscountharga.field_length');
+    Route::get('tarifdiscountharga/{id}/delete', [TarifDiscountHargaController::class, 'delete'])->name('tarifdiscountharga.delete');
+    Route::get('tarifdiscountharga/index', [TarifDiscountHargaController::class, 'index']);
+    Route::get('tarifdiscountharga/get', [TarifDiscountHargaController::class, 'get'])->name('tarifdiscountharga.get');
+    Route::get('tarifdiscountharga/export', [TarifDiscountHargaController::class, 'export'])->name('tarifdiscountharga.export');
+    Route::get('tarifdiscountharga/report', [TarifDiscountHargaController::class, 'report'])->name('tarifdiscountharga.report');
+    Route::resource('tarifdiscountharga', TarifDiscountHargaController::class);
 
 
 
