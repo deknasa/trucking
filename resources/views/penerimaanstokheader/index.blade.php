@@ -112,7 +112,7 @@
   }
 
   $(document).ready(function() {
-    $("#kodepenerimaanheader").val($("#kodepenerimaanheader option:eq(1)").val()).trigger('change');
+    // $("#kodepenerimaanheader").val($("#kodepenerimaanheader option:eq(1)").val()).trigger('change');
     penerimaanStok($('#crudForm'))
     $("#tabs").tabs()
 

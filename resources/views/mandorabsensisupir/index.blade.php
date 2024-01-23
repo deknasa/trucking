@@ -424,7 +424,6 @@
         if (cellname === 'absentrado') {
           $("#jqGrid").jqGrid('setCell', rowid, 'absentrado', value);
           let absen_id =$("#jqGrid").jqGrid('getCell', rowid, 'absen_id')
-          console.log(absen_id);
           getabsentrado(absen_id).then((response) => {
             setSupirEnableIndex(response,rowid)
           })

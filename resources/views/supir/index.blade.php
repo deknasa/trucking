@@ -1311,40 +1311,106 @@
 
 
         function approvalBlackListSupir(supirId) {
-
+            event.preventDefault()
+            
+            let form = $('#crudForm')
+            $(this).attr('disabled', '')
+            $('#processingLoader').removeClass('d-none')
+            
             $.ajax({
-                url: `${apiUrl}supir/${supirId}`,
-                method: 'GET',
+                url: `${apiUrl}supir/approvalblacklist`,
+                method: 'POST',
                 dataType: 'JSON',
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 },
-                success: response => {
-                    let msg = `YAKIN approval BlackList Supir ${response.data.namasupir}`
-                    if (response.data.statusblacklist != statusBukanBlackList) {
-                        msg = `YAKIN Unapproval BlackList Supir ${response.data.namasupir}`
-                    }
-                    showConfirm(msg, "", `supir/${response.data.id}/approvalblacklist`)
+                data: {
+                    Id: selectedRows,
+                    nama: selectedRowsSupir
                 },
+                success: response => {
+                    $('#crudForm').trigger('reset')
+                    $('#crudModal').modal('hide')
+                    
+                    $('#jqGrid').jqGrid().trigger('reloadGrid');
+                    selectedRows = []
+                    selectedRowsSupir = []
+                    $('#gs_').prop('checked', false)
+                },
+                error: error => {
+                    if (error.status === 422) {
+                        $('.is-invalid').removeClass('is-invalid')
+                        $('.invalid-feedback').remove()
+                        
+                        setErrorMessages(form, error.responseJSON.errors);
+                    } else {
+                        showDialog(error.responseJSON)
+                    }
+                },
+            }).always(() => {
+                $('#processingLoader').addClass('d-none')
+                $(this).removeAttr('disabled')
             })
+            
+            // $.ajax({
+            //     url: `${apiUrl}supir/${supirId}`,
+            //     method: 'GET',
+            //     dataType: 'JSON',
+            //     headers: {
+            //         Authorization: `Bearer ${accessToken}`
+            //     },
+            //     success: response => {
+            //         let msg = `YAKIN approval BlackList Supir ${response.data.namasupir}`
+            //         if (response.data.statusblacklist != statusBukanBlackList) {
+            //             msg = `YAKIN Unapproval BlackList Supir ${response.data.namasupir}`
+            //         }
+            //         showConfirm(msg, "", `supir/${response.data.id}/approvalblacklist`)
+            //     },
+            // })
+
+            
         }
 
         function approvalSupirLuarKota(supirId) {
+            event.preventDefault()
+            
+            let form = $('#crudForm')
+            $(this).attr('disabled', '')
+            $('#processingLoader').removeClass('d-none')
+            
             $.ajax({
-                url: `${apiUrl}supir/${supirId}`,
-                method: 'GET',
-                dataType: 'JSON',
-                headers: {
-                    Authorization: `Bearer ${accessToken}`
-                },
-                success: response => {
-                    console.log(statusTidakBolehLuarkota);
-                    let msg = ` YAKIN approval STATUS Luar Kota Supir ${response.data.namasupir} ?`
-                    if (response.data.statusluarkota != statusTidakBolehLuarkota) {
-                        msg = `YAKIN UNapproval STATUS Luar Kota Supir ${response.data.namasupir} ?`
-                    }
-                    showConfirm(msg, "", `supir/${response.data.id}/approvalluarkota`)
-                },
+              url: `${apiUrl}supir/approvalluarkota`,
+              method: 'POST',
+              dataType: 'JSON',
+              headers: {
+                Authorization: `Bearer ${accessToken}`
+              },
+              data: {
+                Id: selectedRows,
+                nama: selectedRowsSupir
+              },
+              success: response => {
+                $('#crudForm').trigger('reset')
+                $('#crudModal').modal('hide')
+            
+                $('#jqGrid').jqGrid().trigger('reloadGrid');
+                selectedRows = []
+                selectedRowsSupir = []
+                $('#gs_').prop('checked', false)
+              },
+              error: error => {
+                if (error.status === 422) {
+                  $('.is-invalid').removeClass('is-invalid')
+                  $('.invalid-feedback').remove()
+            
+                  setErrorMessages(form, error.responseJSON.errors);
+                } else {
+                  showDialog(error.responseJSON)
+                }
+              },
+            }).always(() => {
+              $('#processingLoader').addClass('d-none')
+              $(this).removeAttr('disabled')
             })
         }
 

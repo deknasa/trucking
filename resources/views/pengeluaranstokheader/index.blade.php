@@ -116,7 +116,7 @@
     }
   }
   $(document).ready(function() {
-    $("#kodepengeluaranheader").val($("#kodepengeluaranheader option:eq(1)").val()).trigger('change');
+    // $("#kodepengeluaranheader").val($("#kodepengeluaranheader option:eq(1)").val()).trigger('change');
     $("#tabs").tabs()
 
     initSelect2($(`#kodepengeluaranheader`), false);

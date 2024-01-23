@@ -8,6 +8,10 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class MyController extends Controller
 {
+    public function __construct() {
+        $domain =request()->getScheme().'://'.request()->getHttpHost().env('API_PATH_URL');
+        config()->set('app.api_url',$domain);
+    }
     public $httpHeaders = [
         'Accept' => 'application/json',
         'Content-Type' => 'application/json',
