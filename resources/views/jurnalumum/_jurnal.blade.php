@@ -1,6 +1,7 @@
 
 @push('scripts')
 <script>
+  let nobuktiSearch = ''
   function loadJurnalUmumGrid(nobukti) {
     let sortnameJurnal = 'nobukti'
     let sortorderJurnal = 'asc'
@@ -78,7 +79,7 @@
         page: pageJurnal,
         viewrecords: true,
         postData: {
-          nobukti: nobukti
+          nobukti: nobuktiSearch
         },
         prmNames: {
           sort: 'sortIndex',
@@ -143,7 +144,7 @@
         beforeSearch: function() {
           $(this).setGridParam({
           postData: {
-            nobukti: nobukti
+            nobukti: nobuktiSearch
           },})
           clearGlobalSearch($('#jurnalGrid'))
         },
@@ -165,6 +166,7 @@
   }
 
   function loadJurnalUmumData(id, nobukti) {
+    nobuktiSearch = nobukti
     abortGridLastRequest($('#jurnalGrid'))
     $('#jurnalGrid').setGridParam({
       url: `${apiUrl}jurnalumumdetail/jurnal`,

@@ -27,11 +27,6 @@
             width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
           },
           {
-            label: 'NO BUKTI PENGELUARAN TRUCKING',
-            name: 'pengeluarantruckingheader_nobukti',
-            width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
-          },
-          {
             label: 'KETERANGAN',
             name: 'keterangan',
             width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1

@@ -87,13 +87,14 @@
   let currentTab = 'detail'
   let hasDetail = false
 
+  let pengeluaran_nobukti = ''
+  let nobukti = ''
   $(document).ready(function() {
     $("#tabs-detail").tabs()
 
-    let pengeluaran_nobukti = $('#jqGrid').jqGrid('getCell', id, 'pengeluaran_nobukti')
-    let nobukti = $('#jqGrid').jqGrid('getCell', id, 'nobukti')
-    loadDetailGrid()
+
     loadPengeluaranGrid(pengeluaran_nobukti)
+    loadDetailGrid()
     loadPotSemuaGrid(nobukti)
     loadPotPribadiGrid(nobukti)
     loadDepositoGrid(nobukti)
@@ -280,17 +281,17 @@
             formatter: currencyFormat,
           },
 
-          {
-            label: 'PERIODE',
-            name: 'periode',
-            align: 'left',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
-            }
-          },
+          // {
+          //   label: 'PERIODE',
+          //   name: 'periode',
+          //   align: 'left',
+          //   width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+          //   formatter: "date",
+          //   formatoptions: {
+          //     srcformat: "ISO8601Long",
+          //     newformat: "d-m-Y"
+          //   }
+          // },
           {
             label: 'TGL DARI',
             name: 'tgldari',
@@ -305,24 +306,6 @@
           {
             label: 'TGL SAMPAI',
             name: 'tglsampai',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
-            align: 'left',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
-            }
-          },
-          {
-            label: 'USER APPROVAL',
-            name: 'userapproval',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-            align: 'left'
-          },
-
-          {
-            label: 'TGL APPROVAL',
-            name: 'tglapproval',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_2,
             align: 'left',
             formatter: "date",
@@ -331,6 +314,24 @@
               newformat: "d-m-Y"
             }
           },
+          // {
+          //   label: 'USER APPROVAL',
+          //   name: 'userapproval',
+          //   width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+          //   align: 'left'
+          // },
+
+          // {
+          //   label: 'TGL APPROVAL',
+          //   name: 'tglapproval',
+          //   width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_2,
+          //   align: 'left',
+          //   formatter: "date",
+          //   formatoptions: {
+          //     srcformat: "ISO8601Long",
+          //     newformat: "d-m-Y"
+          //   }
+          // },
           {
             label: 'USER BUKA CETAK',
             name: 'userbukacetak',
@@ -360,7 +361,7 @@
             name: 'pengeluaran_nobukti',
             align: 'left',
             formatter: (value, options, rowData) => {
-              if ((value == null) ||( value == '')) {
+              if ((value == null) || (value == '')) {
                 return '';
               }
               let tgldari = rowData.tgldariheaderpengeluaranheader
@@ -369,7 +370,7 @@
               let formattedValue = $(`
               <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
              `)
-             return formattedValue[0].outerHTML
+              return formattedValue[0].outerHTML
             },
           },
           {
@@ -432,26 +433,27 @@
           setGridLastRequest($(this), jqXHR)
         },
         onSelectRow: function(id) {
-          let nobukti = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title') ?? '';
-          let pengeluaran_nobukti = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_pengeluaran_nobukti"]`).attr('title') ?? '';
+          nobukti = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title') ?? '';
+          pengeluaran_nobukti = $(`#jqGrid tr#${id}`).find(`td[aria-describedby="jqGrid_pengeluaran_nobukti"]`).attr('title') ?? '';
           activeGrid = $(this)
           indexRow = $(this).jqGrid('getCell', id, 'rn') - 1
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
 
+
           loadDetailData(id)
-          loadPengeluaranData(id,pengeluaran_nobukti)
+          loadPengeluaranData(id, pengeluaran_nobukti)
           loadPotSemuaData(nobukti)
           loadPotPribadiData(nobukti)
           loadDepositoData(nobukti)
           loadBBMData(nobukti)
           loadJurnalUmumData(id, nobukti)
           loadPengembalianData(nobukti)
+
         },
         loadComplete: function(data) {
           changeJqGridRowListText()
-          console.log(data.data)
           if (data.data.length === 0) {
             console.log('0 data')
             $('#detail, #potsemuaGrid, #potpribadiGrid, #depositoGrid, #bbmGrid, #pengeluaranGrid, #jurnalGrid, #pengembalianGrid').each((index, element) => {
@@ -627,24 +629,22 @@
           caption: 'Approve',
           innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
           class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-          dropmenuHTML: [
-            {
-              id: 'approval-buka-cetak',
-              text: "un/Approval Buka Cetak PROSES  GAJI SUPIR",
-              onClick: () => {
-                if (`{{ $myAuth->hasPermission('prosesgajisupirheader', 'approvalbukacetak') }}`) {
-                  let tglbukacetak = $('#tgldariheader').val().split('-');
-                  tglbukacetak =tglbukacetak[1] + '-' + tglbukacetak[2];
-                  selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                  if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                    showDialog('Harap pilih salah satu record')
-                  }else{
-                    approvalBukaCetak(tglbukacetak,'PROSESGAJISUPIRHEADER',[selectedId]);
-                  }
+          dropmenuHTML: [{
+            id: 'approval-buka-cetak',
+            text: "un/Approval Buka Cetak PROSES  GAJI SUPIR",
+            onClick: () => {
+              if (`{{ $myAuth->hasPermission('prosesgajisupirheader', 'approvalbukacetak') }}`) {
+                let tglbukacetak = $('#tgldariheader').val().split('-');
+                tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
+                selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                  showDialog('Harap pilih salah satu record')
+                } else {
+                  approvalBukaCetak(tglbukacetak, 'PROSESGAJISUPIRHEADER', [selectedId]);
                 }
               }
-            },
-          ],
+            }
+          }, ],
         }]
 
       })
