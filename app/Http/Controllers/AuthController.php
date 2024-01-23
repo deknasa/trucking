@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Laravel\Passport\Token;
 
-class AuthController extends Controller
+class AuthController extends MyController
 {
     public function index()
     {

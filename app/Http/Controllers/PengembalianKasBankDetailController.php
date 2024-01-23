@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
-class PengembalianKasBankDetailController extends Controller
+class PengembalianKasBankDetailController extends MyController
 {
     public $title = 'Pengembalian Kas Bank';
 

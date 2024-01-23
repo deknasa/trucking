@@ -46,18 +46,18 @@
                             {
                                 label: 'NAMA karyawan',
                                 name: 'namakaryawan',
-                                width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+                                width: (detectDeviceType() == "desktop") ? md_dekstop_1 : sm_mobile_4,
                             },
                             {
                                 label: 'KETERANGAN',
                                 name: 'keterangan',
-                                width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
                             },
                             {
                                 label: 'STATUS',
                                 name: 'statusaktif',
                                 stype: 'select',
-                                width: (detectDeviceType() == "desktop") ? sm_dekstop_1 : sm_mobile_1,
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                                 searchoptions: {
                                     value: `<?php
                                     $i = 1;
@@ -100,6 +100,7 @@
                                 label: 'STATUS STAFF',
                                 name: 'statusstaff',
                                 stype: 'select',
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                                 searchoptions: {
                                     value: `<?php
                                     $i = 1;
@@ -146,7 +147,7 @@
                             {
                                 label: 'MODIFIED BY',
                                 name: 'modifiedby',
-                                width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+                                width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                             },
                             {
                                 label: 'CREATED AT',

@@ -2,7 +2,7 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
-        
+
         <form action="" method="post">
           <div class="modal-body">
 
@@ -42,9 +42,8 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <select name="statusaktif" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH STATUS AKTIF --</option>
-                </select>
+                <input type="hidden" name="statusaktif">
+                <input type="text" name="statusaktifnama" id="statusaktifnama" class="form-control lg-form status-lookup">
               </div>
             </div>
             <div class="row form-group">
@@ -54,9 +53,8 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <select name="statusstaff" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH STATUS STAFF --</option>
-                </select>
+                <input type="hidden" name="statusstaff">
+                <input type="text" name="statusstaffnama" id="statusstaffnama" class="form-control lg-form statusstaff-lookup">
               </div>
             </div>
             <div class="row form-group">
@@ -204,7 +202,7 @@
     }
 
     getMaxLength(form)
-    initSelect2(form.find('[name="statusaktif"], [name="statusstaff"]'), true)
+    initLookup()
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
@@ -231,21 +229,16 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form),
-        setStatusStaffOptions(form)
+        showDefault(form)
       ])
       .then(() => {
-        showDefault(form)
-          .then(() => {
-            $('#crudModal').modal('show')
-          })
-          .catch((error) => {
-            showDialog(error.statusText)
-          })
-          .finally(() => {
-            $('.modal-loader').addClass('d-none')
-          })
-
+        $('#crudModal').modal('show')
+      })
+      .catch((error) => {
+        showDialog(error.statusText)
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
       })
   }
 
@@ -267,21 +260,17 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form),
-        setStatusStaffOptions(form)
+        showKaryawan(form, Id)
 
       ])
       .then(() => {
-        showKaryawan(form, Id)
-          .then(() => {
-            $('#crudModal').modal('show')
-          })
-          .catch((error) => {
-            showDialog(error.statusText)
-          })
-          .finally(() => {
-            $('.modal-loader').addClass('d-none')
-          })
+        $('#crudModal').modal('show')
+      })
+      .catch((error) => {
+        showDialog(error.statusText)
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
       })
   }
 
@@ -303,21 +292,17 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form),
-        setStatusStaffOptions(form)
+        showKaryawan(form, Id)
 
       ])
       .then(() => {
-        showKaryawan(form, Id)
-          .then(() => {
-            $('#crudModal').modal('show')
-          })
-          .catch((error) => {
-            showDialog(error.statusText)
-          })
-          .finally(() => {
-            $('.modal-loader').addClass('d-none')
-          })
+        $('#crudModal').modal('show')
+      })
+      .catch((error) => {
+        showDialog(error.statusText)
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
       })
   }
 
@@ -337,30 +322,26 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form),
-        setStatusStaffOptions(form)
+        showKaryawan(form, Id)
 
       ])
-      .then(() => {
-        showKaryawan(form, Id)
-          .then(Id => {
-            // form.find('.aksi').hide()
-            setFormBindKeys(form)
-            form.find('[name]').attr('disabled', 'disabled').css({
-              background: '#fff'
-            })
-            form.find('[name=id]').prop('disabled', false)
+      .then(Id => {
+        // form.find('.aksi').hide()
+        setFormBindKeys(form)
+        form.find('[name]').attr('disabled', 'disabled').css({
+          background: '#fff'
+        })
+        form.find('[name=id]').prop('disabled', false)
 
-          })
-          .then(() => {
-            $('#crudModal').modal('show')
-          })
-          .catch((error) => {
-            showDialog(error.statusText)
-          })
-          .finally(() => {
-            $('.modal-loader').addClass('d-none')
-          })
+      })
+      .then(() => {
+        $('#crudModal').modal('show')
+      })
+      .catch((error) => {
+        showDialog(error.statusText)
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
       })
   }
 
@@ -551,6 +532,76 @@
 
       }
     })
+  }
+
+
+  function initLookup() {
+
+    $(`.status-lookup`).lookupMaster({
+      title: 'Status Aktif Lookup',
+      fileName: 'parameterMaster',
+      typeSearch: 'ALL',
+      searching: 1,
+      beforeProcess: function() {
+        this.postData = {
+          url: `${apiUrl}parameter/combo`,
+          grp: 'STATUS AKTIF',
+          subgrp: 'STATUS AKTIF',
+          searching: 1,
+          valueName: `statusaktif`,
+          searchText: `status-lookup`,
+          singleColumn: true,
+          hideLabel: true,
+          title: 'Status Aktif'
+        };
+      },
+      onSelectRow: (status, element) => {
+        $('#crudForm [name=statusaktif]').first().val(status.id)
+        element.val(status.text)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'));
+      },
+      onClear: (element) => {
+        $('#crudForm [name=statusaktif]').first().val('')
+        element.val('');
+        element.data('currentValue', element.val());
+      },
+    });
+
+    $(`.statusstaff-lookup`).lookupMaster({
+      title: 'Status Staff Lookup',
+      fileName: 'parameterMaster',
+      typeSearch: 'ALL',
+      searching: 1,
+      beforeProcess: function() {
+        this.postData = {
+          url: `${apiUrl}parameter/combo`,
+          grp: 'STATUS STAFF',
+          subgrp: 'STATUS STAFF',
+          searching: 1,
+          valueName: `statusstaff`,
+          searchText: `statusstaff-lookup`,
+          singleColumn: true,
+          hideLabel: true,
+          title: 'Status Staff'
+        };
+      },
+      onSelectRow: (status, element) => {
+        $('#crudForm [name=statusstaff]').first().val(status.id)
+        element.val(status.text)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'));
+      },
+      onClear: (element) => {
+        $('#crudForm [name=statusstaff]').first().val('')
+        element.val('');
+        element.data('currentValue', element.val());
+      },
+    });
   }
 </script>
 @endpush()

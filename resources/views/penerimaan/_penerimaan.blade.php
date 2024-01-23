@@ -1,6 +1,7 @@
 
 @push('scripts')
 <script>
+  let nobuktiSearchPenerimaan = ''
   function loadPenerimaanGrid(nobukti) {
     let sortnamePenerimaan = 'nobukti'
     let sortorderPenerimaan = 'asc'
@@ -103,7 +104,7 @@
         page: pagePenerimaan,
         viewrecords: true,
         postData: {
-          nobukti: nobukti
+          nobukti: nobuktiSearchPenerimaan
         },
         prmNames: {
           sort: 'sortIndex',
@@ -167,7 +168,7 @@
         beforeSearch: function() {
           $(this).setGridParam({
           postData: {
-            nobukti: nobukti
+            nobukti: nobuktiSearchPenerimaan
           },})
           clearGlobalSearch($('#penerimaanGrid'))
         },
@@ -190,6 +191,7 @@
 
   function loadPenerimaanData(id, nobukti) {
     abortGridLastRequest($('#penerimaanGrid'))
+    nobuktiSearchPenerimaan = nobukti
     $('#penerimaanGrid').setGridParam({
       url: `${apiUrl}penerimaandetail/getPenerimaan`,
       datatype: "json",

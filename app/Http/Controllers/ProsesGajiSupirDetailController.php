@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
 
-class ProsesGajiSupirDetailController extends Controller
+class ProsesGajiSupirDetailController extends MyController
 {
     public $title = 'Proses Gaji Supir Detail';
 

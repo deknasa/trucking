@@ -43,7 +43,7 @@
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="hidden" name="trado_id">
-                <input type="text" name="trado" class="form-control trado-lookup">
+                <input type="text" name="trado" id="trado" class="form-control trado-lookup">
               </div>
             </div>
 
@@ -55,7 +55,7 @@
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input type="hidden" name="container_id">
-                <input type="text" name="container" class="form-control container-lookup">
+                <input type="text" name="container" id="container" class="form-control container-lookup">
               </div>
             </div>
 
@@ -86,9 +86,8 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <select name="statusaktif" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH STATUS AKTIF --</option>
-                </select>
+                <input type="hidden" name="statusaktif">
+                <input type="text" name="statusaktifnama" id="statusaktifnama" class="form-control lg-form status-lookup">
               </div>
             </div>
           </div>
@@ -227,9 +226,7 @@
     }
 
     getMaxLength(form)
-    initSelect2(form.find(`
-      [name="statusaktif"]
-    `), true)
+    initLookup()
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
@@ -255,21 +252,17 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form)
+        showDefault(form)
       ])
       .then(() => {
-        showDefault(form)
-          .then(() => {
-            $('#crudModal').modal('show')
-          })
-          .catch((error) => {
-            showDialog(error.statusText)
-          })
-          .finally(() => {
-            $('.modal-loader').addClass('d-none')
-          })
+        $('#crudModal').modal('show')
       })
-    initLookup()
+      .catch((error) => {
+        showDialog(error.statusText)
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
   }
 
   function editGandengan(gandenganId) {
@@ -290,20 +283,16 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form)
+        showGandengan(form, gandenganId)
       ])
       .then(() => {
-        showGandengan(form, gandenganId)
-          .then(() => {
-            $('#crudModal').modal('show')
-          }).catch((error) => {
-            showDialog(error.statusText)
-          })
-          .finally(() => {
-            $('.modal-loader').addClass('d-none')
-          })
+        $('#crudModal').modal('show')
+      }).catch((error) => {
+        showDialog(error.statusText)
       })
-    initLookup()
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
   }
 
   function deleteGandengan(gandenganId) {
@@ -324,19 +313,16 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form)
+        showGandengan(form, gandenganId)
       ])
       .then(() => {
-        showGandengan(form, gandenganId)
-          .then(() => {
-            $('#crudModal').modal('show')
-          })
-          .catch((error) => {
-            showDialog(error.statusText)
-          })
-          .finally(() => {
-            $('.modal-loader').addClass('d-none')
-          })
+        $('#crudModal').modal('show')
+      })
+      .catch((error) => {
+        showDialog(error.statusText)
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
       })
   }
 
@@ -358,39 +344,36 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form)
-      ])
-      .then(() => {
         showGandengan(form, gandenganId)
-          .then(gandenganId => {
-            // form.find('.aksi').hide()
-            setFormBindKeys(form)
-            initSelect2(form.find('.select2bs4'), true)
-            form.find('[name]').removeAttr('disabled')
+      ])
+      .then(gandenganId => {
+        // form.find('.aksi').hide()
+        setFormBindKeys(form)
+        initSelect2(form.find('.select2bs4'), true)
+        form.find('[name]').removeAttr('disabled')
 
-            form.find('select').each((index, select) => {
-              let element = $(select)
+        form.find('select').each((index, select) => {
+          let element = $(select)
 
-              if (element.data('select2')) {
-                element.select2('destroy')
-              }
-            })
+          if (element.data('select2')) {
+            element.select2('destroy')
+          }
+        })
 
-            form.find('[name]').attr('disabled', 'disabled').css({
-              background: '#fff'
-            })
-            form.find('[name=id]').prop('disabled', false)
+        form.find('[name]').attr('disabled', 'disabled').css({
+          background: '#fff'
+        })
+        form.find('[name=id]').prop('disabled', false)
 
-          })
-          .then(() => {
-            $('#crudModal').modal('show')
-          })
-          .catch((error) => {
-            showDialog(error.statusText)
-          })
-          .finally(() => {
-            $('.modal-loader').addClass('d-none')
-          })
+      })
+      .then(() => {
+        $('#crudModal').modal('show')
+      })
+      .catch((error) => {
+        showDialog(error.statusText)
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
       })
   }
 
@@ -424,21 +407,26 @@
 
   function initLookup() {
     if (!$('.trado-lookup').data('hasLookup')) {
-      $('.trado-lookup').lookup({
+      $('.trado-lookup').lookupMaster({
         title: 'trado Lookup',
-        fileName: 'trado',
+        fileName: 'tradoMaster',
+        typeSearch: 'ALL',
+        searching: 1,
         beforeProcess: function(test) {
-          // var levelcoa = $(`#levelcoa`).val();
           this.postData = {
 
             Aktif: 'AKTIF',
+            searching: 1,
+            valueName: 'trado',
+            searchText: 'trado-lookup',
+            title: 'TRADO',
+            typeSearch: 'ALL',
           }
         },
         onSelectRow: (trado, element) => {
           $('#crudForm [name=trado_id]').first().val(trado.id)
           element.val(trado.kodetrado)
           element.data('currentValue', element.val())
-          console.log(trado)
         },
 
         onCancel: (element) => {
@@ -452,33 +440,73 @@
       })
     }
     if (!$('.container-lookup').data('hasLookup')) {
-      $('.container-lookup').lookup({
+      $('.container-lookup').lookupMaster({
         title: 'container Lookup',
-        fileName: 'container',
+        fileName: 'containerMaster',
+        typeSearch: 'ALL',
+        searching: 1,
         beforeProcess: function(test) {
-          // var levelcoa = $(`#levelcoa`).val();
           this.postData = {
 
             Aktif: 'AKTIF',
+            searching: 1,
+            valueName: 'container',
+            searchText: 'container-lookup',
+            title: 'CONTAINER',
+            typeSearch: 'ALL',
           }
         },
         onSelectRow: (container, element) => {
           $('#crudForm [name=container_id]').first().val(container.id)
           element.val(container.kodecontainer)
           element.data('currentValue', element.val())
-          console.log(container)
         },
 
         onCancel: (element) => {
           element.val(element.data('currentValue'))
         },
         onClear: (element) => {
-          $('#crudForm [name=trado_id]').first().val('')
+          $('#crudForm [name=container_id]').first().val('')
           element.val('')
           element.data('currentValue', element.val())
         }
       })
     }
+
+
+    $(`.status-lookup`).lookupMaster({
+      title: 'Status Aktif Lookup',
+      fileName: 'parameterMaster',
+      typeSearch: 'ALL',
+      searching: 1,
+      beforeProcess: function() {
+        this.postData = {
+          url: `${apiUrl}parameter/combo`,
+          grp: 'STATUS AKTIF',
+          subgrp: 'STATUS AKTIF',
+          searching: 1,
+          valueName: `statusaktif`,
+          searchText: `status-lookup`,
+          singleColumn: true,
+          hideLabel: true,
+          title: 'Status Aktif'
+        };
+      },
+      onSelectRow: (status, element) => {
+        $('#crudForm [name=statusaktif]').first().val(status.id)
+        element.val(status.text)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'));
+      },
+      onClear: (element) => {
+        $('#crudForm [name=statusaktif]').first().val('')
+        element.val('');
+        element.data('currentValue', element.val());
+      },
+    });
+
     // if (!$('.supir-lookup').data('hasLookup')) {
     //   $('.supir-lookup').lookup({
     //     title: 'Supir Lookup',

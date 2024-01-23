@@ -9,7 +9,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 
-class LaporanHistoryTradoMilikMandorController extends Controller
+class LaporanHistoryTradoMilikMandorController extends MyController
 {
     public $title = 'Laporan History Trado Milik Mandor';
 

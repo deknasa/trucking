@@ -1,9 +1,9 @@
 <?php
 if (isset($id)) { ?>
-  <table id="subkelompokLookup<?= $id ?>" class="lookup-grid"></table>
+  <table id="cabangLookup<?= $id ?>" class="lookup-grid"></table>
 <?php
 } else { ?>
-  <table id="subkelompokLookup" class="lookup-grid"></table>
+  <table id="cabangLookup" class="lookup-grid"></table>
 <?php } ?>
 <div class="loadingMessage">
   <img class="loading-image" src="{{ asset('libraries/tas-lib/img/loading-lookup.gif') }}" alt="Loading">
@@ -19,7 +19,7 @@ $idLookup = isset($id) ? $id : null;
   var idLookup = '{{ $idLookup }}';
   var idTop
 
-  selector = $(`#subkelompokLookup{{ isset($id) ? $id : null }} `)
+  selector = $(`#cabangLookup{{ isset($id) ? $id : null }} `)
 
 
   var singleColumn = `{{ $singleColumn ?? '' }}`
@@ -132,7 +132,7 @@ $idLookup = isset($id) ? $id : null;
     fixed: true,
     rownumbers: false,
     rownumWidth: 0,
-    rowNum: `{!! $limit ?? 11 !!}`,
+    rowNum: `{!! $limit ?? 15 !!}`,
     rowList: [10, 20, 50, 0],
     sortable: true,
     sortname: 'id',

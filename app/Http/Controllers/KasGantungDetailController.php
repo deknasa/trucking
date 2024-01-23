@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
-class KasGantungDetailController extends Controller
+class KasGantungDetailController extends MyController
 {
     public $title = 'Kas Gantung Detail';
 

@@ -310,6 +310,7 @@
     let triggerClickRincian
     let indexRowRincian
     let isEditTgl
+    let isReload = false;
 
     function checkboxHandler(element) {
         let value = $(element).val();
@@ -427,7 +428,7 @@
         initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_uangmakanberjenjang"]`).text(berjenjang))
         initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_gajisupir"]`).text(gajisupir))
         initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_gajikenek"]`).text(gajikenek))
-        initAutoNumeric($('.footrow').find(`td[aria-describedby="rekapRincian_extra"]`).text(extra))
+        initAutoNumericMinus($('.footrow').find(`td[aria-describedby="rekapRincian_extra"]`).text(extra))
     }
 
     $(document).ready(function() {
@@ -586,7 +587,6 @@
 
             let tgldariheader = $('#tgldariheader').val();
             let tglsampaiheader = $('#tglsampaiheader').val()
-            console.log(data);
 
             switch (action) {
                 case 'add':
@@ -694,6 +694,7 @@
         selectedGajiKenek = [];
         selectedGajiSupir = [];
         selectedExtra = [];
+        isReload = false
         $('#crudModal').find('.modal-body').html(modalBody)
         initDatepicker('datepickerIndex')
     })
@@ -789,13 +790,23 @@
                         label: 'DARI',
                         name: 'tgldariric',
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-                        align: 'left'
+                        align: 'left',
+                        formatter: "date",
+                        formatoptions: {
+                            srcformat: "ISO8601Long",
+                            newformat: "d-m-Y"
+                        }
                     },
                     {
                         label: 'SAMPAI',
                         name: 'tglsampairic',
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-                        align: 'left'
+                        align: 'left',
+                        formatter: "date",
+                        formatoptions: {
+                            srcformat: "ISO8601Long",
+                            newformat: "d-m-Y"
+                        }
                     },
                     {
                         label: 'BORONGAN SUPIR',
@@ -939,12 +950,19 @@
                     $(document).unbind('keydown')
                     setCustomBindKeys($(this))
                     initResize($(this))
-                    console.log(selectedRows)
                     $.each(selectedRows, function(key, value) {
                         $(grid).find('tbody tr').each(function(row, tr) {
                             if ($(this).find(`td input:checkbox`).val() == value) {
                                 $(this).addClass('bg-light-blue')
                                 $(this).find(`td input:checkbox`).prop('checked', true)
+
+                                if ($('#crudForm').data('action') == 'edit') {
+                                    if (isReload) {
+                                        $(this).find(`td input:checkbox`).prop("disabled", false);
+                                    } else {
+                                        $(this).find(`td input:checkbox`).prop("disabled", true);
+                                    }
+                                }
                             }
                         })
                     });
@@ -970,6 +988,17 @@
                         $('#gsRincian').attr('disabled', false)
                     } else {
                         $('#gsRincian').attr('disabled', true)
+                    }
+
+                    if ($('#crudForm').data('action') == 'add') {
+                        $('#gsRincian').attr('disabled', false)
+                    }
+                    if ($('#crudForm').data('action') == 'edit') {
+                        if (isReload) {
+                            $('#gsRincian').attr('disabled', false)
+                        } else {
+                            $('#gsRincian').attr('disabled', true)
+                        }
                     }
                 }
             })
@@ -1277,7 +1306,7 @@
                         tgldari: $('#crudForm').find('[name=tgldari]').val(),
                         tglsampai: $('#crudForm').find('[name=tglsampai]').val(),
                         sortIndex: sortnameRincian,
-                        aksi: 'edit'
+                        aksi: ''
                     },
                     datatype: "json"
                 }).trigger('reloadGrid');
@@ -1388,23 +1417,30 @@
             .then((response) => {
                 $('.is-invalid').removeClass('is-invalid')
                 $('.invalid-feedback').remove()
+                if ($('#crudForm').data('action') == 'add') {
+                    clearRows()
+                    selectedRows = response.data.map((data) => data.idric)
+                    selectedBorongan = response.data.map((data) => data.borongan)
+                    selectedGajiSupir = response.data.map((data) => data.gajisupir)
+                    selectedGajiKenek = response.data.map((data) => data.gajikenek)
+                    selectedExtra = response.data.map((data) => data.extra)
+                    selectedJalan = response.data.map((data) => data.uangjalan)
+                    selectedKomisi = response.data.map((data) => data.komisisupir)
+                    selectedMakan = response.data.map((data) => data.uangmakanharian)
+                    selectedMakanBerjenjang = response.data.map((data) => data.uangmakanberjenjang)
+                    selectedPP = response.data.map((data) => data.potonganpinjaman)
+                    selectedPS = response.data.map((data) => data.potonganpinjamansemua)
+                    selectedDeposito = response.data.map((data) => data.deposito)
+                    selectedBBM = response.data.map((data) => data.bbm)
+                    selectedRIC = response.data.map((data) => data.nobuktiric)
+                    selectedSupir = response.data.map((data) => data.supir_id)
+                }
+                if ($('#crudForm').data('action') == 'edit') {
+                    clearRows()
+                    isReload = true;
+                    $(`[name="rincianId[]"]`).prop('disabled', false)
 
-                selectedRows = response.data.map((data) => data.idric)
-                selectedBorongan = response.data.map((data) => data.borongan)
-                selectedGajiSupir = response.data.map((data) => data.gajisupir)
-                selectedGajiKenek = response.data.map((data) => data.gajikenek)
-                selectedExtra = response.data.map((data) => data.extra)
-                selectedJalan = response.data.map((data) => data.uangjalan)
-                selectedKomisi = response.data.map((data) => data.komisisupir)
-                selectedMakan = response.data.map((data) => data.uangmakanharian)
-                selectedMakanBerjenjang = response.data.map((data) => data.uangmakanberjenjang)
-                selectedPP = response.data.map((data) => data.potonganpinjaman)
-                selectedPS = response.data.map((data) => data.potonganpinjamansemua)
-                selectedDeposito = response.data.map((data) => data.deposito)
-                selectedBBM = response.data.map((data) => data.bbm)
-                selectedRIC = response.data.map((data) => data.nobuktiric)
-                selectedSupir = response.data.map((data) => data.supir_id)
-
+                }
                 $('#rekapRincian').jqGrid('setGridParam', {
                     url: `${apiUrl}prosesgajisupirheader/${response.url}`,
                     postData: {
@@ -1534,6 +1570,24 @@
                 element.data('currentValue', element.val())
             }
         })
+    }
+
+    function clearRows() {
+        selectedRows = [];
+        selectedBorongan = [];
+        selectedGajiSupir = [];
+        selectedExtra = [];
+        selectedGajiKenek = [];
+        selectedJalan = [];
+        selectedKomisi = [];
+        selectedMakan = [];
+        selectedMakanBerjenjang = [];
+        selectedPP = [];
+        selectedPS = [];
+        selectedDeposito = [];
+        selectedBBM = [];
+        selectedRIC = [];
+        selectedSupir = [];
     }
 
     function clearSelectedRows() {

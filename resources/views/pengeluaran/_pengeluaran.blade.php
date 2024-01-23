@@ -1,6 +1,7 @@
 
 @push('scripts')
 <script>
+  let nobuktiSearchPengeluaran = ''
   function loadPengeluaranGrid(nobukti) {
     let sortnamePengeluaran = 'nobukti'
     let sortorderPengeluaran = 'asc'
@@ -88,7 +89,7 @@
         page: pagePengeluaran,
         viewrecords: true,
         postData: {
-          nobukti: nobukti
+          nobukti: nobuktiSearchPengeluaran
         },
         prmNames: {
           sort: 'sortIndex',
@@ -152,7 +153,7 @@
         beforeSearch: function() {
           $(this).setGridParam({
           postData: {
-            nobukti: nobukti
+            nobukti: nobuktiSearchPengeluaran
           },})
           clearGlobalSearch($('#pengeluaranGrid'))
         },
@@ -175,7 +176,7 @@
 
   function loadPengeluaranData(id,nobukti) {
     abortGridLastRequest($('#pengeluaranGrid'))
-
+    nobuktiSearchPengeluaran = nobukti
     $('#pengeluaranGrid').setGridParam({
       url: `${apiUrl}pengeluarandetail/getPengeluaran`,
       datatype: "json",

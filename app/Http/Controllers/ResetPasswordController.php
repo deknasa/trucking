@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class ResetPasswordController extends Controller
+class ResetPasswordController extends MyController
 {
     public function index($token, Request $request)
     {   

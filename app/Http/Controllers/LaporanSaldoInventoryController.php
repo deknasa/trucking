@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
-class LaporanSaldoInventoryController extends Controller
+class LaporanSaldoInventoryController extends MyController
 {
     public $title = 'Laporan Saldo Inventory';
 

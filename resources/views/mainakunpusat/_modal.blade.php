@@ -2,7 +2,7 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
-        
+
         <form action="" method="post">
           <div class="modal-body">
             {{-- <div class="row form-group">
@@ -42,18 +42,8 @@
               </div>
               <div class="col-12 col-md-10">
                 <input type="hidden" name="type_id">
-                <input type="text" name="type"  data-target-name="type" id="type" class="form-control lg-form type-lookup">
-              </div>
-            </div>
-            <div class="row form-group">
-              <div class="col-12 col-md-2">
-                <label class="col-form-label">
-                  akuntansi <span class="text-danger">*</span>
-                </label>
-              </div>
-              <div class="col-12 col-md-10">
                 <input type="hidden" name="akuntansi_id">
-                  <input type="text" name="akuntansi"  data-target-name="akuntansi" id="akuntansi" class="form-control lg-form  akuntansi-lookup">
+                <input type="text" name="type" data-target-name="type" id="type" class="form-control lg-form type-lookup">
               </div>
             </div>
             <div class="row form-group">
@@ -129,7 +119,7 @@
 <script>
   let hasFormBindKeys = false
   let modalBody = $('#crudModal').find('.modal-body').html()
-  $(document).ready(function() {   
+  $(document).ready(function() {
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
 
@@ -249,15 +239,17 @@
   // });
 
 
-  function activateParent(par) { 
+  function activateParent(par) {
     if (par == 'BUKAN PARENT') {
       $('#crudForm [name=parentnama]').attr('readonly', false)
       $('#crudForm [name=parentnama]').parents('.input-group').find('.input-group-append').show()
       $('#crudForm [name=parentnama]').parents('.input-group').find('.button-clear').show()
-    }  else {
+    } else {
       setTimeout(() => {
 
         $('#crudForm [name=parentnama]').attr('readonly', true)
+        $('#crudForm [name=parent]').val('')
+        $('#crudForm [name=parentnama]').val('')
         $('#crudForm [name=parentnama]').parents('.input-group').find('.input-group-append').hide()
         $('#crudForm [name=parentnama]').parents('.input-group').find('.button-clear').hide()
       }, 500);
@@ -303,18 +295,18 @@
     $('.invalid-feedback').remove()
 
     Promise
-    .all([
-      showDefault(form)
-    ])
-    .then(() => {
-      $('#crudModal').modal('show')
-    })
-    .catch((error) => {
-      showDialog(error.statusText)
-    })
-    .finally(() => {
-      $('.modal-loader').addClass('d-none')
-    })
+      .all([
+        showDefault(form)
+      ])
+      .then(() => {
+        $('#crudModal').modal('show')
+      })
+      .catch((error) => {
+        showDialog(error.statusText)
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
   }
 
   function showDefault(form) {
@@ -329,7 +321,7 @@
         success: response => {
           $.each(response.data, (index, value) => {
             // console.log(value)
-            
+
             let element = form.find(`[name="${index}"]`)
             // let element = form.find(`[name="statusaktif"]`)
 
@@ -339,8 +331,8 @@
               element.val(value)
             }
             if (index == 'statusparentnama') {
-                activateParent(value);
-              }
+              activateParent(value);
+            }
           })
           resolve()
         },
@@ -367,18 +359,18 @@
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
     Promise
-    .all([
-      showMainAkunPusat(form, akunPusatId)
-    ])
-    .then(() => {
-      $('#crudModal').modal('show')
-    })
-    .catch((error) => {
-      showDialog(error.statusText)
-    })
-    .finally(() => {
-      $('.modal-loader').addClass('d-none')
-    })
+      .all([
+        showMainAkunPusat(form, akunPusatId)
+      ])
+      .then(() => {
+        $('#crudModal').modal('show')
+      })
+      .catch((error) => {
+        showDialog(error.statusText)
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
 
   }
 
@@ -399,19 +391,19 @@
     $('.invalid-feedback').remove()
 
     Promise
-    .all([
-      showMainAkunPusat(form, akunPusatId)
-    ])
-    .then(() => {
-      $('#crudModal').modal('show')
-    })
-    .catch((error) => {
-      showDialog(error.statusText)
-    })
-    .finally(() => {
-      $('.modal-loader').addClass('d-none')
-    })
-    
+      .all([
+        showMainAkunPusat(form, akunPusatId)
+      ])
+      .then(() => {
+        $('#crudModal').modal('show')
+      })
+      .catch((error) => {
+        showDialog(error.statusText)
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
+
   }
 
   function viewMainAkunPusat(akunPusatId) {
@@ -431,30 +423,30 @@
     $('.invalid-feedback').remove()
 
     Promise
-    .all([
-      showMainAkunPusat(form, akunPusatId)
-    ])
-    .then(akunPusatId => {
-      // form.find('.aksi').hide()
-      setFormBindKeys(form)
-      form.find('[name]').attr('disabled', 'disabled').css({
-        background: '#fff'
-      })
-      form.find('[name=id]').prop('disabled', false)
+      .all([
+        showMainAkunPusat(form, akunPusatId)
+      ])
+      .then(akunPusatId => {
+        // form.find('.aksi').hide()
+        setFormBindKeys(form)
+        form.find('[name]').attr('disabled', 'disabled').css({
+          background: '#fff'
+        })
+        form.find('[name=id]').prop('disabled', false)
 
-    })
-    .then(() => {
-      $('#crudModal').modal('show')
-      let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
-      name.attr('disabled', true)
-      name.find('.lookup-toggler').attr('disabled', true)
-    })
-    .catch((error) => {
-      showDialog(error.statusText)
-    })
-    .finally(() => {
-      $('.modal-loader').addClass('d-none')
-    })      
+      })
+      .then(() => {
+        $('#crudModal').modal('show')
+        let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
+        name.attr('disabled', true)
+        name.find('.lookup-toggler').attr('disabled', true)
+      })
+      .catch((error) => {
+        showDialog(error.statusText)
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
   }
 
   function getMaxLength(form) {
@@ -715,7 +707,7 @@
             }
             if (index == 'statusparentnama') {
               activateParent(value);
-                
+
             }
           })
 
@@ -774,6 +766,7 @@
       },
       onSelectRow: (type, element) => {
         $('#crudForm [name=type_id]').val(type.id)
+        $('#crudForm [name=akuntansi_id]').val(type.akuntansi_id)
         element.val(type.kodetype)
         element.data('currentValue', element.val())
       },
@@ -782,6 +775,7 @@
       },
       onClear: (element) => {
         $('#crudForm [name=type_id]').val('')
+        $('#crudForm [name=akuntansi_id]').val('')
         element.val('')
         element.data('currentValue', element.val())
       }
@@ -807,7 +801,7 @@
         $('#crudForm [name=akuntansi_id]').val(akuntansi.id)
         element.val(akuntansi.kodeakuntansi)
         element.data('currentValue', element.val())
-      
+
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
@@ -956,7 +950,7 @@
         element.data('currentValue', element.val())
       },
     });
-  
+
     $('.parent-lookup').lookupMaster({
       title: 'Main Akun Pusat Lookup',
       fileName: 'mainakunpusatMaster',
@@ -965,7 +959,9 @@
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
+          isParent: true,
           searching: 1,
+          typeSearch: 'ALL',
           valueName: `parentnama`,
           searchText: `parent-lookup`,
           // singleColumn: true,
