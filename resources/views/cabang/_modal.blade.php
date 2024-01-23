@@ -2,10 +2,10 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
-        
+
         <form action="" method="post">
           <div class="modal-body">
-           {{-- <div class="row form-group">
+            {{-- <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">ID</label>
               </div>
@@ -43,12 +43,11 @@
 
 
               <div class="col-12 col-sm-9 col-md-10">
-                <select name="statusaktif" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH STATUS AKTIF --</option>
-                </select>
+                <input type="hidden" name="statusaktif">
+                <input type="text" name="statusaktifnama" id="statusaktifnama" class="form-control lg-form status-lookup">
               </div>
             </div>
-            
+
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
@@ -114,8 +113,8 @@
       deleteRow($(this).parents('tr'))
     })
 
-    
-      
+
+
 
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
@@ -228,9 +227,8 @@
     setFormBindKeys(form)
 
     activeGrid = null
-
+    initLookup()
     getMaxLength(form)
-    initSelect2($(`[name="statusaktif"]`), true)
   })
 
   function addRow() {
@@ -250,6 +248,7 @@
     $('#detailList tbody').append(detailRow)
 
   }
+
   function initRow() {
     let detailRow = (`
       <tr>
@@ -297,7 +296,7 @@
       addRow()
     }
   }
-    
+
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
     $('#crudModal').find('.modal-body').html(modalBody)
@@ -318,25 +317,22 @@
     $('#crudModalTitle').text('Create Cabang')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-    
+
     $('#table_body').html('')
     initRow()
 
     Promise
       .all([
-        setStatusAktifOptions(form)
+        showDefault(form)
       ])
       .then(() => {
-        showDefault(form)
-          .then(() => {
-            $('#crudModal').modal('show')
-          })
-          .catch((error) => {
-            showDialog(error.statusText)
-          })
-          .finally(() => {
-            $('.modal-loader').addClass('d-none')
-          })
+        $('#crudModal').modal('show')
+      })
+      .catch((error) => {
+        showDialog(error.statusText)
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
       })
   }
 
@@ -358,19 +354,16 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form)
+        showCabang(form, cabangId)
       ])
       .then(() => {
-        showCabang(form, cabangId)
-          .then(() => {
-            $('#crudModal').modal('show')
-          })
-          .catch((error) => {
-            showDialog(error.statusText)
-          })
-          .finally(() => {
-            $('.modal-loader').addClass('d-none')
-          })
+        $('#crudModal').modal('show')
+      })
+      .catch((error) => {
+        showDialog(error.statusText)
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
       })
 
   }
@@ -393,21 +386,19 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form)
+        showCabang(form, cabangId)
       ])
       .then(() => {
-        showCabang(form, cabangId)
-          .then(() => {
-            $('#crudModal').modal('show')
-          })
-          .catch((error) => {
-            showDialog(error.statusText)
-          })
-          .finally(() => {
-            $('.modal-loader').addClass('d-none')
-          })
+        $('#crudModal').modal('show')
+      })
+      .catch((error) => {
+        showDialog(error.statusText)
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
       })
   }
+
   function viewCabang(cabangId) {
     let form = $('#crudForm')
 
@@ -419,7 +410,7 @@
       <i class="fa fa-save"></i>
       Save
     `)
-    form.find('#btnSubmit').prop('disabled',true)
+    form.find('#btnSubmit').prop('disabled', true)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('View Cabang')
     $('.is-invalid').removeClass('is-invalid')
@@ -427,39 +418,35 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form)
-      ])
-      .then(() => {
         showCabang(form, cabangId)
-          .then(cabangId => {
-              setFormBindKeys(form)
-              initSelect2(form.find('.select2bs4'), true)
-              form.find('[name]').removeAttr('disabled')
-  
-              form.find('select').each((index, select) => {
-                let element = $(select)
-  
-                if (element.data('select2')) {
-                  element.select2('destroy')
-                }
-              })
-  
-              form.find('[name]').attr('disabled', 'disabled').css({
-                background: '#fff'
-              })
-              form.find('[name=id]').prop('disabled',false)
-  
-            })
-          .then(() => {
-            $('#crudModal').modal('show')
-          })
-          .catch((error) => {
-            showDialog(error.statusText)
-          })
-          .finally(() => {
-            $('.modal-loader').addClass('d-none')
-          })
-          
+      ])
+      .then(cabangId => {
+        setFormBindKeys(form)
+        initSelect2(form.find('.select2bs4'), true)
+        form.find('[name]').removeAttr('disabled')
+
+        form.find('select').each((index, select) => {
+          let element = $(select)
+
+          if (element.data('select2')) {
+            element.select2('destroy')
+          }
+        })
+
+        form.find('[name]').attr('disabled', 'disabled').css({
+          background: '#fff'
+        })
+        form.find('[name=id]').prop('disabled', false)
+
+      })
+      .then(() => {
+        $('#crudModal').modal('show')
+      })
+      .catch((error) => {
+        showDialog(error.statusText)
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
       })
   }
 
@@ -561,11 +548,11 @@
           })
 
           let memo = response.data.memo
-          
+
           let isJson = isJSON(memo);
-          if (isJson === false ||memo==null) {
+          if (isJson === false || memo == null) {
             initRow()
-          } else{
+          } else {
             let memoToArray = JSON.parse(memo)
             $.each(memoToArray, (index, detail) => {
 
@@ -631,6 +618,42 @@
         }
       })
     })
+  }
+
+  function initLookup() {
+
+    $(`.status-lookup`).lookupMaster({
+      title: 'Status Aktif Lookup',
+      fileName: 'parameterMaster',
+      typeSearch: 'ALL',
+      searching: 1,
+      beforeProcess: function() {
+        this.postData = {
+          url: `${apiUrl}parameter/combo`,
+          grp: 'STATUS AKTIF',
+          subgrp: 'STATUS AKTIF',
+          searching: 1,
+          valueName: `statusaktif`,
+          searchText: `status-lookup`,
+          singleColumn: true,
+          hideLabel: true,
+          title: 'Status Aktif'
+        };
+      },
+      onSelectRow: (status, element) => {
+        $('#crudForm [name=statusaktif]').first().val(status.id)
+        element.val(status.text)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'));
+      },
+      onClear: (element) => {
+        $('#crudForm [name=statusaktif]').first().val('')
+        element.val('');
+        element.data('currentValue', element.val());
+      },
+    });
   }
 </script>
 @endpush()

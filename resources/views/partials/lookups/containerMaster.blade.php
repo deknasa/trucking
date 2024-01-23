@@ -1,9 +1,9 @@
 <?php
 if (isset($id)) { ?>
-  <table id="cabangLookup<?= $id ?>" class="lookup-grid"></table>
+  <table id="containerLookup<?= $id ?>" class="lookup-grid"></table>
 <?php
 } else { ?>
-  <table id="cabangLookup" class="lookup-grid"></table>
+  <table id="containerLookup" class="lookup-grid"></table>
 <?php } ?>
 <div class="loadingMessage">
   <img class="loading-image" src="{{ asset('libraries/tas-lib/img/loading-lookup.gif') }}" alt="Loading">
@@ -19,7 +19,7 @@ $idLookup = isset($id) ? $id : null;
   var idLookup = '{{ $idLookup }}';
   var idTop
 
-  selector = $(`#cabangLookup{{ isset($id) ? $id : null }} `)
+  selector = $(`#containerLookup{{ isset($id) ? $id : null }} `)
 
 
   var singleColumn = `{{ $singleColumn ?? '' }}`
@@ -44,9 +44,10 @@ $idLookup = isset($id) ? $id : null;
         search: false,
       },
       {
-        label: 'Nama Cabang',
-        name: 'namacabang',
+        label: 'CONTAINER',
+        name: 'kodecontainer',
         width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+        align: 'left'
       },
     ];
   } else {
@@ -59,14 +60,23 @@ $idLookup = isset($id) ? $id : null;
         search: false,
       },
       {
-        label: 'CABANG',
-        name: 'kodecabang',
+        label: 'CONTAINER',
+        name: 'kodecontainer',
         width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+        align: 'left'
       },
       {
-        label: 'NAMA CABANG',
-        name: 'namacabang',
-        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+        label: 'NOMINAL SUMBANGAN',
+        name: 'nominalsumbangan',
+        width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
+        align: "right",
+        formatter: currencyFormat,
+      },
+      {
+        label: 'KETERANGAN',
+        name: 'keterangan',
+        width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_2,
+        align: 'left'
       },
       {
         label: 'Status Aktif',
@@ -118,7 +128,7 @@ $idLookup = isset($id) ? $id : null;
   }
 
   selector.jqGrid({
-    url: `{{ config('app.api_url') . 'cabang' }}`,
+    url: `{{ config('app.api_url') . 'container' }}`,
     mtype: "GET",
     styleUI: 'Bootstrap4',
     iconSet: 'fontAwesome',
@@ -126,7 +136,7 @@ $idLookup = isset($id) ? $id : null;
     postData: {
       aktif: `{!! $Aktif ?? '' !!}`,
     },
-    idPrefix: 'cabangLookup',
+    idPrefix: 'containerLookup',
     colModel: column,
     height: 350,
     fixed: true,
@@ -371,7 +381,7 @@ $idLookup = isset($id) ? $id : null;
       $('.clearsearchclass').click(function() {
         clearColumnSearch($(this))
       })
-      $(this).setGridWidth($('#lookupCabang').prev().width())
+      $(this).setGridWidth($('#lookupContainer').prev().width())
       setHighlight($(this))
     },
   })
