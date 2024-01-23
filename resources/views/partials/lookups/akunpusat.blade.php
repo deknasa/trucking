@@ -13,6 +13,7 @@
         aktif: `{!! $Aktif ?? '' !!}`,
         keterangancoa: `{!! $KeteranganCoa ?? '' !!}`,
         supplier: `{!! $Supplier ?? '' !!}`,
+        isParent: `{!! $isParent ?? '' !!}`,
         // filters: `{!! $filters ?? '' !!}`
       },
       idPrefix: 'akunPusatLookup',
