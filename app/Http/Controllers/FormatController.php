@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UpdateFormatRequest;
 
-class FormatController extends Controller
+class FormatController extends MyController
 {
     public function update(UpdateFormatRequest $request)
     {

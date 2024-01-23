@@ -8,7 +8,7 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
-class LaporanKasHarianController extends Controller
+class LaporanKasHarianController extends MyController
 {
     public $title = 'Laporan Kas Harian';
 

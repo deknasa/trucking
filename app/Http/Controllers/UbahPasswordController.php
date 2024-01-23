@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class UbahPasswordController extends Controller
+class UbahPasswordController extends MyController
 {
     public $title = 'Ubah Password';
 

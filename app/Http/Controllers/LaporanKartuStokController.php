@@ -13,7 +13,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 
-class LaporanKartuStokController extends Controller
+class LaporanKartuStokController extends MyController
 {
     public $title = 'Laporan Kartu Stok';
 

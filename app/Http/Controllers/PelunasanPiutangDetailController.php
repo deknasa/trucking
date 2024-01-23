@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
 
-class PelunasanPiutangDetailController extends Controller
+class PelunasanPiutangDetailController extends MyController
 {
     public $title = 'Pelunasan Piutang Detail';
 
