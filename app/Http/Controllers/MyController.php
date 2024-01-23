@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Http;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
-class MyController extends MyController
+class MyController extends Controller
 {
     public function __construct() {
         $domain =request()->getScheme().'://'.request()->getHttpHost().env('API_PATH_URL');
