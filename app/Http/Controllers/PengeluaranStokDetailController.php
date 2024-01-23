@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
-class PengeluaranStokDetailController extends Controller
+class PengeluaranStokDetailController extends MyController
 {
     public function index(Request $request)
     {

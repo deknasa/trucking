@@ -8,7 +8,7 @@ use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
-class StatusOliTradoController extends Controller
+class StatusOliTradoController extends MyController
 {
     public $title = 'Status Oli Trado';
 

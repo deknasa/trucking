@@ -8,7 +8,7 @@ use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
-class ExportLaporanMingguanSupirController extends Controller
+class ExportLaporanMingguanSupirController extends MyController
 {
     public $title = 'Export Laporan Mingguan Supir';
 

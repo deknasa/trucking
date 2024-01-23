@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Http;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
-class UpahSupirRincianController extends Controller
+class UpahSupirRincianController extends MyController
 {
     public $title = 'Upah Supir Rincian';
 

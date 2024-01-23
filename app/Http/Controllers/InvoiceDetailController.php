@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
 
-class InvoiceDetailController extends Controller
+class InvoiceDetailController extends MyController
 {
     public $title = 'Invoice Detail';
 

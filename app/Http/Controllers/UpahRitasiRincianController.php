@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
-class UpahRitasiRincianController extends Controller
+class UpahRitasiRincianController extends MyController
 {
     public $title = 'Upah Ritasi Rincian';
 

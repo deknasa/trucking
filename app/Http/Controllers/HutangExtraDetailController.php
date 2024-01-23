@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class HutangExtraDetailController extends Controller
+class HutangExtraDetailController extends MyController
 {
     public function jurnalGrid()
     {

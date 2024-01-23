@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
-class PenerimaanStokDetailController extends Controller
+class PenerimaanStokDetailController extends MyController
 {
     /**
      * Display a listing of the resource.

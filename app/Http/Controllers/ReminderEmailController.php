@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class ReminderEmailController extends Controller
+class ReminderEmailController extends MyController
 {
     public $title = 'reminder email';
 

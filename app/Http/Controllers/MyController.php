@@ -6,11 +6,15 @@ use Illuminate\Support\Facades\Http;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
-class MyController extends Controller
+class MyController extends MyController
 {
     public function __construct() {
         $domain =request()->getScheme().'://'.request()->getHttpHost().env('API_PATH_URL');
+        $domainTNL =request()->getScheme().'://'.request()->getHttpHost().env('TRUCKING_API_PATH_TNL');
+        $domainEmkl =request()->getScheme().'://'.request()->getHttpHost().env('EMKL_API_PATH_URL');
         config()->set('app.api_url',$domain);
+        config()->set('app.trucking_api_tnl',$domainTNL);
+        config()->set('app.emkl_api_url',$domainEmkl);
     }
     public $httpHeaders = [
         'Accept' => 'application/json',

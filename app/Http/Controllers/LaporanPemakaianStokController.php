@@ -13,7 +13,7 @@ use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
-class LaporanPemakaianStokController extends Controller
+class LaporanPemakaianStokController extends MyController
 {
     public $title = 'Laporan Pemakaian Barang';
 

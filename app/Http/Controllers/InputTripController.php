@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class InputTripController extends Controller
+class InputTripController extends MyController
 {
     public $title = 'input Trip';
 

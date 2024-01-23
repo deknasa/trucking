@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class CcEmailController extends Controller
+class CcEmailController extends MyController
 {
     public $title = 'Cc Email';
 
