@@ -657,6 +657,13 @@
   function setKodePengeluaran(kode) {
     kodePengeluaranStok = kode;
     setTampilanForm();
+
+    if ($('#crudForm').data('action') == 'add') {
+      if (kode != listKodePengeluaran[6]) {
+        resetRow()
+        initRowcreate()
+      }
+    }
   }
 
   function setTampilanForm() {
@@ -1599,6 +1606,7 @@
 
   function initRowcreate() {
     let countRow = $('.rmv').parents('tr').length
+    // console.log(countRow);
     if (countRow <= 1) {
       addRow()
     }
