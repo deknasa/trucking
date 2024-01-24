@@ -59,7 +59,7 @@
                     {
                         label: 'CONTAINER',
                         name: 'container',
-                        width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         align: 'left'
                     },
                     {
@@ -85,7 +85,7 @@
                         label: 'STATUS AKTIF',
                         name: 'statusaktif',
                         stype: 'select',
-                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         searchoptions: {
                             value: `<?php
                                     $i = 1;
@@ -132,7 +132,7 @@
                         label: 'STATUS CABANG',
                         name: 'statuscabang',
                         stype: 'select',
-                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                         searchoptions: {
                             value: `<?php
                                     $i = 1;
@@ -326,7 +326,7 @@
                             if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                 showDialog('Harap pilih salah satu record')
                             } else {
-                                cekValidasidelete(selectedId)
+                                deleteTarifDiscountHarga(selectedId)
                             }
                         }
                     },

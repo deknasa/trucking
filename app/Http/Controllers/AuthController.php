@@ -49,6 +49,8 @@ class AuthController extends MyController
             'client_secret' => config('app.emkl_client_secret')
         ];
 
+        // dd($credentialsEmkl);
+
         $dataIp = $credentials;
         // $dataIp['ipclient'] = "192.168.12.3";
         $dataIp['ipclient'] = $request->clientippublic;
@@ -109,6 +111,7 @@ class AuthController extends MyController
             ])->withOptions(['verify' => false])
                 ->post(config('app.api_url') . 'token', $credentials);
 
+                // dd($token->getBody()->getContents());
             $tokenUrlTas = '';
             if ($parametercabang->text == "PUSAT") {
                 // $credentialsAdmin = [
@@ -184,12 +187,20 @@ class AuthController extends MyController
 
                 $tokenTNL = $getTokenTNL['access_token'];
             }
-            $tokenEmkl = Http::withHeaders([
-                'Accept' => 'application/json'
-            ])->withOptions(['verify' => false])
-                ->post(config('app.emkl_api_url') . 'oauth/token', $credentialsEmkl);
+            // dd($credentialsEmkl);
+            // dd(config('app.emkl_api_url'));
+            // dump(config('app.emkl_api_url') . 'oauth/token');
+            // dd($credentialsEmkl);
+            // $tokenEmkl = Http::withHeaders([
+            //     'Accept' => 'application/json'
+            // ])->withOptions(['verify' => false])
+            //     ->post(config('app.emkl_api_url') . 'oauth/token', $credentialsEmkl);
+
+                // dd($tokenEmkl
 
             // dd($tokenEmkl->getBody()->getContents());
+            // dd($tokenEmkl->Json());
+            
 
             session(['access_token' => $token['access_token']]);
             session(['access_token_tnl' => $tokenTNL]);
@@ -198,7 +209,10 @@ class AuthController extends MyController
             session(['info' => $token['info']]);
             session(['link_url' => strtolower($linkUrl->text)]);
 
-            session(['access_token_emkl' => $tokenEmkl['access_token']]);
+            // session(['access_token_emkl' => $tokenEmkl['access_token']]);
+
+            session(['access_token_emkl' => 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI5YjJhNDU1My1mYWZkLTQ4MDQtOTYxNy03MTNlNmZmYWU5MGUiLCJqdGkiOiJhMTQ2MjRiYjNhZjYwNmRjYmZjZDFiZDIzNWNiN2E0NzliYzU1YmVjMzc5YzFiMWRiMDI0Yjg1YjczZWQ2ODBhNmJhMTc4NTAwNTcwNmI5MiIsImlhdCI6MTcwNjA1OTE3OCwibmJmIjoxNzA2MDU5MTc4LCJleHAiOjE3Mzc2ODE1NzgsInN1YiI6IiIsInNjb3BlcyI6W119.B0QcamQLB6vEi2VAGZ0OfP4MsCgt9_eSOwqB1ukkFa98SKgkfdHBt0eZ-vNhGJeNTQu69y-qImaIAzh-SgL2uQvueDF6sF7bJzRygO16gP_1aDv6L5VckbkSboqazVqZ62AMO5JYAyc8x4LNKEbKEqmg14yFd8rUg4ce8TQ0HhmshquJR_3jCqO-NkrLtQKVS65ZvF-RAVUnZ9Yujh6SDbqhLKQ8Q9hO6n3YKwaMzqbJoPY3yiM3AzeCSitD0cL3zYRSiSSHmuBUuoinAUybN3QDVpdEad7jb5QLbQQmL7UAW2EPk8-DUMkVRkx6aDjwYoPNrz7CURuNFezWKBDBuWNcLJLwdkJ0tQqj-nDGsb5XFGdPRZovx3RSoxb3Mn7hwafkGhZycDZ739X2odSP3z2_7i9MvIB8WIr-zSn_i6hYXz-t-Fxtn3_fyP2d0OA8MqRLC7niKsXyJEcADFO_nECZL0OpJ5AqGBfDqr1ochKOnro4Y8gEgZb2uok9G1oaeGLr_gWtOgb8xPsU7DED6CCyQESKjSuv031WdD_HCReYuzK1bgaGxaIAV3cPhPF83MYXIMkb5tv8A_ldahQfLAzrCN2840kgISbVKSg22xnRZo8SD2Zb-P86hIOTpeFdTuQfxW7RL9Jh1lTPC15CB-BKQ-CMvbMSRH0emSIt1L4']);
+            
             session(['menus' => (new Menu())->getMenu()]);
             if ($parametercabang->text == "PUSAT") {
                 // session(['access_token_mdn' => $tokenMdn]);

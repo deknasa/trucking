@@ -1,9 +1,9 @@
-<table id="tujuanbongkarLookup" class="lookup-grid"></table>
+<table id="shipperLookup" class="lookup-grid"></table>
 
 @push('scripts')
 <script>
-  $('#tujuanbongkarLookup').jqGrid({
-      url: `${apiEmklUrl}tujuanbongkar`,
+  $('#shipperLookup').jqGrid({
+      url: `${apiEmklUrl}shipper`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
       iconSet: 'fontAwesome',
@@ -12,7 +12,7 @@
       postData: {
         aktif: `{!! $Aktif ?? '' !!}`,
       },
-      idPrefix: 'tujuanbongkarLookup',
+      idPrefix: 'shipperLookup',
       colModel: [{
           label: 'ID',
           name: 'id',
@@ -22,22 +22,10 @@
           hidden: true
         },
         {
-          label: 'TUJUAN KAPAL',
-          name: 'tujuan',
-          width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
+          label: 'SHIPPER',
+          name: 'shipper',
+          width: (detectDeviceType() == "desktop") ? lg_dekstop_2 : lg_mobile_2,
           align: 'left'
-        },
-        {
-          label: 'CABANG',
-          name: 'cabang',
-          width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
-          align: "left",
-        },
-        {
-          label: 'STATUS CABANG',
-          name: 'statuscabang',
-          width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
-          align: "left",
         },
       ],
       autowidth: true,
@@ -53,7 +41,7 @@
       sortname: 'id',
       sortorder: 'asc',
       page: 1,
-      // pager: $('#tujuanbongkarLookupPager'),
+      // pager: $('#shipperLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -84,26 +72,26 @@
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
 
-          if (indexRow - 1 > $('#tujuanbongkarLookup').getGridParam().reccount) {
-            indexRow = $('#tujuanbongkarLookup').getGridParam().reccount - 1
+          if (indexRow - 1 > $('#shipperLookup').getGridParam().reccount) {
+            indexRow = $('#shipperLookup').getGridParam().reccount - 1
           }
 
           if (triggerClick) {
             if (id != '') {
               indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-              $(`#tujuanbongkarLookup [id="${$('#tujuanbongkarLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#shipperLookup [id="${$('#shipperLookup').getDataIDs()[indexRow]}"]`).click()
               id = ''
             } else if (indexRow != undefined) {
-              $(`#tujuanbongkarLookup [id="${$('#tujuanbongkarLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#shipperLookup [id="${$('#shipperLookup').getDataIDs()[indexRow]}"]`).click()
             }
 
-            if ($('#tujuanbongkarLookup').getDataIDs()[indexRow] == undefined) {
-              $(`#tujuanbongkarLookup [id="` + $('#tujuanbongkarLookup').getDataIDs()[0] + `"]`).click()
+            if ($('#shipperLookup').getDataIDs()[indexRow] == undefined) {
+              $(`#shipperLookup [id="` + $('#shipperLookup').getDataIDs()[0] + `"]`).click()
             }
 
             triggerClick = false
           } else {
-            $('#tujuanbongkarLookup').setSelection($('#tujuanbongkarLookup').getDataIDs()[indexRow])
+            $('#shipperLookup').setSelection($('#shipperLookup').getDataIDs()[indexRow])
           }
         }
 
@@ -118,7 +106,7 @@
           clearColumnSearch($(this))
         })
 
-        $(this).setGridWidth($('#lookuptujuanbongkar').prev().width())
+        $(this).setGridWidth($('#lookupshipper').prev().width())
         setHighlight($(this))
       }
     })
@@ -133,10 +121,10 @@
       beforeSearch: function() {
         abortGridLastRequest($(this))
 
-        clearGlobalSearch($('#tujuanbongkarLookup'))
+        clearGlobalSearch($('#shipperLookup'))
       },
     })
     .customPager()
-  loadGlobalSearch($('#tujuanbongkarLookup'))
-  loadClearFilter($('#tujuanbongkarLookup'))
+  loadGlobalSearch($('#shipperLookup'))
+  loadClearFilter($('#shipperLookup'))
 </script>

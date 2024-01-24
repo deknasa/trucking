@@ -26,7 +26,7 @@
         {
           label: 'TUJUAN',
           name: 'tujuan',
-          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+          width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
         },
         {
           label: 'PENYESUAIAN',
