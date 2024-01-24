@@ -1,9 +1,9 @@
-<table id="tujuanbongkarLookup" class="lookup-grid"></table>
+<table id="lokasidooringLookup" class="lookup-grid"></table>
 
 @push('scripts')
 <script>
-  $('#tujuanbongkarLookup').jqGrid({
-      url: `${apiEmklUrl}tujuanbongkar`,
+  $('#lokasidooringLookup').jqGrid({
+      url: `${apiEmklUrl}lokasidooring`,
       mtype: "GET",
       styleUI: 'Bootstrap4',
       iconSet: 'fontAwesome',
@@ -11,8 +11,9 @@
 
       postData: {
         aktif: `{!! $Aktif ?? '' !!}`,
+        cabang: `{!! $Cabang ?? '' !!}`,
       },
-      idPrefix: 'tujuanbongkarLookup',
+      idPrefix: 'lokasidooringLookup',
       colModel: [{
           label: 'ID',
           name: 'id',
@@ -22,22 +23,10 @@
           hidden: true
         },
         {
-          label: 'TUJUAN KAPAL',
-          name: 'tujuan',
-          width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
+          label: 'LOKASI BONGKAR',
+          name: 'lokasidooring',
+          width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1,
           align: 'left'
-        },
-        {
-          label: 'CABANG',
-          name: 'cabang',
-          width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
-          align: "left",
-        },
-        {
-          label: 'STATUS CABANG',
-          name: 'statuscabang',
-          width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
-          align: "left",
         },
       ],
       autowidth: true,
@@ -53,7 +42,7 @@
       sortname: 'id',
       sortorder: 'asc',
       page: 1,
-      // pager: $('#tujuanbongkarLookupPager'),
+      // pager: $('#lokasidooringLookupPager'),
       viewrecords: true,
       prmNames: {
         sort: 'sortIndex',
@@ -84,26 +73,26 @@
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
 
-          if (indexRow - 1 > $('#tujuanbongkarLookup').getGridParam().reccount) {
-            indexRow = $('#tujuanbongkarLookup').getGridParam().reccount - 1
+          if (indexRow - 1 > $('#lokasidooringLookup').getGridParam().reccount) {
+            indexRow = $('#lokasidooringLookup').getGridParam().reccount - 1
           }
 
           if (triggerClick) {
             if (id != '') {
               indexRow = parseInt($('#jqGrid').jqGrid('getInd', id)) - 1
-              $(`#tujuanbongkarLookup [id="${$('#tujuanbongkarLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#lokasidooringLookup [id="${$('#lokasidooringLookup').getDataIDs()[indexRow]}"]`).click()
               id = ''
             } else if (indexRow != undefined) {
-              $(`#tujuanbongkarLookup [id="${$('#tujuanbongkarLookup').getDataIDs()[indexRow]}"]`).click()
+              $(`#lokasidooringLookup [id="${$('#lokasidooringLookup').getDataIDs()[indexRow]}"]`).click()
             }
 
-            if ($('#tujuanbongkarLookup').getDataIDs()[indexRow] == undefined) {
-              $(`#tujuanbongkarLookup [id="` + $('#tujuanbongkarLookup').getDataIDs()[0] + `"]`).click()
+            if ($('#lokasidooringLookup').getDataIDs()[indexRow] == undefined) {
+              $(`#lokasidooringLookup [id="` + $('#lokasidooringLookup').getDataIDs()[0] + `"]`).click()
             }
 
             triggerClick = false
           } else {
-            $('#tujuanbongkarLookup').setSelection($('#tujuanbongkarLookup').getDataIDs()[indexRow])
+            $('#lokasidooringLookup').setSelection($('#lokasidooringLookup').getDataIDs()[indexRow])
           }
         }
 
@@ -118,7 +107,7 @@
           clearColumnSearch($(this))
         })
 
-        $(this).setGridWidth($('#lookuptujuanbongkar').prev().width())
+        $(this).setGridWidth($('#lookuplokasidooring').prev().width())
         setHighlight($(this))
       }
     })
@@ -133,10 +122,10 @@
       beforeSearch: function() {
         abortGridLastRequest($(this))
 
-        clearGlobalSearch($('#tujuanbongkarLookup'))
+        clearGlobalSearch($('#lokasidooringLookup'))
       },
     })
     .customPager()
-  loadGlobalSearch($('#tujuanbongkarLookup'))
-  loadClearFilter($('#tujuanbongkarLookup'))
+  loadGlobalSearch($('#lokasidooringLookup'))
+  loadClearFilter($('#lokasidooringLookup'))
 </script>

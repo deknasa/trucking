@@ -2,7 +2,7 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
-        
+
         <form action="" method="post">
           <div class="modal-body">
             {{-- <div class="row form-group">
@@ -17,11 +17,21 @@
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
-                  TARIF <span class="text-danger">*</span></label>
+                  TUJUAN <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-md-10">
                 <input type="hidden" name="tarif_id">
                 <input type="text" name="tarif" class="form-control tarif-lookup">
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
+                  PENYESUAIAN<span class="text-danger"></span>
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="text" name="penyesuaian" class="form-control" readonly>
               </div>
             </div>
             <div class="row form-group">
@@ -37,11 +47,31 @@
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
-                  TUJUAN BONGKAR <span class="text-danger">*</span></label>
+                  TUJUAN CABANG BONGKAR <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-md-10">
                 <input type="hidden" name="tujuanbongkar_id">
                 <input type="text" name="tujuanbongkar" class="form-control tujuanbongkar-lookup">
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
+                  CABANG<span class="text-danger"></span>
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="text" name="cabang" class="form-control" readonly>
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
+                  STATUS CABANG<span class="text-danger"></span>
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="text" name="statuscabang" class="form-control" readonly>
               </div>
             </div>
             <div class="row form-group">
@@ -54,6 +84,7 @@
                 <input type="text" name="lokasidooring" class="form-control lokasidooring-lookup">
               </div>
             </div>
+
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
@@ -74,18 +105,8 @@
                 <input type="text" name="nominal" class="form-control text-right">
               </div>
             </div>
-           
-            <div class="row form-group" >
-              <div class="col-12 col-md-2">
-                <label class="col-form-label">
-                  STATUS CABANG <span class="text-danger">*</span></label>
-              </div>
-              <div class="col-12 col-md-10">
-                <select name="statuscabang" class="form-select select2bs4" style="width: 100%;">
-                  <option value="">-- PILIH STATUS CABANG --</option>
-                </select>
-              </div>
-            </div>
+
+
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
@@ -120,6 +141,7 @@
   let modalBody = $('#crudModal').find('.modal-body').html()
   let jenisorderId
   let containerId
+  let cabang
   var statustas
   var kodecontainer
   var isAllowEdited;
@@ -134,8 +156,8 @@
       let tarifDiscounthargaId = form.find('[name=id]').val()
       let action = form.data('action')
       let data = $('#crudForm').serializeArray()
-      $('#crudForm').find(`[name="nominalsumbangan"]`).each((index, element) => {
-        data.filter((row) => row.name === 'nominalsumbangan')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominalsumbangan"]`)[index])
+      $('#crudForm').find(`[name="nominal"]`).each((index, element) => {
+        data.filter((row) => row.name === 'nominal')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal"]`)[index])
       })
       data.push({
         name: 'sortIndex',
@@ -169,19 +191,19 @@
       switch (action) {
         case 'add':
           method = 'POST'
-          url = `${apiUrl}tarifdicountharga`
+          url = `${apiUrl}tarifdiscountharga`
           break;
         case 'edit':
           method = 'PATCH'
-          url = `${apiUrl}tarifdicountharga/${tarifDiscountharga}`
+          url = `${apiUrl}tarifdiscountharga/${tarifDiscounthargaId}`
           break;
         case 'delete':
           method = 'DELETE'
-          url = `${apiUrl}tarifdicountharga/${tarifDiscountharga}`
+          url = `${apiUrl}tarifdiscountharga/${tarifDiscounthargaId}`
           break;
         default:
           method = 'POST'
-          url = `${apiUrl}tarifdicountharga`
+          url = `${apiUrl}tarifdiscountharga`
           break;
       }
 
@@ -265,10 +287,10 @@
     $('#crudModalTitle').text('Create Tarif Discount Harga')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-    $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-    $('#crudForm [name=nojobemkl]').attr('readonly', true)
-    $('#crudForm [name=nojobemkl2]').attr('readonly', true)
 
+    initAutoNumeric(form.find(`[name="nominal"]`), {
+      minimumValue: 0
+    })
     Promise
       .all([
         setStatusAktifOptions(form),
@@ -314,8 +336,6 @@
         showTarifDiscountHarga(form, tarifDiscounthargaId)
           .then(() => {
             $('#crudModal').modal('show')
-            $('#crudForm [name=tglbukti]').attr('readonly', true)
-            $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
 
             editValidasi(isAllowEdited);
           })
@@ -502,25 +522,16 @@
 
   function editValidasi(edit) {
     let container = $('#crudForm').find(`[name="container"]`).parents('.input-group')
-    let agen = $('#crudForm').find(`[name="agen"]`).parents('.input-group')
-    let jenisorder = $('#crudForm').find(`[name="jenisorder"]`).parents('.input-group')
-    let pelanggan = $('#crudForm').find(`[name="pelanggan"]`).parents('.input-group')
+    let tarif = $('#crudForm').find(`[name="tarif"]`).parents('.input-group')
 
     if (!edit) {
 
       container.find('.button-clear').attr('disabled', true)
       container.find('input').attr('readonly', true)
       container.children().find('.lookup-toggler').attr('disabled', true)
-      agen.find('.button-clear').attr('disabled', true)
-      agen.find('input').attr('readonly', true)
-      agen.children().find('.lookup-toggler').attr('disabled', true)
-      jenisorder.find('.button-clear').attr('disabled', true)
-      jenisorder.find('input').attr('readonly', true)
-      jenisorder.children().find('.lookup-toggler').attr('disabled', true)
-
-      pelanggan.find('.button-clear').attr('disabled', true)
-      pelanggan.find('input').attr('readonly', true)
-      pelanggan.children().find('.lookup-toggler').attr('disabled', true)
+      tarif.find('.button-clear').attr('disabled', true)
+      tarif.find('input').attr('readonly', true)
+      tarif.children().find('.lookup-toggler').attr('disabled', true)
 
 
     } else {
@@ -528,16 +539,9 @@
       container.find('.button-clear').attr('disabled', false)
       container.find('input').attr('readonly', false)
       container.children().find('.lookup-toggler').attr('disabled', false)
-      agen.find('.button-clear').attr('disabled', false)
-      agen.find('input').attr('readonly', false)
-      agen.children().find('.lookup-toggler').attr('disabled', false)
-      jenisorder.find('.button-clear').attr('disabled', false)
-      jenisorder.find('input').attr('readonly', false)
-      jenisorder.children().find('.lookup-toggler').attr('disabled', false)
-
-      pelanggan.find('.button-clear').attr('disabled', false)
-      pelanggan.find('input').attr('readonly', false)
-      pelanggan.children().find('.lookup-toggler').attr('disabled', false)
+      tarif.find('.button-clear').attr('disabled', false)
+      tarif.find('input').attr('readonly', false)
+      tarif.children().find('.lookup-toggler').attr('disabled', false)
 
     }
 
@@ -663,43 +667,20 @@
           $.each(response.data, (index, value) => {
             let element = form.find(`[name="${index}"]`)
             containerId = response.data.container_id
-            jenisorderId = response.data.jenisorder_id
-
-            // if (index == 'tglbukti') {
-            //   element.val(dateFormat(value))
-            // }
+            cabang = response.data.cabang
 
             if (element.is('select')) {
               element.val(value).trigger('change')
-            } else if (element.hasClass('datepicker')) {
-              element.val(dateFormat(value))
             } else {
               element.val(value)
             }
 
-            if (index == 'container') {
-              element.data('current-value', value)
-              console.log(containerId)
-              getcont(containerId)
-            }
-            if (index == 'agen') {
-              element.data('current-value', value)
-            }
-            if (index == 'jenisorder') {
-              element.data('current-value', value)
-            }
-            if (index == 'pelanggan') {
-              element.data('current-value', value)
-            }
-            if (index == 'tarifrincian') {
-              element.data('current-value', value)
-            }
 
-            if (index == 'agen_id') {
-              getagentas(value)
-            }
           })
 
+          initAutoNumeric(form.find(`[name="nominal"]`), {
+            minimumValue: 0
+          })
 
           if (form.data('action') === 'delete') {
             form.find('[name]').addClass('disabled')
@@ -881,7 +862,6 @@
         element.val(container.keterangan)
         containerId = container.id
         element.data('currentValue', element.val())
-        getcont(containerId)
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
@@ -908,8 +888,10 @@
         element.val(tarif.keterangan)
         tarifId = tarif.id
         element.data('currentValue', element.val())
-        getcont(tarifId)
+        $('#crudForm [name=tarif]').first().val(tarif.tujuan)
+        $('#crudForm [name=penyesuaian]').first().val(tarif.penyesuaian)
       },
+
       onCancel: (element) => {
         element.val(element.data('currentValue'))
       },
@@ -926,15 +908,17 @@
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
-          jenisorder_Id: jenisorderId,
-          container_Id: containerId,
         }
       },
       onSelectRow: (tujuanbongkar, element) => {
+        $('#crudForm [name=tujuanbongkar_id]').first().val(tujuanbongkar.id)
         element.val(tujuanbongkar.tujuan)
         element.data('currentValue', element.val())
-
+        cabang = tujuanbongkar.cabang
         $('#crudForm [name=tujuan]').first().val(tujuanbongkar.tujuan)
+        $('#crudForm [name=cabang]').first().val(tujuanbongkar.cabang)
+        $('#crudForm [name=statuscabang]').first().val(tujuanbongkar.statuscabang)
+
 
       },
       onCancel: (element) => {
@@ -952,15 +936,14 @@
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
-          jenisorder_Id: jenisorderId,
-          container_Id: containerId,
         }
       },
       onSelectRow: (shipper, element) => {
-        element.val(shipper.namashipper)
+        $('#crudForm [name=shipper_id]').first().val(shipper.id)
+        element.val(shipper.shipper)
         element.data('currentValue', element.val())
 
-        $('#crudForm [name=namashipper]').first().val(shipper.namashipper)
+        $('#crudForm [name=shipper]').first().val(shipper.shipper)
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
@@ -977,15 +960,16 @@
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
-          jenisorder_Id: jenisorderId,
-          container_Id: containerId,
+          Cabang: cabang,
         }
       },
       onSelectRow: (lokasidooring, element) => {
+        $('#crudForm [name=lokasidooring_id]').first().val(lokasidooring.id)
         element.val(lokasidooring.lokasidooring)
         element.data('currentValue', element.val())
 
-        $('#crudForm [name=namalokasidooring]').first().val(lokasidooring.lokasidooring)
+        $('#crudForm [name=lokasidooring]').first().val(lokasidooring.lokasidooring)
+
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
@@ -996,8 +980,8 @@
       }
     })
 
-  
-   
+
+
   }
 
   function cekValidasidelete(Id, Aksi, nobukti) {
