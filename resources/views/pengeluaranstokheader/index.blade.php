@@ -172,7 +172,7 @@
                       $i = 1;
 
                       foreach ($data['combocetak'] as $status) :
-                        echo "$status[param]:$status[parameter]";
+                        echo "$status[id]:$status[parameter]";
                         if ($i !== count($data['combocetak'])) {
                           echo ";";
                         }
