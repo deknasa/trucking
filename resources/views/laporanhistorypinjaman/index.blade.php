@@ -137,7 +137,7 @@
             fileName: 'supir',
             beforeProcess: function(test) {
                 this.postData = {
-                    Aktif: 'AKTIF',
+                    Aktif: 'ALL',
                 }
             },
             onSelectRow: (supir, element) => {
@@ -159,7 +159,7 @@
             fileName: 'supir',
             beforeProcess: function(test) {
                 this.postData = {
-                    Aktif: 'AKTIF',
+                    Aktif: 'ALL',
                 }
             },
             onSelectRow: (supir, element) => {
