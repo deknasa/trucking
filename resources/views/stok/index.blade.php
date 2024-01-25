@@ -31,6 +31,28 @@
     let approveEditRequest =null ;
 
     let autoNumericElements = []
+    let selectedRows = [];
+    let selectedRowsStok = [];
+
+    function checkboxHandler(element) {
+        let value = $(element).val();
+        if (element.checked) {
+            selectedRows.push($(element).val())
+            selectedRowsStok.push($(element).parents('tr').find(`td[aria-describedby="jqGrid_namastok"]`).text())
+            $(element).parents('tr').addClass('bg-light-blue')
+
+
+        } else {
+            $(element).parents('tr').removeClass('bg-light-blue')
+            for (var i = 0; i < selectedRows.length; i++) {
+                if (selectedRows[i] == value) {
+                    selectedRows.splice(i, 1);
+                    selectedRowsStok.splice(i, 1);
+                }
+            }
+        }
+
+    }
 
     $(document).ready(function() {
 
@@ -49,7 +71,40 @@
                 styleUI: 'Bootstrap4',
                 iconSet: 'fontAwesome',
                 datatype: "json",
-                colModel: [{
+                colModel: [
+                    {
+                        label: '',
+                        name: 'check',
+                        width: 30,
+                        align: 'center',
+                        sortable: false,
+                        clear: false,
+                        stype: 'input',
+                        searchable: false,
+                        searchoptions: {
+                            type: 'checkbox',
+                            clearSearch: false,
+                            dataInit: function(element) {
+                                $(element).removeClass('form-control')
+                                $(element).parent().addClass('text-center')
+
+                                $(element).on('click', function() {
+
+                                $(element).attr('disabled', true)
+                                if ($(this).is(':checked')) {
+                                    selectAllRows()
+                                } else {
+                                    clearSelectedRows()
+                                }
+                                })
+
+                            }
+                        },
+                        formatter: (value, rowOptions, rowData) => {
+                            return `<input type="checkbox" name="Id[]" value="${rowData.id}" onchange="checkboxHandler(this)">`
+                        },
+                    },
+                    {
                         label: 'ID',
                         name: 'id',
                         align: 'right',
@@ -184,7 +239,56 @@
             return ` title="${statusreuse.MEMO}"`
           }
                     },
+                    {
+                        label: 'tanpa klaim',
+                        name: 'statusapprovaltanpaklaim',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+                        align: 'left',
+                        stype: 'select',
+                        searchoptions: {
+                            value: `<?php
+                                    $i = 1;
 
+                                    foreach ($data['combotanpaclaim'] as $status) :
+                                        echo "$status[param]:$status[parameter]";
+                                        if ($i !== count($data['combotanpaclaim'])) {
+                                            echo ';';
+                                        }
+                                        $i++;
+                                    endforeach;
+
+                                    ?>
+                        `,
+                            dataInit: function(element) {
+                                $(element).select2({
+                                    width: 'resolve',
+                                    theme: "bootstrap4"
+                                });
+                            }
+                        },
+                        formatter: (value, options, rowData) => {
+                            if (!value) {
+                               return '' 
+                            }
+                            let statusreuse = JSON.parse(value)
+                            
+                            let formattedValue = $(`
+                            <div class="badge" style="background-color: ${statusreuse.WARNA}; color: ${statusreuse.WARNATULISAN};">
+                                <span>${statusreuse.SINGKATAN}</span>
+                            </div>
+                            `)
+                            
+                            return formattedValue[0].outerHTML
+                        },
+                        cellattr: (rowId, value, rowObject) => {
+                            if (!rowObject.statusapprovaltanpaklaim) {
+                               return '' 
+                            }
+                            let statusreuse = JSON.parse(rowObject.statusapprovaltanpaklaim)
+                            
+                            return ` title="${statusreuse.MEMO}"`
+                        }
+                    },
                     {
                         label: 'keterangan',
                         name: 'keterangan',
@@ -418,6 +522,7 @@
                             $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
                         }
                     }, 100)
+                    $('#gs_check').prop('disabled', false)
 
                     $('#left-nav').find('button').attr('disabled', false)
                     permission()
@@ -518,6 +623,14 @@
                                 onClick: () => {
                                     selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                                     approvalTanpaKlaim(selectedId)
+                                }
+                            },
+                            {
+                                id: 'approvalReuse',
+                                text: ' UN/APPROVAL Reuse',
+                                onClick: () => {
+                                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                                    approvalReuse(selectedId)
                                 }
                             },
                         ],
@@ -777,23 +890,105 @@
             if (approveEditRequest) {
                 approveEditRequest.abort();
             }     
-            approveEditRequest = $.ajax({
-                url: `${apiUrl}stok/${id}`,
-                method: 'GET',
+            approveEditRequest = 
+            $.ajax({
+                url: `${apiUrl}stok/approvalklaim`,
+                method: 'POST',
                 dataType: 'JSON',
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 },
-                success: response => {
-                    let msg = `YAKIN Approve Status Boleh Tanpa Klaim `
-                    console.log(response.data);
-                    if (response.data.statusapprovaltanpaklaim === statusTanpaKlaim) {
-                        msg = `YAKIN UnApprove Status Boleh Tanpa Klaim `
-                    }
-                    showConfirm(msg,response.data.nobukti,`stok/${response.data.id}/approvalklaim`)
+                data: {
+                    Id: selectedRows,
+                    nama: selectedRowsStok
                 },
+                success: response => {
+                    $('#crudForm').trigger('reset')
+                    $('#crudModal').modal('hide')
+                    
+                    $('#jqGrid').jqGrid().trigger('reloadGrid');
+                    selectedRows = []
+                    selectedRowsStok = []
+                    $('#gs_').prop('checked', false)
+                },
+                error: error => {
+                    if (error.status === 422) {
+                        $('.is-invalid').removeClass('is-invalid')
+                        $('.invalid-feedback').remove()
+                        
+                        setErrorMessages(form, error.responseJSON.errors);
+                    } else {
+                        showDialog(error.responseJSON)
+                    }
+                },
+            }).always(() => {
+                $('#processingLoader').addClass('d-none')
+                $(this).removeAttr('disabled')
             })
         }
+        function approvalReuse(id) {
+            if (approveEditRequest) {
+                approveEditRequest.abort();
+            }     
+            approveEditRequest = 
+            $.ajax({
+                url: `${apiUrl}stok/approvalreuse`,
+                method: 'POST',
+                dataType: 'JSON',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                data: {
+                    Id: selectedRows,
+                    nama: selectedRowsStok,
+                    info:info             
+                },
+                success: response => {
+                    $('#crudForm').trigger('reset')
+                    $('#crudModal').modal('hide')
+                    
+                    $('#jqGrid').jqGrid().trigger('reloadGrid');
+                    selectedRows = []
+                    selectedRowsStok = []
+                    $('#gs_').prop('checked', false)
+                },
+                error: error => {
+                    if (error.status === 422) {
+                        $('.is-invalid').removeClass('is-invalid')
+                        $('.invalid-feedback').remove()
+                        
+                        setErrorMessages(form, error.responseJSON.errors);
+                    } else {
+                        showDialog(error.responseJSON)
+                    }
+                },
+            }).always(() => {
+                $('#processingLoader').addClass('d-none')
+                $(this).removeAttr('disabled')
+            })
+        }
+
+        // function approvalTanpaKlaim(id) {
+        //     if (approveEditRequest) {
+        //         approveEditRequest.abort();
+        //     }     
+        //     approveEditRequest = $.ajax({
+        //         url: `${apiUrl}stok/${id}`,
+        //         method: 'GET',
+        //         dataType: 'JSON',
+        //         headers: {
+        //             Authorization: `Bearer ${accessToken}`
+        //         },
+        //         success: response => {
+        //             let msg = `YAKIN Approve Status Boleh Tanpa Klaim `
+        //             console.log(response.data);
+        //             if (response.data.statusapprovaltanpaklaim === statusTanpaKlaim) {
+        //                 msg = `YAKIN UnApprove Status Boleh Tanpa Klaim `
+        //             }
+        //             showConfirm(msg,response.data.nobukti,`stok/${response.data.id}/approvalklaim`)
+        //         },
+        //     })
+        // }
 
         getStatusTanpaKlaim()
         function getStatusTanpaKlaim() {
