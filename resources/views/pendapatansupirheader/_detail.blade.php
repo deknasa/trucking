@@ -24,12 +24,12 @@
           },
           {
             label: 'NO BUKTI TRIP',
-            name: 'nobuktitrip',
+            name: 'nobukti_trip',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'TGL TRIP',
-            name: 'tgltrip',
+            name: 'tgl_trip',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
             formatter: "date",
             formatoptions: {
@@ -41,6 +41,16 @@
             label: 'NO BUKTI RIC',
             name: 'nobuktirincian',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+          },
+          {
+            label: 'TGL RIC',
+            name: 'tgl_ric',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
           },
           {
             label: 'NO POL',
@@ -64,7 +74,7 @@
           },
           {
             label: 'KOMISI SUPIR',
-            name: 'nominal',
+            name: 'nominal_detail',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'right',
             formatter: currencyFormat
@@ -147,7 +157,7 @@
           if (data.attributes) {
             $(this).jqGrid('footerData', 'set', {
               nobukti: 'Total:',
-              nominal: data.attributes.totalNominal,
+              nominal_detail: data.attributes.totalNominal,
               gajikenek: data.attributes.totalGajiKenek,
               totaldetail: data.attributes.totalAll
             }, true)

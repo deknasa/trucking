@@ -337,7 +337,7 @@
             formatter: "date",
             formatoptions: {
               srcformat: "ISO8601Long",
-              newformat: "d-m-Y H:i:s"
+              newformat: "d-m-Y"
             }
           },
           {

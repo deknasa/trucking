@@ -338,7 +338,9 @@
             let nominalTrip = [];
             let kenekTrip = [];
             $.each(selectedNominal, function(index, item) {
-                nominalTrip.push(parseFloat(item.replaceAll(',', '')))
+                if(item != undefined){
+                    nominalTrip.push(parseFloat(item.replaceAll(',', '')))
+                }
             });
             $.each(selectedGajiKenek, function(index, item) {
                 kenekTrip.push(parseFloat(item.replaceAll(',', '')))
@@ -1030,7 +1032,8 @@
                         label: 'ID',
                         name: 'id',
                         width: '50px',
-                        hidden: true
+                        hidden: true,
+                        search: false
                     },
                     {
                         label: 'SUPIR',
@@ -1063,6 +1066,16 @@
                         label: 'NO BUKTI RIC',
                         name: 'nobukti_ric',
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+                    },
+                    {
+                        label: 'TGL RIC',
+                        name: 'tgl_ric',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+                        formatter: "date",
+                        formatoptions: {
+                            srcformat: "ISO8601Long",
+                            newformat: "d-m-Y"
+                        }
                     },
                     {
                         label: 'DARI',
@@ -2238,6 +2251,16 @@
                             field = $.trim(field.toLowerCase());
                             $(`.${field}`).hide()
                             $("#modalgrid").jqGrid("hideCol", `${field}`);
+                            console.log(field)
+                            if (field == 'nobukti_trip') {
+                                
+                                sortnameTrip = 'nobukti_ric';
+                                $("#modalgrid").jqGrid('setGridParam',{
+                                    postData: {
+                                        sortIndex: sortnameTrip
+                                    }
+                                }).trigger('reloadGrid')
+                            }
                         });
                     }
                     resolve()
