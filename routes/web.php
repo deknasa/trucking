@@ -4,15 +4,14 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\AclController;
-use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BankController;
 use App\Http\Controllers\KotaController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\MerkController;
 use App\Http\Controllers\RoleController;
-
 use App\Http\Controllers\StokController;
+
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ZonaController;
 use App\Http\Controllers\ErrorController;
@@ -25,22 +24,26 @@ use App\Http\Controllers\FormatController;
 use App\Http\Controllers\GudangController;
 use App\Http\Controllers\LookupController;
 use App\Http\Controllers\MandorController;
+use App\Http\Controllers\OtobonController;
 use App\Http\Controllers\RitasiController;
 use App\Http\Controllers\SatuanController;
 use App\Http\Controllers\CcEmailController;
 use App\Http\Controllers\ExpStnkController;
 use App\Http\Controllers\MekanikController;
+use App\Http\Controllers\ShipperController;
 use App\Http\Controllers\ToEmailController;
 use App\Http\Controllers\UserAclController;
 use App\Http\Controllers\BccEmailController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\KaryawanController;
+
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\KelompokController;
+use App\Http\Controllers\LapanganController;
 
 use App\Http\Controllers\ListTripController;
 use App\Http\Controllers\LogTrailController;
 use App\Http\Controllers\PenerimaController;
-
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\TripInapController;
 use App\Http\Controllers\UserRoleController;
@@ -48,7 +51,6 @@ use App\Http\Controllers\AkunPusatController;
 use App\Http\Controllers\AkuntansiController;
 use App\Http\Controllers\AlatBayarController;
 use App\Http\Controllers\ContainerController;
-use App\Http\Controllers\TarifDiscountHargaController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExportRicController;
 use App\Http\Controllers\GandenganController;
@@ -58,21 +60,21 @@ use App\Http\Controllers\JenisEmklController;
 use App\Http\Controllers\KartuStokController;
 use App\Http\Controllers\KerusakanController;
 use App\Http\Controllers\ParameterController;
-use App\Http\Controllers\ShipperController;
 use App\Http\Controllers\ReportAllController;
 use App\Http\Controllers\SpkHarianController;
 use App\Http\Controllers\StokPusatController;
 use App\Http\Controllers\TutupBukuController;
 use App\Http\Controllers\UpahSupirController;
-use App\Http\Controllers\AbsenTradoController;
 
+use App\Http\Controllers\AbsenTradoController;
 use App\Http\Controllers\DataRitasiController;
 use App\Http\Controllers\JenisOrderController;
 use App\Http\Controllers\JenisTradoController;
 use App\Http\Controllers\LogAbsensiController;
 use App\Http\Controllers\MandorTripController;
-use App\Http\Controllers\PindahBukuController;
 
+use App\Http\Controllers\PindahBukuController;
+use App\Http\Controllers\SupirSerapController;
 use App\Http\Controllers\UpahRitasiController;
 use App\Http\Controllers\BukaAbsensiController;
 use App\Http\Controllers\ExpAsuransiController;
@@ -91,20 +93,20 @@ use App\Http\Controllers\BankPelangganController;
 use App\Http\Controllers\InvoiceDetailController;
 use App\Http\Controllers\InvoiceHeaderController;
 use App\Http\Controllers\LaporanNeracaController;
+
 use App\Http\Controllers\MainAkunPusatController;
 use App\Http\Controllers\PiutangDetailController;
-
 use App\Http\Controllers\PiutangHeaderController;
+
 use App\Http\Controllers\ReminderEmailController;
 use App\Http\Controllers\ResetPasswordController;
-
 use App\Http\Controllers\TypeAkuntansiController;
+
 use App\Http\Controllers\ApprovalOpnameController;
 use App\Http\Controllers\BlackListSupirController;
 
 use App\Http\Controllers\LaporanArusKasController;
 use App\Http\Controllers\LaporanKasBankController;
-
 use App\Http\Controllers\PemutihanSupirController;
 use App\Http\Controllers\PenerimaanStokController;
 use App\Http\Controllers\StatusOliTradoController;
@@ -120,25 +122,25 @@ use App\Http\Controllers\OrderanTruckingController;
 use App\Http\Controllers\PengeluaranStokController;
 use App\Http\Controllers\ReminderServiceController;
 use App\Http\Controllers\ServiceInDetailController;
+
 use App\Http\Controllers\ServiceInHeaderController;
 use App\Http\Controllers\StatusContainerController;
-
 use App\Http\Controllers\ImportDataCabangController;
 use App\Http\Controllers\JurnalUmumDetailController;
+
 use App\Http\Controllers\JurnalUmumHeaderController;
 use App\Http\Controllers\KasGantungDetailController;
 
 use App\Http\Controllers\KasGantungHeaderController;
 use App\Http\Controllers\LaporanBukuBesarController;
-
 use App\Http\Controllers\LaporanHutangBBMController;
+
 use App\Http\Controllers\LaporanKartuStokController;
 use App\Http\Controllers\LaporanKasHarianController;
-
 use App\Http\Controllers\LaporanPembelianController;
+
 use App\Http\Controllers\LaporanTripTradoController;
 use App\Http\Controllers\LaporanUangJalanController;
-
 use App\Http\Controllers\NotaKreditDetailController;
 use App\Http\Controllers\NotaKreditHeaderController;
 use App\Http\Controllers\PenerimaanDetailController;
@@ -148,16 +150,18 @@ use App\Http\Controllers\ServiceOutHeaderController;
 use App\Http\Controllers\TarikDataAbsensiController;
 use App\Http\Controllers\UpahSupirRincianController;
 use App\Http\Controllers\ApprovalBukaCetakController;
+use App\Http\Controllers\ApprovalStokReuseController;
 use App\Http\Controllers\ExportLaporanStokController;
 use App\Http\Controllers\HutangBayarDetailController;
 use App\Http\Controllers\HutangBayarHeaderController;
 use App\Http\Controllers\HutangExtraDetailController;
 use App\Http\Controllers\HutangExtraHeaderController;
+use App\Http\Controllers\LaporanBiayaSupirController;
+
 use App\Http\Controllers\LaporanDataJurnalController;
 use App\Http\Controllers\LaporanHutangGiroController;
 use App\Http\Controllers\LaporanJurnalUmumController;
 use App\Http\Controllers\LaporanKasGantungController;
-
 use App\Http\Controllers\MainTypeAkuntansiController;
 use App\Http\Controllers\PengajuanTripInapController;
 use App\Http\Controllers\PengeluaranDetailController;
@@ -176,6 +180,7 @@ use App\Http\Controllers\LaporanTitipanEmklController;
 use App\Http\Controllers\MandorAbsensiSupirController;
 use App\Http\Controllers\penerimaanTruckingController;
 use App\Http\Controllers\ProsesAbsensiSupirController;
+use App\Http\Controllers\TarifDiscountHargaController;
 use App\Http\Controllers\ApprovalHutangBayarController;
 use App\Http\Controllers\ApprovalSupirGambarController;
 use App\Http\Controllers\ApprovalTradoGambarController;
@@ -198,13 +203,13 @@ use App\Http\Controllers\StatusGandenganTruckController;
 use App\Http\Controllers\ApprovalInvoiceHeaderController;
 use App\Http\Controllers\ExportLaporanDepositoController;
 use App\Http\Controllers\ExportPemakaianBarangController;
+
+
 use App\Http\Controllers\ExportPembelianBarangController;
 use App\Http\Controllers\ExportRincianMingguanController;
 use App\Http\Controllers\HistoriPenerimaanStokController;
 use App\Http\Controllers\JurnalUmumPusatDetailController;
 use App\Http\Controllers\JurnalUmumPusatHeaderController;
-
-
 use App\Http\Controllers\LaporanOrderPembelianController;
 use App\Http\Controllers\LaporanRekapSumbanganController;
 use App\Http\Controllers\LaporanSaldoInventoryController;
@@ -238,6 +243,7 @@ use App\Http\Controllers\ExportLaporanKasGantungController;
 use App\Http\Controllers\ExportPengeluaranBarangController;
 use App\Http\Controllers\LaporanDepositoKaryawanController;
 use App\Http\Controllers\LaporanRekapTitipanEmklController;
+use App\Http\Controllers\LaporanApprovalStokReuseController;
 use App\Http\Controllers\LaporanPenyesuaianBarangController;
 use App\Http\Controllers\PenerimaanTruckingDetailController;
 use App\Http\Controllers\PenerimaanTruckingHeaderController;
@@ -263,8 +269,11 @@ use App\Http\Controllers\LaporanPinjamanSupirKaryawanController;
 use App\Http\Controllers\PengembalianKasGantungDetailController;
 use App\Http\Controllers\PengembalianKasGantungHeaderController;
 use App\Http\Controllers\LapKartuHutangPerVendorDetailController;
+use App\Http\Controllers\LaporanHistoryTradoMilikSupirController;
 use App\Http\Controllers\LaporanKartuHutangPerSupplierController;
 use App\Http\Controllers\LaporanPemotonganPinjamanDepoController;
+use App\Http\Controllers\LaporanHistorySupirMilikMandorController;
+use App\Http\Controllers\LaporanHistoryTradoMilikMandorController;
 use App\Http\Controllers\LaporanKeteranganPinjamanSupirController;
 use App\Http\Controllers\LaporanMingguanSupirBedaMandorController;
 use App\Http\Controllers\PencairanGiroPengeluaranDetailController;
@@ -276,13 +285,6 @@ use App\Http\Controllers\SuratPengantarApprovalInputTripController;
 use App\Http\Controllers\ApprovalBukaTanggalSuratPengantarController;
 use App\Http\Controllers\LaporanPemotonganPinjamanDepositoController;
 use App\Http\Controllers\ExportRincianMingguanPendapatanSupirController;
-use App\Http\Controllers\LapanganController;
-use App\Http\Controllers\LaporanBiayaSupirController;
-use App\Http\Controllers\LaporanHistorySupirMilikMandorController;
-use App\Http\Controllers\LaporanHistoryTradoMilikMandorController;
-use App\Http\Controllers\LaporanHistoryTradoMilikSupirController;
-use App\Http\Controllers\OtobonController;
-use App\Http\Controllers\SupirSerapController;
 
 /*
 |--------------------------------------------------------------------------
@@ -1681,6 +1683,11 @@ Route::middleware(['auth', 'authorized'])->group(function () {
     Route::get('laporanhistorytradomiliksupir/export', [LaporanHistoryTradoMilikSupirController::class, 'export'])->name('laporanhistorytradomiliksupir.export');
     Route::get('laporanhistorytradomiliksupir/index', [LaporanHistoryTradoMilikSupirController::class, 'index']);
     Route::resource('laporanhistorytradomiliksupir', LaporanHistoryTradoMilikSupirController::class);
+    
+    Route::get('laporanapprovalstokreuse/report', [LaporanApprovalStokReuseController::class, 'report'])->name('laporanapprovalstokreuse.report');
+    Route::get('laporanapprovalstokreuse/export', [LaporanApprovalStokReuseController::class, 'export'])->name('laporanapprovalstokreuse.export');
+    Route::get('laporanapprovalstokreuse/index', [LaporanApprovalStokReuseController::class, 'index']);
+    Route::resource('laporanapprovalstokreuse', LaporanApprovalStokReuseController::class);
 });
 
 Route::patch('format', [FormatController::class, 'update']);
