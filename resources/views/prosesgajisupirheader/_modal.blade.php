@@ -409,7 +409,11 @@
         });
 
         // postingRincian = borongan + makan
-        postingRincian = borongan
+        if(isPisahGajiKenek == 'YA'){
+            postingRincian = borongan-gajikenek
+        }else{
+            postingRincian = borongan
+        }
         initAutoNumeric($('#crudForm').find(`[name="nomPR"]`).val(postingRincian))
         initAutoNumeric($('#crudForm').find(`[name="nomPS"]`).val(potSemua))
         initAutoNumeric($('#crudForm').find(`[name="nomPP"]`).val(potPribadi))
@@ -475,33 +479,33 @@
                 value: form.find(`[name="bank_id"]`).val()
             })
 
-            $.each(selectedRows, function(index, item) {
-                data.push({
-                    name: 'rincianId[]',
-                    value: item
-                })
-            });
+            data.push({
+                name: 'jumlahdetail',
+                value: selectedRows.length
+            })
 
-            $.each(selectedRIC, function(index, item) {
-                data.push({
-                    name: 'nobuktiRIC[]',
-                    value: item
-                })
-            });
-
-            $.each(selectedSupir, function(index, item) {
-                data.push({
-                    name: 'supir_id[]',
-                    value: item
-                })
-            });
-
+            let nominalBorongan = [];
+            let kenekTrip = [];
             $.each(selectedBorongan, function(index, item) {
-                data.push({
-                    name: 'totalborongan[]',
-                    value: parseFloat(item.replaceAll(',', ''))
-                })
+                nominalBorongan.push(parseFloat(item.replaceAll(',', '')))
             });
+            $.each(selectedGajiKenek, function(index, item) {
+                kenekTrip.push(parseFloat(item.replaceAll(',', '')))
+            });
+
+            let requestDataRIC = {
+                'rincianId': selectedRows,
+                'nobuktiRIC': selectedRIC,
+                'supir_id': selectedSupir,
+                'totalborongan': nominalBorongan,
+                'gajikenek': kenekTrip,
+
+            };
+
+            data.push({
+                name: 'dataric',
+                value: JSON.stringify(requestDataRIC)
+            })
 
             $('#crudForm').find(`[name="nomPR"]`).each((index, element) => {
                 data.push({

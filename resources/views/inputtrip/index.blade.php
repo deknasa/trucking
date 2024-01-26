@@ -342,6 +342,8 @@
           showSuccessDialog(response.message, response.data.nobukti)
           enabledUpahSupir()
           createSuratPengantar()
+
+          $('#crudForm [name=trado]').data('currentValue', '')
         },
         error: error => {
           console.log('postdata ', error)

@@ -16,7 +16,7 @@
   <script src="{{ asset('libraries/tas-lib/js/terbilang.js?version='. config('app.version')) }}"></script>
   <script type="text/javascript">
     let pendapatansupirs = <?= json_encode($pendapatan); ?>;
-    let showGajiSupir = <?= json_encode($showgajikenek); ?>;
+    let formatKomisi = <?= json_encode($formatkomisi); ?>;
     let printer = <?= json_encode($printer); ?>;
 
     function Start() {
@@ -45,7 +45,7 @@
       var dataSet = new Stimulsoft.System.Data.DataSet("Data")
 
       viewer.renderHtml('content')
-      if (showGajiSupir == 'YA') {
+      if (formatKomisi == 'FORMAT 1') {
         if (printer['tipe'] == 'reportPrinterBesar') {
           report.loadFile(`{{ asset('public/reports/ReportPendapatanSupir(kenek)Besar.mrt') }}`)
         } else {

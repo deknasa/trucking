@@ -86,6 +86,7 @@
   let rowNum = 10
   let currentTab = 'detail'
   let hasDetail = false
+  let isPisahGajiKenek;
 
   let pengeluaran_nobukti = ''
   let nobukti = ''
@@ -95,6 +96,7 @@
 
     loadPengeluaranGrid(pengeluaran_nobukti)
     loadDetailGrid()
+    setIsPisahKenek()
     loadPotSemuaGrid(nobukti)
     loadPotPribadiGrid(nobukti)
     loadDepositoGrid(nobukti)
@@ -776,6 +778,25 @@
     })
 
   })
+
+  
+  function setIsPisahKenek() {
+    $.ajax({
+      url: `${apiUrl}parameter/getparamfirst`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        grp: 'PROSES GAJI SUPIR',
+        subgrp: 'PISAH GAJI KENEK'
+      },
+      success: response => {
+        isPisahGajiKenek = response.text
+      }
+    })
+  }
 </script>
 @endpush()
 @endsection
