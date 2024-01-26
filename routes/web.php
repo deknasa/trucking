@@ -224,6 +224,7 @@ use App\Http\Controllers\RekapPenerimaanDetailController;
 use App\Http\Controllers\RekapPenerimaanHeaderController;
 use App\Http\Controllers\TradoSupirMilikMandorController;
 use App\Http\Controllers\ExportLaporanKasHarianController;
+use App\Http\Controllers\ExportPerhitunganBonusController;
 use App\Http\Controllers\HistoriPengeluaranStokController;
 use App\Http\Controllers\LaporanHistoryDepositoController;
 use App\Http\Controllers\LaporanHistoryPinjamanController;
@@ -1688,6 +1689,11 @@ Route::middleware(['auth', 'authorized'])->group(function () {
     Route::get('laporanapprovalstokreuse/export', [LaporanApprovalStokReuseController::class, 'export'])->name('laporanapprovalstokreuse.export');
     Route::get('laporanapprovalstokreuse/index', [LaporanApprovalStokReuseController::class, 'index']);
     Route::resource('laporanapprovalstokreuse', LaporanApprovalStokReuseController::class);
+    
+    Route::get('exportperhitunganbonus/report', [ExportPerhitunganBonusController::class, 'report'])->name('exportperhitunganbonus.report');
+    Route::get('exportperhitunganbonus/export', [ExportPerhitunganBonusController::class, 'export'])->name('exportperhitunganbonus.export');
+    Route::get('exportperhitunganbonus/index', [ExportPerhitunganBonusController::class, 'index']);
+    Route::resource('exportperhitunganbonus', ExportPerhitunganBonusController::class);
 });
 
 Route::patch('format', [FormatController::class, 'update']);
