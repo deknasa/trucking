@@ -2898,6 +2898,7 @@
     classHidden = [];
     $('#crudModal').find('.modal-body').html(modalBody)
     initDatepicker('datepickerIndex')
+    KodePengeluaranId=''
   })
 
   function setTotal() {
@@ -4591,6 +4592,9 @@
       dataType: 'JSON',
       beforeSend: request => {
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+      },
+      data: {
+        aksi: Aksi
       },
       success: response => {
         var kodenobukti = response.kodenobukti
