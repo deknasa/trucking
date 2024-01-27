@@ -86,7 +86,7 @@ class AbsensiSupirApprovalHeaderController extends MyController
      /**
      * @ClassName
      */
-    public function report(Request $request,$id)
+    public function report(Request $request)
     {
         //FETCH HEADER
         $id = $request->id;
@@ -128,6 +128,7 @@ class AbsensiSupirApprovalHeaderController extends MyController
 
         //FETCH DETAIL
         $detailParams = [
+            'forReport' => true,
             'absensisupirapproval_id' => $request->id
         ];
         $responses = Http::withHeaders(request()->header())
@@ -168,7 +169,7 @@ class AbsensiSupirApprovalHeaderController extends MyController
 
         $header_start_row = 4;
         $header_right_start_row = 4;
-        $detail_table_header_row = 8;
+        $detail_table_header_row = 7;
         $detail_start_row = $detail_table_header_row + 1;
 
         $alphabets = range('A', 'Z');
@@ -181,24 +182,16 @@ class AbsensiSupirApprovalHeaderController extends MyController
                 'label'=>'Tanggal',
                 'index'=>'tglbukti'
             ],
-            [
-                'label'=>'No Bukti Absensi Supir ',
-                'index'=>'absensisupir_nobukti'
-            ],
         ];
         $header_right_columns = [
+            [
+                'label'=>'No Bukti Absensi',
+                'index'=>'absensisupir_nobukti'
+            ],
             [
                 'label'=>'No Bukti Pengeluaran',
                 'index'=>'pengeluaran_nobukti'
             ],
-            [
-                'label'=>'Kode Perkiraan Kas Keluar',
-                'index'=>'coakaskeluar'
-            ],
-            [
-                'label'=>'Tanggal Kas Keluar',
-                'index'=>'tglkaskeluar'
-            ]
         ];
         $detail_columns = [
             [
@@ -216,6 +209,11 @@ class AbsensiSupirApprovalHeaderController extends MyController
                 'label'=>'SUPIR SERAP',
                 'index'=>'supirserap'
             ],
+            [
+                'label'=>'UANG JALAN',
+                'index'=>'uangjalan'
+            ],
+            
             
         ];
 
@@ -254,36 +252,39 @@ class AbsensiSupirApprovalHeaderController extends MyController
         ];
 
         // $sheet->getStyle("A$detail_table_header_row:G$detail_table_header_row")->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FF1F456E');
-        $sheet ->getStyle("A$detail_table_header_row:D$detail_table_header_row")->applyFromArray($styleArray);
+        $sheet ->getStyle("A$detail_table_header_row:E$detail_table_header_row")->applyFromArray($styleArray);
         
 
         // LOOPING DETAIL
 
         foreach ($absensiappheader_details as $response_index => $response_detail) {
-            
-            foreach ($detail_columns as $detail_columns_index => $detail_column) {
-                $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
-                $sheet->getStyle("A$detail_table_header_row:D$detail_table_header_row")->getFont()->setBold(true);
-                $sheet->getStyle("A$detail_table_header_row:D$detail_table_header_row")->getAlignment()->setHorizontal('center');
-            }
-        
             $sheet->setCellValue("A$detail_start_row", $response_index + 1);
             $sheet->setCellValue("B$detail_start_row", $response_detail['trado']);
             $sheet->setCellValue("C$detail_start_row", $response_detail['supir']);
             $sheet->setCellValue("D$detail_start_row", $response_detail['supirserap']);
+            $sheet->setCellValue("E$detail_start_row", $response_detail['uangjalan']);
 
-            $sheet ->getStyle("A$detail_start_row:D$detail_start_row")->applyFromArray($styleArray);
+            $sheet ->getStyle("A$detail_start_row:E$detail_start_row")->applyFromArray($styleArray);
+            $sheet ->getStyle("E$detail_start_row")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
+            
             $detail_start_row++;
         }
+
+        $total_start_row = $detail_start_row;
+        $sheet->mergeCells('A'.$total_start_row.':D'.$total_start_row);
+        $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A'.$total_start_row.':D'.$total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
+        $sheet->setCellValue("E$total_start_row", "=SUM(E7:E" . ($detail_start_row - 1) . ")")->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->getStyle("E$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
         //set autosize
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);
         $sheet->getColumnDimension('C')->setAutoSize(true);
         $sheet->getColumnDimension('D')->setAutoSize(true);
+        $sheet->getColumnDimension('E')->setAutoSize(true);
 
         $writer = new Xlsx($spreadsheet);
-        $filename = 'Laporan Absensi Supir Approval ' . date('dmYHis');
+        $filename = 'Laporan Absensi Supir Posting ' . date('dmYHis');
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
         header('Cache-Control: max-age=0');
