@@ -482,7 +482,7 @@
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
                     showDialog('Harap pilih salah satu record')
                   } else {
-                    window.open(`{{url('absensisupirapprovalheader/report/${selectedId}?printer=reportPrinterBesar')}}`)
+                    cekValidasi(selectedId, 'PRINTER BESAR')
                   }
                 }
               },
@@ -494,7 +494,7 @@
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
                     showDialog('Harap pilih salah satu record')
                   } else {
-                    window.open(`{{url('absensisupirapprovalheader/report/${selectedId}?printer=reportPrinterKecil')}}`)
+                    cekValidasi(selectedId, 'PRINTER KECIL')
                   }
                 }
               },

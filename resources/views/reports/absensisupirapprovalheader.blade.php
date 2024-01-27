@@ -47,7 +47,7 @@
       if (printer['tipe'] == 'reportPrinterBesar') {
         report.loadFile(`{{ asset('public/reports/ReportAbsensiSupirApprovalBesar.mrt') }}`)
       } else {
-        report.loadFile(`{{ asset('public/reports/ReportAbsensiSupirApproval.mrt') }}`)
+        report.loadFile(`{{ asset('public/reports/ReportAbsensiSupirApprovalBesar.mrt') }}`)
       }
 
       report.dictionary.dataSources.clear()
@@ -59,8 +59,8 @@
 
       report.regData(dataSet.dataSetName, '', dataSet)
       report.dictionary.synchronize()
-      designer.report = report;
-      designer.renderHtml('content');
+      // designer.report = report;
+      // designer.renderHtml('content');
       viewer.report = report
       viewer.onPrintReport = function(event) {
         triggerEvent(window, 'afterprint');

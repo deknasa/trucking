@@ -471,7 +471,7 @@ Route::middleware(['auth', 'authorized'])->group(function () {
     Route::get('absensisupirapprovalheader/index', [AbsensiSupirApprovalHeaderController::class, 'index']);
     Route::get('absensisupirapprovalheader/get', [AbsensiSupirApprovalHeaderController::class, 'get'])->name('absensisupirapprovalheader.get');
     Route::get('absensisupirapprovalheader/export', [AbsensiSupirApprovalHeaderController::class, 'export'])->name('absensisupirapprovalheader.export');
-    Route::get('absensisupirapprovalheader/report/{id}', [AbsensiSupirApprovalHeaderController::class, 'report'])->name('absensisupirapprovalheader.report');
+    Route::get('absensisupirapprovalheader/report', [AbsensiSupirApprovalHeaderController::class, 'report'])->name('absensisupirapprovalheader.report');
     Route::resource('absensisupirapprovalheader', AbsensiSupirApprovalHeaderController::class);
 
     Route::get('absensisupirapprovaldetail/jurnal/grid', [AbsensiSupirApprovalDetailController::class, 'jurnalGrid']);

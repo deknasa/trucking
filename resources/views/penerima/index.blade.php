@@ -371,6 +371,9 @@
             if (!`{{ $myAuth->hasPermission('penerima', 'store') }}`) {
                 $('#add').attr('disabled', 'disabled')
             }
+            if (!`{{ $myAuth->hasPermission('penerima', 'update') }}`) {
+                $('#edit').attr('disabled', 'disabled')
+            }
 
             if (!`{{ $myAuth->hasPermission('penerima', 'show') }}`) {
                 $('#view').attr('disabled', 'disabled')

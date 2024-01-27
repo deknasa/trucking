@@ -587,16 +587,19 @@
               text: "UN/APPROVAL Data",
               onClick: () => {
 
-                approve()
-
+                if (`{{ $myAuth->hasPermission('supplier', 'approval') }}`) {
+                  approve()
+                }
               }
             },
             {
               id: 'approvalnonaktif',
               text: "Approval Non Aktif",
               onClick: () => {
+                if (`{{ $myAuth->hasPermission('supplier', 'approvalnonaktif') }}`) {
 
-                approvenonaktif()
+                  approvenonaktif()
+                }
 
               }
             },

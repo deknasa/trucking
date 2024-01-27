@@ -2,7 +2,7 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
-       
+
         <form action="" method="post">
           <div class="modal-body">
             <div class="row form-group">
@@ -529,7 +529,13 @@
         if (error) {
           showDialog(response)
         } else {
-          cekValidasiAksi(Id, Aksi)
+          if (Aksi == 'PRINTER BESAR') {
+            window.open(`{{ route('absensisupirapprovalheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
+          } else if (Aksi == 'PRINTER KECIL') {
+            window.open(`{{ route('absensisupirapprovalheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
+          } else {
+            cekValidasiAksi(Id, Aksi)
+          }
         }
       }
     })
