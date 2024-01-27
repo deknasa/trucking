@@ -10,8 +10,9 @@
       datatype: "json",
       idPrefix: 'penerimaanStokLookup',
       postData: {
-        aktif: `{!! $Aktif ?? '' !!}`,        
-        roleinput: `{!! $roleInput ?? '' !!}`,        
+        aktif: `{!! $Aktif ?? '' !!}`,
+        roleinput: `{!! $roleInput ?? '' !!}`,
+        isLookup: `{!! $isLookup ?? '' !!}`,
         // filters: `{!! $filters ?? '' !!}`
       },
       colModel: [{
@@ -19,7 +20,7 @@
           name: 'id',
           align: 'right',
           width: '70px',
-            search: false,
+          search: false,
           hidden: true
         },
         {
@@ -61,7 +62,7 @@
 
             return ` title="${statusFormat.MEMO}"`
           }
-        },        
+        },
         // {
         //   label: 'status format text',
         //   name: 'statusformattext',
@@ -95,7 +96,7 @@
 
             return ` title="${statusHitungstok.MEMO}"`
           }
-        },                
+        },
         {
           label: 'MODIFIED BY',
           name: 'modifiedby',
@@ -164,7 +165,7 @@
         setGridLastRequest($(this), jqXHR)
       },
       loadComplete: function(data) {
-          changeJqGridRowListText()
+        changeJqGridRowListText()
         if (detectDeviceType() == 'desktop') {
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
@@ -223,12 +224,12 @@
       },
     })
     .jqGrid("navGrid", pager, {
-        search: false,
-        refresh: false,
-        add: false,
-        edit: false,
-        del: false,
-      })
+      search: false,
+      refresh: false,
+      add: false,
+      edit: false,
+      del: false,
+    })
     .customPager()
   loadGlobalSearch($('#penerimaanStokLookup'))
   loadClearFilter($('#penerimaanStokLookup'))
