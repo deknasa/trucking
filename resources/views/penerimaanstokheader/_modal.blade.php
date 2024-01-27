@@ -2894,6 +2894,7 @@
         this.postData = {
           Aktif: 'AKTIF',
           roleInput: 'role',
+          isLookup: true
         }
       },
       onSelectRow: (penerimaanstok, element) => {
