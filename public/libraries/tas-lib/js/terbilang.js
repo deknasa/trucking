@@ -8,9 +8,11 @@ var terbilang = function (number) {
     } else if (n < 20) {
       return terbilangSatuan(n - 10) + " Belas";
     } else if (n < 100) {
-      return terbilangSatuan(Math.floor(n / 10)) + " Puluh" + terbilangSatuan(n % 10);
+      return terbilangSatuan(Math.floor(n / 10)) + " Puluh " + terbilangSatuan(n % 10);
+    } else if (n < 200) {
+      return " Seratus "+ terbilangSatuan(n % 100);
     } else if (n < 1000) {
-      return units[Math.floor(n / 100)] + " Ratus" + terbilangSatuan(n % 100);
+      return units[Math.floor(n / 100)] + " Ratus " + terbilangSatuan(n % 100);
     }
     // tambahkan kondisi untuk ribu, juta, miliar, dst. sesuai kebutuhan
   }
