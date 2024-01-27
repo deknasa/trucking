@@ -1,52 +1,81 @@
 var terbilang = function (number) {
-      
-  // Array kosong untuk menampung kata terbilang
-  
   let words = [];
-  
-  // Array untuk menampung angka terbilang
-  const units = [
-  "", "Satu", "Dua", "Tiga", "Empat", "Lima", "Enam", "Tujuh", "Delapan", "Sembilan", "Sepuluh", "Sebelas"
-  ];
-  
-  // Konversi angka menjadi terbilang
-  if (number < 12) {
-    words.push(units[number]);
-  } else if (number < 20) {
-    words.push(terbilang(number - 10) + " Belas");
-  } else if (number < 100) {
-    words.push(terbilang(Math.floor(number / 10)) + " Puluh");
-    if (number % 10 !== 0) {
-      words.push(terbilang(number % 10));
+  const units = ["", "Satu", "Dua", "Tiga", "Empat", "Lima", "Enam", "Tujuh", "Delapan", "Sembilan", "Sepuluh", "Sebelas"];
+
+  function terbilangSatuan(n) {
+    if (n < 12) {
+      return units[n];
+    } else if (n < 20) {
+      return terbilangSatuan(n - 10) + " Belas";
+    } else if (n < 100) {
+      return terbilangSatuan(Math.floor(n / 10)) + " Puluh" + terbilangSatuan(n % 10);
+    } else if (n < 1000) {
+      return units[Math.floor(n / 100)] + " Ratus" + terbilangSatuan(n % 100);
     }
-  } else if (number < 200) {
-    words.push("Seratus", terbilang(number - 100));
-  } else if (number < 1000) {
-    words.push(terbilang(Math.floor(number / 100)) + " Ratus");
-    if (number % 100 !== 0) {
-      words.push(terbilang(number % 100));
-    }
-  } else if (number < 2000) {
-    words.push("Seribu", terbilang(number - 1000));
-  } else if (number < 1000000) {
-    words.push(terbilang(Math.floor(number / 1000)) + " Ribu");
-    if (number % 1000 !== 0) {
-      words.push(terbilang(number % 1000));
-    }
-  } else if (number < 1000000000) {
-    words.push(terbilang(Math.floor(number / 1000000)) + " Juta");
-    if (number % 1000000 !== 0) {
-      words.push(terbilang(number % 1000000));
-    }
-  } else if (number < 1000000000000) {
-    words.push(terbilang(Math.floor(number / 1000000000)) + " Miliar");
-    if (number % 1000000000 !== 0) {
-      words.push(terbilang(number % 1000000000));
-    }
-  } else {
-    words.push("Angka terlalu besar");
+    // tambahkan kondisi untuk ribu, juta, miliar, dst. sesuai kebutuhan
   }
-  // Menggabungkan semua kata terbilang menjadi satu string
+
+  function terbilangDesimal(n) {
+    n *= 100; // konversi desimal ke integer untuk memudahkan perhitungan
+    n = Math.round(n);
+    if (n > 0) {
+      words.push(terbilangSatuan(n));
+    }
+  }
+
+  var str = number.toString();
+  var desimalIndex = str.indexOf('.');
+  var nilaiDesimal = 0;
+
+  if (desimalIndex !== -1) {
+    // Jika terdapat desimal
+    nilaiDesimal = parseFloat("0." + str.substr(desimalIndex + 1));
+    str = str.substr(0, desimalIndex);
+  }
+
+  var nilai = parseInt(str);
+
+  if (isNaN(nilai)) {
+    return "Input tidak valid";
+  }
+
+  if (nilai < 0 || nilai > 999999999999) {
+    return "Angka di luar batas";
+  }
+
+  if (nilai === 0) {
+    words.push("Nol");
+  } else {
+    if (nilai < 1000) {
+      words.push(terbilangSatuan(nilai));
+    } else {
+      var milyar = Math.floor(nilai / 1000000000);
+      var juta = Math.floor((nilai % 1000000000) / 1000000);
+      var ribu = Math.floor((nilai % 1000000) / 1000);
+      var ratusan = nilai % 1000;
+
+      if (milyar > 0) {
+        words.push(terbilangSatuan(milyar) + " Miliar");
+      }
+
+      if (juta > 0) {
+        words.push(terbilangSatuan(juta) + " Juta");
+      }
+
+      if (ribu > 0) {
+        words.push(terbilangSatuan(ribu) + " Ribu");
+      }
+
+      if (ratusan > 0) {
+        words.push(terbilangSatuan(ratusan));
+      }
+    }
+  }
+
+  if (nilaiDesimal > 0) {
+    words.push("Koma");
+    terbilangDesimal(nilaiDesimal);
+  }
+
   return words.join(" ");
 };
-  
