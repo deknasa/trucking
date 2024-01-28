@@ -34,24 +34,36 @@ class ExportPerhitunganBonusController extends MyController
             ->get(config('app.api_url') . 'exportperhitunganbonus/export', $detailParams);
 
             
+            // dd($responses);
+            // dd($responses['data']);
         $bukubesar = $responses['data'];
         
         if(count($bukubesar) == 0){
             throw new \Exception('TIDAK ADA DATA');
         }
         $dataheader = $responses['dataheader'];
+        $judul = $responses['judul'];
         $user = Auth::user();
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setCellValue('A1', "BONUS KARYAWAN JKT JUL s.d SEP");
-        $sheet->getStyle("A1")->getFont()->setSize(20)->setBold(true);
+
+        $sheet->setCellValue('A1', $bukubesar[0]['cmpyname']);
+        $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:D1');
 
+        $sheet->setCellValue('A2', $judul);
+        $sheet->getStyle("A2")->getFont()->setBold(true);
+
+        // $sheet->setCellValue('A1', $judul);
+        // $sheet->getStyle("A1")->getFont()->setSize(20)->setBold(true);
+        // $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
+        // $sheet->mergeCells('A1:D1');
+
    
 
-        $detail_table_header_row = 2;
+        $detail_table_header_row = 3;
         $detail_start_row = $detail_table_header_row + 1;
 
         $styleArray = array(
@@ -73,6 +85,14 @@ class ExportPerhitunganBonusController extends MyController
                 'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
                 'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN]
             ]
+        ];
+
+        $style_number2 = [
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT,
+            ],
+
+          
         ];
 
         $alphabets = range('A', 'Z');
@@ -105,19 +125,98 @@ class ExportPerhitunganBonusController extends MyController
 
         }
         $detail_start_row++;
+        $barisawalsumpendapatan=$detail_start_row;
+        $ftype='';
+        $fketparent='';
+        $hitbeban=0;
         foreach ($bukubesar as $response_index => $response_detail) {
 
-            $sheet->setCellValue("a$detail_start_row", $response_detail['perkiraan']);
-            $sheet->setCellValue("b$detail_start_row", number_format((float) $response_detail['bulankesatu'], '2', ',', '.'));
-            $sheet->setCellValue("c$detail_start_row", number_format((float) $response_detail['bulankedua'], '2', ',', '.'));
-            $sheet->setCellValue("d$detail_start_row", number_format((float) $response_detail['bulanketiga'], '2', ',', '.'));
+            $sheet->setCellValue("a$detail_start_row", $response_detail['fketcoa']);
 
-            $sheet->getStyle("A$detail_start_row:D$detail_start_row")->applyFromArray($styleArray);
-            $sheet->getStyle("B$detail_start_row:D$detail_start_row")->applyFromArray($style_number);
-            
+            $sheet->setCellValue("b$detail_start_row",$response_detail['nominal1']);
+            $sheet->setCellValue("c$detail_start_row",$response_detail['nominal2']);
+            $sheet->setCellValue("d$detail_start_row",$response_detail['nominal3']);
+            $sheet->getStyle('b' . $detail_start_row)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");            
+            $sheet->getStyle('c' . $detail_start_row)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");            
+            $sheet->getStyle('d' . $detail_start_row)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");  
+            if (($response_detail['ftype'] != $ftype)  && ($ftype=='PENDAPATAN')){
+                // $test="=SUM(b" . ($barisawalsumpendapatan) . ":b" . ($detail_start_row - 1) . ")";
+                $sheet->setCellValue("a$detail_start_row", 'TOTAL PENDAPATAN')->getStyle("a$detail_start_row")->getFont()->setBold(true);;
+                $barispendapatan=$detail_start_row;
+                $sheet->setCellValue("b$detail_start_row", "=SUM(b" . ($barisawalsumpendapatan) . ":b" . ($detail_start_row - 1) . ")")->getStyle("b$detail_start_row")->getFont()->setBold(true);
+                $sheet->setCellValue("c$detail_start_row", "=SUM(c" . ($barisawalsumpendapatan) . ":c" . ($detail_start_row - 1) . ")")->getStyle("c$detail_start_row")->getFont()->setBold(true);
+                $sheet->setCellValue("d$detail_start_row", "=SUM(d" . ($barisawalsumpendapatan) . ":d" . ($detail_start_row - 1) . ")")->getStyle("d$detail_start_row")->getFont()->setBold(true);
+                $sheet->getStyle('b' . $detail_start_row)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");            
+                $sheet->getStyle('c' . $detail_start_row)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");            
+                $sheet->getStyle('d' . $detail_start_row)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");            
+                    $detail_start_row=$detail_start_row+2;
+            }
+            if (($response_detail['ftype'] != $ftype)  && ($response_detail['ftype'] =='BEBAN')){
+                $hitbeban=0;
+                $barisawalsumbiaya=$detail_start_row;
+                $sheet->setCellValue("a$detail_start_row", $response_detail['ketmain'])->getStyle("a$detail_start_row")->getFont()->setBold(true);;
+                $detail_start_row++;
+                $sheet->setCellValue("a$detail_start_row", $response_detail['fketparent'])->getStyle("a$detail_start_row")->getFont()->setBold(true);;
+            }
+
+            if (($response_detail['ftype'] =='BEBAN') && ($response_detail['fketparent'] != $fketparent) && ($hitbeban != 0)) {
+                $detail_start_row=$detail_start_row+2;
+                $sheet->setCellValue("a$detail_start_row", $response_detail['fketparent'])->getStyle("a$detail_start_row")->getFont()->setBold(true);;
+            }
+
+            if ($response_detail['ftype'] =='BEBAN') {
+                $hitbeban=$hitbeban+1;
+            }
+
+
+            // $sheet->getStyle("A$detail_start_row:D$detail_start_row")->applyFromArray($styleArray);
+            $sheet->getStyle("B$detail_start_row:D$detail_start_row")->applyFromArray($style_number2);
+            $sheet->getStyle('b' . $detail_start_row)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");            
+            $sheet->getStyle('c' . $detail_start_row)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");            
+            $sheet->getStyle('d' . $detail_start_row)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");            
             $detail_start_row++;
-        }
+            $ftype=$response_detail['ftype'];
+            $fketparent=$response_detail['fketparent'];
+        }  
         $detail_start_row++;
+        $barisbiaya=$detail_start_row;
+
+        $sheet->setCellValue("a$detail_start_row", 'TOTAL BIAYA')->getStyle("a$detail_start_row")->getFont()->setBold(true);;
+        $sheet->setCellValue("b$detail_start_row", "=SUM(b" . ($barisawalsumbiaya) . ":b" . ($detail_start_row - 1) . ")")->getStyle("b$detail_start_row")->getFont()->setBold(true);
+        $sheet->setCellValue("c$detail_start_row", "=SUM(c" . ($barisawalsumbiaya) . ":c" . ($detail_start_row - 1) . ")")->getStyle("c$detail_start_row")->getFont()->setBold(true);
+        $sheet->setCellValue("d$detail_start_row", "=SUM(d" . ($barisawalsumbiaya) . ":d" . ($detail_start_row - 1) . ")")->getStyle("d$detail_start_row")->getFont()->setBold(true);
+        $sheet->getStyle('b' . $detail_start_row)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");            
+        $sheet->getStyle('c' . $detail_start_row)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");            
+        $sheet->getStyle('d' . $detail_start_row)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");            
+
+        $detail_start_row++;
+        $sheet->setCellValue("a$detail_start_row", 'LABA/RUGI BERSIH')->getStyle("a$detail_start_row");
+        $sheet->setCellValue("b$detail_start_row", "=(b" . ($barispendapatan) . "-b" . ($barisbiaya) . ")");
+        $sheet->setCellValue("c$detail_start_row", "=(c" . ($barispendapatan) . "-c" . ($barisbiaya) . ")");
+        $sheet->setCellValue("d$detail_start_row", "=(d" . ($barispendapatan) . "-d" . ($barisbiaya) . ")");
+        $sheet->getStyle('b' . $detail_start_row)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");            
+        $sheet->getStyle('c' . $detail_start_row)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");            
+        $sheet->getStyle('d' . $detail_start_row)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");            
+
+        $detail_start_row++;
+        $sheet->setCellValue("a$detail_start_row", 'BONUS KARYAWAN (3%)')->getStyle("a$detail_start_row");
+        $sheet->setCellValue("b$detail_start_row", "=(b" . ($detail_start_row-1) . "*0.03)");
+        $sheet->setCellValue("c$detail_start_row", "=(c" . ($detail_start_row-1) . "*0.03)");
+        $sheet->setCellValue("d$detail_start_row", "=(d" . ($detail_start_row-1) . "*0.03)");
+        $sheet->getStyle('b' . $detail_start_row)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");            
+        $sheet->getStyle('c' . $detail_start_row)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");            
+        $sheet->getStyle('d' . $detail_start_row)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");            
+
+        $detail_start_row++;
+        $sheet->setCellValue("a$detail_start_row", 'TOTAL')->getStyle("a$detail_start_row");
+        $sheet->setCellValue("b$detail_start_row", "=(b" . ($detail_start_row-1) . "+c" . ($detail_start_row-1) . "+d" . ($detail_start_row-1) . ")");
+        $sheet->getStyle('b' . $detail_start_row)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");            
+
+        $detail_start_row++;
+        $sheet->setCellValue("a$detail_start_row", 'KANTOR PUSAT (10%)')->getStyle("a$detail_start_row");
+        $sheet->setCellValue("b$detail_start_row", "=(b" . ($detail_start_row-1) . "*0.1)");
+        $sheet->getStyle('b' . $detail_start_row)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");            
+
         // $sheet->mergeCells('A' . $detail_start_row . ':C' . $detail_start_row);
         // $sheet->setCellValue("A$detail_start_row", 'Total')->getStyle('A' . $detail_start_row . ':C' . $detail_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
         // $sheet->setCellValue("D$detail_start_row", number_format((float) $totalDebet, '2', ',', '.'))->getStyle("D$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
@@ -184,14 +283,14 @@ class ExportPerhitunganBonusController extends MyController
         //     }
         // }
 
-        $ttd_start_row = $detail_start_row + 2;
-        $sheet->setCellValue("A$ttd_start_row", 'Disetujui Oleh,');
-        $sheet->setCellValue("C$ttd_start_row", 'Diperiksa Oleh,');
-        $sheet->setCellValue("F$ttd_start_row", 'Disusun Oleh,');
+        // $ttd_start_row = $detail_start_row + 2;
+        // $sheet->setCellValue("A$ttd_start_row", 'Disetujui Oleh,');
+        // $sheet->setCellValue("C$ttd_start_row", 'Diperiksa Oleh,');
+        // $sheet->setCellValue("F$ttd_start_row", 'Disusun Oleh,');
 
-        $sheet->setCellValue("A" . ($ttd_start_row + 3), '(                )');
-        $sheet->setCellValue("C" . ($ttd_start_row + 3), '(                )');
-        $sheet->setCellValue("F" . ($ttd_start_row + 3), '(                )');
+        // $sheet->setCellValue("A" . ($ttd_start_row + 3), '(                )');
+        // $sheet->setCellValue("C" . ($ttd_start_row + 3), '(                )');
+        // $sheet->setCellValue("F" . ($ttd_start_row + 3), '(                )');
 
         $sheet->getColumnDimension('A')->setWidth(30);
         $sheet->getColumnDimension('B')->setAutoSize(true);
@@ -201,7 +300,7 @@ class ExportPerhitunganBonusController extends MyController
 
 
         $writer = new Xlsx($spreadsheet);
-        $filename = 'LAPORAN BUKU BESAR ' . date('dmYHis');
+        $filename = 'Perhitungan Bonus ' . date('dmYHis');
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
         header('Cache-Control: max-age=0');
