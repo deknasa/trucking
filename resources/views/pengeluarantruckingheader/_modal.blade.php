@@ -625,6 +625,17 @@
           getDataPelunasanBBM(tgldari, tglsampai).then((response) => {
 
             $("#tablePelunasanbbm")[0].p.selectedRowIds = [];
+            let selectedId = []
+            let totalBayar = 0
+            if ($('#crudForm').data('action') == 'edit') {
+
+              $.each(response.data, (index, value) => {
+                if (value.pengeluarantruckingheader_id != null) {
+                  selectedId.push(value.id)
+                  totalBayar += parseFloat(value.nominal)
+                }
+              })
+            }
             setTimeout(() => {
 
               $("#tablePelunasanbbm")
@@ -633,10 +644,12 @@
                   data: response.data,
                   originalData: response.data,
                   rowNum: response.data.length,
-                  selectedRowIds: []
+                  selectedRowIds: selectedId
                 })
                 .trigger("reloadGrid");
             }, 100);
+            initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePelunasanbbm_nominal"]`).text(totalBayar))
+
           });
         }
       }
@@ -2898,7 +2911,7 @@
     classHidden = [];
     $('#crudModal').find('.modal-body').html(modalBody)
     initDatepicker('datepickerIndex')
-    KodePengeluaranId=''
+    KodePengeluaranId = ''
   })
 
   function setTotal() {
@@ -3538,11 +3551,9 @@
       attribut = 'disabled'
       forCheckbox = 'disabled'
     } else {
-      if (id != undefined) {
-        urlBBM = `${apiUrl}pengeluarantruckingheader/${id}/edit/geteditpelunasan`
-      } else {
-        urlBBM = `${apiUrl}pengeluarantruckingheader/getpelunasan`
-      }
+      id = $('#crudForm').find(`[name=id]`).val()
+      urlBBM = `${apiUrl}pengeluarantruckingheader/${id}/edit/geteditpelunasan`
+
     }
 
     return new Promise((resolve, reject) => {
