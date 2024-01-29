@@ -172,7 +172,7 @@
                             });
                             var link = document.createElement('a');
                             link.href = window.URL.createObjectURL(blob);
-                            link.download = `LAPORAN BUKU BESAR ${new Date().getTime()}.xlsx`;
+                            link.download = `PerHitungan Bonus ${new Date().getTime()}.xlsx`;
                             link.click();
                         }
                     }
