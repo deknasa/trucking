@@ -1973,53 +1973,6 @@
               "TextBrush": "solid:Black",
               "Type": "Expression"
             },
-            "4": {
-              "Ident": "StiText",
-              "Name": "Text32",
-              "Guid": "778600c3b2b37fff99f2747cf78ccd15",
-              "CanGrow": true,
-              "ClientRectangle": "2,8.72,16,6",
-              "ComponentPlacement": "pf.PageFooterBand1",
-              "Interaction": {
-                "Ident": "StiInteraction"
-              },
-              "MaxNumberOfLines": 6,
-              "Text": {
-                "Value": "Terbilang # "
-              },
-              "VertAlignment": "Center",
-              "Font": ";;Italic;",
-              "Border": ";;;;;;;solid:0,0,0",
-              "Brush": "solid:",
-              "TextBrush": "solid:0,0,0",
-              "Type": "Expression"
-            },
-            "5": {
-              "Ident": "StiText",
-              "Name": "Text42",
-              "Guid": "03761185aeb8229f408af8b40dc7209d",
-              "CanGrow": true,
-              "ClientRectangle": "18,8.72,186,6",
-              "ComponentPlacement": "pf.PageFooterBand1",
-              "Interaction": {
-                "Ident": "StiInteraction"
-              },
-              "MaxNumberOfLines": 6,
-              "Text": {
-                "Value": "{Terbilang(Sum(pengeluaranstokheader_details.total))}"
-              },
-              "VertAlignment": "Center",
-              "Font": ";;Italic;",
-              "Border": ";;;;;;;solid:Black",
-              "Brush": "solid:",
-              "TextBrush": "solid:Black",
-              "TextOptions": {
-                "WordWrap": true
-              },
-              "ShrinkFontToFit": true,
-              "ShrinkFontToFitMinimumSize": 5,
-              "Type": "Expression"
-            },
             "6": {
               "Ident": "StiText",
               "Name": "Text5",

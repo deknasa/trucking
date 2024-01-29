@@ -1902,55 +1902,6 @@
               "TextBrush": "solid:Black",
               "Type": "Expression"
             },
-            "4": {
-              "Ident": "StiText",
-              "Name": "Text38",
-              "Guid": "88f054e457783400fdc29c6dce0d0c5f",
-              "CanGrow": true,
-              "ClientRectangle": "2,8.76,16,6",
-              "ComponentPlacement": "rs.ReportSummaryBand1",
-              "Enabled": false,
-              "Interaction": {
-                "Ident": "StiInteraction"
-              },
-              "MaxNumberOfLines": 6,
-              "Text": {
-                "Value": "Terbilang # "
-              },
-              "VertAlignment": "Center",
-              "Font": ";;Italic;",
-              "Border": ";;;;;;;solid:0,0,0",
-              "Brush": "solid:",
-              "TextBrush": "solid:0,0,0",
-              "Type": "Expression"
-            },
-            "5": {
-              "Ident": "StiText",
-              "Name": "Text39",
-              "Guid": "99c06b523f2eec33d525fb000aea9ce9",
-              "CanGrow": true,
-              "ClientRectangle": "18,8.76,184,6",
-              "ComponentPlacement": "rs.ReportSummaryBand1",
-              "Enabled": false,
-              "Interaction": {
-                "Ident": "StiInteraction"
-              },
-              "MaxNumberOfLines": 6,
-              "Text": {
-                "Value": "{Terbilang(Sum(pengeluaranstokheader_details.total))}"
-              },
-              "VertAlignment": "Center",
-              "Font": ";;Italic;",
-              "Border": ";;;;;;;solid:Black",
-              "Brush": "solid:",
-              "TextBrush": "solid:Black",
-              "TextOptions": {
-                "WordWrap": true
-              },
-              "ShrinkFontToFit": true,
-              "ShrinkFontToFitMinimumSize": 5,
-              "Type": "Expression"
-            },
             "6": {
               "Ident": "StiText",
               "Name": "Text43",

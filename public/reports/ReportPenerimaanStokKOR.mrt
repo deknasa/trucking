@@ -1795,53 +1795,6 @@
               "TextBrush": "solid:Black",
               "Type": "Expression"
             },
-            "4": {
-              "Ident": "StiText",
-              "Name": "Text32",
-              "Guid": "5971e7f7f63cb6eba35c06adea0b4155",
-              "CanGrow": true,
-              "ClientRectangle": "2.03,8.01,16,6",
-              "ComponentPlacement": "rs.ReportSummaryBand1",
-              "Interaction": {
-                "Ident": "StiInteraction"
-              },
-              "MaxNumberOfLines": 6,
-              "Text": {
-                "Value": "Terbilang # "
-              },
-              "VertAlignment": "Center",
-              "Font": ";;Italic;",
-              "Border": ";;;;;;;solid:0,0,0",
-              "Brush": "solid:",
-              "TextBrush": "solid:0,0,0",
-              "Type": "Expression"
-            },
-            "5": {
-              "Ident": "StiText",
-              "Name": "Text42",
-              "Guid": "8291897615d4bfbee745381fa89bab77",
-              "CanGrow": true,
-              "ClientRectangle": "18.03,8.01,184,6",
-              "ComponentPlacement": "rs.ReportSummaryBand1",
-              "Interaction": {
-                "Ident": "StiInteraction"
-              },
-              "MaxNumberOfLines": 6,
-              "Text": {
-                "Value": "{Terbilang(Sum(penerimaanstokheader_details.total))}"
-              },
-              "VertAlignment": "Center",
-              "Font": ";;Italic;",
-              "Border": ";;;;;;;solid:Black",
-              "Brush": "solid:",
-              "TextBrush": "solid:Black",
-              "TextOptions": {
-                "WordWrap": true
-              },
-              "ShrinkFontToFit": true,
-              "ShrinkFontToFitMinimumSize": 5,
-              "Type": "Expression"
-            },
             "6": {
               "Ident": "StiText",
               "Name": "Text5",
