@@ -1705,7 +1705,7 @@
     $('.tbl_harga').hide()
     $('.cabang').hide()
     $('.tbl_karyawan_id').hide()
-    $('#detail-tde-section').show()
+    $('#detail-tde-section').hide()
     $('#detail-bst-section').hide()
     $('#detail-bll-section').hide()
     $('#detail-bln-section').hide()
