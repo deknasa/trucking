@@ -157,11 +157,19 @@ class ExportPerhitunganBonusController extends MyController
                 $sheet->setCellValue("a$detail_start_row", $response_detail['ketmain'])->getStyle("a$detail_start_row")->getFont()->setBold(true);;
                 $detail_start_row++;
                 $sheet->setCellValue("a$detail_start_row", $response_detail['fketparent'])->getStyle("a$detail_start_row")->getFont()->setBold(true);;
+                $detail_start_row++;                
+                $sheet->setCellValue("a$detail_start_row", $response_detail['fketcoa']);
+
+                $sheet->setCellValue("b$detail_start_row",$response_detail['nominal1']);
+                $sheet->setCellValue("c$detail_start_row",$response_detail['nominal2']);
+                $sheet->setCellValue("d$detail_start_row",$response_detail['nominal3']);
+    
             }
 
             if (($response_detail['ftype'] =='BEBAN') && ($response_detail['fketparent'] != $fketparent) && ($hitbeban != 0)) {
                 $detail_start_row=$detail_start_row+2;
                 $sheet->setCellValue("a$detail_start_row", $response_detail['fketparent'])->getStyle("a$detail_start_row")->getFont()->setBold(true);;
+    
             }
 
             if ($response_detail['ftype'] =='BEBAN') {
