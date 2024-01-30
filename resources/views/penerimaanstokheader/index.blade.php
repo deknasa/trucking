@@ -662,6 +662,30 @@
       if (!`{{ $myAuth->hasPermission('penerimaanstokheader', 'report') }}`) {
         $('#report').attr('disabled', 'disabled')
       }
+      let hakApporveCount = 0 ;
+      hakApporveCount++
+      if (!`{{ $myAuth->hasPermission('penerimaanstokheader', 'approvalEdit') }}`) {
+        $('#approvalEdit').hide()
+        hakApporveCount--
+        // $('#approvalEdit').attr('disabled', 'disabled')
+      }
+      hakApporveCount++
+      if (!`{{ $myAuth->hasPermission('penerimaanstokheader', 'approvalEditKeterangan') }}`) {
+        $('#approvalEditKeterangan').hide()
+        hakApporveCount--
+        // $('#approvalEditKeterangan').attr('disabled', 'disabled')
+      }
+      hakApporveCount++
+      if (!`{{ $myAuth->hasPermission('penerimaanstokheader', 'approvalbukacetak') }}`) {
+        hakApporveCount--
+        $('#approval-buka-cetak').hide()
+        // $('#approval-buka-cetak').attr('disabled', 'disabled')
+      }
+      if (hakApporveCount < 1) {
+        // $('#approve').hide()
+        $('#approve').attr('disabled', 'disabled')
+      }
+
     }
 
     $('#rangeModal').on('shown.bs.modal', function() {
