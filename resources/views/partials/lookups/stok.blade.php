@@ -133,7 +133,7 @@ $('#stokLookup').jqGrid({
                   },
                   processResults: (response) => {
                     let formattedResponse = response.data.map(row => ({
-                      id: row.text,
+                      id: row.id,
                       text: row.text
                     }));
 

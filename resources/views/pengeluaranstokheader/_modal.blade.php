@@ -714,6 +714,7 @@
     $('.tbl_total').hide();
     $('.colspan').attr('colspan', 5);
     $('.sumrow').hide();
+    $("#addRow").show();
     $("#detail-table").show();
     $("#detail-afkir").hide();
     $("#detail-afkir :input").attr("disabled", true);
@@ -739,6 +740,7 @@
     $('.tbl_statusban').hide();
     $('.tbl_persentase').hide();
     $('.colspan').attr('colspan', 4);
+    $("#addRow").hide();
     $("#detail-table").show();
     $("#detail-afkir").hide();
     $("#detail-afkir :input").attr("disabled", true);
@@ -766,6 +768,7 @@
     $('.tbl_persentase').hide();
     $('.colspan').attr('colspan', 4);
     $('.potongkas').show() //potong kas
+    $("#addRow").show();
     $('#titlePotongkas').html('POSTING Penerimaan')
     $('[name=tglkasmasuk]').parents('.form-group').show()
     $("#detail-table").show();
@@ -816,6 +819,7 @@
     $('.colspan').attr('colspan', 4);
     $('.sumrow').hide();
     $("#detail-table").show();
+    $("#addRow").show();
     $("#detail-afkir").hide();
     $("#detail-afkir :input").attr("disabled", true);
   }
@@ -1766,14 +1770,14 @@
       },
       success: response => {
         var data = response.data;
-        $('[name=supplier]').val(data.supplier).attr('readonly', true);
-        $('[name=supplier]').data('currentValue', data.supplier)
+        $('#crudForm').find('[name=supplier]').val(data.supplier).attr('readonly', true);
+        $('#crudForm').find('[name=supplier]').data('currentValue', data.supplier)
 
-        $('[name=supplier_id]').val(data.supplier_id)
+        $('#crudForm').find('[name=supplier_id]').val(data.supplier_id)
 
-        $('[name=gudang]').val(data.gudang).attr('readonly', true);
-        $('[name=gudang]').data('currentValue', data.gudang)
-        $('[name=gudang_id]').val(data.gudang_id)
+        $('#crudForm').find('[name=gudang]').val(data.gudang).attr('readonly', true);
+        $('#crudForm').find('[name=gudang]').data('currentValue', data.gudang)
+        $('#crudForm').find('[name=gudang_id]').val(data.gudang_id)
       },
       error: error => {
         showDialog(error.statusText)
@@ -1929,9 +1933,10 @@
               initSelect2($(`#statusoli${id}`), true)
               $('table #table_body').append(detailRow)
               // initAutoNumeric($(`.number${id}`))
-              initAutoNumeric($(`#detail_qty${id}`), {
-                'maximumValue': detail.qty
-              })
+              // initAutoNumeric($(`#detail_qty${id}`), {
+              //   'maximumValue': detail.qty
+              // })
+              initAutoNumeric($(`#detail_qty${id}`))
               initAutoNumeric($(`#detail_harga${id}`))
               initAutoNumeric($(`#detail_persentasediscount${id}`))
               initAutoNumeric($(`#totalItem${id}`))
@@ -2065,9 +2070,10 @@
               }
 
               // initAutoNumeric($(`.number${id}`))
-              initAutoNumeric($(`#detail_qty${id}`), {
-                'maximumValue': detail.qty
-              })
+              // initAutoNumeric($(`#detail_qty${id}`), {
+              //   'maximumValue': detail.qty
+              // })
+              initAutoNumeric($(`#detail_qty${id}`))
               initAutoNumeric($(`#detail_harga${id}`))
               initAutoNumeric($(`#detail_persentasediscount${id}`))
               initAutoNumeric($(`#totalItem${id}`))
@@ -2214,9 +2220,10 @@
           detailRow.find(`[name="detail_keterangan[]"]`).val(detail.keterangan)
           $('table #table_body').append(detailRow)
           // initAutoNumeric($(`.number${id}`))
-          initAutoNumeric($(`#detail_qty${id}`), {
-            'maximumValue': detail.qty
-          })
+          // initAutoNumeric($(`#detail_qty${id}`), {
+          //   'maximumValue': detail.qty
+          // })
+          initAutoNumeric($(`#detail_qty${id}`))
           initAutoNumeric($(`#detail_harga${id}`))
           initAutoNumeric($(`#detail_persentasediscount${id}`))
           initAutoNumeric($(`#totalItem${id}`))
