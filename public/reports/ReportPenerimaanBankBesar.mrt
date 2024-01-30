@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "33224d5c8ad1ad86ff93a43800107b8c",
+  "ReportGuid": "ceaa958dafc905ef11ea19ed535f013b",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://localhost/trucking/public/reports/ReportPenerimaanBank.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportPenerimaanBankBesar.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1697518426000+0700)/",
+  "ReportChanged": "/Date(1706517895000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -1187,7 +1187,7 @@
             "7": {
               "Ident": "StiStartPointPrimitive",
               "Name": "StartPointPrimitive6",
-              "ClientRectangle": "11.94,-2.34,0,0",
+              "ClientRectangle": "12,-2.34,0,0",
               "ComponentPlacement": "d.DataBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -1216,16 +1216,6 @@
             },
             "10": {
               "Ident": "StiStartPointPrimitive",
-              "Name": "StartPointPrimitive25",
-              "ClientRectangle": "116.08,-1.07,0,0",
-              "ComponentPlacement": "d.DataBand1",
-              "Interaction": {
-                "Ident": "StiInteraction"
-              },
-              "ReferenceToGuid": "a9f2656c7a9dcadd4ed1a1204596bd56"
-            },
-            "11": {
-              "Ident": "StiStartPointPrimitive",
               "Name": "StartPointPrimitive3",
               "ClientRectangle": "176,-2.34,0,0",
               "ComponentPlacement": "d.DataBand1",
@@ -1234,7 +1224,7 @@
               },
               "ReferenceToGuid": "a38de0646174f247c28559e54cae9dd5"
             },
-            "12": {
+            "11": {
               "Ident": "StiStartPointPrimitive",
               "Name": "StartPointPrimitive23",
               "ClientRectangle": "202.2,-1.58,0,0",
@@ -1243,6 +1233,15 @@
                 "Ident": "StiInteraction"
               },
               "ReferenceToGuid": "9b144182f54c3840cc83803898ad95fa"
+            },
+            "12": {
+              "Ident": "StiStartPointPrimitive",
+              "Name": "StartPointPrimitive14",
+              "ClientRectangle": "116,-0.89,0,0",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "ReferenceToGuid": "f4e59d9ffa0de6f39dceb89fca0fa857"
             }
           },
           "DataSourceName": "penerimaan_details",
@@ -1672,7 +1671,7 @@
             "30": {
               "Ident": "StiEndPointPrimitive",
               "Name": "EndPointPrimitive6",
-              "ClientRectangle": "11.94,0.2,0,0",
+              "ClientRectangle": "12,0.2,0,0",
               "ComponentPlacement": "rs.ReportSummaryBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -1680,16 +1679,6 @@
               "ReferenceToGuid": "658f21503205d352a37fb95fe20966fe"
             },
             "31": {
-              "Ident": "StiEndPointPrimitive",
-              "Name": "EndPointPrimitive25",
-              "ClientRectangle": "116.08,0.2,0,0",
-              "ComponentPlacement": "rs.ReportSummaryBand1",
-              "Interaction": {
-                "Ident": "StiInteraction"
-              },
-              "ReferenceToGuid": "a9f2656c7a9dcadd4ed1a1204596bd56"
-            },
-            "32": {
               "Ident": "StiEndPointPrimitive",
               "Name": "EndPointPrimitive3",
               "ClientRectangle": "176,0.2,0,0",
@@ -1699,7 +1688,7 @@
               },
               "ReferenceToGuid": "a38de0646174f247c28559e54cae9dd5"
             },
-            "33": {
+            "32": {
               "Ident": "StiEndPointPrimitive",
               "Name": "EndPointPrimitive23",
               "ClientRectangle": "202.2,0.2,0,0",
@@ -1709,7 +1698,7 @@
               },
               "ReferenceToGuid": "9b144182f54c3840cc83803898ad95fa"
             },
-            "34": {
+            "33": {
               "Ident": "StiStartPointPrimitive",
               "Name": "StartPointPrimitive9",
               "ClientRectangle": "202.2,0.2,0,0",
@@ -1719,7 +1708,7 @@
               },
               "ReferenceToGuid": "5451a1a4fdeef93e3761b244329f7204"
             },
-            "35": {
+            "34": {
               "Ident": "StiEndPointPrimitive",
               "Name": "EndPointPrimitive9",
               "ClientRectangle": "202.2,8.33,0,0",
@@ -1728,6 +1717,15 @@
                 "Ident": "StiInteraction"
               },
               "ReferenceToGuid": "5451a1a4fdeef93e3761b244329f7204"
+            },
+            "35": {
+              "Ident": "StiEndPointPrimitive",
+              "Name": "EndPointPrimitive14",
+              "ClientRectangle": "116,0.64,0,0",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "ReferenceToGuid": "f4e59d9ffa0de6f39dceb89fca0fa857"
             }
           },
           "PrintAtBottom": true
@@ -1760,7 +1758,7 @@
           "Ident": "StiVerticalLinePrimitive",
           "Name": "VerticalLinePrimitive6",
           "Guid": "658f21503205d352a37fb95fe20966fe",
-          "ClientRectangle": "11.94,50.55,0.254,18.54",
+          "ClientRectangle": "12,50.55,0.254,18.54",
           "ComponentPlacement": "p.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -1974,9 +1972,9 @@
         },
         "24": {
           "Ident": "StiVerticalLinePrimitive",
-          "Name": "VerticalLinePrimitive25",
-          "Guid": "a9f2656c7a9dcadd4ed1a1204596bd56",
-          "ClientRectangle": "116.08,51.82,0.254,17.27",
+          "Name": "VerticalLinePrimitive3",
+          "Guid": "a38de0646174f247c28559e54cae9dd5",
+          "ClientRectangle": "176,50.55,0.254,18.54",
           "ComponentPlacement": "p.Page1",
           "Interaction": {
             "Ident": "StiInteraction"
@@ -1986,9 +1984,9 @@
         },
         "25": {
           "Ident": "StiVerticalLinePrimitive",
-          "Name": "VerticalLinePrimitive3",
-          "Guid": "a38de0646174f247c28559e54cae9dd5",
-          "ClientRectangle": "176,50.55,0.254,18.54",
+          "Name": "VerticalLinePrimitive14",
+          "Guid": "f4e59d9ffa0de6f39dceb89fca0fa857",
+          "ClientRectangle": "116,52,0.254,17.53",
           "ComponentPlacement": "p.Page1",
           "Interaction": {
             "Ident": "StiInteraction"

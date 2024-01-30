@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "60ac87eb9bb744453b3f0e591a0e1092",
+  "ReportGuid": "e9f74854a1b73fde8ad2585f57ae53dc",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://localhost/trucking/public/reports/ReportPenerimaanKas.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportPenerimaanKasBesar.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1697518097000+0700)/",
+  "ReportChanged": "/Date(1706517694000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -511,7 +511,7 @@
               "Ident": "StiText",
               "Name": "Text8",
               "Guid": "a200f0aa78f8298bc4b6190080bddcfe",
-              "ClientRectangle": "132.08,20.13,2,6",
+              "ClientRectangle": "130.08,20.13,2,6",
               "ComponentPlacement": "ph.PageHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -710,7 +710,7 @@
               "Ident": "StiText",
               "Name": "Text23",
               "Guid": "893e3d98f00f578bd70ea89668f0b6f7",
-              "ClientRectangle": "132.08,14.03,2,6",
+              "ClientRectangle": "130.08,14.03,2,6",
               "ComponentPlacement": "ph.PageHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"

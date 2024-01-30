@@ -2,7 +2,7 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
-        
+
         <form action="" method="post">
 
           <div class="modal-body">
@@ -946,7 +946,7 @@
 
                   // ambil data potongan per row
                   dataPelunasan = $("#tablePelunasan").jqGrid("getLocalRow", rowObject.rowId);
-                  getPotongan = (dataPelunasan.potongan == undefined) ? 0 : dataPelunasan.potongan;
+                  getPotongan = (dataPelunasan.potongan == undefined || dataPelunasan.potongan == '') ? 0 : dataPelunasan.potongan;
                   potongan = (isNaN(getPotongan)) ? parseFloat(getPotongan.replaceAll(',', '')) : getPotongan
 
                   if ($('#crudForm').data('action') == 'edit') {
@@ -1011,7 +1011,7 @@
                   let potongan = AutoNumeric.getNumber($('#crudForm').find(`[id="${rowObject.id}"]`)[0])
                   // ambil data potongan per row
                   dataPelunasan = $("#tablePelunasan").jqGrid("getLocalRow", rowObject.rowId);
-                  getBayar = (dataPelunasan.bayar == undefined) ? 0 : dataPelunasan.bayar;
+                  getBayar = (dataPelunasan.bayar == undefined || dataPelunasan.bayar == '') ? 0 : dataPelunasan.bayar;
                   bayar = (isNaN(getBayar)) ? parseFloat(getBayar.replaceAll(',', '')) : getBayar
 
                   if ($('#crudForm').data('action') == 'edit') {
@@ -1341,14 +1341,55 @@
       .jqGrid("excelLikeGrid", {
         beforeDeleteCell: function(rowId, iRow, iCol, event) {
           let localRow = $("#tablePelunasan").jqGrid("getLocalRow", rowId);
+          console.log(iCol)
+          let originalGridData = $("#tablePelunasan")
+            .jqGrid("getGridParam", "originalData")
+            .find((row) => row.id == rowId);
 
-          $("#tablePelunasan").jqGrid(
-            "setCell",
-            rowId,
-            "sisa",
-            parseInt(localRow.sisa) + parseInt(localRow.bayar)
-          );
+          getBayar = (localRow.bayar == undefined || localRow.bayar == '') ? 0 : localRow.bayar;
+          bayar = (isNaN(getBayar)) ? parseFloat(getBayar.replaceAll(',', '')) : getBayar
+          getPotongan = (localRow.potongan == undefined || localRow.potongan == '') ? 0 : localRow.potongan;
+          potongan = (isNaN(getPotongan)) ? parseFloat(getPotongan.replaceAll(',', '')) : getPotongan
+          let totalSisa
+          if (iCol == 10 || iCol == 9) {
 
+            if ($('#crudForm').data('action') == 'edit') {
+              if (iCol == 10) {
+                totalSisa = (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.bayar) + parseFloat(originalGridData.potongan)) - bayar
+                localRow.potongan = 0
+              }
+              if (iCol == 9) {
+                totalSisa = (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.bayar) + parseFloat(originalGridData.potongan)) - potongan
+                localRow.bayar = 0
+              }
+
+            } else {
+              if (iCol == 10) {
+                totalSisa = parseFloat(originalGridData.sisa) - bayar
+                localRow.potongan = 0
+              }
+              
+              if (iCol == 9) {
+                totalSisa = parseFloat(originalGridData.sisa) - potongan
+                localRow.bayar = 0
+              }
+            }
+            console.log(totalSisa)
+            $("#tablePelunasan").jqGrid(
+              "setCell",
+              rowId,
+              "sisa",
+              totalSisa
+            );
+
+            setTotalSisa()
+            setTotalBayar()
+            setTotalPotongan()
+          }
+          if (iCol == 13){
+            localRow.nominallebihbayar = 0
+            setTotalLebihBayar()
+          }
           return true;
         },
       });
@@ -1561,7 +1602,7 @@
     $.each(selectedRows, function(index, value) {
       dataPelunasan = $("#tablePelunasan").jqGrid("getLocalRow", value);
       lunas_lebih = (dataPelunasan.nominallebihbayar == undefined || dataPelunasan.nominallebihbayar == '') ? 0 : dataPelunasan.nominallebihbayar;
-      lebihBayars = (isNaN(lunas_lebih)) ? parseFloat(lunas_lebih.replaceAll(',', '')) : parseFloat(lunas_potongan)
+      lebihBayars = (isNaN(lunas_lebih)) ? parseFloat(lunas_lebih.replaceAll(',', '')) : parseFloat(lunas_lebih)
       lebihBayar = lebihBayar + lebihBayars
     })
     // $.each(lebihBayarDetails, (index, lebihBayarDetail) => {

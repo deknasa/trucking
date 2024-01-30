@@ -202,7 +202,7 @@
       let selectedRows = $("#tablePengembalian").getGridParam("selectedRowIds");
       data.push({
         name: 'jumlahdetail',
-        value: selectedRows
+        value: selectedRows.length
       })
       $.each(selectedRows, function(index, value) {
         dataPengembalianKasGantung = $("#tablePengembalian").jqGrid("getLocalRow", value);
@@ -527,7 +527,7 @@
       .then(() => {
         $('#crudModal').modal('show')
         if (isEditTgl == 'TIDAK') {
-          form.find(`[name="tglbukti"]`).prop('readonly', true)
+          form.find(`[name="tglbukti"]`).not('#gs_tglbukti').prop('readonly', true)
           form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
         }
       })

@@ -16,7 +16,7 @@ class PiutangHeaderController extends MyController
     {
         $title = $this->title;
         $data = [
-            'statuscetak' => $this->comboapproval('list', 'STATUS CETAK', 'STATUS CETAK'),
+            'statuscetak' => $this->comboapproval('list', 'STATUSCETAK', 'STATUSCETAK'),
         ];
         $data = array_merge(compact('title', 'data'),
             ["request"=>$request->all()]
@@ -82,7 +82,7 @@ class PiutangHeaderController extends MyController
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'invoiceheader/comboapproval', $status);
+            ->get(config('app.api_url') . 'parameter/combolist', $status);
 
         return $response['data'];
     }
