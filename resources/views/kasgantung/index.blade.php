@@ -199,6 +199,7 @@
           {
             name: 'pengeluaran_nobukti_hidden',
             hidden: true,
+            search: false,
             formatter: (value, options, rowData) => {
              return  rowData.pengeluaran_nobukti
            },

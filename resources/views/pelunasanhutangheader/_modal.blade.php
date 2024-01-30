@@ -2,7 +2,7 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
-        
+
         <form action="" method="post">
 
           <div class="modal-body">
@@ -945,7 +945,7 @@
 
                   // ambil data potongan per row
                   dataHutang = $("#tableHutang").jqGrid("getLocalRow", rowObject.rowId);
-                  getPotongan = (dataHutang.potongan == undefined) ? 0 : dataHutang.potongan;
+                  getPotongan = (dataHutang.potongan == undefined || dataHutang.potongan == '') ? 0 : dataHutang.potongan;
                   potongan = (isNaN(getPotongan)) ? parseFloat(getPotongan.replaceAll(',', '')) : getPotongan
 
                   if ($('#crudForm').data('action') == 'edit') {
@@ -1018,7 +1018,7 @@
 
                   // ambil data potongan per row
                   dataHutang = $("#tableHutang").jqGrid("getLocalRow", rowObject.rowId);
-                  getBayar = (dataHutang.bayar == undefined) ? 0 : dataHutang.bayar;
+                  getBayar = (dataHutang.bayar == undefined || dataHutang.bayar == '') ? 0 : dataHutang.bayar;
                   bayar = (isNaN(getBayar)) ? parseFloat(getBayar.replaceAll(',', '')) : getBayar
 
                   if ($('#crudForm').data('action') == 'edit') {
@@ -1190,14 +1190,63 @@
       .jqGrid("excelLikeGrid", {
         beforeDeleteCell: function(rowId, iRow, iCol, event) {
           let localRow = $("#tableHutang").jqGrid("getLocalRow", rowId);
+          console.log(iCol)
+          let originalGridData = $("#tableHutang")
+            .jqGrid("getGridParam", "originalData")
+            .find((row) => row.id == rowId);
 
-          $("#tableHutang").jqGrid(
-            "setCell",
-            rowId,
-            "sisa",
-            parseInt(localRow.sisa) + parseInt(localRow.bayar)
-          );
+          getBayar = (localRow.bayar == undefined || localRow.bayar == '') ? 0 : localRow.bayar;
+          bayar = (isNaN(getBayar)) ? parseFloat(getBayar.replaceAll(',', '')) : getBayar
+          getPotongan = (localRow.potongan == undefined || localRow.potongan == '') ? 0 : localRow.potongan;
+          potongan = (isNaN(getPotongan)) ? parseFloat(getPotongan.replaceAll(',', '')) : getPotongan
 
+          if (iCol == 8 || iCol == 9) {
+
+            if ($('#crudForm').data('action') == 'edit') {
+              if (iCol == 8) {
+
+                totalSisa = (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.bayar)) - parseFloat(potongan)
+                localRow.bayar = 0
+                grandTotal = potongan;
+              }
+              if (iCol == 9) {
+
+                totalSisa = (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.bayar)) - parseFloat(bayar)
+                localRow.potongan = 0
+                grandTotal = bayar;
+              }
+            } else {
+              if (iCol == 8) {
+                totalSisa = parseFloat(originalGridData.sisa) - potongan
+                localRow.bayar = 0
+                grandTotal = potongan;
+
+              }
+              if (iCol == 9) {
+                totalSisa = parseFloat(originalGridData.sisa) - bayar
+                localRow.potongan = 0
+                grandTotal = bayar;
+              }
+            }
+
+            $("#tableHutang").jqGrid(
+              "setCell",
+              rowId,
+              "total",
+              grandTotal
+            );
+
+            $("#tableHutang").jqGrid(
+              "setCell",
+              rowId,
+              "sisa",
+              totalSisa
+            );
+            setTotalSisa()
+            setTotalBayar()
+            setTotalPotongan()
+            setAllTotal()
+          }
           return true;
         },
       });
@@ -1552,9 +1601,9 @@
           if (kodestatus == '1') {
             showDialog(response.message['keterangan'])
           } else {
-            if(Aksi == 'PRINTER BESAR'){
+            if (Aksi == 'PRINTER BESAR') {
               window.open(`{{ route('pelunasanhutangheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
-            } else if(Aksi == 'PRINTER KECIL'){
+            } else if (Aksi == 'PRINTER KECIL') {
               window.open(`{{ route('pelunasanhutangheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
             } else {
               cekValidasiAksi(Id, Aksi)

@@ -232,10 +232,6 @@ class PenerimaanHeaderController extends MyController
                     'index' => 'nobukti',
                 ],
                 [
-                    'label' => 'Tanggal',
-                    'index' => 'tglbukti',
-                ],
-                [
                     'label' => 'Kas',
                     'index' => 'bank_id',
                 ]
@@ -244,6 +240,10 @@ class PenerimaanHeaderController extends MyController
                 [
                     'label' => 'Diterima Dari',
                     'index' => 'diterimadari',
+                ],
+                [
+                    'label' => 'Tanggal',
+                    'index' => 'tglbukti',
                 ],
             ];
 
