@@ -650,7 +650,7 @@
             class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
             dropmenuHTML: [{
                 id: 'approvalEdit',
-                text: 'approval Edit',
+                text: ' UN/APPROVAL status Edit',
                 onClick: () => {
 
                   if (`{{ $myAuth->hasPermission('pengeluaranstokheader', 'approvalEdit') }}`) {
@@ -671,7 +671,7 @@
               },
               {
                 id: 'approval-buka-cetak',
-                text: "un/Approval Buka Cetak PENGELUARAN STOK",
+                text: "Approval Buka Cetak PENGELUARAN STOK",
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('pengeluaranstokheader', 'approvalbukacetak') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');

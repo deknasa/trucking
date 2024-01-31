@@ -437,7 +437,7 @@
               // },
               {
                 id: 'approval-buka-cetak',
-                text: "un/Approval Buka Cetak KAS GANTUNG",
+                text: "Approval Buka Cetak KAS GANTUNG",
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('kasgantungheader', 'approvalbukacetak') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');
@@ -549,6 +549,17 @@
 
       if (!`{{ $myAuth->hasPermission('kasgantungheader', 'report') }}`) {
         $('#report').attr('disabled', 'disabled')
+      }
+      let hakApporveCount = 0 ;
+      hakApporveCount++
+      if (!`{{ $myAuth->hasPermission('kasgantungheader', 'approvalbukacetak') }}`) {
+        hakApporveCount--
+        $('#approval-buka-cetak').hide()
+        // $('#approval-buka-cetak').attr('disabled', 'disabled')
+      }
+      if (hakApporveCount < 1) {
+        // $('#approve').hide()
+        $('#approve').attr('disabled', 'disabled')
       }
     }
 

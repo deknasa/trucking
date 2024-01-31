@@ -586,7 +586,7 @@
               },
               {
                 id: 'approval-buka-cetak',
-                text: "un/Approval Buka Cetak penerimaan",
+                text: "Approval Buka Cetak penerimaan",
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('penerimaanheader', 'approvalbukacetak') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');
@@ -706,6 +706,22 @@
 
       if (!`{{ $myAuth->hasPermission('penerimaanheader', 'report') }}`) {
         $('#report').attr('disabled', 'disabled')
+      }
+      let hakApporveCount = 0 ;
+      hakApporveCount++
+      if (!`{{ $myAuth->hasPermission('penerimaanheader', 'approval') }}`) {
+        hakApporveCount--
+        $('#approveun').hide()
+        // $('#approval-buka-cetak').attr('disabled', 'disabled')
+      }
+      if (!`{{ $myAuth->hasPermission('penerimaanheader', 'approvalbukacetak') }}`) {
+        hakApporveCount--
+        $('#approval-buka-cetak').hide()
+        // $('#approval-buka-cetak').attr('disabled', 'disabled')
+      }
+      if (hakApporveCount < 1) {
+        // $('#approve').hide()
+        $('#approve').attr('disabled', 'disabled')
       }
     }
   })

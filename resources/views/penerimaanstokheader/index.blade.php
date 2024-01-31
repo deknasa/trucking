@@ -592,7 +592,7 @@
               },
               {
                 id: 'approval-buka-cetak',
-                text: "un/Approval Buka Cetak PENERIMAAN STOK",
+                text: "Approval Buka Cetak PENERIMAAN STOK",
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('penerimaanstokheader', 'approvalbukacetak') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');

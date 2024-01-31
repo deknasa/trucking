@@ -597,6 +597,7 @@
           clearSelectedRows()
         },
         error: error => {
+          $("#dialog-warning-message").find("p").remove();
           $(`#dialog-warning-message`).append(
             `<p class="text-dark">${error.responseJSON.errors.tableId}</p>`
           );

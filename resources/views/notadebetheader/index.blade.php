@@ -612,7 +612,7 @@
               },
               {
                 id: 'approval-buka-cetak',
-                text: "un/Approval Buka Cetak NOTA DEBET",
+                text: "Approval Buka Cetak NOTA DEBET",
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('notadebetheader', 'approvalbukacetak') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');
@@ -721,6 +721,22 @@
 
       if (!`{{ $myAuth->hasPermission('notadebetheader', 'report') }}`) {
         $('#report').attr('disabled', 'disabled')
+      }
+      let hakApporveCount = 0 ;
+      hakApporveCount++
+      if (!`{{ $myAuth->hasPermission('notadebetheader', 'approval') }}`) {
+        hakApporveCount--
+        $('#approveun').hide()
+        // $('#approval-buka-cetak').attr('disabled', 'disabled')
+      }
+      if (!`{{ $myAuth->hasPermission('notadebetheader', 'approvalbukacetak') }}`) {
+        hakApporveCount--
+        $('#approval-buka-cetak').hide()
+        // $('#approval-buka-cetak').attr('disabled', 'disabled')
+      }
+      if (hakApporveCount < 1) {
+        // $('#approve').hide()
+        $('#approve').attr('disabled', 'disabled')
       }
     }
 

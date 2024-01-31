@@ -526,7 +526,7 @@
             dropmenuHTML: [
               {
                 id: 'approval-buka-cetak',
-                text: "un/Approval Buka Cetak Absensi",
+                text: "Approval Buka Cetak Absensi",
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('absensisupirapprovalheader', 'approvalbukacetak') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');
@@ -616,6 +616,17 @@
 
       if (!`{{ $myAuth->hasPermission('absensisupirapprovalheader', 'report') }}`) {
         $('#report').attr('disabled', 'disabled')
+      }
+      let hakApporveCount = 0 ;
+      hakApporveCount++
+      if (!`{{ $myAuth->hasPermission('absensisupirapprovalheader', 'approvalbukacetak') }}`) {
+        hakApporveCount--
+        $('#approval-buka-cetak').hide()
+        // $('#approval-buka-cetak').attr('disabled', 'disabled')
+      }
+      if (hakApporveCount < 1) {
+        // $('#approve').hide()
+        $('#approve').attr('disabled', 'disabled')
       }
     }
 

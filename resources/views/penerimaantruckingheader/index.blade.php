@@ -494,7 +494,7 @@
             class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
             dropmenuHTML: [{
               id: 'approval-buka-cetak',
-              text: "un/Approval Buka Cetak PENERIMAAN TRUCKING ",
+              text: "Approval Buka Cetak PENERIMAAN TRUCKING ",
               onClick: () => {
                 if (`{{ $myAuth->hasPermission('penerimaantruckingheader', 'approvalbukacetak') }}`) {
                   let tglbukacetak = $('#tgldariheader').val().split('-');
@@ -606,6 +606,18 @@
 
       if (!`{{ $myAuth->hasPermission('penerimaantruckingheader', 'report') }}`) {
         $('#report').attr('disabled', 'disabled')
+      }
+
+      let hakApporveCount = 0 ;
+      hakApporveCount++
+      if (!`{{ $myAuth->hasPermission('penerimaantruckingheader', 'approvalbukacetak') }}`) {
+        hakApporveCount--
+        $('#approval-buka-cetak').hide()
+        // $('#approval-buka-cetak').attr('disabled', 'disabled')
+      }
+      if (hakApporveCount < 1) {
+        // $('#approve').hide()
+        $('#approve').attr('disabled', 'disabled')
       }
     }
   })

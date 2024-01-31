@@ -394,7 +394,7 @@
             class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
             dropmenuHTML: [{
               id: 'approval-buka-cetak',
-              text: "un/Approval Buka Cetak PINDAH BUKU",
+              text: "Approval Buka Cetak PINDAH BUKU",
               onClick: () => {
                 if (`{{ $myAuth->hasPermission('pindahbuku', 'approvalbukacetak') }}`) {
                   let tglbukacetak = $('#tgldariheader').val().split('-');
@@ -499,6 +499,17 @@
       }
       if (!`{{ $myAuth->hasPermission('pindahbuku', 'export') }}`) {
         $('#export').attr('disabled', 'disabled')
+      }
+      let hakApporveCount = 0 ;
+      hakApporveCount++
+      if (!`{{ $myAuth->hasPermission('pindahbuku', 'approvalbukacetak') }}`) {
+        hakApporveCount--
+        $('#approval-buka-cetak').hide()
+        // $('#approval-buka-cetak').attr('disabled', 'disabled')
+      }
+      if (hakApporveCount < 1) {
+        // $('#approve').hide()
+        $('#approve').attr('disabled', 'disabled')
       }
     }
 

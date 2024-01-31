@@ -660,6 +660,22 @@
       if (!`{{ $myAuth->hasPermission('orderantrucking', 'export') }}`) {
         $('#export').attr('disabled', 'disabled')
       }
+      let hakApporveCount = 0 ;
+      hakApporveCount++
+      if (!`{{ $myAuth->hasPermission('orderantrucking', 'approval') }}`) {
+        hakApporveCount--
+        $('#approveun').hide()
+        // $('#approval-buka-cetak').attr('disabled', 'disabled')
+      }
+      if (!`{{ $myAuth->hasPermission('orderantrucking', 'approvaledit') }}`) {
+        hakApporveCount--
+        $('#approvalEditOrderanTrucking').hide()
+        // $('#approval-buka-cetak').attr('disabled', 'disabled')
+      }
+      if (hakApporveCount < 1) {
+        // $('#approve').hide()
+        $('#approve').attr('disabled', 'disabled')
+      }
     }
 
     $('#rangeModal').on('shown.bs.modal', function() {

@@ -456,7 +456,7 @@
           dropmenuHTML: [
             {
               id: 'approval-buka-cetak',
-              text: "un/Approval Buka Cetak PENGEMBALIAN KAS GANTUNG",
+              text: "Approval Buka Cetak PENGEMBALIAN KAS GANTUNG",
               onClick: () => {
                 if (`{{ $myAuth->hasPermission('pengembaliankasgantungheader', 'approvalbukacetak') }}`) {
                   let tglbukacetak = $('#tgldariheader').val().split('-');
@@ -569,7 +569,20 @@
 
     if (!`{{ $myAuth->hasPermission('pengembaliankasgantungheader', 'report') }}`) {
       $('#report').addClass('ui-disabled')
-    }}
+    }
+
+    let hakApporveCount = 0 ;
+    hakApporveCount++
+    if (!`{{ $myAuth->hasPermission('pengembaliankasgantungheader', 'approvalbukacetak') }}`) {
+      hakApporveCount--
+      $('#approval-buka-cetak').hide()
+      // $('#approval-buka-cetak').attr('disabled', 'disabled')
+    }
+    if (hakApporveCount < 1) {
+      // $('#approve').hide()
+      $('#approve').attr('disabled', 'disabled')
+    }
+  }
 
     $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {

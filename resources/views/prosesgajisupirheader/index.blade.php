@@ -633,7 +633,7 @@
           class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
           dropmenuHTML: [{
             id: 'approval-buka-cetak',
-            text: "un/Approval Buka Cetak PROSES  GAJI SUPIR",
+            text: "Approval Buka Cetak PROSES  GAJI SUPIR",
             onClick: () => {
               if (`{{ $myAuth->hasPermission('prosesgajisupirheader', 'approvalbukacetak') }}`) {
                 let tglbukacetak = $('#tgldariheader').val().split('-');
@@ -698,6 +698,17 @@
 
       if (!`{{ $myAuth->hasPermission('prosesgajisupirheader', 'report') }}`) {
         $('#report').attr('disabled', 'disabled')
+      }
+      let hakApporveCount = 0 ;
+      hakApporveCount++
+      if (!`{{ $myAuth->hasPermission('prosesgajisupirheader', 'approvalbukacetak') }}`) {
+        hakApporveCount--
+        $('#approval-buka-cetak').hide()
+        // $('#approval-buka-cetak').attr('disabled', 'disabled')
+      }
+      if (hakApporveCount < 1) {
+        // $('#approve').hide()
+        $('#approve').attr('disabled', 'disabled')
       }
     }
 

@@ -553,7 +553,7 @@
                             },
                             {
                                 id: 'approval-buka-cetak',
-                                text: "un/Approval Buka Cetak PENERIMAAN GIRO",
+                                text: "Approval Buka Cetak PENERIMAAN GIRO",
                                 onClick: () => {
                                     if (`{{ $myAuth->hasPermission('penerimaangiroheader', 'approvalbukacetak') }}`) {
                                         let tglbukacetak = $('#tgldariheader').val().split('-');
@@ -688,6 +688,23 @@
 
             if (!`{{ $myAuth->hasPermission('penerimaangiroheader', 'approval') }}`) {
                 $('#approval').attr('disabled', 'disabled')
+            }
+
+            let hakApporveCount = 0 ;
+            hakApporveCount++
+            if (!`{{ $myAuth->hasPermission('penerimaangiroheader', 'approval') }}`) {
+              hakApporveCount--
+              $('#approveun').hide()
+              // $('#approval-buka-cetak').attr('disabled', 'disabled')
+            }
+            if (!`{{ $myAuth->hasPermission('penerimaangiroheader', 'approvalbukacetak') }}`) {
+              hakApporveCount--
+              $('#approval-buka-cetak').hide()
+              // $('#approval-buka-cetak').attr('disabled', 'disabled')
+            }
+            if (hakApporveCount < 1) {
+              // $('#approve').hide()
+              $('#approve').attr('disabled', 'disabled')
             }
 
         }
