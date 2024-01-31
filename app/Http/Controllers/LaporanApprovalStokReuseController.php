@@ -70,20 +70,15 @@ class LaporanApprovalStokReuseController extends MyController
     public function export(Request $request): void
     {
         $detailParams = [
-            'dari' => $request->dari,
-            'sampai' => $request->sampai,
-            'coadari_id' => $request->coadari_id,
-            'coasampai_id' => $request->coasampai_id,
-            'coadari' => $request->coadari,
-            'coasampai' => $request->coasampai,
-            'cabang_id' => $request->cabang_id,
+            'stok_id' => $request->stok_id,
+            'stok' => $request->stok,
         ];
 
         $responses = Http::withHeaders($request->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'laporanbukubesar/export', $detailParams);
-
+        dd($responses->json());
         $bukubesar = $responses['data'];
         
         if(count($bukubesar) == 0){
