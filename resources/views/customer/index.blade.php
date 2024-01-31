@@ -587,6 +587,23 @@
             if (!`{{ $myAuth->hasPermission('customer', 'approval') }}`) {
                 $('#approval').attr('disabled', 'disabled')
             }
+            let hakApporveCount = 0 ;
+            hakApporveCount++
+            if (!`{{ $myAuth->hasPermission('customer', 'approveun') }}`) {
+              hakApporveCount--
+              $('#approval').hide()
+              // $('#approval-buka-cetak').attr('disabled', 'disabled')
+            }
+            hakApporveCount++
+            if (!`{{ $myAuth->hasPermission('customer', 'approvalnonaktif') }}`) {
+              hakApporveCount--
+              $('#approvalnonaktif').hide()
+              // $('#approval-buka-cetak').attr('disabled', 'disabled')
+            }
+            if (hakApporveCount < 1) {
+              // $('#approve').hide()
+              $('#approve').attr('disabled', 'disabled')
+            }
         }
 
         $('#rangeModal').on('shown.bs.modal', function() {

@@ -702,6 +702,22 @@
       if (!`{{ $myAuth->hasPermission('invoiceextraheader', 'report') }}`) {
         $('#report').attr('disabled', 'disabled')
       }
+      let hakApporveCount = 0 ;
+      hakApporveCount++
+      if (!`{{ $myAuth->hasPermission('invoiceextraheader', 'approval') }}`) {
+        hakApporveCount--
+        $('#approveun').hide()
+        // $('#approval-buka-cetak').attr('disabled', 'disabled')
+      }
+      if (!`{{ $myAuth->hasPermission('invoiceextraheader', 'approvalbukacetak') }}`) {
+        hakApporveCount--
+        $('#approval-buka-cetak').hide()
+        // $('#approval-buka-cetak').attr('disabled', 'disabled')
+      }
+      if (hakApporveCount < 1) {
+        // $('#approve').hide()
+        $('#approve').attr('disabled', 'disabled')
+      }
 
     }
 

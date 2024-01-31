@@ -437,6 +437,17 @@
             if (!`{{ $myAuth->hasPermission('cabang', 'report') }}`) {
                 $('#report').attr('disabled', 'disabled')
             }
+            let hakApporveCount = 0 ;
+            hakApporveCount++
+            if (!`{{ $myAuth->hasPermission('cabang', 'approvalKonensi') }}`) {
+              hakApporveCount--
+              $('#approvalKoneksi').hide()
+              // $('#approval-buka-cetak').attr('disabled', 'disabled')
+            }
+            if (hakApporveCount < 1) {
+              // $('#approve').hide()
+              $('#approve').attr('disabled', 'disabled')
+            }
         }
 
         $('#rangeModal').on('shown.bs.modal', function() {

@@ -1088,6 +1088,45 @@
             if (!`{{ $myAuth->hasPermission('supir', 'report') }}`) {
                 $('#report').attr('disabled', 'disabled')
             }
+
+            let hakApporveCount = 0 ;
+            
+            hakApporveCount++
+            if (!`$myAuth->hasPermission('supir', 'approvalBlackListSupir')`) {
+              hakApporveCount--
+              $('#approvalBlackListSupir').hide()
+              // $('#approval-buka-cetak').attr('disabled', 'disabled')
+            }
+            
+            hakApporveCount++
+            if (!`$myAuth->hasPermission('supir', 'approvalnonaktif')`) {
+              hakApporveCount--
+              $('#approvalnonaktif').hide()
+              // $('#approval-buka-cetak').attr('disabled', 'disabled')
+            }
+            
+            hakApporveCount++
+            if (!`$myAuth->hasPermission('supir', 'approvalSupirLuarKota')`) {
+              hakApporveCount--
+              $('#approvalSupirLuarKota').hide()
+              // $('#approval-buka-cetak').attr('disabled', 'disabled')
+            }
+            
+            hakApporveCount++
+            if (!`$myAuth->hasPermission('supir', 'approvalSupirResign')`) {
+              hakApporveCount--
+              $('#approvalSupirResign').hide()
+              // $('#approval-buka-cetak').attr('disabled', 'disabled')
+            }
+                       
+            if (hakApporveCount < 1) {
+              // $('#approve').hide()
+              $('#approve').attr('disabled', 'disabled')
+            }
+
+            if (!`{{ $myAuth->hasPermission('supir', 'historySupirMandor') }}`) {
+                $('#lainnya').attr('disabled', 'disabled')
+            }
         }
 
         getTidakBolehLuarkota()

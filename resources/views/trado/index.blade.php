@@ -1159,6 +1159,56 @@
             if (!`{{ $myAuth->hasPermission('trado', 'report') }}`) {
                 $('#report').attr('disabled', 'disabled')
             }
+            let hakApporveCount = 0 ;
+            hakApporveCount++
+            
+            if (!`{{ $myAuth->hasPermission('trado', 'approvalmesin') }}`) {
+              hakApporveCount--
+              $('#approveun').hide()
+              // $('#approval-buka-cetak').attr('disabled', 'disabled')
+            }
+            
+            if (!`{{ $myAuth->hasPermission('trado', 'approvalnonaktif') }}`) {
+              hakApporveCount--
+              $('#approvalnonaktif').hide()
+              // $('#approval-buka-cetak').attr('disabled', 'disabled')
+            }
+            
+            if (!`{{ $myAuth->hasPermission('trado', 'approvalPersneling') }}`) {
+              hakApporveCount--
+              $('#approvalPersneling').hide()
+              // $('#approval-buka-cetak').attr('disabled', 'disabled')
+            }
+            
+            if (!`{{ $myAuth->hasPermission('trado', 'approvalGardan') }}`) {
+              hakApporveCount--
+              $('#approvalGardan').hide()
+              // $('#approval-buka-cetak').attr('disabled', 'disabled')
+            }
+            
+            if (!`{{ $myAuth->hasPermission('trado', 'approvalSaringanHawa') }}`) {
+              hakApporveCount--
+              $('#approvalSaringanHawa').hide()
+              // $('#approval-buka-cetak').attr('disabled', 'disabled')
+            }
+            
+            if (!`{{ $myAuth->hasPermission('trado', 'approvalTradoGambar') }}`) {
+              hakApporveCount--
+              $('#approvalTradoGambar').hide()
+              // $('#approval-buka-cetak').attr('disabled', 'disabled')
+            }
+            
+            if (!`{{ $myAuth->hasPermission('trado', 'approvalTradoKeterangan') }}`) {
+              hakApporveCount--
+              $('#approvalTradoKeterangan').hide()
+              // $('#approval-buka-cetak').attr('disabled', 'disabled')
+            }
+            
+            
+            if (hakApporveCount < 1) {
+              // $('#approve').hide()
+              $('#approve').attr('disabled', 'disabled')
+            }
         }
 
         $('#rangeModal').on('shown.bs.modal', function() {
