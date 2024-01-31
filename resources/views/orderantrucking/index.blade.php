@@ -662,12 +662,12 @@
       }
       let hakApporveCount = 0 ;
       hakApporveCount++
-      if (!`{{ $myAuth->hasPermission('notakreditheader', 'approval') }}`) {
+      if (!`{{ $myAuth->hasPermission('orderantrucking', 'approval') }}`) {
         hakApporveCount--
         $('#approveun').hide()
         // $('#approval-buka-cetak').attr('disabled', 'disabled')
       }
-      if (!`{{ $myAuth->hasPermission('notakreditheader', 'approvaledit') }}`) {
+      if (!`{{ $myAuth->hasPermission('orderantrucking', 'approvaledit') }}`) {
         hakApporveCount--
         $('#approvalEditOrderanTrucking').hide()
         // $('#approval-buka-cetak').attr('disabled', 'disabled')

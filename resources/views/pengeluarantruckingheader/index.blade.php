@@ -568,7 +568,7 @@
             class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
             dropmenuHTML: [{
               id: 'approval-buka-cetak',
-              text: "un/Approval Buka Cetak PENGELUARAN TRUCKING ",
+              text: "Approval Buka Cetak PENGELUARAN TRUCKING ",
               onClick: () => {
                 if (`{{ $myAuth->hasPermission('pengeluarantruckingheader', 'approvalbukacetak') }}`) {
                   let tglbukacetak = $('#tgldariheader').val().split('-');

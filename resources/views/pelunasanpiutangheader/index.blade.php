@@ -514,7 +514,7 @@
             dropmenuHTML: [
               {
                 id: 'approval-buka-cetak',
-                text: "un/Approval Buka Cetak PELUNASAN PIUTANG",
+                text: "Approval Buka Cetak PELUNASAN PIUTANG",
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('pelunasanpiutangheader', 'approvalbukacetak') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');

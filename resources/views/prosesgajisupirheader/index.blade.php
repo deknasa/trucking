@@ -633,7 +633,7 @@
           class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
           dropmenuHTML: [{
             id: 'approval-buka-cetak',
-            text: "un/Approval Buka Cetak PROSES  GAJI SUPIR",
+            text: "Approval Buka Cetak PROSES  GAJI SUPIR",
             onClick: () => {
               if (`{{ $myAuth->hasPermission('prosesgajisupirheader', 'approvalbukacetak') }}`) {
                 let tglbukacetak = $('#tgldariheader').val().split('-');

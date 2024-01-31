@@ -612,7 +612,7 @@
               },
               {
                 id: 'approval-buka-cetak',
-                text: "un/Approval Buka Cetak NOTA DEBET",
+                text: "Approval Buka Cetak NOTA DEBET",
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('notadebetheader', 'approvalbukacetak') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');
