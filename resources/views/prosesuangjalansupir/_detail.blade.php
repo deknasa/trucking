@@ -101,41 +101,9 @@
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
-            label: 'NO BUKTI PENGEMBALIAN KAS GANTUNG',
-            name: 'pengembaliankasgantung_nobukti',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
-            formatter: (value, options, rowData) => {
-              if ((value == null) ||( value == '')) {
-                return '';
-              }
-              let tgldari = rowData.tgldariheaderpengembaliankasgantungheader
-              let tglsampai = rowData.tglsampaiheaderpengembaliankasgantungheader
-              let url = "{{route('pengembaliankasgantungheader.index')}}"
-              let formattedValue = $(`
-              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
-             `)
-             return formattedValue[0].outerHTML
-           }
-          },
-          {
-            label: 'TGL PENGEMBALIAN KAS GANTUNG',
-            name: 'pengembaliankasgantung_tglbukti',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
-            }
-          },
-          {
-            label: 'BANK PENGEMBALIAN KAS GANTUNG',
-            name: 'pengembaliankasgantung_bank_id',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-          },
-          {
             label: 'PROSES UANG JALAN',
             name: 'statusprosesuangjalan',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
           },
           {
             label: 'KETERANGAN',
@@ -210,12 +178,12 @@
 
           setHighlight($(this))
 
-          if (data.attributes) {
-            $(this).jqGrid('footerData', 'set', {
-              nobukti: 'Total:',
-              nominal: data.attributes.totalNominal,
-            }, true)
-          }
+          // if (data.attributes) {
+          //   $(this).jqGrid('footerData', 'set', {
+          //     nobukti: 'Total:',
+          //     nominal: data.attributes.totalNominal,
+          //   }, true)
+          // }
         }
       })
       .jqGrid("setLabel", "rn", "No.")

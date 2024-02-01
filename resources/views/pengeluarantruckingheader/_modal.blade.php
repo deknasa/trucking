@@ -659,6 +659,17 @@
       rangeInvoice();
     })
 
+
+    $(document).on('change', `[name=statusposting]`, function(event) {
+      let statusposting_id = $('#crudForm').find('[name=statusposting]').val()
+      console.log('dari on change')
+      if (parameterPosting == statusposting_id) {
+        enabledKas(true);
+      } else {
+        enabledKas(false);
+      }
+    })
+
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
 
@@ -2731,14 +2742,6 @@
     enabledRow($(this).data("id"))
   })
 
-  $(document).on('change', $('#crudForm').find('[name=statusposting]'), function(event) {
-    let statusposting_id = $('#crudForm').find('[name=statusposting]').val()
-    if (parameterPosting == statusposting_id) {
-      enabledKas(true);
-    } else {
-      enabledKas(false);
-    }
-  })
 
   function enabledRow(row) {
     let check = $(`#penerimaantruckingheader_id${row}`)
@@ -2760,6 +2763,7 @@
     // if (statusposting_id) {
     if (KodePengeluaranId != 'KLAIM') {
       if (KodePengeluaranId == 'PJT') {
+        console.log('enabled ', enabled)
         if (enabled) {
           $('.posting-border').show()
           setDefaultBank()
