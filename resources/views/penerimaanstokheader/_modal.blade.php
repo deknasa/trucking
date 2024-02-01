@@ -627,7 +627,7 @@
     $('.tbl_total').hide();
     $('.tbl_harga').hide();
     $('.tbl_penerimaanstok_nobukti').hide();
-    $('.colspan').attr('colspan', 4);
+    $('.colspan').attr('colspan', 5);
     $('.sumrow').hide();
     
     // $('[name=supplier]').val('').attr('readonly', false);
@@ -660,7 +660,7 @@
     $('.tbl_total').hide();
     $('.tbl_penerimaanstok_nobukti').hide();
 
-    $('.colspan').attr('colspan', 4);
+    $('.colspan').attr('colspan', 5);
     $('.sumrow').hide();
     
     // $('[name=supplier]').val('').attr('readonly', false);
@@ -686,7 +686,7 @@
     $('.tbl_vulkanisirke').hide();
     $('.tbl_vulkanisirtotal').hide();
     $('.tbl_statusban').hide();
-    $('.colspan').attr('colspan', 6);
+    $('.colspan').attr('colspan', 7);
     $('.tbl_total_sebelum').show();
     $('.tbl_penerimaanstok_nobukti').hide();
 
@@ -720,7 +720,7 @@
     $('.tbl_total').hide();
     $('.tbl_harga').hide();
     $('.tbl_total_sebelum').hide();
-    $('.colspan').attr('colspan', 2);
+    $('.colspan').attr('colspan', 3);
 
     $('.tbl_aksi').show()
     $('#addRow').show()
@@ -757,7 +757,7 @@
     $('.tbl_persentase').hide();
     $('.tbl_total').hide();
     $('.tbl_total_sebelum').hide();
-    $('.colspan').attr('colspan', 4);
+    $('.colspan').attr('colspan', 5);
     $('.sumrow').hide();
     
     $('#addRow').show()
@@ -784,7 +784,7 @@
     $('.tbl_statusban').hide();
     $('.tbl_total_sebelum').show();
     $('.tbl_penerimaanstok_nobukti').show();
-    $('.colspan').attr('colspan', 7);
+    $('.colspan').attr('colspan', 8);
     
     $('#addRow').show()
   }
@@ -806,7 +806,7 @@
     $('.sumrow').show();
     $('.data_tbl').show();
     $('.tbl_total_sebelum').hide();
-    $('.colspan').attr('colspan', 6);
+    $('.colspan').attr('colspan', 7);
     $('.tbl_vulkanisirke').hide();
     $('.tbl_vulkanisirtotal').hide();
     $('.tbl_statusban').hide();
@@ -843,7 +843,7 @@
     $('.data_tbl').hide();
     $('.tbl_total_sebelum').hide();
     $('.tbl_statusban').hide();
-    $('.colspan').attr('colspan',3);
+    $('.colspan').attr('colspan',4);
     // $('[name=nobon]').val('')
     // $('[name=supplier]').attr('readonly', false);
     // $('[name=supplier]').data('currentValue', '')
@@ -872,7 +872,7 @@
     $('.tbl_vulkanisirtotal').hide();
     $('.tbl_statusban').hide();
     $('.tbl_total_sebelum').hide();
-    $('.colspan').attr('colspan', 5);
+    $('.colspan').attr('colspan', 6);
     $('.tbl_penerimaanstok_nobukti').hide();
 
     $('.sumrow').show();
@@ -900,7 +900,7 @@
     $('.tbl_vulkanisirtotal').hide();
     $('.tbl_statusban').hide();
     $('.tbl_total_sebelum').hide();
-    $('.colspan').attr('colspan', 5);
+    $('.colspan').attr('colspan', 6);
     $('.tbl_penerimaanstok_nobukti').hide();
 
     $('.sumrow').show();
@@ -937,7 +937,7 @@
     $('.tbl_harga').hide();
     $('.tbl_persentase').hide();
     $('.tbl_total').hide();
-    $('.colspan').attr('colspan', 6);
+    $('.colspan').attr('colspan', 7);
     $('.sumrow').hide();
     
     $('#addRow').show()
@@ -964,7 +964,7 @@
     $('.tbl_statusban').hide();
     $('.tbl_total_sebelum').hide();
     $('.tbl_penerimaanstok_nobukti').show();
-    $('.colspan').attr('colspan', 6);
+    $('.colspan').attr('colspan', 7);
 
     $('.tbl_aksi').show()
   }

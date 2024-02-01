@@ -725,7 +725,7 @@
     $('.tbl_harga').hide();
     $('.tbl_persentase').hide();
     $('.tbl_total').hide();
-    $('.colspan').attr('colspan', 5);
+    $('.colspan').attr('colspan', 6);
     $('.sumrow').hide();
     $("#addRow").show();
     $("#detail-table").show();
@@ -752,7 +752,7 @@
     $('.tbl_statusoli').hide();
     $('.tbl_statusban').hide();
     $('.tbl_persentase').hide();
-    $('.colspan').attr('colspan', 4);
+    $('.colspan').attr('colspan', 5);
     $("#addRow").hide();
     $("#detail-table").show();
     $("#detail-afkir").hide();
@@ -779,7 +779,7 @@
     $('.tbl_statusoli').hide();
     $('.tbl_statusban').hide();
     $('.tbl_persentase').hide();
-    $('.colspan').attr('colspan', 4);
+    $('.colspan').attr('colspan', 5);
     $('.potongkas').show() //potong kas
     $("#addRow").show();
     $('#titlePotongkas').html('POSTING Penerimaan')
@@ -806,7 +806,7 @@
     $('.tbl_total').hide();
     $('.tbl_statusoli').hide();
     $('.tbl_statusban').hide();
-    $('.colspan').attr('colspan', 4);
+    $('.colspan').attr('colspan', 5);
     $('.sumrow').hide();
     $("#detail-table").show();
     $("#detail-afkir").hide();
@@ -829,7 +829,7 @@
     $('.tbl_total').hide();
     $('.tbl_statusoli').hide();
     $('.tbl_statusban').hide();
-    $('.colspan').attr('colspan', 4);
+    $('.colspan').attr('colspan', 5);
     $('.sumrow').hide();
     $("#detail-table").show();
     $("#addRow").show();
@@ -857,7 +857,7 @@
     $('.tbl_statusoli').hide();
     $('.tbl_statusban').show();
     $('.tbl_total').hide();
-    $('.colspan').attr('colspan', 6);
+    $('.colspan').attr('colspan', 7);
     $('.sumrow').hide();
     $("#detail-table").show();
     $("#detail-afkir").hide();
@@ -935,7 +935,7 @@
     $('.tbl_harga').show()
     $('.tbl_persentase').show()
     $('.tbl_total').show()
-    $('.colspan').attr('colspan', 6);
+    $('.colspan').attr('colspan', 7);
   }
 
   $('#crudModal').on('shown.bs.modal', () => {
