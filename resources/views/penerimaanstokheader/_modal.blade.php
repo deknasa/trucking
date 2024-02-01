@@ -239,6 +239,7 @@
                   <tr>
                     <th style="width:10%; max-width: 25px;max-width: 15px">No</th>
                     <th style="width: 20%; min-width: 200px;">stok  </th>
+                    <th style="width: 10%; min-width: 100px;">Satuan  </th>
                     <th style="width: 20%; min-width: 200px;">keterangan  </th>
                     <th class="data_tbl tbl_penerimaanstok_nobukti"  style="width: 20%; min-width: 200px;">Penerimaan stok no bukti</th>
                     <th class="data_tbl tbl_harga" style="width: 20%; min-width: 200px;">harga</th>
@@ -346,9 +347,42 @@
       })
     });
 
+    function validasiSpbMinus(detail_id,row){
+      let form = $('#crudForm');
+      $.ajax({
+        url: `${apiUrl}penerimaanstokheader/deleterow`,
+        method: 'POST',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {detail:detail_id},
+        success: response => {
+         console.log(response);
+        },
+        error: error => {
+          if (error.status === 422) {
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+
+            setErrorMessages(form, error.responseJSON.errors);
+          } else {
+            showDialog(error.responseJSON)
+          }
+        },
+      }).always(() => {
+        $('#processingLoader').addClass('d-none')
+        $(this).removeAttr('disabled')
+      })
+    }
+
     $(document).on('click', '.rmv', function(event) {
       // console.log($(.rmv).parents('tr'));
-      deleteRow($(this).parents('tr'))
+      if ($(this).attr('data-id')) {
+        validasiSpbMinus($(this).attr('data-id'))
+      }else{
+        deleteRow($(this).parents('tr'))
+      }
     })
 
     function numericInput(data) {
@@ -982,6 +1016,9 @@
                     <input type="text" id="detailstokId_${id}" readonly hidden class="detailstokId" name="detail_stok_id[]">
                   </td>
                   <td>
+                    <input type="text" disabled name="detail_satuan[]" id="" value="${detail.satuan}" class="form-control detail_satuan_${id}">
+                  </td> 
+                  <td>
                     <input type="text"  name="detail_keterangan[]" style="" class="form-control">                    
                   </td>
                   
@@ -1129,6 +1166,9 @@
                     <input type="text"  name="detail_stok[]" id="detail_stok_${id}" class="form-control stok-lookup ">
                     <input type="text" id="detailstokId_${id}" readonly hidden class="detailstokId" name="detail_stok_id[]">
                   </td>
+                  <td>
+                    <input type="text" disabled name="detail_satuan[]" id="" value="${detail.satuan}" class="form-control detail_satuan_${id}">
+                  </td> 
                   <td>
                     <input type="text"  name="detail_keterangan[]" style="" class="form-control">                    
                   </td>
@@ -1282,6 +1322,9 @@
                 <input type="text"  name="detail_stok[]" id="detail_stok_${id}" class="form-control stok-lookup ">
                 <input type="text" id="detailstokId_${id}" readonly hidden class="detailstokId" name="detail_stok_id[]">
               </td>
+              <td>
+                <input type="text" disabled name="detail_satuan[]" id="" value="${detail.satuan}"  class="form-control detail_satuan_${id}">
+              </td> 
               <td>
                 <input type="text"  name="detail_keterangan[]" style="" class="form-control">                    
               </td>
@@ -1442,7 +1485,9 @@
                     <input type="text"  name="detail_stok[]" id="detail_stok_${id}" class="form-control stok-lookup ">
                     <input type="text" id="detailstokId_${id}" readonly hidden class="detailstokId" name="detail_stok_id[]">
                   </td>
-                   
+                  <td>
+                    <input type="text" disabled name="detail_satuan[]" id="" value="${detail.satuan}"  class="form-control detail_satuan_${id}">
+                  </td> 
                   <td>
                     <input type="text"  name="detail_keterangan[]" style="" class="form-control">                    
                   </td>
@@ -1577,7 +1622,9 @@
                     <input type="text"  name="detail_stok[]" id="detail_stok_${id}" class="form-control stok-lookup ">
                     <input type="text" id="detailstokId_${id}" readonly hidden class="detailstokId" name="detail_stok_id[]">
                   </td>
-                 
+                  <td>
+                    <input type="text" disabled name="detail_satuan[]" id="" value="${detail.satuan}" class="form-control detail_satuan_${id}">
+                  </td> 
                   <td>
                     <input type="text"  name="detail_keterangan[]" style="" class="form-control">                    
                   </td>
@@ -2323,7 +2370,9 @@
                     <input type="text"  name="detail_stok[]" id="" class="form-control detail_stok_${index}">
                     <input type="text" id="detailstokId_${index}" readonly hidden class="detailstokId" name="detail_stok_id[]">
                   </td>                 
-                  
+                  <td>
+                    <input type="text" disabled name="detail_satuan[]" id="" class="form-control detail_satuan_${index}">
+                  </td> 
                   <td>
                     <input type="text"  name="detail_keterangan[]" style="" class="form-control">                    
                   </td>
@@ -2395,6 +2444,10 @@
       },
       onSelectRow: (stok, element) => {
         element.val(stok.namastok)
+        
+        let satuanEl = element.parents('tr').find(`td [name="detail_satuan[]"]`);
+        satuanEl.val(stok.satuan);
+
         parent = element.closest('td');
         parent.children('.detailstokId').val(stok.id)
         element.data('currentValue', element.val())
@@ -2404,6 +2457,9 @@
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
+        let satuanEl = element.parents('tr').find(`td [name="detail_satuan[]"]`);
+        satuanEl.val('');
+
         element.val('')
         element.data('currentValue', element.val())
       }
@@ -2678,8 +2734,11 @@
                     <td>
                       <input type="text"  name="detail_stok[]" id="detail_stok_${id}" class="form-control stok-lookup ">
                       <input type="text" id="detailstokId_${id}" readonly hidden class="detailstokId" name="detail_stok_id[]">
+                      <input type="text" id="detailstokId_${id}_old" value="${detail.stok_id}" readonly hidden name="detail_stok_id_old[]">
                     </td>
-                   
+                    <td>
+                      <input type="text" disabled name="detail_satuan[]" id="" value="${detail.satuan}"  class="form-control detail_satuan_${id}">
+                    </td> 
                     <td>
                       <input type="text"  name="detail_keterangan[]" style="" class="form-control">                    
                     </td>
@@ -2723,7 +2782,7 @@
                     </td>
 
                     <td class="data_tbl tbl_aksi">
-                      <div class='btn btn-danger btn-sm rmv'>Delete</div>
+                      <div data-id="${detail.id}" class='btn btn-danger btn-sm rmv'>Delete</div>
                     </td>
                 </tr>
             `)
