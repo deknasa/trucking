@@ -132,7 +132,8 @@ class ProsesUangJalanSupirHeaderController extends MyController
         $combo = $this->combo('list');
         $key = array_search('CETAK', array_column($combo, 'parameter'));
         $uangjalansupir["combo"] =  $combo[$key];
-        return view('reports.prosesuangjalansupir', compact('uangjalansupir', 'uangjalansupir_detail'));
+        $printer['tipe'] = $request->printer;
+        return view('reports.prosesuangjalansupir', compact('uangjalansupir', 'uangjalansupir_detail', 'printer'));
     }
 
     public function export(Request $request): void
@@ -146,7 +147,7 @@ class ProsesUangJalanSupirHeaderController extends MyController
 
         //FETCH DETAIL
         $detailParams = [
-            'forExport' => true,
+            'forReport' => true,
             'prosesuangjalansupir_id' => $request->id
         ];
         $uangjalansupir_detail = Http::withHeaders(request()->header())
@@ -169,8 +170,8 @@ class ProsesUangJalanSupirHeaderController extends MyController
         $sheet->getStyle("A2")->getFont()->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
-        $sheet->mergeCells('A1:N1');
-        $sheet->mergeCells('A2:N2');
+        $sheet->mergeCells('A1:F1');
+        $sheet->mergeCells('A2:F2');
 
         $header_start_row = 4;
         $header_right_start_row = 4;
@@ -195,12 +196,16 @@ class ProsesUangJalanSupirHeaderController extends MyController
         ];
         $header_right_columns = [
             [
+                'label' => 'Supir',
+                'index' => 'supir_id',
+            ],
+            [
                 'label' => 'Trado',
                 'index' => 'trado_id',
             ],
             [
-                'label' => 'Supir',
-                'index' => 'supir_id',
+                'label' => 'Uang Jalan',
+                'index' => 'nominaluangjalan',
             ]
         ];
 
@@ -209,59 +214,24 @@ class ProsesUangJalanSupirHeaderController extends MyController
                 'label' => 'NO',
             ],
             [
-                'label' => 'NO BUKTI',
+                'label' => 'NO BUKTI PENERIMAAN/PENGELUARAN KAS/BANK',
                 'index' => 'nobukti',
             ],
             [
-                'label' => 'NO BUKTI PENERIMAAN',
-                'index' => 'penerimaantrucking_nobukti',
+                'label' => 'BANK',
+                'index' => 'bank',
             ],
             [
-                'label' => 'TANGGAL PENERIMAAN',
-                'index' => 'penerimaantrucking_tglbukti',
-            ],
-            [
-                'label' => 'BANK PENERIMAAN',
-                'index' => 'penerimaantrucking_bank_id',
-            ],
-            [
-                'label' => 'STATUS PROSES UANG JALAN',
-                'index' => 'statusprosesuangjalan',
-            ],
-            [
-                'label' => 'NO BUKTI PENGELUARAN',
-                'index' => 'pengeluarantrucking_nobukti',
-            ],
-            [
-                'label' => 'TANGGAL PENGELUARAN',
-                'index' => 'pengeluarantrucking_tglbukti',
-            ],
-            [
-                'label' => 'BANK PENGELUARAN',
-                'index' => 'pengeluarantrucking_bank_id',
+                'label' => 'STATUS PROSES',
+                'index' => 'statusproses',
             ],
             [
                 'label' => 'KETERANGAN',
                 'index' => 'keterangan',
             ],
             [
-                'label' => 'NO BUKTI PENGEMBALIAN KAS GANTUNG',
-                'index' => 'pengembaliankasgantung_nobukti',
-
-            ],
-            [
-                'label' => 'TANGGAL PENGEMBALIAN KAS GANTUNG',
-                'index' => 'pengembaliankasgantung_tglbukti',
-
-            ],
-            [
-                'label' => 'BANK PENGEMBALIAN KAS GANTUNG',
-                'index' => 'pengembaliankasgantung_bank_id',
-            ],
-            [
                 'label' => 'NOMINAL',
                 'index' => 'nominal',
-
             ]
         ];
 
@@ -272,7 +242,11 @@ class ProsesUangJalanSupirHeaderController extends MyController
         }
         foreach ($header_right_columns as $header_right_column) {
             $sheet->setCellValue('D' . $header_right_start_row, $header_right_column['label']);
-            $sheet->setCellValue('E' . $header_right_start_row++, ': ' . $uangjalansupir[$header_right_column['index']]);
+            if ($header_right_column['index'] == 'nominaluangjalan') {
+                $sheet->setCellValue('E' . $header_right_start_row++, ': ' . number_format($uangjalansupir[$header_right_column['index']], 2, ".", ","));
+            } else {
+                $sheet->setCellValue('E' . $header_right_start_row++, ': ' . $uangjalansupir[$header_right_column['index']]);
+            }
         }
 
         foreach ($detail_columns as $detail_columns_index => $detail_column) {
@@ -299,70 +273,33 @@ class ProsesUangJalanSupirHeaderController extends MyController
             ]
         ];
 
-        $sheet->getStyle("A$detail_table_header_row:N$detail_table_header_row")->applyFromArray($styleArray);
+        $sheet->getStyle("A$detail_table_header_row:F$detail_table_header_row")->applyFromArray($styleArray);
 
         // LOOPING DETAIL
         $nominal = 0;
         foreach ($uangjalansupir_detail as $response_index => $response_detail) {
 
-            foreach ($detail_columns as $detail_columns_index => $detail_column) {
-                $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
-                $sheet->getStyle("A$detail_table_header_row:N$detail_table_header_row")->getFont()->setBold(true);
-                $sheet->getStyle("A$detail_table_header_row:N$detail_table_header_row")->getAlignment()->setHorizontal('center');
-            }
-
-            $penerimaantrucking_tglbukti = ($response_detail['penerimaantrucking_tglbukti'] != null) ? Date::PHPToExcel(date('Y-m-d', strtotime($response_detail['penerimaantrucking_tglbukti']))) : '';
-            $pengeluarantrucking_tglbukti = ($response_detail['pengeluarantrucking_tglbukti'] != null) ? Date::PHPToExcel(date('Y-m-d', strtotime($response_detail['pengeluarantrucking_tglbukti']))) : '';
-            $pengembaliankasgantung_tglbukti = ($response_detail['pengembaliankasgantung_tglbukti'] != null) ? Date::PHPToExcel(date('Y-m-d', strtotime($response_detail['pengembaliankasgantung_tglbukti']))) : '';
 
             $sheet->setCellValue("A$detail_start_row", $response_index + 1);
-            $sheet->setCellValue("B$detail_start_row", $response_detail['nobukti']);
-            $sheet->setCellValue("C$detail_start_row", $response_detail['penerimaantrucking_nobukti']);
-            $sheet->setCellValue("D$detail_start_row", $penerimaantrucking_tglbukti);
-            $sheet->setCellValue("E$detail_start_row", $response_detail['penerimaantrucking_bank_id']);
-            $sheet->setCellValue("F$detail_start_row", $response_detail['statusprosesuangjalan']);
-            $sheet->setCellValue("G$detail_start_row", $response_detail['pengeluarantrucking_nobukti']);
-            $sheet->setCellValue("H$detail_start_row", $pengeluarantrucking_tglbukti);
-            $sheet->setCellValue("I$detail_start_row", $response_detail['pengeluarantrucking_bank_id']);
-            $sheet->setCellValue("J$detail_start_row", $response_detail['keterangan']);
-            $sheet->setCellValue("K$detail_start_row", $response_detail['pengembaliankasgantung_nobukti']);
-            $sheet->setCellValue("L$detail_start_row", $pengembaliankasgantung_tglbukti);
-            $sheet->setCellValue("M$detail_start_row", $response_detail['pengembaliankasgantung_bank_id']);
-            $sheet->setCellValue("N$detail_start_row", $response_detail['nominal']);
+            $sheet->setCellValue("B$detail_start_row", $response_detail['nobukti_proses']);
+            $sheet->setCellValue("C$detail_start_row", $response_detail['bank']);
+            $sheet->setCellValue("D$detail_start_row", $response_detail['statusproses']);
+            $sheet->setCellValue("E$detail_start_row", $response_detail['keterangan']);
+            $sheet->setCellValue("F$detail_start_row", $response_detail['nominal']);
+            $sheet->getColumnDimension('E')->setWidth(30);
 
-            $sheet->getStyle("J$detail_start_row")->getAlignment()->setWrapText(true);
-            $sheet->getColumnDimension('J')->setWidth(50);
-
-            $sheet->getStyle("A$detail_start_row:M$detail_start_row")->applyFromArray($styleArray);
-            $sheet->getStyle("N$detail_start_row")->applyFromArray($style_number);
-            $sheet->getStyle("N$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
-
-            $sheet->getStyle("D$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
-            $sheet->getStyle("H$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
-            $sheet->getStyle("L$detail_start_row")->getNumberFormat()->setFormatCode('dd-mm-yyyy');
+            $sheet->getStyle("A$detail_start_row:E$detail_start_row")->applyFromArray($styleArray);
+            $sheet->getStyle("F$detail_start_row")->applyFromArray($style_number);
+            $sheet->getStyle("F$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
             $detail_start_row++;
         }
 
-        $total_start_row = $detail_start_row;
-        $sheet->mergeCells('A' . $total_start_row . ':M' . $total_start_row);
-        $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':M' . $total_start_row)->applyFromArray($style_number)->getFont()->setBold(true);
-        $total = "=SUM(N".($detail_table_header_row + 1).":N" . ($detail_start_row - 1) . ")";
-        $sheet->setCellValue("N$total_start_row", $total)->getStyle("N$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
-        $sheet->getStyle("N$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);
         $sheet->getColumnDimension('C')->setAutoSize(true);
         $sheet->getColumnDimension('D')->setAutoSize(true);
-        $sheet->getColumnDimension('E')->setAutoSize(true);
         $sheet->getColumnDimension('F')->setAutoSize(true);
-        $sheet->getColumnDimension('G')->setAutoSize(true);
-        $sheet->getColumnDimension('H')->setAutoSize(true);
-        $sheet->getColumnDimension('I')->setAutoSize(true);
-        $sheet->getColumnDimension('K')->setAutoSize(true);
-        $sheet->getColumnDimension('L')->setAutoSize(true);
-        $sheet->getColumnDimension('M')->setAutoSize(true);
-        $sheet->getColumnDimension('N')->setAutoSize(true);
 
         $writer = new Xlsx($spreadsheet);
         $filename = 'Laporan Proses Uang Jalan Supir' . date('dmYHis');

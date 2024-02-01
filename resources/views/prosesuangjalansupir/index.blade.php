@@ -56,13 +56,59 @@
   let rowNum = 10
   let hasDetail = false
   let currentTab = 'detail'
+  let selectedRows = [];
 
+  function checkboxHandler(element) {
+    let value = $(element).val();
+    if (element.checked) {
+      selectedRows.push($(element).val())
+      $(element).parents('tr').addClass('bg-light-blue')
+    } else {
+      $(element).parents('tr').removeClass('bg-light-blue')
+      for (var i = 0; i < selectedRows.length; i++) {
+        if (selectedRows[i] == value) {
+          selectedRows.splice(i, 1);
+        }
+      }
+    }
+
+  }
+
+  function clearSelectedRows() {
+    selectedRows = []
+
+    $('#jqGrid').trigger('reloadGrid')
+  }
+
+  function selectAllRows() {
+    $.ajax({
+      url: `${apiUrl}prosesuangjalansupirheader`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        limit: 0,
+        tgldari: $('#tgldariheader').val(),
+        tglsampai: $('#tglsampaiheader').val(),
+        filters: $('#jqGrid').jqGrid('getGridParam', 'postData').filters
+      },
+      success: (response) => {
+        selectedRows = response.data.map((proses) => proses.id)
+        $('#jqGrid').trigger('reloadGrid')
+      }
+    })
+  }
+
+  setSpaceBarCheckedHandler()
+  reloadGrid()
   $(document).ready(function() {
     $("#tabs").tabs()
 
     setRange()
     initDatepicker('datepickerIndex')
-    $(document).on('click','#btnReload', function(event) {
+    $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('prosesuangjalansupirheader')
     })
 
@@ -73,12 +119,44 @@
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         postData: {
-          tgldari:$('#tgldariheader').val() ,
-          tglsampai:$('#tglsampaiheader').val(),
-          
+          tgldari: $('#tgldariheader').val(),
+          tglsampai: $('#tglsampaiheader').val(),
+
         },
         datatype: "json",
         colModel: [{
+            label: '',
+            name: '',
+            width: 40,
+            align: 'center',
+            sortable: false,
+            clear: false,
+            stype: 'input',
+            searchable: false,
+            searchoptions: {
+              type: 'checkbox',
+              clearSearch: false,
+              dataInit: function(element) {
+                $(element).removeClass('form-control')
+                $(element).parent().addClass('text-center')
+                $(element).addClass('checkbox-selectall')
+
+                $(element).on('click', function() {
+
+                  $(element).attr('disabled', true)
+                  if ($(this).is(':checked')) {
+                    selectAllRows()
+                  } else {
+                    clearSelectedRows()
+                  }
+                })
+
+              }
+            },
+            formatter: (value, rowOptions, rowData) => {
+              return `<input type="checkbox" name="prosesId[]" class="checkbox-jqgrid" value="${rowData.id}" onchange="checkboxHandler(this)">`
+            },
+          }, {
             label: 'ID',
             name: 'id',
             align: 'right',
@@ -93,7 +171,7 @@
             align: 'left',
             stype: 'select',
             searchoptions: {
-              
+
               value: `<?php
                       $i = 1;
 
@@ -124,7 +202,7 @@
                   <span>${statusCetak.SINGKATAN}</span>
                 </div>
               `)
-              
+
               return formattedValue[0].outerHTML
             },
             cellattr: (rowId, value, rowObject) => {
@@ -207,7 +285,7 @@
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'left',
             formatter: (value, options, rowData) => {
-              if ((value == null) ||( value == '')) {
+              if ((value == null) || (value == '')) {
                 return '';
               }
               let tgldari = rowData.tgldariheaderabsensisupirheader
@@ -245,6 +323,23 @@
           {
             label: 'TGL APPROVAL',
             name: 'tglapproval',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
+          {
+            label: 'USER BUKA CETAK',
+            name: 'userbukacetak',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            align: 'left'
+          },
+          {
+            label: 'TGL BUKA CETAK',
+            name: 'tglbukacetak',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'left',
             formatter: "date",
@@ -385,7 +480,7 @@
           }, 100)
 
           $('#left-nav').find('button').attr('disabled', false)
-          permission() 
+          permission()
           setHighlight($(this))
         }
       })
@@ -405,6 +500,86 @@
       })
 
       .customPager({
+        extndBtn: [{
+            id: 'report',
+            title: 'Report',
+            caption: 'Report',
+            innerHTML: '<i class="fa fa-print"></i> REPORT',
+            class: 'btn btn-info btn-sm mr-1 dropdown-toggle',
+            dropmenuHTML: [{
+                id: 'reportPrinterBesar',
+                text: "Printer Lain(Faktur)",
+                onClick: () => {
+                  selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                  if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                    showDialog('Harap pilih salah satu record')
+                  } else {
+                    cekValidasi(selectedId, 'PRINTER BESAR')
+                  }
+                }
+              },
+              {
+                id: 'reportPrinterKecil',
+                text: "Printer Epson Seri LX(Faktur)",
+                onClick: () => {
+                  selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                  if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                    showDialog('Harap pilih salah satu record')
+                  } else {
+                    cekValidasi(selectedId, 'PRINTER KECIL')
+                  }
+                }
+              },
+
+            ],
+          },
+          {
+            id: 'export',
+            title: 'Export',
+            caption: 'Export',
+            innerHTML: '<i class="fas fa-file-export"></i> EXPORT',
+            class: 'btn btn-warning btn-sm mr-1',
+            onClick: () => {
+
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Harap pilih salah satu record')
+              } else {
+                window.open(`{{ route('prosesuangjalansupirheader.export') }}?id=${selectedId}`)
+              }
+            }
+          },
+          {
+            id: 'approve',
+            title: 'Approve',
+            caption: 'Approve',
+            innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+            class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
+            dropmenuHTML: [{
+                id: 'approval',
+                text: "Un/Approval Proses Uang Jalan",
+                onClick: () => {
+                  approvalData()
+                }
+              },
+              {
+                id: 'approval-buka-cetak',
+                text: "Approval Buka Cetak Proses Uang Jalan",
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('prosesuangjalansupirheader', 'approvalbukacetak') }}`) {
+                    let tglbukacetak = $('#tgldariheader').val().split('-');
+                    tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
+                    if (selectedRows.length < 1) {
+                      showDialog('Harap pilih salah satu record')
+                    } else {
+                      approvalBukaCetak(tglbukacetak, 'PROSESUANGJALANSUPIRHEADER', selectedRows);
+                    }
+                  }
+                }
+              },
+            ],
+          }
+        ],
         buttons: [{
             id: 'add',
             innerHTML: '<i class="fa fa-plus"></i> ADD',
@@ -440,31 +615,12 @@
             }
           },
           {
-            id: 'report',
-            innerHTML: '<i class="fa fa-print"></i> REPORT',
-            class: 'btn btn-info btn-sm mr-1',
+            id: 'view',
+            innerHTML: '<i class="fa fa-eye"></i> VIEW',
+            class: 'btn btn-orange btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Harap pilih salah satu record')
-              } else {
-                window.open(`{{ route('prosesuangjalansupirheader.report') }}?id=${selectedId}`)
-              }
-            }
-          },
-          {
-            id: 'export',
-            title: 'Export',
-            caption: 'Export',
-            innerHTML: '<i class="fas fa-file-export"></i> EXPORT',
-            class: 'btn btn-warning btn-sm mr-1',
-            onClick: () => {
-              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Harap pilih salah satu record')
-              } else {
-                window.open(`{{ route('prosesuangjalansupirheader.export') }}?id=${selectedId}`)
-              }
+              viewProsesUangJalanSupirHeader(selectedId)
             }
           },
         ]
@@ -498,28 +654,46 @@
       .addClass('btn btn-sm btn-warning')
       .parent().addClass('px-1')
 
-      function permission() {
-    if (!`{{ $myAuth->hasPermission('prosesuangjalansupirheader', 'store') }}`) {
-      $('#add').attr('disabled', 'disabled')
+    function permission() {
+      if (!`{{ $myAuth->hasPermission('prosesuangjalansupirheader', 'store') }}`) {
+        $('#add').attr('disabled', 'disabled')
+      }
+
+      if (!`{{ $myAuth->hasPermission('prosesuangjalansupirheader', 'update') }}`) {
+        $('#edit').attr('disabled', 'disabled')
+      }
+
+      if (!`{{ $myAuth->hasPermission('prosesuangjalansupirheader', 'destroy') }}`) {
+        $('#delete').attr('disabled', 'disabled')
+      }
+
+      if (!`{{ $myAuth->hasPermission('prosesuangjalansupirheader', 'export') }}`) {
+        $('#export').attr('disabled', 'disabled')
+      }
+
+      if (!`{{ $myAuth->hasPermission('prosesuangjalansupirheader', 'report') }}`) {
+        $('#report').attr('disabled', 'disabled')
+      }
     }
 
-    if (!`{{ $myAuth->hasPermission('prosesuangjalansupirheader', 'update') }}`) {
-      $('#edit').attr('disabled', 'disabled')
+    let hakApporveCount = 0;
+    hakApporveCount++
+    if (!`{{ $myAuth->hasPermission('prosesuangjalansupirheader', 'approval') }}`) {
+      $('#approval').hide()
+      hakApporveCount--
+      // $('#approvalEdit').attr('disabled', 'disabled')
+    }
+    hakApporveCount++
+    if (!`{{ $myAuth->hasPermission('prosesuangjalansupirheader', 'approvalbukacetak') }}`) {
+      hakApporveCount--
+      $('#approval-buka-cetak').hide()
+      // $('#approval-buka-cetak').attr('disabled', 'disabled')
+    }
+    if (hakApporveCount < 1) {
+      // $('#approve').hide()
+      $('#approve').attr('disabled', 'disabled')
     }
 
-    if (!`{{ $myAuth->hasPermission('prosesuangjalansupirheader', 'destroy') }}`) {
-      $('#delete').attr('disabled', 'disabled')
-    }
-
-    if (!`{{ $myAuth->hasPermission('prosesuangjalansupirheader', 'export') }}`) {
-      $('#export').attr('disabled', 'disabled')
-    }
-
-    if (!`{{ $myAuth->hasPermission('prosesuangjalansupirheader', 'report') }}`) {
-      $('#report').attr('disabled', 'disabled')
-    }}
-
-    
     // $("#tabs").on('click', 'li.ui-state-active', function() {
     //   let href = $(this).find('a').attr('href');
     //   currentTab = href.substring(1, href.length - 4);
