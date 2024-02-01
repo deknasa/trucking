@@ -519,7 +519,7 @@
                 id: 'cekAbsenTrado',
                 text: "Cek Absen Trado",
                 onClick: () => {
-                  if (`{{ $myAuth->hasPermission('suratpengantar', 'cekabsensi') }}`) {
+                  if (`{{ $myAuth->hasPermission('absensisupirheader', 'cekabsensi') }}`) {
                     selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                     cekAbsenTrado(selectedId)
                   }
