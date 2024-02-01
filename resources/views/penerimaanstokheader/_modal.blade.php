@@ -1089,6 +1089,10 @@
             },
             onSelectRow: (stok, element) => {
               element.val(stok.namastok)
+              
+              let satuanEl = element.parents('tr').find(`td [name="detail_satuan[]"]`);
+              satuanEl.val(stok.satuan);
+
               parent = element.closest('td');
               parent.children('.detailstokId').val(stok.id)
               element.data('currentValue', element.val())
@@ -1097,6 +1101,9 @@
               element.val(element.data('currentValue'))
             },
             onClear: (element) => {
+              let satuanEl = element.parents('tr').find(`td [name="detail_satuan[]"]`);
+              satuanEl.val('');
+              
               element.val('')
               parent = element.closest('td');
               parent.children('.detailpenerimaanstoknobuktiId').val('')
@@ -1243,6 +1250,10 @@
             },
             onSelectRow: (stok, element) => {
               element.val(stok.namastok)
+              
+              let satuanEl = element.parents('tr').find(`td [name="detail_satuan[]"]`);
+              satuanEl.val(stok.satuan);
+
               parent = element.closest('td');
               parent.children('.detailstokId').val(stok.id)
               element.data('currentValue', element.val())
@@ -1251,6 +1262,9 @@
               element.val(element.data('currentValue'))
             },
             onClear: (element) => {
+              let satuanEl = element.parents('tr').find(`td [name="detail_satuan[]"]`);
+              satuanEl.val('');
+
               element.val('')
               parent = element.closest('td');
               parent.children('.detailpenerimaanstoknobuktiId').val('')
@@ -1402,6 +1416,10 @@
         },
         onSelectRow: (stok, element) => {
           element.val(stok.namastok)
+          
+          let satuanEl = element.parents('tr').find(`td [name="detail_satuan[]"]`);
+          satuanEl.val(stok.satuan);
+
           parent = element.closest('td');
           parent.children('.detailstokId').val(stok.id)
           element.data('currentValue', element.val())
@@ -1410,6 +1428,9 @@
           element.val(element.data('currentValue'))
         },
         onClear: (element) => {
+          let satuanEl = element.parents('tr').find(`td [name="detail_satuan[]"]`);
+          satuanEl.val('');
+
           element.val('')
           parent = element.closest('td');
           parent.children('.detailpenerimaanstoknobuktiId').val('')
@@ -2830,6 +2851,10 @@
               },
               onSelectRow: (stok, element) => {
                 element.val(stok.namastok)
+
+                let satuanEl = element.parents('tr').find(`td [name="detail_satuan[]"]`);
+                satuanEl.val(stok.satuan);
+
                 parent = element.closest('td');
                 parent.children('.detailstokId').val(stok.id)
                 element.data('currentValue', element.val())

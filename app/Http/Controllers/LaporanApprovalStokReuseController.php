@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
 class LaporanApprovalStokReuseController extends MyController
 {
@@ -77,42 +79,43 @@ class LaporanApprovalStokReuseController extends MyController
         $responses = Http::withHeaders($request->header())
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'laporanbukubesar/export', $detailParams);
-        dd($responses->json());
-        $bukubesar = $responses['data'];
+            ->get(config('app.api_url') . 'laporanapprovalstokreuse/export', $detailParams);
+
+        $stok = $responses['data'];
         
-        if(count($bukubesar) == 0){
+        if(count($stok) == 0){
             throw new \Exception('TIDAK ADA DATA');
         }
+        dd($responses->json());
         $dataheader = $responses['dataheader'];
         $user = Auth::user();
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setCellValue('A1', $bukubesar[0]['judul']);
-        $sheet->getStyle("A1")->getFont()->setSize(20)->setBold(true);
-        $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
-        $sheet->mergeCells('A1:F1');
+        // $sheet->setCellValue('A1', $bukubesar[0]['judul']);
+        // $sheet->getStyle("A1")->getFont()->setSize(20)->setBold(true);
+        // $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
+        // $sheet->mergeCells('A1:F1');
 
-        $sheet->setCellValue('A2', 'Buku Besar Divisi Trucking');
-        $sheet->getStyle("A2")->getFont()->setSize(16)->setBold(true);
-        $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
-        $sheet->mergeCells('A2:F2');
+        // $sheet->setCellValue('A2', 'Buku Besar Divisi Trucking');
+        // $sheet->getStyle("A2")->getFont()->setSize(16)->setBold(true);
+        // $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
+        // $sheet->mergeCells('A2:F2');
 
-        $sheet->setCellValue('A3', 'Periode : ' . $dataheader['dari'] . ' s/d ' . $dataheader['sampai']);
-        $sheet->getStyle("A3")->getFont()->setSize(12)->setBold(true);
-        $sheet->getStyle('A3')->getAlignment()->setHorizontal('center');
-        $sheet->mergeCells('A3:F3');
+        // $sheet->setCellValue('A3', 'Periode : ' . $dataheader['dari'] . ' s/d ' . $dataheader['sampai']);
+        // $sheet->getStyle("A3")->getFont()->setSize(12)->setBold(true);
+        // $sheet->getStyle('A3')->getAlignment()->setHorizontal('center');
+        // $sheet->mergeCells('A3:F3');
 
-        $sheet->setCellValue('A4', 'No Perk. : ' .  $dataheader['coadari'] . ' s/d ' . $dataheader['coasampai']);
-        $sheet->getStyle("A4")->getFont()->setSize(12)->setBold(true);
-        $sheet->getStyle('A4')->getAlignment()->setHorizontal('center');
-        $sheet->mergeCells('A4:F4');
+        // $sheet->setCellValue('A4', 'No Perk. : ' .  $dataheader['coadari'] . ' s/d ' . $dataheader['coasampai']);
+        // $sheet->getStyle("A4")->getFont()->setSize(12)->setBold(true);
+        // $sheet->getStyle('A4')->getAlignment()->setHorizontal('center');
+        // $sheet->mergeCells('A4:F4');
 
-        $sheet->setCellValue('A5', ' ' . $dataheader['ketcoadari'] . ' s/d ' . $dataheader['ketcoasampai']);
-        $sheet->getStyle("A5")->getFont()->setSize(12)->setBold(true);
-        $sheet->getStyle('A5')->getAlignment()->setHorizontal('center');
-        $sheet->mergeCells('A5:F5');
+        // $sheet->setCellValue('A5', ' ' . $dataheader['ketcoadari'] . ' s/d ' . $dataheader['ketcoasampai']);
+        // $sheet->getStyle("A5")->getFont()->setSize(12)->setBold(true);
+        // $sheet->getStyle('A5')->getAlignment()->setHorizontal('center');
+        // $sheet->mergeCells('A5:F5');
 
         $detail_table_header_row = 7;
         $detail_start_row = $detail_table_header_row + 1;
@@ -142,12 +145,12 @@ class LaporanApprovalStokReuseController extends MyController
 
         $detail_columns = [
             [
-                'label' => 'Tanggal',
-                'index' => 'tglbukti',
-            ],
-            [
                 'label' => 'No Bukti',
                 'index' => 'nobukti',
+            ],
+            [
+                'label' => 'Tanggal',
+                'index' => 'tglbukti',
             ],
             [
                 'label' => 'Keterangan',
