@@ -11,6 +11,7 @@ $('#stokLookup').jqGrid({
       postData: {
         aktif: `{!! $Aktif ?? '' !!}`,
         statusreuse: `{!! $statusreuse ?? '' !!}`,
+        approveReuse: `{!! $approveReuse ?? '' !!}`,
         penerimaanstok_id: `{!! $penerimaanstok_id ?? '' !!}`,
         pengeluaranstok_id: `{!! $pengeluaranstok_id ?? '' !!}`,
         penerimaanstokheader_nobukti: `{!! $penerimaanstokheader_nobukti ?? '' !!}`,
@@ -180,6 +181,12 @@ $('#stokLookup').jqGrid({
       {
         label: 'kelompok',
         name: 'kelompok',
+        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+        align: 'left'
+      },
+      {
+        label: 'satuan',
+        name: 'satuan',
         width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
         align: 'left'
       },

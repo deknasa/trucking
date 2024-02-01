@@ -260,6 +260,7 @@
                         <tr>
                           <th style="width:10%; max-width: 25px; max-width: 15px">No</th>
                           <th style="width: 20%; min-width: 200px;">stok</th>
+                          <th style="width: 10%; min-width: 100px;">satuan</th>
                           <th style="width: 20%; min-width: 200px;">keterangan</th>
                           <th class="tbl_qty" style="width:10%; min-width: 100px">qty</th>
                           <th class="data_tbl tbl_statusoli" style="width:10%; min-width: 100px">Status Oli</th>
@@ -289,14 +290,26 @@
                   </div>
                 </div>
                 <div id="detail-afkir" class="row">
-                  <div class="form-group col-md-6">
-                    <div class="row">
-                      <div class="col-12 col-sm-3 col-md-4">
-                        <label class="col-form-label">Stok <span class="text-danger">*</span> </label>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <div class="row">
+                        <div class="col-12 col-sm-3 col-md-4">
+                          <label class="col-form-label">Stok <span class="text-danger">*</span> </label>
+                        </div>
+                        <div class="col-12 col-sm-9 col-md-8">
+                          <input type="text" name="detail_stok[]" class="form-control detail_stok_1 stok-lookup">
+                          <input type="text" class="detailstokId" id="detail_stok_id" name="detail_stok_id[]" readonly hidden>
+                        </div>
                       </div>
-                      <div class="col-12 col-sm-9 col-md-8">
-                        <input type="text" name="detail_stok[]" class="form-control detail_stok_1 stok-lookup">
-                        <input type="text" class="detailstokId" id="detail_stok_id" name="detail_stok_id[]" readonly hidden>
+                    </div>
+                    <div class="form-group">
+                      <div class="row">
+                        <div class="col-12 col-sm-3 col-md-4">
+                          <label class="col-form-label">Satuan</label>
+                        </div>
+                        <div class="col-12 col-sm-9 col-md-8">
+                          <input type="text"  disabled="disabled" id="detail_satuan_id" name="detail_satuan[]" class="form-control detail_satuan_1 ">
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -869,6 +882,8 @@
     $('.rmv').parents('tr').remove();
     $("#detail-afkir").show();
     $("#detail-afkir :input").attr("disabled", false);
+    $("#detail_satuan_id").attr("disabled", true);
+
   }
 
   function tampilanall() {
@@ -1432,6 +1447,9 @@
                     <input type="text" id="detailstokId_${index}" readonly hidden class="detailstokId" name="detail_stok_id[]">
                   </td>                 
                   <td>
+                    <input type="text" disabled name="detail_satuan[]" id="" class="form-control detail_satuan_${index}">
+                  </td>                 
+                  <td>
                     <input type="text"  name="detail_keterangan[]" id="detail_keterangan${index}" style="" class="form-control">                    
                   </td>
                   <td class="data_tbl tbl_qty">
@@ -1518,6 +1536,10 @@
         parent = element.closest('td');
         parent.children('.detailstokId').val(stok.id)
         element.data('currentValue', element.val())
+      
+        let satuanEl = element.parents('tr').find(`td [name="detail_satuan[]"]`);
+        satuanEl.val(stok.satuan);
+
         setKorv(row, stok.id);
         let service = stok.servicerutin_text;
 
@@ -1571,6 +1593,8 @@
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
+        let satuanEl = element.parents('tr').find(`td [name="detail_satuan[]"]`);
+        satuanEl.val('');
         element.val('')
         element.data('currentValue', element.val())
         dataStatusOli.forEach(statusOli => {
@@ -1893,6 +1917,9 @@
                         <input type="text" id="detailstokId_${id}" readonly hidden class="detailstokId" name="detail_stok_id[]">
                       </td>
                       <td>
+                        <input type="text" disabled name="detail_satuan[]" id="" value="${detail.satuan}" class="form-control detail_satuan_${index}">
+                      </td>   
+                      <td>
                         <input type="text"  name="detail_keterangan[]" style="" class="form-control">                    
                       </td>
                       <td class="data_tbl tbl_qty" >
@@ -1987,6 +2014,9 @@
                         <input type="text"  name="detail_stok[]" id="detail_stok_${id}" class="form-control stok-lookup ">
                         <input type="text" id="detailstokId_${id}" data-current-value="${detail.stok}" readonly hidden class="detailstokId" name="detail_stok_id[]">
                       </td>
+                      <td>
+                        <input type="text" disabled name="detail_satuan[]" id="" value="${detail.satuan}" class="form-control detail_satuan_${index}">
+                      </td>   
                       <td>
                         <input type="text"  name="detail_keterangan[]" style="" class="form-control">                    
                       </td>
@@ -2182,6 +2212,9 @@
                     <input type="text"  name="detail_stok[]" id="detail_stok_${id}" readonly class="form-control stok-lookup ">
                     <input type="text" id="detailstokId_${id}" readonly hidden class="detailstokId" name="detail_stok_id[]">
                   </td>
+                  <td>
+                    <input type="text" disabled name="detail_satuan[]" id="" value="${detail.satuan}" class="form-control detail_satuan_${index}">
+                  </td>   
                   <td>
                     <input type="text"  name="detail_keterangan[]" style="" class="form-control">                    
                   </td>
@@ -2518,6 +2551,8 @@
       },
       onSelectRow: (stok, element) => {
         element.val(stok.namastok)
+        let satuanEl = $(`#detail_satuan_id`);
+        satuanEl.val(stok.satuan);
         $(`#detail_stok_id`).val(stok.id)
         $(`#status_stok`).val(stok.statusban)
         $('#afkir_vulkanisirke').val(parseInt(stok.vulkan))
@@ -2530,6 +2565,8 @@
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
+        let satuanEl = $(`#detail_satuan_id`);
+        satuanEl.val('');
         element.val('')
         element.data('currentValue', element.val())
         $(`#detail_stok_id`).val('')
