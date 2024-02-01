@@ -130,6 +130,8 @@ $idLookup = isset($id) ? $id : null;
       cabang: `{!! $cabang ?? '' !!}`,
       absensiId: `{!! $absensiId ?? '' !!}`,
       tgltrip: `{!! $tgltrip ?? '' !!}`,
+      absensi_id: `{!! $absensi_id ?? '' !!}`,
+      isProsesUangjalan: `{!! $isProsesUangjalan ?? '' !!}`,
 
     },
     idPrefix: 'tradoLookup',

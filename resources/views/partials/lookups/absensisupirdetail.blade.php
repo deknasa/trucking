@@ -12,6 +12,8 @@
       postData: {
         aktif: `{!! $Aktif ?? '' !!}`,
         tgltrip: `{!! $tgltrip ?? '' !!}`,
+        absensi_id: `{!! $absensi_id ?? '' !!}`,
+        isProsesUangjalan: `{!! $isProsesUangjalan ?? '' !!}`,
       },       
       colModel: [{
             label: 'TRADO',
