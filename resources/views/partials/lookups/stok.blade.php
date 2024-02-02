@@ -240,6 +240,13 @@ $('#stokLookup').jqGrid({
           align: 'left',
       },
       {
+          label: 'kelompok_id',
+          name: 'kelompok_id',
+          align: 'left',
+          search: false,
+          hidden: true
+      },
+      {
           label: 'statusban_id',
           name: 'statusban_id',
           align: 'left',

@@ -886,6 +886,7 @@
           // singleColumn: true,
           title: 'Main Akun Pusat Lookup',
           isParent: true,
+          typeSearch: 'ALL',
         }
       },
       onSelectRow: (akunpusat, element) => {
@@ -912,8 +913,9 @@
         this.postData = {
           Aktif: 'AKTIF',
           searching: 1,
-          valueName: `parentnama`,
-          searchText: `parent-lookup`,
+          valueName: `coamain`,
+          searchText: `coamain-lookup`,
+          typeSearch: 'ALL',
           // singleColumn: true,
           title: 'Main Akun Pusat Lookup'
         }

@@ -433,7 +433,10 @@ $idLookup = isset($id) ? $id : null;
       level: `{!! $levelCoa ?? '' !!}`,
       potongan: `{!! $potongan ?? '' !!}`,
       aktif: `{!! $Aktif ?? '' !!}`,
+      keterangancoa: `{!! $KeteranganCoa ?? '' !!}`,
       supplier: `{!! $Supplier ?? '' !!}`,
+      isParent: `{!! $isParent ?? '' !!}`,
+        // filters: `{!! $filters ?? '' !!}`
     },
     idPrefix: 'akunpusatLookup',
     colModel: column,

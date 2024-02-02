@@ -198,12 +198,12 @@
     function initLookup() {
 
         $('.stok-lookup').lookup({
-            title: 'Kd. Perkiraan Lookup',
+            title: 'Stok Lookup',
             fileName: 'stok',
             beforeProcess: function(test) {
                 this.postData = {
-                    levelstok: '3',
                     Aktif: 'AKTIF',
+                    approveReuse: true,
                 }
             },
             onSelectRow: (stok, element) => {
