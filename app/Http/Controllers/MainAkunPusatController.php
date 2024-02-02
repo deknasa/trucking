@@ -12,7 +12,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class MainAkunPusatController extends MyController
 {
-    public $title = 'Main Akun Pusat';
+    public $title = 'Kode Perkiraan Pusat';
     public $httpHeaders = [
         'Accept' => 'application/json',
         'Content-Type' => 'application/json'

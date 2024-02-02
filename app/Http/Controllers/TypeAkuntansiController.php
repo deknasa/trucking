@@ -8,7 +8,7 @@ use Illuminate\Http\Response;
 
 class TypeAkuntansiController extends MyController
 {
-    public $title = 'TIPE AKUNTANSI';
+    public $title = 'Type Kode Perkiraan Cabang';
 
     /**
      * Fungsi index
