@@ -298,7 +298,7 @@
     form.find('#btnSubmit').html(`
     <i class="fa fa-save"></i>
     Save
-  `)
+    `)
     form.data('action', 'add')
     form.find(`.sometimes`).show()
     $('#crudModalTitle').text('Create Akun Pusat')
@@ -884,7 +884,7 @@
           valueName: `parentnama`,
           searchText: `parent-lookup`,
           // singleColumn: true,
-          title: 'Main Akun Pusat Lookup'
+          title: 'Main Akun Pusat Lookup',
           isParent: true,
         }
       },
