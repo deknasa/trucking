@@ -221,14 +221,16 @@
             width: 230,
             name: 'penerimaan_nobuktihidden',
             align: 'left',
-            hidden: true
+            hidden: true,
+            search: false
           },          
           {
             label: 'NO BUKTI PENERIMAAN GIRO',
             width: 230,
             name: 'penerimaangiro_nobuktihidden',
             align: 'left',
-            hidden: true
+            hidden: true,
+            search: false
           },          
           {
             label: 'NO BUKTI GIRO',

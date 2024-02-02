@@ -16,7 +16,8 @@
   <script src="{{ asset('libraries/tas-lib/js/terbilang.js?version='. config('app.version')) }}"></script>
   <script type="text/javascript">
 
-    let uangjalansupir = <?= json_encode($uangjalansupir); ?>
+    let uangjalansupir = <?= json_encode($uangjalansupir); ?>;
+    let printer = <?= json_encode($printer); ?>;
 
     function Start() {
       Stimulsoft.Base.StiLicense.loadFromFile("{{ asset($stireport_path . 'license.php') }}");
@@ -44,7 +45,11 @@
       var dataSet = new Stimulsoft.System.Data.DataSet("Data")
 
       viewer.renderHtml('content')
-      report.loadFile(`{{ asset('public/reports/ReportProsesUangJalanSupir.mrt') }}`)
+      if (printer['tipe'] == 'reportPrinterBesar') {
+        report.loadFile(`{{ asset('public/reports/ReportProsesUangJalanSupirBesar.mrt') }}`)
+      } else {
+        report.loadFile(`{{ asset('public/reports/ReportProsesUangJalanSupir.mrt') }}`)
+      }
 
       report.dictionary.dataSources.clear()
 
@@ -87,6 +92,7 @@
             Authorization: `Bearer {{ session('access_token') }}`
           },
           success: response => {
+            window.opener.reloadGrid();
             window.close();
           }
         })

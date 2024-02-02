@@ -1397,7 +1397,7 @@
         let kenek = 0
         $.each(selectedRowsTrip, (index, val) => {
             getNominal = selectedNominal[index];
-            nominals = parseFloat(getNominal.replaceAll(',', ''))
+            nominals = (getNominal=='undefined' || getNominal == NaN || getNominal == '' || getNominal == undefined) ? 0 : parseFloat(getNominal.replaceAll(',', ''))
             nominal += nominals
 
             getKenek = selectedGajiKenek[index];

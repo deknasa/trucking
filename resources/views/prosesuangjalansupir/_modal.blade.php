@@ -38,6 +38,7 @@
                                     </label>
                                 </div>
                                 <div class="col-12 col-md-10">
+                                    <input type="hidden" name="absensi_id">
                                     <input type="text" name="absensisupir" class="form-control absensisupir-lookup">
                                 </div>
                             </div>
@@ -62,7 +63,17 @@
                                 </div>
                                 <div class="col-12 col-md-10">
                                     <input type="hidden" name="trado_id">
-                                    <input type="text" name="trado" class="form-control trado-lookup">
+                                    <input type="text" name="trado" class="form-control" readonly>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-12 col-md-2">
+                                    <label class="col-form-label">
+                                        Uang Jalan
+                                    </label>
+                                </div>
+                                <div class="col-12 col-md-10">
+                                    <input type="text" name="uangjalan" class="form-control text-right" readonly>
                                 </div>
                             </div>
                         </div>
@@ -116,7 +127,7 @@
                                         <div class="row form-group mt-3">
                                             <div class="col-md-2">
                                                 <label class="col-form-label">
-                                                    TGL ADJUST TRANSFER
+                                                    TGL ADJUST TRANSFER <span class="text-danger">*</span>
                                                 </label>
                                             </div>
                                             <div class="col-md-10">
@@ -128,7 +139,7 @@
                                         <div class="row form-group">
                                             <div class="col-md-2">
                                                 <label class="col-form-label">
-                                                    NILAI ADJUST TRANSFER
+                                                    NILAI ADJUST TRANSFER <span class="text-danger">*</span>
                                                 </label>
                                             </div>
                                             <div class="col-md-10">
@@ -140,7 +151,7 @@
                                         <div class="row form-group">
                                             <div class="col-md-2">
                                                 <label class="col-form-label">
-                                                    KETERANGAN ADJUST TRANSFER
+                                                    KETERANGAN ADJUST TRANSFER <span class="text-danger">*</span>
                                                 </label>
                                             </div>
                                             <div class="col-md-10">
@@ -156,7 +167,8 @@
                                             <div class="row form-group">
                                                 <div class="col-12 col-md-2">
                                                     <label class="col-form-label">
-                                                        POSTING
+                                                        POSTING <span class="text-danger">*</span>
+                                                    </label>
                                                 </div>
                                                 <div class="col-12 col-md-4">
                                                     <input type="hidden" name="bank_idadjust">
@@ -166,7 +178,8 @@
                                             <div class="row form-group">
                                                 <div class="col-12 col-md-2">
                                                     <label class="col-form-label">
-                                                        NO BUKTI BARU
+                                                        NO BUKTI KAS/BANK MASUK
+                                                    </label>
                                                 </div>
                                                 <div class="col-12 col-md-4">
                                                     <input type="text" name="penerimaan_nobukti" class="form-control" readonly>
@@ -205,7 +218,7 @@
                                         <div class="row form-group">
                                             <div class="col-md-2">
                                                 <label class="col-form-label">
-                                                    NILAI DEPOSIT
+                                                    NILAI DEPOSITO
                                                 </label>
                                             </div>
                                             <div class="col-md-10">
@@ -243,7 +256,7 @@
                                             <div class="row form-group">
                                                 <div class="col-12 col-md-2">
                                                     <label class="col-form-label">
-                                                        NO BUKTI BARU
+                                                        NO BUKTI KAS/BANK MASUK
                                                 </div>
                                                 <div class="col-12 col-md-4">
                                                     <input type="text" name="penerimaandeposit_nobukti" id="pengeluaran_nobukti" class="form-control" readonly>
@@ -432,12 +445,15 @@
             let action = form.data('action')
             let data = $('#crudForm').serializeArray()
 
+            data = data.filter(item => item.name !== 'pinj_nobukti' && item.name !== 'pinj_tglbukti' && item.name !== 'jlhpinjaman' && item.name !== 'totalbayar' && item.name !== 'sisa' && item.name !== 'nombayar' && item.name !== 'keteranganpinjaman');
+
             nilaiTransfer = 0
             $('#crudForm').find(`[name="nilaitransfer[]"]`).each((index, element) => {
                 data.filter((row) => row.name === 'nilaitransfer[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nilaitransfer[]"]`)[index])
                 nilaiTransfer = nilaiTransfer + AutoNumeric.getNumber($(`#crudForm [name="nilaitransfer[]"]`)[index])
             })
             data.filter((row) => row.name === 'nilaiadjust')[0].value = AutoNumeric.getNumber($(`#crudForm [name="nilaiadjust"]`)[0])
+            data.filter((row) => row.name === 'uangjalan')[0].value = AutoNumeric.getNumber($(`#crudForm [name="uangjalan"]`)[0])
             data.filter((row) => row.name === 'nilaideposit')[0].value = AutoNumeric.getNumber($(`#crudForm [name="nilaideposit"]`)[0])
             nilaiDeposit = AutoNumeric.getNumber($(`#crudForm [name="nilaideposit"]`)[0])
 
@@ -463,7 +479,7 @@
                 })
                 data.push({
                     name: 'pengeluarantruckingheader_nobukti[]',
-                    value: dataPengembalian.nobuktipengeluaran
+                    value: dataPengembalian.pinj_nobukti
                 })
                 data.push({
                     name: 'pjt_id[]',
@@ -631,9 +647,13 @@
         activeGrid = null
 
         $("#tabs").tabs();
-        getMaxLength(form)
+        // getMaxLength(form)
         initLookup()
         initDatepicker()
+        form.find('#btnSubmit').prop('disabled', false)
+        if (form.data('action') == "view") {
+            form.find('#btnSubmit').prop('disabled', true)
+        }
     })
 
     $('#crudModal').on('hidden.bs.modal', () => {
@@ -663,6 +683,7 @@
         });
 
         new AutoNumeric('#totalTransfer').set(total)
+        new AutoNumeric(`[name="nilaiadjust"]`).set(total)
     }
 
     function setNomBayar() {
@@ -720,7 +741,7 @@
         $('#addRowTransfer').show()
         initAutoNumeric(form.find(`[name="nilaideposit"]`))
         initAutoNumeric(form.find(`[name="nilaiadjust"]`))
-
+        initAutoNumeric(form.find(`[name="uangjalan"]`))
         loadPengembalianGrid()
     }
 
@@ -770,7 +791,7 @@
                 form.find(`[name="bankpengembalian"]`).parent('.input-group').find('.input-group-append').remove()
             })
             .catch((error) => {
-                showDialog(error.statusText)
+                showDialog(error.responseJSON)
             })
             .finally(() => {
                 $('.modal-loader').addClass('d-none')
@@ -817,11 +838,66 @@
                 form.find(`[name="bankpengembalian"]`).parent('.input-group').find('.input-group-append').remove()
             })
             .catch((error) => {
-                showDialog(error.statusText)
+                showDialog(error.responseJSON)
             })
             .finally(() => {
                 $('.modal-loader').addClass('d-none')
             })
+    }
+
+    function viewProsesUangJalanSupirHeader(id) {
+        let form = $('#crudForm')
+        $('.modal-loader').removeClass('d-none')
+
+        form.data('action', 'view')
+        form.trigger('reset')
+        form.find('#btnSubmit').html(`
+      <i class="fa fa-save"></i>
+      Save
+    `)
+        form.find('#btnSubmit').prop('disabled', true)
+        form.find(`.sometimes`).hide()
+        $('#crudModalTitle').text('View Proses Uang Jalan Supir')
+
+        $('.is-invalid').removeClass('is-invalid')
+        $('.invalid-feedback').remove()
+
+        form.find(`[name="bank"]`).removeClass('bank-lookup')
+        form.find(`[name="penerimaantrucking"]`).removeClass('penerimaantrucking-lookup')
+
+        Promise
+            .all([
+                showProsesUangJalanSupir(form, id)
+            ])
+            .then(userId => {
+                setFormBindKeys(form)
+                form.find('[name]').removeAttr('disabled')
+
+
+                form.find('[name]').attr('disabled', 'disabled').css({
+                    background: '#fff'
+                })
+                form.find('[name=id]').prop('disabled', false)
+            })
+            .then(() => {
+                $('#crudModal').modal('show')
+                form.find(`.hasDatepicker`).prop('readonly', true)
+                form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
+                $('#crudForm').find(`.tbl_aksi`).hide()
+                let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
+                let nameFind = $('#crudForm').find(`[name]`).parents('.input-group')
+                name.attr('disabled', true)
+                name.find('.lookup-toggler').remove()
+                nameFind.find('button.button-clear').remove()
+
+            })
+            .catch((error) => {
+                showDialog(error.responseJSON)
+            })
+            .finally(() => {
+                $('.modal-loader').addClass('d-none')
+            })
+
     }
 
     function loadPengembalianGrid() {
@@ -839,7 +915,7 @@
                         editable: false,
                         formatter: function(value, rowOptions, rowData) {
                             let disabled = '';
-                            if ($('#crudForm').data('action') == 'delete' || $('#crudForm').data('action') == 'edit') {
+                            if ($('#crudForm').data('action') == 'delete' || $('#crudForm').data('action') == 'edit' || $('#crudForm').data('action') == 'view') {
                                 disabled = 'disabled'
                             }
                             return `<input type="checkbox" value="${rowData.id}" ${disabled} onChange="checkboxPengembalianHandler(this, ${rowData.id})">`;
@@ -852,10 +928,37 @@
                         search: false,
                     },
                     {
-                        label: "no bukti pengeluaran TRUCKING",
+                        label: "no bukti pinjaman",
                         width: 250,
-                        name: "nobuktipengeluaran",
+                        name: "pinj_nobukti",
                         sortable: true,
+                    },
+                    {
+                        label: "tgl bukti pinjaman",
+                        name: "pinj_tglbukti",
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+                        sortable: true,
+                        formatter: "date",
+                        formatoptions: {
+                            srcformat: "ISO8601Long",
+                            newformat: "d-m-Y"
+                        }
+                    },
+                    {
+                        label: "Jlh Pinjaman",
+                        name: "jlhpinjaman",
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+                        sortable: true,
+                        align: "right",
+                        formatter: currencyFormat,
+                    },
+                    {
+                        label: "Total Bayar",
+                        name: "totalbayar",
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+                        sortable: true,
+                        align: "right",
+                        formatter: currencyFormat,
                     },
                     {
                         label: "SISA",
@@ -1057,16 +1160,16 @@
     $(document).on('click', '#resetdatafilter_tablePengembalian', function(event) {
         selectedRowsPengembalian = $("#tablePengembalian").getGridParam("selectedRowIds");
         $.each(selectedRowsPengembalian, function(index, value) {
-            $('#tablePengembalian').jqGrid('saveCell', value, 7); //emptycell
-            $('#tablePengembalian').jqGrid('saveCell', value, 5); //nominal
+            $('#tablePengembalian').jqGrid('saveCell', value, 10); //emptycell
+            $('#tablePengembalian').jqGrid('saveCell', value, 8); //nominal
         })
 
     });
     $(document).on('click', '#gbox_tablePengembalian .ui-jqgrid-hbox .ui-jqgrid-htable thead .ui-search-toolbar th td a.clearsearchclass', function(event) {
         selectedRowsPengembalian = $("#tablePengembalian").getGridParam("selectedRowIds");
         $.each(selectedRowsPengembalian, function(index, value) {
-            $('#tablePengembalian').jqGrid('saveCell', value, 7); //emptycell
-            $('#tablePengembalian').jqGrid('saveCell', value, 5); //nominal
+            $('#tablePengembalian').jqGrid('saveCell', value, 10); //emptycell
+            $('#tablePengembalian').jqGrid('saveCell', value, 8); //nominal
         })
     })
 
@@ -1076,7 +1179,7 @@
 
         if (aksi == 'edit') {
             url = `${apiUrl}prosesuangjalansupirheader/${id}/getPengembalian`
-        } else if (aksi == 'delete') {
+        } else if (aksi == 'delete' || aksi == 'view') {
             url = `${apiUrl}prosesuangjalansupirheader/${id}/getPengembalian`
             attribut = 'disabled'
             forCheckbox = 'disabled'
@@ -1090,6 +1193,10 @@
                 dataType: "JSON",
                 headers: {
                     Authorization: `Bearer ${accessToken}`
+                },
+                data: {
+                    nobukti: $('#crudForm').find('[name=nobukti]').val(),
+                    tglbukti: $('#crudForm').find('[name=tglbukti]').val(),
                 },
                 success: (response) => {
                     resolve(response);
@@ -1200,6 +1307,9 @@
             beforeSend: request => {
                 request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
             },
+            data:{
+                aksi: Aksi
+            },
             success: response => {
                 var kodenobukti = response.kodenobukti
                 if (kodenobukti == '1') {
@@ -1207,6 +1317,12 @@
                     if (kodestatus == '1') {
                         showDialog(response.message['keterangan'])
                     } else {
+                        if (Aksi == 'PRINTER BESAR') {
+                            window.open(`{{ route('prosesuangjalansupirheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
+                        }
+                        if (Aksi == 'PRINTER KECIL') {
+                            window.open(`{{ route('prosesuangjalansupirheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
+                        }
                         if (Aksi == 'EDIT') {
                             editProsesUangJalanSupir(Id)
                         }
@@ -1246,6 +1362,8 @@
                             element.prop('readonly', true)
                         }
                     })
+
+                    initAutoNumeric(form.find(`[name="uangjalan"]`))
 
                     form.find(`[name="tglbukti"]`).val(dateFormat(response.data.tglbukti))
                     form.find(`[name="supir"]`).val(response.data.supir)
@@ -1329,6 +1447,7 @@
 
                     if (response.detail.deposito == null) {
                         form.find('#tabs-3 [name]').prop('readonly', true)
+                        initAutoNumeric(form.find(`[name="nilaideposit"]`))
                     } else {
                         $.each(response.detail.deposito, (index, value) => {
                             let element = form.find(`[name="${index}"]`)
@@ -1363,6 +1482,8 @@
                         form.find(`[name="bank_idpengembalian"]`).val(response.detail.pengembalian.bank_idpengembalian)
                         form.find(`[name="bankpengembalian"]`).val(response.detail.pengembalian.bankpengembalian).prop('readonly', true)
                         form.find(`[name="bankpengembalian"]`).data('currentValue', response.detail.pengembalian.bankpengembalian)
+                        form.find(`[name="penerimaanpengembalian_nobukti"]`).val(response.detail.pengembalian.penerimaanpengembalian_nobukti).prop('readonly', true)
+
                         getDataPengembalian(response.data.supir_id, userId).then((response) => {
 
                             let selectedId = []
@@ -1370,7 +1491,7 @@
 
                             $.each(response.data, (index, value) => {
                                 selectedId.push(value.id)
-                                totalBayar += parseFloat(value.nominal)
+                                totalBayar += parseFloat(value.nombayar)
                             })
                             $('#tablePengembalian').jqGrid("clearGridData");
                             setTimeout(() => {
@@ -1539,7 +1660,7 @@
                     form.attr('has-maxlength', true)
                 },
                 error: error => {
-                    showDialog(error.statusText)
+                    showDialog(error.responseJSON)
                 }
             })
         }
@@ -1551,10 +1672,9 @@
             fileName: 'absensisupir',
 
             onSelectRow: (absensisupir, element) => {
+                $('#crudForm [name=absensi_id]').first().val(absensisupir.id)
                 element.val(absensisupir.nobukti)
 
-                $('#crudForm [name=nilaiadjust]').first().val(absensisupir.nominal)
-                initAutoNumeric($('#crudForm [name=nilaiadjust]'))
                 element.data('currentValue', element.val())
             },
             onCancel: (element) => {
@@ -1591,21 +1711,26 @@
 
         $('.supir-lookup').lookup({
             title: 'Supir Lookup',
-            fileName: 'supir',
+            fileName: 'absensisupirdetail',
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
+                    absensi_id: $('#crudForm [name=absensi_id]').val(),
+                    isProsesUangjalan: true
                 }
             },
             onSelectRow: (supir, element) => {
-                $('#crudForm [name=supir_id]').first().val(supir.id)
-                element.val(supir.namasupir)
+                $('#crudForm [name=supir_id]').first().val(supir.supir_id)
+                $('#crudForm [name=trado]').first().val(supir.trado)
+                $('#crudForm [name=trado_id]').first().val(supir.trado_id)
+                $('#crudForm [name=uangjalan]').first().val(supir.uangjalan)
+                initAutoNumeric($('#crudForm [name=uangjalan]'))
+                element.val(supir.supir)
                 element.data('currentValue', element.val())
                 $('#tablePengembalian').jqGrid("clearGridData");
                 $("#tablePengembalian")[0].p.selectedRowIds = [];
-                getDataPengembalian(supir.id).then((response) => {
 
-                    console.log('before', $("#tablePengembalian").jqGrid('getGridParam', 'selectedRowIds'))
+                getDataPengembalian(supir.supir_id).then((response) => {
                     setTimeout(() => {
 
                         $("#tablePengembalian")
@@ -1625,6 +1750,9 @@
                 element.val(element.data('currentValue'))
             },
             onClear: (element) => {
+                $('#crudForm [name=uangjalan').first().val('')
+                $('#crudForm [name=trado').first().val('')
+                $('#crudForm [name=trado_id]').first().val('')
                 $('#crudForm [name=supir_id]').first().val('')
                 element.val('')
                 element.data('currentValue', element.val())
@@ -1731,6 +1859,49 @@
                 }
             })
         })
+    }
+
+    function approvalData() {
+
+        event.preventDefault()
+
+        let form = $('#crudForm')
+        $(this).attr('disabled', '')
+        $('#processingLoader').removeClass('d-none')
+
+        $.ajax({
+            url: `${apiUrl}prosesuangjalansupirheader/approval`,
+            method: 'POST',
+            dataType: 'JSON',
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            },
+            data: {
+                prosesId: selectedRows
+            },
+            success: response => {
+                $('#crudForm').trigger('reset')
+                $('#crudModal').modal('hide')
+
+                $('#jqGrid').jqGrid().trigger('reloadGrid');
+                selectedRows = []
+                $('#gs_').prop('checked', false)
+            },
+            error: error => {
+                if (error.status === 422) {
+                    $('.is-invalid').removeClass('is-invalid')
+                    $('.invalid-feedback').remove()
+
+                    setErrorMessages(form, error.responseJSON.errors);
+                } else {
+                    showDialog(error.responseJSON)
+                }
+            },
+        }).always(() => {
+            $('#processingLoader').addClass('d-none')
+            $(this).removeAttr('disabled')
+        })
+
     }
 </script>
 @endpush()

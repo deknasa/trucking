@@ -320,10 +320,10 @@
           $('#crudModal').find('#crudForm').trigger('reset')
           $('#bankheader').val(response.data.bank_id).trigger('change')
 
-          $('.select2').select2({
-            width: 'resolve',
-            theme: "bootstrap4"
-          });
+          // $('.select2').select2({
+          //   width: 'resolve',
+          //   theme: "bootstrap4"
+          // });
           $('#rangeHeader').find('[name=tgldariheader]').val(dateFormat(response.data.tgldariheader)).trigger('change');
           $('#rangeHeader').find('[name=tglsampaiheader]').val(dateFormat(response.data.tglsampaiheader)).trigger('change');
           $('#jqGrid').jqGrid('setGridParam', {
