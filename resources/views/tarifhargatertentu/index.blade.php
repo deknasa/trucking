@@ -10,7 +10,7 @@
     </div>
 </div>
 
-@include('tarifdiscountharga._modal')
+@include('tarifhargatertentu._modal')
 
 @push('scripts')
 <script>
@@ -32,7 +32,7 @@
 
     $(document).ready(function() {
         $("#jqGrid").jqGrid({
-                url: `${apiUrl}tarifdiscountharga`,
+                url: `${apiUrl}tarifhargatertentu`,
                 mtype: "GET",
                 styleUI: 'Bootstrap4',
                 iconSet: 'fontAwesome',
@@ -45,6 +45,7 @@
                         search: false,
                         hidden: true
                     },
+                    
                     {
                         label: 'STATUS AKTIF',
                         name: 'statusaktif',
@@ -301,7 +302,7 @@
                         innerHTML: '<i class="fa fa-plus"></i> ADD',
                         class: 'btn btn-primary btn-sm mr-1',
                         onClick: () => {
-                            createTarifDiscountHarga()
+                            createTarifHargaTertentu()
                         }
                     },
                     {
@@ -313,7 +314,7 @@
                             if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                 showDialog('Harap pilih salah satu record')
                             } else {
-                                editTarifDiscountHarga(selectedId)
+                                editTarifHargaTertentu(selectedId)
                             }
 
                         }
@@ -327,7 +328,7 @@
                             if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                 showDialog('Harap pilih salah satu record')
                             } else {
-                                deleteTarifDiscountHarga(selectedId)
+                                deleteTarifHargaTertentu(selectedId)
                             }
                         }
                     },
@@ -338,7 +339,7 @@
                         onClick: () => {
                             selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
 
-                            viewTarifDiscountHarga(selectedId)
+                            viewTarifHargaTertentu(selectedId)
                         }
                     },
                     {
@@ -385,22 +386,21 @@
 
 
         function permission() {
-            if (!`{{ $myAuth->hasPermission('tarifdiscountharga', 'store') }}`) {
+            if (!`{{ $myAuth->hasPermission('tarifhargatertentu', 'store') }}`) {
                 $('#add').attr('disabled', 'disabled')
             }
 
-
-            if (!`{{ $myAuth->hasPermission('tarifdiscountharga', 'update') }}`) {
+            if (!`{{ $myAuth->hasPermission('tarifhargatertentu', 'update') }}`) {
                 $('#edit').attr('disabled', 'disabled')
             }
 
-            if (!`{{ $myAuth->hasPermission('tarifdiscountharga', 'destroy') }}`) {
+            if (!`{{ $myAuth->hasPermission('tarifhargatertentu', 'destroy') }}`) {
                 $('#delete').attr('disabled', 'disabled')
             }
-            if (!`{{ $myAuth->hasPermission('tarifdiscountharga', 'export') }}`) {
+            if (!`{{ $myAuth->hasPermission('tarifhargatertentu', 'export') }}`) {
                 $('#export').attr('disabled', 'disabled')
             }
-            if (!`{{ $myAuth->hasPermission('tarifdiscountharga', 'report') }}`) {
+            if (!`{{ $myAuth->hasPermission('tarifhargatertentu', 'report') }}`) {
                 $('#report').attr('disabled', 'disabled')
             }
         }
@@ -471,7 +471,7 @@
             getCekExport(params).then((response) => {
                 if ($('#rangeModal').data('action') == 'export') {
                     $.ajax({
-                        url: `${apiUrl}tarifdiscountharga/export?${params}`,
+                        url: `${apiUrl}tarifhargatertentu/export?${params}`,
                         type: 'GET',
                         beforeSend: function(xhr) {
                             xhr.setRequestHeader('Authorization', `Bearer ${accessToken}`);
@@ -483,11 +483,11 @@
                             if (xhr.status === 200) {
                                 if (response !== undefined) {
                                     var blob = new Blob([response], {
-                                        type: 'tarifdiscountharga/vnd.ms-excel'
+                                        type: 'tarifhargatertentu/vnd.ms-excel'
                                     });
                                     var link = document.createElement('a');
                                     link.href = window.URL.createObjectURL(blob);
-                                    link.download = 'laporantarifdiscountharga' + new Date().getTime() + '.xlsx';
+                                    link.download = 'laporantarifhargatertentu' + new Date().getTime() + '.xlsx';
                                     link.click();
                                 }
                                 $('#rangeModal').modal('hide')
@@ -502,7 +502,7 @@
                         submitButton.removeAttr('disabled')
                     })
                 } else if ($('#rangeModal').data('action') == 'report') {
-                    window.open(`{{ route('tarifdiscountharga.report') }}?${params}`)
+                    window.open(`{{ route('tarifhargatertentu.report') }}?${params}`)
                     submitButton.removeAttr('disabled')
                     $('#processingLoader').addClass('d-none')
                     $('#rangeModal').modal('hide')
@@ -560,7 +560,7 @@
 
             return new Promise((resolve, reject) => {
                 $.ajax({
-                    url: `${apiUrl}tarifdiscountharga/export?${params}`,
+                    url: `${apiUrl}tarifhargatertentu/export?${params}`,
                     dataType: "JSON",
                     headers: {
                         Authorization: `Bearer ${accessToken}`

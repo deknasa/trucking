@@ -4,16 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Auth;
 
-use Illuminate\Contracts\View\View;
-use Illuminate\Http\Response;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-
-class TarifDiscountHargaController extends MyController
+class TarifHargaTertentuController extends MyController
 {
-    public $title = 'Tarif Discount Harga';
+   
+    public $title = 'Tarif Harga Tertentu';
 
 
     /**
@@ -32,7 +27,7 @@ class TarifDiscountHargaController extends MyController
         ];
 
 
-        return view('tarifdiscountharga.index', compact('title', 'data'));
+        return view('tarifhargatertentu.index', compact('title', 'data'));
     }
     private function combo($aksi)
     {
@@ -44,7 +39,7 @@ class TarifDiscountHargaController extends MyController
         // dd($status);
         $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'tarifdiscountharga/combo', $status);
+            ->get(config('app.api_url') . 'tarifhargatertentu/combo', $status);
 
 
      
@@ -74,12 +69,12 @@ class TarifDiscountHargaController extends MyController
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'tarifdiscountharga', $request->all());
+            ->get(config('app.api_url') . 'tarifhargatertentu', $request->all());
 
-        $tarifdiscounthargas = $response['data'];
+        $tarifhargatertentus = $response['data'];
 
         $i = 0;
-        foreach ($tarifdiscounthargas as $index => $params) {
+        foreach ($tarifhargatertentus as $index => $params) {
 
             $statusaktif = $params['statusaktif'];
             $statuscabang = $params['statuscabang'];
@@ -90,8 +85,8 @@ class TarifDiscountHargaController extends MyController
             $statusaktif = $result['MEMO'];
             $statuscabang = $resultcabang['MEMO'];
 
-            $tarifdiscounthargas[$i]['statusaktif'] = $statusaktif;
-            $tarifdiscounthargas[$i]['statuscabang'] = $statuscabang;
+            $tarifhargatertentus[$i]['statusaktif'] = $statusaktif;
+            $tarifhargatertentus[$i]['statuscabang'] = $statuscabang;
 
         
             $i++;
@@ -99,7 +94,7 @@ class TarifDiscountHargaController extends MyController
 
         }
 
-        return view('reports.tarifdiscountharga', compact('tarifdiscounthargas'));
+        return view('reports.tarifhargatertentu', compact('tarifhargatertentus'));
     }
 
     

@@ -153,7 +153,7 @@
       let method
       let url
       let form = $('#crudForm')
-      let tarifDiscounthargaId = form.find('[name=id]').val()
+      let tarifHargaTertentuId = form.find('[name=id]').val()
       let action = form.data('action')
       let data = $('#crudForm').serializeArray()
       $('#crudForm').find(`[name="nominal"]`).each((index, element) => {
@@ -191,19 +191,19 @@
       switch (action) {
         case 'add':
           method = 'POST'
-          url = `${apiUrl}tarifdiscountharga`
+          url = `${apiUrl}tarifhargatertentu`
           break;
         case 'edit':
           method = 'PATCH'
-          url = `${apiUrl}tarifdiscountharga/${tarifDiscounthargaId}`
+          url = `${apiUrl}tarifhargatertentu/${tarifHargaTertentuId}`
           break;
         case 'delete':
           method = 'DELETE'
-          url = `${apiUrl}tarifdiscountharga/${tarifDiscounthargaId}`
+          url = `${apiUrl}tarifhargatertentu/${tarifHargaTertentuId}`
           break;
         default:
           method = 'POST'
-          url = `${apiUrl}tarifdiscountharga`
+          url = `${apiUrl}tarifhargatertentu`
           break;
       }
 
@@ -272,7 +272,7 @@
     initDatepicker('datepickerIndex')
   })
 
-  function createTarifDiscountHarga() {
+  function createTarifHargaTertentu() {
     let form = $('#crudForm')
 
     $('.modal-loader').removeClass('d-none')
@@ -284,7 +284,7 @@
   `)
     form.data('action', 'add')
     form.find(`.sometimes`).show()
-    $('#crudModalTitle').text('Create Tarif Discount Harga')
+    $('#crudModalTitle').text('Create Tarif Harga Tertentu')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -310,7 +310,7 @@
       })
   }
 
-  function editTarifDiscountHarga(tarifDiscounthargaId) {
+  function editTarifHargaTertentu(tarifHargaTertentuId) {
     let form = $('#crudForm')
 
     $('.modal-loader').removeClass('d-none')
@@ -322,7 +322,7 @@
     Save
   `)
     form.find(`.sometimes`).hide()
-    $('#crudModalTitle').text('Edit Tarif Discount Harga')
+    $('#crudModalTitle').text('Edit Tarif Harga Tertentu')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -333,7 +333,7 @@
         setStatusCabangOptions(form)
       ])
       .then(() => {
-        showTarifDiscountHarga(form, tarifDiscounthargaId)
+        showTarifHargaTertentu(form, tarifHargaTertentuId)
           .then(() => {
             $('#crudModal').modal('show')
 
@@ -348,7 +348,7 @@
       })
   }
 
-  function deleteTarifDiscountHarga(tarifDiscounthargaId) {
+  function deleteTarifHargaTertentu(tarifHargaTertentuId) {
     let form = $('#crudForm')
 
     $('.modal-loader').removeClass('d-none')
@@ -360,7 +360,7 @@
     Delete
   `)
     form.find(`.sometimes`).hide()
-    $('#crudModalTitle').text('Delete Tarif Discount Harga')
+    $('#crudModalTitle').text('Delete Tarif Harga Tertentu')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
     $('#crudForm [name=tglbukti]').attr('readonly', true)
@@ -372,7 +372,7 @@
         setStatusCabangOptions(form)
       ])
       .then(() => {
-        showTarifDiscountHarga(form, tarifDiscounthargaId)
+        showTarifHargaTertentu(form, tarifHargaTertentuId)
           .then(() => {
             $('#crudModal').modal('show')
           })
@@ -385,7 +385,7 @@
       })
   }
 
-  function viewTarifDiscountHarga(tarifDiscounthargaId) {
+  function viewTarifHargaTertentu(tarifHargaTertentuId) {
     let form = $('#crudForm')
 
     $('.modal-loader').removeClass('d-none')
@@ -397,7 +397,7 @@
       Save
     `)
     form.find(`.sometimes`).hide()
-    $('#crudModalTitle').text('View Tarif Discount Harga')
+    $('#crudModalTitle').text('View Tarif Harga Tertentu')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
     $('#crudForm [name=tglbukti]').attr('readonly', true)
@@ -409,8 +409,8 @@
         setStatusCabangOptions(form)
       ])
       .then(() => {
-        showTarifDiscountHarga(form, tarifDiscounthargaId)
-          .then(tarifDiscounthargaId => {
+        showTarifHargaTertentu(form, tarifHargaTertentuId)
+          .then(tarifHargaTertentuId => {
             // form.find('.aksi').hide()
             setFormBindKeys(form)
             form.find('[name]').attr('disabled', 'disabled').css({
@@ -445,14 +445,14 @@
     $('#processingLoader').removeClass('d-none')
 
     $.ajax({
-      url: `${apiUrl}tarifdiscountharga/approval`,
+      url: `${apiUrl}tarifhargatertentu/approval`,
       method: 'POST',
       dataType: 'JSON',
       headers: {
         Authorization: `Bearer ${accessToken}`
       },
       data: {
-        tarifDiscounthargaId: selectedRows
+        tarifHargaTertentuId: selectedRows
       },
       success: response => {
         $('#crudForm').trigger('reset')
@@ -479,7 +479,7 @@
 
   }
 
-  function approvalEditTarifDiscountHarga() {
+  function approvalEditTarifHargaTertentu() {
     event.preventDefault()
 
     let form = $('#crudForm')
@@ -487,14 +487,14 @@
     $('#processingLoader').removeClass('d-none')
 
     $.ajax({
-      url: `${apiUrl}tarifdiscountharga/approvaledit`,
+      url: `${apiUrl}tarifhargatertentu/approvaledit`,
       method: 'POST',
       dataType: 'JSON',
       headers: {
         Authorization: `Bearer ${accessToken}`
       },
       data: {
-        tarifDiscounthargaId: selectedRows
+        tarifHargaTertentuId: selectedRows
       },
       success: response => {
         $('#crudForm').trigger('reset')
@@ -552,7 +552,7 @@
   function getMaxLength(form) {
     if (!form.attr('has-maxlength')) {
       $.ajax({
-        url: `${apiUrl}tarifdiscountharga/field_length`,
+        url: `${apiUrl}tarifhargatertentu/field_length`,
         method: 'GET',
         dataType: 'JSON',
         headers: {
@@ -654,10 +654,10 @@
     })
   }
 
-  function showTarifDiscountHarga(form, tarifDiscounthargaId) {
+  function showTarifHargaTertentu(form, tarifHargaTertentuId) {
     return new Promise((resolve, reject) => {
       $.ajax({
-        url: `${apiUrl}tarifdiscountharga/${tarifDiscounthargaId}`,
+        url: `${apiUrl}tarifhargatertentu/${tarifHargaTertentuId}`,
         method: 'GET',
         dataType: 'JSON',
         headers: {
@@ -699,7 +699,7 @@
   function showDefault(form) {
     return new Promise((resolve, reject) => {
       $.ajax({
-        url: `${apiUrl}tarifdiscountharga/default`,
+        url: `${apiUrl}tarifhargatertentu/default`,
         method: 'GET',
         dataType: 'JSON',
         headers: {
@@ -808,7 +808,7 @@
 
   function getagentas(id) {
     $.ajax({
-      url: `${apiUrl}tarifdiscountharga/${id}/getagentas`,
+      url: `${apiUrl}tarifhargatertentu/${id}/getagentas`,
       method: 'GET',
       dataType: 'JSON',
       headers: {
@@ -829,7 +829,7 @@
 
   function getcont(id) {
     $.ajax({
-      url: `${apiUrl}tarifdiscountharga/${id}/getcont`,
+      url: `${apiUrl}tarifhargatertentu/${id}/getcont`,
       method: 'GET',
       dataType: 'JSON',
       headers: {
@@ -990,7 +990,7 @@
 
   function cekValidasidelete(Id, Aksi, nobukti) {
     $.ajax({
-      url: `{{ config('app.api_url') }}tarifdiscountharga/${Id}/${Aksi}/cekValidasi`,
+      url: `{{ config('app.api_url') }}tarifhargatertentu/${Id}/${Aksi}/cekValidasi`,
       method: 'POST',
       dataType: 'JSON',
       data: {
@@ -1007,9 +1007,9 @@
           showDialog(response.message['keterangan'])
         } else {
           if (Aksi == 'edit') {
-            editTarifDiscountHarga(selectedId)
+            editTarifHargaTertentu(Id)
           } else if (Aksi == 'delete') {
-            deleteTarifDiscountHarga(Id)
+            deleteTarifHargaTertentu(Id)
           }
         }
 

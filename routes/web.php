@@ -286,6 +286,7 @@ use App\Http\Controllers\SuratPengantarApprovalInputTripController;
 use App\Http\Controllers\ApprovalBukaTanggalSuratPengantarController;
 use App\Http\Controllers\LaporanPemotonganPinjamanDepositoController;
 use App\Http\Controllers\ExportRincianMingguanPendapatanSupirController;
+use App\Http\Controllers\TarifHargaTertentuController;
 
 /*
 |--------------------------------------------------------------------------
@@ -561,6 +562,12 @@ Route::middleware(['auth', 'authorized'])->group(function () {
     Route::get('tarifdiscountharga/export', [TarifDiscountHargaController::class, 'export'])->name('tarifdiscountharga.export');
     Route::get('tarifdiscountharga/report', [TarifDiscountHargaController::class, 'report'])->name('tarifdiscountharga.report');
     Route::resource('tarifdiscountharga', TarifDiscountHargaController::class);
+
+    Route::get('tarifhargatertentu/index', [TarifHargaTertentuController::class, 'index']);
+    Route::get('tarifhargatertentu/export', [TarifHargaTertentuController::class, 'export'])->name('tarifhargatertentu.export');
+    Route::get('tarifhargatertentu/report', [TarifHargaTertentuController::class, 'report'])->name('tarifhargatertentu.report');
+    Route::resource('tarifhargatertentu', TarifHargaTertentuController::class);
+
 
 
 
