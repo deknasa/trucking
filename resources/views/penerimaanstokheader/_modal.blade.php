@@ -293,6 +293,7 @@
   let hasFormBindKeys = false
   let modalBody = $('#crudModal').find('.modal-body').html()
   var KodePenerimaanId
+  var KelompokId = "";
   var listKodePenerimaan =[];
   var listIdPenerimaan =[];
   $(document).ready(function() {
@@ -359,6 +360,7 @@
         data: {detail:detail_id},
         success: response => {
          console.log(response);
+         deleteRow(row)
         },
         error: error => {
           if (error.status === 422) {
@@ -379,7 +381,7 @@
     $(document).on('click', '.rmv', function(event) {
       // console.log($(.rmv).parents('tr'));
       if ($(this).attr('data-id')) {
-        validasiSpbMinus($(this).attr('data-id'))
+        validasiSpbMinus($(this).attr('data-id'),$(this).parents('tr'))
       }else{
         deleteRow($(this).parents('tr'))
       }
@@ -1014,6 +1016,7 @@
                   <td>
                     <input type="text"  name="detail_stok[]" id="detail_stok_${id}" class="form-control stok-lookup ">
                     <input type="text" id="detailstokId_${id}" readonly hidden class="detailstokId" name="detail_stok_id[]">
+                    <input type="text" id="detailstokKelompok_${id}" value="${detail.kelompok_id}" readonly hidden class="detailstokKelompok" name="detail_stok_kelompok[]">
                   </td>
                   <td>
                     <input type="text" disabled name="detail_satuan[]" id="" value="${detail.satuan}" class="form-control detail_satuan_${id}">
@@ -1081,10 +1084,12 @@
             beforeProcess: function(test) {
               var penerimaanstokId = $(`#penerimaanstokId`).val();
               var penerimaanstok_nobukti = $('#crudModal').find(`[name=penerimaanstok_nobukti]`).val();
+              cekKelompok(row);
               this.postData = {
                 penerimaanstok_id: penerimaanstokId,
                 penerimaanstokheader_nobukti: penerimaanstok_nobukti,
                 Aktif: 'AKTIF',
+                KelompokId:KelompokId ,
               }
             },
             onSelectRow: (stok, element) => {
@@ -1095,6 +1100,7 @@
 
               parent = element.closest('td');
               parent.children('.detailstokId').val(stok.id)
+              parent.children('.detailstokKelompok').val(stok.kelompok_id)
               element.data('currentValue', element.val())
             },
             onCancel: (element) => {
@@ -1172,6 +1178,7 @@
                   <td>
                     <input type="text"  name="detail_stok[]" id="detail_stok_${id}" class="form-control stok-lookup ">
                     <input type="text" id="detailstokId_${id}" readonly hidden class="detailstokId" name="detail_stok_id[]">
+                    <input type="text" id="detailstokKelompok_${id}" value="${detail.kelompok_id}" readonly hidden class="detailstokKelompok" name="detail_stok_kelompok[]">
                   </td>
                   <td>
                     <input type="text" disabled name="detail_satuan[]" id="" value="${detail.satuan}" class="form-control detail_satuan_${id}">
@@ -1242,10 +1249,12 @@
             beforeProcess: function(test) {
               var penerimaanstokId = $(`#penerimaanstokId`).val();
               var penerimaanstok_nobukti = $('#crudModal').find(`[name=penerimaanstok_nobukti]`).val();
+              cekKelompok(row);
               this.postData = {
                 penerimaanstok_id: penerimaanstokId,
                 penerimaanstokheader_nobukti: penerimaanstok_nobukti,
                 Aktif: 'AKTIF',
+                KelompokId:KelompokId ,
               }
             },
             onSelectRow: (stok, element) => {
@@ -1256,6 +1265,7 @@
 
               parent = element.closest('td');
               parent.children('.detailstokId').val(stok.id)
+              parent.children('.detailstokKelompok').val(stok.kelompok_id)
               element.data('currentValue', element.val())
             },
             onCancel: (element) => {
@@ -1335,6 +1345,7 @@
               <td>
                 <input type="text"  name="detail_stok[]" id="detail_stok_${id}" class="form-control stok-lookup ">
                 <input type="text" id="detailstokId_${id}" readonly hidden class="detailstokId" name="detail_stok_id[]">
+                <input type="text" id="detailstokKelompok_${id}" value="${detail.kelompok_id}"  readonly hidden class="detailstokKelompok" name="detail_stok_kelompok[]">
               </td>
               <td>
                 <input type="text" disabled name="detail_satuan[]" id="" value="${detail.satuan}"  class="form-control detail_satuan_${id}">
@@ -1408,10 +1419,12 @@
         beforeProcess: function(test) {
           var penerimaanstokId = $(`#penerimaanstokId`).val();
           var penerimaanstok_nobukti = $('#crudModal').find(`[name=penerimaanstok_nobukti]`).val();
+          cekKelompok(row);
           this.postData = {
             penerimaanstok_id: penerimaanstokId,
             penerimaanstokheader_nobukti: penerimaanstok_nobukti,
             Aktif: 'AKTIF',
+            KelompokId:KelompokId ,
           }
         },
         onSelectRow: (stok, element) => {
@@ -1422,6 +1435,7 @@
 
           parent = element.closest('td');
           parent.children('.detailstokId').val(stok.id)
+          parent.children('.detailstokKelompok').val(stok.kelompok_id)
           element.data('currentValue', element.val())
         },
         onCancel: (element) => {
@@ -1505,6 +1519,7 @@
                   <td>
                     <input type="text"  name="detail_stok[]" id="detail_stok_${id}" class="form-control stok-lookup ">
                     <input type="text" id="detailstokId_${id}" readonly hidden class="detailstokId" name="detail_stok_id[]">
+                    <input type="text" id="detailstokKelompok_${id}" value="${detail.kelompok_id}" readonly hidden class="detailstokKelompok" name="detail_stok_kelompok[]">
                   </td>
                   <td>
                     <input type="text" disabled name="detail_satuan[]" id="" value="${detail.satuan}"  class="form-control detail_satuan_${id}">
@@ -1642,6 +1657,7 @@
                   <td>
                     <input type="text"  name="detail_stok[]" id="detail_stok_${id}" class="form-control stok-lookup ">
                     <input type="text" id="detailstokId_${id}" readonly hidden class="detailstokId" name="detail_stok_id[]">
+                    <input type="text" id="detailstokKelompok_${id}" value="${detail.kelompok_id}" readonly hidden class="detailstokKelompok" name="detail_stok_kelompok[]">
                   </td>
                   <td>
                     <input type="text" disabled name="detail_satuan[]" id="" value="${detail.satuan}" class="form-control detail_satuan_${id}">
@@ -2390,6 +2406,7 @@
                   <td>
                     <input type="text"  name="detail_stok[]" id="" class="form-control detail_stok_${index}">
                     <input type="text" id="detailstokId_${index}" readonly hidden class="detailstokId" name="detail_stok_id[]">
+                    <input type="text" id="detailstokKelompok_${index}" readonly hidden class="detailstokKelompok" name="detail_stok_kelompok[]">
                   </td>                 
                   <td>
                     <input type="text" disabled name="detail_satuan[]" id="" class="form-control detail_satuan_${index}">
@@ -2457,10 +2474,12 @@
       beforeProcess: function(test) {
         var penerimaanstokId = $(`#penerimaanstokId`).val();
         var penerimaanstok_nobukti = $('#crudModal').find(`[name=penerimaanstok_nobukti]`).val();
+        cekKelompok(row);
         this.postData = {
           penerimaanstok_id: penerimaanstokId,
           penerimaanstokheader_nobukti: penerimaanstok_nobukti,
           Aktif: 'AKTIF',
+          KelompokId:KelompokId ,
         }
       },
       onSelectRow: (stok, element) => {
@@ -2471,6 +2490,7 @@
 
         parent = element.closest('td');
         parent.children('.detailstokId').val(stok.id)
+        parent.children('.detailstokKelompok').val(stok.kelompok_id)
         element.data('currentValue', element.val())
         setKorv(row,stok.id);
       },
@@ -2541,6 +2561,16 @@
 
   function resetRow() {
     $('.trow').remove()
+  }
+
+  function cekKelompok(row) {
+     //check jika lookup baris pertama
+     if ($(`#detailstokKelompok_${row}`)[0] == $('.detailstokKelompok')[0]) {
+          KelompokId="";
+        }else {
+          let detailstokKelompok = $('.detailstokKelompok')
+          KelompokId = $(detailstokKelompok[0]).val();
+        }
   }
 
   function setRowNumbers() {
@@ -2756,6 +2786,7 @@
                       <input type="text"  name="detail_stok[]" id="detail_stok_${id}" class="form-control stok-lookup ">
                       <input type="text" id="detailstokId_${id}" readonly hidden class="detailstokId" name="detail_stok_id[]">
                       <input type="text" id="detailstokId_${id}_old" value="${detail.stok_id}" readonly hidden name="detail_stok_id_old[]">
+                      <input type="text" id="detailstokKelompok_${id}" value="${detail.kelompok_id}" readonly hidden class="detailstokKelompok" name="detail_stok_kelompok[]">
                     </td>
                     <td>
                       <input type="text" disabled name="detail_satuan[]" id="" value="${detail.satuan}"  class="form-control detail_satuan_${id}">
@@ -2843,6 +2874,7 @@
               beforeProcess: function(test) {
                 var penerimaanstokId = $("#crudForm").find(`[name="penerimaanstok_id"]`).val();
                 var penerimaanstok_nobukti = $('#crudModal').find(`[name=penerimaanstok_nobukti]`).val();
+                cekKelompok(row);
                 this.postData = {
                   penerimaanstok_id: penerimaanstokId,
                   penerimaanstokheader_nobukti: penerimaanstok_nobukti,
@@ -2857,6 +2889,7 @@
 
                 parent = element.closest('td');
                 parent.children('.detailstokId').val(stok.id)
+                parent.children('.detailstokKelompok').val(stok.kelompok_id)
                 element.data('currentValue', element.val())
                 setKorv(id,stok.id);
 
