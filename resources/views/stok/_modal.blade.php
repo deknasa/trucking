@@ -2,7 +2,12 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
-        
+
+        <div class="modal-header">
+          <p class="modal-title" id="crudModalTitle"></p>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          </button>
+        </div>
         <form action="" method="post">
           <div class="modal-body">
             <div class="row form-group">
@@ -50,11 +55,11 @@
                 </select>
               </div>
             </div>
-            
+
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
-                  status service rutin 
+                  status service rutin
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
@@ -143,7 +148,7 @@
                   </select>
                 </div>
               </div>
-              
+
               <div class="row form-group">
                 <div class="col-12 col-sm-3 col-md-2">
                   <label class="col-form-label">Total vulkanisir</label>
@@ -152,7 +157,7 @@
                   <input type="text" name="totalvulkanisir" style="text-align:right" disabled class="form-control">
                 </div>
               </div>
-              
+
               <div class="row form-group">
                 <div class="col-12 col-sm-3 col-md-2">
                   <label class="col-form-label">vulkanisir awal</label>
@@ -209,7 +214,7 @@
                 <div class="dropzone" data-field="gambar" id="my-dropzone"></div>
 
                 <div class="dz-preview dz-file-preview">
-                  <div class="dz-details" >
+                  <div class="dz-details">
                     <img data-dz-thumbnail />
                   </div>
                 </div>
@@ -251,7 +256,7 @@
   let modalBody = $('#crudModal').find('.modal-body').html()
   let dropzones = []
   var dataReuse = []
-  
+
   $(document).ready(function() {
     $(document).on('dblclick', '[data-dz-thumbnail]', handleImageClick)
     $(document).on('click', '.rmv', function(event) {
@@ -260,17 +265,17 @@
     $(`#kelompok-ban`).hide();
 
     $(document).on('change', '#statusreuse', function(event) {
-      let reuse =0
+      let reuse = 0
       if (dataReuse.length) {
-        $.each(dataReuse, (index,data) => {
-          if (data.text == "REUSE"){
+        $.each(dataReuse, (index, data) => {
+          if (data.text == "REUSE") {
             reuse = data.id
           }
         })
       }
       if ($(this).val() == reuse) {
         $('#crudForm').find('[name=vulkanisirawal]').attr('readonly', false);
-      }else{
+      } else {
         $('#crudForm').find('[name=vulkanisirawal]').attr('readonly', true);
         $('#crudForm').find('[name=vulkanisirawal]').val('');
       }
@@ -390,9 +395,9 @@
     setFormBindKeys(form)
 
     activeGrid = null
-    form.find('#btnSubmit').prop('disabled',false)
+    form.find('#btnSubmit').prop('disabled', false)
     if (form.data('action') == "view") {
-      form.find('#btnSubmit').prop('disabled',true)
+      form.find('#btnSubmit').prop('disabled', true)
     }
 
     initDatepicker()
@@ -428,7 +433,7 @@
     form.find(`.sometimes`).show()
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
-    $('#crudModalTitle').text('Create Stok')
+    $('#crudModalTitle').text('add Stok')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
     Promise
@@ -454,11 +459,17 @@
       })
 
     initDropzone(form.data('action'))
-    initAutoNumeric(form.find(`[name="qtymin"]`),{'maximumValue':10000})
-    initAutoNumeric(form.find(`[name="qtymax"]`),{'maximumValue':10000})
+    initAutoNumeric(form.find(`[name="qtymin"]`), {
+      'maximumValue': 10000
+    })
+    initAutoNumeric(form.find(`[name="qtymax"]`), {
+      'maximumValue': 10000
+    })
     initAutoNumeric(form.find(`[name="hargabelimin"]`))
     initAutoNumeric(form.find(`[name="hargabelimax"]`))
-    initAutoNumeric(form.find(`[name="vulkanisirawal"]`),{'maximumValue':100})
+    initAutoNumeric(form.find(`[name="vulkanisirawal"]`), {
+      'maximumValue': 100
+    })
   }
 
   function editStok(stokId) {
@@ -539,6 +550,7 @@
           })
       })
   }
+
   function viewStok(stokId) {
     let form = $('#crudForm')
     $('.modal-loader').removeClass('d-none')
@@ -563,38 +575,38 @@
       ])
       .then(() => {
         showStok(form, stokId)
-        .then((stok) => {
-          initDropzone(form.data('action'), stok)
-        })
-        .then(stokId => {
-          form.find('[name]').removeAttr('disabled')
-          form.find('select').each((index, select) => {
-            let element = $(select)
-            if (element.data('select2')) {
+          .then((stok) => {
+            initDropzone(form.data('action'), stok)
+          })
+          .then(stokId => {
+            form.find('[name]').removeAttr('disabled')
+            form.find('select').each((index, select) => {
+              let element = $(select)
+              if (element.data('select2')) {
                 element.select2('destroy')
-            }
+              }
+            })
+            form.find('[name]').attr('disabled', 'disabled').css({
+              background: '#fff'
+            })
+            form.find('[name=id]').prop('disabled', false)
           })
-          form.find('[name]').attr('disabled', 'disabled').css({
-            background: '#fff'
+          .then(() => {
+            $('#crudModal').modal('show')
+            form.find(`.hasDatepicker`).prop('readonly', true)
+            form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
+            let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
+            name.attr('disabled', true)
+            name.find('.lookup-toggler').attr('disabled', true)
+            $(".dz-hidden-input").prop("disabled", true);
           })
-          form.find('[name=id]').prop('disabled',false)
-        })
-        .then(() => {
-          $('#crudModal').modal('show')
-          form.find(`.hasDatepicker`).prop('readonly', true)
-          form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
-          let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
-          name.attr('disabled', true)
-          name.find('.lookup-toggler').attr('disabled', true)
-          $(".dz-hidden-input").prop("disabled",true);
-        })
-        .catch((error) => {
-          showDialog(error.statusText)
-        })
-        .finally(() => {
-          $('.modal-loader').addClass('d-none')
-        })
-    })
+          .catch((error) => {
+            showDialog(error.statusText)
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
+      })
   }
 
   function getMaxLength(form) {
@@ -686,7 +698,7 @@
           })
         },
         success: response => {
-          response.data.forEach((statusReuse,index) => {
+          response.data.forEach((statusReuse, index) => {
             dataReuse[index] = statusReuse
             // dataReuse[index]['text'] =  statusReuse.text
 
@@ -839,12 +851,18 @@
           })
           maxLengthForDropzone = 5 - response.count
           resolve(response.data)
-          initAutoNumeric(form.find(`[name="qtymin"]`),{'maximumValue':9999})
-          initAutoNumeric(form.find(`[name="qtymax"]`),{'maximumValue':10000})
+          initAutoNumeric(form.find(`[name="qtymin"]`), {
+            'maximumValue': 9999
+          })
+          initAutoNumeric(form.find(`[name="qtymax"]`), {
+            'maximumValue': 10000
+          })
           initAutoNumeric(form.find(`[name="hargabelimin"]`))
           initAutoNumeric(form.find(`[name="hargabelimax"]`))
-          initAutoNumeric(form.find(`[name="vulkanisirawal"]`),{'maximumValue':100})
-          isKelompokBan(response.data.kelompok_id,response.data.kelompok)
+          initAutoNumeric(form.find(`[name="vulkanisirawal"]`), {
+            'maximumValue': 100
+          })
+          isKelompokBan(response.data.kelompok_id, response.data.kelompok)
           if (response.statuspakai) {
             $(`#statusreuse`).attr('disabled', true)
             form.find(`[name="vulkanisirawal"]`).attr('disabled', true)
@@ -873,7 +891,7 @@
     }
 
   }
-  
+
   function initDropzone(action, data = null) {
     let buttonRemoveDropzone = `<i class="fas fa-times-circle"></i>`
     $('.dropzone').each((index, element) => {
@@ -893,7 +911,7 @@
             checkIsPhotExist(this.files, data)
             dropzones.push(this)
             this.on("addedfile", function(file) {
-              if(this.files.length > 5){
+              if (this.files.length > 5) {
                 this.removeFile(file);
               }
               checkIsPhotExist(this.files, data)
@@ -901,7 +919,7 @@
 
           },
           removedfile: function(file) {
-            
+
             file.previewElement.remove();
             checkIsPhotExist(this.files, data)
 
@@ -914,17 +932,17 @@
       if (action == 'edit' || action == 'delete' || action == 'view') {
         assignAttachment(element.dropzone, data)
       }
-    })    
+    })
   }
 
   function checkIsPhotExist(files, data) {
-    
+
     if (files.length > 0) {
-      $('#crudForm').find(`[name="namaterpusat"]`).prop('disabled',false)
-    }else{
-      $('#crudForm').find(`[name="namaterpusat"]`).prop('disabled',true)
+      $('#crudForm').find(`[name="namaterpusat"]`).prop('disabled', false)
+    } else {
+      $('#crudForm').find(`[name="namaterpusat"]`).prop('disabled', true)
     }
-    $('#crudForm').find(`[name="namaterpusat"]`).prop('disabled',true)
+    $('#crudForm').find(`[name="namaterpusat"]`).prop('disabled', true)
   }
 
   function assignAttachment(dropzone, data) {
@@ -964,7 +982,7 @@
           dropzone.options.addedfile.call(dropzone, imageFile);
           dropzone.options.thumbnail.call(dropzone, imageFile, `${apiUrl}stok/${file}/ori`);
           dropzone.files.push(imageFile)
-  
+
         })
       })
     }
@@ -1011,9 +1029,9 @@
     $('#kategoriId').val('');
   }
 
-  function isKelompokBan(id=0,Kelompok=""){
+  function isKelompokBan(id = 0, Kelompok = "") {
     $(`#kelompok-ban`).hide();
-    if ((id == 1) || (Kelompok =="BAN")) {
+    if ((id == 1) || (Kelompok == "BAN")) {
       $(`#kelompok-ban`).show();
     }
   }
@@ -1063,7 +1081,7 @@
         element.data('currentValue', element.val())
         disabledHirarkiKelompok()
         enabledSubKelompok()
-        isKelompokBan(kelompok.id,kelompok.kodekelompok)
+        isKelompokBan(kelompok.id, kelompok.kodekelompok)
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
@@ -1073,7 +1091,7 @@
         $(`#${element[0]['name']}Id`).val('')
         element.val('')
         element.data('currentValue', element.val())
-        isKelompokBan(0,"")
+        isKelompokBan(0, "")
       }
     })
     $('.subkelompok-lookup').lookup({

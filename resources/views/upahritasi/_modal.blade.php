@@ -2,7 +2,12 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
-        
+
+        <div class="modal-header">
+          <p class="modal-title" id="crudModalTitle"></p>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          </button>
+        </div>
         <form action="" method="post">
           <div class="modal-body">
             <input type="hidden" name="id">
@@ -340,9 +345,9 @@
 
     activeGrid = null
 
-    form.find('#btnSubmit').prop('disabled',false)
+    form.find('#btnSubmit').prop('disabled', false)
     if (form.data('action') == "view") {
-      form.find('#btnSubmit').prop('disabled',true)
+      form.find('#btnSubmit').prop('disabled', true)
     }
 
     getMaxLength(form)
@@ -381,7 +386,7 @@
     Save
   `)
     form.data('action', 'add')
-    $('#crudModalTitle').text('Create Upah Ritasi')
+    $('#crudModalTitle').text('ADD Upah Ritasi')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
     $('#table_body').html('')
@@ -502,6 +507,7 @@
           })
       })
   }
+
   function viewUpahRitasi(id) {
     let form = $('#crudForm')
 
@@ -525,19 +531,19 @@
       ])
       .then(() => {
         showUpahRitasi(form, id)
-        .then(id => {
-          form.find('[name]').removeAttr('disabled')
-          form.find('select').each((index, select) => {
-            let element = $(select)
-            if (element.data('select2')) {
+          .then(id => {
+            form.find('[name]').removeAttr('disabled')
+            form.find('select').each((index, select) => {
+              let element = $(select)
+              if (element.data('select2')) {
                 element.select2('destroy')
-            }
+              }
+            })
+            form.find('[name]').attr('disabled', 'disabled').css({
+              background: '#fff'
+            })
+            form.find('[name=id]').prop('disabled', false)
           })
-          form.find('[name]').attr('disabled', 'disabled').css({
-            background: '#fff'
-          })
-          form.find('[name=id]').prop('disabled',false)
-        })
           .then(() => {
             $('#crudModal').modal('show')
           })

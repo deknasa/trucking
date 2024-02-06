@@ -2,6 +2,11 @@
   <div class="modal-dialog">
     <form action="#" id="crudFormApprovalGambar">
       <div class="modal-content">
+        <div class="modal-header">
+          <p class="modal-title" id="crudModalApprovalGambarTitle"></p>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          </button>
+        </div>
 
         <form action="" method="post">
           <div class="modal-body">
@@ -202,7 +207,7 @@
     Save
   `)
     form.data('action', 'add')
-    $('#crudModalApprovalGambarTitle').text('Create Approval Supir Gambar')
+    $('#crudModalApprovalGambarTitle').text('un/approval Approval Supir Gambar')
     $('#crudModalApprovalGambar').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
@@ -227,7 +232,7 @@
     <i class="fa fa-save"></i>
     Save
   `)
-    $('#crudModalApprovalGambarTitle').text('Edit Approval Supir Gambar')
+    $('#crudModalApprovalGambarTitle').text('un/approval Supir tanpa Gambar')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
     Promise

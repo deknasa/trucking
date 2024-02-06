@@ -3,6 +3,11 @@
     <form action="#" id="crudForm" enctype="multipart/form-data">
       <div class="modal-content">
 
+        <div class="modal-header">
+          <p class="modal-title" id="crudModalTitle"></p>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          </button>
+        </div>
         <form action="" method="post">
           <div class="modal-body">
 
@@ -440,7 +445,7 @@
   `)
     form.data('action', 'add')
     form.find(`.sometimes`).show()
-    $('#crudModalTitle').text('Create Trado')
+    $('#crudModalTitle').text('Add Trado')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
     Promise

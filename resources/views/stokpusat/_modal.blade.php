@@ -3,6 +3,11 @@
         <form action="#" id="crudForm">
             <div class="modal-content">
 
+                <div class="modal-header">
+                    <p class="modal-title" id="crudModalTitle"></p>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    </button>
+                </div>
                 <form action="" method="post">
                     <div class="modal-body">
 
@@ -683,7 +688,7 @@
         form.data('action', 'add')
         $('#crudModal').modal('show')
         form.find(`.sometimes`).show()
-        $('#crudModalTitle').text('Create Stok Pusat')
+        $('#crudModalTitle').text('Add Stok Pusat')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
 
@@ -1208,8 +1213,8 @@
                 datatype: "local",
                 styleUI: 'Bootstrap4',
                 iconSet: 'fontAwesome',
-                postData:{
-                    'dari' : 'index'
+                postData: {
+                    'dari': 'index'
                 },
                 colModel: [{
                         label: 'Pilih',
@@ -1363,8 +1368,8 @@
                 datatype: "local",
                 styleUI: 'Bootstrap4',
                 iconSet: 'fontAwesome',
-                postData:{
-                    'dari' : 'index'
+                postData: {
+                    'dari': 'index'
                 },
                 colModel: [{
                         label: 'Pilih',

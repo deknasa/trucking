@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 
 class BankController extends MyController
 {
-    public $title = 'Bank';
+    public $title = 'kas / Bank';
     public $access_token = 'tes';
     public $httpHeaders = [
         'Accept' => 'application/json',

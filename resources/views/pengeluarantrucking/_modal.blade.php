@@ -2,10 +2,15 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
-        
+
+        <div class="modal-header">
+          <p class="modal-title" id="crudModalTitle"></p>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          </button>
+        </div>
         <form action="" method="post">
           <div class="modal-body">
-           {{-- <div class="row form-group">
+            {{-- <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">ID</label>
               </div>
@@ -58,7 +63,7 @@
               </div>
             </div>
 
-            
+
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
@@ -83,7 +88,7 @@
               </div>
             </div>
 
-            
+
 
             <div class="row form-group">
               <div class="col-12 col-md-2">
@@ -227,9 +232,9 @@
 
     activeGrid = null
     getMaxLength(form)
-    form.find('#btnSubmit').prop('disabled',false)
+    form.find('#btnSubmit').prop('disabled', false)
     if (form.data('action') == "view") {
-      form.find('#btnSubmit').prop('disabled',true)
+      form.find('#btnSubmit').prop('disabled', true)
     }
     initLookup()
     initSelect2(form.find('.select2bs4'), true)
@@ -252,7 +257,7 @@
   `)
     form.data('action', 'add')
     form.find(`.sometimes`).show()
-    $('#crudModalTitle').text('Create Pengeluaran Trucking')
+    $('#crudModalTitle').text('Add Pengeluaran Trucking')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -264,8 +269,8 @@
         $('#crudModal').modal('show')
       })
       .catch((error) => {
-            showDialog(error.statusText)
-          })
+        showDialog(error.statusText)
+      })
       .finally(() => {
         $('.modal-loader').addClass('d-none')
       })
@@ -338,6 +343,7 @@
           })
       })
   }
+
   function viewPengeluaranTrucking(pengeluaranTruckingId) {
     let form = $('#crudForm')
 
@@ -360,23 +366,23 @@
       ])
       .then(() => {
         showPengeluaranTrucking(form, pengeluaranTruckingId)
-        .then(pengeluaranTruckingId => {
-        // form.find('.aksi').hide()
-        setFormBindKeys(form)
-        initSelect2(form.find('.select2bs4'), true)
-        form.find('[name]').removeAttr('disabled')
-    
-        form.find('select').each((index, select) => {
-          let element = $(select)
-          if (element.data('select2')) {
-              element.select2('destroy')
-          }
-        })
-        form.find('[name]').attr('disabled', 'disabled').css({
-          background: '#fff'
-        })
-        form.find('[name=id]').prop('disabled',false)
-      })
+          .then(pengeluaranTruckingId => {
+            // form.find('.aksi').hide()
+            setFormBindKeys(form)
+            initSelect2(form.find('.select2bs4'), true)
+            form.find('[name]').removeAttr('disabled')
+
+            form.find('select').each((index, select) => {
+              let element = $(select)
+              if (element.data('select2')) {
+                element.select2('destroy')
+              }
+            })
+            form.find('[name]').attr('disabled', 'disabled').css({
+              background: '#fff'
+            })
+            form.find('[name=id]').prop('disabled', false)
+          })
           .then(() => {
             $('#crudModal').modal('show')
             form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
@@ -433,7 +439,7 @@
           Authorization: `Bearer ${accessToken}`
         },
         data: {
-          limit:0,
+          limit: 0,
           filters: JSON.stringify({
             "groupOp": "AND",
             "rules": [{
@@ -493,7 +499,7 @@
             if (index == 'coapostingkreditKeterangan') {
               element.data('current-value', value)
             }
-            
+
           })
 
           if (form.data('action') === 'delete') {
@@ -517,9 +523,9 @@
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
           levelCoa: '3',
-          Aktif: 'AKTIF',          
+          Aktif: 'AKTIF',
         }
-      },      
+      },
       onSelectRow: (akunpusat, element) => {
         $('#crudForm [name=coadebet]').first().val(akunpusat.coa)
         element.val(akunpusat.keterangancoa)
@@ -542,9 +548,9 @@
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
           levelCoa: '3',
-          Aktif: 'AKTIF',          
+          Aktif: 'AKTIF',
         }
-      },      
+      },
       onSelectRow: (akunpusat, element) => {
         $('#crudForm [name=coakredit]').first().val(akunpusat.coa)
         element.val(akunpusat.keterangancoa)
@@ -559,7 +565,7 @@
         element.data('currentValue', element.val())
       }
     })
-    
+
     $('.coapostingdebet-lookup').lookup({
       title: 'Nama Perkiraan (Posting Debet) Lookup',
       fileName: 'akunpusat',
@@ -567,9 +573,9 @@
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
           levelCoa: '3',
-          Aktif: 'AKTIF',          
+          Aktif: 'AKTIF',
         }
-      },      
+      },
       onSelectRow: (akunpusat, element) => {
         $('#crudForm [name=coapostingdebet]').first().val(akunpusat.coa)
         element.val(akunpusat.keterangancoa)
@@ -592,9 +598,9 @@
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
           levelCoa: '3',
-          Aktif: 'AKTIF',          
+          Aktif: 'AKTIF',
         }
-      },      
+      },
       onSelectRow: (akunpusat, element) => {
         $('#crudForm [name=coapostingkredit]').first().val(akunpusat.coa)
         element.val(akunpusat.keterangancoa)
@@ -611,7 +617,7 @@
     })
 
   }
-  
+
   function cekValidasidelete(Id) {
     $.ajax({
       url: `{{ config('app.api_url') }}pengeluarantrucking/${Id}/cekValidasi`,
@@ -622,15 +628,14 @@
       },
       success: response => {
         var kondisi = response.kondisi
-          if (kondisi == true) {
-            showDialog(response.message['keterangan'])
-          } else {
-              deletePengeluaranTrucking(Id)
-          }
+        if (kondisi == true) {
+          showDialog(response.message['keterangan'])
+        } else {
+          deletePengeluaranTrucking(Id)
+        }
 
       }
     })
   }
-
 </script>
 @endpush()

@@ -266,7 +266,7 @@
     `)
     form.data('action', 'add')
     form.find(`.sometimes`).show()
-    $('#crudModalTitle').text('Create Tipe Akuntansi')
+    $('#crudModalTitle').text('Add Type Kode Perkiraan Cabang')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -306,7 +306,7 @@
     Save
   `)
     form.find(`.sometimes`).hide()
-    $('#crudModalTitle').text('Edit Tipe Akuntansi')
+    $('#crudModalTitle').text('Edit Type Kode Perkiraan Cabang')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -348,7 +348,7 @@
     Delete
   `)
     form.find(`.sometimes`).hide()
-    $('#crudModalTitle').text('Delete Tipe Akuntansi')
+    $('#crudModalTitle').text('Delete Type Kode Perkiraan Cabang')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -383,7 +383,7 @@
       Save
     `)
     form.find(`.sometimes`).hide()
-    $('#crudModalTitle').text('View Tipe Akuntansi')
+    $('#crudModalTitle').text('View Type Kode Perkiraan Cabang')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 

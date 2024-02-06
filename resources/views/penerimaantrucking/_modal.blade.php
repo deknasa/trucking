@@ -2,7 +2,12 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
-        
+
+        <div class="modal-header">
+          <p class="modal-title" id="crudModalTitle"></p>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          </button>
+        </div>
         <form action="" method="post">
           <div class="modal-body">
             {{-- <div class="row form-group">
@@ -58,7 +63,7 @@
               </div>
             </div>
 
-            
+
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
@@ -224,9 +229,9 @@
 
     activeGrid = null
     getMaxLength(form)
-    form.find('#btnSubmit').prop('disabled',false)
+    form.find('#btnSubmit').prop('disabled', false)
     if (form.data('action') == "view") {
-      form.find('#btnSubmit').prop('disabled',true)
+      form.find('#btnSubmit').prop('disabled', true)
     }
     initLookup()
     initSelect2(form.find('.select2bs4'), true)
@@ -240,7 +245,7 @@
   function createPenerimaanTrucking() {
     let form = $('#crudForm')
 
-    
+
     form.trigger('reset')
     form.find('#btnSubmit').html(`
     <i class="fa fa-save"></i>
@@ -248,7 +253,7 @@
   `)
     form.data('action', 'add')
     form.find(`.sometimes`).show()
-    $('#crudModalTitle').text('Create Penerimaan Trucking')
+    $('#crudModalTitle').text('add Penerimaan Trucking')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -335,6 +340,7 @@
           })
       })
   }
+
   function viewPenerimaanTrucking(penerimaanTruckingId) {
     let form = $('#crudForm')
 
@@ -351,46 +357,46 @@
     $('.invalid-feedback').remove()
 
     Promise
-    .all([
-      setStatusFormatOptions(form),
-    ])
-    .then(() => {
-      showPenerimaanTrucking(form, penerimaanTruckingId)
-      .then(penerimaanTruckingId => {
-        // form.find('.aksi').hide()
-        setFormBindKeys(form)
-        initSelect2(form.find('.select2bs4'), true)
-        form.find('[name]').removeAttr('disabled')
-    
-        form.find('select').each((index, select) => {
-          let element = $(select)
-          if (element.data('select2')) {
-              element.select2('destroy')
-          }
-        })
-        form.find('[name]').attr('disabled', 'disabled').css({
-          background: '#fff'
-        })
-        form.find('[name=id]').prop('disabled',false)
-      })
+      .all([
+        setStatusFormatOptions(form),
+      ])
       .then(() => {
-        $('#crudModal').modal('show')
-        form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
-        let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
-        name.attr('disabled', true)
-        name.find('.lookup-toggler').attr('disabled', true)
-        name.find('.lookup-toggler').attr('disabled', true)
+        showPenerimaanTrucking(form, penerimaanTruckingId)
+          .then(penerimaanTruckingId => {
+            // form.find('.aksi').hide()
+            setFormBindKeys(form)
+            initSelect2(form.find('.select2bs4'), true)
+            form.find('[name]').removeAttr('disabled')
+
+            form.find('select').each((index, select) => {
+              let element = $(select)
+              if (element.data('select2')) {
+                element.select2('destroy')
+              }
+            })
+            form.find('[name]').attr('disabled', 'disabled').css({
+              background: '#fff'
+            })
+            form.find('[name=id]').prop('disabled', false)
+          })
+          .then(() => {
+            $('#crudModal').modal('show')
+            form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
+            let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
+            name.attr('disabled', true)
+            name.find('.lookup-toggler').attr('disabled', true)
+            name.find('.lookup-toggler').attr('disabled', true)
+          })
+          .catch((error) => {
+            showDialog(error.statusText)
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
       })
-      .catch((error) => {
-        showDialog(error.statusText)
-      })
-      .finally(() => {
-        $('.modal-loader').addClass('d-none')
-      })
-    })
   }
-      
-          
+
+
 
   function getMaxLength(form) {
     if (!form.attr('has-maxlength')) {
@@ -425,7 +431,7 @@
       ).trigger('change')
 
       $.ajax({
-        limit:0,
+        limit: 0,
         url: `${apiUrl}parameter`,
         method: 'GET',
         dataType: 'JSON',
@@ -500,7 +506,7 @@
           }
           resolve()
         },
-         error: error => {
+        error: error => {
           reject(error)
         }
       })
@@ -515,9 +521,9 @@
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
           levelCoa: '3',
-          Aktif: 'AKTIF',          
+          Aktif: 'AKTIF',
         }
-      },      
+      },
       onSelectRow: (akunpusat, element) => {
         $('#crudForm [name=coadebet]').first().val(akunpusat.coa)
         element.val(akunpusat.keterangancoa)
@@ -540,9 +546,9 @@
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
           levelCoa: '3',
-          Aktif: 'AKTIF',          
+          Aktif: 'AKTIF',
         }
-      },      
+      },
       onSelectRow: (akunpusat, element) => {
         $('#crudForm [name=coakredit]').first().val(akunpusat.coa)
         element.val(akunpusat.keterangancoa)
@@ -557,7 +563,7 @@
         element.data('currentValue', element.val())
       }
     })
-    
+
     $('.coapostingdebet-lookup').lookup({
       title: 'Nama Perkiraan (Posting Debet) Lookup',
       fileName: 'akunpusat',
@@ -565,9 +571,9 @@
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
           levelCoa: '3',
-          Aktif: 'AKTIF',          
+          Aktif: 'AKTIF',
         }
-      },      
+      },
       onSelectRow: (akunpusat, element) => {
         $('#crudForm [name=coapostingdebet]').first().val(akunpusat.coa)
         element.val(akunpusat.keterangancoa)
@@ -590,9 +596,9 @@
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
           levelCoa: '3',
-          Aktif: 'AKTIF',          
+          Aktif: 'AKTIF',
         }
-      },      
+      },
       onSelectRow: (akunpusat, element) => {
         $('#crudForm [name=coapostingkredit]').first().val(akunpusat.coa)
         element.val(akunpusat.keterangancoa)
@@ -609,7 +615,7 @@
     })
 
   }
-  
+
   function cekValidasidelete(Id) {
     $.ajax({
       url: `{{ config('app.api_url') }}penerimaantrucking/${Id}/cekValidasi`,
@@ -620,15 +626,14 @@
       },
       success: response => {
         var kondisi = response.kondisi
-          if (kondisi == true) {
-            showDialog(response.message['keterangan'])
-          } else {
-              deletePenerimaanTrucking(Id)
-          }
+        if (kondisi == true) {
+          showDialog(response.message['keterangan'])
+        } else {
+          deletePenerimaanTrucking(Id)
+        }
 
       }
     })
   }
-
 </script>
 @endpush()

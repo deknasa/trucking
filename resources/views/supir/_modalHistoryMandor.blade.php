@@ -3,6 +3,11 @@
         <form action="#" id="crudFormHistoryMandor">
             <div class="modal-content">
 
+                <div class="modal-header">
+                    <p class="modal-title" id="crudModalHistoryMandorTitle"></p>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    </button>
+                </div>
                 <form action="" method="post">
                     <div class="modal-body">
 
@@ -194,7 +199,7 @@
             Save
         `)
         form.find(`.sometimes`).hide()
-        $('#crudModalHistoryMandorTitle').text('HistorySupirMilikMandor')
+        $('#crudModalHistoryMandorTitle').text('History Supir Milik Mandor')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
         loadSupirMandorGrid()

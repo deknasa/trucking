@@ -2,7 +2,12 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
-        
+
+        <div class="modal-header">
+          <p class="modal-title" id="crudModalTitle"></p>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          </button>
+        </div>
         <form action="" method="post">
           <div class="modal-body">
 
@@ -12,87 +17,87 @@
               </div>
               <div class="col-12 col-md-10">
                 <input type="text" name="id" class="form-control" value="{{ $absenTrado['id'] ?? '' }}" readonly>
-              </div>
-            </div> --}}
-            <input type="text" name="id" class="form-control" hidden>
-            <div class="row form-group">
-              <div class="col-12 col-md-2">
-                <label class="col-form-label">
-                  KODE ABSEN <span class="text-danger">*</span>
-                </label>
-              </div>
-              <div class="col-12 col-md-10">
-                <input type="text" name="kodeabsen" class="form-control" value="{{ $absenTrado['kodeabsen'] ?? '' }}">
-              </div>
-            </div>
-            <div class="row form-group">
-              <div class="col-12 col-md-2">
-                <label class="col-form-label">
-                  KETERANGAN
-                </label>
-              </div>
-              <div class="col-12 col-md-10">
-                <input type="text" name="keterangan" class="form-control" value="{{ $absenTrado['keterangan'] ?? '' }}">
-              </div>
-            </div>
-            <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2">
-                <label class="col-form-label">
-                  STATUS AKTIF <span class="text-danger">*</span>
-                </label>
-              </div>
-              <div class="col-12 col-sm-9 col-md-10">
-                <input type="hidden" name="statusaktif">
-                <input type="text" name="statusaktifnama" data-target-name="statusaktif" id="statusaktifnama" class="form-control lg-form status-lookup">
-              </div>
-            </div>
-
-            <div class="row form-group">
-              <div class="col-12 col-sm-3 col-md-2">
-                <label class="col-form-label">
-                  MEMO
-                </label>
-              </div>
-            </div>
-
-            <div class="table-responsive">
-              <table class="table table-bordered table-bindkeys" id="detailList" style="width: 1300px;">
-                <thead>
-                  <tr>
-                    <th width="3%">Judul</th>
-                    <th width="8%">Keterangan</th>
-                    <th width="2%" class="aksi">Aksi</th>
-                  </tr>
-                </thead>
-                <tbody id="table_body" class="form-group">
-
-                </tbody>
-                <tfoot>
-                  <tr>
-                    <td colspan="2"></td>
-                    <td class="aksi">
-                      <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
-                    </td>
-                  </tr>
-                </tfoot>
-              </table>
-            </div>
-
           </div>
-          <div class="modal-footer justify-content-start">
-            <button id="btnSubmit" class="btn btn-primary">
-              <i class="fa fa-save"></i>
-              Save
-            </button>
-            <button class="btn btn-secondary" data-dismiss="modal">
-              <i class="fa fa-times"></i>
-              Cancel
-            </button>
-          </div>
-        </form>
+      </div> --}}
+      <input type="text" name="id" class="form-control" hidden>
+      <div class="row form-group">
+        <div class="col-12 col-md-2">
+          <label class="col-form-label">
+            KODE ABSEN <span class="text-danger">*</span>
+          </label>
+        </div>
+        <div class="col-12 col-md-10">
+          <input type="text" name="kodeabsen" class="form-control" value="{{ $absenTrado['kodeabsen'] ?? '' }}">
+        </div>
       </div>
-    </form>
+      <div class="row form-group">
+        <div class="col-12 col-md-2">
+          <label class="col-form-label">
+            KETERANGAN
+          </label>
+        </div>
+        <div class="col-12 col-md-10">
+          <input type="text" name="keterangan" class="form-control" value="{{ $absenTrado['keterangan'] ?? '' }}">
+        </div>
+      </div>
+      <div class="row form-group">
+        <div class="col-12 col-sm-3 col-md-2">
+          <label class="col-form-label">
+            STATUS AKTIF <span class="text-danger">*</span>
+          </label>
+        </div>
+        <div class="col-12 col-sm-9 col-md-10">
+          <input type="hidden" name="statusaktif">
+          <input type="text" name="statusaktifnama" data-target-name="statusaktif" id="statusaktifnama" class="form-control lg-form status-lookup">
+        </div>
+      </div>
+
+      <div class="row form-group">
+        <div class="col-12 col-sm-3 col-md-2">
+          <label class="col-form-label">
+            MEMO
+          </label>
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-bordered table-bindkeys" id="detailList" style="width: 1300px;">
+          <thead>
+            <tr>
+              <th width="3%">Judul</th>
+              <th width="8%">Keterangan</th>
+              <th width="2%" class="aksi">Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="table_body" class="form-group">
+
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="2"></td>
+              <td class="aksi">
+                <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
   </div>
+  <div class="modal-footer justify-content-start">
+    <button id="btnSubmit" class="btn btn-primary">
+      <i class="fa fa-save"></i>
+      Save
+    </button>
+    <button class="btn btn-secondary" data-dismiss="modal">
+      <i class="fa fa-times"></i>
+      Cancel
+    </button>
+  </div>
+  </form>
+</div>
+</form>
+</div>
 </div>
 
 @push('scripts')
@@ -103,39 +108,39 @@
   $(document).ready(function() {
     $(document).on('click', "#addRow", function() {
       event.preventDefault()
-            let method = `POST`
-            let url = `${apiUrl}absentrado/addrow`
-            let form = $('#crudForm')
-            let Id = form.find('[name=id]').val()
-            let action = form.data('action')
-            let data = $('#crudForm').serializeArray()
-            
-            $.ajax({
-                url: url,
-                method: method,
-                dataType: 'JSON',
-                headers: {
-                    Authorization: `Bearer ${accessToken}`
-                },
-                data: data,
-                success: response => {
-                  addRow()
-                  $('.is-invalid').removeClass('is-invalid')
-                  $('.invalid-feedback').remove()
-                },
-                error: error => {
-                    if (error.status === 422) {
-                        $('.is-invalid').removeClass('is-invalid')
-                        $('.invalid-feedback').remove()
-                        setErrorMessages(form, error.responseJSON.errors);
-                    } else {
-                        showDialog(error.responseJSON)
-                    }
-                },
-            }).always(() => {
-                $('#processingLoader').addClass('d-none')
-                $(this).removeAttr('disabled')
-            })  
+      let method = `POST`
+      let url = `${apiUrl}absentrado/addrow`
+      let form = $('#crudForm')
+      let Id = form.find('[name=id]').val()
+      let action = form.data('action')
+      let data = $('#crudForm').serializeArray()
+
+      $.ajax({
+        url: url,
+        method: method,
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: data,
+        success: response => {
+          addRow()
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+        },
+        error: error => {
+          if (error.status === 422) {
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+            setErrorMessages(form, error.responseJSON.errors);
+          } else {
+            showDialog(error.responseJSON)
+          }
+        },
+      }).always(() => {
+        $('#processingLoader').addClass('d-none')
+        $(this).removeAttr('disabled')
+      })
     });
 
     $(document).on('click', '.delete-row', function(event) {
@@ -157,7 +162,7 @@
 
       if (cekHex < 7) {
         showDialog("value warna harus berjumlah 6 digit dan diawali dengan #")
-      } 
+      }
       let method
       let url
       let form = $('#crudForm')
@@ -230,7 +235,9 @@
 
           id = response.data.id
 
-          $('#jqGrid').jqGrid('setGridParam', { page: response.data.page}).trigger('reloadGrid');
+          $('#jqGrid').jqGrid('setGridParam', {
+            page: response.data.page
+          }).trigger('reloadGrid');
 
           if (response.data.grp == 'FORMAT') {
             updateFormat(response.data)
@@ -244,13 +251,13 @@
             setErrorMessages(form, error.responseJSON.errors);
           } else {
             //showDialog(error.responseJSON)
-if(error.responseJSON.errors){
-	showDialog(error.statusText, error.responseJSON.errors.join('<hr>'))
-} else if(error.responseJSON.message) {
-	showDialog(error.statusText, error.responseJSON.message)
-} else {
-	showDialog(error.statusText, error.statusText)
-}
+            if (error.responseJSON.errors) {
+              showDialog(error.statusText, error.responseJSON.errors.join('<hr>'))
+            } else if (error.responseJSON.message) {
+              showDialog(error.statusText, error.responseJSON.message)
+            } else {
+              showDialog(error.statusText, error.statusText)
+            }
           }
         },
       }).always(() => {
@@ -267,9 +274,9 @@ if(error.responseJSON.errors){
 
     activeGrid = null
 
-    form.find('#btnSubmit').prop('disabled',false)
+    form.find('#btnSubmit').prop('disabled', false)
     if (form.data('action') == "view") {
-      form.find('#btnSubmit').prop('disabled',true)
+      form.find('#btnSubmit').prop('disabled', true)
     }
     initLookup()
     getMaxLength(form)
@@ -293,7 +300,7 @@ if(error.responseJSON.errors){
   `)
     form.data('action', 'add')
     form.find(`.sometimes`).show()
-    $('#crudModalTitle').text('Create Absen Trado')
+    $('#crudModalTitle').text('Add Absen Trado')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
@@ -301,21 +308,21 @@ if(error.responseJSON.errors){
     addRow()
 
     Promise
-    .all([
-      showDefault(form)
-    ])
-    .then(() => {
-      $('#crudModal').modal('show')
-    })
-    .catch((error) => {
+      .all([
+        showDefault(form)
+      ])
+      .then(() => {
+        $('#crudModal').modal('show')
+      })
+      .catch((error) => {
         showDialog(error.statusText)
       })
-    .finally(() => {
-      $('.modal-loader').addClass('d-none')
-    })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
   }
 
-  
+
   function cekValidasidelete(Id) {
     $.ajax({
       url: `{{ config('app.api_url') }}absentrado/${Id}/cekValidasi`,
@@ -326,11 +333,11 @@ if(error.responseJSON.errors){
       },
       success: response => {
         var kondisi = response.kondisi
-          if (kondisi == true) {
-            showDialog(response.message['keterangan'])
-          } else {
-            deleteAbsenTrado(Id)
-          }
+        if (kondisi == true) {
+          showDialog(response.message['keterangan'])
+        } else {
+          deleteAbsenTrado(Id)
+        }
 
       }
     })
@@ -403,53 +410,53 @@ if(error.responseJSON.errors){
     let form = $('#crudForm')
 
     $('.modal-loader').removeClass('d-none')
-    
+
     form.data('action', 'view')
     form.trigger('reset')
     form.find('#btnSubmit').html(`
       <i class="fa fa-save"></i>
       Save
     `)
-    form.find('#btnSubmit').prop('disabled',true)
+    form.find('#btnSubmit').prop('disabled', true)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('View Absen Trado')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
     Promise
-    .all([
-      showAbsenTrado(form, absenTradoId)
-    ])
-    .then(absenTradoId => {
-      form.find('.aksi').hide()
-      setFormBindKeys(form)
-      initSelect2(form.find('.select2bs4'), true)
-      form.find('[name]').removeAttr('disabled')
+      .all([
+        showAbsenTrado(form, absenTradoId)
+      ])
+      .then(absenTradoId => {
+        form.find('.aksi').hide()
+        setFormBindKeys(form)
+        initSelect2(form.find('.select2bs4'), true)
+        form.find('[name]').removeAttr('disabled')
 
-      form.find('select').each((index, select) => {
-        let element = $(select)
+        form.find('select').each((index, select) => {
+          let element = $(select)
 
-        if (element.data('select2')) {
-          element.select2('destroy')
-        }
+          if (element.data('select2')) {
+            element.select2('destroy')
+          }
+        })
+
+        form.find('[name]').attr('disabled', 'disabled').css({
+          background: '#fff'
+        })
+        form.find('[name=id]').prop('disabled', false)
+      })
+      .then(() => {
+        $('#crudModal').modal('show')
+      })
+      .catch((error) => {
+        showDialog(error.statusText)
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
       })
 
-      form.find('[name]').attr('disabled', 'disabled').css({
-        background: '#fff'
-      })
-      form.find('[name=id]').prop('disabled',false)
-    })
-    .then(() => {
-      $('#crudModal').modal('show')
-    })
-    .catch((error) => {
-      showDialog(error.statusText)
-    })
-    .finally(() => {
-      $('.modal-loader').addClass('d-none')
-    })
-    
-    
+
   }
 
   function getMaxLength(form) {
@@ -515,7 +522,7 @@ if(error.responseJSON.errors){
       })
     })
   }
-  
+
   function isJSON(something) {
     if (typeof something != 'string')
       something = JSON.stringify(something);
@@ -592,7 +599,7 @@ if(error.responseJSON.errors){
                 detailRow.find(`[name="key[]"]`).addClass('disabled')
                 initDisabled()
               }
-            
+
             })
           }
           if (form.data('action') === 'delete') {
@@ -608,7 +615,7 @@ if(error.responseJSON.errors){
       })
     })
   }
-  
+
   function showDefault(form) {
     return new Promise((resolve, reject) => {
       $.ajax({
@@ -626,8 +633,7 @@ if(error.responseJSON.errors){
 
             if (element.is('select')) {
               element.val(value).trigger('change')
-            } 
-            else {
+            } else {
               element.val(value)
             }
             if (index == 'statusaktifnama') {
@@ -645,40 +651,41 @@ if(error.responseJSON.errors){
 
   function initLookup() {
     $(`.status-lookup`).lookupMaster({
-        title: 'Status Aktif Lookup',
-        fileName: 'parameterMaster',
-        typeSearch: 'ALL',
-        searching: 1,
-        beforeProcess: function() {
-          this.postData = {
-            url: `${apiUrl}parameter/combo`,
-            grp: 'STATUS AKTIF',
-            subgrp: 'STATUS AKTIF',
-            searching: 1,
-            valueName: `statusaktif`,
-            searchText: `status-lookup`,
-            singleColumn: true,
-            hideLabel: true,
-            title: 'Status Aktif'
-          };
-        },
-        onSelectRow: (status, element) => {
-          let elId = element.data('targetName')
-          $(`#crudForm [name=${elId}]`).first().val(status.id)
-          element.val(status.text)
-          element.data('currentValue', element.val())
-        },
-        onCancel: (element) => {
-          element.val(element.data('currentValue'));
-        },
-        onClear: (element) => {
-          let elId = element.data('targetName')
-          $(`#crudForm [name=${elId}]`).first().val('')
-          element.val('')
-          element.data('currentValue', element.val())
-        },
-      });
+      title: 'Status Aktif Lookup',
+      fileName: 'parameterMaster',
+      typeSearch: 'ALL',
+      searching: 1,
+      beforeProcess: function() {
+        this.postData = {
+          url: `${apiUrl}parameter/combo`,
+          grp: 'STATUS AKTIF',
+          subgrp: 'STATUS AKTIF',
+          searching: 1,
+          valueName: `statusaktif`,
+          searchText: `status-lookup`,
+          singleColumn: true,
+          hideLabel: true,
+          title: 'Status Aktif'
+        };
+      },
+      onSelectRow: (status, element) => {
+        let elId = element.data('targetName')
+        $(`#crudForm [name=${elId}]`).first().val(status.id)
+        element.val(status.text)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'));
+      },
+      onClear: (element) => {
+        let elId = element.data('targetName')
+        $(`#crudForm [name=${elId}]`).first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      },
+    });
   }
+
   function addRow() {
     let detailRow = (`
         <tr>
@@ -715,7 +722,7 @@ if(error.responseJSON.errors){
     if ($(this).val().toLowerCase() == 'warna') {
       $(this).parent().siblings().find(`[name="value[]"]`).wrap('<div class="input-group"></div>');
       $(this).parent().siblings().find(`.input-group`).prepend(inputColor);
-    } else if($(this).val().toLowerCase() == 'jurnal') {
+    } else if ($(this).val().toLowerCase() == 'jurnal') {
       // $(this).parent().siblings().removeClass('input-group');
       $(this).parent().siblings().find(`[name="value[]"]`).addClass("coa-lookup")
       $('.coa-lookup').last().lookup({
@@ -733,9 +740,9 @@ if(error.responseJSON.errors){
           element.data('currentValue', element.val())
         }
       })
-    }else {
+    } else {
       console.log($(this))
-      
+
       $(this).parent().siblings().find('.input-group-append').remove()
       $(this).parent().siblings().find('.input-group .btn').remove()
       $(this).parent().siblings().find(`[name="value[]"]`).removeClass("coa-lookup")
@@ -764,6 +771,7 @@ if(error.responseJSON.errors){
       $(this).parents('.input-group').find(`[name="color[]"`).val(color)
     }
   })
+
   function deleteRow(row) {
     let countRow = $('.delete-row').parents('tr').length
     row.remove()

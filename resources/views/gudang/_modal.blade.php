@@ -2,7 +2,12 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
-        
+        <div class="modal-header">
+          <p class="modal-title" id="crudModalTitle"></p>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          </button>
+        </div>
+
         <form action="" method="post">
           <div class="modal-body modal-master">
             {{-- <div class="row form-group">
@@ -133,8 +138,8 @@
 
           id = response.data.id
 
-          
-          $('#jqGrid').jqGrid('setGridParam', { 
+
+          $('#jqGrid').jqGrid('setGridParam', {
             page: response.data.page
           }).trigger('reloadGrid');
 
@@ -166,11 +171,11 @@
 
     activeGrid = null
 
-    form.find('#btnSubmit').prop('disabled',false)
+    form.find('#btnSubmit').prop('disabled', false)
     if (form.data('action') == "view") {
-      form.find('#btnSubmit').prop('disabled',true)
+      form.find('#btnSubmit').prop('disabled', true)
     }
-    
+
     getMaxLength(form)
     initLookup()
     initSelect2(form.find('.select2bs4'), true)
@@ -193,22 +198,22 @@
   `)
     form.data('action', 'add')
     form.find(`.sometimes`).show()
-    $('#crudModalTitle').text('Create Gudang')
+    $('#crudModalTitle').text('add Gudang')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
     Promise.all([
-      showDefault(form)
-    ])
-    .then(() => {
-      $('#crudModal').modal('show')
-    })
-    .catch((error) => {
-      showDialog(error.statusText)
-    })
-    .finally(() => {
-      $('.modal-loader').addClass('d-none')
-    })
+        showDefault(form)
+      ])
+      .then(() => {
+        $('#crudModal').modal('show')
+      })
+      .catch((error) => {
+        showDialog(error.statusText)
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
   }
 
   function editGudang(gudangId) {
@@ -228,18 +233,18 @@
     $('.invalid-feedback').remove()
 
     Promise.all([
-      showGudang(form, gudangId)
-    ])
-    .then(() => {
-      $('#crudModal').modal('show')
-    })
-    .catch((error) => {
-      showDialog(error.statusText)
-    })
-    .finally(() => {
-      $('.modal-loader').addClass('d-none')
-    })
-    
+        showGudang(form, gudangId)
+      ])
+      .then(() => {
+        $('#crudModal').modal('show')
+      })
+      .catch((error) => {
+        showDialog(error.statusText)
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
+
   }
 
   function deleteGudang(gudangId) {
@@ -259,18 +264,18 @@
     $('.invalid-feedback').remove()
 
     Promise
-    .all([
-      showGudang(form, gudangId)
-    ])
-    .then(() => {
-      $('#crudModal').modal('show')
-    })
-    .catch((error) => {
-      showDialog(error.statusText)
-    })
-    .finally(() => {
-      $('.modal-loader').addClass('d-none')
-    })
+      .all([
+        showGudang(form, gudangId)
+      ])
+      .then(() => {
+        $('#crudModal').modal('show')
+      })
+      .catch((error) => {
+        showDialog(error.statusText)
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
   }
 
   function viewGudang(gudangId) {
@@ -290,34 +295,34 @@
     $('.invalid-feedback').remove()
 
     Promise
-    .all([
-      showGudang(form, gudangId)
-    ])
-    .then(gudangId => {
-      // form.find('.aksi').hide()
-      setFormBindKeys(form)
-      initSelect2(form.find('.select2bs4'), true)
-      form.find('[name]').removeAttr('disabled')
-      form.find('select').each((index, select) => {
-        let element = $(select)
-        if (element.data('select2')) {
-          element.select2('destroy')
-        }
+      .all([
+        showGudang(form, gudangId)
+      ])
+      .then(gudangId => {
+        // form.find('.aksi').hide()
+        setFormBindKeys(form)
+        initSelect2(form.find('.select2bs4'), true)
+        form.find('[name]').removeAttr('disabled')
+        form.find('select').each((index, select) => {
+          let element = $(select)
+          if (element.data('select2')) {
+            element.select2('destroy')
+          }
+        })
+        form.find('[name]').attr('disabled', 'disabled').css({
+          background: '#fff'
+        })
+        form.find('[name=id]').prop('disabled', false)
       })
-      form.find('[name]').attr('disabled', 'disabled').css({
-        background: '#fff'
+      .then(() => {
+        $('#crudModal').modal('show')
       })
-      form.find('[name=id]').prop('disabled',false)
-    })
-    .then(() => {  
-      $('#crudModal').modal('show')
-    })
-    .catch((error) => {
-      showDialog(error.statusText)
-    })
-    .finally(() => {
-      $('.modal-loader').addClass('d-none')
-    })    
+      .catch((error) => {
+        showDialog(error.statusText)
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
   }
 
   function getMaxLength(form) {
@@ -408,7 +413,7 @@
               element.data('current-value', value)
             }
           })
-          
+
           if (form.data('action') === 'delete') {
             form.find('[name]').addClass('disabled')
             initDisabled()
@@ -439,8 +444,7 @@
 
             if (element.is('select')) {
               element.val(value).trigger('change')
-            } 
-            else {
+            } else {
               element.val(value)
             }
             if (index == 'statusaktifnama') {
@@ -455,7 +459,7 @@
       })
     })
   }
-  
+
   function initLookup() {
     $(`.status-lookup`).lookupMaster({
       title: 'Status Aktif Lookup',
@@ -473,7 +477,7 @@
           singleColumn: true,
           hideLabel: true,
           title: 'Status Aktif'
-        };  
+        };
       },
       onSelectRow: (status, element) => {
         let elId = element.data('targetName')
@@ -492,7 +496,7 @@
       },
     });
   }
-  
+
   function cekValidasidelete(Id) {
     $.ajax({
       url: `{{ config('app.api_url') }}gudang/${Id}/cekValidasi`,
@@ -503,11 +507,11 @@
       },
       success: response => {
         var kondisi = response.kondisi
-          if (kondisi == true) {
-            showDialog(response.message['keterangan'])
-          } else {
-              deleteGudang(Id)
-          }
+        if (kondisi == true) {
+          showDialog(response.message['keterangan'])
+        } else {
+          deleteGudang(Id)
+        }
 
       }
     })

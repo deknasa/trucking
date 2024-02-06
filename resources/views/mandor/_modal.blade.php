@@ -2,10 +2,15 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
-        
+        <div class="modal-header">
+          <p class="modal-title" id="crudModalTitle"></p>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          </button>
+        </div>
+
         <form action="" method="post">
           <div class="modal-body">
-           {{-- <div class="row form-group">
+            {{-- <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">ID</label>
               </div>
@@ -157,7 +162,9 @@
 
           id = response.data.id
 
-          $('#jqGrid').jqGrid('setGridParam', { page: response.data.page}).trigger('reloadGrid');
+          $('#jqGrid').jqGrid('setGridParam', {
+            page: response.data.page
+          }).trigger('reloadGrid');
 
           if (response.data.grp == 'FORMAT') {
             updateFormat(response.data)
@@ -199,9 +206,9 @@
 
     activeGrid = null
 
-    form.find('#btnSubmit').prop('disabled',false)
+    form.find('#btnSubmit').prop('disabled', false)
     if (form.data('action') == "view") {
-      form.find('#btnSubmit').prop('disabled',true)
+      form.find('#btnSubmit').prop('disabled', true)
     }
 
     getMaxLength(form)
@@ -226,11 +233,11 @@
   `)
     form.data('action', 'add')
     form.find(`.sometimes`).show()
-    $('#crudModalTitle').text('Create Mandor')
+    $('#crudModalTitle').text('Add Mandor')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
-    Promise 
+    Promise
       .all([
         setStatusAktifOptions(form)
       ])
@@ -338,15 +345,15 @@
       ])
       .then(() => {
         showMandor(form, mandorId)
-        .then(mandorId => {
-              // form.find('.aksi').hide()
-              setFormBindKeys(form)
-              form.find('[name]').attr('disabled', 'disabled').css({
-                background: '#fff'
-              })
-              form.find('[name=id]').prop('disabled',false)
-              
+          .then(mandorId => {
+            // form.find('.aksi').hide()
+            setFormBindKeys(form)
+            form.find('[name]').attr('disabled', 'disabled').css({
+              background: '#fff'
             })
+            form.find('[name=id]').prop('disabled', false)
+
+          })
           .then(() => {
             $('#crudModal').modal('show')
           })
@@ -475,8 +482,7 @@
 
             if (element.is('select')) {
               element.val(value).trigger('change')
-            } 
-            else {
+            } else {
               element.val(value)
             }
           })
@@ -488,7 +494,7 @@
       })
     })
   }
-  
+
   function cekValidasidelete(Id) {
     $.ajax({
       url: `{{ config('app.api_url') }}mandor/${Id}/cekValidasi`,
@@ -499,11 +505,11 @@
       },
       success: response => {
         var kondisi = response.kondisi
-          if (kondisi == true) {
-            showDialog(response.message['keterangan'])
-          } else {
-              deleteMandor(Id)
-          }
+        if (kondisi == true) {
+          showDialog(response.message['keterangan'])
+        } else {
+          deleteMandor(Id)
+        }
 
       }
     })
@@ -533,8 +539,7 @@
         element.data('currentValue', element.val())
       }
     })
-    
-  }
 
+  }
 </script>
 @endpush()

@@ -2,10 +2,15 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
-       
+
+        <div class="modal-header">
+          <p class="modal-title" id="crudModalTitle"></p>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          </button>
+        </div>
         <form action="" method="post">
           <div class="modal-body">
-           {{-- <div class="row form-group">
+            {{-- <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">ID</label>
               </div>
@@ -155,7 +160,9 @@
 
           id = response.data.id
 
-          $('#jqGrid').jqGrid('setGridParam', { page: response.data.page}).trigger('reloadGrid');
+          $('#jqGrid').jqGrid('setGridParam', {
+            page: response.data.page
+          }).trigger('reloadGrid');
 
           if (response.data.grp == 'FORMAT') {
             updateFormat(response.data)
@@ -185,9 +192,9 @@
 
     activeGrid = null
 
-    form.find('#btnSubmit').prop('disabled',false)
+    form.find('#btnSubmit').prop('disabled', false)
     if (form.data('action') == "view") {
-      form.find('#btnSubmit').prop('disabled',true)
+      form.find('#btnSubmit').prop('disabled', true)
     }
 
     getMaxLength(form)
@@ -212,26 +219,26 @@
   `)
     form.data('action', 'add')
     form.find(`.sometimes`).show()
-    $('#crudModalTitle').text('Create Kota')
+    $('#crudModalTitle').text('add Kota')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
     Promise
-    .all([
-      setStatusAktifOptions(form),
-    ])
-    .then(() => {
-      showDefault(form)
-        .then(() => {
-          $('#crudModal').modal('show')
-        })
-        .catch((error) => {
-          showDialog(error.statusText)
-        })
-        .finally(() => {
-          $('.modal-loader').addClass('d-none')
-        })
-    })
+      .all([
+        setStatusAktifOptions(form),
+      ])
+      .then(() => {
+        showDefault(form)
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .catch((error) => {
+            showDialog(error.statusText)
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
+      })
   }
 
   function editKota(kotaId) {
@@ -301,6 +308,7 @@
           })
       })
   }
+
   function viewKota(kotaId) {
     let form = $('#crudForm')
 
@@ -323,15 +331,15 @@
       ])
       .then(() => {
         showKota(form, kotaId)
-        .then(kotaId => {
-              // form.find('.aksi').hide()
-              setFormBindKeys(form)
-              form.find('[name]').attr('disabled', 'disabled').css({
-                background: '#fff'
-              })
-              form.find('[name=id]').prop('disabled',false)
-              
+          .then(kotaId => {
+            // form.find('.aksi').hide()
+            setFormBindKeys(form)
+            form.find('[name]').attr('disabled', 'disabled').css({
+              background: '#fff'
             })
+            form.find('[name=id]').prop('disabled', false)
+
+          })
           .then(() => {
             $('#crudModal').modal('show')
             let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
@@ -372,7 +380,7 @@
     }
   }
 
-  
+
   const setStatusAktifOptions = function(relatedForm) {
     return new Promise((resolve, reject) => {
       relatedForm.find('[name=statusaktif]').empty()
@@ -432,7 +440,7 @@
               element.val(value)
             }
 
-            if(index == 'zona') {
+            if (index == 'zona') {
               element.data('current-value', value)
             }
           })
@@ -493,8 +501,7 @@
 
             if (element.is('select')) {
               element.val(value).trigger('change')
-            } 
-            else {
+            } else {
               element.val(value)
             }
           })
@@ -506,7 +513,7 @@
       })
     })
   }
-  
+
   function cekValidasidelete(Id) {
     $.ajax({
       url: `{{ config('app.api_url') }}kota/${Id}/cekValidasi`,
@@ -517,15 +524,14 @@
       },
       success: response => {
         var kondisi = response.kondisi
-          if (kondisi == true) {
-            showDialog(response.message['keterangan'])
-          } else {
-              deleteKota(Id)
-          }
+        if (kondisi == true) {
+          showDialog(response.message['keterangan'])
+        } else {
+          deleteKota(Id)
+        }
 
       }
     })
   }
-
 </script>
 @endpush()

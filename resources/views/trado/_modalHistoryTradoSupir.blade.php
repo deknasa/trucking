@@ -3,6 +3,11 @@
         <form action="#" id="crudFormHistorySupir">
             <div class="modal-content">
 
+                <div class="modal-header">
+                    <p class="modal-title" id="crudModalHistorySupirTitle"></p>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    </button>
+                </div>
                 <form action="" method="post">
                     <div class="modal-body">
 
@@ -194,7 +199,7 @@
             Save
         `)
         form.find(`.sometimes`).hide()
-        $('#crudModalHistorySupirTitle').text('HistorySupirMilikSupir')
+        $('#crudModalHistorySupirTitle').text('History Trado Milik Supir')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
         loadTradoSupir()

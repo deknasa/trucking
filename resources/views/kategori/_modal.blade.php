@@ -2,12 +2,13 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
-        <!-- <div class="modal-header">
+
+        <div class="modal-header">
           <p class="modal-title" id="crudModalTitle"></p>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 
           </button>
-        </div> -->
+        </div>
         <form action="" method="post">
           <!-- TAMBAH INI -->
           <div class="modal-body modal-master">
@@ -229,7 +230,7 @@
     `)
 
     form.find(`.sometimes`).hide()
-    $('#crudModalTitle').text('Create Kategori')
+    $('#crudModalTitle').text('add Kategori')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 

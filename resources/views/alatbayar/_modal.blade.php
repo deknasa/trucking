@@ -2,11 +2,16 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
-        
+        <div class="modal-header">
+          <p class="modal-title" id="crudModalTitle"></p>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          </button>
+        </div>
+
         <form action="" method="post">
           <div class="modal-body">
 
-                   {{-- <div class="row form-group">
+            {{-- <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">ID</label>
               </div>
@@ -231,11 +236,11 @@
 
     activeGrid = null
 
-    form.find('#btnSubmit').prop('disabled',false)
+    form.find('#btnSubmit').prop('disabled', false)
     if (form.data('action') == "view") {
-      form.find('#btnSubmit').prop('disabled',true)
+      form.find('#btnSubmit').prop('disabled', true)
     }
-    
+
     getMaxLength(form)
     initLookup()
     initSelect2(form.find('.select2bs4'), true)
@@ -258,7 +263,7 @@
   `)
     form.data('action', 'add')
     form.find(`.sometimes`).show()
-    $('#crudModalTitle').text('Create Alat Bayar')
+    $('#crudModalTitle').text('Add Alat Bayar')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -354,6 +359,7 @@
           })
       })
   }
+
   function viewAlatBayar(alatBayarId) {
     let form = $('#crudForm')
 
@@ -365,7 +371,7 @@
       <i class="fa fa-save"></i>
       Save
     `)
-    form.find('#btnSubmit').prop('disabled',true)
+    form.find('#btnSubmit').prop('disabled', true)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('Delete Alat Bayar')
     $('.is-invalid').removeClass('is-invalid')
@@ -379,26 +385,26 @@
       ])
       .then(() => {
         showAlatBayar(form, alatBayarId)
-        .then(alatBayarId => {
-              // form.find('.aksi').hide()
-              setFormBindKeys(form)
-              initSelect2(form.find('.select2bs4'), true)
-              form.find('[name]').removeAttr('disabled')
-  
-              form.find('select').each((index, select) => {
-                let element = $(select)
-  
-                if (element.data('select2')) {
-                  element.select2('destroy')
-                }
-              })
-  
-              form.find('[name]').attr('disabled', 'disabled').css({
-                background: '#fff'
-              })
-              form.find('[name=id]').prop('disabled',false)
-              
+          .then(alatBayarId => {
+            // form.find('.aksi').hide()
+            setFormBindKeys(form)
+            initSelect2(form.find('.select2bs4'), true)
+            form.find('[name]').removeAttr('disabled')
+
+            form.find('select').each((index, select) => {
+              let element = $(select)
+
+              if (element.data('select2')) {
+                element.select2('destroy')
+              }
             })
+
+            form.find('[name]').attr('disabled', 'disabled').css({
+              background: '#fff'
+            })
+            form.find('[name=id]').prop('disabled', false)
+
+          })
           .then(() => {
             $('#crudModal').modal('show')
             let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
@@ -658,14 +664,14 @@
       onCancel: (element) => {
         element.val(element.data('currentValue'))
       },
-      onClear: (element) => {        
+      onClear: (element) => {
         $('#crudForm [name=coa]').first().val('')
         element.val('')
         element.data('currentValue', element.val())
       }
     })
   }
-  
+
   function cekValidasidelete(Id) {
     $.ajax({
       url: `{{ config('app.api_url') }}alatbayar/${Id}/cekValidasi`,
@@ -676,15 +682,14 @@
       },
       success: response => {
         var kondisi = response.kondisi
-          if (kondisi == true) {
-            showDialog(response.message['keterangan'])
-          } else {
-              deleteAlatBayar(Id)
-          }
+        if (kondisi == true) {
+          showDialog(response.message['keterangan'])
+        } else {
+          deleteAlatBayar(Id)
+        }
 
       }
     })
   }
-
 </script>
 @endpush()

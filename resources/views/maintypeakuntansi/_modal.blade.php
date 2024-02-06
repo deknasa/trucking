@@ -3,6 +3,11 @@
     <form action="#" id="crudForm">
       <div class="modal-content">
 
+        <div class="modal-header">
+          <p class="modal-title" id="crudModalTitle"></p>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          </button>
+        </div>
         <form action="" method="post">
           <div class="modal-body">
 
@@ -44,8 +49,8 @@
                 </label>
               </div>
               <div class="col-12 col-md-10">
-                  <input type="hidden" name="akuntansi_id">
-                  <input type="text" name="akuntansi"  data-target-name="akuntansi" id="akuntansi" class="form-control lg-form  akuntansi-lookup">
+                <input type="hidden" name="akuntansi_id">
+                <input type="text" name="akuntansi" data-target-name="akuntansi" id="akuntansi" class="form-control lg-form  akuntansi-lookup">
 
               </div>
             </div>
@@ -257,7 +262,7 @@
     `)
     form.data('action', 'add')
     form.find(`.sometimes`).show()
-    $('#crudModalTitle').text('Create Main Tipe Akuntansi')
+    $('#crudModalTitle').text('Add Type Kode Perkiraan Pusat')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -297,7 +302,7 @@
     Save
   `)
     form.find(`.sometimes`).hide()
-    $('#crudModalTitle').text('Edit Main Tipe Akuntansi')
+    $('#crudModalTitle').text('Edit Type Kode Perkiraan Pusat')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -339,7 +344,7 @@
     Delete
   `)
     form.find(`.sometimes`).hide()
-    $('#crudModalTitle').text('Delete Main Tipe Akuntansi')
+    $('#crudModalTitle').text('Delete Type Kode Perkiraan Pusat')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -375,7 +380,7 @@
       Save
     `)
     form.find(`.sometimes`).hide()
-    $('#crudModalTitle').text('View Main Tipe Akuntansi')
+    $('#crudModalTitle').text('View Type Kode Perkiraan Pusat')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 

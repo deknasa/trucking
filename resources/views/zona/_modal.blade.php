@@ -2,10 +2,15 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
-        
+
+        <div class="modal-header">
+          <p class="modal-title" id="crudModalTitle"></p>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          </button>
+        </div>
         <form action="" method="post">
           <div class="modal-body">
-           {{-- <div class="row form-group">
+            {{-- <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">ID</label>
               </div>
@@ -175,9 +180,9 @@
     setFormBindKeys(form)
 
     activeGrid = null
-    form.find('#btnSubmit').prop('disabled',false)
+    form.find('#btnSubmit').prop('disabled', false)
     if (form.data('action') == "view") {
-      form.find('#btnSubmit').prop('disabled',true)
+      form.find('#btnSubmit').prop('disabled', true)
     }
     getMaxLength(form)
     initSelect2(form.find('.select2bs4'), true)
@@ -200,26 +205,26 @@
   `)
     form.data('action', 'add')
     form.find(`.sometimes`).show()
-    $('#crudModalTitle').text('Create Zona')
+    $('#crudModalTitle').text('add Zona')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
     Promise
-    .all([
-      setStatusAktifOptions(form),
-    ])
-    .then(() => {
-      showDefault(form)
-        .then(() => {
-          $('#crudModal').modal('show')
-        })
-        .catch((error) => {
+      .all([
+        setStatusAktifOptions(form),
+      ])
+      .then(() => {
+        showDefault(form)
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .catch((error) => {
             showDialog(error.statusText)
           })
-        .finally(() => {
-          $('.modal-loader').addClass('d-none')
-        })
-    })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
+      })
   }
 
   function editZona(zonaId) {
@@ -290,7 +295,7 @@
       })
   }
 
-  
+
   function viewZona(zonaId) {
     let form = $('#crudForm')
 
@@ -313,15 +318,15 @@
       ])
       .then(() => {
         showZona(form, zonaId)
-        .then(zonaId => {
-              // form.find('.aksi').hide()
-              setFormBindKeys(form)
-              form.find('[name]').attr('disabled', 'disabled').css({
-                background: '#fff'
-              })
-              form.find('[name=id]').prop('disabled',false)
-              
+          .then(zonaId => {
+            // form.find('.aksi').hide()
+            setFormBindKeys(form)
+            form.find('[name]').attr('disabled', 'disabled').css({
+              background: '#fff'
             })
+            form.find('[name=id]').prop('disabled', false)
+
+          })
           .then(() => {
             $('#crudModal').modal('show')
             let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
@@ -336,6 +341,7 @@
           })
       })
   }
+
   function getMaxLength(form) {
     if (!form.attr('has-maxlength')) {
       $.ajax({
@@ -450,8 +456,7 @@
 
             if (element.is('select')) {
               element.val(value).trigger('change')
-            } 
-            else {
+            } else {
               element.val(value)
             }
           })
@@ -463,6 +468,7 @@
       })
     })
   }
+
   function cekValidasidelete(Id) {
     $.ajax({
       url: `{{ config('app.api_url') }}zona/${Id}/cekValidasi`,
@@ -473,15 +479,14 @@
       },
       success: response => {
         var kondisi = response.kondisi
-          if (kondisi == true) {
-            showDialog(response.message['keterangan'])
-          } else {
-              deleteZona(Id)
-          }
+        if (kondisi == true) {
+          showDialog(response.message['keterangan'])
+        } else {
+          deleteZona(Id)
+        }
 
       }
     })
   }
-
 </script>
 @endpush()
