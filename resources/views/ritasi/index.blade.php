@@ -35,14 +35,14 @@
   $(document).ready(function() {
 
     @isset($request['tgldari'])
-      tgldariheader = `{{ $request['tgldari'] }}`;
+    tgldariheader = `{{ $request['tgldari'] }}`;
     @endisset
     @isset($request['tglsampai'])
-      tglsampaiheader = `{{ $request['tglsampai'] }}`;
+    tglsampaiheader = `{{ $request['tglsampai'] }}`;
     @endisset
-    setRange(false,tgldariheader,tglsampaiheader)
+    setRange(false, tgldariheader, tglsampaiheader)
     initDatepicker('datepickerIndex')
-    $(document).on('click','#btnReload', function(event) {
+    $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('ritasi')
     })
     $("#jqGrid").jqGrid({
@@ -52,9 +52,9 @@
         iconSet: 'fontAwesome',
         datatype: "json",
         postData: {
-          tgldari:$('#tgldariheader').val() ,
-          tglsampai:$('#tglsampaiheader').val(),
-          
+          tgldari: $('#tgldariheader').val(),
+          tglsampai: $('#tglsampaiheader').val(),
+
         },
         colModel: [{
             label: 'ID',
@@ -89,7 +89,7 @@
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             name: 'suratpengantar_nobukti',
             formatter: (value, options, rowData) => {
-              if ((value == null) ||( value == '')) {
+              if ((value == null) || (value == '')) {
                 return '';
               }
               let tgldari = rowData.tgldariheadersuratpengantar
@@ -253,7 +253,7 @@
           }
 
           $('#left-nav').find('button').attr('disabled', false)
-          permission() 
+          permission()
           setHighlight($(this))
         },
       })
@@ -313,7 +313,11 @@
             class: 'btn btn-orange btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              viewRitasi(selectedId)
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Harap pilih salah satu record')
+              } else {
+                viewRitasi(selectedId)
+              }
             }
           },
           {
@@ -335,7 +339,7 @@
               $('#rangeTglModal').find('button:submit').html(`Export`)
               $('#rangeTglModal').modal('show')
             }
-          },  
+          },
         ]
       })
 
@@ -365,56 +369,57 @@
       .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
 
-      $('#rangeTglModal').on('shown.bs.modal', function() {
-        initDatepicker()
+    $('#rangeTglModal').on('shown.bs.modal', function() {
+      initDatepicker()
 
-        $('#formRangeTgl').find('[name=dari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-        $('#formRangeTgl').find('[name=sampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-      })
-      $('#formRangeTgl').submit(event => {
-        event.preventDefault()
+      $('#formRangeTgl').find('[name=dari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+      $('#formRangeTgl').find('[name=sampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+    })
+    $('#formRangeTgl').submit(event => {
+      event.preventDefault()
 
-        let params
-        let actionUrl = ``
-        let submitButton = $(this).find('button:submit')
+      let params
+      let actionUrl = ``
+      let submitButton = $(this).find('button:submit')
 
-        /* Clear validation messages */
-        $('.is-invalid').removeClass('is-invalid')
-        $('.invalid-feedback').remove()
+      /* Clear validation messages */
+      $('.is-invalid').removeClass('is-invalid')
+      $('.invalid-feedback').remove()
 
-        /* Set params value */
-        for (var key in postData) {
-          if (params != "") {
-            params += "&";
-          }
-          params += key + "=" + encodeURIComponent(postData[key]);
+      /* Set params value */
+      for (var key in postData) {
+        if (params != "") {
+          params += "&";
         }
+        params += key + "=" + encodeURIComponent(postData[key]);
+      }
 
-        // window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
+      // window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
 
-        let formRange = $('#formRangeTgl')
-        let dari = formRange.find('[name=dari]').val()
-        let sampai = formRange.find('[name=sampai]').val()
-        params += `&dari=${dari}&sampai=${sampai}`
+      let formRange = $('#formRangeTgl')
+      let dari = formRange.find('[name=dari]').val()
+      let sampai = formRange.find('[name=sampai]').val()
+      params += `&dari=${dari}&sampai=${sampai}`
 
-        getCekExport()
+      getCekExport()
         .then((response) => {
-          if ($('#formRangeTgl').data('action') == 'export'){
+          if ($('#formRangeTgl').data('action') == 'export') {
             let actionUrl = `{{ route('ritasi.export') }}`
 
             /* Clear validation messages */
             $('.is-invalid').removeClass('is-invalid')
             $('.invalid-feedback').remove()
             window.open(`${actionUrl}?${$('#formRangeTgl').serialize()}`)
-          } else if($('#formRangeTgl').data('action') == 'report') {
+          } else if ($('#formRangeTgl').data('action') == 'report') {
             window.open(`{{ route('ritasi.report') }}?${params}`)
           }
-          
+
         })
 
-      })
-        function getCekExport() {
-           return new Promise((resolve, reject) => {
+    })
+
+    function getCekExport() {
+      return new Promise((resolve, reject) => {
         $.ajax({
           url: `${apiUrl}ritasi/export`,
           dataType: "JSON",
@@ -422,8 +427,8 @@
             Authorization: `Bearer ${accessToken}`
           },
           data: {
-            dari:$('#formRangeTgl').find('[name=dari]').val(),
-            sampai:$('#formRangeTgl').find('[name=sampai]').val()
+            dari: $('#formRangeTgl').find('[name=dari]').val(),
+            sampai: $('#formRangeTgl').find('[name=sampai]').val()
           },
           success: (response) => {
             resolve(response);
@@ -438,29 +443,30 @@
 
 
     function permission() {
-    if (!`{{ $myAuth->hasPermission('ritasi', 'store') }}`) {
-      $('#add').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('ritasi', 'store') }}`) {
+        $('#add').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('ritasi', 'show') }}`) {
-      $('#view').attr('disabled', 'disabled')
-    }
-      
-    if (!`{{ $myAuth->hasPermission('ritasi', 'update') }}`) {
-      $('#edit').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('ritasi', 'show') }}`) {
+        $('#view').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('ritasi', 'destroy') }}`) {
-      $('#delete').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('ritasi', 'update') }}`) {
+        $('#edit').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('ritasi', 'report') }}`) {
-      $('#report').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('ritasi', 'destroy') }}`) {
+        $('#delete').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('ritasi', 'export') }}`) {
-      $('#export').attr('disabled', 'disabled')
-    }}
+      if (!`{{ $myAuth->hasPermission('ritasi', 'report') }}`) {
+        $('#report').attr('disabled', 'disabled')
+      }
+
+      if (!`{{ $myAuth->hasPermission('ritasi', 'export') }}`) {
+        $('#export').attr('disabled', 'disabled')
+      }
+    }
 
     $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {

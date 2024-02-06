@@ -538,8 +538,12 @@
             class: 'btn btn-orange btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Harap pilih salah satu record')
+              } else {
 
-              viewGajiSupirHeader(selectedId)
+                viewGajiSupirHeader(selectedId)
+              }
             }
           },
           {
@@ -656,7 +660,7 @@
       if (!`{{ $myAuth->hasPermission('gajisupirheader', 'report') }}`) {
         $('#report').attr('disabled', 'disabled')
       }
-      let hakApporveCount = 0 ;
+      let hakApporveCount = 0;
       hakApporveCount++
       if (!`{{ $myAuth->hasPermission('gajisupirheader', 'approvalbukacetak') }}`) {
         hakApporveCount--

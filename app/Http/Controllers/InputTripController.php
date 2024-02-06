@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 class InputTripController extends MyController
 {
-    public $title = 'input Trip';
+    public $title = 'input Trip ( mandor )';
 
     /**
      * @ClassName

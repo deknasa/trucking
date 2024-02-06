@@ -37,14 +37,14 @@
 
   $(document).ready(function() {
     @isset($request['tgldari'])
-      tgldariheader = `{{ $request['tgldari'] }}`;
+    tgldariheader = `{{ $request['tgldari'] }}`;
     @endisset
     @isset($request['tglsampai'])
-      tglsampaiheader = `{{ $request['tglsampai'] }}`;
+    tglsampaiheader = `{{ $request['tglsampai'] }}`;
     @endisset
-    setRange(false,tgldariheader,tglsampaiheader)
+    setRange(false, tgldariheader, tglsampaiheader)
     initDatepicker('datepickerIndex')
-    $(document).on('click','#btnReload', function(event) {
+    $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('pemutihansupir')
     })
 
@@ -54,8 +54,8 @@
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         postData: {
-          tgldari:$('#tgldariheader').val() ,
-          tglsampai:$('#tglsampaiheader').val() 
+          tgldari: $('#tgldariheader').val(),
+          tglsampai: $('#tglsampaiheader').val()
         },
         datatype: "json",
         colModel: [{
@@ -72,7 +72,7 @@
             align: 'left',
             stype: 'select',
             searchoptions: {
-              
+
               value: `<?php
                       $i = 1;
 
@@ -103,7 +103,7 @@
                   <span>${statusCetak.SINGKATAN}</span>
                 </div>
               `)
-              
+
               return formattedValue[0].outerHTML
             },
             cellattr: (rowId, value, rowObject) => {
@@ -113,7 +113,7 @@
               }
               return ` title="${statusCetak.MEMO}"`
             }
-          }, 
+          },
           {
             label: 'NO BUKTI',
             name: 'nobukti',
@@ -145,7 +145,7 @@
             width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
             name: 'penerimaan_nobukti',
             formatter: (value, options, rowData) => {
-              if ((value == null) ||( value == '')) {
+              if ((value == null) || (value == '')) {
                 return '';
               }
               let tgldari = rowData.tgldariheaderpenerimaanheader
@@ -154,8 +154,8 @@
               let formattedValue = $(`
               <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
              `)
-             return formattedValue[0].outerHTML
-           }
+              return formattedValue[0].outerHTML
+            }
           },
           {
             label: 'NAMA PERKIRAAN',
@@ -174,7 +174,7 @@
             width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
             name: 'penerimaantruckingposting_nobukti',
             formatter: (value, options, rowData) => {
-              if ((value == null) ||( value == '')) {
+              if ((value == null) || (value == '')) {
                 return '';
               }
               let tgldari = rowData.tgldariheaderposting
@@ -183,15 +183,15 @@
               let formattedValue = $(`
               <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
              `)
-             return formattedValue[0].outerHTML
-           }
+              return formattedValue[0].outerHTML
+            }
           },
           {
             label: 'NO BUKTI PENERIMAAN TRUCKING NON POSTING',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
             name: 'penerimaantruckingnonposting_nobukti',
             formatter: (value, options, rowData) => {
-              if ((value == null) ||( value == '')) {
+              if ((value == null) || (value == '')) {
                 return '';
               }
               let tgldari = rowData.tgldariheadernonposting
@@ -200,8 +200,8 @@
               let formattedValue = $(`
               <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
              `)
-             return formattedValue[0].outerHTML
-           }
+              return formattedValue[0].outerHTML
+            }
           },
           {
             label: 'MODIFIED BY',
@@ -265,7 +265,7 @@
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
-          
+
           if (!hasDetail) {
             loadDetailGrid(id)
             hasDetail = true
@@ -334,7 +334,7 @@
       })
 
       .customPager({
-        
+
         extndBtn: [{
             id: 'report',
             title: 'Report',
@@ -425,8 +425,11 @@
             class: 'btn btn-orange btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              
-              viewPemutihanSupir(selectedId)
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Harap pilih salah satu record')
+              } else {
+                viewPemutihanSupir(selectedId)
+              }
             }
           },
         ]
@@ -451,37 +454,38 @@
       .parent().addClass('px-1')
 
     $('#report .ui-pg-div')
-    .addClass('btn-sm btn-info')
-    .parent().addClass('px-1')
+      .addClass('btn-sm btn-info')
+      .parent().addClass('px-1')
 
     $('#export .ui-pg-div')
       .addClass('btn-sm btn-warning')
       .parent().addClass('px-1')
 
-      function permission() {
-    if (!`{{ $myAuth->hasPermission('pemutihansupir', 'store') }}`) {
-      $('#add').attr('disabled', 'disabled')
-    }
+    function permission() {
+      if (!`{{ $myAuth->hasPermission('pemutihansupir', 'store') }}`) {
+        $('#add').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('pemutihansupir', 'show') }}`) {
+      if (!`{{ $myAuth->hasPermission('pemutihansupir', 'show') }}`) {
         $('#view').attr('disabled', 'disabled')
       }
 
-    if (!`{{ $myAuth->hasPermission('pemutihansupir', 'update') }}`) {
-      $('#edit').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('pemutihansupir', 'update') }}`) {
+        $('#edit').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('pemutihansupir', 'destroy') }}`) {
-      $('#delete').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('pemutihansupir', 'destroy') }}`) {
+        $('#delete').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('pemutihansupir', 'report') }}`) {
-      $('#report').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('pemutihansupir', 'report') }}`) {
+        $('#report').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('pemutihansupir', 'export') }}`) {
-      $('#export').attr('disabled', 'disabled')
-    }}
+      if (!`{{ $myAuth->hasPermission('pemutihansupir', 'export') }}`) {
+        $('#export').attr('disabled', 'disabled')
+      }
+    }
 
     $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {

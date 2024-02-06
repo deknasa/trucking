@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Http;
 
 class MandorAbsensiSupirController extends MyController
 {
-    public $title = 'Mandor Absensi Supir';
+    public $title = 'Absensi Supir ( Mandor )';
     
     public function index()
     {

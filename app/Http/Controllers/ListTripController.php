@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Http;
 
 class ListTripController extends MyController
 {
-    public $title = 'List Trip';
+    public $title = 'Data Trip ( mandor )';
      /**
      * @ClassName 
      */

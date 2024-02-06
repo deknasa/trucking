@@ -593,7 +593,11 @@
             class: 'btn btn-orange btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              viewProsesGajiSupirHeader(selectedId)
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Harap pilih salah satu record')
+              } else {
+                viewProsesGajiSupirHeader(selectedId)
+              }
             }
           },
           {
@@ -699,7 +703,7 @@
       if (!`{{ $myAuth->hasPermission('prosesgajisupirheader', 'report') }}`) {
         $('#report').attr('disabled', 'disabled')
       }
-      let hakApporveCount = 0 ;
+      let hakApporveCount = 0;
       hakApporveCount++
       if (!`{{ $myAuth->hasPermission('prosesgajisupirheader', 'approvalbukacetak') }}`) {
         hakApporveCount--
@@ -790,7 +794,7 @@
 
   })
 
-  
+
   function setIsPisahKenek() {
     $.ajax({
       url: `${apiUrl}parameter/getparamfirst`,

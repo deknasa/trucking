@@ -2,6 +2,11 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
+        <div class="modal-header">
+          <p class="modal-title" id="crudModalTitle"></p>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          </button>
+        </div>
 
         <form action="" method="post">
 
@@ -1161,7 +1166,7 @@
       <i class="fa fa-save"></i>
       Save
     `)
-    $('#crudModalTitle').text('Edit Penerimaan Truck')
+    $('#crudModalTitle').text('Edit Penerimaan Trucking')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
     form.find(`[name="bank"]`).removeClass('bank-lookup')
@@ -1204,7 +1209,7 @@
       <i class="fa fa-trash"></i>
               Delete
     `)
-    $('#crudModalTitle').text('Delete Penerimaan Truck')
+    $('#crudModalTitle').text('Delete Penerimaan Trucking')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -1239,7 +1244,7 @@
     `)
     form.find('#btnSubmit').prop('disabled', true)
     form.find(`.sometimes`).hide()
-    $('#crudModalTitle').text('View Penerimaan Truck')
+    $('#crudModalTitle').text('View Penerimaan Trucking')
 
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()

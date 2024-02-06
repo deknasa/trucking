@@ -655,8 +655,12 @@
             class: 'btn btn-orange btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Harap pilih salah satu record')
+              } else {
 
-              viewPendapatanSupir(selectedId)
+                viewPendapatanSupir(selectedId)
+              }
             }
           },
         ],
@@ -723,7 +727,7 @@
         $('#report').attr('disabled', 'disabled')
       }
 
-      let hakApporveCount = 0 ;
+      let hakApporveCount = 0;
       hakApporveCount++
       if (!`{{ $myAuth->hasPermission('pendapatansupirheader', 'approval') }}`) {
         hakApporveCount--

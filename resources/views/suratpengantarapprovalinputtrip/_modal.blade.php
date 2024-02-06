@@ -2,7 +2,12 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
-        
+        <div class="modal-header">
+          <p class="modal-title" id="crudModalTitle"></p>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          </button>
+        </div>
+
         <form action="" method="post">
           <div class="modal-body">
             <input type="text" name="id" class="form-control" hidden readonly>
@@ -171,9 +176,9 @@
 
     setFormBindKeys(form)
 
-    form.find('#btnSubmit').prop('disabled',false)
+    form.find('#btnSubmit').prop('disabled', false)
     if (form.data('action') == "view") {
-      form.find('#btnSubmit').prop('disabled',true)
+      form.find('#btnSubmit').prop('disabled', true)
     }
 
     activeGrid = null
@@ -195,7 +200,7 @@
     Save
   `)
     form.data('action', 'add')
-    $('#crudModalTitle').text('Create Buka Trip')
+    $('#crudModalTitle').text('Create Approval Buka Tanggal Trip')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -229,7 +234,7 @@
     <i class="fa fa-save"></i>
     Save
   `)
-    $('#crudModalTitle').text('Edit Buka Trip')
+    $('#crudModalTitle').text('Edit Approval Buka Tanggal Trip')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -262,7 +267,7 @@
     <i class="fa fa-trash"></i>
     Delete
   `)
-    $('#crudModalTitle').text('Delete Buka Trip')
+    $('#crudModalTitle').text('Delete Approval Buka Tanggal Trip')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -284,7 +289,7 @@
       })
 
   }
-  
+
   function viewSuratPengantarApprovalInputTrip(SuratPengantarApprovalInputTripId) {
     let form = $('#crudForm')
     $('.modal-loader').removeClass('d-none')
@@ -296,7 +301,7 @@
       Save
     `)
     form.find(`.sometimes`).hide()
-    $('#crudModalTitle').text('View Buka Trip')
+    $('#crudModalTitle').text('View Approval Buka Tanggal Trip')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -306,19 +311,19 @@
       ])
       .then(() => {
         showSuratPengantarApprovalInputTrip(form, SuratPengantarApprovalInputTripId)
-        .then(SuratPengantarApprovalInputTripId => {
-          form.find('[name]').removeAttr('disabled')
-          form.find('select').each((index, select) => {
-            let element = $(select)
-            if (element.data('select2')) {
+          .then(SuratPengantarApprovalInputTripId => {
+            form.find('[name]').removeAttr('disabled')
+            form.find('select').each((index, select) => {
+              let element = $(select)
+              if (element.data('select2')) {
                 element.select2('destroy')
-            }
+              }
+            })
+            form.find('[name]').attr('disabled', 'disabled').css({
+              background: '#fff'
+            })
+            form.find('[name=id]').prop('disabled', false)
           })
-          form.find('[name]').attr('disabled', 'disabled').css({
-            background: '#fff'
-          })
-          form.find('[name=id]').prop('disabled',false)
-        })
           .then(() => {
             $('#crudModal').modal('show')
             form.find(`.hasDatepicker`).prop('readonly', true)
@@ -372,23 +377,23 @@
   }
 
   function cekValidasi(Id, Aksi) {
-        $.ajax({
-            url: `{{ config('app.api_url') }}suratpengantarapprovalinputtrip/${Id}/cekvalidasi`,
-            method: 'POST',
-            dataType: 'JSON',
-            beforeSend: request => {
-                request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
-            },
-            success: response => {
-                var error = response.error
-                if (error) {
-                    showDialog(response)
-                } else {
-                   deleteSuratPengantarApprovalInputTrip(Id)
-                }
-            }
-        })
-    }
+    $.ajax({
+      url: `{{ config('app.api_url') }}suratpengantarapprovalinputtrip/${Id}/cekvalidasi`,
+      method: 'POST',
+      dataType: 'JSON',
+      beforeSend: request => {
+        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+      },
+      success: response => {
+        var error = response.error
+        if (error) {
+          showDialog(response)
+        } else {
+          deleteSuratPengantarApprovalInputTrip(Id)
+        }
+      }
+    })
+  }
 
   const setStatusApprovalOptions = function(relatedForm) {
     return new Promise((resolve, reject) => {

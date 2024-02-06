@@ -2,6 +2,11 @@
     <div class="modal-dialog">
         <form action="#" id="crudForm">
             <div class="modal-content">
+                <div class="modal-header">
+                    <p class="modal-title" id="crudModalTitle"></p>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    </button>
+                </div>
 
                 <form action="" method="post">
 
@@ -211,7 +216,7 @@
       Save
     `)
         form.data('action', 'add')
-        $('#crudModalTitle').text('Create Supir Serap')
+        $('#crudModalTitle').text('Add Supir Serap')
         $('#crudModal').modal('show')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
@@ -521,7 +526,7 @@
         let form = $('#crudForm')
         $(this).attr('disabled', '')
         $('#processingLoader').removeClass('d-none')
-        
+
         $.ajax({
             url: `${apiUrl}supirserap/approval`,
             method: 'POST',
@@ -530,7 +535,7 @@
                 Authorization: `Bearer ${accessToken}`
             },
             data: {
-                serapId : selectedRows
+                serapId: selectedRows
             },
             success: response => {
                 $('#crudForm').trigger('reset')

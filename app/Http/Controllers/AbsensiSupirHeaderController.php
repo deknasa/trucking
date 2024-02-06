@@ -13,7 +13,7 @@ use stdClass;
 
 class AbsensiSupirHeaderController extends MyController
 {
-    public $title = 'Absensi';
+    public $title = 'Absensi Supir (Admin)';
     
     public function index(Request $request)
     {

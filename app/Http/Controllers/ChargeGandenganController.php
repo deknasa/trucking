@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 class ChargeGandenganController extends MyController
 {
-    public $title = 'charge gandengan';
+    public $title = 'reminder charge gandengan';
 
     /**
      * Fungsi index

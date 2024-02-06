@@ -3,6 +3,11 @@
         <form action="#" id="crudForm">
             <div class="modal-content">
 
+                <div class="modal-header">
+                    <p class="modal-title" id="crudModalTitle"></p>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    </button>
+                </div>
                 <form action="" method="post">
 
                     <div class="modal-body">
@@ -409,9 +414,9 @@
         });
 
         // postingRincian = borongan + makan
-        if(isPisahGajiKenek == 'YA'){
-            postingRincian = borongan-gajikenek
-        }else{
+        if (isPisahGajiKenek == 'YA') {
+            postingRincian = borongan - gajikenek
+        } else {
             postingRincian = borongan
         }
         initAutoNumeric($('#crudForm').find(`[name="nomPR"]`).val(postingRincian))

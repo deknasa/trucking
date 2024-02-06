@@ -2,6 +2,11 @@
     <div class="modal-dialog">
         <form action="#" id="crudForm">
             <div class="modal-content">
+                <div class="modal-header">
+                    <p class="modal-title" id="crudModalTitle"></p>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    </button>
+                </div>
 
                 <form action="" method="post">
 
@@ -728,7 +733,7 @@
       Save
     `)
         form.data('action', 'add')
-        $('#crudModalTitle').text('Create Proses Uang Jalan')
+        $('#crudModalTitle').text('Add Proses Uang Jalan Supir')
         $('#crudModal').modal('show')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
@@ -757,7 +762,7 @@
     Save
   `)
         form.find(`.sometimes`).hide()
-        $('#crudModalTitle').text('Edit Proses Uang Jalan')
+        $('#crudModalTitle').text('Edit Proses Uang Jalan Supir')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
 
@@ -810,7 +815,7 @@
     Delete
   `)
         form.find(`.sometimes`).hide()
-        $('#crudModalTitle').text('Delete Proses Uang Jalan')
+        $('#crudModalTitle').text('Delete Proses Uang Jalan Supir')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
 
@@ -1307,7 +1312,7 @@
             beforeSend: request => {
                 request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
             },
-            data:{
+            data: {
                 aksi: Aksi
             },
             success: response => {

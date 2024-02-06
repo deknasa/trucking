@@ -2,7 +2,12 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
-        
+        <div class="modal-header">
+          <p class="modal-title" id="crudModalTitle"></p>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          </button>
+        </div>
+
         <form action="" method="post">
 
           <div class="modal-body">
@@ -483,7 +488,7 @@
       Save
     `)
     form.data('action', 'add')
-    $('#crudModalTitle').text('Create Pemutihan Supir')
+    $('#crudModalTitle').text('add Pemutihan Supir')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
@@ -1290,7 +1295,7 @@
       }
     })
   }
-  
+
   const setTglBukti = function(form) {
     return new Promise((resolve, reject) => {
       let data = [];

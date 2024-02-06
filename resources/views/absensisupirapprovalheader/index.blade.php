@@ -252,7 +252,7 @@
           {
             label: 'user approval',
             name: 'userapproval',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,  
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'left'
           },
           {
@@ -270,7 +270,7 @@
             label: 'NO BUKTI pengeluaran',
             width: 210,
             name: 'pengeluaran_nobukti',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,  
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'left',
             formatter: (value, options, rowData) => {
               if ((value == null) || (value == '')) {
@@ -289,7 +289,7 @@
             label: 'KODE PERKIRAAN KAS KELUAR',
             width: 230,
             name: 'coakaskeluar',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,  
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'left'
           },
           {
@@ -306,7 +306,7 @@
           {
             label: 'USER BUKA CETAK',
             name: 'userbukacetak',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,  
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'left'
           },
           {
@@ -323,7 +323,7 @@
           {
             label: 'MODIFIED BY',
             name: 'modifiedby',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,  
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'left'
           },
           {
@@ -523,19 +523,18 @@
             caption: 'Approve',
             innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
             class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-            dropmenuHTML: [
-              {
+            dropmenuHTML: [{
                 id: 'approval-buka-cetak',
                 text: "Approval Buka Cetak Absensi",
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('absensisupirapprovalheader', 'approvalbukacetak') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');
-                    tglbukacetak =tglbukacetak[1] + '-' + tglbukacetak[2];
+                    tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
                     selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                     if (selectedId == null || selectedId == '' || selectedId == undefined) {
                       showDialog('Harap pilih salah satu record')
-                    }else{
-                      approvalBukaCetak(tglbukacetak,'ABSENSISUPIRAPPROVALHEADER',[selectedId]);
+                    } else {
+                      approvalBukaCetak(tglbukacetak, 'ABSENSISUPIRAPPROVALHEADER', [selectedId]);
                     }
                   }
                 }
@@ -563,6 +562,20 @@
                 showDialog('Harap pilih salah satu record')
               } else {
                 cekValidasi(selectedId, 'DELETE')
+              }
+            }
+          },
+          {
+            id: 'view',
+            innerHTML: '<i class="fa fa-eye"></i> VIEW',
+            class: 'btn btn-orange btn-sm mr-1',
+            onClick: () => {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Harap pilih salah satu record')
+              } else {
+                viewAbsensiSupirApprovalHeader(selectedId)
               }
             }
           },
@@ -617,7 +630,7 @@
       if (!`{{ $myAuth->hasPermission('absensisupirapprovalheader', 'report') }}`) {
         $('#report').attr('disabled', 'disabled')
       }
-      let hakApporveCount = 0 ;
+      let hakApporveCount = 0;
       hakApporveCount++
       if (!`{{ $myAuth->hasPermission('absensisupirapprovalheader', 'approvalbukacetak') }}`) {
         hakApporveCount--

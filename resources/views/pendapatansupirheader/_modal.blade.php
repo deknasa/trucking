@@ -2,6 +2,11 @@
     <div class="modal-dialog">
         <form action="#" id="crudForm">
             <div class="modal-content">
+                <div class="modal-header">
+                    <p class="modal-title" id="crudModalTitle"></p>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    </button>
+                </div>
 
                 <form action="" method="post">
 
@@ -338,7 +343,7 @@
             let nominalTrip = [];
             let kenekTrip = [];
             $.each(selectedNominal, function(index, item) {
-                if(item != undefined){
+                if (item != undefined) {
                     nominalTrip.push(parseFloat(item.replaceAll(',', '')))
                 }
             });
@@ -565,7 +570,7 @@
     `)
         form.data('action', 'add')
 
-        $('#crudModalTitle').text('Add Pendapatan Supir')
+        $('#crudModalTitle').text('Add Komisi Supir')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
 
@@ -632,7 +637,7 @@
       <i class="fa fa-save"></i>
       Save
     `)
-        $('#crudModalTitle').text('Edit Pendapatan Supir')
+        $('#crudModalTitle').text('Edit komisi Supir')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
 
@@ -685,7 +690,7 @@
       <i class="fa fa-trash"></i>
               Delete
     `)
-        $('#crudModalTitle').text('Delete Pendapatan Supir')
+        $('#crudModalTitle').text('Delete komisi Supir')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
         loadModalGrid()
@@ -721,7 +726,7 @@
           Save
         `)
         form.find(`.sometimes`).hide()
-        $('#crudModalTitle').text('View Pendapatan Supir')
+        $('#crudModalTitle').text('View komisi Supir')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
         loadModalGrid()
@@ -1397,7 +1402,7 @@
         let kenek = 0
         $.each(selectedRowsTrip, (index, val) => {
             getNominal = selectedNominal[index];
-            nominals = (getNominal=='undefined' || getNominal == NaN || getNominal == '' || getNominal == undefined) ? 0 : parseFloat(getNominal.replaceAll(',', ''))
+            nominals = (getNominal == 'undefined' || getNominal == NaN || getNominal == '' || getNominal == undefined) ? 0 : parseFloat(getNominal.replaceAll(',', ''))
             nominal += nominals
 
             getKenek = selectedGajiKenek[index];
@@ -2253,9 +2258,9 @@
                             $("#modalgrid").jqGrid("hideCol", `${field}`);
                             console.log(field)
                             if (field == 'nobukti_trip') {
-                                
+
                                 sortnameTrip = 'nobukti_ric';
-                                $("#modalgrid").jqGrid('setGridParam',{
+                                $("#modalgrid").jqGrid('setGridParam', {
                                     postData: {
                                         sortIndex: sortnameTrip
                                     }

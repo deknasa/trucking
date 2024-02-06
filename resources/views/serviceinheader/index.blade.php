@@ -39,14 +39,14 @@
   reloadGrid()
   $(document).ready(function() {
     @isset($request['tgldari'])
-      tgldariheader = `{{ $request['tgldari'] }}`;
+    tgldariheader = `{{ $request['tgldari'] }}`;
     @endisset
     @isset($request['tglsampai'])
-      tglsampaiheader = `{{ $request['tglsampai'] }}`;
+    tglsampaiheader = `{{ $request['tglsampai'] }}`;
     @endisset
-    setRange(false,tgldariheader,tglsampaiheader)
+    setRange(false, tgldariheader, tglsampaiheader)
     initDatepicker('datepickerIndex')
-    $(document).on('click','#btnReload', function(event) {
+    $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('serviceinheader')
     })
     $("#jqGrid").jqGrid({
@@ -55,9 +55,9 @@
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         postData: {
-          tgldari:$('#tgldariheader').val() ,
-          tglsampai:$('#tglsampaiheader').val(),
-          
+          tgldari: $('#tgldariheader').val(),
+          tglsampai: $('#tglsampaiheader').val(),
+
         },
         datatype: "json",
         colModel: [{
@@ -214,7 +214,7 @@
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
-          
+
           if (!hasDetail) {
             loadDetailGrid(id)
             hasDetail = true
@@ -245,7 +245,7 @@
           totalRecord = $(this).getGridParam("records")
           limit = $(this).jqGrid('getGridParam', 'postData').limit
           postData = $(this).jqGrid('getGridParam', 'postData')
-          triggerClick = true  
+          triggerClick = true
 
           $('.clearsearchclass').click(function() {
             clearColumnSearch($(this))
@@ -297,7 +297,7 @@
       })
 
       .customPager({
-        
+
         extndBtn: [{
             id: 'report',
             title: 'Report',
@@ -353,24 +353,22 @@
             caption: 'Approve',
             innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
             class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-            dropmenuHTML: [
-              {
-                id: 'approval-buka-cetak',
-                text: "Approval Buka Cetak SERVICEIN",
-                onClick: () => {
-                  if (`{{ $myAuth->hasPermission('serviceinheader', 'approvalbukacetak') }}`) {
-                    let tglbukacetak = $('#tgldariheader').val().split('-');
-                    tglbukacetak =tglbukacetak[1] + '-' + tglbukacetak[2];
-                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                    if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                      showDialog('Harap pilih salah satu record')
-                    }else{
-                      approvalBukaCetak(tglbukacetak,'SERVICEINHEADER',[selectedId]);
-                    }
+            dropmenuHTML: [{
+              id: 'approval-buka-cetak',
+              text: "Approval Buka Cetak SERVICEIN",
+              onClick: () => {
+                if (`{{ $myAuth->hasPermission('serviceinheader', 'approvalbukacetak') }}`) {
+                  let tglbukacetak = $('#tgldariheader').val().split('-');
+                  tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
+                  selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                  if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                    showDialog('Harap pilih salah satu record')
+                  } else {
+                    approvalBukaCetak(tglbukacetak, 'SERVICEINHEADER', [selectedId]);
                   }
                 }
-              },
-            ],
+              }
+            }, ],
           }
         ],
         buttons: [{
@@ -391,7 +389,7 @@
                 showDialog('Harap pilih salah satu record')
               } else {
                 cekValidasi(selectedId, 'EDIT')
-                
+
               }
             }
           },
@@ -405,7 +403,7 @@
                 showDialog('Harap pilih salah satu record')
               } else {
                 cekValidasi(selectedId, 'DELETE')
-                
+
               }
             }
           },
@@ -415,7 +413,11 @@
             class: 'btn btn-orange btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              viewServicein(selectedId)
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Harap pilih salah satu record')
+              } else {
+                viewServicein(selectedId)
+              }
             }
           },
         ]
@@ -448,42 +450,42 @@
       .addClass('btn btn-sm btn-warning')
       .parent().addClass('px-1')
 
-      function permission() {
-    if (!`{{ $myAuth->hasPermission('serviceinheader', 'store') }}`) {
-      $('#add').attr('disabled', 'disabled')
-    }
+    function permission() {
+      if (!`{{ $myAuth->hasPermission('serviceinheader', 'store') }}`) {
+        $('#add').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('serviceinheader', 'update') }}`) {
-      $('#edit').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('serviceinheader', 'update') }}`) {
+        $('#edit').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('serviceinheader', 'show') }}`) {
-      $('#view').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('serviceinheader', 'show') }}`) {
+        $('#view').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('serviceinheader', 'destroy') }}`) {
-      $('#delete').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('serviceinheader', 'destroy') }}`) {
+        $('#delete').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('serviceinheader', 'export') }}`) {
-      $('#export').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('serviceinheader', 'export') }}`) {
+        $('#export').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('serviceinheader', 'report') }}`) {
-      $('#report').attr('disabled', 'disabled')
+      if (!`{{ $myAuth->hasPermission('serviceinheader', 'report') }}`) {
+        $('#report').attr('disabled', 'disabled')
+      }
+      let hakApporveCount = 0;
+      hakApporveCount++
+      if (!`{{ $myAuth->hasPermission('serviceinheader', 'approvalbukacetak') }}`) {
+        hakApporveCount--
+        $('#approval-buka-cetak').hide()
+        // $('#approval-buka-cetak').attr('disabled', 'disabled')
+      }
+      if (hakApporveCount < 1) {
+        // $('#approve').hide()
+        $('#approve').attr('disabled', 'disabled')
+      }
     }
-    let hakApporveCount = 0 ;
-    hakApporveCount++
-    if (!`{{ $myAuth->hasPermission('serviceinheader', 'approvalbukacetak') }}`) {
-      hakApporveCount--
-      $('#approval-buka-cetak').hide()
-      // $('#approval-buka-cetak').attr('disabled', 'disabled')
-    }
-    if (hakApporveCount < 1) {
-      // $('#approve').hide()
-      $('#approve').attr('disabled', 'disabled')
-    }
-  }
 
     $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {
