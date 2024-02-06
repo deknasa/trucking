@@ -2,7 +2,12 @@
     <div class="modal-dialog">
         <form action="#" id="crudForm">
             <div class="modal-content">
-                
+
+                <div class="modal-header">
+                    <p class="modal-title" id="crudModalTitle"></p>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    </button>
+                </div>
                 <form action="" method="post">
 
                     <div class="modal-body">
@@ -37,7 +42,7 @@
                             <div class="col-8 col-md-10">
                                 <select name="statusaktif" class="form-select select2bs4" style="width: 100%;">
                                     <option value="">-- PILIH STATUS AKTIF --</option>
-                                  </select>
+                                </select>
 
                             </div>
                         </div>
@@ -54,8 +59,8 @@
                             </div>
                         </div>
 
-                     
-                      
+
+
 
                     </div>
                     <div class="modal-footer justify-content-start">
@@ -213,7 +218,7 @@
 
     $('#crudModal').on('hidden.bs.modal', () => {
         activeGrid = '#jqGrid'
-
+        clearSelectedRows()
         $('#crudModal').find('.modal-body').html(modalBody)
     })
 
@@ -232,19 +237,19 @@
         $('.invalid-feedback').remove()
 
         Promise
-        .all([
-          setStatusAktifOptions(form),
-        ])
-        .then(() => {
-            $('#crudModal').modal('show')
-        })
-        .catch((error) => {
-            showDialog(error.statusText)
-        })
-        .finally(() => {
-            $('.modal-loader').addClass('d-none')
-        })
-        
+            .all([
+                setStatusAktifOptions(form),
+            ])
+            .then(() => {
+                $('#crudModal').modal('show')
+            })
+            .catch((error) => {
+                showDialog(error.statusText)
+            })
+            .finally(() => {
+                $('.modal-loader').addClass('d-none')
+            })
+
     }
 
     function editToEmail(id) {
@@ -270,9 +275,9 @@
             ])
             .then(() => {
                 showToEmail(form, id)
-                .then(() => {
-                    $('#crudModal').modal('show')
-                })
+                    .then(() => {
+                        $('#crudModal').modal('show')
+                    })
             })
             .catch((error) => {
                 showDialog(error.responseJSON)
@@ -300,15 +305,15 @@
 
         Promise
             .all([
-                
+
                 setStatusAktifOptions(form),
 
             ])
             .then(() => {
                 showToEmail(form, id)
-                .then(() => {
-                    $('#crudModal').modal('show')
-                })
+                    .then(() => {
+                        $('#crudModal').modal('show')
+                    })
             })
             .catch((error) => {
                 showDialog(error.responseJSON)
@@ -405,7 +410,7 @@
                         }
 
                     })
-                  
+
                     if (form.data('action') === 'delete') {
                         form.find('[name]').addClass('disabled')
                         initDisabled()
@@ -420,14 +425,14 @@
     }
 
     function cekValidasi(Id, Aksi) {
-        
+
         if (Aksi == 'EDIT') {
             editToEmail(Id)
         }
         if (Aksi == 'DELETE') {
             deleteToEmail(Id)
         }
-  
+
     }
 
     const setStatusAktifOptions = function(relatedForm) {
@@ -437,7 +442,7 @@
             relatedForm.find('[name=statusaktif]').append(
                 new Option('-- PILIH STATUS AKTIF --', '', false, true)
             ).trigger('change')
-            
+
             $.ajax({
                 url: `${apiUrl}parameter`,
                 method: 'GET',
@@ -468,9 +473,9 @@
             })
         })
     }
-    
-    
-        
+
+
+
 
     function getMaxLength(form) {
         if (!form.attr('has-maxlength')) {

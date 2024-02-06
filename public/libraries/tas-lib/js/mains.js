@@ -42,17 +42,17 @@ $(document).ready(function () {
 	$("input").attr("autocomplete", "off");
 	$("input, textarea").attr("spellcheck", "false");
 	$("input[type=password]").css({"text-transform": "none", "border-right": "none"});	
-	$(".focusPass").css("background-color", "#ffffff");
+	$(".focusPass").css("background-color", "#E0ECFF");
 	
 	$('.delete-row').removeClass('btn-sm')
 
-	$(document).on('focus', ".password", function(event) {
-		$(".focusPass").css({"background-color":"#ffffee", "border-color":"#80bdff"});		
-	});
+	// $(document).on('focus', ".password", function(event) {
+	// 	$(".focusPass").css({"background-color":"#ffffee", "border-color":"#80bdff"});		
+	// });
 	
-	$(document).on('blur', ".password", function(event) {
-		$(".focusPass").css({"background-color":"#fff", "border-color":"#ced4da"});
-	});
+	// $(document).on('blur', ".password", function(event) {
+	// 	$(".focusPass").css({"background-color":"#fff", "border-color":"#ced4da"});
+	// });
 	$(document).on("click", "#sidebar-overlay", () => {
 		$(document).trigger("sidebar:toggle");
 
@@ -1382,6 +1382,89 @@ function showConfirm(statusText = "", message = "", urlDestination = "") {
 		],
 	});
 	return def.promise();
+}
+
+function showDialogForce(response) {
+	$("#dialog-force-message").html(`
+		<span class="fa fa-exclamation-triangle" aria-hidden="true" style="font-size:25px;"></span>
+	`)
+		$("#dialog-force-message").append(
+			`<p class="text-dark">${response}</p>`
+		);
+
+		$("#dialog-force-message").dialog({
+			modal: true,
+			buttons: [
+				{
+					text: "Ok",
+					click: function () {
+						$(this).dialog("close");
+						$(`#dialog-force-message`).find("p").remove();
+					},
+				},
+			]
+		});
+		$(".ui-dialog-titlebar-close").find("p").remove();
+	
+}
+function showConfirmForce(message = "", Id = "") {
+	// var def = $.Deferred();
+	$("#dialog-confirm-force").find("p").remove();
+	$("#dialog-confirm-force").append(`<p> ${message} </p>`);
+	// $("#dialog-confirm-force").dialog({
+	// 	modal: true,
+	// 	open: function () {
+	// 		// console.log($(this));
+	// 	},
+	// 	buttons: [
+	// 		{
+	// 			text: "Force Edit",
+	// 			open: function () {
+	// 				$(this).addClass("btn btn-success");
+	// 			},
+	// 			click: function () {
+	// 				$(this).dialog("close");
+	// 				if(urlDestination != ""){
+	// 					processResult(true, urlDestination);
+	// 				}
+	// 				def.resolve()
+	// 			},
+	// 		},
+	// 		{
+	// 			text: "Cancel",
+	// 			open: function () {
+	// 				$(this).addClass("btn btn-danger");
+	// 			},
+	// 			click: function () {
+	// 				$(this).dialog("close");
+	// 				processResult(false);
+	// 				def.reject()
+	// 			},
+	// 		},
+	// 	],
+	// });
+	$("#dialog-confirm-force").dialog({
+		modal: true,
+		buttons: [
+		{
+			id: "Force Edit",
+			text: "Force Edit",
+			click: function () {				
+				$(this).dialog("close");
+				console.log(Id)
+				approveKacab(Id);
+			}
+		},
+		{
+			id: "Cancel",
+			text: "Cancel",
+			click: function () {
+				$(this).dialog('close');
+			}
+		}
+		]
+	});
+	// return def.promise();
 }
 
 $(document).ready(function () {
