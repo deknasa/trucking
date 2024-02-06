@@ -594,6 +594,7 @@
         $('#approveun').hide()
         // $('#approval-buka-cetak').attr('disabled', 'disabled')
       }
+      hakApporveCount++
       if (!`{{ $myAuth->hasPermission('rekappengeluaranheader', 'approvalbukacetak') }}`) {
         hakApporveCount--
         $('#approval-buka-cetak').hide()
