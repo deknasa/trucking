@@ -83,6 +83,7 @@
   $(document).on('change', $('#crudForm').find('[name=pengeluaranheader_id]'), function(event) {
     setPermissionAcos()
   })
+
   function setPermissionAcos() {
     let selectedIdPengeluaran = $(`[name="pengeluaranheader_id"] option:selected`).val();
     if (selectedIdPengeluaran != '') {
@@ -624,7 +625,11 @@
             class: 'btn btn-orange btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              viewPengeluaranTruckingHeader(selectedId)
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Harap pilih salah satu record')
+              } else {
+                viewPengeluaranTruckingHeader(selectedId)
+              }
             }
           },
         ],
@@ -682,7 +687,7 @@
         $('#report').attr('disabled', 'disabled')
       }
 
-      let hakApporveCount = 0 ;
+      let hakApporveCount = 0;
       hakApporveCount++
       if (!`{{ $myAuth->hasPermission('pengeluarantruckingheader', 'approvalbukacetak') }}`) {
         hakApporveCount--
@@ -708,7 +713,6 @@
     // })
 
   })
-
 </script>
 @endpush()
 @endsection

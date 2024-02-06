@@ -2,39 +2,44 @@
     <div class="modal-dialog">
         <form action="#" id="crudForm">
             <div class="modal-content">
-                
+                <div class="modal-header">
+                    <p class="modal-title" id="crudModalTitle"></p>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    </button>
+                </div>
+
                 <form action="" method="post">
 
                     <div class="modal-body">
                         <input type="hidden" name="id">
 
-                       
-                            
-                            <div class="row form-group">
-                                <div class="col-12 col-sm-3 col-md-2">
-                                    <label class="col-form-label">absensi <span class="text-danger">*</span> </label>
-                                </div>
-                                <div class="col-12 col-sm-9 col-md-10">
-                                    <input type="hidden" name="absensi_id">
-                                    <input type="text" name="tglabsensi" id="tglabsensi" class="form-control absensisupir-lookup">
-                                </div>
+
+
+                        <div class="row form-group">
+                            <div class="col-12 col-sm-3 col-md-2">
+                                <label class="col-form-label">absensi <span class="text-danger">*</span> </label>
                             </div>
-                            
-                            <div class="row form-group">
-                                <div class="col-12 col-sm-3 col-md-2">
-                                    <label class="col-form-label">
-                                        Trado <span class="text-danger">*</span>
-                                    </label>
-                                </div>
-                                <div class="col-12 col-sm-9 col-md-10">
-                                    <input type="hidden" name="trado_id">
-                                    <input type="hidden" name="supir_id">
-                                    <input type="text" name="trado" id="trado" class="form-control absensisupirdetail-lookup">
-                                </div>
+                            <div class="col-12 col-sm-9 col-md-10">
+                                <input type="hidden" name="absensi_id">
+                                <input type="text" name="tglabsensi" id="tglabsensi" class="form-control absensisupir-lookup">
                             </div>
-                          
-                            
-                      
+                        </div>
+
+                        <div class="row form-group">
+                            <div class="col-12 col-sm-3 col-md-2">
+                                <label class="col-form-label">
+                                    Trado <span class="text-danger">*</span>
+                                </label>
+                            </div>
+                            <div class="col-12 col-sm-9 col-md-10">
+                                <input type="hidden" name="trado_id">
+                                <input type="hidden" name="supir_id">
+                                <input type="text" name="trado" id="trado" class="form-control absensisupirdetail-lookup">
+                            </div>
+                        </div>
+
+
+
 
                     </div>
                     <div class="modal-footer justify-content-start">
@@ -187,9 +192,9 @@
         }
         initSelect2(form.find('.select2bs4'), true)
         Inputmask("datetime", {
-              inputFormat: "HH:MM",
-              max: 24
-            }).mask(".inputmask-time");
+            inputFormat: "HH:MM",
+            max: 24
+        }).mask(".inputmask-time");
 
         initLookup()
         initDatepicker()
@@ -210,25 +215,25 @@
         Save
         `)
         form.data('action', 'add')
-        $('#crudModalTitle').text('Add Service in')
+        $('#crudModalTitle').text('Add Pengajuan Trip Inap')
         $('#crudModal').modal('show')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
 
         Promise
-        .all([
-          setStatusAktifOptions(form),
-        ])
-        .then(() => {
-            $('#crudModal').modal('show')
-        })
-        .catch((error) => {
-            showDialog(error.statusText)
-        })
-        .finally(() => {
-            $('.modal-loader').addClass('d-none')
-        })
-        
+            .all([
+                setStatusAktifOptions(form),
+            ])
+            .then(() => {
+                $('#crudModal').modal('show')
+            })
+            .catch((error) => {
+                showDialog(error.statusText)
+            })
+            .finally(() => {
+                $('.modal-loader').addClass('d-none')
+            })
+
     }
 
     function editPengajuanTripInap(id) {
@@ -242,24 +247,24 @@
             <i class="fa fa-save"></i>
             Save
         `)
-        $('#crudModalTitle').text('Edit Service In ')
+        $('#crudModalTitle').text('Edit Pengajuan Trip Inap')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
 
         Promise
-        .all([
-            showPengajuanTripInap(form, id)
-        ])
-        .then(() => {
-            $('#crudModal').modal('show')
-        })
-        .catch((error) => {
-            showDialog(error.responseJSON)
-        })
-        .finally(() => {
-            $('.modal-loader').addClass('d-none')
-        })
-        
+            .all([
+                showPengajuanTripInap(form, id)
+            ])
+            .then(() => {
+                $('#crudModal').modal('show')
+            })
+            .catch((error) => {
+                showDialog(error.responseJSON)
+            })
+            .finally(() => {
+                $('.modal-loader').addClass('d-none')
+            })
+
     }
 
     function deletePengajuanTripInap(id) {
@@ -274,23 +279,23 @@
             Delete
         `)
         form.find(`.sometimes`).hide()
-        $('#crudModalTitle').text('Delete Service in')
+        $('#crudModalTitle').text('Delete Pengajuan Trip Inap')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
 
         Promise
-        .all([
-            showPengajuanTripInap(form, id)
-        ])
-        .then(() => {
-            $('#crudModal').modal('show')
-        })
-        .catch((error) => {
-            showDialog(error.responseJSON)
-        })
-        .finally(() => {
-            $('.modal-loader').addClass('d-none')
-        })
+            .all([
+                showPengajuanTripInap(form, id)
+            ])
+            .then(() => {
+                $('#crudModal').modal('show')
+            })
+            .catch((error) => {
+                showDialog(error.responseJSON)
+            })
+            .finally(() => {
+                $('.modal-loader').addClass('d-none')
+            })
 
     }
 
@@ -307,7 +312,7 @@
         `)
         form.find('#btnSubmit').prop('disabled', true)
         form.find(`.sometimes`).hide()
-        $('#crudModalTitle').text('View Service in')
+        $('#crudModalTitle').text('View Pengajuan Trip Inap')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
 
@@ -380,7 +385,7 @@
                         }
 
                     })
-                  
+
                     if (form.data('action') === 'delete') {
                         form.find('[name]').addClass('disabled')
                         initDisabled()
@@ -395,14 +400,14 @@
     }
 
     function cekValidasi(Id, Aksi) {
-        
+
         if (Aksi == 'EDIT') {
             editPengajuanTripInap(Id)
         }
         if (Aksi == 'DELETE') {
             deletePengajuanTripInap(Id)
         }
-  
+
     }
 
     const setStatusAktifOptions = function(relatedForm) {
@@ -412,7 +417,7 @@
             relatedForm.find('[name=statusaktif]').append(
                 new Option('-- PILIH STATUS AKTIF --', '', false, true)
             ).trigger('change')
-            
+
             $.ajax({
                 url: `${apiUrl}parameter`,
                 method: 'GET',
@@ -443,7 +448,7 @@
             })
         })
     }
-    
+
     function getMaxLength(form) {
         if (!form.attr('has-maxlength')) {
             $.ajax({
@@ -481,7 +486,7 @@
             },
             onSelectRow: (absensisupir, element) => {
                 absensiId = absensisupir.id
-                
+
                 $('#crudForm [name=absensi_id]').first().val(absensisupir.id)
                 element.val(absensisupir.tglbukti)
                 element.data('currentValue', element.val())
@@ -496,14 +501,14 @@
                 element.data('currentValue', element.val())
             }
         })
-        
+
         $('.absensisupirdetail-lookup').lookupMaster({
             title: 'Trado Lookup',
             fileName: 'absensisupirdetailMaster',
             typeSearch: 'ALL',
             beforeProcess: function(test) {
                 // var levelcoa = $(`#levelcoa`).val();
-                
+
                 this.postData = {
                     Aktif: 'AKTIF',
                     searching: 1,
@@ -512,7 +517,7 @@
                     title: 'TRADO',
                     typeSearch: 'ALL',
                     tgltrip: $('#crudForm [name=tglabsensi]').val(),
-                    absensiId:absensiId
+                    absensiId: absensiId
                 }
             },
             onSelectRow: (absensi, element) => {
@@ -531,14 +536,10 @@
                 element.data('currentValue', element.val())
             }
         })
-        
-        
 
-        
+
+
+
     }
-    
-
-    
-    
 </script>
 @endpush()

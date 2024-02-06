@@ -3,7 +3,7 @@
     <form action="#" id="crudForm">
       <div class="modal-content">
         <div class="modal-header">
-          <p class="modal-title" id="crudModalTitle">Create Absensi Supir</p>
+          <p class="modal-title" id="crudModalTitle"></p>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 
           </button>

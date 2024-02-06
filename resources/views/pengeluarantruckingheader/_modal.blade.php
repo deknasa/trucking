@@ -3,6 +3,11 @@
     <form action="#" id="crudForm">
       <div class="modal-content">
 
+        <div class="modal-header">
+          <p class="modal-title" id="crudModalTitle"></p>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          </button>
+        </div>
         <form action="" method="post">
 
           <div class="modal-body">
@@ -3003,7 +3008,7 @@
       <i class="fa fa-save"></i>
       Save
     `)
-    $('#crudModalTitle').text('Edit Pengeluaran Truck')
+    $('#crudModalTitle').text('Edit Pengeluaran Trucking')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -3075,7 +3080,7 @@
       <i class="fa fa-trash"></i>
               Delete
     `)
-    $('#crudModalTitle').text('Delete Pengeluaran Truck')
+    $('#crudModalTitle').text('Delete Pengeluaran Trucking')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -3151,7 +3156,7 @@
     `)
     form.find('#btnSubmit').prop('disabled', true)
     form.find(`.sometimes`).hide()
-    $('#crudModalTitle').text('View Pengeluaran Truck')
+    $('#crudModalTitle').text('View Pengeluaran Trucking')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 

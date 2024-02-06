@@ -340,7 +340,7 @@ input[type=text]:focus,input[type=password]:focus, .select2-selection:focus {
 
 #crudModal .modal-body {
 	overflow-y: auto;
-	height: calc(100vh - 56px);
+	height: calc(100vh - 80px);
 	border: 0;
 	border-radius: 0;
 }

@@ -2,7 +2,12 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
-        
+        <div class="modal-header">
+          <p class="modal-title" id="crudModalTitle"></p>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          </button>
+        </div>
+
         <form action="" method="post">
 
           <div class="modal-body">
@@ -431,7 +436,7 @@
       Save
     `)
     form.data('action', 'add')
-    $('#crudModalTitle').text('Create Invoice')
+    $('#crudModalTitle').text('Add Invoice')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
@@ -948,10 +953,10 @@
                 $(this)
                   .find(`tr input[value=${selectedRowId}]`)
                   .prop("checked", true);
-                  invoiceData = $("#tableInvoice").jqGrid("getLocalRow", selectedRowId)
-                  if(invoiceData.nominalretribusi > 0){
-                    initAutoNumeric($(this).find(`tr#${selectedRowId} td[aria-describedby="tableInvoice_nominalretribusi"]`))
-                  }
+                invoiceData = $("#tableInvoice").jqGrid("getLocalRow", selectedRowId)
+                if (invoiceData.nominalretribusi > 0) {
+                  initAutoNumeric($(this).find(`tr#${selectedRowId} td[aria-describedby="tableInvoice_nominalretribusi"]`))
+                }
               });
           }, 100);
 

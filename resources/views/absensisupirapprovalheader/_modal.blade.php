@@ -2,6 +2,11 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
+        <div class="modal-header">
+          <p class="modal-title" id="crudModalTitle"></p>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          </button>
+        </div>
 
         <form action="" method="post">
           <div class="modal-body">
@@ -231,6 +236,10 @@
     activeGrid = null
 
     getMaxLength(form)
+    form.find('#btnSubmit').prop('disabled', false)
+    if (form.data('action') == "view") {
+      form.find('#btnSubmit').prop('disabled', true)
+    }
     initLookup()
     initDatepicker()
     loadModalGrid()
@@ -256,7 +265,7 @@
     `)
     form.data('action', 'add')
     form.find(`.sometimes`).show()
-    $('#crudModalTitle').text('CREATE ABSENSI SUPIR APPROVAL')
+    $('#crudModalTitle').text('ADD ABSENSI SUPIR POSTING (KEUANGAN)')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
@@ -274,7 +283,7 @@
     Save
   `)
     form.find(`.sometimes`).hide()
-    $('#crudModalTitle').text('Edit AbsensiSupirApproval')
+    $('#crudModalTitle').text('Edit ABSENSI SUPIR POSTING (KEUANGAN)')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -305,7 +314,7 @@
     Delete
   `)
     form.find(`.sometimes`).hide()
-    $('#crudModalTitle').text('Delete AbsensiSupirApproval')
+    $('#crudModalTitle').text('Delete ABSENSI SUPIR POSTING (KEUANGAN)')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -317,7 +326,40 @@
         $('#crudModal').modal('show')
       })
       .catch((error) => {
-        showDialog(error.statusText)
+        showDialog(error.responseJSON)
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
+  }
+
+  function viewAbsensiSupirApprovalHeader(absensiSupirApproval) {
+    let form = $('#crudForm')
+    $('.modal-loader').removeClass('d-none')
+
+    form.data('action', 'view')
+    form.trigger('reset')
+    form.find('#btnSubmit').html(`
+      <i class="fa fa-save"></i>
+      Save
+    `)
+    form.find(`.sometimes`).hide()
+    $('#crudModalTitle').text('View ABSENSI SUPIR POSTING (KEUANGAN)')
+    $('.is-invalid').removeClass('is-invalid')
+    $('.invalid-feedback').remove()
+
+    Promise
+      .all([
+        ShowAbsensiSupirApproval(form, absensiSupirApproval)
+      ])
+      .then(() => {
+        $('#crudModal').modal('show')
+        form.find(`.hasDatepicker`).prop('readonly', true)
+        form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
+        form.find(`.tbl_aksi`).hide()
+      })
+      .catch((error) => {
+        showDialog(error.responseJSON)
       })
       .finally(() => {
         $('.modal-loader').addClass('d-none')

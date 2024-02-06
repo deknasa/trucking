@@ -2,6 +2,11 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
+        <div class="modal-header">
+          <p class="modal-title" id="crudModalTitle"></p>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          </button>
+        </div>
 
         <form action="" method="post">
           <div class="modal-body">
@@ -308,7 +313,7 @@
                           <label class="col-form-label">Satuan</label>
                         </div>
                         <div class="col-12 col-sm-9 col-md-8">
-                          <input type="text"  disabled="disabled" id="detail_satuan_id" name="detail_satuan[]" class="form-control detail_satuan_1 ">
+                          <input type="text" disabled="disabled" id="detail_satuan_id" name="detail_satuan[]" class="form-control detail_satuan_1 ">
                         </div>
                       </div>
                     </div>
@@ -991,7 +996,7 @@
     activeGrid = '#jqGrid'
     $('#crudModal').find('.modal-body').html(modalBody)
     initDatepicker('datepickerIndex')
-    kodePengeluaranStok =""
+    kodePengeluaranStok = ""
   })
 
   function createPengeluaranstokHeader() {
@@ -1013,7 +1018,7 @@
     let tglbukti = $('#crudForm').find(`[name="tglbukti"]`).parents('.input-group').children()
     tglbukti.find('button').attr('disabled', true)
 
-    $('#crudModalTitle').text('Create Pengeluaran Stok')
+    $('#crudModalTitle').text('Add Pengeluaran Stok')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -1521,7 +1526,7 @@
       fileName: 'stok',
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
-        
+
         cekKelompok(row);
         this.postData = {
 
@@ -1529,7 +1534,7 @@
           // if  (kodePengeluaranStok=listKodePengeluaran[1])  {
           pengeluaranstok_id: idpengeluaranstok,
           penerimaanstokheader_nobukti: nobuktipenerimaan,
-          KelompokId:KelompokId ,
+          KelompokId: KelompokId,
           // },
 
 
@@ -1541,7 +1546,7 @@
         parent.children('.detailstokId').val(stok.id)
         parent.children('.detailstokKelompok').val(stok.kelompok_id)
         element.data('currentValue', element.val())
-      
+
         let satuanEl = element.parents('tr').find(`td [name="detail_satuan[]"]`);
         satuanEl.val(stok.satuan);
 
@@ -2122,7 +2127,7 @@
                   this.postData = {
                     pengeluaranstok_id: pengeluaranstokId,
                     Aktif: 'AKTIF',
-                    KelompokId:KelompokId ,
+                    KelompokId: KelompokId,
                   }
                 },
                 onSelectRow: (stok, element) => {
@@ -2130,7 +2135,7 @@
 
                   let satuanEl = element.parents('tr').find(`td [name="detail_satuan[]"]`);
                   satuanEl.val(stok.satuan);
-                  
+
                   parent = element.closest('td');
                   parent.children('.detailstokId').val(stok.id)
                   parent.children('.detailstokKelompok').val(stok.kelompok_id)
@@ -2326,16 +2331,18 @@
       }
     });
   }
+
   function cekKelompok(row) {
-     //check jika lookup baris pertama
-     console.log($(`#detailstokKelompok_${row}`)[0] == $('.detailstokKelompok')[0],$(`#detailstokKelompok_${row}`)[0] ,$('.detailstokKelompok')[0]);
-     if ($(`#detailstokKelompok_${row}`)[0] == $('.detailstokKelompok')[0]) {
-          KelompokId="";
-        }else {
-          let detailstokKelompok = $('.detailstokKelompok')[0]
-          KelompokId = $(detailstokKelompok).val();
-        }
+    //check jika lookup baris pertama
+    console.log($(`#detailstokKelompok_${row}`)[0] == $('.detailstokKelompok')[0], $(`#detailstokKelompok_${row}`)[0], $('.detailstokKelompok')[0]);
+    if ($(`#detailstokKelompok_${row}`)[0] == $('.detailstokKelompok')[0]) {
+      KelompokId = "";
+    } else {
+      let detailstokKelompok = $('.detailstokKelompok')[0]
+      KelompokId = $(detailstokKelompok).val();
+    }
   }
+
   function cekValidasi(Id, Aksi) {
     $.ajax({
       url: `{{ config('app.api_url') }}pengeluaranstokheader/${Id}/cekvalidasi`,

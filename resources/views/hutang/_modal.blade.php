@@ -2,7 +2,12 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
-        
+        <div class="modal-header">
+          <p class="modal-title" id="crudModalTitle"></p>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          </button>
+        </div>
+
         <form action="" method="post">
 
           <div class="modal-body">
@@ -301,9 +306,9 @@
 
     activeGrid = null
 
-    form.find('#btnSubmit').prop('disabled',false)
+    form.find('#btnSubmit').prop('disabled', false)
     if (form.data('action') == "view") {
-      form.find('#btnSubmit').prop('disabled',true)
+      form.find('#btnSubmit').prop('disabled', true)
     }
 
     initLookup()
@@ -339,7 +344,7 @@
     `)
     form.data('action', 'add')
     // form.find(`.sometimes`).show()
-    $('#crudModalTitle').text('Create Hutang')
+    $('#crudModalTitle').text('Add Hutang')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
@@ -415,6 +420,7 @@
         $('.modal-loader').addClass('d-none')
       })
   }
+
   function viewHutangHeader(id) {
     let form = $('#crudForm')
     $('.modal-loader').removeClass('d-none')
@@ -425,7 +431,7 @@
       <i class="fa fa-save"></i>
       Save
     `)
-    form.find('#btnSubmit').prop('disabled',true)
+    form.find('#btnSubmit').prop('disabled', true)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('View Hutang')
     $('.is-invalid').removeClass('is-invalid')
@@ -439,25 +445,25 @@
         setFormBindKeys(form)
         initSelect2(form.find('.select2bs4'), true)
         form.find('[name]').removeAttr('disabled')
-  
+
         form.find('select').each((index, select) => {
           let element = $(select)
-  
+
           if (element.data('select2')) {
             element.select2('destroy')
           }
         })
-  
+
         form.find('[name]').attr('disabled', 'disabled').css({
           background: '#fff'
         })
-        form.find('[name=id]').prop('disabled',false)
+        form.find('[name=id]').prop('disabled', false)
       })
       .then(() => {
         $('#crudModal').modal('show')
         form.find(`.hasDatepicker`).prop('readonly', true)
         form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
-        
+
         let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
         let nameFind = $('#crudForm').find(`[name]`).parents('.input-group')
         name.attr('disabled', true)
@@ -488,9 +494,9 @@
           if (kodestatus == '1') {
             showDialog(response.message['keterangan'])
           } else {
-            if(Aksi == 'PRINTER BESAR'){
+            if (Aksi == 'PRINTER BESAR') {
               window.open(`{{ route('hutangheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
-            } else if(Aksi == 'PRINTER KECIL'){
+            } else if (Aksi == 'PRINTER KECIL') {
               window.open(`{{ route('hutangheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
             } else {
               cekValidasiAksi(Id, Aksi)

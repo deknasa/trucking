@@ -3,6 +3,11 @@
     <form action="#" id="crudForm">
       <div class="modal-content">
 
+        <div class="modal-header">
+          <p class="modal-title" id="crudModalTitle"></p>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          </button>
+        </div>
         <form action="" method="post">
 
           <div class="modal-body">
@@ -1368,7 +1373,7 @@
                 totalSisa = parseFloat(originalGridData.sisa) - bayar
                 localRow.potongan = 0
               }
-              
+
               if (iCol == 9) {
                 totalSisa = parseFloat(originalGridData.sisa) - potongan
                 localRow.bayar = 0
@@ -1386,7 +1391,7 @@
             setTotalBayar()
             setTotalPotongan()
           }
-          if (iCol == 13){
+          if (iCol == 13) {
             localRow.nominallebihbayar = 0
             setTotalLebihBayar()
           }

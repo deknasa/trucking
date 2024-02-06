@@ -3,6 +3,11 @@
         <form action="#" id="crudForm">
             <div class="modal-content">
 
+                <div class="modal-header">
+                    <p class="modal-title" id="crudModalTitle"></p>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    </button>
+                </div>
                 <form action="" method="post">
 
                     <div class="modal-body">
@@ -243,7 +248,7 @@
         Save
         `)
         form.data('action', 'add')
-        $('#crudModalTitle').text('Add Service in')
+        $('#crudModalTitle').text('Add Trip Inap')
         $('#crudModal').modal('show')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
@@ -275,7 +280,7 @@
             <i class="fa fa-save"></i>
             Save
         `)
-        $('#crudModalTitle').text('Edit Service In ')
+        $('#crudModalTitle').text('Edit Trip Inap')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
 
@@ -307,7 +312,7 @@
             Delete
         `)
         form.find(`.sometimes`).hide()
-        $('#crudModalTitle').text('Delete Service in')
+        $('#crudModalTitle').text('Delete Trip Inap')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
 
@@ -340,7 +345,7 @@
         `)
         form.find('#btnSubmit').prop('disabled', true)
         form.find(`.sometimes`).hide()
-        $('#crudModalTitle').text('View Service in')
+        $('#crudModalTitle').text('View Trip Inap')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
 

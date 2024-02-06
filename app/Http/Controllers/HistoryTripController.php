@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Http;
 
 class HistoryTripController extends MyController
 {
-    public $title = 'History Trip';
+    public $title = 'History Trip ( mandor )';
      /**
      * @ClassName 
      */

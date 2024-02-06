@@ -36,6 +36,7 @@
   let hasDetail = false
   let selectedRows = [];
   reloadGrid()
+
   function checkboxHandler(element) {
     let value = $(element).val();
     if (element.checked) {
@@ -51,7 +52,7 @@
     }
 
   }
-  
+
   setSpaceBarCheckedHandler()
 
   $(document).ready(function() {
@@ -422,9 +423,8 @@
       })
 
       .customPager({
-        
-        extndBtn: [
-          {
+
+        extndBtn: [{
             id: 'report',
             title: 'Report',
             caption: 'Report',
@@ -490,31 +490,32 @@
             }
           },
           {
-          id: 'lainnya',
-          title: 'Lainnya',
-          caption: 'Lainnya',
-          innerHTML: '<i class="fa fa-check"></i> LAINNYA',
-          class: 'btn btn-secondary btn-sm mr-1 dropdown-toggle ',
-          dropmenuHTML: [{
-              id: 'copy',
-              text: "COPY",
-              onClick: () => {
-                if (`{{ $myAuth->hasPermission('jurnalumumheader', 'copy') }}`) {
-                  selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                  if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                    showDialog('Harap pilih salah satu record')
-                  } else {
-                    cekValidasiAksi(selectedId, 'COPY')
+            id: 'lainnya',
+            title: 'Lainnya',
+            caption: 'Lainnya',
+            innerHTML: '<i class="fa fa-check"></i> LAINNYA',
+            class: 'btn btn-secondary btn-sm mr-1 dropdown-toggle ',
+            dropmenuHTML: [{
+                id: 'copy',
+                text: "COPY",
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('jurnalumumheader', 'copy') }}`) {
+                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                    if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                      showDialog('Harap pilih salah satu record')
+                    } else {
+                      cekValidasiAksi(selectedId, 'COPY')
+                    }
+                    clearSelectedRows()
+                    $('#gs_').prop('checked', false)
                   }
-                  clearSelectedRows()
-                  $('#gs_').prop('checked', false)
                 }
-              }
-            },
+              },
 
 
-          ],
-        }],
+            ],
+          }
+        ],
         buttons: [{
             id: 'add',
             innerHTML: '<i class="fa fa-plus"></i> ADD',
@@ -559,7 +560,11 @@
             class: 'btn btn-orange btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              viewJurnalUmumHeader(selectedId)
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Harap pilih salah satu record')
+              } else {
+                viewJurnalUmumHeader(selectedId)
+              }
             }
           }
         ],
@@ -723,7 +728,7 @@
         limit: 0,
         tgldari: $('#tgldariheader').val(),
         tglsampai: $('#tglsampaiheader').val(),
-        filters: $('#jqGrid').jqGrid('getGridParam','postData').filters
+        filters: $('#jqGrid').jqGrid('getGridParam', 'postData').filters
       },
       success: (response) => {
         selectedRows = response.data.map((jurnal) => jurnal.id)

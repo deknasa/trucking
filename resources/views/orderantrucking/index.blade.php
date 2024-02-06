@@ -53,12 +53,12 @@
   $(document).ready(function() {
 
     @isset($request['tgldari'])
-      tgldariheader = `{{ $request['tgldari'] }}`;
+    tgldariheader = `{{ $request['tgldari'] }}`;
     @endisset
     @isset($request['tglsampai'])
-      tglsampaiheader = `{{ $request['tglsampai'] }}`;
+    tglsampaiheader = `{{ $request['tglsampai'] }}`;
     @endisset
-    setRange(false,tgldariheader,tglsampaiheader)
+    setRange(false, tgldariheader, tglsampaiheader)
     initDatepicker('datepickerIndex')
     $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('orderantrucking')
@@ -291,7 +291,7 @@
           {
             label: 'USER APP EDIT',
             name: 'userapprovaledit',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,  
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'TGL BATAS EDIT',
@@ -307,7 +307,7 @@
           {
             label: 'MODIFIED BY',
             name: 'modifiedby',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,  
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'CREATED AT',
@@ -441,8 +441,7 @@
       })
 
       .customPager({
-        buttons: [
-          {
+        buttons: [{
             id: 'edit',
             innerHTML: '<i class="fa fa-pen"></i> EDIT',
             class: 'btn btn-success btn-sm mr-1',
@@ -482,8 +481,12 @@
             class: 'btn btn-orange btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              
-              viewOrderanTrucking(selectedId)
+
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Harap pilih salah satu record')
+              } else {
+                viewOrderanTrucking(selectedId)
+              }
             }
           },
           {
@@ -644,7 +647,7 @@
       if (!`{{ $myAuth->hasPermission('orderantrucking', 'show') }}`) {
         $('#view').attr('disabled', 'disabled')
       }
-        
+
       if (!`{{ $myAuth->hasPermission('orderantrucking', 'update') }}`) {
         $('#edit').attr('disabled', 'disabled')
       }
@@ -660,7 +663,7 @@
       if (!`{{ $myAuth->hasPermission('orderantrucking', 'export') }}`) {
         $('#export').attr('disabled', 'disabled')
       }
-      let hakApporveCount = 0 ;
+      let hakApporveCount = 0;
       hakApporveCount++
       if (!`{{ $myAuth->hasPermission('orderantrucking', 'approval') }}`) {
         hakApporveCount--

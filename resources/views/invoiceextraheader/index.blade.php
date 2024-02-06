@@ -644,7 +644,11 @@
             class: 'btn btn-orange btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              viewInvoiceExtraHeader(selectedId)
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Harap pilih salah satu record')
+              } else {
+                viewInvoiceExtraHeader(selectedId)
+              }
             }
           },
         ]
@@ -702,7 +706,7 @@
       if (!`{{ $myAuth->hasPermission('invoiceextraheader', 'report') }}`) {
         $('#report').attr('disabled', 'disabled')
       }
-      let hakApporveCount = 0 ;
+      let hakApporveCount = 0;
       hakApporveCount++
       if (!`{{ $myAuth->hasPermission('invoiceextraheader', 'approval') }}`) {
         hakApporveCount--

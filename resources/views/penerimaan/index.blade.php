@@ -649,7 +649,11 @@
             class: 'btn btn-orange btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              viewPenerimaan(selectedId)
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Harap pilih salah satu record')
+              } else {
+                viewPenerimaan(selectedId)
+              }
             }
           },
         ],
@@ -707,7 +711,7 @@
       if (!`{{ $myAuth->hasPermission('penerimaanheader', 'report') }}`) {
         $('#report').attr('disabled', 'disabled')
       }
-      let hakApporveCount = 0 ;
+      let hakApporveCount = 0;
       hakApporveCount++
       if (!`{{ $myAuth->hasPermission('penerimaanheader', 'approval') }}`) {
         hakApporveCount--

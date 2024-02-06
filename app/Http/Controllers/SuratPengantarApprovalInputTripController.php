@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Http;
 
 class SuratPengantarApprovalInputTripController extends MyController
 {
-    public $title = 'Surat Pengantar Approval Input Trip';
+    public $title = 'approval buka tanggal Trip';
     
     public function index(Request $request)
     {

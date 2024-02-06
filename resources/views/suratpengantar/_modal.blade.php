@@ -2,6 +2,11 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
+        <div class="modal-header">
+          <p class="modal-title" id="crudModalTitle"></p>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          </button>
+        </div>
 
         <form action="" method="post">
           <div class="modal-body">
@@ -849,7 +854,7 @@
     Save
   `)
     form.data('action', 'add')
-    $('#crudModalTitle').text('Create Surat Pengantar')
+    $('#crudModalTitle').text('Add Surat Pengantar')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
@@ -1786,7 +1791,7 @@
 
           Aktif: 'AKTIF',
           AbsensiId: true,
-          trado_id:  $('#crudForm [name=trado_id]').val(),
+          trado_id: $('#crudForm [name=trado_id]').val(),
           tgltrip: $('#crudForm [name=tglbukti]').val(),
         }
       },

@@ -2,7 +2,12 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
-        
+        <div class="modal-header">
+          <p class="modal-title" id="crudModalTitle"></p>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          </button>
+        </div>
+
         <form action="" method="post">
           <div class="modal-body">
             <input type="hidden" name="id" class="form-control" readonly>
@@ -237,9 +242,9 @@
 
     getMaxLength(form)
     initLookup()
-    form.find('#btnSubmit').prop('disabled',false)
+    form.find('#btnSubmit').prop('disabled', false)
     if (form.data('action') == "view") {
-      form.find('#btnSubmit').prop('disabled',true)
+      form.find('#btnSubmit').prop('disabled', true)
     }
     initDatepicker()
     initSelect2(form.find('.select2bs4'), true)
@@ -266,7 +271,7 @@
     form.data('action', 'add')
     $('#crudModal').modal('show')
     form.find(`.sometimes`).show()
-    $('#crudModalTitle').text('Create Ritasi')
+    $('#crudModalTitle').text('Add Ritasi')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
@@ -699,29 +704,30 @@
     })
 
   }
-  function cekValidasi(Id, Aksi) {
-        $.ajax({
-            url: `{{ config('app.api_url') }}ritasi/${Id}/cekvalidasi`,
-            method: 'POST',
-            dataType: 'JSON',
-            beforeSend: request => {
-                request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
-            },
-            success: response => {
-                var error = response.error
-                if (error) {
-                    showDialog(response)
-                } else {
-                    if (Aksi == 'EDIT') {
-                        editRitasi(Id)
-                    }
-                    if (Aksi == 'DELETE') {
-                        deleteRitasi(Id)
-                    }
-                }
 
-            }
-        })
-    }
+  function cekValidasi(Id, Aksi) {
+    $.ajax({
+      url: `{{ config('app.api_url') }}ritasi/${Id}/cekvalidasi`,
+      method: 'POST',
+      dataType: 'JSON',
+      beforeSend: request => {
+        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+      },
+      success: response => {
+        var error = response.error
+        if (error) {
+          showDialog(response)
+        } else {
+          if (Aksi == 'EDIT') {
+            editRitasi(Id)
+          }
+          if (Aksi == 'DELETE') {
+            deleteRitasi(Id)
+          }
+        }
+
+      }
+    })
+  }
 </script>
 @endpush()

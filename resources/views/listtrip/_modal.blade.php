@@ -2,6 +2,11 @@
     <div class="modal-dialog">
         <form action="#" id="crudForm">
             <div class="modal-content">
+                <div class="modal-header">
+                    <p class="modal-title" id="crudModalTitle"></p>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    </button>
+                </div>
                 <div class="modal-body">
                     <form action="" method="post">
                         <input type="text" name="id" class="form-control" hidden>
@@ -569,7 +574,7 @@
             <i class="fa fa-save"></i>
             Save
         `)
-        $('#crudModalTitle').text('Edit Trip')
+        $('#crudModalTitle').text('Edit Data Trip (mandor)')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
 
@@ -611,7 +616,7 @@
             Delete
         `)
         form.find(`.sometimes`).hide()
-        $('#crudModalTitle').text('Delete Trip')
+        $('#crudModalTitle').text('Delete Data Trip (mandor)')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
 
@@ -653,7 +658,7 @@
             Save
             `)
         form.find(`.sometimes`).hide()
-        $('#crudModalTitle').text('View Trip')
+        $('#crudModalTitle').text('View Data Trip (mandor)')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
 

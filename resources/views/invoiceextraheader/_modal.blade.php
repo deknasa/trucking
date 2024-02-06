@@ -2,7 +2,12 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
-       
+        <div class="modal-header">
+          <p class="modal-title" id="crudModalTitle"></p>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          </button>
+        </div>
+
         <form action="" method="post">
           <div class="modal-body">
             <div class="row form-group">
@@ -110,7 +115,7 @@
     $(document).on('click', "#addRow", function() {
 
       event.preventDefault()
-      
+
       let method = `POST`
       let url = `${apiUrl}invoiceextraheader/addrow`
       let form = $('#crudForm')
@@ -152,7 +157,7 @@
         $('#processingLoader').addClass('d-none')
         $(this).removeAttr('disabled')
       })
-        
+
     });
 
     $(document).on('click', '.delete-row', function(event) {
@@ -301,11 +306,11 @@
     activeGrid = null
     initLookup()
     initDatepicker()
-    form.find('#btnSubmit').prop('disabled',false)
+    form.find('#btnSubmit').prop('disabled', false)
     if (form.data('action') == "view") {
-      form.find('#btnSubmit').prop('disabled',true)
+      form.find('#btnSubmit').prop('disabled', true)
     }
-    
+
     // getMaxLength(form)
   })
 
@@ -332,13 +337,13 @@
         if (error) {
           showDialog(response)
         } else {
-            if(Aksi == 'PRINTER BESAR'){
-              window.open(`{{ route('invoiceextraheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
-            } else if(Aksi == 'PRINTER KECIL'){
-              window.open(`{{ route('invoiceextraheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
-            } else {
-              cekValidasiAksi(Id, Aksi)
-            }
+          if (Aksi == 'PRINTER BESAR') {
+            window.open(`{{ route('invoiceextraheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
+          } else if (Aksi == 'PRINTER KECIL') {
+            window.open(`{{ route('invoiceextraheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
+          } else {
+            cekValidasiAksi(Id, Aksi)
+          }
         }
       }
     })
@@ -380,7 +385,7 @@
     `)
     form.data('action', 'add')
     form.find(`.sometimes`).show()
-    $('#crudModalTitle').text('Create Invoice Extra')
+    $('#crudModalTitle').text('Add Invoice Extra')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
@@ -457,6 +462,7 @@
       })
 
   }
+
   function viewInvoiceExtraHeader(invoiceExtraHeader) {
     let form = $('#crudForm')
 
@@ -466,7 +472,7 @@
       <i class="fa fa-save"></i>
       Save
     `)
-    form.find('#btnSubmit').prop('disabled',true)
+    form.find('#btnSubmit').prop('disabled', true)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('View Invoice Extra')
     $('#crudModal').modal('show')
@@ -481,31 +487,31 @@
         setFormBindKeys(form)
         initSelect2(form.find('.select2bs4'), true)
         form.find('[name]').removeAttr('disabled')
-  
+
         form.find('select').each((index, select) => {
           let element = $(select)
-  
+
           if (element.data('select2')) {
             element.select2('destroy')
           }
         })
-  
+
         form.find('[name]').attr('disabled', 'disabled').css({
           background: '#fff'
         })
-        form.find('[name=id]').prop('disabled',false)
+        form.find('[name=id]').prop('disabled', false)
       })
       .then(() => {
         $('#crudModal').modal('show')
-          form.find(`.hasDatepicker`).prop('readonly', true)
-          form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
-          
-          let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
-          let nameFind = $('#crudForm').find(`[name]`).parents('.input-group')
-          name.attr('disabled', true)
-          name.find('.lookup-toggler').remove()
-          nameFind.find('button.button-clear').remove()
-          $('#crudForm').find(`.tbl_aksi`).hide()
+        form.find(`.hasDatepicker`).prop('readonly', true)
+        form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
+
+        let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
+        let nameFind = $('#crudForm').find(`[name]`).parents('.input-group')
+        name.attr('disabled', true)
+        name.find('.lookup-toggler').remove()
+        nameFind.find('button.button-clear').remove()
+        $('#crudForm').find(`.tbl_aksi`).hide()
 
       })
       .catch((error) => {
@@ -646,12 +652,12 @@
             detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
             $('table #table_body').append(detailRow)
             initAutoNumeric(detailRow.find('.autonumeric'))
-  
+
             setRowNumbers()
-  
+
             setTotal()
             id++;
-  
+
             if (form.data('action') === 'delete') {
               form.find('[name]').addClass('disabled')
               initDisabled()
@@ -709,7 +715,7 @@
     })
 
   }
-  
+
   function setTglJatuhTempo(top = 0) {
     // Tanggal awal dalam format "YYYY-MM-DD"
     const tanggalAwal = new Date();
@@ -757,7 +763,7 @@
       }
     })
   }
-  
+
   const setTglBukti = function(form) {
     return new Promise((resolve, reject) => {
       let data = [];

@@ -2,7 +2,12 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
-        
+        <div class="modal-header">
+          <p class="modal-title" id="crudModalTitle"></p>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          </button>
+        </div>
+
         <form action="" method="post">
           <input type="hidden" name="id">
           <div class="modal-body">
@@ -182,9 +187,9 @@
       }).always(() => {
         $('#processingLoader').addClass('d-none')
         $(this).removeAttr('disabled')
-      })  
+      })
     });
-         
+
     $(document).on('click', '.delete-row', function(event) {
       deleteRow($(this).parents('tr'))
     })
@@ -324,9 +329,9 @@
 
     activeGrid = null
 
-    form.find('#btnSubmit').prop('disabled',false)
+    form.find('#btnSubmit').prop('disabled', false)
     if (form.data('action') == "view") {
-      form.find('#btnSubmit').prop('disabled',true)
+      form.find('#btnSubmit').prop('disabled', true)
     }
 
     getMaxLength(form)
@@ -365,7 +370,7 @@
   `)
     form.data('action', 'add')
     form.find(`.sometimes`).show()
-    $('#crudModalTitle').text('Create Kas Gantung')
+    $('#crudModalTitle').text('Add Kas Gantung')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -459,18 +464,19 @@
       })
 
   }
+
   function viewKasGantung(userId) {
     let form = $('#crudForm')
 
     $('.modal-loader').removeClass('d-none')
 
-   form.data('action', 'view')
+    form.data('action', 'view')
     form.trigger('reset')
     form.find('#btnSubmit').html(`
       <i class="fa fa-save"></i>
       Save
     `)
-    form.find('#btnSubmit').prop('disabled',true)
+    form.find('#btnSubmit').prop('disabled', true)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('View Kas Gantung')
     $('.is-invalid').removeClass('is-invalid')
@@ -484,25 +490,25 @@
         setFormBindKeys(form)
         initSelect2(form.find('.select2bs4'), true)
         form.find('[name]').removeAttr('disabled')
-  
+
         form.find('select').each((index, select) => {
           let element = $(select)
-  
+
           if (element.data('select2')) {
             element.select2('destroy')
           }
         })
-  
+
         form.find('[name]').attr('disabled', 'disabled').css({
           background: '#fff'
         })
-        form.find('[name=id]').prop('disabled',false)
+        form.find('[name=id]').prop('disabled', false)
       })
       .then(() => {
         $('#crudModal').modal('show')
         form.find(`.hasDatepicker`).prop('readonly', true)
         form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
-        
+
         let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
         let nameFind = $('#crudForm').find(`[name]`).parents('.input-group')
         name.attr('disabled', true)
@@ -534,9 +540,9 @@
           if (kodestatus == '1') {
             showDialog(response.message['keterangan'])
           } else {
-            if(Aksi == 'PRINTER BESAR'){
+            if (Aksi == 'PRINTER BESAR') {
               window.open(`{{ route('kasgantungheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
-            } else if(Aksi == 'PRINTER KECIL'){
+            } else if (Aksi == 'PRINTER KECIL') {
               window.open(`{{ route('kasgantungheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
             } else {
               cekValidasiAksi(Id, Aksi)
