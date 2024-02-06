@@ -2,7 +2,12 @@
   <div class="modal-dialog">
     <form action="#" id="crudFormApprovalKeterangan">
       <div class="modal-content">
-        
+        <div class="modal-header">
+          <p class="modal-title" id="crudModalApprovalKeteranganTitle"></p>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          </button>
+        </div>
+
         <form action="" method="post">
           <div class="modal-body">
             <input type="text" name="id" class="form-control" hidden readonly>
@@ -195,36 +200,36 @@
   function approvalSupirKeterangan(id) {
     let form = $('#crudFormApprovalKeterangan')
     $('.modal-loader').removeClass('d-none')
-    
+
     form.trigger('reset')
     form.find('#btnSubmitApprovalKeterangan').html(`<i class="fa fa-save"></i> Save`)
-    
+
     form.find(`.sometimes`).show()
-    $('#crudModalApprovalKeteranganTitle').text('Approval Supir Keterangan')
+    $('#crudModalApprovalKeteranganTitle').text('Un/Approval Supir tanpa Keterangan')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
     Promise.all([
-      setStatusApprovalOptions(form),
-      showApprovalSupirKeterangan(form, id)
-    ])
-    .then((response) => {
-      let approvalKeterangan = response[1];
-      $('#crudModalApprovalKeterangan').modal('show')
-      form.data('action', 'add')
-      if (approvalKeterangan.id){
+        setStatusApprovalOptions(form),
+        showApprovalSupirKeterangan(form, id)
+      ])
+      .then((response) => {
+        let approvalKeterangan = response[1];
+        $('#crudModalApprovalKeterangan').modal('show')
+        form.data('action', 'add')
+        if (approvalKeterangan.id) {
           form.data('action', 'edit')
-      }
-    })
-    .catch((error) => {
-      console.log(error);
-      showDialog(error.statusText)
-    })
-    .finally(() => {
-      $('.modal-loader').addClass('d-none')
-    })
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        showDialog(error.statusText)
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
   }
-        
+
 
 
   function showApprovalSupirKeterangan(form, Id) {
@@ -233,14 +238,16 @@
         url: `${apiUrl}approvalsupirketerangan`,
         method: 'GET',
         dataType: 'JSON',
-        data:{supir_id:Id},
+        data: {
+          supir_id: Id
+        },
         headers: {
           Authorization: `Bearer ${accessToken}`
         },
         success: response => {
           $.each(response.data, (index, value) => {
             let element = form.find(`[name="${index}"]`)
-            
+
             if (element.is('select')) {
               element.val(value).trigger('change')
             } else if (element.hasClass('datepicker')) {
@@ -250,14 +257,14 @@
             } else {
               element.val(value)
             }
-            if(index == 'namasupir'){
+            if (index == 'namasupir') {
               element.prop('readonly', true)
             }
-            if(index == 'noktp'){
+            if (index == 'noktp') {
               element.prop('readonly', true)
             }
           })
-          
+
           resolve(response.data)
         },
         error: error => {
@@ -267,14 +274,14 @@
     })
   }
 
-  
+
   const setStatusApprovalOptions = function(relatedForm) {
     return new Promise((resolve, reject) => {
       relatedForm.find('[name=statusapproval]').empty()
       relatedForm.find('[name=statusapproval]').append(
         new Option('-- PILIH STATUS APPROVAL --', '', false, true)
       ).trigger('change')
-      
+
       $.ajax({
         url: `${apiUrl}parameter/combo`,
         method: 'GET',
@@ -292,13 +299,11 @@
             relatedForm.find('[name=statusapproval]').append(option).trigger('change')
           });
           resolve()
-          
-          
+
+
         }
       })
     })
   }
-    
-      
 </script>
 @endpush()

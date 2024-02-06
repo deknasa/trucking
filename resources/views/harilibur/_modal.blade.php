@@ -2,7 +2,11 @@
     <div class="modal-dialog">
         <form action="#" id="crudForm">
             <div class="modal-content">
-                
+                <div class="modal-header">
+                    <p class="modal-title" id="crudModalTitle"></p>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    </button>
+                </div>
                 <form action="" method="post">
                     <div class="modal-body">
                         {{-- <div class="row form-group">
@@ -200,7 +204,7 @@
         `)
         form.data('action', 'add')
         form.find(`.sometimes`).show()
-        $('#crudModalTitle').text('Create Hari Libur')
+        $('#crudModalTitle').text('Add Hari Libur')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
         $('#crudForm').find('[name=tgl]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');

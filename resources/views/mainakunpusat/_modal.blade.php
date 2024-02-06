@@ -2,6 +2,11 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
+      <div class="modal-header">
+        <p class="modal-title" id="crudModalTitle"></p>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        </button>
+      </div>
 
         <form action="" method="post">
           <div class="modal-body">
@@ -290,7 +295,7 @@
   `)
     form.data('action', 'add')
     form.find(`.sometimes`).show()
-    $('#crudModalTitle').text('Create Main Akun Pusat')
+    $('#crudModalTitle').text('Add Kode Perkiraan Pusat')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -355,7 +360,7 @@
     Save
   `)
     form.find(`.sometimes`).hide()
-    $('#crudModalTitle').text('Edit Akun Pusat')
+    $('#crudModalTitle').text('Edit Kode Perkiraan Pusat')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
     Promise
@@ -386,7 +391,7 @@
     Delete
   `)
     form.find(`.sometimes`).hide()
-    $('#crudModalTitle').text('Delete Akun Pusat')
+    $('#crudModalTitle').text('Delete Kode Perkiraan Pusat')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -418,7 +423,7 @@
       Save
     `)
     form.find(`.sometimes`).hide()
-    $('#crudModalTitle').text('View Akun Pusat')
+    $('#crudModalTitle').text('View Kode perkiraan Pusat')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 

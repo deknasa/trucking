@@ -2,11 +2,16 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
-        
+        <div class="modal-header">
+          <p class="modal-title" id="crudModalTitle"></p>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          </button>
+        </div>
+
         <form action="" method="post">
           <div class="modal-body">
-            <input type="text" name="id" class="form-control"  hidden readonly>
-            
+            <input type="text" name="id" class="form-control" hidden readonly>
+
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
@@ -23,7 +28,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
-                  No KTP  <span class="text-danger">*</span>
+                  No KTP <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
@@ -36,7 +41,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
-                  No SIM  <span class="text-danger">*</span>
+                  No SIM <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
@@ -45,9 +50,9 @@
                 </div>
               </div>
             </div>
-            
+
             <div class="col-12 col-sm-9 col-md-10">
-              
+
             </div>
           </div>
           <div class="modal-footer justify-content-start">
@@ -147,7 +152,7 @@
 
           id = response.data.id
 
-          $('#jqGrid').jqGrid('setGridParam', { 
+          $('#jqGrid').jqGrid('setGridParam', {
             page: response.data.page
           }).trigger('reloadGrid');
 
@@ -195,7 +200,7 @@
     Save
   `)
     form.data('action', 'add')
-    $('#crudModalTitle').text('Create Black List Supir')
+    $('#crudModalTitle').text('Add Black List Supir')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
@@ -216,7 +221,7 @@
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-    
+
     showBlackListSupir(form, blackListSupirId)
   }
 
@@ -233,12 +238,12 @@
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-    
+
     showBlackListSupir(form, blackListSupirId)
 
   }
 
-  
+
 
   function showBlackListSupir(form, blackListSupirId) {
     $.ajax({
@@ -253,7 +258,7 @@
           let element = form.find(`[name="${index}"]`)
           element.val(value)
         })
-        
+
         if (form.data('action') === 'delete') {
           form.find('[name]').addClass('disabled')
           initDisabled()

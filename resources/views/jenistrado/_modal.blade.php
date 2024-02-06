@@ -2,7 +2,12 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
-        
+
+        <div class="modal-header">
+          <p class="modal-title" id="crudModalTitle"></p>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          </button>
+        </div>
         <form action="" method="post">
           <div class="modal-body">
 
@@ -181,9 +186,9 @@
 
     activeGrid = null
 
-    form.find('#btnSubmit').prop('disabled',false)
+    form.find('#btnSubmit').prop('disabled', false)
     if (form.data('action') == "view") {
-      form.find('#btnSubmit').prop('disabled',true)
+      form.find('#btnSubmit').prop('disabled', true)
     }
 
     getMaxLength(form)
@@ -205,7 +210,7 @@
   `)
     form.data('action', 'add')
     form.find(`.sometimes`).show()
-    $('#crudModalTitle').text('Create Jenis Trado')
+    $('#crudModalTitle').text('Add Jenis Trado')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -215,15 +220,15 @@
       ])
       .then(() => {
         showDefault(form)
-        .then(() => {
-          $('#crudModal').modal('show')
-        })
-        .catch((error) => {
-          showDialog(error.statusText)
-        })
-        .finally(() => {
-          $('.modal-loader').addClass('d-none')
-        })
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .catch((error) => {
+            showDialog(error.statusText)
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
       })
   }
 
@@ -248,15 +253,15 @@
       ])
       .then(() => {
         showJenisTrado(form, jenisTradoId)
-        .then(() => {
-          $('#crudModal').modal('show')
-        })
-        .catch((error) => {
-          showDialog(error.statusText)
-        })
-        .finally(() => {
-          $('.modal-loader').addClass('d-none')
-        })
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .catch((error) => {
+            showDialog(error.statusText)
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
       })
   }
 
@@ -282,17 +287,18 @@
       ])
       .then(() => {
         showJenisTrado(form, jenisTradoId)
-        .then(() => {
-          $('#crudModal').modal('show')
-        })
-        .catch((error) => {
-          showDialog(error.statusText)
-        })
-        .finally(() => {
-          $('.modal-loader').addClass('d-none')
-        })
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .catch((error) => {
+            showDialog(error.statusText)
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
       })
   }
+
   function viewJenisTrado(jenisTradoId) {
     let form = $('#crudForm')
 
@@ -315,24 +321,24 @@
       ])
       .then(() => {
         showJenisTrado(form, jenisTradoId)
-        .then(jenisTradoId => {
-              // form.find('.aksi').hide()
-              setFormBindKeys(form)
-              form.find('[name]').attr('disabled', 'disabled').css({
-                background: '#fff'
-              })
-              form.find('[name=id]').prop('disabled',false)
-              
+          .then(jenisTradoId => {
+            // form.find('.aksi').hide()
+            setFormBindKeys(form)
+            form.find('[name]').attr('disabled', 'disabled').css({
+              background: '#fff'
             })
-        .then(() => {
-          $('#crudModal').modal('show')
-        })
-        .catch((error) => {
-          showDialog(error.statusText)
-        })
-        .finally(() => {
-          $('.modal-loader').addClass('d-none')
-        })
+            form.find('[name=id]').prop('disabled', false)
+
+          })
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .catch((error) => {
+            showDialog(error.statusText)
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
       })
   }
 
@@ -428,6 +434,7 @@
       })
     })
   }
+
   function showDefault(form) {
     return new Promise((resolve, reject) => {
       $.ajax({
@@ -445,8 +452,7 @@
 
             if (element.is('select')) {
               element.val(value).trigger('change')
-            } 
-            else {
+            } else {
               element.val(value)
             }
           })
@@ -458,7 +464,7 @@
       })
     })
   }
-  
+
   function cekValidasidelete(Id) {
     $.ajax({
       url: `{{ config('app.api_url') }}jenistrado/${Id}/cekValidasi`,
@@ -469,11 +475,11 @@
       },
       success: response => {
         var kondisi = response.kondisi
-          if (kondisi == true) {
-            showDialog(response.message['keterangan'])
-          } else {
-              deleteJenisTrado(Id)
-          }
+        if (kondisi == true) {
+          showDialog(response.message['keterangan'])
+        } else {
+          deleteJenisTrado(Id)
+        }
 
       }
     })

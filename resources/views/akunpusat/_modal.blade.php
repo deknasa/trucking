@@ -2,7 +2,12 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
-        
+        <div class="modal-header">
+          <p class="modal-title" id="crudModalTitle"></p>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          </button>
+        </div>
+
         <form action="" method="post">
           <div class="modal-body">
             {{-- <div class="row form-group">
@@ -42,7 +47,7 @@
               </div>
               <div class="col-12 col-md-10">
                 <input type="hidden" name="type_id">
-                <input type="text" name="type"  data-target-name="type" id="type" class="form-control lg-form type-lookup">
+                <input type="text" name="type" data-target-name="type" id="type" class="form-control lg-form type-lookup">
               </div>
             </div>
             <div class="row form-group">
@@ -53,7 +58,7 @@
               </div>
               <div class="col-12 col-md-10">
                 <input type="hidden" name="akuntansi_id">
-                  <input type="text" name="akuntansi"  data-target-name="akuntansi" id="akuntansi" class="form-control lg-form  akuntansi-lookup">
+                <input type="text" name="akuntansi" data-target-name="akuntansi" id="akuntansi" class="form-control lg-form  akuntansi-lookup">
               </div>
             </div>
             <div class="row form-group">
@@ -71,7 +76,7 @@
               </div>
               <div class="col-12 col-md-10">
                 <input type="hidden" name="parent">
-                <input type="text" name="parentnama"  data-target-name="parentnama" id="parentnama" class="form-control lg-form  parent-lookup">
+                <input type="text" name="parentnama" data-target-name="parentnama" id="parentnama" class="form-control lg-form  parent-lookup">
               </div>
             </div>
             <div class="row form-group">
@@ -96,7 +101,7 @@
               </div>
               <div class="col-12 col-md-10">
                 <input type="hidden" name="coamain">
-                <input type="text" name="coamainket"  data-target-name="coamainket" id="coamainket" class="form-control lg-form  coamain-lookup">
+                <input type="text" name="coamainket" data-target-name="coamainket" id="coamainket" class="form-control lg-form  coamain-lookup">
               </div>
             </div>
             <div class="row form-group">
@@ -232,9 +237,9 @@
     })
   })
 
-  
+
   $(document).on('change', $('#crudForm').find('[name=statusparent]'), function(event) {
-    let par =  $(`#crudForm [name="statusparent"] option:selected`).text()
+    let par = $(`#crudForm [name="statusparent"] option:selected`).text()
     console.log(par)
     if (par == 'PARENT') {
       setTimeout(() => {
@@ -252,12 +257,12 @@
     }
   });
 
-  function activateParent(par) { 
+  function activateParent(par) {
     if (par == 'BUKAN PARENT') {
       $('#crudForm [name=parentnama]').attr('readonly', false)
       $('#crudForm [name=parentnama]').parents('.input-group').find('.input-group-append').show()
       $('#crudForm [name=parentnama]').parents('.input-group').find('.button-clear').show()
-    }  else {
+    } else {
       setTimeout(() => {
 
         $('#crudForm [name=parentnama]').attr('readonly', true)
@@ -266,7 +271,7 @@
       }, 500);
     }
   }
-  
+
   $('#crudModal').on('shown.bs.modal', () => {
     let form = $('#crudForm')
 
@@ -274,11 +279,11 @@
 
     activeGrid = null
 
-    form.find('#btnSubmit').prop('disabled',false)
+    form.find('#btnSubmit').prop('disabled', false)
     if (form.data('action') == "view") {
-      form.find('#btnSubmit').prop('disabled',true)
+      form.find('#btnSubmit').prop('disabled', true)
     }
-    
+
     getMaxLength(form)
     initSelect2(form.find('.select2bs4'), true)
     initLookup()
@@ -301,7 +306,7 @@
     `)
     form.data('action', 'add')
     form.find(`.sometimes`).show()
-    $('#crudModalTitle').text('Create Akun Pusat')
+    $('#crudModalTitle').text('Create Kode Perkiraan Cabang')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -358,7 +363,7 @@
             }
             if (index == 'statusparentnama') {
               activateParent(value);
-                
+
             }
           })
           resolve()
@@ -382,7 +387,7 @@
     Save
   `)
     form.find(`.sometimes`).hide()
-    $('#crudModalTitle').text('Edit Akun Pusat')
+    $('#crudModalTitle').text('Edit Kode Perkiraan Cabang')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -419,7 +424,7 @@
     Delete
   `)
     form.find(`.sometimes`).hide()
-    $('#crudModalTitle').text('Delete Akun Pusat')
+    $('#crudModalTitle').text('Delete Kode Perkiraan Cabang')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -443,6 +448,7 @@
           })
       })
   }
+
   function viewAkunPusat(akunPusatId) {
     let form = $('#crudForm')
 
@@ -454,9 +460,9 @@
       <i class="fa fa-save"></i>
       Save
     `)
-    form.find('#btnSubmit').prop('disabled',true)
+    form.find('#btnSubmit').prop('disabled', true)
     form.find(`.sometimes`).hide()
-    $('#crudModalTitle').text('View Akun Pusat')
+    $('#crudModalTitle').text('View Kode Perkiraan Cabang')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -469,26 +475,26 @@
       ])
       .then(() => {
         showAkunPusat(form, akunPusatId)
-        .then(akunPusatId => {
-              // form.find('.aksi').hide()
-              setFormBindKeys(form)
-              initSelect2(form.find('.select2bs4'), true)
-              form.find('[name]').removeAttr('disabled')
-  
-              form.find('select').each((index, select) => {
-                let element = $(select)
-  
-                if (element.data('select2')) {
-                  element.select2('destroy')
-                }
-              })
-  
-              form.find('[name]').attr('disabled', 'disabled').css({
-                background: '#fff'
-              })
-              form.find('[name=id]').prop('disabled',false)
-              
+          .then(akunPusatId => {
+            // form.find('.aksi').hide()
+            setFormBindKeys(form)
+            initSelect2(form.find('.select2bs4'), true)
+            form.find('[name]').removeAttr('disabled')
+
+            form.find('select').each((index, select) => {
+              let element = $(select)
+
+              if (element.data('select2')) {
+                element.select2('destroy')
+              }
             })
+
+            form.find('[name]').attr('disabled', 'disabled').css({
+              background: '#fff'
+            })
+            form.find('[name=id]').prop('disabled', false)
+
+          })
           .then(() => {
             $('#crudModal').modal('show')
             let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
@@ -764,7 +770,7 @@
             }
             if (index == 'statusparentnama') {
               activateParent(value);
-                
+
             }
           })
 
@@ -780,8 +786,8 @@
       })
     })
   }
- 
-  function cekValidasi(Id,aksi) {
+
+  function cekValidasi(Id, aksi) {
     $.ajax({
       url: `{{ config('app.api_url') }}akunpusat/${Id}/cekValidasi`,
       method: 'GET',
@@ -794,9 +800,9 @@
         if (kondisi == true) {
           showDialog(response.message['keterangan'])
         } else {
-          if(aksi == 'edit'){
+          if (aksi == 'edit') {
             editAkunPusat(Id)
-          }else{
+          } else {
             deleteAkunPusat(Id)
           }
         }
@@ -858,7 +864,7 @@
         $('#crudForm [name=akuntansi_id]').val(akuntansi.id)
         element.val(akuntansi.kodeakuntansi)
         element.data('currentValue', element.val())
-      
+
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))

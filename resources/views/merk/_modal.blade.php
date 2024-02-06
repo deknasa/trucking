@@ -2,10 +2,15 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
-        
+
+        <div class="modal-header">
+          <p class="modal-title" id="crudModalTitle"></p>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          </button>
+        </div>
         <form action="" method="post">
           <div class="modal-body modal-master">
-           {{-- <div class="row form-group">
+            {{-- <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">ID</label>
               </div>
@@ -143,7 +148,9 @@
 
           id = response.data.id
 
-          $('#jqGrid').jqGrid('setGridParam', { page: response.data.page}).trigger('reloadGrid');
+          $('#jqGrid').jqGrid('setGridParam', {
+            page: response.data.page
+          }).trigger('reloadGrid');
 
           if (response.data.grp == 'FORMAT') {
             updateFormat(response.data)
@@ -173,9 +180,9 @@
 
     activeGrid = null
 
-    form.find('#btnSubmit').prop('disabled',false)
+    form.find('#btnSubmit').prop('disabled', false)
     if (form.data('action') == "view") {
-      form.find('#btnSubmit').prop('disabled',true)
+      form.find('#btnSubmit').prop('disabled', true)
     }
 
     getMaxLength(form)
@@ -200,23 +207,23 @@
   `)
     form.data('action', 'add')
     form.find(`.sometimes`).show()
-    $('#crudModalTitle').text('Create Merk')
+    $('#crudModalTitle').text('add Merk')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
     Promise
-    .all([
-      showDefault(form)
-    ])
-    .then(() => {
-      $('#crudModal').modal('show')
-    })
-    .catch((error) => {
-      console.log(error);
-      showDialog(error.statusText)
-    })
-    .finally(() => {
-      $('.modal-loader').addClass('d-none')
-    })
+      .all([
+        showDefault(form)
+      ])
+      .then(() => {
+        $('#crudModal').modal('show')
+      })
+      .catch((error) => {
+        console.log(error);
+        showDialog(error.statusText)
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
   }
 
   function editMerk(merkId) {
@@ -236,18 +243,18 @@
     $('.invalid-feedback').remove()
 
     Promise
-    .all([
-      showMerk(form, merkId)
-    ])
-    .then(() => {
-      $('#crudModal').modal('show')
-    })
-    .catch((error) => {
-      showDialog(error.statusText)
-    })
-    .finally(() => {
-      $('.modal-loader').addClass('d-none')
-    })
+      .all([
+        showMerk(form, merkId)
+      ])
+      .then(() => {
+        $('#crudModal').modal('show')
+      })
+      .catch((error) => {
+        showDialog(error.statusText)
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
   }
 
   function deleteMerk(merkId) {
@@ -267,18 +274,18 @@
     $('.invalid-feedback').remove()
 
     Promise
-    .all([
-      showMerk(form, merkId)
-    ])
-    .then(() => {
-      $('#crudModal').modal('show')
-    })
-    .catch((error) => {
-      showDialog(error.statusText)
-    })
-    .finally(() => {
-      $('.modal-loader').addClass('d-none')
-    })
+      .all([
+        showMerk(form, merkId)
+      ])
+      .then(() => {
+        $('#crudModal').modal('show')
+      })
+      .catch((error) => {
+        showDialog(error.statusText)
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
   }
 
   function viewMerk(merkId) {
@@ -297,27 +304,27 @@
     $('.invalid-feedback').remove()
 
     Promise
-    .all([
-      showMerk(form, merkId)
-    ])
-    .then(merkId => {
-      // form.find('.aksi').hide()
-      setFormBindKeys(form)
-      form.find('[name]').attr('disabled', 'disabled').css({
-        background: '#fff'
+      .all([
+        showMerk(form, merkId)
+      ])
+      .then(merkId => {
+        // form.find('.aksi').hide()
+        setFormBindKeys(form)
+        form.find('[name]').attr('disabled', 'disabled').css({
+          background: '#fff'
+        })
+        form.find('[name=id]').prop('disabled', false)
+
       })
-      form.find('[name=id]').prop('disabled',false)
-      
-    })
-    .then(() => {
-      $('#crudModal').modal('show')
-    })
-    .catch((error) => {
-      showDialog(error.statusText)
-    })
-    .finally(() => {
-      $('.modal-loader').addClass('d-none')
-    })
+      .then(() => {
+        $('#crudModal').modal('show')
+      })
+      .catch((error) => {
+        showDialog(error.statusText)
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
 
   }
 
@@ -411,8 +418,8 @@
             form.find('[name]').addClass('disabled')
             initDisabled()
           }
-          
-          
+
+
           resolve()
         },
         error: error => {
@@ -438,8 +445,7 @@
 
             if (element.is('select')) {
               element.val(value).trigger('change')
-            } 
-            else {
+            } else {
               element.val(value)
             }
             if (index == 'statusaktifnama') {
@@ -454,7 +460,7 @@
       })
     })
   }
-  
+
   function cekValidasidelete(Id) {
     $.ajax({
       url: `{{ config('app.api_url') }}merk/${Id}/cekValidasi`,
@@ -465,11 +471,11 @@
       },
       success: response => {
         var kondisi = response.kondisi
-          if (kondisi == true) {
-            showDialog(response.message['keterangan'])
-          } else {
-              deleteMerk(Id)
-          }
+        if (kondisi == true) {
+          showDialog(response.message['keterangan'])
+        } else {
+          deleteMerk(Id)
+        }
 
       }
     })
@@ -492,7 +498,7 @@
           singleColumn: true,
           hideLabel: true,
           title: 'Status Aktif'
-        };  
+        };
       },
       onSelectRow: (status, element) => {
         let elId = element.data('targetName')
@@ -511,6 +517,5 @@
       },
     });
   }
-
 </script>
 @endpush()

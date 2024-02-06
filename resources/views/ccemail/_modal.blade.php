@@ -2,7 +2,12 @@
     <div class="modal-dialog">
         <form action="#" id="crudForm">
             <div class="modal-content">
-                
+
+                <div class="modal-header">
+                    <p class="modal-title" id="crudModalTitle"></p>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    </button>
+                </div>
                 <form action="" method="post">
 
                     <div class="modal-body">
@@ -37,7 +42,7 @@
                             <div class="col-8 col-md-10">
                                 <select name="statusaktif" class="form-select select2bs4" style="width: 100%;">
                                     <option value="">-- PILIH STATUS AKTIF --</option>
-                                  </select>
+                                </select>
 
                             </div>
                         </div>
@@ -54,8 +59,8 @@
                             </div>
                         </div>
 
-                     
-                      
+
+
 
                     </div>
                     <div class="modal-footer justify-content-start">
@@ -226,25 +231,25 @@
         Save
         `)
         form.data('action', 'add')
-        $('#crudModalTitle').text('Add Service in')
+        $('#crudModalTitle').text('Add CC Email')
         $('#crudModal').modal('show')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
 
         Promise
-        .all([
-          setStatusAktifOptions(form),
-        ])
-        .then(() => {
-            $('#crudModal').modal('show')
-        })
-        .catch((error) => {
-            showDialog(error.statusText)
-        })
-        .finally(() => {
-            $('.modal-loader').addClass('d-none')
-        })
-        
+            .all([
+                setStatusAktifOptions(form),
+            ])
+            .then(() => {
+                $('#crudModal').modal('show')
+            })
+            .catch((error) => {
+                showDialog(error.statusText)
+            })
+            .finally(() => {
+                $('.modal-loader').addClass('d-none')
+            })
+
     }
 
     function editCcEmail(id) {
@@ -258,7 +263,7 @@
             <i class="fa fa-save"></i>
             Save
         `)
-        $('#crudModalTitle').text('Edit Service In ')
+        $('#crudModalTitle').text('Edit CC Email ')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
 
@@ -270,9 +275,9 @@
             ])
             .then(() => {
                 showCcEmail(form, id)
-                .then(() => {
-                    $('#crudModal').modal('show')
-                })
+                    .then(() => {
+                        $('#crudModal').modal('show')
+                    })
             })
             .catch((error) => {
                 showDialog(error.responseJSON)
@@ -294,21 +299,21 @@
             Delete
         `)
         form.find(`.sometimes`).hide()
-        $('#crudModalTitle').text('Delete Service in')
+        $('#crudModalTitle').text('Delete CC Email')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
 
         Promise
             .all([
-                
+
                 setStatusAktifOptions(form),
 
             ])
             .then(() => {
                 showCcEmail(form, id)
-                .then(() => {
-                    $('#crudModal').modal('show')
-                })
+                    .then(() => {
+                        $('#crudModal').modal('show')
+                    })
             })
             .catch((error) => {
                 showDialog(error.responseJSON)
@@ -332,7 +337,7 @@
         `)
         form.find('#btnSubmit').prop('disabled', true)
         form.find(`.sometimes`).hide()
-        $('#crudModalTitle').text('View Service in')
+        $('#crudModalTitle').text('View CC Email')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
 
@@ -405,7 +410,7 @@
                         }
 
                     })
-                  
+
                     if (form.data('action') === 'delete') {
                         form.find('[name]').addClass('disabled')
                         initDisabled()
@@ -420,14 +425,14 @@
     }
 
     function cekValidasi(Id, Aksi) {
-        
+
         if (Aksi == 'EDIT') {
             editCcEmail(Id)
         }
         if (Aksi == 'DELETE') {
             deleteCcEmail(Id)
         }
-  
+
     }
 
     const setStatusAktifOptions = function(relatedForm) {
@@ -437,7 +442,7 @@
             relatedForm.find('[name=statusaktif]').append(
                 new Option('-- PILIH STATUS AKTIF --', '', false, true)
             ).trigger('change')
-            
+
             $.ajax({
                 url: `${apiUrl}parameter`,
                 method: 'GET',
@@ -468,9 +473,9 @@
             })
         })
     }
-    
-    
-        
+
+
+
 
     function getMaxLength(form) {
         if (!form.attr('has-maxlength')) {

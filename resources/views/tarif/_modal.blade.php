@@ -2,7 +2,12 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
-        
+
+        <div class="modal-header">
+          <p class="modal-title" id="crudModalTitle"></p>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          </button>
+        </div>
         <form action="" method="post">
           <div class="modal-body">
             <input type="hidden" name="id">
@@ -97,7 +102,7 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                 <select name="statusaktif" class="form-select select2bs4" style="width: 100%;">
+                <select name="statusaktif" class="form-select select2bs4" style="width: 100%;">
                   <option value="">-- PILIH STATUS AKTIF --</option>
 
                 </select>
@@ -113,7 +118,7 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                 <select name="statussistemton" class="form-select select2bs4" style="width: 100%;">
+                <select name="statussistemton" class="form-select select2bs4" style="width: 100%;">
                   <option value="">-- PILIH SISTEM TON --</option>
 
                 </select>
@@ -166,7 +171,7 @@
                   STATUS POSTING TNL <span class="text-danger">*</span></label>
               </div>
               <div class="col-12 col-md-10">
-                 <select name="statuspostingtnl" class="form-select select2bs4" style="width: 100%;" z-index='3'>
+                <select name="statuspostingtnl" class="form-select select2bs4" style="width: 100%;" z-index='3'>
                   <option value="">-- PILIH STATUS POSTING TNL --</option>
 
                 </select>
@@ -1226,7 +1231,7 @@
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
 
-          Aktif: 'AKTIF',          
+          Aktif: 'AKTIF',
           searching: 1,
           valueName: 'jenisorder_id',
           searchText: 'jenisorder-lookup',
@@ -1260,7 +1265,7 @@
 
           Aktif: 'AKTIF',
           jenisOrder: $('#crudForm [name=jenisorder]').val(),
-          isParent: true,          
+          isParent: true,
           searching: 1,
           valueName: 'parent_id',
           searchText: 'parent-lookup',
@@ -1474,51 +1479,51 @@
     })
   }
 
-  
+
   function approvenonaktif() {
 
-event.preventDefault()
+    event.preventDefault()
 
-let form = $('#crudForm')
-$(this).attr('disabled', '')
-$('#processingLoader').removeClass('d-none')
+    let form = $('#crudForm')
+    $(this).attr('disabled', '')
+    $('#processingLoader').removeClass('d-none')
 
-$.ajax({
-  url: `${apiUrl}tarif/approvalnonaktif`,
-  method: 'POST',
-  dataType: 'JSON',
-  headers: {
-    Authorization: `Bearer ${accessToken}`
-  },
-  data: {
-    Id: selectedRows,
-    nama: selectedRowsTarif
-  },
-  success: response => {
-    $('#crudForm').trigger('reset')
-    $('#crudModal').modal('hide')
+    $.ajax({
+      url: `${apiUrl}tarif/approvalnonaktif`,
+      method: 'POST',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        Id: selectedRows,
+        nama: selectedRowsTarif
+      },
+      success: response => {
+        $('#crudForm').trigger('reset')
+        $('#crudModal').modal('hide')
 
-    $('#jqGrid').jqGrid().trigger('reloadGrid');
-    selectedRows = []
-    selectedRowsTarif = []
-    $('#gs_').prop('checked', false)
-  },
-  error: error => {
-    if (error.status === 422) {
-      $('.is-invalid').removeClass('is-invalid')
-      $('.invalid-feedback').remove()
+        $('#jqGrid').jqGrid().trigger('reloadGrid');
+        selectedRows = []
+        selectedRowsTarif = []
+        $('#gs_').prop('checked', false)
+      },
+      error: error => {
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
 
-      setErrorMessages(form, error.responseJSON.errors);
-    } else {
-      showDialog(error.responseJSON)
-    }
-  },
-}).always(() => {
-  $('#processingLoader').addClass('d-none')
-  $(this).removeAttr('disabled')
-})
+          setErrorMessages(form, error.responseJSON.errors);
+        } else {
+          showDialog(error.responseJSON)
+        }
+      },
+    }).always(() => {
+      $('#processingLoader').addClass('d-none')
+      $(this).removeAttr('disabled')
+    })
 
-}
+  }
 
 
   function cekValidasidelete(Id, aksi) {

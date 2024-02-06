@@ -3,6 +3,11 @@
     <form action="#" id="crudForm">
       <div class="modal-content">
 
+        <div class="modal-header">
+          <p class="modal-title" id="crudModalTitle"></p>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          </button>
+        </div>
         <form action="" method="post">
           <div class="modal-body">
 
@@ -235,7 +240,7 @@
     `)
     form.data('action', 'add')
     form.find(`.sometimes`).show()
-    $('#crudModalTitle').text('Create Data Ritasi')
+    $('#crudModalTitle').text('Add Data Ritasi')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -556,39 +561,39 @@
 
   function initLookup() {
     $(`.status-lookup`).lookupMaster({
-        title: 'Status Aktif Lookup',
-        fileName: 'parameterMaster',
-        typeSearch: 'ALL',
-        searching: 1,
-        beforeProcess: function() {
-          this.postData = {
-            url: `${apiUrl}parameter/combo`,
-            grp: 'STATUS AKTIF',
-            subgrp: 'STATUS AKTIF',
-            searching: 1,
-            valueName: `statusaktif`,
-            searchText: `status-lookup`,
-            singleColumn: true,
-            hideLabel: true,
-            title: 'Status Aktif'
-          };
-        },
-        onSelectRow: (status, element) => {
-          let elId = element.data('targetName')
-          $(`#crudForm [name=${elId}]`).first().val(status.id)
-          element.val(status.text)
-          element.data('currentValue', element.val())
-        },
-        onCancel: (element) => {
-          element.val(element.data('currentValue'));
-        },
-        onClear: (element) => {
-          let elId = element.data('targetName')
-          $(`#crudForm [name=${elId}]`).first().val('')
-          element.val('')
-          element.data('currentValue', element.val())
-        },
-      });
+      title: 'Status Aktif Lookup',
+      fileName: 'parameterMaster',
+      typeSearch: 'ALL',
+      searching: 1,
+      beforeProcess: function() {
+        this.postData = {
+          url: `${apiUrl}parameter/combo`,
+          grp: 'STATUS AKTIF',
+          subgrp: 'STATUS AKTIF',
+          searching: 1,
+          valueName: `statusaktif`,
+          searchText: `status-lookup`,
+          singleColumn: true,
+          hideLabel: true,
+          title: 'Status Aktif'
+        };
+      },
+      onSelectRow: (status, element) => {
+        let elId = element.data('targetName')
+        $(`#crudForm [name=${elId}]`).first().val(status.id)
+        element.val(status.text)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'));
+      },
+      onClear: (element) => {
+        let elId = element.data('targetName')
+        $(`#crudForm [name=${elId}]`).first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      },
+    });
     $(`.statusritasi-lookup`).lookupMaster({
       title: 'Status ritasi Lookup',
       fileName: 'parameterMaster',

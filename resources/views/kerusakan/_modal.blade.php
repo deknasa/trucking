@@ -2,7 +2,12 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
-        
+
+        <div class="modal-header">
+          <p class="modal-title" id="crudModalTitle"></p>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          </button>
+        </div>
         <form action="" method="post">
           <div class="modal-body">
             {{-- <div class="row form-group">
@@ -165,9 +170,9 @@
 
     activeGrid = null
 
-    form.find('#btnSubmit').prop('disabled',false)
+    form.find('#btnSubmit').prop('disabled', false)
     if (form.data('action') == "view") {
-      form.find('#btnSubmit').prop('disabled',true)
+      form.find('#btnSubmit').prop('disabled', true)
     }
 
     getMaxLength(form)
@@ -194,7 +199,7 @@
   `)
     form.data('action', 'add')
     form.find(`.sometimes`).show()
-    $('#crudModalTitle').text('Create Kerusakan')
+    $('#crudModalTitle').text('Add Kerusakan')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -283,6 +288,7 @@
           })
       })
   }
+
   function viewKerusakan(kerusakanId) {
     let form = $('#crudForm')
 
@@ -305,15 +311,15 @@
       ])
       .then(() => {
         showKerusakan(form, kerusakanId)
-        .then(kerusakanId => {
-              // form.find('.aksi').hide()
-              setFormBindKeys(form)
-              form.find('[name]').attr('disabled', 'disabled').css({
-                background: '#fff'
-              })
-              form.find('[name=id]').prop('disabled',false)
-              
+          .then(kerusakanId => {
+            // form.find('.aksi').hide()
+            setFormBindKeys(form)
+            form.find('[name]').attr('disabled', 'disabled').css({
+              background: '#fff'
             })
+            form.find('[name=id]').prop('disabled', false)
+
+          })
           .then(() => {
             $('#crudModal').modal('show')
           })

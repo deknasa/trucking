@@ -2,7 +2,12 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
-        
+
+        <div class="modal-header">
+          <p class="modal-title" id="crudModalTitle"></p>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          </button>
+        </div>
         <form action="" method="post">
           <div class="modal-body">
             <!--{{-- <div class="row form-group">
@@ -186,9 +191,9 @@
     setFormBindKeys(form)
 
     activeGrid = null
-    form.find('#btnSubmit').prop('disabled',false)
+    form.find('#btnSubmit').prop('disabled', false)
     if (form.data('action') == "view") {
-      form.find('#btnSubmit').prop('disabled',true)
+      form.find('#btnSubmit').prop('disabled', true)
     }
 
     getMaxLength(form)
@@ -213,26 +218,26 @@
   `)
     form.data('action', 'add')
     form.find(`.sometimes`).show()
-    $('#crudModalTitle').text('Create Sub Kelompok')
+    $('#crudModalTitle').text('Add Sub Kelompok')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
     Promise
-    .all([
-      setStatusAktifOptions(form),
-    ])
-    .then(() => {
-      showDefault(form)
-        .then(() => {
-          $('#crudModal').modal('show')
-        })
-        .catch((error) => {
+      .all([
+        setStatusAktifOptions(form),
+      ])
+      .then(() => {
+        showDefault(form)
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .catch((error) => {
             showDialog(error.statusText)
           })
-        .finally(() => {
-          $('.modal-loader').addClass('d-none')
-        })
-    })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
+      })
   }
 
   function editSubKelompok(subKelompokId) {
@@ -253,7 +258,7 @@
 
     Promise
       .all([
-  
+
         setStatusAktifOptions(form),
       ])
       .then(() => {
@@ -288,7 +293,7 @@
 
     Promise
       .all([
-  
+
         setStatusAktifOptions(form),
       ])
       .then(() => {
@@ -304,6 +309,7 @@
           })
       })
   }
+
   function viewSubKelompok(subKelompokId) {
     let form = $('#crudForm')
 
@@ -322,24 +328,24 @@
 
     Promise
       .all([
-  
+
         setStatusAktifOptions(form),
       ])
       .then(() => {
         showSubKelompok(form, subKelompokId)
-        .then(subKelompokId => {
-          form.find('[name]').removeAttr('disabled')
-          form.find('select').each((index, select) => {
-            let element = $(select)
-            if (element.data('select2')) {
+          .then(subKelompokId => {
+            form.find('[name]').removeAttr('disabled')
+            form.find('select').each((index, select) => {
+              let element = $(select)
+              if (element.data('select2')) {
                 element.select2('destroy')
-            }
+              }
+            })
+            form.find('[name]').attr('disabled', 'disabled').css({
+              background: '#fff'
+            })
+            form.find('[name=id]').prop('disabled', false)
           })
-          form.find('[name]').attr('disabled', 'disabled').css({
-            background: '#fff'
-          })
-          form.find('[name=id]').prop('disabled',false)
-        })
           .then(() => {
             $('#crudModal').modal('show')
             let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
@@ -439,8 +445,7 @@
 
             if (element.is('select')) {
               element.val(value).trigger('change')
-            } 
-            else {
+            } else {
               element.val(value)
             }
           })
@@ -472,8 +477,8 @@
               element.val(value)
             }
 
-            
-            if(index == 'kelompok') {
+
+            if (index == 'kelompok') {
               element.data('current-value', value)
             }
           })
@@ -491,7 +496,7 @@
     })
   }
 
-  function initLookup(){
+  function initLookup() {
     $(`.status-lookup`).lookupMaster({
       title: 'Status Aktif Lookup',
       fileName: 'parameterMaster',
@@ -556,7 +561,8 @@
       }
     })
   }
-  function cekValidasidelete(Id,Aksi) {
+
+  function cekValidasidelete(Id, Aksi) {
     $.ajax({
       url: `{{ config('app.api_url') }}subkelompok/${Id}/cekValidasi`,
       method: 'POST',
@@ -566,16 +572,16 @@
       },
       success: response => {
         var kondisi = response.kondisi
-          if (kondisi == true) {
-            showDialog(response.message['keterangan'])
-          } else {
-            if(Aksi == 'EDIT'){
-              editSubKelompok(Id)
-            }
-            if(Aksi == 'DELETE'){
-              deleteSubKelompok(Id)
-            }
+        if (kondisi == true) {
+          showDialog(response.message['keterangan'])
+        } else {
+          if (Aksi == 'EDIT') {
+            editSubKelompok(Id)
           }
+          if (Aksi == 'DELETE') {
+            deleteSubKelompok(Id)
+          }
+        }
 
       }
     })

@@ -2,11 +2,16 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
-        
+
+        <div class="modal-header">
+          <p class="modal-title" id="crudModalTitle"></p>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          </button>
+        </div>
         <form action="" method="post">
           <div class="modal-body">
 
-           {{-- <div class="row form-group">
+            {{-- <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">ID</label>
               </div>
@@ -35,7 +40,7 @@
                 <input type="text" name="keterangan" class="form-control">
               </div>
             </div>
-            
+
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
@@ -47,7 +52,7 @@
                 <input type="text" name="keterangancoa" id="keterangancoa" class="form-control akunpusat-lookup">
               </div>
             </div>
-            
+
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
@@ -70,7 +75,7 @@
                 <input type="text" name="statushitungstoknama" data-target-name="statushitungstok" id="statushitungstoknama" class="form-control lg-form statushitungstok-lookup">
               </div>
             </div>
-            
+
           </div>
           <div class="modal-footer justify-content-start">
             <button id="btnSubmit" class="btn btn-primary">
@@ -193,7 +198,7 @@
       })
     })
   })
-    
+
   $('#crudModal').on('shown.bs.modal', () => {
     let form = $('#crudForm')
 
@@ -201,9 +206,9 @@
 
     activeGrid = null
     initLookup()
-    form.find('#btnSubmit').prop('disabled',false)
+    form.find('#btnSubmit').prop('disabled', false)
     if (form.data('action') == "view") {
-      form.find('#btnSubmit').prop('disabled',true)
+      form.find('#btnSubmit').prop('disabled', true)
     }
     initSelect2(form.find('.select2bs4'), true);
     getMaxLength(form)
@@ -226,23 +231,23 @@
   `)
     form.data('action', 'add')
     form.find(`.sometimes`).show()
-    $('#crudModalTitle').text('Create Penerimaan Stok')
+    $('#crudModalTitle').text('Add Penerimaan Stok')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
     Promise
-    .all([
-      showDefault(form)
-    ])
-    .then(() => {
-      $('#crudModal').modal('show')
-    })
-    .catch((error) => {
-      showDialog(error.statusText)
-    })
-    .finally(() => {
-      $('.modal-loader').addClass('d-none')
-    })
+      .all([
+        showDefault(form)
+      ])
+      .then(() => {
+        $('#crudModal').modal('show')
+      })
+      .catch((error) => {
+        showDialog(error.statusText)
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
   }
 
   function editPenerimaanStok(penerimaanstokId) {
@@ -260,21 +265,21 @@
     $('#crudModalTitle').text('Edit Penerimaan Stok')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
-    
-    Promise
-    .all([
-      showPenerimaanStok(form, penerimaanstokId)
 
-    ])
-    .then(() => {
-      $('#crudModal').modal('show')
-    })
-    .catch((error) => {
-      showDialog(error.statusText)
-    })
-    .finally(() => {
-      $('.modal-loader').addClass('d-none')
-    })
+    Promise
+      .all([
+        showPenerimaanStok(form, penerimaanstokId)
+
+      ])
+      .then(() => {
+        $('#crudModal').modal('show')
+      })
+      .catch((error) => {
+        showDialog(error.statusText)
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
   }
 
   function deletePenerimaanStok(penerimaanstokId) {
@@ -294,19 +299,20 @@
     $('.invalid-feedback').remove()
 
     Promise
-    .all([
-      showPenerimaanStok(form, penerimaanstokId)
-    ])
-    .then(() => {
-      $('#crudModal').modal('show')
-    })
-    .catch((error) => {
-      showDialog(error.statusText)
-    })
-    .finally(() => {
-      $('.modal-loader').addClass('d-none')
-    })
+      .all([
+        showPenerimaanStok(form, penerimaanstokId)
+      ])
+      .then(() => {
+        $('#crudModal').modal('show')
+      })
+      .catch((error) => {
+        showDialog(error.statusText)
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
   }
+
   function viewPenerimaanStok(penerimaanstokId) {
     let form = $('#crudForm')
 
@@ -323,44 +329,44 @@
     $('.invalid-feedback').remove()
 
     Promise
-    .all([
-      showPenerimaanStok(form, penerimaanstokId)
-    ])
-    .then(penerimaanstokId => {
-      // form.find('.aksi').hide()
-      setFormBindKeys(form)
-      initSelect2(form.find('.select2bs4'), true)
-      form.find('[name]').removeAttr('disabled')
-  
-      form.find('select').each((index, select) => {
+      .all([
+        showPenerimaanStok(form, penerimaanstokId)
+      ])
+      .then(penerimaanstokId => {
+        // form.find('.aksi').hide()
+        setFormBindKeys(form)
+        initSelect2(form.find('.select2bs4'), true)
+        form.find('[name]').removeAttr('disabled')
+
+        form.find('select').each((index, select) => {
           let element = $(select)
           if (element.data('select2')) {
-              element.select2('destroy')
+            element.select2('destroy')
           }
+        })
+        form.find('[name]').attr('disabled', 'disabled').css({
+          background: '#fff'
+        })
+        form.find('[name=id]').prop('disabled', false)
       })
-      form.find('[name]').attr('disabled', 'disabled').css({
-        background: '#fff'
-      })
-      form.find('[name=id]').prop('disabled',false)
-    })
-    .then(() => {
-      $('#crudModal').modal('show')
-      form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
-      let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
-      name.attr('disabled', true)
-      name.find('.lookup-toggler').attr('disabled', true)
-      name.find('.lookup-toggler').attr('disabled', true)
+      .then(() => {
+        $('#crudModal').modal('show')
+        form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
+        let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
+        name.attr('disabled', true)
+        name.find('.lookup-toggler').attr('disabled', true)
+        name.find('.lookup-toggler').attr('disabled', true)
 
-    })
-    .catch((error) => {
-      showDialog(error.statusText)
-    })
-    .finally(() => {
-      $('.modal-loader').addClass('d-none')
-    })
+      })
+      .catch((error) => {
+        showDialog(error.statusText)
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
   }
-      
-  
+
+
   const setStatusFormatListOptions = function(relatedForm) {
     return new Promise((resolve, reject) => {
       relatedForm.find('[name=format]').empty()
@@ -441,7 +447,7 @@
       })
     })
   }
-    
+
   function showDefault(form) {
     return new Promise((resolve, reject) => {
       $.ajax({
@@ -459,8 +465,7 @@
 
             if (element.is('select')) {
               element.val(value).trigger('change')
-            } 
-            else {
+            } else {
               element.val(value)
             }
           })
@@ -472,6 +477,7 @@
       })
     })
   }
+
   function getMaxLength(form) {
     if (!form.attr('has-maxlength')) {
       $.ajax({
@@ -527,7 +533,7 @@
     })
   }
 
-    function initLookup() {
+  function initLookup() {
     $('.akunpusat-lookup').lookupMaster({
       title: 'akun pusat Lookup',
       fileName: 'akunpusatMaster',
@@ -537,14 +543,14 @@
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
           levelCoa: '3',
-          Aktif: 'AKTIF',     
+          Aktif: 'AKTIF',
           searching: 1,
           typeSearch: 'ALL',
           valueName: `keterangancoa`,
           searchText: `akunpusat-lookup`,
-          title: 'COA'     
+          title: 'COA'
         }
-      },      
+      },
       onSelectRow: (akunpusat, element) => {
         $('#crudForm [name=coa]').first().val(akunpusat.coa)
         element.val(akunpusat.keterangancoa)
@@ -638,11 +644,11 @@
       },
       success: response => {
         var kondisi = response.kondisi
-          if (kondisi == true) {
-            showDialog(response.message['keterangan'])
-          } else {
-              deletePenerimaanStok(Id)
-          }
+        if (kondisi == true) {
+          showDialog(response.message['keterangan'])
+        } else {
+          deletePenerimaanStok(Id)
+        }
 
       }
     })
