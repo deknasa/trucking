@@ -450,7 +450,11 @@
             class: 'btn btn-orange btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              viewPindahBuku(selectedId)
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Harap pilih salah satu record')
+              } else {
+                viewPindahBuku(selectedId)
+              }
             }
           },
         ],
@@ -500,7 +504,7 @@
       if (!`{{ $myAuth->hasPermission('pindahbuku', 'export') }}`) {
         $('#export').attr('disabled', 'disabled')
       }
-      let hakApporveCount = 0 ;
+      let hakApporveCount = 0;
       hakApporveCount++
       if (!`{{ $myAuth->hasPermission('pindahbuku', 'approvalbukacetak') }}`) {
         hakApporveCount--
@@ -532,7 +536,7 @@
             window.open(`{{ route('pindahbuku.report') }}?id=${Id}&printer=reportPrinterBesar`)
           } else if (Aksi == 'PRINTER KECIL') {
             window.open(`{{ route('pindahbuku.report') }}?id=${Id}&printer=reportPrinterKecil`)
-          } 
+          }
         }
       }
     })

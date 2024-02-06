@@ -10,7 +10,7 @@
       <option value="{{$kodepenerimaan['id']}}"> {{$kodepenerimaan['keterangan']}} </option>
       {{-- <option @if ($kodepenerimaan['statusdefault_text'] ==="YA") selected @endif value="{{$kodepenerimaan['id']}}"> {{$kodepenerimaan['namakodepenerimaan']}} </option> --}}
       @endforeach
-      
+
     </select>
   </div>
 </div>
@@ -511,7 +511,11 @@
             class: 'btn btn-orange btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              viewPenerimaanstokHeader(selectedId)
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Harap pilih salah satu record')
+              } else {
+                viewPenerimaanstokHeader(selectedId)
+              }
             }
           },
 
@@ -662,7 +666,7 @@
       if (!`{{ $myAuth->hasPermission('penerimaanstokheader', 'report') }}`) {
         $('#report').attr('disabled', 'disabled')
       }
-      let hakApporveCount = 0 ;
+      let hakApporveCount = 0;
       hakApporveCount++
       if (!`{{ $myAuth->hasPermission('penerimaanstokheader', 'approvalEdit') }}`) {
         $('#approvalEdit').hide()
@@ -786,17 +790,17 @@
 
           if (response.is_before_opname) {
             showConfirm('Yakin ingin mengedit data ?', 'stok Sudah Melewati Batas Stok Opname')
-            .done(function() {
-              showConfirm(msg, response.data.nobukti, `penerimaanstokheader/${response.data.id}/approvaledit?to=confirm`)
-            })
-          }else{
+              .done(function() {
+                showConfirm(msg, response.data.nobukti, `penerimaanstokheader/${response.data.id}/approvaledit?to=confirm`)
+              })
+          } else {
             showConfirm(msg, response.data.nobukti, `penerimaanstokheader/${response.data.id}/approvaledit?to=confirm`)
           }
 
         },
       })
     }
-    
+
     function approveEditKeterangan(id) {
       if (approveEditRequest) {
         approveEditRequest.abort();

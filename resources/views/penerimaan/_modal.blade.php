@@ -2,7 +2,12 @@
     <div class="modal-dialog">
         <form action="#" id="crudForm">
             <div class="modal-content">
-               
+                <div class="modal-header">
+                    <p class="modal-title" id="crudModalTitle"></p>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    </button>
+                </div>
+
                 <form action="" method="post">
 
                     <div class="modal-body">
@@ -400,7 +405,7 @@
       Save
     `)
         form.data('action', 'add')
-        $('#crudModalTitle').text('Add Penerimaan')
+        $('#crudModalTitle').text('Add Penerimaan Kas/Bank')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
         $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
@@ -473,7 +478,7 @@
       <i class="fa fa-save"></i>
       Save
     `)
-        $('#crudModalTitle').text('Edit Penerimaan')
+        $('#crudModalTitle').text('Edit Penerimaan Kas/Bank')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
         Promise
@@ -588,7 +593,7 @@
       <i class="fa fa-trash"></i>
               Delete
     `)
-        $('#crudModalTitle').text('Delete Penerimaan')
+        $('#crudModalTitle').text('Delete Penerimaan Kas/Bank')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
         Promise
@@ -625,7 +630,7 @@
           Save
         `)
         form.find(`.sometimes`).hide()
-        $('#crudModalTitle').text('View Penerimaan')
+        $('#crudModalTitle').text('View Penerimaan Kas/Bank')
 
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()

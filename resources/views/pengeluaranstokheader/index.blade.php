@@ -591,7 +591,11 @@
             class: 'btn btn-orange btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              viewPengeluaranstokHeader(selectedId)
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog(pleaseSelectARow)
+              } else {
+                viewPengeluaranstokHeader(selectedId)
+              }
             }
           },
         ],
@@ -752,7 +756,7 @@
         $('#report').attr('disabled', 'disabled')
       }
 
-      let hakApporveCount = 0 ;
+      let hakApporveCount = 0;
       hakApporveCount++
       if (!`{{ $myAuth->hasPermission('pengeluaranstokheader', 'approvalEdit') }}`) {
         $('#approvalEdit').hide()

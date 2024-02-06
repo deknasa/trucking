@@ -2,7 +2,12 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
-        
+        <div class="modal-header">
+          <p class="modal-title" id="crudModalTitle"></p>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          </button>
+        </div>
+
         <form action="" method="post">
 
           <div class="modal-body">
@@ -345,7 +350,7 @@
       Save
     `)
     form.data('action', 'add')
-    $('#crudModalTitle').text('Create Piutang Header')
+    $('#crudModalTitle').text('Add Piutang')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
@@ -368,7 +373,7 @@
     Save
   `)
     form.find(`.sometimes`).hide()
-    $('#crudModalTitle').text('Edit Piutang Header')
+    $('#crudModalTitle').text('Edit Piutang')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -403,7 +408,7 @@
     Delete
   `)
     form.find(`.sometimes`).hide()
-    $('#crudModalTitle').text('Delete Piutang Header')
+    $('#crudModalTitle').text('Delete Piutang')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -433,7 +438,7 @@
       Save
     `)
     form.find(`.sometimes`).hide()
-    $('#crudModalTitle').text('View Piutang Header')
+    $('#crudModalTitle').text('View Piutang')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 

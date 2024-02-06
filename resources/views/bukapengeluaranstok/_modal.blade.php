@@ -2,11 +2,16 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
-        
+
+        <div class="modal-header">
+          <p class="modal-title" id="crudModalTitle"></p>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          </button>
+        </div>
         <form action="" method="post">
-          <div class="modal-body" style="height: 30vh">
-            <input type="text" name="id" class="form-control"  hidden readonly>
-            
+          <div class="modal-body">
+            <input type="text" name="id" class="form-control" hidden readonly>
+
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
@@ -28,7 +33,8 @@
               <div class="col-12 col-sm-9 col-md-10">
                 <div class="input-group">
                   <input type="text" name="pengeluaranstok" class="form-control pengeluaranstok-lookup">
-                  <input type="text" id="pengeluaranstokId" name="pengeluaranstok_id" hidden readonly>                </div>
+                  <input type="text" id="pengeluaranstokId" name="pengeluaranstok_id" hidden readonly>
+                </div>
               </div>
             </div>
           </div>
@@ -125,7 +131,7 @@
 
           id = response.data.id
 
-          $('#jqGrid').jqGrid('setGridParam', { 
+          $('#jqGrid').jqGrid('setGridParam', {
             page: response.data.page
           }).trigger('reloadGrid');
 
@@ -174,7 +180,7 @@
     Save
   `)
     form.data('action', 'add')
-    $('#crudModalTitle').text('Create Buka Pengeluaran Stok')
+    $('#crudModalTitle').text('Add Buka Pengeluaran Stok')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
@@ -245,7 +251,7 @@
     })
   }
 
-  
+
 
   function showBukaPengeluaranStok(form, bukaPengeluaranStokId) {
     return new Promise((resolve, reject) => {
@@ -262,14 +268,14 @@
 
             if (element.is('select')) {
               element.val(value).trigger('change')
-            }else if(element.attr("name") == 'tglbukti'){
+            } else if (element.attr("name") == 'tglbukti') {
               var result = value.split('-');
-              element.val(result[2]+'-'+result[1]+'-'+result[0]);
+              element.val(result[2] + '-' + result[1] + '-' + result[0]);
             } else {
               element.val(value)
             }
           })
-          
+
           if (form.data('action') === 'delete') {
             form.find('[name]').addClass('disabled')
             initDisabled()
@@ -302,6 +308,5 @@
       }
     })
   }
-      
 </script>
 @endpush()

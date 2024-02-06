@@ -2,7 +2,12 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
-        
+        <div class="modal-header">
+          <p class="modal-title" id="crudModalTitle"></p>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          </button>
+        </div>
+
         <form action="" method="post">
           <input type="hidden" name="id">
           <div class="modal-body">
@@ -480,7 +485,7 @@
 
     form.data('action', 'add')
     form.find(`.sometimes`).show()
-    $('#crudModalTitle').text('Create Pengembalian Kas Gantung')
+    $('#crudModalTitle').text('Add Pengembalian Kas Gantung')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 

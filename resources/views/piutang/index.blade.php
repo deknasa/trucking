@@ -73,12 +73,12 @@
     loadJurnalUmumGrid(nobukti)
 
     @isset($request['tgldari'])
-      tgldariheader = `{{ $request['tgldari'] }}`;
+    tgldariheader = `{{ $request['tgldari'] }}`;
     @endisset
     @isset($request['tglsampai'])
-      tglsampaiheader = `{{ $request['tglsampai'] }}`;
+    tglsampaiheader = `{{ $request['tglsampai'] }}`;
     @endisset
-    setRange(false,tgldariheader,tglsampaiheader)
+    setRange(false, tgldariheader, tglsampaiheader)
     initDatepicker('datepickerIndex')
     $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('piutangheader')
@@ -210,14 +210,14 @@
               let tgldari
               let tglsampai
               let url
-              if ((value == null) ||( value == '')) {
+              if ((value == null) || (value == '')) {
                 return '';
               }
               if (rowData.tgldariheaderinvoiceheader) {
                 tgldari = rowData.tgldariheaderinvoiceheader
                 tglsampai = rowData.tglsampaiheaderinvoiceheader
                 url = "{{route('invoiceheader.index')}}"
-              }else if (rowData.tgldariheaderinvoiceextraheader) {
+              } else if (rowData.tgldariheaderinvoiceextraheader) {
                 tgldari = rowData.tgldariheaderinvoiceextraheader
                 tglsampai = rowData.tglsampaiheaderinvoiceextraheader
                 url = "{{route('invoiceextraheader.index')}}"
@@ -225,7 +225,7 @@
               let formattedValue
               if (url) {
                 formattedValue = $(`<a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>`)
-              }else{
+              } else {
                 formattedValue = $(`<span>${value}</span>`)
               }
               return formattedValue[0].outerHTML
@@ -386,7 +386,7 @@
           }, 100)
 
           $('#left-nav').find('button').attr('disabled', false)
-          permission() 
+          permission()
           setHighlight($(this))
         }
       })
@@ -406,7 +406,7 @@
       })
 
       .customPager({
-        
+
         extndBtn: [{
             id: 'report',
             title: 'Report',
@@ -462,24 +462,22 @@
             caption: 'Approve',
             innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
             class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-            dropmenuHTML: [
-              {
-                id: 'approval-buka-cetak',
-                text: "un/Approval Buka Cetak Piutang",
-                onClick: () => {
-                  if (`{{ $myAuth->hasPermission('piutangheader', 'approvalbukacetak') }}`) {
-                    let tglbukacetak = $('#tgldariheader').val().split('-');
-                    tglbukacetak =tglbukacetak[1] + '-' + tglbukacetak[2];
-                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                    if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                      showDialog('Harap pilih salah satu record')
-                    }else{
-                      approvalBukaCetak(tglbukacetak,'PIUTANGHEADER',[selectedId]);
-                    }
+            dropmenuHTML: [{
+              id: 'approval-buka-cetak',
+              text: "un/Approval Buka Cetak Piutang",
+              onClick: () => {
+                if (`{{ $myAuth->hasPermission('piutangheader', 'approvalbukacetak') }}`) {
+                  let tglbukacetak = $('#tgldariheader').val().split('-');
+                  tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
+                  selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                  if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                    showDialog('Harap pilih salah satu record')
+                  } else {
+                    approvalBukaCetak(tglbukacetak, 'PIUTANGHEADER', [selectedId]);
                   }
                 }
-              },
-            ],
+              }
+            }, ],
           }
         ],
         buttons: [{
@@ -523,7 +521,11 @@
             class: 'btn btn-orange btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              viewPiutangHeader(selectedId)
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Harap pilih salah satu record')
+              } else {
+                viewPiutangHeader(selectedId)
+              }
             }
           },
         ],
@@ -579,7 +581,7 @@
       if (!`{{ $myAuth->hasPermission('piutangheader', 'report') }}`) {
         $('#report').attr('disabled', 'disabled')
       }
-      let hakApporveCount = 0 ;
+      let hakApporveCount = 0;
       hakApporveCount++
       if (!`{{ $myAuth->hasPermission('piutangheader', 'approvalbukacetak') }}`) {
         hakApporveCount--

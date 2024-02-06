@@ -2,7 +2,12 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
-        
+        <div class="modal-header">
+          <p class="modal-title" id="crudModalTitle"></p>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          </button>
+        </div>
+
         <form action="" method="post">
 
           <div class="modal-body">
@@ -406,7 +411,7 @@
     `)
     form.data('action', 'add')
 
-    $('#crudModalTitle').text('Add Pengeluaran')
+    $('#crudModalTitle').text('Add Pengeluaran Kas/bank')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -488,7 +493,7 @@
       <i class="fa fa-save"></i>
       Save
     `)
-    $('#crudModalTitle').text('Edit Pengeluaran')
+    $('#crudModalTitle').text('Edit Pengeluaran Kas/bank')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -601,7 +606,7 @@
       <i class="fa fa-trash"></i>
               Delete
     `)
-    $('#crudModalTitle').text('Delete Pengeluaran')
+    $('#crudModalTitle').text('Delete Pengeluaran Kas/bank')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -638,7 +643,7 @@
       Save
     `)
     form.find(`.sometimes`).hide()
-    $('#crudModalTitle').text('View Pengeluaran')
+    $('#crudModalTitle').text('View Pengeluaran Kas/bank')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 

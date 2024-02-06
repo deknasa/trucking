@@ -71,7 +71,7 @@
 
     setRange()
     initDatepicker('datepickerIndex')
-    $(document).on('click','#btnReload', function(event) {
+    $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('pengembaliankasgantungheader')
     })
 
@@ -82,9 +82,9 @@
         iconSet: 'fontAwesome',
         datatype: "json",
         postData: {
-          tgldari:$('#tgldariheader').val() ,
-          tglsampai:$('#tglsampaiheader').val(),
-          
+          tgldari: $('#tgldariheader').val(),
+          tglsampai: $('#tglsampaiheader').val(),
+
         },
         colModel: [{
             label: 'ID',
@@ -212,7 +212,7 @@
             name: 'penerimaan_nobukti',
             align: 'left',
             formatter: (value, options, rowData) => {
-              if ((value == null) ||( value == '')) {
+              if ((value == null) || (value == '')) {
                 return '';
               }
               let tgldari = rowData.tgldariheaderpenerimaanheader
@@ -221,8 +221,8 @@
               let formattedValue = $(`
               <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
              `)
-             return formattedValue[0].outerHTML
-           }
+              return formattedValue[0].outerHTML
+            }
           },
           {
             label: 'KODE PERKIRAAN',
@@ -312,7 +312,7 @@
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
-          
+
           loadDetailData(id)
           loadPenerimaanData(id, nobukti)
           loadJurnalUmumData(id, nobukti)
@@ -330,7 +330,7 @@
               clearGridHeader($(element))
             })
           }
-          
+
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))
@@ -373,7 +373,7 @@
           }, 100)
 
           $('#left-nav').find('button').attr('disabled', false)
-          permission() 
+          permission()
           setHighlight($(this))
         }
       })
@@ -388,16 +388,17 @@
         beforeSearch: function() {
           $('#left-nav').find(`button:not(#add)`).attr('disabled', 'disabled')
           $(this).setGridParam({
-          postData: {
-            tgldari:$('#tgldariheader').val() ,
-            tglsampai:$('#tglsampaiheader').val() 
-          },})
+            postData: {
+              tgldari: $('#tgldariheader').val(),
+              tglsampai: $('#tglsampaiheader').val()
+            },
+          })
           clearGlobalSearch($('#jqGrid'))
         },
       })
 
       .customPager({
-        
+
         extndBtn: [{
             id: 'report',
             title: 'Report',
@@ -448,30 +449,28 @@
             }
           },
           {
-          id: 'approve',
-          title: 'Approve',
-          caption: 'Approve',
-          innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-          class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-          dropmenuHTML: [
-            {
+            id: 'approve',
+            title: 'Approve',
+            caption: 'Approve',
+            innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+            class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
+            dropmenuHTML: [{
               id: 'approval-buka-cetak',
               text: "Approval Buka Cetak PENGEMBALIAN KAS GANTUNG",
               onClick: () => {
                 if (`{{ $myAuth->hasPermission('pengembaliankasgantungheader', 'approvalbukacetak') }}`) {
                   let tglbukacetak = $('#tgldariheader').val().split('-');
-                  tglbukacetak =tglbukacetak[1] + '-' + tglbukacetak[2];
+                  tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
                     showDialog('Harap pilih salah satu record')
-                  }else{
-                    approvalBukaCetak(tglbukacetak,'PENGEMBALIANKASGANTUNGHEADER',[selectedId]);
+                  } else {
+                    approvalBukaCetak(tglbukacetak, 'PENGEMBALIANKASGANTUNGHEADER', [selectedId]);
                   }
                 }
               }
-            },
-          ],
-        }
+            }, ],
+          }
         ],
         buttons: [{
             id: 'add',
@@ -489,7 +488,7 @@
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
-              }else {
+              } else {
                 cekValidasi(selectedId, 'EDIT')
               }
             }
@@ -504,7 +503,8 @@
                 showDialog('Harap pilih salah satu record')
               } else {
                 cekValidasi(selectedId, 'DELETE')
-              }            }
+              }
+            }
           },
           {
             id: 'view',
@@ -512,9 +512,13 @@
             class: 'btn btn-orange btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              viewPengembalianKasGantung(selectedId)
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Harap pilih salah satu record')
+              } else {
+                viewPengembalianKasGantung(selectedId)
+              }
             }
-          },  
+          },
         ],
 
       })
@@ -546,43 +550,43 @@
       .addClass('btn btn-sm btn-warning')
       .parent().addClass('px-1')
 
-      function permission() {
-    if (!`{{ $myAuth->hasPermission('pengembaliankasgantungheader', 'store') }}`) {
-      $('#add').addClass('ui-disabled')
-    }
+    function permission() {
+      if (!`{{ $myAuth->hasPermission('pengembaliankasgantungheader', 'store') }}`) {
+        $('#add').addClass('ui-disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('pengembaliankasgantungheader', 'show') }}`) {
-      $('#view').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('pengembaliankasgantungheader', 'show') }}`) {
+        $('#view').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('pengembaliankasgantungheader', 'update') }}`) {
-      $('#edit').addClass('ui-disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('pengembaliankasgantungheader', 'update') }}`) {
+        $('#edit').addClass('ui-disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('pengembaliankasgantungheader', 'destroy') }}`) {
-      $('#delete').addClass('ui-disabled')
-  }
+      if (!`{{ $myAuth->hasPermission('pengembaliankasgantungheader', 'destroy') }}`) {
+        $('#delete').addClass('ui-disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('pengembaliankasgantungheader', 'export') }}`) {
-      $('#export').addClass('ui-disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('pengembaliankasgantungheader', 'export') }}`) {
+        $('#export').addClass('ui-disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('pengembaliankasgantungheader', 'report') }}`) {
-      $('#report').addClass('ui-disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('pengembaliankasgantungheader', 'report') }}`) {
+        $('#report').addClass('ui-disabled')
+      }
 
-    let hakApporveCount = 0 ;
-    hakApporveCount++
-    if (!`{{ $myAuth->hasPermission('pengembaliankasgantungheader', 'approvalbukacetak') }}`) {
-      hakApporveCount--
-      $('#approval-buka-cetak').hide()
-      // $('#approval-buka-cetak').attr('disabled', 'disabled')
+      let hakApporveCount = 0;
+      hakApporveCount++
+      if (!`{{ $myAuth->hasPermission('pengembaliankasgantungheader', 'approvalbukacetak') }}`) {
+        hakApporveCount--
+        $('#approval-buka-cetak').hide()
+        // $('#approval-buka-cetak').attr('disabled', 'disabled')
+      }
+      if (hakApporveCount < 1) {
+        // $('#approve').hide()
+        $('#approve').attr('disabled', 'disabled')
+      }
     }
-    if (hakApporveCount < 1) {
-      // $('#approve').hide()
-      $('#approve').attr('disabled', 'disabled')
-    }
-  }
 
     $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {

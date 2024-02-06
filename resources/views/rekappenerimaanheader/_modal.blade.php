@@ -2,7 +2,12 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
-        
+        <div class="modal-header">
+          <p class="modal-title" id="crudModalTitle"></p>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          </button>
+        </div>
+
         <form action="" method="post">
           <div class="modal-body">
             <div class="row form-group">
@@ -223,7 +228,7 @@
         name: 'tglsampaiheader',
         value: $('#tglsampaiheader').val()
       })
-      
+
       let tgldariheader = $('#tgldariheader').val();
       let tglsampaiheader = $('#tglsampaiheader').val()
 
@@ -367,7 +372,7 @@
     `)
     form.data('action', 'add')
     form.find(`.sometimes`).show()
-    $('#crudModalTitle').text('Create Rekap Penerimaan')
+    $('#crudModalTitle').text('Add Rekap Penerimaan')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
@@ -502,9 +507,9 @@
           if (kodestatus == '1') {
             showDialog(response.message['keterangan'])
           } else {
-            if(Aksi == 'PRINTER BESAR'){
+            if (Aksi == 'PRINTER BESAR') {
               window.open(`{{ route('rekappenerimaanheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
-            } else if(Aksi == 'PRINTER KECIL'){
+            } else if (Aksi == 'PRINTER KECIL') {
               window.open(`{{ route('rekappenerimaanheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
             } else if (Aksi == 'EDIT') {
               showDialog('REKAP PENERIMAAN TIDAK BISA DIEDIT')

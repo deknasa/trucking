@@ -2,7 +2,12 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
-        
+        <div class="modal-header">
+          <p class="modal-title" id="crudModalTitle"></p>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          </button>
+        </div>
+
         <form action="" method="post">
           <div class="modal-body">
 
@@ -142,86 +147,86 @@
                   </div>
                 </div>
               </div>
-            
-            </div>
-              
-              <div class="row">
 
-                <div class="form-group col-md-6">
-                  <div class="row">
-                    <div class="col-12 col-sm-3 col-md-4">
-                      <label class="col-form-label"> gudang dari </label>
-                    </div>
-                    <div class="col-12 col-sm-9 col-md-8">
-                      <input type="text" name="gudangdari" class="form-control gudangdari-lookup">
-                      <input type="text" id="gudangdariId" name="gudangdari_id" hidden readonly>
-                    </div>
+            </div>
+
+            <div class="row">
+
+              <div class="form-group col-md-6">
+                <div class="row">
+                  <div class="col-12 col-sm-3 col-md-4">
+                    <label class="col-form-label"> gudang dari </label>
+                  </div>
+                  <div class="col-12 col-sm-9 col-md-8">
+                    <input type="text" name="gudangdari" class="form-control gudangdari-lookup">
+                    <input type="text" id="gudangdariId" name="gudangdari_id" hidden readonly>
                   </div>
                 </div>
-                <div class="form-group col-md-6">
-                  <div class="row">
-                    <div class="col-12 col-sm-3 col-md-4">
-                      <label class="col-form-label">gudang ke </label>
-                    </div>
-                    <div class="col-12 col-sm-9 col-md-8">
-                      <input type="text" name="gudangke" class="form-control gudangke-lookup">
-                      <input type="text" id="gudangkeId" name="gudangke_id" hidden readonly>
-                    </div>
+              </div>
+              <div class="form-group col-md-6">
+                <div class="row">
+                  <div class="col-12 col-sm-3 col-md-4">
+                    <label class="col-form-label">gudang ke </label>
+                  </div>
+                  <div class="col-12 col-sm-9 col-md-8">
+                    <input type="text" name="gudangke" class="form-control gudangke-lookup">
+                    <input type="text" id="gudangkeId" name="gudangke_id" hidden readonly>
                   </div>
                 </div>
-  
-                <div class="form-group col-md-6">
-                  <div class="row">
-                    <div class="col-12 col-sm-3 col-md-4">
-                      <label class="col-form-label">trado dari</label>
-                    </div>
-                    <div class="col-12 col-sm-9 col-md-8">
-                      <input type="text" name="tradodari" class="form-control tradodari-lookup">
-                      <input type="text" id="tradodariId" name="tradodari_id" hidden readonly>
-                    </div>
+              </div>
+
+              <div class="form-group col-md-6">
+                <div class="row">
+                  <div class="col-12 col-sm-3 col-md-4">
+                    <label class="col-form-label">trado dari</label>
+                  </div>
+                  <div class="col-12 col-sm-9 col-md-8">
+                    <input type="text" name="tradodari" class="form-control tradodari-lookup">
+                    <input type="text" id="tradodariId" name="tradodari_id" hidden readonly>
                   </div>
                 </div>
-  
-                <div class="form-group col-md-6">
-                  <div class="row">
-                    <div class="col-12 col-sm-3 col-md-4">
-                      <label class="col-form-label">trado ke </label>
-                    </div>
-                    <div class="col-12 col-sm-9 col-md-8">
-                      <input type="text" name="tradoke" class="form-control tradoke-lookup">
-                      <input type="text" id="tradokeId" name="tradoke_id" hidden readonly>
-                    </div>
+              </div>
+
+              <div class="form-group col-md-6">
+                <div class="row">
+                  <div class="col-12 col-sm-3 col-md-4">
+                    <label class="col-form-label">trado ke </label>
                   </div>
-                </div>
-              
-  
-                <div class="form-group col-md-6">
-                  <div class="row">
-                    <div class="col-12 col-sm-3 col-md-4">
-                      <label class="col-form-label">gandengan dari</label>
-                    </div>
-                    <div class="col-12 col-sm-9 col-md-8">
-                      <input type="text" name="gandengandari" class="form-control gandengandari-lookup">
-                      <input type="text" id="gandengandariId" name="gandengandari_id" hidden readonly>
-                    </div>
-                  </div>
-                </div>
-  
-                <div class="form-group col-md-6">
-                  <div class="row">
-                    <div class="col-12 col-sm-3 col-md-4">
-                      <label class="col-form-label">gandengan ke </label>
-                    </div>
-                    <div class="col-12 col-sm-9 col-md-8">
-                      <input type="text" name="gandenganke" class="form-control gandenganke-lookup">
-                      <input type="text" id="gandengankeId" name="gandenganke_id" hidden readonly>
-                    </div>
+                  <div class="col-12 col-sm-9 col-md-8">
+                    <input type="text" name="tradoke" class="form-control tradoke-lookup">
+                    <input type="text" id="tradokeId" name="tradoke_id" hidden readonly>
                   </div>
                 </div>
               </div>
 
 
-            
+              <div class="form-group col-md-6">
+                <div class="row">
+                  <div class="col-12 col-sm-3 col-md-4">
+                    <label class="col-form-label">gandengan dari</label>
+                  </div>
+                  <div class="col-12 col-sm-9 col-md-8">
+                    <input type="text" name="gandengandari" class="form-control gandengandari-lookup">
+                    <input type="text" id="gandengandariId" name="gandengandari_id" hidden readonly>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group col-md-6">
+                <div class="row">
+                  <div class="col-12 col-sm-3 col-md-4">
+                    <label class="col-form-label">gandengan ke </label>
+                  </div>
+                  <div class="col-12 col-sm-9 col-md-8">
+                    <input type="text" name="gandenganke" class="form-control gandenganke-lookup">
+                    <input type="text" id="gandengankeId" name="gandenganke_id" hidden readonly>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+
 
             {{-- <div class="row form-group" style="display:none">
               <div class="col-12 col-sm-3 col-md-2">
@@ -238,10 +243,10 @@
                 <thead>
                   <tr>
                     <th style="width:10%; max-width: 25px;max-width: 15px">No</th>
-                    <th style="width: 20%; min-width: 200px;">stok  </th>
-                    <th style="width: 10%; min-width: 100px;">Satuan  </th>
-                    <th style="width: 20%; min-width: 200px;">keterangan  </th>
-                    <th class="data_tbl tbl_penerimaanstok_nobukti"  style="width: 20%; min-width: 200px;">Penerimaan stok no bukti</th>
+                    <th style="width: 20%; min-width: 200px;">stok </th>
+                    <th style="width: 10%; min-width: 100px;">Satuan </th>
+                    <th style="width: 20%; min-width: 200px;">keterangan </th>
+                    <th class="data_tbl tbl_penerimaanstok_nobukti" style="width: 20%; min-width: 200px;">Penerimaan stok no bukti</th>
                     <th class="data_tbl tbl_harga" style="width: 20%; min-width: 200px;">harga</th>
                     <th class="data_tbl tbl_qty" style="width:10%; min-width: 100px">qty </th>
                     <th class="data_tbl tbl_vulkanisirke" style="width:10%; min-width: 100px">vulkanisir ke</th>
@@ -262,7 +267,7 @@
 
                     <td class="font-weight-bold data_tbl sumrow"> Total : </td>
                     <td id="sumary" class="text-right font-weight-bold data_tbl sumrow"> </td>
-                    <td  class="data_tbl tbl_aksi" >
+                    <td class="data_tbl tbl_aksi">
                       <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
                     </td>
                   </tr>
@@ -294,8 +299,8 @@
   let modalBody = $('#crudModal').find('.modal-body').html()
   var KodePenerimaanId
   var KelompokId = "";
-  var listKodePenerimaan =[];
-  var listIdPenerimaan =[];
+  var listKodePenerimaan = [];
+  var listIdPenerimaan = [];
   $(document).ready(function() {
     $(document).on('click', '#addRow', function(event) {
       event.preventDefault()
@@ -304,8 +309,8 @@
       let action = form.data('action')
       let data = $('#crudForm').serializeArray()
       data = numericInput(data);
-      
-      
+
+
       $.ajax({
         url: `${apiUrl}penerimaanstokheader/addrow`,
         method: 'POST',
@@ -334,10 +339,10 @@
               }
               return result;
             }, {});
-            
+
             console.log(filteredErrors);
             setErrorMessages(form, filteredErrors);
-          
+
           } else {
             showDialog(error.responseJSON)
           }
@@ -348,7 +353,7 @@
       })
     });
 
-    function validasiSpbMinus(detail_id,row){
+    function validasiSpbMinus(detail_id, row) {
       let form = $('#crudForm');
       $.ajax({
         url: `${apiUrl}penerimaanstokheader/deleterow`,
@@ -357,10 +362,12 @@
         headers: {
           Authorization: `Bearer ${accessToken}`
         },
-        data: {detail:detail_id},
+        data: {
+          detail: detail_id
+        },
         success: response => {
-         console.log(response);
-         deleteRow(row)
+          console.log(response);
+          deleteRow(row)
         },
         error: error => {
           if (error.status === 422) {
@@ -381,47 +388,47 @@
     $(document).on('click', '.rmv', function(event) {
       // console.log($(.rmv).parents('tr'));
       if ($(this).attr('data-id')) {
-        validasiSpbMinus($(this).attr('data-id'),$(this).parents('tr'))
-      }else{
+        validasiSpbMinus($(this).attr('data-id'), $(this).parents('tr'))
+      } else {
         deleteRow($(this).parents('tr'))
       }
     })
 
     function numericInput(data) {
       $('#crudForm').find(`[name="detail_qty[]"]`).each((index, element) => {
-        if (element.value !="" &&  AutoNumeric.getAutoNumericElement(element) !== null) {
+        if (element.value != "" && AutoNumeric.getAutoNumericElement(element) !== null) {
           data.filter((row) => row.name === 'detail_qty[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="detail_qty[]"]`)[index])
-        }else{
+        } else {
           data.filter((row) => row.name === 'detail_qty[]')[index].value = 0;
         }
       })
       $('#crudForm').find(`[name="detail_harga[]"]`).each((index, element) => {
-        if (element.value !="" &&  AutoNumeric.getAutoNumericElement(element) !== null) {
+        if (element.value != "" && AutoNumeric.getAutoNumericElement(element) !== null) {
           data.filter((row) => row.name === 'detail_harga[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="detail_harga[]"]`)[index])
-        }else{
+        } else {
           data.filter((row) => row.name === 'detail_harga[]')[index].value = 0;
         }
       })
 
       $('#crudForm').find(`[name="detail_persentasediscount[]"]`).each((index, element) => {
-        if (element.value !="" &&  AutoNumeric.getAutoNumericElement(element) !== null) {
+        if (element.value != "" && AutoNumeric.getAutoNumericElement(element) !== null) {
           data.filter((row) => row.name === 'detail_persentasediscount[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="detail_persentasediscount[]"]`)[index])
-        }else{
+        } else {
           data.filter((row) => row.name === 'detail_persentasediscount[]')[index].value = 0;
         }
       })
 
       $('#crudForm').find(`[name="total_sebelum[]"]`).each((index, element) => {
-        if (element.value !="" &&  AutoNumeric.getAutoNumericElement(element) !== null) {
+        if (element.value != "" && AutoNumeric.getAutoNumericElement(element) !== null) {
           data.filter((row) => row.name === 'total_sebelum[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="total_sebelum[]"]`)[index])
-        }else{
+        } else {
           data.filter((row) => row.name === 'total_sebelum[]')[index].value = 0;
         }
       })
       $('#crudForm').find(`[name="totalItem[]"]`).each((index, element) => {
-        if (element.value !="" &&  AutoNumeric.getAutoNumericElement(element) !== null) {
+        if (element.value != "" && AutoNumeric.getAutoNumericElement(element) !== null) {
           data.filter((row) => row.name === 'totalItem[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="totalItem[]"]`)[index])
-        }else{
+        } else {
           data.filter((row) => row.name === 'totalItem[]')[index].value = 0;
         }
       })
@@ -485,7 +492,7 @@
       })
       data.push({
         name: 'penerimaanheader_id',
-        value:  $('#penerimaanstokId').val()
+        value: $('#penerimaanstokId').val()
       })
       let penerimaanheader_id = $('#penerimaanstokId').val()
       let tgldariheader = $('#tgldariheader').val();
@@ -570,34 +577,34 @@
   function setTampilanForm() {
     tampilanall()
     switch (KodePenerimaanId) {
-      case listKodePenerimaan[0] : // 'DOT':
+      case listKodePenerimaan[0]: // 'DOT':
         tampilandot()
         break;
-      case listKodePenerimaan[1] : // 'PO':
+      case listKodePenerimaan[1]: // 'PO':
         tampilanpo()
         break;
-      case listKodePenerimaan[2] : // 'SPB':
+      case listKodePenerimaan[2]: // 'SPB':
         tampilanpbt()
         break;
-      case listKodePenerimaan[4] : // 'PG':
+      case listKodePenerimaan[4]: // 'PG':
         tampilanpgt()
         break;
-      case listKodePenerimaan[3] : // 'KOR':
+      case listKodePenerimaan[3]: // 'KOR':
         tampilankst()
         break;
-      case listKodePenerimaan[5] : // 'SPBS':
+      case listKodePenerimaan[5]: // 'SPBS':
         tampilanSPBS()
         break;
-      case listKodePenerimaan[7] : // 'PST':
+      case listKodePenerimaan[7]: // 'PST':
         tampilanPST()
         break;
-      case listKodePenerimaan[8] : // 'PSPK':
+      case listKodePenerimaan[8]: // 'PSPK':
         tampilanPSPK()
         break;
-      case listKodePenerimaan[9] : // 'KORV':
+      case listKodePenerimaan[9]: // 'KORV':
         tampilanKORV()
         break;
-      case listKodePenerimaan[10] : // 'SPBP':
+      case listKodePenerimaan[10]: // 'SPBP':
         tampilanSPBP()
         break;
 
@@ -631,13 +638,13 @@
     $('.tbl_penerimaanstok_nobukti').hide();
     $('.colspan').attr('colspan', 5);
     $('.sumrow').hide();
-    
+
     // $('[name=supplier]').val('').attr('readonly', false);
     // $('[name=supplier]').data('currentValue', '')
     // $('[name=supplier_id]').val('')
     $('#addRow').show()
     $('.tbl_aksi').show()
-    
+
   }
 
   function tampilanpo() {
@@ -664,13 +671,13 @@
 
     $('.colspan').attr('colspan', 5);
     $('.sumrow').hide();
-    
+
     // $('[name=supplier]').val('').attr('readonly', false);
     // $('[name=supplier]').data('currentValue', '')
     // $('[name=supplier_id]').val('')
     $('#addRow').show()
     $('.tbl_aksi').show()
-    
+
   }
 
   function tampilanpbt() {
@@ -693,7 +700,7 @@
     $('.tbl_penerimaanstok_nobukti').hide();
 
     $('.sumrow').show();
-    
+
     $('.tbl_aksi').show()
   }
 
@@ -726,7 +733,7 @@
 
     $('.tbl_aksi').show()
     $('#addRow').show()
-    
+
   }
 
   function tampilankst() {
@@ -742,8 +749,8 @@
     $('[name=gudang]').parents('.form-group').show()
     $('[name=trado]').parents('.form-group').show()
     $('[name=gandengan]').parents('.form-group').show()
-    
-    
+
+
     $('[name=gudangdari]').parents('.form-group').hide()
     $('[name=gudangke]').parents('.form-group').hide()
     $('[name=tradodari]').parents('.form-group').hide()
@@ -761,7 +768,7 @@
     $('.tbl_total_sebelum').hide();
     $('.colspan').attr('colspan', 5);
     $('.sumrow').hide();
-    
+
     $('#addRow').show()
   }
 
@@ -787,7 +794,7 @@
     $('.tbl_total_sebelum').show();
     $('.tbl_penerimaanstok_nobukti').show();
     $('.colspan').attr('colspan', 8);
-    
+
     $('#addRow').show()
   }
 
@@ -817,8 +824,9 @@
     // $('[name=supplier]').data('currentValue', '')
     // $('[name=supplier_id]').val('')
     $('#addRow').show()
-    
+
   }
+
   function tampilanInit() {
     $('[name=gudang]').val('').attr('readonly', false);
     $('[name=gudang_id]').val('')
@@ -845,7 +853,7 @@
     $('.data_tbl').hide();
     $('.tbl_total_sebelum').hide();
     $('.tbl_statusban').hide();
-    $('.colspan').attr('colspan',4);
+    $('.colspan').attr('colspan', 4);
     // $('[name=nobon]').val('')
     // $('[name=supplier]').attr('readonly', false);
     // $('[name=supplier]').data('currentValue', '')
@@ -878,10 +886,10 @@
     $('.tbl_penerimaanstok_nobukti').hide();
 
     $('.sumrow').show();
-    
+
     $('.tbl_aksi').show()
   }
-  
+
   function tampilanPSPK() {
     $('[name=pengeluaranstok_nobukti]').parents('.form-group').show()
     $('[name=penerimaanstok_nobukti]').parents('.form-group').hide()
@@ -906,7 +914,7 @@
     $('.tbl_penerimaanstok_nobukti').hide();
 
     $('.sumrow').show();
-    
+
     $('.tbl_aksi').show()
   }
 
@@ -923,7 +931,7 @@
     $('[name=gudang]').parents('.form-group').hide()
     $('[name=trado]').parents('.form-group').hide()
     $('[name=gandengan]').parents('.form-group').hide()
-    
+
     $('.tbl_total_sebelum').hide();
     $('[name=gudangdari]').parents('.form-group').hide()
     $('[name=gudangke]').parents('.form-group').hide()
@@ -941,16 +949,16 @@
     $('.tbl_total').hide();
     $('.colspan').attr('colspan', 7);
     $('.sumrow').hide();
-    
+
     $('#addRow').show()
   }
 
-  
+
   function tampilanSPBP() {
     $('[name=pengeluaranstok_nobukti]').parents('.form-group').hide()
     $('[name=hutang_nobukti]').parents('.form-group').hide()
     $('[name=supplier]').parents('.form-group').show()
-    
+
     $('[name=trado]').parents('.form-group').hide()
     $('[name=gudang]').parents('.form-group').hide()
     $('[name=gudangdari]').parents('.form-group').hide()
@@ -970,6 +978,7 @@
 
     $('.tbl_aksi').show()
   }
+
   function setSuplier(penerimaan_id) {
     $.ajax({
       url: `${apiUrl}penerimaanstokheader/${penerimaan_id}`,
@@ -1067,7 +1076,7 @@
           `)
           detailRow.find(`[name="detail_nobukti[]"]`).val(detail.nobukti)
           detailRow.find(`[name="detail_stok[]"]`).val(detail.stok)
-          detailRow.find(`[name="detail_stok[]"]`).data('currentValue',detail.stok)
+          detailRow.find(`[name="detail_stok[]"]`).data('currentValue', detail.stok)
           detailRow.find(`[name="detail_stok_id[]"]`).val(detail.stok_id)
           detailRow.find(`[name="detail_qty[]"]`).val(detail.qty)
           detailRow.find(`[name="detail_harga[]"]`).val(detail.harga)
@@ -1089,12 +1098,12 @@
                 penerimaanstok_id: penerimaanstokId,
                 penerimaanstokheader_nobukti: penerimaanstok_nobukti,
                 Aktif: 'AKTIF',
-                KelompokId:KelompokId ,
+                KelompokId: KelompokId,
               }
             },
             onSelectRow: (stok, element) => {
               element.val(stok.namastok)
-              
+
               let satuanEl = element.parents('tr').find(`td [name="detail_satuan[]"]`);
               satuanEl.val(stok.satuan);
 
@@ -1109,7 +1118,7 @@
             onClear: (element) => {
               let satuanEl = element.parents('tr').find(`td [name="detail_satuan[]"]`);
               satuanEl.val('');
-              
+
               element.val('')
               parent = element.closest('td');
               parent.children('.detailpenerimaanstoknobuktiId').val('')
@@ -1146,7 +1155,7 @@
         setTampilanForm()
         if (KodePenerimaanId === listKodePenerimaan[2]) {
           $('#addRow').hide()
-        }else{
+        } else {
           $('#addRow').show()
         }
       },
@@ -1155,6 +1164,7 @@
       }
     })
   }
+
   function setDetailSPBP(penerimaan_id) {
     $.ajax({
       url: `${apiUrl}penerimaanstokheader/${penerimaan_id}`,
@@ -1166,9 +1176,9 @@
       success: response => {
         $('#detailList tbody').html('')
         resetRow()
-        
+
         $.each(response.detail, (id, detail) => {
-          
+
           let detailRow = $(`
             <tr class="trow" data-id="${id}">
                   <td>
@@ -1223,7 +1233,7 @@
           `)
           // detailRow.find(`[name="detail_nobukti[]"]`).val(detail.nobukti)
           detailRow.find(`[name="detail_stok[]"]`).val(detail.stok)
-          detailRow.find(`[name="detail_stok[]"]`).data('currentValue',detail.stok)
+          detailRow.find(`[name="detail_stok[]"]`).data('currentValue', detail.stok)
           detailRow.find(`[name="detail_stok_id[]"]`).val(detail.stok_id)
 
           detailRow.find(`[name="detail_qty[]"]`).val(0)
@@ -1231,12 +1241,12 @@
           detailRow.find(`[name="detail_persentasediscount[]"]`).val(0)
           detailRow.find(`[name="detail_vulkanisirke[]"]`).val(0)
           detailRow.find(`[name="totalItem[]"]`).val(0)
-          
-          detailRow.find(`[name="detail_qty[]"]`).prop('readonly',true)
-          detailRow.find(`[name="detail_harga[]"]`).prop('readonly',true)
-          detailRow.find(`[name="detail_persentasediscount[]"]`).prop('readonly',true)
-          detailRow.find(`[name="detail_vulkanisirke[]"]`).prop('readonly',true)
-          detailRow.find(`[name="totalItem[]"]`).prop('readonly',true)
+
+          detailRow.find(`[name="detail_qty[]"]`).prop('readonly', true)
+          detailRow.find(`[name="detail_harga[]"]`).prop('readonly', true)
+          detailRow.find(`[name="detail_persentasediscount[]"]`).prop('readonly', true)
+          detailRow.find(`[name="detail_vulkanisirke[]"]`).prop('readonly', true)
+          detailRow.find(`[name="totalItem[]"]`).prop('readonly', true)
 
 
           detailRow.find(`[name="detail_keterangan[]"]`).val(detail.keterangan)
@@ -1254,12 +1264,12 @@
                 penerimaanstok_id: penerimaanstokId,
                 penerimaanstokheader_nobukti: penerimaanstok_nobukti,
                 Aktif: 'AKTIF',
-                KelompokId:KelompokId ,
+                KelompokId: KelompokId,
               }
             },
             onSelectRow: (stok, element) => {
               element.val(stok.namastok)
-              
+
               let satuanEl = element.parents('tr').find(`td [name="detail_satuan[]"]`);
               satuanEl.val(stok.satuan);
 
@@ -1297,7 +1307,7 @@
               parent = element.closest('td');
               parent.children('.detailpenerimaanstoknobuktiId').val(penerimaan.id)
               element.val(penerimaan.nobukti)
-              
+
               detailRow.find(`[name="detail_qty[]"]`).val(penerimaan.qty)
               detailRow.find(`[name="detail_harga[]"]`).val(penerimaan.harga)
               detailRow.find(`[name="detail_persentasediscount[]"]`).val(penerimaan.persentasediscount)
@@ -1323,7 +1333,7 @@
         })
         sumary()
         setTampilanForm()
-          $('#addRow').hide()
+        $('#addRow').hide()
 
       },
       error: error => {
@@ -1332,10 +1342,10 @@
     })
   }
 
-  function setShowDetailSPBP(data){
+  function setShowDetailSPBP(data) {
     resetRow()
     $.each(data, (id, detail) => {
-      
+
       let detailRow = $(`
         <tr class="trow" data-id="${id}">
               <td>
@@ -1390,23 +1400,23 @@
       `)
       // detailRow.find(`[name="detail_nobukti[]"]`).val(detail.nobukti)
       detailRow.find(`[name="detail_stok[]"]`).val(detail.stok)
-      detailRow.find(`[name="detail_stok[]"]`).data('currentValue',detail.stok)
+      detailRow.find(`[name="detail_stok[]"]`).data('currentValue', detail.stok)
       detailRow.find(`[name="detail_stok_id[]"]`).val(detail.stok_id)
 
       detailRow.find(`[name="detail_penerimaanstoknobukti[]"]`).val(detail.penerimaanstok_nobukti)
-      detailRow.find(`[name="detail_penerimaanstoknobukti[]"]`).data('currentValue',detail.penerimaanstok_nobukti)
+      detailRow.find(`[name="detail_penerimaanstoknobukti[]"]`).data('currentValue', detail.penerimaanstok_nobukti)
       // element.data('currentValue', value)
       detailRow.find(`[name="detail_qty[]"]`).val(detail.qty)
       detailRow.find(`[name="detail_harga[]"]`).val(detail.harga)
       detailRow.find(`[name="detail_persentasediscount[]"]`).val(detail.persentasediscount)
       detailRow.find(`[name="detail_vulkanisirke[]"]`).val(detail.vulkanisirke)
       detailRow.find(`[name="totalItem[]"]`).val(detail.total)
-      
-      detailRow.find(`[name="detail_qty[]"]`).prop('readonly',true)
-      detailRow.find(`[name="detail_harga[]"]`).prop('readonly',true)
-      detailRow.find(`[name="detail_persentasediscount[]"]`).prop('readonly',true)
-      detailRow.find(`[name="detail_vulkanisirke[]"]`).prop('readonly',true)
-      detailRow.find(`[name="totalItem[]"]`).prop('readonly',true)
+
+      detailRow.find(`[name="detail_qty[]"]`).prop('readonly', true)
+      detailRow.find(`[name="detail_harga[]"]`).prop('readonly', true)
+      detailRow.find(`[name="detail_persentasediscount[]"]`).prop('readonly', true)
+      detailRow.find(`[name="detail_vulkanisirke[]"]`).prop('readonly', true)
+      detailRow.find(`[name="totalItem[]"]`).prop('readonly', true)
 
 
       detailRow.find(`[name="detail_keterangan[]"]`).val(detail.keterangan)
@@ -1424,12 +1434,12 @@
             penerimaanstok_id: penerimaanstokId,
             penerimaanstokheader_nobukti: penerimaanstok_nobukti,
             Aktif: 'AKTIF',
-            KelompokId:KelompokId ,
+            KelompokId: KelompokId,
           }
         },
         onSelectRow: (stok, element) => {
           element.val(stok.namastok)
-          
+
           let satuanEl = element.parents('tr').find(`td [name="detail_satuan[]"]`);
           satuanEl.val(stok.satuan);
 
@@ -1469,7 +1479,7 @@
           parent = element.closest('td');
           parent.children('.detailpenerimaanstoknobuktiId').val(penerimaan.id)
           element.val(penerimaan.nobukti)
-          
+
           detailRow.find(`[name="detail_qty[]"]`).val(penerimaan.qty)
           detailRow.find(`[name="detail_harga[]"]`).val(penerimaan.harga)
           detailRow.find(`[name="detail_persentasediscount[]"]`).val(penerimaan.persentasediscount)
@@ -1497,7 +1507,7 @@
     $('#addRow').hide()
 
   }
-  
+
   function setDetailPengeluaran(pengeluaran_id) {
     $.ajax({
       url: `${apiUrl}pengeluaranstokheader/${pengeluaran_id}`,
@@ -1563,24 +1573,24 @@
               </tr>
           `)
           if (KodePenerimaanId === listKodePenerimaan[7]) {
-            detailRow.find(`[name="detail_harga[]"]`).prop('readonly',true);
-            detailRow.find(`[name="detail_persentasediscount[]"]`).prop('readonly',true);
-            detailRow.find(`[name="totalItem[]"]`).prop('readonly',true);
-            detailRow.find(`[name="detail_qty[]"]`).prop('readonly',true);
+            detailRow.find(`[name="detail_harga[]"]`).prop('readonly', true);
+            detailRow.find(`[name="detail_persentasediscount[]"]`).prop('readonly', true);
+            detailRow.find(`[name="totalItem[]"]`).prop('readonly', true);
+            detailRow.find(`[name="detail_qty[]"]`).prop('readonly', true);
             detailRow.find(`[name="detail_qty[]"]`).val(detail.qty)
-          }else{
-            detailRow.find(`[name="detail_harga[]"]`).prop('readonly',true);
-            detailRow.find(`[name="detail_persentasediscount[]"]`).prop('readonly',true);
-            detailRow.find(`[name="totalItem[]"]`).prop('readonly',true);
-            detailRow.find(`[name="detail_qty[]"]`).prop('readonly',false);
+          } else {
+            detailRow.find(`[name="detail_harga[]"]`).prop('readonly', true);
+            detailRow.find(`[name="detail_persentasediscount[]"]`).prop('readonly', true);
+            detailRow.find(`[name="totalItem[]"]`).prop('readonly', true);
+            detailRow.find(`[name="detail_qty[]"]`).prop('readonly', false);
             detailRow.find(`[name="detail_qty[]"]`).val(0)
             detailRow.find(`[name="totalItem[]"]`).val(0)
           }
           detailRow.find(`[name="detail_nobukti[]"]`).val(detail.nobukti)
           detailRow.find(`[name="detail_stok[]"]`).val(detail.stok)
-          detailRow.find(`[name="detail_stok[]"]`).data('currentValue',detail.stok)
+          detailRow.find(`[name="detail_stok[]"]`).data('currentValue', detail.stok)
           detailRow.find(`[name="detail_stok_id[]"]`).val(detail.stok_id)
-          
+
           detailRow.find(`[name="detail_harga[]"]`).val(detail.harga)
           detailRow.find(`[name="detail_persentasediscount[]"]`).val(detail.persentasediscount)
           detailRow.find(`[name="detail_vulkanisirke[]"]`).val(detail.vulkanisirke)
@@ -1590,9 +1600,11 @@
           initAutoNumeric($(`#detail_harga${id}`))
           initAutoNumeric($(`#detail_persentasediscount${id}`))
           initAutoNumeric($(`#totalItem${id}`))
-          initAutoNumeric($(`#detail_qty${id}`),{'maximumValue':detail.qty})
+          initAutoNumeric($(`#detail_qty${id}`), {
+            'maximumValue': detail.qty
+          })
 
-          
+
           setRowNumbers()
           $(`#detail_penerimaanstoknobukti_${id}`).lookup({
             title: 'penerimaan stok header Lookup',
@@ -1622,9 +1634,9 @@
         })
         sumary()
         setTampilanForm()
-        if ((KodePenerimaanId === listKodePenerimaan[7]) || (KodePenerimaanId === listKodePenerimaan[8]) ) {
+        if ((KodePenerimaanId === listKodePenerimaan[7]) || (KodePenerimaanId === listKodePenerimaan[8])) {
           $('#addRow').hide()
-        }else{
+        } else {
           $('#addRow').show()
         }
       },
@@ -1634,7 +1646,7 @@
     })
   }
 
-  function setShowDetailPengeluaran(idpenerimaan,kodepenerimaan){
+  function setShowDetailPengeluaran(idpenerimaan, kodepenerimaan) {
     resetRow()
     $.ajax({
       url: `${apiUrl}penerimaanstokheader/${idpenerimaan}/pengeluaranstoknobukti`,
@@ -1701,25 +1713,25 @@
               </tr>
           `)
           if (KodePenerimaanId === listKodePenerimaan[7]) {
-            detailRow.find(`[name="detail_harga[]"]`).prop('readonly',true);
-            detailRow.find(`[name="detail_persentasediscount[]"]`).prop('readonly',true);
-            detailRow.find(`[name="totalItem[]"]`).prop('readonly',true);
-            detailRow.find(`[name="detail_qty[]"]`).prop('readonly',true);
+            detailRow.find(`[name="detail_harga[]"]`).prop('readonly', true);
+            detailRow.find(`[name="detail_persentasediscount[]"]`).prop('readonly', true);
+            detailRow.find(`[name="totalItem[]"]`).prop('readonly', true);
+            detailRow.find(`[name="detail_qty[]"]`).prop('readonly', true);
             detailRow.find(`[name="detail_qty[]"]`).val(detail.qty)
-          }else{
-            detailRow.find(`[name="detail_harga[]"]`).prop('readonly',true);
-            detailRow.find(`[name="detail_persentasediscount[]"]`).prop('readonly',true);
-            detailRow.find(`[name="totalItem[]"]`).prop('readonly',true);
-            detailRow.find(`[name="detail_qty[]"]`).prop('readonly',false);
+          } else {
+            detailRow.find(`[name="detail_harga[]"]`).prop('readonly', true);
+            detailRow.find(`[name="detail_persentasediscount[]"]`).prop('readonly', true);
+            detailRow.find(`[name="totalItem[]"]`).prop('readonly', true);
+            detailRow.find(`[name="detail_qty[]"]`).prop('readonly', false);
             detailRow.find(`[name="detail_qty[]"]`).val(0)
             detailRow.find(`[name="totalItem[]"]`).val(0)
           }
           detailRow.find(`[name="detail_nobukti[]"]`).val(detail.nobukti)
           detailRow.find(`[name="detail_stok[]"]`).val(detail.stok)
-          detailRow.find(`[name="detail_stok[]"]`).data('currentValue',detail.stok)
+          detailRow.find(`[name="detail_stok[]"]`).data('currentValue', detail.stok)
           detailRow.find(`[name="detail_stok_id[]"]`).val(detail.stok_id)
           detailRow.find(`[name="detail_qty[]"]`).val(detail.qty)
-          
+
           detailRow.find(`[name="detail_harga[]"]`).val(detail.harga)
           detailRow.find(`[name="detail_persentasediscount[]"]`).val(detail.persentasediscount)
           detailRow.find(`[name="detail_vulkanisirke[]"]`).val(detail.vulkanisirke)
@@ -1729,9 +1741,11 @@
           initAutoNumeric($(`#detail_harga${id}`))
           initAutoNumeric($(`#detail_persentasediscount${id}`))
           initAutoNumeric($(`#totalItem${id}`))
-          initAutoNumeric($(`#detail_qty${id}`),{'maximumValue':detail.maximum})
-    
-          
+          initAutoNumeric($(`#detail_qty${id}`), {
+            'maximumValue': detail.maximum
+          })
+
+
           setRowNumbers()
           id++;
         })
@@ -1750,7 +1764,7 @@
     let tradoke = $('#crudForm').find(`[name="tradoke"]`).parents('.input-group').children()
     let gandenganke = $('#crudForm').find(`[name="gandenganke"]`).parents('.input-group').children()
     let gudangke = $('#crudForm').find(`[name="gudangke"]`).parents('.input-group').children()
-    
+
 
 
     switch (el) {
@@ -1812,11 +1826,11 @@
         //     $('#gudangkeId').attr('disabled', false);
         //     $('#gudangkeId').val('');
         //     $('#crudForm').find(`[name="gudangke"]`).val('');
-            
+
         //     tradoke.attr('disabled', true)
         //     tradoke.find('.lookup-toggler').attr('disabled', true)
         //     $('#tradokeId').attr('disabled', true);
-    
+
         //     gandenganke.attr('disabled', true)
         //     gandenganke.find('.lookup-toggler').attr('disabled', true)
         //     $('#gandengankeId').attr('disabled', true);
@@ -1824,12 +1838,12 @@
         //     tradoke.attr('disabled', false)
         //     tradoke.find('.lookup-toggler').attr('disabled', false)
         //     $('#tradokeId').attr('disabled', false);
-    
+
         //     gandenganke.attr('disabled', false)
         //     gandenganke.find('.lookup-toggler').attr('disabled', false)
         //     $('#gandengankeId').attr('disabled', false);
         //   }
-          
+
         // }
 
         break;
@@ -1905,14 +1919,14 @@
 
     if (KodePenerimaanId == listKodePenerimaan[4]) {
       if (lokasi == 'gudang' && nilai == 1) {
-            enabledLookupSelectedKe()
-            $('#crudForm').find(`[name="gudangke"]`).val('');
+        enabledLookupSelectedKe()
+        $('#crudForm').find(`[name="gudangke"]`).val('');
       }
       // let tradoke = $('#crudForm').find(`[name="tradoke"]`).parents('.input-group').children()
       // let gandenganke = $('#crudForm').find(`[name="gandenganke"]`).parents('.input-group').children()
       // let gudangke = $('#crudForm').find(`[name="gudangke"]`).parents('.input-group').children()
     }
-          
+
   }
 
   function enabledLookupSelectedKe() {
@@ -1933,7 +1947,7 @@
     gandenganke.find('.lookup-toggler').attr('disabled', false)
     $('#gandengankeId').attr('disabled', false);
     $('#gandengankeId').val('');
-    
+
   }
 
   function lookupSelected(el) {
@@ -2002,8 +2016,8 @@
     $('#gudangId').val('');
   }
 
-  $(window).on('popstate', function() { 
-    $('#crudModal').modal('hide') 
+  $(window).on('popstate', function() {
+    $('#crudModal').modal('hide')
   });
 
   $('#crudModal').on('shown.bs.modal', () => {
@@ -2011,12 +2025,12 @@
     history.pushState(null, null, urlReplace); // push state that hash into the url
     let form = $('#crudForm')
     setFormBindKeys(form)
-    
+
     activeGrid = null
     initDatepicker()
     initLookup()
     if (form.data('action') == 'add') {
-      if($('#kodepenerimaanheader').val() != ''){
+      if ($('#kodepenerimaanheader').val() != '') {
         let index = listIdPenerimaan.indexOf($('#kodepenerimaanheader').val());
         setKodePenerimaan(listKodePenerimaan[index]);
         setIsDateAvailable($('#kodepenerimaanheader').val())
@@ -2026,7 +2040,7 @@
         $('#crudForm').find(`[name="penerimaanstok_id"]`).val($('#kodepenerimaanheader').val())
       }
     }
-    if( form.data('action') !== 'add'){
+    if (form.data('action') !== 'add') {
       let penerimaanstok = $('#crudForm').find(`[name="penerimaanstok"]`).parents('.input-group').children()
       let penerimaanstok_nobukti = $('#crudForm').find(`[name="penerimaanstok_nobukti"]`).parents('.input-group').children()
       let pengeluaranstok_nobukti = $('#crudForm').find(`[name="pengeluaranstok_nobukti"]`).parents('.input-group').children()
@@ -2041,11 +2055,11 @@
       pengeluaranstok_nobukti.parents('.input-group').find('.button-clear').attr('disabled', true)
       pengeluaranstok_nobukti.find('.lookup-toggler').attr('disabled', true)
     }
-      
-      
-    form.find('#btnSubmit').prop('disabled',false)
+
+
+    form.find('#btnSubmit').prop('disabled', false)
     if (form.data('action') == "view") {
-      form.find('#btnSubmit').prop('disabled',true)
+      form.find('#btnSubmit').prop('disabled', true)
     }
     getMaxLength(form)
   })
@@ -2054,7 +2068,7 @@
     activeGrid = '#jqGrid'
     $('#crudModal').find('.modal-body').html(modalBody)
     initDatepicker('datepickerIndex')
-    KodePenerimaanId ="";
+    KodePenerimaanId = "";
 
   })
 
@@ -2070,7 +2084,7 @@
     `)
     form.data('action', 'add')
     form.find(`.sometimes`).show()
-    $('#crudModalTitle').text('Create Penerimaan Stok')
+    $('#crudModalTitle').text('Add Penerimaan Stok')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -2080,14 +2094,16 @@
       ])
       .then(() => {
         $('#crudModal').modal('show')
-         // tampilanall()
+        // tampilanall()
         tampilanInit()
         // addRow()
         initRow()
         sumary()
         $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-        
-        $('#crudForm').find('[name=tglbukti]').attr('readonly', 'readonly').css({ background: '#fff'})
+
+        $('#crudForm').find('[name=tglbukti]').attr('readonly', 'readonly').css({
+          background: '#fff'
+        })
         let tglbukti = $('#crudForm').find(`[name="tglbukti"]`).parents('.input-group').children()
         tglbukti.find('button').attr('disabled', true)
       })
@@ -2124,53 +2140,53 @@
         let data = showPenerimaanstok[1];
         // console.log(data.statuseditketerangan_id == statusBisaEdit);
         // console.log(data.statuseditketerangan_id == statusBisaEdit);
-        
-          initDatepicker()
-          initSelect2(form.find('.select2bs4'), true)
-          form.find('[name=tglbukti]').removeAttr('disabled')
-  
-          form.find('[name=tglbukti]').attr('readonly', 'readonly').css({
-            background: '#fff'
-          })
-          
-          $('#crudModal').modal('show')
-          $('#crudForm').find(`.ui-datepicker-trigger`).attr('disabled', true)
-          if ( $('#crudForm').find("[name=gudang]").val()) {
-              lookupSelected(`gudang`);
-          }else if ( $('#crudForm').find("[name=gandengan]").val()) {
-              lookupSelected('gandengan')
-          }else if ( $('#crudForm').find("[name=trado]").val()) {
-              lookupSelected('trado')
-          }
-  
-          if ( $('#crudForm').find("[name=gudangke]").val()) {
-              lookupSelectedKe(`gudangke`);
-          }else if ( $('#crudForm').find("[name=gandenganke]").val()) {
-            lookupSelectedKe('gandenganke')
-          }else if ( $('#crudForm').find("[name=tradoke]").val()) {
-            lookupSelectedKe('tradoke')
-          }
-  
-          if ( $('#crudForm').find("[name=gudangdari]").val()) {
-              lookupSelectedDari(`gudangdari`);
-          }else if ( $('#crudForm').find("[name=gandengandari]").val()) {
-            lookupSelectedDari('gandengandari')
-          }else if ( $('#crudForm').find("[name=tradodari]").val()) {
-            lookupSelectedDari('tradodari')
-          }
+
+        initDatepicker()
+        initSelect2(form.find('.select2bs4'), true)
+        form.find('[name=tglbukti]').removeAttr('disabled')
+
+        form.find('[name=tglbukti]').attr('readonly', 'readonly').css({
+          background: '#fff'
+        })
+
+        $('#crudModal').modal('show')
+        $('#crudForm').find(`.ui-datepicker-trigger`).attr('disabled', true)
+        if ($('#crudForm').find("[name=gudang]").val()) {
+          lookupSelected(`gudang`);
+        } else if ($('#crudForm').find("[name=gandengan]").val()) {
+          lookupSelected('gandengan')
+        } else if ($('#crudForm').find("[name=trado]").val()) {
+          lookupSelected('trado')
+        }
+
+        if ($('#crudForm').find("[name=gudangke]").val()) {
+          lookupSelectedKe(`gudangke`);
+        } else if ($('#crudForm').find("[name=gandenganke]").val()) {
+          lookupSelectedKe('gandenganke')
+        } else if ($('#crudForm').find("[name=tradoke]").val()) {
+          lookupSelectedKe('tradoke')
+        }
+
+        if ($('#crudForm').find("[name=gudangdari]").val()) {
+          lookupSelectedDari(`gudangdari`);
+        } else if ($('#crudForm').find("[name=gandengandari]").val()) {
+          lookupSelectedDari('gandengandari')
+        } else if ($('#crudForm').find("[name=tradodari]").val()) {
+          lookupSelectedDari('tradodari')
+        }
 
         if ((data.statuseditketerangan_id == statusBisaEdit) && (data.statusedit_id != statusBisaEdit)) {
           form.find('[name]').attr('readonly', 'readonly')
-          form.find('[name=id]').prop('disabled',false)
+          form.find('[name=id]').prop('disabled', false)
           form.find('[name="detail_keterangan[]"]').prop('readonly', false)
           // console.log();
-          
+
           let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
           name.attr('readonly', true)
           name.find('.lookup-toggler').attr('disabled', true)
-          
+
           $('.tbl_aksi').hide()
-          
+
         }
 
         // let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
@@ -2206,35 +2222,35 @@
         showPenerimaanstokHeader(form, penerimaanStokHeaderId)
       ])
       .then(penerimaanStokHeaderId => {
-            setFormBindKeys(form)
-            initDatepicker()
-            initSelect2(form.find('.select2bs4'), true)
-            form.find('[name]').removeAttr('disabled')
+        setFormBindKeys(form)
+        initDatepicker()
+        initSelect2(form.find('.select2bs4'), true)
+        form.find('[name]').removeAttr('disabled')
 
-            form.find('select').each((index, select) => {
-              let element = $(select)
+        form.find('select').each((index, select) => {
+          let element = $(select)
 
-              if (element.data('select2')) {
-                element.select2('destroy')
-              }
-            })
+          if (element.data('select2')) {
+            element.select2('destroy')
+          }
+        })
 
-            form.find('[name]').attr('disabled', 'disabled').css({
-              background: '#fff'
-            })
-            form.find('[name=id]').prop('disabled',false)
+        form.find('[name]').attr('disabled', 'disabled').css({
+          background: '#fff'
+        })
+        form.find('[name=id]').prop('disabled', false)
 
-          })
-          .then(() => {
-            $('#crudModal').modal('show')
-            $('#crudForm').find(`.ui-datepicker-trigger`).attr('disabled', true)
+      })
+      .then(() => {
+        $('#crudModal').modal('show')
+        $('#crudForm').find(`.ui-datepicker-trigger`).attr('disabled', true)
 
-            let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
-            name.attr('disabled', true)
-            name.find('.lookup-toggler').attr('disabled', true)
+        let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
+        name.attr('disabled', true)
+        name.find('.lookup-toggler').attr('disabled', true)
 
-            $('.tbl_aksi').hide()
-          })
+        $('.tbl_aksi').hide()
+      })
       .catch((error) => {
         showDialog(error.statusText)
       })
@@ -2242,6 +2258,7 @@
         $('.modal-loader').addClass('d-none')
       })
   }
+
   function viewPenerimaanstokHeader(penerimaanStokHeaderId) {
     let form = $('#crudForm')
     $('.modal-loader').removeClass('d-none')
@@ -2252,7 +2269,7 @@
       <i class="fa fa-save"></i>
       Save
     `)
-    form.find('#btnSubmit').prop('disabled',true)
+    form.find('#btnSubmit').prop('disabled', true)
     form.find(`.sometimes`).hide()
     $('#crudModalTitle').text('View Penerimaan Stok')
     $('.is-invalid').removeClass('is-invalid')
@@ -2264,39 +2281,39 @@
         showPenerimaanstokHeader(form, penerimaanStokHeaderId)
       ])
       .then(penerimaanStokHeaderId => {
-            setFormBindKeys(form)
-            initDatepicker()
-            initSelect2(form.find('.select2bs4'), true)
-            form.find('[name]').removeAttr('disabled')
+        setFormBindKeys(form)
+        initDatepicker()
+        initSelect2(form.find('.select2bs4'), true)
+        form.find('[name]').removeAttr('disabled')
 
-            form.find('select').each((index, select) => {
-              let element = $(select)
+        form.find('select').each((index, select) => {
+          let element = $(select)
 
-              if (element.data('select2')) {
-                element.select2('destroy')
-              }
-            })
+          if (element.data('select2')) {
+            element.select2('destroy')
+          }
+        })
 
-            form.find('[name]').attr('disabled', 'disabled').css({
-              background: '#fff'
-            })
-            form.find('[name=id]').prop('disabled',false)
+        form.find('[name]').attr('disabled', 'disabled').css({
+          background: '#fff'
+        })
+        form.find('[name=id]').prop('disabled', false)
 
-          })
-          .then(() => {
-            $('#crudModal').modal('show')
-            $('#crudForm').find(`.ui-datepicker-trigger`).attr('disabled', true)
-            
-            form.find(`.hasDatepicker`).prop('readonly', true)
-            form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
-            let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
-            let nameFind = $('#crudForm').find(`[name]`).parents('.input-group')
-            name.attr('disabled', true)
-            name.find('.lookup-toggler').remove()
-            nameFind.find('button.button-clear').remove()
+      })
+      .then(() => {
+        $('#crudModal').modal('show')
+        $('#crudForm').find(`.ui-datepicker-trigger`).attr('disabled', true)
 
-            $('.tbl_aksi').hide()
-          })
+        form.find(`.hasDatepicker`).prop('readonly', true)
+        form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
+        let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
+        let nameFind = $('#crudForm').find(`[name]`).parents('.input-group')
+        name.attr('disabled', true)
+        name.find('.lookup-toggler').remove()
+        nameFind.find('button.button-clear').remove()
+
+        $('.tbl_aksi').hide()
+      })
       .catch((error) => {
         showDialog(error.statusText)
       })
@@ -2323,14 +2340,13 @@
         data: {
           filters: JSON.stringify({
             "groupOp": "AND",
-            "rules": [
-              {
+            "rules": [{
                 "field": "grp",
                 "op": "cn",
                 "data": "STATUS KONDISI BAN",
-               
+
               },
-             
+
             ]
           })
         },
@@ -2372,26 +2388,26 @@
     }
   }
 
-  function setKorv(row,stok_id) {
+  function setKorv(row, stok_id) {
 
     $.ajax({
-        url: `${apiUrl}stok/${stok_id}/getvulkan`,
-        method: 'POST',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        success: response => {
-          $(`#vulkanisirtotal${row}`).val(response.data.totalvulkan)
-          $(`#statusban${row}`).val(response.data.statusban).trigger('change')
+      url: `${apiUrl}stok/${stok_id}/getvulkan`,
+      method: 'POST',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      success: response => {
+        $(`#vulkanisirtotal${row}`).val(response.data.totalvulkan)
+        $(`#statusban${row}`).val(response.data.statusban).trigger('change')
 
-        },
-        error: error => {
-          showDialog(error.responseJSON)
-        }
-      })
-          
-          
+      },
+      error: error => {
+        showDialog(error.responseJSON)
+      }
+    })
+
+
   }
 
   index = 0;
@@ -2479,12 +2495,12 @@
           penerimaanstok_id: penerimaanstokId,
           penerimaanstokheader_nobukti: penerimaanstok_nobukti,
           Aktif: 'AKTIF',
-          KelompokId:KelompokId ,
+          KelompokId: KelompokId,
         }
       },
       onSelectRow: (stok, element) => {
         element.val(stok.namastok)
-        
+
         let satuanEl = element.parents('tr').find(`td [name="detail_satuan[]"]`);
         satuanEl.val(stok.satuan);
 
@@ -2492,7 +2508,7 @@
         parent.children('.detailstokId').val(stok.id)
         parent.children('.detailstokKelompok').val(stok.kelompok_id)
         element.data('currentValue', element.val())
-        setKorv(row,stok.id);
+        setKorv(row, stok.id);
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
@@ -2516,7 +2532,7 @@
         // console.log($(`#detailstokId_${row}`).val(),$(`#detailstokId_${row}`));
         this.postData = {
           penerimaanstok_id: penerimaanstokId,
-          stok_id : detailstok
+          stok_id: detailstok
         }
       },
       onSelectRow: (penerimaan, element) => {
@@ -2534,7 +2550,7 @@
         element.data('currentValue', element.val())
       }
     })
-      
+
     initAutoNumeric($(`.number${index}`))
     setTampilanForm()
     setRowNumbers()
@@ -2550,6 +2566,7 @@
     sumary()
     setRowNumbers()
   }
+
   function initRow() {
     let countRow = $('.rmv').parents('tr').length
     if (countRow <= 1) {
@@ -2564,13 +2581,13 @@
   }
 
   function cekKelompok(row) {
-     //check jika lookup baris pertama
-     if ($(`#detailstokKelompok_${row}`)[0] == $('.detailstokKelompok')[0]) {
-          KelompokId="";
-        }else {
-          let detailstokKelompok = $('.detailstokKelompok')
-          KelompokId = $(detailstokKelompok[0]).val();
-        }
+    //check jika lookup baris pertama
+    if ($(`#detailstokKelompok_${row}`)[0] == $('.detailstokKelompok')[0]) {
+      KelompokId = "";
+    } else {
+      let detailstokKelompok = $('.detailstokKelompok')
+      KelompokId = $(detailstokKelompok[0]).val();
+    }
   }
 
   function setRowNumbers() {
@@ -2602,12 +2619,12 @@
     discount = $(`#detail_persentasediscount${id}`)[0];
     totalItem = $(`#totalItem${id}`)[0];
     total_sebelum = $(`#total_sebelum${id}`)[0];
-    
+
     qty = AutoNumeric.getNumber(qty);
     discount = AutoNumeric.getNumber(discount);
     totalItem = AutoNumeric.getNumber(totalItem);
     total_sebelum = AutoNumeric.getNumber(total_sebelum);
-    
+
     nominaldiscount = total_sebelum * (discount / 100);
     totalItem = total_sebelum - nominaldiscount;
     discSatuan = nominaldiscount / qty;
@@ -2627,11 +2644,11 @@
     discount = AutoNumeric.getNumber(discount);
     totalItem = AutoNumeric.getNumber(totalItem);
 
-    satuanSebelumDiscount= totalItem / qty
-    discount = 1-(discount/100)
+    satuanSebelumDiscount = totalItem / qty
+    discount = 1 - (discount / 100)
 
     satuanSetelahDiscount = satuanSebelumDiscount / discount;
-  
+
     harga = satuanSetelahDiscount;
     new AutoNumeric($(`#detail_harga${id}`)[0]).set(harga)
     sumary();
@@ -2664,11 +2681,11 @@
           if (kodestatus == '1') {
             showDialog(response.message['keterangan'])
           } else {
-            if(Aksi == 'PRINTER BESAR'){
+            if (Aksi == 'PRINTER BESAR') {
               window.open(`{{ route('penerimaanstokheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
-            } else if(Aksi == 'PRINTER KECIL'){
+            } else if (Aksi == 'PRINTER KECIL') {
               window.open(`{{ route('penerimaanstokheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
-            } 
+            }
             if (Aksi == 'EDIT') {
               editPenerimaanstokHeader(Id)
             }
@@ -2682,8 +2699,9 @@
       }
     })
   }
+
   function disabledkodepenerimaanedit() {
-    
+
   }
 
   function penerimaanStok(form) {
@@ -2692,14 +2710,14 @@
         url: `${apiUrl}penerimaanstok`,
         method: 'GET',
         dataType: 'JSON',
-        data:{
-          "limit":20
+        data: {
+          "limit": 20
         },
         headers: {
           Authorization: `Bearer ${accessToken}`
         },
         success: response => {
-          $.each(response.data, (index,data) => {
+          $.each(response.data, (index, data) => {
             listIdPenerimaan[index] = data.id
             listKodePenerimaan[index] = data.kodepenerimaan;
           })
@@ -2718,13 +2736,15 @@
         Authorization: `Bearer ${accessToken}`
       },
       success: response => {
-        
+
         if (response.data.length) {
           $('#crudForm').find('[name=tglbukti]').attr('readonly', false)
           let tglbukti = $('#crudForm').find(`[name="tglbukti"]`).parents('.input-group').children()
           tglbukti.find('button').attr('disabled', false)
         } else {
-          $('#crudForm').find('[name=tglbukti]').attr('readonly', 'readonly').css({ background: '#fff'})
+          $('#crudForm').find('[name=tglbukti]').attr('readonly', 'readonly').css({
+            background: '#fff'
+          })
           let tglbukti = $('#crudForm').find(`[name="tglbukti"]`).parents('.input-group').children()
           tglbukti.find('button').attr('disabled', true)
         }
@@ -2754,13 +2774,13 @@
               element.val(value)
               element.data('currentValue', value)
             }
-            
-            
+
+
           })
 
           // console.log('gudang_id '+ response.data.tradodari_id);
           // console.log('gandengan_id '+ response.data.gandengan_id);
-          
+
           $('#gudangId').val(response.data.gudang_id)
           $('#gandenganId').val(response.data.gandengan_id)
           $('#tradoId').val(response.data.trado_id)
@@ -2770,7 +2790,7 @@
           $('#gudangdariId').val(response.data.gudangdari_id)
           $('#gandengandariId').val(response.data.gandengandari_id)
           $('#tradodariId').val(response.data.tradodari_id)
-          
+
           $('#detailList tbody').html('')
           setKodePenerimaan(response.data.penerimaanstok);
 
@@ -2839,16 +2859,16 @@
                 </tr>
             `)
             // console.log(KodePenerimaanId , listKodePenerimaan[7]);
-           
+
             dataStatusBan.forEach(statusBan => {
               option = new Option(statusBan.text, statusBan.id)
               detailRow.find(`#statusban${index}`).append(option).trigger('change')
             });
             if (KodePenerimaanId === listKodePenerimaan[7]) {
-              detailRow.find(`[name="detail_harga[]"]`).prop('readonly',true);
-              detailRow.find(`[name="detail_persentasediscount[]"]`).prop('readonly',true);
-              detailRow.find(`[name="totalItem[]"]`).prop('readonly',true);
-              detailRow.find(`[name="detail_qty[]"]`).prop('readonly',true);
+              detailRow.find(`[name="detail_harga[]"]`).prop('readonly', true);
+              detailRow.find(`[name="detail_persentasediscount[]"]`).prop('readonly', true);
+              detailRow.find(`[name="totalItem[]"]`).prop('readonly', true);
+              detailRow.find(`[name="detail_qty[]"]`).prop('readonly', true);
             }
             detailRow.find(`[name="detail_nobukti[]"]`).val(detail.nobukti)
             detailRow.find(`[name="detail_stok[]"]`).val(detail.stok)
@@ -2860,12 +2880,12 @@
             detailRow.find(`[name="detail_persentasediscount[]"]`).val(detail.persentasediscount)
             detailRow.find(`[name="detail_vulkanisirke[]"]`).val(detail.vulkanisirke)
             detailRow.find(`[name="totalItem[]"]`).val(detail.total)
-            totalSSebelumDiscount = detail.total / (1-(detail.persentasediscount/ 100))
+            totalSSebelumDiscount = detail.total / (1 - (detail.persentasediscount / 100))
             detailRow.find(`[name="total_sebelum[]"]`).val(totalSSebelumDiscount)
             detailRow.find(`[name="detail_keterangan[]"]`).val(detail.keterangan)
             $('table #table_body').append(detailRow)
             initSelect2($(`#statusban${id}`), true)
-            setKorv(id,detail.stok_id);
+            setKorv(id, detail.stok_id);
             initAutoNumeric($(`.number${id}`))
             setRowNumbers()
             $(`#detail_stok_${id}`).lookup({
@@ -2891,7 +2911,7 @@
                 parent.children('.detailstokId').val(stok.id)
                 parent.children('.detailstokKelompok').val(stok.kelompok_id)
                 element.data('currentValue', element.val())
-                setKorv(id,stok.id);
+                setKorv(id, stok.id);
 
               },
               onCancel: (element) => {
@@ -2922,10 +2942,10 @@
                 element.data('currentValue', element.val())
               }
             })
-            
+
             // dataStatusBan.forEach(statusBan => {
             //   option = new Option(statusBan.text, statusBan.id)
-        
+
             //   detailRow.find(`#statusban${id}`).append(option).trigger('change')
             // });
 
@@ -2933,21 +2953,20 @@
           })
           sumary()
           setKodePenerimaan(response.data.penerimaanstok);
-          
+
           if (KodePenerimaanId === listKodePenerimaan[2]) {
             if (response.data.penerimaanstok_nobukti) {
               $('#addRow').hide()
-            }else{
+            } else {
               $('#addRow').show()
             }
-          }else if (KodePenerimaanId === listKodePenerimaan[10]) {
+          } else if (KodePenerimaanId === listKodePenerimaan[10]) {
             setShowDetailSPBP(response.detail)
-          }else if (KodePenerimaanId === listKodePenerimaan[8]) {
-            setShowDetailPengeluaran(penerimaanStokHeaderId,KodePenerimaanId)
-          }else if (KodePenerimaanId === listKodePenerimaan[7]) {
+          } else if (KodePenerimaanId === listKodePenerimaan[8]) {
+            setShowDetailPengeluaran(penerimaanStokHeaderId, KodePenerimaanId)
+          } else if (KodePenerimaanId === listKodePenerimaan[7]) {
             $('#addRow').hide()
-          }
-          else{
+          } else {
             $('#addRow').show()
           }
           resolve(response.data)
@@ -2960,7 +2979,7 @@
   }
 
   function resetLookup() {
-    
+
     array = [
       'supplier',
       'trado',
@@ -2976,8 +2995,8 @@
       'gandengandari',
     ];
     array.forEach(index => {
-      $('#crudForm').find(`[name="${index}"]`).parents('.input-group').children().attr('disabled',false)
-      $('#crudForm').find(`[name="${index}"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled',false)
+      $('#crudForm').find(`[name="${index}"]`).parents('.input-group').children().attr('disabled', false)
+      $('#crudForm').find(`[name="${index}"]`).parents('.input-group').children().find('.lookup-toggler').attr('disabled', false)
       $(`#${index}Id`).val('')
       $('#crudForm').find(`[name="${index}"]`).data('currentValue', '')
     });
@@ -3017,7 +3036,7 @@
       onSelectRow: (penerimaanstok, element) => {
         setKodePenerimaan(penerimaanstok.kodepenerimaan)
         setIsDateAvailable(penerimaanstok.id)
-        
+
         element.val(penerimaanstok.kodepenerimaan)
         $(`#${element[0]['name']}Id`).val(penerimaanstok.id)
         element.data('currentValue', element.val())
@@ -3137,19 +3156,19 @@
       },
       onSelectRow: (penerimaan, element) => {
         var penerimaanstokId = $(`#penerimaanstokId`).val();
-        if ((penerimaanstokId == listIdPenerimaan[2] || penerimaanstokId == listIdPenerimaan[10])) {//spb beli /reuse /spbp
+        if ((penerimaanstokId == listIdPenerimaan[2] || penerimaanstokId == listIdPenerimaan[10])) { //spb beli /reuse /spbp
           setSuplier(penerimaan.id);
           $('[name=nobon]').val(penerimaan.nobon)
-          if (penerimaanstokId == listIdPenerimaan[2]) {//spb
+          if (penerimaanstokId == listIdPenerimaan[2]) { //spb
             setDetailPenerimaan(penerimaan.id);
           }
-          if (penerimaanstokId == listIdPenerimaan[10]) {//spbp
+          if (penerimaanstokId == listIdPenerimaan[10]) { //spbp
             setDetailSPBP(penerimaan.id);
           }
           // console.log(penerimaan.supplier,
           // penerimaan.nobon);
         }
-        
+
         element.val(penerimaan.nobukti)
       },
       onCancel: (element) => {
@@ -3176,7 +3195,7 @@
       },
       onSelectRow: (pengeluaran, element) => {
         var penerimaanstokId = $(`#penerimaanstokId`).val();
-        if ((penerimaanstokId == 8) || (penerimaanstokId == 9 )) {//pst pengembalian stok dan pspk
+        if ((penerimaanstokId == 8) || (penerimaanstokId == 9)) { //pst pengembalian stok dan pspk
           console.log(penerimaanstokId);
           setDetailPengeluaran(pengeluaran.id);
         }
@@ -3191,7 +3210,7 @@
         element.data('currentValue', element.val())
       }
     })
-    
+
 
     $('.tradoke-lookup').lookup({
       title: 'Trado Lookup',
@@ -3338,7 +3357,7 @@
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
-        enabledLookupSelectedDari('gudang',$(`#${element[0]['name']}Id`).val())
+        enabledLookupSelectedDari('gudang', $(`#${element[0]['name']}Id`).val())
         element.val('')
         $(`#${element[0]['name']}Id`).val('')
         element.data('currentValue', element.val())

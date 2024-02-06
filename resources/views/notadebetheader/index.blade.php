@@ -669,7 +669,11 @@
             class: 'btn btn-orange btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              viewNotaDebetHeader(selectedId)
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Harap pilih salah satu record')
+              } else {
+                viewNotaDebetHeader(selectedId)
+              }
             }
           },
         ],
@@ -722,7 +726,7 @@
       if (!`{{ $myAuth->hasPermission('notadebetheader', 'report') }}`) {
         $('#report').attr('disabled', 'disabled')
       }
-      let hakApporveCount = 0 ;
+      let hakApporveCount = 0;
       hakApporveCount++
       if (!`{{ $myAuth->hasPermission('notadebetheader', 'approval') }}`) {
         hakApporveCount--
