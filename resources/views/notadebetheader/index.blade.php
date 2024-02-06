@@ -733,6 +733,7 @@
         $('#approveun').hide()
         // $('#approval-buka-cetak').attr('disabled', 'disabled')
       }
+      hakApporveCount++
       if (!`{{ $myAuth->hasPermission('notadebetheader', 'approvalbukacetak') }}`) {
         hakApporveCount--
         $('#approval-buka-cetak').hide()
