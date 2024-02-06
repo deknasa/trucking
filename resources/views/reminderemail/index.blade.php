@@ -30,7 +30,52 @@
   let rowNum = 10
   let tgldariheader
   let tglsampaiheader
+  let selectedRows = [];
+
   reloadGrid()
+
+  function checkboxHandler(element) {
+    let value = $(element).val();
+    if (element.checked) {
+      selectedRows.push($(element).val())
+      $(element).parents('tr').addClass('bg-light-blue')
+    } else {
+      $(element).parents('tr').removeClass('bg-light-blue')
+      for (var i = 0; i < selectedRows.length; i++) {
+        if (selectedRows[i] == value) {
+          selectedRows.splice(i, 1);
+        }
+      }
+    }
+
+  }
+
+  function clearSelectedRows() {
+    selectedRows = []
+    $('#gs_').prop('checked', false);
+    $('#jqGrid').trigger('reloadGrid')
+  }
+
+  function selectAllRows() {
+    $.ajax({
+      url: `${apiUrl}reminderemail`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        limit: 0,
+        filters: $('#jqGrid').jqGrid('getGridParam', 'postData').filters
+      },
+      success: (response) => {
+        selectedRows = response.data.map((reminder) => reminder.id)
+        $('#jqGrid').trigger('reloadGrid')
+      }
+    })
+  }
+
+
   $(document).ready(function() {
 
     $("#jqGrid").jqGrid({
@@ -39,112 +84,121 @@
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         datatype: "json",
-        colModel: [
-            {
-                label: 'ID',
-                name: 'id',
-                align: 'right',
-                width: '70px',
-                search: false,
-                hidden: true
+        colModel: [{
+            label: '',
+            name: '',
+            width: 30,
+            align: 'center',
+            sortable: false,
+            clear: false,
+            stype: 'input',
+            searchable: false,
+            searchoptions: {
+              type: 'checkbox',
+              clearSearch: false,
+              dataInit: function(element) {
+                $(element).removeClass('form-control')
+                $(element).parent().addClass('text-center')
+
+                $(element).on('click', function() {
+
+                  $(element).attr('disabled', true)
+                  if ($(this).is(':checked')) {
+                    selectAllRows()
+                  } else {
+                    clearSelectedRows()
+                  }
+                })
+
+              }
             },
-            {
-                label: 'keterangan',
-                name: 'keterangan',
-                align: 'left',
-                width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
+            formatter: (value, rowOptions, rowData) => {
+              return `<input type="checkbox" name="Id[]" value="${rowData.id}" onchange="checkboxHandler(this)">`
             },
-            {
-                label: 'Status',
-                name: 'statusaktif_memo',
-                stype: 'select',
-                width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
-                searchoptions: {
-                    dataInit: function(element) {
-                        $(element).select2({
-                            width: 'resolve',
-                            theme: "bootstrap4",
-                            ajax: {
-                                url: `${apiUrl}parameter/combo`,
-                                dataType: 'JSON',
-                                headers: {
-                                    Authorization: `Bearer ${accessToken}`
-                                },
-                                data: {
-                                    grp: 'STATUS AKTIF',
-                                    subgrp: 'STATUS AKTIF'
-                                },
-                                beforeSend: () => {
-                                    // clear options
-                                    $(element).data('select2').$results.children().filter((index, element) => {
-                                        // clear options except index 0, which
-                                        // is the "searching..." label
-                                        if (index > 0) {
-                                            element.remove()
-                                        }
-                                    })
-                                },
-                                processResults: (response) => {
-                                    let formattedResponse = response.data.map(row => ({
-                                        id: row.text,
-                                        text: row.text
-                                    }));
-                                
-                                    formattedResponse.unshift({
-                                        id: '',
-                                        text: 'ALL'
-                                    });
-                                    return {
-                                        results: formattedResponse
-                                    };
-                                },
-                            }
-                        });
-                    }
-                },
-                formatter: (value, options, rowData) => {
-                    let statusAktif = JSON.parse(value)
-                    let formattedValue = $(`
+          },
+          {
+            label: 'ID',
+            name: 'id',
+            align: 'right',
+            width: '70px',
+            search: false,
+            hidden: true
+          },
+          {
+            label: 'keterangan',
+            name: 'keterangan',
+            align: 'left',
+            width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
+          },
+          {
+            label: 'Status',
+            name: 'statusaktif_memo',
+            stype: 'select',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['comboaktif'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['comboaktif'])) {
+                          echo ';';
+                        }
+                        $i++;
+                      endforeach;
+
+                      ?>
+                  `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              let statusAktif = JSON.parse(value)
+              let formattedValue = $(`
                     <div class="badge" style="background-color: ${statusAktif.WARNA}; color: ${statusAktif.WARNATULISAN};">
                         <span>${statusAktif.SINGKATAN}</span>
                     </div>
                     `)
-                    return formattedValue[0].outerHTML
-                },
-                cellattr: (rowId, value, rowObject) => {
-                    let statusAktif = JSON.parse(rowObject.statusaktif)
-                    return ` title="${statusAktif.MEMO}"`
-                }
+              return formattedValue[0].outerHTML
             },
-            {
-                label: 'MODIFIED BY',
-                name: 'modifiedby',
-                align: 'left',
-                width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
-            },
-            {
-                label: 'CREATED AT',
-                name: 'created_at',
-                align: 'right',
-                width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
-                formatter: "date",
-                formatoptions: {
-                    srcformat: "ISO8601Long",
-                    newformat: "d-m-Y H:i:s"
-                }
-            },
-            {
-                label: 'UPDATED AT',
-                name: 'updated_at',
-                align: 'right',
-                width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
-                formatter: "date",
-                formatoptions: {
-                    srcformat: "ISO8601Long",
-                    newformat: "d-m-Y H:i:s"
-                }
-            },
-        ],        
+            cellattr: (rowId, value, rowObject) => {
+              let statusAktif = JSON.parse(rowObject.statusaktif)
+              return ` title="${statusAktif.MEMO}"`
+            }
+          },
+          {
+            label: 'MODIFIED BY',
+            name: 'modifiedby',
+            align: 'left',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+          },
+          {
+            label: 'CREATED AT',
+            name: 'created_at',
+            align: 'right',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y H:i:s"
+            }
+          },
+          {
+            label: 'UPDATED AT',
+            name: 'updated_at',
+            align: 'right',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y H:i:s"
+            }
+          },
+        ],
         autowidth: true,
         shrinkToFit: false,
         height: 350,
@@ -179,8 +233,8 @@
           page = $(this).jqGrid('getGridParam', 'page')
           let limit = $(this).jqGrid('getGridParam', 'postData').limit
           if (indexRow >= limit) indexRow = (indexRow - limit * (page - 1))
-          
-         
+
+
 
         },
         loadComplete: function(data) {
@@ -197,6 +251,16 @@
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))
+          $.each(selectedRows, function(key, value) {
+
+            $('#jqGrid tbody tr').each(function(row, tr) {
+              if ($(this).find(`td input:checkbox`).val() == value) {
+                $(this).find(`td input:checkbox`).prop('checked', true)
+                $(this).addClass('bg-light-blue')
+              }
+            })
+
+          });
 
           /* Set global variables */
           sortname = $(this).jqGrid("getGridParam", "sortname")
@@ -204,7 +268,7 @@
           totalRecord = $(this).getGridParam("records")
           limit = $(this).jqGrid('getGridParam', 'postData').limit
           postData = $(this).jqGrid('getGridParam', 'postData')
-          triggerClick = true  
+          triggerClick = true
 
           $('.clearsearchclass').click(function() {
             clearColumnSearch($(this))
@@ -237,6 +301,7 @@
 
           $('#left-nav').find('button').attr('disabled', false)
           permission()
+          $('#gs_').attr('disabled', false)
           setHighlight($(this))
         }
       })
@@ -256,7 +321,7 @@
       })
 
       .customPager({
-        
+
         buttons: [{
             id: 'add',
             innerHTML: '<i class="fa fa-plus"></i> ADD',
@@ -275,7 +340,7 @@
                 showDialog('Harap pilih salah satu record')
               } else {
                 cekValidasi(selectedId, 'EDIT')
-                
+
               }
             }
           },
@@ -289,7 +354,7 @@
                 showDialog('Harap pilih salah satu record')
               } else {
                 cekValidasi(selectedId, 'DELETE')
-                
+
               }
             }
           },
@@ -300,6 +365,16 @@
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               viewReminderEmail(selectedId)
+            }
+          },
+          {
+            id: 'approveun',
+            innerHTML: '<i class="fas fa-check""></i> APPROVAL NON AKTIF',
+            class: 'btn btn-purple btn-sm mr-1',
+            onClick: () => {
+
+              approvalNonAktif('reminderemail')
+
             }
           },
         ]
@@ -332,30 +407,34 @@
       .addClass('btn btn-sm btn-warning')
       .parent().addClass('px-1')
 
-      function permission() {
-    if (!`{{ $myAuth->hasPermission('reminderemail', 'store') }}`) {
-      $('#add').attr('disabled', 'disabled')
-    }
+    function permission() {
+      if (!`{{ $myAuth->hasPermission('reminderemail', 'store') }}`) {
+        $('#add').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('reminderemail', 'update') }}`) {
-      $('#edit').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('reminderemail', 'update') }}`) {
+        $('#edit').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('reminderemail', 'show') }}`) {
-      $('#view').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('reminderemail', 'show') }}`) {
+        $('#view').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('reminderemail', 'destroy') }}`) {
-      $('#delete').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('reminderemail', 'destroy') }}`) {
+        $('#delete').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('reminderemail', 'export') }}`) {
-      $('#export').attr('disabled', 'disabled')
-    }
+      if (!`{{ $myAuth->hasPermission('reminderemail', 'export') }}`) {
+        $('#export').attr('disabled', 'disabled')
+      }
 
-    if (!`{{ $myAuth->hasPermission('reminderemail', 'report') }}`) {
-      $('#report').attr('disabled', 'disabled')
-    }}
+      if (!`{{ $myAuth->hasPermission('reminderemail', 'report') }}`) {
+        $('#report').attr('disabled', 'disabled')
+      }
+      // if (!`{{ $myAuth->hasPermission('reminderemail', 'approvalnonaktif') }}`) {
+      //   $('#approveun').attr('disabled', 'disabled')
+      // }
+    }
 
     $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {
@@ -427,7 +506,7 @@
 
         xhr.send()
       } else if ($('#rangeModal').data('action') == 'report') {
-        
+
 
         submitButton.removeAttr('disabled')
       }

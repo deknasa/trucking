@@ -445,30 +445,29 @@
     }
     // Pusher.logToConsole = true;
 
-    // var pusher = new Pusher('ad75cb7e8c752de64286', {
-    //   cluster: 'ap1'
+    var pusher = new Pusher('ad75cb7e8c752de64286', {
+      cluster: 'ap1'
+    });
+
+    // pusher.connection.bind('error', function(err) {
+    //   console.error(err);
     // });
 
-    // // pusher.connection.bind('error', function(err) {
-    // //   console.error(err);
-    // // });
+    var channel = pusher.subscribe('data-channel');
+    channel.bind("App\\Events\\NewNotification", (response) => {
 
-    // var channel = pusher.subscribe('data-channel');
-    // console.log('dashboad')
-    // channel.bind("App\\Events\\NewNotification", (response) => {
-
-    //   var message = JSON.parse(response.message);
-    //   if (message.olduser == '<?= auth()->user()->name ?>') {
-    //     showDialogForce(message.message)
-    //     // $("#dialog-force-message").dialog({
-    //     //   close: function(event, ui) {
-    //     //     isAllowedForceEdit = true
-    //     //     approveKacab(message.id)
-    //     //   },
-    //     // });
-    //   }
-    //   console.log('data', response);
-    // });
+      var message = JSON.parse(response.message);
+      if (message.olduser == '<?= auth()->user()->name ?>') {
+        showDialogForce(message.message)
+        // $("#dialog-force-message").dialog({
+        //   close: function(event, ui) {
+        //     isAllowedForceEdit = true
+        //     approveKacab(message.id)
+        //   },
+        // });
+      }
+      console.log('data', response);
+    });
 
     $(".formatdate").datepicker({
         dateFormat: 'dd-mm-yy',
@@ -835,6 +834,52 @@
           },
         });
       });
+    }
+
+
+
+    function approvalNonAktif(table) {
+
+      event.preventDefault()
+
+      let form = $('#crudForm')
+      $(this).attr('disabled', '')
+      $('#processingLoader').removeClass('d-none')
+
+      $.ajax({
+        url: `${apiUrl}${table}/approvalnonaktif`,
+        method: 'POST',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          Id: selectedRows,
+          table: table
+        },
+        success: response => {
+          $('#crudForm').trigger('reset')
+          $('#crudModal').modal('hide')
+
+          $('#jqGrid').jqGrid().trigger('reloadGrid');
+          selectedRows = []
+          $('#gs_').prop('checked', false)
+        },
+        error: error => {
+          if (error.status === 422) {
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+
+            setErrorMessages(form, error.responseJSON.errors);
+          } else {
+            showDialog(error.responseJSON)
+          }
+        },
+      }).always(() => {
+        $('#processingLoader').addClass('d-none')
+        $(this).removeAttr('disabled')
+      })
+
     }
   </script>
 </body>
