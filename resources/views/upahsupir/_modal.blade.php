@@ -605,7 +605,7 @@
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
-
+    clearSelectedRows()
     $('#crudModal').find('.modal-body').html(modalBody)
     dropzones.forEach(dropzone => {
       dropzone.removeAllFiles()

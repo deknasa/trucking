@@ -404,7 +404,7 @@
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
-
+    clearSelectedRows()
     // $('#crudModal').find('.modal-body').html(modalBody)
     dropzones.forEach(dropzone => {
       dropzone.removeAllFiles()

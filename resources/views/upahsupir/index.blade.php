@@ -56,6 +56,31 @@
 
   }
 
+  function clearSelectedRows() {
+    selectedRows = []
+    $('#gs_check').prop('checked', false);
+    $('#jqGrid').trigger('reloadGrid')
+  }
+
+  function selectAllRows() {
+    $.ajax({
+      url: `${apiUrl}upahsupir`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        limit: 0,
+        filters: $('#jqGrid').jqGrid('getGridParam', 'postData').filters
+      },
+      success: (response) => {
+        selectedRows = response.data.map((upahsupir) => upahsupir.id)
+        $('#jqGrid').trigger('reloadGrid')
+      }
+    })
+  }
+
 
   $(document).ready(function() {
     setTampilanIndex()
@@ -443,6 +468,16 @@
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))
+          $.each(selectedRows, function(key, value) {
+
+            $('#jqGrid tbody tr').each(function(row, tr) {
+              if ($(this).find(`td input:checkbox`).val() == value) {
+                $(this).find(`td input:checkbox`).prop('checked', true)
+                $(this).addClass('bg-light-blue')
+              }
+            })
+
+          });
 
           /* Set global variables */
           sortname = $(this).jqGrid("getGridParam", "sortname")
@@ -480,6 +515,7 @@
 
           $('#left-nav').find('button').attr('disabled', false)
           permission()
+          $('#gs_check').attr('disabled', false)
           setHighlight($(this))
         }
       })
@@ -544,7 +580,11 @@
             class: 'btn btn-orange btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              viewUpahSupir(selectedId)
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Harap pilih salah satu record')
+              } else {
+                viewUpahSupir(selectedId)
+              }
             }
           },
           {
@@ -598,7 +638,7 @@
             class: 'btn btn-purple btn-sm mr-1',
             onClick: () => {
 
-              approvenonaktif()
+              approvalNonAktif('upahsupir')
 
             }
           },
@@ -662,6 +702,9 @@
       }
       if (!`{{ $myAuth->hasPermission('upahsupir', 'import') }}`) {
         $('#import').attr('disabled', 'disabled')
+      }
+      if (!`{{ $myAuth->hasPermission('upahsupir', 'approvalnonaktif') }}`) {
+        $('#approveun').attr('disabled', 'disabled')
       }
     }
 

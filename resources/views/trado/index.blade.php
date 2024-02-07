@@ -56,6 +56,31 @@
 
     }
 
+    function clearSelectedRows() {
+        selectedRows = []
+        $('#gs_check').prop('checked', false);
+        $('#jqGrid').trigger('reloadGrid')
+    }
+
+    function selectAllRows() {
+        $.ajax({
+            url: `${apiUrl}trado`,
+            method: 'GET',
+            dataType: 'JSON',
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            },
+            data: {
+                limit: 0,
+                filters: $('#jqGrid').jqGrid('getGridParam', 'postData').filters
+            },
+            success: (response) => {
+                selectedRows = response.data.map((trado) => trado.id)
+                $('#jqGrid').trigger('reloadGrid')
+            }
+        })
+    }
+
 
     var statusAktif = new URLSearchParams(window.location.search).get('status');
     // let selectedRows = [];
@@ -870,6 +895,16 @@
                     $(document).unbind('keydown')
                     setCustomBindKeys($(this))
                     initResize($(this))
+                    $.each(selectedRows, function(key, value) {
+
+                        $('#jqGrid tbody tr').each(function(row, tr) {
+                            if ($(this).find(`td input:checkbox`).val() == value) {
+                                $(this).find(`td input:checkbox`).prop('checked', true)
+                                $(this).addClass('bg-light-blue')
+                            }
+                        })
+
+                    });
 
                     /* Set global variables */
                     sortname = $(this).jqGrid("getGridParam", "sortname")
@@ -907,6 +942,7 @@
 
                     $('#left-nav').find('button').attr('disabled', false)
                     permission()
+                    $('#gs_check').attr('disabled', false)
                     setHighlight($(this))
                 },
             })
@@ -940,8 +976,11 @@
                         class: 'btn btn-success btn-sm mr-1',
                         onClick: () => {
                             selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-                            editTrado(selectedId)
+                            if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                                showDialog('Harap pilih salah satu record')
+                            } else {
+                                editTrado(selectedId)
+                            }
                         }
                     },
                     {
@@ -963,7 +1002,11 @@
                         class: 'btn btn-orange btn-sm mr-1',
                         onClick: () => {
                             selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                            viewTrado(selectedId)
+                            if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                                showDialog('Harap pilih salah satu record')
+                            } else {
+                                viewTrado(selectedId)
+                            }
                         }
                     },
                     {
@@ -999,7 +1042,11 @@
                                 onClick: () => {
                                     if (`{{ $myAuth->hasPermission('trado', 'approvalmesin') }}`) {
                                         selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                                        approvalMesin(selectedId)
+                                        if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                                            showDialog('Harap pilih salah satu record')
+                                        } else {
+                                            approvalMesin(selectedId)
+                                        }
                                     }
                                 }
                             },
@@ -1008,7 +1055,7 @@
                                 text: "Approval Non Aktif",
                                 onClick: () => {
 
-                                    approvenonaktif()
+                                    approvalNonAktif('trado')
 
                                 }
                             },
@@ -1018,8 +1065,11 @@
                                 onClick: () => {
                                     if (`{{ $myAuth->hasPermission('trado', 'approvalpersneling') }}`) {
                                         selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-                                        approvalPersneling(selectedId);
+                                        if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                                            showDialog('Harap pilih salah satu record')
+                                        } else {
+                                            approvalPersneling(selectedId);
+                                        }
                                     }
                                     // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                                 }
@@ -1030,7 +1080,11 @@
                                 onClick: () => {
                                     if (`{{ $myAuth->hasPermission('trado', 'approvalgardan') }}`) {
                                         selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                                        approvalGardan(selectedId);
+                                        if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                                            showDialog('Harap pilih salah satu record')
+                                        } else {
+                                            approvalGardan(selectedId);
+                                        }
                                     }
                                     // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                                 }
@@ -1041,7 +1095,11 @@
                                 onClick: () => {
                                     if (`{{ $myAuth->hasPermission('trado', 'approvalsaringanhawa') }}`) {
                                         selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                                        approvalSaringanHawa(selectedId);
+                                        if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                                            showDialog('Harap pilih salah satu record')
+                                        } else {
+                                            approvalSaringanHawa(selectedId);
+                                        }
                                     }
                                     // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                                 }
@@ -1052,7 +1110,12 @@
                                 onClick: () => {
                                     if (`{{ $myAuth->hasPermission('approvaltradogambar', 'update') }}`) {
                                         selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                                        approvalTradoGambar(selectedId);
+
+                                        if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                                            showDialog('Harap pilih salah satu record')
+                                        } else {
+                                            approvalTradoGambar(selectedId);
+                                        }
                                     }
                                     // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                                 }
@@ -1063,7 +1126,12 @@
                                 onClick: () => {
                                     if (`{{ $myAuth->hasPermission('approvaltradoketerangan', 'update') }}`) {
                                         selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                                        approvalTradoKeterangan(selectedId);
+
+                                        if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                                            showDialog('Harap pilih salah satu record')
+                                        } else {
+                                            approvalTradoKeterangan(selectedId);
+                                        }
                                     }
                                     // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                                 }
@@ -1159,55 +1227,76 @@
             if (!`{{ $myAuth->hasPermission('trado', 'report') }}`) {
                 $('#report').attr('disabled', 'disabled')
             }
-            let hakApporveCount = 0 ;
+            let hakApporveCount = 0;
             hakApporveCount++
             if (!`{{ $myAuth->hasPermission('trado', 'approvalmesin') }}`) {
-              hakApporveCount--
-              $('#approveun').hide()
-              // $('#approval-buka-cetak').attr('disabled', 'disabled')
+                hakApporveCount--
+                $('#approveun').hide()
+                // $('#approval-buka-cetak').attr('disabled', 'disabled')
             }
             hakApporveCount++
             if (!`{{ $myAuth->hasPermission('trado', 'approvalnonaktif') }}`) {
-              hakApporveCount--
-              $('#approvalnonaktif').hide()
-              // $('#approval-buka-cetak').attr('disabled', 'disabled')
+                hakApporveCount--
+                $('#approvalnonaktif').hide()
+                // $('#approval-buka-cetak').attr('disabled', 'disabled')
             }
             hakApporveCount++
             if (!`{{ $myAuth->hasPermission('trado', 'approvalPersneling') }}`) {
-              hakApporveCount--
-              $('#approvalPersneling').hide()
-              // $('#approval-buka-cetak').attr('disabled', 'disabled')
+                hakApporveCount--
+                $('#approvalPersneling').hide()
+                // $('#approval-buka-cetak').attr('disabled', 'disabled')
             }
             hakApporveCount++
             if (!`{{ $myAuth->hasPermission('trado', 'approvalGardan') }}`) {
-              hakApporveCount--
-              $('#approvalGardan').hide()
-              // $('#approval-buka-cetak').attr('disabled', 'disabled')
+                hakApporveCount--
+                $('#approvalGardan').hide()
+                // $('#approval-buka-cetak').attr('disabled', 'disabled')
             }
             hakApporveCount++
             if (!`{{ $myAuth->hasPermission('trado', 'approvalSaringanHawa') }}`) {
-              hakApporveCount--
-              $('#approvalSaringanHawa').hide()
-              // $('#approval-buka-cetak').attr('disabled', 'disabled')
+                hakApporveCount--
+                $('#approvalSaringanHawa').hide()
+                // $('#approval-buka-cetak').attr('disabled', 'disabled')
             }
             hakApporveCount++
             if (!`{{ $myAuth->hasPermission('trado', 'approvalTradoGambar') }}`) {
-              hakApporveCount--
-              $('#approvalTradoGambar').hide()
-              // $('#approval-buka-cetak').attr('disabled', 'disabled')
+                hakApporveCount--
+                $('#approvalTradoGambar').hide()
+                // $('#approval-buka-cetak').attr('disabled', 'disabled')
             }
             hakApporveCount++
             if (!`{{ $myAuth->hasPermission('trado', 'approvalTradoKeterangan') }}`) {
-              hakApporveCount--
-              $('#approvalTradoKeterangan').hide()
-              // $('#approval-buka-cetak').attr('disabled', 'disabled')
+                hakApporveCount--
+                $('#approvalTradoKeterangan').hide()
+                // $('#approval-buka-cetak').attr('disabled', 'disabled')
             }
-            
-            
+
+
             if (hakApporveCount < 1) {
-              // $('#approve').hide()
-              $('#approve').attr('disabled', 'disabled')
+                // $('#approve').hide()
+                $('#approve').attr('disabled', 'disabled')
             }
+
+            let hakLainnyaCount = 0;
+            hakLainnyaCount++
+            if (!`{{ $myAuth->hasPermission('trado', 'historyTradoMandor') }}`) {
+                hakLainnyaCount--
+                $('#historyMandor').hide()
+                // $('#approval-buka-cetak').attr('disabled', 'disabled')
+            }
+            hakLainnyaCount++
+            if (!`{{ $myAuth->hasPermission('trado', 'historyTradoSupir') }}`) {
+                hakLainnyaCount--
+                $('#historySupir').hide()
+                // $('#approval-buka-cetak').attr('disabled', 'disabled')
+            }
+
+
+            if (hakLainnyaCount < 1) {
+                // $('#approve').hide()
+                $('#lainnya').attr('disabled', 'disabled')
+            }
+
         }
 
         $('#rangeModal').on('shown.bs.modal', function() {
