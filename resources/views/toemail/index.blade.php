@@ -493,9 +493,9 @@
         $('#report').attr('disabled', 'disabled')
       }
 
-      // if (!`{{ $myAuth->hasPermission('toemail', 'approvalnonaktif') }}`) {
-      //   $('#approveun').attr('disabled', 'disabled')
-      // }
+      if (!`{{ $myAuth->hasPermission('toemail', 'approvalnonaktif') }}`) {
+        $('#approveun').attr('disabled', 'disabled')
+      }
     }
 
     $('#rangeModal').on('shown.bs.modal', function() {
