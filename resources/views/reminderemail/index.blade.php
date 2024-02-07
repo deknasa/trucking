@@ -431,9 +431,9 @@
       if (!`{{ $myAuth->hasPermission('reminderemail', 'report') }}`) {
         $('#report').attr('disabled', 'disabled')
       }
-      // if (!`{{ $myAuth->hasPermission('reminderemail', 'approvalnonaktif') }}`) {
-      //   $('#approveun').attr('disabled', 'disabled')
-      // }
+      if (!`{{ $myAuth->hasPermission('reminderemail', 'approvalnonaktif') }}`) {
+        $('#approveun').attr('disabled', 'disabled')
+      }
     }
 
     $('#rangeModal').on('shown.bs.modal', function() {
