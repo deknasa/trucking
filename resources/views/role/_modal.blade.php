@@ -3,6 +3,11 @@
     <form action="#" id="crudForm">
       <div class="modal-content">
 
+        <div class="modal-header">
+          <p class="modal-title" id="crudModalTitle"></p>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          </button>
+        </div>
         <form action="" method="post">
           <div class="modal-body">
             {{-- <div class="row form-group">
@@ -200,7 +205,7 @@
     Save
   `)
     form.data('action', 'add')
-    $('#crudModalTitle').text('Create Role')
+    $('#crudModalTitle').text('Add Role')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
@@ -443,7 +448,7 @@
             name: 'keterangan',
             width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
             align: 'left'
-          },    
+          },
           {
             label: 'Nama',
             name: 'nama',

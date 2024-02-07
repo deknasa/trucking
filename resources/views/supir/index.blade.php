@@ -56,6 +56,31 @@
         }
 
     }
+
+    function clearSelectedRows() {
+        selectedRows = []
+        $('#gs_check').prop('checked', false);
+        $('#jqGrid').trigger('reloadGrid')
+    }
+
+    function selectAllRows() {
+        $.ajax({
+            url: `${apiUrl}supir`,
+            method: 'GET',
+            dataType: 'JSON',
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            },
+            data: {
+                limit: 0,
+                filters: $('#jqGrid').jqGrid('getGridParam', 'postData').filters
+            },
+            success: (response) => {
+                selectedRows = response.data.map((supir) => supir.id)
+                $('#jqGrid').trigger('reloadGrid')
+            }
+        })
+    }
     var statusTidakBolehLuarkota;
     var statusBukanBlackList;
     var statusAktif = new URLSearchParams(window.location.search).get('status');
@@ -816,6 +841,16 @@
                     $(document).unbind('keydown')
                     setCustomBindKeys($(this))
                     initResize($(this))
+                    $.each(selectedRows, function(key, value) {
+
+                        $('#jqGrid tbody tr').each(function(row, tr) {
+                            if ($(this).find(`td input:checkbox`).val() == value) {
+                                $(this).find(`td input:checkbox`).prop('checked', true)
+                                $(this).addClass('bg-light-blue')
+                            }
+                        })
+
+                    });
 
                     /* Set global variables */
                     sortname = $(this).jqGrid("getGridParam", "sortname")
@@ -853,6 +888,7 @@
 
                     $('#left-nav').find('button').attr('disabled', false)
                     permission()
+                    $('#gs_check').attr('disabled', false)
                     setHighlight($(this))
                 },
             })
@@ -914,7 +950,11 @@
                         class: 'btn btn-orange btn-sm mr-1',
                         onClick: () => {
                             selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                            viewSupir(selectedId)
+                            if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                                showDialog('Harap pilih salah satu record')
+                            } else {
+                                viewSupir(selectedId)
+                            }
                         }
                     },
                     {
@@ -950,7 +990,11 @@
                                 onClick: () => {
                                     if (`{{ $myAuth->hasPermission('supir', 'approvalBlackListSupir') }}`) {
                                         selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                                        approvalBlackListSupir(selectedId)
+                                        if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                                            showDialog('Harap pilih salah satu record')
+                                        } else {
+                                            approvalBlackListSupir(selectedId)
+                                        }
                                     }
                                 }
                             },
@@ -958,10 +1002,7 @@
                                 id: 'approvalnonaktif',
                                 text: "Approval Non Aktif",
                                 onClick: () => {
-
-                                    if (`{{ $myAuth->hasPermission('supir', 'approvalnonaktif') }}`) {
-                                        approvenonaktif()
-                                    }
+                                    approvalNonAktif('supir')
                                 }
                             },
                             {
@@ -970,7 +1011,11 @@
                                 onClick: () => {
                                     if (`{{ $myAuth->hasPermission('supir', 'approvalSupirLuarKota') }}`) {
                                         selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                                        approvalSupirLuarKota(selectedId)
+                                        if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                                            showDialog('Harap pilih salah satu record')
+                                        } else {
+                                            approvalSupirLuarKota(selectedId)
+                                        }
                                     }
                                 }
                             },
@@ -993,10 +1038,14 @@
                                 id: 'approvalSupirKeterangan',
                                 text: "un/Approval Supir tanpa Keterangan",
                                 onClick: () => {
-                                    if (`{{ $myAuth->hasPermission('approvalsupirketerangan', 'update') }}`) {
-                                        selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                                    // if (`{{ $myAuth->hasPermission('approvalsupirketerangan', 'update') }}`) {
+                                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                                    if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                                        showDialog('Harap pilih salah satu record')
+                                    } else {
                                         approvalSupirKeterangan(selectedId);
                                     }
+                                    // }
                                     // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                                 }
                             },
@@ -1004,10 +1053,14 @@
                                 id: 'approvalSupirGambar',
                                 text: "un/Approval Supir tanpa Gambar",
                                 onClick: () => {
-                                    if (`{{ $myAuth->hasPermission('approvalsupirgambar', 'update') }}`) {
-                                        selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                                    // if (`{{ $myAuth->hasPermission('approvalsupirgambar', 'update') }}`) {
+                                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                                    if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                                        showDialog('Harap pilih salah satu record')
+                                    } else {
                                         approvalSupirGambar(selectedId);
                                     }
+                                    // }
                                     // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                                 }
                             },
@@ -1089,39 +1142,51 @@
                 $('#report').attr('disabled', 'disabled')
             }
 
-            let hakApporveCount = 0 ;
-            
+            let hakApporveCount = 0;
+
             hakApporveCount++
-            if (!`$myAuth->hasPermission('supir', 'approvalBlackListSupir')`) {
-              hakApporveCount--
-              $('#approvalBlackListSupir').hide()
-              // $('#approval-buka-cetak').attr('disabled', 'disabled')
+            if (!`{{ $myAuth->hasPermission('supir', 'approvalBlackListSupir') }}`) {
+                hakApporveCount--
+                $('#approvalBlackListSupir').hide()
+                // $('#approval-buka-cetak').attr('disabled', 'disabled')
             }
-            
+
             hakApporveCount++
-            if (!`$myAuth->hasPermission('supir', 'approvalnonaktif')`) {
-              hakApporveCount--
-              $('#approvalnonaktif').hide()
-              // $('#approval-buka-cetak').attr('disabled', 'disabled')
+            if (!`{{ $myAuth->hasPermission('supir', 'approvalnonaktif') }}`) {
+                hakApporveCount--
+                $('#approvalnonaktif').hide()
+                // $('#approval-buka-cetak').attr('disabled', 'disabled')
             }
-            
+
             hakApporveCount++
-            if (!`$myAuth->hasPermission('supir', 'approvalSupirLuarKota')`) {
-              hakApporveCount--
-              $('#approvalSupirLuarKota').hide()
-              // $('#approval-buka-cetak').attr('disabled', 'disabled')
+            if (!`{{ $myAuth->hasPermission('supir', 'approvalSupirLuarKota') }}`) {
+                hakApporveCount--
+                $('#approvalSupirLuarKota').hide()
+                // $('#approval-buka-cetak').attr('disabled', 'disabled')
             }
-            
+
             hakApporveCount++
-            if (!`$myAuth->hasPermission('supir', 'approvalSupirResign')`) {
-              hakApporveCount--
-              $('#approvalSupirResign').hide()
-              // $('#approval-buka-cetak').attr('disabled', 'disabled')
+            if (!`{{ $myAuth->hasPermission('supir', 'approvalSupirResign') }}`) {
+                hakApporveCount--
+                $('#approvalSupirResign').hide()
+                // $('#approval-buka-cetak').attr('disabled', 'disabled')
             }
-                       
+
+            hakApporveCount++
+            if (!`{{ $myAuth->hasPermission('supir', 'approvalsupirketerangan') }}`) {
+                hakApporveCount--
+                $('#approvalSupirKeterangan').hide()
+            }
+
+            hakApporveCount++
+            if (!`{{ $myAuth->hasPermission('supir', 'approvalsupirgambar') }}`) {
+                hakApporveCount--
+                $('#approvalSupirGambar').hide()
+            }
+
             if (hakApporveCount < 1) {
-              // $('#approve').hide()
-              $('#approve').attr('disabled', 'disabled')
+                // $('#approve').hide()
+                $('#approve').attr('disabled', 'disabled')
             }
 
             if (!`{{ $myAuth->hasPermission('supir', 'historySupirMandor') }}`) {
@@ -1375,7 +1440,7 @@
                     $('#jqGrid').jqGrid().trigger('reloadGrid');
                     selectedRows = []
                     selectedRowsSupir = []
-                    $('#gs_').prop('checked', false)
+                    $('#gs_check').prop('checked', false)
                 },
                 error: error => {
                     if (error.status === 422) {
@@ -1436,7 +1501,7 @@
                     $('#jqGrid').jqGrid().trigger('reloadGrid');
                     selectedRows = []
                     selectedRowsSupir = []
-                    $('#gs_').prop('checked', false)
+                    $('#gs_check').prop('checked', false)
                 },
                 error: error => {
                     if (error.status === 422) {

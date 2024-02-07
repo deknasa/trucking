@@ -28,6 +28,48 @@
     let autoNumericElements = []
     let indexRow = 0;
     let approveEditRequest = null;
+    let selectedRows = [];
+
+    function checkboxHandler(element) {
+        let value = $(element).val();
+        if (element.checked) {
+            selectedRows.push($(element).val())
+            $(element).parents('tr').addClass('bg-light-blue')
+        } else {
+            $(element).parents('tr').removeClass('bg-light-blue')
+            for (var i = 0; i < selectedRows.length; i++) {
+                if (selectedRows[i] == value) {
+                    selectedRows.splice(i, 1);
+                }
+            }
+        }
+
+    }
+
+    function clearSelectedRows() {
+        selectedRows = []
+        $('#gs_').prop('checked', false);
+        $('#jqGrid').trigger('reloadGrid')
+    }
+
+    function selectAllRows() {
+        $.ajax({
+            url: `${apiUrl}cabang`,
+            method: 'GET',
+            dataType: 'JSON',
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            },
+            data: {
+                limit: 0,
+                filters: $('#jqGrid').jqGrid('getGridParam', 'postData').filters
+            },
+            success: (response) => {
+                selectedRows = response.data.map((cabang) => cabang.id)
+                $('#jqGrid').trigger('reloadGrid')
+            }
+        })
+    }
 
     $(document).ready(function() {
         $("#jqGrid").jqGrid({
@@ -37,6 +79,37 @@
                 iconSet: 'fontAwesome',
                 datatype: "json",
                 colModel: [{
+                        label: '',
+                        name: '',
+                        width: 30,
+                        align: 'center',
+                        sortable: false,
+                        clear: false,
+                        stype: 'input',
+                        searchable: false,
+                        searchoptions: {
+                            type: 'checkbox',
+                            clearSearch: false,
+                            dataInit: function(element) {
+                                $(element).removeClass('form-control')
+                                $(element).parent().addClass('text-center')
+
+                                $(element).on('click', function() {
+
+                                    $(element).attr('disabled', true)
+                                    if ($(this).is(':checked')) {
+                                        selectAllRows()
+                                    } else {
+                                        clearSelectedRows()
+                                    }
+                                })
+
+                            }
+                        },
+                        formatter: (value, rowOptions, rowData) => {
+                            return `<input type="checkbox" name="Id[]" value="${rowData.id}" onchange="checkboxHandler(this)">`
+                        },
+                    }, {
                         label: 'ID',
                         name: 'id',
                         align: 'right',
@@ -248,6 +321,16 @@
                     setCustomBindKeys($(this))
                     initResize($(this))
 
+                    $.each(selectedRows, function(key, value) {
+
+                        $('#jqGrid tbody tr').each(function(row, tr) {
+                            if ($(this).find(`td input:checkbox`).val() == value) {
+                                $(this).find(`td input:checkbox`).prop('checked', true)
+                                $(this).addClass('bg-light-blue')
+                            }
+                        })
+
+                    });
                     /* Set global variables */
                     sortname = $(this).jqGrid("getGridParam", "sortname")
                     sortorder = $(this).jqGrid("getGridParam", "sortorder")
@@ -284,6 +367,7 @@
 
                     $('#left-nav').find('button').attr('disabled', false)
                     permission()
+                    $('#gs_').attr('disabled', false)
                     setHighlight($(this))
                 }
             })
@@ -317,8 +401,11 @@
                         class: 'btn btn-success btn-sm mr-1',
                         onClick: () => {
                             selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-                            editCabang(selectedId)
+                            if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                                showDialog('Harap pilih salah satu record')
+                            } else {
+                                editCabang(selectedId)
+                            }
                         }
                     },
                     {
@@ -327,8 +414,11 @@
                         class: 'btn btn-danger btn-sm mr-1',
                         onClick: () => {
                             selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-                            deleteCabang(selectedId)
+                            if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                                showDialog('Harap pilih salah satu record')
+                            } else {
+                                deleteCabang(selectedId)
+                            }
                         }
                     },
                     {
@@ -337,8 +427,11 @@
                         class: 'btn btn-orange btn-sm mr-1',
                         onClick: () => {
                             selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-                            viewCabang(selectedId)
+                            if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                                showDialog('Harap pilih salah satu record')
+                            } else {
+                                viewCabang(selectedId)
+                            }
                         }
                     },
                     // {
@@ -378,13 +471,25 @@
                     innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
                     class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
                     dropmenuHTML: [{
-                        id: 'approvalKoneksi',
-                        text: ' UN/APPROVAL KONEKSI',
-                        onClick: () => {
-                            selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                            approvalKoneksi(selectedId)
-                        }
-                    }, ],
+                            id: 'approvalKoneksi',
+                            text: ' UN/APPROVAL KONEKSI',
+                            onClick: () => {
+                                selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                                if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                                    showDialog('Harap pilih salah satu record')
+                                } else {
+                                    approvalKoneksi(selectedId)
+                                }
+                            }
+                        },
+                        {
+                            id: 'approvalnonaktif',
+                            text: "Approval Non Aktif",
+                            onClick: () => {
+                                approvalNonAktif('cabang')
+                            }
+                        },
+                    ],
                 }]
             })
 
@@ -437,16 +542,22 @@
             if (!`{{ $myAuth->hasPermission('cabang', 'report') }}`) {
                 $('#report').attr('disabled', 'disabled')
             }
-            let hakApporveCount = 0 ;
+            let hakApporveCount = 0;
             hakApporveCount++
             if (!`{{ $myAuth->hasPermission('cabang', 'approvalKonensi') }}`) {
-              hakApporveCount--
-              $('#approvalKoneksi').hide()
-              // $('#approval-buka-cetak').attr('disabled', 'disabled')
+                hakApporveCount--
+                $('#approvalKoneksi').hide()
+                // $('#approval-buka-cetak').attr('disabled', 'disabled')
+            }
+            hakApporveCount++
+            if (!`{{ $myAuth->hasPermission('cabang', 'approvalnonaktif') }}`) {
+                hakApporveCount--
+                $('#approvalnonaktif').hide()
+                // $('#approval-buka-cetak').attr('disabled', 'disabled')
             }
             if (hakApporveCount < 1) {
-              // $('#approve').hide()
-              $('#approve').attr('disabled', 'disabled')
+                // $('#approve').hide()
+                $('#approve').attr('disabled', 'disabled')
             }
         }
 

@@ -32,6 +32,48 @@
   let autoNumericElements = []
   let rowNum = 10
   let hasDetail = false
+  let selectedRows = [];
+
+  function checkboxHandler(element) {
+    let value = $(element).val();
+    if (element.checked) {
+      selectedRows.push($(element).val())
+      $(element).parents('tr').addClass('bg-light-blue')
+    } else {
+      $(element).parents('tr').removeClass('bg-light-blue')
+      for (var i = 0; i < selectedRows.length; i++) {
+        if (selectedRows[i] == value) {
+          selectedRows.splice(i, 1);
+        }
+      }
+    }
+
+  }
+
+  function clearSelectedRows() {
+    selectedRows = []
+    $('#gs_').prop('checked', false);
+    $('#jqGrid').trigger('reloadGrid')
+  }
+
+  function selectAllRows() {
+    $.ajax({
+      url: `${apiUrl}upahritasi`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        limit: 0,
+        filters: $('#jqGrid').jqGrid('getGridParam', 'postData').filters
+      },
+      success: (response) => {
+        selectedRows = response.data.map((upahritasi) => upahritasi.id)
+        $('#jqGrid').trigger('reloadGrid')
+      }
+    })
+  }
 
   $(document).ready(function() {
 
@@ -42,6 +84,38 @@
         iconSet: 'fontAwesome',
         datatype: "json",
         colModel: [{
+            label: '',
+            name: '',
+            width: 30,
+            align: 'center',
+            sortable: false,
+            clear: false,
+            stype: 'input',
+            searchable: false,
+            searchoptions: {
+              type: 'checkbox',
+              clearSearch: false,
+              dataInit: function(element) {
+                $(element).removeClass('form-control')
+                $(element).parent().addClass('text-center')
+
+                $(element).on('click', function() {
+
+                  $(element).attr('disabled', true)
+                  if ($(this).is(':checked')) {
+                    selectAllRows()
+                  } else {
+                    clearSelectedRows()
+                  }
+                })
+
+              }
+            },
+            formatter: (value, rowOptions, rowData) => {
+              return `<input type="checkbox" name="Id[]" value="${rowData.id}" onchange="checkboxHandler(this)">`
+            },
+          },
+          {
             label: 'ID',
             name: 'id',
             align: 'right',
@@ -255,6 +329,16 @@
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))
+          $.each(selectedRows, function(key, value) {
+
+            $('#jqGrid tbody tr').each(function(row, tr) {
+              if ($(this).find(`td input:checkbox`).val() == value) {
+                $(this).find(`td input:checkbox`).prop('checked', true)
+                $(this).addClass('bg-light-blue')
+              }
+            })
+
+          });
 
           /* Set global variables */
           sortname = $(this).jqGrid("getGridParam", "sortname")
@@ -292,6 +376,7 @@
 
           $('#left-nav').find('button').attr('disabled', false)
           permission()
+          $('#gs_').attr('disabled', false)
           setHighlight($(this))
         }
       })
@@ -351,7 +436,11 @@
             class: 'btn btn-orange btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              viewUpahRitasi(selectedId)
+              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                showDialog('Harap pilih salah satu record')
+              } else {
+                viewUpahRitasi(selectedId)
+              }
             }
           },
           {
@@ -392,6 +481,16 @@
               // $('#importModal').data('action', 'import')
               $('#importModal').find('button:submit').html(`Update Harga`)
               $('#importModal').modal('show')
+            }
+          },
+          {
+            id: 'approveun',
+            innerHTML: '<i class="fas fa-check""></i> APPROVAL NON AKTIF',
+            class: 'btn btn-purple btn-sm mr-1',
+            onClick: () => {
+
+              approvalNonAktif('upahritasi')
+
             }
           },
         ]
@@ -448,6 +547,9 @@
       }
       if (!`{{ $myAuth->hasPermission('upahritasi', 'updateharga') }}`) {
         $('#approvalEdit').attr('disabled', 'disabled')
+      }
+      if (!`{{ $myAuth->hasPermission('upahritasi', 'approvalnonaktif') }}`) {
+        $('#approveun').attr('disabled', 'disabled')
       }
     }
 

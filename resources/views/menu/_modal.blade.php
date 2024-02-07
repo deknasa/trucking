@@ -2,11 +2,16 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
-        
+
+        <div class="modal-header">
+          <p class="modal-title" id="crudModalTitle"></p>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          </button>
+        </div>
         <form action="" method="post">
           <div class="modal-body">
 
-                   {{-- <div class="row form-group">
+            {{-- <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">ID</label>
               </div>
@@ -28,7 +33,7 @@
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
-                  PENGURUTAN 
+                  PENGURUTAN
                 </label>
               </div>
               <div class="col-12 col-md-10">
@@ -38,7 +43,7 @@
             <div class="row form-group sometimes">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
-                  MENU PARENT 
+                  MENU PARENT
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
@@ -50,7 +55,7 @@
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
-                  ICON 
+                  ICON
                 </label>
               </div>
               <div class="col-12 col-md-10">
@@ -60,7 +65,7 @@
             <div class="row form-group sometimes_link">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
-                  LINK 
+                  LINK
                 </label>
               </div>
               <div class="col-12 col-md-10">
@@ -176,7 +181,9 @@
 
           id = response.data.id
 
-          $('#jqGrid').jqGrid('setGridParam', { page: response.data.page}).trigger('reloadGrid');
+          $('#jqGrid').jqGrid('setGridParam', {
+            page: response.data.page
+          }).trigger('reloadGrid');
 
           if (response.data.grp == 'FORMAT') {
             updateFormat(response.data)
@@ -230,7 +237,7 @@
 
     form.data('action', 'add')
     form.find(`.sometimes`).show()
-    $('#crudModalTitle').text('Create Menu')
+    $('#crudModalTitle').text('Add Menu')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
@@ -275,9 +282,9 @@
       .then(() => {
         showMenu(form, menuId)
           .then(() => {
-          form.find('select').prop('disabled', true);
-          form.find('.select2-container').addClass('disabled');
-          form.find('input[name="menuexe"]').prop('disabled', true);
+            form.find('select').prop('disabled', true);
+            form.find('.select2-container').addClass('disabled');
+            form.find('input[name="menuexe"]').prop('disabled', true);
             $('#crudModal').modal('show')
           })
           .catch((error) => {
@@ -286,47 +293,47 @@
           .finally(() => {
             $('.modal-loader').addClass('d-none')
           })
-        })
-        
+      })
+
   }
 
   function deleteMenu(menuId) {
-  let form = $('#crudForm');
+    let form = $('#crudForm');
 
-  $('.modal-loader').removeClass('d-none');
+    $('.modal-loader').removeClass('d-none');
 
-  form.data('action', 'delete');
-  form.trigger('reset');
-  form.find('#btnSubmit').html(`
+    form.data('action', 'delete');
+    form.trigger('reset');
+    form.find('#btnSubmit').html(`
     <i class="fa fa-trash"></i>
     Delete
   `);
-  form.find('.sometimes').show();
-  $('#crudModalTitle').text('Delete Menu');
-  $('.is-invalid').removeClass('is-invalid');
-  $('.invalid-feedback').remove();
+    form.find('.sometimes').show();
+    $('#crudModalTitle').text('Delete Menu');
+    $('.is-invalid').removeClass('is-invalid');
+    $('.invalid-feedback').remove();
 
-  Promise.all([
-    setMenuParentOptions(form),
-    // setControllerOptions(form)
-  ])
-    .then(() => {
-      showMenu(form, menuId)
-        .then(() => {
-          form.find('select').prop('disabled', true);
-          form.find('.select2-container').addClass('disabled');
-          form.find('.form-control.sometimes_link').addClass('disabled');
-          form.find('input[name="menuexe"]').prop('disabled', true);
-          $('#crudModal').modal('show');
-        })
-        .catch((error) => {
-          showDialog(error.statusText);
-        })
-        .finally(() => {
-          $('.modal-loader').addClass('d-none');
-        });
-    });
-}
+    Promise.all([
+        setMenuParentOptions(form),
+        // setControllerOptions(form)
+      ])
+      .then(() => {
+        showMenu(form, menuId)
+          .then(() => {
+            form.find('select').prop('disabled', true);
+            form.find('.select2-container').addClass('disabled');
+            form.find('.form-control.sometimes_link').addClass('disabled');
+            form.find('input[name="menuexe"]').prop('disabled', true);
+            $('#crudModal').modal('show');
+          })
+          .catch((error) => {
+            showDialog(error.statusText);
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none');
+          });
+      });
+  }
 
   function getMaxLength(form) {
     if (!form.attr('has-maxlength')) {
@@ -431,7 +438,7 @@
             } else {
               element.val(value)
             }
-            
+
           })
           if (form.data('action') === 'delete') {
             form.find('[name]').addClass('disabled')

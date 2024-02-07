@@ -452,7 +452,7 @@
   // })
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
-
+    clearSelectedRows()
     $('#crudForm [name=nominalpinjamansaldoawal]').attr('value', '')
     dropzones.forEach(dropzone => {
       dropzone.removeAllFiles()
