@@ -144,6 +144,10 @@
         value: $('#jqGrid').getGridParam().sortorder
       })
       data.push({
+        name: 'accessTokenTnl',
+        value: accessTokenTnl
+      })      
+      data.push({
         name: 'info',
         value: info
       })
