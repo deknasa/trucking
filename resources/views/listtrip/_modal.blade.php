@@ -1170,6 +1170,8 @@
 
                 element.val(pelanggan.namapelanggan)
                 element.data('currentValue', element.val())
+                $('#crudForm [name=jobtrucking]').val('')
+                $('#crudForm [name=jobtrucking]').data('currentValue', '')
             },
             onCancel: (element) => {
                 element.val(element.data('currentValue'))
@@ -1198,6 +1200,8 @@
                 containerId = container.id
                 element.val(container.keterangan)
                 element.data('currentValue', element.val())
+                $('#crudForm [name=jobtrucking]').val('')
+                $('#crudForm [name=jobtrucking]').data('currentValue', '')
                 enabledUpahSupir()
             },
             onCancel: (element) => {
@@ -1242,6 +1246,10 @@
                     labeljobtrucking.attr('hidden', true)
                     jobtrucking.parents('.input-group').find('.input-group-append').hide()
                     jobtrucking.parents('.input-group').find('.button-clear').hide()
+                } else {
+
+                    $('#crudForm [name=jobtrucking]').val('')
+                    $('#crudForm [name=jobtrucking]').data('currentValue', '')
                 }
             },
             onCancel: (element) => {
@@ -1336,6 +1344,8 @@
                 }
                 element.val(gandengan.keterangan)
                 element.data('currentValue', element.val())
+                $('#crudForm [name=jobtrucking]').val('')
+                $('#crudForm [name=jobtrucking]').data('currentValue', '')
             },
             onCancel: (element) => {
                 element.val(element.data('currentValue'))
@@ -1363,6 +1373,8 @@
                 $('#crudForm [name=agen_id]').first().val(agen.id)
                 element.val(agen.namaagen)
                 element.data('currentValue', element.val())
+                $('#crudForm [name=jobtrucking]').val('')
+                $('#crudForm [name=jobtrucking]').data('currentValue', '')
             },
             onCancel: (element) => {
                 element.val(element.data('currentValue'))
@@ -1390,6 +1402,8 @@
                 element.val(jenisorder.keterangan)
                 element.data('currentValue', element.val())
                 enabledUpahSupir()
+                $('#crudForm [name=jobtrucking]').val('')
+                $('#crudForm [name=jobtrucking]').data('currentValue', '')
             },
             onCancel: (element) => {
                 element.val(element.data('currentValue'))
@@ -1475,7 +1489,8 @@
                     element.val(`${upahsupir.zonadari} - ${upahsupir.zonasampai}`)
                 }
                 kotaUpahZona()
-
+                $('#crudForm [name=jobtrucking]').val('')
+                $('#crudForm [name=jobtrucking]').data('currentValue', '')
                 element.data('currentValue', element.val())
             },
             onCancel: (element) => {

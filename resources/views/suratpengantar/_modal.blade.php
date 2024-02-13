@@ -1434,7 +1434,11 @@
               $('#detailList tbody').append(detailRow)
 
               initAutoNumericMinus(detailRow.find('.autonumeric'))
-
+              if (detail.statusapproval == 3) {
+                detailRow.find(`[name="keterangan_detail[]"]`).prop('readonly', true)
+                detailRow.find(`[name="nominal[]"]`).prop('readonly', true)
+                detailRow.find(`[name="nominalTagih[]"]`).prop('readonly', true)
+              }
               $('#detailList tbody').append(detailRow)
 
               setTotal()
