@@ -51,6 +51,31 @@
 
     }
 
+    function clearSelectedRows() {
+        selectedRows = []
+        $('#gs_').prop('checked', false);
+        $('#jqGrid').trigger('reloadGrid')
+    }
+
+    function selectAllRows() {
+        $.ajax({
+            url: `${apiUrl}gandengan`,
+            method: 'GET',
+            dataType: 'JSON',
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            },
+            data: {
+                limit: 0,
+                filters: $('#jqGrid').jqGrid('getGridParam', 'postData').filters
+            },
+            success: (response) => {
+                selectedRows = response.data.map((gandengan) => gandengan.id)
+                $('#jqGrid').trigger('reloadGrid')
+            }
+        })
+    }
+
     $(document).ready(function() {
         $("#jqGrid").jqGrid({
                 url: `${apiUrl}gandengan`,
@@ -60,7 +85,7 @@
                 datatype: "json",
                 colModel: [{
                         label: '',
-                        name: 'check',
+                        name: '',
                         width: 30,
                         align: 'center',
                         sortable: false,
@@ -244,7 +269,16 @@
                     $(document).unbind('keydown')
                     setCustomBindKeys($(this))
                     initResize($(this))
+                    $.each(selectedRows, function(key, value) {
 
+                        $('#jqGrid tbody tr').each(function(row, tr) {
+                            if ($(this).find(`td input:checkbox`).val() == value) {
+                                $(this).find(`td input:checkbox`).prop('checked', true)
+                                $(this).addClass('bg-light-blue')
+                            }
+                        })
+
+                    });
                     /* Set global variables */
                     sortname = $(this).jqGrid("getGridParam", "sortname")
                     sortorder = $(this).jqGrid("getGridParam", "sortorder")
@@ -281,6 +315,7 @@
 
                     $('#left-nav').find('button').attr('disabled', false)
                     permission()
+                    $('#gs_').attr('disabled', false)
                     setHighlight($(this))
                 }
             })
@@ -314,8 +349,11 @@
                         class: 'btn btn-success btn-sm mr-1',
                         onClick: () => {
                             selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-                            editGandengan(selectedId)
+                            if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                                showDialog('Harap pilih salah satu record')
+                            } else {
+                                editGandengan(selectedId)
+                            }
                         }
                     },
                     {
@@ -337,8 +375,11 @@
                         class: 'btn btn-orange btn-sm mr-1',
                         onClick: () => {
                             selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-                            viewGandengan(selectedId)
+                            if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                                showDialog('Harap pilih salah satu record')
+                            } else {
+                                viewGandengan(selectedId)
+                            }
                         }
                     },
                     {
@@ -367,7 +408,7 @@
                         class: 'btn btn-purple btn-sm mr-1',
                         onClick: () => {
 
-                            approvenonaktif()
+                            approvalNonAktif('gandengan')
 
                         }
                     },
@@ -428,6 +469,9 @@
 
             if (!`{{ $myAuth->hasPermission('gandengan', 'report') }}`) {
                 $('#report').attr('disabled', 'disabled')
+            }
+            if (!`{{ $myAuth->hasPermission('gandengan', 'approvalnonaktif') }}`) {
+                $('#approveun').attr('disabled', 'disabled')
             }
         }
 
@@ -493,12 +537,10 @@
             getCekExport(params).then((response) => {
                     if ($('#rangeModal').data('action') == 'export') {
                         $.ajax({
-                            url: '{{ config('
-                            app.api_url ') }}gandengan/export?' + params,
+                            url: `${apiUrl}gandengan/export?${params}`,
                             type: 'GET',
                             beforeSend: function(xhr) {
-                                xhr.setRequestHeader('Authorization', 'Bearer {{ session('
-                                    access_token ') }}');
+                                xhr.setRequestHeader('Authorization', `Bearer ${accessToken}`);
                             },
                             xhrFields: {
                                 responseType: 'arraybuffer'

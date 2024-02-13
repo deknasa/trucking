@@ -196,6 +196,7 @@
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
+    clearSelectedRows() 
   })
 
   function createJenisTrado() {

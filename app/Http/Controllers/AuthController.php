@@ -191,15 +191,19 @@ class AuthController extends MyController
             // dd(config('app.emkl_api_url'));
             // dump(config('app.emkl_api_url') . 'oauth/token');
             // dd($credentialsEmkl);
+
             // $tokenEmkl = Http::withHeaders([
             //     'Accept' => 'application/json'
             // ])->withOptions(['verify' => false])
             //     ->post(config('app.emkl_api_url') . 'oauth/token', $credentialsEmkl);
 
-                // dd($tokenEmkl
+                $credentials['user'] = 'ADMIN';
+                $credentials['password'] = config('app.password_emkl');
+                $tokenEmkl = Http::withHeaders([
+                    'Accept' => 'application/json'
+                ])->withOptions(['verify' => false])
+                    ->post(config('app.emkl_api_url') . 'token', $credentials);
 
-            // dd($tokenEmkl->getBody()->getContents());
-            // dd($tokenEmkl->Json());
             
 
             session(['access_token' => $token['access_token']]);
