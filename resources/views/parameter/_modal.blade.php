@@ -3,6 +3,11 @@
     <form action="#" id="crudForm">
       <div class="modal-content">
 
+        <div class="modal-header">
+          <p class="modal-title" id="crudModalTitle"></p>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          </button>
+        </div>
         <form action="" method="post">
           <div class="modal-body">
             {{-- <input type="hidden" name="id"> --}}
@@ -324,7 +329,7 @@
     Save
   `)
     form.data('action', 'add')
-    $('#crudModalTitle').text('Create Parameter')
+    $('#crudModalTitle').text('Add Parameter')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 

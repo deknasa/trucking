@@ -2,7 +2,11 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
-
+        <div class="modal-header">
+          <p class="modal-title" id="crudModalTitle"></p>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          </button>
+        </div>
         <form action="" method="post">
           <div class="modal-body">
             {{-- <div class="row form-group">
@@ -139,6 +143,10 @@
         name: 'sortOrder',
         value: $('#jqGrid').getGridParam().sortorder
       })
+      data.push({
+        name: 'accessTokenTnl',
+        value: accessTokenTnl
+      })      
       data.push({
         name: 'info',
         value: info
@@ -299,6 +307,7 @@
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
+    clearSelectedRows()
     $('#crudModal').find('.modal-body').html(modalBody)
   })
 
@@ -314,7 +323,7 @@
     `)
     form.data('action', 'add')
     form.find(`.sometimes`).show()
-    $('#crudModalTitle').text('Create Cabang')
+    $('#crudModalTitle').text('Add Cabang')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 

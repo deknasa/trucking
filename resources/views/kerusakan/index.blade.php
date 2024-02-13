@@ -27,6 +27,47 @@
     let sortname = 'keterangan'
     let sortorder = 'asc'
     let autoNumericElements = []
+    let selectedRows = [];
+
+    function checkboxHandler(element) {
+        let value = $(element).val();
+        if (element.checked) {
+            selectedRows.push($(element).val())
+            $(element).parents('tr').addClass('bg-light-blue')
+        } else {
+            $(element).parents('tr').removeClass('bg-light-blue')
+            for (var i = 0; i < selectedRows.length; i++) {
+                if (selectedRows[i] == value) {
+                    selectedRows.splice(i, 1);
+                }
+            }
+        }
+    }
+
+    function clearSelectedRows() {
+        selectedRows = []
+        $('#gs_').prop('checked', false);
+        $('#jqGrid').trigger('reloadGrid')
+    }
+
+    function selectAllRows() {
+        $.ajax({
+            url: `${apiUrl}kerusakan`,
+            method: 'GET',
+            dataType: 'JSON',
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            },
+            data: {
+                limit: 0,
+                filters: $('#jqGrid').jqGrid('getGridParam', 'postData').filters
+            },
+            success: (response) => {
+                selectedRows = response.data.map((kerusakan) => kerusakan.id)
+                $('#jqGrid').trigger('reloadGrid')
+            }
+        })
+    }
 
     $(document).ready(function() {
         $("#jqGrid").jqGrid({
@@ -36,6 +77,38 @@
                 iconSet: 'fontAwesome',
                 datatype: "json",
                 colModel: [{
+                        label: '',
+                        name: '',
+                        width: 30,
+                        align: 'center',
+                        sortable: false,
+                        clear: false,
+                        stype: 'input',
+                        searchable: false,
+                        searchoptions: {
+                            type: 'checkbox',
+                            clearSearch: false,
+                            dataInit: function(element) {
+                                $(element).removeClass('form-control')
+                                $(element).parent().addClass('text-center')
+
+                                $(element).on('click', function() {
+
+                                    $(element).attr('disabled', true)
+                                    if ($(this).is(':checked')) {
+                                        selectAllRows()
+                                    } else {
+                                        clearSelectedRows()
+                                    }
+                                })
+
+                            }
+                        },
+                        formatter: (value, rowOptions, rowData) => {
+                            return `<input type="checkbox" name="Id[]" value="${rowData.id}" onchange="checkboxHandler(this)">`
+                        },
+                    },
+                    {
                         label: 'ID',
                         name: 'id',
                         width: '50px',
@@ -158,7 +231,16 @@
                     $(document).unbind('keydown')
                     setCustomBindKeys($(this))
                     initResize($(this))
+                    $.each(selectedRows, function(key, value) {
 
+                        $('#jqGrid tbody tr').each(function(row, tr) {
+                            if ($(this).find(`td input:checkbox`).val() == value) {
+                                $(this).find(`td input:checkbox`).prop('checked', true)
+                                $(this).addClass('bg-light-blue')
+                            }
+                        })
+
+                    });
                     /* Set global variables */
                     sortname = $(this).jqGrid("getGridParam", "sortname")
                     sortorder = $(this).jqGrid("getGridParam", "sortorder")
@@ -195,6 +277,7 @@
 
                     $('#left-nav').find('button').attr('disabled', false)
                     permission()
+                    $('#gs_').attr('disabled', false)
                     setHighlight($(this))
                 },
             })
@@ -227,8 +310,12 @@
                         class: 'btn btn-success btn-sm mr-1',
                         onClick: () => {
                             selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                            if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                                showDialog('Harap pilih salah satu record')
+                            } else {
 
-                            editKerusakan(selectedId)
+                                editKerusakan(selectedId)
+                            }
                         }
                     },
                     {
@@ -250,8 +337,11 @@
                         class: 'btn btn-orange btn-sm mr-1',
                         onClick: () => {
                             selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-    
-                            viewKerusakan(selectedId)
+                            if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                                showDialog('Harap pilih salah satu record')
+                            } else {
+                                viewKerusakan(selectedId)
+                            }
                         }
                     },
                     {
@@ -272,6 +362,16 @@
                             $('#rangeModal').data('action', 'export')
                             $('#rangeModal').find('button:submit').html(`Export`)
                             $('#rangeModal').modal('show')
+                        }
+                    },
+                    {
+                        id: 'approveun',
+                        innerHTML: '<i class="fas fa-check""></i> APPROVAL NON AKTIF',
+                        class: 'btn btn-purple btn-sm mr-1',
+                        onClick: () => {
+
+                            approvalNonAktif('kerusakan')
+
                         }
                     },
                 ]
@@ -311,7 +411,7 @@
             if (!`{{ $myAuth->hasPermission('kerusakan', 'show') }}`) {
                 $('#view').attr('disabled', 'disabled')
             }
-                
+
             if (!`{{ $myAuth->hasPermission('kerusakan', 'update') }}`) {
                 $('#edit').attr('disabled', 'disabled')
             }
@@ -324,6 +424,10 @@
             }
             if (!`{{ $myAuth->hasPermission('kerusakan', 'report') }}`) {
                 $('#report').attr('disabled', 'disabled')
+            }
+
+            if (!`{{ $myAuth->hasPermission('kerusakan', 'approvalnonaktif') }}`) {
+                $('#approveun').attr('disabled', 'disabled')
             }
         }
 
@@ -369,81 +473,81 @@
             let params
             let actionUrl = ``
             let submitButton = $(this).find('button:submit')
-                    
-                    submitButton.attr('disabled', 'disabled')
-                    $('#processingLoader').removeClass('d-none')
-                    
-                    // window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
-                    let formRange = $('#formRange')
-                    let offset = parseInt(formRange.find('[name=dari]').val()) - 1
-                    let limit = parseInt(formRange.find('[name=sampai]').val().replace('.', '')) - offset
-                    params += `&offset=${offset}&limit=${limit}`
 
-                    getCekExport(params).then((response) => {
-                        if ($('#rangeModal').data('action') == 'export') {
-                            $.ajax({
-                                url: `${apiUrl}kerusakan/export?${params}`,
-                                type: 'GET',
-                                beforeSend: function(xhr) {
-                                    xhr.setRequestHeader('Authorization', `Bearer ${accessToken}`);
-                                },
-                                xhrFields: {
-                                    responseType: 'arraybuffer'
-                                },
-                                success: function(response, status, xhr) {
-                                    if (xhr.status === 200) {
-                                        if (response !== undefined) {
-                                            var blob = new Blob([response], {
-                                                type: 'kerusakan/vnd.ms-excel'
-                                            });
-                                            var link = document.createElement('a');
-                                            link.href = window.URL.createObjectURL(blob);
-                                            link.download = 'kerusakan' + new Date().getTime() + '.xlsx';
-                                            link.click();
-                                        }
-                                        $('#rangeModal').modal('hide')
+            submitButton.attr('disabled', 'disabled')
+            $('#processingLoader').removeClass('d-none')
+
+            // window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
+            let formRange = $('#formRange')
+            let offset = parseInt(formRange.find('[name=dari]').val()) - 1
+            let limit = parseInt(formRange.find('[name=sampai]').val().replace('.', '')) - offset
+            params += `&offset=${offset}&limit=${limit}`
+
+            getCekExport(params).then((response) => {
+                    if ($('#rangeModal').data('action') == 'export') {
+                        $.ajax({
+                            url: `${apiUrl}kerusakan/export?${params}`,
+                            type: 'GET',
+                            beforeSend: function(xhr) {
+                                xhr.setRequestHeader('Authorization', `Bearer ${accessToken}`);
+                            },
+                            xhrFields: {
+                                responseType: 'arraybuffer'
+                            },
+                            success: function(response, status, xhr) {
+                                if (xhr.status === 200) {
+                                    if (response !== undefined) {
+                                        var blob = new Blob([response], {
+                                            type: 'kerusakan/vnd.ms-excel'
+                                        });
+                                        var link = document.createElement('a');
+                                        link.href = window.URL.createObjectURL(blob);
+                                        link.download = 'kerusakan' + new Date().getTime() + '.xlsx';
+                                        link.click();
                                     }
-                                },
-                                
-                                error: function(xhr, status, error) {
-                                    $('#processingLoader').addClass('d-none')
-                                    submitButton.removeAttr('disabled')
+                                    $('#rangeModal').modal('hide')
                                 }
-                            }).always(() => {
+                            },
+
+                            error: function(xhr, status, error) {
                                 $('#processingLoader').addClass('d-none')
                                 submitButton.removeAttr('disabled')
-                            })
-                        } else if ($('#rangeModal').data('action') == 'report') {
-                            window.open(`{{ route('kerusakan.report') }}?${params}`)
-                            submitButton.removeAttr('disabled')
+                            }
+                        }).always(() => {
                             $('#processingLoader').addClass('d-none')
-                            $('#rangeModal').modal('hide')
+                            submitButton.removeAttr('disabled')
+                        })
+                    } else if ($('#rangeModal').data('action') == 'report') {
+                        window.open(`{{ route('kerusakan.report') }}?${params}`)
+                        submitButton.removeAttr('disabled')
+                        $('#processingLoader').addClass('d-none')
+                        $('#rangeModal').modal('hide')
+                    }
+                })
+
+                .catch((error) => {
+                    if (error.status === 422) {
+                        $('.is-invalid').removeClass('is-invalid')
+                        $('.invalid-feedback').remove()
+                        let status
+                        if (error.responseJSON.hasOwnProperty('status') == false) {
+                            status = false
+                        } else {
+                            status = true
                         }
-                    })
-                        
-                        .catch((error) => {
-                            if (error.status === 422) {
-                                $('.is-invalid').removeClass('is-invalid')
-                                $('.invalid-feedback').remove()
-                                let status
-                                if (error.responseJSON.hasOwnProperty('status') == false) {
-                                    status = false
-                                } else {
-                                    status = true
-                                }
-                                statusText = error.statusText
-                                errors = error.responseJSON.errors
-                                $.each(errors, (index, error) => {
-                                    let indexes = index.split(".");
-                                    if (status === false) {
-                                        indexes[0] = 'sampai'
-                                    }
-                                    let element;
-                                    element = $('#rangeModal').find(`[name="${indexes[0]}"]`)[
-                                        0];
-                                    if ($(element).length > 0 && !$(element).is(":hidden")) {
-                                        $(element).addClass("is-invalid");
-                                        $(`
+                        statusText = error.statusText
+                        errors = error.responseJSON.errors
+                        $.each(errors, (index, error) => {
+                            let indexes = index.split(".");
+                            if (status === false) {
+                                indexes[0] = 'sampai'
+                            }
+                            let element;
+                            element = $('#rangeModal').find(`[name="${indexes[0]}"]`)[
+                                0];
+                            if ($(element).length > 0 && !$(element).is(":hidden")) {
+                                $(element).addClass("is-invalid");
+                                $(`
                                                 <div class="invalid-feedback">
                                                 ${error[0].toLowerCase()}
                                                 </div>
@@ -455,7 +559,7 @@
                             }
                         });
                         $(".is-invalid").first().focus();
-          $('#processingLoader').addClass('d-none')
+                        $('#processingLoader').addClass('d-none')
 
                     } else {
                         showDialog(error.statusText)
