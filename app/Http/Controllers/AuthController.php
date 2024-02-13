@@ -187,11 +187,15 @@ class AuthController extends MyController
 
                 $tokenTNL = $getTokenTNL['access_token'];
             }
-            
-            // $tokenEmkl = Http::withHeaders([
-            //     'Accept' => 'application/json'
-            // ])->withOptions(['verify' => false])
-            //     ->post(config('app.emkl_api_url') . 'oauth/token', $credentialsEmkl);
+            // dd($credentialsEmkl);
+            // dd(config('app.emkl_api_url'));
+            // dump(config('app.emkl_api_url') . 'oauth/token');
+            // dd($credentialsEmkl);
+
+            $tokenEmkl = Http::withHeaders([
+                'Accept' => 'application/json'
+            ])->withOptions(['verify' => false])
+                ->post(config('app.emkl_api_url') . 'oauth/token', $credentialsEmkl);
 
                 $credentials['user'] = 'ADMIN';
                 $credentials['password'] = config('app.password_emkl');
