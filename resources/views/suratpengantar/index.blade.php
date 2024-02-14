@@ -998,6 +998,9 @@
         // $('#approve').hide()
         $('#approve').attr('disabled', 'disabled')
       }
+      if (!`{{ $myAuth->hasPermission('suratpengantar', 'approvalBiayaTambahan') }}`) {
+        $('#approvalbiayatambahan').attr('disabled', 'disabled')
+      }
     }
 
     $('#rangeModal').on('shown.bs.modal', function() {

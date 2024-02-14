@@ -454,9 +454,7 @@
             new AutoNumeric(`#crudForm [name="bbm"]`)
             hitungSisa()
         })
-        $(document).on('input', `#crudForm [name="uangjalantidakterhitung"]`, function(event) {
-            hitungSisa()
-        })
+        
         $(document).on('click', '#btnTampil', function(event) {
             event.preventDefault()
             let form = $('#crudForm')
@@ -801,12 +799,7 @@
                     value: AutoNumeric.getNumber($(`#crudForm [name="uangjalan"]`)[index])
                 })
             })
-            $('#crudForm').find(`[name="uangjalantidakterhitung"]`).each((index, element) => {
-                data.push({
-                    name: 'uangjalantidakterhitung',
-                    value: AutoNumeric.getNumber($(`#crudForm [name="uangjalantidakterhitung"]`)[index])
-                })
-            })
+            
 
             $('#crudForm').find(`[name="nomDeposito"]`).each((index, element) => {
                 data.push({
@@ -1121,7 +1114,6 @@
         initAutoNumeric($('#crudForm').find('[name=nomBBM]'))
         initAutoNumeric($('#crudForm').find('[name=nomPinjaman]'))
         initAutoNumeric($('#crudForm').find('[name=uangmakanharian]'))
-        initAutoNumeric($('#crudForm').find('[name=uangjalantidakterhitung]'))
 
         loadPotSemuaGrid()
         loadPotPribadiGrid()
@@ -2373,13 +2365,12 @@
 
 
         let uangjalan = AutoNumeric.getNumber($(`#crudForm [name="uangjalan"]`)[0]);
-        let uangjalantidakterhitung = ($(`#crudForm [name="uangjalantidakterhitung"]`).val() == '') ? 0 : AutoNumeric.getNumber($(`#crudForm [name="uangjalantidakterhitung"]`)[0]);
         let deposito = ($(`#crudForm [name="deposito"]`).val() == '') ? 0 : AutoNumeric.getNumber($(`#crudForm [name="deposito"]`)[0]);
         let bbm = ($(`#crudForm [name="bbm"]`).val() == '') ? 0 : AutoNumeric.getNumber($(`#crudForm [name="bbm"]`)[0]);
         let potonganpinjaman = AutoNumeric.getNumber($(`#crudForm [name="potonganpinjaman"]`)[0]);
         let potonganpinjamansemua = AutoNumeric.getNumber($(`#crudForm [name="potonganpinjamansemua"]`)[0]);
 
-        let sisa = total - (uangjalan + deposito + bbm + potonganpinjaman + potonganpinjamansemua + uangjalantidakterhitung)
+        let sisa = total - (uangjalan + deposito + bbm + potonganpinjaman + potonganpinjamansemua)
         $(`#crudForm [name="sisa"]`).val(sisa)
         new AutoNumeric(`#crudForm [name="sisa"]`)
     }
@@ -2413,7 +2404,6 @@
 
                 initAutoNumeric(form.find(`[name="subtotal"]`))
                 initAutoNumeric(form.find(`[name="uangjalan"]`))
-                initAutoNumeric(form.find(`[name="uangjalantidakterhitung"]`))
                 initAutoNumeric(form.find(`[name="berjenjanguangmakan"]`))
                 initAutoNumeric(form.find(`[name="uangmakanharian"]`))
                 initAutoNumeric(form.find(`[name="deposito"]`))
@@ -2935,18 +2925,7 @@
                     <input type="text" name="berjenjanguangmakan" class="form-control text-right autonumeric" readonly>
                 </div>
             </div>
-            
-            <div class="row form-group">
-                <div class="col-12 col-md-3">
-                  <label class="col-form-label">
-                   total potongan uang jalan Tidak Terhitung
-                  </label>
-                </div>
-                <div class="col-12 col-md-9">
-                    <input type="text" name="uangjalantidakterhitung" class="form-control text-right">
-                </div>
-            </div>
-            
+                        
             <div class="row form-group">
                 <div class="col-12 col-md-3">
                   <label class="col-form-label">

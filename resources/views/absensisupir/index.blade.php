@@ -66,6 +66,55 @@
   let tgldariheader
   let tglsampaiheader
   let isTradoMilikSupir = ''
+  let selectedRows = [];
+
+  function checkboxHandler(element) {
+    let value = $(element).val();
+    if (element.checked) {
+      selectedRows.push($(element).val())
+      $(element).parents('tr').addClass('bg-light-blue')
+    } else {
+      $(element).parents('tr').removeClass('bg-light-blue')
+      for (var i = 0; i < selectedRows.length; i++) {
+        if (selectedRows[i] == value) {
+          selectedRows.splice(i, 1);
+        }
+      }
+
+      if(selectedRows.length == 0){
+        $('#gs_').prop('checked', false)
+      }
+    }
+
+  }
+
+  function clearSelectedRows() {
+    selectedRows = []
+    $('#gs_').prop('checked', false);
+    $('#jqGrid').trigger('reloadGrid')
+  }
+
+  function selectAllRows() {
+    $.ajax({
+      url: `${apiUrl}absensisupirheader`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        limit: 0,
+        tgldari: $('#tgldariheader').val(),
+        tglsampai: $('#tglsampaiheader').val(),
+        filters: $('#jqGrid').jqGrid('getGridParam', 'postData').filters
+      },
+      success: (response) => {
+        selectedRows = response.data.map((supir) => supir.id)
+        $('#jqGrid').trigger('reloadGrid')
+      }
+    })
+  }
+
   reloadGrid()
   $(document).ready(function() {
 
@@ -97,6 +146,37 @@
           tglsampai: $('#tglsampaiheader').val()
         },
         colModel: [{
+            label: '',
+            name: '',
+            width: 30,
+            align: 'center',
+            sortable: false,
+            clear: false,
+            stype: 'input',
+            searchable: false,
+            searchoptions: {
+              type: 'checkbox',
+              clearSearch: false,
+              dataInit: function(element) {
+                $(element).removeClass('form-control')
+                $(element).parent().addClass('text-center')
+
+                $(element).on('click', function() {
+
+                  $(element).attr('disabled', true)
+                  if ($(this).is(':checked')) {
+                    selectAllRows()
+                  } else {
+                    clearSelectedRows()
+                  }
+                })
+
+              }
+            },
+            formatter: (value, rowOptions, rowData) => {
+              return `<input type="checkbox" name="Id[]" value="${rowData.id}" onchange="checkboxHandler(this)">`
+            },
+          }, {
             label: 'ID',
             name: 'id',
             align: 'right',
@@ -196,7 +276,7 @@
             label: 'USER BUKA CETAK',
             name: 'userbukacetak',
             align: 'left',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,  
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'TGL BUKA CETAK',
@@ -208,7 +288,7 @@
               srcformat: "ISO8601Long",
               newformat: "d-m-Y"
             }
-          },          
+          },
           {
             label: 'STATUS APP EDIT',
             name: 'statusapprovaleditabsensi',
@@ -262,7 +342,7 @@
             label: 'USER APP EDIT',
             name: 'userapprovaleditabsensi',
             align: 'left',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,  
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'TGL APP EDIT',
@@ -278,7 +358,7 @@
           {
             label: 'MODIFIED BY',
             name: 'modifiedby',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,    
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'left'
           },
           {
@@ -364,7 +444,16 @@
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))
+          $.each(selectedRows, function(key, value) {
 
+            $('#jqGrid tbody tr').each(function(row, tr) {
+              if ($(this).find(`td input:checkbox`).val() == value) {
+                $(this).find(`td input:checkbox`).prop('checked', true)
+                $(this).addClass('bg-light-blue')
+              }
+            })
+
+          });
           /* Set global variables */
           sortname = $(this).jqGrid("getGridParam", "sortname")
           sortorder = $(this).jqGrid("getGridParam", "sortorder")
@@ -404,6 +493,7 @@
 
           $('#left-nav').find('button').attr('disabled', false)
           permission()
+          $('#gs_').attr('disabled', false)
           setHighlight($(this))
         }
       })
@@ -423,7 +513,7 @@
       })
 
       .customPager({
-        
+
         extndBtn: [{
             id: 'report',
             title: 'Report',
@@ -495,12 +585,12 @@
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('absensisupirheader', 'approvalbukacetak') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');
-                    tglbukacetak =tglbukacetak[1] + '-' + tglbukacetak[2];
+                    tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
                     selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                     if (selectedId == null || selectedId == '' || selectedId == undefined) {
                       showDialog('Harap pilih salah satu record')
-                    }else{
-                      approvalBukaCetak(tglbukacetak,'ABSENSISUPIRHEADER',[selectedId]);
+                    } else {
+                      approvalBukaCetak(tglbukacetak, 'ABSENSISUPIRHEADER', selectedRows);
                     }
                   }
                 }
@@ -530,8 +620,7 @@
             ],
           }
         ],
-        buttons: [
-          {
+        buttons: [{
             id: 'edit',
             innerHTML: '<i class="fa fa-pen"></i> EDIT',
             class: 'btn btn-success btn-sm mr-1',
@@ -619,18 +708,21 @@
       if (!`{{ $myAuth->hasPermission('absensisupirheader', 'report') }}`) {
         $('#report').attr('disabled', 'disabled')
       }
-      if (!`{{ $myAuth->hasPermission('absensisupirheader', 'approvalEditAbsensi') }}`) {
-        $('#approvalEdit').attr('disabled', 'disabled')
-      }
       if (!`{{ $myAuth->hasPermission('absensisupirheader', 'cekabsensi') }}`) {
         $('#cekAbsenTrado').attr('disabled', 'disabled')
       }
-      let hakApporveCount = 0 ;
+      let hakApporveCount = 0;
       hakApporveCount++
       if (!`{{ $myAuth->hasPermission('absensisupirheader', 'approvalbukacetak') }}`) {
         hakApporveCount--
         $('#approval-buka-cetak').hide()
         // $('#approval-buka-cetak').attr('disabled', 'disabled')
+      }
+
+      hakApporveCount++      
+      if (!`{{ $myAuth->hasPermission('absensisupirheader', 'approvalEditAbsensi') }}`) {
+        hakApporveCount--
+        $('#approvalEdit').hide()
       }
       if (hakApporveCount < 1) {
         // $('#approve').hide()

@@ -283,7 +283,6 @@
           innerHTML: '<i class="fas fa-check""></i> UN/APPROVAL',
           class: 'btn btn-purple btn-sm mr-1',
           onClick: () => {
-            console.log(`{{ $myAuth->hasPermission('suratpengantar', 'approval') }}`)
             approveBiayaTambahan()
           }
         }, ]
@@ -296,9 +295,6 @@
     loadGlobalSearch($('#detailGrid'))
   }
 
-  if (!`{{ $myAuth->hasPermission('suratpengantar', 'approval') }}`) {
-    $('#approvalbiayatambahan').attr('disabled', 'disabled')
-  }
 
   function loadDetailData(id) {
     abortGridLastRequest($('#detailGrid'))
