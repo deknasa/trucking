@@ -106,6 +106,10 @@
         value: info
       })
       data.push({
+        name: 'accessTokenTnl',
+        value: accessTokenTnl
+      })
+      data.push({
         name: 'indexRow',
         value: indexRow
       })
@@ -196,7 +200,7 @@
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
-    clearSelectedRows() 
+    clearSelectedRows()
   })
 
   function createJenisTrado() {

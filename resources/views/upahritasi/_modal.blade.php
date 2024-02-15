@@ -258,6 +258,10 @@
         value: $('#jqGrid').getGridParam('postData').filters
       })
       data.push({
+        name: 'accessTokenTnl',
+        value: accessTokenTnl
+      })        
+      data.push({
         name: 'info',
         value: info
       })

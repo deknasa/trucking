@@ -322,11 +322,13 @@
       })
 
 
+    
       formData.append('sortIndex', $('#jqGrid').getGridParam().sortname)
       formData.append('sortOrder', $('#jqGrid').getGridParam().sortorder)
       formData.append('filters', $('#jqGrid').getGridParam('postData').filters)
       formData.append('info', info)
       formData.append('indexRow', indexRow)
+      formData.append('accessTokenTnl', accessTokenTnl)
       formData.append('page', page)
       formData.append('limit', limit)
 
