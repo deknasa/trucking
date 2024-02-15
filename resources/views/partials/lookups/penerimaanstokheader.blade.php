@@ -7,7 +7,16 @@
   setRangeLookup()
   initDatepicker()
   $(document).on('click', '#btnReloadLookup', function(event) {
-    loadDataHeaderLookup('penerimaanstokheader', 'penerimaanStokHeaderLookup')
+    loadDataHeaderLookup('penerimaanstokheader', 'penerimaanStokHeaderLookup',{
+      penerimaanstok_id: `{!! $penerimaanstok_id ?? '' !!}`,
+        stok_id: `{!! $stok_id ?? '' !!}`,
+        cabang: `{!! $cabang ?? '' !!}`,
+        // filters: `{!! $filters ?? '' !!}`
+        supplier_id: `{!! $supplier_id ?? '' !!}`,
+        pengeluaranstok_id: `{!! $pengeluaranstok_id ?? '' !!}`,
+        tgldari: $('#tgldariheaderlookup').val(),
+        tglsampai: $('#tglsampaiheaderlookup').val(),
+    })
   })
 
   $('#penerimaanStokHeaderLookup').jqGrid({
@@ -135,6 +144,14 @@
               srcformat: "ISO8601Long",
               newformat: "d-m-Y H:i:s"
             }
+          },
+          {
+            label: 'kelompok_id',
+            name: 'kelompok_id',
+            align: 'right',
+            width: '50px',
+            search: false,
+            hidden: true
           },
         ],
       autowidth: true,
