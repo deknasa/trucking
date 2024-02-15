@@ -415,6 +415,7 @@
 
         // postingRincian = borongan + makan
         if (isPisahGajiKenek == 'YA') {
+
             postingRincian = borongan - gajikenek
         } else {
             postingRincian = borongan
@@ -1106,6 +1107,9 @@
                 showProsesGajiSupir(form, Id, 'edit')
             ])
             .then(() => {
+                if (selectedRowsIndex.length > 0) {
+                    clearSelectedRowsIndex()
+                }
                 $('#crudModal').modal('show')
                 if (isEditTgl == 'TIDAK') {
                     form.find(`[name="tglbukti"]`).prop('readonly', true)
@@ -1139,6 +1143,9 @@
                 showProsesGajiSupir(form, Id, 'delete')
             ])
             .then(() => {
+                if (selectedRowsIndex.length > 0) {
+                    clearSelectedRowsIndex()
+                }
                 $('#crudModal').modal('show')
                 form.find(`[name="tglbukti"]`).prop('readonly', true)
                 form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
@@ -1188,6 +1195,9 @@
                 form.find('[name=id]').prop('disabled', false);
             })
             .then(() => {
+                if (selectedRowsIndex.length > 0) {
+                    clearSelectedRowsIndex()
+                }
                 $('#crudModal').modal('show')
                 clearSelectedRows()
                 $('#gs_').prop('checked', false)

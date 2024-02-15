@@ -192,6 +192,9 @@
         showBukaAbsensi(form, bukaAbsensiId)
       ])
       .then(() => {
+        if (selectedRows.length > 0) {
+          clearSelectedRows()
+        }
         $('#crudModal').modal('show')
         form.find(`[name="tglabsensi"]`).parent('.input-group').find('.input-group-append').remove()
       })
@@ -203,23 +206,25 @@
       })
   }
 
-  function updatetanggalbatas(bukaAbsensiId) {
+  function updatetanggalbatas() {
     event.preventDefault()
     let form = $('#crudForm')
     $(this).attr('disabled', '')
     $('#processingLoader').removeClass('d-none')
     $.ajax({
-      url: `${apiUrl}bukaabsensi/${bukaAbsensiId}/updatetanggalbatas`,
+      url: `${apiUrl}bukaabsensi/updatetanggalbatas`,
       method: 'POST',
       dataType: 'JSON',
       headers: {
         Authorization: `Bearer ${accessToken}`
       },
+      data: {
+        Id: selectedRows,
+        table: 'tanggal absensi'
+      },
       success: response => {
-        $('#crudForm').trigger('reset')
-        $('#crudModal').modal('hide')
+        clearSelectedRows()
         $('#jqGrid').jqGrid().trigger('reloadGrid');
-
       },
       error: error => {
         if (error.status === 422) {

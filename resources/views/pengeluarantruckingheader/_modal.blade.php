@@ -3027,6 +3027,9 @@
       .then(() => {
         showPengeluaranTruckingHeader(form, id)
           .then(() => {
+            if (selectedRowsIndex.length > 0) {
+              clearSelectedRowsIndex()
+            }
             $('#crudModal').modal('show')
             // $('#crudForm [name=tglbukti]').attr('readonly', true)
             $('#crudForm [name=statusposting]').attr('disabled', true)
@@ -3099,6 +3102,9 @@
       .then(() => {
         showPengeluaranTruckingHeader(form, id)
           .then(() => {
+            if (selectedRowsIndex.length > 0) {
+              clearSelectedRowsIndex()
+            }
             $('#crudModal').modal('show')
             $('#btnReloadOtokGrid').prop('disabled', true)
             $('#crudForm [name=statusposting]').attr('disabled', true)
@@ -3194,6 +3200,9 @@
 
           })
           .then(() => {
+            if (selectedRowsIndex.length > 0) {
+              clearSelectedRowsIndex()
+            }
             $('#crudModal').modal('show')
             $('#crudForm [name=statusposting]').attr('disabled', true)
             if ($('#crudForm [name=statusposting]').val() == '84') {

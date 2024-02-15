@@ -258,6 +258,10 @@
         value: $('#jqGrid').getGridParam('postData').filters
       })
       data.push({
+        name: 'accessTokenTnl',
+        value: accessTokenTnl
+      })
+      data.push({
         name: 'info',
         value: info
       })
@@ -358,7 +362,6 @@
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
-    clearSelectedRows()
     $('#crudModal').find('.modal-body').html(modalBody)
   })
 
@@ -444,6 +447,9 @@
       .then(() => {
         showUpahRitasi(form, id)
           .then(() => {
+            if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
             $('#crudModal').modal('show')
             if (aksiEdit == false) {
               statusAktif = form.find(`[name="statusaktif"]`).val()
@@ -497,6 +503,9 @@
       .then(() => {
         showUpahRitasi(form, id)
           .then(() => {
+            if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
             $('#crudModal').modal('show')
           })
           .catch((error) => {
@@ -545,6 +554,9 @@
             form.find('[name=id]').prop('disabled', false)
           })
           .then(() => {
+            if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
             $('#crudModal').modal('show')
           })
           .catch((error) => {

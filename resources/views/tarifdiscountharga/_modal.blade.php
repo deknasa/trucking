@@ -3,6 +3,11 @@
     <form action="#" id="crudForm">
       <div class="modal-content">
 
+        <div class="modal-header">
+          <p class="modal-title" id="crudModalTitle"></p>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          </button>
+        </div>
         <form action="" method="post">
           <div class="modal-body">
             {{-- <div class="row form-group">
@@ -335,6 +340,9 @@
       .then(() => {
         showTarifDiscountHarga(form, tarifDiscounthargaId)
           .then(() => {
+            if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
             $('#crudModal').modal('show')
 
             editValidasi(isAllowEdited);
@@ -374,6 +382,9 @@
       .then(() => {
         showTarifDiscountHarga(form, tarifDiscounthargaId)
           .then(() => {
+            if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
             $('#crudModal').modal('show')
           })
           .catch((error) => {
@@ -420,6 +431,9 @@
 
           })
           .then(() => {
+            if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
             $('#crudModal').modal('show')
             $('#crudForm').find(`.ui-datepicker-trigger`).attr('disabled', true)
 

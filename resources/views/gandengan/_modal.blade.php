@@ -145,6 +145,10 @@
         value: info
       })
       data.push({
+        name: 'accessTokenTnl',
+        value: accessTokenTnl
+      })
+      data.push({
         name: 'indexRow',
         value: indexRow
       })
@@ -236,7 +240,6 @@
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
-    clearSelectedRows()
     $('#crudModal').find('.modal-body').html(modalBody)
   })
 
@@ -292,6 +295,9 @@
         showGandengan(form, gandenganId)
       ])
       .then(() => {
+        if (selectedRows.length > 0) {
+          clearSelectedRows()
+        }
         $('#crudModal').modal('show')
       }).catch((error) => {
         showDialog(error.statusText)
@@ -322,6 +328,9 @@
         showGandengan(form, gandenganId)
       ])
       .then(() => {
+        if (selectedRows.length > 0) {
+          clearSelectedRows()
+        }
         $('#crudModal').modal('show')
       })
       .catch((error) => {
@@ -373,6 +382,9 @@
 
       })
       .then(() => {
+        if (selectedRows.length > 0) {
+          clearSelectedRows()
+        }
         $('#crudModal').modal('show')
       })
       .catch((error) => {

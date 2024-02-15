@@ -286,7 +286,6 @@
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
-    clearSelectedRows()
     $('#crudModal').find('.modal-body').html(modalBody)
     initDatepicker('datepickerIndex')
   })
@@ -536,6 +535,9 @@
       ])
       .then(() => {
         setTampilan(form).then(() => {
+            if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
             $('#crudModal').modal('show')
             form.find('[name=tglbukti]').attr('readonly', true)
             form.find('[name=tglbukti]').siblings('.input-group-append').remove()
@@ -580,6 +582,9 @@
       .then(() => {
         setTampilan(form).then(() => {
             $('#crudModal').modal('show')
+            if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
             form.find('[name=tglbukti]').attr('readonly', true)
             form.find('[name=tglbukti]').siblings('.input-group-append').remove()
           })
@@ -636,6 +641,9 @@
 
           })
           .then(() => {
+            if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
             $('#crudModal').modal('show')
             form.find('[name=tglbukti]').attr('readonly', true)
             form.find('[name=tglbukti]').siblings('.input-group-append').remove()

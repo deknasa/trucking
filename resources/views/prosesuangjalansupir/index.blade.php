@@ -70,6 +70,9 @@
           selectedRows.splice(i, 1);
         }
       }
+      if (selectedRows.length == 0) {
+        $('#gs_').prop('checked', false)
+      }
     }
 
   }
@@ -77,6 +80,7 @@
   function clearSelectedRows() {
     selectedRows = []
 
+    $('#gs_').prop('checked', false)
     $('#jqGrid').trigger('reloadGrid')
   }
 
@@ -110,6 +114,8 @@
     initDatepicker('datepickerIndex')
     $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('prosesuangjalansupirheader')
+      selectedRows = []
+      $('#gs_').prop('checked', false)
     })
 
 
@@ -442,6 +448,16 @@
           setCustomBindKeys($(this))
           initResize($(this))
 
+          $.each(selectedRows, function(key, value) {
+
+            $('#jqGrid tbody tr').each(function(row, tr) {
+              if ($(this).find(`td input:checkbox`).val() == value) {
+                $(this).find(`td input:checkbox`).prop('checked', true)
+                $(this).addClass('bg-light-blue')
+              }
+            })
+
+          });
           /* Set global variables */
           sortname = $(this).jqGrid("getGridParam", "sortname")
           sortorder = $(this).jqGrid("getGridParam", "sortorder")
@@ -481,6 +497,7 @@
 
           $('#left-nav').find('button').attr('disabled', false)
           permission()
+          $('#gs_').attr('disabled', false)
           setHighlight($(this))
         }
       })

@@ -454,7 +454,7 @@
             new AutoNumeric(`#crudForm [name="bbm"]`)
             hitungSisa()
         })
-        
+
         $(document).on('click', '#btnTampil', function(event) {
             event.preventDefault()
             let form = $('#crudForm')
@@ -799,7 +799,7 @@
                     value: AutoNumeric.getNumber($(`#crudForm [name="uangjalan"]`)[index])
                 })
             })
-            
+
 
             $('#crudForm').find(`[name="nomDeposito"]`).each((index, element) => {
                 data.push({
@@ -1138,6 +1138,9 @@
                 showGajiSupir(form, Id, 'edit')
             ])
             .then(() => {
+                if (selectedRowsIndex.length > 0) {
+                    clearSelectedRowsIndex()
+                }
                 $('#crudModal').modal('show')
                 // form.find(`[name="tglbukti"]`).prop('readonly', true)
                 // form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
@@ -1171,6 +1174,9 @@
                 showGajiSupir(form, Id, 'delete')
             ])
             .then(() => {
+                if (selectedRowsIndex.length > 0) {
+                    clearSelectedRowsIndex()
+                }
                 $('#crudModal').modal('show')
                 form.find(`[name="tglbukti"]`).prop('readonly', true)
                 form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
@@ -1207,6 +1213,9 @@
                 showGajiSupir(form, Id, 'delete')
             ])
             .then(() => {
+                if (selectedRowsIndex.length > 0) {
+                    clearSelectedRowsIndex()
+                }
                 $('#crudModal').modal('show')
                 form.find(`[name="tglbukti"]`).prop('readonly', true)
                 form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()

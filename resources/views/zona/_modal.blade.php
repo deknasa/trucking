@@ -101,6 +101,10 @@
         value: info
       })
       data.push({
+        name: 'accessTokenTnl',
+        value: accessTokenTnl
+      })        
+      data.push({
         name: 'indexRow',
         value: indexRow
       })
@@ -190,7 +194,6 @@
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
-    clearSelectedRows()
     $('#crudModal').find('.modal-body').html(modalBody)
   })
 
@@ -251,6 +254,9 @@
       .then(() => {
         showZona(form, zonaId)
           .then(() => {
+            if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
             $('#crudModal').modal('show')
           })
           .catch((error) => {
@@ -285,6 +291,9 @@
       .then(() => {
         showZona(form, zonaId)
           .then(() => {
+            if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
             $('#crudModal').modal('show')
           })
           .catch((error) => {
@@ -329,6 +338,9 @@
 
           })
           .then(() => {
+            if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
             $('#crudModal').modal('show')
             let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
             name.attr('disabled', true)

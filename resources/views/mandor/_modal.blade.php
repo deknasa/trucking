@@ -118,6 +118,10 @@
         value: indexRow
       })
       data.push({
+        name: 'accessTokenTnl',
+        value: accessTokenTnl
+      })      
+      data.push({
         name: 'page',
         value: page
       })
@@ -218,7 +222,6 @@
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
-    clearSelectedRows()
     $('#crudModal').find('.modal-body').html(modalBody)
   })
 
@@ -279,6 +282,9 @@
       .then(() => {
         showMandor(form, mandorId)
           .then(() => {
+            if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
             $('#crudModal').modal('show')
           })
           .catch((error) => {
@@ -313,6 +319,9 @@
       .then(() => {
         showMandor(form, mandorId)
           .then(() => {
+            if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
             $('#crudModal').modal('show')
           })
           .catch((error) => {
@@ -356,6 +365,9 @@
 
           })
           .then(() => {
+            if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
             $('#crudModal').modal('show')
           })
           .catch((error) => {

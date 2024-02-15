@@ -247,7 +247,6 @@
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
-    clearSelectedRows()
     $('#crudModal').find('.modal-body').html(modalBody)
     initDatepicker('datepickerIndex')
   })
@@ -292,6 +291,9 @@
         ShowAbsensiSupirApproval(form, absensiSupirApproval)
       ])
       .then(() => {
+        if (selectedRows.length > 0) {
+          clearSelectedRows()
+        }
         $('#crudModal').modal('show')
       })
       .catch((error) => {
@@ -323,6 +325,9 @@
         ShowAbsensiSupirApproval(form, absensiSupirApproval)
       ])
       .then(() => {
+        if (selectedRows.length > 0) {
+          clearSelectedRows()
+        }
         $('#crudModal').modal('show')
       })
       .catch((error) => {
@@ -353,6 +358,9 @@
         ShowAbsensiSupirApproval(form, absensiSupirApproval)
       ])
       .then(() => {
+        if (selectedRows.length > 0) {
+          clearSelectedRows()
+        }
         $('#crudModal').modal('show')
         form.find(`.hasDatepicker`).prop('readonly', true)
         form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()

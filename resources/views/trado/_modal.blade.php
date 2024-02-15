@@ -345,6 +345,7 @@
       formData.append('filters', $('#jqGrid').getGridParam('postData').filters)
       formData.append('info', info)
       formData.append('indexRow', indexRow)
+      formData.append('accessTokenTnl', accessTokenTnl)
       formData.append('page', page)
       formData.append('limit', limit)
       if (form.data('action') == 'add') {
@@ -404,7 +405,6 @@
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
-    clearSelectedRows()
     // $('#crudModal').find('.modal-body').html(modalBody)
     dropzones.forEach(dropzone => {
       dropzone.removeAllFiles()
@@ -524,6 +524,9 @@
             form.find('[name]').removeAttr('disabled')
           })
           .then(() => {
+            if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
             $('#crudModal').modal('show')
             getMaxLength(form)
             $('#crudForm').find(`.ui-datepicker-trigger`).attr('disabled', false)
@@ -593,6 +596,9 @@
 
           })
           .then(() => {
+            if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
             $('#crudModal').modal('show')
             $('#crudForm').find(`.ui-datepicker-trigger`).attr('disabled', true)
 
@@ -660,6 +666,9 @@
 
           })
           .then(() => {
+            if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
             $('#crudModal').modal('show')
             $('#crudForm').find(`.ui-datepicker-trigger`).attr('disabled', true)
 

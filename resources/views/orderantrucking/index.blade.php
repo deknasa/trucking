@@ -46,9 +46,13 @@
           selectedRows.splice(i, 1);
         }
       }
+      if (selectedRows.length == 0) {
+        $('#gs_').prop('checked', false)
+      }
     }
   }
 
+  setSpaceBarCheckedHandler()
 
   $(document).ready(function() {
 
@@ -727,33 +731,37 @@
       window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
     })
 
-    function clearSelectedRows() {
-      selectedRows = []
 
-      $('#jqGrid').trigger('reloadGrid')
-    }
-
-    function selectAllRows() {
-      $.ajax({
-        url: `${apiUrl}orderantrucking`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        data: {
-          limit: 0,
-          tgldari: $('#tgldariheader').val(),
-          tglsampai: $('#tglsampaiheader').val()
-        },
-        success: (response) => {
-          console.log(response);
-          selectedRows = response.data.map((giro) => giro.id)
-          $('#jqGrid').trigger('reloadGrid')
-        }
-      })
-    }
   })
+
+  function clearSelectedRows() {
+    selectedRows = []
+
+    $('#gs_').prop('checked', false)
+    $('#jqGrid').trigger('reloadGrid')
+  }
+
+  function selectAllRows() {
+    $.ajax({
+      url: `${apiUrl}orderantrucking`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        limit: 0,
+        tgldari: $('#tgldariheader').val(),
+        tglsampai: $('#tglsampaiheader').val(),
+        filters: $('#jqGrid').jqGrid('getGridParam', 'postData').filters
+      },
+      success: (response) => {
+        console.log(response);
+        selectedRows = response.data.map((giro) => giro.id)
+        $('#jqGrid').trigger('reloadGrid')
+      }
+    })
+  }
 </script>
 @endpush()
 @endsection

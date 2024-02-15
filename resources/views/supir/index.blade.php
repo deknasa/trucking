@@ -59,6 +59,7 @@
 
     function clearSelectedRows() {
         selectedRows = []
+        selectedRowsSupir = []
         $('#gs_check').prop('checked', false);
         $('#jqGrid').trigger('reloadGrid')
     }

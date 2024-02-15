@@ -289,6 +289,9 @@
                 showTripInap(form, id)
             ])
             .then(() => {
+                if (selectedRows.length > 0) {
+                    clearSelectedRows()
+                }
                 $('#crudModal').modal('show')
             })
             .catch((error) => {
@@ -321,6 +324,9 @@
                 showTripInap(form, id)
             ])
             .then(() => {
+                if (selectedRows.length > 0) {
+                    clearSelectedRows()
+                }
                 $('#crudModal').modal('show')
             })
             .catch((error) => {
@@ -370,6 +376,9 @@
                 form.find('[name=id]').prop('disabled', false);
             })
             .then(() => {
+                if (selectedRows.length > 0) {
+                    clearSelectedRows()
+                }
                 $('#crudModal').modal('show')
                 form.find(`.hasDatepicker`).prop('readonly', true)
                 form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()

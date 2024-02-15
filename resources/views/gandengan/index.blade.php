@@ -53,6 +53,7 @@
 
     function clearSelectedRows() {
         selectedRows = []
+        selectedRowsGandengan = []
         $('#gs_').prop('checked', false);
         $('#jqGrid').trigger('reloadGrid')
     }

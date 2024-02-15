@@ -28,6 +28,52 @@
   let sortorder = 'asc'
   let autoNumericElements = []
   let rowNum = 10
+  let selectedRows = [];
+
+  function checkboxHandler(element) {
+    let value = $(element).val();
+    if (element.checked) {
+      selectedRows.push($(element).val())
+      $(element).parents('tr').addClass('bg-light-blue')
+    } else {
+      $(element).parents('tr').removeClass('bg-light-blue')
+      for (var i = 0; i < selectedRows.length; i++) {
+        if (selectedRows[i] == value) {
+          selectedRows.splice(i, 1);
+        }
+      }
+      
+      if (selectedRows.length == 0) {
+        $('#gs_').prop('checked', false)
+      }
+    }
+  }
+
+  function clearSelectedRows() {
+    selectedRows = []
+    $('#gs_').prop('checked', false);
+    $('#jqGrid').trigger('reloadGrid')
+  }
+
+  function selectAllRows() {
+    $.ajax({
+      url: `${apiUrl}bukaabsensi`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        limit: 0,
+        filters: $('#jqGrid').jqGrid('getGridParam', 'postData').filters
+      },
+      success: (response) => {
+        selectedRows = response.data.map((bukaabsensi) => bukaabsensi.id)
+        $('#jqGrid').trigger('reloadGrid')
+      }
+    })
+  }
+  setSpaceBarCheckedHandler()
 
   $(document).ready(function() {
     $("#jqGrid").jqGrid({
@@ -37,6 +83,37 @@
         iconSet: 'fontAwesome',
         datatype: "json",
         colModel: [{
+            label: '',
+            name: '',
+            width: 30,
+            align: 'center',
+            sortable: false,
+            clear: false,
+            stype: 'input',
+            searchable: false,
+            searchoptions: {
+              type: 'checkbox',
+              clearSearch: false,
+              dataInit: function(element) {
+                $(element).removeClass('form-control')
+                $(element).parent().addClass('text-center')
+
+                $(element).on('click', function() {
+
+                  $(element).attr('disabled', true)
+                  if ($(this).is(':checked')) {
+                    selectAllRows()
+                  } else {
+                    clearSelectedRows()
+                  }
+                })
+
+              }
+            },
+            formatter: (value, rowOptions, rowData) => {
+              return `<input type="checkbox" name="Id[]" value="${rowData.id}" onchange="checkboxHandler(this)">`
+            },
+          }, {
             label: 'ID',
             name: 'id',
             width: '50px',
@@ -47,7 +124,6 @@
             label: 'Tgl absensi',
             name: 'tglabsensi',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
-            align: 'right',
             formatter: "date",
             formatoptions: {
               srcformat: "ISO8601Long",
@@ -58,23 +134,21 @@
             label: 'tgl batas',
             name: 'tglbatas',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
-            align: 'right',
             formatter: "date",
             formatoptions: {
               srcformat: "ISO8601Long",
               newformat: "d-m-Y H:i:s"
             }
-          },          
+          },
           {
             label: 'MODIFIED BY',
             name: 'modifiedby',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3, 
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
             label: 'CREATED AT',
             name: 'created_at',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
-            align: 'right',
             formatter: "date",
             formatoptions: {
               srcformat: "ISO8601Long",
@@ -85,7 +159,6 @@
             label: 'UPDATED AT',
             name: 'updated_at',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
-            align: 'right',
             formatter: "date",
             formatoptions: {
               srcformat: "ISO8601Long",
@@ -134,6 +207,16 @@
           setCustomBindKeys($(this))
           initResize($(this))
 
+          $.each(selectedRows, function(key, value) {
+
+            $('#jqGrid tbody tr').each(function(row, tr) {
+              if ($(this).find(`td input:checkbox`).val() == value) {
+                $(this).find(`td input:checkbox`).prop('checked', true)
+                $(this).addClass('bg-light-blue')
+              }
+            })
+
+          });
           /* Set global variables */
           sortname = $(this).jqGrid("getGridParam", "sortname")
           sortorder = $(this).jqGrid("getGridParam", "sortorder")
@@ -168,6 +251,7 @@
             $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
           }
 
+          $('#gs_').attr('disabled', false)
           setHighlight($(this))
         },
       })
@@ -181,7 +265,7 @@
         disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
           abortGridLastRequest($(this))
-          
+
           clearGlobalSearch($('#jqGrid'))
         },
       })
@@ -213,12 +297,7 @@
             innerHTML: '<i class="fas fa-check""></i> UPDATE TANGGAL BATAS',
             class: 'btn btn-purple btn-sm mr-1',
             onClick: () => {
-              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Harap pilih salah satu record')
-              } else {
-                updatetanggalbatas(selectedId)
-              }
+              updatetanggalbatas()
             }
           },
         ]

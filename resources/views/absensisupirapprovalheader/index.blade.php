@@ -110,6 +110,7 @@
   }
 
 
+  setSpaceBarCheckedHandler()
   $(document).ready(function() {
     $("#tabs").tabs()
 
@@ -123,6 +124,8 @@
     initDatepicker('datepickerIndex')
     $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('absensisupirapprovalheader')
+      selectedRows = []
+      $('#gs_').prop('checked', false)
     })
     $('.supir-lookup').lookup({
       title: 'supir Lookup',
@@ -489,6 +492,16 @@
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
           initResize($(this))
+          $.each(selectedRows, function(key, value) {
+
+            $('#jqGrid tbody tr').each(function(row, tr) {
+              if ($(this).find(`td input:checkbox`).val() == value) {
+                $(this).find(`td input:checkbox`).prop('checked', true)
+                $(this).addClass('bg-light-blue')
+              }
+            })
+
+          });
 
           /* Set global variables */
           sortname = $(this).jqGrid("getGridParam", "sortname")
@@ -529,6 +542,7 @@
 
           $('#left-nav').find('button').attr('disabled', false)
           permission()
+          $('#gs_').attr('disabled', false)
           setHighlight($(this))
         }
       })

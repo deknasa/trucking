@@ -77,6 +77,7 @@
 @push('scripts')
 <script>
   let hasFormBindKeys = false
+  let modalBody = $('#crudModal').find('.modal-body').html()
 
   $(document).ready(function() {
     $('#btnSubmit').click(function(event) {
@@ -104,6 +105,10 @@
       data.push({
         name: 'info',
         value: info
+      })
+      data.push({
+        name: 'accessTokenTnl',
+        value: accessTokenTnl
       })
       data.push({
         name: 'indexRow',
@@ -196,7 +201,7 @@
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
-    clearSelectedRows() 
+    $('#crudModal').find('.modal-body').html(modalBody)
   })
 
   function createJenisTrado() {
@@ -255,6 +260,9 @@
       .then(() => {
         showJenisTrado(form, jenisTradoId)
           .then(() => {
+            if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
             $('#crudModal').modal('show')
           })
           .catch((error) => {
@@ -289,6 +297,9 @@
       .then(() => {
         showJenisTrado(form, jenisTradoId)
           .then(() => {
+            if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
             $('#crudModal').modal('show')
           })
           .catch((error) => {
@@ -332,6 +343,9 @@
 
           })
           .then(() => {
+            if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
             $('#crudModal').modal('show')
           })
           .catch((error) => {

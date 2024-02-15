@@ -90,6 +90,56 @@
 
   let pengeluaran_nobukti = ''
   let nobukti = ''
+  let selectedRowsIndex = [];
+
+  function checkboxHandlerIndex(element) {
+    let value = $(element).val();
+    if (element.checked) {
+      selectedRowsIndex.push($(element).val())
+      $(element).parents('tr').addClass('bg-light-blue')
+    } else {
+      $(element).parents('tr').removeClass('bg-light-blue')
+      for (var i = 0; i < selectedRowsIndex.length; i++) {
+        if (selectedRowsIndex[i] == value) {
+          selectedRowsIndex.splice(i, 1);
+        }
+      }
+
+      if (selectedRowsIndex.length == 0) {
+        $('#gs_check').prop('checked', false)
+      }
+    }
+
+  }
+
+
+  function clearSelectedRowsIndex() {
+    selectedRowsIndex = []
+    $('#gs_check').prop('checked', false);
+    $('#jqGrid').trigger('reloadGrid')
+  }
+
+  function selectAllRowsIndex() {
+    $.ajax({
+      url: `${apiUrl}prosesgajisupirheader`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        limit: 0,
+        tgldari: $('#tgldariheader').val(),
+        tglsampai: $('#tglsampaiheader').val(),
+        filters: $('#jqGrid').jqGrid('getGridParam', 'postData').filters
+      },
+      success: (response) => {
+        selectedRowsIndex = response.data.map((row) => row.id)
+        $('#jqGrid').trigger('reloadGrid')
+      }
+    })
+  }
+  setSpaceBarCheckedHandler2()
   $(document).ready(function() {
     $("#tabs-detail").tabs()
 
@@ -108,6 +158,8 @@
     initDatepicker('datepickerIndex')
     $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('prosesgajisupirheader')
+      selectedRowsIndex = []
+      $('#gs_check').prop('checked', false);
     })
     $("#jqGrid").jqGrid({
         url: `${apiUrl}prosesgajisupirheader`,
@@ -120,6 +172,37 @@
           tglsampai: $('#tglsampaiheader').val()
         },
         colModel: [{
+            label: '',
+            name: 'check',
+            width: 30,
+            align: 'center',
+            sortable: false,
+            clear: false,
+            stype: 'input',
+            searchable: false,
+            searchoptions: {
+              type: 'checkbox',
+              clearSearch: false,
+              dataInit: function(element) {
+                $(element).removeClass('form-control')
+                $(element).parent().addClass('text-center')
+
+                $(element).on('click', function() {
+                  $(element).attr('disabled', true)
+                  if ($(this).is(':checked')) {
+                    selectAllRowsIndex()
+                  } else {
+                    clearSelectedRowsIndex()
+                  }
+                })
+
+              }
+            },
+            formatter: (value, rowOptions, rowData) => {
+              return `<input type="checkbox" name="Idindex[]" value="${rowData.id}" onchange="checkboxHandlerIndex(this)">`
+            },
+          },
+          {
             label: 'ID',
             name: 'id',
             align: 'right',
@@ -472,6 +555,16 @@
           setCustomBindKeys($(this))
           initResize($(this))
 
+          $.each(selectedRowsIndex, function(key, value) {
+
+            $('#jqGrid tbody tr').each(function(row, tr) {
+              if ($(this).find(`td input:checkbox`).val() == value) {
+                $(this).find(`td input:checkbox`).prop('checked', true)
+                $(this).addClass('bg-light-blue')
+              }
+            })
+
+          });
           /* Set global variables */
           sortname = $(this).jqGrid("getGridParam", "sortname")
           sortorder = $(this).jqGrid("getGridParam", "sortorder")
@@ -529,6 +622,7 @@
           }
           $('#left-nav').find('button').attr('disabled', false)
           permission()
+          $('#gs_check').attr('disabled', false)
           setHighlight($(this))
         }
       })
@@ -643,11 +737,9 @@
                 let tglbukacetak = $('#tgldariheader').val().split('-');
                 tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
                 selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                  showDialog('Harap pilih salah satu record')
-                } else {
-                  approvalBukaCetak(tglbukacetak, 'PROSESGAJISUPIRHEADER', [selectedId]);
-                }
+
+                approvalBukaCetak(tglbukacetak, 'PROSESGAJISUPIRHEADER', selectedRowsIndex);
+
               }
             }
           }, ],
