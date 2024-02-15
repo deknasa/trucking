@@ -442,7 +442,6 @@
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
-    clearSelectedRows()
     $('#crudModal').find('.modal-body').html(modalBody)
   })
 
@@ -521,6 +520,9 @@
       .then(() => {
         showTarif(form, tarifId)
           .then(() => {
+            if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
             $('#crudModal').modal('show')
             if (aksiEdit == false) {
               // form.find('select').each((index, select) => {
@@ -605,6 +607,9 @@
       .then(() => {
         showTarif(form, tarifId)
           .then(() => {
+            if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
             $('#crudModal').modal('show')
 
             $('#crudForm').find(`.btn.btn-easyui.lookup-toggler`).attr('disabled', true)
@@ -659,6 +664,9 @@
             form.find('[name=id]').prop('disabled', false)
           })
           .then(() => {
+            if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
             $('#crudModal').modal('show')
 
             $('#crudForm').find(`.btn.btn-easyui.lookup-toggler`).attr('disabled', true)

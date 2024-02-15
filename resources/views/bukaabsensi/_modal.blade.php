@@ -154,9 +154,6 @@
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
-    if (selectedRows.length > 0) {
-      clearSelectedRows()
-    }
     $('#crudModal').find('.modal-body').html(modalBody)
   })
 
@@ -195,6 +192,9 @@
         showBukaAbsensi(form, bukaAbsensiId)
       ])
       .then(() => {
+        if (selectedRows.length > 0) {
+          clearSelectedRows()
+        }
         $('#crudModal').modal('show')
         form.find(`[name="tglabsensi"]`).parent('.input-group').find('.input-group-append').remove()
       })
@@ -223,7 +223,7 @@
         table: 'tanggal absensi'
       },
       success: response => {
-        clearSelectedRows() 
+        clearSelectedRows()
         $('#jqGrid').jqGrid().trigger('reloadGrid');
       },
       error: error => {

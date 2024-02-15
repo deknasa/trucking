@@ -116,7 +116,7 @@
       data.push({
         name: 'accessTokenTnl',
         value: accessTokenTnl
-      })        
+      })
       data.push({
         name: 'indexRow',
         value: indexRow
@@ -209,7 +209,6 @@
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
-    clearSelectedRows()
     $('#crudModal').find('.modal-body').html(modalBody)
   })
 
@@ -296,6 +295,9 @@
       .then(() => {
         showContainer(form, mekanikId)
           .then(() => {
+            if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
             $('#crudModal').modal('show')
           })
           .catch((error) => {
@@ -330,6 +332,9 @@
       .then(() => {
         showContainer(form, mekanikId)
           .then(() => {
+            if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
             $('#crudModal').modal('show')
           })
           .catch((error) => {
@@ -384,6 +389,9 @@
 
           })
           .then(() => {
+            if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
             $('#crudModal').modal('show')
           })
           .catch((error) => {

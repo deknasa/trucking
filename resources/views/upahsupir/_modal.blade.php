@@ -606,7 +606,6 @@
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
-    clearSelectedRows()
     $('#crudModal').find('.modal-body').html(modalBody)
     dropzones.forEach(dropzone => {
       dropzone.removeAllFiles()
@@ -739,6 +738,9 @@
       .then(() => {
         showUpahSupir(form, id)
           .then((upahsupir) => {
+            if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
             initDropzone(form.data('action'), upahsupir);
             if (aksiEdit == false) {
 
@@ -826,6 +828,9 @@
             initDropzone(form.data('action'), upahsupir)
           })
           .then(() => {
+            if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
             $('#crudModal').modal('show')
             $('#crudForm').find(`.btn.btn-easyui.lookup-toggler`).attr('disabled', true)
             $('#crudForm').find(`.ui-datepicker-trigger.btn.btn-easyui.text-easyui-dark`).attr('disabled', true)
@@ -884,6 +889,9 @@
             form.find('[name=id]').prop('disabled', false)
           })
           .then(() => {
+            if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
             $('#crudModal').modal('show')
             $('#crudForm').find(`.btn.btn-easyui.lookup-toggler`).attr('disabled', true)
             $('#crudForm').find(`.ui-datepicker-trigger.btn.btn-easyui.text-easyui-dark`).attr('disabled', true)
