@@ -105,12 +105,14 @@ class Myauth
             ->join('acl', 'acos.id', '=', 'acl.aco_id')
             // ->where('acos.class', 'like', "%$class%")
             ->where('acos.class', '=', $class)
+            ->whereRaw("isnull(acos.statusemkl,'')=''")
             ->whereIn('acl.role_id', auth()->user()->roles->pluck('id')->toArray() ?? null);
 
         $data = DB::table('acos')
             ->select(['acos.id', 'acos.class', 'acos.method'])
             ->join('useracl', 'acos.id', '=', 'useracl.aco_id')
             ->where('acos.class', '=', $class)
+            ->whereRaw("isnull(acos.statusemkl,'')=''")
             // ->where('acos.class', 'like', "%$class%")
             ->where('useracl.user_id', auth()->user()->id)
             ->unionAll($data_union)
