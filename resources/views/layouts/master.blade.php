@@ -585,15 +585,19 @@
           $('.invalid-feedback').remove()
           $('#crudForm').trigger('reset')
           $('#crudModal').modal('hide')
-
+          if(table == 'GAJISUPIRHEADER' || table == 'PROSESGAJISUPIRHEADER' || table == 'PENGELUARANTRUCKINGHEADER'){
+            selectedRowsIndex = []
+            clearSelectedRowsIndex() 
+          } else {
+            selectedRows = []
+            clearSelectedRows() 
+          }
           $('#jqGrid').jqGrid('setGridParam', {
             postData: {
               proses: 'reload',
             }
           }).trigger('reloadGrid');
           let data = $('#jqGrid').jqGrid("getGridParam", "postData");
-          selectedRows = []
-          clearSelectedRows()
         },
         error: error => {
           $("#dialog-warning-message").find("p").remove();

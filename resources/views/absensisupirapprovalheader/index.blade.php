@@ -110,6 +110,7 @@
   }
 
 
+  setSpaceBarCheckedHandler()
   $(document).ready(function() {
     $("#tabs").tabs()
 
@@ -123,6 +124,8 @@
     initDatepicker('datepickerIndex')
     $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('absensisupirapprovalheader')
+      selectedRows = []
+      $('#gs_').prop('checked', false)
     })
     $('.supir-lookup').lookup({
       title: 'supir Lookup',

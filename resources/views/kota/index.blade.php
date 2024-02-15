@@ -70,7 +70,7 @@
         })
     }
 
-
+    setSpaceBarCheckedHandler()
     $(document).ready(function() {
 
 

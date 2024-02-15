@@ -335,6 +335,9 @@
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
+    if (selectedRows.length > 0) {
+      clearSelectedRows()
+    }
     $('#crudModal').find('.modal-body').html(modalBody)
     initDatepicker('datepickerIndex')
   })

@@ -2918,6 +2918,9 @@
     clearSelectedRowsOTOK()
     clearSelectedRowsOTOL()
     classHidden = [];
+    if (selectedRowsIndex.length > 0) {
+      clearSelectedRowsIndex()
+    }
     $('#crudModal').find('.modal-body').html(modalBody)
     initDatepicker('datepickerIndex')
     KodePengeluaranId = ''

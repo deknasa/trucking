@@ -34,6 +34,29 @@
   let hasDetail = false
   let tgldariheader
   let tglsampaiheader
+  let selectedRows = [];
+
+  function checkboxHandler(element) {
+    let value = $(element).val();
+    if (element.checked) {
+      selectedRows.push($(element).val())
+      $(element).parents('tr').addClass('bg-light-blue')
+    } else {
+      $(element).parents('tr').removeClass('bg-light-blue')
+      for (var i = 0; i < selectedRows.length; i++) {
+        if (selectedRows[i] == value) {
+          selectedRows.splice(i, 1);
+        }
+      }
+
+      if (selectedRows.length == 0) {
+        $('#gs_').prop('checked', false)
+      }
+    }
+
+  }
+
+  setSpaceBarCheckedHandler()
 
   $(document).ready(function() {
     @isset($request['tgldari'])
@@ -46,6 +69,8 @@
     initDatepicker('datepickerIndex')
     $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('pemutihansupir')
+      selectedRows = []
+      $('#gs_').prop('checked', false)
     })
 
     $("#jqGrid").jqGrid({
@@ -59,6 +84,38 @@
         },
         datatype: "json",
         colModel: [{
+            label: '',
+            name: '',
+            width: 40,
+            align: 'center',
+            sortable: false,
+            clear: false,
+            stype: 'input',
+            searchable: false,
+            searchoptions: {
+              type: 'checkbox',
+              clearSearch: false,
+              dataInit: function(element) {
+                $(element).removeClass('form-control')
+                $(element).parent().addClass('text-center')
+                $(element).addClass('checkbox-selectall')
+
+                $(element).on('click', function() {
+                  $(element).attr('disabled', true)
+                  if ($(this).is(':checked')) {
+                    selectAllRows()
+                  } else {
+                    clearSelectedRows()
+                  }
+                })
+
+              }
+            },
+            formatter: (value, rowOptions, rowData) => {
+              return `<input type="checkbox" name="invoiceId[]" class="checkbox-jqgrid" value="${rowData.id}" onchange="checkboxHandler(this)">`
+            },
+          },
+          {
             label: 'ID',
             name: 'id',
             width: '50px',
@@ -279,6 +336,16 @@
           setCustomBindKeys($(this))
           initResize($(this))
 
+          $.each(selectedRows, function(key, value) {
+
+            $('#jqGrid tbody tr').each(function(row, tr) {
+              if ($(this).find(`td input:checkbox`).val() == value) {
+                $(this).find(`td input:checkbox`).prop('checked', true)
+                $(this).addClass('bg-light-blue')
+              }
+            })
+
+          });
           /* Set global variables */
           sortname = $(this).jqGrid("getGridParam", "sortname")
           sortorder = $(this).jqGrid("getGridParam", "sortorder")
@@ -315,6 +382,7 @@
 
           $('#left-nav').find('button').attr('disabled', false)
           permission()
+          $('#gs_').attr('disabled', false)
           setHighlight($(this))
         },
       })
@@ -384,6 +452,27 @@
               }
             }
           },
+
+          {
+            id: 'approve',
+            title: 'Approve',
+            caption: 'Approve',
+            innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+            class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
+            dropmenuHTML: [{
+              id: 'approval-buka-cetak',
+              text: "Approval Buka Cetak PEMUTIHAN SUPIR",
+              onClick: () => {
+                if (`{{ $myAuth->hasPermission('pemutihansupir', 'approvalbukacetak') }}`) {
+                  let tglbukacetak = $('#tgldariheader').val().split('-');
+                  tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
+
+                  approvalBukaCetak(tglbukacetak, 'PEMUTIHANSUPIR', selectedRows);
+
+                }
+              }
+            }, ],
+          }
         ],
         buttons: [{
             id: 'add',
@@ -485,6 +574,18 @@
       if (!`{{ $myAuth->hasPermission('pemutihansupir', 'export') }}`) {
         $('#export').attr('disabled', 'disabled')
       }
+
+      let hakApporveCount = 0;
+      hakApporveCount++
+      if (!`{{ $myAuth->hasPermission('pemutihansupir', 'approvalbukacetak') }}`) {
+        hakApporveCount--
+        $('#approval-buka-cetak').hide()
+        // $('#approval-buka-cetak').attr('disabled', 'disabled')
+      }
+      if (hakApporveCount < 1) {
+        // $('#approve').hide()
+        $('#approve').attr('disabled', 'disabled')
+      }
     }
 
     $('#rangeModal').on('shown.bs.modal', function() {
@@ -560,6 +661,35 @@
     })
 
   })
+
+
+  function clearSelectedRows() {
+    selectedRows = []
+
+    $('#gs_').prop('checked', false)
+    $('#jqGrid').trigger('reloadGrid')
+  }
+
+  function selectAllRows() {
+    $.ajax({
+      url: `${apiUrl}pemutihansupir`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        limit: 0,
+        tgldari: $('#tgldariheader').val(),
+        tglsampai: $('#tglsampaiheader').val(),
+        filters: $('#jqGrid').jqGrid('getGridParam', 'postData').filters
+      },
+      success: (response) => {
+        selectedRows = response.data.map((row) => row.id)
+        $('#jqGrid').trigger('reloadGrid')
+      }
+    })
+  }
 </script>
 @endpush()
 @endsection

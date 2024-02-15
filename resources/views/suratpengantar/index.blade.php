@@ -60,7 +60,54 @@
   let tglsampaiheader
   let isKomisi;
   let isApprovalBiayaTambahan;
+  let selectedRows = [];
 
+  function checkboxHandler(element) {
+    let value = $(element).val();
+    if (element.checked) {
+      selectedRows.push($(element).parents('tr').find(`td[aria-describedby="jqGrid_nobukti"]`).text())
+      $(element).parents('tr').addClass('bg-light-blue')
+    } else {
+      $(element).parents('tr').removeClass('bg-light-blue')
+      for (var i = 0; i < selectedRows.length; i++) {
+        if (selectedRows[i] == value) {
+          selectedRows.splice(i, 1);
+        }
+      }
+      if (selectedRows.length == 0) {
+        $('#gs_').prop('checked', false)
+      }
+    }
+  }
+
+  function clearSelectedRows() {
+    selectedRows = []
+    $('#gs_').prop('checked', false);
+    $('#jqGrid').trigger('reloadGrid')
+  }
+
+  function selectAllRows() {
+    $.ajax({
+      url: `${apiUrl}suratpengantar`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        limit: 0,
+        tgldari: $('#tgldariheader').val(),
+        tglsampai: $('#tglsampaiheader').val(),
+        filters: $('#jqGrid').jqGrid('getGridParam', 'postData').filters
+      },
+      success: (response) => {
+        selectedRows = response.data.map((suratpengantar) => suratpengantar.nobukti)
+        $('#jqGrid').trigger('reloadGrid')
+      }
+    })
+  }
+
+  setSpaceBarCheckedHandler('suratpengantar')
   $(document).ready(function() {
     $("#tabs").tabs()
     setIsKomisi()
@@ -90,6 +137,37 @@
         },
         datatype: "json",
         colModel: [{
+            label: '',
+            name: '',
+            width: 30,
+            align: 'center',
+            sortable: false,
+            clear: false,
+            stype: 'input',
+            searchable: false,
+            searchoptions: {
+              type: 'checkbox',
+              clearSearch: false,
+              dataInit: function(element) {
+                $(element).removeClass('form-control')
+                $(element).parent().addClass('text-center')
+
+                $(element).on('click', function() {
+
+                  $(element).attr('disabled', true)
+                  if ($(this).is(':checked')) {
+                    selectAllRows()
+                  } else {
+                    clearSelectedRows()
+                  }
+                })
+
+              }
+            },
+            formatter: (value, rowOptions, rowData) => {
+              return `<input type="checkbox" name="Id[]" value="${rowData.nobukti}" onchange="checkboxHandler(this)">`
+            },
+          }, {
             label: 'ID',
             name: 'id',
             width: '50px',
@@ -683,6 +761,16 @@
           setCustomBindKeys($(this))
           initResize($(this))
 
+          $.each(selectedRows, function(key, value) {
+
+            $('#jqGrid tbody tr').each(function(row, tr) {
+              if ($(this).find(`td input:checkbox`).val() == value) {
+                $(this).find(`td input:checkbox`).prop('checked', true)
+                $(this).addClass('bg-light-blue')
+              }
+            })
+
+          });
           /* Set global variables */
           sortname = $(this).jqGrid("getGridParam", "sortname")
           sortorder = $(this).jqGrid("getGridParam", "sortorder")
@@ -718,6 +806,7 @@
           }
           $('#left-nav').find('button').attr('disabled', false)
           permission()
+          $('#gs_').attr('disabled', false)
           setHighlight($(this))
 
           if (data.attributes) {
@@ -1028,62 +1117,134 @@
     })
 
     function approvalBatalMuat(id) {
-      getBatalMuat()
+      // getBatalMuat()
+      // $.ajax({
+      //   url: `${apiUrl}suratpengantar/${id}`,
+      //   method: 'GET',
+      //   dataType: 'JSON',
+      //   headers: {
+      //     Authorization: `Bearer ${accessToken}`
+      //   },
+      //   success: response => {
+      //     let msg = `YAKIN Unapproval Batal Muat`
+      //     console.log(statusBukanBatalMuat);
+      //     if (response.data.statusbatalmuat === statusBukanBatalMuat) {
+      //       msg = `YAKIN approval Batal Muat`
+      //     }
+      //     showConfirm(msg, response.data.nobukti, `suratpengantar/${response.data.id}/batalmuat`)
+      //   },
+      // })
+      event.preventDefault()
+
+      let form = $('#crudForm')
+      $(this).attr('disabled', '')
+      $('#processingLoader').removeClass('d-none')
+
       $.ajax({
-        url: `${apiUrl}suratpengantar/${id}`,
-        method: 'GET',
+        url: `${apiUrl}suratpengantar/batalmuat`,
+        method: 'POST',
         dataType: 'JSON',
         headers: {
           Authorization: `Bearer ${accessToken}`
         },
-        success: response => {
-          let msg = `YAKIN Unapproval Batal Muat`
-          console.log(statusBukanBatalMuat);
-          if (response.data.statusbatalmuat === statusBukanBatalMuat) {
-            msg = `YAKIN approval Batal Muat`
-          }
-          showConfirm(msg, response.data.nobukti, `suratpengantar/${response.data.id}/batalmuat`)
+        data: {
+          Id: selectedRows,
+          table: 'surat pengantar'
         },
+        success: response => {
+          clearSelectedRows() 
+          $('#jqGrid').jqGrid().trigger('reloadGrid');
+        },
+        error: error => {
+          if (error.status === 422) {
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+
+            setErrorMessages(form, error.responseJSON.errors);
+          } else {
+            showDialog(error.responseJSON)
+          }
+        },
+      }).always(() => {
+        $('#processingLoader').addClass('d-none')
+        $(this).removeAttr('disabled')
       })
     }
 
     function approvalEditTujuan(id) {
-      getEditTujuan()
+      event.preventDefault()
+
+      let form = $('#crudForm')
+      $(this).attr('disabled', '')
+      $('#processingLoader').removeClass('d-none')
+
       $.ajax({
-        url: `${apiUrl}suratpengantar/${id}`,
-        method: 'GET',
+        url: `${apiUrl}suratpengantar/edittujuan`,
+        method: 'POST',
         dataType: 'JSON',
         headers: {
           Authorization: `Bearer ${accessToken}`
         },
-        success: response => {
-          let msg = `YAKIN Unapproval Edit Surat Pengantar`
-          console.log(statusEditTujuan, response.data.statusapprovaleditsuratpengantar);
-          if (response.data.statusapprovaleditsuratpengantar === statusEditTujuan) {
-            msg = `YAKIN approval Edit Surat Pengantar`
-          }
-          showConfirm(msg, response.data.nobukti, `suratpengantar/${response.data.id}/edittujuan`)
+        data: {
+          Id: selectedRows,
+          table: 'surat pengantar'
         },
+        success: response => {
+          clearSelectedRows() 
+          $('#jqGrid').jqGrid().trigger('reloadGrid');
+        },
+        error: error => {
+          if (error.status === 422) {
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+
+            setErrorMessages(form, error.responseJSON.errors);
+          } else {
+            showDialog(error.responseJSON)
+          }
+        },
+      }).always(() => {
+        $('#processingLoader').addClass('d-none')
+        $(this).removeAttr('disabled')
       })
     }
 
     function approvalTitipanEmkl(id, noBukti) {
-      getEditTujuan()
+
+      event.preventDefault()
+
+      let form = $('#crudForm')
+      $(this).attr('disabled', '')
+      $('#processingLoader').removeClass('d-none')
+
       $.ajax({
-        url: `${apiUrl}suratpengantar/${id}`,
-        method: 'GET',
+        url: `${apiUrl}suratpengantar/titipanemkl`,
+        method: 'POST',
         dataType: 'JSON',
         headers: {
           Authorization: `Bearer ${accessToken}`
         },
-        success: response => {
-          let msg = `YAKIN Unapproval Titipan EMKL`
-          console.log(statusEditTujuan, response.data.statusapprovalbiayatitipanemkl);
-          if (response.data.statusapprovalbiayatitipanemkl === statusEditTujuan) {
-            msg = `YAKIN approval Titipan EMKL`
-          }
-          showConfirm(msg, noBukti, `suratpengantar/titipanemkl?nobukti=${noBukti}`)
+        data: {
+          Id: selectedRows,
+          table: 'surat pengantar'
         },
+        success: response => {
+          clearSelectedRows() 
+          $('#jqGrid').jqGrid().trigger('reloadGrid');
+        },
+        error: error => {
+          if (error.status === 422) {
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+
+            setErrorMessages(form, error.responseJSON.errors);
+          } else {
+            showDialog(error.responseJSON)
+          }
+        },
+      }).always(() => {
+        $('#processingLoader').addClass('d-none')
+        $(this).removeAttr('disabled')
       })
     }
 

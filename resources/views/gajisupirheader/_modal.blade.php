@@ -454,7 +454,7 @@
             new AutoNumeric(`#crudForm [name="bbm"]`)
             hitungSisa()
         })
-        
+
         $(document).on('click', '#btnTampil', function(event) {
             event.preventDefault()
             let form = $('#crudForm')
@@ -799,7 +799,7 @@
                     value: AutoNumeric.getNumber($(`#crudForm [name="uangjalan"]`)[index])
                 })
             })
-            
+
 
             $('#crudForm').find(`[name="nomDeposito"]`).each((index, element) => {
                 data.push({
@@ -1078,6 +1078,9 @@
         selectedRowsAbsensiNobukti = [];
         selectedRowsAbsensiUangjalan = [];
         isReload = false
+        if (selectedRowsIndex.length > 0) {
+            clearSelectedRowsIndex()
+        }
         $('#crudModal').find('.modal-body').html(modalBody)
         initDatepicker('datepickerIndex')
     })
