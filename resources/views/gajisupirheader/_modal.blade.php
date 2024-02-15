@@ -1078,9 +1078,6 @@
         selectedRowsAbsensiNobukti = [];
         selectedRowsAbsensiUangjalan = [];
         isReload = false
-        if (selectedRowsIndex.length > 0) {
-            clearSelectedRowsIndex()
-        }
         $('#crudModal').find('.modal-body').html(modalBody)
         initDatepicker('datepickerIndex')
     })
@@ -1141,6 +1138,9 @@
                 showGajiSupir(form, Id, 'edit')
             ])
             .then(() => {
+                if (selectedRowsIndex.length > 0) {
+                    clearSelectedRowsIndex()
+                }
                 $('#crudModal').modal('show')
                 // form.find(`[name="tglbukti"]`).prop('readonly', true)
                 // form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
@@ -1174,6 +1174,9 @@
                 showGajiSupir(form, Id, 'delete')
             ])
             .then(() => {
+                if (selectedRowsIndex.length > 0) {
+                    clearSelectedRowsIndex()
+                }
                 $('#crudModal').modal('show')
                 form.find(`[name="tglbukti"]`).prop('readonly', true)
                 form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
@@ -1210,6 +1213,9 @@
                 showGajiSupir(form, Id, 'delete')
             ])
             .then(() => {
+                if (selectedRowsIndex.length > 0) {
+                    clearSelectedRowsIndex()
+                }
                 $('#crudModal').modal('show')
                 form.find(`[name="tglbukti"]`).prop('readonly', true)
                 form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()

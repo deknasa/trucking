@@ -786,9 +786,6 @@
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
-    if (selectedRows.length > 0) {
-      clearSelectedRows()
-    }
     $('#crudModal').find('.modal-body').html(modalBody)
     initDatepicker('datepickerIndex')
   })
@@ -920,6 +917,9 @@
       .then(() => {
         showSuratPengantar(form, id)
           .then(() => {
+            if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
             $('#crudModal').modal('show')
             $('#crudForm [name=tglbukti]').attr('readonly', true)
             $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
@@ -961,6 +961,9 @@
       .then(() => {
         showSuratPengantar(form, id)
           .then(() => {
+            if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
             $('#crudModal').modal('show')
           })
           .catch((error) => {
@@ -1011,6 +1014,9 @@
             form.find('[name=id]').prop('disabled', false)
           })
           .then(() => {
+            if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
             $('#crudModal').modal('show')
             form.find(`.hasDatepicker`).prop('readonly', true)
             form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()

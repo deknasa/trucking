@@ -216,7 +216,7 @@
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
-    clearSelectedRows()
+    // clearSelectedRows()
     $('#crudModal').find('.modal-body').html(modalBody)
   })
 
