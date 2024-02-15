@@ -335,9 +335,6 @@
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
-    if (selectedRows.length > 0) {
-      clearSelectedRows()
-    }
     $('#crudModal').find('.modal-body').html(modalBody)
     initDatepicker('datepickerIndex')
   })
@@ -405,6 +402,9 @@
       .then(() => {
         showOrderanTrucking(form, orderanTruckingId)
           .then(() => {
+            if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
             $('#crudModal').modal('show')
             $('#crudForm [name=tglbukti]').attr('readonly', true)
             $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
@@ -446,6 +446,9 @@
       .then(() => {
         showOrderanTrucking(form, orderanTruckingId)
           .then(() => {
+            if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
             $('#crudModal').modal('show')
           })
           .catch((error) => {
@@ -492,6 +495,9 @@
 
           })
           .then(() => {
+            if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
             $('#crudModal').modal('show')
             $('#crudForm').find(`.ui-datepicker-trigger`).attr('disabled', true)
 

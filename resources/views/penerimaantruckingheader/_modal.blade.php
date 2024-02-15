@@ -1101,9 +1101,6 @@
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
 
-    if (selectedRows.length > 0) {
-      clearSelectedRows()
-    }
     $('#crudModal').find('.modal-body').html(modalBody)
     initDatepicker('datepickerIndex')
     KodePenerimaanId = "";
@@ -1181,6 +1178,9 @@
         showPenerimaanTruckingHeader(form, id)
       ])
       .then(() => {
+        if (selectedRows.length > 0) {
+          clearSelectedRows()
+        }
         $('#crudModal').modal('show')
         if (isEditTgl == 'TIDAK') {
           form.find(`[name="tglbukti"]`).prop('readonly', true)
@@ -1224,6 +1224,9 @@
         showPenerimaanTruckingHeader(form, id)
       ])
       .then(() => {
+        if (selectedRows.length > 0) {
+          clearSelectedRows()
+        }
         $('#crudModal').modal('show')
       })
       .catch((error) => {
@@ -1278,6 +1281,9 @@
         form.find('[name=id]').prop('disabled', false)
       })
       .then(() => {
+        if (selectedRows.length > 0) {
+          clearSelectedRows()
+        }
         $('#crudModal').modal('show')
         form.find(`.hasDatepicker`).prop('readonly', true)
         form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
