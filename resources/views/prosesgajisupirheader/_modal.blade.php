@@ -415,6 +415,7 @@
 
         // postingRincian = borongan + makan
         if (isPisahGajiKenek == 'YA') {
+
             postingRincian = borongan - gajikenek
         } else {
             postingRincian = borongan
@@ -704,6 +705,9 @@
         selectedGajiSupir = [];
         selectedExtra = [];
         isReload = false
+        if (selectedRowsIndex.length > 0) {
+            clearSelectedRowsIndex()
+        }
         $('#crudModal').find('.modal-body').html(modalBody)
         initDatepicker('datepickerIndex')
     })
