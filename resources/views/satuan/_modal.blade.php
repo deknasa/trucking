@@ -208,6 +208,9 @@
         showDefault(form)
       ])
       .then(() => {
+        if (selectedRows.length > 0) {
+          clearSelectedRows()
+        }
         $('#crudModal').modal('show')
       })
       .catch((error) => {
@@ -239,6 +242,9 @@
         showSatuan(form, satuanId)
       ])
       .then(() => {
+        if (selectedRows.length > 0) {
+          clearSelectedRows()
+        }
         $('#crudModal').modal('show')
       })
       .catch((error) => {
@@ -270,6 +276,9 @@
         showSatuan(form, satuanId)
       ])
       .then(() => {
+        if (selectedRows.length > 0) {
+          clearSelectedRows()
+        }
         $('#crudModal').modal('show')
       })
       .catch((error) => {
@@ -310,6 +319,9 @@
 
       })
       .then(() => {
+        if (selectedRows.length > 0) {
+          clearSelectedRows()
+        }
         $('#crudModal').modal('show')
         let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
         name.attr('disabled', true)
