@@ -124,7 +124,7 @@
       data.push({
         name: 'accessTokenTnl',
         value: accessTokenTnl
-      })      
+      })
       data.push({
         name: 'indexRow',
         value: indexRow
@@ -530,6 +530,10 @@
       dataType: 'JSON',
       beforeSend: request => {
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+      },
+
+      data: {
+        accessTokenTnl: accessTokenTnl
       },
       success: response => {
         var kondisi = response.kondisi
