@@ -1104,7 +1104,8 @@
         Authorization: `Bearer ${accessToken}`
       },
       data: {
-        tradoId: id
+        Id: selectedRows,
+        table: 'trado'
       },
       success: response => {
         $('#crudForm').trigger('reset')
@@ -1145,7 +1146,8 @@
         Authorization: `Bearer ${accessToken}`
       },
       data: {
-        tradoId: id
+        Id: selectedRows,
+        table: 'trado'
       },
       success: response => {
         $('#crudForm').trigger('reset')
@@ -1187,7 +1189,8 @@
         Authorization: `Bearer ${accessToken}`
       },
       data: {
-        tradoId: id
+        Id: selectedRows,
+        table: 'trado'
       },
       success: response => {
         $('#crudForm').trigger('reset')
@@ -1230,7 +1233,8 @@
         Authorization: `Bearer ${accessToken}`
       },
       data: {
-        tradoId: id
+        Id: selectedRows,
+        table: 'trado'
       },
       success: response => {
         $('#crudForm').trigger('reset')

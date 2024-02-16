@@ -1042,12 +1042,8 @@
                                 text: "UN/APPROVAL Reminder Oli Mesin",
                                 onClick: () => {
                                     if (`{{ $myAuth->hasPermission('trado', 'approvalmesin') }}`) {
-                                        selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                                        if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                                            showDialog('Harap pilih salah satu record')
-                                        } else {
-                                            approvalMesin(selectedId)
-                                        }
+
+                                        approvalMesin()
                                     }
                                 }
                             },
@@ -1065,12 +1061,7 @@
                                 text: "un/Approval Reminder Oli Persneling",
                                 onClick: () => {
                                     if (`{{ $myAuth->hasPermission('trado', 'approvalpersneling') }}`) {
-                                        selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                                        if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                                            showDialog('Harap pilih salah satu record')
-                                        } else {
-                                            approvalPersneling(selectedId);
-                                        }
+                                        approvalPersneling();
                                     }
                                     // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                                 }
@@ -1080,12 +1071,7 @@
                                 text: "un/Approval Reminder Oli Gardan",
                                 onClick: () => {
                                     if (`{{ $myAuth->hasPermission('trado', 'approvalgardan') }}`) {
-                                        selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                                        if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                                            showDialog('Harap pilih salah satu record')
-                                        } else {
-                                            approvalGardan(selectedId);
-                                        }
+                                            approvalGardan();
                                     }
                                     // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                                 }
@@ -1095,12 +1081,7 @@
                                 text: "un/Approval Reminder Oli Saringan Hawa",
                                 onClick: () => {
                                     if (`{{ $myAuth->hasPermission('trado', 'approvalsaringanhawa') }}`) {
-                                        selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                                        if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                                            showDialog('Harap pilih salah satu record')
-                                        } else {
-                                            approvalSaringanHawa(selectedId);
-                                        }
+                                            approvalSaringanHawa();
                                     }
                                     // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                                 }
@@ -1109,7 +1090,7 @@
                                 id: 'approvalTradoGambar',
                                 text: "un/Approval Trado tanpa Gambar",
                                 onClick: () => {
-                                    if (`{{ $myAuth->hasPermission('approvaltradogambar', 'update') }}`) {
+                                    if (`{{ $myAuth->hasPermission('trado', 'approvaltradogambar') }}`) {
                                         selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
 
                                         if (selectedId == null || selectedId == '' || selectedId == undefined) {
@@ -1125,7 +1106,7 @@
                                 id: 'approvalTradoKeterangan',
                                 text: "un/Approval Trado tanpa Keterangan",
                                 onClick: () => {
-                                    if (`{{ $myAuth->hasPermission('approvaltradoketerangan', 'update') }}`) {
+                                    if (`{{ $myAuth->hasPermission('trado', 'approvaltradoketerangan') }}`) {
                                         selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
 
                                         if (selectedId == null || selectedId == '' || selectedId == undefined) {
