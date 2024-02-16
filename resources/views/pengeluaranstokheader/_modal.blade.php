@@ -2334,9 +2334,11 @@
 
   function cekKelompok(row) {
     //check jika lookup baris pertama
-    console.log($(`#detailstokKelompok_${row}`)[0] == $('.detailstokKelompok')[0], $(`#detailstokKelompok_${row}`)[0], $('.detailstokKelompok')[0]);
+    // console.log(listKodePengeluaran[0] == kodePengeluaranStok);
     if ($(`#detailstokKelompok_${row}`)[0] == $('.detailstokKelompok')[0]) {
-      KelompokId = "";
+      if ((listKodePengeluaran[0] != kodePengeluaranStok)) {
+        KelompokId = "";
+      }
     } else {
       let detailstokKelompok = $('.detailstokKelompok')[0]
       KelompokId = $(detailstokKelompok).val();
@@ -2675,6 +2677,7 @@
       onSelectRow: (penerimaan, element) => {
         setSuplier(penerimaan.id);
         element.val(penerimaan.nobukti)
+        KelompokId = penerimaan.kelompok_id
         element.data('currentValue', element.val())
         penerimaanOrServicein('penerimaan')
         if (kodePengeluaranStok == listKodePengeluaran[1]) {
