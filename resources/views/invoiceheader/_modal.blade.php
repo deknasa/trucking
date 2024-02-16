@@ -237,6 +237,7 @@
       nominalretribusi = []
       omset = []
       sp_id = []
+      jobtrucking = []
       $.each(selectedRowsInvoice, function(index, value) {
         dataInvoice = $("#tableInvoice").jqGrid("getLocalRow", value);
         let selectedExtra = dataInvoice.nominalextra
@@ -248,12 +249,14 @@
         nominalretribusi.push((isNaN(selectedRetribusi)) ? parseFloat(selectedRetribusi.replaceAll(',', '')) : selectedRetribusi)
         omset.push((isNaN(selectedOmset)) ? parseFloat(selectedOmset.replaceAll(',', '')) : selectedOmset)
         sp_id.push(dataInvoice.sp_id)
+        jobtrucking.push(dataInvoice.jobtrucking)
       });
       let requestData = {
         'nominalextra': nominalextra,
         'nominalretribusi': nominalretribusi,
         'omset': omset,
         'sp_id': sp_id,
+        'jobtrucking': jobtrucking
       };
       data.push({
         name: 'detail',
