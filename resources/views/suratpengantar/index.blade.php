@@ -1084,8 +1084,8 @@
         // $('#approval-buka-cetak').attr('disabled', 'disabled')
       }
       if (hakApporveCount < 1) {
-        // $('#approve').hide()
-        $('#approve').attr('disabled', 'disabled')
+        $('#approve').hide()
+        // $('#approve').attr('disabled', 'disabled')
       }
       if (!`{{ $myAuth->hasPermission('suratpengantar', 'approvalBiayaTambahan') }}`) {
         $('#approvalbiayatambahan').attr('disabled', 'disabled')

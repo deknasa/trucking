@@ -1186,8 +1186,8 @@
             }
 
             if (hakApporveCount < 1) {
-                // $('#approve').hide()
-                $('#approve').attr('disabled', 'disabled')
+                $('#approve').hide()
+                // $('#approve').attr('disabled', 'disabled')
             }
 
             if (!`{{ $myAuth->hasPermission('supir', 'historySupirMandor') }}`) {

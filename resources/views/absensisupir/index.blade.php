@@ -728,8 +728,8 @@
         $('#approvalEdit').hide()
       }
       if (hakApporveCount < 1) {
-        // $('#approve').hide()
-        $('#approve').attr('disabled', 'disabled')
+        $('#approve').hide()
+        // $('#approve').attr('disabled', 'disabled')
       }
     }
 

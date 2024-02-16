@@ -718,14 +718,15 @@
         $('#approveun').hide()
         // $('#approval-buka-cetak').attr('disabled', 'disabled')
       }
+      hakApporveCount++
       if (!`{{ $myAuth->hasPermission('penerimaanheader', 'approvalbukacetak') }}`) {
         hakApporveCount--
         $('#approval-buka-cetak').hide()
         // $('#approval-buka-cetak').attr('disabled', 'disabled')
       }
       if (hakApporveCount < 1) {
-        // $('#approve').hide()
-        $('#approve').attr('disabled', 'disabled')
+        $('#approve').hide()
+        // $('#approve').attr('disabled', 'disabled')
       }
     }
   })

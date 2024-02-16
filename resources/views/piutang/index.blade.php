@@ -589,8 +589,8 @@
         // $('#approval-buka-cetak').attr('disabled', 'disabled')
       }
       if (hakApporveCount < 1) {
-        // $('#approve').hide()
-        $('#approve').attr('disabled', 'disabled')
+        $('#approve').hide()
+        // $('#approve').attr('disabled', 'disabled')
       }
     }
     $('#rangeModal').on('shown.bs.modal', function() {
