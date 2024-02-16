@@ -1013,14 +1013,16 @@
           let detailRow = $(`
               <tr>
                 <td> ${detail.status} </td>
-                <td> ${detail.kmperjalanan} </td>
-                <td> ${detail.kmtotal} </td>
+                <td> ${numberWithCommas(detail.kmperjalanan)} </td>
+                <td> ${numberWithCommas(detail.kmtotal)} </td>
+                <input type="hidden" name="namastatus[]" value="${detail.status}">
+                <input type="hidden" name="statusbatas[]" value="${detail.statusbatas}">
+                <input type="hidden" name="jarak[]" value="${detail.jarak}">
               </tr>
             `)
 
           $('#infoTrado').append(detailRow)
         })
-        console.log(response)
       },
       error: error => {
         showDialog(error.statusText)
@@ -1766,6 +1768,10 @@
     elements.each((index, element) => {
       $(element).text(index + 1)
     })
+  }
+
+  function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 </script>
 @endpush
