@@ -583,15 +583,11 @@
             if (!`{{ $myAuth->hasPermission('customer', 'report') }}`) {
                 $('#report').attr('disabled', 'disabled')
             }
-
-            if (!`{{ $myAuth->hasPermission('customer', 'approval') }}`) {
-                $('#approval').attr('disabled', 'disabled')
-            }
             let hakApporveCount = 0 ;
             hakApporveCount++
-            if (!`{{ $myAuth->hasPermission('customer', 'approveun') }}`) {
+            if (!`{{ $myAuth->hasPermission('customer', 'approval') }}`) {
               hakApporveCount--
-              $('#approval').hide()
+              $('#approveun').hide()
               // $('#approval-buka-cetak').attr('disabled', 'disabled')
             }
             hakApporveCount++
