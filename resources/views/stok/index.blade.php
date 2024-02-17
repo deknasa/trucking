@@ -51,9 +51,36 @@
                 }
             }
         }
-
     }
-
+    
+    function clearSelectedRows() {
+        selectedRows = []
+        selectedRowsStok = []
+        $('#gs_').prop('checked', false);
+        $('#jqGrid').trigger('reloadGrid')
+    }
+    
+    function selectAllRows() {
+        $.ajax({
+            url: `${apiUrl}stok`,
+            method: 'GET',
+            dataType: 'JSON',
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            },
+            data: {
+                limit: 0,
+                filters: $('#jqGrid').jqGrid('getGridParam', 'postData').filters
+            },
+            success: (response) => {
+                selectedRows = response.data.map((stok) => stok.id)
+                selectedRowsStok = response.data.map((stok) => stok.namastok)
+                $('#jqGrid').trigger('reloadGrid')
+            }
+        })
+    }
+    
+    
     $(document).ready(function() {
 
         $('#lookup').hide()
@@ -87,17 +114,14 @@
                             dataInit: function(element) {
                                 $(element).removeClass('form-control')
                                 $(element).parent().addClass('text-center')
-
                                 $(element).on('click', function() {
-
-                                $(element).attr('disabled', true)
-                                if ($(this).is(':checked')) {
-                                    selectAllRows()
-                                } else {
-                                    clearSelectedRows()
-                                }
+                                    $(element).attr('disabled', true)
+                                    if ($(this).is(':checked')) {
+                                        selectAllRows()
+                                    } else {
+                                        clearSelectedRows()
+                                    }
                                 })
-
                             }
                         },
                         formatter: (value, rowOptions, rowData) => {
@@ -483,7 +507,16 @@
                     $(document).unbind('keydown')
                     setCustomBindKeys($(this))
                     initResize($(this))
-
+                    
+                    $.each(selectedRows, function(key, value) {
+                        $('#jqGrid tbody tr').each(function(row, tr) {
+                            if ($(this).find(`td input:checkbox`).val() == value) {
+                                $(this).find(`td input:checkbox`).prop('checked', true)
+                                $(this).addClass('bg-light-blue')
+                            }
+                        })
+                    });
+                    
                     /* Set global variables */
                     sortname = $(this).jqGrid("getGridParam", "sortname")
                     sortorder = $(this).jqGrid("getGridParam", "sortorder")
@@ -526,6 +559,7 @@
 
                     $('#left-nav').find('button').attr('disabled', false)
                     permission()
+                    $('#gs_').attr('disabled', false)
                     setHighlight($(this))
                 }
             })
@@ -633,6 +667,14 @@
                                     approvalReuse(selectedId)
                                 }
                             },
+                            {
+                                id: 'approveun',
+                                text: ' APPROVAL NON AKTIF',
+                                onClick: () => {
+                                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                                    approvalNonAktif('stok')
+                                }
+                            },
                         ],
                     }
                 ]    
@@ -700,6 +742,12 @@
             if (!`{{ $myAuth->hasPermission('stok', 'approvalReuse') }}`) {
               hakApporveCount--
               $('#approvalReuse').hide()
+              // $('#approval-buka-cetak').attr('disabled', 'disabled')
+            }
+            hakApporveCount++
+            if (!`{{ $myAuth->hasPermission('stok', 'approvalnonaktif') }}`) {
+              hakApporveCount--
+              $('#approveun').hide()
               // $('#approval-buka-cetak').attr('disabled', 'disabled')
             }
             if (hakApporveCount < 1) {

@@ -255,6 +255,9 @@
         showDefault(form)
       ])
       .then(() => {
+        if (selectedRows.length > 0) {
+          clearSelectedRows()
+        }
         $('#crudModal').modal('show')
       })
       .catch((error) => {
@@ -287,6 +290,9 @@
 
       ])
       .then(() => {
+        if (selectedRows.length > 0) {
+          clearSelectedRows()
+        }
         $('#crudModal').modal('show')
       })
       .catch((error) => {
@@ -318,6 +324,9 @@
         showPenerimaanStok(form, penerimaanstokId)
       ])
       .then(() => {
+        if (selectedRows.length > 0) {
+          clearSelectedRows()
+        }
         $('#crudModal').modal('show')
       })
       .catch((error) => {
@@ -365,6 +374,9 @@
         form.find('[name=id]').prop('disabled', false)
       })
       .then(() => {
+        if (selectedRows.length > 0) {
+          clearSelectedRows()
+        }
         $('#crudModal').modal('show')
         form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
         let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
