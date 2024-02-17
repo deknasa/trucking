@@ -28,7 +28,47 @@
             let sortorder = 'asc'
             let autoNumericElements = []
             let rowNum = 10
+            let selectedRows = [];
 
+            function checkboxHandler(element) {
+                let value = $(element).val();
+                if (element.checked) {
+                    selectedRows.push($(element).val())
+                    $(element).parents('tr').addClass('bg-light-blue')
+                } else {
+                    $(element).parents('tr').removeClass('bg-light-blue')
+                    for (var i = 0; i < selectedRows.length; i++) {
+                        if (selectedRows[i] == value) {
+                            selectedRows.splice(i, 1);
+                        }
+                    }
+                }
+            }
+
+            function clearSelectedRows() {
+                selectedRows = []
+                $('#gs_').prop('checked', false);
+                $('#jqGrid').trigger('reloadGrid')
+            }
+
+            function selectAllRows() {
+                $.ajax({
+                    url: `${apiUrl}kategori`,
+                    method: 'GET',
+                    dataType: 'JSON',
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`
+                    },
+                    data: {
+                        limit: 0,
+                        filters: $('#jqGrid').jqGrid('getGridParam', 'postData').filters
+                    },
+                    success: (response) => {
+                        selectedRows = response.data.map((ketegori) => ketegori.id)
+                        $('#jqGrid').trigger('reloadGrid')
+                    }
+                })
+            }
 
             $(document).ready(function() {
 
@@ -38,7 +78,37 @@
                         styleUI: 'Bootstrap4',
                         iconSet: 'fontAwesome',
                         datatype: "json",
-                        colModel: [{
+                        colModel: [
+                            {
+                                label: '',
+                                name: '',
+                                width: 30,
+                                align: 'center',
+                                sortable: false,
+                                clear: false,
+                                stype: 'input',
+                                searchable: false,
+                                searchoptions: {
+                                    type: 'checkbox',
+                                    clearSearch: false,
+                                    dataInit: function(element) {
+                                        $(element).removeClass('form-control')
+                                        $(element).parent().addClass('text-center')
+                                        $(element).on('click', function() {
+                                            $(element).attr('disabled', true)
+                                            if ($(this).is(':checked')) {
+                                                selectAllRows()
+                                            } else {
+                                                clearSelectedRows()
+                                            }
+                                        })
+                                    }
+                                },
+                                formatter: (value, rowOptions, rowData) => {
+                                    return `<input type="checkbox" name="Id[]" value="${rowData.id}" onchange="checkboxHandler(this)">`
+                                },
+                            }, 
+                            {
                                 label: 'ID',
                                 name: 'id',
                                 width: '50px',
@@ -172,6 +242,14 @@
                             $(document).unbind('keydown')
                             setCustomBindKeys($(this))
                             initResize($(this))
+                            $.each(selectedRows, function(key, value) {
+                                $('#jqGrid tbody tr').each(function(row, tr) {
+                                    if ($(this).find(`td input:checkbox`).val() == value) {
+                                        $(this).find(`td input:checkbox`).prop('checked', true)
+                                        $(this).addClass('bg-light-blue')
+                                    }
+                                })
+                            });
 
                             /* Set global variables */
                             sortname = $(this).jqGrid("getGridParam", "sortname")
@@ -207,6 +285,7 @@
 
                             $('#left-nav').find('button').attr('disabled', false)
                             permission() 
+                            $('#gs_').attr('disabled', false)
                             setHighlight($(this))
                         },
 
@@ -302,6 +381,16 @@
                                     $('#rangeModal').modal('show')
                                 }
                             },
+                            {
+                                id: 'approveun',
+                                innerHTML: '<i class="fas fa-check""></i> APPROVAL NON AKTIF',
+                                class: 'btn btn-purple btn-sm mr-1',
+                                onClick: () => {
+        
+                                    approvalNonAktif('kategori')
+        
+                                }
+                            },
                         ]
                     })
 
@@ -331,28 +420,32 @@
                     .addClass('btn-sm btn-warning')
                     .parent().addClass('px-1')
 
-                    function permission() {
-                if (!`{{ $myAuth->hasPermission('kategori', 'store') }}`) {
-                    $('#add').attr('disabled', 'disabled')
-                }
+                function permission() {
+                    if (!`{{ $myAuth->hasPermission('kategori', 'store') }}`) {
+                        $('#add').attr('disabled', 'disabled')
+                    }
 
-                if (!`{{ $myAuth->hasPermission('kategori', 'show') }}`) {
-                    $('#view').attr('disabled', 'disabled')
-                }
+                    if (!`{{ $myAuth->hasPermission('kategori', 'show') }}`) {
+                        $('#view').attr('disabled', 'disabled')
+                    }
 
-                if (!`{{ $myAuth->hasPermission('kategori', 'update') }}`) {
-                    $('#edit').attr('disabled', 'disabled')
-                }
+                    if (!`{{ $myAuth->hasPermission('kategori', 'update') }}`) {
+                        $('#edit').attr('disabled', 'disabled')
+                    }
 
-                if (!`{{ $myAuth->hasPermission('kategori', 'destroy') }}`) {
-                    $('#delete').attr('disabled', 'disabled')
+                    if (!`{{ $myAuth->hasPermission('kategori', 'destroy') }}`) {
+                        $('#delete').attr('disabled', 'disabled')
+                    }
+                    if (!`{{ $myAuth->hasPermission('kategori', 'export') }}`) {
+                        $('#export').attr('disabled', 'disabled')
+                    }
+                    if (!`{{ $myAuth->hasPermission('kategori', 'report') }}`) {
+                        $('#report').attr('disabled', 'disabled')
+                    }
+                    if (!`{{ $myAuth->hasPermission('kategori', 'approvalnonaktif') }}`) {
+                        $('#approveun').hide()
+                    }
                 }
-                if (!`{{ $myAuth->hasPermission('kategori', 'export') }}`) {
-                    $('#export').attr('disabled', 'disabled')
-                }
-                if (!`{{ $myAuth->hasPermission('kategori', 'report') }}`) {
-                    $('#report').attr('disabled', 'disabled')
-                } }
 
                 $('#rangeModal').on('shown.bs.modal', function() {
                     if (autoNumericElements.length > 0) {

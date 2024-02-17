@@ -86,6 +86,7 @@
     
 
     $(document).on('click','#btnReload', function(event) {
+      dataAbsensi = {}
       loadDataAbsensiMandor('mandorabsensisupir',{tglbukaabsensi:$('#tglbukaabsensi').val(),sortIndex:'kodetrado'})
     })
     
