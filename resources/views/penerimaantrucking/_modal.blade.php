@@ -99,6 +99,18 @@
                 </select>
               </div>
             </div>
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
+                  STATUS AKTIF <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <select name="statusaktif" class="form-select select2bs4" style="width: 100%;">
+                  <option value="">-- PILIH STATUS AKTIF --</option>
+                </select>
+              </div>
+            </div>
           </div>
           <div class="modal-footer justify-content-start">
             <button id="btnSubmit" class="btn btn-primary">
@@ -151,7 +163,7 @@
       data.push({
         name: 'accessTokenTnl',
         value: accessTokenTnl
-      })       
+      })
       data.push({
         name: 'indexRow',
         value: indexRow
@@ -264,15 +276,19 @@
     Promise
       .all([
         setStatusFormatOptions(form),
+        setStatusAktifOptions(form),
       ])
       .then(() => {
-        $('#crudModal').modal('show')
-      })
-      .catch((error) => {
-        showDialog(error.statusText)
-      })
-      .finally(() => {
-        $('.modal-loader').addClass('d-none')
+        showDefault(form)
+          .then(() => {
+            $('#crudModal').modal('show')
+          })
+          .catch((error) => {
+            showDialog(error.statusText)
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
       })
   }
 
@@ -295,10 +311,14 @@
     Promise
       .all([
         setStatusFormatOptions(form),
+        setStatusAktifOptions(form)
       ])
       .then(() => {
         showPenerimaanTrucking(form, penerimaanTruckingId)
           .then(() => {
+            if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
             $('#crudModal').modal('show')
           })
           .catch((error) => {
@@ -330,10 +350,14 @@
     Promise
       .all([
         setStatusFormatOptions(form),
+        setStatusAktifOptions(form)
       ])
       .then(() => {
         showPenerimaanTrucking(form, penerimaanTruckingId)
           .then(() => {
+            if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
             $('#crudModal').modal('show')
           })
           .catch((error) => {
@@ -363,6 +387,7 @@
     Promise
       .all([
         setStatusFormatOptions(form),
+        setStatusAktifOptions(form)
       ])
       .then(() => {
         showPenerimaanTrucking(form, penerimaanTruckingId)
@@ -384,6 +409,9 @@
             form.find('[name=id]').prop('disabled', false)
           })
           .then(() => {
+            if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
             $('#crudModal').modal('show')
             form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
             let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
@@ -639,5 +667,75 @@
       }
     })
   }
+  const setStatusAktifOptions = function(relatedForm) {
+    return new Promise((resolve, reject) => {
+      relatedForm.find('[name=statusaktif]').empty()
+      relatedForm.find('[name=statusaktif]').append(
+        new Option('-- PILIH STATUS AKTIF --', '', false, true)
+      ).trigger('change')
+
+      $.ajax({
+        url: `${apiUrl}parameter`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          filters: JSON.stringify({
+            "groupOp": "AND",
+            "rules": [{
+              "field": "grp",
+              "op": "cn",
+              "data": "STATUS AKTIF"
+            }]
+          })
+        },
+        success: response => {
+          response.data.forEach(statusAktif => {
+            let option = new Option(statusAktif.text, statusAktif.id)
+
+            relatedForm.find('[name=statusaktif]').append(option).trigger('change')
+          });
+
+          resolve()
+        },
+        error: error => {
+          reject(error)
+        }
+      })
+    })
+  }
+
+  function showDefault(form) {
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `${apiUrl}penerimaantrucking/default`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          $.each(response.data, (index, value) => {
+            console.log(value)
+            let element = form.find(`[name="${index}"]`)
+            // let element = form.find(`[name="statusaktif"]`)
+
+            if (element.is('select')) {
+              element.val(value).trigger('change')
+            } else {
+              element.val(value)
+            }
+          })
+          resolve()
+        },
+        error: error => {
+          reject(error)
+        }
+      })
+    })
+  }
+
 </script>
 @endpush()
