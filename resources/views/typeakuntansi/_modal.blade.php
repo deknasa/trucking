@@ -286,6 +286,9 @@
       .then(() => {
         showDefault(form)
           .then(() => {
+            if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
             $('#crudModal').modal('show')
           })
           .catch((error) => {
@@ -326,6 +329,9 @@
       .then(() => {
         showTypeAkuntansi(form, id)
         .then(() => {
+            if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
             $('#crudModal').modal('show')
             form.find(`[name="order"]`).parent('.input-group').find('.button-clear').remove()
             form.find(`[name="order"]`).parent('.input-group').find('.input-group-append').remove()
@@ -364,6 +370,9 @@
       .then(() => {
         showTypeAkuntansi(form, id)
           .then(() => {
+            if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
             $('#crudModal').modal('show')
             $('#crudForm').find(`.btn.btn-easyui.lookup-toggler`).attr('disabled', true)
           })
@@ -412,6 +421,9 @@
           form.find('[name=id]').prop('disabled',false)
         })
           .then(() => {
+            if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
             $('#crudModal').modal('show')
             $('#crudForm').find(`.btn.btn-easyui.lookup-toggler`).attr('disabled', true)
           })
