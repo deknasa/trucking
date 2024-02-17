@@ -84,7 +84,7 @@
 
   reloadGrid()
 
-  function checkboxHandler(element) {
+  function checkboxHandlerIndex(element) {
     let value = $(element).val();
     if (element.checked) {
       selectedRows.push($(element).val())
@@ -200,7 +200,7 @@
               }
             },
             formatter: (value, rowOptions, rowData) => {
-              return `<input type="checkbox" name="Idindex[]" class="checkbox-jqgrid" value="${rowData.id}" onchange="checkboxHandler(this)">`
+              return `<input type="checkbox" name="Idindex[]" class="checkbox-jqgrid" value="${rowData.id}" onchange="checkboxHandlerIndex(this)">`
             },
           },
           {
