@@ -202,10 +202,6 @@ class GajiSupirHeaderController extends MyController
                 'index' => 'uangmakanberjenjang',
             ],
             [
-                'label' => 'TOTAL POTONGAN UANG JALAN TIDAK TERHITUNG',
-                'index' => 'uangJalantidakterhitung',
-            ],
-            [
                 'label' => 'TOTAL POTONGAN UANG JALAN',
                 'index' => 'uangjalan',
             ],

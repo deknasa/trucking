@@ -23,18 +23,19 @@ class OrderanTruckingController extends MyController
     public function index(Request $request)
     {
         $title = $this->title;
-        
+
         $data = [
-            'combolangsir' => $this->combo('list','STATUS LANGSIR','STATUS LANGSIR'),
-            'comboperalihan' => $this->combo('list','STATUS PERALIHAN','STATUS PERALIHAN'),
+            'combolangsir' => $this->combo('list', 'STATUS LANGSIR', 'STATUS LANGSIR'),
+            'comboperalihan' => $this->combo('list', 'STATUS PERALIHAN', 'STATUS PERALIHAN'),
             'comboapproval' => $this->comboApproval('list', 'STATUS APPROVAL', 'STATUS APPROVAL'),
             'comboapprovaledit' => $this->comboApproval('list', 'STATUS APPROVAL', 'STATUS APPROVAL'),
         ];
 
-        $data = array_merge(compact('title', 'data'),
-            ["request"=>$request->all()]
+        $data = array_merge(
+            compact('title', 'data'),
+            ["request" => $request->all()]
         );
-        return view('orderantrucking.index', $data);   
+        return view('orderantrucking.index', $data);
     }
 
     /**
@@ -77,7 +78,7 @@ class OrderanTruckingController extends MyController
         $title = $this->title;
         $combo = $this->combo();
 
-        return view('orderantrucking.add', compact('title','combo'));
+        return view('orderantrucking.add', compact('title', 'combo'));
     }
 
 
@@ -97,10 +98,10 @@ class OrderanTruckingController extends MyController
             'status' => $aksi,
             'grp' => 'STATUSCETAK',
             'subgrp' => 'STATUSCETAK',
-        ];    
+        ];
         $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-            ->get(config('app.api_url') . 'user/combostatus',$status);
+            ->get(config('app.api_url') . 'user/combostatus', $status);
         return $response['data'];
     }
     public function comboApproval($aksi, $grp, $subgrp)
@@ -134,7 +135,7 @@ class OrderanTruckingController extends MyController
         return view('reports.orderantrucking', compact('orderantrucking', 'params'));
     }
 
-    public function export(Request $request):void
+    public function export(Request $request): void
     {
         //FETCH HEADER
         $orderanTrucking = Http::withHeaders($request->header())
@@ -142,15 +143,15 @@ class OrderanTruckingController extends MyController
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'orderantrucking/export?dari=' . $request->dari . '&sampai=' . $request->sampai)['data'];
         $orderanTruck = $orderanTrucking['data'];
-    
-        $tglDari = $orderanTruck[0]['tgldari'];
-        $timeStamp = strtotime($tglDari);
-        $datetglDari = date('d-m-Y', $timeStamp); 
+
+        // $tglDari = $orderanTruck[0]['tgldari'];
+        $timeStamp = strtotime($request->dari);
+        $datetglDari = date('d-m-Y', $timeStamp);
         $periodeDari = $datetglDari;
 
-        $tglSampai = $orderanTruck[0]['tglsampai'];
-        $timeStamp = strtotime($tglSampai);
-        $datetglSampai = date('d-m-Y', $timeStamp); 
+        // $tglSampai = $orderanTruck[0]['tglsampai'];
+        $timeStamp = strtotime($request->sampai);
+        $datetglSampai = date('d-m-Y', $timeStamp);
         $periodeSampai = $datetglSampai;
 
         $spreadsheet = new Spreadsheet();
@@ -174,12 +175,12 @@ class OrderanTruckingController extends MyController
 
         $header_columns = [
             [
-                'label'=>'Periode Dari',
-                'index'=>$periodeDari
+                'label' => 'Periode Dari',
+                'index' => $periodeDari
             ],
             [
-                'label'=>'Periode Sampai',
-                'index'=>$periodeSampai
+                'label' => 'Periode Sampai',
+                'index' => $periodeSampai
             ]
         ];
         $columns = [
@@ -239,7 +240,7 @@ class OrderanTruckingController extends MyController
         //LOOPING HEADER        
         foreach ($header_columns as $header_column) {
             $sheet->setCellValue('B' . $header_start_row, $header_column['label']);
-            $sheet->setCellValue('C' . $header_start_row++, ': '.$header_column['index']);
+            $sheet->setCellValue('C' . $header_start_row++, ': ' . $header_column['index']);
         }
         foreach ($columns as $detail_columns_index => $detail_column) {
             $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_table_header_row, $detail_column['label'] ?? $detail_columns_index + 1);
@@ -251,52 +252,55 @@ class OrderanTruckingController extends MyController
                 ),
             ),
         );
- 
+
         $style_number = [
             'alignment' => [
-                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT, 
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT,
             ],
-            
+
             'borders' => [
                 'top' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
-                'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN], 
+                'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
                 'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
-                'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN] 
+                'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN]
             ]
         ];
-        $sheet ->getStyle("A$detail_table_header_row:M$detail_table_header_row")->applyFromArray($styleArray);
+        $sheet->getStyle("A$detail_table_header_row:M$detail_table_header_row")->applyFromArray($styleArray);
 
         $nominal = 0;
-        foreach ($orderanTruck as $response_index => $response_detail) {
-            foreach ($columns as $detail_columns_index => $detail_column) {
-                $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
-                $sheet->getStyle("A$detail_table_header_row:M$detail_table_header_row")->getFont()->setBold(true);
-                $sheet->getStyle("A$detail_table_header_row:M$detail_table_header_row")->getAlignment()->setHorizontal('center');
+        if (is_iterable($orderanTruck)) {
+
+            foreach ($orderanTruck as $response_index => $response_detail) {
+                foreach ($columns as $detail_columns_index => $detail_column) {
+                    $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
+                    $sheet->getStyle("A$detail_table_header_row:M$detail_table_header_row")->getFont()->setBold(true);
+                    $sheet->getStyle("A$detail_table_header_row:M$detail_table_header_row")->getAlignment()->setHorizontal('center');
+                }
+                $response_detail['nominals'] = number_format((float) $response_detail['nominal'], '2', '.', ',');
+
+                $tglbukti = $response_detail["tglbukti"];
+                $timeStamp = strtotime($tglbukti);
+                $datetglbukti = date('d-m-Y', $timeStamp);
+                $response_detail['tglbukti'] = $datetglbukti;
+
+                $sheet->setCellValue("A$detail_start_row", $response_index + 1);
+                $sheet->setCellValue("B$detail_start_row", $response_detail['nobukti']);
+                $sheet->setCellValue("C$detail_start_row", $response_detail['tglbukti']);
+                $sheet->setCellValue("D$detail_start_row", $response_detail['container_id']);
+                $sheet->setCellValue("E$detail_start_row", $response_detail['agen_id']);
+                $sheet->setCellValue("F$detail_start_row", $response_detail['jenisorder_id']);
+                $sheet->setCellValue("G$detail_start_row", $response_detail['pelanggan_id']);
+                $sheet->setCellValue("H$detail_start_row", $response_detail['nojobemkl']);
+                $sheet->setCellValue("I$detail_start_row", $response_detail['nocont']);
+                $sheet->setCellValue("J$detail_start_row", $response_detail['noseal']);
+                $sheet->setCellValue("K$detail_start_row", $response_detail['nojobemkl2']);
+                $sheet->setCellValue("L$detail_start_row", $response_detail['nocont2']);
+                $sheet->setCellValue("M$detail_start_row", $response_detail['noseal2']);
+
+                $sheet->getStyle("A$detail_start_row:M$detail_start_row")->applyFromArray($styleArray);
+
+                $detail_start_row++;
             }
-            $response_detail['nominals'] = number_format((float) $response_detail['nominal'], '2', '.', ',');
-
-            $tglbukti = $response_detail["tglbukti"];
-            $timeStamp = strtotime($tglbukti);
-            $datetglbukti = date('d-m-Y', $timeStamp); 
-            $response_detail['tglbukti'] = $datetglbukti;
-        
-            $sheet->setCellValue("A$detail_start_row", $response_index + 1);
-            $sheet->setCellValue("B$detail_start_row", $response_detail['nobukti']);
-            $sheet->setCellValue("C$detail_start_row", $response_detail['tglbukti']);
-            $sheet->setCellValue("D$detail_start_row", $response_detail['container_id']);
-            $sheet->setCellValue("E$detail_start_row", $response_detail['agen_id']);
-            $sheet->setCellValue("F$detail_start_row", $response_detail['jenisorder_id']);
-            $sheet->setCellValue("G$detail_start_row", $response_detail['pelanggan_id']);
-            $sheet->setCellValue("H$detail_start_row", $response_detail['nojobemkl']);
-            $sheet->setCellValue("I$detail_start_row", $response_detail['nocont']);
-            $sheet->setCellValue("J$detail_start_row", $response_detail['noseal']);
-            $sheet->setCellValue("K$detail_start_row", $response_detail['nojobemkl2']);
-            $sheet->setCellValue("L$detail_start_row", $response_detail['nocont2']);
-            $sheet->setCellValue("M$detail_start_row", $response_detail['noseal2']);
-
-            $sheet ->getStyle("A$detail_start_row:M$detail_start_row")->applyFromArray($styleArray);
-
-            $detail_start_row++;
         }
 
         $sheet->getColumnDimension('A')->setAutoSize(true);
@@ -323,5 +327,4 @@ class OrderanTruckingController extends MyController
 
         $writer->save('php://output');
     }
-
 }

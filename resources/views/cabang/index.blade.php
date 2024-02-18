@@ -180,46 +180,23 @@
                         width: 100,
                         stype: 'select',
                         searchoptions: {
+                            value: `<?php
+                                    $i = 1;
+
+                                    foreach ($data['koneksi'] as $status) :
+                                        echo "$status[param]:$status[parameter]";
+                                        if ($i !== count($data['koneksi'])) {
+                                            echo ';';
+                                        }
+                                        $i++;
+                                    endforeach;
+
+                                    ?>
+            `,
                             dataInit: function(element) {
                                 $(element).select2({
                                     width: 'resolve',
-                                    theme: "bootstrap4",
-                                    ajax: {
-                                        url: `${apiUrl}parameter/combo`,
-                                        dataType: 'JSON',
-                                        headers: {
-                                            Authorization: `Bearer ${accessToken}`
-                                        },
-                                        data: {
-                                            grp: 'STATUS KONEKSI',
-                                            subgrp: 'STATUS KONEKSI'
-                                        },
-                                        beforeSend: () => {
-                                            // clear options
-                                            $(element).data('select2').$results.children().filter((index, element) => {
-                                                // clear options except index 0, which
-                                                // is the "searching..." label
-                                                if (index > 0) {
-                                                    element.remove()
-                                                }
-                                            })
-                                        },
-                                        processResults: (response) => {
-                                            let formattedResponse = response.data.map(row => ({
-                                                id: row.text,
-                                                text: row.text
-                                            }));
-
-                                            formattedResponse.unshift({
-                                                id: '',
-                                                text: 'ALL'
-                                            });
-
-                                            return {
-                                                results: formattedResponse
-                                            };
-                                        },
-                                    }
+                                    theme: "bootstrap4"
                                 });
                             }
                         },

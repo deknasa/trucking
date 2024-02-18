@@ -31,17 +31,18 @@ class SuratPengantarController extends MyController
     {
         $title = $this->title;
         $data = [
-            'combolongtrip' => $this->comboList('list','STATUS LONGTRIP','STATUS LONGTRIP'),
-            'comboeditsp' => $this->comboList('list','STATUS APPROVAL','STATUS APPROVAL'),
-            'combotitipan' => $this->comboList('list','STATUS APPROVAL','STATUS APPROVAL'),
-            'comboperalihan' => $this->comboList('list','STATUS PERALIHAN','STATUS PERALIHAN'),
-            'comboritasiomset' => $this->comboList('list','STATUS RITASI OMSET','STATUS RITASI OMSET'),
-            'combogudangsama' => $this->comboList('list','STATUS GUDANG SAMA','STATUS GUDANG SAMA'),
-            'combobatalmuat' => $this->comboList('list','STATUS BATAL MUAT','STATUS BATAL MUAT')
+            'combolongtrip' => $this->comboList('list', 'STATUS LONGTRIP', 'STATUS LONGTRIP'),
+            'comboeditsp' => $this->comboList('list', 'STATUS APPROVAL', 'STATUS APPROVAL'),
+            'combotitipan' => $this->comboList('list', 'STATUS APPROVAL', 'STATUS APPROVAL'),
+            'comboperalihan' => $this->comboList('list', 'STATUS PERALIHAN', 'STATUS PERALIHAN'),
+            'comboritasiomset' => $this->comboList('list', 'STATUS RITASI OMSET', 'STATUS RITASI OMSET'),
+            'combogudangsama' => $this->comboList('list', 'STATUS GUDANG SAMA', 'STATUS GUDANG SAMA'),
+            'combobatalmuat' => $this->comboList('list', 'STATUS BATAL MUAT', 'STATUS BATAL MUAT')
         ];
 
-        $data = array_merge(compact('title', 'data'),
-            ["request"=>$request->all()]
+        $data = array_merge(
+            compact('title', 'data'),
+            ["request" => $request->all()]
         );
         return view('suratpengantar.index', $data);
     }
@@ -88,17 +89,17 @@ class SuratPengantarController extends MyController
         if (request()->ajax()) {
             return response($data, $response->status());
         }
-        
+
         return $data;
     }
 
     public function create()
     {
         $title = $this->title;
-        
+
         $combo = $this->combo();
 
-        return view('suratpengantar.add', compact('title','combo'));
+        return view('suratpengantar.add', compact('title', 'combo'));
     }
 
     public function store(Request $request): Response
@@ -114,14 +115,14 @@ class SuratPengantarController extends MyController
 
             $request['komisisupir'] = str_replace('.', '', $request['komisisupir']);
             $request['komisisupir'] = str_replace(',', '', $request['komisisupir']);
-        
+
             $response = Http::withHeaders([
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json',
             ])
                 ->withToken(session('access_token'))
                 ->post(config('app.api_url') . 'suratpengantar', $request->all());
-    
+
             return response($response, $response->status());
         } catch (\Throwable $th) {
             dd($th->getMessage());
@@ -148,7 +149,7 @@ class SuratPengantarController extends MyController
         $suratpengantar = $response['data'];
         $combo = $this->combo();
 
-        return view('suratpengantar.edit', compact('title', 'suratpengantar','combo'));
+        return view('suratpengantar.edit', compact('title', 'suratpengantar', 'combo'));
     }
 
     public function update(Request $request, $id): Response
@@ -180,8 +181,8 @@ class SuratPengantarController extends MyController
             $title = $this->title;
 
             $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
-            ->withToken(session('access_token'))
-            ->get(config('app.api_url') . "suratpengantar/$id");
+                ->withToken(session('access_token'))
+                ->get(config('app.api_url') . "suratpengantar/$id");
 
             $suratpengantar = $response['data'];
 
@@ -197,7 +198,7 @@ class SuratPengantarController extends MyController
     {
         $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
-        ->delete(config('app.api_url') . "suratpengantar/$id", $request->all());
+            ->delete(config('app.api_url') . "suratpengantar/$id", $request->all());
 
         return response($response);
     }
@@ -251,7 +252,7 @@ class SuratPengantarController extends MyController
         $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'suratpengantar/get_gaji', $request->all());
-        
+
         return response($response['data']);
     }
 
@@ -259,7 +260,7 @@ class SuratPengantarController extends MyController
     {
         $response = Http::withHeaders($this->httpHeaders)->withOptions(['verify' => false])
             ->get(config('app.api_url') . 'suratpengantar/combo');
-        
+
         return $response['data'];
     }
 
@@ -283,15 +284,15 @@ class SuratPengantarController extends MyController
             ->withToken(session('access_token'))
             ->get(config('app.api_url') . 'suratpengantar/export?dari=' . $request->dari . '&sampai=' . $request->sampai)['data'];
         $suratPengantar = $data_header['data'];
-        
-        $tglDari = $suratPengantar[0]['tgldari'];
-        $timeStamp = strtotime($tglDari);
-        $datetglDari = date('d-m-Y', $timeStamp); 
+
+        // $tglDari = $suratPengantar[0]['tgldari'];
+        $timeStamp = strtotime($request->dari);
+        $datetglDari = date('d-m-Y', $timeStamp);
         $periodeDari = $datetglDari;
 
-        $tglSampai = $suratPengantar[0]['tglsampai'];
-        $timeStamp = strtotime($tglSampai);
-        $datetglSampai = date('d-m-Y', $timeStamp); 
+        // $tglSampai = $suratPengantar[0]['tglsampai'];
+        $timeStamp = strtotime($request->sampai);
+        $datetglSampai = date('d-m-Y', $timeStamp);
         $periodeSampai = $datetglSampai;
 
         $spreadsheet = new Spreadsheet();
@@ -314,12 +315,12 @@ class SuratPengantarController extends MyController
 
         $header_columns = [
             [
-                'label'=>'Periode Dari',
-                'index'=>$periodeDari
+                'label' => 'Periode Dari',
+                'index' => $periodeDari
             ],
             [
-                'label'=>'Periode Sampai',
-                'index'=>$periodeSampai
+                'label' => 'Periode Sampai',
+                'index' => $periodeSampai
             ]
         ];
 
@@ -433,7 +434,7 @@ class SuratPengantarController extends MyController
         //LOOPING HEADER        
         foreach ($header_columns as $header_column) {
             $sheet->setCellValue('B' . $header_start_row, $header_column['label']);
-            $sheet->setCellValue('C' . $header_start_row++, ': '.$header_column['index']);
+            $sheet->setCellValue('C' . $header_start_row++, ': ' . $header_column['index']);
         }
         foreach ($columns as $detail_columns_index => $detail_column) {
             $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_table_header_row, $detail_column['label'] ?? $detail_columns_index + 1);
@@ -448,78 +449,79 @@ class SuratPengantarController extends MyController
 
         $style_number = [
             'alignment' => [
-                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT, 
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT,
             ],
-            
+
             'borders' => [
                 'top' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
-                'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN], 
+                'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
                 'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
-                'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN] 
+                'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN]
             ]
         ];
-        $sheet ->getStyle("A$detail_table_header_row:Z$detail_table_header_row")->applyFromArray($styleArray);
+        $sheet->getStyle("A$detail_table_header_row:Z$detail_table_header_row")->applyFromArray($styleArray);
 
-        $gajisupir = 0;
-        foreach ($suratPengantar as $response_index => $response_detail) {
-            foreach ($columns as $detail_columns_index => $detail_column) {
-                $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
-                $sheet->getStyle("A$detail_table_header_row:Z$detail_table_header_row")->getFont()->setBold(true);
-                $sheet->getStyle("A$detail_table_header_row:Z$detail_table_header_row")->getAlignment()->setHorizontal('center');
+        if (is_iterable($suratPengantar)) {
+            $gajisupir = 0;
+            foreach ($suratPengantar as $response_index => $response_detail) {
+                foreach ($columns as $detail_columns_index => $detail_column) {
+                    $sheet->setCellValue($alphabets[$detail_columns_index] . $detail_start_row, isset($detail_column['index']) ? $response_detail[$detail_column['index']] : $response_index + 1);
+                    $sheet->getStyle("A$detail_table_header_row:Z$detail_table_header_row")->getFont()->setBold(true);
+                    $sheet->getStyle("A$detail_table_header_row:Z$detail_table_header_row")->getAlignment()->setHorizontal('center');
+                }
+                $response_detail['gajisupirs'] = number_format((float) $response_detail['gajisupir'], '2', '.', ',');
+
+                $tglTrip = $response_detail["tglbukti"];
+                $timeStamp = strtotime($tglTrip);
+                $datetglTrip = date('d-m-Y', $timeStamp);
+                $response_detail['tglbukti'] = $datetglTrip;
+
+                $tglSp = $response_detail["tglsp"];
+                $timeStamp = strtotime($tglSp);
+                $datetglSp = date('d-m-Y', $timeStamp);
+                $response_detail['tglsp'] = $datetglSp;
+
+                $sheet->setCellValue("A$detail_start_row", $response_index + 1);
+                $sheet->setCellValue("B$detail_start_row", $response_detail['jobtrucking']);
+                $sheet->setCellValue("C$detail_start_row", $response_detail['nobukti']);
+                $sheet->setCellValue("D$detail_start_row", $response_detail['tglbukti']);
+                $sheet->setCellValue("E$detail_start_row", $response_detail['nosp']);
+                $sheet->setCellValue("F$detail_start_row", $response_detail['tglsp']);
+                $sheet->setCellValue("G$detail_start_row", $response_detail['pelanggan_id']);
+                $sheet->setCellValue("H$detail_start_row", $response_detail['keterangan']);
+                $sheet->setCellValue("I$detail_start_row", $response_detail['nojob']);
+                $sheet->setCellValue("J$detail_start_row", $response_detail['dari_id']);
+                $sheet->setCellValue("K$detail_start_row", $response_detail['sampai_id']);
+                $sheet->setCellValue("L$detail_start_row", $response_detail['agen_id']);
+                $sheet->setCellValue("M$detail_start_row", $response_detail['jenisorder_id']);
+                $sheet->setCellValue("N$detail_start_row", $response_detail['jarak']);
+                $sheet->setCellValue("O$detail_start_row", $response_detail['nocont']);
+                $sheet->setCellValue("P$detail_start_row", $response_detail['container_id']);
+                $sheet->setCellValue("Q$detail_start_row", $response_detail['statuscontainer_id']);
+                $sheet->setCellValue("R$detail_start_row", $response_detail['gudang']);
+                $sheet->setCellValue("S$detail_start_row", $response_detail['trado_id']);
+                $sheet->setCellValue("T$detail_start_row", $response_detail['supir_id']);
+                $sheet->setCellValue("U$detail_start_row", $response_detail['gandengan_id']);
+                $sheet->setCellValue("V$detail_start_row", $response_detail['tarif_id']);
+                $sheet->setCellValue("W$detail_start_row", $response_detail['mandortrado_id']);
+                $sheet->setCellValue("X$detail_start_row", $response_detail['mandorsupir_id']);
+                $sheet->setCellValue("Y$detail_start_row", $response_detail['noseal']);
+                $sheet->setCellValue("Z$detail_start_row", $response_detail['gajisupirs']);
+
+                $sheet->getStyle("H$detail_start_row")->getAlignment()->setWrapText(true);
+                $sheet->getColumnDimension('H')->setWidth(50);
+
+                $sheet->getStyle("A$detail_start_row:Y$detail_start_row")->applyFromArray($styleArray);
+                $sheet->getStyle("Z$detail_start_row")->applyFromArray($style_number);
+
+                $gajisupir += $response_detail['gajisupir'];
+                $detail_start_row++;
             }
-            $response_detail['gajisupirs'] = number_format((float) $response_detail['gajisupir'], '2', '.', ',');
-
-            $tglTrip = $response_detail["tglbukti"];
-            $timeStamp = strtotime($tglTrip);
-            $datetglTrip = date('d-m-Y', $timeStamp); 
-            $response_detail['tglbukti'] = $datetglTrip;
-
-            $tglSp = $response_detail["tglsp"];
-            $timeStamp = strtotime($tglSp);
-            $datetglSp = date('d-m-Y', $timeStamp); 
-            $response_detail['tglsp'] = $datetglSp;
-        
-            $sheet->setCellValue("A$detail_start_row", $response_index + 1);
-            $sheet->setCellValue("B$detail_start_row", $response_detail['jobtrucking']);
-            $sheet->setCellValue("C$detail_start_row", $response_detail['nobukti']);
-            $sheet->setCellValue("D$detail_start_row", $response_detail['tglbukti']);
-            $sheet->setCellValue("E$detail_start_row", $response_detail['nosp']);
-            $sheet->setCellValue("F$detail_start_row", $response_detail['tglsp']);
-            $sheet->setCellValue("G$detail_start_row", $response_detail['pelanggan_id']);
-            $sheet->setCellValue("H$detail_start_row", $response_detail['keterangan']);
-            $sheet->setCellValue("I$detail_start_row", $response_detail['nojob']);
-            $sheet->setCellValue("J$detail_start_row", $response_detail['dari_id']);
-            $sheet->setCellValue("K$detail_start_row", $response_detail['sampai_id']);
-            $sheet->setCellValue("L$detail_start_row", $response_detail['agen_id']);
-            $sheet->setCellValue("M$detail_start_row", $response_detail['jenisorder_id']);
-            $sheet->setCellValue("N$detail_start_row", $response_detail['jarak']);
-            $sheet->setCellValue("O$detail_start_row", $response_detail['nocont']);
-            $sheet->setCellValue("P$detail_start_row", $response_detail['container_id']);
-            $sheet->setCellValue("Q$detail_start_row", $response_detail['statuscontainer_id']);
-            $sheet->setCellValue("R$detail_start_row", $response_detail['gudang']);
-            $sheet->setCellValue("S$detail_start_row", $response_detail['trado_id']);
-            $sheet->setCellValue("T$detail_start_row", $response_detail['supir_id']);
-            $sheet->setCellValue("U$detail_start_row", $response_detail['gandengan_id']);
-            $sheet->setCellValue("V$detail_start_row", $response_detail['tarif_id']);
-            $sheet->setCellValue("W$detail_start_row", $response_detail['mandortrado_id']);
-            $sheet->setCellValue("X$detail_start_row", $response_detail['mandorsupir_id']);
-            $sheet->setCellValue("Y$detail_start_row", $response_detail['noseal']);
-            $sheet->setCellValue("Z$detail_start_row", $response_detail['gajisupirs']);
-
-            $sheet->getStyle("H$detail_start_row")->getAlignment()->setWrapText(true);
-            $sheet->getColumnDimension('H')->setWidth(50);
-
-            $sheet ->getStyle("A$detail_start_row:Y$detail_start_row")->applyFromArray($styleArray);
-            $sheet ->getStyle("Z$detail_start_row")->applyFromArray($style_number);
-
-            $gajisupir += $response_detail['gajisupir'];
-            $detail_start_row++;
+            $total_start_row = $detail_start_row;
+            $sheet->mergeCells('A' . $total_start_row . ':Y' . $total_start_row);
+            $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':Y' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
+            $sheet->setCellValue("Z$total_start_row", number_format((float) $gajisupir, '2', '.', ','))->getStyle("Z$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
         }
-        $total_start_row = $detail_start_row;
-        $sheet->mergeCells('A'.$total_start_row.':Y'.$total_start_row);
-        $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A'.$total_start_row.':Y'.$total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
-        $sheet->setCellValue("Z$total_start_row", number_format((float) $gajisupir, '2', '.', ','))->getStyle("Z$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
-        
 
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);

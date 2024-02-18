@@ -19,7 +19,8 @@ class CabangController extends MyController
         $title = $this->title;
         $data = [
             'pagename' => 'Menu Utama Cabang',
-            'combo' => $this->combo('list')
+            'combo' => $this->combo('list','STATUS AKTIF','STATUS AKTIF'),
+            'koneksi' => $this->combo('list','STATUS KONEKSI','STATUS KONEKSI'),
         ];
 
         return view('cabang.index', compact('title', 'data'));
@@ -222,13 +223,13 @@ class CabangController extends MyController
     }
 
 
-    public function combo($aksi)
+    public function combo($aksi, $grp, $subgrp)
     {
 
         $status = [
             'status' => $aksi,
-            'grp' => 'STATUS AKTIF',
-            'subgrp' => 'STATUS AKTIF',
+            'grp' => $grp,
+            'subgrp' => $subgrp,
         ];
 
         $response = Http::withHeaders($this->httpHeaders)

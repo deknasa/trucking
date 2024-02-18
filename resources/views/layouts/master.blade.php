@@ -865,7 +865,11 @@
           $('#crudForm').trigger('reset')
           $('#crudModal').modal('hide')
 
-          $('#jqGrid').jqGrid().trigger('reloadGrid');
+          $('#jqGrid').jqGrid('setGridParam',{
+            postData: {
+              proses: 'reload'
+            }
+          }).trigger('reloadGrid');
           selectedRows = []
           $('#gs_').prop('checked', false)
         },

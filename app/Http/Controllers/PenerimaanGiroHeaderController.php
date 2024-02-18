@@ -224,10 +224,6 @@ class PenerimaanGiroHeaderController extends MyController
                 'label' => 'Tanggal',
                 'index' => 'tglbukti',
             ],
-            [
-                'label' => 'Cabang',
-                'index' => 'cabang',
-            ],
         ];
         $header_right_columns = [
             [

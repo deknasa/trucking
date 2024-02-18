@@ -896,6 +896,13 @@
     $('.agen-lookup').lookup({
       title: 'Customer Lookup',
       fileName: 'agen',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+
+          Aktif: 'AKTIF',
+        }
+      },
       onSelectRow: (agen, element) => {
         $('#crudForm').find('[name=agen_id]').val(agen.id)
         element.val(agen.namaagen)

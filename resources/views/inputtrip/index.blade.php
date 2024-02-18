@@ -1565,6 +1565,8 @@
 
   function clearUpahSupir() {
 
+    $('#crudForm [name=upah_id]').val('')
+    $('#crudForm [name=upah]').data('currentValue', '')
     $('#crudForm [name=dari_id]').val('')
     $('#crudForm [name=sampai_id]').val('')
     $('#crudForm [name=dari]').val('')
