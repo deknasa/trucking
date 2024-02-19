@@ -1729,6 +1729,13 @@ function setSpaceBarCheckedHandler(table = null) {
                                     selectedRows.splice(i, 1);
                                 }
                             }
+
+                            if (
+                                selectedRows.length !=
+                                $("#jqGrid").jqGrid("getGridParam").records
+                            ) {
+                                $("#gs_").prop("checked", false);
+                            }
                         } else {
                             $checkbox.prop("checked", true);
                             if (table == "suratpengantar") {

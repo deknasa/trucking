@@ -489,8 +489,9 @@
             .then(() => {
                 showPenerimaan(form, id)
                     .then(() => {
-                        clearSelectedRows()
-                        $('#gs_').prop('checked', false)
+                        if (selectedRows.length > 0) {
+                            clearSelectedRows()
+                        }
                         $('#crudModal').modal('show')
 
                         if (isEditTgl == 'TIDAK') {
@@ -603,8 +604,9 @@
             .then(() => {
                 showPenerimaan(form, id)
                     .then(() => {
-                        clearSelectedRows()
-                        $('#gs_').prop('checked', false)
+                        if (selectedRows.length > 0) {
+                            clearSelectedRows()
+                        }
                         $('#crudModal').modal('show')
                         $('#crudForm [name=tgllunas]').attr('readonly', true)
                         $('#crudForm [name=tgllunas]').siblings('.input-group-append').remove()
@@ -642,8 +644,9 @@
 
                 showPenerimaan(form, id)
                     .then(id => {
-                        clearSelectedRows()
-                        $('#gs_').prop('checked', false)
+                        if (selectedRows.length > 0) {
+                            clearSelectedRows()
+                        }
                         $('#crudModal').modal('show')
                         $('#crudForm [name=tglbukti]').attr('readonly', true)
                         $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()

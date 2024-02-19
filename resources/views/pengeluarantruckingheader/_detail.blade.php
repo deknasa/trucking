@@ -180,7 +180,7 @@
             $(this).jqGrid('footerData', 'set', {
               nobukti: 'Total:',
               nominal: data.attributes.totalNominal,
-              nominaltagih: data.attributes.totalNominal,
+              nominaltagih: data.attributes.totalNominalTagih,
             }, true)
           }
         }

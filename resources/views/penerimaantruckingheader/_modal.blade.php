@@ -1574,7 +1574,11 @@
                     if (originalGridData.sisa == 0) {
                       $("#tablePinjaman").jqGrid("setCell", rowObject.rowId, "sisa", (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.nominal)));
                     } else {
-                      $("#tablePinjaman").jqGrid("setCell", rowObject.rowId, "sisa", originalGridData.sisa);
+                      if ($('#crudForm').data('action') == 'edit') {
+                        $("#tablePinjaman").jqGrid("setCell", rowObject.rowId, "sisa", (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.nominal)));
+                      } else {
+                        $("#tablePinjaman").jqGrid("setCell", rowObject.rowId, "sisa", originalGridData.sisa);
+                      }
                     }
                   }
 
@@ -1645,7 +1649,7 @@
             sisa = parseFloat(originalGridData.sisa) - nominal
           }
           console.log(indexColumn)
-          if (indexColumn == 5) {
+          if (indexColumn == 9) {
 
             $("#tablePinjaman").jqGrid(
               "setCell",
@@ -1705,12 +1709,23 @@
         beforeDeleteCell: function(rowId, iRow, iCol, event) {
           let localRow = $("#tablePinjaman").jqGrid("getLocalRow", rowId);
 
+          let originalGridData = $("#tablePinjaman")
+            .jqGrid("getGridParam", "originalData")
+            .find((row) => row.id == rowId);
+          let totalSisa
+          if ($('#crudForm').data('action') == 'edit') {
+
+            totalSisa = (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.nominal))
+          }else{
+            totalSisa = parseFloat(originalGridData.sisa)
+          }
           $("#tablePinjaman").jqGrid(
             "setCell",
             rowId,
             "sisa",
-            parseInt(localRow.sisa) + parseInt(localRow.nominal)
+            totalSisa
           );
+
 
           return true;
         },
@@ -1897,7 +1912,11 @@
                     if (originalGridData.sisa == 0) {
                       $("#tablePinjamanKaryawan").jqGrid("setCell", rowObject.rowId, "sisa", (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.nominal)));
                     } else {
-                      $("#tablePinjamanKaryawan").jqGrid("setCell", rowObject.rowId, "sisa", originalGridData.sisa);
+                      if ($('#crudForm').data('action') == 'edit') {
+                        $("#tablePinjamanKaryawan").jqGrid("setCell", rowObject.rowId, "sisa", (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.nominal)));
+                      } else {
+                        $("#tablePinjamanKaryawan").jqGrid("setCell", rowObject.rowId, "sisa", originalGridData.sisa);
+                      }
                     }
                   }
 
@@ -2023,11 +2042,21 @@
         beforeDeleteCell: function(rowId, iRow, iCol, event) {
           let localRow = $("#tablePinjamanKaryawan").jqGrid("getLocalRow", rowId);
 
+          let originalGridData = $("#tablePinjamanKaryawan")
+            .jqGrid("getGridParam", "originalData")
+            .find((row) => row.id == rowId);
+          let totalSisa
+          if ($('#crudForm').data('action') == 'edit') {
+
+            totalSisa = (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.nominal))
+          }else{
+            totalSisa = parseFloat(originalGridData.sisa)
+          }
           $("#tablePinjamanKaryawan").jqGrid(
             "setCell",
             rowId,
             "sisa",
-            parseInt(localRow.sisa) + parseInt(localRow.nominal)
+            totalSisa
           );
 
           return true;

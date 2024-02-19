@@ -364,6 +364,9 @@
       .then(() => {
         showNotaKredit(form, userId)
           .then(() => {
+            if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
             $('#crudModal').modal('show')
             if (isEditTgl == 'TIDAK') {
               form.find(`[name="tglbukti"]`).prop('readonly', true)
@@ -408,6 +411,9 @@
         showNotaKredit(form, userId)
       ])
       .then(() => {
+        if (selectedRows.length > 0) {
+          clearSelectedRows()
+        }
         $('#crudModal').modal('show')
       })
       .catch((error) => {
@@ -438,6 +444,9 @@
         showNotaKredit(form, userId)
       ])
       .then(() => {
+        if (selectedRows.length > 0) {
+          clearSelectedRows()
+        }
         $('#crudModal').modal('show')
         form.find(`.hasDatepicker`).prop('readonly', true)
         form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
@@ -861,6 +870,13 @@
     $('.agen-lookup').lookup({
       title: 'Customer Lookup',
       fileName: 'agen',
+      beforeProcess: function(test) {
+        // var levelcoa = $(`#levelcoa`).val();
+        this.postData = {
+
+          Aktif: 'AKTIF',
+        }
+      },
       onSelectRow: (agen, element) => {
         $('#crudForm').find('[name=agen_id]').val(agen.id)
         element.val(agen.namaagen)

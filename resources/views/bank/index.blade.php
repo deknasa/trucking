@@ -165,6 +165,9 @@
                         formatter: (value, options, rowData) => {
                             let statusAktif = JSON.parse(value)
 
+                            if (!statusAktif) {
+                                return ''
+                            }
                             let formattedValue = $(`
                 <div class="badge" style="background-color: ${statusAktif.WARNA}; color: ${statusAktif.WARNATULISAN};">
                   <span>${statusAktif.SINGKATAN}</span>
@@ -175,7 +178,9 @@
                         },
                         cellattr: (rowId, value, rowObject) => {
                             let statusAktif = JSON.parse(rowObject.statusaktif)
-
+                            if (!statusAktif) {
+                                return ` title=""`
+                            }
                             return ` title="${statusAktif.MEMO}"`
                         }
                     },
@@ -189,6 +194,9 @@
                             }
                             let FormatPenerimaan = JSON.parse(value)
 
+                            if (!FormatPenerimaan) {
+                                return ''
+                            }
                             let formattedValue = $(`
                 <div class="badge" style="background-color: ${FormatPenerimaan.WARNA}; color: #fff;">
                   <span>${FormatPenerimaan.SINGKATAN}</span>
@@ -202,7 +210,9 @@
                                 return ''
                             }
                             let FormatPenerimaan = JSON.parse(rowObject.formatpenerimaan)
-
+                            if (!FormatPenerimaan) {
+                                return ` title=""`
+                            }
                             return ` title="${FormatPenerimaan.MEMO}"`
                         }
                     },
@@ -213,6 +223,9 @@
                         formatter: (value, options, rowData) => {
                             let FormatPengeluaran = JSON.parse(value)
 
+                            if (!FormatPengeluaran) {
+                                return ''
+                            }
                             let formattedValue = $(`
                 <div class="badge" style="background-color: ${FormatPengeluaran.WARNA}; color: #fff;">
                   <span>${FormatPengeluaran.SINGKATAN}</span>
@@ -223,7 +236,9 @@
                         },
                         cellattr: (rowId, value, rowObject) => {
                             let FormatPengeluaran = JSON.parse(rowObject.formatpengeluaran)
-
+                            if (!FormatPengeluaran) {
+                                return ` title=""`
+                            }
                             return ` title="${FormatPengeluaran.MEMO}"`
                         }
                     },
