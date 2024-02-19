@@ -370,6 +370,9 @@
       Save
     `)
     form.data('action', 'add')
+    if (selectedRows.length > 0) {
+      clearSelectedRows()
+    }
     form.find(`.sometimes`).show()
     $('#crudModalTitle').text('Add Rekap Pengeluaran')
     $('#crudModal').modal('show')
@@ -398,6 +401,9 @@
         showRekapPengeluaran(form, rekapPengeluaranId)
       ])
       .then(() => {
+        if (selectedRows.length > 0) {
+          clearSelectedRows()
+        }
         $('#crudModal').modal('show')
         form.find(`[name="tglbukti"]`).prop('readonly', true)
         form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
@@ -436,6 +442,9 @@
         showRekapPengeluaran(form, rekapPengeluaranId)
       ])
       .then(() => {
+        if (selectedRows.length > 0) {
+          clearSelectedRows()
+        }
         $('#crudModal').modal('show')
       })
       .catch((error) => {

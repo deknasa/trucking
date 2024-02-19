@@ -74,7 +74,7 @@
           selectedRows.splice(i, 1);
         }
       }
-      if (selectedRows.length == 0) {
+      if (selectedRows.length != $('#jqGrid').jqGrid('getGridParam').records) {
         $('#gs_').prop('checked', false)
       }
     }
@@ -124,6 +124,8 @@
     initDatepicker('datepickerIndex')
     $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('suratpengantar')
+      selectedRows = []
+      $('#gs_').prop('checked', false)
     })
 
     $("#jqGrid").jqGrid({

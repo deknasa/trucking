@@ -85,6 +85,9 @@
           selectedRows.splice(i, 1);
         }
       }
+      if (selectedRows.length != $('#jqGrid').jqGrid('getGridParam').records) {
+        $('#gs_').prop('checked', false)
+      }
     }
 
   }
@@ -605,11 +608,8 @@
                   if (`{{ $myAuth->hasPermission('pengeluaranheader', 'approvalbukacetak') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');
                     tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
-                    if (selectedRows.length < 1) {
-                      showDialog('Harap pilih salah satu record')
-                    } else {
-                      approvalBukaCetak(tglbukacetak, 'PENGELUARANHEADER', selectedRows);
-                    }
+
+                    approvalBukaCetak(tglbukacetak, 'PENGELUARANHEADER', selectedRows);
                   }
                 }
               },
@@ -755,6 +755,7 @@
   function clearSelectedRows() {
     selectedRows = []
 
+    $('#gs_').prop('checked', false);
     $('#jqGrid').trigger('reloadGrid')
   }
 

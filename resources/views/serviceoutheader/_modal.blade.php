@@ -311,6 +311,9 @@
         $('.invalid-feedback').remove()
         $('#table_body').html('')
 
+        if (selectedRows.length > 0) {
+            clearSelectedRows()
+        }
         $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         $('#crudForm').find('[name=tglkeluar]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 

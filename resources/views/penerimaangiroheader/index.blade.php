@@ -72,6 +72,9 @@
                     selectedRows.splice(i, 1);
                 }
             }
+            if (selectedRows.length != $('#jqGrid').jqGrid('getGridParam').records) {
+                $('#gs_').prop('checked', false)
+            }
         }
 
     }
@@ -558,11 +561,7 @@
                                     if (`{{ $myAuth->hasPermission('penerimaangiroheader', 'approvalbukacetak') }}`) {
                                         let tglbukacetak = $('#tgldariheader').val().split('-');
                                         tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
-                                        if (selectedRows.length < 1) {
-                                            showDialog('Harap pilih salah satu record')
-                                        } else {
-                                            approvalBukaCetak(tglbukacetak, 'PENERIMAANGIROHEADER', selectedRows);
-                                        }
+                                        approvalBukaCetak(tglbukacetak, 'PENERIMAANGIROHEADER', selectedRows);
                                     }
                                 }
                             },
@@ -621,8 +620,6 @@
                             } else {
                                 viewPenerimaanGiro(selectedId)
                             }
-                            clearSelectedRows()
-                            $('#gs_').prop('checked', false)
                         }
                     },
                 ],
@@ -690,22 +687,22 @@
                 $('#approval').attr('disabled', 'disabled')
             }
 
-            let hakApporveCount = 0 ;
+            let hakApporveCount = 0;
             hakApporveCount++
             if (!`{{ $myAuth->hasPermission('penerimaangiroheader', 'approval') }}`) {
-              hakApporveCount--
-              $('#approveun').hide()
-              // $('#approval-buka-cetak').attr('disabled', 'disabled')
+                hakApporveCount--
+                $('#approveun').hide()
+                // $('#approval-buka-cetak').attr('disabled', 'disabled')
             }
             hakApporveCount++
             if (!`{{ $myAuth->hasPermission('penerimaangiroheader', 'approvalbukacetak') }}`) {
-              hakApporveCount--
-              $('#approval-buka-cetak').hide()
-              // $('#approval-buka-cetak').attr('disabled', 'disabled')
+                hakApporveCount--
+                $('#approval-buka-cetak').hide()
+                // $('#approval-buka-cetak').attr('disabled', 'disabled')
             }
             if (hakApporveCount < 1) {
-              $('#approve').hide()
-            //   $('#approve').attr('disabled', 'disabled')
+                $('#approve').hide()
+                //   $('#approve').attr('disabled', 'disabled')
             }
 
         }
@@ -789,6 +786,7 @@
     function clearSelectedRows() {
         selectedRows = []
 
+        $('#gs_').prop('checked', false);
         $('#jqGrid').trigger('reloadGrid')
     }
 

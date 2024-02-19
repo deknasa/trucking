@@ -329,6 +329,9 @@
         showDefault(form)
       ])
       .then(() => {
+        if (selectedRows.length > 0) {
+          clearSelectedRows()
+        }
         $('#crudModal').modal('show')
         addRow()
         setTotal()

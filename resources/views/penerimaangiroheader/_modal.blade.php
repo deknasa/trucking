@@ -2,6 +2,11 @@
     <div class="modal-dialog">
         <form action="#" id="crudForm">
             <div class="modal-content">
+                <div class="modal-header">
+                    <p class="modal-title" id="crudModalTitle"></p>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    </button>
+                </div>
                 <form action="" method="post">
                     <!-- TAMBAH INI KHUSUS MASTER DETAIL -->
                     <div class="modal-body modal-master modal-overflow" style="overflow: auto;">
@@ -145,6 +150,7 @@
     let modalBody = $('#crudModal').find('.modal-body').html()
     let formattedDate
     let isEditTgl
+    let isEdited
     $(document).ready(function() {
 
         $('#crudForm').autocomplete({
@@ -229,7 +235,7 @@
                     $('#processingLoader').addClass('d-none')
                     $(this).removeAttr('disabled')
                 })
-            } else {                
+            } else {
                 $("#crudModal").modal("hide")
             }
         })
@@ -454,7 +460,7 @@
                 data: data,
                 success: response => {
 
-
+                    // isAllowedForceEdit = false
                     id = response.data.id
                     console.log(id)
                     $('#crudModal').modal('hide')
@@ -478,11 +484,26 @@
                     }
                 },
                 error: error => {
+                    // console.log('isAllowedForceEdit ', isAllowedForceEdit)
                     if (error.status === 422) {
                         $('.is-invalid').removeClass('is-invalid')
                         $('.invalid-feedback').remove()
 
                         setErrorMessages(form, error.responseJSON.errors);
+                        // if (action == 'edit') {
+                        //     console.log('isAllowedForceEdit ', isAllowedForceEdit)
+                        //     if (isAllowedForceEdit) {
+                        //         $("#dialog-warning-message").dialog({
+                        //             close: function(event, ui) {
+                        //                 isAllowedForceEdit = true
+                        //                 // approveKacab(Id)
+                        //                 $('#crudModal').find('#crudForm').trigger('reset')
+                        //                 $('#crudModal').modal('hide')
+
+                        //             },
+                        //         });
+                        //     }
+                        // }
                     } else {
                         showDialog(error.responseJSON)
                     }
@@ -514,7 +535,7 @@
         activeGrid = '#jqGrid'
         $('#crudModal').find('.modal-body').html(modalBody)
         initDatepicker('datepickerIndex')
-
+        // isAllowedForceEdit = false
         // TAMBAH INI
         selectIndex = 0
     })
@@ -605,6 +626,9 @@
 
         $('#table_body').html('')
 
+        if (selectedRows.length > 0) {
+            clearSelectedRows()
+        }
         addRow()
         initAutoNumeric(form.find('.nominal'))
 
@@ -628,12 +652,12 @@
         Promise
             .all([
                 setTglBukti(form),
-                editingAt(id, 'EDIT'),
             ])
             .then(() => {
                 showPenerimaanGiro(form, id).then(() => {
-                        clearSelectedRows()
-                        $('#gs_').prop('checked', false)
+                        if (selectedRows.length > 0) {
+                            clearSelectedRows()
+                        }
                         $('#crudModal').modal('show')
                         if (isEditTgl == 'TIDAK') {
                             form.find(`[name="tglbukti"]`).prop('readonly', true)
@@ -681,8 +705,9 @@
                 showPenerimaanGiro(form, id)
             ])
             .then(() => {
-                clearSelectedRows()
-                $('#gs_').prop('checked', false)
+                if (selectedRows.length > 0) {
+                    clearSelectedRows()
+                }
                 $('#crudModal').modal('show')
             })
             .catch((error) => {
@@ -694,25 +719,29 @@
     }
 
     function editingAt(id, btn) {
-        return new Promise((resolve, reject) => {
-            $.ajax({
-                url: `{{ config('app.api_url') }}penerimaangiroheader/editingat`,
-                method: 'POST',
-                dataType: 'JSON',
-                headers: {
-                    Authorization: `Bearer ${accessToken}`
-                },
-                data: {
-                    id: id,
-                    btn: btn
-                },
-                success: response => {
-                    resolve()
-                },
-                error: error => {
-                    reject(error)
-                }
-            })
+        $.ajax({
+            url: `{{ config('app.api_url') }}penerimaangiroheader/editingat`,
+            method: 'POST',
+            dataType: 'JSON',
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            },
+            data: {
+                id: id,
+                btn: btn
+            },
+            success: response => {
+                // isEdited = response.isEdited
+                // if (isEdited) {
+                //     approveKacab(id)
+                // } else {
+                editPenerimaanGiro(id)
+                // }
+            },
+            error: error => {
+                errors = JSON.parse(error.responseText);
+                showConfirmForce(errors.errors.id, id)
+            }
         })
     }
 
@@ -756,8 +785,9 @@
                 form.find('[name=id]').prop('disabled', false)
             })
             .then(() => {
-                clearSelectedRows()
-                $('#gs_').prop('checked', false)
+                if (selectedRows.length > 0) {
+                    clearSelectedRows()
+                }
                 $('#crudModal').modal('show')
                 form.find(`.hasDatepicker`).prop('readonly', true)
                 form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
@@ -846,6 +876,7 @@
                 } else {
                     if (Aksi == 'EDIT') {
                         editPenerimaanGiro(Id)
+                        // editingAt(Id, 'EDIT')
                     }
                     if (Aksi == 'DELETE') {
                         deletePenerimaanGiro(Id)
@@ -1298,5 +1329,63 @@
             })
         })
     }
+
+    function approveKacab(id) {
+        $('#approveKacab').modal('show')
+        $('#formApproveKacab').find('[name=id]').val(id)
+    }
+
+    $(document).on('click', `#approvalKacab`, function(event) {
+        event.preventDefault()
+
+        let data = [];
+        data.push({
+            name: 'id',
+            value: $('#formApproveKacab').find('[name=id]').val()
+        })
+        data.push({
+            name: 'username',
+            value: $('#formApproveKacab').find('[name=username]').val()
+        })
+        data.push({
+            name: 'password',
+            value: $('#formApproveKacab').find('[name=password]').val()
+        })
+        $('#processingLoader').removeClass('d-none')
+
+        $.ajax({
+            url: `${apiUrl}penerimaangiroheader/approvalkacab`,
+            method: 'POST',
+            dataType: 'JSON',
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            },
+            data: data,
+            success: response => {
+                if (response.status) {
+                    $('#formApproveKacab').trigger("reset");
+                    $("#approveKacab").modal('hide');
+                    // if (!isAllowedForceEdit) {
+                    editPenerimaanGiro($('#formApproveKacab').find('[name=id]').val())
+                    // }
+                } else {
+                    showDialog('TIDAK ADA HAK AKSES')
+                }
+            },
+            error: error => {
+                if (error.status === 422) {
+                    $('.is-invalid').removeClass('is-invalid')
+                    $('.invalid-feedback').remove()
+
+                    setErrorMessages($('#formApproveKacab'), error.responseJSON.errors);
+                } else {
+                    showDialog(error.responseJSON)
+                }
+            },
+        }).always(() => {
+            $('#processingLoader').addClass('d-none')
+            $(this).removeAttr('disabled')
+        })
+    })
 </script>
 @endpush()

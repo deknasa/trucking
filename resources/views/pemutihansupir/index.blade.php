@@ -49,7 +49,7 @@
         }
       }
 
-      if (selectedRows.length == 0) {
+      if (selectedRows.length != $('#jqGrid').jqGrid('getGridParam').records) {
         $('#gs_').prop('checked', false)
       }
     }

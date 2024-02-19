@@ -440,6 +440,9 @@
     `)
     form.data('action', 'add')
     $('#crudModalTitle').text('Add Invoice')
+    if (selectedRows.length > 0) {
+      clearSelectedRows()
+    }
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
@@ -480,8 +483,9 @@
         showInvoiceHeader(form, invId, 'edit')
           .then(() => {
 
-            clearSelectedRows()
-            $('#gs_').prop('checked', false)
+            if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
             $('#crudModal').modal('show')
             if (isEditTgl == 'TIDAK') {
               form.find(`[name="tglbukti"]`).prop('readonly', true)
@@ -527,10 +531,11 @@
         setStatusPilihanInvoiceOptions(form)
       ])
       .then(() => {
-        clearSelectedRows()
+        if (selectedRows.length > 0) {
+          clearSelectedRows()
+        }
         form.find(`[name="tglbukti"]`).prop('readonly', true)
         form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
-        $('#gs_').prop('checked', false)
         $('#crudModal').modal('show')
       })
       .catch((error) => {
@@ -564,10 +569,11 @@
         setStatusPilihanInvoiceOptions(form)
       ])
       .then(() => {
-        clearSelectedRows()
+        if (selectedRows.length > 0) {
+          clearSelectedRows()
+        }
         form.find(`[name="tglbukti"]`).prop('readonly', true)
         form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
-        $('#gs_').prop('checked', false)
         $('#crudModal').modal('show')
       })
       .catch((error) => {

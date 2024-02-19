@@ -2993,6 +2993,9 @@
         setTampilan(form),
       ])
       .then(() => {
+        if (selectedRowsIndex.length > 0) {
+          clearSelectedRowsIndex()
+        }
         $('#crudModal').modal('show')
       })
       .catch((error) => {

@@ -263,6 +263,9 @@
       Save
     `)
     form.data('action', 'add')
+    if (selectedRows.length > 0) {
+      clearSelectedRows()
+    }
     form.find(`.sometimes`).show()
     $('#crudModalTitle').text('ADD ABSENSI SUPIR POSTING (KEUANGAN)')
     $('#crudModal').modal('show')

@@ -325,6 +325,9 @@
       .then(() => {
         setTampilan(form).then(() => {
             setTotal()
+            if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
             $('#crudModal').modal('show')
             $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
           })

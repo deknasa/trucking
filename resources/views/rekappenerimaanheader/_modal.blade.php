@@ -370,6 +370,9 @@
       Save
     `)
     form.data('action', 'add')
+    if (selectedRows.length > 0) {
+      clearSelectedRows()
+    }
     form.find(`.sometimes`).show()
     $('#crudModalTitle').text('Add Rekap Penerimaan')
     $('#crudModal').modal('show')
@@ -399,6 +402,9 @@
         showRekapPenerimaan(form, rekapPenerimaanId)
       ])
       .then(() => {
+        if (selectedRows.length > 0) {
+          clearSelectedRows()
+        }
         $('#crudModal').modal('show')
       })
       .catch((error) => {
@@ -431,6 +437,9 @@
         showRekapPenerimaan(form, rekapPenerimaanId)
       ])
       .then(() => {
+        if (selectedRows.length > 0) {
+          clearSelectedRows()
+        }
         $('#crudModal').modal('show')
       })
       .catch((error) => {

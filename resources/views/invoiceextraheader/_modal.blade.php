@@ -391,6 +391,9 @@
     $('.invalid-feedback').remove()
 
     $('#table_body').html('')
+    if (selectedRows.length > 0) {
+      clearSelectedRows()
+    }
     addRow()
 
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');

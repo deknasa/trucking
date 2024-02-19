@@ -594,11 +594,8 @@
                   if (`{{ $myAuth->hasPermission('penerimaanheader', 'approvalbukacetak') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');
                     tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
-                    if (selectedRows.length < 1) {
-                      showDialog('Harap pilih salah satu record')
-                    } else {
-                      approvalBukaCetak(tglbukacetak, 'PENERIMAANHEADER', selectedRows);
-                    }
+
+                    approvalBukaCetak(tglbukacetak, 'PENERIMAANHEADER', selectedRows);
                   }
                 }
               },

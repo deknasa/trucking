@@ -612,6 +612,9 @@
                 setTampilan()
             ])
             .then(() => {
+                if (selectedRows.length > 0) {
+                    clearSelectedRows()
+                }
                 $('#crudModal').modal('show')
                 $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
                 // $('#crudForm').find('[name=periode]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
@@ -649,9 +652,9 @@
                 showPendapatanSupir(form, pendapatanId)
             ])
             .then(() => {
-                clearSelectedRows()
-                $('#gs_').prop('checked', false)
-
+                if (selectedRows.length > 0) {
+                    clearSelectedRows()
+                }
                 $('#crudModal').modal('show')
                 if (isEditTgl == 'TIDAK') {
                     form.find(`[name="tglbukti"]`).prop('readonly', true)
@@ -700,8 +703,9 @@
                 showPendapatanSupir(form, pendapatanId)
             ])
             .then(() => {
-                clearSelectedRows()
-                $('#gs_').prop('checked', false)
+                if (selectedRows.length > 0) {
+                    clearSelectedRows()
+                }
                 $('#crudModal').modal('show')
             })
             .catch((error) => {
@@ -736,8 +740,9 @@
                 showPendapatanSupir(form, pendapatanId)
             ])
             .then(() => {
-                clearSelectedRows()
-                $('#gs_').prop('checked', false)
+                if (selectedRows.length > 0) {
+                    clearSelectedRows()
+                }
                 $('#crudModal').modal('show')
             })
             .catch((error) => {

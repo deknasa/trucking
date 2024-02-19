@@ -63,6 +63,8 @@
     initDatepicker('datepickerIndex')
     $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('rekappenerimaanheader')
+      selectedRows = []
+      $('#gs_').prop('checked', false)
     })
 
 

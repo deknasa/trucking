@@ -1143,6 +1143,9 @@
         setTotal()
       ])
       .then(() => {
+        if (selectedRows.length > 0) {
+          clearSelectedRows()
+        }
         $('#btnReloadPJP').parents('.row').show()
         $('#crudModal').modal('show')
       })
@@ -1716,7 +1719,7 @@
           if ($('#crudForm').data('action') == 'edit') {
 
             totalSisa = (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.nominal))
-          }else{
+          } else {
             totalSisa = parseFloat(originalGridData.sisa)
           }
           $("#tablePinjaman").jqGrid(
@@ -2049,7 +2052,7 @@
           if ($('#crudForm').data('action') == 'edit') {
 
             totalSisa = (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.nominal))
-          }else{
+          } else {
             totalSisa = parseFloat(originalGridData.sisa)
           }
           $("#tablePinjamanKaryawan").jqGrid(
