@@ -250,6 +250,9 @@
         showJenisOrder(form, jenisOrderId)
       ])
       .then(() => {
+        if (selectedRows.length > 0) {
+          clearSelectedRows()
+        }
         $('#crudModal').modal('show')
       })
       .catch((error) => {
@@ -282,6 +285,9 @@
         showJenisOrder(form, jenisOrderId)
       ])
       .then(() => {
+        if (selectedRows.length > 0) {
+          clearSelectedRows()
+        }
         $('#crudModal').modal('show')
       })
       .catch((error) => {
@@ -330,6 +336,9 @@
         form.find('[name=id]').prop('disabled', false)
       })
       .then(() => {
+        if (selectedRows.length > 0) {
+          clearSelectedRows()
+        }
         $('#crudModal').modal('show')
 
       })
