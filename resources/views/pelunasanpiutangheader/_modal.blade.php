@@ -609,6 +609,10 @@
     activeGrid = null
 
     getMaxLength(form)
+    form.find('#btnSubmit').prop('disabled', false)
+    if (form.data('action') == "view") {
+      form.find('#btnSubmit').prop('disabled', true)
+    }
     initLookup()
     initDatepicker()
     initSelect2($(`.select2bs4`), true)
@@ -859,10 +863,10 @@
             },
             formatter: function(value, rowOptions, rowData) {
               let disabled = '';
-              if ($('#crudForm').data('action') == 'delete') {
+              if ($('#crudForm').data('action') == 'delete' || $('#crudForm').data('action') == 'view') {
                 disabled = 'disabled'
               }
-              return `<input type="checkbox" class="checkbox-jqgrid" value="${rowData.id}" ${disabled} onChange="checkboxHandler(this, ${rowData.id})">`;
+              return `<input type="checkbox" class="checkbox-jqgrid" value="${rowData.id}" ${disabled} onChange="checkboxHandlerPelunasan(this, ${rowData.id})">`;
             },
           },
           {
@@ -1444,7 +1448,7 @@
       } else {
         url = `${apiUrl}pelunasanpiutangheader/${agenId}/getpiutang`
       }
-    } else if (aksi == 'delete') {
+    } else if (aksi == 'delete' || aksi == 'view') {
       url = `${apiUrl}pelunasanpiutangheader/${id}/${agenId}/getDeletePelunasanPiutang`
       attribut = 'disabled'
       forCheckbox = 'disabled'
@@ -1469,7 +1473,7 @@
     });
   }
 
-  function checkboxHandler(element, rowId) {
+  function checkboxHandlerPelunasan(element, rowId) {
 
     let isChecked = $(element).is(":checked");
     let editableColumns = $("#tablePelunasan").getGridParam("editableColumns");
@@ -1677,6 +1681,10 @@
       ]).then(() => {
 
         showPelunasanPiutang(form, Id).then(() => {
+
+            if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
             $('#crudModal').modal('show')
             if (isEditTgl == 'TIDAK') {
               form.find(`[name="tglbukti"]`).prop('readonly', true)
@@ -1716,22 +1724,97 @@
     setStatusNotaKreditOptions()
     Promise
       .all([
-        showPelunasanPiutang(form, Id)
+        setStatusPelunasanOptions(form),
       ])
       .then(() => {
-        $('#crudModal').modal('show')
-        form.find(`[name="agen"]`).parent('.input-group').find('.button-clear').remove()
-        form.find(`[name="agen"]`).parent('.input-group').find('.input-group-append').remove()
-        form.find(`[name="bank"]`).parent('.input-group').find('.button-clear').remove()
-        form.find(`[name="bank"]`).parent('.input-group').find('.input-group-append').remove()
-        form.find(`[name="alatbayar"]`).parent('.input-group').find('.button-clear').remove()
-        form.find(`[name="alatbayar"]`).parent('.input-group').find('.input-group-append').remove()
+
+        showPelunasanPiutang(form, Id).then(() => {
+            if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
+            $('#crudModal').modal('show')
+            form.find(`[name="agen"]`).parent('.input-group').find('.button-clear').remove()
+            form.find(`[name="agen"]`).parent('.input-group').find('.input-group-append').remove()
+            form.find(`[name="bank"]`).parent('.input-group').find('.button-clear').remove()
+            form.find(`[name="bank"]`).parent('.input-group').find('.input-group-append').remove()
+            form.find(`[name="alatbayar"]`).parent('.input-group').find('.button-clear').remove()
+            form.find(`[name="alatbayar"]`).parent('.input-group').find('.input-group-append').remove()
+          })
+          .catch((error) => {
+            showDialog(error.responseJSON)
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
       })
-      .catch((error) => {
-        showDialog(error.responseJSON)
-      })
-      .finally(() => {
-        $('.modal-loader').addClass('d-none')
+  }
+
+  function viewPelunasanPiutang(Id) {
+    let form = $('#crudForm')
+
+    $('.modal-loader').removeClass('d-none')
+
+    form.data('action', 'view')
+    form.trigger('reset')
+    form.find('#btnSubmit').html(`
+      <i class="fa fa-save"></i>
+      Save
+    `)
+    form.find('#btnSubmit').prop('disabled', true)
+    form.find(`.sometimes`).hide()
+    $('#crudModalTitle').text('View Pelunasan Piutang')
+    $('.is-invalid').removeClass('is-invalid')
+    $('.invalid-feedback').remove()
+
+    setStatusNotaDebetOptions()
+    setStatusNotaKreditOptions()
+
+    Promise
+      .all([
+        setStatusPelunasanOptions(form),
+      ])
+      .then(() => {
+
+        showPelunasanPiutang(form, Id)
+          .then(id => {
+            setFormBindKeys(form)
+            initSelect2(form.find('.select2bs4'), true)
+            form.find('[name]').removeAttr('disabled')
+
+            form.find('select').each((index, select) => {
+              let element = $(select)
+
+              if (element.data('select2')) {
+                element.select2('destroy')
+              }
+            })
+
+            form.find('[name]').attr('disabled', 'disabled').css({
+              background: '#fff'
+            })
+            form.find('[name=id]').prop('disabled', false)
+
+          })
+          .then(() => {
+            if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
+            $('#crudModal').modal('show')
+            form.find('[name=tglbukti]').attr('readonly', true)
+            form.find('[name=tglbukti]').siblings('.input-group-append').remove()
+
+            let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
+            let nameFind = $('#crudForm').find(`[name]`).parents('.input-group')
+            name.attr('disabled', true)
+            name.find('.lookup-toggler').remove()
+            nameFind.find('button.button-clear').remove()
+          })
+          .catch((error) => {
+            showDialog(error.responseJSON)
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
       })
   }
 
