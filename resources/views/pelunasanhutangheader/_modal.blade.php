@@ -581,8 +581,9 @@
         showPelunasanHutang(form, Id)
       ])
       .then(() => {
-        clearSelectedRows()
-        $('#gs_').prop('checked', false)
+        if (selectedRows.length > 0) {
+          clearSelectedRows()
+        }
         $('#crudModal').modal('show')
         if (isEditTgl == 'TIDAK') {
           form.find(`[name="tglbukti"]`).prop('readonly', true)
@@ -627,8 +628,9 @@
         showPelunasanHutang(form, Id)
       ])
       .then(() => {
-        clearSelectedRows()
-        $('#gs_').prop('checked', false)
+        if (selectedRows.length > 0) {
+          clearSelectedRows()
+        }
         $('#crudModal').modal('show')
 
       })

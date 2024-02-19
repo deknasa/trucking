@@ -47,6 +47,9 @@
           selectedRows.splice(i, 1);
         }
       }
+      if (selectedRows.length != $('#jqGrid').jqGrid('getGridParam').records) {
+        $('#gs_').prop('checked', false)
+      }
     }
 
   }
@@ -695,6 +698,7 @@
   function clearSelectedRows() {
     selectedRows = []
 
+    $('#gs_').prop('checked', false);
     $('#jqGrid').trigger('reloadGrid')
   }
 

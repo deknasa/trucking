@@ -130,7 +130,6 @@
 
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
-        selectedRows = response.data.map((data) => data.id)
         selectedNobukti = response.data.map((data) => data.nobukti_penerimaan);
         selectedTglBukti = response.data.map((data) => data.tglbukti_penerimaan);
         selectedKeterangan = response.data.map((data) => data.keterangan_detail);
