@@ -197,6 +197,9 @@
     }
 
     getMaxLength(form)
+    initSelect2(form.find(`
+      [name="statusaktif"]
+    `), true)
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {

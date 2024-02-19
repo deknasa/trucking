@@ -1002,11 +1002,12 @@
           })
         }
         let selectedRowsBLL = $(`#table${KodePengeluaranId}`).getGridParam("selectedRowIds");
+        let jumlahdetail = 0;
         $.each(selectedRowsBLL, function(index, value) {
           dataBLL = $(`#table${KodePengeluaranId}`).jqGrid("getLocalRow", value);
           let selectedNominal = (dataBLL.nominal == undefined) ? 0 : dataBLL.nominal;
           if (selectedNominal != 0) {
-
+            jumlahdetail++
             data.push({
               name: 'nominal[]',
               value: (isNaN(selectedNominal)) ? parseFloat(selectedNominal.replaceAll(',', '')) : selectedNominal
@@ -1017,9 +1018,14 @@
             })
             data.push({
               name: 'supir_id[]',
-              value: dataBLL.id
+              value: dataBLL.supir_id
             })
           }
+        })
+
+        data.push({
+          name: 'jumlahdetail',
+          value: jumlahdetail
         })
       } else if (KodePengeluaranId == "BST") {
         data = []
@@ -3404,7 +3410,11 @@
                     if (originalGridData.sisa == 0) {
                       $("#tablePelunasanbbm").jqGrid("setCell", rowObject.rowId, "sisa", (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.nominal)));
                     } else {
-                      $("#tablePelunasanbbm").jqGrid("setCell", rowObject.rowId, "sisa", originalGridData.sisa);
+                      if ($('#crudForm').data('action') == 'edit') {
+                        $("#tablePelunasanbbm").jqGrid("setCell", rowObject.rowId, "sisa", (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.nominal)));
+                      } else {
+                        $("#tablePelunasanbbm").jqGrid("setCell", rowObject.rowId, "sisa", originalGridData.sisa);
+                      }
                     }
                   }
                   // nominalDetails = $(`#tablePelunasanbbm tr:not(#${rowObject.rowId})`).find(`td[aria-describedby="tablePelunasanbbm_nominal"]`)
@@ -3859,7 +3869,11 @@
                     if (originalGridData.sisa == 0) {
                       $("#tableDeposito").jqGrid("setCell", rowObject.rowId, "sisa", (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.nominal)));
                     } else {
-                      $("#tableDeposito").jqGrid("setCell", rowObject.rowId, "sisa", originalGridData.sisa);
+                      if ($('#crudForm').data('action') == 'edit') {
+                        $("#tableDeposito").jqGrid("setCell", rowObject.rowId, "sisa", (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.nominal)));
+                      } else {
+                        $("#tableDeposito").jqGrid("setCell", rowObject.rowId, "sisa", originalGridData.sisa);
+                      }
                     }
                   }
                   // nominalDetails = $(`#tableDeposito tr:not(#${rowObject.rowId})`).find(`td[aria-describedby="tableDeposito_nominal"]`)
@@ -3995,11 +4009,21 @@
         beforeDeleteCell: function(rowId, iRow, iCol, event) {
           let localRow = $("#tableDeposito").jqGrid("getLocalRow", rowId);
 
+          let originalGridData = $("#tableDeposito")
+            .jqGrid("getGridParam", "originalData")
+            .find((row) => row.id == rowId);
+          let totalSisa
+          if ($('#crudForm').data('action') == 'edit') {
+
+            totalSisa = (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.nominal))
+          } else {
+            totalSisa = parseFloat(originalGridData.sisa)
+          }
           $("#tableDeposito").jqGrid(
             "setCell",
             rowId,
             "sisa",
-            parseInt(localRow.sisa) + parseInt(localRow.nominal)
+            totalSisa
           );
 
           return true;
@@ -4324,7 +4348,11 @@
                     if (originalGridData.sisa == 0) {
                       $("#tableDepositoKaryawan").jqGrid("setCell", rowObject.rowId, "sisa", (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.nominal)));
                     } else {
-                      $("#tableDepositoKaryawan").jqGrid("setCell", rowObject.rowId, "sisa", originalGridData.sisa);
+                      if ($('#crudForm').data('action') == 'edit') {
+                        $("#tableDepositoKaryawan").jqGrid("setCell", rowObject.rowId, "sisa", (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.nominal)));
+                      } else {
+                        $("#tableDepositoKaryawan").jqGrid("setCell", rowObject.rowId, "sisa", originalGridData.sisa);
+                      }
                     }
                   }
                   // nominalDetails = $(`#tableDepositoKaryawan tr:not(#${rowObject.rowId})`).find(`td[aria-describedby="tableDepositoKaryawan_nominal"]`)
@@ -4460,13 +4488,22 @@
         beforeDeleteCell: function(rowId, iRow, iCol, event) {
           let localRow = $("#tableDepositoKaryawan").jqGrid("getLocalRow", rowId);
 
+          let originalGridData = $("#tableDepositoKaryawan")
+            .jqGrid("getGridParam", "originalData")
+            .find((row) => row.id == rowId);
+          let totalSisa
+          if ($('#crudForm').data('action') == 'edit') {
+
+            totalSisa = (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.nominal))
+          } else {
+            totalSisa = parseFloat(originalGridData.sisa)
+          }
           $("#tableDepositoKaryawan").jqGrid(
             "setCell",
             rowId,
             "sisa",
-            parseInt(localRow.sisa) + parseInt(localRow.nominal)
+            totalSisa
           );
-
           return true;
         },
       });
@@ -6391,6 +6428,12 @@
             search: false,
           },
           {
+            label: "supir_id",
+            name: "supir_id",
+            hidden: true,
+            search: false,
+          },
+          {
             label: "SUPIR",
             name: "supirbiaya",
             sortable: true,
@@ -6565,6 +6608,12 @@
             search: false,
           },
           {
+            label: "supir_id",
+            name: "supir_id",
+            hidden: true,
+            search: false,
+          },
+          {
             label: "SUPIR",
             name: "supirbiaya",
             sortable: true,
@@ -6718,6 +6767,12 @@
             search: false,
           },
           {
+            label: "supir_id",
+            name: "supir_id",
+            hidden: true,
+            search: false,
+          },
+          {
             label: "SUPIR",
             name: "supirbiaya",
             sortable: true,
@@ -6731,6 +6786,7 @@
             editable: true,
             editoptions: {
               dataInit: function(element, id) {
+                console.log('here', id)
                 initAutoNumeric($('#crudForm').find(`[id="${id.id}"]`))
               },
               dataEvents: [{
@@ -6757,17 +6813,18 @@
                       "nominal",
                       0
                     );
-                    nominal = AutoNumeric.getNumber($('#crudForm').find(`[id="${rowObject.id}"]`)[0])
+                    // nominal = AutoNumeric.getNumber($('#crudForm').find(`[id="${rowObject.id}"]`)[0])
                   }
-                  nominalDetails = $(`#tableBTU tr:not(#${rowObject.rowId})`).find(`td[aria-describedby="tableBTU_nominal"]`)
-                  ttlBayar = 0
-                  $.each(nominalDetails, (index, nominalDetail) => {
-                    ttlBayarDetail = parseFloat($(nominalDetail).attr('title').replaceAll(',', ''))
-                    ttlBayars = (isNaN(ttlBayarDetail)) ? 0 : ttlBayarDetail;
-                    ttlBayar += ttlBayars
-                  });
-                  ttlBayar += nominal
-                  initAutoNumeric($('.footrow').find(`td[aria-describedby="tableBTU_nominal"]`).text(ttlBayar))
+                  setTotalNominalBiaya('tableBTU')
+                  // nominalDetails = $(`#tableBTU tr:not(#${rowObject.rowId})`).find(`td[aria-describedby="tableBTU_nominal"]`)
+                  // ttlBayar = 0
+                  // $.each(nominalDetails, (index, nominalDetail) => {
+                  //   ttlBayarDetail = parseFloat($(nominalDetail).attr('title').replaceAll(',', ''))
+                  //   ttlBayars = (isNaN(ttlBayarDetail)) ? 0 : ttlBayarDetail;
+                  //   ttlBayar += ttlBayars
+                  // });
+                  // ttlBayar += nominal
+                  // initAutoNumeric($('.footrow').find(`td[aria-describedby="tableBTU_nominal"]`).text(ttlBayar))
                 },
               }, ],
             },
@@ -6793,6 +6850,12 @@
               }, ]
             }
           },
+          {
+            label: "empty",
+            name: "empty",
+            hidden: true,
+            search: false,
+          },
         ],
         autowidth: true,
         shrinkToFit: false,
@@ -6808,6 +6871,9 @@
         cellsubmit: "clientArray",
         editableColumns: ["nominal"],
         selectedRowIds: [],
+        // onCellSelect: function(rowid, iCol, cellcontent, e) {
+        //   console.log("Selected Cell - Row ID: " + rowid + ", Column Index: " + iCol);
+        // },
         afterRestoreCell: function(rowId, value, indexRow, indexColumn) {
           let originalGridData = $("#tableBTU")
             .jqGrid("getGridParam", "originalData")
@@ -6822,6 +6888,7 @@
           console.log(iCol);
         },
         loadComplete: function() {
+          setTotalNominalBiaya('tableBTU')
           setHighlight($(this))
         },
       })
@@ -6857,6 +6924,36 @@
     // loadGlobalSearch($('#tableDeposito'))
   }
 
+  function setTotalNominalBiaya(table) {
+    let nominalDetails = $(`#${table}`).find(`td[aria-describedby="${table}_nominal"]`)
+    let nominal = 0
+    selectedRowsPinjaman = $(`#${table}`).getGridParam("selectedRowIds");
+    $.each(selectedRowsPinjaman, function(index, value) {
+      dataPinjaman = $(`#${table}`).jqGrid("getLocalRow", value);
+      nominals = (dataPinjaman.nominal == undefined || dataPinjaman.nominal == '') ? 0 : dataPinjaman.nominal;
+      getNominal = (isNaN(nominals)) ? parseFloat(nominals.replaceAll(',', '')) : parseFloat(nominals)
+      nominal = nominal + getNominal
+    })
+    initAutoNumeric($('.footrow').find(`td[aria-describedby="${table}_nominal"]`).text(nominal))
+  }
+
+  $(document).on('click', '#resetdatafilter_tableBTU', function(event) {
+    selectedRowsBtu = $("#tableBTU").getGridParam("selectedRowIds");
+    $.each(selectedRowsBtu, function(index, value) {
+      $('#tableBTU').jqGrid('saveCell', value, 5); //emptycell
+      $('#tableBTU').jqGrid('saveCell', value, 3); //nominal
+      $('#tableBTU').jqGrid('saveCell', value, 4); //keterangan
+    })
+
+  });
+  $(document).on('click', '#gbox_tableBTU .ui-jqgrid-hbox .ui-jqgrid-htable thead .ui-search-toolbar th td a.clearsearchclass', function(event) {
+    selectedRowsBtu = $("#tableBTU").getGridParam("selectedRowIds");
+    $.each(selectedRowsBtu, function(index, value) {
+      $('#tableBTU').jqGrid('saveCell', value, 5); //emptycell
+      $('#tableBTU').jqGrid('saveCell', value, 3); //nominal
+      $('#tableBTU').jqGrid('saveCell', value, 4); //keterangan
+    })
+  })
   // TABLE BPT
   function loadBPTGrid() {
     $("#tableBPT")
@@ -6867,6 +6964,12 @@
         colModel: [{
             label: "id",
             name: "id",
+            hidden: true,
+            search: false,
+          },
+          {
+            label: "supir_id",
+            name: "supir_id",
             hidden: true,
             search: false,
           },
@@ -7024,6 +7127,12 @@
             search: false,
           },
           {
+            label: "supir_id",
+            name: "supir_id",
+            hidden: true,
+            search: false,
+          },
+          {
             label: "SUPIR",
             name: "supirbiaya",
             sortable: true,
@@ -7177,6 +7286,12 @@
             search: false,
           },
           {
+            label: "supir_id",
+            name: "supir_id",
+            hidden: true,
+            search: false,
+          },
+          {
             label: "SUPIR",
             name: "supirbiaya",
             sortable: true,
@@ -7326,6 +7441,12 @@
         colModel: [{
             label: "id",
             name: "id",
+            hidden: true,
+            search: false,
+          },
+          {
+            label: "supir_id",
+            name: "supir_id",
             hidden: true,
             search: false,
           },

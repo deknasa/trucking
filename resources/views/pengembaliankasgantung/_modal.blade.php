@@ -797,7 +797,11 @@
                     if (originalGridData.sisa == 0) {
                       $("#tablePengembalian").jqGrid("setCell", rowObject.rowId, "sisa", (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.nominal)));
                     } else {
-                      $("#tablePengembalian").jqGrid("setCell", rowObject.rowId, "sisa", originalGridData.sisa);
+                      if ($('#crudForm').data('action') == 'edit') {
+                        $("#tablePengembalian").jqGrid("setCell", rowObject.rowId, "sisa", (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.nominal)));
+                      } else {
+                        $("#tablePengembalian").jqGrid("setCell", rowObject.rowId, "sisa", originalGridData.sisa);
+                      }
                     }
                   }
 
@@ -926,14 +930,21 @@
       .jqGrid("excelLikeGrid", {
         beforeDeleteCell: function(rowId, iRow, iCol, event) {
           let localRow = $("#tablePengembalian").jqGrid("getLocalRow", rowId);
-          getNominal = (localRow.nominal == undefined || localRow.nominal == '') ? 0 : localRow.nominal;
-          nominal = (isNaN(getNominal)) ? parseFloat(getNominal.replaceAll(',', '')) : getNominal
 
+          let originalGridData = $("#tablePengembalian")
+            .jqGrid("getGridParam", "originalData")
+            .find((row) => row.id == rowId);
+          let totalSisa
+          if ($('#crudForm').data('action') == 'edit') {
+            totalSisa = (parseFloat(originalGridData.sisa) + parseFloat(originalGridData.nominal))
+          }else{
+            totalSisa = parseFloat(originalGridData.sisa)
+          }
           $("#tablePengembalian").jqGrid(
             "setCell",
             rowId,
-            "nominal",
-            parseFloat(nominal)
+            "sisa",
+            totalSisa
           );
 
           return true;

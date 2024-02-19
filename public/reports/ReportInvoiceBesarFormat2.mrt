@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "32374a5bfec7708759c3815e7db5cb98",
+  "ReportGuid": "ba0725ba73e07d970b5adf2c668d3dda",
   "ReportName": "Report",
   "ReportAlias": "Report",
-  "ReportFile": "http://localhost/trucking/public/reports/ReportInvoiceBesar.mrt",
+  "ReportFile": "http://localhost/trucking/public/reports/ReportInvoiceBesarFormat2.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1698400053000+0700)/",
+  "ReportChanged": "/Date(1708259598000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -1557,7 +1557,7 @@
               },
               "MaxNumberOfLines": 10,
               "Text": {
-                "Value": "{invoice_detail.fullEmpty}"
+                "Value": "{invoice_detail.full} / {invoice_detail.empty} "
               },
               "VertAlignment": "Center",
               "Font": ";9;;",
@@ -1574,7 +1574,7 @@
                 "Bottom": 0
               },
               "ShrinkFontToFitMinimumSize": 5,
-              "Type": "DataColumn"
+              "Type": "Expression"
             },
             "9": {
               "Ident": "StiText",

@@ -360,9 +360,9 @@ class InvoiceHeaderController extends MyController
             $sheet->setCellValue("D$detail_start_row", $response_detail['tujuan']);
             $sheet->setCellValue("E$detail_start_row", $response_detail['nocont']);
             $sheet->setCellValue("F$detail_start_row", $response_detail['ukcont']);
-            $sheet->setCellValue("G$detail_start_row", $response_detail['full']);
-            $sheet->setCellValue("H$detail_start_row", $response_detail['empty']);
-            $sheet->setCellValue("I$detail_start_row", $response_detail['fullEmpty']);
+            $sheet->setCellValue("G$detail_start_row", "'".$response_detail['full']);
+            $sheet->setCellValue("H$detail_start_row", "'".$response_detail['empty']);
+            $sheet->setCellValue("I$detail_start_row", "'".$response_detail['fullEmpty']);
             $sheet->setCellValue("J$detail_start_row", $response_detail['omset']);
             $sheet->setCellValue("K$detail_start_row", $response_detail['extra']);
             $sheet->setCellValue("L$detail_start_row", $response_detail['jumlah']);

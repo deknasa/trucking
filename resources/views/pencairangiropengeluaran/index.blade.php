@@ -153,11 +153,20 @@
                     name: 'pengeluaranId[]',
                     value: item
                 })
+                data.push({
+                    name: 'nobukti[]',
+                    value: $(`tr#${item}`).find(`td[aria-describedby="jqGrid_nobukti"]`).text()
+                })
+                
             });
 
             data.push({
                 name: 'sortIndex',
                 value: $('#jqGrid').getGridParam().sortname
+            })
+            data.push({
+                name: 'periode',
+                value: $('#crudForm').find('[name=periode]').val()
             })
             data.push({
                 name: 'sortOrder',

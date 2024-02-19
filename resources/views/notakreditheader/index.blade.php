@@ -260,7 +260,8 @@
             label: 'NO BUKTI',
             name: 'nobuktihidden',
             align: 'left',
-            hidden: true
+            hidden: true,
+            search: false
           },
           {
             label: 'TGL BUKTI',

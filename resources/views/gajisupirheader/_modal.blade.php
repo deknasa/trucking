@@ -1585,12 +1585,21 @@
             .jqGrid("excelLikeGrid", {
                 beforeDeleteCell: function(rowId, iRow, iCol, event) {
                     let localRow = $("#tablePotSemua").jqGrid("getLocalRow", rowId);
+                    let originalGridData = $("#tablePotSemua")
+                        .jqGrid("getGridParam", "originalData")
+                        .find((row) => row.id == rowId);
+                    let totalSisa
+                    if ($('#crudForm').data('action') == 'edit') {
 
+                        totalSisa = (parseFloat(originalGridData.pinjSemua_sisa) + parseFloat(originalGridData.nominalPS))
+                    }else{
+                        totalSisa = parseFloat(originalGridData.pinjSemua_sisa)
+                    }
                     $("#tablePotSemua").jqGrid(
                         "setCell",
                         rowId,
-                        "sisa",
-                        parseInt(localRow.sisa) + parseInt(localRow.nominal)
+                        "pinjSemua_sisa",
+                        totalSisa
                     );
 
                     return true;
@@ -1976,11 +1985,21 @@
                 beforeDeleteCell: function(rowId, iRow, iCol, event) {
                     let localRow = $("#tablePotPribadi").jqGrid("getLocalRow", rowId);
 
+                    let originalGridData = $("#tablePotPribadi")
+                        .jqGrid("getGridParam", "originalData")
+                        .find((row) => row.id == rowId);
+                    let totalSisa
+                    if ($('#crudForm').data('action') == 'edit') {
+
+                        totalSisa = (parseFloat(originalGridData.pinjPribadi_sisa) + parseFloat(originalGridData.nominalPP))
+                    }else{
+                        totalSisa = parseFloat(originalGridData.pinjPribadi_sisa)
+                    }
                     $("#tablePotPribadi").jqGrid(
                         "setCell",
                         rowId,
-                        "sisa",
-                        parseInt(localRow.sisa) + parseInt(localRow.nominal)
+                        "pinjPribadi_sisa",
+                        totalSisa
                     );
 
                     return true;

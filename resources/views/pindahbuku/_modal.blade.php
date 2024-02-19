@@ -378,7 +378,7 @@
     }
 
 
-    function viewPindahBuku(id) {
+    function viewPindahBuku(pindahId) {
 
         let form = $('#crudForm')
         $('.modal-loader').removeClass('d-none')
