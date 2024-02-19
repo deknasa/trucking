@@ -2093,6 +2093,9 @@
         setStatusBanOptions(form)
       ])
       .then(() => {
+         if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
         $('#crudModal').modal('show')
         // tampilanall()
         tampilanInit()
@@ -2149,6 +2152,9 @@
           background: '#fff'
         })
 
+         if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
         $('#crudModal').modal('show')
         $('#crudForm').find(`.ui-datepicker-trigger`).attr('disabled', true)
         if ($('#crudForm').find("[name=gudang]").val()) {
@@ -2242,6 +2248,9 @@
 
       })
       .then(() => {
+         if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
         $('#crudModal').modal('show')
         $('#crudForm').find(`.ui-datepicker-trigger`).attr('disabled', true)
 
@@ -2301,6 +2310,9 @@
 
       })
       .then(() => {
+         if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
         $('#crudModal').modal('show')
         $('#crudForm').find(`.ui-datepicker-trigger`).attr('disabled', true)
 

@@ -291,6 +291,9 @@
     `)
     form.data('action', 'add')
     $('#crudModalTitle').text('Create Opname')
+    if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
@@ -321,6 +324,9 @@
         showOpname(form, opnameId, 'edit')
       ])
       .then(() => {
+        if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
         $('#crudModal').modal('show')
         $('#crudForm').find("[name=gudang]").parents('.input-group').find('.input-group-append').hide()
         $('#crudForm').find("[name=gudang]").parents('.input-group').find('.button-clear').hide()
@@ -359,6 +365,9 @@
         showOpname(form, opnameId, 'delete')
       ])
       .then(() => {
+        if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
         $('#crudModal').modal('show')
         $('#crudForm').find("[name=gudang]").parents('.input-group').find('.input-group-append').hide()
         $('#crudForm').find("[name=gudang]").parents('.input-group').find('.button-clear').hide()
@@ -779,8 +788,7 @@
       success: response => {
         var error = response.error
         if (error) {
-          // console.log(response);
-          showDialog(response.message['keterangan'])
+          showDialog(response.message)
         } else {
           if(Aksi == 'EDIT'){
             editOpname(Id)

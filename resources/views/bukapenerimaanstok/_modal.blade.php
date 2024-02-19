@@ -181,6 +181,9 @@
   `)
     form.data('action', 'add')
     $('#crudModalTitle').text('Add Buka Penerimaan Stok')
+     if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
@@ -206,6 +209,9 @@
         showBukaPenerimaanStok(form, bukaPenerimaanStokId)
       ])
       .then(() => {
+         if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
         $('#crudModal').modal('show')
         form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
       })
