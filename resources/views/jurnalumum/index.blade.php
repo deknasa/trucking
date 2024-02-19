@@ -49,6 +49,10 @@
           selectedRows.splice(i, 1);
         }
       }
+
+      if (selectedRows.length != $('#jqGrid').jqGrid('getGridParam').records) {
+        $('#gs_').prop('checked', false)
+      }
     }
 
   }
@@ -480,14 +484,32 @@
             }
           },
           {
-            id: 'approveun',
-            innerHTML: '<i class="fas fa-check""></i> UN/APPROVAL',
-            class: 'btn btn-purple btn-sm mr-1',
-            onClick: () => {
-
-              approve()
-
-            }
+            id: 'approve',
+            title: 'Approve',
+            caption: 'Approve',
+            innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+            class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
+            dropmenuHTML: [{
+                id: 'approveun',
+                text: "UN/APPROVAL Jurnal Umum",
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('jurnalumumheader', 'approval') }}`) {
+                    approve()
+                  }
+                }
+              },
+              {
+                id: 'approval-buka-cetak',
+                text: "Approval Buka Cetak JURNAL",
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('jurnalumumheader', 'approvalbukacetak') }}`) {
+                    let tglbukacetak = $('#tgldariheader').val().split('-');
+                    tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
+                    approvalBukaCetak(tglbukacetak, 'JURNALUMUMHEADER', selectedRows);
+                  }
+                }
+              },
+            ],
           },
           {
             id: 'lainnya',
@@ -627,9 +649,24 @@
         $('#lainnya').attr('disabled', 'disabled')
         $('#copy').attr('hidden', 'true')
       }
+
+      let hakApporveCount = 0;
+      hakApporveCount++
       if (!`{{ $myAuth->hasPermission('jurnalumumheader', 'approval') }}`) {
-        $('#approveun').attr('disabled', 'disabled')
+        hakApporveCount--
+        $('#approveun').hide()
         $("#jqGrid").hideCol("");
+        // $('#approval-buka-cetak').attr('disabled', 'disabled')
+      }
+      hakApporveCount++
+      if (!`{{ $myAuth->hasPermission('jurnalumumheader', 'approvalbukacetak') }}`) {
+        hakApporveCount--
+        $('#approval-buka-cetak').hide()
+        // $('#approval-buka-cetak').attr('disabled', 'disabled')
+      }
+      if (hakApporveCount < 1) {
+        $('#approve').hide()
+        // $('#approve').attr('disabled', 'disabled')
       }
     }
 
@@ -713,6 +750,7 @@
   function clearSelectedRows() {
     selectedRows = []
 
+    $('#gs_').prop('checked', false);
     $('#jqGrid').trigger('reloadGrid')
   }
 
