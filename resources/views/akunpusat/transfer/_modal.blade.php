@@ -50,7 +50,7 @@
     let postDataCoa
     let triggerClickCoa
     let indexRowCoa
-    let selectedRows = [];
+    let selectedRowsTransfer = [];
 
     $(document).ready(function() {
         $('#btnSubmitTransfer').click(function(event) {
@@ -74,9 +74,9 @@
             })
             data.push({
                 name: 'jumlahdetail',
-                value: selectedRows.length
+                value: selectedRowsTransfer.length
             })
-            $.each(selectedRows, function(index, item) {
+            $.each(selectedRowsTransfer, function(index, item) {
                 data.push({
                     name: 'coaId[]',
                     value: item
@@ -127,7 +127,7 @@
                     $('#transferModal').find('#crudForm').trigger('reset')
                     $('#transferModal').modal('hide')
                     $('#jqGrid').jqGrid().trigger('reloadGrid');
-                    selectedRows = []
+                    selectedRowsTransfer = []
 
                 },
                 error: error => {
@@ -209,7 +209,7 @@
                                     if ($(this).is(':checked')) {
                                         selectAllRows()
                                     } else {
-                                        clearSelectedRows(element)
+                                        clearselectedRowsTransfer(element)
                                     }
                                 })
 
@@ -518,7 +518,7 @@
 
                     setHighlight($(this))
 
-                    $.each(selectedRows, function(key, value) {
+                    $.each(selectedRowsTransfer, function(key, value) {
                         $(grid).find('tbody tr').each(function(row, tr) {
                             if ($(this).find(`td input:checkbox`).val() == value) {
                                 $(this).addClass('bg-light-blue')
@@ -588,20 +588,20 @@
         let value = $(element).val();
 
         if (element.checked) {
-            selectedRows.push($(element).val())
+            selectedRowsTransfer.push($(element).val())
             $(element).parents('tr').addClass('bg-light-blue')
         } else {
             $(element).parents('tr').removeClass('bg-light-blue')
-            for (var i = 0; i < selectedRows.length; i++) {
-                if (selectedRows[i] == value) {
-                    selectedRows.splice(i, 1);
+            for (var i = 0; i < selectedRowsTransfer.length; i++) {
+                if (selectedRowsTransfer[i] == value) {
+                    selectedRowsTransfer.splice(i, 1);
                 }
             }
         }
     }
 
-    function clearSelectedRows() {
-        selectedRows = []
+    function clearselectedRowsTransfer() {
+        selectedRowsTransfer = []
 
         $('#coaGrid').trigger('reloadGrid')
     }
@@ -618,7 +618,7 @@
                 limit: 0
             },
             success: (response) => {
-                selectedRows = response.data.map((coa) => coa.id)
+                selectedRowsTransfer = response.data.map((coa) => coa.id)
 
                 $('#coaGrid').trigger('reloadGrid')
             }

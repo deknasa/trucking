@@ -256,6 +256,9 @@
       .then(() => {
         showDefault(form)
           .then(() => {
+            if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
             $('#crudModal').modal('show')
           })
           .catch((error) => {
@@ -295,6 +298,9 @@
       .then(() => {
         showAkuntansi(form, id)
           .then(() => {
+            if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
             $('#crudModal').modal('show')
             form.find(`[name="nominal"]`).parent('.input-group').find('.button-clear').remove()
             form.find(`[name="nominal"]`).parent('.input-group').find('.input-group-append').remove()
@@ -333,6 +339,9 @@
       .then(() => {
         showAkuntansi(form, id)
           .then(() => {
+            if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
             $('#crudModal').modal('show')
           })
           .catch((error) => {
@@ -377,6 +386,9 @@
 
           })
           .then(() => {
+            if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
             $('#crudModal').modal('show')
             let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
             name.attr('disabled', true)
