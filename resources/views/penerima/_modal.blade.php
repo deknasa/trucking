@@ -290,6 +290,9 @@
       .then(() => {
         showDefault(form)
           .then(() => {
+             if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
             $('#crudModal').modal('show')
           })
           .catch((error) => {
@@ -342,6 +345,9 @@
       .then(() => {
         showPenerima(form, penerimaId)
           .then(() => {
+             if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
             $('#crudModal').modal('show')
           })
           .catch((error) => {
@@ -377,6 +383,9 @@
       .then(() => {
         showPenerima(form, penerimaId)
           .then(() => {
+             if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
             $('#crudModal').modal('show')
           })
           .catch((error) => {
@@ -431,6 +440,9 @@
            
           })
           .then(() => {
+             if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
             $('#crudModal').modal('show')
           })
           .catch((error) => {
