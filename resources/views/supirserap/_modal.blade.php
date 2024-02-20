@@ -217,6 +217,9 @@
     `)
         form.data('action', 'add')
         $('#crudModalTitle').text('Add Supir Serap')
+        if (selectedRows.length > 0) {
+            clearSelectedRows()
+        }
         $('#crudModal').modal('show')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
@@ -244,6 +247,9 @@
                 showSupirSerap(form, serapId)
             ])
             .then(() => {
+                if (selectedRows.length > 0) {
+                    clearSelectedRows()
+                }
                 $('#crudModal').modal('show')
                 form.find(`[name="tglbukti"]`).prop('readonly', true)
                 form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
@@ -276,6 +282,9 @@
                 showSupirSerap(form, serapId)
             ])
             .then(() => {
+                if (selectedRows.length > 0) {
+                    clearSelectedRows()
+                }
                 $('#crudModal').modal('show')
             })
             .catch((error) => {
@@ -305,6 +314,9 @@
                 showSupirSerap(form, serapId)
             ])
             .then(() => {
+                if (selectedRows.length > 0) {
+                    clearSelectedRows()
+                }
                 $('#crudModal').modal('show')
                 form.find(`.hasDatepicker`).prop('readonly', true)
                 form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()

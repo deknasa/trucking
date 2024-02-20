@@ -432,8 +432,9 @@
             } else {
               $('.bmt').hide()
             }
-            clearSelectedRows()
-            $('#gs_').prop('checked', false)
+            if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
             $('#crudModal').modal('show')
             addRow()
           })
@@ -507,8 +508,9 @@
       .then(() => {
         showPengeluaran(form, id)
           .then(() => {
-            clearSelectedRows()
-            $('#gs_').prop('checked', false)
+            if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
             $('#crudModal').modal('show')
             if (isEditTgl == 'TIDAK') {
               form.find(`[name="tglbukti"]`).prop('readonly', true)
@@ -556,7 +558,9 @@
       .then(() => {
         showPengeluaran(form, id)
           .then(() => {
-            clearSelectedRows()
+            if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
             form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
             // let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
             // name.attr('readonly', true)
@@ -618,8 +622,9 @@
       .then(() => {
         showPengeluaran(form, id)
           .then(() => {
-            clearSelectedRows()
-            $('#gs_').prop('checked', false)
+            if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
             $('#crudModal').modal('show')
           })
           .catch((error) => {
@@ -672,8 +677,9 @@
             form.find('[name=id]').prop('disabled', false)
           })
           .then(() => {
-            clearSelectedRows()
-            $('#gs_').prop('checked', false)
+            if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
             $('#crudModal').modal('show')
             form.find(`.hasDatepicker`).prop('readonly', true)
             form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()

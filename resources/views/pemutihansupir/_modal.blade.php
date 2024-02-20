@@ -495,6 +495,9 @@
 
     $('#table_body').html('')
 
+    if (selectedRows.length > 0) {
+      clearSelectedRows()
+    }
     initDatepicker()
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
     tablePost('getPost')

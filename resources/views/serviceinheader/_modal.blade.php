@@ -310,6 +310,9 @@
         $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         $('#crudForm').find('[name=tglmasuk]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
+        if (selectedRows.length > 0) {
+            clearSelectedRows()
+        }
         $('#table_body').html('')
         addRow()
     }

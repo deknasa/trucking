@@ -359,6 +359,9 @@
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
     $('#crudForm').find(`[name="tgljatuhtempo"]`).val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
     addRow()
+    if (selectedRows.length > 0) {
+      clearSelectedRows()
+    }
     setTotal()
   }
 

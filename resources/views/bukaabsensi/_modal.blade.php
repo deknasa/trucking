@@ -166,6 +166,9 @@
     Save
   `)
     form.data('action', 'add')
+    if (selectedRows.length > 0) {
+      clearSelectedRows()
+    }
     $('#crudModalTitle').text('Add Buka tanggal Absensi')
     $('#crudModal').modal('show')
     $('.is-invalid').removeClass('is-invalid')

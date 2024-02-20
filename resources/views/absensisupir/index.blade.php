@@ -81,7 +81,7 @@
         }
       }
 
-      if(selectedRows.length == 0){
+      if (selectedRows.length != $('#jqGrid').jqGrid('getGridParam').records) {
         $('#gs_').prop('checked', false)
       }
     }
@@ -722,7 +722,7 @@
         // $('#approval-buka-cetak').attr('disabled', 'disabled')
       }
 
-      hakApporveCount++      
+      hakApporveCount++
       if (!`{{ $myAuth->hasPermission('absensisupirheader', 'approvalEditAbsensi') }}`) {
         hakApporveCount--
         $('#approvalEdit').hide()

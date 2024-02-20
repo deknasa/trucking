@@ -35,6 +35,27 @@
   let sortorder = 'asc'
   let autoNumericElements = []
   let rowNum = 10
+  let selectedRows = [];
+
+  function checkboxHandler(element) {
+    let value = $(element).val();
+    if (element.checked) {
+      selectedRows.push($(element).val())
+      $(element).parents('tr').addClass('bg-light-blue')
+    } else {
+      $(element).parents('tr').removeClass('bg-light-blue')
+      for (var i = 0; i < selectedRows.length; i++) {
+        if (selectedRows[i] == value) {
+          selectedRows.splice(i, 1);
+        }
+      }
+      if (selectedRows.length != $('#jqGrid').jqGrid('getGridParam').records) {
+        $('#gs_').prop('checked', false)
+      }
+    }
+
+  }
+  setSpaceBarCheckedHandler()
   reloadGrid()
   $(document).ready(function() {
 
@@ -42,6 +63,8 @@
     initDatepicker('datepickerIndex')
     $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('pindahbuku')
+      selectedRows = []
+      $('#gs_').prop('checked', false)
     })
     let nobukti = $('#jqGrid').jqGrid('getCell', id, 'nobukti')
     loadJurnalUmumGrid(nobukti)
@@ -57,6 +80,39 @@
         },
         datatype: "json",
         colModel: [{
+            label: '',
+            name: '',
+            width: 40,
+            align: 'center',
+            sortable: false,
+            clear: false,
+            stype: 'input',
+            searchable: false,
+            searchoptions: {
+              type: 'checkbox',
+              clearSearch: false,
+              dataInit: function(element) {
+                $(element).removeClass('form-control')
+                $(element).parent().addClass('text-center')
+                $(element).addClass('checkbox-selectall')
+
+                $(element).on('click', function() {
+
+                  $(element).attr('disabled', true)
+                  if ($(this).is(':checked')) {
+                    selectAllRows()
+                  } else {
+                    clearSelectedRows()
+                  }
+                })
+
+              }
+            },
+            formatter: (value, rowOptions, rowData) => {
+              return `<input type="checkbox" name="penerimaanId[]" class="checkbox-jqgrid" value="${rowData.id}" onchange="checkboxHandler(this)">`
+            },
+          },
+          {
             label: 'ID',
             name: 'id',
             width: '50px',
@@ -281,6 +337,16 @@
           setCustomBindKeys($(this))
           initResize($(this))
 
+          $.each(selectedRows, function(key, value) {
+
+            $('#jqGrid tbody tr').each(function(row, tr) {
+              if ($(this).find(`td input:checkbox`).val() == value) {
+                $(this).find(`td input:checkbox`).prop('checked', true)
+                $(this).addClass('bg-light-blue')
+              }
+            })
+
+          });
           /* Set global variables */
           sortname = $(this).jqGrid("getGridParam", "sortname")
           sortorder = $(this).jqGrid("getGridParam", "sortorder")
@@ -318,6 +384,7 @@
           $('#left-nav').find('button').attr('disabled', false)
           permission()
           setHighlight($(this))
+          $('#gs_').attr('disabled', false)
         },
       })
 
@@ -399,12 +466,8 @@
                 if (`{{ $myAuth->hasPermission('pindahbuku', 'approvalbukacetak') }}`) {
                   let tglbukacetak = $('#tgldariheader').val().split('-');
                   tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
-                  selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                  if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                    showDialog('Harap pilih salah satu record')
-                  } else {
-                    approvalBukaCetak(tglbukacetak, 'PINDAHBUKU', [selectedId]);
-                  }
+
+                  approvalBukaCetak(tglbukacetak, 'PINDAHBUKU', selectedRows);
                 }
               }
             }, ],
@@ -427,7 +490,7 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                editPindahBuku(selectedId)
+                cekValidasi(selectedId, 'EDIT')
               }
             }
           },
@@ -440,7 +503,7 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                deletePindahBuku(selectedId)
+                cekValidasi(selectedId, 'DELETE')
               }
             }
           },
@@ -536,8 +599,42 @@
             window.open(`{{ route('pindahbuku.report') }}?id=${Id}&printer=reportPrinterBesar`)
           } else if (Aksi == 'PRINTER KECIL') {
             window.open(`{{ route('pindahbuku.report') }}?id=${Id}&printer=reportPrinterKecil`)
+          } 
+          if (Aksi == 'EDIT') {
+            editPindahBuku(Id)
+          }
+          if (Aksi == 'DELETE') {
+            deletePindahBuku(Id)
           }
         }
+      }
+    })
+  }
+
+  function clearSelectedRows() {
+    selectedRows = []
+
+    $('#gs_').prop('checked', false);
+    $('#jqGrid').trigger('reloadGrid')
+  }
+
+  function selectAllRows() {
+    $.ajax({
+      url: `${apiUrl}pindahbuku`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        limit: 0,
+        tgldari: $('#tgldariheader').val(),
+        tglsampai: $('#tglsampaiheader').val(),
+        filters: $('#jqGrid').jqGrid('getGridParam', 'postData').filters
+      },
+      success: (response) => {
+        selectedRows = response.data.map((penerimaan) => penerimaan.id)
+        $('#jqGrid').trigger('reloadGrid')
       }
     })
   }

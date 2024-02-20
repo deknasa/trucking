@@ -421,6 +421,9 @@
             .then(() => {
                 showDefault(form)
                     .then(() => {
+                        if (selectedRows.length > 0) {
+                            clearSelectedRows()
+                        }
                         $('#crudModal').modal('show')
                     })
                     .catch((error) => {
@@ -533,7 +536,9 @@
             .then(() => {
                 showPenerimaan(form, id)
                     .then(() => {
-                        clearSelectedRows()
+                        if (selectedRows.length > 0) {
+                            clearSelectedRows()
+                        }
                         form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
                         // let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
                         // name.attr('readonly', true)

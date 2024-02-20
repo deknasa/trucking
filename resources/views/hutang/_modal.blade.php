@@ -352,6 +352,9 @@
     $('#table_body').html('')
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
+    if (selectedRows.length > 0) {
+      clearSelectedRows()
+    }
     addRow()
     setTotal()
   }

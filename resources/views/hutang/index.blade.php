@@ -103,6 +103,8 @@
     initDatepicker('datepickerIndex')
     $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('hutangheader')
+      selectedRows = []
+      $('#gs_').prop('checked', false)
     })
 
     $("#jqGrid").jqGrid({

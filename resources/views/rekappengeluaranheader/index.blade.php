@@ -47,6 +47,9 @@
           selectedRows.splice(i, 1);
         }
       }
+      if (selectedRows.length != $('#jqGrid').jqGrid('getGridParam').records) {
+        $('#gs_').prop('checked', false)
+      }
     }
 
   }
@@ -60,6 +63,8 @@
     initDatepicker('datepickerIndex')
     $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('rekappengeluaranheader')
+      selectedRows = []
+      $('#gs_').prop('checked', false)
     })
 
     $('#crudModal').on('hidden.bs.modal', function() {
@@ -499,11 +504,7 @@
                   if (`{{ $myAuth->hasPermission('rekappengeluaranheader', 'approvalbukacetak') }}`) {
                     let tglbukacetak = $('#tgldariheader').val().split('-');
                     tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
-                    if (selectedRows.length < 1) {
-                      showDialog('Harap pilih salah satu record')
-                    } else {
-                      approvalBukaCetak(tglbukacetak, 'REKAPPENGELUARANHEADER', selectedRows);
-                    }
+                    approvalBukaCetak(tglbukacetak, 'REKAPPENGELUARANHEADER', selectedRows);
                   }
                 }
               },
@@ -587,7 +588,7 @@
       if (!`{{ $myAuth->hasPermission('rekappengeluaranheader', 'report') }}`) {
         $('#report').addClass('ui-disabled')
       }
-      let hakApporveCount = 0 ;
+      let hakApporveCount = 0;
       hakApporveCount++
       if (!`{{ $myAuth->hasPermission('rekappengeluaranheader', 'approval') }}`) {
         hakApporveCount--
@@ -695,6 +696,7 @@
   function clearSelectedRows() {
     selectedRows = []
 
+    $('#gs_').prop('checked', false);
     $('#jqGrid').trigger('reloadGrid')
   }
 

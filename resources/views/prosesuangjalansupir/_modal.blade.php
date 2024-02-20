@@ -738,6 +738,9 @@
         $('.invalid-feedback').remove()
 
         $('#table_body').html('')
+        if (selectedRows.length > 0) {
+            clearSelectedRows()
+        }
         $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         $('#crudForm').find('[name=tgladjust]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         $('#crudForm').find('[name=tgldeposit]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');

@@ -1797,6 +1797,14 @@ function setSpaceBarCheckedHandler2() {
                                     selectedRowsIndex.splice(i, 1);
                                 }
                             }
+
+                            if (
+                                selectedRowsIndex.length !=
+                                $("#jqGrid").jqGrid("getGridParam").records
+                            ) {
+                                $("#gs_check").prop("checked", false);
+                                $("#gs_").prop("checked", false);
+                            }
                         } else {
                             $checkbox.prop("checked", true);
                             selectedRowsIndex.push($checkbox.val());

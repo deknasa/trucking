@@ -2,7 +2,7 @@
   <div class="modal-dialog">
     <form action="#" id="crudForm">
       <div class="modal-content">
-        
+
         <form action="" method="post">
           <div class="modal-body">
             <div class="row form-group">
@@ -107,7 +107,7 @@
   let hasFormBindKeys = false
   let modalBody = $('#crudModal').find('.modal-body').html()
   let rowIndex = 0;
-  let selectedRows = []
+  let selectedRowsInvoice = []
   let selectedJobTrucking = [];
   let selectedNoPolisi = [];
   let selectedGandengan = [];
@@ -225,9 +225,9 @@
 
       data.push({
         name: 'jumlahdetail',
-        value: selectedRows.length
+        value: selectedRowsInvoice.length
       })
-      $.each(selectedRows, function(index, item) {
+      $.each(selectedRowsInvoice, function(index, item) {
         data.push({
           name: 'id_detail[]',
           value: item
@@ -378,7 +378,7 @@
               tglsampai: dateFormat(response.data.tglsampaiheader)
             }
           }).trigger('reloadGrid');
-          clearSelectedRows()
+          clearSelectedRowsInvoice()
           if (id == 0) {
             $('#detail').jqGrid().trigger('reloadGrid')
           }
@@ -419,7 +419,7 @@
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
     $('#crudModal').find('.modal-body').html(modalBody)
-    clearSelectedRows()
+    clearSelectedRowsInvoice()
     initDatepicker('datepickerIndex')
   })
 
@@ -486,6 +486,9 @@
 
     $('#table_body').html('')
 
+    if (selectedRows.length > 0) {
+      clearSelectedRows()
+    }
     $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
     $('#crudForm').find('[name=tglproses]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
     $('#crudForm').find('[name=tgljatuhtempo]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
@@ -512,6 +515,9 @@
         showInvoiceChargeGandenganHeader(form, invoiceChargeGandenganHeader)
       ])
       .then(() => {
+        if (selectedRows.length > 0) {
+          clearSelectedRows()
+        }
         $('#crudModal').modal('show')
         if (isEditTgl == 'TIDAK') {
           form.find(`[name="tglbukti"]`).prop('readonly', true)
@@ -548,6 +554,9 @@
         showInvoiceChargeGandenganHeader(form, invoiceChargeGandenganHeader)
       ])
       .then(() => {
+        if (selectedRows.length > 0) {
+          clearSelectedRows()
+        }
         $('#crudModal').modal('show')
       })
       .catch((error) => {
@@ -619,9 +628,9 @@
                     $(element).attr('disabled', true)
 
                     if ($(this).is(':checked')) {
-                      selectAllRows()
+                      selectAllRowsInvoice()
                     } else {
-                      clearSelectedRows(element)
+                      clearSelectedRowsInvoice(element)
                     }
                   })
                 } else {
@@ -630,7 +639,7 @@
               }
             },
             formatter: (value, rowOptions, rowData) => {
-              return `<input type="checkbox" name="idgrid[]" value="${rowData.id}" ${disabled} onchange="checkboxHandler(this)">`
+              return `<input type="checkbox" name="idgrid[]" value="${rowData.id}" ${disabled} onchange="checkboxHandlerInvoice(this)">`
             },
           },
           {
@@ -775,7 +784,7 @@
             }, true)
           }
 
-          $.each(selectedRows, function(key, value) {
+          $.each(selectedRowsInvoice, function(key, value) {
             $(grid).find('tbody tr').each(function(row, tr) {
               if ($(this).find(`td input:checkbox`).val() == value) {
                 $(this).addClass('bg-light-blue')
@@ -810,8 +819,8 @@
     loadGlobalSearch($('#modalgrid'))
   }
 
-  function clearSelectedRows(element = null) {
-    selectedRows = []
+  function clearSelectedRowsInvoice(element = null) {
+    selectedRowsInvoice = []
     selectedJobTrucking = [];
     selectedNoPolisi = [];
     selectedGandengan = [];
@@ -825,7 +834,7 @@
     $('#modalgrid').trigger('reloadGrid')
   }
 
-  function selectAllRows() {
+  function selectAllRowsInvoice() {
     agen_id = $('#crudForm').find(`[name=agen_id]`).val()
     tglproses = $('#crudForm').find(`[name=tglproses]`).val()
 
@@ -845,7 +854,7 @@
         Authorization: `Bearer ${accessToken}`
       },
       success: (response) => {
-        selectedRows = []
+        selectedRowsInvoice = []
         selectedJobTrucking = [];
         selectedNoPolisi = [];
         selectedGandengan = [];
@@ -857,7 +866,7 @@
         selectedNamaGudang = [];
         selectedKeterangan = [];
 
-        selectedRows = response.data.map((data) => data.id)
+        selectedRowsInvoice = response.data.map((data) => data.id)
         selectedJobTrucking = response.data.map((data) => data.jobtrucking)
         selectedNoPolisi = response.data.map((data) => data.trado_id)
         selectedGandengan = response.data.map((data) => data.gandengan_id)
@@ -910,7 +919,7 @@
         },
         success: (response) => {
           response.url = `${apiUrl}orderantrucking/getorderantrip`
-          selectedRows = []
+          selectedRowsInvoice = []
           selectedJobTrucking = [];
           selectedNoPolisi = [];
           selectedGandengan = [];
@@ -925,7 +934,7 @@
           $.each(response.data, (index, detail) => {
             if (detail.noinvoice != '') {
 
-              selectedRows.push(detail.id)
+              selectedRowsInvoice.push(detail.id)
               selectedJobTrucking.push(detail.jobtrucking)
               selectedNoPolisi.push(detail.trado_id)
               selectedGandengan.push(detail.gandengan_id)
@@ -959,10 +968,10 @@
 
   }
 
-  function checkboxHandler(element) {
+  function checkboxHandlerInvoice(element) {
     let value = $(element).val();
     if (element.checked) {
-      selectedRows.push($(element).val())
+      selectedRowsInvoice.push($(element).val())
       selectedJobTrucking.push($(element).parents('tr').find(`td[aria-describedby="modalgrid_jobtrucking"]`).text())
       selectedNoPolisi.push($(element).parents('tr').find(`td[aria-describedby="modalgrid_trado_id"]`).text())
       selectedGandengan.push($(element).parents('tr').find(`td[aria-describedby="modalgrid_gandengan_id"]`).text())
@@ -976,9 +985,9 @@
       $(element).parents('tr').addClass('bg-light-blue')
     } else {
       $(element).parents('tr').removeClass('bg-light-blue')
-      for (var i = 0; i < selectedRows.length; i++) {
-        if (selectedRows[i] == value) {
-          selectedRows.splice(i, 1);
+      for (var i = 0; i < selectedRowsInvoice.length; i++) {
+        if (selectedRowsInvoice[i] == value) {
+          selectedRowsInvoice.splice(i, 1);
           selectedJobTrucking.splice(i, 1);
           selectedNoPolisi.splice(i, 1);
           selectedGandengan.splice(i, 1);
@@ -1089,7 +1098,7 @@
           $.each(response.detail, (index, detail) => {
             if (detail.nobukti_header != null) {
 
-              selectedRows.push(detail.id)
+              selectedRowsInvoice.push(detail.id)
               selectedJobTrucking.push(detail.jobtrucking)
               selectedNoPolisi.push(detail.trado_id)
               selectedGandengan.push(detail.gandengan_id)

@@ -711,6 +711,9 @@
         showDefault(form)
       ])
       .then(() => {
+        if (selectedRows.length > 0) {
+          clearSelectedRows()
+        }
         loadPelunasanGrid()
         $('#crudModal').modal('show')
       })

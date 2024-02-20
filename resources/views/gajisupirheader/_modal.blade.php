@@ -1094,6 +1094,9 @@
 
         form.data('action', 'add')
         $('#crudModalTitle').text('Add Rincian Gaji Supir')
+        if (selectedRowsIndex.length > 0) {
+            clearSelectedRowsIndex()
+        }
         $('#crudModal').modal('show')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
@@ -1592,7 +1595,7 @@
                     if ($('#crudForm').data('action') == 'edit') {
 
                         totalSisa = (parseFloat(originalGridData.pinjSemua_sisa) + parseFloat(originalGridData.nominalPS))
-                    }else{
+                    } else {
                         totalSisa = parseFloat(originalGridData.pinjSemua_sisa)
                     }
                     $("#tablePotSemua").jqGrid(
@@ -1992,7 +1995,7 @@
                     if ($('#crudForm').data('action') == 'edit') {
 
                         totalSisa = (parseFloat(originalGridData.pinjPribadi_sisa) + parseFloat(originalGridData.nominalPP))
-                    }else{
+                    } else {
                         totalSisa = parseFloat(originalGridData.pinjPribadi_sisa)
                     }
                     $("#tablePotPribadi").jqGrid(
