@@ -1030,6 +1030,9 @@
         setStatusBanOptions(form)
       ])
       .then(() => {
+        if (selectedRows.length > 0) {
+           clearSelectedRows()
+         }
         $('#crudModal').modal('show')
         initLookup()
         // addRow()
@@ -1073,6 +1076,9 @@
       .then((showPengeluaranStok) => {
 
         let data = showPengeluaranStok[4];
+        if (selectedRows.length > 0) {
+           clearSelectedRows()
+         }
         $('#crudModal').modal('show')
         if ((data.statuseditketerangan_id == statusBisaEdit) && (data.statusedit_id != statusBisaEdit)) {
           form.find('[name]').attr('readonly', 'readonly')
@@ -1141,6 +1147,9 @@
 
           })
           .then(() => {
+            if (selectedRows.length > 0) {
+               clearSelectedRows()
+             }
             $('#crudModal').modal('show')
             form.find(`.hasDatepicker`).prop('readonly', true)
             form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
@@ -1208,6 +1217,9 @@
 
           })
           .then(() => {
+            if (selectedRows.length > 0) {
+               clearSelectedRows()
+             }
             $('#crudModal').modal('show')
             $('#crudForm').find(`.ui-datepicker-trigger`).attr('disabled', true)
 

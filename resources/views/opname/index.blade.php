@@ -35,7 +35,56 @@
   let rowNum = 10
   let hasDetail = false
   let approveRequest = null;
+  let selectedRows = [];
 
+  function checkboxHandler(element) {
+    let value = $(element).val();
+    if (element.checked) {
+      selectedRows.push($(element).val())
+      $(element).parents('tr').addClass('bg-light-blue')
+    } else {
+      $(element).parents('tr').removeClass('bg-light-blue')
+      for (var i = 0; i < selectedRows.length; i++) {
+        if (selectedRows[i] == value) {
+          selectedRows.splice(i, 1);
+        }
+      }
+
+      if (selectedRows.length == 0) {
+        $('#gs_').prop('checked', false)
+      }
+    }
+
+  }
+
+  function clearSelectedRows() {
+    selectedRows = []
+    $('#gs_').prop('checked', false);
+    $('#jqGrid').trigger('reloadGrid')
+  }
+
+  function selectAllRows() {
+    $.ajax({
+      url: `${apiUrl}pengeluaranstokheader`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        limit: 0,
+        tgldari: $('#tgldariheader').val(),
+        tglsampai: $('#tglsampaiheader').val(),
+        filters: $('#jqGrid').jqGrid('getGridParam', 'postData').filters
+      },
+      success: (response) => {
+        selectedRows = response.data.map((pengeluaranstokheader) => pengeluaranstokheader.id)
+        $('#jqGrid').trigger('reloadGrid')
+      }
+    })
+  }
+reloadGrid()
+setSpaceBarCheckedHandler()
 
   $(document).ready(function() {
     setRange()
@@ -54,7 +103,40 @@
           
         },
         datatype: "json",
-        colModel: [{
+        colModel: [
+          {
+            label: '',
+            name: '',
+            width: 30,
+            align: 'center',
+            sortable: false,
+            clear: false,
+            stype: 'input',
+            searchable: false,
+            searchoptions: {
+              type: 'checkbox',
+              clearSearch: false,
+              dataInit: function(element) {
+                $(element).removeClass('form-control')
+                $(element).parent().addClass('text-center')
+                
+                $(element).on('click', function() {
+                  
+                  $(element).attr('disabled', true)
+                  if ($(this).is(':checked')) {
+                    selectAllRows()
+                  } else {
+                    clearSelectedRows()
+                  }
+                })
+                
+              }
+            },
+            formatter: (value, rowOptions, rowData) => {
+              return `<input type="checkbox" name="Id[]" value="${rowData.id}" onchange="checkboxHandler(this)">`
+            },
+          },
+          {
             label: 'ID',
             name: 'id',
             align: 'right',
@@ -305,6 +387,15 @@
           setCustomBindKeys($(this))
           initResize($(this))
 
+          $.each(selectedRows, function(key, value) {
+            $('#jqGrid tbody tr').each(function(row, tr) {
+              if ($(this).find(`td input:checkbox`).val() == value) {
+                $(this).find(`td input:checkbox`).prop('checked', true)
+                $(this).addClass('bg-light-blue')
+              }
+            })
+          });
+
           /* Set global variables */
           sortname = $(this).jqGrid("getGridParam", "sortname")
           sortorder = $(this).jqGrid("getGridParam", "sortorder")
@@ -344,6 +435,7 @@
 
           $('#left-nav').find('button').attr('disabled', false)
           permission()
+          $('#gs_').attr('disabled', false)
           setHighlight($(this))
         }
       })
@@ -487,20 +579,44 @@
                 }
               },
             ]
-          },  
+          }, 
           {
             id: 'approve',
             title: 'Approve',
             caption: 'Approve',
             innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-            class: 'btn btn-purple btn-sm mr-1',
-            onClick: () => {
-              if (`{{ $myAuth->hasPermission('opnameheader', 'approval') }}`) {
-                selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                approve(selectedId)
-              }
-            }
-          }
+            class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
+            dropmenuHTML: [{
+                id: 'approveun',
+                text: ' UN/APPROVAL status',
+                onClick: () => {
+                  if (!selectedRows.length) {
+                      showDialog('Harap pilih salah satu record')
+                    } else {
+                      approvalStatus()
+                    }
+                }
+              },
+              
+              {
+                id: 'approval-buka-cetak',
+                text: "Approval Buka Cetak PENGELUARAN STOK",
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('pengeluaranstokheader', 'approvalbukacetak') }}`) {
+                    let tglbukacetak = $('#tgldariheader').val().split('-');
+                    tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
+                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                    if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                      showDialog('Harap pilih salah satu record')
+                    } else {
+                      approvalBukaCetak(tglbukacetak, 'OPNAMEHEADER', selectedRows);
+                    }
+                  }
+                }
+              },
+            ],
+          } 
+          
         ]
 
       })
@@ -586,8 +702,51 @@
       })
     }
 
-    
-   
+    function approvalStatus() {
+      event.preventDefault()
+      let form = $('#crudForm')
+      $(this).attr('disabled', '')
+      $('#processingLoader').removeClass('d-none')
+      
+      $.ajax({
+        url: `${apiUrl}opnameheader/approval`,
+        method: 'POST',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          Id: selectedRows,
+        },
+        success: response => {
+          $('#crudForm').trigger('reset')
+          $('#crudModal').modal('hide')
+          
+          $('#jqGrid').jqGrid('setGridParam',{
+            postData: {
+              proses: 'reload'
+            }
+          }).trigger('reloadGrid');
+          selectedRows = []
+          $('#gs_').prop('checked', false)
+        },
+        error: error => {
+          if (error.status === 422) {
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+            
+            setErrorMessages(form, error.responseJSON.errors);
+          } else {
+            showDialog(error.responseJSON)
+          }
+        },
+      }).always(() => {
+        $('#processingLoader').addClass('d-none')
+        $(this).removeAttr('disabled')
+      })
+      
+    }
+
   })
 </script>
 @endpush()

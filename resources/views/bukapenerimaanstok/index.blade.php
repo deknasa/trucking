@@ -28,6 +28,54 @@
   let sortorder = 'asc'
   let autoNumericElements = []
   let rowNum = 10
+  let selectedRows = [];
+
+  function checkboxHandler(element) {
+    let value = $(element).val();
+    if (element.checked) {
+      selectedRows.push($(element).val())
+      $(element).parents('tr').addClass('bg-light-blue')
+    } else {
+      $(element).parents('tr').removeClass('bg-light-blue')
+      for (var i = 0; i < selectedRows.length; i++) {
+        if (selectedRows[i] == value) {
+          selectedRows.splice(i, 1);
+        }
+      }
+
+      if (selectedRows.length == 0) {
+        $('#gs_').prop('checked', false)
+      }
+    }
+
+  }
+
+  function clearSelectedRows() {
+    selectedRows = []
+    $('#gs_').prop('checked', false);
+    $('#jqGrid').trigger('reloadGrid')
+  }
+
+  function selectAllRows() {
+    $.ajax({
+      url: `${apiUrl}bukapenerimaanstok`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        limit: 0,
+        tgldari: $('#tgldariheader').val(),
+        tglsampai: $('#tglsampaiheader').val(),
+        filters: $('#jqGrid').jqGrid('getGridParam', 'postData').filters
+      },
+      success: (response) => {
+        selectedRows = response.data.map((bukapenerimaanstok) => bukapenerimaanstok.id)
+        $('#jqGrid').trigger('reloadGrid')
+      }
+    })
+  }
 
   $(document).ready(function() {
     $("#jqGrid").jqGrid({
@@ -36,7 +84,40 @@
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         datatype: "json",
-        colModel: [{
+        colModel: [
+          {
+            label: '',
+            name: '',
+            width: 30,
+            align: 'center',
+            sortable: false,
+            clear: false,
+            stype: 'input',
+            searchable: false,
+            searchoptions: {
+              type: 'checkbox',
+              clearSearch: false,
+              dataInit: function(element) {
+                $(element).removeClass('form-control')
+                $(element).parent().addClass('text-center')
+                
+                $(element).on('click', function() {
+                  
+                  $(element).attr('disabled', true)
+                  if ($(this).is(':checked')) {
+                    selectAllRows()
+                  } else {
+                    clearSelectedRows()
+                  }
+                })
+                
+              }
+            },
+            formatter: (value, rowOptions, rowData) => {
+              return `<input type="checkbox" name="Id[]" value="${rowData.id}" onchange="checkboxHandler(this)">`
+            },
+          },
+          {
             label: 'ID',
             name: 'id',
             width: '50px',
@@ -134,6 +215,15 @@
           setCustomBindKeys($(this))
           initResize($(this))
 
+          $.each(selectedRows, function(key, value) {
+            $('#jqGrid tbody tr').each(function(row, tr) {
+              if ($(this).find(`td input:checkbox`).val() == value) {
+                $(this).find(`td input:checkbox`).prop('checked', true)
+                $(this).addClass('bg-light-blue')
+              }
+            })
+          });
+
           /* Set global variables */
           sortname = $(this).jqGrid("getGridParam", "sortname")
           sortorder = $(this).jqGrid("getGridParam", "sortorder")
@@ -167,7 +257,7 @@
           } else {
             $('#jqGrid').setSelection($('#jqGrid').getDataIDs()[indexRow])
           }
-
+          $('#gs_').attr('disabled', false)
           setHighlight($(this))
         },
       })
@@ -214,10 +304,11 @@
             class: 'btn btn-purple btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              if (selectedId == null || selectedId == '' || selectedId == undefined) {
+              if (!selectedRows.length) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                updatetanggalbatas(selectedId)
+                multiUpdateTanggalBatas()
+                // updatetanggalbatas(selectedId)
               }
             }
           },
@@ -306,6 +397,51 @@
 
       window.open(`${actionUrl}?${$('#formRange').serialize()}&${params}`)
     })
+
+    function multiUpdateTanggalBatas() {
+      event.preventDefault()
+      let form = $('#crudForm')
+      $(this).attr('disabled', '')
+      $('#processingLoader').removeClass('d-none')
+      
+      $.ajax({
+        url: `${apiUrl}bukapenerimaanstok/updatetanggalbatas`,
+        method: 'POST',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          Id: selectedRows,
+        },
+        success: response => {
+          $('#crudForm').trigger('reset')
+          $('#crudModal').modal('hide')
+          
+          $('#jqGrid').jqGrid('setGridParam',{
+            postData: {
+              proses: 'reload'
+            }
+          }).trigger('reloadGrid');
+          selectedRows = []
+          $('#gs_').prop('checked', false)
+        },
+        error: error => {
+          if (error.status === 422) {
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+            
+            setErrorMessages(form, error.responseJSON.errors);
+          } else {
+            showDialog(error.responseJSON)
+          }
+        },
+      }).always(() => {
+        $('#processingLoader').addClass('d-none')
+        $(this).removeAttr('disabled')
+      })
+      
+    }
   })
 </script>
 @endpush()
