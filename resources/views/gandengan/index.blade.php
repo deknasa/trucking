@@ -127,7 +127,7 @@
                         label: 'GANDENGAN',
                         name: 'kodegandengan',
                         align: 'left',
-                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_1
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
                     },
                     {
                         label: 'KETERANGAN',
