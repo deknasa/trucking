@@ -23,6 +23,7 @@
         tglabsensi: `{!! $tglabsensi ?? '' !!}`,
         trado_id: `{!! $trado_id ?? '' !!}`,
         supir_id: `{!! $supir_id ?? '' !!}`,
+        isTripAsal: `{!! $isTripAsal ?? '' !!}`,
       },
       idPrefix: 'suratpengantarLookup',
       colModel: [{
