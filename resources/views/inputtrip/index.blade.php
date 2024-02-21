@@ -341,9 +341,18 @@
           $('.tableInfo').hide()
           showSuccessDialog(response.message, response.data.nobukti)
           enabledUpahSupir()
+          $('#crudForm [name=nobukti_tripasal]').data('currentValue', '')
+          $('#crudForm [name=agen]').data('currentValue', '')
+          $('#crudForm [name=jenisorder]').data('currentValue', '')
+          $('#crudForm [name=statuscontainer]').data('currentValue', '')
+          $('#crudForm [name=container]').data('currentValue', '')
+          $('#crudForm [name=upah]').data('currentValue', '')
+          $('#crudForm [name=pelanggan]').data('currentValue', '')
+          $('#crudForm [name=gandengan]').data('currentValue', '')
+          $('#crudForm [name=gandenganasal]').data('currentValue', '')
+          $('#crudForm [name=trado]').data('currentValue', '')
           createSuratPengantar()
 
-          $('#crudForm [name=trado]').data('currentValue', '')
         },
         error: error => {
           console.log('postdata ', error)
@@ -467,6 +476,11 @@
     } else {
       $('.nobukti_tripasal').hide()
     }
+    setJobReadOnly()
+  })
+  
+  $(`#crudForm [name="statuslongtrip"]`).on('change', function(event) {
+    setJobReadOnly()
   })
 
   function enabledLogTrip(selected) {
@@ -1057,19 +1071,39 @@
 
     let jobtrucking = $('#crudForm [name=jobtrucking]')
     let labeljobtrucking = $('#crudForm [name=labeljobtrucking]')
-    if (statuspelabuhan == '0') {
-      //bukan tas
-      // console.log('bukan');
+    let longtrip = $('#crudForm [name=statuslongtrip]').val()
+    let gudangsama = $('#crudForm [name=statusgudangsama]').val()
+    if (longtrip != 66) {
+      console.log('lontrip')
+      jobtrucking.attr('hidden', true)
+      labeljobtrucking.attr('hidden', true)
+      jobtrucking.parents('.input-group').find('.input-group-append').hide()
+      jobtrucking.parents('.input-group').find('.button-clear').hide()
+    } else if (gudangsama == 204) {
+      console.log('gudangsama')
+
       jobtrucking.attr('hidden', true)
       labeljobtrucking.attr('hidden', true)
       jobtrucking.parents('.input-group').find('.input-group-append').hide()
       jobtrucking.parents('.input-group').find('.button-clear').hide()
     } else {
-      //tas
-      labeljobtrucking.attr('hidden', false)
-      jobtrucking.attr('hidden', false)
-      jobtrucking.parents('.input-group').find('.input-group-append').show()
-      jobtrucking.parents('.input-group').find('.button-clear').show()
+      console.log('else')
+
+      console.log(statuspelabuhan)
+      if (statuspelabuhan == '0') {
+        //bukan tas
+        // console.log('bukan');
+        jobtrucking.attr('hidden', true)
+        labeljobtrucking.attr('hidden', true)
+        jobtrucking.parents('.input-group').find('.input-group-append').hide()
+        jobtrucking.parents('.input-group').find('.button-clear').hide()
+      } else {
+        //tas
+        labeljobtrucking.attr('hidden', false)
+        jobtrucking.attr('hidden', false)
+        jobtrucking.parents('.input-group').find('.input-group-append').show()
+        jobtrucking.parents('.input-group').find('.button-clear').show()
+      }
     }
   }
 
@@ -1084,7 +1118,8 @@
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
           Aktif: 'AKTIF',
-          jenisorder_id: 2
+          jenisorder_id: 2,
+          isTripAsal: true
         }
       },
       onSelectRow: (suratpengantar, element) => {
