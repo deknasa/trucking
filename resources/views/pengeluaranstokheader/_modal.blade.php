@@ -1538,7 +1538,9 @@
       fileName: 'stok',
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
-
+        if (kodePengeluaranStok == listKodePengeluaran[0]) {//spk
+          idpengeluaranstok = $(`#pengeluaranstokId`).val();
+        }
         cekKelompok(row);
         this.postData = {
 
@@ -2137,7 +2139,7 @@
                   // var levelcoa = $(`#levelcoa`).val();
                   cekKelompok(id);
                   this.postData = {
-                    pengeluaranstok_id: pengeluaranstokId,
+                    pengeluaranstok_id: $(pengeluaranstokId).val(),
                     Aktif: 'AKTIF',
                     KelompokId: KelompokId,
                   }
