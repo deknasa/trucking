@@ -516,6 +516,9 @@
       beforeSend: request => {
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
+      data: {
+        accessTokenTnl: accessTokenTnl
+      },
       success: response => {
         var kondisi = response.kondisi
         if (kondisi == true) {
