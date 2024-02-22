@@ -474,7 +474,7 @@
           if (aksi == 'edit') {
             editAbsensi(tradoId,supirId)
           } else if (aksi =="deleteFromAll") {
-            deleteFromAll(tradoId,supirId)
+            deleteFromAll(tradoId,supirId,rowId)
           } else {
             deleteAbsensi(tradoId,supirId)
           }

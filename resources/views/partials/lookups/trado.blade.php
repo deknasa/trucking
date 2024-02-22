@@ -14,6 +14,7 @@
         trado_id: `{!! $trado_id ?? '' !!}`,
         cabang: `{!! $cabang ?? '' !!}`,
         supirserap: `{!! $supirserap ?? '' !!}`,
+        tglabsensi: `{!! $tglabsensi ?? '' !!}`,
       },
       idPrefix: 'tradoLookup',
       colModel: [{

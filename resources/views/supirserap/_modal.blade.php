@@ -455,9 +455,11 @@
             title: 'Trado Lookup',
             fileName: 'trado',
             beforeProcess: function(test) {
+                console.log($('#crudForm').find('[name=tglabsensi]').val());
                 this.postData = {
                     Aktif: 'AKTIF',
                     supirserap: true,
+                    tglabsensi: $('#crudForm').find('[name=tglabsensi]').val(),
                 }
             },
             onSelectRow: (trado, element) => {

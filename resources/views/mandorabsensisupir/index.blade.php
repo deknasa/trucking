@@ -516,10 +516,16 @@
             }
             if (firstTime) {
             $.each(data.data, (index, absensi) => {
-              // console.log(absensi.id);
               pushToObject(absensi.id, null, null)
             })
             firstTime = false
+            }else{
+              $.each(data.data, (index, absensi) => {
+                if (!absensi.memo) {
+                  // console.log(absensi);
+                  pushToObject(absensi.id, null, null)
+                }
+              })
             }
           }
           loadStaticData();
@@ -740,7 +746,7 @@
     cekValidasi(tradoId, supirId, 'deleteFromAll', id)
   })
 
-  function deleteFromAll(tradoId, supirId) {
+  function deleteFromAll(tradoId, supirId,rowId) {
     $.ajax({
       url: `${apiUrl}mandorabsensisupir/${tradoId}`,
       method: 'GET',
@@ -809,8 +815,35 @@
 
   function deleteStatic(id, message) {
     if (dataAbsensi.hasOwnProperty(String(id))) {
-      delete dataAbsensi[String(id)];
+      const item = dataAbsensi[id];
+      if (item.supirold_id) {
+        nama_supir = item.namasupir_old
+      } else {
+        nama_supir = null;
+      }
+      $("#jqGrid").jqGrid('setCell', id, 'absen_id', null);
+      $("#jqGrid").jqGrid('setCell', id, 'namasupir', nama_supir);
+      $("#jqGrid").jqGrid('setCell', id, 'absentrado', null);
+      $("#jqGrid").jqGrid('setCell', id, 'keterangan', null);
       $('#jqGrid').jqGrid().trigger('reloadGrid')
+      console.log($("#jqGrid").jqGrid('getCell', id, 'supir_id'),'dfg',$("#jqGrid").jqGrid('getCell', id, 'namasupir'));
+      dataAbsensi[id] = {
+        id: $("#jqGrid").jqGrid('getCell', id, 'id'),
+        trado_id: $("#jqGrid").jqGrid('getCell', id, 'trado_id'),
+        supir_id: $("#jqGrid").jqGrid('getCell', id, 'supir_id'),
+        supirold_id: $("#jqGrid").jqGrid('getCell', id, 'supir_id_old'),
+        absen_id: $("#jqGrid").jqGrid('getCell', id, 'absen_id'),
+        kodetrado: $("#jqGrid").jqGrid('getCell', id, 'kodetrado'),
+        namasupir: $("#jqGrid").jqGrid('getCell', id, 'namasupir'),
+        namasupir_old: $("#jqGrid").jqGrid('getCell', id, 'namasupir_old'),
+        // jam : $("#jqGrid").jqGrid('getCell', id, 'jam'),
+        absentrado: $("#jqGrid").jqGrid('getCell', id, 'absentrado'),
+        keterangan: $("#jqGrid").jqGrid('getCell', id, 'keterangan'),
+        tglbukti: $("#jqGrid").jqGrid('getCell', id, 'tglbukti'),
+      }
+
+      console.log(dataAbsensi[id]);
+      console.log(dataAbsensi);
     } else {
       showDialog(message)
     }
