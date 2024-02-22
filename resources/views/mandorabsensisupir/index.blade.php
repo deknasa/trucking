@@ -514,13 +514,13 @@
                 editable: true
               });
             }
-            // if (firstTime) {
+            if (firstTime) {
             $.each(data.data, (index, absensi) => {
               // console.log(absensi.id);
               pushToObject(absensi.id, null, null)
             })
-            // firstTime = false
-            // }
+            firstTime = false
+            }
           }
           loadStaticData();
         },
@@ -612,6 +612,7 @@
         absen_id: $("#jqGrid").jqGrid('getCell', id, 'absen_id'),
         kodetrado: $("#jqGrid").jqGrid('getCell', id, 'kodetrado'),
         namasupir: $("#jqGrid").jqGrid('getCell', id, 'namasupir'),
+        namasupir_old: $("#jqGrid").jqGrid('getCell', id, 'namasupir_old'),
         // jam : $("#jqGrid").jqGrid('getCell', id, 'jam'),
         absentrado: $("#jqGrid").jqGrid('getCell', id, 'absentrado'),
         keterangan: $("#jqGrid").jqGrid('getCell', id, 'keterangan'),
@@ -817,11 +818,11 @@
   }
 
   function isEditing() {
-    if (jQuery.isEmptyObject(dataAbsensi)) {
-      $('#absen').prop('disabled', true)
-    } else {
-      $('#absen').prop('disabled', false)
-    }
+    // if (jQuery.isEmptyObject(dataAbsensi)) {
+    //   $('#absen').prop('disabled', true)
+    // } else {
+    //   $('#absen').prop('disabled', false)
+    // }
   }
 
   function setTradoMilikSupir() {
