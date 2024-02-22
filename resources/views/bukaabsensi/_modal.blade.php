@@ -150,6 +150,8 @@
 
     activeGrid = null
     initDatepicker()
+    $('#crudForm').find('[name=tglabsensi]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
