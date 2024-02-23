@@ -522,7 +522,8 @@
             }else{
               $.each(data.data, (index, absensi) => {
                 if (!absensi.memo) {
-                  // console.log(absensi);
+                  // console.log(dataAbsensi.hasOwnProperty(String(absensi.id)),absensi.id);
+                  // dataAbsensi.hasOwnProperty(String(id))
                   pushToObject(absensi.id, null, null)
                 }
               })
@@ -825,8 +826,8 @@
       $("#jqGrid").jqGrid('setCell', id, 'namasupir', nama_supir);
       $("#jqGrid").jqGrid('setCell', id, 'absentrado', null);
       $("#jqGrid").jqGrid('setCell', id, 'keterangan', null);
-      $('#jqGrid').jqGrid().trigger('reloadGrid')
-      console.log($("#jqGrid").jqGrid('getCell', id, 'supir_id'),'dfg',$("#jqGrid").jqGrid('getCell', id, 'namasupir'));
+      // $('#jqGrid').jqGrid().trigger('reloadGrid')
+      // console.log($("#jqGrid").jqGrid('getCell', id, 'supir_id'),'dfg',$("#jqGrid").jqGrid('getCell', id, 'namasupir'));
       dataAbsensi[id] = {
         id: $("#jqGrid").jqGrid('getCell', id, 'id'),
         trado_id: $("#jqGrid").jqGrid('getCell', id, 'trado_id'),
@@ -842,8 +843,8 @@
         tglbukti: $("#jqGrid").jqGrid('getCell', id, 'tglbukti'),
       }
 
-      console.log(dataAbsensi[id]);
-      console.log(dataAbsensi);
+      // console.log(dataAbsensi[id]);
+      // console.log(dataAbsensi);
     } else {
       showDialog(message)
     }
