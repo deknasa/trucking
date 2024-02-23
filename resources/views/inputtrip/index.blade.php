@@ -336,7 +336,6 @@
         },
         data: data,
         success: response => {
-          console.log(response.message);
 
           $('.tableInfo').hide()
           showSuccessDialog(response.message, response.data.nobukti)
@@ -351,6 +350,10 @@
           $('#crudForm [name=gandengan]').data('currentValue', '')
           $('#crudForm [name=gandenganasal]').data('currentValue', '')
           $('#crudForm [name=trado]').data('currentValue', '')
+          $('#crudForm [name=jobtrucking]').data('currentValue', '')
+          $('#crudForm [name=dari]').data('currentValue', '')
+          $('#crudForm [name=sampai]').data('currentValue', '')
+          $('#crudForm [name=tarifrincian]').data('currentValue', '')
           createSuratPengantar()
 
         },
@@ -1369,7 +1372,6 @@
         }
       },
       onSelectRow: (absensi, element) => {
-        console.log(absensi);
         $('#crudForm [name=trado_id]').first().val(absensi.trado_id)
         $('#crudForm [name=supir_id]').first().val(absensi.supir_id)
         $('#crudForm [name=absensidetail_id]').first().val(absensi.id)
