@@ -446,9 +446,9 @@
     // $(document).on('input', `#crudForm [name="nominalperalihan"]`, function(event) {
     //   setPersentase()
     // })
-    // $(document).on('input', `#crudForm [name="persentaseperalihan"]`, function(event) {
-    //   setNominal()
-    // })
+    $(document).on('input', `#crudForm [name="persentaseperalihan"]`, function(event) {
+      setNominal()
+    })
 
     $(document).on('change', `#crudForm [name="statusupahzona"]`, function(event) {
       selectedUpahZona = $(`#crudForm [name="statusupahzona"] option:selected`).text()
@@ -810,12 +810,10 @@
   function setNominal() {
     let persentase = $(`#crudForm [name="persentaseperalihan"]`)
     let omset = $(`#crudForm [name="omset"]`).val()
-    console.log(persentase)
     // console.log(omset,(AutoNumeric.getNumber(persentase[0]) / 100) * omset)
 
-    totalPersentase = (AutoNumeric.getNumber(persentase[0]) / 100) * omset;
+    totalPersentase = (AutoNumeric.getNumber(persentase[0]) / 100) * parseFloat(omset.replace(/,/g, ''));
     // $(`#crudForm [name="nominalperalihan"]`).val(totalPersentase)
-
     new AutoNumeric($(`#crudForm [name="nominalperalihan"]`)[0]).set(totalPersentase)
     // initAutoNumeric($(`#crudForm [name="nominalperalihan"]`).val(totalPersentase))
   }
