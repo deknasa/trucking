@@ -1148,3 +1148,11 @@ ul.mob-ul {
 	padding: 0;
 	margin: 0px 0px -10px 5px;
 }
+
+.border-dropdown-extndbtn{
+	border-bottom: #dbe3ef 1px solid;
+}
+
+.dropdown-extndbtn>li:last-child>a{
+	border: none;
+}

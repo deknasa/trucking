@@ -209,11 +209,11 @@ $.fn.customPager = function (option = {}) {
                     extndBtn += `<button type="button" class="${element.class}" data-toggle="dropdown" id="${element.id}">
 					${element.innerHTML}
 					</button>`;
-                    extndBtn += `<ul class="dropdown-menu" id="menu-${element.id}" aria-labelledby="${element.id}">`;
+                    extndBtn += `<ul class="dropdown-menu dropdown-extndbtn" id="menu-${element.id}" aria-labelledby="${element.id}">`;
 
                     if (element.dropmenuHTML) {
                         element.dropmenuHTML.forEach((dropmenuHTML) => {
-                            extndBtn += `<li><a class="dropdown-item" id='${dropmenuHTML.id}' href="#">${dropmenuHTML.text}</a></li>`;
+                            extndBtn += `<li><a class="dropdown-item border-dropdown-extndbtn" id='${dropmenuHTML.id}' href="#">${dropmenuHTML.text}</a></li>`;
                             $(document).on(
                                 "click",
                                 `#${dropmenuHTML.id}`,
@@ -242,12 +242,17 @@ $.fn.customPager = function (option = {}) {
                             );
                             let kurang = leftNavWidth - widthDropdown;
                             let widthX = 0;
-                            if (kurang > 20) {
-                                widthX = kurang / 2;
+                            if (kurang > 15) {
+                                widthX = '-'+ (kurang / 2);
+                            }
+                            if(kurang < -10){
+                                let getNavOffset = $("#left-nav").offset()
+                                console.log( getNavOffset.left, Math.abs(kurang))
+                                widthX = (Math.abs(kurang) + getNavOffset.left)/2
                             }
 
                             let leftNavHeight = $("#left-nav").height();
-                            
+
                             $(`#${element.id}`).on("click", function () {
                                 let widthDropdown = Math.ceil(
                                     $(`#menu-${element.id}`).width()
@@ -257,7 +262,7 @@ $.fn.customPager = function (option = {}) {
                                 );
                                 let kurang = leftNavWidth - widthDropdown;
                                 let widthX = 0;
-                                if (kurang > 20) {
+                                if (kurang > 15) {
                                     widthX = kurang / 2;
                                 }
 
@@ -277,7 +282,7 @@ $.fn.customPager = function (option = {}) {
                                 $(`#menu-${element.id}`).css({
                                     // transform: `translate3d(${widthX}px, 0px, 0px)`,
                                     top: `-${leftNavHeight}px`,
-                                    left: `-${widthX}px`,
+                                    left: `${widthX}px`,
                                 });
                             }, 0);
                         }
