@@ -130,6 +130,7 @@
                     {
                         label: 'user',
                         name: 'user',
+                        width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
                     },
                     {
                         label: 'STATUS',
