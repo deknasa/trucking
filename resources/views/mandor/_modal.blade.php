@@ -59,8 +59,7 @@
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
-                <input type="hidden" name="user_id">
-                <input type="text" name="user" class="form-control user-lookup">
+                <select name="users[]" id="multiple" class="select2bs4 form-control" multiple="multiple"></select>
               </div>
             </div>
 
@@ -120,7 +119,7 @@
       data.push({
         name: 'accessTokenTnl',
         value: accessTokenTnl
-      })      
+      })
       data.push({
         name: 'page',
         value: page
@@ -218,6 +217,12 @@
     getMaxLength(form)
     initLookup()
     initSelect2(form.find('.select2bs4'), true)
+
+    $('#multiple')
+      .select2({
+        theme: 'bootstrap4',
+        width: '100%',
+      })
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
@@ -243,7 +248,8 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form)
+        setStatusAktifOptions(form),
+        setUserOptions(form)
       ])
       .then(() => {
         showDefault(form)
@@ -277,7 +283,8 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form)
+        setStatusAktifOptions(form),
+        setUserOptions(form)
       ])
       .then(() => {
         showMandor(form, mandorId)
@@ -314,7 +321,8 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form)
+        setStatusAktifOptions(form),
+        setUserOptions(form)
       ])
       .then(() => {
         showMandor(form, mandorId)
@@ -351,7 +359,8 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form)
+        setStatusAktifOptions(form),
+        setUserOptions(form)
       ])
       .then(() => {
         showMandor(form, mandorId)
@@ -454,6 +463,8 @@
           Authorization: `Bearer ${accessToken}`
         },
         success: response => {
+
+          let userIds = []
           $.each(response.data, (index, value) => {
             let element = form.find(`[name="${index}"]`)
 
@@ -463,6 +474,11 @@
               element.val(value)
             }
           })
+          response.detail.forEach((user) => {
+            userIds.push(user.user_id)
+          });
+
+          form.find(`[name="users[]"]`).val(userIds).change()
 
           if (form.data('action') === 'delete') {
             form.find('[name]').addClass('disabled')
@@ -556,6 +572,45 @@
       }
     })
 
+  }
+
+
+  function setUserOptions(relatedForm) {
+    return new Promise((resolve, reject) => {
+      relatedForm.find('[name="users[]"]').empty()
+
+      $.ajax({
+        url: `${apiUrl}user`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          limit: 0,
+          filters: JSON.stringify({
+            "groupOp": "AND",
+            "rules": [{
+              "field": "statusaktif",
+              "op": "cn",
+              "data": "AKTIF"
+            }]
+          })
+        },
+        success: response => {
+          response.data.forEach(user => {
+            let option = new Option(user.user, user.id)
+
+            relatedForm.find(`[name="users[]"]`).append(option).trigger('change')
+          });
+
+          resolve()
+        },
+        error: error => {
+          reject(error)
+        }
+      })
+    })
   }
 </script>
 @endpush()
