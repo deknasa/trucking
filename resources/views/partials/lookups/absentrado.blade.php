@@ -10,6 +10,12 @@
       datatype: "json",
       postData: {
         aktif: `{!! $Aktif ?? '' !!}`,
+        trado_id : `{!! $trado_id ?? '' !!}`,
+        supir_id : `{!! $supir_id ?? '' !!}`,
+        supirold_id : `{!! $supirold_id ?? '' !!}`,
+        tglabsensi : `{!! $tglabsensi ?? '' !!}`,
+        dari : `{!! $dari ?? '' !!}`,
+        
       },       
       idPrefix: 'absenTradoLookup',
       colModel: [{

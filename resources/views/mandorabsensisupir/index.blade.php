@@ -314,13 +314,21 @@
               autocomplete: 'off',
               class: 'statusabsentrado-lookup',
               dataInit: function(element) {
-
+                let rowId = $("#jqGrid").jqGrid('getGridParam', 'selrow');
+                let row_trado_id = $("#jqGrid").jqGrid('getCell', rowId, 'trado_id');
+                let row_supir_id = $("#jqGrid").jqGrid('getCell', rowId, 'supir_id');
+                let row_supirold_id = $("#jqGrid").jqGrid('getCell', rowId, 'supirold_id');
                 $('.statusabsentrado-lookup').last().lookup({
                   title: 'Absen Trado Lookup',
                   fileName: 'absentrado',
                   beforeProcess: function(test) {
                     this.postData = {
                       Aktif: 'AKTIF',
+                      trado_id : row_trado_id,
+                      supir_id : row_supir_id,
+                      supirold_id : row_supirold_id,
+                      tglabsensi : $('#tglbukaabsensi').val(),
+                      dari : 'mandorabsensisupir',
                     }
                   },
                   onSelectRow: (absentrado, el) => {
