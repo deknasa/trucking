@@ -2177,6 +2177,7 @@
           // $('#crudForm [name=hargaperton]').first().val(response.dataTarif.nominalton)
           $('#crudForm ').find(`[name="omset"]`).val(response.dataTarif.nominal)
           initAutoNumeric($('#crudForm ').find(`[name="omset"]`))
+          setNominal()
         }
       },
       error: error => {
