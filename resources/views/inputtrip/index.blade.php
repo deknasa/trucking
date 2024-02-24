@@ -481,9 +481,17 @@
     }
     setJobReadOnly()
   })
-  
+
   $(`#crudForm [name="statuslongtrip"]`).on('change', function(event) {
     setJobReadOnly()
+  })
+
+  $(document).on("change", `[name=tglbukti]`, function(event) {
+    $(`#crudForm [name="trado_id"]`).val('')
+    $(`#crudForm [name="supir_id"]`).val('')
+    $(`#crudForm [name="absensidetail_id"]`).val('')
+    $(`#crudForm [name="trado"]`).val('')
+    $('#crudForm [name=trado]').data('currentValue', '')
   })
 
   function enabledLogTrip(selected) {
