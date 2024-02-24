@@ -595,7 +595,8 @@
               "op": "cn",
               "data": "AKTIF"
             }]
-          })
+          }),
+          role: 'MANDOR'
         },
         success: response => {
           response.data.forEach(user => {
