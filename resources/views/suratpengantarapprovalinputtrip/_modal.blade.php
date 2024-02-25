@@ -384,12 +384,20 @@
       beforeSend: request => {
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
+      data: {
+        aksi: Aksi
+      },
       success: response => {
         var error = response.error
         if (error) {
           showDialog(response)
         } else {
-          deleteSuratPengantarApprovalInputTrip(Id)
+          if(Aksi == 'DELETE'){
+            deleteSuratPengantarApprovalInputTrip(Id)
+          }
+          if(Aksi == 'EDIT'){
+            editSuratPengantarApprovalInputTrip(Id)
+          }
         }
       }
     })

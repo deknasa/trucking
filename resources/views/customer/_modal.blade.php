@@ -181,6 +181,8 @@
   let hasFormBindKeys = false
   let modalBody = $('#crudModal').find('.modal-body').html()
 
+  let dataMaxLength = []
+
   $(document).ready(function() {
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
@@ -214,7 +216,7 @@
       data.push({
         name: 'accessTokenTnl',
         value: accessTokenTnl
-      })  
+      })
       data.push({
         name: 'indexRow',
         value: indexRow
@@ -301,7 +303,6 @@
       form.find('#btnSubmit').prop('disabled', true)
     }
 
-    getMaxLength(form)
     initSelect2(form.find(`[name="statustas"]`), true)
     initSelect2(form.find(`[name="statusaktif"]`), true)
 
@@ -335,6 +336,7 @@
       .all([
         setStatusAktifOptions(form),
         setStatusTasOptions(form),
+        getMaxLength(form)
       ])
       .then(() => {
         showDefault(form)
@@ -370,6 +372,7 @@
       .all([
         setStatusAktifOptions(form),
         setStatusTasOptions(form),
+        getMaxLength(form)
       ])
       .then(() => {
         showAgen(form, agenId)
@@ -405,6 +408,7 @@
       .all([
         setStatusAktifOptions(form),
         setStatusTasOptions(form),
+        getMaxLength(form)
       ])
       .then(() => {
         showAgen(form, agenId)
@@ -441,6 +445,7 @@
       .all([
         setStatusAktifOptions(form),
         setStatusTasOptions(form),
+        getMaxLength(form)
       ])
       .then(() => {
         showAgen(form, agenId)
@@ -477,32 +482,53 @@
 
   function getMaxLength(form) {
     if (!form.attr('has-maxlength')) {
-      $.ajax({
-        url: `${apiUrl}customer/field_length`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          'Authorization': `Bearer ${accessToken}`
-        },
-        success: response => {
-          $.each(response.data, (index, value) => {
-            if (value !== null && value !== 0 && value !== undefined) {
-              form.find(`[name=${index}]`).attr('maxlength', value)
+      return new Promise((resolve, reject) => {
+        $.ajax({
+          url: `${apiUrl}customer/field_length`,
+          method: 'GET',
+          dataType: 'JSON',
+          headers: {
+            'Authorization': `Bearer ${accessToken}`
+          },
+          success: response => {
+            $.each(response.data, (index, value) => {
+              if (value !== null && value !== 0 && value !== undefined) {
+                form.find(`[name=${index}]`).attr('maxlength', value)
 
-              if (index == 'nohp') {
-                form.find(`[name=nohp]`).attr('maxlength', 13)
+                if (index == 'nohp') {
+                  form.find(`[name=nohp]`).attr('maxlength', 13)
+                }
+                if (index == 'notelp') {
+                  form.find(`[name=notelp]`).attr('maxlength', 13)
+                }
               }
-              if (index == 'notelp') {
-                form.find(`[name=notelp]`).attr('maxlength', 13)
-              }
+            })
+            dataMaxLength = response.data
+            form.attr('has-maxlength', true)
+            resolve()
+          },
+          error: error => {
+            showDialog(error.statusText)
+            reject()
+          }
+        })
+      })
+    } else {
+
+      return new Promise((resolve, reject) => {
+        $.each(dataMaxLength, (index, value) => {
+          if (value !== null && value !== 0 && value !== undefined) {
+            form.find(`[name=${index}]`).attr('maxlength', value)
+
+            if (index == 'nohp') {
+              form.find(`[name=nohp]`).attr('maxlength', 13)
             }
-          })
-
-          form.attr('has-maxlength', true)
-        },
-        error: error => {
-          showDialog(error.statusText)
-        }
+            if (index == 'notelp') {
+              form.find(`[name=notelp]`).attr('maxlength', 13)
+            }
+          }
+        })
+        resolve()
       })
     }
   }

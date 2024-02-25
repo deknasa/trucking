@@ -108,6 +108,17 @@
             }
           },
           {
+            label: 'TGL BATAS',
+            name: 'tglbatas',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y H:i:s"
+            }
+          },
+          {
             label: 'MODIFIED BY',
             name: 'modifiedby',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
@@ -247,7 +258,7 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                editSuratPengantarApprovalInputTrip(selectedId)
+                cekValidasi(selectedId, 'EDIT')
               }
             }
           },
@@ -260,7 +271,7 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                cekValidasi(selectedId)
+                cekValidasi(selectedId, 'DELETE')
               }
             }
           },
