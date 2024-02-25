@@ -399,6 +399,8 @@
   let dropzones = []
   let aksiEdit = true;
 
+  let dataMaxLength = []
+
   let statusAktif
   let statusUpahZona
   $(document).ready(function() {
@@ -598,7 +600,7 @@
       form.find('#btnSubmit').prop('disabled', true)
     }
 
-    getMaxLength(form)
+ 
     initSelect2(form.find('.select2bs4'), true)
     initDatepicker()
     initLookup()
@@ -686,7 +688,8 @@
         setStatusSimpanKandangOptions(form),
         setStatusUpahZonaOptions(form),
         setStatusPostingTnlOptions(form),
-        setTampilan(form)
+        setTampilan(form),
+        getMaxLength(form)
       ])
       .then(() => {
         showDefault(form)
@@ -733,7 +736,8 @@
         setStatusAktifOptions(form),
         setStatusUpahZonaOptions(form),
         setStatusPostingTnlOptions(form),
-        setTampilan(form)
+        setTampilan(form),
+        getMaxLength(form)
       ])
       .then(() => {
         showUpahSupir(form, id)
@@ -820,7 +824,8 @@
       .all([
         setStatusAktifOptions(form),
         setStatusPostingTnlOptions(form),
-        setTampilan(form)
+        setTampilan(form),
+        getMaxLength(form)
       ])
       .then(() => {
         showUpahSupir(form, id)
@@ -868,7 +873,8 @@
       .all([
         setStatusAktifOptions(form),
         setStatusPostingTnlOptions(form),
-        setTampilan(form)
+        setTampilan(form),
+        getMaxLength(form)
       ])
       .then(() => {
         showUpahSupir(form, id)
@@ -1025,6 +1031,7 @@
 
   function getMaxLength(form) {
     if (!form.attr('has-maxlength')) {
+      return new Promise((resolve, reject) => {
       $.ajax({
         url: `${apiUrl}upahsupir/field_length`,
         method: 'GET',
@@ -1039,11 +1046,26 @@
             }
           })
 
-          form.attr('has-maxlength', true)
+          dataMaxLength = response.data
+            form.attr('has-maxlength', true)
+            resolve()
         },
         error: error => {
           showDialog(error.statusText)
+          reject()
         }
+      })
+            })
+    } else {
+      return new Promise((resolve, reject) => {
+        $.each(dataMaxLength, (index, value) => {
+          if (value !== null && value !== 0 && value !== undefined) {
+            form.find(`[name=${index}]`).attr('maxlength', value)
+
+           
+          }
+        })
+        resolve()
       })
     }
   }
@@ -1996,7 +2018,8 @@
 
         $('#crudForm').find(`[name=kotasampai]`).parents('.input-group').find('.input-group-append').hide()
         $('#crudForm').find(`[name=kotasampai]`).parents('.input-group').find('.button-clear').hide()
-        element.val(tarif.tujuan + ' - ' + tarif.penyesuaian)
+        // element.val(tarif.tujuan + ' - ' + tarif.penyesuaian)
+        element.val(tarif.tujuanpenyesuaian)
         element.data('currentValue', element.val())
       },
       onCancel: (element) => {

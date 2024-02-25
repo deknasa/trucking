@@ -61,6 +61,8 @@
     let modalBody = $('#crudModal').find('.modal-body').html()
     let isEditTgl
 
+    
+
     $(document).ready(function() {
 
         $('#btnSubmit').click(function(event) {

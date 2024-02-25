@@ -269,6 +269,7 @@
   let statusAktif
   let statusSistemTon
   let statusPenyesuaianHarga
+  let dataMaxLength = []
 
   $(document).ready(function() {
 
@@ -433,7 +434,7 @@
       form.find('#btnSubmit').prop('disabled', true)
     }
 
-    getMaxLength(form)
+
     initLookup()
     initSelect2(form.find('.select2bs4'), true)
     initDatepicker()
@@ -470,7 +471,8 @@
         setStatusPenyesuaianHargaOptions(form),
         setStatusSistemTonOptions(form),
         setStatusPostingTnlOptions(form),
-        setTampilan(form)
+        setTampilan(form),
+        getMaxLength(form)
       ])
       .then(() => {
         showDefault(form)
@@ -515,7 +517,8 @@
         setStatusSistemTonOptions(form),
         setStatusAktifOptions(form),
         setStatusPostingTnlOptions(form),
-        setTampilan(form)
+        setTampilan(form),
+        getMaxLength(form)
       ])
       .then(() => {
         showTarif(form, tarifId)
@@ -602,7 +605,8 @@
         setStatusSistemTonOptions(form),
         setStatusAktifOptions(form),
         setStatusPostingTnlOptions(form),
-        setTampilan(form)
+        setTampilan(form),
+        getMaxLength(form)
       ])
       .then(() => {
         showTarif(form, tarifId)
@@ -646,7 +650,8 @@
         setStatusSistemTonOptions(form),
         setStatusAktifOptions(form),
         setStatusPostingTnlOptions(form),
-        setTampilan(form)
+        setTampilan(form),
+        getMaxLength(form)
       ])
       .then(() => {
         showTarif(form, tarifId)
@@ -725,6 +730,7 @@
 
   function getMaxLength(form) {
     if (!form.attr('has-maxlength')) {
+      return new Promise((resolve, reject) => {
       $.ajax({
         url: `${apiUrl}tarif/field_length`,
         method: 'GET',
@@ -739,11 +745,26 @@
             }
           })
 
-          form.attr('has-maxlength', true)
+          dataMaxLength = response.data
+            form.attr('has-maxlength', true)
+            resolve()
         },
         error: error => {
           showDialog(error.statusText)
+          reject()
         }
+      })
+    })
+    } else {
+      return new Promise((resolve, reject) => {
+        $.each(dataMaxLength, (index, value) => {
+          if (value !== null && value !== 0 && value !== undefined) {
+            form.find(`[name=${index}]`).attr('maxlength', value)
+
+ 
+          }
+        })
+        resolve()
       })
     }
   }

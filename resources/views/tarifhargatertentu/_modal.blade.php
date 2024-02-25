@@ -161,6 +161,9 @@
       let tarifHargaTertentuId = form.find('[name=id]').val()
       let action = form.data('action')
       let data = $('#crudForm').serializeArray()
+
+      let dataMaxLength = []
+
       $('#crudForm').find(`[name="nominal"]`).each((index, element) => {
         data.filter((row) => row.name === 'nominal')[index].value = AutoNumeric.getNumber($(`#crudForm [name="nominal"]`)[index])
       })
@@ -261,7 +264,7 @@
 
     activeGrid = null
 
-    getMaxLength(form)
+  
     form.find('#btnSubmit').prop('disabled', false)
     if (form.data('action') == "view") {
       form.find('#btnSubmit').prop('disabled', true)
@@ -299,7 +302,8 @@
     Promise
       .all([
         setStatusAktifOptions(form),
-        setStatusCabangOptions(form)
+        setStatusCabangOptions(form),
+        getMaxLength(form)
       ])
       .then(() => {
         showDefault(form)
@@ -335,7 +339,8 @@
     Promise
       .all([
         setStatusAktifOptions(form),
-        setStatusCabangOptions(form)
+        setStatusCabangOptions(form),
+        getMaxLength(form)
       ])
       .then(() => {
         showTarifHargaTertentu(form, tarifHargaTertentuId)
@@ -377,7 +382,8 @@
     Promise
       .all([
         setStatusAktifOptions(form),
-        setStatusCabangOptions(form)
+        setStatusCabangOptions(form),
+        getMaxLength(form)
       ])
       .then(() => {
         showTarifHargaTertentu(form, tarifHargaTertentuId)
@@ -417,7 +423,8 @@
     Promise
       .all([
         setStatusAktifOptions(form),
-        setStatusCabangOptions(form)
+        setStatusCabangOptions(form),
+        getMaxLength(form)
       ])
       .then(() => {
         showTarifHargaTertentu(form, tarifHargaTertentuId)
@@ -565,6 +572,7 @@
 
   function getMaxLength(form) {
     if (!form.attr('has-maxlength')) {
+      return new Promise((resolve, reject) => {
       $.ajax({
         url: `${apiUrl}tarifhargatertentu/field_length`,
         method: 'GET',
@@ -579,11 +587,26 @@
             }
           })
 
-          form.attr('has-maxlength', true)
+          dataMaxLength = response.data
+            form.attr('has-maxlength', true)
+            resolve()
         },
         error: error => {
           showDialog(error.statusText)
+          reject()
         }
+      })
+    })
+    } else {
+      return new Promise((resolve, reject) => {
+        $.each(dataMaxLength, (index, value) => {
+          if (value !== null && value !== 0 && value !== undefined) {
+            form.find(`[name=${index}]`).attr('maxlength', value)
+
+
+          }
+        })
+        resolve()
       })
     }
   }
