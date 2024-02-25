@@ -296,6 +296,8 @@
   let hasFormBindKeys = false
   let modalBody = $('#crudModal').find('.modal-body').html()
 
+  let dataMaxLength = []
+
   $(document).ready(function() {
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
@@ -412,7 +414,6 @@
       form.find('#btnSubmit').prop('disabled', true)
     }
 
-    getMaxLength(form)
     initSelect2(form.find('.select2bs4'), true)
     initLookup()
   })
@@ -443,7 +444,8 @@
         setStatusDaftarHargaOptions(form),
         setStatusAktifOptions(form),
         setStatusPostingTnlOptions(form),
-        setTampilan(form)
+        setTampilan(form),
+        getMaxLength(form)        
       ])
       .then(() => {
         showDefault(form)
@@ -480,7 +482,8 @@
         setStatusDaftarHargaOptions(form),
         setStatusAktifOptions(form),
         setStatusPostingTnlOptions(form),
-        setTampilan(form)
+        setTampilan(form),
+        getMaxLength(form)
       ])
       .then(() => {
         showSupplier(form, supplierId)
@@ -517,7 +520,8 @@
         setStatusDaftarHargaOptions(form),
         setStatusAktifOptions(form),
         setStatusPostingTnlOptions(form),
-        setTampilan(form)
+        setTampilan(form),
+        getMaxLength(form)
       ])
       .then(() => {
         showSupplier(form, supplierId)
@@ -556,7 +560,8 @@
         setStatusDaftarHargaOptions(form),
         setStatusAktifOptions(form),
         setStatusPostingTnlOptions(form),
-        setTampilan(form)
+        setTampilan(form),
+        getMaxLength(form)
       ])
       .then(() => {
         showSupplier(form, supplierId)
@@ -576,6 +581,7 @@
 
   function getMaxLength(form) {
     if (!form.attr('has-maxlength')) {
+      return new Promise((resolve, reject) => {
       $.ajax({
         url: `${apiUrl}supplier/field_length`,
         method: 'GET',
@@ -594,10 +600,10 @@
                 form.find(`[name=namakontak]`).attr('maxlength', 150)
               }
               if (index == 'notelp1') {
-                form.find(`[name=notelp1]`).attr('maxlength', 50)
+                form.find(`[name=notelp1]`).attr('maxlength', 13)
               }
               if (index == 'notelp2') {
-                form.find(`[name=notelp2]`).attr('maxlength', 50)
+                form.find(`[name=notelp2]`).attr('maxlength', 13)
               }
               if (index == 'namarekening') {
                 form.find(`[name=namarekening]`).attr('maxlength', 150)
@@ -632,14 +638,73 @@
               }
             }
           })
-
+          dataMaxLength = response.data
           form.attr('has-maxlength', true)
+          resolve()
         },
         error: error => {
           showDialog(error.statusText)
-        }
+          reject()
+         }
+        })
+      })
+    } else {
+
+      return new Promise((resolve, reject) => {
+        $.each(dataMaxLength, (index, value) => {
+          if (value !== null && value !== 0 && value !== undefined) {
+            form.find(`[name=${index}]`).attr('maxlength', value)
+
+            if (index == 'kodepos') {
+                form.find(`[name=kodepos]`).attr('maxlength', 50)
+              }
+              if (index == 'namakontak') {
+                form.find(`[name=namakontak]`).attr('maxlength', 150)
+              }
+              if (index == 'notelp1') {
+                form.find(`[name=notelp1]`).attr('maxlength', 13)
+              }
+              if (index == 'notelp2') {
+                form.find(`[name=notelp2]`).attr('maxlength', 13)
+              }
+              if (index == 'namarekening') {
+                form.find(`[name=namarekening]`).attr('maxlength', 150)
+              }
+              if (index == 'jabatan') {
+                form.find(`[name=jabatan]`).attr('maxlength', 150)
+              }
+              if (index == 'kategoriusaha') {
+                form.find(`[name=kategoriusaha]`).attr('maxlength', 150)
+              }
+              if (index == 'rekeningbank') {
+                form.find(`[name=rekeningbank]`).attr('maxlength', 150)
+              }
+              if (index == 'email') {
+                form.find(`[name=email]`).attr('maxlength', 50)
+              }
+              if (index == 'web') {
+                form.find(`[name=web]`).attr('maxlength', 50)
+              }
+              if (index == 'namapemilik') {
+                form.find(`[name=namapemilik]`).attr('maxlength', 150)
+              }
+              if (index == 'jenisusaha') {
+                form.find(`[name=jenisusaha]`).attr('maxlength', 150)
+              }
+              if (index == 'bank') {
+                form.find(`[name=bank]`).attr('maxlength', 150)
+              }
+
+              if (index == 'kota') {
+                form.find(`[name=kota]`).attr('maxlength', 150)
+              }
+          }
+        })
+        resolve()
       })
     }
+
+
   }
 
 

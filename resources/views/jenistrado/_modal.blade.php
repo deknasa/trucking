@@ -79,6 +79,8 @@
   let hasFormBindKeys = false
   let modalBody = $('#crudModal').find('.modal-body').html()
 
+  let dataMaxLength = []
+
   $(document).ready(function() {
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
@@ -196,7 +198,7 @@
       form.find('#btnSubmit').prop('disabled', true)
     }
 
-    getMaxLength(form)
+    
     initSelect2(form.find(`
       [name="statusaktif"]
     `), true)
@@ -225,7 +227,8 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form)
+        setStatusAktifOptions(form),
+        getMaxLength(form)
       ])
       .then(() => {
         showDefault(form)
@@ -258,7 +261,8 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form)
+        setStatusAktifOptions(form),
+        getMaxLength(form)
       ])
       .then(() => {
         showJenisTrado(form, jenisTradoId)
@@ -295,7 +299,8 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form)
+        setStatusAktifOptions(form),
+        getMaxLength(form)
       ])
       .then(() => {
         showJenisTrado(form, jenisTradoId)
@@ -332,7 +337,8 @@
 
     Promise
       .all([
-        setStatusAktifOptions(form)
+        setStatusAktifOptions(form),
+        getMaxLength(form)
       ])
       .then(() => {
         showJenisTrado(form, jenisTradoId)
@@ -362,6 +368,7 @@
 
   function getMaxLength(form) {
     if (!form.attr('has-maxlength')) {
+      return new Promise((resolve, reject) => {
       $.ajax({
         url: `${apiUrl}jenistrado/field_length`,
         method: 'GET',
@@ -376,11 +383,26 @@
             }
           })
 
-          form.attr('has-maxlength', true)
+          dataMaxLength = response.data
+            form.attr('has-maxlength', true)
+            resolve()
         },
         error: error => {
           showDialog(error.statusText)
+          reject()
         }
+      })
+    })
+    } else {
+      return new Promise((resolve, reject) => {
+        $.each(dataMaxLength, (index, value) => {
+          if (value !== null && value !== 0 && value !== undefined) {
+            form.find(`[name=${index}]`).attr('maxlength', value)
+
+   
+          }
+        })
+        resolve()
       })
     }
   }
