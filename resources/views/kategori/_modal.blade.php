@@ -84,6 +84,8 @@
   let hasFormBindKeys = false
   let modalBody = $('#crudModal').find('.modal-body').html()
 
+  let dataMaxLength = []
+
   $(document).ready(function() {
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
@@ -208,7 +210,6 @@
       form.find('#btnSubmit').prop('disabled', true)
     }
 
-    getMaxLength(form)
     initLookup()
     initDatepicker()
     initSelect2(form.find('.select2bs4'), true)
@@ -241,9 +242,11 @@
     Promise
       .all([
         setStatusAktifOptions(form),
+        showDefault(form),
+        getMaxLength(form)
       ])
-      .then(() => {
-        showDefault(form)
+     
+        
           .then(() => {
             if (selectedRows.length > 0) {
               clearSelectedRows()
@@ -256,7 +259,7 @@
           .finally(() => {
             $('.modal-loader').addClass('d-none')
           })
-      })
+  
   }
 
   function editKategori(kategoriId) {
@@ -278,6 +281,7 @@
     Promise
       .all([
         setStatusAktifOptions(form),
+        getMaxLength(form)
       ])
       .then(() => {
         showKategori(form, kategoriId)
@@ -315,6 +319,7 @@
     Promise
       .all([
         setStatusAktifOptions(form),
+        getMaxLength(form)
       ])
       .then(() => {
         showKategori(form, kategoriId)
@@ -351,6 +356,7 @@
     Promise
       .all([
         setStatusAktifOptions(form),
+        getMaxLength(form)
       ])
       .then(() => {
         showKategori(form, kategoriId)
@@ -383,6 +389,7 @@
 
   function getMaxLength(form) {
     if (!form.attr('has-maxlength')) {
+      return new Promise((resolve, reject) => {
       $.ajax({
         url: `${apiUrl}kategori/field_length`,
         method: 'GET',
@@ -397,11 +404,25 @@
             }
           })
 
-          form.attr('has-maxlength', true)
+          dataMaxLength = response.data
+            form.attr('has-maxlength', true)
+            resolve()
         },
         error: error => {
           showDialog(error.statusText)
+          reject()
         }
+      })
+    })
+    } else {
+      return new Promise((resolve, reject) => {
+        $.each(dataMaxLength, (index, value) => {
+          if (value !== null && value !== 0 && value !== undefined) {
+            form.find(`[name=${index}]`).attr('maxlength', value)
+
+          }
+        })
+        resolve()
       })
     }
   }
@@ -559,7 +580,7 @@
   function showDefault(form) {
     return new Promise((resolve, reject) => {
       $.ajax({
-        url: `${apiUrl}kategori/default`,
+        url: `${apiUrl}kelompok/default`,
         method: 'GET',
         dataType: 'JSON',
         headers: {

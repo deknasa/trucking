@@ -92,6 +92,8 @@
 
 @push('scripts')
 <script>
+    let dataMaxLength = []
+
   $('#input_masknpwp').inputmask({
     mask: '99.999.999.9-999.999',
     definitions: {
@@ -239,7 +241,6 @@
       form.find('#btnSubmit').prop('disabled',true)
     }
     
-    getMaxLength(form)
     initSelect2(form.find('.select2bs4'), true)
   })
 
@@ -286,6 +287,7 @@
       .all([
         setStatusAktifOptions(form),
         setStatusKaryawanOptions(form),
+        getMaxLength(form)
       ])
       .then(() => {
         showDefault(form)
@@ -341,6 +343,7 @@
       .all([
         setStatusAktifOptions(form),
         setStatusKaryawanOptions(form),
+        getMaxLength(form)
       ])
       .then(() => {
         showPenerima(form, penerimaId)
@@ -379,6 +382,7 @@
       .all([
         setStatusAktifOptions(form),
         setStatusKaryawanOptions(form),
+        getMaxLength(form)
       ])
       .then(() => {
         showPenerima(form, penerimaId)
@@ -417,6 +421,7 @@
       .all([
         setStatusAktifOptions(form),
         setStatusKaryawanOptions(form),
+        getMaxLength(form)
       ])
       .then(() => {
         showPenerima(form, penerimaId)
@@ -456,6 +461,7 @@
 
   function getMaxLength(form) {
     if (!form.attr('has-maxlength')) {
+      return new Promise((resolve, reject) => {
       $.ajax({
         url: `${apiUrl}penerima/field_length`,
         method: 'GET',
@@ -470,11 +476,24 @@
             }
           })
 
-          form.attr('has-maxlength', true)
-        },
+          dataMaxLength = response.data
+            form.attr('has-maxlength', true)
+            resolve()        },
         error: error => {
           showDialog(error.statusText)
+          reject()
         }
+      })
+     })
+    } else {
+      return new Promise((resolve, reject) => {
+        $.each(dataMaxLength, (index, value) => {
+          if (value !== null && value !== 0 && value !== undefined) {
+            form.find(`[name=${index}]`).attr('maxlength', value)
+
+          }
+        })
+        resolve()
       })
     }
   }

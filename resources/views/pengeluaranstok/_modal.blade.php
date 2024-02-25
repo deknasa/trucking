@@ -109,6 +109,8 @@
   let hasFormBindKeys = false
   let modalBody = $('#crudModal').find('.modal-body').html()
 
+  let dataMaxLength = []
+
   $(document).ready(function() {
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
@@ -229,7 +231,6 @@
     activeGrid = null
     initLookup()
     initSelect2(form.find('.select2bs4'), true);
-    getMaxLength(form)
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
@@ -255,7 +256,8 @@
     $('.invalid-feedback').remove()
     Promise
       .all([
-        showDefault(form)
+        showDefault(form),
+        getMaxLength(form)
       ])
       .then(() => {
         if (selectedRows.length > 0) {
@@ -289,7 +291,8 @@
 
     Promise
       .all([
-        showPengeluaranStok(form, pengeluaranstokId)
+        showPengeluaranStok(form, pengeluaranstokId),
+        getMaxLength(form)
       ])
       .then(() => {
         if (selectedRows.length > 0) {
@@ -322,7 +325,8 @@
     $('.invalid-feedback').remove()
     Promise
       .all([
-        showPengeluaranStok(form, pengeluaranstokId)
+        showPengeluaranStok(form, pengeluaranstokId),
+        getMaxLength(form)
       ])
       .then(() => {
         if (selectedRows.length > 0) {
@@ -355,7 +359,8 @@
     $('.invalid-feedback').remove()
     Promise
       .all([
-        showPengeluaranStok(form, pengeluaranstokId)
+        showPengeluaranStok(form, pengeluaranstokId),
+        getMaxLength(form)
       ])
       .then(pengeluaranstokId => {
         // form.find('.aksi').hide()
@@ -477,6 +482,7 @@
 
   function getMaxLength(form) {
     if (!form.attr('has-maxlength')) {
+      return new Promise((resolve, reject) => {
       $.ajax({
         url: `${apiUrl}pengeluaranstok/field_length`,
         method: 'GET',
@@ -491,11 +497,26 @@
             }
           })
 
-          form.attr('has-maxlength', true)
+          dataMaxLength = response.data
+            form.attr('has-maxlength', true)
+            resolve()
         },
         error: error => {
           showDialog(error.statusText)
+          reject()
         }
+      })
+    })
+    } else {
+      return new Promise((resolve, reject) => {
+        $.each(dataMaxLength, (index, value) => {
+          if (value !== null && value !== 0 && value !== undefined) {
+            form.find(`[name=${index}]`).attr('maxlength', value)
+
+          
+          }
+        })
+        resolve()
       })
     }
   }

@@ -146,6 +146,8 @@
 
 @push('scripts')
 <script>
+    let dataMaxLength = []
+
   let hasFormBindKeys = false
   let modalBody = $('#crudModal').find('.modal-body').html()
 
@@ -266,7 +268,6 @@
       form.find('#btnSubmit').prop('disabled', true)
     }
 
-    getMaxLength(form)
     initSelect2(form.find('.select2bs4'), true)
 
   })
@@ -295,6 +296,7 @@
     Promise
       .all([
         setStatusAktifOptions(form),
+        getMaxLength(form)
       ])
       .then(() => {
         showDefault(form)
@@ -401,6 +403,7 @@
     Promise
       .all([
         setStatusAktifOptions(form),
+        getMaxLength(form)
       ])
       .then(() => {
         showPelanggan(form, pelangganId)
@@ -436,6 +439,7 @@
     Promise
       .all([
         setStatusAktifOptions(form),
+        getMaxLength(form)
       ])
       .then(() => {
         showPelanggan(form, pelangganId)
@@ -470,6 +474,7 @@
     Promise
       .all([
         setStatusAktifOptions(form),
+        getMaxLength(form)
       ])
       .then(() => {
         showPelanggan(form, pelangganId)
@@ -506,6 +511,8 @@
 
   function getMaxLength(form) {
     if (!form.attr('has-maxlength')) {
+      return new Promise((resolve, reject) => {
+
       $.ajax({
         url: `${apiUrl}shipper/field_length`,
         method: 'GET',
@@ -526,12 +533,32 @@
             }
           })
 
-          form.attr('has-maxlength', true)
+          dataMaxLength = response.data
+            form.attr('has-maxlength', true)
+            resolve()
         },
         error: error => {
           showDialog(error.statusText)
+          reject()
         }
       })
+     })
+    } else {
+      return new Promise((resolve, reject) => {
+        $.each(dataMaxLength, (index, value) => {
+          if (value !== null && value !== 0 && value !== undefined) {
+            form.find(`[name=${index}]`).attr('maxlength', value)
+
+            if (index == 'kodepos') {
+                form.find(`[name=${index}]`).attr('maxlength', 5)
+              }
+              if (index == 'telp') {
+                form.find(`[name=${index}]`).attr('maxlength', 13)
+              }
+          }
+        })
+        resolve()
+      })  
     }
   }
 

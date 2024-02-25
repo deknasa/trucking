@@ -257,6 +257,9 @@
   let dropzones = []
   var dataReuse = []
 
+  let dataMaxLength = []
+
+
   $(document).ready(function() {
     $(document).on('dblclick', '[data-dz-thumbnail]', handleImageClick)
     $(document).on('click', '.rmv', function(event) {
@@ -408,7 +411,6 @@
     initSelect2(form.find(`[name="statusreuse"]`))
     initSelect2(form.find(`[name="statusban"]`))
     initSelect2(form.find(`[name="statusservicerutin"]`))
-    getMaxLength(form)
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
@@ -443,7 +445,8 @@
         setStatusAktifOptions(form),
         setStatusReuseOptions(form),
         setStatusBanOptions(form),
-        setStatusServiceRutinOptions(form)
+        setStatusServiceRutinOptions(form),
+        getMaxLength(form)
 
       ])
       .then(() => {
@@ -498,7 +501,8 @@
         setStatusAktifOptions(form),
         setStatusReuseOptions(form),
         setStatusBanOptions(form),
-        setStatusServiceRutinOptions(form)
+        setStatusServiceRutinOptions(form),
+        getMaxLength(form)
       ])
       .then(() => {
         showStok(form, stokId)
@@ -540,7 +544,8 @@
         setStatusAktifOptions(form),
         setStatusReuseOptions(form),
         setStatusBanOptions(form),
-        setStatusServiceRutinOptions(form)
+        setStatusServiceRutinOptions(form),
+        getMaxLength(form)
       ])
       .then(() => {
         showStok(form, stokId)
@@ -582,7 +587,8 @@
         setStatusAktifOptions(form),
         setStatusReuseOptions(form),
         setStatusBanOptions(form),
-        setStatusServiceRutinOptions(form)
+        setStatusServiceRutinOptions(form),
+        getMaxLength(form)
       ])
       .then(() => {
         showStok(form, stokId)
@@ -625,6 +631,8 @@
 
   function getMaxLength(form) {
     if (!form.attr('has-maxlength')) {
+      return new Promise((resolve, reject) => {
+
       $.ajax({
         url: `${apiUrl}stok/field_length`,
         method: 'GET',
@@ -639,11 +647,26 @@
             }
           })
 
-          form.attr('has-maxlength', true)
+          dataMaxLength = response.data
+            form.attr('has-maxlength', true)
+            resolve()
         },
         error: error => {
           showDialog(error.statusText)
+          reject()
         }
+      })
+    })
+    } else {
+      return new Promise((resolve, reject) => {
+        $.each(dataMaxLength, (index, value) => {
+          if (value !== null && value !== 0 && value !== undefined) {
+            form.find(`[name=${index}]`).attr('maxlength', value)
+
+      
+          }
+        })
+        resolve()
       })
     }
   }

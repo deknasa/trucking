@@ -312,6 +312,7 @@
   let hasFormBindKeys = false
   let modalBody = $('#crudModal').find('.modal-body').html()
   let dropzones = []
+  let dataMaxLength = []
 
   $(document).ready(function() {
     $(document).on('dblclick', '[data-dz-thumbnail]', handleImageClick)
@@ -453,7 +454,8 @@
         setStatusAktifOptions(form),
         setStatusJenisPlatOptions(form),
         setStatusGerobak(form),
-        setStatusAbsensiSupir(form)
+        setStatusAbsensiSupir(form),
+        getMaxLength(form)
       ])
       .then(() => {
         showDefault(form)
@@ -483,7 +485,7 @@
       [name="statusgerobak"],
       [name="statusabsensisupir"]
     `), true)
-    getMaxLength(form)
+    
     form.find('[name]').removeAttr('disabled')
   }
 
@@ -511,7 +513,8 @@
         setStatusAktifOptions(form),
         setStatusJenisPlatOptions(form),
         setStatusGerobak(form),
-        setStatusAbsensiSupir(form)
+        setStatusAbsensiSupir(form),
+        getMaxLength(form)
       ])
       .then(() => {
         showTrado(form, id)
@@ -528,7 +531,7 @@
               clearSelectedRows()
             }
             $('#crudModal').modal('show')
-            getMaxLength(form)
+     
             $('#crudForm').find(`.ui-datepicker-trigger`).attr('disabled', false)
 
             let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
@@ -569,7 +572,8 @@
         setStatusAktifOptions(form),
         setStatusJenisPlatOptions(form),
         setStatusGerobak(form),
-        setStatusAbsensiSupir(form)
+        setStatusAbsensiSupir(form),
+        getMaxLength(form)
 
       ])
       .then(() => {
@@ -639,7 +643,8 @@
         setStatusAktifOptions(form),
         setStatusJenisPlatOptions(form),
         setStatusGerobak(form),
-        setStatusAbsensiSupir(form)
+        setStatusAbsensiSupir(form),
+        getMaxLength(form)
 
       ])
       .then(() => {
@@ -1308,6 +1313,7 @@
 
   function getMaxLength(form) {
     if (!form.attr('has-maxlength')) {
+      return new Promise((resolve, reject) => {
       $.ajax({
         url: `${apiUrl}trado/field_length`,
         method: 'GET',
@@ -1354,11 +1360,56 @@
               form.find(`[name=jumlahbanserap]`).attr('maxlength', 2)
             }
           })
-          form.attr('has-maxlength', true)
+          dataMaxLength = response.data
+            form.attr('has-maxlength', true)
+            resolve()
         },
         error: error => {
           showDialog(error.statusText)
+          reject()
         }
+      })
+    })
+    } else {
+      return new Promise((resolve, reject) => {
+        $.each(dataMaxLength, (index, value) => {
+          if (value !== null && value !== 0 && value !== undefined) {
+              form.find(`[name=${index}]`).attr('maxlength', value)
+              if (index == 'tahun') {
+                form.find(`[name=tahun]`).attr('maxlength', 4)
+              }
+              if (index == 'norangka') {
+                form.find(`[name=norangka]`).attr('maxlength', 20)
+              }
+              if (index == 'nostnk') {
+                form.find(`[name=nostnk]`).attr('maxlength', 50)
+              }
+              if (index == 'kodetrado') {
+                form.find(`[name=kodetrado]`).attr('maxlength', 12)
+              }
+              if (index == 'nomesin') {
+                form.find(`[name=nomesin]`).attr('maxlength', 20)
+              }
+              if (index == 'nobpkb') {
+                form.find(`[name=nobpkb]`).attr('maxlength', 15)
+              }
+
+            }
+
+            if (index == 'jumlahsumbu') {
+              form.find(`[name=jumlahsumbu]`).attr('maxlength', 2)
+            }
+            if (index == 'isisilinder') {
+              form.find(`[name=isisilinder]`).attr('maxlength', 5)
+            }
+            if (index == 'jumlahroda') {
+              form.find(`[name=jumlahroda]`).attr('maxlength', 2)
+            }
+            if (index == 'jumlahbanserap') {
+              form.find(`[name=jumlahbanserap]`).attr('maxlength', 2)
+            }
+        })
+        resolve()
       })
     }
   }
