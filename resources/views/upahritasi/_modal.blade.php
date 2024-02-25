@@ -204,6 +204,8 @@
   let aksiEdit = true;
   let statusAktif
 
+  let dataMaxLength = []
+
 
   $(document).ready(function() {
 
@@ -354,7 +356,7 @@
       form.find('#btnSubmit').prop('disabled', true)
     }
 
-    getMaxLength(form)
+   
     initSelect2(form.find('.select2bs4'), true)
     initDatepicker()
     initLookup()
@@ -400,7 +402,8 @@
     Promise
       .all([
         setStatusAktifOptions(form),
-        setStatusLuarKotaOptions(form)
+        setStatusLuarKotaOptions(form),
+        getMaxLength(form)
       ])
       .then(() => {
         showDefault(form)
@@ -442,7 +445,8 @@
     Promise
       .all([
         setStatusAktifOptions(form),
-        setStatusLuarKotaOptions(form)
+        setStatusLuarKotaOptions(form),
+        getMaxLength(form)
       ])
       .then(() => {
         showUpahRitasi(form, id)
@@ -498,7 +502,8 @@
     Promise
       .all([
         setStatusAktifOptions(form),
-        setStatusLuarKotaOptions(form)
+        setStatusLuarKotaOptions(form),
+        getMaxLength(form)
       ])
       .then(() => {
         showUpahRitasi(form, id)
@@ -536,7 +541,8 @@
     Promise
       .all([
         setStatusAktifOptions(form),
-        setStatusLuarKotaOptions(form)
+        setStatusLuarKotaOptions(form),
+        getMaxLength(form)
       ])
       .then(() => {
         showUpahRitasi(form, id)
@@ -570,6 +576,7 @@
 
   function getMaxLength(form) {
     if (!form.attr('has-maxlength')) {
+      return new Promise((resolve, reject) => {
       $.ajax({
         url: `${apiUrl}upahritasi/field_length`,
         method: 'GET',
@@ -584,12 +591,32 @@
             }
           })
 
-          form.attr('has-maxlength', true)
+          dataMaxLength = response.data
+            form.attr('has-maxlength', true)
+            resolve()
         },
         error: error => {
           showDialog(error.statusText)
+          reject()
         }
       })
+    })
+    } else {
+      return new Promise((resolve, reject) => {
+        $.each(dataMaxLength, (index, value) => {
+          if (value !== null && value !== 0 && value !== undefined) {
+            form.find(`[name=${index}]`).attr('maxlength', value)
+
+            if (index == 'nohp') {
+              form.find(`[name=nohp]`).attr('maxlength', 13)
+            }
+            if (index == 'notelp') {
+              form.find(`[name=notelp]`).attr('maxlength', 13)
+            }
+          }
+        })
+        resolve()
+      })  
     }
   }
 
