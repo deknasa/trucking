@@ -24,7 +24,7 @@
   let totalRecord
   let limit
   let postData
-  let sortname = 'tglbukti'
+  let sortname = 'tglbatas'
   let sortorder = 'asc'
   let autoNumericElements = []
   let rowNum = 10

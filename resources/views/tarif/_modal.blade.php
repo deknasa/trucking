@@ -1044,6 +1044,8 @@
     $('.statusaktif-lookup').lookupMaster({
       title: 'Status Aktif Lookup',
       fileName: 'parameterMaster',
+      typeSearch: 'ALL',
+      searching: 1,
       beforeProcess: function(test) {
         this.postData = {
           url: `${apiUrl}parameter/combo`,
@@ -1197,6 +1199,8 @@
     $('.kota-lookup').lookupMaster({
       title: 'Kota Lookup',
       fileName: 'kotaMaster',
+      typeSearch: 'ALL',
+      searching: 1,
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
@@ -1229,6 +1233,8 @@
     $('.zona-lookup').lookupMaster({
       title: 'Zona Lookup',
       fileName: 'zonaMaster',
+      typeSearch: 'ALL',
+      searching: 1,
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
@@ -1293,6 +1299,8 @@
     $('.parent-lookup').lookupMaster({
       title: 'Tarif Lookup',
       fileName: 'tarifMaster',
+      typeSearch: 'ALL',
+      searching: 1,
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
