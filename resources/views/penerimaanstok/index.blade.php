@@ -11,6 +11,7 @@
     </div>
 
     @include('penerimaanstok._modal')
+    @include('penerimaanstok._modalTidakCabang')
 
     @push('scripts')
         <script>
@@ -449,6 +450,32 @@
             
                                 }
                             },
+
+                        ],
+                        extndBtn: [
+                            {
+                                id: 'lainnya',
+                                title: 'Lainnya',
+                                caption: 'Lainnya',
+                                innerHTML: '<i class="fa fa-check"></i> LAINNYA',
+                                class: 'btn btn-secondary btn-sm mr-1 dropdown-toggle ',
+                                dropmenuHTML: [
+                                    {
+                                        id: 'approvalnoncabang',
+                                        text: "Approval Tidak berlaku dicabang",
+                                        onClick: () => {
+                                            approvalCabang()
+                                        }
+                                    },
+                                    {
+                                        id: 'approvalberlakudicabang',
+                                        text: "Approval berlaku dicabang",
+                                        onClick: () => {
+                                            listCabang()
+                                        }
+                                    }
+                                ]
+                            },
                         ]
                     })
 
@@ -677,6 +704,50 @@
                     });
                 }
 
+                function approvalCabang() {
+                    event.preventDefault()
+                    let form = $('#crudForm')
+                    $(this).attr('disabled', '')
+                    $('#processingLoader').removeClass('d-none')
+                    
+                    $.ajax({
+                        url: `${apiUrl}penerimaanstok/approvaltidakcabang`,
+                        method: 'POST',
+                        dataType: 'JSON',
+                        headers: {
+                            Authorization: `Bearer ${accessToken}`
+                        },
+                        data: {
+                            Id: selectedRows
+                        },
+                        success: response => {
+                            $('#crudForm').trigger('reset')
+                            $('#crudModal').modal('hide')
+                            
+                            $('#jqGrid').jqGrid('setGridParam',{
+                                postData: {
+                                    proses: 'reload'
+                                }
+                            }).trigger('reloadGrid');
+                            selectedRows = []
+                            $('#gs_').prop('checked', false)
+                        },
+                        error: error => {
+                            if (error.status === 422) {
+                                $('.is-invalid').removeClass('is-invalid')
+                                $('.invalid-feedback').remove()
+                                
+                                setErrorMessages(form, error.responseJSON.errors);
+                            } else {
+                                showDialog(error.responseJSON)
+                            }
+                        },
+                    }).always(() => {
+                        $('#processingLoader').addClass('d-none')
+                        $(this).removeAttr('disabled')
+                    })
+                    
+                }
 
 
 

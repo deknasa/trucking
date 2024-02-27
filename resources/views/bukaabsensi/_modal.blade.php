@@ -24,6 +24,20 @@
                 </div>
               </div>
             </div>
+
+
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
+                  user <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="hidden" name="user_id">
+                <input type="text" name="user" class="form-control user-lookup">
+              </div>
+            </div>
+
           </div>
           <div class="modal-footer justify-content-start">
             <button id="btnSubmit" class="btn btn-primary">
@@ -147,7 +161,7 @@
     let form = $('#crudForm')
 
     setFormBindKeys(form)
-
+    initLookup();
     activeGrid = null
     initDatepicker()
     $('#crudForm').find('[name=tglabsensi]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
@@ -282,6 +296,31 @@
           reject(error)
         }
       })
+    })
+  }
+
+  function initLookup() {
+    $('.user-lookup').lookup({
+      title: 'user Lookup',
+      fileName: 'user',
+      beforeProcess: function(test) {
+        this.postData = {
+          role: 'MANDOR',
+        }
+      },
+      onSelectRow: (user, element) => {
+        $(`#crudForm [name="user_id"]`).first().val(user.id)
+        element.val(user.name)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        $(`#crudForm [name="user_id"]`).first().val('')
+        element.data('currentValue', element.val())
+      }
     })
   }
 </script>
