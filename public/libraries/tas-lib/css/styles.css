@@ -481,6 +481,38 @@ input[type=text]:focus,input[type=password]:focus, .select2-selection:focus {
 	background-color: #DCDCDC;
 }
 
+/* Not with modal-header */
+#activeCabang {
+	padding-right: 0px !important;
+	padding-left: 0px !important;
+}
+
+#activeCabang .modal-dialog {
+	max-width: 100%;
+	margin: 0;
+	height: 100%;
+}
+
+#activeCabang .modal-content {
+	height: 100%;
+	border: 0;
+	border-radius: 0;
+	background-color: #ffcc99;
+}
+
+#activeCabang .modal-body {
+	overflow-y: auto;
+	height: calc(100vh - 80px);
+	border: 0;
+	border-radius: 0;
+}
+
+#activeCabang .modal-footer {
+	border: 0;
+	border-radius: 0;
+	background-color: #DCDCDC;
+}
+
 /* Not with modal-header (For cek aben trado) */
 .approval-modal {
 	padding-right: 0px !important;
