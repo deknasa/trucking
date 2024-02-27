@@ -131,6 +131,11 @@
             }
           },
           {
+            label: 'user Mandor',
+            name: 'user',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+          },
+          {
             label: 'tgl batas',
             name: 'tglbatas',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
