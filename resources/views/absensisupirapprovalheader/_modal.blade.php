@@ -84,6 +84,7 @@
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
+          Proses: 'APPROVALSUPIR',
         }
       },
       onSelectRow: (absensisupir, element) => {
