@@ -15,6 +15,7 @@
       iconSet: 'fontAwesome',
       datatype: "json",
       postData: {
+        proses: `{!! $Proses ?? '' !!}`,        
         tgldari: $('#tgldariheaderlookup').val(),
         tglsampai: $('#tglsampaiheaderlookup').val(),
 
