@@ -423,6 +423,7 @@
               return ` title="${statusPeralihan.MEMO}"`
             }
           },
+
           {
             label: 'LOKASI BONGKAR MUAT',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
@@ -435,10 +436,104 @@
             width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
           },
           {
+            label: 'STATUS GAJI SUPIR',
+            name: 'statusgajisupir',
+            stype: 'select',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['combogajisupir'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['combogajisupir'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+            `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              let statusGajisupir = JSON.parse(value)
+              if (!statusGajisupir) {
+                return ''
+              }
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusGajisupir.WARNA}; color: #fff;">
+                  <span>${statusGajisupir.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusGajisupir = JSON.parse(rowObject.statusgajisupir)
+              if (!statusGajisupir) {
+                return ` title=""`
+              }
+              return ` title="${statusGajisupir.MEMO}"`
+            }
+          },          
+          {
             label: 'INVOICE NO BUKTI',
             name: 'invoice_nobukti',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
+          {
+            label: 'STATUS INVOICE',
+            name: 'statusinvoice',
+            stype: 'select',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['comboinvoice'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['comboinvoice'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+            `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              let statusInvoice = JSON.parse(value)
+              if (!statusInvoice) {
+                return ''
+              }
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusInvoice.WARNA}; color: #fff;">
+                  <span>${statusInvoice.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusInvoice = JSON.parse(rowObject.statusinvoice)
+              if (!statusInvoice) {
+                return ` title=""`
+              }
+              return ` title="${statusInvoice.MEMO}"`
+            }
+          },          
           {
             label: 'MANDOR TRADO',
             name: 'mandortrado_id',
