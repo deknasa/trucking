@@ -934,6 +934,16 @@
     })
   }
 
+  function clearTrado() {
+    $('#crudForm [name=trado_id]').val('')
+    $('#crudForm [name=supir_id]').val('')
+    $('#crudForm [name=absensidetail_id]').val('')
+    $('#crudForm [name=trado]').val('')
+    $('#crudForm [name=trado]').data('currentValue', '')
+    $('#infoTrado').html('')
+    $('.tableInfo').hide()
+  }
+
   function showDefault(form) {
     $.ajax({
       url: `${apiUrl}suratpengantar/default`,
@@ -1559,6 +1569,7 @@
         kotaUpahZona()
 
         element.data('currentValue', element.val())
+        clearTrado()
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
@@ -1570,6 +1581,7 @@
         clearUpahSupir()
         element.val('')
         element.data('currentValue', element.val())
+        clearTrado()
       }
     })
 

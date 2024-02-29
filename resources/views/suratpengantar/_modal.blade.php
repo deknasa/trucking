@@ -49,7 +49,7 @@
                     </select>
                   </div>
                 </div>
-                <div class="form-group ">
+                <div class="form-group statusupahzona">
                   <label class="col-sm-12 col-form-label">UPAH ZONA <span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <select name="statusupahzona" class="form-control select2bs4" id="statusupahzona">
@@ -164,7 +164,7 @@
                   <label class="col-sm-12 col-form-label">SUPIR <span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <input type="hidden" name="supir_id">
-                    <input type="text" name="supir" class="form-control supir-lookup">
+                    <input type="text" name="supir" class="form-control" readonly>
                   </div>
                 </div>
 
@@ -176,7 +176,7 @@
                   </div>
                 </div>
 
-                <div class="form-group ">
+                <div class="form-group statusgandengan">
                   <label class="col-sm-12 col-form-label">STATUS GANDENGAN <span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <select name="statusgandengan" class="form-control select2bs4" id="statusgandengan">
@@ -185,7 +185,7 @@
                   </div>
                 </div>
 
-                <div class="form-group ">
+                <div class="form-group gandengan">
                   <label class="col-sm-12 col-form-label">NO GANDENGAN / CHASIS</label>
                   <div class="col-sm-12">
                     <input type="hidden" name="gandengan_id">
@@ -327,34 +327,76 @@
 
             <div class="card">
               <div class="card-header bg-info">
-                Biaya
+                <div class="row">
+                  <div class="col-md-6">
+                    BIAYA
+                  </div>
+                  <div class="col-md-6">
+                    MASTER
+                  </div>
+                </div>
               </div>
               <div class="card-body">
-                <div class="row form-group">
-                  <div class="col-12 col-md-2">
-                    <label class="col-form-label">
-                      GAJI SUPIR </label>
+                <div class="row">
+                  <div class="col-md-6">
+
+                    <div class="row form-group">
+                      <div class="col-12 col-md-2">
+                        <label class="col-form-label">
+                          GAJI SUPIR </label>
+                      </div>
+                      <div class="col-12 col-md-8">
+                        <input type="text" name="gajisupir" id="gajisupir" class="form-control autonumeric" readonly>
+                      </div>
+                    </div>
+                    <div class="row form-group row-gajikenek">
+                      <div class="col-12 col-md-2">
+                        <label class="col-form-label">
+                          GAJI KENEK </label>
+                      </div>
+                      <div class="col-12 col-md-8 elgajikenek">
+                        <input type="text" name="gajikenek" id="gajikenek" class="form-control text-right" readonly>
+                      </div>
+                    </div>
+                    <div class="row form-group">
+                      <div class="col-12 col-md-2">
+                        <label class="col-form-label">
+                          KOMISI SUPIR </label>
+                      </div>
+                      <div class="col-12 col-md-8 elkomisisupir">
+                        <input type="text" name="komisisupir" id="komisisupir" class="form-control text-right" readonly>
+                      </div>
+                    </div>
                   </div>
-                  <div class="col-12 col-md-4">
-                    <input type="text" name="gajisupir" id="gajisupir" class="form-control autonumeric" readonly>
-                  </div>
-                </div>
-                <div class="row form-group">
-                  <div class="col-12 col-md-2">
-                    <label class="col-form-label">
-                      GAJI KENEK </label>
-                  </div>
-                  <div class="col-12 col-md-4">
-                    <input type="text" name="gajikenek" id="gajikenek" class="form-control text-right" readonly>
-                  </div>
-                </div>
-                <div class="row form-group">
-                  <div class="col-12 col-md-2">
-                    <label class="col-form-label">
-                      KOMISI SUPIR </label>
-                  </div>
-                  <div class="col-12 col-md-4">
-                    <input type="text" name="komisisupir" id="komisisupir" class="form-control text-right" readonly>
+                  <div class="col-md-6">
+
+                    <div class="row form-group">
+                      <div class="col-12 col-md-2">
+                        <label class="col-form-label">
+                          GAJI SUPIR </label>
+                      </div>
+                      <div class="col-12 col-md-8">
+                        <input type="text" name="gajisupirmaster" id="gajisupirmaster" class="form-control autonumeric" readonly>
+                      </div>
+                    </div>
+                    <div class="row form-group">
+                      <div class="col-12 col-md-2">
+                        <label class="col-form-label">
+                          GAJI KENEK </label>
+                      </div>
+                      <div class="col-12 col-md-8">
+                        <input type="text" name="gajikenekmaster" id="gajikenekmaster" class="form-control text-right" readonly>
+                      </div>
+                    </div>
+                    <div class="row form-group">
+                      <div class="col-12 col-md-2">
+                        <label class="col-form-label">
+                          KOMISI SUPIR </label>
+                      </div>
+                      <div class="col-12 col-md-8">
+                        <input type="text" name="komisisupirmaster" id="komisisupirmaster" class="form-control text-right" readonly>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
@@ -910,7 +952,8 @@
         setStatusGudangSamaOptions(form),
         setStatusBatalMuatOptions(form),
         setStatusGandenganOptions(form),
-        setStatusUpahZonaOptions(form)
+        setStatusUpahZonaOptions(form),
+        setTampilan(form)
       ])
       .then(() => {
         showSuratPengantar(form, id)
@@ -1398,11 +1441,11 @@
           initAutoNumeric(form.find(`[name="persentaseperalihan"]`))
           initAutoNumeric(form.find(`[name="gajisupir"]`))
           if (isKomisi == 'TIDAK') {
-            $(`#crudForm [name="gajikenek"]`).parents('.row').find('.col-form-label').text('KOMISI KENEK')
+            $(`#crudForm [name="gajikenek"]`).parents('.row-gajikenek').find('.col-form-label').text('KOMISI KENEK')
             form.find(`[name="gajikenek"]`).attr('readonly', false)
             form.find(`[name="komisisupir"]`).attr('readonly', false)
           } else {
-            $(`#crudForm [name="gajikenek"]`).parents('.row').find('.col-form-label').text('GAJI KENEK')
+            $(`#crudForm [name="gajikenek"]`).parents('.row-gajikenek').find('.col-form-label').text('GAJI KENEK')
             form.find(`[name="gajikenek"]`).attr('readonly', false)
 
           }
@@ -1455,7 +1498,7 @@
 
           isShow = false
           setRowNumbers()
-
+          getDataUpahSupir()
           initDatepicker()
           if (form.data('action') === 'delete') {
             form.find('[name]').addClass('disabled')
@@ -1467,6 +1510,32 @@
           reject(error)
         }
       })
+    })
+  }
+
+  function getDataUpahSupir() {
+    $.ajax({
+      url: `${apiUrl}upahsupir/getrincian`,
+      method: 'POST',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        upah_id: $('#crudForm').find(`[name="upah_id"]`).val(),
+        container_id: $('#crudForm').find(`[name="container_id"]`).val(),
+        statuscontainer_id: $('#crudForm').find(`[name="statuscontainer_id"]`).val(),
+      },
+      success: response => {
+        $('#crudForm').find(`[name="gajisupirmaster"]`).val(response.data.nominalsupir)
+        $('#crudForm').find(`[name="gajikenekmaster"]`).val(response.data.nominalkenek)
+        $('#crudForm').find(`[name="komisisupirmaster"]`).val(response.data.nominalkomisi)
+
+        initAutoNumeric($('#crudForm').find(`[name="gajisupirmaster"]`))
+        initAutoNumeric($('#crudForm').find(`[name="gajikenekmaster"]`))
+        initAutoNumeric($('#crudForm').find(`[name="komisisupirmaster"]`))
+
+      }
     })
   }
 
@@ -1736,13 +1805,11 @@
         let nominalKenek = parseFloat(upahsupir.nominalkenek.replace(/,/g, ""));
         let nominalKomisi = parseFloat(upahsupir.nominalkomisi.replace(/,/g, ""));
 
-        $('#crudForm [name=gajikenek]').val(nominalKenek)
-        $('#crudForm [name=komisisupir]').val(nominalKomisi)
-        initAutoNumeric($('#crudForm').find('[name="gajikenek"]'))
-        initAutoNumeric($('#crudForm').find('[name="komisisupir"]'))
+        setNominalKenek(nominalKenek, nominalKomisi)
         element.data('currentValue', element.val())
         getNominalSupir()
         getTarifOmset(upahsupir.tarif_id, containerId)
+        getDataUpahSupir()
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
@@ -1780,6 +1847,8 @@
         element.val(trado.trado)
         element.data('currentValue', element.val())
         getNominalSupir()
+        $('#crudForm [name=supir_id]').val(trado.supir_id)
+        $('#crudForm [name=supir]').val(trado.supir)
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
@@ -1790,6 +1859,9 @@
         element.val('')
         element.data('currentValue', element.val())
         getNominalSupir()
+        $('#crudForm [name=supir_id]').val('')
+        $('#crudForm [name=supir]').val('')
+        $('#crudForm [name=supir]').data('currentValue', '')
       }
     })
     $('.supir-lookup').lookup({
@@ -2221,6 +2293,28 @@
     })
   }
 
+  function setNominalKenek(nominalKenek, nominalKomisi) {
+    $('#crudForm [name=gajikenek]').remove()
+    $('#crudForm [name=komisisupir]').remove()
+    elGajiKenek = $(`<input type="text" name="gajikenek" id="gajikenek" class="form-control text-right" readonly>`)
+    elKomisiSupir = $(`<input type="text" name="komisisupir" id="komisisupir" class="form-control text-right" readonly>`)
+    $('.elgajikenek').append(elGajiKenek)
+    $('.elkomisisupir').append(elKomisiSupir)
+
+    $('#crudForm [name=gajikenek]').val(nominalKenek)
+    $('#crudForm [name=komisisupir]').val(nominalKomisi)
+    initAutoNumeric($('#crudForm').find('[name="gajikenek"]'))
+    initAutoNumeric($('#crudForm').find('[name="komisisupir"]'))
+
+    if (isKomisi == 'TIDAK') {
+      $('#crudForm').find(`[name="gajikenek"]`).attr('readonly', false)
+      $('#crudForm').find(`[name="komisisupir"]`).attr('readonly', false)
+    } else {
+      $('#crudForm').find(`[name="gajikenek"]`).attr('readonly', false)
+
+    }
+  }
+
   function getOrderanTrucking(id) {
     $.ajax({
       url: `${apiUrl}suratpengantar/${id}/getOrderanTrucking`,
@@ -2256,6 +2350,47 @@
       error: error => {
         showDialog(error.statusText)
       }
+    })
+  }
+
+  const setTampilan = function(relatedForm) {
+    return new Promise((resolve, reject) => {
+      let data = [];
+      data.push({
+        name: 'grp',
+        value: 'UBAH TAMPILAN'
+      })
+      data.push({
+        name: 'text',
+        value: 'INPUTTRIP'
+      })
+      $.ajax({
+        url: `${apiUrl}parameter/getparambytext`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: data,
+        success: response => {
+          memo = JSON.parse(response.memo)
+          memo = memo.INPUT
+          if (memo != '') {
+            input = memo.split(',');
+            input.forEach(field => {
+              field = $.trim(field.toLowerCase());
+              if (field == 'nobukti_tripasal') {
+                isTripAsal = false
+              }
+              $(`.${field}`).hide()
+            });
+          }
+          resolve()
+        },
+        error: error => {
+          reject(error)
+        }
+      })
     })
   }
   // function setDummyOption() {
