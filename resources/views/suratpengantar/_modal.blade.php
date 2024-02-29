@@ -169,7 +169,7 @@
                 </div>
 
                 <div class="form-group ">
-                  <label class="col-sm-12 col-form-label">PELANGGAN <span class="text-danger">*</span></label>
+                  <label class="col-sm-12 col-form-label">SHIPPER <span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <input type="hidden" name="pelanggan_id">
                     <input type="text" name="pelanggan" class="form-control pelanggan-lookup">
