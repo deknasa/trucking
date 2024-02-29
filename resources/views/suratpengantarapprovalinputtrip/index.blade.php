@@ -119,6 +119,16 @@
             }
           },
           {
+            label: 'USER',
+            name: 'user_id',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+          },
+          {
+            label: 'TERPAKAI',
+            name: 'terpakai',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+          },
+          {
             label: 'MODIFIED BY',
             name: 'modifiedby',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,

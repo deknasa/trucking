@@ -48,6 +48,19 @@
                 </select>
               </div>
             </div>
+
+
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
+                  user <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="hidden" name="user_id">
+                <input type="text" name="user" class="user-lookup form-control">
+              </div>
+            </div>
           </div>
           <div class="modal-footer justify-content-start">
             <button id="btnSubmit" class="btn btn-primary">
@@ -184,6 +197,7 @@
     activeGrid = null
     initSelect2($(`[name="statusapproval"]`), true)
     initDatepicker()
+    initLookup()
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
@@ -358,6 +372,8 @@
             let element = form.find(`[name="${index}"]`)
             if (element.is('select')) {
               element.val(value).trigger('change')
+            } else if (element.hasClass('datepicker')) {
+              element.val(dateFormat(value))
             } else {
               element.val(value)
             }
@@ -392,10 +408,10 @@
         if (error) {
           showDialog(response)
         } else {
-          if(Aksi == 'DELETE'){
+          if (Aksi == 'DELETE') {
             deleteSuratPengantarApprovalInputTrip(Id)
           }
-          if(Aksi == 'EDIT'){
+          if (Aksi == 'EDIT') {
             editSuratPengantarApprovalInputTrip(Id)
           }
         }
@@ -464,6 +480,32 @@
         }
       })
     })
+  }
+
+  function initLookup() {
+    $('.user-lookup').lookup({
+      title: 'user Lookup',
+      fileName: 'user',
+      beforeProcess: function(test) {
+        this.postData = {
+          role: 'MANDOR',
+        }
+      },
+      onSelectRow: (user, element) => {
+        $(`#crudForm [name="user_id"]`).first().val(user.id)
+        element.val(user.name)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        $(`#crudForm [name="user_id"]`).first().val('')
+        element.data('currentValue', element.val())
+      }
+    })
+
   }
 </script>
 @endpush()
