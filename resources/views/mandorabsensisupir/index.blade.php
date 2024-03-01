@@ -354,6 +354,13 @@
             width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
           },
           {
+            label: 'jlh trip',
+            name: 'jlhtrip',
+            editable: false,
+            align: 'right',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2
+          },
+          {
             label: 'keterangan',
             name: 'keterangan',
             editable: true,
@@ -364,6 +371,26 @@
               }]
             },
             width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1
+          },
+          {
+            label: 'TGL BATAS',
+            name: 'tglbatas',
+            formatter: (value, options, rowData) => {
+              let rowId = $("#jqGrid").jqGrid('getGridParam', 'selrow');
+              let data = value
+              if (!value) {
+                data = $('#tglbukaabsensi').val() +' 11:59:00'
+                $("#jqGrid").jqGrid('setCell', rowId, 'tglbatas', data);
+              }
+              return data;
+            },
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+            align: 'right',
+            // formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
           },
           {
             label: 'TGL BUKTI',
