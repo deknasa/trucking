@@ -35,7 +35,7 @@
               <div class="col-12 col-md-10">
                 <div class="input-group">
 
-                  <input type="text" name="tglbukti" class="form-control datepicker">
+                  <input type="text" name="tglbukti" id="tglbukti" class="form-control datepicker">
                 </div>
               </div>
             </div>
@@ -54,7 +54,7 @@
                           <th width="15%">Supir</th>
                           <th width="30%">Keterangan</th>
                           <th width="15%">Status</th>
-                          <th width="10%">Jam</th>
+                          <th width="8%">jlh trip</th>
                           <th width="15%" class="uangjalan">Uang Jalan</th>
                           {{-- <th width="2%">Aksi</th> --}}
                         </tr>
@@ -78,7 +78,7 @@
                       <input type="text" name="absen" class="form-control absentrado-lookup">
                     </td>
                     <td>
-                      <input type="text" class="form-control inputmask-time" name="jam[]"></input>
+                      <input type="text" class="form-control inputmask-time" name="jlhtrip[]"></input>
                     </td>
                     <td>
                       <input type="text" class="form-control uangjalan autonumeric" name="uangjalan[]">
@@ -412,7 +412,7 @@
                       <input type="text" name="absen" class="form-control absentrado-lookup">
                     </td>
                     <td>
-                      <input type="text" class="form-control inputmask-time" name="jam[]"></input>
+                      <input type="text" class="form-control autonumeric" name="jlhtrip[]" disabled></input>
                     </td>
                     <td class="uangjalan">
                       <input type="text" class="form-control uangjalan autonumeric" name="uangjalan[]">
@@ -696,8 +696,11 @@
                 <input type="text" name="trado[]" data-current-value="${detail.trado}" class="form-control" value="${detail.trado}" readonly>
               </td>
               <td>
-                <input type="hidden" name="supir_id[]">
-                <input type="text" name="supir[]" data-current-value="${detail.supir}" class="form-control supir-lookup" value="${detail.supir}">
+                <input type="hidden" name="supir_old[]" id="supir_old_row_${index}" value="${detail.namasupir_old}">
+                <input type="hidden" name="supir_id_old[]" id="supir_old_id_row_${index}" value="${detail.supir_id_old}">
+
+                <input type="hidden" name="supir_id[]" id="supir_id_row_${index}">
+                <input type="text" name="supir[]" data-current-value="${detail.supir}" class="form-control supir-lookup" id="supir_row_${index}" value="${detail.supir}">
               </td>
               <td>
                 <input type="text" name="keterangan_detail[]" class="form-control" value="${detail.keterangan}">
@@ -707,7 +710,8 @@
                 <input type="text" name="absen"  data-current-value="${detail.absen}" class="form-control absentrado-lookup" value="${detail.absen}">
               </td>
               <td>
-                <input type="text" class="form-control inputmask-time" name="jam[]" value="${detail.jam}"></input>
+                <input type="text" class="form-control autonumeric" name="jlhtrip[]" value="${detail.jlhtrip}" disabled></input>
+                <input type="text" class="form-control inputmask-time" hidden name="jam[]" value="${detail.jam}"></input>
               </td>
               <td class="uangjalan">
                 <input type="text" class="form-control uangjalan autonumeric" name="uangjalan[]" value="${detail.uangjalan}">
@@ -780,9 +784,19 @@
               beforeProcess: function(test) {
                 this.postData = {
                   Aktif: 'AKTIF',
+                  trado_id : detail.trado_id,
+                  supir_id : detail.supir_id,
+                  supirold_id : detail.supir_id_old,
+                  tglabsensi : $('#tglbukti').val(),
+                  dari : 'mandorabsensisupir',
                 }
               },
               onSelectRow: (absentrado, element) => {
+                getabsentrado(absentrado.id).then((response) => {
+                  setSupirEnableIndex(response, index)
+                }).catch(() => {
+                  setSupirEnableIndex(false, index)
+                })
                 element.parents('td').find(`[name="absen_id[]"]`).val(absentrado.id)
                 element.val(absentrado.keterangan)
                 element.data('currentValue', element.val())
@@ -794,6 +808,7 @@
                 element.parents('td').find(`[name="absen_id[]"]`).val('')
                 element.val('')
                 element.data('currentValue', element.val())
+                setSupirEnableIndex(false, index)
               }
             })
 
@@ -834,7 +849,7 @@
           <input type="text" name="absen" class="form-control absentrado-lookup">
         </td>
         <td>
-          <input type="text" class="form-control inputmask-time" name="jam[]"></input>
+          <input type="text" class="form-control autonumeric" name="jlhtrip[]" disabled></input>
         </td>
         <td>
           <input type="text" class="form-control uangjalan autonumeric" name="uangjalan[]">
@@ -1004,6 +1019,40 @@
           showDialog(response.message['keterangan'])
         }
       }
+    })
+  }
+
+  function setSupirEnableIndex(kodeabsensitrado, rowId) {
+    if (kodeabsensitrado) {
+      $(`#supir_row_${rowId}`).val('')
+      $(`#supir_id_row_${rowId}`).val('')
+      // $("#jqGrid").jqGrid('setCell', rowId, 'jam', null);
+    } else {
+      console.log(rowId);
+      let namasupir_old = $(`#supir_old_row_${rowId}`).val()
+      let supir_id_old = $(`#supir_old_id_row_${rowId}`).val()
+
+      console.log($(`#supir_old_row_${rowId}`),$(`#supir_old_id_row_${rowId}`));
+      $(`#supir_row_${rowId}`).val(namasupir_old)
+      $(`#supir_id_row_${rowId}`).val(supir_id_old)
+    }
+  }
+  function getabsentrado(id) {
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `${apiUrl}mandorabsensisupir/${id}/getabsentrado`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        },
+        success: response => {
+          resolve(response.data)
+        },
+        error: error => {
+          reject(error)
+        }
+      })
     })
   }
 
