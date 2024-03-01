@@ -1,48 +1,5 @@
 @push('scripts')
 <script>
-  let selectedRowsTambahan = [];
-
-  function clearSelectedRowsTambahan() {
-    selectedRowsTambahan = []
-
-    $('#detailGrid').trigger('reloadGrid')
-  }
-
-  function selectAllRowsTambahan(id) {
-    $.ajax({
-      url: `${apiUrl}suratpengantarbiayatambahan`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      data: {
-        limit: 0,
-        suratpengantar_id: $('#detailGrid').jqGrid('getGridParam', 'postData').suratpengantar_id,
-        filters: $('#detailGrid').jqGrid('getGridParam', 'postData').filters
-      },
-      success: (response) => {
-        selectedRowsTambahan = response.data.map((jurnal) => jurnal.id)
-        $('#detailGrid').trigger('reloadGrid')
-      }
-    })
-  }
-
-  function checkboxHandlerTambahan(element) {
-    let value = $(element).val();
-    if (element.checked) {
-      selectedRowsTambahan.push($(element).val())
-      $(element).parents('tr').addClass('bg-light-blue')
-    } else {
-      $(element).parents('tr').removeClass('bg-light-blue')
-      for (var i = 0; i < selectedRowsTambahan.length; i++) {
-        if (selectedRowsTambahan[i] == value) {
-          selectedRowsTambahan.splice(i, 1);
-        }
-      }
-    }
-
-  }
 
   function loadDetailGrid() {
     let sortnameDetail = 'nobukti'
@@ -193,7 +150,6 @@
           setCustomBindKeys($(this))
           initResize($(this))
 
-
           /* Set global variables */
           sortnameDetail = $(this).jqGrid("getGridParam", "sortname")
           sortorderDetail = $(this).jqGrid("getGridParam", "sortorder")
@@ -259,38 +215,5 @@
     }).trigger('reloadGrid')
   }
 
-  function approveBiayaTambahan() {
-    event.preventDefault()
-    $.ajax({
-      url: `${apiUrl}suratpengantarbiayatambahan/approval`,
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      },
-      data: {
-        id: selectedRowsTambahan
-      },
-      success: response => {
-        $('#crudForm').trigger('reset')
-        $('#crudModal').modal('hide')
-        selectedRowsTambahan = []
-        $('#detailGrid').jqGrid().trigger('reloadGrid');
-      },
-      error: error => {
-        if (error.status === 422) {
-          $('.is-invalid').removeClass('is-invalid')
-          $('.invalid-feedback').remove()
-
-          setErrorMessages($('#crudForm'), error.responseJSON.errors);
-        } else {
-          showDialog(error.responseJSON)
-        }
-      },
-    }).always(() => {
-      $('#processingLoader').addClass('d-none')
-      $(this).removeAttr('disabled')
-    })
-  }
 </script>
 @endpush
