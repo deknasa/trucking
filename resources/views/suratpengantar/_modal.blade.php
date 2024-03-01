@@ -413,7 +413,7 @@
                             <th width="60%">Keterangan</th>
                             <th width="19%">Nominal Supir</th>
                             <th width="19%">Nominal Tagih</th>
-                            <th width="1%">Aksi</th>
+                            <th class="aksi" width="1%">Aksi</th>
                           </tr>
                         </thead>
                         <tbody class="form-group">
@@ -429,7 +429,7 @@
                             <td>
                               <p class="text-right font-weight-bold autonumeric" id="totalTagih"></p>
                             </td>
-                            <td>
+                            <td class="aksi">
                               <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">TAMBAH</button>
                             </td>
                           </tr>
@@ -1487,6 +1487,8 @@
                 detailRow.find(`[name="keterangan_detail[]"]`).prop('readonly', true)
                 detailRow.find(`[name="nominal[]"]`).prop('readonly', true)
                 detailRow.find(`[name="nominalTagih[]"]`).prop('readonly', true)
+                $('.aksi').hide()
+                $('.delete-row').parents('td').hide()
               }
               $('#detailList tbody').append(detailRow)
 

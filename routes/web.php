@@ -286,6 +286,7 @@ use App\Http\Controllers\SuratPengantarApprovalInputTripController;
 use App\Http\Controllers\ApprovalBukaTanggalSuratPengantarController;
 use App\Http\Controllers\LaporanPemotonganPinjamanDepositoController;
 use App\Http\Controllers\ExportRincianMingguanPendapatanSupirController;
+use App\Http\Controllers\SuratPengantarBiayaTambahanController;
 use App\Http\Controllers\TarifHargaTertentuController;
 
 /*
@@ -1701,6 +1702,8 @@ Route::middleware(['auth', 'authorized'])->group(function () {
     Route::get('exportperhitunganbonus/export', [ExportPerhitunganBonusController::class, 'export'])->name('exportperhitunganbonus.export');
     Route::get('exportperhitunganbonus/index', [ExportPerhitunganBonusController::class, 'index']);
     Route::resource('exportperhitunganbonus', ExportPerhitunganBonusController::class);
+    Route::get('suratpengantarbiayatambahan/index', [SuratPengantarBiayaTambahanController::class, 'index']);
+    Route::resource('suratpengantarbiayatambahan', SuratPengantarBiayaTambahanController::class);
 });
 
 Route::patch('format', [FormatController::class, 'update']);
