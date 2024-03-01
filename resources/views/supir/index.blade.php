@@ -276,6 +276,17 @@
                         }
                     },
                     {
+                        label: 'TGL MASUK',
+                        name: 'tglmasuk',
+                        formatter: "date",
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+                        align: 'right',
+                        formatoptions: {
+                            srcformat: "ISO8601Long",
+                            newformat: "d-m-Y"
+                        }
+                    },                    
+                    {
                         label: 'TGL TERBIT SIM',
                         name: 'tglterbitsim',
                         formatter: "date",

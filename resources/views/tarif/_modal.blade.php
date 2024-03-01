@@ -45,6 +45,54 @@
               </div>
             </div>
 
+            <div class="row form-group ">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
+                UPAH SUPIR
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                    <input type="hidden" name="upah_id">
+                    <input type="text" name="upah" id="upah" class="form-control upahsupir-lookup">
+                  </div>
+                </div>
+
+                <div class="row form-group ">
+                <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
+                PENYESUAIAN
+                </label>
+              </div>       
+              <div class="col-12 col-sm-9 col-md-10">
+                    <input type="text" name="penyesuaian" id="penyesuaian" class="form-control" readonly>
+                  </div>
+                </div>
+
+                <div class="row form-group ">
+                <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
+                DARI
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                    <input type="hidden" name="dari_id" >
+                    <input type="text" name="dari" id="dari" class="form-control kotadari-lookup" readonly>
+                  </div>
+                </div>
+
+                <div class="row form-group ">
+                <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
+                SAMPAI
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                    <input type="hidden" name="sampai_id">
+                    <input type="text" name="sampai" id="sampai" class="form-control kotasampai-lookup" readonly>
+                  </div>
+                </div>
+
+
             <div class="row form-group">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
@@ -150,21 +198,7 @@
                 </div>
               </div>
             </div>
-            <div class="row form-group statuspenyesuaianharga">
-              <div class="col-12 col-md-2">
-                <label class="col-form-label">
-                  STATUS PENYESUAIAN HARGA <span class="text-danger">*</span></label>
-              </div>
-              <div class="col-12 col-md-10">
-                <select name="statuspenyesuaianharga" class="form-select select2bs4" style="width: 100%;" z-index='3'>
-                  <option value="">-- PILIH STATUS PENYESUAIAN HARGA --</option>
-
-                </select>
-                <!-- <input type="hidden" name="statuspenyesuaianharga_id" class="filled-row">
-                <input type="text" name="statuspenyesuaianharga_name" id="statuspenyesuaianharga_name" class="form-control lg-form statuspenyesuaianharga-lookup filled-row" autocomplete="off"> -->
-
-              </div>
-            </div>
+   
             <div class="row form-group statuspostingtnl">
               <div class="col-12 col-md-2">
                 <label class="col-form-label">
@@ -468,7 +502,7 @@
     Promise
       .all([
         setStatusAktifOptions(form),
-        setStatusPenyesuaianHargaOptions(form),
+        // setStatusPenyesuaianHargaOptions(form),
         setStatusSistemTonOptions(form),
         setStatusPostingTnlOptions(form),
         setTampilan(form),
@@ -513,7 +547,7 @@
 
     Promise
       .all([
-        setStatusPenyesuaianHargaOptions(form),
+        // setStatusPenyesuaianHargaOptions(form),
         setStatusSistemTonOptions(form),
         setStatusAktifOptions(form),
         setStatusPostingTnlOptions(form),
@@ -601,7 +635,7 @@
 
     Promise
       .all([
-        setStatusPenyesuaianHargaOptions(form),
+        // setStatusPenyesuaianHargaOptions(form),
         setStatusSistemTonOptions(form),
         setStatusAktifOptions(form),
         setStatusPostingTnlOptions(form),
@@ -646,7 +680,7 @@
 
     Promise
       .all([
-        setStatusPenyesuaianHargaOptions(form),
+        // setStatusPenyesuaianHargaOptions(form),
         setStatusSistemTonOptions(form),
         setStatusAktifOptions(form),
         setStatusPostingTnlOptions(form),
@@ -1229,6 +1263,7 @@
         element.data('currentValue', element.val())
       }
     })
+    
 
     $('.zona-lookup').lookupMaster({
       title: 'Zona Lookup',
@@ -1333,37 +1368,60 @@
         element.data('currentValue', element.val())
       }
     })
-    $('.upahsupir-lookup').lookup({
+    $('.upahsupir-lookup').lookupMaster({
       title: 'Upah Supir Lookup',
-      fileName: 'upahsupir',
+      fileName: 'upahsupirMaster',
+      typeSearch: 'ALL',
+      searching: 1,      
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
 
+        
           Aktif: 'AKTIF',
+          searching: 1,
+          valueName: 'upahsupir_id',
+          searchText: 'upahsupir-lookup',
+          singleColumn: '',
+          hideLabel: '',
+          title: 'upahsupir',
+          typeSearch: 'ALL',
         }
       },
       onSelectRow: (upahsupir, element) => {
-        $('#crudForm [name=upahsupir_id]').first().val(upahsupir.id)
-        $('#crudForm').find(`[name=penyesuaian]`).val(upahsupir.penyesuaian).prop('readonly', true)
-        $('#crudForm').find(`[name=tujuan]`).prop('readonly', true)
-        $('#crudForm [name=tujuan]').val(upahsupir.kotasampai_id)
-        element.val(upahsupir.kotasampai_id)
+        $('#crudForm [name=upah_id]').val(upahsupir.id)
+
+          $('#crudForm [name=penyesuaian]').val(upahsupir.penyesuaian)
+          $('#crudForm [name=dari]').val(upahsupir.kotadari_id)
+          $('#crudForm [name=sampai]').val(upahsupir.kotasampai_id)
+          element.val(`${upahsupir.kotadari_id} - ${upahsupir.kotasampai_id}`)
+
         element.data('currentValue', element.val())
+        clearTrado()
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
       },
       onClear: (element) => {
-        $('#crudForm [name=upahsupir_id]').first().val('')
-        $('#crudForm').find(`[name=tujuan]`).prop('readonly', false)
-        $('#crudForm').find(`[name=penyesuaian]`).val('').prop('readonly', false)
-        $('#crudForm [name=tujuan]').val('')
+        tarifrincianId = 0
+        $('#crudForm [name=upah_id]').val('')
+        clearUpahSupir()
         element.val('')
         element.data('currentValue', element.val())
       }
     })
   }
+
+  function clearUpahSupir() {
+
+      $('#crudForm [name=upah_id]').val('')
+      $('#crudForm [name=upah]').data('currentValue', '')
+      $('#crudForm [name=dari_id]').val('')
+      $('#crudForm [name=sampai_id]').val('')
+      $('#crudForm [name=dari]').val('')
+      $('#crudForm [name=sampai]').val('')
+      $('#crudForm [name=penyesuaian]').val('')
+      }
 
 
   function setUpRow() {
