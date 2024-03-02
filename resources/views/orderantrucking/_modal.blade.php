@@ -598,6 +598,48 @@
     })
   }
 
+
+  function approvalTanpaJobEMKL() {
+    event.preventDefault()
+
+    let form = $('#crudForm')
+    $(this).attr('disabled', '')
+    $('#processingLoader').removeClass('d-none')
+
+    $.ajax({
+      url: `${apiUrl}orderantrucking/approvaltanpajob`,
+      method: 'POST',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        orderanTruckingId: selectedRows
+      },
+      success: response => {
+        $('#crudForm').trigger('reset')
+        $('#crudModal').modal('hide')
+
+        $('#jqGrid').jqGrid().trigger('reloadGrid');
+        selectedRows = []
+        $('#gs_').prop('checked', false)
+      },
+      error: error => {
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+
+          setErrorMessages(form, error.responseJSON.errors);
+        } else {
+          showDialog(error.statusText)
+        }
+      },
+    }).always(() => {
+      $('#processingLoader').addClass('d-none')
+      $(this).removeAttr('disabled')
+    })
+  }
+
   function editValidasi(edit) {
     let container = $('#crudForm').find(`[name="container"]`).parents('.input-group')
     let agen = $('#crudForm').find(`[name="agen"]`).parents('.input-group')
@@ -777,8 +819,6 @@
 
             if (index == 'container') {
               element.data('current-value', value)
-              console.log(containerId)
-              getcont(containerId)
             }
             if (index == 'agen') {
               element.data('current-value', value)
@@ -789,12 +829,15 @@
             if (index == 'pelanggan') {
               element.data('current-value', value)
             }
-            if (index == 'tarifrincian') {
+            if (index == 'nojobemkl') {
+              element.data('current-value', value)
+            }
+            if (index == 'nojobemkl2') {
               element.data('current-value', value)
             }
 
             if (index == 'agen_id') {
-              getagentas(value)
+              getagentas(value, response.data.statusapprovaltanpajob, response.data.tglbatastanpajoborderantrucking)
             }
           })
 
@@ -847,9 +890,9 @@
   }
 
   function setJobReadOnly() {
-
     let nojobemkl = $('#crudForm [name=nojobemkl]')
     let nojobemkl2 = $('#crudForm [name=nojobemkl2]')
+    let container_id = $('#crudForm [name=container_id]').val()
     if (statustas == '0') {
       //bukan tas
       // console.log('bukan');
@@ -860,70 +903,75 @@
       nojobemkl2.parents('.input-group').find('.input-group-append').hide()
       nojobemkl2.parents('.input-group').find('.button-clear').hide()
       nojobemkl.val('')
-      nojobemkl.val('')
+      nojobemkl2.val('')
     } else {
       //tas
       nojobemkl.attr('readonly', false)
       nojobemkl.parents('.input-group').find('.input-group-append').show()
       nojobemkl.parents('.input-group').find('.button-clear').show()
-      nojobemkl2.attr('readonly', false)
-      nojobemkl2.parents('.input-group').find('.input-group-append').show()
-      nojobemkl2.parents('.input-group').find('.button-clear').show()
+
+      if (container_id == 3) {
+        nojobemkl2.attr('readonly', false)
+        nojobemkl2.parents('.input-group').find('.input-group-append').show()
+        nojobemkl2.parents('.input-group').find('.button-clear').show()
+      }
     }
   }
 
   function setContEnable() {
+    let container_id = $('#crudForm [name=container_id]').val()
     let nojobemkl2 = $('#crudForm [name=nojobemkl2]')
-    if (statustas == '0') {
-      //bukan tas
-      nojobemkl2.attr('readonly', true)
-      nojobemkl2.parents('.input-group').find('.input-group-append').hide()
-      nojobemkl2.parents('.input-group').find('.button-clear').hide()
-      $('#crudForm [name=nocont]').attr('readonly', false)
-      $('#crudForm [name=noseal]').attr('readonly', false)
-      if (kodecontainer == '1') {
-        $('#crudForm [name=nocont2]').attr('readonly', false)
-        $('#crudForm [name=noseal2]').attr('readonly', false)
-      }
-    } else {
+    if (container_id == 3) {
       nojobemkl2.attr('readonly', false)
       nojobemkl2.parents('.input-group').find('.input-group-append').show()
       nojobemkl2.parents('.input-group').find('.button-clear').show()
-      $('#crudForm [name=nocont]').attr('readonly', true)
-      $('#crudForm [name=noseal]').attr('readonly', true)
-      $('#crudForm [name=nocont2]').attr('readonly', true)
-      $('#crudForm [name=noseal2]').attr('readonly', true)
+    } else {
+      nojobemkl2.attr('readonly', true)
+      nojobemkl2.parents('.input-group').find('.input-group-append').hide()
+      nojobemkl2.parents('.input-group').find('.button-clear').hide()
     }
   }
 
 
-  function setCont2Enable() {
-    let nojobemkl2 = $('#crudForm [name=nojobemkl2]')
-    if (kodecontainer == '1') {
-      //2x20
-      if (statustas != '0') {
+  function setContApprovalTanpaJob(statusapproval, tglbatas) {
+    var tglbatasDate = new Date(tglbatas);
+    var currentDate = new Date();
+
+    let container_id = $('#crudForm [name=container_id]').val()
+    if (statusapproval == 3 && currentDate < tglbatasDate) {
+      $('#crudForm [name=nocont]').attr('readonly', false)
+      $('#crudForm [name=noseal]').attr('readonly', false)
+      if (container_id == 3) {
+        $('#crudForm [name=nocont2]').attr('readonly', false)
+        $('#crudForm [name=noseal2]').attr('readonly', false)
+      }
+
+    } else {
+      let nojobemkl = $('#crudForm [name=nojobemkl]')
+      let nojobemkl2 = $('#crudForm [name=nojobemkl2]')
+
+      nojobemkl.attr('readonly', false)
+      nojobemkl.parents('.input-group').find('.input-group-append').show()
+      nojobemkl.parents('.input-group').find('.button-clear').show()
+      $('#crudForm [name=nocont]').attr('readonly', true)
+      $('#crudForm [name=noseal]').attr('readonly', true)
+      if (container_id == 3) {
         nojobemkl2.attr('readonly', false)
         nojobemkl2.parents('.input-group').find('.input-group-append').show()
         nojobemkl2.parents('.input-group').find('.button-clear').show()
-
-      } else {
+        $('#crudForm [name=nocont2]').attr('readonly', true)
+        $('#crudForm [name=noseal2]').attr('readonly', true)
+      }else{
+        
         nojobemkl2.attr('readonly', true)
         nojobemkl2.parents('.input-group').find('.input-group-append').hide()
         nojobemkl2.parents('.input-group').find('.button-clear').hide()
       }
-      $('#crudForm [name=nocont2]').attr('readonly', false)
-      $('#crudForm [name=noseal2]').attr('readonly', false)
-    } else {
-      nojobemkl2.attr('readonly', true)
-      nojobemkl2.parents('.input-group').find('.input-group-append').hide()
-      nojobemkl2.parents('.input-group').find('.button-clear').hide()
-      $('#crudForm [name=nocont2]').attr('readonly', true)
-      $('#crudForm [name=noseal2]').attr('readonly', true)
     }
   }
 
 
-  function getagentas(id) {
+  function getagentas(id, statusapproval, tglbatas) {
     $.ajax({
       url: `${apiUrl}orderantrucking/${id}/getagentas`,
       method: 'GET',
@@ -932,10 +980,12 @@
         'Authorization': `Bearer ${accessToken}`
       },
       success: response => {
-
         statustas = response.data.statustas
+        if (statusapproval == 3) {
+          statustas = 0
+        }
         setJobReadOnly()
-        setContEnable()
+        setContApprovalTanpaJob(statusapproval, tglbatas)
         // console.log(statustas)
       },
       error: error => {
@@ -955,7 +1005,7 @@
       success: response => {
 
         kodecontainer = response.data.kodecontainer
-        setCont2Enable()
+        // setCont2Enable()
       },
       error: error => {
         showDialog(error.statusText)
@@ -1015,6 +1065,8 @@
       },
       onClear: (element) => {
         element.val('')
+        $('#crudForm [name=nocont]').val('')
+        $('#crudForm [name=noseal]').val('')
         element.data('currentValue', element.val())
       }
     })

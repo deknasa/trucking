@@ -309,6 +309,81 @@
             }
           },
           {
+            label: 'APP TANPA JOB',
+            name: 'statusapprovaltanpajob',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            align: 'left',
+            stype: 'select',
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['comboapprovaltanpajob'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['comboapprovaltanpajob'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+                `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              let statusApprovalTanpaJob = JSON.parse(value)
+              if (!statusApprovalTanpaJob) {
+                return ''
+              }
+              let formattedValue = $(`
+                    <div class="badge" style="background-color: ${statusApprovalTanpaJob.WARNA}; color: #fff;">
+                    <span>${statusApprovalTanpaJob.SINGKATAN}</span>
+                    </div>
+                `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusApprovalTanpaJob = JSON.parse(rowObject.statusapprovaltanpajob)
+              if (!statusApprovalTanpaJob) {
+                return ` title=" "`
+              }
+              return ` title="${statusApprovalTanpaJob.MEMO}"`
+            }
+          },
+          {
+            label: 'TGL APP TANPA JOB',
+            name: 'tglapprovaltanpajob',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },
+          {
+            label: 'USER APP TANPA JOB',
+            name: 'userapprovaltanpajob',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+          },
+          {
+            label: 'TGL BATAS TANPA JOB',
+            name: 'tglbatastanpajoborderantrucking',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+            align: 'right',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y H:i:s"
+            }
+          },
+          {
             label: 'MODIFIED BY',
             name: 'modifiedby',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
@@ -544,6 +619,16 @@
                 // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
               }
             },
+            {
+              id: 'approvalTanpaJob',
+              text: "un/Approval Tanpa Job EMKL",
+              onClick: () => {
+                if (`{{ $myAuth->hasPermission('orderantrucking', 'approvaltanpajobemkl') }}`) {
+                  approvalTanpaJobEMKL();
+                }
+                // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              }
+            },
           ],
         }]
       })
@@ -678,6 +763,13 @@
       if (!`{{ $myAuth->hasPermission('orderantrucking', 'approvaledit') }}`) {
         hakApporveCount--
         $('#approvalEditOrderanTrucking').hide()
+        // $('#approval-buka-cetak').attr('disabled', 'disabled')
+      }
+
+      hakApporveCount++
+      if (!`{{ $myAuth->hasPermission('orderantrucking', 'approvaltanpajobemkl') }}`) {
+        hakApporveCount--
+        $('#approvalTanpaJob').hide()
         // $('#approval-buka-cetak').attr('disabled', 'disabled')
       }
       if (hakApporveCount < 1) {
