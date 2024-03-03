@@ -136,6 +136,11 @@
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           },
           {
+            label: 'UPAH SUPIR',
+            name: 'upahsupir',
+            width: (detectDeviceType() == "desktop") ? md_dekstop_3 : md_mobile_3,
+          },
+          {
             label: 'TUJUAN',
             name: 'tujuan',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
@@ -256,49 +261,6 @@
             formatoptions: {
               srcformat: "ISO8601Long",
               newformat: "d-m-Y"
-            }
-          },
-          {
-            label: 'STATUS PENYESUAIAN HARGA',
-            name: 'statuspenyesuaianharga',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-            stype: 'select',
-            searchoptions: {
-              value: `<?php
-                      $i = 1;
-
-                      foreach ($data['combopenyesuaianharga'] as $status) :
-                        echo "$status[param]:$status[parameter]";
-                        if ($i !== count($data['combopenyesuaianharga'])) {
-                          echo ";";
-                        }
-                        $i++;
-                      endforeach
-
-                      ?>
-            `,
-              dataInit: function(element) {
-                $(element).select2({
-                  width: 'resolve',
-                  theme: "bootstrap4"
-                });
-              }
-            },
-            formatter: (value, options, rowData) => {
-              let statusPenyesuaianharga = JSON.parse(value)
-
-              let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusPenyesuaianharga.WARNA}; color: ${statusPenyesuaianharga.WARNATULISAN};">
-                  <span>${statusPenyesuaianharga.SINGKATAN}</span>
-                </div>
-              `)
-
-              return formattedValue[0].outerHTML
-            },
-            cellattr: (rowId, value, rowObject) => {
-              let statusPenyesuaianharga = JSON.parse(rowObject.statuspenyesuaianharga)
-
-              return ` title="${statusPenyesuaianharga.MEMO}"`
             }
           },
           {

@@ -1253,6 +1253,8 @@
         $('#crudForm [name=kota_id]').first().val(kota.id)
         element.val(kota.keterangan)
         element.data('currentValue', element.val())
+       $('#crudForm [name=tujuan]').val(kota.keterangan)
+
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))

@@ -216,76 +216,7 @@
         //   formatter: "date",
         //   formatoptions: { srcformat: "ISO8601Long", newformat: "d-m-Y" }
         // },
-        {
-          label: 'STATUS PENYESUAIAN HARGA',
-          name: 'statuspenyesuaianharga',
-          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-          stype: 'select',
-          searchoptions: {
-            dataInit: function(element) {
-              $(element).select2({
-                width: 'resolve',
-                theme: "bootstrap4",
-                ajax: {
-                  url: `${apiUrl}parameter/combo`,
-                  dataType: 'JSON',
-                  headers: {
-                    Authorization: `Bearer ${accessToken}`
-                  },
-                  data: {
-                    grp: 'PENYESUAIAN HARGA',
-                    subgrp: 'PENYESUAIAN HARGA'
-                  },
-                  beforeSend: () => {
-                    // clear options
-                    $(element).data('select2').$results.children().filter((index, element) => {
-                      // clear options except index 0, which
-                      // is the "searching..." label
-                      if (index > 0) {
-                        element.remove()
-                      }
-                    })
-                  },
-                  processResults: (response) => {
-                    let formattedResponse = response.data.map(row => ({
-                      id: row.text,
-                      text: row.text
-                    }));
-
-                    formattedResponse.unshift({
-                      id: '',
-                      text: 'ALL'
-                    });
-
-                    return {
-                      results: formattedResponse
-                    };
-                  },
-                }
-              });
-            }
-          },
-          formatter: (value, options, rowData) => {
-            let statusPenyHarga = JSON.parse(value)
-            if (!statusPenyHarga) {
-              return ''
-            }
-            let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusPenyHarga.WARNA}; color: #fff;">
-                  <span>${statusPenyHarga.SINGKATAN}</span>
-                </div>
-              `)
-
-            return formattedValue[0].outerHTML
-          },
-          cellattr: (rowId, value, rowObject) => {
-            let statusPenyHarga = JSON.parse(rowObject.statuspenyesuaianharga)
-            if (!statusPenyHarga) {
-              return ` title=""`
-            }
-            return ` title="${statusPenyHarga.MEMO}"`
-          }
-        },
+      
         {
           label: 'MODIFIED BY',
           width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
