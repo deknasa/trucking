@@ -695,7 +695,6 @@
           })
           $('#detailList tbody').html('')
           $.each(response.detail, (index, detail) => {
-            detail.tglbatas ='2024-05-04'
             let detailRow = $(`
             <tr>
               <td></td>
