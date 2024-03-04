@@ -2786,7 +2786,6 @@
                         name: 'keteranganbiaya',
                         width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1,
                         align: 'left',
-                        width: '200px'
                     },
                 ],
                 autowidth: true,

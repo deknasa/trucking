@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use PhpOffice\PhpSpreadsheet\Cell\DataType;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -360,9 +361,9 @@ class InvoiceHeaderController extends MyController
             $sheet->setCellValue("D$detail_start_row", $response_detail['tujuan']);
             $sheet->setCellValue("E$detail_start_row", $response_detail['nocont']);
             $sheet->setCellValue("F$detail_start_row", $response_detail['ukcont']);
-            $sheet->setCellValue("G$detail_start_row", "'".$response_detail['full']);
-            $sheet->setCellValue("H$detail_start_row", "'".$response_detail['empty']);
-            $sheet->setCellValue("I$detail_start_row", "'".$response_detail['fullEmpty']);
+            $sheet->setCellValueExplicit("G$detail_start_row",$response_detail['full'], DataType::TYPE_STRING);
+            $sheet->setCellValueExplicit("H$detail_start_row",$response_detail['empty'], DataType::TYPE_STRING);
+            $sheet->setCellValueExplicit("I$detail_start_row",$response_detail['fullEmpty'], DataType::TYPE_STRING);
             $sheet->setCellValue("J$detail_start_row", $response_detail['omset']);
             $sheet->setCellValue("K$detail_start_row", $response_detail['extra']);
             $sheet->setCellValue("L$detail_start_row", $response_detail['jumlah']);
@@ -378,7 +379,7 @@ class InvoiceHeaderController extends MyController
 
         $total_start_row = $detail_start_row;
         $sheet->mergeCells('A' . $total_start_row . ':K' . $total_start_row);
-        $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':K' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
+        $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':M' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
         $sheet->setCellValue("L$detail_start_row", "=SUM(L9:L" . ($detail_start_row - 1) . ")")->getStyle("L$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
 
         $sheet->getStyle("L$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
