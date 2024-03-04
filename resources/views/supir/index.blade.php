@@ -11,8 +11,9 @@
 </div>
 
 @include('supir._modal')
-@include('supir._modalApprovalKeterangan')
-@include('supir._modalApprovalGambar')
+@include('supir._modalApprovalTanpa')
+{{-- @include('supir._modalApprovalKeterangan')
+@include('supir._modalApprovalGambar') --}}
 @include('supir._modalSupirResign')
 @include('supir._modalHistoryMandor')
 
@@ -1032,6 +1033,19 @@
                                         } else {
                                             supirResign(selectedId)
                                         }
+                                    }
+                                }
+                            },
+                            {
+                                id: 'approvalSupirTanpa',
+                                text: "un/Approval Supir Tanpa Keterangan/Gambar",
+                                onClick: () => {
+                                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                                    if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                                        showDialog('Harap pilih salah satu record')
+                                    } else {
+                                        cekValidasiTanpa(selectedId);
+                                        // approvalSupirTanpa(selectedId);
                                     }
                                 }
                             },
