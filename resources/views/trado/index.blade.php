@@ -11,8 +11,9 @@
 </div>
 
 @include('trado._modal')
-@include('trado._modalApprovalGambar')
-@include('trado._modalApprovalKetrangan')
+@include('trado._modalApprovalTanpa')
+{{-- @include('trado._modalApprovalGambar')
+@include('trado._modalApprovalKetrangan') --}}
 @include('trado._modalHistoryTradoSupir')
 @include('trado._modalHistoryTradoMandor')
 
@@ -1087,37 +1088,50 @@
                                 }
                             },
                             {
-                                id: 'approvalTradoGambar',
-                                text: "un/Approval Trado tanpa Gambar",
+                                id: 'StoreApprovalTradoTanpa',
+                                text: "un/Approval Trado Tanpa Keterangan/Gambar",
                                 onClick: () => {
-                                    if (`{{ $myAuth->hasPermission('trado', 'approvaltradogambar') }}`) {
-                                        selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-                                        if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                                            showDialog('Harap pilih salah satu record')
-                                        } else {
-                                            approvalTradoGambar(selectedId);
-                                        }
+                                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                                    if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                                        showDialog('Harap pilih salah satu record')
+                                    } else {
+                                        cekValidasiTanpa(selectedId);
+                                        // approvalTradoTanpa(selectedId);
                                     }
-                                    // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                                 }
                             },
-                            {
-                                id: 'approvalTradoKeterangan',
-                                text: "un/Approval Trado tanpa Keterangan",
-                                onClick: () => {
-                                    if (`{{ $myAuth->hasPermission('trado', 'approvaltradoketerangan') }}`) {
-                                        selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                            // {
+                            //     id: 'approvalTradoGambar',
+                            //     text: "un/Approval Trado tanpa Gambar",
+                            //     onClick: () => {
+                            //         if (`{{ $myAuth->hasPermission('trado', 'approvaltradogambar') }}`) {
+                            //             selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
 
-                                        if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                                            showDialog('Harap pilih salah satu record')
-                                        } else {
-                                            approvalTradoKeterangan(selectedId);
-                                        }
-                                    }
-                                    // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                                }
-                            },
+                            //             if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                            //                 showDialog('Harap pilih salah satu record')
+                            //             } else {
+                            //                 approvalTradoGambar(selectedId);
+                            //             }
+                            //         }
+                            //         // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                            //     }
+                            // },
+                            // {
+                            //     id: 'approvalTradoKeterangan',
+                            //     text: "un/Approval Trado tanpa Keterangan",
+                            //     onClick: () => {
+                            //         if (`{{ $myAuth->hasPermission('trado', 'approvaltradoketerangan') }}`) {
+                            //             selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+
+                            //             if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                            //                 showDialog('Harap pilih salah satu record')
+                            //             } else {
+                            //                 approvalTradoKeterangan(selectedId);
+                            //             }
+                            //         }
+                            //         // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                            //     }
+                            // },
                         ],
                     },
 
@@ -1241,17 +1255,12 @@
                 // $('#approval-buka-cetak').attr('disabled', 'disabled')
             }
             hakApporveCount++
-            if (!`{{ $myAuth->hasPermission('trado', 'approvalTradoGambar') }}`) {
+            if (!`{{ $myAuth->hasPermission('trado', 'StoreApprovalTradoTanpa') }}`) {
                 hakApporveCount--
-                $('#approvalTradoGambar').hide()
+                $('#StoreApprovalTradoTanpa').hide()
                 // $('#approval-buka-cetak').attr('disabled', 'disabled')
             }
-            hakApporveCount++
-            if (!`{{ $myAuth->hasPermission('trado', 'approvalTradoKeterangan') }}`) {
-                hakApporveCount--
-                $('#approvalTradoKeterangan').hide()
-                // $('#approval-buka-cetak').attr('disabled', 'disabled')
-            }
+            
 
 
             if (hakApporveCount < 1) {
