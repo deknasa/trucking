@@ -792,7 +792,7 @@
         })
     }
 
-    function clearJobTrucking(){
+    function clearJobTrucking() {
         $('#crudForm [name=jobtrucking]').val('')
         $('#crudForm [name=jobtrucking]').data('currentValue', '')
     }
@@ -1312,7 +1312,7 @@
                 $('#crudForm [name=supir_id]').first().val(absensi.supir_id)
                 $('#crudForm [name=absensidetail_id]').first().val(absensi.id)
                 tradoId = absensi.trado_id
-                element.val(absensi.trado)
+                element.val(absensi.tradosupir)
                 element.data('currentValue', element.val())
                 getInfoTrado(tradoId)
             },
