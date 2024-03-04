@@ -55,6 +55,7 @@
                           <th width="30%">Keterangan</th>
                           <th width="15%">Status</th>
                           <th width="8%">jlh trip</th>
+                          <th width="8%">tgl batas</th>
                           <th width="15%" class="uangjalan">Uang Jalan</th>
                           {{-- <th width="2%">Aksi</th> --}}
                         </tr>
@@ -79,6 +80,9 @@
                     </td>
                     <td>
                       <input type="text" class="form-control inputmask-time" name="jlhtrip[]"></input>
+                    </td>
+                    <td>
+                      <input type="text" class="form-control inputmask-time" name="tglbatas[]"></input>
                     </td>
                     <td>
                       <input type="text" class="form-control uangjalan autonumeric" name="uangjalan[]">
@@ -414,6 +418,9 @@
                     <td>
                       <input type="text" class="form-control autonumeric" name="jlhtrip[]" disabled></input>
                     </td>
+                    <td>
+                      <input type="text" class="form-control autonumeric" name="tglbatas[]" disabled></input>
+                    </td>
                     <td class="uangjalan">
                       <input type="text" class="form-control uangjalan autonumeric" name="uangjalan[]">
                     </td>              
@@ -712,6 +719,9 @@
               <td>
                 <input type="text" class="form-control autonumeric" name="jlhtrip[]" value="${detail.jlhtrip}" disabled></input>
                 <input type="text" class="form-control inputmask-time" hidden name="jam[]" value="${detail.jam}"></input>
+              </td>
+              <td>
+                <input type="text" class="form-control autonumeric" name="tglbatas[]" value="${detail.tglbatas}" disabled></input>
               </td>
               <td class="uangjalan">
                 <input type="text" class="form-control uangjalan autonumeric" name="uangjalan[]" value="${detail.uangjalan}">

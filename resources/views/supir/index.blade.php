@@ -11,8 +11,9 @@
 </div>
 
 @include('supir._modal')
-@include('supir._modalApprovalKeterangan')
-@include('supir._modalApprovalGambar')
+@include('supir._modalApprovalTanpa')
+{{-- @include('supir._modalApprovalKeterangan')
+@include('supir._modalApprovalGambar') --}}
 @include('supir._modalSupirResign')
 @include('supir._modalHistoryMandor')
 
@@ -1047,35 +1048,48 @@
                                 }
                             },
                             {
-                                id: 'approvalSupirKeterangan',
-                                text: "un/Approval Supir tanpa Keterangan",
+                                id: 'StoreApprovalTradoTanpa',
+                                text: "un/Approval Supir Tanpa Keterangan/Gambar",
                                 onClick: () => {
-                                    // if (`{{ $myAuth->hasPermission('approvalsupirketerangan', 'update') }}`) {
                                     selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                                     if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                         showDialog('Harap pilih salah satu record')
                                     } else {
-                                        approvalSupirKeterangan(selectedId);
+                                        cekValidasiTanpa(selectedId);
+                                        // approvalSupirTanpa(selectedId);
                                     }
-                                    // }
-                                    // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                                 }
                             },
-                            {
-                                id: 'approvalSupirGambar',
-                                text: "un/Approval Supir tanpa Gambar",
-                                onClick: () => {
-                                    // if (`{{ $myAuth->hasPermission('approvalsupirgambar', 'update') }}`) {
-                                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                                    if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                                        showDialog('Harap pilih salah satu record')
-                                    } else {
-                                        approvalSupirGambar(selectedId);
-                                    }
-                                    // }
-                                    // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                                }
-                            },
+                            // {
+                            //     id: 'approvalSupirKeterangan',
+                            //     text: "un/Approval Supir tanpa Keterangan",
+                            //     onClick: () => {
+                            //         // if (`{{ $myAuth->hasPermission('approvalsupirketerangan', 'update') }}`) {
+                            //         selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                            //         if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                            //             showDialog('Harap pilih salah satu record')
+                            //         } else {
+                            //             approvalSupirKeterangan(selectedId);
+                            //         }
+                            //         // }
+                            //         // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                            //     }
+                            // },
+                            // {
+                            //     id: 'approvalSupirGambar',
+                            //     text: "un/Approval Supir tanpa Gambar",
+                            //     onClick: () => {
+                            //         // if (`{{ $myAuth->hasPermission('approvalsupirgambar', 'update') }}`) {
+                            //         selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                            //         if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                            //             showDialog('Harap pilih salah satu record')
+                            //         } else {
+                            //             approvalSupirGambar(selectedId);
+                            //         }
+                            //         // }
+                            //         // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                            //     }
+                            // },
 
                         ]
                     },
@@ -1185,16 +1199,12 @@
             }
 
             hakApporveCount++
-            if (!`{{ $myAuth->hasPermission('supir', 'approvalsupirketerangan') }}`) {
+            if (!`{{ $myAuth->hasPermission('supir', 'StoreApprovalSupirTanpa') }}`) {
                 hakApporveCount--
-                $('#approvalSupirKeterangan').hide()
+                $('#StoreApprovalTradoTanpa').hide()
             }
 
-            hakApporveCount++
-            if (!`{{ $myAuth->hasPermission('supir', 'approvalsupirgambar') }}`) {
-                hakApporveCount--
-                $('#approvalSupirGambar').hide()
-            }
+            
 
             if (hakApporveCount < 1) {
                 $('#approve').hide()
