@@ -238,6 +238,7 @@
       omset = []
       sp_id = []
       jobtrucking = []
+      keteranganManual = []
       $.each(selectedRowsInvoice, function(index, value) {
         dataInvoice = $("#tableInvoice").jqGrid("getLocalRow", value);
         let selectedExtra = dataInvoice.nominalextra
@@ -250,13 +251,15 @@
         omset.push((isNaN(selectedOmset)) ? parseFloat(selectedOmset.replaceAll(',', '')) : selectedOmset)
         sp_id.push(dataInvoice.sp_id)
         jobtrucking.push(dataInvoice.jobtrucking)
+        keteranganManual.push(dataInvoice.keterangan)
       });
       let requestData = {
         'nominalextra': nominalextra,
         'nominalretribusi': nominalretribusi,
         'omset': omset,
         'sp_id': sp_id,
-        'jobtrucking': jobtrucking
+        'jobtrucking': jobtrucking,
+        'keterangan': keteranganManual
       };
       data.push({
         name: 'detail',
@@ -885,10 +888,31 @@
             },
           },
           {
+            label: "KET. BIAYA EXTRA",
+            name: "keteranganbiaya",
+            width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1,
+            sortable: true,
+          },
+          {
             label: "KETERANGAN",
             name: "keterangan",
             width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1,
-            sortable: true,
+            sortable: false,
+            editable: true,
+            editoptions: {
+              dataEvents: [{
+                type: "keyup",
+                fn: function(event, rowObject) {
+
+                  let localRow = $("#tableInvoice").jqGrid(
+                    "getLocalRow",
+                    rowObject.rowId
+                  );
+                  console.log(localRow)
+                  localRow.keterangan = event.target.value;
+                },
+              }, ],
+            },
           },
           {
             label: "empty",
@@ -911,6 +935,9 @@
         cellsubmit: "clientArray",
         editableColumns: ["retribusi"],
         selectedRowIds: [],
+        // onCellSelect: function(rowid, iCol, cellcontent, e) {
+        //   console.log("Selected Cell - Row ID: " + rowid + ", Column Index: " + iCol);
+        // },
         afterRestoreCell: function(rowId, value, indexRow, indexColumn) {
           let originalGridData = $("#tableInvoice")
             .jqGrid("getGridParam", "originalData")
@@ -1020,7 +1047,7 @@
   $(document).on('click', '#resetdatafilter_tableInvoice', function(event) {
     selectedRowsPengembalian = $("#tableInvoice").getGridParam("selectedRowIds");
     $.each(selectedRowsPengembalian, function(index, value) {
-      $('#tableInvoice').jqGrid('saveCell', value, 20); //emptycell
+      $('#tableInvoice').jqGrid('saveCell', value, 21); //emptycell
       $('#tableInvoice').jqGrid('saveCell', value, 13); //nominal
     })
 
@@ -1028,7 +1055,7 @@
   $(document).on('click', '#gbox_tableInvoice .ui-jqgrid-hbox .ui-jqgrid-htable thead .ui-search-toolbar th td a.clearsearchclass', function(event) {
     selectedRowsPengembalian = $("#tableInvoice").getGridParam("selectedRowIds");
     $.each(selectedRowsPengembalian, function(index, value) {
-      $('#tableInvoice').jqGrid('saveCell', value, 20); //emptycell
+      $('#tableInvoice').jqGrid('saveCell', value, 21); //emptycell
       $('#tableInvoice').jqGrid('saveCell', value, 13); //nominal
     })
   })
