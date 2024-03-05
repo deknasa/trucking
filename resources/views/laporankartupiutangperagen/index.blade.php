@@ -234,7 +234,7 @@
 
     function initLookup() {
         $('.agendari-lookup').lookup({
-            title: 'Agen Lookup',
+            title: 'Customer Lookup',
             fileName: 'agen',
             beforeProcess: function(test) {
                 this.postData = {
@@ -257,7 +257,7 @@
         });
 
         $('.agensampai-lookup').lookup({
-            title: 'Agen Lookup',
+            title: 'Customer Lookup',
             fileName: 'agen',
             beforeProcess: function(test) {
                 this.postData = {
