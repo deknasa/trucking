@@ -761,7 +761,7 @@
               form.find(`[name="jarak"]`).prop('readonly', true)
               // form.find(`[name="statusaktif"]`).prop('disabled', 'disabled')
               form.find(`[name="statusupahzona"]`).prop('disabled', 'disabled')
-              form.find(`[name="tglmulaiberlaku"]`).prop('readonly', true)
+              // form.find(`[name="tglmulaiberlaku"]`).prop('readonly', true)
               form.find(`[name="tujuan"]`).prop('readonly', true)
               form.find(`[name="penyesuaian"]`).prop('readonly', true)
               form.find(`[name="kotadari"]`).prop('readonly', true)
