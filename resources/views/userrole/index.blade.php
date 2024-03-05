@@ -45,7 +45,7 @@
     })
 
     $('.agen-lookup').lookup({
-      title: 'Agen Lookup',
+      title: 'Customer Lookup',
       fileName: 'agen',
       onSelectRow: (agen, element) => {
         element.val(agen.namaagen)

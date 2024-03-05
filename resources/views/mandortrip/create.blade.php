@@ -723,7 +723,7 @@ if (statustas == '0') {
       }
     })
     $('.agen-lookup').lookup({
-      title: 'Agen Lookup',
+      title: 'Customer Lookup',
       fileName: 'agen',
       beforeProcess: function(test) {
         // var levelcoa = $(`#levelcoa`).val();
