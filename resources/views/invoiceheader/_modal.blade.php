@@ -443,21 +443,35 @@
     `)
     form.data('action', 'add')
     $('#crudModalTitle').text('Add Invoice')
-    if (selectedRows.length > 0) {
-      clearSelectedRows()
-    }
-    $('#crudModal').modal('show')
-    $('.is-invalid').removeClass('is-invalid')
-    $('.invalid-feedback').remove()
-    $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-    $('#crudForm').find('[name=tgljatuhtempo]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-    $('#crudForm').find('[name=tglterima]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-    $('#crudForm').find('[name=tgldari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
-    $('#crudForm').find('[name=tglsampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
     initDatepicker()
     loadInvoiceGrid();
-    setStatusPilihanInvoiceOptions(form)
+    Promise
+      .all([
+        setStatusPilihanInvoiceOptions(form),
+        setFormatTable()
+      ])
+      .then(() => {
+        if (selectedRows.length > 0) {
+          clearSelectedRows()
+        }
+        $('#crudModal').modal('show')
+        $('.is-invalid').removeClass('is-invalid')
+        $('.invalid-feedback').remove()
+        $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+        $('#crudForm').find('[name=tgljatuhtempo]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+        $('#crudForm').find('[name=tglterima]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+        $('#crudForm').find('[name=tgldari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+        $('#crudForm').find('[name=tglsampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
+
+      })
+      .catch((error) => {
+        showDialog(error.responseJSON)
+      })
+      .finally(() => {
+        $('.modal-loader').addClass('d-none')
+      })
+
   }
 
   function editInvoiceHeader(invId) {
@@ -475,11 +489,13 @@
     $('#crudModalTitle').text('Edit Invoice')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
+    loadInvoiceGrid();
 
     Promise
       .all([
         setTglBukti(form),
-        setStatusPilihanInvoiceOptions(form)
+        setStatusPilihanInvoiceOptions(form),
+        setFormatTable()
       ])
       .then(() => {
 
@@ -528,24 +544,29 @@
     $('.invalid-feedback').remove()
     form.find('#btnTampil').prop('disabled', true)
 
+    loadInvoiceGrid();
     Promise
       .all([
-        showInvoiceHeader(form, invId, 'edit'),
-        setStatusPilihanInvoiceOptions(form)
+        setStatusPilihanInvoiceOptions(form),
+        setFormatTable()
       ])
       .then(() => {
-        if (selectedRows.length > 0) {
-          clearSelectedRows()
-        }
-        form.find(`[name="tglbukti"]`).prop('readonly', true)
-        form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
-        $('#crudModal').modal('show')
-      })
-      .catch((error) => {
-        showDialog(error.responseJSON)
-      })
-      .finally(() => {
-        $('.modal-loader').addClass('d-none')
+
+        showInvoiceHeader(form, invId, 'delete')
+          .then(() => {
+            if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
+            form.find(`[name="tglbukti"]`).prop('readonly', true)
+            form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+            $('#crudModal').modal('show')
+          })
+          .catch((error) => {
+            showDialog(error.responseJSON)
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
       })
   }
 
@@ -566,24 +587,29 @@
     $('.invalid-feedback').remove()
     form.find('#btnTampil').prop('disabled', true)
 
+    loadInvoiceGrid();
     Promise
       .all([
-        showInvoiceHeader(form, invId, 'delete'),
-        setStatusPilihanInvoiceOptions(form)
+        setStatusPilihanInvoiceOptions(form),
+        setFormatTable()
       ])
       .then(() => {
-        if (selectedRows.length > 0) {
-          clearSelectedRows()
-        }
-        form.find(`[name="tglbukti"]`).prop('readonly', true)
-        form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
-        $('#crudModal').modal('show')
-      })
-      .catch((error) => {
-        showDialog(error.responseJSON)
-      })
-      .finally(() => {
-        $('.modal-loader').addClass('d-none')
+
+        showInvoiceHeader(form, invId, 'delete')
+          .then(() => {
+            if (selectedRows.length > 0) {
+              clearSelectedRows()
+            }
+            form.find(`[name="tglbukti"]`).prop('readonly', true)
+            form.find(`[name="tglbukti"]`).parent('.input-group').find('.input-group-append').remove()
+            $('#crudModal').modal('show')
+          })
+          .catch((error) => {
+            showDialog(error.responseJSON)
+          })
+          .finally(() => {
+            $('.modal-loader').addClass('d-none')
+          })
       })
   }
 
@@ -847,13 +873,13 @@
           },
           {
             label: "BAGIAN",
-            name: "jenisorder_id",
+            name: "jenisorder_idgrid",
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             sortable: true,
           },
           {
             label: "CUSTOMER",
-            name: "agen_id",
+            name: "agen_idgrid",
             width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
             sortable: true,
           },
@@ -1283,7 +1309,7 @@
           $('#crudForm').find("[name=statuspilihaninvoice]").prop('disabled', true);
           $('#crudForm').find("[name=tgljatuhtempo]").prop('readonly', true);
           $('#crudForm').find("[name=tgljatuhtempo]").parent('.input-group').find('.input-group-append').children().prop('disabled', true);
-          loadInvoiceGrid();
+          // loadInvoiceGrid();
 
           getDataInvoice(`${invId}/getEdit`).then((response) => {
             console.log(response)
@@ -1642,6 +1668,37 @@
         data: data,
         success: response => {
           isEditTgl = $.trim(response.text);
+          resolve()
+        },
+        error: error => {
+          reject(error)
+        }
+      })
+    })
+  }
+  const setFormatTable = function() {
+    return new Promise((resolve, reject) => {
+      let data = [];
+      data.push({
+        name: 'grp',
+        value: 'STATUS CETAKAN'
+      })
+      data.push({
+        name: 'subgrp',
+        value: 'INVOICE'
+      })
+      $.ajax({
+        url: `${apiUrl}parameter/getparamfirst`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: data,
+        success: response => {
+          if (response.text == 'FORMAT 1') {
+            $("#tableInvoice").jqGrid("hideCol", `keteranganbiaya`);
+          }
           resolve()
         },
         error: error => {
