@@ -58,13 +58,6 @@
                   </div>
                 </div>
 
-                <div class="form-group nobukti_tripasal">
-                  <label class="col-sm-12 col-form-label">TRIP ASAL</label>
-                  <div class="col-sm-12">
-                    <input type="text" name="nobukti_tripasal" class="form-control suratpengantar-lookup">
-                  </div>
-                </div>
-
                 <div class="form-group ">
                   <label class="col-sm-12 col-form-label">CUSTOMER <span class="text-danger">*</span></label>
                   <div class="col-sm-12">
@@ -207,6 +200,12 @@
                   </div>
                 </div>
 
+                <div class="form-group nobukti_tripasal">
+                  <label class="col-sm-12 col-form-label">TRIP ASAL</label>
+                  <div class="col-sm-12">
+                    <input type="text" name="nobukti_tripasal" class="form-control suratpengantar-lookup">
+                  </div>
+                </div>
 
                 <div class="form-group ">
                   <label class="col-sm-12 col-form-label">GUDANG <span class="text-danger">*</span></label>
@@ -472,13 +471,7 @@
 
 
   $(`#crudForm [name="statusgudangsama"]`).on('change', function(event) {
-    if ($(this).val() == 204) {
-      if (isTripAsal) {
-        $('.nobukti_tripasal').show()
-      }
-    } else {
-      $('.nobukti_tripasal').hide()
-    }
+    enableTripAsal()
     setJobReadOnly()
   })
 
@@ -1095,22 +1088,17 @@
     let longtrip = $('#crudForm [name=statuslongtrip]').val()
     let gudangsama = $('#crudForm [name=statusgudangsama]').val()
     if (longtrip != 66) {
-      console.log('lontrip')
       jobtrucking.attr('hidden', true)
       labeljobtrucking.attr('hidden', true)
       jobtrucking.parents('.input-group').find('.input-group-append').hide()
       jobtrucking.parents('.input-group').find('.button-clear').hide()
     } else if (gudangsama == 204) {
-      console.log('gudangsama')
 
       jobtrucking.attr('hidden', true)
       labeljobtrucking.attr('hidden', true)
       jobtrucking.parents('.input-group').find('.input-group-append').hide()
       jobtrucking.parents('.input-group').find('.button-clear').hide()
     } else {
-      console.log('else')
-
-      console.log(statuspelabuhan)
       if (statuspelabuhan == '0') {
         //bukan tas
         // console.log('bukan');
@@ -1129,7 +1117,10 @@
   }
 
 
-
+  function clearTripAsal() {
+    $('#crudForm [name=nobukti_tripasal]').val('')
+    $('#crudForm [name=nobukti_tripasal]').data('currentValue', '')
+  }
 
   function initLookup() {
     $('.suratpengantar-lookup').lookup({
@@ -1139,7 +1130,11 @@
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
           Aktif: 'AKTIF',
-          jenisorder_id: 2,
+          container_id: $('#crudForm [name=container_id]').val(),
+          agen_id: $('#crudForm [name=agen_id]').val(),
+          upah_id: $('#crudForm [name=upah_id]').val(),
+          pelanggan_id: $('#crudForm [name=pelanggan_id]').val(),
+          trado_id: $('#crudForm [name=trado_id]').val(),
           isTripAsal: true
         }
       },
@@ -1264,6 +1259,7 @@
 
         element.val(pelanggan.namapelanggan)
         element.data('currentValue', element.val())
+        clearTripAsal()
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
@@ -1273,6 +1269,7 @@
         $('#crudForm [name=pelanggan_id]').first().val('')
         element.val('')
         element.data('currentValue', element.val())
+        clearTripAsal()
       }
     })
 
@@ -1292,6 +1289,7 @@
         element.val(container.keterangan)
         element.data('currentValue', element.val())
         enabledUpahSupir()
+        clearTripAsal()
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
@@ -1304,6 +1302,7 @@
         $('#crudForm [name=upah]').val('').data('currentValue', '')
         enabledUpahSupir()
         clearUpahSupir()
+        clearTripAsal()
         element.val('')
         element.data('currentValue', element.val())
       }
@@ -1397,6 +1396,7 @@
         element.val(absensi.tradosupir)
         element.data('currentValue', element.val())
         getInfoTrado(tradoId)
+        clearTripAsal()
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
@@ -1408,6 +1408,7 @@
         $('#crudForm [name=absensidetail_id]').first().val('')
         element.val('')
         element.data('currentValue', element.val())
+        clearTripAsal()
       }
     })
 
@@ -1455,6 +1456,7 @@
         $('#crudForm [name=agen_id]').first().val(agen.id)
         element.val(agen.namaagen)
         element.data('currentValue', element.val())
+        clearTripAsal()
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
@@ -1463,6 +1465,7 @@
         $('#crudForm [name=agen_id]').first().val('')
         element.val('')
         element.data('currentValue', element.val())
+        clearTripAsal()
       }
     })
 
@@ -1482,6 +1485,7 @@
         element.val(jenisorder.keterangan)
         element.data('currentValue', element.val())
         enabledUpahSupir()
+        enableTripAsal()
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
@@ -1540,7 +1544,8 @@
           container_Id: containerId,
           statuscontainer_Id: statuscontainerId,
           jenisorder_Id: jenisorderId,
-          statusUpahZona: statusUpahZona
+          statusUpahZona: statusUpahZona,
+          tglbukti: $('#crudForm [name=tglbukti]').val()
         }
       },
       onSelectRow: (upahsupir, element) => {
@@ -1570,6 +1575,7 @@
 
         element.data('currentValue', element.val())
         clearTrado()
+        clearTripAsal()
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
@@ -1582,6 +1588,7 @@
         element.val('')
         element.data('currentValue', element.val())
         clearTrado()
+        clearTripAsal()
       }
     })
 
@@ -1831,6 +1838,24 @@
 
   function numberWithCommas(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+
+  function enableTripAsal() {
+    let statusgudangsama = $(`#crudForm [name="statusgudangsama"]`).val()
+    let jenisorder_id = $('#crudForm [name=jenisorder_id]').val()
+    if (statusgudangsama == 204) {
+      if (isTripAsal) {
+        if (jenisorder_id == 1 || jenisorder_id == 4) {
+          $('.nobukti_tripasal').show()
+        } else {
+          $('.nobukti_tripasal').hide()
+          clearTripAsal()
+        }
+      }
+    } else {
+      $('.nobukti_tripasal').hide()
+      clearTripAsal()
+    }
   }
 </script>
 @endpush

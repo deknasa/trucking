@@ -14,6 +14,7 @@
         statuscontainer_id: `{!! $statuscontainer_Id ?? '' !!}`,
         jenisorder_id: `{!! $jenisorder_Id ?? '' !!}`,
         statusupahzona: `{!! $statusUpahZona ?? '' !!}`,
+        tglbukti: `{!! $tglbukti ?? '' !!}`,
       }, 
       idPrefix: 'upahSupirRincianLookup',
       colModel: [
