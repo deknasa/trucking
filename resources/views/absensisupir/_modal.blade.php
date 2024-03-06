@@ -55,7 +55,7 @@
                           <th width="30%">Keterangan</th>
                           <th width="15%">Status</th>
                           <th width="8%">jlh trip</th>
-                          <th width="8%">tgl batas</th>
+                          <th width="9%">tgl batas</th>
                           <th width="15%" class="uangjalan">Uang Jalan</th>
                           {{-- <th width="2%">Aksi</th> --}}
                         </tr>
@@ -821,7 +821,11 @@
                 setSupirEnableIndex(false, index)
               }
             })
-
+            if (detail.berlaku == 0) {
+              $('.absentrado-lookup').last().parents('td').children().find('input').attr('disabled', true)
+              $('.absentrado-lookup').last().parents('td').children().find('.lookup-toggler').attr('disabled', true)
+              $('.absentrado-lookup').last().parents('td').children().find('.button-clear').attr('disabled', true)
+            }
           })
 
           setRowNumbers()
