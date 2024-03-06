@@ -1778,7 +1778,8 @@
           container_Id: containerId,
           statuscontainer_Id: statuscontainerId,
           jenisorder_Id: jenisorderId,
-          statusUpahZona: statusUpahZona
+          statusUpahZona: statusUpahZona,
+          tglbukti: $('#crudForm [name=tglbukti]').val()
         }
       },
       onSelectRow: (upahsupir, element) => {
