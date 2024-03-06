@@ -58,6 +58,7 @@ use App\Http\Controllers\HariLiburController;
 use App\Http\Controllers\InputTripController;
 use App\Http\Controllers\JenisEmklController;
 use App\Http\Controllers\KartuStokController;
+use App\Http\Controllers\KartuStokLamaController;
 use App\Http\Controllers\KerusakanController;
 use App\Http\Controllers\ParameterController;
 use App\Http\Controllers\ReportAllController;
@@ -1220,6 +1221,11 @@ Route::middleware(['auth', 'authorized'])->group(function () {
     Route::get('kartustok/report', [KartuStokController::class, 'report'])->name('kartustok.report');
     Route::get('kartustok/index', [KartuStokController::class, 'index']);
     Route::resource('kartustok', KartuStokController::class);
+
+    Route::get('kartustoklama/export', [KartuStokLamaController::class, 'export'])->name('kartustoklama.export');
+    Route::get('kartustoklama/report', [KartuStokLamaController::class, 'report'])->name('kartustoklama.report');
+    Route::get('kartustoklama/index', [KartuStokLamaController::class, 'index']);
+    Route::resource('kartustoklama', KartuStokLamaController::class);    
 
     Route::get('historipenerimaanstok/export', [HistoriPenerimaanStokController::class, 'export'])->name('historipenerimaanstok.export');
     Route::get('historipenerimaanstok/report', [HistoriPenerimaanStokController::class, 'report'])->name('historipenerimaanstok.report');
