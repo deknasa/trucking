@@ -1602,6 +1602,7 @@
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
+          Invoice: 'UTAMA',
         }
       },
       onSelectRow: (agen, element) => {

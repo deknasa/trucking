@@ -10,6 +10,7 @@
       datatype: "json",
       postData: {
         aktif: `{!! $Aktif ?? '' !!}`,
+        invoice: `{!! $Invoice ?? '' !!}`,
       },       
       idPrefix: 'agenLookup',
       colModel: [{
