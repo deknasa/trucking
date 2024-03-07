@@ -61,12 +61,6 @@
                             </div>
                         </div>
 
-                        <div class="form-group nobukti_tripasal">
-                            <label class="col-sm-12 col-form-label">TRIP ASAL</label>
-                            <div class="col-sm-12">
-                                <input type="text" name="nobukti_tripasal" class="form-control suratpengantar-lookup">
-                            </div>
-                        </div>
 
                         <div class="form-group ">
                             <label class="col-sm-12 col-form-label">CUSTOMER <span class="text-danger">*</span></label>
@@ -210,6 +204,12 @@
                             </div>
                         </div>
 
+                        <div class="form-group nobukti_tripasal">
+                            <label class="col-sm-12 col-form-label">TRIP ASAL</label>
+                            <div class="col-sm-12">
+                                <input type="text" name="nobukti_tripasal" class="form-control suratpengantar-lookup">
+                            </div>
+                        </div>
 
                         <div class="form-group ">
                             <label class="col-sm-12 col-form-label">GUDANG <span class="text-danger">*</span></label>
@@ -461,15 +461,9 @@
         }
     })
 
-
-    $(`#crudForm [name="statusgudangsama"]`).on('change', function(event) {
-        if ($(this).val() == 204) {
-            if (isTripAsal) {
-                $('.nobukti_tripasal').show()
-            }
-        } else {
-            $('.nobukti_tripasal').hide()
-        }
+    $(document).on('change', `#crudForm [name="statusgudangsama"]`, function(event) {
+        enableTripAsal()
+        setJobReadOnly()
     })
 
 
@@ -1050,7 +1044,12 @@
                 // var levelcoa = $(`#levelcoa`).val();
                 this.postData = {
                     Aktif: 'AKTIF',
-                    jenisorder_id: 2
+                    container_id: $('#crudForm [name=container_id]').val(),
+                    agen_id: $('#crudForm [name=agen_id]').val(),
+                    upah_id: $('#crudForm [name=upah_id]').val(),
+                    pelanggan_id: $('#crudForm [name=pelanggan_id]').val(),
+                    trado_id: $('#crudForm [name=trado_id]').val(),
+                    isTripAsal: true
                 }
             },
             onSelectRow: (suratpengantar, element) => {
@@ -1178,6 +1177,7 @@
                 element.val(pelanggan.namapelanggan)
                 element.data('currentValue', element.val())
                 clearJobTrucking()
+                clearTripAsal()
             },
             onCancel: (element) => {
                 element.val(element.data('currentValue'))
@@ -1187,6 +1187,7 @@
                 element.val('')
                 element.data('currentValue', element.val())
                 clearJobTrucking()
+                clearTripAsal()
             }
         })
 
@@ -1207,6 +1208,7 @@
                 element.data('currentValue', element.val())
                 clearJobTrucking()
                 enabledUpahSupir()
+                clearTripAsal()
             },
             onCancel: (element) => {
                 element.val(element.data('currentValue'))
@@ -1221,6 +1223,7 @@
                 element.val('')
                 element.data('currentValue', element.val())
                 clearJobTrucking()
+                clearTripAsal()
             }
         })
 
@@ -1315,6 +1318,7 @@
                 element.val(absensi.tradosupir)
                 element.data('currentValue', element.val())
                 getInfoTrado(tradoId)
+                clearTripAsal()
             },
             onCancel: (element) => {
                 element.val(element.data('currentValue'))
@@ -1325,6 +1329,7 @@
                 $('#crudForm [name=absensidetail_id]').first().val('')
                 element.val('')
                 element.data('currentValue', element.val())
+                clearTripAsal()
             }
         })
 
@@ -1375,6 +1380,7 @@
                 element.val(agen.namaagen)
                 element.data('currentValue', element.val())
                 clearJobTrucking()
+                clearTripAsal()
             },
             onCancel: (element) => {
                 element.val(element.data('currentValue'))
@@ -1384,6 +1390,7 @@
                 element.val('')
                 element.data('currentValue', element.val())
                 clearJobTrucking()
+                clearTripAsal()
             }
         })
 
@@ -1403,7 +1410,9 @@
                 element.val(jenisorder.keterangan)
                 element.data('currentValue', element.val())
                 enabledUpahSupir()
+                enableTripAsal()
                 clearJobTrucking()
+                clearTripAsal()
             },
             onCancel: (element) => {
                 element.val(element.data('currentValue'))
@@ -1418,6 +1427,7 @@
                 element.val('')
                 element.data('currentValue', element.val())
                 clearJobTrucking()
+                clearTripAsal()
             }
         })
 
@@ -1461,7 +1471,8 @@
                     container_Id: containerId,
                     statuscontainer_Id: statuscontainerId,
                     jenisorder_Id: jenisorderId,
-                    statusUpahZona: statusUpahZona
+                    statusUpahZona: statusUpahZona,
+                    tglbukti: $('#crudForm [name=tglbukti]').val()
                 }
             },
             onSelectRow: (upahsupir, element) => {
@@ -1490,6 +1501,8 @@
                 kotaUpahZona()
                 clearJobTrucking()
                 element.data('currentValue', element.val())
+                clearTrado()
+                clearTripAsal()
             },
             onCancel: (element) => {
                 element.val(element.data('currentValue'))
@@ -1501,6 +1514,8 @@
                 element.val('')
                 element.data('currentValue', element.val())
                 clearJobTrucking()
+                clearTrado()
+                clearTripAsal()
             }
         })
 
@@ -1567,17 +1582,34 @@
 
         let jobtrucking = $('#crudForm [name=jobtrucking]')
         let labeljobtrucking = $('#crudForm [name=labeljobtrucking]')
-        if (statuspelabuhan == '0') {
-            // console.log('bukan');
+        let longtrip = $('#crudForm [name=statuslongtrip]').val()
+        let gudangsama = $('#crudForm [name=statusgudangsama]').val()
+        if (longtrip != 66) {
+            jobtrucking.attr('hidden', true)
+            labeljobtrucking.attr('hidden', true)
+            jobtrucking.parents('.input-group').find('.input-group-append').hide()
+            jobtrucking.parents('.input-group').find('.button-clear').hide()
+        } else if (gudangsama == 204) {
+
             jobtrucking.attr('hidden', true)
             labeljobtrucking.attr('hidden', true)
             jobtrucking.parents('.input-group').find('.input-group-append').hide()
             jobtrucking.parents('.input-group').find('.button-clear').hide()
         } else {
-            labeljobtrucking.attr('hidden', false)
-            jobtrucking.attr('hidden', false)
-            jobtrucking.parents('.input-group').find('.input-group-append').show()
-            jobtrucking.parents('.input-group').find('.button-clear').show()
+            if (statuspelabuhan == '0') {
+                //bukan tas
+                // console.log('bukan');
+                jobtrucking.attr('hidden', true)
+                labeljobtrucking.attr('hidden', true)
+                jobtrucking.parents('.input-group').find('.input-group-append').hide()
+                jobtrucking.parents('.input-group').find('.button-clear').hide()
+            } else {
+                //tas
+                labeljobtrucking.attr('hidden', false)
+                jobtrucking.attr('hidden', false)
+                jobtrucking.parents('.input-group').find('.input-group-append').show()
+                jobtrucking.parents('.input-group').find('.button-clear').show()
+            }
         }
     }
 
@@ -1614,6 +1646,43 @@
                 showDialog(error.statusText)
             }
         })
+    }
+
+    function enableTripAsal() {
+        let statusgudangsama = $(`#crudForm [name="statusgudangsama"]`).val()
+        let jenisorder_id = $('#crudForm [name=jenisorder_id]').val()
+        if (statusgudangsama == 204) {
+            if (isTripAsal) {
+                if (jenisorder_id == 1 || jenisorder_id == 4) {
+                    $('.nobukti_tripasal').show()
+                } else {
+                    $('.nobukti_tripasal').hide()
+                    clearTripAsal()
+                    $('#crudForm [name=jobtrucking]').data('currentValue', '')
+                    $('#crudForm [name=jobtrucking]').val('')
+                }
+            }
+        } else {
+            $('.nobukti_tripasal').hide()
+            clearTripAsal()
+            $('#crudForm [name=jobtrucking]').data('currentValue', '')
+            $('#crudForm [name=jobtrucking]').val('')
+        }
+    }
+
+    function clearTripAsal() {
+        $('#crudForm [name=nobukti_tripasal]').val('')
+        $('#crudForm [name=nobukti_tripasal]').data('currentValue', '')
+    }
+
+    function clearTrado() {
+        $('#crudForm [name=trado_id]').val('')
+        $('#crudForm [name=supir_id]').val('')
+        $('#crudForm [name=absensidetail_id]').val('')
+        $('#crudForm [name=trado]').val('')
+        $('#crudForm [name=trado]').data('currentValue', '')
+        $('#infoTrado').html('')
+        $('.tableInfo').hide()
     }
 </script>
 @endpush()

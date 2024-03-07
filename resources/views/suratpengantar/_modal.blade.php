@@ -482,6 +482,8 @@
   let upahId = 0
   let editUpahZona
   let indexDetail = 0
+  let isTripAsal = true;
+
   $(document).ready(function() {
     $('.nobukti_tripasal').hide()
 
@@ -794,12 +796,8 @@
   })
 
 
-  $(`#crudForm [name="statusgudangsama"]`).on('change', function(event) {
-    if ($(this).val() == 204) {
-      $('.nobukti_tripasal').show()
-    } else {
-      $('.nobukti_tripasal').hide()
-    }
+  $(document).on('change', `#crudForm [name="statusgudangsama"]`, function(event) {
+    enableTripAsal()
   })
 
   function getNominalSupir() {
@@ -1498,6 +1496,15 @@
             })
           }
 
+
+          if (response.data.statusgudangsama == 204) {
+            if (isTripAsal) {
+              $('.nobukti_tripasal').show()
+            }
+          } else {
+            $('.nobukti_tripasal').hide()
+          }
+
           isShow = false
           setRowNumbers()
           getDataUpahSupir()
@@ -1597,7 +1604,12 @@
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
           Aktif: 'AKTIF',
-          jenisorder_id: 2
+          container_id: $('#crudForm [name=container_id]').val(),
+          agen_id: $('#crudForm [name=agen_id]').val(),
+          upah_id: $('#crudForm [name=upah_id]').val(),
+          pelanggan_id: $('#crudForm [name=pelanggan_id]').val(),
+          trado_id: $('#crudForm [name=trado_id]').val(),
+          isTripAsal: true
         }
       },
       onSelectRow: (suratpengantar, element) => {
@@ -1687,6 +1699,7 @@
         $('#crudForm [name=pelanggan_id]').first().val(pelanggan.id)
         element.val(pelanggan.namapelanggan)
         element.data('currentValue', element.val())
+        clearTripAsal()
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
@@ -1695,6 +1708,7 @@
         $('#crudForm [name=pelanggan_id]').first().val('')
         element.val('')
         element.data('currentValue', element.val())
+        clearTripAsal()
       }
     })
 
@@ -1715,6 +1729,7 @@
         element.val(container.keterangan)
         element.data('currentValue', element.val())
         enabledUpahSupir()
+        clearTripAsal()
         // getGaji()
       },
       onCancel: (element) => {
@@ -1729,6 +1744,7 @@
         $('#crudForm [name=upah]').val('').data('currentValue', '')
         enabledUpahSupir()
         clearUpahSupir()
+        clearTripAsal()
         // getGaji()
       }
     })
@@ -1813,6 +1829,7 @@
         getNominalSupir()
         getTarifOmset(upahsupir.tarif_id, containerId)
         getDataUpahSupir()
+        clearTripAsal()
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
@@ -1829,6 +1846,7 @@
         clearUpahSupir()
         element.val('')
         element.data('currentValue', element.val())
+        clearTripAsal()
       }
     })
 
@@ -1852,6 +1870,7 @@
         getNominalSupir()
         $('#crudForm [name=supir_id]').val(trado.supir_id)
         $('#crudForm [name=supir]').val(trado.supir)
+        clearTripAsal()
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
@@ -1865,6 +1884,7 @@
         $('#crudForm [name=supir_id]').val('')
         $('#crudForm [name=supir]').val('')
         $('#crudForm [name=supir]').data('currentValue', '')
+        clearTripAsal()
       }
     })
     $('.supir-lookup').lookup({
@@ -1932,6 +1952,7 @@
         $('#crudForm [name=agen_id]').first().val(agen.id)
         element.val(agen.namaagen)
         element.data('currentValue', element.val())
+        clearTripAsal()
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
@@ -1940,6 +1961,7 @@
         $('#crudForm [name=agen_id]').first().val('')
         element.val('')
         element.data('currentValue', element.val())
+        clearTripAsal()
       }
     })
 
@@ -1958,6 +1980,7 @@
         element.val(jenisorder.keterangan)
         element.data('currentValue', element.val())
         enabledUpahSupir()
+        enableTripAsal()
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
@@ -2395,6 +2418,30 @@
         }
       })
     })
+  }
+
+
+  function enableTripAsal() {
+    let statusgudangsama = $(`#crudForm [name="statusgudangsama"]`).val()
+    let jenisorder_id = $('#crudForm [name=jenisorder_id]').val()
+    if (statusgudangsama == 204) {
+      if (isTripAsal) {
+        if (jenisorder_id == 1 || jenisorder_id == 4) {
+          $('.nobukti_tripasal').show()
+        } else {
+          $('.nobukti_tripasal').hide()
+          clearTripAsal()
+        }
+      }
+    } else {
+      $('.nobukti_tripasal').hide()
+      clearTripAsal()
+    }
+  }
+
+  function clearTripAsal() {
+    $('#crudForm [name=nobukti_tripasal]').val('')
+    $('#crudForm [name=nobukti_tripasal]').data('currentValue', '')
   }
   // function setDummyOption() {
   //   fetch(`http://dummy.test/server/`)
