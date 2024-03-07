@@ -713,24 +713,36 @@
         aksi: Aksi
       },
       success: response => {
-        var kodenobukti = response.kodenobukti
-        if (kodenobukti == '1') {
-          var kodestatus = response.kodestatus
-          if (kodestatus == '1') {
-            showDialog(response.message['keterangan'])
-          } else {
-            if (Aksi == 'PRINTER BESAR') {
-              window.open(`{{ route('pengeluaranheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
-            } else if (Aksi == 'PRINTER KECIL') {
-              window.open(`{{ route('pengeluaranheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
-            } else {
-              cekValidasiAksi(Id, Aksi)
-            }
-          }
-
+        var error = response.error
+        if (error) {
+          showDialog(response)
         } else {
-          showDialog(response.message['keterangan'])
+          if (Aksi == 'PRINTER BESAR') {
+            window.open(`{{ route('pengeluaranheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
+          } else if (Aksi == 'PRINTER KECIL') {
+            window.open(`{{ route('pengeluaranheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
+          } else {
+            cekValidasiAksi(Id, Aksi)
+          }
         }
+        // var kodenobukti = response.kodenobukti
+        // if (kodenobukti == '1') {
+        //   var kodestatus = response.kodestatus
+        //   if (kodestatus == '1') {
+        //     showDialog(response.message['keterangan'])
+        //   } else {
+        //     if (Aksi == 'PRINTER BESAR') {
+        //       window.open(`{{ route('pengeluaranheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
+        //     } else if (Aksi == 'PRINTER KECIL') {
+        //       window.open(`{{ route('pengeluaranheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
+        //     } else {
+        //       cekValidasiAksi(Id, Aksi)
+        //     }
+        //   }
+
+        // } else {
+        //   showDialog(response.message['keterangan'])
+        // }
       }
     })
   }
@@ -745,17 +757,9 @@
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
       success: response => {
-        var kondisi = response.kondisi
-        if (kondisi == true) {
-          if (response.editcoa) {
-            if (Aksi == 'EDIT') {
-              editCoa(Id)
-            } else {
-              showDialog(response.message['keterangan'])
-            }
-          } else {
-            showDialog(response.message['keterangan'])
-          }
+        var error = response.error
+        if (error) {
+          showDialog(response)
         } else {
           if (Aksi == 'EDIT') {
             editPengeluaran(Id)
@@ -764,6 +768,25 @@
             deletePengeluaran(Id)
           }
         }
+        // var kondisi = response.kondisi
+        // if (kondisi == true) {
+        //   if (response.editcoa) {
+        //     if (Aksi == 'EDIT') {
+        //       editCoa(Id)
+        //     } else {
+        //       showDialog(response.message['keterangan'])
+        //     }
+        //   } else {
+        //     showDialog(response.message['keterangan'])
+        //   }
+        // } else {
+        //   if (Aksi == 'EDIT') {
+        //     editPengeluaran(Id)
+        //   }
+        //   if (Aksi == 'DELETE') {
+        //     deletePengeluaran(Id)
+        //   }
+        // }
       }
     })
   }
