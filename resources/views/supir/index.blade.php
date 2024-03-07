@@ -100,6 +100,8 @@
     }
 
     $(document).ready(function() {
+        permission()
+        
         setTampilanIndex()
         $("#jqGrid").jqGrid({
                 url: `${apiUrl}supir`,

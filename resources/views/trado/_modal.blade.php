@@ -208,7 +208,7 @@
                     <input type="text" name="keterangan" class="form-control">
                   </div>
                 </div>
-                <div class="form-group ">
+                <!-- <div class="form-group ">
                   <label class="col-sm-12 col-form-label">Milik Mandor</label>
                   <div class="col-sm-12">
                     <input type="hidden" name="mandor_id">
@@ -222,7 +222,7 @@
                     <input type="hidden" name="supir_id">
                     <input type="text" name="supir" class="form-control supir-lookup">
                   </div>
-                </div>
+                </div> -->
 
               </div>
             </div>

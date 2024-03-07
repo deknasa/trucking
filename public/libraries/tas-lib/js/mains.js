@@ -1827,3 +1827,7 @@ function setSpaceBarCheckedHandler2() {
 function reloadGrid() {
     $("#jqGrid").trigger("reloadGrid");
 }
+
+function preventNewTab(table){
+    showDialog('TIDAK PUNYA HAK UNTUK MENGAKSES '+table)
+}
