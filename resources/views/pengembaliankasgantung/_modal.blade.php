@@ -1352,24 +1352,36 @@
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
       success: response => {
-        var kodenobukti = response.kodenobukti
-        if (kodenobukti == '1') {
-          var kodestatus = response.kodestatus
-          if (kodestatus == '1') {
-            showDialog(response.message['keterangan'])
-          } else {
+        var error = response.error
+        if (error) {
+          showDialog(response)
+        } else {
             if (Aksi == 'PRINTER BESAR') {
               window.open(`{{ route('pengembaliankasgantungheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
             } else if (Aksi == 'PRINTER KECIL') {
               window.open(`{{ route('pengembaliankasgantungheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
             } else {
-              cekValidasiAksi(Id, Aksi)
-            }
+            cekValidasiAksi(Id, Aksi)
           }
-
-        } else {
-          showDialog(response.message['keterangan'])
         }
+        // var kodenobukti = response.kodenobukti
+        // if (kodenobukti == '1') {
+        //   var kodestatus = response.kodestatus
+        //   if (kodestatus == '1') {
+        //     showDialog(response.message['keterangan'])
+        //   } else {
+        //     if (Aksi == 'PRINTER BESAR') {
+        //       window.open(`{{ route('pengembaliankasgantungheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
+        //     } else if (Aksi == 'PRINTER KECIL') {
+        //       window.open(`{{ route('pengembaliankasgantungheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
+        //     } else {
+        //       cekValidasiAksi(Id, Aksi)
+        //     }
+        //   }
+
+        // } else {
+        //   showDialog(response.message['keterangan'])
+        // }
       }
     })
   }
@@ -1379,13 +1391,16 @@
       url: `{{ config('app.api_url') }}pengembaliankasgantungheader/${Id}/cekValidasiAksi`,
       method: 'POST',
       dataType: 'JSON',
+      data: {
+                aksi: Aksi
+            },
       beforeSend: request => {
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
       success: response => {
-        var kondisi = response.kondisi
-        if (kondisi == true) {
-          showDialog(response.message['keterangan'])
+        var error = response.error
+        if (error) {
+          showDialog(response)
         } else {
           if (Aksi == 'EDIT') {
             editPengembalianKasGantung(Id)
@@ -1393,7 +1408,18 @@
           if (Aksi == 'DELETE') {
             deletePengembalianKasGantung(Id)
           }
-        }
+        }        
+        // var kondisi = response.kondisi
+        // if (kondisi == true) {
+        //   showDialog(response.message['keterangan'])
+        // } else {
+        //   if (Aksi == 'EDIT') {
+        //     editPengembalianKasGantung(Id)
+        //   }
+        //   if (Aksi == 'DELETE') {
+        //     deletePengembalianKasGantung(Id)
+        //   }
+        // }
 
       }
     })
