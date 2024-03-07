@@ -291,6 +291,7 @@
             align: 'left',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             formatter: (value, options, rowData) => {
+
               let tgldari
               let tglsampai
               let url
@@ -311,6 +312,11 @@
                 formattedValue = $(`<a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>`)
               } else {
                 formattedValue = $(`<span>${value}</span>`)
+              }
+
+              if (!`{{ $myAuth->hasPermission('invoiceheader', 'index') }}`) {
+                formattedValue.prop('href', '#')
+                formattedValue.prop('target', '')
               }
               return formattedValue[0].outerHTML
             },
@@ -576,54 +582,18 @@
           }
         ],
         buttons: [{
-            id: 'add',
-            innerHTML: '<i class="fa fa-plus"></i> ADD',
-            class: 'btn btn-primary btn-sm mr-1',
-            onClick: function(event) {
-              createPiutangHeader()
+          id: 'view',
+          innerHTML: '<i class="fa fa-eye"></i> VIEW',
+          class: 'btn btn-orange btn-sm mr-1',
+          onClick: () => {
+            selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+            if (selectedId == null || selectedId == '' || selectedId == undefined) {
+              showDialog('Harap pilih salah satu record')
+            } else {
+              viewPiutangHeader(selectedId)
             }
-          },
-          {
-            id: 'edit',
-            innerHTML: '<i class="fa fa-pen"></i> EDIT',
-            class: 'btn btn-success btn-sm mr-1',
-            onClick: function(event) {
-              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Harap pilih salah satu record')
-              } else {
-                cekValidasi(selectedId, 'EDIT')
-              }
-            }
-          },
-          {
-            id: 'delete',
-            innerHTML: '<i class="fa fa-trash"></i> DELETE',
-            class: 'btn btn-danger btn-sm mr-1',
-            onClick: () => {
-              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Harap pilih salah satu record')
-              } else {
-
-                cekValidasi(selectedId, 'DELETE')
-              }
-            }
-          },
-          {
-            id: 'view',
-            innerHTML: '<i class="fa fa-eye"></i> VIEW',
-            class: 'btn btn-orange btn-sm mr-1',
-            onClick: () => {
-              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Harap pilih salah satu record')
-              } else {
-                viewPiutangHeader(selectedId)
-              }
-            }
-          },
-        ],
+          }
+        }, ],
       })
 
     /* Append clear filter button */
@@ -764,6 +734,11 @@
       }
     })
   })
+  $(document).on('click', '.link-color', function() {
+    if (!`{{ $myAuth->hasPermission('invoiceheader', 'index') }}`) {
+      preventNewTab('invoice');
+    }
+  });
 </script>
 @endpush()
 @endsection

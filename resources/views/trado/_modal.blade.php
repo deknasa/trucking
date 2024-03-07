@@ -463,9 +463,15 @@
             $('#crudModal').modal('show')
             $('#crudForm').find(`.ui-datepicker-trigger`).attr('disabled', false)
 
-            let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
-            name.attr('disabled', false)
-            name.find('.lookup-toggler').attr('disabled', false)
+            let mandor = $('#crudForm').find(`[name=mandor]`).parents('.input-group').children()
+            mandor.attr('disabled', false)
+            mandor.find('.lookup-toggler').attr('disabled', false)
+            $(`#crudForm [name=mandor]`).prop('readonly', false)
+
+            let supir = $('#crudForm').find(`[name=supir]`).parents('.input-group').children()
+            supir.attr('disabled', false)
+            supir.find('.lookup-toggler').attr('disabled', false)
+            $(`#crudForm [name=supir]`).prop('readonly', false)
           })
           .catch((error) => {
             showDialog(error.statusText)
@@ -537,6 +543,16 @@
             let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
             name.attr('disabled', false)
             name.find('.lookup-toggler').attr('disabled', false)
+            
+            let mandor = $('#crudForm').find(`[name=mandor]`).parents('.input-group').children()
+            mandor.attr('disabled', true)
+            mandor.find('.lookup-toggler').attr('disabled', true)
+            $(`#crudForm [name=mandor]`).prop('readonly', true)
+
+            let supir = $('#crudForm').find(`[name=supir]`).parents('.input-group').children()
+            supir.attr('disabled', true)
+            supir.find('.lookup-toggler').attr('disabled', true)
+            $(`#crudForm [name=supir]`).prop('readonly', true)
 
           })
           .catch((error) => {
