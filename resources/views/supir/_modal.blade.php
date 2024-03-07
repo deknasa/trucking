@@ -150,6 +150,13 @@
                     <input type="text" name="nominalpinjamansaldoawal" class="form-control text-right" readonly>
                   </div>
                 </div>
+                <div class="form-group row">
+                  <label class="col-sm-2 col-form-label">Milik Mandor</label>
+                  <div class="col-sm-10">
+                    <input type="hidden" name="mandor_id">
+                    <input type="text" name="mandor" class="form-control mandor-lookup">
+                  </div>
+                </div>
 
                 <div class="form-group row" style="display:none;">
                   <label for="staticEmail" class="col-sm-2 col-form-label ">Angsuran Pinjaman</label>
@@ -534,6 +541,11 @@
       .then(() => {
         showDefault(form)
           .then(() => {
+            
+            let name = $('#crudForm').find(`[name=mandor]`).parents('.input-group').children()
+            name.attr('disabled', false)
+            name.find('.lookup-toggler').attr('disabled', false)
+            $(`#crudForm [name=mandor]`).prop('readonly', false)
             $('#crudModal').modal('show')
           })
           .catch((error) => {
@@ -597,6 +609,10 @@
               clearSelectedRows()
             }
             $('#crudModal').modal('show')
+            let name = $('#crudForm').find(`[name=mandor]`).parents('.input-group').children()
+            name.attr('disabled', true)
+            name.find('.lookup-toggler').attr('disabled', true)
+            $(`#crudForm [name=mandor]`).prop('readonly', true)
           })
           .catch((error) => {
             showDialog(error.statusText)
@@ -652,6 +668,7 @@
               clearSelectedRows()
             }
             $('#crudModal').modal('show')
+            // $(`#crudForm [name=mandor]`).parents('.form-group').hide()
           })
           .catch((error) => {
             showDialog(error.statusText)
@@ -714,6 +731,7 @@
             name.attr('disabled', true)
             name.find('.lookup-toggler').attr('disabled', true)
             $(".dz-hidden-input").prop("disabled", true);
+            // $(`#crudForm [name=mandor]`).parents('.form-group').hide()
 
           })
           .catch((error) => {
@@ -792,6 +810,32 @@
         },
         onClear: (element) => {
           $('#crudForm [name=supirold_id]').first().val('')
+          element.val('')
+          element.data('currentValue', element.val())
+        }
+      })
+    }
+    if (!$('.mandor-lookup').data('hasLookup')) {
+      $('.mandor-lookup').lookup({
+        title: 'Mandor Lookup',
+        fileName: 'mandor',
+        beforeProcess: function(test) {
+          // var levelcoa = $(`#levelcoa`).val();
+          this.postData = {
+
+            Aktif: 'AKTIF',
+          }
+        },
+        onSelectRow: (mandor, element) => {
+          $('#crudForm [name=mandor_id]').first().val(mandor.id)
+          element.val(mandor.namamandor)
+          element.data('currentValue', element.val())
+        },
+        onCancel: (element) => {
+          element.val(element.data('currentValue'))
+        },
+        onClear: (element) => {
+          $('#crudForm [name=mandor_id]').first().val('')
           element.val('')
           element.data('currentValue', element.val())
         }
