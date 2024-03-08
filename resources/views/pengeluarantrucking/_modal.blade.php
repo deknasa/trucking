@@ -233,6 +233,7 @@
 
             setErrorMessages(form, error.responseJSON.errors);
           } else {
+   
             showDialog(error.responseJSON)
           }
         },
@@ -331,6 +332,7 @@
           })
           .catch((error) => {
             showDialog(error.statusText)
+            // showDialog(error.responseJSON)            
           })
           .finally(() => {
             $('.modal-loader').addClass('d-none')
@@ -681,12 +683,18 @@
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
       success: response => {
-        var kondisi = response.kondisi
-        if (kondisi == true) {
-          showDialog(response.message['keterangan'])
+        var error = response.error
+        if (error) {
+          showDialog(response)
         } else {
           deletePengeluaranTrucking(Id)
-        }
+        }        
+        // var kondisi = response.kondisi
+        // if (kondisi == true) {
+        //   showDialog(response.message['keterangan'])
+        // } else {
+        //   deletePengeluaranTrucking(Id)
+        // }
 
       }
     })
