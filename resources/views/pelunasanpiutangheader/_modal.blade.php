@@ -1074,7 +1074,11 @@
             },
             editoptions: {
               class: 'statuskredit',
-              value: statusKredit,
+              value: function() {
+                var rowData =  $("#tablePelunasan").jqGrid('getGridParam', 'selrow')
+                return getStatusKredit(rowData);
+              },
+              // value: getStatusKredit(this),
               dataInit: function(element) {
                 initSelect2($(`.statuskredit`), true);
               },
@@ -2612,7 +2616,9 @@
       },
       data: {
         grp: 'TIPENOTAKREDIT',
-        subgrp: 'TIPENOTAKREDIT'
+        subgrp: 'TIPENOTAKREDIT',
+        sortIndex:'text',
+        sortOrder:'asc',
       },
       success: response => {
         statusKredit[0] = "--PILIH STATUS NOTA KREDIT--"
@@ -2621,6 +2627,31 @@
         });
       },
     })
+  }
+  
+  function getStatusKredit(rowid){
+    let localRow = $("#tablePelunasan").jqGrid("getLocalRow",rowid);
+    let jenisinvoice = localRow.jenisinvoice
+    let tidakTampil
+    let data = statusKredit
+    // Melakukan filter berdasarkan nilai (value)
+    if (jenisinvoice == "TAMBAHAN") {
+      tidakTampil = "POTONGAN PENDAPATAN"
+    }else {
+      tidakTampil = "POTONGAN PENDAPATAN LAIN"
+    }
+    var filteredValues = Object.entries(data).filter(function(entry) {
+      
+        return entry[1] !== tidakTampil; // Filter semua nilai yang bukan "UANG DIBAYAR DIMUKA"
+    });
+
+    // Mengonversi hasil filter kembali ke dalam objek
+    var filteredObject = Object.fromEntries(filteredValues);
+    
+    
+    return filteredObject;
+    
+    
   }
 </script>
 @endpush()
