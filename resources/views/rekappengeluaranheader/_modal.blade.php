@@ -563,25 +563,40 @@
         aksi: Aksi
       },
       success: response => {
-        var kodenobukti = response.kodenobukti
-        if (kodenobukti == '1') {
-          var kodestatus = response.kodestatus
-          if (kodestatus == '1') {
-            showDialog(response.message['keterangan'])
-          } else {
-            if (Aksi == 'PRINTER BESAR') {
-              window.open(`{{url('rekappengeluaranheader/report/${Id}?printer=reportPrinterBesar')}}`)
-            } else if (Aksi == 'PRINTER KECIL') {
-              window.open(`{{url('rekappengeluaranheader/report/${Id}?printer=reportPrinterKecil')}}`)
-            } else if (Aksi == 'EDIT') {
-              showDialog('REKAP PENGELUARAN TIDAK BISA DIEDIT')
-            } else if (Aksi == 'DELETE') {
-              deleteRekapPengeluaranHeader(Id)
-            }
-          }
+        var error = response.error
+        if (error) {
+          showDialog(response)
         } else {
-          showDialog(response.message['keterangan'])
+          if (Aksi == 'PRINTER BESAR') {
+            window.open(`{{url('rekappengeluaranheader/report/${Id}?printer=reportPrinterBesar')}}`)
+          } else if (Aksi == 'PRINTER KECIL') {
+            window.open(`{{url('rekappengeluaranheader/report/${Id}?printer=reportPrinterKecil')}}`)
+          } else if (Aksi == 'EDIT') {
+            showDialog('REKAP PENGELUARAN TIDAK BISA DIEDIT')
+          } else if (Aksi == 'DELETE') {
+            deleteRekapPengeluaranHeader(Id)
+          }
         }
+
+        // var kodenobukti = response.kodenobukti
+        // if (kodenobukti == '1') {
+        //   var kodestatus = response.kodestatus
+        //   if (kodestatus == '1') {
+        //     showDialog(response.message['keterangan'])
+        //   } else {
+        //     if (Aksi == 'PRINTER BESAR') {
+        //       window.open(`{{url('rekappengeluaranheader/report/${Id}?printer=reportPrinterBesar')}}`)
+        //     } else if (Aksi == 'PRINTER KECIL') {
+        //       window.open(`{{url('rekappengeluaranheader/report/${Id}?printer=reportPrinterKecil')}}`)
+        //     } else if (Aksi == 'EDIT') {
+        //       showDialog('REKAP PENGELUARAN TIDAK BISA DIEDIT')
+        //     } else if (Aksi == 'DELETE') {
+        //       deleteRekapPengeluaranHeader(Id)
+        //     }
+        //   }
+        // } else {
+        //   showDialog(response.message['keterangan'])
+        // }
       }
     })
   }
