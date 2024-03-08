@@ -820,6 +820,19 @@
 
     }
 
+    function selectedOnlyOne() {
+      let msg        
+      if (selectedRows.length < 1) {
+        msg ='Harap pilih salah satu record'
+      }else if (selectedRows.length > 1) {
+        msg ='Hanya bisa memilih satu record'
+      }
+      if (selectedRows.length === 1) {
+        return [true,selectedRows[0]];
+      } 
+      return [false,msg];   
+    }
+    
     function getIndexLookup(url, data) {
       return new Promise((resolve, reject) => {
         $.ajax({

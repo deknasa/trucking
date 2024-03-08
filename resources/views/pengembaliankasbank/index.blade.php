@@ -540,11 +540,11 @@
             innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
             class: 'btn btn-purple btn-sm mr-1',
             onClick: () => {
-              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-              if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                showDialog('Harap pilih salah satu record')
+              var selectedOne = selectedOnlyOne();
+              if (selectedOne[0]) {
+                handleApproval(selectedOne[1])
               } else {
-                handleApproval(selectedId)
+                showDialog(selectedOne[1])
               }
             }
           },

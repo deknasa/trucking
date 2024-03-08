@@ -749,10 +749,13 @@
                 id: 'approvalEdit',
                 text: ' UN/APPROVAL status Edit',
                 onClick: () => {
-
                   if (`{{ $myAuth->hasPermission('pengeluaranstokheader', 'approvalEdit') }}`) {
-                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                    approveEdit(selectedId)
+                    var selectedOne = selectedOnlyOne();
+                    if (selectedOne[0]) {
+                      approveEdit(selectedOne[1])
+                    } else {
+                      showDialog(selectedOne[1])
+                    }
                   }
                 }
               },
@@ -761,8 +764,12 @@
                 text: ' UN/APPROVAL status Edit Keterangan',
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('pengeluaranstokheader', 'approvalEditKeterangan') }}`) {
-                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                    approveEditKeterangan(selectedId)
+                    var selectedOne = selectedOnlyOne();
+                    if (selectedOne[0]) {
+                      approveEditKeterangan(selectedOne[1])
+                    } else {
+                      showDialog(selectedOne[1])
+                    }
                   }
                 }
               },
@@ -970,6 +977,10 @@
             msg = `YAKIN UnApprove Status Edit `
           }
           showConfirm(msg, response.data.nobukti, `pengeluaranstokheader/${response.data.id}/approvaledit`)
+          .then(()=>{
+            selectedRows = []
+            $('#gs_').prop('checked', false)
+          })
         },
       })
     }
@@ -994,6 +1005,10 @@
             msg = `YAKIN UnApprove Status Edit Keterangan`
           }
           showConfirm(msg, response.data.nobukti, `pengeluaranstokheader/${response.data.id}/approvaleditketerangan`)
+          .then(()=>{
+            selectedRows = []
+            $('#gs_').prop('checked', false)
+          })
         },
       })
     }

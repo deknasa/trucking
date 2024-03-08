@@ -577,8 +577,12 @@
                 text: "UN/APPROVAL Absensi Edit",
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('absensisupirheader', 'approvalEditAbsensi') }}`) {
-                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                    approveEdit(selectedId)
+                    var selectedOne = selectedOnlyOne();                            
+                    if (selectedOne[0]) {
+                        approveEdit(selectedOne[1])
+                    } else {
+                        showDialog(selectedOne[1])
+                    }
                   }
                 }
               },
@@ -841,6 +845,11 @@
             msg = `YAKIN Approve Status Edit `
           }
           showConfirm(msg, response.data.nobukti, `absensisupirheader/${response.data.id}/approvalEditAbsensi`)
+          .then(()=>{
+            selectedRows = []
+            $('#gs_').prop('checked', false)
+          })
+            
         },
       })
     }

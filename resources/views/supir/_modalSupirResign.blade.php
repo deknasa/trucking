@@ -140,6 +140,8 @@
           if (response.data.grp == 'FORMAT') {
             updateFormat(response.data)
           }
+          selectedRows = []
+          $('#gs_').prop('checked', false)
         },
         error: error => {
           if (error.status === 422) {
