@@ -509,25 +509,39 @@
         aksi: Aksi
       },
       success: response => {
-        var kodenobukti = response.kodenobukti
-        if (kodenobukti == '1') {
-          var kodestatus = response.kodestatus
-          if (kodestatus == '1') {
-            showDialog(response.message['keterangan'])
-          } else {
-            if (Aksi == 'PRINTER BESAR') {
-              window.open(`{{ route('rekappenerimaanheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
-            } else if (Aksi == 'PRINTER KECIL') {
-              window.open(`{{ route('rekappenerimaanheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
-            } else if (Aksi == 'EDIT') {
-              showDialog('REKAP PENERIMAAN TIDAK BISA DIEDIT')
-            } else if (Aksi == 'DELETE') {
-              deleteRekapPenerimaanHeader(Id)
-            }
-          }
+        var error = response.error
+        if (error) {
+          showDialog(response)
         } else {
-          showDialog(response.message['keterangan'])
+          if (Aksi == 'PRINTER BESAR') {
+            window.open(`{{ route('rekappenerimaanheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
+          } else if (Aksi == 'PRINTER KECIL') {
+            window.open(`{{ route('rekappenerimaanheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
+          } else if (Aksi == 'EDIT') {
+            showDialog('REKAP PENERIMAAN TIDAK BISA DIEDIT')
+          } else if (Aksi == 'DELETE') {
+            deleteRekapPenerimaanHeader(Id)
+          }
         }
+        // var kodenobukti = response.kodenobukti
+        // if (kodenobukti == '1') {
+        //   var kodestatus = response.kodestatus
+        //   if (kodestatus == '1') {
+        //     showDialog(response.message['keterangan'])
+        //   } else {
+        //     if (Aksi == 'PRINTER BESAR') {
+        //       window.open(`{{ route('rekappenerimaanheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
+        //     } else if (Aksi == 'PRINTER KECIL') {
+        //       window.open(`{{ route('rekappenerimaanheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
+        //     } else if (Aksi == 'EDIT') {
+        //       showDialog('REKAP PENERIMAAN TIDAK BISA DIEDIT')
+        //     } else if (Aksi == 'DELETE') {
+        //       deleteRekapPenerimaanHeader(Id)
+        //     }
+        //   }
+        // } else {
+        //   showDialog(response.message['keterangan'])
+        // }
       }
     })
   }
