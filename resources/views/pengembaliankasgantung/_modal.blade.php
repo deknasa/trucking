@@ -339,7 +339,7 @@
               row = parseInt(selectedRows[angka]) - 1;
               let element;
 
-              if (indexes[0] == 'bank' || indexes[0] == 'tglbukti' || indexes[0] == 'tgldari' || indexes[0] == 'tglsampai' || indexes[0] == 'kasgantungdetail_id') {
+              if (indexes[0] == 'bank' || indexes[0] == 'tglbukti' || indexes[0] == 'tgldari' || indexes[0] == 'tglsampai' || indexes[0] == 'kasgantungdetail_id' || indexes[0] == 'id') {
                 if (indexes.length > 1) {
                   element = form.find(`[name="${indexes[0]}[]"]`)[row];
                 } else {
@@ -1352,7 +1352,9 @@
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
       success: response => {
+        // console.log(response)
         var error = response.error
+
         if (error) {
           showDialog(response)
         } else {
