@@ -214,6 +214,7 @@ use App\Http\Controllers\JurnalUmumPusatHeaderController;
 use App\Http\Controllers\LaporanOrderPembelianController;
 use App\Http\Controllers\LaporanRekapSumbanganController;
 use App\Http\Controllers\LaporanSaldoInventoryController;
+use App\Http\Controllers\LaporanSaldoInventoryLamaController;
 use App\Http\Controllers\PelunasanHutangHeaderController;
 use App\Http\Controllers\PendapatanSupirDetailController;
 use App\Http\Controllers\PendapatanSupirHeaderController;
@@ -1560,6 +1561,11 @@ Route::middleware(['auth', 'authorized'])->group(function () {
     Route::get('laporansaldoinventory/report', [LaporanSaldoInventoryController::class, 'report'])->name('laporansaldoinventory.report');
     Route::get('laporansaldoinventory/index', [LaporanSaldoInventoryController::class, 'index']);
     Route::resource('laporansaldoinventory', LaporanSaldoInventoryController::class);
+
+    Route::get('laporansaldoinventorylama/export', [LaporanSaldoInventoryLamaController::class, 'export'])->name('laporansaldoinventorylama.export');
+    Route::get('laporansaldoinventorylama/report', [LaporanSaldoInventoryLamaController::class, 'report'])->name('laporansaldoinventorylama.report');
+    Route::get('laporansaldoinventorylama/index', [LaporanSaldoInventoryLamaController::class, 'index']);
+    Route::resource('laporansaldoinventorylama', LaporanSaldoInventoryLamaController::class);
 
     Route::get('laporanaruskas/report', [LaporanArusKasController::class, 'report'])->name('laporanaruskas.report');
     Route::get('laporanaruskas/index', [LaporanArusKasController::class, 'index']);
