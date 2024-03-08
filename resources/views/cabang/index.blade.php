@@ -451,11 +451,11 @@
                             id: 'approvalKoneksi',
                             text: ' UN/APPROVAL KONEKSI',
                             onClick: () => {
-                                selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                                if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                                    showDialog('Harap pilih salah satu record')
+                                var selectedOne = selectedOnlyOne();                            
+                                if (selectedOne[0]) {
+                                    approvalKoneksi(selectedOne[1])
                                 } else {
-                                    approvalKoneksi(selectedId)
+                                    showDialog(selectedOne[1])
                                 }
                             }
                         },
@@ -585,6 +585,10 @@
                         msg = `YAKIN SET KONEKSI MENJADI OFFLINE `
                     }
                     showConfirm(msg, response.data.namacabang, `cabang/${response.data.id}/approvalkonensi`)
+                    .then(()=>{
+                        selectedRows = []
+                        $('#gs_').prop('checked', false)
+                    })
                 },
             })
         }

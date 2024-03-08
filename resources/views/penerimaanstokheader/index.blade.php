@@ -672,8 +672,12 @@
                 text: ' UN/APPROVAL status Edit',
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('penerimaanstokheader', 'approvalEdit') }}`) {
-                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                    approveEdit(selectedId)
+                    var selectedOne = selectedOnlyOne();                            
+                    if (selectedOne[0]) {
+                      approveEdit(selectedOne[1])
+                    } else {
+                      showDialog(selectedOne[1])
+                    }
                   }
                 }
               },
@@ -682,8 +686,12 @@
                 text: ' UN/APPROVAL status Edit Keterangan',
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('penerimaanstokheader', 'approvalEditKeterangan') }}`) {
-                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                    approveEditKeterangan(selectedId)
+                    var selectedOne = selectedOnlyOne();
+                    if (selectedOne[0]) {
+                      approveEditKeterangan(selectedOne[1])
+                    } else {
+                      showDialog(selectedOne[1])
+                    }
                   }
                 }
               },
@@ -886,8 +894,16 @@
               .done(function() {
                 showConfirm(msg, response.data.nobukti, `penerimaanstokheader/${response.data.id}/approvaledit?to=confirm`)
               })
+              .then(()=>{
+                selectedRows = []
+                $('#gs_').prop('checked', false)
+              })
           } else {
             showConfirm(msg, response.data.nobukti, `penerimaanstokheader/${response.data.id}/approvaledit?to=confirm`)
+            .then(()=>{
+              selectedRows = []
+              $('#gs_').prop('checked', false)
+            })
           }
 
         },
@@ -913,6 +929,11 @@
             msg = `YAKIN UnApprove Status Edit Keterangan`
           }
           showConfirm(msg, response.data.nobukti, `penerimaanstokheader/${response.data.id}/approvaleditketerangan`)
+          .then(()=>{
+            selectedRows = []
+            $('#gs_').prop('checked', false)
+          })
+          
         },
       })
     }

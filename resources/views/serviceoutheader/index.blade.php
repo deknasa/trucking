@@ -421,12 +421,8 @@
                 if (`{{ $myAuth->hasPermission('serviceoutheader', 'approvalbukacetak') }}`) {
                   let tglbukacetak = $('#tgldariheader').val().split('-');
                   tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
-                  selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                  if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                    showDialog('Harap pilih salah satu record')
-                  } else {
-                    approvalBukaCetak(tglbukacetak, 'SERVICEOUTHEADER', [selectedId]);
-                  }
+                  
+                  approvalBukaCetak(tglbukacetak, 'SERVICEOUTHEADER',selectedRows);
                 }
               }
             }, ],

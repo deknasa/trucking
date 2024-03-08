@@ -1039,12 +1039,11 @@
                                 text: "un/Approval Supir Resign",
                                 onClick: () => {
                                     if (`{{ $myAuth->hasPermission('supir', 'approvalSupirResign') }}`) {
-                                        selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                                        if (selectedId == null || selectedId == '' || selectedId ==
-                                            undefined) {
-                                            showDialog('Harap pilih salah satu record')
+                                        var selectedOne = selectedOnlyOne();
+                                        if (selectedOne[0]) {
+                                            supirResign(selectedOne[1])
                                         } else {
-                                            supirResign(selectedId)
+                                          showDialog(selectedOne[1])
                                         }
                                     }
                                 }
@@ -1053,12 +1052,11 @@
                                 id: 'StoreApprovalTradoTanpa',
                                 text: "un/Approval Supir Tanpa Keterangan/Gambar",
                                 onClick: () => {
-                                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                                    if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                                        showDialog('Harap pilih salah satu record')
+                                    var selectedOne = selectedOnlyOne();
+                                    if (selectedOne[0]) {
+                                        cekValidasiTanpa(selectedOne[1])
                                     } else {
-                                        cekValidasiTanpa(selectedId);
-                                        // approvalSupirTanpa(selectedId);
+                                      showDialog(selectedOne[1])
                                     }
                                 }
                             },
@@ -1107,12 +1105,11 @@
                             text: "History Supir Milik Mandor",
                             onClick: () => {
                                 if (`{{ $myAuth->hasPermission('supir', 'historySupirMandor') }}`) {
-                                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                                    if (selectedId == null || selectedId == '' || selectedId ==
-                                        undefined) {
-                                        showDialog('Harap pilih salah satu record')
+                                    var selectedOne = selectedOnlyOne();
+                                    if (selectedOne[0]) {
+                                        editSupirMilikMandor(selectedOne[1])
                                     } else {
-                                        editSupirMilikMandor(selectedId)
+                                      showDialog(selectedOne[1])
                                     }
                                 }
                             }

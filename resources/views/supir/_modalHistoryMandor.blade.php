@@ -208,6 +208,9 @@
                 showSupirMilikMandor(form, Id)
             ])
             .then(() => {
+                if (selectedRows.length > 0) {
+                    clearSelectedRows()
+                  }
                 $('#crudModalHistoryMandor').modal('show')
             })
             .catch((error) => {
