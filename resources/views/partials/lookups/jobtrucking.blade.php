@@ -19,6 +19,8 @@
         trado_id: `{!! $trado_id ?? '' !!}`,
         tarif_id: `{!! $tarif_id ?? '' !!}`,
         statuslongtrip: `{!! $statuslongtrip ?? '' !!}`,
+        tripasal: `{!! $tripasal ?? '' !!}`,
+        isPulangLongtrip: `{!! $isPulangLongtrip ?? '' !!}`,
         filters: `{!! $filters ?? '' !!}`
       },
       idPrefix: 'jobTruckingLookup',

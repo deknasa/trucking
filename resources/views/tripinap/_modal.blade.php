@@ -620,6 +620,7 @@
                     tglabsensi: $('#crudForm [name=tglabsensi]').first().val(),
                     trado_id: $('#crudForm [name=trado_id]').first().val(),
                     supir_id: $('#crudForm [name=supir_id]').first().val(),
+                    from: 'tripinap',
                     Aktif: 'AKTIF',
                 }
             },

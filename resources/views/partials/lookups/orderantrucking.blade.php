@@ -17,6 +17,11 @@
       postData: {
         tgldari: $('#tgldariheaderlookup').val(),
         tglsampai: $('#tglsampaiheaderlookup').val(),
+        jenisorder_id: `{!! $jenisorder_id ?? '' !!}`,
+        agen_id: `{!! $agen_id ?? '' !!}`,
+        container_id: `{!! $container_id ?? '' !!}`,
+        pelanggan_id: `{!! $pelanggan_id ?? '' !!}`,
+        from: `{!! $from ?? '' !!}`,
       },
       idPrefix: 'orderanTruckingLookup',
       colModel: [{
@@ -102,138 +107,6 @@
           label: 'no seaL (2)',
           name: 'noseal2',
           width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-        },
-        {
-          label: 'STATUS LANGSIR',
-          name: 'statuslangsir',
-          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-          stype: 'select',
-          searchoptions: {
-            dataInit: function(element) {
-              $(element).select2({
-                width: 'resolve',
-                theme: "bootstrap4",
-                ajax: {
-                  url: `${apiUrl}parameter/combo`,
-                  dataType: 'JSON',
-                  headers: {
-                    Authorization: `Bearer ${accessToken}`
-                  },
-                  data: {
-                    grp: 'STATUS LANGSIR',
-                    subgrp: 'STATUS LANGSIR'
-                  },
-                  beforeSend: () => {
-                    // clear options
-                    $(element).data('select2').$results.children().filter((index, element) => {
-                      // clear options except index 0, which
-                      // is the "searching..." label
-                      if (index > 0) {
-                        element.remove()
-                      }
-                    })
-                  },
-                  processResults: (response) => {
-                    let formattedResponse = response.data.map(row => ({
-                      id: row.text,
-                      text: row.text
-                    }));
-
-                    formattedResponse.unshift({
-                      id: '',
-                      text: 'ALL'
-                    });
-
-                    return {
-                      results: formattedResponse
-                    };
-                  },
-                }
-              });
-            }
-          },
-          formatter: (value, options, rowData) => {
-            let statusLangsir = JSON.parse(value)
-
-            let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusLangsir.WARNA}; color: #fff;">
-                  <span>${statusLangsir.SINGKATAN}</span>
-                </div>
-              `)
-
-            return formattedValue[0].outerHTML
-          },
-          cellattr: (rowId, value, rowObject) => {
-            let statusLangsir = JSON.parse(rowObject.statuslangsir)
-
-            return ` title="${statusLangsir.MEMO}"`
-          }
-        },
-        {
-          label: 'STATUS PERALIHAN',
-          name: 'statusperalihan',
-          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-          stype: 'select',
-          searchoptions: {
-            dataInit: function(element) {
-              $(element).select2({
-                width: 'resolve',
-                theme: "bootstrap4",
-                ajax: {
-                  url: `${apiUrl}parameter/combo`,
-                  dataType: 'JSON',
-                  headers: {
-                    Authorization: `Bearer ${accessToken}`
-                  },
-                  data: {
-                    grp: 'STATUS PERALIHAN',
-                    subgrp: 'STATUS PERALIHAN'
-                  },
-                  beforeSend: () => {
-                    // clear options
-                    $(element).data('select2').$results.children().filter((index, element) => {
-                      // clear options except index 0, which
-                      // is the "searching..." label
-                      if (index > 0) {
-                        element.remove()
-                      }
-                    })
-                  },
-                  processResults: (response) => {
-                    let formattedResponse = response.data.map(row => ({
-                      id: row.text,
-                      text: row.text
-                    }));
-
-                    formattedResponse.unshift({
-                      id: '',
-                      text: 'ALL'
-                    });
-
-                    return {
-                      results: formattedResponse
-                    };
-                  },
-                }
-              });
-            }
-          },
-          formatter: (value, options, rowData) => {
-            let statusPeralihan = JSON.parse(value)
-
-            let formattedValue = $(`
-                <div class="badge" style="background-color: ${statusPeralihan.WARNA}; color: #fff;">
-                  <span>${statusPeralihan.SINGKATAN}</span>
-                </div>
-              `)
-
-            return formattedValue[0].outerHTML
-          },
-          cellattr: (rowId, value, rowObject) => {
-            let statusPeralihan = JSON.parse(rowObject.statusperalihan)
-
-            return ` title="${statusPeralihan.MEMO}"`
-          }
         },
         {
           label: 'MODIFIED BY',
