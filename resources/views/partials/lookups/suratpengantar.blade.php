@@ -27,7 +27,10 @@
         agen_id: `{!! $agen_id ?? '' !!}`,
         upah_id: `{!! $upah_id ?? '' !!}`,
         pelanggan_id: `{!! $pelanggan_id ?? '' !!}`,
-        isTripAsal: `{!! $isTripAsal ?? '' !!}`,
+        gudangsama: `{!! $gudangsama ?? '' !!}`,
+        longtrip: `{!! $longtrip ?? '' !!}`,
+        isGudangSama: `{!! $isGudangSama ?? '' !!}`,
+        from: `{!! $from ?? '' !!}`,
       },
       idPrefix: 'suratpengantarLookup',
       colModel: [{
@@ -42,6 +45,11 @@
         {
           label: 'NO BUKTI',
           name: 'nobukti',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+        },
+        {
+          label: 'JOB TRUCKING',
+          name: 'jobtrucking',
           width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
         },
         {

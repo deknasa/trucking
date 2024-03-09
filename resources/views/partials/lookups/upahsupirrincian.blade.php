@@ -15,6 +15,7 @@
         jenisorder_id: `{!! $jenisorder_Id ?? '' !!}`,
         statusupahzona: `{!! $statusUpahZona ?? '' !!}`,
         tglbukti: `{!! $tglbukti ?? '' !!}`,
+        longtrip: `{!! $longtrip ?? '' !!}`
       }, 
       idPrefix: 'upahSupirRincianLookup',
       colModel: [

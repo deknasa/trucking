@@ -191,19 +191,19 @@
                   </div>
                 </div>
 
+                <div class="form-group nobukti_tripasal">
+                  <label class="col-sm-12 col-form-label">TRIP ASAL</label>
+                  <div class="col-sm-12">
+                    <input type="text" name="nobukti_tripasal" class="form-control suratpengantar-lookup">
+                  </div>
+                </div>
+
                 <div class="form-group ">
                   <label name="labeljobtrucking" class="col-sm-12 col-form-label">NO JOB TRUCKING
                     {{-- <span class="text-danger">*</span> --}}
                   </label>
                   <div class="col-sm-12">
                     <input type="text" name="jobtrucking" class="form-control jobtrucking-lookup">
-                  </div>
-                </div>
-
-                <div class="form-group nobukti_tripasal">
-                  <label class="col-sm-12 col-form-label">TRIP ASAL</label>
-                  <div class="col-sm-12">
-                    <input type="text" name="nobukti_tripasal" class="form-control suratpengantar-lookup">
                   </div>
                 </div>
 
@@ -286,6 +286,8 @@
   let longTripId
   let kodeStatusContainer
   let isTripAsal = true;
+  let isPulangLongtrip;
+  let isGudangSama = true;
 
   $(document).ready(function() {
     $('.nobukti_tripasal').hide()
@@ -476,6 +478,14 @@
   })
 
   $(`#crudForm [name="statuslongtrip"]`).on('change', function(event) {
+    let statuslongtrip = $(`#crudForm [name="statuslongtrip"]`).val()
+
+    if (statuslongtrip == 65) {
+      $('.nobukti_tripasal').hide()
+      clearTripAsal()
+      isPulangLongtrip = false;
+    }
+    clearUpahSupir()
     setJobReadOnly()
   })
 
@@ -1120,6 +1130,19 @@
   function clearTripAsal() {
     $('#crudForm [name=nobukti_tripasal]').val('')
     $('#crudForm [name=nobukti_tripasal]').data('currentValue', '')
+    let statuslongtrip = $(`#crudForm [name="statuslongtrip"]`).val()
+    let jenisorder_id = $('#crudForm [name=jenisorder_id]').val()
+    let statuscontainer_id = $('#crudForm [name=statuscontainer_id]').val()
+    if (statuslongtrip == 66) {
+      if ((jenisorder_id == 2 && statuscontainer_id == 2) || (jenisorder_id == 3 && statuscontainer_id == 2) || (jenisorder_id == 1 && statuscontainer_id == 1) || (jenisorder_id == 4 && statuscontainer_id == 1)) {
+        clearJobTrucking()
+      }
+    }
+  }
+
+  function clearJobTrucking() {
+    $('#crudForm [name=jobtrucking]').val('')
+    $('#crudForm [name=jobtrucking]').data('currentValue', '')
   }
 
   function initLookup() {
@@ -1135,12 +1158,19 @@
           upah_id: $('#crudForm [name=upah_id]').val(),
           pelanggan_id: $('#crudForm [name=pelanggan_id]').val(),
           trado_id: $('#crudForm [name=trado_id]').val(),
-          isTripAsal: true
+          gudangsama: $('#crudForm [name=statusgudangsama]').val(),
+          longtrip: $('#crudForm [name=statuslongtrip]').val(),
+          isGudangSama: isGudangSama
         }
       },
       onSelectRow: (suratpengantar, element) => {
         element.val(suratpengantar.nobukti)
         element.data('currentValue', element.val())
+        if ($('#crudForm [name=statusgudangsama]').val() == 205) {
+
+          $('#crudForm [name=jobtrucking]').val(suratpengantar.jobtrucking)
+          $('#crudForm [name=jobtrucking]').data('currentValue', suratpengantar.jobtrucking)
+        }
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
@@ -1194,6 +1224,8 @@
           trado_id: tradoId,
           statuslongtrip: statusLongtrip,
           tarif_id: tarifrincianId,
+          tripasal: $('#crudForm [name=nobukti_tripasal]').val(),
+          isPulangLongtrip: isPulangLongtrip
         }
       },
       onSelectRow: (jobtrucking, element) => {
@@ -1333,6 +1365,8 @@
           labeljobtrucking.attr('hidden', true)
           jobtrucking.parents('.input-group').find('.input-group-append').hide()
           jobtrucking.parents('.input-group').find('.button-clear').hide()
+        } else {
+          enableTripAsalLongTrip()
         }
       },
       onCancel: (element) => {
@@ -1348,6 +1382,8 @@
         clearUpahSupir()
         element.val('')
         element.data('currentValue', element.val())
+        isPulangLongtrip = false;
+        clearTripAsal()
       }
     })
 
@@ -1485,7 +1521,10 @@
         element.val(jenisorder.keterangan)
         element.data('currentValue', element.val())
         enabledUpahSupir()
-        enableTripAsal()
+        if ($('#crudForm [name=statuscontainer_id]') != 3) {
+          enableTripAsal()
+          enableTripAsalLongTrip()
+        }
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
@@ -1500,6 +1539,8 @@
         clearUpahSupir()
         element.val('')
         element.data('currentValue', element.val())
+        isPulangLongtrip = false;
+        clearTripAsal()
       }
     })
 
@@ -1545,7 +1586,8 @@
           statuscontainer_Id: statuscontainerId,
           jenisorder_Id: jenisorderId,
           statusUpahZona: statusUpahZona,
-          tglbukti: $('#crudForm [name=tglbukti]').val()
+          tglbukti: $('#crudForm [name=tglbukti]').val(),
+          longtrip: $('#crudForm [name=statuslongtrip]').val()
         }
       },
       onSelectRow: (upahsupir, element) => {
@@ -1630,6 +1672,7 @@
   function clearUpahSupir() {
 
     $('#crudForm [name=upah_id]').val('')
+    $('#crudForm [name=upah]').val('')
     $('#crudForm [name=upah]').data('currentValue', '')
     $('#crudForm [name=dari_id]').val('')
     $('#crudForm [name=sampai_id]').val('')
@@ -1847,14 +1890,37 @@
       if (isTripAsal) {
         if (jenisorder_id == 1 || jenisorder_id == 4) {
           $('.nobukti_tripasal').show()
+          isGudangSama = true
         } else {
           $('.nobukti_tripasal').hide()
           clearTripAsal()
+          isGudangSama = false
         }
       }
     } else {
       $('.nobukti_tripasal').hide()
       clearTripAsal()
+      isGudangSama = false
+    }
+  }
+
+  function enableTripAsalLongTrip() {
+    let statuslongtrip = $(`#crudForm [name="statuslongtrip"]`).val()
+    let jenisorder_id = $('#crudForm [name=jenisorder_id]').val()
+    let statuscontainer_id = $('#crudForm [name=statuscontainer_id]').val()
+    if (statuslongtrip == 66) {
+      if ((jenisorder_id == 2 && statuscontainer_id == 2) || (jenisorder_id == 3 && statuscontainer_id == 2) || (jenisorder_id == 1 && statuscontainer_id == 1) || (jenisorder_id == 4 && statuscontainer_id == 1)) {
+        $('.nobukti_tripasal').show()
+        isPulangLongtrip = true;
+      } else {
+        $('.nobukti_tripasal').hide()
+        clearTripAsal()
+        isPulangLongtrip = false;
+      }
+    } else {
+      $('.nobukti_tripasal').hide()
+      clearTripAsal()
+      isPulangLongtrip = false;
     }
   }
 </script>
