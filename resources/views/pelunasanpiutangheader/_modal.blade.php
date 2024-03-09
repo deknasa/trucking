@@ -117,7 +117,7 @@
                 </label>
               </div>
               <div class="col-8 col-md-10">
-                <input type="text" name="notadebet_nobukti" class="form-control" readonly>
+                <input type="text" name="notadebet_nobukti" class="form-control notadebet-lookup">
               </div>
             </div>
             <div class="row form-group">
@@ -635,6 +635,7 @@
       $('#tablePelunasan').jqGrid('setColProp', 'statusnotadebet', {
         editable: false
       });
+      notaDebetSelected(true)
     } else {
       $('#tablePelunasan').jqGrid('setColProp', 'nominallebihbayar', {
         editable: true
@@ -642,6 +643,7 @@
       $('#tablePelunasan').jqGrid('setColProp', 'statusnotadebet', {
         editable: true
       });
+      notaDebetSelected(false)
     }
   })
 
@@ -686,6 +688,41 @@
     });
 
     new AutoNumeric('#sisaPiutang').set(bayar)
+  }
+
+  function notaDebetSelected(status) {
+    if (status) {
+      $('[name=bank]').parents('.form-group').hide()      
+      $('[name=alatbayar]').parents('.form-group').hide()
+      $("#tablePelunasan").jqGrid('setColProp', 'nominallebihbayar', {
+        editable: false
+      });
+      $("#tablePelunasan").jqGrid('setColProp', 'statusnotadebet', {
+        editable: false
+      });
+
+      selectedRows = $("#tablePelunasan").getGridParam("selectedRowIds");
+      $.each(selectedRows, function(index, value) {
+        $("#tablePelunasan").jqGrid("setCell", value, "nominallebihbayar", 0);
+        $(`#tablePelunasan tr#${value}`).find(`td[aria-describedby="tablePelunasan_nominallebihbayar"]`).attr("value", "")
+        $("#tablePelunasan").jqGrid("setCell", value, "statusnotadebet", 0);
+        $(`#tablePelunasan tr#${value}`).find(`td[aria-describedby="tablePelunasan_statusnotadebet"]`).attr("value", 0).trigger('change')
+      })
+      
+      let notadebet_nobukti = $('#crudForm').find(`[name="notadebet_nobukti"]`).parents('.input-group').children()
+      notadebet_nobukti.attr('readonly', false)
+      notadebet_nobukti.parents('.input-group').find('.button-clear').attr('disabled', false)
+      notadebet_nobukti.find('.lookup-toggler').attr('disabled', false)
+    }else{
+      $('[name=bank]').parents('.form-group').show()      
+      $('[name=alatbayar]').parents('.form-group').show()
+      $('[name=notadebet_nobukti]').val('')
+      let notadebet_nobukti = $('#crudForm').find(`[name="notadebet_nobukti"]`).parents('.input-group').children()
+      notadebet_nobukti.attr('readonly', true)
+      notadebet_nobukti.parents('.input-group').find('.button-clear').attr('disabled', true)
+      notadebet_nobukti.find('.lookup-toggler').attr('disabled', true)
+    }
+    
   }
 
   function createPelunasanPiutangHeader() {
@@ -2398,6 +2435,29 @@
       },
       onClear: (element) => {
         $('#crudForm [name=alatbayar_id]').first().val('')
+        element.val('')
+        element.data('currentValue', element.val())
+      }
+    })
+    
+    $('.notadebet-lookup').lookup({
+      title: 'nota debet Lookup',
+      fileName: 'notadebetheader',
+      beforeProcess: function(test) {
+        // const bank_ID=0        
+        this.postData = {
+          bank_Id: bankId,
+          Aktif: 'AKTIF',
+        }
+      },
+      onSelectRow: (alatbayar, element) => {
+        element.val(alatbayar.nobukti)
+        element.data('currentValue', element.val())
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
         element.val('')
         element.data('currentValue', element.val())
       }
