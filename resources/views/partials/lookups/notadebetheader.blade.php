@@ -1,10 +1,10 @@
-@include('layouts._rangeheaderlookup')
+
 <table id="notaDebetHeaderLookup" class="lookup-grid" style="width: 100%;"></table>
 {{-- <div id="notaDebetHeaderLookupPager"></div> --}}
 
 <script>
   // var sendedFilters = `{!! $filters ?? '' !!}`
-  setRangeLookup()
+  // setRangeLookup()
   initDatepicker()
   $(document).on('click', '#btnReloadLookup', function(event) {
     loadDataHeaderLookup('notadebetheader', 'notaDebetHeaderLookup',{
@@ -20,8 +20,10 @@
       iconSet: 'fontAwesome',
       datatype: "json",
       postData: {
-        tgldari: $('#tgldariheaderlookup').val(),
-        tglsampai: $('#tglsampaiheaderlookup').val(),
+        // tgldari: $('#tgldariheaderlookup').val(),
+        // tglsampai: $('#tglsampaiheaderlookup').val(),
+        panjar: `{!! $Panjar ?? '' !!}`,
+        agen_id: `{!! $agen_Id ?? '' !!}`,
       },
       idPrefix: 'notaDebetHeaderLookup',
       colModel: [
@@ -32,152 +34,6 @@
             width: '50px',
             search: false,
             hidden: true
-          },
-          {
-            label: 'status approval',
-            name: 'statusapproval_memo',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-            align: 'left',
-            stype: 'select',
-            searchoptions: {
-              dataInit: function(element) {
-                $(element).select2({
-                  width: 'resolve',
-                  theme: "bootstrap4",
-                  ajax: {
-                    url: `${apiUrl}parameter/combo`,
-                    dataType: 'JSON',
-                    headers: {
-                      Authorization: `Bearer ${accessToken}`
-                    },
-                    data: {
-                      grp: 'STATUS APPROVAL',
-                      subgrp: 'STATUS APPROVAL'
-                    },
-                    beforeSend: () => {
-                      // clear options
-                      $(element).data('select2').$results.children().filter((index, element) => {
-                        // clear options except index 0, which
-                        // is the "searching..." label
-                        if (index > 0) {
-                          element.remove()
-                        }
-                      })
-                    },
-                    processResults: (response) => {
-                      let formattedResponse = response.data.map(row => ({
-                        id: row.text,
-                        text: row.text
-                      }));
-                      
-                      formattedResponse.unshift({
-                        id: '',
-                        text: 'ALL'
-                      });
-                      
-                      return {
-                        results: formattedResponse
-                      };
-                    },
-                  }
-                });
-              }
-            },
-            formatter: (value, options, rowData) => {
-              if (!value) {
-                return ''
-              }
-              let statusAktif = JSON.parse(value)
-              
-              let formattedValue = $(`
-              <div class="badge" style="background-color: ${statusAktif.WARNA}; color: ${statusAktif.WARNATULISAN};">
-                <span>${statusAktif.SINGKATAN}</span>
-                </div>
-              `)
-              
-              return formattedValue[0].outerHTML
-            },
-            cellattr: (rowId, value, rowObject) => {
-              if (!rowObject.statusaktif) {
-                return ''
-              }
-              let statusAktif = JSON.parse(rowObject.statusaktif)
-              
-              return ` title="${statusAktif.MEMO}"`
-            }
-          },
-          {
-            label: 'STATUS CETAK',  
-            name: 'statuscetak_memo',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-            align: 'left',
-            stype: 'select',
-            searchoptions: {
-              dataInit: function(element) {
-                $(element).select2({
-                  width: 'resolve',
-                  theme: "bootstrap4",
-                  ajax: {
-                    url: `${apiUrl}parameter/combo`,
-                    dataType: 'JSON',
-                    headers: {
-                      Authorization: `Bearer ${accessToken}`
-                    },
-                    data: {
-                      grp: 'STATUSCETAK',
-                      subgrp: 'STATUSCETAK'
-                    },
-                    beforeSend: () => {
-                      // clear options
-                      $(element).data('select2').$results.children().filter((index, element) => {
-                        // clear options except index 0, which
-                        // is the "searching..." label
-                        if (index > 0) {
-                          element.remove()
-                        }
-                      })
-                    },
-                    processResults: (response) => {
-                      let formattedResponse = response.data.map(row => ({
-                        id: row.text,
-                        text: row.text
-                      }));
-                      
-                      formattedResponse.unshift({
-                        id: '',
-                        text: 'ALL'
-                      });
-                      
-                      return {
-                        results: formattedResponse
-                      };
-                    },
-                  }
-                });
-              }
-            },
-            formatter: (value, options, rowData) => {
-              if (!value) {
-                return ''
-              }
-              let statusAktif = JSON.parse(value)
-              
-              let formattedValue = $(`
-              <div class="badge" style="background-color: ${statusAktif.WARNA}; color: ${statusAktif.WARNATULISAN};">
-                <span>${statusAktif.SINGKATAN}</span>
-                </div>
-              `)
-              
-              return formattedValue[0].outerHTML
-            },
-            cellattr: (rowId, value, rowObject) => {
-              if (!rowObject.statusaktif) {
-                return ''
-              }
-              let statusAktif = JSON.parse(rowObject.statusaktif)
-              
-              return ` title="${statusAktif.MEMO}"`
-            }
           },
           {
             label: 'NO BUKTI',
@@ -197,107 +53,16 @@
             }
           },
           {
-            label: 'tgl lunas',
-            name: 'tgllunas',
-            align: 'left',
-            formatter: "date",
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
-            }
+            label: 'SISA PANJAR',
+            name: 'nominal',
+            align: 'right',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            formatter: currencyFormat,
           },
           {
             label: 'CUSTOMER',
             name: 'agen',
             align: 'left',
-          },
-          {
-            label: 'NO BUKTI PELUNASAN PIUTANG',
-            width: 250,
-            name: 'pelunasanpiutang_nobukti',
-            align: 'left',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-            formatter: (value, options, rowData) => {
-              if ((value == null) || (value == '')) {
-                return '';
-              }
-              let tgldari = rowData.tgldariheaderpelunasanpiutangheader
-              let tglsampai = rowData.tglsampaiheaderpelunasanpiutangheader
-              let url = "{{route('pelunasanpiutangheader.index')}}"
-              let formattedValue = $(`
-              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
-             `)
-              return formattedValue[0].outerHTML
-            }
-          },
-          {
-            label: 'BANK',
-            name: 'bank',
-            align: 'left',
-          },
-          {
-            label: 'ALAT BAYAR',
-            name: 'alatbayar',
-            align: 'left',
-          },
-          {
-            label: 'NO BUKTI PENERIMAAN',
-            name: 'penerimaan_nobukti',
-            align: 'left',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
-            formatter: (value, options, rowData) => {
-              if ((value == null) || (value == '')) {
-                return '';
-              }
-              let tgldari = rowData.tgldariheaderpenerimaanheader
-              let tglsampai = rowData.tglsampaiheaderpenerimaanheader
-              let url = "{{route('penerimaanheader.index')}}"
-              let formattedValue = $(`
-              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
-             `)
-              return formattedValue[0].outerHTML
-            }
-          },
-          {
-            label: 'user approval',
-            name: 'userapproval',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-            align: 'left'
-          },
-          {
-            label: 'TGL APPROVAL',
-            name: 'tglapproval',
-            align: 'left',
-            formatter: "date",
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
-            }
-          },
-          {
-            label: 'user buka cetak',
-            name: 'userbukacetak',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-            align: 'left'
-          },
-          {
-            label: 'TGL BUKA CETAK',
-            name: 'tglbukacetak',
-            align: 'left',
-            formatter: "date",
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
-            }
-          },
-          {
-            label: 'posting dari',
-            name: 'postingdari',
-            width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
-            align: 'left'
           },
           {
             label: 'MODIFIED BY',
