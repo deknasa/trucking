@@ -568,7 +568,7 @@
               row = parseInt(selectedRows[angka]) - 1;
               let element;
 
-              if (indexes[0] == 'alatbayar' || indexes[0] == 'statuspelunasan' || indexes[0] == 'id' || indexes[0] == 'tglbukti' || indexes[0] == 'bank' || indexes[0] == 'nowarkat' || indexes[0] == 'agen' || indexes[0] == 'piutang_id') {
+              if (indexes[0] == 'alatbayar' || indexes[0] == 'statuspelunasan' || indexes[0] == 'id' || indexes[0] == 'tglbukti' || indexes[0] == 'bank' || indexes[0] == 'nowarkat' || indexes[0] == 'agen' || indexes[0] == 'piutang_id' || indexes[0] == 'notadebet_nobukti') {
                 if (indexes.length > 1) {
                   element = form.find(`[name="${indexes[0]}[]"]`)[row];
                 } else {
