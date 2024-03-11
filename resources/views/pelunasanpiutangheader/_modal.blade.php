@@ -34,6 +34,19 @@
                 </div>
               </div>
             </div>
+
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
+                  CUSTOMER <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-8 col-md-10">
+                <input type="hidden" name="agen_id" class="form-control">
+                <input type="text" name="agen" class="form-control agen-lookup">
+              </div>
+            </div>
+
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
@@ -117,10 +130,10 @@
                 </label>
               </div>
               <div class="col-8 col-md-10">
-                <input type="text" name="notadebet_nobukti" class="form-control notadebet-lookup">
+                <input type="text" name="notadebet_nobukti" class="form-control notadebet-lookup" readonly>
               </div>
             </div>
-            <div class="row form-group">
+            <div class="row form-group mb-5">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
                   NO WARKAT
@@ -128,17 +141,6 @@
               </div>
               <div class="col-8 col-md-10">
                 <input type="text" name="nowarkat" class="form-control">
-              </div>
-            </div>
-            <div class="row form-group mb-5">
-              <div class="col-12 col-sm-3 col-md-2">
-                <label class="col-form-label">
-                  CUSTOMER <span class="text-danger">*</span>
-                </label>
-              </div>
-              <div class="col-8 col-md-10">
-                <input type="hidden" name="agen_id" class="form-control">
-                <input type="text" name="agen" class="form-control agen-lookup">
               </div>
             </div>
 
@@ -213,6 +215,7 @@
   let hasFormBindKeys = false
   let modalBody = $('#crudModal').find('.modal-body').html()
   let bankId
+  let agenId
   let selectAll = false
   let isEditTgl
   let statusDebet = {}
@@ -647,6 +650,8 @@
     }
   })
 
+
+
   function setTotal() {
     let nominalDetails = $(`#table_body [name="bayarppd[]"]:not([disabled])`)
     let total = 0
@@ -713,6 +718,7 @@
       notadebet_nobukti.attr('readonly', false)
       notadebet_nobukti.parents('.input-group').find('.button-clear').attr('disabled', false)
       notadebet_nobukti.find('.lookup-toggler').attr('disabled', false)
+
     }else{
       $('[name=bank]').parents('.form-group').show()      
       $('[name=alatbayar]').parents('.form-group').show()
@@ -1876,6 +1882,7 @@
           let tgl = response.data.tglbukti
           $.each(response.data, (index, value) => {
             bankId = response.data.bank_id
+            agenId = response.data.agen_id
             let element = form.find(`[name="${index}"]`)
 
             form.find(`[name="${index}"]:not([name="tglbukti"])`).val(value).attr('readonly', true)
@@ -2367,6 +2374,7 @@
         },
         success: response => {
           bankId = response.data.bank_id
+          agenId = response.data.agen_id
 
           $.each(response.data, (index, value) => {
             let element = form.find(`[name="${index}"]`)
@@ -2448,6 +2456,9 @@
         this.postData = {
           bank_Id: bankId,
           Aktif: 'AKTIF',
+          Panjar: 'PANJAR',
+          agen_Id: agenId,
+
         }
       },
       onSelectRow: (alatbayar, element) => {
@@ -2474,6 +2485,7 @@
       },
       onSelectRow: (agen, element) => {
         $('#crudForm [name=agen_id]').first().val(agen.id)
+        agenId = agen.id
         element.val(agen.namaagen)
         // getPiutang(agen.id)
         $('#tablePelunasan').jqGrid("clearGridData");
