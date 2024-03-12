@@ -1882,6 +1882,9 @@
           let tgl = response.data.tglbukti
           $.each(response.data, (index, value) => {
             bankId = response.data.bank_id
+            // console.log(response.data.bank_id)
+            // console.log(response.data.agen_id)
+
             agenId = response.data.agen_id
             let element = form.find(`[name="${index}"]`)
 
@@ -1912,11 +1915,11 @@
             }
 
           })
-          let agenId = response.data.agen_id
+          let agenId_ = response.data.agen_id
 
           loadPelunasanGrid();
 
-          getDataPelunasan(agenId, Id).then((response) => {
+          getDataPelunasan(agenId_, Id).then((response) => {
 
             let selectedId = []
             let totalBayar = 0
