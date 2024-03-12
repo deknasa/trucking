@@ -794,11 +794,11 @@
               beforeProcess: function(test) {
                 this.postData = {
                   Aktif: 'AKTIF',
-                  trado_id : detail.trado_id,
-                  supir_id : detail.supir_id,
-                  supirold_id : detail.supir_id_old,
-                  tglabsensi : $('#tglbukti').val(),
-                  dari : 'mandorabsensisupir',
+                  trado_id: detail.trado_id,
+                  supir_id: detail.supir_id,
+                  supirold_id: detail.supir_id_old,
+                  tglabsensi: $('#tglbukti').val(),
+                  dari: 'mandorabsensisupir',
                 }
               },
               onSelectRow: (absentrado, element) => {
@@ -1010,28 +1010,45 @@
         aksi: Aksi
       },
       success: response => {
-        var kodenobukti = response.kodenobukti
-        if (kodenobukti == '1') {
-          var kodestatus = response.kodestatus
-          if (kodestatus == '1') {
-            showDialog(response.message['keterangan'])
-          } else {
-            if (Aksi == 'PRINTER BESAR') {
-              window.open(`{{ route('absensisupirheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
-            } else if (Aksi == 'PRINTER KECIL') {
-              window.open(`{{ route('absensisupirheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
-            }
-            if (Aksi == 'EDIT') {
-              editAbsensiSupir(Id)
-            }
-            if (Aksi == 'DELETE') {
-              deleteAbsensiSupir(Id)
-            }
-          }
-
+        var error = response.error
+        if (error) {
+          showDialog(response)
         } else {
-          showDialog(response.message['keterangan'])
+          if (Aksi == 'PRINTER BESAR') {
+            window.open(`{{ route('absensisupirheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
+          } else if (Aksi == 'PRINTER KECIL') {
+            window.open(`{{ route('absensisupirheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
+          }
+          if (Aksi == 'EDIT') {
+            editAbsensiSupir(Id)
+          }
+          if (Aksi == 'DELETE') {
+            deleteAbsensiSupir(Id)
+          }
         }
+
+        // var kodenobukti = response.kodenobukti
+        // if (kodenobukti == '1') {
+        //   var kodestatus = response.kodestatus
+        //   if (kodestatus == '1') {
+        //     showDialog(response.message['keterangan'])
+        //   } else {
+        //     if (Aksi == 'PRINTER BESAR') {
+        //       window.open(`{{ route('absensisupirheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
+        //     } else if (Aksi == 'PRINTER KECIL') {
+        //       window.open(`{{ route('absensisupirheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
+        //     }
+        //     if (Aksi == 'EDIT') {
+        //       editAbsensiSupir(Id)
+        //     }
+        //     if (Aksi == 'DELETE') {
+        //       deleteAbsensiSupir(Id)
+        //     }
+        //   }
+
+        // } else {
+        //   showDialog(response.message['keterangan'])
+        // }
       }
     })
   }
@@ -1046,11 +1063,12 @@
       let namasupir_old = $(`#supir_old_row_${rowId}`).val()
       let supir_id_old = $(`#supir_old_id_row_${rowId}`).val()
 
-      console.log($(`#supir_old_row_${rowId}`),$(`#supir_old_id_row_${rowId}`));
+      console.log($(`#supir_old_row_${rowId}`), $(`#supir_old_id_row_${rowId}`));
       $(`#supir_row_${rowId}`).val(namasupir_old)
       $(`#supir_id_row_${rowId}`).val(supir_id_old)
     }
   }
+
   function getabsentrado(id) {
     return new Promise((resolve, reject) => {
       $.ajax({
