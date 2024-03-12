@@ -359,6 +359,61 @@
             }
           },
           {
+            label: 'STATUS APP pengajuan trip inap',
+            name: 'statusapprovalpengajuantripinap',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            align: 'left',
+            stype: 'select',
+            searchoptions: {
+
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['comboedit'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['comboedit'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+              `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              let statusAppEdit = JSON.parse(value)
+              if (!statusAppEdit) {
+                return ''
+              }
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusAppEdit.WARNA}; color: #fff;">
+                  <span>${statusAppEdit.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusAppEdit = JSON.parse(rowObject.statusapprovalpengajuantripinap)
+              if (!statusAppEdit) {
+                return ` title=" "`
+              }
+              return ` title="${statusAppEdit.MEMO}"`
+            }
+          },
+          {
+            label: 'USER APP pengajuan trip inap',
+            name: 'userapprovalpengajuantripinap',
+            align: 'left',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+          },
+          {
             label: 'MODIFIED BY',
             name: 'modifiedby',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
@@ -584,6 +639,20 @@
                         showDialog(selectedOne[1])
                     }
                   }
+                }
+              },
+              {
+                id: 'approvalTripInap',
+                text: "UN/APPROVAL Pengajuan Trip Inap",
+                onClick: () => {
+                  // if (`{{ $myAuth->hasPermission('absensisupirheader', 'approvalTripInap') }}`) {
+                    var selectedOne = selectedOnlyOne();                            
+                    if (selectedOne[0]) {
+                        approveTripInap(selectedOne[1])
+                    } else {
+                        showDialog(selectedOne[1])
+                    }
+                  // }
                 }
               },
               {
@@ -853,6 +922,34 @@
         },
       })
     }
+
+    function approveTripInap(id) {
+      if (approveEditRequest) {
+        approveEditRequest.abort();
+      }
+      approveEditRequest = $.ajax({
+        url: `${apiUrl}absensisupirheader/${id}`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        success: response => {
+          let msg = `YAKIN UnApprove Status Edit `
+          console.log(statusTidakBisaEdit);
+          if (response.data.statusapprovaleditabsensi === statusTidakBisaEdit) {
+            msg = `YAKIN Approve Status Edit `
+          }
+          showConfirm(msg, response.data.nobukti, `absensisupirheader/${response.data.id}/approvaltripinap`)
+          .then(()=>{
+            selectedRows = []
+            $('#gs_').prop('checked', false)
+          })
+            
+        },
+      })
+    }
+
   })
 
   const setTampilanIndex = function() {
