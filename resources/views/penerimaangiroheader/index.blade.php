@@ -60,24 +60,40 @@
     let tgldariheader
     let tglsampaiheader
 
-    function checkboxHandler(element) {
-        let value = $(element).val();
-        if (element.checked) {
-            selectedRows.push($(element).val())
-            $(element).parents('tr').addClass('bg-light-blue')
-        } else {
-            $(element).parents('tr').removeClass('bg-light-blue')
-            for (var i = 0; i < selectedRows.length; i++) {
-                if (selectedRows[i] == value) {
-                    selectedRows.splice(i, 1);
-                }
-            }
-            if (selectedRows.length != $('#jqGrid').jqGrid('getGridParam').records) {
-                $('#gs_').prop('checked', false)
-            }
-        }
+    let selectedbukti = [];
 
+function checkboxHandler(element) {
+  let value = $(element).val();
+  let valuebukti=$('#jqGrid').jqGrid('getCell', $(element).val(), 'nobukti');
+  if (element.checked) {
+    selectedRows.push($(element).val())
+    selectedbukti.push(valuebukti)
+    $(element).parents('tr').addClass('bg-light-blue')
+  } else {
+    $(element).parents('tr').removeClass('bg-light-blue')
+    for (var i = 0; i < selectedRows.length; i++) {
+      if (selectedRows[i] == value) {
+        selectedRows.splice(i, 1);
+      }
     }
+    if (selectedRows.length != $('#jqGrid').jqGrid('getGridParam').records) {
+      $('#gs_').prop('checked', false)
+    }
+
+    for (var i = 0; i < selectedbukti.length; i++) {
+      if (selectedbukti[i] ==valuebukti ) {
+        selectedbukti.splice(i, 1);
+      }
+    }
+
+    if (selectedbukti.length != $('#jqGrid').jqGrid('getGridParam').records) {
+      $('#gs_').prop('checked', false)
+    }
+
+  }
+
+}
+
     setSpaceBarCheckedHandler()
     reloadGrid()
     $(document).ready(function() {
@@ -561,7 +577,7 @@
                                     if (`{{ $myAuth->hasPermission('penerimaangiroheader', 'approvalbukacetak') }}`) {
                                         let tglbukacetak = $('#tgldariheader').val().split('-');
                                         tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
-                                        approvalBukaCetak(tglbukacetak, 'PENERIMAANGIROHEADER', selectedRows);
+                                        approvalBukaCetak(tglbukacetak, 'PENERIMAANGIROHEADER', selectedRows, selectedbukti);
                                     }
                                 }
                             },

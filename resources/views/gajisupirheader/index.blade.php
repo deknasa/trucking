@@ -692,7 +692,7 @@
                   let tglbukacetak = $('#tgldariheader').val().split('-');
                   tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
 
-                  approvalBukaCetak(tglbukacetak, 'GAJISUPIRHEADER', selectedRowsIndex);
+                  approvalBukaCetak(tglbukacetak, 'GAJISUPIRHEADER', selectedRowsIndex, selectedbukti);
 
                 }
               }

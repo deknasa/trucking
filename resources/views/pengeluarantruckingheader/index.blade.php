@@ -644,7 +644,7 @@
                   let tglbukacetak = $('#tgldariheader').val().split('-');
                   tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
 
-                  approvalBukaCetak(tglbukacetak, 'PENGELUARANTRUCKINGHEADER', selectedRowsIndex);
+                  approvalBukaCetak(tglbukacetak, 'PENGELUARANTRUCKINGHEADER', selectedRowsIndex, selectedbukti);
 
                 }
               }

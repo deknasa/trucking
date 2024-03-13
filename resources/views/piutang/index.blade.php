@@ -574,7 +574,7 @@
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
                     showDialog('Harap pilih salah satu record')
                   } else {
-                    approvalBukaCetak(tglbukacetak, 'PIUTANGHEADER', selectedRows);
+                    approvalBukaCetak(tglbukacetak, 'PIUTANGHEADER', selectedRows, selectedbukti);
                   }
                 }
               }
