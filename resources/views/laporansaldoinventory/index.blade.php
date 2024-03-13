@@ -60,13 +60,23 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <!-- <div class="col-md-6">
                                 <div class="row">
                                     <label class="col-12 col-sm-3  col-form-label mt-2">jenis tgl Tampil<span class="text-danger">*</span></label>
                                     <div class="col-sm-9 mt-2">
                                         <div class="input-group">
                                             <select name="jenistgltampil" id="jenistgltampil" class="form-select select2bs4" style="width: 100%;">
                                             </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> -->
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <label class="col-12 col-sm-3 col-form-label mt-2">Periode<span class="text-danger">*</span></label>
+                                    <div class="col-sm-9 mt-2">
+                                        <div class="input-group">
+                                            <input type="text" name="priode" class="form-control datepicker">
                                         </div>
                                     </div>
                                 </div>
@@ -132,7 +142,7 @@
                         </div>
 
                         <div class=" row">
-                            <div class="col-md-6">
+                            <!-- <div class="col-md-6">
                                 <div class="row">
                                     <label class="col-12 col-sm-3 col-form-label mt-2">Periode<span class="text-danger">*</span></label>
                                     <div class="col-sm-9 mt-2">
@@ -141,7 +151,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
 
                             {{-- <div class="col-md-6">
                                 <div class="row">
@@ -228,7 +238,7 @@
             // (statusreuse != '') &&
             // (statusban != '') &&
             // (filter != '') &&
-            (jenistgltampil != '') &&
+            // (jenistgltampil != '') &&
             (priode != '')
             // (stokdari_id != '') &&
             // (stoksampai_id != '') &&

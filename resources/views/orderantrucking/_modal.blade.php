@@ -961,8 +961,8 @@
         nojobemkl2.parents('.input-group').find('.button-clear').show()
         $('#crudForm [name=nocont2]').attr('readonly', true)
         $('#crudForm [name=noseal2]').attr('readonly', true)
-      }else{
-        
+      } else {
+
         nojobemkl2.attr('readonly', true)
         nojobemkl2.parents('.input-group').find('.input-group-append').hide()
         nojobemkl2.parents('.input-group').find('.button-clear').hide()
@@ -1205,10 +1205,13 @@
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
       success: response => {
-        var kondisi = response.kondisi
+        // var kondisi = response.kondisi
+        var error = response.error
         isAllowEdited = response.edit;
-        if (kondisi == true) {
-          showDialog(response.message['keterangan'])
+        // if (kondisi == true) {
+        if (error) {
+          // showDialog(response.message['keterangan'])
+          showDialog(response)          
         } else {
           if (Aksi == 'edit') {
             editOrderanTrucking(selectedId)

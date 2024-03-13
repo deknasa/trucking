@@ -2353,15 +2353,18 @@
       },
       success: response => {
 
-        var kondisi = response.kondisi
+        // var kondisi = response.kondisi
+        var error = response.error
 
         // if (!response.edit) {
         isAllowEdited = response.edit;
         // console.log(isAllowEdited);
         // }
 
-        if (kondisi == true) {
-          showDialog(response.message['keterangan'])
+        // if (kondisi == true) {
+        if (error) {
+          showDialog(response) 
+          // showDialog(response.message['keterangan'])
         } else {
           if (Aksi == 'EDIT') {
             editSuratPengantar(Id)
