@@ -701,7 +701,7 @@
 
   }
 
-  function cekValidasi(Id, Aksi) {
+  function cekValidasi(Id, Aksi,nobukti) {
     $.ajax({
       url: `{{ config('app.api_url') }}pengeluaranheader/${Id}/cekvalidasi`,
       method: 'POST',
@@ -710,7 +710,8 @@
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
       data: {
-        aksi: Aksi
+        aksi: Aksi,
+        nobukti: nobukti
       },
       success: response => {
         var error = response.error

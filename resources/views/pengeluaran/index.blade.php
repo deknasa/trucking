@@ -70,6 +70,7 @@
   let hasDetail = false
   let currentTab = 'detail'
   let selectedRows = [];
+  let selectedbukti = [];
   let tgldariheader
   let tglsampaiheader
 
@@ -77,12 +78,14 @@
     let value = $(element).val();
     if (element.checked) {
       selectedRows.push($(element).val())
+      selectedbukti.push($('#jqGrid').jqGrid('getCell', $(element).val(), 'nobukti'))
       $(element).parents('tr').addClass('bg-light-blue')
     } else {
       $(element).parents('tr').removeClass('bg-light-blue')
       for (var i = 0; i < selectedRows.length; i++) {
         if (selectedRows[i] == value) {
           selectedRows.splice(i, 1);
+          selectedbukti.splice(i, 1);
         }
       }
       if (selectedRows.length != $('#jqGrid').jqGrid('getGridParam').records) {
@@ -542,10 +545,13 @@
                 text: "Printer Lain(Faktur)",
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                  rawCellValue = $("#jqGrid").jqGrid('getCell', selectedId, 'nobukti');
+                  celValue = $("<div>").html(rawCellValue).text();
+                  selectednobukti = celValue
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
                     showDialog('Harap pilih salah satu record')
                   } else {
-                    cekValidasi(selectedId, 'PRINTER BESAR')
+                    cekValidasi(selectedId, 'PRINTER BESAR', selectednobukti)
                   }
                   clearSelectedRows()
                   $('#gs_').prop('checked', false)
@@ -556,10 +562,13 @@
                 text: "Printer Epson Seri LX(Faktur)",
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                  rawCellValue = $("#jqGrid").jqGrid('getCell', selectedId, 'nobukti');
+                  celValue = $("<div>").html(rawCellValue).text();
+                  selectednobukti = celValue
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
                     showDialog('Harap pilih salah satu record')
                   } else {
-                    cekValidasi(selectedId, 'PRINTER KECIL')
+                    cekValidasi(selectedId, 'PRINTER KECIL', selectednobukti)
                   }
                   clearSelectedRows()
                   $('#gs_').prop('checked', false)
@@ -609,7 +618,8 @@
                     let tglbukacetak = $('#tgldariheader').val().split('-');
                     tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
 
-                    approvalBukaCetak(tglbukacetak, 'PENGELUARANHEADER', selectedRows);
+
+                    approvalBukaCetak(tglbukacetak, 'PENGELUARANHEADER', selectedRows, selectedbukti);
                   }
                 }
               },
@@ -631,10 +641,13 @@
             onClick: function(event) {
 
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              rawCellValue = $("#jqGrid").jqGrid('getCell', selectedId, 'nobukti');
+              celValue = $("<div>").html(rawCellValue).text();
+              selectednobukti = celValue
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                cekValidasi(selectedId, 'EDIT')
+                cekValidasi(selectedId, 'EDIT', selectednobukti)
               }
 
             }
@@ -646,10 +659,13 @@
             onClick: () => {
 
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              rawCellValue = $("#jqGrid").jqGrid('getCell', selectedId, 'nobukti');
+              celValue = $("<div>").html(rawCellValue).text();
+              selectednobukti = celValue
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                cekValidasi(selectedId, 'DELETE')
+                cekValidasi(selectedId, 'DELETE', selectednobukti)
               }
 
             }
