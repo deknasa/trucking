@@ -738,7 +738,7 @@
                 tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
                 selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
 
-                approvalBukaCetak(tglbukacetak, 'PROSESGAJISUPIRHEADER', selectedRowsIndex);
+                approvalBukaCetak(tglbukacetak, 'PROSESGAJISUPIRHEADER', selectedRowsIndex, selectedbukti);
 
               }
             }

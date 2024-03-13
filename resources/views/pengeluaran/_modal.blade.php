@@ -1083,7 +1083,8 @@
         Authorization: `Bearer ${accessToken}`
       },
       data: {
-        pengeluaranId: selectedRows
+        pengeluaranId: selectedRows,
+        bukti: selectedbukti
       },
       success: response => {
         $('#crudForm').trigger('reset')
@@ -1091,6 +1092,7 @@
 
         $('#jqGrid').jqGrid().trigger('reloadGrid');
         selectedRows = []
+        selectedbukti = []
         $('#gs_').prop('checked', false)
       },
       error: error => {
