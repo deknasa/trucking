@@ -565,7 +565,7 @@
       }
     }
 
-    function approvalBukaCetak(periode, table, selectedRows) {
+    function approvalBukaCetak(periode, table, selectedRows,buktiselectedRows) {
 
       $.ajax({
         url: `${apiUrl}approvalbukacetak`,
@@ -576,6 +576,7 @@
         },
         data: {
           tableId: selectedRows,
+          bukti: buktiselectedRows,
           periode: periode,
           table: table,
           info: info
