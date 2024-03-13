@@ -79,7 +79,17 @@
                   <input type="hidden" name="jenisorder_id">
                   <input type="text" name="jenisorder" class="form-control jenisorder-lookup">
                 </div>
+              </div>
 
+              <div class="row form-group noinvoicepajak">
+                <div class="col-12 col-md-2  ">
+                  <label class="col-form-label">
+                    no invoice pajak <span class="text-danger">*</span>
+                  </label>
+                </div>
+                <div class="col-12 col-md-4">
+                  <input type="text" name="noinvoicepajak" class="form-control">
+                </div>
               </div>
 
               <div class="row form-group">
@@ -218,6 +228,10 @@
       data.push({
         name: 'agen_id',
         value: form.find(`[name="agen_id"]`).val()
+      })
+      data.push({
+        name: 'noinvoicepajak',
+        value: form.find(`[name="noinvoicepajak"]`).val()
       })
 
       data.push({
@@ -449,6 +463,7 @@
     Promise
       .all([
         setStatusPilihanInvoiceOptions(form),
+        setTampilan(),
         setFormatTable()
       ])
       .then(() => {
@@ -495,6 +510,7 @@
       .all([
         setTglBukti(form),
         setStatusPilihanInvoiceOptions(form),
+        setTampilan(),
         setFormatTable()
       ])
       .then(() => {
@@ -548,6 +564,7 @@
     Promise
       .all([
         setStatusPilihanInvoiceOptions(form),
+        setTampilan(),
         setFormatTable()
       ])
       .then(() => {
@@ -1699,6 +1716,46 @@
         success: response => {
           if (response.text == 'FORMAT 1') {
             $("#tableInvoice").jqGrid("hideCol", `keteranganbiaya`);
+          }
+          resolve()
+        },
+        error: error => {
+          reject(error)
+        }
+      })
+    })
+  }
+
+  const setTampilan = function(relatedForm) {
+    return new Promise((resolve, reject) => {
+      let data = [];
+      data.push({
+        name: 'grp',
+        value: 'UBAH TAMPILAN'
+      })
+      data.push({
+        name: 'text',
+        value: 'INVOICEHEADER'
+      })
+      $.ajax({
+        url: `${apiUrl}parameter/getparambytext`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: data,
+        success: response => {
+          memo = JSON.parse(response.memo)
+          memo = memo.INPUT
+          if (memo != '') {
+            
+            input = memo.split(',');
+            input.forEach(field => {
+              field = $.trim(field.toLowerCase());
+              $(`.${field}`).hide()
+              $("#tableInvoice").jqGrid("hideCol", `${field}`);
+            });
           }
           resolve()
         },
