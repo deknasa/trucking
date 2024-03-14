@@ -53,22 +53,22 @@
                         <div class="row form-group">
                             <div class="col-12 col-sm-3 col-md-2">
                                 <label class="col-form-label">
-                                    jam masuk <span class="text-danger">*</span>
+                                    Tanggal & Jam Masuk <span class="text-danger">*</span>
                                 </label>
                             </div>
                             <div class="col-12 col-sm-9 col-md-10">
-                                <input type="text" class="form-control inputmask-time" name="jammasukinap">
+                                <input type="datetime-local" class="form-control inputmask-time" name="jammasukinap">
                             </div>
                         </div>
 
                         <div class="row form-group">
                             <div class="col-12 col-sm-3 col-md-2">
                                 <label class="col-form-label">
-                                    jam keluar <span class="text-danger">*</span>
+                                    Tanggal & Jam keluar <span class="text-danger">*</span>
                                 </label>
                             </div>
                             <div class="col-12 col-sm-9 col-md-10">
-                                <input type="text" class="form-control inputmask-time" name="jamkeluarinap">
+                                <input type="datetime-local" class="form-control inputmask-time" name="jamkeluarinap">
                             </div>
                         </div>
 
@@ -445,14 +445,30 @@
     }
 
     function cekValidasi(Id, Aksi) {
-
-        if (Aksi == 'EDIT') {
-            editTripInap(Id)
-        }
-        if (Aksi == 'DELETE') {
-            deleteTripInap(Id)
-        }
-
+        $.ajax({
+            url: `{{ config('app.api_url') }}tripinap/${Id}/cekValidasi`,
+            method: 'POST',
+            data: {
+                aksi: Aksi
+            },
+            dataType: 'JSON',
+            beforeSend: request => {
+                request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+            },
+            success: response => {
+                var error = response.error
+                if (error == true) {
+                    showDialog(response)
+                } else {
+                    if (Aksi == 'EDIT') {
+                        editTripInap(Id)
+                    }
+                    if (Aksi == 'DELETE') {
+                        deleteTripInap(Id)
+                    }
+                }
+            }
+        })
     }
 
     const setStatusAktifOptions = function(relatedForm) {
@@ -530,6 +546,7 @@
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
+                    from: 'tripinap',
                 }
             },
             onSelectRow: (absensisupir, element) => {
@@ -538,15 +555,28 @@
                 $('#crudForm [name=absensi_id]').first().val(absensisupir.id)
                 element.val(absensisupir.tglbukti)
                 element.data('currentValue', element.val())
+                $('#crudForm [name=trado_id]').val('')
+                $('#crudForm [name=supir_id]').val('')
+                $('#crudForm [name=trado]').val('')
+                $('#crudForm [name=trado]').data('currentValue', '')
+                $('#crudForm [name=suratpengantar_nobukti]').val('')
+                $('#crudForm [name=suratpengantar_nobukti]').data('currentValue', '')
+
             },
             onCancel: (element) => {
                 element.val(element.data('currentValue'))
             },
             onClear: (element) => {
                 $('#crudForm [name=absensi_id]').first().val('')
-
+                absensiId = ''
                 element.val('')
                 element.data('currentValue', element.val())
+                $('#crudForm [name=trado_id]').val('')
+                $('#crudForm [name=supir_id]').val('')
+                $('#crudForm [name=trado]').val('')
+                $('#crudForm [name=trado]').data('currentValue', '')
+                $('#crudForm [name=suratpengantar_nobukti]').val('')
+                $('#crudForm [name=suratpengantar_nobukti]').data('currentValue', '')
             }
         })
 
@@ -611,9 +641,11 @@
                 element.data('currentValue', element.val())
             }
         })
-        $('.suratpengantar-lookup').lookup({
+        $('.suratpengantar-lookup').lookupMaster({
             title: 'Surat Pengantar Lookup',
-            fileName: 'suratpengantar',
+            fileName: 'suratpengantartripinap',
+            typeSearch: 'ALL',
+            searching: 1,
             beforeProcess: function(test) {
                 // var levelcoa = $(`#levelcoa`).val();
                 this.postData = {
@@ -622,6 +654,11 @@
                     supir_id: $('#crudForm [name=supir_id]').first().val(),
                     from: 'tripinap',
                     Aktif: 'AKTIF',
+                    searching: 1,
+                    valueName: 'suratpengantar_nobukti',
+                    searchText: 'suratpengantar-lookup',
+                    title: 'Surat Pengantar',
+                    typeSearch: 'ALL',
                 }
             },
             onSelectRow: (suratpengantar, element) => {
@@ -640,35 +677,82 @@
         })
 
 
-        $('.absensisupirdetail-lookup').lookup({
+        $('.absensisupirdetail-lookup').lookupMaster({
             title: 'Trado Lookup',
-            fileName: 'absensisupirdetail',
+            fileName: 'absensisupirdetailMaster',
+            typeSearch: 'ALL',
+            searching: 1,
             beforeProcess: function(test) {
                 // var levelcoa = $(`#levelcoa`).val();
+
                 this.postData = {
-                    tgltrip: $('#crudForm [name=tglabsensi]').val(),
                     Aktif: 'AKTIF',
+                    searching: 1,
+                    valueName: 'trado_id',
+                    searchText: 'absensisupirdetail-lookup',
+                    title: 'TRADO',
+                    typeSearch: 'ALL',
+                    tgltrip: $('#crudForm [name=tglabsensi]').val(),
+                    absensi_id: absensiId,
+                    from: 'tripinap',
+                    tripinap_id: $('#crudForm [name=id]').val(),
+                    aksi: $('#crudForm').data('action')
                 }
             },
             onSelectRow: (absensi, element) => {
-                console.log(absensi);
                 $('#crudForm [name=trado_id]').first().val(absensi.trado_id)
                 $('#crudForm [name=supir_id]').first().val(absensi.supir_id)
                 element.val(absensi.tradosupir)
                 element.data('currentValue', element.val())
-                getInfoTrado(tradoId)
+                $('#crudForm [name=suratpengantar_nobukti]').val('')
+                $('#crudForm [name=suratpengantar_nobukti]').data('currentValue', '')
             },
             onCancel: (element) => {
                 element.val(element.data('currentValue'))
             },
             onClear: (element) => {
-                tradoId = 0
                 $('#crudForm [name=trado_id]').first().val('')
                 $('#crudForm [name=supir_id]').first().val('')
                 element.val('')
                 element.data('currentValue', element.val())
+                $('#crudForm [name=suratpengantar_nobukti]').val('')
+                $('#crudForm [name=suratpengantar_nobukti]').data('currentValue', '')
             }
         })
+
+
+        // $('.absensisupirdetail-lookup').lookup({
+        //     title: 'Trado Lookup',
+        //     fileName: 'absensisupirdetail',
+        //     beforeProcess: function(test) {
+        //         // var levelcoa = $(`#levelcoa`).val();
+        //         this.postData = {
+        //             tgltrip: $('#crudForm [name=tglabsensi]').val(),
+        //             Aktif: 'AKTIF',
+        //             absensi_id: absensiId,
+        //             from: 'tripinap',
+        //             aksi: $('#crudForm').data('action'),
+        //         }
+        //     },
+        //     onSelectRow: (absensi, element) => {
+        //         console.log(absensi);
+        //         $('#crudForm [name=trado_id]').first().val(absensi.trado_id)
+        //         $('#crudForm [name=supir_id]').first().val(absensi.supir_id)
+        //         element.val(absensi.tradosupir)
+        //         element.data('currentValue', element.val())
+        //         getInfoTrado(tradoId)
+        //     },
+        //     onCancel: (element) => {
+        //         element.val(element.data('currentValue'))
+        //     },
+        //     onClear: (element) => {
+        //         tradoId = 0
+        //         $('#crudForm [name=trado_id]').first().val('')
+        //         $('#crudForm [name=supir_id]').first().val('')
+        //         element.val('')
+        //         element.data('currentValue', element.val())
+        //     }
+        // })
     }
 </script>
 @endpush()

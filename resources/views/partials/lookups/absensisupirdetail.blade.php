@@ -11,78 +11,84 @@
       idPrefix: 'absensiSupirLookup',
       postData: {
         aktif: `{!! $Aktif ?? '' !!}`,
+        trado_id: `{!! $trado_id ?? '' !!}`,
+        cabang: `{!! $cabang ?? '' !!}`,
+        absensiId: `{!! $absensiId ?? '' !!}`,
         tgltrip: `{!! $tgltrip ?? '' !!}`,
         absensi_id: `{!! $absensi_id ?? '' !!}`,
+        from: `{!! $from ?? '' !!}`,
+        aksi: `{!! $aksi ?? '' !!}`,
+        pengajuantrip_id: `{!! $pengajuantrip_id ?? '' !!}`,
         isProsesUangjalan: `{!! $isProsesUangjalan ?? '' !!}`,
-      },       
+      },
       colModel: [{
-            label: 'TRADO',
-            name: 'trado',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-          },
-          {
-            label: 'SUPIR',
-            name: 'supir',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
-          },
-          {
-            label: 'STATUS',
-            name: 'status',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
-          },
-          {
-            label: 'KETERANGAN',
-            name: 'keterangan_detail',
-            width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1,
-          },
-          {
-            label: 'JAM',
-            name: 'jam', 
-            formatter:'date',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
-            formatoptions:{
-              srcformat: "H:i:s",
-              newformat: "H:i",
-              // userLocalTime : true
-            }
-          },
-          
+          label: 'TRADO',
+          name: 'trado',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+        },
+        {
+          label: 'SUPIR',
+          name: 'supir',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+        },
+        {
+          label: 'STATUS',
+          name: 'status',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+        },
+        {
+          label: 'KETERANGAN',
+          name: 'keterangan_detail',
+          width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1,
+        },
+        {
+          label: 'JAM',
+          name: 'jam',
+          formatter: 'date',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+          formatoptions: {
+            srcformat: "H:i:s",
+            newformat: "H:i",
+            // userLocalTime : true
+          }
+        },
 
 
-          {
-            label: 'id',
-            name: 'id',
-             hidden: true
-          },
-          {
-            label: 'trado_id',
-            name: 'trado_id',
-             hidden: true
-          },
-          {
-            label: 'supir_id',
-            name: 'supir_id',
-             hidden: true
-          },
-          {
-            label: 'nominalplusborongan',
-            name: 'nominalplusborongan',
-             hidden: true,
-             search: false
-          },
-          {
-            label: 'UANG JALAN',
-            name: 'uangjalan',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-            formatter: currencyFormat,
-            align: "right",
-          },
-          {
-            label: 'TRADO - SUPIR',
-            name: 'tradosupir',
-            width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
-          },
-        ],
+
+        {
+          label: 'id',
+          name: 'id',
+          hidden: true
+        },
+        {
+          label: 'trado_id',
+          name: 'trado_id',
+          hidden: true
+        },
+        {
+          label: 'supir_id',
+          name: 'supir_id',
+          hidden: true
+        },
+        {
+          label: 'nominalplusborongan',
+          name: 'nominalplusborongan',
+          hidden: true,
+          search: false
+        },
+        {
+          label: 'UANG JALAN',
+          name: 'uangjalan',
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+          formatter: currencyFormat,
+          align: "right",
+        },
+        {
+          label: 'TRADO - SUPIR',
+          name: 'tradosupir',
+          width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
+        },
+      ],
       autowidth: true,
       responsive: true,
       shrinkToFit: false,
@@ -122,7 +128,7 @@
         setGridLastRequest($(this), jqXHR)
       },
       loadComplete: function(data) {
-          changeJqGridRowListText()
+        changeJqGridRowListText()
         if (detectDeviceType() == 'desktop') {
           $(document).unbind('keydown')
           setCustomBindKeys($(this))

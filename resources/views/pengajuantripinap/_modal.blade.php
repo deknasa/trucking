@@ -412,13 +412,32 @@
     }
 
     function cekValidasi(Id, Aksi) {
+        $.ajax({
+            url: `{{ config('app.api_url') }}pengajuantripinap/${Id}/cekValidasi`,
+            method: 'POST',
+            data: {
+                aksi: Aksi
+            },
+            dataType: 'JSON',
+            beforeSend: request => {
+                request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+            },
+            success: response => {
+                var error = response.error
+                if (error == true) {
+                    showDialog(response)
+                } else {
+                    if (Aksi == 'EDIT') {
+                        editPengajuanTripInap(Id)
+                    }
+                    if (Aksi == 'DELETE') {
+                        deletePengajuanTripInap(Id)
+                    }
 
-        if (Aksi == 'EDIT') {
-            editPengajuanTripInap(Id)
-        }
-        if (Aksi == 'DELETE') {
-            deletePengajuanTripInap(Id)
-        }
+                }
+
+            }
+        })
 
     }
 
@@ -494,6 +513,7 @@
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
+                    from: 'pengajuantripinap',
                 }
             },
             onSelectRow: (absensisupir, element) => {
@@ -502,15 +522,23 @@
                 $('#crudForm [name=absensi_id]').first().val(absensisupir.id)
                 element.val(absensisupir.tglbukti)
                 element.data('currentValue', element.val())
+                $('#crudForm [name=trado_id]').val('')
+                $('#crudForm [name=supir_id]').val('')
+                $('#crudForm [name=trado]').val('')
+                $('#crudForm [name=trado]').data('currentValue', '')
             },
             onCancel: (element) => {
                 element.val(element.data('currentValue'))
             },
             onClear: (element) => {
                 $('#crudForm [name=absensi_id]').first().val('')
-
+                absensiId = ''
                 element.val('')
                 element.data('currentValue', element.val())
+                $('#crudForm [name=trado_id]').val('')
+                $('#crudForm [name=supir_id]').val('')
+                $('#crudForm [name=trado]').val('')
+                $('#crudForm [name=trado]').data('currentValue', '')
             }
         })
 
@@ -518,6 +546,7 @@
             title: 'Trado Lookup',
             fileName: 'absensisupirdetailMaster',
             typeSearch: 'ALL',
+            searching: 1,
             beforeProcess: function(test) {
                 // var levelcoa = $(`#levelcoa`).val();
 
@@ -529,7 +558,10 @@
                     title: 'TRADO',
                     typeSearch: 'ALL',
                     tgltrip: $('#crudForm [name=tglabsensi]').val(),
-                    absensiId: absensiId
+                    absensi_id: absensiId,
+                    from: 'pengajuantripinap',
+                    aksi: $('#crudForm').data('action'),
+                    pengajuantrip_id: $('#crudForm [name=id]').val()
                 }
             },
             onSelectRow: (absensi, element) => {

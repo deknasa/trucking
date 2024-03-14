@@ -49,7 +49,7 @@
           selectedRows.splice(i, 1);
         }
       }
-      
+
       if (selectedRows.length != $('#jqGrid').jqGrid('getGridParam').records) {
         $('#gs_').prop('checked', false)
       }
@@ -187,7 +187,7 @@
           {
             label: 'tgl Absensi',
             name: 'tglabsensi',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_2,
             align: 'left',
             formatter: "date",
             formatoptions: {
@@ -199,25 +199,23 @@
           {
             label: 'jam masuk inap',
             name: 'jammasukinap',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_2,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
             align: 'left',
             formatter: 'date',
             formatoptions: {
-              srcformat: "H:i:s",
-              newformat: "H:i",
-              // userLocalTime : true
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y H:i:s"
             }
           },
           {
             label: 'jam keluar inap',
             name: 'jamkeluarinap',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_2,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
             align: 'left',
             formatter: 'date',
             formatoptions: {
-              srcformat: "H:i:s",
-              newformat: "H:i",
-              // userLocalTime : true
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y H:i:s"
             }
           },
           {
@@ -250,7 +248,7 @@
             label: 'CREATED AT',
             name: 'created_at',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
-            align: 'right',
+            align: 'left',
             formatter: "date",
             formatoptions: {
               srcformat: "ISO8601Long",
@@ -261,7 +259,7 @@
             label: 'UPDATED AT',
             name: 'updated_at',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
-            align: 'right',
+            align: 'left',
             formatter: "date",
             formatoptions: {
               srcformat: "ISO8601Long",
@@ -565,10 +563,6 @@
         $('#edit').attr('disabled', 'disabled')
       }
 
-      if (!`{{ $myAuth->hasPermission('tripinap', 'show') }}`) {
-        $('#view').attr('disabled', 'disabled')
-      }
-
       if (!`{{ $myAuth->hasPermission('tripinap', 'destroy') }}`) {
         $('#delete').attr('disabled', 'disabled')
       }
@@ -582,12 +576,7 @@
       }
       if (!`{{ $myAuth->hasPermission('tripinap', 'approval') }}`) {
         $('#approve').attr('disabled', 'disabled')
-      }
-      if (!`{{ $myAuth->hasPermission('tripinap', 'export') }}`) {
-        $('#export').attr('disabled', 'disabled')
-      }
-      if (!`{{ $myAuth->hasPermission('tripinap', 'report') }}`) {
-        $('#report').attr('disabled', 'disabled')
+        $('#approve').hide()
       }
     }
 
@@ -779,6 +768,15 @@
       $(this).attr('disabled', '')
       $('#processingLoader').removeClass('d-none')
 
+      let dataabsensi = [];
+      let datatrado = [];
+      let datasupir = [];
+      $.each(selectedRows, function(index, row) {
+        dataabsensi.push($(`#jqGrid tr#${row}`).find(`td[aria-describedby="jqGrid_tglabsensi"]`).attr('title'))
+        datasupir.push($(`#jqGrid tr#${row}`).find(`td[aria-describedby="jqGrid_supir"]`).attr('title'))
+        datatrado.push($(`#jqGrid tr#${row}`).find(`td[aria-describedby="jqGrid_trado"]`).attr('title'))
+      })
+
       $.ajax({
         url: `${apiUrl}tripinap/approval`,
         method: 'POST',
@@ -787,7 +785,10 @@
           Authorization: `Bearer ${accessToken}`
         },
         data: {
-          Id: selectedRows
+          Id: selectedRows,
+          supir: datasupir,
+          absen: dataabsensi,
+          trado: datatrado,
         },
         success: response => {
           $('#jqGrid').jqGrid().trigger('reloadGrid');
