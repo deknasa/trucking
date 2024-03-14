@@ -1041,15 +1041,17 @@
         'Authorization': `Bearer ${accessToken}`
       },
       data: {
-        trado_id: trado,
+        trado_id: $('#crudForm').find(`[name="trado_id"]`).val(),
         upah_id: $('#crudForm').find(`[name="upah_id"]`).val(),
         statuscontainer_id: $('#crudForm').find(`[name="statuscontainer_id"]`).val()
       },
       success: response => {
-        $('.tableInfo').show()
-        $('#infoTrado').html('')
-        $.each(response.data, (index, detail) => {
-          let detailRow = $(`
+        if (response.data.length > 0) {
+
+          $('.tableInfo').show()
+          $('#infoTrado').html('')
+          $.each(response.data, (index, detail) => {
+            let detailRow = $(`
               <tr>
                 <td> ${detail.status} </td>
                 <td> ${numberWithCommas(detail.kmperjalanan)} </td>
@@ -1060,8 +1062,9 @@
               </tr>
             `)
 
-          $('#infoTrado').append(detailRow)
-        })
+            $('#infoTrado').append(detailRow)
+          })
+        }
       },
       error: error => {
         showDialog(error.statusText)
@@ -1456,6 +1459,7 @@
         element.val('')
         element.data('currentValue', element.val())
         clearTripAsal()
+        $('.tableInfo').hide()
       }
     })
 
@@ -1627,7 +1631,8 @@
         kotaUpahZona()
 
         element.data('currentValue', element.val())
-        clearTrado()
+        // clearTrado()
+        getInfoTrado()
         clearTripAsal()
       },
       onCancel: (element) => {
@@ -1640,7 +1645,7 @@
         clearUpahSupir()
         element.val('')
         element.data('currentValue', element.val())
-        clearTrado()
+        // clearTrado()
         clearTripAsal()
       }
     })
