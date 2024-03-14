@@ -1042,7 +1042,7 @@
     })
 
     $('.orderanemkl-lookup').lookup({
-      title: 'orderanemkl Lookup',
+      title: 'orderan emkl Lookup',
       fileName: 'orderanemkl',
       beforeProcess: function(test) {
         this.postData = {
