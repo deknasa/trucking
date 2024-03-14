@@ -16,6 +16,7 @@
       datatype: "json",
       postData: {
         proses: `{!! $Proses ?? '' !!}`,        
+        from: `{!! $from ?? '' !!}`,        
         tgldari: $('#tgldariheaderlookup').val(),
         tglsampai: $('#tglsampaiheaderlookup').val(),
 

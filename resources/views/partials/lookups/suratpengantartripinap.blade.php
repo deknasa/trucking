@@ -1,9 +1,9 @@
 <?php
 if (isset($id)) { ?>
-  <table id="tradoLookup<?= $id ?>" class="lookup-grid"></table>
+  <table id="suratpengantartripinap<?= $id ?>" class="lookup-grid"></table>
 <?php
 } else { ?>
-  <table id="tradoLookup" class="lookup-grid"></table>
+  <table id="suratpengantartripinap" class="lookup-grid"></table>
 <?php } ?>
 <div class="loadingMessage">
   <img class="loading-image" src="{{ asset('libraries/tas-lib/img/loading-lookup.gif') }}" alt="Loading">
@@ -19,7 +19,7 @@ $idLookup = isset($id) ? $id : null;
   var idLookup = '{{ $idLookup }}';
   var idTop
 
-  selector = $(`#tradoLookup{{ isset($id) ? $id : null }} `)
+  selector = $(`#suratpengantartripinap{{ isset($id) ? $id : null }} `)
 
 
   var singleColumn = `{{ $singleColumn ?? '' }}`
@@ -44,101 +44,85 @@ $idLookup = isset($id) ? $id : null;
         search: false,
       },
       {
-        label: 'NO POLISI',
-        name: 'kodetrado',
+        label: 'NO BUKTI',
+        name: 'nobukti',
       },
 
     ];
   } else {
     column = [{
-        label: 'TRADO',
-        name: 'trado'
+        label: "ID",
+        name: "id",
+        width: "50px",
+        hidden: true,
+        sortable: false,
+        search: false,
+      }, {
+        label: 'NO BUKTI',
+        name: 'nobukti'
       },
       {
-        label: 'SUPIR',
-        name: 'supir',
-      },
-      {
-        label: 'STATUS',
-        name: 'status',
-      },
-      {
-        label: 'KETERANGAN',
-        name: 'keterangan_detail',
-      },
-      {
-        label: 'JAM',
-        name: 'jam',
-        formatter: 'date',
+        label: 'TGL BUKTI',
+        name: 'tglbukti',
+        formatter: "date",
+        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
         formatoptions: {
-          srcformat: "H:i:s",
-          newformat: "H:i",
-          // userLocalTime : true
+          srcformat: "ISO8601Long",
+          newformat: "d-m-Y"
         }
       },
-
-
       {
-        label: 'id',
-        name: 'id',
-        hidden: true
+        label: 'FULL/EMPTY',
+        name: 'statuscontainer_id',
+        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4
       },
       {
-        label: 'trado_id',
-        name: 'trado_id',
-        hidden: true
+        label: 'MODIFIED BY',
+        name: 'modifiedby',
+        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
       },
       {
-        label: 'supir_id',
-        name: 'supir_id',
-        hidden: true
-      },
-      {
-        label: 'nominalplusborongan',
-        name: 'nominalplusborongan',
-        hidden: true,
-        search: false
-      },
-      {
-        label: 'UANG JALAN',
-        name: 'uangjalan',
-        formatter: 'number',
+        label: 'CREATED AT',
+        name: 'created_at',
+        align: 'right',
+        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+        formatter: "date",
         formatoptions: {
-          thousandsSeparator: ",",
-          decimalPlaces: 0
-        },
-        align: "right",
+          srcformat: "ISO8601Long",
+          newformat: "d-m-Y H:i:s"
+        }
       },
       {
-        label: 'TRADO - SUPIR',
-        name: 'tradosupir',
-        width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
+        label: 'UPDATED AT',
+        name: 'updated_at',
+        align: 'right',
+        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+
+        formatter: "date",
+        formatoptions: {
+          srcformat: "ISO8601Long",
+          newformat: "d-m-Y H:i:s"
+        }
       },
     ]
 
   }
 
   selector.jqGrid({
-    url: `{{ config('app.api_url') . 'absensisupirdetail/get' }}`,
+    url: `{{ config('app.api_url') . 'suratpengantar/gettripinap' }}`,
     mtype: "GET",
     styleUI: 'Bootstrap4',
     iconSet: 'fontAwesome',
     datatype: "json",
     postData: {
       aktif: `{!! $Aktif ?? '' !!}`,
+      tglabsensi: `{!! $tglabsensi ?? '' !!}`,
       trado_id: `{!! $trado_id ?? '' !!}`,
-      cabang: `{!! $cabang ?? '' !!}`,
-      absensiId: `{!! $absensiId ?? '' !!}`,
-      tgltrip: `{!! $tgltrip ?? '' !!}`,
-      absensi_id: `{!! $absensi_id ?? '' !!}`,
+      supir_id: `{!! $supir_id ?? '' !!}`,
       from: `{!! $from ?? '' !!}`,
-      aksi: `{!! $aksi ?? '' !!}`,
-      tripinap_id: `{!! $tripinap_id ?? '' !!}`,
-      pengajuantrip_id: `{!! $pengajuantrip_id ?? '' !!}`,
-      isProsesUangjalan: `{!! $isProsesUangjalan ?? '' !!}`,
 
     },
-    idPrefix: 'tradoLookup',
+    idPrefix: 'suratpengantartripinap',
     colModel: column,
     height: 350,
     fixed: true,

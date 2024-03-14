@@ -14,6 +14,7 @@ class PengajuanTripInapController extends MyController
         $title = $this->title;
         $data = [
             'comboapproval' => $this->comboList('list', 'STATUS APPROVAL', 'STATUS APPROVAL'),
+            'combobatas' => $this->comboList('list', 'STATUS APPROVAL', 'STATUS APPROVAL'),
         ];
         return view('pengajuantripinap.index', compact('title','data'));
     }

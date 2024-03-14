@@ -49,7 +49,7 @@
           selectedRows.splice(i, 1);
         }
       }
-      
+
       if (selectedRows.length != $('#jqGrid').jqGrid('getGridParam').records) {
         $('#gs_').prop('checked', false)
       }
@@ -206,6 +206,73 @@
             name: 'supir',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
             align: 'left'
+          },
+
+          {
+            label: 'STATUS APP. LEWAT BATAS',
+            name: 'statusapprovallewatbataspengajuan',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            align: 'left',
+            stype: 'select',
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['combobatas'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['combobatas'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+            `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              let statusApproval = JSON.parse(value)
+              if (!statusApproval) {
+                return ''
+              }
+
+              let formattedValue = $(`
+                  <div class="badge" style="background-color: ${statusApproval.WARNA}; color: ${statusApproval.WARNATULISAN};">
+                    <span>${statusApproval.SINGKATAN}</span>
+                  </div>
+                `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusApproval = JSON.parse(rowObject.statusapprovallewatbataspengajuan)
+              if (!statusApproval) {
+                return ''
+              }
+
+              return ` title="${statusApproval.MEMO}"`
+            }
+          },
+          {
+            label: 'USER APP LEWAT BATAS',
+            name: 'userapprovallewatbataspengajuan',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+          },
+          {
+            label: 'TGL BATAS PENGAJUAN',
+            name: 'tglbataslewatbataspengajuan',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+            align: 'right',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y H:i:s"
+            }
           },
           {
             label: 'MODIFIED BY',
@@ -411,17 +478,32 @@
           //       }
           //     }
           //   },
+
           {
             id: 'approve',
             title: 'Approve',
             caption: 'Approve',
             innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-            class: 'btn btn-purple btn-sm mr-1',
-            onClick: () => {
-              if (`{{ $myAuth->hasPermission('pengajuantripinap', 'approval') }}`) {
-                approve()
-              }
-            }
+            class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
+            dropmenuHTML: [{
+                id: 'approveun',
+                text: "UN/APPROVAL Pengajuan Trip Inap",
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('pengajuantripinap', 'approval') }}`) {
+                    approve()
+                  }
+                }
+              },
+              {
+                id: 'approval-batas-pengajuan',
+                text: "UN/APPROVAL Lewat Batas Pengajuan",
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('pengajuantripinap', 'approvalbataspengajuan') }}`) {
+                    approveBatasPengajuan()
+                  }
+                }
+              },
+            ],
           }
         ],
         buttons: [{
@@ -544,8 +626,23 @@
       if (!`{{ $myAuth->hasPermission('pengajuantripinap', 'report') }}`) {
         $('#report').attr('disabled', 'disabled')
       }
+
+      let hakApporveCount = 0;
+      hakApporveCount++
       if (!`{{ $myAuth->hasPermission('pengajuantripinap', 'approval') }}`) {
-        $('#approve').attr('disabled', 'disabled')
+        hakApporveCount--
+        $('#approveun').hide()
+        // $('#approval-buka-cetak').attr('disabled', 'disabled')
+      }
+      hakApporveCount++
+      if (!`{{ $myAuth->hasPermission('pengajuantripinap', 'approvalbataspengajuan') }}`) {
+        hakApporveCount--
+        $('#approval-batas-pengajuan').hide()
+        // $('#approval-buka-cetak').attr('disabled', 'disabled')
+      }
+      if (hakApporveCount < 1) {
+        $('#approve').hide()
+        // $('#approve').attr('disabled', 'disabled')
       }
     }
 
@@ -660,6 +757,14 @@
       let form = $('#crudForm')
       $(this).attr('disabled', '')
       $('#processingLoader').removeClass('d-none')
+      let dataabsensi = [];
+      let datatrado = [];
+      let datasupir = [];
+      $.each(selectedRows, function(index, row) {
+        dataabsensi.push($(`#jqGrid tr#${row}`).find(`td[aria-describedby="jqGrid_tglabsensi"]`).attr('title'))
+        datasupir.push($(`#jqGrid tr#${row}`).find(`td[aria-describedby="jqGrid_supir"]`).attr('title'))
+        datatrado.push($(`#jqGrid tr#${row}`).find(`td[aria-describedby="jqGrid_trado"]`).attr('title'))
+      })
 
       $.ajax({
         url: `${apiUrl}pengajuantripinap/approval`,
@@ -669,7 +774,10 @@
           Authorization: `Bearer ${accessToken}`
         },
         data: {
-          Id: selectedRows
+          Id: selectedRows,
+          supir: datasupir,
+          absen: dataabsensi,
+          trado: datatrado,
         },
         success: response => {
           $('#jqGrid').jqGrid().trigger('reloadGrid');
@@ -692,6 +800,54 @@
       })
     }
   })
+
+  function approveBatasPengajuan() {
+    event.preventDefault()
+
+    let form = $('#crudForm')
+    $(this).attr('disabled', '')
+    $('#processingLoader').removeClass('d-none')
+    let dataabsensi = [];
+    let datatrado = [];
+    let datasupir = [];
+    $.each(selectedRows, function(index, row) {
+      dataabsensi.push($(`#jqGrid tr#${row}`).find(`td[aria-describedby="jqGrid_tglabsensi"]`).attr('title'))
+      datasupir.push($(`#jqGrid tr#${row}`).find(`td[aria-describedby="jqGrid_supir"]`).attr('title'))
+      datatrado.push($(`#jqGrid tr#${row}`).find(`td[aria-describedby="jqGrid_trado"]`).attr('title'))
+    })
+    $.ajax({
+      url: `${apiUrl}pengajuantripinap/approvalbataspengajuan`,
+      method: 'POST',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        Id: selectedRows,
+        supir: datasupir,
+        absen: dataabsensi,
+        trado: datatrado,
+      },
+      success: response => {
+        $('#jqGrid').jqGrid().trigger('reloadGrid');
+        selectedRows = []
+        $('#gs_').prop('checked', false)
+      },
+      error: error => {
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+
+          setErrorMessages(form, error.responseJSON.errors);
+        } else {
+          showDialog(error.responseJSON)
+        }
+      },
+    }).always(() => {
+      $('#processingLoader').addClass('d-none')
+      $(this).removeAttr('disabled')
+    })
+  }
 </script>
 @endpush()
 @endsection
