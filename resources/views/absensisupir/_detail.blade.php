@@ -30,7 +30,7 @@
           {
             label: 'STATUS',
             name: 'status',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+            width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
           },
 
           // {
@@ -78,6 +78,7 @@
             label: 'JAM',
             name: 'jam',
             formatter: 'date',
+            hidden: true,
             width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
             formatoptions: {
               srcformat: "H:i:s",
