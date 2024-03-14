@@ -79,7 +79,7 @@
 
   function initLookup() {
     $('.absensisupir-lookup').lookup({
-      title: 'absensisupir Lookup',
+      title: 'absensi supir Lookup',
       fileName: 'absensisupir',
       beforeProcess: function(test) {
         this.postData = {
