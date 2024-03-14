@@ -1009,7 +1009,10 @@
         setStatusLongTripOptions(form),
         setStatusPeralihanOptions(form),
         setStatusGudangSamaOptions(form),
-        setStatusBatalMuatOptions(form)
+        setStatusBatalMuatOptions(form),
+        setStatusGandenganOptions(form),
+        setStatusUpahZonaOptions(form),
+        setTampilan(form)
       ])
       .then(() => {
         showSuratPengantar(form, id)
@@ -1049,7 +1052,10 @@
         setStatusLongTripOptions(form),
         setStatusPeralihanOptions(form),
         setStatusGudangSamaOptions(form),
-        setStatusBatalMuatOptions(form)
+        setStatusBatalMuatOptions(form),
+        setStatusGandenganOptions(form),
+        setStatusUpahZonaOptions(form),
+        setTampilan(form)
       ])
       .then(() => {
         showSuratPengantar(form, id)
@@ -1641,6 +1647,7 @@
           agen_id: $('#crudForm [name=agen_id]').val(),
           upah_id: $('#crudForm [name=upah_id]').val(),
           pelanggan_id: $('#crudForm [name=pelanggan_id]').val(),
+          jenisorder_id: $('#crudForm [name=jenisorder_id]').val(),
           trado_id: $('#crudForm [name=trado_id]').val(),
           gudangsama: $('#crudForm [name=statusgudangsama]').val(),
           longtrip: $('#crudForm [name=statuslongtrip]').val(),

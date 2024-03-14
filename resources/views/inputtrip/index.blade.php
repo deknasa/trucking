@@ -352,6 +352,7 @@
           $('#crudForm [name=gandenganasal]').data('currentValue', '')
           $('#crudForm [name=trado]').data('currentValue', '')
           $('#crudForm [name=jobtrucking]').data('currentValue', '')
+          $('#crudForm [name=jobtrucking]').attr('readonly', false)
           $('#crudForm [name=dari]').data('currentValue', '')
           $('#crudForm [name=sampai]').data('currentValue', '')
           $('#crudForm [name=tarifrincian]').data('currentValue', '')
@@ -1040,15 +1041,17 @@
         'Authorization': `Bearer ${accessToken}`
       },
       data: {
-        trado_id: trado,
+        trado_id: $('#crudForm').find(`[name="trado_id"]`).val(),
         upah_id: $('#crudForm').find(`[name="upah_id"]`).val(),
         statuscontainer_id: $('#crudForm').find(`[name="statuscontainer_id"]`).val()
       },
       success: response => {
-        $('.tableInfo').show()
-        $('#infoTrado').html('')
-        $.each(response.data, (index, detail) => {
-          let detailRow = $(`
+        if (response.data.length > 0) {
+
+          $('.tableInfo').show()
+          $('#infoTrado').html('')
+          $.each(response.data, (index, detail) => {
+            let detailRow = $(`
               <tr>
                 <td> ${detail.status} </td>
                 <td> ${numberWithCommas(detail.kmperjalanan)} </td>
@@ -1059,8 +1062,9 @@
               </tr>
             `)
 
-          $('#infoTrado').append(detailRow)
-        })
+            $('#infoTrado').append(detailRow)
+          })
+        }
       },
       error: error => {
         showDialog(error.statusText)
@@ -1090,6 +1094,13 @@
     })
   }
 
+  function setJobTruckingFromTripAsal() {
+
+    let jobtrucking = $('#crudForm [name=jobtrucking]')
+    jobtrucking.attr('readonly', true)
+    jobtrucking.parents('.input-group').find('.input-group-append').hide()
+    jobtrucking.parents('.input-group').find('.button-clear').hide()
+  }
 
   function setJobReadOnly() {
 
@@ -1145,6 +1156,7 @@
     $('#crudForm [name=jobtrucking]').data('currentValue', '')
   }
 
+
   function initLookup() {
     $('.suratpengantar-lookup').lookup({
       title: 'Surat Pengantar Lookup',
@@ -1157,6 +1169,7 @@
           agen_id: $('#crudForm [name=agen_id]').val(),
           upah_id: $('#crudForm [name=upah_id]').val(),
           pelanggan_id: $('#crudForm [name=pelanggan_id]').val(),
+          jenisorder_id: $('#crudForm [name=jenisorder_id]').val(),
           trado_id: $('#crudForm [name=trado_id]').val(),
           gudangsama: $('#crudForm [name=statusgudangsama]').val(),
           longtrip: $('#crudForm [name=statuslongtrip]').val(),
@@ -1170,6 +1183,7 @@
 
           $('#crudForm [name=jobtrucking]').val(suratpengantar.jobtrucking)
           $('#crudForm [name=jobtrucking]').data('currentValue', suratpengantar.jobtrucking)
+          setJobTruckingFromTripAsal()
         }
       },
       onCancel: (element) => {
@@ -1445,6 +1459,7 @@
         element.val('')
         element.data('currentValue', element.val())
         clearTripAsal()
+        $('.tableInfo').hide()
       }
     })
 
@@ -1616,7 +1631,8 @@
         kotaUpahZona()
 
         element.data('currentValue', element.val())
-        clearTrado()
+        // clearTrado()
+        getInfoTrado()
         clearTripAsal()
       },
       onCancel: (element) => {
@@ -1629,7 +1645,7 @@
         clearUpahSupir()
         element.val('')
         element.data('currentValue', element.val())
-        clearTrado()
+        // clearTrado()
         clearTripAsal()
       }
     })

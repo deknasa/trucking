@@ -604,6 +604,10 @@
                         $('#crudForm [name=upah]').attr('readonly', false)
                         kotaUpahZona()
                         setJobReadOnly()
+
+                        if ($('#crudForm [name=nobukti_tripasal]').val() != '') {
+                            setJobTruckingFromTripAsal()
+                        }
                     })
                     .catch((error) => {
                         showDialog(error.statusText)
@@ -646,6 +650,9 @@
                         $('#crudForm [name=upah]').attr('readonly', false)
                         kotaUpahZona()
                         setJobReadOnly()
+                        if ($('#crudForm [name=nobukti_tripasal]').val() != '') {
+                            setJobTruckingFromTripAsal()
+                        }
                     })
                     .catch((error) => {
                         showDialog(error.statusText)
@@ -694,6 +701,9 @@
                     })
                     .then(() => {
                         $('#crudModal').modal('show')
+                        if ($('#crudForm [name=nobukti_tripasal]').val() != '') {
+                            setJobTruckingFromTripAsal()
+                        }
                     })
                     .catch((error) => {
                         showDialog(error.statusText)
@@ -1072,6 +1082,14 @@
         })
     }
 
+    function setJobTruckingFromTripAsal() {
+
+        let jobtrucking = $('#crudForm [name=jobtrucking]')
+        jobtrucking.attr('readonly', true)
+        jobtrucking.parents('.input-group').find('.input-group-append').hide()
+        jobtrucking.parents('.input-group').find('.button-clear').hide()
+    }
+
     function initLookup() {
         $('.suratpengantar-lookup').lookup({
             title: 'Surat Pengantar Lookup',
@@ -1084,6 +1102,7 @@
                     agen_id: $('#crudForm [name=agen_id]').val(),
                     upah_id: $('#crudForm [name=upah_id]').val(),
                     pelanggan_id: $('#crudForm [name=pelanggan_id]').val(),
+                    jenisorder_id: $('#crudForm [name=jenisorder_id]').val(),
                     trado_id: $('#crudForm [name=trado_id]').val(),
                     gudangsama: $('#crudForm [name=statusgudangsama]').val(),
                     longtrip: $('#crudForm [name=statuslongtrip]').val(),
@@ -1097,6 +1116,7 @@
 
                     $('#crudForm [name=jobtrucking]').val(suratpengantar.jobtrucking)
                     $('#crudForm [name=jobtrucking]').data('currentValue', suratpengantar.jobtrucking)
+                    setJobTruckingFromTripAsal()
                 }
             },
             onCancel: (element) => {
@@ -1105,6 +1125,10 @@
             onClear: (element) => {
                 element.val('')
                 element.data('currentValue', element.val())
+                if ($('#crudForm [name=statusgudangsama]').val() == 205) {
+                    $('#crudForm [name=jobtrucking]').val('')
+                    $('#crudForm [name=jobtrucking]').data('currentValue', '')
+                }
             }
         })
 
@@ -1378,6 +1402,7 @@
                 element.val('')
                 element.data('currentValue', element.val())
                 clearTripAsal()
+                $('.tableInfo').hide()
             }
         })
 
@@ -1557,7 +1582,8 @@
                 kotaUpahZona()
                 clearJobTrucking()
                 element.data('currentValue', element.val())
-                clearTrado()
+                // clearTrado()
+                getInfoTrado()
                 clearTripAsal()
             },
             onCancel: (element) => {
@@ -1570,7 +1596,7 @@
                 element.val('')
                 element.data('currentValue', element.val())
                 clearJobTrucking()
-                clearTrado()
+                // clearTrado()
                 clearTripAsal()
             }
         })
@@ -1679,24 +1705,27 @@
                 'Authorization': `Bearer ${accessToken}`
             },
             data: {
-                trado_id: trado,
+                trado_id: $('#crudForm').find(`[name="trado_id"]`).val(),
                 upah_id: $('#crudForm').find(`[name="upah_id"]`).val(),
+                id: $('#crudForm').find(`[name="id"]`).val(),
                 statuscontainer_id: $('#crudForm').find(`[name="statuscontainer_id"]`).val()
             },
             success: response => {
-                $('.tableInfo').show()
-                $('#infoTrado').html('')
-                $.each(response.data, (index, detail) => {
-                    let detailRow = $(`
-              <tr>
-                <td> ${detail.status} </td>
-                <td> ${detail.kmperjalanan} </td>
-                <td> ${detail.kmtotal} </td>
-              </tr>
-            `)
+                if (response.data.length > 0) {
+                    $('.tableInfo').show()
+                    $('#infoTrado').html('')
+                    $.each(response.data, (index, detail) => {
+                        let detailRow = $(`
+                            <tr>
+                                <td> ${detail.status} </td>
+                                <td> ${numberWithCommas(detail.kmperjalanan)} </td>
+                                <td> ${numberWithCommas(detail.kmtotal)} </td>
+                            </tr>
+                            `)
 
-                    $('#infoTrado').append(detailRow)
-                })
+                        $('#infoTrado').append(detailRow)
+                    })
+                }
             },
             error: error => {
                 showDialog(error.statusText)
@@ -1778,6 +1807,10 @@
             clearTripAsal()
             isPulangLongtrip = false;
         }
+    }
+
+    function numberWithCommas(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 </script>
 @endpush()

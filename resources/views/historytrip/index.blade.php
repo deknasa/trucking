@@ -47,8 +47,8 @@
   let totalRecord
   let limit
   let postData
-  let sortname = 'nobukti'
-  let sortorder = 'asc'
+  let sortname = 'tglbukti'
+  let sortorder = 'desc'
   let autoNumericElements = []
   let rowNum = 10
   let hasDetail = false
