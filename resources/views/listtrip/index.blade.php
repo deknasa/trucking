@@ -27,7 +27,7 @@
   let limit
   let postData
   let sortname = 'nobukti'
-  let sortorder = 'asc'
+  let sortorder = 'desc'
   let autoNumericElements = []
   let rowNum = 10
   let hasDetail = false

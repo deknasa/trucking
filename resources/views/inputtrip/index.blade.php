@@ -352,6 +352,7 @@
           $('#crudForm [name=gandenganasal]').data('currentValue', '')
           $('#crudForm [name=trado]').data('currentValue', '')
           $('#crudForm [name=jobtrucking]').data('currentValue', '')
+          $('#crudForm [name=jobtrucking]').attr('readonly', false)
           $('#crudForm [name=dari]').data('currentValue', '')
           $('#crudForm [name=sampai]').data('currentValue', '')
           $('#crudForm [name=tarifrincian]').data('currentValue', '')
@@ -1090,6 +1091,13 @@
     })
   }
 
+  function setJobTruckingFromTripAsal() {
+
+    let jobtrucking = $('#crudForm [name=jobtrucking]')
+    jobtrucking.attr('readonly', true)
+    jobtrucking.parents('.input-group').find('.input-group-append').hide()
+    jobtrucking.parents('.input-group').find('.button-clear').hide()
+  }
 
   function setJobReadOnly() {
 
@@ -1145,6 +1153,7 @@
     $('#crudForm [name=jobtrucking]').data('currentValue', '')
   }
 
+
   function initLookup() {
     $('.suratpengantar-lookup').lookup({
       title: 'Surat Pengantar Lookup',
@@ -1157,6 +1166,7 @@
           agen_id: $('#crudForm [name=agen_id]').val(),
           upah_id: $('#crudForm [name=upah_id]').val(),
           pelanggan_id: $('#crudForm [name=pelanggan_id]').val(),
+          jenisorder_id: $('#crudForm [name=jenisorder_id]').val(),
           trado_id: $('#crudForm [name=trado_id]').val(),
           gudangsama: $('#crudForm [name=statusgudangsama]').val(),
           longtrip: $('#crudForm [name=statuslongtrip]').val(),
@@ -1170,6 +1180,7 @@
 
           $('#crudForm [name=jobtrucking]').val(suratpengantar.jobtrucking)
           $('#crudForm [name=jobtrucking]').data('currentValue', suratpengantar.jobtrucking)
+          setJobTruckingFromTripAsal()
         }
       },
       onCancel: (element) => {
