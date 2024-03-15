@@ -950,17 +950,30 @@
       let nojobemkl = $('#crudForm [name=nojobemkl]')
       let nojobemkl2 = $('#crudForm [name=nojobemkl2]')
 
-      nojobemkl.attr('readonly', false)
-      nojobemkl.parents('.input-group').find('.input-group-append').show()
-      nojobemkl.parents('.input-group').find('.button-clear').show()
-      $('#crudForm [name=nocont]').attr('readonly', true)
-      $('#crudForm [name=noseal]').attr('readonly', true)
+      if (statustas == 1) {
+
+        nojobemkl.attr('readonly', false)
+        nojobemkl.parents('.input-group').find('.input-group-append').show()
+        nojobemkl.parents('.input-group').find('.button-clear').show()
+        $('#crudForm [name=nocont]').attr('readonly', true)
+        $('#crudForm [name=noseal]').attr('readonly', true)
+      } else {
+
+        $('#crudForm [name=nocont]').attr('readonly', false)
+        $('#crudForm [name=noseal]').attr('readonly', false)
+      }
       if (container_id == 3) {
-        nojobemkl2.attr('readonly', false)
-        nojobemkl2.parents('.input-group').find('.input-group-append').show()
-        nojobemkl2.parents('.input-group').find('.button-clear').show()
-        $('#crudForm [name=nocont2]').attr('readonly', true)
-        $('#crudForm [name=noseal2]').attr('readonly', true)
+        if (statustas == 1) {
+          nojobemkl2.attr('readonly', false)
+          nojobemkl2.parents('.input-group').find('.input-group-append').show()
+          nojobemkl2.parents('.input-group').find('.button-clear').show()
+          $('#crudForm [name=nocont2]').attr('readonly', true)
+          $('#crudForm [name=noseal2]').attr('readonly', true)
+        } else {
+
+          $('#crudForm [name=nocont2]').attr('readonly', false)
+          $('#crudForm [name=noseal2]').attr('readonly', false)
+        }
       } else {
 
         nojobemkl2.attr('readonly', true)
@@ -1211,7 +1224,7 @@
         // if (kondisi == true) {
         if (error) {
           // showDialog(response.message['keterangan'])
-          showDialog(response)          
+          showDialog(response)
         } else {
           if (Aksi == 'edit') {
             editOrderanTrucking(selectedId)
