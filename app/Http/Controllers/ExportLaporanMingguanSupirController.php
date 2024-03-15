@@ -885,9 +885,10 @@ class ExportLaporanMingguanSupirController extends MyController
             $sheet->setCellValue("R$rowIndex", $response_detail['pengeluarannobuktiebs']);
             $sheet->setCellValue("S$rowIndex", $response_detail['uangburuh'])->getStyle("S$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
             $sheet->setCellValue("U$rowIndex", $response_detail['uangextra'])->getStyle("U$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
-
-            $sheet->setCellValue("V$rowIndex", $response_detail['nobuktikbtkomisi']);
-            $sheet->setCellValue("W$rowIndex", $response_detail['ket']);
+            if($response_detail['uangextra'] > 0){
+                $sheet->setCellValue("V$rowIndex", $response_detail['nobuktikbtkomisi']);
+            }
+            $sheet->setCellValue("W$rowIndex", $response_detail['keteranganbiayatambahan']);
             $sheet->setCellValue("X$rowIndex", $response_detail['uangjalan'])->getStyle("X$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
             $sheet->setCellValue("Y$rowIndex", $response_detail['uangbbm'])->getStyle("Y$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
             $sheet->setCellValue("AA$rowIndex", "=(P$rowIndex+S$rowIndex+U$rowIndex)")->getStyle("AA$rowIndex")->applyFromArray($style_number)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
