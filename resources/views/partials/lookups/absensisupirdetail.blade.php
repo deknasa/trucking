@@ -41,17 +41,17 @@
           name: 'keterangan_detail',
           width: (detectDeviceType() == "desktop") ? lg_dekstop_1 : lg_mobile_1,
         },
-        {
-          label: 'JAM',
-          name: 'jam',
-          formatter: 'date',
-          width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
-          formatoptions: {
-            srcformat: "H:i:s",
-            newformat: "H:i",
-            // userLocalTime : true
-          }
-        },
+        // {
+        //   label: 'JAM',
+        //   name: 'jam',
+        //   formatter: 'date',
+        //   width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+        //   formatoptions: {
+        //     srcformat: "H:i:s",
+        //     newformat: "H:i",
+        //     // userLocalTime : true
+        //   }
+        // },
 
 
 

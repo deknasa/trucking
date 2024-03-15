@@ -16,7 +16,8 @@ class ListTripController extends MyController
         $title = $this->title;
         
         $data = [
-            'combolongtrip' => $this->comboList('list','STATUS LONGTRIP','STATUS LONGTRIP')
+            'combolongtrip' => $this->comboList('list','STATUS LONGTRIP','STATUS LONGTRIP'),
+            'combogudangsama' => $this->comboList('list', 'STATUS GUDANG SAMA', 'STATUS GUDANG SAMA')
         ];
         return view('listtrip.index', compact('title','data'));
     }

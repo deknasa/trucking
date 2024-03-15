@@ -188,6 +188,53 @@
             }
           },
           {
+            label: 'GUDANG SAMA',
+            name: 'statusgudangsama',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            stype: 'select',
+            searchoptions: {
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['combogudangsama'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['combogudangsama'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+            `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              let statusGudangSama = JSON.parse(value)
+              if (!statusGudangSama) {
+                return ''
+              }
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusGudangSama.WARNA}; color: #fff;">
+                  <span>${statusGudangSama.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusGudangSama = JSON.parse(rowObject.statusgudangsama)
+              if (!statusGudangSama) {
+                return ` title=""`
+              }
+              return ` title="${statusGudangSama.MEMO}"`
+            }
+          },
+          {
             label: 'LOKASI BONGKAR MUAT',
             name: 'tarif_id',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
