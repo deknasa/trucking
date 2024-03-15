@@ -940,7 +940,7 @@
 
   function setSupirEnableIndex(kodeabsensitrado, rowId) {
 
-    if (kodeabsensitrado) {
+    if (kodeabsensitrado.supir) {
       $("#jqGrid").jqGrid('setCell', rowId, 'namasupir', null, 'not-editable-cell');
       $("#jqGrid").jqGrid('setCell', rowId, 'supir_id', null);
       // $("#jqGrid").jqGrid('setCell', rowId, 'jam', null);
