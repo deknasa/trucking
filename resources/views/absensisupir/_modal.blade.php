@@ -95,7 +95,7 @@
                       </tbody>
                       <tfoot>
                         <tr>
-                          <td colspan="6">
+                          <td colspan="7">
                             <h5 class="text-right font-weight-bold">TOTAL:</h5>
                           </td>
                           <td>
