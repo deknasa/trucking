@@ -201,6 +201,9 @@
         penerimaanheader_id: $('#kodepenerimaanheader').val(),
         proses: 'reload'
       })
+      selectedRows = []
+      selectedbukti = []
+      $('#gs_').prop('checked', false)
     })
 
     $('#crudModal').on('hidden.bs.modal', function() {

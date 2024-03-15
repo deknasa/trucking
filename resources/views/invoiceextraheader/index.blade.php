@@ -121,6 +121,7 @@
     $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('invoiceextraheader')
       selectedRows = []
+      selectedbukti = []
       $('#gs_').prop('checked', false)
     })
 

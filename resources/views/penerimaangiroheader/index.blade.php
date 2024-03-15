@@ -115,6 +115,7 @@ function checkboxHandler(element) {
         $(document).on('click', '#btnReload', function(event) {
             loadDataHeader('penerimaangiroheader')
             selectedRows = []
+            selectedbukti = []
             $('#gs_').prop('checked', false)
         })
 

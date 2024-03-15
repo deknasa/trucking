@@ -202,6 +202,9 @@
         pengeluaranheader_id: $('#kodepengeluaranheader').val(),
         proses: 'reload'
       })
+      selectedRows = []
+      selectedbukti = []
+      $('#gs_').prop('checked', false)
     })
     // console.log(,);
 

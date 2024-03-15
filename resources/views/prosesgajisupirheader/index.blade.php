@@ -159,6 +159,7 @@
     $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('prosesgajisupirheader')
       selectedRowsIndex = []
+      selectedbukti = []
       $('#gs_check').prop('checked', false);
     })
     $("#jqGrid").jqGrid({

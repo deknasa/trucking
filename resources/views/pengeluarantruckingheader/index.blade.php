@@ -151,6 +151,7 @@
         pengeluaranheader_id: $('#pengeluaranheader_id').val()
       })
       selectedRowsIndex = []
+      selectedbukti = []
       $('#gs_').prop('checked', false)
     })
 

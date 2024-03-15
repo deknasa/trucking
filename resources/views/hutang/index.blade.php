@@ -120,6 +120,7 @@
     $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('hutangheader')
       selectedRows = []
+      selectedbukti = []
       $('#gs_').prop('checked', false)
     })
 
