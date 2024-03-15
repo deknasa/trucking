@@ -86,6 +86,7 @@
     $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('serviceoutheader')
       selectedRows = []
+      selectedbukti = []
       $('#gs_').prop('checked', false)
     })
     $("#jqGrid").jqGrid({

@@ -150,6 +150,7 @@
     $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('absensisupirheader')
       selectedRows = []
+      selectedbukti = []
       $('#gs_').prop('checked', false)
     })
     $("#jqGrid").jqGrid({

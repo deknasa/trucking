@@ -155,6 +155,7 @@ function checkboxHandler(element) {
     $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('pelunasanpiutangheader')
       selectedRows = []
+      selectedbukti = []
       $('#gs_').prop('checked', false)
     })
 

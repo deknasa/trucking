@@ -80,6 +80,7 @@ function checkboxHandler(element) {
     $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('rekappenerimaanheader')
       selectedRows = []
+      selectedbukti = []
       $('#gs_').prop('checked', false)
     })
 

@@ -136,6 +136,7 @@
         proses: 'reload'
       })
       selectedRows = []
+      selectedbukti = []
       $('#gs_').prop('checked', false)
     })
 

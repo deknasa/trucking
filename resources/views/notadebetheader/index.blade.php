@@ -123,6 +123,7 @@
     $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('notadebetheader')
       selectedRows = []
+      selectedbukti = []
       $('#gs_').prop('checked', false)
     })
 

@@ -80,6 +80,7 @@ function checkboxHandler(element) {
     $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('pindahbuku')
       selectedRows = []
+      selectedbukti = []
       $('#gs_').prop('checked', false)
     })
     let nobukti = $('#jqGrid').jqGrid('getCell', id, 'nobukti')

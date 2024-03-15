@@ -141,6 +141,7 @@
     $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('absensisupirapprovalheader')
       selectedRows = []
+      selectedbukti = []
       $('#gs_').prop('checked', false)
     })
     $('.supir-lookup').lookup({

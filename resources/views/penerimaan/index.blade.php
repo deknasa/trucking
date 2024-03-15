@@ -135,6 +135,7 @@ function checkboxHandler(element) {
         bank: $('#bankheader').val()
       })
       selectedRows = []
+      selectedbukti = []
       $('#gs_').prop('checked', false)
     })
 

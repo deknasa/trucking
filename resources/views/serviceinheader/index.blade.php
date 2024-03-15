@@ -87,6 +87,7 @@ function checkboxHandler(element) {
     $(document).on('click', '#btnReload', function(event) {
       loadDataHeader('serviceinheader')
       selectedRows = []
+      selectedbukti = []
       $('#gs_').prop('checked', false)
     })
     $("#jqGrid").jqGrid({

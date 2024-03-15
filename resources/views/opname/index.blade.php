@@ -106,6 +106,9 @@ setSpaceBarCheckedHandler()
     initDatepicker('datepickerIndex')
     $(document).on('click','#btnReload', function(event) {
       loadDataHeader('opnameheader')
+      selectedRows = []
+      selectedbukti = []
+      $('#gs_').prop('checked', false)
     })
     $("#jqGrid").jqGrid({
         url: `${apiUrl}opnameheader`,
