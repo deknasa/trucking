@@ -724,7 +724,7 @@
                 <input type="text" class="form-control autonumeric" name="tglbatas[]" value="${detail.tglbatas}" disabled></input>
               </td>
               <td class="uangjalan">
-                <input type="text" class="form-control uangjalan autonumeric" name="uangjalan[]" value="${detail.uangjalan}">
+                <input type="text" id="uangjalan_row_${index}" class="form-control uangjalan autonumeric" name="uangjalan[]" value="${detail.uangjalan}" ${detail.uangjalan_readonly}>
               </td>
               <input type="hidden" name="namasupir_old[]" value="${detail.namasupir_old}">
               <input type="hidden" name="supirold_id[]" value="${detail.supir_id_old}">
@@ -733,6 +733,11 @@
             `)
 
             detailRow.find(`[name="supir_id[]"]`).val(detail.supir_id)
+            // getabsentrado(detail.absen_id).then((response) => {
+            //       setSupirEnableIndex(response, index)
+            //     }).catch(() => {
+            //       setSupirEnableIndex(false, index)
+            //     })
             initAutoNumeric(detailRow.find(`[name="uangjalan[]"]`))
             $('#detailList tbody').append(detailRow)
             Inputmask("datetime", {
@@ -1054,7 +1059,11 @@
   }
 
   function setSupirEnableIndex(kodeabsensitrado, rowId) {
-    if (kodeabsensitrado) {
+    console.log(kodeabsensitrado,
+    kodeabsensitrado.supir,
+kodeabsensitrado.uang
+    );
+    if (kodeabsensitrado.supir) {
       $(`#supir_row_${rowId}`).val('')
       $(`#supir_id_row_${rowId}`).val('')
       // $("#jqGrid").jqGrid('setCell', rowId, 'jam', null);
@@ -1067,6 +1076,13 @@
       $(`#supir_row_${rowId}`).val(namasupir_old)
       $(`#supir_id_row_${rowId}`).val(supir_id_old)
     }
+    if (kodeabsensitrado.uang) {
+      $(`#uangjalan_row_${rowId}`).attr('readonly', true)
+    }else{
+      $(`#uangjalan_row_${rowId}`).attr('readonly', false)
+    }
+
+
   }
 
   function getabsentrado(id) {

@@ -14,6 +14,7 @@
         absen: `{!! $AbsensiId ?? '' !!}`,
         supir_id: `{!! $supir_id ?? '' !!}`,
         tgltrip: `{!! $tgltrip ?? '' !!}`,
+        fromSupirSerap: `{!! $fromSupirSerap ?? '' !!}`,
         trado_id: `{!! $trado_id ?? '' !!}`,
       },
       idPrefix: 'supirLookup',

@@ -488,6 +488,8 @@
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
+                    fromSupirSerap :true,
+                    tgltrip:$('#crudForm').find('[name=tglabsensi]').val()
                 }
             },
             onSelectRow: (supir, element) => {
