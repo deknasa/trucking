@@ -1059,10 +1059,6 @@
   }
 
   function setSupirEnableIndex(kodeabsensitrado, rowId) {
-    console.log(kodeabsensitrado,
-    kodeabsensitrado.supir,
-kodeabsensitrado.uang
-    );
     if (kodeabsensitrado.supir) {
       $(`#supir_row_${rowId}`).val('')
       $(`#supir_id_row_${rowId}`).val('')
