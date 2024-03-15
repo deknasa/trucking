@@ -90,42 +90,42 @@
   let activeGrid;
   let tgldariheader
   let tglsampaiheader
-  
+
   let selectedRows = [];
 
   let selectedbukti = [];
 
-function checkboxHandler(element) {
-  let value = $(element).val();
-  let valuebukti=$('#jqGrid').jqGrid('getCell', $(element).val(), 'nobukti');
-  if (element.checked) {
-    selectedRows.push($(element).val())
-    selectedbukti.push(valuebukti)
-    $(element).parents('tr').addClass('bg-light-blue')
-  } else {
-    $(element).parents('tr').removeClass('bg-light-blue')
-    for (var i = 0; i < selectedRows.length; i++) {
-      if (selectedRows[i] == value) {
-        selectedRows.splice(i, 1);
+  function checkboxHandler(element) {
+    let value = $(element).val();
+    let valuebukti = $('#jqGrid').jqGrid('getCell', $(element).val(), 'nobukti');
+    if (element.checked) {
+      selectedRows.push($(element).val())
+      selectedbukti.push(valuebukti)
+      $(element).parents('tr').addClass('bg-light-blue')
+    } else {
+      $(element).parents('tr').removeClass('bg-light-blue')
+      for (var i = 0; i < selectedRows.length; i++) {
+        if (selectedRows[i] == value) {
+          selectedRows.splice(i, 1);
+        }
       }
-    }
-    if (selectedRows.length != $('#jqGrid').jqGrid('getGridParam').records) {
-      $('#gs_').prop('checked', false)
-    }
-
-    for (var i = 0; i < selectedbukti.length; i++) {
-      if (selectedbukti[i] ==valuebukti ) {
-        selectedbukti.splice(i, 1);
+      if (selectedRows.length != $('#jqGrid').jqGrid('getGridParam').records) {
+        $('#gs_').prop('checked', false)
       }
-    }
 
-    if (selectedbukti.length != $('#jqGrid').jqGrid('getGridParam').records) {
-      $('#gs_').prop('checked', false)
+      for (var i = 0; i < selectedbukti.length; i++) {
+        if (selectedbukti[i] == valuebukti) {
+          selectedbukti.splice(i, 1);
+        }
+      }
+
+      if (selectedbukti.length != $('#jqGrid').jqGrid('getGridParam').records) {
+        $('#gs_').prop('checked', false)
+      }
+
     }
 
   }
-
-}
 
 
   function clearSelectedRows() {
@@ -218,8 +218,7 @@ function checkboxHandler(element) {
           pengeluaranheader_id: $('#kodepengeluaranheader').val(),
         },
         datatype: "json",
-        colModel: [
-          {
+        colModel: [{
             label: '',
             name: '',
             width: 30,
@@ -234,9 +233,9 @@ function checkboxHandler(element) {
               dataInit: function(element) {
                 $(element).removeClass('form-control')
                 $(element).parent().addClass('text-center')
-                
+
                 $(element).on('click', function() {
-                  
+
                   $(element).attr('disabled', true)
                   if ($(this).is(':checked')) {
                     selectAllRows()
@@ -244,7 +243,7 @@ function checkboxHandler(element) {
                     clearSelectedRows()
                   }
                 })
-                
+
               }
             },
             formatter: (value, rowOptions, rowData) => {
@@ -596,7 +595,7 @@ function checkboxHandler(element) {
                 $(this).addClass('bg-light-blue')
               }
             })
-            
+
           });
 
           /* Set global variables */
@@ -673,10 +672,13 @@ function checkboxHandler(element) {
             class: 'btn btn-success btn-sm mr-1',
             onClick: function(event) {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              rawCellValue = $("#jqGrid").jqGrid('getCell', selectedId, 'nobukti');
+              celValue = $("<div>").html(rawCellValue).text();
+              selectednobukti = celValue
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog(pleaseSelectARow)
               } else {
-                cekValidasi(selectedId, 'EDIT')
+                cekValidasi(selectedId, 'EDIT', selectednobukti)
               }
             }
           },
@@ -686,10 +688,13 @@ function checkboxHandler(element) {
             class: 'btn btn-danger btn-sm mr-1',
             onClick: () => {
               selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+              rawCellValue = $("#jqGrid").jqGrid('getCell', selectedId, 'nobukti');
+              celValue = $("<div>").html(rawCellValue).text();
+              selectednobukti = celValue
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog(pleaseSelectARow)
               } else {
-                cekValidasi(selectedId, 'DELETE')
+                cekValidasi(selectedId, 'DELETE', selectednobukti)
               }
             }
           },
@@ -718,10 +723,13 @@ function checkboxHandler(element) {
                 text: 'Printer Lain(Faktur)',
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                  rawCellValue = $("#jqGrid").jqGrid('getCell', selectedId, 'nobukti');
+                  celValue = $("<div>").html(rawCellValue).text();
+                  selectednobukti = celValue
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
                     showDialog('Harap pilih salah satu record')
                   } else {
-                    cekValidasi(selectedId, 'PRINTER BESAR')
+                    cekValidasi(selectedId, 'PRINTER BESAR', selectednobukti)
                   }
                 }
               },
@@ -730,10 +738,13 @@ function checkboxHandler(element) {
                 text: "Printer Epson Seri LX(Faktur)",
                 onClick: () => {
                   selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                  rawCellValue = $("#jqGrid").jqGrid('getCell', selectedId, 'nobukti');
+                  celValue = $("<div>").html(rawCellValue).text();
+                  selectednobukti = celValue
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
                     showDialog('Harap pilih salah satu record')
                   } else {
-                    cekValidasi(selectedId, 'PRINTER KECIL')
+                    cekValidasi(selectedId, 'PRINTER KECIL', selectednobukti)
                   }
                 }
               },
@@ -992,10 +1003,10 @@ function checkboxHandler(element) {
             msg = `YAKIN UnApprove Status Edit `
           }
           showConfirm(msg, response.data.nobukti, `pengeluaranstokheader/${response.data.id}/approvaledit`)
-          .then(()=>{
-            selectedRows = []
-            $('#gs_').prop('checked', false)
-          })
+            .then(() => {
+              selectedRows = []
+              $('#gs_').prop('checked', false)
+            })
         },
       })
     }
@@ -1020,10 +1031,10 @@ function checkboxHandler(element) {
             msg = `YAKIN UnApprove Status Edit Keterangan`
           }
           showConfirm(msg, response.data.nobukti, `pengeluaranstokheader/${response.data.id}/approvaleditketerangan`)
-          .then(()=>{
-            selectedRows = []
-            $('#gs_').prop('checked', false)
-          })
+            .then(() => {
+              selectedRows = []
+              $('#gs_').prop('checked', false)
+            })
         },
       })
     }

@@ -2359,7 +2359,7 @@
     }
   }
 
-  function cekValidasi(Id, Aksi) {
+  function cekValidasi(Id, Aksi,nobukti) {
     $.ajax({
       url: `{{ config('app.api_url') }}pengeluaranstokheader/${Id}/cekvalidasi`,
       method: 'POST',
@@ -2368,14 +2368,16 @@
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
       data: {
-        aksi: Aksi
+        aksi: Aksi,
+        nobukti: nobukti
       },
       success: response => {
         var kodenobukti = response.kodenobukti
         if (kodenobukti == '1') {
           var kodestatus = response.kodestatus
           if (kodestatus == '1') {
-            showDialog(response.message['keterangan'])
+            // showDialog(response.message['keterangan'])
+            showDialog(response)
           } else {
             if (Aksi == 'PRINTER BESAR') {
               window.open(`{{ route('pengeluaranstokheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
@@ -2390,7 +2392,8 @@
             }
           }
         } else {
-          showDialog(response.message['keterangan'])
+          showDialog(response)
+          // showDialog(response.message['keterangan'])
         }
       }
     })

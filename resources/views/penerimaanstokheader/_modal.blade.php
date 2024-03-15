@@ -2093,9 +2093,9 @@
         setStatusBanOptions(form)
       ])
       .then(() => {
-         if (selectedRows.length > 0) {
-              clearSelectedRows()
-            }
+        if (selectedRows.length > 0) {
+          clearSelectedRows()
+        }
         $('#crudModal').modal('show')
         // tampilanall()
         tampilanInit()
@@ -2152,9 +2152,9 @@
           background: '#fff'
         })
 
-         if (selectedRows.length > 0) {
-              clearSelectedRows()
-            }
+        if (selectedRows.length > 0) {
+          clearSelectedRows()
+        }
         $('#crudModal').modal('show')
         $('#crudForm').find(`.ui-datepicker-trigger`).attr('disabled', true)
         if ($('#crudForm').find("[name=gudang]").val()) {
@@ -2248,9 +2248,9 @@
 
       })
       .then(() => {
-         if (selectedRows.length > 0) {
-              clearSelectedRows()
-            }
+        if (selectedRows.length > 0) {
+          clearSelectedRows()
+        }
         $('#crudModal').modal('show')
         $('#crudForm').find(`.ui-datepicker-trigger`).attr('disabled', true)
 
@@ -2310,9 +2310,9 @@
 
       })
       .then(() => {
-         if (selectedRows.length > 0) {
-              clearSelectedRows()
-            }
+        if (selectedRows.length > 0) {
+          clearSelectedRows()
+        }
         $('#crudModal').modal('show')
         $('#crudForm').find(`.ui-datepicker-trigger`).attr('disabled', true)
 
@@ -2675,7 +2675,7 @@
     new AutoNumeric($('#sumary')[0]).set(sumary);
   }
 
-  function cekValidasi(Id, Aksi) {
+  function cekValidasi(Id, Aksi, nobukti) {
     $.ajax({
       url: `{{ config('app.api_url') }}penerimaanstokheader/${Id}/cekvalidasi`,
       method: 'POST',
@@ -2684,14 +2684,16 @@
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
       data: {
-        aksi: Aksi
+        aksi: Aksi,
+        nobukti: nobukti
       },
       success: response => {
         var kodenobukti = response.kodenobukti
         if (kodenobukti == '1') {
           var kodestatus = response.kodestatus
           if (kodestatus == '1') {
-            showDialog(response.message['keterangan'])
+            showDialog(response)
+            // showDialog(response.message['keterangan'])
           } else {
             if (Aksi == 'PRINTER BESAR') {
               window.open(`{{ route('penerimaanstokheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
@@ -2706,7 +2708,8 @@
             }
           }
         } else {
-          showDialog(response.message['keterangan'])
+          showDialog(response)
+          // showDialog(response.message['keterangan'])
         }
       }
     })
