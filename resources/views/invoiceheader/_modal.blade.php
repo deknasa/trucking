@@ -608,6 +608,7 @@
     Promise
       .all([
         setStatusPilihanInvoiceOptions(form),
+        setTampilan(),
         setFormatTable()
       ])
       .then(() => {
