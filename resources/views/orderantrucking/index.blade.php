@@ -12,6 +12,7 @@
 </div>
 
 @include('orderantrucking._modal')
+@include('orderantrucking._modalUpdate')
 
 @push('scripts')
 <script>
@@ -647,6 +648,27 @@ function checkboxHandler(element) {
               }
             },
           ],
+        },
+        {
+          id: 'lainnya',
+          title: 'Lainnya',
+          caption: 'Lainnya',
+          innerHTML: '<i class="fa fa-check"></i> LAINNYA',
+          class: 'btn btn-secondary btn-sm mr-1 dropdown-toggle ',
+          dropmenuHTML: [
+            {
+              id: 'updateNoContainer',
+              text: "Update No Container",
+              onClick: () => {
+                var selectedOne = selectedOnlyOne();
+                if (selectedOne[0]) {
+                  updateOrderanTrucking(selectedOne[1])
+                } else {
+                  showDialog(selectedOne[1])
+                }
+              }
+            }
+          ]
         }]
       })
 
