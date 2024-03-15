@@ -71,7 +71,7 @@
 
   function checkboxHandler(element) {
     let value = $(element).val();
-    let valuebukti=$('#jqGrid').jqGrid('getCell', $(element).val(), 'nobukti');
+    let valuebukti = $('#jqGrid').jqGrid('getCell', $(element).val(), 'nobukti');
 
     if (element.checked) {
       selectedRows.push($(element).val())
@@ -90,7 +90,7 @@
       }
 
       for (var i = 0; i < selectedbukti.length; i++) {
-        if (selectedbukti[i] ==valuebukti ) {
+        if (selectedbukti[i] == valuebukti) {
           selectedbukti.splice(i, 1);
         }
       }
@@ -646,11 +646,11 @@
                 text: "UN/APPROVAL Absensi Edit",
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('absensisupirheader', 'approvalEditAbsensi') }}`) {
-                    var selectedOne = selectedOnlyOne();                            
+                    var selectedOne = selectedOnlyOne();
                     if (selectedOne[0]) {
-                        approveEdit(selectedOne[1])
+                      approveEdit(selectedOne[1])
                     } else {
-                        showDialog(selectedOne[1])
+                      showDialog(selectedOne[1])
                     }
                   }
                 }
@@ -660,12 +660,12 @@
                 text: "UN/APPROVAL Pengajuan Trip Inap",
                 onClick: () => {
                   // if (`{{ $myAuth->hasPermission('absensisupirheader', 'approvalTripInap') }}`) {
-                    var selectedOne = selectedOnlyOne();                            
-                    if (selectedOne[0]) {
-                        approveTripInap(selectedOne[1])
-                    } else {
-                        showDialog(selectedOne[1])
-                    }
+                  // var selectedOne = selectedOnlyOne();                            
+                  // if (selectedOne[0]) {
+                  approveTripInap(selectedRows)
+                  // } else {
+                  //     showDialog(selectedOne[1])
+                  // }
                   // }
                 }
               },
@@ -928,11 +928,11 @@
             msg = `YAKIN Approve Status Edit `
           }
           showConfirm(msg, response.data.nobukti, `absensisupirheader/${response.data.id}/approvalEditAbsensi`)
-          .then(()=>{
-            selectedRows = []
-            $('#gs_').prop('checked', false)
-          })
-            
+            .then(() => {
+              selectedRows = []
+              $('#gs_').prop('checked', false)
+            })
+
         },
       })
     }
@@ -942,24 +942,30 @@
         approveEditRequest.abort();
       }
       approveEditRequest = $.ajax({
-        url: `${apiUrl}absensisupirheader/${id}`,
-        method: 'GET',
+        url: `${apiUrl}absensisupirheader/approvaltripinap`,
+        method: 'POST',
         dataType: 'JSON',
         headers: {
           Authorization: `Bearer ${accessToken}`
         },
+        data: {
+          id: selectedRows
+        },
         success: response => {
-          let msg = `YAKIN UnApprove Status Edit `
-          console.log(statusTidakBisaEdit);
-          if (response.data.statusapprovaleditabsensi === statusTidakBisaEdit) {
-            msg = `YAKIN Approve Status Edit `
+          $('#jqGrid').jqGrid().trigger('reloadGrid');
+          selectedRows = []
+          $('#gs_').prop('checked', false)
+
+        },
+        error: error => {
+          if (error.status === 422) {
+            $('.is-invalid').removeClass('is-invalid')
+            $('.invalid-feedback').remove()
+
+            setErrorMessages( $('#crudForm'), error.responseJSON.errors);
+          } else {
+            showDialog(error.responseJSON)
           }
-          showConfirm(msg, response.data.nobukti, `absensisupirheader/${response.data.id}/approvaltripinap`)
-          .then(()=>{
-            selectedRows = []
-            $('#gs_').prop('checked', false)
-          })
-            
         },
       })
     }
