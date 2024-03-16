@@ -220,11 +220,12 @@
     $('.invalid-feedback').remove()
 
     Promise.all([
-        setStatusApprovalOptions(form),
-        showApprovalTradoTanpa(form, id)
-      ])
+      setStatusApprovalOptions(form),
+    ])
+    .then(() => {
+      showApprovalTradoTanpa(form, id)
       .then((response) => {
-        let approvalTanpa = response[1];
+        let approvalTanpa = response;
         $('#crudModalApprovalTanpa').modal('show')
         form.data('action', 'add')
         if (approvalTanpa.id) {
@@ -235,8 +236,7 @@
         }
         if (!showGambar) {
           $('[name=gambar_statusapproval]').parents('.form-group').hide()
-        }
-
+        }    
       })
       .catch((error) => {
         console.log(error);
@@ -245,6 +245,7 @@
       .finally(() => {
         $('.modal-loader').addClass('d-none')
       })
+    })
   }
 
   function showApprovalTradoTanpa(form, Id) {
