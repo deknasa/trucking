@@ -98,7 +98,7 @@
                 
               </div>
               <div class="col-12 col-md-10">
-                <table class="table table-bordered " style="width:100%;">
+                <table class="table table-bordered " id="joblama" style="width:100%; display:none;">
                   <thead>
                       <th>#</th>
                       <th width="36%">No Job</th>
@@ -389,6 +389,7 @@
             $('#updateModal').modal('show')
             $('#updateForm [name=tglbukti]').attr('readonly', true)
             $('#updateForm [name=tglbukti]').siblings('.input-group-append').remove()
+            $('#joblama').show();
 
             editValidasi(isAllowEdited);
           })
