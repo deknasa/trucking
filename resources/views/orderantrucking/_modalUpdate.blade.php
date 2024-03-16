@@ -226,7 +226,7 @@
 @push('scripts')
 <script>
   hasFormBindKeys = false
-  modalBody = $('#updateModal').find('.modal-body').html()
+  let modalBodyUpdate = $('#updateModal').find('.modal-body').html()
 
   var statustas
   var kodecontainer
@@ -353,7 +353,7 @@
 
   $('#updateModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
-    $('#updateModal').find('.modal-body').html(modalBody)
+    $('#updateModal').find('.modal-body').html(modalBodyUpdate)
     initDatepicker('datepickerIndex')
   })
 
@@ -370,7 +370,7 @@
     Save
   `)
     form.find(`.sometimes`).hide()
-    $('#updateModalTitle').text('Edit Orderan Trucking')
+    $('#updateModalTitle').text('update No container')
     $('.is-invalid').removeClass('is-invalid')
     $('.invalid-feedback').remove()
 
