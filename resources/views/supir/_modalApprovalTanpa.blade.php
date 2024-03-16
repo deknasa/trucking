@@ -85,6 +85,10 @@
                 </div>
               </div>
             </div>
+            
+            <input type="text" id="showGambar" name="showgambar" hidden>
+            <input type="text" id="showKeterangan" name="showketerangan" hidden>
+            
 
             <div class="col-12 col-sm-9 col-md-10">
 
@@ -236,11 +240,13 @@
     $('.invalid-feedback').remove()
 
     Promise.all([
-        setStatusApprovalOptions(form),
-        showApprovalSupirTanpa(form, id)
-      ])
+      setStatusApprovalOptions(form),
+    ])
+    .then(() => {
+      showApprovalSupirTanpa(form, id)
       .then((response) => {
-        let approvalTanpa = response[1];
+        
+        let approvalTanpa = response;
         $('#crudModalApprovalTanpa').modal('show')
         form.data('action', 'add')
         if (approvalTanpa.id) {
@@ -252,6 +258,8 @@
         if (!showGambar) {
           $('[name=gambar_statusapproval]').parents('.form-group').hide()
         }
+        form.find(`#showGambar`).val(showGambar)
+        form.find(`#showKeterangan`).val(showKeterangan)
 
       })
       .catch((error) => {
@@ -261,6 +269,7 @@
       .finally(() => {
         $('.modal-loader').addClass('d-none')
       })
+    }) 
   }
 
   function showApprovalSupirTanpa(form, Id) {
@@ -356,7 +365,6 @@
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
       success: response => {
-        console.log(response);
         var error = response.error
         if (error) {
           showDialog('Gambar dan Keterangan Supir Telah terisi Semua')
