@@ -1091,12 +1091,11 @@
                                 id: 'StoreApprovalTradoTanpa',
                                 text: "un/Approval Trado Tanpa Keterangan/Gambar",
                                 onClick: () => {
-                                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                                    if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                                        showDialog('Harap pilih salah satu record')
+                                    var selectedOne = selectedOnlyOne();
+                                    if (selectedOne[0]) {
+                                        cekValidasiTanpa(selectedOne[1])
                                     } else {
-                                        cekValidasiTanpa(selectedId);
-                                        // approvalTradoTanpa(selectedId);
+                                      showDialog(selectedOne[1])
                                     }
                                 }
                             },
