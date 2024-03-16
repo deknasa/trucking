@@ -1686,7 +1686,11 @@
         $('.absensisupir-lookup').lookup({
             title: 'Abensi Supir Lookup',
             fileName: 'absensisupir',
-
+            beforeProcess: function(test) {
+                this.postData = {
+                    from: 'prosesuangjalansupir',
+                }
+            },
             onSelectRow: (absensisupir, element) => {
                 $('#crudForm [name=absensi_id]').first().val(absensisupir.id)
                 element.val(absensisupir.nobukti)
@@ -1698,7 +1702,16 @@
             },
             onClear: (element) => {
                 element.val('')
+                $('#crudForm [name=absensi_id]').val('')
                 element.data('currentValue', element.val())
+                $('#crudForm [name=uangjalan').first().val('')
+                $('#crudForm [name=trado').first().val('')
+                $('#crudForm [name=trado_id]').first().val('')
+                $('#crudForm [name=supir_id]').first().val('')
+                $('#crudForm [name=supir]').first().val('')
+                $('#crudForm [name=supir').data('currentValue', '')
+                $('#crudForm [name=trado').data('currentValue', '')
+                initAutoNumeric($('#crudForm [name=uangjalan]'))
             }
         })
 
@@ -1732,7 +1745,9 @@
                 this.postData = {
                     Aktif: 'AKTIF',
                     absensi_id: $('#crudForm [name=absensi_id]').val(),
-                    isProsesUangjalan: true
+                    isProsesUangjalan: true,
+                    aksi: $('#crudForm').data('action'),
+                    uangJalanId: $('#crudForm [name=id]').val(),
                 }
             },
             onSelectRow: (supir, element) => {
