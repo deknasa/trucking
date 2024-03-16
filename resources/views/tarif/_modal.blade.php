@@ -1399,7 +1399,7 @@
           element.val(`${upahsupir.kotadari_id} - ${upahsupir.kotasampai_id}`)
 
         element.data('currentValue', element.val())
-        clearTrado()
+        // clearTrado()
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
