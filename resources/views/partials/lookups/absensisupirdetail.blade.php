@@ -18,8 +18,10 @@
         absensi_id: `{!! $absensi_id ?? '' !!}`,
         from: `{!! $from ?? '' !!}`,
         aksi: `{!! $aksi ?? '' !!}`,
+        tripinap_id: `{!! $tripinap_id ?? '' !!}`,
         pengajuantrip_id: `{!! $pengajuantrip_id ?? '' !!}`,
         isProsesUangjalan: `{!! $isProsesUangjalan ?? '' !!}`,
+        uangJalanId: `{!! $uangJalanId ?? '' !!}`,
       },
       colModel: [{
           label: 'TRADO',
