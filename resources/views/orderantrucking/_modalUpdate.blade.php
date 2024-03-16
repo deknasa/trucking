@@ -468,7 +468,7 @@
             }
 
             if (index == 'agen_id') {
-              getagentas(value, response.data.statusapprovaltanpajob, response.data.tglbatastanpajoborderantrucking)
+              getagentas(form,value, response.data.statusapprovaltanpajob, response.data.tglbatastanpajoborderantrucking)
             }
           })
 

@@ -837,7 +837,7 @@
             }
 
             if (index == 'agen_id') {
-              getagentas(value, response.data.statusapprovaltanpajob, response.data.tglbatastanpajoborderantrucking)
+              getagentas(form, value, response.data.statusapprovaltanpajob, response.data.tglbatastanpajoborderantrucking)
             }
           })
 
@@ -889,10 +889,10 @@
     })
   }
 
-  function setJobReadOnly() {
-    let nojobemkl = $('#crudForm [name=nojobemkl]')
-    let nojobemkl2 = $('#crudForm [name=nojobemkl2]')
-    let container_id = $('#crudForm [name=container_id]').val()
+  function setJobReadOnly(form) {
+    let nojobemkl = form.find('[name=nojobemkl]')
+    let nojobemkl2 = form.find('[name=nojobemkl2]')
+    let container_id = form.find('[name=container_id]').val()
     if (statustas == '0') {
       //bukan tas
       // console.log('bukan');
@@ -933,46 +933,46 @@
   }
 
 
-  function setContApprovalTanpaJob(statusapproval, tglbatas) {
+  function setContApprovalTanpaJob(form, statusapproval, tglbatas) {
     var tglbatasDate = new Date(tglbatas);
     var currentDate = new Date();
 
-    let container_id = $('#crudForm [name=container_id]').val()
+    let container_id = form.find('[name=container_id]').val()
     if (statusapproval == 3 && currentDate < tglbatasDate) {
-      $('#crudForm [name=nocont]').attr('readonly', false)
-      $('#crudForm [name=noseal]').attr('readonly', false)
+      form.find('[name=nocont]').attr('readonly', false)
+      form.find('[name=noseal]').attr('readonly', false)
       if (container_id == 3) {
-        $('#crudForm [name=nocont2]').attr('readonly', false)
-        $('#crudForm [name=noseal2]').attr('readonly', false)
+        form.find('[name=nocont2]').attr('readonly', false)
+        form.find('[name=noseal2]').attr('readonly', false)
       }
 
     } else {
-      let nojobemkl = $('#crudForm [name=nojobemkl]')
-      let nojobemkl2 = $('#crudForm [name=nojobemkl2]')
+      let nojobemkl = form.find('[name=nojobemkl]')
+      let nojobemkl2 = form.find('[name=nojobemkl2]')
 
       if (statustas == 1) {
 
         nojobemkl.attr('readonly', false)
         nojobemkl.parents('.input-group').find('.input-group-append').show()
         nojobemkl.parents('.input-group').find('.button-clear').show()
-        $('#crudForm [name=nocont]').attr('readonly', true)
-        $('#crudForm [name=noseal]').attr('readonly', true)
+        form.find('[name=nocont]').attr('readonly', true)
+        form.find('[name=noseal]').attr('readonly', true)
       } else {
 
-        $('#crudForm [name=nocont]').attr('readonly', false)
-        $('#crudForm [name=noseal]').attr('readonly', false)
+        form.find('[name=nocont]').attr('readonly', false)
+        form.find('[name=noseal]').attr('readonly', false)
       }
       if (container_id == 3) {
         if (statustas == 1) {
           nojobemkl2.attr('readonly', false)
           nojobemkl2.parents('.input-group').find('.input-group-append').show()
           nojobemkl2.parents('.input-group').find('.button-clear').show()
-          $('#crudForm [name=nocont2]').attr('readonly', true)
-          $('#crudForm [name=noseal2]').attr('readonly', true)
+          form.find('[name=nocont2]').attr('readonly', true)
+          form.find('[name=noseal2]').attr('readonly', true)
         } else {
 
-          $('#crudForm [name=nocont2]').attr('readonly', false)
-          $('#crudForm [name=noseal2]').attr('readonly', false)
+          form.find('[name=nocont2]').attr('readonly', false)
+          form.find('[name=noseal2]').attr('readonly', false)
         }
       } else {
 
@@ -984,7 +984,7 @@
   }
 
 
-  function getagentas(id, statusapproval, tglbatas) {
+  function getagentas(form ,id, statusapproval, tglbatas) {
     $.ajax({
       url: `${apiUrl}orderantrucking/${id}/getagentas`,
       method: 'GET',
@@ -997,8 +997,8 @@
         if (statusapproval == 3) {
           statustas = 0
         }
-        setJobReadOnly()
-        setContApprovalTanpaJob(statusapproval, tglbatas)
+        setJobReadOnly(form)
+        setContApprovalTanpaJob(form, statusapproval, tglbatas)
         // console.log(statustas)
       },
       error: error => {
@@ -1123,7 +1123,7 @@
         $('#crudForm [name=agen_id]').first().val(agen.id)
         element.val(agen.namaagen)
         element.data('currentValue', element.val())
-        getagentas(agen.id)
+        getagentas($('#crudForm'),agen.id)
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
