@@ -2576,6 +2576,7 @@
                     form.find(`[name="ketDeposito"]`).val(response.deposito.keterangan)
                 } else {
                     let defaultKetDeposito = "DEPOSITO SUPIR " + supir + " PERIODE " + form.find(`[name="tgldari"]`).val() + " S/D " + form.find(`[name="tglsampai"]`).val();
+                    form.find(`[name="ketDeposito"]`).val(defaultKetDeposito);
                     initAutoNumeric(form.find(`[name="nomDeposito"]`))
                 }
                 if (response.bbm != null) {
@@ -2586,6 +2587,7 @@
                 } else {
                     initAutoNumeric(form.find(`[name="nomBBM"]`))
                     let defaultKetBBM = "HUTANG BBM SUPIR " + supir + " PERIODE " + form.find(`[name="tgldari"]`).val() + " S/D " + form.find(`[name="tglsampai"]`).val();
+                    form.find(`[name="ketBBM"]`).val(defaultKetBBM);
                 }
 
                 loadUangJalan()
