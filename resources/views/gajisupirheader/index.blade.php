@@ -83,7 +83,7 @@
 
   function checkboxHandlerIndex(element) {
     let value = $(element).val();
-    let valuebukti=$('#jqGrid').jqGrid('getCell', $(element).val(), 'nobukti');
+    let valuebukti=$(`#jqGrid tr#${value}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
     if (element.checked) {
       selectedRowsIndex.push($(element).val())
       selectedbukti.push(valuebukti)

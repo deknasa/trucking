@@ -12,7 +12,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class AbsenTradoController extends MyController
 {
-    public $title = 'AbsenTrado';
+    public $title = 'Absen Trado';
 
     
     /**

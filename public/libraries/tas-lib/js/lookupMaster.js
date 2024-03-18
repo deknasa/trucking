@@ -29,6 +29,7 @@ let indexRowSelect;
 let keydownIndex = true;
 
 let isKeyDown = false;
+let isLookupOpen = true;
 
 $.fn.lookupMaster = function (options) {
     let defaults = {
@@ -42,6 +43,7 @@ $.fn.lookupMaster = function (options) {
         alignRightMobile: null,
         alignRight: null,
         searching: null,
+        disabledIsUsed: null,
         postData: {},
         beforeProcess: function () {},
         onShowLookup: function (rowData, element) {},
@@ -56,8 +58,6 @@ $.fn.lookupMaster = function (options) {
     this.each(function () {
         let element = $(this);
         let lookupContainer;
-        
-
 
         element.data("hasLookup", true);
 
@@ -78,12 +78,12 @@ $.fn.lookupMaster = function (options) {
         }
 
         $(
-            `<button class="btn btn-easyui lookup-toggler" type="button"><i class="far fa-window-maximize text-easyui-dark" style="font-size: 12.25px"></i></button>`
+            `<button class="btn btn-easyui lookup-toggler" type="button"><i class="far fa-window-maximize text-easyui-dark" style="font-size: 12.25px;"></i></button>`
         )
             .appendTo(inputGroupAppend)
             .click(async function () {
                 event.preventDefault();
-                
+
                 element.data("input", false);
 
                 let lookupContainer = element.siblings(
@@ -91,6 +91,7 @@ $.fn.lookupMaster = function (options) {
                 );
 
                 if (activeLookupElement != null) {
+                    console.log(lookupContainer);
                     if (aktifId != `#lookup-${element.attr("id")}`) {
                         bottomSelected = 10;
                         topSelected = 0;
@@ -101,15 +102,12 @@ $.fn.lookupMaster = function (options) {
                     }
                 }
                 if (activeLookupElement) {
-                  
                     activeLookupElement.hide();
-                 
+
                     lookupContainer.remove();
                     element.data("hasLookup", false);
 
                     let detailElement = $(".overflow");
-
-                  
 
                     // detailElement.css("overflow", "auto");
                 }
@@ -119,11 +117,9 @@ $.fn.lookupMaster = function (options) {
                 aktifId = `#lookup-${element.attr("id")}`;
 
                 if (activate) {
-                    
                     $(aktifId).hide();
-                    
-                    activate = false;
 
+                    activate = false;
 
                     lookupContainer.remove();
                     element.data("hasLookup", false);
@@ -139,11 +135,13 @@ $.fn.lookupMaster = function (options) {
 
                     // $(".modal-overflow").css("overflow-y", "hidden");
                 }
+
+                isLookupOpen = true;
             });
 
         activate = false;
         // element.on("focus", function (event) {
-        
+
         // });
 
         element.on("input", function (event) {
@@ -155,18 +153,17 @@ $.fn.lookupMaster = function (options) {
                 `#lookup-${element.attr("id")}`
             );
 
-           
-
             if (activeLookupElement != null) {
                 if (aktifId != `#lookup-${element.attr("id")}`) {
-                    bottomSelected = 10;
-                    topSelected = 0;
-
                     $(aktifId).hide();
 
                     activate = false;
                 }
             }
+
+            activeLookupElement = lookupContainer;
+
+            aktifId = `#lookup-${element.attr("id")}`;
 
             if (!activate) {
                 delay(function () {
@@ -174,12 +171,14 @@ $.fn.lookupMaster = function (options) {
                     activate = true;
                 }, 50);
             } else {
+                console.log("else");
                 delay(function () {
                     handleOnInput(element, searchValue);
                 }, 100);
                 bindKey = false;
             }
-            
+
+            isLookupOpen = true;
         });
 
         element.focus(function () {
@@ -241,10 +240,11 @@ $.fn.lookupMaster = function (options) {
                         $(`#lookup-${getId}`).css("right", "0");
                     }
                 } else if (detectDeviceType() == "mobile") {
+                    
                     let ukuranDevice = window.innerWidth;
                     let widthValue = ukuranDevice < 400 ? 330 : 340;
                     lookupContainer = $(
-                        `<div id="lookup-${getId}" style="position: absolute; background-color: #fff; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); z-index: 9999; top: 100%; width: ${widthValue}px; max-height: 280px; overflow: hidden; overscroll-behavior: contain!important;"></div>`
+                        `<div id="lookup-${getId}" style="position: absolute; background-color: #fff; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); z-index: 9999; top: 100%; width: ${widthValue}px; max-height: 280px;  overscroll-behavior: contain!important;"></div>`
                     ).insertAfter(element);
 
                     if (alignRightMobile) {
@@ -272,10 +272,11 @@ $.fn.lookupMaster = function (options) {
                             $(`#lookup-${getId}`).css("right", "0");
                         }
                     } else if (detectDeviceType() == "mobile") {
+                        
                         lookupContainer = $(
                             '<div id="lookup-' +
                                 getId +
-                                '" style="position: absolute; background-color: #fff; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); z-index: 9999; top: 100%;  width: 330px; max-height: 280px;  overflow: hidden;  overscroll-behavior: contain!important; "></div>'
+                                '" style="position: absolute; background-color: #fff; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); z-index: 9999; top: 100%;  width: 330px; max-height: 280px;   overscroll-behavior: contain!important; "></div>'
                         ).insertAfter(element);
 
                         if (alignRightMobile) {
@@ -296,10 +297,11 @@ $.fn.lookupMaster = function (options) {
                             $(`#lookup-${getId}`).css("right", "0");
                         }
                     } else if (detectDeviceType() == "mobile") {
+                        
                         lookupContainer = $(
                             '<div id="lookup-' +
                                 getId +
-                                '" style="position: absolute; background-color: #fff; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); z-index: 9999; top: 100%; width: 350px; max-height: 280px;  overflow: hidden;  overscroll-behavior: contain!important;"></div>'
+                                '" style="position: absolute; background-color: #fff; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); z-index: 9999; top: 100%; width: 350px; max-height: 280px;  overscroll-behavior: contain!important;"></div>'
                         ).insertAfter(element);
 
                         if (alignRightMobile) {
@@ -316,10 +318,10 @@ $.fn.lookupMaster = function (options) {
             lookupContainer
         );
 
+       
+
         getLookupMaster(settings.fileName, settings.postData ?? null).then(
             (response) => {
-               
-
                 lookupBody.html(response);
                 let grid = lookupBody.find(".lookup-grid");
 
@@ -339,260 +341,219 @@ $.fn.lookupMaster = function (options) {
                 $(".ui-jqgrid-bdiv").addClass("bdiv-lookup");
                 $(".jqgrid-rownum").addClass("rowNum-lookup");
 
-                
                 if (grid.length > 0) {
                     bindKey = false;
-                    
+
                     let el = $(this);
                     // keydownIndex++
 
-                  
-                   
-                        $(element).on("keydown", function (e) {
-                            // keydownIndex = true
-                           
-                                    if (!bindKey) {
-                                        if (
-                                            e.keyCode == 33 ||
-                                            e.keyCode == 34 ||
-                                            e.keyCode == 35 ||
-                                            e.keyCode == 36 ||
-                                            e.keyCode == 38 ||
-                                            e.keyCode == 40 ||
-                                            e.keyCode == 13
-                                        ) {
-                                            e.preventDefault();
-    
-                                            for (let index = 0; index < keydownIndex; index++) {
-                                                if (index == 0) {
-                                                   
-                                                }
-                                                 
-                                            }
-            
-                                            
-                                            var gridIds = $(grid).getDataIDs();
-                                            var selectedRow =
-                                                $(grid).getGridParam("selrow");
-            
-                                            var currentPage = $(grid).getGridParam("page");
-                                            var lastPage = $(grid).getGridParam("lastpage");
-                                            var currentIndex = -1;
-            
-                                            var triggerClick = false;
-            
-                                            for (var i = 0; i < gridIds.length; i++) {
-                                                if (gridIds[i] == selectedRow)
-                                                 
-                                                    currentIndex = i;
+                    $(element).on("keydown", function (e) {
+                        // keydownIndex = true
 
-                                                   
-                                            }
-                                           
-                                            if (triggerClick == false) {
-                                                if (33 === e.keyCode) {
-                                                    if (currentPage > 1) {
-                                                        $(grid)
-                                                            .jqGrid("setGridParam", {
-                                                                page:
-                                                                    parseInt(currentPage) -
-                                                                    2,
-                                                            })
-                                                            .trigger("reloadGrid");
-            
-                                                        triggerClick = true;
-                                                    }
-                                                    $(grid).triggerHandler("jqGridKeyUp"),
-                                                        e.preventDefault();
-            
-                                                    return false;
-                                                }
-                                                if (34 === e.keyCode) {
-                                                    if (currentPage !== lastPage) {
-                                                        $(grid)
-                                                            .jqGrid("setGridParam", {
-                                                                page:
-                                                                    parseInt(currentPage) -
-                                                                    1,
-                                                            })
-                                                            .trigger("reloadGrid");
-            
-                                                        triggerClick = true;
-                                                    }
-                                                    $(grid).triggerHandler("jqGridKeyUp"),
-                                                        e.preventDefault();
-            
-                                                    return false;
-                                                }
-                                                if (
-                                                    35 === e.keyCode &&
-                                                    !e.shiftKey &&
-                                                    !e.ctrlKey
-                                                ) {
-                                                    var inputElement =
-                                                        document.activeElement;
-                                                    if (
-                                                        inputElement &&
-                                                        inputElement.tagName === "INPUT"
-                                                    ) {
-                                                        inputElement.setSelectionRange(
-                                                            inputElement.value.length,
-                                                            inputElement.value.length
-                                                        );
-                                                    }
-                                                    return false;
-                                                }
-                                                if (
-                                                    36 === e.keyCode &&
-                                                    !e.shiftKey &&
-                                                    !e.ctrlKey
-                                                ) {
-                                                    var inputElement =
-                                                        document.activeElement;
-                                                    if (
-                                                        inputElement &&
-                                                        inputElement.tagName === "INPUT"
-                                                    ) {
-                                                        inputElement.setSelectionRange(
-                                                            0,
-                                                            0
-                                                        );
-                                                    }
-                                                    return false;
-                                                }
-                                                if (38 === e.keyCode) {
-                                                    // if (currentIndex - 1 >= 0) {
-                                                    //     $(grid).setSelection(
-                                                    //         gridIds[currentIndex - 1]
-                                                    //     );
-                                                    // }
-                                                    // element.focus();
-                                                    // return false;
-            
-                                                    $(grid).setSelection(
-                                                        gridIds[currentIndex - 1]
-                                                    );
-                                                    element.focus();
-            
-                                                    var selectedRowId = $(grid).getGridParam("selrow");
-            
-                                                    indexRowSelect = $(grid).jqGrid('getInd',selectedRowId);
-            
-                                                    var currentRowHeight =
-                                                        $(grid).getGridParam("rowHeight") ||
-                                                        26;
-                                                    var visibleRows =
-                                                        $(grid).getGridParam(
-                                                            "recordsView"
-                                                        ) || 1;
-            
-                                                    var currentScrollTop = $(grid)
-                                                        .closest(".ui-jqgrid-bdiv")
-                                                        .scrollTop();
-                                                       
-                                                    if (indexRowSelect == topSelected) {
-                                                        
-                                                        bottomSelected--
-                                                        topSelected--
-                                                        $(grid)
-                                                            .closest(".bdiv-lookup")
-                                                            .scrollTop(
-                                                                currentScrollTop - visibleRows * currentRowHeight
-                                                            );
-                                                    }
-                                                  
-            
-                                                    return false;
-                                                }
-                                                if (40 === e.keyCode) {
-                                                   
-                                                    
-                                                    $(grid).setSelection(
-                                                        gridIds[currentIndex + 1]
-                                                    );
-                                                   
-                                                    var currentRowHeight = $(grid).getGridParam("rowHeight") ||26;
-                                                    var visibleRows =$(grid).getGridParam( "recordsView" ) || 1;
-            
-                                                    var selectedRowId = $(grid).getGridParam("selrow");
-                                                    // var selectedRowId = $(grid).jqGrid("getGridParam").selectedIndex++;
-            
-                                                    indexRowSelect = $(grid).jqGrid('getInd',selectedRowId);
+                        if (!bindKey) {
+                            if (
+                                e.keyCode == 33 ||
+                                e.keyCode == 34 ||
+                                e.keyCode == 35 ||
+                                e.keyCode == 36 ||
+                                e.keyCode == 38 ||
+                                e.keyCode == 40 ||
+                                e.keyCode == 13
+                            ) {
+                                e.preventDefault();
 
-                                                    // if (keydownIndex) {
-                                                    //     indexRowSelect = 1
-                                                    // }
-            
-                                                    var visibleSelRow = 0
-                                                    
-                                                    element.focus();
-            
-                                                    var currentScrollTop = $(grid)
-                                                        .closest(".bdiv-lookup")
-                                                        .scrollTop();
-                                                    
-                                                      
-                                                    if (indexRowSelect == bottomSelected) {
-                                                        visibleSelRow = 1
-                                                        bottomSelected++
-                                                        topSelected++
-                                                    }
-                                                   
-                                                    if (visibleSelRow === 1) {
-                                                    
-                                                        $(grid)
-                                                            .closest(".bdiv-lookup")
-                                                            .scrollTop(
-                                                                currentScrollTop + visibleRows * currentRowHeight
-                                                            );
-
-                                                        
-                                                    }
-                                                    
-            
-                                                    return false;
-            
-                                                
-                                                }
-            
-                                                if (13 === e.keyCode) {
-                                                    let rowId =
-                                                        $(grid).getGridParam("selrow");
-                                                    let ondblClickRowHandler = $(
-                                                        grid
-                                                    ).jqGrid(
-                                                        "getGridParam",
-                                                        "ondblClickRow"
-                                                    );
-            
-                                                    if (ondblClickRowHandler) {
-                                                        ondblClickRowHandler.call(
-                                                            $(grid)[0],
-                                                            rowId
-                                                        );
-                                                    }
-            
-                                                    return false;
-                                                }
-                                            }
-            
-                                            $(".ui-jqgrid-bdiv").find("tbody").animate({
-                                                scrollTop: 200,
-                                            });
-                                            $(".table-success").position().top > 300;
-                                        }
-                                        bindKey = true;
+                                for (
+                                    let index = 0;
+                                    index < keydownIndex;
+                                    index++
+                                ) {
+                                    if (index == 0) {
                                     }
-                                
-                          
-                        });
-                   
-                   
+                                }
+
+                                var gridIds = $(grid).getDataIDs();
+                                var selectedRow =
+                                    $(grid).getGridParam("selrow");
+
+                                var currentPage = $(grid).getGridParam("page");
+                                var lastPage = $(grid).getGridParam("lastpage");
+                                var currentIndex = -1;
+
+                                var triggerClick = false;
+
+                                for (var i = 0; i < gridIds.length; i++) {
+                                    if (gridIds[i] == selectedRow)
+                                        currentIndex = i;
+                                }
+
+                                if (triggerClick == false) {
+                                    if (
+                                        35 === e.keyCode &&
+                                        !e.shiftKey &&
+                                        !e.ctrlKey
+                                    ) {
+                                        var inputElement =
+                                            document.activeElement;
+                                        if (
+                                            inputElement &&
+                                            inputElement.tagName === "INPUT"
+                                        ) {
+                                            inputElement.setSelectionRange(
+                                                inputElement.value.length,
+                                                inputElement.value.length
+                                            );
+                                        }
+                                        return false;
+                                    }
+                                    if (
+                                        36 === e.keyCode &&
+                                        !e.shiftKey &&
+                                        !e.ctrlKey
+                                    ) {
+                                        var inputElement =
+                                            document.activeElement;
+                                        if (
+                                            inputElement &&
+                                            inputElement.tagName === "INPUT"
+                                        ) {
+                                            inputElement.setSelectionRange(
+                                                0,
+                                                0
+                                            );
+                                        }
+                                        return false;
+                                    }
+                                    if (38 === e.keyCode && isLookupOpen) {
+                                       
+                                        $(grid).setSelection(
+                                            gridIds[currentIndex - 1]
+                                        );
+                                        element.focus();
+
+                                        var selectedRowId =
+                                            $(grid).getGridParam("selrow");
+
+                                        indexRowSelect = $(grid).jqGrid(
+                                            "getInd",
+                                            selectedRowId
+                                        );
+
+                                        var currentRowHeight =
+                                            $(grid).getGridParam("rowHeight") ||
+                                            26;
+                                        var visibleRows =
+                                            $(grid).getGridParam(
+                                                "recordsView"
+                                            ) || 1;
+
+                                        var currentScrollTop = $(grid)
+                                            .closest(".ui-jqgrid-bdiv")
+                                            .scrollTop();
+
+                                        if (indexRowSelect == topSelected) {
+                                            bottomSelected--;
+                                            topSelected--;
+                                            $(grid)
+                                                .closest(".bdiv-lookup")
+                                                .scrollTop(
+                                                    currentScrollTop -
+                                                        visibleRows *
+                                                            currentRowHeight
+                                                );
+                                        }
+
+                                        return false;
+                                    }
+
+                                    if (40 === e.keyCode && isLookupOpen) {
+                                        console.log("bind key lookup");
+                                        $(grid).setSelection(
+                                            gridIds[currentIndex + 1]
+                                        );
+
+                                        var currentRowHeight =
+                                            $(grid).getGridParam("rowHeight") ||
+                                            26;
+                                        var visibleRows =
+                                            $(grid).getGridParam(
+                                                "recordsView"
+                                            ) || 1;
+
+                                        var selectedRowId =
+                                            $(grid).getGridParam("selrow");
+                                        // var selectedRowId = $(grid).jqGrid("getGridParam").selectedIndex++;
+
+                                        indexRowSelect = $(grid).jqGrid(
+                                            "getInd",
+                                            selectedRowId
+                                        );
+
+                                        // if (keydownIndex) {
+                                        //     indexRowSelect = 1
+                                        // }
+
+                                        var visibleSelRow = 0;
+
+                                        element.focus();
+
+                                        var currentScrollTop = $(grid)
+                                            .closest(".bdiv-lookup")
+                                            .scrollTop();
+
+                                        if (indexRowSelect == bottomSelected) {
+                                            visibleSelRow = 1;
+                                            bottomSelected++;
+                                            topSelected++;
+                                        }
+
+                                        if (visibleSelRow === 1) {
+                                            $(grid)
+                                                .closest(".bdiv-lookup")
+                                                .scrollTop(
+                                                    currentScrollTop +
+                                                        visibleRows *
+                                                            currentRowHeight
+                                                );
+                                        }
+
+                                        isLookupOpen = true;
+
+                                        return false;
+                                    }
+
+                                    if (13 === e.keyCode) {
+                                        let rowId =
+                                            $(grid).getGridParam("selrow");
+                                        let ondblClickRowHandler = $(
+                                            grid
+                                        ).jqGrid(
+                                            "getGridParam",
+                                            "ondblClickRow"
+                                        );
+
+                                        if (ondblClickRowHandler) {
+                                            ondblClickRowHandler.call(
+                                                $(grid)[0],
+                                                rowId
+                                            );
+                                        }
+
+                                        return false;
+                                    }
+                                }
+
+                                $(".ui-jqgrid-bdiv").find("tbody").animate({
+                                    scrollTop: 200,
+                                });
+                                $(".table-success").position().top > 300;
+                            }
+                            bindKey = true;
+                        }
+                    });
                 }
 
                 /* Determine user selection listener */
                 if (detectDeviceType() == "desktop") {
-                   
                     grid.jqGrid("setGridParam", {
                         onCellSelect: function (id) {
                             handleSelectedRow(id, lookupContainer, element);
@@ -600,12 +561,10 @@ $.fn.lookupMaster = function (options) {
                             activate = false;
                             bindKey = false;
                         },
-                        onSelectRow: function (id) { 
+                        onSelectRow: function (id) {
                             selectedId = id;
                         },
-
                     });
-                  
                 } else if (detectDeviceType() == "mobile") {
                     grid.jqGrid("setGridParam", {
                         onCellSelect: function (id) {
@@ -619,7 +578,6 @@ $.fn.lookupMaster = function (options) {
             }
         );
 
-        
         $(element).on("keydown", function (event) {
             if (event.keyCode === 13) {
                 handleSelectedRow(selectedId, lookupContainer, element);
@@ -630,8 +588,6 @@ $.fn.lookupMaster = function (options) {
             }
         });
 
-
-       
         lookupContainer.show();
 
         $(document).on("click.lookup", function (event) {
@@ -648,112 +604,8 @@ $.fn.lookupMaster = function (options) {
         });
 
         const modal = $(".modal-body");
-
-        // document.addEventListener('DOMContentLoaded', function() {
-
-        //     lastTdElements.forEach(td => {
-        //       // Menambahkan event listener untuk setiap elemen <td>
-        //       td.addEventListener('click', function() {
-        //         // Memeriksa apakah elemen ini adalah elemen terakhir dalam tabel
-        //         if (this === this.parentElement.lastElementChild) {
-        //           // Jika ya, jalankan scrollIntoView()
-        //           this.scrollIntoView();
-        //         }
-        //       });
-        //     });
-        //   });
-
-        // document.addEventListener("focusin", function (event) {
-
-        //     const focusedElement = event.target;
-        //     if (focusedElement && focusedElement.closest('tr')) {
-        //     const focusElement = focusedElement.closest('tr').parentElement.querySelectorAll('.table-lookup tbody tr:last-child')
-
-        //     const rowIndexElement =  $(focusedElement.closest('tr')).attr("data-trindex")
-
-        //     const lastElement = document.querySelectorAll('.table-lookup tbody tr:last-child');
-        //     totalRowsElement = $(focusElement[0]).attr("data-trindex")
-
-        //     const tableContaint = $(".scroll-container");
-        //     if (tableContaint.length) {
-        //         const lookupTop = lookupContainer.offset().top;
-        //         const lookupBottom = lookupContainer.offset().top + lookupContainer.outerHeight();
-        //         const tableContaintBottom = tableContaint.offset().top + tableContaint.height();
-        //         const tableContaintTop = tableContaint.offset().top;
-        //         if (totalRowsElement <= rowIndexElement) {
-
-        //             tableContaint.animate(
-        //                 {
-        //                     scrollTop: 3000,
-        //                 },
-        //                 300
-        //             );
-        //         }
-
-        //     }
-        // }
-
-        // });
-
         const modalheader = $(".modal-master");
-        // if (modalheader.length) {
-        //     const lookupTop = lookupContainer.offset().top;
-
-        //     const lookupBottom =
-        //         lookupContainer.offset().top + lookupContainer.outerHeight();
-        //     const modalBottom = modalheader.offset().top + modalheader.height();
-        //     const modalTop = modalheader.offset().top;
-
-        //     if (lookupTop >= 573.5) {
-        //         const scrollDistance =
-        //             lookupTop + lookupContainer.height() - modalBottom + 50; // Jarak scroll yang diinginkan
-
-        //         modalheader.animate(
-        //             {
-        //                 scrollTop: modalBottom + scrollDistance + 50,
-        //             },
-        //             500
-        //         );
-        //     }
-        // }
-
-        // const tableContaint = $(".scroll-container");
-        //     if (tableContaint.length) {
-        //         const lookupTop = lookupContainer.offset().top;
-
-        //         const lookupBottom = lookupContainer.offset().top + lookupContainer.outerHeight();
-        //         const tableContaintBottom = tableContaint.offset().top + tableContaint.height();
-        //         const tableContaintTop = tableContaint.offset().top;
-
-        //         if (settings.totalRow <= settings.rowIndex) {
-
-        //             tableContaint.animate(
-        //                 {
-        //                     scrollTop: 5000,
-        //                 },
-        //                 300
-        //             );
-        //         }
-
-        //     }
-
-        // const aktifElement = document.activeElement;
-        // const containtModal = document.querySelector(".scroll-container"); // Ganti dengan selektor sesuai struktur Anda
-
-        // if (aktifElement && "scrollIntoView" in aktifElement && containtModal) {
-        //     aktifElement.scrollIntoView({
-        //         behavior: "instant",
-        //         block: "start",
-        //         inline: "end",
-        //     });
-        // }
-
-        // window.addEventListener("resize", () => {
-        //     if (window.innerWidth < 768) {
-        //         adjustScrollForMobile();
-        //     }
-        // });
-
+       
         $(element).on("keydown", function (event) {
             if (event.keyCode === 27) {
                 lookupContainer.hide();
@@ -814,12 +666,10 @@ $.fn.lookupMaster = function (options) {
             element.data("hasLookup", false);
 
             let detailElement = $(".overflow");
-
+            isLookupOpen = false;
             // keydownIndex = false;
-            
+
             // indexRowSelect = 1
-           
-            
         }
     }
 
@@ -830,14 +680,14 @@ $.fn.lookupMaster = function (options) {
     function handleOnClear(element) {
         settings.onClear(element);
 
-        let lookupContainer = element.siblings(`#lookup-${element.attr("id")}`);
+        let lookupContainer = element.siblings(`#lookup-${element.attr("id")}`);       
         let grid = lookupContainer.find(".lookup-grid");
 
-        grid.jqGrid("setGridParam", {
-            postData: {
-                filters: [],
-            },
-        });
+        // grid.jqGrid("setGridParam", {
+        //     postData: {
+        //         filters: [],
+        //     },
+        // });
 
         grid.trigger("reloadGrid", [{ page: 1, current: true }]);
     }
@@ -846,7 +696,6 @@ $.fn.lookupMaster = function (options) {
         let lookupContainer = element.siblings(`#lookup-${element.attr("id")}`);
         let grid = lookupContainer.find(".lookup-grid");
 
-        
         if (searchValue) {
             /* Determine user selection listener */
             if (detectDeviceType() == "desktop") {
