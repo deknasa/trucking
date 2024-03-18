@@ -2566,6 +2566,8 @@
                     initAutoNumeric($('.footrow').find(`td[aria-describedby="tablePotPribadi_nominalPP"]`).text(totalBayarPP))
 
                 });
+                let supir = form.find(`[name="supir"]`).val();
+
 
                 if (response.deposito != null) {
                     form.find(`[name="nobuktiDeposito"]`).val(response.deposito.nobukti)
@@ -2573,6 +2575,7 @@
                     initAutoNumeric(form.find(`[name="nomDeposito"]`).val(response.deposito.nominal))
                     form.find(`[name="ketDeposito"]`).val(response.deposito.keterangan)
                 } else {
+                    let defaultKetDeposito = "DEPOSITO SUPIR " + supir + " PERIODE " + form.find(`[name="tgldari"]`).val() + " S/D " + form.find(`[name="tglsampai"]`).val();
                     initAutoNumeric(form.find(`[name="nomDeposito"]`))
                 }
                 if (response.bbm != null) {
@@ -2582,6 +2585,7 @@
                     form.find(`[name="ketBBM"]`).val(response.bbm.keterangan)
                 } else {
                     initAutoNumeric(form.find(`[name="nomBBM"]`))
+                    let defaultKetBBM = "HUTANG BBM SUPIR " + supir + " PERIODE " + form.find(`[name="tgldari"]`).val() + " S/D " + form.find(`[name="tglsampai"]`).val();
                 }
 
                 loadUangJalan()
