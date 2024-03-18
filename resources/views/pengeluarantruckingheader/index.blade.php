@@ -297,13 +297,13 @@
               if ((value == null) || (value == '')) {
                 return '';
               }
-              let tgldari = rowData.tgldariheaderpenerimaantrucking
-              let tglsampai = rowData.tglsampaiheaderpenerimaantrucking
-              let url = "{{route('penerimaantruckingheader.index')}}"
-              let formattedValue = $(`
-              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
-             `)
-              return formattedValue[0].outerHTML
+            //   let tgldari = rowData.tgldariheaderpenerimaantrucking
+            //   let tglsampai = rowData.tglsampaiheaderpenerimaantrucking
+            //   let url = "{{route('penerimaantruckingheader.index')}}"
+            //   let formattedValue = $(`
+            //   <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
+            //  `)
+              return value.outerHTML
             }
           },
           {
