@@ -303,7 +303,7 @@
             //   let formattedValue = $(`
             //   <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
             //  `)
-              return value.outerHTML
+              return value
             }
           },
           {
