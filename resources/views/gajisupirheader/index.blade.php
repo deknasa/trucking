@@ -116,6 +116,7 @@
 
   function clearSelectedRowsIndex() {
     selectedRowsIndex = []
+    selectedbukti = []
     $('#gs_check').prop('checked', false);
     $('#jqGrid').trigger('reloadGrid')
   }
@@ -135,7 +136,8 @@
         filters: $('#jqGrid').jqGrid('getGridParam', 'postData').filters
       },
       success: (response) => {
-        selectedRowsIndex = response.data.map((row) => row.id)
+        selectedRowsIndex = response.data.map((datas) => datas.id)
+        selectedbukti = response.data.map((datas) => datas.nobukti)
         $('#jqGrid').trigger('reloadGrid')
       }
     })
