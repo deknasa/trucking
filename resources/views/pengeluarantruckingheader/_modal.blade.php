@@ -4692,9 +4692,9 @@
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
       success: response => {
-        var kondisi = response.kondisi
-        if (kondisi == true) {
-          showDialog(response.message['keterangan'])
+        var error = response.error
+        if (error) {
+          showDialog(response)
         } else {
           if (Aksi == 'EDIT') {
             editPengeluaranTruckingHeader(Id)
