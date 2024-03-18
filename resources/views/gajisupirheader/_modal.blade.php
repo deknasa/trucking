@@ -635,6 +635,15 @@
             //     }
             // })
 
+            let supir = form.find(`[name="supir"]`).val();
+            let defaultKetBBM = "HUTANG BBM SUPIR " + supir + " PERIODE " + dari + " S/D " + sampai;
+            let defaultKetDeposito = "DEPOSITO SUPIR " + supir + " PERIODE " + dari + " S/D " + sampai;
+            if (aksi == 'add') {
+
+                form.find(`[name="ketDeposito"]`).val(defaultKetDeposito);
+                form.find(`[name="ketBBM"]`).val(defaultKetBBM);
+
+            }
         })
 
         $('#btnSubmit').click(function(event) {
