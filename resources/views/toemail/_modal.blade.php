@@ -235,7 +235,7 @@
         Save
         `)
         form.data('action', 'add')
-        $('#crudModalTitle').text('Add Service in')
+        $('#crudModalTitle').text('Add To Email')
         $('#crudModal').modal('show')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
@@ -267,7 +267,7 @@
             <i class="fa fa-save"></i>
             Save
         `)
-        $('#crudModalTitle').text('Edit Service In ')
+        $('#crudModalTitle').text('Edit To Email ')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
 
@@ -303,7 +303,7 @@
             Delete
         `)
         form.find(`.sometimes`).hide()
-        $('#crudModalTitle').text('Delete Service in')
+        $('#crudModalTitle').text('Delete To Email')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
 
@@ -341,7 +341,7 @@
         `)
         form.find('#btnSubmit').prop('disabled', true)
         form.find(`.sometimes`).hide()
-        $('#crudModalTitle').text('View Service in')
+        $('#crudModalTitle').text('View To Email')
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
 
