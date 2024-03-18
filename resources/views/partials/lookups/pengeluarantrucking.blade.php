@@ -143,7 +143,7 @@
       rowList: [10, 20, 50, 0],
       toolbar: [true, "top"],
       sortable: true,
-      sortname: 'id',
+      sortname: 'keterangan',
       sortorder: 'asc',
       page: 1,
       // pager: $('#pengeluaranTruckingLookupPager'),

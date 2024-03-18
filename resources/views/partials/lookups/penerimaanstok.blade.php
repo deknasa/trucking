@@ -135,7 +135,7 @@
       rownumWidth: 45,
       rowList: [10, 20, 50, 0],
       sortable: true,
-      sortname: 'id',
+      sortname: 'keterangan',
       sortorder: 'asc',
       toolbar: [true, "top"],
       page: 1,
