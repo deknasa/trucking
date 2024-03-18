@@ -39,7 +39,12 @@
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'right',
             formatter: currencyFormat,
-          }
+          }, 
+          {
+            label: 'TRADO',
+            name: 'trado',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+          },
         ],
         autowidth: true,
         shrinkToFit: false,
@@ -120,9 +125,10 @@
         disabledKeys: [17, 33, 34, 35, 36, 37, 38, 39, 40],
         beforeSearch: function() {
           $(this).setGridParam({
-          postData: {
-            nobukti: nobukti
-          },})
+            postData: {
+              nobukti: nobukti
+            },
+          })
           clearGlobalSearch($('#absensiGrid'))
         },
       })
@@ -144,7 +150,7 @@
 
   function loadAbsensiData(nobukti) {
     abortGridLastRequest($('#absensiGrid'))
-    
+
     $('#absensiGrid').setGridParam({
       url: `${apiUrl}gajisupirdetail/absensi`,
       datatype: "json",
