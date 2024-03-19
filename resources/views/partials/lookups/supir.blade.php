@@ -16,6 +16,7 @@
         tgltrip: `{!! $tgltrip ?? '' !!}`,
         fromSupirSerap: `{!! $fromSupirSerap ?? '' !!}`,
         trado_id: `{!! $trado_id ?? '' !!}`,
+        from: `{!! $from ?? '' !!}`,
       },
       idPrefix: 'supirLookup',
       colModel: [{

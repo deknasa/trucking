@@ -144,7 +144,7 @@
                     $('#crudModalHistoryMandor').modal('hide')
 
                     id = response.data.id
-
+                    selectedRows = []
                     $('#jqGrid').jqGrid('setGridParam', {
                         page: response.data.page
                     }).trigger('reloadGrid');
