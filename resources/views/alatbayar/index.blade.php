@@ -264,7 +264,7 @@
                             {
                                 label: 'BANK',
                                 name: 'bank',
-                                width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+                                width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
                             },
                             {
                                 label: 'MODIFIED BY',
