@@ -462,6 +462,7 @@
           .then(() => {
             $('#crudModal').modal('show')
             $('#crudForm').find(`.ui-datepicker-trigger`).attr('disabled', false)
+            form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').show()
 
             let mandor = $('#crudForm').find(`[name=mandor]`).parents('.input-group').children()
             mandor.attr('disabled', false)
@@ -537,7 +538,9 @@
               clearSelectedRows()
             }
             $('#crudModal').modal('show')
-     
+
+            form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').show()
+
             $('#crudForm').find(`.ui-datepicker-trigger`).attr('disabled', false)
 
             let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
@@ -621,6 +624,7 @@
             }
             $('#crudModal').modal('show')
             $('#crudForm').find(`.ui-datepicker-trigger`).attr('disabled', true)
+            form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').show()
 
             let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
             name.attr('disabled', true)
@@ -694,7 +698,7 @@
             $('#crudForm').find(`.ui-datepicker-trigger`).attr('disabled', true)
 
             form.find(`.hasDatepicker`).prop('readonly', true)
-            form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
+            form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').hide()
             let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
             name.attr('disabled', true)
             name.find('.lookup-toggler').attr('disabled', true)
