@@ -542,6 +542,12 @@
         showDefault(form)
           .then(() => {
             
+            form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').show()
+            let name = $('#crudForm').find(`[name=mandor]`).parents('.input-group').children()
+            name.attr('disabled', false)
+            name.find('.lookup-toggler').attr('disabled', false)
+            $(`#crudForm [name=mandor]`).prop('readonly', false)
+
             let mandor = $('#crudForm').find(`[name=mandor]`).css({
               background: '#e9ecef'
             })
@@ -608,6 +614,11 @@
               clearSelectedRows()
             }
             $('#crudModal').modal('show')
+            form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').show()
+            let name = $('#crudForm').find(`[name=mandor]`).parents('.input-group').children()
+            name.attr('disabled', true)
+            name.find('.lookup-toggler').attr('disabled', true)
+            $(`#crudForm [name=mandor]`).prop('readonly', true)
             let mandor = $('#crudForm').find(`[name=mandor]`).css({
               background: '#e9ecef'
             })
@@ -666,6 +677,8 @@
               clearSelectedRows()
             }
             $('#crudModal').modal('show')
+            form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').show()
+
             // $(`#crudForm [name=mandor]`).parents('.form-group').hide()
           })
           .catch((error) => {
@@ -725,6 +738,8 @@
               clearSelectedRows()
             }
             $('#crudModal').modal('show')
+            form.find(`.hasDatepicker`).prop('readonly', true)
+            form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').hide()
             let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
             name.attr('disabled', true)
             name.find('.lookup-toggler').attr('disabled', true)
