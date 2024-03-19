@@ -372,7 +372,7 @@ input[type=text]:focus,input[type=password]:focus, .select2-selection:focus {
 
 #userAclModal .modal-body {
 	overflow-y: auto;
-	height: calc(100vh - 56px);
+	height: calc(100vh - 80px);
 	border: 0;
 	border-radius: 0;
 }
@@ -406,7 +406,7 @@ input[type=text]:focus,input[type=password]:focus, .select2-selection:focus {
 
 #userRoleModal .modal-body {
 	overflow-y: auto;
-	height: calc(100vh - 56px);
+	height: calc(100vh - 80px);
 	border: 0;
 	border-radius: 0;
 }
@@ -438,7 +438,7 @@ input[type=text]:focus,input[type=password]:focus, .select2-selection:focus {
 
 #cekAbsenTradoModal .modal-body {
 	overflow-y: auto;
-	height: calc(100vh - 56px);
+	height: calc(100vh - 80px);
 	border: 0;
 	border-radius: 0;
 }
@@ -534,7 +534,7 @@ input[type=text]:focus,input[type=password]:focus, .select2-selection:focus {
 
 .approval-modal .modal-body {
 	overflow-y: auto;
-	height: calc(100vh - 56px);
+	height: calc(100vh - 80px);
 	border: 0;
 	border-radius: 0;
 }
@@ -567,7 +567,7 @@ input[type=text]:focus,input[type=password]:focus, .select2-selection:focus {
 
 #crudModalHistoryMandor .modal-body {
 	overflow-y: auto;
-	height: calc(100vh - 56px);
+	height: calc(100vh - 80px);
 	border: 0;
 	border-radius: 0;
 }
@@ -599,7 +599,7 @@ input[type=text]:focus,input[type=password]:focus, .select2-selection:focus {
 
 #crudModalHistorySupir .modal-body {
 	overflow-y: auto;
-	height: calc(100vh - 56px);
+	height: calc(100vh - 80px);
 	border: 0;
 	border-radius: 0;
 }
@@ -631,7 +631,7 @@ input[type=text]:focus,input[type=password]:focus, .select2-selection:focus {
 
 #updateModal .modal-body {
 	overflow-y: auto;
-	height: calc(100vh - 56px);
+	height: calc(100vh - 80px);
 	border: 0;
 	border-radius: 0;
 }

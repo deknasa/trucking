@@ -1072,7 +1072,7 @@
                                 text: "un/Approval Reminder Oli Gardan",
                                 onClick: () => {
                                     if (`{{ $myAuth->hasPermission('trado', 'approvalgardan') }}`) {
-                                            approvalGardan();
+                                        approvalGardan();
                                     }
                                     // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                                 }
@@ -1082,7 +1082,7 @@
                                 text: "un/Approval Reminder Oli Saringan Hawa",
                                 onClick: () => {
                                     if (`{{ $myAuth->hasPermission('trado', 'approvalsaringanhawa') }}`) {
-                                            approvalSaringanHawa();
+                                        approvalSaringanHawa();
                                     }
                                     // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                                 }
@@ -1095,7 +1095,7 @@
                                     if (selectedOne[0]) {
                                         cekValidasiTanpa(selectedOne[1])
                                     } else {
-                                      showDialog(selectedOne[1])
+                                        showDialog(selectedOne[1])
                                     }
                                 }
                             },
@@ -1146,12 +1146,11 @@
                             text: "History Trado Milik Mandor",
                             onClick: () => {
                                 if (`{{ $myAuth->hasPermission('trado', 'historyTradoMandor') }}`) {
-                                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                                    if (selectedId == null || selectedId == '' || selectedId ==
-                                        undefined) {
-                                        showDialog('Harap pilih salah satu record')
+                                    var selectedOne = selectedOnlyOne();
+                                    if (selectedOne[0]) {
+                                        editTradoMilikMandor(selectedOne[1])
                                     } else {
-                                        editTradoMilikMandor(selectedId)
+                                        showDialog(selectedOne[1])
                                     }
                                 }
                             }
@@ -1160,12 +1159,11 @@
                             text: "History Trado Milik Supir",
                             onClick: () => {
                                 if (`{{ $myAuth->hasPermission('trado', 'historyTradoSupir') }}`) {
-                                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                                    if (selectedId == null || selectedId == '' || selectedId ==
-                                        undefined) {
-                                        showDialog('Harap pilih salah satu record')
+                                    var selectedOne = selectedOnlyOne();
+                                    if (selectedOne[0]) {
+                                        editTradoMilikSupir(selectedOne[1])
                                     } else {
-                                        editTradoMilikSupir(selectedId)
+                                        showDialog(selectedOne[1])
                                     }
                                 }
                             }
@@ -1259,7 +1257,7 @@
                 $('#StoreApprovalTradoTanpa').hide()
                 // $('#approval-buka-cetak').attr('disabled', 'disabled')
             }
-            
+
 
 
             if (hakApporveCount < 1) {

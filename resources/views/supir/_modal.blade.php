@@ -154,7 +154,7 @@
                   <label class="col-sm-2 col-form-label">Milik Mandor</label>
                   <div class="col-sm-10">
                     <input type="hidden" name="mandor_id">
-                    <input type="text" name="mandor" class="form-control mandor-lookup">
+                    <input type="text" name="mandor" class="form-control" readonly>
                   </div>
                 </div>
 
@@ -542,10 +542,9 @@
         showDefault(form)
           .then(() => {
             
-            let name = $('#crudForm').find(`[name=mandor]`).parents('.input-group').children()
-            name.attr('disabled', false)
-            name.find('.lookup-toggler').attr('disabled', false)
-            $(`#crudForm [name=mandor]`).prop('readonly', false)
+            let mandor = $('#crudForm').find(`[name=mandor]`).css({
+              background: '#e9ecef'
+            })
             $('#crudModal').modal('show')
           })
           .catch((error) => {
@@ -609,10 +608,9 @@
               clearSelectedRows()
             }
             $('#crudModal').modal('show')
-            let name = $('#crudForm').find(`[name=mandor]`).parents('.input-group').children()
-            name.attr('disabled', true)
-            name.find('.lookup-toggler').attr('disabled', true)
-            $(`#crudForm [name=mandor]`).prop('readonly', true)
+            let mandor = $('#crudForm').find(`[name=mandor]`).css({
+              background: '#e9ecef'
+            })
           })
           .catch((error) => {
             showDialog(error.statusText)

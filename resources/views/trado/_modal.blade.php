@@ -212,7 +212,7 @@
                   <label class="col-sm-12 col-form-label">Milik Mandor</label>
                   <div class="col-sm-12">
                     <input type="hidden" name="mandor_id">
-                    <input type="text" name="mandor" class="form-control mandor-lookup">
+                    <input type="text" name="mandor" class="form-control" readonly>
                   </div>
                 </div>
 
@@ -220,7 +220,7 @@
                   <label class="col-sm-12 col-form-label">Milik Supir</label>
                   <div class="col-sm-12">
                     <input type="hidden" name="supir_id">
-                    <input type="text" name="supir" class="form-control supir-lookup">
+                    <input type="text" name="supir" class="form-control" readonly>
                   </div>
                 </div>
 
@@ -463,15 +463,12 @@
             $('#crudModal').modal('show')
             $('#crudForm').find(`.ui-datepicker-trigger`).attr('disabled', false)
 
-            let mandor = $('#crudForm').find(`[name=mandor]`).parents('.input-group').children()
-            mandor.attr('disabled', false)
-            mandor.find('.lookup-toggler').attr('disabled', false)
-            $(`#crudForm [name=mandor]`).prop('readonly', false)
-
-            let supir = $('#crudForm').find(`[name=supir]`).parents('.input-group').children()
-            supir.attr('disabled', false)
-            supir.find('.lookup-toggler').attr('disabled', false)
-            $(`#crudForm [name=supir]`).prop('readonly', false)
+            let mandor = $('#crudForm').find(`[name=mandor]`).css({
+              background: '#e9ecef'
+            })
+            let supir = $('#crudForm').find(`[name=supir]`).css({
+              background: '#e9ecef'
+            })
           })
           .catch((error) => {
             showDialog(error.statusText)
@@ -544,16 +541,12 @@
             name.attr('disabled', false)
             name.find('.lookup-toggler').attr('disabled', false)
             
-            let mandor = $('#crudForm').find(`[name=mandor]`).parents('.input-group').children()
-            mandor.attr('disabled', true)
-            mandor.find('.lookup-toggler').attr('disabled', true)
-            $(`#crudForm [name=mandor]`).prop('readonly', true)
-
-            let supir = $('#crudForm').find(`[name=supir]`).parents('.input-group').children()
-            supir.attr('disabled', true)
-            supir.find('.lookup-toggler').attr('disabled', true)
-            $(`#crudForm [name=supir]`).prop('readonly', true)
-
+            let mandor = $('#crudForm').find(`[name=mandor]`).css({
+              background: '#e9ecef'
+            })
+            let supir = $('#crudForm').find(`[name=supir]`).css({
+              background: '#e9ecef'
+            })
           })
           .catch((error) => {
             showDialog(error.statusText)
