@@ -79,13 +79,17 @@
   let tgldariheader
   let tglsampaiheader
   let selectedRowsIndex = [];
+  let selectedbukti = [];
 
   reloadGrid()
 
   function checkboxHandlerIndex(element) {
     let value = $(element).val();
+    let valuebukti = $(`#jqGrid tr#${value}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
+
     if (element.checked) {
       selectedRowsIndex.push($(element).val())
+      selectedbukti.push(valuebukti)
       $(element).parents('tr').addClass('bg-light-blue')
     } else {
       $(element).parents('tr').removeClass('bg-light-blue')
@@ -97,6 +101,11 @@
 
       if (selectedRowsIndex.length != $('#jqGrid').jqGrid('getGridParam').records) {
         $('#gs_').prop('checked', false)
+      }
+      for (var i = 0; i < selectedbukti.length; i++) {
+        if (selectedbukti[i] == valuebukti) {
+          selectedbukti.splice(i, 1);
+        }
       }
     }
 
@@ -288,13 +297,13 @@
               if ((value == null) || (value == '')) {
                 return '';
               }
-              let tgldari = rowData.tgldariheaderpenerimaantrucking
-              let tglsampai = rowData.tglsampaiheaderpenerimaantrucking
-              let url = "{{route('penerimaantruckingheader.index')}}"
-              let formattedValue = $(`
-              <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
-             `)
-              return formattedValue[0].outerHTML
+            //   let tgldari = rowData.tgldariheaderpenerimaantrucking
+            //   let tglsampai = rowData.tglsampaiheaderpenerimaantrucking
+            //   let url = "{{route('penerimaantruckingheader.index')}}"
+            //   let formattedValue = $(`
+            //   <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
+            //  `)
+              return value
             }
           },
           {
@@ -783,6 +792,7 @@
 
   function clearSelectedRowsIndex() {
     selectedRowsIndex = []
+    selectedbukti = []
 
     $('#gs_').prop('checked', false)
     $('#jqGrid').trigger('reloadGrid')
@@ -805,6 +815,7 @@
       },
       success: (response) => {
         selectedRowsIndex = response.data.map((row) => row.id)
+        selectedbukti =response.data.map((datas) => datas.nobukti)
         $('#jqGrid').trigger('reloadGrid')
       }
     })

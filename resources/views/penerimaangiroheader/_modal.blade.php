@@ -1114,6 +1114,7 @@
             detail: true,
             miniSize: true,
             typeSearch: 'ALL',
+            searching: 1,
             beforeProcess: function() {
                 this.postData = {
                     Aktif: 'AKTIF',
@@ -1146,6 +1147,7 @@
             detail: true,
             miniSize: true,
             typeSearch: 'ALL',
+            searching: 1,
             beforeProcess: function() {
                 this.postData = {
                     Aktif: 'AKTIF',
@@ -1269,6 +1271,7 @@
             title: 'Customer Lookup',
             fileName: 'agenMaster',
             typeSearch: 'ALL',
+            searching: 1,
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',

@@ -41,7 +41,7 @@
                             </div>
                             <div class="col-12 col-md-10">
                                 <input type="hidden" name="mandorbaru_id">
-                                <input type="text" name="mandorbaru" class="form-control mandor-lookup">
+                                <input type="text" name="mandorbaru" class="form-control mandorbaru-lookup">
                             </div>
                         </div>
                         <div class="row form-group">
@@ -265,7 +265,7 @@
     }
 
     function initLookupHistoryMandor() {
-        $('.mandor-lookup').lookup({
+        $('.mandorbaru-lookup').lookup({
             title: 'Mandor Lookup',
             fileName: 'mandor',
             beforeProcess: function(test) {

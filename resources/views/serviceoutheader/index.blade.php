@@ -42,7 +42,7 @@
 
   function checkboxHandler(element) {
     let value = $(element).val();
-    let valuebukti=$('#jqGrid').jqGrid('getCell', $(element).val(), 'nobukti');
+    let valuebukti=$(`#jqGrid tr#${value}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
     if (element.checked) {
       selectedRows.push($(element).val())
       selectedbukti.push(valuebukti)
@@ -640,7 +640,7 @@
 
   function clearSelectedRows() {
     selectedRows = []
-
+    selectedbukti = []
     $('#gs_').prop('checked', false)
     $('#jqGrid').trigger('reloadGrid')
   }
@@ -660,7 +660,8 @@
         filters: $('#jqGrid').jqGrid('getGridParam', 'postData').filters
       },
       success: (response) => {
-        selectedRows = response.data.map((row) => row.id)
+        selectedRows = response.data.map((datas) => datas.id)
+        selectedbukti =response.data.map((datas) => datas.nobukti)
         $('#jqGrid').trigger('reloadGrid')
       }
     })

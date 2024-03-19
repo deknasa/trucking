@@ -36,7 +36,7 @@
                         <div class="row form-group">
                             <div class="col-12 col-md-2">
                                 <label class="col-form-label">
-                                    Supir Baru<span class="text-danger">*</span>
+                                    Supir Baru
                                 </label>
                             </div>
                             <div class="col-12 col-md-10">
@@ -144,7 +144,7 @@
                     $('#crudModalHistorySupir').modal('hide')
 
                     id = response.data.id
-
+                    selectedRows = []
                     $('#jqGrid').jqGrid('setGridParam', {
                         page: response.data.page
                     }).trigger('reloadGrid');
@@ -268,6 +268,7 @@
             beforeProcess: function(test) {
                 this.postData = {
                     Aktif: 'AKTIF',
+                    from: 'historytradosupir'
                 }
             },
             onSelectRow: (supir, element) => {

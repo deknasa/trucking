@@ -91,11 +91,15 @@
   let pengeluaran_nobukti = ''
   let nobukti = ''
   let selectedRowsIndex = [];
+  let selectedbukti = [];
+
 
   function checkboxHandlerIndex(element) {
     let value = $(element).val();
+    let valuebukti=$(`#jqGrid tr#${value}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
     if (element.checked) {
       selectedRowsIndex.push($(element).val())
+      selectedbukti.push(valuebukti)
       $(element).parents('tr').addClass('bg-light-blue')
     } else {
       $(element).parents('tr').removeClass('bg-light-blue')
@@ -108,6 +112,16 @@
       if (selectedRowsIndex.length != $('#jqGrid').jqGrid('getGridParam').records) {
         $('#gs_check').prop('checked', false)
       }
+
+      for (var i = 0; i < selectedbukti.length; i++) {
+        if (selectedbukti[i] ==valuebukti ) {
+          selectedbukti.splice(i, 1);
+        }
+      }
+
+      if (selectedbukti.length != $('#jqGrid').jqGrid('getGridParam').records) {
+        $('#gs_check').prop('checked', false)
+      }
     }
 
   }
@@ -115,6 +129,7 @@
 
   function clearSelectedRowsIndex() {
     selectedRowsIndex = []
+    selectedbukti = []
     $('#gs_check').prop('checked', false);
     $('#jqGrid').trigger('reloadGrid')
   }
@@ -134,7 +149,8 @@
         filters: $('#jqGrid').jqGrid('getGridParam', 'postData').filters
       },
       success: (response) => {
-        selectedRowsIndex = response.data.map((row) => row.id)
+        selectedRowsIndex = response.data.map((datas) => datas.id)
+        selectedbukti =response.data.map((datas) => datas.nobukti)
         $('#jqGrid').trigger('reloadGrid')
       }
     })
