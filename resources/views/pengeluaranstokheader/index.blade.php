@@ -130,6 +130,7 @@
 
   function clearSelectedRows() {
     selectedRows = []
+    selectedbukti =[]
     $('#gs_').prop('checked', false);
     $('#jqGrid').trigger('reloadGrid')
   }
@@ -150,6 +151,7 @@
       },
       success: (response) => {
         selectedRows = response.data.map((pengeluaranstokheader) => pengeluaranstokheader.id)
+        selectedbukti = response.data.map((penerimaanstokheader) => penerimaanstokheader.nobukti)
         $('#jqGrid').trigger('reloadGrid')
       }
     })

@@ -722,7 +722,7 @@ function checkboxHandler(element) {
 
   function clearSelectedRows() {
     selectedRows = []
-
+selectedbukti =[]
     $('#gs_').prop('checked', false);
     $('#jqGrid').trigger('reloadGrid')
   }
@@ -743,6 +743,7 @@ function checkboxHandler(element) {
       },
       success: (response) => {
         selectedRows = response.data.map((row) => row.id)
+        selectedbukti = response.data.map((hutang) => hutang.nobukti)
         $('#jqGrid').trigger('reloadGrid')
       }
     })

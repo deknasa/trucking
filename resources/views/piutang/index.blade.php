@@ -102,6 +102,7 @@
 
   function clearSelectedRows() {
     selectedRows = []
+    selectedbukti =[]
     $('#gs_').prop('checked', false);
     $('#jqGrid').trigger('reloadGrid')
   }
@@ -122,6 +123,7 @@
       },
       success: (response) => {
         selectedRows = response.data.map((supir) => supir.id)
+        selectedbukti = response.data.map((supir) => supir.nobukti)
         $('#jqGrid').trigger('reloadGrid')
       }
     })
