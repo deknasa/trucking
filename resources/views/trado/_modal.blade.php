@@ -461,7 +461,11 @@
         showDefault(form)
           .then(() => {
             $('#crudModal').modal('show')
+            
             $('#crudForm').find(`.ui-datepicker-trigger`).attr('disabled', false)
+            let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
+            name.attr('disabled', false)
+            name.find('.lookup-toggler').attr('disabled', false)
 
             let mandor = $('#crudForm').find(`[name=mandor]`).css({
               background: '#e9ecef'
@@ -540,7 +544,7 @@
             let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
             name.attr('disabled', false)
             name.find('.lookup-toggler').attr('disabled', false)
-            
+
             let mandor = $('#crudForm').find(`[name=mandor]`).css({
               background: '#e9ecef'
             })
@@ -686,8 +690,8 @@
             $('#crudModal').modal('show')
             $('#crudForm').find(`.ui-datepicker-trigger`).attr('disabled', true)
 
-            form.find(`.hasDatepicker`).prop('readonly', true)
-            form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
+            // form.find(`.hasDatepicker`).prop('readonly', true)
+            // form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
             let name = $('#crudForm').find(`[name]`).parents('.input-group').children()
             name.attr('disabled', true)
             name.find('.lookup-toggler').attr('disabled', true)
