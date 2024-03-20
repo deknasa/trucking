@@ -453,38 +453,78 @@
           total: 'attributes.total',
           records: 'attributes.records',
         },
-        afterEditCell: function(rowid, cellname, value, iRow, iCol) {
-          var $grid = $("#jqGrid");
+        // beforeSaveCell: function(rowid,celname,value,iRow,iCol) {
+        //   // alert('New cell value: "'+rowid+'"'); 1
+        //   // alert('New cell value: "'+celname+'"'); namasupir
+        //   // alert('New cell value: "'+value+'"'); abdulmuhit
+        //   // alert('New cell value: "'+iRow+'"');1
+        //   // alert('New cell value: "'+iCol+'"');8
+        //   var $grid = $("#jqGrid");
           
-          $(this.rows[iRow].cells[iCol])
-          .find("input,textarea,select,button,object,*[tabindex]")
-          .filter(":input:visible:not(:disabled)")
-          .first()
-          .on("focusout", function (e) {
-              var p = $grid.jqGrid('getGridParam');
+        //     $(this.rows[iRow].cells[iCol])
+        //     .find("input,textarea,select,button,object,*[tabindex]")
+        //     .filter(":input:visible:not(:disabled)")
+        //     .first()
+        //     .on("focusout", function (e) {
+        //         var p = $grid.jqGrid('getGridParam');
+        
+        //         if ($(e.relatedTarget).closest('.input-group-append').length === 0) {
+        //             $grid.jqGrid('saveCell', p.iRow, p.iCol);
+        //             $("#jqGrid").jqGrid('setCell', rowid, celname, value);
+        //             pushToObject(rowid, celname, value);
+                    
+        //             if (celname === 'absentrado') {
+        //               console.log('test1');
+        //               $("#jqGrid").jqGrid('setCell', rowid, 'absentrado', value);
+        //               let absen_id = $("#jqGrid").jqGrid('getCell', rowid, 'absen_id')
+        //               getabsentrado(absen_id).then((response) => {
+        //                   setSupirEnableIndex(response, rowid)
+        //                 })
+        //                 .catch(() => {
+        //                   setSupirEnableIndex(false, rowid)
+        //                 })
+        //                 .then(() => {
+        //                   pushToObject(rowid, 'absentrado', value);
+        //                 })
+        //             }
+                    
+        //         }
+        //     });
+        //   },
+         
+        // afterEditCell: function(rowid, cellname, value, iRow, iCol) {
+        //   var $grid = $("#jqGrid");
+          
+        //   $(this.rows[iRow].cells[iCol])
+        //   .find("input,textarea,select,button,object,*[tabindex]")
+        //   .filter(":input:visible:not(:disabled)")
+        //   .first()
+        //   .on("focusout", function (e) {
+        //       var p = $grid.jqGrid('getGridParam');
       
-              if ($(e.relatedTarget).closest('.input-group-append').length === 0) {
-                  $grid.jqGrid('saveCell', p.iRow, p.iCol);
-                  $("#jqGrid").jqGrid('setCell', rowid, cellname, value);
-                  pushToObject(rowid, cellname, value);
+        //       if ($(e.relatedTarget).closest('.input-group-append').length === 0) {
+        //           $grid.jqGrid('saveCell', p.iRow, p.iCol);
+        //           $("#jqGrid").jqGrid('setCell', rowid, cellname, value);
+        //           pushToObject(rowid, cellname, value);
                   
-                  if (cellname === 'absentrado') {
-                    $("#jqGrid").jqGrid('setCell', rowid, 'absentrado', value);
-                    let absen_id = $("#jqGrid").jqGrid('getCell', rowid, 'absen_id')
-                    getabsentrado(absen_id).then((response) => {
-                        setSupirEnableIndex(response, rowid)
-                      })
-                      .catch(() => {
-                        setSupirEnableIndex(false, rowid)
-                      })
-                      .then(() => {
-                        pushToObject(rowid, 'absentrado', value);
-                      })
-                  }
+        //           if (cellname === 'absentrado') {
+        //             console.log('test1');
+        //             $("#jqGrid").jqGrid('setCell', rowid, 'absentrado', value);
+        //             let absen_id = $("#jqGrid").jqGrid('getCell', rowid, 'absen_id')
+        //             getabsentrado(absen_id).then((response) => {
+        //                 setSupirEnableIndex(response, rowid)
+        //               })
+        //               .catch(() => {
+        //                 setSupirEnableIndex(false, rowid)
+        //               })
+        //               .then(() => {
+        //                 pushToObject(rowid, 'absentrado', value);
+        //               })
+        //           }
                   
-              }
-          });
-        },
+        //       }
+        //   });
+        // },
 
         afterSaveCell: function(rowid, cellname, value, iRow, iCol) {
           if (cellname === 'namasupir') {
