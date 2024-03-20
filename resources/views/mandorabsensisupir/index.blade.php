@@ -147,7 +147,7 @@
             name: 'id',
             width: '50px',
             search: false,
-            hidden: true
+            // hidden: true
           },
           {
             label: 'trado_id',
@@ -852,7 +852,7 @@
               dataType: 'JSON',
               data: {
                 data: JSON.stringify(dataAbsensi),
-                deleted_id: response.data.id
+                deleted_id: rowId
               },
               headers: {
                 Authorization: `Bearer ${accessToken}`
