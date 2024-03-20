@@ -538,6 +538,7 @@
                 $('#crudForm [name=bankdari_id]').first().val('')
                 element.val('')
                 element.data('currentValue', element.val())
+                bankDariId = ''
             }
         })
 
@@ -564,6 +565,7 @@
                 $('#crudForm [name=bankke_id]').first().val('')
                 element.val('')
                 element.data('currentValue', element.val())
+                bankKeId = ''
             }
         })
 
