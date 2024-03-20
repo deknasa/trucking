@@ -855,8 +855,8 @@
                 Authorization: `Bearer ${accessToken}`
               },
               success: response => {
-                // $('#jqGrid').jqGrid().trigger('reloadGrid')
-                deleteStatic(rowId,' ');
+                $('#jqGrid').jqGrid().trigger('reloadGrid')
+                // deleteStatic(rowId,' ');
               },
 
               error: error => {
