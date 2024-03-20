@@ -127,7 +127,7 @@
     })
   }
 
-
+  reloadGrid()
   setSpaceBarCheckedHandler()
   $(document).ready(function() {
     $("#tabs").tabs()
@@ -648,7 +648,7 @@
                     if (selectedId == null || selectedId == '' || selectedId == undefined) {
                       showDialog('Harap pilih salah satu record')
                     } else {
-                      approvalBukaCetak(tglbukacetak, 'ABSENSISUPIRAPPROVALHEADER', [selectedId], selectedbukti);
+                      approvalBukaCetak(tglbukacetak, 'ABSENSISUPIRAPPROVALHEADER', selectedRows, selectedbukti);
                     }
                   }
                 }
