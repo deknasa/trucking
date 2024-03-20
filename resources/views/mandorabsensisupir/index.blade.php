@@ -87,7 +87,8 @@
       dataAbsensi = {}
       loadDataAbsensiMandor('mandorabsensisupir', {
         tglbukaabsensi: $('#tglbukaabsensi').val(),
-        sortIndex: 'kodetrado'
+        sortIndex: 'kodetrado',
+        deleted_id:0
       })
     })
 
@@ -778,7 +779,13 @@
           data: JSON.stringify(dataAbsensi)
         },
         success: response => {
-          $('#jqGrid').jqGrid().trigger('reloadGrid')
+          $('#jqGrid').setGridParam({
+            url: `${apiUrl}mandorabsensisupir`,
+            datatype: "json",
+            postData: {
+              deleted_id: 0
+            },
+          }).trigger('reloadGrid')
           dataAbsensi = {}
           isEditing()
         },
@@ -859,7 +866,14 @@
                 Authorization: `Bearer ${accessToken}`
               },
               success: response => {
-                $('#jqGrid').jqGrid().trigger('reloadGrid')
+
+                $('#jqGrid').setGridParam({
+                  url: `${apiUrl}mandorabsensisupir`,
+                  datatype: "json",
+                  postData: {
+                    deleted_id: rowId
+                  },
+                }).trigger('reloadGrid')
                 // deleteStatic(rowId,' ');
               },
 
