@@ -472,6 +472,7 @@
           $('#detailList').append(detailRow)
 
         })
+        initAutoNumeric($('#gbox_modalgrid .footrow').find(`td[aria-describedby="modalgrid_uangjalan"]`).text(response.attributes.totalUangJalan))
         $('#modalgrid').setGridParam({
           datatype: "local",
           data: response.data
