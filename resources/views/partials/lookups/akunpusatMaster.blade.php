@@ -430,7 +430,7 @@ $idLookup = isset($id) ? $id : null;
     iconSet: 'fontAwesome',
     datatype: "json",
     postData: {
-      level: `{!! $levelCoa ?? '' !!}`,
+      levelCoa: `{!! $levelCoa ?? '' !!}`,
       potongan: `{!! $potongan ?? '' !!}`,
       aktif: `{!! $Aktif ?? '' !!}`,
       keterangancoa: `{!! $KeteranganCoa ?? '' !!}`,
