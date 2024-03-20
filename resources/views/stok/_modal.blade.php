@@ -325,7 +325,7 @@
       })
 
 
-    
+
       formData.append('sortIndex', $('#jqGrid').getGridParam().sortname)
       formData.append('sortOrder', $('#jqGrid').getGridParam().sortorder)
       formData.append('filters', $('#jqGrid').getGridParam('postData').filters)
@@ -633,37 +633,37 @@
     if (!form.attr('has-maxlength')) {
       return new Promise((resolve, reject) => {
 
-      $.ajax({
-        url: `${apiUrl}stok/field_length`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          'Authorization': `Bearer ${accessToken}`
-        },
-        success: response => {
-          $.each(response.data, (index, value) => {
-            if (value !== null && value !== 0 && value !== undefined) {
-              form.find(`[name=${index}]`).attr('maxlength', value)
-            }
-          })
+        $.ajax({
+          url: `${apiUrl}stok/field_length`,
+          method: 'GET',
+          dataType: 'JSON',
+          headers: {
+            'Authorization': `Bearer ${accessToken}`
+          },
+          success: response => {
+            $.each(response.data, (index, value) => {
+              if (value !== null && value !== 0 && value !== undefined) {
+                form.find(`[name=${index}]`).attr('maxlength', value)
+              }
+            })
 
-          dataMaxLength = response.data
+            dataMaxLength = response.data
             form.attr('has-maxlength', true)
             resolve()
-        },
-        error: error => {
-          showDialog(error.statusText)
-          reject()
-        }
+          },
+          error: error => {
+            showDialog(error.statusText)
+            reject()
+          }
+        })
       })
-    })
     } else {
       return new Promise((resolve, reject) => {
         $.each(dataMaxLength, (index, value) => {
           if (value !== null && value !== 0 && value !== undefined) {
             form.find(`[name=${index}]`).attr('maxlength', value)
 
-      
+
           }
         })
         resolve()
@@ -983,6 +983,7 @@
   }
 
   function assignAttachment(dropzone, data) {
+    let buttonRemoveDropzone = `<i class="fas fa-times-circle"></i>`
     const paramName = dropzone.options.paramName
     const type = paramName.substring(5)
 
@@ -991,14 +992,31 @@
         if (!element.dropzone) {
           let newDropzone = new Dropzone(element, {
             url: 'test',
+            previewTemplate: document.querySelector('.dz-preview').innerHTML,
+            thumbnailWidth: null,
+            thumbnailHeight: null,
             autoProcessQueue: false,
             addRemoveLinks: true,
+            dictRemoveFile: buttonRemoveDropzone,
             acceptedFiles: 'image/*',
+            minFilesize: 100, // Set the minimum file size in kilobytes
             paramName: $(element).data('field'),
             init: function() {
               dropzones.push(this)
               console.log(this.files.length);
               checkIsPhotExist(this, data)
+              this.on("addedfile", function(file) {
+                if (this.files.length > 5) {
+                  this.removeFile(file);
+                }
+                checkIsPhotExist(this.files, data)
+              });
+            },
+            removedfile: function(file) {
+
+              file.previewElement.remove();
+              checkIsPhotExist(this.files, data)
+
             }
           })
         }
