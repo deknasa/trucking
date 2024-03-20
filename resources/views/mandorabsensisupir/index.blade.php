@@ -147,7 +147,7 @@
             name: 'id',
             width: '50px',
             search: false,
-            // hidden: true
+            hidden: true
           },
           {
             label: 'trado_id',
@@ -581,20 +581,20 @@
                 editable: true
               });
             }
-            if (firstTime) {
+            // if (firstTime) {
             $.each(data.data, (index, absensi) => {
               pushToObject(absensi.id, null, null)
             })
-            firstTime = false
-            }else{
-              $.each(data.data, (index, absensi) => {
-                if (!absensi.memo) {
-                  // console.log(dataAbsensi.hasOwnProperty(String(absensi.id)),absensi.id);
-                  // dataAbsensi.hasOwnProperty(String(id))
-                  pushToObject(absensi.id, null, null)
-                }
-              })
-            }
+            // firstTime = false
+            // }else{
+            //   $.each(data.data, (index, absensi) => {
+            //     if (!absensi.memo) {
+            //       // console.log(dataAbsensi.hasOwnProperty(String(absensi.id)),absensi.id);
+            //       // dataAbsensi.hasOwnProperty(String(id))
+            //       pushToObject(absensi.id, null, null)
+            //     }
+            //   })
+            // }
           }
           loadStaticData();
         },
@@ -811,7 +811,8 @@
     let tradoId = $(this).data('trado')
     let supirId = $(this).data('supir')
     let id = $(this).data('id')
-    cekValidasi(tradoId, supirId, 'deleteFromAll', id)
+    // cekValidasi(tradoId, supirId, 'deleteFromAll', id)
+    deleteFromAll(tradoId, supirId,id)
   })
 
   function deleteFromAll(tradoId, supirId,rowId) {
