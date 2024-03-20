@@ -147,7 +147,7 @@
             name: 'id',
             width: '50px',
             search: false,
-            hidden: true
+            // hidden: true
           },
           {
             label: 'trado_id',
@@ -847,10 +847,13 @@
         showConfirm(msg, supirtrado)
           .then(function() {
             $.ajax({
-              url: `${apiUrl}mandorabsensisupir/${response.data.id}/delete`,
-              method: 'DELETE',
+              url: `${apiUrl}mandorabsensisupir`,
+              method: 'POST',
               dataType: 'JSON',
-              data: response.data,
+              data: {
+                data: JSON.stringify(dataAbsensi),
+                deleted_id: rowId
+              },
               headers: {
                 Authorization: `Bearer ${accessToken}`
               },
