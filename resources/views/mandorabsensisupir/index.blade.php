@@ -847,10 +847,13 @@
         showConfirm(msg, supirtrado)
           .then(function() {
             $.ajax({
-              url: `${apiUrl}mandorabsensisupir/${response.data.id}/delete`,
-              method: 'DELETE',
+              url: `${apiUrl}mandorabsensisupir`,
+              method: 'POST',
               dataType: 'JSON',
-              data: response.data,
+              data: {
+                data: JSON.stringify(dataAbsensi),
+                deleted_id: response.data.id
+              },
               headers: {
                 Authorization: `Bearer ${accessToken}`
               },
