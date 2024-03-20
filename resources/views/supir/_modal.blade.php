@@ -541,7 +541,7 @@
       .then(() => {
         showDefault(form)
           .then(() => {
-            
+
             form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').show()
             let name = $('#crudForm').find(`[name=mandor]`).parents('.input-group').children()
             name.attr('disabled', false)
@@ -996,17 +996,35 @@
   function assignAttachment(dropzone, data) {
     const paramName = dropzone.options.paramName
     const type = paramName.substring(5)
+    let buttonRemoveDropzone = `<i class="fas fa-times-circle"></i>`
     if (data[paramName] == '') {
       $('.dropzoneImg').each((index, element) => {
         if (!element.dropzone) {
           let newDropzone = new Dropzone(element, {
             url: 'test',
+            previewTemplate: document.querySelector('.dz-preview').innerHTML,
+            thumbnailWidth: null,
+            thumbnailHeight: null,
             autoProcessQueue: false,
             addRemoveLinks: true,
+            dictRemoveFile: buttonRemoveDropzone,
             acceptedFiles: 'image/*',
+            minFilesize: 100, // Set the minimum file size in kilobytes
             paramName: $(element).data('field'),
             init: function() {
               dropzones.push(this)
+              this.on("addedfile", function(file) {
+                if (this.files.length > 5) {
+                  this.removeFile(file);
+                }
+                if ($(element).data('field') != 'photosupir') {
+
+                  if (file.size < (this.options.minFilesize * 1024)) {
+                    showDialog('ukuran file minimal 100 kb')
+                    this.removeFile(file);
+                  }
+                }
+              });
             }
           })
         }
@@ -1038,6 +1056,7 @@
   }
 
   function assignAttachmentPdf(dropzone, data) {
+    let buttonRemoveDropzone = `<i class="fas fa-times-circle"></i>`
     const paramName = dropzone.options.paramName
     const type = paramName.substring(3)
     if (data[paramName] == '') {
@@ -1048,10 +1067,38 @@
             url: 'test',
             autoProcessQueue: false,
             addRemoveLinks: true,
+            dictRemoveFile: buttonRemoveDropzone,
             acceptedFiles: 'application/pdf',
             paramName: $(element).data('field'),
             init: function() {
               dropzones.push(this)
+              this.on("addedfile", function(file) {
+                if (this.files.length > 1) {
+                  this.removeFile(file);
+                } else {
+                  linkPdf.href = window.URL.createObjectURL(file);
+
+                  const currentDropzone = this;
+                  const reader = new FileReader();
+                  reader.onload = function(event) {
+                    const arrayBuffer = event.target.result;
+                    const uint8Array = new Uint8Array(arrayBuffer);
+
+                    // Check for PDF magic numbers in the first few bytes (PDF files start with '%PDF')
+                    const isPdf = uint8Array[0] === 0x25 && uint8Array[1] === 0x50 && uint8Array[2] === 0x44 && uint8Array[3] === 0x46;
+
+                    console.log(isPdf)
+                    if (!isPdf) {
+                      // If the file is not a PDF, remove it from the dropzone
+                      currentDropzone.removeFile(file);
+                      showDialog('TYPE FILE BUKAN PDF')
+                    }
+                  };
+
+                  reader.readAsArrayBuffer(file);
+                }
+                // $(file.previewElement).find('img').prop('src',appUrl+'/images/pdf_icon.png')
+              });
             }
           })
         }
