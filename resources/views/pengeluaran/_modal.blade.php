@@ -1193,7 +1193,7 @@
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
-
+          from: 'pengeluaran'
         }
       },
       onSelectRow: (bank, element) => {
