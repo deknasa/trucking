@@ -174,6 +174,8 @@
           $('#crudModalApprovalTanpa').modal('hide')
 
           $('#jqGrid').trigger('reloadGrid');
+          selectedRows = []
+          $('#gs_').prop('checked', false)
         },
         error: error => {
           if (error.status === 422) {
