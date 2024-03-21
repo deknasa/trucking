@@ -62,7 +62,7 @@
                 <div class="form-group row">
                   <label class="col-sm-2 col-form-label">NO Telepon / Handphone <span class="text-danger">*</span></label>
                   <div class="col-sm-10">
-                    <input type="text" name="telp" class="form-control numbernoseparate" maxlength="50">
+                    <input type="text" name="telp" class="form-control numbernoseparate" maxlength="15">
                   </div>
                 </div>
 
