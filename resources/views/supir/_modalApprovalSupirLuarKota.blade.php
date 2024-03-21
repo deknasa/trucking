@@ -15,7 +15,7 @@
                         <div class="row form-group">
                             <div class="col-12 col-sm-3 col-md-2">
                                 <label class="col-form-label">
-                                    nama supir <span class="text-danger">*</span>
+                                    nama supir
                                 </label>
                             </div>
                             <div class="col-12 col-sm-9 col-md-10">
@@ -29,7 +29,7 @@
                         <div class="row form-group">
                             <div class="col-12 col-sm-3 col-md-2">
                                 <label class="col-form-label">
-                                    No KTP <span class="text-danger">*</span>
+                                    No KTP
                                 </label>
                             </div>
                             <div class="col-12 col-sm-9 col-md-10">
