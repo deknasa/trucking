@@ -106,40 +106,42 @@
               </div>
             </div>
 
-            <div class="table-scroll table-responsive">
-              <table class="table table-bordered table-bindkeys" id="detailList" style="width: 1500px;">
-                <thead>
-                  <tr>
-                    <th width="1%">No</th>
-                    <th width="15%">Nama Perkiraan</th>
-                    <th width="25%">Keterangan</th>
-                    <th width="10%">Nominal</th>
-                    <th width="10%">No warkat</th>
-                    <th width="10%">Tgl jatuh tempo</th>
-                    <th width="10%">No Invoice</th>
-                    <th width="10%">Bank</th>
-                    <th width="1%" class="aksiBmt tbl_aksi">Aksi</th>
-                  </tr>
-                </thead>
-                <tbody id="table_body" class="form-group">
+            <div class="overflow scroll-container mb-2">
+              <div class="table-container">
+                <table class="table table-bordered table-bindkeys" id="detailList" style="width: 1500px;">
+                  <thead>
+                    <tr>
+                      <th style="width: 10px; min-width: 10px;">No</th>
+                      <th style="width: 180px; min-width: 180px;">Nama Perkiraan</th>
+                      <th style="width: 350px; min-width: 350px;">Keterangan</th>
+                      <th style="width: 180px; min-width: 180px;">Nominal</th>
+                      <th style="width: 180px; min-width: 180px;">No warkat</th>
+                      <th style="width: 150px; min-width: 150px;">Tgl jatuh tempo</th>
+                      <th style="width: 210px; min-width: 210px;">No Invoice</th>
+                      <th style="width: 210px; min-width: 210px;">Bank</th>
+                      <th style="width: 10px; min-width: 10px;" class="aksiBmt tbl_aksi">Aksi</th>
+                    </tr>
+                  </thead>
+                  <tbody id="table_body" class="form-group">
 
 
-                </tbody>
-                <tfoot>
-                  <tr>
-                    <td colspan="3">
-                      <p class="text-right font-weight-bold">TOTAL :</p>
-                    </td>
-                    <td>
-                      <p class="text-right font-weight-bold autonumeric" id="total"></p>
-                    </td>
-                    <td colspan="4"></td>
-                    <td class="aksiBmt tbl_aksi">
-                      <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
-                    </td>
-                  </tr>
-                </tfoot>
-              </table>
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                      <td colspan="3">
+                        <p class="text-right font-weight-bold">TOTAL :</p>
+                      </td>
+                      <td>
+                        <p class="text-right font-weight-bold autonumeric" id="total"></p>
+                      </td>
+                      <td colspan="4"></td>
+                      <td class="aksiBmt tbl_aksi">
+                        <button type="button" class="btn btn-primary btn-sm my-2" id="addRow">Tambah</button>
+                      </td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
             </div>
 
           </div>
@@ -211,7 +213,16 @@
     });
 
     $(document).on('change', `#crudForm [name="tglbukti"]`, function() {
-      $('#crudForm').find(`[name="tgljatuhtempo[]"]`).val($(this).val()).trigger('change');
+      if ($(`#crudForm [name="alatbayar"]`).val() != 'GIRO') {
+        $('#crudForm').find(`[name="tgljatuhtempo[]"]`).val($(this).val()).trigger('change');
+      }
+    });
+
+
+    $(document).on('change', `#table_body [name="tgljatuhtempo[]"]`, function() {
+      if ($(`#crudForm [name="alatbayar"]`).val() == 'GIRO') {
+        $('#crudForm').find(`[name="tgljatuhtempo[]"]`).val($(this).val());
+      }
     });
 
     $(document).on('click', '.delete-row', function(event) {
@@ -437,6 +448,7 @@
             }
             $('#crudModal').modal('show')
             addRow()
+            enableTglJatuhTempo(form)
           })
           .catch((error) => {
             showDialog(error.responseJSON)
@@ -701,7 +713,7 @@
 
   }
 
-  function cekValidasi(Id, Aksi,nobukti) {
+  function cekValidasi(Id, Aksi, nobukti) {
     $.ajax({
       url: `{{ config('app.api_url') }}pengeluaranheader/${Id}/cekvalidasi`,
       method: 'POST',
@@ -975,6 +987,8 @@
   }
 
   function addRow() {
+
+    let isTheFirstRow = $('#table_body tr').length;
     let detailRow = $(`
       <tr>
         <td></td>
@@ -994,7 +1008,7 @@
         </td>
         <td>
           <div class="input-group">
-            <input type="text" name="tgljatuhtempo[]" class="form-control datepicker">   
+            <input type="text" name="tgljatuhtempo[]" class="form-control">   
           </div>
         </td>
         <td>
@@ -1030,22 +1044,57 @@
         $(`#crudForm [name="coadebet[]"]`).last().val(akunpusat.coa)
         element.val(akunpusat.keterangancoa)
         element.data('currentValue', element.val())
+
+        enableTglJatuhTempo($(`#crudForm`))
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
+
+        enableTglJatuhTempo($(`#crudForm`))
       },
       onClear: (element) => {
         $(`#crudForm [name="coadebet[]"]`).last().val('')
         element.val('')
         element.data('currentValue', element.val())
+
+        enableTglJatuhTempo($(`#crudForm`))
       }
     })
     initAutoNumericMinus(detailRow.find(`[name="nominal_detail[]"]`))
     tglbukti = $('#crudForm').find(`[name="tglbukti"]`).val()
-    detailRow.find(`[name="tgljatuhtempo[]"]`).val(tglbukti).trigger('change');
-
-    initDatepicker()
+    if (isTheFirstRow == 0) {
+      detailRow.find(`[name="tgljatuhtempo[]"]`).addClass('first-input');
+      detailRow.find(`[name="tgljatuhtempo[]"]`).val(tglbukti).trigger('change');
+    }  else {
+      let firstDateVal = $('#table_body tr:first').find(`[name="tgljatuhtempo[]"]`).val();
+      detailRow.find(`[name="tgljatuhtempo[]"]`).val(firstDateVal).trigger('change');
+    }
+    enableTglJatuhTempo(detailRow)
+    enableNoWarkat(detailRow)
     setRowNumbers()
+  }
+
+  function enableTglJatuhTempo(el) {
+    if ($(`#crudForm [name="alatbayar"]`).val() == 'GIRO') {
+      el.find(`[name="tgljatuhtempo[]"]`).addClass('datepicker')
+      el.find(`[name="tgljatuhtempo[]"]`).attr('readonly', false)
+      initDatepicker()
+      el.find(`[name="tgljatuhtempo[]"]`).parent('.input-group').find('.input-group-append').show()
+    } else {
+      el.find(`[name="tgljatuhtempo[]"]`).removeClass('datepicker')
+      el.find(`[name="tgljatuhtempo[]"]`).parent('.input-group').find('.input-group-append').hide()
+      el.find(`[name="tgljatuhtempo[]"]`).val($('#crudForm').find(`[name="tglbukti"]`).val()).trigger('change');
+      el.find(`[name="tgljatuhtempo[]"]`).attr('readonly', true)
+    }
+  }
+
+  function enableNoWarkat(el) {
+    if ($(`#crudForm [name="alatbayar"]`).val() != 'TUNAI') {
+      el.find(`[name="nowarkat[]"]`).attr('readonly', false)
+    } else {
+      el.find(`[name="nowarkat[]"]`).attr('readonly', true)
+      el.find(`[name="nowarkat[]"]`).val('')
+    }
   }
 
   function deleteRow(row) {
@@ -1176,6 +1225,8 @@
         $(`#crudForm [name="alatbayar_id"]`).first().val(alatbayar.id)
         element.val(alatbayar.namaalatbayar)
         element.data('currentValue', element.val())
+        enableTglJatuhTempo($(`#crudForm`))
+        enableNoWarkat($(`#crudForm`))
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
