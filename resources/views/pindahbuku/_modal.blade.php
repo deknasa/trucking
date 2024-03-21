@@ -272,6 +272,7 @@
 
         setFormBindKeys(form)
 
+        form.find('#btnSubmit').prop('disabled', false)
         if (form.data('action') == "view") {
             form.find('#btnSubmit').prop('disabled', true)
         }
