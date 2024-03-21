@@ -458,7 +458,7 @@
                     //   name: 'zona_id',
                     // },                    
                     {
-                        label: 'TGL BATAS TIDAK BOLEH LUAR KOTA',
+                        label: 'TGL BATAS TDK BOLEH LUAR KOTA',
                         name: 'tglbatastidakbolehluarkota',
                         formatter: "date",
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
@@ -467,6 +467,11 @@
                             srcformat: "ISO8601Long",
                             newformat: "d-m-Y"
                         }
+                    },
+                    {
+                        label: 'Ket. TDK BOLEH LUAR KOTA',
+                        name: 'keterangantidakbolehluarkota',
+                        width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
                     },
                     {
                         label: 'angsuran pinjaman',
