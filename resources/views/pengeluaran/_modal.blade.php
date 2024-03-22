@@ -1269,6 +1269,9 @@
         }
         element.val(bank.namabank)
         element.data('currentValue', element.val())
+        $('#crudForm [name=alatbayar_id]').first().val('')
+        $('#crudForm [name=alatbayar]').first().val('')
+        $('#crudForm [name=alatbayar]').data('currentValue', '')
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
@@ -1277,6 +1280,9 @@
         $('#crudForm [name=bank_id]').first().val('')
         element.val('')
         element.data('currentValue', element.val())
+        $('#crudForm [name=alatbayar_id]').first().val('')
+        $('#crudForm [name=alatbayar]').first().val('')
+        $('#crudForm [name=alatbayar]').data('currentValue', '')
       }
     })
 
