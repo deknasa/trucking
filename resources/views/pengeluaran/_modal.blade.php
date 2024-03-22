@@ -523,6 +523,9 @@
             if (selectedRows.length > 0) {
               clearSelectedRows()
             }
+
+            enableTglJatuhTempo(form)
+            enableNoWarkat(form)
             $('#crudModal').modal('show')
             if (isEditTgl == 'TIDAK') {
               form.find(`[name="tglbukti"]`).prop('readonly', true)
@@ -593,6 +596,9 @@
           .then(() => {
             clearSelectedRows()
             $('#gs_').prop('checked', false)
+            
+            enableTglJatuhTempo(form)
+            enableNoWarkat(form)
             $('#crudModal').modal('show')
             $('#crudForm [name=tglbukti]').attr('readonly', true)
             $('#crudForm [name=tglbukti]').siblings('.input-group-append').remove()
@@ -637,6 +643,8 @@
             if (selectedRows.length > 0) {
               clearSelectedRows()
             }
+            enableTglJatuhTempo(form)
+            enableNoWarkat(form)
             $('#crudModal').modal('show')
           })
           .catch((error) => {
@@ -692,6 +700,8 @@
             if (selectedRows.length > 0) {
               clearSelectedRows()
             }
+            enableTglJatuhTempo(form)
+            enableNoWarkat(form)
             $('#crudModal').modal('show')
             form.find(`.hasDatepicker`).prop('readonly', true)
             form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
@@ -1065,7 +1075,7 @@
     if (isTheFirstRow == 0) {
       detailRow.find(`[name="tgljatuhtempo[]"]`).addClass('first-input');
       detailRow.find(`[name="tgljatuhtempo[]"]`).val(tglbukti).trigger('change');
-    }  else {
+    } else {
       let firstDateVal = $('#table_body tr:first').find(`[name="tgljatuhtempo[]"]`).val();
       detailRow.find(`[name="tgljatuhtempo[]"]`).val(firstDateVal).trigger('change');
     }
