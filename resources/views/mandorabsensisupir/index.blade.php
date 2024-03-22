@@ -40,7 +40,7 @@
               <th width="2%">No</th>
               <th width="8%">Trado</th>
               <th width="12%">Supir</th>
-              <th width="12%">Status</th>
+              <th width="10%">Status</th>
               <th width="8%">jlh trip</th>
               <th width="15%">Keterangan</th>
               <th width="6%">tgl batas</th>
@@ -82,6 +82,8 @@
   let firstPage = false;
   var currentPage = 0;
   let isTradoMilikSupir =''
+  let dataAbsensi = {}
+
   $(document).ready(function() {
     // setTradoMilikSupir()
     initDatepicker('datepickerIndex')
@@ -106,6 +108,68 @@
     filtersEditAll(dataColumn)
     bindKeyPagerEditAll()
     totalInfoPage()
+
+    $(document).on('click', '#btnSubmitAbsen', function(event) {
+      event.preventDefault()
+
+      let method
+      let url
+      let form = $('#crudForm')
+      let action = form.data('action')
+      
+      $('.trow').each((index, element) => {
+        let idRow = $(element).find(`[name="id[]"]`).val();
+        pushToObject(idRow, null, null)
+      })
+
+      $.ajax({
+        url: `${apiUrl}mandorabsensisupir`,
+        method: 'POST',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          data: JSON.stringify(dataAbsensi)
+        },
+        success: response => {
+          getAll(1, 0, filterObject)
+          dataAbsensi = {}
+          isEditing()
+        },
+        error: error => {
+          $(".ui-state-error").removeClass("ui-state-error");
+
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+          errors = error.responseJSON.errors
+          $.each(errors, (index, error) => {
+            let indexes = index.split(".");
+            let angka = indexes[0]
+            let col = indexes[1]
+            let element = $(`#row${angka}`).find(`[name="${col}[]"]`);
+            if ($(element).length > 0 && !$(element).is(":hidden")) {
+              $(element).addClass("is-invalid");
+              $(`
+              <div class="invalid-feedback">
+              ${error[0].toLowerCase()}
+              </div>
+              `).appendTo($(element).parent());
+            } else {
+              console.log(error);
+              return showDialog(error);
+            }
+          });
+        },
+      }).always(() => {
+        $('#processingLoader').addClass('d-none')
+        $(this).removeAttr('disabled')
+      })
+
+
+
+    })
+
   })
 
   function getAll(page, limit = 0, filters = [], date = '') {
@@ -150,20 +214,21 @@
     let tradosupir = data.attributes.tradosupir
     $.each(data.data, (index, detail) => {
       let detailRow = $(`
-      <tr>
+      <tr id="row${detail.id}" class="trow row_id${detail.id} index${index}">
         <td></td>
         <td>
+          <input type="hidden" name="id[]" value="${detail.id}">
           <input type="hidden" name="trado_id[]" value="${detail.trado_id}">
-          <input type="text" name="trado[]" data-current-value="${detail.kodetrado}" class="form-control" value="${detail.kodetrado}" readonly>
+          <input type="text" name="kodetrado[]" data-current-value="${detail.kodetrado}" class="form-control" value="${detail.kodetrado}" readonly>
         </td>
         <td>
-          <input type="hidden" name="supir_old[]" id="supir_old_row_${index}" value="${detail.namasupir_old}">
+          <input type="hidden" name="namasupir_old[]" id="supir_old_row_${index}" value="${detail.namasupir_old}">
           <input type="hidden" name="supir_id_old[]" id="supir_old_id_row_${index}" value="${detail.supir_id_old}">
 
           <input type="hidden" name="supir_id[]" id="supir_id_row_${index}">
-          <input type="text" name="supir[]" data-current-value="" class="form-control supir-editable supir-lookup-${index}" id="supir_row_${index}" value="">
+          <input type="text" name="namasupir[]" data-current-value="" class="form-control supir-editable supir-lookup-${index}" id="supir_row_${index}" value="">
         </td>
-       
+        
         <td>
           <input type="hidden" name="absen_id[]" value="${detail.absen_id}">
           <input type="text" name="absentrado[]"  data-current-value="" class="form-control  absentrado-lookup-${index}" value="">
@@ -173,7 +238,7 @@
           <input type="text" class="form-control inputmask-time" hidden name="jam[]" value="${detail.jam}"></input>
         </td>
         <td>
-          <input type="text" name="keterangan_detail[]" class="form-control" value="" autocomplete="off">
+          <input type="text" name="keterangan[]" class="form-control" value="" autocomplete="off">
         </td>
         <td>
           <input type="text" class="form-control autonumeric" name="tglbatas[]" value="${detail.tglbatas}" disabled></input>
@@ -182,6 +247,7 @@
           <button data-trado="${detail.trado_id}" data-supir="${detail.supir_id}" data-id="${detail.id}" class="btn btn-danger btn-sm delete-row"><i class="fa fa-trash"></i> Delete</button>
         </td>
        
+        <input type="hidden" name="tglbukti[]" value="${detail.tglbukti}">
         <input type="hidden" name="namasupir_old[]" value="${detail.namasupir_old}">
         <input type="hidden" name="supirold_id[]" value="${detail.supir_id_old}">
 
@@ -191,11 +257,11 @@
 
       detailRow.find(`[name="supir_id[]"]`).val(detail.supir_id)
       if (detail.namasupir) {
-        detailRow.find(`[name="supir[]"]`).val(detail.namasupir)
-        detailRow.find(`[name="supir[]"]`).attr("data-current-value", detail.namasupir);
+        detailRow.find(`[name="namasupir[]"]`).val(detail.namasupir)
+        detailRow.find(`[name="namasupir[]"]`).attr("data-current-value", detail.namasupir);
       }
       if (detail.keterangan) {
-        detailRow.find(`[name="keterangan_detail[]"]`).val(detail.keterangan)
+        detailRow.find(`[name="keterangan[]"]`).val(detail.keterangan)
       }
       if (detail.absentrado) {
         detailRow.find(`[name="absentrado[]"]`).val(detail.absentrado)
@@ -203,9 +269,7 @@
       }
       // console.log(response.attributes.tradosupir);
       initLookupDetail(index, detailRow, detail);
-      
-      
-      
+
       if (tradosupir === true) {
         $(`.supir-editable`).last().parents('td').children().find('input').attr('readonly',true)
         $(`.supir-editable`).last().parents('td').children().find('.lookup-toggler').attr('disabled', true)
@@ -215,11 +279,36 @@
         $(`.supir-editable`).last().parents('td').children().find('.lookup-toggler').attr('disabled', false)
         $(`.supir-editable`).last().parents('td').children().find('.button-clear').attr('disabled', false)
       }
+
+      // supir
+      // absentrado
+      // keterangan_detail
       
+      pushToObject(detail.id,null,null)
 
     })
     
     setRowNumbers()
+  }
+
+  function pushToObject(id, cell, value) {
+    if (dataAbsensi.hasOwnProperty(String(id))) {
+      delete dataAbsensi[String(id)];
+    }
+    let rowElement = $(`#row${id}`)
+    dataAbsensi[id] = {
+      id: $(rowElement).find(`[name="id[]"]`).val(),
+      trado_id: ( $(rowElement).find(`[name="trado_id[]"]`).val() != "null") ? $(rowElement).find(`[name="trado_id[]"]`).val() : 0,
+      supir_id: ( $(rowElement).find(`[name="supir_id[]"]`).val() != "null") ? $(rowElement).find(`[name="supir_id[]"]`).val() : 0,
+      supirold_id: ( $(rowElement).find(`[name="supirold_id[]"]`).val() != "null") ? $(rowElement).find(`[name="supirold_id[]"]`).val() : 0,
+      absen_id: ( $(rowElement).find(`[name="absen_id[]"]`).val() != "null") ? $(rowElement).find(`[name="absen_id[]"]`).val() : 0,
+      kodetrado: ( $(rowElement).find(`[name="kodetrado[]"]`).val() != 'null') ? $(rowElement).find(`[name="kodetrado[]"]`).val() :"",
+      namasupir: ( $(rowElement).find(`[name="namasupir[]"]`).val() != 'null') ? $(rowElement).find(`[name="namasupir[]"]`).val() :"",
+      namasupir_old: ( $(rowElement).find(`[name="namasupir_old[]"]`).val() )? $(rowElement).find(`[name="namasupir_old[]"]`).val() :"",
+      absentrado: ( $(rowElement).find(`[name="absentrado[]"]`).val() != 'null') ? $(rowElement).find(`[name="absentrado[]"]`).val() :"",
+      keterangan: ( $(rowElement).find(`[name="keterangan[]"]`).val() != 'null') ? $(rowElement).find(`[name="keterangan[]"]`).val() :"",
+      tglbukti: ( $(rowElement).find(`[name="tglbukti[]"]`).val() != 'null') ? $(rowElement).find(`[name="tglbukti[]"]`).val() :"",
+    }
   }
 
   function setTradoMilikSupir() {
