@@ -62,37 +62,37 @@
 
     let selectedbukti = [];
 
-function checkboxHandler(element) {
-  let value = $(element).val();
-  let valuebukti=$(`#jqGrid tr#${value}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
-  if (element.checked) {
-    selectedRows.push($(element).val())
-    selectedbukti.push(valuebukti)
-    $(element).parents('tr').addClass('bg-light-blue')
-  } else {
-    $(element).parents('tr').removeClass('bg-light-blue')
-    for (var i = 0; i < selectedRows.length; i++) {
-      if (selectedRows[i] == value) {
-        selectedRows.splice(i, 1);
-      }
-    }
-    if (selectedRows.length != $('#jqGrid').jqGrid('getGridParam').records) {
-      $('#gs_').prop('checked', false)
-    }
+    function checkboxHandler(element) {
+        let value = $(element).val();
+        let valuebukti = $(`#jqGrid tr#${value}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
+        if (element.checked) {
+            selectedRows.push($(element).val())
+            selectedbukti.push(valuebukti)
+            $(element).parents('tr').addClass('bg-light-blue')
+        } else {
+            $(element).parents('tr').removeClass('bg-light-blue')
+            for (var i = 0; i < selectedRows.length; i++) {
+                if (selectedRows[i] == value) {
+                    selectedRows.splice(i, 1);
+                }
+            }
+            if (selectedRows.length != $('#jqGrid').jqGrid('getGridParam').records) {
+                $('#gs_').prop('checked', false)
+            }
 
-    for (var i = 0; i < selectedbukti.length; i++) {
-      if (selectedbukti[i] ==valuebukti ) {
-        selectedbukti.splice(i, 1);
-      }
+            for (var i = 0; i < selectedbukti.length; i++) {
+                if (selectedbukti[i] == valuebukti) {
+                    selectedbukti.splice(i, 1);
+                }
+            }
+
+            if (selectedbukti.length != $('#jqGrid').jqGrid('getGridParam').records) {
+                $('#gs_').prop('checked', false)
+            }
+
+        }
+
     }
-
-    if (selectedbukti.length != $('#jqGrid').jqGrid('getGridParam').records) {
-      $('#gs_').prop('checked', false)
-    }
-
-  }
-
-}
 
     setSpaceBarCheckedHandler()
     reloadGrid()
@@ -514,7 +514,9 @@ function checkboxHandler(element) {
                                     if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                         showDialog('Harap pilih salah satu record')
                                     } else {
-                                        cekValidasi(selectedId, 'PRINTER BESAR')
+                                        nobukti = $(`#jqGrid tr#${selectedId}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
+
+                                        cekValidasi(selectedId, 'PRINTER BESAR', nobukti)
                                     }
                                     clearSelectedRows()
                                     $('#gs_').prop('checked', false)
@@ -528,7 +530,9 @@ function checkboxHandler(element) {
                                     if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                         showDialog('Harap pilih salah satu record')
                                     } else {
-                                        cekValidasi(selectedId, 'PRINTER KECIL')
+                                        nobukti = $(`#jqGrid tr#${selectedId}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
+
+                                        cekValidasi(selectedId, 'PRINTER KECIL', nobukti)
                                     }
                                     clearSelectedRows()
                                     $('#gs_').prop('checked', false)
@@ -605,7 +609,8 @@ function checkboxHandler(element) {
                             if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                 showDialog('Harap pilih salah satu record')
                             } else {
-                                cekValidasi(selectedId, 'EDIT')
+                                nobukti = $(`#jqGrid tr#${selectedId}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
+                                cekValidasi(selectedId, 'EDIT', nobukti)
                             }
                         }
                     },
@@ -619,7 +624,9 @@ function checkboxHandler(element) {
                             if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                 showDialog('Harap pilih salah satu record')
                             } else {
-                                cekValidasi(selectedId, 'DELETE')
+                                nobukti = $(`#jqGrid tr#${selectedId}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
+
+                                cekValidasi(selectedId, 'DELETE', nobukti)
                             }
                         }
                     },
@@ -824,7 +831,7 @@ function checkboxHandler(element) {
             },
             success: (response) => {
                 selectedRows = response.data.map((datas) => datas.id)
-                selectedbukti =response.data.map((datas) => datas.nobukti)
+                selectedbukti = response.data.map((datas) => datas.nobukti)
                 $('#jqGrid').trigger('reloadGrid')
             }
         })
