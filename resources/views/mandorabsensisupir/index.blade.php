@@ -97,6 +97,8 @@
     $(document).on('click', '#btnReload', function(event) {
       dataAbsensi = {}
       getAll(1, 0, filterObject)
+    //deleted_id
+
       let dataColumn = ["kodetrado","namasupir","absentrado","jlhtrip","keterangan"] 
       filtersEditAll(dataColumn)
       bindKeyPagerEditAll()
@@ -104,6 +106,7 @@
     })
 
     getAll(1, 0, filterObject)
+    //deleted_id
     let dataColumn = ["kodetrado","namasupir","absentrado","jlhtrip","keterangan"] 
     filtersEditAll(dataColumn)
     bindKeyPagerEditAll()
@@ -122,6 +125,7 @@
         pushToObject(idRow, null, null)
       })
 
+      $('#processingLoader').removeClass('d-none')
       $.ajax({
         url: `${apiUrl}mandorabsensisupir`,
         method: 'POST',
@@ -134,8 +138,8 @@
         },
         success: response => {
           getAll(1, 0, filterObject)
+          //deleted_id
           dataAbsensi = {}
-          isEditing()
         },
         error: error => {
           $(".ui-state-error").removeClass("ui-state-error");
@@ -172,16 +176,19 @@
 
   })
 
-  function getAll(page, limit = 0, filters = [], date = '') {
+  function getAll(page, limit = 0, filters = [], date = '',deleted_id =0) {
     let data  ={
       page: page,
       limit: limit,
       sortIndex: 'kodetrado',
       sortOrder: 'asc',
       filters: JSON.stringify(filters),
-      tglbukaabsensi: $('#tglbukaabsensi').val()      
+      tglbukaabsensi: $('#tglbukaabsensi').val(),
+      deleted_id: deleted_id,
     
     }
+    $('#processingLoader').removeClass('d-none')
+
     let url = 'mandorabsensisupir'
     getIndex(url, data)
     .then((response) => {
@@ -190,9 +197,10 @@
       $('.invalid-feedback').remove()
       setTableMandoAbsensi(response)
      
-
+      $('#processingLoader').addClass('d-none')
       
     }).catch((error) => {
+      $('#processingLoader').addClass('d-none')
       if (error.status === 422) {
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
@@ -335,6 +343,82 @@
     elements.each((index, element) => {
       $(element).text(index + 1)
     })
+  }
+
+  $(document).on('click', '.delete-row', function(event) {
+    let tradoId = $(this).data('trado')
+    let supirId = $(this).data('supir')
+    let id = $(this).data('id')
+    cekValidasi(tradoId, supirId, 'deleteFromAll', id)
+  })
+
+  function deleteFromAll(tradoId, supirId,rowId) {
+    // $(this).attr('disabled', '')
+    $('#processingLoader').removeClass('d-none')
+    $.ajax({
+      url: `${apiUrl}mandorabsensisupir/${tradoId}`,
+      method: 'GET',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        tanggal: $('#tglshow').val(),
+        supir_id: supirId,
+
+      },
+      success: response => {
+
+        let msg = `YAKIN HAPUS ABSENSI `
+        let supirtrado = `${response.data.trado}`
+        if (response.data.supir) {
+          supirtrado += ` - ${response.data.supir}`
+        }
+        showConfirm(msg, supirtrado)
+          .then(function() {
+            $('#processingLoader').removeClass('d-none')
+            $.ajax({
+              url: `${apiUrl}mandorabsensisupir`,
+              method: 'POST',
+              dataType: 'JSON',
+              data: {
+                data: JSON.stringify(dataAbsensi),
+                deleted_id: rowId
+              },
+              headers: {
+                Authorization: `Bearer ${accessToken}`
+              },
+              success: response => {
+                getAll(1, 0, filterObject,'',rowId)
+                //deleted_id
+                dataAbsensi = {}
+                // deleteStatic(rowId,' ');
+              },
+
+              error: error => {
+                if (error.status === 422) {
+                  $('.is-invalid').removeClass('is-invalid')
+                  $('.invalid-feedback').remove()
+
+                  setErrorMessages($("#crudForm"), error.responseJSON.errors);
+                } else {
+                  showDialog(error.responseJSON)
+                }
+              },
+            }).always(() => {
+              $('#processingLoader').addClass('d-none')
+            })
+
+          })
+
+      },
+      error: error => {
+        reject(error)
+      }
+    }).always(() => {
+      $('#processingLoader').addClass('d-none')
+    })
+    
   }
 
   function initLookupDetail(index, detailRow, detail) {
