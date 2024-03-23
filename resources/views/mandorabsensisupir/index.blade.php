@@ -468,7 +468,7 @@
           trado_id: detail.trado_id,
           supir_id: detail.supir_id,
           supirold_id: detail.supir_id_old,
-          tglabsensi: $('#tglbukti').val(),
+          tglabsensi: $('#tglbukaabsensi').val(),
           dari: 'mandorabsensisupir',
         }
       },
