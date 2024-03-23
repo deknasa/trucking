@@ -136,6 +136,7 @@
     let modalBody = $('#crudModal').find('.modal-body').html()
     let bankDariId
     let bankKeId
+    let bankId
 
     $(document).ready(function() {
 
@@ -272,6 +273,7 @@
 
         setFormBindKeys(form)
 
+        form.find('#btnSubmit').prop('disabled', false)
         if (form.data('action') == "view") {
             form.find('#btnSubmit').prop('disabled', true)
         }
@@ -285,7 +287,18 @@
         activeGrid = '#jqGrid'
 
         $('#crudModal').find('.modal-body').html(modalBody)
+
+        bankDariId = ''
+        bankKeId = ''
+        bankId = ''
     })
+
+    $(document).on('change', `#crudForm [name="tglbukti"]`, function() {
+        if ($(`#crudForm [name="alatbayar"]`).val() != 'GIRO') {
+            $('#crudForm').find(`[name="tgljatuhtempo"]`).val($(this).val()).trigger('change');
+        }
+    });
+
 
     function createPindahBuku() {
         let form = $('#crudForm')
@@ -312,6 +325,9 @@
                 if (selectedRows.length > 0) {
                     clearSelectedRows()
                 }
+
+                enableTglJatuhTempo(form)
+                enableNoWarkat(form)
                 $('#crudModal').modal('show')
             })
             .catch((error) => {
@@ -343,6 +359,8 @@
                 if (selectedRows.length > 0) {
                     clearSelectedRows()
                 }
+                enableTglJatuhTempo(form)
+                enableNoWarkat(form)
                 $('#crudModal').modal('show')
             })
             .catch((error) => {
@@ -376,6 +394,8 @@
                 if (selectedRows.length > 0) {
                     clearSelectedRows()
                 }
+                enableTglJatuhTempo(form)
+                enableNoWarkat(form)
                 $('#crudModal').modal('show')
             })
             .catch((error) => {
@@ -428,6 +448,8 @@
                 if (selectedRows.length > 0) {
                     clearSelectedRows()
                 }
+                enableTglJatuhTempo(form)
+                enableNoWarkat(form)
                 $('#crudModal').modal('show')
                 form.find(`.hasDatepicker`).prop('readonly', true)
                 form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').remove()
@@ -489,28 +511,39 @@
     }
 
     function showDefault(form) {
-        $.ajax({
-            url: `${apiUrl}pindahbuku/default`,
-            method: 'GET',
-            dataType: 'JSON',
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            },
-            success: response => {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: `${apiUrl}pindahbuku/default`,
+                method: 'GET',
+                dataType: 'JSON',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                success: response => {
 
-                $.each(response.data, (index, value) => {
-                    let element = form.find(`[name="${index}"]`)
+                    $.each(response.data, (index, value) => {
+                        let element = form.find(`[name="${index}"]`)
 
-                    if (element.is('select')) {
-                        element.val(value).trigger('change')
-                    } else {
-                        element.val(value)
-                    }
-                    if (index == 'alatbayar') {
-                        element.data('current-value', value)
-                    }
-                })
-            }
+                        if (element.is('select')) {
+                            element.val(value).trigger('change')
+                        } else {
+                            element.val(value)
+                        }
+                        if (index == 'alatbayar') {
+                            element.data('current-value', value)
+                        }
+                        if (index == 'bankdari') {
+                            element.data('current-value', value)
+                        }
+                    })
+                    resolve()
+                    bankId = response.data.bankdari_id
+                    bankDariId = response.data.bankdari_id
+                },
+                error: error => {
+                    reject(error)
+                }
+            })
         })
     }
 
@@ -527,9 +560,13 @@
             },
             onSelectRow: (bank, element) => {
                 bankDariId = bank.id
+                bankId = bank.id
                 $('#crudForm [name=bankdari_id]').first().val(bank.id)
                 element.val(bank.namabank)
                 element.data('currentValue', element.val())
+                $('#crudForm [name=alatbayar_id]').first().val('')
+                $('#crudForm [name=alatbayar]').first().val('')
+                $('#crudForm [name=alatbayar]').data('currentValue', '')
             },
             onCancel: (element) => {
                 element.val(element.data('currentValue'))
@@ -538,6 +575,10 @@
                 $('#crudForm [name=bankdari_id]').first().val('')
                 element.val('')
                 element.data('currentValue', element.val())
+                bankDariId = ''
+                $('#crudForm [name=alatbayar_id]').first().val('')
+                $('#crudForm [name=alatbayar]').first().val('')
+                $('#crudForm [name=alatbayar]').data('currentValue', '')
             }
         })
 
@@ -564,6 +605,7 @@
                 $('#crudForm [name=bankke_id]').first().val('')
                 element.val('')
                 element.data('currentValue', element.val())
+                bankKeId = ''
             }
         })
 
@@ -572,7 +614,7 @@
             fileName: 'alatbayar',
             beforeProcess: function(test) {
                 this.postData = {
-
+                    bank_Id: bankId,
                     Aktif: 'AKTIF',
                 }
             },
@@ -580,6 +622,8 @@
                 $('#crudForm [name=alatbayar_id]').first().val(alatbayar.id)
                 element.val(alatbayar.namaalatbayar)
                 element.data('currentValue', element.val())
+                enableTglJatuhTempo($(`#crudForm`))
+                enableNoWarkat($(`#crudForm`))
             },
             onCancel: (element) => {
                 element.val(element.data('currentValue'))
@@ -590,6 +634,30 @@
                 element.data('currentValue', element.val())
             }
         })
+    }
+
+
+    function enableTglJatuhTempo(el) {
+        if ($(`#crudForm [name="alatbayar"]`).val() == 'GIRO') {
+            el.find(`[name="tgljatuhtempo"]`).addClass('datepicker')
+            el.find(`[name="tgljatuhtempo"]`).attr('readonly', false)
+            initDatepicker()
+            el.find(`[name="tgljatuhtempo"]`).parent('.input-group').find('.input-group-append').show()
+        } else {
+            el.find(`[name="tgljatuhtempo"]`).removeClass('datepicker')
+            el.find(`[name="tgljatuhtempo"]`).parent('.input-group').find('.input-group-append').hide()
+            el.find(`[name="tgljatuhtempo"]`).val($('#crudForm').find(`[name="tglbukti"]`).val()).trigger('change');
+            el.find(`[name="tgljatuhtempo"]`).attr('readonly', true)
+        }
+    }
+
+    function enableNoWarkat(el) {
+        if ($(`#crudForm [name="alatbayar"]`).val() != 'TUNAI') {
+            el.find(`[name="nowarkat"]`).attr('readonly', false)
+        } else {
+            el.find(`[name="nowarkat"]`).attr('readonly', true)
+            el.find(`[name="nowarkat"]`).val('')
+        }
     }
 </script>
 @endpush()

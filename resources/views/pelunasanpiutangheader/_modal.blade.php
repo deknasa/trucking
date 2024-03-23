@@ -133,7 +133,7 @@
                 <input type="text" name="notadebet_nobukti" class="form-control notadebet-lookup" readonly>
               </div>
             </div>
-            <div class="row form-group mb-5">
+            <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
                   NO WARKAT
@@ -141,6 +141,18 @@
               </div>
               <div class="col-8 col-md-10">
                 <input type="text" name="nowarkat" class="form-control">
+              </div>
+            </div>
+            <div class="row form-group mb-5">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
+                  TGL JATUH TEMPO
+                </label>
+              </div>
+              <div class="col-8 col-md-10">
+                <div class="input-group">
+                  <input type="text" name="tgljatuhtempo" class="form-control datepicker">
+                </div>
               </div>
             </div>
 
@@ -220,6 +232,7 @@
   let isEditTgl
   let statusDebet = {}
   let statusKredit = {}
+  let topAgen = 0
   $(document).ready(function() {
 
     $("#crudForm [name]").attr("autocomplete", "off");
@@ -372,6 +385,10 @@
       data.push({
         name: 'nowarkat',
         value: form.find(`[name="nowarkat"]`).val()
+      })
+      data.push({
+        name: 'tgljatuhtempo',
+        value: form.find(`[name="tgljatuhtempo"]`).val()
       })
       data.push({
         name: 'penerimaan_nobukti',
@@ -568,7 +585,7 @@
               row = parseInt(selectedRows[angka]) - 1;
               let element;
 
-              if (indexes[0] == 'alatbayar' || indexes[0] == 'statuspelunasan' || indexes[0] == 'id' || indexes[0] == 'tglbukti' || indexes[0] == 'bank' || indexes[0] == 'nowarkat' || indexes[0] == 'agen' || indexes[0] == 'piutang_id' || indexes[0] == 'notadebet_nobukti') {
+              if (indexes[0] == 'alatbayar' || indexes[0] == 'statuspelunasan' || indexes[0] == 'id' || indexes[0] == 'tglbukti' || indexes[0] == 'bank' || indexes[0] == 'nowarkat' || indexes[0] == 'agen' || indexes[0] == 'tgljatuhtempo' || indexes[0] == 'piutang_id' || indexes[0] == 'notadebet_nobukti') {
                 if (indexes.length > 1) {
                   element = form.find(`[name="${indexes[0]}[]"]`)[row];
                 } else {
@@ -695,9 +712,33 @@
     new AutoNumeric('#sisaPiutang').set(bayar)
   }
 
+  function enableTglJatuhTempo(el) {
+    if ($(`#crudForm [name="alatbayar"]`).val() == 'GIRO') {
+      el.find(`[name="tgljatuhtempo"]`).addClass('datepicker')
+      el.find(`[name="tgljatuhtempo"]`).attr('readonly', false)
+      initDatepicker()
+      el.find(`[name="tgljatuhtempo"]`).parent('.input-group').find('.input-group-append').show()
+    } else {
+      el.find(`[name="tgljatuhtempo"]`).removeClass('datepicker')
+      el.find(`[name="tgljatuhtempo"]`).parent('.input-group').find('.input-group-append').hide()
+      el.find(`[name="tgljatuhtempo"]`).val($('#crudForm').find(`[name="tglbukti"]`).val()).trigger('change');
+      el.find(`[name="tgljatuhtempo"]`).attr('readonly', true)
+    }
+  }
+
+  function enableNoWarkat(el) {
+    if ($(`#crudForm [name="alatbayar"]`).val() != 'TUNAI') {
+      el.find(`[name="nowarkat"]`).attr('readonly', false)
+    } else {
+      el.find(`[name="nowarkat"]`).attr('readonly', true)
+      el.find(`[name="nowarkat"]`).val('')
+    }
+  }
+
+
   function notaDebetSelected(status) {
     if (status) {
-      $('[name=bank]').parents('.form-group').hide()      
+      $('[name=bank]').parents('.form-group').hide()
       $('[name=alatbayar]').parents('.form-group').hide()
       $("#tablePelunasan").jqGrid('setColProp', 'nominallebihbayar', {
         editable: false
@@ -713,14 +754,14 @@
         $("#tablePelunasan").jqGrid("setCell", value, "statusnotadebet", 0);
         $(`#tablePelunasan tr#${value}`).find(`td[aria-describedby="tablePelunasan_statusnotadebet"]`).attr("value", 0).trigger('change')
       })
-      
+
       let notadebet_nobukti = $('#crudForm').find(`[name="notadebet_nobukti"]`).parents('.input-group').children()
       notadebet_nobukti.attr('readonly', false)
       notadebet_nobukti.parents('.input-group').find('.button-clear').attr('disabled', false)
       notadebet_nobukti.find('.lookup-toggler').attr('disabled', false)
 
-    }else{
-      $('[name=bank]').parents('.form-group').show()      
+    } else {
+      $('[name=bank]').parents('.form-group').show()
       $('[name=alatbayar]').parents('.form-group').show()
       $('[name=notadebet_nobukti]').val('')
       let notadebet_nobukti = $('#crudForm').find(`[name="notadebet_nobukti"]`).parents('.input-group').children()
@@ -728,8 +769,14 @@
       notadebet_nobukti.parents('.input-group').find('.button-clear').attr('disabled', true)
       notadebet_nobukti.find('.lookup-toggler').attr('disabled', true)
     }
-    
+
   }
+
+  $(document).on('change', `#crudForm [name="tglbukti"]`, function() {
+    if ($(`#crudForm [name="alatbayar"]`).val() != 'GIRO') {
+      $('#crudForm').find(`[name="tgljatuhtempo"]`).val($(this).val()).trigger('change');
+    }
+  });
 
   function createPelunasanPiutangHeader() {
     let form = $('#crudForm')
@@ -758,6 +805,8 @@
           clearSelectedRows()
         }
         loadPelunasanGrid()
+        enableTglJatuhTempo(form)
+        enableNoWarkat(form)
         $('#crudModal').modal('show')
       })
       .catch((error) => {
@@ -1118,7 +1167,7 @@
             editoptions: {
               class: 'statuskredit',
               value: function() {
-                var rowData =  $("#tablePelunasan").jqGrid('getGridParam', 'selrow')
+                var rowData = $("#tablePelunasan").jqGrid('getGridParam', 'selrow')
                 return getStatusKredit(rowData);
               },
               // value: getStatusKredit(this),
@@ -1735,6 +1784,8 @@
             if (selectedRows.length > 0) {
               clearSelectedRows()
             }
+            enableTglJatuhTempo(form)
+            enableNoWarkat(form)
             $('#crudModal').modal('show')
             if (isEditTgl == 'TIDAK') {
               form.find(`[name="tglbukti"]`).prop('readonly', true)
@@ -1782,6 +1833,8 @@
             if (selectedRows.length > 0) {
               clearSelectedRows()
             }
+            enableTglJatuhTempo(form)
+            enableNoWarkat(form)
             $('#crudModal').modal('show')
             form.find(`[name="agen"]`).parent('.input-group').find('.button-clear').remove()
             form.find(`[name="agen"]`).parent('.input-group').find('.input-group-append').remove()
@@ -1849,6 +1902,8 @@
             if (selectedRows.length > 0) {
               clearSelectedRows()
             }
+            enableTglJatuhTempo(form)
+            enableNoWarkat(form)
             $('#crudModal').modal('show')
             form.find('[name=tglbukti]').attr('readonly', true)
             form.find('[name=tglbukti]').siblings('.input-group-append').remove()
@@ -2415,6 +2470,9 @@
         $('#crudForm [name=bank_id]').first().val(bank.id)
         element.val(bank.namabank)
         element.data('currentValue', element.val())
+        $('#crudForm [name=alatbayar_id]').first().val('')
+        $('#crudForm [name=alatbayar]').first().val('')
+        $('#crudForm [name=alatbayar]').data('currentValue', '')
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
@@ -2423,6 +2481,10 @@
         $('#crudForm [name=bank_id]').first().val('')
         element.val('')
         element.data('currentValue', element.val())
+
+        $('#crudForm [name=alatbayar_id]').first().val('')
+        $('#crudForm [name=alatbayar]').first().val('')
+        $('#crudForm [name=alatbayar]').data('currentValue', '')
       }
     })
 
@@ -2440,6 +2502,10 @@
         $('#crudForm [name=alatbayar_id]').first().val(alatbayar.id)
         element.val(alatbayar.namaalatbayar)
         element.data('currentValue', element.val())
+        enableTglJatuhTempo($(`#crudForm`))
+        enableNoWarkat($(`#crudForm`))
+        
+        setTOP()
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
@@ -2450,7 +2516,7 @@
         element.data('currentValue', element.val())
       }
     })
-    
+
     $('.notadebet-lookup').lookup({
       title: 'nota debet Lookup',
       fileName: 'notadebetheader',
@@ -2490,6 +2556,8 @@
         $('#crudForm [name=agen_id]').first().val(agen.id)
         agenId = agen.id
         element.val(agen.namaagen)
+        topAgen = agen.top
+        setTOP()
         // getPiutang(agen.id)
         $('#tablePelunasan').jqGrid("clearGridData");
         $("#tablePelunasan")
@@ -2529,6 +2597,7 @@
         //   })
         //   .trigger("reloadGrid");
 
+        topAgen = 0
         console.log('onclear', $("#tablePelunasan").jqGrid('getGridParam', 'selectedRowIds'))
         // setTimeout(() => {
         $("#tablePelunasan")[0].p.selectedRowIds = [];
@@ -2596,6 +2665,18 @@
     })
   }
 
+  function setTOP() {
+    if ($('#crudForm').find(`[name="alatbayar"]`).val() == 'GIRO') {
+
+      let dateNow = new Date();
+      dateNow.setDate(dateNow.getDate() + parseInt(topAgen));
+      let end_date = new Date(dateNow.getFullYear(), dateNow.getMonth(), dateNow.getDate());
+      formattedDate = end_date.getDate().toString().padStart(2, '0') + '-' + (end_date.getMonth() + 1).toString().padStart(2, '0') + '-' + end_date.getFullYear();
+
+      $('#crudForm').find(`[name="tgljatuhtempo"]`).val(formattedDate).trigger('change');
+
+    }
+  }
   const setTglBukti = function(form) {
     return new Promise((resolve, reject) => {
       let data = [];
@@ -2692,8 +2773,8 @@
       data: {
         grp: 'TIPENOTAKREDIT',
         subgrp: 'TIPENOTAKREDIT',
-        sortIndex:'text',
-        sortOrder:'asc',
+        sortIndex: 'text',
+        sortOrder: 'asc',
       },
       success: response => {
         statusKredit[0] = "--PILIH STATUS NOTA KREDIT--"
@@ -2703,30 +2784,30 @@
       },
     })
   }
-  
-  function getStatusKredit(rowid){
-    let localRow = $("#tablePelunasan").jqGrid("getLocalRow",rowid);
+
+  function getStatusKredit(rowid) {
+    let localRow = $("#tablePelunasan").jqGrid("getLocalRow", rowid);
     let jenisinvoice = localRow.jenisinvoice
     let tidakTampil
     let data = statusKredit
     // Melakukan filter berdasarkan nilai (value)
     if (jenisinvoice == "TAMBAHAN") {
       tidakTampil = "POTONGAN PENDAPATAN"
-    }else {
+    } else {
       tidakTampil = "POTONGAN PENDAPATAN LAIN"
     }
     var filteredValues = Object.entries(data).filter(function(entry) {
-      
-        return entry[1] !== tidakTampil; // Filter semua nilai yang bukan "UANG DIBAYAR DIMUKA"
+
+      return entry[1] !== tidakTampil; // Filter semua nilai yang bukan "UANG DIBAYAR DIMUKA"
     });
 
     // Mengonversi hasil filter kembali ke dalam objek
     var filteredObject = Object.fromEntries(filteredValues);
-    
-    
+
+
     return filteredObject;
-    
-    
+
+
   }
 </script>
 @endpush()

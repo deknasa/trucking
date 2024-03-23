@@ -103,6 +103,7 @@
       filtersEditAll(dataColumn)
       bindKeyPagerEditAll()
       totalInfoPage()
+
     })
 
     getAll(1, 0, filterObject)
@@ -139,6 +140,7 @@
         success: response => {
           getAll(1, 0, filterObject)
           //deleted_id
+
           dataAbsensi = {}
         },
         error: error => {
@@ -349,7 +351,13 @@
     let tradoId = $(this).data('trado')
     let supirId = $(this).data('supir')
     let id = $(this).data('id')
-    cekValidasi(tradoId, supirId, 'deleteFromAll', id)
+    // cekValidasi(tradoId, supirId, 'deleteFromAll', id)
+    // console.log('test')
+    Promise
+      .all([
+        deleteFromAll(tradoId, supirId,id)
+      ])
+      console.log(supirId,id)
   })
 
   function deleteFromAll(tradoId, supirId,rowId) {
@@ -392,6 +400,7 @@
                 getAll(1, 0, filterObject,'',rowId)
                 //deleted_id
                 dataAbsensi = {}
+
                 // deleteStatic(rowId,' ');
               },
 

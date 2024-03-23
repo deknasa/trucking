@@ -8408,6 +8408,7 @@
         // var levelcoa = $(`#levelcoa`).val();
         this.postData = {
           Aktif: 'AKTIF',
+          Invoice: 'UTAMA',
         }
       },
       onSelectRow: (agen, element) => {

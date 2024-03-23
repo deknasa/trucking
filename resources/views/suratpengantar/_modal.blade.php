@@ -1808,9 +1808,9 @@
         element.val(statuscontainer.keterangan)
         element.data('currentValue', element.val())
         enabledUpahSupir()
-        if (statuscontainer.kodestatuscontainer != 'FULL EMPTY') {
+        // if (statuscontainer.kodestatuscontainer != 'FULL EMPTY') {
           enableTripAsalLongTrip()
-        }
+        // }
         // getGaji()
       },
       onCancel: (element) => {
@@ -1994,6 +1994,7 @@
         this.postData = {
 
           Aktif: 'AKTIF',
+          Invoice: 'UTAMA',          
         }
       },
       onSelectRow: (agen, element) => {
@@ -2029,11 +2030,11 @@
         element.data('currentValue', element.val())
         enabledUpahSupir()
 
-        if ($('#crudForm [name=statuscontainer_id]') != 3) {
+        // if ($('#crudForm [name=statuscontainer_id]') != 3) {
           enableTripAsal()
           enableTripAsalLongTrip()
           clearTripAsal()
-        }
+        // }
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))

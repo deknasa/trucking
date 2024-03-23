@@ -26,6 +26,7 @@ class PengeluaranHeaderController extends MyController
             'combocetak' => $this->comboCetak('list','STATUSCETAK','STATUSCETAK'),
             'combobank' => $this->comboBank(),
         ];
+        
         $data = array_merge(compact('title', 'data'),
             ["request"=>$request->all()]
         );
@@ -112,7 +113,7 @@ class PengeluaranHeaderController extends MyController
     {
         $detailParams = [
             'aktif' => 'AKTIF',
-            'format' => 'pengeluaran'
+            'from' => 'pengeluaran'
         ];
         $response = Http::withHeaders($this->httpHeaders)
             ->withOptions(['verify' => false])

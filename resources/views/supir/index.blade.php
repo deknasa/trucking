@@ -16,6 +16,7 @@
 @include('supir._modalApprovalGambar') --}}
 @include('supir._modalSupirResign')
 @include('supir._modalHistoryMandor')
+@include('supir._modalApprovalSupirLuarKota')
 
 @push('scripts')
 <script>
@@ -455,7 +456,23 @@
                     // {
                     //   label: 'ZONA',
                     //   name: 'zona_id',
-                    // },
+                    // },                    
+                    {
+                        label: 'TGL BATAS TDK BOLEH LUAR KOTA',
+                        name: 'tglbatastidakbolehluarkota',
+                        formatter: "date",
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+                        align: 'left',
+                        formatoptions: {
+                            srcformat: "ISO8601Long",
+                            newformat: "d-m-Y"
+                        }
+                    },
+                    {
+                        label: 'Ket. TDK BOLEH LUAR KOTA',
+                        name: 'keterangantidakbolehluarkota',
+                        width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
+                    },
                     {
                         label: 'angsuran pinjaman',
                         name: 'angsuranpinjaman',
@@ -1025,11 +1042,17 @@
                                 text: "un/Approval Supir Luar Kota",
                                 onClick: () => {
                                     if (`{{ $myAuth->hasPermission('supir', 'approvalSupirLuarKota') }}`) {
-                                        selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                                        if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                                            showDialog('Harap pilih salah satu record')
+                                        // selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                                        // if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                                        //     showDialog('Harap pilih salah satu record')
+                                        // } else {
+                                        //     approvalSupirLuarKota(selectedId)
+                                        // }
+                                        var selectedOne = selectedOnlyOne();
+                                        if (selectedOne[0]) {
+                                            approvalLuarKota(selectedOne[1])
                                         } else {
-                                            approvalSupirLuarKota(selectedId)
+                                          showDialog(selectedOne[1])
                                         }
                                     }
                                 }

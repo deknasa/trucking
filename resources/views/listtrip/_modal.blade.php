@@ -1321,6 +1321,7 @@
                     labeljobtrucking.attr('hidden', true)
                     jobtrucking.parents('.input-group').find('.input-group-append').hide()
                     jobtrucking.parents('.input-group').find('.button-clear').hide()
+                    enableTripAsalLongTrip()
                 } else {
 
                     clearJobTrucking()
@@ -1446,6 +1447,7 @@
                 this.postData = {
 
                     Aktif: 'AKTIF',
+                    Invoice: 'UTAMA',
                 }
             },
             onSelectRow: (agen, element) => {

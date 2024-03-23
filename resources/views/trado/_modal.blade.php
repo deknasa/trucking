@@ -461,7 +461,7 @@
         showDefault(form)
           .then(() => {
             $('#crudModal').modal('show')
-            
+
             $('#crudForm').find(`.ui-datepicker-trigger`).attr('disabled', false)
             form.find(`.hasDatepicker`).parent('.input-group').find('.input-group-append').show()
 
@@ -494,7 +494,7 @@
       [name="statusgerobak"],
       [name="statusabsensisupir"]
     `), true)
-    
+
     form.find('[name]').removeAttr('disabled')
   }
 
@@ -870,18 +870,37 @@
   function assignAttachment(dropzone, data) {
     const paramName = dropzone.options.paramName
     const type = paramName.substring(5)
-
+    let buttonRemoveDropzone = `<i class="fas fa-times-circle"></i>`
     if (data[paramName] == '') {
       $('.dropzone').each((index, element) => {
         if (!element.dropzone) {
           let newDropzone = new Dropzone(element, {
             url: 'test',
+            previewTemplate: document.querySelector('.dz-preview').innerHTML,
+            thumbnailWidth: null,
+            thumbnailHeight: null,
             autoProcessQueue: false,
             addRemoveLinks: true,
+            dictRemoveFile: buttonRemoveDropzone,
             acceptedFiles: 'image/*',
+            minFilesize: 100, // Set the minimum file size in kilobytes
             paramName: $(element).data('field'),
             init: function() {
               dropzones.push(this)
+              this.on("addedfile", function(file) {
+                if (this.files.length > 5) {
+                  this.removeFile(file);
+                }
+
+                if ($(element).data('field') == 'photobpkb' || $(element).data('field') == 'photostnk') {
+
+                  if (file.size < (this.options.minFilesize * 1024)) {
+                    showDialog('ukuran file minimal 100 kb')
+                    this.removeFile(file);
+
+                  }
+                }
+              });
             }
           })
         }
@@ -1333,100 +1352,100 @@
   function getMaxLength(form) {
     if (!form.attr('has-maxlength')) {
       return new Promise((resolve, reject) => {
-      $.ajax({
-        url: `${apiUrl}trado/field_length`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          'Authorization': `Bearer ${accessToken}`
-        },
-        success: response => {
-          $.each(response.data, (index, value) => {
+        $.ajax({
+          url: `${apiUrl}trado/field_length`,
+          method: 'GET',
+          dataType: 'JSON',
+          headers: {
+            'Authorization': `Bearer ${accessToken}`
+          },
+          success: response => {
+            $.each(response.data, (index, value) => {
 
-            if (value !== null && value !== 0 && value !== undefined) {
-              form.find(`[name=${index}]`).attr('maxlength', value)
-              if (index == 'tahun') {
-                form.find(`[name=tahun]`).attr('maxlength', 4)
-              }
-              if (index == 'norangka') {
-                form.find(`[name=norangka]`).attr('maxlength', 20)
-              }
-              if (index == 'nostnk') {
-                form.find(`[name=nostnk]`).attr('maxlength', 50)
-              }
-              if (index == 'kodetrado') {
-                form.find(`[name=kodetrado]`).attr('maxlength', 12)
-              }
-              if (index == 'nomesin') {
-                form.find(`[name=nomesin]`).attr('maxlength', 20)
-              }
-              if (index == 'nobpkb') {
-                form.find(`[name=nobpkb]`).attr('maxlength', 15)
+              if (value !== null && value !== 0 && value !== undefined) {
+                form.find(`[name=${index}]`).attr('maxlength', value)
+                if (index == 'tahun') {
+                  form.find(`[name=tahun]`).attr('maxlength', 4)
+                }
+                if (index == 'norangka') {
+                  form.find(`[name=norangka]`).attr('maxlength', 20)
+                }
+                if (index == 'nostnk') {
+                  form.find(`[name=nostnk]`).attr('maxlength', 50)
+                }
+                if (index == 'kodetrado') {
+                  form.find(`[name=kodetrado]`).attr('maxlength', 12)
+                }
+                if (index == 'nomesin') {
+                  form.find(`[name=nomesin]`).attr('maxlength', 20)
+                }
+                if (index == 'nobpkb') {
+                  form.find(`[name=nobpkb]`).attr('maxlength', 15)
+                }
+
               }
 
-            }
-
-            if (index == 'jumlahsumbu') {
-              form.find(`[name=jumlahsumbu]`).attr('maxlength', 2)
-            }
-            if (index == 'isisilinder') {
-              form.find(`[name=isisilinder]`).attr('maxlength', 5)
-            }
-            if (index == 'jumlahroda') {
-              form.find(`[name=jumlahroda]`).attr('maxlength', 2)
-            }
-            if (index == 'jumlahbanserap') {
-              form.find(`[name=jumlahbanserap]`).attr('maxlength', 2)
-            }
-          })
-          dataMaxLength = response.data
+              if (index == 'jumlahsumbu') {
+                form.find(`[name=jumlahsumbu]`).attr('maxlength', 2)
+              }
+              if (index == 'isisilinder') {
+                form.find(`[name=isisilinder]`).attr('maxlength', 5)
+              }
+              if (index == 'jumlahroda') {
+                form.find(`[name=jumlahroda]`).attr('maxlength', 2)
+              }
+              if (index == 'jumlahbanserap') {
+                form.find(`[name=jumlahbanserap]`).attr('maxlength', 2)
+              }
+            })
+            dataMaxLength = response.data
             form.attr('has-maxlength', true)
             resolve()
-        },
-        error: error => {
-          showDialog(error.statusText)
-          reject()
-        }
+          },
+          error: error => {
+            showDialog(error.statusText)
+            reject()
+          }
+        })
       })
-    })
     } else {
       return new Promise((resolve, reject) => {
         $.each(dataMaxLength, (index, value) => {
           if (value !== null && value !== 0 && value !== undefined) {
-              form.find(`[name=${index}]`).attr('maxlength', value)
-              if (index == 'tahun') {
-                form.find(`[name=tahun]`).attr('maxlength', 4)
-              }
-              if (index == 'norangka') {
-                form.find(`[name=norangka]`).attr('maxlength', 20)
-              }
-              if (index == 'nostnk') {
-                form.find(`[name=nostnk]`).attr('maxlength', 50)
-              }
-              if (index == 'kodetrado') {
-                form.find(`[name=kodetrado]`).attr('maxlength', 12)
-              }
-              if (index == 'nomesin') {
-                form.find(`[name=nomesin]`).attr('maxlength', 20)
-              }
-              if (index == 'nobpkb') {
-                form.find(`[name=nobpkb]`).attr('maxlength', 15)
-              }
-
+            form.find(`[name=${index}]`).attr('maxlength', value)
+            if (index == 'tahun') {
+              form.find(`[name=tahun]`).attr('maxlength', 4)
+            }
+            if (index == 'norangka') {
+              form.find(`[name=norangka]`).attr('maxlength', 20)
+            }
+            if (index == 'nostnk') {
+              form.find(`[name=nostnk]`).attr('maxlength', 50)
+            }
+            if (index == 'kodetrado') {
+              form.find(`[name=kodetrado]`).attr('maxlength', 12)
+            }
+            if (index == 'nomesin') {
+              form.find(`[name=nomesin]`).attr('maxlength', 20)
+            }
+            if (index == 'nobpkb') {
+              form.find(`[name=nobpkb]`).attr('maxlength', 15)
             }
 
-            if (index == 'jumlahsumbu') {
-              form.find(`[name=jumlahsumbu]`).attr('maxlength', 2)
-            }
-            if (index == 'isisilinder') {
-              form.find(`[name=isisilinder]`).attr('maxlength', 5)
-            }
-            if (index == 'jumlahroda') {
-              form.find(`[name=jumlahroda]`).attr('maxlength', 2)
-            }
-            if (index == 'jumlahbanserap') {
-              form.find(`[name=jumlahbanserap]`).attr('maxlength', 2)
-            }
+          }
+
+          if (index == 'jumlahsumbu') {
+            form.find(`[name=jumlahsumbu]`).attr('maxlength', 2)
+          }
+          if (index == 'isisilinder') {
+            form.find(`[name=isisilinder]`).attr('maxlength', 5)
+          }
+          if (index == 'jumlahroda') {
+            form.find(`[name=jumlahroda]`).attr('maxlength', 2)
+          }
+          if (index == 'jumlahbanserap') {
+            form.find(`[name=jumlahbanserap]`).attr('maxlength', 2)
+          }
         })
         resolve()
       })
