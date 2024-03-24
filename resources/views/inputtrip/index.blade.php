@@ -1054,8 +1054,8 @@
             let detailRow = $(`
               <tr>
                 <td> ${detail.status} </td>
-                <td> ${numberWithCommas(detail.kmperjalanan)} </td>
-                <td> ${numberWithCommas(detail.kmtotal)} </td>
+                <td align="right"> ${numberWithCommas(detail.kmperjalanan)} </td>
+                <td align="right"> ${numberWithCommas(detail.kmtotal)} </td>
                 <input type="hidden" name="namastatus[]" value="${detail.status}">
                 <input type="hidden" name="statusbatas[]" value="${detail.statusbatas}">
                 <input type="hidden" name="jarak[]" value="${detail.jarak}">
