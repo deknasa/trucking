@@ -306,19 +306,19 @@
                     {
                         label: 'NO BUKTI GIRO',
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_3,
-                        name: 'pengeluaran_nobukti',
+                        name: 'urlpengeluaran',
                         align: 'left',
                         formatter: (value, options, rowData) => {
                             if ((value == null) || (value == '')) {
                                 return '';
                             }
-                            let tgldari = rowData.tgldariheaderpengeluaranheader
-                            let tglsampai = rowData.tglsampaiheaderpengeluaranheader
-                            let url = "{{route('pengeluaranheader.index')}}"
-                            let formattedValue = $(`
-                            <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
-                           `)
-                            return formattedValue[0].outerHTML
+                        //     let tgldari = rowData.tgldariheaderpengeluaranheader
+                        //     let tglsampai = rowData.tglsampaiheaderpengeluaranheader
+                        //     let url = "{{route('pengeluaranheader.index')}}"
+                        //     let formattedValue = $(`
+                        //     <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
+                        //    `)
+                            return value
                         }
                     },
                     {
@@ -555,6 +555,7 @@
                         }
                     }
                 ]
+                
             })
         /* Append clear filter button */
         loadClearFilter($('#jqGrid'))
