@@ -353,6 +353,11 @@
     let id = $(this).data('id')
     // cekValidasi(tradoId, supirId, 'deleteFromAll', id)
     // console.log('test')
+    $('.trow').each((index, element) => {
+        let idRow = $(element).find(`[name="id[]"]`).val();
+        pushToObject(idRow, null, null)
+      })
+
     Promise
       .all([
         deleteFromAll(tradoId, supirId,id)
@@ -377,7 +382,7 @@
       },
       success: response => {
 
-        let msg = `YAKIN HAPUS ABSENSI `
+        let msg = `YAKIN HAPUS ABSENSI. `
         let supirtrado = `${response.data.trado}`
         if (response.data.supir) {
           supirtrado += ` - ${response.data.supir}`
