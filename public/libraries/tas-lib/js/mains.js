@@ -1831,3 +1831,293 @@ function reloadGrid() {
 function preventNewTab(table){
     showDialog('TIDAK PUNYA HAK UNTUK MENGAKSES '+table)
 }
+
+
+function elementPager() {
+    let elPager = $(`
+    <div class="row d-flex align-items-center justify-content-center justify-content-lg-end pr-3">
+        <div id="PagerHandler"
+            class="pager-handler d-flex align-items-center justify-content-center mx-2">
+            <button type="button" id="firstPageButton"
+                class="btn btn-sm hover-primary mr-2 d-flex">
+                <span class="fas fa-step-backward"></span>
+            </button>
+
+            <button type="button" id="previousPageButton"
+                class="btn btn-sm hover-primary d-flex">
+                <span class="fas fa-backward"></span>
+            </button>
+
+            <div class="d-flex align-items-center my-1  justify-content-between gap-10" id="infoPage">
+                <span>Page</span>
+                <input id="pagerInput" class="pager-input" value="1" autocomplete="off">
+               
+            </div>
+
+            <button type="button" id="nextPageButton"
+                class="btn btn-sm hover-primary d-flex">
+                <span class="fas fa-forward"></span>
+            </button>
+
+            <button type="button" id="lastPageButton"
+                class="btn btn-sm hover-primary ml-2 d-flex">
+                <span class="fas fa-step-forward"></span>
+            </button>
+
+            <select id="rowList" class="ml-2">
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="50">50</option>
+                <option value="0">ALL</option>
+            </select>
+        </div>
+        <div id="InfoHandlerEditAll" class="pager-info">
+            
+        </div>
+    </div>
+
+    `);
+
+    $(".editAllPager").append(elPager);
+}
+
+let dateFilter = $("#editAllForm").find("[name=tglpengiriman]").val();
+function filtersEditAll(dataColumn = []) {
+    let elFilters = ` <th>
+    <div id="resetfilter" class="reset"><span id="resetdatafilter"
+            class="btn btn-default align-items-center"> X </span></div>
+    </th>`;
+
+    $.each(dataColumn, (index, detail) => {
+        elFilters += `
+       
+        <th rowspan="1" colspan="1" >
+            <div class="row">
+                <div class="col-3 col-sm-12 input-group">
+                    <input type="text" name="nama[]" class="form-control filter-input" data-field="${detail}" autocomplete="off">
+                    <button type="button" title="Reset Search Value" data-column="${detail}" class="clearsearchclass btn position-absolute button-clear text-secondary" style="right: 14px; z-index: 99;"><i class="fa fa-times"></i></button>
+                </div>
+                
+            
+            </div>
+
+        </th>
+
+    `;
+    });
+
+    $("table tr.filters").html($(elFilters));
+
+    $("#resetdatafilter").on("click", function () {
+        var filters = [];
+        $(".filter-input").each(function () {
+            var field = $(this).data("field");
+        });
+
+        filterObject = {
+            groupOp: "AND",
+            rules: [],
+        };
+
+        $(".filter-input").val("");
+        $("#searchText").val("");
+
+        getAll(1, $("#rowList").val(), filterObject, dateFilter);
+        setTimeout(function () {
+            totalInfoPage(totalPages);
+            viewPageEdit(currentPage, $("#editAll tbody tr").length);
+        }, 500);
+    });
+
+    $(".filter-input").on("input", function () {
+        var filters = [];
+        $(".filter-input").each(function () {
+            var field = $(this).data("field");
+
+            var data = $(this).val();
+            if (data !== "") {
+                filters.push({
+                    field: field,
+                    op: "cn",
+                    data: data,
+                });
+            }
+        });
+
+        filterObject = {
+            groupOp: "AND",
+            rules: filters,
+        };
+        // firstPage = false;
+        getAll(1, 0, filterObject, dateFilter);
+        console.log(filters,'filter');
+        // setTimeout(function () {
+        //     totalInfoPage(totalPages);
+        //     viewPageEdit(currentPage, $("#editAll tbody tr").length);
+        // }, 500);
+    });
+
+    $("#searchText").on("keyup", function () {
+        var filters = [];
+        var l = $(".filter-input").length;
+
+        for (i = 0; i < l; i++) {
+            var data = $(this).val();
+            field = $(".filter-input").eq(i).data("field");
+
+            if (data !== "") {
+                filters.push({
+                    field: field,
+                    op: "cn",
+                    data: data,
+                });
+            }
+        }
+
+        filterObject = {
+            groupOp: "OR",
+            rules: filters,
+        };
+
+        getAll(1, $("#rowList").val(), filterObject, dateFilter);
+        setTimeout(function () {
+            totalInfoPage(totalPages);
+            viewPageEdit(currentPage, $("#editAll tbody tr").length);
+        }, 500);
+    });
+
+    var filters = {};
+    $(".clearsearchclass").on("click", function () {
+        var column = $(this).data("column");
+
+        if (!filters[column]) {
+            filters[column] = $('.filter-input[data-field="' + column + '"]');
+        }
+
+        if (filters[column]) {
+            filters[column].val("");
+        }
+
+        filterObject = {
+            groupOp: "AND",
+            rules: [],
+        };
+
+        $(".filter-input").each(function () {
+            var field = $(this).data("field");
+            var data = $(this).val();
+
+            if (data !== "") {
+                filterObject.rules.push({
+                    field: field,
+                    op: "cn",
+                    data: data,
+                });
+            }
+        });
+
+        getAll(1, $("#rowList").val(), filterObject, dateFilter);
+
+        setTimeout(function () {
+            totalInfoPage(totalPages);
+            viewPageEdit(currentPage, $("#editAll tbody tr").length);
+        }, 500);
+    });
+}
+
+function bindKeyPagerEditAll(date) {
+    $("#previousPageButton").click(function (e) {
+        if (currentPage > 1) {
+            getAll(parseInt(currentPage) - 1, rowCount, filterObject, date);
+            $("#pagerInput").val(parseInt(currentPage) - 1);
+        }
+        
+        if (tglPengiriman) {
+            setTimeout(function () {
+                viewPageEdit(10, lengthValue);
+            }, 500);
+        }else{
+            viewPageEdit();
+        }
+    });
+    // Handle next page button click
+    $("#nextPageButton").click(function (e) {
+        if (currentPage < totalPages) {
+            // console.log(lengthValue);
+
+            getAll(parseInt(currentPage) + 1, rowCount, filterObject, date);
+
+            $("#pagerInput").val(parseInt(currentPage) + 1);
+            // viewPageEdit(selectedValue, rowCount,lengthValue);
+        }
+
+        if (tglPengiriman) {
+            setTimeout(function () {
+                viewPageEdit(10, lengthValue);
+            }, 500);
+        }else{
+            viewPageEdit();
+        }
+
+       
+    });
+
+    $("#lastPageButton").click(function (e) {
+        getAll(lastPageEditAll);
+        console.log(lengthValue);
+        $("#pagerInput").val(lastPageEditAll);
+        viewPageEdit();
+    });
+
+    $("#firstPageButton").click(function (e) {
+        getAll(1, selectedValue);
+
+        $("#pagerInput").val(1, selectedValue);
+        viewPageEdit(selectedValue, rowCount);
+    });
+
+    $("#pagerInput").on("input", function () {
+        let inputValue = $(this).val();
+
+        if (inputValue === "" || inputValue == 0) {
+            inputValue = 1; // Jika kosong, paksakan nilai menjadi 1
+            $(this).val(inputValue);
+        }
+        getAll(inputValue);
+
+        viewPageEdit();
+    });
+
+    $("#rowList").on("change", function () {
+        selectedValue = $(this).val();
+
+        getAll($("#pagerInput").val(), selectedValue);
+
+        setTimeout(function () {
+            rowCount = $("#editAll tbody tr").length;
+
+            totalInfoPage(totalPages);
+            viewPageEdit(selectedValue, rowCount);
+        }, 500);
+    });
+}
+
+function viewPageEdit(perPage = 10, rowCountEdit = 10) {
+    let pageEditAll = $("#pagerInput").val();
+    let perPageEditAll = perPage;
+    let recordCountEditAll = rowCountEdit;
+    let firstRowEditAll = (pageEditAll - 1) * perPageEditAll + 1;
+    let lastRowEditAll = firstRowEditAll + recordCountEditAll - 1;
+    $("#InfoHandlerEditAll").html(`
+        <div class="text-md-right">
+            View  ${firstRowEditAll} - ${lastRowEditAll} of ${totalRowsEditAll}
+        </div>
+    `);
+}
+
+function totalInfoPage() {
+    $("#totalPage").remove();
+    $("#infoPage").append(`
+    <span id="totalPage">of ${totalPages}</span>
+`);
+}
