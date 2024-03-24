@@ -215,7 +215,12 @@
           label: 'TGL APPROVAL',
           name: 'tglapproval',
           width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
-          align: 'left'
+           align: 'right',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
         },
         {
           label: 'STATUS TAS',
