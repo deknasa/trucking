@@ -435,7 +435,8 @@ function checkboxHandler(element) {
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
                     showDialog('Harap pilih salah satu record')
                   } else {
-                    cekValidasi(selectedId, 'PRINTER BESAR')
+                    nobukti = $(`#jqGrid tr#${selectedId}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
+                    cekValidasi(selectedId, 'PRINTER BESAR', nobukti)
                   }
                 }
               },
@@ -447,7 +448,8 @@ function checkboxHandler(element) {
                   if (selectedId == null || selectedId == '' || selectedId == undefined) {
                     showDialog('Harap pilih salah satu record')
                   } else {
-                    cekValidasi(selectedId, 'PRINTER KECIL')
+                    nobukti = $(`#jqGrid tr#${selectedId}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
+                    cekValidasi(selectedId, 'PRINTER KECIL', nobukti)
                   }
                 }
               },
@@ -507,7 +509,8 @@ function checkboxHandler(element) {
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                cekValidasi(selectedId, 'EDIT')
+                    nobukti = $(`#jqGrid tr#${selectedId}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
+                cekValidasi(selectedId, 'EDIT', nobukti)
               }
             }
           },
@@ -520,7 +523,8 @@ function checkboxHandler(element) {
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                cekValidasi(selectedId, 'DELETE')
+                    nobukti = $(`#jqGrid tr#${selectedId}`).find(`td[aria-describedby="jqGrid_nobukti"]`).attr('title');
+                cekValidasi(selectedId, 'DELETE', nobukti)
               }
             }
           },
@@ -599,13 +603,16 @@ function checkboxHandler(element) {
 
   })
 
-  function cekValidasi(Id, Aksi) {
+  function cekValidasi(Id, Aksi,nobukti) {
     $.ajax({
       url: `{{ config('app.api_url') }}pindahbuku/${Id}/cekvalidasi`,
       method: 'POST',
       dataType: 'JSON',
       beforeSend: request => {
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+      },
+      data:{
+        nobukti: nobukti
       },
       success: response => {
         var error = response.error
@@ -630,6 +637,7 @@ function checkboxHandler(element) {
 
   function clearSelectedRows() {
     selectedRows = []
+    selectedbukti = []
 
     $('#gs_').prop('checked', false);
     $('#jqGrid').trigger('reloadGrid')
@@ -650,7 +658,8 @@ function checkboxHandler(element) {
         filters: $('#jqGrid').jqGrid('getGridParam', 'postData').filters
       },
       success: (response) => {
-        selectedRows = response.data.map((penerimaan) => penerimaan.id)
+        selectedRows = response.data.map((datas) => datas.id)
+        selectedbukti =response.data.map((datas) => datas.nobukti)
         $('#jqGrid').trigger('reloadGrid')
       }
     })

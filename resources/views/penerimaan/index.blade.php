@@ -293,7 +293,7 @@ function checkboxHandler(element) {
           {
             label: 'NO BUKTI',
             name: 'nobukti',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
             align: 'left'
           },
           {
