@@ -474,11 +474,11 @@
         let statuslongtrip = $(`#crudForm [name="statuslongtrip"]`).val()
 
         if (statuslongtrip == 65) {
-            $('.nobukti_tripasal').hide()
-            clearTripAsal()
+            // $('.nobukti_tripasal').hide()
+            // clearTripAsal()
             isPulangLongtrip = false;
         }
-        console.log('berubah longtrip')
+        enableTripAsalLongTrip()
         clearUpahSupir()
         setJobReadOnly()
     })
@@ -747,6 +747,7 @@
                         (index == 'container') ? element.data('current-value', value): '';
                         (index == 'agen') ? element.data('current-value', value): '';
                         (index == 'jenisorder') ? element.data('current-value', value): '';
+                        (index == 'nobukti_tripasal') ? element.data('current-value', value): '';
                     })
                     if (response.data.statusgandengan = tinggalGandengan) {
                         $(`#crudForm [name="gandenganasal"]`).parents('.form-group').hide()
@@ -793,8 +794,14 @@
                             isPulangLongtrip = false;
                         }
                     } else {
-                        $('.nobukti_tripasal').hide()
-                        isPulangLongtrip = false;
+                        if ((jenisorder_id == 2 && statuscontainer_id == 1) || (jenisorder_id == 3 && statuscontainer_id == 1) || (jenisorder_id == 1 && statuscontainer_id == 2) || (jenisorder_id == 1 && statuscontainer_id == 1) || (jenisorder_id == 4 && statuscontainer_id == 2)) {
+                            $('.nobukti_tripasal').show()
+                            isPulangLongtrip = false;
+                        } else {
+
+                            $('.nobukti_tripasal').hide()
+                            isPulangLongtrip = false;
+                        }
                     }
                     resolve()
                 },
@@ -1106,6 +1113,7 @@
                     trado_id: $('#crudForm [name=trado_id]').val(),
                     gudangsama: $('#crudForm [name=statusgudangsama]').val(),
                     longtrip: $('#crudForm [name=statuslongtrip]').val(),
+                    idTrip: $('#crudForm [name=id]').val(),
                     isGudangSama: isGudangSama
                 }
             },
@@ -1113,10 +1121,11 @@
                 element.val(suratpengantar.nobukti)
                 element.data('currentValue', element.val())
                 if ($('#crudForm [name=statusgudangsama]').val() == 205) {
-
-                    $('#crudForm [name=jobtrucking]').val(suratpengantar.jobtrucking)
-                    $('#crudForm [name=jobtrucking]').data('currentValue', suratpengantar.jobtrucking)
-                    setJobTruckingFromTripAsal()
+                    if ($('#crudForm [name=statuslongtrip]').val() == 66) {
+                        $('#crudForm [name=jobtrucking]').val(suratpengantar.jobtrucking)
+                        $('#crudForm [name=jobtrucking]').data('currentValue', suratpengantar.jobtrucking)
+                        setJobTruckingFromTripAsal()
+                    }
                 }
             },
             onCancel: (element) => {
@@ -1572,9 +1581,9 @@
                     element.val(`${upahsupir.kotadari} - ${upahsupir.kotasampai}`)
 
                     tarifrincianId = upahsupir.tarif_id
-                    if (kodeStatusContainer != 'FULL EMPTY') {
+                    // if (kodeStatusContainer != 'FULL EMPTY') {
                         getpelabuhan(upahsupir.kotadari_id)
-                    }
+                    // }
                 } else {
                     zonadariId = upahsupir.zonadari_id
                     zonasampaiId = upahsupir.zonasampai_id
@@ -1805,9 +1814,15 @@
                 isPulangLongtrip = false;
             }
         } else {
-            $('.nobukti_tripasal').hide()
-            clearTripAsal()
-            isPulangLongtrip = false;
+            if ((jenisorder_id == 2 && statuscontainer_id == 1) || (jenisorder_id == 3 && statuscontainer_id == 1) || (jenisorder_id == 1 && statuscontainer_id == 2) || (jenisorder_id == 1 && statuscontainer_id == 1) || (jenisorder_id == 4 && statuscontainer_id == 2)) {
+                $('.nobukti_tripasal').show()
+                isPulangLongtrip = false;
+            } else {
+
+                $('.nobukti_tripasal').hide()
+                clearTripAsal()
+                isPulangLongtrip = false;
+            }
         }
     }
 

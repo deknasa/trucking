@@ -30,6 +30,7 @@
         gudangsama: `{!! $gudangsama ?? '' !!}`,
         longtrip: `{!! $longtrip ?? '' !!}`,
         isGudangSama: `{!! $isGudangSama ?? '' !!}`,
+        idTrip: `{!! $idTrip ?? '' !!}`,
         from: `{!! $from ?? '' !!}`,
       },
       idPrefix: 'suratpengantarLookup',

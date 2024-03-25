@@ -482,10 +482,11 @@
     let statuslongtrip = $(`#crudForm [name="statuslongtrip"]`).val()
 
     if (statuslongtrip == 65) {
-      $('.nobukti_tripasal').hide()
-      clearTripAsal()
+      // $('.nobukti_tripasal').hide()
+      // clearTripAsal()
       isPulangLongtrip = false;
     }
+    enableTripAsalLongTrip()
     clearUpahSupir()
     setJobReadOnly()
   })
@@ -1936,9 +1937,15 @@
         isPulangLongtrip = false;
       }
     } else {
-      $('.nobukti_tripasal').hide()
-      clearTripAsal()
-      isPulangLongtrip = false;
+      if ((jenisorder_id == 2 && statuscontainer_id == 1) || (jenisorder_id == 3 && statuscontainer_id == 1) || (jenisorder_id == 1 && statuscontainer_id == 2) || (jenisorder_id == 1 && statuscontainer_id == 1) || (jenisorder_id == 4 && statuscontainer_id == 2)) {
+        $('.nobukti_tripasal').show()
+        isPulangLongtrip = false;
+      } else {
+
+        $('.nobukti_tripasal').hide()
+        clearTripAsal()
+        isPulangLongtrip = false;
+      }
     }
   }
 </script>
