@@ -10,16 +10,17 @@
       datatype: "json",
       postData: {
         statusdefault: `{!! $statusDefault?? '' !!}`,
-        bank_id: `{!! $bank_Id?? '' !!}`,
-        aktif: `{!! $Aktif ?? '' !!}`,        
-      },      
+        bank_id: `{!! $bank_Id ?? '' !!}`,
+        aktif: `{!! $Aktif ?? '' !!}`,
+        from: `{!! $from ?? '' !!}`,
+      },
       idPrefix: 'alatBayarLookup',
       colModel: [{
           label: 'ID',
           name: 'id',
           align: 'right',
           width: '70px',
-            search: false,
+          search: false,
           hidden: true
         },
         {
@@ -189,28 +190,28 @@
           width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
           align: 'left'
         },
-          {
-            label: 'CREATED AT',
-            name: 'created_at',
+        {
+          label: 'CREATED AT',
+          name: 'created_at',
           width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
-            align: 'right',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y H:i:s"
-            }
-          },
-          {
-            label: 'UPDATED AT',
-            name: 'updated_at',
+          align: 'right',
+          formatter: "date",
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y H:i:s"
+          }
+        },
+        {
+          label: 'UPDATED AT',
+          name: 'updated_at',
           width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
-            align: 'right',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y H:i:s"
-            }
-          },
+          align: 'right',
+          formatter: "date",
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y H:i:s"
+          }
+        },
       ],
       autowidth: true,
       responsive: true,
@@ -224,6 +225,7 @@
       sortname: 'id',
       sortorder: 'asc',
       page: 1,
+      toolbar: [true, "top"],
       // pager: $('#alatBayarLookupPager'),
       viewrecords: true,
       prmNames: {
@@ -250,7 +252,7 @@
         setGridLastRequest($(this), jqXHR)
       },
       loadComplete: function(data) {
-          changeJqGridRowListText()
+        changeJqGridRowListText()
         if (detectDeviceType() == 'desktop') {
           $(document).unbind('keydown')
           setCustomBindKeys($(this))

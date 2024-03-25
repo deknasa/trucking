@@ -333,6 +333,13 @@
                         }
                     },
                     {
+                        label: 'pengeluaran_nobukti',
+                        name: 'pengeluaran_nobukti',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+                        hidden: true,
+                        search: false
+                    },
+                    {
                         label: 'ALAT BAYAR',
                         name: 'alatbayar_id',
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
