@@ -489,6 +489,7 @@
                     })
 
                     bankDariId = response.data.bankdari_id
+                    bankId = response.data.bankdari_id
                     bankKeId = response.data.bankke_id
                     form.find(`[name="tglbukti"]`).val(dateFormat(response.data.tglbukti))
                     form.find(`[name="tgljatuhtempo"]`).val(dateFormat(response.data.tgljatuhtempo))
@@ -616,6 +617,7 @@
                 this.postData = {
                     bank_Id: bankId,
                     Aktif: 'AKTIF',
+                    from: 'pindahbuku'
                 }
             },
             onSelectRow: (alatbayar, element) => {
