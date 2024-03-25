@@ -85,7 +85,7 @@
   let dataAbsensi = {}
 
   $(document).ready(function() {
-    // setTradoMilikSupir()
+    setTradoMilikSupir()
     initDatepicker('datepickerIndex')
     // mendapatkan tanggal hari ini
     let today = new Date();
@@ -507,9 +507,10 @@
     } else {
       let namasupir_old = $(`#supir_old_row_${rowId}`).val();
       let supir_id_old = $(`#supir_old_id_row_${rowId}`).last().val();
-
-      $(`#supir_id_row_${rowId}`).val(supir_id_old);
-      $(`.supir-lookup-${rowId}`).last().val(namasupir_old);
+      if (namasupir_old != null && supir_id_old != 0 && namasupir_old != 'null' && supir_id_old != '0') {
+        $(`#supir_id_row_${rowId}`).val(supir_id_old);
+        $(`.supir-lookup-${rowId}`).last().val(namasupir_old);
+      }
 
     }
   }
