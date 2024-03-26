@@ -289,6 +289,10 @@
         name: 'tglcair',
         value: form.find(`[name="tglcair"]`).val()
       })
+      data.push({
+        name: 'aksi',
+        value: action.toUpperCase()
+      })
 
       let selectedRowsHutang = $("#tableHutang").getGridParam("selectedRowIds");
       console.log()
@@ -1605,23 +1609,17 @@
         aksi: Aksi
       },
       success: response => {
-        var kodenobukti = response.kodenobukti
-        if (kodenobukti == '1') {
-          var kodestatus = response.kodestatus
-          if (kodestatus == '1') {
-            showDialog(response.message['keterangan'])
-          } else {
-            if (Aksi == 'PRINTER BESAR') {
-              window.open(`{{ route('pelunasanhutangheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
-            } else if (Aksi == 'PRINTER KECIL') {
-              window.open(`{{ route('pelunasanhutangheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
-            } else {
-              cekValidasiAksi(Id, Aksi)
-            }
-          }
-
+        var error = response.error
+        if (error) {
+          showDialog(response)
         } else {
-          showDialog(response.message['keterangan'])
+          if (Aksi == 'PRINTER BESAR') {
+            window.open(`{{ route('pelunasanhutangheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
+          } else if (Aksi == 'PRINTER KECIL') {
+            window.open(`{{ route('pelunasanhutangheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
+          } else {
+            cekValidasiAksi(Id, Aksi)
+          }
         }
       }
     })

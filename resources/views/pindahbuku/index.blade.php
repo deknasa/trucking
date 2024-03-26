@@ -612,7 +612,8 @@ function checkboxHandler(element) {
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
       data:{
-        nobukti: nobukti
+        nobukti: nobukti,
+        aksi: Aksi
       },
       success: response => {
         var error = response.error
