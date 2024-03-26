@@ -104,6 +104,7 @@ class PendapatanSupirHeaderController extends MyController
         $combo = $this->combo('list');
         $key = array_search('CETAK', array_column($combo, 'parameter'));
         $pendapatan["combo"] =  $combo[$key];
+        $pendapatansupir["combo"] =  $combo[$key];
         $printer['tipe'] = $request->printer;
 
         return view('reports.pendapatansupir', compact('pendapatan', 'pendapatan_details', 'formatkomisi', 'printer', 'pendapatansupir', 'pendapatansupir_details'));
