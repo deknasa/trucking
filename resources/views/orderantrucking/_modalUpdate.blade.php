@@ -274,6 +274,10 @@
         name: 'limit',
         value: limit
       })
+      data.push({
+        name: 'aksi',
+        value: 'updatenocont'
+      })
 
       data.push({
         name: 'tgldariheader',
