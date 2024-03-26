@@ -153,6 +153,10 @@
             name: 'subgrp',
             value: 'STATUS POSTING'
         })
+        data.push({
+            name: 'semua',
+            value: 'SEMUA'
+        })
         $.ajax({
             url: `${apiUrl}parameter/combo`,
             method: 'GET',
