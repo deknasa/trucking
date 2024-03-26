@@ -335,6 +335,11 @@
                 name: 'jumlahdetail',
                 value: selectedRowsTrip.length
             })
+            data.push({
+                name: 'aksi',
+                value: action.toUpperCase()
+            })
+
             // data.push({
             //     name: 'periode',
             //     value: form.find(`[name="periode"]`).val()

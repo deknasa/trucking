@@ -16,6 +16,7 @@
   <script src="{{ asset('libraries/tas-lib/js/terbilang.js?version='. config('app.version')) }}"></script>
   <script type="text/javascript">
     let pendapatansupirs = <?= json_encode($pendapatan); ?>;
+    let pendapatansupirs2 = <?= json_encode($pendapatansupir); ?>;
     let formatKomisi = <?= json_encode($formatkomisi); ?>;
     let printer = <?= json_encode($printer); ?>;
 
@@ -28,15 +29,23 @@
 
       var viewer = new Stimulsoft.Viewer.StiViewer(viewerOptions, "StiViewer", false)
       var report = new Stimulsoft.Report.StiReport()
-
-      var statuscetak = pendapatansupirs.statuscetak_id
-      var sudahcetak = pendapatansupirs['combo']['id']
-      if (statuscetak == sudahcetak) {
-        viewerOptions.toolbar.showPrintButton = false;
-        viewerOptions.toolbar.showSaveButton = false;
-        viewerOptions.toolbar.showOpenButton = false;
+      if (formatKomisi == 'FORMAT 1') {
+        var statuscetak = pendapatansupirs.statuscetak_id
+        var sudahcetak = pendapatansupirs['combo']['id']
+        if (statuscetak == sudahcetak) {
+          viewerOptions.toolbar.showPrintButton = false;
+          viewerOptions.toolbar.showSaveButton = false;
+          viewerOptions.toolbar.showOpenButton = false;
+        }
+      }else{
+        var statuscetak = pendapatansupirs2.statuscetak_id
+        var sudahcetak = pendapatansupirs2['combo']['id']
+        if (statuscetak == sudahcetak) {
+          viewerOptions.toolbar.showPrintButton = false;
+          viewerOptions.toolbar.showSaveButton = false;
+          viewerOptions.toolbar.showOpenButton = false;
+        }
       }
-
       var options = new Stimulsoft.Designer.StiDesignerOptions()
       options.appearance.fullScreenMode = true
 
@@ -92,7 +101,12 @@
       }
 
       window.addEventListener('afterprint', (event) => {
-        var id = pendapatansupirs.id
+        if (formatKomisi == 'FORMAT 1') {
+          var id = pendapatansupirs.id
+        } else {
+          var id = pendapatansupirs2.id
+
+        }
         var apiUrl = `{{ config('app.api_url') }}`;
         $.ajax({
           url: `${apiUrl}pendapatansupirheader/${id}/printreport`,
