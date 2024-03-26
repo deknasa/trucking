@@ -411,6 +411,10 @@
         value: form.find(`[name="notadebet_nobukti"]`).val()
       })
 
+      data.push({
+        name: 'aksi',
+        value: action.toUpperCase()
+      })
       let selectedRows = $("#tablePelunasan").getGridParam("selectedRowIds");
       data.push({
         name: 'jumlahdetail',
@@ -2622,6 +2626,9 @@
       dataType: 'JSON',
       beforeSend: request => {
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+      },
+      data: {
+        aksi: Aksi
       },
       success: response => {
         var error = response.error

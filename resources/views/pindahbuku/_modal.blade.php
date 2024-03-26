@@ -198,6 +198,10 @@
                 value: limit
             })
 
+            data.push({
+                name: 'aksi',
+                value: action.toUpperCase()
+            })
             let tgldariheader = $('#tgldariheader').val();
             let tglsampaiheader = $('#tglsampaiheader').val()
 

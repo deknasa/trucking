@@ -263,6 +263,10 @@
         value: limit
       })
       data.push({
+        name: 'aksi',
+        value: action.toUpperCase()
+      })
+      data.push({
         name: 'tgldariheader',
         value: $('#tgldariheader').val()
       })
@@ -1350,6 +1354,9 @@
       dataType: 'JSON',
       beforeSend: request => {
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+      },
+      data: {
+        aksi: Aksi
       },
       success: response => {
         // console.log(response)
