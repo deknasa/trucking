@@ -688,6 +688,10 @@
                 name: 'tglsampai',
                 value: form.find(`[name="tglsampai"]`).val()
             })
+            data.push({
+                name: 'aksi',
+                value: action.toUpperCase()
+            })
 
 
             let selectedRowsTrip = $("#rekapRincian").getGridParam("selectedRowIds");
