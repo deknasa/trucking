@@ -732,6 +732,10 @@
         value: $('#tglsampaiheader').val()
       })
 
+      data.push({
+        name: 'aksi',
+        value: action.toUpperCase()
+      })
       let tgldariheader = $('#tgldariheader').val();
       let tglsampaiheader = $('#tglsampaiheader').val()
 
