@@ -225,6 +225,11 @@
         name: 'limit',
         value: limit
       })
+      data.push({
+        name: 'aksi',
+        value: action.toUpperCase()
+      })
+
 
       let tgldariheader = $('#tgldariheader').val();
       let tglsampaiheader = $('#tglsampaiheader').val()
@@ -499,26 +504,22 @@
       beforeSend: request => {
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
+      data: {
+        aksi: Aksi
+      },
       success: response => {
-        var kodenobukti = response.kodenobukti
-        if (kodenobukti == '1') {
-          var kodestatus = response.kodestatus
-          if (kodestatus == '1') {
-            // showDialog(response.message['keterangan'])
-            showDialog(response)
-          } else {
-            if (Aksi == 'PRINTER BESAR') {
-              window.open(`{{ route('hutangheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
-            } else if (Aksi == 'PRINTER KECIL') {
-              window.open(`{{ route('hutangheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
-            } else {
-              cekValidasiAksi(Id, Aksi)
-            }
-          }
-
-        } else {
+        var error = response.error
+        if (error) {
           // showDialog(response.message['keterangan'])
           showDialog(response)
+        } else {
+          if (Aksi == 'PRINTER BESAR') {
+            window.open(`{{ route('hutangheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
+          } else if (Aksi == 'PRINTER KECIL') {
+            window.open(`{{ route('hutangheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
+          } else {
+            cekValidasiAksi(Id, Aksi)
+          }
         }
       }
     })
@@ -549,7 +550,7 @@
 
         $('#jqGrid').jqGrid().trigger('reloadGrid');
         selectedRows = []
-        selectedbukti= []
+        selectedbukti = []
         $('#gs_').prop('checked', false)
       },
       error: error => {
@@ -580,8 +581,8 @@
       success: response => {
         // var kondisi = response.kondisi
         // if (kondisi == true) {
-          var error = response.error
-        if (error) {          
+        var error = response.error
+        if (error) {
           // showDialog(response.message['keterangan'])
           showDialog(response)
         } else {
