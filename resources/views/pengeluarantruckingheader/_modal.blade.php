@@ -2917,6 +2917,7 @@
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
+    removeEditingBy($('#crudForm').find('[name=id]').val())
     selectedRows = []
     penerimaanstokheader = ''
     pengeluaranstokheader = ''
@@ -2928,6 +2929,35 @@
     initDatepicker('datepickerIndex')
     KodePengeluaranId = ''
   })
+  function removeEditingBy(id) {
+    $.ajax({
+      url: `{{ config('app.api_url') }}bataledit`,
+      method: 'POST',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        id: id,
+        aksi: 'BATAL',
+        table: 'pengeluarantruckingheader'
+
+      },
+      success: response => {
+        $("#crudModal").modal("hide")
+      },
+      error: error => {
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+
+          setErrorMessages(form, error.responseJSON.errors);
+        } else {
+          showDialog(error.responseJSON)
+        }
+      },
+    })
+  }  
 
   function setTotal() {
     let nominalDetails = $(`#table_body [name="nominal[]"]:not([disabled])`)
