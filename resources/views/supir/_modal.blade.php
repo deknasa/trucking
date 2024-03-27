@@ -1341,6 +1341,73 @@
   }
 
 
+  function approvalHistorySupirMilikMandor(id) {
+    event.preventDefault()
+
+    let form = $('#crudForm')
+    $(this).attr('disabled', '')
+    $('#processingLoader').removeClass('d-none')
+
+    $.ajax({
+      url: `${apiUrl}supir/approvalhistorysupirmilikmandor`,
+      method: 'POST',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        Id: selectedRows,
+        table: 'trado'
+      },
+      success: response => {
+        $('#crudForm').trigger('reset')
+        $('#crudModal').modal('hide')
+
+        $('#jqGrid').jqGrid().trigger('reloadGrid');
+        selectedRows = []
+        $('#gs_').prop('checked', false)
+      },
+      error: error => {
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+
+          setErrorMessages(form, error.responseJSON.errors);
+        } else {
+          showDialog(error.statusText)
+        }
+      },
+    }).always(() => {
+      $('#processingLoader').addClass('d-none')
+      $(this).removeAttr('disabled')
+    })
+  }
+
+  function cekValidasihistory(Id, Aksi) {
+    $.ajax({
+      url: `{{ config('app.api_url') }}supir/${Id}/cekvalidasihistory`,
+      method: 'POST',
+      dataType: 'JSON',
+      beforeSend: request => {
+        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+      },
+      data: {
+        aksi: Aksi
+      },      
+      success: response => {
+        var error = response.error
+        if (error) {
+          showDialog(response)
+        } else {
+          if (Aksi == 'historyMandor') {
+            editSupirMilikMandor(Id)
+          }
+        }
+
+      }
+    })
+  }
+
   function showDefault(form) {
     return new Promise((resolve, reject) => {
       $.ajax({

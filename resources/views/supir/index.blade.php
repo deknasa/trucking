@@ -102,7 +102,7 @@
 
     $(document).ready(function() {
         permission()
-        
+
         setTampilanIndex()
         $("#jqGrid").jqGrid({
                 url: `${apiUrl}supir`,
@@ -165,6 +165,17 @@
                         name: 'mandor_id',
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
                     },
+                    {
+                        label: 'TGL berlaku milik mandor',
+                        name: 'tglberlakumilikmandor',
+                        align: 'right',
+                        formatter: "date",
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+                        formatoptions: {
+                            srcformat: "ISO8601Long",
+                            newformat: "d-m-Y"
+                        }
+                    },                              
                     {
                         label: 'TGL LAHIR',
                         name: 'tgllahir',
@@ -289,7 +300,7 @@
                             srcformat: "ISO8601Long",
                             newformat: "d-m-Y"
                         }
-                    },                    
+                    },
                     {
                         label: 'TGL TERBIT SIM',
                         name: 'tglterbitsim',
@@ -473,13 +484,82 @@
                         name: 'keterangantidakbolehluarkota',
                         width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
                     },
+                    // {
+                    //     label: 'angsuran pinjaman',
+                    //     name: 'angsuranpinjaman',
+                    // },
+                    // {
+                    //     label: 'plafon deposito',
+                    //     name: 'plafondeposito',
+                    // },
                     {
-                        label: 'angsuran pinjaman',
-                        name: 'angsuranpinjaman',
+                        label: 'STATUS APP HISTORY SUPIR MILIK MANDOR',
+                        name: 'statusapprovalhistorysupirmilikmandor',
+                        width: 200,
+                        stype: 'select',
+                        width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
+                        searchoptions: {
+                            value: `<?php
+                                    $i = 1;
+                                    foreach ($data['statusapprovalhistorysupirmilikmandor'] as $status) :
+                                        echo "$status[param]:$status[parameter]";
+                                        if ($i !== count($data['statusapprovalhistorysupirmilikmandor'])) {
+                                            echo ';';
+                                        }
+                                        $i++;
+                                    endforeach;
+                                    ?>
+  `,
+                            dataInit: function(element) {
+                                $(element).select2({
+                                    width: 'resolve',
+                                    theme: "bootstrap4"
+                                });
+                            }
+                        },
+                        formatter: (value, options, rowData) => {
+                            let statusApprovalHistorySupirMilikMandor = JSON.parse(value)
+
+                            let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusApprovalHistorySupirMilikMandor.WARNA}; color: #fff;">
+                  <span>${statusApprovalHistorySupirMilikMandor.SINGKATAN}</span>
+                </div>
+              `)
+
+                            return formattedValue[0].outerHTML
+                        },
+                        cellattr: (rowId, value, rowObject) => {
+                            let statusApprovalHistorySupirMilikMandor = JSON.parse(rowObject.statusapprovalhistorysupirmilikmandor)
+
+                            return ` title="${statusApprovalHistorySupirMilikMandor.MEMO}"`
+                        }
                     },
                     {
-                        label: 'plafon deposito',
-                        name: 'plafondeposito',
+                        label: 'USER APP HISTORY SUPIR MILIK MANDOR',
+                        name: 'userapprovalhistorysupirmilikmandor',
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+                    },
+                    {
+                        label: 'TGL APP HISTORY SUPIR MILIK MANDOR',
+                        name: 'tglapprovalhistorysupirmilikmandor',
+                        align: 'right',
+                        formatter: "date",
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+                        formatoptions: {
+                            srcformat: "ISO8601Long",
+                            newformat: "d-m-Y H:i:s"
+                        }
+                    },
+                    {
+                        label: 'TGL UPDATE HISTORY SUPIR MILIK MANDOR',
+                        name: 'tglupdatehistorysupirmilikmandor',
+                        align: 'right',
+                        formatter: "date",
+                        width: (detectDeviceType() == "desktop") ? sm_dekstop_4 : sm_mobile_4,
+                        formatoptions: {
+                            srcformat: "ISO8601Long",
+                            newformat: "d-m-Y H:i:s"
+                        }
                     },
                     {
                         label: 'STATUS POSTING TNL',
@@ -1052,7 +1132,7 @@
                                         if (selectedOne[0]) {
                                             approvalLuarKota(selectedOne[1])
                                         } else {
-                                          showDialog(selectedOne[1])
+                                            showDialog(selectedOne[1])
                                         }
                                     }
                                 }
@@ -1066,11 +1146,21 @@
                                         if (selectedOne[0]) {
                                             supirResign(selectedOne[1])
                                         } else {
-                                          showDialog(selectedOne[1])
+                                            showDialog(selectedOne[1])
                                         }
                                     }
                                 }
                             },
+                            {
+                                id: 'approvalHistorySupirMilikMandor',
+                                text: "un/Approval History Supir Milik Mandor",
+                                onClick: () => {
+                                    if (`{{ $myAuth->hasPermission('supir', 'approvalhistorysupirmilikmandor') }}`) {
+                                        approvalHistorySupirMilikMandor();
+                                    }
+                                }
+                            },
+
                             {
                                 id: 'StoreApprovalTradoTanpa',
                                 text: "un/Approval Supir Tanpa Keterangan/Gambar",
@@ -1079,7 +1169,7 @@
                                     if (selectedOne[0]) {
                                         cekValidasiTanpa(selectedOne[1])
                                     } else {
-                                      showDialog(selectedOne[1])
+                                        showDialog(selectedOne[1])
                                     }
                                 }
                             },
@@ -1130,9 +1220,11 @@
                                 if (`{{ $myAuth->hasPermission('supir', 'historySupirMandor') }}`) {
                                     var selectedOne = selectedOnlyOne();
                                     if (selectedOne[0]) {
-                                        editSupirMilikMandor(selectedOne[1])
+                                        // editSupirMilikMandor(selectedOne[1])
+                                        cekValidasihistory(selectedOne[1],'historyMandor')
+
                                     } else {
-                                      showDialog(selectedOne[1])
+                                        showDialog(selectedOne[1])
                                     }
                                 }
                             }
@@ -1226,7 +1318,7 @@
                 $('#StoreApprovalTradoTanpa').hide()
             }
 
-            
+
 
             if (hakApporveCount < 1) {
                 $('#approve').hide()

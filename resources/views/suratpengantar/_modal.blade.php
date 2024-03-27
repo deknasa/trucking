@@ -58,14 +58,14 @@
                   </div>
                 </div>
                 <div class="form-group ">
-                  <label class="col-sm-12 col-form-label">CUSTOMER <span class="text-danger">*</span></label>
+                  <label class="col-sm-12 col-form-label"><em><u>CUSTOMER </u></em><span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <input type="hidden" name="agen_id">
                     <input type="text" name="agen" class="form-control agen-lookup">
                   </div>
                 </div>
                 <div class="form-group ">
-                  <label class="col-sm-12 col-form-label">JENIS ORDERAN <span class="text-danger">*</span></label>
+                  <label class="col-sm-12 col-form-label"><em><u>JENIS ORDERAN </u></em><span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <input type="hidden" name="jenisorder_id">
                     <input type="text" name="jenisorder" class="form-control jenisorder-lookup">
@@ -79,7 +79,7 @@
                   </div>
                 </div>
                 <div class="form-group ">
-                  <label class="col-sm-12 col-form-label">CONTAINER <span class="text-danger">*</span></label>
+                  <label class="col-sm-12 col-form-label"><em><u>CONTAINER </u></em><span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <input type="hidden" name="container_id">
                     <input type="text" name="container" class="form-control container-lookup">
@@ -169,7 +169,7 @@
                 </div>
 
                 <div class="form-group ">
-                  <label class="col-sm-12 col-form-label">SHIPPER <span class="text-danger">*</span></label>
+                  <label class="col-sm-12 col-form-label"><em><u>SHIPPER </u></em><span class="text-danger">*</span></label>
                   <div class="col-sm-12">
                     <input type="hidden" name="pelanggan_id">
                     <input type="text" name="pelanggan" class="form-control pelanggan-lookup">
@@ -207,13 +207,13 @@
                   </div>
                 </div>
                 <div class="form-group ">
-                  <label class="col-sm-12 col-form-label">NO CONTAINER (1)</label>
+                  <label class="col-sm-12 col-form-label"><em><u>NO CONTAINER (1)</u></em></label>
                   <div class="col-sm-12">
                     <input type="text" name="nocont" class="form-control" readonly>
                   </div>
                 </div>
                 <div class="form-group ">
-                  <label class="col-sm-12 col-form-label">NO SEAL (1)</label>
+                  <label class="col-sm-12 col-form-label"><em><u>NO SEAL (1)</u></em></label>
                   <div class="col-sm-12">
                     <input type="text" name="noseal" class="form-control" readonly>
                   </div>
@@ -257,25 +257,25 @@
                   </div>
                 </div>
                 <div class="form-group ">
-                  <label class="col-sm-12 col-form-label">NO CONTAINER (2)</label>
+                  <label class="col-sm-12 col-form-label"><em><u>NO CONTAINER (2)</u></em></label>
                   <div class="col-sm-12">
                     <input type="text" name="nocont2" class="form-control" readonly>
                   </div>
                 </div>
                 <div class="form-group ">
-                  <label class="col-sm-12 col-form-label">NO SEAL (2)</label>
+                  <label class="col-sm-12 col-form-label"><em><u>NO SEAL (2)</u></em></label>
                   <div class="col-sm-12">
                     <input type="text" name="noseal2" class="form-control" readonly>
                   </div>
                 </div>
                 <div class="form-group ">
-                  <label class="col-sm-12 col-form-label">NO JOB (1)</label>
+                  <label class="col-sm-12 col-form-label"><em><u>NO JOB (1)</u></em></label>
                   <div class="col-sm-12">
                     <input type="text" name="nojob" class="form-control" readonly>
                   </div>
                 </div>
                 <div class="form-group ">
-                  <label class="col-sm-12 col-form-label">NO JOB (2)</label>
+                  <label class="col-sm-12 col-form-label"><em><u>NO JOB (2)</u></em></label>
                   <div class="col-sm-12">
                     <input type="text" name="nojob2" class="form-control" readonly>
                   </div>
