@@ -93,6 +93,7 @@
           },
           success: response => {
             window.opener.reloadGrid();
+            window.opener.removeEditingBy(id);
             window.close();
           }
         })
