@@ -229,6 +229,11 @@
         name: 'limit',
         value: limit
       })
+      data.push({
+        name: 'aksi',
+        value: action.toUpperCase()
+      })
+
 
       data.push({
         name: 'tgldariheader',

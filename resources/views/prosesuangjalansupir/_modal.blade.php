@@ -539,6 +539,11 @@
                 name: 'tglsampaiheader',
                 value: $('#tglsampaiheader').val()
             })
+            data.push({
+                name: 'aksi',
+                value: action.toUpperCase()
+            })
+
 
             let tgldariheader = $('#tgldariheader').val();
             let tglsampaiheader = $('#tglsampaiheader').val()
@@ -1327,32 +1332,48 @@
                 aksi: Aksi
             },
             success: response => {
-                var kodenobukti = response.kodenobukti
-                if (kodenobukti == '1') {
-                    var kodestatus = response.kodestatus
-                    if (kodestatus == '1') {
-                        showDialog(response.message['keterangan'])
-                    } else {
-                        if (Aksi == 'PRINTER BESAR') {
-                            window.open(`{{ route('prosesuangjalansupirheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
-                        }
-                        if (Aksi == 'PRINTER KECIL') {
-                            window.open(`{{ route('prosesuangjalansupirheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
-                        }
-                        if (Aksi == 'EDIT') {
-                            editProsesUangJalanSupir(Id)
-                        }
-                        if (Aksi == 'DELETE') {
-                            deleteProsesUangJalanSupir(Id)
-                        }
-                    }
-
+                var error = response.error
+                if (error) {
+                    showDialog(response)
                 } else {
-                    showDialog(response.message['keterangan'])
+                    if (Aksi == 'PRINTER BESAR') {
+                        window.open(`{{ route('prosesuangjalansupirheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
+                    } else if (Aksi == 'PRINTER KECIL') {
+                        window.open(`{{ route('prosesuangjalansupirheader.report') }}?id=${Id}&printer=reportPrinterKecil`)
+                    } else {
+                        cekValidasiAksi(Id, Aksi)
+                    }
                 }
+
             }
         })
     }
+
+    function cekValidasiAksi(Id, Aksi) {
+        $.ajax({
+            url: `{{ config('app.api_url') }}prosesuangjalansupirheader/${Id}/cekValidasiAksi`,
+            method: 'POST',
+            dataType: 'JSON',
+            beforeSend: request => {
+                request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+            },
+            success: response => {
+                var error = response.error
+                if (error) {
+                    showDialog(response)
+                } else {
+                    if (Aksi == 'EDIT') {
+                        editProsesUangJalanSupir(Id)
+                    }
+                    if (Aksi == 'DELETE') {
+                        deleteProsesUangJalanSupir(Id)
+                    }
+                }
+
+            }
+        })
+    }
+
 
     function showProsesUangJalanSupir(form, userId) {
         return new Promise((resolve, reject) => {
