@@ -156,7 +156,6 @@
 @push('scripts')
 <script>
     $(document).ready(function() {
-        var user_id = "{{ auth()->user()->id }}"
         var from_login = "{{ session()->has('from_login') }}"
 
         if (!`{{ $myAuth->hasPermission('reminderoli', 'index') }}`) {
@@ -189,13 +188,11 @@
         if (!`{{ $myAuth->hasPermission('statusolitrado', 'index') }}`) {
             $('#statusolitrado').attr('href', '#')
         }
-        // console.log(from_login);
         if (from_login) {
-            console.log('asdas');
             showLoginModal()
         }
     })
-    function showLoginModal(user_id) {
+    function showLoginModal() {
         $.ajax({
             url: `${apiUrl}remainderfinalabsensi/`,
             method: 'GET',
