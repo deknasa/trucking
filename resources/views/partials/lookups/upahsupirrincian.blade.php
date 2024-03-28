@@ -28,6 +28,12 @@
             hidden: true
           }, 
           {
+            label: 'upah id',
+            name: 'upah_id',
+            search: false,
+            hidden: true
+          },
+          {
             label: 'Kota dari Id',
             name: 'kotadari_id',
             search: false,
