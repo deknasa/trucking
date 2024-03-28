@@ -1568,7 +1568,7 @@
                 }
             },
             onSelectRow: (upahsupir, element) => {
-                $('#crudForm [name=upah_id]').val(upahsupir.id)
+                $('#crudForm [name=upah_id]').val(upahsupir.upah_id)
                 if (selectedUpahZona == 'NON UPAH ZONA') {
 
                     $('#crudForm [name=tarifrincian_id]').val(upahsupir.tarif_id)
