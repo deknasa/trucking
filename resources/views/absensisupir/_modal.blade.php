@@ -51,12 +51,13 @@
                         <tr>
                           <th width="2%">No</th>
                           <th width="13%">Trado</th>
-                          <th width="15%">Supir</th>
-                          <th width="30%">Keterangan</th>
+                          <th width="6%">supir serap</th>
+                          <th width="12%">Supir</th>
+                          <th width="10%" class="uangjalan">Uang Jalan</th>
+                          <th width="25%">Keterangan</th>
                           <th width="15%">Status</th>
-                          <th width="8%">jlh trip</th>
+                          <th width="6%">jlh trip</th>
                           <th width="9%">tgl batas</th>
-                          <th width="15%" class="uangjalan">Uang Jalan</th>
                           {{-- <th width="2%">Aksi</th> --}}
                         </tr>
                       </thead>
@@ -734,11 +735,17 @@
                 <input type="text" name="trado[]" data-current-value="${detail.trado}" class="form-control" value="${detail.trado}" readonly>
               </td>
               <td>
+                <input type="text" class="form-control" name="statussupirserap[]" value="${detail.statussupirserap}" readonly>
+              </td>
+              <td>
                 <input type="hidden" name="supir_old[]" id="supir_old_row_${index}" value="${detail.namasupir_old}">
                 <input type="hidden" name="supir_id_old[]" id="supir_old_id_row_${index}" value="${detail.supir_id_old}">
 
                 <input type="hidden" name="supir_id[]" id="supir_id_row_${index}">
                 <input type="text" name="supir[]" data-current-value="${detail.supir}" class="form-control supir-lookup" id="supir_row_${index}" value="${detail.supir}">
+              </td>
+              <td class="uangjalan">
+                <input type="text" id="uangjalan_row_${index}" class="form-control uangjalan autonumeric" name="uangjalan[]" value="${detail.uangjalan}" ${detail.uangjalan_readonly}>
               </td>
               <td>
                 <input type="text" name="keterangan_detail[]" class="form-control" value="${detail.keterangan}">
@@ -753,9 +760,6 @@
               </td>
               <td>
                 <input type="text" class="form-control autonumeric" name="tglbatas[]" value="${detail.tglbatas}" disabled></input>
-              </td>
-              <td class="uangjalan">
-                <input type="text" id="uangjalan_row_${index}" class="form-control uangjalan autonumeric" name="uangjalan[]" value="${detail.uangjalan}" ${detail.uangjalan_readonly}>
               </td>
               <input type="hidden" name="namasupir_old[]" value="${detail.namasupir_old}">
               <input type="hidden" name="supirold_id[]" value="${detail.supir_id_old}">
