@@ -293,6 +293,72 @@
             formatter: currencyFormat
           },
           {
+            label: 'STATUS FINAL ABSENSI',
+            name: 'statusapprovalfinalabsensi',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            align: 'left',
+            stype: 'select',
+            searchoptions: {
+
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['comboedit'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['comboedit'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+              `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              let statusFinalAbsensi = JSON.parse(value)
+              if (!statusFinalAbsensi) {
+                return ''
+              }
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusFinalAbsensi.WARNA}; color: #fff;">
+                  <span>${statusFinalAbsensi.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusFinalAbsensi = JSON.parse(rowObject.statusapprovalfinalabsensi)
+              if (!statusFinalAbsensi) {
+                return ` title=" "`
+              }
+              return ` title="${statusFinalAbsensi.MEMO}"`
+            }
+          },
+          {
+            label: 'USER FINAL ABSENSI',
+            name: 'userapprovalfinalabsensi',
+            align: 'left',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+          },
+          {
+            label: 'TGL FINAL ABSENSI',
+            name: 'tglapprovalfinalabsensi',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_2,
+            align: 'left',
+            formatter: "date",
+            formatoptions: {
+              srcformat: "ISO8601Long",
+              newformat: "d-m-Y"
+            }
+          },          
+          {
             label: 'USER BUKA CETAK',
             name: 'userbukacetak',
             align: 'left',
@@ -688,7 +754,20 @@
                   }
                 }
               },
-
+              {
+                id: 'approvalabsensifinal',
+                text: "Approval Absensi Final",
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('absensisupirheader', 'approvalbukacetak') }}`) {
+                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                    if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                      showDialog('Harap pilih salah satu record')
+                    } else {
+                      approvalAbsensiFinal(selectedRows, selectedbukti);
+                    }
+                  }
+                }
+              },
 
             ],
           },

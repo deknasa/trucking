@@ -1037,6 +1037,57 @@
     }
   }
 
+  function approvalFinalAbsensi(selectedRows, buktiselectedRows) {
+
+    $.ajax({
+      url: `${apiUrl}absensisupirheader/approvalabsensifinal`,
+      method: 'POST',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        absensiId: selectedRows,
+        bukti: buktiselectedRows,
+      },
+      success: response => {
+        $('.is-invalid').removeClass('is-invalid')
+        $('.invalid-feedback').remove()
+        $('#crudForm').trigger('reset')
+        $('#crudModal').modal('hide')
+        selectedRows = []
+        clearSelectedRows()
+        $('#jqGrid').jqGrid('setGridParam', {
+          postData: {
+            proses: 'reload',
+          }
+        }).trigger('reloadGrid');
+        let data = $('#jqGrid').jqGrid("getGridParam", "postData");
+      },
+      error: error => {
+        $("#dialog-warning-message").find("p").remove();
+        $(`#dialog-warning-message`).append(
+          `<p class="text-dark">${error.responseJSON.errors.tableId}</p>`
+        );
+
+        $("#dialog-warning-message").dialog({
+          modal: true,
+          buttons: [{
+            text: "Ok",
+            click: function() {
+              $(this).dialog("close");
+            },
+          }, ]
+        });
+        $(".ui-dialog-titlebar-close").find("p").remove();
+
+      },
+    }).always(() => {
+      $('#processingLoader').addClass('d-none')
+      $(this).removeAttr('disabled')
+    })
+  }
+
   function cekValidasi(Id, Aksi) {
 
     $.ajax({
@@ -1109,7 +1160,7 @@
     }
     if (kodeabsensitrado.uang) {
       $(`#uangjalan_row_${rowId}`).attr('readonly', true)
-    }else{
+    } else {
       $(`#uangjalan_row_${rowId}`).attr('readonly', false)
     }
 
