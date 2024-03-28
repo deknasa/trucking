@@ -156,6 +156,9 @@
 @push('scripts')
 <script>
     $(document).ready(function() {
+        var user_id = "{{ auth()->user()->id }}"
+        var from_login = "{{ session()->has('from_login') }}"
+
         if (!`{{ $myAuth->hasPermission('reminderoli', 'index') }}`) {
             $('#reminderoli').attr('href', '#')
         }
@@ -186,7 +189,27 @@
         if (!`{{ $myAuth->hasPermission('statusolitrado', 'index') }}`) {
             $('#statusolitrado').attr('href', '#')
         }
+        // console.log(from_login);
+        if (from_login) {
+            console.log('asdas');
+            showLoginModal()
+        }
     })
+    function showLoginModal(user_id) {
+        $.ajax({
+            url: `${apiUrl}remainderfinalabsensi/`,
+            method: 'GET',
+            dataType: 'JSON',
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            },
+            success: response => {
+                if (response.data) {
+                    showDialog('Harap pilih salah satu record');
+                }
+            },
+        })
+    }
 </script>
 @endpush
 @endsection

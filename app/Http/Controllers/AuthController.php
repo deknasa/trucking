@@ -248,7 +248,7 @@ class AuthController extends MyController
                 }
             }
 
-            return redirect()->route('dashboard');
+            return redirect()->route('dashboard')->with(['from_login'=>true]);
         } else {
             return redirect()->back()->withErrors([
                 'user_not_found' => 'User not registered'
