@@ -1037,56 +1037,52 @@
     }
   }
 
-  function approvalFinalAbsensi(selectedRows, buktiselectedRows) {
+  function approvalFinalAbsensi(id) {
+    event.preventDefault()
+
+    let form = $('#crudForm')
+    $(this).attr('disabled', '')
+    $('#processingLoader').removeClass('d-none')
 
     $.ajax({
-      url: `${apiUrl}absensisupirheader/approvalabsensifinal`,
+      url: `${apiUrl}absensisupirheader/approvalfinalabsensi`,
       method: 'POST',
       dataType: 'JSON',
       headers: {
         Authorization: `Bearer ${accessToken}`
       },
       data: {
-        absensiId: selectedRows,
-        bukti: buktiselectedRows,
+        Id: selectedRows,
+        bukti: selectedbukti ,
+        table: 'absensisupirheader' ,
+        statusapproval: 'statusapprovalfinalabsensi' ,
+
       },
       success: response => {
-        $('.is-invalid').removeClass('is-invalid')
-        $('.invalid-feedback').remove()
         $('#crudForm').trigger('reset')
         $('#crudModal').modal('hide')
+
+        $('#jqGrid').jqGrid().trigger('reloadGrid');
         selectedRows = []
-        clearSelectedRows()
-        $('#jqGrid').jqGrid('setGridParam', {
-          postData: {
-            proses: 'reload',
-          }
-        }).trigger('reloadGrid');
-        let data = $('#jqGrid').jqGrid("getGridParam", "postData");
+        $('#gs_').prop('checked', false)
       },
       error: error => {
-        $("#dialog-warning-message").find("p").remove();
-        $(`#dialog-warning-message`).append(
-          `<p class="text-dark">${error.responseJSON.errors.tableId}</p>`
-        );
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
 
-        $("#dialog-warning-message").dialog({
-          modal: true,
-          buttons: [{
-            text: "Ok",
-            click: function() {
-              $(this).dialog("close");
-            },
-          }, ]
-        });
-        $(".ui-dialog-titlebar-close").find("p").remove();
-
+          setErrorMessages(form, error.responseJSON.errors);
+        } else {
+          showDialog(error.statusText)
+        }
       },
     }).always(() => {
       $('#processingLoader').addClass('d-none')
       $(this).removeAttr('disabled')
     })
   }
+
+
 
   function cekValidasi(Id, Aksi) {
 

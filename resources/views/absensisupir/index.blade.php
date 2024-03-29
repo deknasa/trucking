@@ -303,9 +303,9 @@
               value: `<?php
                       $i = 1;
 
-                      foreach ($data['comboedit'] as $status) :
+                      foreach ($data['combofinalabsensi'] as $status) :
                         echo "$status[param]:$status[parameter]";
-                        if ($i !== count($data['comboedit'])) {
+                        if ($i !== count($data['combofinalabsensi'])) {
                           echo ";";
                         }
                         $i++;
@@ -350,12 +350,12 @@
           {
             label: 'TGL FINAL ABSENSI',
             name: 'tglapprovalfinalabsensi',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_2,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'left',
             formatter: "date",
             formatoptions: {
               srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
+              newformat: "d-m-Y H:i:s"
             }
           },          
           {
@@ -755,19 +755,15 @@
                 }
               },
               {
-                id: 'approvalabsensifinal',
-                text: "Approval Absensi Final",
-                onClick: () => {
-                  if (`{{ $myAuth->hasPermission('absensisupirheader', 'approvalbukacetak') }}`) {
-                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                    if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                      showDialog('Harap pilih salah satu record')
-                    } else {
-                      approvalAbsensiFinal(selectedRows, selectedbukti);
-                    }
+                  id: 'approvalabsensifinal',
+                  text: "un/Approval Absensi Final",
+                  onClick: () => {
+                      if (`{{ $myAuth->hasPermission('absensisupirheader', 'approvalfinalabsensi') }}`) {
+                        approvalFinalAbsensi();
+                      }
                   }
-                }
               },
+             
 
             ],
           },
@@ -1003,17 +999,24 @@
         headers: {
           Authorization: `Bearer ${accessToken}`
         },
+   
         success: response => {
-          let msg = `YAKIN UnApprove Status Edit `
-          console.log(statusTidakBisaEdit);
-          if (response.data.statusapprovaleditabsensi === statusTidakBisaEdit) {
-            msg = `YAKIN Approve Status Edit `
+          if (response.data.statusapprovalfinalabsensi === "TIDAK"){
+            let msg = `YAKIN UnApprove Status Edit `
+              console.log(statusTidakBisaEdit);
+              if (response.data.statusapprovaleditabsensi === statusTidakBisaEdit) {
+                msg = `YAKIN Approve Status Edit `
+              }
+              showConfirm(msg, response.data.nobukti, `absensisupirheader/${response.data.id}/approvalEditAbsensi?absenId=${selectedRows}`)
+                .then(() => {
+                  selectedRows = []
+                  $('#gs_').prop('checked', false)
+                })
+
+          } else {
+            showDialog("TIDAK BISA APPROVAL KARENA SUDAH APPROVAL FINAL")
           }
-          showConfirm(msg, response.data.nobukti, `absensisupirheader/${response.data.id}/approvalEditAbsensi`)
-            .then(() => {
-              selectedRows = []
-              $('#gs_').prop('checked', false)
-            })
+
 
         },
       })

@@ -1173,7 +1173,9 @@
       },
       data: {
         pengeluaranId: selectedRows,
-        bukti: selectedbukti
+        bukti: selectedbukti,
+        table: 'pengeluaranheader' ,
+        statusapproval: 'statusapproval' ,        
       },
       success: response => {
         $('#crudForm').trigger('reset')

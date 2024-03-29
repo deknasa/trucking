@@ -275,7 +275,7 @@
         success: response => {
           $.each(response.data, (index, value) => {
             let element = form.find(`[name="${index}"]`)
-
+            console.log(value)
             if (element.is('select')) {
               element.val(value).trigger('change')
             } else if (element.attr("name") == 'tglabsensi') {
