@@ -57,6 +57,15 @@
                     </select>
                   </div>
                 </div>
+
+                <div class="form-group statuskandang">
+                  <label class="col-sm-12 col-form-label">STATUS KANDANG <span class="text-danger">*</span></label>
+                  <div class="col-sm-12">
+                    <select name="statuskandang" class="form-control select2bs4" id="statuskandang">
+                      <option value="">-- PILIH STATUS KANDANG--</option>
+                    </select>
+                  </div>
+                </div>
                 <div class="form-group ">
                   <label class="col-sm-12 col-form-label"><em><u>CUSTOMER </u></em><span class="text-danger">*</span></label>
                   <div class="col-sm-12">
@@ -1001,6 +1010,7 @@
         setStatusBatalMuatOptions(form),
         setStatusGandenganOptions(form),
         setStatusUpahZonaOptions(form),
+        setStatusKandangOptions(form),
         setTampilan(form)
       ])
       .then(() => {
@@ -1048,6 +1058,7 @@
         setStatusBatalMuatOptions(form),
         setStatusGandenganOptions(form),
         setStatusUpahZonaOptions(form),
+        setStatusKandangOptions(form),
         setTampilan(form)
       ])
       .then(() => {
@@ -1302,6 +1313,44 @@
             let option = new Option(statusGandengan.text, statusGandengan.id)
             statusLongtrip = statusGandengan.id
             relatedForm.find('[name=statusgandengan]').append(option).trigger('change')
+          });
+
+          resolve()
+        },
+        error: error => {
+          reject(error)
+        }
+      })
+    })
+  }
+  const setStatusKandangOptions = function(relatedForm) {
+    return new Promise((resolve, reject) => {
+      relatedForm.find('[name=statuskandan]').empty()
+      relatedForm.find('[name=statuskandan]').append(
+        new Option('-- PILIH STATUS KANDANG --', '', false, true)
+      ).trigger('change')
+
+      $.ajax({
+        url: `${apiUrl}parameter`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          filters: JSON.stringify({
+            "groupOp": "AND",
+            "rules": [{
+              "field": "grp",
+              "op": "cn",
+              "data": "STATUS KANDANG"
+            }]
+          })
+        },
+        success: response => {
+          response.data.forEach(statusKandang => {
+            let option = new Option(statusKandang.text, statusKandang.id)
+            relatedForm.find('[name=statuskandang]').append(option).trigger('change')
           });
 
           resolve()
