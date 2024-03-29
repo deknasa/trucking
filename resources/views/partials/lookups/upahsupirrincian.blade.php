@@ -13,6 +13,7 @@
         container_id: `{!! $container_Id ?? '' !!}`,
         statuscontainer_id: `{!! $statuscontainer_Id ?? '' !!}`,
         jenisorder_id: `{!! $jenisorder_Id ?? '' !!}`,
+        statuskandang_id: `{!! $statuskandang_Id ?? '' !!}`,
         statusupahzona: `{!! $statusUpahZona ?? '' !!}`,
         tglbukti: `{!! $tglbukti ?? '' !!}`,
         longtrip: `{!! $longtrip ?? '' !!}`

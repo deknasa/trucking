@@ -272,6 +272,7 @@
   let triggerClick = true;
   let id = "";
   let jenisorderId
+  let statuskandangId
   let statuscontainerId
   let kotadariId
   let kotasampaiId
@@ -485,6 +486,14 @@
     enableTripAsal()
     setJobReadOnly()
   })
+
+  $(`#crudForm [name="statuskandang"]`).on('change', function(event) {
+        $('#crudForm [name=upah_id]').val('')
+        $('#crudForm [name=upah]').val('').data('currentValue', '')
+        enabledUpahSupir()
+        clearUpahSupir()
+        clearTripAsal() 
+ })
 
   $(`#crudForm [name="statuslongtrip"]`).on('change', function(event) {
     let statuslongtrip = $(`#crudForm [name="statuslongtrip"]`).val()
@@ -1007,6 +1016,7 @@
       success: response => {
         containerId = 0
         jenisorderId = 0
+        statuskandangId = 0
         tradoId = 0
         gandenganId = 0
         pelangganId = 0
@@ -1650,6 +1660,7 @@
           container_Id: containerId,
           statuscontainer_Id: statuscontainerId,
           jenisorder_Id: jenisorderId,
+          statuskandang_Id: $('#crudForm [name=statuskandang]').val(),
           statusUpahZona: statusUpahZona,
           tglbukti: $('#crudForm [name=tglbukti]').val(),
           longtrip: $('#crudForm [name=statuslongtrip]').val()
