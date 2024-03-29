@@ -600,6 +600,7 @@ function checkboxHandler(element) {
                 text: "UN/APPROVAL Status penerimaan",
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('penerimaanheader', 'approval') }}`) {
+                    // console.log(selectedbukti )
                     approve()
                   }
                 }
