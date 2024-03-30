@@ -216,12 +216,12 @@ function checkboxHandler(element) {
           {
             label: 'TGL MASUK',
             name: 'tglmasuk',
-            width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'left',
             formatter: "date",
             formatoptions: {
               srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
+              newformat: "d-m-Y H:i:s"
             }
           },
           {

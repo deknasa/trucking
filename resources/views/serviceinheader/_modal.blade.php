@@ -47,12 +47,12 @@
                             </div>
                             <div class="col-12 col-sm-2 col-md-2">
                                 <label class="col-form-label">
-                                    TGL MASUK <span class="text-danger">*</span>
+                                    TGL & JAM MASUK <span class="text-danger">*</span>
                                 </label>
                             </div>
                             <div class="col-12 col-sm-4 col-md-4">
                                 <div class="input-group">
-                                    <input type="text" name="tglmasuk" class="form-control datepicker">
+                                    <input type="datetime-local" name="tglmasuk" class="form-control inputmask-time">
                                 </div>
                             </div>
                         </div>
@@ -286,6 +286,10 @@
         getMaxLength(form)
         initLookup()
         initDatepicker()
+        Inputmask("datetime", {
+            inputFormat: "HH:MM",
+            max: 24
+        }).mask(".inputmask-time");
     })
 
     $('#crudModal').on('hidden.bs.modal', () => {
