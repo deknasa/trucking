@@ -201,8 +201,8 @@
                 Authorization: `Bearer ${accessToken}`
             },
             success: response => {
-                if (response.data) {
-                    showDialog('Harap pilih salah satu record');
+                if (response.show) {
+                    showDialog('Ada Absensi Belum Approval Final, Tanggal : ' +response.data);
                 }
             },
         })
