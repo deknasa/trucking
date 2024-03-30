@@ -201,6 +201,7 @@
 
   $(document).ready(function() {
     $("#crudForm [name]").attr("autocomplete", "off");
+    var orederan_id;
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
 
@@ -335,11 +336,12 @@
     initLookup()
     initSelect2(form.find('.select2bs4'), true)
     initDatepicker()
+    orederan_id = $('#crudForm').find('[name=id]').val();
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
-    removeEditingBy($('#crudForm').find('[name=id]').val())
+    removeEditingBy(orederan_id)
     $('#crudModal').find('.modal-body').html(modalBody)
     initDatepicker('datepickerIndex')
   })
