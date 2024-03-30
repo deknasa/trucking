@@ -478,6 +478,14 @@
         setJobReadOnly()
     })
 
+    $(document).on('change', `#crudForm [name="statuskandang"]`, function(event) {
+        // if ($(`#crudForm [name="statuskandang"]`).val() == 600){
+        $('#crudForm [name=upah]').data('currentValue', '')
+        $('#crudForm [name=upah]').val('')
+        $('#crudForm [name=upah_id]').val('')
+        clearUpahSupir()
+        // }
+    })
 
     $(document).on('change', `#crudForm [name="statuslongtrip"]`, function(event) {
         let statuslongtrip = $(`#crudForm [name="statuslongtrip"]`).val()
@@ -1612,6 +1620,7 @@
                     container_Id: containerId,
                     statuscontainer_Id: statuscontainerId,
                     jenisorder_Id: jenisorderId,
+                    statuskandang_Id: $('#crudForm [name=statuskandang]').val(),
                     statusUpahZona: statusUpahZona,
                     tglbukti: $('#crudForm [name=tglbukti]').val(),
                     longtrip: $('#crudForm [name=statuslongtrip]').val()

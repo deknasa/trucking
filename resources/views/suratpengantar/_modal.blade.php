@@ -667,6 +667,14 @@
     $(document).on('input', `#detailList [name="nominalTagih[]"]`, function(event) {
       setTotalTagih()
     })
+    $(document).on('change', `#crudForm [name="statuskandang"]`, function(event) {
+        // if ($(`#crudForm [name="statuskandang"]`).val() == 600){
+            $('#crudForm [name=upah]').data('currentValue','')
+            $('#crudForm [name=upah]').val('')
+            $('#crudForm [name=upah_id]').val('')
+            clearUpahSupir()
+        // }
+    })
 
 
     $(document).on('click', `#btnSubmit`, function(event) {
@@ -706,6 +714,7 @@
       data.filter((row) => row.name === 'omset')[0].value = AutoNumeric.getNumber($(`#crudForm [name="omset"]`)[0])
       data.filter((row) => row.name === 'komisisupir')[0].value = AutoNumeric.getNumber($(`#crudForm [name="komisisupir"]`)[0])
       data.filter((row) => row.name === 'gajikenek')[0].value = AutoNumeric.getNumber($(`#crudForm [name="gajikenek"]`)[0])
+      data.filter((row) => row.name === 'gajisupir')[0].value = AutoNumeric.getNumber($(`#crudForm [name="gajisupir"]`)[0])
       // })
 
       data.push({
@@ -1662,6 +1671,7 @@
         Authorization: `Bearer ${accessToken}`
       },
       data: {
+        statuskandang: $('#crudForm').find(`[name="statuskandang"]`).val(),
         upah_id: $('#crudForm').find(`[name="upah_id"]`).val(),
         container_id: $('#crudForm').find(`[name="container_id"]`).val(),
         statuscontainer_id: $('#crudForm').find(`[name="statuscontainer_id"]`).val(),
@@ -1934,6 +1944,7 @@
           container_Id: containerId,
           statuscontainer_Id: statuscontainerId,
           jenisorder_Id: jenisorderId,
+          statuskandang_Id: $('#crudForm [name=statuskandang]').val(),
           statusUpahZona: statusUpahZona,
           tglbukti: $('#crudForm [name=tglbukti]').val(),
           longtrip: $('#crudForm [name=statuslongtrip]').val()
