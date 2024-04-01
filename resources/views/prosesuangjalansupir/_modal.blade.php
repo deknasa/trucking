@@ -1811,6 +1811,7 @@
                 element.data('currentValue', element.val())
                 $('#tablePengembalian').jqGrid("clearGridData");
                 $("#tablePengembalian")[0].p.selectedRowIds = [];
+                $('#crudForm [name=keterangandeposit]').val("DEPOSITO SUPIR " + supir.supir)
 
                 getDataPengembalian(supir.supir_id).then((response) => {
                     setTimeout(() => {

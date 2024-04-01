@@ -2882,6 +2882,9 @@
                   element.parents('td').find(`[name="supir_id[]"]`).val(supir.id)
                   element.val(supir.namasupir)
                   element.data('currentValue', element.val())
+                  if (KodePenerimaanId == 'DPO') {
+                    element.parents('tr').find(`td [name="keterangan[]"]`).val("DEPOSITO SUPIR " + supir.namasupir)
+                  }
                 },
                 onCancel: (element) => {
                   element.val(element.data('currentValue'))
@@ -2906,6 +2909,9 @@
                   element.parents('td').find(`[name="karyawan_id[]"]`).val(karyawan.id)
                   element.val(karyawan.namakaryawan)
                   element.data('currentValue', element.val())
+                  if (KodePenerimaanId == 'DPOK') {
+                    element.parents('tr').find(`td [name="keterangan[]"]`).val("DEPOSITO KARYAWAN " + karyawan.namakaryawan)
+                  }
                 },
                 onCancel: (element) => {
                   element.val(element.data('currentValue'))
@@ -3198,6 +3204,12 @@
       </tr>
     `)
 
+    // if (KodePenerimaanId == 'DPO') {
+    //   detailRow.find(`[name="keterangan[]"]`).val("DEPOSITO SUPIR")
+    // }
+    // if (KodePenerimaanId == 'DPOK') {
+    //   detailRow.find(`[name="keterangan[]"]`).val("DEPOSITO KARYAWAN")
+    // }
     $('#detailList tbody').append(detailRow)
 
     $('.supir-lookup').last().lookup({
@@ -3213,6 +3225,10 @@
         element.parents('td').find(`[name="supir_id[]"]`).val(supir.id)
         element.val(supir.namasupir)
         element.data('currentValue', element.val())
+
+        if (KodePenerimaanId == 'DPO') {
+          element.parents('tr').find(`td [name="keterangan[]"]`).val("DEPOSITO SUPIR " + supir.namasupir)
+        }
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
@@ -3237,6 +3253,9 @@
         element.parents('td').find(`[name="karyawan_id[]"]`).val(karyawan.id)
         element.val(karyawan.namakaryawan)
         element.data('currentValue', element.val())
+        if (KodePenerimaanId == 'DPOK') {
+          element.parents('tr').find(`td [name="keterangan[]"]`).val("DEPOSITO KARYAWAN " + karyawan.namakaryawan)
+        }
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
