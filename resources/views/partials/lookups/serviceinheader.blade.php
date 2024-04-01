@@ -18,6 +18,8 @@
       postData: {
         tgldari: $('#tgldariheaderlookup').val(),
         tglsampai: $('#tglsampaiheaderlookup').val(),
+        serviceout:`{!! $serviceout ?? '' !!}`,
+        trado_id:`{!! $trado_id ?? '' !!}`
 
       },
       idPrefix: 'serviceinLookup',

@@ -540,7 +540,12 @@
                         $('.serviceinheader-lookup').last().lookup({
                             title: 'servicein Lookup',
                             fileName: 'serviceinheader',
-
+                            beforeProcess: function(test) {
+                                this.postData = {
+                                    serviceout: true,
+                                    trado_id:$('#crudForm').find(`[name="trado_id"] `).val()
+                                }
+                            },
                             onSelectRow: (servicein, element) => {
                                 element.val(servicein.nobukti)
                                 element.data('currentValue', element.val())
@@ -590,6 +595,12 @@
         $('.serviceinheader-lookup').last().lookup({
             title: 'servicein Lookup',
             fileName: 'serviceinheader',
+            beforeProcess: function(test) {
+                this.postData = {
+                    serviceout: true,
+                    trado_id:$('#crudForm').find(`[name="trado_id"] `).val()
+                }
+            },
             onSelectRow: (servicein, element) => {
                 element.val(servicein.nobukti)
                 element.data('currentValue', element.val())
@@ -706,6 +717,7 @@
             },
             onClear: (element) => {
                 element.val('')
+                $('#crudForm [name=trado_id]').first().val('')
                 $(`#crudForm [name="type"]`).first().val('')
                 element.data('currentValue', element.val())
             }
