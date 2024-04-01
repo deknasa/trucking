@@ -2929,6 +2929,7 @@
     initDatepicker('datepickerIndex')
     KodePengeluaranId = ''
   })
+
   function removeEditingBy(id) {
     $.ajax({
       url: `{{ config('app.api_url') }}bataledit`,
@@ -2957,7 +2958,7 @@
         }
       },
     })
-  }  
+  }
 
   function setTotal() {
     let nominalDetails = $(`#table_body [name="nominal[]"]:not([disabled])`)
@@ -5404,6 +5405,9 @@
                   element.parents('td').find(`[name="supir_id[]"]`).val(supir.id)
                   element.val(supir.namasupir)
                   element.data('currentValue', element.val())
+                  if (KodePengeluaranId == 'PJT') {
+                    element.parents('tr').find(`td [name="keterangan[]"]`).val("PINJAMAN SUPIR " + supir.namasupir)
+                  }
                 },
                 onCancel: (element) => {
                   element.val(element.data('currentValue'))
@@ -5427,6 +5431,9 @@
                   element.parents('td').find(`[name="karyawan_id[]"]`).val(karyawan.id)
                   element.val(karyawan.namakaryawan)
                   element.data('currentValue', element.val())
+                  if (KodePengeluaranId == 'PJK') {
+                    element.parents('tr').find(`td [name="keterangan[]"]`).val("PINJAMAN KARYAWAN " + karyawan.namakaryawan)
+                  }
                 },
                 onCancel: (element) => {
                   element.val(element.data('currentValue'))
@@ -5783,7 +5790,7 @@
         </td>  
         <td class="data_tbl tbl_karyawan_id">
           <input id="karyawan_id_${indexRow}" type="hidden" name="karyawan_id[]">
-          <input id="karyawawan_${indexRow}" type="text" name="karyawawan[]"  class="form-control karyawan-lookup">
+          <input id="karyawawan_${indexRow}" type="text" name="karyawan[]"  class="form-control karyawan-lookup">
         </td>
         <td class="data_tbl tbl_pengeluaranstokheader_nobukti">
           <input id="pengeluaranstok_nobukti_${indexRow}" type="text" name="pengeluaranstok_nobukti[]"  class="form-control pengeluaranstokheader-lookup">
@@ -5862,6 +5869,9 @@
         element.parents('td').find(`[name="supir_id[]"]`).val(supir.id)
         element.val(supir.namasupir)
         element.data('currentValue', element.val())
+        if (KodePengeluaranId == 'PJT') {
+          element.parents('tr').find(`td [name="keterangan[]"]`).val("PINJAMAN SUPIR " + supir.namasupir)
+        }
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
@@ -5917,6 +5927,9 @@
         element.parents('td').find(`[name="karyawan_id[]"]`).val(karyawan.id)
         element.val(karyawan.namakaryawan)
         element.data('currentValue', element.val())
+        if (KodePengeluaranId == 'PJK') {
+          element.parents('tr').find(`td [name="keterangan[]"]`).val("PINJAMAN KARYAWAN " + karyawan.namakaryawan)
+        }
       },
       onCancel: (element) => {
         element.val(element.data('currentValue'))
