@@ -1445,6 +1445,19 @@
                 $('#StoreApprovalTradoTanpa').hide()
                 // $('#approval-buka-cetak').attr('disabled', 'disabled')
             }
+            hakApporveCount++
+            if (!`{{ $myAuth->hasPermission('trado', 'approvalhistorytradomilikmandor') }}`) {
+                hakApporveCount--
+                $('#approvalHistoryTradoMilikMandor').hide()
+                // $('#approval-buka-cetak').attr('disabled', 'disabled')
+            }
+            hakApporveCount++
+            if (!`{{ $myAuth->hasPermission('trado', 'approvalhistorytradomiliksupir') }}`) {
+                hakApporveCount--
+                $('#approvalHistoryTradoMilikSupir').hide()
+                // $('#approval-buka-cetak').attr('disabled', 'disabled')
+            }
+
 
 
 
