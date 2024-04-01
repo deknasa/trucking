@@ -1318,6 +1318,12 @@
                 $('#StoreApprovalTradoTanpa').hide()
             }
 
+            hakApporveCount++
+            if (!`{{ $myAuth->hasPermission('supir', 'approvalhistorysupirmilikmandor') }}`) {
+                hakApporveCount--
+                $('#approvalHistorySupirMilikMandor').hide()
+            }
+
 
 
             if (hakApporveCount < 1) {
