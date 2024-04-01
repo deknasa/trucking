@@ -824,7 +824,7 @@
       }
       if (hakLainnyaCount < 1) {
         // $('#approve').hide()
-        $('#lainnya').attr('disabled', 'disabled')
+        $('#lainnya').hide()
       }
     }
 
