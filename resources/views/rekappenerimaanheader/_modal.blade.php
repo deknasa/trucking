@@ -190,6 +190,10 @@
           value: parseFloat(item.replaceAll(',', ''))
         })
       });
+      data.push({
+        name: 'aksi',
+        value: action.toUpperCase()
+      })
 
       data.push({
         name: 'sortIndex',
