@@ -1332,7 +1332,7 @@
             }
 
             if (!`{{ $myAuth->hasPermission('supir', 'historySupirMandor') }}`) {
-                $('#lainnya').attr('disabled', 'disabled')
+                $('#lainnya').hide()
             }
         }
 
