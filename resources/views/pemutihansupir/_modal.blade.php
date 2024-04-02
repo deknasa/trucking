@@ -49,12 +49,12 @@
               </div>
 
               <div class="border p-3 mt-3">
-                <h6>Posting Penerimaan</h6>
+                <h6>Posting Penerimaan/Pengeluaran</h6>
 
                 <div class="row form-group">
                   <div class="col-12 col-md-2">
                     <label class="col-form-label">
-                      POSTING </label>
+                      kas / bank </label>
                   </div>
                   <div class="col-12 col-md-4">
                     <input type="hidden" name="bank_id">
@@ -64,10 +64,19 @@
                 <div class="row form-group">
                   <div class="col-12 col-md-2">
                     <label class="col-form-label">
-                      NO BUKTI KAS MASUK </label>
+                      NO BUKTI KAS / BANK MASUK </label>
                   </div>
                   <div class="col-12 col-md-4">
                     <input type="text" name="penerimaan_nobukti" id="penerimaan_nobukti" class="form-control" readonly>
+                  </div>
+                </div>
+                <div class="row form-group">
+                  <div class="col-12 col-md-2">
+                    <label class="col-form-label">
+                      NO BUKTI KAS / BANK KELUAR </label>
+                  </div>
+                  <div class="col-12 col-md-4">
+                    <input type="text" name="pengeluaran_nobukti" id="pengeluaran_nobukti" class="form-control" readonly>
                   </div>
                 </div>
               </div>
@@ -274,6 +283,10 @@
         value: form.find(`[name="penerimaan_nobukti"]`).val()
       })
 
+      data.push({
+        name: 'aksi',
+        value: action.toUpperCase()
+      })
 
       let rowLength = 0
       $.each(selectedRowsPosting, function(index, item) {
@@ -1066,18 +1079,46 @@
       beforeSend: request => {
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
+      data: {
+        aksi: Aksi
+      },
       success: response => {
-        var kondisi = response.kondisi
-        if (kondisi == true) {
+        var error = response.error
+        if (error) {
+          showDialog(response)
+        } else {
+          if (Aksi == 'PRINTER BESAR') {
+            window.open(`{{ route('pemutihansupir.report') }}?id=${Id}&printer=reportPrinterBesar`)
+          } else if (Aksi == 'PRINTER KECIL') {
+            window.open(`{{ route('pemutihansupir.report') }}?id=${Id}&printer=reportPrinterKecil`)
+          } else {
+            cekValidasiAksi(Id, Aksi)
+          }
+        }
 
+      }
+    })
+  }
+
+  function cekValidasiAksi(Id, Aksi) {
+    $.ajax({
+      url: `{{ config('app.api_url') }}pemutihansupir/${Id}/cekValidasiAksi`,
+      method: 'POST',
+      dataType: 'JSON',
+      beforeSend: request => {
+        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+      },
+      success: response => {
+        var error = response.error
+        if (error) {
+          showDialog(response)
+        } else {
           if (Aksi == 'EDIT') {
             editPemutihanSupir(Id)
           }
           if (Aksi == 'DELETE') {
             deletePemutihanSupir(Id)
           }
-        } else {
-          showDialog(response.message['keterangan'])
         }
 
       }
