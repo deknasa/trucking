@@ -19,6 +19,7 @@
         tgldari: $('#tgldariheaderlookup').val(),
         tglsampai: $('#tglsampaiheaderlookup').val(),
         serviceout:`{!! $serviceout ?? '' !!}`,
+        nobukti:`{!! $nobukti ?? '' !!}`,
         trado_id:`{!! $trado_id ?? '' !!}`
 
       },
