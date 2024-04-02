@@ -796,7 +796,7 @@
         })
 
         $(`.status-lookup`).lookupMaster({
-            title: 'Status Aktif Lookup',
+            title: 'STATUS SERVICE OUT Lookup',
             fileName: 'parameterMaster',
             typeSearch: 'ALL',
             searching: 1,
@@ -810,7 +810,7 @@
                     searchText: `status-lookup`,
                     singleColumn: true,
                     hideLabel: true,
-                    title: 'Status Aktif'
+                    title: 'STATUS SERVICE OUT'
                 };
             },
             onSelectRow: (status, element) => {
