@@ -57,6 +57,20 @@
                             </div>
                         </div>
 
+                        <div class="row form-group">
+                            <div class="col-12 col-sm-3 col-md-2">
+                              <label class="col-form-label">
+                                Status Aktif <span class="text-danger">*</span>
+                              </label>
+                            </div>
+              
+              
+                            <div class="col-12 col-sm-4 col-md-4">
+                              <input type="hidden" name="statusserviceout">
+                              <input type="text" name="statusserviceoutnama" id="statusserviceoutnama" class="form-control lg-form status-lookup">
+                            </div>
+                          </div>
+
 
                         <div class="row mt-5">
                             <div class="col-md-12">
@@ -335,7 +349,7 @@
         `)
         form.data('action', 'add')
         $('#crudModalTitle').text('Add Service in')
-        $('#crudModal').modal('show')
+       
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
         $('#crudForm').find('[name=tglbukti]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
@@ -344,8 +358,24 @@
         if (selectedRows.length > 0) {
             clearSelectedRows()
         }
-        $('#table_body').html('')
-        addRow()
+
+        Promise
+        .all([
+          showDefault(form),
+        ])
+        .then(() => {
+            $('#crudModal').modal('show')
+            $('#table_body').html('')
+            addRow()
+        })
+        .catch((error) => {
+            showDialog(error.statusText)
+        })
+        .finally(() => {
+            $('.modal-loader').addClass('d-none')
+        })
+        
+       
     }
 
     function editServicein(id) {
@@ -577,6 +607,36 @@
         })
     }
 
+    function showDefault(form) {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: `${apiUrl}serviceinheader/default`,
+                method: 'GET',
+                dataType: 'JSON',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                success: response => {
+                    $.each(response.data, (index, value) => {
+                        console.log(value)
+                        let element = form.find(`[name="${index}"]`)
+                        
+                        if (element.is('select')) {
+                            element.val(value).trigger('change')
+                        } else {
+                            element.val(value)
+                        }
+                    })
+                    resolve()
+                },
+                error: error => {
+                    reject(error)
+                }
+            })
+        })
+    }
+    
+    
     function addRow() {
         let detailRow = (`
         <tr>
@@ -731,6 +791,39 @@
             }
         })
 
+        $(`.status-lookup`).lookupMaster({
+            title: 'Status Aktif Lookup',
+            fileName: 'parameterMaster',
+            typeSearch: 'ALL',
+            searching: 1,
+            beforeProcess: function() {
+                this.postData = {
+                    url: `${apiUrl}parameter/combo`,
+                    grp: 'STATUS SERVICE OUT',
+                    subgrp: 'STATUS SERVICE OUT',
+                    searching: 1,
+                    valueName: `statusserviceout`,
+                    searchText: `status-lookup`,
+                    singleColumn: true,
+                    hideLabel: true,
+                    title: 'Status Aktif'
+                };
+            },
+            onSelectRow: (status, element) => {
+                $('#crudForm [name=statusserviceout]').first().val(status.id)
+                element.val(status.text)
+                element.data('currentValue', element.val())
+            },
+            onCancel: (element) => {
+                element.val(element.data('currentValue'));
+            },
+            onClear: (element) => {
+                $('#crudForm [name=statusserviceout]').first().val('')
+                element.val('');
+                element.data('currentValue', element.val());
+            },
+        });
+        
     }
     const setTglBukti = function(form) {
         return new Promise((resolve, reject) => {
