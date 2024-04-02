@@ -705,6 +705,7 @@
                 setStatusUpahZonaOptions(form),
                 setStatusLangsirOptions(form),
                 setStatusGandenganOptions(form),
+                setStatusKandangOptions(form),
                 setTampilan(form)
             ])
             .then(() => {
