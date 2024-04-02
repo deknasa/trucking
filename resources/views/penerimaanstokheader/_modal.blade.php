@@ -3264,6 +3264,8 @@
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
+          tradodari_id:$('#crudForm').find(`[id="tradodariId"] `).val(),
+          tradodarike: 'ke',          
         }
       },
       onSelectRow: (trado, element) => {
@@ -3288,6 +3290,8 @@
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
+          gandengandari_id:$('#crudForm').find(`[id="gandengandariId"] `).val(),
+          gandengandarike: 'ke',
         }
       },
       onSelectRow: (trado, element) => {
@@ -3313,7 +3317,8 @@
         var penerimaanstokId = $(`#penerimaanstokId`).val();
         this.postData = {
           penerimaanstok_id: penerimaanstokId,
-          // gudangdarike: 'ke',
+          gudangdari_id:$('#crudForm').find(`[id="gudangdariId"] `).val(),
+          gudangdarike: 'ke',
           Aktif: 'AKTIF',
         }
       },
@@ -3338,6 +3343,7 @@
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
+          tradodarike: 'dari',
         }
       },
       onSelectRow: (trado, element) => {
@@ -3363,6 +3369,7 @@
       beforeProcess: function(test) {
         this.postData = {
           Aktif: 'AKTIF',
+          gandengandarike: 'dari',
         }
       },
       onSelectRow: (trado, element) => {
@@ -3389,7 +3396,7 @@
         var penerimaanstokId = $(`#penerimaanstokId`).val();
         this.postData = {
           penerimaanstok_id: penerimaanstokId,
-          // gudangdarike: 'dari',
+          gudangdarike: 'dari',
           Aktif: 'AKTIF',
         }
       },
