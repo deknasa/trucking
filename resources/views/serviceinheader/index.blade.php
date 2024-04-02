@@ -243,6 +243,55 @@ function checkboxHandler(element) {
             }
           },
           {
+            label: 'STATUS SERVICE OUT',
+            name: 'statusserviceout',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
+            align: 'left',
+            stype: 'select',
+            searchoptions: {
+
+              value: `<?php
+                      $i = 1;
+
+                      foreach ($data['comboserviceout'] as $status) :
+                        echo "$status[param]:$status[parameter]";
+                        if ($i !== count($data['comboserviceout'])) {
+                          echo ";";
+                        }
+                        $i++;
+                      endforeach
+
+                      ?>
+              `,
+              dataInit: function(element) {
+                $(element).select2({
+                  width: 'resolve',
+                  theme: "bootstrap4"
+                });
+              }
+            },
+            formatter: (value, options, rowData) => {
+              let statusserviceout = JSON.parse(value)
+              if (!statusserviceout) {
+                return ``
+              }
+              let formattedValue = $(`
+                <div class="badge" style="background-color: ${statusserviceout.WARNA}; color: #fff;">
+                  <span>${statusserviceout.SINGKATAN}</span>
+                </div>
+              `)
+
+              return formattedValue[0].outerHTML
+            },
+            cellattr: (rowId, value, rowObject) => {
+              let statusserviceout = JSON.parse(rowObject.statusserviceout)
+              if (!statusserviceout) {
+                return ` title=""`
+              }
+              return ` title="${statusserviceout.MEMO}"`
+            }
+          },
+          {
             label: 'MODIFIED BY',
             name: 'modifiedby',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
