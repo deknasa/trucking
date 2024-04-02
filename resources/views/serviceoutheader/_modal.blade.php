@@ -543,7 +543,8 @@
                             beforeProcess: function(test) {
                                 this.postData = {
                                     serviceout: true,
-                                    trado_id:$('#crudForm').find(`[name="trado_id"] `).val()
+                                    trado_id:$('#crudForm').find(`[name="trado_id"] `).val(),
+                                    nobukti:$('#crudForm').find(`[name="nobukti"] `).val()
                                 }
                             },
                             onSelectRow: (servicein, element) => {
@@ -598,7 +599,8 @@
             beforeProcess: function(test) {
                 this.postData = {
                     serviceout: true,
-                    trado_id:$('#crudForm').find(`[name="trado_id"] `).val()
+                    trado_id:$('#crudForm').find(`[name="trado_id"] `).val(),
+                    nobukti:$('#crudForm').find(`[name="nobukti"] `).val()
                 }
             },
             onSelectRow: (servicein, element) => {
