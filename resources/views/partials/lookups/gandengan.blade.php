@@ -12,6 +12,8 @@
         aktif: `{!! $Aktif ?? '' !!}`,
         asal:  `{!! $Asal ?? '' !!}`,
         cabang: `{!! $cabang ?? '' !!}`,
+        gandengandarike: `{!! $gandengandarike ?? '' !!}`,
+        gandengandari_id: `{!! $gandengandari_id ?? '' !!}`,        
       },      
       idPrefix: 'gandenganLookup',
       colModel: [{
