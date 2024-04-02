@@ -60,7 +60,7 @@
                         <div class="row form-group">
                             <div class="col-12 col-sm-3 col-md-2">
                               <label class="col-form-label">
-                                Status Aktif <span class="text-danger">*</span>
+                                Status Service Out <span class="text-danger">*</span>
                               </label>
                             </div>
               
