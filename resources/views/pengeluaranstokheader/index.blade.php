@@ -130,7 +130,7 @@
 
   function clearSelectedRows() {
     selectedRows = []
-    selectedbukti =[]
+    selectedbukti = []
     $('#gs_').prop('checked', false);
     $('#jqGrid').trigger('reloadGrid')
   }
@@ -171,6 +171,7 @@
         $('#add').attr('disabled', false)
         $('#edit').attr('disabled', false)
         $('#delete').attr('disabled', false)
+        permission()
       } else {
         $('#add').attr('disabled', true)
         $('#edit').attr('disabled', true)
@@ -180,6 +181,7 @@
       $('#add').attr('disabled', false)
       $('#edit').attr('disabled', false)
       $('#delete').attr('disabled', false)
+      permission()
     }
   }
   $(document).ready(function() {
@@ -862,55 +864,6 @@
       .addClass('btn btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    function permission() {
-      if (!`{{ $myAuth->hasPermission('pengeluaranstokheader', 'store') }}`) {
-        $('#add').attr('disabled', 'disabled')
-      }
-
-      if (!`{{ $myAuth->hasPermission('pengeluaranstokheader', 'show') }}`) {
-        $('#view').attr('disabled', 'disabled')
-      }
-
-      if (!`{{ $myAuth->hasPermission('pengeluaranstokheader', 'update') }}`) {
-        $('#edit').attr('disabled', 'disabled')
-      }
-
-      if (!`{{ $myAuth->hasPermission('pengeluaranstokheader', 'destroy') }}`) {
-        $('#delete').attr('disabled', 'disabled')
-      }
-
-      if (!`{{ $myAuth->hasPermission('pengeluaranstokheader', 'export') }}`) {
-        $('#export').attr('disabled', 'disabled')
-      }
-
-      if (!`{{ $myAuth->hasPermission('pengeluaranstokheader', 'report') }}`) {
-        $('#report').attr('disabled', 'disabled')
-      }
-
-      let hakApporveCount = 0;
-      hakApporveCount++
-      if (!`{{ $myAuth->hasPermission('pengeluaranstokheader', 'approvalEdit') }}`) {
-        $('#approvalEdit').hide()
-        hakApporveCount--
-        // $('#approvalEdit').attr('disabled', 'disabled')
-      }
-      hakApporveCount++
-      if (!`{{ $myAuth->hasPermission('pengeluaranstokheader', 'approvalEditKeterangan') }}`) {
-        $('#approvalEditKeterangan').hide()
-        hakApporveCount--
-        // $('#approvalEditKeterangan').attr('disabled', 'disabled')
-      }
-      hakApporveCount++
-      if (!`{{ $myAuth->hasPermission('pengeluaranstokheader', 'approvalbukacetak') }}`) {
-        hakApporveCount--
-        $('#approval-buka-cetak').hide()
-        // $('#approval-buka-cetak').attr('disabled', 'disabled')
-      }
-      if (hakApporveCount < 1) {
-        $('#approve').hide()
-        // $('#approve').attr('disabled', 'disabled')
-      }
-    }
 
     $('#rangeModal').on('shown.bs.modal', function() {
       if (autoNumericElements.length > 0) {
@@ -1075,6 +1028,56 @@
 
 
   })
+
+  function permission() {
+    if (!`{{ $myAuth->hasPermission('pengeluaranstokheader', 'store') }}`) {
+      $('#add').attr('disabled', 'disabled')
+    }
+
+    if (!`{{ $myAuth->hasPermission('pengeluaranstokheader', 'show') }}`) {
+      $('#view').attr('disabled', 'disabled')
+    }
+
+    if (!`{{ $myAuth->hasPermission('pengeluaranstokheader', 'update') }}`) {
+      $('#edit').attr('disabled', 'disabled')
+    }
+
+    if (!`{{ $myAuth->hasPermission('pengeluaranstokheader', 'destroy') }}`) {
+      $('#delete').attr('disabled', 'disabled')
+    }
+
+    if (!`{{ $myAuth->hasPermission('pengeluaranstokheader', 'export') }}`) {
+      $('#export').attr('disabled', 'disabled')
+    }
+
+    if (!`{{ $myAuth->hasPermission('pengeluaranstokheader', 'report') }}`) {
+      $('#report').attr('disabled', 'disabled')
+    }
+
+    let hakApporveCount = 0;
+    hakApporveCount++
+    if (!`{{ $myAuth->hasPermission('pengeluaranstokheader', 'approvalEdit') }}`) {
+      $('#approvalEdit').hide()
+      hakApporveCount--
+      // $('#approvalEdit').attr('disabled', 'disabled')
+    }
+    hakApporveCount++
+    if (!`{{ $myAuth->hasPermission('pengeluaranstokheader', 'approvalEditKeterangan') }}`) {
+      $('#approvalEditKeterangan').hide()
+      hakApporveCount--
+      // $('#approvalEditKeterangan').attr('disabled', 'disabled')
+    }
+    hakApporveCount++
+    if (!`{{ $myAuth->hasPermission('pengeluaranstokheader', 'approvalbukacetak') }}`) {
+      hakApporveCount--
+      $('#approval-buka-cetak').hide()
+      // $('#approval-buka-cetak').attr('disabled', 'disabled')
+    }
+    if (hakApporveCount < 1) {
+      $('#approve').hide()
+      // $('#approve').attr('disabled', 'disabled')
+    }
+  }
 </script>
 @endpush()
 @endsection

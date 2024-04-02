@@ -124,6 +124,7 @@
         $('#add').attr('disabled', false)
         $('#edit').attr('disabled', false)
         $('#delete').attr('disabled', false)
+        permission()
       } else {
         $('#add').attr('disabled', true)
         $('#edit').attr('disabled', true)
@@ -133,6 +134,7 @@
       $('#add').attr('disabled', false)
       $('#edit').attr('disabled', false)
       $('#delete').attr('disabled', false)
+      permission()
     }
   }
   $(document).ready(function() {
@@ -297,12 +299,12 @@
               if ((value == null) || (value == '')) {
                 return '';
               }
-            //   let tgldari = rowData.tgldariheaderpenerimaantrucking
-            //   let tglsampai = rowData.tglsampaiheaderpenerimaantrucking
-            //   let url = "{{route('penerimaantruckingheader.index')}}"
-            //   let formattedValue = $(`
-            //   <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
-            //  `)
+              //   let tgldari = rowData.tgldariheaderpenerimaantrucking
+              //   let tglsampai = rowData.tglsampaiheaderpenerimaantrucking
+              //   let url = "{{route('penerimaantruckingheader.index')}}"
+              //   let formattedValue = $(`
+              //   <a href="${url}?tgldari=${tgldari}&tglsampai=${tglsampai}" class="link-color" target="_blank">${value}</a>
+              //  `)
               return value
             }
           },
@@ -738,7 +740,23 @@
       .addClass('btn btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    function permission() {
+    
+
+
+    // $("#tabs").on('click', 'li.ui-state-active', function() {
+    //   let href = $(this).find('a').attr('href');
+    //   currentTab = href.substring(1, href.length - 4);
+    //   let hutangBayarId = $('#jqGrid').jqGrid('getGridParam', 'selrow')
+    //   let nobukti = $('#jqGrid').jqGrid('getCell', hutangBayarId, 'pengeluaran_nobukti')
+    //   $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/pengeluarantruckingdetail/${currentTab}/grid`, function() {
+
+    //     loadGrid(hutangBayarId, nobukti)
+    //   })
+    // })
+
+  })
+
+  function permission() {
       if (!`{{ $myAuth->hasPermission('pengeluarantruckingheader', 'store') }}`) {
         $('#add').attr('disabled', 'disabled')
       }
@@ -775,21 +793,6 @@
         // $('#approve').attr('disabled', 'disabled')
       }
     }
-
-
-    // $("#tabs").on('click', 'li.ui-state-active', function() {
-    //   let href = $(this).find('a').attr('href');
-    //   currentTab = href.substring(1, href.length - 4);
-    //   let hutangBayarId = $('#jqGrid').jqGrid('getGridParam', 'selrow')
-    //   let nobukti = $('#jqGrid').jqGrid('getCell', hutangBayarId, 'pengeluaran_nobukti')
-    //   $(`#tabs #${currentTab}-tab`).html('').load(`${appUrl}/pengeluarantruckingdetail/${currentTab}/grid`, function() {
-
-    //     loadGrid(hutangBayarId, nobukti)
-    //   })
-    // })
-
-  })
-
   function clearSelectedRowsIndex() {
     selectedRowsIndex = []
     selectedbukti = []
@@ -815,7 +818,7 @@
       },
       success: (response) => {
         selectedRowsIndex = response.data.map((row) => row.id)
-        selectedbukti =response.data.map((datas) => datas.nobukti)
+        selectedbukti = response.data.map((datas) => datas.nobukti)
         $('#jqGrid').trigger('reloadGrid')
       }
     })

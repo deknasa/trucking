@@ -126,6 +126,7 @@
         $('#add').attr('disabled', false)
         $('#edit').attr('disabled', false)
         $('#delete').attr('disabled', false)
+        permission()
       } else {
         $('#add').attr('disabled', true)
         $('#edit').attr('disabled', true)
@@ -135,6 +136,7 @@
       $('#add').attr('disabled', false)
       $('#edit').attr('disabled', false)
       $('#delete').attr('disabled', false)
+      permission()
     }
   }
   $(document).ready(function() {
@@ -663,44 +665,46 @@
       .addClass('btn btn-sm btn-warning')
       .parent().addClass('px-1')
 
-    function permission() {
-      if (!`{{ $myAuth->hasPermission('penerimaantruckingheader', 'store') }}`) {
-        $('#add').attr('disabled', 'disabled')
-      }
-
-      if (!`{{ $myAuth->hasPermission('penerimaangiroheader', 'show') }}`) {
-        $('#view').attr('disabled', 'disabled')
-      }
-
-      if (!`{{ $myAuth->hasPermission('penerimaantruckingheader', 'update') }}`) {
-        $('#edit').attr('disabled', 'disabled')
-      }
-
-      if (!`{{ $myAuth->hasPermission('penerimaantruckingheader', 'destroy') }}`) {
-        $('#delete').attr('disabled', 'disabled')
-      }
-
-      if (!`{{ $myAuth->hasPermission('penerimaantruckingheader', 'export') }}`) {
-        $('#export').attr('disabled', 'disabled')
-      }
-
-      if (!`{{ $myAuth->hasPermission('penerimaantruckingheader', 'report') }}`) {
-        $('#report').attr('disabled', 'disabled')
-      }
-
-      let hakApporveCount = 0;
-      hakApporveCount++
-      if (!`{{ $myAuth->hasPermission('penerimaantruckingheader', 'approvalbukacetak') }}`) {
-        hakApporveCount--
-        $('#approval-buka-cetak').hide()
-        // $('#approval-buka-cetak').attr('disabled', 'disabled')
-      }
-      if (hakApporveCount < 1) {
-        $('#approve').hide()
-        // $('#approve').attr('disabled', 'disabled')
-      }
-    }
   })
+
+
+  function permission() {
+    if (!`{{ $myAuth->hasPermission('penerimaantruckingheader', 'store') }}`) {
+      $('#add').attr('disabled', 'disabled')
+    }
+
+    if (!`{{ $myAuth->hasPermission('penerimaangiroheader', 'show') }}`) {
+      $('#view').attr('disabled', 'disabled')
+    }
+
+    if (!`{{ $myAuth->hasPermission('penerimaantruckingheader', 'update') }}`) {
+      $('#edit').attr('disabled', 'disabled')
+    }
+
+    if (!`{{ $myAuth->hasPermission('penerimaantruckingheader', 'destroy') }}`) {
+      $('#delete').attr('disabled', 'disabled')
+    }
+
+    if (!`{{ $myAuth->hasPermission('penerimaantruckingheader', 'export') }}`) {
+      $('#export').attr('disabled', 'disabled')
+    }
+
+    if (!`{{ $myAuth->hasPermission('penerimaantruckingheader', 'report') }}`) {
+      $('#report').attr('disabled', 'disabled')
+    }
+
+    let hakApporveCount = 0;
+    hakApporveCount++
+    if (!`{{ $myAuth->hasPermission('penerimaantruckingheader', 'approvalbukacetak') }}`) {
+      hakApporveCount--
+      $('#approval-buka-cetak').hide()
+      // $('#approval-buka-cetak').attr('disabled', 'disabled')
+    }
+    if (hakApporveCount < 1) {
+      $('#approve').hide()
+      // $('#approve').attr('disabled', 'disabled')
+    }
+  }
 
   function clearSelectedRows() {
     selectedRows = []
@@ -727,7 +731,7 @@
       },
       success: (response) => {
         selectedRows = response.data.map((datas) => datas.id)
-        selectedbukti =response.data.map((datas) => datas.nobukti)
+        selectedbukti = response.data.map((datas) => datas.nobukti)
         $('#jqGrid').trigger('reloadGrid')
       }
     })
