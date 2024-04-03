@@ -15,6 +15,7 @@
         pengeluaranstok_id: `{!! $pengeluaranstok_id ?? '' !!}`,
         gudangdarike: `{!! $gudangdarike ?? '' !!}`,
         gudangdari_id: `{!! $gudangdari_id ?? '' !!}`,
+        gudangke_id: `{!! $gudangke_id ?? '' !!}`,
       },
       idPrefix: 'gudangLookup',
       colModel: [{
