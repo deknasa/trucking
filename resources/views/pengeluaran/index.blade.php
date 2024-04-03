@@ -116,7 +116,7 @@
     loadDetailGrid()
     loadJurnalUmumGrid(nobukti)
 
-    $('.select2').select2({
+    $('#bankheader').select2({
       width: 'resolve',
       theme: "bootstrap4"
     });
@@ -322,7 +322,7 @@
 
           {
             label: 'BANK',
-            name: 'bank_id',
+            name: 'bank',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'left'
           },
@@ -342,6 +342,12 @@
             label: 'TRANSFER NAMA BANK',
             width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             name: 'transferkebank',
+            align: 'left'
+          },
+          {
+            label: 'PENERIMA',
+            width: (detectDeviceType() == "desktop") ? md_dekstop_2 : md_mobile_2,
+            name: 'penerima',
             align: 'left'
           },
           {
