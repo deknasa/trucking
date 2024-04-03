@@ -77,7 +77,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
-                  Jumlah Ban Serap <span class="text-danger">*</span>
+                  Jumlah Ban Serap 
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
