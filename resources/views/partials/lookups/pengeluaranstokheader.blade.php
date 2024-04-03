@@ -8,7 +8,6 @@
   initDatepicker()
   $(document).on('click', '#btnReloadLookup', function(event) {
     loadDataHeaderLookup('pengeluaranstokheader', 'pengeluaranStokHeaderLookup', {
-
       penerimaanstok_id: `{!! $penerimaanstok_id ?? '' !!}`,
       cabang: `{!! $cabang ?? '' !!}`,
       from: `{!! $from ?? '' !!}`,
