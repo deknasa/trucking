@@ -552,6 +552,17 @@
               background: '#e9ecef'
             })
             $('#crudModal').modal('show')
+
+            form.find(`[name="noktp"]`).attr('readonly', false)
+            form.find(`[name="namasupir"]`).attr('readonly', false)
+            form.find(`[name="tgllahir"]`).attr('readonly', false)
+            form.find(`[name="alamat"]`).attr('readonly', false)
+            form.find(`[name="kota"]`).attr('readonly', false)
+            form.find(`[name="nokk"]`).attr('readonly', false)
+            form.find(`[name="tglmasuk"]`).attr('readonly', false)
+            form.find(`[name="statusaktif"]`).attr('readonly', false)
+            form.find(`[name="keterangan"]`).attr('readonly', false)
+
           })
           .catch((error) => {
             showDialog(error.statusText)
@@ -777,7 +788,18 @@
               element.val(value)
             }
           })
+          if (response.data.noktp_readonly != '') {
+            form.find(`[name="noktp"]`).attr(response.data.noktp_readonly, true)
+            form.find(`[name="namasupir"]`).attr(response.data.namasupir_readonly, true)
+            form.find(`[name="tgllahir"]`).attr(response.data.tgllahir_readonly, true)
+            form.find(`[name="alamat"]`).attr(response.data.alamat_readonly, true)
+            form.find(`[name="kota"]`).attr(response.data.kota_readonly, true)
+            form.find(`[name="nokk"]`).attr(response.data.nokk_readonly, true)
+            form.find(`[name="tglmasuk"]`).attr(response.data.tglmasuk_readonly, true)
+            form.find(`[name="statusaktif"]`).attr(response.data.statusaktif_readonly, true)
+            form.find(`[name="keterangan"]`).attr(response.data.keterangan_readonly, true)
 
+          }
           resolve(response.data)
         },
         error: error => {

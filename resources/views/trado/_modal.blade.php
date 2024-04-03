@@ -422,7 +422,7 @@
       },
       data: {
         aksi: Aksi
-      },      
+      },
       success: response => {
         var error = response.error
         if (error) {
@@ -502,8 +502,32 @@
             })
             let supir = $('#crudForm').find(`[name=supir]`).css({
               background: '#e9ecef'
+
             })
+            form.find(`[name="kodetrado"]`).attr('readonly', false)
+            form.find(`[name="keterangan"]`).attr('readonly', false)
+            form.find(`[name="merek"]`).attr('readonly', false)
+            form.find(`[name="tipe"]`).attr('readonly', false)
+            form.find(`[name="jenis"]`).attr('readonly', false)
+            form.find(`[name="model"]`).attr('readonly', false)
+            form.find(`[name="tahun"]`).attr('readonly', false)
+            form.find(`[name="isisilinder"]`).attr('readonly', false)
+            form.find(`[name="warna"]`).attr('readonly', false)
+            form.find(`[name="norangka"]`).attr('readonly', false)
+            form.find(`[name="nomesin"]`).attr('readonly', false)
+            form.find(`[name="jenisbahanbakar"]`).attr('readonly', false)
+            form.find(`[name="jumlahsumbu"]`).attr('readonly', false)
+            form.find(`[name="statusabsensisupir"]`).attr('readonly', false)
+            form.find(`[name="jumlahroda"]`).attr('readonly', false)
+            form.find(`[name="jumlahbanserap"]`).attr('readonly', false)
+            form.find(`[name="nostnk"]`).attr('readonly', false)
+            form.find(`[name="statusjenisplat"]`).attr('readonly', false)
+            form.find(`[name="statusaktif"]`).attr('readonly', false)
+            form.find(`[name="statusgerobak"]`).attr('readonly', false)
+
+
           })
+
           .catch((error) => {
             showDialog(error.statusText)
           })
@@ -772,7 +796,31 @@
 
 
           })
+          if (response.data.kodetrado_readonly != '') {
+            form.find(`[name="kodetrado"]`).attr(response.data.kodetrado_readonly, true)
+            form.find(`[name="keterangan"]`).attr(response.data.keterangan_readonly, true)
+            form.find(`[name="merek"]`).attr(response.data.merk_readonly, true)
+            form.find(`[name="tipe"]`).attr(response.data.tipe_readonly, true)
+            form.find(`[name="jenis"]`).attr(response.data.jenis_readonly, true)
+            form.find(`[name="model"]`).attr(response.data.model_readonly, true)
+            form.find(`[name="tahun"]`).attr(response.data.tahun_readonly, true)
+            form.find(`[name="isisilinder"]`).attr(response.data.isisilinder_readonly, true)
+            form.find(`[name="warna"]`).attr(response.data.warna_readonly, true)
+            form.find(`[name="norangka"]`).attr(response.data.norangka_readonly, true)
+            form.find(`[name="nomesin"]`).attr(response.data.nomesin_readonly, true)
+            form.find(`[name="jenisbahanbakar"]`).attr(response.data.jenisbahanbakar_readonly, true)
+            form.find(`[name="jumlahsumbu"]`).attr(response.data.jumlahsumbu_readonly, true)
+            form.find(`[name="statusabsensisupir"]`).attr(response.data.statusabsensisupir_readonly, true)
+            form.find(`[name="jumlahroda"]`).attr(response.data.jumlahroda_readonly, true)
+            form.find(`[name="jumlahbanserap"]`).attr(response.data.jumlahbanserap_readonly, true)
+            form.find(`[name="nostnk"]`).attr(response.data.nostnk_readonly, true)
+            form.find(`[name="statusjenisplat"]`).attr(response.data.statusjenisplat_readonly, true)
+            form.find(`[name="statusaktif"]`).attr(response.data.statusaktif_readonly, true)
+            form.find(`[name="statusgerobak"]`).attr(response.data.statusgerobak_readonly, true)
+
+          }
           resolve(response.data)
+
         },
         error: error => {
           reject(error)

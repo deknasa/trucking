@@ -1391,13 +1391,13 @@
                 $('#add').attr('disabled', 'disabled')
             }
 
-            if (!`{{ $myAuth->hasPermission('trado', 'update') }}`) {
-                $('#edit').attr('disabled', 'disabled')
-            }
-
-            // if ((!`{{ $myAuth->hasPermission('trado', 'update') }}`) && (!`{{ $myAuth->hasPermission('trado', 'updateuser') }}`) ) {
+            // if (!`{{ $myAuth->hasPermission('trado', 'update') }}`) {
             //     $('#edit').attr('disabled', 'disabled')
             // }
+
+            if ((!`{{ $myAuth->hasPermission('trado', 'update') }}`) && (!`{{ $myAuth->hasPermission('trado', 'updateuser') }}`) ) {
+                $('#edit').attr('disabled', 'disabled')
+            }
 
 
             if (!`{{ $myAuth->hasPermission('trado', 'show') }}`) {
