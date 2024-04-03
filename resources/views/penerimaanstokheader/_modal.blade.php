@@ -3262,8 +3262,10 @@
       title: 'Trado Lookup',
       fileName: 'trado',
       beforeProcess: function(test) {
+        var penerimaanstokId = $(`#penerimaanstokId`).val();
         this.postData = {
           Aktif: 'AKTIF',
+          penerimaanstok_id: penerimaanstokId,
           tradodari_id:$('#crudForm').find(`[id="tradodariId"] `).val(),
           tradodarike: 'ke',          
         }
@@ -3288,8 +3290,10 @@
       title: 'gandengan Lookup',
       fileName: 'gandengan',
       beforeProcess: function(test) {
+        var penerimaanstokId = $(`#penerimaanstokId`).val();
         this.postData = {
           Aktif: 'AKTIF',
+          penerimaanstok_id: penerimaanstokId,
           gandengandari_id:$('#crudForm').find(`[id="gandengandariId"] `).val(),
           gandengandarike: 'ke',
         }
@@ -3341,7 +3345,10 @@
       title: 'Trado Lookup',
       fileName: 'trado',
       beforeProcess: function(test) {
+        var penerimaanstokId = $(`#penerimaanstokId`).val();
         this.postData = {
+          penerimaanstok_id: penerimaanstokId,
+          tradoke_id:$('#crudForm').find(`[id="tradokeId"] `).val(),
           Aktif: 'AKTIF',
           tradodarike: 'dari',
         }
@@ -3367,7 +3374,10 @@
       title: 'gandengan Lookup',
       fileName: 'gandengan',
       beforeProcess: function(test) {
+        var penerimaanstokId = $(`#penerimaanstokId`).val();
         this.postData = {
+          penerimaanstok_id: penerimaanstokId,
+          gandenganke_id:$('#crudForm').find(`[id="gandengankeId"] `).val(),
           Aktif: 'AKTIF',
           gandengandarike: 'dari',
         }
@@ -3396,6 +3406,7 @@
         var penerimaanstokId = $(`#penerimaanstokId`).val();
         this.postData = {
           penerimaanstok_id: penerimaanstokId,
+          gudangke_id:$('#crudForm').find(`[id="gudangkeId"] `).val(),
           gudangdarike: 'dari',
           Aktif: 'AKTIF',
         }
