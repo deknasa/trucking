@@ -77,7 +77,8 @@
       dataAbsensi = {}
       loadDataAbsensiMandor('mandorabsensisupirhistory', {
         tglbukaabsensi: $('#tglbukaabsensi').val(),
-        sortIndex: 'kodetrado'
+        sortIndex: 'kodetrado',
+        view:true,
       })
     })
 
@@ -122,7 +123,8 @@
         styleUI: 'Bootstrap4',
         iconSet: 'fontAwesome',
         postData: {
-          tglbukaabsensi: $('#tglbukaabsensi').val()
+          tglbukaabsensi: $('#tglbukaabsensi').val(),
+          view:true,
         },
         // datatype: "local",
         data: {
@@ -360,69 +362,7 @@
           total: 'attributes.total',
           records: 'attributes.records',
         },
-        // afterEditCell: function(rowid, cellname, value, iRow, iCol) {
-        //   var $grid = $("#jqGrid");
-          
-        //   $(this.rows[iRow].cells[iCol])
-        //   .find("input,textarea,select,button,object,*[tabindex]")
-        //   .filter(":input:visible:not(:disabled)")
-        //   .first()
-        //   .on("focusout", function (e) {
-        //       var p = $grid.jqGrid('getGridParam');
-      
-        //       if ($(e.relatedTarget).closest('.input-group-append').length === 0) {
-        //           $grid.jqGrid('saveCell', p.iRow, p.iCol);
-        //           $("#jqGrid").jqGrid('setCell', rowid, cellname, value);
-        //           pushToObject(rowid, cellname, value);
-                  
-        //           if (cellname === 'absentrado') {
-        //             $("#jqGrid").jqGrid('setCell', rowid, 'absentrado', value);
-        //             let absen_id = $("#jqGrid").jqGrid('getCell', rowid, 'absen_id')
-        //             getabsentrado(absen_id).then((response) => {
-        //                 setSupirEnableIndex(response, rowid)
-        //               })
-        //               .catch(() => {
-        //                 setSupirEnableIndex(false, rowid)
-        //               })
-        //               .then(() => {
-        //                 pushToObject(rowid, 'absentrado', value);
-        //               })
-        //           }
-                  
-        //       }
-        //   });
-        // },
-        afterSaveCell: function(rowid, cellname, value, iRow, iCol) {
-          if (cellname === 'namasupir') {
-            $("#jqGrid").jqGrid('setCell', rowid, 'namasupir', value);
-            pushToObject(rowid, 'namasupir', value);
-          }
-          if (cellname === 'absentrado') {
-            $("#jqGrid").jqGrid('setCell', rowid, 'absentrado', value);
-            let absen_id = $("#jqGrid").jqGrid('getCell', rowid, 'absen_id')
-            getabsentrado(absen_id).then((response) => {
-                setSupirEnableIndex(response, rowid)
-              })
-              .catch(() => {
-                setSupirEnableIndex(false, rowid)
-              })
-              .then(() => {
-                pushToObject(rowid, 'absentrado', value);
-              })
-          }
-          // if (cellname === 'jam') {
-          //   $("#jqGrid").jqGrid('setCell', rowid, 'jam', value);
-          //   pushToObject(rowid,'jam', value);
-          // }
-          if (cellname === 'keterangan') {
-            $("#jqGrid").jqGrid('setCell', rowid, 'keterangan', value);
-            pushToObject(rowid, 'keterangan', value);
-          }
-          if (cellname === 'tglbukti') {
-            $("#jqGrid").jqGrid('setCell', rowid, 'tglbukti', value);
-            pushToObject(rowid, 'tglbukti', value);
-          }
-        },
+        
         loadBeforeSend: function(jqXHR) {
           jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
           setGridLastRequest($(this), jqXHR)
@@ -649,6 +589,7 @@
           limit: 0,
           sortIndex: 'trado_id',
           sortOrder: 'asc',
+          view:true,
         },
         headers: {
           Authorization: `Bearer ${accessToken}`
