@@ -254,6 +254,7 @@
                     <th class="data_tbl tbl_total_sebelum" style="width: 20%; min-width: 200px;">Total Sebelum disc</th>
                     <th class="data_tbl tbl_statusban" style="width:10%; min-width: 100px">Status Ban</th>
                     <th class="data_tbl tbl_persentase" style="width:10%; min-width: 100px">persentase discount</th>
+                    <th class="data_tbl tbl_nominaldiscount" style="width:20%; min-width: 200px">nominal discount</th>
                     <th class="data_tbl tbl_total" style="width: 20%; min-width: 200px;">Total</th>
                     <th class="data_tbl tbl_aksi" style="width:10%; max-width: 25px;max-width: 15px">Aksi</th>
                   </tr>
@@ -415,6 +416,14 @@
           data.filter((row) => row.name === 'detail_persentasediscount[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="detail_persentasediscount[]"]`)[index])
         } else {
           data.filter((row) => row.name === 'detail_persentasediscount[]')[index].value = 0;
+        }
+      })
+
+      $('#crudForm').find(`[name="detail_nominaldiscount[]"]`).each((index, element) => {
+        if (element.value != "" && AutoNumeric.getAutoNumericElement(element) !== null) {
+          data.filter((row) => row.name === 'detail_nominaldiscount[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="detail_nominaldiscount[]"]`)[index])
+        } else {
+          data.filter((row) => row.name === 'detail_nominaldiscount[]')[index].value = 0;
         }
       })
 
@@ -633,6 +642,7 @@
     $('.tbl_vulkanisirtotal').hide();
     $('.tbl_statusban').hide();
     $('.tbl_persentase').hide();
+    $('.tbl_nominaldiscount').hide();
     $('.tbl_total').hide();
     $('.tbl_harga').hide();
     $('.tbl_penerimaanstok_nobukti').hide();
@@ -666,6 +676,7 @@
     $('.tbl_statusban').hide();
     $('.tbl_harga').hide();
     $('.tbl_persentase').hide();
+    $('.tbl_nominaldiscount').hide();
     $('.tbl_total').hide();
     $('.tbl_penerimaanstok_nobukti').hide();
 
@@ -695,7 +706,7 @@
     $('.tbl_vulkanisirke').hide();
     $('.tbl_vulkanisirtotal').hide();
     $('.tbl_statusban').hide();
-    $('.colspan').attr('colspan', 7);
+    $('.colspan').attr('colspan', 8);
     $('.tbl_total_sebelum').show();
     $('.tbl_penerimaanstok_nobukti').hide();
 
@@ -725,6 +736,7 @@
     $('[name=gandenganke]').parents('.form-group').show()
     $('.tbl_penerimaanstok_nobukti').hide();
     $('.tbl_persentase').hide();
+    $('.tbl_nominaldiscount').hide();
     $('.tbl_statusban').hide();
     $('.tbl_total').hide();
     $('.tbl_harga').hide();
@@ -764,6 +776,7 @@
     $('.tbl_vulkanisirtotal').hide();
     $('.tbl_harga').hide();
     $('.tbl_persentase').hide();
+    $('.tbl_nominaldiscount').hide();
     $('.tbl_total').hide();
     $('.tbl_total_sebelum').hide();
     $('.colspan').attr('colspan', 5);
@@ -793,7 +806,7 @@
     $('.tbl_statusban').hide();
     $('.tbl_total_sebelum').show();
     $('.tbl_penerimaanstok_nobukti').show();
-    $('.colspan').attr('colspan', 8);
+    $('.colspan').attr('colspan', 9);
 
     $('#addRow').show()
   }
@@ -882,7 +895,7 @@
     $('.tbl_vulkanisirtotal').hide();
     $('.tbl_statusban').hide();
     $('.tbl_total_sebelum').hide();
-    $('.colspan').attr('colspan', 6);
+    $('.colspan').attr('colspan', 7);
     $('.tbl_penerimaanstok_nobukti').hide();
 
     $('.sumrow').show();
@@ -910,7 +923,7 @@
     $('.tbl_vulkanisirtotal').hide();
     $('.tbl_statusban').hide();
     $('.tbl_total_sebelum').hide();
-    $('.colspan').attr('colspan', 6);
+    $('.colspan').attr('colspan', 7);
     $('.tbl_penerimaanstok_nobukti').hide();
 
     $('.sumrow').show();
@@ -946,6 +959,7 @@
     $('.tbl_statusban').show();
     $('.tbl_harga').hide();
     $('.tbl_persentase').hide();
+    $('.tbl_nominaldiscount').hide();
     $('.tbl_total').hide();
     $('.colspan').attr('colspan', 7);
     $('.sumrow').hide();
@@ -974,7 +988,7 @@
     $('.tbl_statusban').hide();
     $('.tbl_total_sebelum').hide();
     $('.tbl_penerimaanstok_nobukti').show();
-    $('.colspan').attr('colspan', 7);
+    $('.colspan').attr('colspan', 8);
 
     $('.tbl_aksi').show()
   }
@@ -1063,6 +1077,10 @@
 
                   <td class="data_tbl tbl_persentase">
                     <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${id}" onkeyup="calculate(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
+                  </td>  
+
+                  <td class="data_tbl tbl_nominaldiscount">
+                    <input type="text"  name="detail_nominaldiscount[]" id="detail_nominaldiscount${id}" onkeyup="calculate_nominal(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
                   </td>  
 
                   <td class="data_tbl tbl_total">
@@ -1220,6 +1238,10 @@
 
                   <td class="data_tbl tbl_persentase">
                     <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${id}" onkeyup="calculate(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
+                  </td>  
+
+                  <td class="data_tbl tbl_nominaldiscount">
+                    <input type="text"  name="detail_nominaldiscount[]" id="detail_nominaldiscount${id}" onkeyup="calculate_nominal(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
                   </td>  
 
                   <td class="data_tbl tbl_total">
@@ -1389,6 +1411,10 @@
                 <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${id}" onkeyup="calculate(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
               </td>  
 
+              <td class="data_tbl tbl_nominaldiscount">
+                <input type="text"  name="detail_nominaldiscount[]" id="detail_nominaldiscount${id}" onkeyup="calculate_nominal(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
+              </td>  
+
               <td class="data_tbl tbl_total">
                 <input type="text"  name="totalItem[]" id="totalItem${id}" style="text-align:right" onkeyup="calculate(${id})" class="form-control totalItem autonumeric number${id}">                    
               </td>
@@ -1544,11 +1570,11 @@
                   </td>  
 
                   <td class="data_tbl tbl_harga">
-                    <input type="text"  name="detail_harga[]" readonly id="detail_harga${id}" onkeyup="cal(${id})"  style="text-align:right" class="autonumeric number${id} form-control">                    
+                    <input type="text"  name="detail_harga[]" readonly id="detail_harga${id}" onkeyup="calculate(${id})"  style="text-align:right" class="autonumeric number${id} form-control">                    
                   </td>
 
                   <td class="data_tbl tbl_qty">
-                    <input type="text"  name="detail_qty[]" id="detail_qty${id}" onkeyup="cal(${id})" style="text-align:right" class="form-control autonumeric number${id}">                    
+                    <input type="text"  name="detail_qty[]" id="detail_qty${id}" onkeyup="calculate(${id})" style="text-align:right" class="form-control autonumeric number${id}">                    
                   </td>
                   
                   <td class="data_tbl tbl_vulkanisirke">
@@ -1560,7 +1586,11 @@
                   </td>
                   
                   <td class="data_tbl tbl_persentase">
-                    <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${id}" onkeyup="cal(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
+                    <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${id}" onkeyup="calculate(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
+                  </td>  
+
+                  <td class="data_tbl tbl_nominaldiscount">
+                    <input type="text"  name="detail_nominaldiscount[]" id="detail_nominaldiscount${id}" onkeyup="calculate_nominal(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
                   </td>  
 
                   <td class="data_tbl tbl_total">
@@ -1684,11 +1714,11 @@
                   </td>  
     
                   <td class="data_tbl tbl_harga">
-                    <input type="text"  name="detail_harga[]" readonly id="detail_harga${id}" onkeyup="cal(${id})"  style="text-align:right" class="autonumeric number${id} form-control">                    
+                    <input type="text"  name="detail_harga[]" readonly id="detail_harga${id}" onkeyup="calculate(${id})"  style="text-align:right" class="autonumeric number${id} form-control">                    
                   </td>
     
                   <td class="data_tbl tbl_qty">
-                    <input type="text"  name="detail_qty[]" id="detail_qty${id}" onkeyup="cal(${id})" style="text-align:right" class="form-control autonumeric number${id}">                    
+                    <input type="text"  name="detail_qty[]" id="detail_qty${id}" onkeyup="calculate(${id})" style="text-align:right" class="form-control autonumeric number${id}">                    
                   </td>  
 
                   <td class="data_tbl tbl_vulkanisirke">
@@ -1700,8 +1730,12 @@
                   </td>
                   
                   <td class="data_tbl tbl_persentase">
-                    <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${id}" onkeyup="cal(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
+                    <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${id}" onkeyup="calculate(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
                   </td>  
+
+                  <td class="data_tbl tbl_nominaldiscount">
+                    <input type="text"  name="detail_nominaldiscount[]" id="detail_nominaldiscount${id}" onkeyup="calculate_nominal(${id})" style="text-align:right" class="autonumeric number${id} form-control">
+                  </td>
     
                   <td class="data_tbl tbl_total">
                     <input type="text"  name="totalItem[]" id="totalItem${id}" style="text-align:right" class="form-control totalItem autonumeric number${id}">                    
@@ -2509,6 +2543,10 @@
                     <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${index}" onkeyup="calculate(${index})" style="text-align:right" class="form-control autonumeric number${index}" >
                   </td>  
 
+                  <td class="data_tbl tbl_nominaldiscount">
+                    <input type="text"  name="detail_nominaldiscount[]" id="detail_nominaldiscount${index}"  onkeyup="calculate_nominal(${index})"  style="text-align:right" class="form-control autonumeric number${index}" >
+                  </td>  
+
                   <td class="data_tbl tbl_total">
                     <input type="text"  name="totalItem[]" readonly id="totalItem${index}" style="text-align:right"  onkeyup="calculate(${index})" class="form-control totalItem autonumeric number${index}" >                    
                   </td>
@@ -2673,6 +2711,35 @@
     discSatuan = nominaldiscount / qty;
     satuanSetelahDiscount = (total_sebelum / qty) - discSatuan;
     harga = satuanSetelahDiscount;
+
+    elNominalDiscount = AutoNumeric.getAutoNumericElement($(`#detail_nominaldiscount${id}`)[0]);
+    elNominalDiscount.set(nominaldiscount);
+
+    new AutoNumeric($(`#totalItem${id}`)[0]).set(totalItem)
+    new AutoNumeric($(`#detail_harga${id}`)[0]).set(harga)
+    sumary();
+  }
+  
+  function calculate_nominal(id) {
+    qty = $(`#detail_qty${id}`)[0];
+    nominaldiscount = $(`#detail_nominaldiscount${id}`)[0];
+    totalItem = $(`#totalItem${id}`)[0];
+    total_sebelum = $(`#total_sebelum${id}`)[0];
+
+    qty = AutoNumeric.getNumber(qty);
+    nominaldiscount = AutoNumeric.getNumber(nominaldiscount);
+    totalItem = AutoNumeric.getNumber(totalItem);
+    total_sebelum = AutoNumeric.getNumber(total_sebelum);
+
+    totalItem = total_sebelum - nominaldiscount;
+    discSatuan = nominaldiscount / qty;
+    satuanSetelahDiscount = (total_sebelum / qty) - discSatuan;
+    harga = satuanSetelahDiscount;
+    discount  = (nominaldiscount / total_sebelum)*100;
+
+    elPersentaseDiscount = AutoNumeric.getAutoNumericElement($(`#detail_persentasediscount${id}`)[0]);
+    elPersentaseDiscount.set(discount);
+
     new AutoNumeric($(`#totalItem${id}`)[0]).set(totalItem)
     new AutoNumeric($(`#detail_harga${id}`)[0]).set(harga)
     sumary();
@@ -2895,6 +2962,10 @@
                       <input type="text"  name="detail_persentasediscount[]" id="detail_persentasediscount${id}" onkeyup="calculate(${id})" style="text-align:right" class="autonumeric number${id} form-control">
                     </td>
 
+                    <td class="data_tbl tbl_nominaldiscount">
+                      <input type="text"  name="detail_nominaldiscount[]" id="detail_nominaldiscount${id}" onkeyup="calculate_nominal(${id})" style="text-align:right" class="autonumeric number${id} form-control">
+                    </td>
+
                     <td class="data_tbl tbl_total">
                       <input type="text"  name="totalItem[]" readonly id="totalItem${id}" style="text-align:right" onkeyup="calculate(${id})" class="form-control totalItem autonumeric number${id}">
                     </td>
@@ -2924,6 +2995,7 @@
             detailRow.find(`[name="detail_penerimaanstoknobukti[]"]`).val(detail.penerimaanstok_nobukti)
             detailRow.find(`[name="detail_harga[]"]`).val(detail.harga)
             detailRow.find(`[name="detail_persentasediscount[]"]`).val(detail.persentasediscount)
+            detailRow.find(`[name="detail_nominaldiscount[]"]`).val(detail.nominaldiscount)
             detailRow.find(`[name="detail_vulkanisirke[]"]`).val(detail.vulkanisirke)
             detailRow.find(`[name="totalItem[]"]`).val(detail.total)
             totalSSebelumDiscount = detail.total / (1 - (detail.persentasediscount / 100))
