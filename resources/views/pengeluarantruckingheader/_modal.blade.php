@@ -5456,6 +5456,9 @@
                     Aktif: 'AKTIF',
                     url: urlTNL,
                     token: tokenTNL,
+                    from: 'klaim',
+                    aksi: $('#crudForm').data('action'),
+                    pengeluarantrucking_id: $('#crudForm').find(`[name="id"]`).val()
                   }
                 },
                 onSelectRow: (stok, element) => {
@@ -5493,6 +5496,8 @@
                     Aktif: 'AKTIF',
                     url: urlTNL,
                     token: tokenTNL,
+                    from: 'klaim',
+                    pengeluarantrucking_id: $('#crudForm').find(`[name="id"]`).val()
                   }
                 },
                 onSelectRow: (stok, element) => {
@@ -5530,6 +5535,8 @@
                     token: tokenTNL,
                     penerimaanstokheader_id: detail.penerimaanstokheader_id,
                     pengeluaranstokheader_id: detail.pengeluaranstokheader_id,
+                    from: 'klaim',
+                    stok_id: detail.stok_id
                   }
                 },
                 onSelectRow: (stok, element) => {
@@ -5953,6 +5960,7 @@
           Aktif: 'AKTIF',
           url: urlTNL,
           token: tokenTNL,
+          from: 'klaim',
         }
       },
       onSelectRow: (stok, element) => {
@@ -5993,6 +6001,8 @@
           Aktif: 'AKTIF',
           url: urlTNL,
           token: tokenTNL,
+          from: 'klaim',
+          aksi: $('#crudForm').data('action')
         }
       },
       onSelectRow: (stok, element) => {
@@ -6033,6 +6043,7 @@
           pengeluaranstokheader_id: pengeluaranstokheader,
           url: urlTNL,
           token: tokenTNL,
+          from: 'klaim',
         }
       },
       onSelectRow: (stok, element) => {

@@ -16,6 +16,8 @@
         pengeluaranstok_id: `{!! $pengeluaranstok_id ?? '' !!}`,
         tgldari: $('#tgldariheaderlookup').val(),
         tglsampai: $('#tglsampaiheaderlookup').val(),
+        from: `{!! $from ?? '' !!}`,
+        pengeluarantrucking_id: `{!! $pengeluarantrucking_id ?? '' !!}`,
     })
   })
 
@@ -34,6 +36,8 @@
         pengeluaranstok_id: `{!! $pengeluaranstok_id ?? '' !!}`,
         tgldari: $('#tgldariheaderlookup').val(),
         tglsampai: $('#tglsampaiheaderlookup').val(),
+        from: `{!! $from ?? '' !!}`,
+        pengeluarantrucking_id: `{!! $pengeluarantrucking_id ?? '' !!}`,
       },
       idPrefix: 'penerimaanStokHeaderLookup',
       colModel: [{
