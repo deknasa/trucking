@@ -58,7 +58,6 @@ use App\Http\Controllers\HariLiburController;
 use App\Http\Controllers\InputTripController;
 use App\Http\Controllers\JenisEmklController;
 use App\Http\Controllers\KartuStokController;
-use App\Http\Controllers\KartuStokLamaController;
 use App\Http\Controllers\KerusakanController;
 use App\Http\Controllers\ParameterController;
 use App\Http\Controllers\ReportAllController;
@@ -66,15 +65,15 @@ use App\Http\Controllers\SpkHarianController;
 use App\Http\Controllers\StokPusatController;
 use App\Http\Controllers\TutupBukuController;
 use App\Http\Controllers\UpahSupirController;
-
 use App\Http\Controllers\AbsenTradoController;
+
 use App\Http\Controllers\DataRitasiController;
 use App\Http\Controllers\JenisOrderController;
 use App\Http\Controllers\JenisTradoController;
 use App\Http\Controllers\LogAbsensiController;
 use App\Http\Controllers\MandorTripController;
-
 use App\Http\Controllers\PindahBukuController;
+
 use App\Http\Controllers\SupirSerapController;
 use App\Http\Controllers\UpahRitasiController;
 use App\Http\Controllers\BukaAbsensiController;
@@ -93,6 +92,7 @@ use App\Http\Controllers\UbahPasswordController;
 use App\Http\Controllers\BankPelangganController;
 use App\Http\Controllers\InvoiceDetailController;
 use App\Http\Controllers\InvoiceHeaderController;
+use App\Http\Controllers\KartuStokLamaController;
 use App\Http\Controllers\LaporanNeracaController;
 
 use App\Http\Controllers\MainAkunPusatController;
@@ -175,6 +175,7 @@ use App\Http\Controllers\BukaPenerimaanStokController;
 use App\Http\Controllers\InvoiceExtraDetailController;
 use App\Http\Controllers\InvoiceExtraHeaderController;
 use App\Http\Controllers\KaryawanLogAbsensiController;
+use App\Http\Controllers\LaporanKartuPanjarController;
 use App\Http\Controllers\LaporanPiutangGiroController;
 use App\Http\Controllers\LaporanRitasiTradoController;
 use App\Http\Controllers\LaporanTitipanEmklController;
@@ -182,6 +183,7 @@ use App\Http\Controllers\MandorAbsensiSupirController;
 use App\Http\Controllers\penerimaanTruckingController;
 use App\Http\Controllers\ProsesAbsensiSupirController;
 use App\Http\Controllers\TarifDiscountHargaController;
+use App\Http\Controllers\TarifHargaTertentuController;
 use App\Http\Controllers\ApprovalHutangBayarController;
 use App\Http\Controllers\ApprovalSupirGambarController;
 use App\Http\Controllers\ApprovalTradoGambarController;
@@ -202,10 +204,10 @@ use App\Http\Controllers\PenerimaanStokDetailController;
 use App\Http\Controllers\PenerimaanStokHeaderController;
 use App\Http\Controllers\StatusGandenganTruckController;
 use App\Http\Controllers\ApprovalInvoiceHeaderController;
+
+
 use App\Http\Controllers\ExportLaporanDepositoController;
 use App\Http\Controllers\ExportPemakaianBarangController;
-
-
 use App\Http\Controllers\ExportPembelianBarangController;
 use App\Http\Controllers\ExportRincianMingguanController;
 use App\Http\Controllers\HistoriPenerimaanStokController;
@@ -214,7 +216,6 @@ use App\Http\Controllers\JurnalUmumPusatHeaderController;
 use App\Http\Controllers\LaporanOrderPembelianController;
 use App\Http\Controllers\LaporanRekapSumbanganController;
 use App\Http\Controllers\LaporanSaldoInventoryController;
-use App\Http\Controllers\LaporanSaldoInventoryLamaController;
 use App\Http\Controllers\PelunasanHutangHeaderController;
 use App\Http\Controllers\PendapatanSupirDetailController;
 use App\Http\Controllers\PendapatanSupirHeaderController;
@@ -252,6 +253,8 @@ use App\Http\Controllers\PenerimaanTruckingDetailController;
 use App\Http\Controllers\PenerimaanTruckingHeaderController;
 use App\Http\Controllers\LaporanBanGudangSementaraController;
 use App\Http\Controllers\LaporanEstimasiKasGantungController;
+use App\Http\Controllers\LaporanSaldoInventoryLamaController;
+use App\Http\Controllers\MandorAbsensiSupirHistoryController;
 use App\Http\Controllers\PengeluaranTruckingDetailController;
 use App\Http\Controllers\PengeluaranTruckingHeaderController;
 use App\Http\Controllers\PengembalianKasBankDetailController;
@@ -261,13 +264,13 @@ use App\Http\Controllers\AbsensiSupirApprovalHeaderController;
 use App\Http\Controllers\ExportLaporanMingguanSupirController;
 use App\Http\Controllers\LaporanKartuHutangPrediksiController;
 use App\Http\Controllers\LaporanKartuPiutangPerAgenController;
-use App\Http\Controllers\LaporanKartuPanjarController;
 use App\Http\Controllers\LaporanSupirLebihDariTradoController;
 use App\Http\Controllers\LaporanTripGandenganDetailController;
 use App\Http\Controllers\ProsesUangJalanSupirDetailController;
 use App\Http\Controllers\ProsesUangJalanSupirHeaderController;
 use App\Http\Controllers\LaporanKartuHutangPerVendorController;
 use App\Http\Controllers\LaporanPinjamanPerUnitTradoController;
+use App\Http\Controllers\SuratPengantarBiayaTambahanController;
 use App\Http\Controllers\InvoiceChargeGandenganHeaderController;
 use App\Http\Controllers\LaporanPinjamanSupirKaryawanController;
 use App\Http\Controllers\PengembalianKasGantungDetailController;
@@ -289,8 +292,6 @@ use App\Http\Controllers\SuratPengantarApprovalInputTripController;
 use App\Http\Controllers\ApprovalBukaTanggalSuratPengantarController;
 use App\Http\Controllers\LaporanPemotonganPinjamanDepositoController;
 use App\Http\Controllers\ExportRincianMingguanPendapatanSupirController;
-use App\Http\Controllers\SuratPengantarBiayaTambahanController;
-use App\Http\Controllers\TarifHargaTertentuController;
 
 /*
 |--------------------------------------------------------------------------
@@ -484,6 +485,8 @@ Route::middleware(['auth', 'authorized'])->group(function () {
     Route::get('absensisupirapprovaldetail/detail/grid', [AbsensiSupirApprovalDetailController::class, 'detailGrid']);
     Route::resource('absensisupirapprovaldetail', AbsensiSupirApprovalDetailController::class);
 
+    Route::get('mandorabsensisupirhistory', [MandorAbsensiSupirHistoryController::class, 'index']);
+    Route::get('mandorabsensisupirhistory/index', [MandorAbsensiSupirHistoryController::class, 'index']);
     Route::get('mandorabsensisupir/index', [MandorAbsensiSupirController::class, 'index']);
     Route::resource('mandorabsensisupir', MandorAbsensiSupirController::class);
 
