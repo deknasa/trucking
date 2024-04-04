@@ -66,6 +66,17 @@
                   </div>
                 </div>
               </div>
+              
+              <div class="form-group col-md-6">
+                <div class="row">
+                  <div class="col-12 col-sm-3 col-md-4">
+                    <label class="col-form-label">pengeluaran stok no bukti proses</label>
+                  </div>
+                  <div class="col-12 col-sm-9 col-md-8">
+                    <input type="text" name="pengeluaranstok_nobukti_proses" class="form-control" readonly>
+                  </div>
+                </div>
+              </div>
 
               <div class="form-group col-md-6">
                 <div class="row">
@@ -249,6 +260,7 @@
                     <th class="data_tbl tbl_penerimaanstok_nobukti" style="width: 20%; min-width: 200px;">Penerimaan stok no bukti</th>
                     <th class="data_tbl tbl_harga" style="width: 20%; min-width: 200px;">harga</th>
                     <th class="data_tbl tbl_qty" style="width:10%; min-width: 100px">qty </th>
+                    <th class="data_tbl tbl_qtyterpakai" style="width:10%; min-width: 100px">qty terpakai</th>
                     <th class="data_tbl tbl_vulkanisirke" style="width:10%; min-width: 100px">vulkanisir ke</th>
                     <th class="data_tbl tbl_vulkanisirtotal" style="width:10%; min-width: 100px">vulkanisir</th>
                     <th class="data_tbl tbl_total_sebelum" style="width: 20%; min-width: 200px;">Total Sebelum disc</th>
@@ -401,6 +413,13 @@
           data.filter((row) => row.name === 'detail_qty[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="detail_qty[]"]`)[index])
         } else {
           data.filter((row) => row.name === 'detail_qty[]')[index].value = 0;
+        }
+      })
+      $('#crudForm').find(`[name="detail_qtyterpakai[]"]`).each((index, element) => {
+        if (element.value != "" && AutoNumeric.getAutoNumericElement(element) !== null) {
+          data.filter((row) => row.name === 'detail_qtyterpakai[]')[index].value = AutoNumeric.getNumber($(`#crudForm [name="detail_qtyterpakai[]"]`)[index])
+        } else {
+          data.filter((row) => row.name === 'detail_qtyterpakai[]')[index].value = 0;
         }
       })
       $('#crudForm').find(`[name="detail_harga[]"]`).each((index, element) => {
@@ -638,9 +657,11 @@
     $('[name=gandengandari]').parents('.form-group').hide()
     $('[name=gandenganke]').parents('.form-group').hide()
     $('[name=coa]').parents('.form-group').hide()
+    $('[name=pengeluaranstok_nobukti_proses]').parents('.form-group').hide()
     $('.tbl_vulkanisirke').hide();
     $('.tbl_vulkanisirtotal').hide();
     $('.tbl_statusban').hide();
+    $('.tbl_qtyterpakai').hide();
     $('.tbl_persentase').hide();
     $('.tbl_nominaldiscount').hide();
     $('.tbl_total').hide();
@@ -671,9 +692,11 @@
     $('[name=gandengandari]').parents('.form-group').hide()
     $('[name=gandenganke]').parents('.form-group').hide()
     $('[name=coa]').parents('.form-group').hide()
+    $('[name=pengeluaranstok_nobukti_proses]').parents('.form-group').hide()
     $('.tbl_vulkanisirke').hide();
     $('.tbl_vulkanisirtotal').hide();
     $('.tbl_statusban').hide();
+    $('.tbl_qtyterpakai').hide();
     $('.tbl_harga').hide();
     $('.tbl_persentase').hide();
     $('.tbl_nominaldiscount').hide();
@@ -703,6 +726,8 @@
     $('[name=gandengandari]').parents('.form-group').hide()
     $('[name=gandenganke]').parents('.form-group').hide()
     $('[name=coa]').parents('.form-group').hide()
+    $('[name=pengeluaranstok_nobukti_proses]').parents('.form-group').hide()
+    $('.tbl_qtyterpakai').hide();
     $('.tbl_vulkanisirke').hide();
     $('.tbl_vulkanisirtotal').hide();
     $('.tbl_statusban').hide();
@@ -727,7 +752,7 @@
     $('[name=nobon]').parents('.form-group').hide()
     $('.tbl_vulkanisirke').hide();
     $('.tbl_vulkanisirtotal').hide();
-
+    $('[name=pengeluaranstok_nobukti_proses]').parents('.form-group').hide()
     $('[name=gudangdari]').parents('.form-group').show()
     $('[name=gudangke]').parents('.form-group').show()
     $('[name=tradodari]').parents('.form-group').show()
@@ -736,6 +761,8 @@
     $('[name=gandenganke]').parents('.form-group').show()
     $('.tbl_penerimaanstok_nobukti').hide();
     $('.tbl_persentase').hide();
+    $('.tbl_qtyterpakai').hide();
+
     $('.tbl_nominaldiscount').hide();
     $('.tbl_statusban').hide();
     $('.tbl_total').hide();
@@ -761,7 +788,7 @@
     $('[name=gudang]').parents('.form-group').show()
     $('[name=trado]').parents('.form-group').show()
     $('[name=gandengan]').parents('.form-group').show()
-
+    $('[name=pengeluaranstok_nobukti_proses]').parents('.form-group').hide()
 
     $('[name=gudangdari]').parents('.form-group').hide()
     $('[name=gudangke]').parents('.form-group').hide()
@@ -770,6 +797,7 @@
     $('[name=gandengandari]').parents('.form-group').hide()
     $('[name=gandenganke]').parents('.form-group').hide()
     $('.tbl_penerimaanstok_nobukti').hide();
+    $('.tbl_qtyterpakai').hide();
     $('.tbl_qty').show()
     $('.tbl_statusban').hide();
     $('.tbl_vulkanisirke').hide();
@@ -794,6 +822,7 @@
     $('[name=coa]').parents('.form-group').hide()
     $('[name=gudang]').parents('.form-group').hide()
 
+    $('[name=pengeluaranstok_nobukti_proses]').parents('.form-group').hide()
     $('[name=gudangdari]').parents('.form-group').hide()
     $('[name=gudangke]').parents('.form-group').hide()
     $('[name=gandengan]').parents('.form-group').hide()
@@ -801,6 +830,7 @@
     $('[name=tradoke]').parents('.form-group').hide()
     $('[name=gandengandari]').parents('.form-group').hide()
     $('[name=gandenganke]').parents('.form-group').hide()
+    $('.tbl_qtyterpakai').hide();
     $('.tbl_vulkanisirke').hide();
     $('.tbl_vulkanisirtotal').hide();
     $('.tbl_statusban').hide();
@@ -853,6 +883,7 @@
     $('[name=gandengan]').parents('.form-group').hide()
     $('[name=gandengandari]').parents('.form-group').hide()
     $('[name=gandenganke]').parents('.form-group').hide()
+    $('[name=pengeluaranstok_nobukti_proses]').parents('.form-group').hide()
 
     $('[name=supplier]').parents('.form-group').hide()
     $('[name=gudang]').parents('.form-group').hide()
@@ -889,18 +920,23 @@
     $('[name=tradodari]').parents('.form-group').hide()
     $('[name=tradoke]').parents('.form-group').hide()
     $('[name=gandengandari]').parents('.form-group').hide()
+    $('[name=pengeluaranstok_nobukti_proses]').parents('.form-group').show()
     $('[name=gandenganke]').parents('.form-group').hide()
     $('[name=coa]').parents('.form-group').hide()
     $('.tbl_vulkanisirke').hide();
     $('.tbl_vulkanisirtotal').hide();
     $('.tbl_statusban').hide();
     $('.tbl_total_sebelum').hide();
-    $('.colspan').attr('colspan', 7);
+    $('.tbl_persentase').hide();
+    $('.tbl_nominaldiscount').hide();
+    $('.colspan').attr('colspan', 6);
+
     $('.tbl_penerimaanstok_nobukti').hide();
+    $('.tbl_qtyterpakai').show();
 
     $('.sumrow').show();
 
-    $('.tbl_aksi').show()
+    $('.tbl_aksi').hide()
   }
 
   function tampilanPSPK() {
@@ -919,7 +955,9 @@
     $('[name=gandengandari]').parents('.form-group').hide()
     $('[name=gandenganke]').parents('.form-group').hide()
     $('[name=coa]').parents('.form-group').hide()
+    $('[name=pengeluaranstok_nobukti_proses]').parents('.form-group').hide()
     $('.tbl_vulkanisirke').hide();
+    $('.tbl_qtyterpakai').hide();
     $('.tbl_vulkanisirtotal').hide();
     $('.tbl_statusban').hide();
     $('.tbl_total_sebelum').hide();
@@ -940,11 +978,11 @@
     $('[name=nobon]').parents('.form-group').hide()
     $('[name=hutang_nobukti]').parents('.form-group').hide()
     $('[name=coa]').parents('.form-group').hide()
-
+    $('[name=pengeluaranstok_nobukti_proses]').parents('.form-group').hide()
     $('[name=gudang]').parents('.form-group').hide()
     $('[name=trado]').parents('.form-group').hide()
     $('[name=gandengan]').parents('.form-group').hide()
-
+    $('.tbl_qtyterpakai').hide();
     $('.tbl_total_sebelum').hide();
     $('[name=gudangdari]').parents('.form-group').hide()
     $('[name=gudangke]').parents('.form-group').hide()
@@ -983,6 +1021,8 @@
     $('[name=gandengandari]').parents('.form-group').hide()
     $('[name=gandenganke]').parents('.form-group').hide()
     $('[name=coa]').parents('.form-group').hide()
+    $('[name=pengeluaranstok_nobukti_proses]').parents('.form-group').hide()
+    $('.tbl_qtyterpakai').hide();
     $('.tbl_vulkanisirke').hide();
     $('.tbl_vulkanisirtotal').hide();
     $('.tbl_statusban').hide();
@@ -1061,6 +1101,10 @@
                     <input type="text"  name="detail_qty[]" id="detail_qty${id}" onkeyup="calculate(${id})" style="text-align:right" class="form-control autonumeric number${id}">                    
                   </td>
 
+                  <td class="data_tbl tbl_qtyterpakai">
+                    <input type="text"  name="detail_qtyterpakai[]" id="detail_qtyterpakai${id}" onkeyup="calculate(${id})" style="text-align:right" class="form-control autonumeric number${id}">
+                  </td>
+
                   <td class="data_tbl tbl_vulkanisirke">
                     <input type="number"  name="detail_vulkanisirke[]" style="" class="form-control">                    
                   </td>
@@ -1087,7 +1131,7 @@
                     <input type="text"  name="totalItem[]" id="totalItem${id}" style="text-align:right" onkeyup="calculate(${id})" class="form-control totalItem autonumeric number${id}">                    
                   </td>
 
-                  <td>
+                  <td class="tbl_aksi">
                     <div class='btn btn-danger btn-sm rmv'>Delete</div>
                   </td>
               </tr>
@@ -1226,6 +1270,10 @@
 
                   <td class="data_tbl tbl_qty">
                     <input type="text"  name="detail_qty[]" id="detail_qty${id}" onkeyup="calculate(${id})" style="text-align:right" class="form-control autonumeric number${id}">                    
+                  </td>
+
+                  <td class="data_tbl tbl_qtyterpakai">
+                    <input type="text"  name="detail_qtyterpakai[]" id="detail_qtyterpakai${id}" onkeyup="calculate(${id})" style="text-align:right" class="form-control autonumeric number${id}">
                   </td>
 
                   <td class="data_tbl tbl_vulkanisirke">
@@ -1397,6 +1445,10 @@
 
               <td class="data_tbl tbl_qty">
                 <input type="text"  name="detail_qty[]" id="detail_qty${id}" onkeyup="calculate(${id})" style="text-align:right" class="form-control autonumeric number${id}">                    
+              </td>
+
+              <td class="data_tbl tbl_qtyterpakai">
+                <input type="text"  name="detail_qtyterpakai[]" id="detail_qtyterpakai${id}" onkeyup="calculate(${id})" style="text-align:right" class="form-control autonumeric number${id}">
               </td>
 
               <td class="data_tbl tbl_vulkanisirke">
@@ -1577,6 +1629,10 @@
                     <input type="text"  name="detail_qty[]" id="detail_qty${id}" onkeyup="calculate(${id})" style="text-align:right" class="form-control autonumeric number${id}">                    
                   </td>
                   
+                  <td class="data_tbl tbl_qtyterpakai">
+                    <input type="text"  name="detail_qtyterpakai[]" id="detail_qtyterpakai${id}" onkeyup="cal(${id})" style="text-align:right" class="form-control autonumeric number${id}">
+                  </td>
+                  
                   <td class="data_tbl tbl_vulkanisirke">
                     <input type="number"  name="detail_vulkanisirke[]" style="" max="100" class="form-control">                    
                   </td> 
@@ -1593,11 +1649,15 @@
                     <input type="text"  name="detail_nominaldiscount[]" id="detail_nominaldiscount${id}" onkeyup="calculate_nominal(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
                   </td>  
 
+                  <td class="data_tbl tbl_nominaldiscount">
+                    <input type="text"  name="detail_nominaldiscount[]" id="detail_nominaldiscount${id}" onkeyup="calculate_nominal(${id})" style="text-align:right" class="autonumeric number${id} form-control">                    
+                  </td>  
+
                   <td class="data_tbl tbl_total">
                     <input type="text"  name="totalItem[]" id="totalItem${id}" style="text-align:right" class="form-control totalItem autonumeric number${id}">                    
                   </td>
 
-                  <td>
+                  <td class="tbl_aksi">
                     <div class='btn btn-danger btn-sm rmv'>Delete</div>
                   </td>
               </tr>
@@ -1608,6 +1668,7 @@
             detailRow.find(`[name="totalItem[]"]`).prop('readonly', true);
             detailRow.find(`[name="detail_qty[]"]`).prop('readonly', true);
             detailRow.find(`[name="detail_qty[]"]`).val(detail.qty)
+            detailRow.find(`[name="detail_qtyterpakai[]"]`).val(detail.qty)
           } else {
             detailRow.find(`[name="detail_harga[]"]`).prop('readonly', true);
             detailRow.find(`[name="detail_persentasediscount[]"]`).prop('readonly', true);
@@ -1633,8 +1694,10 @@
           initAutoNumeric($(`#detail_qty${id}`), {
             'maximumValue': detail.qty
           })
-
-
+          initAutoNumeric($(`#detail_qtyterpakai${id}`), {
+            'maximumValue': detail.qty
+          })
+          cal(id)
           setRowNumbers()
           $(`#detail_penerimaanstoknobukti_${id}`).lookup({
             title: 'penerimaan stok header Lookup',
@@ -1721,6 +1784,10 @@
                     <input type="text"  name="detail_qty[]" id="detail_qty${id}" onkeyup="calculate(${id})" style="text-align:right" class="form-control autonumeric number${id}">                    
                   </td>  
 
+                  <td class="data_tbl tbl_qtyterpakai">
+                    <input type="text"  name="detail_qtyterpakai[]" id="detail_qtyterpakai${id}" onkeyup="calculate(${id})" style="text-align:right" class="form-control autonumeric number${id}">
+                  </td>
+
                   <td class="data_tbl tbl_vulkanisirke">
                     <input type="number"  name="detail_vulkanisirke[]" style="" max="100" class="form-control">                    
                   </td>
@@ -1741,7 +1808,7 @@
                     <input type="text"  name="totalItem[]" id="totalItem${id}" style="text-align:right" class="form-control totalItem autonumeric number${id}">                    
                   </td>
     
-                  <td>
+                  <td class="tbl_aksi">
                     <div class='btn btn-danger btn-sm rmv'>Delete</div>
                   </td>
               </tr>
@@ -2521,6 +2588,10 @@
                     <input type="text"  name="detail_qty[]" id="detail_qty${index}" onkeyup="calculate(${index})" style="text-align:right" class="form-control autonumeric number${index}" >
                   </td>
 
+                  <td class="data_tbl tbl_qtyterpakai">
+                    <input type="text"  name="detail_qtyterpakai[]" id="detail_qtyterpakai${index}" onkeyup="calculate(${index})" style="text-align:right" class="form-control autonumeric number${index}">
+                  </td>
+
                   <td class="data_tbl tbl_vulkanisirke">
                     <input type="number"  name="detail_vulkanisirke[]" id="vulkanisirke${index}" style="" max="100" class="form-control" >                    
                   </td> 
@@ -2551,7 +2622,7 @@
                     <input type="text"  name="totalItem[]" readonly id="totalItem${index}" style="text-align:right"  onkeyup="calculate(${index})" class="form-control totalItem autonumeric number${index}" >                    
                   </td>
 
-                  <td>
+                  <td class="tbl_aksi">
                     <div class='btn btn-danger btn-sm rmv'>Delete</div>
                   </td>
               </tr>
@@ -2940,6 +3011,11 @@
                     <td class="data_tbl tbl_qty">
                       <input type="text"  name="detail_qty[]" id="detail_qty${id}" onkeyup="calculate(${id})" style="text-align:right" class="form-control autonumeric number${id}">
                     </td>
+
+                    <td class="data_tbl tbl_qtyterpakai">
+                      <input type="text"  name="detail_qtyterpakai[]" id="detail_qtyterpakai${id}" onkeyup="calculate(${id})" style="text-align:right" class="form-control autonumeric number${id}">
+                    </td>  
+
                     <td class="data_tbl tbl_vulkanisirke">
                       <input type="number"  name="detail_vulkanisirke[]" style="" max="100" class="form-control">                    
                     </td>  
