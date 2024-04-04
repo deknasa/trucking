@@ -3081,7 +3081,17 @@
             $('table #table_body').append(detailRow)
             initSelect2($(`#statusban${id}`), true)
             setKorv(id, detail.stok_id);
-            initAutoNumeric($(`.number${id}`))
+            initAutoNumeric($(`#detail_qtyterpakai${id}`), {
+              'maximumValue': detail.qty
+            })
+            initAutoNumeric($(`#detail_harga${id}`))
+            initAutoNumeric($(`#detail_qty${id}`))
+            initAutoNumeric($(`#total_sebelum${id}`))
+            initAutoNumeric($(`#detail_persentasediscount${id}`))
+            initAutoNumeric($(`#detail_nominaldiscount${id}`))
+            initAutoNumeric($(`#totalItem${id}`))
+
+
             setRowNumbers()
             $(`#detail_stok_${id}`).lookup({
               title: 'stok Lookup',
