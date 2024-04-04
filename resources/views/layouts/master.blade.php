@@ -768,7 +768,8 @@
       clearGlobalSearch($('#jqGrid'))
       let data = {
         tgldari: $('#tgldariheaderlookup').val(),
-        tglsampai: $('#tglsampaiheaderlookup').val()
+        tglsampai: $('#tglsampaiheaderlookup').val(),
+        proses: 'reload'
       }
       data = {
         ...data,
