@@ -177,7 +177,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-3">
                 <label class="col-form-label">
-                  KODE PERKIRAAN <span class="text-danger">*</span>
+                  NAMA PERKIRAAN <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-8 col-md-9">
@@ -242,11 +242,11 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-3">
                 <label class="col-form-label">
-                  syarat pembayaran <span class="text-danger">*</span>
+                  syarat pembayaran / TOP <span class="text-danger">*</span>
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-9">
-                <input type="text" name="top" class="form-control numbernoseparate">
+                <input type="text" name="top" class="form-control numbernoseparate text-right">
               </div>
             </div>
 
@@ -263,7 +263,7 @@
               </div>
             </div>
 
-            <div class="row form-group statuspostingtnl">
+            {{--<div class="row form-group statuspostingtnl">
               <div class="col-12 col-sm-3 col-md-3">
                 <label class="col-form-label">
                   STATUS POSTING TNL <span class="text-danger">*</span></label>
@@ -273,7 +273,7 @@
                   <option value="">-- PILIH STATUS POSTING TNL --</option>
                 </select>
               </div>
-            </div>
+            </div>--}}
           </div>
           <div class="modal-footer justify-content-start">
             <button id="btnSubmit" class="btn btn-primary">
@@ -444,7 +444,7 @@
         setStatusDaftarHargaOptions(form),
         setStatusAktifOptions(form),
         setStatusPostingTnlOptions(form),
-        setTampilan(form),
+        // setTampilan(form),
         getMaxLength(form)        
       ])
       .then(() => {
@@ -482,7 +482,7 @@
         setStatusDaftarHargaOptions(form),
         setStatusAktifOptions(form),
         setStatusPostingTnlOptions(form),
-        setTampilan(form),
+        // setTampilan(form),
         getMaxLength(form)
       ])
       .then(() => {
@@ -520,7 +520,7 @@
         setStatusDaftarHargaOptions(form),
         setStatusAktifOptions(form),
         setStatusPostingTnlOptions(form),
-        setTampilan(form),
+        // setTampilan(form),
         getMaxLength(form)
       ])
       .then(() => {
@@ -560,7 +560,7 @@
         setStatusDaftarHargaOptions(form),
         setStatusAktifOptions(form),
         setStatusPostingTnlOptions(form),
-        setTampilan(form),
+        // setTampilan(form),
         getMaxLength(form)
       ])
       .then(() => {
