@@ -3068,6 +3068,7 @@
             detailRow.find(`[name="detail_stok[]"]`).data('currentValue', detail.stok)
             detailRow.find(`[name="detail_stok_id[]"]`).val(detail.stok_id)
             detailRow.find(`[name="detail_qty[]"]`).val(detail.qty)
+            detailRow.find(`[name="detail_qtyterpakai[]"]`).val(detail.qtyterpakai)
             detailRow.find(`[name="detail_penerimaanstoknobukti[]"]`).val(detail.penerimaanstok_nobukti)
             detailRow.find(`[name="detail_harga[]"]`).val(detail.harga)
             detailRow.find(`[name="detail_persentasediscount[]"]`).val(detail.persentasediscount)
