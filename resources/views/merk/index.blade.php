@@ -406,13 +406,10 @@
                         $('#add').attr('disabled', 'disabled')
                     }
 
-                    if (!`{{ $myAuth->hasPermission('merk', 'show') }}`) {
-                        $('#view').attr('disabled', 'disabled')
+                    if (!`{{ $myAuth->hasPermission('merk', 'update') }}`) {
+                        $('#edit').attr('disabled', 'disabled')
                     }
 
-                    if (!`{{ $myAuth->hasPermission('merk', 'show') }}`) {
-                        $('#view').attr('disabled', 'disabled')
-                    }
 
                     if (!`{{ $myAuth->hasPermission('merk', 'destroy') }}`) {
                         $('#delete').attr('disabled', 'disabled')
