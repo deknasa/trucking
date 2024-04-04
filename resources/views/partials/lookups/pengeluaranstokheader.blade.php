@@ -6,7 +6,9 @@
 <script>
   setRangeLookup()
   initDatepicker()
-  $(document).on('click', '#btnReloadLookup', function(event) {
+  $('#btnReloadLookup').click(function(event) {
+    event.preventDefault()
+    console.log('tekan')
     loadDataHeaderLookup('pengeluaranstokheader', 'pengeluaranStokHeaderLookup', {
       penerimaanstok_id: `{!! $penerimaanstok_id ?? '' !!}`,
       cabang: `{!! $cabang ?? '' !!}`,
@@ -16,7 +18,7 @@
 
       tgldari: $('#tgldariheaderlookup').val(),
       tglsampai: $('#tglsampaiheaderlookup').val(),
-    })
+    }, `{!! $url ?? config('app.api_url')  !!}` + 'pengeluaranstokheader')
   })
 
   $('#pengeluaranStokHeaderLookup').jqGrid({
