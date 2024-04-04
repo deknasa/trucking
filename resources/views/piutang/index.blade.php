@@ -576,29 +576,29 @@
               }
             }
           },
-          {
-            id: 'approve',
-            title: 'Approve',
-            caption: 'Approve',
-            innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-            class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-            dropmenuHTML: [{
-              id: 'approval-buka-cetak',
-              text: "un/Approval Buka Cetak Piutang",
-              onClick: () => {
-                if (`{{ $myAuth->hasPermission('piutangheader', 'approvalbukacetak') }}`) {
-                  let tglbukacetak = $('#tgldariheader').val().split('-');
-                  tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
-                  selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                  if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                    showDialog('Harap pilih salah satu record')
-                  } else {
-                    approvalBukaCetak(tglbukacetak, 'PIUTANGHEADER', selectedRows, selectedbukti);
-                  }
-                }
-              }
-            }, ],
-          }
+          // {
+          //   id: 'approve',
+          //   title: 'Approve',
+          //   caption: 'Approve',
+          //   innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+          //   class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
+          //   dropmenuHTML: [{
+          //     id: 'approval-buka-cetak',
+          //     text: "un/Approval Buka Cetak Piutang",
+          //     onClick: () => {
+          //       if (`{{ $myAuth->hasPermission('piutangheader', 'approvalbukacetak') }}`) {
+          //         let tglbukacetak = $('#tgldariheader').val().split('-');
+          //         tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
+          //         selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+          //         if (selectedId == null || selectedId == '' || selectedId == undefined) {
+          //           showDialog('Harap pilih salah satu record')
+          //         } else {
+          //           approvalBukaCetak(tglbukacetak, 'PIUTANGHEADER', selectedRows, selectedbukti);
+          //         }
+          //       }
+          //     }
+          //   }, ],
+          // }
         ],
         buttons: [{
           id: 'view',
@@ -613,6 +613,49 @@
             }
           }
         }, ],
+        extndBtn: [{
+          id: 'approve',
+          title: 'Approve',
+          caption: 'Approve',
+          innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+          class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
+          dropmenuHTML: [
+            // {
+            //   id: 'approveun',
+            //   text: "UN/APPROVAL Status penerimaan",
+            //   onClick: () => {
+            //     approve()
+            //   }
+            // },
+            {
+              id: 'approval-buka-cetak',
+              text: "Approval Buka Cetak PIUTANGHEADER",
+              onClick: () => {
+                if (`{{ $myAuth->hasPermission('piutangheader', 'approvalbukacetak') }}`) {
+                  let tglbukacetak = $('#tgldariheader').val().split('-');
+                  tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
+
+                  approvalBukaCetak(tglbukacetak, 'PIUTANGHEADER', selectedRowsIndex, selectedbukti);
+
+                }
+              }
+            },
+            {
+              id: 'approval-kirim-berkas',
+              text: "Approval Kirim berkas PIUTANGHEADER",
+              onClick: () => {
+                if (`{{ $myAuth->hasPermission('piutangheader', 'approvalkirimberkas') }}`) {
+                  let tglkirimberkas = $('#tgldariheader').val().split('-');
+                  tglkirimberkas = tglkirimberkas[1] + '-' + tglkirimberkas[2];
+
+                  approvalKirimBerkas(tglkirimberkas, 'PIUTANGHEADER', selectedRowsIndex, selectedbukti);
+
+                }
+              }
+            },            
+          ],
+        }]
+
       })
 
     /* Append clear filter button */

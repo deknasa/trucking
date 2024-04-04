@@ -617,6 +617,18 @@ function checkboxHandler(element) {
                   }
                 }
               },
+              {
+                id: 'approval-kirim-berkas',
+                text: "Approval Kirim berkas penerimaan",
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('penerimaanheader', 'approvalkirimberkas') }}`) {
+                    let tglkirimberkas = $('#tgldariheader').val().split('-');
+                    tglkirimberkas = tglkirimberkas[1] + '-' + tglkirimberkas[2];
+
+                    approvalKirimBerkas(tglkirimberkas, 'PENERIMAANHEADER', selectedRows, selectedbukti);
+                  }
+                }
+              },
             ],
           }
         ],

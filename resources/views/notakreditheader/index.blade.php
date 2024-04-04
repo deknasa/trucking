@@ -649,6 +649,19 @@ function checkboxHandler(element) {
                   }
                 }
               },
+              {
+                id: 'approval-kirim-berkas',
+                text: "Approval Kirim Berkas NOTA KREDIT",
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('notakreditheader', 'approvalkirimberkas') }}`) {
+                    let tglkirimberkas = $('#tgldariheader').val().split('-');
+                    tglkirimberkas = tglkirimberkas[1] + '-' + tglkirimberkas[2];
+
+                    approvalKirimBerkas(tglkirimberkas, 'NOTAKREDITHEADER', selectedRows, selectedbukti);
+
+                  }
+                }
+              },
             ],
           }
         ],

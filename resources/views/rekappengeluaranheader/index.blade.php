@@ -525,6 +525,17 @@ function checkboxHandler(element) {
                   }
                 }
               },
+              {
+                id: 'approval-kirim-berkas',
+                text: "Approval Kirim berkas REKAP PENGELUARAN",
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('rekappengeluaranheader', 'approvalkirimberkas') }}`) {
+                    let tglkirimberkas = $('#tgldariheader').val().split('-');
+                    tglkirimberkas = tglkirimberkas[1] + '-' + tglkirimberkas[2];
+                    approvalKirimBerkas(tglkirimberkas, 'REKAPPENGELUARANHEADER', selectedRows, selectedbukti);
+                  }
+                }
+              },
             ],
           }
         ],

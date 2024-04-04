@@ -642,26 +642,26 @@
               }
             }
           },
-          {
-            id: 'approve',
-            title: 'Approve',
-            caption: 'Approve',
-            innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-            class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-            dropmenuHTML: [{
-              id: 'approval-buka-cetak',
-              text: "Approval Buka Cetak PENGELUARAN TRUCKING ",
-              onClick: () => {
-                if (`{{ $myAuth->hasPermission('pengeluarantruckingheader', 'approvalbukacetak') }}`) {
-                  let tglbukacetak = $('#tgldariheader').val().split('-');
-                  tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
+          // {
+          //   id: 'approve',
+          //   title: 'Approve',
+          //   caption: 'Approve',
+          //   innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+          //   class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
+          //   dropmenuHTML: [{
+          //     id: 'approval-buka-cetak',
+          //     text: "Approval Buka Cetak PENGELUARAN TRUCKING ",
+          //     onClick: () => {
+          //       if (`{{ $myAuth->hasPermission('pengeluarantruckingheader', 'approvalbukacetak') }}`) {
+          //         let tglbukacetak = $('#tgldariheader').val().split('-');
+          //         tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
 
-                  approvalBukaCetak(tglbukacetak, 'PENGELUARANTRUCKINGHEADER', selectedRowsIndex, selectedbukti);
+          //         approvalBukaCetak(tglbukacetak, 'PENGELUARANTRUCKINGHEADER', selectedRowsIndex, selectedbukti);
 
-                }
-              }
-            }, ],
-          }
+          //       }
+          //     }
+          //   }, ],
+          // }
         ],
         buttons: [{
             id: 'add',
@@ -711,6 +711,49 @@
             }
           },
         ],
+        extndBtn: [{
+          id: 'approve',
+          title: 'Approve',
+          caption: 'Approve',
+          innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+          class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
+          dropmenuHTML: [
+            // {
+            //   id: 'approveun',
+            //   text: "UN/APPROVAL Status penerimaan",
+            //   onClick: () => {
+            //     approve()
+            //   }
+            // },
+            {
+              id: 'approval-buka-cetak',
+              text: "Approval Buka Cetak PENGELUARAN TRUCKING",
+              onClick: () => {
+                if (`{{ $myAuth->hasPermission('pengeluarantruckingheader', 'approvalbukacetak') }}`) {
+                  let tglbukacetak = $('#tgldariheader').val().split('-');
+                  tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
+
+                  approvalBukaCetak(tglbukacetak, 'PENGELUARANTRUCKINGHEADER', selectedRowsIndex, selectedbukti);
+
+                }
+              }
+            },
+            {
+              id: 'approval-kirim-berkas',
+              text: "Approval Kirim berkas PENGELUARAN TRUCKING",
+              onClick: () => {
+                if (`{{ $myAuth->hasPermission('pengeluarantruckingheader', 'approvalkirimberkas') }}`) {
+                  let tglkirimberkas = $('#tgldariheader').val().split('-');
+                  tglkirimberkas = tglkirimberkas[1] + '-' + tglkirimberkas[2];
+
+                  approvalKirimBerkas(tglkirimberkas, 'PENGELUARANTRUCKINGHEADER', selectedRowsIndex, selectedbukti);
+
+                }
+              }
+            },            
+          ],
+        }]
+
       })
 
     /* Append clear filter button */

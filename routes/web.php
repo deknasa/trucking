@@ -151,6 +151,7 @@ use App\Http\Controllers\ServiceOutHeaderController;
 use App\Http\Controllers\TarikDataAbsensiController;
 use App\Http\Controllers\UpahSupirRincianController;
 use App\Http\Controllers\ApprovalBukaCetakController;
+use App\Http\Controllers\ApprovalKirimBerkasController;
 use App\Http\Controllers\ApprovalStokReuseController;
 use App\Http\Controllers\ExportLaporanStokController;
 use App\Http\Controllers\HutangBayarDetailController;
@@ -1162,6 +1163,9 @@ Route::middleware(['auth', 'authorized'])->group(function () {
 
     Route::get('approvalbukacetak/index', [ApprovalBukaCetakController::class, 'index']);
     Route::resource('approvalbukacetak', ApprovalBukaCetakController::class);
+
+    Route::get('approvalkirimberkas/index', [ApprovalKirimBerkasController::class, 'index']);
+    Route::resource('approvalkirimberkas', ApprovalKirimBerkasController::class);
 
     Route::get('penerimaangiroheader/index', [PenerimaanGiroHeaderController::class, 'index']);
     Route::get('penerimaangiroheader/{id}/delete', [PenerimaanGiroHeaderController::class, 'delete'])->name('penerimaangiroheader.delete');

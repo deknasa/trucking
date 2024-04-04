@@ -746,7 +746,8 @@
           caption: 'Approve',
           innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
           class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-          dropmenuHTML: [{
+          dropmenuHTML: [
+            {
             id: 'approval-buka-cetak',
             text: "Approval Buka Cetak PROSES  GAJI SUPIR",
             onClick: () => {
@@ -759,7 +760,24 @@
 
               }
             }
-          }, ],
+          }, 
+          {
+            id: 'approval-kirim-berkas',
+            text: "Approval Kirim Berkas PROSES  GAJI SUPIR",
+            onClick: () => {
+              if (`{{ $myAuth->hasPermission('prosesgajisupirheader', 'approvalkirimberkas') }}`) {
+                let tglkirimberkas = $('#tgldariheader').val().split('-');
+                tglkirimberkas = tglkirimberkas[1] + '-' + tglkirimberkas[2];
+                selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+
+                approvalKirimBerkas(tglkirimberkas, 'PROSESGAJISUPIRHEADER', selectedRowsIndex, selectedbukti);
+
+              }
+            }
+          }, 
+          
+        ],
+
         }]
 
       })

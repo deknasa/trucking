@@ -567,27 +567,27 @@
               }
             }
           },
-          {
-            id: 'approve',
-            title: 'Approve',
-            caption: 'Approve',
-            innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-            class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-            dropmenuHTML: [
-              {
-                id: 'approval-buka-cetak',
-                text: "Approval Buka Cetak hutang",
-                onClick: () => {
-                  if (`{{ $myAuth->hasPermission('hutangheader', 'approvalbukacetak') }}`) {
-                    let tglbukacetak = $('#tgldariheader').val().split('-');
-                    tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
+          // {
+          //   id: 'approve',
+          //   title: 'Approve',
+          //   caption: 'Approve',
+          //   innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+          //   class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
+          //   dropmenuHTML: [
+          //     {
+          //       id: 'approval-buka-cetak',
+          //       text: "Approval Buka Cetak hutang",
+          //       onClick: () => {
+          //         if (`{{ $myAuth->hasPermission('hutangheader', 'approvalbukacetak') }}`) {
+          //           let tglbukacetak = $('#tgldariheader').val().split('-');
+          //           tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
 
-                    approvalBukaCetak(tglbukacetak, 'HUTANGHEADER', selectedRows, selectedbukti);
-                  }
-                }
-              },
-            ],
-          }
+          //           approvalBukaCetak(tglbukacetak, 'HUTANGHEADER', selectedRows, selectedbukti);
+          //         }
+          //       }
+          //     },
+          //   ],
+          // }
         ],
         buttons: [{
             id: 'add',
@@ -643,7 +643,49 @@
               }
             }
           },
-        ]
+        ],
+        extndBtn: [{
+          id: 'approve',
+          title: 'Approve',
+          caption: 'Approve',
+          innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+          class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
+          dropmenuHTML: [
+            // {
+            //   id: 'approveun',
+            //   text: "UN/APPROVAL Status penerimaan",
+            //   onClick: () => {
+            //     approve()
+            //   }
+            // },
+            {
+              id: 'approval-buka-cetak',
+              text: "Approval Buka Cetak Hutang",
+              onClick: () => {
+                if (`{{ $myAuth->hasPermission('hutangheader', 'approvalbukacetak') }}`) {
+                  let tglbukacetak = $('#tgldariheader').val().split('-');
+                  tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
+
+                  approvalBukaCetak(tglbukacetak, 'HUTANGHEADER', selectedRowsIndex, selectedbukti);
+
+                }
+              }
+            },
+            {
+              id: 'approval-kirim-berkas',
+              text: "Approval Kirim berkas Hutang",
+              onClick: () => {
+                if (`{{ $myAuth->hasPermission('hutangheader', 'approvalkirimberkas') }}`) {
+                  let tglkirimberkas = $('#tgldariheader').val().split('-');
+                  tglkirimberkas = tglkirimberkas[1] + '-' + tglkirimberkas[2];
+
+                  approvalKirimBerkas(tglkirimberkas, 'HUTANGHEADER', selectedRowsIndex, selectedbukti);
+
+                }
+              }
+            },            
+          ],
+        }]        
 
 
       })

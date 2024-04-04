@@ -24,6 +24,7 @@ class PengeluaranHeaderController extends MyController
         $data = [            
             'comboapproval' => $this->comboApproval('list','STATUS APPROVAL','STATUS APPROVAL'),
             'combocetak' => $this->comboCetak('list','STATUSCETAK','STATUSCETAK'),
+            'combokirimberkas' => $this->comboCetak('list','STATUSKIRIMBERKAS','STATUSKIRIMBERKAS'),
             'combobank' => $this->comboBank(),
         ];
         
@@ -139,6 +140,7 @@ class PengeluaranHeaderController extends MyController
 
         return $response['data'];
     }
+
 
     // /**
     //  * Fungsi combo

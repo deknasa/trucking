@@ -619,29 +619,29 @@ function checkboxHandler(element) {
               }
             }
           },
-          {
-            id: 'approve',
-            title: 'Approve',
-            caption: 'Approve',
-            innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-            class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-            dropmenuHTML: [{
-              id: 'approval-buka-cetak',
-              text: "Approval Buka Cetak PELUNASAN PIUTANG",
-              onClick: () => {
-                if (`{{ $myAuth->hasPermission('pelunasanpiutangheader', 'approvalbukacetak') }}`) {
-                  let tglbukacetak = $('#tgldariheader').val().split('-');
-                  tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
-                  selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-                  if (selectedId == null || selectedId == '' || selectedId == undefined) {
-                    showDialog('Harap pilih salah satu record')
-                  } else {
-                    approvalBukaCetak(tglbukacetak, 'PELUNASANPIUTANGHEADER', selectedRows, selectedbukti);
-                  }
-                }
-              }
-            }, ],
-          }
+          // {
+          //   id: 'approve',
+          //   title: 'Approve',
+          //   caption: 'Approve',
+          //   innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+          //   class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
+          //   dropmenuHTML: [{
+          //     id: 'approval-buka-cetak',
+          //     text: "Approval Buka Cetak PELUNASAN PIUTANG",
+          //     onClick: () => {
+          //       if (`{{ $myAuth->hasPermission('pelunasanpiutangheader', 'approvalbukacetak') }}`) {
+          //         let tglbukacetak = $('#tgldariheader').val().split('-');
+          //         tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
+          //         selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+          //         if (selectedId == null || selectedId == '' || selectedId == undefined) {
+          //           showDialog('Harap pilih salah satu record')
+          //         } else {
+          //           approvalBukaCetak(tglbukacetak, 'PELUNASANPIUTANGHEADER', selectedRows, selectedbukti);
+          //         }
+          //       }
+          //     }
+          //   }, ],
+          // }
         ],
         buttons: [{
             id: 'add',
@@ -688,6 +688,49 @@ function checkboxHandler(element) {
             }
           },
         ],
+        extndBtn: [{
+          id: 'approve',
+          title: 'Approve',
+          caption: 'Approve',
+          innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+          class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
+          dropmenuHTML: [
+            // {
+            //   id: 'approveun',
+            //   text: "UN/APPROVAL Status penerimaan",
+            //   onClick: () => {
+            //     approve()
+            //   }
+            // },
+            {
+              id: 'approval-buka-cetak',
+              text: "Approval Buka Cetak PELUNASAN PIUTANG",
+              onClick: () => {
+                if (`{{ $myAuth->hasPermission('pelunasanpiutangheader', 'approvalbukacetak') }}`) {
+                  let tglbukacetak = $('#tgldariheader').val().split('-');
+                  tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
+
+                  approvalBukaCetak(tglbukacetak, 'PELUNASANPIUTANGHEADER', selectedRowsIndex, selectedbukti);
+
+                }
+              }
+            },
+            {
+              id: 'approval-kirim-berkas',
+              text: "Approval Kirim berkas PELUNASAN PIUTANG",
+              onClick: () => {
+                if (`{{ $myAuth->hasPermission('pelunasanpiutangheader', 'approvalkirimberkas') }}`) {
+                  let tglkirimberkas = $('#tgldariheader').val().split('-');
+                  tglkirimberkas = tglkirimberkas[1] + '-' + tglkirimberkas[2];
+
+                  approvalKirimBerkas(tglkirimberkas, 'PELUNASANPIUTANGHEADER', selectedRowsIndex, selectedbukti);
+
+                }
+              }
+            },            
+          ],
+        }]
+
       })
 
     /* Append clear filter button */

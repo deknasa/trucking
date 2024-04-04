@@ -755,6 +755,23 @@
                 }
               },
               {
+                id: 'approval-kirim-berkas',
+                text: "Un/Approval Kirim Berkas Absensi",
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('absensisupirheader', 'approvalkirimberkas') }}`) {
+                    let tglkirimberkas = $('#tgldariheader').val().split('-');
+                    tglkirimberkas = tglkirimberkas[1] + '-' + tglkirimberkas[2];
+                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                    if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                      showDialog('Harap pilih salah satu record')
+                    } else {
+                      approvalKirimBerkas(tglkirimberkas, 'ABSENSISUPIRHEADER', selectedRows, selectedbukti);
+                    }
+                  }
+                }
+              },
+
+              {
                   id: 'approvalabsensifinal',
                   text: "un/Approval Absensi Final",
                   onClick: () => {

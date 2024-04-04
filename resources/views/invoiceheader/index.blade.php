@@ -623,6 +623,21 @@ function checkboxHandler(element) {
                   }
                 }
               },
+              {
+                id: 'approval-kirim-berkas',
+                text: "Approval Kirim Berkas INVOICE",
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('invoiceheader', 'approvalkirimberkas') }}`) {
+                    let tglkirimberkas = $('#tgldariheader').val().split('-');
+                    tglkirimberkas = tglkirimberkas[1] + '-' + tglkirimberkas[2];
+                    if (selectedRows.length < 1) {
+                      showDialog('Harap pilih salah satu record')
+                    } else {
+                      approvalKirimberkas(tglkirimberkas, 'INVOICEHEADER', selectedRows, selectedbukti);
+                    }
+                  }
+                }
+              },              
             ],
           }
         ],
