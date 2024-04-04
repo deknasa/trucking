@@ -128,6 +128,11 @@
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
                     },
                     {
+                        label: 'KETERANGAN',
+                        name: 'keterangan',
+                        width: (detectDeviceType() == "desktop") ? md_dekstop_1 : md_mobile_1,
+                    },
+                    {
                         label: 'status',
                         name: 'statusaktif',
                         width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,

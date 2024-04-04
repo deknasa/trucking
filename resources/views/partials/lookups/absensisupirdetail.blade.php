@@ -36,7 +36,7 @@
         {
           label: 'STATUS',
           name: 'status',
-          width: (detectDeviceType() == "desktop") ? sm_dekstop_2 : sm_mobile_2,
+          width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
         },
         {
           label: 'KETERANGAN',

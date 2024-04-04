@@ -47,7 +47,7 @@
                             </div>
                             <div class="col-12 col-sm-2 col-md-2">
                                 <label class="col-form-label">
-                                    TGL KELUAR <span class="text-danger">*</span>
+                                    TGL & JAM KELUAR <span class="text-danger">*</span>
                                 </label>
                             </div>
                             <div class="col-12 col-sm-4 col-md-4">

@@ -288,6 +288,7 @@ function checkboxHandler(element) {
           {
             label: 'SUPPLIER',
             name: 'supplier_id',
+            width: (detectDeviceType() == "desktop") ? sm_dekstop_3 : sm_mobile_3,
             align: 'left'
           },
           {
@@ -321,7 +322,7 @@ function checkboxHandler(element) {
             align: 'left'
           },
           {
-            label: 'TANGGAL CAIR',
+            label: 'TGL JATUH TEMPO',
             name: 'tglcair',
             align: 'left',
             formatter: "date",
@@ -330,6 +331,11 @@ function checkboxHandler(element) {
               srcformat: "ISO8601Long",
               newformat: "d-m-Y"
             }
+          },
+          {
+            label: 'NO WARKAT',
+            name: 'nowarkat',
+            align: 'left'
           },
           {
             label: 'USER APPROVAL',
@@ -647,6 +653,16 @@ function checkboxHandler(element) {
               } else {
                 cekValidasi(selectedId, 'DELETE')
               }
+            }
+          },
+          {
+            id: 'view',
+            innerHTML: '<i class="fa fa-eye"></i> VIEW',
+            class: 'btn btn-orange btn-sm mr-1',
+            onClick: () => {
+              selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+
+              viewPelunasanHutang(selectedId)
             }
           },
         ],

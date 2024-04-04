@@ -573,15 +573,7 @@
             caption: 'Approve',
             innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
             class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-            dropmenuHTML: [{
-                id: 'approveun',
-                text: "UN/APPROVAL Status hutang",
-                onClick: () => {
-                  if (`{{ $myAuth->hasPermission('hutangheader', 'approval') }}`) {
-                    approve()
-                  }
-                }
-              },
+            dropmenuHTML: [
               {
                 id: 'approval-buka-cetak',
                 text: "Approval Buka Cetak hutang",

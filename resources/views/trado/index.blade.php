@@ -1391,9 +1391,14 @@
                 $('#add').attr('disabled', 'disabled')
             }
 
-            if (!`{{ $myAuth->hasPermission('trado', 'update') }}`) {
+            // if (!`{{ $myAuth->hasPermission('trado', 'update') }}`) {
+            //     $('#edit').attr('disabled', 'disabled')
+            // }
+
+            if ((!`{{ $myAuth->hasPermission('trado', 'update') }}`) && (!`{{ $myAuth->hasPermission('trado', 'updateuser') }}`) ) {
                 $('#edit').attr('disabled', 'disabled')
             }
+
 
             if (!`{{ $myAuth->hasPermission('trado', 'show') }}`) {
                 $('#view').attr('disabled', 'disabled')

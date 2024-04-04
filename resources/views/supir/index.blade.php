@@ -1268,7 +1268,11 @@
                 $('#view').attr('disabled', 'disabled')
             }
 
-            if (!`{{ $myAuth->hasPermission('supir', 'update') }}`) {
+            // if (!`{{ $myAuth->hasPermission('supir', 'update') }}`) {
+            //     $('#edit').attr('disabled', 'disabled')
+            // }
+
+            if ((!`{{ $myAuth->hasPermission('supir', 'update') }}`) && (!`{{ $myAuth->hasPermission('supir', 'updateuser') }}`) ) {
                 $('#edit').attr('disabled', 'disabled')
             }
 

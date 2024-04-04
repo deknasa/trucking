@@ -32,7 +32,7 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
-                  npwp <span class="text-danger">*</span>
+                  npwp
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
@@ -42,11 +42,21 @@
             <div class="row form-group">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
-                  no ktp <span class="text-danger">*</span>
+                  no ktp
                 </label>
               </div>
               <div class="col-12 col-sm-9 col-md-10">
                 <input id='input_maskktp' type="text" name="noktp" class="form-control numbernoseparate">
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
+                  keterangan <span class="text-danger">*</span>
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <input type="text" name="keterangan" class="form-control">
               </div>
             </div>
             <div class="row form-group">

@@ -774,7 +774,7 @@
         ...data,
         ...addtional
       }
-      getIndexLookup(url, data).then((response) => {
+      // getIndexLookup(url, data).then((response) => {
         $('.is-invalid').removeClass('is-invalid')
         $('.invalid-feedback').remove()
         clearGlobalSearch($('#jqGrid'))
@@ -789,34 +789,34 @@
 
           page: 1
         }).trigger('reloadGrid')
-      }).catch((error) => {
-        clearGlobalSearch($('#jqGrid'))
+      // }).catch((error) => {
+      //   clearGlobalSearch($('#jqGrid'))
 
-        if (error.status === 422) {
-          $('.is-invalid').removeClass('is-invalid')
-          $('.invalid-feedback').remove()
-          errors = error.responseJSON.errors
+      //   if (error.status === 422) {
+      //     $('.is-invalid').removeClass('is-invalid')
+      //     $('.invalid-feedback').remove()
+      //     errors = error.responseJSON.errors
 
-          $.each(errors, (index, error) => {
-            let indexes = index.split(".");
-            let element;
-            element = $('#rangeHeaderLookup').find(`[name="${indexes[0]}headerlookup"]`)[0];
+      //     $.each(errors, (index, error) => {
+      //       let indexes = index.split(".");
+      //       let element;
+      //       element = $('#rangeHeaderLookup').find(`[name="${indexes[0]}headerlookup"]`)[0];
 
-            $(element).addClass("is-invalid");
-            $(`
-              <div class="invalid-feedback">
-              ${error[0].toLowerCase()}
-              </div>
-			    `).appendTo($(element).parent());
+      //       $(element).addClass("is-invalid");
+      //       $(`
+      //         <div class="invalid-feedback">
+      //         ${error[0].toLowerCase()}
+      //         </div>
+			//     `).appendTo($(element).parent());
 
-          });
+      //     });
 
-          $(".is-invalid").first().focus();
-          $('#processingLoader').addClass('d-none')
-        } else {
-          showDialog(error.responseJSON)
-        }
-      })
+      //     $(".is-invalid").first().focus();
+      //     $('#processingLoader').addClass('d-none')
+      //   } else {
+      //     showDialog(error.responseJSON)
+      //   }
+      // })
 
 
     }

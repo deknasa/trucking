@@ -96,6 +96,19 @@
               </div>
             </div>
 
+
+            <div class="row form-group">
+              <div class="col-12 col-sm-3 col-md-2">
+                <label class="col-form-label">
+                  PENERIMA
+                </label>
+              </div>
+              <div class="col-12 col-sm-9 col-md-10">
+                <select name="penerima_id[]" id="multiple" class="select2bs4 form-control" multiple="multiple"></select>
+              </div>
+            </div>
+
+
             <div class="row form-group bmt" style="display: none;">
               <div class="col-12 col-sm-3 col-md-2">
                 <label class="col-form-label">
@@ -347,7 +360,8 @@
             postData: {
               bank_id: response.data.bank_id,
               tgldari: dateFormat(response.data.tgldariheader),
-              tglsampai: dateFormat(response.data.tglsampaiheader)
+              tglsampai: dateFormat(response.data.tglsampaiheader),
+              proses: 'reload'
             }
           }).trigger('reloadGrid');
 
@@ -391,6 +405,11 @@
     }
     initLookup()
     initSelect2(form.find('.select2bs4'), true)
+    $('#multiple')
+      .select2({
+        theme: 'bootstrap4',
+        width: '100%',
+      })
     initDatepicker()
   })
 
@@ -463,7 +482,8 @@
 
     Promise
       .all([
-        setStatusJenisTransaksiOptions(form)
+        setStatusJenisTransaksiOptions(form),
+        setPenerimaOptions(form),
       ])
       .then(() => {
         showDefault(form)
@@ -544,6 +564,7 @@
       .all([
         setTglBukti(form),
         setStatusJenisTransaksiOptions(form),
+        setPenerimaOptions(form),
 
         // $('#detailList tbody').remove()
       ])
@@ -599,6 +620,7 @@
       .all([
         setTglBukti(form),
         setStatusJenisTransaksiOptions(form),
+        setPenerimaOptions(form),
       ])
       .then(() => {
         showPengeluaran(form, id)
@@ -666,6 +688,7 @@
     Promise
       .all([
         setStatusJenisTransaksiOptions(form),
+        setPenerimaOptions(form),
       ])
       .then(() => {
         showPengeluaran(form, id)
@@ -706,6 +729,7 @@
     Promise
       .all([
         setStatusJenisTransaksiOptions(form),
+        setPenerimaOptions(form),
       ])
       .then(() => {
         showPengeluaran(form, id)
@@ -768,7 +792,11 @@
       success: response => {
         var error = response.error
         if (error) {
-          showDialog(response)
+          // if (response.force) {
+          //   showConfirmForce(response.message, Id)
+          // } else {
+            showDialog(response)
+          // }
         } else {
           if (Aksi == 'PRINTER BESAR') {
             window.open(`{{ route('pengeluaranheader.report') }}?id=${Id}&printer=reportPrinterBesar`)
@@ -900,6 +928,7 @@
         success: response => {
           let tgl = response.data.tglbukti
 
+          let penerimaIds = []
           $.each(response.data, (index, value) => {
             bankId = response.data.bank_id
             let element = form.find(`[name="${index}"]`)
@@ -930,6 +959,11 @@
           } else {
             $('.bmt').hide()
           }
+          response.detailpenerima.forEach((penerima) => {
+            penerimaIds.push(penerima.penerima_id)
+          })
+
+          form.find(`[name="penerima_id[]"]`).val(penerimaIds).change()
 
           $('#detailList tbody').html('')
           $.each(response.detail, (index, detail) => {
@@ -1174,8 +1208,8 @@
       data: {
         pengeluaranId: selectedRows,
         bukti: selectedbukti,
-        table: 'pengeluaranheader' ,
-        statusapproval: 'statusapproval' ,        
+        table: 'pengeluaranheader',
+        statusapproval: 'statusapproval',
       },
       success: response => {
         $('#crudForm').trigger('reset')
@@ -1462,6 +1496,48 @@
         data: data,
         success: response => {
           isEditTgl = $.trim(response.text);
+          resolve()
+        },
+        error: error => {
+          reject(error)
+        }
+      })
+    })
+  }
+
+  function setPenerimaOptions(relatedForm) {
+    return new Promise((resolve, reject) => {
+      relatedForm.find('[name="penerima_id[]"]').empty()
+
+      $.ajax({
+        url: `${apiUrl}penerima`,
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          limit: 0,
+          filters: JSON.stringify({
+            "groupOp": "AND",
+            "rules": [{
+              "field": "statusaktif",
+              "op": "eq",
+              "data": "AKTIF"
+            }, {
+              "field": "statuskaryawan",
+              "op": "eq",
+              "data": "KARYAWAN"
+            }]
+          }),
+        },
+        success: response => {
+          response.data.forEach(penerima => {
+            let option = new Option(penerima.namapenerima, penerima.id)
+
+            relatedForm.find(`[name="penerima_id[]"]`).append(option).trigger('change')
+          });
+
           resolve()
         },
         error: error => {

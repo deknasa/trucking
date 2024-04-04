@@ -225,7 +225,7 @@ function checkboxHandler(element) {
             }
           },
           {
-            label: 'Penerimaan no bukti',
+            label: 'Service Out no bukti',
             width: 200,
             name: 'serviceout_nobukti',
             align: 'left',

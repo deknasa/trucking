@@ -7,20 +7,22 @@
   setRangeLookup()
   initDatepicker()
   $(document).on('click', '#btnReloadLookup', function(event) {
-    loadDataHeaderLookup('penerimaanstokheader', 'penerimaanStokHeaderLookup',{
+    loadDataHeaderLookup('penerimaanstokheader', 'penerimaanStokHeaderLookup', {
       penerimaanstok_id: `{!! $penerimaanstok_id ?? '' !!}`,
-        stok_id: `{!! $stok_id ?? '' !!}`,
-        cabang: `{!! $cabang ?? '' !!}`,
-        // filters: `{!! $filters ?? '' !!}`
-        supplier_id: `{!! $supplier_id ?? '' !!}`,
-        pengeluaranstok_id: `{!! $pengeluaranstok_id ?? '' !!}`,
-        tgldari: $('#tgldariheaderlookup').val(),
-        tglsampai: $('#tglsampaiheaderlookup').val(),
+      stok_id: `{!! $stok_id ?? '' !!}`,
+      cabang: `{!! $cabang ?? '' !!}`,
+      // filters: `{!! $filters ?? '' !!}`
+      supplier_id: `{!! $supplier_id ?? '' !!}`,
+      pengeluaranstok_id: `{!! $pengeluaranstok_id ?? '' !!}`,
+      tgldari: $('#tgldariheaderlookup').val(),
+      tglsampai: $('#tglsampaiheaderlookup').val(),
+      from: `{!! $from ?? '' !!}`,
+      pengeluarantrucking_id: `{!! $pengeluarantrucking_id ?? '' !!}`,
     })
   })
 
   $('#penerimaanStokHeaderLookup').jqGrid({
-      url: `{!! $url ?? config('app.api_url')  !!}`+'penerimaanstokheader',
+      url: `{!! $url ?? config('app.api_url')  !!}` + 'penerimaanstokheader',
       mtype: "GET",
       styleUI: 'Bootstrap4',
       iconSet: 'fontAwesome',
@@ -34,126 +36,128 @@
         pengeluaranstok_id: `{!! $pengeluaranstok_id ?? '' !!}`,
         tgldari: $('#tgldariheaderlookup').val(),
         tglsampai: $('#tglsampaiheaderlookup').val(),
+        from: `{!! $from ?? '' !!}`,
+        pengeluarantrucking_id: `{!! $pengeluarantrucking_id ?? '' !!}`,
       },
       idPrefix: 'penerimaanStokHeaderLookup',
       colModel: [{
-            label: 'ID',
-            name: 'id',
-            align: 'right',
-            width: '50px',
-            search: false,
-            hidden: true
-          },
-          {
-            label: 'NO BUKTI',
-            name: 'nobukti',
-            align: 'left'
-          },
-          {
-            label: 'TGL BUKTI',
-            name: 'tglbukti',
-            align: 'left',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y"
-            }
-          },
-          {
-            label: 'PENERIMAAN Stok',
-            name: 'penerimaanstok',
-            align: 'left'
-          },
-          {
-            label: 'Penerimaan no bukti',
-            name: 'penerimaanstok_nobukti',
-            align: 'left'
-          },
-          {
-            label: 'Pengeluaran no bukti',
-            name: 'pengeluaranstok_nobukti',
-            align: 'left'
-          },
-          {
-            label: 'Gudang',
-            name: 'gudang',
-            align: 'left'
-          },
-          {
-            label: 'Trado',
-            name: 'trado',
-            align: 'left'
-          },
-          {
-            label: 'supplier',
-            name: 'supplier',
-            align: 'left'
-          },
-          {
-            label: 'no bon',
-            name: 'nobon',
-            align: 'left'
-          },
-          {
-            label: 'no bukti Hutang',
-            name: 'hutang_nobukti',
-            align: 'left'
-          },
-          {
-            label: 'gudang dari',
-            name: 'gudangdari',
-            align: 'left'
-          },
-          {
-            label: 'gudang ke',
-            name: 'gudangke',
-            align: 'left'
-          },
-          {
-            label: 'KODE PERKIRAAN',
-            name: 'coa',
-            align: 'left'
-          },
-          {
-            label: 'keterangan',
-            name: 'keterangan',
-            align: 'left'
-          },
-          
-          {
-            label: 'MODIFIED BY',
-            name: 'modifiedby',
-            align: 'left'
-          },
-          {
-            label: 'CREATED AT',
-            name: 'created_at',
-            align: 'right',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y H:i:s"
-            }
-          },
-          {
-            label: 'UPDATED AT',
-            name: 'updated_at',
-            align: 'right',
-            formatter: "date",
-            formatoptions: {
-              srcformat: "ISO8601Long",
-              newformat: "d-m-Y H:i:s"
-            }
-          },
-          {
-            label: 'kelompok_id',
-            name: 'kelompok_id',
-            align: 'right',
-            width: '50px',
-            search: false,
-            hidden: true
-          },
-        ],
+          label: 'ID',
+          name: 'id',
+          align: 'right',
+          width: '50px',
+          search: false,
+          hidden: true
+        },
+        {
+          label: 'NO BUKTI',
+          name: 'nobukti',
+          align: 'left'
+        },
+        {
+          label: 'TGL BUKTI',
+          name: 'tglbukti',
+          align: 'left',
+          formatter: "date",
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y"
+          }
+        },
+        {
+          label: 'PENERIMAAN Stok',
+          name: 'penerimaanstok',
+          align: 'left'
+        },
+        {
+          label: 'Penerimaan no bukti',
+          name: 'penerimaanstok_nobukti',
+          align: 'left'
+        },
+        {
+          label: 'Pengeluaran no bukti',
+          name: 'pengeluaranstok_nobukti',
+          align: 'left'
+        },
+        {
+          label: 'Gudang',
+          name: 'gudang',
+          align: 'left'
+        },
+        {
+          label: 'Trado',
+          name: 'trado',
+          align: 'left'
+        },
+        {
+          label: 'supplier',
+          name: 'supplier',
+          align: 'left'
+        },
+        {
+          label: 'no bon',
+          name: 'nobon',
+          align: 'left'
+        },
+        {
+          label: 'no bukti Hutang',
+          name: 'hutang_nobukti',
+          align: 'left'
+        },
+        {
+          label: 'gudang dari',
+          name: 'gudangdari',
+          align: 'left'
+        },
+        {
+          label: 'gudang ke',
+          name: 'gudangke',
+          align: 'left'
+        },
+        {
+          label: 'KODE PERKIRAAN',
+          name: 'coa',
+          align: 'left'
+        },
+        {
+          label: 'keterangan',
+          name: 'keterangan',
+          align: 'left'
+        },
+
+        {
+          label: 'MODIFIED BY',
+          name: 'modifiedby',
+          align: 'left'
+        },
+        {
+          label: 'CREATED AT',
+          name: 'created_at',
+          align: 'right',
+          formatter: "date",
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y H:i:s"
+          }
+        },
+        {
+          label: 'UPDATED AT',
+          name: 'updated_at',
+          align: 'right',
+          formatter: "date",
+          formatoptions: {
+            srcformat: "ISO8601Long",
+            newformat: "d-m-Y H:i:s"
+          }
+        },
+        {
+          label: 'kelompok_id',
+          name: 'kelompok_id',
+          align: 'right',
+          width: '50px',
+          search: false,
+          hidden: true
+        },
+      ],
       autowidth: true,
       responsive: true,
       shrinkToFit: false,
@@ -189,15 +193,15 @@
       },
       loadBeforeSend: function(jqXHR) {
         cab = `{!! $cabang ?? '' !!}`;
-        if(cab == 'TNL'){
+        if (cab == 'TNL') {
           jqXHR.setRequestHeader('Authorization', `Bearer ${accessTokenTnl}`)
-        }else{
+        } else {
           jqXHR.setRequestHeader('Authorization', `Bearer ${accessToken}`)
         }
         setGridLastRequest($(this), jqXHR)
       },
       loadComplete: function(data) {
-          changeJqGridRowListText()
+        changeJqGridRowListText()
         if (detectDeviceType() == 'desktop') {
           $(document).unbind('keydown')
           setCustomBindKeys($(this))
@@ -269,18 +273,15 @@
       },
     })
     .jqGrid("navGrid", pager, {
-        search: false,
-        refresh: false,
-        add: false,
-        edit: false,
-        del: false,
-      })
+      search: false,
+      refresh: false,
+      add: false,
+      edit: false,
+      del: false,
+    })
     .customPager()
   loadGlobalSearch($('#penerimaanStokHeaderLookup'))
   // additionalRulesGlobalSearch(sendedFilters)
 
   loadClearFilter($('#penerimaanStokHeaderLookup'))
-
-  
 </script>
-

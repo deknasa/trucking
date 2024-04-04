@@ -13,8 +13,12 @@
         aktif: `{!! $Aktif ?? '' !!}`,
         trado_id: `{!! $trado_id ?? '' !!}`,
         cabang: `{!! $cabang ?? '' !!}`,
+        penerimaanstok_id: `{!! $penerimaanstok_id ?? '' !!}`,
         supirserap: `{!! $supirserap ?? '' !!}`,
         tglabsensi: `{!! $tglabsensi ?? '' !!}`,
+        tradodarike: `{!! $tradodarike ?? '' !!}`,
+        tradodari_id: `{!! $tradodari_id ?? '' !!}`,   
+        tradoke_id: `{!! $tradoke_id ?? '' !!}`,             
       },
       idPrefix: 'tradoLookup',
       colModel: [{
