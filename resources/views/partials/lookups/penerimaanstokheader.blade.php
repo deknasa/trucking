@@ -6,7 +6,7 @@
   // var sendedFilters = `{!! $filters ?? '' !!}`
   setRangeLookup()
   initDatepicker()
-  $(document).on('click', '#btnReloadLookup', function(event) {
+  $('#btnReloadLookup').click(function(event) {
     loadDataHeaderLookup('penerimaanstokheader', 'penerimaanStokHeaderLookup', {
       penerimaanstok_id: `{!! $penerimaanstok_id ?? '' !!}`,
       stok_id: `{!! $stok_id ?? '' !!}`,
@@ -18,7 +18,7 @@
       tglsampai: $('#tglsampaiheaderlookup').val(),
       from: `{!! $from ?? '' !!}`,
       pengeluarantrucking_id: `{!! $pengeluarantrucking_id ?? '' !!}`,
-    })
+    }, `{!! $url ?? config('app.api_url')  !!}` + 'penerimaanstokheader')
   })
 
   $('#penerimaanStokHeaderLookup').jqGrid({
