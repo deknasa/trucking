@@ -624,6 +624,65 @@
       })
     }
 
+    function approvalKirimBerkas(periode, table, selectedRows,buktiselectedRows) {
+
+$.ajax({
+  url: `${apiUrl}approvalkirimberkas`,
+  method: 'POST',
+  dataType: 'JSON',
+  headers: {
+    Authorization: `Bearer ${accessToken}`
+  },
+  data: {
+    tableId: selectedRows,
+    bukti: buktiselectedRows,
+    periode: periode,
+    table: table,
+    info: info
+  },
+  success: response => {
+    $('.is-invalid').removeClass('is-invalid')
+    $('.invalid-feedback').remove()
+    $('#crudForm').trigger('reset')
+    $('#crudModal').modal('hide')
+    if(table == 'GAJISUPIRHEADER' || table == 'PROSESGAJISUPIRHEADER' || table == 'PENGELUARANTRUCKINGHEADER'){
+      selectedRowsIndex = []
+      clearSelectedRowsIndex() 
+    } else {
+      selectedRows = []
+      clearSelectedRows() 
+    }
+    $('#jqGrid').jqGrid('setGridParam', {
+      postData: {
+        proses: 'reload',
+      }
+    }).trigger('reloadGrid');
+    let data = $('#jqGrid').jqGrid("getGridParam", "postData");
+  },
+  error: error => {
+    $("#dialog-warning-message").find("p").remove();
+    $(`#dialog-warning-message`).append(
+      `<p class="text-dark">${error.responseJSON.errors.tableId}</p>`
+    );
+
+    $("#dialog-warning-message").dialog({
+      modal: true,
+      buttons: [{
+        text: "Ok",
+        click: function() {
+          $(this).dialog("close");
+        },
+      }, ]
+    });
+    $(".ui-dialog-titlebar-close").find("p").remove();
+
+  },
+}).always(() => {
+  $('#processingLoader').addClass('d-none')
+  $(this).removeAttr('disabled')
+})
+}
+
 
 
 

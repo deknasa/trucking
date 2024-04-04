@@ -586,6 +586,17 @@
                                     }
                                 }
                             },
+                            {
+                                id: 'approval-kirim-berkas',
+                                text: "Approval Kirim berkas PENERIMAAN GIRO",
+                                onClick: () => {
+                                    if (`{{ $myAuth->hasPermission('penerimaangiroheader', 'approvalkirimberkas') }}`) {
+                                        let tglkirimberkas = $('#tgldariheader').val().split('-');
+                                        tglkirimberkas = tglkirimberkas[1] + '-' + tglkirimberkas[2];
+                                        approvalKirimBerkas(tglkirimberkas, 'PENERIMAANGIROHEADER', selectedRows, selectedbukti);
+                                    }
+                                }
+                            },
                         ],
                     }
                 ],

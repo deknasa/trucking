@@ -498,25 +498,25 @@ function checkboxHandler(element) {
               }
             }
           },
-          {
-            id: 'approve',
-            title: 'Approve',
-            caption: 'Approve',
-            innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
-            class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
-            dropmenuHTML: [{
-              id: 'approval-buka-cetak',
-              text: "Approval Buka Cetak SERVICEIN",
-              onClick: () => {
-                if (`{{ $myAuth->hasPermission('serviceinheader', 'approvalbukacetak') }}`) {
-                  let tglbukacetak = $('#tgldariheader').val().split('-');
-                  tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
+          // {
+          //   id: 'approve',
+          //   title: 'Approve',
+          //   caption: 'Approve',
+          //   innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+          //   class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
+          //   dropmenuHTML: [{
+          //     id: 'approval-buka-cetak',
+          //     text: "Approval Buka Cetak SERVICEIN",
+          //     onClick: () => {
+          //       if (`{{ $myAuth->hasPermission('serviceinheader', 'approvalbukacetak') }}`) {
+          //         let tglbukacetak = $('#tgldariheader').val().split('-');
+          //         tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
 
-                  approvalBukaCetak(tglbukacetak, 'SERVICEINHEADER', selectedRows, selectedbukti);
-                }
-              }
-            }, ],
-          }
+          //         approvalBukaCetak(tglbukacetak, 'SERVICEINHEADER', selectedRows, selectedbukti);
+          //       }
+          //     }
+          //   }, ],
+          // }
         ],
         buttons: [{
             id: 'add',
@@ -567,7 +567,50 @@ function checkboxHandler(element) {
               }
             }
           },
-        ]
+        ],
+        extndBtn: [{
+          id: 'approve',
+          title: 'Approve',
+          caption: 'Approve',
+          innerHTML: '<i class="fa fa-check"></i> UN/APPROVAL',
+          class: 'btn btn-purple btn-sm mr-1 dropdown-toggle ',
+          dropmenuHTML: [
+            // {
+            //   id: 'approveun',
+            //   text: "UN/APPROVAL Status penerimaan",
+            //   onClick: () => {
+            //     approve()
+            //   }
+            // },
+            {
+              id: 'approval-buka-cetak',
+              text: "Approval Buka Cetak SERVICE IN",
+              onClick: () => {
+                if (`{{ $myAuth->hasPermission('serviceinheader', 'approvalbukacetak') }}`) {
+                  let tglbukacetak = $('#tgldariheader').val().split('-');
+                  tglbukacetak = tglbukacetak[1] + '-' + tglbukacetak[2];
+
+                  approvalBukaCetak(tglbukacetak, 'SERVICEINHEADER', selectedRowsIndex, selectedbukti);
+
+                }
+              }
+            },
+            {
+              id: 'approval-kirim-berkas',
+              text: "Approval Kirim berkas SERVICE IN",
+              onClick: () => {
+                if (`{{ $myAuth->hasPermission('serviceinheader', 'approvalkirimberkas') }}`) {
+                  let tglkirimberkas = $('#tgldariheader').val().split('-');
+                  tglkirimberkas = tglkirimberkas[1] + '-' + tglkirimberkas[2];
+
+                  approvalKirimBerkas(tglkirimberkas, 'SERVICEINHEADER', selectedRowsIndex, selectedbukti);
+
+                }
+              }
+            },            
+          ],
+        }]
+
       })
 
     /* Append clear filter button */

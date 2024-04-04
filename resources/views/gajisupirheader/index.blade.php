@@ -715,6 +715,19 @@
                 }
               }
             },
+            {
+              id: 'approval-kirim-berkas',
+              text: "Approval Kirim berkas GAJI SUPIR",
+              onClick: () => {
+                if (`{{ $myAuth->hasPermission('gajisupirheader', 'approvalkirimberkas') }}`) {
+                  let tglkirimberkas = $('#tgldariheader').val().split('-');
+                  tglkirimberkas = tglkirimberkas[1] + '-' + tglkirimberkas[2];
+
+                  approvalKirimBerkas(tglkirimberkas, 'GAJISUPIRHEADER', selectedRowsIndex, selectedbukti);
+
+                }
+              }
+            },            
           ],
         }]
       })

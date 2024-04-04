@@ -613,6 +613,21 @@
                   }
                 }
               },
+              {
+                id: 'approval-kirim-berkas',
+                text: "Approval Kirim berkas INVOICEEXTRA",
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('invoiceextraheader', 'approvalkirimberkas') }}`) {
+                    let tglkirimberkas = $('#tgldariheader').val().split('-');
+                    tglkirimberkas = tglkirimberkas[1] + '-' + tglkirimberkas[2];
+                    if (selectedRows.length < 1) {
+                      showDialog('Harap pilih salah satu record')
+                    } else {
+                      approvalKirimberkas(tglkirimberkas, 'INVOICEEXTRAHEADER', selectedRows, selectedbukti);
+                    }
+                  }
+                }
+              },              
             ],
           }
         ],

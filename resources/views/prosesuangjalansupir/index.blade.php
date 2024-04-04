@@ -613,6 +613,21 @@ function checkboxHandler(element) {
                   }
                 }
               },
+              {
+                id: 'approval-kirim-berkas',
+                text: "Approval Kirim Berkas Proses Uang Jalan",
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('prosesuangjalansupirheader', 'approvalkirimberkas') }}`) {
+                    let tglkirimberkas = $('#tgldariheader').val().split('-');
+                    tglkirimberkas = tglkirimberkas[1] + '-' + tglkirimberkas[2];
+                    if (selectedRows.length < 1) {
+                      showDialog('Harap pilih salah satu record')
+                    } else {
+                      approvalKirimBerkas(tglkirimberkas, 'PROSESUANGJALANSUPIRHEADER', selectedRows, selectedbukti);
+                    }
+                  }
+                }
+              },
             ],
           }
         ],

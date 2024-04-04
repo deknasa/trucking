@@ -628,6 +628,21 @@ function checkboxHandler(element) {
                   }
                 }
               },
+              {
+                id: 'approval-kirim-berkas',
+                text: "Approval Kirim berkas PENDAPATAN SUPIR",
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('pendapatansupirheader', 'approvalkirimberkas') }}`) {
+                    let tglkirimberkas = $('#tgldariheader').val().split('-');
+                    tglkirimberkas = tglkirimberkas[1] + '-' + tglkirimberkas[2];
+                    if (selectedRows.length < 1) {
+                      showDialog('Harap pilih salah satu record')
+                    } else {
+                      approvalKirimBerkas(tglkirimberkas, 'PENDAPATANSUPIRHEADER', selectedRows, selectedbukti);
+                    }
+                  }
+                }
+              },
             ],
           }
         ],

@@ -632,6 +632,22 @@ setSpaceBarCheckedHandler()
                   }
                 }
               },
+              {
+                id: 'approval-kirim-berkas',
+                text: "Approval Kirim Berkas PENGELUARAN STOK",
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('pengeluaranstokheader', 'approvalkirimberkas') }}`) {
+                    let tglkirimberkas = $('#tgldariheader').val().split('-');
+                    tglkirimberkas = tglkirimberkas[1] + '-' + tglkirimberkas[2];
+                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                    if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                      showDialog('Harap pilih salah satu record')
+                    } else {
+                      approvalKirimBerkas(tglkirimberkas, 'OPNAMEHEADER', selectedRows, selectedbukti);
+                    }
+                  }
+                }
+              },
             ],
           } 
           

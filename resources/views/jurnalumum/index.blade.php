@@ -522,6 +522,17 @@
                   }
                 }
               },
+              {
+                id: 'approval-kirim-berkas',
+                text: "Approval Kirim berkas JURNAL",
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('jurnalumumheader', 'approvalkirimberkas') }}`) {
+                    let tglkirimberkas = $('#tgldariheader').val().split('-');
+                    tglkirimberkas = tglkirimberkas[1] + '-' + tglkirimberkas[2];
+                    approvalKirimberkas(tglkirimberkas, 'JURNALUMUMHEADER', selectedRows, selectedbukti);
+                  }
+                }
+              },              
             ],
           },
           {

@@ -744,6 +744,22 @@
                   }
                 }
               },
+              {
+                id: 'approval-kirim-berkas',
+                text: "Approval Kirim Berkas PENERIMAAN STOK",
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('penerimaanstokheader', 'approvalkirimberkas') }}`) {
+                    let tglkirimberkas = $('#tgldariheader').val().split('-');
+                    tglkirimberkas = tglkirimberkas[1] + '-' + tglkirimberkas[2];
+                    selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                    if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                      showDialog('Harap pilih salah satu record')
+                    } else {
+                      approvalKirimBerkas(tglkirimberkas, 'PENERIMAANSTOKHEADER', selectedRows, selectedbukti);
+                    }
+                  }
+                }
+              },
             ],
           }
         ]

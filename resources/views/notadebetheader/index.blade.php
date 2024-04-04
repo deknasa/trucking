@@ -644,6 +644,19 @@
                   }
                 }
               },
+              {
+                id: 'approval-kirim-berkas',
+                text: "Approval Kirim Berkas NOTA DEBET",
+                onClick: () => {
+                  if (`{{ $myAuth->hasPermission('notadebetheader', 'approvalkirimberkas') }}`) {
+                    let tglkirimberkas = $('#tgldariheader').val().split('-');
+                    tglkirimberkas = tglkirimberkas[1] + '-' + tglkirimberkas[2];
+
+                    approvalKirimBerkas(tglkirimberkas, 'NOTADEBETHEADER', selectedRows, selectedbukti);
+
+                  }
+                }
+              },
             ],
           }
         ],
