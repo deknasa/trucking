@@ -43,10 +43,11 @@ class LaporanKasBankController extends MyController
             ->get(config('app.api_url') . 'laporankasbank/report', $detailParams);
 
         $data = $header['data'];
+        $dataCabang['namacabang'] = $header['namacabang'];
         $printer['tipe'] = $request->printer;
 
         $user = Auth::user();
-        return view('reports.laporankasbank', compact('data', 'user', 'detailParams','printer'));
+        return view('reports.laporankasbank', compact('data','dataCabang', 'user', 'detailParams','printer'));
     }
 
     public function export(Request $request): void
@@ -68,6 +69,7 @@ class LaporanKasBankController extends MyController
         if(count($data) == 0){
             throw new \Exception('TIDAK ADA DATA');
         }
+        $namacabang = $header['namacabang'];
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
@@ -75,19 +77,23 @@ class LaporanKasBankController extends MyController
         $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:G1');
+        $sheet->setCellValue('A2', $namacabang);
+        $sheet->getStyle("A2")->getFont()->setSize(16)->setBold(true);
+        $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
+        $sheet->mergeCells('A2:G2');
 
-        $sheet->setCellValue('A2', $data[0]['judulLaporan']);
-        $sheet->mergeCells('A2:B2');
-        $sheet->setCellValue('A3', 'Tanggal : ' . date('d-M-Y', strtotime($detailParams['dari'])) . ' s/d ' . date('d-M-Y', strtotime($detailParams['sampai'])));
+        $sheet->setCellValue('A3', $data[0]['judulLaporan']);
         $sheet->mergeCells('A3:B3');
-        $sheet->setCellValue('A4', 'Buku Kas/Bank : '. $request->bank);
+        $sheet->setCellValue('A4', 'Tanggal : ' . date('d-M-Y', strtotime($detailParams['dari'])) . ' s/d ' . date('d-M-Y', strtotime($detailParams['sampai'])));
         $sheet->mergeCells('A4:B4');
+        $sheet->setCellValue('A5', 'Buku Kas/Bank : '. $request->bank);
+        $sheet->mergeCells('A5:B5');
 
-        $sheet->getStyle("A2")->getFont()->setBold(true);
-        $sheet->getStyle("A3:B3")->getFont()->setBold(true);
+        $sheet->getStyle("A3")->getFont()->setBold(true);
         $sheet->getStyle("A4:B4")->getFont()->setBold(true);
+        $sheet->getStyle("A5:B5")->getFont()->setBold(true);
 
-        $detail_table_header_row = 6;
+        $detail_table_header_row = 7;
         $detail_start_row = $detail_table_header_row + 2;
 
         $styleArray = array(
@@ -195,9 +201,9 @@ class LaporanKasBankController extends MyController
         $sheet->mergeCells('A' . $detail_start_row . ':D' . $detail_start_row);
         $sheet->setCellValue("A$detail_start_row", 'Total')->getStyle('A' . $detail_start_row . ':D' . $detail_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
 
-        $sheet->setCellValue("E$detail_start_row", "=SUM(E8:E" . ($dataRow - 1) . ")")->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->setCellValue("E$detail_start_row", "=SUM(E9:E" . ($dataRow - 1) . ")")->getStyle("E$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
 
-        $sheet->setCellValue("F$detail_start_row",  "=SUM(F8:F" . ($dataRow - 1) . ")")->getStyle("F$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
+        $sheet->setCellValue("F$detail_start_row",  "=SUM(F9:F" . ($dataRow - 1) . ")")->getStyle("F$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
         $sheet->setCellValue("G$detail_start_row",  "=G".($dataRow-1))->getStyle("G$detail_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
 
         $sheet->getStyle("E$detail_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");

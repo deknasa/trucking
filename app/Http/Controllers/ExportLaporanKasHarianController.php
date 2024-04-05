@@ -56,6 +56,7 @@ class ExportLaporanKasHarianController extends MyController
         }
         
         $dataDua = $header['dataDua'];
+        $namacabang = $header['namacabang'];
 
         $spreadsheet = new Spreadsheet();
         $alphabets = array_merge(range('A', 'Z'), range('AA', 'AZ'), range('BA', 'BZ'), range('CA', 'CZ'));
@@ -88,18 +89,23 @@ class ExportLaporanKasHarianController extends MyController
             $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
             $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
             $sheet->mergeCells('A1:H1');
+            $sheet->setCellValue('A2', $namacabang);
+            $sheet->getStyle("A2")->getFont()->setSize(16)->setBold(true);
+            $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
+            $sheet->mergeCells('A2:H2');
+
 
             $tanggal = str_replace($englishMonths, $indonesianMonths, date('d - M - Y', strtotime($date)));
 
-            $sheet->setCellValue('A2', 'LAPORAN ' . $kasbank . ' ' . $norek);
-            $sheet->getStyle("A2")->getFont()->setBold(true);
+            $sheet->setCellValue('A3', 'LAPORAN ' . $kasbank . ' ' . $norek);
+            $sheet->getStyle("A3")->getFont()->setBold(true);
             // $sheet->mergeCells('A2:H2');
 
-            $sheet->setCellValue('A3', 'PER ' . $tanggal);
-            $sheet->getStyle("A3")->getFont()->setBold(true);
+            $sheet->setCellValue('A4', 'PER ' . $tanggal);
+            $sheet->getStyle("A4")->getFont()->setBold(true);
             // $sheet->mergeCells('A3:H3');
 
-            $headerRow = 5;
+            $headerRow = 6;
             $columnIndex = 0;
             $headerColumns = [
                 'no' => 'No',
@@ -197,12 +203,12 @@ class ExportLaporanKasHarianController extends MyController
 
 
             // Setelah perulangan selesai, tambahkan total ke sheet
-            $sheet->setCellValue('F' . $dataRow, "=SUM(F5:F" . ($dataRow - 1) . ")");
+            $sheet->setCellValue('F' . $dataRow, "=SUM(F6:F" . ($dataRow - 1) . ")");
             // $sheet->getStyle('F' . $dataRow)->applyFromArray($borderStyle);
             $sheet->getStyle('F' . $dataRow)->applyFromArray($boldStyle);
             $sheet->getStyle('F' . $dataRow)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
-            $sheet->setCellValue('G' . $dataRow, "=SUM(G5:G" . ($dataRow - 1) . ")");
+            $sheet->setCellValue('G' . $dataRow, "=SUM(G6:G" . ($dataRow - 1) . ")");
             // $sheet->getStyle('G' . $dataRow)->applyFromArray($borderStyle);
             $sheet->getStyle('G' . $dataRow)->applyFromArray($boldStyle);
             $sheet->getStyle('G' . $dataRow)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
@@ -228,18 +234,22 @@ class ExportLaporanKasHarianController extends MyController
         $rekapSheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
         $rekapSheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $rekapSheet->mergeCells('A1:H1');
+        $rekapSheet->setCellValue('A2', $namacabang);
+        $rekapSheet->getStyle("A2")->getFont()->setSize(16)->setBold(true);
+        $rekapSheet->getStyle('A2')->getAlignment()->setHorizontal('center');
+        $rekapSheet->mergeCells('A2:H2');
 
-        $rekapSheet->setCellValue('A2', 'LAPORAN REKAP ' . $kasbank . ' ' . $norek);
-        $rekapSheet->getStyle("A2")->getFont()->setBold(true);
+        $rekapSheet->setCellValue('A3', 'LAPORAN REKAP ' . $kasbank . ' ' . $norek);
+        $rekapSheet->getStyle("A3")->getFont()->setBold(true);
         // $rekapSheet->getStyle('A2')->getAlignment()->setHorizontal('center');
         // $rekapSheet->mergeCells('A2:H2');
 
-        $rekapSheet->setCellValue('A3', 'PERIODE ' . $bulan . ' - ' . $tahun);
-        $rekapSheet->getStyle("A3")->getFont()->setBold(true);
+        $rekapSheet->setCellValue('A4', 'PERIODE ' . $bulan . ' - ' . $tahun);
+        $rekapSheet->getStyle("A4")->getFont()->setBold(true);
         // $rekapSheet->getStyle('A3')->getAlignment()->setHorizontal('center');
         // $rekapSheet->mergeCells('A3:H3');
 
-        $rekapHeaderRow = 5;
+        $rekapHeaderRow = 6;
         $rekapColumnIndex = 0;
         $rekapHeaderColumns = [
             // 'no' => 'No',
@@ -336,12 +346,12 @@ class ExportLaporanKasHarianController extends MyController
         }
 
         // Setelah perulangan selesai, tambahkan total ke sheet
-        $rekapSheet->setCellValue('E' . $rekapDataRow, "=SUM(E5:E" . ($rekapDataRow - 1) . ")");
+        $rekapSheet->setCellValue('E' . $rekapDataRow, "=SUM(E6:E" . ($rekapDataRow - 1) . ")");
         // $rekapSheet->getStyle('F' . $rekapDataRow)->applyFromArray($borderStyle);
         $rekapSheet->getStyle('E' . $rekapDataRow)->applyFromArray($boldStyle);
         $rekapSheet->getStyle('E' . $rekapDataRow)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
-        $rekapSheet->setCellValue('F' . $rekapDataRow, "=SUM(F5:F" . ($rekapDataRow - 1) . ")");
+        $rekapSheet->setCellValue('F' . $rekapDataRow, "=SUM(F6:F" . ($rekapDataRow - 1) . ")");
         // $rekapSheet->getStyle('G' . $rekapDataRow)->applyFromArray($borderStyle);
         $rekapSheet->getStyle('F' . $rekapDataRow)->applyFromArray($boldStyle);
         $rekapSheet->getStyle('F' . $rekapDataRow)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
@@ -366,18 +376,22 @@ class ExportLaporanKasHarianController extends MyController
         $rekap01Sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
         $rekap01Sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $rekap01Sheet->mergeCells('A1:H1');
+        $rekap01Sheet->setCellValue('A2', $namacabang);
+        $rekap01Sheet->getStyle("A2")->getFont()->setSize(16)->setBold(true);
+        $rekap01Sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
+        $rekap01Sheet->mergeCells('A2:H2');
 
-        $rekap01Sheet->setCellValue('A2', 'LAPORAN REKAP 01 ' . $kasbank . ' ' . $norek);
-        $rekap01Sheet->getStyle("A2")->getFont()->setBold(true);
+        $rekap01Sheet->setCellValue('A3', 'LAPORAN REKAP 01 ' . $kasbank . ' ' . $norek);
+        $rekap01Sheet->getStyle("A3")->getFont()->setBold(true);
         // $rekap01Sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
         // $rekap01Sheet->mergeCells('A2:H2');
 
-        $rekap01Sheet->setCellValue('A3', 'PERIODE ' . $bulan . ' - ' . $tahun);
-        $rekap01Sheet->getStyle("A3")->getFont()->setBold(true);
+        $rekap01Sheet->setCellValue('A4', 'PERIODE ' . $bulan . ' - ' . $tahun);
+        $rekap01Sheet->getStyle("A4")->getFont()->setBold(true);
         // $rekap01Sheet->getStyle('A3')->getAlignment()->setHorizontal('center');
         // $rekap01Sheet->mergeCells('A3:H3');
 
-        $rekap01HeaderRow = 5;
+        $rekap01HeaderRow = 6;
         $rekap01ColumnIndex = 0;
         $rekap01HeaderColumns = [
             // 'no' => 'No',
@@ -464,12 +478,12 @@ class ExportLaporanKasHarianController extends MyController
         }
 
         // Setelah perulangan selesai, tambahkan total ke sheet
-        $rekap01Sheet->setCellValue('E' . $rekap01DataRow, "=SUM(E5:E" . ($rekap01DataRow - 1) . ")");
+        $rekap01Sheet->setCellValue('E' . $rekap01DataRow, "=SUM(E6:E" . ($rekap01DataRow - 1) . ")");
         // $rekap01Sheet->getStyle('F' . $rekap01DataRow)->applyFromArray($borderStyle);
         $rekap01Sheet->getStyle('E' . $rekap01DataRow)->applyFromArray($boldStyle);
         $rekap01Sheet->getStyle('E' . $rekap01DataRow)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
-        $rekap01Sheet->setCellValue('F' . $rekap01DataRow, "=SUM(F5:F" . ($rekap01DataRow - 1) . ")");
+        $rekap01Sheet->setCellValue('F' . $rekap01DataRow, "=SUM(F6:F" . ($rekap01DataRow - 1) . ")");
         // $rekap01Sheet->getStyle('G' . $rekap01DataRow)->applyFromArray($borderStyle);
         $rekap01Sheet->getStyle('F' . $rekap01DataRow)->applyFromArray($boldStyle);
         $rekap01Sheet->getStyle('F' . $rekap01DataRow)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
@@ -493,18 +507,22 @@ class ExportLaporanKasHarianController extends MyController
         $rekapPerkiraanSheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
         $rekapPerkiraanSheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $rekapPerkiraanSheet->mergeCells('A1:E1');
+        $rekapPerkiraanSheet->setCellValue('A2', $namacabang);
+        $rekapPerkiraanSheet->getStyle("A2")->getFont()->setSize(16)->setBold(true);
+        $rekapPerkiraanSheet->getStyle('A2')->getAlignment()->setHorizontal('center');
+        $rekapPerkiraanSheet->mergeCells('A2:E2');
 
-        $rekapPerkiraanSheet->setCellValue('A2', 'LAPORAN REKAP PERKIRAAN');
-        $rekapPerkiraanSheet->getStyle("A2")->getFont()->setBold(true);
+        $rekapPerkiraanSheet->setCellValue('A3', 'LAPORAN REKAP PERKIRAAN');
+        $rekapPerkiraanSheet->getStyle("A3")->getFont()->setBold(true);
         // $rekapPerkiraanSheet->getStyle('A2')->getAlignment()->setHorizontal('center');
         // $rekapPerkiraanSheet->mergeCells('A2:E2');
 
-        $rekapPerkiraanSheet->setCellValue('A3', 'PERIODE ' . $bulan . ' - ' . $tahun);
-        $rekapPerkiraanSheet->getStyle("A3")->getFont()->setBold(true);
+        $rekapPerkiraanSheet->setCellValue('A4', 'PERIODE ' . $bulan . ' - ' . $tahun);
+        $rekapPerkiraanSheet->getStyle("A4")->getFont()->setBold(true);
         // $rekapPerkiraanSheet->getStyle('A3')->getAlignment()->setHorizontal('center');
         // $rekapPerkiraanSheet->mergeCells('A3:E3');
 
-        $rekapPerkiraanHeaderRow = 5;
+        $rekapPerkiraanHeaderRow = 6;
         $rekapPerkiraanColumnIndex = 0;
         $rekapPerkiraanHeaderColumns = [
             'no' => 'No',
@@ -566,13 +584,13 @@ class ExportLaporanKasHarianController extends MyController
 
 
         // Menghitung total kolom D (nominaldebet)
-        $rekapPerkiraanSheet->setCellValue('D' . $rekapPerkiraanDataRow, "=SUM(D5:D" . ($rekapPerkiraanDataRow - 1) . ")");
+        $rekapPerkiraanSheet->setCellValue('D' . $rekapPerkiraanDataRow, "=SUM(D6:D" . ($rekapPerkiraanDataRow - 1) . ")");
         // $rekapPerkiraanSheet->getStyle('D' . $rekapPerkiraanDataRow)->applyFromArray($borderStyle);
         $rekapPerkiraanSheet->getStyle('D' . $rekapPerkiraanDataRow)->applyFromArray($boldStyle);
         $rekapPerkiraanSheet->getStyle('D' . $rekapPerkiraanDataRow)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
         // Menghitung total kolom E (nominalkredit)
-        $rekapPerkiraanSheet->setCellValue('E' . $rekapPerkiraanDataRow, "=SUM(E5:E" . ($rekapPerkiraanDataRow - 1) . ")");
+        $rekapPerkiraanSheet->setCellValue('E' . $rekapPerkiraanDataRow, "=SUM(E6:E" . ($rekapPerkiraanDataRow - 1) . ")");
         // $rekapPerkiraanSheet->getStyle('E' . $rekapPerkiraanDataRow)->applyFromArray($borderStyle);
         $rekapPerkiraanSheet->getStyle('E' . $rekapPerkiraanDataRow)->applyFromArray($boldStyle);
         $rekapPerkiraanSheet->getStyle('E' . $rekapPerkiraanDataRow)->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");

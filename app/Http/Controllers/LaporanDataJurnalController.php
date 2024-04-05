@@ -38,6 +38,7 @@ class LaporanDataJurnalController extends MyController
             throw new \Exception('TIDAK ADA DATA');
         }
 
+        $namacabang = $responses['namacabang'];
         $dataheader = $detailParams;
         $user = Auth::user();
 
@@ -48,15 +49,20 @@ class LaporanDataJurnalController extends MyController
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:I1');
 
-        $sheet->setCellValue('A2', 'Laporan Data Jurnal');
+        $sheet->setCellValue('A2', $namacabang);
         $sheet->getStyle("A2")->getFont()->setSize(16)->setBold(true);
         $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A2:I2');
 
-        $sheet->setCellValue('A3', 'Periode : ' . $dataheader['dari'] . ' s/d ' . $dataheader['sampai']);
-        $sheet->getStyle("A3")->getFont()->setSize(12)->setBold(true);
+        $sheet->setCellValue('A3', 'Laporan Data Jurnal');
+        $sheet->getStyle("A3")->getFont()->setSize(16)->setBold(true);
         $sheet->getStyle('A3')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A3:I3');
+
+        $sheet->setCellValue('A4', 'Periode : ' . $dataheader['dari'] . ' s/d ' . $dataheader['sampai']);
+        $sheet->getStyle("A4")->getFont()->setSize(12)->setBold(true);
+        $sheet->getStyle('A4')->getAlignment()->setHorizontal('center');
+        $sheet->mergeCells('A4:I4');
 
        
 

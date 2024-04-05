@@ -100,8 +100,8 @@
         })
     }
 
+    permission()
     $(document).ready(function() {
-        permission()
 
         setTampilanIndex()
         $("#jqGrid").jqGrid({
@@ -175,7 +175,7 @@
                             srcformat: "ISO8601Long",
                             newformat: "d-m-Y"
                         }
-                    },                              
+                    },
                     {
                         label: 'TGL LAHIR',
                         name: 'tgllahir',
@@ -220,7 +220,7 @@
                                     endforeach;
 
                                     ?>
-          `,
+                            `,
                             dataInit: function(element) {
                                 $(element).select2({
                                     width: 'resolve',
@@ -509,7 +509,7 @@
                                         $i++;
                                     endforeach;
                                     ?>
-  `,
+                            `,
                             dataInit: function(element) {
                                 $(element).select2({
                                     width: 'resolve',
@@ -1221,7 +1221,7 @@
                                     var selectedOne = selectedOnlyOne();
                                     if (selectedOne[0]) {
                                         // editSupirMilikMandor(selectedOne[1])
-                                        cekValidasihistory(selectedOne[1],'historyMandor')
+                                        cekValidasihistory(selectedOne[1], 'historyMandor')
 
                                     } else {
                                         showDialog(selectedOne[1])
@@ -1259,86 +1259,6 @@
             .addClass('btn-sm btn-warning')
             .parent().addClass('px-1')
 
-        function permission() {
-            if (!`{{ $myAuth->hasPermission('supir', 'store') }}`) {
-                $('#add').attr('disabled', 'disabled')
-            }
-
-            if (!`{{ $myAuth->hasPermission('supir', 'show') }}`) {
-                $('#view').attr('disabled', 'disabled')
-            }
-
-            // if (!`{{ $myAuth->hasPermission('supir', 'update') }}`) {
-            //     $('#edit').attr('disabled', 'disabled')
-            // }
-
-            if ((!`{{ $myAuth->hasPermission('supir', 'update') }}`) && (!`{{ $myAuth->hasPermission('supir', 'updateuser') }}`) ) {
-                $('#edit').attr('disabled', 'disabled')
-            }
-
-            if (!`{{ $myAuth->hasPermission('supir', 'destroy') }}`) {
-                $('#delete').attr('disabled', 'disabled')
-            }
-            if (!`{{ $myAuth->hasPermission('supir', 'export') }}`) {
-                $('#export').attr('disabled', 'disabled')
-            }
-            if (!`{{ $myAuth->hasPermission('supir', 'report') }}`) {
-                $('#report').attr('disabled', 'disabled')
-            }
-
-            let hakApporveCount = 0;
-
-            hakApporveCount++
-            if (!`{{ $myAuth->hasPermission('supir', 'approvalBlackListSupir') }}`) {
-                hakApporveCount--
-                $('#approvalBlackListSupir').hide()
-                // $('#approval-buka-cetak').attr('disabled', 'disabled')
-            }
-
-            hakApporveCount++
-            if (!`{{ $myAuth->hasPermission('supir', 'approvalnonaktif') }}`) {
-                hakApporveCount--
-                $('#approvalnonaktif').hide()
-                // $('#approval-buka-cetak').attr('disabled', 'disabled')
-            }
-
-            hakApporveCount++
-            if (!`{{ $myAuth->hasPermission('supir', 'approvalSupirLuarKota') }}`) {
-                hakApporveCount--
-                $('#approvalSupirLuarKota').hide()
-                // $('#approval-buka-cetak').attr('disabled', 'disabled')
-            }
-
-            hakApporveCount++
-            if (!`{{ $myAuth->hasPermission('supir', 'approvalSupirResign') }}`) {
-                hakApporveCount--
-                $('#approvalSupirResign').hide()
-                // $('#approval-buka-cetak').attr('disabled', 'disabled')
-            }
-
-            hakApporveCount++
-            if (!`{{ $myAuth->hasPermission('supir', 'StoreApprovalSupirTanpa') }}`) {
-                hakApporveCount--
-                $('#StoreApprovalTradoTanpa').hide()
-            }
-
-            hakApporveCount++
-            if (!`{{ $myAuth->hasPermission('supir', 'approvalhistorysupirmilikmandor') }}`) {
-                hakApporveCount--
-                $('#approvalHistorySupirMilikMandor').hide()
-            }
-
-
-
-            if (hakApporveCount < 1) {
-                $('#approve').hide()
-                // $('#approve').attr('disabled', 'disabled')
-            }
-
-            if (!`{{ $myAuth->hasPermission('supir', 'historySupirMandor') }}`) {
-                $('#lainnya').hide()
-            }
-        }
 
         getTidakBolehLuarkota()
         getBukanBlackList()
@@ -1690,6 +1610,88 @@
         }
 
     })
+
+
+    function permission() {
+        if (!`{{ $myAuth->hasPermission('supir', 'store') }}`) {
+            $('#add').attr('disabled', 'disabled')
+        }
+
+        if (!`{{ $myAuth->hasPermission('supir', 'show') }}`) {
+            $('#view').attr('disabled', 'disabled')
+        }
+
+        // if (!`{{ $myAuth->hasPermission('supir', 'update') }}`) {
+        //     $('#edit').attr('disabled', 'disabled')
+        // }
+
+        if ((!`{{ $myAuth->hasPermission('supir', 'update') }}`) && (!`{{ $myAuth->hasPermission('supir', 'updateuser') }}`)) {
+            $('#edit').attr('disabled', 'disabled')
+        }
+
+        if (!`{{ $myAuth->hasPermission('supir', 'destroy') }}`) {
+            $('#delete').attr('disabled', 'disabled')
+        }
+        if (!`{{ $myAuth->hasPermission('supir', 'export') }}`) {
+            $('#export').attr('disabled', 'disabled')
+        }
+        if (!`{{ $myAuth->hasPermission('supir', 'report') }}`) {
+            $('#report').attr('disabled', 'disabled')
+        }
+
+        let hakApporveCount = 0;
+
+        hakApporveCount++
+        if (!`{{ $myAuth->hasPermission('supir', 'approvalBlackListSupir') }}`) {
+            hakApporveCount--
+            $('#approvalBlackListSupir').hide()
+            // $('#approval-buka-cetak').attr('disabled', 'disabled')
+        }
+
+        hakApporveCount++
+        if (!`{{ $myAuth->hasPermission('supir', 'approvalnonaktif') }}`) {
+            hakApporveCount--
+            $('#approvalnonaktif').hide()
+            // $('#approval-buka-cetak').attr('disabled', 'disabled')
+        }
+
+        hakApporveCount++
+        if (!`{{ $myAuth->hasPermission('supir', 'approvalSupirLuarKota') }}`) {
+            hakApporveCount--
+            $('#approvalSupirLuarKota').hide()
+            // $('#approval-buka-cetak').attr('disabled', 'disabled')
+        }
+
+        hakApporveCount++
+        if (!`{{ $myAuth->hasPermission('supir', 'approvalSupirResign') }}`) {
+            hakApporveCount--
+            $('#approvalSupirResign').hide()
+            // $('#approval-buka-cetak').attr('disabled', 'disabled')
+        }
+
+        hakApporveCount++
+        if (!`{{ $myAuth->hasPermission('supir', 'StoreApprovalSupirTanpa') }}`) {
+            hakApporveCount--
+            $('#StoreApprovalTradoTanpa').hide()
+        }
+
+        hakApporveCount++
+        if (!`{{ $myAuth->hasPermission('supir', 'approvalhistorysupirmilikmandor') }}`) {
+            hakApporveCount--
+            $('#approvalHistorySupirMilikMandor').hide()
+        }
+
+
+
+        if (hakApporveCount < 1) {
+            $('#approve').hide()
+            // $('#approve').attr('disabled', 'disabled')
+        }
+
+        if (!`{{ $myAuth->hasPermission('supir', 'historySupirMandor') }}`) {
+            $('#lainnya').hide()
+        }
+    }
 
     function getTidakBolehLuarkota() {
 
