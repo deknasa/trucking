@@ -634,7 +634,7 @@ setSpaceBarCheckedHandler()
               },
               {
                 id: 'approval-kirim-berkas',
-                text: "Approval Kirim Berkas PENGELUARAN STOK",
+                text: "Un/Approval Kirim Berkas PENGELUARAN STOK",
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('pengeluaranstokheader', 'approvalkirimberkas') }}`) {
                     let tglkirimberkas = $('#tgldariheader').val().split('-');
