@@ -763,7 +763,7 @@
           }, 
           {
             id: 'approval-kirim-berkas',
-            text: "Approval Kirim Berkas PROSES  GAJI SUPIR",
+            text: "Un/Approval Kirim Berkas PROSES  GAJI SUPIR",
             onClick: () => {
               if (`{{ $myAuth->hasPermission('prosesgajisupirheader', 'approvalkirimberkas') }}`) {
                 let tglkirimberkas = $('#tgldariheader').val().split('-');

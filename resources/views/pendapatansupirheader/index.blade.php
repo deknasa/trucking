@@ -630,7 +630,7 @@ function checkboxHandler(element) {
               },
               {
                 id: 'approval-kirim-berkas',
-                text: "Approval Kirim berkas PENDAPATAN SUPIR",
+                text: "Un/Approval Kirim Berkas PENDAPATAN SUPIR",
                 onClick: () => {
                   if (`{{ $myAuth->hasPermission('pendapatansupirheader', 'approvalkirimberkas') }}`) {
                     let tglkirimberkas = $('#tgldariheader').val().split('-');
