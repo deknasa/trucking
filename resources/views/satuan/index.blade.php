@@ -310,8 +310,12 @@
                         class: 'btn btn-success btn-sm mr-1',
                         onClick: () => {
                             selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-                            editSatuan(selectedId)
+                            if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                                showDialog('Harap pilih salah satu record')
+                            } else {
+                                cekValidasidelete(selectedId, 'edit')
+                            }
+                            // editSatuan(selectedId)
                         }
                     },
                     {
@@ -320,8 +324,12 @@
                         class: 'btn btn-danger btn-sm mr-1',
                         onClick: () => {
                             selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-                            deleteSatuan(selectedId)
+                            if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                                showDialog('Harap pilih salah satu record')
+                            } else {
+                                cekValidasidelete(selectedId, 'delete')
+                            }
+                            // deleteSatuan(selectedId)
                         }
                     },
                     {
@@ -398,7 +406,9 @@
                 $('#add').attr('disabled', 'disabled')
             }
 
-            if (!`{{ $myAuth->hasPermission('satuan', 'update') }}`) {
+            // if (!`{{ $myAuth->hasPermission('satuan', 'update') }}`) {
+                if ((!`{{ $myAuth->hasPermission('satuan', 'update') }}`) && (!`{{ $myAuth->hasPermission('satuan', 'updateuser') }}`)) {
+
                 $('#edit').attr('disabled', 'disabled')
             }
 

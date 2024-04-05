@@ -1238,7 +1238,7 @@
     xhr.send();
   }
 
-  function cekValidasidelete(Id) {
+  function cekValidasidelete(Id,Aksi) {
     $.ajax({
       url: `{{ config('app.api_url') }}stok/${Id}/cekValidasi`,
       method: 'POST',
@@ -1246,12 +1246,20 @@
       beforeSend: request => {
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
+      data: {
+        aksi: Aksi
+      },      
       success: response => {
         var kondisi = response.kondisi
         if (kondisi == true) {
           showDialog(response.message['keterangan'])
         } else {
-          deleteStok(Id)
+          if(Aksi=='edit') {
+            editStok(Id)
+          } else {
+            deleteStok(Id)
+          }
+          // deleteStok(Id)
         }
 
       }

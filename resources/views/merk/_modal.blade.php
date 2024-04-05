@@ -499,7 +499,7 @@
     })
   }
 
-  function cekValidasidelete(Id) {
+  function cekValidasidelete(Id,Aksi) {
     $.ajax({
       url: `{{ config('app.api_url') }}merk/${Id}/cekValidasi`,
       method: 'POST',
@@ -507,12 +507,20 @@
       beforeSend: request => {
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
+      data: {
+        aksi: Aksi
+      },      
       success: response => {
         var kondisi = response.kondisi
         if (kondisi == true) {
           showDialog(response.message['keterangan'])
         } else {
-          deleteMerk(Id)
+          if(Aksi=='edit') {
+            editMerk(Id)
+          } else {
+            deleteMerk(Id)
+          }
+          
         }
 
       }
