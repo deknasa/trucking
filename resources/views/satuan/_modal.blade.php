@@ -344,37 +344,37 @@
     if (!form.attr('has-maxlength')) {
       return new Promise((resolve, reject) => {
 
-      $.ajax({
-        url: `${apiUrl}satuan/field_length`,
-        method: 'GET',
-        dataType: 'JSON',
-        headers: {
-          'Authorization': `Bearer ${accessToken}`
-        },
-        success: response => {
-          $.each(response.data, (index, value) => {
-            if (value !== null && value !== 0 && value !== undefined) {
-              form.find(`[name=${index}]`).attr('maxlength', value)
-            }
-          })
+        $.ajax({
+          url: `${apiUrl}satuan/field_length`,
+          method: 'GET',
+          dataType: 'JSON',
+          headers: {
+            'Authorization': `Bearer ${accessToken}`
+          },
+          success: response => {
+            $.each(response.data, (index, value) => {
+              if (value !== null && value !== 0 && value !== undefined) {
+                form.find(`[name=${index}]`).attr('maxlength', value)
+              }
+            })
 
-          dataMaxLength = response.data
+            dataMaxLength = response.data
             form.attr('has-maxlength', true)
             resolve()
-        },
-        error: error => {
-          showDialog(error.statusText)
-          reject()
-        }
+          },
+          error: error => {
+            showDialog(error.statusText)
+            reject()
+          }
+        })
       })
-    })
     } else {
       return new Promise((resolve, reject) => {
         $.each(dataMaxLength, (index, value) => {
           if (value !== null && value !== 0 && value !== undefined) {
             form.find(`[name=${index}]`).attr('maxlength', value)
 
-        
+
           }
         })
         resolve()
@@ -526,6 +526,34 @@
         element.data('currentValue', element.val())
       },
     });
+  }
+
+  function cekValidasidelete(Id, Aksi) {
+    $.ajax({
+      url: `{{ config('app.api_url') }}kelompok/${Id}/cekValidasi`,
+      method: 'POST',
+      dataType: 'JSON',
+      beforeSend: request => {
+        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+      },
+      data: {
+        aksi: Aksi
+      },
+      success: response => {
+        var kondisi = response.kondisi
+        if (kondisi == true) {
+          showDialog(response.message['keterangan'])
+        } else {
+          if (Aksi == 'edit') {
+            editSatuan(Id)
+          } else {
+            deleteSatuan(Id)
+          }
+
+        }
+
+      }
+    })
   }
 </script>
 @endpush()

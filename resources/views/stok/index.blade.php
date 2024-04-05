@@ -596,7 +596,9 @@
                             if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                 showDialog('Harap pilih salah satu record')
                             } else {
-                                editStok(selectedId)
+                                cekValidasidelete(selectedId,'edit')
+
+                                // editStok(selectedId)
                             }
                         }
                     },
@@ -609,7 +611,7 @@
                             if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                 showDialog('Harap pilih salah satu record')
                             } else {
-                                cekValidasidelete(selectedId)
+                                cekValidasidelete(selectedId,'delete')
                             }
                         }
                     },
@@ -716,7 +718,9 @@
                 $('#view').attr('disabled', 'disabled')
             }
                 
-            if (!`{{ $myAuth->hasPermission('stok', 'update') }}`) {
+            // if (!`{{ $myAuth->hasPermission('stok', 'update') }}`) {
+                if ((!`{{ $myAuth->hasPermission('stok', 'update') }}`) && (!`{{ $myAuth->hasPermission('stok', 'updateuser') }}`)) {
+
                 $('#edit').attr('disabled', 'disabled')
             }
 

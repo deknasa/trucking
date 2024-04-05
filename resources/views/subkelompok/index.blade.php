@@ -416,7 +416,9 @@
                         $('#view').attr('disabled', 'disabled')
                     }
 
-                    if (!`{{ $myAuth->hasPermission('subkelompok', 'update') }}`) {
+                    // if (!`{{ $myAuth->hasPermission('subkelompok', 'update') }}`) {
+                        if ((!`{{ $myAuth->hasPermission('subkelompok', 'update') }}`) && (!`{{ $myAuth->hasPermission('subkelompok', 'updateuser') }}`)) {
+
                         $('#edit').attr('disabled', 'disabled')
                     }
 

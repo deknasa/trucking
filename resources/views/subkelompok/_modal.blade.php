@@ -611,6 +611,9 @@
       beforeSend: request => {
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
+      data: {
+        aksi: Aksi
+      },
       success: response => {
         var kondisi = response.kondisi
         if (kondisi == true) {
