@@ -308,6 +308,7 @@
 @push('scripts')
 <script>
   Dropzone.autoDiscover = false;
+  var data_id
 
   let hasFormBindKeys = false
   let modalBody = $('#crudModal').find('.modal-body').html()
@@ -404,13 +405,47 @@
       })
     })
   })
+  $('#crudModal').on('shown.bs.modal', () => {
+    data_id = $('#crudForm').find('[name=id]').val();
 
+  })
   $('#crudModal').on('hidden.bs.modal', () => {
     // $('#crudModal').find('.modal-body').html(modalBody)
+    removeEditingBy(data_id)
     dropzones.forEach(dropzone => {
       dropzone.removeAllFiles()
     })
   })
+  function removeEditingBy(id) {
+    $.ajax({
+      url: `{{ config('app.api_url') }}bataledit`,
+      method: 'POST',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        id: id,
+        aksi: 'BATAL',
+        table: 'trado'
+        
+      },
+      success: response => {
+        $("#crudModal").modal("hide")
+      },
+      error: error => {
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+          
+          setErrorMessages(form, error.responseJSON.errors);
+        } else {
+          showDialog(error.responseJSON)
+        }
+      },
+    })
+  }
+  
 
   function cekValidasihistory(Id, Aksi) {
     $.ajax({
@@ -440,7 +475,7 @@
     })
   }
 
-  function cekValidasidelete(Id) {
+  function cekValidasi(Id,Aksi) {
     $.ajax({
       url: `{{ config('app.api_url') }}trado/${Id}/cekValidasi`,
       method: 'POST',
@@ -448,13 +483,28 @@
       beforeSend: request => {
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
+      data: {
+        aksi: Aksi,
+      },
       success: response => {
         var kondisi = response.kondisi
         if (kondisi == true) {
           showDialog(response.message['keterangan'])
         } else {
-          deleteTrado(Id)
+          // deleteKaryawan(Id)
+          if (Aksi=="EDIT") {
+            editTrado(Id)
+          }else if (Aksi=="DELETE"){
+            deleteTrado(Id)
+          }
+            
         }
+        // var kondisi = response.kondisi
+        // if (kondisi == true) {
+        //   showDialog(response.message['keterangan'])
+        // } else {
+        //   deleteTrado(Id)
+        // }
 
       }
     })
