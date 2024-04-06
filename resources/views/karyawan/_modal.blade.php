@@ -94,7 +94,7 @@
   let hasFormBindKeys = false
   let modalBody = $('#crudModal').find('.modal-body').html()
   let dataMaxLength = []
-
+  var data_id 
   $(document).ready(function() {
     $('#btnSubmit').click(function(event) {
       event.preventDefault()
@@ -211,15 +211,47 @@
       form.find('#btnSubmit').prop('disabled', true)
     }
 
-
+    data_id = $('#crudForm').find('[name=id]').val();
     initLookup()
   })
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
+    removeEditingBy(data_id)
     // clearSelectedRows()
     $('#crudModal').find('.modal-body').html(modalBody)
   })
+
+  function removeEditingBy(id) {
+    $.ajax({
+      url: `{{ config('app.api_url') }}bataledit`,
+      method: 'POST',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        id: id,
+        aksi: 'BATAL',
+        table: 'karyawan'
+        
+      },
+      success: response => {
+        $("#crudModal").modal("hide")
+      },
+      error: error => {
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+          
+          setErrorMessages(form, error.responseJSON.errors);
+        } else {
+          showDialog(error.responseJSON)
+        }
+      },
+    })
+  }
+  
 
   function createKaryawan() {
     let form = $('#crudForm')
@@ -553,7 +585,7 @@
     })
   }
 
-  function cekValidasidelete(Id) {
+  function cekValidasi(Id,aksi) {
     $.ajax({
       url: `{{ config('app.api_url') }}karyawan/${Id}/cekValidasi`,
       method: 'POST',
@@ -563,14 +595,21 @@
       },
 
       data: {
-        accessTokenTnl: accessTokenTnl
+        accessTokenTnl: accessTokenTnl,
+        aksi: aksi,
       },
       success: response => {
         var kondisi = response.kondisi
         if (kondisi == true) {
           showDialog(response.message['keterangan'])
         } else {
-          deleteKaryawan(Id)
+          // deleteKaryawan(Id)
+          if (aksi=="edit") {
+            editKaryawan(Id)
+          }else if (aksi=="delete"){
+            deleteKaryawan(Id)
+          }
+            
         }
 
       }

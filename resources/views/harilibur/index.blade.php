@@ -241,8 +241,7 @@
                                 class: 'btn btn-success btn-sm mr-1',
                                 onClick: () => {
                                     selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-                                    editHariLibur(selectedId)
+                                    cekValidasi(selectedId,'edit')
                                 }
                             },
                             {
@@ -251,8 +250,7 @@
                                 class: 'btn btn-danger btn-sm mr-1',
                                 onClick: () => {
                                     selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
-
-                                    deleteHariLibur(selectedId)
+                                    cekValidasi(selectedId,'delete')
                                 }
                             },
                             {
