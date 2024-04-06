@@ -42,8 +42,9 @@ class LaporanRekapTitipanEmklController extends MyController
             ->get(config('app.api_url') . 'laporanrekaptitipanemkl/report', $detailParams);
 
         $data = $header['data'];
+        $dataCabang['namacabang'] = $header['namacabang'];
         $user = Auth::user();
-        return view('reports.laporanrekaptitipanemkl', compact('data', 'user', 'detailParams'));
+        return view('reports.laporanrekaptitipanemkl', compact('data','dataCabang', 'user', 'detailParams'));
     }
 
     public function export(Request $request): void
@@ -64,21 +65,25 @@ class LaporanRekapTitipanEmklController extends MyController
         }
 
         // dd($pengeluaran);
+        $namacabang = $responses['namacabang'];
         $user = Auth::user();
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
         $sheet->setCellValue('A1', $pengeluaran[0]['judul']);
-        $sheet->setCellValue('A2', $pengeluaran[0]['judullaporan']);
-        $sheet->setCellValue('A3', 'Periode : ' . date('d-M-Y', strtotime($request->periode)));
+        $sheet->setCellValue('A2', $namacabang);
+        $sheet->setCellValue('A3', $pengeluaran[0]['judullaporan']);
+        $sheet->setCellValue('A4', 'Periode : ' . date('d-M-Y', strtotime($request->periode)));
 
         $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
+        $sheet->getStyle("A2")->getFont()->setSize(16)->setBold(true);
 
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
-        $sheet->getStyle('A2')->getAlignment()->setHorizontal('left');
-        $sheet->getStyle("A2")->getFont()->setBold(true);
+        $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
         $sheet->getStyle("A3")->getFont()->setBold(true);
+        $sheet->getStyle("A4")->getFont()->setBold(true);
         $sheet->mergeCells('A1:E1');
+        $sheet->mergeCells('A2:E2');
 
         $header_start_row = 5;
         $detail_start_row = 6;

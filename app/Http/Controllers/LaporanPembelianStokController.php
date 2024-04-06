@@ -74,10 +74,11 @@ class LaporanPembelianStokController extends MyController
             ->get(config('app.api_url') . 'laporanpembelianstok/report', $detailParams);
         $data = $header['data'];
 
+        $dataCabang['namacabang'] = $header['namacabang'];
         // $dataHeader = $header['dataheader'];
         $user = Auth::user();
         // dd($data);
-        return view('reports.laporanpembelianstok', compact('data', 'user', 'detailParams'));
+        return view('reports.laporanpembelianstok', compact('data','dataCabang', 'user', 'detailParams'));
     }
 
 
@@ -110,6 +111,7 @@ class LaporanPembelianStokController extends MyController
             throw new \Exception('TIDAK ADA DATA');
         }
         
+        $namacabang = $responses['namacabang'];
         $disetujui = $pengeluaran[0]['disetujui'] ?? '';
         $diperiksa = $pengeluaran[0]['diperiksa'] ?? '';
         $user = Auth::user();
@@ -121,21 +123,25 @@ class LaporanPembelianStokController extends MyController
         $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:L1');
-
-        $sheet->setCellValue('A2', strtoupper($pengeluaran[0]['judulLaporan']));
-        $sheet->getStyle("A2")->getFont()->setBold(true);
+        $sheet->setCellValue('A2', $namacabang);
+        $sheet->getStyle("A2")->getFont()->setSize(16)->setBold(true);
+        $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A2:L2');
 
-        $sheet->setCellValue('A3', strtoupper('Periode: ' . date('d - M - Y', strtotime($request->dari)) . ' S/D ' . date('d - M - Y', strtotime($request->sampai))));
+        $sheet->setCellValue('A3', strtoupper($pengeluaran[0]['judulLaporan']));
         $sheet->getStyle("A3")->getFont()->setBold(true);
         $sheet->mergeCells('A3:L3');
 
-        $sheet->setCellValue('A4', strtoupper('Stok: ' . $request->stokdari . ' S/D ' . $request->stoksampai));
+        $sheet->setCellValue('A4', strtoupper('Periode: ' . date('d - M - Y', strtotime($request->dari)) . ' S/D ' . date('d - M - Y', strtotime($request->sampai))));
         $sheet->getStyle("A4")->getFont()->setBold(true);
         $sheet->mergeCells('A4:L4');
 
-        $header_start_row = 6;
-        $detail_start_row = 7;
+        $sheet->setCellValue('A5', strtoupper('Stok: ' . $request->stokdari . ' S/D ' . $request->stoksampai));
+        $sheet->getStyle("A5")->getFont()->setBold(true);
+        $sheet->mergeCells('A5:L5');
+
+        $header_start_row = 7;
+        $detail_start_row = 8;
 
         $styleArray = array(
             'borders' => array(
@@ -295,17 +301,17 @@ class LaporanPembelianStokController extends MyController
         $sheet->mergeCells('A' . $total_start_row . ':G' . $total_start_row);
         $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':G' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
 
-        $totalNominal = "=SUM(H7:H" . ($detail_start_row - 1) . ")";
+        $totalNominal = "=SUM(H8:H" . ($detail_start_row - 1) . ")";
         $sheet->setCellValue("H$total_start_row", $totalNominal)->getStyle("H$total_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
         $sheet->setCellValue("H$total_start_row", $totalNominal)->getStyle("H$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
         $sheet->setCellValue("H$total_start_row", $totalNominal)->getStyle("H$total_start_row")->applyFromArray($styleArray);
 
-        $totalNominal = "=SUM(I7:I" . ($detail_start_row - 1) . ")";
+        $totalNominal = "=SUM(I8:I" . ($detail_start_row - 1) . ")";
         $sheet->setCellValue("I$total_start_row", $totalNominal)->getStyle("I$total_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
         $sheet->setCellValue("I$total_start_row", $totalNominal)->getStyle("I$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
         $sheet->setCellValue("I$total_start_row", $totalNominal)->getStyle("I$total_start_row")->applyFromArray($styleArray);
 
-        $totalNominal = "=SUM(J7:J" . ($detail_start_row - 1) . ")";
+        $totalNominal = "=SUM(J8:J" . ($detail_start_row - 1) . ")";
         $sheet->setCellValue("J$total_start_row", $totalNominal)->getStyle("J$total_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
         $sheet->setCellValue("J$total_start_row", $totalNominal)->getStyle("J$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
         $sheet->setCellValue("J$total_start_row", $totalNominal)->getStyle("J$total_start_row")->applyFromArray($styleArray);

@@ -54,8 +54,9 @@ class LaporanTitipanEmklController extends MyController
             ->get(config('app.api_url') . 'laporantitipanemkl/report', $detailParams);
 
         $data = $header['data'];
+        $dataCabang['namacabang'] = $header['namacabang'];
         $user = Auth::user();
-        return view('reports.laporantitipanemkl', compact('data', 'user', 'detailParams'));
+        return view('reports.laporantitipanemkl', compact('data','dataCabang', 'user', 'detailParams'));
     }
 
     public function export(Request $request): void
@@ -78,6 +79,7 @@ class LaporanTitipanEmklController extends MyController
             throw new \Exception('TIDAK ADA DATA');
         }
         
+        $namacabang = $responses['namacabang'];
         $jenis = $responses['jenisorder'];
         // dd($pengeluaran);
         $disetujui = $pengeluaran[0]['disetujui'] ?? '';
@@ -90,27 +92,31 @@ class LaporanTitipanEmklController extends MyController
         $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:E1');
+        $sheet->setCellValue('A2', $namacabang);
+        $sheet->getStyle("A2")->getFont()->setSize(16)->setBold(true);
+        $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
+        $sheet->mergeCells('A2:E2');
 
         $englishMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
         $indonesianMonths = ['JANUARI', 'FEBRUARI', 'MARET', 'APRIL', 'MEI', 'JUNI', 'JULI', 'AGUSTUS', 'SEPTEMBER', 'OKTOBER', 'NOVEMBER', 'DESEMBER'];
         $tgldari = str_replace($englishMonths, $indonesianMonths, date('d - M - Y', strtotime($request->tgldari)));
         $tglsampai = str_replace($englishMonths, $indonesianMonths, date('d - M - Y', strtotime($request->tglsampai)));
         
-        $sheet->setCellValue('A2', strtoupper($pengeluaran[0]['judullaporan']));
-        $sheet->getStyle("A2")->getFont()->setBold(true);
-        $sheet->mergeCells('A2:E2');
-        
-        $sheet->setCellValue('A3', strtoupper( 'Periode: ' . date('d - M - Y', strtotime($request->tgldari)) .' s/d '.date('d - M - Y', strtotime($request->tglsampai)) ));
+        $sheet->setCellValue('A3', strtoupper($pengeluaran[0]['judullaporan']));
         $sheet->getStyle("A3")->getFont()->setBold(true);
         $sheet->mergeCells('A3:E3');
-
-        $sheet->setCellValue('A4', strtoupper('Jenis Order: ' . $jenis));
+        
+        $sheet->setCellValue('A4', strtoupper( 'Periode: ' . date('d - M - Y', strtotime($request->tgldari)) .' s/d '.date('d - M - Y', strtotime($request->tglsampai)) ));
         $sheet->getStyle("A4")->getFont()->setBold(true);
         $sheet->mergeCells('A4:E4');
 
+        $sheet->setCellValue('A5', strtoupper('Jenis Order: ' . $jenis));
+        $sheet->getStyle("A5")->getFont()->setBold(true);
+        $sheet->mergeCells('A5:E5');
 
-        $header_start_row = 6;
-        $detail_start_row = 7;
+
+        $header_start_row = 7;
+        $detail_start_row = 8;
 
         $styleArray = array(
             'borders' => array(
@@ -215,8 +221,8 @@ class LaporanTitipanEmklController extends MyController
         $sheet->mergeCells('A' . $total_start_row . ':F' . $total_start_row);
         $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':F' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
 
-        $totalDebet = "=SUM(G6:G" . ($detail_start_row - 1) . ")";
-        $sheet->setCellValue("G$total_start_row", $totalDebet)->getStyle("G$total_start_row")->applyFromArray($style_number);
+        $totalDebet = "=SUM(G7:G" . ($detail_start_row - 1) . ")";
+        $sheet->setCellValue("G$total_start_row", $totalDebet)->getStyle("G$total_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
         $sheet->setCellValue("G$total_start_row", $totalDebet)->getStyle("G$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
         $ttd_start_row = $detail_start_row + 2;

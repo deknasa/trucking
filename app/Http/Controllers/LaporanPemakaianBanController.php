@@ -55,8 +55,9 @@ class LaporanPemakaianBanController extends MyController
             throw new \Exception('TIDAK ADA DATA');
         }
         $user = Auth::user();
+        $dataCabang['namacabang'] = $header['namacabang'];
 
-        return view('reports.laporanpemakaianban', compact('data', 'user', 'detailParams'));
+        return view('reports.laporanpemakaianban', compact('data','dataCabang', 'user', 'detailParams'));
     }
 
     public function export(Request $request): void
@@ -81,6 +82,7 @@ class LaporanPemakaianBanController extends MyController
             ->get(config('app.api_url') . 'laporanpemakaianban/export', $detailParams);
 
         $data = $header['data'];
+        $namacabang = $header['namacabang'];
         $disetujui = $data[0]['disetujui'] ?? '';
         $diperiksa = $data[0]['diperiksa'] ?? '';
 
@@ -91,27 +93,31 @@ class LaporanPemakaianBanController extends MyController
         $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:E1');
+        $sheet->setCellValue('A2', $namacabang);
+        $sheet->getStyle("A2")->getFont()->setSize(16)->setBold(true);
+        $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
+        $sheet->mergeCells('A2:E2');
 
         $englishMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
         $indonesianMonths = ['JANUARI', 'FEBRUARI', 'MARET', 'APRIL', 'MEI', 'JUNI', 'JULI', 'AGUSTUS', 'SEPTEMBER', 'OKTOBER', 'NOVEMBER', 'DESEMBER'];
         $tgldari = str_replace($englishMonths, $indonesianMonths, date('d - M - Y', strtotime($request->tgldari)));
         $tglsampai = str_replace($englishMonths, $indonesianMonths, date('d - M - Y', strtotime($request->tglsampai)));
         
-        $sheet->setCellValue('A2', strtoupper($data[0]['judulLaporan']));
-        $sheet->getStyle("A2")->getFont()->setBold(true);
-        $sheet->mergeCells('A2:E2');
-        
-        $sheet->setCellValue('A3', strtoupper( 'Periode: ' . date('d - M - Y', strtotime($request->dari)) .' s/d '.date('d - M - Y', strtotime($request->sampai)) ));
+        $sheet->setCellValue('A3', strtoupper($data[0]['judulLaporan']));
         $sheet->getStyle("A3")->getFont()->setBold(true);
         $sheet->mergeCells('A3:E3');
         
-        $sheet->setCellValue('A4', strtoupper( 'Posisi akhir ban : ' . $request->parameter));
+        $sheet->setCellValue('A4', strtoupper( 'Periode: ' . date('d - M - Y', strtotime($request->dari)) .' s/d '.date('d - M - Y', strtotime($request->sampai)) ));
         $sheet->getStyle("A4")->getFont()->setBold(true);
         $sheet->mergeCells('A4:E4');
         
-        $sheet->setCellValue('A5', strtoupper('Jenis Laporan: ' . $request->jenislaporan));
+        $sheet->setCellValue('A5', strtoupper( 'Posisi akhir ban : ' . $request->parameter));
         $sheet->getStyle("A5")->getFont()->setBold(true);
         $sheet->mergeCells('A5:E5');
+        
+        $sheet->setCellValue('A6', strtoupper('Jenis Laporan: ' . $request->jenislaporan));
+        $sheet->getStyle("A6")->getFont()->setBold(true);
+        $sheet->mergeCells('A6:E6');
         
 
         $detail_table_header_row = 8;
