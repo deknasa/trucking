@@ -31,12 +31,13 @@
       var dataSet = new Stimulsoft.System.Data.DataSet("Data")
 
       viewer.renderHtml('content')
-      report.loadFile(`{{ asset('public/reports/ReportPemotonganPinjamanperEBS (1) (2).mrt') }}`)
+      report.loadFile(`{{ asset('public/reports/ReportPemotonganPinjamanperEBSS.mrt') }}`)
 
       report.dictionary.dataSources.clear()
 
       dataSet.readJson({
         'data': <?= json_encode($data); ?>,
+        'dataCabang': <?= json_encode($dataCabang); ?>,
         'user': <?= json_encode($user); ?>,
         'parameter': <?= json_encode($detailParams); ?>
       })

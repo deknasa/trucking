@@ -1,12 +1,12 @@
 {
   "ReportVersion": "2023.1.1",
-  "ReportGuid": "524d11f14b61d1c02db5086d75d94544",
+  "ReportGuid": "a1d3f5b040597f0c107c5c007b877333",
   "ReportName": "Report",
   "ReportAlias": "Report",
   "ReportFile": "http://localhost/trucking/public/reports/ReportLaporanBanGudangSementara.mrt",
   "ReportDescription": "14-10-2019",
   "ReportCreated": "/Date(0+0700)/",
-  "ReportChanged": "/Date(1698985710000+0700)/",
+  "ReportChanged": "/Date(1712568628000+0700)/",
   "EngineVersion": "EngineV2",
   "CalculationMode": "Interpretation",
   "ReportUnit": "Millimeters",
@@ -92,6 +92,20 @@
       },
       "1": {
         "Ident": "StiDataTableSource",
+        "Name": "dataCabang",
+        "Alias": "dataCabang",
+        "Columns": {
+          "0": {
+            "Name": "namacabang",
+            "NameInSource": "namacabang",
+            "Alias": "namacabang",
+            "Type": "System.String"
+          }
+        },
+        "NameInSource": "Data.dataCabang"
+      },
+      "2": {
+        "Ident": "StiDataTableSource",
         "Name": "user_roles_pivot",
         "Alias": "user_roles_pivot",
         "Columns": {
@@ -116,7 +130,7 @@
         },
         "NameInSource": "Data.user_roles_pivot"
       },
-      "2": {
+      "3": {
         "Ident": "StiDataTableSource",
         "Name": "user_roles",
         "Alias": "user_roles",
@@ -172,7 +186,7 @@
         },
         "NameInSource": "Data.user_roles"
       },
-      "3": {
+      "4": {
         "Ident": "StiDataTableSource",
         "Name": "user",
         "Alias": "user",
@@ -264,7 +278,7 @@
         },
         "NameInSource": "Data.user"
       },
-      "4": {
+      "5": {
         "Ident": "StiDataTableSource",
         "Name": "parameter",
         "Alias": "parameter",
@@ -366,13 +380,13 @@
               "Ident": "StiText",
               "Name": "Text50",
               "Guid": "5f820a2550f72e12d9401438c5d7d2b0",
-              "ClientRectangle": "34.04,9.21,154,6",
+              "ClientRectangle": "34.04,8.5,154,6",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
               },
               "Text": {
-                "Value": "{data.judulLaporan}"
+                "Value": "{dataCabang.namacabang}"
               },
               "HorAlignment": "Center",
               "Font": ";10;Bold;",
@@ -385,7 +399,7 @@
               "Ident": "StiText",
               "Name": "Text2",
               "Guid": "3ed7388f08c331933899cbd5a52fc0cd",
-              "ClientRectangle": "153.51,14,59.16,3.81",
+              "ClientRectangle": "153.51,2,59.16,3.81",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -405,7 +419,7 @@
               "Ident": "StiText",
               "Name": "Text51",
               "Guid": "35db52aa64d78f29e7f9ac8a162d6f70",
-              "ClientRectangle": "149.99,17.81,62.68,4.06",
+              "ClientRectangle": "149.99,9.81,62.68,4.06",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -423,7 +437,7 @@
               "Ident": "StiText",
               "Name": "Text79",
               "Guid": "09b50b2bfa64aa73794124c2d7a265f4",
-              "ClientRectangle": "2,14.7,76.04,4.06",
+              "ClientRectangle": "154,6,58.04,4.06",
               "ComponentPlacement": "gh.GroupHeaderBand1",
               "Interaction": {
                 "Ident": "StiInteraction"
@@ -431,6 +445,7 @@
               "Text": {
                 "Value": "{data.usercetak}"
               },
+              "HorAlignment": "Right",
               "Font": ";;Italic;",
               "Border": ";;;;;;;solid:Black",
               "Brush": "solid:",
@@ -556,6 +571,25 @@
               "Brush": "solid:",
               "TextBrush": "solid:Black",
               "Type": "Expression"
+            },
+            "11": {
+              "Ident": "StiText",
+              "Name": "Text4",
+              "Guid": "813065e875c16210cd2f0c8b0f425d86",
+              "ClientRectangle": "34,14,154,6",
+              "ComponentPlacement": "gh.GroupHeaderBand1",
+              "Interaction": {
+                "Ident": "StiInteraction"
+              },
+              "Text": {
+                "Value": "{data.judulLaporan}"
+              },
+              "HorAlignment": "Center",
+              "Font": ";10;Bold;",
+              "Border": ";;;;;;;solid:Black",
+              "Brush": "solid:",
+              "TextBrush": "solid:Black",
+              "Type": "DataColumn"
             }
           },
           "PrintOnAllPages": true
