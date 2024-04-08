@@ -266,9 +266,9 @@
                           <th style="width:10%; max-width: 25px; max-width: 15px">No</th>
                           <th style="width: 20%; min-width: 200px;">stok</th>
                           <th style="width: 10%; min-width: 100px;">satuan</th>
+                          <th class="data_tbl tbl_statusoli" style="width:10%; min-width: 100px">Status Oli</th>
                           <th style="width: 20%; min-width: 200px;">keterangan</th>
                           <th class="tbl_qty" style="width:10%; min-width: 100px">qty</th>
-                          <th class="data_tbl tbl_statusoli" style="width:10%; min-width: 100px">Status Oli</th>
                           <th class="data_tbl tbl_statusban" style="width:10%; min-width: 100px">Status Ban</th>
                           <th class="data_tbl tbl_vulkanisirke" style="width:10%; min-width: 100px">vulkanisirke</th>
                           <th class="data_tbl tbl_vulkanisirtotal" style="width:10%; min-width: 100px">vulkanisir</th>
@@ -1497,18 +1497,22 @@
                   </td>                 
                   <td>
                     <input type="text" disabled name="detail_satuan[]" id="" class="form-control detail_satuan_${index}">
-                  </td>                 
+                  </td>       
+                  <td class="data_tbl tbl_statusoli">
+                    <select name="detail_statusoli[]" class="form-select select2bs4" id="statusoli${index}" style="width: 100%;">
+                      <option value="">-- PILIH STATUS OLI --</option>
+                    </select>
+                  </td>
                   <td>
                     <input type="text"  name="detail_keterangan[]" id="detail_keterangan${index}" style="" class="form-control">                    
                   </td>
                   <td class="data_tbl tbl_qty">
+                    <div id="qtytestlookup${index}" style="display:none;" >
+                      <input type="text"  name="detail_qty_oli[]" id="detail_qty_oli${index}" class="form-control gandengan-lookup${index}">
+                    </div>
+
                     <input type="text"  name="detail_qty[]" id="detail_qty${index}" onkeyup="calculate(${index})" style="text-align:right" class="form-control autonumeric number${index}">
                   </td>  
-                  <td class="data_tbl tbl_statusoli">
-                    <select name="detail_statusoli[]" class="form-select select2bs4" id="statusoli${index}" style="width: 100%;">
-                      <option value="">-- PILIH STATUS OLI --</option>
-                    </select>                 
-                  </td> 
                   <td class="data_tbl tbl_statusban">
                     <select name="detail_statusban[]" class="form-select select2bs4" id="statusban${index}" style="width: 100%;">
                       <option value="">-- PILIH STATUS BAN --</option>
@@ -1635,7 +1639,14 @@
           elStatusOli.find(`option:contains('TAMBAH')`).remove()
           elStatusOli.find(`option:contains('GANTI')`).remove()
           elStatusOli.trigger('change')
+          $(`#detail_qty_oli${row}`).hide()
+          $(`#qtytestlookup${row}`).hide()
+          $(`#detail_qty${row}`).show()
         } else {
+          $(`#detail_qty_oli${row}`).show()
+          $(`#qtytestlookup${row}`).show()
+          $(`#detail_qty${row}`).hide()
+          console.log(`#qtytestlookup${row}`,`detail_qty${row}`);
           dataStatusOli.forEach(statusOli => {
             let option = new Option(statusOli.text, statusOli.id)
 
@@ -1656,6 +1667,34 @@
 
           elStatusOli.append(option).trigger('change')
         });
+      }
+    })
+
+    $(`.gandengan-lookup${row}`).lookup({
+      title: 'gandengan Lookup',
+      fileName: 'gandengan',
+      beforeProcess: function(test) {
+        this.postData = {
+          // var levelcoa = $(`#levelcoa`).val();
+          statusoli:$(`#statusoli${row}`).val(),
+          Aktif: 'AKTIF',
+        }
+      },
+
+      onSelectRow: (gandengan, element) => {
+        element.val(gandengan.kodegandengan)
+        $(`#${element[0]['name']}Id`).val(gandengan.id)
+        element.data('currentValue', element.val())
+        lookupSelected(`gandengan`);
+
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
+        enabledKorDisable()
       }
     })
     if (kodePengeluaranStok != listKodePengeluaran[1]) {
@@ -2072,17 +2111,17 @@
                       <td>
                         <input type="text" disabled name="detail_satuan[]" id="" value="${detail.satuan}" class="form-control detail_satuan_${index}">
                       </td>   
+                      <td class="data_tbl tbl_statusoli">
+                        <select name="detail_statusoli[]" class="form-select select2bs4" id="statusoli${id}" style="width: 100%;">
+                          <option value="">-- PILIH STATUS OLI --</option>
+                        </select>                 
+                      </td>
                       <td>
                         <input type="text"  name="detail_keterangan[]" style="" class="form-control">                    
                       </td>
                       <td class="data_tbl tbl_qty">
                         <input type="text"  name="detail_qty[]" id="detail_qty${id}" onkeyup="calculate(${id})" style="text-align:right" class="form-control autonumeric number${id}">                    
                       </td>  
-                    <td class="data_tbl tbl_statusoli">
-                      <select name="detail_statusoli[]" class="form-select select2bs4" id="statusoli${id}" style="width: 100%;">
-                        <option value="">-- PILIH STATUS OLI --</option>
-                      </select>                 
-                    </td>
                       <td class="data_tbl tbl_statusban">
                         <select name="detail_statusban[]" class="form-select select2bs4" id="statusban${id}" style="width: 100%;">
                           <option value="">-- PILIH STATUS BAN --</option>
