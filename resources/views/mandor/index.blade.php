@@ -326,7 +326,7 @@
                             if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                 showDialog('Harap pilih salah satu record')
                             } else {
-                                editMandor(selectedId)
+                                cekValidasi(selectedId,'edit')
                             }
                         }
                     },
@@ -339,7 +339,7 @@
                             if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                 showDialog('Harap pilih salah satu record')
                             } else {
-                                cekValidasidelete(selectedId)
+                                cekValidasi(selectedId,'delete')
                             }
                         }
                     },
