@@ -109,7 +109,7 @@
                             });
                             var link = document.createElement('a');
                             link.href = window.URL.createObjectURL(blob);
-                            link.download = `LAPORAN DATA JURNAL ${new Date().getTime()}.xlsx`;
+                            link.download = `LAPORAN TARIK DATA ABSENSI ${new Date().getTime()}.xlsx`;
                             link.click();
                         }
                     }

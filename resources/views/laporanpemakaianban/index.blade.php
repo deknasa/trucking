@@ -25,7 +25,7 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-12 col-sm-2 col-form-label mt-2">Posisi Akhir Ban Trado<span class="text-danger">*</span></label>
+                            <label class="col-12 col-sm-2 col-form-label mt-2">Posisi Akhir Ban Trado</label>
                             <div class="col-sm-4 mt-2">
                                 <div class="input-group">
                                     <input type="hidden" name="posisiakhirtrado_id" id="tradoId">
@@ -34,7 +34,7 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-12 col-sm-2 col-form-label mt-2">Posisi Akhir Ban Gandengan<span class="text-danger">*</span></label>
+                            <label class="col-12 col-sm-2 col-form-label mt-2">Posisi Akhir Ban Gandengan</label>
                             <div class="col-sm-4 mt-2">
                                 <div class="input-group">
                                     <input type="hidden" name="posisiakhirgandengan_id" id="gandenganId">

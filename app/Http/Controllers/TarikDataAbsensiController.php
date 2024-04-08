@@ -12,7 +12,7 @@ use PhpOffice\PhpSpreadsheet\Cell\DataType;
 
 class TarikDataAbsensiController extends MyController
 {
-    public $title = 'Laporan Data Jurnal';
+    public $title = 'Laporan Tarik Data Absensi';
 
     public function index(Request $request)
     {
@@ -38,25 +38,32 @@ class TarikDataAbsensiController extends MyController
             throw new \Exception('TIDAK ADA DATA');
         }
 
+        $disetujui = $bukubesar[0]['disetujui'] ?? '';
+        $diperiksa = $bukubesar[0]['diperiksa'] ?? '';
         $dataheader = $detailParams;
         $user = Auth::user();
 
+        $namacabang = $responses['namacabang'];
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setCellValue('A1', $bukubesar[0]['judul']);
         $sheet->getStyle("A1")->getFont()->setSize(20)->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:H1');
-
-        $sheet->setCellValue('A2', 'Laporan Data Jurnal');
-        $sheet->getStyle("A2")->getFont()->setSize(16)->setBold(true);
+        $sheet->setCellValue('A2', $namacabang);
+        $sheet->getStyle("A2")->getFont()->setSize(20)->setBold(true);
         $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A2:H2');
 
-        $sheet->setCellValue('A3', 'Periode : ' . $dataheader['dari'] . ' s/d ' . $dataheader['sampai']);
-        $sheet->getStyle("A3")->getFont()->setSize(12)->setBold(true);
+        $sheet->setCellValue('A3', $bukubesar[0]['judulLaporan']);
+        $sheet->getStyle("A3")->getFont()->setSize(16)->setBold(true);
         $sheet->getStyle('A3')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A3:H3');
+
+        $sheet->setCellValue('A4', 'Periode : ' . $dataheader['dari'] . ' s/d ' . $dataheader['sampai']);
+        $sheet->getStyle("A4")->getFont()->setSize(12)->setBold(true);
+        $sheet->getStyle('A4')->getAlignment()->setHorizontal('center');
+        $sheet->mergeCells('A4:H4');
 
        
 
@@ -176,8 +183,8 @@ class TarikDataAbsensiController extends MyController
         $sheet->setCellValue("C$ttd_start_row", 'Diperiksa Oleh,');
         $sheet->setCellValue("F$ttd_start_row", 'Disusun Oleh,');
 
-        $sheet->setCellValue("A" . ($ttd_start_row + 3), '(                )');
-        $sheet->setCellValue("C" . ($ttd_start_row + 3), '(                )');
+        $sheet->setCellValue("A" . ($ttd_start_row + 3), '( ' . $disetujui . ' )');
+        $sheet->setCellValue("C" . ($ttd_start_row + 3), '( ' . $diperiksa . ' )');
         $sheet->setCellValue("F" . ($ttd_start_row + 3), '(                )');
 
         $sheet->getColumnDimension('A')->setWidth(24);

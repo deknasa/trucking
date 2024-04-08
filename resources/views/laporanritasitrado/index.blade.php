@@ -121,7 +121,7 @@
                             });
                             var link = document.createElement('a');
                             link.href = window.URL.createObjectURL(blob);
-                            link.download = 'EXPORT RINCIAN MINGGUAN ' + new Date().getTime() + '.xlsx';
+                            link.download = 'LAPORAN RITASI TRADO ' + new Date().getTime() + '.xlsx';
                             link.click();
                         }
                     }

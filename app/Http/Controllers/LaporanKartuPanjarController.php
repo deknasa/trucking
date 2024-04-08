@@ -45,9 +45,10 @@ class LaporanKartuPanjarController extends MyController
             ->get(config('app.api_url') . 'laporankartupanjar/report', $detailParams);
 
         $data = $header['data'];
+        $dataCabang['namacabang'] = $header['namacabang'];
         $user = Auth::user();
 
-        return view('reports.laporankartupanjar', compact('data', 'user', 'detailParams'));
+        return view('reports.laporankartupanjar', compact('data','dataCabang', 'user', 'detailParams'));
     }
 
     public function export(Request $request): void
@@ -72,6 +73,7 @@ class LaporanKartuPanjarController extends MyController
         if(count($pengeluaran) == 0){
             throw new \Exception('TIDAK ADA DATA');
         }
+        $namacabang = $responses['namacabang'];
         
         $disetujui = $pengeluaran[0]['disetujui'] ?? '';
         $diperiksa = $pengeluaran[0]['diperiksa'] ?? '';
@@ -84,28 +86,33 @@ class LaporanKartuPanjarController extends MyController
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:J1');
 
+        $sheet->setCellValue('A2', $namacabang);
+        $sheet->getStyle("A2")->getFont()->setSize(16)->setBold(true);
+        $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
+        $sheet->mergeCells('A2:J2');
+
         $englishMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
         $indonesianMonths = ['JANUARI', 'FEBRUARI', 'MARET', 'APRIL', 'MEI', 'JUNI', 'JULI', 'AGUSTUS', 'SEPTEMBER', 'OKTOBER', 'NOVEMBER', 'DESEMBER'];
         $tanggal = str_replace($englishMonths, $indonesianMonths, date('d - M - Y', strtotime($request->dari)));
 
-        $sheet->setCellValue('A2', strtoupper($pengeluaran[0]['judulLaporan']));
-        $sheet->getStyle("A2")->getFont()->setBold(true);
-        $sheet->mergeCells('A2:J2');
-
-        $sheet->setCellValue('A3', strtoupper('Periode : ' . $tanggal));
+        $sheet->setCellValue('A3', strtoupper($pengeluaran[0]['judulLaporan']));
         $sheet->getStyle("A3")->getFont()->setBold(true);
         $sheet->mergeCells('A3:J3');
+
+        $sheet->setCellValue('A4', strtoupper('Periode : ' . $tanggal));
+        $sheet->getStyle("A4")->getFont()->setBold(true);
+        $sheet->mergeCells('A4:J4');
 
         $agendari=$request->agendari ?? '';
         $agensampai=$request->agensampai ?? '';
         if ($agendari=='' || $agensampai=='') {
-            $sheet->setCellValue('A4', strtoupper('Customer : SEMUA'));
+            $sheet->setCellValue('A5', strtoupper('Customer : SEMUA'));
         } else {
-            $sheet->setCellValue('A4', strtoupper('Customer : ' . $request->agendari . ' S/D ' . $request->agensampai));
+            $sheet->setCellValue('A5', strtoupper('Customer : ' . $request->agendari . ' S/D ' . $request->agensampai));
         }
 
-        $sheet->getStyle("A4")->getFont()->setBold(true);
-        $sheet->mergeCells('A4:J4');
+        $sheet->getStyle("A5")->getFont()->setBold(true);
+        $sheet->mergeCells('A5:J5');
 
         $header_start_row = 6;
         $detail_start_row = 7;

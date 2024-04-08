@@ -75,6 +75,7 @@ class LaporanPemakaianStokController extends MyController
             throw new \Exception('TIDAK ADA DATA');
         }
 
+        $namacabang = $responses['namacabang'];
         $disetujui = $pengeluaran[0]['disetujui'] ?? '';
         $diperiksa = $pengeluaran[0]['diperiksa'] ?? '';
         $user = Auth::user();
@@ -86,19 +87,24 @@ class LaporanPemakaianStokController extends MyController
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:J1');
 
+        $sheet->setCellValue('A2', $namacabang);
+        $sheet->getStyle("A2")->getFont()->setSize(16)->setBold(true);
+        $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
+        $sheet->mergeCells('A2:J2');
+
         $englishMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
         $indonesianMonths = ['JANUARI', 'FEBRUARI', 'MARET', 'APRIL', 'MEI', 'JUNI', 'JULI', 'AGUSTUS', 'SEPTEMBER', 'OKTOBER', 'NOVEMBER', 'DESEMBER'];
 
-        $sheet->setCellValue('A2', strtoupper('Laporan Pemakaian Stok'));
-        $sheet->getStyle("A2")->getFont()->setBold(true);
-        $sheet->mergeCells('A2:J2');
-
-        $sheet->setCellValue('A3', strtoupper( 'Bulan ' . date('M-Y', strtotime($pengeluaran[0]['tglbukti'])) ));
+        $sheet->setCellValue('A3', strtoupper('Laporan Pemakaian Stok'));
         $sheet->getStyle("A3")->getFont()->setBold(true);
         $sheet->mergeCells('A3:J3');
 
-        $header_start_row = 5;
-        $detail_start_row = 6;
+        $sheet->setCellValue('A4', strtoupper( 'Bulan ' . date('M-Y', strtotime($pengeluaran[0]['tglbukti'])) ));
+        $sheet->getStyle("A4")->getFont()->setBold(true);
+        $sheet->mergeCells('A4:J4');
+
+        $header_start_row = 6;
+        $detail_start_row = 7;
         $styleArray = array(
             'borders' => array(
                 'allBorders' => array(
@@ -170,7 +176,7 @@ class LaporanPemakaianStokController extends MyController
         $lastColumn = $alphabets[$data_columns_index];
         $sheet->getStyle("A$header_start_row:$lastColumn$header_start_row")->getFont()->setBold(true);
 
-        $rowAwal = 6;
+        $rowAwal = 7;
         $no = 1;
         if (is_array($pengeluaran) || is_iterable($pengeluaran)) {
             // Menulis data dan melakukan grup berdasarkan kolom "KeteranganMain"

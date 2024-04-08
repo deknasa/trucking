@@ -147,7 +147,7 @@
             url: `{{ route('laporantitipanemkl.export') }}?jenisorder=${jenisorder}&tgldari=${tgldari}&tglsampai=${tglsampai}&periode=${periode}`,
             type: 'GET',
             beforeSend: function(xhr) {
-                xhr.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`);
+                xhr.setRequestHeader('Authorization', `Bearer ${accessToken}`);
             },
             xhrFields: {
                 responseType: 'arraybuffer'

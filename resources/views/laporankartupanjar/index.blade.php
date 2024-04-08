@@ -160,7 +160,7 @@
                         });
                         var link = document.createElement('a');
                         link.href = window.URL.createObjectURL(blob);
-                        link.download = 'LAPORAN KARTU PIUTANG PER CUSTOMER ' + new Date().getTime() + '.xlsx';
+                        link.download = 'LAPORAN KARTU PANJAR PER CUSTOMER ' + new Date().getTime() + '.xlsx';
                         link.click();
                     }
                 }

@@ -58,25 +58,26 @@ class StokPersediaanController extends MyController
         $sheet->getStyle("A1")->getFont()->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:B1');
-
-        $sheet->setCellValue('A2', $dataHeader['judulLaporan']);
-        $sheet->getStyle("A2")->getFont()->setSize(12);
-        $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
+        $sheet->setCellValue('A2', $dataHeader['namacabang']);
+        $sheet->getStyle("A2")->getFont()->setSize(16);
         $sheet->getStyle("A2")->getFont()->setBold(true);
+        $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A2:B2');
-        
-        $sheet->setCellValue('A3', $dataHeader['filter']);
-        $sheet->getStyle("A3")->getFont()->setSize(12);
-        $sheet->getStyle('A3')->getAlignment()->setHorizontal('left');
+
+
+        $sheet->setCellValue('A3', $dataHeader['judulLaporan']);
         $sheet->getStyle("A3")->getFont()->setBold(true);
-        $sheet->setCellValue('B3', ': '.$dataHeader['datafilter']);
-        $sheet->getStyle("B3")->getFont()->setSize(12);
-        $sheet->getStyle('B3')->getAlignment()->setHorizontal('left');
-        $sheet->getStyle("B3")->getFont()->setBold(true);
+        $sheet->mergeCells('A3:B3');
+        
+        $sheet->setCellValue('A4', $dataHeader['filter']);
+        $sheet->getStyle("A4")->getFont()->setBold(true);
+        $sheet->setCellValue('B4', ': '.$dataHeader['datafilter']);
+        $sheet->getStyle('B4')->getAlignment()->setHorizontal('left');
+        $sheet->getStyle("B4")->getFont()->setBold(true);
 
         $header_start_row = 2;
         $header_right_start_row = 2;
-        $detail_table_header_row = 5;
+        $detail_table_header_row = 6;
         $detail_start_row = $detail_table_header_row + 1;
 
         $alphabets = range('A', 'Z');
