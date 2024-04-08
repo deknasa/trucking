@@ -188,7 +188,7 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                editBlackListSupir(selectedId)
+                cekValidasi(selectedId,'edit')
               }
             }
           },
@@ -201,7 +201,7 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                deleteBlackListSupir(selectedId)
+                cekValidasi(selectedId,'delete')
               }
             }
           },

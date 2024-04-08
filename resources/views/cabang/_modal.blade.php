@@ -107,7 +107,7 @@
   let hasFormBindKeys = false
   let modalBody = $('#crudModal').find('.modal-body').html()
   let dataMaxLength = []
-
+  var data_id 
   $(document).ready(function() {
 
     $(document).on('click', "#addRow", function() {
@@ -235,6 +235,7 @@
 
     setFormBindKeys(form)
 
+    data_id = $('#crudForm').find('[name=id]').val();
     activeGrid = null
     form.find('#btnSubmit').prop('disabled', false)
     if (form.data('action') == "view") {
@@ -312,8 +313,39 @@
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
+    removeEditingBy(data_id)
     $('#crudModal').find('.modal-body').html(modalBody)
   })
+
+  function removeEditingBy(id) {
+    $.ajax({
+      url: `{{ config('app.api_url') }}bataledit`,
+      method: 'POST',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        id: id,
+        aksi: 'BATAL',
+        table: 'cabang'
+
+      },
+      success: response => {
+        $("#crudModal").modal("hide")
+      },
+      error: error => {
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+
+          setErrorMessages(form, error.responseJSON.errors);
+        } else {
+          showDialog(error.responseJSON)
+        }
+      },
+    })
+  }
 
   function createCabang() {
     let form = $('#crudForm')
@@ -696,6 +728,33 @@
         element.data('currentValue', element.val());
       },
     });
+  }
+
+  function cekValidasi(id,aksi) {
+    $.ajax({
+      url: `{{ config('app.api_url') }}cabang/${id}/cekValidasi`,
+      method: 'POST',
+      dataType: 'JSON',
+      beforeSend: request => {
+        request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+      },
+      data:{
+        aksi: aksi,
+      },
+      success: response => {
+        var error = response.error
+        if (error == true) {
+          showDialog(response.message)
+        } else {
+          if (aksi=="edit") {
+            editCabang(id)
+          }else if (aksi=="delete"){
+            deleteCabang(id)
+          }
+        }
+
+      }
+    })
   }
 </script>
 @endpush()

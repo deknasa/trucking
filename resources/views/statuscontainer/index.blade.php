@@ -325,7 +325,7 @@
                             if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                 showDialog('Harap pilih salah satu record')
                             } else {
-                                editStatusContainer(selectedId)
+                                cekValidasi(selectedId,'edit')
                             }
                         }
                     },
@@ -338,7 +338,7 @@
                             if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                 showDialog('Harap pilih salah satu record')
                             } else {
-                                cekValidasidelete(selectedId)
+                                cekValidasi(selectedId,'delete')
                             }
                         }
                     },

@@ -86,6 +86,7 @@
   let modalBody = $('#crudModal').find('.modal-body').html()
 
   let dataMaxLength = []
+  var data_id
 
   $(document).ready(function() {
     $('#btnSubmit').click(function(event) {
@@ -210,6 +211,7 @@
     setFormBindKeys(form)
 
     activeGrid = null
+    data_id = $('#crudForm').find('[name=id]').val();
 
     form.find('#btnSubmit').prop('disabled', false)
     if (form.data('action') == "view") {
@@ -229,8 +231,38 @@
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
+    removeEditingBy(data_id)
     $('#crudModal').find('.modal-body').html(modalBody)
   })
+  function removeEditingBy(id) {
+    $.ajax({
+      url: `{{ config('app.api_url') }}bataledit`,
+      method: 'POST',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        id: id,
+        aksi: 'BATAL',
+        table: 'mandor'
+        
+      },
+      success: response => {
+        $("#crudModal").modal("hide")
+      },
+      error: error => {
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+          
+          setErrorMessages(form, error.responseJSON.errors);
+        } else {
+          showDialog(error.responseJSON)
+        }
+      },
+    })
+  }
 
   function createMandor() {
     let form = $('#crudForm')
@@ -544,7 +576,7 @@
     })
   }
 
-  function cekValidasidelete(Id) {
+  function cekValidasi(Id,Aksi) {
     $.ajax({
       url: `{{ config('app.api_url') }}mandor/${Id}/cekValidasi`,
       method: 'POST',
@@ -553,14 +585,19 @@
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
       data: {
-        accessTokenTnl: accessTokenTnl
+        accessTokenTnl: accessTokenTnl,
+        aksi: Aksi,
       },
       success: response => {
         var kondisi = response.kondisi
         if (kondisi == true) {
           showDialog(response.message['keterangan'])
         } else {
-          deleteMandor(Id)
+          if (Aksi=="edit") {
+            editMandor(Id)
+          }else if (Aksi=="delete"){
+            deleteMandor(Id)
+          }
         }
 
       }

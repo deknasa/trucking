@@ -84,6 +84,7 @@
     let hasFormBindKeys = false
     let modalBody = $('#crudModal').find('.modal-body').html()
     let isEditTgl
+    var data_id
 
     $(document).ready(function() {
 
@@ -217,14 +218,46 @@
         initSelect2(form.find('.select2bs4'), true)
 
         initLookup()
+        data_id = $('#crudForm').find('[name=id]').val();
         initDatepicker()
     })
 
     $('#crudModal').on('hidden.bs.modal', () => {
         activeGrid = '#jqGrid'
         clearSelectedRows()
+        removeEditingBy(data_id)
         $('#crudModal').find('.modal-body').html(modalBody)
     })
+
+    function removeEditingBy(id) {
+        $.ajax({
+            url: `{{ config('app.api_url') }}bataledit`,
+            method: 'POST',
+            dataType: 'JSON',
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            },
+            data: {
+                id: id,
+                aksi: 'BATAL',
+                table: 'bccemail'
+                
+            },
+            success: response => {
+                $("#crudModal").modal("hide")
+            },
+            error: error => {
+                if (error.status === 422) {
+                    $('.is-invalid').removeClass('is-invalid')
+                    $('.invalid-feedback').remove()
+                    
+                    setErrorMessages(form, error.responseJSON.errors);
+                } else {
+                    showDialog(error.responseJSON)
+                }
+            },
+        })
+    }
 
     function createBccEmail() {
         let form = $('#crudForm')
@@ -429,14 +462,31 @@
     }
 
     function cekValidasi(Id, Aksi) {
+        $.ajax({
+            url: `{{ config('app.api_url') }}bccemail/${Id}/cekValidasi`,
+            method: 'POST',
+            dataType: 'JSON',
+            beforeSend: request => {
+                request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
+            },
+            data:{
+                aksi: Aksi,
+            },
+            success: response => {
+                var error = response.error
+                if (error == true) {
+                    showDialog(response.message)
+                } else {
+                    if (Aksi == 'EDIT') {
+                        editBccEmail(Id)
+                    }
+                    if (Aksi == 'DELETE') {
+                        deleteBccEmail(Id)
+                    }
 
-        if (Aksi == 'EDIT') {
-            editBccEmail(Id)
-        }
-        if (Aksi == 'DELETE') {
-            deleteBccEmail(Id)
-        }
-
+                }    
+            }
+        })        
     }
 
     const setStatusAktifOptions = function(relatedForm) {

@@ -205,6 +205,7 @@
   let statusAktif
 
   let dataMaxLength = []
+  var data_id
 
 
   $(document).ready(function() {
@@ -348,6 +349,7 @@
     let form = $('#crudForm')
 
     setFormBindKeys(form)
+    data_id = $('#crudForm').find('[name=id]').val();
 
     activeGrid = null
 
@@ -364,8 +366,39 @@
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
+    removeEditingBy(data_id)
     $('#crudModal').find('.modal-body').html(modalBody)
   })
+
+  function removeEditingBy(id) {
+    $.ajax({
+      url: `{{ config('app.api_url') }}bataledit`,
+      method: 'POST',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        id: id,
+        aksi: 'BATAL',
+        table: 'upahritasi'
+        
+      },
+      success: response => {
+        $("#crudModal").modal("hide")
+      },
+      error: error => {
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+          
+          setErrorMessages(form, error.responseJSON.errors);
+        } else {
+          showDialog(error.responseJSON)
+        }
+      },
+    })
+  }
 
   function setNominalSupir() {
     let nominalDetails = $(`#table_body [name="nominalsupir[]"]`)
@@ -1054,15 +1087,23 @@
       beforeSend: request => {
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
+       data:{
+        aksi:aksi
+      },
       success: response => {
-        var kondisi = response.error
+        var kondisi = response.kondisi
         if (kondisi == true) {
-          if (aksi == 'EDIT') {
-            aksiEdit = false
-            editUpahRitasi(selectedId)
+
+          if (!response.editblok) {
+            if (aksi == 'EDIT') {
+              aksiEdit = false
+              editUpahRitasi(selectedId)
+            } else {
+              showDialog(response)
+            }
           } else {
-            showDialog(response)
-          }
+            showDialog(response.message['keterangan'])
+          }  
         } else {
           if (aksi == 'EDIT') {
             aksiEdit = true

@@ -304,6 +304,7 @@
   let statusSistemTon
   let statusPenyesuaianHarga
   let dataMaxLength = []
+  var data_id
 
   $(document).ready(function() {
 
@@ -462,6 +463,7 @@
     setFormBindKeys(form)
 
     activeGrid = null
+    data_id = $('#crudForm').find('[name=id]').val();
 
     form.find('#btnSubmit').prop('disabled', false)
     if (form.data('action') == "view") {
@@ -477,8 +479,38 @@
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
+    removeEditingBy(data_id)
     $('#crudModal').find('.modal-body').html(modalBody)
   })
+  function removeEditingBy(id) {
+    $.ajax({
+      url: `{{ config('app.api_url') }}bataledit`,
+      method: 'POST',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        id: id,
+        aksi: 'BATAL',
+        table: 'tarif'
+        
+      },
+      success: response => {
+        $("#crudModal").modal("hide")
+      },
+      error: error => {
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+          
+          setErrorMessages(form, error.responseJSON.errors);
+        } else {
+          showDialog(error.responseJSON)
+        }
+      },
+    })
+  }
 
   function createTarif() {
     let form = $('#crudForm')
@@ -1636,13 +1668,20 @@
       beforeSend: request => {
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
+      data:{
+        aksi:aksi
+      },
       success: response => {
         var kondisi = response.kondisi
         if (kondisi == true) {
-          if (aksi == 'EDIT') {
-            aksiEdit = false
-            editTarif(selectedId)
-          } else {
+          if (!response.editblok) {
+            if (aksi == 'EDIT') {
+              aksiEdit = false
+              editTarif(selectedId)
+            } else {
+              showDialog(response.message['keterangan'])
+            }
+          }else{
             showDialog(response.message['keterangan'])
           }
         } else {

@@ -355,6 +355,7 @@
 
   let dropzones = []
   let hasFormBindKeys = false
+  var data_id
   let modalBody = $('#crudModal').find('.modal-body').html()
   let linkPdf
   $(document).ready(function() {
@@ -448,7 +449,9 @@
   })
 
 
-  // $('#crudModal').on('shown.bs.modal', () => {
+  $('#crudModal').on('shown.bs.modal', () => {
+    data_id = $('#crudForm').find('[name=id]').val();
+    
   //   let form = $('#crudForm')
 
   //   setFormBindKeys(form)
@@ -457,14 +460,44 @@
 
   //   getMaxLength(form)
   //   initLookup()
-  // })
+  })
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
+    removeEditingBy(data_id)
     $('#crudForm [name=nominalpinjamansaldoawal]').attr('value', '')
     dropzones.forEach(dropzone => {
       dropzone.removeAllFiles()
     })
   })
+  function removeEditingBy(id) {
+    $.ajax({
+      url: `{{ config('app.api_url') }}bataledit`,
+      method: 'POST',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        id: id,
+        aksi: 'BATAL',
+        table: 'supir'
+        
+      },
+      success: response => {
+        $("#crudModal").modal("hide")
+      },
+      error: error => {
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+          
+          setErrorMessages(form, error.responseJSON.errors);
+        } else {
+          showDialog(error.responseJSON)
+        }
+      },
+    })
+  }
 
   $('#crudForm [name=noktp]').bind("enterKey", function(e) {
     let form = $('#crudForm');

@@ -91,6 +91,7 @@
       let jenisTradoId = form.find('[name=id]').val()
       let action = form.data('action')
       let data = $('#crudForm').serializeArray()
+      var data_id
 
       data.push({
         name: 'sortIndex',
@@ -192,6 +193,7 @@
     setFormBindKeys(form)
 
     activeGrid = null
+    data_id = $('#crudForm').find('[name=id]').val();
 
     form.find('#btnSubmit').prop('disabled', false)
     if (form.data('action') == "view") {
@@ -206,8 +208,39 @@
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
+    removeEditingBy(data_id)
     $('#crudModal').find('.modal-body').html(modalBody)
   })
+
+  function removeEditingBy(id) {
+    $.ajax({
+      url: `{{ config('app.api_url') }}bataledit`,
+      method: 'POST',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        id: id,
+        aksi: 'BATAL',
+        table: 'jenistrado'
+        
+      },
+      success: response => {
+        $("#crudModal").modal("hide")
+      },
+      error: error => {
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+          
+          setErrorMessages(form, error.responseJSON.errors);
+        } else {
+          showDialog(error.responseJSON)
+        }
+      },
+    })
+  }
 
   function createJenisTrado() {
     let form = $('#crudForm')
@@ -505,7 +538,7 @@
     })
   }
 
-  function cekValidasidelete(Id) {
+  function cekValidasi(Id,Aksi) {
     $.ajax({
       url: `{{ config('app.api_url') }}jenistrado/${Id}/cekValidasi`,
       method: 'POST',
@@ -513,12 +546,19 @@
       beforeSend: request => {
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
+      data: {
+        aksi: Aksi,
+      },
       success: response => {
         var kondisi = response.kondisi
         if (kondisi == true) {
           showDialog(response.message['keterangan'])
         } else {
-          deleteJenisTrado(Id)
+          if (Aksi=="EDIT") {
+            editJenisTrado(Id)
+          }else if (Aksi=="DELETE"){
+            deleteJenisTrado(Id)
+          }
         }
 
       }
