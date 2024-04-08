@@ -49,6 +49,8 @@ class LaporanRitasiTradoController extends MyController
             throw new \Exception('TIDAK ADA DATA');
         }
 
+        $namacabang = $responses['namacabang'];
+
         $user = Auth::user();
         // dd($pengeluaran);
         $spreadsheet = new Spreadsheet();
@@ -56,17 +58,21 @@ class LaporanRitasiTradoController extends MyController
         // $sheet->setCellValue('A1', 'Laporan Ritasi Trado : ' . $monthName . ' - ' . $yearNum);
 
         $sheet->setCellValue('A1', $responses['judul'] ?? '');
-        $sheet->setCellValue('A2','LAPORAN RITASI TRADO');
-        $sheet->setCellValue('A3', 'PERIODE : ' . $monthName . ' - ' . $yearNum);
+        $sheet->setCellValue('A2', $namacabang ?? '');
+        $sheet->setCellValue('A3','LAPORAN RITASI TRADO');
+        $sheet->setCellValue('A4', 'PERIODE : ' . $monthName . ' - ' . $yearNum);
         $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
-        $sheet->getStyle("A2")->getFont()->setBold(true);        
-        $sheet->getStyle("A3")->getFont()->setBold(true);
+        $sheet->getStyle("A2")->getFont()->setSize(16)->setBold(true);
+        $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
+        $sheet->getStyle("A3")->getFont()->setBold(true);        
+        $sheet->getStyle("A4")->getFont()->setBold(true);
 
         $sheet->mergeCells('A1:AF1');
+        $sheet->mergeCells('A2:AF2');
 
         $totalTanggal = count($pengeluaran[0]) - 1;
-        $rowIndex = 6;
+        $rowIndex = 7;
         $columnIndex = 1;
 
         foreach ($pengeluaran as $data) {
@@ -95,16 +101,16 @@ class LaporanRitasiTradoController extends MyController
 
         // SET HEADER
         $columnIndexHeader = 2;
-        $sheet->setCellValue('A5', 'No Pol');
+        $sheet->setCellValue('A6', 'No Pol');
         for ($i = 1; $i <= $totalTanggal; $i++) {
-            $cell = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($columnIndexHeader) . '5';
+            $cell = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($columnIndexHeader) . '6';
             $sheet->setCellValue($cell, $i);
             $columnIndexHeader++;
         }
 
-        $cell = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($columnIndexHeader) . '5';
+        $cell = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($columnIndexHeader) . '6';
         $sheet->setCellValue($cell, 'Total');
-        $cellRange = "A5:$cell";
+        $cellRange = "A6:$cell";
 
         $cell = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($columnIndexHeader) . $rowIndex;
         $cellFooter = "A" . $rowIndex . ":$cell";
@@ -161,7 +167,7 @@ class LaporanRitasiTradoController extends MyController
 
             if ($columnLabel != 'A') {
 
-                $cellBody = $columnLabel . "6:" . $columnLabel . $rowIndex;
+                $cellBody = $columnLabel . "7:" . $columnLabel . $rowIndex;
                 $sheet->getStyle($cellBody)->applyFromArray($styleBody);
             }
         }
@@ -172,8 +178,8 @@ class LaporanRitasiTradoController extends MyController
             $columnLabel = $this->alphabetLoop($columnIndex);
             if ($columnLabel != 'A') {
 
-                $cellBody = $columnLabel . "6:" . $columnLabel . $rowIndex;
-                $sheet->setCellValue($columnLabel . ($rowIndex), "=SUM(" . $columnLabel . "6:" . $columnLabel . $rowIndex . ")");
+                $cellBody = $columnLabel . "7:" . $columnLabel . $rowIndex;
+                $sheet->setCellValue($columnLabel . ($rowIndex), "=SUM(" . $columnLabel . "7:" . $columnLabel . $rowIndex . ")");
             }
         }
 

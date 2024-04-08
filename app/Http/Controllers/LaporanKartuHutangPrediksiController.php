@@ -44,7 +44,8 @@ class LaporanKartuHutangPrediksiController extends MyController
             if ($header->successful()) {
                 $data = $header['data'];
                 $user = Auth::user();
-                return view('reports.laporankartuhutangprediksi', compact('data', 'user', 'detailParams'));
+                $dataCabang['namacabang'] = $header['namacabang'];
+                return view('reports.laporankartuhutangprediksi', compact('data','dataCabang', 'user', 'detailParams'));
             } else {
                 return response()->json($header->json(), $header->status());
             }
@@ -68,6 +69,8 @@ class LaporanKartuHutangPrediksiController extends MyController
         if(count($data) == 0){
             throw new \Exception('TIDAK ADA DATA');
         }
+        $namacabang = $header['namacabang'];
+
         
         $disetujui = $data[0]['disetujui'] ?? '';
         $diperiksa = $data[0]['diperiksa'] ?? '';
@@ -76,15 +79,19 @@ class LaporanKartuHutangPrediksiController extends MyController
         $sheet = $spreadsheet->getActiveSheet();
 
         $sheet->setCellValue('A1', $data[0]['judul']);
-        $sheet->setCellValue('A2', $data[0]['judulLaporan']);
-        $sheet->setCellValue('A3', 'PERIODE : ' .date('d-M-Y', strtotime($detailParams['dari'])) . ' s/d ' . date('d-M-Y', strtotime($detailParams['sampai'])));
+        $sheet->setCellValue('A2', $namacabang);
+        $sheet->setCellValue('A3', $data[0]['judulLaporan']);
+        $sheet->setCellValue('A4', 'PERIODE : ' .date('d-M-Y', strtotime($detailParams['sampai'])));
+        // $sheet->setCellValue('A4', 'PERIODE : ' .date('d-M-Y', strtotime($detailParams['dari'])) . ' s/d ' . date('d-M-Y', strtotime($detailParams['sampai'])));
         // $sheet = $spreadsheet->getActiveSheet();
         // $sheet->setCellValue('b1', 'LAPORAN PINJAMAN SUPIR');
         $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
+        $sheet->getStyle("A2")->getFont()->setSize(16)->setBold(true);
+        $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
 
-        $sheet->getStyle("A2")->getFont()->setBold(true);        
-        $sheet->getStyle("A3")->getFont()->setBold(true);
+        $sheet->getStyle("A3")->getFont()->setBold(true);        
+        $sheet->getStyle("A4")->getFont()->setBold(true);
 
         // $sheet->setCellValue('A4', 'PERIODE');
         // $sheet->getStyle("A4")->getFont()->setSize(12)->setBold(true);
@@ -94,6 +101,7 @@ class LaporanKartuHutangPrediksiController extends MyController
         // $sheet->getStyle("B4")->getFont()->setSize(12)->setBold(true);
 
         $sheet->mergeCells('A1:G1');
+        $sheet->mergeCells('A2:G2');
 
         $detail_table_header_row = 6;
         $detail_start_row = $detail_table_header_row + 1;
@@ -197,8 +205,8 @@ class LaporanKartuHutangPrediksiController extends MyController
 
        //total
        $total_start_row = $detail_start_row;
-       $sheet->mergeCells('A' . $total_start_row . ':D' . $total_start_row);
-       $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':D' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
+       $sheet->mergeCells('A' . $total_start_row . ':C' . $total_start_row);
+       $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':C' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
 
        $totalDebet = "=SUM(D6:D" . ($detail_start_row-1) . ")";
        $sheet->setCellValue("D$total_start_row", $totalDebet)->getStyle("D$total_start_row")->applyFromArray($style_number)->getFont()->setBold(true);

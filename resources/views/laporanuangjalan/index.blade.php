@@ -25,7 +25,7 @@
                             </div>
                             
                         </div> --}}
-                        
+
                         <div class="form-group row">
                             <label class="col-12 col-sm-2 col-form-label mt-2">TGL RIC (DARI)<span class="text-danger">*</span></label>
                             <div class="col-sm-4 mt-2">
@@ -39,9 +39,9 @@
                                     <input type="text" name="ricsampai" class="form-control datepicker">
                                 </div>
                             </div>
-                            
+
                         </div>
-                        
+
                         <div class="form-group row">
                             <label class="col-12 col-sm-2 col-form-label mt-2">SUPIR (DARI)<span class="text-danger">*</span></label>
                             <div class="col-sm-4 mt-2">
@@ -53,10 +53,10 @@
                                 <input type="hidden" name="supirsampai_id">
                                 <input type="text" name="supirsampai" class="form-control supirsampai-lookup">
                             </div>
-                            
+
                         </div>
-                        
-                        
+
+
                         <div class="form-group row">
                             <label class="col-12 col-sm-2 col-form-label mt-2">TGL AMBIL UANG JALAN (DARI)<span class="text-danger">*</span></label>
                             <div class="col-sm-4 mt-2">
@@ -70,7 +70,7 @@
                                     <input type="text" name="ambilsampai" class="form-control datepicker">
                                 </div>
                             </div>
-                            
+
                         </div>
                         <div class="row">
                             <label class="col-12 col-sm-2 col-form-label mt-2">STATUS<span class="text-danger">*</span></label>
@@ -145,12 +145,12 @@
         let ricsampai = $('#crudForm').find('[name=ricsampai]').val()
         let ambildari = $('#crudForm').find('[name=ambildari]').val()
         let ambilsampai = $('#crudForm').find('[name=ambilsampai]').val()
-        let supirdari= $('#crudForm').find('[name=supirdari_id]').val()
-        let supirsampai= $('#crudForm').find('[name=supirsampai_id]').val()
-        let status= $('#crudForm').find('[name=status]').val()
-        if (ricdari != '' && ricsampai != '' && ambildari != '' && ambilsampai) {
+        let supirdari = $('#crudForm').find('[name=supirdari_id]').val()
+        let supirsampai = $('#crudForm').find('[name=supirsampai_id]').val()
+        let status = $('#crudForm').find('[name=status]').val()
+        if (ricdari != '' && ricsampai != '' && ambildari != '' && ambilsampai && supirdari != '' && supirsampai && status != '') {
 
-            window.open(`{{ route('laporanuangjalan.report') }}?ricdari2=${ricdari}&ricsampai=${ricsampai}&ambildari=${ambildari}&ambilsampai=${ambilsampai}&supirdari=${supirdari}&supirsampai=${supirsampai}&status=${status}`)
+            window.open(`{{ route('laporanuangjalan.report') }}?ricdari=${ricdari}&ricsampai=${ricsampai}&ambildari=${ambildari}&ambilsampai=${ambilsampai}&supirdari=${supirdari}&supirsampai=${supirsampai}&status=${status}`)
         } else {
             showDialog('ISI SELURUH KOLOM')
         }
@@ -161,12 +161,12 @@
         let ricsampai = $('#crudForm').find('[name=ricsampai]').val()
         let ambildari = $('#crudForm').find('[name=ambildari]').val()
         let ambilsampai = $('#crudForm').find('[name=ambilsampai]').val()
-        let supirdari= $('#crudForm').find('[name=supirdari_id]').val()
-        let supirsampai= $('#crudForm').find('[name=supirsampai_id]').val()
-        let status= $('#crudForm').find('[name=status]').val()
-        if (ricdari != '' && ricsampai != '' && ambildari != '' && ambilsampai) {
+        let supirdari = $('#crudForm').find('[name=supirdari_id]').val()
+        let supirsampai = $('#crudForm').find('[name=supirsampai_id]').val()
+        let status = $('#crudForm').find('[name=status]').val()
+        if (ricdari != '' && ricsampai != '' && ambildari != '' && ambilsampai && supirdari != '' && supirsampai && status != '') {
             $('#processingLoader').removeClass('d-none')
-            
+
             $.ajax({
                 url: `{{ route('laporanuangjalan.export') }}?ricdari=${ricdari}&ricsampai=${ricsampai}&ambildari=${ambildari}&ambilsampai=${ambilsampai}&supirdari=${supirdari}&supirsampai=${supirsampai}`,
                 type: 'GET',
@@ -188,20 +188,20 @@
                             link.click();
                         }
                     }
-                    
+
                     $('#processingLoader').addClass('d-none')
                 },
                 error: function(xhr, status, error) {
                     $('#processingLoader').addClass('d-none')
                     showDialog('TIDAK ADA DATA')
                 }
-            })    
-            
-            
-        } else {
-        showDialog('ISI SELURUH KOLOM')
-        }
             })
+
+
+        } else {
+            showDialog('ISI SELURUH KOLOM')
+        }
+    })
 
     function initLookup() {
         $('.supirdari-lookup').lookup({

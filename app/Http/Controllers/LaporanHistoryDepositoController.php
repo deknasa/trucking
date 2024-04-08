@@ -44,9 +44,10 @@ class LaporanHistoryDepositoController extends MyController
             ->get(config('app.api_url') . 'laporanhistorydeposito/report', $detailParams);
 
         $data = $header['data'];
+        $dataCabang['namacabang'] = $header['namacabang'];
         $user = Auth::user();
         // dd($data);
-        return view('reports.laporanhistorydeposito', compact('data', 'user', 'detailParams'));
+        return view('reports.laporanhistorydeposito', compact('data','dataCabang', 'user', 'detailParams'));
     }
 
     public function export(Request $request): void
@@ -70,6 +71,7 @@ class LaporanHistoryDepositoController extends MyController
         if(count($pengeluaran) == 0){
             throw new \Exception('TIDAK ADA DATA');
         }
+        $namacabang = $responses['namacabang'];
 
         $disetujui = $pengeluaran[0]['disetujui'] ?? '';
         $diperiksa = $pengeluaran[0]['diperiksa'] ?? '';
@@ -82,18 +84,22 @@ class LaporanHistoryDepositoController extends MyController
         $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:E1');
-        
-        $sheet->setCellValue('A2', strtoupper('Laporan History Deposito'));
-        $sheet->getStyle("A2")->getFont()->setBold(true);
+        $sheet->setCellValue('A2', $namacabang);
+        $sheet->getStyle("A2")->getFont()->setSize(16)->setBold(true);
+        $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A2:E2');
-
-        $sheet->setCellValue('A3', strtoupper('SUPIR: ' . $request->supirdari));
+        
+        $sheet->setCellValue('A3', strtoupper('Laporan History Deposito'));
         $sheet->getStyle("A3")->getFont()->setBold(true);
         $sheet->mergeCells('A3:E3');
 
+        $sheet->setCellValue('A4', strtoupper('SUPIR: ' . $request->supirdari));
+        $sheet->getStyle("A4")->getFont()->setBold(true);
+        $sheet->mergeCells('A4:E4');
 
-        $header_start_row = 5;
-        $detail_start_row = 6;
+
+        $header_start_row = 6;
+        $detail_start_row = 7;
 
         $styleArray = array(
             'borders' => array(
@@ -145,6 +151,7 @@ class LaporanHistoryDepositoController extends MyController
 
         $lastColumn = $alphabets[$data_columns_index];
         $sheet->getStyle("A$header_start_row:$lastColumn$header_start_row")->getFont()->setBold(true);
+        $sheet->getStyle("A$header_start_row:$lastColumn$header_start_row")->applyFromArray($styleArray);
         $totalDebet = 0;
         $totalKredit = 0;
         $totalSaldo = 0;

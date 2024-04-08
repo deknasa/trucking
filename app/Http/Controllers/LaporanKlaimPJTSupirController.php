@@ -44,8 +44,9 @@ class LaporanKlaimPJTSupirController extends MyController
 
         if ($header->successful()) {
             $data = $header['data'];
+            $dataCabang['namacabang'] = $header['namacabang'];
             $user = Auth::user();
-            return view('reports.laporanklaimpjtsupir', compact('data', 'user', 'detailParams'));
+            return view('reports.laporanklaimpjtsupir', compact('data','dataCabang', 'user', 'detailParams'));
         } else {
             return response()->json($header->json(), $header->status());
         }
@@ -70,23 +71,29 @@ class LaporanKlaimPJTSupirController extends MyController
         if(count($data) == 0){
             throw new \Exception('TIDAK ADA DATA');
         }
+        $namacabang = $header['namacabang'];
         $disetujui = $data[0]['disetujui'] ?? '';
         $diperiksa = $data[0]['diperiksa'] ?? '';
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setCellValue('A1', $data[0]['judul'] ?? '');
-        $sheet->setCellValue('A2', $data[0]['judulLaporan'] ?? '');
-        $sheet->setCellValue('A3', 'PERIODE : ' .date('d-M-Y', strtotime($detailParams['dari'])) . ' s/d ' . date('d-M-Y', strtotime($detailParams['sampai'])));
-        $sheet->setCellValue('A4', 'KELOMPOK : '.$kelompok);
+        $sheet->setCellValue('A2', $namacabang ?? '');
+        $sheet->setCellValue('A3', $data[0]['judulLaporan'] ?? '');
+        $sheet->setCellValue('A4', 'PERIODE : ' .date('d-M-Y', strtotime($detailParams['dari'])) . ' s/d ' . date('d-M-Y', strtotime($detailParams['sampai'])));
+        $sheet->setCellValue('A5', 'KELOMPOK : '.$kelompok);
         $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:F1');
+        $sheet->getStyle("A2")->getFont()->setSize(16)->setBold(true);
+        $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
+        $sheet->mergeCells('A2:F2');
         $sheet->getStyle("A2")->getFont()->setBold(true);        
-        $sheet->getStyle("A3")->getFont()->setBold(true);
+        $sheet->getStyle("A3")->getFont()->setBold(true);        
         $sheet->getStyle("A4")->getFont()->setBold(true);
+        $sheet->getStyle("A5")->getFont()->setBold(true);
 
-        $detail_table_header_row = 6;
+        $detail_table_header_row = 7;
         $detail_start_row = $detail_table_header_row + 1;
 
         $styleArray = array(
@@ -176,7 +183,7 @@ class LaporanKlaimPJTSupirController extends MyController
         $sheet->mergeCells('A' . $total_start_row . ':E' . $total_start_row);
         $sheet->setCellValue("A$total_start_row", 'Total')->getStyle('A' . $total_start_row . ':E' . $total_start_row)->applyFromArray($styleArray)->getFont()->setBold(true);
 
-        $totalDebet = "=SUM(F6:F" . ($detail_start_row - 1) . ")";
+        $totalDebet = "=SUM(F7:F" . ($detail_start_row - 1) . ")";
         $sheet->setCellValue("F$total_start_row", $totalDebet)->getStyle("F$total_start_row")->applyFromArray($style_number)->getFont()->setBold(true);
         $sheet->setCellValue("F$total_start_row", $totalDebet)->getStyle("F$total_start_row")->getNumberFormat()->setFormatCode("#,##0.00_);(#,##0.00)");
 
@@ -191,7 +198,7 @@ class LaporanKlaimPJTSupirController extends MyController
 
         $sheet->getColumnDimension('A')->setWidth(20);
         $sheet->getColumnDimension('B')->setAutoSize(true);
-        $sheet->getColumnDimension('C')->setWidth(81);
+        $sheet->getColumnDimension('C')->setWidth(68);
         $sheet->getColumnDimension('D')->setWidth(16);
         $sheet->getColumnDimension('E')->setWidth(32);
         $sheet->getColumnDimension('F')->setAutoSize(true);

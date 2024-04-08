@@ -10,7 +10,7 @@
                 </div>
                 <form id="crudForm">
                     <div class="card-body">
-                        
+
                         <div class="form-group row">
                             <label class="col-12 col-sm-2 col-form-label mt-2">SUPIR (DARI)<span class="text-danger">*</span></label>
                             <div class="col-sm-4 mt-2">
@@ -18,9 +18,9 @@
                                 <input type="text" name="supirdari" class="form-control supirdari-lookup">
                             </div>
                         </div>
-                        
-                      
-                      
+
+
+
                         <div class="row">
 
                             <div class="col-sm-6 mt-4">
@@ -72,7 +72,7 @@
         $('#crudForm').find('[name=ambildari]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
         $('#crudForm').find('[name=ambilsampai]').val($.datepicker.formatDate('dd-mm-yy', new Date())).trigger('change');
 
-        initLookup() 
+        initLookup()
         if (!`{{ $myAuth->hasPermission('laporanhistorydeposito', 'report') }}`) {
             $('#btnPreview').attr('disabled', 'disabled')
         }
@@ -82,9 +82,9 @@
     })
 
     $(document).on('click', `#btnPreview`, function(event) {
-        let supirdari_id= $('#crudForm').find('[name=supirdari_id]').val()
-        let supirdari= $('#crudForm').find('[name=supirdari]').val()
-        let supirsampai= $('#crudForm').find('[name=supirsampai_id]').val()
+        let supirdari_id = $('#crudForm').find('[name=supirdari_id]').val()
+        let supirdari = $('#crudForm').find('[name=supirdari]').val()
+        let supirsampai = $('#crudForm').find('[name=supirsampai_id]').val()
         if (supirdari_id != '') {
 
             window.open(`{{ route('laporanhistorydeposito.report') }}?&supirdari_id=${supirdari_id}&supirdari=${supirdari}`)
@@ -95,13 +95,13 @@
 
     $(document).on('click', `#btnExport`, function(event) {
         $('#processingLoader').removeClass('d-none')
-        
-        let supirdari_id= $('#crudForm').find('[name=supirdari_id]').val()
-        let supirdari= $('#crudForm').find('[name=supirdari]').val()
-        let supirsampai= $('#crudForm').find('[name=supirsampai_id]').val()
+
+        let supirdari_id = $('#crudForm').find('[name=supirdari_id]').val()
+        let supirdari = $('#crudForm').find('[name=supirdari]').val()
+        let supirsampai = $('#crudForm').find('[name=supirsampai_id]').val()
         if (supirdari_id != '') {
             $.ajax({
-            
+
                 url: `{{ route('laporanhistorydeposito.export') }}?&supirdari_id=${supirdari_id}&supirdari=${supirdari}`,
                 type: 'GET',
                 beforeSend: function(xhr) {
@@ -122,7 +122,7 @@
                             link.click();
                         }
                     }
-                    
+
                     $('#processingLoader').addClass('d-none')
                 },
                 error: function(xhr, status, error) {
@@ -131,9 +131,10 @@
                 }
             })
         } else {
+            $('#processingLoader').addClass('d-none')
             showDialog('ISI SELURUH KOLOM')
         }
-            })
+    })
 
     function initLookup() {
         $('.supirdari-lookup').lookup({

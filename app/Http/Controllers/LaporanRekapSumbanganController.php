@@ -40,8 +40,9 @@ class LaporanRekapSumbanganController extends MyController
             ->get(config('app.api_url') . 'laporanrekapsumbangan/report', $detailParams);
 
         $data = $header['data'];
+        $dataCabang['namacabang'] = $header['namacabang'];
         $user = Auth::user();
-        return view('reports.laporanrekapsumbangan', compact('data', 'user', 'detailParams'));
+        return view('reports.laporanrekapsumbangan', compact('data','dataCabang', 'user', 'detailParams'));
     }
 
     public function export(Request $request): void
@@ -60,20 +61,25 @@ class LaporanRekapSumbanganController extends MyController
         if(count($data) == 0){
             throw new \Exception('TIDAK ADA DATA');
         }
+        $namacabang = $header['namacabang'];
         $disetujui = $data[0]['disetujui'] ?? '';
         $diperiksa = $data[0]['diperiksa'] ?? '';
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
         $sheet->setCellValue('A1', $data[0]['judul'] ?? '');
-        $sheet->setCellValue('A2',  $data[0]['judulLaporan'] ?? '');
-        $sheet->setCellValue('A3', 'PERIODE : ' .date('d-M-Y', strtotime($detailParams['dari'])) . ' s/d ' . date('d-M-Y', strtotime($detailParams['sampai'])));
+        $sheet->setCellValue('A2', $namacabang ?? '');
+        $sheet->setCellValue('A3',  $data[0]['judulLaporan'] ?? '');
+        $sheet->setCellValue('A4', 'PERIODE : ' .date('d-M-Y', strtotime($detailParams['dari'])) . ' s/d ' . date('d-M-Y', strtotime($detailParams['sampai'])));
         $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
+        $sheet->getStyle("A2")->getFont()->setSize(16)->setBold(true);
+        $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:D1');
-        $sheet->mergeCells('A3:B3');
-        $sheet->getStyle("A2")->getFont()->setBold(true);        
-        $sheet->getStyle("A3")->getFont()->setBold(true);
+        $sheet->mergeCells('A2:D2');
+        $sheet->mergeCells('A4:B4');
+        $sheet->getStyle("A3")->getFont()->setBold(true);        
+        $sheet->getStyle("A4")->getFont()->setBold(true);
        
 
 

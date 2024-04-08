@@ -45,9 +45,10 @@ class LaporanSupirLebihDariTradoController extends MyController
             ->get(config('app.api_url') . 'laporansupirlebihdaritrado/report', $detailParams);
 
         $data = $header['data'];
+        $dataCabang['namacabang'] = $header['namacabang'];
         $user = Auth::user();
         // dd($data);
-        return view('reports.laporansupirlebihdaritrado', compact('data', 'user', 'detailParams'));
+        return view('reports.laporansupirlebihdaritrado', compact('data','dataCabang', 'user', 'detailParams'));
         
 
     }
@@ -72,6 +73,7 @@ class LaporanSupirLebihDariTradoController extends MyController
         if(count($pengeluaran) == 0){
             throw new \Exception('TIDAK ADA DATA');
         }
+        $namacabang = $responses['namacabang'];
         $disetujui = $pengeluaran[0]['disetujui'] ?? '';
         $diperiksa = $pengeluaran[0]['diperiksa'] ?? '';
         $user = Auth::user();
@@ -81,18 +83,23 @@ class LaporanSupirLebihDariTradoController extends MyController
       
       
         $sheet->setCellValue('A1', $pengeluaran[0]['judul'] ?? '');
-        $sheet->setCellValue('A2', $pengeluaran[0]['judulLaporan'] ?? '');
-        $sheet->setCellValue('A3', 'PERIODE : ' .date('d-M-Y', strtotime($detailParams['dari'])) . ' s/d ' . date('d-M-Y', strtotime($detailParams['sampai'])));
+        $sheet->setCellValue('A2', $namacabang ?? '');
+        $sheet->setCellValue('A3', $pengeluaran[0]['judulLaporan'] ?? '');
+        $sheet->setCellValue('A4', 'PERIODE : ' .date('d-M-Y', strtotime($detailParams['dari'])) . ' s/d ' . date('d-M-Y', strtotime($detailParams['sampai'])));
        
         $sheet->getStyle("A1")->getFont()->setSize(16)->setBold(true);
     
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->mergeCells('A1:C1');
-        $sheet->getStyle("A2")->getFont()->setBold(true);        
-        $sheet->getStyle("A3")->getFont()->setBold(true);
+        $sheet->getStyle("A2")->getFont()->setSize(16)->setBold(true);
+    
+        $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
+        $sheet->mergeCells('A2:C2');
+        $sheet->getStyle("A3")->getFont()->setBold(true);        
+        $sheet->getStyle("A4")->getFont()->setBold(true);
        
-        $header_start_row = 5;
-        $detail_start_row = 6;
+        $header_start_row = 6;
+        $detail_start_row = 7;
 
         $styleArray = array(
             'borders' => array(
@@ -119,7 +126,7 @@ class LaporanSupirLebihDariTradoController extends MyController
                 'index' => 'namasupir',
             ],
             [
-                'label' => 'Tgl Bukti',
+                'label' => 'Tanggal Bukti',
                 'index' => 'tglbukti',
             ],
             [

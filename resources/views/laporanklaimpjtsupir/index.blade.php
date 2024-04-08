@@ -25,7 +25,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <label class="col-12 col-sm-2 col-form-label mt-2">JENIS STOK</label>
+                            <label class="col-12 col-sm-2 col-form-label mt-2">JENIS STOK<span class="text-danger">*</span></label>
                             <div class="col-sm-4 mt-2">
                                 <input type="hidden" name="kelompok_id">
                                 <input type="text" name="kelompok" class="form-control kelompok-lookup">
