@@ -37,6 +37,7 @@
 
       dataSet.readJson({
         'data': <?= json_encode($data); ?>,
+        'dataCabang': <?= json_encode($dataCabang); ?>,
       })
 
       report.regData(dataSet.dataSetName, '', dataSet)
