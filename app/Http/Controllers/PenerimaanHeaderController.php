@@ -26,6 +26,7 @@ class PenerimaanHeaderController extends MyController
             'comboapproval' => $this->comboList('list', 'STATUS APPROVAL', 'STATUS APPROVAL'),
             'combokas' => $this->comboList('list', 'STATUS KAS', 'STATUS KAS'),
             'combocetak' => $this->comboList('list', 'STATUSCETAK', 'STATUSCETAK'),
+            'combokirimberkas' => $this->comboList('list','STATUSKIRIMBERKAS','STATUSKIRIMBERKAS'),
             'combobank' => $this->comboBank(),
         ];
 
