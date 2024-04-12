@@ -142,7 +142,7 @@
       rowList: [10, 20, 50, 0],
       sortable: true,
       toolbar: [true, "top"],
-      sortname: 'id',
+      sortname: 'qty',
       sortorder: 'asc',
       page: 1,
       // pager: $('#qtytambahgantioliLookupPager'),
