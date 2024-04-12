@@ -1508,7 +1508,7 @@
                   </td>
                   <td class="data_tbl tbl_qty">
                     <div id="qtytestlookup${index}" style="display:none;" >
-                      <input type="text"  name="detail_qty_oli[]" id="detail_qty_oli${index}" class="form-control gandengan-lookup${index}">
+                      <input type="text"  name="detail_qty_oli[]" id="detail_qty_oli${index}" class="form-control qtytambahgantioli-lookup${index}">
                     </div>
 
                     <input type="text"  name="detail_qty[]" id="detail_qty${index}" onkeyup="calculate(${index})" style="text-align:right" class="form-control autonumeric number${index}">
@@ -2656,6 +2656,36 @@
         enabledKorDisable()
       }
     })
+
+    $('.qtytambahgantioli-lookup').lookup({
+      title: 'qtytambahgantioli Lookup',
+      fileName: 'qtytambahgantioli',
+      beforeProcess: function(test) {
+        this.postData = {
+          // var levelcoa = $(`#levelcoa`).val();
+          Aktif: 'AKTIF',
+          stok_id: $(`#detail_stok_id`).val(),
+          isLookup: true
+
+        }
+      },
+
+      onSelectRow: (qtytambahgantioli, element) => {
+        element.val(qtytambahgantioli.kodeqtytambahgantioli)
+        $(`#${element[0]['name']}Id`).val(qtytambahgantioli.id)
+        element.data('currentValue', element.val())
+        lookupSelected(`qtytambahgantioli`);
+
+      },
+      onCancel: (element) => {
+        element.val(element.data('currentValue'))
+      },
+      onClear: (element) => {
+        element.val('')
+        element.data('currentValue', element.val())
+        enabledKorDisable()
+      }
+    })    
 
     $(`.stok-lookup`).lookup({
       title: 'stok Lookup',

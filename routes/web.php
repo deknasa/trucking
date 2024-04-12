@@ -51,6 +51,7 @@ use App\Http\Controllers\AkunPusatController;
 use App\Http\Controllers\AkuntansiController;
 use App\Http\Controllers\AlatBayarController;
 use App\Http\Controllers\ContainerController;
+use App\Http\Controllers\QtyTambahGantiOliController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExportRicController;
 use App\Http\Controllers\GandenganController;
@@ -562,6 +563,14 @@ Route::middleware(['auth', 'authorized'])->group(function () {
     Route::get('container/export', [ContainerController::class, 'export'])->name('container.export');
     Route::get('container/report', [ContainerController::class, 'report'])->name('container.report');
     Route::resource('container', ContainerController::class);
+
+    Route::get('qtytambahgantioli/field_length', [QtyTambahGantiOliController::class, 'fieldLength'])->name('qtytambahgantioli.field_length');
+    Route::get('qtytambahgantioli/{id}/delete', [QtyTambahGantiOliController::class, 'delete'])->name('qtytambahgantioli.delete');
+    Route::get('qtytambahgantioli/index', [QtyTambahGantiOliController::class, 'index']);
+    Route::get('qtytambahgantioli/get', [QtyTambahGantiOliController::class, 'get'])->name('qtytambahgantioli.get');
+    Route::get('qtytambahgantioli/export', [QtyTambahGantiOliController::class, 'export'])->name('qtytambahgantioli.export');
+    Route::get('qtytambahgantioli/report', [QtyTambahGantiOliController::class, 'report'])->name('qtytambahgantioli.report');
+    Route::resource('qtytambahgantioli', QtyTambahGantiOliController::class);    
 
     Route::get('tarifdiscountharga/field_length', [TarifDiscountHargaController::class, 'fieldLength'])->name('tarifdiscountharga.field_length');
     Route::get('tarifdiscountharga/{id}/delete', [TarifDiscountHargaController::class, 'delete'])->name('tarifdiscountharga.delete');
