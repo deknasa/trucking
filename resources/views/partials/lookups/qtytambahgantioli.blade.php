@@ -11,6 +11,7 @@
       postData: {
         aktif: `{!! $Aktif ?? '' !!}`,
         stok_id: `{!! $stok_id ?? '' !!}`,        
+        statusoli: `{!! $statusoli ?? '' !!}`,        
         isLookup: `{!! $isLookup ?? '' !!}`,        
       },
       idPrefix: 'qtytambahgantioliLookup',
