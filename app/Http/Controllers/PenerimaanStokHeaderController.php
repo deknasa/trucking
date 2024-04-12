@@ -17,7 +17,9 @@ class PenerimaanStokHeaderController extends MyController
     {
         $title = $this->title;
         $data = [
-            'combocetak' => $this->comboList('list', 'STATUSCETAK', 'STATUSCETAK')
+            'combocetak' => $this->comboList('list', 'STATUSCETAK', 'STATUSCETAK'),
+            'combokirimberkas' => $this->comboList('list','STATUSKIRIMBERKAS','STATUSKIRIMBERKAS'),
+
         ];
         $combo = $this->comboKodepenerimaan();
         $comboKodepenerimaan = $combo['data'];
@@ -312,7 +314,8 @@ class PenerimaanStokHeaderController extends MyController
             'withRelations' => true,
 
         ];
-        $id = $request->id;
+        // dd($request->all());
+        $id = $request->id ?? 0;
         $penerimaanstok = $this->find($params, $id)['data'];
         $data = $penerimaanstok;
         $i = 0;
