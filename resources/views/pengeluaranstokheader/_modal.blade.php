@@ -1685,7 +1685,7 @@
       },
 
       onSelectRow: (qtytambahgantioli, element) => {
-        element.val(qtytambahgantioli.kodeqtytambahgantioli)
+        element.val(qtytambahgantioli.qty)
         $(`#detail_qty${row}`).val(qtytambahgantioli.qty)
         $(`#${element[0]['name']}Id`).val(qtytambahgantioli.id)
         element.data('currentValue', element.val())
