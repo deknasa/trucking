@@ -1670,22 +1670,24 @@
       }
     })
 
-    $(`.gandengan-lookup${row}`).lookup({
-      title: 'gandengan Lookup',
-      fileName: 'gandengan',
+    $(`.qtytambahgantioli-lookup${index}`).lookup({
+      title: 'qtytambahgantioli Lookup',
+      fileName: 'qtytambahgantioli',
       beforeProcess: function(test) {
         this.postData = {
           // var levelcoa = $(`#levelcoa`).val();
-          statusoli:$(`#statusoli${row}`).val(),
           Aktif: 'AKTIF',
+          stok_id: $(`#detail_stok_id`).val(),
+          isLookup: true
+
         }
       },
 
-      onSelectRow: (gandengan, element) => {
-        element.val(gandengan.kodegandengan)
-        $(`#${element[0]['name']}Id`).val(gandengan.id)
+      onSelectRow: (qtytambahgantioli, element) => {
+        element.val(qtytambahgantioli.kodeqtytambahgantioli)
+        $(`#${element[0]['name']}Id`).val(qtytambahgantioli.id)
         element.data('currentValue', element.val())
-        lookupSelected(`gandengan`);
+        lookupSelected(`qtytambahgantioli`);
 
       },
       onCancel: (element) => {
