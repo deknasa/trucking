@@ -1670,14 +1670,14 @@
       }
     })
 
-    $(`.qtytambahgantioli-lookup${index}`).lookup({
+    $(`.qtytambahgantioli-lookup${row}`).lookup({
       title: 'qtytambahgantioli Lookup',
       fileName: 'qtytambahgantioli',
       beforeProcess: function(test) {
         this.postData = {
           // var levelcoa = $(`#levelcoa`).val();
           Aktif: 'AKTIF',
-          stok_id: $(`#detail_stok_id`).val(),
+          stok_id: $(`#detailstokId_${row}`).val(),
           isLookup: true
 
         }
@@ -1685,6 +1685,7 @@
 
       onSelectRow: (qtytambahgantioli, element) => {
         element.val(qtytambahgantioli.kodeqtytambahgantioli)
+        $(`#detail_qty${row}`).val(qtytambahgantioli.qty)
         $(`#${element[0]['name']}Id`).val(qtytambahgantioli.id)
         element.data('currentValue', element.val())
         lookupSelected(`qtytambahgantioli`);
@@ -1696,6 +1697,7 @@
       onClear: (element) => {
         element.val('')
         element.data('currentValue', element.val())
+        $(`#detail_qty${row}`).val(0)
         enabledKorDisable()
       }
     })
