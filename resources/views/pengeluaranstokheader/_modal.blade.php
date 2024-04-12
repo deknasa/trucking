@@ -1678,6 +1678,7 @@
           // var levelcoa = $(`#levelcoa`).val();
           Aktif: 'AKTIF',
           stok_id: $(`#detailstokId_${row}`).val(),
+          statusoli: $(`#statusoli${row}`).val(),
           isLookup: true
 
         }
