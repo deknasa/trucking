@@ -1686,8 +1686,9 @@
 
       onSelectRow: (qtytambahgantioli, element) => {
         element.val(qtytambahgantioli.qty)
-        $(`#detail_qty${row}`).val(qtytambahgantioli.qty)
-        $(`#${element[0]['name']}Id`).val(qtytambahgantioli.id)
+        elQty = AutoNumeric.getAutoNumericElement($(`#detail_qty${row}`)[0]);
+        elQty.set(qtytambahgantioli.qty);
+        // $(`#${element[0]['name']}Id`).val(qtytambahgantioli.id)
         element.data('currentValue', element.val())
         lookupSelected(`qtytambahgantioli`);
 
@@ -1698,7 +1699,8 @@
       onClear: (element) => {
         element.val('')
         element.data('currentValue', element.val())
-        $(`#detail_qty${row}`).val(0)
+        elQty = AutoNumeric.getAutoNumericElement($(`#detail_qty${row}`)[0]);
+        elQty.set(0);
         enabledKorDisable()
       }
     })
