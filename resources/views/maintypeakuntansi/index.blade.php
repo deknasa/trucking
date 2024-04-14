@@ -337,7 +337,8 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                editMainTypeAkuntansi(selectedId)
+                // editMainTypeAkuntansi(selectedId)
+                cekValidasidelete(selectedId,'edit')
               }
 
             }
@@ -351,7 +352,8 @@
               if (selectedId == null || selectedId == '' || selectedId == undefined) {
                 showDialog('Harap pilih salah satu record')
               } else {
-                deleteMainTypeAkuntansi(selectedId)
+                // deleteMainTypeAkuntansi(selectedId)
+                cekValidasidelete(selectedId,'delete')
               }
             }
           },

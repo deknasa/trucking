@@ -103,6 +103,7 @@
 @push('scripts')
 <script>
     let dataMaxLength = []
+    var data_id 
 
   $('#input_masknpwp').inputmask({
     mask: '99.999.999.9-999.999',
@@ -241,7 +242,7 @@
 
   $('#crudModal').on('shown.bs.modal', () => {
     let form = $('#crudForm')
-
+    data_id = $('#crudForm').find('[name=id]').val();
     setFormBindKeys(form)
 
     activeGrid = null
@@ -256,8 +257,40 @@
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
+    removeEditingBy(data_id)    
+
     $('#crudModal').find('.modal-body').html(modalBody)
   })
+
+  function removeEditingBy(id) {
+    $.ajax({
+      url: `{{ config('app.api_url') }}bataledit`,
+      method: 'POST',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        id: id,
+        aksi: 'BATAL',
+        table: 'penerima'
+
+      },
+      success: response => {
+        $("#crudModal").modal("hide")
+      },
+      error: error => {
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+
+          setErrorMessages(form, error.responseJSON.errors);
+        } else {
+          showDialog(error.responseJSON)
+        }
+      },
+    })
+  }
 
   function createPenerima() {
     let form = $('#crudForm')
@@ -652,7 +685,7 @@
     })
   }
   
-  function cekValidasidelete(Id) {
+  function cekValidasidelete(Id,aksi) {
     $.ajax({
       url: `{{ config('app.api_url') }}penerima/${Id}/cekValidasi`,
       method: 'POST',
@@ -660,13 +693,28 @@
       beforeSend: request => {
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
+      data:{
+        aksi: aksi,
+      },
       success: response => {
-        var kondisi = response.kondisi
-          if (kondisi == true) {
-            showDialog(response.message['keterangan'])
-          } else {
-              deletePenerima(Id)
+        // var kondisi = response.kondisi
+        //   if (kondisi == true) {
+        //     showDialog(response.message['keterangan'])
+        //   } else {
+        //       deletePenerima(Id)
+        //   }
+
+        var error = response.error
+        if (error == true) {
+          showDialog(response.message)
+        } else {
+          if (aksi=="edit") {
+            editPenerima(Id)
+          }else if (aksi=="delete"){
+            deletePenerima(Id)
           }
+        }
+
 
       }
     })
