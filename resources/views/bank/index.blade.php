@@ -388,7 +388,13 @@
                         onClick: () => {
                             selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
                             console.log(selectedId)
-                            editBank(selectedId)
+                            if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                                showDialog('Harap pilih salah satu record')
+                            } else {
+                                cekValidasidelete(selectedId,'edit')
+                            }
+
+                            // editBank(selectedId)
                         }
                     },
                     {
@@ -400,7 +406,7 @@
                             if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                 showDialog('Harap pilih salah satu record')
                             } else {
-                                cekValidasidelete(selectedId)
+                                cekValidasidelete(selectedId,'delete')
                             }
                         }
                     },

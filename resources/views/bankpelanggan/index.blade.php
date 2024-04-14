@@ -313,8 +313,13 @@
                         class: 'btn btn-success btn-sm mr-1',
                         onClick: () => {
                             selectedId = $("#jqGrid").jqGrid('getGridParam', 'selrow')
+                            if (selectedId == null || selectedId == '' || selectedId == undefined) {
+                                showDialog('Harap pilih salah satu record')
+                            } else {
+                                cekValidasidelete(selectedId,'edit')
+                            }
 
-                            editBankPelanggan(selectedId)
+                            // editBankPelanggan(selectedId)
                         }
                     },
                     {
@@ -326,7 +331,7 @@
                             if (selectedId == null || selectedId == '' || selectedId == undefined) {
                                 showDialog('Harap pilih salah satu record')
                             } else {
-                                cekValidasidelete(selectedId)
+                                cekValidasidelete(selectedId,'delete')
                             }
                         }
                     },

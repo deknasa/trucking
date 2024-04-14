@@ -297,6 +297,7 @@
   let modalBody = $('#crudModal').find('.modal-body').html()
 
   let dataMaxLength = []
+  var data_id 
 
   $(document).ready(function() {
     $('#btnSubmit').click(function(event) {
@@ -405,6 +406,7 @@
 
   $('#crudModal').on('shown.bs.modal', () => {
     let form = $('#crudForm')
+    data_id = $('#crudForm').find('[name=id]').val();
 
     setFormBindKeys(form)
 
@@ -420,8 +422,40 @@
 
   $('#crudModal').on('hidden.bs.modal', () => {
     activeGrid = '#jqGrid'
+    removeEditingBy(data_id)    
+
     $('#crudModal').find('.modal-body').html(modalBody)
   })
+
+  function removeEditingBy(id) {
+    $.ajax({
+      url: `{{ config('app.api_url') }}bataledit`,
+      method: 'POST',
+      dataType: 'JSON',
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      data: {
+        id: id,
+        aksi: 'BATAL',
+        table: 'supplier'
+
+      },
+      success: response => {
+        $("#crudModal").modal("hide")
+      },
+      error: error => {
+        if (error.status === 422) {
+          $('.is-invalid').removeClass('is-invalid')
+          $('.invalid-feedback').remove()
+
+          setErrorMessages(form, error.responseJSON.errors);
+        } else {
+          showDialog(error.responseJSON)
+        }
+      },
+    })
+  }
 
   function createSupplier() {
     let form = $('#crudForm')
@@ -1025,7 +1059,7 @@
     })
   }
 
-  function cekValidasidelete(Id) {
+  function cekValidasidelete(Id,aksi) {
     $.ajax({
       url: `{{ config('app.api_url') }}supplier/${Id}/cekValidasi`,
       method: 'POST',
@@ -1033,14 +1067,26 @@
       beforeSend: request => {
         request.setRequestHeader('Authorization', `Bearer {{ session('access_token') }}`)
       },
+      data:{
+        aksi: aksi,
+      },
       success: response => {
-        var kondisi = response.kondisi
-        if (kondisi == true) {
-          showDialog(response.message['keterangan'])
+        // var kondisi = response.kondisi
+        // if (kondisi == true) {
+        //   showDialog(response.message['keterangan'])
+        // } else {
+        //   deleteSupplier(Id)
+        // }
+        var error = response.error
+        if (error == true) {
+          showDialog(response.message)
         } else {
-          deleteSupplier(Id)
+          if (aksi=="edit") {
+            editSupplier(Id)
+          }else if (aksi=="delete"){
+            deleteSupplier(Id)
+          }
         }
-
       }
     })
   }
